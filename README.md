@@ -4,6 +4,8 @@ Employee application for [HRIS Platform](https://github.com/fajarxfce/hris-platf
 
 Generated from [Compose Fluent Starter](https://github.com/fajarxfce/compose-fluent-starter). The enterprise foundation is imported from commit [`5aa8ee4`](https://github.com/fajarxfce/compose-fluent-starter/commit/5aa8ee40f4da5d002f4463bb395b7ea70c55ffe0). This repository has an independent history; the template license is retained.
 
+Reusable foundation improvements are also maintained in the starter; see [template updates](docs/template-updates.md).
+
 Backend integration is in progress. The inherited demo described below is a template fixture, not an HRIS service.
 
 ## Run
