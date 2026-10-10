@@ -93,6 +93,12 @@ their entries and reacts to onboarding/session state. Authentication transitions
 the root stack, so sign-out removes protected screens. Dashboard owns its three tab
 states; tab selection does not create independent navigation histories in this starter.
 
+The root navigation graph belongs to a session ID. Logout or a replacement session
+disposes its protected routes and saved tab state immediately; these boundaries
+never animate an outgoing account's content. Token rotation does not change that
+identity. Page transitions inside a session use a short fade. `AppTabContent`
+retains each finite tab's rendering state and cancels superseded transitions.
+
 The app host handles top/side safe areas and keyboard insets. AppPage handles the bottom
 safe area for standalone pages; dashboard's bottom navigation owns that inset instead,
 and its content marks the inset consumed. The bar draws its surface beneath the system

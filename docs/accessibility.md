@@ -1,5 +1,12 @@
 # Accessibility and adaptive layout
 
+Page, tab, and navigation feedback use short 120–180 ms transitions. Android and
+iOS use the Compose host's system motion scale; Web observes `prefers-reduced-motion`
+and removes its listener on disposal. Desktop hosts can supply a motion scale or
+use `AppTheme(reduceMotion = true)`. Reduced motion sets these transition durations
+to zero without changing actions, content, or focus order. Authentication boundaries
+always replace their content immediately.
+
 The design system keeps rendering mechanics in shared `AppXxx` components. Feature
 pages provide immutable state and actions; navigation and ViewModels retain their
 existing ownership.

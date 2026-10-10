@@ -39,6 +39,9 @@ Read [docs/architecture.md](docs/architecture.md) and [README.md](README.md) bef
   relevant build targets. Report only checks actually performed.
 - Keep copy short and professional. Make atomic commits without co-author trailers.
   Preserve unrelated changes. Push when authorized; releases require an explicit request.
+- Follow [mobile experience](docs/experience.md): use restrained, interruptible
+  transitions and clear interaction feedback. Honor reduced motion, retain tab
+  state, and keep animation work independent of data acquisition.
 - Follow [template updates](docs/template-updates.md): port reusable foundation
   fixes and regression tests back to Compose Fluent Starter. Keep HRIS business
   policy, API adapters, and configuration in this application.

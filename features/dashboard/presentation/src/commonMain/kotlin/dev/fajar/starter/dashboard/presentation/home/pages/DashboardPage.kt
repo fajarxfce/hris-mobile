@@ -59,30 +59,32 @@ fun DashboardPage(state: DashboardState, onEvent: (DashboardEvent) -> Unit) {
             selected = state.tab,
             onSelected = { onEvent(DashboardEvent.TabSelected(it)) },
         ) {
-            when (state.tab) {
-                DashboardTab.Overview ->
-                    OverviewPage(
-                        state,
-                        { onEvent(DashboardEvent.RefreshRequested) },
-                        { onEvent(DashboardEvent.TabSelected(DashboardTab.Activity)) },
-                    )
-                DashboardTab.Activity ->
-                    ActivityPage(
-                        state = state,
-                        onRefresh = { onEvent(DashboardEvent.RefreshRequested) },
-                        onLoadMore = { onEvent(DashboardEvent.NextPageRequested) },
-                        onSavedChanged = { id, saved ->
-                            onEvent(DashboardEvent.ActivitySavedChanged(id, saved))
-                        },
-                    )
-                DashboardTab.Account ->
-                    AccountPage(
-                        state,
-                        { onEvent(DashboardEvent.SignOutRequested) },
-                        { onEvent(DashboardEvent.NotificationsRequested) },
-                        { onEvent(DashboardEvent.SettingsRequested) },
-                        { onEvent(DashboardEvent.FilesRequested) },
-                    )
+            AppTabContent(state.tab, stateKey = { it.name }) { tab ->
+                when (tab) {
+                    DashboardTab.Overview ->
+                        OverviewPage(
+                            state,
+                            { onEvent(DashboardEvent.RefreshRequested) },
+                            { onEvent(DashboardEvent.TabSelected(DashboardTab.Activity)) },
+                        )
+                    DashboardTab.Activity ->
+                        ActivityPage(
+                            state = state,
+                            onRefresh = { onEvent(DashboardEvent.RefreshRequested) },
+                            onLoadMore = { onEvent(DashboardEvent.NextPageRequested) },
+                            onSavedChanged = { id, saved ->
+                                onEvent(DashboardEvent.ActivitySavedChanged(id, saved))
+                            },
+                        )
+                    DashboardTab.Account ->
+                        AccountPage(
+                            state,
+                            { onEvent(DashboardEvent.SignOutRequested) },
+                            { onEvent(DashboardEvent.NotificationsRequested) },
+                            { onEvent(DashboardEvent.SettingsRequested) },
+                            { onEvent(DashboardEvent.FilesRequested) },
+                        )
+                }
             }
         }
     }

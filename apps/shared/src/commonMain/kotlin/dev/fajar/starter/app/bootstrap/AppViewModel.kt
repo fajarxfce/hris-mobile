@@ -3,7 +3,7 @@ package dev.fajar.starter.app.bootstrap
 import androidx.lifecycle.viewModelScope
 import dev.fajar.starter.app.navigation.ResolveAppLink
 import dev.fajar.starter.common.result.AppResult
-import dev.fajar.starter.identity.domain.usecases.ObserveUser
+import dev.fajar.starter.identity.domain.usecases.ObserveSessionIdentity
 import dev.fajar.starter.identity.domain.usecases.RestoreSession
 import dev.fajar.starter.observability.*
 import dev.fajar.starter.onboarding.domain.usecases.LoadOnboarding
@@ -15,7 +15,7 @@ import org.koin.android.annotation.KoinViewModel
 @KoinViewModel
 class AppViewModel(
     private val loadOnboarding: LoadOnboarding,
-    private val observeUser: ObserveUser,
+    private val observeIdentity: ObserveSessionIdentity,
     private val restoreSession: RestoreSession,
     private val resolveAppLink: ResolveAppLink,
 ) : MviViewModel<AppState, AppEvent, Nothing>(AppState()) {
@@ -53,15 +53,17 @@ class AppViewModel(
                         if (!result.value) {
                             updateState { it.copy(stage = AppStage.Onboarding) }
                         } else {
-                            observeUser().collect { user ->
+                            observeIdentity().collect { identity ->
                                 updateState {
                                     it.copy(
                                         stage =
-                                            when (user) {
-                                                is AppResult.Failed -> AppStage.Failed(user.failure)
+                                            when (identity) {
+                                                is AppResult.Failed ->
+                                                    AppStage.Failed(identity.failure)
                                                 is AppResult.Success ->
-                                                    if (user.value == null) AppStage.SignedOut
-                                                    else AppStage.SignedIn
+                                                    identity.value?.let {
+                                                        AppStage.SignedIn(it.sessionId)
+                                                    } ?: AppStage.SignedOut
                                             }
                                     )
                                 }

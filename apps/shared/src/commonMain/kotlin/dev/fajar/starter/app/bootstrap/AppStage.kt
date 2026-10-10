@@ -7,7 +7,7 @@ sealed interface AppStage {
 
     data object SignedOut : AppStage
 
-    data object SignedIn : AppStage
+    data class SignedIn(val sessionId: String) : AppStage
 
     data class Failed(val failure: dev.fajar.starter.common.result.Failure) : AppStage
 }

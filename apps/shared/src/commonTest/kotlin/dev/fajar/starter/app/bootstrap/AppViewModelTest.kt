@@ -8,7 +8,7 @@ import dev.fajar.starter.common.config.AppEnvironment
 import dev.fajar.starter.common.result.AppResult
 import dev.fajar.starter.identity.domain.entities.*
 import dev.fajar.starter.identity.domain.repositories.SessionRepository
-import dev.fajar.starter.identity.domain.usecases.ObserveUser
+import dev.fajar.starter.identity.domain.usecases.ObserveSessionIdentity
 import dev.fajar.starter.onboarding.domain.repositories.OnboardingRepository
 import dev.fajar.starter.onboarding.domain.usecases.LoadOnboarding
 import kotlin.test.*
@@ -33,7 +33,7 @@ class AppViewModelTest {
             val vm =
                 AppViewModel(
                     LoadOnboarding(onboarding),
-                    ObserveUser(identity),
+                    ObserveSessionIdentity(identity),
                     dev.fajar.starter.identity.domain.usecases.RestoreSession(identity),
                     ResolveAppLink(AppEnvironment.Dev),
                 )
@@ -49,7 +49,10 @@ class AppViewModelTest {
             assertEquals(AppLink.Inbox, vm.state.value.pendingLink)
             identity.value.value = AppResult.Success(testSession())
             runCurrent()
-            assertEquals(AppStage.SignedIn, vm.state.value.stage)
+            assertEquals(AppStage.SignedIn("session-a"), vm.state.value.stage)
+            identity.value.value = AppResult.Success(testSession().copy(id = "session-b"))
+            runCurrent()
+            assertEquals(AppStage.SignedIn("session-b"), vm.state.value.stage)
             vm.onEvent(AppEvent.LinkReceived("fluentstarter-dev://app/activity"))
             vm.onEvent(AppEvent.LinkHandled(AppLink.Inbox))
             runCurrent()

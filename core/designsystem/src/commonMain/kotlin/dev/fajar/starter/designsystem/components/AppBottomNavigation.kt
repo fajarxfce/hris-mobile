@@ -1,5 +1,7 @@
 package dev.fajar.starter.designsystem.components
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.background
 import androidx.compose.foundation.indication
@@ -9,6 +11,7 @@ import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -19,6 +22,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import dev.fajar.starter.designsystem.theme.AppColors
+import dev.fajar.starter.designsystem.theme.LocalAppMotion
 import io.github.composefluent.FluentTheme
 
 @Composable
@@ -45,6 +49,12 @@ fun <T> AppBottomNavigation(
             items.forEach { item ->
                 key(item.value) {
                     val interactionSource = remember(item.value) { MutableInteractionSource() }
+                    val color by
+                        animateColorAsState(
+                            if (item.value == selected) AppColors.accent else AppColors.muted,
+                            animationSpec = tween(LocalAppMotion.current.selectionMillis),
+                            label = "navigation selection",
+                        )
                     Column(
                         Modifier.weight(1f)
                             .heightIn(min = 48.dp)
@@ -66,9 +76,7 @@ fun <T> AppBottomNavigation(
                         ) {
                             AppIcon(
                                 if (item.value == selected) item.selectedIcon else item.icon,
-                                tint =
-                                    if (item.value == selected) AppColors.accent
-                                    else AppColors.muted,
+                                tint = color,
                             )
                         }
                         AppText(
@@ -79,8 +87,7 @@ fun <T> AppBottomNavigation(
                                         if (item.value == selected) FontWeight.SemiBold
                                         else FontWeight.Normal
                                 ),
-                            color =
-                                if (item.value == selected) AppColors.accent else AppColors.muted,
+                            color = color,
                         )
                     }
                 }
