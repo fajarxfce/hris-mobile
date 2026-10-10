@@ -11,7 +11,7 @@ to the starter through [reviewed updates](docs/template-updates.md).
 ## Current integration
 
 The application uses the HRIS native API for password sign-in, authenticator setup
-and verification, recovery codes, token rotation, company selection, and current
+and verification, recovery codes, token rotation, active-session management, company selection, and current
 company access. Employees can open their own personal profile, employment terms,
 and organization assignments. Screens support English and Indonesian. System
 appearance and reduced-motion preferences are respected.

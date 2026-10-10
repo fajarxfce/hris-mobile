@@ -177,4 +177,12 @@
     <string name="more_employments_en">More employment records</string>
     <string name="no_employment_en">No employee profile is available. Contact HR to check your account linkage.</string>
     <string name="employment_as_of_en">Effective on %1$s</string>
+    <string name="active_sessions_en">Active sessions</string>
+    <string name="no_active_sessions_en">No active sessions.</string>
+    <string name="this_device_en">This device</string>
+    <string name="session_created_en">Signed in: %1$s</string>
+    <string name="end_session_en">End session</string>
+    <string name="confirm_end_session_en">Confirm</string>
+    <string name="end_session_confirmation_en">This device will need to sign in again.</string>
+    <string name="sign_out_this_device_en">Sign out on this device</string>
 </resources>

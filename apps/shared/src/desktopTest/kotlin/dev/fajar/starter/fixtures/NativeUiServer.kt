@@ -27,6 +27,8 @@ class NativeUiServer(
 
     val unexpectedPaths = mutableListOf<String>()
     val people = NativePeopleUi()
+    val deviceSessions = NativeSessionsUi()
+    var rejectSessionAccessOnce = false
 
     suspend fun expireVerification() = requests.withLock { verified = false }
 
@@ -36,6 +38,20 @@ class NativeUiServer(
             assertEquals("ANDROID", request.headers["X-HRIS-Client-Platform"])
             assertEquals("1", request.headers["X-HRIS-Client-Build"])
             val headers = headersOf(HttpHeaders.ContentType, "application/json")
+            if (path.startsWith("/api/v1/auth/native/sessions") && rejectSessionAccessOnce) {
+                rejectSessionAccessOnce = false
+                return@withLock respond(
+                    """{"code":"session_expired"}""",
+                    HttpStatusCode.Unauthorized,
+                    headers,
+                )
+            }
+            deviceSessions.response(path, request.method)?.let { (body, status) ->
+                assertTrue(
+                    request.headers[HttpHeaders.Authorization]?.startsWith("Bearer ") == true
+                )
+                return@withLock respond(body, status, headers)
+            }
             people.response(path)?.let { (body, status) ->
                 assertTrue(
                     request.headers[HttpHeaders.Authorization]?.startsWith("Bearer ") == true

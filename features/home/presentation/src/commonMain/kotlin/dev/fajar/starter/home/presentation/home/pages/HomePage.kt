@@ -87,6 +87,12 @@ fun HomePage(state: HomeState, onEvent: (HomeEvent) -> Unit) {
                                 primary = false,
                             )
                             AppButton(
+                                appString(AppString.ActiveSessions),
+                                { onEvent(HomeEvent.SessionsRequested) },
+                                Modifier.fillMaxWidth(),
+                                primary = false,
+                            )
+                            AppButton(
                                 appString(AppString.ChangeCompany),
                                 { onEvent(HomeEvent.CompanyChangeRequested) },
                                 Modifier.fillMaxWidth(),

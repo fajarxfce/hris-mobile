@@ -19,6 +19,7 @@ import dev.fajar.starter.common.config.AppEnvironment
 import dev.fajar.starter.common.config.AppPlatform
 import dev.fajar.starter.database.createAppDatabase
 import dev.fajar.starter.datastore.createUserPreferences
+import dev.fajar.starter.fixtures.NativeSessionsUi
 import dev.fajar.starter.fixtures.NativeUiServer
 import dev.fajar.starter.notifications.data.datasources.*
 import dev.fajar.starter.notifications.data.dto.*
@@ -32,6 +33,53 @@ import org.koin.dsl.module
 
 class AppFlowTest {
     @get:Rule val compose = createComposeRule()
+
+    @Test
+    fun activeSessionsRequireConfirmationAndCurrentLogoutRemovesTheProtectedStack() {
+        val server = NativeUiServer().apply { rejectSessionAccessOnce = true }
+        withApplication(server) {
+            signIn()
+            waitFor("Choose a company")
+            compose.onAllNodesWithText("Open company")[0].performClick()
+            waitFor("Employee workspace")
+            compose.onNode(hasText("Account") and hasClickAction()).performClick()
+            compose.onNodeWithText("Active sessions").performScrollTo().performClick()
+            waitFor("Test iPhone")
+            assertEquals(1, server.refreshes)
+            compose.onNodeWithText("This device").assertExists()
+            capture("sessions")
+            compose.onNodeWithText("End session").performClick()
+            compose.onNodeWithText("This device will need to sign in again.").assertExists()
+            assertTrue(server.deviceSessions.revoked.isEmpty())
+            compose.onNodeWithText("Cancel").performClick()
+            compose.onNodeWithText("End session").performClick()
+            compose.onNodeWithText("Confirm").performClick()
+            compose.waitUntil(15_000) {
+                compose.onAllNodesWithText("Test iPhone").fetchSemanticsNodes().isEmpty()
+            }
+            assertEquals(setOf(NativeSessionsUi.OTHER), server.deviceSessions.revoked)
+            compose.onNodeWithText("Sign out on this device").performScrollTo().performClick()
+            waitFor("Use your account to continue.")
+            compose.onNodeWithText("Active sessions").assertDoesNotExist()
+            assertEquals(
+                setOf(NativeSessionsUi.CURRENT, NativeSessionsUi.OTHER),
+                server.deviceSessions.revoked,
+            )
+        }
+    }
+
+    @Test
+    fun anUnconfirmedRemoteLogoutStillRemovesTheLocalIdentity() {
+        val server = NativeUiServer().apply { deviceSessions.loseRevocation = true }
+        withApplication(server) {
+            signIn()
+            waitFor("Choose a company")
+            compose.onNodeWithText("Sign out").performScrollTo().performClick()
+            waitFor("Use your account to continue.")
+            compose.onNodeWithText("Choose a company").assertDoesNotExist()
+            assertEquals(setOf(NativeSessionsUi.CURRENT), server.deviceSessions.revoked)
+        }
+    }
 
     @Test
     fun nativeLoginCompanySwitchLanguageAndLogout() =

@@ -95,6 +95,7 @@ fun AppNavigation(controller: NavHostController, incomingLinks: Flow<String>) {
                 homeRoutes(
                     stage.workspace,
                     onProfile = { controller.navigate(ProfileRoute) { launchSingleTop = true } },
+                    onSessions = { controller.navigate(SessionsRoute) { launchSingleTop = true } },
                 ) {
                     controller.navigate(SettingsRoute) { launchSingleTop = true }
                 }
@@ -105,6 +106,7 @@ fun AppNavigation(controller: NavHostController, incomingLinks: Flow<String>) {
                     controller.popBackStack()
                 }
                 verificationRoutes(stage.sessionId) { controller.popBackStack() }
+                sessionRoutes(stage.sessionId) { controller.popBackStack() }
                 settingsRoutes(securitySettings = { AppLockSettings() }) {
                     controller.popBackStack()
                 }

@@ -19,7 +19,7 @@ class VerificationViewModel(
     private val beginEnrollment: BeginMfaEnrollment,
     private val confirmEnrollment: ConfirmMfaEnrollment,
     private val verifyMfa: VerifyMfa,
-    private val signOut: SignOut,
+    private val signOut: SignOutNativeSession,
 ) : MviViewModel<VerificationState, VerificationEvent, VerificationEffect>(VerificationState()) {
     init {
         on<VerificationEvent.AccountRequested>(::onAccountRequested)
@@ -238,7 +238,7 @@ class VerificationViewModel(
         if (state.value.working) return
         updateState { it.copy(working = true) }
         viewModelScope.launch {
-            when (val result = signOut()) {
+            when (val result = signOut(sessionId)) {
                 is AppResult.Failed ->
                     updateState { it.copy(working = false, failure = result.failure) }
                 is AppResult.Success -> updateState { VerificationState() }

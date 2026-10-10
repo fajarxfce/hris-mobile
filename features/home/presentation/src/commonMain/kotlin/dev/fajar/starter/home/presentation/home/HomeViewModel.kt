@@ -3,7 +3,7 @@ package dev.fajar.starter.home.presentation.home
 import androidx.lifecycle.viewModelScope
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.identity.domain.usecases.ObserveSessionIdentity
-import dev.fajar.starter.identity.domain.usecases.SignOut
+import dev.fajar.starter.identity.domain.usecases.SignOutNativeSession
 import dev.fajar.starter.presentation.mvi.MviViewModel
 import dev.fajar.starter.workspace.domain.entities.Workspace
 import dev.fajar.starter.workspace.domain.usecases.LeaveWorkspace
@@ -17,13 +17,14 @@ class HomeViewModel(
     @InjectedParam initialTab: HomeTab,
     private val observeIdentity: ObserveSessionIdentity,
     private val leaveWorkspace: LeaveWorkspace,
-    private val signOut: SignOut,
+    private val signOut: SignOutNativeSession,
 ) : MviViewModel<HomeState, HomeEvent, HomeEffect>(HomeState(workspace, tab = initialTab)) {
     init {
         on<HomeEvent.TabSelected>(::onTabSelected)
         on<HomeEvent.CompanyChangeRequested>(::onCompanyChangeRequested)
         on<HomeEvent.SettingsRequested>(::onSettingsRequested)
         on<HomeEvent.ProfileRequested>(::onProfileRequested)
+        on<HomeEvent.SessionsRequested>(::onSessionsRequested)
         on<HomeEvent.SignOutRequested>(::onSignOutRequested)
         viewModelScope.launch {
             observeIdentity().collect { result ->
@@ -57,6 +58,10 @@ class HomeViewModel(
         viewModelScope.launch { emitEffect(HomeEffect.OpenProfile) }
     }
 
+    private fun onSessionsRequested(event: HomeEvent.SessionsRequested) {
+        viewModelScope.launch { emitEffect(HomeEffect.OpenSessions) }
+    }
+
     private fun onCompanyChangeRequested(event: HomeEvent.CompanyChangeRequested) {
         if (state.value.working) return
         updateState { it.copy(working = true) }
@@ -73,7 +78,7 @@ class HomeViewModel(
         if (state.value.working) return
         updateState { it.copy(working = true) }
         viewModelScope.launch {
-            when (val result = signOut()) {
+            when (val result = signOut(state.value.workspace.sessionId)) {
                 is AppResult.Failed ->
                     updateState { it.copy(working = false, failure = result.failure) }
                 is AppResult.Success -> updateState { it.copy(working = false, user = null) }

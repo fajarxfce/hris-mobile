@@ -3,7 +3,7 @@ package dev.fajar.starter.workspace.presentation.selection
 import androidx.lifecycle.viewModelScope
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.identity.domain.usecases.LoadAccount
-import dev.fajar.starter.identity.domain.usecases.SignOut
+import dev.fajar.starter.identity.domain.usecases.SignOutNativeSession
 import dev.fajar.starter.presentation.mvi.MviViewModel
 import dev.fajar.starter.workspace.domain.usecases.SelectWorkspace
 import kotlinx.coroutines.launch
@@ -15,7 +15,7 @@ class WorkspaceViewModel(
     @InjectedParam private val sessionId: String,
     private val loadAccount: LoadAccount,
     private val selectWorkspace: SelectWorkspace,
-    private val signOut: SignOut,
+    private val signOut: SignOutNativeSession,
 ) : MviViewModel<WorkspaceState, WorkspaceEvent, WorkspaceEffect>(WorkspaceState()) {
     init {
         on<WorkspaceEvent.CompaniesRequested>(::onCompaniesRequested)
@@ -65,7 +65,7 @@ class WorkspaceViewModel(
         if (state.value.loading || state.value.selectingId != null) return
         updateState { it.copy(loading = true) }
         viewModelScope.launch {
-            when (val result = signOut()) {
+            when (val result = signOut(sessionId)) {
                 is AppResult.Failed ->
                     updateState { it.copy(loading = false, failure = result.failure) }
                 is AppResult.Success -> updateState { WorkspaceState() }

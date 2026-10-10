@@ -177,4 +177,12 @@
     <string name="more_employments_id">Data pekerjaan berikutnya</string>
     <string name="no_employment_id">Profil karyawan belum tersedia. Hubungi HR untuk memeriksa tautan akun Anda.</string>
     <string name="employment_as_of_id">Berlaku pada %1$s</string>
+    <string name="active_sessions_id">Sesi aktif</string>
+    <string name="no_active_sessions_id">Tidak ada sesi aktif.</string>
+    <string name="this_device_id">Perangkat ini</string>
+    <string name="session_created_id">Masuk: %1$s</string>
+    <string name="end_session_id">Akhiri sesi</string>
+    <string name="confirm_end_session_id">Konfirmasi</string>
+    <string name="end_session_confirmation_id">Perangkat ini perlu masuk kembali.</string>
+    <string name="sign_out_this_device_id">Keluar di perangkat ini</string>
 </resources>

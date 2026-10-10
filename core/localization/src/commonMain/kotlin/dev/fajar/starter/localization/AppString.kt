@@ -5,6 +5,17 @@ import org.jetbrains.compose.resources.StringResource
 
 /** Explicit pairs keep runtime language changes portable across Android, iOS, desktop and Web. */
 enum class AppString(val english: StringResource, val indonesian: StringResource) {
+    ActiveSessions(Res.string.active_sessions_en, Res.string.active_sessions_id),
+    NoActiveSessions(Res.string.no_active_sessions_en, Res.string.no_active_sessions_id),
+    ThisDevice(Res.string.this_device_en, Res.string.this_device_id),
+    SessionCreated(Res.string.session_created_en, Res.string.session_created_id),
+    EndSession(Res.string.end_session_en, Res.string.end_session_id),
+    ConfirmEndSession(Res.string.confirm_end_session_en, Res.string.confirm_end_session_id),
+    EndSessionConfirmation(
+        Res.string.end_session_confirmation_en,
+        Res.string.end_session_confirmation_id,
+    ),
+    SignOutThisDevice(Res.string.sign_out_this_device_en, Res.string.sign_out_this_device_id),
     Home(Res.string.home_en, Res.string.home_id),
     MyProfile(Res.string.my_profile_en, Res.string.my_profile_id),
     PersonalInformation(Res.string.personal_information_en, Res.string.personal_information_id),

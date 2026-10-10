@@ -15,6 +15,7 @@ import org.koin.core.parameter.parametersOf
 fun NavGraphBuilder.homeRoutes(
     workspace: Workspace,
     onProfile: () -> Unit,
+    onSessions: () -> Unit,
     onSettings: () -> Unit,
 ) {
     composable<HomeRoute> { entry ->
@@ -27,6 +28,7 @@ fun NavGraphBuilder.homeRoutes(
             when (effect) {
                 HomeEffect.OpenSettings -> onSettings()
                 HomeEffect.OpenProfile -> onProfile()
+                HomeEffect.OpenSessions -> onSessions()
             }
         }
         HomePage(state, viewModel::onEvent)

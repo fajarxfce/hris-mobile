@@ -26,6 +26,21 @@ class IdentityModule {
 
     @Factory fun signOut(sessions: SessionRepository) = SignOut(sessions)
 
+    @Factory
+    fun nativeSignOut(
+        sessions: SessionRepository,
+        devices: DeviceSessionRepository,
+        server: IdentityServer,
+    ) = SignOutNativeSession(sessions, devices, server)
+
+    @Factory
+    fun deviceSessions(sessions: SessionRepository, devices: DeviceSessionRepository) =
+        LoadDeviceSessions(sessions, devices)
+
+    @Factory
+    fun revokeDeviceSession(sessions: SessionRepository, devices: DeviceSessionRepository) =
+        RevokeDeviceSession(sessions, devices)
+
     @Factory fun observeUser(sessions: SessionRepository) = ObserveUser(sessions)
 
     @Factory fun observeIdentity(sessions: SessionRepository) = ObserveSessionIdentity(sessions)
