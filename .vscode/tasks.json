@@ -1,0 +1,62 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Desktop: run",
+      "type": "shell",
+      "command": "./gradlew :apps:shared:run",
+      "problemMatcher": []
+    },
+    {
+      "label": "Desktop: debug",
+      "type": "shell",
+      "command": "./gradlew :apps:shared:run --debug-jvm",
+      "problemMatcher": []
+    },
+    {
+      "label": "Android: run",
+      "type": "shell",
+      "command": "python3 tool/run_android.py",
+      "problemMatcher": []
+    },
+    {
+      "label": "Android: build APK",
+      "type": "shell",
+      "command": "./gradlew :apps:android:assembleDebug",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "Web: run",
+      "type": "shell",
+      "command": "./gradlew :apps:shared:wasmJsBrowserDevelopmentRun",
+      "problemMatcher": []
+    },
+    {
+      "label": "Web: build",
+      "type": "shell",
+      "command": "./gradlew :apps:shared:wasmJsBrowserDistribution",
+      "problemMatcher": []
+    },
+    {
+      "label": "Workspace: check",
+      "type": "shell",
+      "command": "./gradlew :check",
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "Workspace: check (headless Linux)",
+      "type": "shell",
+      "command": "xvfb-run -a ./gradlew :check",
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "Workspace: clean",
+      "type": "shell",
+      "command": "./gradlew clean",
+      "problemMatcher": []
+    }
+  ]
+}

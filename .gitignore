@@ -1,0 +1,13 @@
+.gradle/
+.kotlin/
+**/build/
+local.properties
+.env
+.env.*
+!.env.example
+.idea/
+*.iml
+.DS_Store
+**/xcuserdata/
+**/DerivedData/
+artifacts/

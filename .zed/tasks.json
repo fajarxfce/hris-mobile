@@ -1,0 +1,68 @@
+[
+  {
+    "label": "Desktop: run",
+    "command": "./gradlew",
+    "args": [
+      ":apps:shared:run"
+    ]
+  },
+  {
+    "label": "Desktop: debug (JVM 5005)",
+    "command": "./gradlew",
+    "args": [
+      ":apps:shared:run",
+      "--debug-jvm"
+    ]
+  },
+  {
+    "label": "Android: run",
+    "command": "python3",
+    "args": [
+      "tool/run_android.py"
+    ]
+  },
+  {
+    "label": "Android: build APK",
+    "command": "./gradlew",
+    "args": [
+      ":apps:android:assembleDebug"
+    ]
+  },
+  {
+    "label": "Web: run",
+    "command": "./gradlew",
+    "args": [
+      ":apps:shared:wasmJsBrowserDevelopmentRun"
+    ]
+  },
+  {
+    "label": "Web: build",
+    "command": "./gradlew",
+    "args": [
+      ":apps:shared:wasmJsBrowserDistribution"
+    ]
+  },
+  {
+    "label": "Workspace: check",
+    "command": "./gradlew",
+    "args": [
+      ":check"
+    ]
+  },
+  {
+    "label": "Workspace: check (headless Linux)",
+    "command": "xvfb-run",
+    "args": [
+      "-a",
+      "./gradlew",
+      ":check"
+    ]
+  },
+  {
+    "label": "Workspace: clean",
+    "command": "./gradlew",
+    "args": [
+      "clean"
+    ]
+  }
+]
