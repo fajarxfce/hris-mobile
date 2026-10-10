@@ -57,6 +57,18 @@ class StoredSessionRepositoryTest {
     }
 
     @Test
+    fun pendingRefreshIntentSurvivesSecureStoreAndRepositoryRecreation() = runTest {
+        val vault = Vault()
+        val prepared =
+            session.copy(pendingRefreshOperationId = "11111111-1111-4111-8111-111111111111")
+        val first = StoredSessionRepository(vault, MemorySessionDataSource(), Accounts())
+        assertEquals(AppResult.Success(true), first.compareAndSet(null, prepared))
+        val restored = StoredSessionRepository(vault, MemorySessionDataSource(), Accounts())
+        assertEquals(AppResult.Success(prepared), restored.current())
+        assertFalse(prepared.toString().contains("refresh"))
+    }
+
+    @Test
     fun vaultFailureRetainsIdentityAndNextReadReconcilesDerivativeCache() = runTest {
         val vault = Vault()
         val accounts = Accounts()

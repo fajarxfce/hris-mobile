@@ -7,5 +7,5 @@ interface AuthRemoteDataSource {
 
     suspend fun signIn(request: SignInRequest): AuthResponse
 
-    suspend fun refresh(request: RefreshRequest): AuthResponse
+    suspend fun refresh(request: RefreshRequest, operationId: String): AuthResponse
 }

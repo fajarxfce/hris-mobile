@@ -1,3 +1,5 @@
+@file:OptIn(kotlin.uuid.ExperimentalUuidApi::class)
+
 package dev.fajar.starter.identity.data.mappers
 
 import dev.fajar.starter.identity.data.dto.*
@@ -14,7 +16,8 @@ fun AuthResponse.toAuthenticatedUser() = AuthenticatedUser(user.toUser(), tokens
 
 fun SessionDto.toSession(): Session {
     require(id.isNotBlank()) { "Invalid session record." }
-    return Session(id, user.toUser(), tokens.toTokens())
+    pendingRefreshOperationId?.let { kotlin.uuid.Uuid.parse(it) }
+    return Session(id, user.toUser(), tokens.toTokens(), pendingRefreshOperationId)
 }
 
 fun Session.toDto() =
@@ -22,4 +25,5 @@ fun Session.toDto() =
         id,
         UserDto(user.id, user.name, user.email),
         TokensDto(tokens.accessToken, tokens.refreshToken, tokens.expiresAtEpochMillis),
+        pendingRefreshOperationId,
     )

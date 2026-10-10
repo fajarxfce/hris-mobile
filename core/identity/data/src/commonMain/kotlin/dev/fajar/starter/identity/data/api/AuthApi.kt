@@ -26,9 +26,10 @@ class AuthApi(@Named(HttpClients.Public) private val client: HttpClient) {
             }
             .body()
 
-    suspend fun refresh(request: RefreshRequest): AuthResponse =
+    suspend fun refresh(request: RefreshRequest, operationId: String): AuthResponse =
         client
             .post("auth/refresh") {
+                header("Idempotency-Key", operationId)
                 contentType(ContentType.Application.Json)
                 setBody(request)
             }

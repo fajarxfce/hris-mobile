@@ -2,6 +2,7 @@ package dev.fajar.starter.identity.domain.repositories
 
 import dev.fajar.starter.common.result.AppResult
 import dev.fajar.starter.identity.domain.entities.AuthenticatedUser
+import dev.fajar.starter.identity.domain.entities.Session
 import dev.fajar.starter.identity.domain.sso.entities.SsoProof
 
 interface IdentityRepository {
@@ -9,5 +10,5 @@ interface IdentityRepository {
 
     suspend fun signIn(email: String, password: String): AppResult<AuthenticatedUser>
 
-    suspend fun refresh(refreshToken: String): AppResult<AuthenticatedUser>
+    suspend fun refresh(session: Session, operationId: String): AppResult<AuthenticatedUser>
 }

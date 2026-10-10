@@ -10,7 +10,8 @@ import org.koin.core.annotation.Single
 class ApiAuthRemoteDataSource(private val api: AuthApi) : AuthRemoteDataSource {
     override suspend fun completeSso(request: OidcExchangeRequest) = api.completeSso(request)
 
-    override suspend fun refresh(request: RefreshRequest) = api.refresh(request)
+    override suspend fun refresh(request: RefreshRequest, operationId: String) =
+        api.refresh(request, operationId)
 
     override suspend fun signIn(request: SignInRequest) = api.signIn(request)
 }

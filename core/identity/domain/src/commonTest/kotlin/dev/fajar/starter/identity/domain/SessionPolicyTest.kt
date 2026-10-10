@@ -21,7 +21,7 @@ class SessionPolicyTest {
 
         override suspend fun signIn(email: String, password: String) = action()
 
-        override suspend fun refresh(refreshToken: String) = action()
+        override suspend fun refresh(session: Session, operationId: String) = action()
     }
 
     @Test
@@ -89,7 +89,9 @@ class SessionPolicyTest {
         var failure = AppResult.Failed(Failure(FailureKind.Network, "Offline"))
         val acquire = AcquireSessionTokens(Remote { failure }, sessions)
         assertSame(failure, acquire(session.id, "access"))
-        assertEquals(session, assertIs<AppResult.Success<Session?>>(sessions.current()).value)
+        val retained = assertIs<AppResult.Success<Session?>>(sessions.current()).value!!
+        assertNotNull(retained.pendingRefreshOperationId)
+        assertEquals(session, retained.copy(pendingRefreshOperationId = null))
         failure = AppResult.Failed(Failure(FailureKind.Unauthorized, "Expired"))
         assertSame(failure, acquire(session.id, "access"))
         assertNull(assertIs<AppResult.Success<Session?>>(sessions.current()).value)

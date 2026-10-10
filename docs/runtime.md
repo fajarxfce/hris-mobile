@@ -6,6 +6,15 @@ No authentication request leaves the device in demo mode.
 
 ## Session ownership
 
+Refresh intent is persisted in the secure session record before network I/O.
+The identity repository receives the original session snapshot and operation ID;
+the HTTP adapter sends that ID as `Idempotency-Key`. A lost response, cancelled
+request, or restarted application reuses the same token/key. Successful token
+replacement clears the pending operation atomically. Existing session records
+without that optional field are prepared on their first refresh. The backend
+must implement replay and define its finite replay window; an expired or revoked
+session must require authentication instead of retrying indefinitely.
+
 `SignIn`, `SignOut`, `RestoreSession`, and `AcquireSessionTokens` coordinate the
 identity and session repository contracts. Datasources do raw I/O. Token refresh
 is serialized in the use case; the Ktor plugin only adapts HTTP requests to it.

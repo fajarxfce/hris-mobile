@@ -23,7 +23,7 @@ class IdentityRepositoryTest {
 
         override suspend fun signIn(request: SignInRequest) = execute()
 
-        override suspend fun refresh(request: RefreshRequest) = execute()
+        override suspend fun refresh(request: RefreshRequest, operationId: String) = execute()
     }
 
     @Test

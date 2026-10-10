@@ -135,8 +135,10 @@ private class ExchangeFixture(
     override suspend fun signIn(email: String, password: String): AppResult<AuthenticatedUser> =
         error("Unused")
 
-    override suspend fun refresh(refreshToken: String): AppResult<AuthenticatedUser> =
-        error("Unused")
+    override suspend fun refresh(
+        session: Session,
+        operationId: String,
+    ): AppResult<AuthenticatedUser> = error("Unused")
 }
 
 private class SessionFixture : SessionRepository {

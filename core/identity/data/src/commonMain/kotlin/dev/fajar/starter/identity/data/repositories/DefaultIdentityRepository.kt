@@ -3,6 +3,7 @@ package dev.fajar.starter.identity.data.repositories
 import dev.fajar.starter.identity.data.datasources.AuthRemoteDataSource
 import dev.fajar.starter.identity.data.dto.*
 import dev.fajar.starter.identity.data.mappers.toAuthenticatedUser
+import dev.fajar.starter.identity.domain.entities.Session
 import dev.fajar.starter.identity.domain.repositories.IdentityRepository
 import dev.fajar.starter.identity.domain.sso.entities.SsoProof
 import dev.fajar.starter.network.safeApiCall
@@ -29,7 +30,9 @@ class DefaultIdentityRepository(private val remote: AuthRemoteDataSource) : Iden
         remote.signIn(SignInRequest(email, password)).toAuthenticatedUser()
     }
 
-    override suspend fun refresh(refreshToken: String) = safeApiCall {
-        remote.refresh(RefreshRequest(refreshToken)).toAuthenticatedUser()
+    override suspend fun refresh(session: Session, operationId: String) = safeApiCall {
+        remote
+            .refresh(RefreshRequest(session.tokens.refreshToken), operationId)
+            .toAuthenticatedUser()
     }
 }

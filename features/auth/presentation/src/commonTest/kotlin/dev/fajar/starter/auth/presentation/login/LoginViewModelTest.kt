@@ -54,8 +54,10 @@ class LoginViewModelTest {
                 override suspend fun completeSso(proof: SsoProof): AppResult<AuthenticatedUser> =
                     error("Unused SSO exchange")
 
-                override suspend fun refresh(refreshToken: String): AppResult<AuthenticatedUser> =
-                    error("Unused")
+                override suspend fun refresh(
+                    session: Session,
+                    operationId: String,
+                ): AppResult<AuthenticatedUser> = error("Unused")
 
                 override suspend fun signIn(
                     email: String,
@@ -98,8 +100,10 @@ class LoginViewModelTest {
                 override suspend fun completeSso(proof: SsoProof): AppResult<AuthenticatedUser> =
                     error("Unused SSO exchange")
 
-                override suspend fun refresh(refreshToken: String): AppResult<AuthenticatedUser> =
-                    error("Unused")
+                override suspend fun refresh(
+                    session: Session,
+                    operationId: String,
+                ): AppResult<AuthenticatedUser> = error("Unused")
 
                 override suspend fun signIn(
                     email: String,
@@ -139,8 +143,10 @@ class LoginViewModelTest {
                 override suspend fun completeSso(proof: SsoProof): AppResult<AuthenticatedUser> =
                     error("Unused SSO exchange")
 
-                override suspend fun refresh(refreshToken: String): AppResult<AuthenticatedUser> =
-                    error("unused")
+                override suspend fun refresh(
+                    session: Session,
+                    operationId: String,
+                ): AppResult<AuthenticatedUser> = error("unused")
 
                 override suspend fun signIn(
                     email: String,

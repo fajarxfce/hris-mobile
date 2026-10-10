@@ -29,8 +29,10 @@ class SignInTest {
             return result
         }
 
-        override suspend fun refresh(refreshToken: String): AppResult<AuthenticatedUser> =
-            error("Unused")
+        override suspend fun refresh(
+            session: Session,
+            operationId: String,
+        ): AppResult<AuthenticatedUser> = error("Unused")
     }
 
     @Test
