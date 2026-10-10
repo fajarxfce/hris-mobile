@@ -46,6 +46,10 @@ remote tombstone protocol hidden in the repository. Those policies depend on the
 The demo acknowledges valid commands and checks idempotency within its process; its server-side
 state is not persistent. Local storage is persistent.
 
+[Replication storage](replica-storage.md) additionally provides staged snapshots,
+atomic document/checkpoint commits, tombstones, and account-isolated partitions.
+Feature-specific encrypted HRIS adapters and sync use cases are separate work.
+
 ## Workers
 
 | Platform | Execution |

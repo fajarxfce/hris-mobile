@@ -22,12 +22,17 @@ private class IndexedDbAppDatabase(name: String) : AppDatabase {
         MutableSharedFlow<Unit>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST).apply {
             tryEmit(Unit)
         }
+    private val replicaChanges =
+        MutableSharedFlow<Unit>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST).apply {
+            tryEmit(Unit)
+        }
     override val accounts: AccountCacheStore =
         object : AccountCacheStore {
             override suspend fun activate(sessionId: String?) {
                 activateAccount(database.await<JsAny>(), sessionId).await<JsAny?>()
                 changes.tryEmit(Unit)
                 transferChanges.tryEmit(Unit)
+                replicaChanges.tryEmit(Unit)
             }
         }
     override val inbox: InboxStore = IndexedDbInboxStore(changes) { database.await<JsAny>() }
@@ -36,6 +41,8 @@ private class IndexedDbAppDatabase(name: String) : AppDatabase {
 
     override val transfers: TransferStore =
         IndexedDbTransferStore(transferChanges) { database.await<JsAny>() }
+    override val replicas: ReplicaStore =
+        IndexedDbReplicaStore(replicaChanges) { database.await<JsAny>() }
 
     override fun close() {
         if (connection.isInitialized()) closeDatabase(database)
@@ -71,9 +78,17 @@ private class IndexedDbInboxStore(
 
 @JsFun(
     """(name) => new Promise((resolve, reject) => {
-    const request = indexedDB.open(name, 4);
+    const request = indexedDB.open(name, 5);
+    let settled = false;
     request.onupgradeneeded = event => {
         const db = request.result;
+        if (event.oldVersion < 5) {
+            db.createObjectStore('replica_heads', {keyPath:'partition'});
+            db.createObjectStore('replica_generations', {keyPath:['partition', 'generation']});
+            const replicas = db.createObjectStore('replica_documents', {keyPath:['partition', 'generation', 'id']});
+            replicas.createIndex('ordered', ['partition', 'generation', 'sortKey'], {unique:true});
+            replicas.createIndex('visible', ['partition', 'generation', 'visibleSort']);
+        }
         if (event.oldVersion < 4) {
             db.createObjectStore('transfers', {keyPath: 'id'});
             db.createObjectStore('transfer_chunks', {keyPath: ['transferId', 'offset']});
@@ -87,9 +102,12 @@ private class IndexedDbInboxStore(
             outbox.createIndex('operationId', 'operationId', {unique: true});
         }
     };
-    request.onsuccess = () => { request.result.onversionchange = () => request.result.close(); resolve(request.result); };
-    request.onerror = () => reject(request.error);
-    request.onblocked = () => reject(new Error('Database upgrade is blocked.'));
+    request.onsuccess = () => {
+        if (settled) { request.result.close(); return; }
+        settled = true; request.result.onversionchange = () => request.result.close(); resolve(request.result);
+    };
+    request.onerror = () => { settled = true; reject(request.error); };
+    request.onblocked = () => { settled = true; reject(new Error('Database upgrade is blocked.')); };
 })"""
 )
 private external fun openAppDatabase(name: String): Promise<JsAny>
@@ -134,11 +152,11 @@ private external fun closeDatabase(database: Promise<JsAny>)
 
 @JsFun(
     """(db, scope) => new Promise((resolve, reject) => {
-    const tx = db.transaction(['account_scope', 'dashboard', 'activity_preferences', 'dashboard_outbox', 'inbox', 'transfers', 'transfer_chunks'], 'readwrite');
+    const tx = db.transaction(['account_scope', 'dashboard', 'activity_preferences', 'dashboard_outbox', 'inbox', 'transfers', 'transfer_chunks', 'replica_heads', 'replica_generations', 'replica_documents'], 'readwrite');
     const scopes = tx.objectStore('account_scope'), current = scopes.get('current');
     current.onsuccess = () => {
         if (current.result === scope) return;
-        for (const name of ['dashboard', 'activity_preferences', 'dashboard_outbox', 'inbox', 'transfers', 'transfer_chunks']) tx.objectStore(name).clear();
+        for (const name of ['dashboard', 'activity_preferences', 'dashboard_outbox', 'inbox', 'transfers', 'transfer_chunks', 'replica_heads', 'replica_generations', 'replica_documents']) tx.objectStore(name).clear();
         scopes.put(scope, 'current');
     };
     tx.oncomplete = () => resolve(null);
