@@ -13,4 +13,9 @@ interface SessionRepository {
 
     /** False means another session transition already committed. */
     suspend fun compareAndSet(expected: Session?, updated: Session?): AppResult<Boolean>
+
+    /**
+     * Atomically clears this local identity, regardless of token rotation; false means it is gone.
+     */
+    suspend fun clear(sessionId: String): AppResult<Boolean>
 }

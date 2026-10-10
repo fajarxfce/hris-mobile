@@ -53,14 +53,27 @@ class StoredSessionRepository(
         }
     }
 
-    override suspend fun compareAndSet(expected: Session?, updated: Session?): AppResult<Boolean> {
+    override suspend fun compareAndSet(expected: Session?, updated: Session?): AppResult<Boolean> =
+        writeIfCurrent(updated) { it == expected }
+
+    override suspend fun clear(sessionId: String): AppResult<Boolean> =
+        writeIfCurrent(null) { it?.id == sessionId }
+
+    /**
+     * The vault/cache transaction shares one guard for full-record CAS and identity-scoped
+     * deletion.
+     */
+    private suspend fun writeIfCurrent(
+        updated: Session?,
+        matches: (Session?) -> Boolean,
+    ): AppResult<Boolean> {
         when (val restored = current()) {
             is AppResult.Failed -> return restored
             is AppResult.Success -> Unit
         }
         return safeStorageCall {
             localCommit.withLock {
-                if (memory.record.value?.toSession() != expected) return@withLock false
+                if (!matches(memory.record.value?.toSession())) return@withLock false
                 currentCoroutineContext().ensureActive()
                 val record = updated?.toDto()
                 // Local commit only: never hold this section across network I/O.

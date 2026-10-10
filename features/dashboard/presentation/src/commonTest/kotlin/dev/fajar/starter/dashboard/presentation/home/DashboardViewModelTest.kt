@@ -147,6 +147,16 @@ private class TestSessions(initial: Session? = null) : SessionRepository {
 
     override suspend fun current() = value.value
 
+    override suspend fun clear(sessionId: String): AppResult<Boolean> {
+        val session =
+            when (val result = current()) {
+                is AppResult.Failed -> return result
+                is AppResult.Success -> result.value
+            }
+        return if (session?.id == sessionId) compareAndSet(session, null)
+        else AppResult.Success(false)
+    }
+
     override suspend fun compareAndSet(expected: Session?, updated: Session?): AppResult<Boolean> {
         val current = value.value
         if (current is AppResult.Failed) return current

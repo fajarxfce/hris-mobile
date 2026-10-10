@@ -10,7 +10,8 @@ class SignOut(private val repository: SessionRepository) {
                 is AppResult.Failed -> return result
                 is AppResult.Success -> result.value
             }
-        return when (val cleared = repository.compareAndSet(session, null)) {
+        if (session == null) return AppResult.Success(Unit)
+        return when (val cleared = repository.clear(session.id)) {
             is AppResult.Failed -> cleared
             is AppResult.Success -> AppResult.Success(Unit)
         }
