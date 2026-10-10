@@ -6,10 +6,10 @@ plugins {
 }
 
 android {
-    namespace = "dev.fajar.fluent"
+    namespace = "dev.fajar.hris"
     compileSdk = 36
     defaultConfig {
-        applicationId = "dev.fajar.fluent.starter"
+        applicationId = "dev.fajar.hris.mobile"
         minSdk = 24
         targetSdk = 36
         versionCode = providers.gradleProperty("appVersionCode").get().toInt()

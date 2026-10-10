@@ -24,7 +24,7 @@ def configuration(values):
         url = urlparse(endpoint)
         if url.scheme != 'https' or not url.hostname or url.username or url.password or url.query or url.fragment:
             raise ValueError('A remote build requires an HTTPS API_BASE_URL without credentials or query.')
-    identifier = 'dev.fajar.fluent.starter' + ('' if environment == 'prod' else f'.{environment}')
+    identifier = 'dev.fajar.hris.mobile' + ('' if environment == 'prod' else f'.{environment}')
     return {'environment': environment, 'variant': environment.capitalize(),
             'identifier': identifier, 'version': version, 'build': build, 'backend': backend}
 

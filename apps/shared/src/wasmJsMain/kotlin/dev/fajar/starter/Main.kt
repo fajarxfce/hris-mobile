@@ -31,7 +31,7 @@ import org.koin.dsl.module
 fun main() {
     if (dev.fajar.starter.identity.data.sso.datasources.handleOidcRedirect()) return
     val environment = BuildEnvironment.current
-    val namespace = "fluent-starter.${environment.id}"
+    val namespace = "hris-mobile.${environment.id}"
     val links = AppLinkChannel()
     val push = BrowserPushTokenSource()
     val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)

@@ -31,7 +31,7 @@ class DesktopNotificationDisplaySource(private val open: (String) -> Unit) :
                                             dispose()
                                         }
                                     },
-                                    "Fluent Starter",
+                                    "HRIS Mobile",
                                 )
                                 .also {
                                     it.isImageAutoSize = true

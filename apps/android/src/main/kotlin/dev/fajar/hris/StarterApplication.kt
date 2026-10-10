@@ -1,4 +1,4 @@
-package dev.fajar.fluent
+package dev.fajar.hris
 
 import android.app.Application
 import androidx.work.Configuration

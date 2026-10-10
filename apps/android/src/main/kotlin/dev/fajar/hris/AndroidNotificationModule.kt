@@ -1,4 +1,4 @@
-package dev.fajar.fluent
+package dev.fajar.hris
 
 import android.content.Context
 import dev.fajar.starter.common.config.AppEnvironment

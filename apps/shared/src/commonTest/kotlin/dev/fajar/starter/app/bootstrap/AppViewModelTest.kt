@@ -38,7 +38,7 @@ class AppViewModelTest {
                     ResolveAppLink(AppEnvironment.Dev),
                 )
             owner.put("app", vm)
-            vm.onEvent(AppEvent.LinkReceived("fluentstarter-dev://app/inbox"))
+            vm.onEvent(AppEvent.LinkReceived("hrismobile-dev://app/inbox"))
             runCurrent()
             assertEquals(AppStage.Onboarding, vm.state.value.stage)
             assertEquals(AppLink.Inbox, vm.state.value.pendingLink)
@@ -53,7 +53,7 @@ class AppViewModelTest {
             identity.value.value = AppResult.Success(testSession().copy(id = "session-b"))
             runCurrent()
             assertEquals(AppStage.SignedIn("session-b"), vm.state.value.stage)
-            vm.onEvent(AppEvent.LinkReceived("fluentstarter-dev://app/activity"))
+            vm.onEvent(AppEvent.LinkReceived("hrismobile-dev://app/activity"))
             vm.onEvent(AppEvent.LinkHandled(AppLink.Inbox))
             runCurrent()
             assertEquals(AppLink.Activity, vm.state.value.pendingLink)

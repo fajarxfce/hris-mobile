@@ -15,7 +15,7 @@ from firebase_distribute import FirebaseDistribution, NoRedirects
 class DistributionConfigurationTest(unittest.TestCase):
     def test_inputs_reject_injection_and_unsafe_remote_origins(self):
         values = dict(RELEASE_ENVIRONMENT='staging', RELEASE_VERSION='1.2.3', RELEASE_BUILD='42', RELEASE_BACKEND='demo')
-        self.assertEqual('dev.fajar.fluent.starter.staging', configuration(values)['identifier'])
+        self.assertEqual('dev.fajar.hris.mobile.staging', configuration(values)['identifier'])
         for key, bad in [('RELEASE_ENVIRONMENT', '../prod'), ('RELEASE_BUILD', '42\nsecret=1'),
                          ('RELEASE_VERSION', '$(command)'), ('RELEASE_BACKEND', 'unknown')]:
             with self.subTest(key=key), self.assertRaises(ValueError):
@@ -43,7 +43,7 @@ class DistributionConfigurationTest(unittest.TestCase):
         # No keystore write or upload occurs before the registration is validated.
 
     def test_apple_profile_rejects_expiry_debug_and_other_accounts(self):
-        identifier, team = 'dev.fajar.fluent.starter.staging', 'AAAAAAAAAA'
+        identifier, team = 'dev.fajar.hris.mobile.staging', 'AAAAAAAAAA'
         profile = {'UUID': '12345678-1234-1234-1234-123456789012', 'TeamIdentifier': [team],
                    'ExpirationDate': datetime.now(timezone.utc) + timedelta(days=1),
                    'Entitlements': {'application-identifier': team + '.' + identifier, 'get-task-allow': False}}

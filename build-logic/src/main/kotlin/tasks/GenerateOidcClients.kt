@@ -105,8 +105,7 @@ private fun encodeOidcRegistration(platform: Any?, raw: Any?, environment: Strin
     when (platform) {
         "android",
         "ios" -> {
-            val scheme =
-                if (environment == "prod") "fluentstarter" else "fluentstarter-$environment"
+            val scheme = if (environment == "prod") "hrismobile" else "hrismobile-$environment"
             require(redirect == "$scheme://oauth/callback") {
                 "Mobile OIDC callback must match the environment URL scheme and oauth/callback."
             }

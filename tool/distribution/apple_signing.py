@@ -37,7 +37,7 @@ def prepare(root, directory, values):
     environment = required(values, 'RELEASE_ENVIRONMENT')
     if environment not in {'dev', 'staging', 'prod'}:
         raise ValueError('Invalid environment.')
-    identifier = 'dev.fajar.fluent.starter' + ('' if environment == 'prod' else '.' + environment)
+    identifier = 'dev.fajar.hris.mobile' + ('' if environment == 'prod' else '.' + environment)
     team = required(values, 'APPLE_TEAM_ID')
     key_id = required(values, 'APPLE_API_KEY_ID')
     issuer = required(values, 'APPLE_API_ISSUER_ID')

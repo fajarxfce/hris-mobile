@@ -1,4 +1,4 @@
-package dev.fajar.fluent
+package dev.fajar.hris
 
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage

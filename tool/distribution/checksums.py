@@ -37,9 +37,9 @@ def package(root, platform):
         if mapping.exists():
             shutil.copytree(mapping, destination / 'mapping')
     elif platform == 'ios':
-        archive = directory / 'FluentStarter.xcarchive'
-        checked('codesign', '--verify', '--deep', '--strict', str(archive / 'Products/Applications/FluentStarter.app'))
-        ipa = directory / 'ipa/FluentStarter.ipa'
+        archive = directory / 'HrisMobile.xcarchive'
+        checked('codesign', '--verify', '--deep', '--strict', str(archive / 'Products/Applications/HrisMobile.app'))
+        ipa = directory / 'ipa/HrisMobile.ipa'
         shutil.copyfile(ipa, destination / ipa.name)
         if (archive / 'dSYMs').exists():
             shutil.copytree(archive / 'dSYMs', destination / 'dSYMs')

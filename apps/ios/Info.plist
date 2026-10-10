@@ -7,7 +7,7 @@
     <key>firebase_performance_collection_enabled</key><false/>
     <key>firebase_performance_instrumentation_enabled</key><false/>
 	<key>CFBundleDisplayName</key>
-	<string>$(FLUENT_DISPLAY_NAME)</string>
+	<string>$(HRIS_DISPLAY_NAME)</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -27,7 +27,7 @@
 			<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>$(FLUENT_LINK_SCHEME)</string>
+				<string>$(HRIS_LINK_SCHEME)</string>
 			</array>
 		</dict>
 	</array>

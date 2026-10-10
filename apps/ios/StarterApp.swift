@@ -11,7 +11,7 @@ struct StarterApp: App {
                 ComposeView(host: delegate.host)
                 if scenePhase != .active {
                     Color(.systemBackground)
-                        .accessibilityLabel("Fluent Starter")
+                        .accessibilityLabel("HRIS Mobile")
                 }
             }
                 .ignoresSafeArea()

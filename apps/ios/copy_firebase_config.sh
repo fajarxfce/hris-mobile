@@ -1,6 +1,6 @@
 #!/bin/sh
 set -eu
-config="$SRCROOT/Configuration/$FLUENT_ENVIRONMENT/GoogleService-Info.plist"
+config="$SRCROOT/Configuration/$HRIS_ENVIRONMENT/GoogleService-Info.plist"
 destination="$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH/GoogleService-Info.plist"
 if [ ! -f "$config" ]; then
     rm -f "$destination"

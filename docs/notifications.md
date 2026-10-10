@@ -109,9 +109,9 @@ links are in-memory intents and do not survive process death.
 
 ```sh
 adb shell am start -W -a android.intent.action.VIEW \
-  -d 'fluentstarter-dev://app/inbox' dev.fajar.fluent.starter.dev
-xcrun simctl openurl booted 'fluentstarter-dev://app/inbox'
-./gradlew :apps:shared:run --args='fluentstarter-dev://app/activity'
+  -d 'hrismobile-dev://app/inbox' dev.fajar.hris.mobile.dev
+xcrun simctl openurl booted 'hrismobile-dev://app/inbox'
+./gradlew :apps:shared:run --args='hrismobile-dev://app/activity'
 ```
 
 Web uses the current deployment URL followed by `#/inbox`, for example

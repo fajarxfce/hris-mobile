@@ -8,6 +8,10 @@ Reusable foundation improvements are also maintained in the starter; see [templa
 
 Backend integration is in progress. The inherited demo described below is a template fixture, not an HRIS service.
 
+HRIS uses separate Android/iOS identifiers, desktop credentials, browser storage,
+and deep-link schemes. It can be installed alongside the starter. See
+[build environments](docs/environments.md) for all three application IDs.
+
 ## Run
 
 Requires JDK 21. Checks require Python 3; web builds require Node.js 22 LTS.
@@ -19,7 +23,7 @@ Android builds also require Android SDK 36.
 ./gradlew :apps:shared:wasmJsBrowserDevelopmentRun # Web
 ```
 
-Open `apps/ios/FluentStarter.xcodeproj` on macOS for iOS. Select a simulator or configure your signing team for a physical device.
+Open `apps/ios/HrisMobile.xcodeproj` on macOS for iOS. Select a simulator or configure your signing team for a physical device.
 
 Demo account: **demo@example.com / Demo123!**. The default transport is an in-process Ktor MockEngine; no authentication requests leave the device. Onboarding preferences persist. Sessions restore from secure storage on mobile/desktop; Web sessions remain in memory. Dashboard content is sample data, cached locally. Saved activities use a transactional outbox and persist with the active session.
 

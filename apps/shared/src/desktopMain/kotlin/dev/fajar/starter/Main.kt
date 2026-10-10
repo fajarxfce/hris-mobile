@@ -22,13 +22,12 @@ import org.koin.dsl.onClose
 
 fun main(args: Array<String>) {
     val environment = BuildEnvironment.current
-    val directory =
-        java.io.File(System.getProperty("user.home"), ".fluent-starter/${environment.id}")
+    val directory = java.io.File(System.getProperty("user.home"), ".hris-mobile/${environment.id}")
     val links = AppLinkChannel()
     args.firstOrNull()?.let(links::receive)
     val container =
         createAppContainer(
-            createUserPreferences(directory, migrateLegacy = environment.id == "prod"),
+            createUserPreferences(directory, migrateLegacy = false),
             createAppDatabase(directory),
             module {
                 single<NotificationPermissionSource> { DesktopNotificationPermissionSource() }
@@ -43,7 +42,7 @@ fun main(args: Array<String>) {
             browserAuthorization = DesktopBrowserAuthorizationSource(),
             credentials =
                 if (BuildRuntime.persistDesktopSession)
-                    DesktopCredentialStore("fluent-starter.${environment.id}")
+                    DesktopCredentialStore("hris-mobile.${environment.id}")
                 else MemoryCredentialStore(),
         )
     val workerScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
@@ -58,7 +57,7 @@ fun main(args: Array<String>) {
         }
         Window(
             onCloseRequest = ::exitApplication,
-            title = "Fluent Starter",
+            title = "HRIS Mobile",
             state = rememberWindowState(width = 1100.dp, height = 820.dp),
         ) {
             StarterApp(container, links.links)

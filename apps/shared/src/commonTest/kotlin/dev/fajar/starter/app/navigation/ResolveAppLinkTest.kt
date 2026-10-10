@@ -8,15 +8,16 @@ class ResolveAppLinkTest {
 
     @Test
     fun acceptsOnlyKnownRoutesAndTheCurrentEnvironment() {
-        assertEquals(AppLink.Inbox, resolve("fluentstarter-dev://app/inbox"))
+        assertEquals(AppLink.Inbox, resolve("hrismobile-dev://app/inbox"))
         assertEquals(AppLink.Activity, resolve("#/activity"))
-        assertEquals(AppLink.Account, resolve("FLUENTSTARTER-DEV://APP/account"))
+        assertEquals(AppLink.Account, resolve("HRISMOBILE-DEV://APP/account"))
         listOf(
-                "fluentstarter://app/inbox",
-                "fluentstarter-staging://app/inbox",
-                "fluentstarter-dev://evil/inbox",
+                "fluentstarter-dev://app/account",
+                "hrismobile://app/inbox",
+                "hrismobile-staging://app/inbox",
+                "hrismobile-dev://evil/inbox",
                 "https://example.com/#/inbox",
-                "fluentstarter-dev://app/account?redirect=evil",
+                "hrismobile-dev://app/account?redirect=evil",
                 "#/../account",
                 "#/%61ccount",
                 "#/inbox/unknown",

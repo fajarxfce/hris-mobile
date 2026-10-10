@@ -2,9 +2,9 @@
 
 | Environment | Android/iOS identifier | URL scheme |
 |---|---|---|
-| dev | `dev.fajar.fluent.starter.dev` | `fluentstarter-dev` |
-| staging | `dev.fajar.fluent.starter.staging` | `fluentstarter-staging` |
-| prod | `dev.fajar.fluent.starter` | `fluentstarter` |
+| dev | `dev.fajar.hris.mobile.dev` | `hrismobile-dev` |
+| staging | `dev.fajar.hris.mobile.staging` | `hrismobile-staging` |
+| prod | `dev.fajar.hris.mobile` | `hrismobile` |
 
 Android flavors are configured by `starter.android.flavors`, independently of
 `debug`/`release` build types. Application IDs isolate installed apps and storage.
@@ -33,9 +33,9 @@ Desktop storage directories and browser storage keys include the environment. An
 uses its flavor's BuildConfig value, independently of the shared default. The demo
 transport stays in-process in every flavor; flavors are not production backend setup.
 
-iOS has `FluentStarter-dev`, `FluentStarter-staging`, and `FluentStarter-prod` schemes,
+iOS has `HrisMobile-dev`, `HrisMobile-staging`, and `HrisMobile-prod` schemes,
 each with Debug/Release configurations and separate bundle identifiers. The framework
-build passes `FLUENT_ENVIRONMENT` to Gradle. Existing Debug/Release configurations remain
+build passes `HRIS_ENVIRONMENT` to Gradle. Existing Debug/Release configurations remain
 aliases for dev/prod. Native release distribution still requires Apple signing.
 
 Firebase configuration and verified HTTPS link association are environment-specific.

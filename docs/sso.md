@@ -21,11 +21,11 @@ with separate registrations for those environments.
 
 | Platform | Dev callback |
 |---|---|
-| Android / iOS | `fluentstarter-dev://oauth/callback` |
+| Android / iOS | `hrismobile-dev://oauth/callback` |
 | Desktop | `http://127.0.0.1:48085/oauth/callback` |
 | Web development | `http://localhost:8080/oauth/callback` |
 
-Mobile staging uses `fluentstarter-staging`, and production uses `fluentstarter`.
+Mobile staging uses `hrismobile-staging`, and production uses `hrismobile`.
 Desktop may use a different registered port. Web must use the deployed application's
 exact origin and `/oauth/callback`; HTTPS is required outside dev localhost.
 
@@ -66,7 +66,7 @@ secrets, signing credentials and service-account keys must remain server-side.
   "code": "<single-use authorization code>",
   "codeVerifier": "<PKCE verifier>",
   "nonce": "<requested nonce>",
-  "redirectUri": "fluentstarter-dev://oauth/callback"
+  "redirectUri": "hrismobile-dev://oauth/callback"
 }
 ```
 

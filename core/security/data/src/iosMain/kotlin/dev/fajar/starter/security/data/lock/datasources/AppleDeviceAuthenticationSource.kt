@@ -30,7 +30,7 @@ class AppleDeviceAuthenticationSource : DeviceAuthenticationSource {
                     continuation.invokeOnCancellation { context.invalidate() }
                     context.evaluatePolicy(
                         LAPolicyDeviceOwnerAuthenticationWithBiometrics,
-                        localizedReason = "Unlock Fluent Starter",
+                        localizedReason = "Unlock HRIS Mobile",
                     ) { success, error ->
                         if (continuation.isActive) {
                             if (error == null) continuation.resume(success)

@@ -10,7 +10,7 @@ tasks.named<CyclonedxDirectTask>("cyclonedxDirectBom") {
             providers.gradleProperty("sbomConfiguration").getOrElse("prodReleaseRuntimeClasspath")
         )
     projectType = Component.Type.APPLICATION
-    componentName = "fluent-starter-${project.name}"
+    componentName = "hris-mobile-${project.name}"
     componentVersion = providers.gradleProperty("appVersion").get()
     jsonOutput = layout.buildDirectory.file("reports/sbom/android.cdx.json")
 }

@@ -23,7 +23,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "compose-fluent-starter"
+rootProject.name = "hris-mobile"
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 

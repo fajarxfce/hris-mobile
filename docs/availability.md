@@ -31,7 +31,7 @@ Set build metadata and a trusted update destination when building:
 ```sh
 ./gradlew :apps:android:assembleProdRelease \
   -PappVersion=1.2.0 -PappVersionCode=12 \
-  -PupdateUrl.android=https://play.google.com/store/apps/details?id=dev.fajar.fluent.starter
+  -PupdateUrl.android=https://play.google.com/store/apps/details?id=dev.fajar.hris.mobile
 ```
 
 Other URL properties are `updateUrl.ios`, `updateUrl.desktop`, and `updateUrl.web`.

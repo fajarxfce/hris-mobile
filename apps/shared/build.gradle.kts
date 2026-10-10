@@ -62,9 +62,9 @@ kotlin {
         }
     }
     wasmJs {
-        outputModuleName.set("fluent-starter")
+        outputModuleName.set("hris-mobile")
         binaries.executable()
-        browser { commonWebpackConfig { outputFileName = "fluent-starter.js" } }
+        browser { commonWebpackConfig { outputFileName = "hris-mobile.js" } }
     }
     sourceSets.getByName("desktopMain").dependencies {
         implementation(compose.desktop.currentOs)
@@ -87,7 +87,7 @@ compose.desktop {
                 org.jetbrains.compose.desktop.application.dsl.TargetFormat.Msi,
                 org.jetbrains.compose.desktop.application.dsl.TargetFormat.Deb,
             )
-            packageName = "FluentStarter"
+            packageName = "HrisMobile"
             packageVersion = providers.gradleProperty("appVersion").get()
         }
     }

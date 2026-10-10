@@ -21,4 +21,4 @@ if serial is None:
 environment = dict(os.environ, ANDROID_SERIAL=serial)
 subprocess.run([str(wrapper), f":apps:android:install{args.flavor.capitalize()}Debug"], cwd=root, env=environment, check=True)
 subprocess.run([str(adb), "-s", serial, "shell", "am", "start", "-n",
-                f"dev.fajar.fluent.starter{'.' + args.flavor if args.flavor != 'prod' else ''}/dev.fajar.fluent.MainActivity"], check=True)
+                f"dev.fajar.hris.mobile{'.' + args.flavor if args.flavor != 'prod' else ''}/dev.fajar.hris.MainActivity"], check=True)

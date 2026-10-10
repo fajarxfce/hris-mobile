@@ -14,11 +14,11 @@ android {
                 val suffix =
                     if (environment == "prod") ""
                     else " ${environment.replaceFirstChar { it.uppercase() }}"
-                resValue("string", "app_name", "Fluent Starter$suffix")
+                resValue("string", "app_name", "HRIS Mobile$suffix")
                 manifestPlaceholders["deepLinkScheme"] =
-                    if (environment == "prod") "fluentstarter" else "fluentstarter-$environment"
+                    if (environment == "prod") "hrismobile" else "hrismobile-$environment"
                 manifestPlaceholders["appAuthRedirectScheme"] =
-                    if (environment == "prod") "fluentstarter" else "fluentstarter-$environment"
+                    if (environment == "prod") "hrismobile" else "hrismobile-$environment"
                 buildConfigField("String", "APP_ENVIRONMENT", "\"$environment\"")
             }
         }

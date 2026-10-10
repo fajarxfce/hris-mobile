@@ -44,7 +44,7 @@
         A00000000000000000000012 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposeView.swift; sourceTree = "<group>"; };
         A00000000000000000000013 = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
         A00000000000000000000014 = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-        A00000000000000000000015 = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FluentStarter.app; sourceTree = BUILT_PRODUCTS_DIR; };
+        A00000000000000000000015 = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HrisMobile.app; sourceTree = BUILT_PRODUCTS_DIR; };
         A00000000000000000000020 = {
             isa = PBXGroup;
             children = (E00000000000000000000003, D00000000000000000000005, D00000000000000000000001, C00000000000000000000011, C00000000000000000000002, A00000000000000000000011, A00000000000000000000012, A00000000000000000000013, A00000000000000000000014, A00000000000000000000021,);
@@ -57,8 +57,8 @@
             buildPhases = (A00000000000000000000044, A00000000000000000000041, A00000000000000000000042, A00000000000000000000043, C00000000000000000000008, D00000000000000000000007,);
             buildRules = (); dependencies = ();
             packageProductDependencies = (E00000000000000000000001,D00000000000000000000003,C00000000000000000000004, C00000000000000000000005, C00000000000000000000009,);
-            name = FluentStarter;
-            productName = FluentStarter;
+            name = HrisMobile;
+            productName = HrisMobile;
             productReference = A00000000000000000000015;
             productType = "com.apple.product-type.application";
         };
@@ -83,37 +83,37 @@
             isa = PBXShellScriptBuildPhase; alwaysOutOfDate = 1; buildActionMask = 2147483647;
             files = (); inputPaths = (); outputPaths = (); name = "Build Kotlin framework";
             runOnlyForDeploymentPostprocessing = 0; shellPath = /bin/sh;
-            shellScript = "cd \"$SRCROOT/../..\"\n./gradlew -PappEnvironment=\"$FLUENT_ENVIRONMENT\" -PappVersion=\"$MARKETING_VERSION\" -PappVersionCode=\"$CURRENT_PROJECT_VERSION\" :apps:shared:embedAndSignAppleFrameworkForXcode\n";
+            shellScript = "cd \"$SRCROOT/../..\"\n./gradlew -PappEnvironment=\"$HRIS_ENVIRONMENT\" -PappVersion=\"$MARKETING_VERSION\" -PappVersionCode=\"$CURRENT_PROJECT_VERSION\" :apps:shared:embedAndSignAppleFrameworkForXcode\n";
         };
         A00000000000000000000050 = {isa = XCConfigurationList; buildConfigurations = (A00000000000000000000060, A00000000000000000000061, B00000000000000000000100, B00000000000000000000102, B00000000000000000000104, B00000000000000000000106, B00000000000000000000108, B00000000000000000000110,); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
         A00000000000000000000051 = {isa = XCConfigurationList; buildConfigurations = (A00000000000000000000062, A00000000000000000000063, B00000000000000000000101, B00000000000000000000103, B00000000000000000000105, B00000000000000000000107, B00000000000000000000109, B00000000000000000000111,); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
         A00000000000000000000060 = {isa = XCBuildConfiguration; buildSettings = {
-            FLUENT_ENVIRONMENT = dev; FLUENT_DISPLAY_NAME = "Fluent Starter Dev"; FLUENT_LINK_SCHEME = fluentstarter-dev;
+            HRIS_ENVIRONMENT = dev; HRIS_DISPLAY_NAME = "HRIS Mobile Dev"; HRIS_LINK_SCHEME = hrismobile-dev;
             CLANG_ENABLE_MODULES = YES; IPHONEOS_DEPLOYMENT_TARGET = 15.0; SDKROOT = iphoneos;
             SWIFT_VERSION = 5.0; DEBUG_INFORMATION_FORMAT = dwarf; SWIFT_OPTIMIZATION_LEVEL = "-Onone"; SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
         }; name = Debug; };
         A00000000000000000000061 = {isa = XCBuildConfiguration; buildSettings = {
-            FLUENT_ENVIRONMENT = prod; FLUENT_DISPLAY_NAME = "Fluent Starter"; FLUENT_LINK_SCHEME = fluentstarter;
+            HRIS_ENVIRONMENT = prod; HRIS_DISPLAY_NAME = "HRIS Mobile"; HRIS_LINK_SCHEME = hrismobile;
             CLANG_ENABLE_MODULES = YES; IPHONEOS_DEPLOYMENT_TARGET = 15.0; SDKROOT = iphoneos;
             SWIFT_VERSION = 5.0; DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym"; SWIFT_COMPILATION_MODE = wholemodule;
         }; name = Release; };
         A00000000000000000000062 = {isa = XCBuildConfiguration; buildSettings = {
-            FLUENT_ENVIRONMENT = dev; FLUENT_DISPLAY_NAME = "Fluent Starter Dev"; FLUENT_LINK_SCHEME = fluentstarter-dev;
+            HRIS_ENVIRONMENT = dev; HRIS_DISPLAY_NAME = "HRIS Mobile Dev"; HRIS_LINK_SCHEME = hrismobile-dev;
             ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-            CODE_SIGN_STYLE = Automatic; CODE_SIGN_ENTITLEMENTS = FluentStarter.entitlements; APS_ENVIRONMENT = development; "APS_ENVIRONMENT[config=Release*]" = production; CURRENT_PROJECT_VERSION = 1; MARKETING_VERSION = 1.0.0;
+            CODE_SIGN_STYLE = Automatic; CODE_SIGN_ENTITLEMENTS = HrisMobile.entitlements; APS_ENVIRONMENT = development; "APS_ENVIRONMENT[config=Release*]" = production; CURRENT_PROJECT_VERSION = 1; MARKETING_VERSION = 1.0.0;
             ENABLE_USER_SCRIPT_SANDBOXING = NO; INFOPLIST_FILE = Info.plist;
-            PRODUCT_BUNDLE_IDENTIFIER = dev.fajar.fluent.starter.dev; PRODUCT_NAME = "$(TARGET_NAME)";
+            PRODUCT_BUNDLE_IDENTIFIER = dev.fajar.hris.mobile.dev; PRODUCT_NAME = "$(TARGET_NAME)";
             TARGETED_DEVICE_FAMILY = "1,2"; SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
             FRAMEWORK_SEARCH_PATHS = ("$(inherited)", "$(SRCROOT)/../shared/build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME)",);
             OTHER_LDFLAGS = ("$(inherited)", "-framework", StarterKit,);
             LD_RUNPATH_SEARCH_PATHS = ("$(inherited)", "@executable_path/Frameworks",);
         }; name = Debug; };
         A00000000000000000000063 = {isa = XCBuildConfiguration; buildSettings = {
-            FLUENT_ENVIRONMENT = prod; FLUENT_DISPLAY_NAME = "Fluent Starter"; FLUENT_LINK_SCHEME = fluentstarter;
+            HRIS_ENVIRONMENT = prod; HRIS_DISPLAY_NAME = "HRIS Mobile"; HRIS_LINK_SCHEME = hrismobile;
             ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-            CODE_SIGN_STYLE = Automatic; CODE_SIGN_ENTITLEMENTS = FluentStarter.entitlements; APS_ENVIRONMENT = development; "APS_ENVIRONMENT[config=Release*]" = production; CURRENT_PROJECT_VERSION = 1; MARKETING_VERSION = 1.0.0;
+            CODE_SIGN_STYLE = Automatic; CODE_SIGN_ENTITLEMENTS = HrisMobile.entitlements; APS_ENVIRONMENT = development; "APS_ENVIRONMENT[config=Release*]" = production; CURRENT_PROJECT_VERSION = 1; MARKETING_VERSION = 1.0.0;
             ENABLE_USER_SCRIPT_SANDBOXING = NO; INFOPLIST_FILE = Info.plist;
-            PRODUCT_BUNDLE_IDENTIFIER = dev.fajar.fluent.starter; PRODUCT_NAME = "$(TARGET_NAME)";
+            PRODUCT_BUNDLE_IDENTIFIER = dev.fajar.hris.mobile; PRODUCT_NAME = "$(TARGET_NAME)";
             TARGETED_DEVICE_FAMILY = "1,2"; SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
             FRAMEWORK_SEARCH_PATHS = ("$(inherited)", "$(SRCROOT)/../shared/build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME)",);
             OTHER_LDFLAGS = ("$(inherited)", "-framework", StarterKit,);
@@ -121,96 +121,96 @@
         }; name = Release; };
 
         B00000000000000000000100 = {isa = XCBuildConfiguration; buildSettings = {
-            FLUENT_ENVIRONMENT = dev; KOTLIN_FRAMEWORK_BUILD_TYPE = debug;
+            HRIS_ENVIRONMENT = dev; KOTLIN_FRAMEWORK_BUILD_TYPE = debug;
             CLANG_ENABLE_MODULES = YES; IPHONEOS_DEPLOYMENT_TARGET = 15.0; SDKROOT = iphoneos;
             SWIFT_VERSION = 5.0; DEBUG_INFORMATION_FORMAT = dwarf; SWIFT_OPTIMIZATION_LEVEL = "-Onone"; SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
         }; name = "Debug-dev"; };
         B00000000000000000000101 = {isa = XCBuildConfiguration; buildSettings = {
-            FLUENT_ENVIRONMENT = dev; KOTLIN_FRAMEWORK_BUILD_TYPE = debug; FLUENT_DISPLAY_NAME = "Fluent Starter Dev"; FLUENT_LINK_SCHEME = fluentstarter-dev;
+            HRIS_ENVIRONMENT = dev; KOTLIN_FRAMEWORK_BUILD_TYPE = debug; HRIS_DISPLAY_NAME = "HRIS Mobile Dev"; HRIS_LINK_SCHEME = hrismobile-dev;
             ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-            CODE_SIGN_STYLE = Automatic; CODE_SIGN_ENTITLEMENTS = FluentStarter.entitlements; APS_ENVIRONMENT = development; "APS_ENVIRONMENT[config=Release*]" = production; CURRENT_PROJECT_VERSION = 1; MARKETING_VERSION = 1.0.0;
+            CODE_SIGN_STYLE = Automatic; CODE_SIGN_ENTITLEMENTS = HrisMobile.entitlements; APS_ENVIRONMENT = development; "APS_ENVIRONMENT[config=Release*]" = production; CURRENT_PROJECT_VERSION = 1; MARKETING_VERSION = 1.0.0;
             ENABLE_USER_SCRIPT_SANDBOXING = NO; INFOPLIST_FILE = Info.plist;
-            PRODUCT_BUNDLE_IDENTIFIER = dev.fajar.fluent.starter.dev; PRODUCT_NAME = "$(TARGET_NAME)";
+            PRODUCT_BUNDLE_IDENTIFIER = dev.fajar.hris.mobile.dev; PRODUCT_NAME = "$(TARGET_NAME)";
             TARGETED_DEVICE_FAMILY = "1,2"; SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
             FRAMEWORK_SEARCH_PATHS = ("$(inherited)", "$(SRCROOT)/../shared/build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME)",);
             OTHER_LDFLAGS = ("$(inherited)", "-framework", StarterKit,);
             LD_RUNPATH_SEARCH_PATHS = ("$(inherited)", "@executable_path/Frameworks",);
         }; name = "Debug-dev"; };
         B00000000000000000000102 = {isa = XCBuildConfiguration; buildSettings = {
-            FLUENT_ENVIRONMENT = dev; KOTLIN_FRAMEWORK_BUILD_TYPE = release;
+            HRIS_ENVIRONMENT = dev; KOTLIN_FRAMEWORK_BUILD_TYPE = release;
             CLANG_ENABLE_MODULES = YES; IPHONEOS_DEPLOYMENT_TARGET = 15.0; SDKROOT = iphoneos;
             SWIFT_VERSION = 5.0; DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym"; SWIFT_COMPILATION_MODE = wholemodule;
         }; name = "Release-dev"; };
         B00000000000000000000103 = {isa = XCBuildConfiguration; buildSettings = {
-            FLUENT_ENVIRONMENT = dev; KOTLIN_FRAMEWORK_BUILD_TYPE = release; FLUENT_DISPLAY_NAME = "Fluent Starter Dev"; FLUENT_LINK_SCHEME = fluentstarter-dev;
+            HRIS_ENVIRONMENT = dev; KOTLIN_FRAMEWORK_BUILD_TYPE = release; HRIS_DISPLAY_NAME = "HRIS Mobile Dev"; HRIS_LINK_SCHEME = hrismobile-dev;
             ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-            CODE_SIGN_STYLE = Automatic; CODE_SIGN_ENTITLEMENTS = FluentStarter.entitlements; APS_ENVIRONMENT = development; "APS_ENVIRONMENT[config=Release*]" = production; CURRENT_PROJECT_VERSION = 1; MARKETING_VERSION = 1.0.0;
+            CODE_SIGN_STYLE = Automatic; CODE_SIGN_ENTITLEMENTS = HrisMobile.entitlements; APS_ENVIRONMENT = development; "APS_ENVIRONMENT[config=Release*]" = production; CURRENT_PROJECT_VERSION = 1; MARKETING_VERSION = 1.0.0;
             ENABLE_USER_SCRIPT_SANDBOXING = NO; INFOPLIST_FILE = Info.plist;
-            PRODUCT_BUNDLE_IDENTIFIER = dev.fajar.fluent.starter.dev; PRODUCT_NAME = "$(TARGET_NAME)";
+            PRODUCT_BUNDLE_IDENTIFIER = dev.fajar.hris.mobile.dev; PRODUCT_NAME = "$(TARGET_NAME)";
             TARGETED_DEVICE_FAMILY = "1,2"; SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
             FRAMEWORK_SEARCH_PATHS = ("$(inherited)", "$(SRCROOT)/../shared/build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME)",);
             OTHER_LDFLAGS = ("$(inherited)", "-framework", StarterKit,);
             LD_RUNPATH_SEARCH_PATHS = ("$(inherited)", "@executable_path/Frameworks",);
         }; name = "Release-dev"; };
         B00000000000000000000104 = {isa = XCBuildConfiguration; buildSettings = {
-            FLUENT_ENVIRONMENT = staging; KOTLIN_FRAMEWORK_BUILD_TYPE = debug;
+            HRIS_ENVIRONMENT = staging; KOTLIN_FRAMEWORK_BUILD_TYPE = debug;
             CLANG_ENABLE_MODULES = YES; IPHONEOS_DEPLOYMENT_TARGET = 15.0; SDKROOT = iphoneos;
             SWIFT_VERSION = 5.0; DEBUG_INFORMATION_FORMAT = dwarf; SWIFT_OPTIMIZATION_LEVEL = "-Onone"; SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
         }; name = "Debug-staging"; };
         B00000000000000000000105 = {isa = XCBuildConfiguration; buildSettings = {
-            FLUENT_ENVIRONMENT = staging; KOTLIN_FRAMEWORK_BUILD_TYPE = debug; FLUENT_DISPLAY_NAME = "Fluent Starter Staging"; FLUENT_LINK_SCHEME = fluentstarter-staging;
+            HRIS_ENVIRONMENT = staging; KOTLIN_FRAMEWORK_BUILD_TYPE = debug; HRIS_DISPLAY_NAME = "HRIS Mobile Staging"; HRIS_LINK_SCHEME = hrismobile-staging;
             ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-            CODE_SIGN_STYLE = Automatic; CODE_SIGN_ENTITLEMENTS = FluentStarter.entitlements; APS_ENVIRONMENT = development; "APS_ENVIRONMENT[config=Release*]" = production; CURRENT_PROJECT_VERSION = 1; MARKETING_VERSION = 1.0.0;
+            CODE_SIGN_STYLE = Automatic; CODE_SIGN_ENTITLEMENTS = HrisMobile.entitlements; APS_ENVIRONMENT = development; "APS_ENVIRONMENT[config=Release*]" = production; CURRENT_PROJECT_VERSION = 1; MARKETING_VERSION = 1.0.0;
             ENABLE_USER_SCRIPT_SANDBOXING = NO; INFOPLIST_FILE = Info.plist;
-            PRODUCT_BUNDLE_IDENTIFIER = dev.fajar.fluent.starter.staging; PRODUCT_NAME = "$(TARGET_NAME)";
+            PRODUCT_BUNDLE_IDENTIFIER = dev.fajar.hris.mobile.staging; PRODUCT_NAME = "$(TARGET_NAME)";
             TARGETED_DEVICE_FAMILY = "1,2"; SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
             FRAMEWORK_SEARCH_PATHS = ("$(inherited)", "$(SRCROOT)/../shared/build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME)",);
             OTHER_LDFLAGS = ("$(inherited)", "-framework", StarterKit,);
             LD_RUNPATH_SEARCH_PATHS = ("$(inherited)", "@executable_path/Frameworks",);
         }; name = "Debug-staging"; };
         B00000000000000000000106 = {isa = XCBuildConfiguration; buildSettings = {
-            FLUENT_ENVIRONMENT = staging; KOTLIN_FRAMEWORK_BUILD_TYPE = release;
+            HRIS_ENVIRONMENT = staging; KOTLIN_FRAMEWORK_BUILD_TYPE = release;
             CLANG_ENABLE_MODULES = YES; IPHONEOS_DEPLOYMENT_TARGET = 15.0; SDKROOT = iphoneos;
             SWIFT_VERSION = 5.0; DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym"; SWIFT_COMPILATION_MODE = wholemodule;
         }; name = "Release-staging"; };
         B00000000000000000000107 = {isa = XCBuildConfiguration; buildSettings = {
-            FLUENT_ENVIRONMENT = staging; KOTLIN_FRAMEWORK_BUILD_TYPE = release; FLUENT_DISPLAY_NAME = "Fluent Starter Staging"; FLUENT_LINK_SCHEME = fluentstarter-staging;
+            HRIS_ENVIRONMENT = staging; KOTLIN_FRAMEWORK_BUILD_TYPE = release; HRIS_DISPLAY_NAME = "HRIS Mobile Staging"; HRIS_LINK_SCHEME = hrismobile-staging;
             ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-            CODE_SIGN_STYLE = Automatic; CODE_SIGN_ENTITLEMENTS = FluentStarter.entitlements; APS_ENVIRONMENT = development; "APS_ENVIRONMENT[config=Release*]" = production; CURRENT_PROJECT_VERSION = 1; MARKETING_VERSION = 1.0.0;
+            CODE_SIGN_STYLE = Automatic; CODE_SIGN_ENTITLEMENTS = HrisMobile.entitlements; APS_ENVIRONMENT = development; "APS_ENVIRONMENT[config=Release*]" = production; CURRENT_PROJECT_VERSION = 1; MARKETING_VERSION = 1.0.0;
             ENABLE_USER_SCRIPT_SANDBOXING = NO; INFOPLIST_FILE = Info.plist;
-            PRODUCT_BUNDLE_IDENTIFIER = dev.fajar.fluent.starter.staging; PRODUCT_NAME = "$(TARGET_NAME)";
+            PRODUCT_BUNDLE_IDENTIFIER = dev.fajar.hris.mobile.staging; PRODUCT_NAME = "$(TARGET_NAME)";
             TARGETED_DEVICE_FAMILY = "1,2"; SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
             FRAMEWORK_SEARCH_PATHS = ("$(inherited)", "$(SRCROOT)/../shared/build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME)",);
             OTHER_LDFLAGS = ("$(inherited)", "-framework", StarterKit,);
             LD_RUNPATH_SEARCH_PATHS = ("$(inherited)", "@executable_path/Frameworks",);
         }; name = "Release-staging"; };
         B00000000000000000000108 = {isa = XCBuildConfiguration; buildSettings = {
-            FLUENT_ENVIRONMENT = prod; KOTLIN_FRAMEWORK_BUILD_TYPE = debug;
+            HRIS_ENVIRONMENT = prod; KOTLIN_FRAMEWORK_BUILD_TYPE = debug;
             CLANG_ENABLE_MODULES = YES; IPHONEOS_DEPLOYMENT_TARGET = 15.0; SDKROOT = iphoneos;
             SWIFT_VERSION = 5.0; DEBUG_INFORMATION_FORMAT = dwarf; SWIFT_OPTIMIZATION_LEVEL = "-Onone"; SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
         }; name = "Debug-prod"; };
         B00000000000000000000109 = {isa = XCBuildConfiguration; buildSettings = {
-            FLUENT_ENVIRONMENT = prod; KOTLIN_FRAMEWORK_BUILD_TYPE = debug; FLUENT_DISPLAY_NAME = "Fluent Starter"; FLUENT_LINK_SCHEME = fluentstarter;
+            HRIS_ENVIRONMENT = prod; KOTLIN_FRAMEWORK_BUILD_TYPE = debug; HRIS_DISPLAY_NAME = "HRIS Mobile"; HRIS_LINK_SCHEME = hrismobile;
             ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-            CODE_SIGN_STYLE = Automatic; CODE_SIGN_ENTITLEMENTS = FluentStarter.entitlements; APS_ENVIRONMENT = development; "APS_ENVIRONMENT[config=Release*]" = production; CURRENT_PROJECT_VERSION = 1; MARKETING_VERSION = 1.0.0;
+            CODE_SIGN_STYLE = Automatic; CODE_SIGN_ENTITLEMENTS = HrisMobile.entitlements; APS_ENVIRONMENT = development; "APS_ENVIRONMENT[config=Release*]" = production; CURRENT_PROJECT_VERSION = 1; MARKETING_VERSION = 1.0.0;
             ENABLE_USER_SCRIPT_SANDBOXING = NO; INFOPLIST_FILE = Info.plist;
-            PRODUCT_BUNDLE_IDENTIFIER = dev.fajar.fluent.starter; PRODUCT_NAME = "$(TARGET_NAME)";
+            PRODUCT_BUNDLE_IDENTIFIER = dev.fajar.hris.mobile; PRODUCT_NAME = "$(TARGET_NAME)";
             TARGETED_DEVICE_FAMILY = "1,2"; SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
             FRAMEWORK_SEARCH_PATHS = ("$(inherited)", "$(SRCROOT)/../shared/build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME)",);
             OTHER_LDFLAGS = ("$(inherited)", "-framework", StarterKit,);
             LD_RUNPATH_SEARCH_PATHS = ("$(inherited)", "@executable_path/Frameworks",);
         }; name = "Debug-prod"; };
         B00000000000000000000110 = {isa = XCBuildConfiguration; buildSettings = {
-            FLUENT_ENVIRONMENT = prod; KOTLIN_FRAMEWORK_BUILD_TYPE = release;
+            HRIS_ENVIRONMENT = prod; KOTLIN_FRAMEWORK_BUILD_TYPE = release;
             CLANG_ENABLE_MODULES = YES; IPHONEOS_DEPLOYMENT_TARGET = 15.0; SDKROOT = iphoneos;
             SWIFT_VERSION = 5.0; DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym"; SWIFT_COMPILATION_MODE = wholemodule;
         }; name = "Release-prod"; };
         B00000000000000000000111 = {isa = XCBuildConfiguration; buildSettings = {
-            FLUENT_ENVIRONMENT = prod; KOTLIN_FRAMEWORK_BUILD_TYPE = release; FLUENT_DISPLAY_NAME = "Fluent Starter"; FLUENT_LINK_SCHEME = fluentstarter;
+            HRIS_ENVIRONMENT = prod; KOTLIN_FRAMEWORK_BUILD_TYPE = release; HRIS_DISPLAY_NAME = "HRIS Mobile"; HRIS_LINK_SCHEME = hrismobile;
             ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-            CODE_SIGN_STYLE = Automatic; CODE_SIGN_ENTITLEMENTS = FluentStarter.entitlements; APS_ENVIRONMENT = development; "APS_ENVIRONMENT[config=Release*]" = production; CURRENT_PROJECT_VERSION = 1; MARKETING_VERSION = 1.0.0;
+            CODE_SIGN_STYLE = Automatic; CODE_SIGN_ENTITLEMENTS = HrisMobile.entitlements; APS_ENVIRONMENT = development; "APS_ENVIRONMENT[config=Release*]" = production; CURRENT_PROJECT_VERSION = 1; MARKETING_VERSION = 1.0.0;
             ENABLE_USER_SCRIPT_SANDBOXING = NO; INFOPLIST_FILE = Info.plist;
-            PRODUCT_BUNDLE_IDENTIFIER = dev.fajar.fluent.starter; PRODUCT_NAME = "$(TARGET_NAME)";
+            PRODUCT_BUNDLE_IDENTIFIER = dev.fajar.hris.mobile; PRODUCT_NAME = "$(TARGET_NAME)";
             TARGETED_DEVICE_FAMILY = "1,2"; SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
             FRAMEWORK_SEARCH_PATHS = ("$(inherited)", "$(SRCROOT)/../shared/build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME)",);
             OTHER_LDFLAGS = ("$(inherited)", "-framework", StarterKit,);

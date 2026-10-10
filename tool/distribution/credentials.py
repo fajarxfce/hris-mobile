@@ -38,7 +38,7 @@ def prepare_android(root, directory, values):
         raise ValueError('Invalid environment.')
     config = decode(values, 'FIREBASE_ANDROID_CONFIG_BASE64')
     parsed = json.loads(config)
-    identifier = 'dev.fajar.fluent.starter' + ('' if environment == 'prod' else '.' + environment)
+    identifier = 'dev.fajar.hris.mobile' + ('' if environment == 'prod' else '.' + environment)
     apps = [client['client_info'] for client in parsed['client']]
     app_id = required(values, 'FIREBASE_ANDROID_APP_ID')
     if not any(app['android_client_info']['package_name'] == identifier and app['mobilesdk_app_id'] == app_id for app in apps):
