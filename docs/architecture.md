@@ -98,6 +98,14 @@ disposes its protected routes and saved tab state immediately; these boundaries
 never animate an outgoing account's content. Token rotation does not change that
 identity. Page transitions inside a session use a short fade. `AppTabContent`
 retains each finite tab's rendering state and cancels superseded transitions.
+`ScopedNavHost` retains its controller across configuration recreation and gives
+each scope a distinct root graph. Navigation then clears the previous entry
+ViewModelStores and saved back stacks; replacing a composable alone would leave
+those stores attached to the Activity/window owner.
+The application retains that controller above temporary lock/availability gates,
+so reopening a gate reuses the existing route owners instead of allocating an
+additional set. Session-aware use cases still own admission and stale-result
+checks independently of whether a screen is currently visible.
 
 The app host handles top/side safe areas and keyboard insets. AppPage handles the bottom
 safe area for standalone pages; dashboard's bottom navigation owns that inset instead,

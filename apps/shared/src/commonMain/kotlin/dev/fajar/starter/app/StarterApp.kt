@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.compose.rememberNavController
 import dev.fajar.starter.app.bootstrap.AppViewModelOwner
 import dev.fajar.starter.app.navigation.AppNavigation
 import dev.fajar.starter.availability.presentation.navigation.AvailabilityGate
@@ -21,6 +22,7 @@ fun StarterApp(
 ) {
     KoinIsolatedContext(context = container) {
         AppViewModelOwner {
+            val navigation = rememberNavController()
             ProvideAppLanguage {
                 AppTheme {
                     Box(
@@ -33,7 +35,9 @@ fun StarterApp(
                             )
                             .imePadding()
                     ) {
-                        AvailabilityGate { AppLockGate { AppNavigation(incomingLinks) } }
+                        AvailabilityGate {
+                            AppLockGate { AppNavigation(navigation, incomingLinks) }
+                        }
                     }
                 }
             }
