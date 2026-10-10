@@ -25,9 +25,10 @@ fun <T, R> safeStorageFlow(
     source
         .map { value -> safeStorageCall(onException) { mapValue(value) } }
         .catch { error ->
-            if (error is CancellationException || error !is Exception) throw error
+            if (error is CancellationException) throw error
             currentCoroutineContext().ensureActive()
-            onException(error)
+            val exception = storageExceptionOrNull(error) ?: throw error
+            onException(exception)
             emit(
                 AppResult.Failed(
                     Failure(FailureKind.Storage, "Local data could not be read or saved.")

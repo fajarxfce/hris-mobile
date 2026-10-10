@@ -17,8 +17,9 @@ suspend fun <T> safeStorageCall(
         AppResult.Success(value)
     } catch (cancelled: CancellationException) {
         throw cancelled
-    } catch (exception: Exception) {
+    } catch (cause: Throwable) {
         currentCoroutineContext().ensureActive()
+        val exception = storageExceptionOrNull(cause) ?: throw cause
         onException(exception)
         AppResult.Failed(Failure(FailureKind.Storage, "Local data could not be read or saved."))
     }

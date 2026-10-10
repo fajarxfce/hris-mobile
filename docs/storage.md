@@ -1,5 +1,14 @@
 # Local storage
 
+## Failure boundary
+
+Repositories use `safeStorageCall` and `safeStorageFlow` for acquisition and mapping.
+The browser boundary also recognizes native JavaScript errors and SDK Promise
+adapters that expose a bare Kotlin `Throwable`. It retains the cause for internal
+diagnostics and returns a sanitized storage failure. Cancellation, Kotlin fatal
+errors, and downstream collector exceptions still propagate. Failed mapping of
+one flow emission does not prevent a later valid record from being delivered.
+
 ## Proto DataStore
 
 `core/datastore` owns `user_preferences.proto`, Wire generation, platform storage,
