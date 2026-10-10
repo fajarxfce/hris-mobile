@@ -17,10 +17,14 @@ import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 
 /** AES-GCM ciphertext is excluded from backup; the non-exportable key stays in Android Keystore. */
-class AndroidCredentialStore(context: Context) : CredentialStore {
+class AndroidCredentialStore(context: Context, recordName: String = "session") : CredentialStore {
+    init {
+        require(recordName.matches(Regex("[a-z][a-z0-9_.-]{0,63}")))
+    }
+
     override val persistent = true
-    private val alias = "${context.packageName}.session"
-    private val file = AtomicFile(File(context.noBackupFilesDir, "session.enc"))
+    private val alias = "${context.packageName}.$recordName"
+    private val file = AtomicFile(File(context.noBackupFilesDir, "$recordName.enc"))
     private val access = Mutex()
 
     override suspend fun read(): String? =

@@ -1,5 +1,8 @@
 # Local storage
 
+See [content encryption](content-encryption.md) for authenticated payloads and
+separate credential records used by encrypted caches.
+
 ## Failure boundary
 
 Repositories use `safeStorageCall` and `safeStorageFlow` for acquisition and mapping.

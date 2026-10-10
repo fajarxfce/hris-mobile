@@ -7,7 +7,7 @@ koin = "4.1.1"
 koin-annotations = "2.3.1"
 coroutines = "1.10.2"
 datetime = "0.7.1"
-serialization = "1.9.0"
+serialization = "1.10.0"
 ktor = "3.3.3"
 lifecycle = "2.9.5"
 navigation = "2.9.1"
@@ -28,11 +28,13 @@ google-services = "4.5.0"
 android-core = "1.17.0"
 work = "2.12.0"
 java-keyring = "1.0.4"
+cryptography = "0.6.0"
 crashlytics = "3.0.8"
 detekt = "2.0.0-alpha.6"
 cyclonedx = "3.5.0"
 
 [libraries]
+cryptography-optimal = { module = "dev.whyoleg.cryptography:cryptography-provider-optimal", version.ref = "cryptography" }
 datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "datetime" }
 cyclonedx-gradle = { module = "org.cyclonedx:cyclonedx-gradle-plugin", version.ref = "cyclonedx" }
 oidc-core = { module = "io.github.kalinjul.kotlin.multiplatform:oidc-core", version.ref = "oidc" }

@@ -3,11 +3,17 @@ import Security
 import StarterKit
 
 final class KeychainClient: NSObject, AppleCredentialClient {
-    private let identity: [String: Any] = [
-        kSecClass as String: kSecClassGenericPassword,
-        kSecAttrService as String: Bundle.main.bundleIdentifier! + ".session",
-        kSecAttrAccount as String: "session"
-    ]
+    private let identity: [String: Any]
+
+    init(recordName: String = "session") {
+        precondition(recordName.range(of: "[a-z][a-z0-9_.-]{0,63}", options: .regularExpression) == (recordName.startIndex..<recordName.endIndex))
+        identity = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: Bundle.main.bundleIdentifier! + "." + recordName,
+            kSecAttrAccount as String: recordName
+        ]
+        super.init()
+    }
 
     func read(completion: @escaping (String?, Error?) -> Void) {
         var query = identity

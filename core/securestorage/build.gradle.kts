@@ -1,7 +1,14 @@
 plugins { id("starter.android.library") }
 
 kotlin.sourceSets {
-    getByName("commonMain").dependencies { implementation(libs.coroutines.core) }
+    getByName("commonMain").dependencies {
+        implementation(libs.coroutines.core)
+        implementation(libs.cryptography.optimal)
+    }
     getByName("desktopMain").dependencies { implementation(libs.java.keyring) }
-    getByName("commonTest").dependencies { implementation(libs.coroutines.test) }
+    getByName("commonTest").dependencies {
+        implementation(libs.coroutines.test)
+        implementation(projects.core.common)
+        implementation(projects.core.storage)
+    }
 }
