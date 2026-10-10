@@ -30,5 +30,11 @@ fun AccountSnapshotDto.toAccount(): AccountSnapshot {
             assurance.validUntil?.let { Instant.parse(it).toEpochMilliseconds() },
             assurance.recentUntil?.let { Instant.parse(it).toEpochMilliseconds() },
         )
-    return AccountSnapshot(account.toUser(), memberships, permissions.toSet(), policy)
+    return AccountSnapshot(
+        account.toUser(),
+        memberships,
+        permissions.toSet(),
+        policy,
+        account.mfaConfigured,
+    )
 }

@@ -5,4 +5,5 @@ data class AccountSnapshot(
     val companies: List<CompanyMembership>,
     val permissions: Set<String>,
     val assurance: SessionAssurance,
+    val mfaConfigured: Boolean,
 )

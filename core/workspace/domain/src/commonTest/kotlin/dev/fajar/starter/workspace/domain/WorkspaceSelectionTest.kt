@@ -33,6 +33,7 @@ class WorkspaceSelectionTest {
             companies,
             emptySet(),
             SessionAssurance(required, false, false, null, null),
+            mfaConfigured = false,
         )
 
     private class Sessions(initial: Session) : SessionRepository {

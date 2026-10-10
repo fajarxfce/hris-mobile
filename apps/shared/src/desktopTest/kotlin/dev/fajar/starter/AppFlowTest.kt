@@ -87,11 +87,12 @@ class AppFlowTest {
     }
 
     @Test
-    fun invalidProofDoesNotRefreshTokensAndAnotherCodeCanBeEntered() {
+    fun anEnrolledAuthenticatorSkipsSetupAndInvalidProofDoesNotRefreshTokens() {
         val server = NativeUiServer(requireMfa = true, existingAuthenticator = true)
         withApplication(server) {
             signIn()
             waitFor("Verify your account")
+            compose.onNodeWithText("Set up authenticator").assertDoesNotExist()
             compose.onNodeWithContentDescription("Verification code").performTextInput("654321")
             compose.onNode(hasText("Verify") and hasClickAction()).performScrollTo().performClick()
             waitFor(

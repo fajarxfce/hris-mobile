@@ -18,7 +18,10 @@ persists its operation ID before network I/O. MFA proof calls use explicit crede
 through the public client, so a rejected authenticator code cannot trigger automatic
 401 refresh/replay. Cancellation and a replaced session prevent late publication.
 
-The account response determines whether MFA is required. Enrollment displays the
+The account response determines whether MFA is required.
+`account.mfaConfigured` distinguishes enrollment from verification.
+`assurance.setupAvailable` only describes server capability and can remain true for
+an already enrolled account. Enrollment displays the
 setup key; confirmation persists rotated credentials before displaying recovery
 codes. Navigation waits for explicit acknowledgement. Secrets are not placed in
 saved navigation arguments, preferences, diagnostics, or `toString` output.

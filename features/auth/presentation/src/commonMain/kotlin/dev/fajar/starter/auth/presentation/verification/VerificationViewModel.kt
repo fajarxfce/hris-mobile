@@ -44,9 +44,23 @@ class VerificationViewModel(
                     val assurance = result.value.assurance
                     val step =
                         if (!assurance.required || assurance.verified) VerificationStep.Verified
+                        else if (result.value.mfaConfigured) VerificationStep.Verify
                         else if (assurance.setupAvailable) VerificationStep.Setup
-                        else VerificationStep.Verify
-                    updateState { it.copy(working = false, step = step) }
+                        else VerificationStep.Loading
+                    updateState {
+                        it.copy(
+                            working = false,
+                            step = step,
+                            failure =
+                                if (step == VerificationStep.Loading)
+                                    Failure(
+                                        FailureKind.Unavailable,
+                                        "Authenticator setup is unavailable.",
+                                        code = "mfa_unavailable",
+                                    )
+                                else null,
+                        )
+                    }
                     if (step == VerificationStep.Verified) emitEffect(VerificationEffect.Verified)
                 }
             }

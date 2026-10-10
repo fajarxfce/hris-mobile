@@ -173,7 +173,7 @@ class NativeUiServer(
         putJsonObject("assurance") {
             put("required", requireMfa)
             put("verified", verified)
-            put("setupAvailable", requireMfa && !existingAuthenticator && !verified)
+            put("setupAvailable", true)
             put("validUntil", if (verified) "2099-01-01T00:00:00Z" else null)
             put("recentUntil", if (verified) "2099-01-01T00:00:00Z" else null)
         }
