@@ -10,7 +10,8 @@ kotlin {
     jvm("desktop") { compilerOptions { jvmTarget.set(JvmTarget.JVM_17) } }
     iosArm64()
     iosSimulatorArm64()
-    @OptIn(ExperimentalWasmDsl::class) wasmJs { browser() }
+    @OptIn(ExperimentalWasmDsl::class)
+    wasmJs { browser { testTask { useKarma { useChromeHeadless() } } } }
     applyDefaultHierarchyTemplate()
     sourceSets.commonTest.dependencies { implementation(kotlin("test")) }
 }

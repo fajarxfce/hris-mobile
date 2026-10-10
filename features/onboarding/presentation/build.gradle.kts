@@ -6,6 +6,7 @@ plugins {
 
 kotlin.sourceSets {
     getByName("commonMain").dependencies {
+        implementation(projects.core.localization)
         implementation(projects.features.onboarding.domain)
         implementation(projects.core.designsystem)
         implementation(projects.core.presentation)

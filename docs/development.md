@@ -10,6 +10,10 @@
 - `starter.android.application`: Android runner configuration with built-in Kotlin.
 - `starter.quality`: shared Kotlin formatting tasks.
 - `starter.web.toolchain`: use Node 22 LTS and resolve Binaryen through the settings repository.
+- `starter.proto`: Wire protobuf generation for KMP.
+- `starter.database`: Room, schema export, and platform KSP processors.
+- `starter.environment`: generated environment selection for shared targets.
+- `starter.android.flavors`: dev/staging/prod Android variants.
 
 Keep dependency versions in the root version catalog. App version/name are in
 `gradle.properties`. New modules declare their own dependencies using `libs` and
@@ -54,7 +58,7 @@ support. Gradle tasks are also included for VS Code and Zed. Android debugging i
 through Android Studio; desktop debugging uses the IDE's Gradle/JVM configuration.
 Web development uses the URL printed by the Wasm development server.
 
-Android APK: `apps/android/build/outputs/apk/debug/android-debug.apk`.
+Android dev APK: `apps/android/build/outputs/apk/dev/debug/android-dev-debug.apk`.
 Web output: `apps/shared/build/dist/wasmJs/productionExecutable`.
 Desktop distributions: `apps/shared/build/compose/binaries/main`.
 

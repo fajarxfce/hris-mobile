@@ -4,5 +4,5 @@ data class OnboardingState(
     val step: Int = 0,
     val saving: Boolean = false,
     val completed: Boolean = false,
-    val error: String? = null,
+    val error: dev.fajar.starter.common.result.Failure? = null,
 )

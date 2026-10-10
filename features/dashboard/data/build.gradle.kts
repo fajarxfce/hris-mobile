@@ -8,6 +8,9 @@ kotlin.sourceSets {
     getByName("commonMain").dependencies {
         implementation(projects.features.dashboard.domain)
         implementation(projects.core.network)
+        implementation(projects.core.storage)
+        implementation(projects.core.database)
         implementation(libs.serialization.json)
     }
+    getByName("commonTest").dependencies { implementation(libs.coroutines.test) }
 }

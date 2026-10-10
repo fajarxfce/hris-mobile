@@ -23,7 +23,7 @@ for name, folder in modules.items():
             errors.append(f"{name}: unknown module {dependency}")
         if name.endswith(".domain") and not (dependency.endswith(".domain") or dependency == "core.common"):
             errors.append(f"{name}: domain cannot depend on {dependency}")
-        if name.endswith(".presentation") and (dependency.endswith(".data") or dependency in {"core.network", "core.storage"}):
+        if name.endswith(".presentation") and (dependency.endswith(".data") or dependency in {"core.network", "core.storage", "core.datastore", "core.database"}):
             errors.append(f"{name}: presentation cannot depend on {dependency}")
         if name.startswith("features.") and dependency.startswith("features.") and name.split(".")[1] != dependency.split(".")[1]:
             errors.append(f"{name}: features must not depend on each other ({dependency})")
@@ -34,7 +34,7 @@ for name, folder in modules.items():
         imports = re.findall(r"^import\s+([^\s;]+)", text, re.M)
         path = str(source.relative_to(ROOT))
         if name.endswith(".domain") or name == "core.common":
-            forbidden = ("android.", "androidx.", "io.ktor.", "org.koin.", "platform.", "kotlinx.serialization.")
+            forbidden = ("android.", "androidx.", "io.ktor.", "org.koin.", "platform.", "kotlinx.serialization.", "com.squareup.wire.")
             if any(i.startswith(forbidden) for i in imports):
                 errors.append(f"{path}: framework dependency in domain")
         if name.endswith(".presentation") and any(i.startswith(("io.ktor.", "platform.", "java.io.", "android.content.")) for i in imports):

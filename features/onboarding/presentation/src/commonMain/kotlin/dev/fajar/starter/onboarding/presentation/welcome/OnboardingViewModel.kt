@@ -40,7 +40,7 @@ class OnboardingViewModel(private val completeOnboarding: CompleteOnboarding) :
                     emitEffect(OnboardingEffect.Completed)
                 }
                 is AppResult.Failed ->
-                    updateState { it.copy(saving = false, error = result.failure.message) }
+                    updateState { it.copy(saving = false, error = result.failure) }
             }
         }
     }

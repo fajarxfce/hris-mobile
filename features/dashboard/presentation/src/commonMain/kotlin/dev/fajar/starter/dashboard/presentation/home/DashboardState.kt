@@ -8,6 +8,12 @@ data class DashboardState(
     val user: User? = null,
     val dashboard: Dashboard? = null,
     val loading: Boolean = true,
+    val loadingMore: Boolean = false,
+    val pageError: dev.fajar.starter.common.result.Failure? = null,
     val signingOut: Boolean = false,
-    val error: String? = null,
+    val savingAvailable: Boolean = false,
+    val hasSavingPermission: Boolean = false,
+    val accessError: dev.fajar.starter.common.result.Failure? = null,
+    val flagError: dev.fajar.starter.common.result.Failure? = null,
+    val error: dev.fajar.starter.common.result.Failure? = null,
 )

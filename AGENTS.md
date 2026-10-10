@@ -28,6 +28,12 @@ Read [docs/architecture.md](docs/architecture.md) and [README.md](README.md) bef
   Do not move feature pages or all use-case bindings into the app.
 - Koin annotations generate data/presentation registrations. Never edit generated code.
   Platform entry points own isolated DI containers; routes own feature ViewModels.
+- Give every coroutine, collector, callback, listener, and native resource an explicit owner.
+  Release registrations on disposal; cancel obsolete work on account/lifecycle changes.
+  Never retain an Activity, screen, or callback in a longer-lived singleton.
+- Collect state with lifecycle awareness near its consumers. Use immutable snapshots and
+  stable keys; avoid broad high-frequency state reads and I/O in composition. Measure
+  performance before claiming improvements; remember/derivedStateOf are not blanket fixes.
 - Test pending cancellation, late results, disposal, retry, and session recovery when
   changing those behaviors. Run `xvfb-run -a ./gradlew :check` on headless Linux and the
   relevant build targets. Report only checks actually performed.

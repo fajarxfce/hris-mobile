@@ -7,15 +7,61 @@ koin = "4.1.1"
 koin-annotations = "2.3.1"
 coroutines = "1.10.2"
 serialization = "1.9.0"
-ktor = "3.3.1"
+ktor = "3.3.3"
 lifecycle = "2.9.5"
 navigation = "2.9.1"
 fluent = "v0.1.0"
 activity = "1.11.0"
+biometric = "1.1.0"
+oidc = "0.18.4"
+appauth = "0.11.1"
 ktfmt = "0.59"
 browser = "0.3"
+datastore = "1.2.1"
+wire = "6.4.7"
+room = "2.8.5"
+sqlite = "2.6.2"
+firebase-bom = "34.19.0"
+firebase-web = "12.19.0"
+google-services = "4.5.0"
+android-core = "1.17.0"
+work = "2.12.0"
+java-keyring = "1.0.4"
+crashlytics = "3.0.8"
+detekt = "2.0.0-alpha.6"
+cyclonedx = "3.5.0"
 
 [libraries]
+cyclonedx-gradle = { module = "org.cyclonedx:cyclonedx-gradle-plugin", version.ref = "cyclonedx" }
+oidc-core = { module = "io.github.kalinjul.kotlin.multiplatform:oidc-core", version.ref = "oidc" }
+android-appauth = { module = "net.openid:appauth", version.ref = "appauth" }
+android-biometric = { module = "androidx.biometric:biometric", version.ref = "biometric" }
+compose-desktop-windows = { module = "org.jetbrains.compose.desktop:desktop-jvm-windows-x64", version.ref = "compose" }
+compose-desktop-macos-arm64 = { module = "org.jetbrains.compose.desktop:desktop-jvm-macos-arm64", version.ref = "compose" }
+compose-desktop-macos-x64 = { module = "org.jetbrains.compose.desktop:desktop-jvm-macos-x64", version.ref = "compose" }
+detekt-cli = { module = "dev.detekt:detekt-cli", version.ref = "detekt" }
+firebase-performance = { module = "com.google.firebase:firebase-perf" }
+firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
+crashlytics-gradle = { module = "com.google.firebase:firebase-crashlytics-gradle", version.ref = "crashlytics" }
+java-keyring = { module = "com.github.javakeyring:java-keyring", version.ref = "java-keyring" }
+ktor-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
+ktor-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
+ktor-js = { module = "io.ktor:ktor-client-js", version.ref = "ktor" }
+work-runtime = { module = "androidx.work:work-runtime", version.ref = "work" }
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase-bom" }
+firebase-config = { module = "com.google.firebase:firebase-config" }
+firebase-messaging = { module = "com.google.firebase:firebase-messaging" }
+google-services-gradle = { module = "com.google.gms:google-services", version.ref = "google-services" }
+android-core = { module = "androidx.core:core-ktx", version.ref = "android-core" }
+coroutines-play-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "coroutines" }
+datastore-core = { module = "androidx.datastore:datastore-core", version.ref = "datastore" }
+datastore-okio = { module = "androidx.datastore:datastore-core-okio", version.ref = "datastore" }
+wire-runtime = { module = "com.squareup.wire:wire-runtime", version.ref = "wire" }
+wire-gradle = { module = "com.squareup.wire:wire-gradle-plugin", version.ref = "wire" }
+room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+room-gradle = { module = "androidx.room:room-gradle-plugin", version.ref = "room" }
+sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sqlite" }
 browser = { module = "org.jetbrains.kotlinx:kotlinx-browser", version.ref = "browser" }
 ktfmt = { module = "com.facebook:ktfmt", version.ref = "ktfmt" }
 compose-runtime = { module = "org.jetbrains.compose.runtime:runtime", version.ref = "compose" }

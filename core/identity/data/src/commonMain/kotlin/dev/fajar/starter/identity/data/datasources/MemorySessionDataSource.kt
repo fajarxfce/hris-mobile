@@ -1,17 +1,16 @@
 package dev.fajar.starter.identity.data.datasources
 
-import dev.fajar.starter.identity.data.dto.UserDto
+import dev.fajar.starter.identity.data.dto.SessionDto
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import org.koin.core.annotation.Single
 
-/** Owns the process-local demo session. Passwords and tokens are never stored. */
 @Single
 class MemorySessionDataSource : SessionDataSource {
-    private val currentUser = MutableStateFlow<UserDto?>(null)
-    override val user = currentUser.asStateFlow()
+    private val current = MutableStateFlow<SessionDto?>(null)
+    override val record = current.asStateFlow()
 
-    override fun write(user: UserDto?) {
-        currentUser.value = user
+    override fun write(session: SessionDto?) {
+        current.value = session
     }
 }

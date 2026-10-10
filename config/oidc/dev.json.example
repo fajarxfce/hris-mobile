@@ -1,0 +1,13 @@
+[
+  {
+    "id": "organization",
+    "label": "Organization",
+    "issuer": "https://login.microsoftonline.com/TENANT_ID/v2.0",
+    "platforms": {
+      "android": {"clientId": "ANDROID_PUBLIC_CLIENT_ID", "redirectUri": "fluentstarter-dev://oauth/callback"},
+      "ios": {"clientId": "IOS_PUBLIC_CLIENT_ID", "redirectUri": "fluentstarter-dev://oauth/callback"},
+      "desktop": {"clientId": "DESKTOP_PUBLIC_CLIENT_ID", "redirectUri": "http://127.0.0.1:48085/oauth/callback"},
+      "web": {"clientId": "WEB_PUBLIC_CLIENT_ID", "redirectUri": "http://localhost:8080/oauth/callback"}
+    }
+  }
+]

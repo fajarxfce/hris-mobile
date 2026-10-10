@@ -23,33 +23,24 @@ suspend fun <T> safeApiCall(
         AppResult.Success(value)
     } catch (cancelled: CancellationException) {
         throw cancelled
-    } catch (exception: Exception) {
+    } catch (cause: Throwable) {
         currentCoroutineContext().ensureActive()
+        val exception = networkExceptionOrNull(cause) ?: throw cause
         onException(exception)
-        AppResult.Failed(mapHttpFailure(exception))
+        val failure = readApiFailure(exception)
+        currentCoroutineContext().ensureActive()
+        AppResult.Failed(failure)
     }
 
 fun mapHttpFailure(exception: Exception): Failure =
     when (exception) {
+        is RequestFailureException -> exception.failure
         is HttpRequestTimeoutException,
         is ConnectTimeoutException,
         is SocketTimeoutException ->
             Failure(FailureKind.Timeout, "The request timed out. Try again.")
-        is ResponseException ->
-            when (exception.response.status.value) {
-                400,
-                422 -> Failure(FailureKind.Validation, "Check the information and try again.")
-                401,
-                403 ->
-                    Failure(
-                        FailureKind.Unauthorized,
-                        "Authentication was not accepted. Check your details.",
-                    )
-                429 -> Failure(FailureKind.Service, "Too many requests. Try again shortly.")
-                in 500..599 ->
-                    Failure(FailureKind.Service, "The service is unavailable. Try again.")
-                else -> Failure(FailureKind.Unexpected, "The request could not be completed.")
-            }
+        is ResponseException -> mapHttpStatusFailure(exception.response.status.value)
+        is HttpStatusException -> mapHttpStatusFailure(exception.statusCode)
         is SerializationException ->
             Failure(FailureKind.Unexpected, "The response could not be read.")
         is IOException -> Failure(FailureKind.Network, "Unable to connect. Check your connection.")

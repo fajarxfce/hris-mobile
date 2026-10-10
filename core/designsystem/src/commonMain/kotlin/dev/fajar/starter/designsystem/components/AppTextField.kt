@@ -11,6 +11,9 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.error
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import dev.fajar.starter.designsystem.theme.AppColors
@@ -36,7 +39,11 @@ fun AppTextField(
         TextField(
             value = value,
             onValueChange = onValueChange,
-            modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp),
+            modifier =
+                Modifier.fillMaxWidth().heightIn(min = 48.dp).semantics {
+                    contentDescription = label
+                    if (error != null) this.error(error)
+                },
             enabled = enabled,
             singleLine = true,
             isClearable = false,

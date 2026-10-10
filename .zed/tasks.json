@@ -15,17 +15,17 @@
     ]
   },
   {
-    "label": "Android: run",
+    "label": "Android: run dev",
     "command": "python3",
     "args": [
       "tool/run_android.py"
     ]
   },
   {
-    "label": "Android: build APK",
+    "label": "Android: build dev APK",
     "command": "./gradlew",
     "args": [
-      ":apps:android:assembleDebug"
+      ":apps:android:assembleDevDebug"
     ]
   },
   {
@@ -63,6 +63,20 @@
     "command": "./gradlew",
     "args": [
       "clean"
+    ]
+  },
+  {
+    "label": "Android: build staging APK",
+    "command": "./gradlew",
+    "args": [
+      ":apps:android:assembleStagingDebug"
+    ]
+  },
+  {
+    "label": "Android: build prod APK",
+    "command": "./gradlew",
+    "args": [
+      ":apps:android:assembleProdDebug"
     ]
   }
 ]

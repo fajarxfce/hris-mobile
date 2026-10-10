@@ -3,6 +3,9 @@ package dev.fajar.starter.designsystem.components
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.ProgressBarRangeInfo
+import androidx.compose.ui.semantics.progressBarRangeInfo
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import io.github.composefluent.LocalContentColor
 import io.github.composefluent.component.AccentButton
@@ -21,7 +24,10 @@ fun AppButton(
     if (primary) {
         AccentButton(
             onClick = onClick,
-            modifier = modifier.heightIn(min = 48.dp),
+            modifier =
+                modifier.heightIn(min = 48.dp).semantics {
+                    if (loading) progressBarRangeInfo = ProgressBarRangeInfo.Indeterminate
+                },
             disabled = !enabled || loading,
         ) {
             if (loading) {
@@ -35,7 +41,10 @@ fun AppButton(
     } else {
         Button(
             onClick = onClick,
-            modifier = modifier.heightIn(min = 48.dp),
+            modifier =
+                modifier.heightIn(min = 48.dp).semantics {
+                    if (loading) progressBarRangeInfo = ProgressBarRangeInfo.Indeterminate
+                },
             disabled = !enabled || loading,
         ) {
             AppText(label, color = LocalContentColor.current)

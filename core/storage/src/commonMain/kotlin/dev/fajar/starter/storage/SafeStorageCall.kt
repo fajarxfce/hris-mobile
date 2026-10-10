@@ -20,7 +20,5 @@ suspend fun <T> safeStorageCall(
     } catch (exception: Exception) {
         currentCoroutineContext().ensureActive()
         onException(exception)
-        AppResult.Failed(
-            Failure(FailureKind.Storage, "Your preferences could not be saved or loaded.")
-        )
+        AppResult.Failed(Failure(FailureKind.Storage, "Local data could not be read or saved."))
     }

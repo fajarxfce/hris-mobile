@@ -14,15 +14,15 @@
       "problemMatcher": []
     },
     {
-      "label": "Android: run",
+      "label": "Android: run dev",
       "type": "shell",
       "command": "python3 tool/run_android.py",
       "problemMatcher": []
     },
     {
-      "label": "Android: build APK",
+      "label": "Android: build dev APK",
       "type": "shell",
-      "command": "./gradlew :apps:android:assembleDebug",
+      "command": "./gradlew :apps:android:assembleDevDebug",
       "group": "build",
       "problemMatcher": []
     },
@@ -56,6 +56,18 @@
       "label": "Workspace: clean",
       "type": "shell",
       "command": "./gradlew clean",
+      "problemMatcher": []
+    },
+    {
+      "label": "Android: build staging APK",
+      "type": "shell",
+      "command": "./gradlew :apps:android:assembleStagingDebug",
+      "problemMatcher": []
+    },
+    {
+      "label": "Android: build prod APK",
+      "type": "shell",
+      "command": "./gradlew :apps:android:assembleProdDebug",
       "problemMatcher": []
     }
   ]

@@ -11,6 +11,7 @@ import dev.fajar.starter.dashboard.presentation.home.DashboardState
 import dev.fajar.starter.dashboard.presentation.home.DashboardTab
 import dev.fajar.starter.designsystem.components.*
 import dev.fajar.starter.designsystem.theme.AppColors
+import dev.fajar.starter.localization.*
 import io.github.composefluent.icons.Icons
 import io.github.composefluent.icons.filled.History
 import io.github.composefluent.icons.filled.Home
@@ -30,9 +31,34 @@ fun DashboardPage(state: DashboardState, onEvent: (DashboardEvent) -> Unit) {
             verticalAlignment = Alignment.CenterVertically,
         ) {
             AppBrand()
-            AppBadge("Demo")
+            AppBadge(appString(AppString.Demo))
         }
-        Box(Modifier.weight(1f).consumeWindowInsets(WindowInsets.navigationBars)) {
+        AppNavigationScaffold(
+            modifier = Modifier.weight(1f),
+            items =
+                listOf(
+                    AppNavigationItem(
+                        DashboardTab.Overview,
+                        appString(AppString.Overview),
+                        Icons.Regular.Home,
+                        Icons.Filled.Home,
+                    ),
+                    AppNavigationItem(
+                        DashboardTab.Activity,
+                        appString(AppString.Activity),
+                        Icons.Regular.History,
+                        Icons.Filled.History,
+                    ),
+                    AppNavigationItem(
+                        DashboardTab.Account,
+                        appString(AppString.Account),
+                        Icons.Regular.Person,
+                        Icons.Filled.Person,
+                    ),
+                ),
+            selected = state.tab,
+            onSelected = { onEvent(DashboardEvent.TabSelected(it)) },
+        ) {
             when (state.tab) {
                 DashboardTab.Overview ->
                     OverviewPage(
@@ -41,35 +67,23 @@ fun DashboardPage(state: DashboardState, onEvent: (DashboardEvent) -> Unit) {
                         { onEvent(DashboardEvent.TabSelected(DashboardTab.Activity)) },
                     )
                 DashboardTab.Activity ->
-                    ActivityPage(state, { onEvent(DashboardEvent.RefreshRequested) })
+                    ActivityPage(
+                        state = state,
+                        onRefresh = { onEvent(DashboardEvent.RefreshRequested) },
+                        onLoadMore = { onEvent(DashboardEvent.NextPageRequested) },
+                        onSavedChanged = { id, saved ->
+                            onEvent(DashboardEvent.ActivitySavedChanged(id, saved))
+                        },
+                    )
                 DashboardTab.Account ->
-                    AccountPage(state, { onEvent(DashboardEvent.SignOutRequested) })
+                    AccountPage(
+                        state,
+                        { onEvent(DashboardEvent.SignOutRequested) },
+                        { onEvent(DashboardEvent.NotificationsRequested) },
+                        { onEvent(DashboardEvent.SettingsRequested) },
+                        { onEvent(DashboardEvent.FilesRequested) },
+                    )
             }
         }
-        AppBottomNavigation(
-            items =
-                listOf(
-                    AppNavigationItem(
-                        DashboardTab.Overview,
-                        "Overview",
-                        Icons.Regular.Home,
-                        Icons.Filled.Home,
-                    ),
-                    AppNavigationItem(
-                        DashboardTab.Activity,
-                        "Activity",
-                        Icons.Regular.History,
-                        Icons.Filled.History,
-                    ),
-                    AppNavigationItem(
-                        DashboardTab.Account,
-                        "Account",
-                        Icons.Regular.Person,
-                        Icons.Filled.Person,
-                    ),
-                ),
-            selected = state.tab,
-            onSelected = { onEvent(DashboardEvent.TabSelected(it)) },
-        )
     }
 }

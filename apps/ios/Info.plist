@@ -1,19 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0"><dict>
-    <key>CFBundleDisplayName</key><string>Fluent Starter</string>
-    <key>CFBundleExecutable</key><string>$(EXECUTABLE_NAME)</string>
-    <key>CFBundleIdentifier</key><string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
-    <key>CFBundleName</key><string>$(PRODUCT_NAME)</string>
-    <key>CFBundlePackageType</key><string>APPL</string>
-    <key>CFBundleShortVersionString</key><string>$(MARKETING_VERSION)</string>
-    <key>CFBundleVersion</key><string>$(CURRENT_PROJECT_VERSION)</string>
-    <key>LSRequiresIPhoneOS</key><true/>
-    <key>UILaunchScreen</key><dict/>
-    <key>CADisableMinimumFrameDurationOnPhone</key><true/>
-    <key>UISupportedInterfaceOrientations</key><array>
-        <string>UIInterfaceOrientationPortrait</string>
-        <string>UIInterfaceOrientationLandscapeLeft</string>
-        <string>UIInterfaceOrientationLandscapeRight</string>
-    </array>
-</dict></plist>
+<plist version="1.0">
+<dict>
+    <key>NSFaceIDUsageDescription</key><string>Use Face ID to unlock the app.</string>
+    <key>FirebaseCrashlyticsCollectionEnabled</key><false/>
+    <key>firebase_performance_collection_enabled</key><false/>
+    <key>firebase_performance_instrumentation_enabled</key><false/>
+	<key>CFBundleDisplayName</key>
+	<string>$(FLUENT_DISPLAY_NAME)</string>
+	<key>CFBundleExecutable</key>
+	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleIdentifier</key>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<key>CFBundleName</key>
+	<string>$(PRODUCT_NAME)</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>$(MARKETING_VERSION)</string>
+	<key>CFBundleVersion</key>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>$(FLUENT_LINK_SCHEME)</string>
+			</array>
+		</dict>
+	</array>
+	<key>LSRequiresIPhoneOS</key>
+	<true/>
+	<key>UILaunchScreen</key>
+	<dict/>
+	<key>CADisableMinimumFrameDurationOnPhone</key>
+	<true/>
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+	<key>BGTaskSchedulerPermittedIdentifiers</key>
+	<array><string>$(PRODUCT_BUNDLE_IDENTIFIER).sync</string></array>
+	<key>UIBackgroundModes</key>
+	<array><string>fetch</string></array>
+	<key>FirebaseAppDelegateProxyEnabled</key>
+	<false/>
+</dict>
+</plist>

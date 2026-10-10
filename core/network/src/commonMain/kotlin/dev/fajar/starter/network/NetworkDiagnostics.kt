@@ -1,6 +1,17 @@
 package dev.fajar.starter.network
 
-/** Never log response bodies, URLs, credentials, or raw exception messages. */
+import dev.fajar.starter.observability.*
+import io.ktor.client.plugins.ResponseException
+
 fun reportNetworkException(exception: Exception) {
-    println("Network operation failed: ${exception::class.simpleName}")
+    if (exception is ResponseException || exception is RequestFailureException) {
+        Diagnostics.record(
+            Diagnostic(
+                DiagnosticArea.Network,
+                DiagnosticKind.OperationFailed,
+                exception::class.simpleName,
+                (exception as? ResponseException)?.response?.status?.value,
+            )
+        )
+    } else Diagnostics.failure(DiagnosticArea.Network, exception)
 }

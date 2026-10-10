@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import dev.fajar.starter.designsystem.components.*
 import dev.fajar.starter.designsystem.theme.AppColors
+import dev.fajar.starter.localization.*
 import dev.fajar.starter.onboarding.presentation.welcome.OnboardingContent
 import dev.fajar.starter.onboarding.presentation.welcome.OnboardingEvent
 import dev.fajar.starter.onboarding.presentation.welcome.OnboardingState
@@ -24,7 +25,7 @@ fun OnboardingPage(state: OnboardingState, onEvent: (OnboardingEvent) -> Unit) {
         ) {
             AppBrand()
             AppButton(
-                "Skip",
+                appString(AppString.Skip),
                 { onEvent(OnboardingEvent.FinishRequested) },
                 primary = false,
                 enabled = !state.saving,
@@ -34,11 +35,11 @@ fun OnboardingPage(state: OnboardingState, onEvent: (OnboardingEvent) -> Unit) {
         AppWorkspaceIllustration(state.step)
         Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
             AppText(
-                OnboardingContent.pages[state.step].title,
+                appString(OnboardingContent.pages[state.step].title),
                 style = FluentTheme.typography.titleLarge,
             )
             AppText(
-                OnboardingContent.pages[state.step].description,
+                appString(OnboardingContent.pages[state.step].description),
                 style = FluentTheme.typography.bodyLarge,
                 color = AppColors.muted,
             )
@@ -58,21 +59,21 @@ fun OnboardingPage(state: OnboardingState, onEvent: (OnboardingEvent) -> Unit) {
             }
             Spacer(Modifier.width(8.dp))
             AppText(
-                "${state.step + 1} of 3",
+                appString(AppString.StepOf, state.step + 1, 3),
                 style = FluentTheme.typography.caption,
                 color = AppColors.muted,
             )
         }
-        if (state.error != null) AppFeedback(state.error)
+        if (state.error != null) AppFeedback(failureText(state.error))
         AppButton(
-            if (state.step == 2) "Get started" else "Continue",
+            if (state.step == 2) appString(AppString.GetStarted) else appString(AppString.Continue),
             { onEvent(OnboardingEvent.NextRequested) },
             Modifier.fillMaxWidth(),
             loading = state.saving,
         )
         if (state.step > 0)
             AppButton(
-                "Back",
+                appString(AppString.Back),
                 { onEvent(OnboardingEvent.BackRequested) },
                 Modifier.fillMaxWidth(),
                 primary = false,

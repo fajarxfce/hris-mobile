@@ -5,10 +5,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import dev.fajar.starter.localization.*
 import io.github.composefluent.component.ProgressRing
 
 @Composable
-fun AppLoading(label: String = "Loading") {
+fun AppLoading(label: String = appString(AppString.Loading)) {
     Column(
         Modifier.fillMaxWidth().padding(32.dp),
         horizontalAlignment = Alignment.CenterHorizontally,

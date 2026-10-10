@@ -8,6 +8,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import dev.fajar.starter.localization.*
 import io.github.composefluent.icons.Icons
 import io.github.composefluent.icons.filled.Eye
 import io.github.composefluent.icons.regular.Eye
@@ -19,7 +20,7 @@ fun AppPasswordField(
     visible: Boolean,
     onVisibilityChanged: () -> Unit,
     modifier: Modifier = Modifier,
-    label: String = "Password",
+    label: String = appString(AppString.Password),
     enabled: Boolean = true,
     error: String? = null,
     keyboardActions: KeyboardActions = KeyboardActions(),
@@ -29,7 +30,7 @@ fun AppPasswordField(
         value = value,
         onValueChange = onValueChange,
         modifier = modifier,
-        placeholder = "Enter your password",
+        placeholder = appString(AppString.PasswordPlaceholder),
         enabled = enabled,
         error = error,
         visualTransformation =
@@ -40,7 +41,9 @@ fun AppPasswordField(
         trailingContent = {
             AppIconButton(
                 icon = if (visible) Icons.Filled.Eye else Icons.Regular.Eye,
-                description = if (visible) "Hide password" else "Show password",
+                description =
+                    if (visible) appString(AppString.HidePassword)
+                    else appString(AppString.ShowPassword),
                 onClick = onVisibilityChanged,
                 enabled = enabled,
             )

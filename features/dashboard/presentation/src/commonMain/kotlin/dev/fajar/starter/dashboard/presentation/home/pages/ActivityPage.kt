@@ -8,19 +8,42 @@ import dev.fajar.starter.dashboard.presentation.home.DashboardState
 import dev.fajar.starter.dashboard.presentation.home.widgets.ActivityList
 import dev.fajar.starter.designsystem.components.*
 import dev.fajar.starter.designsystem.theme.AppColors
+import dev.fajar.starter.localization.*
 import io.github.composefluent.FluentTheme
 
 @Composable
-fun ActivityPage(state: DashboardState, onRefresh: () -> Unit) {
+fun ActivityPage(
+    state: DashboardState,
+    onRefresh: () -> Unit,
+    onLoadMore: () -> Unit,
+    onSavedChanged: (String, Boolean) -> Unit,
+) {
     AppPage {
         Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-            AppText("Activity", style = FluentTheme.typography.title)
-            AppText("Recent changes in your workspace.", color = AppColors.muted)
+            AppHeading(appString(AppString.Activity), style = FluentTheme.typography.title)
+            AppText(appString(AppString.RecentChanges), color = AppColors.muted)
         }
-        AppBadge("Sample data")
-        if (state.error != null) AppFeedback(state.error)
+        AppBadge(appString(AppString.SampleData))
+        if (state.error != null) AppFeedback(failureText(state.error))
+        if (state.flagError != null) AppFeedback(failureText(state.flagError))
         if (state.loading && state.dashboard == null) AppLoading()
-        if (state.dashboard != null) ActivityList(state.dashboard.activity)
-        AppButton("Refresh", onRefresh, primary = false, loading = state.loading)
+        if (state.dashboard != null) {
+            AppText(activityCount(state.dashboard.activity.size))
+            if (state.dashboard.pendingChanges > 0) AppBadge(appString(AppString.SyncPending))
+            ActivityList(
+                state.dashboard.activity,
+                if (state.savingAvailable && state.hasSavingPermission) onSavedChanged else null,
+            )
+        }
+        if (state.pageError != null) AppFeedback(failureText(state.pageError))
+        if (state.dashboard?.hasMore == true)
+            AppButton(
+                if (state.pageError == null) appString(AppString.LoadMore)
+                else appString(AppString.RetryLoading),
+                onLoadMore,
+                loading = state.loadingMore,
+                enabled = !state.loading,
+            )
+        AppButton(appString(AppString.Refresh), onRefresh, primary = false, loading = state.loading)
     }
 }

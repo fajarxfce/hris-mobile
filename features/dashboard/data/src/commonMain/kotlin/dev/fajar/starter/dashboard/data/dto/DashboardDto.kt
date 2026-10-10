@@ -8,4 +8,5 @@ data class DashboardDto(
     val active: Int,
     val members: Int,
     val activity: List<ActivityDto>,
+    val nextCursor: String? = null,
 )

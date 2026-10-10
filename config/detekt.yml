@@ -1,0 +1,34 @@
+config:
+  validation: true
+  warningsAsErrors: true
+
+complexity:
+  active: true
+  LongMethod:
+    active: true
+    allowedLines: 100
+    excludes: ['**/*Test.kt']
+    ignoreAnnotated: ['Composable']
+  NestedBlockDepth:
+    active: true
+    allowedDepth: 5
+    excludes: ['**/*Test.kt']
+
+potential-bugs:
+  active: true
+  UnreachableCode:
+    active: true
+  UnsafeCast:
+    active: true
+  IgnoredReturnValue:
+    active: true
+  MapGetWithNotNullAssertionOperator:
+    active: true
+
+style:
+  active: true
+  ThrowsCount:
+    active: false
+  ForbiddenComment:
+    active: true
+    comments: ['FIXME:', 'STOPSHIP:']

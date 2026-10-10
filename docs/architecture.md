@@ -66,13 +66,25 @@ can retain the original exception for an appropriate internal sink. Never expose
 bodies, credentials, or exception messages in UI/log output.
 
 Sign-in drops duplicate submissions and freezes credential edits until completion.
-Clearing its ViewModel cancels the request. The repository checks cancellation before
-publishing a successful session. Dashboard refresh cancels the previous request and
-retains existing data when a later refresh fails.
+Clearing its ViewModel cancels the request. The sign-in use case checks cancellation before
+committing a successful session through the session repository. Dashboard refresh cancels the previous request and
+retains its database snapshot when a later refresh fails. `SyncDashboard` is a singleton use case
+that serializes sync executions; repositories do not own sync scheduling or UI loading state.
+Workers are platform application entry points that invoke feature `SyncTask` use cases. Local
+mutation and outbox insertion share a transaction; background execution is independently scheduled.
+See [sync](sync.md) for delivery and platform guarantees.
 
-The preference port already serves as a datasource contract. Onboarding does not introduce
-a forwarding datasource around it. The in-memory session datasource owns a replayed DTO
-snapshot; it does not own UI state or decide when the application should sign in.
+Feature flag definitions and evaluation policy live in `core/featureflags/domain`; each
+consuming feature owns its keys and action guards. A shared refresh use case serializes
+workers and sets the fetch interval. Its repository coordinates Remote Config and the
+preference store; SDK adapters perform raw fetch/activation only. Flags have no UI state,
+and overrides are allowed only by dev/staging use-case policy.
+
+The typed preference store already serves as a datasource contract. Onboarding consumes
+Proto DataStore through that port; its repository maps the protobuf field to a domain value.
+The in-memory session datasource owns a replayed DTO snapshot. Its repository
+coordinates credential storage and account cache ownership; session policy remains
+in use cases. See [sessions and HTTP](runtime.md).
 
 ## Navigation
 
@@ -84,7 +96,9 @@ states; tab selection does not create independent navigation histories in this s
 The app host handles top/side safe areas and keyboard insets. AppPage handles the bottom
 safe area for standalone pages; dashboard's bottom navigation owns that inset instead,
 and its content marks the inset consumed. The bar draws its surface beneath the system
-navigation area. Android window icon/contrast configuration stays in the platform runner.
+navigation area. On wider windows a side rail/sidebar replaces the bottom bar and
+pages own their bottom safe area. Moving the content composition preserves its
+rendering state across that layout change. Android window icon/contrast configuration stays in the platform runner.
 
 ## Checks
 

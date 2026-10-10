@@ -1,0 +1,11 @@
+{
+  "firebase": {
+    "apiKey": "FIREBASE_WEB_API_KEY",
+    "authDomain": "PROJECT.firebaseapp.com",
+    "projectId": "PROJECT",
+    "storageBucket": "PROJECT.firebasestorage.app",
+    "messagingSenderId": "SENDER_ID",
+    "appId": "WEB_APP_ID"
+  },
+  "vapidKey": "PUBLIC_VAPID_KEY"
+}

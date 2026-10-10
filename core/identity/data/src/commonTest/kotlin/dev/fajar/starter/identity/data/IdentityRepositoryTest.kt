@@ -1,67 +1,69 @@
 package dev.fajar.starter.identity.data
 
-import dev.fajar.starter.common.result.AppResult
-import dev.fajar.starter.identity.data.datasources.AuthRemoteDataSource
-import dev.fajar.starter.identity.data.datasources.MemorySessionDataSource
-import dev.fajar.starter.identity.data.dto.SignInRequest
-import dev.fajar.starter.identity.data.dto.UserDto
+import dev.fajar.starter.common.result.*
+import dev.fajar.starter.identity.data.datasources.*
+import dev.fajar.starter.identity.data.dto.*
+import dev.fajar.starter.identity.data.dto.AuthResponse
+import dev.fajar.starter.identity.data.dto.OidcExchangeRequest
 import dev.fajar.starter.identity.data.repositories.DefaultIdentityRepository
 import kotlin.test.*
-import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.async
-import kotlinx.coroutines.cancelAndJoin
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.*
 import kotlinx.coroutines.test.runTest
 
 class IdentityRepositoryTest {
-    private val user = UserDto("1", "Alex Morgan", "demo@example.com")
+    private val response =
+        AuthResponse(
+            UserDto("1", "Alex", "demo@example.com"),
+            TokensDto("access", "refresh", Long.MAX_VALUE),
+        )
 
-    @Test
-    fun signInPublishesAndSignOutClearsSession() = runTest {
-        val session = MemorySessionDataSource()
-        val remote =
-            object : AuthRemoteDataSource {
-                override suspend fun signIn(request: SignInRequest) = user
-            }
-        val repository = DefaultIdentityRepository(remote, session)
-        assertNull(repository.observeUser().first())
-        assertIs<AppResult.Success<*>>(repository.signIn(user.email, "Demo123!"))
-        assertEquals(user.name, repository.observeUser().first()?.name)
-        assertIs<AppResult.Success<*>>(repository.signOut())
-        assertNull(repository.observeUser().first())
+    private class Remote(val execute: suspend () -> AuthResponse) : AuthRemoteDataSource {
+        override suspend fun completeSso(request: OidcExchangeRequest): AuthResponse =
+            error("Unused SSO exchange")
+
+        override suspend fun signIn(request: SignInRequest) = execute()
+
+        override suspend fun refresh(request: RefreshRequest) = execute()
     }
 
     @Test
-    fun cancelledLoginNeverPublishesALateSession() = runTest {
+    fun mapsRawResponseAndNeverExposesTokensInDiagnostics() = runTest {
+        val repository = DefaultIdentityRepository(Remote { response })
+        val result =
+            assertIs<AppResult.Success<*>>(repository.signIn("demo@example.com", "password"))
+        assertFalse(result.value.toString().contains("refresh"))
+        assertFalse(SignInRequest("private@example.com", "secret").toString().contains("secret"))
+    }
+
+    @Test
+    fun rejectsInvalidPayloadAndSanitizesTechnicalFailures() = runTest {
+        val invalid =
+            DefaultIdentityRepository(
+                Remote { response.copy(tokens = response.tokens.copy(accessToken = "")) }
+            )
+        assertIs<AppResult.Failed>(invalid.signIn("demo@example.com", "secret"))
+        val failure =
+            DefaultIdentityRepository(Remote { error("private response") })
+                .signIn("demo@example.com", "secret")
+        assertFalse(assertIs<AppResult.Failed>(failure).failure.message.contains("private"))
+    }
+
+    @Test
+    fun cancelledAcquisitionRejectsNonCooperativeLateSuccess() = runTest {
         val started = CompletableDeferred<Unit>()
-        val response = CompletableDeferred<UserDto>()
-        val session = MemorySessionDataSource()
-        val remote =
-            object : AuthRemoteDataSource {
-                override suspend fun signIn(request: SignInRequest): UserDto {
+        val release = CompletableDeferred<Unit>()
+        val repository =
+            DefaultIdentityRepository(
+                Remote {
                     started.complete(Unit)
-                    return response.await()
+                    withContext(NonCancellable) { release.await() }
+                    response
                 }
-            }
-        val repository = DefaultIdentityRepository(remote, session)
-        val login = async { repository.signIn(user.email, "Demo123!") }
+            )
+        val job = async { repository.signIn("demo@example.com", "secret") }
         started.await()
-        login.cancelAndJoin()
-        response.complete(user)
-        assertNull(session.user.value)
-    }
-
-    @Test
-    fun remoteExceptionDoesNotLeakOrChangeCurrentUser() = runTest {
-        val session = MemorySessionDataSource()
-        session.write(user)
-        val remote =
-            object : AuthRemoteDataSource {
-                override suspend fun signIn(request: SignInRequest): UserDto =
-                    error("private response")
-            }
-        val repository = DefaultIdentityRepository(remote, session)
-        assertIs<AppResult.Failed>(repository.signIn(user.email, "wrong"))
-        assertEquals(user, session.user.value)
+        job.cancel()
+        release.complete(Unit)
+        assertFailsWith<CancellationException> { job.await() }
     }
 }

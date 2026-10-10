@@ -2,21 +2,27 @@ package dev.fajar.starter.onboarding.data
 
 import dev.fajar.starter.common.result.AppResult
 import dev.fajar.starter.common.result.FailureKind
+import dev.fajar.starter.datastore.UserPreferencesStore
+import dev.fajar.starter.datastore.proto.UserPreferences
 import dev.fajar.starter.onboarding.data.repositories.StoredOnboardingRepository
-import dev.fajar.starter.storage.PreferenceStore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 
 class StoredOnboardingRepositoryTest {
     @Test
-    fun rejectedWriteDoesNotReportOnboardingCompleted() = runTest {
+    fun failedWriteDoesNotReportOnboardingCompleted() = runTest {
         val storage =
-            object : PreferenceStore {
-                override suspend fun readBoolean(key: String): Boolean? = null
+            object : UserPreferencesStore {
+                override val data = flowOf(UserPreferences())
 
-                override suspend fun writeBoolean(key: String, value: Boolean) = false
+                override suspend fun update(transform: (UserPreferences) -> UserPreferences) {
+                    throw IllegalStateException("storage unavailable")
+                }
+
+                override fun close() = Unit
             }
         val repository = StoredOnboardingRepository(storage)
         assertEquals(

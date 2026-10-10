@@ -40,11 +40,11 @@ class OnboardingViewModelTest {
         viewModel.onEvent(OnboardingEvent.FinishRequested)
         runCurrent()
         assertFalse(viewModel.state.value.completed)
-        assertEquals("Try again", viewModel.state.value.error)
+        assertEquals("Try again", viewModel.state.value.error?.message)
         fail = false
         viewModel.onEvent(OnboardingEvent.FinishRequested)
         runCurrent()
         assertTrue(viewModel.state.value.completed)
-        assertNull(viewModel.state.value.error)
+        assertNull(viewModel.state.value.error?.message)
     }
 }

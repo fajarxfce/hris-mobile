@@ -1,15 +1,20 @@
 package dev.fajar.starter.onboarding.presentation.welcome
 
-data class OnboardingContent(val title: String, val description: String) {
+import dev.fajar.starter.localization.AppString
+
+data class OnboardingContent(val title: AppString, val description: AppString) {
     companion object {
         val pages =
             listOf(
                 OnboardingContent(
-                    "Your workspace",
-                    "Access your projects and account in one place.",
+                    AppString.OnboardingWorkspace,
+                    AppString.OnboardingWorkspaceDescription,
                 ),
-                OnboardingContent("Stay up to date", "Review recent activity and follow progress."),
-                OnboardingContent("Ready to begin", "Sign in to open your workspace."),
+                OnboardingContent(
+                    AppString.OnboardingActivity,
+                    AppString.OnboardingActivityDescription,
+                ),
+                OnboardingContent(AppString.OnboardingReady, AppString.OnboardingReadyDescription),
             )
     }
 }

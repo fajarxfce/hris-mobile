@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package dev.fajar.starter.datastore.proto;
+
+// Add fields with new numbers. Never reuse a removed field number.
+message UserPreferences {
+  bool onboarding_completed = 1;
+  ThemeMode theme_mode = 2;
+  bool notifications_enabled = 3;
+  bool legacy_migrated = 4;
+  map<string, string> feature_flag_values = 5;
+  map<string, bool> feature_flag_overrides = 6;
+  int64 feature_flags_fetched_at = 7;
+  string language_tag = 8; // Empty uses the system language.
+  map<string, int64> dismissed_update_builds = 9;
+  bool app_lock_enabled = 10;
+}
+
+enum ThemeMode {
+  SYSTEM = 0;
+  LIGHT = 1;
+  DARK = 2;
+}

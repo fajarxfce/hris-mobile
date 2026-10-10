@@ -1,0 +1,103 @@
+name: Distribute iOS
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        type: choice
+        options: [staging, dev, prod]
+        default: staging
+        required: true
+      version:
+        description: 'Marketing version (for example 1.0.0)'
+        required: true
+      build:
+        description: 'Increasing numeric build number'
+        required: true
+      backend:
+        type: choice
+        options: [demo, remote]
+        default: demo
+        required: true
+      notes:
+        description: 'Build notes (test details are managed in App Store Connect)'
+        required: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: internal-ios-${{ inputs.environment }}
+  cancel-in-progress: false
+
+jobs:
+  distribute:
+    if: github.ref == 'refs/heads/main'
+    runs-on: macos-15
+    timeout-minutes: 60
+    environment: internal-${{ inputs.environment }}
+    env:
+      RELEASE_ENVIRONMENT: ${{ inputs.environment }}
+      RELEASE_VERSION: ${{ inputs.version }}
+      RELEASE_BUILD: ${{ inputs.build }}
+      RELEASE_BACKEND: ${{ inputs.backend }}
+      RELEASE_NOTES: ${{ inputs.notes }}
+      API_BASE_URL: ${{ vars.API_BASE_URL }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: gradle/actions/setup-gradle@ed408507eac070d1f99cc633dbcf757c94c7933a
+      - run: python3 tool/distribution/configuration.py
+      - name: Prepare signing
+        id: signing
+        env:
+          APPLE_TEAM_ID: ${{ vars.APPLE_TEAM_ID }}
+          APPLE_API_KEY_ID: ${{ vars.APPLE_API_KEY_ID }}
+          APPLE_API_ISSUER_ID: ${{ vars.APPLE_API_ISSUER_ID }}
+          APPLE_API_KEY_BASE64: ${{ secrets.APPLE_API_KEY_BASE64 }}
+          APPLE_CERTIFICATE_BASE64: ${{ secrets.APPLE_CERTIFICATE_BASE64 }}
+          APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
+          APPLE_PROFILE_BASE64: ${{ secrets.APPLE_PROFILE_BASE64 }}
+          FIREBASE_IOS_CONFIG_BASE64: ${{ secrets.FIREBASE_IOS_CONFIG_BASE64 }}
+          OIDC_CONFIG_BASE64: ${{ secrets.OIDC_CONFIG_BASE64 }}
+        run: python3 tool/distribution/apple_signing.py prepare
+      - name: Verify and archive
+        env:
+          APPLE_TEAM_ID: ${{ vars.APPLE_TEAM_ID }}
+          PROFILE_UUID: ${{ steps.signing.outputs.profile }}
+          ORG_GRADLE_PROJECT_backend: ${{ inputs.backend }}
+          ORG_GRADLE_PROJECT_apiBaseUrl: ${{ vars.API_BASE_URL || 'https://api.example.com/' }}
+        run: |
+          ./gradlew :architectureCheck :formatCheck :detekt
+          xcodebuild -project apps/ios/FluentStarter.xcodeproj -scheme "FluentStarter-$RELEASE_ENVIRONMENT" \
+            -configuration "Release-$RELEASE_ENVIRONMENT" -destination 'generic/platform=iOS' \
+            -archivePath build/distribution/FluentStarter.xcarchive \
+            -derivedDataPath apps/ios/build \
+            CODE_SIGN_STYLE=Manual CODE_SIGN_IDENTITY='Apple Distribution' \
+            DEVELOPMENT_TEAM="$APPLE_TEAM_ID" PROVISIONING_PROFILE_SPECIFIER="$PROFILE_UUID" \
+            MARKETING_VERSION="$RELEASE_VERSION" CURRENT_PROJECT_VERSION="$RELEASE_BUILD" archive
+          xcodebuild -exportArchive -archivePath build/distribution/FluentStarter.xcarchive \
+            -exportOptionsPlist "$RUNNER_TEMP/fluent-distribution/ExportOptions.plist" \
+            -exportPath build/distribution/ipa
+      - name: Package checksums
+        run: python3 tool/distribution/checksums.py ios
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: ios-${{ inputs.environment }}-${{ inputs.version }}-${{ inputs.build }}
+          retention-days: 14
+          path: build/distribution/artifacts/
+          if-no-files-found: error
+      - name: Upload to App Store Connect
+        env:
+          API_PRIVATE_KEYS_DIR: ${{ runner.temp }}/fluent-distribution/private_keys
+          APPLE_API_KEY_ID: ${{ vars.APPLE_API_KEY_ID }}
+          APPLE_API_ISSUER_ID: ${{ vars.APPLE_API_ISSUER_ID }}
+        run: >-
+          xcrun altool --upload-app --type ios -f build/distribution/ipa/FluentStarter.ipa
+          --apiKey "$APPLE_API_KEY_ID" --apiIssuer "$APPLE_API_ISSUER_ID"
+      - name: Remove signing resources
+        if: always()
+        run: python3 tool/distribution/apple_signing.py clean
