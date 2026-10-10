@@ -3,7 +3,6 @@ package dev.fajar.starter.settings.presentation.preferences.pages
 import androidx.compose.runtime.Composable
 import dev.fajar.starter.designsystem.components.*
 import dev.fajar.starter.localization.*
-import dev.fajar.starter.security.domain.access.entities.Permission
 import dev.fajar.starter.settings.domain.entities.AppLanguage
 import dev.fajar.starter.settings.presentation.preferences.*
 import io.github.composefluent.FluentTheme
@@ -16,28 +15,6 @@ fun SettingsPage(
 ) {
     AppPage {
         AppHeading(appString(AppString.Settings), style = FluentTheme.typography.title)
-        AppCard {
-            AppText(appString(AppString.AccountAccess), style = FluentTheme.typography.bodyStrong)
-            AppText(appString(AppString.AccountRoles, state.roles.joinToString(", ")))
-            state.permissions.forEach { permission ->
-                AppText(
-                    appString(
-                        when (permission) {
-                            Permission.SaveActivity -> AppString.PermissionSaveActivity
-                            Permission.UploadFile -> AppString.PermissionUploadFile
-                            Permission.DownloadFile -> AppString.PermissionDownloadFile
-                        }
-                    )
-                )
-            }
-            if (state.accessError != null) AppFeedback(failureText(state.accessError))
-            AppButton(
-                appString(AppString.RefreshAccess),
-                { onEvent(SettingsEvent.AccessRefreshRequested) },
-                enabled = !state.loadingAccess,
-                primary = false,
-            )
-        }
         securitySettings()
         AppText(appString(AppString.LanguageDescription))
         AppLanguage.entries.forEach { language ->

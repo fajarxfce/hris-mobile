@@ -3,6 +3,6 @@ package dev.fajar.starter.identity.data.dto
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class SignInRequest(val email: String, val password: String) {
+data class SignInRequest(val email: String, val password: String, val deviceName: String) {
     override fun toString(): String = "SignInRequest([redacted])"
 }

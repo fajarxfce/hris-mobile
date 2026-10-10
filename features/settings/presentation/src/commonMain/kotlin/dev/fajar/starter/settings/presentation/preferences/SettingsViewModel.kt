@@ -12,51 +12,14 @@ import org.koin.android.annotation.KoinViewModel
 class SettingsViewModel(
     private val observe: ObserveLanguage,
     private val setLanguage: SetLanguage,
-    private val observeAccess: dev.fajar.starter.security.domain.access.usecases.ObserveAccess,
-    private val refreshAccess: dev.fajar.starter.security.domain.access.usecases.RefreshAccess,
 ) : MviViewModel<SettingsState, SettingsEvent, SettingsEffect>(SettingsState()) {
     private var observation: Job? = null
 
     init {
-        on<SettingsEvent.AccessRefreshRequested>(::onAccessRefreshRequested)
         on<SettingsEvent.BackRequested>(::onBackRequested)
         on<SettingsEvent.LanguageSelected>(::onLanguageSelected)
         on<SettingsEvent.ReloadRequested>(::onReloadRequested)
-        viewModelScope.launch {
-            observeAccess().collect { result ->
-                when (result) {
-                    is AppResult.Success ->
-                        updateState {
-                            it.copy(
-                                roles = result.value?.roles.orEmpty(),
-                                permissions = result.value?.permissions.orEmpty(),
-                            )
-                        }
-                    is AppResult.Failed ->
-                        updateState {
-                            it.copy(
-                                roles = emptySet(),
-                                permissions = emptySet(),
-                                accessError = result.failure,
-                            )
-                        }
-                }
-            }
-        }
-        onEvent(SettingsEvent.AccessRefreshRequested)
         onEvent(SettingsEvent.ReloadRequested)
-    }
-
-    private fun onAccessRefreshRequested(event: SettingsEvent.AccessRefreshRequested) {
-        if (state.value.loadingAccess) return
-        updateState { it.copy(loadingAccess = true, accessError = null) }
-        viewModelScope.launch {
-            when (val result = refreshAccess()) {
-                is AppResult.Success -> updateState { it.copy(loadingAccess = false) }
-                is AppResult.Failed ->
-                    updateState { it.copy(loadingAccess = false, accessError = result.failure) }
-            }
-        }
     }
 
     private fun onBackRequested(event: SettingsEvent.BackRequested) {

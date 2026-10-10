@@ -10,20 +10,15 @@ import org.koin.core.annotation.*
 
 @Single
 class AuthApi(@Named(HttpClients.Public) private val client: HttpClient) {
-    suspend fun completeSso(request: OidcExchangeRequest): AuthResponse =
-        client.requestJson("auth/oidc", HttpMethod.Post) {
+    suspend fun signIn(request: SignInRequest, operationId: String): AuthResponse =
+        client.requestJson("auth/native/login", HttpMethod.Post) {
+            header("Idempotency-Key", operationId)
             contentType(ContentType.Application.Json)
             setBody(request)
         }
 
-    suspend fun signIn(request: SignInRequest): AuthResponse =
-        client.requestJson("auth/login", HttpMethod.Post) {
-            contentType(ContentType.Application.Json)
-            setBody(request)
-        }
-
-    suspend fun refresh(request: RefreshRequest, operationId: String): AuthResponse =
-        client.requestJson("auth/refresh", HttpMethod.Post) {
+    suspend fun refresh(request: RefreshRequest, operationId: String): NativeCredentialsDto =
+        client.requestJson("auth/native/refresh", HttpMethod.Post) {
             header("Idempotency-Key", operationId)
             contentType(ContentType.Application.Json)
             setBody(request)

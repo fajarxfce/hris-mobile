@@ -62,6 +62,8 @@ class LoginViewModelTest {
                 override suspend fun signIn(
                     email: String,
                     password: String,
+                    deviceName: String,
+                    operationId: String,
                 ): AppResult<AuthenticatedUser> {
                     calls++
                     return response.await()
@@ -70,13 +72,22 @@ class LoginViewModelTest {
         val sessions = TestSessions()
         val viewModel =
             LoginViewModel(
-                SignIn(repository, sessions),
+                SignIn(
+                    repository,
+                    sessions,
+                    server =
+                        dev.fajar.starter.identity.domain.entities.IdentityServer(
+                            "https://example.invalid/",
+                            "Test device",
+                        ),
+                ),
                 ValidateSignIn(),
                 ListSsoProviders(sso),
                 SignInWithSso(sso, repository, sessions),
             )
         store.put("login", viewModel)
-        viewModel.onEvent(LoginEvent.DemoAccountSelected)
+        viewModel.onEvent(LoginEvent.EmailChanged("demo@example.com"))
+        viewModel.onEvent(LoginEvent.PasswordChanged("Demo123!"))
         viewModel.onEvent(LoginEvent.SignInRequested)
         viewModel.onEvent(LoginEvent.SignInRequested)
         viewModel.onEvent(LoginEvent.EmailChanged("changed@example.com"))
@@ -84,7 +95,18 @@ class LoginViewModelTest {
         assertEquals(1, calls)
         assertEquals("demo@example.com", viewModel.state.value.email)
         response.complete(
-            AppResult.Success(AuthenticatedUser(testSession().user, testSession().tokens))
+            AppResult.Success(
+                AuthenticatedUser(
+                    testSession().user,
+                    testSession().tokens,
+                    binding =
+                        dev.fajar.starter.identity.domain.entities.SessionBinding(
+                            "11111111-1111-4111-8111-111111111111",
+                            "https://example.invalid/",
+                            Long.MAX_VALUE,
+                        ),
+                )
+            )
         )
         runCurrent()
         assertFalse(viewModel.state.value.submitting)
@@ -108,6 +130,8 @@ class LoginViewModelTest {
                 override suspend fun signIn(
                     email: String,
                     password: String,
+                    deviceName: String,
+                    operationId: String,
                 ): AppResult<AuthenticatedUser> {
                     started.complete(Unit)
                     try {
@@ -120,13 +144,22 @@ class LoginViewModelTest {
         val sessions = TestSessions()
         val viewModel =
             LoginViewModel(
-                SignIn(repository, sessions),
+                SignIn(
+                    repository,
+                    sessions,
+                    server =
+                        dev.fajar.starter.identity.domain.entities.IdentityServer(
+                            "https://example.invalid/",
+                            "Test device",
+                        ),
+                ),
                 ValidateSignIn(),
                 ListSsoProviders(sso),
                 SignInWithSso(sso, repository, sessions),
             )
         store.put("login", viewModel)
-        viewModel.onEvent(LoginEvent.DemoAccountSelected)
+        viewModel.onEvent(LoginEvent.EmailChanged("demo@example.com"))
+        viewModel.onEvent(LoginEvent.PasswordChanged("Demo123!"))
         viewModel.onEvent(LoginEvent.SignInRequested)
         runCurrent()
         started.await()
@@ -151,6 +184,8 @@ class LoginViewModelTest {
                 override suspend fun signIn(
                     email: String,
                     password: String,
+                    deviceName: String,
+                    operationId: String,
                 ): AppResult<AuthenticatedUser> {
                     calls++
                     return AppResult.Failed(
@@ -165,7 +200,15 @@ class LoginViewModelTest {
         val sessions = TestSessions()
         val vm =
             LoginViewModel(
-                SignIn(repository, sessions),
+                SignIn(
+                    repository,
+                    sessions,
+                    server =
+                        dev.fajar.starter.identity.domain.entities.IdentityServer(
+                            "https://example.invalid/",
+                            "Test device",
+                        ),
+                ),
                 ValidateSignIn(),
                 ListSsoProviders(sso),
                 SignInWithSso(sso, repository, sessions),
@@ -211,4 +254,10 @@ private fun testSession() =
         "session-a",
         User("1", "Alex", "demo@example.com"),
         SessionTokens("access", "refresh", Long.MAX_VALUE),
+        binding =
+            dev.fajar.starter.identity.domain.entities.SessionBinding(
+                "11111111-1111-4111-8111-111111111111",
+                "https://example.invalid/",
+                Long.MAX_VALUE,
+            ),
     )

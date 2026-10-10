@@ -46,27 +46,32 @@ abstract class GenerateEnvironment : DefaultTask() {
         require(value in setOf("dev", "staging", "prod")) {
             "appEnvironment must be dev, staging, or prod."
         }
-        require(backend.get() in setOf("demo", "remote")) { "backend must be demo or remote." }
+        require(backend.get() == "remote") {
+            "HRIS uses its native backend. Mock transports belong in tests."
+        }
         require(desktopPersistence.get() in setOf("secure", "memory")) {
             "desktopPersistence must be secure or memory."
         }
-        val urls = endpoints.get()
+        val urls = endpoints.get().mapValues { (_, url) -> url.trimEnd('/') + "/" }
         require(
             backend.get() != "remote" || urls.values.none { it == "https://demo.fluent.local/" }
         ) {
             "Remote mode requires apiBaseUrl or all three environment endpoints."
         }
         if (backend.get() == "remote")
-            urls.values.forEach {
+            urls.forEach { (environment, it) ->
                 val uri = java.net.URI(it)
                 require(
-                    uri.scheme == "https" &&
+                    (uri.scheme == "https" ||
+                        (environment == "dev" &&
+                            uri.scheme == "http" &&
+                            uri.host in setOf("127.0.0.1", "localhost"))) &&
                         !uri.host.isNullOrBlank() &&
                         uri.userInfo == null &&
                         uri.query == null &&
                         uri.fragment == null
                 ) {
-                    "Remote API endpoints require HTTPS without credentials, query, or fragment."
+                    "API endpoints require HTTPS; only the dev environment allows loopback HTTP. Credentials, queries and fragments are forbidden."
                 }
             }
         val output =

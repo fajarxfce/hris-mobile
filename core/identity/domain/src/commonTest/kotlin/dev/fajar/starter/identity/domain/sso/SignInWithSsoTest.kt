@@ -34,7 +34,20 @@ class SignInWithSsoTest {
         val sessions = SessionFixture()
         val job = async { SignInWithSso(sso, identity, sessions)("organization") }
         runCurrent()
-        sessions.value.value = AppResult.Success(Session("new-session", user.user, user.tokens))
+        sessions.value.value =
+            AppResult.Success(
+                Session(
+                    "new-session",
+                    user.user,
+                    user.tokens,
+                    binding =
+                        dev.fajar.starter.identity.domain.entities.SessionBinding(
+                            "11111111-1111-4111-8111-111111111111",
+                            "https://example.invalid/",
+                            Long.MAX_VALUE,
+                        ),
+                )
+            )
         pending.complete(Unit)
         assertEquals(FailureKind.Unavailable, assertIs<AppResult.Failed>(job.await()).failure.kind)
         assertEquals(0, identity.calls)
@@ -106,6 +119,12 @@ private val user =
     AuthenticatedUser(
         User("u", "Demo", "demo@example.com"),
         SessionTokens("access", "refresh", Long.MAX_VALUE),
+        binding =
+            dev.fajar.starter.identity.domain.entities.SessionBinding(
+                "11111111-1111-4111-8111-111111111111",
+                "https://example.invalid/",
+                Long.MAX_VALUE,
+            ),
     )
 
 private class SsoFixture(
@@ -132,8 +151,12 @@ private class ExchangeFixture(
         return operation()
     }
 
-    override suspend fun signIn(email: String, password: String): AppResult<AuthenticatedUser> =
-        error("Unused")
+    override suspend fun signIn(
+        email: String,
+        password: String,
+        deviceName: String,
+        operationId: String,
+    ): AppResult<AuthenticatedUser> = error("Unused")
 
     override suspend fun refresh(
         session: Session,

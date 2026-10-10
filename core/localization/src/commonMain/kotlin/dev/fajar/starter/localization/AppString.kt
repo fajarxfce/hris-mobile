@@ -5,6 +5,50 @@ import org.jetbrains.compose.resources.StringResource
 
 /** Explicit pairs keep runtime language changes portable across Android, iOS, desktop and Web. */
 enum class AppString(val english: StringResource, val indonesian: StringResource) {
+    Home(Res.string.home_en, Res.string.home_id),
+    ChooseCompany(Res.string.choose_company_en, Res.string.choose_company_id),
+    ChooseCompanyDescription(
+        Res.string.choose_company_description_en,
+        Res.string.choose_company_description_id,
+    ),
+    OpenCompany(Res.string.open_company_en, Res.string.open_company_id),
+    NoCompanies(Res.string.no_companies_en, Res.string.no_companies_id),
+    ChangeCompany(Res.string.change_company_en, Res.string.change_company_id),
+    CompanyWorkspace(Res.string.company_workspace_en, Res.string.company_workspace_id),
+    VerifyingAccount(Res.string.verifying_account_en, Res.string.verifying_account_id),
+    SetUpAuthenticator(Res.string.set_up_authenticator_en, Res.string.set_up_authenticator_id),
+    AuthenticatorSetupDescription(
+        Res.string.authenticator_setup_description_en,
+        Res.string.authenticator_setup_description_id,
+    ),
+    VerificationCode(Res.string.verification_code_en, Res.string.verification_code_id),
+    Verify(Res.string.verify_en, Res.string.verify_id),
+    VerifyAccount(Res.string.verify_account_en, Res.string.verify_account_id),
+    AuthenticatorDescription(
+        Res.string.authenticator_description_en,
+        Res.string.authenticator_description_id,
+    ),
+    RecoveryCodeDescription(
+        Res.string.recovery_code_description_en,
+        Res.string.recovery_code_description_id,
+    ),
+    RecoveryCode(Res.string.recovery_code_en, Res.string.recovery_code_id),
+    UseAuthenticator(Res.string.use_authenticator_en, Res.string.use_authenticator_id),
+    UseRecoveryCode(Res.string.use_recovery_code_en, Res.string.use_recovery_code_id),
+    RecoveryCodes(Res.string.recovery_codes_en, Res.string.recovery_codes_id),
+    SaveRecoveryCodes(Res.string.save_recovery_codes_en, Res.string.save_recovery_codes_id),
+    RecoveryCodesSaved(Res.string.recovery_codes_saved_en, Res.string.recovery_codes_saved_id),
+    VerificationUncertain(
+        Res.string.verification_uncertain_en,
+        Res.string.verification_uncertain_id,
+    ),
+    InvalidCredentials(Res.string.invalid_credentials_en, Res.string.invalid_credentials_id),
+    InvalidVerificationCode(
+        Res.string.invalid_verification_code_en,
+        Res.string.invalid_verification_code_id,
+    ),
+    EnrollmentExpired(Res.string.enrollment_expired_en, Res.string.enrollment_expired_id),
+    TooManyAttempts(Res.string.too_many_attempts_en, Res.string.too_many_attempts_id),
     Files(Res.string.files_en, Res.string.files_id),
     Upload(Res.string.upload_en, Res.string.upload_id),
     Download(Res.string.download_en, Res.string.download_id),

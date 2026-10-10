@@ -76,26 +76,5 @@ fun LoginPage(state: LoginState, onEvent: (LoginEvent) -> Unit) {
                 { onEvent(LoginEvent.SsoCancellationRequested) },
                 primary = false,
             )
-        AppCard(Modifier.fillMaxWidth(), color = AppColors.tint) {
-            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                AppBadge(appString(AppString.Demo))
-                AppText(
-                    appString(AppString.DemoDescription),
-                    style = FluentTheme.typography.bodyStrong,
-                )
-                AppText(
-                    "demo@example.com  /  Demo123!",
-                    style = FluentTheme.typography.caption,
-                    color = AppColors.muted,
-                )
-                AppButton(
-                    appString(AppString.UseDemo),
-                    { onEvent(LoginEvent.DemoAccountSelected) },
-                    Modifier.fillMaxWidth(),
-                    primary = false,
-                    enabled = !state.submitting,
-                )
-            }
-        }
     }
 }

@@ -21,9 +21,25 @@ class SignInTest {
         var calls = 0
         var receivedEmail = ""
         var result: AppResult<AuthenticatedUser> =
-            AppResult.Success(AuthenticatedUser(testSession().user, testSession().tokens))
+            AppResult.Success(
+                AuthenticatedUser(
+                    testSession().user,
+                    testSession().tokens,
+                    binding =
+                        dev.fajar.starter.identity.domain.entities.SessionBinding(
+                            "11111111-1111-4111-8111-111111111111",
+                            "https://example.invalid/",
+                            Long.MAX_VALUE,
+                        ),
+                )
+            )
 
-        override suspend fun signIn(email: String, password: String): AppResult<AuthenticatedUser> {
+        override suspend fun signIn(
+            email: String,
+            password: String,
+            deviceName: String,
+            operationId: String,
+        ): AppResult<AuthenticatedUser> {
             calls++
             receivedEmail = email
             return result
@@ -38,7 +54,16 @@ class SignInTest {
     @Test
     fun invalidEmailDoesNotReachRepository() = runTest {
         val repository = Repository()
-        val result = SignIn(repository, TestSessions())("invalid", "password")
+        val result =
+            SignIn(
+                repository,
+                TestSessions(),
+                server =
+                    dev.fajar.starter.identity.domain.entities.IdentityServer(
+                        "https://example.invalid/",
+                        "Test device",
+                    ),
+            )("invalid", "password", "22222222-2222-4222-8222-222222222222")
         assertEquals("email", assertIs<AppResult.Failed>(result).failure.field)
         assertEquals(0, repository.calls)
     }
@@ -46,7 +71,16 @@ class SignInTest {
     @Test
     fun emptyPasswordDoesNotReachRepository() = runTest {
         val repository = Repository()
-        val result = SignIn(repository, TestSessions())("demo@example.com", "")
+        val result =
+            SignIn(
+                repository,
+                TestSessions(),
+                server =
+                    dev.fajar.starter.identity.domain.entities.IdentityServer(
+                        "https://example.invalid/",
+                        "Test device",
+                    ),
+            )("demo@example.com", "", "22222222-2222-4222-8222-222222222222")
         assertEquals("password", assertIs<AppResult.Failed>(result).failure.field)
         assertEquals(0, repository.calls)
     }
@@ -56,7 +90,18 @@ class SignInTest {
         val repository = Repository()
         val failure = AppResult.Failed(Failure(FailureKind.Network, "Offline"))
         repository.result = failure
-        assertSame(failure, SignIn(repository, TestSessions())(" DEMO@EXAMPLE.COM ", "password"))
+        assertSame(
+            failure,
+            SignIn(
+                repository,
+                TestSessions(),
+                server =
+                    dev.fajar.starter.identity.domain.entities.IdentityServer(
+                        "https://example.invalid/",
+                        "Test device",
+                    ),
+            )(" DEMO@EXAMPLE.COM ", "password", "22222222-2222-4222-8222-222222222222"),
+        )
         assertEquals("demo@example.com", repository.receivedEmail)
     }
 }
@@ -83,4 +128,10 @@ internal fun testSession() =
         "session-a",
         User("1", "Alex", "demo@example.com"),
         SessionTokens("access", "refresh", Long.MAX_VALUE),
+        binding =
+            dev.fajar.starter.identity.domain.entities.SessionBinding(
+                "11111111-1111-4111-8111-111111111111",
+                "https://example.invalid/",
+                Long.MAX_VALUE,
+            ),
     )

@@ -1,5 +1,9 @@
 # Local-first data and sync
 
+This document describes inherited starter infrastructure. For the active HRIS API
+and current integration status, see [native identity](native-identity.md). Template
+endpoints and demo screens described here are not mounted by the HRIS application.
+
 The dashboard is the reference implementation. Its content and saved activities live in
 the local database. The Activity tab's star updates local state immediately; synchronization
 is separate from saving. The current HTTP transport is an in-process demo, not a deployed

@@ -1,3 +1,5 @@
+@file:OptIn(kotlin.uuid.ExperimentalUuidApi::class)
+
 package dev.fajar.starter.auth.presentation.login
 
 import androidx.lifecycle.viewModelScope
@@ -7,6 +9,7 @@ import dev.fajar.starter.identity.domain.sso.usecases.*
 import dev.fajar.starter.identity.domain.usecases.SignIn
 import dev.fajar.starter.identity.domain.usecases.ValidateSignIn
 import dev.fajar.starter.presentation.mvi.MviViewModel
+import kotlin.uuid.Uuid
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
@@ -28,7 +31,6 @@ class LoginViewModel(
         on<LoginEvent.EmailChanged>(::onEmailChanged)
         on<LoginEvent.PasswordChanged>(::onPasswordChanged)
         on<LoginEvent.PasswordVisibilityChanged>(::onPasswordVisibilityChanged)
-        on<LoginEvent.DemoAccountSelected>(::onDemoAccountSelected)
         on<LoginEvent.SignInRequested>(::onSignInRequested)
         onEvent(LoginEvent.ProvidersRequested)
     }
@@ -83,6 +85,7 @@ class LoginViewModel(
                 val errors = it.fieldErrors - "email"
                 it.copy(
                     email = event.value,
+                    signInOperationId = null,
                     failure = null,
                     fieldErrors =
                         errors +
@@ -101,6 +104,7 @@ class LoginViewModel(
                 val errors = it.fieldErrors - "password"
                 it.copy(
                     password = event.value,
+                    signInOperationId = null,
                     failure = null,
                     fieldErrors =
                         errors +
@@ -117,28 +121,16 @@ class LoginViewModel(
         updateState { it.copy(passwordVisible = !it.passwordVisible) }
     }
 
-    private fun onDemoAccountSelected(event: LoginEvent.DemoAccountSelected) {
-        if (!state.value.submitting)
-            updateState {
-                it.copy(
-                    email = "demo@example.com",
-                    password = "Demo123!",
-                    failure = null,
-                    fieldErrors = emptyMap(),
-                    validated = false,
-                )
-            }
-    }
-
     private fun onSignInRequested(event: LoginEvent.SignInRequested) {
         val input = state.value
         if (input.submitting) return
         val errors = validate(input.email, input.password)
         updateState { it.copy(validated = true, fieldErrors = errors, failure = null) }
         if (errors.isNotEmpty()) return
-        updateState { it.copy(submitting = true) }
+        val operationId = input.signInOperationId ?: Uuid.random().toString()
+        updateState { it.copy(submitting = true, signInOperationId = operationId) }
         viewModelScope.launch {
-            when (val result = signIn(input.email, input.password)) {
+            when (val result = signIn(input.email, input.password, operationId)) {
                 is AppResult.Success -> updateState { it.copy(submitting = false, password = "") }
                 is AppResult.Failed ->
                     updateState {

@@ -11,6 +11,9 @@ import dev.fajar.starter.identity.domain.repositories.SessionRepository
 import dev.fajar.starter.identity.domain.usecases.ObserveSessionIdentity
 import dev.fajar.starter.onboarding.domain.repositories.OnboardingRepository
 import dev.fajar.starter.onboarding.domain.usecases.LoadOnboarding
+import dev.fajar.starter.workspace.domain.entities.Workspace
+import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
+import dev.fajar.starter.workspace.domain.usecases.ObserveWorkspace
 import kotlin.test.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -34,8 +37,16 @@ class AppViewModelTest {
                 AppViewModel(
                     LoadOnboarding(onboarding),
                     ObserveSessionIdentity(identity),
-                    dev.fajar.starter.identity.domain.usecases.RestoreSession(identity),
+                    dev.fajar.starter.identity.domain.usecases.RestoreSession(
+                        identity,
+                        server =
+                            dev.fajar.starter.identity.domain.entities.IdentityServer(
+                                "https://example.invalid/",
+                                "Test device",
+                            ),
+                    ),
                     ResolveAppLink(AppEnvironment.Dev),
+                    ObserveWorkspace(identity, TestWorkspaces()),
                 )
             owner.put("app", vm)
             vm.onEvent(AppEvent.LinkReceived("hrismobile-dev://app/inbox"))
@@ -89,4 +100,26 @@ private fun testSession() =
         "session-a",
         User("1", "Alex", "demo@example.com"),
         SessionTokens("access", "refresh", Long.MAX_VALUE),
+        binding =
+            dev.fajar.starter.identity.domain.entities.SessionBinding(
+                "11111111-1111-4111-8111-111111111111",
+                "https://example.invalid/",
+                Long.MAX_VALUE,
+            ),
     )
+
+private class TestWorkspaces : WorkspaceRepository {
+    private val selection = MutableStateFlow<AppResult<Workspace?>>(AppResult.Success(null))
+
+    override fun observe() = selection
+
+    override suspend fun current() = selection.value
+
+    override suspend fun compareAndSet(expected: Workspace?, updated: Workspace?) =
+        AppResult.Success(
+            selection.compareAndSet(AppResult.Success(expected), AppResult.Success(updated))
+        )
+
+    override suspend fun permissions(sessionId: String, companyId: String) =
+        AppResult.Success(emptySet<String>())
+}

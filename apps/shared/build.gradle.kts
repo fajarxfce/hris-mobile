@@ -20,11 +20,9 @@ kotlin.sourceSets {
         implementation(projects.core.designsystem)
         api(projects.core.database)
         api(projects.core.transfers.data)
-        implementation(projects.features.files.presentation)
         api(projects.core.worker)
         api(projects.core.featureflags.data)
         api(projects.core.notifications.data)
-        implementation(projects.features.notifications.presentation)
         api(projects.core.datastore)
         api(projects.core.common)
         api(projects.core.securestorage)
@@ -32,13 +30,13 @@ kotlin.sourceSets {
         implementation(projects.core.network)
         implementation(projects.core.identity.domain)
         implementation(projects.core.identity.data)
+        implementation(projects.core.workspace.data)
         implementation(projects.features.onboarding.domain)
         implementation(projects.features.onboarding.data)
         implementation(projects.features.onboarding.presentation)
         implementation(projects.features.auth.presentation)
-        implementation(projects.features.dashboard.data)
-        implementation(projects.features.dashboard.presentation)
-        implementation(projects.apps.demo)
+        implementation(projects.features.workspace.presentation)
+        implementation(projects.features.home.presentation)
         implementation(projects.core.presentation)
         implementation(libs.lifecycle.compose)
         implementation(libs.koin.compose)
@@ -71,8 +69,8 @@ kotlin {
         implementation(libs.coroutines.swing)
     }
     sourceSets.getByName("desktopTest").dependencies {
+        implementation(libs.ktor.mock)
         implementation(compose.desktop.uiTestJUnit4)
-        implementation(projects.features.dashboard.domain)
         implementation(projects.core.transfers.domain)
     }
 }

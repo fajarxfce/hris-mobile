@@ -19,7 +19,12 @@ class SessionPolicyTest {
         override suspend fun completeSso(proof: SsoProof): AppResult<AuthenticatedUser> =
             error("Unused SSO exchange")
 
-        override suspend fun signIn(email: String, password: String) = action()
+        override suspend fun signIn(
+            email: String,
+            password: String,
+            deviceName: String,
+            operationId: String,
+        ) = action()
 
         override suspend fun refresh(session: Session, operationId: String) = action()
     }
@@ -36,10 +41,24 @@ class SessionPolicyTest {
                     calls++
                     pending.await()
                     AppResult.Success(
-                        AuthenticatedUser(session.user, session.tokens.copy(accessToken = "new"))
+                        AuthenticatedUser(
+                            session.user,
+                            session.tokens.copy(accessToken = "new"),
+                            binding =
+                                dev.fajar.starter.identity.domain.entities.SessionBinding(
+                                    "11111111-1111-4111-8111-111111111111",
+                                    "https://example.invalid/",
+                                    Long.MAX_VALUE,
+                                ),
+                        )
                     )
                 },
                 sessions,
+                server =
+                    dev.fajar.starter.identity.domain.entities.IdentityServer(
+                        "https://example.invalid/",
+                        "Test device",
+                    ),
             )
         val results = List(12) { async { acquire(session.id, "access") } }
         runCurrent()
@@ -65,10 +84,24 @@ class SessionPolicyTest {
                 Remote {
                     pending.await()
                     AppResult.Success(
-                        AuthenticatedUser(session.user, session.tokens.copy(accessToken = "new"))
+                        AuthenticatedUser(
+                            session.user,
+                            session.tokens.copy(accessToken = "new"),
+                            binding =
+                                dev.fajar.starter.identity.domain.entities.SessionBinding(
+                                    "11111111-1111-4111-8111-111111111111",
+                                    "https://example.invalid/",
+                                    Long.MAX_VALUE,
+                                ),
+                        )
                     )
                 },
                 sessions,
+                server =
+                    dev.fajar.starter.identity.domain.entities.IdentityServer(
+                        "https://example.invalid/",
+                        "Test device",
+                    ),
             )
         val request = async { acquire(session.id, "access") }
         runCurrent()
@@ -87,7 +120,16 @@ class SessionPolicyTest {
         val session = testSession()
         val sessions = TestSessions(session)
         var failure = AppResult.Failed(Failure(FailureKind.Network, "Offline"))
-        val acquire = AcquireSessionTokens(Remote { failure }, sessions)
+        val acquire =
+            AcquireSessionTokens(
+                Remote { failure },
+                sessions,
+                server =
+                    dev.fajar.starter.identity.domain.entities.IdentityServer(
+                        "https://example.invalid/",
+                        "Test device",
+                    ),
+            )
         assertSame(failure, acquire(session.id, "access"))
         val retained = assertIs<AppResult.Success<Session?>>(sessions.current()).value!!
         assertNotNull(retained.pendingRefreshOperationId)
@@ -104,16 +146,47 @@ class SessionPolicyTest {
         val pending = CompletableDeferred<Unit>()
         val remote = Remote {
             withContext(NonCancellable) { pending.await() }
-            AppResult.Success(AuthenticatedUser(session.user, session.tokens))
+            AppResult.Success(
+                AuthenticatedUser(
+                    session.user,
+                    session.tokens,
+                    binding =
+                        dev.fajar.starter.identity.domain.entities.SessionBinding(
+                            "11111111-1111-4111-8111-111111111111",
+                            "https://example.invalid/",
+                            Long.MAX_VALUE,
+                        ),
+                )
+            )
         }
-        val request = async { SignIn(remote, sessions)("demo@example.com", "password") }
+        val request = async {
+            SignIn(
+                remote,
+                sessions,
+                server =
+                    dev.fajar.starter.identity.domain.entities.IdentityServer(
+                        "https://example.invalid/",
+                        "Test device",
+                    ),
+            )("demo@example.com", "password", "22222222-2222-4222-8222-222222222222")
+        }
         runCurrent()
         request.cancel()
         pending.complete(Unit)
         assertFailsWith<CancellationException> { request.await() }
         assertNull(assertIs<AppResult.Success<Session?>>(sessions.current()).value)
         sessions.compareAndSet(null, session)
-        val refresh = async { AcquireSessionTokens(remote, sessions)(session.id, "access") }
+        val refresh = async {
+            AcquireSessionTokens(
+                remote,
+                sessions,
+                server =
+                    dev.fajar.starter.identity.domain.entities.IdentityServer(
+                        "https://example.invalid/",
+                        "Test device",
+                    ),
+            )(session.id, "access")
+        }
         refresh.cancel()
         assertFailsWith<CancellationException> { refresh.await() }
         assertEquals(session, assertIs<AppResult.Success<Session?>>(sessions.current()).value)

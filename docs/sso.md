@@ -1,5 +1,9 @@
 # SSO
 
+This document describes inherited starter infrastructure. For the active HRIS API
+and current integration status, see [native identity](native-identity.md). Template
+endpoints and demo screens described here are not mounted by the HRIS application.
+
 The starter supports OIDC Authorization Code with PKCE/S256. Android uses AppAuth
 and an external browser; iOS uses ASWebAuthenticationSession. Desktop uses the
 system browser with an IPv4 loopback callback. Web uses a same-origin popup callback.

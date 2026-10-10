@@ -16,6 +16,12 @@ class ObserveSessionIdentityTest {
                 "first",
                 User("one", "Example", "example@example.invalid"),
                 SessionTokens("access", "refresh", 100),
+                binding =
+                    dev.fajar.starter.identity.domain.entities.SessionBinding(
+                        "11111111-1111-4111-8111-111111111111",
+                        "https://example.invalid/",
+                        Long.MAX_VALUE,
+                    ),
             )
         val repository =
             object : SessionRepository {

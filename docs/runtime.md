@@ -1,5 +1,9 @@
 # Sessions and HTTP
 
+This document describes inherited starter infrastructure. For the active HRIS API
+and current integration status, see [native identity](native-identity.md). Template
+endpoints and demo screens described here are not mounted by the HRIS application.
+
 The default backend is an in-process demo. It supports `demo@example.com` and
 `casey@example.com`, both with password `Demo123!`. Tokens are fixtures, not JWTs.
 No authentication request leaves the device in demo mode.

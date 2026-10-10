@@ -3,6 +3,7 @@
 package dev.fajar.starter.identity.domain.usecases
 
 import dev.fajar.starter.common.result.*
+import dev.fajar.starter.identity.domain.entities.IdentityServer
 import dev.fajar.starter.identity.domain.entities.SessionTokens
 import dev.fajar.starter.identity.domain.repositories.*
 import kotlin.time.Clock
@@ -16,9 +17,10 @@ import kotlinx.coroutines.sync.withLock
 class AcquireSessionTokens(
     private val identity: IdentityRepository,
     private val sessions: SessionRepository,
+    private val server: IdentityServer,
     private val clock: Clock = Clock.System,
+    private val refresh: Mutex = Mutex(),
 ) {
-    private val refresh = Mutex()
 
     suspend operator fun invoke(
         sessionId: String,
@@ -31,6 +33,15 @@ class AcquireSessionTokens(
                     is AppResult.Success -> result.value
                 }
             if (session == null || session.id != sessionId) return@withLock AppResult.Success(null)
+            if (
+                session.binding.audience != server.audience ||
+                    session.binding.expiresAtEpochMillis <= clock.now().toEpochMilliseconds()
+            ) {
+                return@withLock when (val cleared = sessions.compareAndSet(session, null)) {
+                    is AppResult.Failed -> cleared
+                    is AppResult.Success -> AppResult.Success(null)
+                }
+            }
             val expired =
                 session.tokens.expiresAtEpochMillis <= clock.now().toEpochMilliseconds() + 30_000
             if (
@@ -74,7 +85,9 @@ class AcquireSessionTokens(
                     }
                 }
             currentCoroutineContext().ensureActive()
-            if (authenticated.user.id != session.user.id)
+            if (
+                authenticated.user.id != session.user.id || authenticated.binding != session.binding
+            )
                 return@withLock AppResult.Failed(
                     Failure(
                         FailureKind.Unexpected,

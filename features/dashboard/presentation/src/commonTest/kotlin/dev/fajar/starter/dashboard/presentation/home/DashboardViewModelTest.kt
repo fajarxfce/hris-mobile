@@ -161,6 +161,12 @@ private fun testSession() =
         "session-a",
         User("1", "Alex", "demo@example.com"),
         SessionTokens("access", "refresh", Long.MAX_VALUE),
+        binding =
+            dev.fajar.starter.identity.domain.entities.SessionBinding(
+                "11111111-1111-4111-8111-111111111111",
+                "https://example.invalid/",
+                Long.MAX_VALUE,
+            ),
     )
 
 private class GrantedAccess : AccessRepository {

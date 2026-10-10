@@ -1,5 +1,9 @@
 # Notifications and deep links
 
+This document describes inherited starter infrastructure. For the active HRIS API
+and current integration status, see [native identity](native-identity.md). Template
+endpoints and demo screens described here are not mounted by the HRIS application.
+
 Open **Account → Notifications** to request OS access, send a local test, or copy the
 FCM token. Notification permission is requested only after an explicit action.
 The screen checks access again when resumed, including after a change in Settings.

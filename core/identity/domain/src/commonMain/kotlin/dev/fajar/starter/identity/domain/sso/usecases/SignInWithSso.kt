@@ -70,7 +70,12 @@ class SignInWithSso(
                 }
             currentCoroutineContext().ensureActive()
             val session =
-                Session(Uuid.random().toString(), authenticated.user, authenticated.tokens)
+                Session(
+                    Uuid.random().toString(),
+                    authenticated.user,
+                    authenticated.tokens,
+                    authenticated.binding,
+                )
             when (val result = sessions.compareAndSet(previous, session)) {
                 is AppResult.Failed -> result
                 is AppResult.Success ->

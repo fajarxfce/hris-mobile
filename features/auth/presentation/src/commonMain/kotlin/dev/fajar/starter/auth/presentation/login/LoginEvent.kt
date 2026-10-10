@@ -15,7 +15,5 @@ sealed interface LoginEvent {
 
     data object PasswordVisibilityChanged : LoginEvent
 
-    data object DemoAccountSelected : LoginEvent
-
     data object SignInRequested : LoginEvent
 }

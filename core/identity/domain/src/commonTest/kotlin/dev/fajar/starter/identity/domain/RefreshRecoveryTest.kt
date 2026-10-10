@@ -14,8 +14,12 @@ import kotlinx.coroutines.test.*
 class RefreshRecoveryTest {
     private class Remote(val action: suspend (Session, String) -> AppResult<AuthenticatedUser>) :
         IdentityRepository {
-        override suspend fun signIn(email: String, password: String): AppResult<AuthenticatedUser> =
-            error("unused")
+        override suspend fun signIn(
+            email: String,
+            password: String,
+            deviceName: String,
+            operationId: String,
+        ): AppResult<AuthenticatedUser> = error("unused")
 
         override suspend fun completeSso(proof: SsoProof): AppResult<AuthenticatedUser> =
             error("unused")
@@ -43,11 +47,36 @@ class RefreshRecoveryTest {
                     AuthenticatedUser(
                         session.user,
                         session.tokens.copy(accessToken = "renewed", refreshToken = "rotated"),
+                        binding =
+                            dev.fajar.starter.identity.domain.entities.SessionBinding(
+                                "11111111-1111-4111-8111-111111111111",
+                                "https://example.invalid/",
+                                Long.MAX_VALUE,
+                            ),
                     )
                 )
         }
-        assertIs<AppResult.Failed>(AcquireSessionTokens(remote, sessions)(original.id, "access"))
-        val afterRestart = AcquireSessionTokens(remote, sessions)
+        assertIs<AppResult.Failed>(
+            AcquireSessionTokens(
+                remote,
+                sessions,
+                server =
+                    dev.fajar.starter.identity.domain.entities.IdentityServer(
+                        "https://example.invalid/",
+                        "Test device",
+                    ),
+            )(original.id, "access")
+        )
+        val afterRestart =
+            AcquireSessionTokens(
+                remote,
+                sessions,
+                server =
+                    dev.fajar.starter.identity.domain.entities.IdentityServer(
+                        "https://example.invalid/",
+                        "Test device",
+                    ),
+            )
         assertEquals(
             "renewed",
             assertIs<AppResult.Success<SessionTokens?>>(afterRestart(original.id))
@@ -78,10 +107,29 @@ class RefreshRecoveryTest {
             started.complete(Unit)
             withContext(NonCancellable) { release.await() }
             AppResult.Success(
-                AuthenticatedUser(session.user, session.tokens.copy(accessToken = "late"))
+                AuthenticatedUser(
+                    session.user,
+                    session.tokens.copy(accessToken = "late"),
+                    binding =
+                        dev.fajar.starter.identity.domain.entities.SessionBinding(
+                            "11111111-1111-4111-8111-111111111111",
+                            "https://example.invalid/",
+                            Long.MAX_VALUE,
+                        ),
+                )
             )
         }
-        val job = async { AcquireSessionTokens(remote, sessions)(original.id, "access") }
+        val job = async {
+            AcquireSessionTokens(
+                remote,
+                sessions,
+                server =
+                    dev.fajar.starter.identity.domain.entities.IdentityServer(
+                        "https://example.invalid/",
+                        "Test device",
+                    ),
+            )(original.id, "access")
+        }
         started.await()
         job.cancel()
         release.complete(Unit)
@@ -108,7 +156,18 @@ class RefreshRecoveryTest {
             called = true
             error("must not rotate")
         }
-        assertSame(storageFailure, AcquireSessionTokens(remote, sessions)(original.id, "access"))
+        assertSame(
+            storageFailure,
+            AcquireSessionTokens(
+                remote,
+                sessions,
+                server =
+                    dev.fajar.starter.identity.domain.entities.IdentityServer(
+                        "https://example.invalid/",
+                        "Test device",
+                    ),
+            )(original.id, "access"),
+        )
         assertFalse(called)
         assertEquals(AppResult.Success(original), memory.current())
     }
@@ -122,10 +181,26 @@ class RefreshRecoveryTest {
                 AuthenticatedUser(
                     session.user.copy(id = "another-account"),
                     session.tokens.copy(accessToken = "invalid"),
+                    binding =
+                        dev.fajar.starter.identity.domain.entities.SessionBinding(
+                            "11111111-1111-4111-8111-111111111111",
+                            "https://example.invalid/",
+                            Long.MAX_VALUE,
+                        ),
                 )
             )
         }
-        assertIs<AppResult.Failed>(AcquireSessionTokens(remote, sessions)(original.id, "access"))
+        assertIs<AppResult.Failed>(
+            AcquireSessionTokens(
+                remote,
+                sessions,
+                server =
+                    dev.fajar.starter.identity.domain.entities.IdentityServer(
+                        "https://example.invalid/",
+                        "Test device",
+                    ),
+            )(original.id, "access")
+        )
         val retained = assertIs<AppResult.Success<Session?>>(sessions.current()).value!!
         assertEquals(original.tokens, retained.tokens)
         assertEquals(original.user, retained.user)

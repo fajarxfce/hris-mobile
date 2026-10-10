@@ -8,7 +8,12 @@ import dev.fajar.starter.identity.domain.sso.entities.SsoProof
 interface IdentityRepository {
     suspend fun completeSso(proof: SsoProof): AppResult<AuthenticatedUser>
 
-    suspend fun signIn(email: String, password: String): AppResult<AuthenticatedUser>
+    suspend fun signIn(
+        email: String,
+        password: String,
+        deviceName: String,
+        operationId: String,
+    ): AppResult<AuthenticatedUser>
 
     suspend fun refresh(session: Session, operationId: String): AppResult<AuthenticatedUser>
 }

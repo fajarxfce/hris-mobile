@@ -12,8 +12,9 @@
 | Navigation entry | Create route-scoped ViewModels, collect state, handle navigation effects |
 
 Dependencies point inward. Domain modules have no UI, DI, network, or platform dependencies.
-Identity is shared core domain because both auth and dashboard consume it. Features do
-not consume each other's ViewModels, data modules, or repository implementations.
+Identity and workspace selection are shared core domain. Auth, company selection,
+and home consume their contracts. Features do not consume each other's ViewModels,
+data modules, or repository implementations.
 
 Kotlin's data classes provide value equality. StateFlow exposes immutable screen snapshots.
 Each screen defines a sealed Event contract and dispatches through `onEvent`. The shared
@@ -67,12 +68,13 @@ bodies, credentials, or exception messages in UI/log output.
 
 Sign-in drops duplicate submissions and freezes credential edits until completion.
 Clearing its ViewModel cancels the request. The sign-in use case checks cancellation before
-committing a successful session through the session repository. Dashboard refresh cancels the previous request and
-retains its database snapshot when a later refresh fails. `SyncDashboard` is a singleton use case
-that serializes sync executions; repositories do not own sync scheduling or UI loading state.
-Workers are platform application entry points that invoke feature `SyncTask` use cases. Local
-mutation and outbox insertion share a transaction; background execution is independently scheduled.
-See [sync](sync.md) for delivery and platform guarantees.
+committing a successful session through the session repository. Refresh and MFA share
+one credential-mutation mutex. A company selection checks current identity and uses
+compare-and-set before publication. Late results cannot replace an accepted selection.
+Repositories do not own retries, scheduling, or UI loading state.
+Workers are platform application entry points that invoke feature `SyncTask` use cases.
+See [native identity](native-identity.md) for the active HRIS integration and
+[sync](sync.md) for the inherited synchronization contracts awaiting HRIS adapters.
 
 Feature flag definitions and evaluation policy live in `core/featureflags/domain`; each
 consuming feature owns its keys and action guards. A shared refresh use case serializes
@@ -84,16 +86,17 @@ The typed preference store already serves as a datasource contract. Onboarding c
 Proto DataStore through that port; its repository maps the protobuf field to a domain value.
 The in-memory session datasource owns a replayed DTO snapshot. Its repository
 coordinates credential storage and account cache ownership; session policy remains
-in use cases. See [sessions and HTTP](runtime.md).
+in use cases. See [native identity](native-identity.md).
 
 ## Navigation
 
 Features own their serializable route and NavGraphBuilder registration. The app composes
 their entries and reacts to onboarding/session state. Authentication transitions replace
-the root stack, so sign-out removes protected screens. Dashboard owns its three tab
-states; tab selection does not create independent navigation histories in this starter.
+the root stack, so sign-out removes protected screens. Home owns its Home/Account
+tab state; changing tabs does not create independent navigation histories.
 
-The root navigation graph belongs to a session ID. Logout or a replacement session
+The root navigation graph belongs to the session and workspace IDs. Logout, a
+replacement session, or a company change
 disposes its protected routes and saved tab state immediately; these boundaries
 never animate an outgoing account's content. Token rotation does not change that
 identity. Page transitions inside a session use a short fade. `AppTabContent`

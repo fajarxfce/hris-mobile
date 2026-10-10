@@ -1,5 +1,9 @@
 # File transfers
 
+This document describes inherited starter infrastructure. For the active HRIS API
+and current integration status, see [native identity](native-identity.md). Template
+endpoints and demo screens described here are not mounted by the HRIS application.
+
 `core/transfers/domain` owns admission, session policy, pause/resume and worker batches.
 `core/transfers/data` implements the input, durable queue and HTTP repositories.
 `features/files/presentation` owns the MVI queue screen. Open **Account → Files** to

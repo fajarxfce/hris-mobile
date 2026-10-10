@@ -7,28 +7,22 @@ import dev.fajar.starter.common.config.AppBuild
 import dev.fajar.starter.common.config.AppEnvironment
 import dev.fajar.starter.common.config.AppPlatform
 import dev.fajar.starter.common.config.BuildEnvironment
-import dev.fajar.starter.common.config.BuildOidc
 import dev.fajar.starter.common.config.BuildRuntime
-import dev.fajar.starter.dashboard.data.di.DashboardDataModule
-import dev.fajar.starter.dashboard.presentation.di.DashboardPresentationModule
 import dev.fajar.starter.database.AccountCacheStore
 import dev.fajar.starter.database.AppDatabase
-import dev.fajar.starter.database.DashboardStore
 import dev.fajar.starter.database.InboxStore
 import dev.fajar.starter.database.TransferStore
 import dev.fajar.starter.datastore.UserPreferencesStore
-import dev.fajar.starter.demo.DemoBrowserAuthorizationSource
-import dev.fajar.starter.demo.SampleTransferInputSource
 import dev.fajar.starter.featureflags.data.datasources.RemoteFeatureFlagSource
 import dev.fajar.starter.featureflags.data.datasources.UnavailableFeatureFlagSource
 import dev.fajar.starter.featureflags.data.di.FeatureFlagDataModule
-import dev.fajar.starter.files.presentation.di.FilesPresentationModule
+import dev.fajar.starter.home.presentation.di.HomePresentationModule
 import dev.fajar.starter.identity.data.di.IdentityModule
 import dev.fajar.starter.identity.data.sso.config.SsoConfiguration
 import dev.fajar.starter.identity.data.sso.datasources.BrowserAuthorizationSource
 import dev.fajar.starter.identity.data.sso.datasources.UnavailableBrowserAuthorizationSource
+import dev.fajar.starter.identity.domain.entities.IdentityServer
 import dev.fajar.starter.notifications.data.di.NotificationDataModule
-import dev.fajar.starter.notifications.presentation.di.NotificationPresentationModule
 import dev.fajar.starter.onboarding.data.di.OnboardingDataModule
 import dev.fajar.starter.onboarding.presentation.di.OnboardingPresentationModule
 import dev.fajar.starter.securestorage.*
@@ -42,8 +36,11 @@ import dev.fajar.starter.sync.data.datasources.WorkScheduler
 import dev.fajar.starter.sync.data.di.SyncDataModule
 import dev.fajar.starter.sync.domain.SyncTask
 import dev.fajar.starter.transfers.data.datasources.TransferInputSource
+import dev.fajar.starter.transfers.data.datasources.UnavailableTransferInputSource
 import dev.fajar.starter.transfers.data.di.TransferDataModule
 import dev.fajar.starter.worker.ForegroundWorkScheduler
+import dev.fajar.starter.workspace.data.di.WorkspaceDataModule
+import dev.fajar.starter.workspace.presentation.di.WorkspacePresentationModule
 import org.koin.core.module.Module
 import org.koin.dsl.koinApplication
 import org.koin.dsl.module
@@ -62,13 +59,13 @@ fun createAppContainer(
     deviceAuthentication: DeviceAuthenticationSource = UnavailableDeviceAuthenticationSource(),
     browserAuthorization: BrowserAuthorizationSource = UnavailableBrowserAuthorizationSource(),
     platform: AppPlatform = AppPlatform.Desktop,
-    transferInputs: TransferInputSource = SampleTransferInputSource(),
+    transferInputs: TransferInputSource = UnavailableTransferInputSource(),
+    http: Module? = null,
 ) = koinApplication {
     modules(
         notificationPlatform,
-        applicationNetworkModule(environment),
+        http ?: applicationNetworkModule(environment),
         TransferDataModule().module,
-        FilesPresentationModule().module,
         SecurityPresentationModule().module,
         AvailabilityDataModule().module,
         AvailabilityPresentationModule().module,
@@ -78,23 +75,19 @@ fun createAppContainer(
         SyncDataModule().module,
         FeatureFlagDataModule().module,
         NotificationDataModule().module,
-        NotificationPresentationModule().module,
         module {
             single { environment }
+            single {
+                IdentityServer(
+                    BuildRuntime.apiEndpoints.getValue(environment),
+                    "HRIS Mobile (${platform.key})",
+                )
+            }
 
             single<TransferInputSource> { transferInputs }
             single<TransferStore> { get<AppDatabase>().transfers }
-            single {
-                SsoConfiguration(
-                    if (BuildRuntime.demoBackend) dev.fajar.starter.demo.demoOidcClients()
-                    else BuildOidc.clients[environment].orEmpty(),
-                    platform,
-                )
-            }
-            single<BrowserAuthorizationSource> {
-                if (BuildRuntime.demoBackend) DemoBrowserAuthorizationSource()
-                else browserAuthorization
-            }
+            single { SsoConfiguration(emptyList(), platform) }
+            single<BrowserAuthorizationSource> { browserAuthorization }
 
             single<DeviceAuthenticationSource> { deviceAuthentication }
             single {
@@ -115,15 +108,15 @@ fun createAppContainer(
             single<CredentialStore> { credentials }.onClose { it?.close() }
             single<AccountCacheStore> { get<AppDatabase>().accounts }
             single<InboxStore> { get<AppDatabase>().inbox }
-            single<DashboardStore> { get<AppDatabase>().dashboard }
             single<UserPreferencesStore> { preferences }.onClose { it?.close() }
         },
         IdentityModule().module,
+        WorkspaceDataModule().module,
         OnboardingDataModule().module,
         OnboardingPresentationModule().module,
         AuthPresentationModule().module,
-        DashboardDataModule().module,
-        DashboardPresentationModule().module,
+        WorkspacePresentationModule().module,
+        HomePresentationModule().module,
         ApplicationModule().module,
     )
 }

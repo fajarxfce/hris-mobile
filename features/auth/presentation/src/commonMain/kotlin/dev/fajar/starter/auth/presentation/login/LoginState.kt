@@ -14,6 +14,7 @@ data class LoginState(
     val failure: Failure? = null,
     val fieldErrors: Map<String, ValidationIssue> = emptyMap(),
     val validated: Boolean = false,
+    val signInOperationId: String? = null,
 ) {
     override fun toString(): String = "LoginState(submitting=$submitting, credentials=[redacted])"
 }

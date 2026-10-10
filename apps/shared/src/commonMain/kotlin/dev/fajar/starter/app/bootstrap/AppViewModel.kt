@@ -8,7 +8,9 @@ import dev.fajar.starter.identity.domain.usecases.RestoreSession
 import dev.fajar.starter.observability.*
 import dev.fajar.starter.onboarding.domain.usecases.LoadOnboarding
 import dev.fajar.starter.presentation.mvi.MviViewModel
+import dev.fajar.starter.workspace.domain.usecases.ObserveWorkspace
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
 
@@ -18,6 +20,7 @@ class AppViewModel(
     private val observeIdentity: ObserveSessionIdentity,
     private val restoreSession: RestoreSession,
     private val resolveAppLink: ResolveAppLink,
+    private val observeWorkspace: ObserveWorkspace,
 ) : MviViewModel<AppState, AppEvent, Nothing>(AppState()) {
     private var bootstrapJob: Job? = null
 
@@ -53,21 +56,38 @@ class AppViewModel(
                         if (!result.value) {
                             updateState { it.copy(stage = AppStage.Onboarding) }
                         } else {
-                            observeIdentity().collect { identity ->
-                                updateState {
-                                    it.copy(
-                                        stage =
-                                            when (identity) {
-                                                is AppResult.Failed ->
-                                                    AppStage.Failed(identity.failure)
-                                                is AppResult.Success ->
-                                                    identity.value?.let {
-                                                        AppStage.SignedIn(it.sessionId)
-                                                    } ?: AppStage.SignedOut
-                                            }
-                                    )
+                            combine(observeIdentity(), observeWorkspace()) { identity, workspace ->
+                                    identity to workspace
                                 }
-                            }
+                                .collect { (identity, workspace) ->
+                                    updateState {
+                                        it.copy(
+                                            stage =
+                                                when (identity) {
+                                                    is AppResult.Failed ->
+                                                        AppStage.Failed(identity.failure)
+                                                    is AppResult.Success ->
+                                                        identity.value?.let {
+                                                            when (workspace) {
+                                                                is AppResult.Failed ->
+                                                                    AppStage.Failed(
+                                                                        workspace.failure
+                                                                    )
+                                                                is AppResult.Success ->
+                                                                    AppStage.SignedIn(
+                                                                        it.sessionId,
+                                                                        workspace.value?.takeIf {
+                                                                            selection ->
+                                                                            selection.sessionId ==
+                                                                                it.sessionId
+                                                                        },
+                                                                    )
+                                                            }
+                                                        } ?: AppStage.SignedOut
+                                                }
+                                        )
+                                    }
+                                }
                         }
                     }
                 }

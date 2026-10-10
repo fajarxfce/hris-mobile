@@ -5,6 +5,7 @@ data class Session(
     val id: String,
     val user: User,
     val tokens: SessionTokens,
+    val binding: SessionBinding,
     val pendingRefreshOperationId: String? = null,
 ) {
     override fun toString() = "Session([redacted])"

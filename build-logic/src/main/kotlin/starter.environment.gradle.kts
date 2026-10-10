@@ -14,7 +14,7 @@ val generateEnvironment =
             updateUrls.put(platform, providers.gradleProperty("updateUrl.$platform").orElse(""))
         }
         environment.set(providers.gradleProperty("appEnvironment").orElse("dev"))
-        backend.set(providers.gradleProperty("backend").orElse("demo"))
+        backend.set(providers.gradleProperty("backend").orElse("remote"))
         desktopPersistence.set(providers.gradleProperty("desktopPersistence").orElse("secure"))
         listOf("dev", "staging", "prod").forEach { name ->
             endpoints.put(
@@ -22,7 +22,10 @@ val generateEnvironment =
                 providers
                     .gradleProperty("apiBaseUrl.$name")
                     .orElse(providers.gradleProperty("apiBaseUrl"))
-                    .orElse("https://demo.fluent.local/"),
+                    .orElse(
+                        if (name == "dev") "http://127.0.0.1:8088/api/v1/"
+                        else "https://hris.$name.invalid/api/v1/"
+                    ),
             )
         }
         outputDirectory.set(layout.buildDirectory.dir("generated/environment/kotlin"))

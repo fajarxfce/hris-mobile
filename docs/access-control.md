@@ -1,5 +1,9 @@
 # Access control
 
+This document describes inherited starter infrastructure. For the active HRIS API
+and current integration status, see [native identity](native-identity.md). Template
+endpoints and demo screens described here are not mounted by the HRIS application.
+
 The backend returns explicit permissions from `GET me/access`. Roles describe the
 account; the client does not derive permissions by matching role names. A response
 contains `roles`, `permissions` and `expiresAtEpochMillis`. Supported starter keys
