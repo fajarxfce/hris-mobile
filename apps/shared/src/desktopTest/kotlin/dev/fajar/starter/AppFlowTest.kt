@@ -67,6 +67,79 @@ class AppFlowTest {
         }
 
     @Test
+    fun employeeProfileLoadsOwnAssignmentsAndClearsWhenTheCompanyChanges() =
+        withApplication(NativeUiServer()) {
+            signIn()
+            waitFor("Choose a company")
+            compose.onAllNodesWithText("Open company")[0].performClick()
+            waitFor("Employee workspace")
+            compose.onNodeWithText("My profile").performClick()
+            waitFor("Personal information")
+            compose.onNodeWithText("1996-02-29").assertExists()
+            capture("profile")
+            compose.onNode(hasScrollToIndexAction()).performScrollToNode(hasText("Mobile Engineer"))
+            compose.onNodeWithText("Mobile Engineer").assertIsDisplayed()
+            compose.onNodeWithText("Engineering").assertExists()
+            compose.onNode(hasScrollToIndexAction()).performScrollToIndex(0)
+            compose.onNodeWithContentDescription("Back").performClick()
+            waitFor("Employee workspace")
+            compose.onNodeWithText("Change company").performClick()
+            waitFor("Choose a company")
+            compose.onAllNodesWithText("Open company")[1].performClick()
+            waitFor("Employee workspace")
+            compose.onNodeWithText("My profile").performClick()
+            waitFor("No employee profile is available. Contact HR to check your account linkage.")
+            compose.onNodeWithText("1996-02-29").assertDoesNotExist()
+            compose.onNodeWithText("Engineering").assertDoesNotExist()
+        }
+
+    @Test
+    fun revokedProfileAccessRemovesPreviouslyDisplayedPrivateFields() {
+        val server = NativeUiServer()
+        withApplication(server) {
+            signIn()
+            waitFor("Choose a company")
+            compose.onAllNodesWithText("Open company")[0].performClick()
+            waitFor("Employee workspace")
+            compose.onNodeWithText("My profile").performClick()
+            waitFor("Personal information")
+            server.people.denied = true
+            compose.onNodeWithText("Refresh").performClick()
+            waitFor("Your account cannot perform this action.")
+            compose.onNodeWithText("1996-02-29").assertDoesNotExist()
+            compose.onNodeWithText("Private server detail").assertDoesNotExist()
+        }
+    }
+
+    @Test
+    fun expiredProfileAssuranceCanBeRenewedWithoutChangingCompany() {
+        val server = NativeUiServer(requireMfa = true, existingAuthenticator = true)
+        withApplication(server) {
+            signIn()
+            waitFor("Verify your account")
+            compose.onNodeWithContentDescription("Verification code").performTextInput("123456")
+            compose.onNode(hasText("Verify") and hasClickAction()).performScrollTo().performClick()
+            waitFor("Choose a company")
+            compose.onAllNodesWithText("Open company")[0].performClick()
+            waitFor("Employee workspace")
+            compose.onNodeWithText("My profile").performClick()
+            waitFor("Personal information")
+            kotlinx.coroutines.runBlocking { server.expireVerification() }
+            compose.onNodeWithText("Refresh").performClick()
+            waitFor("Your account cannot perform this action.")
+            compose.onNodeWithText("1996-02-29").assertDoesNotExist()
+            compose.onNode(hasText("Verify your account") and hasClickAction()).performClick()
+            waitFor("Verification code")
+            compose.onNodeWithContentDescription("Verification code").performTextInput("123456")
+            compose.onNode(hasText("Verify") and hasClickAction()).performScrollTo().performClick()
+            waitFor("Personal information")
+            compose.onNodeWithText("1996-02-29").assertExists()
+            compose.onNodeWithText("Choose a company").assertDoesNotExist()
+            assertEquals(0, server.refreshes)
+        }
+    }
+
+    @Test
     fun enrollmentKeepsRecoveryCodesVisibleUntilExplicitAcknowledgement() {
         val server = NativeUiServer(requireMfa = true)
         withApplication(server) {

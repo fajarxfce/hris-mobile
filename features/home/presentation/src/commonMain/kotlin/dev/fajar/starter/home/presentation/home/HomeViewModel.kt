@@ -23,6 +23,7 @@ class HomeViewModel(
         on<HomeEvent.TabSelected>(::onTabSelected)
         on<HomeEvent.CompanyChangeRequested>(::onCompanyChangeRequested)
         on<HomeEvent.SettingsRequested>(::onSettingsRequested)
+        on<HomeEvent.ProfileRequested>(::onProfileRequested)
         on<HomeEvent.SignOutRequested>(::onSignOutRequested)
         viewModelScope.launch {
             observeIdentity().collect { result ->
@@ -50,6 +51,10 @@ class HomeViewModel(
 
     private fun onSettingsRequested(event: HomeEvent.SettingsRequested) {
         viewModelScope.launch { emitEffect(HomeEffect.OpenSettings) }
+    }
+
+    private fun onProfileRequested(event: HomeEvent.ProfileRequested) {
+        viewModelScope.launch { emitEffect(HomeEffect.OpenProfile) }
     }
 
     private fun onCompanyChangeRequested(event: HomeEvent.CompanyChangeRequested) {

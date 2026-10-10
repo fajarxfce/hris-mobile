@@ -7,5 +7,7 @@ sealed interface HomeEvent {
 
     data object SettingsRequested : HomeEvent
 
+    data object ProfileRequested : HomeEvent
+
     data object SignOutRequested : HomeEvent
 }

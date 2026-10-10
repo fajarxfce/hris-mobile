@@ -51,6 +51,12 @@ fun HomePage(state: HomeState, onEvent: (HomeEvent) -> Unit) {
                                 }
                             }
                             AppButton(
+                                appString(AppString.MyProfile),
+                                { onEvent(HomeEvent.ProfileRequested) },
+                                Modifier.fillMaxWidth(),
+                                primary = false,
+                            )
+                            AppButton(
                                 appString(AppString.ChangeCompany),
                                 { onEvent(HomeEvent.CompanyChangeRequested) },
                                 primary = false,
@@ -68,6 +74,12 @@ fun HomePage(state: HomeState, onEvent: (HomeEvent) -> Unit) {
                                     AppText(state.workspace.company.name)
                                 }
                             }
+                            AppButton(
+                                appString(AppString.MyProfile),
+                                { onEvent(HomeEvent.ProfileRequested) },
+                                Modifier.fillMaxWidth(),
+                                primary = false,
+                            )
                             AppButton(
                                 appString(AppString.Settings),
                                 { onEvent(HomeEvent.SettingsRequested) },

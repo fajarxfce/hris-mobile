@@ -16,6 +16,7 @@ import dev.fajar.starter.home.presentation.home.HomeTab
 import dev.fajar.starter.home.presentation.navigation.*
 import dev.fajar.starter.localization.*
 import dev.fajar.starter.onboarding.presentation.navigation.*
+import dev.fajar.starter.people.presentation.navigation.*
 import dev.fajar.starter.security.presentation.navigation.AppLockSettings
 import dev.fajar.starter.settings.presentation.navigation.*
 import dev.fajar.starter.workspace.presentation.navigation.*
@@ -91,9 +92,19 @@ fun AppNavigation(controller: NavHostController, incomingLinks: Flow<String>) {
                     }
                 }
             } else {
-                homeRoutes(stage.workspace) {
+                homeRoutes(
+                    stage.workspace,
+                    onProfile = { controller.navigate(ProfileRoute) { launchSingleTop = true } },
+                ) {
                     controller.navigate(SettingsRoute) { launchSingleTop = true }
                 }
+                peopleRoutes(
+                    stage.workspace.id,
+                    onVerify = { controller.navigate(VerificationRoute) { launchSingleTop = true } },
+                ) {
+                    controller.popBackStack()
+                }
+                verificationRoutes(stage.sessionId) { controller.popBackStack() }
                 settingsRoutes(securitySettings = { AppLockSettings() }) {
                     controller.popBackStack()
                 }

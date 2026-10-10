@@ -12,7 +12,11 @@ import dev.fajar.starter.workspace.domain.entities.Workspace
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 
-fun NavGraphBuilder.homeRoutes(workspace: Workspace, onSettings: () -> Unit) {
+fun NavGraphBuilder.homeRoutes(
+    workspace: Workspace,
+    onProfile: () -> Unit,
+    onSettings: () -> Unit,
+) {
     composable<HomeRoute> { entry ->
         val tab =
             HomeTab.entries.firstOrNull { it.name == entry.toRoute<HomeRoute>().tab }
@@ -22,6 +26,7 @@ fun NavGraphBuilder.homeRoutes(workspace: Workspace, onSettings: () -> Unit) {
         CollectEffects(viewModel.effects) { effect ->
             when (effect) {
                 HomeEffect.OpenSettings -> onSettings()
+                HomeEffect.OpenProfile -> onProfile()
             }
         }
         HomePage(state, viewModel::onEvent)

@@ -25,6 +25,8 @@ import dev.fajar.starter.identity.domain.entities.IdentityServer
 import dev.fajar.starter.notifications.data.di.NotificationDataModule
 import dev.fajar.starter.onboarding.data.di.OnboardingDataModule
 import dev.fajar.starter.onboarding.presentation.di.OnboardingPresentationModule
+import dev.fajar.starter.people.data.di.PeopleDataModule
+import dev.fajar.starter.people.presentation.di.PeoplePresentationModule
 import dev.fajar.starter.securestorage.*
 import dev.fajar.starter.security.data.di.SecurityDataModule
 import dev.fajar.starter.security.data.lock.datasources.DeviceAuthenticationSource
@@ -117,6 +119,8 @@ fun createAppContainer(
         AuthPresentationModule().module,
         WorkspacePresentationModule().module,
         HomePresentationModule().module,
+        PeopleDataModule().module,
+        PeoplePresentationModule().module,
         ApplicationModule().module,
     )
 }

@@ -25,6 +25,8 @@ dependencyResolutionManagement {
 
 rootProject.name = "hris-mobile"
 
+include(":features:people:domain", ":features:people:data", ":features:people:presentation")
+
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 include(

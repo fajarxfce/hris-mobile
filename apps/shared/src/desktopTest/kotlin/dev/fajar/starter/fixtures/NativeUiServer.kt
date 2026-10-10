@@ -26,6 +26,9 @@ class NativeUiServer(
         private set
 
     val unexpectedPaths = mutableListOf<String>()
+    val people = NativePeopleUi()
+
+    suspend fun expireVerification() = requests.withLock { verified = false }
 
     fun engine() = MockEngine { request ->
         requests.withLock {
@@ -33,6 +36,14 @@ class NativeUiServer(
             assertEquals("ANDROID", request.headers["X-HRIS-Client-Platform"])
             assertEquals("1", request.headers["X-HRIS-Client-Build"])
             val headers = headersOf(HttpHeaders.ContentType, "application/json")
+            people.response(path)?.let { (body, status) ->
+                assertTrue(
+                    request.headers[HttpHeaders.Authorization]?.startsWith("Bearer ") == true
+                )
+                return@withLock if (requireMfa && !verified)
+                    respond("""{"code":"mfa_required"}""", HttpStatusCode.Forbidden, headers)
+                else respond(body, status, headers)
+            }
             val body =
                 request.body
                     .toByteArray()
@@ -92,15 +103,7 @@ class NativeUiServer(
                 }
                 "/api/v1/companies/$COMPANY_ONE/me/access",
                 "/api/v1/companies/$COMPANY_TWO/me/access" -> {
-                    assertFalse(requireMfa && !verified)
-                    respond(
-                        buildJsonObject {
-                                put("companyId", path.split('/')[4])
-                                putJsonArray("permissions") { add("people.self.read") }
-                            }
-                            .toString(),
-                        headers = headers,
-                    )
+                    respond(companyAccess(path).toString(), headers = headers)
                 }
                 else -> {
                     unexpectedPaths += path
@@ -122,6 +125,14 @@ class NativeUiServer(
         return buildJsonObject {
             put("account", account())
             put("credentials", credentials())
+        }
+    }
+
+    private fun companyAccess(path: String): JsonObject {
+        assertFalse(requireMfa && !verified)
+        return buildJsonObject {
+            put("companyId", path.split('/')[4])
+            putJsonArray("permissions") { add("people.self.read") }
         }
     }
 

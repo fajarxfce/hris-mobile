@@ -1,0 +1,20 @@
+package dev.fajar.starter.people.data.datasources
+
+import dev.fajar.starter.people.data.dto.*
+
+interface PeopleRemoteDataSource {
+    suspend fun selfEmployments(
+        sessionId: String,
+        companyId: String,
+        after: String?,
+    ): SelfEmploymentDirectoryDto
+
+    suspend fun employment(
+        sessionId: String,
+        companyId: String,
+        employeeId: String,
+        asOf: String,
+    ): EmploymentDetailsDto
+
+    suspend fun profile(sessionId: String, companyId: String, employeeId: String): PersonProfileDto
+}
