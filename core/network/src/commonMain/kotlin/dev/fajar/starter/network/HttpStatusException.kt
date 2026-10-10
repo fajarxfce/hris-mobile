@@ -16,6 +16,8 @@ fun mapHttpStatusFailure(status: Int): Failure =
                 "Authentication was not accepted. Check your details.",
             )
         403 -> Failure(FailureKind.AccessDenied, "Your account cannot perform this action.")
+        408 -> Failure(FailureKind.Timeout, "The request timed out. Try again.")
+        409 -> Failure(FailureKind.Conflict, "The data changed. Review it before trying again.")
         429 -> Failure(FailureKind.Service, "Too many requests. Try again shortly.")
         in 500..599 -> Failure(FailureKind.Service, "The service is unavailable. Try again.")
         else -> Failure(FailureKind.Unexpected, "The request could not be completed.")

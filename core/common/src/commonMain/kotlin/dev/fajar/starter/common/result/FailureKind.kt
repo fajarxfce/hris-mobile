@@ -4,6 +4,7 @@ enum class FailureKind {
     /** User dismissed an interaction; coroutine cancellation is still thrown. */
     Cancelled,
     Validation,
+    Conflict,
     Unauthorized,
     Network,
     Timeout,

@@ -124,4 +124,5 @@
     <string name="pause_en">Pause</string>
     <string name="resume_en">Resume</string>
     <string name="remove_en">Remove</string>
+    <string name="error_conflict_en">The data changed. Review it before trying again.</string>
 </resources>

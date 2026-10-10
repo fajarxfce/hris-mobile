@@ -9,6 +9,7 @@ fun failureText(failure: Failure): String =
         when (failure.kind) {
             FailureKind.Cancelled -> AppString.ErrorCancelled
             FailureKind.Validation -> AppString.ErrorValidation
+            FailureKind.Conflict -> AppString.ErrorConflict
             FailureKind.Unauthorized -> AppString.ErrorUnauthorized
             FailureKind.Network -> AppString.ErrorNetwork
             FailureKind.Timeout -> AppString.ErrorTimeout

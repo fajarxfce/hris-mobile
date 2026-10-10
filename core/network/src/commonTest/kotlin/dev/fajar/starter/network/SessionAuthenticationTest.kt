@@ -11,6 +11,47 @@ import kotlinx.coroutines.test.runTest
 
 class SessionAuthenticationTest {
     @Test
+    fun boundedJsonReplayRetainsTheCommandKeyAndStopsAfterASecondRejection() = runTest {
+        val operations = mutableListOf<String?>()
+        val tokens = mutableListOf<String?>()
+        val client =
+            createHttpClient(
+                MockEngine {
+                    operations += it.headers["Idempotency-Key"]
+                    tokens += it.headers[HttpHeaders.Authorization]
+                    respond(
+                        """{"code":"session_expired"}""",
+                        HttpStatusCode.Unauthorized,
+                        headersOf(HttpHeaders.ContentType, "application/problem+json"),
+                    )
+                },
+                HttpClientSettings("https://api.example.test/"),
+            ) {
+                install(SessionAuthentication) {
+                    origin = Url("https://api.example.test/")
+                    acquire = { scope, rejected ->
+                        assertEquals("session-a", scope)
+                        AppResult.Success(if (rejected == null) "first" else "rotated")
+                    }
+                }
+            }
+        try {
+            val result = safeApiCall {
+                client.requestJson<Unit>("command", HttpMethod.Post) {
+                    forSession("session-a")
+                    header("Idempotency-Key", "same-operation")
+                    setBody("command")
+                }
+            }
+            assertEquals<List<String?>>(listOf("same-operation", "same-operation"), operations)
+            assertEquals<List<String?>>(listOf("Bearer first", "Bearer rotated"), tokens)
+            assertEquals("session_expired", assertIs<AppResult.Failed>(result).failure.code)
+        } finally {
+            client.close()
+        }
+    }
+
+    @Test
     fun one401ReplaysWithRotatedCredentialsAndSameScope() = runTest {
         val headers = mutableListOf<String?>()
         val rejected = mutableListOf<String?>()

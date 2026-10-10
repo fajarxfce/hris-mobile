@@ -124,4 +124,5 @@
     <string name="pause_id">Jeda</string>
     <string name="resume_id">Lanjutkan</string>
     <string name="remove_id">Hapus</string>
+    <string name="error_conflict_id">Data telah berubah. Periksa kembali sebelum melanjutkan.</string>
 </resources>

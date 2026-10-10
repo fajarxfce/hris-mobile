@@ -63,6 +63,19 @@ container cancels pending calls and closes both through `cancelAndClose`; an
 engine must not be shared between these clients. Ktor's plain `close()` is a
 graceful shutdown and allows existing calls to finish.
 
+API services acquire JSON with `requestJson` through Ktor's streaming API, before
+the SDK's eager response cache. Success bodies default to a 1 MiB limit (a caller
+can choose a smaller bound), error bodies to 16 KiB, and JSON nesting to 64 levels.
+Streaming file transfers use their separate chunk limits. Cancellation closes the
+response rather than draining an unbounded body. The repository's `safeApiCall`
+maps technical errors and keeps HTTP classification if reading an error body fails.
+
+RFC 9457 responses may supply `code`, `fields`, `parameters`, `correlationId`, and
+`retryAfterSeconds`; the `Retry-After` header takes precedence. These bounded
+extensions remain domain values for local translation and support references.
+Server `title`/`detail` and raw exceptions are never UI copy. HTTP 409 is a conflict
+requiring operation-specific review, not a generic validation or automatic retry.
+
 The example contract is:
 
 - `POST auth/login`: `{ "email": "…", "password": "…" }`.

@@ -130,6 +130,7 @@ enum class AppString(val english: StringResource, val indonesian: StringResource
     ErrorNetwork(Res.string.error_network_en, Res.string.error_network_id),
     ErrorTimeout(Res.string.error_timeout_en, Res.string.error_timeout_id),
     ErrorService(Res.string.error_service_en, Res.string.error_service_id),
+    ErrorConflict(Res.string.error_conflict_en, Res.string.error_conflict_id),
     ErrorStorage(Res.string.error_storage_en, Res.string.error_storage_id),
     ErrorAccessDenied(Res.string.error_access_denied_en, Res.string.error_access_denied_id),
     AccountAccess(Res.string.account_access_en, Res.string.account_access_id),

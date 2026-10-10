@@ -35,6 +35,7 @@ suspend fun <T> safeApiCall(
 fun mapHttpFailure(exception: Exception): Failure =
     when (exception) {
         is RequestFailureException -> exception.failure
+        is ApiResponseException -> mapHttpStatusFailure(exception.statusCode)
         is HttpRequestTimeoutException,
         is ConnectTimeoutException,
         is SocketTimeoutException ->

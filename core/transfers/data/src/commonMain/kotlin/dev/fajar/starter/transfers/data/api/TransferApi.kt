@@ -3,7 +3,6 @@ package dev.fajar.starter.transfers.data.api
 import dev.fajar.starter.network.*
 import dev.fajar.starter.transfers.data.dto.*
 import io.ktor.client.HttpClient
-import io.ktor.client.call.body
 import io.ktor.client.plugins.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
@@ -17,17 +16,15 @@ import org.koin.core.annotation.Single
 @Single
 class TransferApi(@Named(HttpClients.Authenticated) private val client: HttpClient) {
     suspend fun describe(sessionId: String, id: String): RemoteFileDto =
-        client.get("files/${transferResourceSegment(id)}") { forSession(sessionId) }.body()
+        client.requestJson("files/${transferResourceSegment(id)}") { forSession(sessionId) }
 
     suspend fun createUpload(sessionId: String, key: String, file: FileMetadataDto): UploadDto =
-        client
-            .post("files/uploads") {
-                forSession(sessionId)
-                header("Idempotency-Key", key)
-                contentType(ContentType.Application.Json)
-                setBody(file)
-            }
-            .body()
+        client.requestJson("files/uploads", HttpMethod.Post) {
+            forSession(sessionId)
+            header("Idempotency-Key", key)
+            contentType(ContentType.Application.Json)
+            setBody(file)
+        }
 
     suspend fun uploadOffset(sessionId: String, id: String): UploadOffsetDto =
         client
