@@ -24,7 +24,7 @@ fun applicationNetworkModule(environment: AppEnvironment) = module {
                 HttpClientSettings("https://oidc.invalid/"),
             )
         }
-        .onClose { it?.close() }
+        .onClose { it?.cancelAndClose() }
     single<HttpClient>(named(HttpClients.Public)) {
             val policy = get<CheckAppAvailability>()
             createHttpClient(
@@ -35,7 +35,7 @@ fun applicationNetworkModule(environment: AppEnvironment) = module {
                 install(ApplicationAvailability) { check = { policy() } }
             }
         }
-        .onClose { it?.close() }
+        .onClose { it?.cancelAndClose() }
     single<HttpClient>(named(HttpClients.Authenticated)) {
             val acquireTokens = get<AcquireSessionTokens>()
             val policy = get<CheckAppAvailability>()
@@ -57,5 +57,5 @@ fun applicationNetworkModule(environment: AppEnvironment) = module {
                 }
             }
         }
-        .onClose { it?.close() }
+        .onClose { it?.cancelAndClose() }
 }

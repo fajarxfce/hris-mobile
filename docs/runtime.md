@@ -58,6 +58,10 @@ unchanged vault. Storage corruption is reported rather than silently signing out
 Use HTTPS URLs without credentials, query strings or fragments. Public and
 authenticated clients are independently named in DI. The authenticated client
 only sends tokens to its configured origin and does not follow redirects.
+Each client takes ownership of its dedicated engine. Closing the application
+container cancels pending calls and closes both through `cancelAndClose`; an
+engine must not be shared between these clients. Ktor's plain `close()` is a
+graceful shutdown and allows existing calls to finish.
 
 The example contract is:
 
