@@ -31,6 +31,13 @@ when there is insufficient width. `AppHeading` identifies screen headings;
 Icon actions have descriptions, loading buttons expose progress semantics, and
 feedback uses a polite live region. Text selection follows the theme accent.
 
+`AppTopBar` belongs in the fixed `topBar` slot of `AppPage` or `AppLazyPage`, outside
+scrolling content and its padding. Its normal minimum height is 56 dp; large text
+can increase it. Back and refresh keep 48 dp targets. `AppMenuGrid` reduces its
+column count as text grows and `AppMenuItem` exposes one action per icon/label.
+Preference rows expose radio/switch roles and disabled state for the entire row,
+without an extra interactive target on their indicators.
+
 Desktop Compose UI tests cover responsive navigation, preserved content lifetime
 on resize, selected semantics, text at 200%, input labels/errors, minimum button
 height and Enter-key activation. Screenshots are written to the test reports.

@@ -41,12 +41,21 @@ class AdaptiveUiTest {
             CompositionLocalProvider(LocalDensity provides Density(density.density, 2f)) {
                 AppTheme {
                     Box(Modifier.size(360.dp, 760.dp).testTag("frame")) {
-                        AppPage(contentPadding = PaddingValues(20.dp), spacing = 16.dp) {
-                            AppScreenHeader(
-                                title = "Employee updates",
-                                navigation = { AppIconButton(Icons.Regular.ArrowLeft, "Back", {}) },
-                                actions = { AppIconButton(Icons.Regular.ArrowSync, "Refresh", {}) },
-                            )
+                        AppPage(
+                            contentPadding = PaddingValues(16.dp),
+                            spacing = 16.dp,
+                            topBar = {
+                                AppTopBar(
+                                    title = "Employee updates",
+                                    navigation = {
+                                        AppIconButton(Icons.Regular.ArrowLeft, "Back", {})
+                                    },
+                                    actions = {
+                                        AppIconButton(Icons.Regular.ArrowSync, "Refresh", {})
+                                    },
+                                )
+                            },
+                        ) {
                             AppActionTile(
                                 title = "Work calendar",
                                 supportingText = "Shifts and days off",

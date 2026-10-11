@@ -17,6 +17,7 @@ fun AppPage(
     maxWidth: Dp = 960.dp,
     contentPadding: PaddingValues = PaddingValues(24.dp),
     spacing: Dp = 24.dp,
+    topBar: @Composable () -> Unit = {},
     content: @Composable ColumnScope.() -> Unit,
 ) {
     Box(
@@ -26,13 +27,16 @@ fun AppPage(
             .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Bottom)),
         contentAlignment = Alignment.TopCenter,
     ) {
-        Column(
-            Modifier.widthIn(max = maxWidth)
-                .fillMaxWidth()
-                .verticalScroll(rememberScrollState())
-                .padding(contentPadding),
-            verticalArrangement = Arrangement.spacedBy(spacing),
-            content = content,
-        )
+        Column(Modifier.widthIn(max = maxWidth).fillMaxSize()) {
+            topBar()
+            Column(
+                Modifier.weight(1f)
+                    .fillMaxWidth()
+                    .verticalScroll(rememberScrollState())
+                    .padding(contentPadding),
+                verticalArrangement = Arrangement.spacedBy(spacing),
+                content = content,
+            )
+        }
     }
 }

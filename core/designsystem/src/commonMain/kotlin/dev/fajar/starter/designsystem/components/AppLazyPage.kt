@@ -19,6 +19,8 @@ fun AppLazyPage(
     state: LazyListState = rememberLazyListState(),
     spacing: Dp = 24.dp,
     contentPadding: PaddingValues = PaddingValues(24.dp),
+    maxWidth: Dp = 960.dp,
+    topBar: @Composable () -> Unit = {},
     content: LazyListScope.() -> Unit,
 ) {
     Box(
@@ -28,12 +30,15 @@ fun AppLazyPage(
             .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Bottom)),
         contentAlignment = Alignment.TopCenter,
     ) {
-        LazyColumn(
-            state = state,
-            modifier = Modifier.widthIn(max = 960.dp).fillMaxSize(),
-            contentPadding = contentPadding,
-            verticalArrangement = Arrangement.spacedBy(spacing),
-            content = content,
-        )
+        Column(Modifier.widthIn(max = maxWidth).fillMaxSize()) {
+            topBar()
+            LazyColumn(
+                state = state,
+                modifier = Modifier.weight(1f).fillMaxWidth(),
+                contentPadding = contentPadding,
+                verticalArrangement = Arrangement.spacedBy(spacing),
+                content = content,
+            )
+        }
     }
 }
