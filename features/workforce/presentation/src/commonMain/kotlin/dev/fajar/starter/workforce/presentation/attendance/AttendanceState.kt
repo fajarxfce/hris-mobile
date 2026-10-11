@@ -14,4 +14,10 @@ data class AttendanceState(
     val needsVerification: Boolean = false,
     val settingsTarget: LocationSettings? = null,
     val withoutLocationKind: AttendanceKind? = null,
+    val dialog: AttendanceDialog? = null,
 )
+
+enum class AttendanceDialog {
+    QUEUE,
+    EMPLOYMENT,
+}

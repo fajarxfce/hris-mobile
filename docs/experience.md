@@ -67,12 +67,17 @@ timestamp remains available after the agenda, while refresh failures remain
 visible above the retained data. Language, appearance and text-size changes
 must retain the current workspace and navigation state.
 
-Attendance puts today's work date, shift and clock actions before history. Location
-is requested on a capture action, with an explicit fallback when it is unavailable.
+Home retains the clock fields and disabled actions during initial loading.
+This keeps the basic card layout consistent during acquisition.
+Home shows the work date, shift and clock actions. Attendance opens monthly
+metrics and daily history with a fixed month filter and read-only day details.
+Absent totals require confirmed records. History has no clock-in/out controls.
+Location is requested on a Home capture action, with an explicit fallback when
+it is unavailable.
 Saving offline, receiving a server receipt and accepting attendance are separate
 visible outcomes. An uncertain response retains the original command for retry.
-The Home card uses the same capture component and ViewModel as the attendance
-screen, with a separate route-owned instance. Leaving its tab, stopping the app,
+The Home card owns capture and pending-command dialogs separately from monthly
+history. Leaving its tab, stopping the app,
 or disposing the route stops observation and pending acquisition. Returning
 revalidates the saved state; it never automatically records attendance.
 
@@ -84,3 +89,8 @@ owned filter surface; `AppDialog` delegates focus, dismissal and window lifetime
 to the platform. Feature MVI owns visibility, selection and pending data work.
 Department search and coworker search use independent cancellable requests;
 leaving their owner releases both. Directory filtering occurs before server paging.
+
+`AppMonthPicker` receives localized labels, selection and enabled choices from its
+owner. It adapts its column count to text size and does not acquire data or decide
+which periods an application permits. Month selection resets the history list
+position; refreshes of the same month retain it.

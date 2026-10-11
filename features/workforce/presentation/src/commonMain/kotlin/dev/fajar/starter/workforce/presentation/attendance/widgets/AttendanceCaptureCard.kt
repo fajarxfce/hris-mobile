@@ -33,30 +33,31 @@ fun AttendanceCaptureCard(
                     appString(AppString.AttendanceToday),
                     style = FluentTheme.typography.bodyStrong,
                 )
-                if (content != null)
+                if (content != null || state.loading || state.refreshing)
                     AppText(
-                        formatLocalDate(content.date.toString(), appLanguageTag()),
+                        content?.let { formatLocalDate(it.date.toString(), appLanguageTag()) }
+                            ?: appString(AppString.Loading),
                         color = AppColors.muted,
                         style = FluentTheme.typography.caption,
                     )
             }
             actions()
         }
-        if (content?.employee != null) {
-            if (content.shift != null)
+        if (content?.employee != null || (content == null && (state.loading || state.refreshing))) {
+            if (content?.shift != null)
                 AppText(calendarTimeRange(content.shift), color = AppColors.muted)
-            if (content.snapshot.directory.items.size > 1)
+            if (content?.employee != null && content.snapshot.directory.items.size > 1)
                 AppText(content.employee.employeeNumber, color = AppColors.muted)
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                 Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                     AppText(appString(AppString.ClockIn), color = AppColors.muted)
                     AppText(
-                        content.clockIn?.let {
+                        content?.clockIn?.let {
                             attendanceTime(it.capturedAt, content.snapshot.directory.timezone)
                         } ?: "—",
                         style = FluentTheme.typography.subtitle,
                     )
-                    if (content.clockIn != null)
+                    if (content?.clockIn != null)
                         AppText(
                             appString(content.clockIn.status),
                             style = FluentTheme.typography.caption,
@@ -66,12 +67,12 @@ fun AttendanceCaptureCard(
                 Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                     AppText(appString(AppString.ClockOut), color = AppColors.muted)
                     AppText(
-                        content.clockOut?.let {
+                        content?.clockOut?.let {
                             attendanceTime(it.capturedAt, content.snapshot.directory.timezone)
                         } ?: "—",
                         style = FluentTheme.typography.subtitle,
                     )
-                    if (content.clockOut != null)
+                    if (content?.clockOut != null)
                         AppText(
                             appString(content.clockOut.status),
                             style = FluentTheme.typography.caption,
@@ -84,22 +85,15 @@ fun AttendanceCaptureCard(
                     appString(AppString.ClockIn),
                     { onEvent(AttendanceEvent.CaptureRequested(AttendanceKind.CLOCK_IN)) },
                     Modifier.weight(1f),
-                    enabled = content.canClockIn && !state.working && !state.refreshing,
+                    enabled = content?.canClockIn == true && !state.working && !state.refreshing,
                 )
                 AppButton(
                     appString(AppString.ClockOut),
                     { onEvent(AttendanceEvent.CaptureRequested(AttendanceKind.CLOCK_OUT)) },
                     Modifier.weight(1f),
-                    enabled = content.canClockOut && !state.working && !state.refreshing,
+                    enabled = content?.canClockOut == true && !state.working && !state.refreshing,
                     primary = false,
                 )
-            }
-        } else if (state.loading || state.refreshing) {
-            Box(
-                Modifier.fillMaxWidth().heightIn(min = 120.dp),
-                contentAlignment = Alignment.Center,
-            ) {
-                AppLoading()
             }
         } else if (content != null)
             AppText(appString(AppString.CalendarNoEmployment), color = AppColors.muted)

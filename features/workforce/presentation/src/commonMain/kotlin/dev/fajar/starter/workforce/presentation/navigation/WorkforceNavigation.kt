@@ -2,6 +2,7 @@ package dev.fajar.starter.workforce.presentation.navigation
 
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.LifecycleStartEffect
@@ -9,8 +10,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import dev.fajar.starter.presentation.mvi.CollectEffects
-import dev.fajar.starter.workforce.presentation.attendance.*
-import dev.fajar.starter.workforce.presentation.attendance.pages.AttendancePage
+import dev.fajar.starter.workforce.presentation.attendance.history.*
+import dev.fajar.starter.workforce.presentation.attendance.history.pages.AttendanceHistoryPage
 import dev.fajar.starter.workforce.presentation.calendar.*
 import dev.fajar.starter.workforce.presentation.calendar.pages.WorkCalendarPage
 import org.koin.compose.viewmodel.koinViewModel
@@ -24,21 +25,24 @@ fun NavGraphBuilder.workforceRoutes(
 ) {
     composable<AttendanceRoute> {
         val viewModel =
-            koinViewModel<AttendanceViewModel>(parameters = { parametersOf(workspaceId) })
+            koinViewModel<AttendanceHistoryViewModel>(parameters = { parametersOf(workspaceId) })
         val state by viewModel.state.collectAsStateWithLifecycle()
-        val list = rememberLazyListState()
+        val list =
+            key(state.month?.selected, state.selection.employeeId, state.selection.after) {
+                rememberLazyListState()
+            }
         LifecycleStartEffect(viewModel) {
-            viewModel.onEvent(AttendanceEvent.Entered)
-            onStopOrDispose { viewModel.onEvent(AttendanceEvent.Stopped) }
+            viewModel.onEvent(AttendanceHistoryEvent.Entered)
+            onStopOrDispose { viewModel.onEvent(AttendanceHistoryEvent.Stopped) }
         }
         CollectEffects(viewModel.effects) { effect ->
             when (effect) {
-                AttendanceEffect.Back -> onBack()
-                AttendanceEffect.VerifyAccount -> onVerify()
-                AttendanceEffect.RecheckWorkspace -> onRecheckWorkspace()
+                AttendanceHistoryEffect.Back -> onBack()
+                AttendanceHistoryEffect.VerifyAccount -> onVerify()
+                AttendanceHistoryEffect.RecheckWorkspace -> onRecheckWorkspace()
             }
         }
-        AttendancePage(state, list, viewModel::onEvent)
+        AttendanceHistoryPage(state, list, viewModel::onEvent)
     }
     composable<WorkCalendarRoute> {
         val viewModel =

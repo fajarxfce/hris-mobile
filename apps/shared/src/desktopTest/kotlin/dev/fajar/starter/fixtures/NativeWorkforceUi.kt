@@ -6,6 +6,7 @@ import io.ktor.http.HttpStatusCode
 import java.io.IOException
 import java.time.LocalDate
 import java.time.ZoneId
+import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.atomic.AtomicInteger
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CompletableDeferred
@@ -19,6 +20,8 @@ class NativeWorkforceUi {
     @Volatile var attendanceGate: CompletableDeferred<Unit>? = null
     var asOf: LocalDate = LocalDate.parse("2026-10-12")
     @Volatile var failureCode: String? = null
+    @Volatile var historyEvidence = false
+    val attendancePeriods = CopyOnWriteArrayList<Pair<LocalDate, LocalDate>>()
     val active = AtomicInteger()
     val cancelled = AtomicInteger()
     val calendars = AtomicInteger()
@@ -38,22 +41,15 @@ class NativeWorkforceUi {
         if (path.endsWith("/attendance") && request.method == HttpMethod.Get) {
             attendanceActive.incrementAndGet()
             try {
-                attendanceGate?.await()
                 val from = LocalDate.parse(request.url.parameters["from"])
                 val until = LocalDate.parse(request.url.parameters["until"])
+                check(java.time.temporal.ChronoUnit.DAYS.between(from, until) in 0..30)
+                attendancePeriods += from to until
+                attendanceGate?.await()
                 return buildJsonArray {
                         var date = from
                         while (date <= until) {
-                            add(
-                                buildJsonObject {
-                                    put("workDate", date.toString())
-                                    putJsonArray("entries") {}
-                                    put("acceptedMinutes", 0)
-                                    put("pendingCount", 0)
-                                    put("incomplete", false)
-                                    put("correction", JsonNull)
-                                }
-                            )
+                            add(attendanceDay(date, historyEvidence && until > from.plusDays(6)))
                             date = date.plusDays(1)
                         }
                     }
@@ -76,8 +72,10 @@ class NativeWorkforceUi {
                     cancelled.incrementAndGet()
                 }
             val from = LocalDate.parse(request.url.parameters["from"])
-            check(request.url.parameters["until"] == from.plusDays(6).toString())
-            return calendar(from).toString() to HttpStatusCode.OK
+            val until = LocalDate.parse(request.url.parameters["until"])
+            val days = java.time.temporal.ChronoUnit.DAYS.between(from, until).toInt() + 1
+            check(days in 1..31)
+            return calendar(from, days).toString() to HttpStatusCode.OK
         } finally {
             active.decrementAndGet()
         }
@@ -104,10 +102,52 @@ class NativeWorkforceUi {
         }
     }
 
-    private fun calendar(from: LocalDate) = buildJsonObject {
+    private fun attendanceDay(date: LocalDate, evidence: Boolean) = buildJsonObject {
+        val pending = evidence && date.dayOfMonth == 5
+        val correction = evidence && date.dayOfMonth in 3..4
+        put("workDate", date.toString())
+        putJsonArray("entries") {
+            if (pending)
+                add(
+                    buildJsonObject {
+                        put("id", "77777777-7777-4777-8777-777777777777")
+                        put("kind", "CLOCK_IN")
+                        put("capturedAt", "${date}T02:00:00Z")
+                        put("receivedAt", "${date}T03:00:00Z")
+                        put("offline", true)
+                        put("status", "PENDING")
+                        putJsonArray("issues") {}
+                        putJsonObject("schedule") {
+                            put("workDate", date.toString())
+                            put("kind", "UNASSIGNED")
+                        }
+                        put("version", 0)
+                    }
+                )
+        }
+        put("acceptedMinutes", if (evidence && date.dayOfMonth == 3) 480 else 0)
+        put("pendingCount", if (pending) 1 else 0)
+        put("incomplete", false)
+        if (correction)
+            putJsonObject("correction") {
+                put("id", "88888888-8888-4888-8888-888888888888")
+                put(
+                    "clockIn",
+                    if (date.dayOfMonth == 3) JsonPrimitive("${date}T02:00:00Z") else JsonNull,
+                )
+                put(
+                    "clockOut",
+                    if (date.dayOfMonth == 3) JsonPrimitive("${date}T10:00:00Z") else JsonNull,
+                )
+                put("version", 0)
+            }
+        else put("correction", JsonNull)
+    }
+
+    private fun calendar(from: LocalDate, days: Int) = buildJsonObject {
         put("scheduleVersion", JsonNull)
         putJsonArray("days") {
-            repeat(7) { index ->
+            repeat(days) { index ->
                 add(
                     buildJsonObject {
                         val date = from.plusDays(index.toLong())

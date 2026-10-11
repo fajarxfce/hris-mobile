@@ -39,7 +39,9 @@ class AttendanceViewModel(
         on<AttendanceEvent.EmploymentPageRequested>(::onEmploymentPageRequested)
         on<AttendanceEvent.SettingsRequested>(::onSettingsRequested)
         on<AttendanceEvent.VerificationRequested>(::onVerificationRequested)
-        on<AttendanceEvent.BackRequested>(::onBackRequested)
+        on<AttendanceEvent.QueueRequested>(::onQueueRequested)
+        on<AttendanceEvent.EmploymentPickerRequested>(::onEmploymentPickerRequested)
+        on<AttendanceEvent.DialogDismissed>(::onDialogDismissed)
     }
 
     private fun onEntered(event: AttendanceEvent.Entered) {
@@ -89,6 +91,7 @@ class AttendanceViewModel(
                 refreshing = false,
                 working = false,
                 withoutLocationKind = null,
+                dialog = null,
             )
         }
     }
@@ -213,7 +216,11 @@ class AttendanceViewModel(
         acquisition?.cancel()
         acquisition = null
         updateState {
-            it.copy(selection = it.selection.copy(employeeId = event.id), content = null)
+            it.copy(
+                selection = it.selection.copy(employeeId = event.id),
+                content = null,
+                dialog = null,
+            )
         }
         onEvent(AttendanceEvent.RefreshRequested)
     }
@@ -235,7 +242,7 @@ class AttendanceViewModel(
 
     private fun onSettingsRequested(event: AttendanceEvent.SettingsRequested) {
         val target = state.value.settingsTarget ?: return
-        if (state.value.working) return
+        if (state.value.working || observation?.isActive != true) return
         updateState { it.copy(working = true) }
         action =
             viewModelScope.launch {
@@ -251,8 +258,19 @@ class AttendanceViewModel(
             viewModelScope.launch { emitEffect(AttendanceEffect.VerifyAccount) }
     }
 
-    private fun onBackRequested(event: AttendanceEvent.BackRequested) {
-        viewModelScope.launch { emitEffect(AttendanceEffect.Back) }
+    private fun onQueueRequested(event: AttendanceEvent.QueueRequested) {
+        if (observation?.isActive != true || state.value.content?.commands.isNullOrEmpty()) return
+        updateState { it.copy(dialog = AttendanceDialog.QUEUE) }
+    }
+
+    private fun onEmploymentPickerRequested(event: AttendanceEvent.EmploymentPickerRequested) {
+        if (observation?.isActive != true || state.value.content?.hasEmploymentChoice != true)
+            return
+        updateState { it.copy(dialog = AttendanceDialog.EMPLOYMENT) }
+    }
+
+    private fun onDialogDismissed(event: AttendanceEvent.DialogDismissed) {
+        updateState { it.copy(dialog = null) }
     }
 
     private suspend fun reportFailure(failure: Failure) {

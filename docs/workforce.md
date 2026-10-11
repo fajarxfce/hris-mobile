@@ -1,8 +1,8 @@
 # Attendance and work calendar
 
-Home includes today's clock-in/out card above its service grid. It uses the same
-capture rendering, ViewModel and use cases as the attendance screen, with its own
-route-owned instance. Its lifecycle stops on tab disposal as well as app backgrounding.
+Home includes today's clock-in/out card above its service grid. Its capture
+ViewModel owns acquisition, permission recovery and pending-command actions.
+Its lifecycle stops on tab disposal as well as app backgrounding.
 Stored, received, pending review and accepted outcomes remain distinct; corrections
 replace the displayed times without enabling another capture.
 Successful refresh clears an expired-cache message even when expiry is observed
@@ -17,9 +17,8 @@ belong to `features/workforce`; generic foreground location belongs to
 
 Employees can record clock-in and clock-out for their own active or probationary
 employment. The work date follows the company timezone; a running overnight shift
-retains its starting date. The current UI supports one pair per work date, with
-today and five previous days shown in history. A corrected day cannot be captured
-again. The server remains authoritative for ownership, sequencing and acceptance.
+retains its starting date. The capture UI supports one pair per work date.
+A corrected day cannot be captured again. The server remains authoritative for ownership, sequencing and acceptance.
 
 `CaptureAttendance` coordinates current session/workspace, admitted attendance
 snapshot, location and command repository contracts. It owns permission policy,
@@ -57,6 +56,30 @@ dashboard. A receipt does not claim accepted working time. Successful refreshes
 can retire received commands once their entries are present in the scoped
 snapshot. Server review and correction stay in HRIS Platform.
 
+## Attendance history
+
+Attendance is a read-only monthly view: present days, confirmed absences, days
+needing review, verified time and daily evidence. It contains no capture controls.
+The fixed month filter offers adjacent months and a localized month/year picker;
+future months are unavailable. Current-month totals exclude future dates. A missing
+record is not automatically an absence, and an ongoing overnight shift is not
+incomplete merely because the company date has changed.
+
+`AttendanceHistoryViewModel` coordinates only history observation and refresh.
+Changing a month cancels its previous acquisition and clears mismatched data;
+leaving the route cancels both acquisition and observation. Day details are
+read-only. Employment selection remains available when an account has multiple
+employments. The selected monthly snapshot remains readable offline within its
+admission lifetime; selecting another month requires a successful acquisition.
+If a new route falls back to that saved month while offline, subsequent refresh
+keeps the displayed month and employment instead of jumping to the current month.
+
+Capture stays on Home. Pending attendance opens a controlled dialog with explicit
+retry and rejected-command dismissal. Employment selection has its own dialog.
+These surfaces share the Home capture owner; closing a dialog does not cancel a
+submission, while leaving its tab or stopping the app does. Returning from Settings
+still requires a new explicit capture action.
+
 ## Work calendar
 
 Employees open a seven-day work calendar from Home. It shows shift times, breaks,
@@ -91,12 +114,14 @@ authority after pending I/O and before publication.
 `summarizeAttendanceHistory` keeps confirmed absence, missing records, days off,
 unassigned schedules and review status distinct. Future dates do not enter the
 metrics. Queued device commands can appear as pending synchronization, but do not
-add accepted hours or presence. A current unfinished shift is not marked incomplete
+add accepted hours or presence. An unfinished shift is not marked incomplete
 before it ends. These classifications belong to domain policy.
 
 The route owns its MVI ViewModel and observation lifetime. Navigation cancels an
 obsolete acquisition; stopping the route releases collectors and clears displayed
-private content. A late snapshot cannot replace a newer selection. Repositories
+private content. A late snapshot cannot replace a newer selection. Expiry or authoritative denial
+also stops cached observation until a successful refresh; late cache reads cannot
+restore private content after that failure. Repositories
 perform no navigation, permission requests, scheduling or UI-state management.
 
 ## Offline access
@@ -132,13 +157,17 @@ memory, so Web does not claim offline process restoration after closing the page
 
 ## Platform dates and validation
 
-Calendar dates use `formatLocalDate`, independently of the device timezone. Android
+See the [latest validation](validation.md#monthly-attendance-interface) for the
+monthly screen, offline recovery, and current build/device observations.
+
+Calendar dates use `formatLocalDate` and month labels use `formatMonth`,
+independently of the device timezone. Android
 core library desugaring supports the declared API 24 minimum. Web explicitly imports
 IANA timezone data compatible with the `@js-joda/core` version used by
 `kotlinx-datetime`; its browser regression covers overnight dates and daylight-saving
 transitions. Keep that compatibility when updating the npm lock.
 
-Root checks passed 366 JVM/UI tests. Attendance regressions cover cancellation
+The earlier capture integration passed 366 JVM/UI tests. Attendance regressions cover cancellation
 during GPS acquisition, permission recovery, company changes, encrypted process
 restoration, duplicate capture, uncertain delivery, revision checks and observation
 disposal. The workforce and location browser suites passed 25 tests after the

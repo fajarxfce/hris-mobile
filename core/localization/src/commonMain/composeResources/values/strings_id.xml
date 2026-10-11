@@ -249,7 +249,7 @@
     <string name="services_personal_id">Pribadi</string>
     <string name="services_communications_id">Komunikasi</string>
     <string name="attendance_id">Presensi</string>
-    <string name="attendance_summary_id">Catat masuk, pulang, dan lihat riwayat presensi.</string>
+    <string name="attendance_summary_id">Ringkasan dan riwayat presensi harian.</string>
     <string name="clock_in_id">Masuk kerja</string>
     <string name="clock_out_id">Pulang</string>
     <string name="attendance_today_id">Hari ini</string>
@@ -295,4 +295,19 @@
     <string name="refine_department_search_id">Persempit pencarian untuk menemukan departemen lainnya.</string>
     <string name="close_id">Tutup</string>
     <string name="inbox_unread_count_id">%1$s pesan belum dibaca</string>
+    <string name="attendance_present_id">Hadir</string>
+    <string name="attendance_absent_id">Tidak hadir</string>
+    <string name="attendance_needs_review_id">Perlu ditinjau</string>
+    <string name="attendance_incomplete_id">Belum lengkap</string>
+    <string name="attendance_not_recorded_id">Belum tercatat</string>
+    <string name="attendance_no_history_id">Belum ada catatan presensi bulan ini.</string>
+    <string name="attendance_month_id">Pilih bulan</string>
+    <string name="previous_month_id">Bulan sebelumnya</string>
+    <string name="next_month_id">Bulan berikutnya</string>
+    <string name="previous_year_id">Tahun sebelumnya</string>
+    <string name="next_year_id">Tahun berikutnya</string>
+    <string name="attendance_metrics_basis_id">Total tidak hadir mengikuti catatan yang telah dikonfirmasi.</string>
+    <string name="attendance_pending_actions_id">Presensi tertunda</string>
+    <string name="attendance_no_pending_id">Tidak ada presensi tertunda.</string>
+    <string name="attendance_cache_expired_id">Data presensi tersimpan sudah kedaluwarsa. Muat ulang untuk melanjutkan.</string>
 </resources>

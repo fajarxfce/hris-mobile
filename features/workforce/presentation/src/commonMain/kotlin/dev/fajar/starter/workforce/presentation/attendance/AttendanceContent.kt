@@ -20,6 +20,7 @@ data class AttendanceContent(
     val canClockOut: Boolean,
     val clockIn: AttendanceStamp?,
     val clockOut: AttendanceStamp?,
+    val hasEmploymentChoice: Boolean,
 )
 
 fun AttendanceView.toContent(now: Instant): AttendanceContent? {
@@ -62,6 +63,9 @@ fun AttendanceView.toContent(now: Instant): AttendanceContent? {
             day,
             outstanding.filter { it.command.workDate == date },
         ),
+        snapshot.directory.items.size > 1 ||
+            snapshot.directory.nextCursor != null ||
+            snapshot.after != null,
     )
 }
 

@@ -1,5 +1,31 @@
 # Validation
 
+## Monthly attendance interface
+
+The 2026-10-12 update passed root checks with 425 desktop/JVM/UI tests, the
+localization Chromium suite, and Android dev and production Web builds. The
+workforce domain Chromium suite also passed for the monthly acquisition/summary
+implementation. Screen tests cover leap-year filters, future-month restrictions,
+metrics, read-only day details, cancelled month requests, company replacement,
+offline refresh, and expiry/MFA during pending acquisition. Cached observation
+stops on a denied read and resumes after successful refresh. Tests cover both
+arrival orders of cache and network results when restoring a saved month offline.
+
+The API 35 emulator exercised the real API's pending attendance, monthly navigation,
+day details, English/Indonesian, light/dark, and the month picker at 200% text.
+The final APK restored September after an offline process restart and kept that
+month on online refresh. Home retained an explicit capture without location after
+restart; retry sent it and the next snapshot removed it from the device queue.
+It remained pending verification with zero verified time. GPS did not produce a
+valid location during this queue test, so this is not a physical-location check.
+
+The final dev APK was installed on the authorized Android 16 phone at 02:13 on
+2026-10-12 using `--install-only`. Installation and package metadata were verified;
+its UI was not opened or driven. No release was created.
+
+The reusable month picker and date formatting are also ported to the starter;
+HRIS metrics, access policy, cache recovery and capture workflows remain here.
+
 ## Monthly attendance foundation
 
 The acquisition and storage update passed root checks with 420 desktop/JVM/UI

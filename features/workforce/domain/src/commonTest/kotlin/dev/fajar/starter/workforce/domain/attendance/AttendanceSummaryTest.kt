@@ -167,7 +167,8 @@ class AttendanceSummaryTest {
 
     @Test
     fun anOngoingShiftDoesNotBecomeAnIncompletePastDay() {
-        val date = f.base.directory.asOf
+        // The previous work date can still own a shift in progress after company midnight.
+        val date = f.base.directory.asOf.minus(1, DateTimeUnit.DAY)
         val ongoing =
             WorkDay.Work(
                 date,

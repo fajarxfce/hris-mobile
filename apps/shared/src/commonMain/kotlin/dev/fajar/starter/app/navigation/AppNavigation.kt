@@ -160,7 +160,6 @@ fun AppNavigation(controller: NavHostController, incomingLinks: Flow<String>) {
                         attendance = {
                             AttendanceHomeContent(stage.workspace.id) { effect ->
                                 when (effect) {
-                                    AttendanceEffect.Back -> controller.popBackStack()
                                     AttendanceEffect.VerifyAccount ->
                                         controller.navigate(VerificationRoute) {
                                             launchSingleTop = true

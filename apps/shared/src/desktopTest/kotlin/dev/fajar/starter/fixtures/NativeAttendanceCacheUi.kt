@@ -33,8 +33,10 @@ class NativeAttendanceCacheUi : AttendanceCacheRepository {
         )
     }
 
-    fun expire() {
-        val snapshot = snapshots.getValue(AttendanceWindow.RECENT)
+    fun subscribers(window: AttendanceWindow) = snapshots.getValue(window).subscriptionCount.value
+
+    fun expire(window: AttendanceWindow = AttendanceWindow.RECENT) {
+        val snapshot = snapshots.getValue(window)
         val previous = checkNotNull(snapshot.value)
         check(
             snapshot.compareAndSet(

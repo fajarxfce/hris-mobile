@@ -21,7 +21,9 @@ minimum builds and disabled modules, and pause inbox delivery before transport.
 The weekly work calendar shows assigned shifts, roster overrides and days off,
 with a bounded encrypted snapshot for offline access. Attendance supports clock-in,
 clock-out, foreground location evidence, encrypted offline commands and idempotent
-delivery. Pending review stays distinct from accepted time. Workforce availability
+delivery. Attendance opens monthly metrics and daily history with a date filter;
+clock-in/out and pending-command recovery stay on Home. Pending review stays
+distinct from accepted time. Workforce availability
 is independent of the personal-profile module. Home places the employee's name
 and company above today's clock-in/out card and service grid. The four tabs are
 Home, Inbox, Employees and Account. Inbox shows the account's total unread count.

@@ -130,8 +130,9 @@ App composition supplies attendance, inbox and employee-directory entries to Hom
 through composable slots. They retain their own route-scoped ViewModels; Home
 does not depend on those feature modules. `LifecycleStartEffect` pairs entry with stop/disposal,
 including tab changes that do not stop the navigation entry's lifecycle. The
-attendance screen and Home share capture rendering and use cases, not ViewModel
-instances or subscriptions. Inbox and Employees also have separate standalone
+Home capture and monthly history have separate ViewModels and encrypted cache
+windows. History observes attendance and refreshes a selected month; it owns no
+permission, location or capture actions. Inbox and Employees also have separate standalone
 routes with owners distinct from the tab entries. The service catalog contains
 business workflows; Inbox and Employees are reached through their tabs. Personal
 profile access belongs to Account and has its own admission, separate from menu

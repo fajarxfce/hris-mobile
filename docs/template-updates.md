@@ -96,3 +96,13 @@ regressions exist at
 Both repositories passed root checks, the database Chromium tests and the Android
 dev build. Account unread totals, Inbox cache interpretation, and the badge's
 scope/lifecycle policy remain in HRIS Mobile.
+
+## Month selection
+
+The localized, controlled month picker, optional filter-chip icons, and `formatMonth`
+also exist at [86235b6](https://github.com/fajarxfce/compose-fluent-starter/commit/86235b6).
+The mobile foundation is [f531200](https://github.com/fajarxfce/hris-mobile/commit/f531200).
+Both repositories passed root checks, localization Chromium tests, Android dev
+and production Web builds. Shared tests cover disabled months/years, 200% text,
+English/Indonesian names and timezone boundaries. Monthly attendance, access
+revalidation, encrypted history and capture recovery remain in this application.

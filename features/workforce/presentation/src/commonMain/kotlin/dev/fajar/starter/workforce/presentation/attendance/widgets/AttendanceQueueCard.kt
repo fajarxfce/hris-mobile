@@ -31,18 +31,16 @@ fun AttendanceQueueCard(
         AppText(attendanceOutcome(record.outcome))
         record.outcome.failureOrNull()?.let { AppFeedback(failureText(it)) }
         if (record.outcome !is AttendanceCommandOutcome.Confirmed)
-            AppButton(
+            AppTextButton(
                 appString(AppString.TryAgain),
                 { onEvent(AttendanceEvent.RetryRequested(record.command.id)) },
                 enabled = !working,
-                primary = false,
             )
         if (record.outcome is AttendanceCommandOutcome.Rejected)
-            AppButton(
+            AppTextButton(
                 appString(AppString.AttendanceDismiss),
                 { onEvent(AttendanceEvent.RejectionDismissed(record.command.id, record.revision)) },
                 enabled = !working,
-                primary = false,
             )
     }
 }

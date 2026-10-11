@@ -29,6 +29,7 @@ import dev.fajar.starter.fixtures.NativeUiServer
 import dev.fajar.starter.fixtures.TestBackDispatcher
 import dev.fajar.starter.notifications.data.datasources.*
 import dev.fajar.starter.notifications.data.dto.*
+import dev.fajar.starter.workforce.domain.attendance.entities.AttendanceWindow
 import dev.fajar.starter.workforce.domain.attendance.repositories.AttendanceCacheRepository
 import java.io.File
 import java.nio.file.Files
@@ -45,6 +46,208 @@ class AppFlowTest {
     @get:Rule val compose = createComposeRule()
     @get:Rule val testName = TestName()
     private val backDispatcher = TestBackDispatcher()
+
+    @Test
+    fun attendanceShowsMonthlyFactsAndDetailsWithAnOfflineDateFilter() {
+        val server = NativeUiServer().apply { workforce.historyEvidence = true }
+        withApplication(server) {
+            signIn()
+            waitFor("Choose a company")
+            compose.onAllNodesWithText("Open company")[0].performClick()
+            waitFor("Welcome")
+            compose
+                .onNode(hasText("Attendance") and hasClickAction())
+                .performScrollTo()
+                .performClick()
+            waitFor("October 2026")
+            compose.onNode(hasText("Clock in") and hasClickAction()).assertDoesNotExist()
+            compose.onNode(hasText("Clock out") and hasClickAction()).assertDoesNotExist()
+            compose.onNode(hasText("Present") and hasText("1")).assertExists()
+            compose.onNode(hasText("Absent") and hasText("1")).assertExists()
+            compose.onNode(hasText("Needs review") and hasText("1")).assertExists()
+            compose.onNodeWithText("8 h 0 min").assertExists()
+            compose.onNodeWithContentDescription("Next month").assertIsNotEnabled()
+            capture("attendance-monthly")
+            compose.onNode(hasScrollToIndexAction()).performScrollToNode(hasText("Sat, 3 Oct 2026"))
+            compose.onNode(hasText("Sat, 3 Oct 2026") and hasClickAction()).performClick()
+            waitFor("Clock in: 09:00")
+            compose.onNodeWithText("Clock out: 17:00").assertExists()
+            compose.onNodeWithContentDescription("Close").performClick()
+            compose.onNodeWithContentDescription("Back").assertIsDisplayed()
+            compose.onNodeWithText("October 2026").performClick()
+            waitFor("Choose month")
+            compose.onNodeWithText("December").assertIsNotEnabled()
+            compose.onNodeWithContentDescription("Next year").assertIsNotEnabled()
+            compose.onNodeWithContentDescription("Previous year").performClick()
+            compose.onNodeWithContentDescription("Previous year").performClick()
+            waitFor("2024")
+            compose.onNodeWithText("February").performClick()
+            waitFor("February 2024")
+            compose.waitUntil(10_000) {
+                server.workforce.attendancePeriods.lastOrNull() ==
+                    (java.time.LocalDate.parse("2024-02-01") to
+                        java.time.LocalDate.parse("2024-02-29"))
+            }
+            compose.waitUntil {
+                compose
+                    .onAllNodes(hasContentDescription("Refresh") and isEnabled())
+                    .fetchSemanticsNodes()
+                    .isNotEmpty()
+            }
+            compose.waitUntil(10_000) {
+                compose
+                    .onAllNodes(hasText("Present") and hasText("1"))
+                    .fetchSemanticsNodes()
+                    .isNotEmpty()
+            }
+            server.workforce.offline = true
+            compose.onNodeWithContentDescription("Refresh").performClick()
+            waitFor("Unable to connect. Check your connection.")
+            compose.onNodeWithText("February 2024").assertExists()
+            compose.onNode(hasText("Present") and hasText("1")).assertExists()
+            capture("attendance-monthly-offline")
+            compose.runOnIdle { backDispatcher.pressBack() }
+            waitFor("Welcome")
+            compose
+                .onNode(hasText("Attendance") and hasClickAction())
+                .performScrollTo()
+                .performClick()
+            waitFor("February 2024")
+            compose.onNode(hasText("Present") and hasText("1")).assertExists()
+            val reloads = server.workforce.attendancePeriods.size
+            server.workforce.offline = false
+            compose.onNodeWithContentDescription("Refresh").performClick()
+            compose.waitUntil { server.workforce.attendancePeriods.size > reloads }
+            assertEquals(
+                java.time.LocalDate.parse("2024-02-01"),
+                server.workforce.attendancePeriods.last().first,
+            )
+            compose.waitUntil(10_000) {
+                compose
+                    .onAllNodes(hasText("Present") and hasText("1"))
+                    .fetchSemanticsNodes()
+                    .isNotEmpty()
+            }
+            compose.onNodeWithText("February 2024").assertExists()
+            compose.runOnIdle { backDispatcher.pressBack() }
+            waitFor("Welcome")
+            server.workforce.offline = false
+            compose.onNode(hasText("Account") and isSelectable()).performClick()
+            compose.onNodeWithContentDescription("Change company").performClick()
+            waitFor("Choose a company")
+            compose.onAllNodesWithText("Open company")[1].performClick()
+            waitFor("Welcome")
+            compose
+                .onNode(hasText("Attendance") and hasClickAction())
+                .performScrollTo()
+                .performClick()
+            waitFor("Employment is not linked to this account.")
+            compose.onNodeWithText("February 2024").assertDoesNotExist()
+            compose.onNodeWithText("Present").assertDoesNotExist()
+        }
+    }
+
+    @Test
+    fun attendanceHistoryStopsCachedReadsOnExpiryAndAccessDenialThenRecovers() {
+        val cache = NativeAttendanceCacheUi()
+        val server = NativeUiServer()
+        val release = CompletableDeferred<Unit>()
+        try {
+            withApplication(server, module { single<AttendanceCacheRepository> { cache } }) {
+                signIn()
+                waitFor("Choose a company")
+                compose.onAllNodesWithText("Open company")[0].performClick()
+                waitFor("Welcome")
+                compose
+                    .onNode(hasText("Attendance") and hasClickAction())
+                    .performScrollTo()
+                    .performClick()
+                waitFor("Present")
+                compose.waitUntil { server.workforce.attendanceActive.get() == 0 }
+                server.workforce.attendanceGate = release
+                compose.onNodeWithContentDescription("Refresh").performClick()
+                compose.waitUntil { server.workforce.attendanceActive.get() == 1 }
+                cache.expire(AttendanceWindow.MONTHLY)
+                waitFor("Saved attendance has expired. Refresh to continue.")
+                compose.onNodeWithText("Present").assertDoesNotExist()
+                compose.waitUntil { cache.subscribers(AttendanceWindow.MONTHLY) == 0 }
+                server.workforce.attendanceGate = null
+                release.complete(Unit)
+                waitFor("Present")
+                compose
+                    .onNodeWithText("Saved attendance has expired. Refresh to continue.")
+                    .assertDoesNotExist()
+                compose.waitUntil { cache.subscribers(AttendanceWindow.MONTHLY) == 1 }
+                server.workforce.failureCode = "mfa_required"
+                compose.onNodeWithContentDescription("Refresh").performClick()
+                waitFor("Verify your account")
+                compose.onNodeWithText("Present").assertDoesNotExist()
+                compose.waitUntil { cache.subscribers(AttendanceWindow.MONTHLY) == 0 }
+                server.workforce.failureCode = null
+                compose.onNodeWithContentDescription("Refresh").performClick()
+                waitFor("Present")
+                compose.onNodeWithText("Verify your account").assertDoesNotExist()
+                compose.waitUntil { cache.subscribers(AttendanceWindow.MONTHLY) == 1 }
+            }
+        } finally {
+            release.complete(Unit)
+        }
+    }
+
+    @Test
+    fun replacingTheAttendanceMonthAndLeavingThePageCancelTheirRequests() {
+        val server = NativeUiServer()
+        val september = CompletableDeferred<Unit>()
+        val august = CompletableDeferred<Unit>()
+        try {
+            withApplication(server) {
+                signIn()
+                waitFor("Choose a company")
+                compose.onAllNodesWithText("Open company")[0].performClick()
+                waitFor("Welcome")
+                compose
+                    .onNode(hasText("Attendance") and hasClickAction())
+                    .performScrollTo()
+                    .performClick()
+                waitFor("October 2026")
+                compose.waitUntil { server.workforce.attendanceActive.get() == 0 }
+                val cancelled = server.workforce.attendanceCancelled.get()
+                server.workforce.attendanceGate = september
+                compose.onNodeWithContentDescription("Previous month").performClick()
+                compose.waitUntil(5_000) { server.workforce.attendanceActive.get() == 1 }
+                server.workforce.attendanceGate = august
+                compose.onNodeWithContentDescription("Previous month").performClick()
+                waitFor("August 2026")
+                compose.waitUntil(5_000) {
+                    server.workforce.attendanceCancelled.get() == cancelled + 1
+                }
+                compose.waitUntil {
+                    server.workforce.attendancePeriods.last().first ==
+                        java.time.LocalDate.parse("2026-08-01")
+                }
+                september.complete(Unit)
+                compose.onNodeWithText("September 2026").assertDoesNotExist()
+                server.workforce.attendanceGate = null
+                compose.runOnIdle { backDispatcher.pressBack() }
+                waitFor("Welcome")
+                compose.waitUntil(5_000) {
+                    server.workforce.attendanceCancelled.get() == cancelled + 2
+                }
+                august.complete(Unit)
+                compose.waitUntil { server.workforce.attendanceActive.get() == 0 }
+                compose.onNodeWithText("August 2026").assertDoesNotExist()
+                compose.waitUntil(10_000) {
+                    compose
+                        .onAllNodes(hasText("Clock in") and hasClickAction())
+                        .fetchSemanticsNodes()
+                        .isNotEmpty()
+                }
+            }
+        } finally {
+            september.complete(Unit)
+            august.complete(Unit)
+        }
+    }
 
     @Test
     fun inboxBadgeUsesTheFullTotalUpdatesAfterReadingAndClearsOnCompanyChange() {
@@ -421,6 +624,12 @@ class AppFlowTest {
             compose.onAllNodesWithText("Open company")[0].performClick()
             waitFor("Welcome")
             compose.waitUntil(5_000) { server.workforce.attendanceActive.get() == 1 }
+            val pendingMenu =
+                compose
+                    .onNode(hasText("Attendance") and hasClickAction())
+                    .fetchSemanticsNode()
+                    .boundsInRoot
+            compose.onNode(hasText("Clock in") and hasClickAction()).assertIsNotEnabled()
             compose.onNode(hasText("Account") and hasClickAction()).performClick()
             compose.waitUntil(5_000) { server.workforce.attendanceActive.get() == 0 }
             assertEquals(1, server.workforce.attendanceCancelled.get())
@@ -440,6 +649,10 @@ class AppFlowTest {
                     .fetchSemanticsNode()
                     .boundsInRoot
             assertTrue(capture.bottom < menu.top)
+            assertTrue(
+                kotlin.math.abs(menu.top - pendingMenu.top) <= 1f,
+                "Acquisition must not move the menu beneath the loading card",
+            )
             compose.onNode(hasText("Clock in") and hasClickAction()).performClick()
             waitFor(
                 "A current location could not be obtained. Try again outdoors or save for review."
@@ -484,7 +697,7 @@ class AppFlowTest {
             compose.onNodeWithContentDescription("Refresh").performClick()
             compose.waitUntil(5_000) { server.workforce.attendanceActive.get() == 1 }
             cache.expire()
-            waitFor("Refresh attendance before recording a new capture.")
+            waitFor("Saved attendance has expired. Refresh to continue.")
             release.complete(Unit)
             server.workforce.attendanceGate = null
             compose.waitUntil(5_000) {
@@ -494,7 +707,7 @@ class AppFlowTest {
                     .isNotEmpty()
             }
             compose
-                .onNodeWithText("Refresh attendance before recording a new capture.")
+                .onNodeWithText("Saved attendance has expired. Refresh to continue.")
                 .assertDoesNotExist()
             server.workforce.offline = true
             compose.onNodeWithContentDescription("Refresh").performClick()

@@ -31,8 +31,8 @@ fun summarizeAttendanceHistory(
                         }
                         ?.schedule ?: day.entries.firstOrNull()?.schedule ?: calendar[day.date]
                 val shiftEnded =
-                    day.date < snapshot.directory.asOf ||
-                        (scheduled is WorkDay.Work && scheduled.endsAt < now)
+                    if (scheduled is WorkDay.Work) scheduled.endsAt <= now
+                    else day.date < snapshot.directory.asOf
                 val status =
                     when {
                         day.pendingCount > 0 -> AttendanceHistoryStatus.PENDING

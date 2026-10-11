@@ -9,7 +9,11 @@ sealed interface AttendanceEvent {
 
     data object RefreshRequested : AttendanceEvent
 
-    data object BackRequested : AttendanceEvent
+    data object QueueRequested : AttendanceEvent
+
+    data object EmploymentPickerRequested : AttendanceEvent
+
+    data object DialogDismissed : AttendanceEvent
 
     data object VerificationRequested : AttendanceEvent
 
