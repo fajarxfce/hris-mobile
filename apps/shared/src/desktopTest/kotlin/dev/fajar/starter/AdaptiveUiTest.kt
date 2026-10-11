@@ -31,6 +31,39 @@ class AdaptiveUiTest {
     @get:Rule val compose = createComposeRule()
 
     @Test
+    fun narrowListRowsKeepMetadataVisibleAtLargeTextScaleWithOneAction() {
+        var clicks = 0
+        compose.setContent {
+            val density = LocalDensity.current
+            CompositionLocalProvider(LocalDensity provides Density(density.density, 2f)) {
+                AppTheme {
+                    Box(Modifier.width(360.dp).testTag("frame").padding(24.dp)) {
+                        AppListRow(
+                            title = "Office closure and service availability",
+                            supportingText = "The office will be closed on Friday.",
+                            onClick = { clicks++ },
+                            modifier = Modifier.testTag("message"),
+                            metadata = { AppText("Oct 10, 2026") },
+                        )
+                    }
+                }
+            }
+        }
+        compose.onAllNodes(hasClickAction()).assertCountEquals(1)
+        compose.onNodeWithTag("message").assertHeightIsAtLeast(64.dp).performClick()
+        compose.onNodeWithText("Oct 10, 2026", useUnmergedTree = true).assertIsDisplayed()
+        val row = compose.onNodeWithTag("message").fetchSemanticsNode().boundsInRoot
+        val metadata =
+            compose
+                .onNodeWithText("Oct 10, 2026", useUnmergedTree = true)
+                .fetchSemanticsNode()
+                .boundsInRoot
+        kotlin.test.assertTrue(row.contains(metadata.topLeft) && row.contains(metadata.bottomRight))
+        compose.runOnIdle { assertEquals(1, clicks) }
+        capture("list-row-large-text")
+    }
+
+    @Test
     fun resizingMovesNavigationWithoutRecreatingTheContent() {
         val width = mutableStateOf(360.dp)
         val selected = mutableStateOf(0)

@@ -28,3 +28,8 @@ Check light/dark contrast, text scaling, screen-reader labels, focus, keyboard,
 touch targets, tab state, and interrupted transitions. Build/test results do not
 establish frame-time or memory performance; record actual device observations
 and measured workloads separately.
+
+`AppListRow` provides one accessible action, bounded title/summary text, optional
+metadata, and clipped press feedback. Place dates below the summary when a
+trailing column would crowd a narrow screen. `AppLazyPage` accepts an owned list
+state so paging can reset its position without rebuilding the route owner.
