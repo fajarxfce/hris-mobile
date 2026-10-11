@@ -1,6 +1,6 @@
 package dev.fajar.starter.database
 
-/** Switching the active session atomically clears account-owned cached rows and pending writes. */
+/** Switching identity clears derived caches while retaining separately owned durable commands. */
 interface AccountCacheStore {
-    suspend fun activate(sessionId: String?)
+    suspend fun activate(sessionId: String?, accountKey: String? = null)
 }

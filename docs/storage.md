@@ -3,6 +3,9 @@
 See [content encryption](content-encryption.md) for authenticated payloads and
 separate credential records used by encrypted caches.
 
+See [durable command storage](command-storage.md) for requests retained across logout,
+stable account ownership, immutable payloads, revision checks and bounded queues.
+
 ## Failure boundary
 
 Repositories use `safeStorageCall` and `safeStorageFlow` for acquisition and mapping.

@@ -13,6 +13,7 @@ class RoomAppDatabase(builder: RoomDatabase.Builder<StarterDatabase>) : AppDatab
     override val dashboard: DashboardStore = RoomDashboardStore(database.dashboardDao())
     override val transfers: TransferStore = RoomTransferStore(database.transferDao())
     override val replicas: ReplicaStore = RoomReplicaStore(database)
+    override val commands: CommandStore = RoomCommandStore(database)
 
     override fun close() = database.close()
 }

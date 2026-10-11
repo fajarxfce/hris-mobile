@@ -7,6 +7,7 @@ import dev.fajar.starter.database.AccountCacheStore
 import dev.fajar.starter.identity.data.datasources.MemorySessionDataSource
 import dev.fajar.starter.identity.data.repositories.StoredSessionRepository
 import dev.fajar.starter.identity.domain.entities.*
+import dev.fajar.starter.identity.domain.policies.accountStorageKey
 import dev.fajar.starter.identity.domain.repositories.SessionRepository
 import dev.fajar.starter.identity.domain.usecases.SignOut
 import dev.fajar.starter.securestorage.CredentialStore
@@ -32,9 +33,11 @@ class StoredSessionRepositoryTest {
 
     private class Accounts : AccountCacheStore {
         var active: String? = null
+        var account: String? = null
 
-        override suspend fun activate(sessionId: String?) {
+        override suspend fun activate(sessionId: String?, accountKey: String?) {
             active = sessionId
+            account = accountKey
         }
     }
 
@@ -60,6 +63,7 @@ class StoredSessionRepositoryTest {
         repository = StoredSessionRepository(vault, MemorySessionDataSource(), accounts)
         assertEquals(AppResult.Success(session), repository.current())
         assertEquals("a", accounts.active)
+        assertEquals(accountStorageKey(session), accounts.account)
         assertEquals(
             AppResult.Success(false),
             repository.compareAndSet(session.copy(id = "stale"), null),
@@ -67,6 +71,7 @@ class StoredSessionRepositoryTest {
         assertEquals(AppResult.Success(true), repository.compareAndSet(session, null))
         assertNull(vault.value)
         assertNull(accounts.active)
+        assertNull(accounts.account)
     }
 
     @Test

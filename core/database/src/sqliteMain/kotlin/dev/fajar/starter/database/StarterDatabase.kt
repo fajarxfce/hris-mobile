@@ -6,6 +6,7 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.RoomDatabaseConstructor
 import dev.fajar.starter.database.dao.AccountCacheDao
+import dev.fajar.starter.database.dao.CommandDao
 import dev.fajar.starter.database.dao.DashboardDao
 import dev.fajar.starter.database.dao.InboxDao
 import dev.fajar.starter.database.dao.ReplicaDao
@@ -27,8 +28,9 @@ import dev.fajar.starter.database.entities.InboxEntity
             ReplicaHeadEntity::class,
             ReplicaGenerationEntity::class,
             ReplicaDocumentEntity::class,
+            CommandEntity::class,
         ],
-    version = 6,
+    version = 7,
     exportSchema = true,
     autoMigrations =
         [
@@ -37,6 +39,7 @@ import dev.fajar.starter.database.entities.InboxEntity
             AutoMigration(from = 3, to = 4),
             AutoMigration(from = 4, to = 5),
             AutoMigration(from = 5, to = 6),
+            AutoMigration(from = 6, to = 7),
         ],
 )
 @ConstructedBy(StarterDatabaseConstructor::class)
@@ -50,6 +53,8 @@ abstract class StarterDatabase : RoomDatabase() {
     abstract fun transferDao(): TransferDao
 
     abstract fun replicaDao(): ReplicaDao
+
+    abstract fun commandDao(): CommandDao
 }
 
 @Suppress("KotlinNoActualForExpect")

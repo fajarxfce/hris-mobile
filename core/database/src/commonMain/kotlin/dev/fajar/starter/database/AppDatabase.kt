@@ -7,6 +7,7 @@ interface AppDatabase {
     val dashboard: DashboardStore
     val transfers: TransferStore
     val replicas: ReplicaStore
+    val commands: CommandStore
 
     fun close()
 }

@@ -6,6 +6,7 @@ import dev.fajar.starter.identity.data.datasources.SessionDataSource
 import dev.fajar.starter.identity.data.dto.SessionDto
 import dev.fajar.starter.identity.data.mappers.*
 import dev.fajar.starter.identity.domain.entities.Session
+import dev.fajar.starter.identity.domain.policies.accountStorageKey
 import dev.fajar.starter.identity.domain.repositories.SessionRepository
 import dev.fajar.starter.securestorage.CredentialStore
 import dev.fajar.starter.storage.safeStorageCall
@@ -44,8 +45,8 @@ class StoredSessionRepository(
         localCommit.withLock {
             if (!loaded) {
                 val record = credentials.read()?.let { Json.decodeFromString<SessionDto>(it) }
-                record?.toSession() // Validate before admitting the stored identity.
-                accounts.activate(record?.id)
+                val restored = record?.toSession() // Validate before admitting the stored identity.
+                accounts.activate(restored?.id, restored?.let(::accountStorageKey))
                 memory.write(record)
                 loaded = true
             }
@@ -80,7 +81,7 @@ class StoredSessionRepository(
                 // Once admitted, finish persistence/publication even if the caller is cancelled.
                 withContext(NonCancellable) {
                     try {
-                        accounts.activate(updated?.id)
+                        accounts.activate(updated?.id, updated?.let(::accountStorageKey))
                         credentials.write(record?.let { Json.encodeToString(it) })
                         memory.write(record)
                         loaded = true

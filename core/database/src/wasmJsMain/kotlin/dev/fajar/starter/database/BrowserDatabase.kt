@@ -3,10 +3,14 @@
 package dev.fajar.starter.database
 
 import kotlin.js.Promise
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.await
 import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 
 fun createAppDatabase(namespace: String): AppDatabase = IndexedDbAppDatabase("$namespace.database")
@@ -26,13 +30,23 @@ private class IndexedDbAppDatabase(name: String) : AppDatabase {
         MutableSharedFlow<Unit>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST).apply {
             tryEmit(Unit)
         }
+    private val commandChanges =
+        MutableSharedFlow<Unit>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST).apply {
+            tryEmit(Unit)
+        }
     override val accounts: AccountCacheStore =
         object : AccountCacheStore {
-            override suspend fun activate(sessionId: String?) {
-                activateAccount(database.await<JsAny>(), sessionId).await<JsAny?>()
-                changes.tryEmit(Unit)
-                transferChanges.tryEmit(Unit)
-                replicaChanges.tryEmit(Unit)
+            override suspend fun activate(sessionId: String?, accountKey: String?) {
+                require(accountKey == null || (sessionId != null && accountKey.length in 1..2048))
+                val db = database.await<JsAny>()
+                currentCoroutineContext().ensureActive()
+                withContext(NonCancellable) {
+                    activateAccount(db, sessionId, accountKey).await<JsAny?>()
+                    changes.tryEmit(Unit)
+                    transferChanges.tryEmit(Unit)
+                    replicaChanges.tryEmit(Unit)
+                    commandChanges.tryEmit(Unit)
+                }
             }
         }
     override val inbox: InboxStore = IndexedDbInboxStore(changes) { database.await<JsAny>() }
@@ -43,6 +57,8 @@ private class IndexedDbAppDatabase(name: String) : AppDatabase {
         IndexedDbTransferStore(transferChanges) { database.await<JsAny>() }
     override val replicas: ReplicaStore =
         IndexedDbReplicaStore(replicaChanges) { database.await<JsAny>() }
+    override val commands: CommandStore =
+        IndexedDbCommandStore(commandChanges) { database.await<JsAny>() }
 
     override fun close() {
         if (connection.isInitialized()) closeDatabase(database)
@@ -78,10 +94,16 @@ private class IndexedDbInboxStore(
 
 @JsFun(
     """(name) => new Promise((resolve, reject) => {
-    const request = indexedDB.open(name, 5);
+    const request = indexedDB.open(name, 6);
     let settled = false;
     request.onupgradeneeded = event => {
         const db = request.result;
+        if (event.oldVersion < 6) {
+            const commands = db.createObjectStore('durable_commands', {keyPath:['accountKey', 'partition', 'id']});
+            commands.createIndex('account', 'accountKey');
+            commands.createIndex('resource', ['accountKey', 'partition', 'resourceId'], {unique:true});
+            commands.createIndex('ordered', ['accountKey', 'partition', 'sortKey'], {unique:true});
+        }
         if (event.oldVersion < 5) {
             db.createObjectStore('replica_heads', {keyPath:'partition'});
             db.createObjectStore('replica_generations', {keyPath:['partition', 'generation']});
@@ -151,16 +173,21 @@ private external fun clearInbox(database: JsAny): Promise<JsAny?>
 private external fun closeDatabase(database: Promise<JsAny>)
 
 @JsFun(
-    """(db, scope) => new Promise((resolve, reject) => {
+    """(db, scope, account) => new Promise((resolve, reject) => {
     const tx = db.transaction(['account_scope', 'dashboard', 'activity_preferences', 'dashboard_outbox', 'inbox', 'transfers', 'transfer_chunks', 'replica_heads', 'replica_generations', 'replica_documents'], 'readwrite');
-    const scopes = tx.objectStore('account_scope'), current = scopes.get('current');
-    current.onsuccess = () => {
-        if (current.result === scope) return;
+    const scopes = tx.objectStore('account_scope'), current = scopes.get('current'), principal = scopes.get('command-account');
+    principal.onsuccess = () => {
+        if (current.result === scope && (principal.result ?? null) === account) return;
         for (const name of ['dashboard', 'activity_preferences', 'dashboard_outbox', 'inbox', 'transfers', 'transfer_chunks', 'replica_heads', 'replica_generations', 'replica_documents']) tx.objectStore(name).clear();
         scopes.put(scope, 'current');
+        scopes.put(account, 'command-account');
     };
     tx.oncomplete = () => resolve(null);
     tx.onabort = () => reject(tx.error || new Error('Account cache activation failed.'));
 })"""
 )
-private external fun activateAccount(database: JsAny, scope: String?): Promise<JsAny?>
+private external fun activateAccount(
+    database: JsAny,
+    scope: String?,
+    account: String?,
+): Promise<JsAny?>

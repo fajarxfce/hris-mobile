@@ -28,9 +28,12 @@ abstract class AccountCacheDao {
     protected abstract suspend fun clearReplicaGenerations()
 
     @Transaction
-    open suspend fun activate(sessionId: String?) {
+    open suspend fun activate(sessionId: String?, accountKey: String?) {
         val previous = current()
-        if (previous != null && previous.sessionId == sessionId) return
+        if (
+            previous != null && previous.sessionId == sessionId && previous.accountKey == accountKey
+        )
+            return
         clearDashboard()
         clearActivity()
         clearPreferences()
@@ -39,6 +42,6 @@ abstract class AccountCacheDao {
         clearTransfers()
         clearReplicaHeads()
         clearReplicaGenerations()
-        write(AccountScopeEntity(sessionId = sessionId))
+        write(AccountScopeEntity(sessionId = sessionId, accountKey = accountKey))
     }
 }
