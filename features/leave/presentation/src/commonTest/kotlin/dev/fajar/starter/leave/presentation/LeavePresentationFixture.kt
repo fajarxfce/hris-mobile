@@ -187,6 +187,12 @@ class LeavePresentationFixture(instant: () -> Instant = { Instant.parse("2026-10
         }
     val remote =
         object : LeaveRepository {
+            override suspend fun details(
+                access: LeaveAccess,
+                selection: LeaveRequestSelection,
+            ): AppResult<LeaveRequestDetails> =
+                error("Request details are not used by the overview fixture")
+
             override suspend fun selfEmployments(
                 access: LeaveAccess,
                 after: String?,

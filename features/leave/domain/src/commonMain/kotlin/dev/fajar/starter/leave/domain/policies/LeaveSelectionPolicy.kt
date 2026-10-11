@@ -31,6 +31,7 @@ fun leaveFailureInvalidatesCache(failure: Failure): Boolean =
         failure.code in
             setOf(
                 "employee_not_found",
+                "leave_request_not_found",
                 "company_maintenance",
                 "client_update_required",
                 "client_version_required",

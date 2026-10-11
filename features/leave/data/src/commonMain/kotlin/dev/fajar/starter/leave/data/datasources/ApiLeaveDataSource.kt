@@ -5,6 +5,13 @@ import org.koin.core.annotation.Single
 
 @Single
 class ApiLeaveDataSource(private val api: LeaveApi) : LeaveRemoteDataSource {
+    override suspend fun details(
+        sessionId: String,
+        companyId: String,
+        id: String,
+        historyAfter: Long?,
+    ) = api.details(sessionId, companyId, id, historyAfter)
+
     override suspend fun selfEmployments(sessionId: String, companyId: String, after: String?) =
         api.selfEmployments(sessionId, companyId, after)
 

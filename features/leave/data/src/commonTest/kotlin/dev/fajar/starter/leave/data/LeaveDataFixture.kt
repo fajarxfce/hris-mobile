@@ -63,7 +63,86 @@ class LeaveDataFixture : LeaveRemoteDataSource {
             0,
         )
     var requests = LeavePageDto(listOf(request))
+    var detail =
+        LeaveRequestDto(
+            id = request.id,
+            employeeId = employee.id,
+            employeeNumber = employee.employeeNumber,
+            employeeName = "Alex",
+            ownerAccountId = access.accountId,
+            submittedAt = now.toString(),
+            policy =
+                LeaveRequestPolicyDto(
+                    balance.typeId,
+                    "ANNUAL",
+                    0,
+                    "Annual leave",
+                    true,
+                    true,
+                    false,
+                ),
+            days =
+                listOf(
+                    LeaveDayDto(
+                        "2026-10-15",
+                        "FULL",
+                        "1",
+                        "2026-10-15T01:00:00Z",
+                        "2026-10-15T10:00:00Z",
+                        480,
+                        480,
+                    ),
+                    LeaveDayDto(
+                        "2026-10-16",
+                        "FIRST_HALF",
+                        "0.5",
+                        "2026-10-16T01:00:00Z",
+                        "2026-10-16T10:00:00Z",
+                        480,
+                        240,
+                    ),
+                ),
+            chargedDays = "1.5",
+            reason = "Family appointment",
+            status = "PENDING",
+            version = 0,
+            approval = LeaveWorkflowDto("88888888-8888-8888-8888-888888888888", "PENDING", 0, 0),
+            history =
+                LeavePageDto(
+                    listOf(
+                        LeaveChangeDto(
+                            0,
+                            "SUBMITTED",
+                            "PENDING",
+                            now.toString(),
+                            "Family appointment",
+                        )
+                    )
+                ),
+            availableActions = setOf("WITHDRAW"),
+            attachments =
+                listOf(
+                    LeaveAttachmentDto(
+                        "99999999-9999-9999-9999-999999999999",
+                        "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
+                        "note.pdf",
+                        "application/pdf",
+                        640,
+                        "a".repeat(64),
+                    )
+                ),
+        )
     var failure: Exception? = null
+
+    override suspend fun details(
+        sessionId: String,
+        companyId: String,
+        id: String,
+        historyAfter: Long?,
+    ): LeaveRequestDto {
+        failure?.let { throw it }
+        return detail
+    }
 
     override suspend fun selfEmployments(
         sessionId: String,

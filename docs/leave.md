@@ -19,6 +19,14 @@ checks workspace and live module availability, validates the selected employment
 and publishes only a complete view. It rechecks scope after each pending read.
 `ObserveLeave` owns the admitted cache subscription and its finite expiry timer.
 
+`RefreshLeaveRequest` and `ObserveLeaveRequest` provide the separate request-detail
+read boundary. The API uses `/leave/me/requests/{id}`: an HR or approval grant does
+not broaden this route beyond the account's own requests. It returns submitted
+policy/day facts, current workflow metadata, evidence references and at most ten
+history revisions. Older history pages retain the current request header.
+Transport mapping validates IDs, exact half-day totals, ordering, cursors and
+bounded fields. The request-detail screen is the next integration step.
+
 Balances use integer half-day units. The client never recomputes available days
 from the paged request list. Balance and request endpoints are independent server
 reads; they are not represented as an atomic accounting snapshot. Pages contain
@@ -34,6 +42,14 @@ account-owned storage and authenticated encryption bound to session, account,
 audience, company, generation and record purpose. No page publishes in parts.
 The encoded view is limited to 96,000 bytes. Key and plaintext byte buffers are
 cleared after use; cancellation is checked before publication.
+
+Request details have an independent last-view partition per company, sharing the
+account credential without replacing the overview. Up to 366 dates and ten
+history entries use a header, date chunks and individual history records, each
+limited to 96,000 bytes. Counts and record purposes are authenticated; missing,
+duplicate or foreign records cannot restore a partial view. Both partitions use
+complete compare-and-set replacement. A missing encryption key cannot be
+regenerated over either existing partition.
 
 A read lease lasts at most one hour and cannot outlive workspace admission, the
 native session or known maintenance. Authority loss removes content; a transport
@@ -61,25 +77,27 @@ screen shows the last update time and never infers a balance from request rows.
 
 ## Remaining workflow
 
-Subsequent work adds scoped request details,
+Subsequent work adds the request-detail screen,
 eligible policy/day selection, document evidence, durable submission, withdrawal
 and cancellation, plus canonical sync reconciliation. A cached balance is never
 a reservation or authorization to submit.
 
 ## Validation
 
-The root `:check` passes with 461 desktop tests. Leave's three Chromium suites
-have passed 27 tests; the presentation suite was rerun for the retry correction.
-Android dev plus Web production builds pass. Coverage includes
+The root `:check` passes with 478 desktop tests. Leave's three Chromium suites
+have passed 40 tests; domain/data were rerun for request-detail reads, while the
+unchanged presentation suite previously passed nine tests. Android dev passes;
+the preceding overview and retry changes also passed the Web production build. Coverage includes
 exact half-day values, bounded pages, session/company isolation, encrypted cache
 restoration, cancellation, late results and compare-and-set publication. MVI tests
 exercise denied reads, pending retries, expiry, disposal and both cache/network
 arrival orders. Assembled UI tests cover independent module admission, filter
 restoration, company replacement and Indonesian at 200% text.
 
-The API 35 emulator reads a fictional 12.5-day allowance from the development
+The API 35 emulator read a fictional 12.5-day allowance from the development
 server. Year/status filtering, dark/light appearance, offline process restoration
 and online recovery were checked. The saved 2025/approved filter survives restart
-and refresh. Populated request rows use an automated transport fixture; the real
-development account currently has no submitted leave request. Physical iOS
+and refresh. A fictional half-day request was subsequently created through the
+development API and verified as pending using the owner-only detail endpoint;
+this does not validate mobile submission or a detail screen. Physical iOS
 acceptance and transactional workflows remain separate work.

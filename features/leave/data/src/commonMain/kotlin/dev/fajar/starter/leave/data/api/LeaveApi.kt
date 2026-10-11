@@ -8,6 +8,18 @@ import org.koin.core.annotation.*
 
 @Single
 class LeaveApi(@Named(HttpClients.Authenticated) private val client: HttpClient) {
+    suspend fun details(
+        sessionId: String,
+        companyId: String,
+        id: String,
+        historyAfter: Long?,
+    ): LeaveRequestDto =
+        client.requestJson("companies/$companyId/leave/me/requests/$id", maximumBytes = 1_048_576) {
+            forSession(sessionId)
+            parameter("historyLimit", 10)
+            historyAfter?.let { parameter("historyAfter", it) }
+        }
+
     suspend fun selfEmployments(
         sessionId: String,
         companyId: String,

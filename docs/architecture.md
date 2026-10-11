@@ -103,6 +103,10 @@ independent of People and Workforce availability. Its use cases admit the select
 company, acquire scoped balances/history and atomically publish one encrypted
 overview. The ViewModel owns filter selection, read gates and cancellation; it
 never recalculates accounting balances or sends technical API types to the page.
+Own-request details have separate acquisition/observation use cases and an
+independent bounded encrypted partition. The shared feature cache repository
+implements both read contracts; a codec only handles the chunked storage format.
+History pagination changes the visible revision page, not current request facts.
 
 Feature flag definitions and evaluation policy live in `core/featureflags/domain`; each
 consuming feature owns its keys and action guards. A shared refresh use case serializes

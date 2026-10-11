@@ -1,5 +1,19 @@
 # Validation
 
+## Leave request read boundary
+
+The root check passes with 478 desktop tests. Leave domain/data also passed
+31 Chromium tests, and Android dev assembles. Seventeen new tests cover owner-only
+request transport, current metadata with older history, malformed responses,
+cancellation, late results, lease expiry, generation conflicts, independent cache
+windows, encrypted restoration and corrupt/missing records. A 366-day fixture
+with ten multibyte history entries verifies bounded chunking beyond a single
+96,000-byte record. The existing nine presentation browser tests remain unchanged.
+
+The development API accepted one fictional half-day request and returned it through
+the owner-only detail route. Request-detail UI, transaction submission and physical
+device acceptance are not claimed for this foundation change.
+
 ## Protected reads and leave balances
 
 The 2026-10-12 update passed root checks with 461 desktop/JVM/UI tests, all nine

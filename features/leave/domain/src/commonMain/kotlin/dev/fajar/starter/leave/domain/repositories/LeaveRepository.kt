@@ -4,6 +4,11 @@ import dev.fajar.starter.common.result.AppResult
 import dev.fajar.starter.leave.domain.entities.*
 
 interface LeaveRepository {
+    suspend fun details(
+        access: LeaveAccess,
+        selection: LeaveRequestSelection,
+    ): AppResult<LeaveRequestDetails>
+
     suspend fun selfEmployments(access: LeaveAccess, after: String?): AppResult<LeaveDirectory>
 
     suspend fun balances(

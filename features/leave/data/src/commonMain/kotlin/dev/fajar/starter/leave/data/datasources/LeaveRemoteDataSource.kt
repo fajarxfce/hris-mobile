@@ -3,6 +3,13 @@ package dev.fajar.starter.leave.data.datasources
 import dev.fajar.starter.leave.data.dto.*
 
 interface LeaveRemoteDataSource {
+    suspend fun details(
+        sessionId: String,
+        companyId: String,
+        id: String,
+        historyAfter: Long?,
+    ): LeaveRequestDto
+
     suspend fun selfEmployments(
         sessionId: String,
         companyId: String,

@@ -12,6 +12,20 @@ import org.koin.core.annotation.Single
 
 @Single
 class RemoteLeaveRepository(private val remote: LeaveRemoteDataSource) : LeaveRepository {
+    override suspend fun details(access: LeaveAccess, selection: LeaveRequestSelection) =
+        safeApiCall {
+            Uuid.parse(access.companyId)
+            Uuid.parse(selection.requestId)
+            remote
+                .details(
+                    access.sessionId,
+                    access.companyId,
+                    selection.requestId,
+                    selection.historyAfter,
+                )
+                .toDetails(selection)
+        }
+
     override suspend fun selfEmployments(access: LeaveAccess, after: String?) = safeApiCall {
         Uuid.parse(access.companyId)
         remote.selfEmployments(access.sessionId, access.companyId, after).toDirectory(access, after)
