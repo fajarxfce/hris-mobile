@@ -10,6 +10,13 @@ import org.koin.core.annotation.*
 @ComponentScan("dev.fajar.starter.people.data")
 class PeopleDataModule {
     @Factory
+    fun directoryDepartments(
+        people: PeopleRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+    ) = LoadDirectoryDepartments(people, sessions, workspaces)
+
+    @Factory
     fun companyDirectory(
         people: PeopleRepository,
         sessions: SessionRepository,

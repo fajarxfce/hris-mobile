@@ -48,11 +48,27 @@ class PeopleDataFixture : PeopleRemoteDataSource {
             ),
         )
 
+    var departments =
+        DirectoryDepartmentsDto(
+            listOf(DirectoryDepartmentDto("82000000-0000-4000-8000-000000000001", "Engineering")),
+            false,
+        )
+
+    override suspend fun directoryDepartments(
+        sessionId: String,
+        companyId: String,
+        query: String,
+    ): DirectoryDepartmentsDto {
+        failure?.let { throw it }
+        return departments
+    }
+
     override suspend fun companyDirectory(
         sessionId: String,
         companyId: String,
         query: String,
         after: String?,
+        departmentId: String?,
     ): CompanyDirectoryDto {
         failure?.let { throw it }
         return companyPage

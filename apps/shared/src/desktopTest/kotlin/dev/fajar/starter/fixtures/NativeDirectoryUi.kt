@@ -18,12 +18,23 @@ class NativeDirectoryUi {
     val cancelled = CompletableDeferred<Unit>()
     val queries = CopyOnWriteArrayList<String>()
 
+    val departments = CopyOnWriteArrayList<String?>()
+    val departmentQueries = CopyOnWriteArrayList<String>()
+    @Volatile var holdNextDepartment = false
+    val departmentStarted = CompletableDeferred<Unit>()
+    val departmentReleased = CompletableDeferred<Unit>()
+    val departmentCancelled = CompletableDeferred<Unit>()
+
     suspend fun response(request: HttpRequestData): Pair<String, HttpStatusCode>? {
+        if (request.url.encodedPath.endsWith("/employees/directory/departments"))
+            return departmentResponse(request)
         if (!request.url.encodedPath.endsWith("/employees/directory")) return null
         assertEquals("20", request.url.parameters["limit"])
         val query = request.url.parameters["query"].orEmpty()
         val after = request.url.parameters["after"]
         queries.add(query)
+        val department = request.url.parameters["departmentId"]
+        departments.add(department)
         if (holdNext) {
             holdNext = false
             started.complete(Unit)
@@ -57,6 +68,10 @@ class NativeDirectoryUi {
                 }
                 .filter { row ->
                     ownCompany &&
+                        (department == null ||
+                            (if (row.getValue("department").jsonPrimitive.content == "People")
+                                PEOPLE
+                            else ENGINEERING) == department) &&
                         (after == null ||
                             row.getValue("employeeNumber").jsonPrimitive.content > after) &&
                         listOf("name", "employeeNumber").any {
@@ -78,5 +93,47 @@ class NativeDirectoryUi {
                 }
             }
             .toString() to HttpStatusCode.OK
+    }
+
+    private suspend fun departmentResponse(request: HttpRequestData): Pair<String, HttpStatusCode> {
+        assertEquals("50", request.url.parameters["limit"])
+        val query = request.url.parameters["query"].orEmpty()
+        departmentQueries.add(query)
+        if (holdNextDepartment) {
+            holdNextDepartment = false
+            departmentStarted.complete(Unit)
+            try {
+                departmentReleased.await()
+            } catch (failure: CancellationException) {
+                departmentCancelled.complete(Unit)
+                throw failure
+            }
+        }
+        if (offline) throw IOException("Simulated offline department lookup")
+        if (denied) return """{"code":"access_denied"}""" to HttpStatusCode.Forbidden
+        val ownCompany = request.url.encodedPath.split('/')[4] == NativeUiServer.COMPANY_ONE
+        val items =
+            if (ownCompany)
+                listOf(ENGINEERING to "Engineering", PEOPLE to "People").filter {
+                    it.second.contains(query, ignoreCase = true)
+                }
+            else emptyList()
+        return buildJsonObject {
+                putJsonArray("items") {
+                    items.forEach { (id, name) ->
+                        addJsonObject {
+                            put("id", id)
+                            put("name", name)
+                        }
+                    }
+                }
+                put("hasMore", false)
+            }
+            .toString() to HttpStatusCode.OK
+    }
+
+    companion object {
+        const val ENGINEERING = "82000000-0000-4000-8000-000000000001"
+        const val PEOPLE = "82000000-0000-4000-8000-000000000002"
     }
 }

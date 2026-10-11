@@ -11,50 +11,52 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import dev.fajar.starter.designsystem.components.*
 import dev.fajar.starter.designsystem.theme.AppColors
-import dev.fajar.starter.people.domain.entities.DirectoryEmployee
+import dev.fajar.starter.people.presentation.directory.EmployeeRowState
 import io.github.composefluent.FluentTheme
-import io.github.composefluent.icons.Icons
-import io.github.composefluent.icons.regular.Person
 
 @Composable
-fun EmployeeRow(employee: DirectoryEmployee) {
-    val position = employee.position
-    val department = employee.department
-    Column(Modifier.fillMaxWidth().semantics(mergeDescendants = true) {}) {
+fun EmployeeRow(state: EmployeeRowState) {
+    Column(
+        Modifier.fillMaxWidth().background(AppColors.surface).semantics(mergeDescendants = true) {}
+    ) {
         Row(
-            Modifier.fillMaxWidth().padding(vertical = 12.dp),
+            Modifier.fillMaxWidth().padding(horizontal = 14.dp, vertical = 16.dp),
             horizontalArrangement = Arrangement.spacedBy(12.dp),
-            verticalAlignment = Alignment.Top,
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Box(
-                Modifier.size(40.dp).background(AppColors.tint, CircleShape),
+                Modifier.size(48.dp).background(AppColors.tint, CircleShape),
                 contentAlignment = Alignment.Center,
             ) {
-                AppIcon(Icons.Regular.Person, tint = AppColors.accent)
+                AppText(
+                    state.initials,
+                    color = AppColors.accent,
+                    style = FluentTheme.typography.bodyStrong,
+                )
             }
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
                 AppText(
-                    employee.name,
+                    state.name,
                     style = FluentTheme.typography.bodyStrong,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
                 )
-                if (position != null)
-                    AppText(position, maxLines = 2, overflow = TextOverflow.Ellipsis)
-                if (department != null)
-                    AppText(
-                        department,
-                        color = AppColors.muted,
-                        maxLines = 2,
-                        overflow = TextOverflow.Ellipsis,
-                    )
+                if (state.position != null)
+                    AppText(state.position, maxLines = 2, overflow = TextOverflow.Ellipsis)
                 AppText(
-                    employee.employeeNumber,
+                    state.metadata,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
                     color = AppColors.muted,
                     style = FluentTheme.typography.caption,
                 )
             }
         }
-        Box(Modifier.fillMaxWidth().height(1.dp).background(AppColors.border))
+        Box(
+            Modifier.fillMaxWidth()
+                .padding(start = 74.dp, end = 14.dp)
+                .height(1.dp)
+                .background(AppColors.border)
+        )
     }
 }

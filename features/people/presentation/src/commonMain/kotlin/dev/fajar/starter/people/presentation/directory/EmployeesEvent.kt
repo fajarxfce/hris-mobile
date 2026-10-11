@@ -9,6 +9,16 @@ sealed interface EmployeesEvent {
 
     data class PageRequested(val after: String?) : EmployeesEvent
 
+    data object FilterRequested : EmployeesEvent
+
+    data object FilterDismissed : EmployeesEvent
+
+    data class DepartmentQueryChanged(val value: String) : EmployeesEvent
+
+    data class DepartmentSelected(val id: String?) : EmployeesEvent
+
+    data object DepartmentRetryRequested : EmployeesEvent
+
     data object RefreshRequested : EmployeesEvent
 
     data object BackRequested : EmployeesEvent

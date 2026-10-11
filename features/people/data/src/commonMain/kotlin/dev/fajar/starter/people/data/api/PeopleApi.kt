@@ -8,17 +8,33 @@ import org.koin.core.annotation.*
 
 @Single
 class PeopleApi(@Named(HttpClients.Authenticated) private val client: HttpClient) {
+    suspend fun directoryDepartments(
+        sessionId: String,
+        companyId: String,
+        query: String,
+    ): DirectoryDepartmentsDto =
+        client.requestJson(
+            "companies/$companyId/employees/directory/departments",
+            maximumBytes = 65_536,
+        ) {
+            forSession(sessionId)
+            parameter("limit", 50)
+            parameter("query", query)
+        }
+
     suspend fun companyDirectory(
         sessionId: String,
         companyId: String,
         query: String,
         after: String?,
+        departmentId: String? = null,
     ): CompanyDirectoryDto =
         client.requestJson("companies/$companyId/employees/directory", maximumBytes = 131_072) {
             forSession(sessionId)
             parameter("limit", 20)
             parameter("query", query)
             after?.let { parameter("after", it) }
+            departmentId?.let { parameter("departmentId", it) }
         }
 
     suspend fun selfEmployments(

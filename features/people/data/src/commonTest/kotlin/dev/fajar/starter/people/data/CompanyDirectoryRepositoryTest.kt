@@ -19,6 +19,101 @@ import kotlinx.serialization.json.Json
 
 class CompanyDirectoryRepositoryTest {
     @Test
+    fun maximumDepartmentPageAcceptsValidMultibyteNamesWithinTheTransportBound() = runTest {
+        val f = PeopleDataFixture()
+        val page =
+            DirectoryDepartmentsDto(
+                (1..50).map {
+                    DirectoryDepartmentDto(
+                        "82000000-0000-4000-8000-" + it.toString().padStart(12, '0'),
+                        "部".repeat(200),
+                    )
+                },
+                true,
+            )
+        val body = Json.encodeToString(page)
+        assertTrue(body.encodeToByteArray().size > 32_768)
+        val client =
+            HttpClient(
+                MockEngine {
+                    respond(
+                        body,
+                        HttpStatusCode.OK,
+                        headersOf(HttpHeaders.ContentType, "application/json"),
+                    )
+                }
+            ) {
+                defaultRequest { url("https://hris.example.test/api/v1/") }
+            }
+        try {
+            assertIs<AppResult.Success<*>>(
+                RemotePeopleRepository(ApiPeopleRemoteDataSource(PeopleApi(client)))
+                    .directoryDepartments("session", f.company, "")
+            )
+        } finally {
+            client.close()
+        }
+    }
+
+    @Test
+    fun departmentLookupEncodesSearchAndRejectsUnboundedOrInvalidOptions() = runTest {
+        val f = PeopleDataFixture()
+        val client =
+            HttpClient(
+                MockEngine { request ->
+                    assertEquals(
+                        "/api/v1/companies/${f.company}/employees/directory/departments",
+                        request.url.encodedPath,
+                    )
+                    assertEquals("50", request.url.parameters["limit"])
+                    assertEquals("R&D %", request.url.parameters["query"])
+                    respond(
+                        Json.encodeToString(f.departments),
+                        HttpStatusCode.OK,
+                        headersOf(HttpHeaders.ContentType, "application/json"),
+                    )
+                }
+            ) {
+                defaultRequest { url("https://hris.example.test/api/v1/") }
+            }
+        try {
+            val result =
+                RemotePeopleRepository(ApiPeopleRemoteDataSource(PeopleApi(client)))
+                    .directoryDepartments("session", f.company, "R&D %")
+            assertEquals(
+                "Engineering",
+                assertIs<AppResult.Success<*>>(result).let {
+                    (it.value as dev.fajar.starter.people.domain.entities.DirectoryDepartments)
+                        .items
+                        .single()
+                        .name
+                },
+            )
+        } finally {
+            client.close()
+        }
+        val original = f.departments
+        val row = original.items.single()
+        val repository = RemotePeopleRepository(f)
+        for (invalid in
+            listOf(
+                original.copy(hasMore = true),
+                original.copy(items = List(51) { row }),
+                original.copy(items = listOf(row, row)),
+                original.copy(items = listOf(row.copy(id = "invalid"))),
+                original.copy(items = listOf(row.copy(name = " "))),
+            )) {
+            f.departments = invalid
+            assertIs<AppResult.Failed>(repository.directoryDepartments("session", f.company, ""))
+        }
+        f.departments = original
+        f.failure = CancellationException("Stopped")
+        assertFailsWith<CancellationException> {
+            repository.directoryDepartments("session", f.company, "")
+        }
+    }
+
+    @Test
     fun requestEscapesSearchAndCursorAndMapsTheMinimalCompanyProjection() = runTest {
         val source = PeopleDataFixture()
         val client =
@@ -31,6 +126,10 @@ class CompanyDirectoryRepositoryTest {
                     assertEquals("20", request.url.parameters["limit"])
                     assertEquals("Sam & Co%", request.url.parameters["query"])
                     assertEquals("E&01", request.url.parameters["after"])
+                    assertEquals(
+                        source.departments.items.single().id,
+                        request.url.parameters["departmentId"],
+                    )
                     respond(
                         Json.encodeToString(source.companyPage),
                         HttpStatusCode.OK,
@@ -43,7 +142,13 @@ class CompanyDirectoryRepositoryTest {
         try {
             val result =
                 RemotePeopleRepository(ApiPeopleRemoteDataSource(PeopleApi(client)))
-                    .companyDirectory("session", source.company, "Sam & Co%", "E&01")
+                    .companyDirectory(
+                        "session",
+                        source.company,
+                        "Sam & Co%",
+                        "E&01",
+                        source.departments.items.single().id,
+                    )
             val entry = assertIs<AppResult.Success<CompanyDirectory>>(result).value.items.single()
             assertEquals("Sam", entry.name)
             assertEquals("Engineering", entry.department)

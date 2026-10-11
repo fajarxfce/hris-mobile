@@ -89,14 +89,31 @@ class PeopleFixture {
     var companyDirectoryCall: suspend (String, String?) -> AppResult<CompanyDirectory> = { _, _ ->
         AppResult.Success(companyDirectory)
     }
+    val department = DirectoryDepartment("82000000-0000-4000-8000-000000000001", "Engineering")
+    var departmentReads = 0
+    var selectedDepartment: String? = null
+    var departmentsCall: suspend (String) -> AppResult<DirectoryDepartments> = {
+        AppResult.Success(DirectoryDepartments(listOf(department), false))
+    }
     val people =
         object : PeopleRepository {
+            override suspend fun directoryDepartments(
+                sessionId: String,
+                companyId: String,
+                query: String,
+            ): AppResult<DirectoryDepartments> {
+                departmentReads++
+                return departmentsCall(query)
+            }
+
             override suspend fun companyDirectory(
                 sessionId: String,
                 companyId: String,
                 query: String,
                 after: String?,
+                departmentId: String?,
             ): AppResult<CompanyDirectory> {
+                selectedDepartment = departmentId
                 companyDirectoryReads++
                 return companyDirectoryCall(query, after)
             }

@@ -5,12 +5,16 @@ import org.koin.core.annotation.Single
 
 @Single
 class ApiPeopleRemoteDataSource(private val api: PeopleApi) : PeopleRemoteDataSource {
+    override suspend fun directoryDepartments(sessionId: String, companyId: String, query: String) =
+        api.directoryDepartments(sessionId, companyId, query)
+
     override suspend fun companyDirectory(
         sessionId: String,
         companyId: String,
         query: String,
         after: String?,
-    ) = api.companyDirectory(sessionId, companyId, query, after)
+        departmentId: String?,
+    ) = api.companyDirectory(sessionId, companyId, query, after, departmentId)
 
     override suspend fun selfEmployments(sessionId: String, companyId: String, after: String?) =
         api.selfEmployments(sessionId, companyId, after)

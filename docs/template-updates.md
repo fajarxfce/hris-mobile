@@ -76,3 +76,12 @@ emulator checks also cover the four tabs, directory search, separate All service
 English/Indonesian and light/dark layouts. The validated APK was installed on the
 connected phone without launching it. Company directory policy, Inbox integration,
 Home content and service admission remain specific to this application.
+
+## Search and filter controls
+
+The company directory uses reusable `AppSearchField`, `AppFilterChip` and
+`AppDialog` components. These controls and their keyboard, clear, selection,
+dismissal and large-text regressions were ported to Compose Fluent Starter.
+Employee queries, department lookup, access policy and MVI remain in HRIS Mobile.
+The starter passed its root checks and Android dev build for this update.
+The mobile foundation is [fcbac8e](https://github.com/fajarxfce/hris-mobile/commit/fcbac8e).

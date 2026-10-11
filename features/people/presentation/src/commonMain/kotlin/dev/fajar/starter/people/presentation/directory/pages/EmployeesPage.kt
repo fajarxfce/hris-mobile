@@ -10,6 +10,7 @@ import dev.fajar.starter.designsystem.components.*
 import dev.fajar.starter.designsystem.theme.AppColors
 import dev.fajar.starter.localization.*
 import dev.fajar.starter.people.presentation.directory.*
+import dev.fajar.starter.people.presentation.directory.widgets.DepartmentFilterDialog
 import dev.fajar.starter.people.presentation.directory.widgets.EmployeeRow
 import io.github.composefluent.icons.Icons
 import io.github.composefluent.icons.regular.ArrowLeft
@@ -24,7 +25,7 @@ fun EmployeesPage(
 ) {
     AppLazyPage(
         state = listState,
-        spacing = 8.dp,
+        spacing = 0.dp,
         maxWidth = 720.dp,
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
         topBar = {
@@ -52,12 +53,22 @@ fun EmployeesPage(
         },
     ) {
         item(key = "search") {
-            AppTextField(
-                appString(AppString.EmployeeSearch),
-                state.query,
-                { onEvent(EmployeesEvent.QueryChanged(it)) },
-                placeholder = appString(AppString.EmployeeSearchHint),
-            )
+            Column(
+                Modifier.padding(bottom = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+            ) {
+                AppSearchField(
+                    state.query,
+                    { onEvent(EmployeesEvent.QueryChanged(it)) },
+                    appString(AppString.EmployeeSearch),
+                    appString(AppString.ClearSearch),
+                )
+                AppFilterChip(
+                    state.department?.name ?: appString(AppString.AllDepartments),
+                    selected = state.department != null,
+                    onClick = { onEvent(EmployeesEvent.FilterRequested) },
+                )
+            }
         }
         if (state.loading) item(key = "progress") { AppLoading() }
         if (state.failure != null)
@@ -105,4 +116,5 @@ fun EmployeesPage(
                 }
             }
     }
+    if (state.filter != null) DepartmentFilterDialog(state.filter, state.department?.id, onEvent)
 }

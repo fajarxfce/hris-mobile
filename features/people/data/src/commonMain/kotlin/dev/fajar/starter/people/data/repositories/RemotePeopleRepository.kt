@@ -12,14 +12,24 @@ import org.koin.core.annotation.Single
 
 @Single
 class RemotePeopleRepository(private val remote: PeopleRemoteDataSource) : PeopleRepository {
+    override suspend fun directoryDepartments(sessionId: String, companyId: String, query: String) =
+        safeApiCall {
+            Uuid.parse(companyId)
+            remote.directoryDepartments(sessionId, companyId, query).toDepartments()
+        }
+
     override suspend fun companyDirectory(
         sessionId: String,
         companyId: String,
         query: String,
         after: String?,
+        departmentId: String?,
     ) = safeApiCall {
         Uuid.parse(companyId)
-        remote.companyDirectory(sessionId, companyId, query, after).toCompanyDirectory(after)
+        departmentId?.let { Uuid.parse(it) }
+        remote
+            .companyDirectory(sessionId, companyId, query, after, departmentId)
+            .toCompanyDirectory(after)
     }
 
     override suspend fun selfEmployments(sessionId: String, companyId: String, after: String?) =

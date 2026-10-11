@@ -3,11 +3,18 @@ package dev.fajar.starter.people.data.datasources
 import dev.fajar.starter.people.data.dto.*
 
 interface PeopleRemoteDataSource {
+    suspend fun directoryDepartments(
+        sessionId: String,
+        companyId: String,
+        query: String,
+    ): DirectoryDepartmentsDto
+
     suspend fun companyDirectory(
         sessionId: String,
         companyId: String,
         query: String,
         after: String?,
+        departmentId: String? = null,
     ): CompanyDirectoryDto
 
     suspend fun selfEmployments(

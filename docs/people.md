@@ -45,8 +45,15 @@ position and department for current coworkers. These rows do not navigate to
 someone else's private profile. The server selects eligible employments using
 the company date and rechecks access under its guards.
 
-Search is debounced and each page contains at most 20 employees. A replacement
-query cancels the former read, while a refresh of the same page retains content
+Search is debounced and each page contains at most 20 employees. An optional
+department filter applies on the server before paging and combines with name/number
+search. The picker uses a separate bounded lookup (at most 50 departments), with
+its own cancellable search. Closing it cancels pending work; selecting a department
+resets the page. No filtering is limited to the currently loaded employees.
+
+Rows show initials, name, position and department with a compact search control.
+Search and department selection remain in the feature's MVI owner across tab changes.
+A replacement query cancels the former read, while a refresh of the same page retains content
 after a transient network failure. Access failures clear the page. Leaving the
 tab or covering the route stops its request; returning revalidates current
 access. No directory is persisted for offline access, and paging requires an
@@ -62,3 +69,12 @@ search with the employee role. Android emulator checks cover the directory tab,
 standalone route, search, Back behavior, English/Indonesian and light/dark layouts.
 Development fixture data contains one current employee in its first company;
 larger pages and access changes are exercised by the automated fixtures.
+
+The department-filter increment passed the mobile root checks (401 JVM/UI tests)
+and an Android dev build. Regression coverage includes filter-before-page behavior,
+query replacement, picker cancellation, access loss, large text and maximum UTF-8
+response sizes. A production Web build also passed before the final row-spacing
+and dialog-clipping adjustment. The API 35 emulator verified live search, clearing,
+dialog Back and tab Back with the development API. Development employees currently
+have no department assignment; populated lookup/paging scenarios use isolated
+backend and UI fixtures.

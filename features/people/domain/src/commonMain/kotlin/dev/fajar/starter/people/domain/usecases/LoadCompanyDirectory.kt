@@ -1,3 +1,5 @@
+@file:OptIn(kotlin.uuid.ExperimentalUuidApi::class)
+
 package dev.fajar.starter.people.domain.usecases
 
 import dev.fajar.starter.common.result.*
@@ -9,6 +11,7 @@ import dev.fajar.starter.workspace.domain.policies.validateWorkspaceOwnership
 import dev.fajar.starter.workspace.domain.policies.workspaceFailure
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
 import kotlin.time.Clock
+import kotlin.uuid.Uuid
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 
@@ -22,6 +25,7 @@ class LoadCompanyDirectory(
         workspaceId: String,
         query: String = "",
         after: String? = null,
+        departmentId: String? = null,
     ): AppResult<CompanyDirectory> {
         val session =
             when (val result = sessions.current()) {
@@ -42,11 +46,22 @@ class LoadCompanyDirectory(
         if (ownership is AppResult.Failed) return ownership
         val admission = requireCompanyDirectoryAccess(requireNotNull(workspace))
         if (admission is AppResult.Failed) return admission
-        if (query.length > 120 || (after != null && (after.isBlank() || after.length > 32)))
+        if (
+            query.length > 120 ||
+                (after != null && (after.isBlank() || after.length > 32)) ||
+                (departmentId != null && Uuid.parseOrNull(departmentId)?.toString() != departmentId)
+        )
             return AppResult.Failed(
                 Failure(FailureKind.Validation, "Invalid page.", code = "invalid_page")
             )
-        val result = people.companyDirectory(session.id, workspace.company.id, query.trim(), after)
+        val result =
+            people.companyDirectory(
+                session.id,
+                workspace.company.id,
+                query.trim(),
+                after,
+                departmentId,
+            )
         currentCoroutineContext().ensureActive()
         val currentWorkspace =
             when (val current = workspaces.current(session.id)) {

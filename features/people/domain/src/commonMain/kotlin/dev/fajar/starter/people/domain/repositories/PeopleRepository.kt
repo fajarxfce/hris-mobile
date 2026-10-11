@@ -5,11 +5,18 @@ import dev.fajar.starter.people.domain.entities.*
 import kotlinx.datetime.LocalDate
 
 interface PeopleRepository {
+    suspend fun directoryDepartments(
+        sessionId: String,
+        companyId: String,
+        query: String,
+    ): AppResult<DirectoryDepartments>
+
     suspend fun companyDirectory(
         sessionId: String,
         companyId: String,
         query: String,
         after: String?,
+        departmentId: String? = null,
     ): AppResult<CompanyDirectory>
 
     suspend fun selfEmployments(

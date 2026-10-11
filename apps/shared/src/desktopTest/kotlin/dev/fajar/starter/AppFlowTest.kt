@@ -23,6 +23,7 @@ import dev.fajar.starter.common.config.AppPlatform
 import dev.fajar.starter.database.createAppDatabase
 import dev.fajar.starter.datastore.createUserPreferences
 import dev.fajar.starter.fixtures.NativeAttendanceCacheUi
+import dev.fajar.starter.fixtures.NativeDirectoryUi
 import dev.fajar.starter.fixtures.NativeSessionsUi
 import dev.fajar.starter.fixtures.NativeUiServer
 import dev.fajar.starter.fixtures.TestBackDispatcher
@@ -107,6 +108,95 @@ class AppFlowTest {
             }
         } finally {
             server.directory.released.complete(Unit)
+        }
+    }
+
+    @Test
+    fun departmentSelectionFiltersEveryPageAndPersistsAcrossTabs() {
+        val server = NativeUiServer()
+        withApplication(server) {
+            signIn()
+            waitFor("Choose a company")
+            compose.onAllNodesWithText("Open company")[0].performClick()
+            waitFor("Welcome")
+            compose.onNode(hasText("Employees") and isSelectable()).performClick()
+            waitFor("Sam Wilson")
+            compose.onNodeWithText("All departments").performClick()
+            waitFor("Search departments")
+            compose.waitUntil {
+                compose
+                    .onAllNodes(hasText("Engineering") and isSelectable())
+                    .fetchSemanticsNodes()
+                    .size == 1
+            }
+            compose.onNode(hasText("Engineering") and isSelectable()).performClick()
+            compose.waitUntil {
+                server.directory.departments.lastOrNull() == NativeDirectoryUi.ENGINEERING
+            }
+            waitFor("Alex Morgan")
+            compose.onNodeWithText("Sam Wilson").assertDoesNotExist()
+            capture("employees-department")
+            compose.onNode(hasScrollToIndexAction()).performScrollToNode(hasText("Next page"))
+            compose.onNodeWithText("Next page").performClick()
+            waitFor("Colleague 22")
+            compose.onNode(hasScrollToIndexAction()).performScrollToIndex(0)
+            compose
+                .onNodeWithContentDescription("Search employees")
+                .performTextReplacement("Colleague 25")
+            waitFor("Colleague 25")
+            compose.onNodeWithText("Next page").assertDoesNotExist()
+            compose.onNodeWithContentDescription("Clear search").performClick()
+            waitFor("Alex Morgan")
+            compose.onNode(hasText("Account") and isSelectable()).performClick()
+            compose.onNode(hasText("Employees") and isSelectable()).performClick()
+            waitFor("Alex Morgan")
+            compose.onNode(hasText("Engineering") and hasClickAction()).performClick()
+            compose.onNodeWithText("All departments").performClick()
+            waitFor("Sam Wilson")
+            compose.waitUntil { server.directory.departments.lastOrNull() == null }
+        }
+    }
+
+    @Test
+    fun closingTheDepartmentPickerCancelsItsPendingSearch() {
+        val server = NativeUiServer()
+        try {
+            withApplication(server) {
+                signIn()
+                waitFor("Choose a company")
+                compose.onAllNodesWithText("Open company")[0].performClick()
+                waitFor("Welcome")
+                compose.onNode(hasText("Employees") and isSelectable()).performClick()
+                waitFor("Sam Wilson")
+                compose.onNodeWithText("All departments").performClick()
+                waitFor("Search departments")
+                server.directory.holdNextDepartment = true
+                compose
+                    .onNodeWithContentDescription("Search departments")
+                    .performTextReplacement("People")
+                compose.waitUntil { server.directory.departmentStarted.isCompleted }
+                compose.onNodeWithContentDescription("Close").performClick()
+                compose.waitUntil { server.directory.departmentCancelled.isCompleted }
+                server.directory.departmentReleased.complete(Unit)
+                compose.onNodeWithContentDescription("Search departments").assertDoesNotExist()
+                compose.onNodeWithText("Sam Wilson").assertExists()
+                compose.onNodeWithText("All departments").performClick()
+                waitFor("Search departments")
+                compose.waitUntil {
+                    compose
+                        .onAllNodes(hasText("People") and isSelectable())
+                        .fetchSemanticsNodes()
+                        .size == 1
+                }
+                compose.onNode(hasText("People") and isSelectable()).performClick()
+                compose.waitUntil {
+                    server.directory.departments.lastOrNull() == NativeDirectoryUi.PEOPLE
+                }
+                waitFor("Sam Wilson")
+                compose.onNodeWithText("Alex Morgan").assertDoesNotExist()
+            }
+        } finally {
+            server.directory.departmentReleased.complete(Unit)
         }
     }
 
