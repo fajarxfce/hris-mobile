@@ -69,16 +69,21 @@ fun <T> AppBottomNavigation(
                             .padding(top = 4.dp, bottom = 10.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
-                        Box(
-                            Modifier.size(40.dp)
-                                .clip(CircleShape)
-                                .indication(interactionSource, LocalIndication.current),
-                            contentAlignment = Alignment.Center,
-                        ) {
-                            AppIcon(
-                                if (item.value == selected) item.selectedIcon else item.icon,
-                                tint = color,
-                            )
+                        Box(Modifier.size(40.dp), contentAlignment = Alignment.Center) {
+                            Box(
+                                Modifier.matchParentSize()
+                                    .clip(CircleShape)
+                                    .indication(interactionSource, LocalIndication.current),
+                                contentAlignment = Alignment.Center,
+                            ) {
+                                AppIcon(
+                                    if (item.value == selected) item.selectedIcon else item.icon,
+                                    tint = color,
+                                )
+                            }
+                            item.badge?.let { badge ->
+                                Box(Modifier.align(Alignment.TopEnd).offset(x = 8.dp)) { badge() }
+                            }
                         }
                         AppText(
                             item.label,

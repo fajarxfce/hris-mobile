@@ -72,18 +72,26 @@ fun <T> AppSideNavigation(
                             Modifier.weight(1f),
                             color = if (item.value == selected) AppColors.accent else AppColors.text,
                         )
+                        item.badge?.invoke()
                     } else {
                         Column(
                             Modifier.weight(1f),
                             horizontalAlignment = Alignment.CenterHorizontally,
                             verticalArrangement = Arrangement.spacedBy(6.dp),
                         ) {
-                            AppIcon(
-                                if (item.value == selected) item.selectedIcon else item.icon,
-                                tint =
-                                    if (item.value == selected) AppColors.accent
-                                    else AppColors.muted,
-                            )
+                            Box(Modifier.size(40.dp), contentAlignment = Alignment.Center) {
+                                AppIcon(
+                                    if (item.value == selected) item.selectedIcon else item.icon,
+                                    tint =
+                                        if (item.value == selected) AppColors.accent
+                                        else AppColors.muted,
+                                )
+                                item.badge?.let { badge ->
+                                    Box(Modifier.align(Alignment.TopEnd).offset(x = 8.dp)) {
+                                        badge()
+                                    }
+                                }
+                            }
                             AppText(
                                 item.label,
                                 style = FluentTheme.typography.caption,
