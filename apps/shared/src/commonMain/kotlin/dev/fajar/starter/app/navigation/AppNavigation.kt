@@ -14,6 +14,7 @@ import androidx.navigation.compose.composable
 import dev.fajar.starter.app.bootstrap.*
 import dev.fajar.starter.auth.presentation.navigation.*
 import dev.fajar.starter.designsystem.components.*
+import dev.fajar.starter.home.presentation.home.HomeService
 import dev.fajar.starter.home.presentation.home.HomeTab
 import dev.fajar.starter.home.presentation.navigation.*
 import dev.fajar.starter.inbox.presentation.navigation.*
@@ -138,12 +139,19 @@ fun AppNavigation(controller: NavHostController, incomingLinks: Flow<String>) {
                 if (!companyBlocked) {
                     homeRoutes(
                         stage.workspace,
-                        onProfile = {
-                            controller.navigate(ProfileRoute) { launchSingleTop = true }
-                        },
-                        onInbox = { controller.navigate(InboxRoute) { launchSingleTop = true } },
-                        onCalendar = {
-                            controller.navigate(WorkCalendarRoute) { launchSingleTop = true }
+                        onService = { service ->
+                            when (service) {
+                                HomeService.Attendance ->
+                                    controller.navigate(AttendanceRoute) { launchSingleTop = true }
+                                HomeService.Calendar ->
+                                    controller.navigate(WorkCalendarRoute) {
+                                        launchSingleTop = true
+                                    }
+                                HomeService.Inbox ->
+                                    controller.navigate(InboxRoute) { launchSingleTop = true }
+                                HomeService.Profile ->
+                                    controller.navigate(ProfileRoute) { launchSingleTop = true }
+                            }
                         },
                         onSessions = {
                             controller.navigate(SessionsRoute) { launchSingleTop = true }

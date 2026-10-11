@@ -9,11 +9,8 @@ import dev.fajar.starter.home.presentation.home.*
 import dev.fajar.starter.localization.*
 import io.github.composefluent.FluentTheme
 import io.github.composefluent.icons.Icons
-import io.github.composefluent.icons.regular.CalendarLtr
 import io.github.composefluent.icons.regular.ChevronDown
 import io.github.composefluent.icons.regular.Home
-import io.github.composefluent.icons.regular.Mail
-import io.github.composefluent.icons.regular.Person
 
 @Composable
 fun HomeOverview(state: HomeState, onEvent: (HomeEvent) -> Unit) {
@@ -33,30 +30,22 @@ fun HomeOverview(state: HomeState, onEvent: (HomeEvent) -> Unit) {
                 onClick = { onEvent(HomeEvent.CompanyChangeRequested) },
             )
         }
-        if (state.canOpenCalendar || state.canOpenInbox || state.canOpenProfile) {
+        if (state.services.shortcuts.isNotEmpty()) {
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 AppHeading(appString(AppString.MyWork), style = FluentTheme.typography.bodyStrong)
-                if (state.canOpenCalendar)
+                state.services.shortcuts.forEach { service ->
                     AppActionTile(
-                        title = appString(AppString.WorkCalendar),
-                        supportingText = appString(AppString.CalendarSummary),
-                        icon = Icons.Regular.CalendarLtr,
-                        onClick = { onEvent(HomeEvent.CalendarRequested) },
+                        title = appString(service.title),
+                        supportingText = appString(service.summary),
+                        icon = service.icon,
+                        onClick = { onEvent(HomeEvent.ServiceSelected(service)) },
                     )
-                if (state.canOpenInbox)
-                    AppActionTile(
-                        title = appString(AppString.Inbox),
-                        supportingText = appString(AppString.InboxSummary),
-                        icon = Icons.Regular.Mail,
-                        onClick = { onEvent(HomeEvent.InboxRequested) },
-                    )
-                if (state.canOpenProfile)
-                    AppActionTile(
-                        title = appString(AppString.MyProfile),
-                        supportingText = appString(AppString.ProfileSummary),
-                        icon = Icons.Regular.Person,
-                        onClick = { onEvent(HomeEvent.ProfileRequested) },
-                    )
+                }
+                AppButton(
+                    appString(AppString.AllServices),
+                    { onEvent(HomeEvent.TabSelected(HomeTab.Services)) },
+                    primary = false,
+                )
             }
         }
         if (state.failure != null) AppFeedback(failureText(state.failure))

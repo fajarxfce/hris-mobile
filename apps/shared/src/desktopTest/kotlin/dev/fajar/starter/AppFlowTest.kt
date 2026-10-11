@@ -196,13 +196,17 @@ class AppFlowTest {
             waitFor("Choose a company")
             compose.onAllNodesWithText("Open company")[0].performClick()
             waitFor("Employee workspace")
+            compose.onNode(hasText("Services") and hasClickAction()).performClick()
+            compose.onNodeWithText("Attendance").assertExists()
             compose.onNodeWithText("My profile").assertDoesNotExist()
             compose.onNodeWithText("Inbox").assertDoesNotExist()
             capture("company-disabled-modules")
+            compose.onNode(hasText("Home") and hasClickAction()).performClick()
             compose.onNodeWithText("Change company").performScrollTo().performClick()
             waitFor("Choose a company")
             compose.onAllNodesWithText("Open company")[1].performClick()
             waitFor("Inbox")
+            compose.onNode(hasText("Services") and hasClickAction()).performClick()
             compose.onNodeWithText("My profile").assertExists()
             assertTrue(server.inbox.actions.isEmpty())
         }
@@ -485,7 +489,7 @@ class AppFlowTest {
             waitFor("Choose a company")
             compose.onAllNodesWithText("Open company")[0].performClick()
             waitFor("Employee workspace")
-            compose.onNodeWithText("My profile").performClick()
+            openService("My profile")
             waitFor("Personal information")
             compose.onNodeWithText("1996-02-29").assertExists()
             capture("profile")
@@ -494,12 +498,14 @@ class AppFlowTest {
             compose.onNodeWithText("Engineering").assertExists()
             compose.onNode(hasScrollToIndexAction()).performScrollToIndex(0)
             compose.onNodeWithContentDescription("Back").performClick()
+            compose.onNode(hasText("Services") and hasClickAction()).assertIsSelected()
+            compose.onNode(hasText("Home") and hasClickAction()).performClick()
             waitFor("Employee workspace")
             compose.onNodeWithText("Change company").performClick()
             waitFor("Choose a company")
             compose.onAllNodesWithText("Open company")[1].performClick()
             waitFor("Employee workspace")
-            compose.onNodeWithText("My profile").performClick()
+            openService("My profile")
             waitFor("No employee profile is available. Contact HR to check your account linkage.")
             compose.onNodeWithText("1996-02-29").assertDoesNotExist()
             compose.onNodeWithText("Engineering").assertDoesNotExist()
@@ -513,7 +519,7 @@ class AppFlowTest {
             waitFor("Choose a company")
             compose.onAllNodesWithText("Open company")[0].performClick()
             waitFor("Employee workspace")
-            compose.onNodeWithText("My profile").performClick()
+            openService("My profile")
             waitFor("Personal information")
             server.people.denied = true
             compose.onNodeWithText("Refresh").performClick()
@@ -534,7 +540,7 @@ class AppFlowTest {
             waitFor("Choose a company")
             compose.onAllNodesWithText("Open company")[0].performClick()
             waitFor("Employee workspace")
-            compose.onNodeWithText("My profile").performClick()
+            openService("My profile")
             waitFor("Personal information")
             kotlinx.coroutines.runBlocking { server.expireVerification() }
             compose.onNodeWithText("Refresh").performClick()
@@ -663,6 +669,11 @@ class AppFlowTest {
             container.close()
             directory.deleteRecursively()
         }
+    }
+
+    private fun openService(label: String) {
+        compose.onNode(hasText("Services") and hasClickAction()).performClick()
+        compose.onNodeWithText(label).performScrollTo().performClick()
     }
 
     private fun signIn() {

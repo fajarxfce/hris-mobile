@@ -14,9 +14,7 @@ import org.koin.core.parameter.parametersOf
 
 fun NavGraphBuilder.homeRoutes(
     workspace: Workspace,
-    onProfile: () -> Unit,
-    onInbox: () -> Unit,
-    onCalendar: () -> Unit,
+    onService: (HomeService) -> Unit,
     onSessions: () -> Unit,
     onSettings: () -> Unit,
 ) {
@@ -29,9 +27,7 @@ fun NavGraphBuilder.homeRoutes(
         CollectEffects(viewModel.effects) { effect ->
             when (effect) {
                 HomeEffect.OpenSettings -> onSettings()
-                HomeEffect.OpenProfile -> onProfile()
-                HomeEffect.OpenInbox -> onInbox()
-                HomeEffect.OpenCalendar -> onCalendar()
+                is HomeEffect.OpenService -> onService(effect.service)
                 HomeEffect.OpenSessions -> onSessions()
             }
         }

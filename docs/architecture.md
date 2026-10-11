@@ -80,9 +80,14 @@ See [native identity](native-identity.md) for the active HRIS integration and
 [inbox](inbox.md) for the first encrypted HRIS feed integration and
 [sync](sync.md) for the inherited worker and command contracts.
 
-The [work calendar](workforce.md) follows the same ownership boundaries with a
-bounded encrypted snapshot. Acquisition and admission belong to its use case;
-the repository only maps transport/storage data and atomically replaces the snapshot.
+The [work calendar and attendance](workforce.md) follow the same ownership
+boundaries with bounded encrypted snapshots. Acquisition and admission belong to
+use cases; repositories map transport/storage data and atomically replace snapshots.
+Attendance capture coordinates the generic [location repository](location.md),
+current workspace and durable command storage. Permission requests, evidence
+freshness and offline admission remain attendance policy. The location datasource
+only performs the requested OS operation; it neither opens Settings automatically
+nor starts a long-lived tracking subscription.
 
 Feature flag definitions and evaluation policy live in `core/featureflags/domain`; each
 consuming feature owns its keys and action guards. A shared refresh use case serializes
@@ -105,8 +110,12 @@ the database only enforces ownership, immutability, bounds and atomic revision c
 
 Features own their serializable route and NavGraphBuilder registration. The app composes
 their entries and reacts to onboarding/session state. Authentication transitions replace
-the root stack, so sign-out removes protected screens. Home owns its Home/Account
+the root stack, so sign-out removes protected screens. Home owns its Home/Services/Account
 tab state; changing tabs does not create independent navigation histories.
+Its service catalog groups only implemented destinations admitted by the selected
+company's modules and permissions. The catalog exposes typed service identifiers;
+app composition connects them to feature-owned routes. Adding an employee service
+does not require another bottom-navigation item.
 
 The root navigation graph belongs to the session and workspace IDs. Logout, a
 replacement session, or a company change

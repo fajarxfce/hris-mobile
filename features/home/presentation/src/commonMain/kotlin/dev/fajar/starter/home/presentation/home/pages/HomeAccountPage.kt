@@ -39,10 +39,10 @@ fun HomeAccountPage(state: HomeState, onEvent: (HomeEvent) -> Unit) {
             }
         }
         AppCard(Modifier.fillMaxWidth(), padding = 4.dp) {
-            if (state.canOpenProfile)
+            if (state.services.sections.any { HomeService.Profile in it.items })
                 AppListRow(
                     title = appString(AppString.MyProfile),
-                    onClick = { onEvent(HomeEvent.ProfileRequested) },
+                    onClick = { onEvent(HomeEvent.ServiceSelected(HomeService.Profile)) },
                     leading = { AppIcon(Icons.Regular.Person) },
                     trailing = { AppIcon(Icons.Regular.ChevronRight) },
                 )

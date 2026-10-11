@@ -1,13 +1,9 @@
 package dev.fajar.starter.home.presentation.home
 
 sealed interface HomeEffect {
-    data object OpenCalendar : HomeEffect
-
-    data object OpenInbox : HomeEffect
+    data class OpenService(val service: HomeService) : HomeEffect
 
     data object OpenSettings : HomeEffect
-
-    data object OpenProfile : HomeEffect
 
     data object OpenSessions : HomeEffect
 }

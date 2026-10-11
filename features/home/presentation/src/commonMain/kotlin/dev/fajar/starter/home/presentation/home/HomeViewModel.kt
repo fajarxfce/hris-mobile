@@ -5,9 +5,7 @@ import dev.fajar.starter.common.result.*
 import dev.fajar.starter.identity.domain.usecases.ObserveSessionIdentity
 import dev.fajar.starter.identity.domain.usecases.SignOutNativeSession
 import dev.fajar.starter.presentation.mvi.MviViewModel
-import dev.fajar.starter.workspace.domain.entities.CompanyModule
 import dev.fajar.starter.workspace.domain.entities.Workspace
-import dev.fajar.starter.workspace.domain.policies.companyModuleAvailable
 import dev.fajar.starter.workspace.domain.usecases.LeaveWorkspace
 import dev.fajar.starter.workspace.domain.usecases.ObserveWorkspace
 import kotlinx.coroutines.launch
@@ -24,28 +22,13 @@ class HomeViewModel(
     private val observeWorkspace: ObserveWorkspace,
 ) :
     MviViewModel<HomeState, HomeEvent, HomeEffect>(
-        HomeState(
-            workspace,
-            tab = initialTab,
-            canOpenCalendar =
-                workspace.permissions.any {
-                    it == "attendance.self.record" || it == "workforce.read"
-                } && companyModuleAvailable(workspace, CompanyModule.WORKFORCE),
-            canOpenProfile =
-                "people.self.read" in workspace.permissions &&
-                    companyModuleAvailable(workspace, CompanyModule.PEOPLE),
-            canOpenInbox =
-                "announcements.read" in workspace.permissions &&
-                    companyModuleAvailable(workspace, CompanyModule.COMMUNICATIONS),
-        )
+        HomeState(workspace, tab = initialTab, services = homeServices(workspace))
     ) {
     init {
         on<HomeEvent.TabSelected>(::onTabSelected)
         on<HomeEvent.CompanyChangeRequested>(::onCompanyChangeRequested)
         on<HomeEvent.SettingsRequested>(::onSettingsRequested)
-        on<HomeEvent.ProfileRequested>(::onProfileRequested)
-        on<HomeEvent.InboxRequested>(::onInboxRequested)
-        on<HomeEvent.CalendarRequested>(::onCalendarRequested)
+        on<HomeEvent.ServiceSelected>(::onServiceSelected)
         on<HomeEvent.SessionsRequested>(::onSessionsRequested)
         on<HomeEvent.SignOutRequested>(::onSignOutRequested)
         viewModelScope.launch {
@@ -53,23 +36,7 @@ class HomeViewModel(
                 val selected =
                     (result as? AppResult.Success)?.value?.takeIf { it.id == workspace.id }
                 updateState {
-                    it.copy(
-                        workspace = selected ?: it.workspace,
-                        canOpenCalendar =
-                            selected != null &&
-                                selected.permissions.any {
-                                    it == "attendance.self.record" || it == "workforce.read"
-                                } &&
-                                companyModuleAvailable(selected, CompanyModule.WORKFORCE),
-                        canOpenProfile =
-                            selected != null &&
-                                "people.self.read" in selected.permissions &&
-                                companyModuleAvailable(selected, CompanyModule.PEOPLE),
-                        canOpenInbox =
-                            selected != null &&
-                                "announcements.read" in selected.permissions &&
-                                companyModuleAvailable(selected, CompanyModule.COMMUNICATIONS),
-                    )
+                    it.copy(workspace = selected ?: it.workspace, services = homeServices(selected))
                 }
             }
         }
@@ -101,23 +68,13 @@ class HomeViewModel(
         viewModelScope.launch { emitEffect(HomeEffect.OpenSettings) }
     }
 
-    private fun onProfileRequested(event: HomeEvent.ProfileRequested) {
-        if (!state.value.canOpenProfile) return
-        viewModelScope.launch { emitEffect(HomeEffect.OpenProfile) }
-    }
-
-    private fun onInboxRequested(event: HomeEvent.InboxRequested) {
-        if (!state.value.canOpenInbox) return
-        viewModelScope.launch { emitEffect(HomeEffect.OpenInbox) }
+    private fun onServiceSelected(event: HomeEvent.ServiceSelected) {
+        if (state.value.services.sections.none { event.service in it.items }) return
+        viewModelScope.launch { emitEffect(HomeEffect.OpenService(event.service)) }
     }
 
     private fun onSessionsRequested(event: HomeEvent.SessionsRequested) {
         viewModelScope.launch { emitEffect(HomeEffect.OpenSessions) }
-    }
-
-    private fun onCalendarRequested(event: HomeEvent.CalendarRequested) {
-        if (!state.value.canOpenCalendar) return
-        viewModelScope.launch { emitEffect(HomeEffect.OpenCalendar) }
     }
 
     private fun onCompanyChangeRequested(event: HomeEvent.CompanyChangeRequested) {

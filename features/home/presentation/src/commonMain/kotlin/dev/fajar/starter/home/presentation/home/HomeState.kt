@@ -6,6 +6,7 @@ import dev.fajar.starter.workspace.domain.entities.Workspace
 
 enum class HomeTab {
     Home,
+    Services,
     Account,
 }
 
@@ -15,7 +16,5 @@ data class HomeState(
     val user: User? = null,
     val working: Boolean = false,
     val failure: Failure? = null,
-    val canOpenProfile: Boolean = false,
-    val canOpenInbox: Boolean = false,
-    val canOpenCalendar: Boolean = false,
+    val services: HomeServiceCatalog = HomeServiceCatalog(),
 )

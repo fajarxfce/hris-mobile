@@ -34,8 +34,10 @@ metadata, and clipped press feedback. Place dates below the summary when a
 trailing column would crowd a narrow screen. `AppLazyPage` accepts an owned list
 state so paging can reset its position without rebuilding the route owner.
 
-Home separates the active company from employee actions; account preferences and
-session controls stay grouped in the Account tab. Calendar and inbox pages reuse
+Home separates the active company from employee actions. Attendance, calendar and
+inbox are available as quick actions; Services groups all admitted destinations by
+purpose. The three stable tabs are Home, Services and Account. Account preferences
+and session controls stay grouped in Account. Attendance, calendar and inbox pages reuse
 `AppScreenHeader`, with compact titles and consistent back/refresh targets.
 `AppActionTile` provides a single accessible action with supporting text. These
 components add no data observation or navigation ownership. Each page chooses its
@@ -45,3 +47,8 @@ Calendar time ranges carry more visual emphasis than source metadata. The saved
 timestamp remains available after the agenda, while refresh failures remain
 visible above the retained data. Language, appearance and text-size changes
 must retain the current workspace and navigation state.
+
+Attendance puts today's work date, shift and clock actions before history. Location
+is requested on a capture action, with an explicit fallback when it is unavailable.
+Saving offline, receiving a server receipt and accepting attendance are separate
+visible outcomes. An uncertain response retains the original command for retry.
