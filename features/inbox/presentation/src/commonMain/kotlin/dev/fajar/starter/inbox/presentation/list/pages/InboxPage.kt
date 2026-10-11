@@ -19,11 +19,14 @@ import io.github.composefluent.icons.regular.ArrowSync
 @Composable
 fun InboxPage(state: InboxState, listState: LazyListState, onEvent: (InboxEvent) -> Unit) {
     val failure = state.failure
-    AppLazyPage(state = listState, spacing = 8.dp, contentPadding = PaddingValues(20.dp)) {
-        item(key = "heading") {
-            AppScreenHeader(
+    AppLazyPage(
+        state = listState,
+        spacing = 8.dp,
+        maxWidth = 720.dp,
+        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
+        topBar = {
+            AppTopBar(
                 title = appString(AppString.Inbox),
-                modifier = Modifier.padding(bottom = 12.dp),
                 navigation = {
                     AppIconButton(
                         Icons.Regular.ArrowLeft,
@@ -40,7 +43,8 @@ fun InboxPage(state: InboxState, listState: LazyListState, onEvent: (InboxEvent)
                     )
                 },
             )
-        }
+        },
+    ) {
         if (!state.hasSnapshot && (state.syncing || state.loading))
             item(key = "progress") { AppLoading() }
         if (failure != null)
@@ -67,10 +71,9 @@ fun InboxPage(state: InboxState, listState: LazyListState, onEvent: (InboxEvent)
                         Modifier.weight(1f),
                         color = AppColors.muted,
                     )
-                    AppButton(
+                    AppTextButton(
                         appString(AppString.Continue),
                         { onEvent(InboxEvent.RefreshRequested) },
-                        primary = false,
                     )
                 }
             }
@@ -96,16 +99,14 @@ fun InboxPage(state: InboxState, listState: LazyListState, onEvent: (InboxEvent)
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
                 ) {
                     if (state.afterCursor != null)
-                        AppButton(
+                        AppTextButton(
                             appString(AppString.InboxLatest),
                             { onEvent(InboxEvent.PageRequested(null)) },
-                            primary = false,
                         )
                     if (state.nextCursor != null)
-                        AppButton(
+                        AppTextButton(
                             appString(AppString.InboxOlder),
                             { onEvent(InboxEvent.PageRequested(state.nextCursor)) },
-                            primary = false,
                         )
                 }
             }

@@ -22,9 +22,10 @@ The weekly work calendar shows assigned shifts, roster overrides and days off,
 with a bounded encrypted snapshot for offline access. Attendance supports clock-in,
 clock-out, foreground location evidence, encrypted offline commands and idempotent
 delivery. Pending review stays distinct from accepted time. Workforce availability
-is independent of the personal-profile module. Home keeps frequently used actions
-nearby; Services groups the available employee workflows without adding a tab for
-every feature.
+is independent of the personal-profile module. Home places today's clock-in and
+clock-out above a service grid. Services groups the available employee workflows
+without adding a tab for every feature. Inner pages keep their back and refresh
+actions above the scrolling content; Settings groups language and security controls.
 Screens support English and Indonesian. System
 appearance and reduced-motion preferences are respected.
 

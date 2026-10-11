@@ -3,8 +3,6 @@ package dev.fajar.starter.auth.presentation.sessions.pages
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import dev.fajar.starter.auth.presentation.sessions.*
 import dev.fajar.starter.auth.presentation.sessions.widgets.SessionCard
@@ -12,29 +10,35 @@ import dev.fajar.starter.designsystem.components.*
 import dev.fajar.starter.localization.*
 import io.github.composefluent.icons.Icons
 import io.github.composefluent.icons.regular.ArrowLeft
+import io.github.composefluent.icons.regular.ArrowSync
 
 @Composable
 fun SessionsPage(state: SessionsState, onEvent: (SessionsEvent) -> Unit) {
-    AppLazyPage {
-        item(key = "heading") {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-            ) {
-                AppIconButton(
-                    Icons.Regular.ArrowLeft,
-                    appString(AppString.Back),
-                    { onEvent(SessionsEvent.BackRequested) },
-                )
-                AppHeading(appString(AppString.ActiveSessions), Modifier.weight(1f))
-                AppButton(
-                    appString(AppString.Refresh),
-                    { onEvent(SessionsEvent.RefreshRequested) },
-                    enabled = !state.working,
-                    primary = false,
-                )
-            }
-        }
+    AppLazyPage(
+        maxWidth = 720.dp,
+        spacing = 16.dp,
+        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
+        topBar = {
+            AppTopBar(
+                appString(AppString.ActiveSessions),
+                navigation = {
+                    AppIconButton(
+                        Icons.Regular.ArrowLeft,
+                        appString(AppString.Back),
+                        { onEvent(SessionsEvent.BackRequested) },
+                    )
+                },
+                actions = {
+                    AppIconButton(
+                        Icons.Regular.ArrowSync,
+                        appString(AppString.Refresh),
+                        { onEvent(SessionsEvent.RefreshRequested) },
+                        enabled = !state.working,
+                    )
+                },
+            )
+        },
+    ) {
         if (state.working) item(key = "loading") { AppLoading() }
         if (state.failure != null) item(key = "failure") { AppFeedback(failureText(state.failure)) }
         if (state.directory?.items?.isEmpty() == true)

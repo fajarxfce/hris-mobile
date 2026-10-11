@@ -360,6 +360,7 @@ enum class AppString(val english: StringResource, val indonesian: StringResource
     TryAgain(Res.string.try_again_en, Res.string.try_again_id),
     Settings(Res.string.settings_en, Res.string.settings_id),
     Language(Res.string.language_en, Res.string.language_id),
+    Security(Res.string.security_en, Res.string.security_id),
     LanguageDescription(Res.string.language_description_en, Res.string.language_description_id),
     SystemLanguage(Res.string.system_language_en, Res.string.system_language_id),
     English(Res.string.english_en, Res.string.english_id),

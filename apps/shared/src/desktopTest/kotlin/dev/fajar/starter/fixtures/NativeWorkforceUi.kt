@@ -1,11 +1,14 @@
 package dev.fajar.starter.fixtures
 
 import io.ktor.client.request.HttpRequestData
+import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import java.io.IOException
 import java.time.LocalDate
 import java.time.ZoneId
 import java.util.concurrent.atomic.AtomicInteger
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.awaitCancellation
 import kotlinx.serialization.json.*
 
@@ -13,10 +16,14 @@ import kotlinx.serialization.json.*
 class NativeWorkforceUi {
     @Volatile var offline = false
     @Volatile var holdCalendar = false
+    @Volatile var attendanceGate: CompletableDeferred<Unit>? = null
+    var asOf: LocalDate = LocalDate.parse("2026-10-12")
     @Volatile var failureCode: String? = null
     val active = AtomicInteger()
     val cancelled = AtomicInteger()
     val calendars = AtomicInteger()
+    val attendanceActive = AtomicInteger()
+    val attendanceCancelled = AtomicInteger()
 
     suspend fun response(request: HttpRequestData): Pair<String, HttpStatusCode>? {
         val path = request.url.encodedPath
@@ -28,6 +35,36 @@ class NativeWorkforceUi {
         val company = path.split('/')[4]
         if (path.endsWith("/me/employments"))
             return directory(company).toString() to HttpStatusCode.OK
+        if (path.endsWith("/attendance") && request.method == HttpMethod.Get) {
+            attendanceActive.incrementAndGet()
+            try {
+                attendanceGate?.await()
+                val from = LocalDate.parse(request.url.parameters["from"])
+                val until = LocalDate.parse(request.url.parameters["until"])
+                return buildJsonArray {
+                        var date = from
+                        while (date <= until) {
+                            add(
+                                buildJsonObject {
+                                    put("workDate", date.toString())
+                                    putJsonArray("entries") {}
+                                    put("acceptedMinutes", 0)
+                                    put("pendingCount", 0)
+                                    put("incomplete", false)
+                                    put("correction", JsonNull)
+                                }
+                            )
+                            date = date.plusDays(1)
+                        }
+                    }
+                    .toString() to HttpStatusCode.OK
+            } catch (cancelled: CancellationException) {
+                attendanceCancelled.incrementAndGet()
+                throw cancelled
+            } finally {
+                attendanceActive.decrementAndGet()
+            }
+        }
         if (!path.endsWith("/employees/${NativePeopleUi.EMPLOYEE}/calendar")) return null
         calendars.incrementAndGet()
         active.incrementAndGet()
@@ -49,7 +86,7 @@ class NativeWorkforceUi {
     private fun directory(company: String) = buildJsonObject {
         put("accountId", NativePeopleUi.ACCOUNT)
         put("companyId", company)
-        put("asOf", "2026-10-12")
+        put("asOf", asOf.toString())
         put("timezone", "Asia/Jakarta")
         putJsonObject("employments") {
             putJsonArray("items") {

@@ -34,14 +34,24 @@ metadata, and clipped press feedback. Place dates below the summary when a
 trailing column would crowd a narrow screen. `AppLazyPage` accepts an owned list
 state so paging can reset its position without rebuilding the route owner.
 
-Home separates the active company from employee actions. Attendance, calendar and
-inbox are available as quick actions; Services groups all admitted destinations by
-purpose. The three stable tabs are Home, Services and Account. Account preferences
-and session controls stay grouped in Account. Attendance, calendar and inbox pages reuse
-`AppScreenHeader`, with compact titles and consistent back/refresh targets.
-`AppActionTile` provides a single accessible action with supporting text. These
-components add no data observation or navigation ownership. Each page chooses its
-content padding without changing the shared inset or scroll-state ownership.
+Home keeps the company name and its switch action in the top bar. Today's clock-in
+and clock-out appear before the service grid. Services groups admitted destinations
+by purpose; the three stable tabs remain Home, Services and Account. The attendance
+feature owns its card, state and actions. Home receives that entry through app
+composition and does not acquire another feature's data or ViewModel.
+
+`AppTopBar` belongs in the `topBar` slot of `AppPage` or `AppLazyPage`, outside the
+scrolling content and its padding. Its normal minimum height is 56 dp; large text
+can increase it. Inner pages use 16 dp horizontal content margins and 48 dp icon
+targets for back and refresh. The app host still owns top/side system insets, and
+the page or bottom navigation owns the bottom inset.
+
+`AppMenuGrid` lays out up to four columns and reduces that count as text grows.
+`AppMenuItem` provides one named action per icon and label. Use text actions for
+secondary navigation, radio rows for mutually exclusive preferences, and switches
+for boolean preferences. Settings keeps a persistent back action above its
+language and security groups. These components add no data observation or
+navigation ownership.
 
 Calendar time ranges carry more visual emphasis than source metadata. The saved
 timestamp remains available after the agenda, while refresh failures remain
@@ -52,3 +62,7 @@ Attendance puts today's work date, shift and clock actions before history. Locat
 is requested on a capture action, with an explicit fallback when it is unavailable.
 Saving offline, receiving a server receipt and accepting attendance are separate
 visible outcomes. An uncertain response retains the original command for retry.
+The Home card uses the same capture component and ViewModel as the attendance
+screen, with a separate route-owned instance. Leaving its tab, stopping the app,
+or disposing the route stops observation and pending acquisition. Returning
+revalidates the saved state; it never automatically records attendance.

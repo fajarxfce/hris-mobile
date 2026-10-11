@@ -4,6 +4,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
+import androidx.lifecycle.compose.LifecycleStartEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -26,10 +27,10 @@ fun NavGraphBuilder.workforceRoutes(
             koinViewModel<AttendanceViewModel>(parameters = { parametersOf(workspaceId) })
         val state by viewModel.state.collectAsStateWithLifecycle()
         val list = rememberLazyListState()
-        LifecycleEventEffect(Lifecycle.Event.ON_START) {
+        LifecycleStartEffect(viewModel) {
             viewModel.onEvent(AttendanceEvent.Entered)
+            onStopOrDispose { viewModel.onEvent(AttendanceEvent.Stopped) }
         }
-        LifecycleEventEffect(Lifecycle.Event.ON_STOP) { viewModel.onEvent(AttendanceEvent.Stopped) }
         CollectEffects(viewModel.effects) { effect ->
             when (effect) {
                 AttendanceEffect.Back -> onBack()

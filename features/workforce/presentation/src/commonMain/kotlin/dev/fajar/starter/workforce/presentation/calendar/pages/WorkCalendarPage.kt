@@ -24,9 +24,13 @@ fun WorkCalendarPage(
     list: LazyListState,
     onEvent: (WorkCalendarEvent) -> Unit,
 ) {
-    AppLazyPage(state = list, spacing = 12.dp, contentPadding = PaddingValues(20.dp)) {
-        item(key = "heading") {
-            AppScreenHeader(
+    AppLazyPage(
+        state = list,
+        spacing = 12.dp,
+        maxWidth = 720.dp,
+        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
+        topBar = {
+            AppTopBar(
                 title = appString(AppString.WorkCalendar),
                 navigation = {
                     AppIconButton(
@@ -44,7 +48,8 @@ fun WorkCalendarPage(
                     )
                 },
             )
-        }
+        },
+    ) {
         if (state.loading || state.refreshing) item(key = "loading") { AppLoading() }
         val failure = state.refreshFailure ?: state.cacheFailure
         if (failure != null)
@@ -57,7 +62,7 @@ fun WorkCalendarPage(
                             { onEvent(WorkCalendarEvent.VerificationRequested) },
                         )
                     else
-                        AppButton(
+                        AppTextButton(
                             appString(AppString.TryAgain),
                             { onEvent(WorkCalendarEvent.RefreshRequested) },
                             enabled = !state.refreshing,
@@ -89,10 +94,9 @@ fun WorkCalendarPage(
                             },
                             enabled = content.previousWeek != null,
                         )
-                        AppButton(
+                        AppTextButton(
                             appString(AppString.CalendarCurrentWeek),
                             { onEvent(WorkCalendarEvent.CurrentWeekRequested) },
-                            primary = false,
                         )
                         AppIconButton(
                             Icons.Regular.ArrowRight,

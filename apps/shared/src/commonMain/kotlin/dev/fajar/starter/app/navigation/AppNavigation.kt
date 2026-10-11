@@ -23,6 +23,7 @@ import dev.fajar.starter.onboarding.presentation.navigation.*
 import dev.fajar.starter.people.presentation.navigation.*
 import dev.fajar.starter.security.presentation.navigation.AppLockSettings
 import dev.fajar.starter.settings.presentation.navigation.*
+import dev.fajar.starter.workforce.presentation.attendance.AttendanceEffect
 import dev.fajar.starter.workforce.presentation.navigation.*
 import dev.fajar.starter.workspace.domain.entities.CompanyAvailability
 import dev.fajar.starter.workspace.presentation.navigation.*
@@ -155,6 +156,19 @@ fun AppNavigation(controller: NavHostController, incomingLinks: Flow<String>) {
                         },
                         onSessions = {
                             controller.navigate(SessionsRoute) { launchSingleTop = true }
+                        },
+                        attendance = {
+                            AttendanceHomeContent(stage.workspace.id) { effect ->
+                                when (effect) {
+                                    AttendanceEffect.Back -> controller.popBackStack()
+                                    AttendanceEffect.VerifyAccount ->
+                                        controller.navigate(VerificationRoute) {
+                                            launchSingleTop = true
+                                        }
+                                    AttendanceEffect.RecheckWorkspace ->
+                                        viewModel.onEvent(AppEvent.WorkspaceRefreshRequested)
+                                }
+                            }
                         },
                     ) {
                         controller.navigate(SettingsRoute) { launchSingleTop = true }

@@ -1,5 +1,6 @@
 package dev.fajar.starter.home.presentation.navigation
 
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
@@ -16,6 +17,7 @@ fun NavGraphBuilder.homeRoutes(
     workspace: Workspace,
     onService: (HomeService) -> Unit,
     onSessions: () -> Unit,
+    attendance: @Composable () -> Unit,
     onSettings: () -> Unit,
 ) {
     composable<HomeRoute> { entry ->
@@ -31,6 +33,6 @@ fun NavGraphBuilder.homeRoutes(
                 HomeEffect.OpenSessions -> onSessions()
             }
         }
-        HomePage(state, viewModel::onEvent)
+        HomePage(state, viewModel::onEvent, attendance)
     }
 }

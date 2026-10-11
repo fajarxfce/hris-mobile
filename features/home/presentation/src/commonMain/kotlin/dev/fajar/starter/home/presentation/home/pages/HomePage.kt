@@ -5,19 +5,18 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import dev.fajar.starter.designsystem.components.*
+import dev.fajar.starter.designsystem.icons.AppIcons
 import dev.fajar.starter.designsystem.theme.AppColors
 import dev.fajar.starter.home.presentation.home.*
 import dev.fajar.starter.localization.*
 import io.github.composefluent.icons.Icons
 import io.github.composefluent.icons.filled.Home
-import io.github.composefluent.icons.filled.Navigation
 import io.github.composefluent.icons.filled.Person
 import io.github.composefluent.icons.regular.Home
-import io.github.composefluent.icons.regular.Navigation
 import io.github.composefluent.icons.regular.Person
 
 @Composable
-fun HomePage(state: HomeState, onEvent: (HomeEvent) -> Unit) {
+fun HomePage(state: HomeState, onEvent: (HomeEvent) -> Unit, attendance: @Composable () -> Unit) {
     Column(Modifier.fillMaxSize().background(AppColors.canvas)) {
         AppNavigationScaffold(
             items =
@@ -31,8 +30,8 @@ fun HomePage(state: HomeState, onEvent: (HomeEvent) -> Unit) {
                     AppNavigationItem(
                         HomeTab.Services,
                         appString(AppString.Services),
-                        Icons.Regular.Navigation,
-                        Icons.Filled.Navigation,
+                        AppIcons.Services,
+                        AppIcons.Services,
                     ),
                     AppNavigationItem(
                         HomeTab.Account,
@@ -46,7 +45,7 @@ fun HomePage(state: HomeState, onEvent: (HomeEvent) -> Unit) {
         ) {
             AppTabContent(state.tab, stateKey = { it.name }) { tab ->
                 when (tab) {
-                    HomeTab.Home -> HomeOverview(state, onEvent)
+                    HomeTab.Home -> HomeOverview(state, onEvent, attendance)
                     HomeTab.Services -> HomeServicesPage(state, onEvent)
                     HomeTab.Account -> HomeAccountPage(state, onEvent)
                 }

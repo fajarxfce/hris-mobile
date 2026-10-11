@@ -3,7 +3,6 @@ package dev.fajar.starter.people.presentation.profile.pages
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import dev.fajar.starter.designsystem.components.*
@@ -12,29 +11,35 @@ import dev.fajar.starter.people.presentation.profile.*
 import dev.fajar.starter.people.presentation.profile.widgets.*
 import io.github.composefluent.icons.Icons
 import io.github.composefluent.icons.regular.ArrowLeft
+import io.github.composefluent.icons.regular.ArrowSync
 
 @Composable
 fun ProfilePage(state: ProfileState, onEvent: (ProfileEvent) -> Unit) {
-    AppLazyPage {
-        item(key = "heading") {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-            ) {
-                AppIconButton(
-                    Icons.Regular.ArrowLeft,
-                    appString(AppString.Back),
-                    { onEvent(ProfileEvent.BackRequested) },
-                )
-                AppHeading(appString(AppString.MyProfile), Modifier.weight(1f))
-                AppButton(
-                    appString(AppString.Refresh),
-                    { onEvent(ProfileEvent.DirectoryRequested()) },
-                    enabled = !state.loadingDirectory,
-                    primary = false,
-                )
-            }
-        }
+    AppLazyPage(
+        maxWidth = 720.dp,
+        spacing = 16.dp,
+        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
+        topBar = {
+            AppTopBar(
+                appString(AppString.MyProfile),
+                navigation = {
+                    AppIconButton(
+                        Icons.Regular.ArrowLeft,
+                        appString(AppString.Back),
+                        { onEvent(ProfileEvent.BackRequested) },
+                    )
+                },
+                actions = {
+                    AppIconButton(
+                        Icons.Regular.ArrowSync,
+                        appString(AppString.Refresh),
+                        { onEvent(ProfileEvent.DirectoryRequested()) },
+                        enabled = !state.loadingDirectory,
+                    )
+                },
+            )
+        },
+    ) {
         if (state.loadingDirectory || state.loadingProfile) item(key = "loading") { AppLoading() }
         if (state.failure != null)
             item(key = "failure") {
@@ -46,7 +51,7 @@ fun ProfilePage(state: ProfileState, onEvent: (ProfileEvent) -> Unit) {
                             { onEvent(ProfileEvent.VerificationRequested) },
                         )
                     else
-                        AppButton(
+                        AppTextButton(
                             appString(AppString.TryAgain),
                             { onEvent(ProfileEvent.DirectoryRequested()) },
                         )

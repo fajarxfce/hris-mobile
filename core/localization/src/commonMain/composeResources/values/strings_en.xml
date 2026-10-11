@@ -90,6 +90,7 @@
     <string name="try_again_en">Try again</string>
     <string name="settings_en">Settings</string>
     <string name="language_en">Language</string>
+    <string name="security_en">Security</string>
     <string name="language_description_en">Choose the app language.</string>
     <string name="system_language_en">System default</string>
     <string name="english_en">English</string>

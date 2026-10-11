@@ -56,3 +56,10 @@ Optional card content spacing exists at
 Both repositories passed root checks and Android/Web builds. Apple callback
 regressions run in simulator CI. Attendance admission, location evidence policy,
 encrypted commands and employee navigation remain in HRIS Mobile.
+
+Fixed page bars, adaptive menu grids, text actions and preference rows also exist
+at [`f90abb1`](https://github.com/fajarxfce/compose-fluent-starter/commit/f90abb1).
+Both repositories passed root checks and Android/Web builds. Shared UI regressions
+cover fixed actions during scrolling, 200% text, keyboard activation and preference
+semantics. Home attendance, capture recovery, company switching and service
+admission remain specific to HRIS Mobile.

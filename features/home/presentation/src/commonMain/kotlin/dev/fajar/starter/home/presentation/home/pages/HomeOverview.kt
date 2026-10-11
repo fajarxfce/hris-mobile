@@ -2,6 +2,7 @@ package dev.fajar.starter.home.presentation.home.pages
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import dev.fajar.starter.designsystem.components.*
@@ -10,42 +11,54 @@ import dev.fajar.starter.localization.*
 import io.github.composefluent.FluentTheme
 import io.github.composefluent.icons.Icons
 import io.github.composefluent.icons.regular.ChevronDown
-import io.github.composefluent.icons.regular.Home
 
 @Composable
-fun HomeOverview(state: HomeState, onEvent: (HomeEvent) -> Unit) {
-    AppPage(maxWidth = 640.dp, contentPadding = PaddingValues(20.dp)) {
-        AppScreenHeader(
-            title = state.user?.name ?: appString(AppString.Home),
-            subtitle = appString(AppString.CompanyWorkspace),
-        )
-        AppCard(Modifier.fillMaxWidth(), padding = 4.dp) {
-            AppListRow(
+fun HomeOverview(
+    state: HomeState,
+    onEvent: (HomeEvent) -> Unit,
+    attendance: @Composable () -> Unit,
+) {
+    AppPage(
+        maxWidth = 640.dp,
+        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
+        spacing = 16.dp,
+        topBar = {
+            AppTopBar(
                 title = state.workspace.company.name,
-                supportingText = appString(AppString.ChangeCompany),
-                emphasized = true,
-                enabled = !state.working,
-                leading = { AppIcon(Icons.Regular.Home) },
-                trailing = { AppIcon(Icons.Regular.ChevronDown) },
-                onClick = { onEvent(HomeEvent.CompanyChangeRequested) },
+                subtitle = appString(AppString.CompanyWorkspace),
+                actions = {
+                    AppIconButton(
+                        Icons.Regular.ChevronDown,
+                        appString(AppString.ChangeCompany),
+                        { onEvent(HomeEvent.CompanyChangeRequested) },
+                        enabled = !state.working,
+                    )
+                },
             )
-        }
+        },
+    ) {
+        AppHeading(state.user?.name.orEmpty(), style = FluentTheme.typography.subtitle)
+        if (HomeService.Attendance in state.services.shortcuts) attendance()
         if (state.services.shortcuts.isNotEmpty()) {
-            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                AppHeading(appString(AppString.MyWork), style = FluentTheme.typography.bodyStrong)
-                state.services.shortcuts.forEach { service ->
-                    AppActionTile(
+            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                    AppHeading(
+                        appString(AppString.MyWork),
+                        Modifier.weight(1f),
+                        style = FluentTheme.typography.bodyStrong,
+                    )
+                    AppTextButton(
+                        appString(AppString.AllServices),
+                        { onEvent(HomeEvent.TabSelected(HomeTab.Services)) },
+                    )
+                }
+                AppMenuGrid(state.services.shortcuts, itemKey = { it.name }) { service ->
+                    AppMenuItem(
                         title = appString(service.title),
-                        supportingText = appString(service.summary),
                         icon = service.icon,
                         onClick = { onEvent(HomeEvent.ServiceSelected(service)) },
                     )
                 }
-                AppButton(
-                    appString(AppString.AllServices),
-                    { onEvent(HomeEvent.TabSelected(HomeTab.Services)) },
-                    primary = false,
-                )
             }
         }
         if (state.failure != null) AppFeedback(failureText(state.failure))

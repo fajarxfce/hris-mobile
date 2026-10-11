@@ -120,6 +120,13 @@ company's modules and permissions. The catalog exposes typed service identifiers
 app composition connects them to feature-owned routes. Adding an employee service
 does not require another bottom-navigation item.
 
+App composition supplies the attendance feature entry to Home through a composable
+slot. It retains its own route-scoped `AttendanceViewModel`; Home does not depend
+on the workforce module. `LifecycleStartEffect` pairs entry with stop/disposal,
+including tab changes that do not stop the navigation entry's lifecycle. The
+attendance screen and Home share capture rendering and use cases, not ViewModel
+instances or subscriptions.
+
 The root navigation graph belongs to the session and workspace IDs. Logout, a
 replacement session, or a company change
 disposes its protected routes and saved tab state immediately; these boundaries
@@ -141,7 +148,9 @@ Feature entries normally collect their route-owned ViewModel; app-owned gates pa
 a Compose `State` holder and read its value inside the entry. Bootstrap recovery
 tests keep the same route while a pending read fails and an explicit retry succeeds.
 
-The app host handles top/side safe areas and keyboard insets. AppPage handles the bottom
+The app host handles top/side safe areas and keyboard insets. `AppTopBar` is rendered
+in the page's fixed `topBar` slot, before its independently scrolling content.
+Content padding does not move the top bar. AppPage handles the bottom
 safe area for standalone pages; dashboard's bottom navigation owns that inset instead,
 and its content marks the inset consumed. The bar draws its surface beneath the system
 navigation area. On wider windows a side rail/sidebar replaces the bottom bar and

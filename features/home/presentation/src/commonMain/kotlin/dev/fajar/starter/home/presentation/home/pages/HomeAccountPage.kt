@@ -13,16 +13,33 @@ import dev.fajar.starter.home.presentation.home.*
 import dev.fajar.starter.localization.*
 import io.github.composefluent.FluentTheme
 import io.github.composefluent.icons.Icons
+import io.github.composefluent.icons.regular.ArrowRight
+import io.github.composefluent.icons.regular.ChevronDown
 import io.github.composefluent.icons.regular.ChevronRight
-import io.github.composefluent.icons.regular.Home
 import io.github.composefluent.icons.regular.Key
 import io.github.composefluent.icons.regular.Person
 import io.github.composefluent.icons.regular.Settings
 
 @Composable
 fun HomeAccountPage(state: HomeState, onEvent: (HomeEvent) -> Unit) {
-    AppPage(maxWidth = 640.dp, contentPadding = PaddingValues(20.dp)) {
-        AppScreenHeader(appString(AppString.Account))
+    AppPage(
+        maxWidth = 640.dp,
+        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
+        topBar = {
+            AppTopBar(
+                appString(AppString.Account),
+                subtitle = state.workspace.company.name,
+                actions = {
+                    AppIconButton(
+                        Icons.Regular.ChevronDown,
+                        appString(AppString.ChangeCompany),
+                        { onEvent(HomeEvent.CompanyChangeRequested) },
+                        enabled = !state.working,
+                    )
+                },
+            )
+        },
+    ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(16.dp),
@@ -59,23 +76,13 @@ fun HomeAccountPage(state: HomeState, onEvent: (HomeEvent) -> Unit) {
                 trailing = { AppIcon(Icons.Regular.ChevronRight) },
             )
         }
-        AppCard(Modifier.fillMaxWidth(), padding = 4.dp) {
-            AppListRow(
-                title = state.workspace.company.name,
-                supportingText = appString(AppString.ChangeCompany),
-                enabled = !state.working,
-                onClick = { onEvent(HomeEvent.CompanyChangeRequested) },
-                leading = { AppIcon(Icons.Regular.Home) },
-                trailing = { AppIcon(Icons.Regular.ChevronRight) },
-            )
-        }
-        AppButton(
-            appString(AppString.SignOut),
-            { onEvent(HomeEvent.SignOutRequested) },
-            Modifier.fillMaxWidth(),
-            primary = false,
-            loading = state.working,
+        AppListRow(
+            title = appString(AppString.SignOut),
+            onClick = { onEvent(HomeEvent.SignOutRequested) },
+            leading = { AppIcon(Icons.Regular.ArrowRight) },
+            enabled = !state.working,
         )
+        if (state.working) AppLoading()
         if (state.failure != null) AppFeedback(failureText(state.failure))
     }
 }

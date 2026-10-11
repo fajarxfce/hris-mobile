@@ -90,6 +90,7 @@
     <string name="try_again_id">Coba lagi</string>
     <string name="settings_id">Pengaturan</string>
     <string name="language_id">Bahasa</string>
+    <string name="security_id">Keamanan</string>
     <string name="language_description_id">Pilih bahasa aplikasi.</string>
     <string name="system_language_id">Ikuti sistem</string>
     <string name="english_id">English</string>

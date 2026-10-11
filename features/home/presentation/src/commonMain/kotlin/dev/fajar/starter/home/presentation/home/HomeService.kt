@@ -60,8 +60,5 @@ fun homeServices(workspace: Workspace?): HomeServiceCatalog {
                 ),
             )
             .filter { it.items.isNotEmpty() }
-    return HomeServiceCatalog(
-        sections,
-        sections.flatMap { it.items }.filter { it != HomeService.Profile }.take(3),
-    )
+    return HomeServiceCatalog(sections, sections.flatMap { it.items }.take(4))
 }

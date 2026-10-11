@@ -1,6 +1,14 @@
 # Attendance and work calendar
 
-Attendance and work calendar are available from Home shortcuts and the Work
+Home includes today's clock-in/out card above its service grid. It uses the same
+capture rendering, ViewModel and use cases as the attendance screen, with its own
+route-owned instance. Its lifecycle stops on tab disposal as well as app backgrounding.
+Stored, received, pending review and accepted outcomes remain distinct; corrections
+replace the displayed times without enabling another capture.
+Successful refresh clears an expired-cache message even when expiry is observed
+while acquisition is pending. A failed refresh retains its current failure.
+
+Attendance history and work calendar are available from Home shortcuts and the Work
 section in Services. Their routes, MVI owners, repository adapters and policies
 belong to `features/workforce`; generic foreground location belongs to
 `core/location`. Neither workflow depends on the People module being enabled.

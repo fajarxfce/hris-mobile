@@ -17,9 +17,12 @@ import io.github.composefluent.icons.regular.ArrowSync
 @Composable
 fun InboxItemPage(state: InboxItemState, onEvent: (InboxItemEvent) -> Unit) {
     val failure = state.failure
-    AppLazyPage(contentPadding = PaddingValues(20.dp), spacing = 20.dp) {
-        item(key = "heading") {
-            AppScreenHeader(
+    AppLazyPage(
+        spacing = 20.dp,
+        maxWidth = 720.dp,
+        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
+        topBar = {
+            AppTopBar(
                 title = appString(AppString.Inbox),
                 navigation = {
                     AppIconButton(
@@ -37,7 +40,8 @@ fun InboxItemPage(state: InboxItemState, onEvent: (InboxItemEvent) -> Unit) {
                     )
                 },
             )
-        }
+        },
+    ) {
         if (!state.hasSnapshot && (state.syncing || state.loading))
             item(key = "loading") { AppLoading() }
         if (failure != null)

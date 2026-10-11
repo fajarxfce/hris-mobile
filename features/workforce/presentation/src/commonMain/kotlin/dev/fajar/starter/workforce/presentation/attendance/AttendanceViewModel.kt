@@ -110,8 +110,12 @@ class AttendanceViewModel(
             viewModelScope.launch {
                 val result = refresh(workspaceId, selection)
                 ensureActive()
+                when (result) {
+                    is AppResult.Failed -> reportFailure(result.failure)
+                    is AppResult.Success ->
+                        updateState { it.copy(failure = null, needsVerification = false) }
+                }
                 updateState { it.copy(refreshing = false, loading = false) }
-                if (result is AppResult.Failed) reportFailure(result.failure)
             }
     }
 
