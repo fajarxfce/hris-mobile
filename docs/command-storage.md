@@ -12,6 +12,9 @@ envelopes, map storage results, and own command eligibility, retry, authorizatio
 conflict review and retention. No HTTP operation starts from a storage callback.
 Feature integration is separate from this storage capability.
 
+Content-key creation can use the [atomic credential port](protected-credentials.md).
+The raw database does not create or recover cryptographic keys itself.
+
 Each partition retains one operation per resource. The operation ID, resource,
 ordering key and request ciphertext are immutable. Updates change only the outcome
 envelope and compare its observed revision atomically. Removal also requires that

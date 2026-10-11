@@ -1,5 +1,12 @@
 plugins { id("starter.android.library") }
 
+val commonMain = kotlin.sourceSets.getByName("commonMain")
+val jvmSharedMain = kotlin.sourceSets.create("jvmSharedMain") { dependsOn(commonMain) }
+
+listOf("androidMain", "desktopMain").forEach {
+    kotlin.sourceSets.getByName(it).dependsOn(jvmSharedMain)
+}
+
 kotlin.sourceSets {
     getByName("commonMain").dependencies {
         implementation(libs.coroutines.core)

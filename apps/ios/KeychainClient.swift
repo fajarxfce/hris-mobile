@@ -47,4 +47,15 @@ final class KeychainClient: NSObject, AppleCredentialClient {
         }
         completion(status == errSecSuccess ? nil : NSError(domain: NSOSStatusErrorDomain, code: Int(status)))
     }
+
+    func writeIfAbsent(value: String, completion: @escaping (String?, Error?) -> Void) {
+        let attributes: [String: Any] = [
+            kSecValueData as String: Data(value.utf8),
+            kSecAttrAccessible as String: kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly
+        ]
+        let status = SecItemAdd(identity.merging(attributes) { _, value in value } as CFDictionary, nil)
+        if status == errSecSuccess { completion(value, nil); return }
+        if status == errSecDuplicateItem { read(completion: completion); return }
+        completion(nil, NSError(domain: NSOSStatusErrorDomain, code: Int(status)))
+    }
 }

@@ -7,4 +7,6 @@ interface AppleCredentialClient {
     fun read(completion: (String?, NSError?) -> Unit)
 
     fun write(value: String?, completion: (NSError?) -> Unit)
+
+    fun writeIfAbsent(value: String, completion: (String?, NSError?) -> Unit)
 }
