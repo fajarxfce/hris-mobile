@@ -4,24 +4,28 @@ package dev.fajar.starter.app.bootstrap
 
 import androidx.lifecycle.ViewModelStore
 import dev.fajar.starter.app.navigation.*
+import dev.fajar.starter.common.config.AppBuild
 import dev.fajar.starter.common.config.AppEnvironment
+import dev.fajar.starter.common.config.AppPlatform
 import dev.fajar.starter.common.result.AppResult
 import dev.fajar.starter.common.result.Failure
 import dev.fajar.starter.common.result.FailureKind
 import dev.fajar.starter.identity.domain.entities.*
 import dev.fajar.starter.identity.domain.repositories.AccountRepository
 import dev.fajar.starter.identity.domain.repositories.SessionRepository
-import dev.fajar.starter.identity.domain.usecases.ObserveSessionIdentity
 import dev.fajar.starter.onboarding.domain.repositories.OnboardingRepository
 import dev.fajar.starter.onboarding.domain.usecases.LoadOnboarding
+import dev.fajar.starter.workspace.domain.entities.*
 import dev.fajar.starter.workspace.domain.entities.Workspace
 import dev.fajar.starter.workspace.domain.entities.WorkspaceAdmission
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
-import dev.fajar.starter.workspace.domain.usecases.ObserveWorkspace
+import dev.fajar.starter.workspace.domain.usecases.LeaveWorkspace
+import dev.fajar.starter.workspace.domain.usecases.ObserveWorkspaceContext
 import dev.fajar.starter.workspace.domain.usecases.RefreshWorkspace
 import kotlin.test.*
 import kotlin.time.Clock
 import kotlin.time.Duration.Companion.hours
+import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.NonCancellable
@@ -138,7 +142,7 @@ class AppViewModelTest {
             val vm =
                 AppViewModel(
                     LoadOnboarding(onboarding),
-                    ObserveSessionIdentity(identity),
+                    ObserveWorkspaceContext(identity, TestWorkspaces(), fixtureBuild),
                     dev.fajar.starter.identity.domain.usecases.RestoreSession(
                         identity,
                         server =
@@ -148,7 +152,6 @@ class AppViewModelTest {
                             ),
                     ),
                     ResolveAppLink(AppEnvironment.Dev),
-                    ObserveWorkspace(identity, TestWorkspaces()),
                     RefreshWorkspace(
                         identity,
                         object : AccountRepository {
@@ -158,6 +161,7 @@ class AppViewModelTest {
                         },
                         TestWorkspaces(),
                     ),
+                    LeaveWorkspace(identity, TestWorkspaces()),
                 )
             owner.put("app", vm)
             vm.onEvent(AppEvent.LinkReceived("hrismobile-dev://app/inbox"))
@@ -230,6 +234,9 @@ private fun testSession() =
     )
 
 private class TestWorkspaces(initial: Workspace? = null) : WorkspaceRepository {
+    override suspend fun clientPolicy(sessionId: String, companyId: String) =
+        AppResult.Success(fixturePolicy())
+
     private val selection = MutableStateFlow<AppResult<Workspace?>>(AppResult.Success(initial))
     var casFailure: Failure? = null
 
@@ -261,6 +268,7 @@ private fun testWorkspace(): Workspace {
         CompanyMembership("company", "Company", "CO", "Asia/Jakarta"),
         emptySet(),
         WorkspaceAdmission(session.user.id, session.binding.serverId, now, now + 1.hours),
+        policy = CompanyPolicySnapshot(fixturePolicy(), now),
     )
 }
 
@@ -277,12 +285,27 @@ private fun bootstrapViewModel(
                 override suspend fun complete() = AppResult.Success(Unit)
             }
         ),
-        ObserveSessionIdentity(identity),
+        ObserveWorkspaceContext(identity, workspaces, fixtureBuild),
         dev.fajar.starter.identity.domain.usecases.RestoreSession(
             identity,
             IdentityServer("https://example.invalid/", "Fixture"),
         ),
         ResolveAppLink(AppEnvironment.Dev),
-        ObserveWorkspace(identity, workspaces),
         RefreshWorkspace(identity, accounts, workspaces),
+        LeaveWorkspace(identity, workspaces),
     )
+
+private val fixtureBuild = AppBuild(AppPlatform.Android, 1, "1.0.0", null)
+
+private fun fixturePolicy() =
+    Clock.System.now().let {
+        CompanyPolicy(
+            null,
+            CompanyModule.entries.toSet(),
+            CompanyMinimumBuilds(0, 0, 0),
+            null,
+            false,
+            it,
+            it + 60.seconds,
+        )
+    }

@@ -1,19 +1,21 @@
 # Validation
 
-The workspace-admission and inbox implementation passed these Linux checks:
+The company-policy, workspace-admission and inbox implementation passed these Linux checks:
 
 ```sh
 xvfb-run -a ./gradlew :check \
   :core:workspace:domain:wasmJsBrowserTest \
+  :core:workspace:data:wasmJsBrowserTest \
   :features:inbox:domain:wasmJsBrowserTest \
   :apps:android:assembleDevDebug
 ```
 
 The root check includes architecture validation for 52 modules, Kotlin formatting,
-static analysis and JVM tests. The assembled application passed 21 Compose UI
+static analysis and JVM tests. The assembled application passed 24 Compose UI
 tests, three application-MVI tests and one link-parser test. Workspace domain
-tests passed on JVM and in Chromium (12 each), with five SQLite/encryption tests.
-Inbox domain tests passed on JVM and in Chromium (30 each); inbox data
+tests passed on JVM and in Chromium (21 each), with six SQLite/encryption tests
+and three mapper tests on each JVM/browser target.
+Inbox domain tests passed on JVM and in Chromium (37 each); inbox data
 passed 13 JVM tests. Its two browser transport tests passed in the preceding
 inbox-command run. Tests cover scope replacement, expiry,
 pending cancellation, late outcomes, finite replay, conflicts, encrypted command
@@ -39,6 +41,12 @@ The CI workflow additionally builds an unsigned iOS simulator application and
 Windows classes. These are compilation checks, not physical Apple/Windows vault
 tests or signing/distribution validation.
 
+Company-policy regressions cover revision zero, platform build admission,
+microsecond freshness deadlines, scheduled maintenance after a stale snapshot,
+flag changes without cache or command loss, late denied access, scope replacement,
+and a pending bootstrap failure followed by successful retry. Virtual-time tests
+verify the finite observation deadlines; no clock change was made on the device.
+
 ## Android device observations
 
 The dev application was installed on a Samsung Galaxy A72 running Android 16,
@@ -59,10 +67,17 @@ and published dev announcement were used. Checks covered:
   foreground revalidation retained the open detail.
 - Replacing that company, then restarting offline into its empty inbox without
   exposing the first company's messages.
+- Minimum-build and maintenance gates from actual company policy revisions,
+  switching to an unaffected company, and explicit retry after maintenance removal.
+- Disabling People and Communications while Inbox was open, hiding its content
+  and the affected home actions. Another company retained both actions. Re-enabling
+  the modules restored the message and its confirmed acknowledgement.
 
-The workspace APK was used for offline startup and foreground revalidation;
-the preceding command/inbox APKs were used for the earlier observations. The proxy was stopped
-and the normal dev API connection restored afterward. No frame-time, heap or
+The company-policy APK was used for the availability checks, and the workspace APK
+for offline startup and foreground revalidation. The preceding command/inbox APKs
+were used for the earlier observations. The proxy was stopped, the normal dev API
+connection restored, and the demo company's original policy values restored after
+testing. No frame-time, heap or
 battery measurements were taken. Native MFA, external SSO, push delivery, and iOS
 device behavior still need their own physical checks.
 

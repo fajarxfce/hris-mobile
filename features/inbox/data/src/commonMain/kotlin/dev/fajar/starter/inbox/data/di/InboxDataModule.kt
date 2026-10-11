@@ -1,5 +1,6 @@
 package dev.fajar.starter.inbox.data.di
 
+import dev.fajar.starter.common.config.AppBuild
 import dev.fajar.starter.identity.domain.repositories.SessionRepository
 import dev.fajar.starter.inbox.domain.repositories.*
 import dev.fajar.starter.inbox.domain.usecases.*
@@ -43,7 +44,8 @@ class InboxDataModule {
         cache: InboxCacheRepository,
         sessions: SessionRepository,
         workspaces: WorkspaceRepository,
-    ) = ReplayInboxAction(commands, remote, cache, sessions, workspaces, Clock.System)
+        build: AppBuild,
+    ) = ReplayInboxAction(commands, remote, cache, sessions, workspaces, Clock.System, build)
 
     @Factory
     fun observe(
@@ -59,5 +61,6 @@ class InboxDataModule {
         cache: InboxCacheRepository,
         sessions: SessionRepository,
         workspaces: WorkspaceRepository,
-    ) = SyncInbox(feed, remote, cache, sessions, workspaces, Clock.System)
+        build: AppBuild,
+    ) = SyncInbox(feed, remote, cache, sessions, workspaces, Clock.System, build)
 }

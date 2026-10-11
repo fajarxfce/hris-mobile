@@ -1,5 +1,6 @@
 package dev.fajar.starter.workspace.data.di
 
+import dev.fajar.starter.common.config.AppBuild
 import dev.fajar.starter.identity.domain.repositories.*
 import dev.fajar.starter.sync.domain.SyncTask
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
@@ -9,6 +10,10 @@ import org.koin.core.annotation.*
 @Module
 @ComponentScan("dev.fajar.starter.workspace.data")
 class WorkspaceDataModule {
+    @Factory
+    fun context(sessions: SessionRepository, workspaces: WorkspaceRepository, build: AppBuild) =
+        ObserveWorkspaceContext(sessions, workspaces, build)
+
     @Single(binds = [RefreshWorkspace::class, SyncTask::class])
     fun refresh(
         sessions: SessionRepository,

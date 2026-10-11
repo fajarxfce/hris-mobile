@@ -196,6 +196,9 @@
     <string name="inbox_acknowledged_en">Acknowledged</string>
     <string name="inbox_cache_expired_en">Connect to refresh your inbox.</string>
     <string name="workspace_access_expired_en">Connect and select a company again.</string>
+    <string name="company_policy_title_en">Company services</string>
+    <string name="company_policy_unavailable_en">Connect to check company availability.</string>
+    <string name="company_module_disabled_en">This service is unavailable for this company.</string>
     <string name="inbox_mark_read_en">Mark as read</string>
     <string name="inbox_read_en">Read</string>
     <string name="inbox_acknowledge_en">Acknowledge</string>

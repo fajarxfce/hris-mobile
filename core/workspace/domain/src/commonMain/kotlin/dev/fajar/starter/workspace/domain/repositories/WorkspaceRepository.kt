@@ -1,6 +1,7 @@
 package dev.fajar.starter.workspace.domain.repositories
 
 import dev.fajar.starter.common.result.AppResult
+import dev.fajar.starter.workspace.domain.entities.CompanyPolicy
 import dev.fajar.starter.workspace.domain.entities.Workspace
 import kotlinx.coroutines.flow.Flow
 
@@ -16,4 +17,6 @@ interface WorkspaceRepository {
     ): AppResult<Boolean>
 
     suspend fun permissions(sessionId: String, companyId: String): AppResult<Set<String>>
+
+    suspend fun clientPolicy(sessionId: String, companyId: String): AppResult<CompanyPolicy>
 }

@@ -61,6 +61,12 @@ and observed version survive retries, process termination and a new session for
 the same account. See [command admission, encryption and recovery](inbox-commands.md)
 for ownership, finite delivery, conflict review and receipt retirement.
 
+[Company policy](company-policy.md) is checked before feed synchronization and
+each delivery attempt. Disabled modules, maintenance, obsolete builds and failed
+policy reads pause delivery without replacing the original command or consuming
+an attempt during preflight. Re-enabling the module preserves its existing cache
+and cursor, subject to ordinary scope and admission checks.
+
 ## Interface and validation
 
 The list displays thirty messages per page, with stable item keys and explicit

@@ -119,6 +119,12 @@ so reopening a gate reuses the existing route owners instead of allocating an
 additional set. Session-aware use cases still own admission and stale-result
 checks independently of whether a screen is currently visible.
 
+Read changing presentation state inside a composable navigation entry. A retained
+graph must not depend on rebuilding its builder to replace a captured snapshot.
+Feature entries normally collect their route-owned ViewModel; app-owned gates pass
+a Compose `State` holder and read its value inside the entry. Bootstrap recovery
+tests keep the same route while a pending read fails and an explicit retry succeeds.
+
 The app host handles top/side safe areas and keyboard insets. AppPage handles the bottom
 safe area for standalone pages; dashboard's bottom navigation owns that inset instead,
 and its content marks the inset consumed. The bar draws its surface beneath the system

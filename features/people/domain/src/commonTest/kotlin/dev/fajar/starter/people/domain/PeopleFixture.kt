@@ -5,11 +5,13 @@ import dev.fajar.starter.identity.domain.entities.*
 import dev.fajar.starter.identity.domain.repositories.SessionRepository
 import dev.fajar.starter.people.domain.entities.*
 import dev.fajar.starter.people.domain.repositories.PeopleRepository
+import dev.fajar.starter.workspace.domain.entities.*
 import dev.fajar.starter.workspace.domain.entities.Workspace
 import dev.fajar.starter.workspace.domain.entities.WorkspaceAdmission
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
 import kotlin.time.Clock
 import kotlin.time.Duration.Companion.hours
+import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.datetime.LocalDate
 
@@ -31,6 +33,21 @@ class PeopleFixture {
             Clock.System.now().let {
                 WorkspaceAdmission(session.user.id, session.binding.serverId, it, it + 1.hours)
             },
+            policy =
+                Clock.System.now().let {
+                    CompanyPolicySnapshot(
+                        CompanyPolicy(
+                            null,
+                            CompanyModule.entries.toSet(),
+                            CompanyMinimumBuilds(0, 0, 0),
+                            null,
+                            false,
+                            it,
+                            it + 60.seconds,
+                        ),
+                        it,
+                    )
+                },
         )
     val date = LocalDate(2026, 10, 1)
     val employee =
@@ -114,6 +131,9 @@ class PeopleFixture {
     }
 
     class Workspaces(initial: Workspace) : WorkspaceRepository {
+        override suspend fun clientPolicy(sessionId: String, companyId: String) =
+            error("Profile reads do not refresh workspace policy.")
+
         val state = MutableStateFlow<AppResult<Workspace?>>(AppResult.Success(initial))
 
         override fun observe(sessionId: String) = state

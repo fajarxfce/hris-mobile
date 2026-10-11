@@ -5,6 +5,15 @@ import org.jetbrains.compose.resources.StringResource
 
 /** Explicit pairs keep runtime language changes portable across Android, iOS, desktop and Web. */
 enum class AppString(val english: StringResource, val indonesian: StringResource) {
+    CompanyPolicyTitle(Res.string.company_policy_title_en, Res.string.company_policy_title_id),
+    CompanyPolicyUnavailable(
+        Res.string.company_policy_unavailable_en,
+        Res.string.company_policy_unavailable_id,
+    ),
+    CompanyModuleDisabled(
+        Res.string.company_module_disabled_en,
+        Res.string.company_module_disabled_id,
+    ),
     InboxMarkRead(Res.string.inbox_mark_read_en, Res.string.inbox_mark_read_id),
     InboxRead(Res.string.inbox_read_en, Res.string.inbox_read_id),
     InboxAcknowledge(Res.string.inbox_acknowledge_en, Res.string.inbox_acknowledge_id),

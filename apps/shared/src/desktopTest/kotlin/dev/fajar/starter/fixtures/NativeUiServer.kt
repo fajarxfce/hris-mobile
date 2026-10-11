@@ -29,6 +29,7 @@ class NativeUiServer(
     val people = NativePeopleUi()
     val inbox = NativeInboxUi()
     val deviceSessions = NativeSessionsUi()
+    val companyPolicy = NativeCompanyPolicyUi()
     var rejectSessionAccessOnce = false
 
     suspend fun expireVerification() = requests.withLock { verified = false }
@@ -38,7 +39,14 @@ class NativeUiServer(
             val path = request.url.encodedPath
             assertEquals("ANDROID", request.headers["X-HRIS-Client-Platform"])
             assertEquals("1", request.headers["X-HRIS-Client-Build"])
+            if (path !in setOf("/api/v1/auth/native/login", "/api/v1/auth/native/refresh"))
+                assertTrue(
+                    request.headers[HttpHeaders.Authorization]?.startsWith("Bearer ") == true
+                )
             val headers = headersOf(HttpHeaders.ContentType, "application/json")
+            companyPolicy.response(path)?.let { (body, status) ->
+                return@withLock respond(body, status, headers)
+            }
             if ((path.contains("/sync/") || path.contains("/inbox/")) && requireMfa && !verified)
                 return@withLock respond(
                     """{"code":"mfa_required"}""",
@@ -46,9 +54,6 @@ class NativeUiServer(
                     headers,
                 )
             inbox.response(request)?.let { (body, status) ->
-                assertTrue(
-                    request.headers[HttpHeaders.Authorization]?.startsWith("Bearer ") == true
-                )
                 return@withLock respond(body, status, headers)
             }
             if (path.startsWith("/api/v1/auth/native/sessions") && rejectSessionAccessOnce) {
@@ -60,15 +65,9 @@ class NativeUiServer(
                 )
             }
             deviceSessions.response(path, request.method)?.let { (body, status) ->
-                assertTrue(
-                    request.headers[HttpHeaders.Authorization]?.startsWith("Bearer ") == true
-                )
                 return@withLock respond(body, status, headers)
             }
             people.response(path)?.let { (body, status) ->
-                assertTrue(
-                    request.headers[HttpHeaders.Authorization]?.startsWith("Bearer ") == true
-                )
                 return@withLock if (requireMfa && !verified)
                     respond("""{"code":"mfa_required"}""", HttpStatusCode.Forbidden, headers)
                 else respond(body, status, headers)
@@ -88,9 +87,6 @@ class NativeUiServer(
                     respond(credentials().toString(), headers = headers)
                 }
                 "/api/v1/me" -> {
-                    assertTrue(
-                        request.headers[HttpHeaders.Authorization]?.startsWith("Bearer ") == true
-                    )
                     respond(snapshot().toString(), headers = headers)
                 }
                 "/api/v1/auth/native/mfa/enrollment" ->

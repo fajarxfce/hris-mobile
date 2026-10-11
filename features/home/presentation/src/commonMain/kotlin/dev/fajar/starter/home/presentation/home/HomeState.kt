@@ -15,4 +15,6 @@ data class HomeState(
     val user: User? = null,
     val working: Boolean = false,
     val failure: Failure? = null,
+    val canOpenProfile: Boolean = false,
+    val canOpenInbox: Boolean = false,
 )

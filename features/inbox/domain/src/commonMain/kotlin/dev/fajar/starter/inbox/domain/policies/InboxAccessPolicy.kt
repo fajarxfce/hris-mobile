@@ -3,7 +3,9 @@ package dev.fajar.starter.inbox.domain.policies
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.identity.domain.entities.Session
 import dev.fajar.starter.inbox.domain.entities.*
+import dev.fajar.starter.workspace.domain.entities.CompanyModule
 import dev.fajar.starter.workspace.domain.entities.Workspace
+import dev.fajar.starter.workspace.domain.policies.requireCompanyModule
 import dev.fajar.starter.workspace.domain.policies.validateWorkspaceOwnership
 import kotlin.time.Instant
 
@@ -17,6 +19,8 @@ fun admitInbox(
     if (ownership is AppResult.Failed) return ownership
     requireNotNull(workspace)
     requireNotNull(session)
+    val module = requireCompanyModule(workspace, CompanyModule.COMMUNICATIONS)
+    if (module is AppResult.Failed) return module
     if (session.binding.expiresAtEpochMillis <= now.toEpochMilliseconds())
         return AppResult.Failed(
             Failure(FailureKind.Unauthorized, "Sign in again.", code = "session_revoked")

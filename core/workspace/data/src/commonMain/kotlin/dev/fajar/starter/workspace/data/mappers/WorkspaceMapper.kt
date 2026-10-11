@@ -29,6 +29,7 @@ fun WorkspaceRecord.toWorkspace(): Workspace {
         CompanyMembership(companyId, companyName, companyCode, timezone),
         permissions.toSet(),
         WorkspaceAdmission(accountId, familyId, checked, expires),
+        policy?.toSnapshot(),
     )
 }
 
@@ -46,6 +47,7 @@ fun Workspace.toRecord() =
         admission.familyId,
         admission.checkedAt.toString(),
         admission.expiresAt.toString(),
+        policy?.toRecord(),
     )
 
 fun workspaceAssociatedData(audience: String, sessionId: String, generation: String) =

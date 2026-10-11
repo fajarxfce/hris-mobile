@@ -4,6 +4,7 @@ package dev.fajar.starter.workspace.domain.usecases
 
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.identity.domain.repositories.*
+import dev.fajar.starter.workspace.domain.entities.CompanyPolicySnapshot
 import dev.fajar.starter.workspace.domain.entities.Workspace
 import dev.fajar.starter.workspace.domain.policies.*
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
@@ -60,6 +61,12 @@ class SelectWorkspace(
                 is AppResult.Failed -> return result
                 is AppResult.Success -> result.value
             }
+        val policyRequestedAt = clock.now()
+        val policy =
+            when (val result = workspaces.clientPolicy(sessionId, companyId)) {
+                is AppResult.Failed -> return result
+                is AppResult.Success -> CompanyPolicySnapshot(result.value, policyRequestedAt)
+            }
         val current =
             when (val result = sessions.current()) {
                 is AppResult.Failed -> return result
@@ -85,6 +92,7 @@ class SelectWorkspace(
                 company,
                 permissions,
                 admission,
+                policy,
             )
         return when (val result = workspaces.compareAndSet(sessionId, previous, selected)) {
             is AppResult.Failed -> result

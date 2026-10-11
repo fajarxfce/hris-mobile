@@ -42,6 +42,9 @@ session family and API audience. Foreground entry rechecks live access; transpor
 failure cannot renew admission. Workspace observation hides expired or mismatched
 records. See [company workspaces](workspace.md) for expiry, persistence and races,
 and [inbox](inbox.md) for encrypted content and durable employee actions.
+The same snapshot includes [company availability](company-policy.md). Maintenance,
+minimum-build and module restrictions pause company operations without treating
+the policy change as a revoked account or deleting durable inbox commands.
 
 ## Active sessions and sign-out
 

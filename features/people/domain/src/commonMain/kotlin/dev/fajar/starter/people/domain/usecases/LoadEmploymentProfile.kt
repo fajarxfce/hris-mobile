@@ -4,6 +4,8 @@ import dev.fajar.starter.common.result.*
 import dev.fajar.starter.identity.domain.repositories.SessionRepository
 import dev.fajar.starter.people.domain.entities.EmploymentProfile
 import dev.fajar.starter.people.domain.repositories.PeopleRepository
+import dev.fajar.starter.workspace.domain.entities.CompanyModule
+import dev.fajar.starter.workspace.domain.policies.requireCompanyModule
 import dev.fajar.starter.workspace.domain.policies.validateWorkspaceOwnership
 import dev.fajar.starter.workspace.domain.policies.workspaceFailure
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
@@ -42,6 +44,8 @@ class LoadEmploymentProfile(
         if (admission is AppResult.Failed) return admission
         requireNotNull(workspace)
         requireNotNull(session)
+        val availability = requireCompanyModule(workspace, CompanyModule.PEOPLE)
+        if (availability is AppResult.Failed) return availability
         val details =
             when (
                 val result = people.employment(session.id, workspace.company.id, employeeId, asOf)
@@ -77,6 +81,9 @@ class LoadEmploymentProfile(
         val ownership =
             validateWorkspaceOwnership(workspaceId, currentWorkspace, currentSession, clock.now())
         if (ownership is AppResult.Failed) return ownership
+        val stillAvailable =
+            requireCompanyModule(requireNotNull(currentWorkspace), CompanyModule.PEOPLE)
+        if (stillAvailable is AppResult.Failed) return stillAvailable
         if (person.accountId != session.user.id || person.personId != details.employee.personId)
             return AppResult.Failed(
                 Failure(

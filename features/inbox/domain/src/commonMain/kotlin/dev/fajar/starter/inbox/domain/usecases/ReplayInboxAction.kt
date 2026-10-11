@@ -1,11 +1,15 @@
 package dev.fajar.starter.inbox.domain.usecases
 
+import dev.fajar.starter.common.config.AppBuild
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.identity.domain.repositories.SessionRepository
 import dev.fajar.starter.inbox.domain.entities.*
 import dev.fajar.starter.inbox.domain.policies.*
 import dev.fajar.starter.inbox.domain.repositories.*
 import dev.fajar.starter.sync.domain.*
+import dev.fajar.starter.workspace.domain.entities.CompanyModule
+import dev.fajar.starter.workspace.domain.entities.CompanyPolicySnapshot
+import dev.fajar.starter.workspace.domain.policies.admitCompanyOperation
 import dev.fajar.starter.workspace.domain.policies.workspaceFailure
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
 import kotlin.time.Clock
@@ -23,6 +27,7 @@ class ReplayInboxAction(
     private val sessions: SessionRepository,
     private val workspaces: WorkspaceRepository,
     private val clock: Clock,
+    private val build: AppBuild,
 ) : SyncTask {
     override val key = KEY
     private val execution = Mutex()
@@ -167,6 +172,31 @@ class ReplayInboxAction(
         if (record.outcome is InboxCommandOutcome.Confirmed) return AppResult.Success(record)
         if (record.attempts >= INBOX_MAXIMUM_ATTEMPTS)
             return inboxCommandFailure("client.inbox_retry_limit")
+        val policyRequestedAt = clock.now()
+        val policyResponse = workspaces.clientPolicy(access.sessionId, access.companyId)
+        currentCoroutineContext().ensureActive()
+        when (val current = validateInboxCommandAccess(currentAccess(workspaceId), access)) {
+            is AppResult.Failed -> return current
+            is AppResult.Success -> Unit
+        }
+        val policy =
+            when (policyResponse) {
+                is AppResult.Failed -> {
+                    if (
+                        policyResponse.failure.code in
+                            setOf("session_revoked", "company_access_denied", "sync_access_denied")
+                    ) {
+                        val cleared = cache.clear(access)
+                        if (cleared is AppResult.Failed) return cleared
+                    }
+                    return policyResponse
+                }
+                is AppResult.Success ->
+                    CompanyPolicySnapshot(policyResponse.value, policyRequestedAt)
+            }
+        val availability =
+            admitCompanyOperation(policy, build, CompanyModule.COMMUNICATIONS, clock.now())
+        if (availability is AppResult.Failed) return availability
         val attempt = record.attempts + 1
         when (
             val saved = commands.update(access, record, InboxCommandOutcome.Unconfirmed(), attempt)
@@ -186,6 +216,9 @@ class ReplayInboxAction(
             is AppResult.Failed -> return current
             is AppResult.Success -> Unit
         }
+        val stillAvailable =
+            admitCompanyOperation(policy, build, CompanyModule.COMMUNICATIONS, clock.now())
+        if (stillAvailable is AppResult.Failed) return stillAvailable
         val result = remote.act(access.sessionId, record.command)
         currentCoroutineContext().ensureActive()
         val outcome =

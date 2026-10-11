@@ -142,6 +142,7 @@ class InboxCommandFixture(val inbox: InboxFixture = InboxFixture()) {
             inbox.sessions,
             inbox.workspaces,
             inbox.clock,
+            inbox.build,
         )
     val review =
         ReviewInboxAction(

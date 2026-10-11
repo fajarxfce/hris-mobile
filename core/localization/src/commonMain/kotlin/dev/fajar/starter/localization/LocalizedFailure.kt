@@ -7,6 +7,9 @@ import dev.fajar.starter.common.result.*
 fun failureText(failure: Failure): String =
     appString(
         when (failure.code) {
+            "client.company_policy_unavailable",
+            "client.company_policy_expired" -> AppString.CompanyPolicyUnavailable
+            "company_module_disabled" -> AppString.CompanyModuleDisabled
             "client.workspace_expired" -> AppString.WorkspaceAccessExpired
             "client.inbox_cache_expired" -> AppString.InboxCacheExpired
             "client.inbox_item_unavailable",

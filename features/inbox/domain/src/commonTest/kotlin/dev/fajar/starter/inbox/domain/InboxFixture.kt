@@ -1,5 +1,6 @@
 package dev.fajar.starter.inbox.domain
 
+import dev.fajar.starter.common.config.*
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.identity.domain.entities.*
 import dev.fajar.starter.identity.domain.repositories.SessionRepository
@@ -9,6 +10,7 @@ import dev.fajar.starter.inbox.domain.repositories.*
 import dev.fajar.starter.inbox.domain.usecases.*
 import dev.fajar.starter.sync.domain.entities.*
 import dev.fajar.starter.sync.domain.repositories.SyncFeedRepository
+import dev.fajar.starter.workspace.domain.entities.*
 import dev.fajar.starter.workspace.domain.entities.Workspace
 import dev.fajar.starter.workspace.domain.entities.WorkspaceAdmission
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
@@ -16,6 +18,7 @@ import kotlin.time.Clock
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.hours
+import kotlin.time.Duration.Companion.seconds
 import kotlin.time.Instant
 import kotlinx.coroutines.flow.*
 
@@ -38,6 +41,23 @@ class InboxFixture(
                 (clock.now() + sessionLifetime).toEpochMilliseconds(),
             ),
         )
+    val build = AppBuild(AppPlatform.Android, 1, "1.0.0", null)
+    val policy =
+        CompanyPolicy(
+            null,
+            CompanyModule.entries.toSet(),
+            CompanyMinimumBuilds(0, 0, 0),
+            null,
+            false,
+            clock.now(),
+            clock.now() + 60.seconds,
+        )
+    var policyCalls = 0
+    var policyCall: suspend () -> AppResult<CompanyPolicy> = {
+        AppResult.Success(
+            policy.copy(serverTime = clock.now(), validUntil = clock.now() + 60.seconds)
+        )
+    }
     val workspace =
         Workspace(
             "workspace",
@@ -54,6 +74,7 @@ class InboxFixture(
                     Instant.fromEpochMilliseconds(session.binding.expiresAtEpochMillis),
                 ),
             ),
+            policy = CompanyPolicySnapshot(policy, clock.now()),
         )
     val sessionState = MutableStateFlow<AppResult<Session?>>(AppResult.Success(session))
     val workspaceState = MutableStateFlow<AppResult<Workspace?>>(AppResult.Success(workspace))
@@ -129,6 +150,14 @@ class InboxFixture(
         }
     val workspaces =
         object : WorkspaceRepository {
+            override suspend fun clientPolicy(
+                sessionId: String,
+                companyId: String,
+            ): AppResult<CompanyPolicy> {
+                policyCalls++
+                return policyCall()
+            }
+
             override fun observe(sessionId: String) = workspaceState
 
             override suspend fun current(sessionId: String) = workspaceState.value
@@ -253,6 +282,6 @@ class InboxFixture(
                 return AppResult.Success(true)
             }
         }
-    val sync = SyncInbox(feed, remote, cache, sessions, workspaces, clock)
+    val sync = SyncInbox(feed, remote, cache, sessions, workspaces, clock, build)
     val observe = ObserveInbox(cache, sessions, workspaces, clock)
 }

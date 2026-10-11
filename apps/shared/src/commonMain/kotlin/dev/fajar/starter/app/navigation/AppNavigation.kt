@@ -3,6 +3,7 @@ package dev.fajar.starter.app.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleStartEffect
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -21,7 +22,9 @@ import dev.fajar.starter.onboarding.presentation.navigation.*
 import dev.fajar.starter.people.presentation.navigation.*
 import dev.fajar.starter.security.presentation.navigation.AppLockSettings
 import dev.fajar.starter.settings.presentation.navigation.*
+import dev.fajar.starter.workspace.domain.entities.CompanyAvailability
 import dev.fajar.starter.workspace.presentation.navigation.*
+import dev.fajar.starter.workspace.presentation.policy.*
 import kotlinx.coroutines.flow.Flow
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -30,6 +33,21 @@ fun AppNavigation(controller: NavHostController, incomingLinks: Flow<String>) {
     val viewModel = koinViewModel<AppViewModel>()
     val state by viewModel.state.collectAsStateWithLifecycle()
     val stage = state.accessFailure?.let { AppStage.Failed(it) } ?: state.stage
+    val bootstrapStage = rememberUpdatedState(stage)
+    val companyPolicyState =
+        rememberUpdatedState(
+            CompanyPolicyState(
+                (stage as? AppStage.SignedIn)?.workspace?.company?.name.orEmpty(),
+                state.companyPolicy?.availability ?: CompanyAvailability.Unknown,
+                state.refreshingWorkspace,
+                state.changingWorkspace,
+                state.workspaceRefreshFailure,
+            )
+        )
+    val companyBlocked =
+        stage is AppStage.SignedIn &&
+            stage.workspace != null &&
+            state.companyPolicy?.availability != CompanyAvailability.Available
     val lifecycle = LocalLifecycleOwner.current.lifecycle
     LifecycleStartEffect(viewModel) {
         viewModel.onEvent(AppEvent.ForegroundEntered)
@@ -44,20 +62,30 @@ fun AppNavigation(controller: NavHostController, incomingLinks: Flow<String>) {
         when (stage) {
             AppStage.Onboarding -> OnboardingRoute
             AppStage.SignedOut -> LoginRoute
-            is AppStage.SignedIn -> if (stage.workspace == null) VerificationRoute else HomeRoute()
+            is AppStage.SignedIn ->
+                when {
+                    stage.workspace == null -> VerificationRoute
+                    companyBlocked -> CompanyPolicyRoute
+                    else -> HomeRoute()
+                }
             else -> BootstrapRoute
         }
     val scope =
         when (stage) {
             is AppStage.SignedIn ->
-                "account/${stage.sessionId}/${stage.workspace?.id ?: "selection"}"
+                "account/${stage.sessionId}/${stage.workspace?.id ?: "selection"}/${if (companyBlocked) "policy" else "ready"}"
             AppStage.Onboarding -> "onboarding"
             AppStage.SignedOut -> "signed-out"
             else -> "bootstrap"
         }
     LaunchedEffect(scope, state.pendingLink) {
         val link = state.pendingLink
-        if (stage is AppStage.SignedIn && stage.workspace != null && link == AppLink.Account) {
+        if (
+            stage is AppStage.SignedIn &&
+                stage.workspace != null &&
+                !companyBlocked &&
+                link == AppLink.Account
+        ) {
             controller.navigate(HomeRoute(HomeTab.Account.name)) {
                 popUpTo<HomeRoute> { inclusive = true }
                 launchSingleTop = true
@@ -69,7 +97,7 @@ fun AppNavigation(controller: NavHostController, incomingLinks: Flow<String>) {
         composable<BootstrapRoute> {
             AppPage {
                 AppBrand()
-                when (val current = stage) {
+                when (val current = bootstrapStage.value) {
                     is AppStage.Failed -> {
                         AppFeedback(failureText(current.failure))
                         AppButton(
@@ -98,32 +126,50 @@ fun AppNavigation(controller: NavHostController, incomingLinks: Flow<String>) {
                     }
                 }
             } else {
-                homeRoutes(
-                    stage.workspace,
-                    onProfile = { controller.navigate(ProfileRoute) { launchSingleTop = true } },
-                    onInbox = { controller.navigate(InboxRoute) { launchSingleTop = true } },
-                    onSessions = { controller.navigate(SessionsRoute) { launchSingleTop = true } },
-                ) {
-                    controller.navigate(SettingsRoute) { launchSingleTop = true }
+                companyPolicyRoutes(companyPolicyState) { event ->
+                    when (event) {
+                        CompanyPolicyEvent.RefreshRequested ->
+                            viewModel.onEvent(AppEvent.WorkspaceRefreshRequested)
+                        CompanyPolicyEvent.CompanyChangeRequested ->
+                            viewModel.onEvent(AppEvent.CompanyChangeRequested)
+                    }
                 }
-                peopleRoutes(
-                    stage.workspace.id,
-                    onVerify = { controller.navigate(VerificationRoute) { launchSingleTop = true } },
-                ) {
-                    controller.popBackStack()
-                }
-                inboxRoutes(
-                    stage.workspace.id,
-                    onItem = { controller.navigate(InboxItemRoute(it)) { launchSingleTop = true } },
-                    onVerify = {
-                        controller.navigate(VerificationRoute) { launchSingleTop = true }
-                    },
-                    onBack = { controller.popBackStack() },
-                )
-                verificationRoutes(stage.sessionId) { controller.popBackStack() }
-                sessionRoutes(stage.sessionId) { controller.popBackStack() }
-                settingsRoutes(securitySettings = { AppLockSettings() }) {
-                    controller.popBackStack()
+                if (!companyBlocked) {
+                    homeRoutes(
+                        stage.workspace,
+                        onProfile = {
+                            controller.navigate(ProfileRoute) { launchSingleTop = true }
+                        },
+                        onInbox = { controller.navigate(InboxRoute) { launchSingleTop = true } },
+                        onSessions = {
+                            controller.navigate(SessionsRoute) { launchSingleTop = true }
+                        },
+                    ) {
+                        controller.navigate(SettingsRoute) { launchSingleTop = true }
+                    }
+                    peopleRoutes(
+                        stage.workspace.id,
+                        onVerify = {
+                            controller.navigate(VerificationRoute) { launchSingleTop = true }
+                        },
+                    ) {
+                        controller.popBackStack()
+                    }
+                    inboxRoutes(
+                        stage.workspace.id,
+                        onItem = {
+                            controller.navigate(InboxItemRoute(it)) { launchSingleTop = true }
+                        },
+                        onVerify = {
+                            controller.navigate(VerificationRoute) { launchSingleTop = true }
+                        },
+                        onBack = { controller.popBackStack() },
+                    )
+                    verificationRoutes(stage.sessionId) { controller.popBackStack() }
+                    sessionRoutes(stage.sessionId) { controller.popBackStack() }
+                    settingsRoutes(securitySettings = { AppLockSettings() }) {
+                        controller.popBackStack()
+                    }
                 }
             }
         }

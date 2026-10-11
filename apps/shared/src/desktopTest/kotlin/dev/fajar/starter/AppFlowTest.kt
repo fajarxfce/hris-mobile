@@ -35,6 +35,81 @@ class AppFlowTest {
     @get:Rule val compose = createComposeRule()
 
     @Test
+    fun companyAvailabilityPreservesRecoveryAcrossUpdateMaintenanceAndOfflineRetry() {
+        val server = NativeUiServer().apply { companyPolicy.minimumAndroid = 2 }
+        withApplication(server) {
+            signIn()
+            waitFor("Choose a company")
+            compose.onAllNodesWithText("Open company")[0].performClick()
+            waitFor("Update required")
+            compose.onNodeWithText("Inbox").assertDoesNotExist()
+            compose.waitUntil {
+                compose
+                    .onAllNodes(hasText("Retry") and isEnabled())
+                    .fetchSemanticsNodes()
+                    .isNotEmpty()
+            }
+            capture("company-update-required")
+            server.companyPolicy.offline = true
+            compose.onNodeWithText("Retry").performClick()
+            try {
+                waitFor("Unable to connect. Check your connection.")
+            } finally {
+                capture("company-policy-offline-retry")
+            }
+            compose.onNodeWithText("Update required").assertExists()
+            compose.onNodeWithText("Employee workspace").assertDoesNotExist()
+            server.companyPolicy.offline = false
+            compose.onNodeWithText("Change company").performScrollTo().performClick()
+            waitFor("Choose a company")
+            compose.onAllNodesWithText("Open company")[1].performClick()
+            waitFor("Inbox")
+            compose.onNodeWithText("PT Lintas Karya").assertExists()
+            compose.onNodeWithText("Update required").assertDoesNotExist()
+            server.companyPolicy.minimumAndroid = 0
+            server.companyPolicy.maintenance = true
+            compose.onNodeWithText("Change company").performScrollTo().performClick()
+            waitFor("Choose a company")
+            compose.onAllNodesWithText("Open company")[0].performClick()
+            waitFor("Scheduled maintenance")
+            compose.onNodeWithText("Inbox").assertDoesNotExist()
+            compose.waitUntil {
+                compose
+                    .onAllNodes(hasText("Retry") and isEnabled())
+                    .fetchSemanticsNodes()
+                    .isNotEmpty()
+            }
+            server.companyPolicy.maintenance = false
+            compose.onNodeWithText("Retry").performClick()
+            waitFor("Inbox")
+            compose.onNodeWithText("Scheduled maintenance").assertDoesNotExist()
+        }
+    }
+
+    @Test
+    fun disabledModulesAreRemovedFromTheirCompanyWithoutAffectingAnotherCompany() {
+        val server =
+            NativeUiServer().apply {
+                companyPolicy.disabledModules = setOf("PEOPLE", "COMMUNICATIONS")
+            }
+        withApplication(server) {
+            signIn()
+            waitFor("Choose a company")
+            compose.onAllNodesWithText("Open company")[0].performClick()
+            waitFor("Employee workspace")
+            compose.onNodeWithText("My profile").assertDoesNotExist()
+            compose.onNodeWithText("Inbox").assertDoesNotExist()
+            capture("company-disabled-modules")
+            compose.onNodeWithText("Change company").performScrollTo().performClick()
+            waitFor("Choose a company")
+            compose.onAllNodesWithText("Open company")[1].performClick()
+            waitFor("Inbox")
+            compose.onNodeWithText("My profile").assertExists()
+            assertTrue(server.inbox.actions.isEmpty())
+        }
+    }
+
+    @Test
     fun explicitAcknowledgementRecoversTheSameCommandAfterResponseLossAndSignInAgain() {
         val server = NativeUiServer()
         withApplication(server) {

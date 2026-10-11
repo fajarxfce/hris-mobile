@@ -4,29 +4,28 @@ import androidx.lifecycle.viewModelScope
 import dev.fajar.starter.app.navigation.ResolveAppLink
 import dev.fajar.starter.common.result.AppResult
 import dev.fajar.starter.common.result.FailureKind
-import dev.fajar.starter.identity.domain.usecases.ObserveSessionIdentity
 import dev.fajar.starter.identity.domain.usecases.RestoreSession
 import dev.fajar.starter.observability.*
 import dev.fajar.starter.onboarding.domain.usecases.LoadOnboarding
 import dev.fajar.starter.presentation.mvi.MviViewModel
 import dev.fajar.starter.sync.domain.SyncResult
-import dev.fajar.starter.workspace.domain.usecases.ObserveWorkspace
+import dev.fajar.starter.workspace.domain.usecases.LeaveWorkspace
+import dev.fajar.starter.workspace.domain.usecases.ObserveWorkspaceContext
 import dev.fajar.starter.workspace.domain.usecases.RefreshWorkspace
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.ensureActive
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel
 class AppViewModel(
     private val loadOnboarding: LoadOnboarding,
-    private val observeIdentity: ObserveSessionIdentity,
+    private val observeContext: ObserveWorkspaceContext,
     private val restoreSession: RestoreSession,
     private val resolveAppLink: ResolveAppLink,
-    private val observeWorkspace: ObserveWorkspace,
     private val refreshWorkspace: RefreshWorkspace,
+    private val leaveWorkspace: LeaveWorkspace,
 ) : MviViewModel<AppState, AppEvent, Nothing>(AppState()) {
     private var bootstrapJob: Job? = null
     private var accessRefresh: Job? = null
@@ -39,6 +38,7 @@ class AppViewModel(
         on<AppEvent.ForegroundEntered>(::onForegroundEntered)
         on<AppEvent.ForegroundLeft>(::onForegroundLeft)
         on<AppEvent.WorkspaceRefreshRequested>(::onWorkspaceRefreshRequested)
+        on<AppEvent.CompanyChangeRequested>(::onCompanyChangeRequested)
         onEvent(AppEvent.BootstrapRequested)
     }
 
@@ -50,7 +50,15 @@ class AppViewModel(
         bootstrapJob?.cancel()
         accessRefresh?.cancel()
         accessRefresh = null
-        updateState { it.copy(stage = AppStage.Loading) }
+        updateState {
+            it.copy(
+                stage = AppStage.Loading,
+                companyPolicy = null,
+                refreshingWorkspace = false,
+                changingWorkspace = false,
+                workspaceRefreshFailure = null,
+            )
+        }
         bootstrapJob =
             viewModelScope.launch {
                 val initialized =
@@ -73,44 +81,47 @@ class AppViewModel(
                         if (!result.value) {
                             updateState { it.copy(stage = AppStage.Onboarding) }
                         } else {
-                            combine(observeIdentity(), observeWorkspace()) { identity, workspace ->
-                                    identity to workspace
-                                }
-                                .collect { (identity, workspace) ->
-                                    val currentIdentity = (identity as? AppResult.Success)?.value
-                                    val nextStage =
-                                        when {
-                                            identity is AppResult.Failed ->
-                                                AppStage.Failed(identity.failure)
-                                            currentIdentity == null -> AppStage.SignedOut
-                                            workspace is AppResult.Failed ->
-                                                AppStage.Failed(workspace.failure)
-                                            else ->
-                                                AppStage.SignedIn(
-                                                    currentIdentity.sessionId,
-                                                    (workspace as AppResult.Success).value?.takeIf {
-                                                        it.sessionId == currentIdentity.sessionId
-                                                    },
-                                                )
-                                        }
-                                    val previous = state.value.stage as? AppStage.SignedIn
-                                    val next = nextStage as? AppStage.SignedIn
-                                    val changed =
-                                        previous?.sessionId != next?.sessionId ||
-                                            previous?.workspace?.id != next?.workspace?.id
-                                    if (changed) {
-                                        accessRefresh?.cancel()
-                                        accessRefresh = null
+                            observeContext().collect { context ->
+                                val admitted = (context as? AppResult.Success)?.value
+                                val nextStage =
+                                    when {
+                                        context is AppResult.Failed ->
+                                            AppStage.Failed(context.failure)
+                                        admitted == null -> AppStage.SignedOut
+                                        else ->
+                                            AppStage.SignedIn(
+                                                admitted.sessionId,
+                                                admitted.workspace,
+                                            )
                                     }
-                                    updateState {
-                                        it.copy(
-                                            stage = nextStage,
-                                            accessFailure = if (changed) null else it.accessFailure,
-                                        )
-                                    }
-                                    if (changed && foreground)
-                                        onEvent(AppEvent.WorkspaceRefreshRequested)
+                                val previous = state.value.stage as? AppStage.SignedIn
+                                val next = nextStage as? AppStage.SignedIn
+                                val changed =
+                                    previous?.sessionId != next?.sessionId ||
+                                        previous?.workspace?.id != next?.workspace?.id
+                                val expired =
+                                    admitted?.policy?.stale == true &&
+                                        state.value.companyPolicy?.stale != true
+                                if (changed) {
+                                    accessRefresh?.cancel()
+                                    accessRefresh = null
                                 }
+                                updateState {
+                                    it.copy(
+                                        stage = nextStage,
+                                        accessFailure = if (changed) null else it.accessFailure,
+                                        companyPolicy = admitted?.policy,
+                                        refreshingWorkspace =
+                                            if (changed) false else it.refreshingWorkspace,
+                                        changingWorkspace =
+                                            if (changed) false else it.changingWorkspace,
+                                        workspaceRefreshFailure =
+                                            if (changed) null else it.workspaceRefreshFailure,
+                                    )
+                                }
+                                if ((changed || expired) && foreground)
+                                    onEvent(AppEvent.WorkspaceRefreshRequested)
+                            }
                         }
                     }
                 }
@@ -126,32 +137,72 @@ class AppViewModel(
         foreground = false
         accessRefresh?.cancel()
         accessRefresh = null
+        updateState { it.copy(refreshingWorkspace = false) }
     }
 
     private fun onWorkspaceRefreshRequested(event: AppEvent.WorkspaceRefreshRequested) {
-        if (!foreground || accessRefresh?.isActive == true) return
+        if (!foreground || accessRefresh?.isActive == true || state.value.changingWorkspace) return
         val origin = state.value.stage as? AppStage.SignedIn ?: return
         val scope = origin.workspace?.id ?: return
+        updateState { it.copy(refreshingWorkspace = true, workspaceRefreshFailure = null) }
         val refresh =
             viewModelScope.launch(start = CoroutineStart.LAZY) {
-                val result = refreshWorkspace()
-                ensureActive()
-                val current = state.value.stage as? AppStage.SignedIn
-                if (current?.sessionId != origin.sessionId || current.workspace?.id != scope)
-                    return@launch
-                when (result) {
-                    SyncResult.Complete -> updateState { it.copy(accessFailure = null) }
-                    is SyncResult.Blocked ->
-                        if (
-                            result.failure.kind in
-                                setOf(FailureKind.Storage, FailureKind.Unexpected)
-                        )
-                            updateState { it.copy(accessFailure = result.failure) }
-                    is SyncResult.Retry -> Unit
+                try {
+                    val result = refreshWorkspace()
+                    ensureActive()
+                    val current = state.value.stage as? AppStage.SignedIn
+                    if (current?.sessionId != origin.sessionId || current.workspace?.id != scope)
+                        return@launch
+                    when (result) {
+                        SyncResult.Complete ->
+                            updateState {
+                                it.copy(accessFailure = null, workspaceRefreshFailure = null)
+                            }
+                        is SyncResult.Blocked ->
+                            updateState {
+                                it.copy(
+                                    workspaceRefreshFailure = result.failure,
+                                    accessFailure =
+                                        if (
+                                            result.failure.kind in
+                                                setOf(FailureKind.Storage, FailureKind.Unexpected)
+                                        )
+                                            result.failure
+                                        else it.accessFailure,
+                                )
+                            }
+                        is SyncResult.Retry ->
+                            updateState { it.copy(workspaceRefreshFailure = result.failure) }
+                    }
+                } finally {
+                    if (accessRefresh == coroutineContext[Job])
+                        updateState { it.copy(refreshingWorkspace = false) }
                 }
             }
         accessRefresh = refresh
         refresh.start()
+    }
+
+    private fun onCompanyChangeRequested(event: AppEvent.CompanyChangeRequested) {
+        if (state.value.changingWorkspace) return
+        val origin = state.value.stage as? AppStage.SignedIn ?: return
+        val workspace = origin.workspace ?: return
+        accessRefresh?.cancel()
+        accessRefresh = null
+        updateState { it.copy(changingWorkspace = true, refreshingWorkspace = false) }
+        viewModelScope.launch {
+            val result = leaveWorkspace(workspace.id)
+            ensureActive()
+            val current = state.value.stage as? AppStage.SignedIn
+            if (current?.sessionId != origin.sessionId || current.workspace?.id != workspace.id)
+                return@launch
+            updateState {
+                it.copy(
+                    changingWorkspace = false,
+                    workspaceRefreshFailure = (result as? AppResult.Failed)?.failure,
+                )
+            }
+        }
     }
 
     private fun onLinkReceived(event: AppEvent.LinkReceived) {

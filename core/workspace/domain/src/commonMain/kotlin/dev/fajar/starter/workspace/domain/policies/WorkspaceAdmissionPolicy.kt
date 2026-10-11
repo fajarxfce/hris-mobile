@@ -50,6 +50,4 @@ val workspaceAccessLossCodes =
         "mfa_setup_required",
         "mfa_verification_required",
         "recent_authentication_required",
-        "client_update_required",
-        "company_maintenance",
     )

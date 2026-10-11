@@ -10,6 +10,7 @@ import dev.fajar.starter.workspace.domain.entities.*
 import java.nio.file.Files
 import kotlin.test.*
 import kotlin.time.Duration.Companion.hours
+import kotlin.time.Duration.Companion.seconds
 import kotlin.time.Instant
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.first
@@ -36,12 +37,58 @@ class EncryptedWorkspaceTest {
                 now,
                 now + 1.hours,
             ),
+            policy =
+                CompanyPolicySnapshot(
+                    CompanyPolicy(
+                        1,
+                        setOf(CompanyModule.PEOPLE),
+                        CompanyMinimumBuilds(2, 0, 0),
+                        null,
+                        false,
+                        now,
+                        now + 60.seconds,
+                    ),
+                    now,
+                ),
         )
     private val remote =
         object : WorkspaceRemoteDataSource {
+            override suspend fun clientPolicy(sessionId: String, companyId: String) =
+                error("Local storage must not acquire network authority.")
+
             override suspend fun permissions(sessionId: String, companyId: String) =
                 error("Local storage must not acquire network authority.")
         }
+
+    @Test
+    fun legacySelectionsRemainReadableWithoutInventingAnAvailabilityPolicy() = runTest {
+        val directory = Files.createTempDirectory("workspace-legacy").toFile()
+        val database = createAppDatabase(directory)
+        try {
+            database.accounts.activate(workspace.sessionId)
+            val repository =
+                EncryptedWorkspaceRepository(
+                    database.replicas,
+                    remote,
+                    AesGcmContentCipher(),
+                    MemoryCredentialStore(),
+                    server,
+                )
+            val legacy = workspace.copy(policy = null)
+            assertEquals(
+                AppResult.Success(true),
+                repository.compareAndSet(workspace.sessionId, null, legacy),
+            )
+            val restored =
+                assertIs<AppResult.Success<Workspace?>>(repository.current(workspace.sessionId))
+                    .value
+            assertEquals(legacy, restored)
+            assertNull(restored!!.policy)
+        } finally {
+            database.close()
+            directory.deleteRecursively()
+        }
+    }
 
     @Test
     fun encryptedSelectionSurvivesReopeningAndLogoutRemovesTheDerivedRecord() = runTest {

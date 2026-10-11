@@ -5,6 +5,7 @@ package dev.fajar.starter.workspace.domain.usecases
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.identity.domain.repositories.*
 import dev.fajar.starter.sync.domain.*
+import dev.fajar.starter.workspace.domain.entities.CompanyPolicySnapshot
 import dev.fajar.starter.workspace.domain.entities.Workspace
 import dev.fajar.starter.workspace.domain.policies.*
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
@@ -81,6 +82,12 @@ class RefreshWorkspace(
                 is AppResult.Failed -> return handleRejection(previous, result.failure)
                 is AppResult.Success -> result.value
             }
+        val policyRequestedAt = clock.now()
+        val policy =
+            when (val result = workspaces.clientPolicy(session.id, company.id)) {
+                is AppResult.Failed -> return handleRejection(previous, result.failure)
+                is AppResult.Success -> CompanyPolicySnapshot(result.value, policyRequestedAt)
+            }
         currentCoroutineContext().ensureActive()
         val currentSession =
             when (val result = sessions.current()) {
@@ -109,6 +116,7 @@ class RefreshWorkspace(
                 company = company,
                 permissions = permissions,
                 admission = admission,
+                policy = policy,
             )
         return when (val saved = workspaces.compareAndSet(session.id, previous, updated)) {
             is AppResult.Failed -> saved

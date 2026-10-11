@@ -12,4 +12,6 @@ sealed interface AppEvent {
     data object ForegroundLeft : AppEvent
 
     data object WorkspaceRefreshRequested : AppEvent
+
+    data object CompanyChangeRequested : AppEvent
 }

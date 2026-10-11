@@ -4,6 +4,8 @@ import dev.fajar.starter.common.result.*
 import dev.fajar.starter.identity.domain.repositories.SessionRepository
 import dev.fajar.starter.people.domain.entities.SelfEmploymentDirectory
 import dev.fajar.starter.people.domain.repositories.PeopleRepository
+import dev.fajar.starter.workspace.domain.entities.CompanyModule
+import dev.fajar.starter.workspace.domain.policies.requireCompanyModule
 import dev.fajar.starter.workspace.domain.policies.validateWorkspaceOwnership
 import dev.fajar.starter.workspace.domain.policies.workspaceFailure
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
@@ -40,6 +42,8 @@ class LoadSelfEmployments(
         if (admission is AppResult.Failed) return admission
         requireNotNull(workspace)
         requireNotNull(session)
+        val availability = requireCompanyModule(workspace, CompanyModule.PEOPLE)
+        if (availability is AppResult.Failed) return availability
         if (after != null && (after.isBlank() || after.length > 32))
             return AppResult.Failed(
                 Failure(FailureKind.Validation, "Invalid page.", code = "invalid_page")
@@ -59,6 +63,9 @@ class LoadSelfEmployments(
         val ownership =
             validateWorkspaceOwnership(workspaceId, currentWorkspace, currentSession, clock.now())
         if (ownership is AppResult.Failed) return ownership
+        val stillAvailable =
+            requireCompanyModule(requireNotNull(currentWorkspace), CompanyModule.PEOPLE)
+        if (stillAvailable is AppResult.Failed) return stillAvailable
         if (
             result is AppResult.Success &&
                 result.value.items.any { it.accountId != session.user.id }

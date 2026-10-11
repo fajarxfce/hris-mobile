@@ -95,6 +95,11 @@ class EncryptedWorkspaceRepository(
         response.permissions.toSet()
     }
 
+    override suspend fun clientPolicy(sessionId: String, companyId: String) = safeApiCall {
+        Uuid.parse(companyId)
+        remote.clientPolicy(sessionId, companyId).toPolicy()
+    }
+
     private suspend fun decodeWorkspace(sessionId: String, record: ReplicaCheckpoint): Workspace {
         require(record.published && record.revision == 0L)
         require(record.handle.sessionId == sessionId && record.handle.partition == PARTITION)

@@ -50,24 +50,26 @@ fun HomePage(state: HomeState, onEvent: (HomeEvent) -> Unit) {
                                     AppText(state.user?.email.orEmpty(), color = AppColors.muted)
                                 }
                             }
-                            AppButton(
-                                appString(AppString.MyProfile),
-                                { onEvent(HomeEvent.ProfileRequested) },
-                                Modifier.fillMaxWidth(),
-                                primary = false,
-                            )
+                            if (state.canOpenProfile)
+                                AppButton(
+                                    appString(AppString.MyProfile),
+                                    { onEvent(HomeEvent.ProfileRequested) },
+                                    Modifier.fillMaxWidth(),
+                                    primary = false,
+                                )
                             AppButton(
                                 appString(AppString.ChangeCompany),
                                 { onEvent(HomeEvent.CompanyChangeRequested) },
                                 primary = false,
                                 enabled = !state.working,
                             )
-                            AppButton(
-                                appString(AppString.Inbox),
-                                { onEvent(HomeEvent.InboxRequested) },
-                                Modifier.fillMaxWidth(),
-                                primary = false,
-                            )
+                            if (state.canOpenInbox)
+                                AppButton(
+                                    appString(AppString.Inbox),
+                                    { onEvent(HomeEvent.InboxRequested) },
+                                    Modifier.fillMaxWidth(),
+                                    primary = false,
+                                )
                             if (state.failure != null) AppFeedback(failureText(state.failure))
                         }
                     HomeTab.Account ->
@@ -80,12 +82,13 @@ fun HomePage(state: HomeState, onEvent: (HomeEvent) -> Unit) {
                                     AppText(state.workspace.company.name)
                                 }
                             }
-                            AppButton(
-                                appString(AppString.MyProfile),
-                                { onEvent(HomeEvent.ProfileRequested) },
-                                Modifier.fillMaxWidth(),
-                                primary = false,
-                            )
+                            if (state.canOpenProfile)
+                                AppButton(
+                                    appString(AppString.MyProfile),
+                                    { onEvent(HomeEvent.ProfileRequested) },
+                                    Modifier.fillMaxWidth(),
+                                    primary = false,
+                                )
                             AppButton(
                                 appString(AppString.Settings),
                                 { onEvent(HomeEvent.SettingsRequested) },

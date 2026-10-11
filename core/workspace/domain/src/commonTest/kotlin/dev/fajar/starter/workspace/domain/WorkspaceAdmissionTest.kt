@@ -232,7 +232,7 @@ class WorkspaceAdmissionTest {
     }
 }
 
-private class AdmissionFixture(now: () -> Instant = { Instant.parse("2026-10-11T00:00:00Z") }) {
+internal class AdmissionFixture(now: () -> Instant = { Instant.parse("2026-10-11T00:00:00Z") }) {
     val clock =
         object : Clock {
             override fun now() = now()
@@ -277,6 +277,9 @@ private class AdmissionFixture(now: () -> Instant = { Instant.parse("2026-10-11T
     var permissionCall: suspend () -> AppResult<Set<String>> = {
         AppResult.Success(workspace.permissions)
     }
+    var policyCall: suspend () -> AppResult<CompanyPolicy> = {
+        AppResult.Success(testCompanyPolicy(clock.now()))
+    }
     val sessions =
         object : SessionRepository {
             override val persistent = true
@@ -302,6 +305,8 @@ private class AdmissionFixture(now: () -> Instant = { Instant.parse("2026-10-11T
         }
     val workspaces =
         object : WorkspaceRepository {
+            override suspend fun clientPolicy(sessionId: String, companyId: String) = policyCall()
+
             override fun observe(sessionId: String) = selected
 
             override suspend fun current(sessionId: String) = selected.value

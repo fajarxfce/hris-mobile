@@ -64,6 +64,9 @@ class WorkspaceSelectionTest {
     }
 
     private class Workspaces : WorkspaceRepository {
+        override suspend fun clientPolicy(sessionId: String, companyId: String) =
+            AppResult.Success(testCompanyPolicy())
+
         val selected = MutableStateFlow<AppResult<Workspace?>>(AppResult.Success(null))
         var readAccess: suspend (String) -> AppResult<Set<String>> = {
             AppResult.Success(setOf("people.self.read"))

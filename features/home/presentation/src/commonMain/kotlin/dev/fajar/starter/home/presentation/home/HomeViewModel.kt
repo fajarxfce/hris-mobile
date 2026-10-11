@@ -5,8 +5,11 @@ import dev.fajar.starter.common.result.*
 import dev.fajar.starter.identity.domain.usecases.ObserveSessionIdentity
 import dev.fajar.starter.identity.domain.usecases.SignOutNativeSession
 import dev.fajar.starter.presentation.mvi.MviViewModel
+import dev.fajar.starter.workspace.domain.entities.CompanyModule
 import dev.fajar.starter.workspace.domain.entities.Workspace
+import dev.fajar.starter.workspace.domain.policies.companyModuleAvailable
 import dev.fajar.starter.workspace.domain.usecases.LeaveWorkspace
+import dev.fajar.starter.workspace.domain.usecases.ObserveWorkspace
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
 import org.koin.core.annotation.InjectedParam
@@ -18,7 +21,20 @@ class HomeViewModel(
     private val observeIdentity: ObserveSessionIdentity,
     private val leaveWorkspace: LeaveWorkspace,
     private val signOut: SignOutNativeSession,
-) : MviViewModel<HomeState, HomeEvent, HomeEffect>(HomeState(workspace, tab = initialTab)) {
+    private val observeWorkspace: ObserveWorkspace,
+) :
+    MviViewModel<HomeState, HomeEvent, HomeEffect>(
+        HomeState(
+            workspace,
+            tab = initialTab,
+            canOpenProfile =
+                "people.self.read" in workspace.permissions &&
+                    companyModuleAvailable(workspace, CompanyModule.PEOPLE),
+            canOpenInbox =
+                "announcements.read" in workspace.permissions &&
+                    companyModuleAvailable(workspace, CompanyModule.COMMUNICATIONS),
+        )
+    ) {
     init {
         on<HomeEvent.TabSelected>(::onTabSelected)
         on<HomeEvent.CompanyChangeRequested>(::onCompanyChangeRequested)
@@ -27,6 +43,25 @@ class HomeViewModel(
         on<HomeEvent.InboxRequested>(::onInboxRequested)
         on<HomeEvent.SessionsRequested>(::onSessionsRequested)
         on<HomeEvent.SignOutRequested>(::onSignOutRequested)
+        viewModelScope.launch {
+            observeWorkspace().collect { result ->
+                val selected =
+                    (result as? AppResult.Success)?.value?.takeIf { it.id == workspace.id }
+                updateState {
+                    it.copy(
+                        workspace = selected ?: it.workspace,
+                        canOpenProfile =
+                            selected != null &&
+                                "people.self.read" in selected.permissions &&
+                                companyModuleAvailable(selected, CompanyModule.PEOPLE),
+                        canOpenInbox =
+                            selected != null &&
+                                "announcements.read" in selected.permissions &&
+                                companyModuleAvailable(selected, CompanyModule.COMMUNICATIONS),
+                    )
+                }
+            }
+        }
         viewModelScope.launch {
             observeIdentity().collect { result ->
                 when (result) {
@@ -56,10 +91,12 @@ class HomeViewModel(
     }
 
     private fun onProfileRequested(event: HomeEvent.ProfileRequested) {
+        if (!state.value.canOpenProfile) return
         viewModelScope.launch { emitEffect(HomeEffect.OpenProfile) }
     }
 
     private fun onInboxRequested(event: HomeEvent.InboxRequested) {
+        if (!state.value.canOpenInbox) return
         viewModelScope.launch { emitEffect(HomeEffect.OpenInbox) }
     }
 

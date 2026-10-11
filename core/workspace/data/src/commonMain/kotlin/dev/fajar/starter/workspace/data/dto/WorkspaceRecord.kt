@@ -16,6 +16,7 @@ data class WorkspaceRecord(
     val familyId: String,
     val checkedAt: String,
     val expiresAt: String,
+    val policy: CompanyPolicyRecord? = null,
 ) {
     override fun toString() = "WorkspaceRecord([redacted])"
 }

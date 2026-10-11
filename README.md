@@ -16,12 +16,14 @@ company access. Employees can open their own personal profile, employment terms,
 and organization assignments. The employee inbox synchronizes encrypted company
 correspondence, retains admitted content when a refresh fails, and queues explicit
 read/acknowledgement actions with durable idempotent retries. A time-limited encrypted
-workspace restores the selected company offline. Screens support English and Indonesian. System
+workspace restores the selected company offline. Company policies gate maintenance,
+minimum builds and disabled modules, and pause inbox delivery before transport.
+Screens support English and Indonesian. System
 appearance and reduced-motion preferences are respected.
 
 The runtime contains no demo authentication transport. Other transactional employee workflows
 are still being connected; a generated module
-is not a completed HRIS workflow. See [native identity](docs/native-identity.md), [company workspaces](docs/workspace.md), [employee profiles](docs/people.md), [inbox and synchronization](docs/inbox.md), and
+is not a completed HRIS workflow. See [native identity](docs/native-identity.md), [company workspaces](docs/workspace.md), [employee profiles](docs/people.md), [inbox and synchronization](docs/inbox.md), [company availability](docs/company-policy.md), and
 the platform's [remaining delivery work](https://github.com/fajarxfce/hris-platform/blob/main/docs/completion.md).
 
 ## Development

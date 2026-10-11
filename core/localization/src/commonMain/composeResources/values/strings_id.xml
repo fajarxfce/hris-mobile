@@ -196,6 +196,9 @@
     <string name="inbox_acknowledged_id">Dikonfirmasi</string>
     <string name="inbox_cache_expired_id">Hubungkan ke internet untuk memperbarui inbox.</string>
     <string name="workspace_access_expired_id">Hubungkan ke internet dan pilih perusahaan kembali.</string>
+    <string name="company_policy_title_id">Layanan perusahaan</string>
+    <string name="company_policy_unavailable_id">Hubungkan ke internet untuk memeriksa ketersediaan layanan.</string>
+    <string name="company_module_disabled_id">Layanan ini tidak tersedia untuk perusahaan ini.</string>
     <string name="inbox_mark_read_id">Tandai dibaca</string>
     <string name="inbox_read_id">Sudah dibaca</string>
     <string name="inbox_acknowledge_id">Konfirmasi</string>
