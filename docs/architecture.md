@@ -71,6 +71,9 @@ Clearing its ViewModel cancels the request. The sign-in use case checks cancella
 committing a successful session through the session repository. Refresh and MFA share
 one credential-mutation mutex. A company selection checks current identity and uses
 compare-and-set before publication. Late results cannot replace an accepted selection.
+Leaving retries one concurrent metadata refresh of the same workspace. A replacement
+workspace is never cleared; repeated contention returns a conflict rather than
+reporting that the old selection was removed. Cancellation stops further attempts.
 Repositories do not own retries, scheduling, or UI loading state.
 Workers are platform application entry points that invoke `SyncTask` use cases.
 The [workspace admission](workspace.md) use cases own offline eligibility and live

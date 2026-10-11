@@ -72,6 +72,8 @@ class WorkspaceSelectionTest {
             AppResult.Success(setOf("people.self.read"))
         }
         var requests = 0
+        var changes = 0
+        var beforeChange: suspend () -> Unit = {}
 
         override fun observe(sessionId: String) = selected
 
@@ -81,10 +83,13 @@ class WorkspaceSelectionTest {
             sessionId: String,
             expected: Workspace?,
             updated: Workspace?,
-        ) =
-            AppResult.Success(
+        ): AppResult<Boolean> {
+            changes++
+            beforeChange()
+            return AppResult.Success(
                 selected.compareAndSet(AppResult.Success(expected), AppResult.Success(updated))
             )
+        }
 
         override suspend fun permissions(
             sessionId: String,
@@ -97,6 +102,91 @@ class WorkspaceSelectionTest {
 
     private class Accounts(var value: AccountSnapshot) : AccountRepository {
         override suspend fun load(sessionId: String) = AppResult.Success(value)
+    }
+
+    @Test
+    fun leavingRetriesAConcurrentRefreshOfTheSameWorkspace() = runTest {
+        val sessions = Sessions(session)
+        val workspaces = Workspaces()
+        val selected =
+            assertIs<AppResult.Success<Workspace>>(
+                    SelectWorkspace(sessions, Accounts(account()), workspaces)(session.id, "one")
+                )
+                .value
+        workspaces.changes = 0
+        workspaces.beforeChange = {
+            if (workspaces.changes == 1)
+                workspaces.selected.value =
+                    AppResult.Success(selected.copy(permissions = setOf("workforce.read")))
+        }
+        assertIs<AppResult.Success<Unit>>(LeaveWorkspace(sessions, workspaces)(selected.id))
+        assertEquals(AppResult.Success(null), workspaces.selected.value)
+        assertEquals(2, workspaces.changes)
+    }
+
+    @Test
+    fun leavingNeverClearsAReplacementWorkspace() = runTest {
+        val sessions = Sessions(session)
+        val workspaces = Workspaces()
+        val selected =
+            assertIs<AppResult.Success<Workspace>>(
+                    SelectWorkspace(sessions, Accounts(account()), workspaces)(session.id, "one")
+                )
+                .value
+        val replacement = selected.copy(id = "new-scope", company = companies[1])
+        workspaces.changes = 0
+        workspaces.beforeChange = { workspaces.selected.value = AppResult.Success(replacement) }
+        assertIs<AppResult.Success<Unit>>(LeaveWorkspace(sessions, workspaces)(selected.id))
+        assertEquals(AppResult.Success(replacement), workspaces.selected.value)
+        assertEquals(1, workspaces.changes)
+    }
+
+    @Test
+    fun repeatedWorkspaceContentionIsBoundedAndCannotReportSuccess() = runTest {
+        val sessions = Sessions(session)
+        val workspaces = Workspaces()
+        val selected =
+            assertIs<AppResult.Success<Workspace>>(
+                    SelectWorkspace(sessions, Accounts(account()), workspaces)(session.id, "one")
+                )
+                .value
+        workspaces.changes = 0
+        workspaces.beforeChange = {
+            workspaces.selected.value =
+                AppResult.Success(
+                    selected.copy(permissions = setOf("permission-${workspaces.changes}"))
+                )
+        }
+        val failure =
+            assertIs<AppResult.Failed>(LeaveWorkspace(sessions, workspaces)(selected.id)).failure
+        assertEquals(FailureKind.Conflict, failure.kind)
+        assertEquals(2, workspaces.changes)
+        assertNotEquals(AppResult.Success(null), workspaces.selected.value)
+    }
+
+    @Test
+    fun cancellationDuringAContendedChangeDoesNotStartAnotherAttempt() = runTest {
+        val sessions = Sessions(session)
+        val workspaces = Workspaces()
+        val selected =
+            assertIs<AppResult.Success<Workspace>>(
+                    SelectWorkspace(sessions, Accounts(account()), workspaces)(session.id, "one")
+                )
+                .value
+        val release = CompletableDeferred<Unit>()
+        workspaces.changes = 0
+        workspaces.beforeChange = {
+            withContext(NonCancellable) { release.await() }
+            workspaces.selected.value =
+                AppResult.Success(selected.copy(permissions = setOf("workforce.read")))
+        }
+        val leaving = async { LeaveWorkspace(sessions, workspaces)(selected.id) }
+        runCurrent()
+        leaving.cancel()
+        release.complete(Unit)
+        assertFailsWith<CancellationException> { leaving.await() }
+        assertEquals(1, workspaces.changes)
+        assertNotEquals(AppResult.Success(null), workspaces.selected.value)
     }
 
     @Test
