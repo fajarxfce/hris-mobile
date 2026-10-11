@@ -35,6 +35,8 @@ include(
     ":features:workforce:presentation",
 )
 
+include(":features:leave:domain", ":features:leave:data")
+
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 include(

@@ -38,7 +38,7 @@ appearance and reduced-motion preferences are respected.
 The runtime contains no demo authentication transport. Other transactional employee workflows
 are still being connected; a generated module
 is not a completed HRIS workflow. See [native identity](docs/native-identity.md), [company workspaces](docs/workspace.md), [employee profiles](docs/people.md), [inbox and synchronization](docs/inbox.md), [company availability](docs/company-policy.md),
-[attendance and work calendars](docs/workforce.md), and the platform's
+[attendance and work calendars](docs/workforce.md), the [leave integration](docs/leave.md), and the platform's
 [remaining delivery work](https://github.com/fajarxfce/hris-platform/blob/main/docs/completion.md).
 
 ## Development
@@ -85,6 +85,7 @@ policy is not configured yet. Android/iOS send the server's native version heade
 - `core/workspace`: current company selection and scope ownership.
 - `core/location`: foreground location, permission and Settings I/O contracts.
 - `features/auth`, `features/workspace`, `features/home`, `features/people`, `features/inbox`, `features/workforce`: feature-owned MVI screens.
+- `features/leave`: scoped balance/history contracts and encrypted offline reads; UI integration is in progress.
 - `core/designsystem`: shared `AppXxx` Fluent components and restrained transitions.
 - `build-logic`: Gradle convention plugins; versions are in `gradle/libs.versions.toml`.
 
