@@ -10,6 +10,7 @@ import dev.fajar.starter.common.config.BuildEnvironment
 import dev.fajar.starter.common.config.BuildRuntime
 import dev.fajar.starter.database.AccountCacheStore
 import dev.fajar.starter.database.AppDatabase
+import dev.fajar.starter.database.CommandStore
 import dev.fajar.starter.database.InboxStore
 import dev.fajar.starter.database.ReplicaStore
 import dev.fajar.starter.database.TransferStore
@@ -62,6 +63,7 @@ fun createAppContainer(
     workScheduler: WorkScheduler? = null,
     credentials: CredentialStore = MemoryCredentialStore(),
     inboxCredentials: CredentialStore = MemoryCredentialStore(),
+    commandCredentials: AtomicCredentialStore = MemoryCredentialStore(),
     remoteFeatureFlags: RemoteFeatureFlagSource = UnavailableFeatureFlagSource(),
     deviceAuthentication: DeviceAuthenticationSource = UnavailableDeviceAuthenticationSource(),
     browserAuthorization: BrowserAuthorizationSource = UnavailableBrowserAuthorizationSource(),
@@ -115,6 +117,9 @@ fun createAppContainer(
             single<CredentialStore> { credentials }.onClose { it?.close() }
             single<CredentialStore>(named("inbox-content-key")) { inboxCredentials }
                 .onClose { it?.close() }
+            single<AtomicCredentialStore>(named("command-content-key")) { commandCredentials }
+                .onClose { it?.close() }
+            single<CommandStore> { get<AppDatabase>().commands }
             single<ContentCipher> { AesGcmContentCipher() }
             single<ReplicaStore> { get<AppDatabase>().replicas }
             single<AccountCacheStore> { get<AppDatabase>().accounts }

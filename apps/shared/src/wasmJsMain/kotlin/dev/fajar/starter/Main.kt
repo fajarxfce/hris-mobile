@@ -19,6 +19,7 @@ import dev.fajar.starter.notifications.domain.entities.NotificationMessage
 import dev.fajar.starter.notifications.domain.usecases.ReceiveNotification
 import dev.fajar.starter.observability.DiagnosticArea
 import dev.fajar.starter.observability.Diagnostics
+import dev.fajar.starter.securestorage.BrowserProtectedCredentialStore
 import dev.fajar.starter.sync.data.datasources.WorkScheduler
 import dev.fajar.starter.sync.domain.SyncTask
 import kotlin.time.Clock
@@ -45,6 +46,7 @@ fun main() {
                 single<PushTokenSource> { push }
             },
             environment,
+            commandCredentials = BrowserProtectedCredentialStore(namespace, "command-content-key"),
             remoteFeatureFlags = BrowserFeatureFlagSource(),
             browserAuthorization = WebBrowserAuthorizationSource(),
             platform = AppPlatform.Web,

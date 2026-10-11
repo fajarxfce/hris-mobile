@@ -155,6 +155,12 @@ class InboxFixture(now: () -> Instant = { Instant.parse("2026-10-11T00:00:00Z") 
         }
     val remote =
         object : InboxRepository {
+            override suspend fun act(
+                sessionId: String,
+                command: InboxCommand,
+            ): AppResult<InboxActionReceipt> =
+                error("Read synchronization must not issue commands.")
+
             override suspend fun item(
                 sessionId: String,
                 companyId: String,

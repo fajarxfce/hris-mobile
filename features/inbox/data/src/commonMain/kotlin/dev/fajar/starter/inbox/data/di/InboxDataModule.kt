@@ -13,6 +13,39 @@ import org.koin.core.annotation.*
 @ComponentScan("dev.fajar.starter.inbox.data")
 class InboxDataModule {
     @Factory
+    fun prepareAction(
+        commands: InboxCommandRepository,
+        cache: InboxCacheRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+    ) = PrepareInboxAction(commands, cache, sessions, workspaces, Clock.System)
+
+    @Factory
+    fun observeAction(
+        commands: InboxCommandRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+    ) = ObserveInboxAction(commands, sessions, workspaces, Clock.System)
+
+    @Factory
+    fun reviewAction(
+        commands: InboxCommandRepository,
+        remote: InboxRepository,
+        cache: InboxCacheRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+    ) = ReviewInboxAction(commands, remote, cache, sessions, workspaces, Clock.System)
+
+    @Single(binds = [ReplayInboxAction::class, SyncTask::class])
+    fun replayAction(
+        commands: InboxCommandRepository,
+        remote: InboxRepository,
+        cache: InboxCacheRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+    ) = ReplayInboxAction(commands, remote, cache, sessions, workspaces, Clock.System)
+
+    @Factory
     fun observe(
         cache: InboxCacheRepository,
         sessions: SessionRepository,

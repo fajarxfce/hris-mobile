@@ -3,7 +3,9 @@
 package dev.fajar.starter.inbox.data.repositories
 
 import dev.fajar.starter.inbox.data.datasources.InboxRemoteDataSource
-import dev.fajar.starter.inbox.data.mappers.toItem
+import dev.fajar.starter.inbox.data.dto.InboxActionRequest
+import dev.fajar.starter.inbox.data.mappers.*
+import dev.fajar.starter.inbox.domain.entities.*
 import dev.fajar.starter.inbox.domain.repositories.InboxRepository
 import dev.fajar.starter.network.safeApiCall
 import kotlin.uuid.Uuid
@@ -15,5 +17,24 @@ class RemoteInboxRepository(private val remote: InboxRemoteDataSource) : InboxRe
         Uuid.parse(companyId)
         Uuid.parse(id)
         remote.item(sessionId, companyId, id).toItem(id)
+    }
+
+    override suspend fun act(sessionId: String, command: InboxCommand) = safeApiCall {
+        listOf(command.companyId, command.itemId, command.id).forEach {
+            require(Uuid.parse(it).toString() == it)
+        }
+        remote
+            .act(
+                sessionId,
+                command.companyId,
+                command.itemId,
+                command.id,
+                when (command.action) {
+                    InboxAction.READ -> "read"
+                    InboxAction.ACKNOWLEDGE -> "acknowledge"
+                },
+                InboxActionRequest(command.expectedVersion),
+            )
+            .toReceipt(command)
     }
 }

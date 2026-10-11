@@ -8,7 +8,7 @@ import FirebaseMessaging
 import StarterKit
 
 final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDelegate, MessagingDelegate, AppleFirebaseClient {
-    lazy var host = AppleAppHost(firebase: self, remoteConfig: FirebaseFeatureFlagClient(), credentials: KeychainClient(), inboxCredentials: KeychainClient(recordName: "inbox-content-key"), crash: FirebaseCrashClient(), performance: FirebasePerformanceClient())
+    lazy var host = AppleAppHost(firebase: self, remoteConfig: FirebaseFeatureFlagClient(), credentials: KeychainClient(), inboxCredentials: KeychainClient(recordName: "inbox-content-key"), commandCredentials: KeychainClient(recordName: "command-content-key"), crash: FirebaseCrashClient(), performance: FirebasePerformanceClient())
     private let syncIdentifier = Bundle.main.bundleIdentifier! + ".sync"
     var configured: Bool { FirebaseApp.app() != nil }
 
