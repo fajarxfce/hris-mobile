@@ -75,6 +75,11 @@ class InboxCommandTransportTest {
         var calls = 0
         val source =
             object : InboxRemoteDataSource {
+                override suspend fun unreadCount(
+                    sessionId: String,
+                    companyId: String,
+                ): InboxUnreadCountDto = error("unused")
+
                 override suspend fun item(
                     sessionId: String,
                     companyId: String,

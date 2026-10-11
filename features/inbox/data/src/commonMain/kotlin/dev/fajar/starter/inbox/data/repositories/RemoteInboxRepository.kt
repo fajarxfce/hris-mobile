@@ -13,6 +13,11 @@ import org.koin.core.annotation.Single
 
 @Single
 class RemoteInboxRepository(private val remote: InboxRemoteDataSource) : InboxRepository {
+    override suspend fun unreadCount(sessionId: String, companyId: String) = safeApiCall {
+        require(Uuid.parse(companyId).toString() == companyId)
+        remote.unreadCount(sessionId, companyId).unreadCount.also { require(it >= 0) }
+    }
+
     override suspend fun item(sessionId: String, companyId: String, id: String) = safeApiCall {
         Uuid.parse(companyId)
         Uuid.parse(id)

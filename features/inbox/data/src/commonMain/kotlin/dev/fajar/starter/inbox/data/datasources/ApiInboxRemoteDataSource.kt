@@ -6,6 +6,9 @@ import org.koin.core.annotation.Single
 
 @Single
 class ApiInboxRemoteDataSource(private val api: InboxApi) : InboxRemoteDataSource {
+    override suspend fun unreadCount(sessionId: String, companyId: String) =
+        api.unreadCount(sessionId, companyId)
+
     override suspend fun item(sessionId: String, companyId: String, id: String) =
         api.item(sessionId, companyId, id)
 

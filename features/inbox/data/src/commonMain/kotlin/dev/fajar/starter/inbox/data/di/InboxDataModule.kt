@@ -14,6 +14,13 @@ import org.koin.core.annotation.*
 @ComponentScan("dev.fajar.starter.inbox.data")
 class InboxDataModule {
     @Factory
+    fun unread(
+        remote: InboxRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+    ) = LoadUnreadInbox(remote, sessions, workspaces, Clock.System)
+
+    @Factory
     fun prepareAction(
         commands: InboxCommandRepository,
         cache: InboxCacheRepository,

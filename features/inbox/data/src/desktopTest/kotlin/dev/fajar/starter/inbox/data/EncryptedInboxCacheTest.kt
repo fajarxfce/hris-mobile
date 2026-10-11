@@ -81,6 +81,13 @@ class EncryptedInboxCacheTest {
                     .value
                     .checkpoint
             )
+            assertEquals(
+                InboxCachePage(staged, emptyList(), null),
+                assertIs<AppResult.Success<InboxCachePage>>(
+                        repository.observe(access, InboxCacheQuery.Checkpoint).first()
+                    )
+                    .value,
+            )
             val visible = staged.copy(revision = 2, published = true, refreshedAt = now)
             assertEquals(AppResult.Success(true), repository.commit(staged, visible, emptyList()))
             val detail =
@@ -90,6 +97,13 @@ class EncryptedInboxCacheTest {
                     .value
             assertEquals(listOf(item), detail.items)
             assertEquals(visible, detail.checkpoint)
+            assertEquals(
+                InboxCachePage(visible, emptyList(), null),
+                assertIs<AppResult.Success<InboxCachePage>>(
+                        repository.observe(access, InboxCacheQuery.Checkpoint).first()
+                    )
+                    .value,
+            )
             assertEquals(
                 detail,
                 assertIs<AppResult.Success<InboxCachePage>>(

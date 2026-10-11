@@ -1,5 +1,22 @@
 # Validation
 
+## Inbox totals and navigation badges
+
+The 2026-10-12 update passed the root checks with 410 desktop/JVM/UI tests,
+the database and Inbox domain/data Chromium tests, and the Android dev build.
+The full-count and adaptive-navigation UI tests were repeated to capture the
+badge: 36 unread messages remain 36 with a 30-item page, then become 35 after an
+explicit read. Tests also cover cancelled reads, company replacement, zero
+counts, large text and full accessible count descriptions.
+
+The updated APK was installed on the dedicated API 35 emulator. The real API
+Inbox, Employees and Back-to-Home flow were checked; the existing emulator inbox
+messages were already read. Positive badge counts were verified with isolated
+API/UI fixtures. The phone was offline in ADB, so this update was not installed
+there. No release was created.
+
+## Earlier company and inbox integration
+
 The company-policy, workspace-admission and inbox implementation passed these Linux checks:
 
 ```sh

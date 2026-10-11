@@ -294,4 +294,5 @@
     <string name="departments_empty_id">Departemen tidak ditemukan.</string>
     <string name="refine_department_search_id">Persempit pencarian untuk menemukan departemen lainnya.</string>
     <string name="close_id">Tutup</string>
+    <string name="inbox_unread_count_id">%1$s pesan belum dibaca</string>
 </resources>

@@ -25,6 +25,7 @@ fun HomePage(
     attendance: @Composable () -> Unit,
     inbox: @Composable () -> Unit,
     employees: @Composable () -> Unit,
+    inboxBadge: @Composable () -> Unit,
 ) {
     Column(Modifier.fillMaxSize().background(AppColors.canvas)) {
         AppNavigationScaffold(
@@ -41,6 +42,7 @@ fun HomePage(
                         appString(AppString.Inbox),
                         Icons.Regular.Mail,
                         Icons.Filled.Mail,
+                        badge = inboxBadge,
                     ),
                     AppNavigationItem(
                         HomeTab.Employees,

@@ -185,6 +185,7 @@ fun AppNavigation(controller: NavHostController, incomingLinks: Flow<String>) {
                                 },
                             )
                         },
+                        inboxBadge = { InboxBadgeContent(stage.workspace.id) },
                         employees = {
                             EmployeesContent(
                                 stage.workspace.id,

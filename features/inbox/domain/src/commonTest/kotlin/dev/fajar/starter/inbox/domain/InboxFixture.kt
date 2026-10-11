@@ -109,6 +109,8 @@ class InboxFixture(
         AppResult.Success(SyncChangePage(emptyList(), "delta-2", false, false, 5, clock.now()))
     }
     var itemCall: suspend (String) -> AppResult<InboxItem> = { AppResult.Success(item) }
+    var unreadCall: suspend () -> AppResult<Long> = { AppResult.Success(36L) }
+    var unreadCalls = 0
     var bootstrapCalls = 0
     var changesCalls = 0
     var itemCalls = 0
@@ -204,6 +206,15 @@ class InboxFixture(
         }
     val remote =
         object : InboxRepository {
+            override suspend fun unreadCount(
+                sessionId: String,
+                companyId: String,
+            ): AppResult<Long> {
+                check(sessionId == session.id && companyId == workspace.company.id)
+                unreadCalls++
+                return unreadCall()
+            }
+
             override suspend fun act(
                 sessionId: String,
                 command: InboxCommand,
@@ -229,6 +240,8 @@ class InboxFixture(
                                 items = result.value.items.filter { it.id == query.id }
                             )
                         )
+                    else if (result is AppResult.Success && query == InboxCacheQuery.Checkpoint)
+                        AppResult.Success(result.value.copy(items = emptyList(), nextCursor = null))
                     else result
                 }
 
@@ -284,4 +297,5 @@ class InboxFixture(
         }
     val sync = SyncInbox(feed, remote, cache, sessions, workspaces, clock, build)
     val observe = ObserveInbox(cache, sessions, workspaces, clock)
+    val unread = LoadUnreadInbox(remote, sessions, workspaces, clock)
 }

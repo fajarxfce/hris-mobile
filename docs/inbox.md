@@ -6,6 +6,17 @@ cursor keys and run the publication worker. A GET does not mark a message read.
 Read and acknowledgement are explicit employee actions. Push-triggered navigation
 remains subsequent work.
 
+The Inbox tab displays the account's total unread count from
+`GET /companies/{companyId}/inbox/unread-count`, independently of the list's
+thirty-message page. `LoadUnreadInbox` checks current scope before and after the
+read. A foreground-owned badge ViewModel observes encrypted checkpoint metadata
+and coalesces sync commits before refreshing the remote total. It never counts
+the loaded page or decrypts message bodies for a badge. Leaving the route stops
+pending reads; company changes and unavailable counts hide the previous value.
+Opening a message does not change the count. Confirmed read/acknowledgement and
+withdrawal updates refresh it through the next committed checkpoint or foreground
+entry. This is not a live push subscription.
+
 ## Ownership
 
 - `core/sync` implements the explicit collection feed, raw API/datasource

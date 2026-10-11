@@ -169,6 +169,7 @@ enum class AppString(val english: StringResource, val indonesian: StringResource
     InboxActionPending(Res.string.inbox_action_pending_en, Res.string.inbox_action_pending_id),
     InboxRetryLimit(Res.string.inbox_retry_limit_en, Res.string.inbox_retry_limit_id),
     Inbox(Res.string.inbox_title_en, Res.string.inbox_title_id),
+    InboxUnreadCount(Res.string.inbox_unread_count_en, Res.string.inbox_unread_count_id),
     InboxNoMessages(Res.string.inbox_no_messages_en, Res.string.inbox_no_messages_id),
     InboxMessageUnavailable(
         Res.string.inbox_message_unavailable_en,

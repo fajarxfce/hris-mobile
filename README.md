@@ -24,7 +24,8 @@ clock-out, foreground location evidence, encrypted offline commands and idempote
 delivery. Pending review stays distinct from accepted time. Workforce availability
 is independent of the personal-profile module. Home places the employee's name
 and company above today's clock-in/out card and service grid. The four tabs are
-Home, Inbox, Employees and Account. Employees provides a searchable, paged coworker
+Home, Inbox, Employees and Account. Inbox shows the account's total unread count.
+Employees provides a searchable, paged coworker
 directory with assignment labels and department filters. All services opens a separate page; company
 switching stays in Account. Back returns from an inner page to its tab, then to
 Home before leaving the application. Inner pages keep their back and refresh

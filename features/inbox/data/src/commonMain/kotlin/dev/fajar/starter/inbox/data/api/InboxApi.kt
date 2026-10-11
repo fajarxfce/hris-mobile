@@ -9,6 +9,11 @@ import org.koin.core.annotation.*
 
 @Single
 class InboxApi(@Named(HttpClients.Authenticated) private val client: HttpClient) {
+    suspend fun unreadCount(sessionId: String, companyId: String): InboxUnreadCountDto =
+        client.requestJson("companies/$companyId/inbox/unread-count", maximumBytes = 4096) {
+            forSession(sessionId)
+        }
+
     suspend fun item(sessionId: String, companyId: String, id: String): InboxItemDto =
         client.requestJson("companies/$companyId/inbox/$id", maximumBytes = 131_072) {
             forSession(sessionId)

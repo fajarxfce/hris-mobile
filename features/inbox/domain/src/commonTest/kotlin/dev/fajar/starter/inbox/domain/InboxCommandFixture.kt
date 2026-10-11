@@ -115,6 +115,11 @@ class InboxCommandFixture(val inbox: InboxFixture = InboxFixture()) {
         }
     val remote =
         object : InboxRepository {
+            override suspend fun unreadCount(
+                sessionId: String,
+                companyId: String,
+            ): AppResult<Long> = error("Command replay must not read a navigation count.")
+
             override suspend fun item(
                 sessionId: String,
                 companyId: String,

@@ -47,6 +47,75 @@ class AppFlowTest {
     private val backDispatcher = TestBackDispatcher()
 
     @Test
+    fun inboxBadgeUsesTheFullTotalUpdatesAfterReadingAndClearsOnCompanyChange() {
+        val server = NativeUiServer()
+        withApplication(server) {
+            signIn()
+            waitFor("Choose a company")
+            compose.onAllNodesWithText("Open company")[0].performClick()
+            waitFor("Welcome")
+            compose.waitUntil(10_000) {
+                compose.onAllNodesWithContentDescription("36 unread").fetchSemanticsNodes().size ==
+                    1
+            }
+            compose.onNode(hasText("Inbox") and isSelectable()).performClick()
+            waitFor("Office closure")
+            compose.onNodeWithContentDescription("36 unread").assertExists()
+            capture("inbox-unread")
+            compose.onNodeWithText("Office closure").performClick()
+            waitFor(server.inbox.firstBody)
+            compose.onNodeWithText("Mark as read").performScrollTo().performClick()
+            compose.waitUntil(10_000) { server.inbox.actions.size == 1 }
+            compose.onNodeWithContentDescription("Back").performClick()
+            waitFor("Office closure")
+            compose.waitUntil(10_000) {
+                compose.onAllNodesWithContentDescription("35 unread").fetchSemanticsNodes().size ==
+                    1
+            }
+            compose.onNode(hasText("Account") and isSelectable()).performClick()
+            compose.onNodeWithContentDescription("Change company").performClick()
+            waitFor("Choose a company")
+            compose.onNodeWithContentDescription("35 unread").assertDoesNotExist()
+            compose.onAllNodesWithText("Open company")[1].performClick()
+            waitFor("Welcome")
+            compose.waitUntil {
+                server.inbox.countCompanies.lastOrNull() == NativeUiServer.COMPANY_TWO
+            }
+            compose.onNodeWithContentDescription("35 unread").assertDoesNotExist()
+            compose.onNodeWithContentDescription("0 unread").assertDoesNotExist()
+        }
+    }
+
+    @Test
+    fun openingAnInnerRouteCancelsThePendingBadgeAndReturningReloadsIt() {
+        val server = NativeUiServer().apply { inbox.holdNextCount = true }
+        try {
+            withApplication(server) {
+                signIn()
+                waitFor("Choose a company")
+                compose.onAllNodesWithText("Open company")[0].performClick()
+                waitFor("Welcome")
+                compose.waitUntil { server.inbox.countStarted.isCompleted }
+                compose.onNode(hasText("Account") and isSelectable()).performClick()
+                compose.onNodeWithText("Settings").performScrollTo().performClick()
+                waitFor("Bahasa Indonesia")
+                compose.waitUntil { server.inbox.countCancelled.isCompleted }
+                server.inbox.countReleased.complete(Unit)
+                compose.onNodeWithContentDescription("Back").performClick()
+                compose.waitUntil(10_000) {
+                    compose
+                        .onAllNodesWithContentDescription("36 unread")
+                        .fetchSemanticsNodes()
+                        .size == 1
+                }
+                assertEquals(2, server.inbox.countCompanies.size)
+            }
+        } finally {
+            server.inbox.countReleased.complete(Unit)
+        }
+    }
+
+    @Test
     fun employeesTabPagesSearchesAndCancelsHiddenRequestsWithoutCrossingCompanies() {
         val server = NativeUiServer()
         try {

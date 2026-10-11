@@ -85,3 +85,14 @@ dismissal and large-text regressions were ported to Compose Fluent Starter.
 Employee queries, department lookup, access policy and MVI remain in HRIS Mobile.
 The starter passed its root checks and Android dev build for this update.
 The mobile foundation is [fcbac8e](https://github.com/fajarxfce/hris-mobile/commit/fcbac8e).
+
+## Replication metadata and navigation badges
+
+Checkpoint-only observation and its SQLite/IndexedDB contract tests also exist at
+[`daaed3f`](https://github.com/fajarxfce/compose-fluent-starter/commit/daaed3f).
+Adaptive navigation badge slots, `AppCountBadge` and large-text/accessibility
+regressions exist at
+[`f1437c7`](https://github.com/fajarxfce/compose-fluent-starter/commit/f1437c7).
+Both repositories passed root checks, the database Chromium tests and the Android
+dev build. Account unread totals, Inbox cache interpretation, and the badge's
+scope/lifecycle policy remain in HRIS Mobile.

@@ -294,4 +294,5 @@
     <string name="departments_empty_en">No departments found.</string>
     <string name="refine_department_search_en">Refine your search to find more departments.</string>
     <string name="close_en">Close</string>
+    <string name="inbox_unread_count_en">%1$s unread</string>
 </resources>

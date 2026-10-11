@@ -19,6 +19,11 @@ class NativeInboxUi {
     @Volatile var rejectNextAction = false
     @Volatile var holdNextAction = false
     @Volatile var holdNextRefresh = false
+    @Volatile var holdNextCount = false
+    val countStarted = CompletableDeferred<Unit>()
+    val countReleased = CompletableDeferred<Unit>()
+    val countCancelled = CompletableDeferred<Unit>()
+    val countCompanies = CopyOnWriteArrayList<String>()
     val refreshStarted = CompletableDeferred<Unit>()
     val refreshReleased = CompletableDeferred<Unit>()
     val refreshCancelled = CompletableDeferred<Unit>()
@@ -46,6 +51,7 @@ class NativeInboxUi {
         check(request.method == HttpMethod.Get)
         val body =
             when {
+                path.endsWith("/inbox/unread-count") -> unreadCount(requireNotNull(company))
                 path.endsWith("/sync/bootstrap") -> {
                     assertEquals("INBOX", request.url.parameters["collections"])
                     assertEquals("50", request.url.parameters["limit"])
@@ -126,6 +132,27 @@ class NativeInboxUi {
                 }
             }
         return body.toString() to HttpStatusCode.OK
+    }
+
+    private suspend fun unreadCount(company: String): JsonObject {
+        countCompanies += company
+        if (holdNextCount) {
+            holdNextCount = false
+            countStarted.complete(Unit)
+            try {
+                countReleased.await()
+            } catch (failure: CancellationException) {
+                countCancelled.complete(Unit)
+                throw failure
+            }
+        }
+        return buildJsonObject {
+            put(
+                "unreadCount",
+                if (company == NativeUiServer.COMPANY_ONE) ids.size - if (read || archived) 1 else 0
+                else 0,
+            )
+        }
     }
 
     private suspend fun pauseRefresh(path: String) {

@@ -10,6 +10,7 @@ import dev.fajar.starter.securestorage.CredentialStore
 import dev.fajar.starter.storage.*
 import kotlin.io.encoding.Base64
 import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
@@ -27,6 +28,10 @@ class EncryptedInboxCacheRepository(
     override fun observe(access: InboxAccess, query: InboxCacheQuery) =
         safeStorageFlow(
             when (query) {
+                InboxCacheQuery.Checkpoint ->
+                    replicas.observeCheckpoint(access.sessionId, inboxPartition(access)).map {
+                        ReplicaPage(it, emptyList())
+                    }
                 is InboxCacheQuery.Page ->
                     replicas.observe(access.sessionId, inboxPartition(access), query.after, 31)
                 is InboxCacheQuery.Item ->
