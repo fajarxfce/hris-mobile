@@ -1,9 +1,9 @@
 package dev.fajar.starter.inbox.presentation.navigation
 
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.compose.LifecycleEventEffect
+import androidx.lifecycle.compose.LifecycleStartEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -22,28 +22,15 @@ fun NavGraphBuilder.inboxRoutes(
     onVerify: () -> Unit,
     onBack: () -> Unit,
 ) {
-    composable<InboxRoute> {
-        val viewModel = koinViewModel<InboxViewModel>(parameters = { parametersOf(workspaceId) })
-        val state by viewModel.state.collectAsStateWithLifecycle()
-        val list = rememberLazyListState()
-        LifecycleEventEffect(Lifecycle.Event.ON_START) { viewModel.onEvent(InboxEvent.Entered) }
-        LifecycleEventEffect(Lifecycle.Event.ON_STOP) { viewModel.onEvent(InboxEvent.Stopped) }
-        CollectEffects(viewModel.effects) { effect ->
-            when (effect) {
-                InboxEffect.Back -> onBack()
-                InboxEffect.ScrollToStart -> list.requestScrollToItem(0)
-                InboxEffect.VerifyAccount -> onVerify()
-                is InboxEffect.OpenItem -> onItem(effect.id)
-            }
-        }
-        InboxPage(state, list, viewModel::onEvent)
-    }
+    composable<InboxRoute> { InboxContent(workspaceId, onItem, onVerify, onBack) }
     composable<InboxItemRoute> { entry ->
         val target = InboxItemTarget(workspaceId, entry.toRoute<InboxItemRoute>().id)
         val viewModel = koinViewModel<InboxItemViewModel>(parameters = { parametersOf(target) })
         val state by viewModel.state.collectAsStateWithLifecycle()
-        LifecycleEventEffect(Lifecycle.Event.ON_START) { viewModel.onEvent(InboxItemEvent.Entered) }
-        LifecycleEventEffect(Lifecycle.Event.ON_STOP) { viewModel.onEvent(InboxItemEvent.Stopped) }
+        LifecycleStartEffect(viewModel) {
+            viewModel.onEvent(InboxItemEvent.Entered)
+            onStopOrDispose { viewModel.onEvent(InboxItemEvent.Stopped) }
+        }
         CollectEffects(viewModel.effects) { effect ->
             when (effect) {
                 InboxItemEffect.Back -> onBack()
@@ -52,4 +39,30 @@ fun NavGraphBuilder.inboxRoutes(
         }
         InboxItemPage(state, viewModel::onEvent)
     }
+}
+
+/** The Home tab and standalone route use separate ViewModel owners. */
+@Composable
+fun InboxContent(
+    workspaceId: String,
+    onItem: (String) -> Unit,
+    onVerify: () -> Unit,
+    onBack: (() -> Unit)? = null,
+) {
+    val viewModel = koinViewModel<InboxViewModel>(parameters = { parametersOf(workspaceId) })
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    val list = rememberLazyListState()
+    LifecycleStartEffect(viewModel) {
+        viewModel.onEvent(InboxEvent.Entered)
+        onStopOrDispose { viewModel.onEvent(InboxEvent.Stopped) }
+    }
+    CollectEffects(viewModel.effects) { effect ->
+        when (effect) {
+            InboxEffect.Back -> onBack?.invoke()
+            InboxEffect.ScrollToStart -> list.requestScrollToItem(0)
+            InboxEffect.VerifyAccount -> onVerify()
+            is InboxEffect.OpenItem -> onItem(effect.id)
+        }
+    }
+    InboxPage(state, list, viewModel::onEvent, showBack = onBack != null)
 }

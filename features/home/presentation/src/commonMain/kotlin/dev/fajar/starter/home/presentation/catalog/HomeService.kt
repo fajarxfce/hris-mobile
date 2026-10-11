@@ -1,4 +1,4 @@
-package dev.fajar.starter.home.presentation.home
+package dev.fajar.starter.home.presentation.catalog
 
 import androidx.compose.ui.graphics.vector.ImageVector
 import dev.fajar.starter.localization.AppString
@@ -8,6 +8,7 @@ import io.github.composefluent.icons.Icons
 import io.github.composefluent.icons.regular.CalendarLtr
 import io.github.composefluent.icons.regular.Clock
 import io.github.composefluent.icons.regular.Mail
+import io.github.composefluent.icons.regular.People
 import io.github.composefluent.icons.regular.Person
 
 /** A bounded catalog of implemented services; destination state stays with each feature. */
@@ -16,6 +17,7 @@ enum class HomeService(val title: AppString, val summary: AppString, val icon: I
     Calendar(AppString.WorkCalendar, AppString.CalendarSummary, Icons.Regular.CalendarLtr),
     Inbox(AppString.Inbox, AppString.InboxSummary, Icons.Regular.Mail),
     Profile(AppString.MyProfile, AppString.ProfileSummary, Icons.Regular.Person),
+    Employees(AppString.Employees, AppString.EmployeesSummary, Icons.Regular.People),
 }
 
 data class HomeServiceSection(val title: AppString, val items: List<HomeService>)
@@ -56,6 +58,15 @@ fun homeServices(workspace: Workspace?): HomeServiceCatalog {
                             companyModuleAvailable(workspace, CompanyModule.PEOPLE)
                     )
                         listOf(HomeService.Profile)
+                    else emptyList(),
+                ),
+                HomeServiceSection(
+                    AppString.ServicesCompany,
+                    if (
+                        ("people.directory.read" in permissions || "people.read" in permissions) &&
+                            companyModuleAvailable(workspace, CompanyModule.PEOPLE)
+                    )
+                        listOf(HomeService.Employees)
                     else emptyList(),
                 ),
             )

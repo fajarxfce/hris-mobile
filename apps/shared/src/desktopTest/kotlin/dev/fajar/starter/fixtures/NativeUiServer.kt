@@ -27,6 +27,7 @@ class NativeUiServer(
 
     val unexpectedPaths = mutableListOf<String>()
     val people = NativePeopleUi()
+    val directory = NativeDirectoryUi()
     val workforce = NativeWorkforceUi()
     val inbox = NativeInboxUi()
     val deviceSessions = NativeSessionsUi()
@@ -71,7 +72,7 @@ class NativeUiServer(
             deviceSessions.response(path, request.method)?.let { (body, status) ->
                 return@withLock respond(body, status, headers)
             }
-            people.response(path)?.let { (body, status) ->
+            (directory.response(request) ?: people.response(path))?.let { (body, status) ->
                 return@withLock if (requireMfa && !verified)
                     respond("""{"code":"mfa_required"}""", HttpStatusCode.Forbidden, headers)
                 else respond(body, status, headers)
@@ -148,6 +149,7 @@ class NativeUiServer(
             put("companyId", path.split('/')[4])
             putJsonArray("permissions") {
                 add("people.self.read")
+                add("people.directory.read")
                 add("announcements.read")
                 add("attendance.self.record")
             }

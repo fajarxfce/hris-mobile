@@ -14,7 +14,7 @@ import androidx.navigation.compose.composable
 import dev.fajar.starter.app.bootstrap.*
 import dev.fajar.starter.auth.presentation.navigation.*
 import dev.fajar.starter.designsystem.components.*
-import dev.fajar.starter.home.presentation.home.HomeService
+import dev.fajar.starter.home.presentation.catalog.HomeService
 import dev.fajar.starter.home.presentation.home.HomeTab
 import dev.fajar.starter.home.presentation.navigation.*
 import dev.fajar.starter.inbox.presentation.navigation.*
@@ -138,21 +138,25 @@ fun AppNavigation(controller: NavHostController, incomingLinks: Flow<String>) {
                     }
                 }
                 if (!companyBlocked) {
+                    val openService: (HomeService) -> Unit = { service ->
+                        when (service) {
+                            HomeService.Attendance ->
+                                controller.navigate(AttendanceRoute) { launchSingleTop = true }
+                            HomeService.Calendar ->
+                                controller.navigate(WorkCalendarRoute) { launchSingleTop = true }
+                            HomeService.Inbox ->
+                                controller.navigate(InboxRoute) { launchSingleTop = true }
+                            HomeService.Profile ->
+                                controller.navigate(ProfileRoute) { launchSingleTop = true }
+                            HomeService.Employees ->
+                                controller.navigate(EmployeesRoute) { launchSingleTop = true }
+                        }
+                    }
                     homeRoutes(
                         stage.workspace,
-                        onService = { service ->
-                            when (service) {
-                                HomeService.Attendance ->
-                                    controller.navigate(AttendanceRoute) { launchSingleTop = true }
-                                HomeService.Calendar ->
-                                    controller.navigate(WorkCalendarRoute) {
-                                        launchSingleTop = true
-                                    }
-                                HomeService.Inbox ->
-                                    controller.navigate(InboxRoute) { launchSingleTop = true }
-                                HomeService.Profile ->
-                                    controller.navigate(ProfileRoute) { launchSingleTop = true }
-                            }
+                        onService = openService,
+                        onAllServices = {
+                            controller.navigate(ServicesRoute) { launchSingleTop = true }
                         },
                         onSessions = {
                             controller.navigate(SessionsRoute) { launchSingleTop = true }
@@ -170,10 +174,46 @@ fun AppNavigation(controller: NavHostController, incomingLinks: Flow<String>) {
                                 }
                             }
                         },
+                        inbox = {
+                            InboxContent(
+                                stage.workspace.id,
+                                onItem = {
+                                    controller.navigate(InboxItemRoute(it)) {
+                                        launchSingleTop = true
+                                    }
+                                },
+                                onVerify = {
+                                    controller.navigate(VerificationRoute) {
+                                        launchSingleTop = true
+                                    }
+                                },
+                            )
+                        },
+                        employees = {
+                            EmployeesContent(
+                                stage.workspace.id,
+                                onVerify = {
+                                    controller.navigate(VerificationRoute) {
+                                        launchSingleTop = true
+                                    }
+                                },
+                            )
+                        },
                     ) {
                         controller.navigate(SettingsRoute) { launchSingleTop = true }
                     }
+                    servicesRoutes(stage.workspace.id, onService = openService) {
+                        controller.popBackStack()
+                    }
                     peopleRoutes(
+                        stage.workspace.id,
+                        onVerify = {
+                            controller.navigate(VerificationRoute) { launchSingleTop = true }
+                        },
+                    ) {
+                        controller.popBackStack()
+                    }
+                    employeesRoutes(
                         stage.workspace.id,
                         onVerify = {
                             controller.navigate(VerificationRoute) { launchSingleTop = true }

@@ -17,7 +17,12 @@ import io.github.composefluent.icons.regular.ArrowLeft
 import io.github.composefluent.icons.regular.ArrowSync
 
 @Composable
-fun InboxPage(state: InboxState, listState: LazyListState, onEvent: (InboxEvent) -> Unit) {
+fun InboxPage(
+    state: InboxState,
+    listState: LazyListState,
+    onEvent: (InboxEvent) -> Unit,
+    showBack: Boolean = true,
+) {
     val failure = state.failure
     AppLazyPage(
         state = listState,
@@ -27,13 +32,16 @@ fun InboxPage(state: InboxState, listState: LazyListState, onEvent: (InboxEvent)
         topBar = {
             AppTopBar(
                 title = appString(AppString.Inbox),
-                navigation = {
-                    AppIconButton(
-                        Icons.Regular.ArrowLeft,
-                        appString(AppString.Back),
-                        { onEvent(InboxEvent.BackRequested) },
-                    )
-                },
+                navigation =
+                    if (showBack) {
+                        {
+                            AppIconButton(
+                                Icons.Regular.ArrowLeft,
+                                appString(AppString.Back),
+                                { onEvent(InboxEvent.BackRequested) },
+                            )
+                        }
+                    } else null,
                 actions = {
                     AppIconButton(
                         Icons.Regular.ArrowSync,

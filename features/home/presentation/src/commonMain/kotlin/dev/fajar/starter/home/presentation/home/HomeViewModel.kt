@@ -2,6 +2,7 @@ package dev.fajar.starter.home.presentation.home
 
 import androidx.lifecycle.viewModelScope
 import dev.fajar.starter.common.result.*
+import dev.fajar.starter.home.presentation.catalog.homeServices
 import dev.fajar.starter.identity.domain.usecases.ObserveSessionIdentity
 import dev.fajar.starter.identity.domain.usecases.SignOutNativeSession
 import dev.fajar.starter.presentation.mvi.MviViewModel
@@ -26,6 +27,8 @@ class HomeViewModel(
     ) {
     init {
         on<HomeEvent.TabSelected>(::onTabSelected)
+        on<HomeEvent.BackRequested>(::onBackRequested)
+        on<HomeEvent.AllServicesRequested>(::onAllServicesRequested)
         on<HomeEvent.CompanyChangeRequested>(::onCompanyChangeRequested)
         on<HomeEvent.SettingsRequested>(::onSettingsRequested)
         on<HomeEvent.ServiceSelected>(::onServiceSelected)
@@ -62,6 +65,14 @@ class HomeViewModel(
 
     private fun onTabSelected(event: HomeEvent.TabSelected) {
         updateState { it.copy(tab = event.tab) }
+    }
+
+    private fun onBackRequested(event: HomeEvent.BackRequested) {
+        updateState { it.copy(tab = HomeTab.Home) }
+    }
+
+    private fun onAllServicesRequested(event: HomeEvent.AllServicesRequested) {
+        viewModelScope.launch { emitEffect(HomeEffect.OpenAllServices) }
     }
 
     private fun onSettingsRequested(event: HomeEvent.SettingsRequested) {

@@ -63,3 +63,16 @@ Both repositories passed root checks and Android/Web builds. Shared UI regressio
 cover fixed actions during scrolling, 200% text, keyboard activation and preference
 semantics. Home attendance, capture recovery, company switching and service
 admission remain specific to HRIS Mobile.
+
+## Root navigation
+
+Default-tab Back handling, the returning-root transition guard and single-line
+navigation labels also exist at
+[`6daa66e`](https://github.com/fajarxfce/compose-fluent-starter/commit/6daa66e).
+Both repositories passed root checks and Android/Web builds. Shared regressions
+cover inner-page return, cancelled gestures, rapid Back, platform fallback and
+full accessible names at 200% text. HRIS Mobile passed 393 JVM/UI tests; Android
+emulator checks also cover the four tabs, directory search, separate All services,
+English/Indonesian and light/dark layouts. The validated APK was installed on the
+connected phone without launching it. Company directory policy, Inbox integration,
+Home content and service admission remain specific to this application.

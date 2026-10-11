@@ -113,19 +113,26 @@ the database only enforces ownership, immutability, bounds and atomic revision c
 
 Features own their serializable route and NavGraphBuilder registration. The app composes
 their entries and reacts to onboarding/session state. Authentication transitions replace
-the root stack, so sign-out removes protected screens. Home owns its Home/Services/Account
-tab state; changing tabs does not create independent navigation histories.
+the root stack, so sign-out removes protected screens. Home owns its
+Home/Inbox/Employees/Account tab state; changing tabs does not create independent
+navigation histories. All services is a separate feature-owned route. Back pops
+an inner route first, then returns a nondefault root tab to Home. Home leaves the
+next Back action to the platform. Cancelling a back gesture does not change tabs.
+A host-level fallback consumes extra Back actions during the returning root's
+transition. It is disabled once that root resumes; destination callbacks retain
+priority. This prevents a rapid second Back from exiting before the tab returns.
 Its service catalog groups only implemented destinations admitted by the selected
 company's modules and permissions. The catalog exposes typed service identifiers;
 app composition connects them to feature-owned routes. Adding an employee service
 does not require another bottom-navigation item.
 
-App composition supplies the attendance feature entry to Home through a composable
-slot. It retains its own route-scoped `AttendanceViewModel`; Home does not depend
-on the workforce module. `LifecycleStartEffect` pairs entry with stop/disposal,
+App composition supplies attendance, inbox and employee-directory entries to Home
+through composable slots. They retain their own route-scoped ViewModels; Home
+does not depend on those feature modules. `LifecycleStartEffect` pairs entry with stop/disposal,
 including tab changes that do not stop the navigation entry's lifecycle. The
 attendance screen and Home share capture rendering and use cases, not ViewModel
-instances or subscriptions.
+instances or subscriptions. Inbox and Employees also have separate standalone
+routes for the service catalog; their owners are distinct from the tab entries.
 
 The root navigation graph belongs to the session and workspace IDs. Logout, a
 replacement session, or a company change

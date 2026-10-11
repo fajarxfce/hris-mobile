@@ -1,9 +1,12 @@
+@file:OptIn(androidx.compose.ui.ExperimentalComposeUiApi::class)
+
 package dev.fajar.starter
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.backhandler.LocalBackGestureDispatcher
 import androidx.compose.ui.graphics.asSkiaBitmap
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
@@ -22,6 +25,7 @@ import dev.fajar.starter.datastore.createUserPreferences
 import dev.fajar.starter.fixtures.NativeAttendanceCacheUi
 import dev.fajar.starter.fixtures.NativeSessionsUi
 import dev.fajar.starter.fixtures.NativeUiServer
+import dev.fajar.starter.fixtures.TestBackDispatcher
 import dev.fajar.starter.notifications.data.datasources.*
 import dev.fajar.starter.notifications.data.dto.*
 import dev.fajar.starter.workforce.domain.attendance.repositories.AttendanceCacheRepository
@@ -39,6 +43,209 @@ import org.koin.dsl.module
 class AppFlowTest {
     @get:Rule val compose = createComposeRule()
     @get:Rule val testName = TestName()
+    private val backDispatcher = TestBackDispatcher()
+
+    @Test
+    fun employeesTabPagesSearchesAndCancelsHiddenRequestsWithoutCrossingCompanies() {
+        val server = NativeUiServer()
+        try {
+            withApplication(server) {
+                signIn()
+                waitFor("Choose a company")
+                compose.onAllNodesWithText("Open company")[0].performClick()
+                waitFor("Welcome")
+                compose.onNode(hasText("Employees") and isSelectable()).performClick()
+                waitFor("Sam Wilson")
+                compose.onNodeWithContentDescription("Back").assertDoesNotExist()
+                compose.onNodeWithText("HR Specialist").assertExists()
+                capture("employees")
+                compose.onNode(hasScrollToIndexAction()).performScrollToNode(hasText("Next page"))
+                compose.onNodeWithText("Next page").performClick()
+                waitFor("Colleague 21")
+                compose.onNode(hasScrollToIndexAction()).performScrollToNode(hasText("First page"))
+                compose.onNodeWithText("First page").performClick()
+                waitFor("Sam Wilson")
+                compose
+                    .onNodeWithContentDescription("Search employees")
+                    .performTextReplacement("Sam")
+                compose.waitUntil { server.directory.queries.lastOrNull() == "Sam" }
+                waitFor("Sam Wilson")
+                compose.onNodeWithText("Alex Morgan").assertDoesNotExist()
+                compose.onNodeWithText("Next page").assertDoesNotExist()
+                server.directory.holdNext = true
+                compose
+                    .onNodeWithContentDescription("Search employees")
+                    .performTextReplacement("Alex")
+                compose.waitUntil { server.directory.started.isCompleted }
+                compose.onNode(hasText("Account") and isSelectable()).performClick()
+                compose.waitUntil { server.directory.cancelled.isCompleted }
+                server.directory.released.complete(Unit)
+                compose.onNode(hasText("Employees") and isSelectable()).performClick()
+                waitFor("Alex Morgan")
+                compose.onNodeWithContentDescription("Search employees").assertTextEquals("Alex")
+                compose.onNodeWithText("Sam Wilson").assertDoesNotExist()
+                compose.runOnIdle { backDispatcher.pressBack() }
+                waitFor("Welcome")
+                compose.onNode(hasText("Home") and isSelectable()).assertIsSelected()
+                compose.onNodeWithContentDescription("Change company").assertDoesNotExist()
+                compose.onNode(hasText("Account") and isSelectable()).performClick()
+                compose.onNodeWithContentDescription("Change company").performClick()
+                waitFor("Choose a company")
+                compose.onAllNodesWithText("Open company")[1].performClick()
+                waitFor("Welcome")
+                compose.onNode(hasText("Employees") and isSelectable()).performClick()
+                waitFor("No employees found.")
+                compose
+                    .onNodeWithContentDescription("Search employees")
+                    .assert(
+                        SemanticsMatcher.expectValue(
+                            androidx.compose.ui.semantics.SemanticsProperties.EditableText,
+                            androidx.compose.ui.text.AnnotatedString(""),
+                        )
+                    )
+                compose.onNodeWithText("Sam Wilson").assertDoesNotExist()
+            }
+        } finally {
+            server.directory.released.complete(Unit)
+        }
+    }
+
+    @Test
+    fun employeesRetainThePageOfflineButClearItAfterAccessIsDenied() {
+        val server = NativeUiServer()
+        withApplication(server) {
+            signIn()
+            waitFor("Choose a company")
+            compose.onAllNodesWithText("Open company")[0].performClick()
+            waitFor("Welcome")
+            compose.onNode(hasText("Employees") and isSelectable()).performClick()
+            waitFor("Sam Wilson")
+            server.directory.offline = true
+            compose.onNodeWithContentDescription("Refresh").performClick()
+            waitFor("Showing the last loaded page.")
+            compose.onNodeWithText("Sam Wilson").assertExists()
+            server.directory.offline = false
+            server.directory.denied = true
+            compose.onNodeWithContentDescription("Refresh").performClick()
+            compose.waitUntil {
+                compose.onAllNodesWithText("Sam Wilson").fetchSemanticsNodes().isEmpty()
+            }
+            compose.onNodeWithText("Showing the last loaded page.").assertDoesNotExist()
+            compose.onNodeWithText("Alex Morgan").assertDoesNotExist()
+            server.directory.denied = false
+            compose.onNodeWithContentDescription("Refresh").performClick()
+            waitFor("Sam Wilson")
+            compose.runOnIdle { backDispatcher.pressBack() }
+            waitFor("Welcome")
+            openService("Employees")
+            waitFor("Sam Wilson")
+            compose.onNodeWithContentDescription("Back").assertIsDisplayed()
+            compose.onNode(hasText("Home") and isSelectable()).assertDoesNotExist()
+            compose.runOnIdle { backDispatcher.pressBack() }
+            waitFor("All services")
+        }
+    }
+
+    @Test
+    fun inboxTabStopsItsRefreshOnTabChangeAndDetailsReturnToTheSameTab() {
+        val server = NativeUiServer().apply { inbox.holdNextRefresh = true }
+        try {
+            withApplication(server) {
+                signIn()
+                waitFor("Choose a company")
+                compose.onAllNodesWithText("Open company")[0].performClick()
+                waitFor("Welcome")
+                compose.onNode(hasText("Inbox") and isSelectable()).performClick()
+                compose.waitUntil { server.inbox.refreshStarted.isCompleted }
+                compose.onNodeWithContentDescription("Back").assertDoesNotExist()
+                compose.onNode(hasText("Account") and isSelectable()).performClick()
+                compose.waitUntil { server.inbox.refreshCancelled.isCompleted }
+                server.inbox.refreshReleased.complete(Unit)
+                compose.onNode(hasText("Inbox") and isSelectable()).performClick()
+                waitFor("Office closure")
+                compose.onNodeWithText("Office closure").performClick()
+                waitFor(server.inbox.firstBody)
+                compose.runOnIdle { backDispatcher.pressBack() }
+                waitFor("Office closure")
+                compose.onNode(hasText("Inbox") and isSelectable()).assertIsSelected()
+                compose.onNodeWithContentDescription("Back").assertDoesNotExist()
+                compose.runOnIdle { backDispatcher.pressBack() }
+                waitFor("Welcome")
+                compose.onNode(hasText("Home") and isSelectable()).assertIsSelected()
+            }
+        } finally {
+            server.inbox.refreshReleased.complete(Unit)
+        }
+    }
+
+    @Test
+    fun systemBackPopsInnerPagesThenReturnsToHomeBeforeLeavingTheApp() {
+        withApplication(NativeUiServer()) {
+            signIn()
+            waitFor("Choose a company")
+            compose.onAllNodesWithText("Open company")[0].performClick()
+            waitFor("Welcome")
+            compose.onNodeWithContentDescription("Change company").assertDoesNotExist()
+            compose.onNode(hasText("Services") and hasClickAction()).assertDoesNotExist()
+            compose.onNode(hasText("Account") and hasClickAction()).performClick()
+            compose.waitUntil { backDispatcher.canHandleBack }
+            compose.runOnIdle { backDispatcher.cancelBack() }
+            compose.onNode(hasText("Account") and hasClickAction()).assertIsSelected()
+            compose.onNodeWithContentDescription("Change company").assertIsDisplayed()
+            compose.onNodeWithText("Settings").performScrollTo().performClick()
+            waitFor("English")
+            compose.waitUntil { backDispatcher.canHandleBack }
+            compose.runOnIdle { backDispatcher.pressBack() }
+            compose.waitUntil {
+                compose
+                    .onAllNodes(hasText("Account") and isSelected())
+                    .fetchSemanticsNodes()
+                    .size == 1
+            }
+            compose.runOnIdle { backDispatcher.pressBack() }
+            waitFor("Welcome")
+            compose.onNode(hasText("Home") and hasClickAction()).assertIsSelected()
+            compose.onNodeWithContentDescription("Change company").assertDoesNotExist()
+            compose.waitUntil { !backDispatcher.canHandleBack }
+            compose.runOnIdle { backDispatcher.pressBack() }
+            assertEquals(1, backDispatcher.unhandled)
+        }
+    }
+
+    @Test
+    fun allServicesHasItsOwnBackStackAndStopsHomeAttendanceWhileCovered() {
+        val server = NativeUiServer().apply { workforce.attendanceGate = CompletableDeferred() }
+        withApplication(server) {
+            signIn()
+            waitFor("Choose a company")
+            compose.onAllNodesWithText("Open company")[0].performClick()
+            waitFor("Welcome")
+            compose.waitUntil(5_000) { server.workforce.attendanceActive.get() == 1 }
+            compose.onNodeWithText("All services").performScrollTo().performClick()
+            compose.waitUntil {
+                compose.onAllNodesWithContentDescription("Back").fetchSemanticsNodes().isNotEmpty()
+            }
+            compose.waitUntil(5_000) { server.workforce.attendanceActive.get() == 0 }
+            assertEquals(1, server.workforce.attendanceCancelled.get())
+            compose.onNode(hasText("Home") and hasClickAction()).assertDoesNotExist()
+            compose.onNode(hasText("Account") and hasClickAction()).assertDoesNotExist()
+            compose.onNodeWithText("Attendance").assertExists()
+            compose.onNodeWithText("Work calendar").assertExists()
+            compose.onNodeWithText("Inbox").assertExists()
+            compose.onNodeWithText("My profile").assertExists()
+            capture("all-services")
+            compose.onNodeWithText("My profile").performClick()
+            waitFor("Personal information")
+            compose.runOnIdle { backDispatcher.pressBack() }
+            waitFor("All services")
+            compose.onNode(hasText("Home") and hasClickAction()).assertDoesNotExist()
+            server.workforce.attendanceGate = null
+            compose.runOnIdle { backDispatcher.pressBack() }
+            waitFor("Welcome")
+            compose.onNode(hasText("Home") and hasClickAction()).assertIsSelected()
+            compose.waitUntil { !backDispatcher.canHandleBack }
+        }
+    }
 
     @Test
     fun homeAttendanceStopsPendingWorkWhenTheTabLeavesAndHandlesLocationFailureInPlace() {
@@ -51,9 +258,9 @@ class AppFlowTest {
             signIn()
             waitFor("Choose a company")
             compose.onAllNodesWithText("Open company")[0].performClick()
-            waitFor("Employee workspace")
+            waitFor("Welcome")
             compose.waitUntil(5_000) { server.workforce.attendanceActive.get() == 1 }
-            compose.onNode(hasText("Services") and hasClickAction()).performClick()
+            compose.onNode(hasText("Account") and hasClickAction()).performClick()
             compose.waitUntil(5_000) { server.workforce.attendanceActive.get() == 0 }
             assertEquals(1, server.workforce.attendanceCancelled.get())
             server.workforce.attendanceGate = null
@@ -76,9 +283,9 @@ class AppFlowTest {
             waitFor(
                 "A current location could not be obtained. Try again outdoors or save for review."
             )
-            compose.onNodeWithContentDescription("Change company").assertIsDisplayed()
+            compose.onNodeWithContentDescription("Change company").assertDoesNotExist()
             compose.onNode(hasText("Clock out") and hasClickAction()).assertIsNotEnabled()
-            compose.onNode(hasText("Services") and hasClickAction()).performClick()
+            compose.onNode(hasText("Account") and hasClickAction()).performClick()
             compose.onNode(hasText("Home") and hasClickAction()).performClick()
             compose.waitUntil(5_000) {
                 compose
@@ -150,7 +357,7 @@ class AppFlowTest {
             signIn()
             waitFor("Choose a company")
             compose.onAllNodesWithText("Open company")[0].performClick()
-            waitFor("Employee workspace")
+            waitFor("Welcome")
             compose.onNodeWithText("My profile").assertDoesNotExist()
             compose.onNodeWithText("Work calendar").performScrollTo().performClick()
             waitFor("Night shift")
@@ -187,13 +394,14 @@ class AppFlowTest {
             waitFor("Unable to connect. Check your connection.")
             compose.onNodeWithText("Night shift").performScrollTo().assertExists()
             capture("work-calendar-offline")
-            compose.onNodeWithContentDescription("Back").performClick()
-            waitFor("Employee workspace")
+            compose.runOnIdle { backDispatcher.pressBack() }
+            waitFor("Welcome")
             compose.onNodeWithText("Work calendar").performScrollTo().performClick()
             waitFor("Night shift")
-            compose.onNodeWithContentDescription("Back").performClick()
-            waitFor("Employee workspace")
+            compose.runOnIdle { backDispatcher.pressBack() }
+            waitFor("Welcome")
             server.workforce.offline = false
+            compose.onNode(hasText("Account") and hasClickAction()).performClick()
             compose.onNodeWithContentDescription("Change company").performClick()
             waitFor("Choose a company")
             compose.onAllNodesWithText("Open company")[1].performClick()
@@ -218,8 +426,8 @@ class AppFlowTest {
             compose.onNodeWithContentDescription("Next week").performClick()
             compose.waitUntil(5_000) { server.workforce.active.get() == 1 }
             server.workforce.holdCalendar = false
-            compose.onNodeWithContentDescription("Back").performClick()
-            waitFor("Employee workspace")
+            compose.runOnIdle { backDispatcher.pressBack() }
+            waitFor("Welcome")
             compose.waitUntil(5_000) { server.workforce.active.get() == 0 }
             assertEquals(1, server.workforce.cancelled.get())
             server.workforce.holdCalendar = false
@@ -267,7 +475,7 @@ class AppFlowTest {
                 capture("company-policy-offline-retry")
             }
             compose.onNodeWithText("Update required").assertExists()
-            compose.onNodeWithText("Employee workspace").assertDoesNotExist()
+            compose.onNodeWithText("Welcome").assertDoesNotExist()
             server.companyPolicy.offline = false
             compose.onNodeWithText("Change company").performScrollTo().performClick()
             waitFor("Choose a company")
@@ -277,6 +485,7 @@ class AppFlowTest {
             compose.onNodeWithText("Update required").assertDoesNotExist()
             server.companyPolicy.minimumAndroid = 0
             server.companyPolicy.maintenance = true
+            compose.onNode(hasText("Account") and hasClickAction()).performClick()
             compose.onNodeWithContentDescription("Change company").performClick()
             try {
                 waitFor("Choose a company")
@@ -309,18 +518,26 @@ class AppFlowTest {
             signIn()
             waitFor("Choose a company")
             compose.onAllNodesWithText("Open company")[0].performClick()
-            waitFor("Employee workspace")
-            compose.onNode(hasText("Services") and hasClickAction()).performClick()
+            waitFor("Welcome")
+            compose.onNodeWithText("All services").performScrollTo().performClick()
+            compose.waitUntil {
+                compose.onAllNodesWithContentDescription("Back").fetchSemanticsNodes().isNotEmpty()
+            }
             compose.onNodeWithText("Attendance").assertExists()
             compose.onNodeWithText("My profile").assertDoesNotExist()
             compose.onNodeWithText("Inbox").assertDoesNotExist()
             capture("company-disabled-modules")
-            compose.onNode(hasText("Home") and hasClickAction()).performClick()
+            compose.runOnIdle { backDispatcher.pressBack() }
+            waitFor("Welcome")
+            compose.onNode(hasText("Account") and hasClickAction()).performClick()
             compose.onNodeWithContentDescription("Change company").performClick()
             waitFor("Choose a company")
             compose.onAllNodesWithText("Open company")[1].performClick()
             waitFor("Inbox")
-            compose.onNode(hasText("Services") and hasClickAction()).performClick()
+            compose.onNodeWithText("All services").performScrollTo().performClick()
+            compose.waitUntil {
+                compose.onAllNodesWithContentDescription("Back").fetchSemanticsNodes().isNotEmpty()
+            }
             compose.onNodeWithText("My profile").assertExists()
             assertTrue(server.inbox.actions.isEmpty())
         }
@@ -333,8 +550,8 @@ class AppFlowTest {
             signIn()
             waitFor("Choose a company")
             compose.onAllNodesWithText("Open company")[0].performClick()
-            waitFor("Employee workspace")
-            compose.onNodeWithText("Inbox").performScrollTo().performClick()
+            waitFor("Welcome")
+            compose.onNode(hasText("Inbox") and isSelectable()).performClick()
             waitFor("Office closure")
             compose.onNodeWithText("Office closure").performClick()
             waitFor("Mark as read")
@@ -350,16 +567,16 @@ class AppFlowTest {
             capture("inbox-unconfirmed")
             compose.onNodeWithContentDescription("Back").performClick()
             waitFor("Office closure")
-            compose.onNodeWithContentDescription("Back").performClick()
-            waitFor("Employee workspace")
+            compose.runOnIdle { backDispatcher.pressBack() }
+            waitFor("Welcome")
             compose.onNode(hasText("Account") and hasClickAction()).performClick()
             compose.onNodeWithText("Sign out").performScrollTo().performClick()
             waitFor("Use your account to continue.")
             signInFromLogin()
             waitFor("Choose a company")
             compose.onAllNodesWithText("Open company")[0].performClick()
-            waitFor("Employee workspace")
-            compose.onNodeWithText("Inbox").performScrollTo().performClick()
+            waitFor("Welcome")
+            compose.onNode(hasText("Inbox") and isSelectable()).performClick()
             waitFor("Office closure")
             compose.onNodeWithText("Office closure").performClick()
             waitFor("Not confirmed yet. Retry when connected.")
@@ -391,8 +608,8 @@ class AppFlowTest {
             signIn()
             waitFor("Choose a company")
             compose.onAllNodesWithText("Open company")[0].performClick()
-            waitFor("Employee workspace")
-            compose.onNodeWithText("Inbox").performScrollTo().performClick()
+            waitFor("Welcome")
+            compose.onNode(hasText("Inbox") and isSelectable()).performClick()
             waitFor("Office closure")
             compose.onNodeWithText("Office closure").performClick()
             waitFor("Mark as read")
@@ -423,8 +640,8 @@ class AppFlowTest {
                 signIn()
                 waitFor("Choose a company")
                 compose.onAllNodesWithText("Open company")[0].performClick()
-                waitFor("Employee workspace")
-                compose.onNodeWithText("Inbox").performScrollTo().performClick()
+                waitFor("Welcome")
+                compose.onNode(hasText("Inbox") and isSelectable()).performClick()
                 waitFor("Office closure")
                 compose.onNodeWithText("Office closure").performClick()
                 waitFor("Mark as read")
@@ -433,10 +650,10 @@ class AppFlowTest {
                 compose.waitUntil(10_000) { server.inbox.actionStarted.isCompleted }
                 compose.onNodeWithContentDescription("Back").performClick()
                 waitFor("Office closure")
-                compose.onNodeWithContentDescription("Back").performClick()
-                waitFor("Employee workspace")
+                compose.runOnIdle { backDispatcher.pressBack() }
+                waitFor("Welcome")
                 server.inbox.actionReleased.complete(Unit)
-                compose.onNodeWithText("Inbox").performScrollTo().performClick()
+                compose.onNode(hasText("Inbox") and isSelectable()).performClick()
                 waitFor("Office closure")
                 compose.onNodeWithText("Office closure").performClick()
                 waitFor("Not confirmed yet. Retry when connected.")
@@ -456,8 +673,8 @@ class AppFlowTest {
             signIn()
             waitFor("Choose a company")
             compose.onAllNodesWithText("Open company")[0].performClick()
-            waitFor("Employee workspace")
-            compose.onNodeWithText("Inbox").performScrollTo().performClick()
+            waitFor("Welcome")
+            compose.onNode(hasText("Inbox") and isSelectable()).performClick()
             waitFor("Office closure")
             capture("inbox")
             compose.onNode(hasScrollToIndexAction()).performScrollToNode(hasText("Older messages"))
@@ -475,14 +692,15 @@ class AppFlowTest {
             waitFor("Office closure")
             waitFor("Showing saved messages.")
             capture("inbox-offline")
-            compose.onNodeWithContentDescription("Back").performClick()
-            waitFor("Employee workspace")
+            compose.runOnIdle { backDispatcher.pressBack() }
+            waitFor("Welcome")
             server.inbox.offline = false
+            compose.onNode(hasText("Account") and hasClickAction()).performClick()
             compose.onNodeWithContentDescription("Change company").performClick()
             waitFor("Choose a company")
             compose.onAllNodesWithText("Open company")[1].performClick()
-            waitFor("Employee workspace")
-            compose.onNodeWithText("Inbox").performScrollTo().performClick()
+            waitFor("Welcome")
+            compose.onNode(hasText("Inbox") and isSelectable()).performClick()
             waitFor("No messages yet.")
             compose.onNodeWithText("Office closure").assertDoesNotExist()
         }
@@ -495,8 +713,8 @@ class AppFlowTest {
             signIn()
             waitFor("Choose a company")
             compose.onAllNodesWithText("Open company")[0].performClick()
-            waitFor("Employee workspace")
-            compose.onNodeWithText("Inbox").performScrollTo().performClick()
+            waitFor("Welcome")
+            compose.onNode(hasText("Inbox") and isSelectable()).performClick()
             waitFor("Office closure")
             compose.onNodeWithText("Office closure").performClick()
             waitFor(server.inbox.firstBody)
@@ -523,7 +741,7 @@ class AppFlowTest {
             signIn()
             waitFor("Choose a company")
             compose.onAllNodesWithText("Open company")[0].performClick()
-            waitFor("Employee workspace")
+            waitFor("Welcome")
             compose.onNode(hasText("Account") and hasClickAction()).performClick()
             compose.onNodeWithText("Active sessions").performScrollTo().performClick()
             waitFor("Test iPhone")
@@ -570,7 +788,7 @@ class AppFlowTest {
             waitFor("Choose a company")
             capture("companies")
             compose.onAllNodesWithText("Open company")[0].performClick()
-            waitFor("Employee workspace")
+            waitFor("Welcome")
             compose.onNodeWithText("PT Nusa Digital").assertExists()
             compose.waitUntil(5_000) {
                 compose
@@ -582,7 +800,7 @@ class AppFlowTest {
             val shortcuts =
                 listOf("Attendance", "Work calendar", "Inbox", "My profile").map {
                     compose
-                        .onNode(hasText(it) and hasClickAction())
+                        .onNode(hasText(it) and hasClickAction() and !isSelectable())
                         .assertIsDisplayed()
                         .fetchSemanticsNode()
                         .boundsInRoot
@@ -602,10 +820,11 @@ class AppFlowTest {
             compose.onNodeWithText("English").performClick()
             waitFor("Settings")
             compose.onNodeWithContentDescription("Back").performClick()
+            compose.onNode(hasText("Account") and hasClickAction()).performClick()
             compose.onNodeWithContentDescription("Change company").performClick()
             waitFor("Choose a company")
             compose.onAllNodesWithText("Open company")[1].performClick()
-            waitFor("Employee workspace")
+            waitFor("Welcome")
             compose.onNodeWithText("PT Lintas Karya").assertExists()
             compose.onNodeWithText("PT Nusa Digital").assertDoesNotExist()
             compose.onNode(hasText("Account") and hasClickAction()).performClick()
@@ -621,7 +840,7 @@ class AppFlowTest {
             signIn()
             waitFor("Choose a company")
             compose.onAllNodesWithText("Open company")[0].performClick()
-            waitFor("Employee workspace")
+            waitFor("Welcome")
             openService("My profile")
             waitFor("Personal information")
             compose.onNodeWithText("1996-02-29").assertExists()
@@ -631,9 +850,12 @@ class AppFlowTest {
             compose.onNodeWithText("Engineering").assertExists()
             compose.onNodeWithContentDescription("Back").assertIsDisplayed()
             compose.onNodeWithContentDescription("Back").performClick()
-            compose.onNode(hasText("Services") and hasClickAction()).assertIsSelected()
-            compose.onNode(hasText("Home") and hasClickAction()).performClick()
-            waitFor("Employee workspace")
+            waitFor("All services")
+            compose.onNode(hasText("Home") and hasClickAction()).assertDoesNotExist()
+            compose.onNode(hasText("Account") and hasClickAction()).assertDoesNotExist()
+            compose.runOnIdle { backDispatcher.pressBack() }
+            waitFor("Welcome")
+            compose.onNode(hasText("Account") and hasClickAction()).performClick()
             compose
                 .onNode(
                     (hasText("Change company") or hasContentDescription("Change company")) and
@@ -642,7 +864,7 @@ class AppFlowTest {
                 .performClick()
             waitFor("Choose a company")
             compose.onAllNodesWithText("Open company")[1].performClick()
-            waitFor("Employee workspace")
+            waitFor("Welcome")
             openService("My profile")
             waitFor("No employee profile is available. Contact HR to check your account linkage.")
             compose.onNodeWithText("1996-02-29").assertDoesNotExist()
@@ -656,7 +878,7 @@ class AppFlowTest {
             signIn()
             waitFor("Choose a company")
             compose.onAllNodesWithText("Open company")[0].performClick()
-            waitFor("Employee workspace")
+            waitFor("Welcome")
             openService("My profile")
             waitFor("Personal information")
             server.people.denied = true
@@ -677,7 +899,7 @@ class AppFlowTest {
             compose.onNode(hasText("Verify") and hasClickAction()).performScrollTo().performClick()
             waitFor("Choose a company")
             compose.onAllNodesWithText("Open company")[0].performClick()
-            waitFor("Employee workspace")
+            waitFor("Welcome")
             openService("My profile")
             waitFor("Personal information")
             kotlinx.coroutines.runBlocking { server.expireVerification() }
@@ -797,7 +1019,10 @@ class AppFlowTest {
                 DisposableEffect(lifecycleOwner) {
                     onDispose { lifecycleOwner.lifecycle.currentState = Lifecycle.State.DESTROYED }
                 }
-                CompositionLocalProvider(LocalLifecycleOwner provides lifecycleOwner) {
+                CompositionLocalProvider(
+                    LocalLifecycleOwner provides lifecycleOwner,
+                    LocalBackGestureDispatcher provides backDispatcher,
+                ) {
                     if (visible.value) Box(Modifier.size(420.dp, 760.dp)) { StarterApp(container) }
                 }
             }
@@ -821,7 +1046,10 @@ class AppFlowTest {
     }
 
     private fun openService(label: String) {
-        compose.onNode(hasText("Services") and hasClickAction()).performClick()
+        compose.onNodeWithText("All services").performScrollTo().performClick()
+        compose.waitUntil {
+            compose.onAllNodesWithContentDescription("Back").fetchSemanticsNodes().isNotEmpty()
+        }
         compose.onNodeWithText(label).performScrollTo().performClick()
     }
 

@@ -34,11 +34,14 @@ metadata, and clipped press feedback. Place dates below the summary when a
 trailing column would crowd a narrow screen. `AppLazyPage` accepts an owned list
 state so paging can reset its position without rebuilding the route owner.
 
-Home keeps the company name and its switch action in the top bar. Today's clock-in
-and clock-out appear before the service grid. Services groups admitted destinations
-by purpose; the three stable tabs remain Home, Services and Account. The attendance
-feature owns its card, state and actions. Home receives that entry through app
-composition and does not acquire another feature's data or ViewModel.
+Home shows a compact welcome card with the employee's name and company. Company
+switching belongs in Account. Today's clock-in and clock-out appear before the
+service grid. All services opens a separate page of admitted destinations grouped
+by purpose. The four stable tabs are Home, Inbox, Employees and Account. Each
+feature owns its state and actions; Home receives its entries through app
+composition and does not acquire another feature's data or ViewModel. Long bottom
+navigation labels use a single ellipsized line while retaining their complete
+accessible names.
 
 `AppTopBar` belongs in the `topBar` slot of `AppPage` or `AppLazyPage`, outside the
 scrolling content and its padding. Its normal minimum height is 56 dp; large text

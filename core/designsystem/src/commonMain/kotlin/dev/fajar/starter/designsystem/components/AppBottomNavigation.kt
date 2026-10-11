@@ -20,6 +20,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import dev.fajar.starter.designsystem.theme.AppColors
 import dev.fajar.starter.designsystem.theme.LocalAppMotion
@@ -88,6 +89,8 @@ fun <T> AppBottomNavigation(
                                         else FontWeight.Normal
                                 ),
                             color = color,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
                         )
                     }
                 }

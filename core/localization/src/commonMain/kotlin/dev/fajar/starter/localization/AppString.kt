@@ -5,8 +5,19 @@ import org.jetbrains.compose.resources.StringResource
 
 /** Explicit pairs keep runtime language changes portable across Android, iOS, desktop and Web. */
 enum class AppString(val english: StringResource, val indonesian: StringResource) {
+    Employees(Res.string.employees_en, Res.string.employees_id),
+    EmployeesSummary(Res.string.employees_summary_en, Res.string.employees_summary_id),
+    ServicesCompany(Res.string.services_company_en, Res.string.services_company_id),
+    EmployeeSearch(Res.string.employee_search_en, Res.string.employee_search_id),
+    EmployeeSearchHint(Res.string.employee_search_hint_en, Res.string.employee_search_hint_id),
+    EmployeesEmpty(Res.string.employees_empty_en, Res.string.employees_empty_id),
+    DirectoryFirstPage(Res.string.directory_first_page_en, Res.string.directory_first_page_id),
+    DirectoryNextPage(Res.string.directory_next_page_en, Res.string.directory_next_page_id),
+    DirectorySaved(Res.string.directory_saved_en, Res.string.directory_saved_id),
+    HomeGreeting(Res.string.home_greeting_en, Res.string.home_greeting_id),
     Services(Res.string.services_en, Res.string.services_id),
     AllServices(Res.string.all_services_en, Res.string.all_services_id),
+    ServicesEmpty(Res.string.services_empty_en, Res.string.services_empty_id),
     ServicesWork(Res.string.services_work_en, Res.string.services_work_id),
     ServicesPersonal(Res.string.services_personal_en, Res.string.services_personal_id),
     ServicesCommunications(

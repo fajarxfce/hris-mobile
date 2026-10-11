@@ -18,6 +18,10 @@ class NativeInboxUi {
     @Volatile var loseNextActionResponse = false
     @Volatile var rejectNextAction = false
     @Volatile var holdNextAction = false
+    @Volatile var holdNextRefresh = false
+    val refreshStarted = CompletableDeferred<Unit>()
+    val refreshReleased = CompletableDeferred<Unit>()
+    val refreshCancelled = CompletableDeferred<Unit>()
     val actionStarted = CompletableDeferred<Unit>()
     val actionReleased = CompletableDeferred<Unit>()
     val actions = CopyOnWriteArrayList<InboxActionAttempt>()
@@ -33,6 +37,7 @@ class NativeInboxUi {
     suspend fun response(request: HttpRequestData): Pair<String, HttpStatusCode>? {
         val path = request.url.encodedPath
         if (!path.contains("/sync/") && !path.contains("/inbox/")) return null
+        pauseRefresh(path)
         if (offline) throw IOException("Simulated offline inbox")
         val company = path.split('/').getOrNull(4)
         check(company in setOf(NativeUiServer.COMPANY_ONE, NativeUiServer.COMPANY_TWO))
@@ -121,6 +126,18 @@ class NativeInboxUi {
                 }
             }
         return body.toString() to HttpStatusCode.OK
+    }
+
+    private suspend fun pauseRefresh(path: String) {
+        if (!holdNextRefresh || !path.contains("/sync/")) return
+        holdNextRefresh = false
+        refreshStarted.complete(Unit)
+        try {
+            refreshReleased.await()
+        } catch (failure: CancellationException) {
+            refreshCancelled.complete(Unit)
+            throw failure
+        }
     }
 
     private suspend fun act(

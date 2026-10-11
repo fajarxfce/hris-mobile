@@ -1,12 +1,14 @@
 package dev.fajar.starter.home.presentation.home
 
 import dev.fajar.starter.common.result.Failure
+import dev.fajar.starter.home.presentation.catalog.HomeServiceCatalog
 import dev.fajar.starter.identity.domain.entities.User
 import dev.fajar.starter.workspace.domain.entities.Workspace
 
 enum class HomeTab {
     Home,
-    Services,
+    Inbox,
+    Employees,
     Account,
 }
 

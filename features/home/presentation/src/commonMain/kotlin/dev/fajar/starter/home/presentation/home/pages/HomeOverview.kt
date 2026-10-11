@@ -6,11 +6,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import dev.fajar.starter.designsystem.components.*
+import dev.fajar.starter.home.presentation.catalog.HomeService
 import dev.fajar.starter.home.presentation.home.*
+import dev.fajar.starter.home.presentation.home.widgets.EmployeeWelcomeCard
 import dev.fajar.starter.localization.*
 import io.github.composefluent.FluentTheme
-import io.github.composefluent.icons.Icons
-import io.github.composefluent.icons.regular.ChevronDown
 
 @Composable
 fun HomeOverview(
@@ -22,22 +22,8 @@ fun HomeOverview(
         maxWidth = 640.dp,
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
         spacing = 16.dp,
-        topBar = {
-            AppTopBar(
-                title = state.workspace.company.name,
-                subtitle = appString(AppString.CompanyWorkspace),
-                actions = {
-                    AppIconButton(
-                        Icons.Regular.ChevronDown,
-                        appString(AppString.ChangeCompany),
-                        { onEvent(HomeEvent.CompanyChangeRequested) },
-                        enabled = !state.working,
-                    )
-                },
-            )
-        },
     ) {
-        AppHeading(state.user?.name.orEmpty(), style = FluentTheme.typography.subtitle)
+        EmployeeWelcomeCard(state.user?.name.orEmpty(), state.workspace.company.name)
         if (HomeService.Attendance in state.services.shortcuts) attendance()
         if (state.services.shortcuts.isNotEmpty()) {
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -49,7 +35,7 @@ fun HomeOverview(
                     )
                     AppTextButton(
                         appString(AppString.AllServices),
-                        { onEvent(HomeEvent.TabSelected(HomeTab.Services)) },
+                        { onEvent(HomeEvent.AllServicesRequested) },
                     )
                 }
                 AppMenuGrid(state.services.shortcuts, itemKey = { it.name }) { service ->

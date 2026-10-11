@@ -1,4 +1,5 @@
 <resources>
+    <string name="home_greeting_en">Welcome</string>
     <string name="my_work_en">My work</string>
     <string name="calendar_summary_en">Shifts and days off</string>
     <string name="inbox_summary_en">Company updates and requests</string>
@@ -277,4 +278,14 @@
     <string name="location_unavailable_en">A current location could not be obtained. Try again outdoors or save for review.</string>
     <string name="open_settings_en">Open Settings</string>
     <string name="all_services_en">All services</string>
+    <string name="services_empty_en">No services available.</string>
+    <string name="employees_en">Employees</string>
+    <string name="employees_summary_en">Company directory</string>
+    <string name="services_company_en">Company</string>
+    <string name="employee_search_en">Search employees</string>
+    <string name="employee_search_hint_en">Name or employee number</string>
+    <string name="employees_empty_en">No employees found.</string>
+    <string name="directory_first_page_en">First page</string>
+    <string name="directory_next_page_en">Next page</string>
+    <string name="directory_saved_en">Showing the last loaded page.</string>
 </resources>

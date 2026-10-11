@@ -217,6 +217,41 @@ class AdaptiveUiTest {
         capture("accessibility-large-text")
     }
 
+    @Test
+    fun fourLargeTextNavigationLabelsKeepOneLineAndTheirFullAccessibleNames() {
+        val selected = mutableStateOf(0)
+        val labels = listOf("Beranda", "Inbox", "Karyawan", "Akun")
+        compose.setContent {
+            val density = LocalDensity.current
+            CompositionLocalProvider(LocalDensity provides Density(density.density, 2f)) {
+                AppTheme {
+                    Box(Modifier.width(360.dp).testTag("frame")) {
+                        AppBottomNavigation(
+                            labels.mapIndexed { index, label ->
+                                AppNavigationItem(index, label, Icons.Regular.Person)
+                            },
+                            selected.value,
+                            { selected.value = it },
+                        )
+                    }
+                }
+            }
+        }
+        labels.forEach { label ->
+            compose.onNode(hasText(label) and isSelectable()).assertHeightIsAtLeast(48.dp)
+            val layouts = mutableListOf<androidx.compose.ui.text.TextLayoutResult>()
+            compose.onNodeWithText(label, useUnmergedTree = true).performSemanticsAction(
+                androidx.compose.ui.semantics.SemanticsActions.GetTextLayoutResult
+            ) {
+                it(layouts)
+            }
+            assertEquals(1, layouts.single().lineCount)
+        }
+        compose.onNode(hasText("Karyawan") and isSelectable()).performClick().assertIsSelected()
+        compose.runOnIdle { assertEquals(2, selected.value) }
+        capture("navigation-large-text")
+    }
+
     private fun capture(name: String) {
         val bitmap = compose.onNodeWithTag("frame").captureToImage().asSkiaBitmap()
         val data = requireNotNull(Image.makeFromBitmap(bitmap).encodeToData())

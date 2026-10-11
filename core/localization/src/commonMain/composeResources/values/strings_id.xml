@@ -1,4 +1,5 @@
 <resources>
+    <string name="home_greeting_id">Selamat datang</string>
     <string name="my_work_id">Pekerjaan saya</string>
     <string name="calendar_summary_id">Shift dan hari libur</string>
     <string name="inbox_summary_id">Informasi dan pemberitahuan perusahaan</string>
@@ -277,4 +278,14 @@
     <string name="location_unavailable_id">Lokasi saat ini belum tersedia. Coba di luar ruangan atau simpan untuk diverifikasi.</string>
     <string name="open_settings_id">Buka Settings</string>
     <string name="all_services_id">Semua layanan</string>
+    <string name="services_empty_id">Tidak ada layanan yang tersedia.</string>
+    <string name="employees_id">Karyawan</string>
+    <string name="employees_summary_id">Daftar rekan kerja</string>
+    <string name="services_company_id">Perusahaan</string>
+    <string name="employee_search_id">Cari karyawan</string>
+    <string name="employee_search_hint_id">Nama atau nomor karyawan</string>
+    <string name="employees_empty_id">Tidak ada karyawan yang ditemukan.</string>
+    <string name="directory_first_page_id">Halaman pertama</string>
+    <string name="directory_next_page_id">Halaman berikutnya</string>
+    <string name="directory_saved_id">Menampilkan halaman terakhir yang dimuat.</string>
 </resources>
