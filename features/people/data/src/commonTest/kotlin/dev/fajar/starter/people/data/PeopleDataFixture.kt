@@ -39,6 +39,24 @@ class PeopleDataFixture : PeopleRemoteDataSource {
         )
     var details = EmploymentDetailsDto(page.asOf, employee)
     var failure: Exception? = null
+    var companyPage =
+        CompanyDirectoryDto(
+            "2026-10-01",
+            "Asia/Jakarta",
+            DirectoryEmployeePageDto(
+                listOf(DirectoryEmployeeDto(employee.id, "E02", "Sam", "Engineer", "Engineering"))
+            ),
+        )
+
+    override suspend fun companyDirectory(
+        sessionId: String,
+        companyId: String,
+        query: String,
+        after: String?,
+    ): CompanyDirectoryDto {
+        failure?.let { throw it }
+        return companyPage
+    }
 
     override suspend fun selfEmployments(
         sessionId: String,

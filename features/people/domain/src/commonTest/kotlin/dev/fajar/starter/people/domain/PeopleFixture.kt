@@ -67,6 +67,13 @@ class PeopleFixture {
             0,
         )
     val directory = SelfEmploymentDirectory(date, "Asia/Jakarta", listOf(employee), null)
+    val companyDirectory =
+        CompanyDirectory(
+            date,
+            "Asia/Jakarta",
+            listOf(DirectoryEmployee("colleague", "E02", "Sam", "Engineer", "Engineering")),
+            null,
+        )
     val details = EmploymentDetails(date, employee, null, null, null, null, null)
     val profile = PersonProfile("person", "company", "account", "Alex", null, "ID", null, 0)
     val sessions = Sessions(session)
@@ -78,8 +85,22 @@ class PeopleFixture {
     var profileCall: suspend () -> AppResult<PersonProfile> = { AppResult.Success(profile) }
     var profileReads = 0
     var directoryReads = 0
+    var companyDirectoryReads = 0
+    var companyDirectoryCall: suspend (String, String?) -> AppResult<CompanyDirectory> = { _, _ ->
+        AppResult.Success(companyDirectory)
+    }
     val people =
         object : PeopleRepository {
+            override suspend fun companyDirectory(
+                sessionId: String,
+                companyId: String,
+                query: String,
+                after: String?,
+            ): AppResult<CompanyDirectory> {
+                companyDirectoryReads++
+                return companyDirectoryCall(query, after)
+            }
+
             override suspend fun selfEmployments(
                 sessionId: String,
                 companyId: String,
