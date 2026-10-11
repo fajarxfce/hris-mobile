@@ -33,6 +33,7 @@ fun AppTextField(
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions(),
     trailingContent: (@Composable () -> Unit)? = null,
+    maxLines: Int = 1,
 ) {
     Column(modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
         AppText(label, style = FluentTheme.typography.bodyStrong)
@@ -45,7 +46,8 @@ fun AppTextField(
                     if (error != null) this.error(error)
                 },
             enabled = enabled,
-            singleLine = true,
+            singleLine = maxLines == 1,
+            maxLines = maxLines,
             isClearable = false,
             placeholder = { AppText(placeholder, color = AppColors.muted) },
             visualTransformation = visualTransformation,
