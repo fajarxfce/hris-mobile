@@ -95,7 +95,9 @@ class WorkCalendarFixture(instant: () -> Instant = { Instant.parse("2026-10-12T0
         AppResult.Success(
             WorkCalendar(
                 null,
-                List(7) { WorkDay.Unassigned(period.from.plus(it, DateTimeUnit.DAY)) },
+                List(period.from.daysUntil(period.until) + 1) {
+                    WorkDay.Unassigned(period.from.plus(it, DateTimeUnit.DAY))
+                },
             )
         )
     }

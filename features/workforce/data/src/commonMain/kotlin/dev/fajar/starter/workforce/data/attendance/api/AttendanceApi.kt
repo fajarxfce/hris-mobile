@@ -18,7 +18,7 @@ class AttendanceApi(@Named(HttpClients.Authenticated) private val client: HttpCl
     ): List<AttendanceDayDto> =
         client.requestJson(
             "companies/$companyId/workforce/employees/$employeeId/attendance",
-            maximumBytes = 524_288,
+            maximumBytes = 2_097_152,
         ) {
             forSession(sessionId)
             parameter("from", from)

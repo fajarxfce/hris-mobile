@@ -51,7 +51,23 @@ class AttendanceFixture {
             now + 1.hours,
         )
     val snapshot = MutableStateFlow<AppResult<AttendanceSnapshot?>>(AppResult.Success(initial))
+    val history = MutableStateFlow<AppResult<AttendanceSnapshot?>>(AppResult.Success(null))
     val records = MutableStateFlow<List<AttendanceCommandRecord>>(emptyList())
+    val requestedPeriods = mutableListOf<CalendarPeriod>()
+    var daysCall: suspend (CalendarPeriod) -> AppResult<List<AttendanceDay>> = { requested ->
+        AppResult.Success(
+            List(requested.from.daysUntil(requested.until) + 1) {
+                AttendanceDay(
+                    requested.from.plus(it, DateTimeUnit.DAY),
+                    emptyList(),
+                    0,
+                    0,
+                    false,
+                    null,
+                )
+            }
+        )
+    }
     var locationReads = 0
     var permissionRequests = 0
     var windowReads = 0
@@ -77,24 +93,32 @@ class AttendanceFixture {
     var findCall: suspend () -> Unit = {}
     val cache =
         object : AttendanceCacheRepository {
-            override fun observe(access: WorkforceAccess) = snapshot
+            override fun observe(access: WorkforceAccess, window: AttendanceWindow) =
+                if (window == AttendanceWindow.RECENT) snapshot else history
 
-            override suspend fun generation(access: WorkforceAccess) =
-                AppResult.Success((snapshot.value as? AppResult.Success)?.value?.generation)
+            override suspend fun generation(access: WorkforceAccess, window: AttendanceWindow) =
+                AppResult.Success(
+                    ((if (window == AttendanceWindow.RECENT) snapshot else history).value
+                            as? AppResult.Success)
+                        ?.value
+                        ?.generation
+                )
 
             override suspend fun replace(
                 access: WorkforceAccess,
                 expectedGeneration: String?,
                 snapshot: AttendanceSnapshot?,
+                window: AttendanceWindow,
             ): AppResult<Boolean> {
-                if (
-                    (this@AttendanceFixture.snapshot.value as? AppResult.Success)
-                        ?.value
-                        ?.generation != expectedGeneration
-                )
+                val destination =
+                    if (window == AttendanceWindow.RECENT) this@AttendanceFixture.snapshot
+                    else history
+                val previous = destination.value
+                if ((previous as? AppResult.Success)?.value?.generation != expectedGeneration)
                     return AppResult.Success(false)
-                this@AttendanceFixture.snapshot.value = AppResult.Success(snapshot)
-                return AppResult.Success(true)
+                return AppResult.Success(
+                    destination.compareAndSet(previous, AppResult.Success(snapshot))
+                )
             }
         }
     val commands =
@@ -178,7 +202,10 @@ class AttendanceFixture {
                 access: WorkforceAccess,
                 employeeId: String,
                 period: CalendarPeriod,
-            ) = AppResult.Success(initial.days)
+            ): AppResult<List<AttendanceDay>> {
+                requestedPeriods += period
+                return daysCall(period)
+            }
 
             override suspend fun window(
                 access: WorkforceAccess,
@@ -198,6 +225,18 @@ class AttendanceFixture {
                 return sendCall(command)
             }
         }
+    val refresh =
+        RefreshAttendance(
+            base.remote,
+            remote,
+            cache,
+            base.sessions,
+            base.workspaces,
+            base.clock,
+            base.build,
+        )
+    val observe =
+        ObserveAttendance(cache, commands, base.sessions, base.workspaces, base.clock, base.build)
     val capture =
         CaptureAttendance(
             remote,

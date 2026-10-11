@@ -1,5 +1,16 @@
 # Validation
 
+## Monthly attendance foundation
+
+The acquisition and storage update passed root checks with 420 desktop/JVM/UI
+tests, workforce domain Chromium tests and the Android dev build. Regression
+coverage includes complete/leap-year months, invalid/future filters, separate
+recent/history caches, dense monthly ciphertext, v1 cache recovery, cancellation
+during encryption, key-buffer cleanup, company changes and stale results. Domain
+tests distinguish confirmed absences, unrecorded/off days, queued captures,
+pending review and ongoing shifts. This validates the data foundation; the new
+Attendance screen is delivered separately.
+
 ## Inbox totals and navigation badges
 
 The 2026-10-12 update passed the root checks with 410 desktop/JVM/UI tests,

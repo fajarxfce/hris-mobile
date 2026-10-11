@@ -23,7 +23,10 @@ class ObserveAttendance(
     private val build: AppBuild,
 ) {
     @OptIn(ExperimentalCoroutinesApi::class)
-    operator fun invoke(workspaceId: String): Flow<AppResult<AttendanceView>> =
+    operator fun invoke(
+        workspaceId: String,
+        window: AttendanceWindow = AttendanceWindow.RECENT,
+    ): Flow<AppResult<AttendanceView>> =
         sessions
             .observe()
             .flatMapLatest { result ->
@@ -55,9 +58,10 @@ class ObserveAttendance(
                 when (admitted) {
                     is AppResult.Failed -> flowOf(admitted)
                     is AppResult.Success ->
-                        combine(cache.observe(admitted.value), commands.observe(admitted.value)) {
-                                snapshot,
-                                records ->
+                        combine(
+                                cache.observe(admitted.value, window),
+                                commands.observe(admitted.value),
+                            ) { snapshot, records ->
                                 snapshot to records
                             }
                             .flatMapLatest { (result, records) ->

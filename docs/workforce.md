@@ -81,11 +81,18 @@ directory and one seven-day calendar. Directory/calendar responses have separate
 byte limits. Their mappers validate scope, unique IDs, dates, contiguous days,
 shift revisions and elapsed time before producing domain values.
 
-`RefreshAttendance` separately acquires a seven-day window around the company
-date, the employee's frozen/effective calendar and attendance entries. Its cache
+`RefreshAttendance` supports the recent seven-day capture window and a separate
+monthly history window of at most 31 days. A monthly selection starts on the first
+day, cannot select a future month, and uses the server's company date. Its cache
 also retains the selected directory cursor, so a late snapshot from another page
 cannot replace the requested employment page. Both snapshot workflows recheck
 authority after pending I/O and before publication.
+
+`summarizeAttendanceHistory` keeps confirmed absence, missing records, days off,
+unassigned schedules and review status distinct. Future dates do not enter the
+metrics. Queued device commands can appear as pending synchronization, but do not
+add accepted hours or presence. A current unfinished shift is not marked incomplete
+before it ends. These classifications belong to domain policy.
 
 The route owns its MVI ViewModel and observation lifetime. Navigation cancels an
 obsolete acquisition; stopping the route releases collectors and clears displayed
@@ -94,12 +101,22 @@ perform no navigation, permission requests, scheduling or UI-state management.
 
 ## Offline access
 
-Each company retains separate encrypted calendar and attendance snapshots. A new
+Each company retains separate encrypted calendar, recent attendance and monthly
+history snapshots. Browsing a month cannot replace capture evidence. A new
 successful acquisition replaces that workflow's snapshot atomically; this is not
 a full schedule or attendance replica.
 Its content key is separate from inbox encryption. Authentication data binds the
 encrypted document to the audience, account, session, company and generation.
 Publication uses the database's account ownership and compare-and-set revision.
+
+Attendance cache format v2 stores encrypted metadata and one record per day in a
+single atomic snapshot. Dates and attendance values are not used as database
+ordering keys. This accommodates dense monthly responses without exceeding a
+record's encryption limit. The data codec performs encryption/DTO encoding only;
+the repository acquires storage/key values and maps DTOs to domain inside the
+storage failure boundary. Existing v1 recent snapshots remain readable. Associated
+data distinguishes recent and monthly partitions, so ciphertext cannot be moved
+between them. Attendance HTTP responses are bounded to 2 MiB.
 
 Cached reads last at most one hour and never outlive the workspace admission,
 session/MFA authority or a known upcoming maintenance window. Renewing admission
