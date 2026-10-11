@@ -7,10 +7,10 @@ import kotlin.time.Instant
 import kotlinx.datetime.*
 import kotlinx.serialization.json.Json
 
-fun workCalendarPartition(access: CalendarAccess) = "work-calendar/" + access.companyId
+fun workCalendarPartition(access: WorkforceAccess) = "work-calendar/" + access.companyId
 
 fun workCalendarAssociatedData(
-    access: CalendarAccess,
+    access: WorkforceAccess,
     generation: String,
     purpose: String,
 ): ByteArray =
@@ -41,7 +41,7 @@ fun WorkCalendarSnapshot.toDto() =
     )
 
 fun WorkCalendarSnapshotDto.toSnapshot(
-    access: CalendarAccess,
+    access: WorkforceAccess,
     generation: String,
 ): WorkCalendarSnapshot {
     require(permissions.size <= 256 && permissions.all { it.length in 1..128 })

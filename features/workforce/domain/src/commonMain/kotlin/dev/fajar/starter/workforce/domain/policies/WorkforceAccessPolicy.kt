@@ -11,13 +11,13 @@ import kotlin.time.Instant
 
 val WORK_CALENDAR_CACHE_PERIOD = 1.hours
 
-fun admitWorkCalendar(
+fun admitWorkforce(
     workspaceId: String,
     workspace: Workspace?,
     session: Session?,
     build: AppBuild,
     now: Instant,
-): AppResult<CalendarAccess> {
+): AppResult<WorkforceAccess> {
     val ownership = validateWorkspaceOwnership(workspaceId, workspace, session, now)
     if (ownership is AppResult.Failed) return ownership
     requireNotNull(workspace)
@@ -51,7 +51,7 @@ fun admitWorkCalendar(
         }
     }
     return AppResult.Success(
-        CalendarAccess(
+        WorkforceAccess(
             session.id,
             session.user.id,
             session.binding.audience,
@@ -64,7 +64,7 @@ fun admitWorkCalendar(
     )
 }
 
-fun sameCalendarScope(first: CalendarAccess, second: CalendarAccess): Boolean =
+fun sameWorkforceScope(first: WorkforceAccess, second: WorkforceAccess): Boolean =
     first.sessionId == second.sessionId &&
         first.accountId == second.accountId &&
         first.audience == second.audience &&
@@ -72,26 +72,26 @@ fun sameCalendarScope(first: CalendarAccess, second: CalendarAccess): Boolean =
         first.permissions == second.permissions &&
         first.sessionExpiresAt == second.sessionExpiresAt
 
-fun validateCalendarContinuation(
-    expected: CalendarAccess,
-    current: AppResult<CalendarAccess>,
-): AppResult<CalendarAccess> =
+fun validateWorkforceContinuation(
+    expected: WorkforceAccess,
+    current: AppResult<WorkforceAccess>,
+): AppResult<WorkforceAccess> =
     when (current) {
         is AppResult.Failed -> current
         is AppResult.Success ->
-            if (sameCalendarScope(expected, current.value)) current
+            if (sameWorkforceScope(expected, current.value)) current
             else calendarFailure("client.calendar_scope_changed", FailureKind.AccessDenied)
     }
 
 fun validateCalendarCache(
-    access: CalendarAccess,
+    access: WorkforceAccess,
     snapshot: WorkCalendarSnapshot?,
     now: Instant,
 ): AppResult<Unit> =
     when {
         access.readUntil <= now -> calendarFailure(access.expiryCode, FailureKind.AccessDenied)
         snapshot == null -> AppResult.Success(Unit)
-        !sameCalendarScope(access, snapshot.access) ->
+        !sameWorkforceScope(access, snapshot.access) ->
             calendarFailure("client.calendar_scope_changed", FailureKind.AccessDenied)
         snapshot.fetchedAt > now ||
             snapshot.expiresAt <= now ||

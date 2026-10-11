@@ -3,7 +3,7 @@ package dev.fajar.starter.workforce.domain.entities
 import kotlin.time.Instant
 
 /** A read lease. Renewing it does not change the account/company/permission scope. */
-data class CalendarAccess(
+data class WorkforceAccess(
     val sessionId: String,
     val accountId: String,
     val audience: String,
@@ -13,5 +13,5 @@ data class CalendarAccess(
     val readUntil: Instant,
     val expiryCode: String,
 ) {
-    override fun toString() = "CalendarAccess([redacted])"
+    override fun toString() = "WorkforceAccess([redacted])"
 }

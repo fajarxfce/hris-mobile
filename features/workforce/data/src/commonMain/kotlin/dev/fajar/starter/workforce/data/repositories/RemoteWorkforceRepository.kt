@@ -13,13 +13,13 @@ import org.koin.core.annotation.Single
 @Single
 class RemoteWorkforceRepository(private val remote: WorkforceRemoteDataSource) :
     WorkforceRepository {
-    override suspend fun selfEmployments(access: CalendarAccess, after: String?) = safeApiCall {
+    override suspend fun selfEmployments(access: WorkforceAccess, after: String?) = safeApiCall {
         Uuid.parse(access.companyId)
         remote.selfEmployments(access.sessionId, access.companyId, after).toDirectory(access, after)
     }
 
     override suspend fun calendar(
-        access: CalendarAccess,
+        access: WorkforceAccess,
         employeeId: String,
         period: CalendarPeriod,
     ) = safeApiCall {

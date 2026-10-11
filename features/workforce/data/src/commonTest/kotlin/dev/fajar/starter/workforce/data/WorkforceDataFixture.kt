@@ -10,7 +10,7 @@ import kotlinx.datetime.*
 class WorkforceDataFixture : WorkforceRemoteDataSource {
     val now = Instant.parse("2026-10-12T01:00:00Z")
     val access =
-        CalendarAccess(
+        WorkforceAccess(
             "session",
             "11111111-1111-1111-1111-111111111111",
             "https://hris.example.test/",

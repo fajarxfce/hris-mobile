@@ -8,7 +8,7 @@ import kotlin.uuid.Uuid
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 
-fun WorkforceDirectoryDto.toDirectory(access: CalendarAccess, after: String?): WorkforceDirectory {
+fun WorkforceDirectoryDto.toDirectory(access: WorkforceAccess, after: String?): WorkforceDirectory {
     Uuid.parse(accountId)
     Uuid.parse(companyId)
     require(accountId == access.accountId && companyId == access.companyId)

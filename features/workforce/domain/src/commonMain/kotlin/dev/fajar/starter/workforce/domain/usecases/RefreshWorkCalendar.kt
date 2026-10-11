@@ -58,7 +58,7 @@ class RefreshWorkCalendar(
         val requestedAt = clock.now()
         val policyResponse = workspaces.clientPolicy(access.sessionId, access.companyId)
         currentCoroutineContext().ensureActive()
-        val policyOwnership = validateCalendarContinuation(access, currentAccess(workspaceId))
+        val policyOwnership = validateWorkforceContinuation(access, currentAccess(workspaceId))
         if (policyOwnership is AppResult.Failed) return policyOwnership
         val policy =
             when (policyResponse) {
@@ -71,7 +71,7 @@ class RefreshWorkCalendar(
             return reject(access, previousGeneration, availability)
         val directoryResponse = remote.selfEmployments(access, selection.after)
         currentCoroutineContext().ensureActive()
-        val directoryOwnership = validateCalendarContinuation(access, currentAccess(workspaceId))
+        val directoryOwnership = validateWorkforceContinuation(access, currentAccess(workspaceId))
         if (directoryOwnership is AppResult.Failed) return directoryOwnership
         val directory =
             when (directoryResponse) {
@@ -106,7 +106,7 @@ class RefreshWorkCalendar(
         currentCoroutineContext().ensureActive()
         val current =
             when (
-                val ownership = validateCalendarContinuation(access, currentAccess(workspaceId))
+                val ownership = validateWorkforceContinuation(access, currentAccess(workspaceId))
             ) {
                 is AppResult.Failed -> return ownership
                 is AppResult.Success -> ownership.value
@@ -156,12 +156,12 @@ class RefreshWorkCalendar(
                     return calendarFailure("client.calendar_changed", FailureKind.Conflict)
         }
         currentCoroutineContext().ensureActive()
-        val publication = validateCalendarContinuation(snapshot.access, currentAccess(workspaceId))
+        val publication = validateWorkforceContinuation(snapshot.access, currentAccess(workspaceId))
         if (publication is AppResult.Failed) return publication
         return AppResult.Success(Unit)
     }
 
-    private suspend fun currentAccess(workspaceId: String): AppResult<CalendarAccess> {
+    private suspend fun currentAccess(workspaceId: String): AppResult<WorkforceAccess> {
         val session =
             when (val result = sessions.current()) {
                 is AppResult.Failed -> return result
@@ -174,11 +174,11 @@ class RefreshWorkCalendar(
                 is AppResult.Failed -> return result
                 is AppResult.Success -> result.value
             }
-        return admitWorkCalendar(workspaceId, workspace, session, build, clock.now())
+        return admitWorkforce(workspaceId, workspace, session, build, clock.now())
     }
 
     private suspend fun reject(
-        access: CalendarAccess,
+        access: WorkforceAccess,
         generation: String?,
         failure: AppResult.Failed,
     ): AppResult.Failed {

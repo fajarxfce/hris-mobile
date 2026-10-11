@@ -35,7 +35,7 @@ class ObserveWorkCalendar(
                                 when (current) {
                                     is AppResult.Failed -> current
                                     is AppResult.Success ->
-                                        admitWorkCalendar(
+                                        admitWorkforce(
                                             workspaceId,
                                             current.value,
                                             session,

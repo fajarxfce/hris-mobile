@@ -5,12 +5,12 @@ import dev.fajar.starter.workforce.domain.entities.*
 
 interface WorkforceRepository {
     suspend fun selfEmployments(
-        access: CalendarAccess,
+        access: WorkforceAccess,
         after: String?,
     ): AppResult<WorkforceDirectory>
 
     suspend fun calendar(
-        access: CalendarAccess,
+        access: WorkforceAccess,
         employeeId: String,
         period: CalendarPeriod,
     ): AppResult<WorkCalendar>

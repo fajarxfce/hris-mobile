@@ -4,7 +4,7 @@ import kotlin.time.Instant
 
 /** One bounded, complete view. Saved schedules never authorize attendance capture. */
 data class WorkCalendarSnapshot(
-    val access: CalendarAccess,
+    val access: WorkforceAccess,
     val generation: String,
     val directory: WorkforceDirectory,
     val selection: WorkCalendarSelection,

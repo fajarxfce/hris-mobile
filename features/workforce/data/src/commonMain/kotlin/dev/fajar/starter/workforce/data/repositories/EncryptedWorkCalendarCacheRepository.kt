@@ -7,7 +7,7 @@ import dev.fajar.starter.storage.*
 import dev.fajar.starter.workforce.data.dto.WorkCalendarSnapshotDto
 import dev.fajar.starter.workforce.data.mappers.*
 import dev.fajar.starter.workforce.domain.entities.*
-import dev.fajar.starter.workforce.domain.policies.sameCalendarScope
+import dev.fajar.starter.workforce.domain.policies.sameWorkforceScope
 import dev.fajar.starter.workforce.domain.repositories.WorkCalendarCacheRepository
 import kotlin.io.encoding.Base64
 import kotlinx.coroutines.NonCancellable
@@ -25,7 +25,7 @@ class EncryptedWorkCalendarCacheRepository(
 ) : WorkCalendarCacheRepository {
     private val keyCreation = Mutex()
 
-    override fun observe(access: CalendarAccess) =
+    override fun observe(access: WorkforceAccess) =
         safeStorageFlow(
             replicas.observeDocument(access.sessionId, workCalendarPartition(access), "calendar"),
             mapValue = { page ->
@@ -84,12 +84,12 @@ class EncryptedWorkCalendarCacheRepository(
             },
         )
 
-    override suspend fun generation(access: CalendarAccess) = safeStorageCall {
+    override suspend fun generation(access: WorkforceAccess) = safeStorageCall {
         replicas.checkpoint(access.sessionId, workCalendarPartition(access))?.handle?.generation
     }
 
     override suspend fun replace(
-        access: CalendarAccess,
+        access: WorkforceAccess,
         expectedGeneration: String?,
         snapshot: WorkCalendarSnapshot?,
     ) = safeStorageCall {
@@ -99,7 +99,7 @@ class EncryptedWorkCalendarCacheRepository(
         if (snapshot == null)
             return@safeStorageCall replicas.replace(access.sessionId, partition, previous, null)
         require(
-            sameCalendarScope(access, snapshot.access) && snapshot.generation != expectedGeneration
+            sameWorkforceScope(access, snapshot.access) && snapshot.generation != expectedGeneration
         )
         val dto = snapshot.toDto()
         dto.toSnapshot(access, snapshot.generation)

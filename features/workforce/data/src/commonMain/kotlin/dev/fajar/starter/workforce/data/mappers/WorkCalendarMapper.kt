@@ -9,7 +9,10 @@ import kotlin.uuid.Uuid
 import kotlinx.datetime.*
 
 fun WorkCalendarDto.toCalendar(period: CalendarPeriod): WorkCalendar {
-    require(period.from.daysUntil(period.until) == 6 && days.size == 7)
+    require(
+        period.from.daysUntil(period.until) in 0..30 &&
+            days.size == period.from.daysUntil(period.until) + 1
+    )
     require(scheduleVersion == null || scheduleVersion in 0..9_007_199_254_740_991L)
     val mapped =
         days.mapIndexed { index, day ->

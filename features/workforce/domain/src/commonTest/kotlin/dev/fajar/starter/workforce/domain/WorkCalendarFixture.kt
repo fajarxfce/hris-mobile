@@ -159,7 +159,7 @@ class WorkCalendarFixture(instant: () -> Instant = { Instant.parse("2026-10-12T0
     val remote =
         object : WorkforceRepository {
             override suspend fun selfEmployments(
-                access: CalendarAccess,
+                access: WorkforceAccess,
                 after: String?,
             ): AppResult<WorkforceDirectory> {
                 directoryReads++
@@ -167,7 +167,7 @@ class WorkCalendarFixture(instant: () -> Instant = { Instant.parse("2026-10-12T0
             }
 
             override suspend fun calendar(
-                access: CalendarAccess,
+                access: WorkforceAccess,
                 employeeId: String,
                 period: CalendarPeriod,
             ): AppResult<WorkCalendar> {
@@ -177,7 +177,7 @@ class WorkCalendarFixture(instant: () -> Instant = { Instant.parse("2026-10-12T0
         }
     val cache =
         object : WorkCalendarCacheRepository {
-            override fun observe(access: CalendarAccess): Flow<AppResult<WorkCalendarSnapshot?>> =
+            override fun observe(access: WorkforceAccess): Flow<AppResult<WorkCalendarSnapshot?>> =
                 flow {
                     observers++
                     try {
@@ -187,11 +187,11 @@ class WorkCalendarFixture(instant: () -> Instant = { Instant.parse("2026-10-12T0
                     }
                 }
 
-            override suspend fun generation(access: CalendarAccess) =
+            override suspend fun generation(access: WorkforceAccess) =
                 AppResult.Success((records.value as? AppResult.Success)?.value?.generation)
 
             override suspend fun replace(
-                access: CalendarAccess,
+                access: WorkforceAccess,
                 expectedGeneration: String?,
                 snapshot: WorkCalendarSnapshot?,
             ): AppResult<Boolean> {
