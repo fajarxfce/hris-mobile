@@ -10,4 +10,16 @@ sealed interface InboxItemEvent {
     data object BackRequested : InboxItemEvent
 
     data object VerificationRequested : InboxItemEvent
+
+    data object ReadRequested : InboxItemEvent
+
+    data object AcknowledgementRequested : InboxItemEvent
+
+    data object AcknowledgementConfirmed : InboxItemEvent
+
+    data object AcknowledgementCancelled : InboxItemEvent
+
+    data object RetryActionRequested : InboxItemEvent
+
+    data object ReviewActionRequested : InboxItemEvent
 }

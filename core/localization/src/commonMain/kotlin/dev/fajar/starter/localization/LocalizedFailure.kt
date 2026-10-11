@@ -8,6 +8,16 @@ fun failureText(failure: Failure): String =
     appString(
         when (failure.code) {
             "client.inbox_cache_expired" -> AppString.InboxCacheExpired
+            "client.inbox_item_unavailable",
+            "inbox_item_not_found" -> AppString.InboxMessageUnavailable
+            "client.inbox_updates_pending" -> AppString.InboxAwaitingSync
+            "client.inbox_action_unconfirmed" -> AppString.InboxActionUnconfirmed
+            "client.inbox_action_pending" -> AppString.InboxActionPending
+            "client.inbox_retry_limit" -> AppString.InboxRetryLimit
+            "client.command_queue_full" -> AppString.InboxQueueFull
+            "client.inbox_review_required",
+            "client.inbox_command_changed",
+            "client.inbox_action_unavailable" -> AppString.InboxReviewRequired
             "invalid_credentials" -> AppString.InvalidCredentials
             "invalid_mfa_code",
             "invalid_mfa_request" -> AppString.InvalidVerificationCode

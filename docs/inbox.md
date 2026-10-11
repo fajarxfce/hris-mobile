@@ -3,7 +3,8 @@
 The Inbox screen reads account-owned correspondence from HRIS Platform. The
 company must grant `announcements.read`, and the backend must configure its sync
 cursor keys and run the publication worker. A GET does not mark a message read.
-Read/acknowledgement commands and push-triggered navigation are subsequent work.
+Read and acknowledgement are explicit employee actions. Push-triggered navigation
+remains subsequent work.
 
 ## Ownership
 
@@ -13,6 +14,9 @@ Read/acknowledgement commands and push-triggered navigation are subsequent work.
   storage. Datasources never call each other or choose access/retry policy.
 - `SyncInbox` owns scope checks, staging, hydration, pagination, reset policy,
   and execution bounds. `ObserveInbox` owns local admission and expiry.
+- `PrepareInboxAction`, `ReplayInboxAction`, `ObserveInboxAction`, and
+  `ReviewInboxAction` coordinate repository contracts and own command admission,
+  retry, observation and resolution. Use cases never call one another.
 - Route-owned MVI ViewModels observe the database and invoke use cases. Pages
   render state and forward actions; refresh preserves existing content.
 
@@ -50,9 +54,12 @@ is not implemented. Browser keys are memory-only and do not survive page closure
 The encryption adapter fails closed for a missing or mismatched key. It never
 silently generates a key for existing encrypted content.
 
-These replicas contain server-owned reads. They are not the durable command
-outbox: future queued business actions need separate retention, account ownership,
-revalidation, and conflict policy.
+## Durable actions
+
+Read and acknowledgement actions persist before transport. Their immutable UUID
+and observed version survive retries, process termination and a new session for
+the same account. See [command admission, encryption and recovery](inbox-commands.md)
+for ownership, finite delivery, conflict review and receipt retirement.
 
 ## Interface and validation
 
@@ -62,14 +69,19 @@ rows retain a single accessible action. Detail text is selectable plain text.
 Short page transitions follow the existing reduced-motion preference. Initial
 loading and refresh are distinct; an offline failure keeps admitted cached content.
 
-Workspace checks, the Android dev build, and the Web production build passed.
+Workspace checks and the Android dev build passed.
 The real SQLite/encryption tests cover publication, restart, scope/key mismatch,
 and stale writes. Domain tests cover cancellation, late results, cursor recovery,
-expiry, polling, and tombstones on JVM and in the browser. Browser tests also
-exercise the actual IndexedDB replica and feed adapter. Compose tests cover list
-paging, offline detail, company replacement, withdrawal, and large text.
+expiry, polling, tombstones, command ownership, original retries, finite attempts,
+and safe receipt retirement on JVM and in the browser. Command storage tests use
+real SQLite and AES-GCM, including restart, new-session recovery, missing keys,
+tampering and compare-and-set races. Transport tests check the actual request
+shape and idempotency header. Compose tests cover list paging, offline detail,
+company replacement, withdrawal, large text, acknowledgement cancellation,
+response loss followed by sign-in again, conflict review, and leaving a pending
+operation without losing its identity.
 
 The platform's separate real API/PostgreSQL/worker test verifies publication,
 native recipient isolation, versioned commands, replay, and archival sync.
-Physical device behavior and runtime performance have not been measured for
-this feature.
+See [validation](validation.md) for Android device observations and remaining
+platform checks. No rendering or memory-performance claim is made by these tests.

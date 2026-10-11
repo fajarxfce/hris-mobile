@@ -39,13 +39,17 @@ class NativeUiServer(
             assertEquals("ANDROID", request.headers["X-HRIS-Client-Platform"])
             assertEquals("1", request.headers["X-HRIS-Client-Build"])
             val headers = headersOf(HttpHeaders.ContentType, "application/json")
+            if ((path.contains("/sync/") || path.contains("/inbox/")) && requireMfa && !verified)
+                return@withLock respond(
+                    """{"code":"mfa_required"}""",
+                    HttpStatusCode.Forbidden,
+                    headers,
+                )
             inbox.response(request)?.let { (body, status) ->
                 assertTrue(
                     request.headers[HttpHeaders.Authorization]?.startsWith("Bearer ") == true
                 )
-                return@withLock if (requireMfa && !verified)
-                    respond("""{"code":"mfa_required"}""", HttpStatusCode.Forbidden, headers)
-                else respond(body, status, headers)
+                return@withLock respond(body, status, headers)
             }
             if (path.startsWith("/api/v1/auth/native/sessions") && rejectSessionAccessOnce) {
                 rejectSessionAccessOnce = false

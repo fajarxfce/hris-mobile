@@ -195,4 +195,18 @@
     <string name="inbox_acknowledgement_required_en">Acknowledgement required</string>
     <string name="inbox_acknowledged_en">Acknowledged</string>
     <string name="inbox_cache_expired_en">Connect to refresh your inbox.</string>
+    <string name="inbox_mark_read_en">Mark as read</string>
+    <string name="inbox_read_en">Read</string>
+    <string name="inbox_acknowledge_en">Acknowledge</string>
+    <string name="inbox_acknowledgement_prompt_en">I have read this announcement.</string>
+    <string name="inbox_action_sending_en">Sending…</string>
+    <string name="inbox_action_queued_en">Saved on this device. Waiting to send.</string>
+    <string name="inbox_action_unconfirmed_en">Not confirmed yet. Retry when connected.</string>
+    <string name="inbox_action_confirmed_en">Saved. Updating the inbox.</string>
+    <string name="inbox_action_rejected_en">This action was not applied. Review the latest message.</string>
+    <string name="inbox_review_en">Review updates</string>
+    <string name="inbox_review_required_en">Refresh and review the latest message.</string>
+    <string name="inbox_queue_full_en">Resolve pending actions before adding another.</string>
+    <string name="inbox_action_pending_en">Complete the pending action for this message first.</string>
+    <string name="inbox_retry_limit_en">This action needs support review.</string>
 </resources>

@@ -1,34 +1,63 @@
 # Validation
 
-Current Linux checks:
+The current inbox-command implementation passed these Linux checks:
 
-- Architecture checks for 33 modules, ktfmt and Detekt with no findings.
-- 92 JVM tests: session restoration and revocation, concurrent refresh, cancelled
-  and late results, secure-store failure recovery, account cache isolation,
-  SQLite migrations/transactions, stale pagination, offline data, form validation,
-  duplicate submissions, feature flags, notifications, workers and navigation.
-- The assembled Compose UI covers onboarding, login, load more, flags, inbox,
-  changing language and logout. Resource tests load both languages and plurals.
-- 53 browser tests cover IndexedDB, DataStore, session policy, API error mapping,
-  language resources, feature flags, workers and diagnostics.
-- Android dev/staging debug and prod unsigned release APKs; Web distribution.
+```sh
+xvfb-run -a ./gradlew :check \
+  :features:inbox:domain:wasmJsBrowserTest \
+  :features:inbox:data:wasmJsBrowserTest \
+  :apps:android:assembleDevDebug
+```
+
+The root check includes architecture validation for 52 modules, Kotlin formatting,
+static analysis and JVM tests. The assembled application passed 23 Compose UI
+tests. Inbox domain tests passed on JVM and in Chromium (28 each); inbox data
+passed 13 JVM and two browser tests. Tests cover scope replacement, expiry,
+pending cancellation, late outcomes, finite replay, conflicts, encrypted command
+retention, response loss followed by login, and route disposal. Browser transport
+tests verify the serialized command and original idempotency key.
+
+The earlier protected-credential checks passed eight JVM and thirteen browser
+tests, including concurrent record creation, reopening, tampering and cancellation.
+The Android-compatible file-lock correction passed the root check and dev build
+in both this repository and Compose Fluent Starter.
 
 Gradle dependency verification is enabled using the committed SHA-256 metadata.
 See [quality gates](quality.md) for updates and their trust boundary.
 
 Screenshots from UI tests are under `apps/shared/build/reports/screenshots`.
-The CI workflow also builds an unsigned iOS simulator application and Windows
-classes. Compilation does not validate native credential-manager access, Apple
-signing, Firebase delivery, or OS permission behavior on physical devices.
+The CI workflow additionally builds an unsigned iOS simulator application and
+Windows classes. These are compilation checks, not physical Apple/Windows vault
+tests or signing/distribution validation.
 
-Earlier revisions were tested on Android 16 for notification access, Settings
-recovery, local delivery/taps, FCM registration and WorkManager sync. Those device
-checks were not repeated for the session/localization changes: the device was
-unreachable. No deliberate crash was triggered and Crashlytics delivery has not
-been verified in Firebase Console.
+## Android device observations
 
-The demo transport runs in-process. Its tests verify client contracts and
-idempotent replay behavior; a real backend still needs its own authentication,
-refresh-token rotation, idempotency and conflict-resolution validation. Web
-credentials are ephemeral; persistent browser authentication requires a backend
-cookie integration.
+The dev application was installed on a Samsung Galaxy A72 running Android 16,
+connected through WireGuard/ADB to the actual local HRIS API. A fictional employee
+and published dev announcement were used. Checks covered:
+
+- Onboarding, password sign-in, two company selections and current employee profile.
+- Company-isolated inbox contents and a selectable plain-text message.
+- Indonesian language persistence, dark appearance, background/foreground return
+  and credential restoration after process termination.
+- An admitted message remaining readable while a device-only proxy closed its
+  network connections, followed by successful refresh after reconnection.
+- Explicit read, acknowledgement-prompt cancellation, an offline acknowledgement
+  retained after force-stop/restart, and successful retry/reconciliation with the
+  real backend. The completed message showed `Dikonfirmasi` without pending actions.
+
+The latest command APK was used for the last item; the preceding inbox APK was
+used for the baseline profile/language/theme observations. The proxy was stopped
+and the normal dev API connection restored afterward. No frame-time, heap or
+battery measurements were taken. Native MFA, external SSO, push delivery, and iOS
+device behavior still need their own physical checks.
+
+## Integration boundaries
+
+Runtime composition uses the HRIS API, not the starter demo transport. Compose
+tests use wire-contract fixtures. The platform's separate PostgreSQL/API/worker
+integration covers native authentication, recipient isolation, command replay and
+withdrawal. Those checks complement device tests; none establishes production
+capacity. Web bearer credentials remain ephemeral, and offline workspace
+restoration is not yet implemented. Inherited starter notification/transfer
+modules are not evidence that those HRIS workflows have been integrated.

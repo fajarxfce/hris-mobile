@@ -5,6 +5,29 @@ import org.jetbrains.compose.resources.StringResource
 
 /** Explicit pairs keep runtime language changes portable across Android, iOS, desktop and Web. */
 enum class AppString(val english: StringResource, val indonesian: StringResource) {
+    InboxMarkRead(Res.string.inbox_mark_read_en, Res.string.inbox_mark_read_id),
+    InboxRead(Res.string.inbox_read_en, Res.string.inbox_read_id),
+    InboxAcknowledge(Res.string.inbox_acknowledge_en, Res.string.inbox_acknowledge_id),
+    InboxAcknowledgementPrompt(
+        Res.string.inbox_acknowledgement_prompt_en,
+        Res.string.inbox_acknowledgement_prompt_id,
+    ),
+    InboxActionSending(Res.string.inbox_action_sending_en, Res.string.inbox_action_sending_id),
+    InboxActionQueued(Res.string.inbox_action_queued_en, Res.string.inbox_action_queued_id),
+    InboxActionUnconfirmed(
+        Res.string.inbox_action_unconfirmed_en,
+        Res.string.inbox_action_unconfirmed_id,
+    ),
+    InboxActionConfirmed(
+        Res.string.inbox_action_confirmed_en,
+        Res.string.inbox_action_confirmed_id,
+    ),
+    InboxActionRejected(Res.string.inbox_action_rejected_en, Res.string.inbox_action_rejected_id),
+    InboxReview(Res.string.inbox_review_en, Res.string.inbox_review_id),
+    InboxReviewRequired(Res.string.inbox_review_required_en, Res.string.inbox_review_required_id),
+    InboxQueueFull(Res.string.inbox_queue_full_en, Res.string.inbox_queue_full_id),
+    InboxActionPending(Res.string.inbox_action_pending_en, Res.string.inbox_action_pending_id),
+    InboxRetryLimit(Res.string.inbox_retry_limit_en, Res.string.inbox_retry_limit_id),
     Inbox(Res.string.inbox_title_en, Res.string.inbox_title_id),
     InboxNoMessages(Res.string.inbox_no_messages_en, Res.string.inbox_no_messages_id),
     InboxMessageUnavailable(

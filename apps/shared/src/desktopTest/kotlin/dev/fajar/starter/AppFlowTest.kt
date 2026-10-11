@@ -35,6 +35,126 @@ class AppFlowTest {
     @get:Rule val compose = createComposeRule()
 
     @Test
+    fun explicitAcknowledgementRecoversTheSameCommandAfterResponseLossAndSignInAgain() {
+        val server = NativeUiServer()
+        withApplication(server) {
+            signIn()
+            waitFor("Choose a company")
+            compose.onAllNodesWithText("Open company")[0].performClick()
+            waitFor("Employee workspace")
+            compose.onNodeWithText("Inbox").performScrollTo().performClick()
+            waitFor("Office closure")
+            compose.onNodeWithText("Office closure").performClick()
+            waitFor("Mark as read")
+            compose.onNodeWithText("Acknowledge").performScrollTo().performClick()
+            waitFor("I have read this announcement.")
+            compose.onNodeWithText("Cancel").performClick()
+            assertTrue(server.inbox.actions.isEmpty())
+            compose.onNodeWithText("Acknowledge").performClick()
+            server.inbox.loseNextActionResponse = true
+            compose.onNodeWithText("Acknowledge").performClick()
+            waitFor("Not confirmed yet. Retry when connected.")
+            assertEquals(1, server.inbox.actions.size)
+            capture("inbox-unconfirmed")
+            compose.onNodeWithContentDescription("Back").performClick()
+            waitFor("Office closure")
+            compose.onNodeWithContentDescription("Back").performClick()
+            waitFor("Employee workspace")
+            compose.onNode(hasText("Account") and hasClickAction()).performClick()
+            compose.onNodeWithText("Sign out").performScrollTo().performClick()
+            waitFor("Use your account to continue.")
+            signInFromLogin()
+            waitFor("Choose a company")
+            compose.onAllNodesWithText("Open company")[0].performClick()
+            waitFor("Employee workspace")
+            compose.onNodeWithText("Inbox").performScrollTo().performClick()
+            waitFor("Office closure")
+            compose.onNodeWithText("Office closure").performClick()
+            waitFor("Not confirmed yet. Retry when connected.")
+            compose.onNodeWithText("Retry").performScrollTo().performClick()
+            waitFor("Acknowledged")
+            compose.waitUntil(15_000) {
+                compose
+                    .onAllNodesWithText("Not confirmed yet. Retry when connected.")
+                    .fetchSemanticsNodes()
+                    .isEmpty() &&
+                    compose
+                        .onAllNodesWithText("Saved. Updating the inbox.")
+                        .fetchSemanticsNodes()
+                        .isEmpty()
+            }
+            assertEquals(2, server.inbox.actions.size)
+            assertEquals(server.inbox.actions[0], server.inbox.actions[1])
+            capture("inbox-acknowledged")
+        }
+    }
+
+    @Test
+    fun aDefiniteConflictRequiresReviewBeforePreparingAnUpdatedAction() {
+        val server = NativeUiServer()
+        withApplication(server) {
+            signIn()
+            waitFor("Choose a company")
+            compose.onAllNodesWithText("Open company")[0].performClick()
+            waitFor("Employee workspace")
+            compose.onNodeWithText("Inbox").performScrollTo().performClick()
+            waitFor("Office closure")
+            compose.onNodeWithText("Office closure").performClick()
+            waitFor("Mark as read")
+            server.inbox.rejectNextAction = true
+            compose.onNodeWithText("Mark as read").performScrollTo().performClick()
+            waitFor("Review updates")
+            compose.onNodeWithText("Review updates").performScrollTo().performClick()
+            waitFor("Acknowledge")
+            compose.onNodeWithText("Mark as read").assertDoesNotExist()
+            compose.onNodeWithText("Acknowledge").performScrollTo().performClick()
+            waitFor("I have read this announcement.")
+            compose.onNodeWithText("Acknowledge").performClick()
+            waitFor("Acknowledged")
+            assertEquals(2, server.inbox.actions.size)
+            assertNotEquals(
+                server.inbox.actions[0].operationId,
+                server.inbox.actions[1].operationId,
+            )
+            assertEquals(2, server.inbox.actions[1].expectedVersion)
+        }
+    }
+
+    @Test
+    fun leavingAPendingCommandDisposesItsUiWithoutLosingTheOperation() {
+        val server = NativeUiServer()
+        try {
+            withApplication(server) {
+                signIn()
+                waitFor("Choose a company")
+                compose.onAllNodesWithText("Open company")[0].performClick()
+                waitFor("Employee workspace")
+                compose.onNodeWithText("Inbox").performScrollTo().performClick()
+                waitFor("Office closure")
+                compose.onNodeWithText("Office closure").performClick()
+                waitFor("Mark as read")
+                server.inbox.holdNextAction = true
+                compose.onNodeWithText("Mark as read").performScrollTo().performClick()
+                compose.waitUntil(10_000) { server.inbox.actionStarted.isCompleted }
+                compose.onNodeWithContentDescription("Back").performClick()
+                waitFor("Office closure")
+                compose.onNodeWithContentDescription("Back").performClick()
+                waitFor("Employee workspace")
+                server.inbox.actionReleased.complete(Unit)
+                compose.onNodeWithText("Inbox").performScrollTo().performClick()
+                waitFor("Office closure")
+                compose.onNodeWithText("Office closure").performClick()
+                waitFor("Not confirmed yet. Retry when connected.")
+                compose.onNodeWithText("Retry").performScrollTo().performClick()
+                compose.waitUntil(15_000) { server.inbox.actions.size == 2 }
+                assertEquals(server.inbox.actions[0], server.inbox.actions[1])
+            }
+        } finally {
+            server.inbox.actionReleased.complete(Unit)
+        }
+    }
+
+    @Test
     fun encryptedInboxSupportsPagingOfflineDetailAndCompanyIsolation() {
         val server = NativeUiServer()
         withApplication(server) {
@@ -370,6 +490,10 @@ class AppFlowTest {
     private fun signIn() {
         waitFor("Employee services")
         compose.onNodeWithText("Skip").performClick()
+        signInFromLogin()
+    }
+
+    private fun signInFromLogin() {
         waitFor("Use your account to continue.")
         compose.onNodeWithContentDescription("Email").performTextInput("alex@example.com")
         compose.onNodeWithContentDescription("Password").performTextInput("Fictional-password-123!")

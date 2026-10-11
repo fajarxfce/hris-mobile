@@ -195,4 +195,18 @@
     <string name="inbox_acknowledgement_required_id">Perlu konfirmasi</string>
     <string name="inbox_acknowledged_id">Dikonfirmasi</string>
     <string name="inbox_cache_expired_id">Hubungkan ke internet untuk memperbarui inbox.</string>
+    <string name="inbox_mark_read_id">Tandai dibaca</string>
+    <string name="inbox_read_id">Sudah dibaca</string>
+    <string name="inbox_acknowledge_id">Konfirmasi</string>
+    <string name="inbox_acknowledgement_prompt_id">Saya sudah membaca pengumuman ini.</string>
+    <string name="inbox_action_sending_id">Mengirim…</string>
+    <string name="inbox_action_queued_id">Tersimpan di perangkat. Menunggu dikirim.</string>
+    <string name="inbox_action_unconfirmed_id">Belum terkonfirmasi. Coba lagi saat terhubung.</string>
+    <string name="inbox_action_confirmed_id">Tersimpan. Memperbarui inbox.</string>
+    <string name="inbox_action_rejected_id">Aksi belum diterapkan. Tinjau pembaruan pesan.</string>
+    <string name="inbox_review_id">Tinjau pembaruan</string>
+    <string name="inbox_review_required_id">Refresh dan periksa pesan terbaru.</string>
+    <string name="inbox_queue_full_id">Selesaikan aksi yang tertunda terlebih dahulu.</string>
+    <string name="inbox_action_pending_id">Selesaikan aksi tertunda pada pesan ini.</string>
+    <string name="inbox_retry_limit_id">Aksi ini memerlukan bantuan admin.</string>
 </resources>

@@ -9,6 +9,7 @@ import androidx.compose.ui.unit.dp
 import dev.fajar.starter.designsystem.components.*
 import dev.fajar.starter.designsystem.theme.AppColors
 import dev.fajar.starter.inbox.presentation.detail.*
+import dev.fajar.starter.inbox.presentation.detail.widgets.InboxActions
 import dev.fajar.starter.localization.*
 import io.github.composefluent.icons.Icons
 import io.github.composefluent.icons.regular.ArrowLeft
@@ -31,7 +32,7 @@ fun InboxItemPage(state: InboxItemState, onEvent: (InboxItemEvent) -> Unit) {
                 AppButton(
                     appString(if (state.syncing) AppString.Loading else AppString.Refresh),
                     { onEvent(InboxItemEvent.RefreshRequested) },
-                    enabled = !state.syncing,
+                    enabled = !state.syncing && !state.working,
                     primary = false,
                 )
             }
@@ -65,6 +66,7 @@ fun InboxItemPage(state: InboxItemState, onEvent: (InboxItemEvent) -> Unit) {
                         AppBadge(appString(AppString.InboxAcknowledged))
                     else if (message.acknowledgementRequired)
                         AppBadge(appString(AppString.InboxAcknowledgementRequired))
+                    else if (message.readAt != null) AppBadge(appString(AppString.InboxRead))
                 }
             }
             item(key = "body") { SelectionContainer { AppText(message.body) } }
@@ -73,5 +75,6 @@ fun InboxItemPage(state: InboxItemState, onEvent: (InboxItemEvent) -> Unit) {
             item(key = "unavailable") {
                 AppText(appString(AppString.InboxMessageUnavailable), color = AppColors.muted)
             }
+        item(key = "actions") { InboxActions(state, onEvent) }
     }
 }

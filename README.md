@@ -14,11 +14,12 @@ The application uses the HRIS native API for password sign-in, authenticator set
 and verification, recovery codes, token rotation, active-session management, company selection, and current
 company access. Employees can open their own personal profile, employment terms,
 and organization assignments. The employee inbox synchronizes encrypted company
-correspondence and retains admitted content when a refresh fails. Screens support English and Indonesian. System
+correspondence, retains admitted content when a refresh fails, and queues explicit
+read/acknowledgement actions with durable idempotent retries. Screens support English and Indonesian. System
 appearance and reduced-motion preferences are respected.
 
-The runtime contains no demo authentication transport. Transactional employee workflows,
-durable command replay, and offline workspace restoration are still being connected; a generated module
+The runtime contains no demo authentication transport. Other transactional employee workflows
+and offline workspace restoration are still being connected; a generated module
 is not a completed HRIS workflow. See [native identity](docs/native-identity.md), [employee profiles](docs/people.md), [inbox and synchronization](docs/inbox.md), and
 the platform's [remaining delivery work](https://github.com/fajarxfce/hris-platform/blob/main/docs/completion.md).
 
