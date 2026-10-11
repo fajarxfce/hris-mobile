@@ -19,6 +19,13 @@ Keep dependency versions in the root version catalog. App version/name are in
 `gradle.properties`. New modules declare their own dependencies using `libs` and
 `projects` accessors, then register their path in settings.
 
+The Android application convention enables core library desugaring for the API 24
+minimum. This packages supported Java APIs, including `java.time` used by
+`kotlinx-datetime`, for Android versions that do not provide them. Keep the
+desugaring dependency in the version catalog and configure it once in the runner
+convention; individual features must not duplicate it. A JDK/desktop test alone
+does not validate the declared Android minimum.
+
 ## MVI screens
 
 Each screen keeps its `State`, sealed `Event`, and ViewModel together. Extend

@@ -1,9 +1,12 @@
+import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.plugin.compose")
 }
+
+val catalog = extensions.getByType<VersionCatalogsExtension>().named("libs")
 
 android {
     namespace = "dev.fajar.hris"
@@ -19,8 +22,11 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
+        isCoreLibraryDesugaringEnabled = true
     }
     packaging.resources.excludes += "/META-INF/{AL2.0,LGPL2.1}"
 }
+
+dependencies { add("coreLibraryDesugaring", catalog.findLibrary("desugar-jdk-libs").get()) }
 
 kotlin { compilerOptions { jvmTarget.set(JvmTarget.JVM_17) } }
