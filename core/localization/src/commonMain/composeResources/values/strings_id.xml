@@ -357,4 +357,26 @@
     <string name="attendance_pending_actions_id">Presensi tertunda</string>
     <string name="attendance_no_pending_id">Tidak ada presensi tertunda.</string>
     <string name="attendance_cache_expired_id">Data presensi tersimpan sudah kedaluwarsa. Muat ulang untuk melanjutkan.</string>
+    <string name="leave_withdraw_id">Tarik pengajuan</string>
+    <string name="leave_cancel_request_id">Ajukan pembatalan</string>
+    <string name="leave_withdraw_cancellation_id">Tarik pembatalan</string>
+    <string name="leave_withdraw_prompt_id">Tarik pengajuan cuti yang masih menunggu persetujuan.</string>
+    <string name="leave_cancel_prompt_id">Pembatalan memerlukan persetujuan. Cuti tetap disetujui sampai pembatalan diterima.</string>
+    <string name="leave_withdraw_cancellation_prompt_id">Tarik pengajuan pembatalan dan pertahankan cuti yang sudah disetujui.</string>
+    <string name="leave_action_sending_id">Mengirim pengajuan…</string>
+    <string name="leave_action_queued_id">Tersimpan di perangkat ini. Belum dikirim.</string>
+    <string name="leave_action_unconfirmed_id">Pengiriman belum terkonfirmasi. Coba lagi untuk memeriksa pengajuan yang sama.</string>
+    <string name="leave_action_confirmed_id">Diterima server. Refresh untuk melihat status terbaru.</string>
+    <string name="leave_action_rejected_id">Pengajuan tidak diterima. Refresh dan periksa status terbaru.</string>
+    <string name="leave_action_pending_id">Selesaikan atau periksa tindakan tersimpan sebelum membuat yang baru.</string>
+    <string name="leave_retry_delivery_id">Coba kirim lagi</string>
+    <string name="leave_review_action_id">Refresh status</string>
+    <string name="leave_discard_action_id">Hapus tindakan yang belum dikirim</string>
+    <string name="leave_reason_required_id">Masukkan alasan.</string>
+    <string name="leave_reason_limit_id">Gunakan maksimal 1.000 karakter.</string>
+    <string name="leave_review_required_id">Refresh pengajuan ini sebelum melanjutkan.</string>
+    <string name="leave_retry_limit_id">Batas percobaan tercapai. Hubungi administrator.</string>
+    <string name="leave_action_unavailable_id">Tindakan ini tidak lagi tersedia. Refresh pengajuan.</string>
+    <string name="leave_year_closed_id">Tahun cuti sudah ditutup.</string>
+    <string name="leave_payroll_frozen_id">Payroll dikunci untuk tanggal ini.</string>
 </resources>

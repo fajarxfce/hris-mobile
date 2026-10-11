@@ -286,12 +286,8 @@ class LeaveRequestViewModelTest {
     ) {
         Dispatchers.setMain(StandardTestDispatcher(testScheduler))
         val fixture = LeaveRequestPresentationFixture()
-        val model =
-            LeaveRequestViewModel(
-                LeaveRequestTarget(fixture.base.workspace.id, fixture.details.id),
-                fixture.observe,
-                fixture.refresh,
-            )
+        val actions = LeaveActionPresentationFixture(fixture)
+        val model = actions.model()
         val owner = ViewModelStore().apply { put("request", model) }
         try {
             test(fixture, model, owner)
@@ -299,6 +295,7 @@ class LeaveRequestViewModelTest {
             owner.clear()
             runCurrent()
             assertEquals(0, fixture.observers)
+            assertEquals(0, actions.observers)
             Dispatchers.resetMain()
         }
     }

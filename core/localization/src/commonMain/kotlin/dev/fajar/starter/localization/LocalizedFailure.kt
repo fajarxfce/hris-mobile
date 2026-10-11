@@ -7,6 +7,19 @@ import dev.fajar.starter.common.result.*
 fun failureText(failure: Failure): String =
     appString(
         when (failure.code) {
+            "client.leave_reason_required" -> AppString.LeaveReasonRequired
+            "client.leave_reason_too_long" -> AppString.LeaveReasonLimit
+            "client.leave_action_pending" -> AppString.LeaveActionPending
+            "client.leave_action_unconfirmed" -> AppString.LeaveActionUnconfirmed
+            "client.leave_updates_pending" -> AppString.LeaveActionConfirmed
+            "client.leave_review_required",
+            "client.leave_command_changed" -> AppString.LeaveReviewRequired
+            "client.leave_retry_limit" -> AppString.LeaveRetryLimit
+            "client.leave_action_unavailable",
+            "leave_not_pending",
+            "leave_not_approved" -> AppString.LeaveActionUnavailable
+            "leave_year_closed" -> AppString.LeaveYearClosed
+            "payroll_period_frozen" -> AppString.LeavePayrollFrozen
             "leave_request_not_found" -> AppString.LeaveRequestUnavailable
             "client.leave_cache_expired" -> AppString.LeaveCacheExpired
             "client.leave_scope_changed" -> AppString.CalendarScopeChanged

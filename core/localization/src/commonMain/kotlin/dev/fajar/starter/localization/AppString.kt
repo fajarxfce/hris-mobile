@@ -5,6 +5,43 @@ import org.jetbrains.compose.resources.StringResource
 
 /** Explicit pairs keep runtime language changes portable across Android, iOS, desktop and Web. */
 enum class AppString(val english: StringResource, val indonesian: StringResource) {
+    LeaveWithdraw(Res.string.leave_withdraw_en, Res.string.leave_withdraw_id),
+    LeaveCancelRequest(Res.string.leave_cancel_request_en, Res.string.leave_cancel_request_id),
+    LeaveWithdrawCancellation(
+        Res.string.leave_withdraw_cancellation_en,
+        Res.string.leave_withdraw_cancellation_id,
+    ),
+    LeaveWithdrawPrompt(Res.string.leave_withdraw_prompt_en, Res.string.leave_withdraw_prompt_id),
+    LeaveCancelPrompt(Res.string.leave_cancel_prompt_en, Res.string.leave_cancel_prompt_id),
+    LeaveWithdrawCancellationPrompt(
+        Res.string.leave_withdraw_cancellation_prompt_en,
+        Res.string.leave_withdraw_cancellation_prompt_id,
+    ),
+    LeaveActionSending(Res.string.leave_action_sending_en, Res.string.leave_action_sending_id),
+    LeaveActionQueued(Res.string.leave_action_queued_en, Res.string.leave_action_queued_id),
+    LeaveActionUnconfirmed(
+        Res.string.leave_action_unconfirmed_en,
+        Res.string.leave_action_unconfirmed_id,
+    ),
+    LeaveActionConfirmed(
+        Res.string.leave_action_confirmed_en,
+        Res.string.leave_action_confirmed_id,
+    ),
+    LeaveActionRejected(Res.string.leave_action_rejected_en, Res.string.leave_action_rejected_id),
+    LeaveActionPending(Res.string.leave_action_pending_en, Res.string.leave_action_pending_id),
+    LeaveRetryDelivery(Res.string.leave_retry_delivery_en, Res.string.leave_retry_delivery_id),
+    LeaveReviewAction(Res.string.leave_review_action_en, Res.string.leave_review_action_id),
+    LeaveDiscardAction(Res.string.leave_discard_action_en, Res.string.leave_discard_action_id),
+    LeaveReasonRequired(Res.string.leave_reason_required_en, Res.string.leave_reason_required_id),
+    LeaveReasonLimit(Res.string.leave_reason_limit_en, Res.string.leave_reason_limit_id),
+    LeaveReviewRequired(Res.string.leave_review_required_en, Res.string.leave_review_required_id),
+    LeaveRetryLimit(Res.string.leave_retry_limit_en, Res.string.leave_retry_limit_id),
+    LeaveActionUnavailable(
+        Res.string.leave_action_unavailable_en,
+        Res.string.leave_action_unavailable_id,
+    ),
+    LeaveYearClosed(Res.string.leave_year_closed_en, Res.string.leave_year_closed_id),
+    LeavePayrollFrozen(Res.string.leave_payroll_frozen_en, Res.string.leave_payroll_frozen_id),
     LeaveRequestDetails(Res.string.leave_request_details_en, Res.string.leave_request_details_id),
     LeaveRequestUnavailable(
         Res.string.leave_request_unavailable_en,

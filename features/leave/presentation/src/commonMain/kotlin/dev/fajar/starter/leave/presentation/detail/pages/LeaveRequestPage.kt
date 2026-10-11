@@ -41,13 +41,14 @@ fun LeaveRequestPage(
                         Icons.Regular.ArrowSync,
                         appString(AppString.Refresh),
                         { onEvent(LeaveRequestEvent.RefreshRequested) },
-                        enabled = !state.refreshing,
+                        enabled = !state.refreshing && !state.action.working,
                     )
                 },
             )
         },
     ) {
-        if (state.loading || state.refreshing) item(key = "loading") { AppLoading() }
+        if (state.loading || state.refreshing || state.action.working)
+            item(key = "loading") { AppLoading() }
         state.failure?.let { failure ->
             item(key = "failure") {
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -61,7 +62,7 @@ fun LeaveRequestPage(
                         AppTextButton(
                             appString(AppString.TryAgain),
                             { onEvent(LeaveRequestEvent.RefreshRequested) },
-                            enabled = !state.refreshing,
+                            enabled = !state.refreshing && !state.action.working,
                         )
                 }
             }
@@ -70,6 +71,8 @@ fun LeaveRequestPage(
         if (content != null) {
             val request = content.request
             item(key = "summary") { LeaveRequestSummaryCard(request) }
+            if (state.action.command != null || state.availableActions.isNotEmpty())
+                item(key = "actions") { LeaveRequestActions(state, onEvent) }
             item(key = "reason") {
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     AppText(
@@ -112,7 +115,7 @@ fun LeaveRequestPage(
                         AppTextButton(
                             appString(AppString.LeaveLatestActivity),
                             { onEvent(LeaveRequestEvent.HistoryPageRequested(null)) },
-                            enabled = !state.refreshing,
+                            enabled = !state.refreshing && !state.action.working,
                         )
                     if (content?.request?.history?.nextCursor != null)
                         AppTextButton(
@@ -124,7 +127,7 @@ fun LeaveRequestPage(
                                     )
                                 )
                             },
-                            enabled = !state.refreshing,
+                            enabled = !state.refreshing && !state.action.working,
                         )
                 }
             }
@@ -143,4 +146,5 @@ fun LeaveRequestPage(
         else if (!state.loading && !state.refreshing && state.failure == null)
             item(key = "empty") { AppText(appString(AppString.LeaveNoSaved)) }
     }
+    state.action.form?.let { LeaveActionDialog(it, state.action.working, onEvent) }
 }

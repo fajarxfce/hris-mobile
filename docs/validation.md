@@ -1,5 +1,36 @@
 # Validation
 
+## Leave action interface
+
+Root checks pass with 531 desktop tests; all 29 Leave presentation tests and both
+localization tests pass in Chromium. Android dev and production Web builds pass.
+The new MVI regressions cover duplicate confirmation, current-version admission,
+cancelled and late work, permission recovery, process-independent command recovery,
+and completed-source resubscription. An assembled UI test loses the response after
+the server fixture commits, restores the original command, recovers its receipt
+and withdraws the resulting pending cancellation. It asserts the original request
+body and operation ID rather than treating a new submission as a retry.
+
+Shared layout tests cover multiline editing at 200% text and the dialog's fixed
+close action. The generic field and regression also pass in Compose Fluent Starter.
+The earlier `b95bb03` CI run completed successfully on Linux, Windows and Apple,
+including the Home publication correction and durable-command foundation.
+
+Against the development API, the API 35 emulator withdrew a pending half-day
+request and recovered its reservation: available balance changed from 12 to 12.5
+days and reserved balance from 0.5 to zero. For a separate approved request,
+cancellation was retained offline, restored after process termination, and sent
+after reconnecting. Withdrawing that pending cancellation returned the request to
+approved; consumed balance stayed at 0.5 days throughout both cancellation actions.
+Light/dark appearance, 200% text, multiline editing and dialog dismissal were
+inspected. Normal text size, light appearance and API forwarding were restored.
+These transactions use fictional development data; new mobile request creation
+and evidence upload remain separate work. No performance measurement is claimed.
+
+After advance notice, the validated dev APK was installed on the connected
+Android 16 phone at 05:26 on 2026-10-12 with `--install-only`. Package update time
+and API forwarding were verified without launching or interacting with its UI.
+
 ## Durable leave command foundation
 
 Root architecture, formatting, static analysis and all 519 desktop tests pass.

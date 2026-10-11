@@ -1,6 +1,7 @@
 package dev.fajar.starter.fixtures
 
 import io.ktor.client.request.HttpRequestData
+import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import java.io.IOException
 import java.util.concurrent.CopyOnWriteArrayList
@@ -14,12 +15,14 @@ class NativeLeaveUi {
     val years = CopyOnWriteArrayList<Int>()
     val statuses = CopyOnWriteArrayList<String>()
     val historyPages = CopyOnWriteArrayList<String>()
+    val actions = NativeLeaveActionsUi()
 
     fun response(request: HttpRequestData): Pair<String, HttpStatusCode>? {
         val path = request.url.encodedPath
         if (!path.contains("/leave/")) return null
         check(enabled)
         if (offline) throw IOException("Leave test connection unavailable")
+        if (request.method == HttpMethod.Post) return actions.response(request)
         val company = path.split('/')[4]
         if (
             path.contains("/me/requests/") &&
@@ -33,7 +36,7 @@ class NativeLeaveUi {
                     check(request.url.parameters["historyLimit"] == "10")
                     val after = request.url.parameters["historyAfter"]
                     historyPages += after ?: "LATEST"
-                    nativeLeaveRequestFixture(after?.toLong())
+                    actions.details(after?.toLong())
                 }
                 path.endsWith("/me/employments") ->
                     buildJsonObject {

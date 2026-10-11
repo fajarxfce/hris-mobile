@@ -357,4 +357,26 @@
     <string name="attendance_pending_actions_en">Pending attendance</string>
     <string name="attendance_no_pending_en">No pending attendance.</string>
     <string name="attendance_cache_expired_en">Saved attendance has expired. Refresh to continue.</string>
+    <string name="leave_withdraw_en">Withdraw request</string>
+    <string name="leave_cancel_request_en">Request cancellation</string>
+    <string name="leave_withdraw_cancellation_en">Withdraw cancellation</string>
+    <string name="leave_withdraw_prompt_en">Withdraw this pending leave request.</string>
+    <string name="leave_cancel_prompt_en">Cancellation requires approval. Your leave remains approved until the cancellation is accepted.</string>
+    <string name="leave_withdraw_cancellation_prompt_en">Withdraw the cancellation request and keep the approved leave.</string>
+    <string name="leave_action_sending_en">Sending request…</string>
+    <string name="leave_action_queued_en">Saved on this device. Not sent yet.</string>
+    <string name="leave_action_unconfirmed_en">Delivery is unconfirmed. Retry to check the same request.</string>
+    <string name="leave_action_confirmed_en">Received by the server. Refresh to get the latest status.</string>
+    <string name="leave_action_rejected_en">Request was not accepted. Refresh and review the latest status.</string>
+    <string name="leave_action_pending_en">Finish or review the saved action before starting another.</string>
+    <string name="leave_retry_delivery_en">Retry delivery</string>
+    <string name="leave_review_action_en">Refresh status</string>
+    <string name="leave_discard_action_en">Discard unsent action</string>
+    <string name="leave_reason_required_en">Enter a reason.</string>
+    <string name="leave_reason_limit_en">Use at most 1,000 characters.</string>
+    <string name="leave_review_required_en">Refresh this request before continuing.</string>
+    <string name="leave_retry_limit_en">Retry limit reached. Contact your administrator.</string>
+    <string name="leave_action_unavailable_en">This action is no longer available. Refresh the request.</string>
+    <string name="leave_year_closed_en">The leave year is closed.</string>
+    <string name="leave_payroll_frozen_en">Payroll is locked for these dates.</string>
 </resources>

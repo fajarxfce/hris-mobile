@@ -18,6 +18,7 @@ import dev.fajar.starter.leave.data.mappers.toDetails
 import dev.fajar.starter.leave.domain.entities.*
 import dev.fajar.starter.leave.presentation.detail.*
 import dev.fajar.starter.leave.presentation.detail.pages.LeaveRequestPage
+import dev.fajar.starter.leave.presentation.detail.widgets.LeaveActionDialog
 import dev.fajar.starter.localization.LocalAppLanguage
 import dev.fajar.starter.settings.domain.entities.AppLanguage
 import java.io.File
@@ -30,6 +31,55 @@ import org.junit.Test
 
 class LeaveRequestLayoutTest {
     @get:Rule val compose = createComposeRule()
+
+    @Test
+    fun cancellationDialogKeepsMultilineReasonConfirmationAndCloseReachableAtLargeText() {
+        val events = mutableListOf<LeaveRequestEvent>()
+        var form by
+            mutableStateOf(
+                LeaveActionForm(
+                    LeaveRequestAction.REQUEST_CANCELLATION,
+                    12,
+                    "Jadwal berubah.\nMohon ditinjau kembali.",
+                )
+            )
+        compose.setContent {
+            val density = LocalDensity.current
+            CompositionLocalProvider(
+                LocalDensity provides Density(density.density, 2f),
+                LocalAppLanguage provides AppLanguage.Indonesian,
+            ) {
+                AppTheme {
+                    LeaveActionDialog(form, false) { event ->
+                        events += event
+                        if (event is LeaveRequestEvent.ReasonChanged)
+                            form = form.copy(reason = event.value)
+                    }
+                }
+            }
+        }
+        compose.onNodeWithContentDescription("Tutup").assertIsDisplayed()
+        compose
+            .onNodeWithContentDescription("Alasan")
+            .performScrollTo()
+            .performTextReplacement("Rencana berubah\nTinjau kembali")
+        val confirmation = compose.onNode(hasText("Ajukan pembatalan") and hasClickAction())
+        confirmation.performScrollTo().assertIsDisplayed().performClick()
+        compose.runOnIdle {
+            assertEquals("Rencana berubah\nTinjau kembali", form.reason)
+            assertEquals(LeaveRequestEvent.ActionConfirmed, events.last())
+        }
+        compose.onNodeWithContentDescription("Tutup").assertIsDisplayed().performClick()
+        compose.runOnIdle { assertEquals(LeaveRequestEvent.ActionDismissed, events.last()) }
+        val image = Image.makeFromBitmap(compose.onNode(isDialog()).captureToImage().asSkiaBitmap())
+        image.use { captured ->
+            checkNotNull(captured.encodeToData()).use { data ->
+                File("build/reports/screenshots").mkdirs()
+                File("build/reports/screenshots/leave-cancellation-dialog-large-text.png")
+                    .writeBytes(data.bytes)
+            }
+        }
+    }
 
     @Test
     fun largeIndonesianTextKeepsStatusDatesHistoryAndFixedBackActionReadable() {

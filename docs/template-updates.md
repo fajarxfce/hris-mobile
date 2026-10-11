@@ -1,5 +1,14 @@
 # Template updates
 
+## Multiline text fields
+
+Optional multiline input and its 200% text regression from
+[844314c](https://github.com/fajarxfce/hris-mobile/commit/844314c) also exist in
+[Compose Fluent Starter f63b94f](https://github.com/fajarxfce/compose-fluent-starter/commit/f63b94f).
+Both repositories passed root checks and Android/Web builds. The field retains
+its single-line default; Leave validation, dialog state and durable actions stay
+in HRIS Mobile.
+
 ## Storage observer recovery
 
 The completed-source recovery implemented in `eee789e` was ported to

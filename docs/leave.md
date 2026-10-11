@@ -3,7 +3,7 @@
 The employee Leave page shows admitted leave balances by year and paged request
 history with status filtering. Home and All services expose it when the selected
 company enables Leave and the account has self-service or read permission.
-Request creation and other mutations are subsequent integrations.
+New request creation is a subsequent integration.
 Selecting a request opens its submitted facts, current status, dated portions,
 reason, evidence names and paged activity history.
 
@@ -115,44 +115,56 @@ Explicit review can discard an unsent command with its observed revision. A
 confirmed or definitely rejected command is retired only after canonical review
 and cache reconciliation. A concurrent replay wins over an obsolete removal.
 Unconfirmed outcomes cannot be discarded as though the server rolled back.
-The presentation controls for these operations are the next increment.
+The detail page exposes only currently admitted actions. A controlled dialog
+collects the reason; pending, unconfirmed, confirmed and rejected outcomes have
+distinct recovery controls. Closing the dialog does not pretend that a retained
+operation was rolled back. Leaving the page cancels its work and subscriptions;
+returning restores the account-owned command. Confirmation refreshes the canonical
+request and retires the command only after reconciliation. The screen never invents
+a local approval or cancellation status.
+
+A current denial gates the detail through subsequent failed retries and lifecycle
+replacement. An old failure retained as command evidence does not override a new
+successful read. A completed command-storage observer reopens only after an
+explicit successful refresh. Duplicate confirmation, expired reads, changed request
+versions and obsolete outcomes cannot replace the visible operation.
 
 ## Remaining workflow
 
 Subsequent work adds eligible policy/day selection, document evidence acquisition
-and transfer, durable submission, and presentation for withdrawal/cancellation.
+and transfer, and durable submission.
 A cached balance is never
 a reservation or authorization to submit.
 
 ## Validation
 
-The command foundation passes the root check with 519 desktop tests, Leave
-domain/data's 51 Chromium tests and Android dev assembly. New regressions cover
-immutable duplicate admission, expired leases, pending cancellation, late
-receipts, scope replacement, manual/background serialization, finite deadlines,
-bounded automatic attempts, failed receipt storage and removal races. Real SQLite
-tests verify encrypted reopening, replacement sessions, account/company isolation,
-missing keys, tampered envelopes and cancellation during encryption. No mobile
-transaction or physical-device acceptance is claimed for this foundation increment.
+Root checks pass with 531 desktop tests, all 29 Leave presentation tests and both
+localization tests pass in Chromium, and Android dev plus production Web build
+successfully. The command foundation's 51 domain/data Chromium tests passed in
+the preceding increment. Coverage includes immutable duplicate admission, read
+leases, pending cancellation, late receipts, account/company replacement,
+manual/background serialization, finite deadlines, bounded attempts, failed
+receipt storage and removal races. Real SQLite tests verify encrypted reopening,
+replacement sessions, missing keys and tampered envelopes.
 
-The root `:check` passes with 491 desktop tests. Leave's three Chromium suites
-have passed 51 tests; the 20 presentation tests were rerun for request details,
-while domain/data passed 31 tests for the preceding read boundary. Android dev
-and the Web production build pass. Coverage includes
-exact half-day values, bounded pages, session/company isolation, encrypted cache
-restoration, cancellation, late results and compare-and-set publication. MVI tests
-exercise denied reads, pending retries, expiry, disposal and both cache/network
-arrival orders. Assembled UI tests cover independent module admission, filter
-restoration, company replacement and Indonesian at 200% text.
+MVI and assembled UI tests cover denied reads, disposal, expired leases, both
+cache/network arrival orders, response loss after a committed action, recovery
+using the original operation, and withdrawal of the pending cancellation. Shared
+layout tests cover Indonesian at 200% text, multiline reasons and fixed navigation.
+The reusable field also passed the starter's root checks and Android/Web builds.
 
-The API 35 emulator read a fictional 12.5-day allowance from the development
-server. Year/status filtering, dark/light appearance, offline process restoration
-and online recovery were checked. The saved 2025/approved filter survives restart
-and refresh. A fictional half-day request was subsequently created through the
-development API and read on the mobile detail page as pending. Its submitted
-date, first-half portion, reason and activity match the owner-only API. Restarting
-the app offline restores the request, and refresh recovers online. Light/dark
-appearance and 200% text were inspected on the emulator. Earlier history pages
-use an automated transport fixture; the real request has one history entry.
-These observations do not validate mobile submission. Physical iOS
-acceptance and transactional workflows remain separate work.
+The API 35 emulator read a fictional allowance, filtered years/status, restored
+cached content after an offline process restart and recovered online. A fictional
+half-day request created through the development API was withdrawn from the mobile
+page: its reservation returned to the available balance. Another approved request
+was used to retain a cancellation offline, restart the process, restore the same
+reason and send the saved command after reconnecting. Its pending cancellation
+kept the consumed balance unchanged. Withdrawing the pending cancellation restored
+the approved status without another ledger movement. Light/dark appearance,
+200% text, multiline editing and dismissal were inspected on the emulator.
+Earlier history pagination and lost-response
+receipt recovery use automated transport fixtures; they are not represented as
+physical-device checks.
+
+New request submission, evidence transfer and physical iOS acceptance remain
+separate work. No frame-time, heap or battery measurement is claimed.

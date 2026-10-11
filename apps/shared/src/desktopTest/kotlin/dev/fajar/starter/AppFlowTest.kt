@@ -50,6 +50,75 @@ class AppFlowTest {
     private val backDispatcher = TestBackDispatcher()
 
     @Test
+    fun leaveCancellationRecoversItsLostResponseAndCanWithdrawThePendingCancellation() {
+        val server = NativeUiServer().apply { leave.enabled = true }
+        withApplication(server) {
+            signIn()
+            waitFor("Choose a company")
+            compose.onAllNodesWithText("Open company")[0].performClick()
+            waitFor("Welcome")
+            compose.onNode(hasText("Leave") and hasClickAction()).performScrollTo().performClick()
+            waitFor("12.5 days")
+            compose.onNode(hasScrollToIndexAction()).performScrollToNode(hasText("1.5 days"))
+            compose.onNode(hasText("Annual leave") and hasClickAction()).performClick()
+            waitFor("Request cancellation")
+            compose.onNode(hasText("Request cancellation") and hasClickAction()).performClick()
+            val confirm =
+                hasText("Request cancellation") and hasClickAction() and hasAnyAncestor(isDialog())
+            compose.onNode(confirm).performScrollTo().performClick()
+            waitFor("Enter a reason.")
+            compose
+                .onNodeWithContentDescription("Reason")
+                .performTextInput("Plans changed\nKeep the original dates for now")
+            server.leave.actions.loseNextResponse = true
+            compose.onNode(confirm).performScrollTo().performClick()
+            waitFor("Delivery is unconfirmed. Retry to check the same request.")
+            compose.onNode(hasText("Approved") and hasText("Annual leave")).assertExists()
+            assertEquals(1, server.leave.actions.requests.size)
+            capture("leave-cancellation-unconfirmed")
+            compose.onNodeWithContentDescription("Back").performClick()
+            waitFor("Leave balances")
+            server.leave.offline = true
+            compose.onNode(hasScrollToIndexAction()).performScrollToNode(hasText("1.5 days"))
+            compose.onNode(hasText("Annual leave") and hasClickAction()).performClick()
+            waitFor("Delivery is unconfirmed. Retry to check the same request.")
+            server.leave.offline = false
+            compose.waitUntil {
+                compose
+                    .onAllNodes(hasText("Retry delivery") and isEnabled())
+                    .fetchSemanticsNodes()
+                    .size == 1
+            }
+            compose.onNodeWithText("Retry delivery").performClick()
+            waitFor("Withdraw cancellation")
+            compose
+                .onNode(hasText("Cancellation pending") and hasText("Annual leave"))
+                .assertExists()
+            assertEquals(2, server.leave.actions.requests.size)
+            assertEquals(server.leave.actions.requests[0], server.leave.actions.requests[1])
+            capture("leave-cancellation-pending")
+            compose.onNode(hasText("Withdraw cancellation") and hasClickAction()).performClick()
+            compose.onNodeWithContentDescription("Reason").performTextInput("Keep approved dates")
+            compose
+                .onNode(
+                    hasText("Withdraw cancellation") and
+                        hasClickAction() and
+                        hasAnyAncestor(isDialog())
+                )
+                .performScrollTo()
+                .performClick()
+            waitFor("Request cancellation")
+            compose.onNode(hasText("Approved") and hasText("Annual leave")).assertExists()
+            assertEquals(3, server.leave.actions.requests.size)
+            assertNotEquals(
+                server.leave.actions.requests[0].first,
+                server.leave.actions.requests[2].first,
+            )
+            capture("leave-cancellation-withdrawn")
+        }
+    }
+
+    @Test
     fun homeMenuDoesNotMoveBetweenSuccessfulAcquisitionAndObservedPublication() {
         val response = CompletableDeferred<Unit>()
         val publication = CompletableDeferred<Unit>()
