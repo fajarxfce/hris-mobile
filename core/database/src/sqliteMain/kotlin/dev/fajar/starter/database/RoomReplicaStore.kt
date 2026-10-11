@@ -64,6 +64,21 @@ internal class RoomReplicaStore(private val database: StarterDatabase) : Replica
         return dao.document(sessionId, partition, id)
     }
 
+    override fun observeDocument(sessionId: String, partition: String, id: String) =
+        database.invalidationTracker
+            .createFlow(
+                "account_scope",
+                "replica_heads",
+                "replica_generations",
+                "replica_documents",
+            )
+            .map {
+                validateReplicaKey(sessionId, partition)
+                validateReplicaGeneration(id)
+                dao.documentPage(sessionId, partition, id)
+            }
+            .distinctUntilChanged()
+
     override suspend fun clear(sessionId: String, partition: String): Boolean {
         validateReplicaKey(sessionId, partition)
         return dao.clear(sessionId, partition)

@@ -33,6 +33,9 @@ interface ReplicaStore {
         limit: Int = 50,
     ): Flow<ReplicaPage>
 
+    /** Observes one visible document and its active checkpoint in the same read transaction. */
+    fun observeDocument(sessionId: String, partition: String, id: String): Flow<ReplicaPage>
+
     suspend fun document(sessionId: String, partition: String, id: String): ReplicaDocument?
 
     suspend fun clear(sessionId: String, partition: String): Boolean

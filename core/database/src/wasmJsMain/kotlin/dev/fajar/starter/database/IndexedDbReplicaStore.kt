@@ -80,7 +80,20 @@ internal class IndexedDbReplicaStore(
                 validateReplicaKey(sessionId, partition)
                 validateReplicaPage(after, limit)
                 Json.decodeFromString<ReplicaPage>(
-                    replicaPage(database(), sessionId, partition, after, limit)
+                    replicaPage(database(), sessionId, partition, after, limit, null)
+                        .await<JsString>()
+                        .toString()
+                )
+            }
+            .distinctUntilChanged()
+
+    override fun observeDocument(sessionId: String, partition: String, id: String) =
+        changes
+            .map {
+                validateReplicaKey(sessionId, partition)
+                validateReplicaGeneration(id)
+                Json.decodeFromString<ReplicaPage>(
+                    replicaPage(database(), sessionId, partition, null, 1, id)
                         .await<JsString>()
                         .toString()
                 )
@@ -234,7 +247,7 @@ private external fun commitReplica(
 ): Promise<JsBoolean>
 
 @JsFun(
-    """(db, sessionId, partition, after, limit) => new Promise((resolve, reject) => {
+    """(db, sessionId, partition, after, limit, documentId) => new Promise((resolve, reject) => {
     const tx = db.transaction(['account_scope', 'replica_heads', 'replica_generations', 'replica_documents'], 'readonly');
     const value = {checkpoint:null, documents:[]};
     const owner = tx.objectStore('account_scope').get('current');
@@ -248,6 +261,16 @@ private external fun commitReplica(
             row.onsuccess = () => {
                 if (!row.result) return;
                 value.checkpoint = {handle:{sessionId, partition, generation}, revision:row.result.revision, payload:row.result.checkpoint, published:true};
+                if (documentId != null) {
+                    const item = tx.objectStore('replica_documents').get([partition, generation, documentId]);
+                    item.onsuccess = () => {
+                        if (item.result?.payload != null) {
+                            const {id, version, sortKey, payload} = item.result;
+                            value.documents = [{id, version, sortKey, payload}];
+                        }
+                    };
+                    return;
+                }
                 const range = IDBKeyRange.bound([partition, generation, after ?? ''], [partition, generation, '\uffff'], after != null);
                 const items = tx.objectStore('replica_documents').index('visible').getAll(range, limit);
                 items.onsuccess = () => { value.documents = items.result.map(({id, version, sortKey, payload}) => ({id, version, sortKey, payload})); };
@@ -264,6 +287,7 @@ private external fun replicaPage(
     partition: String,
     after: String?,
     limit: Int,
+    documentId: String?,
 ): Promise<JsString>
 
 @JsFun(

@@ -22,12 +22,19 @@ suspend fun verifyReplicaPublication(database: AppDatabase) {
     val a = ReplicaDocument("a", 3, "01-a", "sealed-a3")
     assertTrue(store.commit(first, 0, "sealed-bootstrap-2", listOf(a), false))
     assertNull(store.observe(session, partition).first().checkpoint)
+    assertNull(store.observeDocument(session, partition, "a").first().checkpoint)
     assertTrue(store.commit(first, 1, "sealed-changes-1", emptyList(), true))
     val initial = store.observe(session, partition).first()
     assertEquals(listOf(a), initial.documents)
     assertEquals("sealed-changes-1", initial.checkpoint!!.payload)
     assertEquals(2, initial.checkpoint.revision)
     assertTrue(initial.checkpoint.published)
+    assertEquals(initial, store.observeDocument(session, partition, "a").first())
+    assertEquals(
+        initial.checkpoint,
+        store.observeDocument(session, partition, "absent").first().checkpoint,
+    )
+    assertTrue(store.observeDocument(session, partition, "absent").first().documents.isEmpty())
 
     val second = first.copy(generation = "generation-2")
     assertFalse(store.begin(session, partition, second.generation, "new-bootstrap", "obsolete"))
@@ -37,12 +44,18 @@ suspend fun verifyReplicaPublication(database: AppDatabase) {
     assertFalse(store.commit(first, 2, "obsolete-commit", emptyList(), true))
     assertEquals(initial, store.observe(session, partition).first())
     assertEquals(second, store.checkpoint(session, partition)!!.handle)
+    assertEquals(initial, store.observeDocument(session, partition, "a").first())
     val b = ReplicaDocument("b", 1, "02-b", "sealed-b1")
     assertTrue(store.commit(second, 0, "next-bootstrap", listOf(b), false))
     assertEquals(initial, store.observe(session, partition).first())
     assertTrue(store.commit(second, 1, "caught-up", emptyList(), true))
     assertEquals(listOf(b), store.observe(session, partition).first().documents)
     assertNull(store.document(session, partition, "a"))
+    val removed = store.observeDocument(session, partition, "a").first()
+    assertEquals(second, removed.checkpoint!!.handle)
+    assertTrue(removed.documents.isEmpty())
+    assertNull(store.observeDocument("another-session", partition, "b").first().checkpoint)
+    assertNull(store.observeDocument(session, "company-b/inbox", "b").first().checkpoint)
 
     val abandoned = second.copy(generation = "abandoned")
     assertTrue(store.begin(session, partition, abandoned.generation, "start", second.generation))

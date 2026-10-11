@@ -176,4 +176,21 @@ abstract class ReplicaDao {
         deleteGenerations(partition)
         return true
     }
+
+    @Transaction
+    open suspend fun documentPage(sessionId: String, partition: String, id: String): ReplicaPage {
+        if (!owns(sessionId)) return ReplicaPage(null, emptyList())
+        val active = head(partition)?.activeGeneration ?: return ReplicaPage(null, emptyList())
+        val row = generation(partition, active) ?: return ReplicaPage(null, emptyList())
+        val item = record(partition, active, id)?.takeIf { it.payload != null }
+        return ReplicaPage(
+            ReplicaCheckpoint(
+                ReplicaHandle(sessionId, partition, active),
+                row.revision,
+                row.checkpoint,
+                true,
+            ),
+            listOfNotNull(item?.let { ReplicaDocument(it.id, it.version, it.sortKey, it.payload) }),
+        )
+    }
 }

@@ -1,5 +1,10 @@
 # Replication storage
 
+Single-record observers return the active checkpoint and the requested document
+from one read transaction. A replacement generation remains invisible until
+publication. This lets a repository decrypt a detail record against the same
+generation/access envelope as the list, including after removal or account changes.
+
 `AppDatabase.replicas` is a raw storage contract for bounded, encrypted resource
 replication. It performs no HTTP, permission checks, DTO-to-domain mapping, or
 retry policy. Feature repositories provide authenticated ciphertext; feature use
