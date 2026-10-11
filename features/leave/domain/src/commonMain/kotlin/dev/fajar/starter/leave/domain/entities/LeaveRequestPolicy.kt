@@ -1,6 +1,6 @@
 package dev.fajar.starter.leave.domain.entities
 
-/** The policy retained at submission, independently of subsequent policy edits. */
+/** Policy facts selected for preparation or retained in a submitted request. */
 data class LeaveRequestPolicy(
     val typeId: String,
     val code: String,

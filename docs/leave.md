@@ -36,6 +36,23 @@ reads; they are not represented as an atomic accounting snapshot. Pages contain
 at most 20 items with server cursors, and DTO mapping checks ownership, ordering,
 bounds and supported values. Year selection follows the server's 1900–2200 range.
 
+## Request preparation
+
+`LoadLeaveTypes` reads a bounded effective-date catalog and removes inactive
+choices without changing its server cursor. `PreviewLeaveRequest` calls the
+owner-only `/leave/me/requests/preview` endpoint. The response retains the policy,
+charged days, excluded dates and separate annual balance projections. It does
+not reserve a balance or create a request. Preparation requires `leave.self.manage`;
+an HR read/manage permission does not broaden this employee workflow.
+
+Both use cases acquire fresh company policy, recheck session/workspace ownership
+after pending work, propagate cancellation and use a finite deadline. A preview
+cannot outlive the current read lease, session, company policy or known
+maintenance. The selected dates are copied before acquisition. Data mapping
+rejects contradictory date partitions, totals, years and remaining balances.
+This is the domain/data foundation; the creation form and durable submission
+remain subsequent integration work.
+
 ## Offline access
 
 One encrypted overview is retained per company: selected employment, year, status
@@ -131,8 +148,8 @@ versions and obsolete outcomes cannot replace the visible operation.
 
 ## Remaining workflow
 
-Subsequent work adds eligible policy/day selection, document evidence acquisition
-and transfer, and durable submission.
+Subsequent work connects policy/day selection and preview to the form, document
+evidence acquisition and transfer, and durable submission.
 A cached balance is never
 a reservation or authorization to submit.
 

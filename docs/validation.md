@@ -1,5 +1,19 @@
 # Validation
 
+## Leave preparation boundary
+
+Root checks pass with 544 desktop tests; all 64 Leave domain/data tests pass in
+Chromium. Android dev and production Web builds pass. Thirteen new regressions
+cover catalog bounds and cursors, inactive choices, exact preview date partitions,
+separate annual balances, malformed responses, permission and company changes,
+replacement sessions, cancellation, finite deadlines and mutation of input while
+acquisition is pending. The creation interface is not connected by this increment.
+
+The preceding `2472964` mobile CI and `f63b94f` starter CI completed successfully
+on Linux, Windows and Apple. The server preview is independently implemented and
+verified in [HRIS Platform](https://github.com/fajarxfce/hris-platform/commit/b7182e7).
+There is no new phone interaction or performance measurement for this boundary.
+
 ## Leave action interface
 
 Root checks pass with 531 desktop tests; all 29 Leave presentation tests and both

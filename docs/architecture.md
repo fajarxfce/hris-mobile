@@ -115,6 +115,12 @@ independent bounded encrypted partition. The shared feature cache repository
 implements both read contracts; a codec only handles the chunked storage format.
 History pagination changes the visible revision page, not current request facts.
 
+Leave preparation uses a separate read contract for effective types and the
+owner-only server preview. Its use cases own date-input validation, live company
+admission and the preview deadline. Datasources return DTOs; repository mapping
+checks the consistency of charged/excluded dates and annual balance projections.
+No reservation or request mutation occurs during preparation.
+
 Feature flag definitions and evaluation policy live in `core/featureflags/domain`; each
 consuming feature owns its keys and action guards. A shared refresh use case serializes
 workers and sets the fetch interval. Its repository coordinates Remote Config and the

@@ -9,6 +9,34 @@ import org.koin.core.annotation.*
 
 @Single
 class LeaveApi(@Named(HttpClients.Authenticated) private val client: HttpClient) {
+    suspend fun types(
+        sessionId: String,
+        companyId: String,
+        asOf: String,
+        after: String?,
+    ): LeavePageDto<LeaveTypeDto> =
+        client.requestJson("companies/$companyId/leave/types", maximumBytes = 65_536) {
+            forSession(sessionId)
+            parameter("asOf", asOf)
+            parameter("limit", 20)
+            after?.let { parameter("after", it) }
+        }
+
+    suspend fun preview(
+        sessionId: String,
+        companyId: String,
+        request: LeavePreviewRequest,
+    ): LeaveRequestPreviewDto =
+        client.requestJson(
+            "companies/$companyId/leave/me/requests/preview",
+            maximumBytes = 262_144,
+        ) {
+            forSession(sessionId)
+            method = HttpMethod.Post
+            contentType(ContentType.Application.Json)
+            setBody(request)
+        }
+
     suspend fun act(
         sessionId: String,
         companyId: String,

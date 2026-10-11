@@ -19,13 +19,7 @@ fun LeaveRequestDto.toDetails(selection: LeaveRequestSelection): LeaveRequestDet
     require(employeeName.isNotBlank() && employeeName.length <= 200)
     require(reason.isNotBlank() && reason.length <= 1000 && submittedAt.length in 20..40)
     val submitted = Instant.parse(submittedAt)
-    Uuid.parse(policy.typeId)
-    require(Regex("[A-Z][A-Z0-9_-]{0,31}").matches(policy.code))
-    require(
-        policy.revision in 0..9_007_199_254_740_991L &&
-            policy.name.isNotBlank() &&
-            policy.name.length <= 200
-    )
+    val requestPolicy = policy.toRequestPolicy()
     require(days.size in 1..366)
     val dates = days.map(LeaveDayDto::toLeaveDay)
     require(dates.zipWithNext().all { (first, next) -> first.date < next.date })
@@ -61,15 +55,7 @@ fun LeaveRequestDto.toDetails(selection: LeaveRequestSelection): LeaveRequestDet
         employeeName,
         ownerAccountId,
         submitted,
-        LeaveRequestPolicy(
-            policy.typeId,
-            policy.code,
-            policy.revision,
-            policy.name,
-            policy.paid,
-            policy.allowPartialDays,
-            policy.attachmentRequired,
-        ),
+        requestPolicy,
         dates.toList(),
         charged,
         reason,

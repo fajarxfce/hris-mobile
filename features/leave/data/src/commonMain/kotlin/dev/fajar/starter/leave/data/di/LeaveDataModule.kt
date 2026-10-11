@@ -13,6 +13,22 @@ import org.koin.core.annotation.*
 @ComponentScan("dev.fajar.starter.leave.data")
 class LeaveDataModule {
     @Factory
+    fun loadLeaveTypes(
+        remote: LeavePreparationRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        build: AppBuild,
+    ) = LoadLeaveTypes(remote, sessions, workspaces, Clock.System, build)
+
+    @Factory
+    fun previewLeaveRequest(
+        remote: LeavePreparationRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        build: AppBuild,
+    ) = PreviewLeaveRequest(remote, sessions, workspaces, Clock.System, build)
+
+    @Factory
     fun prepareAction(
         commands: LeaveCommandRepository,
         cache: LeaveRequestCacheRepository,
