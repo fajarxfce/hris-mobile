@@ -9,6 +9,10 @@ iOS uses Core Location. Both stop acquisition on cancellation; the platform host
 closes the source. A cancelled permission request retains its callback slot until
 the OS answers, so a late result cannot complete a newer request. Android keeps a
 weak Activity reference and unregisters the launcher on destruction.
+The iOS fix remains owned until its suspended call finishes cleanup. A callback
+does not clear or stop a later acquisition. Apple CI runs simulator regressions
+for reentrant acquisition and closing during a pending fix; these use an injected
+SDK manager and do not establish physical GPS behavior.
 
 The consuming use case decides when to request permission, bounds acquisition,
 checks freshness and scope, and decides whether an action may proceed without a

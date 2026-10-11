@@ -15,10 +15,14 @@ import platform.UIKit.UIApplicationOpenSettingsURLString
 import platform.darwin.NSObject
 
 /** Foreground one-shot acquisition. The host closes this source with its container. */
-class AppleLocationDataSource : NSObject(), LocationDataSource, CLLocationManagerDelegateProtocol {
-    private val manager = CLLocationManager().apply { delegate = this@AppleLocationDataSource }
+class AppleLocationDataSource(private val manager: CLLocationManager = CLLocationManager()) :
+    NSObject(), LocationDataSource, CLLocationManagerDelegateProtocol {
     private var permission: CancellableContinuation<Unit>? = null
     private var fix: CancellableContinuation<LocationFixDto>? = null
+
+    init {
+        manager.delegate = this
+    }
 
     override suspend fun access(): LocationAccessDto =
         withContext(Dispatchers.Main) {
@@ -36,6 +40,7 @@ class AppleLocationDataSource : NSObject(), LocationDataSource, CLLocationManage
 
     override suspend fun requestPermission(): LocationAccessDto =
         withContext(Dispatchers.Main) {
+            if (manager.delegate == null) throw LocationUnavailableException()
             if (permission != null) throw LocationBusyException()
             if (CLLocationManager.authorizationStatus() == kCLAuthorizationStatusNotDetermined) {
                 suspendCancellableCoroutine { continuation ->
@@ -59,6 +64,7 @@ class AppleLocationDataSource : NSObject(), LocationDataSource, CLLocationManage
 
     override suspend fun current(): LocationFixDto =
         withContext(Dispatchers.Main) {
+            if (manager.delegate == null) throw LocationUnavailableException()
             if (fix != null) throw LocationBusyException()
             try {
                 suspendCancellableCoroutine { continuation ->
@@ -86,14 +92,10 @@ class AppleLocationDataSource : NSObject(), LocationDataSource, CLLocationManage
                 location.sourceInformation?.isSimulatedBySoftware() == true,
             )
         )
-        fix = null
-        manager.stopUpdatingLocation()
     }
 
     override fun locationManager(manager: CLLocationManager, didFailWithError: NSError) {
         val awaiting = fix
-        fix = null
-        manager.stopUpdatingLocation()
         awaiting
             ?.takeIf { it.isActive }
             ?.resumeWithException(

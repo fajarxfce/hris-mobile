@@ -68,6 +68,8 @@ jobs:
           xcodebuild -project apps/ios/HrisMobile.xcodeproj -scheme HrisMobile
           -configuration Debug -sdk iphonesimulator -destination 'generic/platform=iOS Simulator'
           -derivedDataPath apps/ios/build CODE_SIGNING_ALLOWED=NO ARCHS=arm64 build
+      - run: ./gradlew :core:location:data:iosSimulatorArm64Test --no-daemon
+        timeout-minutes: 15
   windows:
     runs-on: windows-latest
     steps:
