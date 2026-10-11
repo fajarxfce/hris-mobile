@@ -8,6 +8,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import dev.fajar.starter.presentation.mvi.CollectEffects
+import dev.fajar.starter.workforce.presentation.attendance.*
+import dev.fajar.starter.workforce.presentation.attendance.pages.AttendancePage
 import dev.fajar.starter.workforce.presentation.calendar.*
 import dev.fajar.starter.workforce.presentation.calendar.pages.WorkCalendarPage
 import org.koin.compose.viewmodel.koinViewModel
@@ -19,6 +21,24 @@ fun NavGraphBuilder.workforceRoutes(
     onRecheckWorkspace: () -> Unit,
     onBack: () -> Unit,
 ) {
+    composable<AttendanceRoute> {
+        val viewModel =
+            koinViewModel<AttendanceViewModel>(parameters = { parametersOf(workspaceId) })
+        val state by viewModel.state.collectAsStateWithLifecycle()
+        val list = rememberLazyListState()
+        LifecycleEventEffect(Lifecycle.Event.ON_START) {
+            viewModel.onEvent(AttendanceEvent.Entered)
+        }
+        LifecycleEventEffect(Lifecycle.Event.ON_STOP) { viewModel.onEvent(AttendanceEvent.Stopped) }
+        CollectEffects(viewModel.effects) { effect ->
+            when (effect) {
+                AttendanceEffect.Back -> onBack()
+                AttendanceEffect.VerifyAccount -> onVerify()
+                AttendanceEffect.RecheckWorkspace -> onRecheckWorkspace()
+            }
+        }
+        AttendancePage(state, list, viewModel::onEvent)
+    }
     composable<WorkCalendarRoute> {
         val viewModel =
             koinViewModel<WorkCalendarViewModel>(parameters = { parametersOf(workspaceId) })

@@ -2,6 +2,7 @@ package dev.fajar.starter.designsystem.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.padding
@@ -18,6 +19,7 @@ fun AppCard(
     modifier: Modifier = Modifier,
     color: Color = AppColors.surface,
     padding: Dp = 20.dp,
+    spacing: Dp = 0.dp,
     content: @Composable ColumnScope.() -> Unit,
 ) {
     Column(
@@ -25,6 +27,7 @@ fun AppCard(
             .background(color, RoundedCornerShape(16.dp))
             .border(1.dp, AppColors.border, RoundedCornerShape(16.dp))
             .padding(padding),
+        verticalArrangement = Arrangement.spacedBy(spacing),
         content = content,
     )
 }

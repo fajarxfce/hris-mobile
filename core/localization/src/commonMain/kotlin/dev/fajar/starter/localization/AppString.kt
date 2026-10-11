@@ -5,6 +5,70 @@ import org.jetbrains.compose.resources.StringResource
 
 /** Explicit pairs keep runtime language changes portable across Android, iOS, desktop and Web. */
 enum class AppString(val english: StringResource, val indonesian: StringResource) {
+    Services(Res.string.services_en, Res.string.services_id),
+    AllServices(Res.string.all_services_en, Res.string.all_services_id),
+    ServicesWork(Res.string.services_work_en, Res.string.services_work_id),
+    ServicesPersonal(Res.string.services_personal_en, Res.string.services_personal_id),
+    ServicesCommunications(
+        Res.string.services_communications_en,
+        Res.string.services_communications_id,
+    ),
+    Attendance(Res.string.attendance_en, Res.string.attendance_id),
+    AttendanceSummary(Res.string.attendance_summary_en, Res.string.attendance_summary_id),
+    ClockIn(Res.string.clock_in_en, Res.string.clock_in_id),
+    ClockOut(Res.string.clock_out_en, Res.string.clock_out_id),
+    AttendanceToday(Res.string.attendance_today_en, Res.string.attendance_today_id),
+    AttendanceHistory(Res.string.attendance_history_en, Res.string.attendance_history_id),
+    AttendanceQueue(Res.string.attendance_queue_en, Res.string.attendance_queue_id),
+    AttendanceSaved(Res.string.attendance_saved_en, Res.string.attendance_saved_id),
+    AttendanceUnconfirmed(
+        Res.string.attendance_unconfirmed_en,
+        Res.string.attendance_unconfirmed_id,
+    ),
+    AttendanceReceived(Res.string.attendance_received_en, Res.string.attendance_received_id),
+    AttendancePending(Res.string.attendance_pending_en, Res.string.attendance_pending_id),
+    AttendanceAccepted(Res.string.attendance_accepted_en, Res.string.attendance_accepted_id),
+    AttendanceRejected(Res.string.attendance_rejected_en, Res.string.attendance_rejected_id),
+    AttendanceCorrected(Res.string.attendance_corrected_en, Res.string.attendance_corrected_id),
+    AttendanceEmpty(Res.string.attendance_empty_en, Res.string.attendance_empty_id),
+    AttendanceAcceptedHours(
+        Res.string.attendance_accepted_hours_en,
+        Res.string.attendance_accepted_hours_id,
+    ),
+    AttendanceDismiss(Res.string.attendance_dismiss_en, Res.string.attendance_dismiss_id),
+    AttendanceWithoutLocation(
+        Res.string.attendance_without_location_en,
+        Res.string.attendance_without_location_id,
+    ),
+    AttendanceWithoutLocationHint(
+        Res.string.attendance_without_location_hint_en,
+        Res.string.attendance_without_location_hint_id,
+    ),
+    AttendanceCaptureHint(
+        Res.string.attendance_capture_hint_en,
+        Res.string.attendance_capture_hint_id,
+    ),
+    AttendanceRefreshRequired(
+        Res.string.attendance_refresh_required_en,
+        Res.string.attendance_refresh_required_id,
+    ),
+    AttendanceAlreadyRecorded(
+        Res.string.attendance_already_recorded_en,
+        Res.string.attendance_already_recorded_id,
+    ),
+    AttendanceQueueLimit(
+        Res.string.attendance_queue_limit_en,
+        Res.string.attendance_queue_limit_id,
+    ),
+    AttendanceRetryLimit(
+        Res.string.attendance_retry_limit_en,
+        Res.string.attendance_retry_limit_id,
+    ),
+    LocationPermission(Res.string.location_permission_en, Res.string.location_permission_id),
+    LocationPermanent(Res.string.location_permanent_en, Res.string.location_permanent_id),
+    LocationDisabled(Res.string.location_disabled_en, Res.string.location_disabled_id),
+    LocationUnavailable(Res.string.location_unavailable_en, Res.string.location_unavailable_id),
+    OpenSettings(Res.string.open_settings_en, Res.string.open_settings_id),
     MyWork(Res.string.my_work_en, Res.string.my_work_id),
     CalendarSummary(Res.string.calendar_summary_en, Res.string.calendar_summary_id),
     InboxSummary(Res.string.inbox_summary_en, Res.string.inbox_summary_id),

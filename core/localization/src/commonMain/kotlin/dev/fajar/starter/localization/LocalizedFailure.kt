@@ -7,6 +7,19 @@ import dev.fajar.starter.common.result.*
 fun failureText(failure: Failure): String =
     appString(
         when (failure.code) {
+            "client.location_permission" -> AppString.LocationPermission
+            "client.location_permanently_denied" -> AppString.LocationPermanent
+            "client.location_disabled" -> AppString.LocationDisabled
+            "client.location_unavailable",
+            "client.location_timeout",
+            "client.location_stale" -> AppString.LocationUnavailable
+            "client.attendance_cache_expired",
+            "client.attendance_refresh_required",
+            "client.attendance_changed" -> AppString.AttendanceRefreshRequired
+            "client.attendance_already_recorded" -> AppString.AttendanceAlreadyRecorded
+            "client.attendance_retry_limit" -> AppString.AttendanceRetryLimit
+            "attendance_day_corrected" -> AppString.AttendanceCorrected
+
             "client.calendar_cache_expired" -> AppString.CalendarCacheExpired
             "client.calendar_scope_changed" -> AppString.CalendarScopeChanged
             "client.calendar_changed" -> AppString.CalendarChanged
