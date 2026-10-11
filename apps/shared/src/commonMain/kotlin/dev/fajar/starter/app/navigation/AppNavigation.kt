@@ -244,6 +244,9 @@ fun AppNavigation(controller: NavHostController, incomingLinks: Flow<String>) {
                     sessionRoutes(stage.sessionId) { controller.popBackStack() }
                     leaveRoutes(
                         stage.workspace.id,
+                        onRequest = {
+                            controller.navigate(LeaveRequestRoute(it)) { launchSingleTop = true }
+                        },
                         onVerify = {
                             controller.navigate(VerificationRoute) { launchSingleTop = true }
                         },

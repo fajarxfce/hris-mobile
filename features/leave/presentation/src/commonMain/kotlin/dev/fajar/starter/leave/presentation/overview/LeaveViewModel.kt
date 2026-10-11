@@ -37,12 +37,19 @@ class LeaveViewModel(
         on<LeaveEvent.BalancesPageRequested>(::onBalancesPageRequested)
         on<LeaveEvent.RequestsPageRequested>(::onRequestsPageRequested)
         on<LeaveEvent.DialogDismissed>(::onDialogDismissed)
+        on<LeaveEvent.RequestSelected>(::onRequestSelected)
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     private fun onEntered(event: LeaveEvent.Entered) {
         if (observation?.isActive == true) return
         updateState { it.copy(loading = true) }
+        observeSelection()
+        onEvent(LeaveEvent.RefreshRequested)
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private fun observeSelection() {
+        observation?.cancel()
         observation =
             viewModelScope.launch {
                 state
@@ -59,7 +66,6 @@ class LeaveViewModel(
                         updateState { it.withCachedLeave(result) }
                     }
             }
-        onEvent(LeaveEvent.RefreshRequested)
     }
 
     private fun onStopped(event: LeaveEvent.Stopped) {
@@ -85,7 +91,9 @@ class LeaveViewModel(
             viewModelScope.launch {
                 val result = refresh(workspaceId, requested)
                 ensureActive()
+                if (result is AppResult.Success) observation?.cancel()
                 updateState { it.withLeaveRefreshResult(result) }
+                if (result is AppResult.Success) observeSelection()
                 if (
                     result is AppResult.Failed &&
                         result.failure.code in workspaceAccessLossCodes &&
@@ -195,6 +203,15 @@ class LeaveViewModel(
 
     private fun onDialogDismissed(event: LeaveEvent.DialogDismissed) {
         updateState { it.copy(dialog = null) }
+    }
+
+    private fun onRequestSelected(event: LeaveEvent.RequestSelected) {
+        if (
+            state.value.readRestricted ||
+                state.value.content?.requests?.items?.none { it.id == event.id } != false
+        )
+            return
+        viewModelScope.launch { emitEffect(LeaveEffect.OpenRequest(event.id)) }
     }
 
     private fun onBackRequested(event: LeaveEvent.BackRequested) {

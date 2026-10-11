@@ -8,7 +8,7 @@ import androidx.compose.ui.unit.dp
 import dev.fajar.starter.designsystem.components.*
 import dev.fajar.starter.designsystem.theme.AppColors
 import dev.fajar.starter.leave.domain.entities.LeaveBalance
-import dev.fajar.starter.leave.presentation.overview.formatters.leaveDaysText
+import dev.fajar.starter.leave.presentation.formatters.leaveDaysText
 import dev.fajar.starter.localization.*
 import io.github.composefluent.FluentTheme
 

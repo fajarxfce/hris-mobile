@@ -4,6 +4,8 @@ The employee Leave page shows admitted leave balances by year and paged request
 history with status filtering. Home and All services expose it when the selected
 company enables Leave and the account has self-service or read permission.
 Request creation and other mutations are subsequent integrations.
+Selecting a request opens its submitted facts, current status, dated portions,
+reason, evidence names and paged activity history.
 
 ## Ownership
 
@@ -25,7 +27,8 @@ not broaden this route beyond the account's own requests. It returns submitted
 policy/day facts, current workflow metadata, evidence references and at most ten
 history revisions. Older history pages retain the current request header.
 Transport mapping validates IDs, exact half-day totals, ordering, cursors and
-bounded fields. The request-detail screen is the next integration step.
+bounded fields. The feature owns the detail route and its MVI ViewModel; app
+composition connects the overview's typed navigation effect to that route.
 
 Balances use integer half-day units. The client never recomputes available days
 from the paged request list. Balance and request endpoints are independent server
@@ -67,6 +70,9 @@ retry and resubscribes only after fresh publication. A failed local cleanup cann
 silently make restricted content visible again.
 The gate also survives subsequent network or storage failures; those errors do
 not authorize reading the previous view.
+An upstream storage failure can complete the cache flow without ending the outer
+state collector. A successful explicit refresh reopens observation in both the
+overview and detail screens; errors never start an automatic retry loop.
 
 Balances have their own year filter; request history explicitly covers all dates.
 Year and status controls remain usable after a transport failure. Cursor actions
@@ -75,19 +81,26 @@ limited to the account-owned directory. Offline restoration retains the saved
 filter whether the cache arrives before or after the transport failure. The
 screen shows the last update time and never infers a balance from request rows.
 
+Detail history accepts only the visible next revision cursor or the latest page.
+Returning to the latest page cancels an older pending read, and an unavailable
+earlier page does not trap navigation. Viewing earlier revisions keeps the
+server's current header rather than presenting an old status as current. Offline
+restoration retains the last history selection. A missing or revoked request
+hides its saved content, including through subsequent failed retries.
+
 ## Remaining workflow
 
-Subsequent work adds the request-detail screen,
-eligible policy/day selection, document evidence, durable submission, withdrawal
+Subsequent work adds eligible policy/day selection, document evidence acquisition
+and transfer, durable submission, withdrawal
 and cancellation, plus canonical sync reconciliation. A cached balance is never
 a reservation or authorization to submit.
 
 ## Validation
 
-The root `:check` passes with 478 desktop tests. Leave's three Chromium suites
-have passed 40 tests; domain/data were rerun for request-detail reads, while the
-unchanged presentation suite previously passed nine tests. Android dev passes;
-the preceding overview and retry changes also passed the Web production build. Coverage includes
+The root `:check` passes with 491 desktop tests. Leave's three Chromium suites
+have passed 51 tests; the 20 presentation tests were rerun for request details,
+while domain/data passed 31 tests for the preceding read boundary. Android dev
+and the Web production build pass. Coverage includes
 exact half-day values, bounded pages, session/company isolation, encrypted cache
 restoration, cancellation, late results and compare-and-set publication. MVI tests
 exercise denied reads, pending retries, expiry, disposal and both cache/network
@@ -98,6 +111,10 @@ The API 35 emulator read a fictional 12.5-day allowance from the development
 server. Year/status filtering, dark/light appearance, offline process restoration
 and online recovery were checked. The saved 2025/approved filter survives restart
 and refresh. A fictional half-day request was subsequently created through the
-development API and verified as pending using the owner-only detail endpoint;
-this does not validate mobile submission or a detail screen. Physical iOS
+development API and read on the mobile detail page as pending. Its submitted
+date, first-half portion, reason and activity match the owner-only API. Restarting
+the app offline restores the request, and refresh recovers online. Light/dark
+appearance and 200% text were inspected on the emulator. Earlier history pages
+use an automated transport fixture; the real request has one history entry.
+These observations do not validate mobile submission. Physical iOS
 acceptance and transactional workflows remain separate work.

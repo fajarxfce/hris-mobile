@@ -29,5 +29,7 @@ sealed interface LeaveEvent {
 
     data class RequestsPageRequested(val after: String?) : LeaveEvent
 
+    data class RequestSelected(val id: String) : LeaveEvent
+
     data object DialogDismissed : LeaveEvent
 }

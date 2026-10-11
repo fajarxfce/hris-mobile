@@ -1,4 +1,21 @@
 <resources>
+    <string name="leave_request_details_en">Leave request</string>
+    <string name="leave_request_unavailable_en">This leave request is unavailable.</string>
+    <string name="leave_submitted_on_en">Submitted %1$s</string>
+    <string name="leave_reason_en">Reason</string>
+    <string name="leave_dates_en">Leave dates</string>
+    <string name="leave_full_day_en">Full day</string>
+    <string name="leave_first_half_en">First half</string>
+    <string name="leave_second_half_en">Second half</string>
+    <string name="leave_activity_en">Activity</string>
+    <string name="leave_submitted_en">Submitted</string>
+    <string name="leave_decision_recorded_en">Decision recorded</string>
+    <string name="leave_withdrawn_en">Withdrawn</string>
+    <string name="leave_cancellation_requested_en">Cancellation requested</string>
+    <string name="leave_latest_activity_en">Latest updates</string>
+    <string name="leave_earlier_activity_en">Earlier updates</string>
+    <string name="leave_no_earlier_activity_en">No earlier updates.</string>
+    <string name="leave_attachments_en">Attachments</string>
     <string name="leave_en">Leave</string>
     <string name="leave_summary_en">Balances and requests</string>
     <string name="leave_balances_en">Leave balances</string>

@@ -72,6 +72,13 @@ lease and make retained cache data readable. Presentation stops that cache
 subscription until a fresh admitted acquisition succeeds. Cache deletion remains
 best effort; tests retain old ciphertext when cleanup fails to verify the gate.
 
+Mapped record failures can recover on a later storage emission. An upstream
+storage-flow exception instead ends that subscription after reporting failure.
+The presentation owner must reopen observation after a successful explicit
+refresh, including when its outer state collector is still active. Do not turn
+the data boundary into an automatic retry loop. Test source completion separately
+from a bad record, and cancel both observation and acquisition on route disposal.
+
 Sign-in drops duplicate submissions and freezes credential edits until completion.
 Clearing its ViewModel cancels the request. The sign-in use case checks cancellation before
 committing a successful session through the session repository. Refresh and MFA share

@@ -10,8 +10,10 @@ import kotlinx.serialization.json.*
 class NativeLeaveUi {
     @Volatile var enabled = false
     @Volatile var offline = false
+    @Volatile var rejectDetails = false
     val years = CopyOnWriteArrayList<Int>()
     val statuses = CopyOnWriteArrayList<String>()
+    val historyPages = CopyOnWriteArrayList<String>()
 
     fun response(request: HttpRequestData): Pair<String, HttpStatusCode>? {
         val path = request.url.encodedPath
@@ -19,8 +21,20 @@ class NativeLeaveUi {
         check(enabled)
         if (offline) throw IOException("Leave test connection unavailable")
         val company = path.split('/')[4]
+        if (
+            path.contains("/me/requests/") &&
+                (rejectDetails || company != NativeUiServer.COMPANY_ONE)
+        )
+            return """{"code":"leave_request_not_found"}""" to HttpStatusCode.NotFound
         val body =
             when {
+                path.contains("/me/requests/") -> {
+                    check(path.endsWith("/dddddddd-dddd-4ddd-8ddd-dddddddddddd"))
+                    check(request.url.parameters["historyLimit"] == "10")
+                    val after = request.url.parameters["historyAfter"]
+                    historyPages += after ?: "LATEST"
+                    nativeLeaveRequestFixture(after?.toLong())
+                }
                 path.endsWith("/me/employments") ->
                     buildJsonObject {
                         put("accountId", NativePeopleUi.ACCOUNT)
@@ -45,35 +59,7 @@ class NativeLeaveUi {
                 path.endsWith("/balances") -> {
                     val year = checkNotNull(request.url.parameters["year"]).toInt()
                     years += year
-                    buildJsonObject {
-                        putJsonObject("employee") { put("id", NativePeopleUi.EMPLOYEE) }
-                        put("year", year)
-                        putJsonObject("balances") {
-                            putJsonArray("items") {
-                                if (year == 2026)
-                                    add(
-                                        buildJsonObject {
-                                            put("typeId", "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb")
-                                            put("typeCode", "ANNUAL")
-                                            put("typeName", "Annual leave")
-                                            putJsonObject("balance") {
-                                                put(
-                                                    "accountId",
-                                                    "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
-                                                )
-                                                put("year", year)
-                                                put("availableDays", "12.5")
-                                                put("reservedDays", "2")
-                                                put("consumedDays", "1.5")
-                                                put("version", 3)
-                                                put("closed", false)
-                                            }
-                                        }
-                                    )
-                            }
-                            put("nextCursor", JsonNull)
-                        }
-                    }
+                    balancePage(year)
                 }
                 path.endsWith("/requests") -> {
                     val status = request.url.parameters["status"]
@@ -102,5 +88,32 @@ class NativeLeaveUi {
                 else -> error("Unexpected leave test request")
             }
         return body.toString() to HttpStatusCode.OK
+    }
+
+    private fun balancePage(year: Int): JsonObject = buildJsonObject {
+        putJsonObject("employee") { put("id", NativePeopleUi.EMPLOYEE) }
+        put("year", year)
+        putJsonObject("balances") {
+            putJsonArray("items") {
+                if (year == 2026)
+                    add(
+                        buildJsonObject {
+                            put("typeId", "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb")
+                            put("typeCode", "ANNUAL")
+                            put("typeName", "Annual leave")
+                            putJsonObject("balance") {
+                                put("accountId", "cccccccc-cccc-4ccc-8ccc-cccccccccccc")
+                                put("year", year)
+                                put("availableDays", "12.5")
+                                put("reservedDays", "2")
+                                put("consumedDays", "1.5")
+                                put("version", 3)
+                                put("closed", false)
+                            }
+                        }
+                    )
+            }
+            put("nextCursor", JsonNull)
+        }
     }
 }

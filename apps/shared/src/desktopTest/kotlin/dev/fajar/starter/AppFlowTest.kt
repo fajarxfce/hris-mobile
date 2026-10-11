@@ -65,13 +65,13 @@ class AppFlowTest {
                 compose.waitUntil { server.workforce.active.get() == 0 }
                 cache.rejectClear = true
                 server.workforce.failureCode = "mfa_required"
-                compose.onNodeWithContentDescription("Refresh").performClick()
+                refreshWhenReady()
                 waitFor("Verify your account")
                 compose.waitUntil { cache.subscribers() == 0 }
                 server.workforce.failureCode = null
                 server.workforce.calendarGate = release
                 cache.rejectClear = false
-                compose.onNodeWithContentDescription("Refresh").performClick()
+                refreshWhenReady()
                 compose.waitUntil { server.workforce.active.get() == 1 }
                 compose.onNodeWithText("Night shift").assertDoesNotExist()
                 compose.onNodeWithText("Verify your account").assertExists()
@@ -104,7 +104,7 @@ class AppFlowTest {
                 waitFor("Night shift")
                 compose.waitUntil { server.workforce.active.get() == 0 }
                 server.workforce.calendarGate = release
-                compose.onNodeWithContentDescription("Refresh").performClick()
+                refreshWhenReady()
                 compose.waitUntil { server.workforce.active.get() == 1 }
                 cache.expire()
                 waitFor("Connect to refresh your schedule.")
@@ -148,7 +148,7 @@ class AppFlowTest {
             compose.onNodeWithContentDescription("Back").assertIsDisplayed()
             capture("leave-filtered-history")
             server.leave.offline = true
-            compose.onNodeWithContentDescription("Refresh").performClick()
+            refreshWhenReady()
             waitFor("Unable to connect. Check your connection.")
             compose.onNodeWithContentDescription("Back").performClick()
             waitFor("Welcome")
@@ -157,7 +157,7 @@ class AppFlowTest {
             compose.onNodeWithText("2025").assertExists()
             server.leave.offline = false
             val reads = server.leave.years.size
-            compose.onNodeWithContentDescription("Refresh").performClick()
+            refreshWhenReady()
             compose.waitUntil { server.leave.years.size > reads }
             compose.waitUntil {
                 !compose
@@ -179,6 +179,56 @@ class AppFlowTest {
             waitFor("Employment is not linked to this account.")
             compose.onNodeWithText("12.5 days").assertDoesNotExist()
             compose.onNodeWithText("Annual leave").assertDoesNotExist()
+        }
+    }
+
+    @Test
+    fun leaveRequestDetailsRestoreOfflineAndKeepCurrentMetadataWithEarlierHistory() {
+        val server = NativeUiServer().apply { leave.enabled = true }
+        withApplication(server) {
+            signIn()
+            waitFor("Choose a company")
+            compose.onAllNodesWithText("Open company")[0].performClick()
+            waitFor("Welcome")
+            compose.onNode(hasText("Leave") and hasClickAction()).performScrollTo().performClick()
+            waitFor("12.5 days")
+            compose.onNode(hasScrollToIndexAction()).performScrollToNode(hasText("1.5 days"))
+            compose.onNode(hasText("Annual leave") and hasClickAction()).performClick()
+            waitFor("Leave request")
+            waitFor("Family appointment")
+            compose.onNode(hasText("Approved") and hasText("Annual leave")).assertExists()
+            capture("leave-request-details")
+            compose.onNode(hasScrollToIndexAction()).performScrollToNode(hasText("Earlier updates"))
+            compose.onNodeWithText("Earlier updates").performClick()
+            compose.waitUntil { server.leave.historyPages.lastOrNull() == "3" }
+            waitFor("Family appointment")
+            compose.onNode(hasText("Approved") and hasText("Annual leave")).assertExists()
+            server.leave.offline = true
+            refreshWhenReady()
+            waitFor("Unable to connect. Check your connection.")
+            compose.onNodeWithContentDescription("Back").performClick()
+            waitFor("Leave balances")
+            compose.onNode(hasScrollToIndexAction()).performScrollToNode(hasText("1.5 days"))
+            compose.onNode(hasText("Annual leave") and hasClickAction()).performClick()
+            waitFor("Leave request")
+            waitFor("Family appointment")
+            compose.onNode(hasScrollToIndexAction()).performScrollToNode(hasText("Latest updates"))
+            server.leave.offline = false
+            compose.onNodeWithText("Latest updates").performClick()
+            compose.waitUntil { server.leave.historyPages.lastOrNull() == "LATEST" }
+            waitFor("Family appointment")
+            server.leave.rejectDetails = true
+            refreshWhenReady()
+            waitFor("This leave request is unavailable.")
+            compose.onNodeWithText("Family appointment").assertDoesNotExist()
+            server.leave.offline = true
+            refreshWhenReady()
+            waitFor("This leave request is unavailable.")
+            compose.onNodeWithText("Family appointment").assertDoesNotExist()
+            server.leave.offline = false
+            server.leave.rejectDetails = false
+            refreshWhenReady()
+            waitFor("Family appointment")
         }
     }
 
@@ -236,7 +286,7 @@ class AppFlowTest {
                     .isNotEmpty()
             }
             server.workforce.offline = true
-            compose.onNodeWithContentDescription("Refresh").performClick()
+            refreshWhenReady()
             waitFor("Unable to connect. Check your connection.")
             compose.onNodeWithText("February 2024").assertExists()
             compose.onNode(hasText("Present") and hasText("1")).assertExists()
@@ -251,7 +301,7 @@ class AppFlowTest {
             compose.onNode(hasText("Present") and hasText("1")).assertExists()
             val reloads = server.workforce.attendancePeriods.size
             server.workforce.offline = false
-            compose.onNodeWithContentDescription("Refresh").performClick()
+            refreshWhenReady()
             compose.waitUntil { server.workforce.attendancePeriods.size > reloads }
             assertEquals(
                 java.time.LocalDate.parse("2024-02-01"),
@@ -300,7 +350,7 @@ class AppFlowTest {
                 waitFor("Present")
                 compose.waitUntil { server.workforce.attendanceActive.get() == 0 }
                 server.workforce.attendanceGate = release
-                compose.onNodeWithContentDescription("Refresh").performClick()
+                refreshWhenReady()
                 compose.waitUntil { server.workforce.attendanceActive.get() == 1 }
                 cache.expire(AttendanceWindow.MONTHLY)
                 waitFor("Saved attendance has expired. Refresh to continue.")
@@ -314,19 +364,19 @@ class AppFlowTest {
                     .assertDoesNotExist()
                 compose.waitUntil { cache.subscribers(AttendanceWindow.MONTHLY) == 1 }
                 server.workforce.failureCode = "mfa_required"
-                compose.onNodeWithContentDescription("Refresh").performClick()
+                refreshWhenReady()
                 waitFor("Verify your account")
                 compose.onNodeWithText("Present").assertDoesNotExist()
                 compose.waitUntil { cache.subscribers(AttendanceWindow.MONTHLY) == 0 }
                 server.workforce.failureCode = null
                 server.workforce.offline = true
-                compose.onNodeWithContentDescription("Refresh").performClick()
+                refreshWhenReady()
                 waitFor("Unable to connect. Check your connection.")
                 compose.onNodeWithText("Verify your account").assertExists()
                 compose.onNodeWithText("Present").assertDoesNotExist()
                 assertEquals(0, cache.subscribers(AttendanceWindow.MONTHLY))
                 server.workforce.offline = false
-                compose.onNodeWithContentDescription("Refresh").performClick()
+                refreshWhenReady()
                 waitFor("Present")
                 compose.onNodeWithText("Verify your account").assertDoesNotExist()
                 compose.waitUntil { cache.subscribers(AttendanceWindow.MONTHLY) == 1 }
@@ -348,19 +398,19 @@ class AppFlowTest {
             compose.waitUntil { server.workforce.attendanceActive.get() == 0 }
             cache.rejectClear = true
             server.workforce.failureCode = "mfa_required"
-            compose.onNodeWithContentDescription("Refresh").performClick()
+            refreshWhenReady()
             waitFor("Verify your account")
             compose.waitUntil { cache.subscribers(AttendanceWindow.RECENT) == 0 }
             server.workforce.failureCode = null
             server.workforce.offline = true
-            compose.onNodeWithContentDescription("Refresh").performClick()
+            refreshWhenReady()
             waitFor("Unable to connect. Check your connection.")
             compose.onNodeWithText("Verify your account").assertExists()
             compose.onNode(hasText("Clock in") and hasClickAction()).assertDoesNotExist()
             assertEquals(0, cache.subscribers(AttendanceWindow.RECENT))
             server.workforce.offline = false
             cache.rejectClear = false
-            compose.onNodeWithContentDescription("Refresh").performClick()
+            refreshWhenReady()
             waitFor("Clock in")
             compose.waitUntil { cache.subscribers(AttendanceWindow.RECENT) == 1 }
         }
@@ -655,19 +705,19 @@ class AppFlowTest {
             compose.onNode(hasText("Employees") and isSelectable()).performClick()
             waitFor("Sam Wilson")
             server.directory.offline = true
-            compose.onNodeWithContentDescription("Refresh").performClick()
+            refreshWhenReady()
             waitFor("Showing the last loaded page.")
             compose.onNodeWithText("Sam Wilson").assertExists()
             server.directory.offline = false
             server.directory.denied = true
-            compose.onNodeWithContentDescription("Refresh").performClick()
+            refreshWhenReady()
             compose.waitUntil {
                 compose.onAllNodesWithText("Sam Wilson").fetchSemanticsNodes().isEmpty()
             }
             compose.onNodeWithText("Showing the last loaded page.").assertDoesNotExist()
             compose.onNodeWithText("Alex Morgan").assertDoesNotExist()
             server.directory.denied = false
-            compose.onNodeWithContentDescription("Refresh").performClick()
+            refreshWhenReady()
             waitFor("Sam Wilson")
             compose.runOnIdle { backDispatcher.pressBack() }
             waitFor("Welcome")
@@ -866,7 +916,7 @@ class AppFlowTest {
             }
             val release = CompletableDeferred<Unit>()
             server.workforce.attendanceGate = release
-            compose.onNodeWithContentDescription("Refresh").performClick()
+            refreshWhenReady()
             compose.waitUntil(5_000) { server.workforce.attendanceActive.get() == 1 }
             cache.expire()
             waitFor("Saved attendance has expired. Refresh to continue.")
@@ -882,10 +932,10 @@ class AppFlowTest {
                 .onNodeWithText("Saved attendance has expired. Refresh to continue.")
                 .assertDoesNotExist()
             server.workforce.offline = true
-            compose.onNodeWithContentDescription("Refresh").performClick()
+            refreshWhenReady()
             waitFor("Unable to connect. Check your connection.")
             server.workforce.offline = false
-            compose.onNodeWithContentDescription("Refresh").performClick()
+            refreshWhenReady()
             compose.waitUntil(5_000) {
                 compose
                     .onAllNodes(hasText("Clock in") and hasClickAction() and isEnabled())
@@ -941,7 +991,7 @@ class AppFlowTest {
                     .isNotEmpty()
             }
             server.workforce.offline = true
-            compose.onNodeWithContentDescription("Refresh").performClick()
+            refreshWhenReady()
             waitFor("Unable to connect. Check your connection.")
             compose.onNodeWithText("Night shift").performScrollTo().assertExists()
             capture("work-calendar-offline")
@@ -999,7 +1049,7 @@ class AppFlowTest {
                     .isNotEmpty()
             }
             server.workforce.failureCode = "mfa_required"
-            compose.onNodeWithContentDescription("Refresh").performClick()
+            refreshWhenReady()
             try {
                 waitFor("Verify your account")
             } finally {
@@ -1285,7 +1335,7 @@ class AppFlowTest {
                         .config
                         .contains(androidx.compose.ui.semantics.SemanticsProperties.Disabled)
             }
-            compose.onNodeWithContentDescription("Refresh").performClick()
+            refreshWhenReady()
             waitFor("This message is no longer available.")
             compose.onNodeWithText(server.inbox.firstBody).assertDoesNotExist()
         }
@@ -1439,7 +1489,7 @@ class AppFlowTest {
             openProfile()
             waitFor("Personal information")
             server.people.denied = true
-            compose.onNodeWithContentDescription("Refresh").performClick()
+            refreshWhenReady()
             waitFor("Your account cannot perform this action.")
             compose.onNodeWithText("1996-02-29").assertDoesNotExist()
             compose.onNodeWithText("Private server detail").assertDoesNotExist()
@@ -1460,7 +1510,7 @@ class AppFlowTest {
             openProfile()
             waitFor("Personal information")
             kotlinx.coroutines.runBlocking { server.expireVerification() }
-            compose.onNodeWithContentDescription("Refresh").performClick()
+            refreshWhenReady()
             waitFor("Your account cannot perform this action.")
             compose.onNodeWithText("1996-02-29").assertDoesNotExist()
             compose.onNode(hasText("Verify your account") and hasClickAction()).performClick()
@@ -1620,6 +1670,16 @@ class AppFlowTest {
         compose.onNodeWithContentDescription("Show password").performClick()
         compose.onNodeWithContentDescription("Hide password").assertExists().performClick()
         compose.onNode(hasText("Sign in") and hasClickAction()).performScrollTo().performClick()
+    }
+
+    private fun refreshWhenReady() {
+        compose.waitUntil(15_000) {
+            compose
+                .onAllNodes(hasContentDescription("Refresh") and isEnabled())
+                .fetchSemanticsNodes()
+                .size == 1
+        }
+        compose.onNodeWithContentDescription("Refresh").assertIsEnabled().performClick()
     }
 
     private fun waitFor(text: String) {

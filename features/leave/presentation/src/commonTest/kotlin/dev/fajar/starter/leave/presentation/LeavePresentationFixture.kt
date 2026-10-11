@@ -134,6 +134,7 @@ class LeavePresentationFixture(instant: () -> Instant = { Instant.parse("2026-10
     var observers = 0
     var rejectWrite = false
     var cacheReadGate: CompletableDeferred<Unit>? = null
+    var failNextObservation = false
     val years = mutableListOf<Int>()
     val sessions =
         object : SessionRepository {
@@ -228,6 +229,11 @@ class LeavePresentationFixture(instant: () -> Instant = { Instant.parse("2026-10
                 observers++
                 try {
                     cacheReadGate?.await()
+                    if (failNextObservation) {
+                        failNextObservation = false
+                        emit(leaveFailure("client.storage", FailureKind.Storage))
+                        return@flow
+                    }
                     emitAll(records)
                 } finally {
                     observers--

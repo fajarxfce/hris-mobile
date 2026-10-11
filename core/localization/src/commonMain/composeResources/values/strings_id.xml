@@ -1,4 +1,21 @@
 <resources>
+    <string name="leave_request_details_id">Pengajuan cuti</string>
+    <string name="leave_request_unavailable_id">Pengajuan cuti ini tidak tersedia.</string>
+    <string name="leave_submitted_on_id">Diajukan %1$s</string>
+    <string name="leave_reason_id">Alasan</string>
+    <string name="leave_dates_id">Tanggal cuti</string>
+    <string name="leave_full_day_id">Sehari penuh</string>
+    <string name="leave_first_half_id">Setengah hari pertama</string>
+    <string name="leave_second_half_id">Setengah hari kedua</string>
+    <string name="leave_activity_id">Riwayat perubahan</string>
+    <string name="leave_submitted_id">Diajukan</string>
+    <string name="leave_decision_recorded_id">Keputusan dicatat</string>
+    <string name="leave_withdrawn_id">Ditarik</string>
+    <string name="leave_cancellation_requested_id">Pembatalan diajukan</string>
+    <string name="leave_latest_activity_id">Perubahan terbaru</string>
+    <string name="leave_earlier_activity_id">Perubahan sebelumnya</string>
+    <string name="leave_no_earlier_activity_id">Tidak ada perubahan sebelumnya.</string>
+    <string name="leave_attachments_id">Lampiran</string>
     <string name="leave_id">Cuti</string>
     <string name="leave_summary_id">Saldo dan pengajuan</string>
     <string name="leave_balances_id">Saldo cuti</string>

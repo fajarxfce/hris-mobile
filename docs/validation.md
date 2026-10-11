@@ -1,5 +1,29 @@
 # Validation
 
+## Leave request presentation
+
+The root check passes with 491 desktop tests, and Leave presentation passes
+20 Chromium tests. Android dev and production Web build successfully. New tests
+cover route-owned subscriptions, pending-read cancellation, late denial, history
+cursors and restoration, current metadata with earlier history, expired reads,
+failed cleanup and retries, upstream storage-flow completion, and company
+replacement. Assembled UI tests open real feature routes through generated DI,
+exercise offline recovery and unavailable-request gates, and verify Indonesian
+at 200% text with fixed navigation. Manual refresh probes wait for the visible
+action to become enabled; transport completion alone did not establish UI readiness.
+
+The API 35 emulator opened one fictional half-day request from the development
+API. Submitted date/portion, duration, reason, current status and activity matched.
+Force-stop/restart with the emulator's API forwarding removed restored the saved
+request; reconnecting and refreshing removed the connection error. Light/dark
+and 200% text were inspected, and normal text size, appearance and forwarding
+were restored. This validates request reading, not mobile submission. No frame-time
+or memory benchmark is claimed.
+
+After advance notice, this APK was installed on the connected Android 16 phone
+with `--install-only`; the package update and API forwarding were verified.
+The phone application was not launched or driven for this delivery.
+
 ## Leave request read boundary
 
 The root check passes with 478 desktop tests. Leave domain/data also passed

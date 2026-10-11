@@ -6,4 +6,6 @@ sealed interface LeaveEffect {
     data object VerifyAccount : LeaveEffect
 
     data object RecheckWorkspace : LeaveEffect
+
+    data class OpenRequest(val id: String) : LeaveEffect
 }

@@ -7,8 +7,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
 import dev.fajar.starter.designsystem.components.*
 import dev.fajar.starter.leave.domain.entities.LeaveStatus
+import dev.fajar.starter.leave.presentation.formatters.label
 import dev.fajar.starter.leave.presentation.overview.*
-import dev.fajar.starter.leave.presentation.overview.formatters.label
 import dev.fajar.starter.localization.*
 
 @Composable

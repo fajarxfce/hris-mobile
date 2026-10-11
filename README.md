@@ -36,8 +36,10 @@ Screens support English and Indonesian. System
 appearance and reduced-motion preferences are respected.
 
 Leave shows annual balances and request history with status filters, account-owned
-employment selection and a bounded encrypted offline view. Request submission,
-evidence and cancellation remain separate delivery work.
+employment selection and a bounded encrypted offline view. Each request opens its
+submitted dates, duration, reason, current status and paged activity history;
+the last request remains available within its offline read lease. Submission,
+evidence transfer and cancellation remain separate delivery work.
 
 The runtime contains no demo authentication transport. Other transactional employee workflows
 are still being connected; a generated module

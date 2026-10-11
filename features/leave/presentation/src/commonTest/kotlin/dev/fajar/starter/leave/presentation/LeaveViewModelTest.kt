@@ -14,6 +14,50 @@ import kotlinx.coroutines.test.*
 
 class LeaveViewModelTest {
     @Test
+    fun explicitRefreshRecoversAfterTheStorageFlowHasCompletedWithAnError() = runTest {
+        withLeave { fixture, model, _ ->
+            val release = CompletableDeferred<Unit>()
+            fixture.failNextObservation = true
+            fixture.directoryCall = {
+                release.await()
+                AppResult.Success(fixture.directory)
+            }
+            model.onEvent(LeaveEvent.Entered)
+            runCurrent()
+            assertEquals(0, fixture.observers)
+            assertEquals(FailureKind.Storage, model.state.value.cacheFailure?.kind)
+            release.complete(Unit)
+            runCurrent()
+            assertEquals(1, fixture.observers)
+            assertNotNull(model.state.value.content)
+            assertNull(model.state.value.cacheFailure)
+            assertEquals(1, fixture.directoryReads)
+        }
+    }
+
+    @Test
+    fun requestNavigationAcceptsOnlyVisibleAdmittedRows() = runTest {
+        withLeave { fixture, model, _ ->
+            val effects = mutableListOf<LeaveEffect>()
+            backgroundScope.launch { model.effects.collect { effects += it } }
+            model.onEvent(LeaveEvent.Entered)
+            runCurrent()
+            model.onEvent(LeaveEvent.RequestSelected("unknown"))
+            runCurrent()
+            assertTrue(effects.isEmpty())
+            model.onEvent(LeaveEvent.RequestSelected(fixture.request.id))
+            runCurrent()
+            assertEquals(listOf<LeaveEffect>(LeaveEffect.OpenRequest(fixture.request.id)), effects)
+            fixture.directoryCall = { leaveFailure("mfa_required", FailureKind.AccessDenied) }
+            model.onEvent(LeaveEvent.RefreshRequested)
+            runCurrent()
+            model.onEvent(LeaveEvent.RequestSelected(fixture.request.id))
+            runCurrent()
+            assertEquals(1, effects.size)
+        }
+    }
+
+    @Test
     fun enteringTwiceOwnsOneSubscriptionAndLeavingCancelsPendingRead() = runTest {
         withLeave { fixture, model, owner ->
             model.onEvent(LeaveEvent.Entered)

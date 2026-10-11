@@ -8,8 +8,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import dev.fajar.starter.designsystem.components.*
 import dev.fajar.starter.designsystem.theme.AppColors
+import dev.fajar.starter.leave.presentation.formatters.label
 import dev.fajar.starter.leave.presentation.overview.*
-import dev.fajar.starter.leave.presentation.overview.formatters.label
 import dev.fajar.starter.leave.presentation.overview.widgets.*
 import dev.fajar.starter.localization.*
 import io.github.composefluent.FluentTheme
@@ -149,7 +149,7 @@ fun LeavePage(state: LeaveState, list: LazyListState, onEvent: (LeaveEvent) -> U
                     AppText(appString(AppString.LeaveNoRequests), color = AppColors.muted)
                 }
             items(content?.requests?.items.orEmpty(), key = { "request/${it.id}" }) {
-                LeaveRequestRow(it)
+                LeaveRequestRow(it, { onEvent(LeaveEvent.RequestSelected(it.id)) })
             }
             if (
                 content != null &&

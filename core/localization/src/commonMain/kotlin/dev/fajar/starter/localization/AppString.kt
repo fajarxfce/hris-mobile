@@ -5,6 +5,38 @@ import org.jetbrains.compose.resources.StringResource
 
 /** Explicit pairs keep runtime language changes portable across Android, iOS, desktop and Web. */
 enum class AppString(val english: StringResource, val indonesian: StringResource) {
+    LeaveRequestDetails(Res.string.leave_request_details_en, Res.string.leave_request_details_id),
+    LeaveRequestUnavailable(
+        Res.string.leave_request_unavailable_en,
+        Res.string.leave_request_unavailable_id,
+    ),
+    LeaveSubmittedOn(Res.string.leave_submitted_on_en, Res.string.leave_submitted_on_id),
+    LeaveReason(Res.string.leave_reason_en, Res.string.leave_reason_id),
+    LeaveDates(Res.string.leave_dates_en, Res.string.leave_dates_id),
+    LeaveFullDay(Res.string.leave_full_day_en, Res.string.leave_full_day_id),
+    LeaveFirstHalf(Res.string.leave_first_half_en, Res.string.leave_first_half_id),
+    LeaveSecondHalf(Res.string.leave_second_half_en, Res.string.leave_second_half_id),
+    LeaveActivity(Res.string.leave_activity_en, Res.string.leave_activity_id),
+    LeaveSubmitted(Res.string.leave_submitted_en, Res.string.leave_submitted_id),
+    LeaveDecisionRecorded(
+        Res.string.leave_decision_recorded_en,
+        Res.string.leave_decision_recorded_id,
+    ),
+    LeaveWithdrawn(Res.string.leave_withdrawn_en, Res.string.leave_withdrawn_id),
+    LeaveCancellationRequested(
+        Res.string.leave_cancellation_requested_en,
+        Res.string.leave_cancellation_requested_id,
+    ),
+    LeaveLatestActivity(Res.string.leave_latest_activity_en, Res.string.leave_latest_activity_id),
+    LeaveEarlierActivity(
+        Res.string.leave_earlier_activity_en,
+        Res.string.leave_earlier_activity_id,
+    ),
+    LeaveNoEarlierActivity(
+        Res.string.leave_no_earlier_activity_en,
+        Res.string.leave_no_earlier_activity_id,
+    ),
+    LeaveAttachments(Res.string.leave_attachments_en, Res.string.leave_attachments_id),
     Leave(Res.string.leave_en, Res.string.leave_id),
     LeaveSummary(Res.string.leave_summary_en, Res.string.leave_summary_id),
     LeaveBalances(Res.string.leave_balances_en, Res.string.leave_balances_id),

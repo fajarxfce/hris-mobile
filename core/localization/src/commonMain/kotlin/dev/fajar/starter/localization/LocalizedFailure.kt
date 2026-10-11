@@ -7,6 +7,7 @@ import dev.fajar.starter.common.result.*
 fun failureText(failure: Failure): String =
     appString(
         when (failure.code) {
+            "leave_request_not_found" -> AppString.LeaveRequestUnavailable
             "client.leave_cache_expired" -> AppString.LeaveCacheExpired
             "client.leave_scope_changed" -> AppString.CalendarScopeChanged
             "client.leave_changed" -> AppString.LeaveChanged
