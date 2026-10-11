@@ -39,6 +39,10 @@ Read [docs/architecture.md](docs/architecture.md) and [README.md](README.md) bef
   relevant build targets. Report only checks actually performed.
 - Keep copy short and professional. Make atomic commits without co-author trailers.
   Preserve unrelated changes. Push when authorized; releases require an explicit request.
+- Use the dedicated Android emulator for routine interaction while the user's phone
+  is in use. Select the ADB serial explicitly. Deliver validated feature updates to
+  the authorized phone with `--install-only`; do not launch or drive its UI while
+  it is in use. Device availability does not block emulator and automated checks.
 - Follow [mobile experience](docs/experience.md): use restrained, interruptible
   transitions and clear interaction feedback. Honor reduced motion, retain tab
   state, and keep animation work independent of data acquisition.

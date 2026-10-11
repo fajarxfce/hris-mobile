@@ -91,6 +91,23 @@ signed out and its company grant disabled. The original employee account was res
 No frame-time, heap or battery measurements were taken. External SSO, push delivery,
 and iOS device behavior still need their own physical checks.
 
+## Android emulator observations
+
+The existing company-policy dev APK was also installed on a dedicated headless
+Android 15/API 35 x86_64 emulator using KVM and software graphics on Linux. Against
+the local HRIS API it passed onboarding, fictional employee sign-in, company
+selection, inbox reading, and acknowledged-message display. Removing only the
+emulator's API tunnel and restarting the process restored the admitted company
+and its readable saved message. The normal API tunnel was restored afterward.
+These checks did not interact with the physical phone.
+
+Both HRIS Mobile and Compose Fluent Starter passed their root checks and four
+Android-runner tests covering target selection, an ambiguous/disconnected device,
+missing artifacts, and updating without an application launch. No application
+runtime code changed for this tooling update; the existing APK was used for the
+emulator observations. See [development](development.md#headless-android-emulator)
+for reproduction. No emulator performance or memory benchmark is claimed.
+
 ## Integration boundaries
 
 Runtime composition uses the HRIS API, not the starter demo transport. Compose

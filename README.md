@@ -33,9 +33,13 @@ instructions, then run:
 
 ```sh
 ./gradlew :apps:android:assembleDevDebug
-adb reverse tcp:8088 tcp:8088
-./gradlew :apps:android:installDevDebug
+adb -s emulator-5560 reverse tcp:8088 tcp:8088
+python3 tool/run_android.py emulator-5560 --skip-build
 ```
+
+Use the serial from `adb devices` for a different target. The runner installs on
+that device only. See [headless emulator setup](docs/development.md#headless-android-emulator)
+for VPS development and updating a connected phone without opening the application.
 
 The dev API defaults to `http://127.0.0.1:8088/api/v1/`. Only dev permits loopback
 HTTP. Configure a deployed API using Gradle properties, for example:

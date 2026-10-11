@@ -22,6 +22,14 @@
     ]
   },
   {
+    "label": "Android: run dev (VPS emulator)",
+    "command": "python3",
+    "args": [
+      "tool/run_android.py",
+      "emulator-5560"
+    ]
+  },
+  {
     "label": "Android: build dev APK",
     "command": "./gradlew",
     "args": [

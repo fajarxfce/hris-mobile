@@ -21,3 +21,9 @@ exist in the starter at
 [`038d516`](https://github.com/fajarxfce/compose-fluent-starter/commit/038d516).
 Both repositories passed their root checks and Android dev builds. The company
 availability adapter and policy remain specific to HRIS Mobile.
+
+The Android runner's explicit-device installation and install-without-launch
+behavior also exist in the starter at
+[`67dd7aa`](https://github.com/fajarxfce/compose-fluent-starter/commit/67dd7aa).
+Both repositories passed their root checks and four runner tests. Emulator
+configuration and HRIS backend forwarding remain in this application.

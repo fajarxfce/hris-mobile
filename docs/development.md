@@ -62,6 +62,49 @@ Android dev APK: `apps/android/build/outputs/apk/dev/debug/android-dev-debug.apk
 Web output: `apps/shared/build/dist/wasmJs/productionExecutable`.
 Desktop distributions: `apps/shared/build/compose/binaries/main`.
 
+## Headless Android emulator
+
+Routine VPS testing uses a dedicated AVD; physical phones receive completed-feature
+APK updates separately. Always select the target serial when multiple devices are
+connected. An APK update preserves application data but may stop the application's
+existing process. `--install-only` never brings it to the foreground.
+
+Create the AVD once with Android SDK command-line tools on `PATH`:
+
+```sh
+emulator -accel-check
+sdkmanager 'system-images;android-35;google_apis;x86_64'
+avdmanager create avd --name hris-mobile-dev \
+  --package 'system-images;android-35;google_apis;x86_64' --device pixel_4a
+```
+
+Start it in its own terminal; keep the console and ADB ports local to the host:
+
+```sh
+emulator -avd hris-mobile-dev -port 5560 -no-window -no-audio \
+  -no-boot-anim -no-snapshot -gpu swiftshader -memory 2048 -cores 2
+```
+
+Wait for `adb -s emulator-5560 shell getprop sys.boot_completed` to return `1`, then:
+
+```sh
+adb -s emulator-5560 reverse tcp:8088 tcp:8088
+python3 tool/run_android.py emulator-5560
+```
+
+The runner builds with `assemble`, then uses `adb -s` for installation and launch.
+It refuses an ambiguous or disconnected target. To install an already validated
+APK on a phone, replace `<phone-serial>` with its actual serial:
+
+```sh
+python3 tool/run_android.py <phone-serial> --skip-build --install-only
+```
+
+Stop an emulator when it is no longer needed with
+`adb -s emulator-5560 emu kill`; its app data is retained. Never use `-wipe-data`
+for an ordinary restart. Emulator checks cover UI, lifecycle and API integration;
+physical sensors, manufacturer behavior and performance still need device checks.
+
 ## Tests
 
 `:check` runs architectural checks and all module desktop tests, including the UI smoke
@@ -71,3 +114,6 @@ device testing. On headless Linux use Xvfb. UI captures are written under
 
 Run `./gradlew clean` for a full rebuild. It is intentionally separate from ordinary
 build/run tasks so incremental compilation remains useful.
+
+The Android runner's device-selection checks run with
+`python3 -m unittest discover -s tool -p 'test_*.py'`.

@@ -20,6 +20,12 @@
       "problemMatcher": []
     },
     {
+      "label": "Android: run dev (VPS emulator)",
+      "type": "shell",
+      "command": "python3 tool/run_android.py emulator-5560",
+      "problemMatcher": []
+    },
+    {
       "label": "Android: build dev APK",
       "type": "shell",
       "command": "./gradlew :apps:android:assembleDevDebug",
