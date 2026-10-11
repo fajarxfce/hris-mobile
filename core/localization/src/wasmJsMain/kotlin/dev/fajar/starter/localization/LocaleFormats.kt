@@ -1,6 +1,14 @@
 @file:OptIn(kotlin.js.ExperimentalWasmJsInterop::class)
 
 package dev.fajar.starter.localization
+actual fun formatLocalDate(isoDate: String, languageTag: String): String =
+    intlLocalDate(isoDate, languageTag)
+
+@JsFun(
+    "(value, locale) => new Intl.DateTimeFormat(locale, {weekday:'short', day:'numeric', month:'short', year:'numeric', timeZone:'UTC'}).format(new Date(value + 'T00:00:00Z'))"
+)
+private external fun intlLocalDate(value: String, locale: String): String
+
 actual fun formatNumber(value: Long, languageTag: String): String =
     intlNumber(value.toString(), languageTag)
 

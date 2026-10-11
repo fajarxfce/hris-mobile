@@ -25,6 +25,9 @@ expect fun formatNumber(value: Long, languageTag: String): String
 
 expect fun formatDate(epochMillis: Long, languageTag: String): String
 
+/** A calendar date has no time or device timezone. Input is an ISO local date. */
+expect fun formatLocalDate(isoDate: String, languageTag: String): String
+
 @Composable
 fun activityCount(count: Int): String =
     pluralStringResource(

@@ -16,6 +16,12 @@ environment API. Add both resources and their typed entry when adding copy.
 `activityCount` demonstrates plural resources. Number/date formatting delegates
 to the platform formatter using the selected locale.
 
+Use `formatLocalDate` for a validated ISO calendar date, such as an employment
+date or work day. It preserves that date independently of the device timezone.
+Use `formatDate` for an instant that should appear in the device's local time.
+Both functions accept the selected language tag. Date-only regression checks
+cover English/Indonesian, leap day, UTC+14 and UTC−12.
+
 Presentation state retains failures and resource keys rather than translated
 error strings. Existing feedback therefore updates when the language changes.
 Remote activity titles and notification payloads remain content supplied by the
