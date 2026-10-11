@@ -49,6 +49,8 @@ company information, inbox and calendar layout changes remain in HRIS Mobile.
 Foreground location and permission adapters, callback ownership, failure mapping
 and cancellation regressions also exist at
 [`694f244`](https://github.com/fajarxfce/compose-fluent-starter/commit/694f244).
+The Core Location protocol bridge correction also exists at
+[`f9c0377`](https://github.com/fajarxfce/compose-fluent-starter/commit/f9c0377).
 Optional card content spacing exists at
 [`d7e7680`](https://github.com/fajarxfce/compose-fluent-starter/commit/d7e7680).
 Both repositories passed root checks and Android/Web builds. Apple callback

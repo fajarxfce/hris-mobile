@@ -27,10 +27,11 @@ class AppleLocationDataSourceTest {
                 }
             assertEquals(1, manager.starts)
 
-            source.locationManager(
-                manager,
-                didUpdateLocations = listOf(CLLocation(latitude = -6.17, longitude = 106.82)),
-            )
+            checkNotNull(manager.delegate)
+                .locationManager(
+                    manager,
+                    didUpdateLocations = listOf(CLLocation(latitude = -6.17, longitude = 106.82)),
+                )
 
             assertEquals(2, manager.starts)
             assertEquals(1, manager.stops)

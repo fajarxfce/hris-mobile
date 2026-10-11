@@ -9,6 +9,9 @@ iOS uses Core Location. Both stop acquisition on cancellation; the platform host
 closes the source. A cancelled permission request retains its callback slot until
 the OS answers, so a late result cannot complete a newer request. Android keeps a
 weak Activity reference and unregisters the launcher on destruction.
+On iOS the datasource implements only its Kotlin contract. A separate owned
+`NSObject` delegate implements the Core Location protocol and refers weakly to
+the datasource, avoiding mixed Kotlin/Objective-C inheritance and a retain cycle.
 The iOS fix remains owned until its suspended call finishes cleanup. A callback
 does not clear or stop a later acquisition. Apple CI runs simulator regressions
 for reentrant acquisition and closing during a pending fix; these use an injected
