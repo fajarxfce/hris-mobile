@@ -80,7 +80,11 @@ class HomeViewModel(
     }
 
     private fun onServiceSelected(event: HomeEvent.ServiceSelected) {
-        if (state.value.services.sections.none { event.service in it.items }) return
+        if (
+            event.service !in state.value.services.account &&
+                state.value.services.sections.none { event.service in it.items }
+        )
+            return
         viewModelScope.launch { emitEffect(HomeEffect.OpenService(event.service)) }
     }
 

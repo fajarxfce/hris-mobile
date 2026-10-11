@@ -42,6 +42,8 @@ feature owns its state and actions; Home receives its entries through app
 composition and does not acquire another feature's data or ViewModel. Long bottom
 navigation labels use a single ellipsized line while retaining their complete
 accessible names.
+The service grid does not repeat Inbox, Employees or Account destinations. Personal
+profile access belongs in Account; the grid is reserved for work services.
 
 `AppTopBar` belongs in the `topBar` slot of `AppPage` or `AppLazyPage`, outside the
 scrolling content and its padding. Its normal minimum height is 56 dp; large text

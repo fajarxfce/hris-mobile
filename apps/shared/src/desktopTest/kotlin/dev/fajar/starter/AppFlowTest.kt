@@ -137,12 +137,10 @@ class AppFlowTest {
             waitFor("Sam Wilson")
             compose.runOnIdle { backDispatcher.pressBack() }
             waitFor("Welcome")
-            openService("Employees")
+            compose.onNode(hasText("Employees") and isSelectable()).performClick()
             waitFor("Sam Wilson")
-            compose.onNodeWithContentDescription("Back").assertIsDisplayed()
-            compose.onNode(hasText("Home") and isSelectable()).assertDoesNotExist()
-            compose.runOnIdle { backDispatcher.pressBack() }
-            waitFor("All services")
+            compose.onNodeWithContentDescription("Back").assertDoesNotExist()
+            compose.onNode(hasText("Home") and isSelectable()).assertExists()
         }
     }
 
@@ -221,6 +219,9 @@ class AppFlowTest {
             compose.onAllNodesWithText("Open company")[0].performClick()
             waitFor("Welcome")
             compose.waitUntil(5_000) { server.workforce.attendanceActive.get() == 1 }
+            compose.onAllNodesWithText("Inbox").assertCountEquals(1)
+            compose.onAllNodesWithText("Employees").assertCountEquals(1)
+            compose.onNodeWithText("My profile").assertDoesNotExist()
             compose.onNodeWithText("All services").performScrollTo().performClick()
             compose.waitUntil {
                 compose.onAllNodesWithContentDescription("Back").fetchSemanticsNodes().isNotEmpty()
@@ -231,11 +232,12 @@ class AppFlowTest {
             compose.onNode(hasText("Account") and hasClickAction()).assertDoesNotExist()
             compose.onNodeWithText("Attendance").assertExists()
             compose.onNodeWithText("Work calendar").assertExists()
-            compose.onNodeWithText("Inbox").assertExists()
-            compose.onNodeWithText("My profile").assertExists()
+            compose.onNodeWithText("Inbox").assertDoesNotExist()
+            compose.onNodeWithText("Employees").assertDoesNotExist()
+            compose.onNodeWithText("My profile").assertDoesNotExist()
             capture("all-services")
-            compose.onNodeWithText("My profile").performClick()
-            waitFor("Personal information")
+            compose.onNodeWithText("Work calendar").performClick()
+            waitFor("Night shift")
             compose.runOnIdle { backDispatcher.pressBack() }
             waitFor("All services")
             compose.onNode(hasText("Home") and hasClickAction()).assertDoesNotExist()
@@ -381,7 +383,12 @@ class AppFlowTest {
             waitFor("Choose a company")
             compose.onAllNodesWithText("Open company")[0].performClick()
             waitFor("Work calendar")
-            compose.onNodeWithText("Work calendar").performScrollTo().performClick()
+            // This scenario validates persisted data; navigation gestures have separate coverage.
+            compose.onNodeWithText("Work calendar").performScrollTo().performSemanticsAction(
+                androidx.compose.ui.semantics.SemanticsActions.OnClick
+            ) {
+                it()
+            }
             waitFor("Night shift")
             compose.waitUntil {
                 compose
@@ -396,7 +403,11 @@ class AppFlowTest {
             capture("work-calendar-offline")
             compose.runOnIdle { backDispatcher.pressBack() }
             waitFor("Welcome")
-            compose.onNodeWithText("Work calendar").performScrollTo().performClick()
+            compose.onNodeWithText("Work calendar").performScrollTo().performSemanticsAction(
+                androidx.compose.ui.semantics.SemanticsActions.OnClick
+            ) {
+                it()
+            }
             waitFor("Night shift")
             compose.runOnIdle { backDispatcher.pressBack() }
             waitFor("Welcome")
@@ -406,7 +417,11 @@ class AppFlowTest {
             waitFor("Choose a company")
             compose.onAllNodesWithText("Open company")[1].performClick()
             waitFor("Work calendar")
-            compose.onNodeWithText("Work calendar").performScrollTo().performClick()
+            compose.onNodeWithText("Work calendar").performScrollTo().performSemanticsAction(
+                androidx.compose.ui.semantics.SemanticsActions.OnClick
+            ) {
+                it()
+            }
             waitFor("Employment is not linked to this account.")
             compose.onNodeWithText("Night shift").assertDoesNotExist()
         }
@@ -530,14 +545,12 @@ class AppFlowTest {
             compose.runOnIdle { backDispatcher.pressBack() }
             waitFor("Welcome")
             compose.onNode(hasText("Account") and hasClickAction()).performClick()
+            compose.onNodeWithText("My profile").assertDoesNotExist()
             compose.onNodeWithContentDescription("Change company").performClick()
             waitFor("Choose a company")
             compose.onAllNodesWithText("Open company")[1].performClick()
-            waitFor("Inbox")
-            compose.onNodeWithText("All services").performScrollTo().performClick()
-            compose.waitUntil {
-                compose.onAllNodesWithContentDescription("Back").fetchSemanticsNodes().isNotEmpty()
-            }
+            waitFor("Welcome")
+            compose.onNode(hasText("Account") and isSelectable()).performClick()
             compose.onNodeWithText("My profile").assertExists()
             assertTrue(server.inbox.actions.isEmpty())
         }
@@ -798,7 +811,7 @@ class AppFlowTest {
             }
             compose.onNodeWithText("All services").performScrollTo()
             val shortcuts =
-                listOf("Attendance", "Work calendar", "Inbox", "My profile").map {
+                listOf("Attendance", "Work calendar").map {
                     compose
                         .onNode(hasText(it) and hasClickAction() and !isSelectable())
                         .assertIsDisplayed()
@@ -841,7 +854,7 @@ class AppFlowTest {
             waitFor("Choose a company")
             compose.onAllNodesWithText("Open company")[0].performClick()
             waitFor("Welcome")
-            openService("My profile")
+            openProfile()
             waitFor("Personal information")
             compose.onNodeWithText("1996-02-29").assertExists()
             capture("profile")
@@ -850,12 +863,12 @@ class AppFlowTest {
             compose.onNodeWithText("Engineering").assertExists()
             compose.onNodeWithContentDescription("Back").assertIsDisplayed()
             compose.onNodeWithContentDescription("Back").performClick()
-            waitFor("All services")
-            compose.onNode(hasText("Home") and hasClickAction()).assertDoesNotExist()
-            compose.onNode(hasText("Account") and hasClickAction()).assertDoesNotExist()
-            compose.runOnIdle { backDispatcher.pressBack() }
-            waitFor("Welcome")
-            compose.onNode(hasText("Account") and hasClickAction()).performClick()
+            compose.waitUntil {
+                compose
+                    .onAllNodes(hasText("Account") and isSelected())
+                    .fetchSemanticsNodes()
+                    .size == 1
+            }
             compose
                 .onNode(
                     (hasText("Change company") or hasContentDescription("Change company")) and
@@ -865,7 +878,7 @@ class AppFlowTest {
             waitFor("Choose a company")
             compose.onAllNodesWithText("Open company")[1].performClick()
             waitFor("Welcome")
-            openService("My profile")
+            openProfile()
             waitFor("No employee profile is available. Contact HR to check your account linkage.")
             compose.onNodeWithText("1996-02-29").assertDoesNotExist()
             compose.onNodeWithText("Engineering").assertDoesNotExist()
@@ -879,7 +892,7 @@ class AppFlowTest {
             waitFor("Choose a company")
             compose.onAllNodesWithText("Open company")[0].performClick()
             waitFor("Welcome")
-            openService("My profile")
+            openProfile()
             waitFor("Personal information")
             server.people.denied = true
             compose.onNodeWithContentDescription("Refresh").performClick()
@@ -900,7 +913,7 @@ class AppFlowTest {
             waitFor("Choose a company")
             compose.onAllNodesWithText("Open company")[0].performClick()
             waitFor("Welcome")
-            openService("My profile")
+            openProfile()
             waitFor("Personal information")
             kotlinx.coroutines.runBlocking { server.expireVerification() }
             compose.onNodeWithContentDescription("Refresh").performClick()
@@ -1045,12 +1058,9 @@ class AppFlowTest {
         }
     }
 
-    private fun openService(label: String) {
-        compose.onNodeWithText("All services").performScrollTo().performClick()
-        compose.waitUntil {
-            compose.onAllNodesWithContentDescription("Back").fetchSemanticsNodes().isNotEmpty()
-        }
-        compose.onNodeWithText(label).performScrollTo().performClick()
+    private fun openProfile() {
+        compose.onNode(hasText("Account") and isSelectable()).performClick()
+        compose.onNodeWithText("My profile").performScrollTo().performClick()
     }
 
     private fun signIn() {

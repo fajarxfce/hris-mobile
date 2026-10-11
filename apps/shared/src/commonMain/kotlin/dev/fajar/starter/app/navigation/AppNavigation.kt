@@ -144,12 +144,8 @@ fun AppNavigation(controller: NavHostController, incomingLinks: Flow<String>) {
                                 controller.navigate(AttendanceRoute) { launchSingleTop = true }
                             HomeService.Calendar ->
                                 controller.navigate(WorkCalendarRoute) { launchSingleTop = true }
-                            HomeService.Inbox ->
-                                controller.navigate(InboxRoute) { launchSingleTop = true }
                             HomeService.Profile ->
                                 controller.navigate(ProfileRoute) { launchSingleTop = true }
-                            HomeService.Employees ->
-                                controller.navigate(EmployeesRoute) { launchSingleTop = true }
                         }
                     }
                     homeRoutes(

@@ -132,7 +132,10 @@ does not depend on those feature modules. `LifecycleStartEffect` pairs entry wit
 including tab changes that do not stop the navigation entry's lifecycle. The
 attendance screen and Home share capture rendering and use cases, not ViewModel
 instances or subscriptions. Inbox and Employees also have separate standalone
-routes for the service catalog; their owners are distinct from the tab entries.
+routes with owners distinct from the tab entries. The service catalog contains
+business workflows; Inbox and Employees are reached through their tabs. Personal
+profile access belongs to Account and has its own admission, separate from menu
+visibility.
 
 The root navigation graph belongs to the session and workspace IDs. Logout, a
 replacement session, or a company change

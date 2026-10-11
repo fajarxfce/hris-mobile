@@ -57,7 +57,7 @@ fun HomeAccountPage(state: HomeState, onEvent: (HomeEvent) -> Unit) {
             }
         }
         AppCard(Modifier.fillMaxWidth(), padding = 4.dp) {
-            if (state.services.sections.any { HomeService.Profile in it.items })
+            if (HomeService.Profile in state.services.account)
                 AppListRow(
                     title = appString(AppString.MyProfile),
                     onClick = { onEvent(HomeEvent.ServiceSelected(HomeService.Profile)) },
