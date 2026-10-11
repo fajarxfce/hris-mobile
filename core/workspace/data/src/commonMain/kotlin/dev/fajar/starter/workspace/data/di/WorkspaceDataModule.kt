@@ -1,6 +1,7 @@
 package dev.fajar.starter.workspace.data.di
 
 import dev.fajar.starter.identity.domain.repositories.*
+import dev.fajar.starter.sync.domain.SyncTask
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
 import dev.fajar.starter.workspace.domain.usecases.*
 import org.koin.core.annotation.*
@@ -8,6 +9,13 @@ import org.koin.core.annotation.*
 @Module
 @ComponentScan("dev.fajar.starter.workspace.data")
 class WorkspaceDataModule {
+    @Single(binds = [RefreshWorkspace::class, SyncTask::class])
+    fun refresh(
+        sessions: SessionRepository,
+        accounts: AccountRepository,
+        workspaces: WorkspaceRepository,
+    ) = RefreshWorkspace(sessions, accounts, workspaces)
+
     @Factory
     fun select(
         sessions: SessionRepository,
@@ -19,5 +27,7 @@ class WorkspaceDataModule {
     fun observe(sessions: SessionRepository, workspaces: WorkspaceRepository) =
         ObserveWorkspace(sessions, workspaces)
 
-    @Factory fun leave(workspaces: WorkspaceRepository) = LeaveWorkspace(workspaces)
+    @Factory
+    fun leave(sessions: SessionRepository, workspaces: WorkspaceRepository) =
+        LeaveWorkspace(sessions, workspaces)
 }

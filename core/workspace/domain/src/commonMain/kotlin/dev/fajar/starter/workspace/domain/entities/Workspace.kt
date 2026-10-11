@@ -9,4 +9,7 @@ data class Workspace(
     val audience: String,
     val company: CompanyMembership,
     val permissions: Set<String>,
-)
+    val admission: WorkspaceAdmission,
+) {
+    override fun toString() = "Workspace([redacted])"
+}

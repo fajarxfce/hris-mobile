@@ -6,20 +6,122 @@ import androidx.lifecycle.ViewModelStore
 import dev.fajar.starter.app.navigation.*
 import dev.fajar.starter.common.config.AppEnvironment
 import dev.fajar.starter.common.result.AppResult
+import dev.fajar.starter.common.result.Failure
+import dev.fajar.starter.common.result.FailureKind
 import dev.fajar.starter.identity.domain.entities.*
+import dev.fajar.starter.identity.domain.repositories.AccountRepository
 import dev.fajar.starter.identity.domain.repositories.SessionRepository
 import dev.fajar.starter.identity.domain.usecases.ObserveSessionIdentity
 import dev.fajar.starter.onboarding.domain.repositories.OnboardingRepository
 import dev.fajar.starter.onboarding.domain.usecases.LoadOnboarding
 import dev.fajar.starter.workspace.domain.entities.Workspace
+import dev.fajar.starter.workspace.domain.entities.WorkspaceAdmission
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
 import dev.fajar.starter.workspace.domain.usecases.ObserveWorkspace
+import dev.fajar.starter.workspace.domain.usecases.RefreshWorkspace
 import kotlin.test.*
+import kotlin.time.Clock
+import kotlin.time.Duration.Companion.hours
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.*
+import kotlinx.coroutines.withContext
 
 class AppViewModelTest {
+    @Test
+    fun renewingTheLeaseDoesNotStartARefreshLoopAndStoppingCancelsPendingWork() = runTest {
+        Dispatchers.setMain(StandardTestDispatcher(testScheduler))
+        val owner = ViewModelStore()
+        val identity = TestSessions(testSession())
+        val selected = testWorkspace()
+        val workspaces = TestWorkspaces(selected)
+        var calls = 0
+        var release: CompletableDeferred<Unit>? = null
+        val accounts =
+            object : AccountRepository {
+                override suspend fun load(sessionId: String): AppResult<AccountSnapshot> {
+                    calls++
+                    release?.let { gate -> withContext(NonCancellable) { gate.await() } }
+                    return AppResult.Success(
+                        AccountSnapshot(
+                            testSession().user,
+                            listOf(selected.company),
+                            emptySet(),
+                            SessionAssurance(false, false, false, null, null),
+                            false,
+                        )
+                    )
+                }
+            }
+        try {
+            val vm = bootstrapViewModel(identity, workspaces, accounts)
+            owner.put("app", vm)
+            runCurrent()
+            assertEquals(0, calls)
+            vm.onEvent(AppEvent.ForegroundEntered)
+            runCurrent()
+            assertEquals(1, calls)
+            repeat(3) { runCurrent() }
+            assertEquals(1, calls)
+            val accepted = (vm.state.value.stage as AppStage.SignedIn).workspace
+            release = CompletableDeferred()
+            vm.onEvent(AppEvent.ForegroundLeft)
+            vm.onEvent(AppEvent.ForegroundEntered)
+            runCurrent()
+            assertEquals(2, calls)
+            vm.onEvent(AppEvent.ForegroundLeft)
+            runCurrent()
+            release.complete(Unit)
+            runCurrent()
+            assertEquals(accepted, (vm.state.value.stage as AppStage.SignedIn).workspace)
+            assertNull(vm.state.value.accessFailure)
+        } finally {
+            owner.clear()
+            release?.complete(Unit)
+            Dispatchers.resetMain()
+        }
+    }
+
+    @Test
+    fun failedRevocationStorageKeepsProtectedRoutesBlockedUntilRevalidationRecovers() = runTest {
+        Dispatchers.setMain(StandardTestDispatcher(testScheduler))
+        val owner = ViewModelStore()
+        val identity = TestSessions(testSession())
+        val selected = testWorkspace()
+        val workspaces = TestWorkspaces(selected)
+        val storage = Failure(FailureKind.Storage, "fixture", code = "fixture.storage")
+        workspaces.casFailure = storage
+        var failure = Failure(FailureKind.AccessDenied, "fixture", code = "company_access_denied")
+        val accounts =
+            object : AccountRepository {
+                override suspend fun load(sessionId: String): AppResult<AccountSnapshot> =
+                    AppResult.Failed(failure)
+            }
+        try {
+            val vm = bootstrapViewModel(identity, workspaces, accounts)
+            owner.put("app", vm)
+            runCurrent()
+            vm.onEvent(AppEvent.ForegroundEntered)
+            runCurrent()
+            assertEquals(storage, vm.state.value.accessFailure)
+            failure = Failure(FailureKind.Network, "offline")
+            vm.onEvent(AppEvent.BootstrapRequested)
+            runCurrent()
+            assertEquals(storage, vm.state.value.accessFailure)
+            workspaces.casFailure = null
+            failure = Failure(FailureKind.AccessDenied, "fixture", code = "company_access_denied")
+            vm.onEvent(AppEvent.BootstrapRequested)
+            runCurrent()
+            assertNull(vm.state.value.accessFailure)
+            assertNull((vm.state.value.stage as AppStage.SignedIn).workspace)
+        } finally {
+            owner.clear()
+            Dispatchers.resetMain()
+        }
+    }
+
     @Test
     fun pendingLinkSurvivesOnboardingAndLoginAndIgnoresAnOlderAcknowledgement() = runTest {
         Dispatchers.setMain(StandardTestDispatcher(testScheduler))
@@ -47,6 +149,15 @@ class AppViewModelTest {
                     ),
                     ResolveAppLink(AppEnvironment.Dev),
                     ObserveWorkspace(identity, TestWorkspaces()),
+                    RefreshWorkspace(
+                        identity,
+                        object : AccountRepository {
+                            override suspend fun load(
+                                sessionId: String
+                            ): AppResult<AccountSnapshot> = error("No workspace is selected.")
+                        },
+                        TestWorkspaces(),
+                    ),
                 )
             owner.put("app", vm)
             vm.onEvent(AppEvent.LinkReceived("hrismobile-dev://app/inbox"))
@@ -118,18 +229,60 @@ private fun testSession() =
             ),
     )
 
-private class TestWorkspaces : WorkspaceRepository {
-    private val selection = MutableStateFlow<AppResult<Workspace?>>(AppResult.Success(null))
+private class TestWorkspaces(initial: Workspace? = null) : WorkspaceRepository {
+    private val selection = MutableStateFlow<AppResult<Workspace?>>(AppResult.Success(initial))
+    var casFailure: Failure? = null
 
-    override fun observe() = selection
+    override fun observe(sessionId: String) = selection
 
-    override suspend fun current() = selection.value
+    override suspend fun current(sessionId: String) = selection.value
 
-    override suspend fun compareAndSet(expected: Workspace?, updated: Workspace?) =
-        AppResult.Success(
-            selection.compareAndSet(AppResult.Success(expected), AppResult.Success(updated))
-        )
+    override suspend fun compareAndSet(
+        sessionId: String,
+        expected: Workspace?,
+        updated: Workspace?,
+    ): AppResult<Boolean> =
+        casFailure?.let { AppResult.Failed(it) }
+            ?: AppResult.Success(
+                selection.compareAndSet(AppResult.Success(expected), AppResult.Success(updated))
+            )
 
     override suspend fun permissions(sessionId: String, companyId: String) =
         AppResult.Success(emptySet<String>())
 }
+
+private fun testWorkspace(): Workspace {
+    val session = testSession()
+    val now = Clock.System.now()
+    return Workspace(
+        "scope",
+        session.id,
+        session.binding.audience,
+        CompanyMembership("company", "Company", "CO", "Asia/Jakarta"),
+        emptySet(),
+        WorkspaceAdmission(session.user.id, session.binding.serverId, now, now + 1.hours),
+    )
+}
+
+private fun bootstrapViewModel(
+    identity: SessionRepository,
+    workspaces: WorkspaceRepository,
+    accounts: AccountRepository,
+) =
+    AppViewModel(
+        LoadOnboarding(
+            object : OnboardingRepository {
+                override suspend fun isComplete() = AppResult.Success(true)
+
+                override suspend fun complete() = AppResult.Success(Unit)
+            }
+        ),
+        ObserveSessionIdentity(identity),
+        dev.fajar.starter.identity.domain.usecases.RestoreSession(
+            identity,
+            IdentityServer("https://example.invalid/", "Fixture"),
+        ),
+        ResolveAppLink(AppEnvironment.Dev),
+        ObserveWorkspace(identity, workspaces),
+        RefreshWorkspace(identity, accounts, workspaces),
+    )

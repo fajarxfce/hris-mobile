@@ -44,6 +44,10 @@ enum class AppString(val english: StringResource, val indonesian: StringResource
     ),
     InboxAcknowledged(Res.string.inbox_acknowledged_en, Res.string.inbox_acknowledged_id),
     InboxCacheExpired(Res.string.inbox_cache_expired_en, Res.string.inbox_cache_expired_id),
+    WorkspaceAccessExpired(
+        Res.string.workspace_access_expired_en,
+        Res.string.workspace_access_expired_id,
+    ),
     ActiveSessions(Res.string.active_sessions_en, Res.string.active_sessions_id),
     NoActiveSessions(Res.string.no_active_sessions_en, Res.string.no_active_sessions_id),
     ThisDevice(Res.string.this_device_en, Res.string.this_device_id),

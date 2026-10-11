@@ -6,9 +6,12 @@ import dev.fajar.starter.common.result.*
 import dev.fajar.starter.identity.domain.entities.*
 import dev.fajar.starter.identity.domain.repositories.*
 import dev.fajar.starter.workspace.domain.entities.Workspace
+import dev.fajar.starter.workspace.domain.entities.WorkspaceAdmission
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
 import dev.fajar.starter.workspace.domain.usecases.*
 import kotlin.test.*
+import kotlin.time.Clock
+import kotlin.time.Duration.Companion.hours
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.test.*
@@ -67,11 +70,15 @@ class WorkspaceSelectionTest {
         }
         var requests = 0
 
-        override fun observe() = selected
+        override fun observe(sessionId: String) = selected
 
-        override suspend fun current() = selected.value
+        override suspend fun current(sessionId: String) = selected.value
 
-        override suspend fun compareAndSet(expected: Workspace?, updated: Workspace?) =
+        override suspend fun compareAndSet(
+            sessionId: String,
+            expected: Workspace?,
+            updated: Workspace?,
+        ) =
             AppResult.Success(
                 selected.compareAndSet(AppResult.Success(expected), AppResult.Success(updated))
             )
@@ -104,7 +111,7 @@ class WorkspaceSelectionTest {
             assertIs<AppResult.Failed>(select(session.id, "absent")).failure.code,
         )
         assertEquals(0, workspaces.requests)
-        assertEquals(AppResult.Success(null), workspaces.current())
+        assertEquals(AppResult.Success(null), workspaces.current(session.id))
     }
 
     @Test
@@ -124,7 +131,7 @@ class WorkspaceSelectionTest {
             "client.workspace_changed",
             assertIs<AppResult.Failed>(first.await()).failure.code,
         )
-        assertEquals(AppResult.Success(second), workspaces.current())
+        assertEquals(AppResult.Success(second), workspaces.current(session.id))
         val returned = assertIs<AppResult.Success<Workspace>>(select(session.id, "two")).value
         assertNotEquals(second.id, returned.id)
     }
@@ -147,7 +154,7 @@ class WorkspaceSelectionTest {
             release.complete(Unit)
             if (cancel) assertFailsWith<CancellationException> { pending.await() }
             else assertIs<AppResult.Failed>(pending.await())
-            assertEquals(AppResult.Success(null), workspaces.current())
+            assertEquals(AppResult.Success(null), workspaces.current(session.id))
         }
     }
 
@@ -157,7 +164,16 @@ class WorkspaceSelectionTest {
         val workspaces = Workspaces()
         val observe = ObserveWorkspace(sessions, workspaces)
         val selected =
-            Workspace("scope", session.id, session.binding.audience, companies.first(), emptySet())
+            Workspace(
+                "scope",
+                session.id,
+                session.binding.audience,
+                companies.first(),
+                emptySet(),
+                Clock.System.now().let {
+                    WorkspaceAdmission(session.user.id, session.binding.serverId, it, it + 1.hours)
+                },
+            )
         workspaces.selected.value = AppResult.Success(selected)
         assertEquals(AppResult.Success(selected), observe().first())
         sessions.compareAndSet(session, session.copy(id = "another-session"))

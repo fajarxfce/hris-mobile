@@ -6,13 +6,77 @@ import dev.fajar.starter.common.result.*
 import dev.fajar.starter.inbox.domain.entities.*
 import dev.fajar.starter.sync.domain.entities.*
 import kotlin.test.*
+import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Instant
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.test.*
 
 class InboxSynchronizationTest {
+    @Test
+    fun renewingWorkspaceAccessKeepsThePublishedGenerationAndContinuesFromItsCursor() = runTest {
+        val base = Instant.parse("2026-10-11T00:00:00Z")
+        val f = InboxFixture { base + testScheduler.currentTime.milliseconds }
+        assertIs<AppResult.Success<InboxSyncOutcome>>(f.sync(f.workspace.id))
+        val generation = f.checkpoint!!.generation
+        advanceTimeBy(30.minutes)
+        f.workspaceState.value =
+            AppResult.Success(
+                f.workspace.copy(
+                    admission =
+                        f.workspace.admission.copy(
+                            checkedAt = f.clock.now(),
+                            expiresAt = f.clock.now() + 1.hours,
+                        )
+                )
+            )
+        assertIs<AppResult.Success<InboxSyncOutcome>>(f.sync(f.workspace.id))
+        assertEquals(1, f.bootstrapCalls)
+        assertEquals(0, f.clearCalls)
+        assertEquals(generation, f.checkpoint!!.generation)
+        assertEquals(
+            listOf(f.item),
+            assertIs<AppResult.Success<InboxCachePage>>(f.snapshot.value).value.items,
+        )
+    }
+
+    @Test
+    fun workspaceExpiryHidesCachedContentEvenWhenTheReplicaHasALongerLifetime() = runTest {
+        val base = Instant.parse("2026-10-11T00:00:00Z")
+        val f = InboxFixture { base + testScheduler.currentTime.milliseconds }
+        assertIs<AppResult.Success<InboxSyncOutcome>>(f.sync(f.workspace.id))
+        f.workspaceState.value =
+            AppResult.Success(
+                f.workspace.copy(
+                    admission = f.workspace.admission.copy(expiresAt = base + 1000.milliseconds)
+                )
+            )
+        f.snapshot.value =
+            AppResult.Success(
+                InboxCachePage(
+                    f.checkpoint!!.copy(expiresAt = base + 2.hours),
+                    listOf(f.item),
+                    null,
+                )
+            )
+        val emissions = mutableListOf<AppResult<InboxCachePage>>()
+        val reader =
+            backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
+                f.observe(f.workspace.id, InboxCacheQuery.Page()).collect { emissions.add(it) }
+            }
+        assertIs<AppResult.Success<InboxCachePage>>(emissions.last())
+        advanceTimeBy(1001)
+        runCurrent()
+        assertEquals(
+            "client.workspace_expired",
+            assertIs<AppResult.Failed>(emissions.last()).failure.code,
+        )
+        assertEquals(0, f.clearCalls)
+        reader.cancelAndJoin()
+    }
+
     @Test
     fun lateAccessFailureAfterWorkspaceReplacementDoesNotClearAnotherOwnersCache() = runTest {
         val f = InboxFixture()

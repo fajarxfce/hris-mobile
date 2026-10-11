@@ -10,6 +10,7 @@ import dev.fajar.starter.inbox.domain.repositories.*
 import dev.fajar.starter.sync.domain.*
 import dev.fajar.starter.sync.domain.entities.*
 import dev.fajar.starter.sync.domain.repositories.SyncFeedRepository
+import dev.fajar.starter.workspace.domain.policies.workspaceFailure
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
 import kotlin.time.Clock
 import kotlin.time.Duration.Companion.seconds
@@ -37,8 +38,13 @@ class SyncInbox(
         }
 
     override suspend fun invoke(): SyncResult {
+        val session =
+            when (val result = sessions.current()) {
+                is AppResult.Failed -> return syncFailure(result.failure)
+                is AppResult.Success -> result.value ?: return SyncResult.Complete
+            }
         val workspace =
-            when (val result = workspaces.current()) {
+            when (val result = workspaces.current(session.id)) {
                 is AppResult.Failed -> return syncFailure(result.failure)
                 is AppResult.Success -> result.value ?: return SyncResult.Complete
             }
@@ -62,7 +68,7 @@ class SyncInbox(
             }
         if (
             checkpoint != null &&
-                (checkpoint.access != access || checkpoint.expiresAt <= clock.now())
+                (!sameInboxScope(checkpoint.access, access) || checkpoint.expiresAt <= clock.now())
         ) {
             val cleared = cache.clear(access)
             if (cleared is AppResult.Failed) return cleared
@@ -72,7 +78,8 @@ class SyncInbox(
         repeat(10) {
             val ownership = currentAccess(workspaceId)
             if (ownership is AppResult.Failed) return ownership
-            if ((ownership as AppResult.Success).value != access) return staleInboxScope()
+            if (!sameInboxScope((ownership as AppResult.Success).value, access))
+                return staleInboxScope()
             if (checkpoint == null) {
                 val initial = initialInboxCheckpoint(access, Uuid.random().toString(), clock.now())
                 when (val started = cache.begin(initial, null)) {
@@ -90,7 +97,8 @@ class SyncInbox(
             currentCoroutineContext().ensureActive()
             when (val current = currentAccess(workspaceId)) {
                 is AppResult.Failed -> return current
-                is AppResult.Success -> if (current.value != access) return staleInboxScope()
+                is AppResult.Success ->
+                    if (!sameInboxScope(current.value, access)) return staleInboxScope()
             }
             if (incoming is AppResult.Failed) {
                 if (incoming.failure.code in cursorResetCodes && !restarted) {
@@ -111,7 +119,8 @@ class SyncInbox(
             currentCoroutineContext().ensureActive()
             when (val current = currentAccess(workspaceId)) {
                 is AppResult.Failed -> return current
-                is AppResult.Success -> if (current.value != access) return staleInboxScope()
+                is AppResult.Success ->
+                    if (!sameInboxScope(current.value, access)) return staleInboxScope()
             }
             val entries =
                 when (hydrated) {
@@ -274,13 +283,18 @@ class SyncInbox(
     }
 
     private suspend fun currentAccess(workspaceId: String): AppResult<InboxAccess> {
-        val workspace =
-            when (val result = workspaces.current()) {
-                is AppResult.Failed -> return result
-                is AppResult.Success -> result.value
-            }
         val session =
             when (val result = sessions.current()) {
+                is AppResult.Failed -> return result
+                is AppResult.Success ->
+                    result.value
+                        ?: return workspaceFailure(
+                            "client.session_changed",
+                            FailureKind.Unauthorized,
+                        )
+            }
+        val workspace =
+            when (val result = workspaces.current(session.id)) {
                 is AppResult.Failed -> return result
                 is AppResult.Success -> result.value
             }

@@ -16,7 +16,7 @@ fun validateInboxCommandAccess(
     when (current) {
         is AppResult.Failed -> current
         is AppResult.Success ->
-            if (current.value == expected) AppResult.Success(Unit)
+            if (sameInboxScope(current.value, expected)) AppResult.Success(Unit)
             else inboxCommandFailure("client.inbox_scope_changed", FailureKind.AccessDenied)
     }
 

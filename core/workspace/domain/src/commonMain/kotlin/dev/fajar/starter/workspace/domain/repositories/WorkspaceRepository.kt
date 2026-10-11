@@ -5,11 +5,15 @@ import dev.fajar.starter.workspace.domain.entities.Workspace
 import kotlinx.coroutines.flow.Flow
 
 interface WorkspaceRepository {
-    fun observe(): Flow<AppResult<Workspace?>>
+    fun observe(sessionId: String): Flow<AppResult<Workspace?>>
 
-    suspend fun current(): AppResult<Workspace?>
+    suspend fun current(sessionId: String): AppResult<Workspace?>
 
-    suspend fun compareAndSet(expected: Workspace?, updated: Workspace?): AppResult<Boolean>
+    suspend fun compareAndSet(
+        sessionId: String,
+        expected: Workspace?,
+        updated: Workspace?,
+    ): AppResult<Boolean>
 
     suspend fun permissions(sessionId: String, companyId: String): AppResult<Set<String>>
 }

@@ -6,4 +6,10 @@ sealed interface AppEvent {
     data class LinkHandled(val link: dev.fajar.starter.app.navigation.AppLink) : AppEvent
 
     data object BootstrapRequested : AppEvent
+
+    data object ForegroundEntered : AppEvent
+
+    data object ForegroundLeft : AppEvent
+
+    data object WorkspaceRefreshRequested : AppEvent
 }

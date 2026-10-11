@@ -1,21 +1,30 @@
 # Validation
 
-The current inbox-command implementation passed these Linux checks:
+The workspace-admission and inbox implementation passed these Linux checks:
 
 ```sh
 xvfb-run -a ./gradlew :check \
+  :core:workspace:domain:wasmJsBrowserTest \
   :features:inbox:domain:wasmJsBrowserTest \
-  :features:inbox:data:wasmJsBrowserTest \
   :apps:android:assembleDevDebug
 ```
 
 The root check includes architecture validation for 52 modules, Kotlin formatting,
-static analysis and JVM tests. The assembled application passed 23 Compose UI
-tests. Inbox domain tests passed on JVM and in Chromium (28 each); inbox data
-passed 13 JVM and two browser tests. Tests cover scope replacement, expiry,
+static analysis and JVM tests. The assembled application passed 21 Compose UI
+tests, three application-MVI tests and one link-parser test. Workspace domain
+tests passed on JVM and in Chromium (12 each), with five SQLite/encryption tests.
+Inbox domain tests passed on JVM and in Chromium (30 each); inbox data
+passed 13 JVM tests. Its two browser transport tests passed in the preceding
+inbox-command run. Tests cover scope replacement, expiry,
 pending cancellation, late outcomes, finite replay, conflicts, encrypted command
 retention, response loss followed by login, and route disposal. Browser transport
 tests verify the serialized command and original idempotency key.
+
+Workspace-specific regressions cover lease renewal without a refresh loop or inbox
+reset, MFA/session deadlines, late outcomes, foreground cancellation, concurrent
+snapshot replacement and failed-revocation storage recovery. The shared atomic
+snapshot primitive passed JVM and actual Chromium storage checks in both HRIS
+Mobile and Compose Fluent Starter; both repository CI runs also passed.
 
 The earlier protected-credential checks passed eight JVM and thirteen browser
 tests, including concurrent record creation, reopening, tampering and cancellation.
@@ -45,9 +54,14 @@ and published dev announcement were used. Checks covered:
 - Explicit read, acknowledgement-prompt cancellation, an offline acknowledgement
   retained after force-stop/restart, and successful retry/reconciliation with the
   real backend. The completed message showed `Dikonfirmasi` without pending actions.
+- Force-stop/restart with the API connection still disabled, restoring the admitted
+  company and readable inbox without another company selection. Reconnection and
+  foreground revalidation retained the open detail.
+- Replacing that company, then restarting offline into its empty inbox without
+  exposing the first company's messages.
 
-The latest command APK was used for the last item; the preceding inbox APK was
-used for the baseline profile/language/theme observations. The proxy was stopped
+The workspace APK was used for offline startup and foreground revalidation;
+the preceding command/inbox APKs were used for the earlier observations. The proxy was stopped
 and the normal dev API connection restored afterward. No frame-time, heap or
 battery measurements were taken. Native MFA, external SSO, push delivery, and iOS
 device behavior still need their own physical checks.
@@ -58,6 +72,6 @@ Runtime composition uses the HRIS API, not the starter demo transport. Compose
 tests use wire-contract fixtures. The platform's separate PostgreSQL/API/worker
 integration covers native authentication, recipient isolation, command replay and
 withdrawal. Those checks complement device tests; none establishes production
-capacity. Web bearer credentials remain ephemeral, and offline workspace
-restoration is not yet implemented. Inherited starter notification/transfer
+capacity. Web bearer credentials remain ephemeral, so page-close workspace
+restoration is unavailable there. Inherited starter notification/transfer
 modules are not evidence that those HRIS workflows have been integrated.

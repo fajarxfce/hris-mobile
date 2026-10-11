@@ -6,6 +6,7 @@ import dev.fajar.starter.inbox.domain.policies.*
 import dev.fajar.starter.sync.domain.SyncResult
 import kotlin.test.*
 import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.minutes
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.test.*
@@ -363,7 +364,11 @@ class InboxCommandsTest {
     fun observedCommandsDisappearOnScopeReplacementAndSessionExpiry() = runTest {
         val start = kotlin.time.Instant.parse("2026-10-11T00:00:00Z")
         val fixture =
-            InboxCommandFixture(InboxFixture { start + testScheduler.currentTime.milliseconds })
+            InboxCommandFixture(
+                InboxFixture(sessionLifetime = 30.minutes) {
+                    start + testScheduler.currentTime.milliseconds
+                }
+            )
         fixture.queue()
         val results = mutableListOf<AppResult<InboxCommandRecord?>>()
         val observation =

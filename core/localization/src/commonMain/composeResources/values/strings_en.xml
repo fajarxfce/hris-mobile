@@ -195,6 +195,7 @@
     <string name="inbox_acknowledgement_required_en">Acknowledgement required</string>
     <string name="inbox_acknowledged_en">Acknowledged</string>
     <string name="inbox_cache_expired_en">Connect to refresh your inbox.</string>
+    <string name="workspace_access_expired_en">Connect and select a company again.</string>
     <string name="inbox_mark_read_en">Mark as read</string>
     <string name="inbox_read_en">Read</string>
     <string name="inbox_acknowledge_en">Acknowledge</string>

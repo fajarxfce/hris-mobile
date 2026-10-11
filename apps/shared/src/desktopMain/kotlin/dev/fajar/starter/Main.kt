@@ -50,6 +50,10 @@ fun main(args: Array<String>) {
                 else MemoryCredentialStore(),
             commandCredentials =
                 DesktopCredentialStore("hris-mobile.${environment.id}", "command-content-key"),
+            workspaceCredentials =
+                if (BuildRuntime.persistDesktopSession)
+                    DesktopCredentialStore("hris-mobile.${environment.id}", "workspace-content-key")
+                else MemoryCredentialStore(),
         )
     val workerScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
     startForegroundSync(container, workerScope)

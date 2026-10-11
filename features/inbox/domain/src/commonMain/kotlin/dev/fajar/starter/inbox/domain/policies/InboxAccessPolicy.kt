@@ -13,7 +13,7 @@ fun admitInbox(
     session: Session?,
     now: Instant,
 ): AppResult<InboxAccess> {
-    val ownership = validateWorkspaceOwnership(workspaceId, workspace, session)
+    val ownership = validateWorkspaceOwnership(workspaceId, workspace, session, now)
     if (ownership is AppResult.Failed) return ownership
     requireNotNull(workspace)
     requireNotNull(session)
@@ -37,6 +37,7 @@ fun admitInbox(
             workspace.company.id,
             workspace.permissions.toSet(),
             Instant.fromEpochMilliseconds(session.binding.expiresAtEpochMillis),
+            workspace.admission.expiresAt,
         )
     )
 }
@@ -47,8 +48,16 @@ fun validateInboxCache(
     now: Instant,
 ): AppResult<Unit> =
     when {
+        access.workspaceExpiresAt <= now ->
+            AppResult.Failed(
+                Failure(
+                    FailureKind.AccessDenied,
+                    "Select a company again.",
+                    code = "client.workspace_expired",
+                )
+            )
         checkpoint == null -> AppResult.Success(Unit)
-        checkpoint.access != access ->
+        !sameInboxScope(checkpoint.access, access) ->
             AppResult.Failed(
                 Failure(
                     FailureKind.AccessDenied,
@@ -56,7 +65,7 @@ fun validateInboxCache(
                     code = "client.inbox_scope_changed",
                 )
             )
-        checkpoint.expiresAt <= now ->
+        minOf(checkpoint.expiresAt, access.workspaceExpiresAt) <= now ->
             AppResult.Failed(
                 Failure(
                     FailureKind.AccessDenied,
@@ -66,3 +75,12 @@ fun validateInboxCache(
             )
         else -> AppResult.Success(Unit)
     }
+
+/** Renewing a lease does not change the resource scope or require another bootstrap. */
+fun sameInboxScope(first: InboxAccess, second: InboxAccess): Boolean =
+    first.sessionId == second.sessionId &&
+        first.accountId == second.accountId &&
+        first.audience == second.audience &&
+        first.companyId == second.companyId &&
+        first.permissions == second.permissions &&
+        first.sessionExpiresAt == second.sessionExpiresAt

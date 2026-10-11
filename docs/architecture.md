@@ -72,7 +72,10 @@ committing a successful session through the session repository. Refresh and MFA 
 one credential-mutation mutex. A company selection checks current identity and uses
 compare-and-set before publication. Late results cannot replace an accepted selection.
 Repositories do not own retries, scheduling, or UI loading state.
-Workers are platform application entry points that invoke feature `SyncTask` use cases.
+Workers are platform application entry points that invoke `SyncTask` use cases.
+The [workspace admission](workspace.md) use cases own offline eligibility and live
+revalidation. Its repository coordinates encrypted storage and raw remote access;
+foreground lifetime and the protected-route failure gate belong to application MVI.
 See [native identity](native-identity.md) for the active HRIS integration and
 [inbox](inbox.md) for the first encrypted HRIS feed integration and
 [sync](sync.md) for the inherited worker and command contracts.

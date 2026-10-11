@@ -10,12 +10,19 @@ import dev.fajar.starter.inbox.domain.usecases.*
 import dev.fajar.starter.sync.domain.entities.*
 import dev.fajar.starter.sync.domain.repositories.SyncFeedRepository
 import dev.fajar.starter.workspace.domain.entities.Workspace
+import dev.fajar.starter.workspace.domain.entities.WorkspaceAdmission
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
 import kotlin.time.Clock
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.days
+import kotlin.time.Duration.Companion.hours
 import kotlin.time.Instant
 import kotlinx.coroutines.flow.*
 
-class InboxFixture(now: () -> Instant = { Instant.parse("2026-10-11T00:00:00Z") }) {
+class InboxFixture(
+    sessionLifetime: Duration = 21.days,
+    now: () -> Instant = { Instant.parse("2026-10-11T00:00:00Z") },
+) {
     val clock =
         object : Clock {
             override fun now() = now()
@@ -28,7 +35,7 @@ class InboxFixture(now: () -> Instant = { Instant.parse("2026-10-11T00:00:00Z") 
             SessionBinding(
                 "family",
                 "https://example.test/",
-                Instant.parse("2026-11-01T00:00:00Z").toEpochMilliseconds(),
+                (clock.now() + sessionLifetime).toEpochMilliseconds(),
             ),
         )
     val workspace =
@@ -38,6 +45,15 @@ class InboxFixture(now: () -> Instant = { Instant.parse("2026-10-11T00:00:00Z") 
             session.binding.audience,
             CompanyMembership("company", "Company", "CO", "Asia/Jakarta"),
             setOf("announcements.read"),
+            WorkspaceAdmission(
+                session.user.id,
+                session.binding.serverId,
+                clock.now(),
+                minOf(
+                    clock.now() + 1.hours,
+                    Instant.fromEpochMilliseconds(session.binding.expiresAtEpochMillis),
+                ),
+            ),
         )
     val sessionState = MutableStateFlow<AppResult<Session?>>(AppResult.Success(session))
     val workspaceState = MutableStateFlow<AppResult<Workspace?>>(AppResult.Success(workspace))
@@ -113,11 +129,15 @@ class InboxFixture(now: () -> Instant = { Instant.parse("2026-10-11T00:00:00Z") 
         }
     val workspaces =
         object : WorkspaceRepository {
-            override fun observe() = workspaceState
+            override fun observe(sessionId: String) = workspaceState
 
-            override suspend fun current() = workspaceState.value
+            override suspend fun current(sessionId: String) = workspaceState.value
 
-            override suspend fun compareAndSet(expected: Workspace?, updated: Workspace?) =
+            override suspend fun compareAndSet(
+                sessionId: String,
+                expected: Workspace?,
+                updated: Workspace?,
+            ) =
                 AppResult.Success(
                     workspaceState.compareAndSet(
                         AppResult.Success(expected),

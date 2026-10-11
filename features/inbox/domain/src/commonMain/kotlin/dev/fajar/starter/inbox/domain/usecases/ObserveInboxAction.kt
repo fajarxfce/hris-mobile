@@ -19,17 +19,29 @@ class ObserveInboxAction(
 ) {
     @OptIn(ExperimentalCoroutinesApi::class)
     operator fun invoke(workspaceId: String, itemId: String): Flow<AppResult<InboxCommandRecord?>> =
-        combine(sessions.observe(), workspaces.observe()) { session, workspace ->
-                when {
-                    session is AppResult.Failed -> session
-                    workspace is AppResult.Failed -> workspace
-                    else ->
-                        admitInbox(
-                            workspaceId,
-                            (workspace as AppResult.Success).value,
-                            (session as AppResult.Success).value,
-                            clock.now(),
-                        )
+        sessions
+            .observe()
+            .flatMapLatest { result ->
+                when (result) {
+                    is AppResult.Failed -> flowOf(result)
+                    is AppResult.Success -> {
+                        val session = result.value
+                        if (session == null)
+                            flowOf(inboxCommandFailure("session_revoked", FailureKind.Unauthorized))
+                        else
+                            workspaces.observe(session.id).map { workspace ->
+                                when (workspace) {
+                                    is AppResult.Failed -> workspace
+                                    is AppResult.Success ->
+                                        admitInbox(
+                                            workspaceId,
+                                            workspace.value,
+                                            session,
+                                            clock.now(),
+                                        )
+                                }
+                            }
+                    }
                 }
             }
             .distinctUntilChanged()
@@ -39,13 +51,30 @@ class ObserveInboxAction(
                     is AppResult.Success ->
                         commands.observe(admitted.value, itemId).flatMapLatest { result ->
                             flow<AppResult<InboxCommandRecord?>> {
-                                val remaining = admitted.value.sessionExpiresAt - clock.now()
+                                val deadline =
+                                    minOf(
+                                        admitted.value.sessionExpiresAt,
+                                        admitted.value.workspaceExpiresAt,
+                                    )
+                                val remaining = deadline - clock.now()
                                 if (remaining.isPositive()) {
                                     emit(result)
                                     delay(remaining)
                                 }
                                 emit(
-                                    inboxCommandFailure("session_revoked", FailureKind.Unauthorized)
+                                    if (
+                                        admitted.value.sessionExpiresAt <=
+                                            admitted.value.workspaceExpiresAt
+                                    )
+                                        inboxCommandFailure(
+                                            "session_revoked",
+                                            FailureKind.Unauthorized,
+                                        )
+                                    else
+                                        inboxCommandFailure(
+                                            "client.workspace_expired",
+                                            FailureKind.AccessDenied,
+                                        )
                                 )
                             }
                         }

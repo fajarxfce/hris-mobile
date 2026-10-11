@@ -6,7 +6,10 @@ import dev.fajar.starter.identity.domain.repositories.SessionRepository
 import dev.fajar.starter.people.domain.entities.*
 import dev.fajar.starter.people.domain.repositories.PeopleRepository
 import dev.fajar.starter.workspace.domain.entities.Workspace
+import dev.fajar.starter.workspace.domain.entities.WorkspaceAdmission
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
+import kotlin.time.Clock
+import kotlin.time.Duration.Companion.hours
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.datetime.LocalDate
 
@@ -25,6 +28,9 @@ class PeopleFixture {
             session.binding.audience,
             CompanyMembership("company", "Company", "CO", "Asia/Jakarta"),
             setOf("people.self.read"),
+            Clock.System.now().let {
+                WorkspaceAdmission(session.user.id, session.binding.serverId, it, it + 1.hours)
+            },
         )
     val date = LocalDate(2026, 10, 1)
     val employee =
@@ -110,11 +116,15 @@ class PeopleFixture {
     class Workspaces(initial: Workspace) : WorkspaceRepository {
         val state = MutableStateFlow<AppResult<Workspace?>>(AppResult.Success(initial))
 
-        override fun observe() = state
+        override fun observe(sessionId: String) = state
 
-        override suspend fun current() = state.value
+        override suspend fun current(sessionId: String) = state.value
 
-        override suspend fun compareAndSet(expected: Workspace?, updated: Workspace?) =
+        override suspend fun compareAndSet(
+            sessionId: String,
+            expected: Workspace?,
+            updated: Workspace?,
+        ) =
             AppResult.Success(
                 state.compareAndSet(AppResult.Success(expected), AppResult.Success(updated))
             )

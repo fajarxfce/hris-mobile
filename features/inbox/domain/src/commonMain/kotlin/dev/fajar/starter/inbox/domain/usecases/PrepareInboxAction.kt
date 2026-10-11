@@ -7,6 +7,7 @@ import dev.fajar.starter.identity.domain.repositories.SessionRepository
 import dev.fajar.starter.inbox.domain.entities.*
 import dev.fajar.starter.inbox.domain.policies.*
 import dev.fajar.starter.inbox.domain.repositories.*
+import dev.fajar.starter.workspace.domain.policies.workspaceFailure
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
 import kotlin.time.Clock
 import kotlin.uuid.Uuid
@@ -108,13 +109,18 @@ class PrepareInboxAction(
     }
 
     private suspend fun currentAccess(workspaceId: String): AppResult<InboxAccess> {
-        val workspace =
-            when (val result = workspaces.current()) {
-                is AppResult.Failed -> return result
-                is AppResult.Success -> result.value
-            }
         val session =
             when (val result = sessions.current()) {
+                is AppResult.Failed -> return result
+                is AppResult.Success ->
+                    result.value
+                        ?: return workspaceFailure(
+                            "client.session_changed",
+                            FailureKind.Unauthorized,
+                        )
+            }
+        val workspace =
+            when (val result = workspaces.current(session.id)) {
                 is AppResult.Failed -> return result
                 is AppResult.Success -> result.value
             }

@@ -23,6 +23,7 @@ class EncryptedInboxCacheTest {
             "company",
             setOf("announcements.read"),
             now + 24.hours,
+            now + 1.hours,
         )
     private val initial =
         InboxCheckpoint(

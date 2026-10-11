@@ -195,6 +195,7 @@
     <string name="inbox_acknowledgement_required_id">Perlu konfirmasi</string>
     <string name="inbox_acknowledged_id">Dikonfirmasi</string>
     <string name="inbox_cache_expired_id">Hubungkan ke internet untuk memperbarui inbox.</string>
+    <string name="workspace_access_expired_id">Hubungkan ke internet dan pilih perusahaan kembali.</string>
     <string name="inbox_mark_read_id">Tandai dibaca</string>
     <string name="inbox_read_id">Sudah dibaca</string>
     <string name="inbox_acknowledge_id">Konfirmasi</string>

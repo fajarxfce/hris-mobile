@@ -37,10 +37,11 @@ use compare-and-set so a late request cannot overwrite another accepted choice.
 Every selection creates a new workspace ID, including a return to the same company.
 The root navigation graph changes with that ID and disposes the former route owners.
 
-Workspace observations filter mismatched account sessions and API audiences. Current
-selection is in memory and is checked again after startup. Encrypted company data,
-offline access policy, change feeds, and outbox integration are subsequent work;
-the selected-company record is not an offline authorization grant.
+The encrypted selection includes a bounded offline admission tied to the account,
+session family and API audience. Foreground entry rechecks live access; transport
+failure cannot renew admission. Workspace observation hides expired or mismatched
+records. See [company workspaces](workspace.md) for expiry, persistence and races,
+and [inbox](inbox.md) for encrypted content and durable employee actions.
 
 ## Active sessions and sign-out
 
@@ -84,11 +85,11 @@ Runtime composition uses platform HTTP engines.
 
 A local HRIS Platform instance was also exercised with native password sign-in,
 MFA enrollment/confirmation, and two fictional companies. This API probe is separate
-from app device validation; no physical HRIS device check has been completed yet.
+from the Android device checks recorded in [validation](validation.md).
 
 A separate disposable native family was issued against that local server to verify
 the pending-MFA directory, owned-family revocation (204), and rejection of both its
 access and refresh tokens afterward (401 `native_session_invalid`). Only the
-verification family was revoked. Workspace checks, nine native-session policy tests,
-three transport tests, nine application-flow tests, the Android dev build, and Wasm
-compilation passed. Browser deployment and physical-device acceptance remain separate.
+verification family was revoked. Workspace checks, native-session policy and
+transport tests, application-flow tests, the Android dev build, and Wasm compilation
+passed. Native MFA device acceptance and browser deployment remain separate.

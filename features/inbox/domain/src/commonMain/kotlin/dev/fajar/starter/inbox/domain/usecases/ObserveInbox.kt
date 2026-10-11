@@ -22,17 +22,29 @@ class ObserveInbox(
         workspaceId: String,
         query: InboxCacheQuery,
     ): Flow<AppResult<InboxCachePage>> =
-        combine(sessions.observe(), workspaces.observe()) { session, workspace ->
-                when {
-                    session is AppResult.Failed -> session
-                    workspace is AppResult.Failed -> workspace
-                    else ->
-                        admitInbox(
-                            workspaceId,
-                            (workspace as AppResult.Success).value,
-                            (session as AppResult.Success).value,
-                            clock.now(),
-                        )
+        sessions
+            .observe()
+            .flatMapLatest { result ->
+                when (result) {
+                    is AppResult.Failed -> flowOf(result)
+                    is AppResult.Success -> {
+                        val session = result.value
+                        if (session == null)
+                            flowOf(inboxCommandFailure("session_revoked", FailureKind.Unauthorized))
+                        else
+                            workspaces.observe(session.id).map { workspace ->
+                                when (workspace) {
+                                    is AppResult.Failed -> workspace
+                                    is AppResult.Success ->
+                                        admitInbox(
+                                            workspaceId,
+                                            workspace.value,
+                                            session,
+                                            clock.now(),
+                                        )
+                                }
+                            }
+                    }
                 }
             }
             .distinctUntilChanged()
@@ -58,22 +70,32 @@ class ObserveInbox(
                                     is AppResult.Failed -> emit(access)
                                     is AppResult.Success -> {
                                         emit(result)
-                                        page.checkpoint?.let {
-                                            delay(
-                                                (it.expiresAt - clock.now())
-                                                    .inWholeMilliseconds
-                                                    .coerceAtLeast(0)
+                                        val deadline =
+                                            minOf(
+                                                page.checkpoint?.expiresAt
+                                                    ?: admitted.value.workspaceExpiresAt,
+                                                admitted.value.workspaceExpiresAt,
                                             )
-                                            emit(
-                                                AppResult.Failed(
-                                                    Failure(
-                                                        FailureKind.AccessDenied,
-                                                        "Connect to refresh the inbox.",
-                                                        code = "client.inbox_cache_expired",
-                                                    )
+                                        delay(
+                                            (deadline - clock.now())
+                                                .inWholeMilliseconds
+                                                .coerceAtLeast(0)
+                                        )
+                                        emit(
+                                            AppResult.Failed(
+                                                Failure(
+                                                    FailureKind.AccessDenied,
+                                                    "Connect to refresh the inbox.",
+                                                    code =
+                                                        if (
+                                                            admitted.value.workspaceExpiresAt <=
+                                                                deadline
+                                                        )
+                                                            "client.workspace_expired"
+                                                        else "client.inbox_cache_expired",
                                                 )
                                             )
-                                        }
+                                        )
                                     }
                                 }
                             }

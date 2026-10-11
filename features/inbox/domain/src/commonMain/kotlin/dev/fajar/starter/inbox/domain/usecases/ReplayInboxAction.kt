@@ -6,6 +6,7 @@ import dev.fajar.starter.inbox.domain.entities.*
 import dev.fajar.starter.inbox.domain.policies.*
 import dev.fajar.starter.inbox.domain.repositories.*
 import dev.fajar.starter.sync.domain.*
+import dev.fajar.starter.workspace.domain.policies.workspaceFailure
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
 import kotlin.time.Clock
 import kotlin.time.Duration.Companion.seconds
@@ -53,8 +54,13 @@ class ReplayInboxAction(
         }
 
     private suspend fun deliverBatch(): SyncResult {
+        val session =
+            when (val result = sessions.current()) {
+                is AppResult.Failed -> return syncFailure(result.failure)
+                is AppResult.Success -> result.value ?: return SyncResult.Complete
+            }
         val workspace =
-            when (val result = workspaces.current()) {
+            when (val result = workspaces.current(session.id)) {
                 is AppResult.Failed -> return syncFailure(result.failure)
                 is AppResult.Success -> result.value ?: return SyncResult.Complete
             }
@@ -216,13 +222,18 @@ class ReplayInboxAction(
     }
 
     private suspend fun currentAccess(workspaceId: String): AppResult<InboxAccess> {
-        val workspace =
-            when (val result = workspaces.current()) {
-                is AppResult.Failed -> return result
-                is AppResult.Success -> result.value
-            }
         val session =
             when (val result = sessions.current()) {
+                is AppResult.Failed -> return result
+                is AppResult.Success ->
+                    result.value
+                        ?: return workspaceFailure(
+                            "client.session_changed",
+                            FailureKind.Unauthorized,
+                        )
+            }
+        val workspace =
+            when (val result = workspaces.current(session.id)) {
                 is AppResult.Failed -> return result
                 is AppResult.Success -> result.value
             }

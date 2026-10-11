@@ -15,7 +15,7 @@ fun initialInboxCheckpoint(access: InboxAccess, generation: String, now: Instant
         null,
         false,
         null,
-        minOf(access.sessionExpiresAt, now + 15.minutes),
+        minOf(access.sessionExpiresAt, access.workspaceExpiresAt, now + 15.minutes),
         null,
     )
 
@@ -33,7 +33,12 @@ internal fun advanceInboxCheckpoint(
         published = previous.published || caughtUp,
         refreshedAt = if (caughtUp) now else previous.refreshedAt,
         expiresAt =
-            if (caughtUp) minOf(previous.access.sessionExpiresAt, now + 1.hours)
+            if (caughtUp)
+                minOf(
+                    previous.access.sessionExpiresAt,
+                    previous.access.workspaceExpiresAt,
+                    now + 1.hours,
+                )
             else previous.expiresAt,
         pollAt = if (page.hasMore) null else now + page.pollAfterSeconds.seconds,
     )

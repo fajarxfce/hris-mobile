@@ -41,16 +41,16 @@ or server cursors. Android Keystore, Apple Keychain, and the configured desktop
 credential manager protect the separate content-key record.
 
 A caught-up snapshot can be displayed for at most one hour, bounded by the
-session-family expiry. Partial progress does not renew that interval. Observation
+session-family and selected-workspace expiry. Partial progress does not renew that interval. Observation
 hides the snapshot when its lease expires, without waiting for another database
 write. Company/account/permission replacement stops the prior observer. Detected
 server revocation clears the affected replica. Logout clears derived account
 data; this is not a secure-erasure or offline-revocation guarantee. Lease timing
 uses the device clock and is not tamper-resistant device attestation.
 
-The selected workspace currently lives in memory. Offline reading works within
-that authorized workspace; restoring company admission after process termination
-is not implemented. Browser keys are memory-only and do not survive page closure.
+The [selected workspace](workspace.md) and its bounded admission are encrypted and
+restored after process termination. Renewing an unchanged workspace does not reset
+the inbox generation or cursor. Browser keys are memory-only and do not survive page closure.
 The encryption adapter fails closed for a missing or mismatched key. It never
 silently generates a key for existing encrypted content.
 

@@ -1,5 +1,8 @@
 package dev.fajar.starter.workspace.data.dto
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class WorkspaceRecord(
     val id: String,
     val sessionId: String,
@@ -9,4 +12,10 @@ data class WorkspaceRecord(
     val companyCode: String,
     val timezone: String,
     val permissions: Set<String>,
-)
+    val accountId: String,
+    val familyId: String,
+    val checkedAt: String,
+    val expiresAt: String,
+) {
+    override fun toString() = "WorkspaceRecord([redacted])"
+}

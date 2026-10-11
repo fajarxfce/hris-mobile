@@ -10,6 +10,7 @@ data class InboxAccess(
     val companyId: String,
     val permissions: Set<String>,
     val sessionExpiresAt: Instant,
+    val workspaceExpiresAt: Instant,
 ) {
     override fun toString() = "InboxAccess([redacted])"
 }

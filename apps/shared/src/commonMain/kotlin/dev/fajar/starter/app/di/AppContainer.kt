@@ -64,6 +64,7 @@ fun createAppContainer(
     credentials: CredentialStore = MemoryCredentialStore(),
     inboxCredentials: CredentialStore = MemoryCredentialStore(),
     commandCredentials: AtomicCredentialStore = MemoryCredentialStore(),
+    workspaceCredentials: AtomicCredentialStore = MemoryCredentialStore(),
     remoteFeatureFlags: RemoteFeatureFlagSource = UnavailableFeatureFlagSource(),
     deviceAuthentication: DeviceAuthenticationSource = UnavailableDeviceAuthenticationSource(),
     browserAuthorization: BrowserAuthorizationSource = UnavailableBrowserAuthorizationSource(),
@@ -118,6 +119,8 @@ fun createAppContainer(
             single<CredentialStore>(named("inbox-content-key")) { inboxCredentials }
                 .onClose { it?.close() }
             single<AtomicCredentialStore>(named("command-content-key")) { commandCredentials }
+                .onClose { it?.close() }
+            single<AtomicCredentialStore>(named("workspace-content-key")) { workspaceCredentials }
                 .onClose { it?.close() }
             single<CommandStore> { get<AppDatabase>().commands }
             single<ContentCipher> { AesGcmContentCipher() }

@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleStartEffect
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
@@ -28,8 +29,12 @@ import org.koin.compose.viewmodel.koinViewModel
 fun AppNavigation(controller: NavHostController, incomingLinks: Flow<String>) {
     val viewModel = koinViewModel<AppViewModel>()
     val state by viewModel.state.collectAsStateWithLifecycle()
-    val stage = state.stage
+    val stage = state.accessFailure?.let { AppStage.Failed(it) } ?: state.stage
     val lifecycle = LocalLifecycleOwner.current.lifecycle
+    LifecycleStartEffect(viewModel) {
+        viewModel.onEvent(AppEvent.ForegroundEntered)
+        onStopOrDispose { viewModel.onEvent(AppEvent.ForegroundLeft) }
+    }
     LaunchedEffect(incomingLinks, lifecycle) {
         lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
             incomingLinks.collect { viewModel.onEvent(AppEvent.LinkReceived(it)) }

@@ -5,7 +5,9 @@ import dev.fajar.starter.identity.domain.repositories.SessionRepository
 import dev.fajar.starter.people.domain.entities.EmploymentProfile
 import dev.fajar.starter.people.domain.repositories.PeopleRepository
 import dev.fajar.starter.workspace.domain.policies.validateWorkspaceOwnership
+import dev.fajar.starter.workspace.domain.policies.workspaceFailure
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
+import kotlin.time.Clock
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 import kotlinx.datetime.LocalDate
@@ -14,23 +16,29 @@ class LoadEmploymentProfile(
     private val people: PeopleRepository,
     private val sessions: SessionRepository,
     private val workspaces: WorkspaceRepository,
+    private val clock: Clock = Clock.System,
 ) {
     suspend operator fun invoke(
         workspaceId: String,
         employeeId: String,
         asOf: LocalDate,
     ): AppResult<EmploymentProfile> {
-        val workspace =
-            when (val result = workspaces.current()) {
-                is AppResult.Failed -> return result
-                is AppResult.Success -> result.value
-            }
         val session =
             when (val result = sessions.current()) {
                 is AppResult.Failed -> return result
+                is AppResult.Success ->
+                    result.value
+                        ?: return workspaceFailure(
+                            "client.session_changed",
+                            FailureKind.Unauthorized,
+                        )
+            }
+        val workspace =
+            when (val result = workspaces.current(session.id)) {
+                is AppResult.Failed -> return result
                 is AppResult.Success -> result.value
             }
-        val admission = validateWorkspaceOwnership(workspaceId, workspace, session)
+        val admission = validateWorkspaceOwnership(workspaceId, workspace, session, clock.now())
         if (admission is AppResult.Failed) return admission
         requireNotNull(workspace)
         requireNotNull(session)
@@ -57,7 +65,7 @@ class LoadEmploymentProfile(
             }
         currentCoroutineContext().ensureActive()
         val currentWorkspace =
-            when (val result = workspaces.current()) {
+            when (val result = workspaces.current(session.id)) {
                 is AppResult.Failed -> return result
                 is AppResult.Success -> result.value
             }
@@ -66,7 +74,8 @@ class LoadEmploymentProfile(
                 is AppResult.Failed -> return result
                 is AppResult.Success -> result.value
             }
-        val ownership = validateWorkspaceOwnership(workspaceId, currentWorkspace, currentSession)
+        val ownership =
+            validateWorkspaceOwnership(workspaceId, currentWorkspace, currentSession, clock.now())
         if (ownership is AppResult.Failed) return ownership
         if (person.accountId != session.user.id || person.personId != details.employee.personId)
             return AppResult.Failed(

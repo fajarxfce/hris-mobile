@@ -25,6 +25,7 @@ class EncryptedInboxCommandTest {
             "20000000-0000-4000-8000-000000000001",
             setOf("announcements.read"),
             now + 24.hours,
+            now + 1.hours,
         )
     private val command =
         InboxCommand(
