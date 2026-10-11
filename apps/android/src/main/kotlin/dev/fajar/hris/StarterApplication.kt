@@ -11,6 +11,7 @@ import dev.fajar.starter.database.createAppDatabase
 import dev.fajar.starter.datastore.createUserPreferences
 import dev.fajar.starter.featureflags.data.datasources.AndroidFeatureFlagSource
 import dev.fajar.starter.identity.data.sso.datasources.AndroidBrowserAuthorizationSource
+import dev.fajar.starter.location.data.datasources.AndroidLocationDataSource
 import dev.fajar.starter.observability.*
 import dev.fajar.starter.securestorage.AndroidCredentialStore
 import dev.fajar.starter.security.data.lock.datasources.AndroidDeviceAuthenticationSource
@@ -44,10 +45,12 @@ class StarterApplication : Application(), Configuration.Provider {
             deviceAuthentication = deviceAuthentication,
             browserAuthorization = browserAuthorization,
             platform = AppPlatform.Android,
+            location = location,
         )
     }
 
     val browserAuthorization by lazy { AndroidBrowserAuthorizationSource(this) }
+    val location by lazy { AndroidLocationDataSource(this) }
 
     val deviceAuthentication by lazy { AndroidDeviceAuthenticationSource(this) }
 

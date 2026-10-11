@@ -22,6 +22,7 @@ class MainActivity : FragmentActivity() {
         container.koin.get<AndroidNotificationPermissionSource>().attach(this)
         app.deviceAuthentication.attach(this)
         app.browserAuthorization.attach(this)
+        app.location.attach(this)
         if (savedInstanceState == null)
             (intent.dataString
                     ?: intent.getStringExtra("destination")?.let {
@@ -50,6 +51,7 @@ class MainActivity : FragmentActivity() {
             .detach(this)
         (application as StarterApplication).deviceAuthentication.detach(this)
         (application as StarterApplication).browserAuthorization.detach(this)
+        (application as StarterApplication).location.detach(this)
         super.onDestroy()
     }
 }

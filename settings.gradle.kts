@@ -68,6 +68,8 @@ include(
     ":core:featureflags:domain",
     ":core:featureflags:data",
     ":core:notifications:domain",
+    ":core:location:domain",
+    ":core:location:data",
     ":core:notifications:data",
     ":core:designsystem",
     ":core:identity:domain",

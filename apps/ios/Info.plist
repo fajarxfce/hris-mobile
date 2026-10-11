@@ -3,6 +3,7 @@
 <plist version="1.0">
 <dict>
     <key>NSFaceIDUsageDescription</key><string>Use Face ID to unlock the app.</string>
+    <key>NSLocationWhenInUseUsageDescription</key><string>Record your location when you clock in or out.</string>
     <key>FirebaseCrashlyticsCollectionEnabled</key><false/>
     <key>firebase_performance_collection_enabled</key><false/>
     <key>firebase_performance_instrumentation_enabled</key><false/>
