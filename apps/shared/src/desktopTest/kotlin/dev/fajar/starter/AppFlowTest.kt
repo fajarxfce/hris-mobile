@@ -32,11 +32,13 @@ import kotlinx.coroutines.CompletableDeferred
 import org.jetbrains.skia.Image
 import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.TestName
 import org.koin.core.module.Module
 import org.koin.dsl.module
 
 class AppFlowTest {
     @get:Rule val compose = createComposeRule()
+    @get:Rule val testName = TestName()
 
     @Test
     fun homeAttendanceStopsPendingWorkWhenTheTabLeavesAndHandlesLocationFailureInPlace() {
@@ -804,6 +806,12 @@ class AppFlowTest {
                 server.unexpectedPaths.isEmpty(),
                 "Unexpected endpoints: ${server.unexpectedPaths}",
             )
+        } catch (failure: Throwable) {
+            runCatching {
+                capture("failure-${testName.methodName}")
+                println(compose.onRoot().printToString())
+            }
+            throw failure
         } finally {
             compose.runOnIdle { visible.value = false }
             compose.waitForIdle()
