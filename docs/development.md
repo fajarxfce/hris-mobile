@@ -111,6 +111,11 @@ APK on a phone, replace `<phone-serial>` with its actual serial:
 python3 tool/run_android.py <phone-serial> --skip-build --install-only
 ```
 
+The default dev API uses the device's loopback address. WireGuard provides device
+reachability but does not recreate ADB forwarding. After restarting or reconnecting
+ADB, restore `adb -s <phone-serial> reverse tcp:8088 tcp:8088` before opening this
+dev build. Deployed builds use their configured HTTPS origin.
+
 Stop an emulator when it is no longer needed with
 `adb -s emulator-5560 emu kill`; its app data is retained. Never use `-wipe-data`
 for an ordinary restart. Emulator checks cover UI, lifecycle and API integration;

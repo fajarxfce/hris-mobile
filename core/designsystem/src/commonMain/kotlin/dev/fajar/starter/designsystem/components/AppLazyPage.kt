@@ -18,6 +18,7 @@ fun AppLazyPage(
     modifier: Modifier = Modifier,
     state: LazyListState = rememberLazyListState(),
     spacing: Dp = 24.dp,
+    contentPadding: PaddingValues = PaddingValues(24.dp),
     content: LazyListScope.() -> Unit,
 ) {
     Box(
@@ -30,7 +31,7 @@ fun AppLazyPage(
         LazyColumn(
             state = state,
             modifier = Modifier.widthIn(max = 960.dp).fillMaxSize(),
-            contentPadding = PaddingValues(24.dp),
+            contentPadding = contentPadding,
             verticalArrangement = Arrangement.spacedBy(spacing),
             content = content,
         )

@@ -14,30 +14,32 @@ import dev.fajar.starter.inbox.presentation.list.widgets.InboxRow
 import dev.fajar.starter.localization.*
 import io.github.composefluent.icons.Icons
 import io.github.composefluent.icons.regular.ArrowLeft
+import io.github.composefluent.icons.regular.ArrowSync
 
 @Composable
 fun InboxPage(state: InboxState, listState: LazyListState, onEvent: (InboxEvent) -> Unit) {
     val failure = state.failure
-    AppLazyPage(state = listState, spacing = 8.dp) {
+    AppLazyPage(state = listState, spacing = 8.dp, contentPadding = PaddingValues(20.dp)) {
         item(key = "heading") {
-            Row(
-                Modifier.padding(bottom = 12.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-            ) {
-                AppIconButton(
-                    Icons.Regular.ArrowLeft,
-                    appString(AppString.Back),
-                    { onEvent(InboxEvent.BackRequested) },
-                )
-                AppHeading(appString(AppString.Inbox), Modifier.weight(1f))
-                AppButton(
-                    appString(if (state.syncing) AppString.Loading else AppString.Refresh),
-                    { onEvent(InboxEvent.RefreshRequested) },
-                    enabled = !state.syncing,
-                    primary = false,
-                )
-            }
+            AppScreenHeader(
+                title = appString(AppString.Inbox),
+                modifier = Modifier.padding(bottom = 12.dp),
+                navigation = {
+                    AppIconButton(
+                        Icons.Regular.ArrowLeft,
+                        appString(AppString.Back),
+                        { onEvent(InboxEvent.BackRequested) },
+                    )
+                },
+                actions = {
+                    AppIconButton(
+                        Icons.Regular.ArrowSync,
+                        appString(AppString.Refresh),
+                        { onEvent(InboxEvent.RefreshRequested) },
+                        enabled = !state.syncing,
+                    )
+                },
+            )
         }
         if (!state.hasSnapshot && (state.syncing || state.loading))
             item(key = "progress") { AppLoading() }

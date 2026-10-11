@@ -12,6 +12,7 @@ import dev.fajar.starter.designsystem.theme.AppColors
 import dev.fajar.starter.localization.*
 import dev.fajar.starter.workforce.presentation.calendar.*
 import dev.fajar.starter.workforce.presentation.calendar.widgets.CalendarDayCard
+import io.github.composefluent.FluentTheme
 import io.github.composefluent.icons.Icons
 import io.github.composefluent.icons.regular.ArrowLeft
 import io.github.composefluent.icons.regular.ArrowRight
@@ -23,25 +24,26 @@ fun WorkCalendarPage(
     list: LazyListState,
     onEvent: (WorkCalendarEvent) -> Unit,
 ) {
-    AppLazyPage(state = list) {
+    AppLazyPage(state = list, spacing = 12.dp, contentPadding = PaddingValues(20.dp)) {
         item(key = "heading") {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-            ) {
-                AppIconButton(
-                    Icons.Regular.ArrowLeft,
-                    appString(AppString.Back),
-                    { onEvent(WorkCalendarEvent.BackRequested) },
-                )
-                AppHeading(appString(AppString.WorkCalendar), Modifier.weight(1f))
-                AppIconButton(
-                    Icons.Regular.ArrowSync,
-                    appString(AppString.Refresh),
-                    { onEvent(WorkCalendarEvent.RefreshRequested) },
-                    enabled = !state.refreshing,
-                )
-            }
+            AppScreenHeader(
+                title = appString(AppString.WorkCalendar),
+                navigation = {
+                    AppIconButton(
+                        Icons.Regular.ArrowLeft,
+                        appString(AppString.Back),
+                        { onEvent(WorkCalendarEvent.BackRequested) },
+                    )
+                },
+                actions = {
+                    AppIconButton(
+                        Icons.Regular.ArrowSync,
+                        appString(AppString.Refresh),
+                        { onEvent(WorkCalendarEvent.RefreshRequested) },
+                        enabled = !state.refreshing,
+                    )
+                },
+            )
         }
         if (state.loading || state.refreshing) item(key = "loading") { AppLoading() }
         val failure = state.refreshFailure ?: state.cacheFailure
@@ -103,13 +105,6 @@ fun WorkCalendarPage(
                             enabled = content.nextWeek != null,
                         )
                     }
-                    AppText(
-                        appString(
-                            AppString.CalendarSaved,
-                            formatDate(snapshot.fetchedAt.toEpochMilliseconds(), appLanguageTag()),
-                        ),
-                        color = AppColors.muted,
-                    )
                 }
             }
             if (snapshot.directory.items.isEmpty())
@@ -161,6 +156,16 @@ fun WorkCalendarPage(
                 }
             items(snapshot.calendar?.days.orEmpty(), key = { "day/${it.date}" }) { day ->
                 CalendarDayCard(day, day.date == snapshot.directory.asOf)
+            }
+            item(key = "saved") {
+                AppText(
+                    appString(
+                        AppString.CalendarSaved,
+                        formatDate(snapshot.fetchedAt.toEpochMilliseconds(), appLanguageTag()),
+                    ),
+                    color = AppColors.muted,
+                    style = FluentTheme.typography.caption,
+                )
             }
         } else if (!state.loading && !state.refreshing && failure == null)
             item(key = "empty") { AppText(appString(AppString.CalendarNoSaved)) }

@@ -1,4 +1,8 @@
 <resources>
+    <string name="my_work_id">Pekerjaan saya</string>
+    <string name="calendar_summary_id">Shift dan hari libur</string>
+    <string name="inbox_summary_id">Informasi dan pemberitahuan perusahaan</string>
+    <string name="profile_summary_id">Data pribadi dan kepegawaian</string>
     <string name="calendar_no_employment_id">Data karyawan belum terhubung ke akun ini.</string>
     <string name="work_calendar_id">Jadwal kerja</string>
     <string name="calendar_today_id">Hari ini</string>

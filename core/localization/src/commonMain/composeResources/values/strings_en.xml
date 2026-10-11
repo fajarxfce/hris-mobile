@@ -1,4 +1,8 @@
 <resources>
+    <string name="my_work_en">My work</string>
+    <string name="calendar_summary_en">Shifts and days off</string>
+    <string name="inbox_summary_en">Company updates and requests</string>
+    <string name="profile_summary_en">Personal details and employment</string>
     <string name="calendar_no_employment_en">Employment is not linked to this account.</string>
     <string name="work_calendar_en">Work calendar</string>
     <string name="calendar_today_en">Today</string>

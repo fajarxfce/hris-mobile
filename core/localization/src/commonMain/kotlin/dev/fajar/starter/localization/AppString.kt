@@ -5,6 +5,10 @@ import org.jetbrains.compose.resources.StringResource
 
 /** Explicit pairs keep runtime language changes portable across Android, iOS, desktop and Web. */
 enum class AppString(val english: StringResource, val indonesian: StringResource) {
+    MyWork(Res.string.my_work_en, Res.string.my_work_id),
+    CalendarSummary(Res.string.calendar_summary_en, Res.string.calendar_summary_id),
+    InboxSummary(Res.string.inbox_summary_en, Res.string.inbox_summary_id),
+    ProfileSummary(Res.string.profile_summary_en, Res.string.profile_summary_id),
     WorkCalendar(Res.string.work_calendar_en, Res.string.work_calendar_id),
     CalendarNoEmployment(
         Res.string.calendar_no_employment_en,

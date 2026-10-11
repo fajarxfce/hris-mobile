@@ -14,7 +14,11 @@ import io.github.composefluent.FluentTheme
 
 @Composable
 fun CalendarDayCard(day: WorkDay, today: Boolean) {
-    AppCard(Modifier.fillMaxWidth(), padding = 16.dp) {
+    AppCard(
+        Modifier.fillMaxWidth(),
+        padding = 16.dp,
+        color = if (today) AppColors.tint else AppColors.surface,
+    ) {
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -30,28 +34,32 @@ fun CalendarDayCard(day: WorkDay, today: Boolean) {
             when (day) {
                 is WorkDay.Work -> {
                     AppHeading(day.shift.name, style = FluentTheme.typography.bodyStrong)
-                    AppText(calendarTimeRange(day))
+                    AppText(calendarTimeRange(day), style = FluentTheme.typography.subtitle)
                     FlowRow(
                         horizontalArrangement = Arrangement.spacedBy(12.dp),
                         verticalArrangement = Arrangement.spacedBy(4.dp),
                     ) {
-                        AppText(calendarDuration(day.plannedMinutes), color = AppColors.muted)
+                        AppText(
+                            calendarDuration(day.plannedMinutes),
+                            color = AppColors.muted,
+                            style = FluentTheme.typography.caption,
+                        )
                         AppText(
                             appString(
                                 AppString.CalendarBreak,
                                 formatNumber(day.shift.breakMinutes.toLong(), appLanguageTag()),
                             ),
                             color = AppColors.muted,
+                            style = FluentTheme.typography.caption,
                         )
-                        AppText(calendarWorkMode(day.shift.mode), color = AppColors.muted)
+                        AppText(
+                            calendarWorkMode(day.shift.mode),
+                            color = AppColors.muted,
+                            style = FluentTheme.typography.caption,
+                        )
                     }
                     AppText(
-                        calendarOrigin(day.origin),
-                        color = AppColors.muted,
-                        style = FluentTheme.typography.caption,
-                    )
-                    AppText(
-                        appString(AppString.CalendarTimezone, day.shift.timezone),
+                        calendarOrigin(day.origin) + " · " + day.shift.timezone,
                         color = AppColors.muted,
                         style = FluentTheme.typography.caption,
                     )

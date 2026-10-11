@@ -39,3 +39,9 @@ Date-only formatting and its English/Indonesian timezone regression also exist a
 HRIS calendar policy, encrypted snapshots and Web IANA timezone initialization
 remain in this application. Apple compilation is checked by platform CI; physical
 iOS acceptance is separate.
+
+Compact screen headers, single-action tiles, page spacing and their large-text/
+keyboard regression also exist at
+[`8b8d625`](https://github.com/fajarxfce/compose-fluent-starter/commit/8b8d625).
+Both repositories passed root checks and Android/Web builds. Employee navigation,
+company information, inbox and calendar layout changes remain in HRIS Mobile.

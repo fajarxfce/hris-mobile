@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import dev.fajar.starter.designsystem.components.*
 import dev.fajar.starter.designsystem.theme.AppColors
 import dev.fajar.starter.home.presentation.home.*
@@ -39,91 +38,8 @@ fun HomePage(state: HomeState, onEvent: (HomeEvent) -> Unit) {
         ) {
             AppTabContent(state.tab, stateKey = { it.name }) { tab ->
                 when (tab) {
-                    HomeTab.Home ->
-                        AppPage {
-                            AppBrand()
-                            AppHeading(state.workspace.company.name)
-                            AppText(appString(AppString.CompanyWorkspace), color = AppColors.muted)
-                            AppCard(Modifier.fillMaxWidth()) {
-                                Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                                    AppHeading(state.user?.name.orEmpty())
-                                    AppText(state.user?.email.orEmpty(), color = AppColors.muted)
-                                }
-                            }
-                            if (state.canOpenProfile)
-                                AppButton(
-                                    appString(AppString.MyProfile),
-                                    { onEvent(HomeEvent.ProfileRequested) },
-                                    Modifier.fillMaxWidth(),
-                                    primary = false,
-                                )
-                            AppButton(
-                                appString(AppString.ChangeCompany),
-                                { onEvent(HomeEvent.CompanyChangeRequested) },
-                                primary = false,
-                                enabled = !state.working,
-                            )
-                            if (state.canOpenInbox)
-                                AppButton(
-                                    appString(AppString.Inbox),
-                                    { onEvent(HomeEvent.InboxRequested) },
-                                    Modifier.fillMaxWidth(),
-                                    primary = false,
-                                )
-                            if (state.canOpenCalendar)
-                                AppButton(
-                                    appString(AppString.WorkCalendar),
-                                    { onEvent(HomeEvent.CalendarRequested) },
-                                    Modifier.fillMaxWidth(),
-                                    primary = false,
-                                )
-                            if (state.failure != null) AppFeedback(failureText(state.failure))
-                        }
-                    HomeTab.Account ->
-                        AppPage {
-                            AppHeading(appString(AppString.Account))
-                            AppCard(Modifier.fillMaxWidth()) {
-                                Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                                    AppHeading(state.user?.name.orEmpty())
-                                    AppText(state.user?.email.orEmpty(), color = AppColors.muted)
-                                    AppText(state.workspace.company.name)
-                                }
-                            }
-                            if (state.canOpenProfile)
-                                AppButton(
-                                    appString(AppString.MyProfile),
-                                    { onEvent(HomeEvent.ProfileRequested) },
-                                    Modifier.fillMaxWidth(),
-                                    primary = false,
-                                )
-                            AppButton(
-                                appString(AppString.Settings),
-                                { onEvent(HomeEvent.SettingsRequested) },
-                                Modifier.fillMaxWidth(),
-                                primary = false,
-                            )
-                            AppButton(
-                                appString(AppString.ActiveSessions),
-                                { onEvent(HomeEvent.SessionsRequested) },
-                                Modifier.fillMaxWidth(),
-                                primary = false,
-                            )
-                            AppButton(
-                                appString(AppString.ChangeCompany),
-                                { onEvent(HomeEvent.CompanyChangeRequested) },
-                                Modifier.fillMaxWidth(),
-                                primary = false,
-                                enabled = !state.working,
-                            )
-                            AppButton(
-                                appString(AppString.SignOut),
-                                { onEvent(HomeEvent.SignOutRequested) },
-                                Modifier.fillMaxWidth(),
-                                primary = false,
-                                loading = state.working,
-                            )
-                            if (state.failure != null) AppFeedback(failureText(state.failure))
-                        }
+                    HomeTab.Home -> HomeOverview(state, onEvent)
+                    HomeTab.Account -> HomeAccountPage(state, onEvent)
                 }
             }
         }

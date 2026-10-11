@@ -15,6 +15,8 @@ import dev.fajar.starter.designsystem.theme.AppColors
 fun AppPage(
     modifier: Modifier = Modifier,
     maxWidth: Dp = 960.dp,
+    contentPadding: PaddingValues = PaddingValues(24.dp),
+    spacing: Dp = 24.dp,
     content: @Composable ColumnScope.() -> Unit,
 ) {
     Box(
@@ -28,8 +30,8 @@ fun AppPage(
             Modifier.widthIn(max = maxWidth)
                 .fillMaxWidth()
                 .verticalScroll(rememberScrollState())
-                .padding(24.dp),
-            verticalArrangement = Arrangement.spacedBy(24.dp),
+                .padding(contentPadding),
+            verticalArrangement = Arrangement.spacedBy(spacing),
             content = content,
         )
     }

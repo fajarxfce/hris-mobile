@@ -3,39 +3,40 @@ package dev.fajar.starter.inbox.presentation.detail.pages
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import dev.fajar.starter.designsystem.components.*
 import dev.fajar.starter.designsystem.theme.AppColors
 import dev.fajar.starter.inbox.presentation.detail.*
 import dev.fajar.starter.inbox.presentation.detail.widgets.InboxActions
 import dev.fajar.starter.localization.*
+import io.github.composefluent.FluentTheme
 import io.github.composefluent.icons.Icons
 import io.github.composefluent.icons.regular.ArrowLeft
+import io.github.composefluent.icons.regular.ArrowSync
 
 @Composable
 fun InboxItemPage(state: InboxItemState, onEvent: (InboxItemEvent) -> Unit) {
     val failure = state.failure
-    AppLazyPage {
+    AppLazyPage(contentPadding = PaddingValues(20.dp), spacing = 20.dp) {
         item(key = "heading") {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-            ) {
-                AppIconButton(
-                    Icons.Regular.ArrowLeft,
-                    appString(AppString.Back),
-                    { onEvent(InboxItemEvent.BackRequested) },
-                )
-                AppText(appString(AppString.Inbox), Modifier.weight(1f), color = AppColors.muted)
-                AppButton(
-                    appString(if (state.syncing) AppString.Loading else AppString.Refresh),
-                    { onEvent(InboxItemEvent.RefreshRequested) },
-                    enabled = !state.syncing && !state.working,
-                    primary = false,
-                )
-            }
+            AppScreenHeader(
+                title = appString(AppString.Inbox),
+                navigation = {
+                    AppIconButton(
+                        Icons.Regular.ArrowLeft,
+                        appString(AppString.Back),
+                        { onEvent(InboxItemEvent.BackRequested) },
+                    )
+                },
+                actions = {
+                    AppIconButton(
+                        Icons.Regular.ArrowSync,
+                        appString(AppString.Refresh),
+                        { onEvent(InboxItemEvent.RefreshRequested) },
+                        enabled = !state.syncing && !state.working,
+                    )
+                },
+            )
         }
         if (!state.hasSnapshot && (state.syncing || state.loading))
             item(key = "loading") { AppLoading() }
@@ -57,7 +58,7 @@ fun InboxItemPage(state: InboxItemState, onEvent: (InboxItemEvent) -> Unit) {
         state.item?.let { message ->
             item(key = "title") {
                 Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                    AppHeading(message.title)
+                    AppHeading(message.title, style = FluentTheme.typography.subtitle)
                     AppText(
                         formatDate(message.deliveredAt.toEpochMilliseconds(), appLanguageTag()),
                         color = AppColors.muted,

@@ -117,3 +117,29 @@ withdrawal. Those checks complement device tests; none establishes production
 capacity. Web bearer credentials remain ephemeral, so page-close workspace
 restoration is unavailable there. Inherited starter notification/transfer
 modules are not evidence that those HRIS workflows have been integrated.
+
+## Employee layout refinement
+
+Home now separates company selection from employee actions; account preferences
+and session controls use grouped rows. Calendar and inbox share compact headers,
+and calendar time ranges have clearer emphasis than saved/source metadata.
+
+Root architecture, formatting and distribution checks passed with all 351 desktop
+tests, including retained offline content, navigation ownership and cancellation
+coverage. A shared 360 dp layout regression checks 200% text, heading semantics,
+icon targets, one action per tile and keyboard activation. Android dev and Web
+distribution builds passed; Web retains its existing bundler warnings.
+
+The API 35 emulator opened Home, Account, weekly calendars, the inbox and message
+details against the real development API. Week navigation returned to the current
+week. English/Indonesian, light/dark and 150% text captures were inspected; the
+workspace survived appearance and text-size changes. An initial probe read the
+previous week before its response arrived; waiting for the expected date verified
+the completed navigation.
+
+After advance notice, the same APK was installed on the connected Android 16 phone
+with `--install-only`. Installation, package update time and the API forwarding
+rule were checked without launching or driving its UI. These observations do not
+establish frame-time, heap or battery performance. The reusable components and
+regression were also validated in Compose Fluent Starter with 198 tests and
+Android/Web builds.

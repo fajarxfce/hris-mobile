@@ -19,6 +19,9 @@ import androidx.compose.ui.unit.dp
 import dev.fajar.starter.designsystem.components.*
 import dev.fajar.starter.designsystem.theme.AppTheme
 import io.github.composefluent.icons.Icons
+import io.github.composefluent.icons.regular.ArrowLeft
+import io.github.composefluent.icons.regular.ArrowSync
+import io.github.composefluent.icons.regular.CalendarLtr
 import io.github.composefluent.icons.regular.Home
 import io.github.composefluent.icons.regular.Person
 import java.io.File
@@ -29,6 +32,51 @@ import org.junit.Test
 
 class AdaptiveUiTest {
     @get:Rule val compose = createComposeRule()
+
+    @Test
+    fun compactHeaderAndActionTileKeepLargeTextAndKeyboardActionsInsideTheScreen() {
+        var clicks = 0
+        compose.setContent {
+            val density = LocalDensity.current
+            CompositionLocalProvider(LocalDensity provides Density(density.density, 2f)) {
+                AppTheme {
+                    Box(Modifier.size(360.dp, 760.dp).testTag("frame")) {
+                        AppPage(contentPadding = PaddingValues(20.dp), spacing = 16.dp) {
+                            AppScreenHeader(
+                                title = "Employee updates",
+                                navigation = { AppIconButton(Icons.Regular.ArrowLeft, "Back", {}) },
+                                actions = { AppIconButton(Icons.Regular.ArrowSync, "Refresh", {}) },
+                            )
+                            AppActionTile(
+                                title = "Work calendar",
+                                supportingText = "Shifts and days off",
+                                icon = Icons.Regular.CalendarLtr,
+                                modifier = Modifier.testTag("work-tile"),
+                                onClick = { clicks++ },
+                            )
+                        }
+                    }
+                }
+            }
+        }
+        compose.onAllNodes(hasClickAction()).assertCountEquals(3)
+        compose.onNodeWithContentDescription("Back").assertWidthIsEqualTo(48.dp)
+        compose.onNodeWithContentDescription("Refresh").assertHeightIsEqualTo(48.dp)
+        compose
+            .onNodeWithText("Employee updates")
+            .assert(SemanticsMatcher.keyIsDefined(SemanticsProperties.Heading))
+        val tile = compose.onNodeWithTag("work-tile").assertHeightIsAtLeast(88.dp)
+        tile.performClick()
+        tile.performSemanticsAction(androidx.compose.ui.semantics.SemanticsActions.RequestFocus) {
+            it()
+        }
+        tile.performKeyInput { pressKey(Key.Enter) }
+        val bounds = tile.fetchSemanticsNode().boundsInRoot
+        val frame = compose.onNodeWithTag("frame").fetchSemanticsNode().boundsInRoot
+        kotlin.test.assertTrue(bounds.left >= frame.left && bounds.right <= frame.right)
+        compose.runOnIdle { assertEquals(2, clicks) }
+        capture("compact-header-action-large-text")
+    }
 
     @Test
     fun narrowListRowsKeepMetadataVisibleAtLargeTextScaleWithOneAction() {

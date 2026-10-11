@@ -384,14 +384,15 @@ class AppFlowTest {
             waitFor(server.inbox.firstBody)
             server.inbox.archived = true
             compose.waitUntil(15_000) {
-                val nodes = compose.onAllNodesWithText("Refresh").fetchSemanticsNodes()
+                val nodes =
+                    compose.onAllNodesWithContentDescription("Refresh").fetchSemanticsNodes()
                 nodes.size == 1 &&
                     !nodes
                         .single()
                         .config
                         .contains(androidx.compose.ui.semantics.SemanticsProperties.Disabled)
             }
-            compose.onNodeWithText("Refresh").performClick()
+            compose.onNodeWithContentDescription("Refresh").performClick()
             waitFor("This message is no longer available.")
             compose.onNodeWithText(server.inbox.firstBody).assertDoesNotExist()
         }

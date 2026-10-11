@@ -33,3 +33,15 @@ and measured workloads separately.
 metadata, and clipped press feedback. Place dates below the summary when a
 trailing column would crowd a narrow screen. `AppLazyPage` accepts an owned list
 state so paging can reset its position without rebuilding the route owner.
+
+Home separates the active company from employee actions; account preferences and
+session controls stay grouped in the Account tab. Calendar and inbox pages reuse
+`AppScreenHeader`, with compact titles and consistent back/refresh targets.
+`AppActionTile` provides a single accessible action with supporting text. These
+components add no data observation or navigation ownership. Each page chooses its
+content padding without changing the shared inset or scroll-state ownership.
+
+Calendar time ranges carry more visual emphasis than source metadata. The saved
+timestamp remains available after the agenda, while refresh failures remain
+visible above the retained data. Language, appearance and text-size changes
+must retain the current workspace and navigation state.
