@@ -89,7 +89,12 @@ class AttendanceViewModel(
                                                 state.value.selection.employeeId) &&
                                             state.value.selection.after == content.snapshot.after)
                                 )
-                                    updateState { it.copy(content = content, loading = false) }
+                                    updateState {
+                                        it.copy(
+                                            content = content,
+                                            loading = content == null && it.failure == null,
+                                        )
+                                    }
                             }
                         }
                     }
@@ -140,7 +145,9 @@ class AttendanceViewModel(
                             it.copy(failure = null, readFailure = null, needsVerification = false)
                         }
                 }
-                updateState { it.copy(refreshing = false, loading = false) }
+                updateState {
+                    it.copy(refreshing = false, loading = it.content == null && it.failure == null)
+                }
             }
     }
 

@@ -50,6 +50,57 @@ class AppFlowTest {
     private val backDispatcher = TestBackDispatcher()
 
     @Test
+    fun homeMenuDoesNotMoveBetweenSuccessfulAcquisitionAndObservedPublication() {
+        val response = CompletableDeferred<Unit>()
+        val publication = CompletableDeferred<Unit>()
+        val server =
+            NativeUiServer().apply {
+                workforce.attendanceGate = response
+                workforce.asOf = java.time.LocalDate.now(java.time.ZoneId.of("Asia/Jakarta"))
+            }
+        val cache = NativeAttendanceCacheUi().apply { publicationGate = publication }
+        try {
+            withApplication(server, module { single<AttendanceCacheRepository> { cache } }) {
+                signIn()
+                waitFor("Choose a company")
+                compose.onAllNodesWithText("Open company")[0].performClick()
+                waitFor("Welcome")
+                compose.waitUntil { server.workforce.attendanceActive.get() == 1 }
+                val menu = compose.onNode(hasText("Work calendar") and hasClickAction())
+                val pending = menu.fetchSemanticsNode().boundsInRoot
+                response.complete(Unit)
+                compose.waitUntil { cache.hasSnapshot(AttendanceWindow.RECENT) }
+                compose.waitUntil {
+                    compose
+                        .onAllNodes(hasContentDescription("Refresh") and isEnabled())
+                        .fetchSemanticsNodes()
+                        .size == 1
+                }
+                val published = menu.fetchSemanticsNode().boundsInRoot
+                assertEquals(
+                    pending.top,
+                    published.top,
+                    "A pending cache notification must not collapse Home's capture card",
+                )
+                compose.onNode(hasText("Clock in") and hasClickAction()).assertIsNotEnabled()
+                publication.complete(Unit)
+                compose.waitUntil {
+                    compose
+                        .onAllNodes(hasText("Clock in") and hasClickAction() and isEnabled())
+                        .fetchSemanticsNodes()
+                        .size == 1
+                }
+                assertEquals(pending.top, menu.fetchSemanticsNode().boundsInRoot.top)
+                menu.performClick()
+                waitFor("Night shift")
+            }
+        } finally {
+            response.complete(Unit)
+            publication.complete(Unit)
+        }
+    }
+
+    @Test
     fun calendarReadDenialRemainsAuthoritativeWhenCleanupFailsAndRetryIsPending() {
         val server = NativeUiServer()
         val cache = NativeCalendarCacheUi()

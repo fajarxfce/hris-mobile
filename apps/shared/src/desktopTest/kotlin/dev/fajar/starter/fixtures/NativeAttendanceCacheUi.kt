@@ -5,17 +5,22 @@ import dev.fajar.starter.workforce.domain.attendance.entities.*
 import dev.fajar.starter.workforce.domain.attendance.repositories.AttendanceCacheRepository
 import dev.fajar.starter.workforce.domain.entities.WorkforceAccess
 import kotlin.time.Duration.Companion.hours
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
 
 /** A single-company cache whose expiry can be advanced during an assembled UI request. */
 class NativeAttendanceCacheUi : AttendanceCacheRepository {
     @Volatile var rejectClear = false
+    @Volatile var publicationGate: CompletableDeferred<Unit>? = null
     private val snapshots =
         AttendanceWindow.entries.associateWith { MutableStateFlow<AttendanceSnapshot?>(null) }
 
     override fun observe(access: WorkforceAccess, window: AttendanceWindow) =
-        snapshots.getValue(window).map { AppResult.Success(it) }
+        snapshots.getValue(window).map {
+            if (it != null) publicationGate?.await()
+            AppResult.Success(it)
+        }
 
     override suspend fun generation(access: WorkforceAccess, window: AttendanceWindow) =
         AppResult.Success(snapshots.getValue(window).value?.generation)
@@ -39,6 +44,8 @@ class NativeAttendanceCacheUi : AttendanceCacheRepository {
     }
 
     fun subscribers(window: AttendanceWindow) = snapshots.getValue(window).subscriptionCount.value
+
+    fun hasSnapshot(window: AttendanceWindow) = snapshots.getValue(window).value != null
 
     fun expire(window: AttendanceWindow = AttendanceWindow.RECENT) {
         val snapshot = snapshots.getValue(window)

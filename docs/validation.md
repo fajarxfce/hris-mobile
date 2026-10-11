@@ -1,5 +1,17 @@
 # Validation
 
+## Home layout during cache publication
+
+A controlled cache notification reproduced a 113 px upward menu shift after
+attendance acquisition completed but before its snapshot reached the UI. Home
+now retains its loading layout until the content arrives. The regression, both
+calendar scenarios that failed in hosted CI, and Home lifecycle/location recovery
+pass as four focused assembled UI tests. The test still activates the menu through
+its pointer action. No frame-time or heap measurement is claimed.
+
+At `eee789e`, Windows and Apple CI passed; Linux verification failed in the two
+initial calendar navigation scenarios. That failed run is not counted as a pass.
+
 ## Leave request presentation
 
 The root check passes with 491 desktop tests, and Leave presentation passes
