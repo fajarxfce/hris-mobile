@@ -71,3 +71,12 @@ The Home card uses the same capture component and ViewModel as the attendance
 screen, with a separate route-owned instance. Leaving its tab, stopping the app,
 or disposing the route stops observation and pending acquisition. Returning
 revalidates the saved state; it never automatically records attendance.
+
+## Search and filters
+
+Use `AppSearchField` for compact search, keeping its accessible label and explicit
+clear action. `AppTextField` remains for labelled forms. `AppFilterChip` opens an
+owned filter surface; `AppDialog` delegates focus, dismissal and window lifetime
+to the platform. Feature MVI owns visibility, selection and pending data work.
+Department search and coworker search use independent cancellable requests;
+leaving their owner releases both. Directory filtering occurs before server paging.
