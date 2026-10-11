@@ -18,6 +18,7 @@ import dev.fajar.starter.home.presentation.catalog.HomeService
 import dev.fajar.starter.home.presentation.home.HomeTab
 import dev.fajar.starter.home.presentation.navigation.*
 import dev.fajar.starter.inbox.presentation.navigation.*
+import dev.fajar.starter.leave.presentation.navigation.*
 import dev.fajar.starter.localization.*
 import dev.fajar.starter.onboarding.presentation.navigation.*
 import dev.fajar.starter.people.presentation.navigation.*
@@ -144,6 +145,8 @@ fun AppNavigation(controller: NavHostController, incomingLinks: Flow<String>) {
                                 controller.navigate(AttendanceRoute) { launchSingleTop = true }
                             HomeService.Calendar ->
                                 controller.navigate(WorkCalendarRoute) { launchSingleTop = true }
+                            HomeService.Leave ->
+                                controller.navigate(LeaveRoute) { launchSingleTop = true }
                             HomeService.Profile ->
                                 controller.navigate(ProfileRoute) { launchSingleTop = true }
                         }
@@ -239,6 +242,16 @@ fun AppNavigation(controller: NavHostController, incomingLinks: Flow<String>) {
                         onBack = { controller.popBackStack() },
                     )
                     sessionRoutes(stage.sessionId) { controller.popBackStack() }
+                    leaveRoutes(
+                        stage.workspace.id,
+                        onVerify = {
+                            controller.navigate(VerificationRoute) { launchSingleTop = true }
+                        },
+                        onRecheckWorkspace = {
+                            viewModel.onEvent(AppEvent.WorkspaceRefreshRequested)
+                        },
+                        onBack = { controller.popBackStack() },
+                    )
                     settingsRoutes(securitySettings = { AppLockSettings() }) {
                         controller.popBackStack()
                     }

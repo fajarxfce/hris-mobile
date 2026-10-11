@@ -54,6 +54,10 @@ fun main(args: Array<String>) {
                 if (BuildRuntime.persistDesktopSession)
                     DesktopCredentialStore("hris-mobile.${environment.id}", "calendar-content-key")
                 else MemoryCredentialStore(),
+            leaveCredentials =
+                if (BuildRuntime.persistDesktopSession)
+                    DesktopCredentialStore("hris-mobile.${environment.id}", "leave-content-key")
+                else MemoryCredentialStore(),
             workspaceCredentials =
                 if (BuildRuntime.persistDesktopSession)
                     DesktopCredentialStore("hris-mobile.${environment.id}", "workspace-content-key")

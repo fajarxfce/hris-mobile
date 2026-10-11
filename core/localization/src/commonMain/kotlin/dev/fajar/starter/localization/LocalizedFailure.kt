@@ -7,6 +7,9 @@ import dev.fajar.starter.common.result.*
 fun failureText(failure: Failure): String =
     appString(
         when (failure.code) {
+            "client.leave_cache_expired" -> AppString.LeaveCacheExpired
+            "client.leave_scope_changed" -> AppString.CalendarScopeChanged
+            "client.leave_changed" -> AppString.LeaveChanged
             "client.location_permission" -> AppString.LocationPermission
             "client.location_permanently_denied" -> AppString.LocationPermanent
             "client.location_disabled" -> AppString.LocationDisabled

@@ -29,6 +29,7 @@ class NativeUiServer(
     val people = NativePeopleUi()
     val directory = NativeDirectoryUi()
     val workforce = NativeWorkforceUi()
+    val leave = NativeLeaveUi()
     val inbox = NativeInboxUi()
     val deviceSessions = NativeSessionsUi()
     val companyPolicy = NativeCompanyPolicyUi()
@@ -59,6 +60,9 @@ class NativeUiServer(
                 return@withLock respond(body, status, headers)
             }
             workforce.response(request)?.let { (body, status) ->
+                return@withLock respond(body, status, headers)
+            }
+            leave.response(request)?.let { (body, status) ->
                 return@withLock respond(body, status, headers)
             }
             if (path.startsWith("/api/v1/auth/native/sessions") && rejectSessionAccessOnce) {
@@ -152,6 +156,7 @@ class NativeUiServer(
                 add("people.directory.read")
                 add("announcements.read")
                 add("attendance.self.record")
+                if (leave.enabled) add("leave.self.manage")
             }
         }
     }

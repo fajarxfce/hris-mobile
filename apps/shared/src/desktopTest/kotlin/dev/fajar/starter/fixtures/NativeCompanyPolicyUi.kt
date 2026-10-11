@@ -28,6 +28,7 @@ class NativeCompanyPolicyUi {
                 path.contains("/sync/") || path.contains("/inbox/") || path.endsWith("/inbox") ->
                     "COMMUNICATIONS"
                 path.contains("/people/") -> "PEOPLE"
+                path.contains("/leave/") -> "LEAVE"
                 else -> return null
             }
         return when {

@@ -35,6 +35,10 @@ actions above the scrolling content; Settings groups language and security contr
 Screens support English and Indonesian. System
 appearance and reduced-motion preferences are respected.
 
+Leave shows annual balances and request history with status filters, account-owned
+employment selection and a bounded encrypted offline view. Request submission,
+evidence and cancellation remain separate delivery work.
+
 The runtime contains no demo authentication transport. Other transactional employee workflows
 are still being connected; a generated module
 is not a completed HRIS workflow. See [native identity](docs/native-identity.md), [company workspaces](docs/workspace.md), [employee profiles](docs/people.md), [inbox and synchronization](docs/inbox.md), [company availability](docs/company-policy.md),
@@ -84,8 +88,7 @@ policy is not configured yet. Android/iOS send the server's native version heade
 - `core/identity`: native credentials, MFA, account contracts, and session policy.
 - `core/workspace`: current company selection and scope ownership.
 - `core/location`: foreground location, permission and Settings I/O contracts.
-- `features/auth`, `features/workspace`, `features/home`, `features/people`, `features/inbox`, `features/workforce`: feature-owned MVI screens.
-- `features/leave`: scoped balance/history contracts and encrypted offline reads; UI integration is in progress.
+- `features/auth`, `features/workspace`, `features/home`, `features/people`, `features/inbox`, `features/workforce`, `features/leave`: feature-owned MVI screens.
 - `core/designsystem`: shared `AppXxx` Fluent components and restrained transitions.
 - `build-logic`: Gradle convention plugins; versions are in `gradle/libs.versions.toml`.
 

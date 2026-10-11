@@ -1,4 +1,34 @@
 <resources>
+    <string name="leave_en">Leave</string>
+    <string name="leave_summary_en">Balances and requests</string>
+    <string name="leave_balances_en">Leave balances</string>
+    <string name="leave_available_en">Available</string>
+    <string name="leave_reserved_en">Reserved</string>
+    <string name="leave_consumed_en">Used</string>
+    <string name="leave_closed_year_en">Year closed</string>
+    <string name="leave_days_en">%1$s days</string>
+    <string name="leave_half_days_en">%1$s.5 days</string>
+    <string name="leave_one_day_en">1 day</string>
+    <string name="leave_no_balances_en">No leave balance for this year.</string>
+    <string name="leave_requests_en">Request history</string>
+    <string name="leave_all_dates_en">All dates</string>
+    <string name="leave_request_status_en">Request status</string>
+    <string name="leave_all_statuses_en">All statuses</string>
+    <string name="leave_pending_en">Pending approval</string>
+    <string name="leave_approved_en">Approved</string>
+    <string name="leave_rejected_en">Rejected</string>
+    <string name="leave_cancelled_en">Cancelled</string>
+    <string name="leave_cancellation_pending_en">Cancellation pending</string>
+    <string name="leave_no_requests_en">No requests match this filter.</string>
+    <string name="leave_more_balances_en">More balances</string>
+    <string name="leave_first_balances_en">First balances</string>
+    <string name="leave_older_requests_en">Older requests</string>
+    <string name="leave_latest_requests_en">Latest requests</string>
+    <string name="leave_saved_en">Updated %1$s</string>
+    <string name="leave_no_saved_en">Connect to load leave data.</string>
+    <string name="leave_cache_expired_en">Refresh to view current leave data.</string>
+    <string name="leave_changed_en">Leave data changed. Refresh to continue.</string>
+
     <string name="home_greeting_en">Welcome</string>
     <string name="my_work_en">My work</string>
     <string name="calendar_summary_en">Shifts and days off</string>

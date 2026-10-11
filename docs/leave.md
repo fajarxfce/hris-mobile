@@ -1,9 +1,9 @@
 # Leave
 
-The domain/data foundation reads the signed-in account's employment references,
-leave balances by year and paged request history. Presentation and durable leave
-commands are the next integration; this foundation does not yet add a menu or
-submit a leave request.
+The employee Leave page shows admitted leave balances by year and paged request
+history with status filtering. Home and All services expose it when the selected
+company enables Leave and the account has self-service or read permission.
+Request creation and other mutations are subsequent integrations.
 
 ## Ownership
 
@@ -41,18 +41,42 @@ failure may retain an otherwise valid view. Cancellation or a replaced workspace
 cannot publish old results or clear the replacement scope. There is no automatic
 retry, background polling or permission orchestration in the data layer.
 
+## Presentation
+
+The feature owns its route, MVI ViewModel, declarative page and filter dialogs.
+The route collects state with lifecycle awareness and pairs start with
+stop/disposal. Leaving cancels acquisition and observation; replacing filters
+cancels obsolete reads. The ViewModel holds an authoritative read failure through
+retry and resubscribes only after fresh publication. A failed local cleanup cannot
+silently make restricted content visible again.
+
+Balances have their own year filter; request history explicitly covers all dates.
+Year and status controls remain usable after a transport failure. Cursor actions
+accept only the visible next page or first page, and employment choices remain
+limited to the account-owned directory. Offline restoration retains the saved
+filter whether the cache arrives before or after the transport failure. The
+screen shows the last update time and never infers a balance from request rows.
+
 ## Remaining workflow
 
-Connect the feature-owned MVI page, localized balances/history, filter and pagination
-controls, and emulator acceptance. Subsequent work adds scoped request details,
+Subsequent work adds scoped request details,
 eligible policy/day selection, document evidence, durable submission, withdrawal
 and cancellation, plus canonical sync reconciliation. A cached balance is never
 a reservation or authorization to submit.
 
 ## Validation
 
-The foundation passes the root `:check` task (447 desktop tests across the
-workspace) and both Leave Chromium test suites. Its 22 desktop tests cover exact
-half-day values, bounded pages, session/company isolation, encrypted cache
-restoration, cancellation, late results and compare-and-set publication. This
-slice does not yet include an Android UI or device acceptance for Leave.
+The root `:check` passes with 457 desktop tests. Leave's three Chromium suites
+pass 26 tests, and Android dev plus Web production builds pass. Coverage includes
+exact half-day values, bounded pages, session/company isolation, encrypted cache
+restoration, cancellation, late results and compare-and-set publication. MVI tests
+exercise denied reads, pending retries, expiry, disposal and both cache/network
+arrival orders. Assembled UI tests cover independent module admission, filter
+restoration, company replacement and Indonesian at 200% text.
+
+The API 35 emulator reads a fictional 12.5-day allowance from the development
+server. Year/status filtering, dark/light appearance, offline process restoration
+and online recovery were checked. The saved 2025/approved filter survives restart
+and refresh. Populated request rows use an automated transport fixture; the real
+development account currently has no submitted leave request. Physical iOS
+acceptance and transactional workflows remain separate work.

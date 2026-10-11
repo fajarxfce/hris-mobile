@@ -92,6 +92,12 @@ freshness and offline admission remain attendance policy. The location datasourc
 only performs the requested OS operation; it neither opens Settings automatically
 nor starts a long-lived tracking subscription.
 
+The [Leave page](leave.md) uses its own minimal self-service employment directory,
+independent of People and Workforce availability. Its use cases admit the selected
+company, acquire scoped balances/history and atomically publish one encrypted
+overview. The ViewModel owns filter selection, read gates and cancellation; it
+never recalculates accounting balances or sends technical API types to the page.
+
 Feature flag definitions and evaluation policy live in `core/featureflags/domain`; each
 consuming feature owns its keys and action guards. A shared refresh use case serializes
 workers and sets the fetch interval. Its repository coordinates Remote Config and the

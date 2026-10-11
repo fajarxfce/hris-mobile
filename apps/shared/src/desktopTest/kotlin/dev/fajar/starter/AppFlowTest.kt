@@ -48,6 +48,69 @@ class AppFlowTest {
     private val backDispatcher = TestBackDispatcher()
 
     @Test
+    fun leaveFiltersRestoreOfflineWithoutCrossingCompanyScope() {
+        val server =
+            NativeUiServer().apply {
+                leave.enabled = true
+                companyPolicy.disabledModules = setOf("WORKFORCE", "PEOPLE")
+            }
+        withApplication(server) {
+            signIn()
+            waitFor("Choose a company")
+            compose.onAllNodesWithText("Open company")[0].performClick()
+            waitFor("Welcome")
+            compose.onNode(hasText("Leave") and hasClickAction()).performScrollTo().performClick()
+            waitFor("12.5 days")
+            compose.onNodeWithText("Leave balances").assertExists()
+            capture("leave-balances")
+            compose.onNodeWithContentDescription("Previous year").performClick()
+            waitFor("No leave balance for this year.")
+            compose.waitUntil { server.leave.years.lastOrNull() == 2025 }
+            compose.onNode(hasScrollToIndexAction()).performScrollToNode(hasText("All statuses"))
+            compose.onNode(hasText("All statuses") and hasClickAction()).performClick()
+            waitFor("Request status")
+            compose.onNode(hasText("Approved") and isSelectable()).performClick()
+            compose.waitUntil { server.leave.statuses.lastOrNull() == "APPROVED" }
+            waitFor("1.5 days")
+            compose.onNode(hasScrollToIndexAction()).performScrollToNode(hasText("1.5 days"))
+            compose.onNodeWithContentDescription("Back").assertIsDisplayed()
+            capture("leave-filtered-history")
+            server.leave.offline = true
+            compose.onNodeWithContentDescription("Refresh").performClick()
+            waitFor("Unable to connect. Check your connection.")
+            compose.onNodeWithContentDescription("Back").performClick()
+            waitFor("Welcome")
+            compose.onNode(hasText("Leave") and hasClickAction()).performScrollTo().performClick()
+            waitFor("No leave balance for this year.")
+            compose.onNodeWithText("2025").assertExists()
+            server.leave.offline = false
+            val reads = server.leave.years.size
+            compose.onNodeWithContentDescription("Refresh").performClick()
+            compose.waitUntil { server.leave.years.size > reads }
+            compose.waitUntil {
+                !compose
+                    .onNodeWithContentDescription("Refresh")
+                    .fetchSemanticsNode()
+                    .config
+                    .contains(androidx.compose.ui.semantics.SemanticsProperties.Disabled)
+            }
+            assertEquals(2025, server.leave.years.last())
+            assertEquals("APPROVED", server.leave.statuses.last())
+            compose.onNodeWithContentDescription("Back").performClick()
+            waitFor("Welcome")
+            compose.onNode(hasText("Account") and isSelectable()).performClick()
+            compose.onNodeWithContentDescription("Change company").performClick()
+            waitFor("Choose a company")
+            compose.onAllNodesWithText("Open company")[1].performClick()
+            waitFor("Welcome")
+            compose.onNode(hasText("Leave") and hasClickAction()).performScrollTo().performClick()
+            waitFor("Employment is not linked to this account.")
+            compose.onNodeWithText("12.5 days").assertDoesNotExist()
+            compose.onNodeWithText("Annual leave").assertDoesNotExist()
+        }
+    }
+
+    @Test
     fun attendanceShowsMonthlyFactsAndDetailsWithAnOfflineDateFilter() {
         val server = NativeUiServer().apply { workforce.historyEvidence = true }
         withApplication(server) {

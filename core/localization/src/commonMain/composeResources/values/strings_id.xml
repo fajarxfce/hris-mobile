@@ -1,4 +1,34 @@
 <resources>
+    <string name="leave_id">Cuti</string>
+    <string name="leave_summary_id">Saldo dan pengajuan</string>
+    <string name="leave_balances_id">Saldo cuti</string>
+    <string name="leave_available_id">Tersedia</string>
+    <string name="leave_reserved_id">Dicadangkan</string>
+    <string name="leave_consumed_id">Terpakai</string>
+    <string name="leave_closed_year_id">Tahun ditutup</string>
+    <string name="leave_days_id">%1$s hari</string>
+    <string name="leave_half_days_id">%1$s,5 hari</string>
+    <string name="leave_one_day_id">1 hari</string>
+    <string name="leave_no_balances_id">Belum ada saldo cuti untuk tahun ini.</string>
+    <string name="leave_requests_id">Riwayat pengajuan</string>
+    <string name="leave_all_dates_id">Semua tanggal</string>
+    <string name="leave_request_status_id">Status pengajuan</string>
+    <string name="leave_all_statuses_id">Semua status</string>
+    <string name="leave_pending_id">Menunggu persetujuan</string>
+    <string name="leave_approved_id">Disetujui</string>
+    <string name="leave_rejected_id">Ditolak</string>
+    <string name="leave_cancelled_id">Dibatalkan</string>
+    <string name="leave_cancellation_pending_id">Menunggu pembatalan</string>
+    <string name="leave_no_requests_id">Tidak ada pengajuan sesuai filter.</string>
+    <string name="leave_more_balances_id">Saldo berikutnya</string>
+    <string name="leave_first_balances_id">Saldo awal</string>
+    <string name="leave_older_requests_id">Pengajuan sebelumnya</string>
+    <string name="leave_latest_requests_id">Pengajuan terbaru</string>
+    <string name="leave_saved_id">Diperbarui %1$s</string>
+    <string name="leave_no_saved_id">Hubungkan ke internet untuk memuat data cuti.</string>
+    <string name="leave_cache_expired_id">Perbarui untuk melihat data cuti terbaru.</string>
+    <string name="leave_changed_id">Data cuti berubah. Perbarui untuk melanjutkan.</string>
+
     <string name="home_greeting_id">Selamat datang</string>
     <string name="my_work_id">Pekerjaan saya</string>
     <string name="calendar_summary_id">Shift dan hari libur</string>

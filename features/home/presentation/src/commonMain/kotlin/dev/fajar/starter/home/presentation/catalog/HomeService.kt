@@ -5,6 +5,7 @@ import dev.fajar.starter.localization.AppString
 import dev.fajar.starter.workspace.domain.entities.*
 import dev.fajar.starter.workspace.domain.policies.companyModuleAvailable
 import io.github.composefluent.icons.Icons
+import io.github.composefluent.icons.regular.CalendarCheckmark
 import io.github.composefluent.icons.regular.CalendarLtr
 import io.github.composefluent.icons.regular.Clock
 import io.github.composefluent.icons.regular.Person
@@ -13,6 +14,7 @@ import io.github.composefluent.icons.regular.Person
 enum class HomeService(val title: AppString, val summary: AppString, val icon: ImageVector) {
     Attendance(AppString.Attendance, AppString.AttendanceSummary, Icons.Regular.Clock),
     Calendar(AppString.WorkCalendar, AppString.CalendarSummary, Icons.Regular.CalendarLtr),
+    Leave(AppString.Leave, AppString.LeaveSummary, Icons.Regular.CalendarCheckmark),
     Profile(AppString.MyProfile, AppString.ProfileSummary, Icons.Regular.Person),
 }
 
@@ -27,15 +29,19 @@ data class HomeServiceCatalog(
 fun homeServices(workspace: Workspace?): HomeServiceCatalog {
     if (workspace == null) return HomeServiceCatalog()
     val permissions = workspace.permissions
-    val work =
-        if (companyModuleAvailable(workspace, CompanyModule.WORKFORCE))
-            buildList {
-                if ("attendance.self.record" in permissions || "workforce.read" in permissions) {
-                    add(HomeService.Attendance)
-                    add(HomeService.Calendar)
-                }
+    val work = buildList {
+        if (companyModuleAvailable(workspace, CompanyModule.WORKFORCE)) {
+            if ("attendance.self.record" in permissions || "workforce.read" in permissions) {
+                add(HomeService.Attendance)
+                add(HomeService.Calendar)
             }
-        else emptyList()
+        }
+        if (
+            companyModuleAvailable(workspace, CompanyModule.LEAVE) &&
+                ("leave.self.manage" in permissions || "leave.read" in permissions)
+        )
+            add(HomeService.Leave)
+    }
     val sections =
         listOf(HomeServiceSection(AppString.ServicesWork, work)).filter { it.items.isNotEmpty() }
     val account =

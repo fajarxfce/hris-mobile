@@ -26,6 +26,8 @@ import dev.fajar.starter.identity.data.sso.datasources.UnavailableBrowserAuthori
 import dev.fajar.starter.identity.domain.entities.IdentityServer
 import dev.fajar.starter.inbox.data.di.InboxDataModule
 import dev.fajar.starter.inbox.presentation.di.InboxPresentationModule
+import dev.fajar.starter.leave.data.di.LeaveDataModule
+import dev.fajar.starter.leave.presentation.di.LeavePresentationModule
 import dev.fajar.starter.location.data.datasources.LocationDataSource
 import dev.fajar.starter.location.data.datasources.UnavailableLocationDataSource
 import dev.fajar.starter.location.data.di.LocationDataModule
@@ -69,6 +71,7 @@ fun createAppContainer(
     credentials: CredentialStore = MemoryCredentialStore(),
     inboxCredentials: CredentialStore = MemoryCredentialStore(),
     calendarCredentials: CredentialStore = MemoryCredentialStore(),
+    leaveCredentials: CredentialStore = MemoryCredentialStore(),
     commandCredentials: AtomicCredentialStore = MemoryCredentialStore(),
     workspaceCredentials: AtomicCredentialStore = MemoryCredentialStore(),
     remoteFeatureFlags: RemoteFeatureFlagSource = UnavailableFeatureFlagSource(),
@@ -129,6 +132,8 @@ fun createAppContainer(
                 .onClose { it?.close() }
             single<CredentialStore>(named("calendar-content-key")) { calendarCredentials }
                 .onClose { it?.close() }
+            single<CredentialStore>(named("leave-content-key")) { leaveCredentials }
+                .onClose { it?.close() }
             single<AtomicCredentialStore>(named("command-content-key")) { commandCredentials }
                 .onClose { it?.close() }
             single<AtomicCredentialStore>(named("workspace-content-key")) { workspaceCredentials }
@@ -153,6 +158,8 @@ fun createAppContainer(
         InboxPresentationModule().module,
         WorkforceDataModule().module,
         WorkforcePresentationModule().module,
+        LeaveDataModule().module,
+        LeavePresentationModule().module,
         ApplicationModule().module,
     )
 }
