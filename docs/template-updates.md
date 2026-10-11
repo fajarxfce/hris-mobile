@@ -45,3 +45,12 @@ keyboard regression also exist at
 [`8b8d625`](https://github.com/fajarxfce/compose-fluent-starter/commit/8b8d625).
 Both repositories passed root checks and Android/Web builds. Employee navigation,
 company information, inbox and calendar layout changes remain in HRIS Mobile.
+
+Foreground location and permission adapters, callback ownership, failure mapping
+and cancellation regressions also exist at
+[`694f244`](https://github.com/fajarxfce/compose-fluent-starter/commit/694f244).
+Optional card content spacing exists at
+[`d7e7680`](https://github.com/fajarxfce/compose-fluent-starter/commit/d7e7680).
+Both repositories passed root checks and Android/Web builds. Apple callback
+regressions run in simulator CI. Attendance admission, location evidence policy,
+encrypted commands and employee navigation remain in HRIS Mobile.
