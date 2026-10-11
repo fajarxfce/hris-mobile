@@ -50,8 +50,37 @@ after pending work, propagate cancellation and use a finite deadline. A preview
 cannot outlive the current read lease, session, company policy or known
 maintenance. The selected dates are copied before acquisition. Data mapping
 rejects contradictory date partitions, totals, years and remaining balances.
-This is the domain/data foundation; the creation form and durable submission
-remain subsequent integration work.
+The preview carries a revision of the selected policy, working-day plan and
+annual balances. Submission retains that revision, allowing the server to reject
+a changed calculation before reserving days. Preparation and submission are
+domain/data foundations; the creation form remains a subsequent integration.
+
+## Durable submission
+
+`PrepareLeaveSubmission` admits an unexpired owner preview, a bounded reason and
+document-revision references, then stores one immutable command per employee.
+The operation and request IDs are generated once. Repeated confirmation restores
+that command; changed dates, reason, evidence or preview cannot replace it.
+Missing required evidence is a use-case validation failure.
+
+Submission has its own encrypted partition and repository contract, sharing raw
+command storage and its credential with existing request actions. The original
+selection, preview revision, reason and evidence are authenticated separately
+from the outcome. Session replacement for the same account can recover them;
+another company/account cannot. A missing key never overwrites retained data.
+
+`ReplayLeaveSubmission` serializes manual and background delivery, checks fresh
+company policy, and persists an unconfirmed attempt before making the HTTP call.
+Retries use exactly the same request ID, operation ID, payload and preview revision.
+A creation receipt must identify that request at version zero. Delivery is bounded
+to 30 seconds, ten sends per batch and three automatic attempts per command.
+Cancellation and a lost response retain the original command for explicit recovery.
+
+An unsent or definitely rejected command can be removed using its observed
+revision. A confirmed command first needs canonical request/cache reconciliation.
+An ambiguous outcome cannot be discarded as though the server rolled back, and a
+late rejection cannot disprove an earlier uncertain attempt. Competing removal and
+replay use storage revision checks; stale work cannot replace the retained outcome.
 
 ## Offline access
 
@@ -148,16 +177,25 @@ versions and obsolete outcomes cannot replace the visible operation.
 
 ## Remaining workflow
 
-Subsequent work connects policy/day selection and preview to the form, document
-evidence acquisition and transfer, and durable submission.
+Subsequent work connects policy/day selection, preview and durable submission to
+the form, followed by document evidence acquisition and transfer.
 A cached balance is never
 a reservation or authorization to submit.
 
 ## Validation
 
-Root checks pass with 531 desktop tests, all 29 Leave presentation tests and both
-localization tests pass in Chromium, and Android dev plus production Web build
-successfully. The command foundation's 51 domain/data Chromium tests passed in
+The submission foundation passed complete root checks, 86 Leave domain/data
+Chromium tests, Android dev assembly and the production Web build. New regression
+coverage includes lost local-save and server responses, immutable retries,
+manual/background contention, current permission checks, late scope changes,
+finite attempts, failed receipt persistence and cancellation during encryption.
+Real SQLite tests reopen the encrypted command across sessions and reject copied
+envelopes, altered revisions, missing keys and mismatched creation receipts.
+The development API preview was rechecked without changing its stored balance.
+
+The preceding action interface passed root checks with 531 desktop tests, all
+29 Leave presentation tests and both localization tests in Chromium, plus Android
+dev and production Web builds. The command foundation's 51 domain/data Chromium tests passed in
 the preceding increment. Coverage includes immutable duplicate admission, read
 leases, pending cancellation, late receipts, account/company replacement,
 manual/background serialization, finite deadlines, bounded attempts, failed
@@ -183,5 +221,5 @@ Earlier history pagination and lost-response
 receipt recovery use automated transport fixtures; they are not represented as
 physical-device checks.
 
-New request submission, evidence transfer and physical iOS acceptance remain
+The new-request interface, evidence transfer and physical iOS acceptance remain
 separate work. No frame-time, heap or battery measurement is claimed.

@@ -8,6 +8,8 @@ import dev.fajar.starter.leave.domain.repositories.LeaveCommandRepository
 import dev.fajar.starter.securestorage.*
 import dev.fajar.starter.storage.*
 import kotlin.io.encoding.Base64
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -125,6 +127,7 @@ class EncryptedLeaveCommandRepository(
                         } finally {
                             stateBytes.fill(0)
                         }
+                    currentCoroutineContext().ensureActive()
                     when (
                         commands.insert(
                             scope,
@@ -175,6 +178,7 @@ class EncryptedLeaveCommandRepository(
                     ),
                     bytes,
                 )
+            currentCoroutineContext().ensureActive()
             commands.update(
                 leaveCommandScope(access),
                 leaveCommandPartition(access),

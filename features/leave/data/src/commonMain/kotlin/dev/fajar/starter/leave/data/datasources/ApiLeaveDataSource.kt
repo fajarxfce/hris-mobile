@@ -2,10 +2,18 @@ package dev.fajar.starter.leave.data.datasources
 
 import dev.fajar.starter.leave.data.api.LeaveApi
 import dev.fajar.starter.leave.data.dto.LeaveActionRequest
+import dev.fajar.starter.leave.data.dto.LeaveSubmissionRequest
 import org.koin.core.annotation.Single
 
 @Single
 class ApiLeaveDataSource(private val api: LeaveApi) : LeaveRemoteDataSource {
+    override suspend fun submit(
+        sessionId: String,
+        companyId: String,
+        operationId: String,
+        request: LeaveSubmissionRequest,
+    ) = api.submit(sessionId, companyId, operationId, request)
+
     override suspend fun act(
         sessionId: String,
         companyId: String,

@@ -12,6 +12,7 @@ import kotlinx.datetime.TimeZone
 fun LeaveRequestPreviewDto.toPreview(selection: LeaveDraftSelection): LeaveRequestPreview {
     Uuid.parse(employeeId)
     require(employeeId == selection.employeeId && policy.typeId == selection.typeId)
+    require(revision.matches(Regex("[0-9a-f]{64}")))
     require(evaluatedAt.length in 20..40 && timezone.length in 1..100)
     val evaluated = Instant.parse(evaluatedAt)
     TimeZone.of(timezone)
@@ -71,5 +72,6 @@ fun LeaveRequestPreviewDto.toPreview(selection: LeaveDraftSelection): LeaveReque
         charged,
         excluded.toList(),
         proposed.toList(),
+        revision,
     )
 }

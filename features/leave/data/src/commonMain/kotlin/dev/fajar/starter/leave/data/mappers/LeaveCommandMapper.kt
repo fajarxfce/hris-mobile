@@ -2,7 +2,6 @@
 
 package dev.fajar.starter.leave.data.mappers
 
-import dev.fajar.starter.common.result.*
 import dev.fajar.starter.database.CommandRecord
 import dev.fajar.starter.database.CommandScope
 import dev.fajar.starter.identity.domain.policies.accountStorageKey
@@ -75,21 +74,6 @@ fun LeaveCommandDto.toCommand(access: LeaveAccess): LeaveCommand {
         .also { require(it.belongsTo(access)) }
 }
 
-fun LeaveCommandOutcome.toDto(attempts: Int): LeaveCommandOutcomeDto {
-    require(attempts in 0..LEAVE_MAXIMUM_ATTEMPTS)
-    return when (this) {
-        LeaveCommandOutcome.Pending -> LeaveCommandOutcomeDto("PENDING", attempts)
-        is LeaveCommandOutcome.Unconfirmed ->
-            LeaveCommandOutcomeDto("UNCONFIRMED", attempts, failure = failure?.toCommandDto())
-        is LeaveCommandOutcome.Rejected ->
-            LeaveCommandOutcomeDto("REJECTED", attempts, failure = failure.toCommandDto())
-        is LeaveCommandOutcome.Confirmed -> LeaveCommandOutcomeDto("CONFIRMED", attempts, version)
-    }
-}
-
-private fun Failure.toCommandDto() =
-    LeaveCommandFailureDto(kind.name, code, correlationId, retryAfterSeconds)
-
 fun LeaveCommandOutcomeDto.toRecord(
     command: LeaveCommand,
     raw: CommandRecord,
@@ -102,44 +86,12 @@ fun LeaveCommandOutcomeDto.toRecord(
             raw.sortKey == command.orderKey()
     )
     require(raw.revision in 0..9_007_199_254_740_991L && attempts in 0..LEAVE_MAXIMUM_ATTEMPTS)
-    require(receiptVersion == null || receiptVersion == command.expectedVersion + 1)
-    val reason =
-        failure?.let {
-            require(it.code == null || it.code.matches(Regex("[A-Za-z0-9_.:-]{1,100}")))
-            require(
-                it.correlationId == null ||
-                    it.correlationId.matches(Regex("[A-Za-z0-9_.:-]{1,128}"))
-            )
-            require(it.retryAfterSeconds == null || it.retryAfterSeconds in 0..86_400)
-            Failure(
-                FailureKind.valueOf(it.kind),
-                "This leave action could not be confirmed.",
-                code = it.code,
-                correlationId = it.correlationId,
-                retryAfterSeconds = it.retryAfterSeconds,
-            )
-        }
-    val outcome =
-        when (phase) {
-            "PENDING" -> {
-                require(attempts == 0 && receiptVersion == null && reason == null)
-                LeaveCommandOutcome.Pending
-            }
-            "UNCONFIRMED" -> {
-                require(attempts > 0 && receiptVersion == null)
-                LeaveCommandOutcome.Unconfirmed(reason)
-            }
-            "REJECTED" -> {
-                require(attempts > 0 && receiptVersion == null)
-                LeaveCommandOutcome.Rejected(requireNotNull(reason))
-            }
-            "CONFIRMED" -> {
-                require(attempts > 0 && reason == null)
-                LeaveCommandOutcome.Confirmed(requireNotNull(receiptVersion))
-            }
-            else -> error("Unsupported leave command outcome.")
-        }
-    return LeaveCommandRecord(command, raw.revision, attempts, outcome)
+    return LeaveCommandRecord(
+        command,
+        raw.revision,
+        attempts,
+        toOutcome(command.expectedVersion + 1),
+    )
 }
 
 fun LeaveActionReceiptDto.toReceipt(command: LeaveCommand): LeaveActionReceipt {

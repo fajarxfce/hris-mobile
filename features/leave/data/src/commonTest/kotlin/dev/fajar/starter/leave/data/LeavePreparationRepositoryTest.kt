@@ -98,6 +98,8 @@ class LeavePreparationRepositoryTest {
         for (invalid in
             listOf(
                 original.copy(employeeId = f.type.id),
+                original.copy(revision = ""),
+                original.copy(revision = "A".repeat(64)),
                 original.copy(policy = original.policy.copy(typeId = f.base.employee.id)),
                 original.copy(timezone = "Unknown/Zone"),
                 original.copy(evaluatedAt = "not-a-timestamp"),

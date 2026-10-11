@@ -121,6 +121,15 @@ admission and the preview deadline. Datasources return DTOs; repository mapping
 checks the consistency of charged/excluded dates and annual balance projections.
 No reservation or request mutation occurs during preparation.
 
+Submission is a separate durable intent. `PrepareLeaveSubmission` validates the
+admitted preview and saves immutable input before transport. `ReplayLeaveSubmission`
+coordinates current company policy, raw-command persistence and the remote
+repository, serializing manual and worker delivery. Repositories authenticate the
+stored envelopes and map protocol facts; they never decide when to retry or discard
+an uncertain operation. A preview revision accompanies the original request on
+every delivery, so changed server balances or schedules cannot silently replace
+what the employee confirmed.
+
 Feature flag definitions and evaluation policy live in `core/featureflags/domain`; each
 consuming feature owns its keys and action guards. A shared refresh use case serializes
 workers and sets the fetch interval. Its repository coordinates Remote Config and the

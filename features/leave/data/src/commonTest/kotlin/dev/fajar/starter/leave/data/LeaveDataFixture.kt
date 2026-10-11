@@ -7,6 +7,13 @@ import kotlin.time.Duration.Companion.hours
 import kotlin.time.Instant
 
 class LeaveDataFixture : LeaveRemoteDataSource {
+    override suspend fun submit(
+        sessionId: String,
+        companyId: String,
+        operationId: String,
+        request: LeaveSubmissionRequest,
+    ): LeaveActionReceiptDto = error("Submission transport is not used by this read fixture")
+
     override suspend fun act(
         sessionId: String,
         companyId: String,

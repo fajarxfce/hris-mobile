@@ -56,6 +56,7 @@ class LeavePreparationFixture(val base: LeaveFixture = LeaveFixture()) {
                     3,
                 )
             ),
+            "a".repeat(64),
         )
     var typeReads = 0
     var previewReads = 0

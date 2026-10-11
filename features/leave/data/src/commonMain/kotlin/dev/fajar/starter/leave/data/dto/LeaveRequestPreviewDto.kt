@@ -12,4 +12,5 @@ data class LeaveRequestPreviewDto(
     val chargedDays: String,
     val excludedDates: List<String>,
     val balances: List<LeavePreviewBalanceDto>,
+    val revision: String,
 )

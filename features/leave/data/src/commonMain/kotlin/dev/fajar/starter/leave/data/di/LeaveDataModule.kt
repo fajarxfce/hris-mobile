@@ -13,6 +13,41 @@ import org.koin.core.annotation.*
 @ComponentScan("dev.fajar.starter.leave.data")
 class LeaveDataModule {
     @Factory
+    fun prepareSubmission(
+        commands: LeaveSubmissionCommandRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        build: AppBuild,
+    ) = PrepareLeaveSubmission(commands, sessions, workspaces, Clock.System, build)
+
+    @Factory
+    fun observeSubmission(
+        commands: LeaveSubmissionCommandRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        build: AppBuild,
+    ) = ObserveLeaveSubmission(commands, sessions, workspaces, Clock.System, build)
+
+    @Factory
+    fun reviewSubmission(
+        commands: LeaveSubmissionCommandRepository,
+        remote: LeaveRepository,
+        cache: LeaveRequestCacheRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        build: AppBuild,
+    ) = ReviewLeaveSubmission(commands, remote, cache, sessions, workspaces, Clock.System, build)
+
+    @Single(binds = [ReplayLeaveSubmission::class, SyncTask::class])
+    fun replaySubmission(
+        commands: LeaveSubmissionCommandRepository,
+        remote: LeaveSubmissionRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        build: AppBuild,
+    ) = ReplayLeaveSubmission(commands, remote, sessions, workspaces, Clock.System, build)
+
+    @Factory
     fun loadLeaveTypes(
         remote: LeavePreparationRepository,
         sessions: SessionRepository,

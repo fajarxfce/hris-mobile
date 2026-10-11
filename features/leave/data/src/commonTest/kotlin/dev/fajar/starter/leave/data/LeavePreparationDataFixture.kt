@@ -41,6 +41,7 @@ class LeavePreparationDataFixture(val base: LeaveDataFixture = LeaveDataFixture(
             "1.5",
             listOf("2026-10-17"),
             listOf(LeavePreviewBalanceDto(2026, "10.5", "1", "0.5", "1.5", "9", 3)),
+            "a".repeat(64),
         )
     var failure: Exception? = null
     var calls = 0

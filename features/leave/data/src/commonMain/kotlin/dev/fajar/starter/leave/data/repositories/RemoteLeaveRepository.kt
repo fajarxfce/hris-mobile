@@ -8,13 +8,20 @@ import dev.fajar.starter.leave.data.mappers.*
 import dev.fajar.starter.leave.domain.entities.*
 import dev.fajar.starter.leave.domain.repositories.LeaveActionRepository
 import dev.fajar.starter.leave.domain.repositories.LeaveRepository
+import dev.fajar.starter.leave.domain.repositories.LeaveSubmissionRepository
 import dev.fajar.starter.network.safeApiCall
 import kotlin.uuid.Uuid
 import org.koin.core.annotation.Single
 
 @Single
 class RemoteLeaveRepository(private val remote: LeaveRemoteDataSource) :
-    LeaveRepository, LeaveActionRepository {
+    LeaveRepository, LeaveActionRepository, LeaveSubmissionRepository {
+    override suspend fun submit(sessionId: String, command: LeaveSubmissionCommand) = safeApiCall {
+        remote
+            .submit(sessionId, command.companyId, command.id, command.toSubmissionRequest())
+            .toSubmissionReceipt(command)
+    }
+
     override suspend fun act(sessionId: String, command: LeaveCommand) = safeApiCall {
         listOf(command.id, command.companyId, command.requestId).forEach {
             require(Uuid.parse(it).toString() == it)

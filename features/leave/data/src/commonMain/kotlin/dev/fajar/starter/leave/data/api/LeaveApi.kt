@@ -9,6 +9,20 @@ import org.koin.core.annotation.*
 
 @Single
 class LeaveApi(@Named(HttpClients.Authenticated) private val client: HttpClient) {
+    suspend fun submit(
+        sessionId: String,
+        companyId: String,
+        operationId: String,
+        request: LeaveSubmissionRequest,
+    ): LeaveActionReceiptDto =
+        client.requestJson("companies/$companyId/leave/requests", maximumBytes = 4_096) {
+            forSession(sessionId)
+            method = HttpMethod.Post
+            header("Idempotency-Key", operationId)
+            contentType(ContentType.Application.Json)
+            setBody(request)
+        }
+
     suspend fun types(
         sessionId: String,
         companyId: String,

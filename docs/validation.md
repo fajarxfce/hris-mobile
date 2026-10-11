@@ -1,5 +1,23 @@
 # Validation
 
+## Durable leave submission
+
+Complete root checks, 86 Leave domain/data Chromium tests, Android dev assembly
+and the production Web build passed for the submission boundary. Twenty-nine new
+tests cover preview-bound admission, immutable input during pending work, duplicate
+confirmation, replacement scopes, cancellation, finite retries, lost responses,
+receipt validation and canonical reconciliation. Real SQLite tests verify encrypted
+process/session restoration, cross-partition key ownership, tampered envelopes,
+outcome races and cancellation before publication. Web retains three existing
+bundler warnings. The creation page is not connected by this increment.
+
+The development API preview still excluded the selected Saturday, proposed a
+half-day deduction and left the existing balance unchanged. The temporary probe
+session was closed afterward. No phone interaction or performance measurement was
+performed for this boundary. The preceding `b27a9c6` mobile CI passed on Linux,
+Windows and Apple. Server revision confirmation is implemented separately in
+[HRIS Platform](https://github.com/fajarxfce/hris-platform/commit/390e567).
+
 ## Leave preparation boundary
 
 Root checks pass with 544 desktop tests; all 64 Leave domain/data tests pass in
