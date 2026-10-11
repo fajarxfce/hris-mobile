@@ -95,4 +95,9 @@ the pending-MFA directory, owned-family revocation (204), and rejection of both 
 access and refresh tokens afterward (401 `native_session_invalid`). Only the
 verification family was revoked. Workspace checks, native-session policy and
 transport tests, application-flow tests, the Android dev build, and Wasm compilation
-passed. Native MFA device acceptance and browser deployment remain separate.
+passed. Android 16 device checks additionally covered MFA enrollment, invalid/valid
+authenticator proofs, recovery acknowledgement and sign-in, restoration after
+process termination, session-revocation cancellation/confirmation, and logout.
+These used fictional accounts and locally generated proofs, separately from an
+external authenticator application. Browser deployment and external SSO acceptance
+remain separate.

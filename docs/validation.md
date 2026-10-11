@@ -13,8 +13,8 @@ xvfb-run -a ./gradlew :check \
 The root check includes architecture validation for 52 modules, Kotlin formatting,
 static analysis and JVM tests. The assembled application passed 24 Compose UI
 tests, three application-MVI tests and one link-parser test. Workspace domain
-tests passed on JVM and in Chromium (21 each), with six SQLite/encryption tests
-and three mapper tests on each JVM/browser target.
+tests passed on JVM and in Chromium (21 each), with six SQLite/encryption tests on
+JVM and three mapper tests on each JVM/browser target.
 Inbox domain tests passed on JVM and in Chromium (37 each); inbox data
 passed 13 JVM tests. Its two browser transport tests passed in the preceding
 inbox-command run. Tests cover scope replacement, expiry,
@@ -72,14 +72,24 @@ and published dev announcement were used. Checks covered:
 - Disabling People and Communications while Inbox was open, hiding its content
   and the affected home actions. Another company retained both actions. Re-enabling
   the modules restored the message and its confirmed acknowledgement.
+- An invalid authenticator code producing localized feedback without ending the
+  verification flow, followed by successful verification and company selection.
+- Authenticator enrollment with a separate fictional account, acknowledgement of
+  ten recovery codes, company restoration after force-stop/restart, and a subsequent
+  sign-in using one recovery code. Proofs were generated from fixture setup secrets;
+  an external authenticator application was not part of this check.
+- Cancelling another device's session-revocation confirmation, then confirming it.
+  The disposable session remained valid after cancellation and its token received
+  `401 native_session_invalid` after confirmation. The current device remained usable.
 
 The company-policy APK was used for the availability checks, and the workspace APK
 for offline startup and foreground revalidation. The preceding command/inbox APKs
 were used for the earlier observations. The proxy was stopped, the normal dev API
 connection restored, and the demo company's original policy values restored after
-testing. No frame-time, heap or
-battery measurements were taken. Native MFA, external SSO, push delivery, and iOS
-device behavior still need their own physical checks.
+testing. The disposable session was revoked and the temporary MFA account was
+signed out and its company grant disabled. The original employee account was restored afterward.
+No frame-time, heap or battery measurements were taken. External SSO, push delivery,
+and iOS device behavior still need their own physical checks.
 
 ## Integration boundaries
 
