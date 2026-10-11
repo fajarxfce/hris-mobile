@@ -74,10 +74,13 @@ class AppFlowTest {
             compose.onNodeWithText("Retry").performScrollTo().performClick()
             waitFor("Acknowledged")
             compose.waitUntil(15_000) {
-                compose
-                    .onAllNodesWithText("Not confirmed yet. Retry when connected.")
-                    .fetchSemanticsNodes()
-                    .isEmpty() &&
+                server.inbox.actions.size == 2 &&
+                    compose.onAllNodesWithText("Acknowledged").fetchSemanticsNodes().isNotEmpty() &&
+                    compose.onAllNodesWithText("Retry").fetchSemanticsNodes().isEmpty() &&
+                    compose
+                        .onAllNodesWithText("Not confirmed yet. Retry when connected.")
+                        .fetchSemanticsNodes()
+                        .isEmpty() &&
                     compose
                         .onAllNodesWithText("Saved. Updating the inbox.")
                         .fetchSemanticsNodes()
