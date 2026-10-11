@@ -5,6 +5,12 @@ from one read transaction. A replacement generation remains invisible until
 publication. This lets a repository decrypt a detail record against the same
 generation/access envelope as the list, including after removal or account changes.
 
+`observeCheckpoint` reads only the partition's metadata. Like `checkpoint`, it
+reports staging progress when a replacement exists; it does not expose staged
+documents. Collectors can react to committed sync progress without reading or
+decrypting resource payloads. Account replacement and partition removal emit an
+absent checkpoint. Cancellation releases the collector's database observation.
+
 `AppDatabase.replicas` is a raw storage contract for bounded, encrypted resource
 replication. It performs no HTTP, permission checks, DTO-to-domain mapping, or
 retry policy. Feature repositories provide authenticated ciphertext; feature use

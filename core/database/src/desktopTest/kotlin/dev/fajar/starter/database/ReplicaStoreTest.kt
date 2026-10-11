@@ -67,6 +67,7 @@ class ReplicaStoreTest {
         val database = createAppDatabase(directory)
         try {
             verifyReplicaPublication(database)
+            verifyReplicaCheckpointObservation(database)
             verifyReplicaAtomicity(database)
             verifyReplicaTombstones(database)
             verifyReplicaIsolation(database)

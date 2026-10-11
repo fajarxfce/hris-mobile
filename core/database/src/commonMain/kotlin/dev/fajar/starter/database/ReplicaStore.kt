@@ -6,6 +6,9 @@ import kotlinx.coroutines.flow.Flow
 interface ReplicaStore {
     suspend fun checkpoint(sessionId: String, partition: String): ReplicaCheckpoint?
 
+    /** Observes sync progress, including staging, without reading document payloads. */
+    fun observeCheckpoint(sessionId: String, partition: String): Flow<ReplicaCheckpoint?>
+
     /**
      * Publishes a complete snapshot, or removes it, only if the current checkpoint still matches.
      * Account ownership, documents and checkpoint change in the same transaction.

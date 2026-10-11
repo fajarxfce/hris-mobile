@@ -11,6 +11,15 @@ internal class RoomReplicaStore(private val database: StarterDatabase) : Replica
         return dao.checkpoint(sessionId, partition)
     }
 
+    override fun observeCheckpoint(sessionId: String, partition: String) =
+        database.invalidationTracker
+            .createFlow("account_scope", "replica_heads", "replica_generations")
+            .map {
+                validateReplicaKey(sessionId, partition)
+                dao.checkpoint(sessionId, partition)
+            }
+            .distinctUntilChanged()
+
     override suspend fun replace(
         sessionId: String,
         partition: String,

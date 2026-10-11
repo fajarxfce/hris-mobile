@@ -29,6 +29,7 @@ class BrowserReplicaStoreTest {
         val database = createAppDatabase(namespace)
         try {
             verifyReplicaPublication(database)
+            verifyReplicaCheckpointObservation(database)
             verifyReplicaAtomicity(database)
             verifyReplicaTombstones(database)
             verifyReplicaIsolation(database)

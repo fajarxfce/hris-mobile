@@ -20,6 +20,9 @@ internal class IndexedDbReplicaStore(
         )
     }
 
+    override fun observeCheckpoint(sessionId: String, partition: String) =
+        changes.map { checkpoint(sessionId, partition) }.distinctUntilChanged()
+
     override suspend fun replace(
         sessionId: String,
         partition: String,
