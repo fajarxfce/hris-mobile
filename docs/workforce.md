@@ -62,5 +62,9 @@ emulator checks used the real dev API for overnight shifts, week navigation,
 company isolation, offline process restoration and recovery. English/Indonesian
 and light/dark captures were inspected. iOS physical acceptance remains separate.
 
+The validated dev APK was also installed on the authorized Android phone using
+`--install-only` on 2026-10-11. Installation and package metadata were checked;
+no phone UI acceptance was performed during that delivery.
+
 Attendance capture, offline attendance verification and overtime requests are
 separate workflows and are not implemented by this read-only calendar.

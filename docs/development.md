@@ -75,7 +75,8 @@ Desktop distributions: `apps/shared/build/compose/binaries/main`.
 ## Headless Android emulator
 
 Routine VPS testing uses a dedicated AVD; physical phones receive completed-feature
-APK updates separately. Always select the target serial when multiple devices are
+APK updates separately. Notify the device owner before starting each installation.
+Always select the target serial when multiple devices are
 connected. An APK update preserves application data but may stop the application's
 existing process. `--install-only` never brings it to the foreground.
 
