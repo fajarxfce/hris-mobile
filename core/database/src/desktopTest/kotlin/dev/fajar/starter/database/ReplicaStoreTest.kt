@@ -72,6 +72,8 @@ class ReplicaStoreTest {
             verifyReplicaIsolation(database)
             verifyReplicaCancellation(database)
             verifyReplicaPaginationAndBounds(database)
+            verifyReplicaSnapshotReplacement(database)
+            verifyReplicaSnapshotCancellationAndBounds(database)
         } finally {
             database.close()
             directory.deleteRecursively()

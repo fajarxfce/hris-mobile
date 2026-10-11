@@ -11,6 +11,17 @@ internal class RoomReplicaStore(private val database: StarterDatabase) : Replica
         return dao.checkpoint(sessionId, partition)
     }
 
+    override suspend fun replace(
+        sessionId: String,
+        partition: String,
+        expected: ReplicaCheckpoint?,
+        snapshot: ReplicaSnapshot?,
+    ): Boolean {
+        val retained = snapshot?.copy(documents = snapshot.documents.toList())
+        validateReplicaReplacement(sessionId, partition, expected, retained)
+        return dao.replace(sessionId, partition, expected, retained)
+    }
+
     override suspend fun begin(
         sessionId: String,
         partition: String,

@@ -34,6 +34,8 @@ class BrowserReplicaStoreTest {
             verifyReplicaIsolation(database)
             verifyReplicaCancellation(database)
             verifyReplicaPaginationAndBounds(database)
+            verifyReplicaSnapshotReplacement(database)
+            verifyReplicaSnapshotCancellationAndBounds(database)
         } finally {
             database.close()
             deleteReplicaDatabase("$namespace.database").await<JsAny?>()

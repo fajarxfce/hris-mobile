@@ -18,7 +18,15 @@ generation and revision, then saves documents and the next encrypted checkpoint
 in one transaction. `publish` makes the replacement visible and removes the old
 generation atomically. Readers see no partially hydrated replacement.
 
-Document versions never move backward. A deletion at the same version removes
+`replace` publishes one complete bounded snapshot, or conditionally removes it,
+in one transaction. It compares the full observed checkpoint, including the
+generation, revision, payload and publication state. A new snapshot uses a fresh
+generation; competing replacements have one winner. This supports small complete
+records without publishing an intermediate staging state. It has the same session
+checks and batch limits as incremental replication. Snapshot admission and expiry
+remain use-case policy.
+
+Within a generation, document versions never move backward. A deletion at the same version removes
 the visible document and retains a tombstone; an older or equal-version upload
 cannot restore it. A newer version can replace it. Ordering keys must be unique
 within a generation, normally by including the resource ID. They contain no
@@ -45,8 +53,8 @@ closes its connection; a blocked IndexedDB upgrade also closes a connection that
 arrives after the original open was rejected.
 
 The shared SQLite/IndexedDB contract checks staging visibility, publication,
-concurrent checkpoint writes, rollback, tombstones, bounded pagination, scope
-replacement, cancellation, and restart. Migration checks cover the existing
+concurrent checkpoint/snapshot writes, conditional removal, rollback, tombstones,
+bounded pagination, scope replacement, cancellation, and restart. Migration checks cover the existing
 SQLite account/inbox and the browser upgrade path.
 
 Validation: the workspace `:check`, Android dev debug build, and database

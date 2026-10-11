@@ -76,6 +76,44 @@ abstract class ReplicaDao {
     }
 
     @Transaction
+    open suspend fun replace(
+        sessionId: String,
+        partition: String,
+        expected: ReplicaCheckpoint?,
+        snapshot: ReplicaSnapshot?,
+    ): Boolean {
+        if (!owns(sessionId) || checkpoint(sessionId, partition) != expected) return false
+        if (snapshot != null && generation(partition, snapshot.generation) != null) return false
+        deleteHead(partition)
+        deleteGenerations(partition)
+        if (snapshot != null) {
+            write(
+                ReplicaGenerationEntity(
+                    partition,
+                    snapshot.generation,
+                    sessionId,
+                    0,
+                    snapshot.checkpoint,
+                )
+            )
+            for (document in snapshot.documents) {
+                insert(
+                    ReplicaDocumentEntity(
+                        partition,
+                        snapshot.generation,
+                        document.id,
+                        document.version,
+                        document.sortKey,
+                        document.payload,
+                    )
+                )
+            }
+            write(ReplicaHeadEntity(partition, snapshot.generation, null))
+        }
+        return true
+    }
+
+    @Transaction
     open suspend fun begin(
         sessionId: String,
         partition: String,

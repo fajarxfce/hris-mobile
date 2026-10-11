@@ -14,6 +14,26 @@ fun validateReplicaCheckpoint(checkpoint: String) {
     require(checkpoint.length in 1..32_768)
 }
 
+fun validateReplicaReplacement(
+    sessionId: String,
+    partition: String,
+    expected: ReplicaCheckpoint?,
+    snapshot: ReplicaSnapshot?,
+) {
+    validateReplicaKey(sessionId, partition)
+    expected?.let {
+        require(it.handle.sessionId == sessionId && it.handle.partition == partition)
+        validateReplicaGeneration(it.handle.generation)
+        validateReplicaCheckpoint(it.payload)
+        require(it.revision in 0..9_007_199_254_740_991L)
+    }
+    snapshot?.let {
+        validateReplicaGeneration(it.generation)
+        validateReplicaCheckpoint(it.checkpoint)
+        validateReplicaBatch(0, it.documents)
+    }
+}
+
 fun validateReplicaBatch(expectedRevision: Long, documents: List<ReplicaDocument>) {
     require(expectedRevision in 0 until 9_007_199_254_740_991L)
     require(documents.size <= 200 && documents.map { it.id }.distinct().size == documents.size)

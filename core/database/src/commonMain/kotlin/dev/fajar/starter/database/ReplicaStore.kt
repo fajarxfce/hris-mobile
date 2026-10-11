@@ -6,6 +6,17 @@ import kotlinx.coroutines.flow.Flow
 interface ReplicaStore {
     suspend fun checkpoint(sessionId: String, partition: String): ReplicaCheckpoint?
 
+    /**
+     * Publishes a complete snapshot, or removes it, only if the current checkpoint still matches.
+     * Account ownership, documents and checkpoint change in the same transaction.
+     */
+    suspend fun replace(
+        sessionId: String,
+        partition: String,
+        expected: ReplicaCheckpoint?,
+        snapshot: ReplicaSnapshot?,
+    ): Boolean
+
     /** Starts a replacement without exposing its incomplete documents to readers. */
     suspend fun begin(
         sessionId: String,

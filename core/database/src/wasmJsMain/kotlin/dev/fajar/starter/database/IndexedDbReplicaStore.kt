@@ -20,6 +20,32 @@ internal class IndexedDbReplicaStore(
         )
     }
 
+    override suspend fun replace(
+        sessionId: String,
+        partition: String,
+        expected: ReplicaCheckpoint?,
+        snapshot: ReplicaSnapshot?,
+    ): Boolean {
+        val retained = snapshot?.copy(documents = snapshot.documents.toList())
+        validateReplicaReplacement(sessionId, partition, expected, retained)
+        val db = database()
+        currentCoroutineContext().ensureActive()
+        return withContext(NonCancellable) {
+            val changed =
+                replaceReplica(
+                        db,
+                        sessionId,
+                        partition,
+                        Json.encodeToString(expected),
+                        Json.encodeToString(retained),
+                    )
+                    .await<JsBoolean>()
+                    .toBoolean()
+            if (changed) changes.tryEmit(Unit)
+            changed
+        }
+    }
+
     override suspend fun begin(
         sessionId: String,
         partition: String,
@@ -151,6 +177,63 @@ private external fun replicaCheckpoint(
     sessionId: String,
     partition: String,
 ): Promise<JsString>
+
+@JsFun(
+    """(db, sessionId, partition, expectedJson, snapshotJson) => new Promise((resolve, reject) => {
+    const expected = JSON.parse(expectedJson), snapshot = JSON.parse(snapshotJson);
+    const tx = db.transaction(['account_scope', 'replica_heads', 'replica_generations', 'replica_documents'], 'readwrite');
+    const heads = tx.objectStore('replica_heads'), generations = tx.objectStore('replica_generations'), documents = tx.objectStore('replica_documents');
+    let changed = false;
+    const replace = current => {
+        if (current == null ? expected != null :
+            expected == null || expected.handle.sessionId !== sessionId ||
+            expected.handle.partition !== partition || expected.handle.generation !== current.generation ||
+            expected.revision !== current.revision || expected.payload !== current.checkpoint ||
+            expected.published !== current.published) return;
+        const write = () => {
+            heads.delete(partition);
+            generations.delete(IDBKeyRange.bound([partition, ''], [partition, '\uffff']));
+            documents.delete(IDBKeyRange.bound([partition, '', ''], [partition, '\uffff', '\uffff']));
+            if (snapshot != null) {
+                const {generation, checkpoint} = snapshot;
+                generations.put({partition, generation, sessionId, revision:0, checkpoint});
+                for (const item of snapshot.documents) {
+                    documents.put({...item, partition, generation, visibleSort:item.payload == null ? undefined : item.sortKey});
+                }
+                heads.put({partition, activeGeneration:generation, stagingGeneration:null});
+            }
+            changed = true;
+        };
+        if (snapshot == null) write();
+        else {
+            const existing = generations.get([partition, snapshot.generation]);
+            existing.onsuccess = () => { if (!existing.result) write(); };
+        }
+    };
+    const owner = tx.objectStore('account_scope').get('current');
+    owner.onsuccess = () => {
+        if (owner.result !== sessionId) return;
+        const head = heads.get(partition);
+        head.onsuccess = () => {
+            const generation = head.result?.stagingGeneration ?? head.result?.activeGeneration;
+            if (generation == null) { replace(null); return; }
+            const row = generations.get([partition, generation]);
+            row.onsuccess = () => {
+                if (row.result) replace({...row.result, published:head.result.activeGeneration === generation});
+            };
+        };
+    };
+    tx.oncomplete = () => resolve(changed);
+    tx.onabort = () => reject(tx.error || new Error('Replica replacement failed.'));
+})"""
+)
+private external fun replaceReplica(
+    db: JsAny,
+    sessionId: String,
+    partition: String,
+    expected: String,
+    snapshot: String,
+): Promise<JsBoolean>
 
 @JsFun(
     """(db, sessionId, partition, generation, checkpoint, expected) => new Promise((resolve, reject) => {
