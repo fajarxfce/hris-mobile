@@ -7,6 +7,15 @@ import kotlin.time.Duration.Companion.hours
 import kotlin.time.Instant
 
 class LeaveDataFixture : LeaveRemoteDataSource {
+    override suspend fun act(
+        sessionId: String,
+        companyId: String,
+        requestId: String,
+        operationId: String,
+        action: String,
+        request: LeaveActionRequest,
+    ): LeaveActionReceiptDto = error("Action transport is not used by this read fixture")
+
     val now = Instant.parse("2026-10-12T01:00:00Z")
     val access =
         LeaveAccess(

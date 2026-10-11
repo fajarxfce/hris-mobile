@@ -3,15 +3,40 @@
 package dev.fajar.starter.leave.data.repositories
 
 import dev.fajar.starter.leave.data.datasources.LeaveRemoteDataSource
+import dev.fajar.starter.leave.data.dto.LeaveActionRequest
 import dev.fajar.starter.leave.data.mappers.*
 import dev.fajar.starter.leave.domain.entities.*
+import dev.fajar.starter.leave.domain.repositories.LeaveActionRepository
 import dev.fajar.starter.leave.domain.repositories.LeaveRepository
 import dev.fajar.starter.network.safeApiCall
 import kotlin.uuid.Uuid
 import org.koin.core.annotation.Single
 
 @Single
-class RemoteLeaveRepository(private val remote: LeaveRemoteDataSource) : LeaveRepository {
+class RemoteLeaveRepository(private val remote: LeaveRemoteDataSource) :
+    LeaveRepository, LeaveActionRepository {
+    override suspend fun act(sessionId: String, command: LeaveCommand) = safeApiCall {
+        listOf(command.id, command.companyId, command.requestId).forEach {
+            require(Uuid.parse(it).toString() == it)
+        }
+        require(command.expectedVersion in 0 until 9_007_199_254_740_991L)
+        require(command.reason.isNotBlank() && command.reason.length <= 1_000)
+        remote
+            .act(
+                sessionId,
+                command.companyId,
+                command.requestId,
+                command.id,
+                when (command.action) {
+                    LeaveRequestAction.WITHDRAW,
+                    LeaveRequestAction.WITHDRAW_CANCELLATION -> "withdraw"
+                    LeaveRequestAction.REQUEST_CANCELLATION -> "cancellation"
+                },
+                LeaveActionRequest(command.expectedVersion, command.reason),
+            )
+            .toReceipt(command)
+    }
+
     override suspend fun details(access: LeaveAccess, selection: LeaveRequestSelection) =
         safeApiCall {
             Uuid.parse(access.companyId)

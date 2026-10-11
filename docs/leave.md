@@ -88,14 +88,52 @@ server's current header rather than presenting an old status as current. Offline
 restoration retains the last history selection. A missing or revoked request
 hides its saved content, including through subsequent failed retries.
 
+## Durable request actions
+
+Withdrawal, cancellation requests and withdrawal of a pending cancellation have
+separate domain intents. Admission checks the visible request version, its live
+read lease, write permission, available actions and a reason of at most 1,000
+characters. A repeated confirmation recovers the same retained intent; different
+input cannot silently replace it.
+
+The command repository coordinates raw command storage, authenticated encryption
+and credentials. Request bodies and outcomes are sealed separately, with account,
+API audience, company, request, purpose and revision authenticated. Commands
+survive session replacement for the same account without becoming accessible to
+another account or company. Losing a key never regenerates one over ciphertext.
+
+Replay belongs to a singleton use case shared by manual delivery and the sync
+worker. It rechecks the company policy and scope, records an unconfirmed attempt
+before transport, and reuses the original operation ID, version and reason.
+The server receipt must identify the request at exactly the next version. A
+later denial cannot turn an earlier uncertain attempt into a known rejection.
+Delivery has a 30-second deadline, at most ten sends per background batch and
+three automatic attempts per command. Manual recovery remains available within
+the bounded retained-attempt limit. There is no retry inside a datasource.
+
+Explicit review can discard an unsent command with its observed revision. A
+confirmed or definitely rejected command is retired only after canonical review
+and cache reconciliation. A concurrent replay wins over an obsolete removal.
+Unconfirmed outcomes cannot be discarded as though the server rolled back.
+The presentation controls for these operations are the next increment.
+
 ## Remaining workflow
 
 Subsequent work adds eligible policy/day selection, document evidence acquisition
-and transfer, durable submission, withdrawal
-and cancellation, plus canonical sync reconciliation. A cached balance is never
+and transfer, durable submission, and presentation for withdrawal/cancellation.
+A cached balance is never
 a reservation or authorization to submit.
 
 ## Validation
+
+The command foundation passes the root check with 519 desktop tests, Leave
+domain/data's 51 Chromium tests and Android dev assembly. New regressions cover
+immutable duplicate admission, expired leases, pending cancellation, late
+receipts, scope replacement, manual/background serialization, finite deadlines,
+bounded automatic attempts, failed receipt storage and removal races. Real SQLite
+tests verify encrypted reopening, replacement sessions, account/company isolation,
+missing keys, tampered envelopes and cancellation during encryption. No mobile
+transaction or physical-device acceptance is claimed for this foundation increment.
 
 The root `:check` passes with 491 desktop tests. Leave's three Chromium suites
 have passed 51 tests; the 20 presentation tests were rerun for request details,

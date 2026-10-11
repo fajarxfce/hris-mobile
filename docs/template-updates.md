@@ -1,5 +1,15 @@
 # Template updates
 
+## Storage observer recovery
+
+The completed-source recovery implemented in `eee789e` was ported to
+[Compose Fluent Starter 60714cf](https://github.com/fajarxfce/compose-fluent-starter/commit/60714cf).
+Its dashboard reopens the owned content subscription after successful writes and
+rejects cancelled results before publishing state. The regression first reproduced
+the disconnected source; root checks with 215 desktop tests, three dashboard
+Chromium tests and Android/Web builds then passed. Leave policy and transactions
+remain in this application.
+
 This application was generated from
 [Compose Fluent Starter](https://github.com/fajarxfce/compose-fluent-starter).
 Template generation does not automatically synchronize either repository.

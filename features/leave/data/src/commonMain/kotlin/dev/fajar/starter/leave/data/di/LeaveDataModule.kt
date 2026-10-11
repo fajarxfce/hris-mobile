@@ -4,6 +4,7 @@ import dev.fajar.starter.common.config.AppBuild
 import dev.fajar.starter.identity.domain.repositories.SessionRepository
 import dev.fajar.starter.leave.domain.repositories.*
 import dev.fajar.starter.leave.domain.usecases.*
+import dev.fajar.starter.sync.domain.SyncTask
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
 import kotlin.time.Clock
 import org.koin.core.annotation.*
@@ -11,6 +12,42 @@ import org.koin.core.annotation.*
 @Module
 @ComponentScan("dev.fajar.starter.leave.data")
 class LeaveDataModule {
+    @Factory
+    fun prepareAction(
+        commands: LeaveCommandRepository,
+        cache: LeaveRequestCacheRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        build: AppBuild,
+    ) = PrepareLeaveAction(commands, cache, sessions, workspaces, Clock.System, build)
+
+    @Factory
+    fun observeAction(
+        commands: LeaveCommandRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        build: AppBuild,
+    ) = ObserveLeaveAction(commands, sessions, workspaces, Clock.System, build)
+
+    @Factory
+    fun reviewAction(
+        commands: LeaveCommandRepository,
+        remote: LeaveRepository,
+        cache: LeaveRequestCacheRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        build: AppBuild,
+    ) = ReviewLeaveAction(commands, remote, cache, sessions, workspaces, Clock.System, build)
+
+    @Single(binds = [ReplayLeaveAction::class, SyncTask::class])
+    fun replayAction(
+        commands: LeaveCommandRepository,
+        remote: LeaveActionRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        build: AppBuild,
+    ) = ReplayLeaveAction(commands, remote, sessions, workspaces, Clock.System, build)
+
     @Factory
     fun observeLeaveRequest(
         cache: LeaveRequestCacheRepository,

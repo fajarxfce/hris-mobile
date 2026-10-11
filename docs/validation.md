@@ -1,5 +1,14 @@
 # Validation
 
+## Durable leave command foundation
+
+Root architecture, formatting, static analysis and all 519 desktop tests pass.
+The 51 Leave domain/data tests also pass in Chromium, and Android dev assembles.
+Twenty-seven new command tests cover admission, recovery, deadlines, concurrency,
+encrypted persistence and transport validation. The Home publication regression
+also passes in the complete suite. UI controls and device acceptance for these
+transactions remain the next increment; no release was created.
+
 ## Home layout during cache publication
 
 A controlled cache notification reproduced a 113 px upward menu shift after

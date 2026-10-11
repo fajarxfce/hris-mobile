@@ -3,11 +3,31 @@ package dev.fajar.starter.leave.data.api
 import dev.fajar.starter.leave.data.dto.*
 import dev.fajar.starter.network.*
 import io.ktor.client.HttpClient
-import io.ktor.client.request.parameter
+import io.ktor.client.request.*
+import io.ktor.http.*
 import org.koin.core.annotation.*
 
 @Single
 class LeaveApi(@Named(HttpClients.Authenticated) private val client: HttpClient) {
+    suspend fun act(
+        sessionId: String,
+        companyId: String,
+        requestId: String,
+        operationId: String,
+        action: String,
+        request: LeaveActionRequest,
+    ): LeaveActionReceiptDto =
+        client.requestJson(
+            "companies/$companyId/leave/requests/$requestId/$action",
+            maximumBytes = 4_096,
+        ) {
+            forSession(sessionId)
+            method = HttpMethod.Post
+            header("Idempotency-Key", operationId)
+            contentType(ContentType.Application.Json)
+            setBody(request)
+        }
+
     suspend fun details(
         sessionId: String,
         companyId: String,
