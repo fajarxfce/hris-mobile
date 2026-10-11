@@ -94,3 +94,8 @@ leaving their owner releases both. Directory filtering occurs before server pagi
 owner. It adapts its column count to text size and does not acquire data or decide
 which periods an application permits. Month selection resets the history list
 position; refreshes of the same month retain it.
+
+`AppDatePicker` renders a controlled seven-column month grid. The caller supplies
+short localized weekday labels, full-date accessible descriptions, selection and
+availability. Calendar navigation and date policy remain with the feature. Put it
+inside a scrollable dialog so large text does not displace the fixed close action.

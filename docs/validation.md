@@ -1,5 +1,13 @@
 # Validation
 
+## Controlled date picker
+
+Root checks passed with 574 desktop tests, Android dev assembled and Web
+compilation passed. The new shared UI regression covers caller-owned selection,
+disabled dates/month navigation, full-date accessible labels and 200% text at
+320 dp. Its screenshot was inspected after shortening the weekday labels.
+No phone interaction or runtime performance measurement was performed.
+
 ## Durable leave submission
 
 Complete root checks, 86 Leave domain/data Chromium tests, Android dev assembly
