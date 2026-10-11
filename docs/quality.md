@@ -47,3 +47,10 @@ Keep the npm workspace lock current after changing KMP modules or npm dependenci
 Behavioral tests cover cancellation/late results, shared token refresh, revoked
 sessions, storage failures, cache isolation, stale pagination, offline reads,
 validation errors, duplicate submissions and persisted language selection.
+
+## Apple toolchain
+
+Use Xcode 26.3 for the Kotlin/Native Core Location integration. CI and internal
+distribution select it explicitly; the macOS runner default (Xcode 16.4) lacks
+frameworks referenced by the current Kotlin platform libraries. The Apple job
+runs location lifecycle tests in the simulator before building the application.
