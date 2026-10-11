@@ -40,6 +40,7 @@ jobs:
           :core:settings:data:wasmJsBrowserTest :core:localization:wasmJsBrowserTest :core:observability:wasmJsBrowserTest
           :core:security:domain:wasmJsBrowserTest :core:security:data:wasmJsBrowserTest :features:security:presentation:wasmJsBrowserTest
           :core:availability:domain:wasmJsBrowserTest :core:availability:data:wasmJsBrowserTest
+          :apps:shared:wasmJsBrowserTest
           :apps:android:assembleDevDebug :apps:android:assembleStagingDebug :apps:android:assembleProdRelease
           :apps:shared:wasmJsBrowserDistribution
       - uses: actions/upload-artifact@v4

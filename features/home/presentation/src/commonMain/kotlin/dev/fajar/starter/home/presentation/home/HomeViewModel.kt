@@ -27,6 +27,10 @@ class HomeViewModel(
         HomeState(
             workspace,
             tab = initialTab,
+            canOpenCalendar =
+                workspace.permissions.any {
+                    it == "attendance.self.record" || it == "workforce.read"
+                } && companyModuleAvailable(workspace, CompanyModule.WORKFORCE),
             canOpenProfile =
                 "people.self.read" in workspace.permissions &&
                     companyModuleAvailable(workspace, CompanyModule.PEOPLE),
@@ -41,6 +45,7 @@ class HomeViewModel(
         on<HomeEvent.SettingsRequested>(::onSettingsRequested)
         on<HomeEvent.ProfileRequested>(::onProfileRequested)
         on<HomeEvent.InboxRequested>(::onInboxRequested)
+        on<HomeEvent.CalendarRequested>(::onCalendarRequested)
         on<HomeEvent.SessionsRequested>(::onSessionsRequested)
         on<HomeEvent.SignOutRequested>(::onSignOutRequested)
         viewModelScope.launch {
@@ -50,6 +55,12 @@ class HomeViewModel(
                 updateState {
                     it.copy(
                         workspace = selected ?: it.workspace,
+                        canOpenCalendar =
+                            selected != null &&
+                                selected.permissions.any {
+                                    it == "attendance.self.record" || it == "workforce.read"
+                                } &&
+                                companyModuleAvailable(selected, CompanyModule.WORKFORCE),
                         canOpenProfile =
                             selected != null &&
                                 "people.self.read" in selected.permissions &&
@@ -102,6 +113,11 @@ class HomeViewModel(
 
     private fun onSessionsRequested(event: HomeEvent.SessionsRequested) {
         viewModelScope.launch { emitEffect(HomeEffect.OpenSessions) }
+    }
+
+    private fun onCalendarRequested(event: HomeEvent.CalendarRequested) {
+        if (!state.value.canOpenCalendar) return
+        viewModelScope.launch { emitEffect(HomeEffect.OpenCalendar) }
     }
 
     private fun onCompanyChangeRequested(event: HomeEvent.CompanyChangeRequested) {

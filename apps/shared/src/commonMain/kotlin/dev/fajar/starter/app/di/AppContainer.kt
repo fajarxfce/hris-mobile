@@ -45,6 +45,8 @@ import dev.fajar.starter.transfers.data.datasources.TransferInputSource
 import dev.fajar.starter.transfers.data.datasources.UnavailableTransferInputSource
 import dev.fajar.starter.transfers.data.di.TransferDataModule
 import dev.fajar.starter.worker.ForegroundWorkScheduler
+import dev.fajar.starter.workforce.data.di.WorkforceDataModule
+import dev.fajar.starter.workforce.presentation.di.WorkforcePresentationModule
 import dev.fajar.starter.workspace.data.di.WorkspaceDataModule
 import dev.fajar.starter.workspace.presentation.di.WorkspacePresentationModule
 import org.koin.core.module.Module
@@ -63,6 +65,7 @@ fun createAppContainer(
     workScheduler: WorkScheduler? = null,
     credentials: CredentialStore = MemoryCredentialStore(),
     inboxCredentials: CredentialStore = MemoryCredentialStore(),
+    calendarCredentials: CredentialStore = MemoryCredentialStore(),
     commandCredentials: AtomicCredentialStore = MemoryCredentialStore(),
     workspaceCredentials: AtomicCredentialStore = MemoryCredentialStore(),
     remoteFeatureFlags: RemoteFeatureFlagSource = UnavailableFeatureFlagSource(),
@@ -118,6 +121,8 @@ fun createAppContainer(
             single<CredentialStore> { credentials }.onClose { it?.close() }
             single<CredentialStore>(named("inbox-content-key")) { inboxCredentials }
                 .onClose { it?.close() }
+            single<CredentialStore>(named("calendar-content-key")) { calendarCredentials }
+                .onClose { it?.close() }
             single<AtomicCredentialStore>(named("command-content-key")) { commandCredentials }
                 .onClose { it?.close() }
             single<AtomicCredentialStore>(named("workspace-content-key")) { workspaceCredentials }
@@ -140,6 +145,8 @@ fun createAppContainer(
         PeoplePresentationModule().module,
         InboxDataModule().module,
         InboxPresentationModule().module,
+        WorkforceDataModule().module,
+        WorkforcePresentationModule().module,
         ApplicationModule().module,
     )
 }

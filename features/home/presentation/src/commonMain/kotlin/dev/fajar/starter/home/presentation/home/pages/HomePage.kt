@@ -70,6 +70,13 @@ fun HomePage(state: HomeState, onEvent: (HomeEvent) -> Unit) {
                                     Modifier.fillMaxWidth(),
                                     primary = false,
                                 )
+                            if (state.canOpenCalendar)
+                                AppButton(
+                                    appString(AppString.WorkCalendar),
+                                    { onEvent(HomeEvent.CalendarRequested) },
+                                    Modifier.fillMaxWidth(),
+                                    primary = false,
+                                )
                             if (state.failure != null) AppFeedback(failureText(state.failure))
                         }
                     HomeTab.Account ->

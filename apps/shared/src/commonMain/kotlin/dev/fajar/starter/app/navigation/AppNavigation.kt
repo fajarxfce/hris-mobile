@@ -22,6 +22,7 @@ import dev.fajar.starter.onboarding.presentation.navigation.*
 import dev.fajar.starter.people.presentation.navigation.*
 import dev.fajar.starter.security.presentation.navigation.AppLockSettings
 import dev.fajar.starter.settings.presentation.navigation.*
+import dev.fajar.starter.workforce.presentation.navigation.*
 import dev.fajar.starter.workspace.domain.entities.CompanyAvailability
 import dev.fajar.starter.workspace.presentation.navigation.*
 import dev.fajar.starter.workspace.presentation.policy.*
@@ -141,6 +142,9 @@ fun AppNavigation(controller: NavHostController, incomingLinks: Flow<String>) {
                             controller.navigate(ProfileRoute) { launchSingleTop = true }
                         },
                         onInbox = { controller.navigate(InboxRoute) { launchSingleTop = true } },
+                        onCalendar = {
+                            controller.navigate(WorkCalendarRoute) { launchSingleTop = true }
+                        },
                         onSessions = {
                             controller.navigate(SessionsRoute) { launchSingleTop = true }
                         },
@@ -166,6 +170,16 @@ fun AppNavigation(controller: NavHostController, incomingLinks: Flow<String>) {
                         onBack = { controller.popBackStack() },
                     )
                     verificationRoutes(stage.sessionId) { controller.popBackStack() }
+                    workforceRoutes(
+                        stage.workspace.id,
+                        onVerify = {
+                            controller.navigate(VerificationRoute) { launchSingleTop = true }
+                        },
+                        onRecheckWorkspace = {
+                            viewModel.onEvent(AppEvent.WorkspaceRefreshRequested)
+                        },
+                        onBack = { controller.popBackStack() },
+                    )
                     sessionRoutes(stage.sessionId) { controller.popBackStack() }
                     settingsRoutes(securitySettings = { AppLockSettings() }) {
                         controller.popBackStack()

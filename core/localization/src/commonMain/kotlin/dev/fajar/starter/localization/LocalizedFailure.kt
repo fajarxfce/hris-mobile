@@ -7,6 +7,9 @@ import dev.fajar.starter.common.result.*
 fun failureText(failure: Failure): String =
     appString(
         when (failure.code) {
+            "client.calendar_cache_expired" -> AppString.CalendarCacheExpired
+            "client.calendar_scope_changed" -> AppString.CalendarScopeChanged
+            "client.calendar_changed" -> AppString.CalendarChanged
             "client.company_policy_unavailable",
             "client.company_policy_expired" -> AppString.CompanyPolicyUnavailable
             "company_module_disabled" -> AppString.CompanyModuleDisabled

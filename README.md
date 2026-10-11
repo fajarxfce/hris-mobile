@@ -18,13 +18,17 @@ correspondence, retains admitted content when a refresh fails, and queues explic
 read/acknowledgement actions with durable idempotent retries. A time-limited encrypted
 workspace restores the selected company offline. Company policies gate maintenance,
 minimum builds and disabled modules, and pause inbox delivery before transport.
+The weekly work calendar shows assigned shifts, roster overrides and days off,
+with a bounded encrypted snapshot for offline access. Workforce availability is
+independent of the personal-profile module.
 Screens support English and Indonesian. System
 appearance and reduced-motion preferences are respected.
 
 The runtime contains no demo authentication transport. Other transactional employee workflows
 are still being connected; a generated module
-is not a completed HRIS workflow. See [native identity](docs/native-identity.md), [company workspaces](docs/workspace.md), [employee profiles](docs/people.md), [inbox and synchronization](docs/inbox.md), [company availability](docs/company-policy.md), and
-the platform's [remaining delivery work](https://github.com/fajarxfce/hris-platform/blob/main/docs/completion.md).
+is not a completed HRIS workflow. See [native identity](docs/native-identity.md), [company workspaces](docs/workspace.md), [employee profiles](docs/people.md), [inbox and synchronization](docs/inbox.md), [company availability](docs/company-policy.md),
+[work calendars](docs/workforce.md), and the platform's
+[remaining delivery work](https://github.com/fajarxfce/hris-platform/blob/main/docs/completion.md).
 
 ## Development
 
@@ -68,7 +72,7 @@ policy is not configured yet. Android/iOS send the server's native version heade
 - `apps/android`, `apps/ios`, `apps/shared`: platform entry points and composition.
 - `core/identity`: native credentials, MFA, account contracts, and session policy.
 - `core/workspace`: current company selection and scope ownership.
-- `features/auth`, `features/workspace`, `features/home`, `features/people`, `features/inbox`: feature-owned MVI screens.
+- `features/auth`, `features/workspace`, `features/home`, `features/people`, `features/inbox`, `features/workforce`: feature-owned MVI screens.
 - `core/designsystem`: shared `AppXxx` Fluent components and restrained transitions.
 - `build-logic`: Gradle convention plugins; versions are in `gradle/libs.versions.toml`.
 

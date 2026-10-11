@@ -29,6 +29,12 @@ include(":features:people:domain", ":features:people:data", ":features:people:pr
 
 include(":features:inbox:domain", ":features:inbox:data", ":features:inbox:presentation")
 
+include(
+    ":features:workforce:domain",
+    ":features:workforce:data",
+    ":features:workforce:presentation",
+)
+
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 include(

@@ -41,6 +41,8 @@ kotlin.sourceSets {
         implementation(projects.features.people.presentation)
         implementation(projects.features.inbox.data)
         implementation(projects.features.inbox.presentation)
+        implementation(projects.features.workforce.data)
+        implementation(projects.features.workforce.presentation)
         implementation(projects.core.presentation)
         implementation(libs.lifecycle.compose)
         implementation(libs.koin.compose)
@@ -49,7 +51,11 @@ kotlin.sourceSets {
         implementation(libs.serialization.json)
     }
     getByName("commonTest").dependencies { implementation(libs.coroutines.test) }
-    getByName("wasmJsMain").dependencies { implementation(libs.browser) }
+    getByName("wasmJsMain").dependencies {
+        implementation(libs.browser)
+        implementation(npm("@js-joda/timezone", libs.versions.js.joda.timezone.get()))
+    }
+    getByName("wasmJsTest").dependencies { implementation(libs.datetime) }
 }
 
 kotlin {

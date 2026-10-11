@@ -27,6 +27,7 @@ class NativeUiServer(
 
     val unexpectedPaths = mutableListOf<String>()
     val people = NativePeopleUi()
+    val workforce = NativeWorkforceUi()
     val inbox = NativeInboxUi()
     val deviceSessions = NativeSessionsUi()
     val companyPolicy = NativeCompanyPolicyUi()
@@ -54,6 +55,9 @@ class NativeUiServer(
                     headers,
                 )
             inbox.response(request)?.let { (body, status) ->
+                return@withLock respond(body, status, headers)
+            }
+            workforce.response(request)?.let { (body, status) ->
                 return@withLock respond(body, status, headers)
             }
             if (path.startsWith("/api/v1/auth/native/sessions") && rejectSessionAccessOnce) {
@@ -145,6 +149,7 @@ class NativeUiServer(
             putJsonArray("permissions") {
                 add("people.self.read")
                 add("announcements.read")
+                add("attendance.self.record")
             }
         }
     }

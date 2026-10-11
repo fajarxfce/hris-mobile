@@ -49,14 +49,17 @@ errors, and form values in state; use effects for transient UI actions.
 
 ## Backend integration
 
-The demo transport implements `POST /auth/login` and `GET /dashboard`. HTTP APIs and DTOs
-live in the consuming data module. Replace the engine and base URL in app composition
-when integrating a server. Each client factory invocation accepts its own engine and base
-URL, so multiple independently configured/named clients can coexist.
+The application uses HRIS Platform's `/api/v1/` native authentication and company
+endpoints. Dev defaults to loopback HTTP through ADB reverse; staging and production
+require the configured HTTPS origin. See [native identity](native-identity.md) and
+[environments](environments.md). The inherited demo module is not installed in the
+runtime graph.
 
-Do not point the existing demo sign-in contract at a real backend and assume it is secure:
-add a backend-specific session response, secure credential port, authenticated client,
-expiration/refresh policy, and matching tests. Never persist passwords in preferences.
+HTTP APIs, DTOs and raw datasource adapters stay in their consuming data module.
+Use cases coordinate current session, workspace and company-policy admission.
+Authenticated requests carry their owning session; a late response cannot replace
+another account's content. Credentials use the platform secure store, and passwords
+are never persisted in preferences.
 
 ## Editors and platforms
 

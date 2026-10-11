@@ -1,0 +1,101 @@
+package dev.fajar.starter.workforce.domain.policies
+
+import dev.fajar.starter.common.config.AppBuild
+import dev.fajar.starter.common.result.*
+import dev.fajar.starter.identity.domain.entities.Session
+import dev.fajar.starter.workforce.domain.entities.*
+import dev.fajar.starter.workspace.domain.entities.*
+import dev.fajar.starter.workspace.domain.policies.*
+import kotlin.time.Duration.Companion.hours
+import kotlin.time.Instant
+
+val WORK_CALENDAR_CACHE_PERIOD = 1.hours
+
+fun admitWorkCalendar(
+    workspaceId: String,
+    workspace: Workspace?,
+    session: Session?,
+    build: AppBuild,
+    now: Instant,
+): AppResult<CalendarAccess> {
+    val ownership = validateWorkspaceOwnership(workspaceId, workspace, session, now)
+    if (ownership is AppResult.Failed) return ownership
+    requireNotNull(workspace)
+    requireNotNull(session)
+    val module = requireCompanyModule(workspace, CompanyModule.WORKFORCE)
+    if (module is AppResult.Failed) return module
+    when (companyAvailability(workspace.policy, build, now)) {
+        CompanyAvailability.Unknown ->
+            return companyPolicyFailure(
+                "client.company_policy_unavailable",
+                FailureKind.Unavailable,
+            )
+        CompanyAvailability.ClientMetadataRequired ->
+            return companyPolicyFailure("client_version_required")
+        is CompanyAvailability.UpdateRequired ->
+            return companyPolicyFailure("client_update_required")
+        is CompanyAvailability.Maintenance ->
+            return companyPolicyFailure("company_maintenance", FailureKind.Service)
+        CompanyAvailability.Available -> Unit
+    }
+    if (workspace.permissions.none { it == "attendance.self.record" || it == "workforce.read" })
+        return calendarFailure("access_denied", FailureKind.AccessDenied)
+    var deadline = workspace.admission.expiresAt
+    var expiryCode = "client.workspace_expired"
+    val policy = requireNotNull(workspace.policy)
+    policy.policy.maintenance?.let { window ->
+        val start = policy.requestedAt + (window.startsAt - policy.policy.serverTime)
+        if (start > now && start < deadline) {
+            deadline = start
+            expiryCode = "company_maintenance"
+        }
+    }
+    return AppResult.Success(
+        CalendarAccess(
+            session.id,
+            session.user.id,
+            session.binding.audience,
+            workspace.company.id,
+            workspace.permissions.toSet(),
+            Instant.fromEpochMilliseconds(session.binding.expiresAtEpochMillis),
+            deadline,
+            expiryCode,
+        )
+    )
+}
+
+fun sameCalendarScope(first: CalendarAccess, second: CalendarAccess): Boolean =
+    first.sessionId == second.sessionId &&
+        first.accountId == second.accountId &&
+        first.audience == second.audience &&
+        first.companyId == second.companyId &&
+        first.permissions == second.permissions &&
+        first.sessionExpiresAt == second.sessionExpiresAt
+
+fun validateCalendarContinuation(
+    expected: CalendarAccess,
+    current: AppResult<CalendarAccess>,
+): AppResult<CalendarAccess> =
+    when (current) {
+        is AppResult.Failed -> current
+        is AppResult.Success ->
+            if (sameCalendarScope(expected, current.value)) current
+            else calendarFailure("client.calendar_scope_changed", FailureKind.AccessDenied)
+    }
+
+fun validateCalendarCache(
+    access: CalendarAccess,
+    snapshot: WorkCalendarSnapshot?,
+    now: Instant,
+): AppResult<Unit> =
+    when {
+        access.readUntil <= now -> calendarFailure(access.expiryCode, FailureKind.AccessDenied)
+        snapshot == null -> AppResult.Success(Unit)
+        !sameCalendarScope(access, snapshot.access) ->
+            calendarFailure("client.calendar_scope_changed", FailureKind.AccessDenied)
+        snapshot.fetchedAt > now ||
+            snapshot.expiresAt <= now ||
+            snapshot.expiresAt > snapshot.fetchedAt + WORK_CALENDAR_CACHE_PERIOD ->
+            calendarFailure("client.calendar_cache_expired", FailureKind.AccessDenied)
+        else -> AppResult.Success(Unit)
+    }

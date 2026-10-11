@@ -5,6 +5,49 @@ import org.jetbrains.compose.resources.StringResource
 
 /** Explicit pairs keep runtime language changes portable across Android, iOS, desktop and Web. */
 enum class AppString(val english: StringResource, val indonesian: StringResource) {
+    WorkCalendar(Res.string.work_calendar_en, Res.string.work_calendar_id),
+    CalendarNoEmployment(
+        Res.string.calendar_no_employment_en,
+        Res.string.calendar_no_employment_id,
+    ),
+    CalendarToday(Res.string.calendar_today_en, Res.string.calendar_today_id),
+    CalendarPreviousWeek(
+        Res.string.calendar_previous_week_en,
+        Res.string.calendar_previous_week_id,
+    ),
+    CalendarNextWeek(Res.string.calendar_next_week_en, Res.string.calendar_next_week_id),
+    CalendarCurrentWeek(Res.string.calendar_current_week_en, Res.string.calendar_current_week_id),
+    CalendarSaved(Res.string.calendar_saved_en, Res.string.calendar_saved_id),
+    CalendarOff(Res.string.calendar_off_en, Res.string.calendar_off_id),
+    CalendarUnassigned(Res.string.calendar_unassigned_en, Res.string.calendar_unassigned_id),
+    CalendarHoliday(Res.string.calendar_holiday_en, Res.string.calendar_holiday_id),
+    CalendarPattern(Res.string.calendar_pattern_en, Res.string.calendar_pattern_id),
+    CalendarRoster(Res.string.calendar_roster_en, Res.string.calendar_roster_id),
+    CalendarHours(Res.string.calendar_hours_en, Res.string.calendar_hours_id),
+    CalendarOvernightHours(
+        Res.string.calendar_overnight_hours_en,
+        Res.string.calendar_overnight_hours_id,
+    ),
+    CalendarDuration(Res.string.calendar_duration_en, Res.string.calendar_duration_id),
+    CalendarBreak(Res.string.calendar_break_en, Res.string.calendar_break_id),
+    CalendarOnsite(Res.string.calendar_onsite_en, Res.string.calendar_onsite_id),
+    CalendarRemote(Res.string.calendar_remote_en, Res.string.calendar_remote_id),
+    CalendarField(Res.string.calendar_field_en, Res.string.calendar_field_id),
+    CalendarTimezone(Res.string.calendar_timezone_en, Res.string.calendar_timezone_id),
+    CalendarFirstEmployments(
+        Res.string.calendar_first_employments_en,
+        Res.string.calendar_first_employments_id,
+    ),
+    CalendarNoSaved(Res.string.calendar_no_saved_en, Res.string.calendar_no_saved_id),
+    CalendarCacheExpired(
+        Res.string.calendar_cache_expired_en,
+        Res.string.calendar_cache_expired_id,
+    ),
+    CalendarScopeChanged(
+        Res.string.calendar_scope_changed_en,
+        Res.string.calendar_scope_changed_id,
+    ),
+    CalendarChanged(Res.string.calendar_changed_en, Res.string.calendar_changed_id),
     CompanyPolicyTitle(Res.string.company_policy_title_en, Res.string.company_policy_title_id),
     CompanyPolicyUnavailable(
         Res.string.company_policy_unavailable_en,

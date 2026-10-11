@@ -27,3 +27,15 @@ behavior also exist in the starter at
 [`67dd7aa`](https://github.com/fajarxfce/compose-fluent-starter/commit/67dd7aa).
 Both repositories passed their root checks and four runner tests. Emulator
 configuration and HRIS backend forwarding remain in this application.
+
+Android core library desugaring also exists in the starter at
+[`5e3967c`](https://github.com/fajarxfce/compose-fluent-starter/commit/5e3967c).
+The API 24 emulator first reproduced a missing Java time class, then passed the
+calendar and offline-restoration checks with the correction. API 35 also passed.
+Both repositories passed root checks and Android/Web builds.
+
+Date-only formatting and its English/Indonesian timezone regression also exist at
+[`ddc73ac`](https://github.com/fajarxfce/compose-fluent-starter/commit/ddc73ac).
+HRIS calendar policy, encrypted snapshots and Web IANA timezone initialization
+remain in this application. Apple compilation is checked by platform CI; physical
+iOS acceptance is separate.

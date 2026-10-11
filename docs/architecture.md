@@ -80,6 +80,10 @@ See [native identity](native-identity.md) for the active HRIS integration and
 [inbox](inbox.md) for the first encrypted HRIS feed integration and
 [sync](sync.md) for the inherited worker and command contracts.
 
+The [work calendar](workforce.md) follows the same ownership boundaries with a
+bounded encrypted snapshot. Acquisition and admission belong to its use case;
+the repository only maps transport/storage data and atomically replaces the snapshot.
+
 Feature flag definitions and evaluation policy live in `core/featureflags/domain`; each
 consuming feature owns its keys and action guards. A shared refresh use case serializes
 workers and sets the fetch interval. Its repository coordinates Remote Config and the

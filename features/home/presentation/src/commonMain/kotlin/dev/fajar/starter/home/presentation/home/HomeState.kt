@@ -17,4 +17,5 @@ data class HomeState(
     val failure: Failure? = null,
     val canOpenProfile: Boolean = false,
     val canOpenInbox: Boolean = false,
+    val canOpenCalendar: Boolean = false,
 )

@@ -35,6 +35,105 @@ class AppFlowTest {
     @get:Rule val compose = createComposeRule()
 
     @Test
+    fun workforceCalendarKeepsItsOwnModuleAdmissionAndNavigatesCompleteWeeks() {
+        val server = NativeUiServer().apply { companyPolicy.disabledModules = setOf("PEOPLE") }
+        withApplication(server) {
+            signIn()
+            waitFor("Choose a company")
+            compose.onAllNodesWithText("Open company")[0].performClick()
+            waitFor("Employee workspace")
+            compose.onNodeWithText("My profile").assertDoesNotExist()
+            compose.onNodeWithText("Work calendar").performScrollTo().performClick()
+            waitFor("Night shift")
+            compose.onNodeWithText("22:00 – 06:00 (+1 day)").performScrollTo().assertExists()
+            compose.onNodeWithText("7 h 0 min").assertExists()
+            capture("work-calendar-night")
+            compose.onNodeWithContentDescription("Next week").performScrollTo().performClick()
+            waitFor("Mon, 19 Oct 2026 – Sun, 25 Oct 2026")
+            compose.onNodeWithText("This week").performClick()
+            waitFor("Mon, 12 Oct 2026 – Sun, 18 Oct 2026")
+            compose.onNodeWithText("Company holiday").performScrollTo().assertExists()
+            capture("work-calendar-holiday")
+        }
+    }
+
+    @Test
+    fun savedCalendarRemainsReadableOfflineButDoesNotAppearInAnotherCompany() {
+        val server = NativeUiServer()
+        withApplication(server) {
+            signIn()
+            waitFor("Choose a company")
+            compose.onAllNodesWithText("Open company")[0].performClick()
+            waitFor("Work calendar")
+            compose.onNodeWithText("Work calendar").performScrollTo().performClick()
+            waitFor("Night shift")
+            compose.waitUntil {
+                compose
+                    .onAllNodes(hasContentDescription("Refresh") and isEnabled())
+                    .fetchSemanticsNodes()
+                    .isNotEmpty()
+            }
+            server.workforce.offline = true
+            compose.onNodeWithContentDescription("Refresh").performClick()
+            waitFor("Unable to connect. Check your connection.")
+            compose.onNodeWithText("Night shift").performScrollTo().assertExists()
+            capture("work-calendar-offline")
+            compose.onNodeWithContentDescription("Back").performScrollTo().performClick()
+            waitFor("Employee workspace")
+            compose.onNodeWithText("Work calendar").performScrollTo().performClick()
+            waitFor("Night shift")
+            compose.onNodeWithContentDescription("Back").performScrollTo().performClick()
+            waitFor("Employee workspace")
+            server.workforce.offline = false
+            compose.onNodeWithText("Change company").performScrollTo().performClick()
+            waitFor("Choose a company")
+            compose.onAllNodesWithText("Open company")[1].performClick()
+            waitFor("Work calendar")
+            compose.onNodeWithText("Work calendar").performScrollTo().performClick()
+            waitFor("Employment is not linked to this account.")
+            compose.onNodeWithText("Night shift").assertDoesNotExist()
+        }
+    }
+
+    @Test
+    fun calendarDepartureCancelsPendingAcquisitionAndMfaDenialHidesSavedContent() {
+        val server = NativeUiServer()
+        withApplication(server) {
+            signIn()
+            waitFor("Choose a company")
+            compose.onAllNodesWithText("Open company")[0].performClick()
+            waitFor("Work calendar")
+            compose.onNodeWithText("Work calendar").performScrollTo().performClick()
+            waitFor("Night shift")
+            server.workforce.holdCalendar = true
+            compose.onNodeWithContentDescription("Next week").performClick()
+            compose.waitUntil(5_000) { server.workforce.active.get() == 1 }
+            compose.onNodeWithContentDescription("Back").performClick()
+            waitFor("Employee workspace")
+            compose.waitUntil(5_000) { server.workforce.active.get() == 0 }
+            assertEquals(1, server.workforce.cancelled.get())
+            server.workforce.holdCalendar = false
+            compose.onNodeWithText("Work calendar").performScrollTo().performClick()
+            waitFor("Night shift")
+            compose.waitUntil {
+                compose
+                    .onAllNodes(hasContentDescription("Refresh") and isEnabled())
+                    .fetchSemanticsNodes()
+                    .isNotEmpty()
+            }
+            server.workforce.failureCode = "mfa_required"
+            compose.onNodeWithContentDescription("Refresh").performClick()
+            try {
+                waitFor("Verify your account")
+            } finally {
+                capture("work-calendar-verification")
+            }
+            compose.onNodeWithText("Night shift").assertDoesNotExist()
+            compose.onNodeWithText("Private diagnostic").assertDoesNotExist()
+        }
+    }
+
+    @Test
     fun companyAvailabilityPreservesRecoveryAcrossUpdateMaintenanceAndOfflineRetry() {
         val server = NativeUiServer().apply { companyPolicy.minimumAndroid = 2 }
         withApplication(server) {

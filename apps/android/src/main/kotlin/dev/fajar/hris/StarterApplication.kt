@@ -37,6 +37,7 @@ class StarterApplication : Application(), Configuration.Provider {
             workScheduler = scheduler,
             credentials = AndroidCredentialStore(this),
             inboxCredentials = AndroidCredentialStore(this, "inbox-content-key"),
+            calendarCredentials = AndroidCredentialStore(this, "calendar-content-key"),
             commandCredentials = AndroidCredentialStore(this, "command-content-key"),
             workspaceCredentials = AndroidCredentialStore(this, "workspace-content-key"),
             remoteFeatureFlags = AndroidFeatureFlagSource(this),

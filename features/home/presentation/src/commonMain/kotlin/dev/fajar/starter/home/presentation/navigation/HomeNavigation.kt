@@ -16,6 +16,7 @@ fun NavGraphBuilder.homeRoutes(
     workspace: Workspace,
     onProfile: () -> Unit,
     onInbox: () -> Unit,
+    onCalendar: () -> Unit,
     onSessions: () -> Unit,
     onSettings: () -> Unit,
 ) {
@@ -30,6 +31,7 @@ fun NavGraphBuilder.homeRoutes(
                 HomeEffect.OpenSettings -> onSettings()
                 HomeEffect.OpenProfile -> onProfile()
                 HomeEffect.OpenInbox -> onInbox()
+                HomeEffect.OpenCalendar -> onCalendar()
                 HomeEffect.OpenSessions -> onSessions()
             }
         }
