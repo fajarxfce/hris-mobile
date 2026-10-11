@@ -8,7 +8,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
@@ -25,10 +27,13 @@ fun AppFilterChip(
     selected: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    icon: ImageVector = Icons.Regular.Filter,
 ) {
     Row(
         modifier
             .heightIn(min = 48.dp)
+            .alpha(if (enabled) 1f else 0.4f)
             .clip(RoundedCornerShape(24.dp))
             .background(if (selected) AppColors.tint else AppColors.surface)
             .border(
@@ -37,12 +42,12 @@ fun AppFilterChip(
                 RoundedCornerShape(24.dp),
             )
             .semantics { this.selected = selected }
-            .clickable(role = Role.Button, onClick = onClick)
+            .clickable(enabled = enabled, role = Role.Button, onClick = onClick)
             .padding(horizontal = 14.dp, vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        AppIcon(Icons.Regular.Filter, tint = if (selected) AppColors.accent else AppColors.muted)
+        AppIcon(icon, tint = if (selected) AppColors.accent else AppColors.muted)
         AppText(
             label,
             Modifier.weight(1f, fill = false),

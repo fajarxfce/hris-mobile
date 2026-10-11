@@ -2,7 +2,13 @@ package dev.fajar.starter.localization
 
 import platform.Foundation.*
 
-actual fun formatLocalDate(isoDate: String, languageTag: String): String {
+actual fun formatLocalDate(isoDate: String, languageTag: String): String =
+    formatCalendarDate(isoDate, languageTag, "EEE d MMM y")
+
+actual fun formatMonth(isoDate: String, languageTag: String, includeYear: Boolean): String =
+    formatCalendarDate(isoDate, languageTag, if (includeYear) "MMMM y" else "MMMM")
+
+private fun formatCalendarDate(isoDate: String, languageTag: String, template: String): String {
     val utc = NSTimeZone.timeZoneForSecondsFromGMT(0)
     val parser =
         NSDateFormatter().apply {
@@ -16,7 +22,7 @@ actual fun formatLocalDate(isoDate: String, languageTag: String): String {
         .apply {
             locale = NSLocale(languageTag)
             timeZone = utc
-            setLocalizedDateFormatFromTemplate("EEE d MMM y")
+            setLocalizedDateFormatFromTemplate(template)
         }
         .stringFromDate(date)
 }

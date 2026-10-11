@@ -28,6 +28,9 @@ expect fun formatDate(epochMillis: Long, languageTag: String): String
 /** A calendar date has no time or device timezone. Input is an ISO local date. */
 expect fun formatLocalDate(isoDate: String, languageTag: String): String
 
+/** Month label for an ISO local date; never shifted into the device timezone. */
+expect fun formatMonth(isoDate: String, languageTag: String, includeYear: Boolean = true): String
+
 @Composable
 fun activityCount(count: Int): String =
     pluralStringResource(

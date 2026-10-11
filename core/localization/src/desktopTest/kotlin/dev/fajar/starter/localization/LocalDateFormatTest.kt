@@ -13,6 +13,9 @@ class LocalDateFormatTest {
                 assertEquals("Mon, 12 Oct 2026", formatLocalDate("2026-10-12", "en"))
                 assertEquals("Sen, 12 Okt 2026", formatLocalDate("2026-10-12", "id"))
                 assertTrue(formatLocalDate("2024-02-29", "en").contains("29 Feb"))
+                assertEquals("October 2026", formatMonth("2026-10-01", "en"))
+                assertEquals("Oktober 2026", formatMonth("2026-10-31", "id"))
+                assertEquals("Februari", formatMonth("2024-02-29", "id", includeYear = false))
             }
         } finally {
             TimeZone.setDefault(original)

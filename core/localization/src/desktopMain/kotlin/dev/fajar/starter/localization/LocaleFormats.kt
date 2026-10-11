@@ -14,6 +14,15 @@ actual fun formatLocalDate(isoDate: String, languageTag: String): String =
     LocalDate.parse(isoDate)
         .format(DateTimeFormatter.ofPattern("EEE, d MMM uuuu", Locale.forLanguageTag(languageTag)))
 
+actual fun formatMonth(isoDate: String, languageTag: String, includeYear: Boolean): String =
+    LocalDate.parse(isoDate)
+        .format(
+            DateTimeFormatter.ofPattern(
+                if (includeYear) "MMMM uuuu" else "MMMM",
+                Locale.forLanguageTag(languageTag),
+            )
+        )
+
 actual fun formatDate(epochMillis: Long, languageTag: String): String =
     DateFormat.getDateTimeInstance(
             DateFormat.MEDIUM,

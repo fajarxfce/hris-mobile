@@ -7,6 +7,14 @@ import org.jetbrains.compose.resources.*
 
 class LocalizedResourcesTest {
     @Test
+    fun monthLabelsUseTheRequestedLanguageAndYear() {
+        assertEquals("January 2026", formatMonth("2026-01-01", "en"))
+        assertEquals("Desember 2026", formatMonth("2026-12-31", "id"))
+        assertEquals("February", formatMonth("2024-02-29", "en", includeYear = false))
+        assertEquals("Februari", formatMonth("2024-02-01", "id", includeYear = false))
+    }
+
+    @Test
     fun bothLanguagesHaveMatchingResourceCoverageAndPluralForms() = runTest {
         for (key in AppString.entries) {
             assertTrue(getString(key.english).isNotBlank(), key.name)

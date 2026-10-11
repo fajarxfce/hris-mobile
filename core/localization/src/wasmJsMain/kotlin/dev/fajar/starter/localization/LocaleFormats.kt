@@ -9,6 +9,14 @@ actual fun formatLocalDate(isoDate: String, languageTag: String): String =
 )
 private external fun intlLocalDate(value: String, locale: String): String
 
+actual fun formatMonth(isoDate: String, languageTag: String, includeYear: Boolean): String =
+    intlMonth(isoDate, languageTag, includeYear)
+
+@JsFun(
+    "(value, locale, year) => new Intl.DateTimeFormat(locale, {month:'long', year:year ? 'numeric' : undefined, timeZone:'UTC'}).format(new Date(value + 'T00:00:00Z'))"
+)
+private external fun intlMonth(value: String, locale: String, year: Boolean): String
+
 actual fun formatNumber(value: Long, languageTag: String): String =
     intlNumber(value.toString(), languageTag)
 
