@@ -39,6 +39,8 @@ kotlin.sourceSets {
         implementation(projects.features.home.presentation)
         implementation(projects.features.people.data)
         implementation(projects.features.people.presentation)
+        implementation(projects.features.inbox.data)
+        implementation(projects.features.inbox.presentation)
         implementation(projects.core.presentation)
         implementation(libs.lifecycle.compose)
         implementation(libs.koin.compose)

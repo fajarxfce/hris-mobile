@@ -62,6 +62,12 @@ fun HomePage(state: HomeState, onEvent: (HomeEvent) -> Unit) {
                                 primary = false,
                                 enabled = !state.working,
                             )
+                            AppButton(
+                                appString(AppString.Inbox),
+                                { onEvent(HomeEvent.InboxRequested) },
+                                Modifier.fillMaxWidth(),
+                                primary = false,
+                            )
                             if (state.failure != null) AppFeedback(failureText(state.failure))
                         }
                     HomeTab.Account ->

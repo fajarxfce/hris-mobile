@@ -29,6 +29,7 @@ class AppleAppHost(
     firebase: AppleFirebaseClient,
     remoteConfig: AppleRemoteConfigClient,
     credentials: AppleCredentialClient,
+    inboxCredentials: AppleCredentialClient,
     crash: AppleCrashClient,
     performance: ApplePerformanceClient,
 ) {
@@ -50,6 +51,7 @@ class AppleAppHost(
                 single<PushTokenSource> { push }
             },
             credentials = AppleCredentialStore(credentials),
+            inboxCredentials = AppleCredentialStore(inboxCredentials),
             deviceAuthentication = AppleDeviceAuthenticationSource(),
             browserAuthorization = AppleBrowserAuthorizationSource(),
             remoteFeatureFlags = AppleFeatureFlagSource(remoteConfig),

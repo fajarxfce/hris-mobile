@@ -14,6 +14,7 @@ import dev.fajar.starter.auth.presentation.navigation.*
 import dev.fajar.starter.designsystem.components.*
 import dev.fajar.starter.home.presentation.home.HomeTab
 import dev.fajar.starter.home.presentation.navigation.*
+import dev.fajar.starter.inbox.presentation.navigation.*
 import dev.fajar.starter.localization.*
 import dev.fajar.starter.onboarding.presentation.navigation.*
 import dev.fajar.starter.people.presentation.navigation.*
@@ -95,6 +96,7 @@ fun AppNavigation(controller: NavHostController, incomingLinks: Flow<String>) {
                 homeRoutes(
                     stage.workspace,
                     onProfile = { controller.navigate(ProfileRoute) { launchSingleTop = true } },
+                    onInbox = { controller.navigate(InboxRoute) { launchSingleTop = true } },
                     onSessions = { controller.navigate(SessionsRoute) { launchSingleTop = true } },
                 ) {
                     controller.navigate(SettingsRoute) { launchSingleTop = true }
@@ -105,6 +107,14 @@ fun AppNavigation(controller: NavHostController, incomingLinks: Flow<String>) {
                 ) {
                     controller.popBackStack()
                 }
+                inboxRoutes(
+                    stage.workspace.id,
+                    onItem = { controller.navigate(InboxItemRoute(it)) { launchSingleTop = true } },
+                    onVerify = {
+                        controller.navigate(VerificationRoute) { launchSingleTop = true }
+                    },
+                    onBack = { controller.popBackStack() },
+                )
                 verificationRoutes(stage.sessionId) { controller.popBackStack() }
                 sessionRoutes(stage.sessionId) { controller.popBackStack() }
                 settingsRoutes(securitySettings = { AppLockSettings() }) {

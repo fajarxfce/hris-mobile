@@ -1,7 +1,8 @@
 # Local-first data and sync
 
 This document describes inherited starter infrastructure. For the active HRIS API
-and current integration status, see [native identity](native-identity.md). Template
+and current integration status, see [native identity](native-identity.md) and
+[the encrypted employee inbox](inbox.md). Template
 endpoints and demo screens described here are not mounted by the HRIS application.
 
 The dashboard is the reference implementation. Its content and saved activities live in
@@ -48,7 +49,9 @@ state is not persistent. Local storage is persistent.
 
 [Replication storage](replica-storage.md) additionally provides staged snapshots,
 atomic document/checkpoint commits, tombstones, and account-isolated partitions.
-Feature-specific encrypted HRIS adapters and sync use cases are separate work.
+The employee inbox consumes this contract through its own encryption repository
+and bounded synchronization use case. Its command outbox and offline workspace
+restoration remain separate work.
 
 ## Workers
 

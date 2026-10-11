@@ -185,4 +185,14 @@
     <string name="confirm_end_session_id">Konfirmasi</string>
     <string name="end_session_confirmation_id">Perangkat ini perlu masuk kembali.</string>
     <string name="sign_out_this_device_id">Keluar di perangkat ini</string>
+    <string name="inbox_title_id">Inbox</string>
+    <string name="inbox_no_messages_id">Belum ada pesan.</string>
+    <string name="inbox_message_unavailable_id">Pesan ini sudah tidak tersedia.</string>
+    <string name="inbox_older_id">Pesan sebelumnya</string>
+    <string name="inbox_latest_id">Pesan terbaru</string>
+    <string name="inbox_awaiting_sync_id">Sinkronisasi tertunda.</string>
+    <string name="inbox_saved_id">Menampilkan pesan tersimpan.</string>
+    <string name="inbox_acknowledgement_required_id">Perlu konfirmasi</string>
+    <string name="inbox_acknowledged_id">Dikonfirmasi</string>
+    <string name="inbox_cache_expired_id">Hubungkan ke internet untuk memperbarui inbox.</string>
 </resources>

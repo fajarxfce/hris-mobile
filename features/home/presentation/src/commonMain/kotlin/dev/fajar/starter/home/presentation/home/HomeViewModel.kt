@@ -24,6 +24,7 @@ class HomeViewModel(
         on<HomeEvent.CompanyChangeRequested>(::onCompanyChangeRequested)
         on<HomeEvent.SettingsRequested>(::onSettingsRequested)
         on<HomeEvent.ProfileRequested>(::onProfileRequested)
+        on<HomeEvent.InboxRequested>(::onInboxRequested)
         on<HomeEvent.SessionsRequested>(::onSessionsRequested)
         on<HomeEvent.SignOutRequested>(::onSignOutRequested)
         viewModelScope.launch {
@@ -56,6 +57,10 @@ class HomeViewModel(
 
     private fun onProfileRequested(event: HomeEvent.ProfileRequested) {
         viewModelScope.launch { emitEffect(HomeEffect.OpenProfile) }
+    }
+
+    private fun onInboxRequested(event: HomeEvent.InboxRequested) {
+        viewModelScope.launch { emitEffect(HomeEffect.OpenInbox) }
     }
 
     private fun onSessionsRequested(event: HomeEvent.SessionsRequested) {

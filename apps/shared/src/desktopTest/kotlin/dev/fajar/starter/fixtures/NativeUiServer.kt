@@ -27,6 +27,7 @@ class NativeUiServer(
 
     val unexpectedPaths = mutableListOf<String>()
     val people = NativePeopleUi()
+    val inbox = NativeInboxUi()
     val deviceSessions = NativeSessionsUi()
     var rejectSessionAccessOnce = false
 
@@ -38,6 +39,14 @@ class NativeUiServer(
             assertEquals("ANDROID", request.headers["X-HRIS-Client-Platform"])
             assertEquals("1", request.headers["X-HRIS-Client-Build"])
             val headers = headersOf(HttpHeaders.ContentType, "application/json")
+            inbox.response(request)?.let { (body, status) ->
+                assertTrue(
+                    request.headers[HttpHeaders.Authorization]?.startsWith("Bearer ") == true
+                )
+                return@withLock if (requireMfa && !verified)
+                    respond("""{"code":"mfa_required"}""", HttpStatusCode.Forbidden, headers)
+                else respond(body, status, headers)
+            }
             if (path.startsWith("/api/v1/auth/native/sessions") && rejectSessionAccessOnce) {
                 rejectSessionAccessOnce = false
                 return@withLock respond(
@@ -85,23 +94,8 @@ class NativeUiServer(
                         enrollment(request.headers["Idempotency-Key"]).toString(),
                         headers = headers,
                     )
-                "/api/v1/auth/native/mfa/enrollment/confirm" -> {
-                    confirmations++
-                    verified = true
-                    if (loseConfirmation) throw IOException("Simulated lost response")
-                    respond(
-                        buildJsonObject {
-                                put("credentials", credentials())
-                                putJsonArray("recoveryCodes") {
-                                    repeat(10) {
-                                        add("RECOVERY-TEST-${it.toString().padStart(2, '0')}")
-                                    }
-                                }
-                            }
-                            .toString(),
-                        headers = headers,
-                    )
-                }
+                "/api/v1/auth/native/mfa/enrollment/confirm" ->
+                    respond(confirmedEnrollment().toString(), headers = headers)
                 "/api/v1/auth/native/mfa/verify" -> {
                     if (body?.get("code")?.jsonPrimitive?.content != "123456")
                         respond(
@@ -148,7 +142,10 @@ class NativeUiServer(
         assertFalse(requireMfa && !verified)
         return buildJsonObject {
             put("companyId", path.split('/')[4])
-            putJsonArray("permissions") { add("people.self.read") }
+            putJsonArray("permissions") {
+                add("people.self.read")
+                add("announcements.read")
+            }
         }
     }
 
@@ -160,6 +157,18 @@ class NativeUiServer(
             "otpauth://totp/HRIS:alex?secret=ABCDEFGHIJKLMNOPQRSTUVWXYZ234567&issuer=HRIS",
         )
         put("expiresAt", (Clock.System.now() + 5.minutes).toString())
+    }
+
+    private fun confirmedEnrollment(): JsonObject {
+        confirmations++
+        verified = true
+        if (loseConfirmation) throw IOException("Simulated lost response")
+        return buildJsonObject {
+            put("credentials", credentials())
+            putJsonArray("recoveryCodes") {
+                repeat(10) { add("RECOVERY-TEST-${it.toString().padStart(2, '0')}") }
+            }
+        }
     }
 
     private fun credentials() = buildJsonObject {

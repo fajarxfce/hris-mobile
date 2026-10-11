@@ -7,6 +7,7 @@ import dev.fajar.starter.common.result.*
 fun failureText(failure: Failure): String =
     appString(
         when (failure.code) {
+            "client.inbox_cache_expired" -> AppString.InboxCacheExpired
             "invalid_credentials" -> AppString.InvalidCredentials
             "invalid_mfa_code",
             "invalid_mfa_request" -> AppString.InvalidVerificationCode

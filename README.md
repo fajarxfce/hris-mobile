@@ -13,12 +13,13 @@ to the starter through [reviewed updates](docs/template-updates.md).
 The application uses the HRIS native API for password sign-in, authenticator setup
 and verification, recovery codes, token rotation, active-session management, company selection, and current
 company access. Employees can open their own personal profile, employment terms,
-and organization assignments. Screens support English and Indonesian. System
+and organization assignments. The employee inbox synchronizes encrypted company
+correspondence and retains admitted content when a refresh fails. Screens support English and Indonesian. System
 appearance and reduced-motion preferences are respected.
 
-The runtime contains no demo authentication transport. Transactional employee workflows and
-encrypted offline synchronization are still being connected; a generated module
-is not a completed HRIS workflow. See [native identity](docs/native-identity.md), [employee profiles](docs/people.md), and
+The runtime contains no demo authentication transport. Transactional employee workflows,
+durable command replay, and offline workspace restoration are still being connected; a generated module
+is not a completed HRIS workflow. See [native identity](docs/native-identity.md), [employee profiles](docs/people.md), [inbox and synchronization](docs/inbox.md), and
 the platform's [remaining delivery work](https://github.com/fajarxfce/hris-platform/blob/main/docs/completion.md).
 
 ## Development
@@ -59,7 +60,7 @@ policy is not configured yet. Android/iOS send the server's native version heade
 - `apps/android`, `apps/ios`, `apps/shared`: platform entry points and composition.
 - `core/identity`: native credentials, MFA, account contracts, and session policy.
 - `core/workspace`: current company selection and scope ownership.
-- `features/auth`, `features/workspace`, `features/home`, `features/people`: feature-owned MVI screens.
+- `features/auth`, `features/workspace`, `features/home`, `features/people`, `features/inbox`: feature-owned MVI screens.
 - `core/designsystem`: shared `AppXxx` Fluent components and restrained transitions.
 - `build-logic`: Gradle convention plugins; versions are in `gradle/libs.versions.toml`.
 

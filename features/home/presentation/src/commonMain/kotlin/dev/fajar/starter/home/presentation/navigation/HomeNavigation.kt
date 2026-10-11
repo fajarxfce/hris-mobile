@@ -15,6 +15,7 @@ import org.koin.core.parameter.parametersOf
 fun NavGraphBuilder.homeRoutes(
     workspace: Workspace,
     onProfile: () -> Unit,
+    onInbox: () -> Unit,
     onSessions: () -> Unit,
     onSettings: () -> Unit,
 ) {
@@ -28,6 +29,7 @@ fun NavGraphBuilder.homeRoutes(
             when (effect) {
                 HomeEffect.OpenSettings -> onSettings()
                 HomeEffect.OpenProfile -> onProfile()
+                HomeEffect.OpenInbox -> onInbox()
                 HomeEffect.OpenSessions -> onSessions()
             }
         }

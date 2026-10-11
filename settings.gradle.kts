@@ -27,6 +27,8 @@ rootProject.name = "hris-mobile"
 
 include(":features:people:domain", ":features:people:data", ":features:people:presentation")
 
+include(":features:inbox:domain", ":features:inbox:data", ":features:inbox:presentation")
+
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 include(

@@ -185,4 +185,14 @@
     <string name="confirm_end_session_en">Confirm</string>
     <string name="end_session_confirmation_en">This device will need to sign in again.</string>
     <string name="sign_out_this_device_en">Sign out on this device</string>
+    <string name="inbox_title_en">Inbox</string>
+    <string name="inbox_no_messages_en">No messages yet.</string>
+    <string name="inbox_message_unavailable_en">This message is no longer available.</string>
+    <string name="inbox_older_en">Older messages</string>
+    <string name="inbox_latest_en">Latest messages</string>
+    <string name="inbox_awaiting_sync_en">Sync is pending.</string>
+    <string name="inbox_saved_en">Showing saved messages.</string>
+    <string name="inbox_acknowledgement_required_en">Acknowledgement required</string>
+    <string name="inbox_acknowledged_en">Acknowledged</string>
+    <string name="inbox_cache_expired_en">Connect to refresh your inbox.</string>
 </resources>

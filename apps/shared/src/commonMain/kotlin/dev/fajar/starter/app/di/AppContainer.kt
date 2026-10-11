@@ -11,6 +11,7 @@ import dev.fajar.starter.common.config.BuildRuntime
 import dev.fajar.starter.database.AccountCacheStore
 import dev.fajar.starter.database.AppDatabase
 import dev.fajar.starter.database.InboxStore
+import dev.fajar.starter.database.ReplicaStore
 import dev.fajar.starter.database.TransferStore
 import dev.fajar.starter.datastore.UserPreferencesStore
 import dev.fajar.starter.featureflags.data.datasources.RemoteFeatureFlagSource
@@ -22,6 +23,8 @@ import dev.fajar.starter.identity.data.sso.config.SsoConfiguration
 import dev.fajar.starter.identity.data.sso.datasources.BrowserAuthorizationSource
 import dev.fajar.starter.identity.data.sso.datasources.UnavailableBrowserAuthorizationSource
 import dev.fajar.starter.identity.domain.entities.IdentityServer
+import dev.fajar.starter.inbox.data.di.InboxDataModule
+import dev.fajar.starter.inbox.presentation.di.InboxPresentationModule
 import dev.fajar.starter.notifications.data.di.NotificationDataModule
 import dev.fajar.starter.onboarding.data.di.OnboardingDataModule
 import dev.fajar.starter.onboarding.presentation.di.OnboardingPresentationModule
@@ -44,6 +47,7 @@ import dev.fajar.starter.worker.ForegroundWorkScheduler
 import dev.fajar.starter.workspace.data.di.WorkspaceDataModule
 import dev.fajar.starter.workspace.presentation.di.WorkspacePresentationModule
 import org.koin.core.module.Module
+import org.koin.core.qualifier.named
 import org.koin.dsl.koinApplication
 import org.koin.dsl.module
 import org.koin.dsl.onClose
@@ -57,6 +61,7 @@ fun createAppContainer(
     environment: AppEnvironment = BuildEnvironment.current,
     workScheduler: WorkScheduler? = null,
     credentials: CredentialStore = MemoryCredentialStore(),
+    inboxCredentials: CredentialStore = MemoryCredentialStore(),
     remoteFeatureFlags: RemoteFeatureFlagSource = UnavailableFeatureFlagSource(),
     deviceAuthentication: DeviceAuthenticationSource = UnavailableDeviceAuthenticationSource(),
     browserAuthorization: BrowserAuthorizationSource = UnavailableBrowserAuthorizationSource(),
@@ -108,6 +113,10 @@ fun createAppContainer(
                 .onClose { (it as? ForegroundWorkScheduler)?.close() }
             single<AppDatabase>(createdAtStart = true) { database }.onClose { it?.close() }
             single<CredentialStore> { credentials }.onClose { it?.close() }
+            single<CredentialStore>(named("inbox-content-key")) { inboxCredentials }
+                .onClose { it?.close() }
+            single<ContentCipher> { AesGcmContentCipher() }
+            single<ReplicaStore> { get<AppDatabase>().replicas }
             single<AccountCacheStore> { get<AppDatabase>().accounts }
             single<InboxStore> { get<AppDatabase>().inbox }
             single<UserPreferencesStore> { preferences }.onClose { it?.close() }
@@ -121,6 +130,8 @@ fun createAppContainer(
         HomePresentationModule().module,
         PeopleDataModule().module,
         PeoplePresentationModule().module,
+        InboxDataModule().module,
+        InboxPresentationModule().module,
         ApplicationModule().module,
     )
 }

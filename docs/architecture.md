@@ -74,7 +74,8 @@ compare-and-set before publication. Late results cannot replace an accepted sele
 Repositories do not own retries, scheduling, or UI loading state.
 Workers are platform application entry points that invoke feature `SyncTask` use cases.
 See [native identity](native-identity.md) for the active HRIS integration and
-[sync](sync.md) for the inherited synchronization contracts awaiting HRIS adapters.
+[inbox](inbox.md) for the first encrypted HRIS feed integration and
+[sync](sync.md) for the inherited worker and command contracts.
 
 Feature flag definitions and evaluation policy live in `core/featureflags/domain`; each
 consuming feature owns its keys and action guards. A shared refresh use case serializes

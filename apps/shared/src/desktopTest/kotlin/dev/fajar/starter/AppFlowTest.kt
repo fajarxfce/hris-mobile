@@ -35,6 +35,72 @@ class AppFlowTest {
     @get:Rule val compose = createComposeRule()
 
     @Test
+    fun encryptedInboxSupportsPagingOfflineDetailAndCompanyIsolation() {
+        val server = NativeUiServer()
+        withApplication(server) {
+            signIn()
+            waitFor("Choose a company")
+            compose.onAllNodesWithText("Open company")[0].performClick()
+            waitFor("Employee workspace")
+            compose.onNodeWithText("Inbox").performScrollTo().performClick()
+            waitFor("Office closure")
+            capture("inbox")
+            compose.onNode(hasScrollToIndexAction()).performScrollToNode(hasText("Older messages"))
+            compose.onNodeWithText("Older messages").performClick()
+            waitFor("Team update 31")
+            compose.onNode(hasScrollToIndexAction()).performScrollToNode(hasText("Latest messages"))
+            compose.onNodeWithText("Latest messages").performClick()
+            waitFor("Office closure")
+            server.inbox.offline = true
+            compose.onNodeWithText("Office closure").performClick()
+            waitFor(server.inbox.firstBody)
+            compose.onNodeWithText("Acknowledgement required").assertExists()
+            capture("inbox-detail")
+            compose.onNodeWithContentDescription("Back").performClick()
+            waitFor("Office closure")
+            waitFor("Showing saved messages.")
+            capture("inbox-offline")
+            compose.onNodeWithContentDescription("Back").performClick()
+            waitFor("Employee workspace")
+            server.inbox.offline = false
+            compose.onNodeWithText("Change company").performScrollTo().performClick()
+            waitFor("Choose a company")
+            compose.onAllNodesWithText("Open company")[1].performClick()
+            waitFor("Employee workspace")
+            compose.onNodeWithText("Inbox").performScrollTo().performClick()
+            waitFor("No messages yet.")
+            compose.onNodeWithText("Office closure").assertDoesNotExist()
+        }
+    }
+
+    @Test
+    fun archivedInboxItemsDisappearWithoutRecreatingThePage() {
+        val server = NativeUiServer()
+        withApplication(server) {
+            signIn()
+            waitFor("Choose a company")
+            compose.onAllNodesWithText("Open company")[0].performClick()
+            waitFor("Employee workspace")
+            compose.onNodeWithText("Inbox").performScrollTo().performClick()
+            waitFor("Office closure")
+            compose.onNodeWithText("Office closure").performClick()
+            waitFor(server.inbox.firstBody)
+            server.inbox.archived = true
+            compose.waitUntil(15_000) {
+                val nodes = compose.onAllNodesWithText("Refresh").fetchSemanticsNodes()
+                nodes.size == 1 &&
+                    !nodes
+                        .single()
+                        .config
+                        .contains(androidx.compose.ui.semantics.SemanticsProperties.Disabled)
+            }
+            compose.onNodeWithText("Refresh").performClick()
+            waitFor("This message is no longer available.")
+            compose.onNodeWithText(server.inbox.firstBody).assertDoesNotExist()
+        }
+    }
+
+    @Test
     fun activeSessionsRequireConfirmationAndCurrentLogoutRemovesTheProtectedStack() {
         val server = NativeUiServer().apply { rejectSessionAccessOnce = true }
         withApplication(server) {

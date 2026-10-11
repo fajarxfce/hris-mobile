@@ -5,6 +5,22 @@ import org.jetbrains.compose.resources.StringResource
 
 /** Explicit pairs keep runtime language changes portable across Android, iOS, desktop and Web. */
 enum class AppString(val english: StringResource, val indonesian: StringResource) {
+    Inbox(Res.string.inbox_title_en, Res.string.inbox_title_id),
+    InboxNoMessages(Res.string.inbox_no_messages_en, Res.string.inbox_no_messages_id),
+    InboxMessageUnavailable(
+        Res.string.inbox_message_unavailable_en,
+        Res.string.inbox_message_unavailable_id,
+    ),
+    InboxOlder(Res.string.inbox_older_en, Res.string.inbox_older_id),
+    InboxLatest(Res.string.inbox_latest_en, Res.string.inbox_latest_id),
+    InboxAwaitingSync(Res.string.inbox_awaiting_sync_en, Res.string.inbox_awaiting_sync_id),
+    InboxSaved(Res.string.inbox_saved_en, Res.string.inbox_saved_id),
+    InboxAcknowledgementRequired(
+        Res.string.inbox_acknowledgement_required_en,
+        Res.string.inbox_acknowledgement_required_id,
+    ),
+    InboxAcknowledged(Res.string.inbox_acknowledged_en, Res.string.inbox_acknowledged_id),
+    InboxCacheExpired(Res.string.inbox_cache_expired_en, Res.string.inbox_cache_expired_id),
     ActiveSessions(Res.string.active_sessions_en, Res.string.active_sessions_id),
     NoActiveSessions(Res.string.no_active_sessions_en, Res.string.no_active_sessions_id),
     ThisDevice(Res.string.this_device_en, Res.string.this_device_id),
