@@ -3,8 +3,6 @@ package dev.fajar.starter.workforce.presentation.navigation
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.LifecycleStartEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
@@ -49,11 +47,9 @@ fun NavGraphBuilder.workforceRoutes(
             koinViewModel<WorkCalendarViewModel>(parameters = { parametersOf(workspaceId) })
         val state by viewModel.state.collectAsStateWithLifecycle()
         val list = rememberLazyListState()
-        LifecycleEventEffect(Lifecycle.Event.ON_START) {
+        LifecycleStartEffect(viewModel) {
             viewModel.onEvent(WorkCalendarEvent.Entered)
-        }
-        LifecycleEventEffect(Lifecycle.Event.ON_STOP) {
-            viewModel.onEvent(WorkCalendarEvent.Stopped)
+            onStopOrDispose { viewModel.onEvent(WorkCalendarEvent.Stopped) }
         }
         CollectEffects(viewModel.effects) { effect ->
             when (effect) {

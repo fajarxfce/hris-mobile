@@ -1,5 +1,25 @@
 # Validation
 
+## Protected reads and leave balances
+
+The 2026-10-12 update passed root checks with 461 desktop/JVM/UI tests, all nine
+Leave presentation Chromium tests, and Android dev plus production Web builds.
+The preceding Leave data/domain Chromium runs passed their 18 tests. Regression
+tests reproduce failed cache cleanup, denied reads followed by failed retries,
+expiry during pending acquisition, fresh publication, and stopped/disposed
+observers. An access or MFA failure cannot be replaced by a later network/storage
+failure to reveal the old snapshot.
+
+The API 35 emulator read the real development calendar, navigated to the previous
+week and back to the current week, returned to Home, and opened the fictional
+12.5-day leave balance. The earlier Leave acceptance also covered offline process
+restoration, online recovery, English/Indonesian, both themes and 200% text.
+Request submission and physical iOS acceptance remain separate work.
+
+The validated dev APK was installed on the authorized Android phone at 03:38 on
+2026-10-12 with `--install-only`. Installation and package metadata were verified;
+the phone UI was not launched or driven.
+
 ## Monthly attendance interface
 
 The 2026-10-12 update passed root checks with 425 desktop/JVM/UI tests, the

@@ -151,6 +151,13 @@ loss hides it and attempts an atomic cache removal. A cleanup failure cannot rep
 the original access failure. Missing content keys do not silently regenerate keys
 for existing ciphertext.
 
+Home attendance, monthly history and the work calendar stop their cache
+subscriptions after an authoritative read failure. They retain that gate through
+pending and failed retries, even if local cleanup fails. Only fresh admitted
+publication reopens observation. Calendar entry pairs acquisition and observation
+with both lifecycle stop and disposal; a successful refresh clears an expiry
+reported while the read was in progress.
+
 Android/iOS support encrypted process restoration through their secure key stores.
 The desktop host uses its configured credential storage. Browser keys remain in
 memory, so Web does not claim offline process restoration after closing the page.

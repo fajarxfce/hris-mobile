@@ -8,6 +8,7 @@ import dev.fajar.starter.workforce.domain.policies.calendarFailureInvalidatesCac
 import dev.fajar.starter.workforce.domain.usecases.*
 import dev.fajar.starter.workspace.domain.policies.workspaceAccessLossCodes
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
 import org.koin.android.annotation.KoinViewModel
 import org.koin.core.annotation.InjectedParam
 
@@ -32,53 +33,68 @@ class WorkCalendarViewModel(
         on<WorkCalendarEvent.VerificationRequested>(::onVerificationRequested)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     private fun onEntered(event: WorkCalendarEvent.Entered) {
         if (observation?.isActive == true) return
         updateState { it.copy(loading = true) }
         observation =
             viewModelScope.launch {
-                observe(workspaceId).collect { result ->
-                    ensureActive()
-                    when (result) {
-                        is AppResult.Failed ->
-                            updateState {
-                                it.copy(
-                                    content = null,
-                                    loading = false,
-                                    cacheFailure = result.failure,
-                                    needsVerification =
-                                        result.failure.code in calendarVerificationCodes ||
-                                            it.refreshFailure?.code in calendarVerificationCodes,
-                                )
-                            }
-                        is AppResult.Success -> {
-                            val snapshot = result.value
-                            val requested = state.value.selection
-                            val matches =
-                                snapshot == null ||
-                                    requested == WorkCalendarSelection() ||
-                                    ((requested.employeeId == null ||
-                                        requested.employeeId == snapshot.selection.employeeId) &&
-                                        (requested.from == null ||
-                                            requested.from == snapshot.period.from) &&
-                                        requested.after == snapshot.selection.after)
-                            if (matches)
+                state
+                    .map { it.selection to it.readRestricted }
+                    .distinctUntilChanged()
+                    .flatMapLatest { (requested, restricted) ->
+                        if (restricted) emptyFlow()
+                        else observe(workspaceId).map { requested to it }
+                    }
+                    .collect { (requested, result) ->
+                        ensureActive()
+                        if (requested != state.value.selection || state.value.readRestricted)
+                            return@collect
+                        when (result) {
+                            is AppResult.Failed ->
                                 updateState {
                                     it.copy(
-                                        content = snapshot?.toContent(),
+                                        content = null,
                                         loading = false,
-                                        cacheFailure = null,
-                                        selection =
-                                            if (!it.refreshing && snapshot != null)
-                                                snapshot.selection
-                                            else it.selection,
+                                        cacheFailure = result.failure,
                                         needsVerification =
-                                            it.refreshFailure?.code in calendarVerificationCodes,
+                                            result.failure.code in calendarVerificationCodes ||
+                                                it.refreshFailure?.code in calendarVerificationCodes,
                                     )
                                 }
+                            is AppResult.Success -> {
+                                val snapshot = result.value
+                                val matches =
+                                    snapshot == null ||
+                                        requested == WorkCalendarSelection() ||
+                                        ((requested.employeeId == null ||
+                                            requested.employeeId ==
+                                                snapshot.selection.employeeId) &&
+                                            (requested.from == null ||
+                                                requested.from == snapshot.period.from) &&
+                                            requested.after == snapshot.selection.after)
+                                if (matches)
+                                    updateState {
+                                        it.copy(
+                                            content = snapshot?.toContent(),
+                                            loading = false,
+                                            cacheFailure = null,
+                                            selection =
+                                                if (
+                                                    !it.refreshing &&
+                                                        it.refreshFailure != null &&
+                                                        requested.from == null &&
+                                                        snapshot != null
+                                                )
+                                                    snapshot.selection
+                                                else it.selection,
+                                            needsVerification =
+                                                it.refreshFailure?.code in calendarVerificationCodes,
+                                        )
+                                    }
+                            }
                         }
                     }
-                }
             }
         onEvent(WorkCalendarEvent.RefreshRequested)
     }
@@ -101,7 +117,17 @@ class WorkCalendarViewModel(
     private fun onRefreshRequested(event: WorkCalendarEvent.RefreshRequested) {
         if (observation?.isActive != true || acquisition?.isActive == true) return
         val requested = state.value.selection
-        updateState { it.copy(refreshing = true, refreshFailure = null, needsVerification = false) }
+        updateState {
+            it.copy(
+                refreshing = true,
+                cacheFailure =
+                    it.refreshFailure?.takeIf(::calendarFailureInvalidatesCache) ?: it.cacheFailure,
+                refreshFailure = it.refreshFailure?.takeIf(::calendarFailureInvalidatesCache),
+                needsVerification =
+                    it.cacheFailure?.code in calendarVerificationCodes ||
+                        it.refreshFailure?.code in calendarVerificationCodes,
+            )
+        }
         acquisition =
             viewModelScope.launch {
                 val result = refresh(workspaceId, requested)
@@ -109,14 +135,23 @@ class WorkCalendarViewModel(
                 when (result) {
                     is AppResult.Failed -> {
                         updateState {
+                            val invalidated = calendarFailureInvalidatesCache(result.failure)
                             it.copy(
                                 refreshing = false,
                                 loading = false,
                                 refreshFailure = result.failure,
-                                content =
-                                    if (calendarFailureInvalidatesCache(result.failure)) null
-                                    else it.content,
-                                needsVerification = result.failure.code in calendarVerificationCodes,
+                                content = if (invalidated) null else it.content,
+                                selection =
+                                    if (
+                                        !invalidated &&
+                                            it.selection.from == null &&
+                                            it.content != null
+                                    )
+                                        it.content.snapshot.selection
+                                    else it.selection,
+                                needsVerification =
+                                    result.failure.code in calendarVerificationCodes ||
+                                        it.cacheFailure?.code in calendarVerificationCodes,
                             )
                         }
                         if (
@@ -127,7 +162,13 @@ class WorkCalendarViewModel(
                     }
                     is AppResult.Success ->
                         updateState {
-                            it.copy(refreshing = false, loading = false, refreshFailure = null)
+                            it.copy(
+                                refreshing = false,
+                                loading = it.content == null,
+                                refreshFailure = null,
+                                cacheFailure = null,
+                                needsVerification = false,
+                            )
                         }
                 }
             }

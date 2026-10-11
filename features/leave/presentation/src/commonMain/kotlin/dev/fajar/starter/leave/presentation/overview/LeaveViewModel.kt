@@ -76,6 +76,8 @@ class LeaveViewModel(
         updateState {
             it.copy(
                 refreshing = true,
+                cacheFailure =
+                    it.refreshFailure?.takeIf(::leaveFailureInvalidatesCache) ?: it.cacheFailure,
                 refreshFailure = it.refreshFailure?.takeIf(::leaveFailureInvalidatesCache),
             )
         }

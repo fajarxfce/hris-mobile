@@ -49,6 +49,8 @@ stop/disposal. Leaving cancels acquisition and observation; replacing filters
 cancels obsolete reads. The ViewModel holds an authoritative read failure through
 retry and resubscribes only after fresh publication. A failed local cleanup cannot
 silently make restricted content visible again.
+The gate also survives subsequent network or storage failures; those errors do
+not authorize reading the previous view.
 
 Balances have their own year filter; request history explicitly covers all dates.
 Year and status controls remain usable after a transport failure. Cursor actions
@@ -66,8 +68,9 @@ a reservation or authorization to submit.
 
 ## Validation
 
-The root `:check` passes with 457 desktop tests. Leave's three Chromium suites
-pass 26 tests, and Android dev plus Web production builds pass. Coverage includes
+The root `:check` passes with 461 desktop tests. Leave's three Chromium suites
+have passed 27 tests; the presentation suite was rerun for the retry correction.
+Android dev plus Web production builds pass. Coverage includes
 exact half-day values, bounded pages, session/company isolation, encrypted cache
 restoration, cancellation, late results and compare-and-set publication. MVI tests
 exercise denied reads, pending retries, expiry, disposal and both cache/network

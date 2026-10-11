@@ -11,6 +11,7 @@ import dev.fajar.starter.workforce.domain.policies.calendarFailureInvalidatesCac
 import dev.fajar.starter.workspace.domain.policies.workspaceAccessLossCodes
 import kotlin.time.Clock
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
 import org.koin.android.annotation.KoinViewModel
 import org.koin.core.annotation.InjectedParam
 
@@ -44,35 +45,54 @@ class AttendanceViewModel(
         on<AttendanceEvent.DialogDismissed>(::onDialogDismissed)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     private fun onEntered(event: AttendanceEvent.Entered) {
         if (observation?.isActive == true) return
         updateState { it.copy(loading = true) }
         observation =
             viewModelScope.launch {
-                observe(workspaceId).collect { result ->
-                    ensureActive()
-                    when (result) {
-                        is AppResult.Failed ->
-                            updateState {
-                                it.copy(
-                                    content = null,
-                                    loading = false,
-                                    failure = result.failure,
-                                    needsVerification = result.failure.code in verificationCodes,
+                state
+                    .map { it.selection to (it.readFailure != null) }
+                    .distinctUntilChanged()
+                    .flatMapLatest { (requested, restricted) ->
+                        if (restricted) emptyFlow()
+                        else observe(workspaceId).map { requested to it }
+                    }
+                    .collect { (requested, result) ->
+                        ensureActive()
+                        if (requested != state.value.selection || state.value.readFailure != null)
+                            return@collect
+                        when (result) {
+                            is AppResult.Failed ->
+                                updateState {
+                                    it.copy(
+                                        content = null,
+                                        loading = false,
+                                        failure = result.failure,
+                                        readFailure =
+                                            result.failure.takeIf(
+                                                ::calendarFailureInvalidatesCache
+                                            ),
+                                        needsVerification =
+                                            result.failure.code in verificationCodes,
+                                        dialog = null,
+                                        settingsTarget = null,
+                                        withoutLocationKind = null,
+                                    )
+                                }
+                            is AppResult.Success -> {
+                                val content = result.value.toContent(Clock.System.now())
+                                if (
+                                    content == null ||
+                                        ((state.value.selection.employeeId == null ||
+                                            content.employee?.id ==
+                                                state.value.selection.employeeId) &&
+                                            state.value.selection.after == content.snapshot.after)
                                 )
+                                    updateState { it.copy(content = content, loading = false) }
                             }
-                        is AppResult.Success -> {
-                            val content = result.value.toContent(Clock.System.now())
-                            if (
-                                content == null ||
-                                    ((state.value.selection.employeeId == null ||
-                                        content.employee?.id == state.value.selection.employeeId) &&
-                                        state.value.selection.after == content.snapshot.after)
-                            )
-                                updateState { it.copy(content = content, loading = false) }
                         }
                     }
-                }
             }
         onEvent(AttendanceEvent.RefreshRequested)
     }
@@ -103,8 +123,8 @@ class AttendanceViewModel(
         updateState {
             it.copy(
                 refreshing = true,
-                failure = null,
-                needsVerification = false,
+                failure = it.readFailure,
+                needsVerification = it.readFailure?.code in verificationCodes,
                 settingsTarget = null,
                 withoutLocationKind = null,
             )
@@ -116,7 +136,9 @@ class AttendanceViewModel(
                 when (result) {
                     is AppResult.Failed -> reportFailure(result.failure)
                     is AppResult.Success ->
-                        updateState { it.copy(failure = null, needsVerification = false) }
+                        updateState {
+                            it.copy(failure = null, readFailure = null, needsVerification = false)
+                        }
                 }
                 updateState { it.copy(refreshing = false, loading = false) }
             }
@@ -275,10 +297,16 @@ class AttendanceViewModel(
 
     private suspend fun reportFailure(failure: Failure) {
         updateState {
+            val invalidated = calendarFailureInvalidatesCache(failure)
             it.copy(
                 failure = failure,
-                needsVerification = failure.code in verificationCodes,
-                content = if (calendarFailureInvalidatesCache(failure)) null else it.content,
+                readFailure = failure.takeIf { invalidated } ?: it.readFailure,
+                needsVerification =
+                    failure.code in verificationCodes || it.readFailure?.code in verificationCodes,
+                content = if (invalidated || it.readFailure != null) null else it.content,
+                dialog = if (invalidated) null else it.dialog,
+                settingsTarget = if (invalidated) null else it.settingsTarget,
+                withoutLocationKind = if (invalidated) null else it.withoutLocationKind,
             )
         }
         if (failure.code in workspaceAccessLossCodes && failure.code !in verificationCodes)

@@ -23,6 +23,7 @@ import dev.fajar.starter.common.config.AppPlatform
 import dev.fajar.starter.database.createAppDatabase
 import dev.fajar.starter.datastore.createUserPreferences
 import dev.fajar.starter.fixtures.NativeAttendanceCacheUi
+import dev.fajar.starter.fixtures.NativeCalendarCacheUi
 import dev.fajar.starter.fixtures.NativeDirectoryUi
 import dev.fajar.starter.fixtures.NativeSessionsUi
 import dev.fajar.starter.fixtures.NativeUiServer
@@ -31,6 +32,7 @@ import dev.fajar.starter.notifications.data.datasources.*
 import dev.fajar.starter.notifications.data.dto.*
 import dev.fajar.starter.workforce.domain.attendance.entities.AttendanceWindow
 import dev.fajar.starter.workforce.domain.attendance.repositories.AttendanceCacheRepository
+import dev.fajar.starter.workforce.domain.repositories.WorkCalendarCacheRepository
 import java.io.File
 import java.nio.file.Files
 import kotlin.test.*
@@ -46,6 +48,76 @@ class AppFlowTest {
     @get:Rule val compose = createComposeRule()
     @get:Rule val testName = TestName()
     private val backDispatcher = TestBackDispatcher()
+
+    @Test
+    fun calendarReadDenialRemainsAuthoritativeWhenCleanupFailsAndRetryIsPending() {
+        val server = NativeUiServer()
+        val cache = NativeCalendarCacheUi()
+        val release = CompletableDeferred<Unit>()
+        try {
+            withApplication(server, module { single<WorkCalendarCacheRepository> { cache } }) {
+                signIn()
+                waitFor("Choose a company")
+                compose.onAllNodesWithText("Open company")[0].performClick()
+                waitFor("Work calendar")
+                compose.onNodeWithText("Work calendar").performScrollTo().performClick()
+                waitFor("Night shift")
+                compose.waitUntil { server.workforce.active.get() == 0 }
+                cache.rejectClear = true
+                server.workforce.failureCode = "mfa_required"
+                compose.onNodeWithContentDescription("Refresh").performClick()
+                waitFor("Verify your account")
+                compose.waitUntil { cache.subscribers() == 0 }
+                server.workforce.failureCode = null
+                server.workforce.calendarGate = release
+                cache.rejectClear = false
+                compose.onNodeWithContentDescription("Refresh").performClick()
+                compose.waitUntil { server.workforce.active.get() == 1 }
+                compose.onNodeWithText("Night shift").assertDoesNotExist()
+                compose.onNodeWithText("Verify your account").assertExists()
+                assertEquals(0, cache.subscribers())
+                release.complete(Unit)
+                waitFor("Night shift")
+                compose.onNodeWithText("Verify your account").assertDoesNotExist()
+                compose.waitUntil { cache.subscribers() == 1 }
+                compose.onNodeWithContentDescription("Back").performClick()
+                waitFor("Welcome")
+                compose.waitUntil { cache.subscribers() == 0 }
+            }
+        } finally {
+            release.complete(Unit)
+        }
+    }
+
+    @Test
+    fun calendarFreshPublicationClearsExpiryThatArrivedDuringTheRead() {
+        val server = NativeUiServer()
+        val cache = NativeCalendarCacheUi()
+        val release = CompletableDeferred<Unit>()
+        try {
+            withApplication(server, module { single<WorkCalendarCacheRepository> { cache } }) {
+                signIn()
+                waitFor("Choose a company")
+                compose.onAllNodesWithText("Open company")[0].performClick()
+                waitFor("Work calendar")
+                compose.onNodeWithText("Work calendar").performScrollTo().performClick()
+                waitFor("Night shift")
+                compose.waitUntil { server.workforce.active.get() == 0 }
+                server.workforce.calendarGate = release
+                compose.onNodeWithContentDescription("Refresh").performClick()
+                compose.waitUntil { server.workforce.active.get() == 1 }
+                cache.expire()
+                waitFor("Connect to refresh your schedule.")
+                compose.waitUntil { cache.subscribers() == 0 }
+                release.complete(Unit)
+                waitFor("Night shift")
+                compose.onNodeWithText("Connect to refresh your schedule.").assertDoesNotExist()
+                compose.waitUntil { cache.subscribers() == 1 }
+            }
+        } finally {
+            release.complete(Unit)
+        }
+    }
 
     @Test
     fun leaveFiltersRestoreOfflineWithoutCrossingCompanyScope() {
@@ -247,6 +319,13 @@ class AppFlowTest {
                 compose.onNodeWithText("Present").assertDoesNotExist()
                 compose.waitUntil { cache.subscribers(AttendanceWindow.MONTHLY) == 0 }
                 server.workforce.failureCode = null
+                server.workforce.offline = true
+                compose.onNodeWithContentDescription("Refresh").performClick()
+                waitFor("Unable to connect. Check your connection.")
+                compose.onNodeWithText("Verify your account").assertExists()
+                compose.onNodeWithText("Present").assertDoesNotExist()
+                assertEquals(0, cache.subscribers(AttendanceWindow.MONTHLY))
+                server.workforce.offline = false
                 compose.onNodeWithContentDescription("Refresh").performClick()
                 waitFor("Present")
                 compose.onNodeWithText("Verify your account").assertDoesNotExist()
@@ -254,6 +333,36 @@ class AppFlowTest {
             }
         } finally {
             release.complete(Unit)
+        }
+    }
+
+    @Test
+    fun homeAttendanceDoesNotReopenDeniedCacheOnFailedRetry() {
+        val cache = NativeAttendanceCacheUi()
+        val server = NativeUiServer()
+        withApplication(server, module { single<AttendanceCacheRepository> { cache } }) {
+            signIn()
+            waitFor("Choose a company")
+            compose.onAllNodesWithText("Open company")[0].performClick()
+            waitFor("Clock in")
+            compose.waitUntil { server.workforce.attendanceActive.get() == 0 }
+            cache.rejectClear = true
+            server.workforce.failureCode = "mfa_required"
+            compose.onNodeWithContentDescription("Refresh").performClick()
+            waitFor("Verify your account")
+            compose.waitUntil { cache.subscribers(AttendanceWindow.RECENT) == 0 }
+            server.workforce.failureCode = null
+            server.workforce.offline = true
+            compose.onNodeWithContentDescription("Refresh").performClick()
+            waitFor("Unable to connect. Check your connection.")
+            compose.onNodeWithText("Verify your account").assertExists()
+            compose.onNode(hasText("Clock in") and hasClickAction()).assertDoesNotExist()
+            assertEquals(0, cache.subscribers(AttendanceWindow.RECENT))
+            server.workforce.offline = false
+            cache.rejectClear = false
+            compose.onNodeWithContentDescription("Refresh").performClick()
+            waitFor("Clock in")
+            compose.waitUntil { cache.subscribers(AttendanceWindow.RECENT) == 1 }
         }
     }
 

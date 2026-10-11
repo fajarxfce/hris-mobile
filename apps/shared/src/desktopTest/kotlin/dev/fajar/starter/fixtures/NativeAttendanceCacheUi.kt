@@ -1,6 +1,6 @@
 package dev.fajar.starter.fixtures
 
-import dev.fajar.starter.common.result.AppResult
+import dev.fajar.starter.common.result.*
 import dev.fajar.starter.workforce.domain.attendance.entities.*
 import dev.fajar.starter.workforce.domain.attendance.repositories.AttendanceCacheRepository
 import dev.fajar.starter.workforce.domain.entities.WorkforceAccess
@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.map
 
 /** A single-company cache whose expiry can be advanced during an assembled UI request. */
 class NativeAttendanceCacheUi : AttendanceCacheRepository {
+    @Volatile var rejectClear = false
     private val snapshots =
         AttendanceWindow.entries.associateWith { MutableStateFlow<AttendanceSnapshot?>(null) }
 
@@ -25,6 +26,10 @@ class NativeAttendanceCacheUi : AttendanceCacheRepository {
         snapshot: AttendanceSnapshot?,
         window: AttendanceWindow,
     ): AppResult<Boolean> {
+        if (snapshot == null && rejectClear)
+            return AppResult.Failed(
+                Failure(FailureKind.Storage, "Storage unavailable", code = "client.storage")
+            )
         val destination = snapshots.getValue(window)
         val previous = destination.value
         return AppResult.Success(

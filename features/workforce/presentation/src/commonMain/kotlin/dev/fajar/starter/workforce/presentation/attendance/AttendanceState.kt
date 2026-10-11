@@ -11,6 +11,7 @@ data class AttendanceState(
     val refreshing: Boolean = false,
     val working: Boolean = false,
     val failure: Failure? = null,
+    val readFailure: Failure? = null,
     val needsVerification: Boolean = false,
     val settingsTarget: LocationSettings? = null,
     val withoutLocationKind: AttendanceKind? = null,

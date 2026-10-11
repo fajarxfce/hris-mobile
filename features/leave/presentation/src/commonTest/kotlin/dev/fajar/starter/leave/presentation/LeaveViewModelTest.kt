@@ -233,6 +233,33 @@ class LeaveViewModelTest {
         }
     }
 
+    @Test
+    fun failedRetriesCannotReplaceAnAuthoritativeDenialWithReadableOldCache() = runTest {
+        withLeave { fixture, model, _ ->
+            model.onEvent(LeaveEvent.Entered)
+            runCurrent()
+            fixture.rejectWrite = true
+            fixture.directoryCall = { leaveFailure("mfa_required", FailureKind.AccessDenied) }
+            model.onEvent(LeaveEvent.RefreshRequested)
+            runCurrent()
+            for (kind in listOf(FailureKind.Network, FailureKind.Storage)) {
+                fixture.directoryCall = { leaveFailure("client.retry_failed", kind) }
+                model.onEvent(LeaveEvent.RefreshRequested)
+                runCurrent()
+                assertTrue(model.state.value.readRestricted)
+                assertNull(model.state.value.content)
+                assertTrue(model.state.value.needsVerification)
+                assertEquals(0, fixture.observers)
+            }
+            fixture.rejectWrite = false
+            fixture.directoryCall = { AppResult.Success(fixture.directory) }
+            model.onEvent(LeaveEvent.RefreshRequested)
+            runCurrent()
+            assertNotNull(model.state.value.content)
+            assertFalse(model.state.value.readRestricted)
+        }
+    }
+
     private suspend fun TestScope.withLeave(
         test: suspend (LeavePresentationFixture, LeaveViewModel, ViewModelStore) -> Unit
     ) {

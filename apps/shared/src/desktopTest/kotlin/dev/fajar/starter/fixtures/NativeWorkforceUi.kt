@@ -17,6 +17,7 @@ import kotlinx.serialization.json.*
 class NativeWorkforceUi {
     @Volatile var offline = false
     @Volatile var holdCalendar = false
+    @Volatile var calendarGate: CompletableDeferred<Unit>? = null
     @Volatile var attendanceGate: CompletableDeferred<Unit>? = null
     var asOf: LocalDate = LocalDate.parse("2026-10-12")
     @Volatile var failureCode: String? = null
@@ -65,6 +66,7 @@ class NativeWorkforceUi {
         calendars.incrementAndGet()
         active.incrementAndGet()
         try {
+            calendarGate?.await()
             if (holdCalendar)
                 try {
                     awaitCancellation()

@@ -155,6 +155,8 @@ class AttendanceHistoryViewModel(
         updateState {
             it.copy(
                 refreshing = true,
+                cacheFailure =
+                    it.refreshFailure?.takeIf(::calendarFailureInvalidatesCache) ?: it.cacheFailure,
                 refreshFailure = it.refreshFailure?.takeIf(::calendarFailureInvalidatesCache),
                 needsVerification =
                     it.cacheFailure?.code in verificationCodes ||
