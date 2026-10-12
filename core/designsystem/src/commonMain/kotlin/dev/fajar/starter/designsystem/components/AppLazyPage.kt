@@ -21,6 +21,7 @@ fun AppLazyPage(
     contentPadding: PaddingValues = PaddingValues(24.dp),
     maxWidth: Dp = 960.dp,
     topBar: @Composable () -> Unit = {},
+    bottomBar: @Composable () -> Unit = {},
     content: LazyListScope.() -> Unit,
 ) {
     Box(
@@ -39,6 +40,7 @@ fun AppLazyPage(
                 verticalArrangement = Arrangement.spacedBy(spacing),
                 content = content,
             )
+            bottomBar()
         }
     }
 }

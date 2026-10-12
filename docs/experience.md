@@ -57,6 +57,11 @@ can increase it. Inner pages use 16 dp horizontal content margins and 48 dp icon
 targets for back and refresh. The app host still owns top/side system insets, and
 the page or bottom navigation owns the bottom inset.
 
+Use `AppActionBar` in `AppLazyPage.bottomBar` for a page's primary action, keeping
+it visible without covering the final list row. `AppIconButton.loading` retains
+its target and accessible label while preventing duplicate input. Progress rings
+belong beside the operation they describe; avoid moving progress below a long list.
+
 `AppMenuGrid` lays out up to four columns and reduces that count as text grows.
 `AppMenuItem` provides one named action per icon and label. Use text actions for
 secondary navigation, radio rows for mutually exclusive preferences, and switches

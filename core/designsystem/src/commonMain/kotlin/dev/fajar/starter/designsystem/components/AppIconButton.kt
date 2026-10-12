@@ -20,15 +20,16 @@ fun AppIconButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
+    loading: Boolean = false,
 ) {
     Box(
         modifier
             .size(48.dp)
             .clip(CircleShape)
-            .alpha(if (enabled) 1f else 0.4f)
-            .clickable(enabled = enabled, role = Role.Button, onClick = onClick),
+            .alpha(if (enabled || loading) 1f else 0.4f)
+            .clickable(enabled = enabled && !loading, role = Role.Button, onClick = onClick),
         contentAlignment = Alignment.Center,
     ) {
-        AppIcon(icon, description)
+        if (loading) AppProgressRing(description) else AppIcon(icon, description)
     }
 }
