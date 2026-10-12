@@ -64,54 +64,60 @@ class HomeViewModel(
     }
 
     private fun onTabSelected(event: HomeEvent.TabSelected) {
+        if (state.value.working) return
         updateState { it.copy(tab = event.tab) }
     }
 
     private fun onBackRequested(event: HomeEvent.BackRequested) {
+        if (state.value.working) return
         updateState { it.copy(tab = HomeTab.Home) }
     }
 
     private fun onAllServicesRequested(event: HomeEvent.AllServicesRequested) {
+        if (state.value.working) return
         viewModelScope.launch { emitEffect(HomeEffect.OpenAllServices) }
     }
 
     private fun onSettingsRequested(event: HomeEvent.SettingsRequested) {
+        if (state.value.working) return
         viewModelScope.launch { emitEffect(HomeEffect.OpenSettings) }
     }
 
     private fun onServiceSelected(event: HomeEvent.ServiceSelected) {
         if (
-            event.service !in state.value.services.account &&
-                state.value.services.sections.none { event.service in it.items }
+            state.value.working ||
+                event.service !in state.value.services.account &&
+                    state.value.services.sections.none { event.service in it.items }
         )
             return
         viewModelScope.launch { emitEffect(HomeEffect.OpenService(event.service)) }
     }
 
     private fun onSessionsRequested(event: HomeEvent.SessionsRequested) {
+        if (state.value.working) return
         viewModelScope.launch { emitEffect(HomeEffect.OpenSessions) }
     }
 
     private fun onCompanyChangeRequested(event: HomeEvent.CompanyChangeRequested) {
         if (state.value.working) return
-        updateState { it.copy(working = true) }
+        updateState { it.copy(operation = HomeOperation.ChangingCompany, failure = null) }
         viewModelScope.launch {
             when (val result = leaveWorkspace(state.value.workspace.id)) {
                 is AppResult.Failed ->
-                    updateState { it.copy(working = false, failure = result.failure) }
-                is AppResult.Success -> updateState { it.copy(working = false) }
+                    updateState { it.copy(operation = null, failure = result.failure) }
+                is AppResult.Success -> Unit
             }
         }
     }
 
     private fun onSignOutRequested(event: HomeEvent.SignOutRequested) {
         if (state.value.working) return
-        updateState { it.copy(working = true) }
+        updateState { it.copy(operation = HomeOperation.SigningOut, failure = null) }
         viewModelScope.launch {
             when (val result = signOut(state.value.workspace.sessionId)) {
                 is AppResult.Failed ->
-                    updateState { it.copy(working = false, failure = result.failure) }
-                is AppResult.Success -> updateState { it.copy(working = false, user = null) }
+                    updateState { it.copy(operation = null, failure = result.failure) }
+                is AppResult.Success -> Unit
             }
         }
     }

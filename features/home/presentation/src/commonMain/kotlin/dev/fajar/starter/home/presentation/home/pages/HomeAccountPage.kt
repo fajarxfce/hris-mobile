@@ -29,13 +29,17 @@ fun HomeAccountPage(state: HomeState, onEvent: (HomeEvent) -> Unit) {
         topBar = {
             AppTopBar(
                 appString(AppString.Account),
-                subtitle = state.workspace.company.name,
+                subtitle =
+                    if (state.operation == HomeOperation.ChangingCompany)
+                        appString(AppString.ChangingCompany)
+                    else state.workspace.company.name,
                 actions = {
                     AppIconButton(
                         Icons.Regular.ChevronDown,
                         appString(AppString.ChangeCompany),
                         { onEvent(HomeEvent.CompanyChangeRequested) },
                         enabled = !state.working,
+                        loading = state.operation == HomeOperation.ChangingCompany,
                     )
                 },
             )
@@ -61,29 +65,39 @@ fun HomeAccountPage(state: HomeState, onEvent: (HomeEvent) -> Unit) {
                 AppListRow(
                     title = appString(AppString.MyProfile),
                     onClick = { onEvent(HomeEvent.ServiceSelected(HomeService.Profile)) },
+                    enabled = !state.working,
                     leading = { AppIcon(Icons.Regular.Person) },
                     trailing = { AppIcon(Icons.Regular.ChevronRight) },
                 )
             AppListRow(
                 title = appString(AppString.Settings),
                 onClick = { onEvent(HomeEvent.SettingsRequested) },
+                enabled = !state.working,
                 leading = { AppIcon(Icons.Regular.Settings) },
                 trailing = { AppIcon(Icons.Regular.ChevronRight) },
             )
             AppListRow(
                 title = appString(AppString.ActiveSessions),
                 onClick = { onEvent(HomeEvent.SessionsRequested) },
+                enabled = !state.working,
                 leading = { AppIcon(Icons.Regular.Key) },
                 trailing = { AppIcon(Icons.Regular.ChevronRight) },
             )
         }
         AppListRow(
-            title = appString(AppString.SignOut),
+            title =
+                appString(
+                    if (state.operation == HomeOperation.SigningOut) AppString.SigningOut
+                    else AppString.SignOut
+                ),
             onClick = { onEvent(HomeEvent.SignOutRequested) },
             leading = { AppIcon(Icons.Regular.ArrowRight) },
             enabled = !state.working,
+            trailing = {
+                if (state.operation == HomeOperation.SigningOut)
+                    AppProgressRing(appString(AppString.SigningOut))
+            },
         )
-        if (state.working) AppLoading()
         if (state.failure != null) AppFeedback(failureText(state.failure))
     }
 }

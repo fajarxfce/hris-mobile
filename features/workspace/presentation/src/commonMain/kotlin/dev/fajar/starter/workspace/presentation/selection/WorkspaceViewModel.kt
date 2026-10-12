@@ -25,7 +25,7 @@ class WorkspaceViewModel(
     }
 
     private fun onCompaniesRequested(event: WorkspaceEvent.CompaniesRequested) {
-        if (state.value.loading || state.value.selectingId != null) return
+        if (state.value.busy) return
         updateState { it.copy(loading = true, failure = null) }
         viewModelScope.launch {
             when (val result = loadAccount(sessionId)) {
@@ -44,11 +44,12 @@ class WorkspaceViewModel(
     }
 
     private fun onCompanySelected(event: WorkspaceEvent.CompanySelected) {
-        if (state.value.loading || state.value.selectingId != null) return
+        if (state.value.busy) return
         updateState { it.copy(selectingId = event.companyId, failure = null) }
         viewModelScope.launch {
             when (val result = selectWorkspace(sessionId, event.companyId)) {
-                is AppResult.Success -> updateState { it.copy(selectingId = null) }
+                // The application observes the new workspace and replaces this route.
+                is AppResult.Success -> Unit
                 is AppResult.Failed -> {
                     updateState { it.copy(selectingId = null, failure = result.failure) }
                     if (
@@ -62,13 +63,13 @@ class WorkspaceViewModel(
     }
 
     private fun onSignOutRequested(event: WorkspaceEvent.SignOutRequested) {
-        if (state.value.loading || state.value.selectingId != null) return
-        updateState { it.copy(loading = true) }
+        if (state.value.busy) return
+        updateState { it.copy(signingOut = true, failure = null) }
         viewModelScope.launch {
             when (val result = signOut(sessionId)) {
                 is AppResult.Failed ->
-                    updateState { it.copy(loading = false, failure = result.failure) }
-                is AppResult.Success -> updateState { WorkspaceState() }
+                    updateState { it.copy(signingOut = false, failure = result.failure) }
+                is AppResult.Success -> Unit
             }
         }
     }

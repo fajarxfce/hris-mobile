@@ -5,6 +5,7 @@ import java.util.concurrent.atomic.AtomicInteger
 import kotlin.time.Clock
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.seconds
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.serialization.json.*
 
 class NativeCompanyPolicyUi {
@@ -12,13 +13,15 @@ class NativeCompanyPolicyUi {
     @Volatile var minimumAndroid: Long = 0
     @Volatile var maintenance = false
     @Volatile var offline = false
+    @Volatile var pending: CompletableDeferred<Unit>? = null
     val reads = AtomicInteger()
 
-    fun response(path: String): Pair<String, HttpStatusCode>? {
+    suspend fun response(path: String): Pair<String, HttpStatusCode>? {
         if (!path.startsWith("/api/v1/companies/")) return null
         val company = path.split('/').getOrNull(4) ?: return null
         if (path.endsWith("/client-policy")) {
             reads.incrementAndGet()
+            pending?.await()
             if (offline) throw java.io.IOException("Fixture policy connection is unavailable")
             return policy(company).toString() to HttpStatusCode.OK
         }

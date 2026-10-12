@@ -1,5 +1,13 @@
 # Template updates
 
+## Page actions and progress
+
+The fixed page action slot, labelled progress ring, busy icon behavior and two
+shared UI regressions also exist at
+[b481f65](https://github.com/fajarxfce/compose-fluent-starter/commit/b481f65).
+Both repositories passed root checks, app Chromium tests and Android dev builds.
+HRIS company selection and operation state stay in this application.
+
 ## Navigation restoration
 
 Scoped navigation persistence, deferred graph attachment and four process/scope

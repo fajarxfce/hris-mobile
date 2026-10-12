@@ -1,5 +1,19 @@
 # Validation
 
+## Company selection and operation feedback
+
+Root checks passed with 747 desktop tests, five app Chromium tests and Android
+dev assembly. The new assembled regression holds company acquisition pending,
+checks disabled duplicate inputs, returns a connection failure and opens a second
+company after retry. Layout checks cover one target per company, visible pending
+feedback and fixed actions at 200% text size. Existing logout, company isolation
+and retained-tab regressions also passed.
+
+The API 35 emulator opened the picker from Account, retained it through appearance
+and font changes, and returned to Home after selection against the development
+API. Light and dark/150% screenshots were inspected; system preferences were
+restored. No frame-time or memory benchmark was performed.
+
 ## Background process restoration
 
 The installed application's crash log identified an SDK back-stack restoration

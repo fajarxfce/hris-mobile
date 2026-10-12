@@ -16,7 +16,10 @@ data class HomeState(
     val workspace: Workspace,
     val tab: HomeTab = HomeTab.Home,
     val user: User? = null,
-    val working: Boolean = false,
+    val operation: HomeOperation? = null,
     val failure: Failure? = null,
     val services: HomeServiceCatalog = HomeServiceCatalog(),
-)
+) {
+    val working: Boolean
+        get() = operation != null
+}

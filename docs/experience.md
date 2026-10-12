@@ -89,6 +89,14 @@ Its navigation ViewModel retains data and observes cache validity until that own
 is cleared. Returning to admitted loaded content does not refresh it; an unfinished
 request or invalidated read needs acquisition. Returning never records attendance.
 
+## Company selection
+
+Company rows provide one selection target with the company name, code and a
+labelled progress indicator. Other actions remain disabled until selection fails
+or the application opens the admitted company. Sign out stays in the fixed bottom
+bar. Account shows company-switch progress in its header and sign-out progress
+beside that action; navigation controls cannot interrupt either operation.
+
 ## Search and filters
 
 Use `AppSearchField` for compact search, keeping its accessible label and explicit

@@ -71,6 +71,33 @@ class AppFlowTest {
     private val backDispatcher = TestBackDispatcher()
 
     @Test
+    fun companySelectionShowsPendingWorkAndRecoversWithoutDuplicateActions() {
+        val pending = CompletableDeferred<Unit>()
+        val server = NativeUiServer().apply { companyPolicy.pending = pending }
+        withApplication(server) {
+            signIn()
+            waitFor("Choose a company")
+            compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
+            waitFor("Opening company…")
+            compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).assertIsNotEnabled()
+            compose.onNode(hasText("PT Lintas Karya") and hasClickAction()).assertIsNotEnabled()
+            compose.onNode(hasText("Sign out") and hasClickAction()).assertIsNotEnabled()
+            compose.waitUntil { server.companyPolicy.reads.get() == 1 }
+            assertEquals(1, server.companyPolicy.reads.get())
+            server.companyPolicy.offline = true
+            pending.complete(Unit)
+            waitFor("Unable to connect. Check your connection.")
+            compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).assertIsEnabled()
+            compose.onNode(hasText("PT Lintas Karya") and hasClickAction()).assertIsEnabled()
+            server.companyPolicy.pending = null
+            server.companyPolicy.offline = false
+            compose.onNode(hasText("PT Lintas Karya") and hasClickAction()).performClick()
+            waitFor("Welcome")
+            compose.onNodeWithText("PT Lintas Karya").assertExists()
+        }
+    }
+
+    @Test
     fun publishedDocumentsResumeFromCommittedProgressAndExportVerifiedContent() {
         val server =
             NativeUiServer().apply {
@@ -83,7 +110,7 @@ class AppFlowTest {
         withApplication(server, fileOutputs = output) {
             signIn()
             waitFor("Choose a company")
-            compose.onAllNodesWithText("Open company")[0].performClick()
+            compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
             waitFor("Welcome")
             compose
                 .onNode(hasText("Documents") and hasClickAction())
@@ -144,7 +171,7 @@ class AppFlowTest {
         withApplication(server, fileOutputs = output) {
             signIn()
             waitFor("Choose a company")
-            compose.onAllNodesWithText("Open company")[0].performClick()
+            compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
             waitFor("Welcome")
             compose
                 .onNode(hasText("Documents") and hasClickAction())
@@ -201,7 +228,7 @@ class AppFlowTest {
         withApplication(server, fileOutputs = output, lifecycleState = lifecycle) {
             signIn()
             waitFor("Choose a company")
-            compose.onAllNodesWithText("Open company")[0].performClick()
+            compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
             waitFor("Welcome")
             compose
                 .onNode(hasText("Documents") and hasClickAction())
@@ -249,7 +276,7 @@ class AppFlowTest {
         withApplication(server, definitions, fileInputs = DocumentInputUi("draft.pdf")) {
             signIn()
             waitFor("Choose a company")
-            compose.onAllNodesWithText("Open company")[0].performClick()
+            compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
             waitFor("Welcome")
             compose
                 .onNode(hasText("Documents") and hasClickAction())
@@ -294,7 +321,7 @@ class AppFlowTest {
         withApplication(server, fileInputs = DocumentInputUi("receipt.pdf")) {
             signIn()
             waitFor("Choose a company")
-            compose.onAllNodesWithText("Open company")[0].performClick()
+            compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
             waitFor("Welcome")
             compose
                 .onNode(hasText("Documents") and hasClickAction())
@@ -359,7 +386,7 @@ class AppFlowTest {
         withApplication(server, fileInputs = DocumentInputUi("pending.pdf")) {
             signIn()
             waitFor("Choose a company")
-            compose.onAllNodesWithText("Open company")[0].performClick()
+            compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
             waitFor("Welcome")
             compose
                 .onNode(hasText("Documents") and hasClickAction())
@@ -397,7 +424,7 @@ class AppFlowTest {
         withApplication(server, fileInputs = DocumentInputUi("retained-upload.pdf")) {
             signIn()
             waitFor("Choose a company")
-            compose.onAllNodesWithText("Open company")[0].performClick()
+            compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
             waitFor("Welcome")
             compose
                 .onNode(hasText("Documents") and hasClickAction())
@@ -471,7 +498,7 @@ class AppFlowTest {
         withApplication(server, fileInputs = source) { koin ->
             signIn()
             waitFor("Choose a company")
-            compose.onAllNodesWithText("Open company")[0].performClick()
+            compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
             waitFor("Welcome")
             val file = runBlocking {
                 val session =
@@ -562,7 +589,7 @@ class AppFlowTest {
         withApplication(server, observation, fileInputs = source) {
             signIn()
             waitFor("Choose a company")
-            compose.onAllNodesWithText("Open company")[0].performClick()
+            compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
             waitFor("Welcome")
             compose
                 .onNode(hasText("Documents") and hasClickAction())
@@ -631,7 +658,7 @@ class AppFlowTest {
         withApplication(server, fileInputs = source, lifecycleState = lifecycle) {
             signIn()
             waitFor("Choose a company")
-            compose.onAllNodesWithText("Open company")[0].performClick()
+            compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
             waitFor("Welcome")
             compose
                 .onNode(hasText("Documents") and hasClickAction())
@@ -678,7 +705,7 @@ class AppFlowTest {
         withApplication(server) {
             signIn()
             waitFor("Choose a company")
-            compose.onAllNodesWithText("Open company")[0].performClick()
+            compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
             waitFor("Welcome")
             compose.onNode(hasText("Leave") and hasClickAction()).performScrollTo().performClick()
             waitFor("12.5 days")
@@ -825,7 +852,7 @@ class AppFlowTest {
         withApplication(server) {
             signIn()
             waitFor("Choose a company")
-            compose.onAllNodesWithText("Open company")[0].performClick()
+            compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
             waitFor("Welcome")
             compose.onNode(hasText("Leave") and hasClickAction()).performScrollTo().performClick()
             waitFor("12.5 days")
@@ -909,7 +936,7 @@ class AppFlowTest {
             withApplication(server, module { single<AttendanceCacheRepository> { cache } }) {
                 signIn()
                 waitFor("Choose a company")
-                compose.onAllNodesWithText("Open company")[0].performClick()
+                compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
                 waitFor("Welcome")
                 compose.waitUntil { server.workforce.attendanceActive.get() == 1 }
                 val menu = compose.onNode(hasText("Work calendar") and hasClickAction())
@@ -955,7 +982,7 @@ class AppFlowTest {
             withApplication(server, module { single<WorkCalendarCacheRepository> { cache } }) {
                 signIn()
                 waitFor("Choose a company")
-                compose.onAllNodesWithText("Open company")[0].performClick()
+                compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
                 waitFor("Work calendar")
                 compose.onNodeWithText("Work calendar").performScrollTo().performClick()
                 waitFor("Night shift")
@@ -995,7 +1022,7 @@ class AppFlowTest {
             withApplication(server, module { single<WorkCalendarCacheRepository> { cache } }) {
                 signIn()
                 waitFor("Choose a company")
-                compose.onAllNodesWithText("Open company")[0].performClick()
+                compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
                 waitFor("Work calendar")
                 compose.onNodeWithText("Work calendar").performScrollTo().performClick()
                 waitFor("Night shift")
@@ -1026,7 +1053,7 @@ class AppFlowTest {
         withApplication(server) {
             signIn()
             waitFor("Choose a company")
-            compose.onAllNodesWithText("Open company")[0].performClick()
+            compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
             waitFor("Welcome")
             compose.onNode(hasText("Leave") and hasClickAction()).performScrollTo().performClick()
             waitFor("12.5 days")
@@ -1070,7 +1097,7 @@ class AppFlowTest {
             compose.onNode(hasText("Account") and isSelectable()).performClick()
             compose.onNodeWithContentDescription("Change company").performClick()
             waitFor("Choose a company")
-            compose.onAllNodesWithText("Open company")[1].performClick()
+            compose.onNode(hasText("PT Lintas Karya") and hasClickAction()).performClick()
             waitFor("Welcome")
             compose.onNode(hasText("Leave") and hasClickAction()).performScrollTo().performClick()
             waitFor("Employment is not linked to this account.")
@@ -1085,7 +1112,7 @@ class AppFlowTest {
         withApplication(server) {
             signIn()
             waitFor("Choose a company")
-            compose.onAllNodesWithText("Open company")[0].performClick()
+            compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
             waitFor("Welcome")
             compose.onNode(hasText("Leave") and hasClickAction()).performScrollTo().performClick()
             waitFor("12.5 days")
@@ -1135,7 +1162,7 @@ class AppFlowTest {
         withApplication(server) {
             signIn()
             waitFor("Choose a company")
-            compose.onAllNodesWithText("Open company")[0].performClick()
+            compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
             waitFor("Welcome")
             compose
                 .onNode(hasText("Attendance") and hasClickAction())
@@ -1217,7 +1244,7 @@ class AppFlowTest {
             compose.onNode(hasText("Account") and isSelectable()).performClick()
             compose.onNodeWithContentDescription("Change company").performClick()
             waitFor("Choose a company")
-            compose.onAllNodesWithText("Open company")[1].performClick()
+            compose.onNode(hasText("PT Lintas Karya") and hasClickAction()).performClick()
             waitFor("Welcome")
             compose
                 .onNode(hasText("Attendance") and hasClickAction())
@@ -1238,7 +1265,7 @@ class AppFlowTest {
             withApplication(server, module { single<AttendanceCacheRepository> { cache } }) {
                 signIn()
                 waitFor("Choose a company")
-                compose.onAllNodesWithText("Open company")[0].performClick()
+                compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
                 waitFor("Welcome")
                 compose
                     .onNode(hasText("Attendance") and hasClickAction())
@@ -1290,7 +1317,7 @@ class AppFlowTest {
         withApplication(server, module { single<AttendanceCacheRepository> { cache } }) {
             signIn()
             waitFor("Choose a company")
-            compose.onAllNodesWithText("Open company")[0].performClick()
+            compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
             waitFor("Clock in")
             compose.waitUntil { server.workforce.attendanceActive.get() == 0 }
             cache.rejectClear = true
@@ -1322,7 +1349,7 @@ class AppFlowTest {
             withApplication(server) {
                 signIn()
                 waitFor("Choose a company")
-                compose.onAllNodesWithText("Open company")[0].performClick()
+                compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
                 waitFor("Welcome")
                 compose
                     .onNode(hasText("Attendance") and hasClickAction())
@@ -1374,7 +1401,7 @@ class AppFlowTest {
         withApplication(server) {
             signIn()
             waitFor("Choose a company")
-            compose.onAllNodesWithText("Open company")[0].performClick()
+            compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
             waitFor("Welcome")
             compose.waitUntil(10_000) {
                 compose.onAllNodesWithContentDescription("36 unread").fetchSemanticsNodes().size ==
@@ -1398,7 +1425,7 @@ class AppFlowTest {
             compose.onNodeWithContentDescription("Change company").performClick()
             waitFor("Choose a company")
             compose.onNodeWithContentDescription("35 unread").assertDoesNotExist()
-            compose.onAllNodesWithText("Open company")[1].performClick()
+            compose.onNode(hasText("PT Lintas Karya") and hasClickAction()).performClick()
             waitFor("Welcome")
             compose.waitUntil {
                 server.inbox.countCompanies.lastOrNull() == NativeUiServer.COMPANY_TWO
@@ -1415,7 +1442,7 @@ class AppFlowTest {
             withApplication(server) {
                 signIn()
                 waitFor("Choose a company")
-                compose.onAllNodesWithText("Open company")[0].performClick()
+                compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
                 waitFor("Welcome")
                 compose.waitUntil { server.inbox.countStarted.isCompleted }
                 compose.onNode(hasText("Account") and isSelectable()).performClick()
@@ -1447,7 +1474,7 @@ class AppFlowTest {
         withApplication(server, module { single<AttendanceCacheRepository> { cache } }) {
             signIn()
             waitFor("Choose a company")
-            compose.onAllNodesWithText("Open company")[0].performClick()
+            compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
             compose.waitUntil {
                 compose
                     .onAllNodes(hasText("Clock in") and hasClickAction() and isEnabled())
@@ -1499,7 +1526,7 @@ class AppFlowTest {
         withApplication(server, module { single<AttendanceCacheRepository> { cache } }) {
             signIn()
             waitFor("Choose a company")
-            compose.onAllNodesWithText("Open company")[0].performClick()
+            compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
             waitFor("Clock in")
             compose.waitUntil { cache.hasSnapshot(AttendanceWindow.RECENT) }
             compose.onNode(hasText("Employees") and isSelectable()).performClick()
@@ -1527,7 +1554,7 @@ class AppFlowTest {
         withApplication(server) { koin ->
             signIn()
             waitFor("Choose a company")
-            compose.onAllNodesWithText("Open company")[0].performClick()
+            compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
             waitFor("Welcome")
             compose.onNode(hasText("Employees") and isSelectable()).performClick()
             waitFor("Sam Wilson")
@@ -1594,7 +1621,7 @@ class AppFlowTest {
             withApplication(server) {
                 signIn()
                 waitFor("Choose a company")
-                compose.onAllNodesWithText("Open company")[0].performClick()
+                compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
                 waitFor("Welcome")
                 compose.onNode(hasText("Employees") and isSelectable()).performClick()
                 waitFor("Sam Wilson")
@@ -1630,7 +1657,7 @@ class AppFlowTest {
             withApplication(server) {
                 signIn()
                 waitFor("Choose a company")
-                compose.onAllNodesWithText("Open company")[0].performClick()
+                compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
                 waitFor("Welcome")
                 compose.onNode(hasText("Employees") and isSelectable()).performClick()
                 waitFor("Sam Wilson")
@@ -1669,7 +1696,7 @@ class AppFlowTest {
                 compose.onNode(hasText("Account") and isSelectable()).performClick()
                 compose.onNodeWithContentDescription("Change company").performClick()
                 waitFor("Choose a company")
-                compose.onAllNodesWithText("Open company")[1].performClick()
+                compose.onNode(hasText("PT Lintas Karya") and hasClickAction()).performClick()
                 waitFor("Welcome")
                 compose.onNode(hasText("Employees") and isSelectable()).performClick()
                 waitFor("No employees found.")
@@ -1694,7 +1721,7 @@ class AppFlowTest {
         withApplication(server) {
             signIn()
             waitFor("Choose a company")
-            compose.onAllNodesWithText("Open company")[0].performClick()
+            compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
             waitFor("Welcome")
             compose.onNode(hasText("Employees") and isSelectable()).performClick()
             waitFor("Sam Wilson")
@@ -1741,7 +1768,7 @@ class AppFlowTest {
             withApplication(server) {
                 signIn()
                 waitFor("Choose a company")
-                compose.onAllNodesWithText("Open company")[0].performClick()
+                compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
                 waitFor("Welcome")
                 compose.onNode(hasText("Employees") and isSelectable()).performClick()
                 waitFor("Sam Wilson")
@@ -1783,7 +1810,7 @@ class AppFlowTest {
         withApplication(server) {
             signIn()
             waitFor("Choose a company")
-            compose.onAllNodesWithText("Open company")[0].performClick()
+            compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
             waitFor("Welcome")
             compose.onNode(hasText("Employees") and isSelectable()).performClick()
             waitFor("Sam Wilson")
@@ -1818,7 +1845,7 @@ class AppFlowTest {
             withApplication(server) {
                 signIn()
                 waitFor("Choose a company")
-                compose.onAllNodesWithText("Open company")[0].performClick()
+                compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
                 waitFor("Welcome")
                 compose.onNode(hasText("Inbox") and isSelectable()).performClick()
                 compose.waitUntil { server.inbox.refreshStarted.isCompleted }
@@ -1848,7 +1875,7 @@ class AppFlowTest {
         withApplication(NativeUiServer()) {
             signIn()
             waitFor("Choose a company")
-            compose.onAllNodesWithText("Open company")[0].performClick()
+            compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
             waitFor("Welcome")
             compose.onNodeWithContentDescription("Change company").assertDoesNotExist()
             compose.onNode(hasText("Services") and hasClickAction()).assertDoesNotExist()
@@ -1883,7 +1910,7 @@ class AppFlowTest {
         withApplication(server) {
             signIn()
             waitFor("Choose a company")
-            compose.onAllNodesWithText("Open company")[0].performClick()
+            compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
             waitFor("Welcome")
             compose.waitUntil(5_000) { server.workforce.attendanceActive.get() == 1 }
             compose.onAllNodesWithText("Inbox").assertCountEquals(1)
@@ -1926,7 +1953,7 @@ class AppFlowTest {
         withApplication(server) {
             signIn()
             waitFor("Choose a company")
-            compose.onAllNodesWithText("Open company")[0].performClick()
+            compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
             waitFor("Welcome")
             compose.waitUntil(5_000) { server.workforce.attendanceActive.get() == 1 }
             val pendingMenu =
@@ -1990,7 +2017,7 @@ class AppFlowTest {
         withApplication(server, module { single<AttendanceCacheRepository> { cache } }) {
             signIn()
             waitFor("Choose a company")
-            compose.onAllNodesWithText("Open company")[0].performClick()
+            compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
             compose.waitUntil(5_000) {
                 compose
                     .onAllNodes(hasText("Clock in") and hasClickAction() and isEnabled())
@@ -2035,7 +2062,7 @@ class AppFlowTest {
         withApplication(server) {
             signIn()
             waitFor("Choose a company")
-            compose.onAllNodesWithText("Open company")[0].performClick()
+            compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
             waitFor("Welcome")
             compose.onNodeWithText("My profile").assertDoesNotExist()
             compose.onNodeWithText("Work calendar").performScrollTo().performClick()
@@ -2058,7 +2085,7 @@ class AppFlowTest {
         withApplication(server) {
             signIn()
             waitFor("Choose a company")
-            compose.onAllNodesWithText("Open company")[0].performClick()
+            compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
             waitFor("Work calendar")
             // This scenario validates persisted data; navigation gestures have separate coverage.
             compose.onNodeWithText("Work calendar").performScrollTo().performSemanticsAction(
@@ -2092,7 +2119,7 @@ class AppFlowTest {
             compose.onNode(hasText("Account") and hasClickAction()).performClick()
             compose.onNodeWithContentDescription("Change company").performClick()
             waitFor("Choose a company")
-            compose.onAllNodesWithText("Open company")[1].performClick()
+            compose.onNode(hasText("PT Lintas Karya") and hasClickAction()).performClick()
             waitFor("Work calendar")
             compose.onNodeWithText("Work calendar").performScrollTo().performSemanticsAction(
                 androidx.compose.ui.semantics.SemanticsActions.OnClick
@@ -2110,7 +2137,7 @@ class AppFlowTest {
         withApplication(server) {
             signIn()
             waitFor("Choose a company")
-            compose.onAllNodesWithText("Open company")[0].performClick()
+            compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
             waitFor("Work calendar")
             compose.onNodeWithText("Work calendar").performScrollTo().performClick()
             waitFor("Night shift")
@@ -2149,7 +2176,7 @@ class AppFlowTest {
         withApplication(server) {
             signIn()
             waitFor("Choose a company")
-            compose.onAllNodesWithText("Open company")[0].performClick()
+            compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
             waitFor("Update required")
             compose.onNodeWithText("Inbox").assertDoesNotExist()
             compose.waitUntil {
@@ -2171,7 +2198,7 @@ class AppFlowTest {
             server.companyPolicy.offline = false
             compose.onNodeWithText("Change company").performScrollTo().performClick()
             waitFor("Choose a company")
-            compose.onAllNodesWithText("Open company")[1].performClick()
+            compose.onNode(hasText("PT Lintas Karya") and hasClickAction()).performClick()
             waitFor("Inbox")
             compose.onNodeWithText("PT Lintas Karya").assertExists()
             compose.onNodeWithText("Update required").assertDoesNotExist()
@@ -2184,7 +2211,7 @@ class AppFlowTest {
             } finally {
                 capture("company-switch-after-home-refresh")
             }
-            compose.onAllNodesWithText("Open company")[0].performClick()
+            compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
             waitFor("Scheduled maintenance")
             compose.onNodeWithText("Inbox").assertDoesNotExist()
             compose.waitUntil {
@@ -2209,7 +2236,7 @@ class AppFlowTest {
         withApplication(server) {
             signIn()
             waitFor("Choose a company")
-            compose.onAllNodesWithText("Open company")[0].performClick()
+            compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
             waitFor("Welcome")
             compose.onNodeWithText("All services").performScrollTo().performClick()
             compose.waitUntil {
@@ -2225,7 +2252,7 @@ class AppFlowTest {
             compose.onNodeWithText("My profile").assertDoesNotExist()
             compose.onNodeWithContentDescription("Change company").performClick()
             waitFor("Choose a company")
-            compose.onAllNodesWithText("Open company")[1].performClick()
+            compose.onNode(hasText("PT Lintas Karya") and hasClickAction()).performClick()
             waitFor("Welcome")
             compose.onNode(hasText("Account") and isSelectable()).performClick()
             compose.onNodeWithText("My profile").assertExists()
@@ -2239,7 +2266,7 @@ class AppFlowTest {
         withApplication(server) {
             signIn()
             waitFor("Choose a company")
-            compose.onAllNodesWithText("Open company")[0].performClick()
+            compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
             waitFor("Welcome")
             compose.onNode(hasText("Inbox") and isSelectable()).performClick()
             waitFor("Office closure")
@@ -2264,7 +2291,7 @@ class AppFlowTest {
             waitFor("Use your account to continue.")
             signInFromLogin()
             waitFor("Choose a company")
-            compose.onAllNodesWithText("Open company")[0].performClick()
+            compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
             waitFor("Welcome")
             compose.onNode(hasText("Inbox") and isSelectable()).performClick()
             waitFor("Office closure")
@@ -2297,7 +2324,7 @@ class AppFlowTest {
         withApplication(server) {
             signIn()
             waitFor("Choose a company")
-            compose.onAllNodesWithText("Open company")[0].performClick()
+            compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
             waitFor("Welcome")
             compose.onNode(hasText("Inbox") and isSelectable()).performClick()
             waitFor("Office closure")
@@ -2329,7 +2356,7 @@ class AppFlowTest {
             withApplication(server) {
                 signIn()
                 waitFor("Choose a company")
-                compose.onAllNodesWithText("Open company")[0].performClick()
+                compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
                 waitFor("Welcome")
                 compose.onNode(hasText("Inbox") and isSelectable()).performClick()
                 waitFor("Office closure")
@@ -2362,7 +2389,7 @@ class AppFlowTest {
         withApplication(server) {
             signIn()
             waitFor("Choose a company")
-            compose.onAllNodesWithText("Open company")[0].performClick()
+            compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
             waitFor("Welcome")
             compose.onNode(hasText("Inbox") and isSelectable()).performClick()
             waitFor("Office closure")
@@ -2388,7 +2415,7 @@ class AppFlowTest {
             compose.onNode(hasText("Account") and hasClickAction()).performClick()
             compose.onNodeWithContentDescription("Change company").performClick()
             waitFor("Choose a company")
-            compose.onAllNodesWithText("Open company")[1].performClick()
+            compose.onNode(hasText("PT Lintas Karya") and hasClickAction()).performClick()
             waitFor("Welcome")
             compose.onNode(hasText("Inbox") and isSelectable()).performClick()
             waitFor("No messages yet.")
@@ -2402,7 +2429,7 @@ class AppFlowTest {
         withApplication(server) {
             signIn()
             waitFor("Choose a company")
-            compose.onAllNodesWithText("Open company")[0].performClick()
+            compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
             waitFor("Welcome")
             compose.onNode(hasText("Inbox") and isSelectable()).performClick()
             waitFor("Office closure")
@@ -2430,7 +2457,7 @@ class AppFlowTest {
         withApplication(server) {
             signIn()
             waitFor("Choose a company")
-            compose.onAllNodesWithText("Open company")[0].performClick()
+            compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
             waitFor("Welcome")
             compose.onNode(hasText("Account") and hasClickAction()).performClick()
             compose.onNodeWithText("Active sessions").performScrollTo().performClick()
@@ -2464,7 +2491,7 @@ class AppFlowTest {
         withApplication(server) {
             signIn()
             waitFor("Choose a company")
-            compose.onNodeWithText("Sign out").performScrollTo().performClick()
+            compose.onNodeWithText("Sign out").assertIsDisplayed().performClick()
             waitFor("Use your account to continue.")
             compose.onNodeWithText("Choose a company").assertDoesNotExist()
             assertEquals(setOf(NativeSessionsUi.CURRENT), server.deviceSessions.revoked)
@@ -2477,7 +2504,7 @@ class AppFlowTest {
             signIn()
             waitFor("Choose a company")
             capture("companies")
-            compose.onAllNodesWithText("Open company")[0].performClick()
+            compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
             waitFor("Welcome")
             compose.onNodeWithText("PT Nusa Digital").assertExists()
             compose.waitUntil(5_000) {
@@ -2513,7 +2540,7 @@ class AppFlowTest {
             compose.onNode(hasText("Account") and hasClickAction()).performClick()
             compose.onNodeWithContentDescription("Change company").performClick()
             waitFor("Choose a company")
-            compose.onAllNodesWithText("Open company")[1].performClick()
+            compose.onNode(hasText("PT Lintas Karya") and hasClickAction()).performClick()
             waitFor("Welcome")
             compose.onNodeWithText("PT Lintas Karya").assertExists()
             compose.onNodeWithText("PT Nusa Digital").assertDoesNotExist()
@@ -2529,7 +2556,7 @@ class AppFlowTest {
         withApplication(NativeUiServer()) {
             signIn()
             waitFor("Choose a company")
-            compose.onAllNodesWithText("Open company")[0].performClick()
+            compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
             waitFor("Welcome")
             openProfile()
             waitFor("Personal information")
@@ -2553,7 +2580,7 @@ class AppFlowTest {
                 )
                 .performClick()
             waitFor("Choose a company")
-            compose.onAllNodesWithText("Open company")[1].performClick()
+            compose.onNode(hasText("PT Lintas Karya") and hasClickAction()).performClick()
             waitFor("Welcome")
             openProfile()
             waitFor("No employee profile is available. Contact HR to check your account linkage.")
@@ -2567,7 +2594,7 @@ class AppFlowTest {
         withApplication(server) {
             signIn()
             waitFor("Choose a company")
-            compose.onAllNodesWithText("Open company")[0].performClick()
+            compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
             waitFor("Welcome")
             openProfile()
             waitFor("Personal information")
@@ -2588,7 +2615,7 @@ class AppFlowTest {
             compose.onNodeWithContentDescription("Verification code").performTextInput("123456")
             compose.onNode(hasText("Verify") and hasClickAction()).performScrollTo().performClick()
             waitFor("Choose a company")
-            compose.onAllNodesWithText("Open company")[0].performClick()
+            compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
             waitFor("Welcome")
             openProfile()
             waitFor("Personal information")

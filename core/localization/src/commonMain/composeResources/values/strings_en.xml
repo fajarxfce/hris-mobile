@@ -1,4 +1,8 @@
 <resources>
+    <string name="opening_company_en">Opening company…</string>
+    <string name="changing_company_en">Changing company…</string>
+    <string name="signing_out_en">Signing out…</string>
+
     <string name="document_published_en">Published documents</string>
     <string name="document_published_description_en">View and download your documents.</string>
     <string name="document_catalog_expired_en">Refresh the document list to continue.</string>
