@@ -1,5 +1,14 @@
 # Validation
 
+## Authenticated export admission
+
+Targeted document checks passed with 59 domain and 24 data desktop tests, plus
+59 domain Chromium tests. Export regressions cover bounded plaintext copying,
+picker dismissal, late cancellation, account replacement, access loss after
+selection and during writing, final resource denial, preserved technical failures,
+zero progress and finite deadlines. Catalog checks cover read-only employment
+acquisition, changed-company results and lease expiry without network polling.
+
 ## Owned file output
 
 Complete root checks passed with 719 desktop/JVM tests. The file-I/O suite passed
@@ -7,12 +16,12 @@ Complete root checks passed with 719 desktop/JVM tests. The file-I/O suite passe
 dev assembly and production Web distribution passed; Web retains its three
 existing bundler warnings. Native and browser regressions cover bounded writes,
 partial writes, zero progress, picker cancellation, late results, disposal and
-read/write failure classification. Apple native filesystem regressions are added
-to the existing simulator CI target; they were not run on this Linux host.
+read/write failure classification. Apple native filesystem regressions and the
+unsigned iOS simulator application build subsequently passed in GitHub Actions,
+alongside Linux and Windows checks, for both HRIS Mobile and Compose Fluent Starter.
 
-The output foundation is not yet connected to an employee export action. Native
-save-dialog acceptance and the full authenticated download/export flow remain
-separate device work.
+At this foundation checkpoint, employee export and native save-dialog acceptance
+were separate integration work.
 
 ## Authenticated download core
 
@@ -24,9 +33,9 @@ resume offsets, checksum failure, stale completion, late cancellation, changed
 company access and finite transfer deadlines. The same storage cases run against
 SQLite and IndexedDB. Downloaded revisions cannot enter the import/upload flow.
 
-This validates the shared transfer and storage contracts. Published-document
-browsing, OS export and real API download acceptance still belong to the next
-presentation increment. No new device installation or memory benchmark was run.
+This checkpoint validated the shared transfer and storage contracts before
+published-document browsing, OS export and real API download acceptance. It did
+not include a new device installation or memory benchmark.
 
 ## Bounded binary transport
 

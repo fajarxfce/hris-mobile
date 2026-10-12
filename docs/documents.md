@@ -25,9 +25,12 @@ Leave ViewModels or attachment policy. Only accepted personal revisions for the
 form's employment are selectable. A replaced or expired dialog cannot publish
 into a later opening, and pending metadata work is cancelled on dismissal.
 
-The catalog is an online selection capability. It does not persist file contents,
-silently retry or start a background observer. The inherited generic transfer
-screen is not an HRIS upload implementation.
+Catalog acquisition is online. It does not persist file contents, silently retry
+or schedule background work. `LoadDocumentEmployments` provides read-only employee
+references without requiring self-upload or People access. `ObserveDocumentAccess`
+separately reports session/company changes and read-lease expiry; the consuming
+route owns that observation. The inherited generic transfer screen is not an HRIS
+upload implementation.
 
 ## Local file import
 
@@ -66,8 +69,8 @@ remains lifecycle-aware. Known access failures hide content and require workspac
 revalidation; reopening a local observer cannot bypass that gate.
 
 Local completion is not server approval and does not make a file selectable as
-published evidence. The confirmation and upload flow below is implemented;
-authenticated download remains separate delivery work.
+published evidence. Server validation and publication remain separate from local
+import and download completion.
 
 ## Resumable upload
 
@@ -121,9 +124,7 @@ observation and keep data hidden through pending or failed workspace revalidatio
 
 ## Download coordination
 
-The shared download contracts are implemented; published-document browsing and OS
-file export are still being connected to presentation. `PrepareDocumentDownload`
-accepts a current catalog selection, rechecks company policy and content access,
+`PrepareDocumentDownload` accepts a current catalog selection, rechecks company policy and content access,
 then reserves encrypted local capacity. Existing copies can be reused only after
 fresh admission. A replacement receives a new local ID so an older writer cannot
 complete a removed file's replacement at a reused storage revision.
@@ -143,3 +144,24 @@ completion proof. A bad checksum cannot produce a readable completed file.
 Session/company changes and cancellation stop publication, while the owner clears
 each transport buffer. Imported files remain distinct from downloaded revisions;
 the latter cannot enter the new-upload confirmation flow.
+
+## Export admission
+
+`ExportDocumentFile` copies only a completed, verified downloaded revision. It
+allocates an output ID before opening the native save dialog and releases that
+owner in bounded cleanup, including cancellation and late picker results. The
+picker may create an empty destination; plaintext remains in encrypted storage
+until fresh company policy and authenticated content HEAD both succeed afterward.
+A cached completion never substitutes for current resource authorization.
+
+The use case reads and writes at most 1 MiB at a time, clears borrowed buffers,
+rechecks ownership around pending work, renews expired admission before another
+chunk, and checks resource access again before completion. Selection and copying
+have separate finite deadlines. Denial, I/O failure and cancellation never start
+an automatic retry. A cancelled picker is a successful dismissal, not a failure.
+
+`DeviceDocumentOutputRepository` maps the raw [file output](file-output.md) contract
+through `safeFileWriteCall`. It does not choose permissions, another destination
+or a retry. Native cancellation/failure may leave an empty or partial selected
+file; release never deletes the user's chosen path. Browser output commits only
+on completion and requires File System Access support in a secure context.

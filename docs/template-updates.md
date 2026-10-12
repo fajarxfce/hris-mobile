@@ -1,5 +1,15 @@
 # Template updates
 
+## Owned file output
+
+The platform save dialogs, bounded writers, handle ownership and error mapping
+also exist at [cf57982](https://github.com/fajarxfce/compose-fluent-starter/commit/cf57982),
+with the Apple verification-handle correction at
+[d1cb257](https://github.com/fajarxfce/compose-fluent-starter/commit/d1cb257). Both
+repositories passed root checks, file-I/O/localization/app Chromium tests and
+Android/Web builds. HRIS content admission, encrypted storage and export workflow
+remain here.
+
 ## Binary transport
 
 The bounded range reader and shared API response boundary also exist in

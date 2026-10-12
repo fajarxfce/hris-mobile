@@ -14,6 +14,31 @@ import org.koin.core.annotation.*
 @Module
 @ComponentScan("dev.fajar.starter.documents.data")
 class DocumentsDataModule {
+    @Factory
+    fun exportFile(
+        files: DocumentFileRepository,
+        content: DocumentContentRepository,
+        outputs: DocumentOutputRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        build: AppBuild,
+    ) = ExportDocumentFile(files, content, outputs, sessions, workspaces, Clock.System, build)
+
+    @Factory
+    fun loadEmployments(
+        remote: DocumentRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        build: AppBuild,
+    ) = LoadDocumentEmployments(remote, sessions, workspaces, Clock.System, build)
+
+    @Factory
+    fun observeAccess(
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        build: AppBuild,
+    ) = ObserveDocumentAccess(sessions, workspaces, Clock.System, build)
+
     @Single @Named("document-upload") fun uploadMutex() = Mutex()
 
     @Single @Named("document-download") fun downloadMutex() = Mutex()
