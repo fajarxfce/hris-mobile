@@ -5,6 +5,13 @@ import org.koin.core.annotation.Single
 
 @Single
 class ApiOvertimeDataSource(private val api: OvertimeApi) : OvertimeRemoteDataSource {
+    override suspend fun review(
+        sessionId: String,
+        companyId: String,
+        employeeId: String,
+        workDate: String,
+    ) = api.review(sessionId, companyId, employeeId, workDate)
+
     override suspend fun requests(
         sessionId: String,
         companyId: String,

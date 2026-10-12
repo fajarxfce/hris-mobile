@@ -18,6 +18,15 @@ import org.koin.core.annotation.*
 @ComponentScan("dev.fajar.starter.workforce.data")
 class WorkforceDataModule {
     @Factory
+    fun reviewOvertimeSchedule(
+        workforce: WorkforceRepository,
+        remote: OvertimePlanningRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        build: AppBuild,
+    ) = ReviewOvertimeSchedule(workforce, remote, sessions, workspaces, Clock.System, build)
+
+    @Factory
     fun observeOvertime(
         cache: OvertimeCacheRepository,
         sessions: SessionRepository,

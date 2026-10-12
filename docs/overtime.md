@@ -64,6 +64,26 @@ an observation that ended with a storage-flow failure. Replacing the shared cach
 with another selection clears the obsolete view instead of retaining its expired
 lease. Navigation and mutation outcomes are not inferred from a failed refresh.
 
+## Planning preparation
+
+`ReviewOvertimeSchedule` acquires live company policy, the account's minimal
+employment directory and the selected day's server review. A management grant
+does not broaden the native picker to another account's employment. Review facts
+retain the employment version, company-local date, timezone, resolved schedule
+and content revision used by the eventual plan.
+
+The preparation lasts at most five minutes, capped by the policy deadline,
+session, workspace admission and upcoming maintenance. Acquisition has a
+30-second deadline and checks ownership after I/O. Leaving its owner discards
+a cancelled late result. Preparation creates no request or durable command.
+
+Pure application policies derive worked duration from whole UTC minutes and the
+declared break. They enforce the 12-hour interval limit, company work-date window,
+shift exclusion, actual-time bounds and completed-work requirement. Datasources
+only acquire DTOs; repository mapping validates protocol consistency and preserves
+localizable server failures. Native command storage and forms remain subsequent
+integration work.
+
 ## Validation
 
 The focused desktop run passed 41 Workforce domain and 25 data tests, including
@@ -86,3 +106,9 @@ API 35 emulator checks covered the development API, month/status filters,
 overnight dates, offline process restoration and explicit recovery. The validated
 update was installed on the authorized phone with `--install-only`. See the
 [validation record](validation.md#overtime-history-and-request-details).
+
+Planning preparation passed root checks with 825 desktop tests, 56 Workforce
+domain and 17 data Chromium cases, and Android dev assembly. Twenty new cases
+cover owner discovery, read-only grants, late scope changes and cancellation,
+review expiry, bounded transport, malformed facts, overnight shifts, DST boundaries
+and actual-time limits. This boundary increment did not add a new device flow.

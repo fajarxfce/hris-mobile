@@ -111,6 +111,12 @@ freshness and offline admission remain attendance policy. The location datasourc
 only performs the requested OS operation; it neither opens Settings automatically
 nor starts a long-lived tracking subscription.
 
+Overtime planning has a separate short-lived review value within Workforce.
+Its use case acquires current policy, verifies owned employment and obtains the
+server's versioned schedule. Repositories map that response; pure domain policies
+validate requested and actual intervals. The review's lifetime is bounded by
+company/session authority and carries no command or UI state.
+
 The [Leave page](leave.md) uses its own minimal self-service employment directory,
 independent of People and Workforce availability. Its use cases admit the selected
 company, acquire scoped balances/history and atomically publish one encrypted

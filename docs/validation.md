@@ -1,5 +1,21 @@
 # Validation
 
+## Overtime planning preparation
+
+Root checks passed with 825 desktop tests and Android dev assembly. Workforce
+passed 56 domain and 30 data desktop tests; Chromium passed the 56 domain and
+17 common data cases. Twenty new tests cover current owned-employment discovery,
+read-only grants, company/session replacement, cancelled late results, finite
+acquisition and review expiry, protocol bounds and localizable denial. Time-policy
+cases cover overnight shifts, whole-minute limits, breaks, DST day boundaries
+and actual-time limits.
+
+The scrolled-detail regression was also corrected after CI exposed an assumption
+about a row at the viewport's lower edge. It verifies visible failure feedback,
+the retained scroll position and reachable activity after the viewport shrinks.
+Root checks and Android assembly passed again after that correction. No additional
+phone installation is claimed for the preparation boundary.
+
 ## Overtime history and request details
 
 Root checks passed with 805 desktop tests, all 21 Workforce presentation Chromium

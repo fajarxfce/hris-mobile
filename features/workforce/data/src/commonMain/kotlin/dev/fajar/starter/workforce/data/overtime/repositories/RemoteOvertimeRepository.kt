@@ -7,12 +7,28 @@ import dev.fajar.starter.workforce.data.overtime.datasources.OvertimeRemoteDataS
 import dev.fajar.starter.workforce.data.overtime.mappers.*
 import dev.fajar.starter.workforce.domain.entities.*
 import dev.fajar.starter.workforce.domain.overtime.entities.*
-import dev.fajar.starter.workforce.domain.overtime.repositories.OvertimeRepository
+import dev.fajar.starter.workforce.domain.overtime.repositories.*
 import kotlin.uuid.Uuid
 import org.koin.core.annotation.Single
 
 @Single
-class RemoteOvertimeRepository(private val remote: OvertimeRemoteDataSource) : OvertimeRepository {
+class RemoteOvertimeRepository(private val remote: OvertimeRemoteDataSource) :
+    OvertimeRepository, OvertimePlanningRepository {
+    override suspend fun review(access: WorkforceAccess, selection: OvertimePlanningSelection) =
+        safeApiCall {
+            listOf(access.companyId, selection.employeeId).forEach {
+                require(Uuid.parse(it).toString() == it)
+            }
+            remote
+                .review(
+                    access.sessionId,
+                    access.companyId,
+                    selection.employeeId,
+                    selection.workDate.toString(),
+                )
+                .toReview(selection)
+        }
+
     override suspend fun requests(
         access: WorkforceAccess,
         employeeId: String,

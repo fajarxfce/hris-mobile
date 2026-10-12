@@ -54,6 +54,25 @@ class OvertimeDataFixture : OvertimeRemoteDataSource {
         )
     val selection = OvertimeRequestSelection(request.id, base.employee.id)
     var failure: Exception? = null
+    var review =
+        OvertimePlanningReviewDto(
+            OvertimePlanningEmployeeDto(base.employee.id, "E01", "Alex", "ACTIVE", 0),
+            request.workDate,
+            request.workDate,
+            request.timezone,
+            base.workDay,
+            "a".repeat(64),
+        )
+
+    override suspend fun review(
+        sessionId: String,
+        companyId: String,
+        employeeId: String,
+        workDate: String,
+    ): OvertimePlanningReviewDto {
+        failure?.let { throw it }
+        return review
+    }
 
     override suspend fun requests(
         sessionId: String,

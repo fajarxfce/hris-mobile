@@ -3,6 +3,13 @@ package dev.fajar.starter.workforce.data.overtime.datasources
 import dev.fajar.starter.workforce.data.overtime.dto.*
 
 interface OvertimeRemoteDataSource {
+    suspend fun review(
+        sessionId: String,
+        companyId: String,
+        employeeId: String,
+        workDate: String,
+    ): OvertimePlanningReviewDto
+
     suspend fun requests(
         sessionId: String,
         companyId: String,

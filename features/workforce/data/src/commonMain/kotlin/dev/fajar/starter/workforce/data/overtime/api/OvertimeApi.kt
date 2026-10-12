@@ -8,6 +8,20 @@ import org.koin.core.annotation.*
 
 @Single
 class OvertimeApi(@Named(HttpClients.Authenticated) private val client: HttpClient) {
+    suspend fun review(
+        sessionId: String,
+        companyId: String,
+        employeeId: String,
+        workDate: String,
+    ): OvertimePlanningReviewDto =
+        client.requestJson(
+            "companies/$companyId/workforce/overtime/planning/employees/$employeeId",
+            maximumBytes = 32_768,
+        ) {
+            forSession(sessionId)
+            parameter("workDate", workDate)
+        }
+
     suspend fun requests(
         sessionId: String,
         companyId: String,
