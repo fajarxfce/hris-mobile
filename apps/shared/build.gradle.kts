@@ -32,6 +32,7 @@ kotlin.sourceSets {
         implementation(projects.core.identity.domain)
         implementation(projects.core.identity.data)
         implementation(projects.core.workspace.data)
+        implementation(projects.core.documents.data)
         implementation(projects.features.onboarding.domain)
         implementation(projects.features.onboarding.data)
         implementation(projects.features.onboarding.presentation)

@@ -94,6 +94,7 @@ policy is not configured yet. Android/iOS send the server's native version heade
 - `core/identity`: native credentials, MFA, account contracts, and session policy.
 - `core/workspace`: current company selection and scope ownership.
 - `core/location`: foreground location, permission and Settings I/O contracts.
+- `core/documents`: shared [HRIS evidence contracts and catalog](docs/documents.md).
 - `features/auth`, `features/workspace`, `features/home`, `features/people`, `features/inbox`, `features/workforce`, `features/leave`: feature-owned MVI screens.
 - `core/designsystem`: shared `AppXxx` Fluent components and restrained transitions.
 - `build-logic`: Gradle convention plugins; versions are in `gradle/libs.versions.toml`.

@@ -37,6 +37,8 @@ include(
 
 include(":features:leave:domain", ":features:leave:data", ":features:leave:presentation")
 
+include(":core:documents:domain", ":core:documents:data")
+
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 include(

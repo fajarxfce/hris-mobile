@@ -16,6 +16,12 @@ Identity and workspace selection are shared core domain. Auth, company selection
 and home consume their contracts. Features do not consume each other's ViewModels,
 data modules, or repository implementations.
 
+Shared HRIS [document contracts](documents.md) live in `core/documents` so employee
+workflows can select evidence without feature-to-feature dependencies. Its use
+case owns live admission and request lifetime; the data adapter maps metadata and
+technical failures. File contents and business attachment decisions have separate
+owners.
+
 Kotlin's data classes provide value equality. StateFlow exposes immutable screen snapshots.
 Each screen defines a sealed Event contract and dispatches through `onEvent`. The shared
 `MviViewModel<State, Event, Effect>` registers separate typed handlers with `on<Event>()`,

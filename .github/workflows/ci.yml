@@ -34,6 +34,7 @@ jobs:
           :features:inbox:domain:wasmJsBrowserTest :features:inbox:data:wasmJsBrowserTest
           :features:workforce:domain:wasmJsBrowserTest :features:leave:domain:wasmJsBrowserTest :features:leave:data:wasmJsBrowserTest
           :features:leave:presentation:wasmJsBrowserTest :core:location:data:wasmJsBrowserTest
+          :core:documents:domain:wasmJsBrowserTest :core:documents:data:wasmJsBrowserTest
           :core:transfers:domain:wasmJsBrowserTest :core:transfers:data:wasmJsBrowserTest
           :features:files:presentation:wasmJsBrowserTest :core:worker:wasmJsBrowserTest
           :core:featureflags:domain:wasmJsBrowserTest :core:featureflags:data:wasmJsBrowserTest

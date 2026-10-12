@@ -1,5 +1,15 @@
 # Validation
 
+## Owned document catalog
+
+Complete root checks passed with 604 desktop tests. All 12 new document domain
+and data tests also passed in Chromium. Coverage includes company/account changes
+during pending work, cancellation, finite acquisition, expired policy recovery,
+maintenance admission, scoped metadata, bounded pages and malformed file facts.
+The Wasm lockfile adds only the new workspace packages. The local browser check
+uses the installed Playwright Chromium executable; no Android build or device
+interaction is claimed for this boundary.
+
 ## Leave creation interface
 
 Complete root checks passed with 592 desktop tests, plus all 42 Leave presentation

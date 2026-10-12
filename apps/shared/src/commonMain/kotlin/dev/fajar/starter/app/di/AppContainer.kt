@@ -15,6 +15,7 @@ import dev.fajar.starter.database.InboxStore
 import dev.fajar.starter.database.ReplicaStore
 import dev.fajar.starter.database.TransferStore
 import dev.fajar.starter.datastore.UserPreferencesStore
+import dev.fajar.starter.documents.data.di.DocumentsDataModule
 import dev.fajar.starter.featureflags.data.datasources.RemoteFeatureFlagSource
 import dev.fajar.starter.featureflags.data.datasources.UnavailableFeatureFlagSource
 import dev.fajar.starter.featureflags.data.di.FeatureFlagDataModule
@@ -147,6 +148,7 @@ fun createAppContainer(
         },
         IdentityModule().module,
         WorkspaceDataModule().module,
+        DocumentsDataModule().module,
         OnboardingDataModule().module,
         OnboardingPresentationModule().module,
         AuthPresentationModule().module,
