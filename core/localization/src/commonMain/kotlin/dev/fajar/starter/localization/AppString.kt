@@ -8,10 +8,13 @@ enum class AppString(val english: StringResource, val indonesian: StringResource
     OpeningCompany(Res.string.opening_company_en, Res.string.opening_company_id),
     ChangingCompany(Res.string.changing_company_en, Res.string.changing_company_id),
     SigningOut(Res.string.signing_out_en, Res.string.signing_out_id),
-    DocumentPublished(Res.string.document_published_en, Res.string.document_published_id),
-    DocumentPublishedDescription(
-        Res.string.document_published_description_en,
-        Res.string.document_published_description_id,
+    DocumentLocalFilesDescription(
+        Res.string.document_local_files_description_en,
+        Res.string.document_local_files_description_id,
+    ),
+    DocumentPreparingDownload(
+        Res.string.document_preparing_download_en,
+        Res.string.document_preparing_download_id,
     ),
     DocumentCatalogExpired(
         Res.string.document_catalog_expired_en,

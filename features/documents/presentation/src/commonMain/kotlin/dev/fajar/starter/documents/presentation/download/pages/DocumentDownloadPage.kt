@@ -41,9 +41,61 @@ fun DocumentDownloadPage(
                 },
             )
         },
+        bottomBar = {
+            if (state.work != null || state.canSave || state.canDownload)
+                AppActionBar {
+                    when {
+                        state.work != null -> {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            ) {
+                                val label =
+                                    appString(
+                                        when (state.work) {
+                                            DocumentDownloadWork.Downloading ->
+                                                AppString.DocumentDownloading
+                                            DocumentDownloadWork.Saving -> AppString.DocumentSaving
+                                            DocumentDownloadWork.Revalidating ->
+                                                AppString.DocumentCheckingAccess
+                                        }
+                                    )
+                                AppProgressRing(label)
+                                AppText(label, color = AppColors.muted)
+                            }
+                            AppTextButton(
+                                appString(
+                                    if (state.work == DocumentDownloadWork.Downloading)
+                                        AppString.DocumentPauseDownload
+                                    else AppString.Cancel
+                                ),
+                                { onEvent(DocumentDownloadEvent.StopRequested) },
+                                Modifier.fillMaxWidth(),
+                            )
+                        }
+                        state.canSave -> {
+                            AppButton(
+                                appString(AppString.DocumentSaveCopy),
+                                { onEvent(DocumentDownloadEvent.SaveRequested) },
+                                Modifier.fillMaxWidth(),
+                            )
+                            AppText(
+                                appString(AppString.DocumentSaveConnection),
+                                color = AppColors.muted,
+                                style = FluentTheme.typography.caption,
+                            )
+                        }
+                        state.canDownload ->
+                            AppButton(
+                                appString(AppString.DocumentResumeDownload),
+                                { onEvent(DocumentDownloadEvent.DownloadRequested) },
+                                Modifier.fillMaxWidth(),
+                            )
+                    }
+                }
+        },
     ) {
-        if (state.loading || state.work != null)
-            item(key = "loading") { AppLoading(compact = true) }
+        if (state.loading) item(key = "loading") { AppLoading(compact = true) }
         val failure = state.restriction ?: state.failure
         if (failure != null)
             item(key = "failure") {
@@ -80,51 +132,6 @@ fun DocumentDownloadPage(
                 }
             }
         }
-        if (state.work != null)
-            item(key = "working") {
-                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    AppText(
-                        appString(
-                            when (state.work) {
-                                DocumentDownloadWork.Downloading -> AppString.DocumentDownloading
-                                DocumentDownloadWork.Saving -> AppString.DocumentSaving
-                                DocumentDownloadWork.Revalidating ->
-                                    AppString.DocumentCheckingAccess
-                            }
-                        ),
-                        color = AppColors.muted,
-                    )
-                    AppTextButton(
-                        appString(
-                            if (state.work == DocumentDownloadWork.Downloading)
-                                AppString.DocumentPauseDownload
-                            else AppString.Cancel
-                        ),
-                        { onEvent(DocumentDownloadEvent.StopRequested) },
-                    )
-                }
-            }
-        if (state.canDownload)
-            item(key = "download") {
-                AppButton(
-                    appString(AppString.DocumentResumeDownload),
-                    { onEvent(DocumentDownloadEvent.DownloadRequested) },
-                )
-            }
-        if (state.canSave)
-            item(key = "save") {
-                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    AppButton(
-                        appString(AppString.DocumentSaveCopy),
-                        { onEvent(DocumentDownloadEvent.SaveRequested) },
-                    )
-                    AppText(
-                        appString(AppString.DocumentSaveConnection),
-                        color = AppColors.muted,
-                        style = FluentTheme.typography.caption,
-                    )
-                }
-            }
         if (state.saved)
             item(key = "saved") {
                 Row(

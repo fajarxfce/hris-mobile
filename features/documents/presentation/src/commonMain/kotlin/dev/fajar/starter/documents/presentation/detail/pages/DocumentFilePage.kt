@@ -47,6 +47,7 @@ fun DocumentFilePage(
                                 appString(AppString.DocumentRefreshForm),
                                 { onEvent(DocumentFileEvent.FormReloadRequested) },
                                 enabled = state.canWrite,
+                                loading = state.formLoading,
                             )
                         else
                             AppIconButton(
@@ -58,6 +59,17 @@ fun DocumentFilePage(
                     }
                 },
             )
+        },
+        bottomBar = {
+            if (state.form != null && state.item != null && state.writeAllowed)
+                AppActionBar {
+                    AppButton(
+                        appString(AppString.DocumentSend),
+                        { onEvent(DocumentFileEvent.UploadConfirmed) },
+                        Modifier.fillMaxWidth(),
+                        enabled = state.canSubmit,
+                    )
+                }
         },
     ) {
         if (state.loading || state.formLoading || state.working || state.revalidating)

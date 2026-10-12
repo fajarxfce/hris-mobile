@@ -14,7 +14,6 @@ import io.github.composefluent.FluentTheme
 import io.github.composefluent.icons.Icons
 import io.github.composefluent.icons.regular.Add
 import io.github.composefluent.icons.regular.ArrowLeft
-import io.github.composefluent.icons.regular.Document
 
 @Composable
 fun DocumentFilesPage(
@@ -29,7 +28,7 @@ fun DocumentFilesPage(
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
         topBar = {
             AppTopBar(
-                appString(AppString.Documents),
+                appString(AppString.DocumentLocalFiles),
                 navigation = {
                     AppIconButton(
                         Icons.Regular.ArrowLeft,
@@ -38,12 +37,13 @@ fun DocumentFilesPage(
                     )
                 },
                 actions = {
-                    if (state.content?.files?.isNotEmpty() == true)
+                    if (state.showImportAction)
                         AppIconButton(
                             Icons.Regular.Add,
                             appString(AppString.DocumentAddFile),
                             { onEvent(DocumentFilesEvent.ImportRequested) },
                             enabled = state.canImport,
+                            loading = state.importing,
                         )
                 },
             )
@@ -69,20 +69,11 @@ fun DocumentFilesPage(
                 }
             }
         if (state.content != null) {
-            item(key = "published") {
-                AppActionTile(
-                    appString(AppString.DocumentPublished),
-                    appString(AppString.DocumentPublishedDescription),
-                    Icons.Regular.Document,
-                    { onEvent(DocumentFilesEvent.CatalogRequested) },
-                    enabled = !state.busy,
-                )
-            }
             item(key = "local-heading") {
                 Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                     AppText(
-                        appString(AppString.DocumentLocalFiles),
-                        style = FluentTheme.typography.subtitle,
+                        appString(AppString.DocumentLocalFilesDescription),
+                        color = AppColors.muted,
                     )
                     AppText(
                         appString(AppString.DocumentFileTypes),
@@ -100,14 +91,7 @@ fun DocumentFilesPage(
                 }
             if (state.content.files.isEmpty() && !state.importing)
                 item(key = "empty") {
-                    Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                        AppText(appString(AppString.DocumentNoLocalFiles), color = AppColors.muted)
-                        if (state.canImport)
-                            AppButton(
-                                appString(AppString.DocumentAddFile),
-                                { onEvent(DocumentFilesEvent.ImportRequested) },
-                            )
-                    }
+                    AppText(appString(AppString.DocumentNoLocalFiles), color = AppColors.muted)
                 }
             items(state.items, key = { it.id }) { file ->
                 DocumentFileRow(file, !state.busy, onEvent)

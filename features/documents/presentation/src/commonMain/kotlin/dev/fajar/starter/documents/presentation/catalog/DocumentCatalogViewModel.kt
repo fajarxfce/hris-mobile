@@ -34,6 +34,7 @@ class DocumentCatalogViewModel(
         on<DocumentCatalogEvent.Opened>(::onOpened)
         on<DocumentCatalogEvent.Closed>(::onClosed)
         on<DocumentCatalogEvent.RefreshRequested>(::onRefreshRequested)
+        on<DocumentCatalogEvent.FilesRequested>(::onFilesRequested)
         on<DocumentCatalogEvent.EmploymentRequested>(::onEmploymentRequested)
         on<DocumentCatalogEvent.EmploymentDismissed>(::onEmploymentDismissed)
         on<DocumentCatalogEvent.EmploymentPageRequested>(::onEmploymentPageRequested)
@@ -121,6 +122,12 @@ class DocumentCatalogViewModel(
                     }
                 }
             }
+    }
+
+    private fun onFilesRequested(event: DocumentCatalogEvent.FilesRequested) {
+        if (!opened || state.value.preparingId != null || state.value.choosingEmployment) return
+        onClosed(DocumentCatalogEvent.Closed)
+        viewModelScope.launch { emitEffect(DocumentCatalogEffect.OpenFiles) }
     }
 
     private fun requestDirectory(after: String?, initial: Boolean) {

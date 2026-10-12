@@ -22,12 +22,34 @@ import org.koin.core.parameter.parametersOf
 fun NavGraphBuilder.documentRoutes(
     workspaceId: String,
     onFile: (String) -> Unit,
-    onCatalog: () -> Unit,
+    onFiles: () -> Unit,
     onDownload: (String, Boolean) -> Unit,
     onVerify: () -> Unit,
     onBack: () -> Unit,
 ) {
     composable<DocumentsRoute> {
+        val viewModel =
+            koinViewModel<DocumentCatalogViewModel>(parameters = { parametersOf(workspaceId) })
+        val state by viewModel.state.collectAsStateWithLifecycle()
+        val list = rememberLazyListState()
+        val employments = rememberLazyListState()
+        DisposableEffect(viewModel) {
+            viewModel.onEvent(DocumentCatalogEvent.Opened)
+            onDispose { viewModel.onEvent(DocumentCatalogEvent.Closed) }
+        }
+        CollectEffects(viewModel.effects) { effect ->
+            when (effect) {
+                DocumentCatalogEffect.OpenFiles -> onFiles()
+                is DocumentCatalogEffect.OpenDownload -> onDownload(effect.fileId, true)
+                DocumentCatalogEffect.Back -> onBack()
+                DocumentCatalogEffect.VerifyAccount -> onVerify()
+                DocumentCatalogEffect.ScrollToStart -> list.requestScrollToItem(0)
+                DocumentCatalogEffect.ScrollEmploymentsToStart -> employments.requestScrollToItem(0)
+            }
+        }
+        DocumentCatalogPage(state, list, employments, viewModel::onEvent)
+    }
+    composable<DocumentFilesRoute> {
         val viewModel =
             koinViewModel<DocumentFilesViewModel>(parameters = { parametersOf(workspaceId) })
         val state by viewModel.state.collectAsStateWithLifecycle()
@@ -42,7 +64,6 @@ fun NavGraphBuilder.documentRoutes(
                 DocumentFilesEffect.Back -> onBack()
                 DocumentFilesEffect.VerifyAccount -> onVerify()
                 is DocumentFilesEffect.OpenFile -> onFile(effect.id)
-                DocumentFilesEffect.OpenCatalog -> onCatalog()
                 is DocumentFilesEffect.OpenDownload -> onDownload(effect.id, false)
             }
         }
@@ -69,27 +90,6 @@ fun NavGraphBuilder.documentRoutes(
             }
         }
         DocumentFilePage(state, list, employments, viewModel::onEvent)
-    }
-    composable<DocumentCatalogRoute> {
-        val viewModel =
-            koinViewModel<DocumentCatalogViewModel>(parameters = { parametersOf(workspaceId) })
-        val state by viewModel.state.collectAsStateWithLifecycle()
-        val list = rememberLazyListState()
-        val employments = rememberLazyListState()
-        DisposableEffect(viewModel) {
-            viewModel.onEvent(DocumentCatalogEvent.Opened)
-            onDispose { viewModel.onEvent(DocumentCatalogEvent.Closed) }
-        }
-        CollectEffects(viewModel.effects) { effect ->
-            when (effect) {
-                is DocumentCatalogEffect.OpenDownload -> onDownload(effect.fileId, true)
-                DocumentCatalogEffect.Back -> onBack()
-                DocumentCatalogEffect.VerifyAccount -> onVerify()
-                DocumentCatalogEffect.ScrollToStart -> list.requestScrollToItem(0)
-                DocumentCatalogEffect.ScrollEmploymentsToStart -> employments.requestScrollToItem(0)
-            }
-        }
-        DocumentCatalogPage(state, list, employments, viewModel::onEvent)
     }
     composable<DocumentDownloadRoute> { entry ->
         val route = entry.toRoute<DocumentDownloadRoute>()

@@ -5,6 +5,9 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.liveRegion
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import dev.fajar.starter.designsystem.components.*
 import dev.fajar.starter.designsystem.theme.AppColors
@@ -12,12 +15,14 @@ import dev.fajar.starter.documents.domain.entities.DocumentClassification
 import dev.fajar.starter.documents.presentation.catalog.*
 import dev.fajar.starter.documents.presentation.catalog.widgets.DocumentCatalogEmploymentDialog
 import dev.fajar.starter.localization.*
+import io.github.composefluent.FluentTheme
 import io.github.composefluent.icons.Icons
 import io.github.composefluent.icons.regular.ArrowDownload
 import io.github.composefluent.icons.regular.ArrowLeft
 import io.github.composefluent.icons.regular.ArrowSync
-import io.github.composefluent.icons.regular.ChevronDown
 import io.github.composefluent.icons.regular.Document
+import io.github.composefluent.icons.regular.Folder
+import io.github.composefluent.icons.regular.Person
 
 @Composable
 fun DocumentCatalogPage(
@@ -33,7 +38,7 @@ fun DocumentCatalogPage(
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
         topBar = {
             AppTopBar(
-                appString(AppString.DocumentPublished),
+                appString(AppString.Documents),
                 navigation = {
                     AppIconButton(
                         Icons.Regular.ArrowLeft,
@@ -43,16 +48,23 @@ fun DocumentCatalogPage(
                 },
                 actions = {
                     AppIconButton(
+                        Icons.Regular.Folder,
+                        appString(AppString.DocumentLocalFiles),
+                        { onEvent(DocumentCatalogEvent.FilesRequested) },
+                        enabled = state.preparingId == null && !state.choosingEmployment,
+                    )
+                    AppIconButton(
                         Icons.Regular.ArrowSync,
                         appString(AppString.Refresh),
                         { onEvent(DocumentCatalogEvent.RefreshRequested) },
                         enabled = !state.busy,
+                        loading = state.loading,
                     )
                 },
             )
         },
     ) {
-        if (state.loading || state.preparingId != null)
+        if (state.loading && state.catalog == null)
             item(key = "loading") { AppLoading(compact = true) }
         val failure = state.restriction ?: state.failure
         if (failure != null && !state.choosingEmployment)
@@ -80,41 +92,35 @@ fun DocumentCatalogPage(
             else
                 item(key = "filters") {
                     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        AppListRow(
-                            state.employment?.employeeNumber
-                                ?: appString(AppString.ChooseEmployment),
-                            { onEvent(DocumentCatalogEvent.EmploymentRequested) },
-                            enabled = state.canChoose,
-                            trailing = { AppIcon(Icons.Regular.ChevronDown) },
+                        if (
+                            state.directory.page.items.size > 1 ||
+                                state.directory.page.nextCursor != null ||
+                                state.directory.after != null ||
+                                state.employment == null
                         )
-                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                            AppRadioRow(
-                                appString(AppString.DocumentPersonal),
-                                state.classification == DocumentClassification.PERSONAL,
-                                {
-                                    onEvent(
-                                        DocumentCatalogEvent.ClassificationChanged(
-                                            DocumentClassification.PERSONAL
-                                        )
-                                    )
-                                },
-                                modifier = Modifier.weight(1f),
+                            AppFilterChip(
+                                state.employment?.employeeNumber
+                                    ?: appString(AppString.ChooseEmployment),
+                                selected = state.employment != null,
+                                onClick = { onEvent(DocumentCatalogEvent.EmploymentRequested) },
                                 enabled = state.canChoose,
+                                icon = Icons.Regular.Person,
                             )
-                            AppRadioRow(
-                                appString(AppString.DocumentReceipt),
-                                state.classification == DocumentClassification.RECEIPT,
-                                {
-                                    onEvent(
-                                        DocumentCatalogEvent.ClassificationChanged(
-                                            DocumentClassification.RECEIPT
-                                        )
-                                    )
-                                },
-                                modifier = Modifier.weight(1f),
-                                enabled = state.canChoose,
-                            )
-                        }
+                        AppTabs(
+                            listOf(
+                                AppTabItem(
+                                    DocumentClassification.PERSONAL,
+                                    appString(AppString.DocumentPersonal),
+                                ),
+                                AppTabItem(
+                                    DocumentClassification.RECEIPT,
+                                    appString(AppString.DocumentReceipt),
+                                ),
+                            ),
+                            state.classification,
+                            { onEvent(DocumentCatalogEvent.ClassificationChanged(it)) },
+                            enabled = state.canChoose,
+                        )
                     }
                 }
         }
@@ -132,11 +138,26 @@ fun DocumentCatalogPage(
                     AppListRow(
                         document.title,
                         { onEvent(DocumentCatalogEvent.DownloadRequested(document.revisionId)) },
+                        modifier =
+                            Modifier.semantics {
+                                if (state.preparingId == document.revisionId)
+                                    liveRegion = LiveRegionMode.Polite
+                            },
                         supportingText = document.fileName,
                         enabled = state.canChoose && !state.expired,
                         leading = { AppIcon(Icons.Regular.Document) },
+                        metadata = {
+                            if (state.preparingId == document.revisionId)
+                                AppText(
+                                    appString(AppString.DocumentPreparingDownload),
+                                    style = FluentTheme.typography.caption,
+                                    color = AppColors.muted,
+                                )
+                        },
                         trailing = {
-                            AppIcon(Icons.Regular.ArrowDownload, appString(AppString.Download))
+                            if (state.preparingId == document.revisionId)
+                                AppProgressRing(appString(AppString.DocumentPreparingDownload))
+                            else AppIcon(Icons.Regular.ArrowDownload, appString(AppString.Download))
                         },
                     )
                 }

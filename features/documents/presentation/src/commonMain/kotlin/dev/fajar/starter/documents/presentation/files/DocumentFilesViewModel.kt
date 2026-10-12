@@ -29,7 +29,6 @@ class DocumentFilesViewModel(
 
     init {
         on<DocumentFilesEvent.Opened>(::onOpened)
-        on<DocumentFilesEvent.CatalogRequested>(::onCatalogRequested)
         on<DocumentFilesEvent.Closed>(::onClosed)
         on<DocumentFilesEvent.RetryRequested>(::onRetryRequested)
         on<DocumentFilesEvent.ImportRequested>(::onImportRequested)
@@ -119,16 +118,6 @@ class DocumentFilesViewModel(
             }
     }
 
-    private fun onCatalogRequested(event: DocumentFilesEvent.CatalogRequested) {
-        if (
-            opened &&
-                !state.value.busy &&
-                state.value.restriction == null &&
-                state.value.content != null
-        )
-            viewModelScope.launch { emitEffect(DocumentFilesEffect.OpenCatalog) }
-    }
-
     private fun onImportRequested(event: DocumentFilesEvent.ImportRequested) {
         if (!opened || !state.value.canImport || state.value.removal != null) return
         updateState { it.copy(importing = true, failure = null) }
@@ -137,7 +126,13 @@ class DocumentFilesViewModel(
                 try {
                     val result = importFile(workspaceId)
                     ensureActive()
-                    if (result is AppResult.Failed) reportFailure(result.failure)
+                    when (result) {
+                        is AppResult.Failed -> reportFailure(result.failure)
+                        is AppResult.Success ->
+                            result.value?.let {
+                                emitEffect(DocumentFilesEffect.OpenFile(it.draft.id))
+                            }
+                    }
                 } finally {
                     if (isActive) updateState { it.copy(importing = false) }
                 }

@@ -10,6 +10,8 @@ sealed interface DocumentCatalogEvent {
 
     data object RefreshRequested : DocumentCatalogEvent
 
+    data object FilesRequested : DocumentCatalogEvent
+
     data object EmploymentRequested : DocumentCatalogEvent
 
     data object EmploymentDismissed : DocumentCatalogEvent

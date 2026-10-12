@@ -5,6 +5,21 @@ adapter. Leave and expense workflows can use these contracts without depending
 on each other's feature modules. This is HRIS business integration and does not
 belong in the generic starter.
 
+## Employee navigation
+
+Documents opens the published catalog, with Personal and Receipt tabs. The folder
+action opens files on the current device, including while catalog acquisition is
+pending. Leaving the catalog cancels its request. Multiple employments use a
+separate filter; a single employment needs no selection control.
+
+Add file opens the system picker and then the imported file's upload form. Upload
+confirmation, download pause/resume and Save a copy stay below the page content.
+Preparation feedback belongs to the selected document. Back returns through the
+catalog or local file list; an interrupted transfer remains available in local
+files. Saving a copy still requires fresh authorization after the native dialog.
+The navigation snapshot version rejects stacks containing the previous catalog
+route before attaching the current graph.
+
 `LoadDocumentEvidence` coordinates current identity, workspace ownership and fresh
 company policy before acquiring the account's own published revisions. It repeats
 scope and availability checks after pending work, propagates cancellation and has

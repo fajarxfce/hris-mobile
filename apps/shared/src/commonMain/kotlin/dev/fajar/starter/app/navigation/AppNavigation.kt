@@ -265,8 +265,8 @@ fun AppNavigation(navigation: ScopedNavigationState, incomingLinks: Flow<String>
                         onFile = { id ->
                             controller.navigate(DocumentFileRoute(id)) { launchSingleTop = true }
                         },
-                        onCatalog = {
-                            controller.navigate(DocumentCatalogRoute) { launchSingleTop = true }
+                        onFiles = {
+                            controller.navigate(DocumentFilesRoute) { launchSingleTop = true }
                         },
                         onDownload = { id, start ->
                             controller.navigate(DocumentDownloadRoute(id, start)) {

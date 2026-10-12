@@ -23,6 +23,8 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.composable
+import androidx.savedstate.SavedState
+import androidx.savedstate.write
 import dev.fajar.starter.app.navigation.ScopedNavHost
 import dev.fajar.starter.app.navigation.ScopedNavigationState
 import dev.fajar.starter.app.navigation.rememberScopedNavigationState
@@ -51,102 +53,110 @@ class NavigationRestorationTest {
     fun processRecreationDuringBootstrapKeepsTheUnresolvedSavedStack() =
         restore(target = FIRST, replaceOwner = true, repeatBootstrap = true)
 
-    private fun restore(target: String, replaceOwner: Boolean, repeatBootstrap: Boolean = false) =
-        runComposeUiTest {
-            val compose = this
-            val owner = mutableStateOf(RestorationOwner())
-            val visible = mutableStateOf(true)
-            val scope = mutableStateOf<String?>(FIRST)
-            var registry = SaveableStateRegistry(null) { true }
-            val probes = mutableListOf<RestorationProbe>()
-            lateinit var navigation: ScopedNavigationState
-            try {
-                compose.setContent {
-                    if (visible.value) {
-                        CompositionLocalProvider(
-                            LocalViewModelStoreOwner provides owner.value,
-                            LocalLifecycleOwner provides owner.value,
-                            LocalSaveableStateRegistry provides registry,
-                        ) {
-                            navigation = rememberScopedNavigationState()
-                            AppTheme {
-                                Box(Modifier.size(360.dp, 600.dp)) {
-                                    val admitted = scope.value
-                                    if (admitted == null) AppText("Restoring")
-                                    else
-                                        ScopedNavHost(navigation, admitted, RestorationRoot) {
-                                            composable<RestorationRoot> {
-                                                AppText("Root $admitted")
-                                            }
-                                            if (admitted == FIRST) {
-                                                composable<RestorationDetail> {
-                                                    viewModel {
-                                                        RestorationProbe().also(probes::add)
-                                                    }
-                                                    var value by rememberSaveable {
-                                                        mutableIntStateOf(0)
-                                                    }
-                                                    Column {
-                                                        AppText("Detail $value")
-                                                        AppButton("Change", { value++ })
-                                                    }
+    @Test
+    fun previousDocumentRoutesDiscardTheOldStackAndClearItsRetainedOwners() =
+        restore(target = FIRST, replaceOwner = false, previousFormat = true)
+
+    private fun restore(
+        target: String,
+        replaceOwner: Boolean,
+        repeatBootstrap: Boolean = false,
+        previousFormat: Boolean = false,
+    ) = runComposeUiTest {
+        val compose = this
+        val owner = mutableStateOf(RestorationOwner())
+        val visible = mutableStateOf(true)
+        val scope = mutableStateOf<String?>(FIRST)
+        var registry = SaveableStateRegistry(null) { true }
+        val probes = mutableListOf<RestorationProbe>()
+        lateinit var navigation: ScopedNavigationState
+        try {
+            compose.setContent {
+                if (visible.value) {
+                    CompositionLocalProvider(
+                        LocalViewModelStoreOwner provides owner.value,
+                        LocalLifecycleOwner provides owner.value,
+                        LocalSaveableStateRegistry provides registry,
+                    ) {
+                        navigation = rememberScopedNavigationState()
+                        AppTheme {
+                            Box(Modifier.size(360.dp, 600.dp)) {
+                                val admitted = scope.value
+                                if (admitted == null) AppText("Restoring")
+                                else
+                                    ScopedNavHost(navigation, admitted, RestorationRoot) {
+                                        composable<RestorationRoot> { AppText("Root $admitted") }
+                                        if (admitted == FIRST) {
+                                            composable<RestorationDetail> {
+                                                viewModel { RestorationProbe().also(probes::add) }
+                                                var value by rememberSaveable {
+                                                    mutableIntStateOf(0)
+                                                }
+                                                Column {
+                                                    AppText("Detail $value")
+                                                    AppButton("Change", { value++ })
                                                 }
                                             }
                                         }
-                                }
+                                    }
                             }
                         }
                     }
                 }
-                compose.onNodeWithText("Root $FIRST").assertExists()
-                compose.runOnIdle { navigation.controller.navigate(RestorationDetail) }
-                compose.onNodeWithText("Detail 0").assertExists()
-                compose.onNodeWithText("Change").performClick()
-                compose.onNodeWithText("Detail 1").assertExists()
-                val original = probes.single()
-
-                fun recreate(closeOwner: Boolean) {
-                    compose.runOnIdle {
-                        val saved = registry.performSave()
-                        visible.value = false
-                        scope.value = null
-                        if (closeOwner) {
-                            owner.value.close()
-                            owner.value = RestorationOwner()
-                        }
-                        registry = SaveableStateRegistry(saved) { true }
-                    }
-                    compose.onNodeWithText("Detail 1").assertDoesNotExist()
-                    compose.runOnIdle { visible.value = true }
-                    compose.onNodeWithText("Restoring").assertExists()
-                }
-
-                recreate(replaceOwner)
-                if (repeatBootstrap) recreate(true)
-                compose.runOnIdle { scope.value = target }
-                if (target == FIRST) {
-                    compose.onNodeWithText("Detail 1").assertExists()
-                    compose.runOnIdle {
-                        assertEquals(2, probes.size)
-                        assertNotSame(original, probes.last())
-                        assertTrue(probes.last().work.isActive)
-                    }
-                } else {
-                    compose.onNodeWithText("Root $target").assertExists()
-                    compose.onNodeWithText("Detail 1").assertDoesNotExist()
-                    compose.runOnIdle {
-                        assertEquals(1, probes.size)
-                        assertNull(navigation.controller.previousBackStackEntry)
-                    }
-                }
-                compose.runOnIdle {
-                    assertEquals(1, original.cleared)
-                    assertFalse(original.work.isActive)
-                }
-            } finally {
-                compose.runOnIdle { owner.value.close() }
             }
+            compose.onNodeWithText("Root $FIRST").assertExists()
+            compose.runOnIdle { navigation.controller.navigate(RestorationDetail) }
+            compose.onNodeWithText("Detail 0").assertExists()
+            compose.onNodeWithText("Change").performClick()
+            compose.onNodeWithText("Detail 1").assertExists()
+            val original = probes.single()
+
+            fun recreate(closeOwner: Boolean) {
+                compose.runOnIdle {
+                    val saved = registry.performSave()
+                    if (previousFormat)
+                        saved.values.flatten().filterIsInstance<SavedState>().single().write {
+                            putInt("format", 1)
+                        }
+                    visible.value = false
+                    scope.value = null
+                    if (closeOwner) {
+                        owner.value.close()
+                        owner.value = RestorationOwner()
+                    }
+                    registry = SaveableStateRegistry(saved) { true }
+                }
+                compose.onNodeWithText("Detail 1").assertDoesNotExist()
+                compose.runOnIdle { visible.value = true }
+                compose.onNodeWithText("Restoring").assertExists()
+            }
+
+            recreate(replaceOwner)
+            if (repeatBootstrap) recreate(true)
+            compose.runOnIdle { scope.value = target }
+            if (target == FIRST && !previousFormat) {
+                compose.onNodeWithText("Detail 1").assertExists()
+                compose.runOnIdle {
+                    assertEquals(2, probes.size)
+                    assertNotSame(original, probes.last())
+                    assertTrue(probes.last().work.isActive)
+                }
+            } else {
+                compose.onNodeWithText("Root $target").assertExists()
+                compose.onNodeWithText("Detail 1").assertDoesNotExist()
+                compose.runOnIdle {
+                    assertEquals(1, probes.size)
+                    assertNull(navigation.controller.previousBackStackEntry)
+                }
+            }
+            compose.runOnIdle {
+                assertEquals(1, original.cleared)
+                assertFalse(original.work.isActive)
+            }
+        } finally {
+            compose.runOnIdle { owner.value.close() }
         }
+    }
 
     private companion object {
         const val FIRST = "account/first/company/first"

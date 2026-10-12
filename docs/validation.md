@@ -628,3 +628,19 @@ The API 35 emulator opened balances, creation and existing request details again
 the development API. Light appearance, dark appearance at 150% text, fixed request
 actions and return navigation were inspected. The shared layout tests also cover
 Indonesian at 200% text. No frame-time or memory measurements were taken.
+
+## Document navigation and transfer actions
+
+Root checks passed with 755 desktop tests, five application Chromium tests and
+Android dev assembly. Coverage includes direct catalog navigation, interrupted
+metadata acquisition when opening local files, native-picker stop/resume, late
+results after route disposal, upload confirmation, retained denied access,
+resumable ranges, authorized export and obsolete navigation-snapshot rejection.
+Shared layout tests cover Indonesian at 200% text and fixed transfer actions.
+
+The API 35 emulator opened the real published catalog, changed categories,
+downloaded a document, opened and cancelled the native Save dialog, then imported
+a PDF through the native picker directly into its upload form. Light appearance
+and dark appearance at 150% text were inspected. The shared tab component also
+passed the starter's root checks, 265 desktop tests, two application Chromium
+tests and Android dev assembly. No performance or memory benchmark is claimed.

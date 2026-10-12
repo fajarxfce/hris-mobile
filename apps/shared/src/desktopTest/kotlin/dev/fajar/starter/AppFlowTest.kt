@@ -116,8 +116,6 @@ class AppFlowTest {
                 .onNode(hasText("Documents") and hasClickAction())
                 .performScrollTo()
                 .performClick()
-            waitFor("Published documents")
-            compose.onNode(hasText("Published documents") and hasClickAction()).performClick()
             waitFor("Medical certificate")
             compose.onNode(hasText("Receipt") and isSelectable()).performClick()
             waitFor("No published documents in this category.")
@@ -133,7 +131,7 @@ class AppFlowTest {
             compose.onNodeWithContentDescription("Back").performClick()
             waitFor("Medical certificate")
             compose.waitUntil { server.documents.downloads.active.get() == 0 }
-            compose.onNodeWithContentDescription("Back").performClick()
+            compose.onNodeWithContentDescription("On this device").performClick()
             waitFor("Download incomplete")
             compose
                 .onNode(hasText("certificate.pdf") and hasClickAction())
@@ -149,7 +147,7 @@ class AppFlowTest {
                 listOf(0L, 1_048_576L, 1_048_576L, 2_097_152L),
                 server.documents.downloads.offsets.toList(),
             )
-            compose.onNodeWithText("Save a copy").performScrollTo().performClick()
+            compose.onNodeWithText("Save a copy").assertIsDisplayed().performClick()
             waitFor("Copy saved.")
             assertEquals(server.documents.downloads.sha256, output.completedHash)
             assertEquals(3, output.writes.get())
@@ -177,13 +175,11 @@ class AppFlowTest {
                 .onNode(hasText("Documents") and hasClickAction())
                 .performScrollTo()
                 .performClick()
-            waitFor("Published documents")
-            compose.onNode(hasText("Published documents") and hasClickAction()).performClick()
             waitFor("Medical certificate")
             compose.onNode(hasText("Medical certificate") and hasClickAction()).performClick()
             waitFor("Save a copy")
             server.documents.downloads.denied = true
-            compose.onNodeWithText("Save a copy").performScrollTo().performClick()
+            compose.onNodeWithText("Save a copy").assertIsDisplayed().performClick()
             waitFor("Your account cannot perform this action.")
             assertEquals(0, output.writes.get())
             assertEquals(1, output.releases.get())
@@ -208,7 +204,7 @@ class AppFlowTest {
                 server.documents.downloads.offsets.size,
                 "Recovery validates the existing completion without repeating its ranges",
             )
-            compose.onNodeWithText("Save a copy").performScrollTo().performClick()
+            compose.onNodeWithText("Save a copy").assertIsDisplayed().performClick()
             waitFor("Copy saved.")
             assertEquals(server.documents.downloads.sha256, output.completedHash)
         }
@@ -234,12 +230,10 @@ class AppFlowTest {
                 .onNode(hasText("Documents") and hasClickAction())
                 .performScrollTo()
                 .performClick()
-            waitFor("Published documents")
-            compose.onNode(hasText("Published documents") and hasClickAction()).performClick()
             waitFor("Medical certificate")
             compose.onNode(hasText("Medical certificate") and hasClickAction()).performClick()
             waitFor("Save a copy")
-            compose.onNodeWithText("Save a copy").performScrollTo().performClick()
+            compose.onNodeWithText("Save a copy").assertIsDisplayed().performClick()
             compose.waitUntil { output.active }
             compose.runOnIdle { lifecycle.value = Lifecycle.State.CREATED }
             compose.waitForIdle()
@@ -256,6 +250,43 @@ class AppFlowTest {
             compose.waitForIdle()
             assertEquals(0, output.writes.get())
             assertNull(output.completedHash)
+        }
+    }
+
+    @Test
+    fun localDocumentsRemainReachableWhileCatalogAcquisitionIsPending() {
+        val pending = CompletableDeferred<Unit>()
+        val server =
+            NativeUiServer().apply {
+                documents.enabled = true
+                documents.uploadEnabled = true
+                documents.gate = pending
+            }
+        try {
+            withApplication(server) {
+                signIn()
+                waitFor("Choose a company")
+                compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
+                waitFor("Welcome")
+                compose
+                    .onNode(hasText("Documents") and hasClickAction())
+                    .performScrollTo()
+                    .performClick()
+                compose.waitUntil { server.documents.active.get() == 1 }
+                compose
+                    .onNodeWithContentDescription("On this device")
+                    .assertIsEnabled()
+                    .performClick()
+                waitFor("No local files yet.")
+                compose.waitUntil { server.documents.active.get() == 0 }
+                pending.complete(Unit)
+                compose.waitForIdle()
+                compose.onNodeWithText("Medical certificate").assertDoesNotExist()
+                compose.onNodeWithContentDescription("Add file").assertIsEnabled()
+                assertEquals(1, server.documents.reads.get())
+            }
+        } finally {
+            pending.complete(Unit)
         }
     }
 
@@ -278,14 +309,9 @@ class AppFlowTest {
             waitFor("Choose a company")
             compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
             waitFor("Welcome")
-            compose
-                .onNode(hasText("Documents") and hasClickAction())
-                .performScrollTo()
-                .performClick()
+            openDocumentFiles()
             waitFor("No local files yet.")
-            compose.onNode(hasText("Add file") and hasClickAction()).performClick()
-            waitFor("Not uploaded")
-            compose.onNode(hasText("draft.pdf") and hasClickAction()).performClick()
+            compose.onNodeWithContentDescription("Add file").performClick()
             waitFor("Upload document")
             compose
                 .onNodeWithContentDescription("Title")
@@ -306,7 +332,7 @@ class AppFlowTest {
             compose
                 .onNodeWithContentDescription("Description")
                 .assertTextContains("Retained description")
-            assertEquals(1, server.documents.reads.get())
+            assertEquals(3, server.documents.reads.get())
             assertEquals(0, server.documents.uploads.starts.get())
         }
     }
@@ -323,20 +349,12 @@ class AppFlowTest {
             waitFor("Choose a company")
             compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
             waitFor("Welcome")
-            compose
-                .onNode(hasText("Documents") and hasClickAction())
-                .performScrollTo()
-                .performClick()
+            openDocumentFiles()
             waitFor("No local files yet.")
-            compose.onNode(hasText("Add file") and hasClickAction()).performClick()
-            waitFor("Not uploaded")
-            compose.onNode(hasText("receipt.pdf") and hasClickAction()).performClick()
+            compose.onNodeWithContentDescription("Add file").performClick()
             waitFor("Upload document")
             compose.onNodeWithText("EMP-001").assertExists()
-            compose
-                .onNode(hasText("Upload document") and hasClickAction())
-                .performScrollTo()
-                .performClick()
+            compose.onNode(hasText("Upload document") and hasClickAction()).performClick()
             waitFor("Enter a description of up to 1,000 characters.")
             assertEquals(0, server.documents.uploads.starts.get())
             compose
@@ -349,10 +367,7 @@ class AppFlowTest {
                 .performTextInput("Reimbursement evidence")
             compose.onNode(hasText("Receipt") and hasClickAction()).performScrollTo().performClick()
             capture("document-upload-form")
-            compose
-                .onNode(hasText("Upload document") and hasClickAction())
-                .performScrollTo()
-                .performClick()
+            compose.onNode(hasText("Upload document") and hasClickAction()).performClick()
             waitFor("Ready")
             assertEquals(1, server.documents.uploads.starts.get())
             assertEquals(1, server.documents.uploads.chunks.get())
@@ -388,16 +403,11 @@ class AppFlowTest {
             waitFor("Choose a company")
             compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
             waitFor("Welcome")
-            compose
-                .onNode(hasText("Documents") and hasClickAction())
-                .performScrollTo()
-                .performClick()
+            openDocumentFiles()
             waitFor("No local files yet.")
-            compose.onNode(hasText("Add file") and hasClickAction()).performClick()
-            waitFor("Not uploaded")
             val pending = CompletableDeferred<Unit>()
             server.documents.gate = pending
-            compose.onNode(hasText("pending.pdf") and hasClickAction()).performClick()
+            compose.onNodeWithContentDescription("Add file").performClick()
             compose.waitUntil { server.documents.active.get() == 1 }
             compose.onNodeWithContentDescription("Back").performClick()
             waitFor("On this device")
@@ -409,7 +419,7 @@ class AppFlowTest {
             compose.onNode(hasText("pending.pdf") and hasClickAction()).performClick()
             waitFor("Upload document")
             compose.onNodeWithText("EMP-001").assertExists()
-            assertEquals(2, server.documents.reads.get())
+            assertEquals(4, server.documents.reads.get())
         }
     }
 
@@ -426,23 +436,15 @@ class AppFlowTest {
             waitFor("Choose a company")
             compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
             waitFor("Welcome")
-            compose
-                .onNode(hasText("Documents") and hasClickAction())
-                .performScrollTo()
-                .performClick()
+            openDocumentFiles()
             waitFor("No local files yet.")
-            compose.onNode(hasText("Add file") and hasClickAction()).performClick()
-            waitFor("Not uploaded")
-            compose.onNode(hasText("retained-upload.pdf") and hasClickAction()).performClick()
+            compose.onNodeWithContentDescription("Add file").performClick()
             waitFor("Upload document")
             compose
                 .onNodeWithContentDescription("Description")
                 .performScrollTo()
                 .performTextInput("Personal record")
-            compose
-                .onNode(hasText("Upload document") and hasClickAction())
-                .performScrollTo()
-                .performClick()
+            compose.onNode(hasText("Upload document") and hasClickAction()).performClick()
             waitFor("Try again")
             compose.onNodeWithText("retained-upload.pdf").assertDoesNotExist()
             server.companyPolicy.offline = true
@@ -519,10 +521,7 @@ class AppFlowTest {
             assertEquals(1, selected.size)
             assertEquals(selected, released)
             assertNotNull(koin.get<DocumentFileRepository>())
-            compose
-                .onNode(hasText("Documents") and hasClickAction())
-                .performScrollTo()
-                .performClick()
+            openDocumentFiles()
             waitFor("Not uploaded")
             compose.onNodeWithText("document.pdf").assertExists()
             compose.onNodeWithContentDescription("Remove document.pdf from device").performClick()
@@ -532,12 +531,14 @@ class AppFlowTest {
             compose.onNodeWithContentDescription("Remove document.pdf from device").performClick()
             compose.onNode(hasText("Remove local file") and hasClickAction()).performClick()
             waitFor("No local files yet.")
-            compose.onNode(hasText("Add file") and hasClickAction()).performClick()
+            compose.onNodeWithContentDescription("Add file").performClick()
+            waitFor("Upload document")
+            compose.onNodeWithContentDescription("Back").performClick()
             waitFor("Not uploaded")
             assertEquals(2, selected.size)
             assertEquals(selected, released)
             capture("document-local-files")
-            assertEquals(0, server.documents.reads.get())
+            assertEquals(3, server.documents.reads.get())
             assertEquals(0, closes)
         }
         assertEquals(1, closes)
@@ -591,12 +592,11 @@ class AppFlowTest {
             waitFor("Choose a company")
             compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
             waitFor("Welcome")
-            compose
-                .onNode(hasText("Documents") and hasClickAction())
-                .performScrollTo()
-                .performClick()
+            openDocumentFiles()
             waitFor("No local files yet.")
-            compose.onNode(hasText("Add file") and hasClickAction()).performClick()
+            compose.onNodeWithContentDescription("Add file").performClick()
+            waitFor("Upload document")
+            compose.onNodeWithContentDescription("Back").performClick()
             waitFor("Not uploaded")
             compose.runOnIdle { denied.value = true }
             waitFor("Try again")
@@ -660,12 +660,9 @@ class AppFlowTest {
             waitFor("Choose a company")
             compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
             waitFor("Welcome")
-            compose
-                .onNode(hasText("Documents") and hasClickAction())
-                .performScrollTo()
-                .performClick()
+            openDocumentFiles()
             waitFor("No local files yet.")
-            compose.onNode(hasText("Add file") and hasClickAction()).performClick()
+            compose.onNodeWithContentDescription("Add file").performClick()
             compose.waitUntil { opened.get() == 1 }
             compose.runOnIdle { lifecycle.value = Lifecycle.State.CREATED }
             compose.waitForIdle()
@@ -673,24 +670,24 @@ class AppFlowTest {
             selection.complete(FileInputMetadata("picked.pdf", "application/pdf", 3))
             compose.waitUntil { released.get() == 1 }
             compose.runOnIdle { lifecycle.value = Lifecycle.State.RESUMED }
-            waitFor("Not uploaded")
+            waitFor("Upload document")
             assertEquals(1, reads.get())
+            compose.onNodeWithContentDescription("Back").performClick()
+            waitFor("Not uploaded")
             selection = CompletableDeferred()
             compose.onNodeWithContentDescription("Add file").performClick()
             compose.waitUntil { opened.get() == 2 }
             compose.onNodeWithContentDescription("Back").performClick()
-            waitFor("Welcome")
+            waitFor("Medical certificate")
+            val metadataReads = server.documents.reads.get()
             compose.waitUntil { released.get() == 2 }
             selection.complete(FileInputMetadata("late.pdf", "application/pdf", 3))
             compose.waitForIdle()
             assertEquals(1, reads.get())
-            compose
-                .onNode(hasText("Documents") and hasClickAction())
-                .performScrollTo()
-                .performClick()
+            compose.onNodeWithContentDescription("On this device").performClick()
             waitFor("Not uploaded")
             compose.onNodeWithText("late.pdf").assertDoesNotExist()
-            assertEquals(0, server.documents.reads.get())
+            assertEquals(metadataReads, server.documents.reads.get())
         }
     }
 
@@ -2786,6 +2783,19 @@ class AppFlowTest {
                 .size == 1
         }
         compose.onNodeWithContentDescription("Refresh").assertIsEnabled().performClick()
+    }
+
+    private fun openDocumentFiles() {
+        compose.onNode(hasText("Documents") and hasClickAction()).performScrollTo().performClick()
+        waitFor("Medical certificate")
+        compose.waitUntil {
+            compose
+                .onAllNodes(hasContentDescription("On this device") and isEnabled())
+                .fetchSemanticsNodes()
+                .isNotEmpty()
+        }
+        compose.onNodeWithContentDescription("On this device").performClick()
+        waitFor("On this device")
     }
 
     private fun waitFor(text: String) {

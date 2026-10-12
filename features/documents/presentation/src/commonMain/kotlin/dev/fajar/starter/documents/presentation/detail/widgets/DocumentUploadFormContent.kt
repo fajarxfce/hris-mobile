@@ -63,11 +63,6 @@ fun DocumentUploadFormContent(state: DocumentFileState, onEvent: (DocumentFileEv
                 enabled = !state.working,
                 maxLines = 3,
             )
-            AppButton(
-                appString(AppString.DocumentSend),
-                { onEvent(DocumentFileEvent.UploadConfirmed) },
-                enabled = state.canSubmit,
-            )
         }
     }
 }

@@ -33,7 +33,7 @@ internal constructor(
                 snapshot != null &&
                     snapshot.read {
                         contains("format") &&
-                            getInt("format") == 1 &&
+                            getInt("format") == NAVIGATION_FORMAT &&
                             contains("scope") &&
                             getString("scope") == nextScope &&
                             contains("navigation")
@@ -52,7 +52,7 @@ internal constructor(
         val currentScope = scope ?: return restored
         val navigation = controller.saveState() ?: return null
         return savedState {
-            putInt("format", 1)
+            putInt("format", NAVIGATION_FORMAT)
             putString("scope", currentScope)
             putSavedState("navigation", navigation)
         }
@@ -87,3 +87,6 @@ fun rememberScopedNavigationState(): ScopedNavigationState {
         ScopedNavigationState(controller, viewModels)
     }
 }
+
+// Version 2 opens Documents at its catalog and replaces the previous catalog route.
+private const val NAVIGATION_FORMAT = 2

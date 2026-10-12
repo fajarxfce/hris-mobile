@@ -228,3 +228,11 @@ Both repositories passed root checks, localization Chromium tests, Android dev
 and production Web builds. Shared tests cover disabled months/years, 200% text,
 English/Indonesian names and timezone boundaries. Monthly attendance, access
 revalidation, encrypted history and capture recovery remain in this application.
+
+## Content categories
+
+The controlled `AppTabs` and its accessibility/large-text regressions also exist
+at [fd858ae](https://github.com/fajarxfce/compose-fluent-starter/commit/fd858ae).
+The mobile foundation is [c992f95](https://github.com/fajarxfce/hris-mobile/commit/c992f95).
+Both repositories passed root checks, application Chromium tests and Android dev
+assembly. Document categories, navigation and transfer policy remain in HRIS Mobile.

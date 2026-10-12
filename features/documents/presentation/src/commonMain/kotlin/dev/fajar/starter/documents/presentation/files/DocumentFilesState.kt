@@ -18,11 +18,13 @@ data class DocumentFilesState(
     val busy: Boolean
         get() = importing || removing || revalidating
 
-    val canImport: Boolean
+    val showImportAction: Boolean
         get() =
-            !busy &&
-                restriction == null &&
+            restriction == null &&
                 content?.access?.permissions?.contains("documents.self.upload") == true
+
+    val canImport: Boolean
+        get() = showImportAction && !busy
 
     val needsVerification: Boolean
         get() =

@@ -3,8 +3,8 @@
     <string name="changing_company_en">Changing company…</string>
     <string name="signing_out_en">Signing out…</string>
 
-    <string name="document_published_en">Published documents</string>
-    <string name="document_published_description_en">View and download your documents.</string>
+    <string name="document_local_files_description_en">Uploads and downloaded files.</string>
+    <string name="document_preparing_download_en">Preparing download…</string>
     <string name="document_catalog_expired_en">Refresh the document list to continue.</string>
     <string name="document_no_published_en">No published documents in this category.</string>
     <string name="document_downloaded_en">Downloaded</string>
