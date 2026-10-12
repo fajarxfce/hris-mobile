@@ -26,8 +26,8 @@ import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import dev.fajar.starter.app.navigation.ScopedNavHost
+import dev.fajar.starter.app.navigation.rememberScopedNavigationState
 import dev.fajar.starter.designsystem.components.AppText
 import dev.fajar.starter.designsystem.theme.AppTheme
 import dev.fajar.starter.fixtures.TestBackDispatcher
@@ -50,10 +50,11 @@ class NavigationOwnershipTest {
                     LocalLifecycleOwner provides owner,
                     LocalBackGestureDispatcher provides backDispatcher,
                 ) {
-                    controller = rememberNavController()
+                    val navigation = rememberScopedNavigationState()
+                    controller = navigation.controller
                     AppTheme {
                         Box(Modifier.size(360.dp, 600.dp)) {
-                            ScopedNavHost(controller, "account", NavigationProbeRoute) {
+                            ScopedNavHost(navigation, "account", NavigationProbeRoute) {
                                 composable<NavigationProbeRoute> { AppText("Root") }
                                 composable<NavigationDetailProbeRoute> { AppText("Detail") }
                             }
@@ -105,11 +106,11 @@ class NavigationOwnershipTest {
                     LocalViewModelStoreOwner provides owner,
                     LocalLifecycleOwner provides owner,
                 ) {
-                    val controller = rememberNavController()
+                    val navigation = rememberScopedNavigationState()
                     AppTheme {
                         Box(Modifier.size(360.dp, 600.dp)) {
                             if (visible.value)
-                                ScopedNavHost(controller, scope.value, NavigationProbeRoute) {
+                                ScopedNavHost(navigation, scope.value, NavigationProbeRoute) {
                                     composable<NavigationProbeRoute> {
                                         val probe = viewModel {
                                             NavigationProbe().also(probes::add)
@@ -162,10 +163,10 @@ class NavigationOwnershipTest {
                         LocalLifecycleOwner provides owner,
                         LocalSaveableStateRegistry provides registry,
                     ) {
-                        val controller = rememberNavController()
+                        val navigation = rememberScopedNavigationState()
                         AppTheme {
                             Box(Modifier.size(360.dp, 600.dp)) {
-                                ScopedNavHost(controller, "same-account", NavigationProbeRoute) {
+                                ScopedNavHost(navigation, "same-account", NavigationProbeRoute) {
                                     composable<NavigationProbeRoute> {
                                         val probe = viewModel {
                                             NavigationProbe().also(probes::add)

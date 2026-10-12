@@ -1,5 +1,20 @@
 # Validation
 
+## Background process restoration
+
+The installed application's crash log identified an SDK back-stack restoration
+failure during bootstrap. The same failure was reproduced on the API 35 emulator
+by backgrounding HRIS, terminating its process and reopening its retained task.
+With the scoped saver, Leave restored in a new process without a new HRIS crash;
+the restored page screenshot was inspected. One initial UI probe read a transient
+incomplete accessibility dump; a bounded retry verified the completed page.
+
+Root checks passed with 743 desktop tests, including four new restoration tests
+and the three existing navigation ownership regressions. Five app Chromium tests
+and Android dev assembly passed. The tests cover changed company, revoked session,
+repeated recreation while bootstrap is unresolved, retained owners and disposal.
+These observations do not measure memory, frame time or battery use.
+
 ## Published documents and saved copies
 
 Complete root checks passed with 739 desktop/JVM tests. Chromium passed 59 document

@@ -9,7 +9,6 @@ import androidx.lifecycle.compose.LifecycleStartEffect
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import dev.fajar.starter.app.bootstrap.*
 import dev.fajar.starter.auth.presentation.navigation.*
@@ -34,7 +33,8 @@ import kotlinx.coroutines.flow.Flow
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun AppNavigation(controller: NavHostController, incomingLinks: Flow<String>) {
+fun AppNavigation(navigation: ScopedNavigationState, incomingLinks: Flow<String>) {
+    val controller = navigation.controller
     val viewModel = koinViewModel<AppViewModel>()
     val state by viewModel.state.collectAsStateWithLifecycle()
     val stage = state.accessFailure?.let { AppStage.Failed(it) } ?: state.stage
@@ -63,6 +63,10 @@ fun AppNavigation(controller: NavHostController, incomingLinks: Flow<String>) {
             incomingLinks.collect { viewModel.onEvent(AppEvent.LinkReceived(it)) }
         }
     }
+    if (stage == AppStage.Loading || stage is AppStage.Failed) {
+        BootstrapPage(stage) { viewModel.onEvent(AppEvent.BootstrapRequested) }
+        return
+    }
     val destination =
         when (stage) {
             AppStage.Onboarding -> OnboardingRoute
@@ -73,7 +77,6 @@ fun AppNavigation(controller: NavHostController, incomingLinks: Flow<String>) {
                     companyBlocked -> CompanyPolicyRoute
                     else -> HomeRoute()
                 }
-            else -> BootstrapRoute
         }
     val scope =
         when (stage) {
@@ -98,21 +101,9 @@ fun AppNavigation(controller: NavHostController, incomingLinks: Flow<String>) {
             viewModel.onEvent(AppEvent.LinkHandled(link))
         }
     }
-    ScopedNavHost(controller, scope = scope, startDestination = destination) {
+    ScopedNavHost(navigation, scope = scope, startDestination = destination) {
         composable<BootstrapRoute> {
-            AppPage {
-                AppBrand()
-                when (val current = bootstrapStage.value) {
-                    is AppStage.Failed -> {
-                        AppFeedback(failureText(current.failure))
-                        AppButton(
-                            appString(AppString.TryAgain),
-                            { viewModel.onEvent(AppEvent.BootstrapRequested) },
-                        )
-                    }
-                    else -> AppLoading()
-                }
-            }
+            BootstrapPage(bootstrapStage.value) { viewModel.onEvent(AppEvent.BootstrapRequested) }
         }
         onboardingRoutes({ viewModel.onEvent(AppEvent.BootstrapRequested) })
         authRoutes()

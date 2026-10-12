@@ -1,5 +1,13 @@
 # Template updates
 
+## Navigation restoration
+
+Scoped navigation persistence, deferred graph attachment and four process/scope
+restoration regressions also exist at
+[9248f59](https://github.com/fajarxfce/compose-fluent-starter/commit/9248f59).
+Both repositories passed root checks, app Chromium tests and Android dev builds.
+HRIS session admission and company policy remain application responsibilities.
+
 ## Owned file output
 
 The platform save dialogs, bounded writers, handle ownership and error mapping

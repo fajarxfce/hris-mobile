@@ -163,6 +163,16 @@ and disposal. Export admission and choosing when to copy remain use-case work.
 
 ## Navigation
 
+Navigation persistence pairs the SDK stack with its admitted account/company
+scope. Bootstrap renders outside NavHost until authority is resolved; an unknown
+scope cannot restore a saved graph. A matching scope restores the original stack,
+while a changed scope discards it before graph attachment. Unresolved snapshots
+survive another recreation during bootstrap. Navigation owns a dedicated retained
+ViewModelStore, independent of application state; mismatched restoration and final
+owner disposal clear its entries and cancel their work. Ordinary graph changes
+continue to let Navigation clear outgoing entry stores. The snapshot format must
+change when existing serialized routes become incompatible.
+
 Features own their serializable route and NavGraphBuilder registration. The app composes
 their entries and reacts to onboarding/session state. Authentication transitions replace
 the root stack, so sign-out removes protected screens. Home owns its

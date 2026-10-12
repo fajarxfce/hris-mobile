@@ -4,9 +4,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.navigation.compose.rememberNavController
 import dev.fajar.starter.app.bootstrap.AppViewModelOwner
 import dev.fajar.starter.app.navigation.AppNavigation
+import dev.fajar.starter.app.navigation.rememberScopedNavigationState
 import dev.fajar.starter.availability.presentation.navigation.AvailabilityGate
 import dev.fajar.starter.designsystem.theme.AppColors
 import dev.fajar.starter.designsystem.theme.AppTheme
@@ -22,7 +22,7 @@ fun StarterApp(
 ) {
     KoinIsolatedContext(context = container) {
         AppViewModelOwner {
-            val navigation = rememberNavController()
+            val navigation = rememberScopedNavigationState()
             ProvideAppLanguage {
                 AppTheme {
                     Box(
