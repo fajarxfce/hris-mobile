@@ -17,4 +17,7 @@ kotlin.sourceSets {
         implementation(libs.coroutines.test)
         implementation(libs.ktor.mock)
     }
+    getByName("wasmJsTest").dependencies {
+        implementation(npm("@js-joda/timezone", libs.versions.js.joda.timezone.get()))
+    }
 }

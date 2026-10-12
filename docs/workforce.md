@@ -1,5 +1,7 @@
 # Attendance and work calendar
 
+[Overtime](overtime.md) shares the Workforce module and frozen schedule contracts.
+
 Home includes today's clock-in/out card above its service grid. Its capture
 ViewModel owns acquisition, permission recovery and pending-command actions.
 Leaving its tab or backgrounding cancels acquisition and user actions. Read-only

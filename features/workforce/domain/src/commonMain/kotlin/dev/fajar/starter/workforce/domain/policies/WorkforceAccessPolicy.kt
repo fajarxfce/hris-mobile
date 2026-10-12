@@ -17,6 +17,23 @@ fun admitWorkforce(
     session: Session?,
     build: AppBuild,
     now: Instant,
+): AppResult<WorkforceAccess> =
+    admitWorkforceAccess(
+        workspaceId,
+        workspace,
+        session,
+        build,
+        now,
+        setOf("attendance.self.record", "workforce.read"),
+    )
+
+internal fun admitWorkforceAccess(
+    workspaceId: String,
+    workspace: Workspace?,
+    session: Session?,
+    build: AppBuild,
+    now: Instant,
+    permissions: Set<String>,
 ): AppResult<WorkforceAccess> {
     val ownership = validateWorkspaceOwnership(workspaceId, workspace, session, now)
     if (ownership is AppResult.Failed) return ownership
@@ -38,7 +55,7 @@ fun admitWorkforce(
             return companyPolicyFailure("company_maintenance", FailureKind.Service)
         CompanyAvailability.Available -> Unit
     }
-    if (workspace.permissions.none { it == "attendance.self.record" || it == "workforce.read" })
+    if (workspace.permissions.none { it in permissions })
         return calendarFailure("access_denied", FailureKind.AccessDenied)
     var deadline = workspace.admission.expiresAt
     var expiryCode = "client.workspace_expired"

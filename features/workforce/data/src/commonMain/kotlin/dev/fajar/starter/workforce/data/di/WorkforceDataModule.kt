@@ -6,6 +6,8 @@ import dev.fajar.starter.location.domain.repositories.LocationRepository
 import dev.fajar.starter.sync.domain.SyncTask
 import dev.fajar.starter.workforce.domain.attendance.repositories.*
 import dev.fajar.starter.workforce.domain.attendance.usecases.*
+import dev.fajar.starter.workforce.domain.overtime.repositories.*
+import dev.fajar.starter.workforce.domain.overtime.usecases.*
 import dev.fajar.starter.workforce.domain.repositories.*
 import dev.fajar.starter.workforce.domain.usecases.*
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
@@ -15,6 +17,42 @@ import org.koin.core.annotation.*
 @Module
 @ComponentScan("dev.fajar.starter.workforce.data")
 class WorkforceDataModule {
+    @Factory
+    fun observeOvertime(
+        cache: OvertimeCacheRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        build: AppBuild,
+    ) = ObserveOvertime(cache, sessions, workspaces, Clock.System, build)
+
+    @Factory
+    fun observeOvertimeRequest(
+        cache: OvertimeCacheRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        build: AppBuild,
+    ) = ObserveOvertimeRequest(cache, sessions, workspaces, Clock.System, build)
+
+    @Single
+    fun refreshOvertime(
+        workforce: WorkforceRepository,
+        remote: OvertimeRepository,
+        cache: OvertimeCacheRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        build: AppBuild,
+    ) = RefreshOvertime(workforce, remote, cache, sessions, workspaces, Clock.System, build)
+
+    @Single
+    fun refreshOvertimeRequest(
+        workforce: WorkforceRepository,
+        remote: OvertimeRepository,
+        cache: OvertimeCacheRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        build: AppBuild,
+    ) = RefreshOvertimeRequest(workforce, remote, cache, sessions, workspaces, Clock.System, build)
+
     @Factory
     fun observeAttendance(
         cache: AttendanceCacheRepository,
