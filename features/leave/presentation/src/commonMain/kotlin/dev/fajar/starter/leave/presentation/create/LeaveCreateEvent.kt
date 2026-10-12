@@ -1,7 +1,9 @@
 package dev.fajar.starter.leave.presentation.create
 
+import dev.fajar.starter.documents.domain.entities.DocumentEvidence
 import dev.fajar.starter.leave.domain.entities.LeavePortion
 import dev.fajar.starter.leave.domain.entities.LeavePreparation
+import dev.fajar.starter.leave.presentation.evidence.LeaveEvidenceTarget
 
 sealed interface LeaveCreateEvent {
     data object Entered : LeaveCreateEvent
@@ -27,6 +29,15 @@ sealed interface LeaveCreateEvent {
     data class PortionSelected(val portion: LeavePortion) : LeaveCreateEvent
 
     data class ReasonChanged(val value: String) : LeaveCreateEvent
+
+    data object EvidencePickerRequested : LeaveCreateEvent
+
+    data class EvidenceSelected(val target: LeaveEvidenceTarget, val document: DocumentEvidence) :
+        LeaveCreateEvent
+
+    data class EvidenceDismissed(val target: LeaveEvidenceTarget) : LeaveCreateEvent
+
+    data class AttachmentRemoved(val revisionId: String) : LeaveCreateEvent
 
     data object PreviewRequested : LeaveCreateEvent
 

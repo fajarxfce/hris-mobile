@@ -9,6 +9,7 @@ import androidx.compose.ui.unit.dp
 import dev.fajar.starter.designsystem.components.*
 import dev.fajar.starter.designsystem.theme.AppColors
 import dev.fajar.starter.leave.presentation.create.*
+import dev.fajar.starter.leave.presentation.create.widgets.LeaveAttachments
 import dev.fajar.starter.leave.presentation.create.widgets.LeaveCreatePicker
 import dev.fajar.starter.leave.presentation.create.widgets.LeaveSubmissionStatus
 import dev.fajar.starter.leave.presentation.formatters.*
@@ -132,6 +133,7 @@ fun LeaveCreatePage(
                     maxLines = 4,
                 )
             }
+            item(key = "attachments") { LeaveAttachments(state, onEvent) }
             item(key = "preview-action") {
                 AppTextButton(
                     appString(AppString.LeavePreview),
@@ -187,7 +189,7 @@ fun LeaveCreatePage(
                         )
                     }
                 }
-                if (prepared.preview.policy.attachmentRequired)
+                if (prepared.preview.policy.attachmentRequired && form.attachments.isEmpty())
                     item(key = "evidence-required") {
                         AppFeedback(appString(AppString.LeaveAttachmentRequired))
                     }

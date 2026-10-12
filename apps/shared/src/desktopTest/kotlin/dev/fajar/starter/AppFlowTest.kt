@@ -25,6 +25,7 @@ import dev.fajar.starter.datastore.createUserPreferences
 import dev.fajar.starter.fixtures.NativeAttendanceCacheUi
 import dev.fajar.starter.fixtures.NativeCalendarCacheUi
 import dev.fajar.starter.fixtures.NativeDirectoryUi
+import dev.fajar.starter.fixtures.NativeDocumentsUi
 import dev.fajar.starter.fixtures.NativeSessionsUi
 import dev.fajar.starter.fixtures.NativeUiServer
 import dev.fajar.starter.fixtures.TestBackDispatcher
@@ -38,6 +39,7 @@ import java.io.File
 import java.nio.file.Files
 import kotlin.test.*
 import kotlinx.coroutines.CompletableDeferred
+import kotlinx.serialization.json.*
 import org.jetbrains.skia.Image
 import org.junit.Rule
 import org.junit.Test
@@ -51,8 +53,13 @@ class AppFlowTest {
     private val backDispatcher = TestBackDispatcher()
 
     @Test
-    fun newLeaveRequestReviewsDatesAndRecoversTheSameSubmissionAfterResponseLoss() {
-        val server = NativeUiServer().apply { leave.enabled = true }
+    fun newLeaveRequestReviewsEvidenceAndRecoversTheSameSubmissionAfterResponseLoss() {
+        val server =
+            NativeUiServer().apply {
+                leave.enabled = true
+                leave.creation.attachmentRequired = true
+                documents.enabled = true
+            }
         withApplication(server) {
             signIn()
             waitFor("Choose a company")
@@ -113,6 +120,34 @@ class AppFlowTest {
                 .onNode(hasText(formatLocalDate("2026-10-17", "en")) and hasClickAction().not())
                 .assertExists()
             assertEquals(0, server.leave.creation.commits)
+            compose
+                .onNode(hasText("Submit request") and hasClickAction())
+                .performScrollTo()
+                .assertIsNotEnabled()
+            val pendingDocuments = CompletableDeferred<Unit>()
+            server.documents.gate = pendingDocuments
+            compose
+                .onNode(hasText("Add attachment") and hasClickAction())
+                .performScrollTo()
+                .performClick()
+            waitFor("Select document")
+            compose.waitUntil { server.documents.active.get() == 1 }
+            compose.onNodeWithContentDescription("Close").performClick()
+            compose.waitUntil { server.documents.active.get() == 0 }
+            server.documents.gate = null
+            pendingDocuments.complete(Unit)
+            compose
+                .onNode(hasText("Add attachment") and hasClickAction())
+                .performScrollTo()
+                .performClick()
+            waitFor("Medical certificate")
+            compose
+                .onNode(hasText("Medical certificate") and hasAnyAncestor(isDialog()))
+                .performClick()
+            compose.waitUntil { compose.onAllNodes(isDialog()).fetchSemanticsNodes().isEmpty() }
+            compose.onNodeWithText("certificate.pdf").assertExists()
+            assertEquals(2, server.documents.reads.get())
+            assertEquals(1, server.leave.creation.previews.size)
             capture("leave-creation-preview")
             server.leave.creation.loseNextResponse = true
             compose
@@ -128,6 +163,14 @@ class AppFlowTest {
             }
             assertEquals(1, server.leave.creation.commits)
             assertEquals(1, server.leave.creation.requests.size)
+            assertEquals(
+                listOf(NativeDocumentsUi.REVISION),
+                Json.parseToJsonElement(server.leave.creation.requests.single().second)
+                    .jsonObject
+                    .getValue("attachmentRevisionIds")
+                    .jsonArray
+                    .map { it.jsonPrimitive.content },
+            )
             capture("leave-creation-unconfirmed")
             compose.onNodeWithContentDescription("Back").performClick()
             waitFor("Leave balances")

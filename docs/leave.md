@@ -103,7 +103,19 @@ observation and its preview-expiry timer when stopped. Current access failures
 hide sensitive content and remain gated through failed retries. A fresh admitted
 catalog read can reopen a completed command source. Typed form values are
 process-local until confirmation; confirmed input uses encrypted durable storage.
-The form does not yet acquire evidence, so it blocks types requiring an attachment.
+Employees can select up to three published personal documents through the shared
+[document catalog](documents.md). The picker owns its MVI state, bounded page,
+request and read-deadline timer. Its navigation entry clears a dedicated
+ViewModelStore when dismissed. Closing or replacing a dialog invalidates its
+callbacks without changing the form's dates or reason.
+
+The catalog refresh keeps still-admitted metadata visible while selection is
+disabled. An expired or denied read stays gated through failed refreshes. Selecting
+another page replaces the previous page; the UI never accumulates an unbounded
+list. The original document revisions become part of the immutable submission;
+the server independently rechecks their current availability. Removing the last
+required attachment disables confirmation. A retained submission shows its
+original attachment count after process restoration.
 
 ## Offline access
 
@@ -200,7 +212,7 @@ versions and obsolete outcomes cannot replace the visible operation.
 
 ## Remaining workflow
 
-Subsequent work connects document evidence acquisition and transfer to the form.
+Subsequent work adds new file acquisition and resumable document transfer.
 A cached balance is never
 a reservation or authorization to submit.
 

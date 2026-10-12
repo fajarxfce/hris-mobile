@@ -10,11 +10,12 @@ internal fun LeaveCreateState.withCreateFailure(value: Failure): LeaveCreateStat
         restriction = value,
         failure = null,
         catalog = catalog.copy(items = emptyList()),
-        form = form?.copy(reason = "", type = null),
+        form = form?.copy(reason = "", type = null, attachments = emptyList()),
         preview = null,
         command = null,
         commandReady = false,
         dialog = null,
+        evidenceTarget = null,
     )
 }
 
@@ -33,5 +34,6 @@ internal fun LeaveCreateState.withRetainedSubmission(
         commandReady = true,
         preview = preview.takeIf { record == null },
         dialog = dialog.takeIf { record == null },
+        evidenceTarget = evidenceTarget.takeIf { record == null },
     )
 }

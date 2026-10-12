@@ -1,4 +1,14 @@
 <resources>
+    <string name="leave_attached_count_en">Attachments: %1$s</string>
+    <string name="leave_choose_document_en">Select document</string>
+    <string name="leave_no_documents_en">No documents are available.</string>
+    <string name="leave_more_documents_en">Next page</string>
+    <string name="leave_first_documents_en">First page</string>
+    <string name="leave_document_attached_en">Attached</string>
+    <string name="leave_add_attachment_en">Add attachment</string>
+    <string name="leave_remove_attachment_en">Remove %1$s</string>
+    <string name="leave_attachment_limit_en">Up to %1$s documents.</string>
+    <string name="document_evidence_expired_en">Refresh the document list to continue.</string>
     <string name="leave_new_request_en">Request leave</string>
     <string name="leave_type_en">Leave type</string>
     <string name="leave_choose_type_en">Select leave type</string>

@@ -24,6 +24,14 @@ fun LeaveSubmissionStatus(state: LeaveCreateState, onEvent: (LeaveCreateEvent) -
         )
         AppText(leaveDaysText(command.charged), style = FluentTheme.typography.bodyStrong)
         AppText(command.reason)
+        if (command.attachmentRevisionIds.isNotEmpty())
+            AppText(
+                appString(
+                    AppString.LeaveAttachedCount,
+                    command.attachmentRevisionIds.size.toString(),
+                ),
+                color = AppColors.muted,
+            )
         AppText(
             appString(
                 if (

@@ -42,8 +42,9 @@ the last request remains available within its offline read lease. Withdrawal,
 cancellation and withdrawal of a pending cancellation retain encrypted commands
 and recover the original request after interrupted delivery. Employees can select
 leave dates and portions, review the server calculation, and submit with durable
-recovery after interrupted delivery. Evidence acquisition and transfer remain
-separate delivery work; leave types requiring an attachment cannot yet be submitted.
+recovery after interrupted delivery. Up to three personal documents can be selected
+from the employee's published evidence catalog, including for types requiring an
+attachment. New file acquisition and resumable transfer remain separate delivery work.
 
 The runtime contains no demo authentication transport. Other transactional employee workflows
 are still being connected; a generated module

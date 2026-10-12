@@ -1,5 +1,36 @@
 # Validation
 
+## Leave document selection
+
+Complete root checks passed with 616 desktop tests. All 52 Leave presentation
+tests and both localization tests passed in Chromium. Android dev assembly and
+the production Web build passed. New coverage verifies bounded selection,
+original revision IDs during interrupted delivery, required-attachment removal,
+closed-dialog callbacks, pending cancellation, read expiry and access gates
+through failed refreshes. The assembled HTTP/SQLite application test closes a
+picker with a request pending, verifies cancellation, then selects required
+evidence and recovers one unchanged submission after response loss.
+
+Controlled layouts verify fixed close controls, long document names, pagination
+and attachment removal at 200% text. The screenshot was inspected. One new test
+initially searched for a lazy-list item before scrolling it into composition;
+the corrected test traverses the list and keeps the visibility/enabled assertions.
+Web retains its three existing bundler warnings. Runtime performance was not
+measured by these checks.
+
+API 35 emulator acceptance selected an existing processed personal PDF and
+submitted a one-day request under a policy requiring evidence. The development
+API confirmed the original document/revision, size and digest, with one day
+reserved and one remaining. Withdrawal restored two available days and zero
+reserved while preserving the original attachment and withdrawal history. The
+isolated allowance was then reversed and its policy retired through the API.
+Light/dark appearance and 200% text were inspected; the emulator returned to Home
+with normal text and light appearance. The phone's ADB connection was unavailable,
+so this increment has no physical-phone installation or interaction claim.
+
+The preceding catalog commit `83cbd4d` passed Linux, Windows and Apple CI. Server
+commit `8ed91d3b` passed its full backend, dashboard and live integration jobs.
+
 ## Owned document catalog
 
 Complete root checks passed with 604 desktop tests. All 12 new document domain

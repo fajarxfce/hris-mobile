@@ -29,6 +29,7 @@ class NativeCompanyPolicyUi {
                     "COMMUNICATIONS"
                 path.contains("/people/") -> "PEOPLE"
                 path.contains("/leave/") -> "LEAVE"
+                path.contains("/documents/") -> "DOCUMENTS"
                 else -> return null
             }
         return when {

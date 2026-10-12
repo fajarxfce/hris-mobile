@@ -313,6 +313,184 @@ class LeaveCreateViewModelTest {
         }
     }
 
+    @Test
+    fun selectedEvidenceIsFrozenBeforePersistenceAndInterruptedDeliveryKeepsTheOriginalRevisions() =
+        runTest {
+            withForm { f, model, _ ->
+                f.previewCall = {
+                    AppResult.Success(
+                        f.preview(it).let { value ->
+                            value.copy(policy = value.policy.copy(attachmentRequired = true))
+                        }
+                    )
+                }
+                prepare(f, model)
+                model.onEvent(LeaveCreateEvent.ReasonChanged("Medical appointment"))
+                runCurrent()
+                val preview = model.state.value.preview
+                for (index in listOf(2, 1)) {
+                    model.onEvent(LeaveCreateEvent.EvidencePickerRequested)
+                    runCurrent()
+                    model.onEvent(
+                        LeaveCreateEvent.EvidenceSelected(
+                            model.state.value.evidenceTarget!!,
+                            leaveEvidence(index),
+                        )
+                    )
+                    runCurrent()
+                }
+                assertEquals(preview, model.state.value.preview)
+                assertEquals(1, f.previews.size)
+                assertTrue(model.state.value.canSubmit)
+                val release = CompletableDeferred<Unit>()
+                f.beforeInsert = { release.await() }
+                f.transmit = { AppResult.Failed(Failure(FailureKind.Network, "Response lost")) }
+                try {
+                    model.onEvent(LeaveCreateEvent.SubmitRequested)
+                    runCurrent()
+                    model.onEvent(LeaveCreateEvent.AttachmentRemoved(leaveEvidence().revisionId))
+                    model.onEvent(LeaveCreateEvent.EvidencePickerRequested)
+                    model.onEvent(LeaveCreateEvent.ReasonChanged("Changed"))
+                    model.onEvent(LeaveCreateEvent.SubmitRequested)
+                    runCurrent()
+                    assertEquals(
+                        listOf(leaveEvidence(2), leaveEvidence(1)),
+                        model.state.value.form?.attachments,
+                    )
+                    assertNull(model.state.value.evidenceTarget)
+                    release.complete(Unit)
+                    runCurrent()
+                    val command = f.transmitted.single()
+                    assertEquals(
+                        listOf(leaveEvidence(1).revisionId, leaveEvidence(2).revisionId),
+                        command.attachmentRevisionIds,
+                    )
+                    assertEquals("Medical appointment", command.reason)
+                    assertIs<LeaveCommandOutcome.Unconfirmed>(model.state.value.command?.outcome)
+                    model.onEvent(LeaveCreateEvent.AttachmentRemoved(leaveEvidence().revisionId))
+                    model.onEvent(LeaveCreateEvent.RetryRequested)
+                    runCurrent()
+                    assertEquals(listOf(command, command), f.transmitted)
+                } finally {
+                    release.complete(Unit)
+                }
+            }
+        }
+
+    @Test
+    fun closedPickerCallbacksCannotEditAReopenedFormAndDuplicateDocumentsDoNotConsumeTheLimit() =
+        runTest {
+            withForm { f, model, _ ->
+                prepare(f, model)
+                model.onEvent(LeaveCreateEvent.EvidencePickerRequested)
+                runCurrent()
+                val previous = model.state.value.evidenceTarget!!
+                model.onEvent(LeaveCreateEvent.EvidenceDismissed(previous))
+                model.onEvent(LeaveCreateEvent.EvidencePickerRequested)
+                runCurrent()
+                val current = model.state.value.evidenceTarget!!
+                assertNotSame(previous, current)
+                model.onEvent(LeaveCreateEvent.EvidenceSelected(previous, leaveEvidence()))
+                model.onEvent(LeaveCreateEvent.EvidenceDismissed(previous))
+                runCurrent()
+                assertSame(current, model.state.value.evidenceTarget)
+                assertTrue(model.state.value.form!!.attachments.isEmpty())
+                model.onEvent(LeaveCreateEvent.EvidenceSelected(current, leaveEvidence()))
+                runCurrent()
+                model.onEvent(LeaveCreateEvent.EvidencePickerRequested)
+                runCurrent()
+                val second = model.state.value.evidenceTarget!!
+                assertEquals(setOf(leaveEvidence().documentId), second.selectedDocumentIds)
+                model.onEvent(
+                    LeaveCreateEvent.EvidenceSelected(
+                        second,
+                        leaveEvidence().copy(revisionId = leaveEvidence(2).revisionId),
+                    )
+                )
+                runCurrent()
+                assertEquals(1, model.state.value.form!!.attachments.size)
+                model.onEvent(LeaveCreateEvent.EvidenceSelected(second, leaveEvidence(2)))
+                runCurrent()
+                model.onEvent(LeaveCreateEvent.EvidencePickerRequested)
+                runCurrent()
+                model.onEvent(
+                    LeaveCreateEvent.EvidenceSelected(
+                        model.state.value.evidenceTarget!!,
+                        leaveEvidence(3),
+                    )
+                )
+                runCurrent()
+                assertFalse(model.state.value.canAddAttachment)
+                model.onEvent(LeaveCreateEvent.EvidencePickerRequested)
+                runCurrent()
+                assertNull(model.state.value.evidenceTarget)
+                assertEquals(3, model.state.value.form!!.attachments.size)
+            }
+        }
+
+    @Test
+    fun removingRequiredEvidenceDisablesSubmissionAndStoppedOrDeniedFormsRejectLateSelections() =
+        runTest {
+            withForm { f, model, _ ->
+                f.previewCall = {
+                    AppResult.Success(
+                        f.preview(it).let { value ->
+                            value.copy(policy = value.policy.copy(attachmentRequired = true))
+                        }
+                    )
+                }
+                prepare(f, model)
+                assertFalse(model.state.value.canSubmit)
+                model.onEvent(LeaveCreateEvent.EvidencePickerRequested)
+                runCurrent()
+                model.onEvent(
+                    LeaveCreateEvent.EvidenceSelected(
+                        model.state.value.evidenceTarget!!,
+                        leaveEvidence(),
+                    )
+                )
+                runCurrent()
+                assertTrue(model.state.value.canSubmit)
+                model.onEvent(LeaveCreateEvent.AttachmentRemoved(leaveEvidence().revisionId))
+                runCurrent()
+                assertFalse(model.state.value.canSubmit)
+                model.onEvent(LeaveCreateEvent.EvidencePickerRequested)
+                runCurrent()
+                val stopped = model.state.value.evidenceTarget!!
+                model.onEvent(LeaveCreateEvent.Stopped)
+                model.onEvent(LeaveCreateEvent.EvidenceSelected(stopped, leaveEvidence()))
+                runCurrent()
+                assertNull(model.state.value.evidenceTarget)
+                assertTrue(model.state.value.form!!.attachments.isEmpty())
+                model.onEvent(LeaveCreateEvent.Entered)
+                runCurrent()
+                model.onEvent(LeaveCreateEvent.EvidencePickerRequested)
+                runCurrent()
+                model.onEvent(
+                    LeaveCreateEvent.EvidenceSelected(
+                        model.state.value.evidenceTarget!!,
+                        leaveEvidence(),
+                    )
+                )
+                model.onEvent(LeaveCreateEvent.ReasonChanged("Private reason"))
+                runCurrent()
+                f.typesCall = {
+                    AppResult.Failed(
+                        Failure(
+                            FailureKind.AccessDenied,
+                            "Verify",
+                            code = "mfa_verification_required",
+                        )
+                    )
+                }
+                model.onEvent(LeaveCreateEvent.ReloadRequested)
+                runCurrent()
+                assertTrue(model.state.value.form!!.attachments.isEmpty())
+                assertEquals("", model.state.value.form?.reason)
+                assertFalse(model.state.value.canAddAttachment)
+            }
+        }
+
     private fun TestScope.enterAndSelect(f: LeaveCreateFixture, model: LeaveCreateViewModel) {
         model.onEvent(LeaveCreateEvent.Entered)
         runCurrent()

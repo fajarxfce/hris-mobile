@@ -12,10 +12,13 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import dev.fajar.starter.designsystem.theme.AppTheme
+import dev.fajar.starter.documents.domain.entities.*
 import dev.fajar.starter.leave.domain.entities.*
 import dev.fajar.starter.leave.presentation.create.*
 import dev.fajar.starter.leave.presentation.create.pages.LeaveCreatePage
 import dev.fajar.starter.leave.presentation.create.widgets.LeaveCreatePicker
+import dev.fajar.starter.leave.presentation.evidence.*
+import dev.fajar.starter.leave.presentation.evidence.widgets.LeaveEvidenceDialog
 import dev.fajar.starter.localization.*
 import dev.fajar.starter.settings.domain.entities.AppLanguage
 import java.io.File
@@ -161,6 +164,145 @@ class LeaveCreateLayoutTest {
         compose.onNodeWithContentDescription("Tutup").assertIsDisplayed().performClick()
         compose.runOnIdle { assertEquals(LeaveCreateEvent.DialogDismissed, events.last()) }
         capture("leave-create-calendar-large-text", compose.onNode(isDialog()))
+    }
+
+    @Test
+    fun requiredAttachmentRemovalAndSubmissionStayReachableAtLargeText() {
+        val base = previewState()
+        val preparation = base.preview!!
+        val evidence =
+            DocumentEvidence(
+                "11111111-1111-4111-8111-111111111111",
+                "22222222-2222-4222-8222-222222222222",
+                1,
+                "Surat pemeriksaan kesehatan",
+                "surat-pemeriksaan.pdf",
+                "application/pdf",
+                100,
+                "a".repeat(64),
+                preparation.fetchedAt,
+            )
+        var state by
+            mutableStateOf(
+                base.copy(
+                    form = base.form!!.copy(attachments = listOf(evidence)),
+                    preview =
+                        preparation.copy(
+                            preview =
+                                preparation.preview.copy(
+                                    policy =
+                                        preparation.preview.policy.copy(attachmentRequired = true)
+                                )
+                        ),
+                )
+            )
+        compose.setContent {
+            val density = LocalDensity.current
+            CompositionLocalProvider(
+                LocalDensity provides Density(density.density, 2f),
+                LocalAppLanguage provides AppLanguage.Indonesian,
+            ) {
+                AppTheme {
+                    Box(Modifier.size(360.dp, 760.dp)) {
+                        LeaveCreatePage(state, rememberLazyListState()) { event ->
+                            if (event is LeaveCreateEvent.AttachmentRemoved)
+                                state =
+                                    state.copy(form = state.form!!.copy(attachments = emptyList()))
+                        }
+                    }
+                }
+            }
+        }
+        compose
+            .onNode(hasScrollToIndexAction())
+            .performScrollToNode(hasText("Kirim pengajuan") and hasClickAction())
+        compose.onNode(hasText("Kirim pengajuan") and hasClickAction()).assertIsEnabled()
+        compose
+            .onNode(hasScrollToIndexAction())
+            .performScrollToNode(hasContentDescription("Hapus surat-pemeriksaan.pdf"))
+        compose
+            .onNodeWithContentDescription("Hapus surat-pemeriksaan.pdf")
+            .assertIsDisplayed()
+            .performClick()
+        compose
+            .onNode(hasScrollToIndexAction())
+            .performScrollToNode(hasText("Tambah lampiran") and hasClickAction())
+        compose.onNode(hasText("Tambah lampiran") and hasClickAction()).assertIsEnabled()
+        compose
+            .onNode(hasScrollToIndexAction())
+            .performScrollToNode(hasText("Kirim pengajuan") and hasClickAction())
+        compose.onNode(hasText("Kirim pengajuan") and hasClickAction()).assertIsNotEnabled()
+        compose.onNodeWithContentDescription("Kembali").assertIsDisplayed()
+    }
+
+    @Test
+    fun theEvidenceDialogKeepsCloseVisibleWhilePagingLongDocumentsAtLargeText() {
+        val now = Instant.parse("2026-10-12T01:00:00Z")
+        val documents =
+            (1..20).map { index ->
+                DocumentEvidence(
+                    "11111111-1111-4111-8111-${index.toString().padStart(12, '0')}",
+                    "22222222-2222-4222-8222-${index.toString().padStart(12, '0')}",
+                    1,
+                    "Surat pemeriksaan kesehatan karyawan $index",
+                    "pemeriksaan-kesehatan-$index.pdf",
+                    "application/pdf",
+                    100,
+                    "a".repeat(64),
+                    now,
+                )
+            }
+        val state =
+            LeaveEvidenceState(
+                setOf(documents.first().documentId),
+                snapshot =
+                    DocumentEvidenceSnapshot(
+                        DocumentAccess(
+                            "session",
+                            "account",
+                            "https://hris.example.test/",
+                            "company",
+                            setOf("documents.self.read"),
+                            now + 1.hours,
+                            now + 1.hours,
+                            "client.workspace_expired",
+                        ),
+                        DocumentEvidenceQuery("employee", DocumentClassification.PERSONAL),
+                        DocumentEvidencePage(documents, documents.last().documentId),
+                        now,
+                        now + 60.seconds,
+                    ),
+            )
+        val events = mutableListOf<LeaveEvidenceEvent>()
+        compose.setContent {
+            val density = LocalDensity.current
+            CompositionLocalProvider(
+                LocalDensity provides Density(density.density, 2f),
+                LocalAppLanguage provides AppLanguage.Indonesian,
+            ) {
+                AppTheme { LeaveEvidenceDialog(state, rememberLazyListState(), events::add) }
+            }
+        }
+        val close = compose.onNodeWithContentDescription("Tutup").fetchSemanticsNode().boundsInRoot
+        compose.onNode(hasText(documents.first().title) and hasClickAction()).assertIsNotEnabled()
+        compose.onNode(hasScrollToIndexAction()).performScrollToNode(hasText("Halaman berikutnya"))
+        compose
+            .onNode(hasText("Halaman berikutnya") and hasClickAction())
+            .assertIsDisplayed()
+            .performClick()
+        compose.runOnIdle {
+            assertEquals(
+                LeaveEvidenceEvent.PageRequested(documents.last().documentId),
+                events.last(),
+            )
+        }
+        assertEquals(
+            close,
+            compose.onNodeWithContentDescription("Tutup").fetchSemanticsNode().boundsInRoot,
+        )
+        compose.onNodeWithContentDescription("Tutup").assertIsDisplayed().performClick()
+        compose.runOnIdle { assertEquals(LeaveEvidenceEvent.Dismissed, events.last()) }
+        capture("leave-evidence-large-text", compose.onNode(isDialog()))
     }
 
     private fun previewState(): LeaveCreateState {

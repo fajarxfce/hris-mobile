@@ -19,6 +19,12 @@ classification, accepted file declarations, unique ordered IDs and cursor progre
 An unvalidated replacement is excluded by the server's published-revision catalog.
 Metadata neither grants content access nor reserves a later business attachment.
 
+The Leave feature consumes this catalog through its own evidence picker. It owns
+selection, pagination and dialog lifetime; the shared document modules contain no
+Leave ViewModels or attachment policy. Only accepted personal revisions for the
+form's employment are selectable. A replaced or expired dialog cannot publish
+into a later opening, and pending metadata work is cancelled on dismissal.
+
 The catalog is an online selection capability. It does not persist file contents,
 silently retry or start a background observer. The inherited generic transfer
 screen is not an HRIS upload implementation; encrypted resumable file acquisition

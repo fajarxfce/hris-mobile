@@ -29,7 +29,8 @@ class PrepareLeaveSubmission(
         attachmentRevisionIds: List<String> = emptyList(),
     ): AppResult<LeaveSubmissionRecord> {
         if (prepared.selection.days.size !in 1..366) return leaveFailure("invalid_leave_request")
-        if (attachmentRevisionIds.size > 3) return leaveFailure("invalid_leave_attachments")
+        if (attachmentRevisionIds.size > MAX_LEAVE_ATTACHMENTS)
+            return leaveFailure("invalid_leave_attachments")
         val preparation =
             prepared.copy(
                 selection =

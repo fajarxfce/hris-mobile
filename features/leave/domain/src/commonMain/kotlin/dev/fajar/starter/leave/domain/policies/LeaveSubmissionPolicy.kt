@@ -7,6 +7,8 @@ import dev.fajar.starter.leave.domain.entities.*
 import kotlin.time.Instant
 import kotlin.uuid.Uuid
 
+const val MAX_LEAVE_ATTACHMENTS = 3
+
 fun LeaveSubmissionCommand.belongsTo(access: LeaveAccess): Boolean =
     accountId == access.accountId && audience == access.audience && companyId == access.companyId
 
@@ -38,7 +40,7 @@ fun validateLeaveSubmission(
     val reasonValidation = validateLeaveActionReason(reason)
     if (reasonValidation is AppResult.Failed) return reasonValidation
     if (
-        attachmentRevisionIds.size > 3 ||
+        attachmentRevisionIds.size > MAX_LEAVE_ATTACHMENTS ||
             attachmentRevisionIds.distinct().size != attachmentRevisionIds.size ||
             attachmentRevisionIds.any { Uuid.parseOrNull(it)?.toString() != it }
     )

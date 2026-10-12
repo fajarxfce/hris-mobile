@@ -1,4 +1,14 @@
 <resources>
+    <string name="leave_attached_count_id">Lampiran: %1$s</string>
+    <string name="leave_choose_document_id">Pilih dokumen</string>
+    <string name="leave_no_documents_id">Belum ada dokumen tersedia.</string>
+    <string name="leave_more_documents_id">Halaman berikutnya</string>
+    <string name="leave_first_documents_id">Halaman pertama</string>
+    <string name="leave_document_attached_id">Terlampir</string>
+    <string name="leave_add_attachment_id">Tambah lampiran</string>
+    <string name="leave_remove_attachment_id">Hapus %1$s</string>
+    <string name="leave_attachment_limit_id">Maksimal %1$s dokumen.</string>
+    <string name="document_evidence_expired_id">Muat ulang daftar dokumen untuk melanjutkan.</string>
     <string name="leave_new_request_id">Ajukan cuti</string>
     <string name="leave_type_id">Jenis cuti</string>
     <string name="leave_choose_type_id">Pilih jenis cuti</string>

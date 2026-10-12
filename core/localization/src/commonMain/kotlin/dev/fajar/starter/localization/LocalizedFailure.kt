@@ -7,6 +7,8 @@ import dev.fajar.starter.common.result.*
 fun failureText(failure: Failure): String =
     appString(
         when (failure.code) {
+            "client.document_evidence_expired" -> AppString.DocumentEvidenceExpired
+            "client.document_scope_changed" -> AppString.CalendarScopeChanged
             "client.leave_preview_expired" -> AppString.LeavePreviewExpired
             "leave_preview_changed",
             "invalid_leave_preview" -> AppString.LeavePreviewChanged

@@ -3,8 +3,10 @@ package dev.fajar.starter.leave.presentation.create
 import androidx.lifecycle.viewModelScope
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.leave.domain.entities.*
+import dev.fajar.starter.leave.domain.policies.MAX_LEAVE_ATTACHMENTS
 import dev.fajar.starter.leave.domain.policies.leaveFailureInvalidatesCache
 import dev.fajar.starter.leave.domain.usecases.*
+import dev.fajar.starter.leave.presentation.evidence.LeaveEvidenceTarget
 import dev.fajar.starter.presentation.mvi.MviViewModel
 import dev.fajar.starter.workspace.domain.policies.workspaceAccessLossCodes
 import kotlinx.coroutines.*
@@ -45,6 +47,10 @@ class LeaveCreateViewModel(
         on<LeaveCreateEvent.PortionPickerRequested>(::onPortionPickerRequested)
         on<LeaveCreateEvent.PortionSelected>(::onPortionSelected)
         on<LeaveCreateEvent.ReasonChanged>(::onReasonChanged)
+        on<LeaveCreateEvent.EvidencePickerRequested>(::onEvidencePickerRequested)
+        on<LeaveCreateEvent.EvidenceSelected>(::onEvidenceSelected)
+        on<LeaveCreateEvent.EvidenceDismissed>(::onEvidenceDismissed)
+        on<LeaveCreateEvent.AttachmentRemoved>(::onAttachmentRemoved)
         on<LeaveCreateEvent.PreviewRequested>(::onPreviewRequested)
         on<LeaveCreateEvent.PreviewExpired>(::onPreviewExpired)
         on<LeaveCreateEvent.SubmitRequested>(::onSubmitRequested)
@@ -79,6 +85,7 @@ class LeaveCreateViewModel(
                 commandReady = false,
                 work = null,
                 dialog = null,
+                evidenceTarget = null,
             )
         }
     }
@@ -146,7 +153,8 @@ class LeaveCreateViewModel(
     }
 
     private fun onTypePickerRequested(event: LeaveCreateEvent.TypePickerRequested) {
-        if (state.value.editable) updateState { it.copy(dialog = LeaveCreateDialog.Types) }
+        if (state.value.editable && state.value.evidenceTarget == null)
+            updateState { it.copy(dialog = LeaveCreateDialog.Types) }
     }
 
     private fun onTypePageRequested(event: LeaveCreateEvent.TypePageRequested) {
@@ -190,7 +198,7 @@ class LeaveCreateViewModel(
 
     private fun onDatePickerRequested(event: LeaveCreateEvent.DatePickerRequested) {
         val form = state.value.form ?: return
-        if (!state.value.editable) return
+        if (!state.value.editable || state.value.evidenceTarget != null) return
         val selected = if (event.field == LeaveDateField.FROM) form.from else form.until
         updateState {
             it.copy(
@@ -243,7 +251,11 @@ class LeaveCreateViewModel(
     }
 
     private fun onPortionPickerRequested(event: LeaveCreateEvent.PortionPickerRequested) {
-        if (state.value.editable && state.value.form?.type?.allowPartialDays == true)
+        if (
+            state.value.editable &&
+                state.value.evidenceTarget == null &&
+                state.value.form?.type?.allowPartialDays == true
+        )
             updateState { it.copy(dialog = LeaveCreateDialog.Portion) }
     }
 
@@ -277,6 +289,65 @@ class LeaveCreateViewModel(
             updateState {
                 it.copy(form = form.copy(reason = event.value.take(1_001)), failure = null)
             }
+    }
+
+    private fun onEvidencePickerRequested(event: LeaveCreateEvent.EvidencePickerRequested) {
+        if (!foreground || !state.value.canAddAttachment || state.value.dialog != null) return
+        val form = state.value.form ?: return
+        updateState {
+            it.copy(
+                evidenceTarget =
+                    LeaveEvidenceTarget(
+                        target.workspaceId,
+                        target.employeeId,
+                        form.attachments.map { attachment -> attachment.documentId }.toSet(),
+                    )
+            )
+        }
+    }
+
+    private fun onEvidenceSelected(event: LeaveCreateEvent.EvidenceSelected) {
+        val form = state.value.form ?: return
+        if (
+            !foreground ||
+                !state.value.editable ||
+                state.value.evidenceTarget !== event.target ||
+                form.attachments.size >= MAX_LEAVE_ATTACHMENTS ||
+                form.attachments.any {
+                    it.documentId == event.document.documentId ||
+                        it.revisionId == event.document.revisionId
+                }
+        )
+            return
+        updateState {
+            it.copy(
+                form = form.copy(attachments = form.attachments + event.document),
+                evidenceTarget = null,
+                failure = null,
+            )
+        }
+    }
+
+    private fun onEvidenceDismissed(event: LeaveCreateEvent.EvidenceDismissed) {
+        if (state.value.evidenceTarget === event.target)
+            updateState { it.copy(evidenceTarget = null) }
+    }
+
+    private fun onAttachmentRemoved(event: LeaveCreateEvent.AttachmentRemoved) {
+        val form = state.value.form ?: return
+        if (!foreground || !state.value.editable || state.value.evidenceTarget != null) return
+        updateState {
+            it.copy(
+                failure = null,
+                form =
+                    form.copy(
+                        attachments =
+                            form.attachments.filterNot { attachment ->
+                                attachment.revisionId == event.revisionId
+                            }
+                    ),
+            )
+        }
     }
 
     private fun onPreviewRequested(event: LeaveCreateEvent.PreviewRequested) {
@@ -331,11 +402,12 @@ class LeaveCreateViewModel(
         if (!foreground || !state.value.canSubmit) return
         val preview = state.value.preview ?: return
         val reason = state.value.form?.reason ?: return
+        val attachments = state.value.form?.attachments?.map { it.revisionId } ?: return
         updateState { it.copy(work = LeaveCreateWork.SENDING, failure = null) }
         operation =
             viewModelScope.launch {
                 try {
-                    val result = prepareSubmission(target.workspaceId, preview, reason)
+                    val result = prepareSubmission(target.workspaceId, preview, reason, attachments)
                     ensureActive()
                     when (result) {
                         is AppResult.Failed -> reportFailure(result.failure)
@@ -461,7 +533,8 @@ class LeaveCreateViewModel(
     }
 
     private fun onBackRequested(event: LeaveCreateEvent.BackRequested) {
-        if (state.value.dialog != null) onEvent(LeaveCreateEvent.DialogDismissed)
+        if (state.value.evidenceTarget != null) updateState { it.copy(evidenceTarget = null) }
+        else if (state.value.dialog != null) onEvent(LeaveCreateEvent.DialogDismissed)
         else viewModelScope.launch { emitEffect(LeaveCreateEffect.Back) }
     }
 

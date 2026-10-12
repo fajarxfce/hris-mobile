@@ -15,38 +15,24 @@ import kotlinx.serialization.json.*
 class NativeLeaveCreationUi {
     @Volatile var loseNextResponse = false
     @Volatile var commits = 0
+    @Volatile var attachmentRequired = false
     val previews = CopyOnWriteArrayList<JsonObject>()
     val requests = CopyOnWriteArrayList<Pair<String, String>>()
     private val receipts = mutableMapOf<String, Pair<String, String>>()
     private val created = mutableMapOf<String, JsonObject>()
-    private val policy = nativeLeaveRequestFixture(null).getValue("policy").jsonObject
+    private val policy: JsonObject
+        get() =
+            JsonObject(
+                nativeLeaveRequestFixture(null).getValue("policy").jsonObject +
+                    ("attachmentRequired" to JsonPrimitive(attachmentRequired))
+            )
 
     @Synchronized
     fun response(request: HttpRequestData): Pair<String, HttpStatusCode>? {
         val path = request.url.encodedPath
         if (!path.contains("/companies/${NativeUiServer.COMPANY_ONE}/")) return null
-        if (path.endsWith("/leave/types")) {
-            check(request.url.parameters["limit"] == "20")
-            LocalDate.parse(checkNotNull(request.url.parameters["asOf"]))
-            return buildJsonObject {
-                    putJsonArray("items") {
-                        addJsonObject {
-                            put("id", policy.getValue("typeId"))
-                            put("code", "ANNUAL")
-                            put("name", "Annual leave")
-                            put("effectiveFrom", "2026-01-01")
-                            put("paid", true)
-                            put("allowPartialDays", true)
-                            put("attachmentRequired", false)
-                            put("active", true)
-                            put("version", 0)
-                            put("appliedRevision", 0)
-                        }
-                    }
-                    put("nextCursor", JsonNull)
-                }
-                .toString() to HttpStatusCode.OK
-        }
+        if (path.endsWith("/leave/types"))
+            return effectiveTypes(request).toString() to HttpStatusCode.OK
         if (path.endsWith("/leave/me/requests/preview")) {
             val input = Json.parseToJsonElement((request.body as TextContent).text).jsonObject
             previews += input
@@ -62,7 +48,12 @@ class NativeLeaveCreationUi {
             }
             val input = Json.parseToJsonElement(body).jsonObject
             check(input.getValue("previewRevision").jsonPrimitive.content == "a".repeat(64))
-            check(input.getValue("attachmentRevisionIds").jsonArray.isEmpty())
+            val attachments =
+                input.getValue("attachmentRevisionIds").jsonArray.map { it.jsonPrimitive.content }
+            check(
+                attachments ==
+                    if (attachmentRequired) listOf(NativeDocumentsUi.REVISION) else emptyList()
+            )
             val id = input.getValue("id").jsonPrimitive.content
             check(id !in created)
             val calculated = preview(input)
@@ -74,6 +65,10 @@ class NativeLeaveCreationUi {
                 put("status", "PENDING")
                 put("submittedAt", submittedAt)
                 put("reason", input.getValue("reason"))
+                put("policy", calculated.getValue("policy"))
+                putJsonArray("attachments") {
+                    if (attachmentRequired) add(NativeDocumentsUi.attachment())
+                }
                 put("days", calculated.getValue("days"))
                 put("chargedDays", calculated.getValue("chargedDays"))
                 putJsonObject("approval") {
@@ -115,6 +110,28 @@ class NativeLeaveCreationUi {
                 return it.toString() to HttpStatusCode.OK
             }
         return null
+    }
+
+    private fun effectiveTypes(request: HttpRequestData): JsonObject {
+        check(request.url.parameters["limit"] == "20")
+        LocalDate.parse(checkNotNull(request.url.parameters["asOf"]))
+        return buildJsonObject {
+            putJsonArray("items") {
+                addJsonObject {
+                    put("id", policy.getValue("typeId"))
+                    put("code", "ANNUAL")
+                    put("name", "Annual leave")
+                    put("effectiveFrom", "2026-01-01")
+                    put("paid", true)
+                    put("allowPartialDays", true)
+                    put("attachmentRequired", attachmentRequired)
+                    put("active", true)
+                    put("version", 0)
+                    put("appliedRevision", 0)
+                }
+            }
+            put("nextCursor", JsonNull)
+        }
     }
 
     private fun preview(input: JsonObject): JsonObject {

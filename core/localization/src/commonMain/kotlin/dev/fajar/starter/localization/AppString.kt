@@ -5,6 +5,28 @@ import org.jetbrains.compose.resources.StringResource
 
 /** Explicit pairs keep runtime language changes portable across Android, iOS, desktop and Web. */
 enum class AppString(val english: StringResource, val indonesian: StringResource) {
+    LeaveAttachedCount(Res.string.leave_attached_count_en, Res.string.leave_attached_count_id),
+    LeaveChooseDocument(Res.string.leave_choose_document_en, Res.string.leave_choose_document_id),
+    LeaveNoDocuments(Res.string.leave_no_documents_en, Res.string.leave_no_documents_id),
+    LeaveMoreDocuments(Res.string.leave_more_documents_en, Res.string.leave_more_documents_id),
+    LeaveFirstDocuments(Res.string.leave_first_documents_en, Res.string.leave_first_documents_id),
+    LeaveDocumentAttached(
+        Res.string.leave_document_attached_en,
+        Res.string.leave_document_attached_id,
+    ),
+    LeaveAddAttachment(Res.string.leave_add_attachment_en, Res.string.leave_add_attachment_id),
+    LeaveRemoveAttachment(
+        Res.string.leave_remove_attachment_en,
+        Res.string.leave_remove_attachment_id,
+    ),
+    LeaveAttachmentLimit(
+        Res.string.leave_attachment_limit_en,
+        Res.string.leave_attachment_limit_id,
+    ),
+    DocumentEvidenceExpired(
+        Res.string.document_evidence_expired_en,
+        Res.string.document_evidence_expired_id,
+    ),
     LeaveNewRequest(Res.string.leave_new_request_en, Res.string.leave_new_request_id),
     LeaveType(Res.string.leave_type_en, Res.string.leave_type_id),
     LeaveChooseType(Res.string.leave_choose_type_en, Res.string.leave_choose_type_id),

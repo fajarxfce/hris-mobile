@@ -1,6 +1,7 @@
 package dev.fajar.starter.leave.presentation.create
 
 import dev.fajar.starter.common.result.AppResult
+import dev.fajar.starter.documents.domain.entities.DocumentEvidence
 import dev.fajar.starter.leave.domain.entities.*
 import dev.fajar.starter.leave.domain.policies.leaveFailure
 import kotlinx.datetime.*
@@ -11,6 +12,7 @@ data class LeaveCreateForm(
     val type: LeaveTypeOption? = null,
     val portion: LeavePortion = LeavePortion.FULL,
     val reason: String = "",
+    val attachments: List<DocumentEvidence> = emptyList(),
 )
 
 /** Expands the bounded date-range control into explicit input; the server selects working days. */

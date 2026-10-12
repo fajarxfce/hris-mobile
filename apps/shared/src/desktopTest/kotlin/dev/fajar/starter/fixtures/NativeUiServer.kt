@@ -1,6 +1,7 @@
 package dev.fajar.starter.fixtures
 
 import io.ktor.client.engine.mock.*
+import io.ktor.client.request.HttpRequestData
 import io.ktor.http.*
 import java.io.IOException
 import java.util.UUID
@@ -30,6 +31,7 @@ class NativeUiServer(
     val directory = NativeDirectoryUi()
     val workforce = NativeWorkforceUi()
     val leave = NativeLeaveUi()
+    val documents = NativeDocumentsUi()
     val inbox = NativeInboxUi()
     val deviceSessions = NativeSessionsUi()
     val companyPolicy = NativeCompanyPolicyUi()
@@ -40,12 +42,7 @@ class NativeUiServer(
     fun engine() = MockEngine { request ->
         requests.withLock {
             val path = request.url.encodedPath
-            assertEquals("ANDROID", request.headers["X-HRIS-Client-Platform"])
-            assertEquals("1", request.headers["X-HRIS-Client-Build"])
-            if (path !in setOf("/api/v1/auth/native/login", "/api/v1/auth/native/refresh"))
-                assertTrue(
-                    request.headers[HttpHeaders.Authorization]?.startsWith("Bearer ") == true
-                )
+            assertNativeHeaders(request)
             val headers = headersOf(HttpHeaders.ContentType, "application/json")
             companyPolicy.response(path)?.let { (body, status) ->
                 return@withLock respond(body, status, headers)
@@ -63,6 +60,9 @@ class NativeUiServer(
                 return@withLock respond(body, status, headers)
             }
             leave.response(request)?.let { (body, status) ->
+                return@withLock respond(body, status, headers)
+            }
+            documents.response(request)?.let { (body, status) ->
                 return@withLock respond(body, status, headers)
             }
             if (path.startsWith("/api/v1/auth/native/sessions") && rejectSessionAccessOnce) {
@@ -136,6 +136,16 @@ class NativeUiServer(
         }
     }
 
+    private fun assertNativeHeaders(request: HttpRequestData) {
+        assertEquals("ANDROID", request.headers["X-HRIS-Client-Platform"])
+        assertEquals("1", request.headers["X-HRIS-Client-Build"])
+        if (
+            request.url.encodedPath !in
+                setOf("/api/v1/auth/native/login", "/api/v1/auth/native/refresh")
+        )
+            assertTrue(request.headers[HttpHeaders.Authorization]?.startsWith("Bearer ") == true)
+    }
+
     private fun signIn(body: JsonObject?): JsonObject {
         assertEquals("alex@example.com", body?.get("email")?.jsonPrimitive?.content)
         assertEquals("Fictional-password-123!", body?.get("password")?.jsonPrimitive?.content)
@@ -157,6 +167,7 @@ class NativeUiServer(
                 add("announcements.read")
                 add("attendance.self.record")
                 if (leave.enabled) add("leave.self.manage")
+                if (documents.enabled) add("documents.self.read")
             }
         }
     }

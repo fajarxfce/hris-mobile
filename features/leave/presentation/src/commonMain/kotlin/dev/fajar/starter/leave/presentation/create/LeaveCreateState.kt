@@ -2,6 +2,8 @@ package dev.fajar.starter.leave.presentation.create
 
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.leave.domain.entities.*
+import dev.fajar.starter.leave.domain.policies.MAX_LEAVE_ATTACHMENTS
+import dev.fajar.starter.leave.presentation.evidence.LeaveEvidenceTarget
 import kotlinx.datetime.LocalDate
 
 data class LeaveCreateState(
@@ -16,6 +18,7 @@ data class LeaveCreateState(
     val failure: Failure? = null,
     val restriction: Failure? = null,
     val dialog: LeaveCreateDialog? = null,
+    val evidenceTarget: LeaveEvidenceTarget? = null,
 ) {
     val editable: Boolean
         get() =
@@ -30,7 +33,14 @@ data class LeaveCreateState(
                     )
 
     val canPreview: Boolean
-        get() = editable && work == null && form?.type != null
+        get() = editable && work == null && form?.type != null && evidenceTarget == null
+
+    val canAddAttachment: Boolean
+        get() =
+            editable &&
+                work == null &&
+                evidenceTarget == null &&
+                (form?.attachments?.size ?: MAX_LEAVE_ATTACHMENTS) < MAX_LEAVE_ATTACHMENTS
 
     val canSubmit: Boolean
         get() =
@@ -38,7 +48,9 @@ data class LeaveCreateState(
                 work == null &&
                 preview != null &&
                 !previewExpired &&
-                preview.preview.policy.attachmentRequired.not()
+                evidenceTarget == null &&
+                (!preview.preview.policy.attachmentRequired ||
+                    form?.attachments?.isNotEmpty() == true)
 
     val visibleFailure: Failure?
         get() = restriction ?: failure

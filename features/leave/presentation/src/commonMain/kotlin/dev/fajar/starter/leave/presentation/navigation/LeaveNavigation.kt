@@ -65,6 +65,19 @@ fun NavGraphBuilder.leaveRoutes(
             }
         }
         LeaveCreatePage(state, list, viewModel::onEvent)
+        state.evidenceTarget?.let { evidenceTarget ->
+            LeaveEvidenceEntry(
+                evidenceTarget,
+                onSelected = {
+                    viewModel.onEvent(LeaveCreateEvent.EvidenceSelected(evidenceTarget, it))
+                },
+                onDismiss = {
+                    viewModel.onEvent(LeaveCreateEvent.EvidenceDismissed(evidenceTarget))
+                },
+                onVerify = onVerify,
+                onRecheckWorkspace = onRecheckWorkspace,
+            )
+        }
     }
     composable<LeaveRequestRoute> { entry ->
         val target = LeaveRequestTarget(workspaceId, entry.toRoute<LeaveRequestRoute>().id)
