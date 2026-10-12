@@ -27,7 +27,10 @@ import dev.fajar.starter.documents.domain.entities.LocalDocumentFile
 import dev.fajar.starter.documents.domain.repositories.DocumentFileRepository
 import dev.fajar.starter.documents.domain.usecases.ImportDocumentFile
 import dev.fajar.starter.documents.domain.usecases.ObserveDocumentFiles
+import dev.fajar.starter.documents.presentation.detail.DocumentFileEvent
+import dev.fajar.starter.documents.presentation.detail.DocumentFileViewModel
 import dev.fajar.starter.fileio.*
+import dev.fajar.starter.fixtures.DocumentInputUi
 import dev.fajar.starter.fixtures.NativeAttendanceCacheUi
 import dev.fajar.starter.fixtures.NativeCalendarCacheUi
 import dev.fajar.starter.fixtures.NativeDirectoryUi
@@ -65,6 +68,212 @@ class AppFlowTest {
     @get:Rule val compose = createComposeRule()
     @get:Rule val testName = TestName()
     private val backDispatcher = TestBackDispatcher()
+
+    @Test
+    fun documentFormRetainsEditsAcrossDetachmentWhileRenewingReadAdmission() {
+        val server =
+            NativeUiServer().apply {
+                documents.enabled = true
+                documents.uploadEnabled = true
+            }
+        val owners = mutableListOf<DocumentFileViewModel>()
+        val definitions = module {
+            factory<DocumentFileViewModel> { parameters ->
+                DocumentFileViewModel(parameters.get(), get(), get(), get(), get(), get(), get())
+                    .also { owners += it }
+            }
+        }
+        withApplication(server, definitions, fileInputs = DocumentInputUi("draft.pdf")) {
+            signIn()
+            waitFor("Choose a company")
+            compose.onAllNodesWithText("Open company")[0].performClick()
+            waitFor("Welcome")
+            compose
+                .onNode(hasText("Documents") and hasClickAction())
+                .performScrollTo()
+                .performClick()
+            waitFor("No local files yet.")
+            compose.onNode(hasText("Add file") and hasClickAction()).performClick()
+            waitFor("Not uploaded")
+            compose.onNode(hasText("draft.pdf") and hasClickAction()).performClick()
+            waitFor("Upload document")
+            compose
+                .onNodeWithContentDescription("Title")
+                .performScrollTo()
+                .performTextReplacement("Retained title")
+            compose
+                .onNodeWithContentDescription("Description")
+                .performScrollTo()
+                .performTextInput("Retained description")
+            val owner = owners.single()
+            compose.runOnIdle { owner.onEvent(DocumentFileEvent.Closed) }
+            compose.waitForIdle()
+            compose.onNodeWithContentDescription("Title").assertDoesNotExist()
+            assertEquals("Retained title", owner.state.value.form?.title)
+            compose.runOnIdle { owner.onEvent(DocumentFileEvent.Opened) }
+            waitFor("Upload document")
+            compose.onNodeWithContentDescription("Title").assertTextContains("Retained title")
+            compose
+                .onNodeWithContentDescription("Description")
+                .assertTextContains("Retained description")
+            assertEquals(1, server.documents.reads.get())
+            assertEquals(0, server.documents.uploads.starts.get())
+        }
+    }
+
+    @Test
+    fun documentFormValidatesConfirmationAndPublishesOnlyAfterTheServerCheck() {
+        val server =
+            NativeUiServer().apply {
+                documents.enabled = true
+                documents.uploadEnabled = true
+            }
+        withApplication(server, fileInputs = DocumentInputUi("receipt.pdf")) {
+            signIn()
+            waitFor("Choose a company")
+            compose.onAllNodesWithText("Open company")[0].performClick()
+            waitFor("Welcome")
+            compose
+                .onNode(hasText("Documents") and hasClickAction())
+                .performScrollTo()
+                .performClick()
+            waitFor("No local files yet.")
+            compose.onNode(hasText("Add file") and hasClickAction()).performClick()
+            waitFor("Not uploaded")
+            compose.onNode(hasText("receipt.pdf") and hasClickAction()).performClick()
+            waitFor("Upload document")
+            compose.onNodeWithText("EMP-001").assertExists()
+            compose
+                .onNode(hasText("Upload document") and hasClickAction())
+                .performScrollTo()
+                .performClick()
+            waitFor("Enter a description of up to 1,000 characters.")
+            assertEquals(0, server.documents.uploads.starts.get())
+            compose
+                .onNodeWithContentDescription("Title")
+                .performScrollTo()
+                .performTextReplacement("Travel receipt")
+            compose
+                .onNodeWithContentDescription("Description")
+                .performScrollTo()
+                .performTextInput("Reimbursement evidence")
+            compose.onNode(hasText("Receipt") and hasClickAction()).performScrollTo().performClick()
+            capture("document-upload-form")
+            compose
+                .onNode(hasText("Upload document") and hasClickAction())
+                .performScrollTo()
+                .performClick()
+            waitFor("Ready")
+            assertEquals(1, server.documents.uploads.starts.get())
+            assertEquals(1, server.documents.uploads.chunks.get())
+            assertEquals(1, server.documents.uploads.validations.get())
+            assertEquals(
+                "RECEIPT",
+                server.documents.uploads.submitted?.get("classification")?.jsonPrimitive?.content,
+            )
+            assertEquals(
+                "Travel receipt",
+                server.documents.uploads.submitted?.get("title")?.jsonPrimitive?.content,
+            )
+            capture("document-upload-ready")
+            compose.onNodeWithContentDescription("Back").performClick()
+            waitFor("On this device")
+            compose.onNodeWithText("Ready").assertExists()
+            compose.onNodeWithContentDescription("Remove receipt.pdf from device").performClick()
+            compose.onNode(hasText("Remove local file") and hasClickAction()).performClick()
+            waitFor("No local files yet.")
+            assertEquals(1, server.documents.uploads.starts.get())
+        }
+    }
+
+    @Test
+    fun leavingTheDocumentFormCancelsPendingEmploymentAcquisition() {
+        val server =
+            NativeUiServer().apply {
+                documents.enabled = true
+                documents.uploadEnabled = true
+            }
+        withApplication(server, fileInputs = DocumentInputUi("pending.pdf")) {
+            signIn()
+            waitFor("Choose a company")
+            compose.onAllNodesWithText("Open company")[0].performClick()
+            waitFor("Welcome")
+            compose
+                .onNode(hasText("Documents") and hasClickAction())
+                .performScrollTo()
+                .performClick()
+            waitFor("No local files yet.")
+            compose.onNode(hasText("Add file") and hasClickAction()).performClick()
+            waitFor("Not uploaded")
+            val pending = CompletableDeferred<Unit>()
+            server.documents.gate = pending
+            compose.onNode(hasText("pending.pdf") and hasClickAction()).performClick()
+            compose.waitUntil { server.documents.active.get() == 1 }
+            compose.onNodeWithContentDescription("Back").performClick()
+            waitFor("On this device")
+            compose.waitUntil { server.documents.active.get() == 0 }
+            server.documents.gate = null
+            pending.complete(Unit)
+            compose.waitForIdle()
+            assertEquals(0, server.documents.uploads.starts.get())
+            compose.onNode(hasText("pending.pdf") and hasClickAction()).performClick()
+            waitFor("Upload document")
+            compose.onNodeWithText("EMP-001").assertExists()
+            assertEquals(2, server.documents.reads.get())
+        }
+    }
+
+    @Test
+    fun deniedUploadRetainsTheFileAndRequiresSuccessfulRevalidationBeforeReopening() {
+        val server =
+            NativeUiServer().apply {
+                documents.enabled = true
+                documents.uploadEnabled = true
+                documents.uploads.denied = true
+            }
+        withApplication(server, fileInputs = DocumentInputUi("retained-upload.pdf")) {
+            signIn()
+            waitFor("Choose a company")
+            compose.onAllNodesWithText("Open company")[0].performClick()
+            waitFor("Welcome")
+            compose
+                .onNode(hasText("Documents") and hasClickAction())
+                .performScrollTo()
+                .performClick()
+            waitFor("No local files yet.")
+            compose.onNode(hasText("Add file") and hasClickAction()).performClick()
+            waitFor("Not uploaded")
+            compose.onNode(hasText("retained-upload.pdf") and hasClickAction()).performClick()
+            waitFor("Upload document")
+            compose
+                .onNodeWithContentDescription("Description")
+                .performScrollTo()
+                .performTextInput("Personal record")
+            compose
+                .onNode(hasText("Upload document") and hasClickAction())
+                .performScrollTo()
+                .performClick()
+            waitFor("Try again")
+            compose.onNodeWithText("retained-upload.pdf").assertDoesNotExist()
+            server.companyPolicy.offline = true
+            val requests = server.companyPolicy.reads.get()
+            compose.onNode(hasText("Try again") and hasClickAction()).performClick()
+            compose.waitUntil { server.companyPolicy.reads.get() > requests }
+            compose.waitUntil {
+                compose
+                    .onAllNodes(hasText("Try again") and hasClickAction() and isEnabled())
+                    .fetchSemanticsNodes()
+                    .isNotEmpty()
+            }
+            compose.onNodeWithText("retained-upload.pdf").assertDoesNotExist()
+            server.companyPolicy.offline = false
+            server.documents.uploads.denied = false
+            compose.onNodeWithText("retained-upload.pdf").assertDoesNotExist()
+            compose.onNode(hasText("Try again") and hasClickAction()).performClick()
+            waitFor("retained-upload.pdf")
+            compose.onNodeWithText("Needs attention").assertExists()
+        }
+    }
 
     @Test
     fun documentImportUsesTheAssembledGraphAndTheContainerClosesItsInputSource() {
@@ -2354,6 +2563,8 @@ class AppFlowTest {
                 "Unexpected endpoints: ${server.unexpectedPaths}",
             )
         } catch (failure: Throwable) {
+            // A stalled native renderer must not hide the assertion that initiated capture.
+            failure.printStackTrace()
             runCatching {
                 capture("failure-${testName.methodName}")
                 println(compose.onRoot().printToString())

@@ -6,6 +6,7 @@ import dev.fajar.starter.workspace.domain.policies.workspaceAccessLossCodes
 
 data class DocumentFilesState(
     val content: DocumentLocalFiles? = null,
+    val items: List<DocumentFileItem> = emptyList(),
     val loading: Boolean = true,
     val importing: Boolean = false,
     val removing: Boolean = false,

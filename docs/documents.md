@@ -66,8 +66,8 @@ remains lifecycle-aware. Known access failures hide content and require workspac
 revalidation; reopening a local observer cannot bypass that gate.
 
 Local completion is not server approval and does not make a file selectable as
-published evidence. The upload core below is implemented; its confirmation screen
-and authenticated downloads are the next integration work.
+published evidence. The confirmation and upload flow below is implemented;
+authenticated download remains separate delivery work.
 
 ## Resumable upload
 
@@ -98,3 +98,23 @@ confirmation before another validation command. A status check preserves a pendi
 cancellation even when another operation has advanced the server version. Local
 deletion is blocked while remote work is active or uncertain, including after a
 lost response; a known terminal server state permits removing the local copy.
+
+## Upload presentation
+
+An imported file opens its own route with employment, title, category and description
+fields. The navigation entry owns the ViewModel, rendering state and effects. The
+ViewModel coordinates document use cases; no request, file handle or SDK type enters
+the page. Browsing employment references does not replace the current selection
+until the employee confirms a row.
+
+Unsent input survives Activity recreation in the navigation owner. Content remains
+hidden until an admitted local read succeeds again; clearing that owner discards
+the unsent form. Preparation expiry requires an explicit form refresh and retains
+typed values. Confirmation freezes the upload input in storage before transmission.
+
+The file list and detail page observe that durable record for progress. Server
+inspection, rejection, technical processing failure and completion have distinct
+labels. Status refresh, retry and cancellation dispatch separate typed events.
+Leaving the route cancels its pending acquisition and manual action; scheduled
+delivery has its own application/worker lifetime. Known access failures stop local
+observation and keep data hidden through pending or failed workspace revalidation.

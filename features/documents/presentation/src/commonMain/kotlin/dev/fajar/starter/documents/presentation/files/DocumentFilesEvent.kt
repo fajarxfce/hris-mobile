@@ -9,6 +9,8 @@ sealed interface DocumentFilesEvent {
 
     data object ImportRequested : DocumentFilesEvent
 
+    data class FileRequested(val id: String) : DocumentFilesEvent
+
     data class RemovalRequested(val id: String) : DocumentFilesEvent
 
     data object RemovalDismissed : DocumentFilesEvent

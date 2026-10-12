@@ -271,6 +271,9 @@ fun AppNavigation(controller: NavHostController, incomingLinks: Flow<String>) {
                     )
                     documentRoutes(
                         stage.workspace.id,
+                        onFile = { id ->
+                            controller.navigate(DocumentFileRoute(id)) { launchSingleTop = true }
+                        },
                         onVerify = {
                             controller.navigate(VerificationRoute) { launchSingleTop = true }
                         },

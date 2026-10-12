@@ -7,6 +7,27 @@ import dev.fajar.starter.common.result.*
 fun failureText(failure: Failure): String =
     appString(
         when (failure.code) {
+            "client.document_title_invalid" -> AppString.DocumentTitleInvalid
+            "client.document_reason_invalid" -> AppString.DocumentReasonInvalid
+            "client.document_employment_required" -> AppString.DocumentEmploymentRequired
+            "client.document_preparation_expired" -> AppString.DocumentFormExpired
+            "client.document_import_incomplete" -> AppString.DocumentImportIncomplete
+            "client.document_upload_active",
+            "document_upload_active" -> AppString.DocumentUploadActive
+            "client.document_upload_waiting",
+            "document_chunk_in_progress",
+            "document_upload_busy" -> AppString.DocumentUploadWaiting
+            "client.document_retry_limit" -> AppString.DocumentRetryLimit
+            "client.document_upload_missing",
+            "document_revision_not_found" -> AppString.DocumentRemoteMissing
+            "client.document_validation_unavailable",
+            "document_validation_attempts_exhausted" -> AppString.DocumentValidationUnavailable
+            "document_upload_closed" -> AppString.DocumentExpired
+            "document_scanner_not_configured",
+            "document_scanner_busy",
+            "document_inspection_unavailable",
+            "document_inspection_failure",
+            "document_scanner_protocol_failure" -> AppString.DocumentScanUnavailable
             "client.document_file_name",
             "client.document_file_type",
             "client.document_file_invalid" -> AppString.DocumentInvalidFile

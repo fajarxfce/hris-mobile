@@ -45,8 +45,10 @@ leave dates and portions, review the server calculation, and submit with durable
 recovery after interrupted delivery. Up to three personal documents can be selected
 from the employee's published evidence catalog, including for types requiring an
 attachment. Documents also supports encrypted local import of PDF/JPG/PNG files and
-confirmed local removal, scoped to the selected account and company. Resumable
-upload and authenticated download remain separate delivery work.
+confirmed local removal, scoped to the selected account and company. Employees can
+confirm an employment, title, category and description before a resumable upload.
+Progress, server inspection, explicit retry and cancellation use the retained
+encrypted upload intent. Authenticated download remains separate delivery work.
 
 The runtime contains no demo authentication transport. Other transactional employee workflows
 are still being connected; a generated module

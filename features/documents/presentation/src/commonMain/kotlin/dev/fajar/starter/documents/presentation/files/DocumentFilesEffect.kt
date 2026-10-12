@@ -4,4 +4,6 @@ sealed interface DocumentFilesEffect {
     data object Back : DocumentFilesEffect
 
     data object VerifyAccount : DocumentFilesEffect
+
+    data class OpenFile(val id: String) : DocumentFilesEffect
 }

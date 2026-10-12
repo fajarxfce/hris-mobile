@@ -1,5 +1,13 @@
 # Template updates
 
+## Scheduler registration
+
+Deferred platform scheduler acquisition and its generated-DI regression also exist
+at [dfcef60](https://github.com/fajarxfce/compose-fluent-starter/commit/dfcef60).
+Tasks can request subsequent work without recursively constructing their scheduler.
+Both repositories passed root checks, sync data Chromium tests and Android dev
+assembly. HRIS-specific upload state and delivery policy remain in this application.
+
 ## Owned file input
 
 The OS picker adapters, bounded reads, incremental hashing and file failure

@@ -1,0 +1,73 @@
+package dev.fajar.starter.documents.presentation.detail.widgets
+
+import androidx.compose.foundation.layout.*
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.unit.dp
+import dev.fajar.starter.designsystem.components.*
+import dev.fajar.starter.documents.domain.entities.DocumentClassification
+import dev.fajar.starter.documents.presentation.detail.*
+import dev.fajar.starter.localization.*
+import io.github.composefluent.FluentTheme
+import io.github.composefluent.icons.Icons
+import io.github.composefluent.icons.regular.ChevronDown
+
+@Composable
+fun DocumentUploadFormContent(state: DocumentFileState, onEvent: (DocumentFileEvent) -> Unit) {
+    state.form?.let { form ->
+        Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
+            AppTextField(
+                appString(AppString.DocumentUploadTitle),
+                form.title,
+                { onEvent(DocumentFileEvent.TitleChanged(it)) },
+                enabled = !state.working,
+            )
+            AppCard(padding = 0.dp) {
+                AppListRow(
+                    appString(AppString.Employment),
+                    { onEvent(DocumentFileEvent.EmploymentRequested) },
+                    supportingText = form.employeeNumber ?: appString(AppString.ChooseEmployment),
+                    enabled = state.canWrite,
+                    trailing = { AppIcon(Icons.Regular.ChevronDown) },
+                )
+            }
+            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                AppText(
+                    appString(AppString.DocumentClassification),
+                    style = FluentTheme.typography.bodyStrong,
+                )
+                AppRadioRow(
+                    appString(AppString.DocumentPersonal),
+                    form.classification == DocumentClassification.PERSONAL,
+                    {
+                        onEvent(
+                            DocumentFileEvent.ClassificationChanged(DocumentClassification.PERSONAL)
+                        )
+                    },
+                    enabled = !state.working,
+                )
+                AppRadioRow(
+                    appString(AppString.DocumentReceipt),
+                    form.classification == DocumentClassification.RECEIPT,
+                    {
+                        onEvent(
+                            DocumentFileEvent.ClassificationChanged(DocumentClassification.RECEIPT)
+                        )
+                    },
+                    enabled = !state.working,
+                )
+            }
+            AppTextField(
+                appString(AppString.DocumentUploadReason),
+                form.reason,
+                { onEvent(DocumentFileEvent.ReasonChanged(it)) },
+                enabled = !state.working,
+                maxLines = 3,
+            )
+            AppButton(
+                appString(AppString.DocumentSend),
+                { onEvent(DocumentFileEvent.UploadConfirmed) },
+                enabled = state.canSubmit,
+            )
+        }
+    }
+}

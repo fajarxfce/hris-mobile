@@ -5,6 +5,86 @@ import org.jetbrains.compose.resources.StringResource
 
 /** Explicit pairs keep runtime language changes portable across Android, iOS, desktop and Web. */
 enum class AppString(val english: StringResource, val indonesian: StringResource) {
+    DocumentDetails(Res.string.document_details_en, Res.string.document_details_id),
+    DocumentUploadTitle(Res.string.document_upload_title_en, Res.string.document_upload_title_id),
+    DocumentUploadReason(
+        Res.string.document_upload_reason_en,
+        Res.string.document_upload_reason_id,
+    ),
+    DocumentClassification(
+        Res.string.document_classification_en,
+        Res.string.document_classification_id,
+    ),
+    DocumentPersonal(Res.string.document_personal_en, Res.string.document_personal_id),
+    DocumentReceipt(Res.string.document_receipt_en, Res.string.document_receipt_id),
+    DocumentQueued(Res.string.document_queued_en, Res.string.document_queued_id),
+    DocumentUploading(Res.string.document_uploading_en, Res.string.document_uploading_id),
+    DocumentChecking(Res.string.document_checking_en, Res.string.document_checking_id),
+    DocumentReady(Res.string.document_ready_en, Res.string.document_ready_id),
+    DocumentRejected(Res.string.document_rejected_en, Res.string.document_rejected_id),
+    DocumentValidationFailed(
+        Res.string.document_validation_failed_en,
+        Res.string.document_validation_failed_id,
+    ),
+    DocumentCancelled(Res.string.document_cancelled_en, Res.string.document_cancelled_id),
+    DocumentExpired(Res.string.document_expired_en, Res.string.document_expired_id),
+    DocumentRetired(Res.string.document_retired_en, Res.string.document_retired_id),
+    DocumentCancelling(Res.string.document_cancelling_en, Res.string.document_cancelling_id),
+    DocumentAttention(Res.string.document_attention_en, Res.string.document_attention_id),
+    DocumentSend(Res.string.document_send_en, Res.string.document_send_id),
+    DocumentResume(Res.string.document_resume_en, Res.string.document_resume_id),
+    DocumentCheckStatus(Res.string.document_check_status_en, Res.string.document_check_status_id),
+    DocumentCancelUpload(
+        Res.string.document_cancel_upload_en,
+        Res.string.document_cancel_upload_id,
+    ),
+    DocumentRetryValidation(
+        Res.string.document_retry_validation_en,
+        Res.string.document_retry_validation_id,
+    ),
+    DocumentCancelReason(
+        Res.string.document_cancel_reason_en,
+        Res.string.document_cancel_reason_id,
+    ),
+    DocumentRefreshForm(Res.string.document_refresh_form_en, Res.string.document_refresh_form_id),
+    DocumentTitleInvalid(
+        Res.string.document_title_invalid_en,
+        Res.string.document_title_invalid_id,
+    ),
+    DocumentReasonInvalid(
+        Res.string.document_reason_invalid_en,
+        Res.string.document_reason_invalid_id,
+    ),
+    DocumentEmploymentRequired(
+        Res.string.document_employment_required_en,
+        Res.string.document_employment_required_id,
+    ),
+    DocumentFormExpired(Res.string.document_form_expired_en, Res.string.document_form_expired_id),
+    DocumentUploadActive(
+        Res.string.document_upload_active_en,
+        Res.string.document_upload_active_id,
+    ),
+    DocumentUploadWaiting(
+        Res.string.document_upload_waiting_en,
+        Res.string.document_upload_waiting_id,
+    ),
+    DocumentRetryLimit(Res.string.document_retry_limit_en, Res.string.document_retry_limit_id),
+    DocumentRemoteMissing(
+        Res.string.document_remote_missing_en,
+        Res.string.document_remote_missing_id,
+    ),
+    DocumentValidationUnavailable(
+        Res.string.document_validation_unavailable_en,
+        Res.string.document_validation_unavailable_id,
+    ),
+    DocumentRejectionInfo(
+        Res.string.document_rejection_info_en,
+        Res.string.document_rejection_info_id,
+    ),
+    DocumentScanUnavailable(
+        Res.string.document_scan_unavailable_en,
+        Res.string.document_scan_unavailable_id,
+    ),
     Documents(Res.string.documents_en, Res.string.documents_id),
     DocumentsSummary(Res.string.documents_summary_en, Res.string.documents_summary_id),
     DocumentLocalFiles(Res.string.document_local_files_en, Res.string.document_local_files_id),

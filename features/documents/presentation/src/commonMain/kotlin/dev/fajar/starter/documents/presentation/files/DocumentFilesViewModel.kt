@@ -3,6 +3,7 @@ package dev.fajar.starter.documents.presentation.files
 import androidx.lifecycle.viewModelScope
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.documents.domain.usecases.*
+import dev.fajar.starter.documents.presentation.files.mappers.toFileItem
 import dev.fajar.starter.presentation.mvi.MviViewModel
 import dev.fajar.starter.sync.domain.SyncResult
 import dev.fajar.starter.workspace.domain.usecases.RefreshWorkspace
@@ -30,6 +31,7 @@ class DocumentFilesViewModel(
         on<DocumentFilesEvent.Closed>(::onClosed)
         on<DocumentFilesEvent.RetryRequested>(::onRetryRequested)
         on<DocumentFilesEvent.ImportRequested>(::onImportRequested)
+        on<DocumentFilesEvent.FileRequested>(::onFileRequested)
         on<DocumentFilesEvent.RemovalRequested>(::onRemovalRequested)
         on<DocumentFilesEvent.RemovalDismissed>(::onRemovalDismissed)
         on<DocumentFilesEvent.RemovalConfirmed>(::onRemovalConfirmed)
@@ -52,6 +54,7 @@ class DocumentFilesViewModel(
         updateState {
             it.copy(
                 content = null,
+                items = emptyList(),
                 importing = false,
                 removing = false,
                 revalidating = false,
@@ -69,7 +72,9 @@ class DocumentFilesViewModel(
                     ensureActive()
                     when (result) {
                         is AppResult.Failed -> {
-                            updateState { it.copy(content = null, loading = false) }
+                            updateState {
+                                it.copy(content = null, items = emptyList(), loading = false)
+                            }
                             if (documentReadRestricted(result.failure))
                                 reportFailure(result.failure)
                             else updateState { it.copy(readFailure = result.failure) }
@@ -78,6 +83,7 @@ class DocumentFilesViewModel(
                             updateState {
                                 it.copy(
                                     content = result.value,
+                                    items = result.value.files.map { file -> file.toFileItem() },
                                     loading = false,
                                     readFailure = null,
                                     restriction = if (revalidated) null else it.restriction,
@@ -129,12 +135,24 @@ class DocumentFilesViewModel(
     private fun onRemovalRequested(event: DocumentFilesEvent.RemovalRequested) {
         val current = state.value
         if (!opened || current.busy || current.restriction != null) return
+        if (current.items.none { it.id == event.id && it.removable }) return
         val file = current.content?.files?.singleOrNull { it.draft.id == event.id } ?: return
         updateState { it.copy(removal = file, failure = null) }
     }
 
     private fun onRemovalDismissed(event: DocumentFilesEvent.RemovalDismissed) {
         if (!state.value.removing) updateState { it.copy(removal = null) }
+    }
+
+    private fun onFileRequested(event: DocumentFilesEvent.FileRequested) {
+        val current = state.value
+        if (
+            opened &&
+                !current.busy &&
+                current.restriction == null &&
+                current.items.any { it.id == event.id && it.openable }
+        )
+            viewModelScope.launch { emitEffect(DocumentFilesEffect.OpenFile(event.id)) }
     }
 
     private fun onRemovalConfirmed(event: DocumentFilesEvent.RemovalConfirmed) {
@@ -162,6 +180,7 @@ class DocumentFilesViewModel(
             updateState {
                 it.copy(
                     content = null,
+                    items = emptyList(),
                     restriction = failure,
                     failure = null,
                     loading = false,

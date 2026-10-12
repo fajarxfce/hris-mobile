@@ -1,5 +1,25 @@
 # Validation
 
+## Document upload presentation
+
+Root checks passed with 684 desktop/JVM tests. The sync data and application
+Chromium suites passed seven and five tests respectively. Android dev assembly
+and the production Web build passed. Four assembled UI regressions cover form
+validation, confirmed metadata and publication, pending acquisition cancellation,
+retained input after detachment, and denied access through failed and successful
+revalidation. English and Indonesian captures were inspected.
+
+The full UI flow exposed a scheduler registration cycle that the earlier upload
+core tests did not resolve. Deferred platform acquisition and a generated-DI
+regression now cover tasks which schedule subsequent work. The expanded document
+contract also required updating the Leave evidence fixture for clean CI compilation.
+The shared scheduler correction was ported to the starter with its own checks.
+
+The API 35 emulator uploaded a 607-byte PDF through the real development API and
+reached server `READY` after content inspection. The encrypted local record and
+completion status restored after process restart. Phone ADB connection timed out,
+so this feature update has not yet been installed on the physical device.
+
 ## Resumable document upload core
 
 Complete root checks passed with 679 desktop/JVM tests. The document domain and

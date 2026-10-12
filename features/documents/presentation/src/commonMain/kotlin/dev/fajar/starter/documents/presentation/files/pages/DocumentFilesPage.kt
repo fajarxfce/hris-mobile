@@ -99,7 +99,7 @@ fun DocumentFilesPage(
                             )
                     }
                 }
-            items(state.content.files, key = { it.draft.id }) { file ->
+            items(state.items, key = { it.id }) { file ->
                 DocumentFileRow(file, !state.busy, onEvent)
             }
         }
