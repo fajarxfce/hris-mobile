@@ -41,8 +41,9 @@ details include planned and actual time, approval progress, the reviewed schedul
 and paged activity. The last admitted list and request remain available in bounded
 encrypted offline storage. Employees can review the company work schedule, select
 local dates and times, and submit an overtime plan. Saved input survives interrupted
-delivery and process restart; retry keeps the original operation. Actual-time
-submission and withdrawal are still being connected to the native interface.
+delivery and process restart; retry keeps the original operation. Request details
+also open actual-time and withdrawal forms with versioned confirmation. An uncertain
+submission stays retained before a different action can be prepared.
 
 Leave shows annual balances and request history with status filters, account-owned
 employment selection and a bounded encrypted offline view. Each request opens its

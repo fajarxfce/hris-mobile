@@ -24,6 +24,12 @@ class NativeOvertimeUi {
     val planCommits = AtomicInteger()
     val planRequests = CopyOnWriteArrayList<Pair<String, String>>()
     @Volatile var loseNextPlanResponse = false
+    @Volatile var loseNextActionResponse = false
+    val actualCommits = AtomicInteger()
+    val withdrawalCommits = AtomicInteger()
+    val actualRequests = CopyOnWriteArrayList<Pair<String, String>>()
+    val withdrawalRequests = CopyOnWriteArrayList<Pair<String, String>>()
+    private val actionReceipts = mutableMapOf<String, Triple<String, String, Long>>()
     private val receivedPlans = mutableMapOf<String, String>()
     private val plannedDetails = mutableMapOf<String, JsonObject>()
 
@@ -56,6 +62,11 @@ class NativeOvertimeUi {
             }
             return """{"id":${plan.getValue("id")},"version":0}""" to HttpStatusCode.OK
         }
+        if (
+            request.method == HttpMethod.Post &&
+                path.substringAfterLast('/') in setOf("actual", "withdraw")
+        )
+            return actionResponse(request)
         assertEquals(HttpMethod.Get, request.method)
         if (path.endsWith("/planning/employees/${NativePeopleUi.EMPLOYEE}")) {
             planningReads.incrementAndGet()
@@ -81,7 +92,7 @@ class NativeOvertimeUi {
                 }
                 .toString() to HttpStatusCode.OK
         }
-        val details = nativeOvertimeDetailsFixture()
+        val details = plannedDetails[REQUEST_ID] ?: nativeOvertimeDetailsFixture()
         if (path.endsWith("/overtime")) {
             listReads.incrementAndGet()
             assertEquals(NativePeopleUi.EMPLOYEE, request.url.parameters["employeeId"])
@@ -89,12 +100,13 @@ class NativeOvertimeUi {
             val from = LocalDate.parse(request.url.parameters["from"])
             val until = LocalDate.parse(request.url.parameters["until"])
             val visible =
-                (listOf(details) + plannedDetails.values)
+                (listOf(details) + plannedDetails.filterKeys { it != REQUEST_ID }.values)
                     .map { it.getValue("request").jsonObject }
                     .filter {
                         LocalDate.parse(it.getValue("workDate").jsonPrimitive.content) in
                             from..until &&
-                            request.url.parameters["status"] in listOf(null, "PLANNED")
+                            request.url.parameters["status"] in
+                                listOf(null, it.getValue("status").jsonPrimitive.content)
                     }
             return buildJsonObject {
                     putJsonArray("items") { visible.forEach(::add) }
@@ -115,9 +127,139 @@ class NativeOvertimeUi {
         return """{"code":"overtime_request_not_found"}""" to HttpStatusCode.NotFound
     }
 
+    private fun actionResponse(request: HttpRequestData): Pair<String, HttpStatusCode> {
+        val path = request.url.encodedPath
+        val operation = requireNotNull(request.headers["Idempotency-Key"])
+        val body = (request.body as TextContent).text
+        val withdrawal = path.endsWith("/withdraw")
+        (if (withdrawal) withdrawalRequests else actualRequests).add(operation to body)
+        val id = path.substringBeforeLast('/').substringAfterLast('/')
+        val previous = actionReceipts[operation]
+        val version =
+            if (previous != null) {
+                assertEquals(previous.first, path)
+                assertEquals(previous.second, body)
+                previous.third
+            } else {
+                val initial =
+                    plannedDetails[id]
+                        ?: nativeOvertimeDetailsFixture().takeIf { id == REQUEST_ID }
+                        ?: return """{"code":"overtime_request_not_found"}""" to
+                            HttpStatusCode.NotFound
+                val action = Json.parseToJsonElement(body).jsonObject
+                val expected = action.getValue("expectedVersion").jsonPrimitive.long
+                assertEquals(
+                    initial.getValue("request").jsonObject.getValue("version").jsonPrimitive.long,
+                    expected,
+                )
+                plannedDetails[id] = nativeOvertimeActionFixture(initial, action, withdrawal)
+                actionReceipts[operation] = Triple(path, body, expected + 1)
+                (if (withdrawal) withdrawalCommits else actualCommits).incrementAndGet()
+                expected + 1
+            }
+        if (loseNextActionResponse) {
+            loseNextActionResponse = false
+            throw IOException("Overtime action response lost")
+        }
+        return """{"id":"$id","version":$version}""" to HttpStatusCode.OK
+    }
+
     companion object {
         const val REQUEST_ID = "66666666-6666-4666-8666-666666666666"
     }
+}
+
+private fun nativeOvertimeActionFixture(
+    initial: JsonObject,
+    body: JsonObject,
+    withdrawal: Boolean,
+): JsonObject {
+    val request = initial.getValue("request").jsonObject
+    val now = JsonPrimitive(Instant.now().toString())
+    val version = request.getValue("version").jsonPrimitive.long + 1
+    val status = JsonPrimitive(if (withdrawal) "WITHDRAWN" else "PENDING")
+    val actual =
+        if (withdrawal) request.getValue("actual")
+        else {
+            val input = body.getValue("actual").jsonObject
+            val minutes =
+                Duration.between(
+                        Instant.parse(input.getValue("startsAt").jsonPrimitive.content),
+                        Instant.parse(input.getValue("endsAt").jsonPrimitive.content),
+                    )
+                    .toMinutes()
+            JsonObject(
+                input +
+                    ("workedMinutes" to
+                        JsonPrimitive(minutes - input.getValue("breakMinutes").jsonPrimitive.int))
+            )
+        }
+    val approvalId =
+        if (withdrawal) request.getValue("approvalId")
+        else JsonPrimitive("88888888-8888-4888-8888-888888888888")
+    val approval =
+        if (withdrawal) {
+            (initial["approval"] as? JsonObject)?.let {
+                JsonObject(
+                    it +
+                        mapOf(
+                            "status" to JsonPrimitive("CANCELLED"),
+                            "version" to
+                                JsonPrimitive(it.getValue("version").jsonPrimitive.long + 1),
+                        )
+                )
+            } ?: JsonNull
+        } else
+            buildJsonObject {
+                put("id", approvalId)
+                put("status", "PENDING")
+                put("currentStep", 0)
+                put("version", 0)
+                putJsonArray("stages") {
+                    addJsonArray { add("99999999-9999-4999-8999-999999999999") }
+                }
+            }
+    val changed =
+        JsonObject(
+            request +
+                mapOf(
+                    "status" to status,
+                    "version" to JsonPrimitive(version),
+                    "actual" to actual,
+                    "approvalId" to approvalId,
+                    "submittedBy" to
+                        if (withdrawal) request.getValue("submittedBy")
+                        else JsonPrimitive(NativePeopleUi.ACCOUNT),
+                    "submittedAt" to if (withdrawal) request.getValue("submittedAt") else now,
+                    "decidedAt" to if (withdrawal) now else JsonNull,
+                )
+        )
+    val history = initial.getValue("history").jsonObject.getValue("items").jsonArray
+    val change = buildJsonObject {
+        put("revision", version)
+        put("kind", if (withdrawal) "WITHDRAWN" else "ACTUAL_SUBMITTED")
+        put("status", status)
+        put("actual", actual)
+        put("approvedMinutes", 0)
+        put("approvalId", approvalId)
+        put("actorId", NativePeopleUi.ACCOUNT)
+        put("recordedAt", now)
+        put("reason", body.getValue("reason"))
+    }
+    return JsonObject(
+        initial +
+            mapOf(
+                "request" to changed,
+                "approval" to approval,
+                "history" to
+                    buildJsonObject {
+                        put("items", JsonArray(listOf(change) + history))
+                        put("nextCursor", JsonNull)
+                    },
+                "actions" to
+                    JsonArray(if (withdrawal) emptyList() else listOf(JsonPrimitive("WITHDRAW"))),
+            )
+    )
 }
 
 private fun nativeOvertimePlannedFixture(plan: JsonObject): JsonObject {

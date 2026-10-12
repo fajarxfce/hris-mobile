@@ -1,5 +1,26 @@
 # Template updates
 
+## Enum route arguments
+
+The shared `enumNavType` adapter also exists in
+[Compose Fluent Starter](https://github.com/fajarxfce/compose-fluent-starter/blob/main/core/presentation/src/commonMain/kotlin/dev/fajar/starter/presentation/navigation/EnumNavType.kt).
+It persists enum names on every Navigation target, rejects unknown values and
+preserves argument equality when rebuilding the graph. Three new regressions cover
+saved-state round trips, invalid values and graph identity. Both repositories passed
+root checks, shared-presentation Chromium tests, Android dev assembly and application
+Web compilation. HRIS overtime routes and action policy remain in this application.
+
+## Controlled time input
+
+The `AppTimeInput` introduced with
+[overtime planning](https://github.com/fajarxfce/hris-mobile/commit/a66c787) also
+exists at [63ff872](https://github.com/fajarxfce/compose-fluent-starter/commit/63ff872).
+It keeps numeric editing and accessible labels reusable while the consuming form
+owns validation and timezone policy. The starter passed 268 desktop tests, Android
+dev assembly and Web compilation; all three CI jobs passed. HRIS planning passed
+887 desktop tests, 120 Workforce Chromium tests, Android dev assembly, Web
+compilation and real-API emulator acceptance.
+
 ## Page actions and progress
 
 The fixed page action slot, labelled progress ring, busy icon behavior and two

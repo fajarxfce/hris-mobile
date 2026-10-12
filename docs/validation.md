@@ -744,3 +744,37 @@ corrections. All owned transport blocks were removed and probe sessions closed.
 After notice, the validated APK was installed on the authorized Android 16 phone
 with `--install-only`. This device update did not launch or drive its UI. These
 checks do not establish performance or physical-device acceptance of the new form.
+
+## Overtime actual time and withdrawal
+
+Root checks passed with 903 desktop tests, five shared-presentation and 40 Workforce
+presentation Chromium tests, Android dev assembly and application Web compilation.
+Sixteen new cases cover action preparation, immutable replay after a lost successful
+response, conflicting action entry, request-version changes, denial through failed
+recovery, storage-flow completion, cancellation, late results and owner disposal.
+Repeated Back during pending delivery produces one navigation effect.
+
+The shared enum adapter preserves named saved-state values and graph identity across
+reconstruction. Unknown values cannot select a fallback action. The application
+regression traverses the real feature graph, HTTP adapter and encrypted store,
+recovering actual time before a separate confirmed withdrawal. Layout tests cover
+fixed controls, disabled duplicate inputs and Indonesian dark appearance at 200%
+text. Actual-time, withdrawal and resulting-request screenshots were inspected.
+
+API 35 emulator acceptance used the fictional employee and an effective development
+overtime approval template. Company-local 19:10–20:50 with a 15-minute break remained
+queued while the application's API transport was blocked. After background process
+death, both the typed action route and original input restored offline. Explicit
+replay created version one with 85 worked minutes and one actual-submission history
+entry. A subsequent HTTP read timed out; the confirmed receipt stayed visible and
+explicit Open request recovered without another submission.
+
+Opening withdrawal and pressing Back preserved version one. Explicit confirmation
+then produced version two, one withdrawal entry and a cancelled approval. The final
+request retained the original planned and actual evidence. Separate API reads
+verified these outcomes. All owned transport blocks were removed and probe sessions
+closed.
+
+After notice, the validated APK was installed on the authorized Android 16 phone
+with `--install-only`. The app was not opened or driven on that phone. No physical
+device acceptance or performance measurement is claimed for these forms.

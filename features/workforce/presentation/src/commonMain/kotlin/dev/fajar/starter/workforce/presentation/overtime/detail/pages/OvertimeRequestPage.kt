@@ -61,6 +61,10 @@ fun OvertimeRequestPage(
                 }
             }
         },
+        bottomBar = {
+            if (state.actionOptions.isNotEmpty())
+                AppActionBar { OvertimeRequestActions(state, onEvent) }
+        },
     ) {
         if (state.loading) item(key = "loading") { AppLoading(compact = state.content != null) }
         val snapshot = state.content?.takeUnless { state.readRestricted }

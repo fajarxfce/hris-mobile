@@ -188,6 +188,13 @@ owner disposal clear its entries and cancel their work. Ordinary graph changes
 continue to let Navigation clear outgoing entry stores. The snapshot format must
 change when existing serialized routes become incompatible.
 
+Enum route arguments register `enumNavType<Mode>()` in the destination's explicit
+`typeMap`, keyed by `typeOf<Mode>()`. The shared presentation adapter supports every
+Navigation target and persists enum names. Unknown names fail decoding rather than
+selecting a fallback action. Argument types compare by their enum class, so rebuilding
+the same graph does not clear its back stack. Renaming an enum value changes the saved
+route contract and requires a compatible restoration policy.
+
 Features own their serializable route and NavGraphBuilder registration. The app composes
 their entries and reacts to onboarding/session state. Authentication transitions replace
 the root stack, so sign-out removes protected screens. Home owns its

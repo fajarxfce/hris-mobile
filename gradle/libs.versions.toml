@@ -104,4 +104,5 @@ fluent-icons-extended = { module = "io.github.compose-fluent:fluent-icons-extend
 lifecycle-viewmodel = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel", version.ref = "lifecycle" }
 lifecycle-compose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle" }
 navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigation" }
+navigation-common = { module = "org.jetbrains.androidx.navigation:navigation-common", version.ref = "navigation" }
 android-activity = { module = "androidx.activity:activity-compose", version.ref = "activity" }

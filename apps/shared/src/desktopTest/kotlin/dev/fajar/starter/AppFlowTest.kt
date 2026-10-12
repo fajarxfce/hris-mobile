@@ -76,6 +76,102 @@ class AppFlowTest {
     private val backDispatcher = TestBackDispatcher()
 
     @Test
+    fun overtimeActualRecoveryPreservesItsActionBeforeExplicitWithdrawal() {
+        val server = NativeUiServer().apply { overtime.enabled = true }
+        withApplication(server) {
+            signIn()
+            waitFor("Choose a company")
+            compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
+            waitFor("Welcome")
+            compose
+                .onNode(hasText("Overtime") and hasClickAction())
+                .performScrollTo()
+                .performClick()
+            waitFor("17:00 – 19:00")
+            compose.onNode(hasText("17:00 – 19:00") and hasClickAction()).performClick()
+            waitFor("Overtime request")
+            waitForAction("Submit actual time")
+            compose.onNode(hasText("Submit actual time") and hasClickAction()).performClick()
+            waitFor("Actual time")
+            waitForAction("Submit actual time")
+            compose
+                .onNode(hasScrollToIndexAction())
+                .performScrollToNode(hasText("Start time") and hasClickAction())
+            compose.onNode(hasText("Start time") and hasClickAction()).performClick()
+            compose.onNodeWithContentDescription("Minute (0–59)").performTextReplacement("05")
+            compose.onNode(hasText("Set time") and hasClickAction()).performClick()
+            compose
+                .onNode(hasScrollToIndexAction())
+                .performScrollToNode(hasText("End time") and hasClickAction())
+            compose.onNode(hasText("End time") and hasClickAction()).performClick()
+            compose.onNodeWithContentDescription("Hour (0–23)").performTextReplacement("18")
+            compose.onNodeWithContentDescription("Minute (0–59)").performTextReplacement("55")
+            compose.onNode(hasText("Set time") and hasClickAction()).performClick()
+            compose
+                .onNode(hasScrollToIndexAction())
+                .performScrollToNode(hasContentDescription("Reason"))
+            compose.onNodeWithContentDescription("Reason").performTextReplacement("Count completed")
+            capture("overtime-actual-form")
+            server.overtime.loseNextActionResponse = true
+            compose.onNode(hasText("Submit actual time") and hasClickAction()).performClick()
+            waitFor("Delivery has not been confirmed. Retry the saved request.")
+            val original = server.overtime.actualRequests.single()
+            val input = Json.parseToJsonElement(original.second).jsonObject
+            assertEquals(
+                "2026-10-12T10:05:00Z",
+                input.getValue("actual").jsonObject.getValue("startsAt").jsonPrimitive.content,
+            )
+            assertEquals(
+                "2026-10-12T11:55:00Z",
+                input.getValue("actual").jsonObject.getValue("endsAt").jsonPrimitive.content,
+            )
+            assertEquals(0L, input.getValue("expectedVersion").jsonPrimitive.long)
+            assertEquals(1, server.overtime.actualCommits.get())
+            compose.onNodeWithContentDescription("Back").performClick()
+            waitFor("Overtime request")
+            waitFor("Pending approval")
+            waitForAction("Withdraw request")
+            compose.onNode(hasText("Withdraw request") and hasClickAction()).performClick()
+            waitFor("Delivery has not been confirmed. Retry the saved request.")
+            compose.onNodeWithText("Actual time").assertExists()
+            compose.onNodeWithText("This will withdraw the overtime request.").assertDoesNotExist()
+            waitForAction("Retry delivery")
+            compose.onNode(hasText("Retry delivery") and hasClickAction()).performClick()
+            waitFor("Overtime request")
+            assertEquals(listOf(original, original), server.overtime.actualRequests.toList())
+            assertEquals(1, server.overtime.actualCommits.get())
+            waitForAction("Withdraw request")
+            compose.onNode(hasText("Withdraw request") and hasClickAction()).performClick()
+            waitFor("This will withdraw the overtime request.")
+            waitForAction("Withdraw request")
+            assertEquals(0, server.overtime.withdrawalCommits.get())
+            compose.onNodeWithContentDescription("Back").performClick()
+            waitFor("Overtime request")
+            waitForAction("Withdraw request")
+            compose.onNode(hasText("Withdraw request") and hasClickAction()).performClick()
+            waitFor("This will withdraw the overtime request.")
+            waitForAction("Withdraw request")
+            compose
+                .onNode(hasScrollToIndexAction())
+                .performScrollToNode(hasContentDescription("Reason"))
+            compose.onNodeWithContentDescription("Reason").performTextReplacement("Work cancelled")
+            capture("overtime-withdrawal-form")
+            compose.onNode(hasText("Withdraw request") and hasClickAction()).performClick()
+            waitFor("Overtime request")
+            waitFor("Withdrawn")
+            assertEquals(1, server.overtime.withdrawalCommits.get())
+            val withdrawal =
+                Json.parseToJsonElement(server.overtime.withdrawalRequests.single().second)
+                    .jsonObject
+            assertEquals(1L, withdrawal.getValue("expectedVersion").jsonPrimitive.long)
+            assertEquals("Work cancelled", withdrawal.getValue("reason").jsonPrimitive.content)
+            compose.onNode(hasText("Submit actual time") and hasClickAction()).assertDoesNotExist()
+            compose.onNode(hasText("Withdraw request") and hasClickAction()).assertDoesNotExist()
+            capture("overtime-withdrawn-request")
+        }
+    }
+
+    @Test
     fun overtimePlanningRestoresItsSavedInputAndRecoversALostCommitResponse() {
         val server = NativeUiServer().apply { overtime.enabled = true }
         withApplication(server) {
@@ -90,27 +186,30 @@ class AppFlowTest {
             waitFor("17:00 – 19:00")
             compose.onNode(hasText("Plan overtime") and hasClickAction()).performClick()
             waitFor("Work schedule")
+            waitForAction("Submit plan")
             compose
-                .onNode(hasText("Start time") and hasClickAction())
-                .performScrollTo()
-                .performClick()
+                .onNode(hasScrollToIndexAction())
+                .performScrollToNode(hasText("Start time") and hasClickAction())
+            compose.onNode(hasText("Start time") and hasClickAction()).performClick()
             compose.onNodeWithContentDescription("Hour (0–23)").performTextReplacement("18")
             compose.onNodeWithContentDescription("Minute (0–59)").performTextReplacement("30")
             compose.onNode(hasText("Set time") and hasClickAction()).performClick()
             compose
-                .onNode(hasText("End time") and hasClickAction())
-                .performScrollTo()
-                .performClick()
+                .onNode(hasScrollToIndexAction())
+                .performScrollToNode(hasText("End time") and hasClickAction())
+            compose.onNode(hasText("End time") and hasClickAction()).performClick()
             compose.onNodeWithContentDescription("Hour (0–23)").performTextReplacement("20")
             compose.onNodeWithContentDescription("Minute (0–59)").performTextReplacement("30")
             compose.onNode(hasText("Set time") and hasClickAction()).performClick()
             compose
-                .onNodeWithContentDescription("Break (minutes)")
-                .performScrollTo()
-                .performTextReplacement("15")
+                .onNode(hasScrollToIndexAction())
+                .performScrollToNode(hasContentDescription("Break (minutes)"))
+            compose.onNodeWithContentDescription("Break (minutes)").performTextReplacement("15")
+            compose
+                .onNode(hasScrollToIndexAction())
+                .performScrollToNode(hasContentDescription("Reason"))
             compose
                 .onNodeWithContentDescription("Reason")
-                .performScrollTo()
                 .performTextReplacement("Month-end inventory")
             capture("overtime-plan-form")
             server.overtime.loseNextPlanResponse = true
@@ -2987,6 +3086,15 @@ class AppFlowTest {
         }
         compose.onNodeWithContentDescription("On this device").performClick()
         waitFor("On this device")
+    }
+
+    private fun waitForAction(text: String) {
+        compose.waitUntil(15_000) {
+            compose
+                .onAllNodes(hasText(text) and hasClickAction() and isEnabled())
+                .fetchSemanticsNodes()
+                .isNotEmpty()
+        }
     }
 
     private fun waitFor(text: String) {

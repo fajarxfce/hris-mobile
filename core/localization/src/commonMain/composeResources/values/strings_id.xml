@@ -1,4 +1,8 @@
 <resources>
+    <string name="overtime_submit_actual_id">Kirim realisasi</string>
+    <string name="overtime_withdraw_request_id">Tarik pengajuan</string>
+    <string name="overtime_withdraw_prompt_id">Pengajuan lembur ini akan ditarik.</string>
+    <string name="overtime_form_changed_id">Pengajuan berubah. Tinjau pengajuan terbaru sebelum melanjutkan.</string>
     <string name="overtime_new_plan_id">Rencanakan lembur</string>
     <string name="overtime_save_plan_id">Kirim rencana</string>
     <string name="overtime_current_schedule_id">Jadwal kerja</string>

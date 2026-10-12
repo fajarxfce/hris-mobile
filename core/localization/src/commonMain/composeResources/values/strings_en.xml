@@ -1,4 +1,8 @@
 <resources>
+    <string name="overtime_submit_actual_en">Submit actual time</string>
+    <string name="overtime_withdraw_request_en">Withdraw request</string>
+    <string name="overtime_withdraw_prompt_en">This will withdraw the overtime request.</string>
+    <string name="overtime_form_changed_en">This request changed. Review the current request before continuing.</string>
     <string name="overtime_new_plan_en">Plan overtime</string>
     <string name="overtime_save_plan_en">Submit plan</string>
     <string name="overtime_current_schedule_en">Work schedule</string>

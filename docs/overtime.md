@@ -4,7 +4,8 @@ Overtime belongs to Workforce, alongside calendars and attendance. Employees can
 open their own requests from Home or All services, filter by month and status,
 and inspect a request's planned/actual time, approval progress and activity.
 Planning opens a separate form with the reviewed work schedule and company-local
-date/time input. Actual-time submission and withdrawal remain in progress.
+date/time input. Request details expose admitted actual-time submission and withdrawal
+through separate confirmation forms.
 
 ## Scope and acquisition
 
@@ -112,8 +113,7 @@ reviewed and discarded; a later rejection cannot disprove an earlier uncertain
 commit. Unconfirmed input stays retained. `ReviewOvertimeCommand` removes confirmed
 evidence only after admitted request facts reach its receipt version, and its
 compare-and-set cannot remove a concurrent delivery. Repositories perform no retry,
-permission or UI orchestration. Native actual-time and withdrawal forms remain
-subsequent integration work.
+permission or UI orchestration.
 
 ## Planning form
 
@@ -138,6 +138,32 @@ request refresh and revision-checked cleanup, navigation opens the request.
 The compact top bar and primary action stay outside the scrolling form. Refresh
 keeps the overview action in place but disables it until acquisition completes.
 An expired review preserves the form and asks for an explicit schedule refresh.
+
+## Actual time and withdrawal
+
+Request details use the server's allowed actions and the current company grants.
+Actual time opens a form initialized from the planned interval; employees confirm
+company-local dates, times, break minutes and a reason. Withdrawal has a separate
+reason and confirmation action. Both pages keep Back and the primary action outside
+their scrolling content. Opening either page creates no command.
+
+The action route owns its MVI state, one combined request/command observation and
+one acquisition or delivery job. A request revision change blocks an existing draft
+until the employee returns to the current request and opens a new form. Preparation
+uses the domain action policy and freezes the observed version before transport.
+UI date controls constrain selection to the planned dates; domain validation still
+enforces actual interval bounds, duration and completed work.
+
+Both actions share the retained request-command slot. Entering withdrawal while an
+actual-time outcome is uncertain restores that original action, including its input
+and operation key. Retry cannot replace it with a withdrawal. A confirmed command
+stays reviewable until admitted details and revision-checked cleanup succeed;
+background confirmation alone does not navigate the page.
+
+Back and route stop cancel observation and pending work. Late responses cannot
+replace a later entry. Explicit successful acquisition reopens completed storage
+observation; known access failures stay gated through pending or failed recovery,
+even if local deletion fails.
 
 ## Validation
 
@@ -184,3 +210,12 @@ verifies identical replay through the real transport adapter and encrypted store
 API 35 acceptance verified a real plan, blocked transport, offline process
 restoration and explicit replay. See the
 [planning validation](validation.md#overtime-planning-and-delivery).
+
+Actual-time and withdrawal forms passed root checks with 903 desktop tests, five
+shared-presentation and 40 Workforce presentation Chromium cases, Android dev
+assembly and application Web compilation. Sixteen new cases cover immutable
+action recovery, observed-version changes, cancellation, repeated Back, retained
+denials, storage-flow completion, large-text layouts and typed route restoration.
+The assembled application loses a successful actual-time response, recovers its
+original command from the withdrawal entry and then confirms a separate withdrawal.
+See the [action validation](validation.md#overtime-actual-time-and-withdrawal).

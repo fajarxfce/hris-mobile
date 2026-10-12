@@ -5,6 +5,19 @@ import org.jetbrains.compose.resources.StringResource
 
 /** Explicit pairs keep runtime language changes portable across Android, iOS, desktop and Web. */
 enum class AppString(val english: StringResource, val indonesian: StringResource) {
+    OvertimeSubmitActual(
+        Res.string.overtime_submit_actual_en,
+        Res.string.overtime_submit_actual_id,
+    ),
+    OvertimeWithdrawRequest(
+        Res.string.overtime_withdraw_request_en,
+        Res.string.overtime_withdraw_request_id,
+    ),
+    OvertimeWithdrawPrompt(
+        Res.string.overtime_withdraw_prompt_en,
+        Res.string.overtime_withdraw_prompt_id,
+    ),
+    OvertimeFormChanged(Res.string.overtime_form_changed_en, Res.string.overtime_form_changed_id),
     OvertimeNewPlan(Res.string.overtime_new_plan_en, Res.string.overtime_new_plan_id),
     OvertimeSavePlan(Res.string.overtime_save_plan_en, Res.string.overtime_save_plan_id),
     OvertimeCurrentSchedule(

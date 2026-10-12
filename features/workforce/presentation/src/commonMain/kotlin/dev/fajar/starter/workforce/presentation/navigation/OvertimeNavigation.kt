@@ -11,6 +11,7 @@ import androidx.navigation.toRoute
 import dev.fajar.starter.presentation.mvi.CollectEffects
 import dev.fajar.starter.workforce.domain.overtime.entities.OvertimePlanningSelection
 import dev.fajar.starter.workforce.domain.overtime.entities.OvertimeRequestSelection
+import dev.fajar.starter.workforce.presentation.overtime.action.OvertimeActionKind
 import dev.fajar.starter.workforce.presentation.overtime.detail.*
 import dev.fajar.starter.workforce.presentation.overtime.detail.pages.OvertimeRequestPage
 import dev.fajar.starter.workforce.presentation.overtime.overview.*
@@ -23,11 +24,13 @@ fun NavGraphBuilder.overtimeRoutes(
     onRequest: (OvertimeRequestSelection) -> Unit,
     onPlan: (OvertimePlanningSelection) -> Unit,
     onPlannedRequest: (OvertimeRequestSelection) -> Unit,
+    onAction: (OvertimeRequestSelection, OvertimeActionKind) -> Unit,
     onVerify: () -> Unit,
     onRecheckWorkspace: () -> Unit,
     onBack: () -> Unit,
 ) {
     overtimePlanRoute(workspaceId, onPlannedRequest, onVerify, onRecheckWorkspace, onBack)
+    overtimeActionRoute(workspaceId, onVerify, onRecheckWorkspace, onBack)
     composable<OvertimeRoute> {
         val viewModel = koinViewModel<OvertimeViewModel>(parameters = { parametersOf(workspaceId) })
         val state by viewModel.state.collectAsStateWithLifecycle()
@@ -67,6 +70,7 @@ fun NavGraphBuilder.overtimeRoutes(
                 OvertimeRequestEffect.Back -> onBack()
                 OvertimeRequestEffect.VerifyAccount -> onVerify()
                 OvertimeRequestEffect.RecheckWorkspace -> onRecheckWorkspace()
+                is OvertimeRequestEffect.OpenAction -> onAction(effect.selection, effect.kind)
             }
         }
         OvertimeRequestPage(state, list, viewModel::onEvent)

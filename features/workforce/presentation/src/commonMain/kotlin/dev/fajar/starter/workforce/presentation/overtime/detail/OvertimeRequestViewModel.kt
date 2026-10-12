@@ -31,6 +31,7 @@ class OvertimeRequestViewModel(
         on<OvertimeRequestEvent.BackRequested>(::onBackRequested)
         on<OvertimeRequestEvent.VerificationRequested>(::onVerificationRequested)
         on<OvertimeRequestEvent.HistoryPageRequested>(::onHistoryPageRequested)
+        on<OvertimeRequestEvent.ActionRequested>(::onActionRequested)
     }
 
     private fun onEntered(event: OvertimeRequestEvent.Entered) {
@@ -119,6 +120,14 @@ class OvertimeRequestViewModel(
 
     private fun onBackRequested(event: OvertimeRequestEvent.BackRequested) {
         viewModelScope.launch { emitEffect(OvertimeRequestEffect.Back) }
+    }
+
+    private fun onActionRequested(event: OvertimeRequestEvent.ActionRequested) {
+        if (!state.value.canOpenAction || event.kind !in state.value.actionOptions) return
+        val selection = state.value.selection.copy(historyAfter = null)
+        viewModelScope.launch {
+            emitEffect(OvertimeRequestEffect.OpenAction(selection, event.kind))
+        }
     }
 
     private fun onVerificationRequested(event: OvertimeRequestEvent.VerificationRequested) {

@@ -29,7 +29,7 @@ jobs:
       - run: python3 -m unittest discover -s tool -p 'test_*.py'
       - run: >-
           xvfb-run -a ./gradlew :check
-          :core:datastore:wasmJsBrowserTest :core:database:wasmJsBrowserTest
+          :core:presentation:wasmJsBrowserTest :core:datastore:wasmJsBrowserTest :core:database:wasmJsBrowserTest
           :core:fileio:wasmJsBrowserTest
           :core:sync:data:wasmJsBrowserTest :core:workspace:domain:wasmJsBrowserTest :core:workspace:data:wasmJsBrowserTest
           :features:inbox:domain:wasmJsBrowserTest :features:inbox:data:wasmJsBrowserTest
