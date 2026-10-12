@@ -8,6 +8,7 @@ interface AppDatabase {
     val transfers: TransferStore
     val replicas: ReplicaStore
     val commands: CommandStore
+    val blobs: BlobStore
 
     fun close()
 }

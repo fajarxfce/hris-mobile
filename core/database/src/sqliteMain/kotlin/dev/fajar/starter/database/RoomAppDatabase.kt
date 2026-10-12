@@ -14,6 +14,7 @@ class RoomAppDatabase(builder: RoomDatabase.Builder<StarterDatabase>) : AppDatab
     override val transfers: TransferStore = RoomTransferStore(database.transferDao())
     override val replicas: ReplicaStore = RoomReplicaStore(database)
     override val commands: CommandStore = RoomCommandStore(database)
+    override val blobs: BlobStore = RoomBlobStore(database)
 
     override fun close() = database.close()
 }

@@ -34,6 +34,10 @@ private class IndexedDbAppDatabase(name: String) : AppDatabase {
         MutableSharedFlow<Unit>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST).apply {
             tryEmit(Unit)
         }
+    private val blobChanges =
+        MutableSharedFlow<Unit>(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST).apply {
+            tryEmit(Unit)
+        }
     override val accounts: AccountCacheStore =
         object : AccountCacheStore {
             override suspend fun activate(sessionId: String?, accountKey: String?) {
@@ -46,6 +50,7 @@ private class IndexedDbAppDatabase(name: String) : AppDatabase {
                     transferChanges.tryEmit(Unit)
                     replicaChanges.tryEmit(Unit)
                     commandChanges.tryEmit(Unit)
+                    blobChanges.tryEmit(Unit)
                 }
             }
         }
@@ -59,6 +64,7 @@ private class IndexedDbAppDatabase(name: String) : AppDatabase {
         IndexedDbReplicaStore(replicaChanges) { database.await<JsAny>() }
     override val commands: CommandStore =
         IndexedDbCommandStore(commandChanges) { database.await<JsAny>() }
+    override val blobs: BlobStore = IndexedDbBlobStore(blobChanges) { database.await<JsAny>() }
 
     override fun close() {
         if (connection.isInitialized()) closeDatabase(database)
@@ -94,10 +100,14 @@ private class IndexedDbInboxStore(
 
 @JsFun(
     """(name) => new Promise((resolve, reject) => {
-    const request = indexedDB.open(name, 6);
+    const request = indexedDB.open(name, 7);
     let settled = false;
     request.onupgradeneeded = event => {
         const db = request.result;
+        if (event.oldVersion < 7) {
+            db.createObjectStore('durable_blobs', {keyPath:['accountKey', 'partition', 'id']});
+            db.createObjectStore('durable_blob_chunks', {keyPath:['accountKey', 'partition', 'id', 'offset']});
+        }
         if (event.oldVersion < 6) {
             const commands = db.createObjectStore('durable_commands', {keyPath:['accountKey', 'partition', 'id']});
             commands.createIndex('account', 'accountKey');

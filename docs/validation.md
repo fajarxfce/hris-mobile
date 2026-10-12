@@ -1,5 +1,21 @@
 # Validation
 
+## Durable file blocks and checkpoints
+
+Complete root checks passed with 627 desktop/JVM tests. All 23 database Chromium
+tests passed, including 11 new cases shared with SQLite. Coverage verifies atomic
+block/progress writes, immutable completed content, checkpoint contention, stale
+deletion, account replacement, bounded reservations/pages, cancellation, independent
+connections, restart and migration with retained commands. Android dev assembly and
+the production Web build passed. Web retains three existing bundler warnings.
+
+The validated APK, including the Leave evidence selector, was installed on the
+authorized Android phone with `--install-only`. No application launch, screen
+interaction or physical-device acceptance is claimed. The preceding selector
+commit `c2a9d41` passed Linux, Windows and Apple CI. File acquisition and the HRIS
+upload protocol remain separate work; this raw storage boundary accepts opaque
+envelopes and does not itself encrypt content or deliver it.
+
 ## Leave document selection
 
 Complete root checks passed with 616 desktop tests. All 52 Leave presentation
@@ -25,8 +41,8 @@ reserved and one remaining. Withdrawal restored two available days and zero
 reserved while preserving the original attachment and withdrawal history. The
 isolated allowance was then reversed and its policy retired through the API.
 Light/dark appearance and 200% text were inspected; the emulator returned to Home
-with normal text and light appearance. The phone's ADB connection was unavailable,
-so this increment has no physical-phone installation or interaction claim.
+with normal text and light appearance. Later installation is recorded above;
+there is no physical-phone interaction claim for this acceptance.
 
 The preceding catalog commit `83cbd4d` passed Linux, Windows and Apple CI. Server
 commit `8ed91d3b` passed its full backend, dashboard and live integration jobs.

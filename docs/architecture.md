@@ -153,6 +153,10 @@ persistence binds a stable audience/account key while cache activation clears on
 derived data. Features own encryption, command admission, replay and conflict policy;
 the database only enforces ownership, immutability, bounds and atomic revision checks.
 
+Large file contents use the separate [blob store](blob-storage.md), with bounded
+opaque blocks, transactional progress and account-owned reservations. File adapters
+own encryption and mapping; use cases own import, transfer and cleanup policy.
+
 ## Navigation
 
 Features own their serializable route and NavGraphBuilder registration. The app composes
