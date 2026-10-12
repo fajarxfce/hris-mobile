@@ -76,6 +76,86 @@ class AppFlowTest {
     private val backDispatcher = TestBackDispatcher()
 
     @Test
+    fun overtimePlanningRestoresItsSavedInputAndRecoversALostCommitResponse() {
+        val server = NativeUiServer().apply { overtime.enabled = true }
+        withApplication(server) {
+            signIn()
+            waitFor("Choose a company")
+            compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
+            waitFor("Welcome")
+            compose
+                .onNode(hasText("Overtime") and hasClickAction())
+                .performScrollTo()
+                .performClick()
+            waitFor("17:00 – 19:00")
+            compose.onNode(hasText("Plan overtime") and hasClickAction()).performClick()
+            waitFor("Work schedule")
+            compose
+                .onNode(hasText("Start time") and hasClickAction())
+                .performScrollTo()
+                .performClick()
+            compose.onNodeWithContentDescription("Hour (0–23)").performTextReplacement("18")
+            compose.onNodeWithContentDescription("Minute (0–59)").performTextReplacement("30")
+            compose.onNode(hasText("Set time") and hasClickAction()).performClick()
+            compose
+                .onNode(hasText("End time") and hasClickAction())
+                .performScrollTo()
+                .performClick()
+            compose.onNodeWithContentDescription("Hour (0–23)").performTextReplacement("20")
+            compose.onNodeWithContentDescription("Minute (0–59)").performTextReplacement("30")
+            compose.onNode(hasText("Set time") and hasClickAction()).performClick()
+            compose
+                .onNodeWithContentDescription("Break (minutes)")
+                .performScrollTo()
+                .performTextReplacement("15")
+            compose
+                .onNodeWithContentDescription("Reason")
+                .performScrollTo()
+                .performTextReplacement("Month-end inventory")
+            capture("overtime-plan-form")
+            server.overtime.loseNextPlanResponse = true
+            compose.onNode(hasText("Submit plan") and hasClickAction()).performClick()
+            waitFor("Delivery has not been confirmed. Retry the saved request.")
+            assertEquals(1, server.overtime.planCommits.get())
+            assertEquals(1, server.overtime.planRequests.size)
+            val original = server.overtime.planRequests.single()
+            val body = Json.parseToJsonElement(original.second).jsonObject
+            assertEquals("Month-end inventory", body.getValue("reason").jsonPrimitive.content)
+            assertEquals(
+                "2026-10-12T11:30:00Z",
+                body.getValue("requested").jsonObject.getValue("startsAt").jsonPrimitive.content,
+            )
+            val reviews = server.overtime.planningReads.get()
+            capture("overtime-plan-unconfirmed")
+            compose.onNodeWithContentDescription("Back").performClick()
+            waitFor("17:00 – 19:00")
+            compose.waitUntil {
+                compose
+                    .onAllNodes(hasText("Plan overtime") and hasClickAction() and isEnabled())
+                    .fetchSemanticsNodes()
+                    .isNotEmpty()
+            }
+            compose.onNode(hasText("Plan overtime") and hasClickAction()).performClick()
+            waitFor("Delivery has not been confirmed. Retry the saved request.")
+            compose.onNode(hasText("Start time") and hasClickAction()).assertDoesNotExist()
+            assertEquals(reviews, server.overtime.planningReads.get())
+            compose
+                .onNode(hasText("Retry delivery") and hasClickAction())
+                .performScrollTo()
+                .performClick()
+            waitFor("Overtime request")
+            waitFor("Month-end inventory")
+            assertEquals(1, server.overtime.planCommits.get())
+            assertEquals(listOf(original, original), server.overtime.planRequests.toList())
+            compose.onNode(hasText("18:30 – 20:30") and hasClickAction().not()).assertExists()
+            capture("overtime-planned-request")
+            compose.onNodeWithContentDescription("Back").performClick()
+            waitFor("17:00 – 19:00")
+            compose.onNodeWithText("Retry delivery").assertDoesNotExist()
+        }
+    }
+
+    @Test
     fun overtimeUsesFeatureRoutesAndRecoversItsAdmittedListAndDetailsOffline() {
         val server = NativeUiServer().apply { overtime.enabled = true }
         withApplication(server) {

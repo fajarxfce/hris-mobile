@@ -3,7 +3,8 @@
 Overtime belongs to Workforce, alongside calendars and attendance. Employees can
 open their own requests from Home or All services, filter by month and status,
 and inspect a request's planned/actual time, approval progress and activity.
-The native forms for planning, actual-time submission and withdrawal remain in progress.
+Planning opens a separate form with the reviewed work schedule and company-local
+date/time input. Actual-time submission and withdrawal remain in progress.
 
 ## Scope and acquisition
 
@@ -111,8 +112,32 @@ reviewed and discarded; a later rejection cannot disprove an earlier uncertain
 commit. Unconfirmed input stays retained. `ReviewOvertimeCommand` removes confirmed
 evidence only after admitted request facts reach its receipt version, and its
 compare-and-set cannot remove a concurrent delivery. Repositories perform no retry,
-permission or UI orchestration. Native forms and real-API command acceptance remain
+permission or UI orchestration. Native actual-time and withdrawal forms remain
 subsequent integration work.
+
+## Planning form
+
+The planning route owns typed form events, one schedule acquisition, one command
+observation and the review-expiry timer. Leaving cancels these resources; late
+responses cannot publish into a later entry. A successful explicit review reopens
+completed storage observation, while known access failures remain gated throughout
+pending or failed recovery.
+
+Date and time controls use the company's IANA timezone. Domain policy resolves
+local input to whole UTC minutes on the computation dispatcher. Nonexistent or
+ambiguous DST times are rejected with localized validation; an unchanged original
+instant can retain its known offset when preparing actual time. The reusable
+`AppTimeInput` only renders controlled numeric fields.
+
+Submission freezes reviewed input before delivery. Pending or unconfirmed input
+restores without acquiring a replacement schedule. Unknown outcomes offer retry
+of that saved request; rejected input requires explicit discard confirmation.
+Confirmed commands remain reviewable when detail acquisition fails. After admitted
+request refresh and revision-checked cleanup, navigation opens the request.
+
+The compact top bar and primary action stay outside the scrolling form. Refresh
+keeps the overview action in place but disables it until acquisition completes.
+An expired review preserves the form and asks for an explicit schedule refresh.
 
 ## Validation
 
@@ -149,3 +174,13 @@ competing preparation, immutable replay, lost responses, scope replacement, fini
 deadlines/retries, cancellation, reconciled cleanup, encrypted SQLite restoration,
 tampering, cross-scope denial and bounded transport/storage. This increment adds
 command contracts and delivery; it does not claim new device interaction.
+
+The planning form passed root checks with 887 desktop tests, 89 Workforce domain
+and 31 presentation Chromium cases, and Android dev assembly. Nineteen new cases
+cover local-time/DST resolution, controlled input, review expiry, pending
+cancellation, retained denials, completed storage observation and original-command
+recovery. The assembled application test loses a successful server response and
+verifies identical replay through the real transport adapter and encrypted store.
+API 35 acceptance verified a real plan, blocked transport, offline process
+restoration and explicit replay. See the
+[planning validation](validation.md#overtime-planning-and-delivery).

@@ -10,6 +10,8 @@ sealed interface OvertimeEvent {
 
     data object RefreshRequested : OvertimeEvent
 
+    data object PlanRequested : OvertimeEvent
+
     data object BackRequested : OvertimeEvent
 
     data object VerificationRequested : OvertimeEvent

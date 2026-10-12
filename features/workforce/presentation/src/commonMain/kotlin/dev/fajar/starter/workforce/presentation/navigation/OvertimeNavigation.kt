@@ -9,6 +9,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import dev.fajar.starter.presentation.mvi.CollectEffects
+import dev.fajar.starter.workforce.domain.overtime.entities.OvertimePlanningSelection
 import dev.fajar.starter.workforce.domain.overtime.entities.OvertimeRequestSelection
 import dev.fajar.starter.workforce.presentation.overtime.detail.*
 import dev.fajar.starter.workforce.presentation.overtime.detail.pages.OvertimeRequestPage
@@ -20,10 +21,13 @@ import org.koin.core.parameter.parametersOf
 fun NavGraphBuilder.overtimeRoutes(
     workspaceId: String,
     onRequest: (OvertimeRequestSelection) -> Unit,
+    onPlan: (OvertimePlanningSelection) -> Unit,
+    onPlannedRequest: (OvertimeRequestSelection) -> Unit,
     onVerify: () -> Unit,
     onRecheckWorkspace: () -> Unit,
     onBack: () -> Unit,
 ) {
+    overtimePlanRoute(workspaceId, onPlannedRequest, onVerify, onRecheckWorkspace, onBack)
     composable<OvertimeRoute> {
         val viewModel = koinViewModel<OvertimeViewModel>(parameters = { parametersOf(workspaceId) })
         val state by viewModel.state.collectAsStateWithLifecycle()
@@ -38,6 +42,7 @@ fun NavGraphBuilder.overtimeRoutes(
                 OvertimeEffect.VerifyAccount -> onVerify()
                 OvertimeEffect.RecheckWorkspace -> onRecheckWorkspace()
                 is OvertimeEffect.OpenRequest -> onRequest(effect.selection)
+                is OvertimeEffect.PlanRequest -> onPlan(effect.selection)
             }
         }
         OvertimePage(state, list, viewModel::onEvent)

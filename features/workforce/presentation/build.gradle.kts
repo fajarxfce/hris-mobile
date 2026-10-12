@@ -16,4 +16,7 @@ kotlin.sourceSets {
         implementation(libs.serialization.json)
     }
     getByName("commonTest").dependencies { implementation(libs.coroutines.test) }
+    getByName("wasmJsTest").dependencies {
+        implementation(npm("@js-joda/timezone", libs.versions.js.joda.timezone.get()))
+    }
 }

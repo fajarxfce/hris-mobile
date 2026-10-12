@@ -248,6 +248,29 @@ fun AppNavigation(navigation: ScopedNavigationState, incomingLinks: Flow<String>
                     sessionRoutes(stage.sessionId) { controller.popBackStack() }
                     overtimeRoutes(
                         stage.workspace.id,
+                        onPlan = {
+                            controller.navigate(
+                                OvertimePlanRoute(
+                                    it.employeeId,
+                                    it.workDate.toString(),
+                                    it.employmentAfter,
+                                )
+                            ) {
+                                launchSingleTop = true
+                            }
+                        },
+                        onPlannedRequest = {
+                            controller.navigate(
+                                OvertimeRequestRoute(
+                                    it.requestId,
+                                    it.employeeId,
+                                    it.employmentAfter,
+                                )
+                            ) {
+                                popUpTo<OvertimePlanRoute> { inclusive = true }
+                                launchSingleTop = true
+                            }
+                        },
                         onRequest = {
                             controller.navigate(
                                 OvertimeRequestRoute(

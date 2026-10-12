@@ -57,6 +57,17 @@ fun OvertimePage(state: OvertimeState, list: LazyListState, onEvent: (OvertimeEv
                 }
             }
         },
+        bottomBar = {
+            if (state.hasPlanningAccess)
+                AppActionBar {
+                    AppButton(
+                        appString(AppString.OvertimeNewPlan),
+                        { onEvent(OvertimeEvent.PlanRequested) },
+                        Modifier.fillMaxWidth(),
+                        enabled = state.canPlan,
+                    )
+                }
+        },
     ) {
         if (state.loading) item(key = "loading") { AppLoading(compact = state.content != null) }
         val content = state.content?.takeUnless { state.readRestricted }?.value

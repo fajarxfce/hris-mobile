@@ -716,3 +716,31 @@ Home. Light appearance and dark appearance with 150% text were inspected; emulat
 preferences were restored afterward. The shared controls also passed the starter's
 267 desktop tests, two application Chromium tests and Android dev assembly.
 These checks do not establish frame-time, memory or battery performance.
+
+## Overtime planning and delivery
+
+Root checks passed with 887 desktop tests, 89 Workforce domain and 31 presentation
+Chromium tests, Android dev assembly and application Web compilation. Nineteen new
+cases cover company-local
+time conversion, DST gaps/folds, duplicate confirmation, pending cancellation and
+late results, owner disposal, review expiry, denial through failed recovery,
+completed storage observation, explicit discard and immutable delivery. The
+assembled application test recovers a lost successful response through feature
+routes, the HTTP adapter and encrypted command storage without a second commit.
+
+Shared layout checks verify fixed Back/submit controls, disabled actions during
+refresh, date bounds and Indonesian text at 200%. Planning, the time dialog,
+unconfirmed delivery and the real request screenshots were inspected.
+
+The API 35 emulator selected a reviewed overnight schedule and entered company-local
+19:00–21:00 time with a 15-minute break. It retained the command while only its API
+transport was blocked, then restored the original date, interval and reason after
+process restart. Explicit replay opened the admitted request. A separate API read
+verified exactly one matching plan at version zero with 105 worked minutes. The
+first device probe was corrected to wait for keyboard focus and tolerate the
+transient UI dump during process startup; no app behavior changed for those probe
+corrections. All owned transport blocks were removed and probe sessions closed.
+
+After notice, the validated APK was installed on the authorized Android 16 phone
+with `--install-only`. This device update did not launch or drive its UI. These
+checks do not establish performance or physical-device acceptance of the new form.

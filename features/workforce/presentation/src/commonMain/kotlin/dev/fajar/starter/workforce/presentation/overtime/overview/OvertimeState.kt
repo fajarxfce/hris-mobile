@@ -37,6 +37,17 @@ data class OvertimeState(
 
     val needsVerification: Boolean
         get() = failure?.code in verificationCodes
+
+    val hasPlanningAccess: Boolean
+        get() =
+            !readRestricted &&
+                content?.value?.selection?.employeeId != null &&
+                content.access.permissions.any {
+                    it == "overtime.self.manage" || it == "overtime.manage"
+                }
+
+    val canPlan: Boolean
+        get() = hasPlanningAccess && !loading && !refreshing
 }
 
 enum class OvertimeDialog {

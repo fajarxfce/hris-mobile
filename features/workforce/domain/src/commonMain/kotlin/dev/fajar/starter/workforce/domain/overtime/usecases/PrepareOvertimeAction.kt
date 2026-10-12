@@ -22,7 +22,32 @@ class PrepareOvertimeAction(
     private val workspaces: WorkspaceRepository,
     private val clock: Clock,
     private val build: AppBuild,
+    private val computation: CoroutineDispatcher = Dispatchers.Default,
 ) {
+    suspend operator fun invoke(
+        workspaceId: String,
+        snapshot: OvertimeSnapshot<OvertimeRequestView>,
+        actual: OvertimeLocalIntervalInput,
+        reason: String,
+    ): AppResult<OvertimeCommandRecord> =
+        withTimeoutOrNull(10.seconds) {
+            val request = snapshot.value.details.request
+            val resolved =
+                withContext(computation) {
+                    resolveOvertimeLocalInterval(actual, request.timezone, request.requested)
+                }
+            when (resolved) {
+                is AppResult.Failed -> resolved
+                is AppResult.Success ->
+                    invoke(
+                        workspaceId,
+                        snapshot,
+                        OvertimeRequestedAction.Actual(resolved.value),
+                        reason,
+                    )
+            }
+        } ?: overtimeFailure("client.overtime_timeout", FailureKind.Timeout)
+
     suspend operator fun invoke(
         workspaceId: String,
         snapshot: OvertimeSnapshot<OvertimeRequestView>,

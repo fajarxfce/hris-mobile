@@ -5,6 +5,120 @@ import org.jetbrains.compose.resources.StringResource
 
 /** Explicit pairs keep runtime language changes portable across Android, iOS, desktop and Web. */
 enum class AppString(val english: StringResource, val indonesian: StringResource) {
+    OvertimeNewPlan(Res.string.overtime_new_plan_en, Res.string.overtime_new_plan_id),
+    OvertimeSavePlan(Res.string.overtime_save_plan_en, Res.string.overtime_save_plan_id),
+    OvertimeCurrentSchedule(
+        Res.string.overtime_current_schedule_en,
+        Res.string.overtime_current_schedule_id,
+    ),
+    OvertimeReviewExpired(
+        Res.string.overtime_review_expired_en,
+        Res.string.overtime_review_expired_id,
+    ),
+    OvertimeReviewSchedule(
+        Res.string.overtime_review_schedule_en,
+        Res.string.overtime_review_schedule_id,
+    ),
+    OvertimeStartDate(Res.string.overtime_start_date_en, Res.string.overtime_start_date_id),
+    OvertimeEndDate(Res.string.overtime_end_date_en, Res.string.overtime_end_date_id),
+    OvertimeStartTime(Res.string.overtime_start_time_en, Res.string.overtime_start_time_id),
+    OvertimeEndTime(Res.string.overtime_end_time_en, Res.string.overtime_end_time_id),
+    OvertimeChooseTime(Res.string.overtime_choose_time_en, Res.string.overtime_choose_time_id),
+    OvertimeHour(Res.string.overtime_hour_en, Res.string.overtime_hour_id),
+    OvertimeMinute(Res.string.overtime_minute_en, Res.string.overtime_minute_id),
+    OvertimeUseTime(Res.string.overtime_use_time_en, Res.string.overtime_use_time_id),
+    OvertimeBreakInput(Res.string.overtime_break_input_en, Res.string.overtime_break_input_id),
+    OvertimeCompanyTimeZone(
+        Res.string.overtime_company_time_zone_en,
+        Res.string.overtime_company_time_zone_id,
+    ),
+    OvertimeCommandSending(
+        Res.string.overtime_command_sending_en,
+        Res.string.overtime_command_sending_id,
+    ),
+    OvertimeCommandQueued(
+        Res.string.overtime_command_queued_en,
+        Res.string.overtime_command_queued_id,
+    ),
+    OvertimeCommandUnconfirmed(
+        Res.string.overtime_command_unconfirmed_en,
+        Res.string.overtime_command_unconfirmed_id,
+    ),
+    OvertimeCommandConfirmed(
+        Res.string.overtime_command_confirmed_en,
+        Res.string.overtime_command_confirmed_id,
+    ),
+    OvertimeCommandRejected(
+        Res.string.overtime_command_rejected_en,
+        Res.string.overtime_command_rejected_id,
+    ),
+    OvertimeRetryDelivery(
+        Res.string.overtime_retry_delivery_en,
+        Res.string.overtime_retry_delivery_id,
+    ),
+    OvertimeOpenRequest(Res.string.overtime_open_request_en, Res.string.overtime_open_request_id),
+    OvertimeDiscardCommand(
+        Res.string.overtime_discard_command_en,
+        Res.string.overtime_discard_command_id,
+    ),
+    OvertimeDiscardPrompt(
+        Res.string.overtime_discard_prompt_en,
+        Res.string.overtime_discard_prompt_id,
+    ),
+    OvertimeInputRequired(
+        Res.string.overtime_input_required_en,
+        Res.string.overtime_input_required_id,
+    ),
+    OvertimeIntervalInvalid(
+        Res.string.overtime_interval_invalid_en,
+        Res.string.overtime_interval_invalid_id,
+    ),
+    OvertimeReasonInvalid(
+        Res.string.overtime_reason_invalid_en,
+        Res.string.overtime_reason_invalid_id,
+    ),
+    OvertimeTimeGap(Res.string.overtime_time_gap_en, Res.string.overtime_time_gap_id),
+    OvertimeTimeAmbiguous(
+        Res.string.overtime_time_ambiguous_en,
+        Res.string.overtime_time_ambiguous_id,
+    ),
+    OvertimePlanChanged(Res.string.overtime_plan_changed_en, Res.string.overtime_plan_changed_id),
+    OvertimeOverlapShift(
+        Res.string.overtime_overlap_shift_en,
+        Res.string.overtime_overlap_shift_id,
+    ),
+    OvertimeWorkDateInvalid(
+        Res.string.overtime_work_date_invalid_en,
+        Res.string.overtime_work_date_invalid_id,
+    ),
+    OvertimeCommandPending(
+        Res.string.overtime_command_pending_en,
+        Res.string.overtime_command_pending_id,
+    ),
+    OvertimeUpdatesPending(
+        Res.string.overtime_updates_pending_en,
+        Res.string.overtime_updates_pending_id,
+    ),
+    OvertimeActionUnavailable(
+        Res.string.overtime_action_unavailable_en,
+        Res.string.overtime_action_unavailable_id,
+    ),
+    OvertimeNotEnded(Res.string.overtime_not_ended_en, Res.string.overtime_not_ended_id),
+    OvertimeOutsidePlanned(
+        Res.string.overtime_outside_planned_en,
+        Res.string.overtime_outside_planned_id,
+    ),
+    OvertimePeriodLocked(
+        Res.string.overtime_period_locked_en,
+        Res.string.overtime_period_locked_id,
+    ),
+    OvertimeRetryLimit(Res.string.overtime_retry_limit_en, Res.string.overtime_retry_limit_id),
+    OvertimeScheduleMissing(
+        Res.string.overtime_schedule_missing_en,
+        Res.string.overtime_schedule_missing_id,
+    ),
+    OvertimeOverlapping(Res.string.overtime_overlapping_en, Res.string.overtime_overlapping_id),
+    OvertimeCapacity(Res.string.overtime_capacity_en, Res.string.overtime_capacity_id),
     Overtime(Res.string.overtime_en, Res.string.overtime_id),
     OvertimeSummary(Res.string.overtime_summary_en, Res.string.overtime_summary_id),
     OvertimeMonth(Res.string.overtime_month_en, Res.string.overtime_month_id),

@@ -59,6 +59,8 @@ class OvertimeLayoutTest {
         val position = bar.fetchSemanticsNode().boundsInRoot
         val filter = compose.onNode(hasText("All statuses") and hasClickAction())
         val filterPosition = filter.fetchSemanticsNode().boundsInRoot
+        val plan = compose.onNode(hasText("Plan overtime") and hasClickAction())
+        val planPosition = plan.assertIsDisplayed().fetchSemanticsNode().boundsInRoot
         compose
             .onNode(hasText("October 2026") and hasClickAction())
             .assertIsDisplayed()
@@ -69,6 +71,10 @@ class OvertimeLayoutTest {
         compose.onNodeWithContentDescription("Refresh").performClick()
         compose.runOnIdle { state = state.copy(refreshing = true) }
         compose.onNodeWithContentDescription("Refresh").assertIsDisplayed().assertIsNotEnabled()
+        assertEquals(
+            planPosition,
+            plan.assertIsDisplayed().assertIsNotEnabled().fetchSemanticsNode().boundsInRoot,
+        )
         compose.runOnIdle {
             state =
                 state.copy(
@@ -88,6 +94,7 @@ class OvertimeLayoutTest {
                 )
         }
         compose.onNodeWithText("All statuses").assertDoesNotExist()
+        plan.assertDoesNotExist()
         compose.onNodeWithText("17:00 – 19:00").assertDoesNotExist()
         compose.onNodeWithText("Verify your account").assertIsDisplayed()
     }

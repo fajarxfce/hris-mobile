@@ -39,8 +39,10 @@ appearance and reduced-motion preferences are respected.
 Overtime shows the employee's requests with month and status filters. Request
 details include planned and actual time, approval progress, the reviewed schedule
 and paged activity. The last admitted list and request remain available in bounded
-encrypted offline storage. Planning and actual-time submission are still being
-connected to the native interface.
+encrypted offline storage. Employees can review the company work schedule, select
+local dates and times, and submit an overtime plan. Saved input survives interrupted
+delivery and process restart; retry keeps the original operation. Actual-time
+submission and withdrawal are still being connected to the native interface.
 
 Leave shows annual balances and request history with status filters, account-owned
 employment selection and a bounded encrypted offline view. Each request opens its

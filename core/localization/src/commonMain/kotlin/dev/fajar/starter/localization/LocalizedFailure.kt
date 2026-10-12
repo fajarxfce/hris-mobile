@@ -7,6 +7,32 @@ import dev.fajar.starter.common.result.*
 fun failureText(failure: Failure): String =
     appString(
         when (failure.code) {
+            "client.overtime_review_expired" -> AppString.OvertimeReviewExpired
+            "client.overtime_time_required" -> AppString.OvertimeInputRequired
+            "client.overtime_time_gap" -> AppString.OvertimeTimeGap
+            "client.overtime_time_ambiguous" -> AppString.OvertimeTimeAmbiguous
+            "client.overtime_command_pending" -> AppString.OvertimeCommandPending
+            "client.overtime_unconfirmed" -> AppString.OvertimeCommandUnconfirmed
+            "client.overtime_updates_pending" -> AppString.OvertimeUpdatesPending
+            "client.overtime_command_changed" -> AppString.OvertimeChanged
+            "client.overtime_retry_limit" -> AppString.OvertimeRetryLimit
+            "overtime_planning_changed",
+            "invalid_overtime_planning_revision" -> AppString.OvertimePlanChanged
+            "invalid_overtime_interval",
+            "invalid_overtime_actual" -> AppString.OvertimeIntervalInvalid
+            "invalid_overtime_request",
+            "invalid_overtime_withdrawal" -> AppString.OvertimeReasonInvalid
+            "overtime_overlaps_shift" -> AppString.OvertimeOverlapShift
+            "overtime_overlap" -> AppString.OvertimeOverlapping
+            "overtime_month_capacity" -> AppString.OvertimeCapacity
+            "overtime_date_out_of_range",
+            "overtime_work_date_mismatch" -> AppString.OvertimeWorkDateInvalid
+            "overtime_not_planned",
+            "overtime_not_pending" -> AppString.OvertimeActionUnavailable
+            "overtime_not_ended" -> AppString.OvertimeNotEnded
+            "overtime_outside_requested_window" -> AppString.OvertimeOutsidePlanned
+            "overtime_schedule_missing" -> AppString.OvertimeScheduleMissing
+            "work_period_locked" -> AppString.OvertimePeriodLocked
             "client.overtime_cache_expired" -> AppString.OvertimeCacheExpired
             "overtime_request_not_found" -> AppString.OvertimeRequestUnavailable
             "client.overtime_changed" -> AppString.OvertimeChanged

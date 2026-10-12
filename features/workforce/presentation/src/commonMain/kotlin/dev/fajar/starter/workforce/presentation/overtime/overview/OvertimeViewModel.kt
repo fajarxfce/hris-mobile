@@ -27,6 +27,7 @@ class OvertimeViewModel(
         on<OvertimeEvent.Entered>(::onEntered)
         on<OvertimeEvent.Stopped>(::onStopped)
         on<OvertimeEvent.RefreshRequested>(::onRefreshRequested)
+        on<OvertimeEvent.PlanRequested>(::onPlanRequested)
         on<OvertimeEvent.BackRequested>(::onBackRequested)
         on<OvertimeEvent.VerificationRequested>(::onVerificationRequested)
         on<OvertimeEvent.MonthFilterRequested>(::onMonthFilterRequested)
@@ -255,6 +256,23 @@ class OvertimeViewModel(
 
     private fun onBackRequested(event: OvertimeEvent.BackRequested) {
         viewModelScope.launch { emitEffect(OvertimeEffect.Back) }
+    }
+
+    private fun onPlanRequested(event: OvertimeEvent.PlanRequested) {
+        if (!state.value.canPlan) return
+        val content = state.value.content?.value ?: return
+        val employeeId = content.selection.employeeId ?: return
+        viewModelScope.launch {
+            emitEffect(
+                OvertimeEffect.PlanRequest(
+                    OvertimePlanningSelection(
+                        employeeId,
+                        content.directory.asOf,
+                        content.selection.employmentAfter,
+                    )
+                )
+            )
+        }
     }
 
     private fun onVerificationRequested(event: OvertimeEvent.VerificationRequested) {
