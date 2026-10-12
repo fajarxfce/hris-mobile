@@ -236,3 +236,12 @@ at [fd858ae](https://github.com/fajarxfce/compose-fluent-starter/commit/fd858ae)
 The mobile foundation is [c992f95](https://github.com/fajarxfce/hris-mobile/commit/c992f95).
 Both repositories passed root checks, application Chromium tests and Android dev
 assembly. Document categories, navigation and transfer policy remain in HRIS Mobile.
+
+## Dedicated search controls
+
+`AppSearchEntry`, optional initial focus in `AppSearchField`, and their keyboard,
+semantics and disposal tests also exist at
+[da8acb2](https://github.com/fajarxfce/compose-fluent-starter/commit/da8acb2).
+Both repositories passed root checks, application Chromium tests and Android dev
+assembly. Employee routes, query/filter ownership, company access and transport
+remain in HRIS Mobile.

@@ -111,12 +111,19 @@ selected container. Labels wrap at large text sizes, each target remains at leas
 48 dp, and disabled tabs cannot dispatch selection. Features own selection and
 the corresponding data request.
 
-Use `AppSearchField` for compact search, keeping its accessible label and explicit
-clear action. `AppTextField` remains for labelled forms. `AppFilterChip` opens an
+Use `AppSearchEntry` to open a dedicated search page from a browsing list. It is
+one accessible action and does not create an editor or open the keyboard itself.
+The search page keeps Back and `AppSearchField` above the scrolling results.
+Initial focus belongs to the field's composition; query changes do not steal
+focus after the user dismisses it. Keep the accessible label and explicit clear
+action. `AppTextField` remains for labelled forms. `AppFilterChip` opens an
 owned filter surface; `AppDialog` delegates focus, dismissal and window lifetime
 to the platform. Feature MVI owns visibility, selection and pending data work.
 Department search and coworker search use independent cancellable requests;
 leaving their owner releases both. Directory filtering occurs before server paging.
+Search owns a separate navigation entry, query, filter and request lifetime.
+Returning preserves the browsing list's department, page and scroll without
+refreshing an already admitted result. A failed search offers explicit retry.
 
 `AppMonthPicker` receives localized labels, selection and enabled choices from its
 owner. It adapts its column count to text size and does not acquire data or decide

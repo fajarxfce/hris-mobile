@@ -5,11 +5,16 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import dev.fajar.starter.designsystem.theme.AppColors
 import io.github.composefluent.component.TextField
@@ -26,18 +31,27 @@ fun AppSearchField(
     clearLabel: String,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
+    autoFocus: Boolean = false,
 ) {
     val focus = LocalFocusManager.current
+    val requester = remember { FocusRequester() }
+    LaunchedEffect(requester, autoFocus, enabled) {
+        if (autoFocus && enabled) requester.requestFocus()
+    }
     TextField(
         value = value,
         onValueChange = onValueChange,
         modifier =
-            modifier.fillMaxWidth().heightIn(min = 48.dp).semantics { contentDescription = label },
+            modifier.fillMaxWidth().heightIn(min = 48.dp).focusRequester(requester).semantics {
+                contentDescription = label
+            },
         enabled = enabled,
         singleLine = true,
         isClearable = false,
         shape = RoundedCornerShape(12.dp),
-        placeholder = { AppText(label, color = AppColors.muted) },
+        placeholder = {
+            AppText(label, color = AppColors.muted, maxLines = 1, overflow = TextOverflow.Ellipsis)
+        },
         leadingIcon = { AppIcon(Icons.Regular.Search, tint = AppColors.muted) },
         trailing = {
             if (value.isNotEmpty())

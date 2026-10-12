@@ -30,6 +30,7 @@ class EmployeesViewModel(
     init {
         on<EmployeesEvent.Entered>(::onEntered)
         on<EmployeesEvent.Stopped>(::onStopped)
+        on<EmployeesEvent.SearchRequested>(::onSearchRequested)
         on<EmployeesEvent.FilterRequested>(::onFilterRequested)
         on<EmployeesEvent.FilterDismissed>(::onFilterDismissed)
         on<EmployeesEvent.DepartmentQueryChanged>(::onDepartmentQueryChanged)
@@ -88,6 +89,12 @@ class EmployeesViewModel(
         if (query == state.value.query) return
         updateState { it.copy(query = query, after = null, page = null) }
         loadPage(null, 300.milliseconds)
+    }
+
+    private fun onSearchRequested(event: EmployeesEvent.SearchRequested) {
+        if (!visible || state.value.filter != null) return
+        onStopped(EmployeesEvent.Stopped)
+        viewModelScope.launch { emitEffect(EmployeesEffect.OpenSearch) }
     }
 
     private fun onFilterRequested(event: EmployeesEvent.FilterRequested) {

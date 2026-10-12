@@ -51,13 +51,16 @@ search. The picker uses a separate bounded lookup (at most 50 departments), with
 its own cancellable search. Closing it cancels pending work; selecting a department
 resets the page. No filtering is limited to the currently loaded employees.
 
-Rows show initials, name, position and department with a compact search control.
-Search and department selection remain in the feature's MVI owner across tab changes.
+Rows show initials, name, position and department. A search entry opens a dedicated
+page with a fixed Back action and focused search field. Browsing and search use
+the same directory MVI implementation with separate navigation-owned instances;
+their queries, departments, pages and requests remain independent. Returning from
+search retains the browsing selection and scroll; reopening search starts empty.
 A replacement query cancels the former read, while a refresh of the same page retains content
 after a transient network failure. Access failures clear the page. Leaving the
 tab or covering the route stops its request. The navigation ViewModel keeps local
 workspace observation active, invalidating hidden rows when admission changes.
-Returning to a successful page keeps search, department, pagination and scroll
+Returning to a successful page keeps department, pagination and scroll
 without repeating HTTP. Interrupted or failed acquisition is resumed; manual
 refresh still loads current data without inserting a spinner above existing rows.
 Clearing the route owner releases observation. No directory is persisted for offline access, and paging requires an
@@ -82,3 +85,11 @@ and dialog-clipping adjustment. The API 35 emulator verified live search, cleari
 dialog Back and tab Back with the development API. Development employees currently
 have no department assignment; populated lookup/paging scenarios use isolated
 backend and UI fixtures.
+
+Dedicated search adds separate navigation ownership while retaining the browsing
+page. The 759-test desktop suite and five application Chromium tests passed, as
+did Android dev assembly. Regression coverage includes cancellation while leaving
+a pending query, released owners, ignored late results, company replacement,
+independent search filters and browsing-page retention. The API 35 emulator
+verified real API search, clearing, empty results, Back, keyboard focus and
+light/dark layouts including 150% text.

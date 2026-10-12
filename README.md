@@ -27,8 +27,9 @@ distinct from accepted time. Workforce availability
 is independent of the personal-profile module. Home places the employee's name
 and company above today's clock-in/out card and service grid. The four tabs are
 Home, Inbox, Employees and Account. Inbox shows the account's total unread count.
-Employees provides a searchable, paged coworker
-directory with assignment labels and department filters. All services opens a separate page; company
+Employees provides a paged coworker directory with assignment labels and department
+filters. Search opens a dedicated page and preserves the browsing list on return.
+All services opens a separate page; company
 switching stays in Account. Back returns from an inner page to its tab, then to
 Home before leaving the application. Inner pages keep their back and refresh
 actions above the scrolling content; Settings groups language and security controls.

@@ -23,6 +23,46 @@ class SearchAndFiltersUiTest {
     @get:Rule val compose = createComposeRule()
 
     @Test
+    fun searchEntryDispatchesOneActionWithoutCreatingAnEditor() {
+        var clicks = 0
+        compose.setContent {
+            AppTheme {
+                Box(Modifier.width(320.dp)) { AppSearchEntry("Search employees", { clicks++ }) }
+            }
+        }
+        val entry = compose.onNodeWithContentDescription("Search employees")
+        entry.assertHeightIsAtLeast(48.dp).assert(hasSetTextAction().not()).performClick()
+        entry.performSemanticsAction(androidx.compose.ui.semantics.SemanticsActions.RequestFocus) {
+            it()
+        }
+        entry.performKeyInput { pressKey(Key.Enter) }
+        compose.runOnIdle { assertEquals(2, clicks) }
+    }
+
+    @Test
+    fun initialSearchFocusDoesNotReturnOnEditsAndIsReleasedWithTheField() {
+        var visible by mutableStateOf(true)
+        var value by mutableStateOf("")
+        compose.setContent {
+            AppTheme {
+                if (visible)
+                    AppSearchField(value, { value = it }, "Search", "Clear", autoFocus = true)
+                else AppText("Closed")
+            }
+        }
+        val field = compose.onNodeWithContentDescription("Search")
+        field.assertIsFocused().performTextInput("People")
+        field.performImeAction()
+        field.assertIsNotFocused()
+        compose.runOnIdle { value = "Engineering" }
+        field.assertIsNotFocused()
+        compose.runOnIdle { visible = false }
+        field.assertDoesNotExist()
+        compose.runOnIdle { visible = true }
+        field.assertIsFocused()
+    }
+
+    @Test
     fun searchHasAnAccessibleClearActionAndSupportsLargeTextWithoutASecondHeader() {
         val value = mutableStateOf("")
         val enabled = mutableStateOf(true)

@@ -644,3 +644,18 @@ a PDF through the native picker directly into its upload form. Light appearance
 and dark appearance at 150% text were inspected. The shared tab component also
 passed the starter's root checks, 265 desktop tests, two application Chromium
 tests and Android dev assembly. No performance or memory benchmark is claimed.
+
+## Dedicated employee search
+
+Root checks passed with 759 desktop tests, five application Chromium tests and
+Android dev assembly. Search has its own navigation-owned ViewModel, query and
+filter. Regressions cover pending cancellation on Back, discarded late results,
+owner disposal, company replacement, retained browsing filters/pages/scroll,
+explicit retry, and fixed search/Back controls with Indonesian text at 200%.
+
+The API 35 emulator verified the browsing entry, automatic keyboard focus, real API
+results, an empty result, clearing, return to the retained directory, and Back to
+Home. Light appearance and dark appearance with 150% text were inspected; emulator
+preferences were restored afterward. The shared controls also passed the starter's
+267 desktop tests, two application Chromium tests and Android dev assembly.
+These checks do not establish frame-time, memory or battery performance.

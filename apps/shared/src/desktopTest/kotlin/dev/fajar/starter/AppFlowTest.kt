@@ -8,13 +8,16 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.backhandler.LocalBackGestureDispatcher
 import androidx.compose.ui.graphics.asSkiaBitmap
+import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.viewModelScope
 import dev.fajar.starter.app.StarterApp
 import dev.fajar.starter.app.di.applicationNetworkModule
 import dev.fajar.starter.app.di.createAppContainer
@@ -44,6 +47,7 @@ import dev.fajar.starter.identity.domain.repositories.SessionRepository
 import dev.fajar.starter.localization.formatLocalDate
 import dev.fajar.starter.notifications.data.datasources.*
 import dev.fajar.starter.notifications.data.dto.*
+import dev.fajar.starter.people.presentation.directory.EmployeesViewModel
 import dev.fajar.starter.workforce.domain.attendance.entities.AttendanceWindow
 import dev.fajar.starter.workforce.domain.attendance.repositories.AttendanceCacheRepository
 import dev.fajar.starter.workforce.domain.repositories.WorkCalendarCacheRepository
@@ -55,6 +59,7 @@ import kotlin.test.*
 import kotlin.time.Duration.Companion.milliseconds
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.job
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.*
 import org.jetbrains.skia.Image
@@ -1469,9 +1474,6 @@ class AppFlowTest {
             val attendanceRequests = server.workforce.attendancePeriods.size
             compose.onNode(hasText("Employees") and isSelectable()).performClick()
             waitFor("Sam Wilson")
-            compose
-                .onNodeWithContentDescription("Search employees")
-                .performTextReplacement("Colleague")
             waitFor("Colleague 03")
             compose.onNode(hasScrollToIndexAction()).performScrollToNode(hasText("Colleague 15"))
             val row = compose.onNodeWithText("Colleague 15").fetchSemanticsNode().boundsInRoot
@@ -1493,7 +1495,9 @@ class AppFlowTest {
                 }
             }
             compose.onNode(hasScrollToIndexAction()).performScrollToIndex(0)
-            compose.onNodeWithContentDescription("Search employees").assertTextEquals("Colleague")
+            compose
+                .onNodeWithContentDescription("Search employees")
+                .assert(hasSetTextAction().not())
             refreshWhenReady()
             compose.waitUntil { server.directory.queries.size == directoryRequests + 1 }
             waitFor("Colleague 03")
@@ -1636,16 +1640,23 @@ class AppFlowTest {
     }
 
     @Test
-    fun employeesTabPagesSearchesAndCancelsHiddenRequestsWithoutCrossingCompanies() {
+    fun employeeSearchOwnsItsRequestsAndReturnsToTheRetainedDirectoryWithoutCrossingCompanies() {
         val server = NativeUiServer()
+        val owners = mutableListOf<EmployeesViewModel>()
+        val definitions = module {
+            factory<EmployeesViewModel> { parameters ->
+                EmployeesViewModel(parameters.get(), get(), get(), get()).also(owners::add)
+            }
+        }
         try {
-            withApplication(server) {
+            withApplication(server, definitions) {
                 signIn()
                 waitFor("Choose a company")
                 compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
                 waitFor("Welcome")
                 compose.onNode(hasText("Employees") and isSelectable()).performClick()
                 waitFor("Sam Wilson")
+                val directory = owners.single()
                 compose.onNodeWithContentDescription("Back").assertDoesNotExist()
                 compose.onNodeWithText("HR Specialist").assertExists()
                 capture("employees")
@@ -1655,6 +1666,10 @@ class AppFlowTest {
                 compose.onNode(hasScrollToIndexAction()).performScrollToNode(hasText("First page"))
                 compose.onNodeWithText("First page").performClick()
                 waitFor("Sam Wilson")
+                openEmployeeSearch()
+                val search = owners.last()
+                assertNotSame(directory, search)
+                compose.onNode(hasText("Account") and isSelectable()).assertDoesNotExist()
                 compose
                     .onNodeWithContentDescription("Search employees")
                     .performTextReplacement("Sam")
@@ -1667,13 +1682,36 @@ class AppFlowTest {
                     .onNodeWithContentDescription("Search employees")
                     .performTextReplacement("Alex")
                 compose.waitUntil { server.directory.started.isCompleted }
-                compose.onNode(hasText("Account") and isSelectable()).performClick()
+                val beforeReturn = server.directory.queries.size
+                compose.onNodeWithContentDescription("Back").performClick()
                 compose.waitUntil { server.directory.cancelled.isCompleted }
                 server.directory.released.complete(Unit)
-                compose.onNode(hasText("Employees") and isSelectable()).performClick()
+                waitFor("Sam Wilson")
+                compose.runOnIdle {
+                    assertFalse(search.viewModelScope.coroutineContext.job.isActive)
+                    assertTrue(directory.viewModelScope.coroutineContext.job.isActive)
+                    assertEquals(beforeReturn, server.directory.queries.size)
+                }
+                compose
+                    .onNodeWithContentDescription("Search employees")
+                    .assert(hasSetTextAction().not())
+                openEmployeeSearch()
+                compose
+                    .onNodeWithContentDescription("Search employees")
+                    .assert(
+                        SemanticsMatcher.expectValue(
+                            SemanticsProperties.EditableText,
+                            AnnotatedString(""),
+                        )
+                    )
+                compose
+                    .onNodeWithContentDescription("Search employees")
+                    .performTextReplacement("Alex")
                 waitFor("Alex Morgan")
-                compose.onNodeWithContentDescription("Search employees").assertTextEquals("Alex")
                 compose.onNodeWithText("Sam Wilson").assertDoesNotExist()
+                capture("employee-search")
+                compose.onNodeWithContentDescription("Back").performClick()
+                waitFor("Sam Wilson")
                 compose.runOnIdle { backDispatcher.pressBack() }
                 waitFor("Welcome")
                 compose.onNode(hasText("Home") and isSelectable()).assertIsSelected()
@@ -1685,15 +1723,23 @@ class AppFlowTest {
                 waitFor("Welcome")
                 compose.onNode(hasText("Employees") and isSelectable()).performClick()
                 waitFor("No employees found.")
+                openEmployeeSearch()
                 compose
                     .onNodeWithContentDescription("Search employees")
                     .assert(
                         SemanticsMatcher.expectValue(
-                            androidx.compose.ui.semantics.SemanticsProperties.EditableText,
-                            androidx.compose.ui.text.AnnotatedString(""),
+                            SemanticsProperties.EditableText,
+                            AnnotatedString(""),
                         )
                     )
+                waitFor("No employees found.")
                 compose.onNodeWithText("Sam Wilson").assertDoesNotExist()
+                compose.runOnIdle {
+                    assertFalse(directory.viewModelScope.coroutineContext.job.isActive)
+                }
+            }
+            compose.runOnIdle {
+                assertTrue(owners.all { !it.viewModelScope.coroutineContext.job.isActive })
             }
         } finally {
             server.directory.released.complete(Unit)
@@ -1729,16 +1775,21 @@ class AppFlowTest {
             compose.onNodeWithText("Next page").performClick()
             waitFor("Colleague 22")
             compose.onNode(hasScrollToIndexAction()).performScrollToIndex(0)
+            openEmployeeSearch()
+            compose.onNodeWithText("All departments").assertExists()
             compose
                 .onNodeWithContentDescription("Search employees")
                 .performTextReplacement("Colleague 25")
             waitFor("Colleague 25")
             compose.onNodeWithText("Next page").assertDoesNotExist()
             compose.onNodeWithContentDescription("Clear search").performClick()
-            waitFor("Alex Morgan")
+            waitFor("Sam Wilson")
+            compose.onNodeWithContentDescription("Back").performClick()
+            waitFor("Colleague 22")
+            compose.onNodeWithText("Sam Wilson").assertDoesNotExist()
             compose.onNode(hasText("Account") and isSelectable()).performClick()
             compose.onNode(hasText("Employees") and isSelectable()).performClick()
-            waitFor("Alex Morgan")
+            waitFor("Colleague 22")
             compose.onNode(hasText("Engineering") and hasClickAction()).performClick()
             compose.onNodeWithText("All departments").performClick()
             waitFor("Sam Wilson")
@@ -2783,6 +2834,21 @@ class AppFlowTest {
                 .size == 1
         }
         compose.onNodeWithContentDescription("Refresh").assertIsEnabled().performClick()
+    }
+
+    private fun openEmployeeSearch() {
+        compose
+            .onNodeWithContentDescription("Search employees")
+            .assert(hasSetTextAction().not())
+            .performScrollTo()
+            .performClick()
+        compose.waitUntil {
+            compose
+                .onAllNodes(hasContentDescription("Search employees") and hasSetTextAction())
+                .fetchSemanticsNodes()
+                .size == 1
+        }
+        compose.onNodeWithContentDescription("Search employees").assertIsFocused()
     }
 
     private fun openDocumentFiles() {

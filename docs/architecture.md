@@ -207,6 +207,12 @@ business workflows; Inbox and Employees are reached through their tabs. Personal
 profile access belongs to Account and has its own admission, separate from menu
 visibility.
 
+Employee search uses a separate navigation entry with its own directory ViewModel
+and list state. It reuses directory acquisition and rendering contracts without
+sharing a ViewModel with the browsing tab. Back disposes search work while the
+tab retains its admitted page, filter and scroll. Company changes dispose both
+owners before any incoming company content is shown.
+
 The root navigation graph belongs to the session and workspace IDs. Logout, a
 replacement session, or a company change
 disposes its protected routes and saved tab state immediately; these boundaries

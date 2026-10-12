@@ -5,6 +5,8 @@ sealed interface EmployeesEvent {
 
     data object Stopped : EmployeesEvent
 
+    data object SearchRequested : EmployeesEvent
+
     data class QueryChanged(val value: String) : EmployeesEvent
 
     data class PageRequested(val after: String?) : EmployeesEvent

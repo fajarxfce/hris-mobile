@@ -185,6 +185,11 @@ fun AppNavigation(navigation: ScopedNavigationState, incomingLinks: Flow<String>
                         employees = {
                             EmployeesContent(
                                 stage.workspace.id,
+                                onSearch = {
+                                    controller.navigate(EmployeeSearchRoute) {
+                                        launchSingleTop = true
+                                    }
+                                },
                                 onVerify = {
                                     controller.navigate(VerificationRoute) {
                                         launchSingleTop = true
@@ -208,6 +213,9 @@ fun AppNavigation(navigation: ScopedNavigationState, incomingLinks: Flow<String>
                     }
                     employeesRoutes(
                         stage.workspace.id,
+                        onSearch = {
+                            controller.navigate(EmployeeSearchRoute) { launchSingleTop = true }
+                        },
                         onVerify = {
                             controller.navigate(VerificationRoute) { launchSingleTop = true }
                         },
