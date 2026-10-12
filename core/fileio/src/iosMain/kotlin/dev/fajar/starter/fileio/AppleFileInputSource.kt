@@ -94,7 +94,7 @@ class AppleFileInputSource : FileInputSource {
         }
 
     override fun read(requestId: String): Flow<ByteArray> =
-        flow {
+        flow<ByteArray> {
                 coroutineScope {
                     val operation = currentCoroutineContext().job
                     val input = inputs.beginRead(requestId, operation)
@@ -104,7 +104,8 @@ class AppleFileInputSource : FileInputSource {
                     try {
                         val path =
                             (input.url.path ?: throw FileInputUnavailableException()).toPath()
-                        FileSystem.SYSTEM.openReadOnly(path).use { handle ->
+                        val handle = FileSystem.SYSTEM.openReadOnly(path)
+                        try {
                             val bytes = ByteArray(FILE_INPUT_BLOCK_BYTES)
                             var offset = 0L
                             var ended = false
@@ -127,6 +128,8 @@ class AppleFileInputSource : FileInputSource {
                                 ensureActive()
                                 if (filled > 0) emit(bytes.copyOf(filled))
                             }
+                        } finally {
+                            handle.close()
                         }
                     } finally {
                         if (scoped) input.url.stopAccessingSecurityScopedResource()
