@@ -13,12 +13,15 @@ def main(arguments=None):
     parser.add_argument("--flavor", choices=["dev", "staging", "prod"], default="dev")
     parser.add_argument("--skip-build", action="store_true", help="Install the existing debug APK")
     parser.add_argument("--install-only", action="store_true", help="Update without opening the app")
+    parser.add_argument("--reverse-port", type=int, metavar="PORT", help="Forward a loopback development API before installing")
     args = parser.parse_args(arguments)
+    if args.reverse_port is not None and not 1 <= args.reverse_port <= 65535:
+        parser.error("The reverse port must be between 1 and 65535")
 
     root = Path(__file__).resolve().parents[1]
     sdk = Path(os.environ.get("ANDROID_HOME") or os.environ.get("ANDROID_SDK_ROOT") or Path.home() / "Android/Sdk")
     adb = str(sdk / "platform-tools" / ("adb.exe" if os.name == "nt" else "adb"))
-    devices = subprocess.check_output([adb, "devices"], text=True)
+    devices = subprocess.check_output([adb, "devices"], text=True, timeout=15)
     serials = [line.split()[0] for line in devices.splitlines()[1:] if line.endswith("\tdevice")]
     serial = args.serial or (serials[0] if len(serials) == 1 else None)
     if serial is None:
@@ -28,14 +31,17 @@ def main(arguments=None):
 
     if not args.skip_build:
         wrapper = root / ("gradlew.bat" if os.name == "nt" else "gradlew")
-        subprocess.run([str(wrapper), f":apps:android:assemble{args.flavor.capitalize()}Debug"], cwd=root, check=True)
+        subprocess.run([str(wrapper), f":apps:android:assemble{args.flavor.capitalize()}Debug", "--no-daemon"], cwd=root, check=True)
     apk = root / "apps/android/build/outputs/apk" / args.flavor / "debug" / f"android-{args.flavor}-debug.apk"
     if not apk.is_file():
         parser.error("The debug APK is missing; run without --skip-build")
-    subprocess.run([adb, "-s", serial, "install", "-r", str(apk)], check=True)
+    if args.reverse_port is not None:
+        port = f"tcp:{args.reverse_port}"
+        subprocess.run([adb, "-s", serial, "reverse", port, port], check=True, timeout=15)
+    subprocess.run([adb, "-s", serial, "install", "-r", str(apk)], check=True, timeout=180)
     if not args.install_only:
         package = f"dev.fajar.hris.mobile{'.' + args.flavor if args.flavor != 'prod' else ''}"
-        subprocess.run([adb, "-s", serial, "shell", "am", "start", "-n", f"{package}/dev.fajar.hris.MainActivity"], check=True)
+        subprocess.run([adb, "-s", serial, "shell", "am", "start", "-n", f"{package}/dev.fajar.hris.MainActivity"], check=True, timeout=15)
 
 
 if __name__ == "__main__":

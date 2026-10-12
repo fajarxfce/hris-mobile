@@ -55,11 +55,11 @@ is not a completed HRIS workflow. See [native identity](docs/native-identity.md)
 ## Development
 
 Requires JDK 21 and Android SDK 36. Start HRIS Platform using its development
-instructions, then run:
+instructions, including its `compose.wireguard.yml` overlay on the development
+VPS. Connect the phone to WireGuard, then run:
 
 ```sh
 ./gradlew :apps:android:assembleDevDebug
-adb -s emulator-5560 reverse tcp:8088 tcp:8088
 python3 tool/run_android.py emulator-5560 --skip-build
 ```
 
@@ -67,8 +67,13 @@ Use the serial from `adb devices` for a different target. The runner installs on
 that device only. See [headless emulator setup](docs/development.md#headless-android-emulator)
 for VPS development and updating a connected phone without opening the application.
 
-The dev API defaults to `http://127.0.0.1:8088/api/v1/`. Only dev permits loopback
-HTTP. Configure a deployed API using Gradle properties, for example:
+This application's `gradle.properties` selects the private dev API at
+`http://10.77.77.1:8088/api/v1/`. It works independently of ADB forwarding.
+Only dev permits HTTP for this VPN address and loopback. For a local backend,
+build with `-PapiBaseUrl.dev=http://127.0.0.1:8088/api/v1/` and add
+`--reverse-port 8088` when installing that APK. See
+[development](docs/development.md#headless-android-emulator) for both paths.
+Configure a deployed API using Gradle properties, for example:
 
 ```sh
 ./gradlew :apps:android:assembleStagingDebug -PapiBaseUrl.staging=https://hris.example.com/api/v1/

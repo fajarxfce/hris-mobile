@@ -22,9 +22,16 @@ tasks.register<Exec>("distributionCheck") {
     )
 }
 
+tasks.register<Exec>("androidRunnerCheck") {
+    group = "verification"
+    commandLine("python3", "-m", "unittest", "discover", "-s", "tool", "-p", "test_*.py")
+}
+
 tasks.named("check") {
     dependsOn("architectureCheck")
     dependsOn("distributionCheck")
+    dependsOn("androidRunnerCheck")
+    dependsOn(gradle.includedBuild("build-logic").task(":test"))
     dependsOn("formatCheck")
     dependsOn(
         subprojects

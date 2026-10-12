@@ -3,6 +3,7 @@ plugins { `kotlin-dsl` }
 kotlin { jvmToolchain(21) }
 
 dependencies {
+    testImplementation(libs.junit)
     implementation(libs.kotlin.gradle)
     implementation(libs.kotlin.compose.gradle)
     implementation(libs.kotlin.serialization.gradle)

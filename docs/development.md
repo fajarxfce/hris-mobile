@@ -50,8 +50,8 @@ errors, and form values in state; use effects for transient UI actions.
 ## Backend integration
 
 The application uses HRIS Platform's `/api/v1/` native authentication and company
-endpoints. Dev defaults to loopback HTTP through ADB reverse; staging and production
-require the configured HTTPS origin. See [native identity](native-identity.md) and
+endpoints. This application's dev configuration uses the private WireGuard API;
+staging and production require the configured HTTPS origin. See [native identity](native-identity.md) and
 [environments](environments.md). The inherited demo module is not installed in the
 runtime graph.
 
@@ -99,11 +99,10 @@ emulator -avd hris-mobile-dev -port 5560 -no-window -no-audio \
 Wait for `adb -s emulator-5560 shell getprop sys.boot_completed` to return `1`, then:
 
 ```sh
-adb -s emulator-5560 reverse tcp:8088 tcp:8088
 python3 tool/run_android.py emulator-5560
 ```
 
-The runner builds with `assemble`, then uses `adb -s` for installation and launch.
+The runner builds with `assemble --no-daemon`, then uses `adb -s` for installation and launch.
 It refuses an ambiguous or disconnected target. To install an already validated
 APK on a phone, replace `<phone-serial>` with its actual serial:
 
@@ -111,10 +110,25 @@ APK on a phone, replace `<phone-serial>` with its actual serial:
 python3 tool/run_android.py <phone-serial> --skip-build --install-only
 ```
 
-The default dev API uses the device's loopback address. WireGuard provides device
-reachability but does not recreate ADB forwarding. After restarting or reconnecting
-ADB, restore `adb -s <phone-serial> reverse tcp:8088 tcp:8088` before opening this
-dev build. Deployed builds use their configured HTTPS origin.
+The checked-in dev endpoint is `http://10.77.77.1:8088/api/v1/`. HRIS Platform's
+optional `compose.wireguard.yml` publishes this private interface. A phone needs
+the WireGuard tunnel; the VPS emulator reaches the same host directly. API access
+does not depend on the ADB connection, which is only needed for installation and
+debugging. Staging/prod use their configured HTTPS origin.
+
+For a backend available only on the development machine's loopback interface:
+
+```sh
+./gradlew :apps:android:assembleDevDebug --no-daemon -PapiBaseUrl.dev=http://127.0.0.1:8088/api/v1/
+python3 tool/run_android.py <device-serial> --skip-build --install-only --reverse-port 8088
+```
+
+The optional reverse port is configured on the selected device before installation;
+failure stops the runner. ADB commands have finite timeouts. Forwarding still ends
+when ADB disconnects; restore it before opening a loopback build again. Prefer the
+private VPN endpoint when the phone must work independently of the debugger.
+Changing the API origin invalidates the old origin's credential and requires sign-in
+again. Account-owned records retain their original origin and are not reassigned.
 
 Stop an emulator when it is no longer needed with
 `adb -s emulator-5560 emu kill`; its app data is retained. Never use `-wipe-data`

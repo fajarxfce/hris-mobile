@@ -59,21 +59,7 @@ abstract class GenerateEnvironment : DefaultTask() {
             "Remote mode requires apiBaseUrl or all three environment endpoints."
         }
         if (backend.get() == "remote")
-            urls.forEach { (environment, it) ->
-                val uri = java.net.URI(it)
-                require(
-                    (uri.scheme == "https" ||
-                        (environment == "dev" &&
-                            uri.scheme == "http" &&
-                            uri.host in setOf("127.0.0.1", "localhost"))) &&
-                        !uri.host.isNullOrBlank() &&
-                        uri.userInfo == null &&
-                        uri.query == null &&
-                        uri.fragment == null
-                ) {
-                    "API endpoints require HTTPS; only the dev environment allows loopback HTTP. Credentials, queries and fragments are forbidden."
-                }
-            }
+            urls.forEach { (environment, url) -> requireApiEndpoint(environment, url) }
         val output =
             outputDirectory.file("dev/fajar/starter/common/config/BuildEnvironment.kt").get().asFile
         output.parentFile.mkdirs()

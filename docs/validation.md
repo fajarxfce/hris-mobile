@@ -1,5 +1,24 @@
 # Validation
 
+## Private VPN development connection
+
+Root checks passed with 627 desktop/JVM tests, four build-endpoint tests and seven
+Android runner tests. Android dev assembly passed. Endpoint coverage rejects public
+and link-local HTTP, credentials, queries/fragments and HTTP in staging/production.
+Runner coverage verifies selected-device forwarding, failure before installation,
+invalid ports, bounded ADB commands and installation without launching the app.
+
+The API 35 emulator signed in, selected the fixture company and restored Home after
+process restart with an empty ADB reverse table. The Home capture was inspected.
+The same APK was installed on the authorized phone with `--install-only`, and its
+obsolete API reverse mapping was removed. No phone UI was driven; acceptance of
+the new connection awaits the owner's check. The earlier loopback connection was
+restored and the owner confirmed successful sign-in before this update.
+
+The development API now uses the private WireGuard interface. Changing from the
+old loopback origin requires sign-in again; retained commands/files keep their
+original origin binding. This configuration does not migrate their ownership.
+
 ## Durable file blocks and checkpoints
 
 Complete root checks passed with 627 desktop/JVM tests. All 23 database Chromium

@@ -31,10 +31,16 @@ For desktop/Web, `starter.environment` generates the selected environment from
 
 Desktop storage directories and browser storage keys include the environment. Android
 uses its flavor's BuildConfig value, independently of the shared default.
-Every runtime uses the native HRIS backend. Dev defaults to
-`http://127.0.0.1:8088/api/v1/`; Android can reach the VPS through
-`adb reverse tcp:8088 tcp:8088`. Its network security configuration permits
-cleartext only for `127.0.0.1` and `localhost`. Staging/prod require HTTPS and must
+Every runtime uses the native HRIS backend. This application's `gradle.properties`
+sets dev to `http://10.77.77.1:8088/api/v1/`, available through the development
+server's private WireGuard interface. It does not require ADB forwarding.
+For a local-only server, override `-PapiBaseUrl.dev=http://127.0.0.1:8088/api/v1/`
+and install using the runner's `--reverse-port 8088`. Android's dev network
+security configuration permits cleartext only for `10.77.77.1`, `127.0.0.1` and
+`localhost`; another private dev host needs an explicit allowlist change.
+The environment generator accepts HTTP only for dev loopback/RFC 1918 IPv4
+addresses. It does not resolve hostnames or accept public/link-local HTTP origins.
+Staging/prod require HTTPS and must
 replace their `.invalid` configuration placeholders using
 `-PapiBaseUrl.staging=...` or `-PapiBaseUrl.prod=...`. API URLs include a trailing
 slash. A credential restored for another configured API audience is invalidated.
