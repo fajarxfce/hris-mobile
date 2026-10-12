@@ -8,6 +8,7 @@ import io.github.composefluent.icons.Icons
 import io.github.composefluent.icons.regular.CalendarCheckmark
 import io.github.composefluent.icons.regular.CalendarLtr
 import io.github.composefluent.icons.regular.Clock
+import io.github.composefluent.icons.regular.Document
 import io.github.composefluent.icons.regular.Person
 
 /** A bounded catalog of implemented services; destination state stays with each feature. */
@@ -15,6 +16,7 @@ enum class HomeService(val title: AppString, val summary: AppString, val icon: I
     Attendance(AppString.Attendance, AppString.AttendanceSummary, Icons.Regular.Clock),
     Calendar(AppString.WorkCalendar, AppString.CalendarSummary, Icons.Regular.CalendarLtr),
     Leave(AppString.Leave, AppString.LeaveSummary, Icons.Regular.CalendarCheckmark),
+    Documents(AppString.Documents, AppString.DocumentsSummary, Icons.Regular.Document),
     Profile(AppString.MyProfile, AppString.ProfileSummary, Icons.Regular.Person),
 }
 
@@ -42,8 +44,19 @@ fun homeServices(workspace: Workspace?): HomeServiceCatalog {
         )
             add(HomeService.Leave)
     }
+    val personal = buildList {
+        if (
+            companyModuleAvailable(workspace, CompanyModule.DOCUMENTS) &&
+                "documents.self.read" in permissions
+        )
+            add(HomeService.Documents)
+    }
     val sections =
-        listOf(HomeServiceSection(AppString.ServicesWork, work)).filter { it.items.isNotEmpty() }
+        listOf(
+                HomeServiceSection(AppString.ServicesWork, work),
+                HomeServiceSection(AppString.ServicesPersonal, personal),
+            )
+            .filter { it.items.isNotEmpty() }
     val account =
         if (
             "people.self.read" in permissions &&

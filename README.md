@@ -44,7 +44,9 @@ and recover the original request after interrupted delivery. Employees can selec
 leave dates and portions, review the server calculation, and submit with durable
 recovery after interrupted delivery. Up to three personal documents can be selected
 from the employee's published evidence catalog, including for types requiring an
-attachment. New file acquisition and resumable transfer remain separate delivery work.
+attachment. Documents also supports encrypted local import of PDF/JPG/PNG files and
+confirmed local removal, scoped to the selected account and company. Resumable
+upload and authenticated download remain separate delivery work.
 
 The runtime contains no demo authentication transport. Other transactional employee workflows
 are still being connected; a generated module
@@ -101,7 +103,7 @@ policy is not configured yet. Android/iOS send the server's native version heade
 - `core/workspace`: current company selection and scope ownership.
 - `core/location`: foreground location, permission and Settings I/O contracts.
 - `core/documents`: shared [HRIS evidence contracts and catalog](docs/documents.md).
-- `features/auth`, `features/workspace`, `features/home`, `features/people`, `features/inbox`, `features/workforce`, `features/leave`: feature-owned MVI screens.
+- `features/auth`, `features/workspace`, `features/home`, `features/people`, `features/inbox`, `features/workforce`, `features/leave`, `features/documents`: feature-owned MVI screens.
 - `core/designsystem`: shared `AppXxx` Fluent components and restrained transitions.
 - `build-logic`: Gradle convention plugins; versions are in `gradle/libs.versions.toml`.
 

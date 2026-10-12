@@ -1,4 +1,23 @@
 <resources>
+    <string name="documents_en">Documents</string>
+    <string name="documents_summary_en">Personal files and supporting documents</string>
+    <string name="document_local_files_en">On this device</string>
+    <string name="document_file_types_en">PDF, JPG, PNG · Up to 100 MB per file</string>
+    <string name="document_add_file_en">Add file</string>
+    <string name="document_no_local_files_en">No local files yet.</string>
+    <string name="document_importing_en">Preparing file…</string>
+    <string name="document_not_uploaded_en">Not uploaded</string>
+    <string name="document_import_incomplete_en">Incomplete import</string>
+    <string name="document_remove_named_en">Remove %1$s from device</string>
+    <string name="document_remove_local_en">Remove local file</string>
+    <string name="document_remove_explanation_en">This removes the copy stored on this device.</string>
+    <string name="document_invalid_file_en">Choose a PDF, JPG or PNG file with a matching extension.</string>
+    <string name="document_file_size_en">Choose a non-empty file up to 100 MB.</string>
+    <string name="document_file_size_unknown_en">The file size is unavailable. Save a local copy and select it again.</string>
+    <string name="document_storage_full_en">Local storage is full. Remove an unused file first.</string>
+    <string name="document_file_changed_en">The file changed. Review it and try again.</string>
+    <string name="document_file_permission_en">File access was denied. Select the file again.</string>
+    <string name="document_file_unavailable_en">The file could not be read. Select another copy.</string>
     <string name="leave_attached_count_en">Attachments: %1$s</string>
     <string name="leave_choose_document_en">Select document</string>
     <string name="leave_no_documents_en">No documents are available.</string>

@@ -16,6 +16,8 @@ interface DocumentFileRepository {
 
     suspend fun find(access: DocumentAccess, id: String): AppResult<LocalDocumentFile?>
 
+    suspend fun remove(access: DocumentAccess, id: String, revision: Long): AppResult<Boolean>
+
     /** Conditional cleanup must never delete a completed or concurrently advanced file. */
     suspend fun discardIncomplete(access: DocumentAccess, id: String): AppResult<Boolean>
 }

@@ -10,7 +10,14 @@ Apple file-handle cleanup also exists at
 Both repositories passed root checks, 12 file-input Chromium tests and Android
 adapter compilation. HRIS passed 642 desktop tests and the starter passed 241.
 Company admission, document encryption and the HRIS transfer protocol remain
-application integration work.
+specific to this application.
+
+The finite IndexedDB test deadline and verified Android runtime metadata are also
+at [0a7c934](https://github.com/fajarxfce/compose-fluent-starter/commit/0a7c934)
+and [eb74538](https://github.com/fajarxfce/compose-fluent-starter/commit/eb74538).
+Both repositories passed root checks, 23 database Chromium tests and Android
+file-input dependency checks. Mobile passed 660 desktop tests and an Android dev
+build; the starter passed 241 desktop tests.
 
 ## Retained tab ownership
 

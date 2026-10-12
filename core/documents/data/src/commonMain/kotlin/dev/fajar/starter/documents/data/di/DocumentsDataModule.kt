@@ -12,6 +12,22 @@ import org.koin.core.annotation.*
 @ComponentScan("dev.fajar.starter.documents.data")
 class DocumentsDataModule {
     @Factory
+    fun observeFiles(
+        files: DocumentFileRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        build: AppBuild,
+    ) = ObserveDocumentFiles(files, sessions, workspaces, Clock.System, build)
+
+    @Factory
+    fun removeFile(
+        files: DocumentFileRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        build: AppBuild,
+    ) = RemoveDocumentFile(files, sessions, workspaces, Clock.System, build)
+
+    @Factory
     fun importFile(
         inputs: DocumentInputRepository,
         files: DocumentFileRepository,

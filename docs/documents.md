@@ -52,7 +52,19 @@ recover them. Cancellation cleanup only removes an incomplete file at its observ
 revision. A completed file, including a commit whose response was lost, remains
 recoverable. Failed cleanup may leave encrypted staging records.
 
-The shared import contract is connected to platform sources and DI. Employee
-file-management UI, upload confirmation, resumable HRIS transport and authenticated
-downloads are subsequent integration work; local completion is not server approval
-and does not make a file selectable as published evidence.
+The Documents service exposes account/company-scoped local files, explicit import
+and confirmed local removal. `ObserveDocumentFiles` owns session, company and read
+lease checks; lease expiry cancels the storage reader even without another data
+emission. `RemoveDocumentFile` checks the file revision shown in the confirmation;
+a concurrently changed file cannot be deleted by an older confirmation.
+
+The feature owns its route and MVI state. Its input operation belongs to the route,
+not Activity `ON_STOP`, because an Android document picker intentionally stops the
+Activity. Leaving the route or replacing its account cancels pending input; the
+import use case still releases resources with bounded cleanup. State collection
+remains lifecycle-aware. Known access failures hide content and require workspace
+revalidation; reopening a local observer cannot bypass that gate.
+
+Upload confirmation, resumable HRIS transport and authenticated downloads remain
+subsequent integration work. Local completion is not server approval and does not
+make a file selectable as published evidence.

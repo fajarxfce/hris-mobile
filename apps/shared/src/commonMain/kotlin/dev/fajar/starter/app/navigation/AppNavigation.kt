@@ -14,6 +14,7 @@ import androidx.navigation.compose.composable
 import dev.fajar.starter.app.bootstrap.*
 import dev.fajar.starter.auth.presentation.navigation.*
 import dev.fajar.starter.designsystem.components.*
+import dev.fajar.starter.documents.presentation.navigation.*
 import dev.fajar.starter.home.presentation.catalog.HomeService
 import dev.fajar.starter.home.presentation.home.HomeTab
 import dev.fajar.starter.home.presentation.navigation.*
@@ -147,6 +148,8 @@ fun AppNavigation(controller: NavHostController, incomingLinks: Flow<String>) {
                                 controller.navigate(WorkCalendarRoute) { launchSingleTop = true }
                             HomeService.Leave ->
                                 controller.navigate(LeaveRoute) { launchSingleTop = true }
+                            HomeService.Documents ->
+                                controller.navigate(DocumentsRoute) { launchSingleTop = true }
                             HomeService.Profile ->
                                 controller.navigate(ProfileRoute) { launchSingleTop = true }
                         }
@@ -263,6 +266,13 @@ fun AppNavigation(controller: NavHostController, incomingLinks: Flow<String>) {
                         },
                         onRecheckWorkspace = {
                             viewModel.onEvent(AppEvent.WorkspaceRefreshRequested)
+                        },
+                        onBack = { controller.popBackStack() },
+                    )
+                    documentRoutes(
+                        stage.workspace.id,
+                        onVerify = {
+                            controller.navigate(VerificationRoute) { launchSingleTop = true }
                         },
                         onBack = { controller.popBackStack() },
                     )

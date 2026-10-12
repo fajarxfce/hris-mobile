@@ -1,4 +1,23 @@
 <resources>
+    <string name="documents_id">Dokumen</string>
+    <string name="documents_summary_id">File pribadi dan dokumen pendukung</string>
+    <string name="document_local_files_id">Di perangkat ini</string>
+    <string name="document_file_types_id">PDF, JPG, PNG · Maks. 100 MB per file</string>
+    <string name="document_add_file_id">Tambah file</string>
+    <string name="document_no_local_files_id">Belum ada file lokal.</string>
+    <string name="document_importing_id">Menyiapkan file…</string>
+    <string name="document_not_uploaded_id">Belum diupload</string>
+    <string name="document_import_incomplete_id">Import belum selesai</string>
+    <string name="document_remove_named_id">Hapus %1$s dari perangkat</string>
+    <string name="document_remove_local_id">Hapus file lokal</string>
+    <string name="document_remove_explanation_id">Salinan yang disimpan di perangkat ini akan dihapus.</string>
+    <string name="document_invalid_file_id">Pilih file PDF, JPG, atau PNG dengan ekstensi yang sesuai.</string>
+    <string name="document_file_size_id">Pilih file yang tidak kosong, maksimal 100 MB.</string>
+    <string name="document_file_size_unknown_id">Ukuran file tidak tersedia. Simpan salinan lokal lalu pilih kembali.</string>
+    <string name="document_storage_full_id">Penyimpanan lokal penuh. Hapus file yang tidak diperlukan.</string>
+    <string name="document_file_changed_id">File telah berubah. Periksa lalu coba lagi.</string>
+    <string name="document_file_permission_id">Akses file ditolak. Pilih file kembali.</string>
+    <string name="document_file_unavailable_id">File tidak dapat dibaca. Pilih salinan lain.</string>
     <string name="leave_attached_count_id">Lampiran: %1$s</string>
     <string name="leave_choose_document_id">Pilih dokumen</string>
     <string name="leave_no_documents_id">Belum ada dokumen tersedia.</string>

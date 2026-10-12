@@ -17,6 +17,7 @@ import dev.fajar.starter.database.ReplicaStore
 import dev.fajar.starter.database.TransferStore
 import dev.fajar.starter.datastore.UserPreferencesStore
 import dev.fajar.starter.documents.data.di.DocumentsDataModule
+import dev.fajar.starter.documents.presentation.di.DocumentsPresentationModule
 import dev.fajar.starter.featureflags.data.datasources.RemoteFeatureFlagSource
 import dev.fajar.starter.featureflags.data.datasources.UnavailableFeatureFlagSource
 import dev.fajar.starter.featureflags.data.di.FeatureFlagDataModule
@@ -171,6 +172,7 @@ fun createAppContainer(
         WorkforcePresentationModule().module,
         LeaveDataModule().module,
         LeavePresentationModule().module,
+        DocumentsPresentationModule().module,
         ApplicationModule().module,
     )
 }

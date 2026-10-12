@@ -5,6 +5,43 @@ import org.jetbrains.compose.resources.StringResource
 
 /** Explicit pairs keep runtime language changes portable across Android, iOS, desktop and Web. */
 enum class AppString(val english: StringResource, val indonesian: StringResource) {
+    Documents(Res.string.documents_en, Res.string.documents_id),
+    DocumentsSummary(Res.string.documents_summary_en, Res.string.documents_summary_id),
+    DocumentLocalFiles(Res.string.document_local_files_en, Res.string.document_local_files_id),
+    DocumentFileTypes(Res.string.document_file_types_en, Res.string.document_file_types_id),
+    DocumentAddFile(Res.string.document_add_file_en, Res.string.document_add_file_id),
+    DocumentNoLocalFiles(
+        Res.string.document_no_local_files_en,
+        Res.string.document_no_local_files_id,
+    ),
+    DocumentImporting(Res.string.document_importing_en, Res.string.document_importing_id),
+    DocumentNotUploaded(Res.string.document_not_uploaded_en, Res.string.document_not_uploaded_id),
+    DocumentImportIncomplete(
+        Res.string.document_import_incomplete_en,
+        Res.string.document_import_incomplete_id,
+    ),
+    DocumentRemoveNamed(Res.string.document_remove_named_en, Res.string.document_remove_named_id),
+    DocumentRemoveLocal(Res.string.document_remove_local_en, Res.string.document_remove_local_id),
+    DocumentRemoveExplanation(
+        Res.string.document_remove_explanation_en,
+        Res.string.document_remove_explanation_id,
+    ),
+    DocumentInvalidFile(Res.string.document_invalid_file_en, Res.string.document_invalid_file_id),
+    DocumentFileSize(Res.string.document_file_size_en, Res.string.document_file_size_id),
+    DocumentFileSizeUnknown(
+        Res.string.document_file_size_unknown_en,
+        Res.string.document_file_size_unknown_id,
+    ),
+    DocumentStorageFull(Res.string.document_storage_full_en, Res.string.document_storage_full_id),
+    DocumentFileChanged(Res.string.document_file_changed_en, Res.string.document_file_changed_id),
+    DocumentFilePermission(
+        Res.string.document_file_permission_en,
+        Res.string.document_file_permission_id,
+    ),
+    DocumentFileUnavailable(
+        Res.string.document_file_unavailable_en,
+        Res.string.document_file_unavailable_id,
+    ),
     LeaveAttachedCount(Res.string.leave_attached_count_en, Res.string.leave_attached_count_id),
     LeaveChooseDocument(Res.string.leave_choose_document_en, Res.string.leave_choose_document_id),
     LeaveNoDocuments(Res.string.leave_no_documents_en, Res.string.leave_no_documents_id),

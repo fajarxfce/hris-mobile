@@ -230,6 +230,12 @@ private class DocumentImportFixture {
             override suspend fun find(access: DocumentAccess, id: String) =
                 AppResult.Success(retained?.takeIf { it.draft.id == id })
 
+            override suspend fun remove(
+                access: DocumentAccess,
+                id: String,
+                revision: Long,
+            ): AppResult<Boolean> = error("Import cleanup must use discardIncomplete")
+
             override suspend fun discardIncomplete(
                 access: DocumentAccess,
                 id: String,

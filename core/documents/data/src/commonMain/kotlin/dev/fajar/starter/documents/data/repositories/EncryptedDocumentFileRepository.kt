@@ -141,6 +141,11 @@ class EncryptedDocumentFileRepository(
         }
     }
 
+    override suspend fun remove(access: DocumentAccess, id: String, revision: Long) =
+        safeStorageCall {
+            blobs.remove(documentBlobScope(access), documentFilePartition(access), id, revision)
+        }
+
     override suspend fun discardIncomplete(access: DocumentAccess, id: String) = safeStorageCall {
         val scope = documentBlobScope(access)
         val partition = documentFilePartition(access)

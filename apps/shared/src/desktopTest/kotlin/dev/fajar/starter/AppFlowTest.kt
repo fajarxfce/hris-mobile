@@ -26,6 +26,7 @@ import dev.fajar.starter.datastore.createUserPreferences
 import dev.fajar.starter.documents.domain.entities.LocalDocumentFile
 import dev.fajar.starter.documents.domain.repositories.DocumentFileRepository
 import dev.fajar.starter.documents.domain.usecases.ImportDocumentFile
+import dev.fajar.starter.documents.domain.usecases.ObserveDocumentFiles
 import dev.fajar.starter.fileio.*
 import dev.fajar.starter.fixtures.NativeAttendanceCacheUi
 import dev.fajar.starter.fixtures.NativeCalendarCacheUi
@@ -119,10 +120,179 @@ class AppFlowTest {
             assertEquals(1, selected.size)
             assertEquals(selected, released)
             assertNotNull(koin.get<DocumentFileRepository>())
+            compose
+                .onNode(hasText("Documents") and hasClickAction())
+                .performScrollTo()
+                .performClick()
+            waitFor("Not uploaded")
+            compose.onNodeWithText("document.pdf").assertExists()
+            compose.onNodeWithContentDescription("Remove document.pdf from device").performClick()
+            waitFor("This removes the copy stored on this device.")
+            compose.onNode(hasText("Cancel") and hasClickAction()).performClick()
+            compose.onNodeWithText("Not uploaded").assertExists()
+            compose.onNodeWithContentDescription("Remove document.pdf from device").performClick()
+            compose.onNode(hasText("Remove local file") and hasClickAction()).performClick()
+            waitFor("No local files yet.")
+            compose.onNode(hasText("Add file") and hasClickAction()).performClick()
+            waitFor("Not uploaded")
+            assertEquals(2, selected.size)
+            assertEquals(selected, released)
+            capture("document-local-files")
             assertEquals(0, server.documents.reads.get())
             assertEquals(0, closes)
         }
         assertEquals(1, closes)
+    }
+
+    @Test
+    fun documentReadGateRequiresSuccessfulRevalidationBeforeRetainedFilesReturn() {
+        val server =
+            NativeUiServer().apply {
+                documents.enabled = true
+                documents.uploadEnabled = true
+            }
+        val denied = kotlinx.coroutines.flow.MutableStateFlow(false)
+        val observation = module {
+            factory<ObserveDocumentFiles> {
+                val delegate = get<WorkspaceRepository>()
+                val guarded =
+                    object : WorkspaceRepository by delegate {
+                        override fun observe(sessionId: String) =
+                            kotlinx.coroutines.flow.combine(delegate.observe(sessionId), denied) {
+                                result,
+                                blocked ->
+                                if (blocked)
+                                    AppResult.Failed(
+                                        dev.fajar.starter.common.result.Failure(
+                                            dev.fajar.starter.common.result.FailureKind
+                                                .AccessDenied,
+                                            "Documents are unavailable.",
+                                            code = "access_denied",
+                                        )
+                                    )
+                                else result
+                            }
+                    }
+                ObserveDocumentFiles(get(), get(), guarded, kotlin.time.Clock.System, get())
+            }
+        }
+        val source =
+            object : FileInputSource {
+                override suspend fun select(requestId: String, mediaTypes: Set<String>) =
+                    FileInputMetadata("retained.pdf", "application/pdf", 3)
+
+                override fun read(requestId: String) = flowOf(byteArrayOf(1, 2, 3))
+
+                override suspend fun release(requestId: String) = Unit
+
+                override fun close() = Unit
+            }
+        withApplication(server, observation, fileInputs = source) {
+            signIn()
+            waitFor("Choose a company")
+            compose.onAllNodesWithText("Open company")[0].performClick()
+            waitFor("Welcome")
+            compose
+                .onNode(hasText("Documents") and hasClickAction())
+                .performScrollTo()
+                .performClick()
+            waitFor("No local files yet.")
+            compose.onNode(hasText("Add file") and hasClickAction()).performClick()
+            waitFor("Not uploaded")
+            compose.runOnIdle { denied.value = true }
+            waitFor("Try again")
+            compose.onNodeWithText("retained.pdf").assertDoesNotExist()
+            server.companyPolicy.offline = true
+            val reads = server.companyPolicy.reads.get()
+            compose.onNode(hasText("Try again") and hasClickAction()).performClick()
+            compose.waitUntil { server.companyPolicy.reads.get() > reads }
+            compose.waitUntil {
+                compose
+                    .onAllNodes(hasText("Try again") and hasClickAction() and isEnabled())
+                    .fetchSemanticsNodes()
+                    .isNotEmpty()
+            }
+            compose.onNodeWithText("retained.pdf").assertDoesNotExist()
+            server.companyPolicy.offline = false
+            compose.runOnIdle { denied.value = false }
+            compose.onNodeWithText("retained.pdf").assertDoesNotExist()
+            compose.onNode(hasText("Try again") and hasClickAction()).performClick()
+            waitFor("Not uploaded")
+            compose.onNodeWithText("retained.pdf").assertExists()
+        }
+    }
+
+    @Test
+    fun documentPickerSurvivesActivityStopAndLeavingTheRouteCancelsPendingSelection() {
+        val server =
+            NativeUiServer().apply {
+                documents.enabled = true
+                documents.uploadEnabled = true
+            }
+        val lifecycle = mutableStateOf(Lifecycle.State.RESUMED)
+        var selection = CompletableDeferred<FileInputMetadata?>()
+        val opened = java.util.concurrent.atomic.AtomicInteger()
+        val released = java.util.concurrent.atomic.AtomicInteger()
+        val reads = java.util.concurrent.atomic.AtomicInteger()
+        val source =
+            object : FileInputSource {
+                override suspend fun select(
+                    requestId: String,
+                    mediaTypes: Set<String>,
+                ): FileInputMetadata? {
+                    opened.incrementAndGet()
+                    return selection.await()
+                }
+
+                override fun read(requestId: String) =
+                    kotlinx.coroutines.flow.flow {
+                        reads.incrementAndGet()
+                        emit(byteArrayOf(1, 2, 3))
+                    }
+
+                override suspend fun release(requestId: String) {
+                    released.incrementAndGet()
+                }
+
+                override fun close() = Unit
+            }
+        withApplication(server, fileInputs = source, lifecycleState = lifecycle) {
+            signIn()
+            waitFor("Choose a company")
+            compose.onAllNodesWithText("Open company")[0].performClick()
+            waitFor("Welcome")
+            compose
+                .onNode(hasText("Documents") and hasClickAction())
+                .performScrollTo()
+                .performClick()
+            waitFor("No local files yet.")
+            compose.onNode(hasText("Add file") and hasClickAction()).performClick()
+            compose.waitUntil { opened.get() == 1 }
+            compose.runOnIdle { lifecycle.value = Lifecycle.State.CREATED }
+            compose.waitForIdle()
+            assertEquals(0, released.get(), "External picker stop must not cancel selection")
+            selection.complete(FileInputMetadata("picked.pdf", "application/pdf", 3))
+            compose.waitUntil { released.get() == 1 }
+            compose.runOnIdle { lifecycle.value = Lifecycle.State.RESUMED }
+            waitFor("Not uploaded")
+            assertEquals(1, reads.get())
+            selection = CompletableDeferred()
+            compose.onNodeWithContentDescription("Add file").performClick()
+            compose.waitUntil { opened.get() == 2 }
+            compose.onNodeWithContentDescription("Back").performClick()
+            waitFor("Welcome")
+            compose.waitUntil { released.get() == 2 }
+            selection.complete(FileInputMetadata("late.pdf", "application/pdf", 3))
+            compose.waitForIdle()
+            assertEquals(1, reads.get())
+            compose
+                .onNode(hasText("Documents") and hasClickAction())
+                .performScrollTo()
+                .performClick()
+            waitFor("Not uploaded")
+            compose.onNodeWithText("late.pdf").assertDoesNotExist()
+            assertEquals(0, server.documents.reads.get())
+        }
     }
 
     @Test
@@ -2130,6 +2300,7 @@ class AppFlowTest {
         server: NativeUiServer,
         overrides: Module? = null,
         fileInputs: FileInputSource = UnavailableFileInputSource(),
+        lifecycleState: MutableState<Lifecycle.State> = mutableStateOf(Lifecycle.State.RESUMED),
         test: (Koin) -> Unit,
     ) {
         val directory = Files.createTempDirectory("hris-ui").toFile()
@@ -2169,6 +2340,7 @@ class AppFlowTest {
                 DisposableEffect(lifecycleOwner) {
                     onDispose { lifecycleOwner.lifecycle.currentState = Lifecycle.State.DESTROYED }
                 }
+                SideEffect { lifecycleOwner.lifecycle.currentState = lifecycleState.value }
                 CompositionLocalProvider(
                     LocalLifecycleOwner provides lifecycleOwner,
                     LocalBackGestureDispatcher provides backDispatcher,

@@ -7,6 +7,20 @@ import dev.fajar.starter.common.result.*
 fun failureText(failure: Failure): String =
     appString(
         when (failure.code) {
+            "client.document_file_name",
+            "client.document_file_type",
+            "client.document_file_invalid" -> AppString.DocumentInvalidFile
+            "client.document_file_size" -> AppString.DocumentFileSize
+            "client.document_file_size_unknown" -> AppString.DocumentFileSizeUnknown
+            "client.document_storage_full" -> AppString.DocumentStorageFull
+            "client.document_file_changed",
+            "client.document_import_conflict",
+            "client.file_changed" -> AppString.DocumentFileChanged
+            "client.file_permission" -> AppString.DocumentFilePermission
+            "client.file_read_failed",
+            "client.file_input_failed",
+            "client.file_unavailable",
+            "client.file_released" -> AppString.DocumentFileUnavailable
             "client.document_evidence_expired" -> AppString.DocumentEvidenceExpired
             "client.document_scope_changed" -> AppString.CalendarScopeChanged
             "client.leave_preview_expired" -> AppString.LeavePreviewExpired
