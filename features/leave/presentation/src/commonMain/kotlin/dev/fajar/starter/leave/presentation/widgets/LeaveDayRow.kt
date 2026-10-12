@@ -1,4 +1,4 @@
-package dev.fajar.starter.leave.presentation.detail.widgets
+package dev.fajar.starter.leave.presentation.widgets
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable

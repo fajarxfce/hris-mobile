@@ -8,4 +8,6 @@ sealed interface LeaveEffect {
     data object RecheckWorkspace : LeaveEffect
 
     data class OpenRequest(val id: String) : LeaveEffect
+
+    data class CreateRequest(val employeeId: String, val asOf: String) : LeaveEffect
 }

@@ -1,0 +1,48 @@
+package dev.fajar.starter.leave.presentation.create
+
+import dev.fajar.starter.leave.domain.entities.LeavePortion
+import dev.fajar.starter.leave.domain.entities.LeavePreparation
+
+sealed interface LeaveCreateEvent {
+    data object Entered : LeaveCreateEvent
+
+    data object Stopped : LeaveCreateEvent
+
+    data object ReloadRequested : LeaveCreateEvent
+
+    data object TypePickerRequested : LeaveCreateEvent
+
+    data class TypePageRequested(val after: String?) : LeaveCreateEvent
+
+    data class TypeSelected(val id: String) : LeaveCreateEvent
+
+    data class DatePickerRequested(val field: LeaveDateField) : LeaveCreateEvent
+
+    data class DateMonthRequested(val delta: Int) : LeaveCreateEvent
+
+    data class DateSelected(val day: Int) : LeaveCreateEvent
+
+    data object PortionPickerRequested : LeaveCreateEvent
+
+    data class PortionSelected(val portion: LeavePortion) : LeaveCreateEvent
+
+    data class ReasonChanged(val value: String) : LeaveCreateEvent
+
+    data object PreviewRequested : LeaveCreateEvent
+
+    data class PreviewExpired(val preparation: LeavePreparation) : LeaveCreateEvent
+
+    data object SubmitRequested : LeaveCreateEvent
+
+    data object RetryRequested : LeaveCreateEvent
+
+    data object OpenRequestRequested : LeaveCreateEvent
+
+    data object DiscardRequested : LeaveCreateEvent
+
+    data object DialogDismissed : LeaveCreateEvent
+
+    data object BackRequested : LeaveCreateEvent
+
+    data object VerificationRequested : LeaveCreateEvent
+}

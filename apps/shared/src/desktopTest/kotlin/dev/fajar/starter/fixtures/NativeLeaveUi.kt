@@ -16,12 +16,16 @@ class NativeLeaveUi {
     val statuses = CopyOnWriteArrayList<String>()
     val historyPages = CopyOnWriteArrayList<String>()
     val actions = NativeLeaveActionsUi()
+    val creation = NativeLeaveCreationUi()
 
     fun response(request: HttpRequestData): Pair<String, HttpStatusCode>? {
         val path = request.url.encodedPath
         if (!path.contains("/leave/")) return null
         check(enabled)
         if (offline) throw IOException("Leave test connection unavailable")
+        creation.response(request)?.let {
+            return it
+        }
         if (request.method == HttpMethod.Post) return actions.response(request)
         val company = path.split('/')[4]
         if (

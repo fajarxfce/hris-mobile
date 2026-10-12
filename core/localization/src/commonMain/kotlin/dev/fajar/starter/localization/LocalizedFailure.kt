@@ -7,6 +7,24 @@ import dev.fajar.starter.common.result.*
 fun failureText(failure: Failure): String =
     appString(
         when (failure.code) {
+            "client.leave_preview_expired" -> AppString.LeavePreviewExpired
+            "leave_preview_changed",
+            "invalid_leave_preview" -> AppString.LeavePreviewChanged
+            "client.leave_submission_pending" -> AppString.LeaveSubmissionPending
+            "client.leave_submission_unconfirmed" -> AppString.LeaveSubmissionUnconfirmed
+            "leave_range_too_large" -> AppString.LeaveDateRangeInvalid
+            "leave_type_unavailable" -> AppString.LeaveNoTypes
+            "no_leave_working_days" -> AppString.LeaveNoWorkingDays
+            "leave_schedule_missing" -> AppString.LeaveScheduleMissing
+            "insufficient_leave_balance",
+            "leave_balance_limit" -> AppString.LeaveBalanceInsufficient
+            "partial_leave_unavailable" -> AppString.LeavePartialUnavailable
+            "leave_duration_too_short",
+            "leave_request_limit" -> AppString.LeaveDurationInvalid
+            "leave_overlap" -> AppString.LeaveOverlapping
+            "leave_employee_ineligible" -> AppString.LeaveEmployeeIneligible
+            "leave_attachment_required" -> AppString.LeaveAttachmentRequired
+            "leave_attachment_unavailable" -> AppString.LeaveEvidenceUnavailable
             "client.leave_reason_required" -> AppString.LeaveReasonRequired
             "client.leave_reason_too_long" -> AppString.LeaveReasonLimit
             "client.leave_action_pending" -> AppString.LeaveActionPending

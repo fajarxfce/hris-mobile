@@ -28,6 +28,7 @@ import dev.fajar.starter.fixtures.NativeDirectoryUi
 import dev.fajar.starter.fixtures.NativeSessionsUi
 import dev.fajar.starter.fixtures.NativeUiServer
 import dev.fajar.starter.fixtures.TestBackDispatcher
+import dev.fajar.starter.localization.formatLocalDate
 import dev.fajar.starter.notifications.data.datasources.*
 import dev.fajar.starter.notifications.data.dto.*
 import dev.fajar.starter.workforce.domain.attendance.entities.AttendanceWindow
@@ -48,6 +49,117 @@ class AppFlowTest {
     @get:Rule val compose = createComposeRule()
     @get:Rule val testName = TestName()
     private val backDispatcher = TestBackDispatcher()
+
+    @Test
+    fun newLeaveRequestReviewsDatesAndRecoversTheSameSubmissionAfterResponseLoss() {
+        val server = NativeUiServer().apply { leave.enabled = true }
+        withApplication(server) {
+            signIn()
+            waitFor("Choose a company")
+            compose.onAllNodesWithText("Open company")[0].performClick()
+            waitFor("Welcome")
+            compose.onNode(hasText("Leave") and hasClickAction()).performScrollTo().performClick()
+            waitFor("12.5 days")
+            compose
+                .onNode(hasText("Request leave") and hasClickAction())
+                .performScrollTo()
+                .performClick()
+            waitFor("Select leave type")
+            compose
+                .onNode(hasText("Start date") and hasClickAction())
+                .performScrollTo()
+                .performClick()
+            compose.onNodeWithContentDescription(formatLocalDate("2026-10-15", "en")).performClick()
+            compose.waitUntil {
+                compose
+                    .onAllNodes(hasContentDescription("Refresh") and isEnabled())
+                    .fetchSemanticsNodes()
+                    .isNotEmpty()
+            }
+            compose
+                .onNode(hasText("End date") and hasClickAction())
+                .performScrollTo()
+                .performClick()
+            compose.onNodeWithContentDescription(formatLocalDate("2026-10-17", "en")).performClick()
+            compose
+                .onNode(hasText("Select leave type") and hasClickAction())
+                .performScrollTo()
+                .performClick()
+            compose.onNode(hasText("Annual leave") and hasAnyAncestor(isDialog())).performClick()
+            compose
+                .onNode(hasText("Daily portion") and hasClickAction())
+                .performScrollTo()
+                .performClick()
+            compose.onNode(hasText("First half") and hasAnyAncestor(isDialog())).performClick()
+            compose
+                .onNodeWithContentDescription("Reason")
+                .performScrollTo()
+                .performTextReplacement("Family appointment\nKeep these dates")
+            compose
+                .onNode(hasText("Review calculation") and hasClickAction())
+                .performScrollTo()
+                .performClick()
+            compose.waitUntil { server.leave.creation.previews.size == 1 }
+            compose.waitUntil {
+                compose
+                    .onAllNodes(hasContentDescription("Refresh") and isEnabled())
+                    .fetchSemanticsNodes()
+                    .isNotEmpty()
+            }
+            compose.onNode(hasScrollToIndexAction()).performScrollToNode(hasText("Calculation"))
+            compose.onNodeWithText("1 day").assertExists()
+            compose.onNode(hasScrollToIndexAction()).performScrollToNode(hasText("Excluded dates"))
+            compose
+                .onNode(hasText(formatLocalDate("2026-10-17", "en")) and hasClickAction().not())
+                .assertExists()
+            assertEquals(0, server.leave.creation.commits)
+            capture("leave-creation-preview")
+            server.leave.creation.loseNextResponse = true
+            compose
+                .onNode(hasText("Submit request") and hasClickAction())
+                .performScrollTo()
+                .performClick()
+            waitFor("The delivery result is not yet known.")
+            compose.waitUntil {
+                compose
+                    .onAllNodes(hasText("Retry delivery") and hasClickAction() and isEnabled())
+                    .fetchSemanticsNodes()
+                    .isNotEmpty()
+            }
+            assertEquals(1, server.leave.creation.commits)
+            assertEquals(1, server.leave.creation.requests.size)
+            capture("leave-creation-unconfirmed")
+            compose.onNodeWithContentDescription("Back").performClick()
+            waitFor("Leave balances")
+            compose.waitUntil {
+                compose
+                    .onAllNodes(hasText("Request leave") and hasClickAction())
+                    .fetchSemanticsNodes()
+                    .isNotEmpty()
+            }
+            server.leave.offline = true
+            compose
+                .onNode(hasText("Request leave") and hasClickAction())
+                .performScrollTo()
+                .performClick()
+            waitFor("The delivery result is not yet known.")
+            compose.onNodeWithText("Family appointment\nKeep these dates").assertExists()
+            server.leave.offline = false
+            compose
+                .onNode(hasText("Retry delivery") and hasClickAction())
+                .performScrollTo()
+                .performClick()
+            waitFor("Leave request")
+            waitFor("Pending approval")
+            compose.onNode(hasText("Pending approval") and hasText("Annual leave")).assertExists()
+            assertEquals(1, server.leave.creation.commits)
+            assertEquals(2, server.leave.creation.requests.size)
+            assertEquals(server.leave.creation.requests[0], server.leave.creation.requests[1])
+            capture("leave-creation-submitted")
+            compose.runOnIdle { backDispatcher.pressBack() }
+            waitFor("Leave balances")
+        }
+    }
 
     @Test
     fun leaveCancellationRecoversItsLostResponseAndCanWithdrawThePendingCancellation() {

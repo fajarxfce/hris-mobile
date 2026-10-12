@@ -9,6 +9,7 @@ import dev.fajar.starter.designsystem.components.*
 import dev.fajar.starter.designsystem.theme.AppColors
 import dev.fajar.starter.leave.presentation.detail.*
 import dev.fajar.starter.leave.presentation.detail.widgets.*
+import dev.fajar.starter.leave.presentation.widgets.LeaveDayRow
 import dev.fajar.starter.localization.*
 import io.github.composefluent.FluentTheme
 import io.github.composefluent.icons.Icons
@@ -48,7 +49,7 @@ fun LeaveRequestPage(
         },
     ) {
         if (state.loading || state.refreshing || state.action.working)
-            item(key = "loading") { AppLoading() }
+            item(key = "loading") { AppLoading(compact = state.content != null) }
         state.failure?.let { failure ->
             item(key = "failure") {
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {

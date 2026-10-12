@@ -1,5 +1,21 @@
 # Template updates
 
+## Inline loading
+
+The compact loading option and its bounded 200% text regression also exist at
+[b0af770](https://github.com/fajarxfce/compose-fluent-starter/commit/b0af770).
+Both repositories passed root checks and Android/production Web builds. Leave
+form state and delivery outcomes remain in this application.
+
+## Date selection
+
+The controlled calendar and its disabled-date, accessible-label and 200% text
+regression also exist at
+[3388304](https://github.com/fajarxfce/compose-fluent-starter/commit/3388304).
+Mobile and starter root checks and Android builds passed; starter production Web
+and mobile Web compilation also passed. Linux, Windows and Apple CI passed in
+both repositories. Leave date/portion policy and server preview remain here.
+
 ## Multiline text fields
 
 Optional multiline input and its 200% text regression from

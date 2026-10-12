@@ -3,7 +3,7 @@
 The employee Leave page shows admitted leave balances by year and paged request
 history with status filtering. Home and All services expose it when the selected
 company enables Leave and the account has self-service or read permission.
-New request creation is a subsequent integration.
+Employees with self-service write access can prepare and submit a new request.
 Selecting a request opens its submitted facts, current status, dated portions,
 reason, evidence names and paged activity history.
 
@@ -53,7 +53,7 @@ rejects contradictory date partitions, totals, years and remaining balances.
 The preview carries a revision of the selected policy, working-day plan and
 annual balances. Submission retains that revision, allowing the server to reject
 a changed calculation before reserving days. Preparation and submission are
-domain/data foundations; the creation form remains a subsequent integration.
+domain/data boundaries consumed by the feature-owned creation form.
 
 ## Durable submission
 
@@ -81,6 +81,29 @@ revision. A confirmed command first needs canonical request/cache reconciliation
 An ambiguous outcome cannot be discarded as though the server rolled back, and a
 late rejection cannot disprove an earlier uncertain attempt. Competing removal and
 replay use storage revision checks; stale work cannot replace the retained outcome.
+
+## Creation interface
+
+The overview opens a route pinned to the visible employment and company date.
+The form offers an effective-date leave catalog, controlled start/end calendars,
+full or half-day portions, and a multiline reason. Changing the start date reloads
+the catalog; changing dates, type or portion cancels an obsolete preview. The
+backend decides working dates, charges and annual projections. The UI displays
+excluded dates and never derives a balance from request history.
+
+Confirmation persists the reviewed input before delivery and freezes further
+editing. The screen distinguishes active sending from queued, uncertain, confirmed
+and rejected outcomes. Retry restores the original IDs, dates, reason and preview
+revision after page/process replacement. An uncertain delivery cannot be discarded.
+Confirmed delivery refreshes the canonical request before retiring the command
+and replacing the form with its detail route. Back returns to the overview.
+
+The route owns lifecycle collection; the MVI owner cancels acquisition, command
+observation and its preview-expiry timer when stopped. Current access failures
+hide sensitive content and remain gated through failed retries. A fresh admitted
+catalog read can reopen a completed command source. Typed form values are
+process-local until confirmation; confirmed input uses encrypted durable storage.
+The form does not yet acquire evidence, so it blocks types requiring an attachment.
 
 ## Offline access
 
@@ -177,8 +200,7 @@ versions and obsolete outcomes cannot replace the visible operation.
 
 ## Remaining workflow
 
-Subsequent work connects policy/day selection, preview and durable submission to
-the form, followed by document evidence acquisition and transfer.
+Subsequent work connects document evidence acquisition and transfer to the form.
 A cached balance is never
 a reservation or authorization to submit.
 
@@ -221,5 +243,12 @@ Earlier history pagination and lost-response
 receipt recovery use automated transport fixtures; they are not represented as
 physical-device checks.
 
-The new-request interface, evidence transfer and physical iOS acceptance remain
-separate work. No frame-time, heap or battery measurement is claimed.
+The creation interface also passed complete root checks, 42 presentation tests
+in Chromium and Android/production Web builds. An assembled UI test verifies one
+creation after response loss and an unchanged replay. API 35 acceptance verified
+server-calculated excluded dates, half-day charges, encrypted confirmation while
+the API was blocked, restoration after process restart and explicit delivery after
+reconnection. Withdrawal returned the test reservation to the available balance.
+
+Evidence transfer and physical iOS acceptance remain separate work. No frame-time,
+heap or battery measurement is claimed.

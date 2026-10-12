@@ -1,5 +1,33 @@
 # Validation
 
+## Leave creation interface
+
+Complete root checks passed with 592 desktop tests, plus all 42 Leave presentation
+tests in Chromium and two localization Chromium tests. Android dev and production
+Web builds passed. New coverage verifies typed form events, superseded previews,
+date/portion bounds, expiry, stopped owners, access gates through failed retries,
+completed observers, retained response-loss recovery and canonical reconciliation.
+An assembled HTTP/SQLite UI test commits a request, loses its response, reopens
+the form offline and verifies an unchanged replay with one server-side creation.
+Controlled layouts cover multiline reasons, fixed Back/close controls, disabled
+dates, expired confirmation and active sending versus an uncertain outcome.
+
+API 35 emulator acceptance used the development API. A three-date selection
+excluded Saturday and charged two half-days as one day. A separate half-day
+request was confirmed with its API connection blocked, restored after process
+restart while still blocked, and delivered explicitly after connection recovery.
+Its original reason remained intact and canonical pending status opened afterward.
+The available balance changed from 12 to 11.5 days with 0.5 reserved. Withdrawal
+returned it to 12 available and zero reserved; both test requests retain their
+withdrawal history.
+The native form and calendar were inspected in Indonesian, including dark mode
+with 200% text; the close action and all dates remained reachable. The emulator
+was returned to its normal light appearance and text scale afterward.
+The initial forwarding-only interruption did not close existing HTTP connections;
+the successful offline check used an emulator-only, app/port-scoped firewall rule,
+removed afterward. Web retains three existing bundler warnings. No physical-phone
+interaction or runtime performance benchmark is claimed by these checks.
+
 ## Inline loading
 
 The optional compact loading layout passed root checks, Android dev assembly and

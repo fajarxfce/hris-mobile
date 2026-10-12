@@ -40,8 +40,10 @@ employment selection and a bounded encrypted offline view. Each request opens it
 submitted dates, duration, reason, current status and paged activity history;
 the last request remains available within its offline read lease. Withdrawal,
 cancellation and withdrawal of a pending cancellation retain encrypted commands
-and recover the original request after interrupted delivery. New submissions and
-evidence transfer remain separate delivery work.
+and recover the original request after interrupted delivery. Employees can select
+leave dates and portions, review the server calculation, and submit with durable
+recovery after interrupted delivery. Evidence acquisition and transfer remain
+separate delivery work; leave types requiring an attachment cannot yet be submitted.
 
 The runtime contains no demo authentication transport. Other transactional employee workflows
 are still being connected; a generated module

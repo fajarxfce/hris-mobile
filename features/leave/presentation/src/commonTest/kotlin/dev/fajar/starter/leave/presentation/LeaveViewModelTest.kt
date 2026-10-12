@@ -14,6 +14,41 @@ import kotlinx.coroutines.test.*
 
 class LeaveViewModelTest {
     @Test
+    fun creationUsesTheVisibleOwnedEmploymentAndIsHiddenFromReadOnlyAccess() = runTest {
+        withLeave { fixture, model, _ ->
+            val effects = mutableListOf<LeaveEffect>()
+            backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
+                model.effects.collect { effects += it }
+            }
+            model.onEvent(LeaveEvent.CreateRequested)
+            runCurrent()
+            assertTrue(effects.isEmpty())
+            model.onEvent(LeaveEvent.Entered)
+            runCurrent()
+            model.onEvent(LeaveEvent.CreateRequested)
+            runCurrent()
+            assertEquals(
+                listOf<LeaveEffect>(
+                    LeaveEffect.CreateRequest(
+                        fixture.employee.id,
+                        fixture.directory.asOf.toString(),
+                    )
+                ),
+                effects,
+            )
+            fixture.workspaceState.value =
+                AppResult.Success(fixture.workspace.copy(permissions = setOf("leave.read")))
+            runCurrent()
+            model.onEvent(LeaveEvent.RefreshRequested)
+            runCurrent()
+            assertFalse(model.state.value.canCreate)
+            model.onEvent(LeaveEvent.CreateRequested)
+            runCurrent()
+            assertEquals(1, effects.size)
+        }
+    }
+
+    @Test
     fun explicitRefreshRecoversAfterTheStorageFlowHasCompletedWithAnError() = runTest {
         withLeave { fixture, model, _ ->
             val release = CompletableDeferred<Unit>()

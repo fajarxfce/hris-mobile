@@ -5,6 +5,98 @@ import org.jetbrains.compose.resources.StringResource
 
 /** Explicit pairs keep runtime language changes portable across Android, iOS, desktop and Web. */
 enum class AppString(val english: StringResource, val indonesian: StringResource) {
+    LeaveNewRequest(Res.string.leave_new_request_en, Res.string.leave_new_request_id),
+    LeaveType(Res.string.leave_type_en, Res.string.leave_type_id),
+    LeaveChooseType(Res.string.leave_choose_type_en, Res.string.leave_choose_type_id),
+    LeaveNoTypes(Res.string.leave_no_types_en, Res.string.leave_no_types_id),
+    LeaveMoreTypes(Res.string.leave_more_types_en, Res.string.leave_more_types_id),
+    LeaveFirstTypes(Res.string.leave_first_types_en, Res.string.leave_first_types_id),
+    LeaveFromDate(Res.string.leave_from_date_en, Res.string.leave_from_date_id),
+    LeaveUntilDate(Res.string.leave_until_date_en, Res.string.leave_until_date_id),
+    LeavePortion(Res.string.leave_portion_en, Res.string.leave_portion_id),
+    LeavePreview(Res.string.leave_preview_en, Res.string.leave_preview_id),
+    LeaveSubmit(Res.string.leave_submit_en, Res.string.leave_submit_id),
+    LeavePreviewHeading(Res.string.leave_preview_heading_en, Res.string.leave_preview_heading_id),
+    LeaveCharged(Res.string.leave_charged_en, Res.string.leave_charged_id),
+    LeaveRemainingAfter(Res.string.leave_remaining_after_en, Res.string.leave_remaining_after_id),
+    LeaveExcludedDates(Res.string.leave_excluded_dates_en, Res.string.leave_excluded_dates_id),
+    LeavePreviewExpired(Res.string.leave_preview_expired_en, Res.string.leave_preview_expired_id),
+    LeavePreviewChanged(Res.string.leave_preview_changed_en, Res.string.leave_preview_changed_id),
+    LeaveAttachmentRequired(
+        Res.string.leave_attachment_required_en,
+        Res.string.leave_attachment_required_id,
+    ),
+    LeaveSubmissionQueued(
+        Res.string.leave_submission_queued_en,
+        Res.string.leave_submission_queued_id,
+    ),
+    LeaveSubmissionUnconfirmed(
+        Res.string.leave_submission_unconfirmed_en,
+        Res.string.leave_submission_unconfirmed_id,
+    ),
+    LeaveSubmissionConfirmed(
+        Res.string.leave_submission_confirmed_en,
+        Res.string.leave_submission_confirmed_id,
+    ),
+    LeaveSubmissionRejected(
+        Res.string.leave_submission_rejected_en,
+        Res.string.leave_submission_rejected_id,
+    ),
+    LeaveOpenRequest(Res.string.leave_open_request_en, Res.string.leave_open_request_id),
+    LeaveDiscardSubmission(
+        Res.string.leave_discard_submission_en,
+        Res.string.leave_discard_submission_id,
+    ),
+    LeaveSubmissionPending(
+        Res.string.leave_submission_pending_en,
+        Res.string.leave_submission_pending_id,
+    ),
+    LeaveDateRangeInvalid(
+        Res.string.leave_date_range_invalid_en,
+        Res.string.leave_date_range_invalid_id,
+    ),
+    LeaveNoWorkingDays(Res.string.leave_no_working_days_en, Res.string.leave_no_working_days_id),
+    LeaveScheduleMissing(
+        Res.string.leave_schedule_missing_en,
+        Res.string.leave_schedule_missing_id,
+    ),
+    LeaveBalanceInsufficient(
+        Res.string.leave_balance_insufficient_en,
+        Res.string.leave_balance_insufficient_id,
+    ),
+    LeavePartialUnavailable(
+        Res.string.leave_partial_unavailable_en,
+        Res.string.leave_partial_unavailable_id,
+    ),
+    LeaveDurationInvalid(
+        Res.string.leave_duration_invalid_en,
+        Res.string.leave_duration_invalid_id,
+    ),
+    LeaveOverlapping(Res.string.leave_overlapping_en, Res.string.leave_overlapping_id),
+    LeaveEmployeeIneligible(
+        Res.string.leave_employee_ineligible_en,
+        Res.string.leave_employee_ineligible_id,
+    ),
+    LeaveEvidenceUnavailable(
+        Res.string.leave_evidence_unavailable_en,
+        Res.string.leave_evidence_unavailable_id,
+    ),
+    WeekdayMondayShort(Res.string.weekday_monday_short_en, Res.string.weekday_monday_short_id),
+    WeekdayTuesdayShort(Res.string.weekday_tuesday_short_en, Res.string.weekday_tuesday_short_id),
+    WeekdayWednesdayShort(
+        Res.string.weekday_wednesday_short_en,
+        Res.string.weekday_wednesday_short_id,
+    ),
+    WeekdayThursdayShort(
+        Res.string.weekday_thursday_short_en,
+        Res.string.weekday_thursday_short_id,
+    ),
+    WeekdayFridayShort(Res.string.weekday_friday_short_en, Res.string.weekday_friday_short_id),
+    WeekdaySaturdayShort(
+        Res.string.weekday_saturday_short_en,
+        Res.string.weekday_saturday_short_id,
+    ),
+    WeekdaySundayShort(Res.string.weekday_sunday_short_en, Res.string.weekday_sunday_short_id),
     LeaveWithdraw(Res.string.leave_withdraw_en, Res.string.leave_withdraw_id),
     LeaveCancelRequest(Res.string.leave_cancel_request_en, Res.string.leave_cancel_request_id),
     LeaveWithdrawCancellation(

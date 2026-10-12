@@ -247,6 +247,17 @@ fun AppNavigation(controller: NavHostController, incomingLinks: Flow<String>) {
                         onRequest = {
                             controller.navigate(LeaveRequestRoute(it)) { launchSingleTop = true }
                         },
+                        onCreate = { employeeId, asOf ->
+                            controller.navigate(LeaveCreateRoute(employeeId, asOf)) {
+                                launchSingleTop = true
+                            }
+                        },
+                        onCreatedRequest = {
+                            controller.navigate(LeaveRequestRoute(it)) {
+                                popUpTo<LeaveCreateRoute> { inclusive = true }
+                                launchSingleTop = true
+                            }
+                        },
                         onVerify = {
                             controller.navigate(VerificationRoute) { launchSingleTop = true }
                         },

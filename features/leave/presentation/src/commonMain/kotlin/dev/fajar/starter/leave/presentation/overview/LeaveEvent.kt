@@ -31,5 +31,7 @@ sealed interface LeaveEvent {
 
     data class RequestSelected(val id: String) : LeaveEvent
 
+    data object CreateRequested : LeaveEvent
+
     data object DialogDismissed : LeaveEvent
 }

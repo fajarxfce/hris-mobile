@@ -38,6 +38,7 @@ class LeaveViewModel(
         on<LeaveEvent.RequestsPageRequested>(::onRequestsPageRequested)
         on<LeaveEvent.DialogDismissed>(::onDialogDismissed)
         on<LeaveEvent.RequestSelected>(::onRequestSelected)
+        on<LeaveEvent.CreateRequested>(::onCreateRequested)
     }
 
     private fun onEntered(event: LeaveEvent.Entered) {
@@ -216,6 +217,15 @@ class LeaveViewModel(
 
     private fun onBackRequested(event: LeaveEvent.BackRequested) {
         viewModelScope.launch { emitEffect(LeaveEffect.Back) }
+    }
+
+    private fun onCreateRequested(event: LeaveEvent.CreateRequested) {
+        val content = state.value.content ?: return
+        val employeeId = content.selection.employeeId ?: return
+        if (state.value.canCreate)
+            viewModelScope.launch {
+                emitEffect(LeaveEffect.CreateRequest(employeeId, content.directory.asOf.toString()))
+            }
     }
 
     private fun onVerificationRequested(event: LeaveEvent.VerificationRequested) {
