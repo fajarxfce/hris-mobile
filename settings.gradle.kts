@@ -39,6 +39,8 @@ include(":features:leave:domain", ":features:leave:data", ":features:leave:prese
 
 include(":core:documents:domain", ":core:documents:data")
 
+include(":core:fileio")
+
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 include(

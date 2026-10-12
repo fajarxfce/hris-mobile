@@ -156,6 +156,8 @@ the database only enforces ownership, immutability, bounds and atomic revision c
 Large file contents use the separate [blob store](blob-storage.md), with bounded
 opaque blocks, transactional progress and account-owned reservations. File adapters
 own encryption and mapping; use cases own import, transfer and cleanup policy.
+The [file input adapter](file-input.md) owns OS pickers and transient readers;
+those resources never enter a domain contract or a ViewModel.
 
 ## Navigation
 

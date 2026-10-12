@@ -23,7 +23,7 @@ for name, folder in modules.items():
             errors.append(f"{name}: unknown module {dependency}")
         if name.endswith(".domain") and not (dependency.endswith(".domain") or dependency == "core.common"):
             errors.append(f"{name}: domain cannot depend on {dependency}")
-        if name.endswith(".presentation") and (dependency.endswith(".data") or dependency in {"core.network", "core.storage", "core.datastore", "core.database"}):
+        if name.endswith(".presentation") and (dependency.endswith(".data") or dependency in {"core.network", "core.storage", "core.datastore", "core.database", "core.fileio"}):
             errors.append(f"{name}: presentation cannot depend on {dependency}")
         if name.startswith("features.") and dependency.startswith("features.") and name.split(".")[1] != dependency.split(".")[1]:
             errors.append(f"{name}: features must not depend on each other ({dependency})")

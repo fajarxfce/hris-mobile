@@ -30,6 +30,7 @@ jobs:
       - run: >-
           xvfb-run -a ./gradlew :check
           :core:datastore:wasmJsBrowserTest :core:database:wasmJsBrowserTest
+          :core:fileio:wasmJsBrowserTest
           :core:sync:data:wasmJsBrowserTest :core:workspace:domain:wasmJsBrowserTest :core:workspace:data:wasmJsBrowserTest
           :features:inbox:domain:wasmJsBrowserTest :features:inbox:data:wasmJsBrowserTest
           :features:workforce:domain:wasmJsBrowserTest :features:leave:domain:wasmJsBrowserTest :features:leave:data:wasmJsBrowserTest
@@ -68,7 +69,7 @@ jobs:
           distribution: temurin
           java-version: '21'
       - uses: gradle/actions/setup-gradle@v4
-      - run: ./gradlew :core:location:data:iosSimulatorArm64Test --no-daemon
+      - run: ./gradlew :core:location:data:iosSimulatorArm64Test :core:fileio:iosSimulatorArm64Test --no-daemon
         timeout-minutes: 15
       - run: >
           xcodebuild -project apps/ios/HrisMobile.xcodeproj -scheme HrisMobile

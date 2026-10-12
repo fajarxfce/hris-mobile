@@ -7,6 +7,7 @@ ksp = "2.3.12"
 koin = "4.1.1"
 koin-annotations = "2.3.1"
 coroutines = "1.10.2"
+okio = "3.17.0"
 datetime = "0.7.1"
 js-joda-timezone = "2.23.0"
 serialization = "1.10.0"
@@ -90,6 +91,7 @@ koin-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel", version.ref
 koin-annotations = { module = "io.insert-koin:koin-annotations", version.ref = "koin-annotations" }
 koin-compiler = { module = "io.insert-koin:koin-ksp-compiler", version.ref = "koin-annotations" }
 coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
+okio = { module = "com.squareup.okio:okio", version.ref = "okio" }
 coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 coroutines-swing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "coroutines" }
 serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
