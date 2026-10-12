@@ -177,7 +177,14 @@ does not require another bottom-navigation item.
 App composition supplies attendance, inbox and employee-directory entries to Home
 through composable slots. They retain their own route-scoped ViewModels; Home
 does not depend on those feature modules. `LifecycleStartEffect` pairs entry with stop/disposal,
-including tab changes that do not stop the navigation entry's lifecycle. The
+including tab changes that do not stop the navigation entry's lifecycle. Home
+attendance and Employees retain loaded state and read-only cache/access
+observation in their navigation ViewModels. Hiding either tab cancels acquisition
+and user actions, without clearing its content or starting another request on
+return. An unfinished/failed request or invalidated read requires acquisition;
+manual refresh and mutations remain explicit triggers. Admission changes still
+invalidate hidden content. Clearing the route owner cancels its observations;
+no hidden tab polls the network or retains a view/controller callback. The
 Home capture and monthly history have separate ViewModels and encrypted cache
 windows. History observes attendance and refreshes a selected month; it owns no
 permission, location or capture actions. Inbox and Employees also have separate standalone

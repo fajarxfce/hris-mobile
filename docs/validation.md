@@ -1,5 +1,25 @@
 # Validation
 
+## Retained Home and Employees tabs
+
+Complete root checks passed with 631 desktop/JVM tests, four build-endpoint tests
+and seven Android runner tests. Android dev assembly passed. Four new assembled
+UI cases cover repeated tab changes without new HTTP requests, retained search
+and scroll, manual refresh, cancellation with loaded rows, hidden access changes,
+expired-cache recovery and observation cleanup. The initial probes reproduced
+Home returning to loading and the missing hidden read observer before the fix.
+
+The full flow suite initially switched its transport offline before a returning
+Leave overview had finished refreshing. That setup now waits for the overview
+before exercising offline detail recovery; the complete suite passed afterward.
+
+The API 35 emulator completed three Home/Account/Employees round trips with Wi-Fi
+and mobile data disabled and the API confirmed unreachable. Attendance values
+and the employee query remained visible. Both connections were restored and
+the Home/directory captures were inspected. The same APK was installed on the
+authorized phone using `--install-only`; phone UI was not driven. Runtime heap
+use and frame timings were not measured.
+
 ## Private VPN development connection
 
 Root checks passed with 627 desktop/JVM tests, four build-endpoint tests and seven
@@ -11,9 +31,9 @@ invalid ports, bounded ADB commands and installation without launching the app.
 The API 35 emulator signed in, selected the fixture company and restored Home after
 process restart with an empty ADB reverse table. The Home capture was inspected.
 The same APK was installed on the authorized phone with `--install-only`, and its
-obsolete API reverse mapping was removed. No phone UI was driven; acceptance of
-the new connection awaits the owner's check. The earlier loopback connection was
-restored and the owner confirmed successful sign-in before this update.
+obsolete API reverse mapping was removed. No phone UI was driven. The owner
+confirmed successful sign-in to Home using the new connection. The earlier
+loopback connection was also restored and checked before this update.
 
 The development API now uses the private WireGuard interface. Changing from the
 old loopback origin requires sign-in again; retained commands/files keep their

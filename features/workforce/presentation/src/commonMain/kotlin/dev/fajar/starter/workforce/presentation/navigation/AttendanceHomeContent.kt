@@ -10,7 +10,7 @@ import dev.fajar.starter.workforce.presentation.attendance.widgets.*
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 
-/** Home hosts this feature entry; its ViewModel and I/O stop when the tab or route leaves. */
+/** Home owns the ViewModel; leaving the visible tab cancels acquisition and user actions. */
 @Composable
 fun AttendanceHomeContent(workspaceId: String, onEffect: (AttendanceEffect) -> Unit) {
     val viewModel =

@@ -28,6 +28,8 @@ class AttendanceViewModel(
     private var observation: Job? = null
     private var acquisition: Job? = null
     private var action: Job? = null
+    private var visible = false
+    private var refreshRequired = true
 
     init {
         on<AttendanceEvent.Entered>(::onEntered)
@@ -45,10 +47,19 @@ class AttendanceViewModel(
         on<AttendanceEvent.DialogDismissed>(::onDialogDismissed)
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     private fun onEntered(event: AttendanceEvent.Entered) {
+        if (visible) return
+        visible = true
+        updateState { it.copy(loading = it.content == null && it.failure == null) }
+        observeContent()
+        if (refreshRequired || state.value.content == null || state.value.readFailure != null)
+            onEvent(AttendanceEvent.RefreshRequested)
+    }
+
+    /** Read-only cache/admission observation belongs to this navigation ViewModel. */
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private fun observeContent() {
         if (observation?.isActive == true) return
-        updateState { it.copy(loading = true) }
         observation =
             viewModelScope.launch {
                 state
@@ -63,7 +74,8 @@ class AttendanceViewModel(
                         if (requested != state.value.selection || state.value.readFailure != null)
                             return@collect
                         when (result) {
-                            is AppResult.Failed ->
+                            is AppResult.Failed -> {
+                                refreshRequired = true
                                 updateState {
                                     it.copy(
                                         content = null,
@@ -80,6 +92,7 @@ class AttendanceViewModel(
                                         withoutLocationKind = null,
                                     )
                                 }
+                            }
                             is AppResult.Success -> {
                                 val content = result.value.toContent(Clock.System.now())
                                 if (
@@ -99,19 +112,16 @@ class AttendanceViewModel(
                         }
                     }
             }
-        onEvent(AttendanceEvent.RefreshRequested)
     }
 
     private fun onStopped(event: AttendanceEvent.Stopped) {
-        observation?.cancel()
-        observation = null
+        visible = false
         acquisition?.cancel()
         acquisition = null
         action?.cancel()
         action = null
         updateState {
             it.copy(
-                content = null,
                 loading = false,
                 refreshing = false,
                 working = false,
@@ -122,8 +132,8 @@ class AttendanceViewModel(
     }
 
     private fun onRefreshRequested(event: AttendanceEvent.RefreshRequested) {
-        if (observation?.isActive != true || acquisition?.isActive == true || state.value.working)
-            return
+        if (!visible || acquisition?.isActive == true || state.value.working) return
+        refreshRequired = true
         val selection = state.value.selection
         updateState {
             it.copy(
@@ -140,10 +150,15 @@ class AttendanceViewModel(
                 ensureActive()
                 when (result) {
                     is AppResult.Failed -> reportFailure(result.failure)
-                    is AppResult.Success ->
+                    is AppResult.Success -> {
+                        refreshRequired = false
+                        observation?.cancel()
+                        observation = null
                         updateState {
                             it.copy(failure = null, readFailure = null, needsVerification = false)
                         }
+                        observeContent()
+                    }
                 }
                 updateState {
                     it.copy(refreshing = false, loading = it.content == null && it.failure == null)
@@ -154,13 +169,14 @@ class AttendanceViewModel(
     private fun onCaptureRequested(event: AttendanceEvent.CaptureRequested) {
         val content = state.value.content ?: return
         val employee = content.employee ?: return
-        if (state.value.working || state.value.refreshing || observation?.isActive != true) return
+        if (!visible || state.value.working || state.value.refreshing) return
         if (event.withoutLocation && state.value.withoutLocationKind != event.kind) return
         if (
             event.kind == AttendanceKind.CLOCK_IN && !content.canClockIn ||
                 event.kind == AttendanceKind.CLOCK_OUT && !content.canClockOut
         )
             return
+        refreshRequired = true
         updateState {
             it.copy(
                 working = true,
@@ -205,10 +221,11 @@ class AttendanceViewModel(
     private fun onRetryRequested(event: AttendanceEvent.RetryRequested) {
         if (
             state.value.working ||
-                observation?.isActive != true ||
+                !visible ||
                 state.value.content?.commands?.none { it.command.id == event.id } != false
         )
             return
+        refreshRequired = true
         updateState { it.copy(working = true, failure = null) }
         action =
             viewModelScope.launch {
@@ -225,7 +242,7 @@ class AttendanceViewModel(
     }
 
     private fun onRejectionDismissed(event: AttendanceEvent.RejectionDismissed) {
-        if (state.value.working || observation?.isActive != true) return
+        if (!visible || state.value.working) return
         updateState { it.copy(working = true) }
         action =
             viewModelScope.launch {
@@ -238,7 +255,8 @@ class AttendanceViewModel(
 
     private fun onEmploymentSelected(event: AttendanceEvent.EmploymentSelected) {
         if (
-            state.value.working ||
+            !visible ||
+                state.value.working ||
                 state.value.content?.snapshot?.directory?.items?.none { it.id == event.id } != false
         )
             return
@@ -256,7 +274,8 @@ class AttendanceViewModel(
 
     private fun onEmploymentPageRequested(event: AttendanceEvent.EmploymentPageRequested) {
         if (
-            state.value.working ||
+            !visible ||
+                state.value.working ||
                 (event.after != null &&
                     event.after != state.value.content?.snapshot?.directory?.nextCursor)
         )
@@ -271,7 +290,7 @@ class AttendanceViewModel(
 
     private fun onSettingsRequested(event: AttendanceEvent.SettingsRequested) {
         val target = state.value.settingsTarget ?: return
-        if (state.value.working || observation?.isActive != true) return
+        if (!visible || state.value.working) return
         updateState { it.copy(working = true) }
         action =
             viewModelScope.launch {
@@ -283,18 +302,17 @@ class AttendanceViewModel(
     }
 
     private fun onVerificationRequested(event: AttendanceEvent.VerificationRequested) {
-        if (state.value.needsVerification)
+        if (visible && state.value.needsVerification)
             viewModelScope.launch { emitEffect(AttendanceEffect.VerifyAccount) }
     }
 
     private fun onQueueRequested(event: AttendanceEvent.QueueRequested) {
-        if (observation?.isActive != true || state.value.content?.commands.isNullOrEmpty()) return
+        if (!visible || state.value.content?.commands.isNullOrEmpty()) return
         updateState { it.copy(dialog = AttendanceDialog.QUEUE) }
     }
 
     private fun onEmploymentPickerRequested(event: AttendanceEvent.EmploymentPickerRequested) {
-        if (observation?.isActive != true || state.value.content?.hasEmploymentChoice != true)
-            return
+        if (!visible || state.value.content?.hasEmploymentChoice != true) return
         updateState { it.copy(dialog = AttendanceDialog.EMPLOYMENT) }
     }
 

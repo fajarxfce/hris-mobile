@@ -20,6 +20,7 @@ import dev.fajar.starter.app.di.applicationNetworkModule
 import dev.fajar.starter.app.di.createAppContainer
 import dev.fajar.starter.common.config.AppEnvironment
 import dev.fajar.starter.common.config.AppPlatform
+import dev.fajar.starter.common.result.AppResult
 import dev.fajar.starter.database.createAppDatabase
 import dev.fajar.starter.datastore.createUserPreferences
 import dev.fajar.starter.fixtures.NativeAttendanceCacheUi
@@ -29,21 +30,28 @@ import dev.fajar.starter.fixtures.NativeDocumentsUi
 import dev.fajar.starter.fixtures.NativeSessionsUi
 import dev.fajar.starter.fixtures.NativeUiServer
 import dev.fajar.starter.fixtures.TestBackDispatcher
+import dev.fajar.starter.identity.domain.entities.Session
+import dev.fajar.starter.identity.domain.repositories.SessionRepository
 import dev.fajar.starter.localization.formatLocalDate
 import dev.fajar.starter.notifications.data.datasources.*
 import dev.fajar.starter.notifications.data.dto.*
 import dev.fajar.starter.workforce.domain.attendance.entities.AttendanceWindow
 import dev.fajar.starter.workforce.domain.attendance.repositories.AttendanceCacheRepository
 import dev.fajar.starter.workforce.domain.repositories.WorkCalendarCacheRepository
+import dev.fajar.starter.workspace.domain.entities.Workspace
+import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
 import java.io.File
 import java.nio.file.Files
 import kotlin.test.*
+import kotlin.time.Duration.Companion.milliseconds
 import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.*
 import org.jetbrains.skia.Image
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestName
+import org.koin.core.Koin
 import org.koin.core.module.Module
 import org.koin.dsl.module
 
@@ -233,6 +241,13 @@ class AppFlowTest {
             capture("leave-cancellation-unconfirmed")
             compose.onNodeWithContentDescription("Back").performClick()
             waitFor("Leave balances")
+            // The offline step targets the detail read, after the overview has resumed.
+            compose.waitUntil {
+                compose
+                    .onAllNodes(hasContentDescription("Refresh") and isEnabled())
+                    .fetchSemanticsNodes()
+                    .size == 1
+            }
             server.leave.offline = true
             compose.onNode(hasScrollToIndexAction()).performScrollToNode(hasText("1.5 days"))
             compose.onNode(hasText("Annual leave") and hasClickAction()).performClick()
@@ -812,6 +827,192 @@ class AppFlowTest {
             }
         } finally {
             server.inbox.countReleased.complete(Unit)
+        }
+    }
+
+    @Test
+    fun rootTabsRetainContentAndScrollWithoutRepeatingSuccessfulRequests() {
+        val cache = NativeAttendanceCacheUi()
+        val server =
+            NativeUiServer().apply {
+                workforce.asOf = java.time.LocalDate.now(java.time.ZoneId.of("Asia/Jakarta"))
+            }
+        withApplication(server, module { single<AttendanceCacheRepository> { cache } }) {
+            signIn()
+            waitFor("Choose a company")
+            compose.onAllNodesWithText("Open company")[0].performClick()
+            compose.waitUntil {
+                compose
+                    .onAllNodes(hasText("Clock in") and hasClickAction() and isEnabled())
+                    .fetchSemanticsNodes()
+                    .isNotEmpty()
+            }
+            val attendanceRequests = server.workforce.attendancePeriods.size
+            compose.onNode(hasText("Employees") and isSelectable()).performClick()
+            waitFor("Sam Wilson")
+            compose
+                .onNodeWithContentDescription("Search employees")
+                .performTextReplacement("Colleague")
+            waitFor("Colleague 03")
+            compose.onNode(hasScrollToIndexAction()).performScrollToNode(hasText("Colleague 15"))
+            val row = compose.onNodeWithText("Colleague 15").fetchSemanticsNode().boundsInRoot
+            val directoryRequests = server.directory.queries.size
+            repeat(3) {
+                compose.onNode(hasText("Home") and isSelectable()).performClick()
+                compose.onNode(hasText("Clock in") and hasClickAction()).assertIsEnabled()
+                compose.onNodeWithContentDescription("Refresh").assertIsEnabled()
+                compose.onNode(hasText("Account") and isSelectable()).performClick()
+                compose.onNode(hasText("Employees") and isSelectable()).performClick()
+                compose.onNodeWithText("Colleague 15").assertIsDisplayed()
+                compose.onNodeWithContentDescription("Refresh").assertIsEnabled()
+                val restored =
+                    compose.onNodeWithText("Colleague 15").fetchSemanticsNode().boundsInRoot
+                assertTrue(kotlin.math.abs(row.top - restored.top) <= 1f)
+                compose.runOnIdle {
+                    assertEquals(attendanceRequests, server.workforce.attendancePeriods.size)
+                    assertEquals(directoryRequests, server.directory.queries.size)
+                }
+            }
+            compose.onNode(hasScrollToIndexAction()).performScrollToIndex(0)
+            compose.onNodeWithContentDescription("Search employees").assertTextEquals("Colleague")
+            refreshWhenReady()
+            compose.waitUntil { server.directory.queries.size == directoryRequests + 1 }
+            waitFor("Colleague 03")
+            compose.onNode(hasText("Home") and isSelectable()).performClick()
+            refreshWhenReady()
+            compose.waitUntil { server.workforce.attendancePeriods.size == attendanceRequests + 1 }
+        }
+        compose.waitUntil { cache.subscribers(AttendanceWindow.RECENT) == 0 }
+    }
+
+    @Test
+    fun hiddenHomeRevokesExpiredContentAndKeepsTheGateThroughOfflineRecovery() {
+        val cache = NativeAttendanceCacheUi()
+        val server = NativeUiServer()
+        withApplication(server, module { single<AttendanceCacheRepository> { cache } }) {
+            signIn()
+            waitFor("Choose a company")
+            compose.onAllNodesWithText("Open company")[0].performClick()
+            waitFor("Clock in")
+            compose.waitUntil { cache.hasSnapshot(AttendanceWindow.RECENT) }
+            compose.onNode(hasText("Employees") and isSelectable()).performClick()
+            waitFor("Sam Wilson")
+            assertEquals(1, cache.subscribers(AttendanceWindow.RECENT))
+            cache.expire()
+            compose.waitUntil { cache.subscribers(AttendanceWindow.RECENT) == 0 }
+            server.workforce.offline = true
+            compose.onNode(hasText("Home") and isSelectable()).performClick()
+            waitFor("Unable to connect. Check your connection.")
+            compose.onNode(hasText("Clock in") and hasClickAction()).assertDoesNotExist()
+            assertTrue(cache.hasSnapshot(AttendanceWindow.RECENT))
+            assertEquals(0, cache.subscribers(AttendanceWindow.RECENT))
+            server.workforce.offline = false
+            refreshWhenReady()
+            waitFor("Clock in")
+            compose.waitUntil { cache.subscribers(AttendanceWindow.RECENT) == 1 }
+        }
+        compose.waitUntil { cache.subscribers(AttendanceWindow.RECENT) == 0 }
+    }
+
+    @Test
+    fun hiddenDirectoryObservesAccessChangesWithoutFetchingOrLosingItsOwner() {
+        val server = NativeUiServer()
+        withApplication(server) { koin ->
+            signIn()
+            waitFor("Choose a company")
+            compose.onAllNodesWithText("Open company")[0].performClick()
+            waitFor("Welcome")
+            compose.onNode(hasText("Employees") and isSelectable()).performClick()
+            waitFor("Sam Wilson")
+            val reads = server.directory.queries.size
+            val workspaces = koin.get<WorkspaceRepository>()
+            val selected = runBlocking {
+                val session =
+                    assertNotNull(
+                        assertIs<AppResult.Success<Session?>>(
+                                koin.get<SessionRepository>().current()
+                            )
+                            .value
+                    )
+                assertNotNull(
+                    assertIs<AppResult.Success<Workspace?>>(workspaces.current(session.id)).value
+                )
+            }
+            val renewed =
+                selected.copy(
+                    admission =
+                        selected.admission.copy(
+                            checkedAt = selected.admission.checkedAt + 1.milliseconds
+                        )
+                )
+            runBlocking {
+                assertEquals(
+                    AppResult.Success(true),
+                    workspaces.compareAndSet(selected.sessionId, selected, renewed),
+                )
+            }
+            compose.mainClock.advanceTimeBy(500)
+            compose.onNodeWithText("Sam Wilson").assertExists()
+            assertEquals(reads, server.directory.queries.size)
+
+            compose.onNode(hasText("Account") and isSelectable()).performClick()
+            val denied = renewed.copy(permissions = renewed.permissions - "people.directory.read")
+            runBlocking {
+                assertEquals(
+                    AppResult.Success(true),
+                    workspaces.compareAndSet(selected.sessionId, renewed, denied),
+                )
+            }
+            compose.mainClock.advanceTimeBy(500)
+            assertEquals(reads, server.directory.queries.size)
+            compose.onNode(hasText("Employees") and isSelectable()).performClick()
+            waitFor("Your account cannot perform this action.")
+            compose.onNodeWithText("Sam Wilson").assertDoesNotExist()
+            assertEquals(reads, server.directory.queries.size)
+            runBlocking {
+                assertEquals(
+                    AppResult.Success(true),
+                    workspaces.compareAndSet(selected.sessionId, denied, renewed),
+                )
+            }
+            waitFor("Sam Wilson")
+            assertEquals(reads + 1, server.directory.queries.size)
+        }
+    }
+
+    @Test
+    fun returningToEmployeesResumesCancelledRefreshAndKeepsTheLoadedRows() {
+        val server = NativeUiServer()
+        try {
+            withApplication(server) {
+                signIn()
+                waitFor("Choose a company")
+                compose.onAllNodesWithText("Open company")[0].performClick()
+                waitFor("Welcome")
+                compose.onNode(hasText("Employees") and isSelectable()).performClick()
+                waitFor("Sam Wilson")
+                val reads = server.directory.queries.size
+                server.directory.holdNext = true
+                refreshWhenReady()
+                compose.waitUntil { server.directory.started.isCompleted }
+                compose.onNodeWithText("Sam Wilson").assertIsDisplayed()
+                compose.onNode(hasText("Home") and isSelectable()).performClick()
+                compose.waitUntil { server.directory.cancelled.isCompleted }
+                server.directory.released.complete(Unit)
+                assertEquals(reads + 1, server.directory.queries.size)
+                compose.onNode(hasText("Employees") and isSelectable()).performClick()
+                compose.onNodeWithText("Sam Wilson").assertIsDisplayed()
+                compose.waitUntil { server.directory.queries.size == reads + 2 }
+                compose.waitUntil {
+                    compose
+                        .onAllNodes(hasContentDescription("Refresh") and isEnabled())
+                        .fetchSemanticsNodes()
+                        .size == 1
+                }
+                compose.onNodeWithText("Sam Wilson").assertIsDisplayed()
+            }
+        } finally {
+            server.directory.released.complete(Unit)
         }
     }
 
@@ -1863,7 +2064,7 @@ class AppFlowTest {
     private fun withApplication(
         server: NativeUiServer,
         overrides: Module? = null,
-        test: () -> Unit,
+        test: (Koin) -> Unit,
     ) {
         val directory = Files.createTempDirectory("hris-ui").toFile()
         val container =
@@ -1908,7 +2109,7 @@ class AppFlowTest {
                     if (visible.value) Box(Modifier.size(420.dp, 760.dp)) { StarterApp(container) }
                 }
             }
-            test()
+            test(container.koin)
             assertTrue(
                 server.unexpectedPaths.isEmpty(),
                 "Unexpected endpoints: ${server.unexpectedPaths}",

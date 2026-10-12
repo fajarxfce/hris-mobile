@@ -55,8 +55,12 @@ Rows show initials, name, position and department with a compact search control.
 Search and department selection remain in the feature's MVI owner across tab changes.
 A replacement query cancels the former read, while a refresh of the same page retains content
 after a transient network failure. Access failures clear the page. Leaving the
-tab or covering the route stops its request; returning revalidates current
-access. No directory is persisted for offline access, and paging requires an
+tab or covering the route stops its request. The navigation ViewModel keeps local
+workspace observation active, invalidating hidden rows when admission changes.
+Returning to a successful page keeps search, department, pagination and scroll
+without repeating HTTP. Interrupted or failed acquisition is resumed; manual
+refresh still loads current data without inserting a spinner above existing rows.
+Clearing the route owner releases observation. No directory is persisted for offline access, and paging requires an
 explicit action rather than an unbounded prefetch loop.
 
 ## Validation

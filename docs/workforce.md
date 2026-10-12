@@ -2,7 +2,11 @@
 
 Home includes today's clock-in/out card above its service grid. Its capture
 ViewModel owns acquisition, permission recovery and pending-command actions.
-Its lifecycle stops on tab disposal as well as app backgrounding.
+Leaving its tab or backgrounding cancels acquisition and user actions. Read-only
+cache/admission observation lives with the navigation ViewModel, so hidden content
+still expires or loses access. Re-entering a loaded, admitted Home does not clear
+the card or repeat its request. Incomplete acquisition, invalidated content and
+explicit actions require refresh. Clearing the owner releases its subscriptions.
 Stored, received, pending review and accepted outcomes remain distinct; corrections
 replace the displayed times without enabling another capture.
 Successful refresh clears an expired-cache message even when expiry is observed

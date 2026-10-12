@@ -79,9 +79,10 @@ it is unavailable.
 Saving offline, receiving a server receipt and accepting attendance are separate
 visible outcomes. An uncertain response retains the original command for retry.
 The Home card owns capture and pending-command dialogs separately from monthly
-history. Leaving its tab, stopping the app,
-or disposing the route stops observation and pending acquisition. Returning
-revalidates the saved state; it never automatically records attendance.
+history. Leaving its tab or stopping the app cancels acquisition and user actions.
+Its navigation ViewModel retains data and observes cache validity until that owner
+is cleared. Returning to admitted loaded content does not refresh it; an unfinished
+request or invalidated read needs acquisition. Returning never records attendance.
 
 ## Search and filters
 

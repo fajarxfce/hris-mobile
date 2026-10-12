@@ -1,5 +1,31 @@
 # Template updates
 
+## Retained tab ownership
+
+The navigation ownership guidance and a regression guarding the starter's
+existing retained dashboard behavior are at
+[f3389dd](https://github.com/fajarxfce/compose-fluent-starter/commit/f3389dd).
+Its root checks passed with 230 desktop tests. Home attendance, company admission
+and employee-directory acquisition remain HRIS-specific. Mobile root checks and
+the Android dev build passed; emulator checks verified loaded tabs while offline.
+
+## Bounded Android tooling
+
+The runner's ADB deadlines, validated optional reverse port, forwarding before
+installation and seven regression tests also exist at
+[8244a00](https://github.com/fajarxfce/compose-fluent-starter/commit/8244a00).
+Both repositories passed root checks. The private HRIS VPN endpoint and its
+development HTTP policy remain application configuration.
+
+## Durable file storage
+
+The account-owned block store, immutable completion proofs, revision-checked
+checkpoints and SQLite/IndexedDB regressions also exist at
+[75f5970](https://github.com/fajarxfce/compose-fluent-starter/commit/75f5970).
+Both repositories passed root checks, all 23 database Chromium tests and
+Android/production Web builds. File encryption and HRIS document policy remain
+separate consuming boundaries.
+
 ## Inline loading
 
 The compact loading option and its bounded 200% text regression also exist at

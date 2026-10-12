@@ -70,7 +70,7 @@ fun EmployeesPage(
                 )
             }
         }
-        if (state.loading) item(key = "progress") { AppLoading() }
+        if (state.loading && state.page == null) item(key = "progress") { AppLoading() }
         if (state.failure != null)
             item(key = "failure") {
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {

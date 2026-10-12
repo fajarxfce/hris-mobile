@@ -24,6 +24,8 @@ class EmployeesViewModel(
     private var request: Job? = null
     private var observation: Job? = null
     private var departmentRequest: Job? = null
+    private var visible = false
+    private var refreshRequired = true
 
     init {
         on<EmployeesEvent.Entered>(::onEntered)
@@ -41,7 +43,13 @@ class EmployeesViewModel(
     }
 
     private fun onEntered(event: EmployeesEvent.Entered) {
-        if (observation?.isActive == true) return
+        if (visible) return
+        visible = true
+        if (observation?.isActive == true) {
+            if (refreshRequired || state.value.page == null) loadPage(state.value.after)
+            return
+        }
+        // Keep admission observed for the navigation owner's lifetime, including hidden tabs.
         observation =
             viewModelScope.launch {
                 observeWorkspace()
@@ -52,17 +60,21 @@ class EmployeesViewModel(
                         }
                     }
                     .collect {
+                        refreshRequired = true
+                        request?.cancel()
+                        request = null
                         departmentRequest?.cancel()
                         departmentRequest = null
-                        updateState { current -> current.copy(filter = null) }
-                        loadPage(state.value.after)
+                        updateState { current ->
+                            current.copy(page = null, filter = null, loading = false)
+                        }
+                        if (visible) loadPage(state.value.after)
                     }
             }
     }
 
     private fun onStopped(event: EmployeesEvent.Stopped) {
-        observation?.cancel()
-        observation = null
+        visible = false
         request?.cancel()
         request = null
         departmentRequest?.cancel()
@@ -71,6 +83,7 @@ class EmployeesViewModel(
     }
 
     private fun onQueryChanged(event: EmployeesEvent.QueryChanged) {
+        if (!visible) return
         val query = event.value.take(120)
         if (query == state.value.query) return
         updateState { it.copy(query = query, after = null, page = null) }
@@ -78,7 +91,7 @@ class EmployeesViewModel(
     }
 
     private fun onFilterRequested(event: EmployeesEvent.FilterRequested) {
-        if (state.value.filter != null) return
+        if (!visible || state.value.filter != null) return
         updateState { it.copy(filter = DepartmentFilterState()) }
         loadDepartmentOptions()
     }
@@ -109,7 +122,7 @@ class EmployeesViewModel(
     }
 
     private fun onDepartmentRetryRequested(event: EmployeesEvent.DepartmentRetryRequested) {
-        if (departmentRequest?.isActive != true) loadDepartmentOptions()
+        if (visible && departmentRequest?.isActive != true) loadDepartmentOptions()
     }
 
     private fun loadDepartmentOptions(debounce: Duration = Duration.ZERO) {
@@ -156,7 +169,8 @@ class EmployeesViewModel(
 
     private fun onPageRequested(event: EmployeesEvent.PageRequested) {
         if (
-            state.value.loading ||
+            !visible ||
+                state.value.loading ||
                 (event.after != null && event.after != state.value.page?.nextCursor)
         )
             return
@@ -165,7 +179,7 @@ class EmployeesViewModel(
     }
 
     private fun onRefreshRequested(event: EmployeesEvent.RefreshRequested) {
-        if (request?.isActive != true) loadPage(state.value.after)
+        if (visible && request?.isActive != true) loadPage(state.value.after)
     }
 
     private fun onBackRequested(event: EmployeesEvent.BackRequested) {
@@ -173,12 +187,16 @@ class EmployeesViewModel(
     }
 
     private fun onVerificationRequested(event: EmployeesEvent.VerificationRequested) {
-        if (state.value.needsVerification || state.value.filter?.needsVerification == true)
+        if (
+            visible &&
+                (state.value.needsVerification || state.value.filter?.needsVerification == true)
+        )
             viewModelScope.launch { emitEffect(EmployeesEffect.VerifyAccount) }
     }
 
     /** This screen owns replacement, debounce and cancellation; the use case owns admission. */
     private fun loadPage(after: String?, debounce: Duration = Duration.ZERO) {
+        refreshRequired = true
         request?.cancel()
         val query = state.value.query
         val departmentId = state.value.department?.id
@@ -197,10 +215,12 @@ class EmployeesViewModel(
                 val result = load(workspaceId, query, after, departmentId)
                 ensureActive()
                 when (result) {
-                    is AppResult.Success ->
+                    is AppResult.Success -> {
+                        refreshRequired = false
                         updateState {
                             it.copy(page = result.value.toDirectoryContent(), loading = false)
                         }
+                    }
                     is AppResult.Failed -> {
                         val transient =
                             result.failure.kind in setOf(FailureKind.Network, FailureKind.Timeout)
