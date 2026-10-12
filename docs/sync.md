@@ -27,6 +27,12 @@ Workers are application entry points. They execute use cases; they do not manipu
 tables or invoke HTTP APIs. Scheduler datasources enqueue work and never execute a use case.
 Repositories do not call other repositories; use cases do not call other use cases.
 
+The scheduling repository resolves its platform scheduler on the first scheduling
+operation. Foreground registration inspects task keys, and those task constructors
+may depend on this repository to request subsequent work. Generated DI therefore
+injects a lazy scheduler reference, allowing task registration to finish before
+platform acquisition. The application container still owns scheduler disposal.
+
 ## Data flow
 
 1. `SetActivitySaved` calls the repository. The store changes the local preference and inserts
