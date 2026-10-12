@@ -117,6 +117,15 @@ server's versioned schedule. Repositories map that response; pure domain policie
 validate requested and actual intervals. The review's lifetime is bounded by
 company/session authority and carries no command or UI state.
 
+Overtime commands use separate preparation, delivery, observation and review use
+cases. Preparation validates the admitted review/request and stores immutable input;
+delivery coordinates command storage, live company policy and the transport port.
+Its shared mutex serializes manual and worker attempts. The repository authenticates
+bounded input/outcome envelopes and maps DTOs; it does not choose retry or discard
+policy. Uncertain outcomes retain their original operation and body, including after
+a later rejection. Confirmed cleanup requires admitted request facts and an atomic
+outcome revision check.
+
 The [Leave page](leave.md) uses its own minimal self-service employment directory,
 independent of People and Workforce availability. Its use cases admit the selected
 company, acquire scoped balances/history and atomically publish one encrypted

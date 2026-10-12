@@ -1,10 +1,34 @@
 package dev.fajar.starter.workforce.data.overtime.datasources
 
 import dev.fajar.starter.workforce.data.overtime.api.OvertimeApi
+import dev.fajar.starter.workforce.data.overtime.dto.*
 import org.koin.core.annotation.Single
 
 @Single
 class ApiOvertimeDataSource(private val api: OvertimeApi) : OvertimeRemoteDataSource {
+    override suspend fun plan(
+        sessionId: String,
+        companyId: String,
+        operationId: String,
+        request: OvertimePlanRequest,
+    ) = api.plan(sessionId, companyId, operationId, request)
+
+    override suspend fun actual(
+        sessionId: String,
+        companyId: String,
+        id: String,
+        operationId: String,
+        request: OvertimeActualRequest,
+    ) = api.actual(sessionId, companyId, id, operationId, request)
+
+    override suspend fun withdraw(
+        sessionId: String,
+        companyId: String,
+        id: String,
+        operationId: String,
+        request: OvertimeWithdrawalRequest,
+    ) = api.withdraw(sessionId, companyId, id, operationId, request)
+
     override suspend fun review(
         sessionId: String,
         companyId: String,

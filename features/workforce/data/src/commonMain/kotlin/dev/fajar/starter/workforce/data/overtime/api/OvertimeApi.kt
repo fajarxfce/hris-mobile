@@ -4,10 +4,61 @@ import dev.fajar.starter.network.*
 import dev.fajar.starter.workforce.data.overtime.dto.*
 import io.ktor.client.HttpClient
 import io.ktor.client.request.*
+import io.ktor.http.*
 import org.koin.core.annotation.*
 
 @Single
 class OvertimeApi(@Named(HttpClients.Authenticated) private val client: HttpClient) {
+    suspend fun plan(
+        sessionId: String,
+        companyId: String,
+        operationId: String,
+        request: OvertimePlanRequest,
+    ): OvertimeCommandReceiptDto =
+        client.requestJson("companies/$companyId/workforce/overtime", maximumBytes = 4_096) {
+            forSession(sessionId)
+            method = HttpMethod.Post
+            header("Idempotency-Key", operationId)
+            contentType(ContentType.Application.Json)
+            setBody(request)
+        }
+
+    suspend fun actual(
+        sessionId: String,
+        companyId: String,
+        id: String,
+        operationId: String,
+        request: OvertimeActualRequest,
+    ): OvertimeCommandReceiptDto =
+        client.requestJson(
+            "companies/$companyId/workforce/overtime/$id/actual",
+            maximumBytes = 4_096,
+        ) {
+            forSession(sessionId)
+            method = HttpMethod.Post
+            header("Idempotency-Key", operationId)
+            contentType(ContentType.Application.Json)
+            setBody(request)
+        }
+
+    suspend fun withdraw(
+        sessionId: String,
+        companyId: String,
+        id: String,
+        operationId: String,
+        request: OvertimeWithdrawalRequest,
+    ): OvertimeCommandReceiptDto =
+        client.requestJson(
+            "companies/$companyId/workforce/overtime/$id/withdraw",
+            maximumBytes = 4_096,
+        ) {
+            forSession(sessionId)
+            method = HttpMethod.Post
+            header("Idempotency-Key", operationId)
+            contentType(ContentType.Application.Json)
+            setBody(request)
+        }
+
     suspend fun review(
         sessionId: String,
         companyId: String,

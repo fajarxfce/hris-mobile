@@ -54,6 +54,7 @@ class OvertimeDataFixture : OvertimeRemoteDataSource {
         )
     val selection = OvertimeRequestSelection(request.id, base.employee.id)
     var failure: Exception? = null
+    var receipt = OvertimeCommandReceiptDto(request.id, 0)
     var review =
         OvertimePlanningReviewDto(
             OvertimePlanningEmployeeDto(base.employee.id, "E01", "Alex", "ACTIVE", 0),
@@ -72,6 +73,38 @@ class OvertimeDataFixture : OvertimeRemoteDataSource {
     ): OvertimePlanningReviewDto {
         failure?.let { throw it }
         return review
+    }
+
+    override suspend fun plan(
+        sessionId: String,
+        companyId: String,
+        operationId: String,
+        request: OvertimePlanRequest,
+    ): OvertimeCommandReceiptDto {
+        failure?.let { throw it }
+        return receipt
+    }
+
+    override suspend fun actual(
+        sessionId: String,
+        companyId: String,
+        id: String,
+        operationId: String,
+        request: OvertimeActualRequest,
+    ): OvertimeCommandReceiptDto {
+        failure?.let { throw it }
+        return receipt
+    }
+
+    override suspend fun withdraw(
+        sessionId: String,
+        companyId: String,
+        id: String,
+        operationId: String,
+        request: OvertimeWithdrawalRequest,
+    ): OvertimeCommandReceiptDto {
+        failure?.let { throw it }
+        return receipt
     }
 
     override suspend fun requests(

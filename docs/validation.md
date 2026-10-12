@@ -1,5 +1,22 @@
 # Validation
 
+## Overtime command foundation
+
+Root checks passed with 868 desktop tests, 85 Workforce domain and 22 data Chromium
+tests, and Android dev assembly. The focused domain/data run passed 129 tests.
+Forty-three new cases cover competing confirmation, actual/withdrawal exclusion,
+late cancellation, ownership/permission changes, expiry, response loss, immutable
+replay, current policy, receipt validation and reconciliation before cleanup.
+
+Delivery tests exercise manual/worker serialization, the deadline while waiting
+for another sender, finite batch/cursor progress and retry limits. Real SQLite
+tests reopen all three command types under a replacement session for the same
+account, reject copied ciphertext and stale outcome revisions, preserve lost-key
+evidence, and verify cancellation/account replacement during pending encryption.
+HTTP tests cover exact routes, bodies, versions, idempotency keys, localizable
+problems and bounded receipts. Native forms and real development API command
+acceptance remain separate; no new phone installation is claimed here.
+
 ## Overtime planning preparation
 
 Root checks passed with 825 desktop tests and Android dev assembly. Workforce

@@ -3,7 +3,7 @@
 Overtime belongs to Workforce, alongside calendars and attendance. Employees can
 open their own requests from Home or All services, filter by month and status,
 and inspect a request's planned/actual time, approval progress and activity.
-Planning, actual-time submission and withdrawal remain the next native integration.
+The native forms for planning, actual-time submission and withdrawal remain in progress.
 
 ## Scope and acquisition
 
@@ -81,8 +81,38 @@ Pure application policies derive worked duration from whole UTC minutes and the
 declared break. They enforce the 12-hour interval limit, company work-date window,
 shift exclusion, actual-time bounds and completed-work requirement. Datasources
 only acquire DTOs; repository mapping validates protocol consistency and preserves
-localizable server failures. Native command storage and forms remain subsequent
-integration work.
+localizable server failures.
+
+## Durable commands
+
+Planning, actual-time submission and withdrawal have typed immutable commands.
+`PrepareOvertimePlan` validates the reviewed schedule before local insertion;
+`PrepareOvertimeAction` uses admitted request facts and pins their observed version.
+Neither sends HTTP. Competing confirmations recover the canonical stored input.
+One planning command is retained per employment; actual time and withdrawal share
+one slot per request so conflicting actions cannot replace each other.
+
+The data repository stores separate authenticated input and outcome envelopes in
+the account-owned command store. Associated data binds account, audience, company,
+operation, resource and outcome revision. Input is limited to 16 KB and outcome
+to 4 KB. Reads return at most 50 records. Lost keys are never replaced over retained
+ciphertext, and cancellation clears owned plaintext/key buffers before publication.
+
+`ReplayOvertimeCommands` is one shared manual/background `SyncTask`. A 30-second
+deadline includes waiting for its mutex. Each delivery reacquires current company
+policy, persists an unconfirmed attempt before transport, and reuses the original
+operation key, body, employment/request version and planning revision. Worker runs
+scan at most three pages and send at most ten commands; automatic attempts stop
+after three, leaving explicit recovery available. A command permits at most 1,000
+total attempts.
+
+A matching receipt confirms delivery. A documented first-attempt rejection can be
+reviewed and discarded; a later rejection cannot disprove an earlier uncertain
+commit. Unconfirmed input stays retained. `ReviewOvertimeCommand` removes confirmed
+evidence only after admitted request facts reach its receipt version, and its
+compare-and-set cannot remove a concurrent delivery. Repositories perform no retry,
+permission or UI orchestration. Native forms and real-API command acceptance remain
+subsequent integration work.
 
 ## Validation
 
@@ -112,3 +142,10 @@ domain and 17 data Chromium cases, and Android dev assembly. Twenty new cases
 cover owner discovery, read-only grants, late scope changes and cancellation,
 review expiry, bounded transport, malformed facts, overnight shifts, DST boundaries
 and actual-time limits. This boundary increment did not add a new device flow.
+
+Durable commands passed root checks with 868 desktop tests, 85 Workforce domain
+and 22 data Chromium cases, and Android dev assembly. Forty-three new cases cover
+competing preparation, immutable replay, lost responses, scope replacement, finite
+deadlines/retries, cancellation, reconciled cleanup, encrypted SQLite restoration,
+tampering, cross-scope denial and bounded transport/storage. This increment adds
+command contracts and delivery; it does not claim new device interaction.

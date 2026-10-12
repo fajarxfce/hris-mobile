@@ -18,6 +18,48 @@ import org.koin.core.annotation.*
 @ComponentScan("dev.fajar.starter.workforce.data")
 class WorkforceDataModule {
     @Factory
+    fun prepareOvertimePlan(
+        commands: OvertimeCommandRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        build: AppBuild,
+    ) = PrepareOvertimePlan(commands, sessions, workspaces, Clock.System, build)
+
+    @Factory
+    fun prepareOvertimeAction(
+        commands: OvertimeCommandRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        build: AppBuild,
+    ) = PrepareOvertimeAction(commands, sessions, workspaces, Clock.System, build)
+
+    @Factory
+    fun observeOvertimeCommand(
+        commands: OvertimeCommandRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        build: AppBuild,
+    ) = ObserveOvertimeCommand(commands, sessions, workspaces, Clock.System, build)
+
+    @Factory
+    fun reviewOvertimeCommand(
+        commands: OvertimeCommandRepository,
+        cache: OvertimeCacheRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        build: AppBuild,
+    ) = ReviewOvertimeCommand(commands, cache, sessions, workspaces, Clock.System, build)
+
+    @Single(binds = [ReplayOvertimeCommands::class, SyncTask::class])
+    fun replayOvertimeCommands(
+        commands: OvertimeCommandRepository,
+        remote: OvertimeSubmissionRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        build: AppBuild,
+    ) = ReplayOvertimeCommands(commands, remote, sessions, workspaces, Clock.System, build)
+
+    @Factory
     fun reviewOvertimeSchedule(
         workforce: WorkforceRepository,
         remote: OvertimePlanningRepository,
