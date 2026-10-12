@@ -76,6 +76,51 @@ class AppFlowTest {
     private val backDispatcher = TestBackDispatcher()
 
     @Test
+    fun overtimeUsesFeatureRoutesAndRecoversItsAdmittedListAndDetailsOffline() {
+        val server = NativeUiServer().apply { overtime.enabled = true }
+        withApplication(server) {
+            signIn()
+            waitFor("Choose a company")
+            compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
+            waitFor("Welcome")
+            compose
+                .onNode(hasText("Overtime") and hasClickAction())
+                .performScrollTo()
+                .performClick()
+            waitFor("17:00 – 19:00")
+            capture("overtime-list")
+            compose.onNode(hasText("17:00 – 19:00") and hasClickAction()).performClick()
+            waitFor("Overtime request")
+            waitFor("Inventory count")
+            capture("overtime-request")
+            server.overtime.offline = true
+            refreshWhenReady()
+            waitFor("Unable to connect. Check your connection.")
+            compose.onNodeWithText("Planned time").assertExists()
+            compose.onNodeWithContentDescription("Back").performClick()
+            waitFor("17:00 – 19:00")
+            compose.onNode(hasText("All statuses") and hasClickAction()).performClick()
+            waitFor("Request status")
+            compose.onNode(hasText("Approved") and isSelectable()).performClick()
+            waitFor("Unable to connect. Check your connection.")
+            compose.onNode(hasText("17:00 – 19:00") and hasClickAction()).assertDoesNotExist()
+            server.overtime.offline = false
+            refreshWhenReady()
+            waitFor("No requests for this period and status.")
+            compose.onNode(hasText("Approved") and hasClickAction()).performClick()
+            waitFor("Request status")
+            compose.onNode(hasText("All statuses") and isSelectable()).performClick()
+            waitFor("17:00 – 19:00")
+            assertTrue(server.overtime.listReads.get() >= 3)
+            assertEquals(1, server.overtime.detailReads.get())
+            server.overtime.failureCode = "company_module_disabled"
+            refreshWhenReady()
+            waitFor("This service is unavailable for this company.")
+            compose.onNode(hasText("17:00 – 19:00") and hasClickAction()).assertDoesNotExist()
+        }
+    }
+
+    @Test
     fun companySelectionShowsPendingWorkAndRecoversWithoutDuplicateActions() {
         val pending = CompletableDeferred<Unit>()
         val server = NativeUiServer().apply { companyPolicy.pending = pending }

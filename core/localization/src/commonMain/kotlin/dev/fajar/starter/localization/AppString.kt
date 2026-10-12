@@ -5,6 +5,97 @@ import org.jetbrains.compose.resources.StringResource
 
 /** Explicit pairs keep runtime language changes portable across Android, iOS, desktop and Web. */
 enum class AppString(val english: StringResource, val indonesian: StringResource) {
+    Overtime(Res.string.overtime_en, Res.string.overtime_id),
+    OvertimeSummary(Res.string.overtime_summary_en, Res.string.overtime_summary_id),
+    OvertimeMonth(Res.string.overtime_month_en, Res.string.overtime_month_id),
+    OvertimeRequestStatus(
+        Res.string.overtime_request_status_en,
+        Res.string.overtime_request_status_id,
+    ),
+    OvertimeAllStatuses(Res.string.overtime_all_statuses_en, Res.string.overtime_all_statuses_id),
+    OvertimePlanned(Res.string.overtime_planned_en, Res.string.overtime_planned_id),
+    OvertimePending(Res.string.overtime_pending_en, Res.string.overtime_pending_id),
+    OvertimeApproved(Res.string.overtime_approved_en, Res.string.overtime_approved_id),
+    OvertimeRejected(Res.string.overtime_rejected_en, Res.string.overtime_rejected_id),
+    OvertimeWithdrawn(Res.string.overtime_withdrawn_en, Res.string.overtime_withdrawn_id),
+    OvertimeNoRequests(Res.string.overtime_no_requests_en, Res.string.overtime_no_requests_id),
+    OvertimeFirstRequests(
+        Res.string.overtime_first_requests_en,
+        Res.string.overtime_first_requests_id,
+    ),
+    OvertimeMoreRequests(
+        Res.string.overtime_more_requests_en,
+        Res.string.overtime_more_requests_id,
+    ),
+    OvertimeSaved(Res.string.overtime_saved_en, Res.string.overtime_saved_id),
+    OvertimeNoSaved(Res.string.overtime_no_saved_en, Res.string.overtime_no_saved_id),
+    OvertimeRequestDetails(
+        Res.string.overtime_request_details_en,
+        Res.string.overtime_request_details_id,
+    ),
+    OvertimeWorkDate(Res.string.overtime_work_date_en, Res.string.overtime_work_date_id),
+    OvertimePlannedTime(Res.string.overtime_planned_time_en, Res.string.overtime_planned_time_id),
+    OvertimeActualTime(Res.string.overtime_actual_time_en, Res.string.overtime_actual_time_id),
+    OvertimeApprovedTime(
+        Res.string.overtime_approved_time_en,
+        Res.string.overtime_approved_time_id,
+    ),
+    OvertimeReason(Res.string.overtime_reason_en, Res.string.overtime_reason_id),
+    OvertimeReviewedSchedule(
+        Res.string.overtime_reviewed_schedule_en,
+        Res.string.overtime_reviewed_schedule_id,
+    ),
+    OvertimeActivity(Res.string.overtime_activity_en, Res.string.overtime_activity_id),
+    OvertimeNoEarlierActivity(
+        Res.string.overtime_no_earlier_activity_en,
+        Res.string.overtime_no_earlier_activity_id,
+    ),
+    OvertimeLatestActivity(
+        Res.string.overtime_latest_activity_en,
+        Res.string.overtime_latest_activity_id,
+    ),
+    OvertimeEarlierActivity(
+        Res.string.overtime_earlier_activity_en,
+        Res.string.overtime_earlier_activity_id,
+    ),
+    OvertimePlannedActivity(
+        Res.string.overtime_planned_activity_en,
+        Res.string.overtime_planned_activity_id,
+    ),
+    OvertimeActualActivity(
+        Res.string.overtime_actual_activity_en,
+        Res.string.overtime_actual_activity_id,
+    ),
+    OvertimeDecisionActivity(
+        Res.string.overtime_decision_activity_en,
+        Res.string.overtime_decision_activity_id,
+    ),
+    OvertimeWithdrawnActivity(
+        Res.string.overtime_withdrawn_activity_en,
+        Res.string.overtime_withdrawn_activity_id,
+    ),
+    OvertimeApprovalBlocked(
+        Res.string.overtime_approval_blocked_en,
+        Res.string.overtime_approval_blocked_id,
+    ),
+    OvertimeApprovalStep(
+        Res.string.overtime_approval_step_en,
+        Res.string.overtime_approval_step_id,
+    ),
+    OvertimeTimeRange(Res.string.overtime_time_range_en, Res.string.overtime_time_range_id),
+    OvertimeDatedTimeRange(
+        Res.string.overtime_dated_time_range_en,
+        Res.string.overtime_dated_time_range_id,
+    ),
+    OvertimeCacheExpired(
+        Res.string.overtime_cache_expired_en,
+        Res.string.overtime_cache_expired_id,
+    ),
+    OvertimeRequestUnavailable(
+        Res.string.overtime_request_unavailable_en,
+        Res.string.overtime_request_unavailable_id,
+    ),
+    OvertimeChanged(Res.string.overtime_changed_en, Res.string.overtime_changed_id),
     OpeningCompany(Res.string.opening_company_en, Res.string.opening_company_id),
     ChangingCompany(Res.string.changing_company_en, Res.string.changing_company_id),
     SigningOut(Res.string.signing_out_en, Res.string.signing_out_id),

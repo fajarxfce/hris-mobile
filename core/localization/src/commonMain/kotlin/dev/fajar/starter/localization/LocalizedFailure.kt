@@ -7,6 +7,10 @@ import dev.fajar.starter.common.result.*
 fun failureText(failure: Failure): String =
     appString(
         when (failure.code) {
+            "client.overtime_cache_expired" -> AppString.OvertimeCacheExpired
+            "overtime_request_not_found" -> AppString.OvertimeRequestUnavailable
+            "client.overtime_changed" -> AppString.OvertimeChanged
+            "client.overtime_scope_changed" -> AppString.CalendarScopeChanged
             "client.document_export_timeout" -> AppString.DocumentExportTimeout
             "client.document_checksum_mismatch" -> AppString.DocumentChecksumMismatch
 

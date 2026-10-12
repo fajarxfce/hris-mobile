@@ -139,6 +139,8 @@ fun AppNavigation(navigation: ScopedNavigationState, incomingLinks: Flow<String>
                                 controller.navigate(WorkCalendarRoute) { launchSingleTop = true }
                             HomeService.Leave ->
                                 controller.navigate(LeaveRoute) { launchSingleTop = true }
+                            HomeService.Overtime ->
+                                controller.navigate(OvertimeRoute) { launchSingleTop = true }
                             HomeService.Documents ->
                                 controller.navigate(DocumentsRoute) { launchSingleTop = true }
                             HomeService.Profile ->
@@ -244,6 +246,27 @@ fun AppNavigation(navigation: ScopedNavigationState, incomingLinks: Flow<String>
                         onBack = { controller.popBackStack() },
                     )
                     sessionRoutes(stage.sessionId) { controller.popBackStack() }
+                    overtimeRoutes(
+                        stage.workspace.id,
+                        onRequest = {
+                            controller.navigate(
+                                OvertimeRequestRoute(
+                                    it.requestId,
+                                    it.employeeId,
+                                    it.employmentAfter,
+                                )
+                            ) {
+                                launchSingleTop = true
+                            }
+                        },
+                        onVerify = {
+                            controller.navigate(VerificationRoute) { launchSingleTop = true }
+                        },
+                        onRecheckWorkspace = {
+                            viewModel.onEvent(AppEvent.WorkspaceRefreshRequested)
+                        },
+                        onBack = { controller.popBackStack() },
+                    )
                     leaveRoutes(
                         stage.workspace.id,
                         onRequest = {

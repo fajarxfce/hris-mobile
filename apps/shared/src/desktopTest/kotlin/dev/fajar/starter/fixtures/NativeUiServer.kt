@@ -30,6 +30,7 @@ class NativeUiServer(
     val people = NativePeopleUi()
     val directory = NativeDirectoryUi()
     val workforce = NativeWorkforceUi()
+    val overtime = NativeOvertimeUi()
     val leave = NativeLeaveUi()
     val documents = NativeDocumentsUi()
     val inbox = NativeInboxUi()
@@ -56,7 +57,7 @@ class NativeUiServer(
             inbox.response(request)?.let { (body, status) ->
                 return@withLock respond(body, status, headers)
             }
-            workforce.response(request)?.let { (body, status) ->
+            (workforce.response(request) ?: overtime.response(request))?.let { (body, status) ->
                 return@withLock respond(body, status, headers)
             }
             leave.response(request)?.let { (body, status) ->
@@ -169,6 +170,7 @@ class NativeUiServer(
                 add("people.directory.read")
                 add("announcements.read")
                 add("attendance.self.record")
+                if (overtime.enabled) add("overtime.self.manage")
                 if (leave.enabled) add("leave.self.manage")
                 if (documents.enabled) {
                     add("documents.self.read")

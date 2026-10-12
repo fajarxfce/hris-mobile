@@ -1,8 +1,9 @@
 # Overtime
 
-Overtime belongs to Workforce, alongside calendars and attendance. Its native
-read contracts use the existing company API and shared schedule models. Employee
-screens and durable commands are the next integration step.
+Overtime belongs to Workforce, alongside calendars and attendance. Employees can
+open their own requests from Home or All services, filter by month and status,
+and inspect a request's planned/actual time, approval progress and activity.
+Planning, actual-time submission and withdrawal remain the next native integration.
 
 ## Scope and acquisition
 
@@ -40,6 +41,29 @@ or replaced scope. Revocation remains authoritative if local cleanup fails.
 Presentation must retain that gate through pending or failed recovery and reopen
 observation only after fresh admitted acquisition succeeds.
 
+## Presentation
+
+The overview and request have separate feature routes and MVI owners. Route
+disposal cancels acquisition and observation; an account or company replacement
+removes their content. Selected employment and continuation travel with the
+request route so details independently verify their ownership.
+
+The top bar and month/status filters stay above the scrolling list. Refresh
+failures remain visible beneath those controls, including when the request is
+scrolled. Refresh uses the existing header action. Month selection opens a
+controlled dialog; pagination never implies that a partial page is a total.
+
+Company-local dates distinguish the work date from an overnight interval.
+Details retain the schedule reviewed for that request, even if the current
+calendar changes. UI formatters localize dates, durations, statuses and failures;
+pages do not calculate approved time or acquire data.
+
+Authoritative read failures retain their gate through pending and failed retries,
+even when cleanup leaves ciphertext behind. A successful admitted refresh reopens
+an observation that ended with a storage-flow failure. Replacing the shared cache
+with another selection clears the obsolete view instead of retaining its expired
+lease. Navigation and mutation outcomes are not inferred from a failed refresh.
+
 ## Validation
 
 The focused desktop run passed 41 Workforce domain and 25 data tests, including
@@ -48,5 +72,17 @@ acquisition, late cancellation, failed cleanup, lease expiry, encrypted SQLite
 restoration, competing publication and cross-scope ciphertext rejection. The full
 headless workspace `:check` and Workforce domain/data `wasmJsBrowserTest` targets
 also passed. The data browser tests register the same IANA time-zone database as
-the application host; their dependency and lockfile are included in CI. Android
-screen and API acceptance remain part of the subsequent presentation integration.
+the application host; their dependency and lockfile are included in CI.
+
+Presentation integration passed the root checks with 805 desktop tests, all 21
+Workforce presentation Chromium tests and Android dev assembly. The new MVI cases
+cover replacement, late cancellation, denial recovery, expired reads, completed
+storage subscriptions and offline filter restoration. Layout tests cover fixed
+controls and visible refresh feedback, Indonesian dark appearance at 200% text,
+month selection and history recovery. The assembled application test uses the
+HTTP adapter, encrypted cache and feature routes together.
+
+API 35 emulator checks covered the development API, month/status filters,
+overnight dates, offline process restoration and explicit recovery. The validated
+update was installed on the authorized phone with `--install-only`. See the
+[validation record](validation.md#overtime-history-and-request-details).

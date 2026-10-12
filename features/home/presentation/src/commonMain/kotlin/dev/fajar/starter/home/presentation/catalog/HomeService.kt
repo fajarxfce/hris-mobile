@@ -6,6 +6,7 @@ import dev.fajar.starter.workspace.domain.entities.*
 import dev.fajar.starter.workspace.domain.policies.companyModuleAvailable
 import io.github.composefluent.icons.Icons
 import io.github.composefluent.icons.regular.CalendarCheckmark
+import io.github.composefluent.icons.regular.CalendarClock
 import io.github.composefluent.icons.regular.CalendarLtr
 import io.github.composefluent.icons.regular.Clock
 import io.github.composefluent.icons.regular.Document
@@ -16,6 +17,7 @@ enum class HomeService(val title: AppString, val summary: AppString, val icon: I
     Attendance(AppString.Attendance, AppString.AttendanceSummary, Icons.Regular.Clock),
     Calendar(AppString.WorkCalendar, AppString.CalendarSummary, Icons.Regular.CalendarLtr),
     Leave(AppString.Leave, AppString.LeaveSummary, Icons.Regular.CalendarCheckmark),
+    Overtime(AppString.Overtime, AppString.OvertimeSummary, Icons.Regular.CalendarClock),
     Documents(AppString.Documents, AppString.DocumentsSummary, Icons.Regular.Document),
     Profile(AppString.MyProfile, AppString.ProfileSummary, Icons.Regular.Person),
 }
@@ -37,6 +39,18 @@ fun homeServices(workspace: Workspace?): HomeServiceCatalog {
                 add(HomeService.Attendance)
                 add(HomeService.Calendar)
             }
+            if (
+                permissions.any {
+                    it in
+                        setOf(
+                            "overtime.self.manage",
+                            "overtime.read",
+                            "overtime.manage",
+                            "workforce.read",
+                        )
+                }
+            )
+                add(HomeService.Overtime)
         }
         if (
             companyModuleAvailable(workspace, CompanyModule.LEAVE) &&

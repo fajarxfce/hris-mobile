@@ -36,6 +36,12 @@ actions above the scrolling content; Settings groups language and security contr
 Screens support English and Indonesian. System
 appearance and reduced-motion preferences are respected.
 
+Overtime shows the employee's requests with month and status filters. Request
+details include planned and actual time, approval progress, the reviewed schedule
+and paged activity. The last admitted list and request remain available in bounded
+encrypted offline storage. Planning and actual-time submission are still being
+connected to the native interface.
+
 Leave shows annual balances and request history with status filters, account-owned
 employment selection and a bounded encrypted offline view. Each request opens its
 submitted dates, duration, reason, current status and paged activity history;
@@ -59,7 +65,7 @@ server authorization; the exported copy is then managed outside the application.
 The runtime contains no demo authentication transport. Other transactional employee workflows
 are still being connected; a generated module
 is not a completed HRIS workflow. See [native identity](docs/native-identity.md), [company workspaces](docs/workspace.md), [employee profiles](docs/people.md), [inbox and synchronization](docs/inbox.md), [company availability](docs/company-policy.md),
-[attendance and work calendars](docs/workforce.md), the [leave integration](docs/leave.md), and the platform's
+[attendance and work calendars](docs/workforce.md), [overtime](docs/overtime.md), the [leave integration](docs/leave.md), and the platform's
 [remaining delivery work](https://github.com/fajarxfce/hris-platform/blob/main/docs/completion.md).
 
 ## Development

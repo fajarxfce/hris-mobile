@@ -1,5 +1,29 @@
 # Validation
 
+## Overtime history and request details
+
+Root checks passed with 805 desktop tests, all 21 Workforce presentation Chromium
+tests and Android dev assembly. The preceding read-boundary increment also passed
+the 41 domain and 25 data cases in desktop and Chromium. New MVI coverage exercises
+late cancellation, company replacement, lease expiry, retained denial after failed
+cleanup, completed storage subscriptions, history paging and offline filters.
+Five layout cases and the assembled HTTP/cache/navigation flow passed. Layouts
+include Indonesian dark appearance at 200% text and stable header/filter targets.
+
+API 35 emulator acceptance used the fictional employee's real development API
+requests. It verified status/month filtering, request activity and the distinct
+work date and execution date following a night shift. An app-UID/API-port firewall
+rule tested refresh failure, encrypted list/detail restoration after process
+restart offline, and explicit online recovery. The rule was removed afterward.
+The first device probe exposed refresh feedback hidden above the anchored list;
+fixed feedback placement and scrolled-list regressions passed before the final
+acceptance. Screenshots were inspected.
+
+After advance notice, the validated APK was installed on the authorized Android 16
+phone at 04:02 on 2026-10-13 with `--install-only`. Installation and package update
+metadata were verified without opening the app. This increment delivers employee
+reads; native planning, actual-time submission and withdrawal remain in progress.
+
 ## Company selection and operation feedback
 
 Root checks passed with 747 desktop tests, five app Chromium tests and Android
