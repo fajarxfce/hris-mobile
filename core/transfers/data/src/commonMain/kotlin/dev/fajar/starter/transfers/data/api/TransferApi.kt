@@ -5,10 +5,7 @@ import dev.fajar.starter.transfers.data.dto.*
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.*
 import io.ktor.client.request.*
-import io.ktor.client.statement.*
 import io.ktor.http.*
-import io.ktor.utils.io.readRemaining
-import kotlinx.io.readByteArray
 import org.koin.core.annotation.Named
 import org.koin.core.annotation.Single
 
@@ -63,38 +60,15 @@ class TransferApi(@Named(HttpClients.Authenticated) private val client: HttpClie
         offset: Long,
         size: Long,
         maxBytes: Int,
-    ): ByteArray {
-        val end = minOf(size, offset + maxBytes) - 1
-        require(offset >= 0 && end >= offset)
-        return client
-            .prepareGet("files/${transferResourceSegment(id)}/content") {
-                forSession(sessionId)
-                expectSuccess = false
-                header(HttpHeaders.Range, "bytes=$offset-$end")
-                header(HttpHeaders.IfMatch, version)
-                header(HttpHeaders.AcceptEncoding, "identity")
-            }
-            .execute { response ->
-                requireTransferStatus(response, HttpStatusCode.PartialContent)
-                require(response.headers[HttpHeaders.ETag] == version)
-                require(response.headers[HttpHeaders.ContentRange] == "bytes $offset-$end/$size")
-                require(
-                    response.headers[HttpHeaders.ContentEncoding].let {
-                        it == null || it == "identity"
-                    }
-                )
-                val expected = (end - offset + 1).toInt()
-                require(
-                    response.headers[HttpHeaders.ContentLength]?.toLongOrNull().let {
-                        it == null || it == expected.toLong()
-                    }
-                )
-                // Read one extra byte to detect an oversized response without buffering an
-                // unbounded body.
-                val bytes =
-                    response.bodyAsChannel().readRemaining(expected.toLong() + 1).readByteArray()
-                require(bytes.size == expected)
-                bytes
-            }
-    }
+    ): ByteArray =
+        client.requestBinaryRange(
+            "files/${transferResourceSegment(id)}/content",
+            version,
+            offset,
+            size,
+            maxBytes,
+        ) {
+            forSession(sessionId)
+            header(HttpHeaders.IfMatch, version)
+        }
 }

@@ -114,7 +114,7 @@ class TransferProtocolTest {
     }
 
     @Test
-    fun rejectedStreamRetainsHttpFailureWithoutReadingItsBody() = runTest {
+    fun rejectedStreamRetainsHttpFailureWithoutExposingItsBody() = runTest {
         val client =
             createHttpClient(
                 MockEngine { respond("not a validation document", HttpStatusCode.BadRequest) },

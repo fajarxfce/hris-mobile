@@ -1,5 +1,13 @@
 # Template updates
 
+## Binary transport
+
+The bounded range reader and shared API response boundary also exist in
+[Compose Fluent Starter](https://github.com/fajarxfce/compose-fluent-starter/blob/main/docs/file-transfers.md).
+Both repositories passed root checks, network and transfer Chromium tests, and
+Android dev assembly. The reusable transport validates range responses and retains
+structured API failures; HRIS document admission and storage policy remain here.
+
 ## Scheduler registration
 
 Deferred platform scheduler acquisition and its generated-DI regression also exist

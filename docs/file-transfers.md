@@ -57,6 +57,14 @@ by the authentication plugin. Downloads require a matching strong ETag and exact
 Content-Range, and reject short/oversized blocks. A changed remote version requires a new
 download, preventing mixed content.
 
+`core/network` provides `requestBinaryRange` for that transport contract. It
+accepts only the requested partial representation, rejects ambiguous headers and
+compressed content, and reads at most the requested size plus one detection byte.
+JSON and binary requests share a 16 KiB API-problem boundary, preserving localizable
+HTTP errors without exposing response text. API adapters supply the conditional
+header supported by their endpoint (`If-Match` or `If-Range`). Use cases retain
+ownership of continuation, storage and access policy.
+
 The queue screen publishes integer percentage changes at most every 200 ms. Stable row IDs
 and immutable row models isolate item updates. Its observers stop with the route lifecycle;
 worker execution is independent. There is no application-wide progress timer.

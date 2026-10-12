@@ -1,5 +1,16 @@
 # Validation
 
+## Bounded binary transport
+
+Root checks passed with 691 desktop/JVM tests, all 34 network and five transfer
+Chromium tests, and Android dev assembly. Range coverage verifies retained session
+and conditional headers, bounded strong validators, offset overflow protection,
+exact extents, conflicting headers, compression rejection, truncated/oversized
+streams, cancellation and body-free HEAD acquisition. API problem codes survive
+binary rejection through the same bounded error reader used by JSON requests.
+The existing transfer adapter now uses this shared reader. HRIS download storage
+and its feature UI remain separate integration work.
+
 ## Document upload presentation
 
 Root checks passed with 684 desktop/JVM tests. The sync data and application
