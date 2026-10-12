@@ -12,6 +12,12 @@ the form offline and verifies an unchanged replay with one server-side creation.
 Controlled layouts cover multiline reasons, fixed Back/close controls, disabled
 dates, expired confirmation and active sending versus an uncertain outcome.
 
+CI run `38188709062` exposed a layout-test assumption: finding a lazy-list section
+heading does not ensure the following date has been composed. The test now scrolls
+to the excluded date itself and asserts that it is displayed. Formatting and the
+complete root checks passed after the correction. This changes test navigation
+only; no additional device installation or platform build is claimed.
+
 API 35 emulator acceptance used the development API. A three-date selection
 excluded Saturday and charged two half-days as one day. A separate half-day
 request was confirmed with its API connection blocked, restored after process

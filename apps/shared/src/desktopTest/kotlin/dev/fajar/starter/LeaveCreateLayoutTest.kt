@@ -105,9 +105,9 @@ class LeaveCreateLayoutTest {
         compose
             .onNode(hasScrollToIndexAction())
             .performScrollToNode(hasText("Tanggal tidak dihitung"))
-        compose
-            .onNode(hasText(formatLocalDate("2026-10-17", "id")) and hasClickAction().not())
-            .assertExists()
+        val excludedDate = hasText(formatLocalDate("2026-10-17", "id")) and hasClickAction().not()
+        compose.onNode(hasScrollToIndexAction()).performScrollToNode(excludedDate)
+        compose.onNode(excludedDate).assertIsDisplayed()
         compose
             .onNode(hasText("Kirim pengajuan") and hasClickAction())
             .performScrollTo()
