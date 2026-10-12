@@ -5,6 +5,7 @@ data class LocalDocumentFile(
     val storedBytes: Long,
     val sha256: String?,
     val revision: Long,
+    val upload: DocumentUpload? = null,
 ) {
     override fun toString() = "LocalDocumentFile([redacted])"
 }

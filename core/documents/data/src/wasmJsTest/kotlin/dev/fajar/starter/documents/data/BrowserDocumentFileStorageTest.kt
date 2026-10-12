@@ -12,6 +12,16 @@ import kotlinx.coroutines.test.runTest
 
 class BrowserDocumentFileStorageTest {
     @Test
+    fun uploadCheckpointsAreImmutableEncryptedAndRevisionBound() = runTest {
+        withDatabase(::verifyDocumentUploadCheckpoint)
+    }
+
+    @Test
+    fun uploadReadsAtMostOneAuthenticatedChunk() = runTest {
+        withDatabase(::verifyBoundedDocumentUploadChunks)
+    }
+
+    @Test
     fun encryptedImportIsBoundedAndRecoverable() = runTest {
         withDatabase(::verifyEncryptedDocumentImport)
     }

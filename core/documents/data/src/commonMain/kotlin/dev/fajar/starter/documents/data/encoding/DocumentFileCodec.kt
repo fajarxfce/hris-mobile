@@ -3,8 +3,10 @@
 package dev.fajar.starter.documents.data.encoding
 
 import dev.fajar.starter.common.result.AppResult
+import dev.fajar.starter.database.BlobChunkRecord
 import dev.fajar.starter.database.BlobRecord
 import dev.fajar.starter.documents.data.dto.*
+import dev.fajar.starter.documents.data.mappers.*
 import dev.fajar.starter.documents.domain.entities.*
 import dev.fajar.starter.documents.domain.policies.resolveDocumentFile
 import dev.fajar.starter.securestorage.ContentCipher
@@ -69,6 +71,44 @@ class DocumentFileCodec(private val cipher: ContentCipher) {
                 .encodeToByteArray(),
         )
 
+    suspend fun upload(
+        access: DocumentAccess,
+        file: LocalDocumentFile,
+        upload: DocumentUpload,
+        key: ByteArray,
+    ): String {
+        val dto = upload.toDto()
+        dto.toUpload(file.draft.declaration.size)
+        return seal(
+            access,
+            file.draft.id,
+            file.draft.declaration.size,
+            "upload",
+            file.revision + 1,
+            key,
+            Json.encodeToString(dto).encodeToByteArray(),
+        )
+    }
+
+    suspend fun readBlock(
+        access: DocumentAccess,
+        draft: DocumentFileDraft,
+        block: BlobChunkRecord,
+        key: ByteArray,
+    ): ByteArray {
+        val bytes =
+            cipher.decrypt(
+                key,
+                associatedData(access, draft.id, draft.declaration.size, "block", block.offset),
+                Base64.decode(block.payload),
+            )
+        if (bytes.size != block.length) {
+            bytes.fill(0)
+            error("Document block extent changed.")
+        }
+        return bytes
+    }
+
     suspend fun decode(access: DocumentAccess, raw: BlobRecord, key: ByteArray): LocalDocumentFile {
         require(raw.partition == documentFilePartition(access))
         require(Uuid.parse(raw.id).toString() == raw.id)
@@ -123,11 +163,30 @@ class DocumentFileCodec(private val cipher: ContentCipher) {
                 )
                 proof.sha256
             }
+        val upload =
+            raw.state?.let {
+                require(sha256 != null)
+                val bytes =
+                    cipher.decrypt(
+                        key,
+                        associatedData(access, raw.id, raw.size, "upload", raw.revision),
+                        Base64.decode(it),
+                    )
+                try {
+                    Json.decodeFromString<DocumentUploadDto>(
+                            bytes.decodeToString(throwOnInvalidSequence = true)
+                        )
+                        .toUpload(raw.size)
+                } finally {
+                    bytes.fill(0)
+                }
+            }
         return LocalDocumentFile(
             DocumentFileDraft(dto.id, declaration, Instant.parse(dto.createdAt)),
             raw.storedBytes,
             sha256,
             raw.revision,
+            upload,
         )
     }
 

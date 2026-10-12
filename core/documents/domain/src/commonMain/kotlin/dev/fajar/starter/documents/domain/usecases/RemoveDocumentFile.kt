@@ -44,6 +44,11 @@ class RemoveDocumentFile(
                     "client.document_file_changed",
                     FailureKind.Conflict,
                 )
+            if (!canRemoveDocumentFile(file))
+                return@withTimeoutOrNull documentFailure(
+                    "client.document_upload_active",
+                    FailureKind.Conflict,
+                )
             val removed = files.remove(access, id, revision)
             currentCoroutineContext().ensureActive()
             val publication = validateDocumentContinuation(access, currentAccess(workspaceId))

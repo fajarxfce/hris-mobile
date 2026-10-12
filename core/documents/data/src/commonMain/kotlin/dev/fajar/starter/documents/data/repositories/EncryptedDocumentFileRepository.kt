@@ -4,6 +4,7 @@ import dev.fajar.starter.common.result.AppResult
 import dev.fajar.starter.database.*
 import dev.fajar.starter.documents.data.encoding.*
 import dev.fajar.starter.documents.domain.entities.*
+import dev.fajar.starter.documents.domain.policies.DOCUMENT_UPLOAD_CHUNK_BYTES
 import dev.fajar.starter.documents.domain.repositories.DocumentFileRepository
 import dev.fajar.starter.fileio.*
 import dev.fajar.starter.identity.domain.policies.accountStorageKey
@@ -144,6 +145,83 @@ class EncryptedDocumentFileRepository(
     override suspend fun remove(access: DocumentAccess, id: String, revision: Long) =
         safeStorageCall {
             blobs.remove(documentBlobScope(access), documentFilePartition(access), id, revision)
+        }
+
+    override suspend fun updateUpload(
+        access: DocumentAccess,
+        expected: LocalDocumentFile,
+        upload: DocumentUpload,
+    ) = safeStorageCall {
+        val scope = documentBlobScope(access)
+        val partition = documentFilePartition(access)
+        val row = blobs.get(scope, partition, expected.draft.id) ?: return@safeStorageCall false
+        if (row.revision != expected.revision || row.completion == null)
+            return@safeStorageCall false
+        val key = readContentKey()
+        try {
+            val actual = codec.decode(access, row, key)
+            if (
+                actual.draft != expected.draft ||
+                    actual.sha256 != expected.sha256 ||
+                    (actual.upload?.intent?.let { it != upload.intent } == true)
+            )
+                return@safeStorageCall false
+            val encrypted = codec.upload(access, actual, upload, key)
+            blobs.updateState(scope, partition, row.id, row.revision, encrypted)
+        } finally {
+            key.fill(0)
+        }
+    }
+
+    override suspend fun chunk(access: DocumentAccess, file: LocalDocumentFile, offset: Long) =
+        safeStorageCall {
+            val size = file.draft.declaration.size
+            require(
+                file.sha256 != null &&
+                    offset in 0 until size &&
+                    offset % DOCUMENT_UPLOAD_CHUNK_BYTES == 0L
+            )
+            val scope = documentBlobScope(access)
+            val partition = documentFilePartition(access)
+            val row = requireNotNull(blobs.get(scope, partition, file.draft.id))
+            val key = readContentKey()
+            val bytes =
+                ByteArray(minOf(DOCUMENT_UPLOAD_CHUNK_BYTES.toLong(), size - offset).toInt())
+            try {
+                val actual = codec.decode(access, row, key)
+                require(
+                    actual.draft == file.draft &&
+                        actual.sha256 == file.sha256 &&
+                        actual.storedBytes == size
+                )
+                val digest = Sha256Digest()
+                var copied = 0
+                while (copied < bytes.size) {
+                    currentCoroutineContext().ensureActive()
+                    val position = offset + copied
+                    val block =
+                        requireNotNull(blobs.chunk(scope, partition, file.draft.id, position))
+                    require(
+                        block.offset == position &&
+                            block.length == minOf(FILE_INPUT_BLOCK_BYTES, bytes.size - copied)
+                    )
+                    val plaintext = codec.readBlock(access, file.draft, block, key)
+                    try {
+                        digest.update(plaintext)
+                        plaintext.copyInto(bytes, copied)
+                        copied += plaintext.size
+                    } finally {
+                        plaintext.fill(0)
+                    }
+                }
+                currentCoroutineContext().ensureActive()
+                DocumentFileChunk(bytes, digest.finishHex())
+            } catch (cause: Throwable) {
+                bytes.fill(0)
+                throw cause
+            } finally {
+                key.fill(0)
+            }
         }
 
     override suspend fun discardIncomplete(access: DocumentAccess, id: String) = safeStorageCall {

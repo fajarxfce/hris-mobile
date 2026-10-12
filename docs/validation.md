@@ -1,5 +1,19 @@
 # Validation
 
+## Resumable document upload core
+
+Complete root checks passed with 679 desktop/JVM tests. The document domain and
+data suites also passed 46 Chromium tests. Coverage includes durable confirmation,
+duplicate admission, response loss, cancelled chunk transport, changed account
+access, late receipts, bounded automatic attempts, validation recovery and
+preserved cancellation intent. SQLite and IndexedDB checks verify encrypted
+checkpoints, immutable input, competing revisions and bounded authenticated chunks.
+
+The isolated browser suite loads the same IANA timezone data as the application;
+without it, valid employment-directory responses failed timezone validation. The
+Wasm lockfile was regenerated with Gradle and reviewed. This checkpoint does not
+include a new APK or device upload acceptance; those accompany the feature UI.
+
 ## Retained Home and Employees tabs
 
 Complete root checks passed with 631 desktop/JVM tests, four build-endpoint tests

@@ -149,6 +149,18 @@ private class LocalFilesFixture {
     var delete: suspend () -> Boolean = { true }
     val files =
         object : DocumentFileRepository {
+            override suspend fun updateUpload(
+                access: DocumentAccess,
+                expected: LocalDocumentFile,
+                upload: DocumentUpload,
+            ): AppResult<Boolean> = error("Read/removal never starts an upload")
+
+            override suspend fun chunk(
+                access: DocumentAccess,
+                file: LocalDocumentFile,
+                offset: Long,
+            ): AppResult<DocumentFileChunk> = error("Read/removal never sends chunks")
+
             override suspend fun import(
                 access: DocumentAccess,
                 draft: DocumentFileDraft,

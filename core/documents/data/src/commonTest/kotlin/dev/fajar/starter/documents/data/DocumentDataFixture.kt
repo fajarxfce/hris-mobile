@@ -46,6 +46,59 @@ class DocumentDataFixture : DocumentRemoteDataSource {
         )
     var acquire: suspend () -> SelfDocumentEvidenceDto = { response }
     var calls = 0
+    var directory =
+        DocumentDirectoryDto(
+            access.accountId,
+            access.companyId,
+            "2026-10-12",
+            "Asia/Jakarta",
+            DocumentEmploymentPageDto(
+                listOf(DocumentEmploymentDto(query.employmentId, "EMP-001", "ACTIVE", 0)),
+                null,
+            ),
+        )
+
+    override suspend fun employments(sessionId: String, companyId: String, after: String?) =
+        directory
+
+    override suspend fun start(
+        sessionId: String,
+        companyId: String,
+        operationId: String,
+        request: DocumentUploadRequestDto,
+    ): DocumentMutationDto = error("Not uploading")
+
+    override suspend fun chunk(
+        sessionId: String,
+        companyId: String,
+        revisionId: String,
+        operationId: String,
+        offset: Long,
+        sha256: String,
+        bytes: ByteArray,
+    ): DocumentMutationDto = error("Not uploading")
+
+    override suspend fun validate(
+        sessionId: String,
+        companyId: String,
+        revisionId: String,
+        operationId: String,
+        request: DocumentVersionRequestDto,
+    ): DocumentMutationDto = error("Not uploading")
+
+    override suspend fun cancel(
+        sessionId: String,
+        companyId: String,
+        revisionId: String,
+        operationId: String,
+        request: DocumentVersionRequestDto,
+    ): DocumentMutationDto = error("Not uploading")
+
+    override suspend fun revision(
+        sessionId: String,
+        companyId: String,
+        revisionId: String,
+    ): DocumentRevisionDto = error("Not uploading")
 
     override suspend fun evidence(
         sessionId: String,

@@ -265,7 +265,173 @@ suspend fun verifyDocumentImportBoundsAndKeyLoss(database: AppDatabase) {
     assertEquals(1, database.blobs.observe(f.scope, f.partition).first().size)
 }
 
-private class DocumentFileStorageFixture(private val database: AppDatabase) {
+suspend fun verifyDocumentUploadCheckpoint(database: AppDatabase) = coroutineScope {
+    val f = DocumentFileStorageFixture(database)
+    f.activate()
+    val repository = f.repository()
+    val file =
+        assertIs<DocumentFileImport.Stored>(
+                assertIs<AppResult.Success<DocumentFileImport>>(
+                        repository.import(
+                            f.access,
+                            f.draft,
+                            DOCUMENT_LOCAL_CAPACITY,
+                            DOCUMENT_LOCAL_FILES,
+                        )
+                    )
+                    .value
+            )
+            .file
+    val intent =
+        DocumentUploadIntent(
+            "44444444-4444-4444-4444-444444444444",
+            "55555555-5555-5555-5555-555555555555",
+            DocumentUploadInput(
+                "66666666-6666-6666-6666-666666666666",
+                "Personal document",
+                DocumentClassification.PERSONAL,
+                "Supporting file",
+            ),
+            f.draft.createdAt,
+        )
+    val upload =
+        DocumentUpload(intent, DocumentUploadStep.Start("77777777-7777-7777-7777-777777777777"))
+    assertEquals(AppResult.Success(true), repository.updateUpload(f.access, file, upload))
+    val restored =
+        assertIs<AppResult.Success<LocalDocumentFile?>>(
+                f.repository().find(f.access, file.draft.id)
+            )
+            .value!!
+    assertEquals(upload, restored.upload)
+    assertEquals(file.revision + 1, restored.revision)
+    val raw = requireNotNull(database.blobs.get(f.scope, f.partition, f.draft.id))
+    assertFalse(requireNotNull(raw.state).contains(intent.input.title))
+    assertFalse(requireNotNull(raw.state).contains(intent.revisionId))
+    assertEquals(
+        AppResult.Success(false),
+        repository.updateUpload(f.access, file, upload.copy(attempts = 1)),
+    )
+    assertEquals(
+        AppResult.Success(false),
+        repository.updateUpload(
+            f.access,
+            restored,
+            upload.copy(intent = intent.copy(input = intent.input.copy(title = "Changed"))),
+        ),
+    )
+    val first = async { repository.updateUpload(f.access, restored, upload.copy(attempts = 1)) }
+    val second = async { repository.updateUpload(f.access, restored, upload.copy(attempts = 2)) }
+    assertEquals(1, listOf(first.await(), second.await()).count { it == AppResult.Success(true) })
+    val current = requireNotNull(database.blobs.get(f.scope, f.partition, f.draft.id))
+    val swapped =
+        f.repository(
+            object : BlobStore by database.blobs {
+                override suspend fun get(scope: BlobScope, partition: String, id: String) =
+                    current.copy(state = raw.state)
+            }
+        )
+    assertEquals(
+        FailureKind.Storage,
+        assertIs<AppResult.Failed>(swapped.find(f.access, f.draft.id)).failure.kind,
+    )
+    assertNotNull(
+        assertIs<AppResult.Success<LocalDocumentFile?>>(repository.find(f.access, f.draft.id))
+            .value
+            ?.upload
+    )
+}
+
+suspend fun verifyBoundedDocumentUploadChunks(database: AppDatabase) = coroutineScope {
+    val f = DocumentFileStorageFixture(database, DOCUMENT_UPLOAD_CHUNK_BYTES + 17)
+    f.activate()
+    val repository = f.repository()
+    val file =
+        assertIs<DocumentFileImport.Stored>(
+                assertIs<AppResult.Success<DocumentFileImport>>(
+                        repository.import(
+                            f.access,
+                            f.draft,
+                            DOCUMENT_LOCAL_CAPACITY,
+                            DOCUMENT_LOCAL_FILES,
+                        )
+                    )
+                    .value
+            )
+            .file
+    var reads = 0
+    val bounded =
+        f.repository(
+            object : BlobStore by database.blobs {
+                override suspend fun chunk(
+                    scope: BlobScope,
+                    partition: String,
+                    id: String,
+                    offset: Long,
+                ): BlobChunkRecord? {
+                    reads++
+                    return database.blobs.chunk(scope, partition, id, offset)
+                }
+            }
+        )
+    val first =
+        assertIs<AppResult.Success<DocumentFileChunk>>(bounded.chunk(f.access, file, 0)).value
+    try {
+        assertEquals(16, reads)
+        assertEquals(DOCUMENT_UPLOAD_CHUNK_BYTES, first.bytes.size)
+        assertContentEquals(f.bytes.copyOfRange(0, DOCUMENT_UPLOAD_CHUNK_BYTES), first.bytes)
+        val digest = Sha256Digest()
+        digest.update(first.bytes)
+        assertEquals(digest.finishHex(), first.sha256)
+    } finally {
+        first.bytes.fill(0)
+    }
+    val last =
+        assertIs<AppResult.Success<DocumentFileChunk>>(
+                bounded.chunk(f.access, file, DOCUMENT_UPLOAD_CHUNK_BYTES.toLong())
+            )
+            .value
+    try {
+        assertEquals(17, reads)
+        assertEquals(17, last.bytes.size)
+        assertContentEquals(
+            f.bytes.copyOfRange(DOCUMENT_UPLOAD_CHUNK_BYTES, f.bytes.size),
+            last.bytes,
+        )
+    } finally {
+        last.bytes.fill(0)
+    }
+    assertIs<AppResult.Failed>(bounded.chunk(f.access, file, 65_536))
+    assertIs<AppResult.Failed>(bounded.chunk(f.access, file, f.bytes.size.toLong()))
+    assertEquals(17, reads)
+    val corrupt =
+        f.repository(
+            object : BlobStore by database.blobs {
+                override suspend fun chunk(
+                    scope: BlobScope,
+                    partition: String,
+                    id: String,
+                    offset: Long,
+                ) =
+                    requireNotNull(database.blobs.chunk(scope, partition, id, offset))
+                        .copy(
+                            payload =
+                                requireNotNull(database.blobs.chunk(scope, partition, id, 65_536))
+                                    .payload
+                        )
+            }
+        )
+    assertIs<AppResult.Failed>(corrupt.chunk(f.access, file, 0))
+    assertEquals(
+        file,
+        assertIs<AppResult.Success<LocalDocumentFile?>>(repository.find(f.access, file.draft.id))
+            .value,
+    )
+}
+
+private class DocumentFileStorageFixture(
+    private val database: AppDatabase,
+    size: Int = 2 * 65536 + 17,
+) {
     val access =
         DocumentAccess(
             "session",
@@ -277,7 +443,7 @@ private class DocumentFileStorageFixture(private val database: AppDatabase) {
             Instant.parse("2026-10-12T01:00:00Z"),
             "client.workspace_expired",
         )
-    val bytes = ByteArray(2 * 65536 + 17) { (it % 251).toByte() }
+    val bytes = ByteArray(size) { (it % 251).toByte() }
     val draft =
         DocumentFileDraft(
             "33333333-3333-3333-3333-333333333333",

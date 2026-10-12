@@ -12,10 +12,15 @@ kotlin.sourceSets {
         implementation(projects.core.database)
         implementation(projects.core.securestorage)
         implementation(projects.core.storage)
+        implementation(projects.core.sync.domain)
         implementation(libs.serialization.json)
+        implementation(libs.datetime)
     }
     getByName("commonTest").dependencies {
         implementation(libs.coroutines.test)
         implementation(libs.ktor.mock)
+    }
+    getByName("wasmJsTest").dependencies {
+        implementation(npm("@js-joda/timezone", libs.versions.js.joda.timezone.get()))
     }
 }

@@ -81,6 +81,23 @@ class DocumentFixture {
     var evidenceReads = 0
     var policyCall: suspend () -> AppResult<CompanyPolicy> = { AppResult.Success(policy) }
     var evidenceCall: suspend () -> AppResult<DocumentEvidencePage> = { AppResult.Success(page) }
+    var employmentCall: suspend () -> AppResult<DocumentEmploymentPage> = {
+        AppResult.Success(
+            DocumentEmploymentPage(
+                listOf(
+                    DocumentEmployment(
+                        query.employmentId,
+                        "EMP-001",
+                        DocumentEmploymentStatus.ACTIVE,
+                        0,
+                    )
+                ),
+                "2026-10-12",
+                "Asia/Jakarta",
+                null,
+            )
+        )
+    }
     val sessionRepository =
         object : SessionRepository {
             override val persistent = false
@@ -125,6 +142,9 @@ class DocumentFixture {
         }
     val repository =
         object : DocumentRepository {
+            override suspend fun employments(access: DocumentAccess, after: String?) =
+                employmentCall()
+
             override suspend fun evidence(
                 access: DocumentAccess,
                 query: DocumentEvidenceQuery,

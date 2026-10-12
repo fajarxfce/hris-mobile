@@ -65,6 +65,36 @@ import use case still releases resources with bounded cleanup. State collection
 remains lifecycle-aware. Known access failures hide content and require workspace
 revalidation; reopening a local observer cannot bypass that gate.
 
-Upload confirmation, resumable HRIS transport and authenticated downloads remain
-subsequent integration work. Local completion is not server approval and does not
-make a file selectable as published evidence.
+Local completion is not server approval and does not make a file selectable as
+published evidence. The upload core below is implemented; its confirmation screen
+and authenticated downloads are the next integration work.
+
+## Resumable upload
+
+`LoadDocumentUploadPreparation` acquires fresh company policy and the employee's
+own employment references through Documents. It does not require People or Leave
+access. `PrepareDocumentUpload` validates the confirmed input and freezes document,
+revision and operation IDs in the encrypted file checkpoint before scheduling work.
+A duplicate confirmation cannot replace the retained input.
+
+`ReplayDocumentUpload` implements `SyncTask` for both manual and worker delivery.
+Each execution has a deadline and advances at most four steps per file. Mutations
+persist their attempt before HTTP, reuse the same key/body after an uncertain
+response, and publish with a storage revision check. A bounded lease keeps another
+process from immediately replaying pending work. Automatic attempts stop before the
+manual retry limit; neither path retries indefinitely. Read-only status checks,
+validation retries and cancellation belong to `ReviewDocumentUpload`, coordinated
+with delivery through one application-owned mutex.
+
+The repository decrypts at most sixteen 64 KiB blocks into one 1 MiB transport
+chunk. Block authentication binds account, company, file and offset; the mutable
+checkpoint is additionally bound to the storage revision. The caller releases the
+transport buffer after HTTP completes or is cancelled. Repositories map API facts
+and storage data; they do not decide retries, permission or work lifetime.
+
+Only server `READY` confirms successful validation. Scanner failure, rejection,
+cancellation and expiry remain distinct. A failed validation needs explicit user
+confirmation before another validation command. A status check preserves a pending
+cancellation even when another operation has advanced the server version. Local
+deletion is blocked while remote work is active or uncertain, including after a
+lost response; a known terminal server state permits removing the local copy.

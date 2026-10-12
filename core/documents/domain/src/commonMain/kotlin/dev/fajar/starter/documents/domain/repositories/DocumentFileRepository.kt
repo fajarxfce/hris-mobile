@@ -18,6 +18,18 @@ interface DocumentFileRepository {
 
     suspend fun remove(access: DocumentAccess, id: String, revision: Long): AppResult<Boolean>
 
+    suspend fun updateUpload(
+        access: DocumentAccess,
+        expected: LocalDocumentFile,
+        upload: DocumentUpload,
+    ): AppResult<Boolean>
+
+    suspend fun chunk(
+        access: DocumentAccess,
+        file: LocalDocumentFile,
+        offset: Long,
+    ): AppResult<DocumentFileChunk>
+
     /** Conditional cleanup must never delete a completed or concurrently advanced file. */
     suspend fun discardIncomplete(access: DocumentAccess, id: String): AppResult<Boolean>
 }
