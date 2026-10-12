@@ -62,6 +62,9 @@ class NativeUiServer(
             leave.response(request)?.let { (body, status) ->
                 return@withLock respond(body, status, headers)
             }
+            documents.downloads.response(request, this)?.let {
+                return@withLock it
+            }
             documents.response(request)?.let { (body, status) ->
                 return@withLock respond(body, status, headers)
             }

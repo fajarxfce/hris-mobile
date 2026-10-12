@@ -165,3 +165,24 @@ through `safeFileWriteCall`. It does not choose permissions, another destination
 or a retry. Native cancellation/failure may leave an empty or partial selected
 file; release never deletes the user's chosen path. Browser output commits only
 on completion and requires File System Access support in a secure context.
+
+## Catalog and download presentation
+
+Documents separates local files from the published catalog. The catalog offers
+own-employment and category filters with bounded pagination. Its ViewModel owns
+metadata acquisition, admission observation and expiry. An expired page requires
+an explicit refresh; changing a filter cancels the previous request. Known access
+failures hide metadata and remain gated through a failed retry.
+
+Selecting a published revision prepares a local reservation and opens its download
+route. That route owns one foreground action and observes committed encrypted
+progress. Pause cancels pending work; Resume starts from retained bytes. Reopening
+a local partial copy does not silently resume transport. Imported files retain
+their upload route and downloaded revisions never expose the upload form.
+
+Save copy dispatches the export use case. Dismissing the native dialog leaves the
+completed download available. A successful save is durable screen state, not only
+a transient effect. Pending export belongs to the navigation route and survives
+the Activity stop caused by Android's picker; leaving the route cancels it. A
+content denial hides the file until explicit resource revalidation succeeds,
+including when a workspace refresh succeeds but the resource remains denied.

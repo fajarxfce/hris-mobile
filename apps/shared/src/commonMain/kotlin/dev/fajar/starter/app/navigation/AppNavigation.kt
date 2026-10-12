@@ -274,6 +274,14 @@ fun AppNavigation(controller: NavHostController, incomingLinks: Flow<String>) {
                         onFile = { id ->
                             controller.navigate(DocumentFileRoute(id)) { launchSingleTop = true }
                         },
+                        onCatalog = {
+                            controller.navigate(DocumentCatalogRoute) { launchSingleTop = true }
+                        },
+                        onDownload = { id, start ->
+                            controller.navigate(DocumentDownloadRoute(id, start)) {
+                                launchSingleTop = true
+                            }
+                        },
                         onVerify = {
                             controller.navigate(VerificationRoute) { launchSingleTop = true }
                         },

@@ -1,6 +1,8 @@
 package dev.fajar.starter.documents.presentation.files
 
 sealed interface DocumentFilesEvent {
+    data object CatalogRequested : DocumentFilesEvent
+
     data object Opened : DocumentFilesEvent
 
     data object Closed : DocumentFilesEvent

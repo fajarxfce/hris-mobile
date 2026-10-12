@@ -1,4 +1,21 @@
 <resources>
+    <string name="document_published_en">Published documents</string>
+    <string name="document_published_description_en">View and download your documents.</string>
+    <string name="document_catalog_expired_en">Refresh the document list to continue.</string>
+    <string name="document_no_published_en">No published documents in this category.</string>
+    <string name="document_downloaded_en">Downloaded</string>
+    <string name="document_download_pending_en">Download incomplete</string>
+    <string name="document_downloading_en">Downloading document…</string>
+    <string name="document_saving_en">Saving copy…</string>
+    <string name="document_checking_access_en">Checking access…</string>
+    <string name="document_pause_download_en">Pause download</string>
+    <string name="document_resume_download_en">Resume download</string>
+    <string name="document_save_copy_en">Save a copy</string>
+    <string name="document_save_connection_en">An active connection is required to save a copy.</string>
+    <string name="document_copy_saved_en">Copy saved.</string>
+    <string name="document_export_timeout_en">The copy could not be saved in time. Try again.</string>
+    <string name="document_checksum_mismatch_en">The downloaded file could not be verified. Remove it and download again.</string>
+
     <string name="file_save_failed_en">The file could not be saved.</string>
     <string name="file_already_exists_en">A file with this name already exists. Choose another name.</string>
 

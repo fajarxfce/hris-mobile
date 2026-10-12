@@ -4,7 +4,7 @@ import androidx.lifecycle.viewModelScope
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.documents.domain.entities.*
 import dev.fajar.starter.documents.domain.usecases.*
-import dev.fajar.starter.documents.presentation.files.documentReadRestricted
+import dev.fajar.starter.documents.presentation.access.documentReadRestricted
 import dev.fajar.starter.documents.presentation.files.mappers.toFileItem
 import dev.fajar.starter.presentation.mvi.MviViewModel
 import dev.fajar.starter.sync.domain.SyncResult
@@ -121,7 +121,7 @@ class DocumentFileViewModel(
 
     private fun acceptFiles(content: DocumentLocalFiles, revalidated: Boolean) {
         val file = content.files.firstOrNull { it.draft.id == target.fileId }
-        if (file == null) {
+        if (file == null || file.draft.download != null) {
             formRequest?.cancel()
             action?.cancel()
             updateState {

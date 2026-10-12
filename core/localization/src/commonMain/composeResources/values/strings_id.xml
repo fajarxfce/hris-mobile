@@ -1,4 +1,21 @@
 <resources>
+    <string name="document_published_id">Dokumen tersedia</string>
+    <string name="document_published_description_id">Lihat dan unduh dokumen Anda.</string>
+    <string name="document_catalog_expired_id">Perbarui daftar dokumen untuk melanjutkan.</string>
+    <string name="document_no_published_id">Belum ada dokumen pada kategori ini.</string>
+    <string name="document_downloaded_id">Sudah diunduh</string>
+    <string name="document_download_pending_id">Unduhan belum selesai</string>
+    <string name="document_downloading_id">Mengunduh dokumen…</string>
+    <string name="document_saving_id">Menyimpan salinan…</string>
+    <string name="document_checking_access_id">Memeriksa akses…</string>
+    <string name="document_pause_download_id">Jeda unduhan</string>
+    <string name="document_resume_download_id">Lanjutkan unduhan</string>
+    <string name="document_save_copy_id">Simpan salinan</string>
+    <string name="document_save_connection_id">Koneksi aktif diperlukan untuk menyimpan salinan.</string>
+    <string name="document_copy_saved_id">Salinan tersimpan.</string>
+    <string name="document_export_timeout_id">Salinan belum tersimpan dalam batas waktu. Coba lagi.</string>
+    <string name="document_checksum_mismatch_id">File unduhan tidak dapat diverifikasi. Hapus lalu unduh kembali.</string>
+
     <string name="file_save_failed_id">File tidak dapat disimpan.</string>
     <string name="file_already_exists_id">File dengan nama ini sudah ada. Pilih nama lain.</string>
 

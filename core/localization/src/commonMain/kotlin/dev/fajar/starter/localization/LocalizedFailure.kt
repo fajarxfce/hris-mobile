@@ -7,6 +7,9 @@ import dev.fajar.starter.common.result.*
 fun failureText(failure: Failure): String =
     appString(
         when (failure.code) {
+            "client.document_export_timeout" -> AppString.DocumentExportTimeout
+            "client.document_checksum_mismatch" -> AppString.DocumentChecksumMismatch
+
             "client.file_write_failed",
             "client.file_output_failed" -> AppString.FileSaveFailed
             "client.file_exists" -> AppString.FileAlreadyExists

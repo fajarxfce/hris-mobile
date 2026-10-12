@@ -14,6 +14,7 @@ import io.github.composefluent.FluentTheme
 import io.github.composefluent.icons.Icons
 import io.github.composefluent.icons.regular.Add
 import io.github.composefluent.icons.regular.ArrowLeft
+import io.github.composefluent.icons.regular.Document
 
 @Composable
 fun DocumentFilesPage(
@@ -68,6 +69,15 @@ fun DocumentFilesPage(
                 }
             }
         if (state.content != null) {
+            item(key = "published") {
+                AppActionTile(
+                    appString(AppString.DocumentPublished),
+                    appString(AppString.DocumentPublishedDescription),
+                    Icons.Regular.Document,
+                    { onEvent(DocumentFilesEvent.CatalogRequested) },
+                    enabled = !state.busy,
+                )
+            }
             item(key = "local-heading") {
                 Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                     AppText(

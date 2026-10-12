@@ -15,6 +15,7 @@ class NativeDocumentsUi {
     val reads = AtomicInteger()
     val active = AtomicInteger()
     val uploads = NativeDocumentUploadsUi()
+    val downloads = NativeDocumentContentUi()
 
     suspend fun response(request: HttpRequestData): Pair<String, HttpStatusCode>? {
         val endpoint = request.url.encodedPath.substringAfter("/documents/", "")
@@ -29,7 +30,10 @@ class NativeDocumentsUi {
         check(request.url.encodedPath.contains("/companies/${NativeUiServer.COMPANY_ONE}/"))
         if (!directory) {
             check(request.url.parameters["employmentId"] == NativePeopleUi.EMPLOYEE)
-            check(request.url.parameters["classification"] == "PERSONAL")
+            check(
+                request.url.parameters["classification"] in
+                    if (downloads.enabled) setOf("PERSONAL", "RECEIPT") else setOf("PERSONAL")
+            )
         }
         check(request.url.parameters["limit"] == "20")
         reads.incrementAndGet()
@@ -59,15 +63,18 @@ class NativeDocumentsUi {
                     put("accountId", NativePeopleUi.ACCOUNT)
                     put("companyId", NativeUiServer.COMPANY_ONE)
                     put("employmentId", NativePeopleUi.EMPLOYEE)
-                    put("classification", "PERSONAL")
+                    put("classification", request.url.parameters["classification"])
                     putJsonObject("documents") {
                         putJsonArray("items") {
-                            addJsonObject {
-                                attachment().forEach { (key, value) -> put(key, value) }
-                                put("revisionNumber", 1)
-                                put("title", "Medical certificate")
-                                put("validatedAt", Clock.System.now().toString())
-                            }
+                            if (request.url.parameters["classification"] == "PERSONAL")
+                                addJsonObject {
+                                    (if (downloads.enabled) downloads.attachment()
+                                        else attachment())
+                                        .forEach { (key, value) -> put(key, value) }
+                                    put("revisionNumber", 1)
+                                    put("title", "Medical certificate")
+                                    put("validatedAt", Clock.System.now().toString())
+                                }
                         }
                         put("nextCursor", JsonNull)
                     }

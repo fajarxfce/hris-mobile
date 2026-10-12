@@ -5,6 +5,49 @@ import org.jetbrains.compose.resources.StringResource
 
 /** Explicit pairs keep runtime language changes portable across Android, iOS, desktop and Web. */
 enum class AppString(val english: StringResource, val indonesian: StringResource) {
+    DocumentPublished(Res.string.document_published_en, Res.string.document_published_id),
+    DocumentPublishedDescription(
+        Res.string.document_published_description_en,
+        Res.string.document_published_description_id,
+    ),
+    DocumentCatalogExpired(
+        Res.string.document_catalog_expired_en,
+        Res.string.document_catalog_expired_id,
+    ),
+    DocumentNoPublished(Res.string.document_no_published_en, Res.string.document_no_published_id),
+    DocumentDownloaded(Res.string.document_downloaded_en, Res.string.document_downloaded_id),
+    DocumentDownloadPending(
+        Res.string.document_download_pending_en,
+        Res.string.document_download_pending_id,
+    ),
+    DocumentDownloading(Res.string.document_downloading_en, Res.string.document_downloading_id),
+    DocumentSaving(Res.string.document_saving_en, Res.string.document_saving_id),
+    DocumentCheckingAccess(
+        Res.string.document_checking_access_en,
+        Res.string.document_checking_access_id,
+    ),
+    DocumentPauseDownload(
+        Res.string.document_pause_download_en,
+        Res.string.document_pause_download_id,
+    ),
+    DocumentResumeDownload(
+        Res.string.document_resume_download_en,
+        Res.string.document_resume_download_id,
+    ),
+    DocumentSaveCopy(Res.string.document_save_copy_en, Res.string.document_save_copy_id),
+    DocumentSaveConnection(
+        Res.string.document_save_connection_en,
+        Res.string.document_save_connection_id,
+    ),
+    DocumentCopySaved(Res.string.document_copy_saved_en, Res.string.document_copy_saved_id),
+    DocumentExportTimeout(
+        Res.string.document_export_timeout_en,
+        Res.string.document_export_timeout_id,
+    ),
+    DocumentChecksumMismatch(
+        Res.string.document_checksum_mismatch_en,
+        Res.string.document_checksum_mismatch_id,
+    ),
     FileSaveFailed(Res.string.file_save_failed_en, Res.string.file_save_failed_id),
     FileAlreadyExists(Res.string.file_already_exists_en, Res.string.file_already_exists_id),
     DocumentDetails(Res.string.document_details_en, Res.string.document_details_id),

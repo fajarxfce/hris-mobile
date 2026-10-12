@@ -10,6 +10,8 @@ fun LocalDocumentFile.toFileItem(): DocumentFileItem {
     val step = current?.step
     val status =
         when {
+            draft.download != null && sha256 != null -> AppString.DocumentDownloaded
+            draft.download != null -> AppString.DocumentDownloadPending
             sha256 == null -> AppString.DocumentImportIncomplete
             current == null -> AppString.DocumentNotUploaded
             current.failure != null -> AppString.DocumentAttention
@@ -53,10 +55,13 @@ fun LocalDocumentFile.toFileItem(): DocumentFileItem {
         draft.declaration.name,
         "$type · $sizeText",
         status,
-        (step as? DocumentUploadStep.Chunk)?.let {
-            (it.offset.toDouble() / size).toFloat().coerceIn(0f, 1f)
-        },
-        sha256 != null,
+        if (draft.download != null && sha256 == null)
+            (storedBytes.toDouble() / size).toFloat().coerceIn(0f, 1f)
+        else
+            (step as? DocumentUploadStep.Chunk)?.let {
+                (it.offset.toDouble() / size).toFloat().coerceIn(0f, 1f)
+            },
+        draft.download != null || sha256 != null,
         canRemoveDocumentFile(this),
     )
 }

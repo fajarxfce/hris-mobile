@@ -48,7 +48,10 @@ attachment. Documents also supports encrypted local import of PDF/JPG/PNG files 
 confirmed local removal, scoped to the selected account and company. Employees can
 confirm an employment, title, category and description before a resumable upload.
 Progress, server inspection, explicit retry and cancellation use the retained
-encrypted upload intent. Authenticated download remains separate delivery work.
+encrypted upload intent. Published documents can be filtered by employment and
+category, downloaded into encrypted storage, paused and explicitly resumed.
+Completed revisions can be saved through the platform file dialog after fresh
+server authorization; the exported copy is then managed outside the application.
 
 The runtime contains no demo authentication transport. Other transactional employee workflows
 are still being connected; a generated module

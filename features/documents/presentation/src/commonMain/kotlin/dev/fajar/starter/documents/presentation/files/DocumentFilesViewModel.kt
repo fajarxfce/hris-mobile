@@ -3,6 +3,7 @@ package dev.fajar.starter.documents.presentation.files
 import androidx.lifecycle.viewModelScope
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.documents.domain.usecases.*
+import dev.fajar.starter.documents.presentation.access.documentReadRestricted
 import dev.fajar.starter.documents.presentation.files.mappers.toFileItem
 import dev.fajar.starter.presentation.mvi.MviViewModel
 import dev.fajar.starter.sync.domain.SyncResult
@@ -28,6 +29,7 @@ class DocumentFilesViewModel(
 
     init {
         on<DocumentFilesEvent.Opened>(::onOpened)
+        on<DocumentFilesEvent.CatalogRequested>(::onCatalogRequested)
         on<DocumentFilesEvent.Closed>(::onClosed)
         on<DocumentFilesEvent.RetryRequested>(::onRetryRequested)
         on<DocumentFilesEvent.ImportRequested>(::onImportRequested)
@@ -117,6 +119,16 @@ class DocumentFilesViewModel(
             }
     }
 
+    private fun onCatalogRequested(event: DocumentFilesEvent.CatalogRequested) {
+        if (
+            opened &&
+                !state.value.busy &&
+                state.value.restriction == null &&
+                state.value.content != null
+        )
+            viewModelScope.launch { emitEffect(DocumentFilesEffect.OpenCatalog) }
+    }
+
     private fun onImportRequested(event: DocumentFilesEvent.ImportRequested) {
         if (!opened || !state.value.canImport || state.value.removal != null) return
         updateState { it.copy(importing = true, failure = null) }
@@ -152,7 +164,15 @@ class DocumentFilesViewModel(
                 current.restriction == null &&
                 current.items.any { it.id == event.id && it.openable }
         )
-            viewModelScope.launch { emitEffect(DocumentFilesEffect.OpenFile(event.id)) }
+            viewModelScope.launch {
+                val file =
+                    current.content?.files?.singleOrNull { it.draft.id == event.id }
+                        ?: return@launch
+                emitEffect(
+                    if (file.draft.download != null) DocumentFilesEffect.OpenDownload(event.id)
+                    else DocumentFilesEffect.OpenFile(event.id)
+                )
+            }
     }
 
     private fun onRemovalConfirmed(event: DocumentFilesEvent.RemovalConfirmed) {

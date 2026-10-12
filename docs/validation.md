@@ -1,5 +1,24 @@
 # Validation
 
+## Published documents and saved copies
+
+Complete root checks passed with 739 desktop/JVM tests. Chromium passed 59 document
+domain tests, 24 document data tests, two localization tests and five app wiring
+tests. Android dev assembly and the production Web distribution passed; Web
+retains its three existing bundler warnings.
+
+Three assembled UI regressions cover catalog filters, committed download progress,
+cancel/resume offsets, export buffer ownership, denied resource access through
+failed retry, and a pending save dialog across Activity stop and route disposal.
+The downloaded record opens its own route instead of the upload form.
+
+On the API 35 emulator, the real development catalog returned an uploaded PDF.
+Authenticated download completed, native Save dismissal recovered, and a second
+Save wrote a 607-byte PDF whose SHA-256 matched the original. The encrypted
+download and correct detail route restored after process restart. The catalog
+and saved-copy screens were inspected. This validation did not drive the phone
+UI or measure runtime memory/frame timings.
+
 ## Authenticated export admission
 
 Targeted document checks passed with 59 domain and 24 data desktop tests, plus

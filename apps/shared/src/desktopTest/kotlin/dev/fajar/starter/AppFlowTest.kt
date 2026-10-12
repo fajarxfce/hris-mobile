@@ -31,6 +31,7 @@ import dev.fajar.starter.documents.presentation.detail.DocumentFileEvent
 import dev.fajar.starter.documents.presentation.detail.DocumentFileViewModel
 import dev.fajar.starter.fileio.*
 import dev.fajar.starter.fixtures.DocumentInputUi
+import dev.fajar.starter.fixtures.DocumentOutputUi
 import dev.fajar.starter.fixtures.NativeAttendanceCacheUi
 import dev.fajar.starter.fixtures.NativeCalendarCacheUi
 import dev.fajar.starter.fixtures.NativeDirectoryUi
@@ -68,6 +69,168 @@ class AppFlowTest {
     @get:Rule val compose = createComposeRule()
     @get:Rule val testName = TestName()
     private val backDispatcher = TestBackDispatcher()
+
+    @Test
+    fun publishedDocumentsResumeFromCommittedProgressAndExportVerifiedContent() {
+        val server =
+            NativeUiServer().apply {
+                documents.enabled = true
+                documents.downloads.enabled = true
+            }
+        val output = DocumentOutputUi()
+        val pending = CompletableDeferred<Unit>()
+        server.documents.downloads.continuation = pending
+        withApplication(server, fileOutputs = output) {
+            signIn()
+            waitFor("Choose a company")
+            compose.onAllNodesWithText("Open company")[0].performClick()
+            waitFor("Welcome")
+            compose
+                .onNode(hasText("Documents") and hasClickAction())
+                .performScrollTo()
+                .performClick()
+            waitFor("Published documents")
+            compose.onNode(hasText("Published documents") and hasClickAction()).performClick()
+            waitFor("Medical certificate")
+            compose.onNode(hasText("Receipt") and isSelectable()).performClick()
+            waitFor("No published documents in this category.")
+            compose.onNode(hasText("Personal") and isSelectable()).performClick()
+            waitFor("Medical certificate")
+            capture("document-catalog")
+            compose.onNode(hasText("Medical certificate") and hasClickAction()).performClick()
+            waitFor("Pause download")
+            compose.waitUntil(15_000) {
+                server.documents.downloads.offsets.size == 2 &&
+                    server.documents.downloads.active.get() == 1
+            }
+            compose.onNodeWithContentDescription("Back").performClick()
+            waitFor("Medical certificate")
+            compose.waitUntil { server.documents.downloads.active.get() == 0 }
+            compose.onNodeWithContentDescription("Back").performClick()
+            waitFor("Download incomplete")
+            compose
+                .onNode(hasText("certificate.pdf") and hasClickAction())
+                .performScrollTo()
+                .performClick()
+            waitFor("Resume download")
+            assertEquals(listOf(0L, 1_048_576L), server.documents.downloads.offsets.toList())
+            server.documents.downloads.continuation = null
+            pending.complete(Unit)
+            compose.onNodeWithText("Resume download").performClick()
+            waitFor("Save a copy")
+            assertEquals(
+                listOf(0L, 1_048_576L, 1_048_576L, 2_097_152L),
+                server.documents.downloads.offsets.toList(),
+            )
+            compose.onNodeWithText("Save a copy").performScrollTo().performClick()
+            waitFor("Copy saved.")
+            assertEquals(server.documents.downloads.sha256, output.completedHash)
+            assertEquals(3, output.writes.get())
+            assertEquals(1, output.releases.get())
+            assertTrue(output.buffers.all { buffer -> buffer.all { it == 0.toByte() } })
+            assertFalse(output.active)
+            capture("document-download-saved")
+        }
+    }
+
+    @Test
+    fun publishedDocumentDenialStaysClosedUntilContentRevalidationSucceeds() {
+        val server =
+            NativeUiServer().apply {
+                documents.enabled = true
+                documents.downloads.enabled = true
+            }
+        val output = DocumentOutputUi()
+        withApplication(server, fileOutputs = output) {
+            signIn()
+            waitFor("Choose a company")
+            compose.onAllNodesWithText("Open company")[0].performClick()
+            waitFor("Welcome")
+            compose
+                .onNode(hasText("Documents") and hasClickAction())
+                .performScrollTo()
+                .performClick()
+            waitFor("Published documents")
+            compose.onNode(hasText("Published documents") and hasClickAction()).performClick()
+            waitFor("Medical certificate")
+            compose.onNode(hasText("Medical certificate") and hasClickAction()).performClick()
+            waitFor("Save a copy")
+            server.documents.downloads.denied = true
+            compose.onNodeWithText("Save a copy").performScrollTo().performClick()
+            waitFor("Your account cannot perform this action.")
+            assertEquals(0, output.writes.get())
+            assertEquals(1, output.releases.get())
+            compose.onNodeWithText("certificate.pdf").assertDoesNotExist()
+            server.documents.downloads.denied = false
+            server.documents.downloads.offline = true
+            compose.onNodeWithText("Try again").performClick()
+            compose.waitUntil {
+                compose
+                    .onAllNodes(hasText("Try again") and isEnabled())
+                    .fetchSemanticsNodes()
+                    .isNotEmpty()
+            }
+            compose.onNodeWithText("Your account cannot perform this action.").assertExists()
+            compose.onNodeWithText("certificate.pdf").assertDoesNotExist()
+            compose.onNodeWithText("Save a copy").assertDoesNotExist()
+            server.documents.downloads.offline = false
+            compose.onNodeWithText("Try again").performClick()
+            waitFor("Save a copy")
+            assertEquals(
+                3,
+                server.documents.downloads.offsets.size,
+                "Recovery validates the existing completion without repeating its ranges",
+            )
+            compose.onNodeWithText("Save a copy").performScrollTo().performClick()
+            waitFor("Copy saved.")
+            assertEquals(server.documents.downloads.sha256, output.completedHash)
+        }
+    }
+
+    @Test
+    fun publishedDocumentSaveSurvivesActivityStopAndClosesWhenItsRouteLeaves() {
+        val server =
+            NativeUiServer().apply {
+                documents.enabled = true
+                documents.downloads.enabled = true
+            }
+        val output = DocumentOutputUi()
+        val choice = CompletableDeferred<Boolean>()
+        output.selection = choice
+        val lifecycle = mutableStateOf(Lifecycle.State.RESUMED)
+        withApplication(server, fileOutputs = output, lifecycleState = lifecycle) {
+            signIn()
+            waitFor("Choose a company")
+            compose.onAllNodesWithText("Open company")[0].performClick()
+            waitFor("Welcome")
+            compose
+                .onNode(hasText("Documents") and hasClickAction())
+                .performScrollTo()
+                .performClick()
+            waitFor("Published documents")
+            compose.onNode(hasText("Published documents") and hasClickAction()).performClick()
+            waitFor("Medical certificate")
+            compose.onNode(hasText("Medical certificate") and hasClickAction()).performClick()
+            waitFor("Save a copy")
+            compose.onNodeWithText("Save a copy").performScrollTo().performClick()
+            compose.waitUntil { output.active }
+            compose.runOnIdle { lifecycle.value = Lifecycle.State.CREATED }
+            compose.waitForIdle()
+            assertTrue(output.active)
+            assertEquals(0, output.releases.get())
+            compose.runOnIdle { lifecycle.value = Lifecycle.State.RESUMED }
+            waitFor("Saving copy…")
+            compose.onNodeWithContentDescription("Back").performClick()
+            waitFor("Medical certificate")
+            compose.waitUntil { output.releases.get() == 1 }
+            assertFalse(output.active)
+            assertEquals(0, output.writes.get())
+            choice.complete(true)
+            compose.waitForIdle()
+            assertEquals(0, output.writes.get())
+            assertNull(output.completedHash)
+        }
+    }
 
     @Test
     fun documentFormRetainsEditsAcrossDetachmentWhileRenewingReadAdmission() {
@@ -2509,6 +2672,7 @@ class AppFlowTest {
         server: NativeUiServer,
         overrides: Module? = null,
         fileInputs: FileInputSource = UnavailableFileInputSource(),
+        fileOutputs: FileOutputSource = UnavailableFileOutputSource(),
         lifecycleState: MutableState<Lifecycle.State> = mutableStateOf(Lifecycle.State.RESUMED),
         test: (Koin) -> Unit,
     ) {
@@ -2534,6 +2698,7 @@ class AppFlowTest {
                 },
                 platform = AppPlatform.Android,
                 fileInputs = fileInputs,
+                fileOutputs = fileOutputs,
                 http = applicationNetworkModule(AppEnvironment.Dev, server::engine),
             )
         if (overrides != null) container.koin.loadModules(listOf(overrides))
