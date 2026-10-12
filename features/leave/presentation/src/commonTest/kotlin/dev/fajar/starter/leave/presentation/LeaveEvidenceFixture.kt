@@ -26,6 +26,12 @@ class LeaveEvidenceFixture(instant: () -> Instant) {
 
     val remote =
         object : DocumentRepository {
+            override suspend fun employments(
+                access: DocumentAccess,
+                after: String?,
+            ): AppResult<DocumentEmploymentPage> =
+                error("Evidence selection must not acquire upload employment references")
+
             override suspend fun evidence(
                 access: DocumentAccess,
                 query: DocumentEvidenceQuery,
