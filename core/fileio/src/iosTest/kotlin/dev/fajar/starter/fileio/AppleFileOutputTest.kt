@@ -23,8 +23,11 @@ class AppleFileOutputTest {
             output.complete()
             output.close()
             val bytes = ByteArray(3)
-            FileSystem.SYSTEM.openReadOnly(path).use { handle ->
+            val handle = FileSystem.SYSTEM.openReadOnly(path)
+            try {
                 assertEquals(3, handle.read(0, bytes, 0, 3))
+            } finally {
+                handle.close()
             }
             assertContentEquals(byteArrayOf(1, 2, 3), bytes)
             assertFailsWith<FileReleasedException> { output.write(3, byteArrayOf(4)) }
