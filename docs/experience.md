@@ -18,6 +18,8 @@ clear without turning the phone screen into a compressed administrative portal.
   do not retain private outgoing content for a transition.
 - Keep existing content during refresh. Reserve initial loading placeholders
   for missing content, and show an explicit recoverable error if loading fails.
+  `AppLoading(compact = true)` keeps a labelled progress ring inline with existing
+  form or page content; its default remains the initial-loading layout.
 - A queued offline action is visibly pending, not confirmed. Retain the command
   and its outcome in state/storage independently of a transient success effect.
 - Lifecycle-aware route collectors own effects. Animations, timers, and input

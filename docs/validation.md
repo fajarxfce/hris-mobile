@@ -1,5 +1,12 @@
 # Validation
 
+## Inline loading
+
+The optional compact loading layout passed root checks, Android dev assembly and
+the production Web build. Its shared UI regression keeps both the label and an
+adjacent action visible at 200% text in a bounded viewport. The default layout is
+unchanged. Runtime performance was not measured.
+
 ## Controlled date picker
 
 Root checks passed with 574 desktop tests, Android dev assembled and Web
