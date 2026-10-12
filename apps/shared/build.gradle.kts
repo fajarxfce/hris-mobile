@@ -19,6 +19,7 @@ kotlin.sourceSets {
         api(libs.koin.core)
         implementation(projects.core.designsystem)
         api(projects.core.database)
+        api(projects.core.fileio)
         api(projects.core.transfers.data)
         api(projects.core.worker)
         api(projects.core.featureflags.data)

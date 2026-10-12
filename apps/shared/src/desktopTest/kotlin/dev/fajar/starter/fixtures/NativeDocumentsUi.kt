@@ -10,6 +10,7 @@ import kotlinx.serialization.json.*
 /** Scoped metadata fixture with a cancellable pending acquisition. It never serves file bytes. */
 class NativeDocumentsUi {
     @Volatile var enabled = false
+    @Volatile var uploadEnabled = false
     @Volatile var gate: CompletableDeferred<Unit>? = null
     val reads = AtomicInteger()
     val active = AtomicInteger()

@@ -13,6 +13,7 @@ import dev.fajar.starter.common.config.BuildEnvironment
 import dev.fajar.starter.common.config.BuildRuntime
 import dev.fajar.starter.database.createAppDatabase
 import dev.fajar.starter.datastore.createUserPreferences
+import dev.fajar.starter.fileio.DesktopFileInputSource
 import dev.fajar.starter.identity.data.sso.datasources.DesktopBrowserAuthorizationSource
 import dev.fajar.starter.notifications.data.datasources.*
 import dev.fajar.starter.securestorage.*
@@ -50,6 +51,9 @@ fun main(args: Array<String>) {
                 else MemoryCredentialStore(),
             commandCredentials =
                 DesktopCredentialStore("hris-mobile.${environment.id}", "command-content-key"),
+            fileCredentials =
+                DesktopCredentialStore("hris-mobile.${environment.id}", "file-content-key"),
+            fileInputs = DesktopFileInputSource(),
             calendarCredentials =
                 if (BuildRuntime.persistDesktopSession)
                     DesktopCredentialStore("hris-mobile.${environment.id}", "calendar-content-key")

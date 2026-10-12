@@ -10,6 +10,7 @@ import dev.fajar.starter.common.config.BuildEnvironment
 import dev.fajar.starter.common.config.BuildRuntime
 import dev.fajar.starter.database.AccountCacheStore
 import dev.fajar.starter.database.AppDatabase
+import dev.fajar.starter.database.BlobStore
 import dev.fajar.starter.database.CommandStore
 import dev.fajar.starter.database.InboxStore
 import dev.fajar.starter.database.ReplicaStore
@@ -19,6 +20,8 @@ import dev.fajar.starter.documents.data.di.DocumentsDataModule
 import dev.fajar.starter.featureflags.data.datasources.RemoteFeatureFlagSource
 import dev.fajar.starter.featureflags.data.datasources.UnavailableFeatureFlagSource
 import dev.fajar.starter.featureflags.data.di.FeatureFlagDataModule
+import dev.fajar.starter.fileio.FileInputSource
+import dev.fajar.starter.fileio.UnavailableFileInputSource
 import dev.fajar.starter.home.presentation.di.HomePresentationModule
 import dev.fajar.starter.identity.data.di.IdentityModule
 import dev.fajar.starter.identity.data.sso.config.SsoConfiguration
@@ -74,6 +77,7 @@ fun createAppContainer(
     calendarCredentials: CredentialStore = MemoryCredentialStore(),
     leaveCredentials: CredentialStore = MemoryCredentialStore(),
     commandCredentials: AtomicCredentialStore = MemoryCredentialStore(),
+    fileCredentials: AtomicCredentialStore = MemoryCredentialStore(),
     workspaceCredentials: AtomicCredentialStore = MemoryCredentialStore(),
     remoteFeatureFlags: RemoteFeatureFlagSource = UnavailableFeatureFlagSource(),
     deviceAuthentication: DeviceAuthenticationSource = UnavailableDeviceAuthenticationSource(),
@@ -81,6 +85,7 @@ fun createAppContainer(
     platform: AppPlatform = AppPlatform.Desktop,
     transferInputs: TransferInputSource = UnavailableTransferInputSource(),
     location: LocationDataSource = UnavailableLocationDataSource(),
+    fileInputs: FileInputSource = UnavailableFileInputSource(),
     http: Module? = null,
 ) = koinApplication {
     modules(
@@ -100,6 +105,7 @@ fun createAppContainer(
         module {
             single { environment }
             single<LocationDataSource> { location }.onClose { it?.close() }
+            single<FileInputSource> { fileInputs }.onClose { it?.close() }
             single {
                 IdentityServer(
                     BuildRuntime.apiEndpoints.getValue(environment),
@@ -137,9 +143,12 @@ fun createAppContainer(
                 .onClose { it?.close() }
             single<AtomicCredentialStore>(named("command-content-key")) { commandCredentials }
                 .onClose { it?.close() }
+            single<AtomicCredentialStore>(named("file-content-key")) { fileCredentials }
+                .onClose { it?.close() }
             single<AtomicCredentialStore>(named("workspace-content-key")) { workspaceCredentials }
                 .onClose { it?.close() }
             single<CommandStore> { get<AppDatabase>().commands }
+            single<BlobStore> { get<AppDatabase>().blobs }
             single<ContentCipher> { AesGcmContentCipher() }
             single<ReplicaStore> { get<AppDatabase>().replicas }
             single<AccountCacheStore> { get<AppDatabase>().accounts }

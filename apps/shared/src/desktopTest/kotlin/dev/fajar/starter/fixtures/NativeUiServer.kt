@@ -167,7 +167,10 @@ class NativeUiServer(
                 add("announcements.read")
                 add("attendance.self.record")
                 if (leave.enabled) add("leave.self.manage")
-                if (documents.enabled) add("documents.self.read")
+                if (documents.enabled) {
+                    add("documents.self.read")
+                    if (documents.uploadEnabled) add("documents.self.upload")
+                }
             }
         }
     }

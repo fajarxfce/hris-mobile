@@ -1,5 +1,17 @@
 # Template updates
 
+## Owned file input
+
+The OS picker adapters, bounded reads, incremental hashing and file failure
+boundary also exist at
+[41b76c8](https://github.com/fajarxfce/compose-fluent-starter/commit/41b76c8).
+Apple file-handle cleanup also exists at
+[0e0e644](https://github.com/fajarxfce/compose-fluent-starter/commit/0e0e644).
+Both repositories passed root checks, 12 file-input Chromium tests and Android
+adapter compilation. HRIS passed 642 desktop tests and the starter passed 241.
+Company admission, document encryption and the HRIS transfer protocol remain
+application integration work.
+
 ## Retained tab ownership
 
 The navigation ownership guidance and a regression guarding the starter's

@@ -11,6 +11,7 @@ import dev.fajar.starter.database.createAppDatabase
 import dev.fajar.starter.datastore.createUserPreferences
 import dev.fajar.starter.featureflags.data.datasources.AppleFeatureFlagSource
 import dev.fajar.starter.featureflags.data.datasources.AppleRemoteConfigClient
+import dev.fajar.starter.fileio.AppleFileInputSource
 import dev.fajar.starter.identity.data.sso.datasources.AppleBrowserAuthorizationSource
 import dev.fajar.starter.location.data.datasources.AppleLocationDataSource
 import dev.fajar.starter.notifications.data.datasources.*
@@ -34,6 +35,7 @@ class AppleAppHost(
     calendarCredentials: AppleCredentialClient,
     leaveCredentials: AppleCredentialClient,
     commandCredentials: AppleCredentialClient,
+    fileCredentials: AppleCredentialClient,
     workspaceCredentials: AppleCredentialClient,
     crash: AppleCrashClient,
     performance: ApplePerformanceClient,
@@ -46,6 +48,7 @@ class AppleAppHost(
     private val links = AppLinkChannel()
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
     private val push = ApplePushTokenSource(firebase)
+    private val fileInputs = AppleFileInputSource()
     private val container =
         createAppContainer(
             createUserPreferences(),
@@ -60,12 +63,14 @@ class AppleAppHost(
             calendarCredentials = AppleCredentialStore(calendarCredentials),
             leaveCredentials = AppleCredentialStore(leaveCredentials),
             commandCredentials = AppleCredentialStore(commandCredentials),
+            fileCredentials = AppleCredentialStore(fileCredentials),
             workspaceCredentials = AppleCredentialStore(workspaceCredentials),
             deviceAuthentication = AppleDeviceAuthenticationSource(),
             browserAuthorization = AppleBrowserAuthorizationSource(),
             remoteFeatureFlags = AppleFeatureFlagSource(remoteConfig),
             platform = AppPlatform.Ios,
             location = AppleLocationDataSource(),
+            fileInputs = fileInputs,
         )
 
     private var foregroundWorker: Job? = null
@@ -97,7 +102,8 @@ class AppleAppHost(
         return AppleSyncExecution(execution)
     }
 
-    fun viewController() = ComposeUIViewController { StarterApp(container, links.links) }
+    fun viewController() =
+        ComposeUIViewController { StarterApp(container, links.links) }.also(fileInputs::attach)
 
     fun openLink(uri: String) {
         links.receive(uri)

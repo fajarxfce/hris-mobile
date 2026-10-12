@@ -10,6 +10,7 @@ import dev.fajar.starter.common.config.AppPlatform
 import dev.fajar.starter.database.createAppDatabase
 import dev.fajar.starter.datastore.createUserPreferences
 import dev.fajar.starter.featureflags.data.datasources.AndroidFeatureFlagSource
+import dev.fajar.starter.fileio.AndroidFileInputSource
 import dev.fajar.starter.identity.data.sso.datasources.AndroidBrowserAuthorizationSource
 import dev.fajar.starter.location.data.datasources.AndroidLocationDataSource
 import dev.fajar.starter.observability.*
@@ -41,17 +42,20 @@ class StarterApplication : Application(), Configuration.Provider {
             calendarCredentials = AndroidCredentialStore(this, "calendar-content-key"),
             leaveCredentials = AndroidCredentialStore(this, "leave-content-key"),
             commandCredentials = AndroidCredentialStore(this, "command-content-key"),
+            fileCredentials = AndroidCredentialStore(this, "file-content-key"),
             workspaceCredentials = AndroidCredentialStore(this, "workspace-content-key"),
             remoteFeatureFlags = AndroidFeatureFlagSource(this),
             deviceAuthentication = deviceAuthentication,
             browserAuthorization = browserAuthorization,
             platform = AppPlatform.Android,
             location = location,
+            fileInputs = fileInputs,
         )
     }
 
     val browserAuthorization by lazy { AndroidBrowserAuthorizationSource(this) }
     val location by lazy { AndroidLocationDataSource(this) }
+    val fileInputs by lazy { AndroidFileInputSource(this) }
 
     val deviceAuthentication by lazy { AndroidDeviceAuthenticationSource(this) }
 

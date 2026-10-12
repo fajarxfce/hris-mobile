@@ -23,6 +23,10 @@ import dev.fajar.starter.common.config.AppPlatform
 import dev.fajar.starter.common.result.AppResult
 import dev.fajar.starter.database.createAppDatabase
 import dev.fajar.starter.datastore.createUserPreferences
+import dev.fajar.starter.documents.domain.entities.LocalDocumentFile
+import dev.fajar.starter.documents.domain.repositories.DocumentFileRepository
+import dev.fajar.starter.documents.domain.usecases.ImportDocumentFile
+import dev.fajar.starter.fileio.*
 import dev.fajar.starter.fixtures.NativeAttendanceCacheUi
 import dev.fajar.starter.fixtures.NativeCalendarCacheUi
 import dev.fajar.starter.fixtures.NativeDirectoryUi
@@ -45,6 +49,7 @@ import java.nio.file.Files
 import kotlin.test.*
 import kotlin.time.Duration.Companion.milliseconds
 import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.*
 import org.jetbrains.skia.Image
@@ -59,6 +64,66 @@ class AppFlowTest {
     @get:Rule val compose = createComposeRule()
     @get:Rule val testName = TestName()
     private val backDispatcher = TestBackDispatcher()
+
+    @Test
+    fun documentImportUsesTheAssembledGraphAndTheContainerClosesItsInputSource() {
+        val server =
+            NativeUiServer().apply {
+                documents.enabled = true
+                documents.uploadEnabled = true
+            }
+        val selected = mutableListOf<String>()
+        val released = mutableListOf<String>()
+        var closes = 0
+        val source =
+            object : FileInputSource {
+                override suspend fun select(
+                    requestId: String,
+                    mediaTypes: Set<String>,
+                ): FileInputMetadata {
+                    selected += requestId
+                    return FileInputMetadata("document.pdf", "application/pdf", 3)
+                }
+
+                override fun read(requestId: String) = flowOf(byteArrayOf(1, 2, 3))
+
+                override suspend fun release(requestId: String) {
+                    released += requestId
+                }
+
+                override fun close() {
+                    closes++
+                }
+            }
+        withApplication(server, fileInputs = source) { koin ->
+            signIn()
+            waitFor("Choose a company")
+            compose.onAllNodesWithText("Open company")[0].performClick()
+            waitFor("Welcome")
+            val file = runBlocking {
+                val session =
+                    assertIs<AppResult.Success<Session?>>(koin.get<SessionRepository>().current())
+                        .value!!
+                val workspace =
+                    assertIs<AppResult.Success<Workspace?>>(
+                            koin.get<WorkspaceRepository>().current(session.id)
+                        )
+                        .value!!
+                assertIs<AppResult.Success<LocalDocumentFile?>>(
+                        koin.get<ImportDocumentFile>()(workspace.id)
+                    )
+                    .value!!
+            }
+            assertEquals(3L, file.storedBytes)
+            assertNotNull(file.sha256)
+            assertEquals(1, selected.size)
+            assertEquals(selected, released)
+            assertNotNull(koin.get<DocumentFileRepository>())
+            assertEquals(0, server.documents.reads.get())
+            assertEquals(0, closes)
+        }
+        assertEquals(1, closes)
+    }
 
     @Test
     fun newLeaveRequestReviewsEvidenceAndRecoversTheSameSubmissionAfterResponseLoss() {
@@ -2064,6 +2129,7 @@ class AppFlowTest {
     private fun withApplication(
         server: NativeUiServer,
         overrides: Module? = null,
+        fileInputs: FileInputSource = UnavailableFileInputSource(),
         test: (Koin) -> Unit,
     ) {
         val directory = Files.createTempDirectory("hris-ui").toFile()
@@ -2087,6 +2153,7 @@ class AppFlowTest {
                     single<PushTokenSource> { UnavailablePushTokenSource() }
                 },
                 platform = AppPlatform.Android,
+                fileInputs = fileInputs,
                 http = applicationNetworkModule(AppEnvironment.Dev, server::engine),
             )
         if (overrides != null) container.koin.loadModules(listOf(overrides))
