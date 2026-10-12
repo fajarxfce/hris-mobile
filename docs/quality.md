@@ -17,6 +17,11 @@ The CI workflow also runs browser contracts and builds Android flavors, Web,
 iOS Simulator and Windows. Platform build success does not establish OS permission
 behavior, keychain availability or configured Firebase delivery on a device.
 
+Browser database contracts use a 20-second test deadline. Capacity checks commit
+hundreds of real IndexedDB transactions, which do not follow coroutine virtual
+time. This replaces Mocha's two-second default without changing production
+timeouts or reducing storage assertions.
+
 ## Dependency integrity
 
 Gradle verifies dependency artifacts using the committed
