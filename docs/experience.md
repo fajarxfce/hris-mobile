@@ -106,6 +106,11 @@ in the bottom bar, including at large text sizes.
 
 ## Search and filters
 
+`AppTabs` renders controlled content categories with an underline and no separate
+selected container. Labels wrap at large text sizes, each target remains at least
+48 dp, and disabled tabs cannot dispatch selection. Features own selection and
+the corresponding data request.
+
 Use `AppSearchField` for compact search, keeping its accessible label and explicit
 clear action. `AppTextField` remains for labelled forms. `AppFilterChip` opens an
 owned filter surface; `AppDialog` delegates focus, dismissal and window lifetime
