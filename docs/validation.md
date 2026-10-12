@@ -1,5 +1,19 @@
 # Validation
 
+## Authenticated download core
+
+Root checks passed with 711 desktop/JVM tests. Chromium passed all 42 document
+domain tests and 24 data tests, and Android dev assembly passed. New coverage
+checks current catalog/content admission, concurrent preparation, fresh local
+identities after removal, exact authenticated ranges, interrupted block writes,
+resume offsets, checksum failure, stale completion, late cancellation, changed
+company access and finite transfer deadlines. The same storage cases run against
+SQLite and IndexedDB. Downloaded revisions cannot enter the import/upload flow.
+
+This validates the shared transfer and storage contracts. Published-document
+browsing, OS export and real API download acceptance still belong to the next
+presentation increment. No new device installation or memory benchmark was run.
+
 ## Bounded binary transport
 
 Root checks passed with 691 desktop/JVM tests, all 34 network and five transfer
@@ -8,8 +22,8 @@ and conditional headers, bounded strong validators, offset overflow protection,
 exact extents, conflicting headers, compression rejection, truncated/oversized
 streams, cancellation and body-free HEAD acquisition. API problem codes survive
 binary rejection through the same bounded error reader used by JSON requests.
-The existing transfer adapter now uses this shared reader. HRIS download storage
-and its feature UI remain separate integration work.
+The existing transfer adapter now uses this shared reader. At that checkpoint,
+HRIS download storage and its feature UI were separate integration work.
 
 ## Document upload presentation
 

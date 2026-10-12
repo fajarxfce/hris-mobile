@@ -4,7 +4,7 @@ import dev.fajar.starter.common.result.AppResult
 import dev.fajar.starter.database.*
 import dev.fajar.starter.documents.data.encoding.*
 import dev.fajar.starter.documents.domain.entities.*
-import dev.fajar.starter.documents.domain.policies.DOCUMENT_UPLOAD_CHUNK_BYTES
+import dev.fajar.starter.documents.domain.policies.*
 import dev.fajar.starter.documents.domain.repositories.DocumentFileRepository
 import dev.fajar.starter.fileio.*
 import dev.fajar.starter.identity.domain.policies.accountStorageKey
@@ -32,7 +32,8 @@ class EncryptedDocumentFileRepository(
         draft: DocumentFileDraft,
         maxBytes: Long,
         maxFiles: Int,
-    ): AppResult<DocumentFileImport> = safeFileCall {
+    ): AppResult<DocumentFileReservation> = safeFileCall {
+        require(draft.download == null)
         // Serialize local imports so key creation and an input's immutable reservation have one
         // writer.
         imports.withLock {
@@ -44,8 +45,8 @@ class EncryptedDocumentFileRepository(
                 if (previous != null) {
                     val file = codec.decode(access, previous, key)
                     return@withLock if (file.draft == draft && file.sha256 != null)
-                        DocumentFileImport.Stored(file)
-                    else DocumentFileImport.Conflict
+                        DocumentFileReservation.Stored(file)
+                    else DocumentFileReservation.Conflict
                 }
                 val metadata = codec.declaration(access, draft, key)
                 when (
@@ -56,10 +57,12 @@ class EncryptedDocumentFileRepository(
                         maxFiles,
                     )
                 ) {
-                    BlobInsertResult.ScopeChanged -> return@withLock DocumentFileImport.ScopeChanged
+                    BlobInsertResult.ScopeChanged ->
+                        return@withLock DocumentFileReservation.ScopeChanged
                     BlobInsertResult.CapacityExceeded ->
-                        return@withLock DocumentFileImport.CapacityExceeded
-                    BlobInsertResult.AlreadyStored -> return@withLock DocumentFileImport.Conflict
+                        return@withLock DocumentFileReservation.CapacityExceeded
+                    BlobInsertResult.AlreadyStored ->
+                        return@withLock DocumentFileReservation.Conflict
                     BlobInsertResult.Stored -> Unit
                 }
                 coroutineScope {
@@ -91,7 +94,7 @@ class EncryptedDocumentFileRepository(
                                     BlobChunkRecord(storedBytes, length, encrypted),
                                 )
                             )
-                                return@coroutineScope DocumentFileImport.Conflict
+                                return@coroutineScope DocumentFileReservation.Conflict
                             storedBytes += length
                             revision++
                         }
@@ -99,8 +102,8 @@ class EncryptedDocumentFileRepository(
                         val sha256 = digest.finishHex()
                         val completion = codec.completion(access, draft, sha256, key)
                         if (!blobs.complete(scope, partition, draft.id, revision, completion))
-                            return@coroutineScope DocumentFileImport.Conflict
-                        DocumentFileImport.Stored(
+                            return@coroutineScope DocumentFileReservation.Conflict
+                        DocumentFileReservation.Stored(
                             LocalDocumentFile(draft, storedBytes, sha256, revision + 1)
                         )
                     } finally {
@@ -152,6 +155,7 @@ class EncryptedDocumentFileRepository(
         expected: LocalDocumentFile,
         upload: DocumentUpload,
     ) = safeStorageCall {
+        if (expected.draft.download != null) return@safeStorageCall false
         val scope = documentBlobScope(access)
         val partition = documentFilePartition(access)
         val row = blobs.get(scope, partition, expected.draft.id) ?: return@safeStorageCall false
@@ -232,6 +236,154 @@ class EncryptedDocumentFileRepository(
             row == null -> true
             row.completion != null -> false
             else -> blobs.remove(scope, partition, id, row.revision)
+        }
+    }
+
+    override suspend fun reserveDownload(
+        access: DocumentAccess,
+        draft: DocumentFileDraft,
+        maxBytes: Long,
+        maxFiles: Int,
+    ): AppResult<DocumentFileReservation> = safeStorageCall {
+        val source = requireNotNull(draft.download)
+        require(validateDocumentDownload(source) is AppResult.Success)
+        require(
+            draft.declaration ==
+                DocumentFileDeclaration(
+                    source.evidence.fileName,
+                    source.evidence.mediaType,
+                    source.evidence.size,
+                )
+        )
+        imports.withLock {
+            val scope = documentBlobScope(access)
+            val partition = documentFilePartition(access)
+            val previous = blobs.get(scope, partition, draft.id)
+            val key = if (previous == null) acquireContentKey() else readContentKey()
+            try {
+                if (previous != null) {
+                    val file = codec.decode(access, previous, key)
+                    return@withLock if (
+                        file.draft.download == source && file.draft.declaration == draft.declaration
+                    )
+                        DocumentFileReservation.Stored(file)
+                    else DocumentFileReservation.Conflict
+                }
+                val metadata = codec.declaration(access, draft, key)
+                when (
+                    blobs.insert(
+                        scope,
+                        BlobRecord(partition, draft.id, draft.declaration.size, metadata),
+                        maxBytes,
+                        maxFiles,
+                    )
+                ) {
+                    BlobInsertResult.ScopeChanged -> DocumentFileReservation.ScopeChanged
+                    BlobInsertResult.CapacityExceeded -> DocumentFileReservation.CapacityExceeded
+                    BlobInsertResult.AlreadyStored -> DocumentFileReservation.Conflict
+                    BlobInsertResult.Stored ->
+                        DocumentFileReservation.Stored(LocalDocumentFile(draft, 0, null, 0))
+                }
+            } finally {
+                key.fill(0)
+            }
+        }
+    }
+
+    override suspend fun appendDownload(
+        access: DocumentAccess,
+        file: LocalDocumentFile,
+        bytes: ByteArray,
+    ): AppResult<LocalDocumentFile?> = safeStorageCall {
+        require(file.draft.download != null && file.sha256 == null)
+        require(file.storedBytes % FILE_INPUT_BLOCK_BYTES == 0L)
+        require(
+            bytes.isNotEmpty() &&
+                bytes.size.toLong() ==
+                    minOf(
+                        DOCUMENT_DOWNLOAD_CHUNK_BYTES.toLong(),
+                        file.draft.declaration.size - file.storedBytes,
+                    )
+        )
+        val scope = documentBlobScope(access)
+        val partition = documentFilePartition(access)
+        val row = blobs.get(scope, partition, file.draft.id) ?: return@safeStorageCall null
+        val key = readContentKey()
+        try {
+            if (codec.decode(access, row, key) != file) return@safeStorageCall null
+            var storedBytes = file.storedBytes
+            var revision = file.revision
+            for (offset in bytes.indices step FILE_INPUT_BLOCK_BYTES) {
+                currentCoroutineContext().ensureActive()
+                val block =
+                    bytes.copyOfRange(offset, minOf(bytes.size, offset + FILE_INPUT_BLOCK_BYTES))
+                val length = block.size
+                val encrypted = codec.block(access, file.draft, storedBytes, block, key)
+                if (
+                    !blobs.append(
+                        scope,
+                        partition,
+                        file.draft.id,
+                        revision,
+                        BlobChunkRecord(storedBytes, length, encrypted),
+                    )
+                )
+                    return@safeStorageCall null
+                storedBytes += length
+                revision++
+            }
+            file.copy(storedBytes = storedBytes, revision = revision)
+        } finally {
+            key.fill(0)
+        }
+    }
+
+    override suspend fun completeDownload(
+        access: DocumentAccess,
+        file: LocalDocumentFile,
+    ): AppResult<DocumentFileCompletion> = safeStorageCall {
+        val source = requireNotNull(file.draft.download)
+        require(file.storedBytes == file.draft.declaration.size)
+        val scope = documentBlobScope(access)
+        val partition = documentFilePartition(access)
+        val row =
+            blobs.get(scope, partition, file.draft.id)
+                ?: return@safeStorageCall DocumentFileCompletion.Changed
+        val key = readContentKey()
+        try {
+            val actual = codec.decode(access, row, key)
+            if (actual != file) return@safeStorageCall DocumentFileCompletion.Changed
+            if (actual.sha256 != null) return@safeStorageCall DocumentFileCompletion.Ready(actual)
+            val digest = Sha256Digest()
+            var offset = 0L
+            while (offset < file.storedBytes) {
+                currentCoroutineContext().ensureActive()
+                val block = requireNotNull(blobs.chunk(scope, partition, file.draft.id, offset))
+                require(
+                    block.offset == offset &&
+                        block.length.toLong() ==
+                            minOf(FILE_INPUT_BLOCK_BYTES.toLong(), file.storedBytes - offset)
+                )
+                val bytes = codec.readBlock(access, file.draft, block, key)
+                try {
+                    digest.update(bytes)
+                    offset += bytes.size
+                } finally {
+                    bytes.fill(0)
+                }
+            }
+            val sha256 = digest.finishHex()
+            if (sha256 != source.evidence.sha256)
+                return@safeStorageCall DocumentFileCompletion.ChecksumMismatch
+            val proof = codec.completion(access, file.draft, sha256, key)
+            if (!blobs.complete(scope, partition, file.draft.id, file.revision, proof))
+                DocumentFileCompletion.Changed
+            else
+                DocumentFileCompletion.Ready(
+                    file.copy(sha256 = sha256, revision = file.revision + 1)
+                )
+        } finally {
+            key.fill(0)
         }
     }
 

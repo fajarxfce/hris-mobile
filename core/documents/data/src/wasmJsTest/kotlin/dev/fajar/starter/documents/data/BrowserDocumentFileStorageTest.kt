@@ -12,6 +12,26 @@ import kotlinx.coroutines.test.runTest
 
 class BrowserDocumentFileStorageTest {
     @Test
+    fun downloadsRetainEncryptedOriginsAndBoundedContent() = runTest {
+        withDatabase(::verifyDocumentDownloadStorage)
+    }
+
+    @Test
+    fun interruptedDownloadsResumeAtTheCommittedBlock() = runTest {
+        withDatabase(::verifyDocumentDownloadResume)
+    }
+
+    @Test
+    fun checksumMismatchNeverCompletesAFile() = runTest {
+        withDatabase(::verifyDocumentDownloadIntegrity)
+    }
+
+    @Test
+    fun cancellationAndDeletionCannotPublishStaleVerification() = runTest {
+        withDatabase(::verifyDocumentDownloadVerificationCancellation)
+    }
+
+    @Test
     fun uploadCheckpointsAreImmutableEncryptedAndRevisionBound() = runTest {
         withDatabase(::verifyDocumentUploadCheckpoint)
     }

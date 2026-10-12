@@ -154,7 +154,7 @@ class ImportDocumentFileTest {
             )
         f.copyFile = { original }
         assertEquals(original, f.import())
-        f.copyFile = { AppResult.Success(DocumentFileImport.CapacityExceeded) }
+        f.copyFile = { AppResult.Success(DocumentFileReservation.CapacityExceeded) }
         assertEquals(
             "client.document_storage_full",
             assertIs<AppResult.Failed>(f.import()).failure.code,
@@ -173,7 +173,8 @@ private class DocumentImportFixture {
     var selection: suspend () -> AppResult<DocumentFileSelection?> = {
         AppResult.Success(validSelection)
     }
-    var copyFile: suspend (DocumentFileDraft) -> AppResult<DocumentFileImport> = ::storeCompleted
+    var copyFile: suspend (DocumentFileDraft) -> AppResult<DocumentFileReservation> =
+        ::storeCompleted
 
     init {
         allowUpload()
@@ -188,10 +189,10 @@ private class DocumentImportFixture {
             )
     }
 
-    fun storeCompleted(draft: DocumentFileDraft): AppResult<DocumentFileImport> {
+    fun storeCompleted(draft: DocumentFileDraft): AppResult<DocumentFileReservation> {
         val file = LocalDocumentFile(draft, draft.declaration.size, "a".repeat(64), 2)
         retained = file
-        return AppResult.Success(DocumentFileImport.Stored(file))
+        return AppResult.Success(DocumentFileReservation.Stored(file))
     }
 
     val inputRepository =
@@ -212,6 +213,26 @@ private class DocumentImportFixture {
         }
     val files =
         object : DocumentFileRepository {
+            override suspend fun reserveDownload(
+                access: DocumentAccess,
+                draft: DocumentFileDraft,
+                maxBytes: Long,
+                maxFiles: Int,
+            ): AppResult<DocumentFileReservation> =
+                error("This operation never reserves a download")
+
+            override suspend fun appendDownload(
+                access: DocumentAccess,
+                file: LocalDocumentFile,
+                bytes: ByteArray,
+            ): AppResult<LocalDocumentFile?> = error("This operation never writes download content")
+
+            override suspend fun completeDownload(
+                access: DocumentAccess,
+                file: LocalDocumentFile,
+            ): AppResult<DocumentFileCompletion> =
+                error("This operation never completes a download")
+
             override suspend fun updateUpload(
                 access: DocumentAccess,
                 expected: LocalDocumentFile,
@@ -229,7 +250,7 @@ private class DocumentImportFixture {
                 draft: DocumentFileDraft,
                 maxBytes: Long,
                 maxFiles: Int,
-            ): AppResult<DocumentFileImport> {
+            ): AppResult<DocumentFileReservation> {
                 assertEquals(DOCUMENT_LOCAL_CAPACITY, maxBytes)
                 assertEquals(DOCUMENT_LOCAL_FILES, maxFiles)
                 imports++

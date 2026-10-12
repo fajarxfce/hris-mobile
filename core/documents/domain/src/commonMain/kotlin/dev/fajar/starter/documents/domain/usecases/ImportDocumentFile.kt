@@ -66,15 +66,15 @@ class ImportDocumentFile(
                 is AppResult.Failed -> imported
                 is AppResult.Success ->
                     when (val outcome = imported.value) {
-                        is DocumentFileImport.Stored -> AppResult.Success(outcome.file)
-                        DocumentFileImport.CapacityExceeded ->
+                        is DocumentFileReservation.Stored -> AppResult.Success(outcome.file)
+                        DocumentFileReservation.CapacityExceeded ->
                             documentFailure("client.document_storage_full", FailureKind.Storage)
-                        DocumentFileImport.ScopeChanged ->
+                        DocumentFileReservation.ScopeChanged ->
                             documentFailure(
                                 "client.document_scope_changed",
                                 FailureKind.AccessDenied,
                             )
-                        DocumentFileImport.Conflict ->
+                        DocumentFileReservation.Conflict ->
                             documentFailure("client.document_import_conflict", FailureKind.Conflict)
                     }
             }

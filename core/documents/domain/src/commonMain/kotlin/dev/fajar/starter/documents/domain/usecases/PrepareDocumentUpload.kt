@@ -67,6 +67,7 @@ class PrepareDocumentUpload(
             if (ownership is AppResult.Failed) return@withTimeoutOrNull ownership
             if (
                 file.draft != prepared.file.draft ||
+                    file.draft.download != null ||
                     file.sha256 == null ||
                     file.sha256 != prepared.file.sha256 ||
                     file.storedBytes != file.draft.declaration.size

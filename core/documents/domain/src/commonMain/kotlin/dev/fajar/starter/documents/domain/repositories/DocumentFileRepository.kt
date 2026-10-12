@@ -10,7 +10,7 @@ interface DocumentFileRepository {
         draft: DocumentFileDraft,
         maxBytes: Long,
         maxFiles: Int,
-    ): AppResult<DocumentFileImport>
+    ): AppResult<DocumentFileReservation>
 
     fun observe(access: DocumentAccess): Flow<AppResult<List<LocalDocumentFile>>>
 
@@ -32,4 +32,23 @@ interface DocumentFileRepository {
 
     /** Conditional cleanup must never delete a completed or concurrently advanced file. */
     suspend fun discardIncomplete(access: DocumentAccess, id: String): AppResult<Boolean>
+
+    suspend fun reserveDownload(
+        access: DocumentAccess,
+        draft: DocumentFileDraft,
+        maxBytes: Long,
+        maxFiles: Int,
+    ): AppResult<DocumentFileReservation>
+
+    /** Append at the observed revision; null indicates a changed file or account binding. */
+    suspend fun appendDownload(
+        access: DocumentAccess,
+        file: LocalDocumentFile,
+        bytes: ByteArray,
+    ): AppResult<LocalDocumentFile?>
+
+    suspend fun completeDownload(
+        access: DocumentAccess,
+        file: LocalDocumentFile,
+    ): AppResult<DocumentFileCompletion>
 }

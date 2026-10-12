@@ -11,6 +11,36 @@ import kotlinx.coroutines.test.*
 
 class DocumentUploadTest {
     @Test
+    fun downloadedRevisionsCannotBeSubmittedAsNewImports() = runTest {
+        val f = DocumentUploadFixture(size = 100)
+        val form =
+            assertIs<AppResult.Success<DocumentUploadPreparation>>(
+                    f.load(f.base.workspace.id, f.file.draft.id)
+                )
+                .value
+        val downloaded =
+            f.file.copy(
+                draft =
+                    f.file.draft.copy(
+                        download =
+                            DocumentDownloadSource(
+                                f.base.query.employmentId,
+                                DocumentClassification.PERSONAL,
+                                f.base.evidence,
+                            )
+                    )
+            )
+        f.rows.value = listOf(downloaded)
+        f.base.employmentCall = { error("Downloaded content does not acquire upload references") }
+        assertIs<AppResult.Failed>(f.load(f.base.workspace.id, downloaded.draft.id))
+        assertIs<AppResult.Failed>(
+            f.prepare(f.base.workspace.id, form.copy(file = downloaded), f.input)
+        )
+        assertNull(f.rows.value.single().upload)
+        assertTrue(f.sent.isEmpty() && f.schedules.isEmpty())
+    }
+
+    @Test
     fun reviewingConcurrentProgressPreservesTheCancellationIntent() = runTest {
         val f = DocumentUploadFixture()
         val file = f.confirmed()

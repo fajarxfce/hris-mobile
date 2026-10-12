@@ -16,6 +16,37 @@ import org.koin.core.annotation.*
 class DocumentsDataModule {
     @Single @Named("document-upload") fun uploadMutex() = Mutex()
 
+    @Single @Named("document-download") fun downloadMutex() = Mutex()
+
+    @Factory
+    fun prepareDownload(
+        files: DocumentFileRepository,
+        content: DocumentContentRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        build: AppBuild,
+        @Named("document-download") execution: Mutex,
+    ) =
+        PrepareDocumentDownload(
+            files,
+            content,
+            sessions,
+            workspaces,
+            Clock.System,
+            build,
+            execution,
+        )
+
+    @Factory
+    fun downloadFile(
+        files: DocumentFileRepository,
+        content: DocumentContentRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        build: AppBuild,
+        @Named("document-download") execution: Mutex,
+    ) = DownloadDocumentFile(files, content, sessions, workspaces, Clock.System, build, execution)
+
     @Factory
     fun loadUpload(
         files: DocumentFileRepository,

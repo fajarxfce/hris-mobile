@@ -3,12 +3,53 @@ package dev.fajar.starter.documents.data.api
 import dev.fajar.starter.documents.data.dto.*
 import dev.fajar.starter.network.*
 import io.ktor.client.HttpClient
+import io.ktor.client.plugins.expectSuccess
 import io.ktor.client.request.*
 import io.ktor.http.*
 import org.koin.core.annotation.*
 
 @Single
 class DocumentsApi(@Named(HttpClients.Authenticated) private val client: HttpClient) {
+    suspend fun inspect(
+        sessionId: String,
+        companyId: String,
+        revisionId: String,
+    ): DocumentContentDto =
+        client
+            .prepareHead("companies/$companyId/documents/revisions/$revisionId/content") {
+                forSession(sessionId)
+                expectSuccess = false
+            }
+            .execute { response ->
+                requireApiStatus(response, HttpStatusCode.OK)
+                DocumentContentDto(
+                    response.headers.getAll(HttpHeaders.ETag).orEmpty(),
+                    response.headers.getAll(HttpHeaders.ContentLength).orEmpty(),
+                    response.headers.getAll(HttpHeaders.ContentType).orEmpty(),
+                    response.headers.getAll(HttpHeaders.ContentEncoding).orEmpty(),
+                )
+            }
+
+    suspend fun download(
+        sessionId: String,
+        companyId: String,
+        revisionId: String,
+        entityTag: String,
+        size: Long,
+        offset: Long,
+        maximumBytes: Int,
+    ): ByteArray =
+        client.requestBinaryRange(
+            "companies/$companyId/documents/revisions/$revisionId/content",
+            entityTag,
+            offset,
+            size,
+            maximumBytes,
+        ) {
+            forSession(sessionId)
+            header(HttpHeaders.IfRange, entityTag)
+        }
+
     suspend fun employments(
         sessionId: String,
         companyId: String,

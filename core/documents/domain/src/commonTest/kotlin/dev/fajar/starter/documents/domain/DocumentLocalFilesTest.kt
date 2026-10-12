@@ -149,6 +149,26 @@ private class LocalFilesFixture {
     var delete: suspend () -> Boolean = { true }
     val files =
         object : DocumentFileRepository {
+            override suspend fun reserveDownload(
+                access: DocumentAccess,
+                draft: DocumentFileDraft,
+                maxBytes: Long,
+                maxFiles: Int,
+            ): AppResult<DocumentFileReservation> =
+                error("This operation never reserves a download")
+
+            override suspend fun appendDownload(
+                access: DocumentAccess,
+                file: LocalDocumentFile,
+                bytes: ByteArray,
+            ): AppResult<LocalDocumentFile?> = error("This operation never writes download content")
+
+            override suspend fun completeDownload(
+                access: DocumentAccess,
+                file: LocalDocumentFile,
+            ): AppResult<DocumentFileCompletion> =
+                error("This operation never completes a download")
+
             override suspend fun updateUpload(
                 access: DocumentAccess,
                 expected: LocalDocumentFile,
@@ -166,7 +186,7 @@ private class LocalFilesFixture {
                 draft: DocumentFileDraft,
                 maxBytes: Long,
                 maxFiles: Int,
-            ): AppResult<DocumentFileImport> = error("Not importing")
+            ): AppResult<DocumentFileReservation> = error("Not importing")
 
             override fun observe(access: DocumentAccess) = flow {
                 readers++

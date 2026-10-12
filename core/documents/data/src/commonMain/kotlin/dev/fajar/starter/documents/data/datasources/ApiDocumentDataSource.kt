@@ -5,7 +5,21 @@ import dev.fajar.starter.documents.data.dto.*
 import org.koin.core.annotation.Single
 
 @Single
-class ApiDocumentDataSource(private val api: DocumentsApi) : DocumentRemoteDataSource {
+class ApiDocumentDataSource(private val api: DocumentsApi) :
+    DocumentRemoteDataSource, DocumentContentDataSource {
+    override suspend fun inspect(sessionId: String, companyId: String, revisionId: String) =
+        api.inspect(sessionId, companyId, revisionId)
+
+    override suspend fun download(
+        sessionId: String,
+        companyId: String,
+        revisionId: String,
+        entityTag: String,
+        size: Long,
+        offset: Long,
+        maximumBytes: Int,
+    ) = api.download(sessionId, companyId, revisionId, entityTag, size, offset, maximumBytes)
+
     override suspend fun employments(sessionId: String, companyId: String, after: String?) =
         api.employments(sessionId, companyId, after)
 

@@ -13,6 +13,7 @@ data class DocumentFileDto(
     val mediaType: String,
     val size: Long,
     val createdAt: String,
+    val download: DocumentDownloadSourceDto? = null,
 ) {
     override fun toString() = "DocumentFileDto([redacted])"
 }

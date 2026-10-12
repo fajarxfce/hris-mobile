@@ -52,7 +52,11 @@ class LoadDocumentUploadPreparation(
                             )
                 }
             currentCoroutineContext().ensureActive()
-            if (file.sha256 == null || file.storedBytes != file.draft.declaration.size)
+            if (
+                file.draft.download != null ||
+                    file.sha256 == null ||
+                    file.storedBytes != file.draft.declaration.size
+            )
                 return@withTimeoutOrNull documentFailure("client.document_import_incomplete")
             if (file.upload != null)
                 return@withTimeoutOrNull documentFailure(

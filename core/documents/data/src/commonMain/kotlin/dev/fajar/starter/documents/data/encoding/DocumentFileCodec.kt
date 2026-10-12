@@ -32,6 +32,7 @@ class DocumentFileCodec(private val cipher: ContentCipher) {
                 mediaType = draft.declaration.mediaType,
                 size = draft.declaration.size,
                 createdAt = draft.createdAt.toString(),
+                download = draft.download?.toDto(),
             )
         return seal(
             access,
@@ -139,6 +140,18 @@ class DocumentFileCodec(private val cipher: ContentCipher) {
                 AppResult.Success(declaration)
         )
         require(raw.storedBytes in 0..raw.size && raw.revision >= 0)
+        val download = dto.download?.toDownloadSource()
+        if (download != null) {
+            require(raw.state == null)
+            require(
+                declaration ==
+                    DocumentFileDeclaration(
+                        download.evidence.fileName,
+                        download.evidence.mediaType,
+                        download.evidence.size,
+                    )
+            )
+        }
         val sha256 =
             raw.completion?.let { encrypted ->
                 require(raw.storedBytes == raw.size)
@@ -163,6 +176,7 @@ class DocumentFileCodec(private val cipher: ContentCipher) {
                 )
                 proof.sha256
             }
+        require(download == null || sha256 == null || sha256 == download.evidence.sha256)
         val upload =
             raw.state?.let {
                 require(sha256 != null)
@@ -182,7 +196,7 @@ class DocumentFileCodec(private val cipher: ContentCipher) {
                 }
             }
         return LocalDocumentFile(
-            DocumentFileDraft(dto.id, declaration, Instant.parse(dto.createdAt)),
+            DocumentFileDraft(dto.id, declaration, Instant.parse(dto.createdAt), download),
             raw.storedBytes,
             sha256,
             raw.revision,

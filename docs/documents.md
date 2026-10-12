@@ -118,3 +118,28 @@ labels. Status refresh, retry and cancellation dispatch separate typed events.
 Leaving the route cancels its pending acquisition and manual action; scheduled
 delivery has its own application/worker lifetime. Known access failures stop local
 observation and keep data hidden through pending or failed workspace revalidation.
+
+## Download coordination
+
+The shared download contracts are implemented; published-document browsing and OS
+file export are still being connected to presentation. `PrepareDocumentDownload`
+accepts a current catalog selection, rechecks company policy and content access,
+then reserves encrypted local capacity. Existing copies can be reused only after
+fresh admission. A replacement receives a new local ID so an older writer cannot
+complete a removed file's replacement at a reused storage revision.
+
+`DownloadDocumentFile` owns a foreground operation with a finite deadline. It
+checks the selected revision with authenticated HEAD and requests exact ranges
+with the server's revision/checksum validator. The API adapter uses `If-Range`;
+an unexpected full response is rejected before reading its body. Failure codes,
+including MFA and access denial, retain their domain classification.
+
+Downloaded origins stay immutable in encrypted metadata. The repository writes
+64 KiB authenticated blocks and advances progress with storage revision checks.
+Interruption retains committed blocks; explicit resume starts at that offset.
+No observer or worker silently retries a download. Completion reads the retained
+blocks with bounded memory and verifies the entire SHA-256 before storing its
+completion proof. A bad checksum cannot produce a readable completed file.
+Session/company changes and cancellation stop publication, while the owner clears
+each transport buffer. Imported files remain distinct from downloaded revisions;
+the latter cannot enter the new-upload confirmation flow.

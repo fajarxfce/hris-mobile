@@ -100,6 +100,26 @@ class DocumentUploadFixture(size: Long = DOCUMENT_UPLOAD_CHUNK_BYTES + 7L) {
 
     val files =
         object : DocumentFileRepository {
+            override suspend fun reserveDownload(
+                access: DocumentAccess,
+                draft: DocumentFileDraft,
+                maxBytes: Long,
+                maxFiles: Int,
+            ): AppResult<DocumentFileReservation> =
+                error("This operation never reserves a download")
+
+            override suspend fun appendDownload(
+                access: DocumentAccess,
+                file: LocalDocumentFile,
+                bytes: ByteArray,
+            ): AppResult<LocalDocumentFile?> = error("This operation never writes download content")
+
+            override suspend fun completeDownload(
+                access: DocumentAccess,
+                file: LocalDocumentFile,
+            ): AppResult<DocumentFileCompletion> =
+                error("This operation never completes a download")
+
             override fun observe(access: DocumentAccess) = rows.map { AppResult.Success(it) }
 
             override suspend fun find(access: DocumentAccess, id: String) =
@@ -158,7 +178,7 @@ class DocumentUploadFixture(size: Long = DOCUMENT_UPLOAD_CHUNK_BYTES + 7L) {
                 draft: DocumentFileDraft,
                 maxBytes: Long,
                 maxFiles: Int,
-            ): AppResult<DocumentFileImport> = error("Already imported")
+            ): AppResult<DocumentFileReservation> = error("Already imported")
 
             override suspend fun discardIncomplete(
                 access: DocumentAccess,

@@ -27,11 +27,11 @@ suspend fun verifyEncryptedDocumentImport(database: AppDatabase) = coroutineScop
         repository.import(f.access, f.draft, DOCUMENT_LOCAL_CAPACITY, DOCUMENT_LOCAL_FILES)
     }
     val file =
-        assertIs<DocumentFileImport.Stored>(
-                assertIs<AppResult.Success<DocumentFileImport>>(first.await()).value
+        assertIs<DocumentFileReservation.Stored>(
+                assertIs<AppResult.Success<DocumentFileReservation>>(first.await()).value
             )
             .file
-    assertEquals(AppResult.Success(DocumentFileImport.Stored(file)), duplicate.await())
+    assertEquals(AppResult.Success(DocumentFileReservation.Stored(file)), duplicate.await())
     assertEquals(1, f.reads)
     assertEquals(1, f.readClosures)
     assertEquals(f.draft.declaration.size, file.storedBytes)
@@ -71,7 +71,7 @@ suspend fun verifyDocumentFileOwnership(database: AppDatabase) {
     val f = DocumentFileStorageFixture(database)
     f.activate()
     val original =
-        assertIs<AppResult.Success<DocumentFileImport>>(
+        assertIs<AppResult.Success<DocumentFileReservation>>(
                 f.repository()
                     .import(f.access, f.draft, DOCUMENT_LOCAL_CAPACITY, DOCUMENT_LOCAL_FILES)
             )
@@ -88,7 +88,7 @@ suspend fun verifyDocumentFileOwnership(database: AppDatabase) {
     val restored = f.access.copy(sessionId = "restored-session")
     database.accounts.activate(restored.sessionId, f.scope.accountKey)
     assertEquals(
-        AppResult.Success(assertIs<DocumentFileImport.Stored>(original).file),
+        AppResult.Success(assertIs<DocumentFileReservation.Stored>(original).file),
         repository.find(restored, f.draft.id),
     )
     val otherCompany = restored.copy(companyId = "77777777-7777-7777-7777-777777777777")
@@ -220,10 +220,10 @@ suspend fun verifyDocumentCleanupRace(database: AppDatabase) = coroutineScope {
     val cleanup = async { repository.discardIncomplete(f.access, f.draft.id) }
     cleanupRead.await()
     allowComplete.complete(Unit)
-    val stored = assertIs<AppResult.Success<DocumentFileImport>>(copying.await())
+    val stored = assertIs<AppResult.Success<DocumentFileReservation>>(copying.await())
     returnOldRead.complete(Unit)
     assertEquals(AppResult.Success(false), cleanup.await())
-    assertNotNull(assertIs<DocumentFileImport.Stored>(stored.value).file.sha256)
+    assertNotNull(assertIs<DocumentFileReservation.Stored>(stored.value).file.sha256)
     assertNotNull(database.blobs.get(f.scope, f.partition, f.draft.id)?.completion)
 }
 
@@ -232,7 +232,7 @@ suspend fun verifyDocumentImportBoundsAndKeyLoss(database: AppDatabase) {
     f.activate()
     val repository = f.repository()
     assertEquals(
-        AppResult.Success(DocumentFileImport.CapacityExceeded),
+        AppResult.Success(DocumentFileReservation.CapacityExceeded),
         repository.import(f.access, f.draft, f.draft.declaration.size - 1, 1),
     )
     assertEquals(0, f.reads)
@@ -246,7 +246,7 @@ suspend fun verifyDocumentImportBoundsAndKeyLoss(database: AppDatabase) {
     assertNull(database.blobs.get(f.scope, f.partition, f.draft.id)?.completion)
     assertEquals(AppResult.Success(true), repository.discardIncomplete(f.access, f.draft.id))
     f.readFile = f::completeFile
-    assertIs<AppResult.Success<DocumentFileImport>>(
+    assertIs<AppResult.Success<DocumentFileReservation>>(
         repository.import(f.access, f.draft, DOCUMENT_LOCAL_CAPACITY, DOCUMENT_LOCAL_FILES)
     )
     val retained = database.blobs.get(f.scope, f.partition, f.draft.id)
@@ -270,8 +270,8 @@ suspend fun verifyDocumentUploadCheckpoint(database: AppDatabase) = coroutineSco
     f.activate()
     val repository = f.repository()
     val file =
-        assertIs<DocumentFileImport.Stored>(
-                assertIs<AppResult.Success<DocumentFileImport>>(
+        assertIs<DocumentFileReservation.Stored>(
+                assertIs<AppResult.Success<DocumentFileReservation>>(
                         repository.import(
                             f.access,
                             f.draft,
@@ -346,8 +346,8 @@ suspend fun verifyBoundedDocumentUploadChunks(database: AppDatabase) = coroutine
     f.activate()
     val repository = f.repository()
     val file =
-        assertIs<DocumentFileImport.Stored>(
-                assertIs<AppResult.Success<DocumentFileImport>>(
+        assertIs<DocumentFileReservation.Stored>(
+                assertIs<AppResult.Success<DocumentFileReservation>>(
                         repository.import(
                             f.access,
                             f.draft,
@@ -428,7 +428,7 @@ suspend fun verifyBoundedDocumentUploadChunks(database: AppDatabase) = coroutine
     )
 }
 
-private class DocumentFileStorageFixture(
+internal class DocumentFileStorageFixture(
     private val database: AppDatabase,
     size: Int = 2 * 65536 + 17,
 ) {
