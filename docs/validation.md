@@ -4,7 +4,7 @@
 
 Root checks passed with 805 desktop tests, all 21 Workforce presentation Chromium
 tests and Android dev assembly. The preceding read-boundary increment also passed
-the 41 domain and 25 data cases in desktop and Chromium. New MVI coverage exercises
+66 desktop and 53 Chromium domain/data cases. New MVI coverage exercises
 late cancellation, company replacement, lease expiry, retained denial after failed
 cleanup, completed storage subscriptions, history paging and offline filters.
 Five layout cases and the assembled HTTP/cache/navigation flow passed. Layouts

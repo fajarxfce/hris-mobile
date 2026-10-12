@@ -1,6 +1,7 @@
 package dev.fajar.starter
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -94,26 +95,30 @@ class OvertimeLayoutTest {
     @Test
     fun detailRefreshFailureIsVisibleAboveTheRetainedScrolledRequest() {
         val snapshot = requestSnapshot()
+        val list = LazyListState()
         var state by
             mutableStateOf(
                 OvertimeRequestState(snapshot.value.selection, snapshot, loading = false)
             )
         compose.setContent {
-            AppTheme {
-                Box(Modifier.size(360.dp, 760.dp)) {
-                    OvertimeRequestPage(state, rememberLazyListState()) {}
-                }
-            }
+            AppTheme { Box(Modifier.size(360.dp, 760.dp)) { OvertimeRequestPage(state, list) {} } }
         }
         compose.onNode(hasScrollToIndexAction()).performScrollToNode(hasText("Approval updated"))
         val bar = compose.onNodeWithTag("app-top-bar").fetchSemanticsNode().boundsInRoot
+        val position =
+            compose.runOnIdle { list.firstVisibleItemIndex to list.firstVisibleItemScrollOffset }
         compose.runOnIdle {
             state = state.copy(refreshFailure = Failure(FailureKind.Network, "Offline"))
         }
         compose.onNodeWithText("Unable to connect. Check your connection.").assertIsDisplayed()
-        compose.onNodeWithText("Approval updated", useUnmergedTree = true).assertIsDisplayed()
+        compose.runOnIdle {
+            assertEquals(position, list.firstVisibleItemIndex to list.firstVisibleItemScrollOffset)
+        }
         assertEquals(bar, compose.onNodeWithTag("app-top-bar").fetchSemanticsNode().boundsInRoot)
         compose.onNodeWithContentDescription("Refresh").assertIsDisplayed().assertIsEnabled()
+        // Feedback reduces the viewport; a row previously at its bottom remains reachable.
+        compose.onNode(hasScrollToIndexAction()).performScrollToNode(hasText("Approval updated"))
+        compose.onNodeWithText("Approval updated", useUnmergedTree = true).assertIsDisplayed()
     }
 
     @Test
