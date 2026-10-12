@@ -34,7 +34,7 @@ class BrowserFileInputSourceTest {
                 block.forEach { assertEquals((offset++ % 251).toByte(), it) }
             }
             source.release("one")
-            assertFailsWith<FileInputReleasedException> { source.read("one").collect() }
+            assertFailsWith<FileReleasedException> { source.read("one").collect() }
         } finally {
             source.close()
         }
@@ -66,7 +66,7 @@ class BrowserFileInputSourceTest {
             pending.join()
             assertTrue(pending.isCancelled)
             assertEquals(0, pickerCount())
-            assertFailsWith<FileInputUnavailableException> {
+            assertFailsWith<FileUnavailableException> {
                 source.select("closed", setOf("application/pdf"))
             }
         } finally {

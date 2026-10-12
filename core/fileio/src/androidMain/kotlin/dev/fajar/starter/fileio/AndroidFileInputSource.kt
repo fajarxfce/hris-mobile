@@ -19,12 +19,12 @@ import kotlinx.coroutines.flow.*
 /** SAF grants belong to the selected input; no blanket storage permission is requested. */
 class AndroidFileInputSource(context: Context) : FileInputSource {
     private val resolver = context.applicationContext.contentResolver
-    private val inputs = FileInputRegistry<Uri>()
+    private val inputs = FileHandleRegistry<Uri>()
     private var owner: WeakReference<ComponentActivity>? = null
 
     fun attach(activity: ComponentActivity) {
         if (owner?.get() !== activity) {
-            inputs.cancelSelections()
+            inputs.cancelAcquisitions()
             owner = WeakReference(activity)
         }
     }
@@ -32,14 +32,14 @@ class AndroidFileInputSource(context: Context) : FileInputSource {
     fun detach(activity: ComponentActivity) {
         if (owner?.get() === activity) {
             owner = null
-            inputs.cancelSelections()
+            inputs.cancelAcquisitions()
         }
     }
 
     override suspend fun select(requestId: String, mediaTypes: Set<String>): FileInputMetadata? =
         withContext(Dispatchers.Main.immediate) {
             validateFileMediaTypes(mediaTypes)
-            val activity = owner?.get() ?: throw FileInputUnavailableException()
+            val activity = owner?.get() ?: throw FileUnavailableException()
             val ticket = inputs.reserve(requestId, currentCoroutineContext().job)
             var launcher: ActivityResultLauncher<Array<String>>? = null
             var retained = false
@@ -101,14 +101,14 @@ class AndroidFileInputSource(context: Context) : FileInputSource {
                 metadata
             } finally {
                 launcher?.unregister()
-                if (!retained) inputs.discardSelection(requestId, ticket)
+                if (!retained) inputs.discard(requestId, ticket)
             }
         }
 
     override fun read(requestId: String): Flow<ByteArray> =
         channelFlow {
                 val operation = currentCoroutineContext().job
-                val uri = inputs.beginRead(requestId, operation)
+                val uri = inputs.beginOperation(requestId, operation)
                 val cancellation = CancellationSignal()
                 val worker =
                     launch(Dispatchers.IO) {
@@ -121,7 +121,7 @@ class AndroidFileInputSource(context: Context) : FileInputSource {
                             readFileChannel(stream.channel).collect { send(it) }
                         }
                     }
-                worker.invokeOnCompletion { inputs.endRead(requestId, operation) }
+                worker.invokeOnCompletion { inputs.endOperation(requestId, operation) }
                 try {
                     worker.join()
                 } finally {

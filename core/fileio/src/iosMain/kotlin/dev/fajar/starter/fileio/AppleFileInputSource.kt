@@ -5,7 +5,6 @@
 
 package dev.fajar.starter.fileio
 
-import kotlin.coroutines.resume
 import kotlin.native.ref.WeakReference
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
@@ -17,16 +16,15 @@ import platform.UIKit.*
 import platform.UniformTypeIdentifiers.UTType
 import platform.UniformTypeIdentifiers.UTTypeData
 import platform.UniformTypeIdentifiers.UTTypeImage
-import platform.darwin.NSObject
 
 /** The host attaches its controller and closes the source when its container is disposed. */
 class AppleFileInputSource : FileInputSource {
     private var owner: WeakReference<UIViewController>? = null
-    private val inputs = FileInputRegistry<AppleFileInput>()
+    private val inputs = FileHandleRegistry<AppleFileInput>()
 
     fun attach(controller: UIViewController) {
         if (owner?.get() !== controller) {
-            inputs.cancelSelections()
+            inputs.cancelAcquisitions()
             owner = WeakReference(controller)
         }
     }
@@ -34,8 +32,8 @@ class AppleFileInputSource : FileInputSource {
     override suspend fun select(requestId: String, mediaTypes: Set<String>): FileInputMetadata? =
         withContext(Dispatchers.Main.immediate) {
             validateFileMediaTypes(mediaTypes)
-            val controller = owner?.get() ?: throw FileInputUnavailableException()
-            if (controller.presentedViewController != null) throw FileInputBusyException()
+            val controller = owner?.get() ?: throw FileUnavailableException()
+            if (controller.presentedViewController != null) throw FileBusyException()
             val ticket = inputs.reserve(requestId, currentCoroutineContext().job)
             var picker: UIDocumentPickerViewController? = null
             var delegate: AppleFilePickerDelegate? = null
@@ -48,8 +46,7 @@ class AppleFileInputSource : FileInputSource {
                             "*/*" -> UTTypeData
                             "image/*" -> UTTypeImage
                             else ->
-                                UTType.typeWithMIMEType(type)
-                                    ?: throw FileInputUnavailableException()
+                                UTType.typeWithMIMEType(type) ?: throw FileUnavailableException()
                         }
                     }
                 val dialog =
@@ -66,9 +63,9 @@ class AppleFileInputSource : FileInputSource {
                 input = selected
                 val metadata =
                     withContext(Dispatchers.IO) {
-                        val path = (url.path ?: throw FileInputUnavailableException()).toPath()
+                        val path = (url.path ?: throw FileUnavailableException()).toPath()
                         val details = FileSystem.SYSTEM.metadata(path)
-                        if (!details.isRegularFile) throw FileInputUnavailableException()
+                        if (!details.isRegularFile) throw FileUnavailableException()
                         FileInputMetadata(
                             url.lastPathComponent,
                             url.pathExtension?.let {
@@ -88,7 +85,7 @@ class AppleFileInputSource : FileInputSource {
                 picker?.dismissViewControllerAnimated(false, completion = null)
                 if (!retained) {
                     input?.close()
-                    inputs.discardSelection(requestId, ticket)
+                    inputs.discard(requestId, ticket)
                 }
             }
         }
@@ -97,13 +94,12 @@ class AppleFileInputSource : FileInputSource {
         flow<ByteArray> {
                 coroutineScope {
                     val operation = currentCoroutineContext().job
-                    val input = inputs.beginRead(requestId, operation)
+                    val input = inputs.beginOperation(requestId, operation)
                     // A reader has its own balanced access even if the selection is released
                     // meanwhile.
                     val scoped = input.url.startAccessingSecurityScopedResource()
                     try {
-                        val path =
-                            (input.url.path ?: throw FileInputUnavailableException()).toPath()
+                        val path = (input.url.path ?: throw FileUnavailableException()).toPath()
                         val handle = FileSystem.SYSTEM.openReadOnly(path)
                         try {
                             val bytes = ByteArray(FILE_INPUT_BLOCK_BYTES)
@@ -133,7 +129,7 @@ class AppleFileInputSource : FileInputSource {
                         }
                     } finally {
                         if (scoped) input.url.stopAccessingSecurityScopedResource()
-                        inputs.endRead(requestId, operation)
+                        inputs.endOperation(requestId, operation)
                     }
                 }
             }
@@ -153,28 +149,5 @@ class AppleFileInputSource : FileInputSource {
 private class AppleFileInput(val url: NSURL, private val scoped: Boolean) {
     fun close() {
         if (scoped) url.stopAccessingSecurityScopedResource()
-    }
-}
-
-private class AppleFilePickerDelegate(private var continuation: CancellableContinuation<NSURL?>?) :
-    NSObject(), UIDocumentPickerDelegateProtocol {
-    override fun documentPicker(
-        controller: UIDocumentPickerViewController,
-        didPickDocumentsAtURLs: List<*>,
-    ) {
-        val pending = continuation
-        continuation = null
-        if (pending?.isActive == true)
-            pending.resume(didPickDocumentsAtURLs.singleOrNull() as? NSURL)
-    }
-
-    override fun documentPickerWasCancelled(controller: UIDocumentPickerViewController) {
-        val pending = continuation
-        continuation = null
-        if (pending?.isActive == true) pending.resume(null)
-    }
-
-    fun clear() {
-        continuation = null
     }
 }

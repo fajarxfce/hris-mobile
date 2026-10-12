@@ -158,6 +158,8 @@ opaque blocks, transactional progress and account-owned reservations. File adapt
 own encryption and mapping; use cases own import, transfer and cleanup policy.
 The [file input adapter](file-input.md) owns OS pickers and transient readers;
 those resources never enter a domain contract or a ViewModel.
+The [file output adapter](file-output.md) owns native save dialogs, bounded writers
+and disposal. Export admission and choosing when to copy remain use-case work.
 
 ## Navigation
 

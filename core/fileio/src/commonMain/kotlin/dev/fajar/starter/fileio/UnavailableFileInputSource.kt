@@ -5,10 +5,10 @@ import kotlinx.coroutines.flow.flow
 
 class UnavailableFileInputSource : FileInputSource {
     override suspend fun select(requestId: String, mediaTypes: Set<String>): FileInputMetadata? =
-        throw FileInputUnavailableException()
+        throw FileUnavailableException()
 
     override fun read(requestId: String): Flow<ByteArray> = flow {
-        throw FileInputUnavailableException()
+        throw FileUnavailableException()
     }
 
     override suspend fun release(requestId: String) = Unit

@@ -14,7 +14,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
 class DesktopFileInputSource : FileInputSource {
-    private val inputs = FileInputRegistry<Path>()
+    private val inputs = FileHandleRegistry<Path>()
 
     override suspend fun select(requestId: String, mediaTypes: Set<String>): FileInputMetadata? =
         withContext(Dispatchers.Main.immediate) {
@@ -45,7 +45,7 @@ class DesktopFileInputSource : FileInputSource {
                     runInterruptible(Dispatchers.IO) {
                         val attributes =
                             Files.readAttributes(selected, BasicFileAttributes::class.java)
-                        if (!attributes.isRegularFile) throw FileInputUnavailableException()
+                        if (!attributes.isRegularFile) throw FileUnavailableException()
                         FileInputMetadata(
                             selected.fileName.toString(),
                             Files.probeContentType(selected),
@@ -57,7 +57,7 @@ class DesktopFileInputSource : FileInputSource {
                 retained = true
                 metadata
             } finally {
-                if (!retained) inputs.discardSelection(requestId, ticket)
+                if (!retained) inputs.discard(requestId, ticket)
             }
         }
 
@@ -65,7 +65,7 @@ class DesktopFileInputSource : FileInputSource {
         flow {
                 coroutineScope {
                     val operation = currentCoroutineContext().job
-                    val selected = inputs.beginRead(requestId, operation)
+                    val selected = inputs.beginOperation(requestId, operation)
                     try {
                         // Opening and reading the channel share the producer's IO scope and
                         // finally.
@@ -73,7 +73,7 @@ class DesktopFileInputSource : FileInputSource {
                             emitAll(readFileChannel(channel))
                         }
                     } finally {
-                        inputs.endRead(requestId, operation)
+                        inputs.endOperation(requestId, operation)
                     }
                 }
             }

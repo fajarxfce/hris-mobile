@@ -22,7 +22,9 @@ import dev.fajar.starter.featureflags.data.datasources.RemoteFeatureFlagSource
 import dev.fajar.starter.featureflags.data.datasources.UnavailableFeatureFlagSource
 import dev.fajar.starter.featureflags.data.di.FeatureFlagDataModule
 import dev.fajar.starter.fileio.FileInputSource
+import dev.fajar.starter.fileio.FileOutputSource
 import dev.fajar.starter.fileio.UnavailableFileInputSource
+import dev.fajar.starter.fileio.UnavailableFileOutputSource
 import dev.fajar.starter.home.presentation.di.HomePresentationModule
 import dev.fajar.starter.identity.data.di.IdentityModule
 import dev.fajar.starter.identity.data.sso.config.SsoConfiguration
@@ -87,6 +89,7 @@ fun createAppContainer(
     transferInputs: TransferInputSource = UnavailableTransferInputSource(),
     location: LocationDataSource = UnavailableLocationDataSource(),
     fileInputs: FileInputSource = UnavailableFileInputSource(),
+    fileOutputs: FileOutputSource = UnavailableFileOutputSource(),
     http: Module? = null,
 ) = koinApplication {
     modules(
@@ -107,6 +110,7 @@ fun createAppContainer(
             single { environment }
             single<LocationDataSource> { location }.onClose { it?.close() }
             single<FileInputSource> { fileInputs }.onClose { it?.close() }
+            single<FileOutputSource> { fileOutputs }.onClose { it?.close() }
             single {
                 IdentityServer(
                     BuildRuntime.apiEndpoints.getValue(environment),

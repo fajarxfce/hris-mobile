@@ -7,6 +7,9 @@ import dev.fajar.starter.common.result.*
 fun failureText(failure: Failure): String =
     appString(
         when (failure.code) {
+            "client.file_write_failed",
+            "client.file_output_failed" -> AppString.FileSaveFailed
+            "client.file_exists" -> AppString.FileAlreadyExists
             "client.document_title_invalid" -> AppString.DocumentTitleInvalid
             "client.document_reason_invalid" -> AppString.DocumentReasonInvalid
             "client.document_employment_required" -> AppString.DocumentEmploymentRequired

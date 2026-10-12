@@ -5,6 +5,8 @@ import org.jetbrains.compose.resources.StringResource
 
 /** Explicit pairs keep runtime language changes portable across Android, iOS, desktop and Web. */
 enum class AppString(val english: StringResource, val indonesian: StringResource) {
+    FileSaveFailed(Res.string.file_save_failed_en, Res.string.file_save_failed_id),
+    FileAlreadyExists(Res.string.file_already_exists_en, Res.string.file_already_exists_id),
     DocumentDetails(Res.string.document_details_en, Res.string.document_details_id),
     DocumentUploadTitle(Res.string.document_upload_title_en, Res.string.document_upload_title_id),
     DocumentUploadReason(

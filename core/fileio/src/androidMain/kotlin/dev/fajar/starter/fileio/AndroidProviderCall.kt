@@ -9,7 +9,7 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 
 /**
  * The calling operation owns the request, worker and cancellation signal. Return detached values;
- * native resources such as cursors must be closed within the operation, before result delivery.
+ * native resources must be closed or transferred to an explicit owner before result delivery.
  */
 internal suspend fun <T> androidProviderCall(operation: (CancellationSignal) -> T): T =
     coroutineScope {

@@ -1,4 +1,7 @@
 <resources>
+    <string name="file_save_failed_en">The file could not be saved.</string>
+    <string name="file_already_exists_en">A file with this name already exists. Choose another name.</string>
+
     <string name="document_details_en">Document details</string>
     <string name="document_upload_title_en">Title</string>
     <string name="document_upload_reason_en">Description</string>

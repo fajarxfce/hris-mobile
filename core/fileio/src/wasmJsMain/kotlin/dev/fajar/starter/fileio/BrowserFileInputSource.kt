@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.*
 
 /** The page/container owns this source; each picker and FileReader has explicit cancellation. */
 class BrowserFileInputSource : FileInputSource {
-    private val inputs = FileInputRegistry<BrowserInputFile>()
+    private val inputs = FileHandleRegistry<BrowserInputFile>()
 
     override suspend fun select(requestId: String, mediaTypes: Set<String>): FileInputMetadata? =
         coroutineScope {
@@ -35,7 +35,7 @@ class BrowserFileInputSource : FileInputSource {
                 metadata
             } finally {
                 picker?.cancel()
-                if (!retained) inputs.discardSelection(requestId, ticket)
+                if (!retained) inputs.discard(requestId, ticket)
             }
         }
 
@@ -43,7 +43,7 @@ class BrowserFileInputSource : FileInputSource {
         flow {
                 coroutineScope {
                     val operation = currentCoroutineContext().job
-                    val file = inputs.beginRead(requestId, operation)
+                    val file = inputs.beginOperation(requestId, operation)
                     try {
                         var offset = 0L
                         val size = file.size.toLong()
@@ -58,13 +58,12 @@ class BrowserFileInputSource : FileInputSource {
                                 } finally {
                                     reader.cancel()
                                 }
-                            if (bytes.size.toLong() != until - offset)
-                                throw FileInputChangedException()
+                            if (bytes.size.toLong() != until - offset) throw FileChangedException()
                             emit(bytes)
                             offset = until
                         }
                     } finally {
-                        inputs.endRead(requestId, operation)
+                        inputs.endOperation(requestId, operation)
                     }
                 }
             }

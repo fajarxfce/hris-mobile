@@ -24,6 +24,7 @@ class MainActivity : FragmentActivity() {
         app.browserAuthorization.attach(this)
         app.location.attach(this)
         app.fileInputs.attach(this)
+        app.fileOutputs.attach(this)
         if (savedInstanceState == null)
             (intent.dataString
                     ?: intent.getStringExtra("destination")?.let {
@@ -54,6 +55,7 @@ class MainActivity : FragmentActivity() {
         (application as StarterApplication).browserAuthorization.detach(this)
         (application as StarterApplication).location.detach(this)
         (application as StarterApplication).fileInputs.detach(this)
+        (application as StarterApplication).fileOutputs.detach(this)
         super.onDestroy()
     }
 }

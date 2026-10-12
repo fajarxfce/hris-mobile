@@ -81,7 +81,7 @@ class EncryptedDocumentFileRepository(
                                 )
                             if (length.toLong() != expected || expected <= 0) {
                                 bytes.fill(0)
-                                throw FileInputChangedException()
+                                throw FileChangedException()
                             }
                             digest.update(bytes)
                             val encrypted = codec.block(access, draft, storedBytes, bytes, key)
@@ -98,7 +98,7 @@ class EncryptedDocumentFileRepository(
                             storedBytes += length
                             revision++
                         }
-                        if (storedBytes != draft.declaration.size) throw FileInputChangedException()
+                        if (storedBytes != draft.declaration.size) throw FileChangedException()
                         val sha256 = digest.finishHex()
                         val completion = codec.completion(access, draft, sha256, key)
                         if (!blobs.complete(scope, partition, draft.id, revision, completion))

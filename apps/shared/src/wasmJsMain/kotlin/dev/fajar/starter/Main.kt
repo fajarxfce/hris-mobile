@@ -14,6 +14,7 @@ import dev.fajar.starter.database.createAppDatabase
 import dev.fajar.starter.datastore.createUserPreferences
 import dev.fajar.starter.featureflags.data.datasources.BrowserFeatureFlagSource
 import dev.fajar.starter.fileio.BrowserFileInputSource
+import dev.fajar.starter.fileio.BrowserFileOutputSource
 import dev.fajar.starter.identity.data.sso.datasources.WebBrowserAuthorizationSource
 import dev.fajar.starter.notifications.data.datasources.*
 import dev.fajar.starter.notifications.domain.entities.NotificationMessage
@@ -50,6 +51,7 @@ fun main() {
             commandCredentials = BrowserProtectedCredentialStore(namespace, "command-content-key"),
             fileCredentials = BrowserProtectedCredentialStore(namespace, "file-content-key"),
             fileInputs = BrowserFileInputSource(),
+            fileOutputs = BrowserFileOutputSource(),
             remoteFeatureFlags = BrowserFeatureFlagSource(),
             browserAuthorization = WebBrowserAuthorizationSource(),
             platform = AppPlatform.Web,

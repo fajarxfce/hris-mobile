@@ -1,4 +1,7 @@
 <resources>
+    <string name="file_save_failed_id">File tidak dapat disimpan.</string>
+    <string name="file_already_exists_id">File dengan nama ini sudah ada. Pilih nama lain.</string>
+
     <string name="document_details_id">Detail dokumen</string>
     <string name="document_upload_title_id">Judul</string>
     <string name="document_upload_reason_id">Keterangan</string>
