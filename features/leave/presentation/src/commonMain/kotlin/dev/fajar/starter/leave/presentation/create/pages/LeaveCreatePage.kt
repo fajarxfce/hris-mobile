@@ -49,9 +49,27 @@ fun LeaveCreatePage(
                         appString(AppString.Refresh),
                         { onEvent(LeaveCreateEvent.ReloadRequested) },
                         enabled = state.work == null,
+                        loading = state.work == LeaveCreateWork.TYPES,
                     )
                 },
             )
+        },
+        bottomBar = {
+            if (
+                state.form != null &&
+                    state.restriction == null &&
+                    state.command == null &&
+                    state.commandReady &&
+                    state.preview != null
+            )
+                AppActionBar {
+                    AppButton(
+                        appString(AppString.LeaveSubmit),
+                        { onEvent(LeaveCreateEvent.SubmitRequested) },
+                        Modifier.fillMaxWidth(),
+                        enabled = state.canSubmit,
+                    )
+                }
         },
     ) {
         if (state.work != null) item(key = "loading") { AppLoading(compact = true) }
@@ -193,13 +211,6 @@ fun LeaveCreatePage(
                     item(key = "evidence-required") {
                         AppFeedback(appString(AppString.LeaveAttachmentRequired))
                     }
-                item(key = "submit") {
-                    AppButton(
-                        appString(AppString.LeaveSubmit),
-                        { onEvent(LeaveCreateEvent.SubmitRequested) },
-                        enabled = state.canSubmit,
-                    )
-                }
             }
         }
     }

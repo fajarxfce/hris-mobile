@@ -2,6 +2,7 @@ package dev.fajar.starter.leave.presentation.detail.widgets
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.semantics
@@ -15,23 +16,27 @@ import io.github.composefluent.FluentTheme
 
 @Composable
 fun LeaveChangeRow(change: LeaveChange) {
-    Column(
+    Row(
         Modifier.fillMaxWidth().semantics(mergeDescendants = true) {},
-        verticalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        FlowRow(
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
+        Box(Modifier.padding(top = 7.dp).size(6.dp).background(AppColors.muted, CircleShape))
+        Column(
+            Modifier.weight(1f).padding(bottom = 8.dp),
+            verticalArrangement = Arrangement.spacedBy(4.dp),
         ) {
             AppText(appString(change.kind.label()), style = FluentTheme.typography.bodyStrong)
-            AppBadge(appString(change.status.label()))
+            AppText(
+                formatDate(change.recordedAt.toEpochMilliseconds(), appLanguageTag()),
+                color = AppColors.muted,
+                style = FluentTheme.typography.caption,
+            )
+            AppText(
+                appString(change.status.label()),
+                color = AppColors.muted,
+                style = FluentTheme.typography.caption,
+            )
+            if (change.reason.isNotBlank()) AppText(change.reason)
         }
-        if (change.reason.isNotBlank()) AppText(change.reason)
-        AppText(
-            formatDate(change.recordedAt.toEpochMilliseconds(), appLanguageTag()),
-            color = AppColors.muted,
-            style = FluentTheme.typography.caption,
-        )
-        Box(Modifier.fillMaxWidth().height(1.dp).background(AppColors.border))
     }
 }

@@ -614,3 +614,17 @@ rule were checked without launching or driving its UI. These observations do not
 establish frame-time, heap or battery performance. The reusable components and
 regression were also validated in Compose Fluent Starter with 198 tests and
 Android/Web builds.
+
+## Leave layout and action placement
+
+The Leave overview and request detail keep their available actions below the
+scrolling content. Creation keeps submission below its calculation review.
+Root checks passed with 749 desktop tests, five application Chromium tests and
+Android dev assembly. Regressions cover fixed actions at large text sizes, disabled
+actions during refresh/recovery, denied reads, and the original durable submission
+after response loss.
+
+The API 35 emulator opened balances, creation and existing request details against
+the development API. Light appearance, dark appearance at 150% text, fixed request
+actions and return navigation were inspected. The shared layout tests also cover
+Indonesian at 200% text. No frame-time or memory measurements were taken.

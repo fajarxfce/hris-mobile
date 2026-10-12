@@ -4,6 +4,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import dev.fajar.starter.designsystem.components.*
 import dev.fajar.starter.designsystem.theme.AppColors
@@ -15,6 +18,7 @@ import io.github.composefluent.FluentTheme
 import io.github.composefluent.icons.Icons
 import io.github.composefluent.icons.regular.ArrowLeft
 import io.github.composefluent.icons.regular.ArrowSync
+import io.github.composefluent.icons.regular.Document
 
 @Composable
 fun LeaveRequestPage(
@@ -43,12 +47,17 @@ fun LeaveRequestPage(
                         appString(AppString.Refresh),
                         { onEvent(LeaveRequestEvent.RefreshRequested) },
                         enabled = !state.refreshing && !state.action.working,
+                        loading = state.refreshing,
                     )
                 },
             )
         },
+        bottomBar = {
+            if (state.action.command == null && state.actionOptions.isNotEmpty())
+                AppActionBar { LeaveRequestActions(state, onEvent) }
+        },
     ) {
-        if (state.loading || state.refreshing || state.action.working)
+        if (state.loading || state.action.working)
             item(key = "loading") { AppLoading(compact = state.content != null) }
         state.failure?.let { failure ->
             item(key = "failure") {
@@ -72,11 +81,11 @@ fun LeaveRequestPage(
         if (content != null) {
             val request = content.request
             item(key = "summary") { LeaveRequestSummaryCard(request) }
-            if (state.action.command != null || state.availableActions.isNotEmpty())
-                item(key = "actions") { LeaveRequestActions(state, onEvent) }
+            if (state.action.command != null)
+                item(key = "command") { LeaveActionStatusCard(state, onEvent) }
             item(key = "reason") {
-                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    AppText(
+                AppCard(Modifier.fillMaxWidth(), padding = 16.dp, spacing = 8.dp) {
+                    AppHeading(
                         appString(AppString.LeaveReason),
                         style = FluentTheme.typography.bodyStrong,
                     )
@@ -84,22 +93,35 @@ fun LeaveRequestPage(
                 }
             }
             item(key = "dates-heading") {
-                AppText(appString(AppString.LeaveDates), style = FluentTheme.typography.subtitle)
+                AppHeading(
+                    appString(AppString.LeaveDates),
+                    style = FluentTheme.typography.bodyStrong,
+                )
             }
             items(request.days, key = { "day/${it.date}" }) { LeaveDayRow(it) }
             if (request.attachments.isNotEmpty()) {
                 item(key = "attachments-heading") {
-                    AppText(
+                    AppHeading(
                         appString(AppString.LeaveAttachments),
-                        style = FluentTheme.typography.subtitle,
+                        style = FluentTheme.typography.bodyStrong,
                     )
                 }
                 items(request.attachments, key = { "attachment/${it.revisionId}" }) { attachment ->
-                    AppText(attachment.fileName)
+                    Row(
+                        Modifier.fillMaxWidth().semantics(mergeDescendants = true) {},
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    ) {
+                        AppIcon(Icons.Regular.Document)
+                        AppText(attachment.fileName, Modifier.weight(1f))
+                    }
                 }
             }
             item(key = "history-heading") {
-                AppText(appString(AppString.LeaveActivity), style = FluentTheme.typography.subtitle)
+                AppHeading(
+                    appString(AppString.LeaveActivity),
+                    style = FluentTheme.typography.bodyStrong,
+                )
             }
             items(request.history.items, key = { "change/${it.version}" }) { LeaveChangeRow(it) }
             if (request.history.items.isEmpty())

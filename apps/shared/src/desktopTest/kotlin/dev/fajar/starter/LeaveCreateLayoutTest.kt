@@ -113,17 +113,13 @@ class LeaveCreateLayoutTest {
         compose.onNode(excludedDate).assertIsDisplayed()
         compose
             .onNode(hasText("Kirim pengajuan") and hasClickAction())
-            .performScrollTo()
             .assertIsEnabled()
             .performClick()
         compose.runOnIdle {
             assertEquals(LeaveCreateEvent.SubmitRequested, events.last())
             state = state.copy(previewExpired = true)
         }
-        compose
-            .onNode(hasText("Kirim pengajuan") and hasClickAction())
-            .performScrollTo()
-            .assertIsNotEnabled()
+        compose.onNode(hasText("Kirim pengajuan") and hasClickAction()).assertIsNotEnabled()
         assertEquals(
             back,
             compose.onNodeWithContentDescription("Kembali").fetchSemanticsNode().boundsInRoot,
@@ -214,9 +210,9 @@ class LeaveCreateLayoutTest {
             }
         }
         compose
-            .onNode(hasScrollToIndexAction())
-            .performScrollToNode(hasText("Kirim pengajuan") and hasClickAction())
-        compose.onNode(hasText("Kirim pengajuan") and hasClickAction()).assertIsEnabled()
+            .onNode(hasText("Kirim pengajuan") and hasClickAction())
+            .assertIsDisplayed()
+            .assertIsEnabled()
         compose
             .onNode(hasScrollToIndexAction())
             .performScrollToNode(hasContentDescription("Hapus surat-pemeriksaan.pdf"))
@@ -229,9 +225,9 @@ class LeaveCreateLayoutTest {
             .performScrollToNode(hasText("Tambah lampiran") and hasClickAction())
         compose.onNode(hasText("Tambah lampiran") and hasClickAction()).assertIsEnabled()
         compose
-            .onNode(hasScrollToIndexAction())
-            .performScrollToNode(hasText("Kirim pengajuan") and hasClickAction())
-        compose.onNode(hasText("Kirim pengajuan") and hasClickAction()).assertIsNotEnabled()
+            .onNode(hasText("Kirim pengajuan") and hasClickAction())
+            .assertIsDisplayed()
+            .assertIsNotEnabled()
         compose.onNodeWithContentDescription("Kembali").assertIsDisplayed()
     }
 

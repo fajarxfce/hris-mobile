@@ -33,6 +33,41 @@ class LeaveRequestLayoutTest {
     @get:Rule val compose = createComposeRule()
 
     @Test
+    fun requestActionWaitsForRecoveryAndKeepsItsPositionWhileHistoryRefreshes() {
+        val events = mutableListOf<LeaveRequestEvent>()
+        var state by mutableStateOf(LeaveRequestState(content = snapshot(), loading = false))
+        compose.setContent {
+            AppTheme {
+                Box(Modifier.size(360.dp, 760.dp)) {
+                    LeaveRequestPage(state, rememberLazyListState(), events::add)
+                }
+            }
+        }
+        val action = compose.onNode(hasText("Withdraw cancellation") and hasClickAction())
+        val position =
+            action.assertIsDisplayed().assertIsNotEnabled().fetchSemanticsNode().boundsInRoot
+        compose.runOnIdle { state = state.copy(action = state.action.copy(ready = true)) }
+        compose.onNode(hasScrollToIndexAction()).performScrollToNode(hasText("Earlier updates"))
+        action.assertIsDisplayed().assertIsEnabled()
+        assertEquals(position, action.fetchSemanticsNode().boundsInRoot)
+        compose.runOnIdle { state = state.copy(refreshing = true) }
+        action.assertIsNotEnabled().performClick()
+        compose.runOnIdle {
+            assertTrue(events.isEmpty())
+            state = state.copy(refreshing = false)
+        }
+        action.performClick()
+        compose.runOnIdle {
+            assertEquals(
+                listOf<LeaveRequestEvent>(
+                    LeaveRequestEvent.ActionRequested(LeaveRequestAction.WITHDRAW_CANCELLATION)
+                ),
+                events,
+            )
+        }
+    }
+
+    @Test
     fun cancellationDialogKeepsMultilineReasonConfirmationAndCloseReachableAtLargeText() {
         val events = mutableListOf<LeaveRequestEvent>()
         var form by
@@ -161,7 +196,17 @@ class LeaveRequestLayoutTest {
             ),
             "generation",
             selection,
-            details.copy(status = LeaveStatus.CANCELLATION_PENDING),
+            details.copy(
+                status = LeaveStatus.CANCELLATION_PENDING,
+                availableActions = setOf(LeaveAction.WITHDRAW),
+                cancellation =
+                    LeaveWorkflow(
+                        "ffffffff-ffff-4fff-8fff-ffffffffffff",
+                        LeaveWorkflowStatus.PENDING,
+                        0,
+                        0,
+                    ),
+            ),
             now,
             now,
         )

@@ -11,6 +11,8 @@ import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
+import dev.fajar.starter.common.result.Failure
+import dev.fajar.starter.common.result.FailureKind
 import dev.fajar.starter.designsystem.theme.AppTheme
 import dev.fajar.starter.leave.domain.entities.*
 import dev.fajar.starter.leave.presentation.overview.*
@@ -27,6 +29,41 @@ import org.junit.Test
 
 class LeaveLayoutTest {
     @get:Rule val compose = createComposeRule()
+
+    @Test
+    fun requestActionStaysVisibleWhileScrollingAndCannotRunDuringRefreshOrDeniedReads() {
+        val events = mutableListOf<LeaveEvent>()
+        var state by mutableStateOf(LeaveState(content = overview(), loading = false))
+        compose.setContent {
+            AppTheme {
+                Box(Modifier.size(360.dp, 760.dp)) {
+                    LeavePage(state, rememberLazyListState(), events::add)
+                }
+            }
+        }
+        val action = compose.onNode(hasText("Request leave") and hasClickAction())
+        val position = action.assertIsDisplayed().fetchSemanticsNode().boundsInRoot
+        compose
+            .onNode(hasScrollToIndexAction())
+            .performScrollToNode(hasText("Cancellation pending"))
+        assertEquals(position, action.assertIsDisplayed().fetchSemanticsNode().boundsInRoot)
+        compose.runOnIdle { state = state.copy(refreshing = true) }
+        action.assertIsDisplayed().assertIsNotEnabled().performClick()
+        compose.runOnIdle {
+            assertTrue(events.isEmpty())
+            state = state.copy(refreshing = false)
+        }
+        action.assertIsEnabled().performClick()
+        compose.runOnIdle {
+            assertEquals(listOf<LeaveEvent>(LeaveEvent.CreateRequested), events)
+            state =
+                state.copy(
+                    refreshFailure =
+                        Failure(FailureKind.AccessDenied, "Denied", code = "access_denied")
+                )
+        }
+        action.assertDoesNotExist()
+    }
 
     @Test
     fun indonesianLargeTextKeepsBalancesFiltersAndFixedNavigationReadable() {
@@ -49,6 +86,7 @@ class LeaveLayoutTest {
             }
         }
         compose.onNodeWithText("Saldo cuti").assertExists()
+        compose.onNode(hasText("Ajukan cuti") and hasClickAction()).assertIsDisplayed()
         compose
             .onNodeWithText("12,5 hari", useUnmergedTree = true)
             .performScrollTo()
@@ -65,6 +103,7 @@ class LeaveLayoutTest {
         compose.runOnIdle { assertEquals(LeaveEvent.YearRequested(2025), events.single()) }
         compose.onNode(hasScrollToIndexAction()).performScrollToNode(hasText("Menunggu pembatalan"))
         compose.onNodeWithText("Menunggu pembatalan", useUnmergedTree = true).assertIsDisplayed()
+        compose.onNode(hasText("Ajukan cuti") and hasClickAction()).assertIsDisplayed()
         compose.onNodeWithContentDescription("Kembali").assertIsDisplayed().performClick()
         compose.runOnIdle { assertEquals(LeaveEvent.BackRequested, events.last()) }
         val image = Image.makeFromBitmap(compose.onRoot().captureToImage().asSkiaBitmap())

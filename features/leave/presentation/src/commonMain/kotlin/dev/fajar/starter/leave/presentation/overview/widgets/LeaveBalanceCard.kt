@@ -15,7 +15,7 @@ import io.github.composefluent.FluentTheme
 @Composable
 fun LeaveBalanceCard(balance: LeaveBalance) {
     AppCard(Modifier.fillMaxWidth(), padding = 16.dp) {
-        Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
             FlowRow(
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -27,10 +27,14 @@ fun LeaveBalanceCard(balance: LeaveBalance) {
                 Modifier.semantics(mergeDescendants = true) {},
                 verticalArrangement = Arrangement.spacedBy(4.dp),
             ) {
-                AppText(appString(AppString.LeaveAvailable), color = AppColors.muted)
+                AppText(
+                    appString(AppString.LeaveAvailable),
+                    color = AppColors.muted,
+                    style = FluentTheme.typography.caption,
+                )
                 AppText(
                     leaveDaysText(balance.available),
-                    style = FluentTheme.typography.title,
+                    style = FluentTheme.typography.subtitle,
                     color = AppColors.accent,
                 )
             }

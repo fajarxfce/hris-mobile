@@ -212,9 +212,10 @@ versions and obsolete outcomes cannot replace the visible operation.
 
 ## Remaining workflow
 
-Subsequent work adds new file acquisition and resumable document transfer.
-A cached balance is never
-a reservation or authorization to submit.
+Entitlement administration and team workflows remain separate from employee
+self-service. Published evidence and local file transfer are covered by
+[Documents](documents.md). A cached balance is never a reservation or authorization
+to submit.
 
 ## Validation
 

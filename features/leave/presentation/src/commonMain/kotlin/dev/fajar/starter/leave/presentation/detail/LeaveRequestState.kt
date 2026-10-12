@@ -38,20 +38,18 @@ data class LeaveRequestState(
                 refreshFailure?.code in requestVerificationCodes ||
                 action.failure?.code in requestVerificationCodes
 
-    val availableActions: List<LeaveRequestAction>
+    val actionOptions: List<LeaveRequestAction>
         get() {
             val snapshot = content ?: return emptyList()
-            if (
-                readRestricted ||
-                    refreshing ||
-                    action.working ||
-                    !action.ready ||
-                    action.command != null ||
-                    admitLeaveWrite(snapshot.access) is AppResult.Failed
-            )
+            if (readRestricted || admitLeaveWrite(snapshot.access) is AppResult.Failed)
                 return emptyList()
             return LeaveRequestAction.entries.filter(snapshot.request::allows)
         }
+
+    val availableActions: List<LeaveRequestAction>
+        get() =
+            if (refreshing || action.working || !action.ready || action.command != null) emptyList()
+            else actionOptions
 
     val canRetryAction: Boolean
         get() =

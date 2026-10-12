@@ -17,9 +17,13 @@ fun LeaveRequestSummaryCard(request: LeaveRequestDetails) {
     AppCard(
         Modifier.fillMaxWidth().semantics(mergeDescendants = true) {},
         padding = 16.dp,
-        spacing = 12.dp,
+        spacing = 8.dp,
     ) {
-        AppText(request.policy.name, style = FluentTheme.typography.subtitle)
+        AppText(request.policy.name, style = FluentTheme.typography.bodyStrong)
+        AppText(
+            leaveDateRange(request.days.first().date, request.days.last().date),
+            style = FluentTheme.typography.subtitle,
+        )
         FlowRow(
             horizontalArrangement = Arrangement.spacedBy(12.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -27,8 +31,11 @@ fun LeaveRequestSummaryCard(request: LeaveRequestDetails) {
             AppText(leaveDaysText(request.charged), style = FluentTheme.typography.bodyStrong)
             AppBadge(appString(request.status.label()))
         }
-        AppText(leaveDateRange(request.days.first().date, request.days.last().date))
-        AppText(request.employeeName + " · " + request.employeeNumber, color = AppColors.muted)
+        AppText(
+            request.employeeName + " · " + request.employeeNumber,
+            Modifier.padding(top = 4.dp),
+            color = AppColors.muted,
+        )
         AppText(
             appString(
                 AppString.LeaveSubmittedOn,

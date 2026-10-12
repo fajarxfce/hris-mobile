@@ -709,10 +709,7 @@ class AppFlowTest {
             waitFor("Welcome")
             compose.onNode(hasText("Leave") and hasClickAction()).performScrollTo().performClick()
             waitFor("12.5 days")
-            compose
-                .onNode(hasText("Request leave") and hasClickAction())
-                .performScrollTo()
-                .performClick()
+            compose.onNode(hasText("Request leave") and hasClickAction()).performClick()
             waitFor("Select leave type")
             compose
                 .onNode(hasText("Start date") and hasClickAction())
@@ -762,10 +759,7 @@ class AppFlowTest {
                 .onNode(hasText(formatLocalDate("2026-10-17", "en")) and hasClickAction().not())
                 .assertExists()
             assertEquals(0, server.leave.creation.commits)
-            compose
-                .onNode(hasText("Submit request") and hasClickAction())
-                .performScrollTo()
-                .assertIsNotEnabled()
+            compose.onNode(hasText("Submit request") and hasClickAction()).assertIsNotEnabled()
             val pendingDocuments = CompletableDeferred<Unit>()
             server.documents.gate = pendingDocuments
             compose
@@ -792,10 +786,7 @@ class AppFlowTest {
             assertEquals(1, server.leave.creation.previews.size)
             capture("leave-creation-preview")
             server.leave.creation.loseNextResponse = true
-            compose
-                .onNode(hasText("Submit request") and hasClickAction())
-                .performScrollTo()
-                .performClick()
+            compose.onNode(hasText("Submit request") and hasClickAction()).performClick()
             waitFor("The delivery result is not yet known.")
             compose.waitUntil {
                 compose
@@ -818,15 +809,12 @@ class AppFlowTest {
             waitFor("Leave balances")
             compose.waitUntil {
                 compose
-                    .onAllNodes(hasText("Request leave") and hasClickAction())
+                    .onAllNodes(hasText("Request leave") and hasClickAction() and isEnabled())
                     .fetchSemanticsNodes()
                     .isNotEmpty()
             }
             server.leave.offline = true
-            compose
-                .onNode(hasText("Request leave") and hasClickAction())
-                .performScrollTo()
-                .performClick()
+            compose.onNode(hasText("Request leave") and hasClickAction()).performClick()
             waitFor("The delivery result is not yet known.")
             compose.onNodeWithText("Family appointment\nKeep these dates").assertExists()
             server.leave.offline = false

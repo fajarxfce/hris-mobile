@@ -97,6 +97,13 @@ or the application opens the admitted company. Sign out stays in the fixed botto
 bar. Account shows company-switch progress in its header and sign-out progress
 beside that action; navigation controls cannot interrupt either operation.
 
+Leave keeps the request action below its balance/history list. Request details
+separate status and dates from the reason and activity history; available actions
+stay in the fixed bottom bar. Refresh temporarily disables those actions without
+moving them. Delivery recovery remains attached to the original saved command.
+Creation keeps the confirmed calculation in the scrollable review and submission
+in the bottom bar, including at large text sizes.
+
 ## Search and filters
 
 Use `AppSearchField` for compact search, keeping its accessible label and explicit

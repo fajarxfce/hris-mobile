@@ -41,13 +41,24 @@ fun LeavePage(state: LeaveState, list: LazyListState, onEvent: (LeaveEvent) -> U
                         appString(AppString.Refresh),
                         { onEvent(LeaveEvent.RefreshRequested) },
                         enabled = !state.refreshing,
+                        loading = state.refreshing,
                     )
                 },
             )
         },
+        bottomBar = {
+            if (state.showCreateAction)
+                AppActionBar {
+                    AppButton(
+                        appString(AppString.LeaveNewRequest),
+                        { onEvent(LeaveEvent.CreateRequested) },
+                        Modifier.fillMaxWidth(),
+                        enabled = state.canCreate,
+                    )
+                }
+        },
     ) {
-        if (state.loading || state.refreshing)
-            item(key = "loading") { AppLoading(compact = state.content != null) }
+        if (state.loading) item(key = "loading") { AppLoading(compact = state.content != null) }
         val failure = state.refreshFailure ?: state.cacheFailure
         if (failure != null)
             item(key = "failure") {
@@ -68,13 +79,6 @@ fun LeavePage(state: LeaveState, list: LazyListState, onEvent: (LeaveEvent) -> U
             }
         val content = state.content
         val selection = state.filters
-        if (state.canCreate)
-            item(key = "create-request") {
-                AppButton(
-                    appString(AppString.LeaveNewRequest),
-                    { onEvent(LeaveEvent.CreateRequested) },
-                )
-            }
         if (content?.directory?.items?.isEmpty() == true)
             item(key = "no-employment") { AppText(appString(AppString.CalendarNoEmployment)) }
         if (
@@ -93,7 +97,10 @@ fun LeavePage(state: LeaveState, list: LazyListState, onEvent: (LeaveEvent) -> U
             }
         if (selection?.employeeId != null && !state.readRestricted) {
             item(key = "balances-heading") {
-                AppText(appString(AppString.LeaveBalances), style = FluentTheme.typography.subtitle)
+                AppText(
+                    appString(AppString.LeaveBalances),
+                    style = FluentTheme.typography.bodyStrong,
+                )
             }
             selection.year?.let { year -> item(key = "year") { LeaveYearBar(year, true, onEvent) } }
             if (content?.balances?.items?.isEmpty() == true)
@@ -136,7 +143,7 @@ fun LeavePage(state: LeaveState, list: LazyListState, onEvent: (LeaveEvent) -> U
                 ) {
                     AppText(
                         appString(AppString.LeaveRequests),
-                        style = FluentTheme.typography.subtitle,
+                        style = FluentTheme.typography.bodyStrong,
                     )
                     AppText(
                         appString(AppString.LeaveAllDates),

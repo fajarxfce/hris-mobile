@@ -14,12 +14,14 @@ data class LeaveState(
     val refreshFailure: Failure? = null,
     val dialog: LeaveDialog? = null,
 ) {
-    val canCreate: Boolean
+    val showCreateAction: Boolean
         get() =
             !readRestricted &&
-                !refreshing &&
                 content?.selection?.employeeId != null &&
                 content.access.permissions.contains("leave.self.manage")
+
+    val canCreate: Boolean
+        get() = showCreateAction && !refreshing
 
     val filters: LeaveSelection?
         get() = selection ?: content?.selection
