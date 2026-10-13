@@ -16,7 +16,14 @@ data class AttendanceHistoryState(
     val cacheFailure: Failure? = null,
     val refreshFailure: Failure? = null,
     val needsVerification: Boolean = false,
-)
+) {
+    val failure: Failure?
+        get() =
+            refreshFailure
+                ?: cacheFailure?.takeUnless {
+                    refreshing && it.code == "client.attendance_cache_expired"
+                }
+}
 
 data class AttendanceHistoryContent(
     val snapshot: AttendanceSnapshot,

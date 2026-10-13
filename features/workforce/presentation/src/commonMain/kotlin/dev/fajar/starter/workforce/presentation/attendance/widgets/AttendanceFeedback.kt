@@ -10,7 +10,7 @@ import dev.fajar.starter.workforce.presentation.attendance.*
 
 @Composable
 fun AttendanceFeedback(state: AttendanceState, onEvent: (AttendanceEvent) -> Unit) {
-    val failure = state.failure ?: return
+    val failure = state.feedbackFailure ?: return
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         AppFeedback(failureText(failure))
         if (state.needsVerification)

@@ -8,6 +8,11 @@ import dev.fajar.starter.leave.domain.entities.*
 import dev.fajar.starter.leave.domain.policies.leaveFailure
 import dev.fajar.starter.leave.presentation.overview.*
 import kotlin.test.*
+import kotlin.time.Duration.Companion.hours
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Duration.Companion.seconds
+import kotlin.time.Instant
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.test.*
@@ -339,11 +344,112 @@ class LeaveViewModelTest {
         }
     }
 
+    @Test
+    fun expiredVisibleReadRenewsWithoutAnErrorWhilePending() = runTest {
+        withLeave { fixture, model, _ ->
+            model.onEvent(LeaveEvent.Entered)
+            runCurrent()
+            val saved = assertNotNull(model.state.value.content)
+            val writes = fixture.writes
+            val release = CompletableDeferred<Unit>()
+            fixture.directoryCall = {
+                release.await()
+                AppResult.Success(fixture.directory)
+            }
+            fixture.records.value =
+                AppResult.Success(saved.copy(expiresAt = fixture.clock.now() + 1.seconds))
+            runCurrent()
+            advanceTimeBy(1_001)
+            runCurrent()
+            assertTrue(model.state.value.refreshing)
+            assertTrue(model.state.value.readRestricted)
+            assertNull(model.state.value.content)
+            assertNull(model.state.value.failure)
+            assertEquals(writes, fixture.writes)
+            release.complete(Unit)
+            runCurrent()
+            assertNotNull(model.state.value.content)
+            assertFalse(model.state.value.readRestricted)
+            assertNull(model.state.value.failure)
+            assertEquals(writes + 1, fixture.writes)
+        }
+    }
+
+    @Test
+    fun failedAutomaticRenewalRetainsTheReadGateAndStopsRetrying() = runTest {
+        withLeave { fixture, model, _ ->
+            model.onEvent(LeaveEvent.Entered)
+            runCurrent()
+            val saved = assertNotNull(model.state.value.content)
+            var attempts = 0
+            fixture.directoryCall = {
+                attempts++
+                leaveFailure("client.network", FailureKind.Network)
+            }
+            fixture.records.value =
+                AppResult.Success(saved.copy(expiresAt = fixture.clock.now() + 1.seconds))
+            runCurrent()
+            advanceTimeBy(1_001)
+            runCurrent()
+            assertEquals(1, attempts)
+            assertEquals("client.network", model.state.value.failure?.code)
+            assertNull(model.state.value.content)
+            assertTrue(model.state.value.readRestricted)
+            advanceTimeBy(10_000)
+            runCurrent()
+            assertEquals(1, attempts)
+            fixture.directoryCall = { AppResult.Success(fixture.directory) }
+            model.onEvent(LeaveEvent.RefreshRequested)
+            runCurrent()
+            assertNotNull(model.state.value.content)
+            assertFalse(model.state.value.readRestricted)
+            assertNull(model.state.value.failure)
+        }
+    }
+
+    @Test
+    fun renewedWorkspaceDoesNotExtendOldDataAndExpiryAcquiresANewSnapshot() = runTest {
+        withLeave { fixture, model, _ ->
+            model.onEvent(LeaveEvent.Entered)
+            runCurrent()
+            model.onEvent(LeaveEvent.YearRequested(2025))
+            runCurrent()
+            val previous = assertNotNull(model.state.value.content)
+            val reads = fixture.directoryReads
+            advanceTimeBy(30.minutes)
+            runCurrent()
+            val now = fixture.clock.now()
+            fixture.workspaceState.value =
+                AppResult.Success(
+                    fixture.workspace.copy(
+                        admission =
+                            fixture.workspace.admission.copy(
+                                checkedAt = now,
+                                expiresAt = now + 1.hours,
+                            )
+                    )
+                )
+            runCurrent()
+            assertEquals(previous.generation, model.state.value.content?.generation)
+            assertEquals(previous.expiresAt, model.state.value.content?.expiresAt)
+            assertEquals(reads, fixture.directoryReads)
+            advanceTimeBy(30.minutes + 1.milliseconds)
+            runCurrent()
+            val renewed = assertNotNull(model.state.value.content)
+            assertNotEquals(previous.generation, renewed.generation)
+            assertEquals(2025, renewed.selection.year)
+            assertEquals(reads + 1, fixture.directoryReads)
+            assertNull(model.state.value.failure)
+        }
+    }
+
     private suspend fun TestScope.withLeave(
         test: suspend (LeavePresentationFixture, LeaveViewModel, ViewModelStore) -> Unit
     ) {
         Dispatchers.setMain(StandardTestDispatcher(testScheduler))
-        val fixture = LeavePresentationFixture()
+        val fixture = LeavePresentationFixture {
+            Instant.parse("2026-10-12T01:00:00Z") + testScheduler.currentTime.milliseconds
+        }
         val model = LeaveViewModel(fixture.workspace.id, fixture.observe, fixture.refresh)
         val owner = ViewModelStore().apply { put("leave", model) }
         try {

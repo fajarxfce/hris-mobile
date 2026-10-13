@@ -73,6 +73,11 @@ class AttendanceViewModel(
                         ensureActive()
                         if (requested != state.value.selection || state.value.readFailure != null)
                             return@collect
+                        val renewExpiredRead =
+                            visible &&
+                                state.value.content != null &&
+                                result is AppResult.Failed &&
+                                result.failure.code == "client.attendance_cache_expired"
                         when (result) {
                             is AppResult.Failed -> {
                                 refreshRequired = true
@@ -110,6 +115,7 @@ class AttendanceViewModel(
                                     }
                             }
                         }
+                        if (renewExpiredRead) onEvent(AttendanceEvent.RefreshRequested)
                     }
             }
     }
@@ -138,6 +144,7 @@ class AttendanceViewModel(
         updateState {
             it.copy(
                 refreshing = true,
+                loading = it.content == null,
                 failure = it.readFailure,
                 needsVerification = it.readFailure?.code in verificationCodes,
                 settingsTarget = null,

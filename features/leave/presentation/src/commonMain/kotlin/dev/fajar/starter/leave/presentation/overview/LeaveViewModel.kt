@@ -64,7 +64,12 @@ class LeaveViewModel(
                         ensureActive()
                         if (selection != state.value.selection || state.value.readRestricted)
                             return@collect
+                        val renewExpiredRead =
+                            state.value.content != null &&
+                                result is AppResult.Failed &&
+                                result.failure.code == "client.leave_cache_expired"
                         updateState { it.withCachedLeave(result) }
+                        if (renewExpiredRead) onEvent(LeaveEvent.RefreshRequested)
                     }
             }
     }
@@ -83,6 +88,7 @@ class LeaveViewModel(
         updateState {
             it.copy(
                 refreshing = true,
+                loading = it.content == null,
                 cacheFailure =
                     it.refreshFailure?.takeIf(::leaveFailureInvalidatesCache) ?: it.cacheFailure,
                 refreshFailure = it.refreshFailure?.takeIf(::leaveFailureInvalidatesCache),

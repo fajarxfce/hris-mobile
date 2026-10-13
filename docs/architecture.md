@@ -78,6 +78,17 @@ lease and make retained cache data readable. Presentation stops that cache
 subscription until a fresh admitted acquisition succeeds. Cache deletion remains
 best effort; tests retain old ciphertext when cleanup fails to verify the gate.
 
+Attendance, calendar, leave, overtime, payslip and expense read screens request one
+fresh acquisition when an already displayed snapshot expires. Their MVI owner
+uses the existing expiry observation and drops duplicate requests. Clearing the
+expired content disarms automatic recovery until a valid snapshot is admitted;
+a failed acquisition therefore cannot start a retry loop. Hidden Home content
+expires without fetching, and resumes through its existing entry policy.
+The read gate stays closed during recovery. Presentation hides the renewable
+cache-expiry message while refreshing and reports a failed acquisition's cause;
+session/MFA/access denials keep their existing gates. Renewal never extends the
+timestamp of old data or resubmits a business command.
+
 Mapped record failures can recover on a later storage emission. An upstream
 storage-flow exception instead ends that subscription after reporting failure.
 The presentation owner must reopen observation after a successful explicit

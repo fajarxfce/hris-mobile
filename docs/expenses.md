@@ -17,6 +17,10 @@ Detail acquisition reads the claim before and after its history, latest
 submission and payment progress. A changed claim or inconsistent revision
 returns a conflict without publishing a partial view or silently retrying.
 Amounts remain exact decimal domain values; approval does not imply payment.
+Expiry of a displayed list or claim requests one new read through the owning
+ViewModel. Pending recovery keeps private content hidden without displaying the
+cache-expired message. A failed acquisition reports its cause and requires an
+explicit retry; draft and command confirmation are never repeated automatically.
 
 ## Draft preparation
 

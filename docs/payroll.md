@@ -19,6 +19,9 @@ and export requests are dropped; selecting a different year cancels obsolete
 work. Row navigation only accepts a visible payslip ID. Refresh preserves an
 admitted snapshot on transport failure. Back releases observation and pending
 work; a known access denial remains gated through retries and failed cleanup.
+Expiry of a displayed list or payslip starts one fresh read. The expiry message
+is suppressed while that read is pending; failure reports its cause without
+reopening old financial content or automatically repeating the request.
 
 ## Reads and offline access
 

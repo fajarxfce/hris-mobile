@@ -54,8 +54,13 @@ class PayslipViewModel(
                     }
                     .collect { result ->
                         ensureActive()
-                        if (!state.value.readRestricted)
-                            updateState { it.withCachedPayslip(result) }
+                        if (state.value.readRestricted) return@collect
+                        val renewExpiredRead =
+                            state.value.content != null &&
+                                result is AppResult.Failed &&
+                                result.failure.code == "client.payslip_cache_expired"
+                        updateState { it.withCachedPayslip(result) }
+                        if (renewExpiredRead) onEvent(PayslipEvent.RefreshRequested)
                     }
             }
     }
@@ -89,6 +94,7 @@ class PayslipViewModel(
         updateState {
             it.copy(
                 refreshing = true,
+                loading = it.content == null,
                 cacheFailure = it.restriction ?: it.cacheFailure,
                 refreshFailure = it.refreshFailure?.takeIf(::payslipFailureInvalidatesCache),
                 exportFailure = it.exportFailure?.takeIf(::payslipFailureInvalidatesCache),

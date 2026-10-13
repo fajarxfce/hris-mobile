@@ -33,6 +33,13 @@ data class LeaveState(
 
     val needsVerification: Boolean
         get() = cacheFailure?.code in verificationCodes || refreshFailure?.code in verificationCodes
+
+    val failure: Failure?
+        get() =
+            refreshFailure
+                ?: cacheFailure?.takeUnless {
+                    refreshing && it.code == "client.leave_cache_expired"
+                }
 }
 
 enum class LeaveDialog {

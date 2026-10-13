@@ -59,7 +59,7 @@ fun LeavePage(state: LeaveState, list: LazyListState, onEvent: (LeaveEvent) -> U
         },
     ) {
         if (state.loading) item(key = "loading") { AppLoading(compact = state.content != null) }
-        val failure = state.refreshFailure ?: state.cacheFailure
+        val failure = state.failure
         if (failure != null)
             item(key = "failure") {
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {

@@ -31,9 +31,13 @@ data class OvertimeState(
 
     val failure: Failure?
         get() =
-            cacheFailure?.takeIf(::overtimeFailureInvalidatesCache)
+            cacheFailure?.takeIf {
+                overtimeFailureInvalidatesCache(it) && it.code != "client.overtime_cache_expired"
+            }
                 ?: refreshFailure
-                ?: cacheFailure
+                ?: cacheFailure?.takeUnless {
+                    refreshing && it.code == "client.overtime_cache_expired"
+                }
 
     val needsVerification: Boolean
         get() = failure?.code in verificationCodes

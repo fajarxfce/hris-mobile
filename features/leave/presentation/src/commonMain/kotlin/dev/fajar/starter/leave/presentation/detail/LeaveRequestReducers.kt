@@ -10,6 +10,7 @@ internal fun LeaveRequestState.withCachedRequest(
     when (result) {
         is AppResult.Failed ->
             copy(
+                selection = visibleSelection,
                 content = null,
                 loading = false,
                 cacheFailure = result.failure,

@@ -55,8 +55,14 @@ class PayslipsViewModel(
                     }
                     .collect { (selection, result) ->
                         ensureActive()
-                        if (selection == state.value.selection && !state.value.readRestricted)
-                            updateState { it.withCachedPayslips(result) }
+                        if (selection != state.value.selection || state.value.readRestricted)
+                            return@collect
+                        val renewExpiredRead =
+                            state.value.content != null &&
+                                result is AppResult.Failed &&
+                                result.failure.code == "client.payslip_cache_expired"
+                        updateState { it.withCachedPayslips(result) }
+                        if (renewExpiredRead) onEvent(PayslipsEvent.RefreshRequested)
                     }
             }
     }
@@ -77,6 +83,7 @@ class PayslipsViewModel(
         updateState {
             it.copy(
                 refreshing = true,
+                loading = it.content == null,
                 cacheFailure =
                     it.refreshFailure?.takeIf(::payslipFailureInvalidatesCache) ?: it.cacheFailure,
                 refreshFailure = it.refreshFailure?.takeIf(::payslipFailureInvalidatesCache),

@@ -175,25 +175,98 @@ class ExpensesViewModelTest {
     }
 
     @Test
-    fun expiryAndWorkspaceReplacementHideTheSnapshotWithoutPolling() = runTest {
+    fun expiryRenewsOnceAndKeepsOldContentHiddenUntilPublication() = runTest {
         withModel { f, model, _ ->
             model.onEvent(ExpensesEvent.Entered)
             runCurrent()
             val saved = assertNotNull(model.state.value.content)
+            val release = CompletableDeferred<Unit>()
+            f.listCall = {
+                release.await()
+                AppResult.Success(ExpensePage(listOf(f.summary)))
+            }
             f.records.value = AppResult.Success(saved.copy(expiresAt = f.clock.now() + 1.seconds))
             runCurrent()
             advanceTimeBy(1_001)
             runCurrent()
-            assertEquals("client.expense_cache_expired", model.state.value.failure?.code)
+            assertTrue(model.state.value.refreshing)
+            assertTrue(model.state.value.readRestricted)
+            assertNull(model.state.value.failure)
             assertNull(model.state.value.content)
-            assertEquals(1, f.listReads)
+            assertEquals(2, f.listReads)
             model.onEvent(ExpensesEvent.RefreshRequested)
+            f.records.value = AppResult.Success(saved)
+            runCurrent()
+            assertNull(model.state.value.content)
+            assertEquals(2, f.listReads)
+            release.complete(Unit)
             runCurrent()
             assertNotNull(model.state.value.content)
+            assertFalse(model.state.value.readRestricted)
+            assertNull(model.state.value.failure)
             f.workspaceState.value = AppResult.Success(f.workspace.copy(id = "replacement"))
             runCurrent()
             assertNull(model.state.value.content)
             assertTrue(model.state.value.readRestricted)
+            assertEquals(2, f.listReads)
+        }
+    }
+
+    @Test
+    fun failedExpiryRenewalShowsItsCauseWithoutRepeatingOrReopeningCache() = runTest {
+        withModel { f, model, _ ->
+            model.onEvent(ExpensesEvent.Entered)
+            runCurrent()
+            val saved = assertNotNull(model.state.value.content)
+            f.listCall = { expenseFailure("client.network", FailureKind.Network) }
+            f.records.value = AppResult.Success(saved.copy(expiresAt = f.clock.now() + 1.seconds))
+            runCurrent()
+            advanceTimeBy(1_001)
+            runCurrent()
+            assertEquals("client.expense_cache_expired", model.state.value.cacheFailure?.code)
+            assertEquals("client.network", model.state.value.failure?.code)
+            assertTrue(model.state.value.readRestricted)
+            assertNull(model.state.value.content)
+            assertEquals(0, f.observers)
+            advanceTimeBy(10_000)
+            runCurrent()
+            assertEquals(2, f.listReads)
+            f.listCall = { AppResult.Success(ExpensePage(listOf(f.summary))) }
+            model.onEvent(ExpensesEvent.RefreshRequested)
+            runCurrent()
+            assertNotNull(model.state.value.content)
+            assertNull(model.state.value.failure)
+            assertEquals(3, f.listReads)
+        }
+    }
+
+    @Test
+    fun leavingDuringAutomaticRenewalCancelsAndIgnoresItsLateFailure() = runTest {
+        withModel { f, model, _ ->
+            model.onEvent(ExpensesEvent.Entered)
+            runCurrent()
+            val saved = assertNotNull(model.state.value.content)
+            var cancelled = false
+            f.listCall = {
+                try {
+                    awaitCancellation()
+                } catch (_: CancellationException) {
+                    cancelled = true
+                }
+                expenseFailure("mfa_required", FailureKind.AccessDenied)
+            }
+            f.records.value = AppResult.Success(saved.copy(expiresAt = f.clock.now() + 1.seconds))
+            runCurrent()
+            advanceTimeBy(1_001)
+            runCurrent()
+            assertTrue(model.state.value.refreshing)
+            model.onEvent(ExpensesEvent.Stopped)
+            runCurrent()
+            assertTrue(cancelled)
+            assertFalse(model.state.value.refreshing)
+            assertNull(model.state.value.content)
+            assertNull(model.state.value.refreshFailure)
+            assertEquals(0, f.observers)
         }
     }
 

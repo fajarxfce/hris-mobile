@@ -8,7 +8,13 @@ import dev.fajar.starter.leave.domain.policies.leaveFailureInvalidatesCache
 internal fun LeaveState.withCachedLeave(result: AppResult<LeaveOverview?>): LeaveState =
     when (result) {
         is AppResult.Failed ->
-            copy(content = null, dialog = null, loading = false, cacheFailure = result.failure)
+            copy(
+                selection = filters,
+                content = null,
+                dialog = null,
+                loading = false,
+                cacheFailure = result.failure,
+            )
         is AppResult.Success -> {
             val snapshot = result.value
             if (snapshot != null && selection != null && !selection.matches(snapshot)) this

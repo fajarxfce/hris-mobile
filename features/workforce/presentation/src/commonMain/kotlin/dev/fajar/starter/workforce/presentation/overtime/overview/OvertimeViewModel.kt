@@ -65,8 +65,14 @@ class OvertimeViewModel(
                     }
                     .collect { (selection, result) ->
                         ensureActive()
-                        if (selection == state.value.selection && !state.value.readRestricted)
-                            updateState { it.withCachedOvertime(result) }
+                        if (selection != state.value.selection || state.value.readRestricted)
+                            return@collect
+                        val renewExpiredRead =
+                            state.value.content != null &&
+                                result is AppResult.Failed &&
+                                result.failure.code == "client.overtime_cache_expired"
+                        updateState { it.withCachedOvertime(result) }
+                        if (renewExpiredRead) onEvent(OvertimeEvent.RefreshRequested)
                     }
             }
     }
@@ -94,6 +100,7 @@ class OvertimeViewModel(
         updateState {
             it.copy(
                 refreshing = true,
+                loading = it.content == null,
                 cacheFailure =
                     it.refreshFailure?.takeIf(::overtimeFailureInvalidatesCache) ?: it.cacheFailure,
                 refreshFailure = it.refreshFailure?.takeIf(::overtimeFailureInvalidatesCache),

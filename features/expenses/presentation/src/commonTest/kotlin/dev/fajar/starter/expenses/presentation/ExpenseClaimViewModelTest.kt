@@ -9,6 +9,7 @@ import dev.fajar.starter.expenses.domain.policies.expenseFailure
 import dev.fajar.starter.expenses.presentation.detail.*
 import kotlin.test.*
 import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
 import kotlin.time.Instant
 import kotlinx.coroutines.*
 import kotlinx.coroutines.test.*
@@ -165,6 +166,69 @@ class ExpenseClaimViewModelTest {
             assertNull(model.state.value.failure)
             assertFalse(model.state.value.refreshing)
             assertEquals(0, f.observers)
+        }
+    }
+
+    @Test
+    fun expiredVisibleReadRenewsWithoutAnErrorWhilePending() = runTest {
+        withModel { f, model, _ ->
+            model.onEvent(ExpenseClaimEvent.Entered)
+            runCurrent()
+            val saved = assertNotNull(model.state.value.content)
+            val writes = f.writes
+            val release = CompletableDeferred<Unit>()
+            f.claimCall = {
+                release.await()
+                AppResult.Success(f.claim)
+            }
+            f.detailRecords.value =
+                AppResult.Success(saved.copy(expiresAt = f.clock.now() + 1.seconds))
+            runCurrent()
+            advanceTimeBy(1_001)
+            runCurrent()
+            assertTrue(model.state.value.refreshing)
+            assertTrue(model.state.value.readRestricted)
+            assertNull(model.state.value.content)
+            assertNull(model.state.value.failure)
+            assertEquals(writes, f.writes)
+            release.complete(Unit)
+            runCurrent()
+            assertNotNull(model.state.value.content)
+            assertFalse(model.state.value.readRestricted)
+            assertNull(model.state.value.failure)
+            assertEquals(writes + 1, f.writes)
+        }
+    }
+
+    @Test
+    fun failedAutomaticRenewalRetainsTheReadGateAndStopsRetrying() = runTest {
+        withModel { f, model, _ ->
+            model.onEvent(ExpenseClaimEvent.Entered)
+            runCurrent()
+            val saved = assertNotNull(model.state.value.content)
+            var attempts = 0
+            f.claimCall = {
+                attempts++
+                expenseFailure("client.network", FailureKind.Network)
+            }
+            f.detailRecords.value =
+                AppResult.Success(saved.copy(expiresAt = f.clock.now() + 1.seconds))
+            runCurrent()
+            advanceTimeBy(1_001)
+            runCurrent()
+            assertEquals(1, attempts)
+            assertEquals("client.network", model.state.value.failure?.code)
+            assertNull(model.state.value.content)
+            assertTrue(model.state.value.readRestricted)
+            advanceTimeBy(10_000)
+            runCurrent()
+            assertEquals(1, attempts)
+            f.claimCall = { AppResult.Success(f.claim) }
+            model.onEvent(ExpenseClaimEvent.RefreshRequested)
+            runCurrent()
+            assertNotNull(model.state.value.content)
+            assertFalse(model.state.value.readRestricted)
+            assertNull(model.state.value.failure)
         }
     }
 

@@ -1479,11 +1479,10 @@ class AppFlowTest {
                 waitFor("Night shift")
                 compose.waitUntil { server.workforce.active.get() == 0 }
                 server.workforce.calendarGate = release
-                refreshWhenReady()
-                compose.waitUntil { server.workforce.active.get() == 1 }
                 cache.expire()
-                waitFor("Connect to refresh your schedule.")
+                compose.waitUntil { server.workforce.active.get() == 1 }
                 compose.waitUntil { cache.subscribers() == 0 }
+                compose.onNodeWithText("Connect to refresh your schedule.").assertDoesNotExist()
                 release.complete(Unit)
                 waitFor("Night shift")
                 compose.onNodeWithText("Connect to refresh your schedule.").assertDoesNotExist()
@@ -1725,10 +1724,12 @@ class AppFlowTest {
                 waitFor("Present")
                 compose.waitUntil { server.workforce.attendanceActive.get() == 0 }
                 server.workforce.attendanceGate = release
-                refreshWhenReady()
-                compose.waitUntil { server.workforce.attendanceActive.get() == 1 }
                 cache.expire(AttendanceWindow.MONTHLY)
-                waitFor("Saved attendance has expired. Refresh to continue.")
+                compose.waitUntil { server.workforce.attendanceActive.get() == 1 }
+                compose.waitUntil { cache.subscribers(AttendanceWindow.MONTHLY) == 0 }
+                compose
+                    .onNodeWithText("Saved attendance has expired. Refresh to continue.")
+                    .assertDoesNotExist()
                 compose.onNodeWithText("Present").assertDoesNotExist()
                 compose.waitUntil { cache.subscribers(AttendanceWindow.MONTHLY) == 0 }
                 server.workforce.attendanceGate = null
@@ -1982,8 +1983,10 @@ class AppFlowTest {
             compose.onNode(hasText("Employees") and isSelectable()).performClick()
             waitFor("Sam Wilson")
             assertEquals(1, cache.subscribers(AttendanceWindow.RECENT))
+            val requestsBeforeExpiry = server.workforce.attendancePeriods.size
             cache.expire()
             compose.waitUntil { cache.subscribers(AttendanceWindow.RECENT) == 0 }
+            assertEquals(requestsBeforeExpiry, server.workforce.attendancePeriods.size)
             server.workforce.offline = true
             compose.onNode(hasText("Home") and isSelectable()).performClick()
             waitFor("Unable to connect. Check your connection.")
@@ -2526,7 +2529,10 @@ class AppFlowTest {
             refreshWhenReady()
             compose.waitUntil(5_000) { server.workforce.attendanceActive.get() == 1 }
             cache.expire()
-            waitFor("Saved attendance has expired. Refresh to continue.")
+            compose.waitUntil { cache.subscribers(AttendanceWindow.RECENT) == 0 }
+            compose
+                .onNodeWithText("Saved attendance has expired. Refresh to continue.")
+                .assertDoesNotExist()
             release.complete(Unit)
             server.workforce.attendanceGate = null
             compose.waitUntil(5_000) {

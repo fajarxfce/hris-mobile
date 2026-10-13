@@ -9,6 +9,7 @@ import dev.fajar.starter.payroll.domain.policies.payslipFailure
 import dev.fajar.starter.payroll.presentation.detail.*
 import kotlin.test.*
 import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
 import kotlin.time.Instant
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
@@ -212,6 +213,104 @@ class PayslipViewModelTest {
             runCurrent()
             assertTrue(model.state.value.canSave)
             assertEquals(1, f.base.observers)
+        }
+    }
+
+    @Test
+    fun expiredVisibleReadRenewsWithoutAnErrorWhilePending() = runTest {
+        withModel { f, model, _ ->
+            model.onEvent(PayslipEvent.Entered)
+            runCurrent()
+            val saved = assertNotNull(model.state.value.content)
+            val writes = f.base.writes
+            val release = CompletableDeferred<Unit>()
+            f.base.detailCall = {
+                release.await()
+                AppResult.Success(f.base.slip)
+            }
+            f.base.detailRecords.value =
+                AppResult.Success(saved.copy(expiresAt = f.base.clock.now() + 1.seconds))
+            runCurrent()
+            advanceTimeBy(1_001)
+            runCurrent()
+            assertTrue(model.state.value.refreshing)
+            assertTrue(model.state.value.readRestricted)
+            assertNull(model.state.value.content)
+            assertNull(model.state.value.failure)
+            assertEquals(writes, f.base.writes)
+            release.complete(Unit)
+            runCurrent()
+            assertNotNull(model.state.value.content)
+            assertFalse(model.state.value.readRestricted)
+            assertNull(model.state.value.failure)
+            assertEquals(writes + 1, f.base.writes)
+        }
+    }
+
+    @Test
+    fun failedAutomaticRenewalRetainsTheReadGateAndStopsRetrying() = runTest {
+        withModel { f, model, _ ->
+            model.onEvent(PayslipEvent.Entered)
+            runCurrent()
+            val saved = assertNotNull(model.state.value.content)
+            var attempts = 0
+            f.base.detailCall = {
+                attempts++
+                payslipFailure("client.network", FailureKind.Network)
+            }
+            f.base.detailRecords.value =
+                AppResult.Success(saved.copy(expiresAt = f.base.clock.now() + 1.seconds))
+            runCurrent()
+            advanceTimeBy(1_001)
+            runCurrent()
+            assertEquals(1, attempts)
+            assertEquals("client.network", model.state.value.failure?.code)
+            assertNull(model.state.value.content)
+            assertTrue(model.state.value.readRestricted)
+            advanceTimeBy(10_000)
+            runCurrent()
+            assertEquals(1, attempts)
+            f.base.detailCall = { AppResult.Success(f.base.slip) }
+            model.onEvent(PayslipEvent.RefreshRequested)
+            runCurrent()
+            assertNotNull(model.state.value.content)
+            assertFalse(model.state.value.readRestricted)
+            assertNull(model.state.value.failure)
+        }
+    }
+
+    @Test
+    fun mfaDenialAfterExpirySurvivesFailedRetriesAndRetainedCiphertext() = runTest {
+        withModel { f, model, _ ->
+            model.onEvent(PayslipEvent.Entered)
+            runCurrent()
+            val saved = assertNotNull(model.state.value.content)
+            f.base.failCleanup = true
+            f.base.detailCall = { payslipFailure("mfa_required", FailureKind.AccessDenied) }
+            f.base.detailRecords.value =
+                AppResult.Success(saved.copy(expiresAt = f.base.clock.now() + 1.seconds))
+            runCurrent()
+            advanceTimeBy(1_001)
+            runCurrent()
+            assertTrue(model.state.value.needsVerification)
+            assertEquals("mfa_required", model.state.value.failure?.code)
+            for (kind in listOf(FailureKind.Network, FailureKind.Storage)) {
+                f.base.detailCall = { payslipFailure("client.retry_failed", kind) }
+                model.onEvent(PayslipEvent.RefreshRequested)
+                runCurrent()
+                assertTrue(model.state.value.needsVerification)
+                assertTrue(model.state.value.readRestricted)
+                assertEquals("mfa_required", model.state.value.failure?.code)
+                assertNull(model.state.value.content)
+                assertNotNull(f.base.snapshot(true))
+                assertEquals(0, f.base.observers)
+            }
+            f.base.detailCall = { AppResult.Success(f.base.slip) }
+            model.onEvent(PayslipEvent.RefreshRequested)
+            runCurrent()
+            assertNotNull(model.state.value.content)
+            assertFalse(model.state.value.needsVerification)
+            assertFalse(model.state.value.readRestricted)
         }
     }
 

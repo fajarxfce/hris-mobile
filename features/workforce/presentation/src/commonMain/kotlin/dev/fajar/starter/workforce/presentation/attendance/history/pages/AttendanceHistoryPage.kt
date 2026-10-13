@@ -54,7 +54,7 @@ fun AttendanceHistoryPage(
         },
     ) {
         if (state.loading || state.refreshing) item(key = "loading") { AppLoading() }
-        val failure = state.refreshFailure ?: state.cacheFailure
+        val failure = state.failure
         if (failure != null)
             item(key = "failure") {
                 AppFeedback(failureText(failure))

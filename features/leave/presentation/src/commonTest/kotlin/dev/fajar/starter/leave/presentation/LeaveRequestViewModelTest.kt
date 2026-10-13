@@ -8,6 +8,9 @@ import dev.fajar.starter.leave.domain.entities.*
 import dev.fajar.starter.leave.domain.policies.leaveFailure
 import dev.fajar.starter.leave.presentation.detail.*
 import kotlin.test.*
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
+import kotlin.time.Instant
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.test.*
@@ -280,12 +283,77 @@ class LeaveRequestViewModelTest {
         }
     }
 
+    @Test
+    fun expiredVisibleReadRenewsWithoutAnErrorWhilePending() = runTest {
+        withRequest { fixture, model, _ ->
+            model.onEvent(LeaveRequestEvent.Entered)
+            runCurrent()
+            val saved = assertNotNull(model.state.value.content)
+            val writes = fixture.writes
+            val release = CompletableDeferred<Unit>()
+            fixture.requestCall = {
+                release.await()
+                AppResult.Success(fixture.details)
+            }
+            fixture.records.value =
+                AppResult.Success(saved.copy(expiresAt = fixture.base.clock.now() + 1.seconds))
+            runCurrent()
+            advanceTimeBy(1_001)
+            runCurrent()
+            assertTrue(model.state.value.refreshing)
+            assertTrue(model.state.value.readRestricted)
+            assertNull(model.state.value.content)
+            assertNull(model.state.value.failure)
+            assertEquals(writes, fixture.writes)
+            release.complete(Unit)
+            runCurrent()
+            assertNotNull(model.state.value.content)
+            assertFalse(model.state.value.readRestricted)
+            assertNull(model.state.value.failure)
+            assertEquals(writes + 1, fixture.writes)
+        }
+    }
+
+    @Test
+    fun failedAutomaticRenewalRetainsTheReadGateAndStopsRetrying() = runTest {
+        withRequest { fixture, model, _ ->
+            model.onEvent(LeaveRequestEvent.Entered)
+            runCurrent()
+            val saved = assertNotNull(model.state.value.content)
+            var attempts = 0
+            fixture.requestCall = {
+                attempts++
+                leaveFailure("client.network", FailureKind.Network)
+            }
+            fixture.records.value =
+                AppResult.Success(saved.copy(expiresAt = fixture.base.clock.now() + 1.seconds))
+            runCurrent()
+            advanceTimeBy(1_001)
+            runCurrent()
+            assertEquals(1, attempts)
+            assertEquals("client.network", model.state.value.failure?.code)
+            assertNull(model.state.value.content)
+            assertTrue(model.state.value.readRestricted)
+            advanceTimeBy(10_000)
+            runCurrent()
+            assertEquals(1, attempts)
+            fixture.requestCall = { AppResult.Success(fixture.details) }
+            model.onEvent(LeaveRequestEvent.RefreshRequested)
+            runCurrent()
+            assertNotNull(model.state.value.content)
+            assertFalse(model.state.value.readRestricted)
+            assertNull(model.state.value.failure)
+        }
+    }
+
     private suspend fun TestScope.withRequest(
         test:
             suspend (LeaveRequestPresentationFixture, LeaveRequestViewModel, ViewModelStore) -> Unit
     ) {
         Dispatchers.setMain(StandardTestDispatcher(testScheduler))
-        val fixture = LeaveRequestPresentationFixture()
+        val fixture = LeaveRequestPresentationFixture {
+            Instant.parse("2026-10-12T01:00:00Z") + testScheduler.currentTime.milliseconds
+        }
         val actions = LeaveActionPresentationFixture(fixture)
         val model = actions.model()
         val owner = ViewModelStore().apply { put("request", model) }

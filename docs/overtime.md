@@ -28,6 +28,9 @@ mapping but are not retained in the employee read view.
 Both use cases own a 30-second acquisition deadline, cancellation, scope checks
 after I/O and atomic publication. Repositories map raw datasource values and
 technical failures. Datasources choose no access, retry or subscription policy.
+The read ViewModels request one acquisition when displayed content expires.
+Pending recovery hides the expiry message while retaining the read gate; failure
+reports its cause and stops. Planning and action confirmation remain explicit.
 
 ## Offline reads
 

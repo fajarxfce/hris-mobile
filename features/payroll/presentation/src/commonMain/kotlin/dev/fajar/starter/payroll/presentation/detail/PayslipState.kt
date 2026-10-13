@@ -18,15 +18,28 @@ data class PayslipState(
 ) {
     val restriction: Failure?
         get() =
-            cacheFailure?.takeIf(::payslipFailureInvalidatesCache)
+            cacheFailure?.takeIf {
+                payslipFailureInvalidatesCache(it) && it.code != "client.payslip_cache_expired"
+            }
                 ?: refreshFailure?.takeIf(::payslipFailureInvalidatesCache)
                 ?: exportFailure?.takeIf(::payslipFailureInvalidatesCache)
+                ?: cacheFailure?.takeIf(::payslipFailureInvalidatesCache)
 
     val readRestricted: Boolean
         get() = restriction != null
 
     val failure: Failure?
-        get() = restriction ?: refreshFailure ?: cacheFailure ?: exportFailure
+        get() =
+            cacheFailure?.takeIf {
+                payslipFailureInvalidatesCache(it) && it.code != "client.payslip_cache_expired"
+            }
+                ?: refreshFailure?.takeIf(::payslipFailureInvalidatesCache)
+                ?: exportFailure?.takeIf(::payslipFailureInvalidatesCache)
+                ?: refreshFailure
+                ?: exportFailure
+                ?: cacheFailure?.takeUnless {
+                    refreshing && it.code == "client.payslip_cache_expired"
+                }
 
     val needsVerification: Boolean
         get() = failure?.code in payslipVerificationCodes

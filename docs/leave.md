@@ -154,6 +154,10 @@ not authorize reading the previous view.
 An upstream storage failure can complete the cache flow without ending the outer
 state collector. A successful explicit refresh reopens observation in both the
 overview and detail screens; errors never start an automatic retry loop.
+Expiry of displayed data requests one fresh acquisition, retaining the current
+employment/year/status or detail history selection. Pending recovery shows loading
+instead of a cache-expired error. A failed recovery reports its cause and retains
+the closed read gate until a successful retry.
 
 Balances have their own year filter; request history explicitly covers all dates.
 Year and status controls remain usable after a transport failure. Cursor actions

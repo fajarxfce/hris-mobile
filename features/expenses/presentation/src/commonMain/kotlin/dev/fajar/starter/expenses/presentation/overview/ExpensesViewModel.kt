@@ -64,8 +64,14 @@ class ExpensesViewModel(
                     }
                     .collect { (selection, result) ->
                         ensureActive()
-                        if (selection == state.value.selection && !state.value.readRestricted)
-                            updateState { it.withCachedExpenses(result) }
+                        if (selection != state.value.selection || state.value.readRestricted)
+                            return@collect
+                        val renewExpiredRead =
+                            state.value.content != null &&
+                                result is AppResult.Failed &&
+                                result.failure.code == "client.expense_cache_expired"
+                        updateState { it.withCachedExpenses(result) }
+                        if (renewExpiredRead) onEvent(ExpensesEvent.RefreshRequested)
                     }
             }
     }
@@ -92,6 +98,7 @@ class ExpensesViewModel(
         updateState {
             it.copy(
                 refreshing = true,
+                loading = it.content == null,
                 cacheFailure =
                     it.refreshFailure?.takeIf(::expenseFailureInvalidatesCache) ?: it.cacheFailure,
                 refreshFailure = it.refreshFailure?.takeIf(::expenseFailureInvalidatesCache),

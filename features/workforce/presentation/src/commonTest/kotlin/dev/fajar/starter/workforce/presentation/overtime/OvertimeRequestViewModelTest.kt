@@ -206,7 +206,7 @@ class OvertimeRequestViewModelTest {
     }
 
     @Test
-    fun expiryThenAccountReplacementCannotKeepPrivateDetailsInTheRoute() = runTest {
+    fun expiryRenewsDetailsButAccountReplacementStillRemovesPrivateContent() = runTest {
         withModel { fixture, model, _ ->
             model.onEvent(OvertimeRequestEvent.Entered)
             runCurrent()
@@ -216,16 +216,78 @@ class OvertimeRequestViewModelTest {
             runCurrent()
             advanceTimeBy(1_001)
             runCurrent()
-            assertNull(model.state.value.content)
-            assertTrue(model.state.value.readRestricted)
-            model.onEvent(OvertimeRequestEvent.RefreshRequested)
-            runCurrent()
-            assertNotNull(model.state.value.content)
+            assertNotEquals(saved.generation, assertNotNull(model.state.value.content).generation)
+            assertFalse(model.state.value.readRestricted)
+            assertEquals(2, fixture.detailReads)
             fixture.sessionState.value =
                 AppResult.Success(fixture.session.copy(id = "another-session"))
             runCurrent()
             assertNull(model.state.value.content)
             assertEquals(0, fixture.observers)
+            assertEquals(2, fixture.detailReads)
+        }
+    }
+
+    @Test
+    fun expiredVisibleReadRenewsWithoutAnErrorWhilePending() = runTest {
+        withModel { fixture, model, _ ->
+            model.onEvent(OvertimeRequestEvent.Entered)
+            runCurrent()
+            val saved = assertNotNull(model.state.value.content)
+            val writes = fixture.writes
+            val release = CompletableDeferred<Unit>()
+            fixture.detailsCall = {
+                release.await()
+                AppResult.Success(fixture.details)
+            }
+            fixture.detailRecords.value =
+                AppResult.Success(saved.copy(expiresAt = fixture.clock.now() + 1.seconds))
+            runCurrent()
+            advanceTimeBy(1_001)
+            runCurrent()
+            assertTrue(model.state.value.refreshing)
+            assertTrue(model.state.value.readRestricted)
+            assertNull(model.state.value.content)
+            assertNull(model.state.value.failure)
+            assertEquals(writes, fixture.writes)
+            release.complete(Unit)
+            runCurrent()
+            assertNotNull(model.state.value.content)
+            assertFalse(model.state.value.readRestricted)
+            assertNull(model.state.value.failure)
+            assertEquals(writes + 1, fixture.writes)
+        }
+    }
+
+    @Test
+    fun failedAutomaticRenewalRetainsTheReadGateAndStopsRetrying() = runTest {
+        withModel { fixture, model, _ ->
+            model.onEvent(OvertimeRequestEvent.Entered)
+            runCurrent()
+            val saved = assertNotNull(model.state.value.content)
+            var attempts = 0
+            fixture.detailsCall = {
+                attempts++
+                overtimeFailure("client.network", FailureKind.Network)
+            }
+            fixture.detailRecords.value =
+                AppResult.Success(saved.copy(expiresAt = fixture.clock.now() + 1.seconds))
+            runCurrent()
+            advanceTimeBy(1_001)
+            runCurrent()
+            assertEquals(1, attempts)
+            assertEquals("client.network", model.state.value.failure?.code)
+            assertNull(model.state.value.content)
+            assertTrue(model.state.value.readRestricted)
+            advanceTimeBy(10_000)
+            runCurrent()
+            assertEquals(1, attempts)
+            fixture.detailsCall = { AppResult.Success(fixture.details) }
+            model.onEvent(OvertimeRequestEvent.RefreshRequested)
+            runCurrent()
+            assertNotNull(model.state.value.content)
+            assertFalse(model.state.value.readRestricted)
+            assertNull(model.state.value.failure)
         }
     }
 

@@ -778,3 +778,24 @@ closed.
 After notice, the validated APK was installed on the authorized Android 16 phone
 with `--install-only`. The app was not opened or driven on that phone. No physical
 device acceptance or performance measurement is claimed for these forms.
+
+## Read-cache renewal
+
+On 13 October 2026, root checks and Android dev assembly passed with 1,163
+desktop tests. Eighteen new cases cover automatic renewal of visible expired
+leave, overtime, expense and payslip reads; a pending acquisition keeps old data
+hidden, failed acquisition does not loop, and cancellation rejects late results.
+An actual one-hour timer verifies that renewing workspace admission leaves the
+old snapshot's deadline intact and its later expiry acquires new data without
+losing the selected year. MFA denial remains gated through network/storage
+failures even when old encrypted content survives cleanup.
+
+The 139 assembled application tests include attendance and calendar renewal,
+expiry during pending acquisition, hidden Home expiry without a network request,
+and account/company isolation. An Android API 35 emulator opened Home and
+Employees repeatedly, loaded attendance history from the development API, and
+returned from background with the same application process. Home screenshots
+were inspected. Expiry timing is exercised by the automated tests.
+
+After notice, the APK was installed on the authorized Android 16 phone with
+`--install-only`. No interaction with that phone's application was performed.

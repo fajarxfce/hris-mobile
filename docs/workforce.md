@@ -11,8 +11,11 @@ the card or repeat its request. Incomplete acquisition, invalidated content and
 explicit actions require refresh. Clearing the owner releases its subscriptions.
 Stored, received, pending review and accepted outcomes remain distinct; corrections
 replace the displayed times without enabling another capture.
-Successful refresh clears an expired-cache message even when expiry is observed
-while acquisition is pending. A failed refresh retains its current failure.
+An expired visible snapshot requests one refresh. Pending acquisition hides the
+expiry message while the read gate remains closed; duplicate expiry and refresh
+events share that acquisition. A failed refresh reports its cause and waits for
+an explicit retry. Hidden Home expiry performs no network request. Successful
+publication restores the card and read observation.
 
 Attendance history and work calendar are available from Home shortcuts and the Work
 section in Services. Their routes, MVI owners, repository adapters and policies
