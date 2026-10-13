@@ -42,6 +42,7 @@ class StarterApplication : Application(), Configuration.Provider {
             inboxCredentials = AndroidCredentialStore(this, "inbox-content-key"),
             calendarCredentials = AndroidCredentialStore(this, "calendar-content-key"),
             leaveCredentials = AndroidCredentialStore(this, "leave-content-key"),
+            leaveReplicaCredentials = AndroidCredentialStore(this, "leave-replica-content-key"),
             commandCredentials = AndroidCredentialStore(this, "command-content-key"),
             fileCredentials = AndroidCredentialStore(this, "file-content-key"),
             workspaceCredentials = AndroidCredentialStore(this, "workspace-content-key"),

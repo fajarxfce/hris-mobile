@@ -5,7 +5,7 @@ import dev.fajar.starter.common.result.AppResult
 import dev.fajar.starter.leave.domain.entities.LeaveSelection
 import dev.fajar.starter.leave.domain.policies.leaveFailureInvalidatesCache
 import dev.fajar.starter.leave.domain.usecases.ObserveLeave
-import dev.fajar.starter.leave.domain.usecases.RefreshLeave
+import dev.fajar.starter.leave.domain.usecases.SyncLeave
 import dev.fajar.starter.presentation.mvi.MviViewModel
 import dev.fajar.starter.workspace.domain.policies.workspaceAccessLossCodes
 import kotlinx.coroutines.*
@@ -17,7 +17,7 @@ import org.koin.core.annotation.InjectedParam
 class LeaveViewModel(
     @InjectedParam private val workspaceId: String,
     private val observe: ObserveLeave,
-    private val refresh: RefreshLeave,
+    private val refresh: SyncLeave,
 ) : MviViewModel<LeaveState, LeaveEvent, LeaveEffect>(LeaveState()) {
     private var observation: Job? = null
     private var acquisition: Job? = null
@@ -58,7 +58,10 @@ class LeaveViewModel(
                     .distinctUntilChanged()
                     .flatMapLatest { (selection, restricted) ->
                         if (restricted) emptyFlow()
-                        else observe(workspaceId).map { selection to it }
+                        else
+                            observe(workspaceId, selection ?: LeaveSelection()).map {
+                                selection to it
+                            }
                     }
                     .collect { (selection, result) ->
                         ensureActive()
@@ -79,10 +82,10 @@ class LeaveViewModel(
 
     private fun onRefreshRequested(event: LeaveEvent.RefreshRequested) {
         if (observation?.isActive != true || acquisition?.isActive == true) return
-        val requested = state.value.selection ?: LeaveSelection()
         updateState {
             it.copy(
                 refreshing = true,
+                syncPending = false,
                 loading = it.content == null,
                 cacheFailure =
                     it.refreshFailure?.takeIf(::leaveFailureInvalidatesCache) ?: it.cacheFailure,
@@ -91,11 +94,12 @@ class LeaveViewModel(
         }
         acquisition =
             viewModelScope.launch {
-                val result = refresh(workspaceId, requested)
+                val result = refresh(workspaceId)
                 ensureActive()
-                if (result is AppResult.Success) observation?.cancel()
+                val caughtUp = result is AppResult.Success && result.value.caughtUp
+                if (caughtUp) observation?.cancel()
                 updateState { it.withLeaveRefreshResult(result) }
-                if (result is AppResult.Success) observeSelection()
+                if (caughtUp) observeSelection()
                 if (
                     result is AppResult.Failed &&
                         result.failure.code in workspaceAccessLossCodes &&
@@ -187,20 +191,16 @@ class LeaveViewModel(
 
     private fun changeSelection(selection: LeaveSelection, dialog: LeaveDialog? = null) {
         if (observation?.isActive != true || state.value.readRestricted) return
-        acquisition?.cancel()
-        acquisition = null
         updateState {
             it.copy(
                 selection = selection,
                 content = null,
                 dialog = dialog,
                 loading = true,
-                refreshing = false,
                 cacheFailure = it.cacheFailure?.takeIf(::leaveFailureInvalidatesCache),
                 refreshFailure = it.refreshFailure?.takeIf(::leaveFailureInvalidatesCache),
             )
         }
-        onEvent(LeaveEvent.RefreshRequested)
     }
 
     private fun onDialogDismissed(event: LeaveEvent.DialogDismissed) {

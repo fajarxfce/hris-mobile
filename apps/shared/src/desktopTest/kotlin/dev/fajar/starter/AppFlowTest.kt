@@ -1500,7 +1500,7 @@ class AppFlowTest {
     }
 
     @Test
-    fun leaveFiltersRestoreOfflineWithoutCrossingCompanyScope() {
+    fun leaveFiltersQuerySavedRecordsOfflineWithoutCrossingCompanyScope() {
         val server =
             NativeUiServer().apply {
                 leave.enabled = true
@@ -1514,15 +1514,23 @@ class AppFlowTest {
             compose.onNode(hasText("Leave") and hasClickAction()).performScrollTo().performClick()
             waitFor("12.5 days")
             compose.onNodeWithText("Leave balances").assertExists()
+            compose.waitUntil {
+                compose
+                    .onAllNodes(hasContentDescription("Refresh") and isEnabled())
+                    .fetchSemanticsNodes()
+                    .size == 1
+            }
+            val initialReads = server.leave.syncRequests.size
             capture("leave-balances")
             compose.onNodeWithContentDescription("Previous year").performClick()
             waitFor("No leave balance for this year.")
-            compose.waitUntil { server.leave.years.lastOrNull() == 2025 }
+            assertTrue(server.leave.years.isEmpty())
             compose.onNode(hasScrollToIndexAction()).performScrollToNode(hasText("All statuses"))
             compose.onNode(hasText("All statuses") and hasClickAction()).performClick()
             waitFor("Request status")
             compose.onNode(hasText("Approved") and isSelectable()).performClick()
-            compose.waitUntil { server.leave.statuses.lastOrNull() == "APPROVED" }
+            assertTrue(server.leave.statuses.isEmpty())
+            assertEquals(initialReads, server.leave.syncRequests.size)
             waitFor("1.5 days")
             compose.onNode(hasScrollToIndexAction()).performScrollToNode(hasText("1.5 days"))
             compose.onNodeWithContentDescription("Back").assertIsDisplayed()
@@ -1533,12 +1541,15 @@ class AppFlowTest {
             compose.onNodeWithContentDescription("Back").performClick()
             waitFor("Welcome")
             compose.onNode(hasText("Leave") and hasClickAction()).performScrollTo().performClick()
+            waitFor("12.5 days")
+            compose.onNodeWithText("2026").assertExists()
+            compose.onNodeWithContentDescription("Previous year").performClick()
             waitFor("No leave balance for this year.")
             compose.onNodeWithText("2025").assertExists()
             server.leave.offline = false
-            val reads = server.leave.years.size
+            val reads = server.leave.syncRequests.size
             refreshWhenReady()
-            compose.waitUntil { server.leave.years.size > reads }
+            compose.waitUntil { server.leave.syncRequests.size > reads }
             compose.waitUntil {
                 !compose
                     .onNodeWithContentDescription("Refresh")
@@ -1546,8 +1557,9 @@ class AppFlowTest {
                     .config
                     .contains(androidx.compose.ui.semantics.SemanticsProperties.Disabled)
             }
-            assertEquals(2025, server.leave.years.last())
-            assertEquals("APPROVED", server.leave.statuses.last())
+            compose.onNodeWithText("2025").assertExists()
+            assertTrue(server.leave.years.isEmpty())
+            assertTrue(server.leave.statuses.isEmpty())
             compose.onNodeWithContentDescription("Back").performClick()
             waitFor("Welcome")
             compose.onNode(hasText("Account") and isSelectable()).performClick()

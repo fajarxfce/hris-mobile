@@ -2,7 +2,7 @@ package dev.fajar.starter.leave.domain.entities
 
 import kotlin.time.Instant
 
-/** One admitted offline view; balances and requests remain independent server reads. */
+/** A filtered local view; balances and requests share one published replica revision. */
 data class LeaveOverview(
     val access: LeaveAccess,
     val generation: String,

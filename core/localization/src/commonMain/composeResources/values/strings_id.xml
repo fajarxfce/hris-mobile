@@ -774,4 +774,5 @@
     <string name="expense_policy_changed_id">Periksa tanggal transaksi, batas kategori, dan bukti yang diwajibkan.</string>
     <string name="expense_submission_limit_id">Klaim ini mencapai batas jumlah pengajuan.</string>
     <string name="expense_reason_required_id">Isi alasan (maksimal 1.000 karakter).</string>
+    <string name="leave_balance_unavailable_id">Saldo cuti ini tidak tersedia.</string>
 </resources>

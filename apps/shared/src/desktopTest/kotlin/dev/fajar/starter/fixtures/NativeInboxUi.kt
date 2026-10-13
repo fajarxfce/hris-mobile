@@ -43,6 +43,7 @@ class NativeInboxUi {
     suspend fun response(request: HttpRequestData): Pair<String, HttpStatusCode>? {
         val path = request.url.encodedPath
         if (!path.contains("/sync/") && !path.contains("/inbox/")) return null
+        if (path.contains("/sync/") && request.url.parameters["collections"] != "INBOX") return null
         pauseRefresh(path)
         if (offline) throw IOException("Simulated offline inbox")
         failureCode?.let {

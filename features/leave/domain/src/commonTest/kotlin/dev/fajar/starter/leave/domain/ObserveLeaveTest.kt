@@ -17,6 +17,27 @@ import kotlinx.coroutines.test.*
 
 class ObserveLeaveTest {
     @Test
+    fun credentialRenewalRetainsTheLegacyFallbackWithoutChangingItsAcquisitionTime() = runTest {
+        val f = LeaveFixture()
+        f.load()
+        val saved = assertIs<AppResult.Success<LeaveOverview?>>(f.records.value).value!!
+        f.sessionState.value =
+            AppResult.Success(
+                f.session.copy(
+                    binding =
+                        f.session.binding.copy(
+                            expiresAtEpochMillis =
+                                f.session.binding.expiresAtEpochMillis + 3_600_000
+                        )
+                )
+            )
+        assertEquals(
+            saved,
+            assertIs<AppResult.Success<LeaveOverview?>>(f.observe(f.workspace.id).first()).value,
+        )
+    }
+
+    @Test
     fun observationHidesContentOnScopeOrModuleLossAndReleasesCollectorsOnDisposal() = runTest {
         val f = LeaveFixture()
         f.load()

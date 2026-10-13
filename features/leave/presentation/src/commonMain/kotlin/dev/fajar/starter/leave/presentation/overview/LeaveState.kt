@@ -10,6 +10,7 @@ data class LeaveState(
     val content: LeaveOverview? = null,
     val loading: Boolean = true,
     val refreshing: Boolean = false,
+    val syncPending: Boolean = false,
     val cacheFailure: Failure? = null,
     val refreshFailure: Failure? = null,
     val dialog: LeaveDialog? = null,
@@ -21,7 +22,7 @@ data class LeaveState(
                 content.access.permissions.contains("leave.self.manage")
 
     val canCreate: Boolean
-        get() = showCreateAction && !refreshing
+        get() = showCreateAction
 
     val filters: LeaveSelection?
         get() = selection ?: content?.selection

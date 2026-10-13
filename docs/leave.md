@@ -16,10 +16,12 @@ attachment and coordinates refresh through the existing identity use case.
 
 Datasources implement raw API contracts. Repositories map responses and technical
 failures inside `safeApiCall`; storage acquisition, decryption and DTO mapping stay
-inside `safeStorageCall`/`safeStorageFlow`. `RefreshLeave` coordinates repositories,
-checks workspace and live module availability, validates the selected employment,
-and publishes only a complete view. It rechecks scope after each pending read.
-`ObserveLeave` owns the scoped local subscription without an age-based read timer.
+inside `safeStorageCall`/`safeStorageFlow`. `SyncLeave` coordinates the feed,
+canonical-resource, directory and replica repository contracts. It checks workspace
+and live module availability and rechecks ownership after pending work. The same
+application-owned execution guard serves UI, reconnect and worker triggers.
+`ObserveLeave` owns the scoped local subscription without an age-based read timer;
+employment, year, status and page selection read the local replica.
 
 `RefreshLeaveRequest` and `ObserveLeaveRequest` provide the separate request-detail
 read boundary. The API uses `/leave/me/requests/{id}`: an HR or approval grant does
@@ -32,9 +34,10 @@ composition connects the overview's typed navigation effect to that route.
 
 Balances use integer half-day units. The client never recomputes available days
 from the paged request list. Balance and request endpoints are independent server
-reads; they are not represented as an atomic accounting snapshot. Pages contain
-at most 20 items with server cursors, and DTO mapping checks ownership, ordering,
-bounds and supported values. Year selection follows the server's 1900–2200 range.
+reads; they are not represented as an atomic server accounting snapshot. Local
+balance/request pages share one published replica checkpoint and contain at most
+20 items. DTO mapping checks ownership, ordering, bounds and supported values.
+Year selection follows the server's 1900–2200 range.
 
 ## Request preparation
 
@@ -119,21 +122,40 @@ original attachment count after process restoration.
 
 ## Offline access
 
-One encrypted overview is retained per company: selected employment, year, status
-and cursors, balance page, and request page. It is a bounded last-view fallback,
-not a full leave replica. Complete replacements use the observed generation,
-account-owned storage and authenticated encryption bound to session, account,
-audience, company, generation and record purpose. No page publishes in parts.
-The encoded view is limited to 96,000 bytes. Key and plaintext byte buffers are
-cleared after use; cancellation is checked before publication.
+Request summaries and balances are stored per resource ID in the account-owned
+`leave-replica/<company>` partition. `SyncLeave` explicitly requests both Leave
+collections, fetches current canonical resources and writes records, tombstones,
+directory metadata and the next cursor in one transaction. A record version cannot
+move backwards. Request reads use the owner-only endpoint; an ambiguous not-found
+response is a failure, not an invented deletion.
+
+Bootstrap writes to a staging generation and publishes only after change-feed
+catch-up. Ordinary cursor expiry or reauthentication for the same account starts
+a replacement while retaining published facts. Confirmed scope changes remove the
+old projection before acquisition. A failed cleanup keeps its original authority
+failure. The employment directory is bounded by the server's 200-employment sync
+scope; each invocation handles at most ten feed pages, 50 references per page,
+four parallel canonical reads, and 30 seconds of work. Progress resumes on the
+next invocation; it does not limit retained history to the last displayed page.
+
+The replica has its own platform credential. Payload encryption binds API audience,
+account, company, generation, ID, version, order and index tags. Keyed filter tokens
+support bounded SQL/IndexedDB queries by employment and year/status. Key and plaintext
+byte buffers are cleared after use. Cancellation is checked before admitting a
+write; an admitted storage transaction remains atomic.
+
+The preceding session-bound overview remains readable as a migration fallback
+until the first full replica publishes. Known empty replica results never restore
+that older page. Credential renewal does not expire a saved fallback read.
 
 Request details have an independent last-view partition per company, sharing the
-account credential without replacing the overview. Up to 366 dates and ten
+legacy Leave credential without replacing the replica. Up to 366 dates and ten
 history entries use a header, date chunks and individual history records, each
 limited to 96,000 bytes. Counts and record purposes are authenticated; missing,
-duplicate or foreign records cannot restore a partial view. Both partitions use
-complete compare-and-set replacement. A missing encryption key cannot be
-regenerated over either existing partition.
+duplicate or foreign records cannot restore a partial view. These legacy snapshots use
+complete compare-and-set replacement. Full detail/history replication remains
+subsequent work. A missing encryption key cannot be regenerated over existing
+records, including records retained for an inactive account.
 
 Saved facts have a freshness timestamp, without an age-based read limit. Command
 preparation separately requires current authorization and a reviewed version.
@@ -145,8 +167,9 @@ retry, background polling or permission orchestration in the data layer.
 
 The feature owns its route, MVI ViewModel, declarative page and filter dialogs.
 The route collects state with lifecycle awareness and pairs start with
-stop/disposal. Leaving cancels acquisition and observation; replacing filters
-cancels obsolete reads. The ViewModel holds an authoritative read failure through
+stop/disposal. Leaving cancels acquisition and observation. Replacing filters
+cancels the preceding local query while background synchronization continues.
+The ViewModel holds an authoritative read failure through
 retry and resubscribes only after fresh publication. A failed local cleanup cannot
 silently make restricted content visible again.
 The gate also survives subsequent network or storage failures; those errors do
@@ -159,11 +182,13 @@ employment/year/status or detail history selection. A network failure reports it
 cause without expiring that content or starting a hidden retry loop.
 
 Balances have their own year filter; request history explicitly covers all dates.
-Year and status controls remain usable after a transport failure. Cursor actions
+Year, status and paging controls remain usable during synchronization and after a transport failure. Cursor actions
 accept only the visible next page or first page, and employment choices remain
-limited to the account-owned directory. Offline restoration retains the saved
-filter whether the cache arrives before or after the transport failure. The
-screen shows the last update time and never infers a balance from request rows.
+limited to the account-owned directory. An active route retains its filters through
+refresh and lifecycle stops. A new visit opens the company-local current year and
+all request statuses from saved records. The migration fallback retains its earlier
+selection until the replica is available. The screen shows the last successful
+sync time and never infers a balance from request rows.
 
 Detail history accepts only the visible next revision cursor or the latest page.
 Returning to the latest page cancels an older pending read, and an unavailable

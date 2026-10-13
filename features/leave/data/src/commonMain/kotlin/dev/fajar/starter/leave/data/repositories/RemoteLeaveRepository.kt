@@ -7,6 +7,7 @@ import dev.fajar.starter.leave.data.dto.LeaveActionRequest
 import dev.fajar.starter.leave.data.mappers.*
 import dev.fajar.starter.leave.domain.entities.*
 import dev.fajar.starter.leave.domain.repositories.LeaveActionRepository
+import dev.fajar.starter.leave.domain.repositories.LeaveRecordRepository
 import dev.fajar.starter.leave.domain.repositories.LeaveRepository
 import dev.fajar.starter.leave.domain.repositories.LeaveSubmissionRepository
 import dev.fajar.starter.network.safeApiCall
@@ -15,7 +16,19 @@ import org.koin.core.annotation.Single
 
 @Single
 class RemoteLeaveRepository(private val remote: LeaveRemoteDataSource) :
-    LeaveRepository, LeaveActionRepository, LeaveSubmissionRepository {
+    LeaveRepository, LeaveRecordRepository, LeaveActionRepository, LeaveSubmissionRepository {
+    override suspend fun request(access: LeaveAccess, id: String) = safeApiCall {
+        Uuid.parse(access.companyId)
+        Uuid.parse(id)
+        remote.details(access.sessionId, access.companyId, id, null).toReplicaRequest(id)
+    }
+
+    override suspend fun balance(access: LeaveAccess, id: String) = safeApiCall {
+        Uuid.parse(access.companyId)
+        Uuid.parse(id)
+        remote.balance(access.sessionId, access.companyId, id).toReplicaBalance(id)
+    }
+
     override suspend fun submit(sessionId: String, command: LeaveSubmissionCommand) = safeApiCall {
         remote
             .submit(sessionId, command.companyId, command.id, command.toSubmissionRequest())

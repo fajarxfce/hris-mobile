@@ -7,6 +7,9 @@ import org.koin.core.annotation.Single
 
 @Single
 class ApiLeaveDataSource(private val api: LeaveApi) : LeaveRemoteDataSource {
+    override suspend fun balance(sessionId: String, companyId: String, id: String) =
+        api.balance(sessionId, companyId, id)
+
     override suspend fun submit(
         sessionId: String,
         companyId: String,

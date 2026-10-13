@@ -6,6 +6,13 @@ facts unreadable. This follows [Now in Android's offline-first approach](https:/
 A change list reduces acquisition work, but does not by itself provide offline
 startup, durable edits, or conflict handling.
 
+NIA's [`changeListSync`](https://github.com/android/nowinandroid/blob/main/core/data/src/main/kotlin/com/google/samples/apps/nowinandroid/core/data/SyncUtilities.kt)
+reads a saved collection version, fetches changed/deleted IDs, updates Room records,
+and advances that version. Its news repository exposes queries from Room. HRIS
+uses the same read-and-reconcile pattern with scope-bound opaque cursors, account
+isolation, staged bootstrap, and records/checkpoint in one storage transaction.
+Feature use cases own synchronization to follow this workspace's layer rules.
+
 ## Read path
 
 ```mermaid
@@ -20,7 +27,7 @@ flowchart TD
   Commit --> Read
 ```
 
-Inbox storage identity binds API audience, account and company independently of
+Inbox and Leave replica identity binds API audience, account and company independently of
 the local session. Database operations still require the active session, so a late
 request from the preceding login cannot mutate retained facts. Other feature
 snapshots still use temporary session ownership until their collection migration.
@@ -52,7 +59,7 @@ rolled-back transactions cannot advance a public cursor. Cursors are opaque,
 scoped to the account/company/projection, and have finite server retention.
 See the [server protocol](https://github.com/fajarxfce/hris-platform/blob/main/docs/synchronization.md).
 
-Inbox already consumes this protocol. One run reads a bounded number of pages,
+Inbox and Leave consume this protocol. One run reads a bounded number of pages,
 hydrates changed resources with bounded concurrency, reconciles versions and
 tombstones, and atomically stores data with the next cursor. A failed hydration
 cannot advance that cursor. Multiple UI/worker triggers share an execution owner.
@@ -92,7 +99,7 @@ submitting it are separate capabilities.
 | Selected company | Encrypted selection, restored without an age limit | Foreground/worker revalidation |
 | Inbox | Account-owned encrypted records survive a new login; list/detail share a published generation | Implemented |
 | Attendance / calendar | Last recent/monthly/calendar snapshots | Snapshot acquisition; server feed not registered |
-| Leave | Last selected overview and request detail | Server collections exist; mobile integration pending |
+| Leave | Account-owned request summaries and balances, queried by employment/year/status; the last full request detail remains a separate snapshot | Request/balance change feed implemented; full detail/history replication remains pending |
 | Overtime | Last selected overview and request detail | Server collection exists; mobile integration pending |
 | Payslips | Last selected list and detail | Server collections exist; mobile integration pending |
 | Expenses | Last selected list and detail | Server collection exists; mobile integration pending |
@@ -122,15 +129,52 @@ optimistic UI cannot accidentally change a leave balance or finalized payslip.
 These are the next collection boundaries, not a claim that every module already
 has these tables.
 
+### Leave replica
+
+The physical store uses `replica_documents` with an account owner, company partition,
+generation, record ID, version, ordering key and encrypted payload. Request summaries
+and balances are independent documents. A small encrypted directory document supplies
+employment choices; it does not contain the request history. Room's indexed tag table
+and IndexedDB's multi-entry index support local filtering without loading the whole
+collection into memory. Filter tokens are derived with HMAC and bound to the API,
+account, company, employment and filter. Ciphertext authenticates the ordering and
+tag metadata too. Index equality/order still reveal structural metadata.
+
+`ObserveLeave` resolves a selection from the stored employment directory, then reads
+the requested balance and request pages. It only combines metadata and pages from
+the same published generation/revision. Status changes, paging and year selection
+do not trigger HTTP calls. Balances use the selected year; requests cover all dates.
+
+`SyncLeave` selects `LEAVE_REQUESTS,LEAVE_BALANCES`, hydrates references four at a time,
+and commits each processed page with its cursor and directory metadata. Fifty
+references per page, ten pages per run and a 30-second run deadline bound one job;
+subsequent invocations resume its stored cursor. These limits do not discard acquired
+history or expire local reads. Canonical versions can be newer than their reference;
+older updates cannot overwrite them, and deletes remain versioned tombstones.
+An unfinished publication honors the server's polling hint. A completed run leaves
+idle scheduling to the platform worker, so explicit refresh and foreground recovery
+do not wait on an old idle polling deadline.
+
+Canonical reads may conceal lost ownership as `leave_request_not_found` or
+`leave_account_not_found`. These invalidate the admitted projection rather than
+inventing a deletion or treating the denial as an offline transport failure.
+Balance type labels are hydrated with their financial record; standalone type
+renames still need a metadata invalidation feed to update an unchanged balance.
+
+The previous last-view overview remains a migration fallback until the first
+complete replica is published. Once a replica is published, an empty local result
+is authoritative for that replica; it does not recover an unrelated old filter page.
+Full request details and paged activity still use their preceding last-view storage.
+
 ## Next increments
 
 1. Extend stable audience/account/company ownership to the remaining read
-   projections. Inbox now retains account-owned facts across sign-in; workspace
+   projections. Inbox and Leave replicas retain account-owned facts across sign-in; workspace
    admission and other last-view snapshots remain session-owned. Reauthentication
    does not reuse an old request guard or old credential-bound feed cursor.
-2. Add mobile projections for the existing leave, overtime, expense and payroll
-   collections. Store independently versioned facts, then query/filter locally;
-   replace single last-view slots only as each collection is implemented.
+2. Add projections for the existing overtime, expense and payroll collections, and
+   independently retained full Leave details/history. Store versioned facts, then
+   query/filter locally; replace single last-view slots as each projection is implemented.
 3. Register backend feeds for attendance, schedules, documents and coworker data,
    including deletions and authorization changes, before implementing mobile sync.
 4. Persist unfinished local drafts separately from confirmed server models and

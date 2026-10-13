@@ -14,6 +14,41 @@ import kotlinx.coroutines.test.*
 
 class LeaveRequestReadTest {
     @Test
+    fun renewingCredentialsDoesNotInvalidateTheStoredRequestReadOrRenewItsActionReview() = runTest {
+        val f = LeaveRequestFixture()
+        f.load()
+        val saved = assertIs<AppResult.Success<LeaveRequestSnapshot?>>(f.records.value).value!!
+        val renewed =
+            f.base.session.copy(
+                binding =
+                    f.base.session.binding.copy(
+                        expiresAtEpochMillis =
+                            f.base.session.binding.expiresAtEpochMillis + 3_600_000
+                    )
+            )
+        f.base.sessionState.value = AppResult.Success(renewed)
+        assertEquals(
+            saved,
+            assertIs<AppResult.Success<LeaveRequestSnapshot?>>(
+                    f.observe(f.base.workspace.id, f.selection.requestId).first()
+                )
+                .value,
+        )
+        val current =
+            saved.access.copy(
+                sessionExpiresAt =
+                    Instant.fromEpochMilliseconds(renewed.binding.expiresAtEpochMillis)
+            )
+        assertIs<AppResult.Failed>(
+            dev.fajar.starter.leave.domain.policies.validateLeaveActionSnapshot(
+                current,
+                saved,
+                f.base.clock.now(),
+            )
+        )
+    }
+
+    @Test
     fun detailsOwnAnIndependentCompleteSnapshotAndNeedNoPeopleOrWorkforceRead() = runTest {
         val f = LeaveRequestFixture()
         f.base.load()

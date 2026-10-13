@@ -7,6 +7,21 @@ import kotlin.time.Duration.Companion.hours
 import kotlin.time.Instant
 
 class LeaveDataFixture : LeaveRemoteDataSource {
+    override suspend fun balance(sessionId: String, companyId: String, id: String) =
+        LeaveAccountDto(
+            requireNotNull(balance.balance.accountId),
+            employee.id,
+            balance.typeId,
+            balance.balance.year,
+            balance.balance.availableDays,
+            balance.balance.reservedDays,
+            balance.balance.consumedDays,
+            balance.balance.version,
+            balance.balance.closed,
+            balance.typeCode,
+            balance.typeName,
+        )
+
     override suspend fun submit(
         sessionId: String,
         companyId: String,

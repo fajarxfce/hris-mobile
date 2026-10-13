@@ -9,6 +9,11 @@ import org.koin.core.annotation.*
 
 @Single
 class LeaveApi(@Named(HttpClients.Authenticated) private val client: HttpClient) {
+    suspend fun balance(sessionId: String, companyId: String, id: String): LeaveAccountDto =
+        client.requestJson("companies/$companyId/leave/balances/$id", maximumBytes = 4_096) {
+            forSession(sessionId)
+        }
+
     suspend fun submit(
         sessionId: String,
         companyId: String,

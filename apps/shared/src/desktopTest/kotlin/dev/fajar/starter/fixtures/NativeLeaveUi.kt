@@ -15,12 +15,17 @@ class NativeLeaveUi {
     val years = CopyOnWriteArrayList<Int>()
     val statuses = CopyOnWriteArrayList<String>()
     val historyPages = CopyOnWriteArrayList<String>()
+    val syncRequests = CopyOnWriteArrayList<String>()
     val actions = NativeLeaveActionsUi()
     val creation = NativeLeaveCreationUi()
 
     fun response(request: HttpRequestData): Pair<String, HttpStatusCode>? {
         val path = request.url.encodedPath
-        if (!path.contains("/leave/")) return null
+        val sync =
+            path.contains("/sync/") &&
+                request.url.parameters["collections"]?.split(',')?.toSet() ==
+                    setOf("LEAVE_REQUESTS", "LEAVE_BALANCES")
+        if (!path.contains("/leave/") && !sync) return null
         check(enabled)
         if (offline) throw IOException("Leave test connection unavailable")
         creation.response(request)?.let {
@@ -35,6 +40,9 @@ class NativeLeaveUi {
             return """{"code":"leave_request_not_found"}""" to HttpStatusCode.NotFound
         val body =
             when {
+                sync -> syncPage(request, company)
+                path.contains("/leave/balances/") ->
+                    balanceAccount(company, path.substringAfterLast('/'))
                 path.contains("/me/requests/") -> {
                     check(path.endsWith("/dddddddd-dddd-4ddd-8ddd-dddddddddddd"))
                     check(request.url.parameters["historyLimit"] == "10")
@@ -95,6 +103,70 @@ class NativeLeaveUi {
                 else -> error("Unexpected leave test request")
             }
         return body.toString() to HttpStatusCode.OK
+    }
+
+    private fun syncPage(request: HttpRequestData, company: String): JsonObject {
+        check(request.url.parameters["limit"] == "50")
+        syncRequests += request.url.encodedPath
+        val bootstrap = request.url.encodedPath.endsWith("/bootstrap")
+        val records =
+            listOf(
+                "dddddddd-dddd-4ddd-8ddd-dddddddddddd" to
+                    actions.details(null).getValue("version").jsonPrimitive.long
+            ) + creation.references()
+        return buildJsonObject {
+            if (bootstrap)
+                putJsonArray("collections") {
+                    add("LEAVE_REQUESTS")
+                    add("LEAVE_BALANCES")
+                }
+            putJsonArray("items") {
+                if (company == NativeUiServer.COMPANY_ONE) {
+                    for ((id, version) in records) addJsonObject {
+                        put("collection", "LEAVE_REQUESTS")
+                        put("id", id)
+                        put("version", version)
+                        if (!bootstrap) put("operation", "UPSERT")
+                    }
+                    addJsonObject {
+                        put("collection", "LEAVE_BALANCES")
+                        put("id", "cccccccc-cccc-4ccc-8ccc-cccccccccccc")
+                        put("version", 3)
+                        if (!bootstrap) put("operation", "UPSERT")
+                    }
+                }
+            }
+            if (bootstrap) {
+                put("nextCursor", JsonNull)
+                put("changesCursor", "leave-head")
+            } else {
+                put("cursor", "leave-current")
+                put("hasMore", false)
+                put("pendingPublication", false)
+                put("pollAfterSeconds", 5)
+            }
+            put("serverTime", "2026-10-12T00:00:00Z")
+        }
+    }
+
+    private fun balanceAccount(company: String, id: String): JsonObject {
+        check(company == NativeUiServer.COMPANY_ONE && id == "cccccccc-cccc-4ccc-8ccc-cccccccccccc")
+        val row =
+            balancePage(2026)
+                .getValue("balances")
+                .jsonObject
+                .getValue("items")
+                .jsonArray
+                .single()
+                .jsonObject
+        return buildJsonObject {
+            row.getValue("balance").jsonObject.forEach { (key, value) ->
+                if (key != "accountId") put(key, value)
+            }
+            put("id", id)
+            put("employeeId", NativePeopleUi.EMPLOYEE)
+            listOf("typeId", "typeCode", "typeName").forEach { put(it, row.getValue(it)) }
+        }
     }
 
     private fun balancePage(year: Int): JsonObject = buildJsonObject {

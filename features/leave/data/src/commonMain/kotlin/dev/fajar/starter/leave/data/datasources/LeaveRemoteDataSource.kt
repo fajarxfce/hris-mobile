@@ -3,6 +3,8 @@ package dev.fajar.starter.leave.data.datasources
 import dev.fajar.starter.leave.data.dto.*
 
 interface LeaveRemoteDataSource {
+    suspend fun balance(sessionId: String, companyId: String, id: String): LeaveAccountDto
+
     suspend fun submit(
         sessionId: String,
         companyId: String,

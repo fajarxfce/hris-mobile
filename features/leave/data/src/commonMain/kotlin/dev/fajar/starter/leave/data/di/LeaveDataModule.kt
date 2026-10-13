@@ -5,6 +5,7 @@ import dev.fajar.starter.identity.domain.repositories.SessionRepository
 import dev.fajar.starter.leave.domain.repositories.*
 import dev.fajar.starter.leave.domain.usecases.*
 import dev.fajar.starter.sync.domain.SyncTask
+import dev.fajar.starter.sync.domain.repositories.SyncFeedRepository
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
 import kotlin.time.Clock
 import org.koin.core.annotation.*
@@ -118,18 +119,21 @@ class LeaveDataModule {
 
     @Factory
     fun observeLeave(
+        replicas: LeaveReplicaRepository,
         cache: LeaveCacheRepository,
         sessions: SessionRepository,
         workspaces: WorkspaceRepository,
         build: AppBuild,
-    ) = ObserveLeave(cache, sessions, workspaces, Clock.System, build)
+    ) = ObserveLeave(replicas, cache, sessions, workspaces, Clock.System, build)
 
-    @Single
-    fun refreshLeave(
-        remote: LeaveRepository,
-        cache: LeaveCacheRepository,
+    @Single(binds = [SyncLeave::class, SyncTask::class])
+    fun syncLeave(
+        feed: SyncFeedRepository,
+        remote: LeaveRecordRepository,
+        directory: LeaveRepository,
+        cache: LeaveReplicaRepository,
         sessions: SessionRepository,
         workspaces: WorkspaceRepository,
         build: AppBuild,
-    ) = RefreshLeave(remote, cache, sessions, workspaces, Clock.System, build)
+    ) = SyncLeave(feed, remote, directory, cache, sessions, workspaces, Clock.System, build)
 }

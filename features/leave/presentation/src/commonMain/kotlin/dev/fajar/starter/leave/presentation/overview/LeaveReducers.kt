@@ -2,7 +2,7 @@ package dev.fajar.starter.leave.presentation.overview
 
 import dev.fajar.starter.common.result.AppResult
 import dev.fajar.starter.leave.domain.entities.LeaveOverview
-import dev.fajar.starter.leave.domain.entities.LeaveSelection
+import dev.fajar.starter.leave.domain.entities.LeaveSyncOutcome
 import dev.fajar.starter.leave.domain.policies.leaveFailureInvalidatesCache
 
 internal fun LeaveState.withCachedLeave(result: AppResult<LeaveOverview?>): LeaveState =
@@ -17,25 +17,22 @@ internal fun LeaveState.withCachedLeave(result: AppResult<LeaveOverview?>): Leav
             )
         is AppResult.Success -> {
             val snapshot = result.value
-            if (snapshot != null && selection != null && !selection.matches(snapshot)) this
-            else
-                copy(
-                    content = snapshot,
-                    loading = false,
-                    cacheFailure = null,
-                    selection =
-                        if (refreshFailure != null && selection == null) snapshot?.selection
-                        else selection,
-                )
+            copy(
+                content = snapshot,
+                loading = false,
+                cacheFailure = null,
+                selection = snapshot?.selection ?: selection,
+            )
         }
     }
 
-internal fun LeaveState.withLeaveRefreshResult(result: AppResult<Unit>): LeaveState =
+internal fun LeaveState.withLeaveRefreshResult(result: AppResult<LeaveSyncOutcome>): LeaveState =
     when (result) {
         is AppResult.Failed -> {
             val invalidated = leaveFailureInvalidatesCache(result.failure)
             copy(
                 refreshing = false,
+                syncPending = false,
                 loading = false,
                 refreshFailure = result.failure,
                 content = if (invalidated) null else content,
@@ -46,16 +43,9 @@ internal fun LeaveState.withLeaveRefreshResult(result: AppResult<Unit>): LeaveSt
         is AppResult.Success ->
             copy(
                 refreshing = false,
-                loading = content == null,
-                cacheFailure = null,
-                refreshFailure = null,
+                loading = false,
+                syncPending = !result.value.caughtUp,
+                cacheFailure = if (result.value.caughtUp) null else cacheFailure,
+                refreshFailure = if (result.value.caughtUp) null else refreshFailure,
             )
     }
-
-private fun LeaveSelection.matches(snapshot: LeaveOverview): Boolean =
-    (employeeId == null || employeeId == snapshot.selection.employeeId) &&
-        (year == null || year == snapshot.selection.year) &&
-        employmentAfter == snapshot.selection.employmentAfter &&
-        balanceAfter == snapshot.selection.balanceAfter &&
-        status == snapshot.selection.status &&
-        requestAfter == snapshot.selection.requestAfter

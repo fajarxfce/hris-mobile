@@ -38,6 +38,6 @@ fun validateStoredLeaveRequest(
     access: LeaveAccess,
     snapshot: LeaveRequestSnapshot?,
 ): AppResult<Unit> =
-    if (snapshot != null && !sameLeaveScope(access, snapshot.access))
+    if (snapshot != null && !sameLeaveSessionOwner(access, snapshot.access))
         leaveFailure("client.leave_scope_changed", FailureKind.AccessDenied)
     else AppResult.Success(Unit)

@@ -19,6 +19,48 @@ import kotlinx.coroutines.test.*
 
 class LeaveViewModelTest {
     @Test
+    fun incompleteSynchronizationCannotUnlockAReadPreviouslyDeniedByTheServer() = runTest {
+        withLeave { fixture, model, _ ->
+            model.onEvent(LeaveEvent.Entered)
+            runCurrent()
+            fixture.rejectWrite = true
+            fixture.directoryCall = { leaveFailure("mfa_required", FailureKind.AccessDenied) }
+            advanceTimeBy(5.seconds)
+            model.onEvent(LeaveEvent.RefreshRequested)
+            runCurrent()
+            assertTrue(model.state.value.readRestricted)
+            fixture.rejectWrite = false
+            fixture.directoryCall = { AppResult.Success(fixture.directory) }
+            val regular = fixture.synchronization.changesCall
+            fixture.synchronization.changesCall = {
+                AppResult.Success(
+                    dev.fajar.starter.sync.domain.entities.SyncChangePage(
+                        emptyList(),
+                        "pending",
+                        false,
+                        true,
+                        5,
+                        fixture.clock.now(),
+                    )
+                )
+            }
+            model.onEvent(LeaveEvent.RefreshRequested)
+            advanceTimeBy(30_001)
+            runCurrent()
+            assertTrue(model.state.value.syncPending)
+            assertTrue(model.state.value.readRestricted)
+            assertNull(model.state.value.content)
+            assertEquals(0, fixture.observers)
+            fixture.synchronization.changesCall = regular
+            advanceTimeBy(5.seconds)
+            model.onEvent(LeaveEvent.RefreshRequested)
+            runCurrent()
+            assertFalse(model.state.value.readRestricted)
+            assertNotNull(model.state.value.content)
+        }
+    }
+
+    @Test
     fun creationUsesTheVisibleOwnedEmploymentAndIsHiddenFromReadOnlyAccess() = runTest {
         withLeave { fixture, model, _ ->
             val effects = mutableListOf<LeaveEffect>()
@@ -135,30 +177,35 @@ class LeaveViewModelTest {
     }
 
     @Test
-    fun changingYearCancelsAnOlderRefreshAndRejectsItsLateFailure() = runTest {
+    fun changingFiltersQueriesLocalRecordsWithoutCancellingBackgroundSynchronization() = runTest {
         withLeave { fixture, model, _ ->
             model.onEvent(LeaveEvent.Entered)
             runCurrent()
+            val gate = CompletableDeferred<Unit>()
             var cancelled = false
-            fixture.balancesCall = { year ->
-                if (year == 2026) {
-                    try {
-                        awaitCancellation()
-                    } catch (_: CancellationException) {
-                        cancelled = true
-                    }
-                    leaveFailure("mfa_required", FailureKind.AccessDenied)
-                } else AppResult.Success(LeavePage(listOf(fixture.balance.copy(year = year))))
+            fixture.balancesCall = {
+                try {
+                    gate.await()
+                    AppResult.Success(LeavePage(listOf(fixture.balance)))
+                } finally {
+                    cancelled = !currentCoroutineContext().isActive
+                }
             }
             model.onEvent(LeaveEvent.RefreshRequested)
             runCurrent()
+            val reads = fixture.directoryReads
             model.onEvent(LeaveEvent.YearRequested(2025))
             runCurrent()
-            assertTrue(cancelled)
+            assertFalse(cancelled)
+            assertTrue(model.state.value.refreshing)
+            assertEquals(2025, model.state.value.content?.selection?.year)
+            assertTrue(model.state.value.content!!.balances.items.isEmpty())
+            assertEquals(reads, fixture.directoryReads)
+            gate.complete(Unit)
+            runCurrent()
             assertEquals(2025, model.state.value.content?.selection?.year)
             assertNull(model.state.value.refreshFailure)
-            assertFalse(model.state.value.needsVerification)
-            assertEquals(listOf(2026, 2026, 2025), fixture.years)
+            assertFalse(model.state.value.refreshing)
         }
     }
 
@@ -176,7 +223,7 @@ class LeaveViewModelTest {
             assertNull(model.state.value.content)
             assertEquals(0, fixture.observers)
             assertTrue(model.state.value.needsVerification)
-            assertNotNull((fixture.records.value as AppResult.Success).value)
+            assertNotNull(fixture.replica.current)
             model.onEvent(LeaveEvent.VerificationRequested)
             runCurrent()
             assertEquals(listOf<LeaveEffect>(LeaveEffect.VerifyAccount), effects)
@@ -211,13 +258,13 @@ class LeaveViewModelTest {
             }
             model.onEvent(LeaveEvent.RefreshRequested)
             runCurrent()
-            val saved = fixture.records.value
-            fixture.records.value =
+            val saved = fixture.replica.published.value
+            fixture.replica.published.value =
                 leaveFailure("client.leave_scope_changed", FailureKind.AccessDenied)
             runCurrent()
             assertTrue(model.state.value.readRestricted)
             assertEquals(0, fixture.observers)
-            fixture.records.value = saved
+            fixture.replica.published.value = saved
             runCurrent()
             assertNull(model.state.value.content)
             release.complete(Unit)
@@ -232,6 +279,11 @@ class LeaveViewModelTest {
     fun offlineRestorationRetainsSavedFiltersWhenCacheArrivesAfterFailure() = runTest {
         withLeave { fixture, model, _ ->
             fixture.load(LeaveSelection(year = 2025, status = LeaveStatus.APPROVED))
+            fixture.requestsCall = {
+                AppResult.Success(
+                    LeavePage(listOf(fixture.request.copy(status = LeaveStatus.APPROVED)))
+                )
+            }
             val release = CompletableDeferred<Unit>()
             fixture.cacheReadGate = release
             fixture.directoryCall = { leaveFailure("client.network", FailureKind.Network) }
@@ -305,9 +357,11 @@ class LeaveViewModelTest {
             model.onEvent(LeaveEvent.Entered)
             runCurrent()
             fixture.directoryCall = { leaveFailure("client.network", FailureKind.Network) }
+            val reads = fixture.directoryReads
             model.onEvent(LeaveEvent.YearRequested(2025))
             runCurrent()
-            assertNull(model.state.value.content)
+            assertTrue(model.state.value.content!!.balances.items.isEmpty())
+            assertEquals(reads, fixture.directoryReads)
             assertEquals(2025, model.state.value.filters?.year)
             fixture.directoryCall = { AppResult.Success(fixture.directory) }
             model.onEvent(LeaveEvent.YearRequested(2026))
@@ -356,8 +410,16 @@ class LeaveViewModelTest {
                 release.await()
                 AppResult.Success(fixture.directory)
             }
-            fixture.records.value =
-                AppResult.Success(saved.copy(refreshAfter = fixture.clock.now() + 1.seconds))
+            val published = (fixture.replica.published.value as AppResult.Success).value
+            fixture.replica.published.value =
+                AppResult.Success(
+                    published.copy(
+                        checkpoint =
+                            published.checkpoint!!.copy(
+                                refreshAfter = fixture.clock.now() + 1.seconds
+                            )
+                    )
+                )
             runCurrent()
             advanceTimeBy(1_001)
             runCurrent()
@@ -390,8 +452,16 @@ class LeaveViewModelTest {
                 attempts++
                 leaveFailure("client.network", FailureKind.Network)
             }
-            fixture.records.value =
-                AppResult.Success(saved.copy(refreshAfter = fixture.clock.now() + 1.seconds))
+            val published = (fixture.replica.published.value as AppResult.Success).value
+            fixture.replica.published.value =
+                AppResult.Success(
+                    published.copy(
+                        checkpoint =
+                            published.checkpoint!!.copy(
+                                refreshAfter = fixture.clock.now() + 1.seconds
+                            )
+                    )
+                )
             runCurrent()
             advanceTimeBy(1_001)
             runCurrent()
@@ -466,6 +536,7 @@ class LeaveViewModelTest {
             owner.clear()
             runCurrent()
             assertEquals(0, fixture.observers)
+            assertEquals(0, fixture.replica.pageObservers)
             Dispatchers.resetMain()
         }
     }

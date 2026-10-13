@@ -65,12 +65,11 @@ fun admitLeave(
 }
 
 fun sameLeaveScope(first: LeaveAccess, second: LeaveAccess): Boolean =
-    first.sessionId == second.sessionId &&
-        first.accountId == second.accountId &&
-        first.audience == second.audience &&
-        first.companyId == second.companyId &&
-        first.permissions == second.permissions &&
-        first.sessionExpiresAt == second.sessionExpiresAt
+    sameLeaveSessionOwner(first, second) && first.sessionExpiresAt == second.sessionExpiresAt
+
+/** Legacy ciphertext is session-bound, but credential renewal does not change its owner. */
+fun sameLeaveSessionOwner(first: LeaveAccess, second: LeaveAccess): Boolean =
+    first.sessionId == second.sessionId && sameStoredLeaveScope(first, second)
 
 fun validateLeaveContinuation(
     expected: LeaveAccess,
@@ -85,6 +84,6 @@ fun validateLeaveContinuation(
 
 /** Stored facts remain readable after freshness expires; commands validate current authority. */
 fun validateStoredLeave(access: LeaveAccess, snapshot: LeaveOverview?): AppResult<Unit> =
-    if (snapshot != null && !sameLeaveScope(access, snapshot.access))
+    if (snapshot != null && !sameLeaveSessionOwner(access, snapshot.access))
         leaveFailure("client.leave_scope_changed", FailureKind.AccessDenied)
     else AppResult.Success(Unit)

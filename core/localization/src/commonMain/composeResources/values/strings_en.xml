@@ -774,4 +774,5 @@
     <string name="expense_policy_changed_en">Check the transaction date, category limits and required evidence.</string>
     <string name="expense_submission_limit_en">This claim has reached its submission limit.</string>
     <string name="expense_reason_required_en">Enter a reason (up to 1,000 characters).</string>
+    <string name="leave_balance_unavailable_en">This leave balance is unavailable.</string>
 </resources>

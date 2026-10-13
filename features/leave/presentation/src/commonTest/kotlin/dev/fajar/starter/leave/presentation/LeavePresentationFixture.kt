@@ -129,12 +129,36 @@ class LeavePresentationFixture(instant: () -> Instant = { Instant.parse("2026-10
     var directoryReads = 0
     var balanceReads = 0
     var requestReads = 0
-    var writes = 0
-    var clears = 0
-    var observers = 0
-    var rejectWrite = false
-    var cacheReadGate: CompletableDeferred<Unit>? = null
-    var failNextObservation = false
+    var legacyWrites = 0
+    val writes
+        get() = legacyWrites + replica.writes
+
+    var legacyClears = 0
+    val clears
+        get() = legacyClears + replica.clears
+
+    var legacyObservers = 0
+    val observers
+        get() = legacyObservers + replica.directoryObservers
+
+    var rejectWrite: Boolean
+        get() = replica.rejectWrite
+        set(value) {
+            replica.rejectWrite = value
+        }
+
+    var cacheReadGate: CompletableDeferred<Unit>?
+        get() = replica.readGate
+        set(value) {
+            replica.readGate = value
+        }
+
+    var failNextObservation: Boolean
+        get() = replica.failNextObservation
+        set(value) {
+            replica.failNextObservation = value
+        }
+
     val years = mutableListOf<Int>()
     val sessions =
         object : SessionRepository {
@@ -226,7 +250,7 @@ class LeavePresentationFixture(instant: () -> Instant = { Instant.parse("2026-10
     val cache =
         object : LeaveCacheRepository {
             override fun observe(access: LeaveAccess): Flow<AppResult<LeaveOverview?>> = flow {
-                observers++
+                legacyObservers++
                 try {
                     cacheReadGate?.await()
                     if (failNextObservation) {
@@ -236,7 +260,7 @@ class LeavePresentationFixture(instant: () -> Instant = { Instant.parse("2026-10
                     }
                     emitAll(records)
                 } finally {
-                    observers--
+                    legacyObservers--
                 }
             }
 
@@ -251,14 +275,36 @@ class LeavePresentationFixture(instant: () -> Instant = { Instant.parse("2026-10
                 val current = (records.value as? AppResult.Success)?.value
                 if (rejectWrite || expectedGeneration != current?.generation)
                     return AppResult.Success(false)
-                if (snapshot == null) clears++ else writes++
+                if (snapshot == null) legacyClears++ else legacyWrites++
                 records.value = AppResult.Success(snapshot)
                 return AppResult.Success(true)
             }
         }
-    val refresh = RefreshLeave(remote, cache, sessions, workspaces, clock, build)
-    val observe = ObserveLeave(cache, sessions, workspaces, clock, build)
+    val replica = LeaveReplicaFixture()
+    val synchronization = LeaveSyncFixture(this)
+    val refresh = synchronization.sync
+    val observe = ObserveLeave(replica, cache, sessions, workspaces, clock, build)
 
-    suspend fun load(selection: LeaveSelection = LeaveSelection()) =
-        refresh(workspace.id, selection)
+    suspend fun load(selection: LeaveSelection = LeaveSelection()): AppResult<Unit> {
+        val access =
+            (admitLeave(workspace.id, workspace, session, build, clock.now()) as AppResult.Success)
+                .value
+        records.value =
+            AppResult.Success(
+                LeaveOverview(
+                    access,
+                    "legacy",
+                    directory,
+                    selection.copy(
+                        employeeId = selection.employeeId ?: employee.id,
+                        year = selection.year ?: 2026,
+                    ),
+                    LeavePage(listOf(balance.copy(year = selection.year ?: 2026))),
+                    LeavePage(listOf(request.copy(status = selection.status ?: request.status))),
+                    clock.now(),
+                    clock.now() + 1.hours,
+                )
+            )
+        return AppResult.Success(Unit)
+    }
 }

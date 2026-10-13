@@ -911,6 +911,10 @@ enum class AppString(val english: StringResource, val indonesian: StringResource
     LeaveYearClosed(Res.string.leave_year_closed_en, Res.string.leave_year_closed_id),
     LeavePayrollFrozen(Res.string.leave_payroll_frozen_en, Res.string.leave_payroll_frozen_id),
     LeaveRequestDetails(Res.string.leave_request_details_en, Res.string.leave_request_details_id),
+    LeaveBalanceUnavailable(
+        Res.string.leave_balance_unavailable_en,
+        Res.string.leave_balance_unavailable_id,
+    ),
     LeaveRequestUnavailable(
         Res.string.leave_request_unavailable_en,
         Res.string.leave_request_unavailable_id,

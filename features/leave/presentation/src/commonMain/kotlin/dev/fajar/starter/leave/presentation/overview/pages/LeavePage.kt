@@ -59,6 +59,10 @@ fun LeavePage(state: LeaveState, list: LazyListState, onEvent: (LeaveEvent) -> U
         },
     ) {
         if (state.loading) item(key = "loading") { AppLoading(compact = state.content != null) }
+        if (state.syncPending)
+            item(key = "sync-pending") {
+                AppText(appString(AppString.SyncPending), color = AppColors.muted)
+            }
         val failure = state.failure
         if (failure != null)
             item(key = "failure") {
@@ -120,7 +124,7 @@ fun LeavePage(state: LeaveState, list: LazyListState, onEvent: (LeaveEvent) -> U
                             AppTextButton(
                                 appString(AppString.LeaveFirstBalances),
                                 { onEvent(LeaveEvent.BalancesPageRequested(null)) },
-                                enabled = !state.refreshing,
+                                enabled = !state.readRestricted,
                             )
                         if (content.balances.nextCursor != null)
                             AppTextButton(
@@ -132,7 +136,7 @@ fun LeavePage(state: LeaveState, list: LazyListState, onEvent: (LeaveEvent) -> U
                                         )
                                     )
                                 },
-                                enabled = !state.refreshing,
+                                enabled = !state.readRestricted,
                             )
                     }
                 }
@@ -176,7 +180,7 @@ fun LeavePage(state: LeaveState, list: LazyListState, onEvent: (LeaveEvent) -> U
                             AppTextButton(
                                 appString(AppString.LeaveLatestRequests),
                                 { onEvent(LeaveEvent.RequestsPageRequested(null)) },
-                                enabled = !state.refreshing,
+                                enabled = !state.readRestricted,
                             )
                         if (content.requests.nextCursor != null)
                             AppTextButton(
@@ -188,7 +192,7 @@ fun LeavePage(state: LeaveState, list: LazyListState, onEvent: (LeaveEvent) -> U
                                         )
                                     )
                                 },
-                                enabled = !state.refreshing,
+                                enabled = !state.readRestricted,
                             )
                     }
                 }

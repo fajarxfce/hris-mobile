@@ -139,14 +139,16 @@ a later rejection. Confirmed cleanup requires admitted request facts and an atom
 outcome revision check.
 
 The [Leave page](leave.md) uses its own minimal self-service employment directory,
-independent of People and Workforce availability. Its use cases admit the selected
-company, acquire scoped balances/history and atomically publish one encrypted
-overview. The ViewModel owns filter selection, read gates and cancellation; it
+independent of People and Workforce availability. `SyncLeave` admits the selected
+company and reconciles request/balance change references. Its replica repository
+atomically stores encrypted records, directory metadata and the processed cursor.
+`ObserveLeave` queries those records by employment, year and status; filters do
+not acquire data. The ViewModel owns selection, read gates and cancellation; it
 never recalculates accounting balances or sends technical API types to the page.
-Own-request details have separate acquisition/observation use cases and an
-independent bounded encrypted partition. The shared feature cache repository
-implements both read contracts; a codec only handles the chunked storage format.
-History pagination changes the visible revision page, not current request facts.
+The preceding overview remains a migration fallback until the first complete
+replica publishes. Own-request details still have separate acquisition/observation
+use cases and a bounded encrypted last-view partition. History pagination changes
+the visible revision page, not current request facts.
 
 The [payslip workflow](payroll.md) keeps employee SELF scope explicit in
 every financial API request. Use cases admit company/session access and publish

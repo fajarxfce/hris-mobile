@@ -31,7 +31,7 @@ class LeaveLayoutTest {
     @get:Rule val compose = createComposeRule()
 
     @Test
-    fun requestActionStaysVisibleWhileScrollingAndCannotRunDuringRefreshOrDeniedReads() {
+    fun requestActionStaysVisibleDuringScrollingAndSyncAndIsHiddenAfterDeniedReads() {
         val events = mutableListOf<LeaveEvent>()
         var state by mutableStateOf(LeaveState(content = overview(), loading = false))
         compose.setContent {
@@ -48,12 +48,7 @@ class LeaveLayoutTest {
             .performScrollToNode(hasText("Cancellation pending"))
         assertEquals(position, action.assertIsDisplayed().fetchSemanticsNode().boundsInRoot)
         compose.runOnIdle { state = state.copy(refreshing = true) }
-        action.assertIsDisplayed().assertIsNotEnabled().performClick()
-        compose.runOnIdle {
-            assertTrue(events.isEmpty())
-            state = state.copy(refreshing = false)
-        }
-        action.assertIsEnabled().performClick()
+        action.assertIsDisplayed().assertIsEnabled().performClick()
         compose.runOnIdle {
             assertEquals(listOf<LeaveEvent>(LeaveEvent.CreateRequested), events)
             state =

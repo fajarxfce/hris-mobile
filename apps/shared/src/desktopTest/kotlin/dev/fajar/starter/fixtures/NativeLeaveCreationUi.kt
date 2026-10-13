@@ -20,6 +20,11 @@ class NativeLeaveCreationUi {
     val requests = CopyOnWriteArrayList<Pair<String, String>>()
     private val receipts = mutableMapOf<String, Pair<String, String>>()
     private val created = mutableMapOf<String, JsonObject>()
+
+    @Synchronized
+    fun references(): List<Pair<String, Long>> =
+        created.map { (id, record) -> id to record.getValue("version").jsonPrimitive.long }
+
     private val policy: JsonObject
         get() =
             JsonObject(

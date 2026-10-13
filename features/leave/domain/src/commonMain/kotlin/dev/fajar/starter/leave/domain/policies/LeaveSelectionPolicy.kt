@@ -19,9 +19,12 @@ fun validateLeaveSelection(selection: LeaveSelection): AppResult<Unit> =
             (selection.employmentAfter.isBlank() || selection.employmentAfter.length > 32) ->
             leaveFailure("invalid_page")
         selection.balanceAfter != null &&
-            !Regex("[A-Z][A-Z0-9_-]{0,31}").matches(selection.balanceAfter) ->
+            !Regex("[A-Z][A-Z0-9_-]{0,31}").matches(selection.balanceAfter) &&
+            !Regex("b/[0-9a-f-]{36}").matches(selection.balanceAfter) ->
             leaveFailure("invalid_page")
-        selection.requestAfter != null && Uuid.parseOrNull(selection.requestAfter) == null ->
+        selection.requestAfter != null &&
+            Uuid.parseOrNull(selection.requestAfter) == null &&
+            !Regex("r/[0-9]{19}/[0-9a-f-]{36}").matches(selection.requestAfter) ->
             leaveFailure("invalid_page")
         else -> AppResult.Success(Unit)
     }
@@ -32,6 +35,8 @@ fun leaveFailureInvalidatesCache(failure: Failure): Boolean =
             setOf(
                 "employee_not_found",
                 "leave_request_not_found",
+                "leave_account_not_found",
+                "sync_scope_changed",
                 "company_maintenance",
                 "client_update_required",
                 "client_version_required",

@@ -49,7 +49,9 @@ also open actual-time and withdrawal forms with versioned confirmation. An uncer
 submission stays retained before a different action can be prepared.
 
 Leave shows annual balances and request history with status filters, account-owned
-employment selection and a bounded encrypted offline view. Each request opens its
+employment selection and encrypted records updated through the change feed.
+Year, status and page changes query the local database. Acquired history and balances
+survive reauthentication for the same account and remain readable offline. Each request opens its
 submitted dates, duration, reason, current status and paged activity history;
 the last request remains available offline without an age limit. Withdrawal,
 cancellation and withdrawal of a pending cancellation retain encrypted commands

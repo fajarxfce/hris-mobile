@@ -155,6 +155,7 @@ fun failureText(failure: Failure): String =
             "leave_year_closed" -> AppString.LeaveYearClosed
             "payroll_period_frozen" -> AppString.LeavePayrollFrozen
             "leave_request_not_found" -> AppString.LeaveRequestUnavailable
+            "leave_account_not_found" -> AppString.LeaveBalanceUnavailable
             "client.leave_cache_expired" -> AppString.LeaveCacheExpired
             "client.leave_scope_changed" -> AppString.CalendarScopeChanged
             "client.leave_changed" -> AppString.LeaveChanged

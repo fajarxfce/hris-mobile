@@ -25,7 +25,7 @@ fun LeaveFilterDialog(state: LeaveState, onEvent: (LeaveEvent) -> Unit) {
             contentPadding = PaddingValues(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            if (state.loading || state.refreshing) item(key = "loading") { AppLoading() }
+            if (state.loading) item(key = "loading") { AppLoading() }
             if (state.dialog == LeaveDialog.STATUS) {
                 item(key = "all") {
                     AppRadioRow(
@@ -43,7 +43,7 @@ fun LeaveFilterDialog(state: LeaveState, onEvent: (LeaveEvent) -> Unit) {
                 }
             } else {
                 val content = state.content
-                val failure = state.refreshFailure ?: state.cacheFailure
+                val failure = state.cacheFailure
                 if (failure != null) item(key = "failure") { AppFeedback(failureText(failure)) }
                 items(content?.directory?.items.orEmpty(), key = { it.id }) { employee ->
                     AppRadioRow(

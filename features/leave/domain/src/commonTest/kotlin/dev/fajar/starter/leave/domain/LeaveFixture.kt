@@ -245,9 +245,29 @@ class LeaveFixture(instant: () -> Instant = { Instant.parse("2026-10-12T01:00:00
                 return AppResult.Success(true)
             }
         }
-    val refresh = RefreshLeave(remote, cache, sessions, workspaces, clock, build)
-    val observe = ObserveLeave(cache, sessions, workspaces, clock, build)
+    val replica = LeaveReplicaFixture()
+    val observe = ObserveLeave(replica, cache, sessions, workspaces, clock, build)
 
-    suspend fun load(selection: LeaveSelection = LeaveSelection()) =
-        refresh(workspace.id, selection)
+    suspend fun load(selection: LeaveSelection = LeaveSelection()): AppResult<Unit> {
+        val access =
+            (admitLeave(workspace.id, workspace, session, build, clock.now()) as AppResult.Success)
+                .value
+        records.value =
+            AppResult.Success(
+                LeaveOverview(
+                    access,
+                    "legacy",
+                    directory,
+                    selection.copy(
+                        employeeId = selection.employeeId ?: employee.id,
+                        year = selection.year ?: 2026,
+                    ),
+                    LeavePage(listOf(balance.copy(year = selection.year ?: 2026))),
+                    LeavePage(listOf(request.copy(status = selection.status ?: request.status))),
+                    clock.now(),
+                    clock.now() + 1.hours,
+                )
+            )
+        return AppResult.Success(Unit)
+    }
 }

@@ -879,3 +879,35 @@ Root checks passed with 1,199 JVM/desktop tests. The database (25) and secure-st
 Android dev assembly passed. This validates the storage foundation; it does not
 claim that Leave is already connected to its change feed or that UI/device
 acceptance has been performed for this increment.
+
+## Account-owned Leave replication
+
+On 14 October 2026, root checks passed with 1,225 JVM/desktop tests, including
+the assembled leave workflows and application resource ownership. The Leave
+domain/data/presentation Chromium suites passed 161 tests. Android dev assembly
+passed. Tests cover staged bootstrap, incremental hydration, local year/status
+queries and pagination, expired cursors, same-account reauthentication, late
+results after company changes, denied reads through failed cleanup, cancellation
+during encryption, database reopening, authenticated index metadata and atomic
+record/checkpoint publication. UI and worker entry points resolve the same sync
+execution owner; both legacy and replica credential stores close with the app.
+
+API 35 emulator acceptance upgraded the existing app with connectivity disabled.
+The preceding leave overview rendered with unchanged ciphertext before any new
+replica existed. Reconnecting acquired five requests, two balances and one
+directory document in the published generation, with 12 filter-index entries and
+no pending generation. After force-stop and offline restart, annual balances and
+request history opened; year and status filters queried the saved records without
+changing their ciphertext. The final APK repeated the offline restart check.
+Screenshots were inspected and the inspected crash buffer recorded no fatal
+exception. Emulator connectivity was restored afterwards.
+
+After notice, the 30,105,761-byte dev APK was installed on the authorized
+Android 16 phone at 02:28:11 WIB using `--skip-build --install-only`. ADB reported
+success and package metadata confirmed the update. Its SHA-256 is
+`37edc965834c3c92f5851ba5e228e68ea910233077159a2e98b54cf256d2a3e2`.
+The phone application was not opened or driven.
+
+Full request details/activity still use the previous last-view snapshot. These
+checks do not claim complete historical-detail replication, offline creation of
+every draft, or measured memory/frame-time improvements.
