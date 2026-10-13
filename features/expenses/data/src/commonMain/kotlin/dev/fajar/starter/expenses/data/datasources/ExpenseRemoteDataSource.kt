@@ -3,6 +3,15 @@ package dev.fajar.starter.expenses.data.datasources
 import dev.fajar.starter.expenses.data.dto.*
 
 interface ExpenseRemoteDataSource {
+    suspend fun references(
+        sessionId: String,
+        companyId: String,
+        employeeId: String,
+        categoryIds: List<String>,
+        costCenterIds: List<String>,
+        receiptRevisionIds: List<String>,
+    ): ExpenseReferenceValuesDto
+
     suspend fun saveDraft(
         sessionId: String,
         companyId: String,

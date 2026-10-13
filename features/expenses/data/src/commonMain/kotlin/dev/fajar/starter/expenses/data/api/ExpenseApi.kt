@@ -9,6 +9,26 @@ import org.koin.core.annotation.*
 
 @Single
 class ExpenseApi(@Named(HttpClients.Authenticated) private val client: HttpClient) {
+    suspend fun references(
+        sessionId: String,
+        companyId: String,
+        employeeId: String,
+        categoryIds: List<String>,
+        costCenterIds: List<String>,
+        receiptRevisionIds: List<String>,
+    ): ExpenseReferenceValuesDto =
+        client.requestJson(
+            "companies/$companyId/expenses/me/employments/$employeeId/draft-references",
+            maximumBytes = 262_144,
+        ) {
+            forSession(sessionId)
+            if (categoryIds.isNotEmpty()) parameter("categoryIds", categoryIds.joinToString(","))
+            if (costCenterIds.isNotEmpty())
+                parameter("costCenterIds", costCenterIds.joinToString(","))
+            if (receiptRevisionIds.isNotEmpty())
+                parameter("receiptRevisionIds", receiptRevisionIds.joinToString(","))
+        }
+
     suspend fun saveDraft(
         sessionId: String,
         companyId: String,

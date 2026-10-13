@@ -6,6 +6,23 @@ import org.koin.core.annotation.Single
 
 @Single
 class ApiExpenseDataSource(private val api: ExpenseApi) : ExpenseRemoteDataSource {
+    override suspend fun references(
+        sessionId: String,
+        companyId: String,
+        employeeId: String,
+        categoryIds: List<String>,
+        costCenterIds: List<String>,
+        receiptRevisionIds: List<String>,
+    ) =
+        api.references(
+            sessionId,
+            companyId,
+            employeeId,
+            categoryIds,
+            costCenterIds,
+            receiptRevisionIds,
+        )
+
     override suspend fun saveDraft(
         sessionId: String,
         companyId: String,

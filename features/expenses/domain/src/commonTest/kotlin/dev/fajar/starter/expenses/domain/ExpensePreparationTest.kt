@@ -255,6 +255,7 @@ class ExpensePreparationTest {
                     is ExpenseDraftPreparation -> value.expiresAt
                     is ExpenseCategories -> value.expiresAt
                     is ExpenseCostCenters -> value.expiresAt
+                    is ExpenseDraftReferences -> value.expiresAt
                     else -> error("Unexpected preparation")
                 }
             assertEquals(now + 10.seconds, expiry)

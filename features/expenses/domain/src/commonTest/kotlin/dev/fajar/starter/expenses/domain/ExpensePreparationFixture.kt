@@ -12,6 +12,7 @@ enum class ExpensePreparationKind {
     DRAFT,
     CATEGORIES,
     COST_CENTERS,
+    REFERENCES,
 }
 
 class ExpensePreparationFixture(
@@ -36,12 +37,33 @@ class ExpensePreparationFixture(
         )
     val center = ExpenseCostCenter("dddddddd-dddd-dddd-dddd-dddddddddddd", "CC01", "Operations", 3)
     var beforeRead: suspend () -> Unit = {}
+    var referenceQuery: ExpenseReferenceQuery? = null
+    var referenceValues: ExpenseReferenceValues? = null
     var categoryQuery: Pair<LocalDate, String?>? = null
     var centerQuery: Pair<String, String?>? = null
     var reads = 0
     var failure: AppResult.Failed? = null
     val remote =
         object : ExpensePreparationRepository {
+            override suspend fun references(
+                access: ExpenseAccess,
+                query: ExpenseReferenceQuery,
+            ): AppResult<ExpenseReferenceValues> {
+                reads++
+                referenceQuery = query
+                beforeRead()
+                return failure
+                    ?: AppResult.Success(
+                        referenceValues
+                            ?: ExpenseReferenceValues(
+                                query.employeeId,
+                                query.categoryIds.map { ExpenseLabelReference(it) },
+                                query.costCenterIds.map { ExpenseLabelReference(it) },
+                                query.receiptRevisionIds.map { ExpenseReceiptReference(it) },
+                            )
+                    )
+            }
+
             override suspend fun categories(
                 access: ExpenseAccess,
                 asOf: LocalDate,
@@ -66,6 +88,7 @@ class ExpensePreparationFixture(
         }
     val draft = LoadExpenseDraftPreparation(f.remote, f.sessions, f.workspaces, f.clock, f.build)
     val categories = LoadExpenseCategories(remote, f.sessions, f.workspaces, f.clock, f.build)
+    val references = LoadExpenseDraftReferences(remote, f.sessions, f.workspaces, f.clock, f.build)
     val centers = LoadExpenseCostCenters(remote, f.sessions, f.workspaces, f.clock, f.build)
 
     init {
@@ -78,6 +101,8 @@ class ExpensePreparationFixture(
 
     suspend fun load(kind: ExpensePreparationKind): AppResult<*> =
         when (kind) {
+            ExpensePreparationKind.REFERENCES ->
+                references(f.workspace.id, f.employee.id, listOf(f.line))
             ExpensePreparationKind.DRAFT -> draft(f.workspace.id, f.employee.id, f.claim.id)
             ExpensePreparationKind.CATEGORIES ->
                 categories(f.workspace.id, f.directory.asOf, "PREVIOUS")

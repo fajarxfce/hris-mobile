@@ -119,3 +119,25 @@ API 35 emulator acceptance used claims created through the development API.
 It verified month/status filters, detail and activity, approval without payment,
 both themes, 200% text, encrypted list/detail restoration after background
 process death offline, and explicit recovery after reconnection.
+
+
+### Draft display references
+
+A separate bounded lookup resolves only the category, cost-center and receipt
+references selected by an owned employment's draft. Editing grants suffice;
+general organization or document browsing is not required. Unavailable records
+retain their IDs with null metadata, and archived names remain recognizable.
+Receipt status is display information, never a content or submission grant.
+
+Domain constructs deduplicated sets from at most twenty lines and three receipt
+revisions per line. Fresh company admission and a short lease bound publication,
+including late failures, scope changes, clock rollback and cancellation. The data
+boundary validates complete-or-absent metadata and exact requested reference sets;
+the authenticated raw response is bounded to 256 KiB.
+
+Validation: root checks passed with 1,061 desktop tests and 72 expense domain/data
+Chromium tests. New cases exercise sparse/archived metadata, deduplicated queries,
+exact scope/reference matching, response bounds, and structured access failures.
+The shared preparation tests also cover cancellation, late failure, permission
+loss, scheduled maintenance and timeouts for this lookup. No APK was delivered
+for this data increment.

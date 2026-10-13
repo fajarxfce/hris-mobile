@@ -3,7 +3,7 @@ package dev.fajar.starter.expenses.data.repositories
 import dev.fajar.starter.common.result.AppResult
 import dev.fajar.starter.expenses.data.datasources.ExpenseRemoteDataSource
 import dev.fajar.starter.expenses.data.mappers.*
-import dev.fajar.starter.expenses.domain.entities.ExpenseAccess
+import dev.fajar.starter.expenses.domain.entities.*
 import dev.fajar.starter.expenses.domain.policies.*
 import dev.fajar.starter.expenses.domain.repositories.ExpensePreparationRepository
 import dev.fajar.starter.network.safeApiCall
@@ -13,6 +13,21 @@ import org.koin.core.annotation.Single
 @Single
 class RemoteExpensePreparationRepository(private val remote: ExpenseRemoteDataSource) :
     ExpensePreparationRepository {
+    override suspend fun references(access: ExpenseAccess, query: ExpenseReferenceQuery) =
+        safeApiCall {
+            require(validateExpenseReferenceQuery(query) is AppResult.Success)
+            remote
+                .references(
+                    access.sessionId,
+                    expenseId(access.companyId),
+                    query.employeeId,
+                    query.categoryIds.toList(),
+                    query.costCenterIds.toList(),
+                    query.receiptRevisionIds.toList(),
+                )
+                .toReferences(query)
+        }
+
     override suspend fun categories(access: ExpenseAccess, asOf: LocalDate, after: String?) =
         safeApiCall {
             require(validateExpenseCategoryQuery(asOf, after) is AppResult.Success)

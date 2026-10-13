@@ -5,6 +5,11 @@ import dev.fajar.starter.expenses.domain.entities.*
 import kotlinx.datetime.LocalDate
 
 interface ExpensePreparationRepository {
+    suspend fun references(
+        access: ExpenseAccess,
+        query: ExpenseReferenceQuery,
+    ): AppResult<ExpenseReferenceValues>
+
     suspend fun categories(
         access: ExpenseAccess,
         asOf: LocalDate,

@@ -7,6 +7,26 @@ import kotlin.time.Duration.Companion.hours
 import kotlin.time.Instant
 
 class ExpenseDataFixture : ExpenseRemoteDataSource {
+    var referenceValues: ExpenseReferenceValuesDto? = null
+
+    override suspend fun references(
+        sessionId: String,
+        companyId: String,
+        employeeId: String,
+        categoryIds: List<String>,
+        costCenterIds: List<String>,
+        receiptRevisionIds: List<String>,
+    ) =
+        referenceValues
+            ?: ExpenseReferenceValuesDto(
+                employeeId,
+                categoryIds.map { ExpenseLabelReferenceDto(it, "TRAVEL", "Travel", false) },
+                costCenterIds.map { ExpenseLabelReferenceDto(it, "CC01", "Operations", true) },
+                receiptRevisionIds.map {
+                    ExpenseReceiptReferenceDto(it, null, null, null, null, null)
+                },
+            )
+
     override suspend fun saveDraft(
         sessionId: String,
         companyId: String,

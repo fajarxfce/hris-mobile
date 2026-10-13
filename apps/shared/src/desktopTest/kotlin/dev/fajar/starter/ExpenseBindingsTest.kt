@@ -52,6 +52,7 @@ class ExpenseBindingsTest {
                     koin.get<LoadExpenseDraftPreparation>()("workspace", id),
                     koin.get<LoadExpenseCategories>()("workspace", LocalDate(2026, 10, 13)),
                     koin.get<LoadExpenseCostCenters>()("workspace", ""),
+                    koin.get<LoadExpenseDraftReferences>()("workspace", id, emptyList()),
                     koin.get<ObserveExpenseClaim>()("workspace", id).first(),
                 )
             results.forEach {

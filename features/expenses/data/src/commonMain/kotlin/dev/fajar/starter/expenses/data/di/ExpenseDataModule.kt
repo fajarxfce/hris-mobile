@@ -12,6 +12,14 @@ import org.koin.core.annotation.*
 @Module
 @ComponentScan("dev.fajar.starter.expenses.data")
 class ExpenseDataModule {
+    @Factory
+    fun loadExpenseDraftReferences(
+        remote: ExpensePreparationRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        build: AppBuild,
+    ) = LoadExpenseDraftReferences(remote, sessions, workspaces, Clock.System, build)
+
     @Factory fun prepareExpenseLine() = PrepareExpenseLine()
 
     @Factory
