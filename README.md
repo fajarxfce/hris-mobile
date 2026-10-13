@@ -41,8 +41,9 @@ appearance and reduced-motion preferences are respected.
 
 Overtime shows the employee's requests with month and status filters. Request
 details include planned and actual time, approval progress, the reviewed schedule
-and paged activity. The last admitted list and request remain available in bounded
-encrypted offline storage. Employees can review the company work schedule, select
+and paged activity. Account-owned encrypted records receive incremental changes;
+month, status and page filters query local storage. Acquired requests and activity
+remain available across process restarts and reauthentication. Employees can review the company work schedule, select
 local dates and times, and submit an overtime plan. Saved input survives interrupted
 delivery and process restart; retry keeps the original operation. Request details
 also open actual-time and withdrawal forms with versioned confirmation. An uncertain

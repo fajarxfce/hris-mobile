@@ -14,38 +14,63 @@ references. Overtime accepts `overtime.self.manage`, `overtime.read`,
 `overtime.manage` or `workforce.read`; discovery never grants calendar or profile
 access. Workforce availability remains independent of People.
 
-`RefreshOvertime` acquires current company policy, owned employments and one page
-of requests. The initial period is the server's company-local month. Later periods
-span at most 62 days. Requests are bounded to 20 rows with explicit continuation.
-The overview stores display summaries rather than all request bodies.
+`SyncOvertime` acquires current company policy, owned employments and the explicit
+`OVERTIME_REQUESTS` change collection. The directory is bounded to ten pages of
+20 owned employments, without requesting a calendar or coworker profile. Each
+feed page has at most eight references; four canonical request reads can run in
+parallel. Ten pages and a 30-second deadline bound one invocation. Stored cursors
+resume remaining work, and records commit with their checkpoint and directory.
 
-`RefreshOvertimeRequest` independently verifies the selected owned employment
-before acquiring details. It returns the frozen schedule, requested/actual/approved
-time, current approval progress and ten history entries. History continuation does
-not replace current request facts. Approver directories are validated during
-mapping but are not retained in the employee read view.
+`ObserveOvertime` resolves the initial company-local month from stored directory
+metadata and queries local records by employee, date and status. A selection spans
+at most 62 days; older and newer months remain retained. Pages expose 20 rows and
+an explicit continuation. Month, status and page changes do not perform HTTP.
 
-Both use cases own a 30-second acquisition deadline, cancellation, scope checks
-after I/O and atomic publication. Repositories map raw datasource values and
-technical failures. Datasources choose no access, retry or subscription policy.
-Stale displayed content remains readable during refresh or network failure.
-Read observation has no timer that clears the page. Planning and action
-confirmation still require separate reviewed input and explicit user actions.
+`LoadOvertimeRequest` independently verifies owned employment before fresh detail
+acquisition. It stores the frozen schedule, requested/actual/approved time, current
+approval progress and latest ten history entries per request ID. Acquiring a
+selected historical page also acquires latest facts; their request versions must
+match before atomic publication. Previously acquired history is queried locally.
+Approver directories are validated during mapping but are not retained.
+
+Sync and individual detail acquisition share one feature-owned mutex, with its
+wait included in the deadline. Cached history bypasses that mutex. After feed
+catch-up, sync acquires at most eight pending history pages, advancing each strictly
+decreasing cursor atomically with its page. Newer server facts wait for change-feed
+reconciliation; obsolete acquisition IDs cannot advance an old frontier.
+
+Use cases own admission, cancellation and scope checks after I/O. Repositories map
+raw datasource values/errors and coordinate atomic storage. Datasources choose no
+access, retry or subscription policy. Ordinary age never makes acquired facts
+unreadable. Planning and action confirmation retain separate reviewed input.
 
 ## Offline reads
 
-The overview and most recently selected request occupy separate bounded encrypted
-partitions. Each plaintext representation is limited to 96 KB. Workspace admission
-owns their encryption key; a reader cannot replace a missing key. Authenticated
-context binds session, account, audience, company, generation and view purpose.
-Compare-and-set rejects an obsolete publication.
+Account-owned encrypted summaries, current request headers and acquired activity
+pages replace the preceding two last-view slots. Ownership binds API audience,
+account and company; the active session separately guards every read/write so a
+preceding login's late work cannot mutate retained data. Each encrypted document
+fits the existing 96-KiB storage bound; the collection has no last-page retention
+limit. The feature owns a persistent encryption key on each native host and never
+replaces a missing key over retained ciphertext.
 
-Local facts remain readable after their freshness timestamp. Recent authorization
-bounds planning and action reviews, independently of the saved read model. Account
-or company replacement cancels observation. Confirmed revocation remains
-authoritative if local cleanup fails.
-Presentation must retain that gate through pending or failed recovery and reopen
-observation only after fresh admitted acquisition succeeds.
+HMAC-tagged indexes select employee/status records. Summary order is company work
+date then request ID; one 21-row query finds each local page. Authenticated context
+binds generation, record ID/version, ordering and tag metadata. Index ordering and
+equality still reveal structural metadata. Details and history verify the current
+parent before exposure, including after tombstones and request-version changes.
+
+A fresh individual request can publish before list bootstrap completes without
+inventing a directory or completed-feed timestamp. Expired cursors stage a new
+generation while the previous published facts stay readable. Complete replacement
+switches visibility atomically. The prior overview and acquired request history
+remain read-only migration sources; production no longer writes the old format.
+
+Local reads ignore ordinary freshness and credential expiry. Action reviews keep
+their original acquisition time, session and authorization deadline. Historical
+activity cannot renew them. Confirmed revocation remains authoritative even if
+local cleanup fails; presentation retains that gate through pending, failed or
+incomplete sync and reopens only after successful admitted acquisition.
 
 ## Presentation
 
@@ -66,9 +91,8 @@ pages do not calculate approved time or acquire data.
 
 Authoritative read failures retain their gate through pending and failed retries,
 even when cleanup leaves ciphertext behind. A successful admitted refresh reopens
-an observation that ended with a storage-flow failure. Replacing the shared cache
-with another selection clears the obsolete view instead of retaining its expired
-lease. Navigation and mutation outcomes are not inferred from a failed refresh.
+an observation that ended with a storage-flow failure. Each filter queries its own local selection. An unrelated checkpoint or newly
+opened request does not replace those facts or renew an action review. Navigation and mutation outcomes are not inferred from a failed refresh.
 
 ## Planning preparation
 
@@ -170,6 +194,16 @@ observation; known access failures stay gated through pending or failed recovery
 even if local deletion fails.
 
 ## Validation
+
+The local-replica increment passed root checks with 1,267 desktop tests, including
+106 Workforce domain, 54 data and 42 presentation cases. The three Workforce
+Chromium suites passed 179 tests and Android dev assembly passed. New cases cover
+change-feed progression, interrupted bootstrap, missing canonical records,
+cancellation and mutex deadlines, local filter queries, retained request/history
+records, authenticated indexes and account replacement. API 35 acceptance covered
+offline upgrade, real change-feed acquisition, independent details after process
+restart, and local month/status filters. See the
+[validation record](validation.md#account-owned-overtime-replication).
 
 The focused desktop run passed 41 Workforce domain and 25 data tests, including
 23 new overtime cases. They cover ownership, invalid protocol facts, finite

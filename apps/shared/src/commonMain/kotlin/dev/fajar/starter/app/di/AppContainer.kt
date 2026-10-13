@@ -84,6 +84,7 @@ fun createAppContainer(
     calendarCredentials: CredentialStore = MemoryCredentialStore(),
     leaveCredentials: CredentialStore = MemoryCredentialStore(),
     leaveReplicaCredentials: CredentialStore = MemoryCredentialStore(),
+    overtimeReplicaCredentials: CredentialStore = MemoryCredentialStore(),
     commandCredentials: AtomicCredentialStore = MemoryCredentialStore(),
     fileCredentials: AtomicCredentialStore = MemoryCredentialStore(),
     workspaceCredentials: AtomicCredentialStore = MemoryCredentialStore(),
@@ -152,6 +153,10 @@ fun createAppContainer(
             single<CredentialStore>(named("leave-content-key")) { leaveCredentials }
                 .onClose { it?.close() }
             single<CredentialStore>(named("leave-replica-content-key")) { leaveReplicaCredentials }
+                .onClose { it?.close() }
+            single<CredentialStore>(named("overtime-replica-content-key")) {
+                    overtimeReplicaCredentials
+                }
                 .onClose { it?.close() }
             single<AtomicCredentialStore>(named("command-content-key")) { commandCredentials }
                 .onClose { it?.close() }

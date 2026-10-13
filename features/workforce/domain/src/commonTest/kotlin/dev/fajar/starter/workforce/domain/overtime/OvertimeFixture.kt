@@ -1,6 +1,8 @@
 package dev.fajar.starter.workforce.domain.overtime
 
 import dev.fajar.starter.common.result.*
+import dev.fajar.starter.sync.domain.entities.*
+import dev.fajar.starter.sync.domain.repositories.SyncFeedRepository
 import dev.fajar.starter.workforce.domain.WorkCalendarFixture
 import dev.fajar.starter.workforce.domain.entities.*
 import dev.fajar.starter.workforce.domain.overtime.entities.*
@@ -9,6 +11,7 @@ import dev.fajar.starter.workforce.domain.overtime.repositories.*
 import dev.fajar.starter.workforce.domain.overtime.usecases.*
 import kotlin.time.Instant
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.sync.Mutex
 import kotlinx.datetime.*
 
 class OvertimeFixture(instant: () -> Instant = { Instant.parse("2026-10-12T01:00:00Z") }) {
@@ -92,8 +95,18 @@ class OvertimeFixture(instant: () -> Instant = { Instant.parse("2026-10-12T01:00
     var detailReads = 0
     var observers = 0
     var acquiredPeriod: CalendarPeriod? = null
-    val remote =
-        object : OvertimeRepository {
+    private val transport =
+        object : OvertimeRepository, OvertimeRecordRepository {
+            override suspend fun request(
+                access: WorkforceAccess,
+                id: String,
+                historyAfter: Long?,
+            ): AppResult<OvertimeDetails> {
+                canonicalReads++
+                canonicalSelections += id to historyAfter
+                return canonicalCall(id, historyAfter)
+            }
+
             override suspend fun requests(
                 access: WorkforceAccess,
                 employeeId: String,
@@ -114,7 +127,63 @@ class OvertimeFixture(instant: () -> Instant = { Instant.parse("2026-10-12T01:00
                 return detailsCall()
             }
         }
-    val cache =
+    val remote: OvertimeRepository
+        get() = transport
+
+    var canonicalReads = 0
+    val canonicalSelections = mutableListOf<Pair<String, Long?>>()
+    var canonicalCall: suspend (String, Long?) -> AppResult<OvertimeDetails> = { id, after ->
+        detailsCall()
+    }
+    var bootstrapReads = 0
+    var changesReads = 0
+    val feedRequests = mutableListOf<Triple<Set<SyncCollection>, String?, Int>>()
+    var bootstrapCall: suspend (String?) -> AppResult<SyncBootstrapPage> = {
+        AppResult.Success(
+            SyncBootstrapPage(
+                setOf(SyncCollection.OVERTIME_REQUESTS),
+                listOf(
+                    SyncReference(SyncCollection.OVERTIME_REQUESTS, request.id, request.version)
+                ),
+                null,
+                "cursor/0",
+                base.clock.now(),
+            )
+        )
+    }
+    var changesCall: suspend (String) -> AppResult<SyncChangePage> = { cursor ->
+        AppResult.Success(SyncChangePage(emptyList(), cursor, false, false, 5, base.clock.now()))
+    }
+    val feed =
+        object : SyncFeedRepository {
+            override suspend fun bootstrap(
+                sessionId: String,
+                companyId: String,
+                collections: Set<SyncCollection>,
+                cursor: String?,
+                limit: Int,
+            ): AppResult<SyncBootstrapPage> {
+                bootstrapReads++
+                feedRequests += Triple(collections, cursor, limit)
+                return bootstrapCall(cursor)
+            }
+
+            override suspend fun changes(
+                sessionId: String,
+                companyId: String,
+                collections: Set<SyncCollection>,
+                cursor: String,
+                limit: Int,
+            ): AppResult<SyncChangePage> {
+                changesReads++
+                feedRequests += Triple(collections, cursor, limit)
+                return changesCall(cursor)
+            }
+        }
+    val replicas = OvertimeReplicaFixture()
+    val execution = Mutex()
+    val historyPages = mutableMapOf<Pair<String, Long?>, OvertimeHistoryPage>()
+    val legacy =
         object : OvertimeCacheRepository {
             override fun observe(access: WorkforceAccess) = flow {
                 observers++
@@ -124,72 +193,94 @@ class OvertimeFixture(instant: () -> Instant = { Instant.parse("2026-10-12T01:00
                     observers--
                 }
             }
-
-            override fun observeRequest(access: WorkforceAccess) = flow {
+        }
+    val cache =
+        object : OvertimeRequestReplicaRepository {
+            override fun observeRequest(
+                access: WorkforceAccess,
+                selection: OvertimeRequestSelection,
+            ) = flow {
                 observers++
                 try {
-                    emitAll(detailRecords)
+                    emitAll(
+                        detailRecords.map { result ->
+                            when (result) {
+                                is AppResult.Failed -> result
+                                is AppResult.Success -> {
+                                    val saved = result.value
+                                    val history =
+                                        historyPages[selection.requestId to selection.historyAfter]
+                                    AppResult.Success(
+                                        if (selection.historyAfter == null) saved
+                                        else if (saved != null && history != null)
+                                            saved.copy(
+                                                value =
+                                                    OvertimeRequestView(
+                                                        selection,
+                                                        saved.value.details.copy(
+                                                            history = history.history
+                                                        ),
+                                                    )
+                                            )
+                                        else null
+                                    )
+                                }
+                            }
+                        }
+                    )
                 } finally {
                     observers--
                 }
             }
 
-            override suspend fun generation(access: WorkforceAccess) =
-                AppResult.Success((records.value as? AppResult.Success)?.value?.generation)
-
-            override suspend fun requestGeneration(access: WorkforceAccess) =
+            override suspend fun requestCheckpoint(access: WorkforceAccess) =
                 AppResult.Success((detailRecords.value as? AppResult.Success)?.value?.generation)
-
-            override suspend fun replace(
-                access: WorkforceAccess,
-                expectedGeneration: String?,
-                snapshot: OvertimeSnapshot<OvertimeOverview>?,
-            ): AppResult<Boolean> {
-                beforeWrite()
-                if (snapshot == null && failCleanup)
-                    return overtimeFailure("fixture.storage", FailureKind.Storage)
-                if (
-                    rejectWrite ||
-                        expectedGeneration !=
-                            (records.value as? AppResult.Success)?.value?.generation
-                )
-                    return AppResult.Success(false)
-                if (snapshot == null) clears++ else writes++
-                records.value = AppResult.Success(snapshot)
-                return AppResult.Success(true)
-            }
 
             override suspend fun replaceRequest(
                 access: WorkforceAccess,
-                expectedGeneration: String?,
+                requestId: String,
+                expectedCheckpoint: String?,
                 snapshot: OvertimeSnapshot<OvertimeRequestView>?,
+                history: OvertimeHistoryPage?,
             ): AppResult<Boolean> {
                 beforeWrite()
                 if (snapshot == null && failCleanup)
                     return overtimeFailure("fixture.storage", FailureKind.Storage)
                 if (
                     rejectWrite ||
-                        expectedGeneration !=
+                        expectedCheckpoint !=
                             (detailRecords.value as? AppResult.Success)?.value?.generation
                 )
                     return AppResult.Success(false)
                 if (snapshot == null) clears++ else writes++
+                if (history != null) historyPages[history.requestId to history.after] = history
                 detailRecords.value = AppResult.Success(snapshot)
                 return AppResult.Success(true)
             }
+
+            override suspend fun pendingHistory(access: WorkforceAccess, limit: Int) =
+                AppResult.Success(emptyList<OvertimeHistoryWork>())
+
+            override suspend fun storeHistory(
+                access: WorkforceAccess,
+                work: OvertimeHistoryWork,
+                page: OvertimeHistoryPage,
+            ) = AppResult.Success(false)
         }
-    val refresh =
-        RefreshOvertime(
+    val sync =
+        SyncOvertime(
+            feed,
+            transport,
             base.remote,
-            remote,
-            cache,
+            replicas,
             base.sessions,
             base.workspaces,
             base.clock,
             base.build,
+            execution,
         )
     val refreshRequest =
-        RefreshOvertimeRequest(
+        LoadOvertimeRequest(
             base.remote,
             remote,
             cache,
@@ -197,12 +288,18 @@ class OvertimeFixture(instant: () -> Instant = { Instant.parse("2026-10-12T01:00
             base.workspaces,
             base.clock,
             base.build,
+            execution,
         )
-    val observe = ObserveOvertime(cache, base.sessions, base.workspaces, base.clock, base.build)
+    val observe =
+        ObserveOvertime(replicas, legacy, base.sessions, base.workspaces, base.clock, base.build)
     val observeRequest =
         ObserveOvertimeRequest(cache, base.sessions, base.workspaces, base.clock, base.build)
 
     suspend fun load(detail: Boolean = false): AppResult<Unit> =
         if (detail) refreshRequest(workspace.id, selection)
-        else refresh(workspace.id, OvertimeSelection())
+        else
+            when (val result = sync(workspace.id)) {
+                is AppResult.Failed -> result
+                is AppResult.Success -> AppResult.Success(Unit)
+            }
 }

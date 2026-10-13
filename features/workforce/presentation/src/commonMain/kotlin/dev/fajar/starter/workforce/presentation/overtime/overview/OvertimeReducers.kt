@@ -18,27 +18,24 @@ internal fun OvertimeState.withCachedOvertime(
             )
         is AppResult.Success -> {
             val snapshot = result.value
-            // A replacement window cancels the former lease timer. Never retain its old content.
-            val matches =
-                snapshot == null || selection == null || selection.matches(snapshot.value.selection)
             copy(
-                content = snapshot?.takeIf { matches },
+                content = snapshot,
                 loading = false,
                 cacheFailure = null,
-                selection = if (matches && snapshot != null) snapshot.value.selection else selection,
+                selection = snapshot?.value?.selection ?: selection,
             )
         }
     }
 
 internal fun OvertimeState.withOvertimeRefresh(
-    result: AppResult<Unit>,
-    requested: OvertimeSelection,
+    result: AppResult<OvertimeSyncOutcome>
 ): OvertimeState =
     when (result) {
         is AppResult.Failed -> {
             val invalidated = overtimeFailureInvalidatesCache(result.failure)
             copy(
                 refreshing = false,
+                syncPending = false,
                 loading = false,
                 refreshFailure = result.failure,
                 content = if (invalidated) null else content,
@@ -50,16 +47,9 @@ internal fun OvertimeState.withOvertimeRefresh(
         is AppResult.Success ->
             copy(
                 refreshing = false,
-                loading = content == null,
-                cacheFailure = null,
-                refreshFailure = null,
-                selection = requested,
+                loading = false,
+                syncPending = !result.value.caughtUp,
+                cacheFailure = if (result.value.caughtUp) null else cacheFailure,
+                refreshFailure = if (result.value.caughtUp) null else refreshFailure,
             )
     }
-
-private fun OvertimeSelection.matches(other: OvertimeSelection): Boolean =
-    (employeeId == null || employeeId == other.employeeId) &&
-        (period == null || period == other.period) &&
-        status == other.status &&
-        employmentAfter == other.employmentAfter &&
-        requestAfter == other.requestAfter

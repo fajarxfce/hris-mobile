@@ -81,6 +81,6 @@ fun validateStoredOvertime(
     access: WorkforceAccess,
     snapshot: OvertimeSnapshot<*>?,
 ): AppResult<Unit> =
-    if (snapshot != null && !sameWorkforceScope(access, snapshot.access))
+    if (snapshot != null && !sameStoredOvertimeScope(access, snapshot.access))
         overtimeFailure("client.overtime_scope_changed", FailureKind.AccessDenied)
     else AppResult.Success(Unit)

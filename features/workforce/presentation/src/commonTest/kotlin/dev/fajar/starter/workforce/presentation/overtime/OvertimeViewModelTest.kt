@@ -4,6 +4,7 @@ package dev.fajar.starter.workforce.presentation.overtime
 
 import androidx.lifecycle.ViewModelStore
 import dev.fajar.starter.common.result.*
+import dev.fajar.starter.sync.domain.entities.*
 import dev.fajar.starter.workforce.domain.overtime.entities.*
 import dev.fajar.starter.workforce.domain.overtime.policies.*
 import dev.fajar.starter.workforce.presentation.overtime.overview.*
@@ -15,20 +16,19 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.test.*
 import kotlinx.datetime.LocalDate
-import kotlinx.datetime.number
 
 class OvertimeViewModelTest {
     @Test
     fun oneOwnerCancelsAcquisitionOnStopAndReleasesEveryCollectorOnClear() = runTest {
-        withModel { fixture, model, owner ->
+        withModel { f, model, owner ->
             model.onEvent(OvertimeEvent.Entered)
             model.onEvent(OvertimeEvent.Entered)
             runCurrent()
-            assertEquals(1, fixture.requestReads)
-            assertEquals(1, fixture.observers)
+            assertEquals(1, f.canonicalReads)
+            assertEquals(2, f.readers)
             assertEquals(LocalDate(2026, 10, 1), model.state.value.month?.selected)
             var cancelled = false
-            fixture.requestsCall = { _, _ ->
+            f.directoryCall = {
                 try {
                     awaitCancellation()
                 } finally {
@@ -41,49 +41,47 @@ class OvertimeViewModelTest {
             model.onEvent(OvertimeEvent.Stopped)
             runCurrent()
             assertTrue(cancelled)
-            assertEquals(0, fixture.observers)
+            assertEquals(0, f.readers)
             assertNull(model.state.value.content)
-            fixture.requestsCall = { _, _ -> AppResult.Success(OvertimePage(emptyList())) }
+            f.directoryCall = { AppResult.Success(f.directory) }
             model.onEvent(OvertimeEvent.Entered)
             runCurrent()
             assertNotNull(model.state.value.content)
             owner.clear()
             runCurrent()
-            assertEquals(0, fixture.observers)
+            assertEquals(0, f.readers)
         }
     }
 
     @Test
-    fun monthReplacementRejectsNonCooperativeLateFailureAndPreservesTheNewFilter() = runTest {
-        withModel { fixture, model, _ ->
+    fun changingMonthDuringSyncQueriesLocallyAndPreservesTheSelectedMonthAfterFailure() = runTest {
+        withModel { f, model, _ ->
             model.onEvent(OvertimeEvent.Entered)
             runCurrent()
-            var cancelled = false
-            fixture.requestsCall = { period, _ ->
-                if (period.from.month.number == 10) {
-                    try {
-                        awaitCancellation()
-                    } catch (_: CancellationException) {
-                        cancelled = true
-                    }
-                    overtimeFailure("mfa_required", FailureKind.AccessDenied)
-                } else AppResult.Success(OvertimePage(emptyList()))
+            val release = CompletableDeferred<Unit>()
+            f.directoryCall = {
+                release.await()
+                overtimeFailure("client.network", FailureKind.Network)
             }
             model.onEvent(OvertimeEvent.RefreshRequested)
             runCurrent()
             model.onEvent(OvertimeEvent.MonthRequested(LocalDate(2026, 9, 1)))
             runCurrent()
-            assertTrue(cancelled)
+            assertTrue(model.state.value.refreshing)
             assertEquals(LocalDate(2026, 9, 1), model.state.value.filters?.period?.from)
+            assertTrue(assertNotNull(model.state.value.content).value.requests.items.isEmpty())
+            assertEquals(1, f.canonicalReads)
+            release.complete(Unit)
+            runCurrent()
+            assertEquals(LocalDate(2026, 9, 1), model.state.value.filters?.period?.from)
+            assertEquals("client.network", model.state.value.failure?.code)
             assertNotNull(model.state.value.content)
-            assertNull(model.state.value.failure)
-            assertEquals(listOf(10, 10, 9), fixture.periods.map { it.from.month.number })
         }
     }
 
     @Test
-    fun theMonthPickerDoesNotAcquireUntilAVisibleMonthIsSelected() = runTest {
-        withModel { fixture, model, _ ->
+    fun theMonthPickerAndStatusFilterOnlyQueryLocalRecords() = runTest {
+        withModel { f, model, _ ->
             model.onEvent(OvertimeEvent.Entered)
             runCurrent()
             model.onEvent(OvertimeEvent.PickerYearRequested(2025))
@@ -91,179 +89,194 @@ class OvertimeViewModelTest {
             model.onEvent(OvertimeEvent.MonthRequested(LocalDate(2026, 7, 1)))
             model.onEvent(OvertimeEvent.MonthRequested(LocalDate(2026, 9, 2)))
             runCurrent()
-            assertEquals(1, fixture.requestReads)
+            assertEquals(LocalDate(2026, 10, 1), model.state.value.month?.selected)
             model.onEvent(OvertimeEvent.MonthFilterRequested)
             model.onEvent(OvertimeEvent.PickerYearRequested(2025))
             model.onEvent(OvertimeEvent.PickerYearRequested(1999))
             model.onEvent(OvertimeEvent.PickerMonthSelected(13))
             runCurrent()
             assertEquals(2025, model.state.value.picker?.year)
-            assertEquals(1, fixture.requestReads)
             model.onEvent(OvertimeEvent.PickerMonthSelected(2))
             runCurrent()
             assertEquals(LocalDate(2025, 2, 28), model.state.value.filters?.period?.until)
-            assertEquals(2, fixture.requestReads)
             assertNull(model.state.value.dialog)
+            model.onEvent(OvertimeEvent.StatusFilterRequested)
+            model.onEvent(OvertimeEvent.StatusSelected(OvertimeStatus.APPROVED))
+            runCurrent()
+            assertEquals(OvertimeStatus.APPROVED, model.state.value.filters?.status)
+            assertEquals(1, f.canonicalReads)
+            assertEquals(1, f.directoryReads)
         }
     }
 
     @Test
-    fun onlyVisibleRowsAndFilterOptionsDispatchAcquisitionOrNavigation() = runTest {
-        withModel { fixture, model, _ ->
+    fun onlyVisibleRowsAndValidFilterOptionsCanNavigateOrChangeSelection() = runTest {
+        withModel { f, model, _ ->
             val effects = mutableListOf<OvertimeEffect>()
             backgroundScope.launch { model.effects.collect { effects += it } }
             model.onEvent(OvertimeEvent.Entered)
             runCurrent()
             model.onEvent(OvertimeEvent.RequestSelected("foreign"))
             model.onEvent(OvertimeEvent.StatusSelected(OvertimeStatus.APPROVED))
-            model.onEvent(OvertimeEvent.RequestsPageRequested(fixture.employee.id))
+            model.onEvent(OvertimeEvent.RequestsPageRequested(f.employee.id))
             model.onEvent(OvertimeEvent.EmploymentSelected("foreign"))
             runCurrent()
-            assertEquals(1, fixture.requestReads)
+            assertNull(model.state.value.filters?.status)
             assertTrue(effects.isEmpty())
-            model.onEvent(OvertimeEvent.RequestSelected(fixture.request.id))
+            model.onEvent(OvertimeEvent.RequestSelected(f.request.id))
             runCurrent()
-            assertEquals(
-                listOf<OvertimeEffect>(OvertimeEffect.OpenRequest(fixture.selection)),
-                effects,
-            )
-            model.onEvent(OvertimeEvent.StatusFilterRequested)
-            model.onEvent(OvertimeEvent.StatusSelected(OvertimeStatus.APPROVED))
-            runCurrent()
-            assertEquals(OvertimeStatus.APPROVED, model.state.value.filters?.status)
-            assertEquals(2, fixture.requestReads)
+            assertEquals(listOf<OvertimeEffect>(OvertimeEffect.OpenRequest(f.selection)), effects)
         }
     }
 
     @Test
-    fun anEmptyContinuationPageCanReturnToTheFirstOwnedEmployment() = runTest {
-        withModel { fixture, model, _ ->
-            fixture.directoryCall = {
-                AppResult.Success(fixture.directory.copy(nextCursor = "E01"))
-            }
-            model.onEvent(OvertimeEvent.Entered)
-            runCurrent()
-            fixture.directoryCall = {
-                AppResult.Success(fixture.directory.copy(items = emptyList()))
-            }
-            model.onEvent(OvertimeEvent.EmploymentFilterRequested)
-            model.onEvent(OvertimeEvent.EmploymentPageRequested("E01"))
-            runCurrent()
-            assertEquals("E01", model.state.value.filters?.employmentAfter)
-            assertNull(model.state.value.filters?.employeeId)
-            fixture.directoryCall = { AppResult.Success(fixture.directory) }
-            model.onEvent(OvertimeEvent.DialogDismissed)
-            model.onEvent(OvertimeEvent.EmploymentFilterRequested)
-            model.onEvent(OvertimeEvent.EmploymentPageRequested(null))
-            runCurrent()
-            assertEquals(fixture.employee.id, model.state.value.filters?.employeeId)
-            assertNull(model.state.value.filters?.employmentAfter)
-        }
-    }
-
-    @Test
-    fun aReplacedCacheWindowClearsFormerContentWithoutFollowingItsLongerLease() = runTest {
-        withModel { fixture, model, _ ->
-            model.onEvent(OvertimeEvent.Entered)
-            runCurrent()
-            val saved = assertNotNull(model.state.value.content)
-            fixture.records.value =
+    fun employmentPagesAreAcquiredOnceAndPagedLocally() = runTest {
+        withModel { f, model, _ ->
+            val firstPage =
+                listOf(f.employee) +
+                    (2..20).map { n ->
+                        f.employee.copy(
+                            id = "33333333-3333-3333-3333-" + n.toString().padStart(12, '0'),
+                            employeeNumber = "E" + n.toString().padStart(2, '0'),
+                        )
+                    }
+            val last =
+                f.employee.copy(id = "44444444-4444-4444-4444-444444444444", employeeNumber = "E21")
+            var pages = 0
+            f.directoryCall = {
+                pages++
                 AppResult.Success(
-                    saved.copy(
-                        generation = "other-filter",
-                        value =
-                            saved.value.copy(
-                                selection =
-                                    saved.value.selection.copy(status = OvertimeStatus.APPROVED)
-                            ),
+                    f.directory.copy(
+                        items = if (pages == 1) firstPage else listOf(last),
+                        nextCursor = if (pages == 1) "E20" else null,
                     )
                 )
+            }
+            model.onEvent(OvertimeEvent.Entered)
             runCurrent()
-            assertNull(model.state.value.content)
-            assertNull(model.state.value.filters?.status)
-            assertEquals(1, fixture.requestReads)
-            model.onEvent(OvertimeEvent.RefreshRequested)
+            assertEquals(2, pages)
+            model.onEvent(OvertimeEvent.EmploymentFilterRequested)
+            model.onEvent(OvertimeEvent.EmploymentPageRequested("E20"))
             runCurrent()
-            assertNotNull(model.state.value.content)
-            assertNull(model.state.value.filters?.status)
+            assertEquals(last.id, model.state.value.filters?.employeeId)
+            assertEquals("E20", model.state.value.filters?.employmentAfter)
+            assertTrue(assertNotNull(model.state.value.content).value.requests.items.isEmpty())
+            model.onEvent(OvertimeEvent.EmploymentPageRequested(null))
+            runCurrent()
+            assertEquals(f.employee.id, model.state.value.filters?.employeeId)
+            assertEquals(2, pages)
         }
     }
 
     @Test
-    fun denialSurvivesFailedCleanupPendingRetryAndLaterTransportFailures() = runTest {
-        withModel { fixture, model, _ ->
+    fun denialSurvivesFailedCleanupAndPendingOrFailedRetry() = runTest {
+        withModel { f, model, _ ->
             val effects = mutableListOf<OvertimeEffect>()
             backgroundScope.launch { model.effects.collect { effects += it } }
             model.onEvent(OvertimeEvent.Entered)
             runCurrent()
-            fixture.failCleanup = true
-            fixture.directoryCall = { overtimeFailure("mfa_required", FailureKind.AccessDenied) }
+            f.replicas.failCleanup = true
+            f.directoryCall = { overtimeFailure("mfa_required", FailureKind.AccessDenied) }
             model.onEvent(OvertimeEvent.RefreshRequested)
             runCurrent()
-            assertNotNull((fixture.records.value as AppResult.Success).value)
+            assertNotNull((f.replicas.published.value as AppResult.Success).value.checkpoint)
             assertNull(model.state.value.content)
-            assertEquals(0, fixture.observers)
+            assertEquals(0, f.readers)
             for (kind in listOf(FailureKind.Network, FailureKind.Storage)) {
-                fixture.directoryCall = { overtimeFailure("fixture.retry", kind) }
+                f.directoryCall = { overtimeFailure("fixture.retry", kind) }
                 model.onEvent(OvertimeEvent.RefreshRequested)
                 runCurrent()
                 assertTrue(model.state.value.readRestricted)
                 assertEquals("mfa_required", model.state.value.failure?.code)
-                assertNull(model.state.value.content)
             }
-            model.onEvent(OvertimeEvent.RequestSelected(fixture.request.id))
+            model.onEvent(OvertimeEvent.RequestSelected(f.request.id))
             model.onEvent(OvertimeEvent.VerificationRequested)
             runCurrent()
             assertEquals(listOf<OvertimeEffect>(OvertimeEffect.VerifyAccount), effects)
             val release = CompletableDeferred<Unit>()
-            fixture.directoryCall = {
+            f.directoryCall = {
                 release.await()
-                AppResult.Success(fixture.directory)
+                AppResult.Success(f.directory)
             }
             model.onEvent(OvertimeEvent.RefreshRequested)
             runCurrent()
             assertTrue(model.state.value.needsVerification)
-            assertEquals(0, fixture.observers)
+            assertEquals(0, f.readers)
             release.complete(Unit)
             runCurrent()
             assertNotNull(model.state.value.content)
             assertFalse(model.state.value.readRestricted)
-            assertEquals(1, fixture.observers)
+            assertEquals(2, f.readers)
         }
     }
 
     @Test
-    fun aCompletedStorageSourceIsReopenedOnlyAfterSuccessfulExplicitAcquisition() = runTest {
-        withModel { fixture, model, _ ->
-            fixture.failNextObservation = true
+    fun aPartialSyncCannotReopenAConfirmedReadDenial() = runTest {
+        withModel { f, model, _ ->
+            model.onEvent(OvertimeEvent.Entered)
+            runCurrent()
+            f.replicas.failCleanup = true
+            f.directoryCall = { overtimeFailure("mfa_required", FailureKind.AccessDenied) }
+            model.onEvent(OvertimeEvent.RefreshRequested)
+            runCurrent()
+            f.directoryCall = { AppResult.Success(f.directory) }
+            f.changesCall = { cursor ->
+                AppResult.Success(
+                    SyncChangePage(emptyList(), cursor + "x", true, false, 5, f.clock.now())
+                )
+            }
+            model.onEvent(OvertimeEvent.RefreshRequested)
+            runCurrent()
+            assertTrue(model.state.value.syncPending)
+            assertTrue(model.state.value.readRestricted)
+            assertNull(model.state.value.content)
+            assertEquals(0, f.readers)
+        }
+    }
+
+    @Test
+    fun aCompletedStorageSourceReopensOnlyAfterAdmittedSync() = runTest {
+        withModel { f, model, _ ->
+            f.replicas.failNextObservation = true
             val release = CompletableDeferred<Unit>()
-            fixture.directoryCall = {
+            f.directoryCall = {
                 release.await()
-                AppResult.Success(fixture.directory)
+                AppResult.Success(f.directory)
             }
             model.onEvent(OvertimeEvent.Entered)
             runCurrent()
             assertEquals(FailureKind.Storage, model.state.value.failure?.kind)
-            assertEquals(0, fixture.observers)
+            assertEquals(0, f.readers)
             release.complete(Unit)
             runCurrent()
             assertNotNull(model.state.value.content)
-            assertEquals(1, fixture.observers)
-            assertEquals(1, fixture.requestReads)
+            assertEquals(2, f.readers)
+            assertEquals(1, f.canonicalReads)
         }
     }
 
     @Test
-    fun offlineRestorationKeepsSavedFiltersWhenCacheArrivesAfterNetworkFailure() = runTest {
-        withModel { fixture, model, _ ->
+    fun legacyFiltersRestoreWhenLocalStorageArrivesAfterAnOfflineFailure() = runTest {
+        withModel { f, model, _ ->
             val period = overtimeMonth(LocalDate(2025, 6, 1))
-            fixture.refresh(
-                fixture.workspace.id,
-                OvertimeSelection(period = period, status = OvertimeStatus.REJECTED),
-            )
+            val selection = OvertimeSelection(f.employee.id, period, OvertimeStatus.REJECTED)
+            val access =
+                (admitOvertime(f.workspace.id, f.workspace, f.session, f.build, f.clock.now())
+                        as AppResult.Success)
+                    .value
+            f.records.value =
+                AppResult.Success(
+                    OvertimeSnapshot(
+                        access,
+                        "legacy",
+                        OvertimeOverview(f.directory, selection, OvertimePage(emptyList())),
+                        f.clock.now(),
+                        f.clock.now() + 1.seconds,
+                    )
+                )
             val release = CompletableDeferred<Unit>()
-            fixture.cacheReadGate = release
-            fixture.directoryCall = { overtimeFailure("fixture.offline", FailureKind.Network) }
+            f.cacheReadGate = release
+            f.directoryCall = { overtimeFailure("client.network", FailureKind.Network) }
             model.onEvent(OvertimeEvent.Entered)
             runCurrent()
             assertNull(model.state.value.content)
@@ -272,106 +285,49 @@ class OvertimeViewModelTest {
             assertEquals(period, model.state.value.filters?.period)
             assertEquals(OvertimeStatus.REJECTED, model.state.value.filters?.status)
             assertNotNull(model.state.value.content)
-            fixture.directoryCall = { AppResult.Success(fixture.directory) }
+            f.directoryCall = { AppResult.Success(f.directory) }
             model.onEvent(OvertimeEvent.RefreshRequested)
             runCurrent()
-            assertEquals(period, model.state.value.content?.value?.selection?.period)
+            assertEquals(selection, model.state.value.content?.value?.selection)
             assertNull(model.state.value.failure)
         }
     }
 
     @Test
-    fun staleDataStaysVisibleUntilCompanyReplacement() = runTest {
-        withModel { fixture, model, _ ->
+    fun staleFactsRemainVisibleDuringRefreshAndDoNotStartAnAutomaticRetryLoop() = runTest {
+        withModel { f, model, _ ->
             model.onEvent(OvertimeEvent.Entered)
             runCurrent()
             val saved = assertNotNull(model.state.value.content)
-            fixture.records.value =
-                AppResult.Success(saved.copy(refreshAfter = fixture.clock.now() + 1.seconds))
-            runCurrent()
-            advanceTimeBy(1_001)
+            val writes = f.replicas.writes
+            var attempts = 0
+            val release = CompletableDeferred<Unit>()
+            f.directoryCall = {
+                attempts++
+                release.await()
+                overtimeFailure("client.network", FailureKind.Network)
+            }
+            advanceTimeBy(3 * 24 * 60 * 60_000L)
             runCurrent()
             assertFalse(model.state.value.readRestricted)
             assertEquals(saved.generation, assertNotNull(model.state.value.content).generation)
-            assertEquals(1, fixture.observers)
-            assertEquals(1, fixture.requestReads)
-            fixture.workspaceState.value =
-                AppResult.Success(fixture.workspace.copy(id = "replacement"))
-            runCurrent()
-            assertNull(model.state.value.content)
-            assertTrue(model.state.value.readRestricted)
-            assertEquals(1, fixture.requestReads)
-        }
-    }
-
-    @Test
-    fun staleContentRemainsVisibleWhileAnExplicitRefreshIsPending() = runTest {
-        withModel { fixture, model, _ ->
-            model.onEvent(OvertimeEvent.Entered)
-            runCurrent()
-            val saved = assertNotNull(model.state.value.content)
-            val writes = fixture.writes
-            val release = CompletableDeferred<Unit>()
-            fixture.directoryCall = {
-                release.await()
-                AppResult.Success(fixture.directory)
-            }
-            fixture.records.value =
-                AppResult.Success(saved.copy(refreshAfter = fixture.clock.now() + 1.seconds))
-            runCurrent()
-            advanceTimeBy(1_001)
-            runCurrent()
-            assertFalse(model.state.value.refreshing)
-            assertNotNull(model.state.value.content)
+            assertEquals(0, attempts)
             model.onEvent(OvertimeEvent.RefreshRequested)
             runCurrent()
             assertTrue(model.state.value.refreshing)
-            assertFalse(model.state.value.readRestricted)
             assertNotNull(model.state.value.content)
-            assertNull(model.state.value.failure)
-            assertEquals(writes, fixture.writes)
+            assertEquals(writes, f.replicas.writes)
             release.complete(Unit)
             runCurrent()
-            assertNotNull(model.state.value.content)
-            assertFalse(model.state.value.readRestricted)
-            assertNull(model.state.value.failure)
-            assertEquals(writes + 1, fixture.writes)
-        }
-    }
-
-    @Test
-    fun failedExplicitRefreshKeepsStaleContentAndDoesNotRetryAutomatically() = runTest {
-        withModel { fixture, model, _ ->
-            model.onEvent(OvertimeEvent.Entered)
-            runCurrent()
-            val saved = assertNotNull(model.state.value.content)
-            var attempts = 0
-            fixture.directoryCall = {
-                attempts++
-                overtimeFailure("client.network", FailureKind.Network)
-            }
-            fixture.records.value =
-                AppResult.Success(saved.copy(refreshAfter = fixture.clock.now() + 1.seconds))
-            runCurrent()
-            advanceTimeBy(1_001)
-            runCurrent()
-            assertEquals(0, attempts)
-            assertNotNull(model.state.value.content)
-            model.onEvent(OvertimeEvent.RefreshRequested)
-            runCurrent()
-            assertEquals(1, attempts)
             assertEquals("client.network", model.state.value.failure?.code)
             assertNotNull(model.state.value.content)
-            assertFalse(model.state.value.readRestricted)
             advanceTimeBy(10_000)
             runCurrent()
             assertEquals(1, attempts)
-            fixture.directoryCall = { AppResult.Success(fixture.directory) }
-            model.onEvent(OvertimeEvent.RefreshRequested)
+            f.workspaceState.value = AppResult.Success(f.workspace.copy(id = "replacement"))
             runCurrent()
-            assertNotNull(model.state.value.content)
-            assertFalse(model.state.value.readRestricted)
-            assertNull(model.state.value.failure)
+            assertNull(model.state.value.content)
+            assertTrue(model.state.value.readRestricted)
         }
     }
 
@@ -379,18 +335,21 @@ class OvertimeViewModelTest {
         test: suspend (OvertimePresentationFixture, OvertimeViewModel, ViewModelStore) -> Unit
     ) {
         Dispatchers.setMain(StandardTestDispatcher(testScheduler))
-        val fixture = OvertimePresentationFixture {
+        val f = OvertimePresentationFixture {
             Instant.parse("2026-10-12T01:00:00Z") + testScheduler.currentTime.milliseconds
         }
-        val model = OvertimeViewModel(fixture.workspace.id, fixture.observe, fixture.refresh)
+        val model = OvertimeViewModel(f.workspace.id, f.observe, f.sync)
         val owner = ViewModelStore().apply { put("overtime", model) }
         try {
-            test(fixture, model, owner)
+            test(f, model, owner)
         } finally {
             owner.clear()
             runCurrent()
-            assertEquals(0, fixture.observers)
+            assertEquals(0, f.readers)
             Dispatchers.resetMain()
         }
     }
 }
+
+private val OvertimePresentationFixture.readers: Int
+    get() = observers + replicas.directoryObservers + replicas.pageObservers

@@ -18,7 +18,7 @@ import org.koin.core.annotation.InjectedParam
 class OvertimeActionViewModel(
     @InjectedParam private val target: OvertimeActionTarget,
     private val observeRequest: ObserveOvertimeRequest,
-    private val refreshRequest: RefreshOvertimeRequest,
+    private val refreshRequest: LoadOvertimeRequest,
     private val observeCommand: ObserveOvertimeCommand,
     private val prepareAction: PrepareOvertimeAction,
     private val replayCommands: ReplayOvertimeCommands,
@@ -85,7 +85,7 @@ class OvertimeActionViewModel(
         observation =
             viewModelScope.launch(start = CoroutineStart.LAZY) {
                 combine(
-                        observeRequest(target.workspaceId),
+                        observeRequest(target.workspaceId, target.selection),
                         observeCommand(
                             target.workspaceId,
                             OvertimeCommandSlot.Request(target.selection.requestId),

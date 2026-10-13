@@ -14,7 +14,20 @@ import org.koin.core.annotation.Single
 
 @Single
 class RemoteOvertimeRepository(private val remote: OvertimeRemoteDataSource) :
-    OvertimeRepository, OvertimePlanningRepository, OvertimeSubmissionRepository {
+    OvertimeRepository,
+    OvertimeRecordRepository,
+    OvertimePlanningRepository,
+    OvertimeSubmissionRepository {
+    override suspend fun request(access: WorkforceAccess, id: String, historyAfter: Long?) =
+        safeApiCall {
+            listOf(access.companyId, id).forEach { require(Uuid.parse(it).toString() == it) }
+            require(historyAfter == null || historyAfter in 0..999)
+            val dto = remote.details(access.sessionId, access.companyId, id, historyAfter)
+            dto.toDetails(
+                OvertimeRequestSelection(id, dto.request.employeeId, historyAfter = historyAfter)
+            )
+        }
+
     override suspend fun send(sessionId: String, command: OvertimeCommand) = safeApiCall {
         require(command.toDto().toCommand() == command)
         val receipt =

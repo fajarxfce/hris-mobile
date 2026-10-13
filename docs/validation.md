@@ -945,3 +945,38 @@ package metadata confirmed the update. Its SHA-256 is
 `14df12ac36b1b908fa3d296a677ec22d40557585924956432a5cf8f75a7f06b5`.
 The phone application was not opened or driven. Other business replicas, unfinished
 offline drafts and shared sync-status presentation remain pending.
+
+## Account-owned Overtime replication
+
+On 14 October 2026, root checks passed with 1,267 desktop tests, including assembled
+application flows and resource ownership. The Workforce domain, data and
+presentation Chromium suites passed 179 tests. Android dev assembly passed.
+Tests cover change-feed hydration, versioned deletion, interrupted staging,
+same-account reauthentication, local date/status pagination, retained request and
+activity records, failed-denial cleanup, cancellation and mutex-wait deadlines.
+The SQLite and IndexedDB suites share encrypted-storage contracts for independent
+requests, legacy migration, authenticated indexes, missing keys and stale writers.
+
+API 35 acceptance upgraded the existing installation with connectivity disabled.
+The preceding overview and selected request remained readable with unchanged
+ciphertext before any new replica existed. Reconnection acquired two full requests,
+two summaries and one directory document through the real API, with no pending
+generation. One request had never been opened on the device before this sync.
+After force-stop and offline restart, both requests displayed their own planned or
+actual time, reason and frozen schedule. The first remained available after viewing
+the second and another process restart. Month and status filters queried local
+records while the device remained offline; all replica and legacy ciphertext
+hashes were unchanged by those reads.
+
+Screenshots were inspected, and the inspected crash buffer contained no fatal
+exception. Emulator connectivity was restored after acceptance. These short request
+histories required no older-page backfill; that behavior is covered by automated
+tests, not claimed as device pagination acceptance.
+
+After notice, the 29,304,638-byte dev APK was installed on the authorized Android 16
+phone with `--skip-build --install-only`. ADB reported success and package metadata
+confirmed the update at 05:06:32 WIB. Its SHA-256 is
+`ecd5a52eef7d3d1592d05d41d852c16e2e92154f23fa9510ab63241cfaaa6ad7`.
+The phone application was not opened or driven. The emulator process was stopped
+with application data retained. Attendance, Expenses and Payslips replicas,
+unfinished offline drafts and shared sync-status presentation remain pending.

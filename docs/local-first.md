@@ -27,7 +27,7 @@ flowchart TD
   Commit --> Read
 ```
 
-Inbox and Leave replica identity binds API audience, account and company independently of
+Inbox, Leave and Overtime replica identity binds API audience, account and company independently of
 the local session. Database operations still require the active session, so a late
 request from the preceding login cannot mutate retained facts. Other feature
 snapshots still use temporary session ownership until their collection migration.
@@ -59,7 +59,7 @@ rolled-back transactions cannot advance a public cursor. Cursors are opaque,
 scoped to the account/company/projection, and have finite server retention.
 See the [server protocol](https://github.com/fajarxfce/hris-platform/blob/main/docs/synchronization.md).
 
-Inbox and Leave consume this protocol. One run reads a bounded number of pages,
+Inbox, Leave and Overtime consume this protocol. One run reads a bounded number of pages,
 hydrates changed resources with bounded concurrency, reconciles versions and
 tombstones, and atomically stores data with the next cursor. A failed hydration
 cannot advance that cursor. Multiple UI/worker triggers share an execution owner.
@@ -100,7 +100,7 @@ submitting it are separate capabilities.
 | Inbox | Account-owned encrypted records survive a new login; list/detail share a published generation | Implemented |
 | Attendance / calendar | Last recent/monthly/calendar snapshots | Snapshot acquisition; server feed not registered |
 | Leave | Account-owned balances, full requests and acquired activity pages; local employment/year/status and history queries | Request/balance change feed and resumable older-activity acquisition implemented |
-| Overtime | Last selected overview and request detail | Server collection exists; mobile integration pending |
+| Overtime | Account-owned full requests and acquired activity; local employment/date/status queries | Request change feed and resumable older-activity acquisition implemented |
 | Payslips | Last selected list and detail | Server collections exist; mobile integration pending |
 | Expenses | Last selected list and detail | Server collection exists; mobile integration pending |
 | Local document files | Account/company-owned imports and completed downloads | Upload/download commands; catalog is online |
@@ -190,13 +190,42 @@ pages, so stale date chunks and children of deleted requests cannot reappear.
 The same mutex covers UI and worker acquisition, and deadlines include lock wait.
 Storage compare-and-set conflicts do not revoke permission to read saved facts.
 
+### Overtime replica
+
+Overtime uses the same account owner and transaction contract, with separate
+summary, current request and older-activity records. `SyncOvertime` selects
+`OVERTIME_REQUESTS`; the current account's minimal employment directory remains
+independent of People or calendar permissions. Explicit collection selection
+supports existing own-resource read grants without widening the feed to coworkers.
+
+Summaries use company work date and resource ID as the stable order. One HMAC-tagged
+query reads at most 21 records for a selected employee/status, starting at the
+requested date or local continuation. Date ordering bounds the query to one page;
+rows past the selected end date are discarded. A 62-day filter window is a query
+constraint, not a retention limit. Other months stay stored independently.
+The preceding remote UUID continuation resets to the first local page during migration.
+
+`LoadOvertimeRequest` and `SyncOvertime` share the feature's acquisition mutex and
+30-second deadline, including lock wait. A fresh request writes current facts,
+summary and any selected older activity atomically. Cached history navigation
+bypasses HTTP and the mutex. Current facts retain their original credential/action
+review metadata; reading older history cannot renew it.
+
+Bootstrap, account replacement, versioned deletion and historical acquisition use
+the same safeguards described for Leave. Eight feed references, four concurrent
+canonical reads, ten feed pages and at most eight older-activity pages bound one
+run. A saved frontier resumes unfinished history. Failed acquisition never advances
+its cursor; a newer canonical version first waits for feed reconciliation.
+An acquired legacy request/history page remains a read-only migration source until
+its replacement is available. A completed feed's missing parent is authoritative.
+
 ## Next increments
 
 1. Extend stable audience/account/company ownership to the remaining read
-   projections. Inbox and Leave replicas retain account-owned facts across sign-in; workspace
+   projections. Inbox, Leave and Overtime replicas retain account-owned facts across sign-in; workspace
    admission and other last-view snapshots remain session-owned. Reauthentication
    does not reuse an old request guard or old credential-bound feed cursor.
-2. Add projections for the existing overtime, expense and payroll collections.
+2. Add projections for the existing expense and payroll collections.
    Store versioned facts, then query/filter locally; replace single last-view slots
    as each projection is implemented.
 3. Register backend feeds for attendance, schedules, documents and coworker data,

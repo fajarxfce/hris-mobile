@@ -106,7 +106,7 @@ class OvertimeRequestViewModelTest {
             assertEquals(fixture.request.id, model.state.value.content?.value?.details?.request?.id)
             model.onEvent(OvertimeRequestEvent.HistoryPageRequested(null))
             runCurrent()
-            assertEquals(listOf(null, 0L, null), fixture.detailSelections.map { it.historyAfter })
+            assertEquals(listOf(null, null, 0L), fixture.detailSelections.map { it.historyAfter })
             assertTrue(
                 fixture.detailSelections.all {
                     it.employeeId == fixture.employee.id && it.requestId == fixture.request.id

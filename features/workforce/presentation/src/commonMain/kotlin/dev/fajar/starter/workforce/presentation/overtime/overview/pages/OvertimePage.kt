@@ -69,6 +69,10 @@ fun OvertimePage(state: OvertimeState, list: LazyListState, onEvent: (OvertimeEv
                 }
         },
     ) {
+        if (state.syncPending)
+            item(key = "sync-pending") {
+                AppText(appString(AppString.SyncPending), color = AppColors.muted)
+            }
         if (state.loading) item(key = "loading") { AppLoading(compact = state.content != null) }
         val content = state.content?.takeUnless { state.readRestricted }?.value
         if (content?.directory?.items?.isEmpty() == true)

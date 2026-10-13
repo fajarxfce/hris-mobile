@@ -21,7 +21,7 @@ import kotlinx.coroutines.flow.first
  */
 class ReviewOvertimeCommand(
     private val commands: OvertimeCommandRepository,
-    private val cache: OvertimeCacheRepository,
+    private val cache: OvertimeRequestReplicaRepository,
     private val sessions: SessionRepository,
     private val workspaces: WorkspaceRepository,
     private val clock: Clock,
@@ -60,7 +60,17 @@ class ReviewOvertimeCommand(
                     FailureKind.Conflict,
                 )
             if (record.outcome is OvertimeCommandOutcome.Confirmed) {
-                val observed = cache.observeRequest(access).first()
+                val observed =
+                    cache
+                        .observeRequest(
+                            access,
+                            OvertimeRequestSelection(
+                                record.command.requestId,
+                                record.command.employeeId,
+                                record.command.employmentAfter,
+                            ),
+                        )
+                        .first()
                 currentCoroutineContext().ensureActive()
                 val continuation = validateOvertimeContinuation(access, currentAccess(workspaceId))
                 if (continuation is AppResult.Failed) return@withTimeoutOrNull continuation

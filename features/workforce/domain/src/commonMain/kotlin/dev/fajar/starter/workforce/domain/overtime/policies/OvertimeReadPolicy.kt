@@ -20,6 +20,7 @@ fun overtimeFailureInvalidatesCache(failure: Failure): Boolean =
                 "company_maintenance",
                 "client_update_required",
                 "client_version_required",
+                "sync_scope_changed",
             )
 
 fun overtimeMonth(date: LocalDate): CalendarPeriod {
@@ -41,10 +42,22 @@ fun validateOvertimeSelection(selection: OvertimeSelection): AppResult<Unit> =
             (selection.employmentAfter.isBlank() || selection.employmentAfter.length > 32) ->
             overtimeFailure("invalid_page")
         selection.requestAfter != null &&
-            Uuid.parseOrNull(selection.requestAfter)?.toString() != selection.requestAfter ->
+            Uuid.parseOrNull(selection.requestAfter)?.toString() != selection.requestAfter &&
+            !isOvertimeReplicaCursor(selection.requestAfter, selection.period) ->
             overtimeFailure("invalid_overtime_page")
         else -> AppResult.Success(Unit)
     }
+
+/** Local request order is company work date followed by resource ID. */
+fun isOvertimeReplicaCursor(value: String, period: CalendarPeriod? = null): Boolean {
+    val parts = value.split('/')
+    if (parts.size != 3 || parts[0] != "r" || Uuid.parseOrNull(parts[2])?.toString() != parts[2])
+        return false
+    val date = runCatching { LocalDate.parse(parts[1]) }.getOrNull() ?: return false
+    return date.toString() == parts[1] &&
+        date.year in 2000..2100 &&
+        (period == null || date in period.from..period.until)
+}
 
 fun validateOvertimeRequestSelection(selection: OvertimeRequestSelection): AppResult<Unit> =
     when {

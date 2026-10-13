@@ -10,6 +10,7 @@ data class OvertimeState(
     val content: OvertimeSnapshot<OvertimeOverview>? = null,
     val loading: Boolean = true,
     val refreshing: Boolean = false,
+    val syncPending: Boolean = false,
     val cacheFailure: Failure? = null,
     val refreshFailure: Failure? = null,
     val dialog: OvertimeDialog? = null,

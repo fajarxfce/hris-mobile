@@ -18,7 +18,7 @@ import org.koin.core.annotation.InjectedParam
 class OvertimeViewModel(
     @InjectedParam private val workspaceId: String,
     private val observe: ObserveOvertime,
-    private val refresh: RefreshOvertime,
+    private val sync: SyncOvertime,
 ) : MviViewModel<OvertimeState, OvertimeEvent, OvertimeEffect>(OvertimeState()) {
     private var observation: Job? = null
     private var acquisition: Job? = null
@@ -61,7 +61,10 @@ class OvertimeViewModel(
                     .distinctUntilChanged()
                     .flatMapLatest { (selection, restricted) ->
                         if (restricted) emptyFlow()
-                        else observe(workspaceId).map { selection to it }
+                        else
+                            observe(workspaceId, selection ?: OvertimeSelection()).map {
+                                selection to it
+                            }
                     }
                     .collect { (selection, result) ->
                         ensureActive()
@@ -91,10 +94,10 @@ class OvertimeViewModel(
 
     private fun onRefreshRequested(event: OvertimeEvent.RefreshRequested) {
         if (observation?.isActive != true || acquisition?.isActive == true) return
-        val requested = state.value.selection ?: OvertimeSelection()
         updateState {
             it.copy(
                 refreshing = true,
+                syncPending = false,
                 loading = it.content == null,
                 cacheFailure =
                     it.refreshFailure?.takeIf(::overtimeFailureInvalidatesCache) ?: it.cacheFailure,
@@ -103,11 +106,12 @@ class OvertimeViewModel(
         }
         acquisition =
             viewModelScope.launch {
-                val result = refresh(workspaceId, requested)
+                val result = sync(workspaceId)
                 ensureActive()
-                if (result is AppResult.Success) observation?.cancel()
-                updateState { it.withOvertimeRefresh(result, requested) }
-                if (result is AppResult.Success) observeSelection()
+                val caughtUp = result is AppResult.Success && result.value.caughtUp
+                if (caughtUp) observation?.cancel()
+                updateState { it.withOvertimeRefresh(result) }
+                if (caughtUp) observeSelection()
                 if (
                     result is AppResult.Failed &&
                         result.failure.code in workspaceAccessLossCodes &&
@@ -218,8 +222,6 @@ class OvertimeViewModel(
 
     private fun changeSelection(selection: OvertimeSelection, dialog: OvertimeDialog? = null) {
         if (observation?.isActive != true || state.value.readRestricted) return
-        acquisition?.cancel()
-        acquisition = null
         updateState {
             it.copy(
                 selection = selection,
@@ -227,12 +229,10 @@ class OvertimeViewModel(
                 dialog = dialog,
                 pickerYear = null,
                 loading = true,
-                refreshing = false,
                 cacheFailure = it.cacheFailure?.takeIf(::overtimeFailureInvalidatesCache),
                 refreshFailure = it.refreshFailure?.takeIf(::overtimeFailureInvalidatesCache),
             )
         }
-        onEvent(OvertimeEvent.RefreshRequested)
     }
 
     private fun onDialogDismissed(event: OvertimeEvent.DialogDismissed) {

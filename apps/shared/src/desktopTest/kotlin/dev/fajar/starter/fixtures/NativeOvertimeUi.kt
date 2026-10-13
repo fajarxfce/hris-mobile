@@ -18,6 +18,7 @@ class NativeOvertimeUi {
     @Volatile var enabled = false
     @Volatile var offline = false
     @Volatile var failureCode: String? = null
+    val syncReads = AtomicInteger()
     val listReads = AtomicInteger()
     val detailReads = AtomicInteger()
     val planningReads = AtomicInteger()
@@ -36,11 +37,14 @@ class NativeOvertimeUi {
     @Synchronized
     fun response(request: HttpRequestData): Pair<String, HttpStatusCode>? {
         val path = request.url.encodedPath
-        if (!enabled || !path.contains("/workforce/overtime")) return null
+        val sync =
+            path.contains("/sync/") && request.url.parameters["collections"] == "OVERTIME_REQUESTS"
+        if (!enabled || (!path.contains("/workforce/overtime") && !sync)) return null
         if (offline) throw IOException("Overtime transport unavailable")
         failureCode?.let {
             return """{"code":"$it","title":"Private diagnostic"}""" to HttpStatusCode.Forbidden
         }
+        if (sync) return syncPage(request).toString() to HttpStatusCode.OK
         if (path.endsWith("/overtime") && request.method == HttpMethod.Post) {
             val operation = requireNotNull(request.headers["Idempotency-Key"])
             val body = (request.body as TextContent).text
@@ -125,6 +129,40 @@ class NativeOvertimeUi {
             return it.toString() to HttpStatusCode.OK
         }
         return """{"code":"overtime_request_not_found"}""" to HttpStatusCode.NotFound
+    }
+
+    private fun syncPage(request: HttpRequestData): JsonObject {
+        assertEquals(HttpMethod.Get, request.method)
+        assertEquals("8", request.url.parameters["limit"])
+        syncReads.incrementAndGet()
+        val bootstrap = request.url.encodedPath.endsWith("/bootstrap")
+        val records =
+            listOf(plannedDetails[REQUEST_ID] ?: nativeOvertimeDetailsFixture()) +
+                plannedDetails.filterKeys { it != REQUEST_ID }.values
+        check(records.size <= 8)
+        return buildJsonObject {
+            if (bootstrap) putJsonArray("collections") { add("OVERTIME_REQUESTS") }
+            putJsonArray("items") {
+                if (request.url.encodedPath.split('/').getOrNull(4) == NativeUiServer.COMPANY_ONE)
+                    for (details in records) addJsonObject {
+                        val value = details.getValue("request").jsonObject
+                        put("collection", "OVERTIME_REQUESTS")
+                        put("id", value.getValue("id"))
+                        put("version", value.getValue("version"))
+                        if (!bootstrap) put("operation", "UPSERT")
+                    }
+            }
+            if (bootstrap) {
+                put("nextCursor", JsonNull)
+                put("changesCursor", "overtime-head")
+            } else {
+                put("cursor", "overtime-current")
+                put("hasMore", false)
+                put("pendingPublication", false)
+                put("pollAfterSeconds", 5)
+            }
+            put("serverTime", "2026-10-12T00:00:00Z")
+        }
     }
 
     private fun actionResponse(request: HttpRequestData): Pair<String, HttpStatusCode> {

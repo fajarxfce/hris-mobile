@@ -5,14 +5,14 @@ import dev.fajar.starter.common.result.*
 import dev.fajar.starter.identity.domain.repositories.SessionRepository
 import dev.fajar.starter.workforce.domain.overtime.entities.*
 import dev.fajar.starter.workforce.domain.overtime.policies.*
-import dev.fajar.starter.workforce.domain.overtime.repositories.OvertimeCacheRepository
+import dev.fajar.starter.workforce.domain.overtime.repositories.OvertimeRequestReplicaRepository
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
 import kotlin.time.Clock
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 
 class ObserveOvertimeRequest(
-    private val cache: OvertimeCacheRepository,
+    private val cache: OvertimeRequestReplicaRepository,
     private val sessions: SessionRepository,
     private val workspaces: WorkspaceRepository,
     private val clock: Clock,
@@ -20,9 +20,12 @@ class ObserveOvertimeRequest(
 ) {
     @OptIn(ExperimentalCoroutinesApi::class)
     operator fun invoke(
-        workspaceId: String
-    ): Flow<AppResult<OvertimeSnapshot<OvertimeRequestView>?>> =
-        sessions
+        workspaceId: String,
+        selection: OvertimeRequestSelection,
+    ): Flow<AppResult<OvertimeSnapshot<OvertimeRequestView>?>> {
+        val valid = validateOvertimeRequestSelection(selection)
+        if (valid is AppResult.Failed) return flowOf(valid)
+        return sessions
             .observe()
             .flatMapLatest { result ->
                 when (result) {
@@ -53,7 +56,7 @@ class ObserveOvertimeRequest(
                 when (admitted) {
                     is AppResult.Failed -> flowOf(admitted)
                     is AppResult.Success ->
-                        cache.observeRequest(admitted.value).map { result ->
+                        cache.observeRequest(admitted.value, selection).map { result ->
                             when (result) {
                                 is AppResult.Failed -> result
                                 is AppResult.Success ->
@@ -68,4 +71,5 @@ class ObserveOvertimeRequest(
                         }
                 }
             }
+    }
 }

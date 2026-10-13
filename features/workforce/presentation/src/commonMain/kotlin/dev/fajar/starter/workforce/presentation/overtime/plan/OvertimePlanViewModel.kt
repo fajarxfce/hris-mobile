@@ -24,7 +24,7 @@ class OvertimePlanViewModel(
     private val preparePlan: PrepareOvertimePlan,
     private val replayCommands: ReplayOvertimeCommands,
     private val reviewCommand: ReviewOvertimeCommand,
-    private val refreshRequest: RefreshOvertimeRequest,
+    private val refreshRequest: LoadOvertimeRequest,
 ) :
     MviViewModel<OvertimePlanState, OvertimePlanEvent, OvertimePlanEffect>(
         initialOvertimePlanState(target)

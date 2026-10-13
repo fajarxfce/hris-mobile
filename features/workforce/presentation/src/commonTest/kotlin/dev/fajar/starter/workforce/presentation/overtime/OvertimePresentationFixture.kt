@@ -4,6 +4,8 @@ import dev.fajar.starter.common.config.*
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.identity.domain.entities.*
 import dev.fajar.starter.identity.domain.repositories.SessionRepository
+import dev.fajar.starter.sync.domain.entities.*
+import dev.fajar.starter.sync.domain.repositories.SyncFeedRepository
 import dev.fajar.starter.workforce.domain.entities.*
 import dev.fajar.starter.workforce.domain.overtime.entities.*
 import dev.fajar.starter.workforce.domain.overtime.policies.*
@@ -18,6 +20,7 @@ import kotlin.time.Duration.Companion.seconds
 import kotlin.time.Instant
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.sync.Mutex
 import kotlinx.datetime.*
 
 class OvertimePresentationFixture(
@@ -244,8 +247,18 @@ class OvertimePresentationFixture(
                 period: CalendarPeriod,
             ): AppResult<WorkCalendar> = error("Overtime reads do not acquire the live calendar")
         }
-    val remote =
-        object : OvertimeRepository {
+    private val transport =
+        object : OvertimeRepository, OvertimeRecordRepository {
+            override suspend fun request(
+                access: WorkforceAccess,
+                id: String,
+                historyAfter: Long?,
+            ): AppResult<OvertimeDetails> {
+                canonicalReads++
+                canonicalSelections += id to historyAfter
+                return canonicalCall(id, historyAfter)
+            }
+
             override suspend fun requests(
                 access: WorkforceAccess,
                 employeeId: String,
@@ -267,7 +280,63 @@ class OvertimePresentationFixture(
                 return detailsCall(selection)
             }
         }
-    val cache =
+    val remote: OvertimeRepository
+        get() = transport
+
+    var canonicalReads = 0
+    val canonicalSelections = mutableListOf<Pair<String, Long?>>()
+    var canonicalCall: suspend (String, Long?) -> AppResult<OvertimeDetails> = { id, after ->
+        detailsCall(selection.copy(requestId = id, historyAfter = after))
+    }
+    var bootstrapReads = 0
+    var changesReads = 0
+    val feedRequests = mutableListOf<Triple<Set<SyncCollection>, String?, Int>>()
+    var bootstrapCall: suspend (String?) -> AppResult<SyncBootstrapPage> = {
+        AppResult.Success(
+            SyncBootstrapPage(
+                setOf(SyncCollection.OVERTIME_REQUESTS),
+                listOf(
+                    SyncReference(SyncCollection.OVERTIME_REQUESTS, request.id, request.version)
+                ),
+                null,
+                "cursor/0",
+                clock.now(),
+            )
+        )
+    }
+    var changesCall: suspend (String) -> AppResult<SyncChangePage> = { cursor ->
+        AppResult.Success(SyncChangePage(emptyList(), cursor, false, false, 5, clock.now()))
+    }
+    val feed =
+        object : SyncFeedRepository {
+            override suspend fun bootstrap(
+                sessionId: String,
+                companyId: String,
+                collections: Set<SyncCollection>,
+                cursor: String?,
+                limit: Int,
+            ): AppResult<SyncBootstrapPage> {
+                bootstrapReads++
+                feedRequests += Triple(collections, cursor, limit)
+                return bootstrapCall(cursor)
+            }
+
+            override suspend fun changes(
+                sessionId: String,
+                companyId: String,
+                collections: Set<SyncCollection>,
+                cursor: String,
+                limit: Int,
+            ): AppResult<SyncChangePage> {
+                changesReads++
+                feedRequests += Triple(collections, cursor, limit)
+                return changesCall(cursor)
+            }
+        }
+    val replicas = OvertimeReplicaFixture()
+    val execution = Mutex()
+    val historyPages = mutableMapOf<Pair<String, Long?>, OvertimeHistoryPage>()
+    val legacy =
         object : OvertimeCacheRepository {
             override fun observe(access: WorkforceAccess) = flow {
                 observers++
@@ -281,66 +350,99 @@ class OvertimePresentationFixture(
                     observers--
                 }
             }
-
-            override fun observeRequest(access: WorkforceAccess) = flow {
+        }
+    val cache =
+        object : OvertimeRequestReplicaRepository {
+            override fun observeRequest(
+                access: WorkforceAccess,
+                selection: OvertimeRequestSelection,
+            ) = flow {
                 observers++
                 try {
                     if (failNextDetailObservation) {
                         failNextDetailObservation = false
                         emit(overtimeFailure("fixture.storage", FailureKind.Storage))
-                    } else emitAll(detailRecords)
+                    } else
+                        emitAll(
+                            detailRecords.map { result ->
+                                when (result) {
+                                    is AppResult.Failed -> result
+                                    is AppResult.Success -> {
+                                        val saved = result.value
+                                        val history =
+                                            historyPages[
+                                                selection.requestId to selection.historyAfter]
+                                        AppResult.Success(
+                                            if (selection.historyAfter == null) saved
+                                            else if (saved != null && history != null)
+                                                saved.copy(
+                                                    value =
+                                                        OvertimeRequestView(
+                                                            selection,
+                                                            saved.value.details.copy(
+                                                                history = history.history
+                                                            ),
+                                                        )
+                                                )
+                                            else null
+                                        )
+                                    }
+                                }
+                            }
+                        )
                 } finally {
                     observers--
                 }
             }
 
-            override suspend fun generation(access: WorkforceAccess) =
-                AppResult.Success((records.value as? AppResult.Success)?.value?.generation)
-
-            override suspend fun requestGeneration(access: WorkforceAccess) =
+            override suspend fun requestCheckpoint(access: WorkforceAccess) =
                 AppResult.Success((detailRecords.value as? AppResult.Success)?.value?.generation)
-
-            override suspend fun replace(
-                access: WorkforceAccess,
-                expectedGeneration: String?,
-                snapshot: OvertimeSnapshot<OvertimeOverview>?,
-            ): AppResult<Boolean> {
-                beforeWrite()
-                if (snapshot == null && failCleanup)
-                    return overtimeFailure("fixture.storage", FailureKind.Storage)
-                if (
-                    rejectWrite ||
-                        expectedGeneration !=
-                            (records.value as? AppResult.Success)?.value?.generation
-                )
-                    return AppResult.Success(false)
-                if (snapshot != null) writes++
-                records.value = AppResult.Success(snapshot)
-                return AppResult.Success(true)
-            }
 
             override suspend fun replaceRequest(
                 access: WorkforceAccess,
-                expectedGeneration: String?,
+                requestId: String,
+                expectedCheckpoint: String?,
                 snapshot: OvertimeSnapshot<OvertimeRequestView>?,
+                history: OvertimeHistoryPage?,
             ): AppResult<Boolean> {
                 beforeWrite()
                 if (snapshot == null && failCleanup)
                     return overtimeFailure("fixture.storage", FailureKind.Storage)
                 if (
                     rejectWrite ||
-                        expectedGeneration !=
+                        expectedCheckpoint !=
                             (detailRecords.value as? AppResult.Success)?.value?.generation
                 )
                     return AppResult.Success(false)
                 if (snapshot != null) writes++
+                if (history != null) historyPages[history.requestId to history.after] = history
                 detailRecords.value = AppResult.Success(snapshot)
                 return AppResult.Success(true)
             }
+
+            override suspend fun pendingHistory(access: WorkforceAccess, limit: Int) =
+                AppResult.Success(emptyList<OvertimeHistoryWork>())
+
+            override suspend fun storeHistory(
+                access: WorkforceAccess,
+                work: OvertimeHistoryWork,
+                page: OvertimeHistoryPage,
+            ) = AppResult.Success(false)
         }
-    val refresh = RefreshOvertime(workforce, remote, cache, sessions, workspaces, clock, build)
+    val sync =
+        SyncOvertime(
+            feed,
+            transport,
+            workforce,
+            replicas,
+            sessions,
+            workspaces,
+            clock,
+            build,
+            execution,
+        )
     val refreshRequest =
-        RefreshOvertimeRequest(workforce, remote, cache, sessions, workspaces, clock, build)
-    val observe = ObserveOvertime(cache, sessions, workspaces, clock, build)
+        LoadOvertimeRequest(workforce, remote, cache, sessions, workspaces, clock, build, execution)
+    val observe = ObserveOvertime(replicas, legacy, sessions, workspaces, clock, build)
     val observeRequest = ObserveOvertimeRequest(cache, sessions, workspaces, clock, build)
 }

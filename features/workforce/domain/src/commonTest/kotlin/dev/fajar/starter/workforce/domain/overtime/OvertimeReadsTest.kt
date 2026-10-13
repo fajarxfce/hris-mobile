@@ -1,6 +1,7 @@
 package dev.fajar.starter.workforce.domain.overtime
 
 import dev.fajar.starter.common.result.*
+import dev.fajar.starter.sync.domain.entities.*
 import dev.fajar.starter.workforce.domain.entities.*
 import dev.fajar.starter.workforce.domain.overtime.entities.*
 import dev.fajar.starter.workforce.domain.overtime.policies.*
@@ -25,7 +26,7 @@ class OvertimeReadsTest {
         assertEquals(0, f.base.calendarReads)
         assertEquals(
             CalendarPeriod(LocalDate(2026, 10, 1), LocalDate(2026, 10, 31)),
-            f.acquiredPeriod,
+            (f.observe(f.workspace.id).first() as AppResult.Success).value!!.value.selection.period,
         )
         assertIs<AppResult.Failed>(
             admitWorkforce(
@@ -37,7 +38,9 @@ class OvertimeReadsTest {
             )
         )
         val snapshot =
-            assertIs<AppResult.Success<OvertimeSnapshot<OvertimeOverview>?>>(f.records.value)
+            assertIs<AppResult.Success<OvertimeSnapshot<OvertimeOverview>?>>(
+                    f.observe(f.workspace.id).first()
+                )
                 .value!!
         assertEquals(f.base.employee.id, snapshot.value.selection.employeeId)
         assertEquals(f.base.clock.now() + 1.hours, snapshot.refreshAfter)
@@ -54,7 +57,9 @@ class OvertimeReadsTest {
                 ),
                 OvertimeSelection(requestAfter = "invalid"),
             )
-        for (selection in invalid) assertIs<AppResult.Failed>(f.refresh(f.workspace.id, selection))
+        for (selection in invalid) assertIs<AppResult.Failed>(
+            f.observe(f.workspace.id, selection).first()
+        )
         assertEquals(0, f.base.policyReads)
         assertIs<AppResult.Failed>(
             f.refreshRequest(
@@ -70,9 +75,27 @@ class OvertimeReadsTest {
     fun anUnlinkedAccountPublishesAnEmptyViewWithoutReadingAnyRequest() = runTest {
         val f = OvertimeFixture()
         f.base.directoryCall = { AppResult.Success(f.base.directory.copy(items = emptyList())) }
+        f.bootstrapCall = {
+            AppResult.Success(
+                SyncBootstrapPage(
+                    setOf(SyncCollection.OVERTIME_REQUESTS),
+                    emptyList(),
+                    null,
+                    "empty",
+                    f.base.clock.now(),
+                )
+            )
+        }
         assertIs<AppResult.Success<*>>(f.load())
-        assertEquals(0, f.requestReads)
-        assertTrue((f.records.value as AppResult.Success).value!!.value.requests.items.isEmpty())
+        assertEquals(0, f.canonicalReads)
+        assertTrue(
+            (f.observe(f.workspace.id).first() as AppResult.Success)
+                .value!!
+                .value
+                .requests
+                .items
+                .isEmpty()
+        )
     }
 
     @Test
@@ -156,11 +179,11 @@ class OvertimeReadsTest {
     @Test
     fun finiteAcquisitionAndCompetingSnapshotReplacementFailExplicitly() = runTest {
         val f = OvertimeFixture()
-        f.requestsCall = { awaitCancellation() }
-        assertEquals("client.overtime_timeout", assertIs<AppResult.Failed>(f.load()).failure.code)
+        f.canonicalCall = { _, _ -> awaitCancellation() }
+        assertEquals(AppResult.Success(OvertimeSyncOutcome(false, 5)), f.sync(f.workspace.id))
         assertEquals(30_000, testScheduler.currentTime)
-        f.requestsCall = { AppResult.Success(OvertimePage(emptyList())) }
-        f.rejectWrite = true
+        f.canonicalCall = { _, _ -> AppResult.Success(f.details) }
+        f.replicas.rejectWrite = true
         assertEquals("client.overtime_changed", assertIs<AppResult.Failed>(f.load()).failure.code)
     }
 
@@ -170,13 +193,14 @@ class OvertimeReadsTest {
             val f = OvertimeFixture()
             f.load(detail)
             f.failCleanup = true
+            f.replicas.failCleanup = true
             val failure = overtimeFailure("mfa_required", FailureKind.AccessDenied)
-            f.requestsCall = { failure }
+            f.base.policyCall = { failure }
             f.detailsCall = { failure }
             assertEquals(failure, f.load(detail))
             assertNotNull(
                 if (detail) (f.detailRecords.value as AppResult.Success).value
-                else (f.records.value as AppResult.Success).value
+                else (f.replicas.published.value as AppResult.Success).value.checkpoint
             )
         }
     }
@@ -196,7 +220,8 @@ class OvertimeReadsTest {
             )
         }
         assertIs<AppResult.Success<*>>(f.load())
-        val saved = (f.records.value as AppResult.Success).value!!
+        val saved =
+            (f.replicas.observeRequest(f.access, f.selection).first() as AppResult.Success).value!!
         assertEquals(f.base.clock.now() + 1.hours, saved.refreshAfter)
         assertEquals(f.base.clock.now() + 15.minutes, saved.access.authorizationExpiresAt)
         assertEquals("company_maintenance", saved.access.authorizationExpiryCode)
@@ -210,16 +235,19 @@ class OvertimeReadsTest {
             f.load(detail)
             val results = mutableListOf<AppResult<*>>()
             val watch = launch {
-                if (detail) f.observeRequest(f.workspace.id).collect { results += it }
+                if (detail) f.observeRequest(f.workspace.id, f.selection).collect { results += it }
                 else f.observe(f.workspace.id).collect { results += it }
             }
             runCurrent()
-            assertEquals(1, f.observers)
+            assertEquals(
+                if (detail) 1 else 2,
+                f.observers + f.replicas.directoryObservers + f.replicas.pageObservers,
+            )
             advanceTimeBy(3 * 24 * 60 * 60_000L)
             runCurrent()
             assertIs<AppResult.Success<*>>(results.last())
             watch.cancelAndJoin()
-            assertEquals(0, f.observers)
+            assertEquals(0, f.observers + f.replicas.directoryObservers + f.replicas.pageObservers)
         }
     }
 }

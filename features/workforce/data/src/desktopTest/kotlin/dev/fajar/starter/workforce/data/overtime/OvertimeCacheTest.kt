@@ -6,7 +6,6 @@ import dev.fajar.starter.securestorage.*
 import dev.fajar.starter.workforce.data.mappers.toDirectory
 import dev.fajar.starter.workforce.data.overtime.encoding.overtimePartition
 import dev.fajar.starter.workforce.data.overtime.mappers.*
-import dev.fajar.starter.workforce.data.overtime.repositories.EncryptedOvertimeCacheRepository
 import dev.fajar.starter.workforce.domain.overtime.entities.*
 import java.nio.file.Files
 import kotlin.io.encoding.Base64
@@ -42,7 +41,7 @@ class OvertimeCacheTest {
     @Test
     fun freshFactsPersistIndependentlyOfAnExpiredAuthorizationDeadline() = runTest {
         withDatabase { db, keys ->
-            val repo = EncryptedOvertimeCacheRepository(db.replicas, AesGcmContentCipher(), keys)
+            val repo = LegacyOvertimeCacheWriter(db.replicas, AesGcmContentCipher(), keys)
             val access =
                 f.access.copy(
                     authorizationExpiresAt = f.base.now - 1.hours,
@@ -60,11 +59,10 @@ class OvertimeCacheTest {
     @Test
     fun separateReadViewsRestoreEncryptedFactsAndRejectStaleReplacement() = runTest {
         withDatabase { db, keys ->
-            val repo = EncryptedOvertimeCacheRepository(db.replicas, AesGcmContentCipher(), keys)
+            val repo = LegacyOvertimeCacheWriter(db.replicas, AesGcmContentCipher(), keys)
             assertEquals(AppResult.Success(true), repo.replace(f.access, null, overview))
             assertEquals(AppResult.Success(true), repo.replaceRequest(f.access, null, details))
-            val restored =
-                EncryptedOvertimeCacheRepository(db.replicas, AesGcmContentCipher(), keys)
+            val restored = LegacyOvertimeCacheWriter(db.replicas, AesGcmContentCipher(), keys)
             assertEquals(AppResult.Success(overview), restored.observe(f.access).first())
             assertEquals(AppResult.Success(details), restored.observeRequest(f.access).first())
             val raw =
@@ -89,7 +87,7 @@ class OvertimeCacheTest {
     @Test
     fun accountAudienceCompanyAndViewAreBoundToTheCiphertext() = runTest {
         withDatabase { db, keys ->
-            val repo = EncryptedOvertimeCacheRepository(db.replicas, AesGcmContentCipher(), keys)
+            val repo = LegacyOvertimeCacheWriter(db.replicas, AesGcmContentCipher(), keys)
             repo.replaceRequest(f.access, null, details)
             for (access in
                 listOf(
@@ -134,12 +132,11 @@ class OvertimeCacheTest {
     @Test
     fun aMissingWorkspaceKeyNeverGeneratesAReplacement() = runTest {
         withDatabase { db, keys ->
-            val repo = EncryptedOvertimeCacheRepository(db.replicas, AesGcmContentCipher(), keys)
+            val repo = LegacyOvertimeCacheWriter(db.replicas, AesGcmContentCipher(), keys)
             repo.replace(f.access, null, overview)
             val absent = MemoryCredentialStore()
             try {
-                val reader =
-                    EncryptedOvertimeCacheRepository(db.replicas, AesGcmContentCipher(), absent)
+                val reader = LegacyOvertimeCacheWriter(db.replicas, AesGcmContentCipher(), absent)
                 assertIs<AppResult.Failed>(reader.observe(f.access).first())
                 assertIs<AppResult.Failed>(reader.replaceRequest(f.access, null, details))
                 assertNull(absent.read())
@@ -153,8 +150,8 @@ class OvertimeCacheTest {
     @Test
     fun onlyOneCompetingPublicationCanReplaceTheObservedGeneration() = runTest {
         withDatabase { db, keys ->
-            val first = EncryptedOvertimeCacheRepository(db.replicas, AesGcmContentCipher(), keys)
-            val second = EncryptedOvertimeCacheRepository(db.replicas, AesGcmContentCipher(), keys)
+            val first = LegacyOvertimeCacheWriter(db.replicas, AesGcmContentCipher(), keys)
+            val second = LegacyOvertimeCacheWriter(db.replicas, AesGcmContentCipher(), keys)
             first.replaceRequest(f.access, null, details)
             val results =
                 awaitAll(
@@ -193,7 +190,7 @@ class OvertimeCacheTest {
                         return encrypted
                     }
                 }
-            val repo = EncryptedOvertimeCacheRepository(db.replicas, delayed, keys)
+            val repo = LegacyOvertimeCacheWriter(db.replicas, delayed, keys)
             val running = async { repo.replaceRequest(f.access, null, details) }
             entered.await()
             if (cancel) running.cancel() else db.accounts.activate("replacement")
@@ -204,7 +201,7 @@ class OvertimeCacheTest {
             assertTrue(keyBuffers.all { buffer -> buffer.all { it == 0.toByte() } })
             assertEquals(
                 AppResult.Success(null),
-                EncryptedOvertimeCacheRepository(db.replicas, cipher, keys)
+                LegacyOvertimeCacheWriter(db.replicas, cipher, keys)
                     .observeRequest(f.access)
                     .first(),
             )

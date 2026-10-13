@@ -3,6 +3,7 @@ package dev.fajar.starter.workforce.presentation.overtime.detail
 import androidx.lifecycle.viewModelScope
 import dev.fajar.starter.common.result.AppResult
 import dev.fajar.starter.presentation.mvi.MviViewModel
+import dev.fajar.starter.workforce.domain.overtime.entities.OvertimeRequestAcquisition
 import dev.fajar.starter.workforce.domain.overtime.policies.overtimeFailureInvalidatesCache
 import dev.fajar.starter.workforce.domain.overtime.usecases.*
 import dev.fajar.starter.workforce.presentation.overtime.verificationCodes
@@ -16,7 +17,7 @@ import org.koin.core.annotation.InjectedParam
 class OvertimeRequestViewModel(
     @InjectedParam private val target: OvertimeRequestTarget,
     private val observe: ObserveOvertimeRequest,
-    private val refresh: RefreshOvertimeRequest,
+    private val refresh: LoadOvertimeRequest,
 ) :
     MviViewModel<OvertimeRequestState, OvertimeRequestEvent, OvertimeRequestEffect>(
         OvertimeRequestState(target.selection)
@@ -51,7 +52,7 @@ class OvertimeRequestViewModel(
                     .distinctUntilChanged()
                     .flatMapLatest { (selection, restricted) ->
                         if (restricted) emptyFlow()
-                        else observe(target.workspaceId).map { selection to it }
+                        else observe(target.workspaceId, selection).map { selection to it }
                     }
                     .collect { (selection, result) ->
                         ensureActive()
@@ -71,6 +72,10 @@ class OvertimeRequestViewModel(
     }
 
     private fun onRefreshRequested(event: OvertimeRequestEvent.RefreshRequested) {
+        acquire(OvertimeRequestAcquisition.FRESH)
+    }
+
+    private fun acquire(mode: OvertimeRequestAcquisition) {
         if (observation?.isActive != true || acquisition?.isActive == true) return
         val requested = state.value.selection
         updateState {
@@ -84,7 +89,7 @@ class OvertimeRequestViewModel(
         }
         acquisition =
             viewModelScope.launch {
-                val result = refresh(target.workspaceId, requested)
+                val result = refresh(target.workspaceId, requested, mode)
                 ensureActive()
                 if (result is AppResult.Success) observation?.cancel()
                 updateState { it.withRequestRefresh(result) }
@@ -117,7 +122,7 @@ class OvertimeRequestViewModel(
                 refreshing = false,
             )
         }
-        onEvent(OvertimeRequestEvent.RefreshRequested)
+        acquire(OvertimeRequestAcquisition.LOCAL_FIRST)
     }
 
     private fun onBackRequested(event: OvertimeRequestEvent.BackRequested) {

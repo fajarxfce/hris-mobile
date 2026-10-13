@@ -4,6 +4,7 @@ import dev.fajar.starter.common.config.AppBuild
 import dev.fajar.starter.identity.domain.repositories.SessionRepository
 import dev.fajar.starter.location.domain.repositories.LocationRepository
 import dev.fajar.starter.sync.domain.SyncTask
+import dev.fajar.starter.sync.domain.repositories.SyncFeedRepository
 import dev.fajar.starter.workforce.domain.attendance.repositories.*
 import dev.fajar.starter.workforce.domain.attendance.usecases.*
 import dev.fajar.starter.workforce.domain.overtime.repositories.*
@@ -12,6 +13,7 @@ import dev.fajar.starter.workforce.domain.repositories.*
 import dev.fajar.starter.workforce.domain.usecases.*
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
 import kotlin.time.Clock
+import kotlinx.coroutines.sync.Mutex
 import org.koin.core.annotation.*
 
 @Module
@@ -44,7 +46,7 @@ class WorkforceDataModule {
     @Factory
     fun reviewOvertimeCommand(
         commands: OvertimeCommandRepository,
-        cache: OvertimeCacheRepository,
+        cache: OvertimeRequestReplicaRepository,
         sessions: SessionRepository,
         workspaces: WorkspaceRepository,
         build: AppBuild,
@@ -70,39 +72,66 @@ class WorkforceDataModule {
 
     @Factory
     fun observeOvertime(
+        replicas: OvertimeReplicaRepository,
         cache: OvertimeCacheRepository,
         sessions: SessionRepository,
         workspaces: WorkspaceRepository,
         build: AppBuild,
-    ) = ObserveOvertime(cache, sessions, workspaces, Clock.System, build)
+    ) = ObserveOvertime(replicas, cache, sessions, workspaces, Clock.System, build)
 
     @Factory
     fun observeOvertimeRequest(
-        cache: OvertimeCacheRepository,
+        cache: OvertimeRequestReplicaRepository,
         sessions: SessionRepository,
         workspaces: WorkspaceRepository,
         build: AppBuild,
     ) = ObserveOvertimeRequest(cache, sessions, workspaces, Clock.System, build)
 
-    @Single
-    fun refreshOvertime(
+    @Single @Named("overtime-acquisition") fun overtimeAcquisition() = Mutex()
+
+    @Single(binds = [SyncOvertime::class, SyncTask::class])
+    fun syncOvertime(
+        feed: SyncFeedRepository,
+        remote: OvertimeRecordRepository,
         workforce: WorkforceRepository,
-        remote: OvertimeRepository,
-        cache: OvertimeCacheRepository,
+        cache: OvertimeReplicaRepository,
         sessions: SessionRepository,
         workspaces: WorkspaceRepository,
         build: AppBuild,
-    ) = RefreshOvertime(workforce, remote, cache, sessions, workspaces, Clock.System, build)
+        @Named("overtime-acquisition") execution: Mutex,
+    ) =
+        SyncOvertime(
+            feed,
+            remote,
+            workforce,
+            cache,
+            sessions,
+            workspaces,
+            Clock.System,
+            build,
+            execution,
+        )
 
     @Single
-    fun refreshOvertimeRequest(
+    fun loadOvertimeRequest(
         workforce: WorkforceRepository,
         remote: OvertimeRepository,
-        cache: OvertimeCacheRepository,
+        cache: OvertimeRequestReplicaRepository,
         sessions: SessionRepository,
         workspaces: WorkspaceRepository,
         build: AppBuild,
-    ) = RefreshOvertimeRequest(workforce, remote, cache, sessions, workspaces, Clock.System, build)
+        @Named("overtime-acquisition") execution: Mutex,
+    ) =
+        LoadOvertimeRequest(
+            workforce,
+            remote,
+            cache,
+            sessions,
+            workspaces,
+            Clock.System,
+            build,
+            execution,
+        )
 
     @Factory
     fun observeAttendance(

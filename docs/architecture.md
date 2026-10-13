@@ -129,6 +129,13 @@ server's versioned schedule. Repositories map that response; pure domain policie
 validate requested and actual intervals. The review's lifetime is bounded by
 company/session authority and carries no command or UI state.
 
+Overtime reads use a separate account-owned replica. `SyncOvertime` coordinates
+company admission, own-employment discovery, request change references and
+canonical reads; its repository commits encrypted records with the cursor.
+`ObserveOvertime` queries date/status selections locally. `LoadOvertimeRequest`
+shares the acquisition mutex, retains each request and reuses acquired activity
+pages without HTTP. Historical acquisition never renews action-review authority.
+
 Overtime commands use separate preparation, delivery, observation and review use
 cases. Preparation validates the admitted review/request and stores immutable input;
 delivery coordinates command storage, live company policy and the transport port.
