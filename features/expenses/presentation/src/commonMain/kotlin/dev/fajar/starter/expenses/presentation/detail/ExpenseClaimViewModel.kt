@@ -22,6 +22,7 @@ class ExpenseClaimViewModel(
     private var acquisition: Job? = null
 
     init {
+        on<ExpenseClaimEvent.EditRequested>(::onEditRequested)
         on<ExpenseClaimEvent.Entered>(::onEntered)
         on<ExpenseClaimEvent.Stopped>(::onStopped)
         on<ExpenseClaimEvent.RefreshRequested>(::onRefreshRequested)
@@ -121,6 +122,16 @@ class ExpenseClaimViewModel(
             )
         }
         onEvent(ExpenseClaimEvent.RefreshRequested)
+    }
+
+    private fun onEditRequested(event: ExpenseClaimEvent.EditRequested) {
+        if (!state.value.canEdit || state.value.refreshing) return
+        val claim = state.value.content?.value?.claim ?: return
+        viewModelScope.launch {
+            emitEffect(
+                ExpenseClaimEffect.EditDraft(claim.employeeId, claim.id, target.employmentAfter)
+            )
+        }
     }
 
     private fun onBackRequested(event: ExpenseClaimEvent.BackRequested) {

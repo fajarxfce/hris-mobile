@@ -1,6 +1,8 @@
 package dev.fajar.starter.expenses.presentation.detail
 
 sealed interface ExpenseClaimEvent {
+    data object EditRequested : ExpenseClaimEvent
+
     data object Entered : ExpenseClaimEvent
 
     data object Stopped : ExpenseClaimEvent

@@ -4,4 +4,4 @@ import kotlinx.serialization.Serializable
 
 @Serializable data object ExpensesRoute
 
-@Serializable data class ExpenseClaimRoute(val id: String)
+@Serializable data class ExpenseClaimRoute(val id: String, val employmentAfter: String? = null)

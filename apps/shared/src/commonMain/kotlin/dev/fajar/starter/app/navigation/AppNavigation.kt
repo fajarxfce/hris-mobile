@@ -310,9 +310,14 @@ fun AppNavigation(navigation: ScopedNavigationState, incomingLinks: Flow<String>
                     )
                     expenseRoutes(
                         stage.workspace.id,
-                        onClaim = {
-                            controller.navigate(ExpenseClaimRoute(it)) { launchSingleTop = true }
+                        onDraft = { controller.navigate(it) { launchSingleTop = true } },
+                        onSavedClaim = {
+                            controller.navigate(it) {
+                                popUpTo<ExpenseDraftRoute> { inclusive = true }
+                                launchSingleTop = true
+                            }
                         },
+                        onClaim = { controller.navigate(it) { launchSingleTop = true } },
                         onVerify = {
                             controller.navigate(VerificationRoute) { launchSingleTop = true }
                         },

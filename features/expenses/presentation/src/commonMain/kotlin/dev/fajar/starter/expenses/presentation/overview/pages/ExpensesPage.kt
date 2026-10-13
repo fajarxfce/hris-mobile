@@ -13,6 +13,7 @@ import dev.fajar.starter.expenses.presentation.widgets.ExpenseReadFeedback
 import dev.fajar.starter.localization.*
 import io.github.composefluent.FluentTheme
 import io.github.composefluent.icons.Icons
+import io.github.composefluent.icons.regular.Add
 import io.github.composefluent.icons.regular.ArrowLeft
 import io.github.composefluent.icons.regular.ArrowSync
 
@@ -35,6 +36,14 @@ fun ExpensesPage(state: ExpensesState, list: LazyListState, onEvent: (ExpensesEv
                         )
                     },
                     actions = {
+                        if (state.canCreate)
+                            AppIconButton(
+                                Icons.Regular.Add,
+                                appString(AppString.ExpenseNewClaim),
+                                { onEvent(ExpensesEvent.CreateRequested) },
+                                enabled = !state.refreshing,
+                            )
+
                         AppIconButton(
                             Icons.Regular.ArrowSync,
                             appString(AppString.Refresh),

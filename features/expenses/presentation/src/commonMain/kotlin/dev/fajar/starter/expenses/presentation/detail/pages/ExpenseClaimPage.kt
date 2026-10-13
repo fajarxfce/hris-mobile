@@ -16,6 +16,7 @@ import io.github.composefluent.FluentTheme
 import io.github.composefluent.icons.Icons
 import io.github.composefluent.icons.regular.ArrowLeft
 import io.github.composefluent.icons.regular.ArrowSync
+import io.github.composefluent.icons.regular.Edit
 
 @Composable
 fun ExpenseClaimPage(
@@ -40,6 +41,14 @@ fun ExpenseClaimPage(
                         )
                     },
                     actions = {
+                        if (state.canEdit)
+                            AppIconButton(
+                                Icons.Regular.Edit,
+                                appString(AppString.ExpenseEditDraft),
+                                { onEvent(ExpenseClaimEvent.EditRequested) },
+                                enabled = !state.refreshing,
+                            )
+
                         AppIconButton(
                             Icons.Regular.ArrowSync,
                             appString(AppString.Refresh),

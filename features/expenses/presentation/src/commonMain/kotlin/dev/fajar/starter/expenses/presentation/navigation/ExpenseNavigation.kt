@@ -10,6 +10,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import dev.fajar.starter.expenses.presentation.detail.*
 import dev.fajar.starter.expenses.presentation.detail.pages.ExpenseClaimPage
+import dev.fajar.starter.expenses.presentation.draft.ExpenseDraftTarget
 import dev.fajar.starter.expenses.presentation.overview.*
 import dev.fajar.starter.expenses.presentation.overview.pages.ExpensesPage
 import dev.fajar.starter.presentation.mvi.CollectEffects
@@ -18,7 +19,9 @@ import org.koin.core.parameter.parametersOf
 
 fun NavGraphBuilder.expenseRoutes(
     workspaceId: String,
-    onClaim: (String) -> Unit,
+    onClaim: (ExpenseClaimRoute) -> Unit,
+    onDraft: (ExpenseDraftRoute) -> Unit,
+    onSavedClaim: (ExpenseClaimRoute) -> Unit,
     onVerify: () -> Unit,
     onRecheckWorkspace: () -> Unit,
     onBack: () -> Unit,
@@ -36,13 +39,32 @@ fun NavGraphBuilder.expenseRoutes(
                 ExpensesEffect.Back -> onBack()
                 ExpensesEffect.VerifyAccount -> onVerify()
                 ExpensesEffect.RecheckWorkspace -> onRecheckWorkspace()
-                is ExpensesEffect.OpenClaim -> onClaim(effect.id)
+                is ExpensesEffect.OpenClaim ->
+                    onClaim(ExpenseClaimRoute(effect.id, effect.employmentAfter))
+                is ExpensesEffect.OpenDraft ->
+                    onDraft(
+                        ExpenseDraftRoute(
+                            effect.employeeId,
+                            employmentAfter = effect.employmentAfter,
+                        )
+                    )
             }
         }
         ExpensesPage(state, list, viewModel::onEvent)
     }
+    composable<ExpenseDraftRoute> { entry ->
+        val route = entry.toRoute<ExpenseDraftRoute>()
+        ExpenseDraftEntry(
+            ExpenseDraftTarget(workspaceId, route.employeeId, route.claimId, route.employmentAfter),
+            onSavedClaim,
+            onVerify,
+            onRecheckWorkspace,
+            onBack,
+        )
+    }
     composable<ExpenseClaimRoute> { entry ->
-        val target = ExpenseClaimTarget(workspaceId, entry.toRoute<ExpenseClaimRoute>().id)
+        val route = entry.toRoute<ExpenseClaimRoute>()
+        val target = ExpenseClaimTarget(workspaceId, route.id, route.employmentAfter)
         val viewModel = koinViewModel<ExpenseClaimViewModel>(parameters = { parametersOf(target) })
         val state by viewModel.state.collectAsStateWithLifecycle()
         val list = rememberLazyListState()
@@ -52,6 +74,10 @@ fun NavGraphBuilder.expenseRoutes(
         }
         CollectEffects(viewModel.effects) { effect ->
             when (effect) {
+                is ExpenseClaimEffect.EditDraft ->
+                    onDraft(
+                        ExpenseDraftRoute(effect.employeeId, effect.claimId, effect.employmentAfter)
+                    )
                 ExpenseClaimEffect.Back -> onBack()
                 ExpenseClaimEffect.VerifyAccount -> onVerify()
                 ExpenseClaimEffect.RecheckWorkspace -> onRecheckWorkspace()

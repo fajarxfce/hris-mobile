@@ -93,6 +93,33 @@ class ExpenseDraftCommandTest {
     }
 
     @Test
+    fun refreshedDraftCannotSilentlyReplaceTheVersionTheEmployeeEdited() = runTest {
+        val p = ExpenseCommandFixture()
+        val refreshed = p.preparation.copy(claim = p.f.claim.copy(version = 1))
+        for (expectedVersion in listOf(null, 0L, 2L)) {
+            val failure =
+                assertIs<AppResult.Failed>(
+                        p.prepare(p.f.workspace.id, refreshed, p.input, expectedVersion)
+                    )
+                    .failure
+            assertEquals("client.expense_changed", failure.code)
+            assertEquals(FailureKind.Conflict, failure.kind)
+        }
+        assertEquals(0, p.insertions)
+        assertTrue(p.values.value.isEmpty())
+        assertTrue(p.sent.isEmpty())
+        val saved =
+            assertIs<AppResult.Success<ExpenseCommandRecord>>(
+                    p.prepare(p.f.workspace.id, refreshed, p.input, expectedVersion = 1)
+                )
+                .value
+        assertEquals(
+            1L,
+            assertIs<ExpenseCommandPayload.SaveDraft>(saved.command.payload).expectedVersion,
+        )
+    }
+
+    @Test
     fun simultaneousSavesShareOneSlotAndCannotReplaceAnotherBody() = runTest {
         val p = ExpenseCommandFixture()
         val entered = CompletableDeferred<Unit>()

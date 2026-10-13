@@ -78,7 +78,10 @@ server authorization. Every read remains limited to their own payslips.
 
 The [expense pages](docs/expenses.md) show employee claims with month/status
 filters, current details, submitted receipt metadata, approval history and
-payment progress. List and detail views use bounded encrypted offline storage.
+payment progress. Employees can create or edit drafts, select dated categories,
+cost centers and published receipts, and recover an interrupted save. List and
+detail views use bounded encrypted offline storage; saved commands retain their
+original body and operation ID until their outcome is reconciled.
 
 ## Development
 

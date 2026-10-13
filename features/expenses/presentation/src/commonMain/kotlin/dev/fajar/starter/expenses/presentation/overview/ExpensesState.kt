@@ -15,6 +15,14 @@ data class ExpensesState(
     val dialog: ExpenseFilter? = null,
     val pickerYear: Int? = null,
 ) {
+    val canCreate: Boolean
+        get() =
+            !readRestricted &&
+                content?.value?.selection?.employeeId != null &&
+                content?.access?.permissions?.any {
+                    it in setOf("expenses.self.manage", "expenses.manage")
+                } == true
+
     val filters: ExpenseSelection?
         get() = selection ?: content?.value?.selection
 

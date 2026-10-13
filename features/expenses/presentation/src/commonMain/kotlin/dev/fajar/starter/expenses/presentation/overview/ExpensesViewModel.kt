@@ -24,6 +24,7 @@ class ExpensesViewModel(
     private var acquisition: Job? = null
 
     init {
+        on<ExpensesEvent.CreateRequested>(::onCreateRequested)
         on<ExpensesEvent.Entered>(::onEntered)
         on<ExpensesEvent.Stopped>(::onStopped)
         on<ExpensesEvent.RefreshRequested>(::onRefreshRequested)
@@ -214,7 +215,18 @@ class ExpensesViewModel(
     private fun onClaimSelected(event: ExpensesEvent.ClaimSelected) {
         val current = state.value.content?.value ?: return
         if (state.value.readRestricted || current.page.items.none { it.id == event.id }) return
-        viewModelScope.launch { emitEffect(ExpensesEffect.OpenClaim(event.id)) }
+        viewModelScope.launch {
+            emitEffect(ExpensesEffect.OpenClaim(event.id, current.selection.employmentAfter))
+        }
+    }
+
+    private fun onCreateRequested(event: ExpensesEvent.CreateRequested) {
+        if (!state.value.canCreate || state.value.refreshing) return
+        val selection = state.value.content?.value?.selection ?: return
+        val employee = selection.employeeId ?: return
+        viewModelScope.launch {
+            emitEffect(ExpensesEffect.OpenDraft(employee, selection.employmentAfter))
+        }
     }
 
     private fun onBackRequested(event: ExpensesEvent.BackRequested) {

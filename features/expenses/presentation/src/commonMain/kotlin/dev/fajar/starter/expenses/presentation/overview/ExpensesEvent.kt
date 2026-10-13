@@ -4,6 +4,8 @@ import dev.fajar.starter.expenses.domain.entities.ExpenseStatus
 import kotlinx.datetime.YearMonth
 
 sealed interface ExpensesEvent {
+    data object CreateRequested : ExpensesEvent
+
     data object Entered : ExpensesEvent
 
     data object Stopped : ExpensesEvent

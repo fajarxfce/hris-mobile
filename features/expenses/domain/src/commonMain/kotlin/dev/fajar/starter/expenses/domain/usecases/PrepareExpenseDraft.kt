@@ -26,6 +26,7 @@ class PrepareExpenseDraft(
         workspaceId: String,
         prepared: ExpenseDraftPreparation,
         input: ExpenseDraftInput,
+        expectedVersion: Long? = prepared.claim?.version,
     ): AppResult<ExpenseCommandRecord> =
         withTimeoutOrNull(10.seconds) {
             val access =
@@ -35,10 +36,15 @@ class PrepareExpenseDraft(
                 }
             val valid = validateExpenseDraftPreparation(prepared, access, clock.now())
             if (valid is AppResult.Failed) return@withTimeoutOrNull valid
+            if (prepared.claim?.version != expectedVersion)
+                return@withTimeoutOrNull expenseFailure(
+                    "client.expense_changed",
+                    FailureKind.Conflict,
+                )
             val explanation = validateExpenseReason(input.reason)
             if (explanation is AppResult.Failed) return@withTimeoutOrNull explanation
             val payload =
-                when (val result = normalizeExpenseDraft(input, prepared.claim?.version)) {
+                when (val result = normalizeExpenseDraft(input, expectedVersion)) {
                     is AppResult.Failed -> return@withTimeoutOrNull result
                     is AppResult.Success -> result.value
                 }

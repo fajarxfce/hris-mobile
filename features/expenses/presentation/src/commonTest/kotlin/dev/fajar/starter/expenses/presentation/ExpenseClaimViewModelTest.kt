@@ -15,6 +15,24 @@ import kotlinx.coroutines.test.*
 
 class ExpenseClaimViewModelTest {
     @Test
+    fun draftEditingRetainsTheSelectedEmploymentPage() = runTest {
+        withModel(employmentAfter = "employee-page") { f, model, _ ->
+            val effects = mutableListOf<ExpenseClaimEffect>()
+            backgroundScope.launch { model.effects.collect { effects += it } }
+            model.onEvent(ExpenseClaimEvent.Entered)
+            runCurrent()
+            model.onEvent(ExpenseClaimEvent.EditRequested)
+            runCurrent()
+            assertEquals(
+                listOf<ExpenseClaimEffect>(
+                    ExpenseClaimEffect.EditDraft(f.employee.id, f.claim.id, "employee-page")
+                ),
+                effects,
+            )
+        }
+    }
+
+    @Test
     fun detailHasOneAcquisitionOwnerAndStopsPendingPaymentReadsOnDisposal() = runTest {
         withModel { f, model, owner ->
             model.onEvent(ExpenseClaimEvent.Entered)
@@ -151,7 +169,8 @@ class ExpenseClaimViewModelTest {
     }
 
     private suspend fun TestScope.withModel(
-        test: suspend (ExpenseFixture, ExpenseClaimViewModel, ViewModelStore) -> Unit
+        employmentAfter: String? = null,
+        test: suspend (ExpenseFixture, ExpenseClaimViewModel, ViewModelStore) -> Unit,
     ) {
         Dispatchers.setMain(StandardTestDispatcher(testScheduler))
         val f = ExpenseFixture {
@@ -159,7 +178,7 @@ class ExpenseClaimViewModelTest {
         }
         val model =
             ExpenseClaimViewModel(
-                ExpenseClaimTarget(f.workspace.id, f.claim.id),
+                ExpenseClaimTarget(f.workspace.id, f.claim.id, employmentAfter),
                 f.observeDetail,
                 f.refreshDetail,
             )

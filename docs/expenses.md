@@ -73,8 +73,8 @@ earlier uncertain commit; an unconfirmed operation cannot be discarded. Confirme
 cleanup requires an admitted claim view at least as recent as the receipt and an
 atomic outcome revision match. Credentials never enter command storage.
 
-These command boundaries are available for the native editor and detail actions;
-the current pages still expose the read workflow described below.
+The native draft editor uses these boundaries for saving and recovery. Submission,
+cancellation and withdrawal UI are being connected separately.
 
 ## Pages
 
@@ -89,11 +89,41 @@ acquisition; leaving the route stops acquisition and observation. Only visible
 claim IDs and issued cursors can trigger navigation or paging. Explicit refresh
 can recover an ended storage subscription.
 
-The current native increment provides reads and offline views. Draft editing,
-receipt selection/export, submission and subsequent employee actions are being
-connected separately to the backend's versioned, idempotent command contracts.
+The add action opens an employment-scoped draft. Draft and returned claims open
+an editor from their detail app bar. A separate item page owns its transaction
+date, effective category, exact IDR amount, description, cost center and receipts.
+Its bounded pickers retain search and close controls above scrolling options;
+the receipt picker accepts only the owned employment's published receipt catalog.
+Selecting a new receipt currently requires Documents self-read access. Existing
+draft labels use the narrower expense reference lookup described below.
+
+Back and Save remain fixed above and below scrolling forms. Leaving a changed
+form asks for confirmation. Backgrounding retains local input and cancels reads;
+returning acquires fresh authority. Unsaved fields remain process-local. Save
+first retains an encrypted immutable command, so pending delivery survives a
+process restart. The recovery card distinguishes sending, uncertain, rejected
+and confirmed results; an uncertain operation cannot be edited or discarded.
+
+The preparation use case rejects a changed server version against the version
+originally edited, without silently rebasing input. The editor then offers an
+explicit reload. After confirmed delivery, it acquires current claim facts and
+reconciles the retained command before navigating. Employment pagination context
+survives list, detail and editor navigation.
+
+Receipt export, submission and subsequent employee actions remain separate
+increments.
 
 ## Validation
+
+The native editor passed root checks with 1,090 desktop tests and 108 expense
+Chromium tests. Coverage includes cancelled and late acquisitions, retained
+input during background readmission, changed draft versions, duplicate saves,
+uncertain delivery, confirmed-read failure, pending discard during worker
+progress, issued picker cursors, expired choices and stale receipt callbacks.
+Layout tests exercise fixed actions, long pickers and exact amounts at 200% text.
+The app-flow test waits for enabled filters before interaction; CI also runs
+all three expense modules' browser tests.
+
 
 Command integration passed 1,054 workspace desktop tests and 65 expense
 domain/data tests in Chromium. Tests cover immutable retries, concurrent saves,

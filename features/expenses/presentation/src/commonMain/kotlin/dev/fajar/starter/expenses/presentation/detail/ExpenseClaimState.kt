@@ -13,6 +13,15 @@ data class ExpenseClaimState(
     val cacheFailure: Failure? = null,
     val refreshFailure: Failure? = null,
 ) {
+    val canEdit: Boolean
+        get() =
+            !readRestricted &&
+                content?.value?.claim?.status in
+                    setOf(ExpenseStatus.DRAFT, ExpenseStatus.RETURNED) &&
+                content?.access?.permissions?.any {
+                    it in setOf("expenses.self.manage", "expenses.manage")
+                } == true
+
     val readRestricted: Boolean
         get() =
             cacheFailure?.let(::expenseFailureInvalidatesCache) == true ||

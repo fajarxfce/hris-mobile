@@ -5,6 +5,146 @@ import org.jetbrains.compose.resources.StringResource
 
 /** Explicit pairs keep runtime language changes portable across Android, iOS, desktop and Web. */
 enum class AppString(val english: StringResource, val indonesian: StringResource) {
+    ExpenseFirstOptions(Res.string.expense_first_options_en, Res.string.expense_first_options_id),
+    ExpenseMoreOptions(Res.string.expense_more_options_en, Res.string.expense_more_options_id),
+    ExpenseProcessing(Res.string.expense_processing_en, Res.string.expense_processing_id),
+    ExpenseNewClaim(Res.string.expense_new_claim_en, Res.string.expense_new_claim_id),
+    ExpenseTitle(Res.string.expense_title_en, Res.string.expense_title_id),
+    ExpenseDescriptionOptional(
+        Res.string.expense_description_optional_en,
+        Res.string.expense_description_optional_id,
+    ),
+    ExpenseChangeReason(Res.string.expense_change_reason_en, Res.string.expense_change_reason_id),
+    ExpenseEditDraft(Res.string.expense_edit_draft_en, Res.string.expense_edit_draft_id),
+    ExpenseSaveDraft(Res.string.expense_save_draft_en, Res.string.expense_save_draft_id),
+    ExpenseAddItem(Res.string.expense_add_item_en, Res.string.expense_add_item_id),
+    ExpenseItem(Res.string.expense_item_en, Res.string.expense_item_id),
+    ExpenseSaveItem(Res.string.expense_save_item_en, Res.string.expense_save_item_id),
+    ExpenseAddItemHint(Res.string.expense_add_item_hint_en, Res.string.expense_add_item_hint_id),
+    ExpenseRemoveItem(Res.string.expense_remove_item_en, Res.string.expense_remove_item_id),
+    ExpenseItemCount(Res.string.expense_item_count_en, Res.string.expense_item_count_id),
+    ExpenseDate(Res.string.expense_date_en, Res.string.expense_date_id),
+    ExpenseCategory(Res.string.expense_category_en, Res.string.expense_category_id),
+    ExpenseChooseCategory(
+        Res.string.expense_choose_category_en,
+        Res.string.expense_choose_category_id,
+    ),
+    ExpenseNoCategories(Res.string.expense_no_categories_en, Res.string.expense_no_categories_id),
+    ExpenseReferenceUnavailable(
+        Res.string.expense_reference_unavailable_en,
+        Res.string.expense_reference_unavailable_id,
+    ),
+    ExpenseAmount(Res.string.expense_amount_en, Res.string.expense_amount_id),
+    ExpenseItemDescription(
+        Res.string.expense_item_description_en,
+        Res.string.expense_item_description_id,
+    ),
+    ExpenseCostCenter(Res.string.expense_cost_center_en, Res.string.expense_cost_center_id),
+    ExpenseNoCostCenter(Res.string.expense_no_cost_center_en, Res.string.expense_no_cost_center_id),
+    ExpenseNoCostCenters(
+        Res.string.expense_no_cost_centers_en,
+        Res.string.expense_no_cost_centers_id,
+    ),
+    ExpenseSearchCostCenter(
+        Res.string.expense_search_cost_center_en,
+        Res.string.expense_search_cost_center_id,
+    ),
+    ExpenseReceipts(Res.string.expense_receipts_en, Res.string.expense_receipts_id),
+    ExpenseAttachReceipt(
+        Res.string.expense_attach_receipt_en,
+        Res.string.expense_attach_receipt_id,
+    ),
+    ExpenseNoAttachedReceipts(
+        Res.string.expense_no_attached_receipts_en,
+        Res.string.expense_no_attached_receipts_id,
+    ),
+    ExpenseChooseReceipt(
+        Res.string.expense_choose_receipt_en,
+        Res.string.expense_choose_receipt_id,
+    ),
+    ExpenseNoReceipts(Res.string.expense_no_receipts_en, Res.string.expense_no_receipts_id),
+    ExpenseReceiptAttached(
+        Res.string.expense_receipt_attached_en,
+        Res.string.expense_receipt_attached_id,
+    ),
+    ExpenseFirstReceipts(
+        Res.string.expense_first_receipts_en,
+        Res.string.expense_first_receipts_id,
+    ),
+    ExpenseMoreReceipts(Res.string.expense_more_receipts_en, Res.string.expense_more_receipts_id),
+    ExpenseReceiptUnavailable(
+        Res.string.expense_receipt_unavailable_en,
+        Res.string.expense_receipt_unavailable_id,
+    ),
+    ExpenseRemoveReceipt(
+        Res.string.expense_remove_receipt_en,
+        Res.string.expense_remove_receipt_id,
+    ),
+    ExpenseLineLimit(Res.string.expense_line_limit_en, Res.string.expense_line_limit_id),
+    ExpenseReceiptRequired(
+        Res.string.expense_receipt_required_en,
+        Res.string.expense_receipt_required_id,
+    ),
+    ExpenseCostCenterRequired(
+        Res.string.expense_cost_center_required_en,
+        Res.string.expense_cost_center_required_id,
+    ),
+    ExpenseDiscardChanges(
+        Res.string.expense_discard_changes_en,
+        Res.string.expense_discard_changes_id,
+    ),
+    ExpenseUnsavedChanges(
+        Res.string.expense_unsaved_changes_en,
+        Res.string.expense_unsaved_changes_id,
+    ),
+    ExpenseDiscard(Res.string.expense_discard_en, Res.string.expense_discard_id),
+    ExpenseReloadDraft(Res.string.expense_reload_draft_en, Res.string.expense_reload_draft_id),
+    ExpenseReloadExplanation(
+        Res.string.expense_reload_explanation_en,
+        Res.string.expense_reload_explanation_id,
+    ),
+    ExpenseEditRequestExplanation(
+        Res.string.expense_edit_request_explanation_en,
+        Res.string.expense_edit_request_explanation_id,
+    ),
+    ExpenseReadyToSend(Res.string.expense_ready_to_send_en, Res.string.expense_ready_to_send_id),
+    ExpenseConfirmationPending(
+        Res.string.expense_confirmation_pending_en,
+        Res.string.expense_confirmation_pending_id,
+    ),
+    ExpenseConfirmationHint(
+        Res.string.expense_confirmation_hint_en,
+        Res.string.expense_confirmation_hint_id,
+    ),
+    ExpenseCommandConfirmed(
+        Res.string.expense_command_confirmed_en,
+        Res.string.expense_command_confirmed_id,
+    ),
+    ExpenseCommandRejected(
+        Res.string.expense_command_rejected_en,
+        Res.string.expense_command_rejected_id,
+    ),
+    ExpenseSendNow(Res.string.expense_send_now_en, Res.string.expense_send_now_id),
+    ExpenseCheckStatus(Res.string.expense_check_status_en, Res.string.expense_check_status_id),
+    ExpenseViewClaim(Res.string.expense_view_claim_en, Res.string.expense_view_claim_id),
+    ExpenseDiscardRequest(
+        Res.string.expense_discard_request_en,
+        Res.string.expense_discard_request_id,
+    ),
+    ExpenseInvalidDraft(Res.string.expense_invalid_draft_en, Res.string.expense_invalid_draft_id),
+    ExpenseInvalidItem(Res.string.expense_invalid_item_en, Res.string.expense_invalid_item_id),
+    ExpensePreparationExpired(
+        Res.string.expense_preparation_expired_en,
+        Res.string.expense_preparation_expired_id,
+    ),
+    ExpensePendingRequest(
+        Res.string.expense_pending_request_en,
+        Res.string.expense_pending_request_id,
+    ),
+    ExpenseLimitExceeded(
+        Res.string.expense_limit_exceeded_en,
+        Res.string.expense_limit_exceeded_id,
+    ),
     Expenses(Res.string.expenses_en, Res.string.expenses_id),
     ExpensesSummary(Res.string.expenses_summary_en, Res.string.expenses_summary_id),
     ExpensesEmpty(Res.string.expenses_empty_en, Res.string.expenses_empty_id),
