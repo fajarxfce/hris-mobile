@@ -18,6 +18,25 @@ submission and payment progress. A changed claim or inconsistent revision
 returns a conflict without publishing a partial view or silently retrying.
 Amounts remain exact decimal domain values; approval does not imply payment.
 
+## Draft preparation
+
+The preparation use case verifies the selected employment through the employee's
+own directory, obtains the company date and, when editing, preserves the current
+claim version and draft. Only draft and returned claims are editable. Read-only
+expense permission does not authorize preparation.
+
+Category discovery reads the effective policy for the selected transaction date.
+Cost-center discovery uses the expense-specific, minimal organization endpoint;
+it does not require general organization browsing. Both retain issued cursor
+pages and validate bounded DTOs inside the HTTP failure boundary. Money remains
+exact decimal and receipt requirements remain category policy.
+
+Preparation and picker results have a short lease bounded by company policy,
+session, workspace and scheduled maintenance. Use cases recheck ownership after
+pending reads, including failed responses, reject cancellation and limit the
+entire acquisition to 30 seconds. They do not retry or reserve a category/cost
+center; the backend validates current eligibility again during submission.
+
 ## Offline access
 
 List and detail snapshots have independent, bounded partitions. Authenticated
@@ -52,10 +71,15 @@ connected separately to the backend's versioned, idempotent command contracts.
 
 ## Validation
 
-The workspace checks passed with 1,004 desktop tests. The expense modules also
-passed 36 Chromium tests; Android dev assembly and production Web compilation
-succeeded. Coverage includes scope changes, cancellation, mixed revisions,
-exact amounts, encrypted chunk integrity, failed cleanup and 200% text.
+Draft-preparation checks passed with 1,023 workspace desktop tests and 44
+expense domain/data tests in Chromium. Coverage includes stale successes and
+failures, pending cancellation, access changes, bounded policy lifetimes and
+validated date/cursor/money transport. Android dev assembly also passed for
+the preparation integration.
+
+The initial read-page delivery passed 36 expense Chromium tests, Android dev
+assembly and production Web compilation. Its coverage includes mixed revisions,
+encrypted chunk integrity, failed cleanup and 200% text.
 
 API 35 emulator acceptance used claims created through the development API.
 It verified month/status filters, detail and activity, approval without payment,

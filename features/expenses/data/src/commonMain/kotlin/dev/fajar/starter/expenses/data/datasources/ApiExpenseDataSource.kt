@@ -5,6 +5,20 @@ import org.koin.core.annotation.Single
 
 @Single
 class ApiExpenseDataSource(private val api: ExpenseApi) : ExpenseRemoteDataSource {
+    override suspend fun categories(
+        sessionId: String,
+        companyId: String,
+        asOf: String,
+        after: String?,
+    ) = api.categories(sessionId, companyId, asOf, after)
+
+    override suspend fun costCenters(
+        sessionId: String,
+        companyId: String,
+        query: String,
+        after: String?,
+    ) = api.costCenters(sessionId, companyId, query, after)
+
     override suspend fun directory(sessionId: String, companyId: String, after: String?) =
         api.directory(sessionId, companyId, after)
 

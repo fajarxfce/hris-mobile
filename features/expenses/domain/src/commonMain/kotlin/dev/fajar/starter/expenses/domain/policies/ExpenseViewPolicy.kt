@@ -13,18 +13,24 @@ fun expenseMinorUnits(amount: DecimalAmount): Long? {
     return whole.toLong() * 100 + fraction.padEnd(2, '0').toLong()
 }
 
-fun validateExpenseView(view: ExpenseView): AppResult<Unit> {
-    val claim = view.claim
-    val draft = claim.draft
+fun validateExpenseDraftAmounts(draft: ExpenseDraft): AppResult<Unit> {
+    if (draft.lines.size > 20)
+        return expenseFailure("client.invalid_response", FailureKind.Unexpected)
     val total = expenseMinorUnits(draft.total)
     val amounts = draft.lines.map { expenseMinorUnits(it.amount) }
     if (
-        draft.lines.size > 20 ||
-            total == null ||
+        total == null ||
             amounts.any { it == null || it !in 1..99_999_999_999_999L } ||
             amounts.filterNotNull().sum() != total
     )
         return expenseFailure("client.invalid_response", FailureKind.Unexpected)
+    return AppResult.Success(Unit)
+}
+
+fun validateExpenseView(view: ExpenseView): AppResult<Unit> {
+    val claim = view.claim
+    val amounts = validateExpenseDraftAmounts(claim.draft)
+    if (amounts is AppResult.Failed) return amounts
     if (view.history.items.any { it.version > claim.version })
         return expenseFailure("client.expense_changed", FailureKind.Conflict)
     if (view.historyAfter == null && view.history.items.firstOrNull()?.version != claim.version)

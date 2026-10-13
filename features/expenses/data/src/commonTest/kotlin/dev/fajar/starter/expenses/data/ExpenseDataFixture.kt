@@ -141,6 +141,48 @@ class ExpenseDataFixture : ExpenseRemoteDataSource {
     var payments: List<ExpensePaymentAttemptDto> = emptyList()
     var failure: Exception? = null
 
+    val category =
+        ExpenseCategoryDto(
+            line.categoryId,
+            "TRAVEL",
+            "Business travel",
+            "IDR",
+            "2026-01-01",
+            "500000.00",
+            "2000000.00",
+            true,
+            true,
+            30,
+            listOf("PERMANENT", "FIXED_TERM"),
+            true,
+            0,
+            0,
+        )
+    var categories = ExpensePageDto(listOf(category), null)
+    val costCenter =
+        ExpenseCostCenterDto("dddddddd-dddd-dddd-dddd-dddddddddddd", "CC01", "Operations", 0)
+    var costCenters = ExpensePageDto(listOf(costCenter), null)
+
+    override suspend fun categories(
+        sessionId: String,
+        companyId: String,
+        asOf: String,
+        after: String?,
+    ): ExpensePageDto<ExpenseCategoryDto> {
+        failure?.let { throw it }
+        return categories
+    }
+
+    override suspend fun costCenters(
+        sessionId: String,
+        companyId: String,
+        query: String,
+        after: String?,
+    ): ExpensePageDto<ExpenseCostCenterDto> {
+        failure?.let { throw it }
+        return costCenters
+    }
+
     override suspend fun directory(
         sessionId: String,
         companyId: String,

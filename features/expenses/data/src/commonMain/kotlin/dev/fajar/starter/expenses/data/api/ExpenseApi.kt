@@ -8,6 +8,32 @@ import org.koin.core.annotation.*
 
 @Single
 class ExpenseApi(@Named(HttpClients.Authenticated) private val client: HttpClient) {
+    suspend fun categories(
+        sessionId: String,
+        companyId: String,
+        asOf: String,
+        after: String?,
+    ): ExpensePageDto<ExpenseCategoryDto> =
+        client.requestJson("companies/$companyId/expenses/categories", maximumBytes = 65_536) {
+            forSession(sessionId)
+            parameter("asOf", asOf)
+            parameter("limit", 20)
+            after?.let { parameter("after", it) }
+        }
+
+    suspend fun costCenters(
+        sessionId: String,
+        companyId: String,
+        query: String,
+        after: String?,
+    ): ExpensePageDto<ExpenseCostCenterDto> =
+        client.requestJson("companies/$companyId/expenses/cost-centers", maximumBytes = 16_384) {
+            forSession(sessionId)
+            parameter("query", query)
+            parameter("limit", 20)
+            after?.let { parameter("after", it) }
+        }
+
     suspend fun directory(
         sessionId: String,
         companyId: String,

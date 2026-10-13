@@ -11,6 +11,7 @@ import java.nio.file.Files
 import kotlin.test.*
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
+import kotlinx.datetime.LocalDate
 import org.koin.dsl.module
 
 class ExpenseBindingsTest {
@@ -27,12 +28,16 @@ class ExpenseBindingsTest {
             val koin = container.koin
             assertNotNull(koin.get<ExpenseRepository>())
             assertNotNull(koin.get<ExpenseCacheRepository>())
+            assertNotNull(koin.get<ExpensePreparationRepository>())
             val id = "44444444-4444-4444-4444-444444444444"
             val results =
                 listOf(
                     koin.get<RefreshExpenses>()("workspace", ExpenseSelection()),
                     koin.get<RefreshExpenseClaim>()("workspace", id),
                     koin.get<ObserveExpenses>()("workspace").first(),
+                    koin.get<LoadExpenseDraftPreparation>()("workspace", id),
+                    koin.get<LoadExpenseCategories>()("workspace", LocalDate(2026, 10, 13)),
+                    koin.get<LoadExpenseCostCenters>()("workspace", ""),
                     koin.get<ObserveExpenseClaim>()("workspace", id).first(),
                 )
             results.forEach {
