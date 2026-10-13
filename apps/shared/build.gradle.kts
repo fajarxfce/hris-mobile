@@ -47,6 +47,7 @@ kotlin.sourceSets {
         implementation(projects.features.workforce.data)
         implementation(projects.features.workforce.presentation)
         implementation(projects.features.leave.data)
+        implementation(projects.features.payroll.data)
         implementation(projects.features.leave.presentation)
         implementation(projects.features.documents.presentation)
         implementation(projects.core.presentation)

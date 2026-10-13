@@ -41,6 +41,7 @@ import dev.fajar.starter.location.data.di.LocationDataModule
 import dev.fajar.starter.notifications.data.di.NotificationDataModule
 import dev.fajar.starter.onboarding.data.di.OnboardingDataModule
 import dev.fajar.starter.onboarding.presentation.di.OnboardingPresentationModule
+import dev.fajar.starter.payroll.data.di.PayrollDataModule
 import dev.fajar.starter.people.data.di.PeopleDataModule
 import dev.fajar.starter.people.presentation.di.PeoplePresentationModule
 import dev.fajar.starter.securestorage.*
@@ -175,6 +176,7 @@ fun createAppContainer(
         WorkforceDataModule().module,
         WorkforcePresentationModule().module,
         LeaveDataModule().module,
+        PayrollDataModule().module,
         LeavePresentationModule().module,
         DocumentsPresentationModule().module,
         ApplicationModule().module,

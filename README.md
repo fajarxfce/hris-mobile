@@ -71,6 +71,10 @@ is not a completed HRIS workflow. See [native identity](docs/native-identity.md)
 [attendance and work calendars](docs/workforce.md), [overtime](docs/overtime.md), the [leave integration](docs/leave.md), and the platform's
 [remaining delivery work](https://github.com/fajarxfce/hris-platform/blob/main/docs/completion.md).
 
+The [employee payslip foundation](docs/payroll.md) provides SELF-scoped reads,
+encrypted list/detail caches and explicitly authorized PDF saving. Its domain and
+data bindings are installed; native payslip pages are being integrated separately.
+
 ## Development
 
 Requires JDK 21 and Android SDK 36. Start HRIS Platform using its development

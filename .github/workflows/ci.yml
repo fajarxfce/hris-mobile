@@ -36,6 +36,8 @@ jobs:
           :features:workforce:domain:wasmJsBrowserTest :features:workforce:data:wasmJsBrowserTest
           :features:workforce:presentation:wasmJsBrowserTest
           :features:leave:domain:wasmJsBrowserTest :features:leave:data:wasmJsBrowserTest
+          :core:common:wasmJsBrowserTest
+          :features:payroll:domain:wasmJsBrowserTest :features:payroll:data:wasmJsBrowserTest
           :features:leave:presentation:wasmJsBrowserTest :core:location:data:wasmJsBrowserTest
           :core:documents:domain:wasmJsBrowserTest :core:documents:data:wasmJsBrowserTest
           :core:transfers:domain:wasmJsBrowserTest :core:transfers:data:wasmJsBrowserTest
