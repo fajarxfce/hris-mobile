@@ -5,6 +5,12 @@ import org.jetbrains.compose.resources.StringResource
 
 /** Explicit pairs keep runtime language changes portable across Android, iOS, desktop and Web. */
 enum class AppString(val english: StringResource, val indonesian: StringResource) {
+    ExpenseSaveReceipt(Res.string.expense_save_receipt_en, Res.string.expense_save_receipt_id),
+    ExpenseReceiptSaved(Res.string.expense_receipt_saved_en, Res.string.expense_receipt_saved_id),
+    ExpenseExportTimeout(
+        Res.string.expense_export_timeout_en,
+        Res.string.expense_export_timeout_id,
+    ),
     ExpenseFirstOptions(Res.string.expense_first_options_en, Res.string.expense_first_options_id),
     ExpenseMoreOptions(Res.string.expense_more_options_en, Res.string.expense_more_options_id),
     ExpenseReasonRequired(

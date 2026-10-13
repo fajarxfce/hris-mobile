@@ -1,21 +1,22 @@
 package dev.fajar.starter.expenses.data.mappers
 
+import dev.fajar.starter.common.result.AppResult
 import dev.fajar.starter.expenses.data.dto.*
 import dev.fajar.starter.expenses.domain.entities.*
+import dev.fajar.starter.expenses.domain.policies.validateExpenseReceipt
 import kotlin.time.Instant
 import kotlinx.datetime.LocalDate
 
 fun ExpenseReceiptDto.toReceipt(): ExpenseReceipt {
-    require(fileName.isNotBlank() && fileName.length <= 512 && mediaType.length in 3..120)
-    require(size in 1..67_108_864L && Regex("[0-9a-f]{64}").matches(sha256))
     return ExpenseReceipt(
-        expenseId(revisionId),
-        fileName,
-        mediaType,
-        size,
-        sha256,
-        possibleDuplicate,
-    )
+            expenseId(revisionId),
+            fileName,
+            mediaType,
+            size,
+            sha256,
+            possibleDuplicate,
+        )
+        .also { require(validateExpenseReceipt(it) is AppResult.Success) }
 }
 
 fun ExpenseSubmittedLineDto.toSubmittedLine(): ExpenseSubmittedLine {

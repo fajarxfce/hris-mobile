@@ -1,6 +1,7 @@
 package dev.fajar.starter.expenses.data.di
 
 import dev.fajar.starter.common.config.AppBuild
+import dev.fajar.starter.documents.domain.repositories.DocumentOutputRepository
 import dev.fajar.starter.expenses.domain.repositories.*
 import dev.fajar.starter.expenses.domain.usecases.*
 import dev.fajar.starter.identity.domain.repositories.SessionRepository
@@ -12,6 +13,15 @@ import org.koin.core.annotation.*
 @Module
 @ComponentScan("dev.fajar.starter.expenses.data")
 class ExpenseDataModule {
+    @Factory
+    fun exportExpenseReceipt(
+        receipts: ExpenseReceiptRepository,
+        outputs: DocumentOutputRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        build: AppBuild,
+    ) = ExportExpenseReceipt(receipts, outputs, sessions, workspaces, Clock.System, build)
+
     @Factory
     fun loadExpenseDraftReferences(
         remote: ExpensePreparationRepository,

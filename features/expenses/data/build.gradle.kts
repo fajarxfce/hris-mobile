@@ -8,6 +8,7 @@ kotlin.sourceSets {
     getByName("commonMain").dependencies {
         api(projects.features.expenses.domain)
         implementation(projects.core.network)
+        implementation(projects.core.fileio)
         implementation(projects.core.storage)
         implementation(projects.core.securestorage)
         implementation(projects.core.database)

@@ -13,6 +13,12 @@ sealed interface ExpenseClaimEvent {
 
     data object Stopped : ExpenseClaimEvent
 
+    data object Closed : ExpenseClaimEvent
+
+    data class ExportRequested(val receiptId: String) : ExpenseClaimEvent
+
+    data object ExportCancelled : ExpenseClaimEvent
+
     data object RefreshRequested : ExpenseClaimEvent
 
     data class HistoryRequested(val after: Long?) : ExpenseClaimEvent

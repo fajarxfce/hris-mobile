@@ -3,12 +3,77 @@ package dev.fajar.starter.expenses.data.api
 import dev.fajar.starter.expenses.data.dto.*
 import dev.fajar.starter.network.*
 import io.ktor.client.HttpClient
+import io.ktor.client.plugins.expectSuccess
 import io.ktor.client.request.*
 import io.ktor.http.*
 import org.koin.core.annotation.*
 
 @Single
 class ExpenseApi(@Named(HttpClients.Authenticated) private val client: HttpClient) {
+    suspend fun inspectReceipt(
+        sessionId: String,
+        companyId: String,
+        submissionId: String,
+        revisionId: String,
+    ): ExpenseReceiptHeadersDto =
+        client
+            .prepareGet(
+                "companies/$companyId/expenses/submissions/$submissionId/receipts/$revisionId/content"
+            ) {
+                forSession(sessionId)
+                parameter("scope", "SELF")
+                // A one-byte GET retains structured problem bodies, including MFA codes.
+                header(HttpHeaders.Range, "bytes=0-0")
+                header(HttpHeaders.AcceptEncoding, "identity")
+                header(
+                    HttpHeaders.Accept,
+                    "application/pdf, image/jpeg, image/png, application/problem+json",
+                )
+                expectSuccess = false
+            }
+            .execute { response ->
+                requireApiStatus(response, HttpStatusCode.PartialContent)
+                val probe = readApiBody(response, 1)
+                try {
+                    require(probe.size == 1)
+                    ExpenseReceiptHeadersDto(
+                        response.headers.getAll(HttpHeaders.ETag).orEmpty(),
+                        response.headers.getAll(HttpHeaders.ContentLength).orEmpty(),
+                        response.headers.getAll(HttpHeaders.ContentType).orEmpty(),
+                        response.headers.getAll(HttpHeaders.ContentEncoding).orEmpty(),
+                        response.headers.getAll(HttpHeaders.ContentRange).orEmpty(),
+                    )
+                } finally {
+                    probe.fill(0)
+                }
+            }
+
+    suspend fun receiptChunk(
+        sessionId: String,
+        companyId: String,
+        submissionId: String,
+        revisionId: String,
+        entityTag: String,
+        size: Long,
+        offset: Long,
+        maximumBytes: Int,
+    ): ByteArray =
+        client.requestBinaryRange(
+            "companies/$companyId/expenses/submissions/$submissionId/receipts/$revisionId/content",
+            entityTag,
+            offset,
+            size,
+            maximumBytes,
+        ) {
+            forSession(sessionId)
+            parameter("scope", "SELF")
+            header(
+                HttpHeaders.Accept,
+                "application/pdf, image/jpeg, image/png, application/problem+json",
+            )
+            header(HttpHeaders.IfRange, entityTag)
+        }
+
     suspend fun references(
         sessionId: String,
         companyId: String,

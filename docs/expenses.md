@@ -126,16 +126,39 @@ Recovery retains the claim summary and the original reason. Back cancels the
 page's reads and delivery immediately, before navigation disposes its owner;
 the durable outcome remains available from detail.
 
-Receipt export remains a separate increment.
+## Receipt export
+
+Submitted receipts can be saved from claim detail through the system file picker.
+This uses explicit SELF claim access, independently of Documents catalog grants.
+The use case rechecks company/session policy and the receipt resource before
+selection, after selection and before completing the file. Scope changes stop
+the transfer; MFA and access failures keep old claim data gated until a fresh
+admitted refresh succeeds.
+
+The raw datasource delegates HTTP operations to the API service. Its repository
+validates the immutable receipt declaration, ETag, range and media type, then
+streams sequential chunks of at most 1 MiB with a final SHA-256 check. A one-byte
+GET preflight preserves structured error codes that a HEAD body cannot carry.
+PDF, JPEG and PNG receipts use the same 100 MiB declaration limit as Documents.
+There is no read-ahead queue; borrowed buffers are cleared after each collector
+returns or is cancelled.
+
+Detail owns one export job and disables competing actions until output cleanup
+finishes. Stopping for the Android save dialog clears private screen content and
+read subscriptions while keeping the export alive. Back, explicit cancellation
+and route disposal cancel it. The UI holds only the selected receipt ID and
+outcome, never a file buffer or platform handle. Picker, transfer and cleanup
+deadlines are bounded. See [file output](file-output.md) for native destination
+ownership and partial-file behavior.
 
 ## Validation
 
-The native draft and action pages passed root checks with 1,108 desktop tests,
-49 presentation tests in Chromium and Android dev assembly. The action policy
-integration also passed 52 domain Chromium tests and production Web compilation;
-the final recovery display and exit changes were checked again on Android and
-Chromium. CI for the preceding editor passed Linux verification, Windows checks
-and the iOS simulator build.
+Root checks passed with 1,144 desktop tests. The additional export-exit regression
+then passed on desktop and Chromium, bringing the desktop total to 1,145.
+The receipt workflow passed 157 expense tests and 36 network tests in Chromium,
+plus Android dev assembly and production Web compilation. CI for the preceding
+action delivery passed Linux verification, Windows checks and the iOS simulator
+build.
 
 Coverage includes immutable retry bodies, concurrent saves, cancellation, late
 results, protected cache cleanup, failed acknowledgement persistence, bounded
@@ -147,6 +170,17 @@ amounts without ellipsis at 200% text.
 Action tests cover reviewed-version conflicts, read-only detail access, recovery
 before competing commands, pending exit before owner disposal, and late failures
 without duplicate navigation or loss of the uncertain outcome.
+
+Receipt tests cover malformed/range-changing responses, digest mismatch,
+backpressure, cleared buffers, cancellation during pending output, scope changes,
+MFA through failed refresh, duplicate input, stopped/resumed screens and disposal.
+The detail layout keeps long filenames, download actions, Back and cancellation
+reachable at 200% text. A real Android API 35 emulator saved a published receipt
+through the system picker; its bytes matched the server SHA-256. Cancelling the
+picker and starting another export also succeeded.
+Dark appearance, 200% text and returning from Android Settings were inspected.
+The validated APK was delivered to the authorized phone with install-only; its
+UI was not opened during delivery.
 
 API 35 emulator acceptance created and edited a fictional claim through the app,
 selected a dated category, cost center and inspected receipt, and verified exact

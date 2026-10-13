@@ -1,4 +1,7 @@
 <resources>
+    <string name="expense_save_receipt_id">Simpan %1$s</string>
+    <string name="expense_receipt_saved_id">Bukti tersimpan.</string>
+    <string name="expense_export_timeout_id">Penyimpanan terlalu lama. Coba lagi.</string>
     <string name="payslips_id">Slip gaji</string>
     <string name="payslips_summary_id">Slip gaji yang diterbitkan</string>
     <string name="payslip_title_id">Slip gaji</string>

@@ -152,6 +152,11 @@ the claim version; repositories map protocol facts and atomically store the
 bounded encrypted result. Approval, reimbursement and activity remain separate
 facts. Screen owners retain read gates and cancel obsolete filter requests.
 
+Expense receipt export coordinates a narrow receipt-content contract with the
+shared document-output contract. Its repository validates and hashes bounded
+sequential chunks; its use case owns live authorization and file lifetime. Detail
+keeps the export through a system-picker stop and cancels it when the route closes.
+
 Leave preparation uses a separate read contract for effective types and the
 owner-only server preview. Its use cases own date-input validation, live company
 admission and the preview deadline. Datasources return DTOs; repository mapping

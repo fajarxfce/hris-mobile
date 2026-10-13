@@ -182,6 +182,7 @@ class ExpenseClaimViewModelTest {
                 f.observeDetail,
                 f.refreshDetail,
                 ExpenseEditorFixture(f).observe,
+                ExpenseReceiptExportFixture(f).export,
             )
         val owner = ViewModelStore().apply { put("expense", model) }
         try {

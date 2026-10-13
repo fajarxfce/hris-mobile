@@ -21,10 +21,12 @@ class ExpenseClaimViewModel(
     private val observe: ObserveExpenseClaim,
     private val refresh: RefreshExpenseClaim,
     private val observeCommand: ObserveExpenseCommand,
+    private val export: ExportExpenseReceipt,
 ) : MviViewModel<ExpenseClaimState, ExpenseClaimEvent, ExpenseClaimEffect>(ExpenseClaimState()) {
     private var commands: Job? = null
     private var observation: Job? = null
     private var acquisition: Job? = null
+    private var exporting: Job? = null
 
     init {
         on<ExpenseClaimEvent.ActionRequested>(::onActionRequested)
@@ -32,6 +34,9 @@ class ExpenseClaimViewModel(
         on<ExpenseClaimEvent.EditRequested>(::onEditRequested)
         on<ExpenseClaimEvent.Entered>(::onEntered)
         on<ExpenseClaimEvent.Stopped>(::onStopped)
+        on<ExpenseClaimEvent.Closed>(::onClosed)
+        on<ExpenseClaimEvent.ExportRequested>(::onExportRequested)
+        on<ExpenseClaimEvent.ExportCancelled>(::onExportCancelled)
         on<ExpenseClaimEvent.RefreshRequested>(::onRefreshRequested)
         on<ExpenseClaimEvent.HistoryRequested>(::onHistoryRequested)
         on<ExpenseClaimEvent.BackRequested>(::onBackRequested)
@@ -39,7 +44,7 @@ class ExpenseClaimViewModel(
     }
 
     private fun onEntered(event: ExpenseClaimEvent.Entered) {
-        if (observation?.isActive == true) return
+        if (state.value.closing || observation?.isActive == true) return
         updateState { it.copy(loading = true) }
         observeContent()
         observeCommands()
@@ -60,8 +65,10 @@ class ExpenseClaimViewModel(
                     }
                     .collect { (after, result) ->
                         ensureActive()
-                        if (after == state.value.historyAfter && !state.value.readRestricted)
+                        if (after == state.value.historyAfter && !state.value.readRestricted) {
                             updateState { it.withCachedClaim(result) }
+                            if (state.value.readRestricted) exporting?.cancel()
+                        }
                     }
             }
     }
@@ -103,11 +110,22 @@ class ExpenseClaimViewModel(
                                     )
                             }
                         }
+                        if (state.value.readRestricted) exporting?.cancel()
                     }
             }
     }
 
     private fun onStopped(event: ExpenseClaimEvent.Stopped) {
+        // An OS save dialog can stop the Activity without leaving this route.
+        stopReads()
+    }
+
+    private fun onClosed(event: ExpenseClaimEvent.Closed) {
+        stopReads()
+        exporting?.cancel()
+    }
+
+    private fun stopReads() {
         commands?.cancel()
         commands = null
         observation?.cancel()
@@ -128,7 +146,13 @@ class ExpenseClaimViewModel(
     }
 
     private fun onRefreshRequested(event: ExpenseClaimEvent.RefreshRequested) {
-        if (observation?.isActive != true || acquisition?.isActive == true) return
+        if (
+            state.value.closing ||
+                exporting != null ||
+                observation?.isActive != true ||
+                acquisition?.isActive == true
+        )
+            return
         val after = state.value.historyAfter
         updateState {
             it.copy(
@@ -162,6 +186,8 @@ class ExpenseClaimViewModel(
         val content = state.value.content?.value ?: return
         if (
             state.value.readRestricted ||
+                state.value.closing ||
+                exporting != null ||
                 event.after == content.historyAfter ||
                 (event.after == state.value.historyAfter && acquisition?.isActive == true) ||
                 (event.after != null && event.after.toString() != content.history.nextCursor)
@@ -222,11 +248,57 @@ class ExpenseClaimViewModel(
     }
 
     private fun onBackRequested(event: ExpenseClaimEvent.BackRequested) {
+        if (state.value.closing) return
+        updateState { it.copy(closing = true) }
+        stopReads()
+        exporting?.cancel()
         viewModelScope.launch { emitEffect(ExpenseClaimEffect.Back) }
     }
 
+    private fun onExportRequested(event: ExpenseClaimEvent.ExportRequested) {
+        if (!state.value.canSaveReceipt || exporting != null) return
+        val snapshot = state.value.content ?: return
+        if (state.value.lines.none { line -> line.receipts.any { it.id == event.receiptId } })
+            return
+        updateState {
+            it.copy(savingReceiptId = event.receiptId, savedReceiptId = null, exportFailure = null)
+        }
+        exporting =
+            viewModelScope.launch(start = CoroutineStart.LAZY) {
+                try {
+                    val result = export(target.workspaceId, snapshot, event.receiptId)
+                    ensureActive()
+                    updateState {
+                        when (result) {
+                            is AppResult.Failed -> it.copy(exportFailure = result.failure)
+                            is AppResult.Success ->
+                                it.copy(savedReceiptId = event.receiptId.takeIf { result.value })
+                        }
+                    }
+                    if (
+                        result is AppResult.Failed &&
+                            result.failure.code in workspaceAccessLossCodes &&
+                            result.failure.code !in expenseVerificationCodes
+                    )
+                        emitEffect(ExpenseClaimEffect.RecheckWorkspace)
+                } finally {
+                    if (exporting === currentCoroutineContext().job) {
+                        exporting = null
+                        updateState { it.copy(savingReceiptId = null) }
+                        if (state.value.content == null && !state.value.readRestricted)
+                            onEvent(ExpenseClaimEvent.RefreshRequested)
+                    }
+                }
+            }
+        exporting?.start()
+    }
+
+    private fun onExportCancelled(event: ExpenseClaimEvent.ExportCancelled) {
+        exporting?.cancel()
+    }
+
     private fun onVerificationRequested(event: ExpenseClaimEvent.VerificationRequested) {
-        if (state.value.needsVerification)
+        if (!state.value.busy && state.value.needsVerification)
             viewModelScope.launch { emitEffect(ExpenseClaimEffect.VerifyAccount) }
     }
 }

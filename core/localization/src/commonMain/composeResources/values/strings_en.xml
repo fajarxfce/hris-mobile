@@ -1,4 +1,7 @@
 <resources>
+    <string name="expense_save_receipt_en">Save %1$s</string>
+    <string name="expense_receipt_saved_en">Receipt saved.</string>
+    <string name="expense_export_timeout_en">Saving took too long. Please try again.</string>
     <string name="payslips_en">Payslips</string>
     <string name="payslips_summary_en">Published pay statements</string>
     <string name="payslip_title_en">Payslip</string>

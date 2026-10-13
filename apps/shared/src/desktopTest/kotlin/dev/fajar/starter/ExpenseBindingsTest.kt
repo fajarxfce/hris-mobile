@@ -32,6 +32,8 @@ class ExpenseBindingsTest {
             assertNotNull(koin.get<ExpensePreparationRepository>())
             assertNotNull(koin.get<ExpenseCommandRepository>())
             assertNotNull(koin.get<ExpenseSubmissionRepository>())
+            assertNotNull(koin.get<ExpenseReceiptRepository>())
+            assertNotNull(koin.get<ExportExpenseReceipt>())
             assertNotNull(koin.get<PrepareExpenseLine>())
             assertNotNull(koin.get<PrepareExpenseDraft>())
             assertNotNull(koin.get<PrepareExpenseAction>())

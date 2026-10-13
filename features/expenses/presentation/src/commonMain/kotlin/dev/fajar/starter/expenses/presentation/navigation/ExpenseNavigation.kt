@@ -1,6 +1,7 @@
 package dev.fajar.starter.expenses.presentation.navigation
 
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.lifecycle.compose.LifecycleStartEffect
@@ -79,6 +80,7 @@ fun NavGraphBuilder.expenseRoutes(
         val viewModel = koinViewModel<ExpenseClaimViewModel>(parameters = { parametersOf(target) })
         val state by viewModel.state.collectAsStateWithLifecycle()
         val list = rememberLazyListState()
+        DisposableEffect(viewModel) { onDispose { viewModel.onEvent(ExpenseClaimEvent.Closed) } }
         LifecycleStartEffect(viewModel) {
             viewModel.onEvent(ExpenseClaimEvent.Entered)
             onStopOrDispose { viewModel.onEvent(ExpenseClaimEvent.Stopped) }

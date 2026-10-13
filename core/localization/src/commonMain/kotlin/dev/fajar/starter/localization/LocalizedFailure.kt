@@ -11,9 +11,11 @@ fun failureText(failure: Failure): String =
             "expense_submission_not_current" -> AppString.ExpenseActionUnavailable
             "expense_lines_required" -> AppString.ExpenseItemsRequired
             "expense_submission_limit" -> AppString.ExpenseSubmissionLimit
-            "expense_receipt_not_ready",
+            "expense_receipt_not_ready" -> AppString.ExpenseReceiptInvalid
             "expense_receipt_not_found",
-            "expense_receipt_unavailable" -> AppString.ExpenseReceiptInvalid
+            "expense_receipt_unavailable" -> AppString.ExpenseReceiptUnavailable
+            "client.expense_export_timeout",
+            "client.expense_selection_timeout" -> AppString.ExpenseExportTimeout
             "expense_transaction_expired",
             "expense_transaction_date_invalid",
             "expense_line_limit_exceeded",

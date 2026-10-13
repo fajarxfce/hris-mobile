@@ -19,7 +19,17 @@ data class ExpenseClaimState(
     val refreshing: Boolean = false,
     val cacheFailure: Failure? = null,
     val refreshFailure: Failure? = null,
+    val savingReceiptId: String? = null,
+    val savedReceiptId: String? = null,
+    val exportFailure: Failure? = null,
+    val closing: Boolean = false,
 ) {
+    val busy: Boolean
+        get() = refreshing || savingReceiptId != null || closing
+
+    val canSaveReceipt: Boolean
+        get() = !readRestricted && !busy && content?.value?.submission != null
+
     val actionOptions: Set<ExpenseActionMode>
         get() =
             content
@@ -35,14 +45,10 @@ data class ExpenseClaimState(
 
     val canOpenAction
         get() =
-            !readRestricted &&
-                !refreshing &&
-                commandReady &&
-                commandFailure == null &&
-                command == null
+            !readRestricted && !busy && commandReady && commandFailure == null && command == null
 
     val canRecover
-        get() = !readRestricted && !refreshing && commandReady && command != null
+        get() = !readRestricted && !busy && commandReady && command != null
 
     val canEdit: Boolean
         get() =
@@ -56,13 +62,17 @@ data class ExpenseClaimState(
     val readRestricted: Boolean
         get() =
             commandFailure?.let(::expenseFailureInvalidatesCache) == true ||
+                exportFailure?.let(::expenseFailureInvalidatesCache) == true ||
                 cacheFailure?.let(::expenseFailureInvalidatesCache) == true ||
                 refreshFailure?.let(::expenseFailureInvalidatesCache) == true
 
     val failure: Failure?
         get() =
             commandFailure?.takeIf(::expenseFailureInvalidatesCache)
+                ?: exportFailure?.takeIf(::expenseFailureInvalidatesCache)
                 ?: cacheFailure?.takeIf(::expenseFailureInvalidatesCache)
+                ?: refreshFailure?.takeIf(::expenseFailureInvalidatesCache)
+                ?: exportFailure
                 ?: refreshFailure
                 ?: commandFailure
                 ?: cacheFailure

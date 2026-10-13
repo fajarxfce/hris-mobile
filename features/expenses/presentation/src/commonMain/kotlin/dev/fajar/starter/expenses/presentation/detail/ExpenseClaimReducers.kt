@@ -39,5 +39,6 @@ internal fun ExpenseClaimState.withClaimRefresh(result: AppResult<Unit>): Expens
                 loading = content == null,
                 cacheFailure = null,
                 refreshFailure = null,
+                exportFailure = null,
             )
     }

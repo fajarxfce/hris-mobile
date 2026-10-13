@@ -339,6 +339,7 @@ class ExpenseActionViewModelTest {
                     f.f.observeDetail,
                     f.f.refreshDetail,
                     f.editor.observe,
+                    ExpenseReceiptExportFixture(f.f).export,
                 )
             owner.put("detail", detail)
             val effects = mutableListOf<ExpenseClaimEffect>()
@@ -383,6 +384,7 @@ class ExpenseActionViewModelTest {
                     f.f.observeDetail,
                     f.f.refreshDetail,
                     f.editor.observe,
+                    ExpenseReceiptExportFixture(f.f).export,
                 )
             owner.put("detail", detail)
             detail.onEvent(ExpenseClaimEvent.Entered)

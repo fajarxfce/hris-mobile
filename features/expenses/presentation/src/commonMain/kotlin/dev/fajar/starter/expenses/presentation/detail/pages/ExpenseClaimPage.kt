@@ -4,6 +4,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import dev.fajar.starter.designsystem.components.*
 import dev.fajar.starter.designsystem.theme.AppColors
@@ -53,16 +55,35 @@ fun ExpenseClaimPage(
                             Icons.Regular.ArrowSync,
                             appString(AppString.Refresh),
                             { onEvent(ExpenseClaimEvent.RefreshRequested) },
-                            enabled = !state.refreshing,
+                            enabled = !state.busy,
                             loading = state.refreshing,
                         )
                     },
                 )
                 state.failure?.let {
-                    ExpenseReadFeedback(it, state.needsVerification, state.refreshing) {
+                    ExpenseReadFeedback(it, state.needsVerification, state.busy) {
                         onEvent(ExpenseClaimEvent.VerificationRequested)
                     }
                 }
+                if (state.savingReceiptId != null)
+                    Row(
+                        Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        AppProgressRing(appString(AppString.DocumentSaving))
+                        AppText(appString(AppString.DocumentSaving), Modifier.weight(1f))
+                        AppTextButton(
+                            appString(AppString.Cancel),
+                            { onEvent(ExpenseClaimEvent.ExportCancelled) },
+                        )
+                    }
+                else if (state.savedReceiptId != null && !state.readRestricted)
+                    AppText(
+                        appString(AppString.ExpenseReceiptSaved),
+                        Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                        style = FluentTheme.typography.caption,
+                    )
             }
         },
         bottomBar = {
@@ -97,7 +118,14 @@ fun ExpenseClaimPage(
                 item(key = "no-lines") {
                     AppText(appString(AppString.ExpenseNoLines), color = AppColors.muted)
                 }
-            items(state.lines, key = { "line/${it.id}" }) { ExpenseLineCard(it) }
+            items(state.lines, key = { "line/${it.id}" }) {
+                ExpenseLineCard(
+                    it,
+                    onSaveReceipt = { id -> onEvent(ExpenseClaimEvent.ExportRequested(id)) },
+                    canSaveReceipt = state.canSaveReceipt,
+                    savingReceiptId = state.savingReceiptId,
+                )
+            }
             view.submission?.let { submission ->
                 item(key = "approval") { ExpenseApprovalCard(submission) }
             }
@@ -121,7 +149,7 @@ fun ExpenseClaimPage(
                             AppTextButton(
                                 appString(AppString.ExpenseLatestActivity),
                                 { onEvent(ExpenseClaimEvent.HistoryRequested(null)) },
-                                enabled = !state.refreshing,
+                                enabled = !state.busy,
                             )
                         if (view.history.nextCursor != null)
                             AppTextButton(
@@ -131,7 +159,7 @@ fun ExpenseClaimPage(
                                         ExpenseClaimEvent.HistoryRequested(state.nextHistoryAfter)
                                     )
                                 },
-                                enabled = !state.refreshing,
+                                enabled = !state.busy,
                             )
                     }
                 }

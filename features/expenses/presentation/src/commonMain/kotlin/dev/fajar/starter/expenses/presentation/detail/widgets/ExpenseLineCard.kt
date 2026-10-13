@@ -2,6 +2,7 @@ package dev.fajar.starter.expenses.presentation.detail.widgets
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import dev.fajar.starter.designsystem.components.*
@@ -9,9 +10,16 @@ import dev.fajar.starter.designsystem.theme.AppColors
 import dev.fajar.starter.expenses.presentation.detail.ExpenseLineItem
 import dev.fajar.starter.localization.*
 import io.github.composefluent.FluentTheme
+import io.github.composefluent.icons.Icons
+import io.github.composefluent.icons.regular.ArrowDownload
 
 @Composable
-fun ExpenseLineCard(line: ExpenseLineItem) {
+fun ExpenseLineCard(
+    line: ExpenseLineItem,
+    onSaveReceipt: ((String) -> Unit)? = null,
+    canSaveReceipt: Boolean = false,
+    savingReceiptId: String? = null,
+) {
     AppCard(Modifier.fillMaxWidth(), padding = 16.dp, spacing = 8.dp) {
         AppText(
             formatLocalDate(line.date.toString(), appLanguageTag()),
@@ -35,13 +43,29 @@ fun ExpenseLineCard(line: ExpenseLineItem) {
                 style = FluentTheme.typography.caption,
             )
         line.receipts.forEach { receipt ->
-            AppText(receipt.fileName, style = FluentTheme.typography.caption)
-            if (receipt.possibleDuplicate)
-                AppText(
-                    appString(AppString.ExpenseDuplicateReceipt),
-                    color = AppColors.muted,
-                    style = FluentTheme.typography.caption,
-                )
+            Row(
+                Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    AppText(receipt.fileName, style = FluentTheme.typography.caption)
+                    if (receipt.possibleDuplicate)
+                        AppText(
+                            appString(AppString.ExpenseDuplicateReceipt),
+                            color = AppColors.muted,
+                            style = FluentTheme.typography.caption,
+                        )
+                }
+                if (onSaveReceipt != null)
+                    AppIconButton(
+                        Icons.Regular.ArrowDownload,
+                        appString(AppString.ExpenseSaveReceipt, receipt.fileName),
+                        { onSaveReceipt(receipt.id) },
+                        enabled = canSaveReceipt,
+                        loading = savingReceiptId == receipt.id,
+                    )
+            }
         }
     }
 }
