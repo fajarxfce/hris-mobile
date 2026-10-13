@@ -2,6 +2,7 @@ package dev.fajar.starter.expenses.presentation.draft.widgets
 
 import androidx.compose.runtime.Composable
 import dev.fajar.starter.designsystem.components.*
+import dev.fajar.starter.designsystem.theme.AppColors
 import dev.fajar.starter.expenses.domain.entities.ExpenseLine
 import dev.fajar.starter.localization.*
 import io.github.composefluent.icons.Icons
@@ -18,11 +19,11 @@ fun ExpenseDraftLineRow(
     AppListRow(
         line.description,
         onEdit,
-        supportingText =
-            formatLocalDate(line.occurredOn.toString(), appLanguageTag()) +
-                " · IDR " +
-                formatDecimal(line.amount, appLanguageTag()) +
-                (category?.let { "\n$it" } ?: ""),
+        supportingText = formatLocalDate(line.occurredOn.toString(), appLanguageTag()),
+        metadata = {
+            AppText("IDR " + formatDecimal(line.amount, appLanguageTag()))
+            if (category != null) AppText(category, color = AppColors.muted)
+        },
         enabled = enabled,
         trailing = {
             AppIconButton(

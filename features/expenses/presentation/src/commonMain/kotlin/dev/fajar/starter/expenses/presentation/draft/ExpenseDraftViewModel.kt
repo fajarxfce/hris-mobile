@@ -127,7 +127,12 @@ class ExpenseDraftViewModel(
                 state.value.itemTarget != null
         )
             return
-        if (state.value.dirty && state.value.command == null && state.value.restriction == null)
+        if (
+            state.value.dirty &&
+                state.value.remoteChanged &&
+                state.value.command == null &&
+                state.value.restriction == null
+        )
             updateState { it.copy(dialog = ExpenseDraftDialog.RELOAD) }
         else if (!state.value.commandReady) observeRetainedCommand() else acquirePreparation()
     }

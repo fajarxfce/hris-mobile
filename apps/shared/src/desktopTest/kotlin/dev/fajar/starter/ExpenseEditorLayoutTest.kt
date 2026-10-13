@@ -6,8 +6,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asSkiaBitmap
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import dev.fajar.starter.common.decimal.DecimalAmount
@@ -16,6 +18,7 @@ import dev.fajar.starter.documents.domain.entities.DocumentRevisionStatus
 import dev.fajar.starter.expenses.domain.entities.*
 import dev.fajar.starter.expenses.presentation.draft.*
 import dev.fajar.starter.expenses.presentation.draft.pages.ExpenseDraftPage
+import dev.fajar.starter.expenses.presentation.draft.widgets.ExpenseDraftLineRow
 import dev.fajar.starter.expenses.presentation.item.*
 import dev.fajar.starter.expenses.presentation.item.pages.ExpenseItemPage
 import dev.fajar.starter.expenses.presentation.item.widgets.ExpenseItemPicker
@@ -76,6 +79,33 @@ class ExpenseEditorLayoutTest {
         )
         compose.onNodeWithContentDescription("Kembali").assertIsDisplayed()
         capture("expense-draft-large-text", compose.onRoot())
+    }
+
+    @Test
+    fun largeMoneyValuesWrapWithoutHidingDigitsAtLargeText() {
+        val line =
+            draftState().form!!.lines.first().copy(amount = DecimalAmount.parse("999999999999.99"))
+        compose.setContent {
+            val density = LocalDensity.current
+            CompositionLocalProvider(
+                LocalDensity provides Density(density.density, 2f),
+                LocalAppLanguage provides AppLanguage.Indonesian,
+            ) {
+                AppTheme {
+                    Box(Modifier.width(360.dp)) {
+                        ExpenseDraftLineRow(line, "Perjalanan dinas", true, {}, {})
+                    }
+                }
+            }
+        }
+        val layouts = mutableListOf<TextLayoutResult>()
+        compose
+            .onNodeWithText("IDR 999.999.999.999,99", useUnmergedTree = true)
+            .assertIsDisplayed()
+            .performSemanticsAction(SemanticsActions.GetTextLayoutResult) { it(layouts) }
+        val layout = layouts.single()
+        assertFalse(layout.hasVisualOverflow)
+        assertTrue((0 until layout.lineCount).none(layout::isLineEllipsized))
     }
 
     @Test

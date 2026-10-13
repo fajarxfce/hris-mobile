@@ -82,7 +82,8 @@ Expenses opens from All services. Month and status filters stay above the
 scrolling list; multiple employments use a separate selection dialog. Detail
 groups amounts, expense lines, submitted receipt metadata, approval, payment
 progress and paged activity. Back and refresh remain in the fixed app bar.
-The pages support English, Indonesian and large text.
+The pages support English, Indonesian and large text. Draft rows give amounts
+their own wrapping line so large values do not disappear into truncated metadata.
 
 Each screen registers separate typed events. Changing filters cancels obsolete
 acquisition; leaving the route stops acquisition and observation. Only visible
@@ -99,7 +100,8 @@ draft labels use the narrower expense reference lookup described below.
 
 Back and Save remain fixed above and below scrolling forms. Leaving a changed
 form asks for confirmation. Backgrounding retains local input and cancels reads;
-returning acquires fresh authority. Unsaved fields remain process-local. Save
+returning acquires fresh authority. Retrying a failed acquisition preserves local
+input without asking to discard it. Unsaved fields remain process-local. Save
 first retains an encrypted immutable command, so pending delivery survives a
 process restart. The recovery card distinguishes sending, uncertain, rejected
 and confirmed results; an uncertain operation cannot be edited or discarded.
@@ -115,41 +117,27 @@ increments.
 
 ## Validation
 
-The native editor passed root checks with 1,090 desktop tests and 108 expense
-Chromium tests. Coverage includes cancelled and late acquisitions, retained
-input during background readmission, changed draft versions, duplicate saves,
-uncertain delivery, confirmed-read failure, pending discard during worker
-progress, issued picker cursors, expired choices and stale receipt callbacks.
-Layout tests exercise fixed actions, long pickers and exact amounts at 200% text.
-The app-flow test waits for enabled filters before interaction; CI also runs
-all three expense modules' browser tests.
+The final recovery and layout changes passed root checks with 1,092 desktop tests,
+36 presentation tests in Chromium and Android dev assembly. The editor integration
+also passed 73 expense domain/data Chromium tests and production Web compilation.
+CI for the editor passed Linux verification, Windows checks and the iOS simulator
+build.
 
+Coverage includes immutable retry bodies, concurrent saves, cancellation, late
+results, protected cache cleanup, failed acknowledgement persistence, bounded
+attempts, retained input during readmission, changed draft versions and pending
+discard during worker progress. Real SQLite/AES tests reject copied or tampered
+command envelopes. Picker tests cover issued cursors, expired choices and stale
+receipt callbacks. Layout tests exercise fixed actions, long pickers and large
+amounts without ellipsis at 200% text.
 
-Command integration passed 1,054 workspace desktop tests and 65 expense
-domain/data tests in Chromium. Tests cover immutable retries, concurrent saves,
-manual/worker serialization, scope changes, cancellation, lost responses,
-acknowledgement persistence failures, bounded attempts and protected cleanup.
-Real SQLite/AES tests reopen commands under a replacement account session,
-reject copied/tampered envelopes and retain 20 Unicode lines within storage
-bounds. Application DI verifies the shared delivery instance and signed-out gates.
-Android dev assembly also passed.
-
-
-Draft-preparation checks passed with 1,023 workspace desktop tests and 44
-expense domain/data tests in Chromium. Coverage includes stale successes and
-failures, pending cancellation, access changes, bounded policy lifetimes and
-validated date/cursor/money transport. Android dev assembly also passed for
-the preparation integration.
-
-The initial read-page delivery passed 36 expense Chromium tests, Android dev
-assembly and production Web compilation. Its coverage includes mixed revisions,
-encrypted chunk integrity, failed cleanup and 200% text.
-
-API 35 emulator acceptance used claims created through the development API.
-It verified month/status filters, detail and activity, approval without payment,
-both themes, 200% text, encrypted list/detail restoration after background
-process death offline, and explicit recovery after reconnection.
-
+API 35 emulator acceptance created and edited a fictional claim through the app,
+selected a dated category, cost center and inspected receipt, and verified exact
+amounts and revisions through the API. It exercised a competing server edit,
+explicit reload, unsaved Back confirmation, background input retention, an offline
+readmission failure and recovery without discarding input. Light/dark appearance
+and 200% text were inspected. The earlier read-page run also verified encrypted
+list/detail restoration after background process death offline and reconnection.
 
 ### Draft display references
 

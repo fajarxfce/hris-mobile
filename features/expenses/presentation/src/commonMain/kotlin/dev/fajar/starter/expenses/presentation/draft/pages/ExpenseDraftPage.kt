@@ -84,7 +84,7 @@ fun ExpenseDraftPage(
                 )
             }
         }
-        if (state.remoteChanged)
+        if (state.remoteChanged && state.visibleFailure == null)
             item(key = "changed") { AppFeedback(appString(AppString.ExpenseChanged)) }
         if (state.command != null && state.restriction == null)
             item(key = "command") {

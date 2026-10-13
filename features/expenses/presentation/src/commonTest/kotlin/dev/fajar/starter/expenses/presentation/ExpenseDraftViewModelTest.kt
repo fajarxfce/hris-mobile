@@ -226,6 +226,41 @@ class ExpenseDraftViewModelTest {
     }
 
     @Test
+    fun reconnectingReadmitsTheDraftWithoutDiscardingUnsavedInput() = runTest {
+        for (editing in listOf(false, true)) withModel(editing) { f, model, _ ->
+            model.onEvent(ExpenseDraftEvent.Entered)
+            runCurrent()
+            model.onEvent(ExpenseDraftEvent.TitleChanged("Retained title"))
+            model.onEvent(ExpenseDraftEvent.ReasonChanged("Retained reason"))
+            runCurrent()
+            val form = model.state.value.form
+            model.onEvent(ExpenseDraftEvent.Stopped)
+            runCurrent()
+            f.f.directoryCall = { expenseFailure("fixture.offline", FailureKind.Network) }
+            model.onEvent(ExpenseDraftEvent.Entered)
+            runCurrent()
+            assertFalse(model.state.value.editable)
+            assertEquals(form, model.state.value.form)
+            val pending = CompletableDeferred<Unit>()
+            f.f.directoryCall = {
+                pending.await()
+                AppResult.Success(f.f.directory)
+            }
+            model.onEvent(ExpenseDraftEvent.ReloadRequested)
+            runCurrent()
+            assertNull(model.state.value.dialog)
+            assertTrue(model.state.value.loading)
+            assertEquals(form, model.state.value.form)
+            pending.complete(Unit)
+            runCurrent()
+            assertTrue(model.state.value.editable)
+            assertEquals(form, model.state.value.form)
+            assertNull(model.state.value.failure)
+            assertEquals(0, f.insertions)
+        }
+    }
+
+    @Test
     fun authoritativeDenialStaysGatedThroughPendingAndFailedReadmission() = runTest {
         withModel(editing = true) { f, model, _ ->
             f.referenceCall = { expenseFailure("mfa_required", FailureKind.AccessDenied) }
