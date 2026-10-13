@@ -7,6 +7,38 @@ import kotlin.time.Duration.Companion.hours
 import kotlin.time.Instant
 
 class ExpenseDataFixture : ExpenseRemoteDataSource {
+    override suspend fun saveDraft(
+        sessionId: String,
+        companyId: String,
+        id: String,
+        operationId: String,
+        request: ExpenseSaveDraftRequest,
+    ): ExpenseCommandReceiptDto = error("No mutation expected")
+
+    override suspend fun submit(
+        sessionId: String,
+        companyId: String,
+        id: String,
+        operationId: String,
+        request: ExpenseSubmitRequest,
+    ): ExpenseCommandReceiptDto = error("No mutation expected")
+
+    override suspend fun cancel(
+        sessionId: String,
+        companyId: String,
+        id: String,
+        operationId: String,
+        request: ExpenseActionRequest,
+    ): ExpenseCommandReceiptDto = error("No mutation expected")
+
+    override suspend fun withdraw(
+        sessionId: String,
+        companyId: String,
+        id: String,
+        operationId: String,
+        request: ExpenseActionRequest,
+    ): ExpenseCommandReceiptDto = error("No mutation expected")
+
     val now = Instant.parse("2026-10-13T00:00:00Z")
     val access =
         ExpenseAccess(

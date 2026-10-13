@@ -9,7 +9,7 @@ import kotlin.uuid.Uuid
 const val EXPENSE_PAGE_SIZE = 20
 
 fun expenseFailure(code: String, kind: FailureKind = FailureKind.Validation) =
-    AppResult.Failed(Failure(kind, "The expense could not be loaded.", code = code))
+    AppResult.Failed(Failure(kind, "The expense request could not be completed.", code = code))
 
 fun expenseFailureInvalidatesCache(failure: Failure): Boolean =
     failure.kind in setOf(FailureKind.Unauthorized, FailureKind.AccessDenied) ||

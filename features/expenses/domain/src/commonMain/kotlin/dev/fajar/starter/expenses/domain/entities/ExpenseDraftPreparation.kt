@@ -10,6 +10,7 @@ data class ExpenseDraftPreparation(
     val claim: ExpenseClaim?,
     val fetchedAt: Instant,
     val expiresAt: Instant,
+    val employmentAfter: String? = null,
 ) {
     override fun toString() = "ExpenseDraftPreparation(redacted)"
 }

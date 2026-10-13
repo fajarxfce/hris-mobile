@@ -1,10 +1,43 @@
 package dev.fajar.starter.expenses.data.datasources
 
 import dev.fajar.starter.expenses.data.api.ExpenseApi
+import dev.fajar.starter.expenses.data.dto.*
 import org.koin.core.annotation.Single
 
 @Single
 class ApiExpenseDataSource(private val api: ExpenseApi) : ExpenseRemoteDataSource {
+    override suspend fun saveDraft(
+        sessionId: String,
+        companyId: String,
+        id: String,
+        operationId: String,
+        request: ExpenseSaveDraftRequest,
+    ) = api.saveDraft(sessionId, companyId, id, operationId, request)
+
+    override suspend fun submit(
+        sessionId: String,
+        companyId: String,
+        id: String,
+        operationId: String,
+        request: ExpenseSubmitRequest,
+    ) = api.submit(sessionId, companyId, id, operationId, request)
+
+    override suspend fun cancel(
+        sessionId: String,
+        companyId: String,
+        id: String,
+        operationId: String,
+        request: ExpenseActionRequest,
+    ) = api.cancel(sessionId, companyId, id, operationId, request)
+
+    override suspend fun withdraw(
+        sessionId: String,
+        companyId: String,
+        id: String,
+        operationId: String,
+        request: ExpenseActionRequest,
+    ) = api.withdraw(sessionId, companyId, id, operationId, request)
+
     override suspend fun categories(
         sessionId: String,
         companyId: String,

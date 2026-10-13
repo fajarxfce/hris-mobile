@@ -3,11 +3,81 @@ package dev.fajar.starter.expenses.data.api
 import dev.fajar.starter.expenses.data.dto.*
 import dev.fajar.starter.network.*
 import io.ktor.client.HttpClient
-import io.ktor.client.request.parameter
+import io.ktor.client.request.*
+import io.ktor.http.*
 import org.koin.core.annotation.*
 
 @Single
 class ExpenseApi(@Named(HttpClients.Authenticated) private val client: HttpClient) {
+    suspend fun saveDraft(
+        sessionId: String,
+        companyId: String,
+        id: String,
+        operationId: String,
+        request: ExpenseSaveDraftRequest,
+    ): ExpenseCommandReceiptDto =
+        client.requestJson("companies/$companyId/expenses/claims/$id/draft", maximumBytes = 4_096) {
+            forSession(sessionId)
+            method = HttpMethod.Put
+            header("Idempotency-Key", operationId)
+            contentType(ContentType.Application.Json)
+            setBody(request)
+        }
+
+    suspend fun submit(
+        sessionId: String,
+        companyId: String,
+        id: String,
+        operationId: String,
+        request: ExpenseSubmitRequest,
+    ): ExpenseCommandReceiptDto =
+        client.requestJson(
+            "companies/$companyId/expenses/claims/$id/submit",
+            maximumBytes = 4_096,
+        ) {
+            forSession(sessionId)
+            method = HttpMethod.Post
+            header("Idempotency-Key", operationId)
+            contentType(ContentType.Application.Json)
+            setBody(request)
+        }
+
+    suspend fun cancel(
+        sessionId: String,
+        companyId: String,
+        id: String,
+        operationId: String,
+        request: ExpenseActionRequest,
+    ): ExpenseCommandReceiptDto =
+        client.requestJson(
+            "companies/$companyId/expenses/claims/$id/cancel",
+            maximumBytes = 4_096,
+        ) {
+            forSession(sessionId)
+            method = HttpMethod.Post
+            header("Idempotency-Key", operationId)
+            contentType(ContentType.Application.Json)
+            setBody(request)
+        }
+
+    suspend fun withdraw(
+        sessionId: String,
+        companyId: String,
+        id: String,
+        operationId: String,
+        request: ExpenseActionRequest,
+    ): ExpenseCommandReceiptDto =
+        client.requestJson(
+            "companies/$companyId/expenses/submissions/$id/withdraw",
+            maximumBytes = 4_096,
+        ) {
+            forSession(sessionId)
+            method = HttpMethod.Post
+            header("Idempotency-Key", operationId)
+            contentType(ContentType.Application.Json)
+            setBody(request)
+        }
+
     suspend fun categories(
         sessionId: String,
         companyId: String,

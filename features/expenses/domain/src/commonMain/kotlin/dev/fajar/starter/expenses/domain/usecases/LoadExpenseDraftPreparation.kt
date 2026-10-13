@@ -104,6 +104,7 @@ class LoadExpenseDraftPreparation(
                 claim,
                 requestedAt,
                 expiry,
+                employmentAfter,
             )
         )
     }

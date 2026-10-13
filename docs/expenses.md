@@ -52,6 +52,30 @@ content. Known access and MFA failures remain gated through pending/failed
 retries, including when cache cleanup fails; a fresh admitted acquisition must
 succeed before observation reopens. There is no automatic retry loop.
 
+## Durable commands
+
+Draft creation/editing, submission, draft cancellation and submission withdrawal
+have separate preparation and delivery use cases. Line preparation validates
+exact amounts, dates and evidence identifiers. Saving is distinct from submitting;
+a returned claim needs a new saved draft revision before submission.
+
+Confirmation stores the immutable body, expected version and operation ID in an
+authenticated command envelope before HTTP delivery. New-claim slots belong to an
+employment; existing actions share a claim slot. A concurrent confirmation cannot
+replace another retained body. Encryption and JSON work run off Main, with bounded
+request/outcome envelopes and cleared temporary plaintext/key buffers.
+
+Manual delivery and the registered expense sync task share one execution owner.
+Each attempt revalidates current company/session policy and marks its outcome
+unconfirmed before transport. Retries retain the original body and operation ID.
+Automatic attempts and batches are finite. A later rejection cannot disprove an
+earlier uncertain commit; an unconfirmed operation cannot be discarded. Confirmed
+cleanup requires an admitted claim view at least as recent as the receipt and an
+atomic outcome revision match. Credentials never enter command storage.
+
+These command boundaries are available for the native editor and detail actions;
+the current pages still expose the read workflow described below.
+
 ## Pages
 
 Expenses opens from All services. Month and status filters stay above the
@@ -70,6 +94,16 @@ receipt selection/export, submission and subsequent employee actions are being
 connected separately to the backend's versioned, idempotent command contracts.
 
 ## Validation
+
+Command integration passed 1,054 workspace desktop tests and 65 expense
+domain/data tests in Chromium. Tests cover immutable retries, concurrent saves,
+manual/worker serialization, scope changes, cancellation, lost responses,
+acknowledgement persistence failures, bounded attempts and protected cleanup.
+Real SQLite/AES tests reopen commands under a replacement account session,
+reject copied/tampered envelopes and retain 20 Unicode lines within storage
+bounds. Application DI verifies the shared delivery instance and signed-out gates.
+Android dev assembly also passed.
+
 
 Draft-preparation checks passed with 1,023 workspace desktop tests and 44
 expense domain/data tests in Chromium. Coverage includes stale successes and
