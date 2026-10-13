@@ -160,6 +160,7 @@ class AppFlowTest {
                 .performScrollTo()
                 .performClick()
             waitFor("Client visit")
+            waitForAction("October 2026")
             compose.onNode(hasText("October 2026") and hasClickAction()).performClick()
             waitFor("November")
             compose
@@ -167,8 +168,15 @@ class AppFlowTest {
                 .performScrollTo()
                 .performClick()
             waitFor("No claims for this month.")
+            compose.waitUntil(15_000) {
+                compose
+                    .onAllNodes(hasContentDescription("Previous month") and isEnabled())
+                    .fetchSemanticsNodes()
+                    .isNotEmpty()
+            }
             compose.onNodeWithContentDescription("Previous month").performClick()
             waitFor("Client visit")
+            waitForAction("All statuses")
             compose.onNode(hasText("All statuses") and hasClickAction()).performClick()
             waitFor("Claim status")
             compose
@@ -179,6 +187,7 @@ class AppFlowTest {
             compose.onNodeWithContentDescription("Back").assertIsDisplayed()
             compose.onNodeWithContentDescription("Refresh").assertIsDisplayed()
             capture("expense-filters-large-text")
+            waitForAction("Needs correction")
             compose.onNode(hasText("Needs correction") and hasClickAction()).performClick()
             waitFor("Claim status")
             compose
