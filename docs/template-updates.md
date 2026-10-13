@@ -1,5 +1,14 @@
 # Template updates
 
+## Bounded protocol response bodies
+
+The public `readApiBody` boundary and its regressions also exist in
+[Compose Fluent Starter](https://github.com/fajarxfce/compose-fluent-starter/blob/main/core/network/src/commonMain/kotlin/dev/fajar/starter/network/ApiResponseBody.kt).
+Feature-owned HTTP protocols can select a bounded success-body budget while
+structured HTTP problems retain their independent 16 KiB limit. Invalid budgets
+fail before acquisition; callers own and clear successful buffers. The expense
+receipt protocol, authorization and export workflow remain in HRIS Mobile.
+
 ## Enum route arguments
 
 The shared `enumNavType` adapter also exists in

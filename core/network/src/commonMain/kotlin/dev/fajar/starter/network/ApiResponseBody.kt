@@ -17,8 +17,12 @@ suspend fun requireApiStatus(response: HttpResponse, vararg accepted: HttpStatus
     error("Unexpected HTTP response status.")
 }
 
-@PublishedApi
-internal suspend fun readApiBody(response: HttpResponse, maximumBytes: Int): ByteArray {
+/**
+ * Bounded body reader for feature-owned HTTP protocols. Success transfers buffer ownership to the
+ * caller, which clears it after use. HTTP problems retain their separate, smaller response budget.
+ */
+suspend fun readApiBody(response: HttpResponse, maximumBytes: Int): ByteArray {
+    require(maximumBytes in 0..16_777_216)
     val succeeded = response.status.value in 200..299
     val limit = if (succeeded) maximumBytes else 16_384
     val declared = response.headers[HttpHeaders.ContentLength]?.toLongOrNull()
