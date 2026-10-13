@@ -17,6 +17,7 @@ class NativeUiServer(
     private val requireMfa: Boolean = false,
     private val existingAuthenticator: Boolean = false,
     private val loseConfirmation: Boolean = false,
+    private val beforeRequest: suspend (HttpRequestData) -> Unit = {},
 ) {
     private val requests = Mutex()
     private var verified = false
@@ -43,6 +44,7 @@ class NativeUiServer(
     suspend fun expireVerification() = requests.withLock { verified = false }
 
     fun engine() = MockEngine { request ->
+        beforeRequest(request)
         requests.withLock {
             val path = request.url.encodedPath
             assertNativeHeaders(request)

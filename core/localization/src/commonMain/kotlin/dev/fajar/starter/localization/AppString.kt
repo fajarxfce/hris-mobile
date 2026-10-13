@@ -1136,6 +1136,14 @@ enum class AppString(val english: StringResource, val indonesian: StringResource
     ),
     CalendarChanged(Res.string.calendar_changed_en, Res.string.calendar_changed_id),
     CompanyPolicyTitle(Res.string.company_policy_title_en, Res.string.company_policy_title_id),
+    WorkspaceConnectionTitle(
+        Res.string.workspace_connection_title_en,
+        Res.string.workspace_connection_title_id,
+    ),
+    WorkspaceConnectionDescription(
+        Res.string.workspace_connection_description_en,
+        Res.string.workspace_connection_description_id,
+    ),
     CompanyPolicyUnavailable(
         Res.string.company_policy_unavailable_en,
         Res.string.company_policy_unavailable_id,

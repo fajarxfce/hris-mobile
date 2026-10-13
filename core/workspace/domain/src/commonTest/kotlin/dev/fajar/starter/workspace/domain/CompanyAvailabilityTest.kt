@@ -154,7 +154,95 @@ class CompanyAvailabilityTest {
         assertEquals(2, states.size)
         advanceTimeBy(1.hours)
         runCurrent()
-        assertNull(assertIs<AppResult.Success<WorkspaceContext?>>(states.last()).value!!.workspace)
+        val ended = assertIs<AppResult.Success<WorkspaceContext?>>(states.last()).value!!
+        assertNull(ended.workspace)
+        assertNull(ended.policy)
+        assertEquals(f.workspace.id, ended.expiredWorkspaceId)
+        advanceTimeBy(2.hours)
+        runCurrent()
+        assertEquals(3, states.size)
+        reader.cancelAndJoin()
+    }
+
+    @Test
+    fun coldExpiredSelectionKeepsOnlyAnOwnedRenewalIdentifier() = runTest {
+        val f = AdmissionFixture()
+        f.selected.value =
+            AppResult.Success(
+                f.workspace.copy(
+                    admission =
+                        f.workspace.admission.copy(
+                            checkedAt = f.clock.now() - 2.hours,
+                            expiresAt = f.clock.now() - 1.hours,
+                        )
+                )
+            )
+        val context =
+            assertIs<AppResult.Success<WorkspaceContext?>>(
+                    ObserveWorkspaceContext(f.sessions, f.workspaces, build, f.clock)().first()
+                )
+                .value!!
+        assertNull(context.workspace)
+        assertNull(context.policy)
+        assertEquals(f.workspace.id, context.expiredWorkspaceId)
+
+        for (identity in
+            listOf(
+                f.session.copy(id = "replacement"),
+                f.session.copy(binding = f.session.binding.copy(serverId = "another-family")),
+                f.session.copy(
+                    binding = f.session.binding.copy(audience = "https://another.invalid/")
+                ),
+                f.session.copy(
+                    binding =
+                        f.session.binding.copy(
+                            expiresAtEpochMillis = f.clock.now().toEpochMilliseconds()
+                        )
+                ),
+            )) {
+            f.identity.value = AppResult.Success(identity)
+            val unselected =
+                assertIs<AppResult.Success<WorkspaceContext?>>(
+                        ObserveWorkspaceContext(f.sessions, f.workspaces, build, f.clock)().first()
+                    )
+                    .value!!
+            assertNull(unselected.workspace)
+            assertNull(unselected.policy)
+            assertNull(unselected.expiredWorkspaceId)
+        }
+    }
+
+    @Test
+    fun sessionExpiryNeverOffersRenewalEvenWhenItEndsWithTheWorkspaceLease() = runTest {
+        val f = AdmissionFixture { now + testScheduler.currentTime.milliseconds }
+        f.identity.value =
+            AppResult.Success(
+                f.session.copy(
+                    binding =
+                        f.session.binding.copy(
+                            expiresAtEpochMillis = (now + 1.minutes).toEpochMilliseconds()
+                        )
+                )
+            )
+        f.selected.value =
+            AppResult.Success(
+                f.workspace.copy(
+                    admission = f.workspace.admission.copy(expiresAt = now + 1.minutes)
+                )
+            )
+        val states = mutableListOf<AppResult<WorkspaceContext?>>()
+        val reader =
+            backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
+                ObserveWorkspaceContext(f.sessions, f.workspaces, build, f.clock)().toList(states)
+            }
+        assertNotNull(
+            assertIs<AppResult.Success<WorkspaceContext?>>(states.last()).value!!.workspace
+        )
+        advanceTimeBy(60_001)
+        runCurrent()
+        val ended = assertIs<AppResult.Success<WorkspaceContext?>>(states.last()).value!!
+        assertNull(ended.workspace)
+        assertNull(ended.expiredWorkspaceId)
         reader.cancelAndJoin()
     }
 

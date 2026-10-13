@@ -16,7 +16,9 @@ company access. Employees can open their own personal profile, employment terms,
 and organization assignments. The employee inbox synchronizes encrypted company
 correspondence, retains admitted content when a refresh fails, and queues explicit
 read/acknowledgement actions with durable idempotent retries. A time-limited encrypted
-workspace restores the selected company offline. Company policies gate maintenance,
+workspace restores the selected company offline for up to one hour. After access
+expires, connection recovery renews the saved selection through the server.
+Company policies gate maintenance,
 minimum builds and disabled modules, and pause inbox delivery before transport.
 The weekly work calendar shows assigned shifts, roster overrides and days off,
 with a bounded encrypted snapshot for offline access. Attendance supports clock-in,

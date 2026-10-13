@@ -31,6 +31,7 @@ import dev.fajar.starter.workforce.presentation.navigation.*
 import dev.fajar.starter.workspace.domain.entities.CompanyAvailability
 import dev.fajar.starter.workspace.presentation.navigation.*
 import dev.fajar.starter.workspace.presentation.policy.*
+import dev.fajar.starter.workspace.presentation.recovery.*
 import kotlinx.coroutines.flow.Flow
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -46,6 +47,14 @@ fun AppNavigation(navigation: ScopedNavigationState, incomingLinks: Flow<String>
             CompanyPolicyState(
                 (stage as? AppStage.SignedIn)?.workspace?.company?.name.orEmpty(),
                 state.companyPolicy?.availability ?: CompanyAvailability.Unknown,
+                state.refreshingWorkspace,
+                state.changingWorkspace,
+                state.workspaceRefreshFailure,
+            )
+        )
+    val workspaceRecoveryState =
+        rememberUpdatedState(
+            WorkspaceRecoveryState(
                 state.refreshingWorkspace,
                 state.changingWorkspace,
                 state.workspaceRefreshFailure,
@@ -75,6 +84,7 @@ fun AppNavigation(navigation: ScopedNavigationState, incomingLinks: Flow<String>
             AppStage.SignedOut -> LoginRoute
             is AppStage.SignedIn ->
                 when {
+                    stage.expiredWorkspaceId != null -> WorkspaceRecoveryRoute
                     stage.workspace == null -> VerificationRoute
                     companyBlocked -> CompanyPolicyRoute
                     else -> HomeRoute()
@@ -83,7 +93,11 @@ fun AppNavigation(navigation: ScopedNavigationState, incomingLinks: Flow<String>
     val scope =
         when (stage) {
             is AppStage.SignedIn ->
-                "account/${stage.sessionId}/${stage.workspace?.id ?: "selection"}/${if (companyBlocked) "policy" else "ready"}"
+                "account/${stage.sessionId}/${stage.selectedWorkspaceId ?: "selection"}/${when {
+                    stage.expiredWorkspaceId != null -> "renewal"
+                    companyBlocked -> "policy"
+                    else -> "ready"
+                }}"
             AppStage.Onboarding -> "onboarding"
             AppStage.SignedOut -> "signed-out"
             else -> "bootstrap"
@@ -110,7 +124,16 @@ fun AppNavigation(navigation: ScopedNavigationState, incomingLinks: Flow<String>
         onboardingRoutes({ viewModel.onEvent(AppEvent.BootstrapRequested) })
         authRoutes()
         if (stage is AppStage.SignedIn) {
-            if (stage.workspace == null) {
+            if (stage.expiredWorkspaceId != null) {
+                workspaceRecoveryRoutes(workspaceRecoveryState) { event ->
+                    when (event) {
+                        WorkspaceRecoveryEvent.RetryRequested ->
+                            viewModel.onEvent(AppEvent.WorkspaceRefreshRequested)
+                        WorkspaceRecoveryEvent.CompanyChangeRequested ->
+                            viewModel.onEvent(AppEvent.CompanyChangeRequested)
+                    }
+                }
+            } else if (stage.workspace == null) {
                 verificationRoutes(stage.sessionId) {
                     controller.navigate(WorkspaceRoute) {
                         popUpTo<VerificationRoute> { inclusive = true }

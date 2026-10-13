@@ -81,14 +81,3 @@ fun admitCompanyOperation(
 
 fun companyPolicyFailure(code: String, kind: FailureKind = FailureKind.AccessDenied) =
     AppResult.Failed(Failure(kind, "Company availability must be checked.", code = code))
-
-fun workspaceContext(workspace: Workspace, build: AppBuild, now: Instant) =
-    WorkspaceContext(
-        workspace.sessionId,
-        workspace,
-        CompanyPolicyStatus(
-            workspace.id,
-            companyAvailability(workspace.policy, build, now),
-            !companyPolicyIsFresh(workspace.policy, now),
-        ),
-    )

@@ -109,6 +109,12 @@ Workers are platform application entry points that invoke `SyncTask` use cases.
 The [workspace admission](workspace.md) use cases own offline eligibility and live
 revalidation. Its repository coordinates encrypted storage and raw remote access;
 foreground lifetime and the protected-route failure gate belong to application MVI.
+An expired company selection is distinct from no selection: application context
+exposes only its owned identifier for renewal, while protected workspace data stays
+absent. MVI can revalidate that identifier without waiting for network during local
+bootstrap. Navigation gives recovery a separate scope, disposing protected route
+owners; a successful renewal reopens the same company. An expiry/recovery transition
+does not change the renewal request's ownership or start a second request on success.
 See [native identity](native-identity.md) for the active HRIS integration and
 [inbox](inbox.md) for the first encrypted HRIS feed integration and
 [sync](sync.md) for the inherited worker and command contracts.

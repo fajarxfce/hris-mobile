@@ -1,5 +1,28 @@
 # Validation
 
+## Offline startup and company renewal
+
+Root checks passed with 1,174 desktop/JVM tests and Android dev assembly. Eleven
+new cases cover cold offline startup, expired selection recovery, pending and
+failed retries, session/account replacement, read gates after failed cleanup,
+renewal without polling, cancellation and late success/denial. The assembled
+Compose test closes and reopens the real SQLite/encrypted workspace, keeps expired
+private content hidden while transport fails, and returns to the same company
+after an explicit admitted retry.
+
+API 35 emulator acceptance disabled both Wi-Fi and mobile data, force-stopped
+the application and reopened Home with the stored attendance time. Advancing only
+the emulator clock by two hours reproduced expiry and showed connection recovery
+without account-verification loading or private company content. Restoring time
+and connectivity, then retrying, reopened the same company against the development
+API. Screenshots were inspected; no HRIS crash appeared in that emulator boot.
+System time, automatic time and both network settings were restored afterward.
+The expiry check used a clock adjustment, not a two-hour physical wait.
+
+This verifies bounded offline snapshots and recovery, not unrestricted offline
+use. The one-hour company admission remains in force; first sign-in, renewal and
+features with live-only reads still require the server.
+
 ## Overtime command foundation
 
 Root checks passed with 868 desktop tests, 85 Workforce domain and 22 data Chromium

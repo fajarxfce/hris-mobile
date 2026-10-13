@@ -35,27 +35,15 @@ class ObserveWorkspaceContext(
                                         emit(selected)
                                         return@flow
                                     }
-                                    val workspace = (selected as AppResult.Success).value
-                                    val unselected =
-                                        AppResult.Success(WorkspaceContext(session.id, null, null))
-                                    if (
-                                        workspace == null ||
-                                            validateWorkspaceOwnership(
-                                                workspace.id,
-                                                workspace,
-                                                session,
-                                                clock.now(),
-                                            ) is
-                                                AppResult.Failed
-                                    ) {
-                                        emit(unselected)
-                                        return@flow
-                                    }
-                                    emit(
-                                        AppResult.Success(
-                                            workspaceContext(workspace, build, clock.now())
+                                    val initial =
+                                        workspaceContext(
+                                            session,
+                                            (selected as AppResult.Success).value,
+                                            build,
+                                            clock.now(),
                                         )
-                                    )
+                                    emit(AppResult.Success(initial))
+                                    val workspace = initial.workspace ?: return@flow
                                     val snapshot = workspace.policy
                                     val now = clock.now()
                                     val policyDeadlines =
@@ -82,15 +70,10 @@ class ObserveWorkspaceContext(
                                                 .inWholeMilliseconds
                                                 .coerceAtLeast(0) + 1
                                         )
-                                        if (workspace.admission.expiresAt <= clock.now()) {
-                                            emit(unselected)
-                                            return@flow
-                                        }
-                                        emit(
-                                            AppResult.Success(
-                                                workspaceContext(workspace, build, clock.now())
-                                            )
-                                        )
+                                        val current =
+                                            workspaceContext(session, workspace, build, clock.now())
+                                        emit(AppResult.Success(current))
+                                        if (current.workspace == null) return@flow
                                     }
                                 }
                             }

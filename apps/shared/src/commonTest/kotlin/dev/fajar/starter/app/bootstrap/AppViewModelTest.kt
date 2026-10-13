@@ -193,7 +193,7 @@ class AppViewModelTest {
     }
 }
 
-private class TestSessions(initial: Session? = null) : SessionRepository {
+internal class TestSessions(initial: Session? = null) : SessionRepository {
     override val persistent = false
     val value = MutableStateFlow<AppResult<Session?>>(AppResult.Success(initial))
 
@@ -220,7 +220,7 @@ private class TestSessions(initial: Session? = null) : SessionRepository {
     }
 }
 
-private fun testSession() =
+internal fun testSession() =
     Session(
         "session-a",
         User("1", "Alex", "demo@example.com"),
@@ -233,9 +233,10 @@ private fun testSession() =
             ),
     )
 
-private class TestWorkspaces(initial: Workspace? = null) : WorkspaceRepository {
+internal class TestWorkspaces(initial: Workspace? = null, private val clock: Clock = Clock.System) :
+    WorkspaceRepository {
     override suspend fun clientPolicy(sessionId: String, companyId: String) =
-        AppResult.Success(fixturePolicy())
+        AppResult.Success(fixturePolicy(clock.now()))
 
     private val selection = MutableStateFlow<AppResult<Workspace?>>(AppResult.Success(initial))
     var casFailure: Failure? = null
@@ -258,9 +259,8 @@ private class TestWorkspaces(initial: Workspace? = null) : WorkspaceRepository {
         AppResult.Success(emptySet<String>())
 }
 
-private fun testWorkspace(): Workspace {
+internal fun testWorkspace(now: kotlin.time.Instant = Clock.System.now()): Workspace {
     val session = testSession()
-    val now = Clock.System.now()
     return Workspace(
         "scope",
         session.id,
@@ -268,14 +268,15 @@ private fun testWorkspace(): Workspace {
         CompanyMembership("company", "Company", "CO", "Asia/Jakarta"),
         emptySet(),
         WorkspaceAdmission(session.user.id, session.binding.serverId, now, now + 1.hours),
-        policy = CompanyPolicySnapshot(fixturePolicy(), now),
+        policy = CompanyPolicySnapshot(fixturePolicy(now), now),
     )
 }
 
-private fun bootstrapViewModel(
+internal fun bootstrapViewModel(
     identity: SessionRepository,
     workspaces: WorkspaceRepository,
     accounts: AccountRepository,
+    clock: Clock = Clock.System,
 ) =
     AppViewModel(
         LoadOnboarding(
@@ -285,20 +286,21 @@ private fun bootstrapViewModel(
                 override suspend fun complete() = AppResult.Success(Unit)
             }
         ),
-        ObserveWorkspaceContext(identity, workspaces, fixtureBuild),
+        ObserveWorkspaceContext(identity, workspaces, fixtureBuild, clock),
         dev.fajar.starter.identity.domain.usecases.RestoreSession(
             identity,
             IdentityServer("https://example.invalid/", "Fixture"),
+            clock,
         ),
         ResolveAppLink(AppEnvironment.Dev),
-        RefreshWorkspace(identity, accounts, workspaces),
+        RefreshWorkspace(identity, accounts, workspaces, clock),
         LeaveWorkspace(identity, workspaces),
     )
 
 private val fixtureBuild = AppBuild(AppPlatform.Android, 1, "1.0.0", null)
 
-private fun fixturePolicy() =
-    Clock.System.now().let {
+private fun fixturePolicy(now: kotlin.time.Instant = Clock.System.now()) =
+    now.let {
         CompanyPolicy(
             null,
             CompanyModule.entries.toSet(),

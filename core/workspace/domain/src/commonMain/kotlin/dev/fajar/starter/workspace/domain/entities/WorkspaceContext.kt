@@ -5,4 +5,6 @@ data class WorkspaceContext(
     val sessionId: String,
     val workspace: Workspace?,
     val policy: CompanyPolicyStatus?,
+    /** Identifies an owned selection needing renewal; it grants no cached read access. */
+    val expiredWorkspaceId: String? = null,
 )

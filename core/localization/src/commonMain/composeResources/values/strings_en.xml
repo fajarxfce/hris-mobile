@@ -538,7 +538,9 @@
     <string name="inbox_acknowledgement_required_en">Acknowledgement required</string>
     <string name="inbox_acknowledged_en">Acknowledged</string>
     <string name="inbox_cache_expired_en">Connect to refresh your inbox.</string>
-    <string name="workspace_access_expired_en">Connect and select a company again.</string>
+    <string name="workspace_access_expired_en">Connect to renew company access.</string>
+    <string name="workspace_connection_title_en">Connect to continue</string>
+    <string name="workspace_connection_description_en">Offline access has ended. Connect to reopen your saved company and refresh its data.</string>
     <string name="company_policy_title_en">Company services</string>
     <string name="company_policy_unavailable_en">Connect to check company availability.</string>
     <string name="company_module_disabled_en">This service is unavailable for this company.</string>

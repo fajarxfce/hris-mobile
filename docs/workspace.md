@@ -18,6 +18,14 @@ assurance expires. A future check timestamp is rejected.
 Application navigation uses `ObserveWorkspaceContext` to receive identity,
 workspace and [company availability](company-policy.md) together.
 It stops exposing an expired workspace without waiting for a database write.
+The application context keeps only that owned selection's identifier for renewal;
+expired company data and permissions are not exposed. Cold startup opens a
+connection recovery page instead of treating expiry as an absent selection and
+entering online account verification. Foreground entry or an explicit retry
+revalidates the saved company. Successful renewal returns to that company without
+requiring selection again. A failed request stays on recovery and does not poll.
+Changing company remains an explicit local action. A mismatched account, session
+family or API audience cannot retain this renewal identifier.
 Inbox observation applies the earlier of its content expiry and workspace expiry.
 Leaving a workspace removes the selection; ending the session clears derived
 replicas through the account-storage boundary.
@@ -65,3 +73,10 @@ failed-invalidation recovery. See [validation](validation.md) for device results
 Offline admission is a bounded client policy, not immediate offline revocation or
 tamper-resistant device attestation. Server-side changes become known on the next
 successful check; lease timing uses the device clock.
+
+The current application is not fully offline. Only previously acquired snapshots
+can be restored, and the one-hour company admission also bounds feature reads.
+First sign-in, new company selection and renewal after admission expiry require
+the server. Coworker directory and personal-profile acquisition still use live
+reads. A recovery screen makes that boundary visible; it does not extend a lease
+or make stale private data readable.

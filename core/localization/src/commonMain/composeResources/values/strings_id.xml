@@ -538,7 +538,9 @@
     <string name="inbox_acknowledgement_required_id">Perlu konfirmasi</string>
     <string name="inbox_acknowledged_id">Dikonfirmasi</string>
     <string name="inbox_cache_expired_id">Hubungkan ke internet untuk memperbarui inbox.</string>
-    <string name="workspace_access_expired_id">Hubungkan ke internet dan pilih perusahaan kembali.</string>
+    <string name="workspace_access_expired_id">Hubungkan ke internet untuk memperbarui akses perusahaan.</string>
+    <string name="workspace_connection_title_id">Koneksi diperlukan</string>
+    <string name="workspace_connection_description_id">Akses offline telah berakhir. Hubungkan ke internet untuk membuka kembali perusahaan yang tersimpan dan memperbarui datanya.</string>
     <string name="company_policy_title_id">Layanan perusahaan</string>
     <string name="company_policy_unavailable_id">Hubungkan ke internet untuk memeriksa ketersediaan layanan.</string>
     <string name="company_module_disabled_id">Layanan ini tidak tersedia untuk perusahaan ini.</string>
