@@ -31,7 +31,11 @@ class EncryptedLeaveCacheRepository(
 
     override fun observe(access: LeaveAccess) =
         safeStorageFlow(
-            replicas.observeDocument(access.sessionId, leavePartition(access), "overview"),
+            replicas.observeDocument(
+                ReplicaScope(access.sessionId),
+                leavePartition(access),
+                "overview",
+            ),
             mapValue = { page ->
                 val checkpoint = page.checkpoint
                 if (checkpoint == null) null
@@ -89,7 +93,10 @@ class EncryptedLeaveCacheRepository(
         )
 
     override suspend fun generation(access: LeaveAccess) = safeStorageCall {
-        replicas.checkpoint(access.sessionId, leavePartition(access))?.handle?.generation
+        replicas
+            .checkpoint(ReplicaScope(access.sessionId), leavePartition(access))
+            ?.handle
+            ?.generation
     }
 
     override suspend fun replace(
@@ -98,10 +105,15 @@ class EncryptedLeaveCacheRepository(
         snapshot: LeaveOverview?,
     ) = safeStorageCall {
         val partition = leavePartition(access)
-        val previous = replicas.checkpoint(access.sessionId, partition)
+        val previous = replicas.checkpoint(ReplicaScope(access.sessionId), partition)
         if (previous?.handle?.generation != expectedGeneration) return@safeStorageCall false
         if (snapshot == null)
-            return@safeStorageCall replicas.replace(access.sessionId, partition, previous, null)
+            return@safeStorageCall replicas.replace(
+                ReplicaScope(access.sessionId),
+                partition,
+                previous,
+                null,
+            )
         require(
             sameLeaveScope(access, snapshot.access) && snapshot.generation != expectedGeneration
         )
@@ -129,7 +141,7 @@ class EncryptedLeaveCacheRepository(
                 )
             currentCoroutineContext().ensureActive()
             replicas.replace(
-                access.sessionId,
+                ReplicaScope(access.sessionId),
                 partition,
                 previous,
                 ReplicaSnapshot(
@@ -145,7 +157,11 @@ class EncryptedLeaveCacheRepository(
 
     override fun observeRequest(access: LeaveAccess) =
         safeStorageFlow(
-            replicas.observe(access.sessionId, leaveRequestPartition(access), limit = 32),
+            replicas.observe(
+                ReplicaScope(access.sessionId),
+                leaveRequestPartition(access),
+                limit = 32,
+            ),
             mapValue = { page ->
                 val checkpoint = page.checkpoint
                 if (checkpoint == null) null
@@ -165,7 +181,10 @@ class EncryptedLeaveCacheRepository(
         )
 
     override suspend fun requestGeneration(access: LeaveAccess) = safeStorageCall {
-        replicas.checkpoint(access.sessionId, leaveRequestPartition(access))?.handle?.generation
+        replicas
+            .checkpoint(ReplicaScope(access.sessionId), leaveRequestPartition(access))
+            ?.handle
+            ?.generation
     }
 
     override suspend fun replaceRequest(
@@ -174,10 +193,15 @@ class EncryptedLeaveCacheRepository(
         snapshot: LeaveRequestSnapshot?,
     ) = safeStorageCall {
         val partition = leaveRequestPartition(access)
-        val previous = replicas.checkpoint(access.sessionId, partition)
+        val previous = replicas.checkpoint(ReplicaScope(access.sessionId), partition)
         if (previous?.handle?.generation != expectedGeneration) return@safeStorageCall false
         if (snapshot == null)
-            return@safeStorageCall replicas.replace(access.sessionId, partition, previous, null)
+            return@safeStorageCall replicas.replace(
+                ReplicaScope(access.sessionId),
+                partition,
+                previous,
+                null,
+            )
         require(
             sameLeaveScope(access, snapshot.access) && snapshot.generation != expectedGeneration
         )
@@ -188,7 +212,7 @@ class EncryptedLeaveCacheRepository(
         try {
             val encoded = encodeLeaveRequestCache(dto, snapshot.generation, cipher, key, access)
             currentCoroutineContext().ensureActive()
-            replicas.replace(access.sessionId, partition, previous, encoded)
+            replicas.replace(ReplicaScope(access.sessionId), partition, previous, encoded)
         } finally {
             key.fill(0)
         }
@@ -201,8 +225,12 @@ class EncryptedLeaveCacheRepository(
             if (saved != null) Base64.decode(saved)
             else {
                 check(
-                    replicas.checkpoint(access.sessionId, leavePartition(access)) == null &&
-                        replicas.checkpoint(access.sessionId, leaveRequestPartition(access)) == null
+                    replicas.checkpoint(ReplicaScope(access.sessionId), leavePartition(access)) ==
+                        null &&
+                        replicas.checkpoint(
+                            ReplicaScope(access.sessionId),
+                            leaveRequestPartition(access),
+                        ) == null
                 ) {
                     "Existing leave views require their content key."
                 }

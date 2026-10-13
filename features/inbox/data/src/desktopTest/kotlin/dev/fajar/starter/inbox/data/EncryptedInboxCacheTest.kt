@@ -2,16 +2,18 @@ package dev.fajar.starter.inbox.data
 
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.database.*
-import dev.fajar.starter.inbox.data.mappers.inboxPartition
+import dev.fajar.starter.inbox.data.mappers.*
 import dev.fajar.starter.inbox.data.repositories.EncryptedInboxCacheRepository
 import dev.fajar.starter.inbox.domain.entities.*
 import dev.fajar.starter.securestorage.*
 import java.nio.file.Files
+import kotlin.io.encoding.Base64
 import kotlin.test.*
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Instant
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
+import kotlinx.serialization.json.Json
 
 class EncryptedInboxCacheTest {
     private val now = Instant.parse("2026-10-11T00:00:00Z")
@@ -52,12 +54,264 @@ class EncryptedInboxCacheTest {
         )
 
     @Test
+    fun theSameAccountReadsPublishedFactsAfterLoginWhileOldSessionsCannotWrite() = runTest {
+        val directory = Files.createTempDirectory("inbox-owner-reopen").toFile()
+        var db = createAppDatabase(directory)
+        val keys = MemoryCredentialStore()
+        try {
+            db.accounts.activate(access.sessionId, inboxReplicaScope(access).accountKey)
+            var repository = EncryptedInboxCacheRepository(db.replicas, AesGcmContentCipher(), keys)
+            assertEquals(AppResult.Success(true), repository.begin(initial, null))
+            val published =
+                initial.copy(
+                    revision = 1,
+                    phase = InboxSyncPhase.CHANGES,
+                    cursor = "cursor",
+                    published = true,
+                    refreshedAt = now,
+                )
+            assertEquals(
+                AppResult.Success(true),
+                repository.commit(initial, published, listOf(InboxReplicaEntry(item.id, 1, item))),
+            )
+            db.accounts.activate(null)
+            assertEquals(
+                AppResult.Success(InboxCachePage(null, emptyList(), null)),
+                repository.observe(access, InboxCacheQuery.Page()).first(),
+            )
+            db.close()
+            db = createAppDatabase(directory)
+            val renewed = access.copy(sessionId = "new-login")
+            db.accounts.activate(renewed.sessionId, inboxReplicaScope(renewed).accountKey)
+            repository = EncryptedInboxCacheRepository(db.replicas, AesGcmContentCipher(), keys)
+            val expected = AppResult.Success(InboxCachePage(published, listOf(item), null))
+            assertEquals(expected, repository.observe(renewed, InboxCacheQuery.Page()).first())
+            assertEquals(
+                expected,
+                repository.observe(renewed, InboxCacheQuery.Item(item.id)).first(),
+            )
+            assertEquals(AppResult.Success(published), repository.checkpoint(renewed))
+            assertEquals(
+                AppResult.Success(false),
+                repository.commit(
+                    published,
+                    published.copy(revision = 2),
+                    listOf(InboxReplicaEntry(item.id, 2, item.copy(version = 2))),
+                ),
+            )
+            assertEquals(AppResult.Success(false), repository.clear(access))
+            val replacement = initial.copy(access = renewed, generation = "new-login-bootstrap")
+            assertEquals(
+                AppResult.Success(true),
+                repository.begin(replacement, published.generation),
+            )
+            assertEquals(expected, repository.observe(renewed, InboxCacheQuery.Page()).first())
+            assertEquals(AppResult.Success(replacement), repository.checkpoint(renewed))
+        } finally {
+            db.close()
+            keys.close()
+            directory.deleteRecursively()
+        }
+    }
+
+    @Test
+    fun thePreviousStorageFormatRemainsReadableOfflineUntilItsReplacementIsPublished() = runTest {
+        val directory = Files.createTempDirectory("inbox-legacy-read").toFile()
+        val db = createAppDatabase(directory)
+        val keys = MemoryCredentialStore()
+        val cipher = AesGcmContentCipher()
+        val key = cipher.generateKey()
+        try {
+            db.accounts.activate(access.sessionId, inboxReplicaScope(access).accountKey)
+            keys.write(Base64.encode(key))
+            val old =
+                initial.copy(
+                    revision = 0,
+                    phase = InboxSyncPhase.CHANGES,
+                    cursor = "old-cursor",
+                    published = true,
+                    refreshedAt = now,
+                )
+            val checkpoint =
+                cipher.encrypt(
+                    key,
+                    inboxAssociatedData(
+                        access,
+                        old.generation,
+                        "checkpoint",
+                        "",
+                        0,
+                        legacySessionBound = true,
+                    ),
+                    Json.encodeToString(old.toDto().copy(syncSessionId = null)).encodeToByteArray(),
+                )
+            val payload =
+                cipher.encrypt(
+                    key,
+                    inboxAssociatedData(
+                        access,
+                        old.generation,
+                        "item",
+                        item.id,
+                        item.version,
+                        legacySessionBound = true,
+                    ),
+                    Json.encodeToString(item.toDto()).encodeToByteArray(),
+                )
+            assertTrue(
+                db.replicas.replace(
+                    ReplicaScope(access.sessionId),
+                    inboxPartition(access),
+                    null,
+                    ReplicaSnapshot(
+                        old.generation,
+                        Base64.encode(checkpoint),
+                        listOf(ReplicaDocument(item.id, 1, item.sortKey(), Base64.encode(payload))),
+                    ),
+                )
+            )
+            val repository = EncryptedInboxCacheRepository(db.replicas, cipher, keys)
+            val expected = AppResult.Success(InboxCachePage(old, listOf(item), null))
+            assertEquals(expected, repository.observe(access, InboxCacheQuery.Page()).first())
+            assertEquals(AppResult.Success(null), repository.checkpoint(access))
+            assertEquals(
+                AppResult.Success(true),
+                repository.begin(initial.copy(generation = "account-generation"), null),
+            )
+            assertEquals(
+                expected,
+                repository.observe(access, InboxCacheQuery.Item(item.id)).first(),
+            )
+            val staged = initial.copy(generation = "account-generation")
+            val ready =
+                staged.copy(
+                    revision = 1,
+                    phase = InboxSyncPhase.CHANGES,
+                    cursor = "account-cursor",
+                    published = true,
+                    refreshedAt = now,
+                )
+            assertEquals(AppResult.Success(true), repository.commit(staged, ready, emptyList()))
+            // An empty complete replacement must not resurrect messages from the legacy table.
+            assertEquals(
+                AppResult.Success(InboxCachePage(ready, emptyList(), null)),
+                repository.observe(access, InboxCacheQuery.Page()).first(),
+            )
+            assertEquals(AppResult.Success(true), repository.clear(access))
+            assertEquals(
+                AppResult.Success(InboxCachePage(null, emptyList(), null)),
+                repository.observe(access, InboxCacheQuery.Page()).first(),
+            )
+            assertFalse(db.replicas.containsRecords("inbox/"))
+        } finally {
+            key.fill(0)
+            keys.close()
+            db.close()
+            directory.deleteRecursively()
+        }
+    }
+
+    @Test
+    fun missingKeysCannotBeReplacedWhileAnInactiveAccountStillHasEncryptedMessages() = runTest {
+        val directory = Files.createTempDirectory("inbox-inactive-key").toFile()
+        val db = createAppDatabase(directory)
+        val keys = MemoryCredentialStore()
+        try {
+            db.accounts.activate(access.sessionId, inboxReplicaScope(access).accountKey)
+            val repository = EncryptedInboxCacheRepository(db.replicas, AesGcmContentCipher(), keys)
+            assertEquals(AppResult.Success(true), repository.begin(initial, null))
+            keys.write(null)
+            val other =
+                access.copy(
+                    sessionId = "other-session",
+                    accountId = "other-account",
+                    companyId = "other-company",
+                )
+            db.accounts.activate(other.sessionId, inboxReplicaScope(other).accountKey)
+            assertIs<AppResult.Failed>(repository.begin(initial.copy(access = other), null))
+            assertNull(keys.read())
+            assertTrue(db.replicas.containsRecords("inbox/"))
+        } finally {
+            keys.close()
+            db.close()
+            directory.deleteRecursively()
+        }
+    }
+
+    @Test
+    fun copiedCiphertextStillRejectsAnotherAccountEvenIfItsRawStorageKeyIsRewritten() = runTest {
+        val directory = Files.createTempDirectory("inbox-owner-aad").toFile()
+        val db = createAppDatabase(directory)
+        val keys = MemoryCredentialStore()
+        try {
+            db.accounts.activate(access.sessionId, inboxReplicaScope(access).accountKey)
+            val repository = EncryptedInboxCacheRepository(db.replicas, AesGcmContentCipher(), keys)
+            assertEquals(AppResult.Success(true), repository.begin(initial, null))
+            val published =
+                initial.copy(
+                    revision = 1,
+                    phase = InboxSyncPhase.CHANGES,
+                    cursor = "cursor",
+                    published = true,
+                    refreshedAt = now,
+                )
+            assertEquals(
+                AppResult.Success(true),
+                repository.commit(initial, published, listOf(InboxReplicaEntry(item.id, 1, item))),
+            )
+            val original =
+                db.replicas.observe(inboxReplicaScope(access), inboxPartition(access)).first()
+            for (other in
+                listOf(
+                    access.copy(accountId = "other-account"),
+                    access.copy(audience = "https://other.example.test/"),
+                )) {
+                db.accounts.activate(other.sessionId, inboxReplicaScope(other).accountKey)
+                assertTrue(
+                    db.replicas.begin(
+                        inboxReplicaScope(other),
+                        inboxPartition(other),
+                        published.generation,
+                        "initial",
+                        null,
+                    )
+                )
+                assertTrue(
+                    db.replicas.commit(
+                        ReplicaHandle(
+                            inboxReplicaScope(other),
+                            inboxPartition(other),
+                            published.generation,
+                        ),
+                        0,
+                        original.checkpoint!!.payload,
+                        original.documents,
+                        true,
+                    )
+                )
+                assertEquals(
+                    FailureKind.Storage,
+                    assertIs<AppResult.Failed>(
+                            repository.observe(other, InboxCacheQuery.Page()).first()
+                        )
+                        .failure
+                        .kind,
+                )
+            }
+        } finally {
+            keys.close()
+            db.close()
+            directory.deleteRecursively()
+        }
+    }
+
+    @Test
     fun sqliteContainsCiphertextAndDetailUsesTheSamePublishedGenerationAsTheList() = runTest {
         val directory = Files.createTempDirectory("inbox-encryption").toFile()
         val db = createAppDatabase(directory)
         val keys = MemoryCredentialStore()
         try {
-            db.accounts.activate(access.sessionId)
+            db.accounts.activate(access.sessionId, inboxReplicaScope(access).accountKey)
             val repository = EncryptedInboxCacheRepository(db.replicas, AesGcmContentCipher(), keys)
             assertEquals(AppResult.Success(true), repository.begin(initial, null))
             val staged =
@@ -113,7 +367,7 @@ class EncryptedInboxCacheTest {
             )
             val raw =
                 db.replicas
-                    .observeDocument(access.sessionId, inboxPartition(access), item.id)
+                    .observeDocument(inboxReplicaScope(access), inboxPartition(access), item.id)
                     .first()
             assertFalse(raw.documents.single().payload!!.contains("Private"))
             assertFalse(raw.checkpoint!!.payload.contains("private-cursor"))
@@ -138,7 +392,7 @@ class EncryptedInboxCacheTest {
             var db = createAppDatabase(directory)
             val keys = MemoryCredentialStore()
             try {
-                db.accounts.activate(access.sessionId)
+                db.accounts.activate(access.sessionId, inboxReplicaScope(access).accountKey)
                 var repository =
                     EncryptedInboxCacheRepository(db.replicas, AesGcmContentCipher(), keys)
                 assertEquals(AppResult.Success(true), repository.begin(initial, null))
@@ -223,7 +477,7 @@ class EncryptedInboxCacheTest {
         val db = createAppDatabase(directory)
         val keys = MemoryCredentialStore()
         try {
-            db.accounts.activate(access.sessionId)
+            db.accounts.activate(access.sessionId, inboxReplicaScope(access).accountKey)
             val cipher = AesGcmContentCipher()
             val repository = EncryptedInboxCacheRepository(db.replicas, cipher, keys)
             repository.begin(initial, null)
@@ -242,12 +496,8 @@ class EncryptedInboxCacheTest {
                     access.copy(audience = "https://another.example.test/"),
                 )) {
                 assertEquals(
-                    FailureKind.Storage,
-                    assertIs<AppResult.Failed>(
-                            repository.observe(wrong, InboxCacheQuery.Page()).first()
-                        )
-                        .failure
-                        .kind,
+                    AppResult.Success(InboxCachePage(null, emptyList(), null)),
+                    repository.observe(wrong, InboxCacheQuery.Page()).first(),
                 )
             }
             val otherCompany =
@@ -271,7 +521,7 @@ class EncryptedInboxCacheTest {
         val db = createAppDatabase(directory)
         val keys = MemoryCredentialStore()
         try {
-            db.accounts.activate(access.sessionId)
+            db.accounts.activate(access.sessionId, inboxReplicaScope(access).accountKey)
             val repository = EncryptedInboxCacheRepository(db.replicas, AesGcmContentCipher(), keys)
             repository.begin(initial, null)
             keys.write(null)
@@ -282,7 +532,10 @@ class EncryptedInboxCacheTest {
             assertNull(keys.read())
             assertEquals(
                 initial.generation,
-                db.replicas.checkpoint(access.sessionId, inboxPartition(access))!!.handle.generation,
+                db.replicas
+                    .checkpoint(inboxReplicaScope(access), inboxPartition(access))!!
+                    .handle
+                    .generation,
             )
         } finally {
             db.close()
@@ -295,7 +548,7 @@ class EncryptedInboxCacheTest {
         val directory = Files.createTempDirectory("inbox-account-change").toFile()
         val db = createAppDatabase(directory)
         try {
-            db.accounts.activate(access.sessionId)
+            db.accounts.activate(access.sessionId, inboxReplicaScope(access).accountKey)
             val repository =
                 EncryptedInboxCacheRepository(
                     db.replicas,

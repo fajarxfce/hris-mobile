@@ -49,8 +49,10 @@ switches data and cursor atomically only when the replacement is complete. A rea
 
 ## Local access and storage
 
-Messages and checkpoints use AES-256-GCM. Associated data binds the session,
+Messages and checkpoints use AES-256-GCM. Associated data binds the stable
 account, API audience, company, generation, resource/version, and envelope purpose.
+`ReplicaScope` separately guards I/O with the currently admitted login. Replacing
+a session cannot authorize its old requests to publish into retained account data.
 Database indexes retain resource IDs and ordering metadata without message text
 or server cursors. Android Keystore, Apple Keychain, and the configured desktop
 credential manager protect the separate content-key record.
@@ -60,8 +62,23 @@ claim a fresh complete view. These timestamps do not expire locally owned messag
 Company/account/permission replacement stops the prior observer. Confirmed server
 revocation invalidates the projection. Cleanup is bounded and cannot replace the
 original denial with a storage error; list and detail retain the read gate through
-failed retries until an admitted sync catches up. Logout clears derived account
-data. An offline client learns new revocations only when it reconnects.
+failed retries until an admitted sync catches up. Logout hides account-owned
+messages. After the same account signs in and selects an admitted company, its
+saved facts can reopen without a download. A different account, API or company
+uses a different partition. An offline client learns new revocations only when it reconnects.
+
+The encrypted checkpoint retains its acquisition session separately from local
+ownership. A new login starts its own bootstrap without hiding published facts;
+it cannot reuse the previous credential-bound cursor. Changed permissions and a
+confirmed `sync_scope_changed` still invalidate the old projection. Live action
+preparation remains separate from permission to read a saved message.
+
+Upgrade retains the preceding session-bound ciphertext for offline reads in that
+same login. The repository reads that format only while no account projection is
+published. The first completed bootstrap publishes the account-owned format; a
+failed bootstrap keeps the previous view. Old-format data alone does not survive
+logging out before that first synchronization. Cleanup removes both formats for
+the current scope, so an empty or revoked replacement cannot resurrect old rows.
 
 The [selected workspace](workspace.md) and its authorization metadata are encrypted and
 restored after process termination. Renewing an unchanged workspace does not reset

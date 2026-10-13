@@ -27,7 +27,11 @@ class EncryptedWorkCalendarCacheRepository(
 
     override fun observe(access: WorkforceAccess) =
         safeStorageFlow(
-            replicas.observeDocument(access.sessionId, workCalendarPartition(access), "calendar"),
+            replicas.observeDocument(
+                ReplicaScope(access.sessionId),
+                workCalendarPartition(access),
+                "calendar",
+            ),
             mapValue = { page ->
                 val checkpoint = page.checkpoint
                 if (checkpoint == null) null
@@ -85,7 +89,10 @@ class EncryptedWorkCalendarCacheRepository(
         )
 
     override suspend fun generation(access: WorkforceAccess) = safeStorageCall {
-        replicas.checkpoint(access.sessionId, workCalendarPartition(access))?.handle?.generation
+        replicas
+            .checkpoint(ReplicaScope(access.sessionId), workCalendarPartition(access))
+            ?.handle
+            ?.generation
     }
 
     override suspend fun replace(
@@ -94,10 +101,15 @@ class EncryptedWorkCalendarCacheRepository(
         snapshot: WorkCalendarSnapshot?,
     ) = safeStorageCall {
         val partition = workCalendarPartition(access)
-        val previous = replicas.checkpoint(access.sessionId, partition)
+        val previous = replicas.checkpoint(ReplicaScope(access.sessionId), partition)
         if (previous?.handle?.generation != expectedGeneration) return@safeStorageCall false
         if (snapshot == null)
-            return@safeStorageCall replicas.replace(access.sessionId, partition, previous, null)
+            return@safeStorageCall replicas.replace(
+                ReplicaScope(access.sessionId),
+                partition,
+                previous,
+                null,
+            )
         require(
             sameWorkforceScope(access, snapshot.access) && snapshot.generation != expectedGeneration
         )
@@ -137,7 +149,7 @@ class EncryptedWorkCalendarCacheRepository(
                     "v1".encodeToByteArray(),
                 )
             replicas.replace(
-                access.sessionId,
+                ReplicaScope(access.sessionId),
                 partition,
                 previous,
                 ReplicaSnapshot(

@@ -40,7 +40,7 @@ class WorkCalendarCacheTest {
             val raw =
                 db.replicas
                     .observeDocument(
-                        f.access.sessionId,
+                        ReplicaScope(f.access.sessionId),
                         workCalendarPartition(f.access),
                         "calendar",
                     )

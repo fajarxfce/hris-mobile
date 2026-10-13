@@ -70,7 +70,7 @@ class OvertimeCacheTest {
             val raw =
                 db.replicas
                     .observeDocument(
-                        f.access.sessionId,
+                        ReplicaScope(f.access.sessionId),
                         overtimePartition(f.access, "request"),
                         "request",
                     )
@@ -109,14 +109,14 @@ class OvertimeCacheTest {
             val raw =
                 db.replicas
                     .observeDocument(
-                        f.access.sessionId,
+                        ReplicaScope(f.access.sessionId),
                         overtimePartition(f.access, "request"),
                         "request",
                     )
                     .first()
             assertTrue(
                 db.replicas.replace(
-                    f.access.sessionId,
+                    ReplicaScope(f.access.sessionId),
                     overtimePartition(f.access, "overview"),
                     null,
                     ReplicaSnapshot(

@@ -65,7 +65,12 @@ class AttendanceHistoryStorageTest {
                     ),
                 )
             assertTrue(
-                db.replicas.replace(f.access.sessionId, attendancePartition(f.access), null, legacy)
+                db.replicas.replace(
+                    ReplicaScope(f.access.sessionId),
+                    attendancePartition(f.access),
+                    null,
+                    legacy,
+                )
             )
             key.fill(0)
             val month = snapshot(AttendanceWindow.MONTHLY)
@@ -79,7 +84,7 @@ class AttendanceHistoryStorageTest {
             val raw =
                 db.replicas
                     .observe(
-                        f.access.sessionId,
+                        ReplicaScope(f.access.sessionId),
                         attendancePartition(f.access, AttendanceWindow.MONTHLY),
                         limit = 33,
                     )
@@ -115,10 +120,13 @@ class AttendanceHistoryStorageTest {
                     .first()
             )
             val recentCheckpoint =
-                db.replicas.checkpoint(f.access.sessionId, attendancePartition(f.access))
+                db.replicas.checkpoint(
+                    ReplicaScope(f.access.sessionId),
+                    attendancePartition(f.access),
+                )
             assertTrue(
                 db.replicas.replace(
-                    f.access.sessionId,
+                    ReplicaScope(f.access.sessionId),
                     attendancePartition(f.access),
                     recentCheckpoint,
                     ReplicaSnapshot(month.generation, raw.checkpoint!!.payload, raw.documents),
@@ -176,7 +184,7 @@ class AttendanceHistoryStorageTest {
             operation.join()
             assertNull(
                 db.replicas.checkpoint(
-                    f.access.sessionId,
+                    ReplicaScope(f.access.sessionId),
                     attendancePartition(f.access, AttendanceWindow.MONTHLY),
                 )
             )

@@ -198,7 +198,8 @@ in use cases. See [native identity](native-identity.md).
 
 Durable commands use a separate [storage contract](command-storage.md). Session
 persistence binds a stable audience/account key while cache activation clears only
-derived data. Features own encryption, command admission, replay and conflict policy;
+temporary session data. Account-owned read replicas and durable commands remain
+retained but require a current matching session to access them. Features own encryption, command admission, replay and conflict policy;
 the database only enforces ownership, immutability, bounds and atomic revision checks.
 
 Large file contents use the separate [blob store](blob-storage.md), with bounded

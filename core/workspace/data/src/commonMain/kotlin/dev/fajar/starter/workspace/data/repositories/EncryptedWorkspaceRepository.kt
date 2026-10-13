@@ -29,12 +29,14 @@ class EncryptedWorkspaceRepository(
 ) : WorkspaceRepository {
     override fun observe(sessionId: String) =
         safeStorageFlow(
-            flow { emitAll(records.observe(sessionId, PARTITION, limit = 1)) },
+            flow { emitAll(records.observe(ReplicaScope(sessionId), PARTITION, limit = 1)) },
             mapValue = { page -> page.checkpoint?.let { decodeWorkspace(sessionId, it) } },
         )
 
     override suspend fun current(sessionId: String) = safeStorageCall {
-        records.checkpoint(sessionId, PARTITION)?.let { decodeWorkspace(sessionId, it) }
+        records.checkpoint(ReplicaScope(sessionId), PARTITION)?.let {
+            decodeWorkspace(sessionId, it)
+        }
     }
 
     override suspend fun compareAndSet(
@@ -42,11 +44,16 @@ class EncryptedWorkspaceRepository(
         expected: Workspace?,
         updated: Workspace?,
     ) = safeStorageCall {
-        val previous = records.checkpoint(sessionId, PARTITION)
+        val previous = records.checkpoint(ReplicaScope(sessionId), PARTITION)
         val current = previous?.let { decodeWorkspace(sessionId, it) }
         if (current != expected) return@safeStorageCall false
         if (updated == null)
-            return@safeStorageCall records.replace(sessionId, PARTITION, previous, null)
+            return@safeStorageCall records.replace(
+                ReplicaScope(sessionId),
+                PARTITION,
+                previous,
+                null,
+            )
         require(updated.sessionId == sessionId && updated.audience == server.audience)
         val dto = updated.toRecord()
         require(dto.toWorkspace() == updated)
@@ -74,7 +81,7 @@ class EncryptedWorkspaceRepository(
                         bytes,
                     )
                 records.replace(
-                    sessionId,
+                    ReplicaScope(sessionId),
                     PARTITION,
                     previous,
                     ReplicaSnapshot(generation, Base64.encode(encrypted), emptyList()),
@@ -102,7 +109,7 @@ class EncryptedWorkspaceRepository(
 
     private suspend fun decodeWorkspace(sessionId: String, record: ReplicaCheckpoint): Workspace {
         require(record.published && record.revision == 0L)
-        require(record.handle.sessionId == sessionId && record.handle.partition == PARTITION)
+        require(record.handle.scope.sessionId == sessionId && record.handle.partition == PARTITION)
         val key = Base64.decode(requireNotNull(keys.read()) { "Workspace key is unavailable." })
         val bytes =
             try {

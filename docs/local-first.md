@@ -20,9 +20,12 @@ flowchart TD
   Commit --> Read
 ```
 
-Storage identity binds API audience, account, company and the current local
-session. Reading a different partition is never a fallback. Existing read
-snapshots use authenticated encryption; scope replacement cancels their owners.
+Inbox storage identity binds API audience, account and company independently of
+the local session. Database operations still require the active session, so a late
+request from the preceding login cannot mutate retained facts. Other feature
+snapshots still use temporary session ownership until their collection migration.
+Existing read snapshots use authenticated encryption; scope replacement cancels
+their observers. Reading another account/company is never a fallback.
 Local bootstrap does not await `/me`, token refresh or client-policy acquisition.
 An unchanged workspace renewal does not replace the navigation graph.
 
@@ -87,7 +90,7 @@ submitting it are separate capabilities.
 | Area | Local reads | Incremental sync |
 | --- | --- | --- |
 | Selected company | Encrypted selection, restored without an age limit | Foreground/worker revalidation |
-| Inbox | Published encrypted projection, including detail and pending actions | Implemented |
+| Inbox | Account-owned encrypted records survive a new login; list/detail share a published generation | Implemented |
 | Attendance / calendar | Last recent/monthly/calendar snapshots | Snapshot acquisition; server feed not registered |
 | Leave | Last selected overview and request detail | Server collections exist; mobile integration pending |
 | Overtime | Last selected overview and request detail | Server collection exists; mobile integration pending |
@@ -121,10 +124,10 @@ has these tables.
 
 ## Next increments
 
-1. Move derived read ownership from the local session ID to stable audience/account/
-   company partitions, with an explicit unlock/revocation policy across sign-in.
-   Current sign-in still clears derived snapshots; durable commands have separate
-   account ownership already.
+1. Extend stable audience/account/company ownership to the remaining read
+   projections. Inbox now retains account-owned facts across sign-in; workspace
+   admission and other last-view snapshots remain session-owned. Reauthentication
+   does not reuse an old request guard or old credential-bound feed cursor.
 2. Add mobile projections for the existing leave, overtime, expense and payroll
    collections. Store independently versioned facts, then query/filter locally;
    replace single last-view slots only as each collection is implemented.

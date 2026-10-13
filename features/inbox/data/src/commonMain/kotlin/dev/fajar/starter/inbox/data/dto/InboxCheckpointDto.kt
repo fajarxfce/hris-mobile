@@ -11,6 +11,7 @@ data class InboxCheckpointDto(
     val refreshedAt: String?,
     val expiresAt: String,
     val pollAt: String?,
+    val syncSessionId: String? = null,
 ) {
     override fun toString() = "InboxCheckpointDto([redacted])"
 }

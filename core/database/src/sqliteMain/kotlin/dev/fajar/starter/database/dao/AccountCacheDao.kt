@@ -22,9 +22,10 @@ abstract class AccountCacheDao {
 
     @Query("DELETE FROM transfers") protected abstract suspend fun clearTransfers()
 
-    @Query("DELETE FROM replica_heads") protected abstract suspend fun clearReplicaHeads()
+    @Query("DELETE FROM replica_heads WHERE ownerKey = ''")
+    protected abstract suspend fun clearReplicaHeads()
 
-    @Query("DELETE FROM replica_generations")
+    @Query("DELETE FROM replica_generations WHERE ownerKey = ''")
     protected abstract suspend fun clearReplicaGenerations()
 
     @Transaction

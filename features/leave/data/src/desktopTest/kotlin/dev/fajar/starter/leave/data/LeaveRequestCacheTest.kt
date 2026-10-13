@@ -76,7 +76,11 @@ class LeaveRequestCacheTest {
                 assertEquals(AppResult.Success(dense), repository.observeRequest(f.access).first())
                 val raw =
                     db.replicas
-                        .observe(f.access.sessionId, leaveRequestPartition(f.access), limit = 32)
+                        .observe(
+                            ReplicaScope(f.access.sessionId),
+                            leaveRequestPartition(f.access),
+                            limit = 32,
+                        )
                         .first()
                 assertEquals(23, raw.documents.size)
                 assertTrue(raw.documents.all { it.id == it.sortKey && !it.id.contains("2026") })
@@ -166,12 +170,16 @@ class LeaveRequestCacheTest {
             )
             val raw =
                 db.replicas
-                    .observe(f.access.sessionId, leaveRequestPartition(f.access), limit = 32)
+                    .observe(
+                        ReplicaScope(f.access.sessionId),
+                        leaveRequestPartition(f.access),
+                        limit = 32,
+                    )
                     .first()
             val incomplete =
                 object : ReplicaStore by db.replicas {
                     override fun observe(
-                        sessionId: String,
+                        scope: ReplicaScope,
                         partition: String,
                         after: String?,
                         limit: Int,

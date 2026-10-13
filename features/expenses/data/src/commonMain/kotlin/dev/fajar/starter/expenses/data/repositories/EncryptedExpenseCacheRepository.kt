@@ -28,7 +28,7 @@ class EncryptedExpenseCacheRepository(
     override fun observe(access: ExpenseAccess) =
         safeStorageFlow(
                 replicas.observe(
-                    access.sessionId,
+                    ReplicaScope(access.sessionId),
                     expensePartition(access, "overview"),
                     limit = EXPENSE_CACHE_MAXIMUM_CHUNKS + 1,
                 ),
@@ -61,7 +61,7 @@ class EncryptedExpenseCacheRepository(
 
     override suspend fun generation(access: ExpenseAccess) = safeStorageCall {
         replicas
-            .checkpoint(access.sessionId, expensePartition(access, "overview"))
+            .checkpoint(ReplicaScope(access.sessionId), expensePartition(access, "overview"))
             ?.handle
             ?.generation
     }
@@ -73,10 +73,15 @@ class EncryptedExpenseCacheRepository(
     ) = safeStorageCall {
         withContext(Dispatchers.Default) {
             val partition = expensePartition(access, "overview")
-            val previous = replicas.checkpoint(access.sessionId, partition)
+            val previous = replicas.checkpoint(ReplicaScope(access.sessionId), partition)
             if (previous?.handle?.generation != expectedGeneration) return@withContext false
             if (snapshot == null)
-                return@withContext replicas.replace(access.sessionId, partition, previous, null)
+                return@withContext replicas.replace(
+                    ReplicaScope(access.sessionId),
+                    partition,
+                    previous,
+                    null,
+                )
             require(
                 sameExpenseScope(access, snapshot.access) &&
                     snapshot.generation != expectedGeneration
@@ -101,7 +106,7 @@ class EncryptedExpenseCacheRepository(
                         bytes.fill(0)
                     }
                 currentCoroutineContext().ensureActive()
-                replicas.replace(access.sessionId, partition, previous, encoded)
+                replicas.replace(ReplicaScope(access.sessionId), partition, previous, encoded)
             } finally {
                 key.fill(0)
             }
@@ -111,7 +116,7 @@ class EncryptedExpenseCacheRepository(
     override fun observeDetails(access: ExpenseAccess) =
         safeStorageFlow(
                 replicas.observe(
-                    access.sessionId,
+                    ReplicaScope(access.sessionId),
                     expensePartition(access, "details"),
                     limit = EXPENSE_CACHE_MAXIMUM_CHUNKS + 1,
                 ),
@@ -144,7 +149,7 @@ class EncryptedExpenseCacheRepository(
 
     override suspend fun detailsGeneration(access: ExpenseAccess) = safeStorageCall {
         replicas
-            .checkpoint(access.sessionId, expensePartition(access, "details"))
+            .checkpoint(ReplicaScope(access.sessionId), expensePartition(access, "details"))
             ?.handle
             ?.generation
     }
@@ -156,10 +161,15 @@ class EncryptedExpenseCacheRepository(
     ) = safeStorageCall {
         withContext(Dispatchers.Default) {
             val partition = expensePartition(access, "details")
-            val previous = replicas.checkpoint(access.sessionId, partition)
+            val previous = replicas.checkpoint(ReplicaScope(access.sessionId), partition)
             if (previous?.handle?.generation != expectedGeneration) return@withContext false
             if (snapshot == null)
-                return@withContext replicas.replace(access.sessionId, partition, previous, null)
+                return@withContext replicas.replace(
+                    ReplicaScope(access.sessionId),
+                    partition,
+                    previous,
+                    null,
+                )
             require(
                 sameExpenseScope(access, snapshot.access) &&
                     snapshot.generation != expectedGeneration
@@ -184,7 +194,7 @@ class EncryptedExpenseCacheRepository(
                         bytes.fill(0)
                     }
                 currentCoroutineContext().ensureActive()
-                replicas.replace(access.sessionId, partition, previous, encoded)
+                replicas.replace(ReplicaScope(access.sessionId), partition, previous, encoded)
             } finally {
                 key.fill(0)
             }

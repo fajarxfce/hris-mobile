@@ -25,7 +25,7 @@ class EncryptedPayslipCacheRepository(
     override fun observe(access: PayrollAccess) =
         safeStorageFlow(
             replicas.observeDocument(
-                access.sessionId,
+                ReplicaScope(access.sessionId),
                 payslipPartition(access, "overview"),
                 "overview",
             ),
@@ -57,7 +57,7 @@ class EncryptedPayslipCacheRepository(
 
     override suspend fun generation(access: PayrollAccess) = safeStorageCall {
         replicas
-            .checkpoint(access.sessionId, payslipPartition(access, "overview"))
+            .checkpoint(ReplicaScope(access.sessionId), payslipPartition(access, "overview"))
             ?.handle
             ?.generation
     }
@@ -68,10 +68,15 @@ class EncryptedPayslipCacheRepository(
         snapshot: PayslipSnapshot<PayslipOverview>?,
     ) = safeStorageCall {
         val partition = payslipPartition(access, "overview")
-        val previous = replicas.checkpoint(access.sessionId, partition)
+        val previous = replicas.checkpoint(ReplicaScope(access.sessionId), partition)
         if (previous?.handle?.generation != expectedGeneration) return@safeStorageCall false
         if (snapshot == null)
-            return@safeStorageCall replicas.replace(access.sessionId, partition, previous, null)
+            return@safeStorageCall replicas.replace(
+                ReplicaScope(access.sessionId),
+                partition,
+                previous,
+                null,
+            )
         require(
             samePayrollScope(access, snapshot.access) && snapshot.generation != expectedGeneration
         )
@@ -88,7 +93,7 @@ class EncryptedPayslipCacheRepository(
                     bytes.fill(0)
                 }
             currentCoroutineContext().ensureActive()
-            replicas.replace(access.sessionId, partition, previous, encoded)
+            replicas.replace(ReplicaScope(access.sessionId), partition, previous, encoded)
         } finally {
             key.fill(0)
         }
@@ -97,7 +102,7 @@ class EncryptedPayslipCacheRepository(
     override fun observeDetails(access: PayrollAccess) =
         safeStorageFlow(
             replicas.observeDocument(
-                access.sessionId,
+                ReplicaScope(access.sessionId),
                 payslipPartition(access, "details"),
                 "details",
             ),
@@ -127,7 +132,7 @@ class EncryptedPayslipCacheRepository(
 
     override suspend fun detailsGeneration(access: PayrollAccess) = safeStorageCall {
         replicas
-            .checkpoint(access.sessionId, payslipPartition(access, "details"))
+            .checkpoint(ReplicaScope(access.sessionId), payslipPartition(access, "details"))
             ?.handle
             ?.generation
     }
@@ -138,10 +143,15 @@ class EncryptedPayslipCacheRepository(
         snapshot: PayslipSnapshot<PayslipView>?,
     ) = safeStorageCall {
         val partition = payslipPartition(access, "details")
-        val previous = replicas.checkpoint(access.sessionId, partition)
+        val previous = replicas.checkpoint(ReplicaScope(access.sessionId), partition)
         if (previous?.handle?.generation != expectedGeneration) return@safeStorageCall false
         if (snapshot == null)
-            return@safeStorageCall replicas.replace(access.sessionId, partition, previous, null)
+            return@safeStorageCall replicas.replace(
+                ReplicaScope(access.sessionId),
+                partition,
+                previous,
+                null,
+            )
         require(
             samePayrollScope(access, snapshot.access) && snapshot.generation != expectedGeneration
         )
@@ -158,7 +168,7 @@ class EncryptedPayslipCacheRepository(
                     bytes.fill(0)
                 }
             currentCoroutineContext().ensureActive()
-            replicas.replace(access.sessionId, partition, previous, encoded)
+            replicas.replace(ReplicaScope(access.sessionId), partition, previous, encoded)
         } finally {
             key.fill(0)
         }

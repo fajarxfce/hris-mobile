@@ -64,7 +64,7 @@ class PayslipCacheTest {
             val raw =
                 db.replicas
                     .observeDocument(
-                        f.access.sessionId,
+                        ReplicaScope(f.access.sessionId),
                         payslipPartition(f.access, "details"),
                         "details",
                     )

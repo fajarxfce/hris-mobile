@@ -77,16 +77,20 @@ fun validateInboxActionSnapshot(
 
 /** Renewing a lease does not change the resource scope or require another bootstrap. */
 fun sameInboxScope(first: InboxAccess, second: InboxAccess): Boolean =
-    first.sessionId == second.sessionId &&
-        first.accountId == second.accountId &&
+    sameStoredInboxScope(first, second) &&
+        first.sessionId == second.sessionId &&
+        first.sessionExpiresAt == second.sessionExpiresAt
+
+/** Credential rotation/replacement does not change who owns a published local projection. */
+fun sameStoredInboxScope(first: InboxAccess, second: InboxAccess): Boolean =
+    first.accountId == second.accountId &&
         first.audience == second.audience &&
         first.companyId == second.companyId &&
-        first.permissions == second.permissions &&
-        first.sessionExpiresAt == second.sessionExpiresAt
+        first.permissions == second.permissions
 
 /** Reading a saved message requires its current local owner, not an unexpired sync cursor. */
 fun validateStoredInbox(access: InboxAccess, checkpoint: InboxCheckpoint?): AppResult<Unit> =
-    if (checkpoint != null && !sameInboxScope(checkpoint.access, access))
+    if (checkpoint != null && !sameStoredInboxScope(checkpoint.access, access))
         inboxCommandFailure("client.inbox_scope_changed", FailureKind.AccessDenied)
     else AppResult.Success(Unit)
 

@@ -834,3 +834,32 @@ were inspected. Expiry timing is exercised by the automated tests.
 
 After notice, the APK was installed on the authorized Android 16 phone with
 `--install-only`. No interaction with that phone's application was performed.
+
+
+## Account-owned Inbox replication
+
+On 14 October 2026, root checks passed with 1,195 JVM/desktop tests, including
+assembled application flows. Chromium passed 24 database, 49 Inbox domain and
+three Inbox transport cases. Android dev assembly passed. The new shared storage
+contract separates the active session guard from stable API/account ownership;
+Room and IndexedDB migrations preserve published/staging rows and tombstones.
+Tests cover logout/new-login retention, account/API/company isolation, late writes,
+atomic checkpoint publication, missing keys for inactive accounts, copied ciphertext,
+old-format reads, and permission denial during failed cleanup.
+
+API 35 emulator acceptance upgraded the existing schema 8 database to schema 9
+without clearing application data. Inspection confirmed the preceding Inbox
+ciphertext was retained byte-for-byte. The new account projection and its detail
+opened after an offline cold start. Logout removed temporary rows while retaining
+the encrypted account records. After sign-in, before company selection or another
+feed acquisition, the stored account/ciphertext matched and the local session ID
+was different. Selecting the admitted company and restarting offline reopened the
+saved Inbox. Screenshots were inspected; no AndroidRuntime or SQLite error appeared
+in the inspected device log. Network access was restored after the probes.
+
+After notice, the 29,229,579-byte APK was installed on the authorized Android 16
+phone at 00:39:19 WIB using `--skip-build --install-only`. Its SHA-256 is
+`ce48523c1b76f74631f4d59d6e30ee079fc2eac15e1e2108875844ee88461f76`.
+The phone application was not opened or driven. Other feature collections,
+persistent offline drafts, and a shared sync-status presentation remain pending;
+these checks do not claim complete offline coverage or measure memory/frame time.

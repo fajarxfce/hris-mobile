@@ -275,3 +275,18 @@ semantics and disposal tests also exist at
 Both repositories passed root checks, application Chromium tests and Android dev
 assembly. Employee routes, query/filter ownership, company access and transport
 remain in HRIS Mobile.
+
+
+## Stable read ownership
+
+`ReplicaScope`, composite owner keys, Room/IndexedDB migrations and their shared
+regression contract are also present in [Compose Fluent Starter c199bab](https://github.com/fajarxfce/compose-fluent-starter/commit/c199bab). Session changes
+hide account-owned records without deleting them, and stale request guards cannot
+read or mutate a replacement session's data. Temporary session projections retain
+their explicit cleanup behavior. Storage rules distinguish local ownership,
+freshness, cursor retention and live operation admission.
+
+The starter passed root checks with 279 JVM/desktop tests, 24 database Chromium
+cases and Android dev assembly. HRIS passed its own root/browser checks and exercised
+the integration on Android. Inbox encryption formats, legacy-read compatibility,
+server cursor replacement and company/permission policy remain in HRIS Mobile.

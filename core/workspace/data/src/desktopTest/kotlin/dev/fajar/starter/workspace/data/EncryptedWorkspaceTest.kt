@@ -109,7 +109,11 @@ class EncryptedWorkspaceTest {
                 AppResult.Success(true),
                 repository.compareAndSet(workspace.sessionId, null, workspace),
             )
-            val raw = database.replicas.checkpoint(workspace.sessionId, "workspace/selected")!!
+            val raw =
+                database.replicas.checkpoint(
+                    ReplicaScope(workspace.sessionId),
+                    "workspace/selected",
+                )!!
             assertFalse(raw.payload.contains(workspace.company.name))
             assertFalse(raw.payload.contains("people.self.read"))
             database.close()
@@ -203,7 +207,11 @@ class EncryptedWorkspaceTest {
                 )
             repository.compareAndSet(workspace.sessionId, null, workspace)
             val key = keys.read()
-            val original = database.replicas.checkpoint(workspace.sessionId, "workspace/selected")!!
+            val original =
+                database.replicas.checkpoint(
+                    ReplicaScope(workspace.sessionId),
+                    "workspace/selected",
+                )!!
             keys.write(null)
             assertEquals(
                 FailureKind.Storage,
@@ -217,7 +225,7 @@ class EncryptedWorkspaceTest {
             assertEquals(AppResult.Success(workspace), repository.current(workspace.sessionId))
             assertTrue(
                 database.replicas.replace(
-                    workspace.sessionId,
+                    ReplicaScope(workspace.sessionId),
                     "workspace/selected",
                     original,
                     ReplicaSnapshot("copied-generation", original.payload, emptyList()),

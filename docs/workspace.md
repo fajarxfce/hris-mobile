@@ -67,6 +67,7 @@ completed runs and device observations.
 First sign-in and selection of a new company need the server. Previously unfetched
 data is unavailable offline. Personal profile and coworker directory currently
 use live reads; existing feature snapshots cover the last acquired view, not all
-history. New sign-in still changes the local session and clears derived read
-replicas. Stable account-owned replicas across reauthentication remain planned.
+history. New sign-in changes the local session and clears temporary read
+replicas. Inbox uses separate account-owned records that survive reauthentication;
+other feature projections still need that migration.
 An offline device cannot discover a new revocation before reconnecting.

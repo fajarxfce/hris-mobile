@@ -44,17 +44,21 @@ class ReplicaStoreTest {
             assertEquals("existing", database.inbox.observe().first().single().id)
             assertTrue(
                 database.replicas.begin(
-                    "existing-session",
+                    ReplicaScope("existing-session"),
                     "company/inbox",
                     "new-generation",
                     "sealed-checkpoint",
                     null,
                 )
             )
-            assertNotNull(database.replicas.checkpoint("existing-session", "company/inbox"))
+            assertNotNull(
+                database.replicas.checkpoint(ReplicaScope("existing-session"), "company/inbox")
+            )
             database.accounts.activate(null)
             assertTrue(database.inbox.observe().first().isEmpty())
-            assertNull(database.replicas.checkpoint("existing-session", "company/inbox"))
+            assertNull(
+                database.replicas.checkpoint(ReplicaScope("existing-session"), "company/inbox")
+            )
         } finally {
             database.close()
             directory.deleteRecursively()
@@ -73,6 +77,8 @@ class ReplicaStoreTest {
             verifyReplicaIsolation(database)
             verifyReplicaCancellation(database)
             verifyReplicaPaginationAndBounds(database)
+            verifyReplicaAccountOwnership(database)
+            verifyReplicaAccountReplacement(database)
             verifyReplicaSnapshotReplacement(database)
             verifyReplicaSnapshotCancellationAndBounds(database)
         } finally {
@@ -85,12 +91,12 @@ class ReplicaStoreTest {
     fun restartResumesStagingWithoutExposingPartialContent() = runTest {
         val directory = Files.createTempDirectory("replica-restart").toFile()
         var database = createAppDatabase(directory)
-        val handle = ReplicaHandle("session", "company/inbox", "staging")
+        val handle = ReplicaHandle(ReplicaScope("session", "account"), "company/inbox", "staging")
         try {
-            database.accounts.activate(handle.sessionId)
+            database.accounts.activate(handle.scope.sessionId, handle.scope.accountKey)
             assertTrue(
                 database.replicas.begin(
-                    handle.sessionId,
+                    handle.scope,
                     handle.partition,
                     handle.generation,
                     "bootstrap",
@@ -101,22 +107,23 @@ class ReplicaStoreTest {
             assertTrue(database.replicas.commit(handle, 0, "next-page", listOf(document), false))
             database.close()
             database = createAppDatabase(directory)
-            database.accounts.activate(handle.sessionId)
+            val resumed = handle.copy(scope = handle.scope.copy(sessionId = "reopened-login"))
+            database.accounts.activate(resumed.scope.sessionId, resumed.scope.accountKey)
             assertTrue(
                 database.replicas
-                    .observe(handle.sessionId, handle.partition)
+                    .observe(resumed.scope, resumed.partition)
                     .first()
                     .documents
                     .isEmpty()
             )
             assertEquals(
                 "next-page",
-                database.replicas.checkpoint(handle.sessionId, handle.partition)!!.payload,
+                database.replicas.checkpoint(resumed.scope, resumed.partition)!!.payload,
             )
-            assertTrue(database.replicas.commit(handle, 1, "caught-up", emptyList(), true))
+            assertTrue(database.replicas.commit(resumed, 1, "caught-up", emptyList(), true))
             assertEquals(
                 document,
-                database.replicas.document(handle.sessionId, handle.partition, document.id),
+                database.replicas.document(resumed.scope, resumed.partition, document.id),
             )
         } finally {
             database.close()

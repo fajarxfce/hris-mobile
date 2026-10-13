@@ -86,7 +86,7 @@ suspend fun decodeExpenseCache(
     val checkpoint = requireNotNull(page.checkpoint)
     require(checkpoint.published && checkpoint.revision == 0L && checkpoint.payload.length <= 4096)
     require(
-        checkpoint.handle.sessionId == access.sessionId &&
+        checkpoint.handle.scope.sessionId == access.sessionId &&
             checkpoint.handle.partition == expensePartition(access, view)
     )
     require(page.documents.size in 1..EXPENSE_CACHE_MAXIMUM_CHUNKS)

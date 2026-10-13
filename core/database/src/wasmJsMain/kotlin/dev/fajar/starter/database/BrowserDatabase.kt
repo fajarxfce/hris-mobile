@@ -100,7 +100,7 @@ private class IndexedDbInboxStore(
 
 @JsFun(
     """(name) => new Promise((resolve, reject) => {
-    const request = indexedDB.open(name, 7);
+    const request = indexedDB.open(name, 8);
     let settled = false;
     request.onupgradeneeded = event => {
         const db = request.result;
@@ -114,12 +114,30 @@ private class IndexedDbInboxStore(
             commands.createIndex('resource', ['accountKey', 'partition', 'resourceId'], {unique:true});
             commands.createIndex('ordered', ['accountKey', 'partition', 'sortKey'], {unique:true});
         }
-        if (event.oldVersion < 5) {
-            db.createObjectStore('replica_heads', {keyPath:'partition'});
-            db.createObjectStore('replica_generations', {keyPath:['partition', 'generation']});
-            const replicas = db.createObjectStore('replica_documents', {keyPath:['partition', 'generation', 'id']});
-            replicas.createIndex('ordered', ['partition', 'generation', 'sortKey'], {unique:true});
-            replicas.createIndex('visible', ['partition', 'generation', 'visibleSort']);
+        if (event.oldVersion < 8) {
+            for (const [name, keyPath] of [
+                ['replica_heads', ['ownerKey', 'partition']],
+                ['replica_generations', ['ownerKey', 'partition', 'generation']],
+                ['replica_documents', ['ownerKey', 'partition', 'generation', 'id']]
+            ]) {
+                const previous = db.objectStoreNames.contains(name) ? request.transaction.objectStore(name) : null;
+                if (previous) previous.name = name + '_session';
+                const store = db.createObjectStore(name, {keyPath});
+                if (name === 'replica_documents') {
+                    store.createIndex('ordered', ['ownerKey', 'partition', 'generation', 'sortKey'], {unique:true});
+                    store.createIndex('visible', ['ownerKey', 'partition', 'generation', 'visibleSort']);
+                }
+                if (previous) {
+                    const rows = previous.openCursor();
+                    rows.onsuccess = () => {
+                        const row = rows.result;
+                        if (!row) { db.deleteObjectStore(previous.name); return; }
+                        const {sessionId, ...record} = row.value;
+                        store.put({...record, ownerKey:''});
+                        row.continue();
+                    };
+                }
+            }
         }
         if (event.oldVersion < 4) {
             db.createObjectStore('transfers', {keyPath: 'id'});
@@ -188,7 +206,10 @@ private external fun closeDatabase(database: Promise<JsAny>)
     const scopes = tx.objectStore('account_scope'), current = scopes.get('current'), principal = scopes.get('command-account');
     principal.onsuccess = () => {
         if (current.result === scope && (principal.result ?? null) === account) return;
-        for (const name of ['dashboard', 'activity_preferences', 'dashboard_outbox', 'inbox', 'transfers', 'transfer_chunks', 'replica_heads', 'replica_generations', 'replica_documents']) tx.objectStore(name).clear();
+        for (const name of ['dashboard', 'activity_preferences', 'dashboard_outbox', 'inbox', 'transfers', 'transfer_chunks']) tx.objectStore(name).clear();
+        tx.objectStore('replica_heads').delete(IDBKeyRange.bound(['', ''], ['', '\uffff']));
+        tx.objectStore('replica_generations').delete(IDBKeyRange.bound(['', '', ''], ['', '\uffff', '\uffff']));
+        tx.objectStore('replica_documents').delete(IDBKeyRange.bound(['', '', '', ''], ['', '\uffff', '\uffff', '\uffff']));
         scopes.put(scope, 'current');
         scopes.put(account, 'command-account');
     };

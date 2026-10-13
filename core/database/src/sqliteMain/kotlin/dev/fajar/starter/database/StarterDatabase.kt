@@ -33,7 +33,7 @@ import dev.fajar.starter.database.entities.InboxEntity
             BlobEntity::class,
             BlobChunkEntity::class,
         ],
-    version = 8,
+    version = 9,
     exportSchema = true,
     autoMigrations =
         [

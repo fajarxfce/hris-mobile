@@ -100,10 +100,18 @@ class SyncInbox(
                 is AppResult.Failed -> return result
                 is AppResult.Success -> result.value
             }
-        if (checkpoint != null && !sameInboxScope(checkpoint.access, access)) {
-            val cleared = cache.clear(access)
-            if (cleared is AppResult.Failed) return cleared
+        if (checkpoint != null && !sameStoredInboxScope(checkpoint.access, access)) {
+            val cleared = withTimeoutOrNull(2.seconds) { cache.clear(access) }
+            if (cleared !is AppResult.Success || !cleared.value) return staleInboxScope()
             checkpoint = null
+        } else if (checkpoint != null && !sameInboxScope(checkpoint.access, access)) {
+            // A replacement login needs its own cursor, while the same owner's facts stay visible.
+            val replacement = initialInboxCheckpoint(access, Uuid.random().toString(), clock.now())
+            when (val started = cache.begin(replacement, checkpoint.generation)) {
+                is AppResult.Failed -> return started
+                is AppResult.Success -> if (!started.value) return staleInboxScope()
+            }
+            checkpoint = replacement
         }
         var restarted = false
         repeat(10) {

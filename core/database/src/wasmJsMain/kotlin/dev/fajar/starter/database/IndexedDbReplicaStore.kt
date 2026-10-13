@@ -13,31 +13,38 @@ internal class IndexedDbReplicaStore(
     private val changes: MutableSharedFlow<Unit>,
     private val database: suspend () -> JsAny,
 ) : ReplicaStore {
-    override suspend fun checkpoint(sessionId: String, partition: String): ReplicaCheckpoint? {
-        validateReplicaKey(sessionId, partition)
+    override suspend fun containsRecords(partitionPrefix: String): Boolean {
+        require(partitionPrefix.length in 1..160 && partitionPrefix.all { it in '!'..'~' })
+        return containsReplicaRecords(database(), partitionPrefix).await<JsBoolean>().toBoolean()
+    }
+
+    override suspend fun checkpoint(scope: ReplicaScope, partition: String): ReplicaCheckpoint? {
+        validateReplicaKey(scope, partition)
         return Json.decodeFromString(
-            replicaCheckpoint(database(), sessionId, partition).await<JsString>().toString()
+            replicaCheckpoint(database(), Json.encodeToString(scope), partition)
+                .await<JsString>()
+                .toString()
         )
     }
 
-    override fun observeCheckpoint(sessionId: String, partition: String) =
-        changes.map { checkpoint(sessionId, partition) }.distinctUntilChanged()
+    override fun observeCheckpoint(scope: ReplicaScope, partition: String) =
+        changes.map { checkpoint(scope, partition) }.distinctUntilChanged()
 
     override suspend fun replace(
-        sessionId: String,
+        scope: ReplicaScope,
         partition: String,
         expected: ReplicaCheckpoint?,
         snapshot: ReplicaSnapshot?,
     ): Boolean {
         val retained = snapshot?.copy(documents = snapshot.documents.toList())
-        validateReplicaReplacement(sessionId, partition, expected, retained)
+        validateReplicaReplacement(scope, partition, expected, retained)
         val db = database()
         currentCoroutineContext().ensureActive()
         return withContext(NonCancellable) {
             val changed =
                 replaceReplica(
                         db,
-                        sessionId,
+                        Json.encodeToString(scope),
                         partition,
                         Json.encodeToString(expected),
                         Json.encodeToString(retained),
@@ -50,13 +57,13 @@ internal class IndexedDbReplicaStore(
     }
 
     override suspend fun begin(
-        sessionId: String,
+        scope: ReplicaScope,
         partition: String,
         generation: String,
         checkpoint: String,
         expectedGeneration: String?,
     ): Boolean {
-        validateReplicaKey(sessionId, partition)
+        validateReplicaKey(scope, partition)
         validateReplicaGeneration(generation)
         validateReplicaCheckpoint(checkpoint)
         val db = database()
@@ -64,7 +71,14 @@ internal class IndexedDbReplicaStore(
         // An admitted IndexedDB transaction finishes atomically even if its caller is cancelled.
         return withContext(NonCancellable) {
             val changed =
-                beginReplica(db, sessionId, partition, generation, checkpoint, expectedGeneration)
+                beginReplica(
+                        db,
+                        Json.encodeToString(scope),
+                        partition,
+                        generation,
+                        checkpoint,
+                        expectedGeneration,
+                    )
                     .await<JsBoolean>()
                     .toBoolean()
             if (changed) changes.tryEmit(Unit)
@@ -79,7 +93,7 @@ internal class IndexedDbReplicaStore(
         documents: List<ReplicaDocument>,
         publish: Boolean,
     ): Boolean {
-        validateReplicaKey(handle.sessionId, handle.partition)
+        validateReplicaKey(handle.scope, handle.partition)
         validateReplicaGeneration(handle.generation)
         validateReplicaCheckpoint(checkpoint)
         val batch = documents.toList()
@@ -103,26 +117,33 @@ internal class IndexedDbReplicaStore(
         }
     }
 
-    override fun observe(sessionId: String, partition: String, after: String?, limit: Int) =
+    override fun observe(scope: ReplicaScope, partition: String, after: String?, limit: Int) =
         changes
             .map {
-                validateReplicaKey(sessionId, partition)
+                validateReplicaKey(scope, partition)
                 validateReplicaPage(after, limit)
                 Json.decodeFromString<ReplicaPage>(
-                    replicaPage(database(), sessionId, partition, after, limit, null)
+                    replicaPage(
+                            database(),
+                            Json.encodeToString(scope),
+                            partition,
+                            after,
+                            limit,
+                            null,
+                        )
                         .await<JsString>()
                         .toString()
                 )
             }
             .distinctUntilChanged()
 
-    override fun observeDocument(sessionId: String, partition: String, id: String) =
+    override fun observeDocument(scope: ReplicaScope, partition: String, id: String) =
         changes
             .map {
-                validateReplicaKey(sessionId, partition)
+                validateReplicaKey(scope, partition)
                 validateReplicaGeneration(id)
                 Json.decodeFromString<ReplicaPage>(
-                    replicaPage(database(), sessionId, partition, null, 1, id)
+                    replicaPage(database(), Json.encodeToString(scope), partition, null, 1, id)
                         .await<JsString>()
                         .toString()
                 )
@@ -130,23 +151,28 @@ internal class IndexedDbReplicaStore(
             .distinctUntilChanged()
 
     override suspend fun document(
-        sessionId: String,
+        scope: ReplicaScope,
         partition: String,
         id: String,
     ): ReplicaDocument? {
-        validateReplicaKey(sessionId, partition)
+        validateReplicaKey(scope, partition)
         validateReplicaGeneration(id)
         return Json.decodeFromString(
-            replicaDocument(database(), sessionId, partition, id).await<JsString>().toString()
+            replicaDocument(database(), Json.encodeToString(scope), partition, id)
+                .await<JsString>()
+                .toString()
         )
     }
 
-    override suspend fun clear(sessionId: String, partition: String): Boolean {
-        validateReplicaKey(sessionId, partition)
+    override suspend fun clear(scope: ReplicaScope, partition: String): Boolean {
+        validateReplicaKey(scope, partition)
         val db = database()
         currentCoroutineContext().ensureActive()
         return withContext(NonCancellable) {
-            val changed = clearReplica(db, sessionId, partition).await<JsBoolean>().toBoolean()
+            val changed =
+                clearReplica(db, Json.encodeToString(scope), partition)
+                    .await<JsBoolean>()
+                    .toBoolean()
             if (changed) changes.tryEmit(Unit)
             changed
         }
@@ -154,20 +180,39 @@ internal class IndexedDbReplicaStore(
 }
 
 @JsFun(
-    """(db, sessionId, partition) => new Promise((resolve, reject) => {
+    """(db, prefix) => new Promise((resolve, reject) => {
+    const tx = db.transaction('replica_generations', 'readonly');
+    let found = false;
+    const rows = tx.objectStore('replica_generations').openKeyCursor();
+    rows.onsuccess = () => {
+        const row = rows.result;
+        if (!row) return;
+        if (row.key[1].startsWith(prefix)) found = true;
+        else row.continue();
+    };
+    tx.oncomplete = () => resolve(found);
+    tx.onabort = () => reject(tx.error || new Error('Replica existence read failed.'));
+})"""
+)
+private external fun containsReplicaRecords(db: JsAny, prefix: String): Promise<JsBoolean>
+
+@JsFun(
+    """(db, scopeJson, partition) => new Promise((resolve, reject) => {
+    const scope = JSON.parse(scopeJson), {sessionId, accountKey = null} = scope, ownerKey = accountKey ?? '';
     const tx = db.transaction(['account_scope', 'replica_heads', 'replica_generations'], 'readonly');
     let value = null;
     const owner = tx.objectStore('account_scope').get('current');
-    owner.onsuccess = () => {
-        if (owner.result !== sessionId) return;
-        const head = tx.objectStore('replica_heads').get(partition);
+    const account = tx.objectStore('account_scope').get('command-account');
+    account.onsuccess = () => {
+        if (owner.result !== sessionId || (accountKey != null && account.result !== accountKey)) return;
+        const head = tx.objectStore('replica_heads').get([ownerKey, partition]);
         head.onsuccess = () => {
             if (!head.result) return;
             const generation = head.result.stagingGeneration ?? head.result.activeGeneration;
             if (generation == null) return;
-            const row = tx.objectStore('replica_generations').get([partition, generation]);
+            const row = tx.objectStore('replica_generations').get([ownerKey, partition, generation]);
             row.onsuccess = () => {
-                if (row.result) value = {handle:{sessionId, partition, generation}, revision:row.result.revision, payload:row.result.checkpoint, published:head.result.activeGeneration === generation};
+                if (row.result) value = {handle:{scope, partition, generation}, revision:row.result.revision, payload:row.result.checkpoint, published:head.result.activeGeneration === generation};
             };
         };
     };
@@ -177,50 +222,52 @@ internal class IndexedDbReplicaStore(
 )
 private external fun replicaCheckpoint(
     db: JsAny,
-    sessionId: String,
+    scope: String,
     partition: String,
 ): Promise<JsString>
 
 @JsFun(
-    """(db, sessionId, partition, expectedJson, snapshotJson) => new Promise((resolve, reject) => {
+    """(db, scopeJson, partition, expectedJson, snapshotJson) => new Promise((resolve, reject) => {
+    const scope = JSON.parse(scopeJson), {sessionId, accountKey = null} = scope, ownerKey = accountKey ?? '';
     const expected = JSON.parse(expectedJson), snapshot = JSON.parse(snapshotJson);
     const tx = db.transaction(['account_scope', 'replica_heads', 'replica_generations', 'replica_documents'], 'readwrite');
     const heads = tx.objectStore('replica_heads'), generations = tx.objectStore('replica_generations'), documents = tx.objectStore('replica_documents');
     let changed = false;
     const replace = current => {
         if (current == null ? expected != null :
-            expected == null || expected.handle.sessionId !== sessionId ||
+            expected == null || expected.handle.scope.sessionId !== sessionId || (expected.handle.scope.accountKey ?? null) !== accountKey ||
             expected.handle.partition !== partition || expected.handle.generation !== current.generation ||
             expected.revision !== current.revision || expected.payload !== current.checkpoint ||
             expected.published !== current.published) return;
         const write = () => {
-            heads.delete(partition);
-            generations.delete(IDBKeyRange.bound([partition, ''], [partition, '\uffff']));
-            documents.delete(IDBKeyRange.bound([partition, '', ''], [partition, '\uffff', '\uffff']));
+            heads.delete([ownerKey, partition]);
+            generations.delete(IDBKeyRange.bound([ownerKey, partition, ''], [ownerKey, partition, '\uffff']));
+            documents.delete(IDBKeyRange.bound([ownerKey, partition, '', ''], [ownerKey, partition, '\uffff', '\uffff']));
             if (snapshot != null) {
                 const {generation, checkpoint} = snapshot;
-                generations.put({partition, generation, sessionId, revision:0, checkpoint});
+                generations.put({ownerKey, partition, generation, revision:0, checkpoint});
                 for (const item of snapshot.documents) {
-                    documents.put({...item, partition, generation, visibleSort:item.payload == null ? undefined : item.sortKey});
+                    documents.put({...item, ownerKey, partition, generation, visibleSort:item.payload == null ? undefined : item.sortKey});
                 }
-                heads.put({partition, activeGeneration:generation, stagingGeneration:null});
+                heads.put({ownerKey, partition, activeGeneration:generation, stagingGeneration:null});
             }
             changed = true;
         };
         if (snapshot == null) write();
         else {
-            const existing = generations.get([partition, snapshot.generation]);
+            const existing = generations.get([ownerKey, partition, snapshot.generation]);
             existing.onsuccess = () => { if (!existing.result) write(); };
         }
     };
     const owner = tx.objectStore('account_scope').get('current');
-    owner.onsuccess = () => {
-        if (owner.result !== sessionId) return;
-        const head = heads.get(partition);
+    const account = tx.objectStore('account_scope').get('command-account');
+    account.onsuccess = () => {
+        if (owner.result !== sessionId || (accountKey != null && account.result !== accountKey)) return;
+        const head = heads.get([ownerKey, partition]);
         head.onsuccess = () => {
             const generation = head.result?.stagingGeneration ?? head.result?.activeGeneration;
             if (generation == null) { replace(null); return; }
-            const row = generations.get([partition, generation]);
+            const row = generations.get([ownerKey, partition, generation]);
             row.onsuccess = () => {
                 if (row.result) replace({...row.result, published:head.result.activeGeneration === generation});
             };
@@ -232,33 +279,35 @@ private external fun replicaCheckpoint(
 )
 private external fun replaceReplica(
     db: JsAny,
-    sessionId: String,
+    scope: String,
     partition: String,
     expected: String,
     snapshot: String,
 ): Promise<JsBoolean>
 
 @JsFun(
-    """(db, sessionId, partition, generation, checkpoint, expected) => new Promise((resolve, reject) => {
+    """(db, scopeJson, partition, generation, checkpoint, expected) => new Promise((resolve, reject) => {
+    const scope = JSON.parse(scopeJson), {sessionId, accountKey = null} = scope, ownerKey = accountKey ?? '';
     const tx = db.transaction(['account_scope', 'replica_heads', 'replica_generations', 'replica_documents'], 'readwrite');
     const heads = tx.objectStore('replica_heads'), generations = tx.objectStore('replica_generations'), documents = tx.objectStore('replica_documents');
     let changed = false;
     const owner = tx.objectStore('account_scope').get('current');
-    owner.onsuccess = () => {
-        if (owner.result !== sessionId) return;
-        const head = heads.get(partition);
+    const account = tx.objectStore('account_scope').get('command-account');
+    account.onsuccess = () => {
+        if (owner.result !== sessionId || (accountKey != null && account.result !== accountKey)) return;
+        const head = heads.get([ownerKey, partition]);
         head.onsuccess = () => {
             const previous = head.result;
             if ((previous?.stagingGeneration ?? previous?.activeGeneration ?? null) !== expected) return;
-            const exists = generations.get([partition, generation]);
+            const exists = generations.get([ownerKey, partition, generation]);
             exists.onsuccess = () => {
                 if (exists.result) return;
                 if (previous?.stagingGeneration != null) {
-                    generations.delete([partition, previous.stagingGeneration]);
-                    documents.delete(IDBKeyRange.bound([partition, previous.stagingGeneration, ''], [partition, previous.stagingGeneration, '\uffff']));
+                    generations.delete([ownerKey, partition, previous.stagingGeneration]);
+                    documents.delete(IDBKeyRange.bound([ownerKey, partition, previous.stagingGeneration, ''], [ownerKey, partition, previous.stagingGeneration, '\uffff']));
                 }
-                generations.put({partition, generation, sessionId, revision:0, checkpoint});
-                heads.put({partition, activeGeneration:previous?.activeGeneration ?? null, stagingGeneration:generation});
+                generations.put({ownerKey, partition, generation, revision:0, checkpoint});
+                heads.put({ownerKey, partition, activeGeneration:previous?.activeGeneration ?? null, stagingGeneration:generation});
                 changed = true;
             };
         };
@@ -269,7 +318,7 @@ private external fun replaceReplica(
 )
 private external fun beginReplica(
     db: JsAny,
-    sessionId: String,
+    scope: String,
     partition: String,
     generation: String,
     checkpoint: String,
@@ -279,38 +328,40 @@ private external fun beginReplica(
 @JsFun(
     """(db, handleJson, expected, checkpoint, documentsJson, publish) => new Promise((resolve, reject) => {
     const handle = JSON.parse(handleJson), incoming = JSON.parse(documentsJson);
-    const {sessionId, partition, generation} = handle;
+    const {scope, partition, generation} = handle;
+    const {sessionId, accountKey = null} = scope, ownerKey = accountKey ?? '';
     const tx = db.transaction(['account_scope', 'replica_heads', 'replica_generations', 'replica_documents'], 'readwrite');
     const heads = tx.objectStore('replica_heads'), generations = tx.objectStore('replica_generations'), documents = tx.objectStore('replica_documents');
     let changed = false;
     const owner = tx.objectStore('account_scope').get('current');
-    owner.onsuccess = () => {
-        if (owner.result !== sessionId) return;
-        const head = heads.get(partition);
+    const account = tx.objectStore('account_scope').get('command-account');
+    account.onsuccess = () => {
+        if (owner.result !== sessionId || (accountKey != null && account.result !== accountKey)) return;
+        const head = heads.get([ownerKey, partition]);
         head.onsuccess = () => {
             if ((head.result?.stagingGeneration ?? head.result?.activeGeneration) !== generation) return;
-            const current = generations.get([partition, generation]);
+            const current = generations.get([ownerKey, partition, generation]);
             current.onsuccess = () => {
-                if (!current.result || current.result.sessionId !== sessionId || current.result.revision !== expected) return;
+                if (!current.result || current.result.revision !== expected) return;
                 const writeNext = index => {
                     if (index === incoming.length) {
                         generations.put({...current.result, revision:expected + 1, checkpoint});
                         if (publish) {
                             const old = head.result.activeGeneration;
                             if (old != null && old !== generation) {
-                                generations.delete([partition, old]);
-                                documents.delete(IDBKeyRange.bound([partition, old, ''], [partition, old, '\uffff']));
+                                generations.delete([ownerKey, partition, old]);
+                                documents.delete(IDBKeyRange.bound([ownerKey, partition, old, ''], [ownerKey, partition, old, '\uffff']));
                             }
-                            heads.put({partition, activeGeneration:generation, stagingGeneration:null});
+                            heads.put({ownerKey, partition, activeGeneration:generation, stagingGeneration:null});
                         }
                         changed = true;
                         return;
                     }
-                    const item = incoming[index], previous = documents.get([partition, generation, item.id]);
+                    const item = incoming[index], previous = documents.get([ownerKey, partition, generation, item.id]);
                     previous.onsuccess = () => {
                         const old = previous.result;
                         if (!old || (old.version <= item.version && !(old.version === item.version && old.payload == null && item.payload != null))) {
-                            documents.put({...item, partition, generation, visibleSort:item.payload == null ? undefined : item.sortKey});
+                            documents.put({...item, ownerKey, partition, generation, visibleSort:item.payload == null ? undefined : item.sortKey});
                         }
                         writeNext(index + 1);
                     };
@@ -333,22 +384,24 @@ private external fun commitReplica(
 ): Promise<JsBoolean>
 
 @JsFun(
-    """(db, sessionId, partition, after, limit, documentId) => new Promise((resolve, reject) => {
+    """(db, scopeJson, partition, after, limit, documentId) => new Promise((resolve, reject) => {
+    const scope = JSON.parse(scopeJson), {sessionId, accountKey = null} = scope, ownerKey = accountKey ?? '';
     const tx = db.transaction(['account_scope', 'replica_heads', 'replica_generations', 'replica_documents'], 'readonly');
     const value = {checkpoint:null, documents:[]};
     const owner = tx.objectStore('account_scope').get('current');
-    owner.onsuccess = () => {
-        if (owner.result !== sessionId) return;
-        const head = tx.objectStore('replica_heads').get(partition);
+    const account = tx.objectStore('account_scope').get('command-account');
+    account.onsuccess = () => {
+        if (owner.result !== sessionId || (accountKey != null && account.result !== accountKey)) return;
+        const head = tx.objectStore('replica_heads').get([ownerKey, partition]);
         head.onsuccess = () => {
             const generation = head.result?.activeGeneration;
             if (generation == null) return;
-            const row = tx.objectStore('replica_generations').get([partition, generation]);
+            const row = tx.objectStore('replica_generations').get([ownerKey, partition, generation]);
             row.onsuccess = () => {
                 if (!row.result) return;
-                value.checkpoint = {handle:{sessionId, partition, generation}, revision:row.result.revision, payload:row.result.checkpoint, published:true};
+                value.checkpoint = {handle:{scope, partition, generation}, revision:row.result.revision, payload:row.result.checkpoint, published:true};
                 if (documentId != null) {
-                    const item = tx.objectStore('replica_documents').get([partition, generation, documentId]);
+                    const item = tx.objectStore('replica_documents').get([ownerKey, partition, generation, documentId]);
                     item.onsuccess = () => {
                         if (item.result?.payload != null) {
                             const {id, version, sortKey, payload} = item.result;
@@ -357,7 +410,7 @@ private external fun commitReplica(
                     };
                     return;
                 }
-                const range = IDBKeyRange.bound([partition, generation, after ?? ''], [partition, generation, '\uffff'], after != null);
+                const range = IDBKeyRange.bound([ownerKey, partition, generation, after ?? ''], [ownerKey, partition, generation, '\uffff'], after != null);
                 const items = tx.objectStore('replica_documents').index('visible').getAll(range, limit);
                 items.onsuccess = () => { value.documents = items.result.map(({id, version, sortKey, payload}) => ({id, version, sortKey, payload})); };
             };
@@ -369,7 +422,7 @@ private external fun commitReplica(
 )
 private external fun replicaPage(
     db: JsAny,
-    sessionId: String,
+    scope: String,
     partition: String,
     after: String?,
     limit: Int,
@@ -377,17 +430,19 @@ private external fun replicaPage(
 ): Promise<JsString>
 
 @JsFun(
-    """(db, sessionId, partition, id) => new Promise((resolve, reject) => {
+    """(db, scopeJson, partition, id) => new Promise((resolve, reject) => {
+    const scope = JSON.parse(scopeJson), {sessionId, accountKey = null} = scope, ownerKey = accountKey ?? '';
     const tx = db.transaction(['account_scope', 'replica_heads', 'replica_documents'], 'readonly');
     let value = null;
     const owner = tx.objectStore('account_scope').get('current');
-    owner.onsuccess = () => {
-        if (owner.result !== sessionId) return;
-        const head = tx.objectStore('replica_heads').get(partition);
+    const account = tx.objectStore('account_scope').get('command-account');
+    account.onsuccess = () => {
+        if (owner.result !== sessionId || (accountKey != null && account.result !== accountKey)) return;
+        const head = tx.objectStore('replica_heads').get([ownerKey, partition]);
         head.onsuccess = () => {
             const generation = head.result?.activeGeneration;
             if (generation == null) return;
-            const row = tx.objectStore('replica_documents').get([partition, generation, id]);
+            const row = tx.objectStore('replica_documents').get([ownerKey, partition, generation, id]);
             row.onsuccess = () => {
                 if (row.result?.payload != null) {
                     const {id, version, sortKey, payload} = row.result; value = {id, version, sortKey, payload};
@@ -401,29 +456,27 @@ private external fun replicaPage(
 )
 private external fun replicaDocument(
     db: JsAny,
-    sessionId: String,
+    scope: String,
     partition: String,
     id: String,
 ): Promise<JsString>
 
 @JsFun(
-    """(db, sessionId, partition) => new Promise((resolve, reject) => {
+    """(db, scopeJson, partition) => new Promise((resolve, reject) => {
+    const scope = JSON.parse(scopeJson), {sessionId, accountKey = null} = scope, ownerKey = accountKey ?? '';
     const tx = db.transaction(['account_scope', 'replica_heads', 'replica_generations', 'replica_documents'], 'readwrite');
     let changed = false;
     const owner = tx.objectStore('account_scope').get('current');
-    owner.onsuccess = () => {
-        if (owner.result !== sessionId) return;
-        tx.objectStore('replica_heads').delete(partition);
-        tx.objectStore('replica_generations').delete(IDBKeyRange.bound([partition, ''], [partition, '\uffff']));
-        tx.objectStore('replica_documents').delete(IDBKeyRange.bound([partition, '', ''], [partition, '\uffff', '\uffff']));
+    const account = tx.objectStore('account_scope').get('command-account');
+    account.onsuccess = () => {
+        if (owner.result !== sessionId || (accountKey != null && account.result !== accountKey)) return;
+        tx.objectStore('replica_heads').delete([ownerKey, partition]);
+        tx.objectStore('replica_generations').delete(IDBKeyRange.bound([ownerKey, partition, ''], [ownerKey, partition, '\uffff']));
+        tx.objectStore('replica_documents').delete(IDBKeyRange.bound([ownerKey, partition, '', ''], [ownerKey, partition, '\uffff', '\uffff']));
         changed = true;
     };
     tx.oncomplete = () => resolve(changed);
     tx.onabort = () => reject(tx.error || new Error('Replica removal failed.'));
 })"""
 )
-private external fun clearReplica(
-    db: JsAny,
-    sessionId: String,
-    partition: String,
-): Promise<JsBoolean>
+private external fun clearReplica(db: JsAny, scope: String, partition: String): Promise<JsBoolean>

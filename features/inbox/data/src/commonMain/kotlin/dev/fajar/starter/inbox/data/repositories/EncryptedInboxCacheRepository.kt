@@ -1,7 +1,7 @@
 package dev.fajar.starter.inbox.data.repositories
 
 import dev.fajar.starter.database.*
-import dev.fajar.starter.inbox.data.dto.*
+import dev.fajar.starter.inbox.data.encoding.*
 import dev.fajar.starter.inbox.data.mappers.*
 import dev.fajar.starter.inbox.domain.entities.*
 import dev.fajar.starter.inbox.domain.repositories.InboxCacheRepository
@@ -9,7 +9,10 @@ import dev.fajar.starter.securestorage.ContentCipher
 import dev.fajar.starter.securestorage.CredentialStore
 import dev.fajar.starter.storage.*
 import kotlin.io.encoding.Base64
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -25,74 +28,62 @@ class EncryptedInboxCacheRepository(
 ) : InboxCacheRepository {
     private val keyCreation = Mutex()
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     override fun observe(access: InboxAccess, query: InboxCacheQuery) =
         safeStorageFlow(
             when (query) {
                 InboxCacheQuery.Checkpoint ->
-                    replicas.observeCheckpoint(access.sessionId, inboxPartition(access)).map {
-                        ReplicaPage(it, emptyList())
-                    }
+                    replicas
+                        .observeCheckpoint(inboxReplicaScope(access), inboxPartition(access))
+                        .map { ReplicaPage(it, emptyList()) }
                 is InboxCacheQuery.Page ->
-                    replicas.observe(access.sessionId, inboxPartition(access), query.after, 31)
+                    replicas.observe(
+                        inboxReplicaScope(access),
+                        inboxPartition(access),
+                        query.after,
+                        31,
+                    )
                 is InboxCacheQuery.Item ->
-                    replicas.observeDocument(access.sessionId, inboxPartition(access), query.id)
+                    replicas.observeDocument(
+                        inboxReplicaScope(access),
+                        inboxPartition(access),
+                        query.id,
+                    )
+            }.flatMapLatest { owned ->
+                if (owned.checkpoint != null) flowOf(owned)
+                else
+                    when (query) {
+                        InboxCacheQuery.Checkpoint ->
+                            replicas
+                                .observeCheckpoint(
+                                    ReplicaScope(access.sessionId),
+                                    inboxPartition(access),
+                                )
+                                .map { ReplicaPage(it, emptyList()) }
+                        is InboxCacheQuery.Page ->
+                            replicas.observe(
+                                ReplicaScope(access.sessionId),
+                                inboxPartition(access),
+                                query.after,
+                                31,
+                            )
+                        is InboxCacheQuery.Item ->
+                            replicas.observeDocument(
+                                ReplicaScope(access.sessionId),
+                                inboxPartition(access),
+                                query.id,
+                            )
+                    }
             },
             mapValue = { page ->
-                val raw = page.checkpoint
-                if (raw == null) InboxCachePage(null, emptyList(), null)
+                if (page.checkpoint == null) InboxCachePage(null, emptyList(), null)
                 else {
                     val key =
                         Base64.decode(
                             requireNotNull(credentials.read()) { "Content key is unavailable." }
                         )
                     try {
-                        val checkpointBytes =
-                            cipher.decrypt(
-                                key,
-                                inboxAssociatedData(
-                                    access,
-                                    raw.handle.generation,
-                                    "checkpoint",
-                                    "",
-                                    raw.revision,
-                                ),
-                                Base64.decode(raw.payload),
-                            )
-                        val checkpoint =
-                            Json.decodeFromString<InboxCheckpointDto>(
-                                    checkpointBytes.decodeToString(throwOnInvalidSequence = true)
-                                )
-                                .toCheckpoint(raw, access)
-                        val items =
-                            page.documents.take(30).map { document ->
-                                val bytes =
-                                    cipher.decrypt(
-                                        key,
-                                        inboxAssociatedData(
-                                            access,
-                                            raw.handle.generation,
-                                            "item",
-                                            document.id,
-                                            document.version,
-                                        ),
-                                        Base64.decode(requireNotNull(document.payload)),
-                                    )
-                                val item =
-                                    Json.decodeFromString<InboxItemDto>(
-                                            bytes.decodeToString(throwOnInvalidSequence = true)
-                                        )
-                                        .toItem(document.id)
-                                require(
-                                    item.version == document.version &&
-                                        item.sortKey() == document.sortKey
-                                )
-                                item
-                            }
-                        InboxCachePage(
-                            checkpoint,
-                            items,
-                            if (page.documents.size > 30) page.documents[29].sortKey else null,
-                        )
+                        decodeInboxPage(cipher, key, access, page)
                     } finally {
                         key.fill(0)
                     }
@@ -101,28 +92,13 @@ class EncryptedInboxCacheRepository(
         )
 
     override suspend fun checkpoint(access: InboxAccess) = safeStorageCall {
-        val raw = replicas.checkpoint(access.sessionId, inboxPartition(access))
+        val raw = replicas.checkpoint(inboxReplicaScope(access), inboxPartition(access))
         if (raw == null) null
         else {
             val key =
                 Base64.decode(requireNotNull(credentials.read()) { "Content key is unavailable." })
             try {
-                val bytes =
-                    cipher.decrypt(
-                        key,
-                        inboxAssociatedData(
-                            access,
-                            raw.handle.generation,
-                            "checkpoint",
-                            "",
-                            raw.revision,
-                        ),
-                        Base64.decode(raw.payload),
-                    )
-                Json.decodeFromString<InboxCheckpointDto>(
-                        bytes.decodeToString(throwOnInvalidSequence = true)
-                    )
-                    .toCheckpoint(raw, access)
+                decodeInboxCheckpoint(cipher, key, access, raw)
             } finally {
                 key.fill(0)
             }
@@ -138,9 +114,7 @@ class EncryptedInboxCacheRepository(
                     val saved = credentials.read()
                     if (saved != null) Base64.decode(saved)
                     else {
-                        check(
-                            replicas.checkpoint(access.sessionId, inboxPartition(access)) == null
-                        ) {
+                        check(!replicas.containsRecords("inbox/")) {
                             "Existing cache requires its content key."
                         }
                         val generated = cipher.generateKey()
@@ -162,7 +136,7 @@ class EncryptedInboxCacheRepository(
                         Json.encodeToString(checkpoint.toDto()).encodeToByteArray(),
                     )
                 replicas.begin(
-                    access.sessionId,
+                    inboxReplicaScope(access),
                     inboxPartition(access),
                     checkpoint.generation,
                     Base64.encode(sealed),
@@ -223,7 +197,11 @@ class EncryptedInboxCacheRepository(
                     Json.encodeToString(next.toDto()).encodeToByteArray(),
                 )
             replicas.commit(
-                ReplicaHandle(access.sessionId, inboxPartition(access), previous.generation),
+                ReplicaHandle(
+                    inboxReplicaScope(access),
+                    inboxPartition(access),
+                    previous.generation,
+                ),
                 previous.revision,
                 Base64.encode(sealed),
                 documents,
@@ -235,6 +213,7 @@ class EncryptedInboxCacheRepository(
     }
 
     override suspend fun clear(access: InboxAccess) = safeStorageCall {
-        replicas.clear(access.sessionId, inboxPartition(access))
+        if (!replicas.clear(ReplicaScope(access.sessionId), inboxPartition(access))) false
+        else replicas.clear(inboxReplicaScope(access), inboxPartition(access))
     }
 }

@@ -77,7 +77,7 @@ suspend fun decodePayslipCache(
     val checkpoint = requireNotNull(page.checkpoint)
     require(checkpoint.published && checkpoint.revision == 0L && checkpoint.payload.length <= 4096)
     require(
-        checkpoint.handle.sessionId == access.sessionId &&
+        checkpoint.handle.scope.sessionId == access.sessionId &&
             checkpoint.handle.partition == payslipPartition(access, view)
     )
     val document = page.documents.single()

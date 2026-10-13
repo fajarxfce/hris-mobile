@@ -4,17 +4,20 @@ import kotlinx.coroutines.flow.Flow
 
 /** Raw encrypted replication storage. Callers own sync policy, encryption, and DTO mapping. */
 interface ReplicaStore {
-    suspend fun checkpoint(sessionId: String, partition: String): ReplicaCheckpoint?
+    /** Checks retained generations, including inactive accounts, before creating a content key. */
+    suspend fun containsRecords(partitionPrefix: String): Boolean
+
+    suspend fun checkpoint(scope: ReplicaScope, partition: String): ReplicaCheckpoint?
 
     /** Observes sync progress, including staging, without reading document payloads. */
-    fun observeCheckpoint(sessionId: String, partition: String): Flow<ReplicaCheckpoint?>
+    fun observeCheckpoint(scope: ReplicaScope, partition: String): Flow<ReplicaCheckpoint?>
 
     /**
      * Publishes a complete snapshot, or removes it, only if the current checkpoint still matches.
      * Account ownership, documents and checkpoint change in the same transaction.
      */
     suspend fun replace(
-        sessionId: String,
+        scope: ReplicaScope,
         partition: String,
         expected: ReplicaCheckpoint?,
         snapshot: ReplicaSnapshot?,
@@ -22,7 +25,7 @@ interface ReplicaStore {
 
     /** Starts a replacement without exposing its incomplete documents to readers. */
     suspend fun begin(
-        sessionId: String,
+        scope: ReplicaScope,
         partition: String,
         generation: String,
         checkpoint: String,
@@ -41,16 +44,16 @@ interface ReplicaStore {
     ): Boolean
 
     fun observe(
-        sessionId: String,
+        scope: ReplicaScope,
         partition: String,
         after: String? = null,
         limit: Int = 50,
     ): Flow<ReplicaPage>
 
     /** Observes one visible document and its active checkpoint in the same read transaction. */
-    fun observeDocument(sessionId: String, partition: String, id: String): Flow<ReplicaPage>
+    fun observeDocument(scope: ReplicaScope, partition: String, id: String): Flow<ReplicaPage>
 
-    suspend fun document(sessionId: String, partition: String, id: String): ReplicaDocument?
+    suspend fun document(scope: ReplicaScope, partition: String, id: String): ReplicaDocument?
 
-    suspend fun clear(sessionId: String, partition: String): Boolean
+    suspend fun clear(scope: ReplicaScope, partition: String): Boolean
 }

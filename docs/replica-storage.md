@@ -17,7 +17,10 @@ retry policy. Feature repositories provide authenticated ciphertext; feature use
 cases own bootstrap, hydration, cursor selection, expiry, and access recovery.
 This storage capability alone does not connect a business API.
 
-Each active account session has separate named partitions. A partition retains
+`ReplicaScope(sessionId, accountKey)` separates the active request from the stable
+API/account owner. Company/collection identity belongs in the partition. A null
+account key explicitly selects temporary session storage. Account keys must be
+unambiguous and include the API audience; they are not access tokens. A partition retains
 one visible generation and at most one replacement generation. `begin` compares
 the observed generation before creating staging storage. `commit` compares the
 generation and revision, then saves documents and the next encrypted checkpoint
@@ -45,11 +48,24 @@ including its checkpoint; they never silently discard a document. Room uses
 explicit insert/update operations because its upsert fallback can swallow a
 conflicting secondary index when no primary-key row exists.
 
-Account activation clears replication metadata and resources in the existing
-account-cache transaction. All subsequent reads/writes check the originating
-session. An old generation, revision, or account cannot publish, recreate, or
-delete a replacement account's data. A company/access reset remains an explicit
-use-case decision through `clear`.
+Account activation clears only temporary session replicas. Account-owned facts,
+staging generations and tombstones remain in separate composite keys. Every read
+and write checks both the live session and its active account binding within the
+same transaction. Logout hides retained facts; a new login can read its own account
+with a new scope. An old request cannot read, publish, recreate or delete those
+facts after replacement. `clear` removes only its admitted account/partition.
+The use case decides when confirmed revocation requires removal or a new cursor.
+
+`containsRecords(prefix)` checks retained generations across inactive accounts
+without returning their payloads. Encryption repositories use it to avoid creating
+a replacement content key over unreadable existing data. It neither switches
+accounts nor makes an inactive account readable.
+
+Room schema 9 and IndexedDB schema 8 preserve the preceding session-owned rows,
+active/staging checkpoints and deletion markers. Migration adds a separate owner
+key rather than relabeling ciphertext as belonging to an account. Features choose
+when to acquire or migrate their encrypted account projection; the database does
+not rewrite feature formats or authorization policy.
 
 Cancellation leaves an absent or complete transaction, never a partial batch.
 An admitted IndexedDB write finishes atomically and notifies existing observers;
@@ -60,8 +76,9 @@ arrives after the original open was rejected.
 
 The shared SQLite/IndexedDB contract checks staging visibility, publication,
 concurrent checkpoint/snapshot writes, conditional removal, rollback, tombstones,
-bounded pagination, scope replacement, cancellation, and restart. Migration checks cover the existing
-SQLite account/inbox and the browser upgrade path.
+bounded pagination, account/API/company isolation, late requests after a new login,
+logout, cancellation, and restart. Both migration suites retain published/staged
+rows and equal-version tombstones from the preceding database schema.
 
 Validation: the workspace `:check`, Android dev debug build, and database
 `wasmJsBrowserTest` passed on Linux. This does not establish device performance

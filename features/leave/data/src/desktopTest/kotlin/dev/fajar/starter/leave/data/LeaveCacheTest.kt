@@ -38,7 +38,11 @@ class LeaveCacheTest {
             assertEquals(AppResult.Success(snapshot), repository.observe(f.access).first())
             val raw =
                 db.replicas
-                    .observeDocument(f.access.sessionId, leavePartition(f.access), "overview")
+                    .observeDocument(
+                        ReplicaScope(f.access.sessionId),
+                        leavePartition(f.access),
+                        "overview",
+                    )
                     .first()
             assertEquals(1, raw.documents.size)
             assertFalse(raw.documents.single().payload!!.contains("Annual leave"))

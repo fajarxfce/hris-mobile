@@ -6,33 +6,43 @@ import dev.fajar.starter.database.entities.*
 
 @Dao
 abstract class ReplicaDao {
-    @Query("SELECT EXISTS(SELECT 1 FROM account_scope WHERE id = 1 AND sessionId = :sessionId)")
-    protected abstract suspend fun owns(sessionId: String): Boolean
-
-    @Query("SELECT * FROM replica_heads WHERE partition = :partition")
-    protected abstract suspend fun head(partition: String): ReplicaHeadEntity?
+    @Query(
+        "SELECT EXISTS(SELECT 1 FROM replica_generations WHERE substr(partition, 1, length(:prefix)) = :prefix)"
+    )
+    abstract suspend fun containsRecords(prefix: String): Boolean
 
     @Query(
-        "SELECT * FROM replica_generations WHERE partition = :partition AND generation = :generation"
+        "SELECT EXISTS(SELECT 1 FROM account_scope WHERE id = 1 AND sessionId = :sessionId AND (:accountKey IS NULL OR accountKey = :accountKey))"
+    )
+    protected abstract suspend fun owns(sessionId: String, accountKey: String?): Boolean
+
+    @Query("SELECT * FROM replica_heads WHERE ownerKey = :ownerKey AND partition = :partition")
+    protected abstract suspend fun head(ownerKey: String, partition: String): ReplicaHeadEntity?
+
+    @Query(
+        "SELECT * FROM replica_generations WHERE ownerKey = :ownerKey AND partition = :partition AND generation = :generation"
     )
     protected abstract suspend fun generation(
+        ownerKey: String,
         partition: String,
         generation: String,
     ): ReplicaGenerationEntity?
 
     @Query(
-        "SELECT * FROM replica_documents WHERE partition = :partition AND generation = :generation AND id = :id"
+        "SELECT * FROM replica_documents WHERE ownerKey = :ownerKey AND partition = :partition AND generation = :generation AND id = :id"
     )
     protected abstract suspend fun record(
+        ownerKey: String,
         partition: String,
         generation: String,
         id: String,
     ): ReplicaDocumentEntity?
 
     @Query(
-        "SELECT * FROM replica_documents WHERE partition = :partition AND generation = :generation AND payload IS NOT NULL AND (:after IS NULL OR sortKey > :after) ORDER BY sortKey LIMIT :limit"
+        "SELECT * FROM replica_documents WHERE ownerKey = :ownerKey AND partition = :partition AND generation = :generation AND payload IS NOT NULL AND (:after IS NULL OR sortKey > :after) ORDER BY sortKey LIMIT :limit"
     )
     protected abstract suspend fun records(
+        ownerKey: String,
         partition: String,
         generation: String,
         after: String?,
@@ -48,27 +58,38 @@ abstract class ReplicaDao {
     @Update protected abstract suspend fun update(document: ReplicaDocumentEntity)
 
     @Query(
-        "DELETE FROM replica_generations WHERE partition = :partition AND generation = :generation"
+        "DELETE FROM replica_generations WHERE ownerKey = :ownerKey AND partition = :partition AND generation = :generation"
     )
-    protected abstract suspend fun deleteGeneration(partition: String, generation: String)
+    protected abstract suspend fun deleteGeneration(
+        ownerKey: String,
+        partition: String,
+        generation: String,
+    )
 
-    @Query("DELETE FROM replica_generations WHERE partition = :partition AND generation != :keep")
-    protected abstract suspend fun deleteOtherGenerations(partition: String, keep: String)
+    @Query(
+        "DELETE FROM replica_generations WHERE ownerKey = :ownerKey AND partition = :partition AND generation != :keep"
+    )
+    protected abstract suspend fun deleteOtherGenerations(
+        ownerKey: String,
+        partition: String,
+        keep: String,
+    )
 
-    @Query("DELETE FROM replica_generations WHERE partition = :partition")
-    protected abstract suspend fun deleteGenerations(partition: String)
+    @Query("DELETE FROM replica_generations WHERE ownerKey = :ownerKey AND partition = :partition")
+    protected abstract suspend fun deleteGenerations(ownerKey: String, partition: String)
 
-    @Query("DELETE FROM replica_heads WHERE partition = :partition")
-    protected abstract suspend fun deleteHead(partition: String)
+    @Query("DELETE FROM replica_heads WHERE ownerKey = :ownerKey AND partition = :partition")
+    protected abstract suspend fun deleteHead(ownerKey: String, partition: String)
 
     @Transaction
-    open suspend fun checkpoint(sessionId: String, partition: String): ReplicaCheckpoint? {
-        if (!owns(sessionId)) return null
-        val head = head(partition) ?: return null
+    open suspend fun checkpoint(scope: ReplicaScope, partition: String): ReplicaCheckpoint? {
+        if (!owns(scope.sessionId, scope.accountKey)) return null
+        val ownerKey = scope.accountKey.orEmpty()
+        val head = head(ownerKey, partition) ?: return null
         val selected = head.stagingGeneration ?: head.activeGeneration ?: return null
-        val row = generation(partition, selected) ?: return null
+        val row = generation(ownerKey, partition, selected) ?: return null
         return ReplicaCheckpoint(
-            ReplicaHandle(sessionId, partition, selected),
+            ReplicaHandle(scope, partition, selected),
             row.revision,
             row.checkpoint,
             head.activeGeneration == selected,
@@ -77,21 +98,24 @@ abstract class ReplicaDao {
 
     @Transaction
     open suspend fun replace(
-        sessionId: String,
+        scope: ReplicaScope,
         partition: String,
         expected: ReplicaCheckpoint?,
         snapshot: ReplicaSnapshot?,
     ): Boolean {
-        if (!owns(sessionId) || checkpoint(sessionId, partition) != expected) return false
-        if (snapshot != null && generation(partition, snapshot.generation) != null) return false
-        deleteHead(partition)
-        deleteGenerations(partition)
+        if (!owns(scope.sessionId, scope.accountKey) || checkpoint(scope, partition) != expected)
+            return false
+        val ownerKey = scope.accountKey.orEmpty()
+        if (snapshot != null && generation(ownerKey, partition, snapshot.generation) != null)
+            return false
+        deleteHead(ownerKey, partition)
+        deleteGenerations(ownerKey, partition)
         if (snapshot != null) {
             write(
                 ReplicaGenerationEntity(
+                    ownerKey,
                     partition,
                     snapshot.generation,
-                    sessionId,
                     0,
                     snapshot.checkpoint,
                 )
@@ -99,6 +123,7 @@ abstract class ReplicaDao {
             for (document in snapshot.documents) {
                 insert(
                     ReplicaDocumentEntity(
+                        ownerKey,
                         partition,
                         snapshot.generation,
                         document.id,
@@ -108,27 +133,28 @@ abstract class ReplicaDao {
                     )
                 )
             }
-            write(ReplicaHeadEntity(partition, snapshot.generation, null))
+            write(ReplicaHeadEntity(ownerKey, partition, snapshot.generation, null))
         }
         return true
     }
 
     @Transaction
     open suspend fun begin(
-        sessionId: String,
+        scope: ReplicaScope,
         partition: String,
         generation: String,
         payload: String,
         expectedGeneration: String?,
     ): Boolean {
-        if (!owns(sessionId)) return false
-        val previous = head(partition)
+        if (!owns(scope.sessionId, scope.accountKey)) return false
+        val ownerKey = scope.accountKey.orEmpty()
+        val previous = head(ownerKey, partition)
         if ((previous?.stagingGeneration ?: previous?.activeGeneration) != expectedGeneration)
             return false
-        if (generation(partition, generation) != null) return false
-        previous?.stagingGeneration?.let { deleteGeneration(partition, it) }
-        write(ReplicaGenerationEntity(partition, generation, sessionId, 0, payload))
-        write(ReplicaHeadEntity(partition, previous?.activeGeneration, generation))
+        if (generation(ownerKey, partition, generation) != null) return false
+        previous?.stagingGeneration?.let { deleteGeneration(ownerKey, partition, it) }
+        write(ReplicaGenerationEntity(ownerKey, partition, generation, 0, payload))
+        write(ReplicaHeadEntity(ownerKey, partition, previous?.activeGeneration, generation))
         return true
     }
 
@@ -140,14 +166,14 @@ abstract class ReplicaDao {
         documents: List<ReplicaDocument>,
         publish: Boolean,
     ): Boolean {
-        if (!owns(handle.sessionId)) return false
-        val head = head(handle.partition) ?: return false
+        if (!owns(handle.scope.sessionId, handle.scope.accountKey)) return false
+        val ownerKey = handle.scope.accountKey.orEmpty()
+        val head = head(ownerKey, handle.partition) ?: return false
         if ((head.stagingGeneration ?: head.activeGeneration) != handle.generation) return false
-        val current = generation(handle.partition, handle.generation) ?: return false
-        if (current.sessionId != handle.sessionId || current.revision != expectedRevision)
-            return false
+        val current = generation(ownerKey, handle.partition, handle.generation) ?: return false
+        if (current.revision != expectedRevision) return false
         for (document in documents) {
-            val previous = record(handle.partition, handle.generation, document.id)
+            val previous = record(ownerKey, handle.partition, handle.generation, document.id)
             if (
                 previous != null &&
                     (previous.version > document.version ||
@@ -158,6 +184,7 @@ abstract class ReplicaDao {
                 continue
             val row =
                 ReplicaDocumentEntity(
+                    ownerKey,
                     handle.partition,
                     handle.generation,
                     document.id,
@@ -169,61 +196,71 @@ abstract class ReplicaDao {
         }
         write(current.copy(revision = expectedRevision + 1, checkpoint = payload))
         if (publish) {
-            write(ReplicaHeadEntity(handle.partition, handle.generation, null))
-            deleteOtherGenerations(handle.partition, handle.generation)
+            write(ReplicaHeadEntity(ownerKey, handle.partition, handle.generation, null))
+            deleteOtherGenerations(ownerKey, handle.partition, handle.generation)
         }
         return true
     }
 
     @Transaction
     open suspend fun page(
-        sessionId: String,
+        scope: ReplicaScope,
         partition: String,
         after: String?,
         limit: Int,
     ): ReplicaPage {
-        if (!owns(sessionId)) return ReplicaPage(null, emptyList())
-        val active = head(partition)?.activeGeneration ?: return ReplicaPage(null, emptyList())
-        val row = generation(partition, active) ?: return ReplicaPage(null, emptyList())
+        if (!owns(scope.sessionId, scope.accountKey)) return ReplicaPage(null, emptyList())
+        val ownerKey = scope.accountKey.orEmpty()
+        val active =
+            head(ownerKey, partition)?.activeGeneration ?: return ReplicaPage(null, emptyList())
+        val row = generation(ownerKey, partition, active) ?: return ReplicaPage(null, emptyList())
         return ReplicaPage(
             ReplicaCheckpoint(
-                ReplicaHandle(sessionId, partition, active),
+                ReplicaHandle(scope, partition, active),
                 row.revision,
                 row.checkpoint,
                 true,
             ),
-            records(partition, active, after, limit).map {
+            records(ownerKey, partition, active, after, limit).map {
                 ReplicaDocument(it.id, it.version, it.sortKey, it.payload)
             },
         )
     }
 
     @Transaction
-    open suspend fun document(sessionId: String, partition: String, id: String): ReplicaDocument? {
-        if (!owns(sessionId)) return null
-        val active = head(partition)?.activeGeneration ?: return null
-        return record(partition, active, id)
+    open suspend fun document(
+        scope: ReplicaScope,
+        partition: String,
+        id: String,
+    ): ReplicaDocument? {
+        if (!owns(scope.sessionId, scope.accountKey)) return null
+        val ownerKey = scope.accountKey.orEmpty()
+        val active = head(ownerKey, partition)?.activeGeneration ?: return null
+        return record(ownerKey, partition, active, id)
             ?.takeIf { it.payload != null }
             ?.let { ReplicaDocument(it.id, it.version, it.sortKey, it.payload) }
     }
 
     @Transaction
-    open suspend fun clear(sessionId: String, partition: String): Boolean {
-        if (!owns(sessionId)) return false
-        deleteHead(partition)
-        deleteGenerations(partition)
+    open suspend fun clear(scope: ReplicaScope, partition: String): Boolean {
+        if (!owns(scope.sessionId, scope.accountKey)) return false
+        val ownerKey = scope.accountKey.orEmpty()
+        deleteHead(ownerKey, partition)
+        deleteGenerations(ownerKey, partition)
         return true
     }
 
     @Transaction
-    open suspend fun documentPage(sessionId: String, partition: String, id: String): ReplicaPage {
-        if (!owns(sessionId)) return ReplicaPage(null, emptyList())
-        val active = head(partition)?.activeGeneration ?: return ReplicaPage(null, emptyList())
-        val row = generation(partition, active) ?: return ReplicaPage(null, emptyList())
-        val item = record(partition, active, id)?.takeIf { it.payload != null }
+    open suspend fun documentPage(scope: ReplicaScope, partition: String, id: String): ReplicaPage {
+        if (!owns(scope.sessionId, scope.accountKey)) return ReplicaPage(null, emptyList())
+        val ownerKey = scope.accountKey.orEmpty()
+        val active =
+            head(ownerKey, partition)?.activeGeneration ?: return ReplicaPage(null, emptyList())
+        val row = generation(ownerKey, partition, active) ?: return ReplicaPage(null, emptyList())
+        val item = record(ownerKey, partition, active, id)?.takeIf { it.payload != null }
         return ReplicaPage(
             ReplicaCheckpoint(
-                ReplicaHandle(sessionId, partition, active),
+                ReplicaHandle(scope, partition, active),
                 row.revision,
                 row.checkpoint,
                 true,

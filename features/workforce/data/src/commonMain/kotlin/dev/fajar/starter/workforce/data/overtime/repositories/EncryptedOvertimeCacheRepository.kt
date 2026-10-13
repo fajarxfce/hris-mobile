@@ -27,7 +27,7 @@ class EncryptedOvertimeCacheRepository(
     override fun observe(access: WorkforceAccess) =
         safeStorageFlow(
             replicas.observeDocument(
-                access.sessionId,
+                ReplicaScope(access.sessionId),
                 overtimePartition(access, "overview"),
                 "overview",
             ),
@@ -61,7 +61,7 @@ class EncryptedOvertimeCacheRepository(
 
     override suspend fun generation(access: WorkforceAccess) = safeStorageCall {
         replicas
-            .checkpoint(access.sessionId, overtimePartition(access, "overview"))
+            .checkpoint(ReplicaScope(access.sessionId), overtimePartition(access, "overview"))
             ?.handle
             ?.generation
     }
@@ -72,10 +72,15 @@ class EncryptedOvertimeCacheRepository(
         snapshot: OvertimeSnapshot<OvertimeOverview>?,
     ) = safeStorageCall {
         val partition = overtimePartition(access, "overview")
-        val previous = replicas.checkpoint(access.sessionId, partition)
+        val previous = replicas.checkpoint(ReplicaScope(access.sessionId), partition)
         if (previous?.handle?.generation != expectedGeneration) return@safeStorageCall false
         if (snapshot == null)
-            return@safeStorageCall replicas.replace(access.sessionId, partition, previous, null)
+            return@safeStorageCall replicas.replace(
+                ReplicaScope(access.sessionId),
+                partition,
+                previous,
+                null,
+            )
         require(
             sameWorkforceScope(access, snapshot.access) && snapshot.generation != expectedGeneration
         )
@@ -92,7 +97,7 @@ class EncryptedOvertimeCacheRepository(
                     bytes.fill(0)
                 }
             currentCoroutineContext().ensureActive()
-            replicas.replace(access.sessionId, partition, previous, encoded)
+            replicas.replace(ReplicaScope(access.sessionId), partition, previous, encoded)
         } finally {
             key.fill(0)
         }
@@ -101,7 +106,7 @@ class EncryptedOvertimeCacheRepository(
     override fun observeRequest(access: WorkforceAccess) =
         safeStorageFlow(
             replicas.observeDocument(
-                access.sessionId,
+                ReplicaScope(access.sessionId),
                 overtimePartition(access, "request"),
                 "request",
             ),
@@ -135,7 +140,7 @@ class EncryptedOvertimeCacheRepository(
 
     override suspend fun requestGeneration(access: WorkforceAccess) = safeStorageCall {
         replicas
-            .checkpoint(access.sessionId, overtimePartition(access, "request"))
+            .checkpoint(ReplicaScope(access.sessionId), overtimePartition(access, "request"))
             ?.handle
             ?.generation
     }
@@ -146,10 +151,15 @@ class EncryptedOvertimeCacheRepository(
         snapshot: OvertimeSnapshot<OvertimeRequestView>?,
     ) = safeStorageCall {
         val partition = overtimePartition(access, "request")
-        val previous = replicas.checkpoint(access.sessionId, partition)
+        val previous = replicas.checkpoint(ReplicaScope(access.sessionId), partition)
         if (previous?.handle?.generation != expectedGeneration) return@safeStorageCall false
         if (snapshot == null)
-            return@safeStorageCall replicas.replace(access.sessionId, partition, previous, null)
+            return@safeStorageCall replicas.replace(
+                ReplicaScope(access.sessionId),
+                partition,
+                previous,
+                null,
+            )
         require(
             sameWorkforceScope(access, snapshot.access) && snapshot.generation != expectedGeneration
         )
@@ -166,7 +176,7 @@ class EncryptedOvertimeCacheRepository(
                     bytes.fill(0)
                 }
             currentCoroutineContext().ensureActive()
-            replicas.replace(access.sessionId, partition, previous, encoded)
+            replicas.replace(ReplicaScope(access.sessionId), partition, previous, encoded)
         } finally {
             key.fill(0)
         }

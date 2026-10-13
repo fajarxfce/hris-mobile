@@ -1,9 +1,10 @@
 package dev.fajar.starter.database
 
 /** Shared storage limits keep SQLite and IndexedDB batches finite before starting I/O. */
-fun validateReplicaKey(sessionId: String, partition: String) {
-    require(sessionId.length in 1..128 && partition.length in 1..160)
-    require((sessionId + partition).all { it in '!'..'~' })
+fun validateReplicaKey(scope: ReplicaScope, partition: String) {
+    require(scope.sessionId.length in 1..128 && partition.length in 1..160)
+    require((scope.sessionId + partition).all { it in '!'..'~' })
+    require(scope.accountKey == null || scope.accountKey.length in 1..2048)
 }
 
 fun validateReplicaGeneration(generation: String) {
@@ -15,14 +16,14 @@ fun validateReplicaCheckpoint(checkpoint: String) {
 }
 
 fun validateReplicaReplacement(
-    sessionId: String,
+    scope: ReplicaScope,
     partition: String,
     expected: ReplicaCheckpoint?,
     snapshot: ReplicaSnapshot?,
 ) {
-    validateReplicaKey(sessionId, partition)
+    validateReplicaKey(scope, partition)
     expected?.let {
-        require(it.handle.sessionId == sessionId && it.handle.partition == partition)
+        require(it.handle.scope == scope && it.handle.partition == partition)
         validateReplicaGeneration(it.handle.generation)
         validateReplicaCheckpoint(it.payload)
         require(it.revision in 0..9_007_199_254_740_991L)

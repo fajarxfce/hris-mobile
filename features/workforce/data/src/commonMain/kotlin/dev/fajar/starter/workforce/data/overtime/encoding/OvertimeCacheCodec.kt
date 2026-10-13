@@ -75,7 +75,7 @@ suspend fun decodeOvertimeCache(
     val checkpoint = requireNotNull(page.checkpoint)
     require(checkpoint.published && checkpoint.revision == 0L)
     require(
-        checkpoint.handle.sessionId == access.sessionId &&
+        checkpoint.handle.scope.sessionId == access.sessionId &&
             checkpoint.handle.partition == overtimePartition(access, view)
     )
     val document = page.documents.single()

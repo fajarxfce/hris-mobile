@@ -75,7 +75,7 @@ class ExpenseCacheTest {
                 assertTrue(encoded.documents.all { it.payload!!.length <= 131_072 })
                 assertTrue(
                     db.replicas.replace(
-                        f.access.sessionId,
+                        ReplicaScope(f.access.sessionId),
                         expensePartition(f.access, "details"),
                         null,
                         encoded,
@@ -84,7 +84,7 @@ class ExpenseCacheTest {
                 val page =
                     db.replicas
                         .observe(
-                            f.access.sessionId,
+                            ReplicaScope(f.access.sessionId),
                             expensePartition(f.access, "details"),
                             limit = 17,
                         )
@@ -120,7 +120,11 @@ class ExpenseCacheTest {
             assertEquals(AppResult.Success(details), restored.observeDetails(f.access).first())
             val raw =
                 db.replicas
-                    .observe(f.access.sessionId, expensePartition(f.access, "details"), limit = 17)
+                    .observe(
+                        ReplicaScope(f.access.sessionId),
+                        expensePartition(f.access, "details"),
+                        limit = 17,
+                    )
                     .first()
             assertFalse(raw.documents.single().payload!!.contains(f.summary.employeeName))
             assertFalse(raw.documents.single().payload!!.contains("totalAmount"))

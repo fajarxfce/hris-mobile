@@ -21,7 +21,11 @@ class EncryptedAttendanceCacheRepository(
 ) : AttendanceCacheRepository {
     override fun observe(access: WorkforceAccess, window: AttendanceWindow) =
         safeStorageFlow(
-            replicas.observe(access.sessionId, attendancePartition(access, window), limit = 33),
+            replicas.observe(
+                ReplicaScope(access.sessionId),
+                attendancePartition(access, window),
+                limit = 33,
+            ),
             mapValue = { page ->
                 val checkpoint = page.checkpoint
                 if (checkpoint == null) null
@@ -43,7 +47,7 @@ class EncryptedAttendanceCacheRepository(
     override suspend fun generation(access: WorkforceAccess, window: AttendanceWindow) =
         safeStorageCall {
             replicas
-                .checkpoint(access.sessionId, attendancePartition(access, window))
+                .checkpoint(ReplicaScope(access.sessionId), attendancePartition(access, window))
                 ?.handle
                 ?.generation
         }
@@ -55,10 +59,15 @@ class EncryptedAttendanceCacheRepository(
         window: AttendanceWindow,
     ) = safeStorageCall {
         val partition = attendancePartition(access, window)
-        val previous = replicas.checkpoint(access.sessionId, partition)
+        val previous = replicas.checkpoint(ReplicaScope(access.sessionId), partition)
         if (previous?.handle?.generation != expectedGeneration) return@safeStorageCall false
         if (snapshot == null)
-            return@safeStorageCall replicas.replace(access.sessionId, partition, previous, null)
+            return@safeStorageCall replicas.replace(
+                ReplicaScope(access.sessionId),
+                partition,
+                previous,
+                null,
+            )
         require(
             sameWorkforceScope(access, snapshot.access) && snapshot.generation != expectedGeneration
         )
@@ -69,7 +78,7 @@ class EncryptedAttendanceCacheRepository(
         try {
             val encoded =
                 encodeAttendanceCache(dto, snapshot.generation, cipher, key, access, window)
-            replicas.replace(access.sessionId, partition, previous, encoded)
+            replicas.replace(ReplicaScope(access.sessionId), partition, previous, encoded)
         } finally {
             key.fill(0)
         }

@@ -6,42 +6,47 @@ import kotlinx.coroutines.flow.map
 internal class RoomReplicaStore(private val database: StarterDatabase) : ReplicaStore {
     private val dao = database.replicaDao()
 
-    override suspend fun checkpoint(sessionId: String, partition: String): ReplicaCheckpoint? {
-        validateReplicaKey(sessionId, partition)
-        return dao.checkpoint(sessionId, partition)
+    override suspend fun containsRecords(partitionPrefix: String): Boolean {
+        require(partitionPrefix.length in 1..160 && partitionPrefix.all { it in '!'..'~' })
+        return dao.containsRecords(partitionPrefix)
     }
 
-    override fun observeCheckpoint(sessionId: String, partition: String) =
+    override suspend fun checkpoint(scope: ReplicaScope, partition: String): ReplicaCheckpoint? {
+        validateReplicaKey(scope, partition)
+        return dao.checkpoint(scope, partition)
+    }
+
+    override fun observeCheckpoint(scope: ReplicaScope, partition: String) =
         database.invalidationTracker
             .createFlow("account_scope", "replica_heads", "replica_generations")
             .map {
-                validateReplicaKey(sessionId, partition)
-                dao.checkpoint(sessionId, partition)
+                validateReplicaKey(scope, partition)
+                dao.checkpoint(scope, partition)
             }
             .distinctUntilChanged()
 
     override suspend fun replace(
-        sessionId: String,
+        scope: ReplicaScope,
         partition: String,
         expected: ReplicaCheckpoint?,
         snapshot: ReplicaSnapshot?,
     ): Boolean {
         val retained = snapshot?.copy(documents = snapshot.documents.toList())
-        validateReplicaReplacement(sessionId, partition, expected, retained)
-        return dao.replace(sessionId, partition, expected, retained)
+        validateReplicaReplacement(scope, partition, expected, retained)
+        return dao.replace(scope, partition, expected, retained)
     }
 
     override suspend fun begin(
-        sessionId: String,
+        scope: ReplicaScope,
         partition: String,
         generation: String,
         checkpoint: String,
         expectedGeneration: String?,
     ): Boolean {
-        validateReplicaKey(sessionId, partition)
+        validateReplicaKey(scope, partition)
         validateReplicaGeneration(generation)
         validateReplicaCheckpoint(checkpoint)
-        return dao.begin(sessionId, partition, generation, checkpoint, expectedGeneration)
+        return dao.begin(scope, partition, generation, checkpoint, expectedGeneration)
     }
 
     override suspend fun commit(
@@ -51,7 +56,7 @@ internal class RoomReplicaStore(private val database: StarterDatabase) : Replica
         documents: List<ReplicaDocument>,
         publish: Boolean,
     ): Boolean {
-        validateReplicaKey(handle.sessionId, handle.partition)
+        validateReplicaKey(handle.scope, handle.partition)
         validateReplicaGeneration(handle.generation)
         validateReplicaCheckpoint(checkpoint)
         val batch = documents.toList()
@@ -59,7 +64,7 @@ internal class RoomReplicaStore(private val database: StarterDatabase) : Replica
         return dao.commit(handle, expectedRevision, checkpoint, batch, publish)
     }
 
-    override fun observe(sessionId: String, partition: String, after: String?, limit: Int) =
+    override fun observe(scope: ReplicaScope, partition: String, after: String?, limit: Int) =
         database.invalidationTracker
             .createFlow(
                 "account_scope",
@@ -68,23 +73,23 @@ internal class RoomReplicaStore(private val database: StarterDatabase) : Replica
                 "replica_documents",
             )
             .map {
-                validateReplicaKey(sessionId, partition)
+                validateReplicaKey(scope, partition)
                 validateReplicaPage(after, limit)
-                dao.page(sessionId, partition, after, limit)
+                dao.page(scope, partition, after, limit)
             }
             .distinctUntilChanged()
 
     override suspend fun document(
-        sessionId: String,
+        scope: ReplicaScope,
         partition: String,
         id: String,
     ): ReplicaDocument? {
-        validateReplicaKey(sessionId, partition)
+        validateReplicaKey(scope, partition)
         validateReplicaGeneration(id)
-        return dao.document(sessionId, partition, id)
+        return dao.document(scope, partition, id)
     }
 
-    override fun observeDocument(sessionId: String, partition: String, id: String) =
+    override fun observeDocument(scope: ReplicaScope, partition: String, id: String) =
         database.invalidationTracker
             .createFlow(
                 "account_scope",
@@ -93,14 +98,14 @@ internal class RoomReplicaStore(private val database: StarterDatabase) : Replica
                 "replica_documents",
             )
             .map {
-                validateReplicaKey(sessionId, partition)
+                validateReplicaKey(scope, partition)
                 validateReplicaGeneration(id)
-                dao.documentPage(sessionId, partition, id)
+                dao.documentPage(scope, partition, id)
             }
             .distinctUntilChanged()
 
-    override suspend fun clear(sessionId: String, partition: String): Boolean {
-        validateReplicaKey(sessionId, partition)
-        return dao.clear(sessionId, partition)
+    override suspend fun clear(scope: ReplicaScope, partition: String): Boolean {
+        validateReplicaKey(scope, partition)
+        return dao.clear(scope, partition)
     }
 }

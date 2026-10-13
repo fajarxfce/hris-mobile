@@ -6,19 +6,20 @@ import androidx.room.Index
 
 @Entity(
     tableName = "replica_documents",
-    primaryKeys = ["partition", "generation", "id"],
+    primaryKeys = ["ownerKey", "partition", "generation", "id"],
     foreignKeys =
         [
             ForeignKey(
                 entity = ReplicaGenerationEntity::class,
-                parentColumns = ["partition", "generation"],
-                childColumns = ["partition", "generation"],
+                parentColumns = ["ownerKey", "partition", "generation"],
+                childColumns = ["ownerKey", "partition", "generation"],
                 onDelete = ForeignKey.CASCADE,
             )
         ],
-    indices = [Index(value = ["partition", "generation", "sortKey"], unique = true)],
+    indices = [Index(value = ["ownerKey", "partition", "generation", "sortKey"], unique = true)],
 )
 data class ReplicaDocumentEntity(
+    val ownerKey: String,
     val partition: String,
     val generation: String,
     val id: String,
