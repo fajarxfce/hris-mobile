@@ -99,7 +99,7 @@ submitting it are separate capabilities.
 | Selected company | Encrypted selection, restored without an age limit | Foreground/worker revalidation |
 | Inbox | Account-owned encrypted records survive a new login; list/detail share a published generation | Implemented |
 | Attendance / calendar | Last recent/monthly/calendar snapshots | Snapshot acquisition; server feed not registered |
-| Leave | Account-owned request summaries and balances, queried by employment/year/status; the last full request detail remains a separate snapshot | Request/balance change feed implemented; full detail/history replication remains pending |
+| Leave | Account-owned balances, full requests and acquired activity pages; local employment/year/status and history queries | Request/balance change feed and resumable older-activity acquisition implemented |
 | Overtime | Last selected overview and request detail | Server collection exists; mobile integration pending |
 | Payslips | Last selected list and detail | Server collections exist; mobile integration pending |
 | Expenses | Last selected list and detail | Server collection exists; mobile integration pending |
@@ -132,8 +132,9 @@ has these tables.
 ### Leave replica
 
 The physical store uses `replica_documents` with an account owner, company partition,
-generation, record ID, version, ordering key and encrypted payload. Request summaries
-and balances are independent documents. A small encrypted directory document supplies
+generation, record ID, version, ordering key and encrypted payload. Request summaries,
+current detail components, activity pages and balances are independent documents.
+A small encrypted directory document supplies
 employment choices; it does not contain the request history. Room's indexed tag table
 and IndexedDB's multi-entry index support local filtering without loading the whole
 collection into memory. Filter tokens are derived with HMAC and bound to the API,
@@ -146,7 +147,7 @@ the same published generation/revision. Status changes, paging and year selectio
 do not trigger HTTP calls. Balances use the selected year; requests cover all dates.
 
 `SyncLeave` selects `LEAVE_REQUESTS,LEAVE_BALANCES`, hydrates references four at a time,
-and commits each processed page with its cursor and directory metadata. Fifty
+and commits each processed page with its cursor and directory metadata. Eight
 references per page, ten pages per run and a 30-second run deadline bound one job;
 subsequent invocations resume its stored cursor. These limits do not discard acquired
 history or expire local reads. Canonical versions can be newer than their reference;
@@ -162,9 +163,32 @@ Balance type labels are hydrated with their financial record; standalone type
 renames still need a metadata invalidation feed to update an unchanged balance.
 
 The previous last-view overview remains a migration fallback until the first
-complete replica is published. Once a replica is published, an empty local result
-is authoritative for that replica; it does not recover an unrelated old filter page.
-Full request details and paged activity still use their preceding last-view storage.
+complete replica is published. Once that replica completes, an empty local result
+is authoritative; it does not recover an unrelated old filter page. The preceding
+request snapshot remains a read-only compatibility source until the expanded
+request format publishes. Its old writer exists only in migration test fixtures.
+
+Full request acquisition writes the summary, header, date chunks and latest activity
+page together. Date chunks contain at most 128 entries and an activity page at most
+ten changes; requests are retained by ID, independently of the last opened page.
+A fresh individual read can initialize those records before list synchronization.
+That initial projection has no completed-feed timestamp or invented directory.
+An existing published generation remains protected while a replacement is staged.
+
+After feed catch-up, `SyncLeave` fills at most eight pending activity pages per run.
+Each request's strictly decreasing cursor advances atomically with its acquired page.
+Already acquired pages are reused locally. A newer server request waits for its
+change-feed update instead of advancing an older frontier. Request-version and
+acquisition checks reject superseded work. Neither older activity nor an unrelated
+checkpoint update renews the request's action-review timestamp.
+
+`LoadLeaveRequest` serves cached activity navigation without HTTP or waiting for the
+shared acquisition mutex. Explicit refresh, entry and action reconciliation acquire
+current facts; combining latest and older responses requires matching request
+versions. Queries verify the current parent before exposing components or older
+pages, so stale date chunks and children of deleted requests cannot reappear.
+The same mutex covers UI and worker acquisition, and deadlines include lock wait.
+Storage compare-and-set conflicts do not revoke permission to read saved facts.
 
 ## Next increments
 
@@ -172,9 +196,9 @@ Full request details and paged activity still use their preceding last-view stor
    projections. Inbox and Leave replicas retain account-owned facts across sign-in; workspace
    admission and other last-view snapshots remain session-owned. Reauthentication
    does not reuse an old request guard or old credential-bound feed cursor.
-2. Add projections for the existing overtime, expense and payroll collections, and
-   independently retained full Leave details/history. Store versioned facts, then
-   query/filter locally; replace single last-view slots as each projection is implemented.
+2. Add projections for the existing overtime, expense and payroll collections.
+   Store versioned facts, then query/filter locally; replace single last-view slots
+   as each projection is implemented.
 3. Register backend feeds for attendance, schedules, documents and coworker data,
    including deletions and authorization changes, before implementing mobile sync.
 4. Persist unfinished local drafts separately from confirmed server models and

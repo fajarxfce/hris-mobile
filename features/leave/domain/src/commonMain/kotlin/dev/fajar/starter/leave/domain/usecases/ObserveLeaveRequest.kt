@@ -5,14 +5,14 @@ import dev.fajar.starter.common.result.*
 import dev.fajar.starter.identity.domain.repositories.SessionRepository
 import dev.fajar.starter.leave.domain.entities.*
 import dev.fajar.starter.leave.domain.policies.*
-import dev.fajar.starter.leave.domain.repositories.LeaveRequestCacheRepository
+import dev.fajar.starter.leave.domain.repositories.LeaveRequestReplicaRepository
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
 import kotlin.time.Clock
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 
 class ObserveLeaveRequest(
-    private val cache: LeaveRequestCacheRepository,
+    private val cache: LeaveRequestReplicaRepository,
     private val sessions: SessionRepository,
     private val workspaces: WorkspaceRepository,
     private val clock: Clock,
@@ -22,8 +22,12 @@ class ObserveLeaveRequest(
     operator fun invoke(
         workspaceId: String,
         requestId: String,
-    ): Flow<AppResult<LeaveRequestSnapshot?>> =
-        sessions
+        historyAfter: Long? = null,
+    ): Flow<AppResult<LeaveRequestSnapshot?>> {
+        val selection = LeaveRequestSelection(requestId, historyAfter)
+        val valid = validateLeaveRequestSelection(selection)
+        if (valid is AppResult.Failed) return flowOf(valid)
+        return sessions
             .observe()
             .flatMapLatest { result ->
                 when (result) {
@@ -54,7 +58,7 @@ class ObserveLeaveRequest(
                 when (admitted) {
                     is AppResult.Failed -> flowOf(admitted)
                     is AppResult.Success ->
-                        cache.observeRequest(admitted.value).map { result ->
+                        cache.observeRequest(admitted.value, selection).map { result ->
                             when (result) {
                                 is AppResult.Failed -> result
                                 is AppResult.Success ->
@@ -72,4 +76,5 @@ class ObserveLeaveRequest(
                         }
                 }
             }
+    }
 }

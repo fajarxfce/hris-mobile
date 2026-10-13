@@ -59,6 +59,7 @@ class LeaveRequestPresentationFixture(
             emptyList(),
         )
     val records = MutableStateFlow<AppResult<LeaveRequestSnapshot?>>(AppResult.Success(null))
+    val historyPages = mutableMapOf<Long, LeavePage<LeaveChange>>()
     var requestCall: suspend (LeaveRequestSelection) -> AppResult<LeaveRequestDetails> = {
         AppResult.Success(details)
     }
@@ -86,9 +87,10 @@ class LeaveRequestPresentationFixture(
             }
         }
     val cache =
-        object : LeaveRequestCacheRepository {
+        object : LeaveRequestReplicaRepository {
             override fun observeRequest(
-                access: LeaveAccess
+                access: LeaveAccess,
+                selection: LeaveRequestSelection,
             ): Flow<AppResult<LeaveRequestSnapshot?>> = flow {
                 observers++
                 subscriptions++
@@ -99,35 +101,71 @@ class LeaveRequestPresentationFixture(
                         emit(AppResult.Failed(Failure(FailureKind.Storage, "Storage unavailable")))
                         return@flow
                     }
-                    emitAll(records)
+                    emitAll(
+                        records.map { result ->
+                            when (result) {
+                                is AppResult.Failed -> result
+                                is AppResult.Success ->
+                                    AppResult.Success(
+                                        result.value?.let { snapshot ->
+                                            if (snapshot.request.id != selection.requestId) null
+                                            else if (selection.historyAfter == null) snapshot
+                                            else
+                                                historyPages[selection.historyAfter]?.let { page ->
+                                                    snapshot.copy(
+                                                        selection = selection,
+                                                        request =
+                                                            snapshot.request.copy(history = page),
+                                                    )
+                                                }
+                                        }
+                                    )
+                            }
+                        }
+                    )
                 } finally {
                     observers--
                 }
             }
 
-            override suspend fun requestGeneration(access: LeaveAccess): AppResult<String?> {
+            override suspend fun requestCheckpoint(access: LeaveAccess): AppResult<String?> {
                 generationWait()
                 return AppResult.Success((records.value as? AppResult.Success)?.value?.generation)
             }
 
             override suspend fun replaceRequest(
                 access: LeaveAccess,
-                expectedGeneration: String?,
+                requestId: String,
+                expectedCheckpoint: String?,
                 snapshot: LeaveRequestSnapshot?,
+                history: LeaveHistoryPage?,
             ): AppResult<Boolean> {
                 publicationWait()
                 if (snapshot == null && cleanupFails)
                     return AppResult.Failed(Failure(FailureKind.Storage, "Storage unavailable"))
                 val current = (records.value as? AppResult.Success)?.value
-                if (rejectWrite || expectedGeneration != current?.generation)
+                if (rejectWrite || expectedCheckpoint != current?.generation)
                     return AppResult.Success(false)
                 if (snapshot == null) clears++ else writes++
+                if (history != null) historyPages[history.after] = history.history
                 records.value = AppResult.Success(snapshot)
+                return AppResult.Success(true)
+            }
+
+            override suspend fun pendingHistory(access: LeaveAccess, limit: Int) =
+                AppResult.Success(emptyList<LeaveHistoryWork>())
+
+            override suspend fun storeHistory(
+                access: LeaveAccess,
+                work: LeaveHistoryWork,
+                page: LeaveHistoryPage,
+            ): AppResult<Boolean> {
+                historyPages[page.after] = page.history
                 return AppResult.Success(true)
             }
         }
     val refresh =
-        RefreshLeaveRequest(remote, cache, base.sessions, base.workspaces, base.clock, base.build)
+        LoadLeaveRequest(remote, cache, base.sessions, base.workspaces, base.clock, base.build)
     val observe = ObserveLeaveRequest(cache, base.sessions, base.workspaces, base.clock, base.build)
 
     suspend fun load(selected: LeaveRequestSelection = selection) =

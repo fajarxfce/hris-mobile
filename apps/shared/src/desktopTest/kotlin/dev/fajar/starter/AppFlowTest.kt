@@ -1314,6 +1314,14 @@ class AppFlowTest {
             compose.onNode(hasScrollToIndexAction()).performScrollToNode(hasText("1.5 days"))
             compose.onNode(hasText("Annual leave") and hasClickAction()).performClick()
             waitFor("Request cancellation")
+            compose.waitUntil {
+                compose
+                    .onAllNodes(
+                        hasText("Request cancellation") and hasClickAction() and isEnabled()
+                    )
+                    .fetchSemanticsNodes()
+                    .size == 1
+            }
             compose.onNode(hasText("Request cancellation") and hasClickAction()).performClick()
             val confirm =
                 hasText("Request cancellation") and hasClickAction() and hasAnyAncestor(isDialog())
@@ -1350,6 +1358,14 @@ class AppFlowTest {
             }
             compose.onNodeWithText("Retry delivery").performClick()
             waitFor("Withdraw cancellation")
+            compose.waitUntil {
+                compose
+                    .onAllNodes(
+                        hasText("Withdraw cancellation") and hasClickAction() and isEnabled()
+                    )
+                    .fetchSemanticsNodes()
+                    .size == 1
+            }
             compose
                 .onNode(hasText("Cancellation pending") and hasText("Annual leave"))
                 .assertExists()
@@ -1592,7 +1608,7 @@ class AppFlowTest {
             capture("leave-request-details")
             compose.onNode(hasScrollToIndexAction()).performScrollToNode(hasText("Earlier updates"))
             compose.onNodeWithText("Earlier updates").performClick()
-            compose.waitUntil { server.leave.historyPages.lastOrNull() == "3" }
+            waitFor("Review 2 completed")
             waitFor("Family appointment")
             compose.onNode(hasText("Approved") and hasText("Annual leave")).assertExists()
             server.leave.offline = true
@@ -1600,15 +1616,18 @@ class AppFlowTest {
             waitFor("Unable to connect. Check your connection.")
             compose.onNodeWithContentDescription("Back").performClick()
             waitFor("Leave balances")
+            waitFor("12.5 days")
             compose.onNode(hasScrollToIndexAction()).performScrollToNode(hasText("1.5 days"))
             compose.onNode(hasText("Annual leave") and hasClickAction()).performClick()
             waitFor("Leave request")
             waitFor("Family appointment")
+            compose.onNode(hasScrollToIndexAction()).performScrollToNode(hasText("Earlier updates"))
+            compose.onNodeWithText("Earlier updates").performClick()
+            waitFor("Review 2 completed")
             compose.onNode(hasScrollToIndexAction()).performScrollToNode(hasText("Latest updates"))
-            server.leave.offline = false
             compose.onNodeWithText("Latest updates").performClick()
-            compose.waitUntil { server.leave.historyPages.lastOrNull() == "LATEST" }
             waitFor("Family appointment")
+            server.leave.offline = false
             server.leave.rejectDetails = true
             refreshWhenReady()
             waitFor("This leave request is unavailable.")

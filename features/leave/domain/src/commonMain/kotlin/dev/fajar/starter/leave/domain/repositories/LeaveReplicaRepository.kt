@@ -4,7 +4,7 @@ import dev.fajar.starter.common.result.AppResult
 import dev.fajar.starter.leave.domain.entities.*
 import kotlinx.coroutines.flow.Flow
 
-interface LeaveReplicaRepository {
+interface LeaveReplicaRepository : LeaveRequestReplicaRepository {
     fun observeDirectory(access: LeaveAccess): Flow<AppResult<LeaveReplicaDirectory>>
 
     fun observe(access: LeaveAccess, selection: LeaveSelection): Flow<AppResult<LeaveReplicaPage>>

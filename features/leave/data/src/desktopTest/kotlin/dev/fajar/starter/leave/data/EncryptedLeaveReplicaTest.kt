@@ -22,7 +22,7 @@ class EncryptedLeaveReplicaTest {
             val requests =
                 (1..25).map { index ->
                     val request =
-                        f.request.value.copy(
+                        f.request.value.withFacts(
                             id = id(index),
                             submittedAt = f.raw.now + index.seconds,
                             status =
@@ -94,14 +94,14 @@ class EncryptedLeaveReplicaTest {
             f.seed(listOf(entry(f.request), entry(f.balance)))
             val approved =
                 f.request.copy(
-                    value = f.request.value.copy(version = 2, status = LeaveStatus.APPROVED)
+                    value = f.request.value.withFacts(version = 2, status = LeaveStatus.APPROVED)
                 )
             f.commit(listOf(entry(approved)))
             assertTrue(
                 f.page(f.selection.copy(status = LeaveStatus.PENDING)).requests.items.isEmpty()
             )
             assertEquals(
-                approved.value,
+                approved.value.toSummary(),
                 f.page(f.selection.copy(status = LeaveStatus.APPROVED)).requests.items.single(),
             )
             f.commit(
@@ -197,7 +197,8 @@ class EncryptedLeaveReplicaTest {
             val expected = f.page()
             db.close()
             db = createAppDatabase(directory)
-            val restored = EncryptedLeaveReplicaRepository(db.replicas, AesGcmContentCipher(), keys)
+            val restored =
+                EncryptedLeaveReplicaRepository(db.replicas, AesGcmContentCipher(), keys, keys)
             assertEquals(
                 expected,
                 assertIs<AppResult.Success<LeaveReplicaPage>>(
@@ -281,13 +282,13 @@ class EncryptedLeaveReplicaTest {
                         }
                     }
                 }
-            val repository = EncryptedLeaveReplicaRepository(f.db.replicas, cipher, f.keys)
+            val repository = EncryptedLeaveReplicaRepository(f.db.replicas, cipher, f.keys, f.keys)
             val writing = async {
                 repository.commit(
                     f.current,
                     f.current.copy(revision = 2),
                     f.directory,
-                    listOf(entry(f.request.copy(value = f.request.value.copy(version = 1)))),
+                    listOf(entry(f.request.copy(value = f.request.value.withFacts(version = 1)))),
                 )
             }
             entered.await()
@@ -325,13 +326,14 @@ class EncryptedLeaveReplicaTest {
         val access = raw.access
         val selection = LeaveSelection(raw.employee.id, 2026)
         val directory = raw.directory.toDirectory(access, null)
-        val request = raw.request.toReplicaRequest(raw.request.id)
+        val request = raw.detail.toReplicaRequest(raw.request.id)
         val balance =
             LeaveReplicaRecord.Balance(
                 raw.employee.id,
                 raw.balances.toBalances(raw.employee.id, 2026, null).items.single(),
             )
-        val repository = EncryptedLeaveReplicaRepository(db.replicas, AesGcmContentCipher(), keys)
+        val repository =
+            EncryptedLeaveReplicaRepository(db.replicas, AesGcmContentCipher(), keys, keys)
         var current = initialLeaveCheckpoint(access, "generation", raw.now)
 
         suspend fun seed(entries: List<LeaveReplicaEntry>, publish: Boolean = true) {
@@ -340,19 +342,24 @@ class EncryptedLeaveReplicaTest {
         }
 
         suspend fun commit(entries: List<LeaveReplicaEntry>, publish: Boolean = true) {
-            val next =
-                current.copy(
-                    revision = current.revision + 1,
-                    phase = LeaveSyncPhase.CHANGES,
-                    cursor = "cursor",
-                    published = publish,
-                    refreshedAt = if (publish) raw.now else null,
+            val batches = entries.chunked(8).ifEmpty { listOf(emptyList()) }
+            for ((index, batch) in batches.withIndex()) {
+                val next =
+                    current.copy(
+                        revision = current.revision + 1,
+                        phase = LeaveSyncPhase.CHANGES,
+                        cursor = "cursor",
+                        published = current.published || (publish && index == batches.lastIndex),
+                        refreshedAt =
+                            if (publish && index == batches.lastIndex) raw.now
+                            else current.refreshedAt,
+                    )
+                assertEquals(
+                    AppResult.Success(true),
+                    repository.commit(current, next, directory, batch),
                 )
-            assertEquals(
-                AppResult.Success(true),
-                repository.commit(current, next, directory, entries),
-            )
-            current = next
+                current = next
+            }
         }
 
         suspend fun page(selection: LeaveSelection = this.selection) =
@@ -378,4 +385,26 @@ private fun entry(record: LeaveReplicaRecord) =
                 )
         },
         record,
+        LeaveDataFixture().now,
+    )
+
+private fun LeaveRequestDetails.withFacts(
+    id: String = this.id,
+    version: Long = this.version,
+    status: LeaveStatus = this.status,
+    submittedAt: kotlin.time.Instant = this.submittedAt,
+): LeaveRequestDetails =
+    copy(
+        id = id,
+        version = version,
+        status = status,
+        submittedAt = submittedAt,
+        history =
+            LeavePage(
+                listOf(
+                    history.items
+                        .first()
+                        .copy(version = version, status = status, recordedAt = submittedAt)
+                )
+            ),
     )

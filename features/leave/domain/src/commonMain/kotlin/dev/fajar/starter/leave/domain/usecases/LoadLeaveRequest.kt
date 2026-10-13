@@ -16,30 +16,49 @@ import kotlin.time.Clock
 import kotlin.time.Duration.Companion.seconds
 import kotlin.uuid.Uuid
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
 /**
  * Owns a finite self-service read and complete publication, independently of overview refreshes.
  */
-class RefreshLeaveRequest(
+class LoadLeaveRequest(
     private val remote: LeaveRepository,
-    private val cache: LeaveRequestCacheRepository,
+    private val cache: LeaveRequestReplicaRepository,
     private val sessions: SessionRepository,
     private val workspaces: WorkspaceRepository,
     private val clock: Clock,
     private val build: AppBuild,
+    private val execution: Mutex = Mutex(),
 ) {
-    private val execution = Mutex()
-
     suspend operator fun invoke(
         workspaceId: String,
         selection: LeaveRequestSelection,
+        acquisition: LeaveRequestAcquisition = LeaveRequestAcquisition.FRESH,
     ): AppResult<Unit> =
-        execution.withLock {
-            withTimeoutOrNull(30.seconds) { acquire(workspaceId, selection) }
-                ?: leaveFailure("client.leave_timeout", FailureKind.Timeout)
-        }
+        withTimeoutOrNull(30.seconds) {
+            val valid = validateLeaveRequestSelection(selection)
+            if (valid is AppResult.Failed) return@withTimeoutOrNull valid
+            if (acquisition == LeaveRequestAcquisition.LOCAL_FIRST) {
+                val access =
+                    when (val current = currentAccess(workspaceId)) {
+                        is AppResult.Failed -> return@withTimeoutOrNull current
+                        is AppResult.Success -> current.value
+                    }
+                val saved = cache.observeRequest(access, selection).first()
+                currentCoroutineContext().ensureActive()
+                val ownership = validateLeaveContinuation(access, currentAccess(workspaceId))
+                if (ownership is AppResult.Failed) return@withTimeoutOrNull ownership
+                when (saved) {
+                    is AppResult.Failed -> return@withTimeoutOrNull saved
+                    is AppResult.Success ->
+                        if (saved.value?.selection == selection)
+                            return@withTimeoutOrNull validateStoredLeaveRequest(access, saved.value)
+                }
+            }
+            execution.withLock { acquire(workspaceId, selection) }
+        } ?: leaveFailure("client.leave_timeout", FailureKind.Timeout)
 
     private suspend fun acquire(
         workspaceId: String,
@@ -53,7 +72,7 @@ class RefreshLeaveRequest(
                 is AppResult.Success -> current.value
             }
         val generation =
-            when (val current = cache.requestGeneration(access)) {
+            when (val current = cache.requestCheckpoint(access)) {
                 is AppResult.Failed -> return current
                 is AppResult.Success -> current.value
             }
@@ -67,12 +86,16 @@ class RefreshLeaveRequest(
         if (policyOwnership is AppResult.Failed) return policyOwnership
         val policy =
             when (policyResponse) {
-                is AppResult.Failed -> return reject(access, generation, policyResponse)
+                is AppResult.Failed ->
+                    return reject(access, selection.requestId, generation, policyResponse)
                 is AppResult.Success -> CompanyPolicySnapshot(policyResponse.value, requestedAt)
             }
         val availability = admitCompanyOperation(policy, build, CompanyModule.LEAVE, clock.now())
-        if (availability is AppResult.Failed) return reject(access, generation, availability)
-        val response = remote.details(access, selection)
+        if (availability is AppResult.Failed)
+            return reject(access, selection.requestId, generation, availability)
+        val latest = LeaveRequestSelection(selection.requestId)
+        val response = remote.details(access, latest)
+        val receivedAt = clock.now()
         currentCoroutineContext().ensureActive()
         val current =
             when (val ownership = validateLeaveContinuation(access, currentAccess(workspaceId))) {
@@ -80,14 +103,25 @@ class RefreshLeaveRequest(
                 is AppResult.Success -> ownership.value
             }
         val stillAvailable = admitCompanyOperation(policy, build, CompanyModule.LEAVE, clock.now())
-        if (stillAvailable is AppResult.Failed) return reject(access, generation, stillAvailable)
+        if (stillAvailable is AppResult.Failed)
+            return reject(access, selection.requestId, generation, stillAvailable)
         val details =
             when (response) {
-                is AppResult.Failed -> return reject(access, generation, response)
+                is AppResult.Failed ->
+                    return reject(access, selection.requestId, generation, response)
                 is AppResult.Success -> response.value
             }
         if (details.id != selection.requestId)
             return leaveFailure("client.invalid_response", FailureKind.Unexpected)
+        val history =
+            when (val older = acquireHistory(workspaceId, access, selection, details, generation)) {
+                is AppResult.Failed -> return older
+                is AppResult.Success -> older.value
+            }
+        val publicationAccess =
+            admitCompanyOperation(policy, build, CompanyModule.LEAVE, clock.now())
+        if (publicationAccess is AppResult.Failed)
+            return reject(access, selection.requestId, generation, publicationAccess)
         val now = clock.now()
         val maintenance =
             policy.policy.maintenance?.let {
@@ -108,12 +142,15 @@ class RefreshLeaveRequest(
             LeaveRequestSnapshot(
                 readAccess,
                 Uuid.random().toString(),
-                selection,
+                latest,
                 details,
-                now,
-                now + LEAVE_FRESHNESS_PERIOD,
+                receivedAt,
+                receivedAt + LEAVE_FRESHNESS_PERIOD,
             )
-        when (val publication = cache.replaceRequest(access, generation, snapshot)) {
+        when (
+            val publication =
+                cache.replaceRequest(access, selection.requestId, generation, snapshot, history)
+        ) {
             is AppResult.Failed -> return publication
             is AppResult.Success ->
                 if (!publication.value)
@@ -123,6 +160,32 @@ class RefreshLeaveRequest(
         val publication = validateLeaveContinuation(access, currentAccess(workspaceId))
         if (publication is AppResult.Failed) return publication
         return AppResult.Success(Unit)
+    }
+
+    /** Older activity must belong to the same current request version before publication. */
+    private suspend fun acquireHistory(
+        workspaceId: String,
+        access: LeaveAccess,
+        selection: LeaveRequestSelection,
+        details: LeaveRequestDetails,
+        generation: String?,
+    ): AppResult<LeaveHistoryPage?> {
+        val after = selection.historyAfter ?: return AppResult.Success(null)
+        val response = remote.details(access, selection)
+        currentCoroutineContext().ensureActive()
+        val ownership = validateLeaveContinuation(access, currentAccess(workspaceId))
+        if (ownership is AppResult.Failed) return ownership
+        val older =
+            when (response) {
+                is AppResult.Failed ->
+                    return reject(access, selection.requestId, generation, response)
+                is AppResult.Success -> response.value
+            }
+        if (older.id != details.id || older.version != details.version)
+            return leaveFailure("client.leave_changed", FailureKind.Conflict)
+        return AppResult.Success(
+            LeaveHistoryPage(details.id, details.version, after, older.history)
+        )
     }
 
     private suspend fun currentAccess(workspaceId: String): AppResult<LeaveAccess> {
@@ -143,11 +206,12 @@ class RefreshLeaveRequest(
 
     private suspend fun reject(
         access: LeaveAccess,
+        requestId: String,
         generation: String?,
         failure: AppResult.Failed,
     ): AppResult.Failed {
         if (leaveFailureInvalidatesCache(failure.failure))
-            cache.replaceRequest(access, generation, null)
+            cache.replaceRequest(access, requestId, generation, null)
         return failure
     }
 }

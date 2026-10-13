@@ -169,7 +169,9 @@ class LeaveRequestReadTest {
         assertEquals(1, f.writes)
         assertEquals(
             1L,
-            assertIs<AppResult.Success<LeaveRequestSnapshot?>>(f.records.value)
+            assertIs<AppResult.Success<LeaveRequestSnapshot?>>(
+                    f.observe(f.base.workspace.id, f.selection.requestId, 1).first()
+                )
                 .value!!
                 .selection
                 .historyAfter,

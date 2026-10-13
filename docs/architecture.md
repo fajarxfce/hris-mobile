@@ -146,9 +146,13 @@ atomically stores encrypted records, directory metadata and the processed cursor
 not acquire data. The ViewModel owns selection, read gates and cancellation; it
 never recalculates accounting balances or sends technical API types to the page.
 The preceding overview remains a migration fallback until the first complete
-replica publishes. Own-request details still have separate acquisition/observation
-use cases and a bounded encrypted last-view partition. History pagination changes
-the visible revision page, not current request facts.
+replica publishes. Own-request details have separate acquisition/observation
+use cases and share the account-owned replica. Each request retains its full
+facts and independently acquired activity pages. A fresh individual read can
+publish before initial list synchronization; it does not mark that list complete.
+History pagination changes the visible revision page, not current request facts.
+`SyncLeave` fills older activity after feed catch-up, with a persisted frontier per
+request. Historical acquisition never renews an action review's timestamp.
 
 The [payslip workflow](payroll.md) keeps employee SELF scope explicit in
 every financial API request. Use cases admit company/session access and publish

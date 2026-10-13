@@ -22,7 +22,7 @@ internal fun LeaveRequestState.withCachedRequest(
             else
                 copy(
                     content = snapshot,
-                    loading = false,
+                    loading = snapshot == null && refreshing,
                     cacheFailure = null,
                     selection =
                         if (refreshFailure != null && selection == null) snapshot?.selection

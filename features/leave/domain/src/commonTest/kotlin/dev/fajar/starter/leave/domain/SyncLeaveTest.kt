@@ -17,6 +17,27 @@ import kotlinx.coroutines.test.*
 
 class SyncLeaveTest {
     @Test
+    fun competingStoragePublicationIsAConflictAndDoesNotRevokeOwnedFacts() = runTest {
+        for (newLogin in listOf(false, true)) {
+            val f = LeaveSyncFixture()
+            f.run()
+            val saved = f.replica.published.value
+            if (newLogin) {
+                val session = f.base.session.copy(id = "renewed")
+                f.base.sessionState.value = AppResult.Success(session)
+                f.base.workspaceState.value =
+                    AppResult.Success(f.base.workspace.copy(sessionId = session.id))
+            }
+            f.replica.rejectWrite = true
+            val failure = assertIs<AppResult.Failed>(f.run()).failure
+            assertEquals("client.leave_changed", failure.code)
+            assertEquals(FailureKind.Conflict, failure.kind)
+            assertEquals(saved, f.replica.published.value)
+            assertEquals(0, f.replica.clears)
+        }
+    }
+
+    @Test
     fun completedRunsDoNotDelayExplicitRefreshAndPendingPublicationHonorsItsPollingHint() =
         runTest {
             val f = LeaveSyncFixture()
@@ -157,7 +178,9 @@ class SyncLeaveTest {
             )
         }
         f.requestCall = {
-            AppResult.Success(LeaveReplicaRecord.Request(f.base.request.copy(version = 3)))
+            AppResult.Success(
+                LeaveReplicaRecord.Request(f.base.request.copy(version = 3).fixtureDetails())
+            )
         }
         f.changesCall = {
             AppResult.Success(
@@ -309,7 +332,10 @@ class SyncLeaveTest {
                 else -> f.requestCall = {
                         gate.await()
                         if (denied) failure
-                        else AppResult.Success(LeaveReplicaRecord.Request(f.base.request))
+                        else
+                            AppResult.Success(
+                                LeaveReplicaRecord.Request(f.base.request.fixtureDetails())
+                            )
                     }
             }
             val pending = async { f.run() }
@@ -333,7 +359,7 @@ class SyncLeaveTest {
             val gate = CompletableDeferred<Unit>()
             f.requestCall = {
                 withContext(NonCancellable) { gate.await() }
-                AppResult.Success(LeaveReplicaRecord.Request(f.base.request))
+                AppResult.Success(LeaveReplicaRecord.Request(f.base.request.fixtureDetails()))
             }
             val first = async { f.run() }
             runCurrent()
@@ -352,7 +378,7 @@ class SyncLeaveTest {
     fun hydrationConcurrencyAndAcquisitionTimeAreBoundedAndPendingWorkCanResume() = runTest {
         val f = LeaveSyncFixture()
         val refs =
-            (1..12).map {
+            (1..8).map {
                 f.references
                     .first()
                     .copy(id = "00000000-0000-0000-0000-${it.toString().padStart(12, '0')}")
@@ -411,7 +437,7 @@ class SyncLeaveTest {
         }
         f.requestCall = {
             delay(2.seconds)
-            AppResult.Success(LeaveReplicaRecord.Request(f.base.request))
+            AppResult.Success(LeaveReplicaRecord.Request(f.base.request.fixtureDetails()))
         }
         assertEquals(
             "client.company_policy_expired",

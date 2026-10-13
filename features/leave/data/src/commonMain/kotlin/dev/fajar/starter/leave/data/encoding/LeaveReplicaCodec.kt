@@ -90,7 +90,7 @@ suspend fun decodeLeaveDocument(
     cipher: ContentCipher,
     key: ByteArray,
     access: LeaveAccess,
-    checkpoint: ReplicaCheckpoint,
+    generation: String,
     document: ReplicaDocument,
 ): String {
     val bytes =
@@ -98,7 +98,7 @@ suspend fun decodeLeaveDocument(
             key,
             leaveReplicaAssociatedData(
                 access,
-                checkpoint.handle.generation,
+                generation,
                 document.id,
                 document.version,
                 document.sortKey,
@@ -128,7 +128,7 @@ suspend fun decodeLeaveReplicaPage(
             require(document.id.startsWith("balance/"))
             val record =
                 Json.decodeFromString<LeaveAccountDto>(
-                        decodeLeaveDocument(cipher, key, access, raw, document)
+                        decodeLeaveDocument(cipher, key, access, raw.handle.generation, document)
                     )
                     .toReplicaBalance(document.id.removePrefix("balance/"))
             require(
@@ -146,17 +146,18 @@ suspend fun decodeLeaveReplicaPage(
             require(document.id.startsWith("request/"))
             val record =
                 Json.decodeFromString<LeaveRequestSummaryDto>(
-                        decodeLeaveDocument(cipher, key, access, raw, document)
+                        decodeLeaveDocument(cipher, key, access, raw.handle.generation, document)
                     )
-                    .toReplicaRequest(document.id.removePrefix("request/"))
-            require(record.value.employeeId == selection.employeeId)
-            require(selection.status == null || record.value.status == selection.status)
+                    .toReplicaSummary(document.id.removePrefix("request/"))
+            require(record.employeeId == selection.employeeId)
+            require(selection.status == null || record.status == selection.status)
             require(
-                record.value.version == document.version &&
-                    record.value.replicaSortKey() == document.sortKey
+                record.version == document.version && record.replicaSortKey() == document.sortKey
             )
-            require(document.tags == leaveRecordTags(key, access, record))
-            record.value
+            require(
+                document.tags == leaveSummaryTags(key, access, record, checkpoint.recordSchema >= 2)
+            )
+            record
         }
     return LeaveReplicaPage(
         checkpoint,

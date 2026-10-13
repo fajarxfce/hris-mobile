@@ -13,6 +13,9 @@ fun leaveReplicaPartition(access: LeaveAccess) = "leave-replica/" + access.compa
 fun leaveReplicaScope(access: LeaveAccess) =
     ReplicaScope(access.sessionId, accountStorageKey(access.audience, access.accountId))
 
+fun leaveWriteCheckpoint(checkpoint: ReplicaCheckpoint?): String? =
+    checkpoint?.let { Json.encodeToString(listOf(it.handle.generation, it.revision.toString())) }
+
 fun leaveReplicaId(collection: SyncCollection, id: String) =
     when (collection) {
         SyncCollection.LEAVE_REQUESTS -> "request/$id"
@@ -61,21 +64,22 @@ fun LeaveCheckpoint.toReplicaDto() =
         refreshedAt?.toString(),
         refreshAfter.toString(),
         pollAt?.toString(),
+        recordSchema,
     )
 
 fun LeaveCheckpointDto.toCheckpoint(raw: ReplicaCheckpoint, access: LeaveAccess): LeaveCheckpoint {
     require(raw.handle.scope == leaveReplicaScope(access))
     require(raw.handle.partition == leaveReplicaPartition(access))
     require(syncSessionId.length in 1..128)
+    require(recordSchema in 1..2)
     require(permissions.size <= 256 && permissions.all { it.length in 1..128 })
     require(cursor == null || cursor.length in 1..8192)
     val stage = LeaveSyncPhase.valueOf(phase)
     require(stage != LeaveSyncPhase.CHANGES || cursor != null)
-    require(!raw.published || stage == LeaveSyncPhase.CHANGES)
     val refreshed = refreshedAt?.let(Instant::parse)
     val refresh = Instant.parse(refreshAfter)
     require(refreshed == null || refreshed < refresh)
-    require(!raw.published || refreshed != null)
+    require(refreshed == null || stage == LeaveSyncPhase.CHANGES)
     return LeaveCheckpoint(
         access.copy(
             sessionId = syncSessionId,
@@ -90,6 +94,7 @@ fun LeaveCheckpointDto.toCheckpoint(raw: ReplicaCheckpoint, access: LeaveAccess)
         refreshed,
         refresh,
         pollAt?.let(Instant::parse),
+        recordSchema,
     )
 }
 

@@ -106,7 +106,7 @@ class NativeLeaveUi {
     }
 
     private fun syncPage(request: HttpRequestData, company: String): JsonObject {
-        check(request.url.parameters["limit"] == "50")
+        check(request.url.parameters["limit"] == "8")
         syncRequests += request.url.encodedPath
         val bootstrap = request.url.encodedPath.endsWith("/bootstrap")
         val records =

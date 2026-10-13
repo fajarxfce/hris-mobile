@@ -8,11 +8,14 @@ import dev.fajar.starter.sync.domain.SyncTask
 import dev.fajar.starter.sync.domain.repositories.SyncFeedRepository
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
 import kotlin.time.Clock
+import kotlinx.coroutines.sync.Mutex
 import org.koin.core.annotation.*
 
 @Module
 @ComponentScan("dev.fajar.starter.leave.data")
 class LeaveDataModule {
+    @Single @Named("leave-acquisition") fun leaveAcquisitionLock() = Mutex()
+
     @Factory
     fun prepareSubmission(
         commands: LeaveSubmissionCommandRepository,
@@ -33,7 +36,7 @@ class LeaveDataModule {
     fun reviewSubmission(
         commands: LeaveSubmissionCommandRepository,
         remote: LeaveRepository,
-        cache: LeaveRequestCacheRepository,
+        cache: LeaveRequestReplicaRepository,
         sessions: SessionRepository,
         workspaces: WorkspaceRepository,
         build: AppBuild,
@@ -67,7 +70,7 @@ class LeaveDataModule {
     @Factory
     fun prepareAction(
         commands: LeaveCommandRepository,
-        cache: LeaveRequestCacheRepository,
+        cache: LeaveRequestReplicaRepository,
         sessions: SessionRepository,
         workspaces: WorkspaceRepository,
         build: AppBuild,
@@ -85,7 +88,7 @@ class LeaveDataModule {
     fun reviewAction(
         commands: LeaveCommandRepository,
         remote: LeaveRepository,
-        cache: LeaveRequestCacheRepository,
+        cache: LeaveRequestReplicaRepository,
         sessions: SessionRepository,
         workspaces: WorkspaceRepository,
         build: AppBuild,
@@ -102,20 +105,21 @@ class LeaveDataModule {
 
     @Factory
     fun observeLeaveRequest(
-        cache: LeaveRequestCacheRepository,
+        cache: LeaveRequestReplicaRepository,
         sessions: SessionRepository,
         workspaces: WorkspaceRepository,
         build: AppBuild,
     ) = ObserveLeaveRequest(cache, sessions, workspaces, Clock.System, build)
 
     @Single
-    fun refreshLeaveRequest(
+    fun loadLeaveRequest(
         remote: LeaveRepository,
-        cache: LeaveRequestCacheRepository,
+        cache: LeaveRequestReplicaRepository,
         sessions: SessionRepository,
         workspaces: WorkspaceRepository,
         build: AppBuild,
-    ) = RefreshLeaveRequest(remote, cache, sessions, workspaces, Clock.System, build)
+        @Named("leave-acquisition") execution: Mutex,
+    ) = LoadLeaveRequest(remote, cache, sessions, workspaces, Clock.System, build, execution)
 
     @Factory
     fun observeLeave(
@@ -135,5 +139,17 @@ class LeaveDataModule {
         sessions: SessionRepository,
         workspaces: WorkspaceRepository,
         build: AppBuild,
-    ) = SyncLeave(feed, remote, directory, cache, sessions, workspaces, Clock.System, build)
+        @Named("leave-acquisition") execution: Mutex,
+    ) =
+        SyncLeave(
+            feed,
+            remote,
+            directory,
+            cache,
+            sessions,
+            workspaces,
+            Clock.System,
+            build,
+            execution,
+        )
 }

@@ -19,11 +19,13 @@ failures inside `safeApiCall`; storage acquisition, decryption and DTO mapping s
 inside `safeStorageCall`/`safeStorageFlow`. `SyncLeave` coordinates the feed,
 canonical-resource, directory and replica repository contracts. It checks workspace
 and live module availability and rechecks ownership after pending work. The same
-application-owned execution guard serves UI, reconnect and worker triggers.
+application-owned execution guard serves UI, reconnect and worker triggers, and
+is shared with individual request acquisition. Cached history reads bypass that
+lock; finite acquisition deadlines include waiting for it.
 `ObserveLeave` owns the scoped local subscription without an age-based read timer;
 employment, year, status and page selection read the local replica.
 
-`RefreshLeaveRequest` and `ObserveLeaveRequest` provide the separate request-detail
+`LoadLeaveRequest` and `ObserveLeaveRequest` provide the separate request-detail
 read boundary. The API uses `/leave/me/requests/{id}`: an HR or approval grant does
 not broaden this route beyond the account's own requests. It returns submitted
 policy/day facts, current workflow metadata, evidence references and at most ten
@@ -122,19 +124,22 @@ original attachment count after process restoration.
 
 ## Offline access
 
-Request summaries and balances are stored per resource ID in the account-owned
+Request summaries, complete details, acquired activity pages and balances are
+stored per resource ID in the account-owned
 `leave-replica/<company>` partition. `SyncLeave` explicitly requests both Leave
 collections, fetches current canonical resources and writes records, tombstones,
 directory metadata and the next cursor in one transaction. A record version cannot
 move backwards. Request reads use the owner-only endpoint; an ambiguous not-found
 response is a failure, not an invented deletion.
 
-Bootstrap writes to a staging generation and publishes only after change-feed
-catch-up. Ordinary cursor expiry or reauthentication for the same account starts
+A replacement bootstrap writes to a staging generation and publishes only after
+change-feed catch-up. Initial individual acquisition can publish complete request
+facts before the first feed finishes; it does not publish a completed overview.
+Ordinary cursor expiry or reauthentication for the same account starts
 a replacement while retaining published facts. Confirmed scope changes remove the
 old projection before acquisition. A failed cleanup keeps its original authority
 failure. The employment directory is bounded by the server's 200-employment sync
-scope; each invocation handles at most ten feed pages, 50 references per page,
+scope; each invocation handles at most ten feed pages, eight references per page,
 four parallel canonical reads, and 30 seconds of work. Progress resumes on the
 next invocation; it does not limit retained history to the last displayed page.
 
@@ -148,14 +153,25 @@ The preceding session-bound overview remains readable as a migration fallback
 until the first full replica publishes. Known empty replica results never restore
 that older page. Credential renewal does not expire a saved fallback read.
 
-Request details have an independent last-view partition per company, sharing the
-legacy Leave credential without replacing the replica. Up to 366 dates and ten
-history entries use a header, date chunks and individual history records, each
-limited to 96,000 bytes. Counts and record purposes are authenticated; missing,
-duplicate or foreign records cannot restore a partial view. These legacy snapshots use
-complete compare-and-set replacement. Full detail/history replication remains
-subsequent work. A missing encryption key cannot be regenerated over existing
-records, including records retained for an inactive account.
+Each request retains its header, up to 366 dates in chunks of 128, and independently
+acquired activity pages. Summary and full current facts commit together. Component
+counts, versions, ordering and index tags are authenticated. Queries select date
+components by request version and require their live parent; stale chunks or
+children of a deleted request cannot become a partial success.
+
+After feed catch-up, the sync use case reads up to eight pending activity frontiers.
+It reuses acquired pages or obtains older revisions, then persists each page and
+its strictly decreasing frontier together. A version ahead of the stored parent
+waits for feed publication. Failures and cancellation preserve progress. History
+acquisition retains the header's original session, acquisition ID and timestamps;
+it cannot renew an action review. Other request IDs and previously acquired pages
+remain available after navigation or account reauthentication.
+
+The previous single-request snapshot remains a read-only migration fallback until
+the expanded format publishes. Format upgrades stage replacement records without
+hiding the preceding overview or detail. An authoritative missing request cannot
+fall back to old ciphertext. A missing encryption key cannot be regenerated over
+existing records, including records retained for an inactive account.
 
 Saved facts have a freshness timestamp, without an age-based read limit. Command
 preparation separately requires current authorization and a reviewed version.
@@ -193,8 +209,10 @@ sync time and never infers a balance from request rows.
 Detail history accepts only the visible next revision cursor or the latest page.
 Returning to the latest page cancels an older pending read, and an unavailable
 earlier page does not trap navigation. Viewing earlier revisions keeps the
-server's current header rather than presenting an old status as current. Offline
-restoration retains the last history selection. A missing or revoked request
+server's current header rather than presenting an old status as current. An active
+route retains its selection; a new visit starts with the latest stored activity.
+The old migration snapshot can retain its original selection until replacement.
+Cached page navigation remains available offline. A missing or revoked request
 hides its saved content, including through subsequent failed retries.
 
 ## Durable request actions

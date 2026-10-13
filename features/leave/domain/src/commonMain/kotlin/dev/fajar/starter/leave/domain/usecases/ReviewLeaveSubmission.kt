@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.first
 class ReviewLeaveSubmission(
     private val commands: LeaveSubmissionCommandRepository,
     private val remote: LeaveRepository,
-    private val cache: LeaveRequestCacheRepository,
+    private val cache: LeaveRequestReplicaRepository,
     private val sessions: SessionRepository,
     private val workspaces: WorkspaceRepository,
     private val clock: Clock,
@@ -60,7 +60,10 @@ class ReviewLeaveSubmission(
                         is AppResult.Failed -> return@withTimeoutOrNull response
                         is AppResult.Success -> response.value
                     }
-                val cached = cache.observeRequest(access).first()
+                val cached =
+                    cache
+                        .observeRequest(access, LeaveRequestSelection(record.command.requestId))
+                        .first()
                 currentCoroutineContext().ensureActive()
                 val cacheOwnership = validateLeaveContinuation(access, currentAccess(workspaceId))
                 if (cacheOwnership is AppResult.Failed) return@withTimeoutOrNull cacheOwnership

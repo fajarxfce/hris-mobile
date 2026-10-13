@@ -32,7 +32,10 @@ class LeaveSyncFixture(val base: LeaveFixture = LeaveFixture()) {
         AppResult.Success(SyncChangePage(emptyList(), "next", false, false, 5, base.clock.now()))
     }
     var requestCall: suspend (String) -> AppResult<LeaveReplicaRecord.Request> = {
-        AppResult.Success(LeaveReplicaRecord.Request(base.request))
+        AppResult.Success(LeaveReplicaRecord.Request(base.request.fixtureDetails()))
+    }
+    var historyCall: suspend (String, Long) -> AppResult<LeaveReplicaRecord.Request> = { id, _ ->
+        requestCall(id)
     }
     var balanceCall: suspend (String) -> AppResult<LeaveReplicaRecord.Balance> = {
         AppResult.Success(LeaveReplicaRecord.Balance(base.employee.id, base.balance))
@@ -46,7 +49,7 @@ class LeaveSyncFixture(val base: LeaveFixture = LeaveFixture()) {
                 cursor: String?,
                 limit: Int,
             ): AppResult<SyncBootstrapPage> {
-                check(collections == this@LeaveSyncFixture.collections && limit == 50)
+                check(collections == this@LeaveSyncFixture.collections && limit == 8)
                 bootstrapReads++
                 requestedCursors += cursor
                 return bootstrapCall(cursor)
@@ -59,7 +62,7 @@ class LeaveSyncFixture(val base: LeaveFixture = LeaveFixture()) {
                 cursor: String,
                 limit: Int,
             ): AppResult<SyncChangePage> {
-                check(collections == this@LeaveSyncFixture.collections && limit == 50)
+                check(collections == this@LeaveSyncFixture.collections && limit == 8)
                 changeReads++
                 requestedCursors += cursor
                 return changesCall(cursor)
@@ -70,9 +73,10 @@ class LeaveSyncFixture(val base: LeaveFixture = LeaveFixture()) {
             override suspend fun request(
                 access: LeaveAccess,
                 id: String,
+                historyAfter: Long?,
             ): AppResult<LeaveReplicaRecord.Request> {
                 recordReads++
-                return requestCall(id)
+                return if (historyAfter == null) requestCall(id) else historyCall(id, historyAfter)
             }
 
             override suspend fun balance(

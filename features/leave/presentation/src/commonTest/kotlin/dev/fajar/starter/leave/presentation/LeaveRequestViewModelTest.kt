@@ -148,9 +148,17 @@ class LeaveRequestViewModelTest {
     }
 
     @Test
-    fun offlineCacheRestoresTheSavedHistorySelectionInEitherArrivalOrder() = runTest {
+    fun legacyOfflineCacheRestoresItsSavedHistorySelectionInEitherArrivalOrder() = runTest {
         for (cacheFirst in listOf(false, true)) withRequest { fixture, model, _ ->
             fixture.load(fixture.selection.copy(historyAfter = 3))
+            val latest = (fixture.records.value as AppResult.Success).value!!
+            fixture.records.value =
+                AppResult.Success(
+                    latest.copy(
+                        selection = fixture.selection.copy(historyAfter = 3),
+                        request = latest.request.copy(history = fixture.historyPages.getValue(3)),
+                    )
+                )
             val release = CompletableDeferred<Unit>()
             if (!cacheFirst) fixture.cacheReadGate = release
             fixture.requestCall = {
@@ -234,6 +242,7 @@ class LeaveRequestViewModelTest {
             runCurrent()
             model.onEvent(LeaveRequestEvent.HistoryPageRequested("3"))
             runCurrent()
+            assertTrue(model.state.value.loading)
             assertTrue(model.state.value.refreshing)
             model.onEvent(LeaveRequestEvent.HistoryPageRequested(null))
             runCurrent()
@@ -241,6 +250,50 @@ class LeaveRequestViewModelTest {
             assertNotNull(model.state.value.content)
             assertNull(model.state.value.failure)
             assertFalse(model.state.value.needsVerification)
+        }
+    }
+
+    @Test
+    fun acquiredActivityPagesCanBeRevisitedOfflineWithoutRefreshingTheRequest() = runTest {
+        withRequest { fixture, model, _ ->
+            val current = fixture.details.copy(version = 12)
+            fixture.requestCall = { selected ->
+                AppResult.Success(
+                    current.copy(
+                        history =
+                            if (selected.historyAfter == null)
+                                LeavePage(
+                                    listOf(current.history.items.single().copy(version = 12)),
+                                    "3",
+                                )
+                            else fixture.details.history
+                    )
+                )
+            }
+            model.onEvent(LeaveRequestEvent.Entered)
+            runCurrent()
+            model.onEvent(LeaveRequestEvent.HistoryPageRequested("3"))
+            runCurrent()
+            val reads = fixture.reads
+            fixture.requestCall = { error("Previously acquired activity is local") }
+            repeat(3) {
+                model.onEvent(LeaveRequestEvent.HistoryPageRequested(null))
+                runCurrent()
+                assertEquals(
+                    12L,
+                    model.state.value.content?.request?.history?.items?.single()?.version,
+                )
+                model.onEvent(LeaveRequestEvent.HistoryPageRequested("3"))
+                runCurrent()
+                assertEquals(
+                    0L,
+                    model.state.value.content?.request?.history?.items?.single()?.version,
+                )
+                assertFalse(model.state.value.loading)
+                assertFalse(model.state.value.refreshing)
+                assertNull(model.state.value.failure)
+            }
+            assertEquals(reads, fixture.reads)
         }
     }
 

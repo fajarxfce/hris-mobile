@@ -16,7 +16,7 @@ import org.koin.core.annotation.InjectedParam
 class LeaveRequestViewModel(
     @InjectedParam private val target: LeaveRequestTarget,
     private val observe: ObserveLeaveRequest,
-    private val refresh: RefreshLeaveRequest,
+    private val load: LoadLeaveRequest,
     private val observeAction: ObserveLeaveAction,
     private val prepareAction: PrepareLeaveAction,
     private val replayAction: ReplayLeaveAction,
@@ -82,7 +82,9 @@ class LeaveRequestViewModel(
                     .distinctUntilChanged()
                     .flatMapLatest { (selection, restricted) ->
                         if (restricted) emptyFlow()
-                        else observe(target.workspaceId, target.requestId).map { selection to it }
+                        else
+                            observe(target.workspaceId, target.requestId, selection?.historyAfter)
+                                .map { selection to it }
                     }
                     .collect { (selection, result) ->
                         ensureActive()
@@ -132,7 +134,10 @@ class LeaveRequestViewModel(
             }
     }
 
-    private suspend fun refreshContent(requested: LeaveRequestSelection): Boolean {
+    private suspend fun refreshContent(
+        requested: LeaveRequestSelection,
+        policy: LeaveRequestAcquisition = LeaveRequestAcquisition.FRESH,
+    ): Boolean {
         updateState {
             it.copy(
                 refreshing = true,
@@ -147,7 +152,7 @@ class LeaveRequestViewModel(
                     ),
             )
         }
-        val result = refresh(target.workspaceId, requested)
+        val result = load(target.workspaceId, requested, policy)
         currentCoroutineContext().ensureActive()
         if (result is AppResult.Success) {
             observation?.cancel()
@@ -193,7 +198,13 @@ class LeaveRequestViewModel(
                 action = it.action.copy(form = null),
             )
         }
-        onEvent(LeaveRequestEvent.RefreshRequested)
+        acquisition =
+            viewModelScope.launch {
+                refreshContent(
+                    selection.copy(historyAfter = after),
+                    LeaveRequestAcquisition.LOCAL_FIRST,
+                )
+            }
     }
 
     private fun onActionRequested(event: LeaveRequestEvent.ActionRequested) {

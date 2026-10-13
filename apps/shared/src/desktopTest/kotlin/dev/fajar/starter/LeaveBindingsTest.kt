@@ -33,6 +33,11 @@ class LeaveBindingsTest {
             val koin = container.koin
             assertNotNull(koin.get<LeaveCacheRepository>())
             assertNotNull(koin.get<LeaveReplicaRepository>())
+            assertSame(
+                koin.get<LeaveReplicaRepository>(),
+                koin.get<LeaveRequestReplicaRepository>(),
+            )
+            assertNotNull(koin.get<LoadLeaveRequest>())
             assertNotNull(koin.get<LeaveRecordRepository>())
             assertSame(
                 koin.get<SyncLeave>(),

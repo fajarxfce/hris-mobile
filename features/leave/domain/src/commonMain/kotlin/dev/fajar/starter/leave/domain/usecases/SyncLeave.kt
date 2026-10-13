@@ -20,6 +20,7 @@ import kotlin.time.Clock
 import kotlin.time.Duration.Companion.seconds
 import kotlin.uuid.Uuid
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
@@ -33,15 +34,13 @@ class SyncLeave(
     private val workspaces: WorkspaceRepository,
     private val clock: Clock,
     private val build: AppBuild,
+    private val execution: Mutex = Mutex(),
 ) : SyncTask {
     override val key = KEY
-    private val execution = Mutex()
 
     suspend operator fun invoke(workspaceId: String): AppResult<LeaveSyncOutcome> =
-        execution.withLock {
-            withTimeoutOrNull(30.seconds) { synchronize(workspaceId) }
-                ?: AppResult.Success(LeaveSyncOutcome(false, 5))
-        }
+        withTimeoutOrNull(30.seconds) { execution.withLock { synchronize(workspaceId) } }
+            ?: AppResult.Success(LeaveSyncOutcome(false, 5))
 
     override suspend fun invoke(): SyncResult {
         val session =
@@ -96,7 +95,46 @@ class SyncLeave(
                 is AppResult.Failed -> return reject(access, loaded)
                 is AppResult.Success -> loaded.value
             }
-        return synchronizePages(workspaceId, access, policy, directory)
+        val records = synchronizePages(workspaceId, access, policy, directory)
+        return when (records) {
+            is AppResult.Failed -> records
+            is AppResult.Success ->
+                if (records.value.caughtUp) synchronizeHistory(workspaceId, access, policy)
+                else records
+        }
+    }
+
+    /** Scope/format replacement keeps owned published data until its successor is complete. */
+    private suspend fun prepareCheckpoint(
+        workspaceId: String,
+        access: LeaveAccess,
+    ): AppResult<LeaveCheckpoint?> {
+        var checkpoint =
+            when (val result = cache.checkpoint(access)) {
+                is AppResult.Failed -> return result
+                is AppResult.Success -> result.value
+            }
+        currentCoroutineContext().ensureActive()
+        val checkpointOwner = validateLeaveContinuation(access, currentAccess(workspaceId))
+        if (checkpointOwner is AppResult.Failed) return checkpointOwner
+        if (checkpoint != null && !sameStoredLeaveScope(checkpoint.access, access)) {
+            val cleared = withTimeoutOrNull(2.seconds) { cache.clear(access) }
+            if (cleared !is AppResult.Success || !cleared.value) return staleLeaveScope()
+            checkpoint = null
+        } else if (
+            checkpoint != null &&
+                (!sameLeaveScope(checkpoint.access, access) || checkpoint.recordSchema < 2)
+        ) {
+            // A new login or expanded projection needs bootstrap; published facts remain readable.
+            val replacement = initialLeaveCheckpoint(access, Uuid.random().toString(), clock.now())
+            when (val started = cache.begin(replacement, checkpoint.generation)) {
+                is AppResult.Failed -> return started
+                is AppResult.Success ->
+                    if (!started.value) return publicationConflict(workspaceId, access)
+            }
+            checkpoint = replacement
+        }
+        return AppResult.Success(checkpoint)
     }
 
     private suspend fun synchronizePages(
@@ -106,23 +144,10 @@ class SyncLeave(
         directory: LeaveDirectory,
     ): AppResult<LeaveSyncOutcome> {
         var checkpoint =
-            when (val result = cache.checkpoint(access)) {
+            when (val result = prepareCheckpoint(workspaceId, access)) {
                 is AppResult.Failed -> return result
                 is AppResult.Success -> result.value
             }
-        if (checkpoint != null && !sameStoredLeaveScope(checkpoint.access, access)) {
-            val cleared = withTimeoutOrNull(2.seconds) { cache.clear(access) }
-            if (cleared !is AppResult.Success || !cleared.value) return staleLeaveScope()
-            checkpoint = null
-        } else if (checkpoint != null && !sameLeaveScope(checkpoint.access, access)) {
-            // A replacement login needs its own cursor, while the same owner's facts stay visible.
-            val replacement = initialLeaveCheckpoint(access, Uuid.random().toString(), clock.now())
-            when (val started = cache.begin(replacement, checkpoint.generation)) {
-                is AppResult.Failed -> return started
-                is AppResult.Success -> if (!started.value) return staleLeaveScope()
-            }
-            checkpoint = replacement
-        }
         var restarted = false
         repeat(10) {
             val ownership = validateLeaveContinuation(access, currentAccess(workspaceId))
@@ -131,7 +156,8 @@ class SyncLeave(
                 val initial = initialLeaveCheckpoint(access, Uuid.random().toString(), clock.now())
                 when (val started = cache.begin(initial, null)) {
                     is AppResult.Failed -> return started
-                    is AppResult.Success -> if (!started.value) return staleLeaveScope()
+                    is AppResult.Success ->
+                        if (!started.value) return publicationConflict(workspaceId, access)
                 }
                 checkpoint = initial
             }
@@ -161,7 +187,8 @@ class SyncLeave(
                             initialLeaveCheckpoint(access, Uuid.random().toString(), clock.now())
                         when (val started = cache.begin(replacement, previous.generation)) {
                             is AppResult.Failed -> return started
-                            is AppResult.Success -> if (!started.value) return staleLeaveScope()
+                            is AppResult.Success ->
+                                if (!started.value) return publicationConflict(workspaceId, access)
                         }
                         checkpoint = replacement
                     }
@@ -196,12 +223,115 @@ class SyncLeave(
             val next = advanceLeaveCheckpoint(previous, page, clock.now())
             when (val committed = cache.commit(previous, next, directory, entries)) {
                 is AppResult.Failed -> return committed
-                is AppResult.Success -> if (!committed.value) return staleLeaveScope()
+                is AppResult.Success ->
+                    if (!committed.value) return publicationConflict(workspaceId, access)
             }
             checkpoint = next
             if (complete) return AppResult.Success(LeaveSyncOutcome(true, page.pollAfterSeconds))
         }
         return AppResult.Success(LeaveSyncOutcome(false, 5))
+    }
+
+    private suspend fun synchronizeHistory(
+        workspaceId: String,
+        access: LeaveAccess,
+        policy: CompanyPolicySnapshot,
+    ): AppResult<LeaveSyncOutcome> {
+        val pending = cache.pendingHistory(access, 8)
+        currentCoroutineContext().ensureActive()
+        val owner = validateLeaveContinuation(access, currentAccess(workspaceId))
+        if (owner is AppResult.Failed) return owner
+        val work =
+            when (pending) {
+                is AppResult.Failed -> return reject(access, pending)
+                is AppResult.Success -> pending.value
+            }
+        for (item in work) {
+            val available = admitCompanyOperation(policy, build, CompanyModule.LEAVE, clock.now())
+            if (available is AppResult.Failed) return reject(access, available)
+            val acquired = acquireHistoryPage(workspaceId, access, item)
+            currentCoroutineContext().ensureActive()
+            val ownership = validateLeaveContinuation(access, currentAccess(workspaceId))
+            if (ownership is AppResult.Failed) return ownership
+            val page =
+                when (acquired) {
+                    is AppResult.Failed -> return reject(access, acquired)
+                    is AppResult.Success ->
+                        acquired.value ?: return AppResult.Success(LeaveSyncOutcome(false, 5))
+                }
+            val next = page.history.nextCursor?.toLongOrNull()
+            if (page.history.nextCursor != null && (next == null || next !in 0 until item.after))
+                return leaveFailure("client.invalid_response", FailureKind.Unexpected)
+            val stillAvailable =
+                admitCompanyOperation(policy, build, CompanyModule.LEAVE, clock.now())
+            if (stillAvailable is AppResult.Failed) return reject(access, stillAvailable)
+            val stored = cache.storeHistory(access, item, page)
+            currentCoroutineContext().ensureActive()
+            val committedOwner = validateLeaveContinuation(access, currentAccess(workspaceId))
+            if (committedOwner is AppResult.Failed) return committedOwner
+            when (stored) {
+                is AppResult.Failed -> return reject(access, stored)
+                is AppResult.Success ->
+                    if (!stored.value) return AppResult.Success(LeaveSyncOutcome(false, 5))
+            }
+        }
+        val remaining = cache.pendingHistory(access, 1)
+        currentCoroutineContext().ensureActive()
+        val current = validateLeaveContinuation(access, currentAccess(workspaceId))
+        if (current is AppResult.Failed) return current
+        return when (remaining) {
+            is AppResult.Failed -> remaining
+            is AppResult.Success ->
+                AppResult.Success(LeaveSyncOutcome(remaining.value.isEmpty(), 5))
+        }
+    }
+
+    /** A null page means the request changed and its change-feed record must catch up first. */
+    private suspend fun acquireHistoryPage(
+        workspaceId: String,
+        access: LeaveAccess,
+        work: LeaveHistoryWork,
+    ): AppResult<LeaveHistoryPage?> {
+        val local =
+            cache.observeRequest(access, LeaveRequestSelection(work.requestId, work.after)).first()
+        currentCoroutineContext().ensureActive()
+        val owner = validateLeaveContinuation(access, currentAccess(workspaceId))
+        if (owner is AppResult.Failed) return owner
+        when (local) {
+            is AppResult.Failed -> return local
+            is AppResult.Success ->
+                local.value?.let { saved ->
+                    return AppResult.Success(
+                        if (saved.request.version == work.requestVersion)
+                            LeaveHistoryPage(
+                                work.requestId,
+                                work.requestVersion,
+                                work.after,
+                                saved.request.history,
+                            )
+                        else null
+                    )
+                }
+        }
+        val response = remote.request(access, work.requestId, work.after)
+        currentCoroutineContext().ensureActive()
+        val ownership = validateLeaveContinuation(access, currentAccess(workspaceId))
+        if (ownership is AppResult.Failed) return ownership
+        val request =
+            when (response) {
+                is AppResult.Failed -> return response
+                is AppResult.Success -> response.value.value
+            }
+        if (request.id != work.requestId || request.version < work.requestVersion)
+            return leaveFailure("client.invalid_response", FailureKind.Unexpected)
+        if (request.version > work.requestVersion) {
+            // Respect publication latency without advancing this request's stored frontier.
+            delay(5.seconds)
+            return AppResult.Success(null)
+        }
+        return AppResult.Success(
+            LeaveHistoryPage(work.requestId, work.requestVersion, work.after, request.history)
+        )
     }
 
     private suspend fun nextPage(
@@ -217,6 +347,7 @@ class SyncLeave(
                             access.companyId,
                             leaveCollections,
                             checkpoint.cursor,
+                            limit = 8,
                         )
                 ) {
                     is AppResult.Failed -> result
@@ -245,6 +376,7 @@ class SyncLeave(
                             access.companyId,
                             leaveCollections,
                             requireNotNull(checkpoint.cursor),
+                            limit = 8,
                         )
                 ) {
                     is AppResult.Failed -> result
@@ -320,7 +452,7 @@ class SyncLeave(
         access: LeaveAccess,
         changes: List<SyncChange>,
     ): AppResult<List<LeaveReplicaEntry>> {
-        if (changes.size > 50 || changes.any { it.reference.collection !in leaveCollections })
+        if (changes.size > 8 || changes.any { it.reference.collection !in leaveCollections })
             return leaveFailure("client.invalid_response", FailureKind.Unexpected)
         val references = linkedMapOf<Pair<SyncCollection, String>, SyncChange>()
         for (change in changes) {
@@ -377,6 +509,7 @@ class SyncLeave(
                                                 LeaveReplicaEntry(
                                                     reference.copy(version = version),
                                                     record,
+                                                    clock.now(),
                                                 )
                                             )
                                     }
@@ -393,6 +526,15 @@ class SyncLeave(
         }
         return AppResult.Success(entries.toList())
     }
+
+    private suspend fun publicationConflict(
+        workspaceId: String,
+        access: LeaveAccess,
+    ): AppResult.Failed =
+        when (val current = validateLeaveContinuation(access, currentAccess(workspaceId))) {
+            is AppResult.Failed -> current
+            is AppResult.Success -> leaveFailure("client.leave_changed", FailureKind.Conflict)
+        }
 
     private suspend fun reject(access: LeaveAccess, failure: AppResult.Failed): AppResult.Failed {
         if (leaveFailureInvalidatesCache(failure.failure))

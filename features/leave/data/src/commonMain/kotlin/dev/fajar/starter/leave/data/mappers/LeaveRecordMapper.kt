@@ -6,23 +6,27 @@ import dev.fajar.starter.leave.data.dto.*
 import dev.fajar.starter.leave.domain.entities.*
 import kotlin.uuid.Uuid
 
-fun LeaveRequestDto.toReplicaRequest(expectedId: String): LeaveReplicaRecord.Request {
-    val details = toDetails(LeaveRequestSelection(expectedId))
-    return LeaveReplicaRecord.Request(
-        LeaveRequestSummary(
-            details.id,
-            details.employeeId,
-            details.policy.code,
-            details.policy.name,
-            details.days.first().date,
-            details.days.last().date,
-            details.charged,
-            details.status,
-            details.submittedAt,
-            details.version,
-        )
-    )
+fun LeaveRequestDto.toReplicaRequest(
+    expectedId: String,
+    historyAfter: Long? = null,
+): LeaveReplicaRecord.Request {
+    val details = toDetails(LeaveRequestSelection(expectedId, historyAfter))
+    return LeaveReplicaRecord.Request(details)
 }
+
+fun LeaveRequestDetails.toSummary() =
+    LeaveRequestSummary(
+        id,
+        employeeId,
+        policy.code,
+        policy.name,
+        days.first().date,
+        days.last().date,
+        charged,
+        status,
+        submittedAt,
+        version,
+    )
 
 fun LeaveAccountDto.toReplicaBalance(expectedId: String): LeaveReplicaRecord.Balance {
     require(id == expectedId)
@@ -76,8 +80,8 @@ fun LeaveRequestSummary.toDto() =
         version,
     )
 
-fun LeaveRequestSummaryDto.toReplicaRequest(expectedId: String): LeaveReplicaRecord.Request {
+fun LeaveRequestSummaryDto.toReplicaSummary(expectedId: String): LeaveRequestSummary {
     require(id == expectedId)
     val page = LeavePageDto(listOf(this), null).toRequests(employeeId, null, null)
-    return LeaveReplicaRecord.Request(page.items.single())
+    return page.items.single()
 }

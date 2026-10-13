@@ -1,5 +1,6 @@
 package dev.fajar.starter.leave.data.encoding
 
+import dev.fajar.starter.leave.data.mappers.toSummary
 import dev.fajar.starter.leave.domain.entities.*
 import dev.fajar.starter.securestorage.contentIndexes
 import kotlinx.serialization.json.Json
@@ -8,7 +9,7 @@ import kotlinx.serialization.json.Json
 suspend fun leaveReplicaTags(
     key: ByteArray,
     access: LeaveAccess,
-    employeeId: String,
+    subjectId: String,
     filters: List<List<String>>,
 ): List<String> {
     val contexts =
@@ -19,7 +20,7 @@ suspend fun leaveReplicaTags(
                         access.audience,
                         access.accountId,
                         access.companyId,
-                        employeeId,
+                        subjectId,
                     ) + it
                 )
                 .encodeToByteArray()
@@ -38,12 +39,7 @@ suspend fun leaveRecordTags(
 ): Set<String> =
     when (record) {
         is LeaveReplicaRecord.Request ->
-            leaveReplicaTags(
-                key,
-                access,
-                record.value.employeeId,
-                listOf(listOf("requests", "ALL"), listOf("requests", record.value.status.name)),
-            )
+            leaveSummaryTags(key, access, record.value.toSummary()).toList()
         is LeaveReplicaRecord.Balance ->
             leaveReplicaTags(
                 key,
@@ -52,3 +48,33 @@ suspend fun leaveRecordTags(
                 listOf(listOf("balances", record.value.year.toString())),
             )
     }.toSet()
+
+suspend fun leaveSummaryTags(
+    key: ByteArray,
+    access: LeaveAccess,
+    summary: LeaveRequestSummary,
+    includeIdentity: Boolean = true,
+): Set<String> {
+    val filters =
+        leaveReplicaTags(
+            key,
+            access,
+            summary.employeeId,
+            listOf(listOf("requests", "ALL"), listOf("requests", summary.status.name)),
+        )
+    return if (includeIdentity)
+        (filters + leaveRequestComponentTag(key, access, summary.id, "request")).toSet()
+    else filters.toSet()
+}
+
+suspend fun leaveRequestComponentTag(
+    key: ByteArray,
+    access: LeaveAccess,
+    requestId: String,
+    component: String,
+): String =
+    leaveReplicaTags(key, access, requestId, listOf(listOf("request-component", component)))
+        .single()
+
+suspend fun leavePendingHistoryTag(key: ByteArray, access: LeaveAccess): String =
+    leaveReplicaTags(key, access, "activity", listOf(listOf("pending"))).single()

@@ -17,11 +17,15 @@ import org.koin.core.annotation.Single
 @Single
 class RemoteLeaveRepository(private val remote: LeaveRemoteDataSource) :
     LeaveRepository, LeaveRecordRepository, LeaveActionRepository, LeaveSubmissionRepository {
-    override suspend fun request(access: LeaveAccess, id: String) = safeApiCall {
-        Uuid.parse(access.companyId)
-        Uuid.parse(id)
-        remote.details(access.sessionId, access.companyId, id, null).toReplicaRequest(id)
-    }
+    override suspend fun request(access: LeaveAccess, id: String, historyAfter: Long?) =
+        safeApiCall {
+            Uuid.parse(access.companyId)
+            Uuid.parse(id)
+            require(historyAfter == null || historyAfter in 0..9_007_199_254_740_991L)
+            remote
+                .details(access.sessionId, access.companyId, id, historyAfter)
+                .toReplicaRequest(id, historyAfter)
+        }
 
     override suspend fun balance(access: LeaveAccess, id: String) = safeApiCall {
         Uuid.parse(access.companyId)

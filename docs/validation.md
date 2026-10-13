@@ -911,3 +911,37 @@ The phone application was not opened or driven.
 Full request details/activity still use the previous last-view snapshot. These
 checks do not claim complete historical-detail replication, offline creation of
 every draft, or measured memory/frame-time improvements.
+
+## Leave request and activity replication
+
+On 14 October 2026, root checks passed with 1,242 JVM/desktop tests, including
+assembled application flows and resource ownership. The Leave domain, data and
+presentation Chromium suites passed 178 tests. Android dev assembly passed.
+Tests exercise independent request retention, initial acquisition before the feed,
+staged format migration, authoritative absence, bounded dense records, historical
+cursor progress, local page reuse and unchanged action-review timestamps. SQLite
+and IndexedDB cover atomic publication, competing versions, stale children,
+interrupted encryption, cancellation and plaintext cleanup. MVI regressions open
+stored activity pages without HTTP and preserve known denials through recovery.
+
+API 35 emulator acceptance upgraded the existing installation with connectivity
+disabled. The preceding overview and request-summary ciphertext remained unchanged.
+Reconnection acquired all five full requests, producing 23 published documents,
+including five detail headers and five activity pages, with no pending generation.
+After force-stop and offline restart, two previously unopened requests displayed
+their reasons, dates, status and activity independently; one also displayed its
+attachment metadata. Screenshots were inspected. The previous request snapshot
+partition was empty on this device; compatibility with that format is covered by
+the encrypted migration tests. Older-page backfill is covered by automated tests,
+not by these short device histories.
+
+A second offline restart reopened the first request after visiting the other one.
+The inspected crash buffer contained no fatal exception. Emulator connectivity
+was restored and its process stopped with application data retained.
+
+After notice, the 30,121,720-byte dev APK was installed on the authorized Android 16
+phone at 03:57:35 WIB using `--skip-build --install-only`. ADB reported success and
+package metadata confirmed the update. Its SHA-256 is
+`14df12ac36b1b908fa3d296a677ec22d40557585924956432a5cf8f75a7f06b5`.
+The phone application was not opened or driven. Other business replicas, unfinished
+offline drafts and shared sync-status presentation remain pending.

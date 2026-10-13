@@ -53,7 +53,8 @@ employment selection and encrypted records updated through the change feed.
 Year, status and page changes query the local database. Acquired history and balances
 survive reauthentication for the same account and remain readable offline. Each request opens its
 submitted dates, duration, reason, current status and paged activity history;
-the last request remains available offline without an age limit. Withdrawal,
+each acquired request and activity page remains available offline without an age limit.
+Background synchronization fills older activity in resumable batches. Withdrawal,
 cancellation and withdrawal of a pending cancellation retain encrypted commands
 and recover the original request after interrupted delivery. Employees can select
 leave dates and portions, review the server calculation, and submit with durable

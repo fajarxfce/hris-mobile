@@ -7,7 +7,6 @@ import dev.fajar.starter.leave.data.mappers.*
 import dev.fajar.starter.leave.domain.entities.*
 import dev.fajar.starter.leave.domain.policies.sameLeaveScope
 import dev.fajar.starter.leave.domain.repositories.LeaveCacheRepository
-import dev.fajar.starter.leave.domain.repositories.LeaveRequestCacheRepository
 import dev.fajar.starter.securestorage.ContentCipher
 import dev.fajar.starter.securestorage.CredentialStore
 import dev.fajar.starter.storage.*
@@ -26,7 +25,7 @@ class EncryptedLeaveCacheRepository(
     private val replicas: ReplicaStore,
     private val cipher: ContentCipher,
     @Named("leave-content-key") private val credentials: CredentialStore,
-) : LeaveCacheRepository, LeaveRequestCacheRepository {
+) : LeaveCacheRepository {
     private val keyCreation = Mutex()
 
     override fun observe(access: LeaveAccess) =
@@ -155,70 +154,7 @@ class EncryptedLeaveCacheRepository(
         }
     }
 
-    override fun observeRequest(access: LeaveAccess) =
-        safeStorageFlow(
-            replicas.observe(
-                ReplicaScope(access.sessionId),
-                leaveRequestPartition(access),
-                limit = 32,
-            ),
-            mapValue = { page ->
-                val checkpoint = page.checkpoint
-                if (checkpoint == null) null
-                else {
-                    val key =
-                        Base64.decode(
-                            requireNotNull(credentials.read()) { "Leave key is unavailable." }
-                        )
-                    try {
-                        decodeLeaveRequestCache(page, cipher, key, access)
-                            .toSnapshot(access, checkpoint.handle.generation)
-                    } finally {
-                        key.fill(0)
-                    }
-                }
-            },
-        )
-
-    override suspend fun requestGeneration(access: LeaveAccess) = safeStorageCall {
-        replicas
-            .checkpoint(ReplicaScope(access.sessionId), leaveRequestPartition(access))
-            ?.handle
-            ?.generation
-    }
-
-    override suspend fun replaceRequest(
-        access: LeaveAccess,
-        expectedGeneration: String?,
-        snapshot: LeaveRequestSnapshot?,
-    ) = safeStorageCall {
-        val partition = leaveRequestPartition(access)
-        val previous = replicas.checkpoint(ReplicaScope(access.sessionId), partition)
-        if (previous?.handle?.generation != expectedGeneration) return@safeStorageCall false
-        if (snapshot == null)
-            return@safeStorageCall replicas.replace(
-                ReplicaScope(access.sessionId),
-                partition,
-                previous,
-                null,
-            )
-        require(
-            sameLeaveScope(access, snapshot.access) && snapshot.generation != expectedGeneration
-        )
-        require(snapshot.request.id == snapshot.selection.requestId)
-        val dto = snapshot.toDto()
-        dto.toSnapshot(access, snapshot.generation)
-        val key = loadOrCreateKey(access)
-        try {
-            val encoded = encodeLeaveRequestCache(dto, snapshot.generation, cipher, key, access)
-            currentCoroutineContext().ensureActive()
-            replicas.replace(ReplicaScope(access.sessionId), partition, previous, encoded)
-        } finally {
-            key.fill(0)
-        }
-    }
-
-    /** Both read views share a key; an absent key cannot replace either existing ciphertext. */
+    /** The preceding formats share a key; a missing retained key must never be replaced. */
     private suspend fun loadOrCreateKey(access: LeaveAccess): ByteArray =
         keyCreation.withLock {
             val saved = credentials.read()

@@ -18,7 +18,7 @@ import kotlinx.coroutines.flow.first
 class ReviewLeaveAction(
     private val commands: LeaveCommandRepository,
     private val remote: LeaveRepository,
-    private val cache: LeaveRequestCacheRepository,
+    private val cache: LeaveRequestReplicaRepository,
     private val sessions: SessionRepository,
     private val workspaces: WorkspaceRepository,
     private val clock: Clock,
@@ -51,7 +51,12 @@ class ReviewLeaveAction(
                 }
             currentCoroutineContext().ensureActive()
             val snapshot =
-                when (val result = cache.observeRequest(access).first()) {
+                when (
+                    val result =
+                        cache
+                            .observeRequest(access, LeaveRequestSelection(record.command.requestId))
+                            .first()
+                ) {
                     is AppResult.Failed -> return result
                     is AppResult.Success -> result.value
                 }

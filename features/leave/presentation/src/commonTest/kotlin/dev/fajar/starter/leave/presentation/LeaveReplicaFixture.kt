@@ -33,6 +33,8 @@ class LeaveReplicaFixture : LeaveReplicaRepository {
     var directoryObservers = 0
     var pageObservers = 0
     val selections = mutableListOf<LeaveSelection>()
+    val historyPages = mutableMapOf<Pair<String, Long>, LeaveHistoryPage>()
+    val historyWork = mutableMapOf<String, LeaveHistoryWork>()
 
     override fun observeDirectory(access: LeaveAccess): Flow<AppResult<LeaveReplicaDirectory>> =
         flow {
@@ -94,7 +96,7 @@ class LeaveReplicaFixture : LeaveReplicaRepository {
                             val requests =
                                 records
                                     .filterIsInstance<LeaveReplicaRecord.Request>()
-                                    .map { it.value }
+                                    .map { it.value.fixtureSummary() }
                                     .filter {
                                         it.employeeId == selection.employeeId &&
                                             (selection.status == null ||
@@ -128,6 +130,83 @@ class LeaveReplicaFixture : LeaveReplicaRepository {
         } finally {
             pageObservers--
         }
+    }
+
+    override fun observeRequest(
+        access: LeaveAccess,
+        selection: LeaveRequestSelection,
+    ): Flow<AppResult<LeaveRequestSnapshot?>> =
+        published.map { result ->
+            when (result) {
+                is AppResult.Failed -> result
+                is AppResult.Success -> {
+                    val checkpoint = result.value.checkpoint
+                    val entry =
+                        result.value.entries.firstOrNull { it.reference.id == selection.requestId }
+                    val request = (entry?.record as? LeaveReplicaRecord.Request)?.value
+                    val history =
+                        if (selection.historyAfter == null) request?.history
+                        else historyPages[selection.requestId to selection.historyAfter]?.history
+                    AppResult.Success(
+                        if (checkpoint == null || request == null || history == null) null
+                        else
+                            LeaveRequestSnapshot(
+                                checkpoint.access,
+                                acquisition(checkpoint, request),
+                                selection,
+                                request.copy(history = history),
+                                requireNotNull(entry.acquiredAt),
+                                checkpoint.refreshAfter,
+                            )
+                    )
+                }
+            }
+        }
+
+    override suspend fun requestCheckpoint(access: LeaveAccess): AppResult<String?> =
+        failure ?: AppResult.Success(current?.let { "${it.generation}:${it.revision}" })
+
+    override suspend fun replaceRequest(
+        access: LeaveAccess,
+        requestId: String,
+        expectedCheckpoint: String?,
+        snapshot: LeaveRequestSnapshot?,
+        history: LeaveHistoryPage?,
+    ): AppResult<Boolean> {
+        failure?.let {
+            return it
+        }
+        if (rejectWrite || requestCheckpoint(access) != AppResult.Success(expectedCheckpoint))
+            return AppResult.Success(false)
+        if (snapshot == null) return clear(access)
+        error(
+            "Individual acquisition uses LeaveRequestFixture; this fixture drives feed publication"
+        )
+    }
+
+    override suspend fun pendingHistory(
+        access: LeaveAccess,
+        limit: Int,
+    ): AppResult<List<LeaveHistoryWork>> =
+        failure ?: AppResult.Success(historyWork.values.take(limit))
+
+    override suspend fun storeHistory(
+        access: LeaveAccess,
+        work: LeaveHistoryWork,
+        page: LeaveHistoryPage,
+    ): AppResult<Boolean> {
+        failure?.let {
+            return it
+        }
+        if (rejectWrite || historyWork[work.requestId] != work) return AppResult.Success(false)
+        historyPages[work.requestId to work.after] = page
+        val next = page.history.nextCursor?.toLong()
+        if (next == null) historyWork.remove(work.requestId)
+        else historyWork[work.requestId] = work.copy(after = next)
+        current = current?.let { it.copy(revision = it.revision + 1) }
+        val previous = (published.value as AppResult.Success).value
+        published.value = AppResult.Success(previous.copy(checkpoint = current))
+        return AppResult.Success(true)
     }
 
     override suspend fun checkpoint(access: LeaveAccess): AppResult<LeaveCheckpoint?> =
@@ -173,7 +252,30 @@ class LeaveReplicaFixture : LeaveReplicaRepository {
         pending = merged.values.toList()
         current = next
         writes++
-        if (next.published) published.value = AppResult.Success(Published(next, directory, pending))
+        if (next.published) {
+            val old = (published.value as? AppResult.Success)?.value?.checkpoint
+            if (old?.generation != next.generation) {
+                historyWork.clear()
+                historyPages.clear()
+            }
+            for (entry in if (old?.generation == next.generation) entries else pending) {
+                val request = (entry.record as? LeaveReplicaRecord.Request)?.value
+                if (request == null) historyWork.remove(entry.reference.id)
+                else {
+                    val after = request.history.nextCursor?.toLong()
+                    if (after == null) historyWork.remove(request.id)
+                    else
+                        historyWork[request.id] =
+                            LeaveHistoryWork(
+                                request.id,
+                                request.version,
+                                acquisition(next, request),
+                                after,
+                            )
+                }
+            }
+            published.value = AppResult.Success(Published(next, directory, pending))
+        }
         return AppResult.Success(true)
     }
 
@@ -183,6 +285,8 @@ class LeaveReplicaFixture : LeaveReplicaRepository {
         }
         if (rejectWrite) return AppResult.Success(false)
         current = null
+        historyWork.clear()
+        historyPages.clear()
         pending = emptyList()
         published.value = AppResult.Success(Published(null, null, emptyList()))
         clears++
@@ -195,3 +299,6 @@ private fun requestOrder(item: LeaveRequestSummary) =
         (Long.MAX_VALUE - item.submittedAt.toEpochMilliseconds()).toString().padStart(19, '0') +
         "/" +
         item.id
+
+private fun acquisition(checkpoint: LeaveCheckpoint, request: LeaveRequestDetails) =
+    "${checkpoint.generation}:${request.id}:${request.version}"

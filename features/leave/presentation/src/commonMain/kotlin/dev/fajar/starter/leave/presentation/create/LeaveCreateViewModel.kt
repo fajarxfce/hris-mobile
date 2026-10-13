@@ -24,7 +24,7 @@ class LeaveCreateViewModel(
     private val prepareSubmission: PrepareLeaveSubmission,
     private val replaySubmission: ReplayLeaveSubmission,
     private val reviewSubmission: ReviewLeaveSubmission,
-    private val refreshRequest: RefreshLeaveRequest,
+    private val refreshRequest: LoadLeaveRequest,
 ) :
     MviViewModel<LeaveCreateState, LeaveCreateEvent, LeaveCreateEffect>(
         initialLeaveCreateState(target)

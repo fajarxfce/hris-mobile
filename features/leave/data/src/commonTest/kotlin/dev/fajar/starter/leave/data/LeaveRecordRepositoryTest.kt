@@ -65,8 +65,8 @@ class LeaveRecordRepositoryTest {
                     )
                     .value
             assertEquals(f.request.id, request.value.id)
-            assertEquals(f.request.from, request.value.from.toString())
-            assertEquals(f.request.until, request.value.until.toString())
+            assertEquals(f.request.from, request.value.days.first().date.toString())
+            assertEquals(f.request.until, request.value.days.last().date.toString())
         } finally {
             client.close()
         }

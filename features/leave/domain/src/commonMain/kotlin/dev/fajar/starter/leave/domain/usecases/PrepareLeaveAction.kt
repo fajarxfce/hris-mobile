@@ -18,7 +18,7 @@ import kotlinx.coroutines.flow.first
 /** Admits immutable intent from the visible, leased request before any transmission. */
 class PrepareLeaveAction(
     private val commands: LeaveCommandRepository,
-    private val cache: LeaveRequestCacheRepository,
+    private val cache: LeaveRequestReplicaRepository,
     private val sessions: SessionRepository,
     private val workspaces: WorkspaceRepository,
     private val clock: Clock,
@@ -41,7 +41,9 @@ class PrepareLeaveAction(
         val permission = admitLeaveWrite(access)
         if (permission is AppResult.Failed) return permission
         val snapshot =
-            when (val result = cache.observeRequest(access).first()) {
+            when (
+                val result = cache.observeRequest(access, LeaveRequestSelection(requestId)).first()
+            ) {
                 is AppResult.Failed -> return result
                 is AppResult.Success -> result.value
             }

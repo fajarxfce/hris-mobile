@@ -12,6 +12,7 @@ data class LeaveCheckpointDto(
     val refreshedAt: String?,
     val refreshAfter: String,
     val pollAt: String?,
+    val recordSchema: Int = 1,
 ) {
     override fun toString() = "LeaveCheckpointDto([redacted])"
 }
