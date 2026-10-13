@@ -44,7 +44,7 @@ fun ExpenseCommandCard(
                 ),
                 color = AppColors.muted,
             )
-        }
+        } else AppText(record.command.reason)
         if (!busy && record.outcome is ExpenseCommandOutcome.Unconfirmed)
             AppText(appString(AppString.ExpenseConfirmationHint), color = AppColors.muted)
         if (busy) AppLoading(compact = true)

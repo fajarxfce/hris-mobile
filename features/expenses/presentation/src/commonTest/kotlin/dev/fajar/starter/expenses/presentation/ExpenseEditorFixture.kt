@@ -13,8 +13,9 @@ import kotlin.time.Instant
 import kotlinx.coroutines.flow.*
 import kotlinx.datetime.LocalDate
 
-class ExpenseEditorFixture(instant: () -> Instant = { Instant.parse("2026-10-13T00:00:00Z") }) {
-    val f = ExpenseFixture(instant)
+class ExpenseEditorFixture(val f: ExpenseFixture = ExpenseFixture()) {
+    constructor(instant: () -> Instant) : this(ExpenseFixture(instant))
+
     val preparation =
         ExpenseDraftPreparation(
             f.access,

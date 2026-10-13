@@ -1,6 +1,12 @@
 package dev.fajar.starter.expenses.presentation.detail
 
 sealed interface ExpenseClaimEvent {
+    data class ActionRequested(
+        val mode: dev.fajar.starter.expenses.presentation.action.ExpenseActionMode
+    ) : ExpenseClaimEvent
+
+    data object RecoveryRequested : ExpenseClaimEvent
+
     data object EditRequested : ExpenseClaimEvent
 
     data object Entered : ExpenseClaimEvent

@@ -170,6 +170,62 @@ class ExpenseDraftCommandTest {
     }
 
     @Test
+    fun actionPreparationUsesTheReviewedVersionAndDoesNotRebaseAChangedClaim() = runTest {
+        val p = ExpenseCommandFixture()
+        val old = p.details()
+        val refreshed = old.copy(value = old.value.copy(claim = old.value.claim.copy(version = 1)))
+        val result =
+            assertIs<AppResult.Failed>(
+                p.action(
+                    p.f.workspace.id,
+                    refreshed,
+                    ExpenseRequestedAction.SUBMIT,
+                    "Reviewed",
+                    expectedVersion = 0,
+                )
+            )
+        assertEquals("client.expense_changed", result.failure.code)
+        assertEquals(0, p.insertions)
+        assertTrue(p.sent.isEmpty())
+    }
+
+    @Test
+    fun displayedActionOptionsUseTheSameEligibilityRulesAsPreparation() = runTest {
+        val p = ExpenseCommandFixture()
+        val view = p.details().value
+        assertEquals(
+            setOf(ExpenseRequestedAction.SUBMIT, ExpenseRequestedAction.CANCEL),
+            availableExpenseActions(view),
+        )
+        assertEquals(
+            setOf(ExpenseRequestedAction.CANCEL),
+            availableExpenseActions(
+                view.copy(
+                    claim = view.claim.copy(draft = view.claim.draft.copy(lines = emptyList()))
+                )
+            ),
+        )
+        assertEquals(
+            setOf(ExpenseRequestedAction.CANCEL),
+            availableExpenseActions(view.copy(claim = view.claim.copy(submissionCount = 20))),
+        )
+        assertEquals(
+            setOf(ExpenseRequestedAction.CANCEL),
+            availableExpenseActions(
+                view.copy(claim = view.claim.copy(status = ExpenseStatus.RETURNED))
+            ),
+        )
+        for (status in
+            listOf(
+                ExpenseStatus.PENDING,
+                ExpenseStatus.APPROVED,
+                ExpenseStatus.CANCELLED,
+            )) assertTrue(
+            availableExpenseActions(view.copy(claim = view.claim.copy(status = status))).isEmpty()
+        )
+    }
+
+    @Test
     fun submitKeepsItsOriginalGeneratedIdAndReturnedClaimsRequireAnEditedDraft() = runTest {
         val p = ExpenseCommandFixture()
         val snapshot = p.details()

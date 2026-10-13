@@ -7,8 +7,21 @@ import dev.fajar.starter.common.result.*
 fun failureText(failure: Failure): String =
     appString(
         when (failure.code) {
-            "invalid_expense_draft",
-            "invalid_expense_reason" -> AppString.ExpenseInvalidDraft
+            "expense_not_editable",
+            "expense_submission_not_current" -> AppString.ExpenseActionUnavailable
+            "expense_lines_required" -> AppString.ExpenseItemsRequired
+            "expense_submission_limit" -> AppString.ExpenseSubmissionLimit
+            "expense_receipt_not_ready",
+            "expense_receipt_not_found",
+            "expense_receipt_unavailable" -> AppString.ExpenseReceiptInvalid
+            "expense_transaction_expired",
+            "expense_transaction_date_invalid",
+            "expense_line_limit_exceeded",
+            "expense_category_limit_exceeded",
+            "expense_cost_center_required",
+            "expense_receipt_required" -> AppString.ExpensePolicyChanged
+            "invalid_expense_draft" -> AppString.ExpenseInvalidDraft
+            "invalid_expense_reason" -> AppString.ExpenseReasonRequired
             "invalid_expense_line",
             "duplicate_expense_line" -> AppString.ExpenseInvalidItem
             "client.expense_preparation_expired",

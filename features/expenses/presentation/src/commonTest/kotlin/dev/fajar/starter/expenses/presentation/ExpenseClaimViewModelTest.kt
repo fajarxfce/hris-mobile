@@ -181,6 +181,7 @@ class ExpenseClaimViewModelTest {
                 ExpenseClaimTarget(f.workspace.id, f.claim.id, employmentAfter),
                 f.observeDetail,
                 f.refreshDetail,
+                ExpenseEditorFixture(f).observe,
             )
         val owner = ViewModelStore().apply { put("expense", model) }
         try {

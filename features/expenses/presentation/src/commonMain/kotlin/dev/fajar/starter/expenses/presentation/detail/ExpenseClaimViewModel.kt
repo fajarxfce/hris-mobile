@@ -2,8 +2,11 @@ package dev.fajar.starter.expenses.presentation.detail
 
 import androidx.lifecycle.viewModelScope
 import dev.fajar.starter.common.result.AppResult
+import dev.fajar.starter.expenses.domain.entities.*
+import dev.fajar.starter.expenses.domain.policies.admitExpenseEditing
 import dev.fajar.starter.expenses.domain.policies.expenseFailureInvalidatesCache
 import dev.fajar.starter.expenses.domain.usecases.*
+import dev.fajar.starter.expenses.presentation.action.ExpenseActionMode
 import dev.fajar.starter.expenses.presentation.expenseVerificationCodes
 import dev.fajar.starter.presentation.mvi.MviViewModel
 import dev.fajar.starter.workspace.domain.policies.workspaceAccessLossCodes
@@ -17,11 +20,15 @@ class ExpenseClaimViewModel(
     @InjectedParam private val target: ExpenseClaimTarget,
     private val observe: ObserveExpenseClaim,
     private val refresh: RefreshExpenseClaim,
+    private val observeCommand: ObserveExpenseCommand,
 ) : MviViewModel<ExpenseClaimState, ExpenseClaimEvent, ExpenseClaimEffect>(ExpenseClaimState()) {
+    private var commands: Job? = null
     private var observation: Job? = null
     private var acquisition: Job? = null
 
     init {
+        on<ExpenseClaimEvent.ActionRequested>(::onActionRequested)
+        on<ExpenseClaimEvent.RecoveryRequested>(::onRecoveryRequested)
         on<ExpenseClaimEvent.EditRequested>(::onEditRequested)
         on<ExpenseClaimEvent.Entered>(::onEntered)
         on<ExpenseClaimEvent.Stopped>(::onStopped)
@@ -35,6 +42,7 @@ class ExpenseClaimViewModel(
         if (observation?.isActive == true) return
         updateState { it.copy(loading = true) }
         observeContent()
+        observeCommands()
         onEvent(ExpenseClaimEvent.RefreshRequested)
     }
 
@@ -58,7 +66,50 @@ class ExpenseClaimViewModel(
             }
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private fun observeCommands() {
+        commands?.cancel()
+        commands =
+            viewModelScope.launch {
+                state
+                    .map { value ->
+                        !value.readRestricted &&
+                            value.content?.access?.let {
+                                admitExpenseEditing(it) is AppResult.Success
+                            } == true
+                    }
+                    .distinctUntilChanged()
+                    .flatMapLatest { allowed ->
+                        if (allowed)
+                            observeCommand(target.workspaceId, ExpenseCommandSlot.Claim(target.id))
+                        else emptyFlow()
+                    }
+                    .collect { result ->
+                        ensureActive()
+                        if (state.value.readRestricted) return@collect
+                        updateState {
+                            when (result) {
+                                is AppResult.Failed ->
+                                    it.copy(
+                                        command = null,
+                                        commandReady = false,
+                                        commandFailure = result.failure,
+                                    )
+                                is AppResult.Success ->
+                                    it.copy(
+                                        command = result.value,
+                                        commandReady = true,
+                                        commandFailure = null,
+                                    )
+                            }
+                        }
+                    }
+            }
+    }
+
     private fun onStopped(event: ExpenseClaimEvent.Stopped) {
+        commands?.cancel()
+        commands = null
         observation?.cancel()
         observation = null
         acquisition?.cancel()
@@ -68,6 +119,8 @@ class ExpenseClaimViewModel(
                 historyAfter =
                     if (it.content != null) it.content.value.historyAfter else it.historyAfter,
                 content = null,
+                command = null,
+                commandReady = false,
                 loading = false,
                 refreshing = false,
             )
@@ -91,7 +144,11 @@ class ExpenseClaimViewModel(
                 ensureActive()
                 if (result is AppResult.Success) observation?.cancel()
                 updateState { it.withClaimRefresh(result) }
-                if (result is AppResult.Success) observeContent()
+                if (result is AppResult.Success) {
+                    updateState { it.copy(commandFailure = null, commandReady = false) }
+                    observeContent()
+                    observeCommands()
+                }
                 if (
                     result is AppResult.Failed &&
                         result.failure.code in workspaceAccessLossCodes &&
@@ -122,6 +179,36 @@ class ExpenseClaimViewModel(
             )
         }
         onEvent(ExpenseClaimEvent.RefreshRequested)
+    }
+
+    private fun onActionRequested(event: ExpenseClaimEvent.ActionRequested) {
+        if (!state.value.canOpenAction || event.mode !in state.value.actionOptions) return
+        viewModelScope.launch {
+            emitEffect(ExpenseClaimEffect.OpenAction(target.id, event.mode, target.employmentAfter))
+        }
+    }
+
+    private fun onRecoveryRequested(event: ExpenseClaimEvent.RecoveryRequested) {
+        val command = state.value.command?.command ?: return
+        if (!state.value.canRecover) return
+        viewModelScope.launch {
+            if (command.payload is ExpenseCommandPayload.SaveDraft)
+                emitEffect(
+                    ExpenseClaimEffect.EditDraft(
+                        command.employeeId,
+                        command.claimId,
+                        command.employmentAfter,
+                    )
+                )
+            else
+                emitEffect(
+                    ExpenseClaimEffect.OpenAction(
+                        target.id,
+                        ExpenseActionMode.RECOVER,
+                        target.employmentAfter,
+                    )
+                )
+        }
     }
 
     private fun onEditRequested(event: ExpenseClaimEvent.EditRequested) {

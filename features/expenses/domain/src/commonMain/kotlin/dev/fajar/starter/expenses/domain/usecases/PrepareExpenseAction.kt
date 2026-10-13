@@ -27,6 +27,7 @@ class PrepareExpenseAction(
         snapshot: ExpenseSnapshot<ExpenseView>,
         action: ExpenseRequestedAction,
         reason: String,
+        expectedVersion: Long = snapshot.value.claim.version,
     ): AppResult<ExpenseCommandRecord> =
         withTimeoutOrNull(10.seconds) {
             val access =
@@ -45,6 +46,7 @@ class PrepareExpenseAction(
                             reason,
                             clock.now(),
                             submissionId,
+                            expectedVersion,
                         )
                 ) {
                     is AppResult.Failed -> return@withTimeoutOrNull result
@@ -57,7 +59,15 @@ class PrepareExpenseAction(
             val ownership = validateExpenseContinuation(access, currentAccess(workspaceId))
             if (ownership is AppResult.Failed) return@withTimeoutOrNull ownership
             val valid =
-                validateExpenseAction(snapshot, access, action, reason, clock.now(), submissionId)
+                validateExpenseAction(
+                    snapshot,
+                    access,
+                    action,
+                    reason,
+                    clock.now(),
+                    submissionId,
+                    expectedVersion,
+                )
             if (valid is AppResult.Failed) return@withTimeoutOrNull valid
             val existing =
                 when (previous) {

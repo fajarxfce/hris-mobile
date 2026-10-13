@@ -750,4 +750,22 @@
     <string name="expense_processing_en">Processing request…</string>
     <string name="expense_first_options_en">First page</string>
     <string name="expense_more_options_en">More options</string>
+    <string name="expense_submit_claim_en">Submit claim</string>
+    <string name="expense_cancel_claim_en">Cancel claim</string>
+    <string name="expense_withdraw_submission_en">Withdraw submission</string>
+    <string name="expense_recover_request_en">Pending request</string>
+    <string name="expense_submit_hint_en">Submit this claim for approval.</string>
+    <string name="expense_cancel_hint_en">A cancelled claim cannot be submitted.</string>
+    <string name="expense_withdraw_hint_en">Withdraw this submission to revise the draft.</string>
+    <string name="expense_action_reason_en">Reason</string>
+    <string name="expense_review_latest_en">Use reviewed version</string>
+    <string name="expense_action_changed_en">The claim changed. Review the current details before continuing.</string>
+    <string name="expense_action_unavailable_en">This action is unavailable for the current claim.</string>
+    <string name="expense_no_pending_request_en">There is no pending request for this claim.</string>
+    <string name="expense_discard_request_hint_en">Remove this unsent or rejected request from this device.</string>
+    <string name="expense_items_required_en">Add at least one expense item before submitting.</string>
+    <string name="expense_receipt_invalid_en">Select a ready receipt owned by this employment.</string>
+    <string name="expense_policy_changed_en">Check the transaction date, category limits and required evidence.</string>
+    <string name="expense_submission_limit_en">This claim has reached its submission limit.</string>
+    <string name="expense_reason_required_en">Enter a reason (up to 1,000 characters).</string>
 </resources>

@@ -22,10 +22,21 @@ fun NavGraphBuilder.expenseRoutes(
     onClaim: (ExpenseClaimRoute) -> Unit,
     onDraft: (ExpenseDraftRoute) -> Unit,
     onSavedClaim: (ExpenseClaimRoute) -> Unit,
+    onAction: (ExpenseActionRoute) -> Unit,
+    onActionClaim: (ExpenseClaimRoute) -> Unit,
+    onActionDraft: (ExpenseDraftRoute) -> Unit,
     onVerify: () -> Unit,
     onRecheckWorkspace: () -> Unit,
     onBack: () -> Unit,
 ) {
+    expenseActionRoute(
+        workspaceId,
+        onActionClaim,
+        onActionDraft,
+        onVerify,
+        onRecheckWorkspace,
+        onBack,
+    )
     composable<ExpensesRoute> {
         val viewModel = koinViewModel<ExpensesViewModel>(parameters = { parametersOf(workspaceId) })
         val state by viewModel.state.collectAsStateWithLifecycle()
@@ -74,6 +85,8 @@ fun NavGraphBuilder.expenseRoutes(
         }
         CollectEffects(viewModel.effects) { effect ->
             when (effect) {
+                is ExpenseClaimEffect.OpenAction ->
+                    onAction(ExpenseActionRoute(effect.id, effect.mode, effect.employmentAfter))
                 is ExpenseClaimEffect.EditDraft ->
                     onDraft(
                         ExpenseDraftRoute(effect.employeeId, effect.claimId, effect.employmentAfter)

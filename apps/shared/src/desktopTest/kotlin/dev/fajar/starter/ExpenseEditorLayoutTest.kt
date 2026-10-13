@@ -16,6 +16,8 @@ import dev.fajar.starter.common.decimal.DecimalAmount
 import dev.fajar.starter.designsystem.theme.AppTheme
 import dev.fajar.starter.documents.domain.entities.DocumentRevisionStatus
 import dev.fajar.starter.expenses.domain.entities.*
+import dev.fajar.starter.expenses.presentation.action.*
+import dev.fajar.starter.expenses.presentation.action.pages.ExpenseActionPage
 import dev.fajar.starter.expenses.presentation.draft.*
 import dev.fajar.starter.expenses.presentation.draft.pages.ExpenseDraftPage
 import dev.fajar.starter.expenses.presentation.draft.widgets.ExpenseDraftLineRow
@@ -268,6 +270,146 @@ class ExpenseEditorLayoutTest {
         compose.runOnIdle {
             assertEquals(listOf<ExpenseDraftEvent>(ExpenseDraftEvent.RetryRequested), events)
         }
+    }
+
+    @Test
+    fun actionReviewKeepsConfirmationVisibleAtLargeTextAndAllowsLeavingPendingWork() {
+        val input = draftState().form!!
+        val draft =
+            ExpenseDraft(
+                0,
+                "E01",
+                "Employee",
+                input.title,
+                input.description,
+                DecimalAmount.parse("375001.25"),
+                "IDR",
+                input.lines,
+                accountId,
+                "Saved",
+                now,
+            )
+        val claim =
+            ExpenseClaim(
+                "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
+                employeeId,
+                accountId,
+                now,
+                0,
+                ExpenseStatus.DRAFT,
+                draft,
+                0,
+                null,
+            )
+        var state by
+            mutableStateOf(
+                ExpenseActionState(
+                    mode = ExpenseActionMode.SUBMIT,
+                    active = true,
+                    commandReady = true,
+                    loading = false,
+                    content =
+                        ExpenseSnapshot(
+                            access(),
+                            "generation",
+                            ExpenseView(claim, null, ExpensePage(emptyList()), null, emptyList()),
+                            now,
+                            now + 1.hours,
+                        ),
+                    form = ExpenseActionForm(0),
+                )
+            )
+        val events = mutableListOf<ExpenseActionEvent>()
+        compose.setContent {
+            val density = LocalDensity.current
+            CompositionLocalProvider(
+                LocalDensity provides Density(density.density, 2f),
+                LocalAppLanguage provides AppLanguage.Indonesian,
+            ) {
+                AppTheme {
+                    Box(Modifier.size(360.dp, 760.dp)) {
+                        ExpenseActionPage(state, rememberLazyListState()) { event ->
+                            events += event
+                            when (event) {
+                                is ExpenseActionEvent.ReasonChanged ->
+                                    state =
+                                        state.copy(form = state.form!!.copy(reason = event.value))
+                                ExpenseActionEvent.Confirmed ->
+                                    state = state.copy(work = ExpenseActionWork.SENDING)
+                                ExpenseActionEvent.BackRequested ->
+                                    state = state.copy(dialog = ExpenseActionDialog.EXIT)
+                                else -> Unit
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        val back = compose.onNodeWithContentDescription("Kembali").fetchSemanticsNode().boundsInRoot
+        compose
+            .onNode(hasScrollToIndexAction())
+            .performScrollToNode(hasContentDescription("Alasan"))
+        compose
+            .onNodeWithContentDescription("Alasan")
+            .performScrollTo()
+            .performTextReplacement("Penggantian biaya perjalanan")
+        compose
+            .onNode(hasText("Ajukan klaim") and hasClickAction())
+            .assertIsDisplayed()
+            .assertIsEnabled()
+            .performClick()
+        compose.runOnIdle { assertEquals(ExpenseActionEvent.Confirmed, events.last()) }
+        assertEquals(
+            back,
+            compose.onNodeWithContentDescription("Kembali").fetchSemanticsNode().boundsInRoot,
+        )
+        compose.onNode(hasText("Ajukan klaim") and hasClickAction()).assertIsNotEnabled()
+        compose.onNodeWithContentDescription("Kembali").performClick()
+        compose.onNode(hasText("Buang") and hasClickAction()).assertIsEnabled().performClick()
+        compose.runOnIdle { assertEquals(ExpenseActionEvent.ExitConfirmed, events.last()) }
+        compose.runOnIdle {
+            state =
+                state.copy(
+                    dialog = null,
+                    work = null,
+                    command =
+                        ExpenseCommandRecord(
+                            ExpenseCommand(
+                                "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+                                accountId,
+                                access().audience,
+                                companyId,
+                                claim.id,
+                                employeeId,
+                                "E01",
+                                null,
+                                "Asia/Jakarta",
+                                ExpenseCommandPayload.Submit(
+                                    0,
+                                    "eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee",
+                                ),
+                                "Penggantian biaya perjalanan",
+                                now,
+                            ),
+                            0,
+                            0,
+                            ExpenseCommandOutcome.Pending,
+                        ),
+                )
+        }
+        compose.onNode(hasText("Ajukan klaim") and hasClickAction()).assertDoesNotExist()
+        compose.onNode(hasScrollToIndexAction()).performScrollToIndex(0)
+        compose.onNodeWithText(input.title).assertIsDisplayed()
+        compose
+            .onNode(hasScrollToIndexAction())
+            .performScrollToNode(hasText("Penggantian biaya perjalanan"))
+        compose.onNodeWithText("Penggantian biaya perjalanan").assertIsDisplayed()
+        compose
+            .onNode(hasText("Kirim sekarang") and hasClickAction())
+            .performScrollTo()
+            .assertIsEnabled()
+            .performClick()
+        compose.runOnIdle { assertEquals(ExpenseActionEvent.RetryRequested, events.last()) }
     }
 
     private fun draftState(): ExpenseDraftState {

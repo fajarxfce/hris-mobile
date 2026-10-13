@@ -53,11 +53,14 @@ fun validateExpenseAction(
     reason: String,
     now: Instant,
     submissionId: String,
+    expectedVersion: Long = snapshot.value.claim.version,
 ): AppResult<ExpenseCommandPayload> {
     val allowed = admitExpenseEditing(access)
     if (allowed is AppResult.Failed) return allowed
     val lease = validateExpenseCache(access, snapshot, now)
     if (lease is AppResult.Failed) return lease
+    if (snapshot.value.claim.version != expectedVersion)
+        return expenseFailure("client.expense_changed", FailureKind.Conflict)
     val explanation = validateExpenseReason(reason)
     if (explanation is AppResult.Failed) return explanation
     val view = snapshot.value
@@ -68,38 +71,19 @@ fun validateExpenseAction(
             claim.version !in 0 until 9_007_199_254_740_991L
     )
         return expenseFailure("client.invalid_response", FailureKind.Unexpected)
+    val eligibility = admitExpenseAction(view, action)
+    if (eligibility is AppResult.Failed) return eligibility
     return when (action) {
         ExpenseRequestedAction.SUBMIT ->
-            when {
-                claim.status != ExpenseStatus.DRAFT ->
-                    expenseFailure("expense_not_editable", FailureKind.Conflict)
-                claim.submissionCount >= 20 ->
-                    expenseFailure("expense_submission_limit", FailureKind.Conflict)
-                claim.draft.lines.isEmpty() -> expenseFailure("expense_lines_required")
-                Uuid.parseOrNull(submissionId)?.toString() != submissionId ->
-                    expenseFailure("invalid_expense_action")
-                else -> AppResult.Success(ExpenseCommandPayload.Submit(claim.version, submissionId))
-            }
+            if (Uuid.parseOrNull(submissionId)?.toString() != submissionId)
+                expenseFailure("invalid_expense_action")
+            else AppResult.Success(ExpenseCommandPayload.Submit(claim.version, submissionId))
         ExpenseRequestedAction.CANCEL ->
-            if (claim.status !in setOf(ExpenseStatus.DRAFT, ExpenseStatus.RETURNED))
-                expenseFailure("expense_not_editable", FailureKind.Conflict)
-            else AppResult.Success(ExpenseCommandPayload.Cancel(claim.version))
-        ExpenseRequestedAction.WITHDRAW -> {
-            val current = view.submission
-            if (
-                claim.status != ExpenseStatus.PENDING ||
-                    current == null ||
-                    !current.current ||
-                    claim.latestSubmissionId != current.id ||
-                    current.claimId != claim.id ||
-                    current.employeeId != claim.employeeId ||
-                    current.claimVersion != claim.version ||
-                    current.approval.status !in
-                        setOf(ExpenseApprovalStatus.PENDING, ExpenseApprovalStatus.BLOCKED)
+            AppResult.Success(ExpenseCommandPayload.Cancel(claim.version))
+        ExpenseRequestedAction.WITHDRAW ->
+            AppResult.Success(
+                ExpenseCommandPayload.Withdraw(claim.version, checkNotNull(view.submission).id)
             )
-                expenseFailure("expense_submission_not_current", FailureKind.Conflict)
-            else AppResult.Success(ExpenseCommandPayload.Withdraw(claim.version, current.id))
-        }
     }
 }
 

@@ -73,8 +73,11 @@ earlier uncertain commit; an unconfirmed operation cannot be discarded. Confirme
 cleanup requires an admitted claim view at least as recent as the receipt and an
 atomic outcome revision match. Credentials never enter command storage.
 
-The native draft editor uses these boundaries for saving and recovery. Submission,
-cancellation and withdrawal UI are being connected separately.
+The native draft editor and action review pages use these boundaries for saving,
+submission, cancellation and withdrawal. Action preparation checks the version
+reviewed by the employee. A changed version requires explicit review; entering a
+reason never authorizes a silent rebase. Submission eligibility and the current
+withdrawable approval are domain policy shared by presentation and preparation.
 
 ## Pages
 
@@ -112,16 +115,27 @@ explicit reload. After confirmed delivery, it acquires current claim facts and
 reconciles the retained command before navigating. Employment pagination context
 survives list, detail and editor navigation.
 
-Receipt export, submission and subsequent employee actions remain separate
-increments.
+Detail exposes the actions available for its current revision. A retained command
+replaces competing actions with recovery. Read-only accounts can still open details
+without subscribing to command storage. Submission, cancellation and withdrawal
+open separate review pages with fixed Back and confirmation controls. The reason
+survives backgrounding; confirmed delivery refreshes the claim and reconciles the
+retained outcome before returning to it. Pending and rejected input can be discarded
+explicitly; an uncertain operation keeps its original body and operation ID.
+Recovery retains the claim summary and the original reason. Back cancels the
+page's reads and delivery immediately, before navigation disposes its owner;
+the durable outcome remains available from detail.
+
+Receipt export remains a separate increment.
 
 ## Validation
 
-The final recovery and layout changes passed root checks with 1,092 desktop tests,
-36 presentation tests in Chromium and Android dev assembly. The editor integration
-also passed 73 expense domain/data Chromium tests and production Web compilation.
-CI for the editor passed Linux verification, Windows checks and the iOS simulator
-build.
+The native draft and action pages passed root checks with 1,108 desktop tests,
+49 presentation tests in Chromium and Android dev assembly. The action policy
+integration also passed 52 domain Chromium tests and production Web compilation;
+the final recovery display and exit changes were checked again on Android and
+Chromium. CI for the preceding editor passed Linux verification, Windows checks
+and the iOS simulator build.
 
 Coverage includes immutable retry bodies, concurrent saves, cancellation, late
 results, protected cache cleanup, failed acknowledgement persistence, bounded
@@ -130,6 +144,9 @@ discard during worker progress. Real SQLite/AES tests reject copied or tampered
 command envelopes. Picker tests cover issued cursors, expired choices and stale
 receipt callbacks. Layout tests exercise fixed actions, long pickers and large
 amounts without ellipsis at 200% text.
+Action tests cover reviewed-version conflicts, read-only detail access, recovery
+before competing commands, pending exit before owner disposal, and late failures
+without duplicate navigation or loss of the uncertain outcome.
 
 API 35 emulator acceptance created and edited a fictional claim through the app,
 selected a dated category, cost center and inspected receipt, and verified exact
@@ -138,6 +155,14 @@ explicit reload, unsaved Back confirmation, background input retention, an offli
 readmission failure and recovery without discarding input. Light/dark appearance
 and 200% text were inspected. The earlier read-page run also verified encrypted
 list/detail restoration after background process death offline and reconnection.
+Action acceptance retained a pending submission through offline process restart,
+replayed it once, withdrew its approval, and cancelled the claim through detail
+recovery. API reads verified the original reason, one submission and one history
+entry per version. The cancellation review and retained-command page were checked
+in dark appearance at 200% text. Emulator transport rules and display preferences
+were restored; no runtime performance measurement was performed.
+The validated APK was installed on the authorized phone with install-only delivery;
+the phone's UI was not opened or driven.
 
 ### Draft display references
 

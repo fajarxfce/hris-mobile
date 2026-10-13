@@ -750,4 +750,22 @@
     <string name="expense_processing_id">Memproses permintaan…</string>
     <string name="expense_first_options_id">Halaman pertama</string>
     <string name="expense_more_options_id">Pilihan lainnya</string>
+    <string name="expense_submit_claim_id">Ajukan klaim</string>
+    <string name="expense_cancel_claim_id">Batalkan klaim</string>
+    <string name="expense_withdraw_submission_id">Tarik pengajuan</string>
+    <string name="expense_recover_request_id">Permintaan tersimpan</string>
+    <string name="expense_submit_hint_id">Ajukan klaim ini untuk ditinjau.</string>
+    <string name="expense_cancel_hint_id">Klaim yang dibatalkan tidak dapat diajukan.</string>
+    <string name="expense_withdraw_hint_id">Tarik pengajuan untuk memperbaiki draft.</string>
+    <string name="expense_action_reason_id">Alasan</string>
+    <string name="expense_review_latest_id">Gunakan versi yang ditinjau</string>
+    <string name="expense_action_changed_id">Klaim berubah. Tinjau detail terbaru sebelum melanjutkan.</string>
+    <string name="expense_action_unavailable_id">Tindakan ini tidak tersedia untuk klaim saat ini.</string>
+    <string name="expense_no_pending_request_id">Tidak ada permintaan tersimpan untuk klaim ini.</string>
+    <string name="expense_discard_request_hint_id">Hapus permintaan yang belum dikirim atau sudah ditolak dari perangkat ini.</string>
+    <string name="expense_items_required_id">Tambahkan minimal satu rincian biaya sebelum mengajukan.</string>
+    <string name="expense_receipt_invalid_id">Pilih bukti yang siap digunakan untuk hubungan kerja ini.</string>
+    <string name="expense_policy_changed_id">Periksa tanggal transaksi, batas kategori, dan bukti yang diwajibkan.</string>
+    <string name="expense_submission_limit_id">Klaim ini mencapai batas jumlah pengajuan.</string>
+    <string name="expense_reason_required_id">Isi alasan (maksimal 1.000 karakter).</string>
 </resources>

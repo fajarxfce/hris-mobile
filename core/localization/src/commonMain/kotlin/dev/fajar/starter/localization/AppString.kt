@@ -7,6 +7,57 @@ import org.jetbrains.compose.resources.StringResource
 enum class AppString(val english: StringResource, val indonesian: StringResource) {
     ExpenseFirstOptions(Res.string.expense_first_options_en, Res.string.expense_first_options_id),
     ExpenseMoreOptions(Res.string.expense_more_options_en, Res.string.expense_more_options_id),
+    ExpenseReasonRequired(
+        Res.string.expense_reason_required_en,
+        Res.string.expense_reason_required_id,
+    ),
+    ExpenseSubmitClaim(Res.string.expense_submit_claim_en, Res.string.expense_submit_claim_id),
+    ExpenseCancelClaim(Res.string.expense_cancel_claim_en, Res.string.expense_cancel_claim_id),
+    ExpenseWithdrawSubmission(
+        Res.string.expense_withdraw_submission_en,
+        Res.string.expense_withdraw_submission_id,
+    ),
+    ExpenseRecoverRequest(
+        Res.string.expense_recover_request_en,
+        Res.string.expense_recover_request_id,
+    ),
+    ExpenseSubmitHint(Res.string.expense_submit_hint_en, Res.string.expense_submit_hint_id),
+    ExpenseCancelHint(Res.string.expense_cancel_hint_en, Res.string.expense_cancel_hint_id),
+    ExpenseWithdrawHint(Res.string.expense_withdraw_hint_en, Res.string.expense_withdraw_hint_id),
+    ExpenseActionReason(Res.string.expense_action_reason_en, Res.string.expense_action_reason_id),
+    ExpenseReviewLatest(Res.string.expense_review_latest_en, Res.string.expense_review_latest_id),
+    ExpenseActionChanged(
+        Res.string.expense_action_changed_en,
+        Res.string.expense_action_changed_id,
+    ),
+    ExpenseActionUnavailable(
+        Res.string.expense_action_unavailable_en,
+        Res.string.expense_action_unavailable_id,
+    ),
+    ExpenseNoPendingRequest(
+        Res.string.expense_no_pending_request_en,
+        Res.string.expense_no_pending_request_id,
+    ),
+    ExpenseDiscardRequestHint(
+        Res.string.expense_discard_request_hint_en,
+        Res.string.expense_discard_request_hint_id,
+    ),
+    ExpenseItemsRequired(
+        Res.string.expense_items_required_en,
+        Res.string.expense_items_required_id,
+    ),
+    ExpenseReceiptInvalid(
+        Res.string.expense_receipt_invalid_en,
+        Res.string.expense_receipt_invalid_id,
+    ),
+    ExpensePolicyChanged(
+        Res.string.expense_policy_changed_en,
+        Res.string.expense_policy_changed_id,
+    ),
+    ExpenseSubmissionLimit(
+        Res.string.expense_submission_limit_en,
+        Res.string.expense_submission_limit_id,
+    ),
     ExpenseProcessing(Res.string.expense_processing_en, Res.string.expense_processing_id),
     ExpenseNewClaim(Res.string.expense_new_claim_en, Res.string.expense_new_claim_id),
     ExpenseTitle(Res.string.expense_title_en, Res.string.expense_title_id),

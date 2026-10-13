@@ -61,6 +61,7 @@ fun ExpenseDraftPage(
                         { onEvent(ExpenseDraftEvent.SaveRequested) },
                         Modifier.fillMaxWidth(),
                         enabled = state.canSave,
+                        loading = state.work == ExpenseDraftWork.SAVING,
                     )
                 }
         },

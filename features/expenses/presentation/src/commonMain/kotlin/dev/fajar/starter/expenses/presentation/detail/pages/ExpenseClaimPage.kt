@@ -65,6 +65,12 @@ fun ExpenseClaimPage(
                 }
             }
         },
+        bottomBar = {
+            if (
+                !state.readRestricted && (state.command != null || state.actionOptions.isNotEmpty())
+            )
+                AppActionBar { ExpenseClaimActions(state, onEvent) }
+        },
     ) {
         if (state.loading) item(key = "loading") { AppLoading(compact = state.content != null) }
         val snapshot = state.content?.takeUnless { state.readRestricted }
