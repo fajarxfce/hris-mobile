@@ -48,6 +48,28 @@ including its checkpoint; they never silently discard a document. Room uses
 explicit insert/update operations because its upsert fallback can swallow a
 conflicting secondary index when no primary-key row exists.
 
+`ReplicaDocument.tags` supplies up to sixteen opaque equality keys. `observeQueries`
+reads one to four ordered, optionally tagged pages against the same published
+checkpoint and account check, with at most 200 returned rows in total. Pagination
+uses the existing ordering key; it does not load or decrypt every stored record.
+Updating a document replaces its indexes in the same transaction as its content
+and cursor. Tombstones have no tags, and older/equal-version resurrection cannot
+restore an index. Query failures never expose partially updated pages.
+
+Room uses a composite tag/order index with cascading document ownership. IndexedDB
+uses a compound-key multi-entry index on the document. An untagged record remains
+available through ordinary reads. Features must acquire or derive their own tags;
+the database does not infer private filters from encrypted payloads.
+
+For sensitive fields, `core/securestorage` provides the public `contentIndexes`
+function. It derives a separate HMAC-SHA256 key through HKDF-SHA256 and returns
+stable equality tokens for explicitly scoped contexts. Feature repositories bind
+the API/account/company, collection and filter values, and authenticate stored
+ordering/tags alongside encrypted content. Keyed tokens still expose equality and
+frequency to storage; they are not authorization or a replacement for authenticated
+encryption. The function bounds work, propagates cancellation, and clears its
+owned byte buffers. Its caller owns exception mapping and credential lifetime.
+
 Account activation clears only temporary session replicas. Account-owned facts,
 staging generations and tombstones remain in separate composite keys. Every read
 and write checks both the live session and its active account binding within the
@@ -66,6 +88,11 @@ active/staging checkpoints and deletion markers. Migration adds a separate owner
 key rather than relabeling ciphertext as belonging to an account. Features choose
 when to acquire or migrate their encrypted account projection; the database does
 not rewrite feature formats or authorization policy.
+
+Room schema 10 and IndexedDB schema 9 add optional indexes without changing
+existing ciphertext, active/staging checkpoints, or tombstones. Legacy rows have
+no tags until their owning feature writes indexed content. Migration tests cover
+both preceding ownership formats and resumption under a replacement login.
 
 Cancellation leaves an absent or complete transaction, never a partial batch.
 An admitted IndexedDB write finishes atomically and notifies existing observers;

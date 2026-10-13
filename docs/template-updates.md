@@ -290,3 +290,12 @@ The starter passed root checks with 279 JVM/desktop tests, 24 database Chromium
 cases and Android dev assembly. HRIS passed its own root/browser checks and exercised
 the integration on Android. Inbox encryption formats, legacy-read compatibility,
 server cursor replacement and company/permission policy remain in HRIS Mobile.
+
+## Indexed replica reads
+
+[Compose Fluent Starter d94c7f3](https://github.com/fajarxfce/compose-fluent-starter/commit/d94c7f3)
+contains the matching raw equality indexes, atomic multi-page queries, compatible
+Room/IndexedDB migrations and scoped HKDF/HMAC token function. Portable regression
+coverage and format/bound checks are shared; Leave contracts and application
+synchronization remain in HRIS Mobile. Both workspaces passed root checks,
+41 database/secure-storage Chromium tests and Android dev assembly.

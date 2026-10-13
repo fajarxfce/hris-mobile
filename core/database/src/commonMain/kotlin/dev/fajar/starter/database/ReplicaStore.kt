@@ -50,6 +50,13 @@ interface ReplicaStore {
         limit: Int = 50,
     ): Flow<ReplicaPage>
 
+    /** Bounded indexed reads sharing one generation, revision and ownership check. */
+    fun observeQueries(
+        scope: ReplicaScope,
+        partition: String,
+        queries: List<ReplicaQuery>,
+    ): Flow<ReplicaQueryPage>
+
     /** Observes one visible document and its active checkpoint in the same read transaction. */
     fun observeDocument(scope: ReplicaScope, partition: String, id: String): Flow<ReplicaPage>
 

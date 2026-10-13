@@ -46,6 +46,20 @@ fun validateReplicaBatch(expectedRevision: Long, documents: List<ReplicaDocument
             it.sortKey.length in 1..200 && it.sortKey.all { character -> character in '!'..'~' }
         )
         require(it.payload == null || it.payload.length in 1..131_072)
+        require(it.tags.size <= 16 && (it.payload != null || it.tags.isEmpty()))
+        it.tags.forEach(::validateReplicaTag)
+    }
+}
+
+fun validateReplicaTag(tag: String) {
+    require(tag.length in 1..128 && tag.all { it in '!'..'~' })
+}
+
+fun validateReplicaQueries(queries: List<ReplicaQuery>) {
+    require(queries.size in 1..4 && queries.sumOf { it.limit.toLong() } <= 200)
+    queries.forEach {
+        validateReplicaPage(it.after, it.limit)
+        it.tag?.let(::validateReplicaTag)
     }
 }
 

@@ -863,3 +863,19 @@ phone at 00:39:19 WIB using `--skip-build --install-only`. Its SHA-256 is
 The phone application was not opened or driven. Other feature collections,
 persistent offline drafts, and a shared sync-status presentation remain pending;
 these checks do not claim complete offline coverage or measure memory/frame time.
+
+## Indexed replica reads
+
+The raw replica store supports bounded equality-tag queries. Multiple pages share
+one published generation/revision and active account check; record, index and
+cursor changes commit together. SQLite and IndexedDB tests cover filtering, ordered
+pagination, status-index replacement, stale updates, deletion, rollback, staged
+publication, observer disposal and replacement sessions. Both migration suites
+retain untagged account ciphertext, pending generations and tombstones before
+adding indexes.
+
+Root checks passed with 1,199 JVM/desktop tests. The database (25) and secure-storage
+(16) Chromium suites passed, including independent HKDF/HMAC vectors and cancellation.
+Android dev assembly passed. This validates the storage foundation; it does not
+claim that Leave is already connected to its change feed or that UI/device
+acceptance has been performed for this increment.

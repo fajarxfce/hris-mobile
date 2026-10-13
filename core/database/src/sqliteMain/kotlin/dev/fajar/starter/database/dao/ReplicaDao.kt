@@ -3,6 +3,7 @@ package dev.fajar.starter.database.dao
 import androidx.room.*
 import dev.fajar.starter.database.*
 import dev.fajar.starter.database.entities.*
+import kotlinx.serialization.json.Json
 
 @Dao
 abstract class ReplicaDao {
@@ -49,6 +50,18 @@ abstract class ReplicaDao {
         limit: Int,
     ): List<ReplicaDocumentEntity>
 
+    @Query(
+        "SELECT d.* FROM replica_tags AS t JOIN replica_documents AS d ON d.ownerKey = t.ownerKey AND d.partition = t.partition AND d.generation = t.generation AND d.id = t.id WHERE t.ownerKey = :ownerKey AND t.partition = :partition AND t.generation = :generation AND t.tag = :tag AND (:after IS NULL OR t.sortKey > :after) ORDER BY t.sortKey LIMIT :limit"
+    )
+    protected abstract suspend fun taggedRecords(
+        ownerKey: String,
+        partition: String,
+        generation: String,
+        tag: String,
+        after: String?,
+        limit: Int,
+    ): List<ReplicaDocumentEntity>
+
     @Upsert protected abstract suspend fun write(head: ReplicaHeadEntity)
 
     @Upsert protected abstract suspend fun write(generation: ReplicaGenerationEntity)
@@ -56,6 +69,18 @@ abstract class ReplicaDao {
     @Insert protected abstract suspend fun insert(document: ReplicaDocumentEntity)
 
     @Update protected abstract suspend fun update(document: ReplicaDocumentEntity)
+
+    @Insert protected abstract suspend fun insert(tags: List<ReplicaTagEntity>)
+
+    @Query(
+        "DELETE FROM replica_tags WHERE ownerKey = :ownerKey AND partition = :partition AND generation = :generation AND id = :id"
+    )
+    protected abstract suspend fun deleteTags(
+        ownerKey: String,
+        partition: String,
+        generation: String,
+        id: String,
+    )
 
     @Query(
         "DELETE FROM replica_generations WHERE ownerKey = :ownerKey AND partition = :partition AND generation = :generation"
@@ -130,7 +155,20 @@ abstract class ReplicaDao {
                         document.version,
                         document.sortKey,
                         document.payload,
+                        Json.encodeToString(document.tags.sorted()),
                     )
+                )
+                insert(
+                    document.tags.map {
+                        ReplicaTagEntity(
+                            ownerKey,
+                            partition,
+                            snapshot.generation,
+                            document.id,
+                            it,
+                            document.sortKey,
+                        )
+                    }
                 )
             }
             write(ReplicaHeadEntity(ownerKey, partition, snapshot.generation, null))
@@ -191,8 +229,22 @@ abstract class ReplicaDao {
                     document.version,
                     document.sortKey,
                     document.payload,
+                    Json.encodeToString(document.tags.sorted()),
                 )
+            deleteTags(ownerKey, handle.partition, handle.generation, document.id)
             if (previous == null) insert(row) else update(row)
+            insert(
+                document.tags.map {
+                    ReplicaTagEntity(
+                        ownerKey,
+                        handle.partition,
+                        handle.generation,
+                        document.id,
+                        it,
+                        document.sortKey,
+                    )
+                }
+            )
         }
         write(current.copy(revision = expectedRevision + 1, checkpoint = payload))
         if (publish) {
@@ -221,9 +273,7 @@ abstract class ReplicaDao {
                 row.checkpoint,
                 true,
             ),
-            records(ownerKey, partition, active, after, limit).map {
-                ReplicaDocument(it.id, it.version, it.sortKey, it.payload)
-            },
+            records(ownerKey, partition, active, after, limit).map { it.toReplicaDocument() },
         )
     }
 
@@ -238,7 +288,7 @@ abstract class ReplicaDao {
         val active = head(ownerKey, partition)?.activeGeneration ?: return null
         return record(ownerKey, partition, active, id)
             ?.takeIf { it.payload != null }
-            ?.let { ReplicaDocument(it.id, it.version, it.sortKey, it.payload) }
+            ?.toReplicaDocument()
     }
 
     @Transaction
@@ -265,7 +315,43 @@ abstract class ReplicaDao {
                 row.checkpoint,
                 true,
             ),
-            listOfNotNull(item?.let { ReplicaDocument(it.id, it.version, it.sortKey, it.payload) }),
+            listOfNotNull(item?.toReplicaDocument()),
+        )
+    }
+
+    @Transaction
+    open suspend fun queryPages(
+        scope: ReplicaScope,
+        partition: String,
+        queries: List<ReplicaQuery>,
+    ): ReplicaQueryPage {
+        val empty = ReplicaQueryPage(null, queries.map { emptyList() })
+        if (!owns(scope.sessionId, scope.accountKey)) return empty
+        val ownerKey = scope.accountKey.orEmpty()
+        val active = head(ownerKey, partition)?.activeGeneration ?: return empty
+        val row = generation(ownerKey, partition, active) ?: return empty
+        return ReplicaQueryPage(
+            ReplicaCheckpoint(
+                ReplicaHandle(scope, partition, active),
+                row.revision,
+                row.checkpoint,
+                true,
+            ),
+            queries.map { query ->
+                val documents =
+                    if (query.tag == null)
+                        records(ownerKey, partition, active, query.after, query.limit)
+                    else
+                        taggedRecords(
+                            ownerKey,
+                            partition,
+                            active,
+                            query.tag,
+                            query.after,
+                            query.limit,
+                        )
+                documents.map { it.toReplicaDocument() }
+            },
         )
     }
 }

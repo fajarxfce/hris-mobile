@@ -1,5 +1,6 @@
 package dev.fajar.starter.database.entities
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
@@ -26,4 +27,5 @@ data class ReplicaDocumentEntity(
     val version: Long,
     val sortKey: String,
     val payload: String?,
+    @ColumnInfo(defaultValue = "'[]'") val tags: String = "[]",
 )

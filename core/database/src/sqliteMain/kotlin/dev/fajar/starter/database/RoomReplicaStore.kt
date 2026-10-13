@@ -31,7 +31,8 @@ internal class RoomReplicaStore(private val database: StarterDatabase) : Replica
         expected: ReplicaCheckpoint?,
         snapshot: ReplicaSnapshot?,
     ): Boolean {
-        val retained = snapshot?.copy(documents = snapshot.documents.toList())
+        val retained =
+            snapshot?.copy(documents = snapshot.documents.map { it.copy(tags = it.tags.toSet()) })
         validateReplicaReplacement(scope, partition, expected, retained)
         return dao.replace(scope, partition, expected, retained)
     }
@@ -59,7 +60,7 @@ internal class RoomReplicaStore(private val database: StarterDatabase) : Replica
         validateReplicaKey(handle.scope, handle.partition)
         validateReplicaGeneration(handle.generation)
         validateReplicaCheckpoint(checkpoint)
-        val batch = documents.toList()
+        val batch = documents.map { it.copy(tags = it.tags.toSet()) }
         validateReplicaBatch(expectedRevision, batch)
         return dao.commit(handle, expectedRevision, checkpoint, batch, publish)
     }
@@ -88,6 +89,28 @@ internal class RoomReplicaStore(private val database: StarterDatabase) : Replica
         validateReplicaGeneration(id)
         return dao.document(scope, partition, id)
     }
+
+    override fun observeQueries(
+        scope: ReplicaScope,
+        partition: String,
+        queries: List<ReplicaQuery>,
+    ) =
+        queries.toList().let { retained ->
+            database.invalidationTracker
+                .createFlow(
+                    "account_scope",
+                    "replica_heads",
+                    "replica_generations",
+                    "replica_documents",
+                    "replica_tags",
+                )
+                .map {
+                    validateReplicaKey(scope, partition)
+                    validateReplicaQueries(retained)
+                    dao.queryPages(scope, partition, retained)
+                }
+                .distinctUntilChanged()
+        }
 
     override fun observeDocument(scope: ReplicaScope, partition: String, id: String) =
         database.invalidationTracker

@@ -36,7 +36,8 @@ internal class IndexedDbReplicaStore(
         expected: ReplicaCheckpoint?,
         snapshot: ReplicaSnapshot?,
     ): Boolean {
-        val retained = snapshot?.copy(documents = snapshot.documents.toList())
+        val retained =
+            snapshot?.copy(documents = snapshot.documents.map { it.copy(tags = it.tags.toSet()) })
         validateReplicaReplacement(scope, partition, expected, retained)
         val db = database()
         currentCoroutineContext().ensureActive()
@@ -96,7 +97,7 @@ internal class IndexedDbReplicaStore(
         validateReplicaKey(handle.scope, handle.partition)
         validateReplicaGeneration(handle.generation)
         validateReplicaCheckpoint(checkpoint)
-        val batch = documents.toList()
+        val batch = documents.map { it.copy(tags = it.tags.toSet()) }
         validateReplicaBatch(expectedRevision, batch)
         val db = database()
         currentCoroutineContext().ensureActive()
@@ -149,6 +150,30 @@ internal class IndexedDbReplicaStore(
                 )
             }
             .distinctUntilChanged()
+
+    override fun observeQueries(
+        scope: ReplicaScope,
+        partition: String,
+        queries: List<ReplicaQuery>,
+    ) =
+        queries.toList().let { retained ->
+            changes
+                .map {
+                    validateReplicaKey(scope, partition)
+                    validateReplicaQueries(retained)
+                    Json.decodeFromString<ReplicaQueryPage>(
+                        replicaQueryPages(
+                                database(),
+                                Json.encodeToString(scope),
+                                partition,
+                                Json.encodeToString(retained),
+                            )
+                            .await<JsString>()
+                            .toString()
+                    )
+                }
+                .distinctUntilChanged()
+        }
 
     override suspend fun document(
         scope: ReplicaScope,
@@ -247,7 +272,8 @@ private external fun replicaCheckpoint(
                 const {generation, checkpoint} = snapshot;
                 generations.put({ownerKey, partition, generation, revision:0, checkpoint});
                 for (const item of snapshot.documents) {
-                    documents.put({...item, ownerKey, partition, generation, visibleSort:item.payload == null ? undefined : item.sortKey});
+                    documents.put({...item, ownerKey, partition, generation, visibleSort:item.payload == null ? undefined : item.sortKey,
+                        tagKeys:item.payload == null ? [] : (item.tags ?? []).map(tag => [ownerKey, partition, generation, tag, item.sortKey])});
                 }
                 heads.put({ownerKey, partition, activeGeneration:generation, stagingGeneration:null});
             }
@@ -361,7 +387,8 @@ private external fun beginReplica(
                     previous.onsuccess = () => {
                         const old = previous.result;
                         if (!old || (old.version <= item.version && !(old.version === item.version && old.payload == null && item.payload != null))) {
-                            documents.put({...item, ownerKey, partition, generation, visibleSort:item.payload == null ? undefined : item.sortKey});
+                            documents.put({...item, ownerKey, partition, generation, visibleSort:item.payload == null ? undefined : item.sortKey,
+                                tagKeys:item.payload == null ? [] : (item.tags ?? []).map(tag => [ownerKey, partition, generation, tag, item.sortKey])});
                         }
                         writeNext(index + 1);
                     };
@@ -404,15 +431,15 @@ private external fun commitReplica(
                     const item = tx.objectStore('replica_documents').get([ownerKey, partition, generation, documentId]);
                     item.onsuccess = () => {
                         if (item.result?.payload != null) {
-                            const {id, version, sortKey, payload} = item.result;
-                            value.documents = [{id, version, sortKey, payload}];
+                            const {id, version, sortKey, payload, tags = []} = item.result;
+                            value.documents = [{id, version, sortKey, payload, tags}];
                         }
                     };
                     return;
                 }
                 const range = IDBKeyRange.bound([ownerKey, partition, generation, after ?? ''], [ownerKey, partition, generation, '\uffff'], after != null);
                 const items = tx.objectStore('replica_documents').index('visible').getAll(range, limit);
-                items.onsuccess = () => { value.documents = items.result.map(({id, version, sortKey, payload}) => ({id, version, sortKey, payload})); };
+                items.onsuccess = () => { value.documents = items.result.map(({id, version, sortKey, payload, tags = []}) => ({id, version, sortKey, payload, tags})); };
             };
         };
     };
@@ -445,7 +472,7 @@ private external fun replicaPage(
             const row = tx.objectStore('replica_documents').get([ownerKey, partition, generation, id]);
             row.onsuccess = () => {
                 if (row.result?.payload != null) {
-                    const {id, version, sortKey, payload} = row.result; value = {id, version, sortKey, payload};
+                    const {id, version, sortKey, payload, tags = []} = row.result; value = {id, version, sortKey, payload, tags};
                 }
             };
         };

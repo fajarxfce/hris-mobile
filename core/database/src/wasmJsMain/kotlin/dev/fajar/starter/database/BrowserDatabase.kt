@@ -100,7 +100,7 @@ private class IndexedDbInboxStore(
 
 @JsFun(
     """(name) => new Promise((resolve, reject) => {
-    const request = indexedDB.open(name, 8);
+    const request = indexedDB.open(name, 9);
     let settled = false;
     request.onupgradeneeded = event => {
         const db = request.result;
@@ -138,6 +138,9 @@ private class IndexedDbInboxStore(
                     };
                 }
             }
+        }
+        if (event.oldVersion < 9) {
+            request.transaction.objectStore('replica_documents').createIndex('tagged', 'tagKeys', {multiEntry:true, unique:true});
         }
         if (event.oldVersion < 4) {
             db.createObjectStore('transfers', {keyPath: 'id'});

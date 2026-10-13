@@ -10,6 +10,19 @@ import kotlinx.coroutines.test.runTest
 
 class BrowserReplicaStoreTest {
     @Test
+    fun accountReplicaSurvivesIndexMigrationWithoutRelabelingItsCiphertext() = runTest {
+        val namespace = "replica-index-upgrade-" + kotlin.random.Random.nextInt()
+        seedIndexedReplicaDatabase("$namespace.database").await<JsAny?>()
+        val database = createAppDatabase(namespace)
+        try {
+            verifyReplicaIndexMigration(database)
+        } finally {
+            database.close()
+            deleteReplicaDatabase("$namespace.database").await<JsAny?>()
+        }
+    }
+
+    @Test
     fun upgradeRetainsPublishedStagedAndDeletedRecords() = runTest {
         val namespace = "replica-owner-upgrade-" + kotlin.random.Random.nextInt()
         seedLegacyReplicaDatabase("$namespace.database").await<JsAny?>()
@@ -52,6 +65,9 @@ class BrowserReplicaStoreTest {
             verifyReplicaAccountReplacement(database)
             verifyReplicaSnapshotReplacement(database)
             verifyReplicaSnapshotCancellationAndBounds(database)
+            verifyReplicaQueryIndexes(database)
+            verifyReplicaQueryPublication(database)
+            verifyReplicaQueryBounds(database)
         } finally {
             database.close()
             deleteReplicaDatabase("$namespace.database").await<JsAny?>()
