@@ -1,0 +1,85 @@
+package dev.fajar.starter.expenses.data.api
+
+import dev.fajar.starter.expenses.data.dto.*
+import dev.fajar.starter.network.*
+import io.ktor.client.HttpClient
+import io.ktor.client.request.parameter
+import org.koin.core.annotation.*
+
+@Single
+class ExpenseApi(@Named(HttpClients.Authenticated) private val client: HttpClient) {
+    suspend fun directory(
+        sessionId: String,
+        companyId: String,
+        after: String?,
+    ): ExpenseDirectoryDto =
+        client.requestJson("companies/$companyId/expenses/me/employments", maximumBytes = 16_384) {
+            forSession(sessionId)
+            parameter("limit", 20)
+            after?.let { parameter("after", it) }
+        }
+
+    suspend fun claims(
+        sessionId: String,
+        companyId: String,
+        employeeId: String,
+        from: String,
+        until: String,
+        status: String?,
+        after: String?,
+    ): ExpensePageDto<ExpenseSummaryDto> =
+        client.requestJson("companies/$companyId/expenses/claims", maximumBytes = 65_536) {
+            forSession(sessionId)
+            parameter("scope", "SELF")
+            parameter("employmentId", employeeId)
+            parameter("from", from)
+            parameter("until", until)
+            parameter("limit", 20)
+            status?.let { parameter("status", it) }
+            after?.let { parameter("after", it) }
+        }
+
+    suspend fun claim(sessionId: String, companyId: String, id: String): ExpenseClaimDto =
+        client.requestJson("companies/$companyId/expenses/claims/$id", maximumBytes = 131_072) {
+            forSession(sessionId)
+            parameter("scope", "SELF")
+        }
+
+    suspend fun history(
+        sessionId: String,
+        companyId: String,
+        id: String,
+        after: Long?,
+    ): ExpensePageDto<ExpenseChangeDto> =
+        client.requestJson(
+            "companies/$companyId/expenses/claims/$id/history",
+            maximumBytes = 131_072,
+        ) {
+            forSession(sessionId)
+            parameter("scope", "SELF")
+            parameter("limit", 20)
+            after?.let { parameter("after", it) }
+        }
+
+    suspend fun submission(sessionId: String, companyId: String, id: String): ExpenseSubmissionDto =
+        client.requestJson(
+            "companies/$companyId/expenses/submissions/$id",
+            maximumBytes = 524_288,
+        ) {
+            forSession(sessionId)
+            parameter("scope", "SELF")
+        }
+
+    suspend fun payments(
+        sessionId: String,
+        companyId: String,
+        id: String,
+    ): List<ExpensePaymentAttemptDto> =
+        client.requestJson(
+            "companies/$companyId/expenses/claims/$id/payments",
+            maximumBytes = 16_384,
+        ) {
+            forSession(sessionId)
+            parameter("scope", "SELF")
+        }
+}

@@ -1,0 +1,34 @@
+package dev.fajar.starter.expenses.data.datasources
+
+import dev.fajar.starter.expenses.data.dto.*
+
+interface ExpenseRemoteDataSource {
+    suspend fun directory(sessionId: String, companyId: String, after: String?): ExpenseDirectoryDto
+
+    suspend fun claims(
+        sessionId: String,
+        companyId: String,
+        employeeId: String,
+        from: String,
+        until: String,
+        status: String?,
+        after: String?,
+    ): ExpensePageDto<ExpenseSummaryDto>
+
+    suspend fun claim(sessionId: String, companyId: String, id: String): ExpenseClaimDto
+
+    suspend fun history(
+        sessionId: String,
+        companyId: String,
+        id: String,
+        after: Long?,
+    ): ExpensePageDto<ExpenseChangeDto>
+
+    suspend fun submission(sessionId: String, companyId: String, id: String): ExpenseSubmissionDto
+
+    suspend fun payments(
+        sessionId: String,
+        companyId: String,
+        id: String,
+    ): List<ExpensePaymentAttemptDto>
+}
