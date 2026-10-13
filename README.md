@@ -76,6 +76,10 @@ amounts and payment progress, with encrypted list/detail caches. Employees can
 save an English or Indonesian PDF through the platform file dialog after fresh
 server authorization. Every read remains limited to their own payslips.
 
+The [expense pages](docs/expenses.md) show employee claims with month/status
+filters, current details, submitted receipt metadata, approval history and
+payment progress. List and detail views use bounded encrypted offline storage.
+
 ## Development
 
 Requires JDK 21 and Android SDK 36. Start HRIS Platform using its development
@@ -125,7 +129,7 @@ policy is not configured yet. Android/iOS send the server's native version heade
 - `core/workspace`: current company selection and scope ownership.
 - `core/location`: foreground location, permission and Settings I/O contracts.
 - `core/documents`: shared [HRIS evidence contracts and catalog](docs/documents.md).
-- `features/auth`, `features/workspace`, `features/home`, `features/people`, `features/inbox`, `features/workforce`, `features/leave`, `features/documents`: feature-owned MVI screens.
+- `features/auth`, `features/workspace`, `features/home`, `features/people`, `features/inbox`, `features/workforce`, `features/leave`, `features/documents`, `features/payroll`, `features/expenses`: feature-owned MVI screens.
 - `core/designsystem`: shared `AppXxx` Fluent components and restrained transitions.
 - `build-logic`: Gradle convention plugins; versions are in `gradle/libs.versions.toml`.
 

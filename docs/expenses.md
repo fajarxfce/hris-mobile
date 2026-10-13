@@ -1,8 +1,9 @@
 # Employee expenses
 
-Expense domain use cases admit company/session access and acquire employee
-claim views. Data adapters map the API and maintain encrypted snapshots.
-Domain contracts remain independent of presentation and platform SDKs.
+The expense feature has separate domain, data and presentation modules. Domain
+use cases admit company/session access and acquire employee claim views. Data
+adapters map the API and maintain encrypted snapshots. Routes own MVI state,
+filters, observation and acquisition lifetime.
 
 ## Reads
 
@@ -32,8 +33,31 @@ content. Known access and MFA failures remain gated through pending/failed
 retries, including when cache cleanup fails; a fresh admitted acquisition must
 succeed before observation reopens. There is no automatic retry loop.
 
+## Pages
+
+Expenses opens from All services. Month and status filters stay above the
+scrolling list; multiple employments use a separate selection dialog. Detail
+groups amounts, expense lines, submitted receipt metadata, approval, payment
+progress and paged activity. Back and refresh remain in the fixed app bar.
+The pages support English, Indonesian and large text.
+
+Each screen registers separate typed events. Changing filters cancels obsolete
+acquisition; leaving the route stops acquisition and observation. Only visible
+claim IDs and issued cursors can trigger navigation or paging. Explicit refresh
+can recover an ended storage subscription.
+
+The current native increment provides reads and offline views. Draft editing,
+receipt selection/export, submission and subsequent employee actions are being
+connected separately to the backend's versioned, idempotent command contracts.
+
 ## Validation
 
-The expense domain and data modules passed 31 desktop and 25 Chromium tests.
-They cover scope changes, cancellation, late results, bounded acquisition,
-composite revisions, exact amounts, encrypted chunk integrity and failed cleanup.
+The workspace checks passed with 1,004 desktop tests. The expense modules also
+passed 36 Chromium tests; Android dev assembly and production Web compilation
+succeeded. Coverage includes scope changes, cancellation, mixed revisions,
+exact amounts, encrypted chunk integrity, failed cleanup and 200% text.
+
+API 35 emulator acceptance used claims created through the development API.
+It verified month/status filters, detail and activity, approval without payment,
+both themes, 200% text, encrypted list/detail restoration after background
+process death offline, and explicit recovery after reconnection.

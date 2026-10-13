@@ -7,6 +7,12 @@ import dev.fajar.starter.common.result.*
 fun failureText(failure: Failure): String =
     appString(
         when (failure.code) {
+            "client.expense_cache_expired" -> AppString.ExpenseCacheExpired
+            "expense_claim_not_found",
+            "expense_submission_not_found" -> AppString.ExpenseUnavailable
+            "client.expense_changed" -> AppString.ExpenseChanged
+            "client.expense_scope_changed" -> AppString.CalendarScopeChanged
+            "client.expense_timeout" -> AppString.ExpenseTimeout
             "client.payslip_cache_expired" -> AppString.PayslipCacheExpired
             "payroll_payslip_not_found" -> AppString.PayslipUnavailable
             "client.payslip_changed" -> AppString.PayslipChanged

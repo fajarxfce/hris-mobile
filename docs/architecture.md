@@ -146,6 +146,12 @@ Route-owned ViewModels coordinate typed acquisition and export events. The
 detail export lives until route disposal, including while the Android save
 dialog temporarily stops the Activity; financial facts remain domain values.
 
+The [expense feature](expenses.md) uses its own minimal employment directory and
+explicit SELF reads. Its detail use case brackets composite acquisition with
+the claim version; repositories map protocol facts and atomically store the
+bounded encrypted result. Approval, reimbursement and activity remain separate
+facts. Screen owners retain read gates and cancel obsolete filter requests.
+
 Leave preparation uses a separate read contract for effective types and the
 owner-only server preview. Its use cases own date-input validation, live company
 admission and the preview deadline. Datasources return DTOs; repository mapping

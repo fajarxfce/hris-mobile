@@ -39,7 +39,7 @@ include(":features:leave:domain", ":features:leave:data", ":features:leave:prese
 
 include(":features:payroll:domain", ":features:payroll:data", ":features:payroll:presentation")
 
-include(":features:expenses:domain", ":features:expenses:data")
+include(":features:expenses:domain", ":features:expenses:data", ":features:expenses:presentation")
 
 include(":features:documents:presentation")
 

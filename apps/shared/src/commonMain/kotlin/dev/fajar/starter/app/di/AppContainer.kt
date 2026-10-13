@@ -18,6 +18,8 @@ import dev.fajar.starter.database.TransferStore
 import dev.fajar.starter.datastore.UserPreferencesStore
 import dev.fajar.starter.documents.data.di.DocumentsDataModule
 import dev.fajar.starter.documents.presentation.di.DocumentsPresentationModule
+import dev.fajar.starter.expenses.data.di.ExpenseDataModule
+import dev.fajar.starter.expenses.presentation.di.ExpensePresentationModule
 import dev.fajar.starter.featureflags.data.datasources.RemoteFeatureFlagSource
 import dev.fajar.starter.featureflags.data.datasources.UnavailableFeatureFlagSource
 import dev.fajar.starter.featureflags.data.di.FeatureFlagDataModule
@@ -177,6 +179,8 @@ fun createAppContainer(
         WorkforceDataModule().module,
         WorkforcePresentationModule().module,
         LeaveDataModule().module,
+        ExpenseDataModule().module,
+        ExpensePresentationModule().module,
         PayrollDataModule().module,
         PayrollPresentationModule().module,
         LeavePresentationModule().module,

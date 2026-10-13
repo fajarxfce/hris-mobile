@@ -34,6 +34,7 @@ class NativeUiServer(
     val leave = NativeLeaveUi()
     val documents = NativeDocumentsUi()
     val payroll = NativePayslipUi()
+    val expenses = NativeExpenseUi()
     val inbox = NativeInboxUi()
     val deviceSessions = NativeSessionsUi()
     val companyPolicy = NativeCompanyPolicyUi()
@@ -61,7 +62,7 @@ class NativeUiServer(
             (workforce.response(request) ?: overtime.response(request))?.let { (body, status) ->
                 return@withLock respond(body, status, headers)
             }
-            leave.response(request)?.let { (body, status) ->
+            (leave.response(request) ?: expenses.response(request))?.let { (body, status) ->
                 return@withLock respond(body, status, headers)
             }
             (documents.downloads.response(request, this) ?: payroll.response(request, this))?.let {
@@ -174,6 +175,7 @@ class NativeUiServer(
                 if (overtime.enabled) add("overtime.self.manage")
                 if (leave.enabled) add("leave.self.manage")
                 if (payroll.enabled) add("payroll.self.read")
+                if (expenses.enabled) add("expenses.self.manage")
                 if (documents.enabled) {
                     add("documents.self.read")
                     if (documents.uploadEnabled) add("documents.self.upload")

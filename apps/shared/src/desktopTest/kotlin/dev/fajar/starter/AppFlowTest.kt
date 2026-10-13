@@ -79,6 +79,128 @@ class AppFlowTest {
     private val backDispatcher = TestBackDispatcher()
 
     @Test
+    fun nativeExpensesKeepApprovalSeparateFromPaymentAndRestoreAdmittedDetailsOffline() {
+        val server = NativeUiServer().apply { expenses.enabled = true }
+        val lifecycle = mutableStateOf(Lifecycle.State.RESUMED)
+        withApplication(server, lifecycleState = lifecycle) {
+            signIn()
+            waitFor("Choose a company")
+            compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
+            waitFor("Welcome")
+            compose.onNodeWithText("All services").performScrollTo().performClick()
+            waitFor("Expenses")
+            compose
+                .onNode(hasText("Expenses") and hasClickAction())
+                .performScrollTo()
+                .performClick()
+            waitFor("Client visit")
+            compose.onNodeWithText("IDR 150,000").assertIsDisplayed()
+            capture("expenses-overview")
+            compose.onNodeWithContentDescription("Previous month").performClick()
+            waitFor("No claims for this month.")
+            compose.onNodeWithText("September 2026").assertIsDisplayed()
+            compose.onNodeWithContentDescription("Next month").performClick()
+            waitFor("Client visit")
+            compose.onNode(hasText("Client visit") and hasClickAction()).performClick()
+            waitFor("Claim amount")
+            capture("expense-detail")
+            compose
+                .onNode(hasScrollToIndexAction())
+                .performScrollToNode(hasText("Transport receipt.pdf"))
+            compose.onNodeWithText("Transport receipt.pdf").assertIsDisplayed()
+            compose
+                .onNode(hasScrollToIndexAction())
+                .performScrollToNode(hasText("Payment has not been prepared."))
+            compose.onNodeWithText("Paid").assertDoesNotExist()
+            compose.onNodeWithContentDescription("Back").assertIsDisplayed()
+            compose.onNodeWithContentDescription("Refresh").assertIsDisplayed()
+            capture("expense-approval-payment")
+            compose
+                .onNode(hasScrollToIndexAction())
+                .performScrollToNode(hasText("Earlier activity"))
+            compose.onNode(hasText("Earlier activity") and hasClickAction()).performClick()
+            compose.waitUntil { server.expenses.historyReads.get() == 2 }
+            compose.waitUntil {
+                compose
+                    .onAllNodes(hasContentDescription("Refresh") and isEnabled())
+                    .fetchSemanticsNodes()
+                    .isNotEmpty()
+            }
+            compose.onNode(hasScrollToIndexAction()).performScrollToNode(hasText("Draft saved"))
+            compose.onNodeWithText("Draft saved").assertIsDisplayed()
+            server.expenses.offline = true
+            compose.onNodeWithContentDescription("Refresh").performClick()
+            waitFor("Unable to connect. Check your connection.")
+            compose.runOnIdle { lifecycle.value = Lifecycle.State.CREATED }
+            compose.waitForIdle()
+            compose.runOnIdle { lifecycle.value = Lifecycle.State.RESUMED }
+            waitFor("Draft saved")
+            compose.onNode(hasScrollToIndexAction()).performScrollToIndex(0)
+            waitFor("Claim amount")
+            compose.onNodeWithText("Client visit").assertIsDisplayed()
+            server.expenses.offline = false
+        }
+    }
+
+    @Test
+    fun nativeExpenseFiltersAndFixedNavigationRemainUsableAtLargeText() {
+        val server = NativeUiServer().apply { expenses.enabled = true }
+        withApplication(server, fontScale = 2f) {
+            signIn()
+            waitFor("Choose a company")
+            compose
+                .onNode(hasText("PT Nusa Digital") and hasClickAction())
+                .performScrollTo()
+                .performClick()
+            waitFor("Welcome")
+            compose.onNodeWithText("All services").performScrollTo().performClick()
+            waitFor("Expenses")
+            compose
+                .onNode(hasText("Expenses") and hasClickAction())
+                .performScrollTo()
+                .performClick()
+            waitFor("Client visit")
+            compose.onNode(hasText("October 2026") and hasClickAction()).performClick()
+            waitFor("November")
+            compose
+                .onNode(hasText("November") and hasClickAction())
+                .performScrollTo()
+                .performClick()
+            waitFor("No claims for this month.")
+            compose.onNodeWithContentDescription("Previous month").performClick()
+            waitFor("Client visit")
+            compose.onNode(hasText("All statuses") and hasClickAction()).performClick()
+            waitFor("Claim status")
+            compose
+                .onNode(hasText("Needs correction") and hasClickAction())
+                .performScrollTo()
+                .performClick()
+            waitFor("No claims for this month.")
+            compose.onNodeWithContentDescription("Back").assertIsDisplayed()
+            compose.onNodeWithContentDescription("Refresh").assertIsDisplayed()
+            capture("expense-filters-large-text")
+            compose.onNode(hasText("Needs correction") and hasClickAction()).performClick()
+            waitFor("Claim status")
+            compose
+                .onNode(hasText("Approved") and hasClickAction())
+                .performScrollTo()
+                .performClick()
+            waitFor("Client visit")
+            compose
+                .onNode(hasText("Client visit") and hasClickAction())
+                .performScrollTo()
+                .performClick()
+            waitFor("Claim amount")
+            capture("expense-detail-large-text")
+            compose
+                .onNode(hasScrollToIndexAction())
+                .performScrollToNode(hasText("Transport receipt.pdf"))
+            compose.onNodeWithText("Transport receipt.pdf").assertIsDisplayed()
+            compose.onNodeWithContentDescription("Back").assertIsDisplayed()
+        }
+    }
+
+    @Test
     fun nativePayslipsShowPublishedAmountsAndSaveWhileActivityIsStopped() {
         val server = NativeUiServer().apply { payroll.enabled = true }
         val output = DocumentOutputUi("payslip-${NativePayslipUi.ID}-id.pdf")

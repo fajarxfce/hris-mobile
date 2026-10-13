@@ -10,6 +10,7 @@ import io.github.composefluent.icons.regular.CalendarClock
 import io.github.composefluent.icons.regular.CalendarLtr
 import io.github.composefluent.icons.regular.Clock
 import io.github.composefluent.icons.regular.Document
+import io.github.composefluent.icons.regular.Money
 import io.github.composefluent.icons.regular.Person
 import io.github.composefluent.icons.regular.Receipt
 
@@ -20,6 +21,7 @@ enum class HomeService(val title: AppString, val summary: AppString, val icon: I
     Leave(AppString.Leave, AppString.LeaveSummary, Icons.Regular.CalendarCheckmark),
     Overtime(AppString.Overtime, AppString.OvertimeSummary, Icons.Regular.CalendarClock),
     Documents(AppString.Documents, AppString.DocumentsSummary, Icons.Regular.Document),
+    Expenses(AppString.Expenses, AppString.ExpensesSummary, Icons.Regular.Money),
     Payslips(AppString.Payslips, AppString.PayslipsSummary, Icons.Regular.Receipt),
     Profile(AppString.MyProfile, AppString.ProfileSummary, Icons.Regular.Person),
 }
@@ -61,6 +63,13 @@ fun homeServices(workspace: Workspace?): HomeServiceCatalog {
             add(HomeService.Leave)
     }
     val personal = buildList {
+        if (
+            companyModuleAvailable(workspace, CompanyModule.EXPENSES) &&
+                permissions.any {
+                    it in setOf("expenses.self.manage", "expenses.read", "expenses.manage")
+                }
+        )
+            add(HomeService.Expenses)
         if (
             companyModuleAvailable(workspace, CompanyModule.PAYROLL) &&
                 permissions.any { it == "payroll.self.read" || it == "payroll.read" }
