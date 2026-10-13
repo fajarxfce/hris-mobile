@@ -7,7 +7,8 @@ import kotlin.test.*
 import kotlinx.coroutines.CompletableDeferred
 
 /** Test-only platform destination; the application still coordinates its real encrypted file. */
-class DocumentOutputUi : FileOutputSource {
+class DocumentOutputUi(private val expectedFileName: String = "certificate.pdf") :
+    FileOutputSource {
     @Volatile var selection: CompletableDeferred<Boolean>? = null
     @Volatile var active = false
     @Volatile var completedHash: String? = null
@@ -26,7 +27,7 @@ class DocumentOutputUi : FileOutputSource {
         mediaType: String,
         size: Long,
     ): Boolean {
-        assertEquals("certificate.pdf", fileName)
+        assertEquals(expectedFileName, fileName)
         assertEquals("application/pdf", mediaType)
         check(!active)
         selections.incrementAndGet()

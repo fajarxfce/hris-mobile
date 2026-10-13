@@ -8,10 +8,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.backhandler.LocalBackGestureDispatcher
 import androidx.compose.ui.graphics.asSkiaBitmap
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
@@ -39,6 +41,7 @@ import dev.fajar.starter.fixtures.NativeAttendanceCacheUi
 import dev.fajar.starter.fixtures.NativeCalendarCacheUi
 import dev.fajar.starter.fixtures.NativeDirectoryUi
 import dev.fajar.starter.fixtures.NativeDocumentsUi
+import dev.fajar.starter.fixtures.NativePayslipUi
 import dev.fajar.starter.fixtures.NativeSessionsUi
 import dev.fajar.starter.fixtures.NativeUiServer
 import dev.fajar.starter.fixtures.TestBackDispatcher
@@ -74,6 +77,109 @@ class AppFlowTest {
     @get:Rule val compose = createComposeRule()
     @get:Rule val testName = TestName()
     private val backDispatcher = TestBackDispatcher()
+
+    @Test
+    fun nativePayslipsShowPublishedAmountsAndSaveWhileActivityIsStopped() {
+        val server = NativeUiServer().apply { payroll.enabled = true }
+        val output = DocumentOutputUi("payslip-${NativePayslipUi.ID}-id.pdf")
+        val choice = CompletableDeferred<Boolean>()
+        output.selection = choice
+        val lifecycle = mutableStateOf(Lifecycle.State.RESUMED)
+        withApplication(server, fileOutputs = output, lifecycleState = lifecycle) {
+            signIn()
+            waitFor("Choose a company")
+            compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
+            waitFor("Welcome")
+            compose.onNodeWithText("All services").performScrollTo().performClick()
+            waitFor("Payslips")
+            compose
+                .onNode(hasText("Payslips") and hasClickAction())
+                .performScrollTo()
+                .performClick()
+            waitFor("September 2026")
+            compose.onNodeWithText("IDR 10,232,500").assertIsDisplayed()
+            capture("payslips-overview")
+            compose.onNodeWithContentDescription("Previous year").performClick()
+            waitFor("No payslips for this year.")
+            compose.onNodeWithText("2025").assertIsDisplayed()
+            compose.onNodeWithContentDescription("Next year").performClick()
+            waitFor("September 2026")
+            compose.onNode(hasText("September 2026") and hasClickAction()).performClick()
+            waitFor("Payment not recorded")
+            compose.onNodeWithText("Paid").assertDoesNotExist()
+            compose.onNodeWithText("IDR 10,232,500").assertIsDisplayed()
+            capture("payslip-detail")
+            compose.onNode(hasScrollToIndexAction()).performScrollToNode(hasText("Deductions"))
+            compose.onNodeWithContentDescription("Back").assertIsDisplayed()
+            compose.onNodeWithContentDescription("Save PDF").assertIsDisplayed().performClick()
+            waitFor("Choose the PDF language. Saved files are managed outside HRIS.")
+            capture(
+                "payslip-language",
+                isRoot() and
+                    hasAnyDescendant(
+                        hasText("Choose the PDF language. Saved files are managed outside HRIS.")
+                    ),
+            )
+            compose.onNode(hasText("Bahasa Indonesia") and hasClickAction()).performClick()
+            compose.waitUntil { output.active }
+            compose.runOnIdle { lifecycle.value = Lifecycle.State.CREATED }
+            compose.waitForIdle()
+            assertTrue(output.active)
+            assertEquals(0, output.releases.get())
+            choice.complete(true)
+            compose.waitUntil { output.completedHash != null }
+            compose.runOnIdle { lifecycle.value = Lifecycle.State.RESUMED }
+            waitFor("PDF saved")
+            assertEquals(server.payroll.sha256, output.completedHash)
+            assertEquals(1, output.selections.get())
+            assertEquals(1, output.releases.get())
+            assertTrue(output.buffers.isNotEmpty())
+            assertTrue(output.buffers.all { buffer -> buffer.all { it == 0.toByte() } })
+            assertEquals(1, server.payroll.downloads.get())
+        }
+    }
+
+    @Test
+    fun nativePayslipLargeTextKeepsActionsReachableAndBackCancelsThePicker() {
+        val server = NativeUiServer().apply { payroll.enabled = true }
+        val output = DocumentOutputUi("payslip-${NativePayslipUi.ID}-id.pdf")
+        val choice = CompletableDeferred<Boolean>()
+        output.selection = choice
+        withApplication(server, fileOutputs = output, fontScale = 2f) {
+            signIn()
+            waitFor("Choose a company")
+            compose
+                .onNode(hasText("PT Nusa Digital") and hasClickAction())
+                .performScrollTo()
+                .performClick()
+            waitFor("Welcome")
+            compose.onNodeWithText("All services").performScrollTo().performClick()
+            waitFor("Payslips")
+            compose
+                .onNode(hasText("Payslips") and hasClickAction())
+                .performScrollTo()
+                .performClick()
+            waitFor("September 2026")
+            compose.onNode(hasText("September 2026") and hasClickAction()).performClick()
+            waitFor("Take-home pay")
+            capture("payslip-large-text")
+            compose.onNodeWithContentDescription("Save PDF").assertIsDisplayed().performClick()
+            waitFor("Choose the PDF language. Saved files are managed outside HRIS.")
+            compose
+                .onNode(hasText("Bahasa Indonesia") and hasClickAction())
+                .performScrollTo()
+                .performClick()
+            compose.waitUntil { output.active }
+            compose.onNodeWithContentDescription("Back").performClick()
+            waitFor("September 2026")
+            compose.waitUntil { output.releases.get() == 1 }
+            choice.complete(true)
+            compose.waitForIdle()
+            assertFalse(output.active)
+            assertEquals(0, output.writes.get())
+            assertNull(output.completedHash)
+        }
+    }
 
     @Test
     fun overtimeActualRecoveryPreservesItsActionBeforeExplicitWithdrawal() {
@@ -2961,6 +3067,7 @@ class AppFlowTest {
         fileInputs: FileInputSource = UnavailableFileInputSource(),
         fileOutputs: FileOutputSource = UnavailableFileOutputSource(),
         lifecycleState: MutableState<Lifecycle.State> = mutableStateOf(Lifecycle.State.RESUMED),
+        fontScale: Float = 1f,
         test: (Koin) -> Unit,
     ) {
         val directory = Files.createTempDirectory("hris-ui").toFile()
@@ -3003,6 +3110,7 @@ class AppFlowTest {
                 }
                 SideEffect { lifecycleOwner.lifecycle.currentState = lifecycleState.value }
                 CompositionLocalProvider(
+                    LocalDensity provides Density(LocalDensity.current.density, fontScale),
                     LocalLifecycleOwner provides lifecycleOwner,
                     LocalBackGestureDispatcher provides backDispatcher,
                 ) {
@@ -3103,8 +3211,8 @@ class AppFlowTest {
         }
     }
 
-    private fun capture(name: String) {
-        val bitmap = compose.onRoot().captureToImage().asSkiaBitmap()
+    private fun capture(name: String, target: SemanticsMatcher = isRoot()) {
+        val bitmap = compose.onNode(target).captureToImage().asSkiaBitmap()
         Image.makeFromBitmap(bitmap).use { image ->
             requireNotNull(image.encodeToData()).use { data ->
                 val file = File("build/reports/screenshots/$name.png")

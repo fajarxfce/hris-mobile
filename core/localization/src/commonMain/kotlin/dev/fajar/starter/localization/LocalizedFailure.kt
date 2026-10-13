@@ -7,6 +7,16 @@ import dev.fajar.starter.common.result.*
 fun failureText(failure: Failure): String =
     appString(
         when (failure.code) {
+            "client.payslip_cache_expired" -> AppString.PayslipCacheExpired
+            "payroll_payslip_not_found" -> AppString.PayslipUnavailable
+            "client.payslip_changed" -> AppString.PayslipChanged
+            "client.payslip_scope_changed" -> AppString.CalendarScopeChanged
+            "client.payslip_export_timeout",
+            "client.payslip_selection_timeout" -> AppString.PayslipExportTimeout
+            "payroll_pdf_text_unsupported",
+            "payroll_pdf_generation_timeout",
+            "payroll_pdf_generation_limit",
+            "payroll_pdf_capacity" -> AppString.PayslipPdfUnavailable
             "client.overtime_review_expired" -> AppString.OvertimeReviewExpired
             "client.overtime_time_required" -> AppString.OvertimeInputRequired
             "client.overtime_time_gap" -> AppString.OvertimeTimeGap

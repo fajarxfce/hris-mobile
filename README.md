@@ -71,9 +71,10 @@ is not a completed HRIS workflow. See [native identity](docs/native-identity.md)
 [attendance and work calendars](docs/workforce.md), [overtime](docs/overtime.md), the [leave integration](docs/leave.md), and the platform's
 [remaining delivery work](https://github.com/fajarxfce/hris-platform/blob/main/docs/completion.md).
 
-The [employee payslip foundation](docs/payroll.md) provides SELF-scoped reads,
-encrypted list/detail caches and explicitly authorized PDF saving. Its domain and
-data bindings are installed; native payslip pages are being integrated separately.
+The [employee payslip pages](docs/payroll.md) provide annual history, published
+amounts and payment progress, with encrypted list/detail caches. Employees can
+save an English or Indonesian PDF through the platform file dialog after fresh
+server authorization. Every read remains limited to their own payslips.
 
 ## Development
 

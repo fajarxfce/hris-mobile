@@ -11,6 +11,7 @@ import io.github.composefluent.icons.regular.CalendarLtr
 import io.github.composefluent.icons.regular.Clock
 import io.github.composefluent.icons.regular.Document
 import io.github.composefluent.icons.regular.Person
+import io.github.composefluent.icons.regular.Receipt
 
 /** A bounded catalog of implemented services; destination state stays with each feature. */
 enum class HomeService(val title: AppString, val summary: AppString, val icon: ImageVector) {
@@ -19,6 +20,7 @@ enum class HomeService(val title: AppString, val summary: AppString, val icon: I
     Leave(AppString.Leave, AppString.LeaveSummary, Icons.Regular.CalendarCheckmark),
     Overtime(AppString.Overtime, AppString.OvertimeSummary, Icons.Regular.CalendarClock),
     Documents(AppString.Documents, AppString.DocumentsSummary, Icons.Regular.Document),
+    Payslips(AppString.Payslips, AppString.PayslipsSummary, Icons.Regular.Receipt),
     Profile(AppString.MyProfile, AppString.ProfileSummary, Icons.Regular.Person),
 }
 
@@ -59,6 +61,11 @@ fun homeServices(workspace: Workspace?): HomeServiceCatalog {
             add(HomeService.Leave)
     }
     val personal = buildList {
+        if (
+            companyModuleAvailable(workspace, CompanyModule.PAYROLL) &&
+                permissions.any { it == "payroll.self.read" || it == "payroll.read" }
+        )
+            add(HomeService.Payslips)
         if (
             companyModuleAvailable(workspace, CompanyModule.DOCUMENTS) &&
                 "documents.self.read" in permissions

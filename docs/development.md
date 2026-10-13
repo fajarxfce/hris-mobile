@@ -80,6 +80,11 @@ Always select the target serial when multiple devices are
 connected. An APK update preserves application data but may stop the application's
 existing process. `--install-only` never brings it to the foreground.
 
+On a shared VPS, stop the dedicated emulator before production Web optimization
+and restart it after the build. The combined compiler, `wasm-opt` and emulator
+memory peak can exhaust the host. Keep the AVD's data when restarting; release
+idle Gradle daemons with `./gradlew --stop` after the build finishes.
+
 Create the AVD once with Android SDK command-line tools on `PATH`:
 
 ```sh

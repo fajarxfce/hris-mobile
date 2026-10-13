@@ -37,7 +37,7 @@ include(
 
 include(":features:leave:domain", ":features:leave:data", ":features:leave:presentation")
 
-include(":features:payroll:domain", ":features:payroll:data")
+include(":features:payroll:domain", ":features:payroll:data", ":features:payroll:presentation")
 
 include(":features:documents:presentation")
 

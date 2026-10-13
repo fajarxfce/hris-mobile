@@ -21,6 +21,7 @@ import dev.fajar.starter.inbox.presentation.navigation.*
 import dev.fajar.starter.leave.presentation.navigation.*
 import dev.fajar.starter.localization.*
 import dev.fajar.starter.onboarding.presentation.navigation.*
+import dev.fajar.starter.payroll.presentation.navigation.*
 import dev.fajar.starter.people.presentation.navigation.*
 import dev.fajar.starter.security.presentation.navigation.AppLockSettings
 import dev.fajar.starter.settings.presentation.navigation.*
@@ -143,6 +144,8 @@ fun AppNavigation(navigation: ScopedNavigationState, incomingLinks: Flow<String>
                                 controller.navigate(OvertimeRoute) { launchSingleTop = true }
                             HomeService.Documents ->
                                 controller.navigate(DocumentsRoute) { launchSingleTop = true }
+                            HomeService.Payslips ->
+                                controller.navigate(PayslipsRoute) { launchSingleTop = true }
                             HomeService.Profile ->
                                 controller.navigate(ProfileRoute) { launchSingleTop = true }
                         }
@@ -293,6 +296,19 @@ fun AppNavigation(navigation: ScopedNavigationState, incomingLinks: Flow<String>
                             ) {
                                 launchSingleTop = true
                             }
+                        },
+                        onVerify = {
+                            controller.navigate(VerificationRoute) { launchSingleTop = true }
+                        },
+                        onRecheckWorkspace = {
+                            viewModel.onEvent(AppEvent.WorkspaceRefreshRequested)
+                        },
+                        onBack = { controller.popBackStack() },
+                    )
+                    payrollRoutes(
+                        stage.workspace.id,
+                        onPayslip = {
+                            controller.navigate(PayslipRoute(it)) { launchSingleTop = true }
                         },
                         onVerify = {
                             controller.navigate(VerificationRoute) { launchSingleTop = true }

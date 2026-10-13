@@ -136,12 +136,15 @@ independent bounded encrypted partition. The shared feature cache repository
 implements both read contracts; a codec only handles the chunked storage format.
 History pagination changes the visible revision page, not current request facts.
 
-The [payslip read foundation](payroll.md) keeps employee SELF scope explicit in
+The [payslip workflow](payroll.md) keeps employee SELF scope explicit in
 every financial API request. Use cases admit company/session access and publish
 bounded, independently cached list and detail views. PDF export coordinates the
 payroll read contract with the generic document-output contract; it does not need
 document-catalog permissions or another feature's use case. The data adapter owns
 protocol validation, exact decimal mapping and temporary byte-buffer ownership.
+Route-owned ViewModels coordinate typed acquisition and export events. The
+detail export lives until route disposal, including while the Android save
+dialog temporarily stops the Activity; financial facts remain domain values.
 
 Leave preparation uses a separate read contract for effective types and the
 owner-only server preview. Its use cases own date-input validation, live company
