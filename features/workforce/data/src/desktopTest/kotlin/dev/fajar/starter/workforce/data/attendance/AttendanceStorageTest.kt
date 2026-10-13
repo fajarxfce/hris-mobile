@@ -185,7 +185,7 @@ class AttendanceStorageTest {
                         )
                     },
                     f.now,
-                    f.access.readUntil,
+                    f.access.authorizationExpiresAt,
                 )
             val repository = EncryptedAttendanceCacheRepository(db.replicas, cipher, keys)
             assertIs<AppResult.Failed>(repository.replace(f.access, null, snapshot))

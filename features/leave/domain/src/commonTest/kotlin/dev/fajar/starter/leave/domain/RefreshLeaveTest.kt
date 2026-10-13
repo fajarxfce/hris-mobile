@@ -6,6 +6,7 @@ import dev.fajar.starter.common.result.*
 import dev.fajar.starter.leave.domain.entities.*
 import dev.fajar.starter.workspace.domain.entities.*
 import kotlin.test.*
+import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.Instant
@@ -34,7 +35,7 @@ class RefreshLeaveTest {
         assertEquals(LeaveDays(21), saved.balances.items.single().available)
         assertEquals(2025, saved.balances.items.single().year)
         assertEquals(LeaveStatus.APPROVED, saved.requests.items.single().status)
-        assertEquals(f.workspace.admission.expiresAt, saved.expiresAt)
+        assertEquals(f.workspace.admission.expiresAt, saved.refreshAfter)
         assertEquals(1, f.writes)
     }
 
@@ -231,8 +232,8 @@ class RefreshLeaveTest {
         }
         assertIs<AppResult.Success<Unit>>(g.load())
         assertEquals(
-            start,
-            assertIs<AppResult.Success<LeaveOverview?>>(g.records.value).value!!.expiresAt,
+            g.clock.now() + 1.hours,
+            assertIs<AppResult.Success<LeaveOverview?>>(g.records.value).value!!.refreshAfter,
         )
     }
 }

@@ -175,7 +175,7 @@ class ExpensesViewModelTest {
     }
 
     @Test
-    fun expiryRenewsOnceAndKeepsOldContentHiddenUntilPublication() = runTest {
+    fun explicitRefreshKeepsStaleContentButCompanyReplacementHidesIt() = runTest {
         withModel { f, model, _ ->
             model.onEvent(ExpensesEvent.Entered)
             runCurrent()
@@ -185,19 +185,25 @@ class ExpensesViewModelTest {
                 release.await()
                 AppResult.Success(ExpensePage(listOf(f.summary)))
             }
-            f.records.value = AppResult.Success(saved.copy(expiresAt = f.clock.now() + 1.seconds))
+            f.records.value =
+                AppResult.Success(saved.copy(refreshAfter = f.clock.now() + 1.seconds))
             runCurrent()
             advanceTimeBy(1_001)
             runCurrent()
+            assertFalse(model.state.value.refreshing)
+            assertEquals(1, f.listReads)
+            assertNotNull(model.state.value.content)
+            model.onEvent(ExpensesEvent.RefreshRequested)
+            runCurrent()
             assertTrue(model.state.value.refreshing)
-            assertTrue(model.state.value.readRestricted)
+            assertFalse(model.state.value.readRestricted)
             assertNull(model.state.value.failure)
-            assertNull(model.state.value.content)
+            assertNotNull(model.state.value.content)
             assertEquals(2, f.listReads)
             model.onEvent(ExpensesEvent.RefreshRequested)
             f.records.value = AppResult.Success(saved)
             runCurrent()
-            assertNull(model.state.value.content)
+            assertNotNull(model.state.value.content)
             assertEquals(2, f.listReads)
             release.complete(Unit)
             runCurrent()
@@ -213,21 +219,25 @@ class ExpensesViewModelTest {
     }
 
     @Test
-    fun failedExpiryRenewalShowsItsCauseWithoutRepeatingOrReopeningCache() = runTest {
+    fun failedExplicitRefreshShowsItsCauseAndKeepsStaleContentWithoutRepeating() = runTest {
         withModel { f, model, _ ->
             model.onEvent(ExpensesEvent.Entered)
             runCurrent()
             val saved = assertNotNull(model.state.value.content)
             f.listCall = { expenseFailure("client.network", FailureKind.Network) }
-            f.records.value = AppResult.Success(saved.copy(expiresAt = f.clock.now() + 1.seconds))
+            f.records.value =
+                AppResult.Success(saved.copy(refreshAfter = f.clock.now() + 1.seconds))
             runCurrent()
             advanceTimeBy(1_001)
             runCurrent()
-            assertEquals("client.expense_cache_expired", model.state.value.cacheFailure?.code)
+            assertEquals(1, f.listReads)
+            model.onEvent(ExpensesEvent.RefreshRequested)
+            runCurrent()
+            assertNull(model.state.value.cacheFailure)
             assertEquals("client.network", model.state.value.failure?.code)
-            assertTrue(model.state.value.readRestricted)
-            assertNull(model.state.value.content)
-            assertEquals(0, f.observers)
+            assertFalse(model.state.value.readRestricted)
+            assertNotNull(model.state.value.content)
+            assertEquals(1, f.observers)
             advanceTimeBy(10_000)
             runCurrent()
             assertEquals(2, f.listReads)
@@ -241,7 +251,7 @@ class ExpensesViewModelTest {
     }
 
     @Test
-    fun leavingDuringAutomaticRenewalCancelsAndIgnoresItsLateFailure() = runTest {
+    fun leavingDuringExplicitRefreshCancelsAndIgnoresItsLateFailure() = runTest {
         withModel { f, model, _ ->
             model.onEvent(ExpensesEvent.Entered)
             runCurrent()
@@ -255,9 +265,12 @@ class ExpensesViewModelTest {
                 }
                 expenseFailure("mfa_required", FailureKind.AccessDenied)
             }
-            f.records.value = AppResult.Success(saved.copy(expiresAt = f.clock.now() + 1.seconds))
+            f.records.value =
+                AppResult.Success(saved.copy(refreshAfter = f.clock.now() + 1.seconds))
             runCurrent()
             advanceTimeBy(1_001)
+            runCurrent()
+            model.onEvent(ExpensesEvent.RefreshRequested)
             runCurrent()
             assertTrue(model.state.value.refreshing)
             model.onEvent(ExpensesEvent.Stopped)

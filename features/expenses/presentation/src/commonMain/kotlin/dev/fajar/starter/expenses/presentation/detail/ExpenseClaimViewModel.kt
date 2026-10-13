@@ -66,13 +66,8 @@ class ExpenseClaimViewModel(
                     .collect { (after, result) ->
                         ensureActive()
                         if (after == state.value.historyAfter && !state.value.readRestricted) {
-                            val renewExpiredRead =
-                                state.value.content != null &&
-                                    result is AppResult.Failed &&
-                                    result.failure.code == "client.expense_cache_expired"
                             updateState { it.withCachedClaim(result) }
                             if (state.value.readRestricted) exporting?.cancel()
-                            if (renewExpiredRead) onEvent(ExpenseClaimEvent.RefreshRequested)
                         }
                     }
             }

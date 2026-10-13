@@ -6,6 +6,7 @@ import dev.fajar.starter.common.result.*
 import dev.fajar.starter.workforce.domain.entities.*
 import dev.fajar.starter.workspace.domain.entities.*
 import kotlin.test.*
+import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.Instant
@@ -32,7 +33,7 @@ class RefreshWorkCalendarTest {
         assertEquals(LocalDate(2026, 10, 12), saved.period.from)
         assertEquals(LocalDate(2026, 10, 18), saved.period.until)
         assertEquals(7, saved.calendar!!.days.size)
-        assertEquals(f.workspace.admission.expiresAt, saved.expiresAt)
+        assertEquals(f.workspace.admission.expiresAt, saved.refreshAfter)
         assertEquals(1, f.policyReads)
         assertEquals(1, f.calendarReads)
         assertEquals(1, f.writes)
@@ -172,38 +173,43 @@ class RefreshWorkCalendarTest {
     }
 
     @Test
-    fun policyAndWorkspaceExpiryPreventTransportOrPublicationWithoutAnAutomaticRetry() = runTest {
-        val base = Instant.parse("2026-10-12T01:00:00Z")
-        val f = WorkCalendarFixture { base + testScheduler.currentTime.milliseconds }
-        f.policyCall = {
-            delay(2.seconds)
-            AppResult.Success(f.policy.copy(validUntil = base + 1.seconds))
-        }
-        assertEquals(
-            "client.company_policy_expired",
-            assertIs<AppResult.Failed>(f.load()).failure.code,
-        )
-        assertEquals(0, f.directoryReads)
-        f.policyCall = {
-            AppResult.Success(
-                f.policy.copy(serverTime = f.clock.now(), validUntil = f.clock.now() + 60.seconds)
+    fun freshPolicyControlsAcquisitionWhileOldWorkspaceFreshnessDoesNotDiscardAuthorizedData() =
+        runTest {
+            val base = Instant.parse("2026-10-12T01:00:00Z")
+            val f = WorkCalendarFixture { base + testScheduler.currentTime.milliseconds }
+            f.policyCall = {
+                delay(2.seconds)
+                AppResult.Success(f.policy.copy(validUntil = base + 1.seconds))
+            }
+            assertEquals(
+                "client.company_policy_expired",
+                assertIs<AppResult.Failed>(f.load()).failure.code,
             )
-        }
-        f.workspaceState.value =
-            AppResult.Success(
-                f.workspace.copy(
-                    admission = f.workspace.admission.copy(expiresAt = f.clock.now() + 1.seconds)
+            assertEquals(0, f.directoryReads)
+            f.policyCall = {
+                AppResult.Success(
+                    f.policy.copy(
+                        serverTime = f.clock.now(),
+                        validUntil = f.clock.now() + 60.seconds,
+                    )
                 )
-            )
-        val regular = f.calendarCall
-        f.calendarCall = {
-            delay(2.seconds)
-            regular(it)
+            }
+            f.workspaceState.value =
+                AppResult.Success(
+                    f.workspace.copy(
+                        admission =
+                            f.workspace.admission.copy(expiresAt = f.clock.now() + 1.seconds)
+                    )
+                )
+            val regular = f.calendarCall
+            f.calendarCall = {
+                delay(2.seconds)
+                regular(it)
+            }
+            assertIs<AppResult.Success<Unit>>(f.load())
+            assertEquals(1, f.calendarReads)
+            assertEquals(1, f.writes)
         }
-        assertEquals("client.workspace_expired", assertIs<AppResult.Failed>(f.load()).failure.code)
-        assertEquals(1, f.calendarReads)
-        assertEquals(0, f.writes)
-    }
 
     @Test
     fun acquisitionHasAFiniteBudgetAndCompareAndSetConflictsDoNotRetry() = runTest {
@@ -231,7 +237,7 @@ class RefreshWorkCalendarTest {
     }
 
     @Test
-    fun freshAvailabilityBlocksDiscoveryAndLimitsTheSavedLeaseBeforeMaintenance() = runTest {
+    fun liveAvailabilityBlocksDiscoveryWithoutExpiringSavedFacts() = runTest {
         for (code in
             listOf("company_module_disabled", "client_update_required", "company_maintenance")) {
             val f = WorkCalendarFixture()
@@ -262,8 +268,8 @@ class RefreshWorkCalendarTest {
         }
         assertIs<AppResult.Success<Unit>>(f.load())
         assertEquals(
-            start,
-            assertIs<AppResult.Success<WorkCalendarSnapshot?>>(f.records.value).value!!.expiresAt,
+            f.clock.now() + 1.hours,
+            assertIs<AppResult.Success<WorkCalendarSnapshot?>>(f.records.value).value!!.refreshAfter,
         )
     }
 }

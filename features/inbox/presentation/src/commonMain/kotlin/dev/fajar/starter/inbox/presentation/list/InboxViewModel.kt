@@ -3,6 +3,7 @@ package dev.fajar.starter.inbox.presentation.list
 import androidx.lifecycle.viewModelScope
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.inbox.domain.entities.InboxCacheQuery
+import dev.fajar.starter.inbox.domain.policies.inboxFailureInvalidatesCache
 import dev.fajar.starter.inbox.domain.usecases.*
 import dev.fajar.starter.presentation.mvi.MviViewModel
 import kotlinx.coroutines.*
@@ -44,6 +45,7 @@ class InboxViewModel(
     }
 
     private fun onPageRequested(event: InboxEvent.PageRequested) {
+        if (state.value.readRestricted) return
         if (
             event.after != null &&
                 event.after != state.value.afterCursor &&
@@ -67,6 +69,7 @@ class InboxViewModel(
             viewModelScope.launch {
                 observe(workspaceId, InboxCacheQuery.Page(event.after)).collect { result ->
                     ensureActive()
+                    if (state.value.readRestricted) return@collect
                     when (result) {
                         is AppResult.Failed ->
                             updateState {
@@ -89,6 +92,7 @@ class InboxViewModel(
                                 )
                             }
                     }
+                    if (state.value.readRestricted) observation?.cancel()
                 }
             }
     }
@@ -96,30 +100,47 @@ class InboxViewModel(
     private fun onRefreshRequested(event: InboxEvent.RefreshRequested) {
         if (refresh?.isActive == true) return
         updateState {
-            it.copy(syncing = true, pending = false, syncFailure = null, needsVerification = false)
+            it.copy(
+                syncing = true,
+                pending = false,
+                cacheFailure =
+                    it.syncFailure?.takeIf(::inboxFailureInvalidatesCache) ?: it.cacheFailure,
+                syncFailure = null,
+            )
         }
         refresh =
             viewModelScope.launch {
                 val result = synchronize(workspaceId)
                 ensureActive()
                 when (result) {
-                    is AppResult.Failed ->
+                    is AppResult.Failed -> {
+                        val restricted =
+                            state.value.readRestricted ||
+                                inboxFailureInvalidatesCache(result.failure)
+                        if (restricted) observation?.cancel()
                         updateState {
                             it.copy(
                                 syncing = false,
                                 loading = false,
                                 syncFailure = result.failure,
-                                needsVerification = result.failure.code in inboxVerificationCodes,
+                                items = if (restricted) emptyList() else it.items,
+                                hasSnapshot = !restricted && it.hasSnapshot,
+                                nextCursor = if (restricted) null else it.nextCursor,
                             )
                         }
-                    is AppResult.Success ->
+                    }
+                    is AppResult.Success -> {
                         updateState {
                             it.copy(
                                 syncing = false,
                                 loading = false,
                                 pending = !result.value.caughtUp,
+                                cacheFailure = if (result.value.caughtUp) null else it.cacheFailure,
                             )
                         }
+                        if (result.value.caughtUp && observation?.isActive != true)
+                            onEvent(InboxEvent.PageRequested(state.value.afterCursor))
+                    }
                 }
             }
     }

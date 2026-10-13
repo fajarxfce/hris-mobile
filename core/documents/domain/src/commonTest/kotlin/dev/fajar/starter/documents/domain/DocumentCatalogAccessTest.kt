@@ -64,7 +64,7 @@ class DocumentCatalogAccessTest {
     }
 
     @Test
-    fun admissionObservationExpiresAndReleasesSourcesWithoutNetworkAcquisition() = runTest {
+    fun localAccessSurvivesStaleAuthorizationAndReleasesSourcesOnDisposal() = runTest {
         val f = DocumentFixture()
         val sessions =
             object : SessionRepository by f.sessionRepository {
@@ -83,10 +83,7 @@ class DocumentCatalogAccessTest {
         f.now += 1.hours
         advanceTimeBy(3_600_001)
         runCurrent()
-        assertEquals(
-            "client.workspace_expired",
-            assertIs<AppResult.Failed>(values.last()).failure.code,
-        )
+        assertIs<AppResult.Success<DocumentAccess>>(values.single())
         observation.cancelAndJoin()
         assertEquals(0, f.sessions.subscriptionCount.value)
         assertEquals(0, f.workspaces.subscriptionCount.value)

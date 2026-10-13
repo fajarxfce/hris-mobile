@@ -24,7 +24,7 @@ entry. This is not a live push subscription.
 - Inbox repositories fetch canonical messages and coordinate encrypted replica
   storage. Datasources never call each other or choose access/retry policy.
 - `SyncInbox` owns scope checks, staging, hydration, pagination, reset policy,
-  and execution bounds. `ObserveInbox` owns local admission and expiry.
+  and execution bounds. `ObserveInbox` owns local scope validation.
 - `PrepareInboxAction`, `ReplayInboxAction`, `ObserveInboxAction`, and
   `ReviewInboxAction` coordinate repository contracts and own command admission,
   retry, observation and resolution. Use cases never call one another.
@@ -42,6 +42,10 @@ server reports no pending publication. Documents and their encrypted checkpoint
 commit atomically. Canonical versions may be newer than feed references; older
 results cannot overwrite them. Tombstones dominate an equal version. A failed
 hydration retains the previous cursor. A cursor reset may restart once per run.
+An expired/out-of-range cursor stages a replacement generation while the old
+published generation remains visible, including across process restart. Publication
+switches data and cursor atomically only when the replacement is complete. A real
+`sync_scope_changed` instead invalidates the old projection before rebuilding.
 
 ## Local access and storage
 
@@ -51,15 +55,15 @@ Database indexes retain resource IDs and ordering metadata without message text
 or server cursors. Android Keystore, Apple Keychain, and the configured desktop
 credential manager protect the separate content-key record.
 
-A caught-up snapshot can be displayed for at most one hour, bounded by the
-session-family and selected-workspace expiry. Partial progress does not renew that interval. Observation
-hides the snapshot when its lease expires, without waiting for another database
-write. Company/account/permission replacement stops the prior observer. Detected
-server revocation clears the affected replica. Logout clears derived account
-data; this is not a secure-erasure or offline-revocation guarantee. Lease timing
-uses the device clock and is not tamper-resistant device attestation.
+Caught-up data records `refreshedAt` and `refreshAfter`; partial progress cannot
+claim a fresh complete view. These timestamps do not expire locally owned messages.
+Company/account/permission replacement stops the prior observer. Confirmed server
+revocation invalidates the projection. Cleanup is bounded and cannot replace the
+original denial with a storage error; list and detail retain the read gate through
+failed retries until an admitted sync catches up. Logout clears derived account
+data. An offline client learns new revocations only when it reconnects.
 
-The [selected workspace](workspace.md) and its bounded admission are encrypted and
+The [selected workspace](workspace.md) and its authorization metadata are encrypted and
 restored after process termination. Renewing an unchanged workspace does not reset
 the inbox generation or cursor. Browser keys are memory-only and do not survive page closure.
 The encryption adapter fails closed for a missing or mismatched key. It never
@@ -89,7 +93,7 @@ loading and refresh are distinct; an offline failure keeps admitted cached conte
 Workspace checks and the Android dev build passed.
 The real SQLite/encryption tests cover publication, restart, scope/key mismatch,
 and stale writes. Domain tests cover cancellation, late results, cursor recovery,
-expiry, polling, tombstones, command ownership, original retries, finite attempts,
+stale reads, cursor replacement, polling, tombstones, command ownership, original retries, finite attempts,
 and safe receipt retirement on JVM and in the browser. Command storage tests use
 real SQLite and AES-GCM, including restart, new-session recovery, missing keys,
 tampering and compare-and-set races. Transport tests check the actual request

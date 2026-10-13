@@ -8,5 +8,5 @@ data class LeaveRequestSnapshot(
     val selection: LeaveRequestSelection,
     val request: LeaveRequestDetails,
     val fetchedAt: Instant,
-    val expiresAt: Instant,
+    val refreshAfter: Instant,
 )

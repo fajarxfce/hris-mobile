@@ -37,7 +37,7 @@ fun LeaveOverview.toDto() =
         access.permissions,
         access.sessionExpiresAt.toString(),
         fetchedAt.toString(),
-        expiresAt.toString(),
+        refreshAfter.toString(),
     )
 
 fun LeaveOverviewDto.toSnapshot(access: LeaveAccess, generation: String): LeaveOverview {
@@ -66,11 +66,7 @@ fun LeaveOverviewDto.toSnapshot(access: LeaveAccess, generation: String): LeaveO
     if (employeeId == null) require(requests.items.isEmpty() && requests.nextCursor == null)
     val fetched = Instant.parse(fetchedAt)
     val expiry = Instant.parse(expiresAt)
-    require(
-        expiry > fetched &&
-            expiry <= fetched + LEAVE_CACHE_PERIOD &&
-            expiry <= owner.sessionExpiresAt
-    )
+    require(expiry > fetched && expiry <= fetched + LEAVE_FRESHNESS_PERIOD)
     return LeaveOverview(
         owner,
         generation,

@@ -6,7 +6,7 @@ import dev.fajar.starter.identity.domain.entities.Session
 import dev.fajar.starter.workspace.domain.entities.*
 import kotlin.time.Instant
 
-/** Retains only an owned renewal identifier when private workspace access has expired. */
+/** Local selection is independent of network credentials and authorization freshness. */
 fun workspaceContext(
     session: Session,
     workspace: Workspace?,
@@ -14,15 +14,8 @@ fun workspaceContext(
     now: Instant,
 ): WorkspaceContext {
     if (workspace == null) return WorkspaceContext(session.id, null, null)
-    val admission = validateWorkspaceOwnership(workspace.id, workspace, session, now)
-    if (admission is AppResult.Failed)
-        return WorkspaceContext(
-            session.id,
-            null,
-            null,
-            expiredWorkspaceId =
-                workspace.id.takeIf { admission.failure.code == "client.workspace_expired" },
-        )
+    val admission = validateLocalWorkspaceOwnership(workspace.id, workspace, session)
+    if (admission is AppResult.Failed) return WorkspaceContext(session.id, null, null)
     return WorkspaceContext(
         session.id,
         workspace,

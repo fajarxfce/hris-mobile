@@ -41,12 +41,15 @@ import dev.fajar.starter.fixtures.NativeAttendanceCacheUi
 import dev.fajar.starter.fixtures.NativeCalendarCacheUi
 import dev.fajar.starter.fixtures.NativeDirectoryUi
 import dev.fajar.starter.fixtures.NativeDocumentsUi
+import dev.fajar.starter.fixtures.NativeInboxCacheUi
 import dev.fajar.starter.fixtures.NativePayslipUi
 import dev.fajar.starter.fixtures.NativeSessionsUi
 import dev.fajar.starter.fixtures.NativeUiServer
 import dev.fajar.starter.fixtures.TestBackDispatcher
 import dev.fajar.starter.identity.domain.entities.Session
 import dev.fajar.starter.identity.domain.repositories.SessionRepository
+import dev.fajar.starter.inbox.data.repositories.EncryptedInboxCacheRepository
+import dev.fajar.starter.inbox.domain.repositories.InboxCacheRepository
 import dev.fajar.starter.localization.formatLocalDate
 import dev.fajar.starter.notifications.data.datasources.*
 import dev.fajar.starter.notifications.data.dto.*
@@ -71,6 +74,7 @@ import org.junit.Test
 import org.junit.rules.TestName
 import org.koin.core.Koin
 import org.koin.core.module.Module
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 class AppFlowTest {
@@ -1465,7 +1469,7 @@ class AppFlowTest {
     }
 
     @Test
-    fun calendarFreshPublicationClearsExpiryThatArrivedDuringTheRead() {
+    fun calendarRetainsStaleDataDuringExplicitRefresh() {
         val server = NativeUiServer()
         val cache = NativeCalendarCacheUi()
         val release = CompletableDeferred<Unit>()
@@ -1479,9 +1483,11 @@ class AppFlowTest {
                 waitFor("Night shift")
                 compose.waitUntil { server.workforce.active.get() == 0 }
                 server.workforce.calendarGate = release
-                cache.expire()
+                cache.markStale()
+                compose.onNodeWithText("Night shift").assertExists()
+                refreshWhenReady()
                 compose.waitUntil { server.workforce.active.get() == 1 }
-                compose.waitUntil { cache.subscribers() == 0 }
+                assertEquals(1, cache.subscribers())
                 compose.onNodeWithText("Connect to refresh your schedule.").assertDoesNotExist()
                 release.complete(Unit)
                 waitFor("Night shift")
@@ -1707,7 +1713,7 @@ class AppFlowTest {
     }
 
     @Test
-    fun attendanceHistoryStopsCachedReadsOnExpiryAndAccessDenialThenRecovers() {
+    fun attendanceHistoryKeepsStaleDataButHonorsConfirmedAccessDenial() {
         val cache = NativeAttendanceCacheUi()
         val server = NativeUiServer()
         val release = CompletableDeferred<Unit>()
@@ -1724,14 +1730,16 @@ class AppFlowTest {
                 waitFor("Present")
                 compose.waitUntil { server.workforce.attendanceActive.get() == 0 }
                 server.workforce.attendanceGate = release
-                cache.expire(AttendanceWindow.MONTHLY)
+                cache.markStale(AttendanceWindow.MONTHLY)
+                compose.onNodeWithText("Present").assertExists()
+                refreshWhenReady()
                 compose.waitUntil { server.workforce.attendanceActive.get() == 1 }
-                compose.waitUntil { cache.subscribers(AttendanceWindow.MONTHLY) == 0 }
+                assertEquals(1, cache.subscribers(AttendanceWindow.MONTHLY))
                 compose
                     .onNodeWithText("Saved attendance has expired. Refresh to continue.")
                     .assertDoesNotExist()
-                compose.onNodeWithText("Present").assertDoesNotExist()
-                compose.waitUntil { cache.subscribers(AttendanceWindow.MONTHLY) == 0 }
+                compose.onNodeWithText("Present").assertExists()
+                assertEquals(1, cache.subscribers(AttendanceWindow.MONTHLY))
                 server.workforce.attendanceGate = null
                 release.complete(Unit)
                 waitFor("Present")
@@ -1971,7 +1979,7 @@ class AppFlowTest {
     }
 
     @Test
-    fun hiddenHomeRevokesExpiredContentAndKeepsTheGateThroughOfflineRecovery() {
+    fun hiddenHomeRetainsStaleDataWithoutFetchingAndOfflineRefreshKeepsItVisible() {
         val cache = NativeAttendanceCacheUi()
         val server = NativeUiServer()
         withApplication(server, module { single<AttendanceCacheRepository> { cache } }) {
@@ -1984,15 +1992,18 @@ class AppFlowTest {
             waitFor("Sam Wilson")
             assertEquals(1, cache.subscribers(AttendanceWindow.RECENT))
             val requestsBeforeExpiry = server.workforce.attendancePeriods.size
-            cache.expire()
-            compose.waitUntil { cache.subscribers(AttendanceWindow.RECENT) == 0 }
+            cache.markStale()
+            assertEquals(1, cache.subscribers(AttendanceWindow.RECENT))
             assertEquals(requestsBeforeExpiry, server.workforce.attendancePeriods.size)
             server.workforce.offline = true
             compose.onNode(hasText("Home") and isSelectable()).performClick()
+            waitFor("Clock in")
+            assertEquals(requestsBeforeExpiry, server.workforce.attendancePeriods.size)
+            refreshWhenReady()
             waitFor("Unable to connect. Check your connection.")
-            compose.onNode(hasText("Clock in") and hasClickAction()).assertDoesNotExist()
+            compose.onNode(hasText("Clock in") and hasClickAction()).assertExists()
             assertTrue(cache.hasSnapshot(AttendanceWindow.RECENT))
-            assertEquals(0, cache.subscribers(AttendanceWindow.RECENT))
+            assertEquals(1, cache.subscribers(AttendanceWindow.RECENT))
             server.workforce.offline = false
             refreshWhenReady()
             waitFor("Clock in")
@@ -2508,7 +2519,7 @@ class AppFlowTest {
     }
 
     @Test
-    fun attendanceRefreshClearsCacheExpiryThatArrivesDuringTheRequest() {
+    fun attendanceRefreshKeepsSavedContentWhenFreshnessElapsesDuringTheRequest() {
         val server =
             NativeUiServer().apply {
                 workforce.asOf = java.time.LocalDate.now(java.time.ZoneId.of("Asia/Jakarta"))
@@ -2528,8 +2539,9 @@ class AppFlowTest {
             server.workforce.attendanceGate = release
             refreshWhenReady()
             compose.waitUntil(5_000) { server.workforce.attendanceActive.get() == 1 }
-            cache.expire()
-            compose.waitUntil { cache.subscribers(AttendanceWindow.RECENT) == 0 }
+            cache.markStale()
+            assertEquals(1, cache.subscribers(AttendanceWindow.RECENT))
+            compose.onNode(hasText("Clock in") and hasClickAction()).assertExists()
             compose
                 .onNodeWithText("Saved attendance has expired. Refresh to continue.")
                 .assertDoesNotExist()
@@ -2883,6 +2895,138 @@ class AppFlowTest {
             }
         } finally {
             server.inbox.actionReleased.complete(Unit)
+        }
+    }
+
+    @Test
+    fun inboxListKeepsConfirmedDenialThroughFailedCleanupAndPendingOfflineRetry() {
+        val server = NativeUiServer()
+        try {
+            withApplication(
+                server,
+                module {
+                    single<InboxCacheRepository> {
+                        NativeInboxCacheUi(
+                            EncryptedInboxCacheRepository(
+                                get(),
+                                get(),
+                                get(named("inbox-content-key")),
+                            )
+                        )
+                    }
+                },
+            ) { koin ->
+                signIn()
+                waitFor("Choose a company")
+                compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
+                waitFor("Welcome")
+                compose.onNode(hasText("Inbox") and isSelectable()).performClick()
+                waitFor("Office closure")
+                val cache = koin.get<InboxCacheRepository>() as NativeInboxCacheUi
+                cache.rejectClear = true
+                server.inbox.failureCode = "mfa_required"
+                refreshWhenReady()
+                waitFor("Verify your account")
+                compose.onNodeWithText("Office closure").assertDoesNotExist()
+                assertTrue(cache.clearAttempts.get() > 0)
+                compose.waitUntil(10_000) {
+                    compose
+                        .onAllNodes(hasContentDescription("Refresh") and isEnabled())
+                        .fetchSemanticsNodes()
+                        .isNotEmpty()
+                }
+                server.inbox.failureCode = null
+                server.inbox.offline = true
+                server.inbox.holdNextRefresh = true
+                refreshWhenReady()
+                compose.waitUntil(10_000) { server.inbox.refreshStarted.isCompleted }
+                compose.onNodeWithText("Verify your account").assertExists()
+                compose.onNodeWithText("Office closure").assertDoesNotExist()
+                server.inbox.refreshReleased.complete(Unit)
+                compose.waitUntil(10_000) {
+                    compose
+                        .onAllNodes(hasContentDescription("Refresh") and isEnabled())
+                        .fetchSemanticsNodes()
+                        .isNotEmpty()
+                }
+                compose.onNodeWithText("Verify your account").assertExists()
+                compose.onNodeWithText("Office closure").assertDoesNotExist()
+                server.inbox.offline = false
+                cache.rejectClear = false
+                refreshWhenReady()
+                waitFor("Office closure")
+                compose.onNodeWithText("Verify your account").assertDoesNotExist()
+                assertTrue(server.inbox.actions.isEmpty())
+            }
+        } finally {
+            server.inbox.refreshReleased.complete(Unit)
+        }
+    }
+
+    @Test
+    fun inboxDetailKeepsConfirmedDenialThroughFailedCleanupAndPendingOfflineRetry() {
+        val server = NativeUiServer()
+        try {
+            withApplication(
+                server,
+                module {
+                    single<InboxCacheRepository> {
+                        NativeInboxCacheUi(
+                            EncryptedInboxCacheRepository(
+                                get(),
+                                get(),
+                                get(named("inbox-content-key")),
+                            )
+                        )
+                    }
+                },
+            ) { koin ->
+                signIn()
+                waitFor("Choose a company")
+                compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
+                waitFor("Welcome")
+                compose.onNode(hasText("Inbox") and isSelectable()).performClick()
+                waitFor("Office closure")
+                compose.onNode(hasText("Office closure") and hasClickAction()).performClick()
+                waitFor(server.inbox.firstBody)
+                val cache = koin.get<InboxCacheRepository>() as NativeInboxCacheUi
+                cache.rejectClear = true
+                server.inbox.failureCode = "mfa_required"
+                refreshWhenReady()
+                waitFor("Verify your account")
+                compose.onNodeWithText(server.inbox.firstBody).assertDoesNotExist()
+                assertTrue(cache.clearAttempts.get() > 0)
+                compose.waitUntil(10_000) {
+                    compose
+                        .onAllNodes(hasContentDescription("Refresh") and isEnabled())
+                        .fetchSemanticsNodes()
+                        .isNotEmpty()
+                }
+                server.inbox.failureCode = null
+                server.inbox.offline = true
+                server.inbox.holdNextRefresh = true
+                refreshWhenReady()
+                compose.waitUntil(10_000) { server.inbox.refreshStarted.isCompleted }
+                compose.onNodeWithText("Verify your account").assertExists()
+                compose.onNodeWithText(server.inbox.firstBody).assertDoesNotExist()
+                server.inbox.refreshReleased.complete(Unit)
+                compose.waitUntil(10_000) {
+                    compose
+                        .onAllNodes(hasContentDescription("Refresh") and isEnabled())
+                        .fetchSemanticsNodes()
+                        .isNotEmpty()
+                }
+                compose.onNodeWithText("Verify your account").assertExists()
+                compose.onNodeWithText(server.inbox.firstBody).assertDoesNotExist()
+                server.inbox.offline = false
+                cache.rejectClear = false
+                refreshWhenReady()
+                waitFor(server.inbox.firstBody)
+                compose.onNodeWithText("Verify your account").assertDoesNotExist()
+                assertTrue(server.inbox.actions.isEmpty())
+            }
+        } finally {
+            server.inbox.refreshReleased.complete(Unit)
         }
     }
 

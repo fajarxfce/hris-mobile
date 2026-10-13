@@ -121,14 +121,7 @@ class RefreshWorkCalendar(
                 is AppResult.Success -> response.value
             }
         val now = clock.now()
-        val maintenance =
-            policy.policy.maintenance?.let {
-                policy.requestedAt + (it.startsAt - policy.policy.serverTime)
-            }
-        val readAccess =
-            if (maintenance != null && maintenance > now && maintenance < current.readUntil)
-                current.copy(readUntil = maintenance, expiryCode = "company_maintenance")
-            else current
+        val readAccess = boundWorkforceAuthorization(current, policy, now)
         val snapshot =
             WorkCalendarSnapshot(
                 readAccess,
@@ -138,7 +131,7 @@ class RefreshWorkCalendar(
                 period,
                 calendar,
                 now,
-                minOf(now + WORK_CALENDAR_CACHE_PERIOD, readAccess.readUntil),
+                now + WORK_CALENDAR_FRESHNESS_PERIOD,
             )
         return publish(workspaceId, previousGeneration, snapshot)
     }

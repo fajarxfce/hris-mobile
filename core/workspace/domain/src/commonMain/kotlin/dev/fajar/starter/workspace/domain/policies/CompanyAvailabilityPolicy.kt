@@ -16,7 +16,7 @@ fun companyAvailability(
     build: AppBuild,
     now: Instant,
 ): CompanyAvailability {
-    if (snapshot == null || now < snapshot.requestedAt) return CompanyAvailability.Unknown
+    if (snapshot == null) return CompanyAvailability.Unknown
     val policy = snapshot.policy
     val minimum =
         when (build.platform) {

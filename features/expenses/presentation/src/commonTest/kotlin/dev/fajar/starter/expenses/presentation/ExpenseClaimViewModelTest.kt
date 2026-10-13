@@ -170,7 +170,7 @@ class ExpenseClaimViewModelTest {
     }
 
     @Test
-    fun expiredVisibleReadRenewsWithoutAnErrorWhilePending() = runTest {
+    fun staleContentRemainsVisibleWhileAnExplicitRefreshIsPending() = runTest {
         withModel { f, model, _ ->
             model.onEvent(ExpenseClaimEvent.Entered)
             runCurrent()
@@ -182,13 +182,17 @@ class ExpenseClaimViewModelTest {
                 AppResult.Success(f.claim)
             }
             f.detailRecords.value =
-                AppResult.Success(saved.copy(expiresAt = f.clock.now() + 1.seconds))
+                AppResult.Success(saved.copy(refreshAfter = f.clock.now() + 1.seconds))
             runCurrent()
             advanceTimeBy(1_001)
             runCurrent()
+            assertFalse(model.state.value.refreshing)
+            assertNotNull(model.state.value.content)
+            model.onEvent(ExpenseClaimEvent.RefreshRequested)
+            runCurrent()
             assertTrue(model.state.value.refreshing)
-            assertTrue(model.state.value.readRestricted)
-            assertNull(model.state.value.content)
+            assertFalse(model.state.value.readRestricted)
+            assertNotNull(model.state.value.content)
             assertNull(model.state.value.failure)
             assertEquals(writes, f.writes)
             release.complete(Unit)
@@ -201,7 +205,7 @@ class ExpenseClaimViewModelTest {
     }
 
     @Test
-    fun failedAutomaticRenewalRetainsTheReadGateAndStopsRetrying() = runTest {
+    fun failedExplicitRefreshKeepsStaleContentAndDoesNotRetryAutomatically() = runTest {
         withModel { f, model, _ ->
             model.onEvent(ExpenseClaimEvent.Entered)
             runCurrent()
@@ -212,14 +216,18 @@ class ExpenseClaimViewModelTest {
                 expenseFailure("client.network", FailureKind.Network)
             }
             f.detailRecords.value =
-                AppResult.Success(saved.copy(expiresAt = f.clock.now() + 1.seconds))
+                AppResult.Success(saved.copy(refreshAfter = f.clock.now() + 1.seconds))
             runCurrent()
             advanceTimeBy(1_001)
             runCurrent()
+            assertEquals(0, attempts)
+            assertNotNull(model.state.value.content)
+            model.onEvent(ExpenseClaimEvent.RefreshRequested)
+            runCurrent()
             assertEquals(1, attempts)
             assertEquals("client.network", model.state.value.failure?.code)
-            assertNull(model.state.value.content)
-            assertTrue(model.state.value.readRestricted)
+            assertNotNull(model.state.value.content)
+            assertFalse(model.state.value.readRestricted)
             advanceTimeBy(10_000)
             runCurrent()
             assertEquals(1, attempts)

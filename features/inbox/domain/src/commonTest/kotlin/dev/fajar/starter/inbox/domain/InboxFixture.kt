@@ -78,8 +78,7 @@ class InboxFixture(
         )
     val sessionState = MutableStateFlow<AppResult<Session?>>(AppResult.Success(session))
     val workspaceState = MutableStateFlow<AppResult<Workspace?>>(AppResult.Success(workspace))
-    val access =
-        (admitInbox(workspace.id, workspace, session, clock.now()) as AppResult.Success).value
+    val access = (admitInbox(workspace.id, workspace, session) as AppResult.Success).value
     val item =
         InboxItem(
             "item",
@@ -115,6 +114,7 @@ class InboxFixture(
     var changesCalls = 0
     var itemCalls = 0
     var clearCalls = 0
+    var clearCall: suspend () -> AppResult<Boolean>? = { null }
     var checkpoint: InboxCheckpoint? = null
     val commits = mutableListOf<InboxCheckpoint>()
     val entries = linkedMapOf<String, InboxReplicaEntry>()
@@ -289,6 +289,9 @@ class InboxFixture(
 
             override suspend fun clear(access: InboxAccess): AppResult<Boolean> {
                 clearCalls++
+                clearCall()?.let {
+                    return it
+                }
                 checkpoint = null
                 entries.clear()
                 snapshot.value = AppResult.Success(InboxCachePage(null, emptyList(), null))
@@ -296,6 +299,6 @@ class InboxFixture(
             }
         }
     val sync = SyncInbox(feed, remote, cache, sessions, workspaces, clock, build)
-    val observe = ObserveInbox(cache, sessions, workspaces, clock)
-    val unread = LoadUnreadInbox(remote, sessions, workspaces, clock)
+    val observe = ObserveInbox(cache, sessions, workspaces)
+    val unread = LoadUnreadInbox(remote, sessions, workspaces)
 }

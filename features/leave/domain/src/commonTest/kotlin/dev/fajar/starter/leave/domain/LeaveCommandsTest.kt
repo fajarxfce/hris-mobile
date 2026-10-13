@@ -305,7 +305,7 @@ class LeaveCommandsTest {
     }
 
     @Test
-    fun observationStopsAtTheReadDeadlineAndReleasesAllCollectorsOnDisposal() = runTest {
+    fun pendingCommandRemainsVisibleForDaysAndReleasesAllCollectorsOnDisposal() = runTest {
         val origin = Instant.parse("2026-10-12T01:00:00Z")
         val f = LeaveCommandFixture { origin + testScheduler.currentTime.milliseconds }
         f.queue()
@@ -315,9 +315,11 @@ class LeaveCommandsTest {
                 f.observe(f.base.workspace.id, f.request.details.id).toList(values)
             }
         assertIs<AppResult.Success<LeaveCommandRecord?>>(values.last())
-        advanceTimeBy(1.hours)
+        val initial = values.last()
+        advanceTimeBy(72.hours)
         runCurrent()
-        assertIs<AppResult.Failed>(values.last())
+        assertEquals(initial, values.last())
+        assertEquals(1, values.size)
         observation.cancelAndJoin()
         assertEquals(0, f.observers)
     }

@@ -10,27 +10,28 @@ import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Instant
 import kotlinx.datetime.*
 
-val ATTENDANCE_CACHE_PERIOD = 1.hours
+val ATTENDANCE_FRESHNESS_PERIOD = 1.hours
 const val ATTENDANCE_AUTOMATIC_ATTEMPTS = 5
 const val ATTENDANCE_MAXIMUM_ATTEMPTS = 20
 
 fun attendanceFailure(code: String, kind: FailureKind = FailureKind.Validation) =
     AppResult.Failed(Failure(kind, "Attendance could not be completed.", code = code))
 
-fun validateAttendanceCache(
+fun validateAttendanceCaptureSnapshot(
     access: WorkforceAccess,
     snapshot: AttendanceSnapshot?,
     now: Instant,
 ): AppResult<Unit> =
     when {
-        access.readUntil <= now -> attendanceFailure(access.expiryCode, FailureKind.AccessDenied)
+        access.authorizationExpiresAt <= now ->
+            attendanceFailure(access.authorizationExpiryCode, FailureKind.Unavailable)
         snapshot == null -> AppResult.Success(Unit)
         !sameWorkforceScope(access, snapshot.access) ->
             attendanceFailure("client.attendance_scope_changed", FailureKind.AccessDenied)
         snapshot.fetchedAt > now ||
-            snapshot.expiresAt <= now ||
-            snapshot.expiresAt > snapshot.fetchedAt + ATTENDANCE_CACHE_PERIOD ->
-            attendanceFailure("client.attendance_cache_expired", FailureKind.AccessDenied)
+            snapshot.refreshAfter <= now ||
+            snapshot.refreshAfter > snapshot.fetchedAt + ATTENDANCE_FRESHNESS_PERIOD ->
+            attendanceFailure("client.attendance_cache_expired", FailureKind.Unavailable)
         else -> AppResult.Success(Unit)
     }
 
@@ -50,7 +51,7 @@ fun validateAttendanceCapture(
     employeeId: String,
     now: Instant,
 ): AppResult<LocalDate> {
-    val admitted = validateAttendanceCache(access, snapshot, now)
+    val admitted = validateAttendanceCaptureSnapshot(access, snapshot, now)
     if (admitted is AppResult.Failed) return admitted
     if ("attendance.self.record" !in access.permissions)
         return attendanceFailure("access_denied", FailureKind.AccessDenied)
@@ -99,3 +100,12 @@ fun resolveAttendanceCommandFailure(
     )
         AttendanceCommandOutcome.Rejected(failure)
     else AttendanceCommandOutcome.Unconfirmed(failure)
+
+/** Stored facts remain readable after freshness expires; commands validate current authority. */
+fun validateStoredAttendance(
+    access: WorkforceAccess,
+    snapshot: AttendanceSnapshot?,
+): AppResult<Unit> =
+    if (snapshot != null && !sameWorkforceScope(access, snapshot.access))
+        attendanceFailure("client.attendance_scope_changed", FailureKind.AccessDenied)
+    else AppResult.Success(Unit)

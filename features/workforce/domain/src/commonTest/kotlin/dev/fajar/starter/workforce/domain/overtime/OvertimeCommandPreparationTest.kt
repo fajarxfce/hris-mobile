@@ -102,7 +102,7 @@ class OvertimeCommandPreparationTest {
             val f = OvertimeCommandFixture { now }
             f.beforeObserve = { now += 2.seconds }
             val result =
-                if (action) f.queueAction(proof = f.snapshot.copy(expiresAt = now + 1.seconds))
+                if (action) f.queueAction(proof = f.snapshot.copy(refreshAfter = now + 1.seconds))
                 else f.queue(proof = f.prepared.copy(expiresAt = now + 1.seconds))
             assertIs<AppResult.Failed>(result)
             assertEquals(0, f.inserts)

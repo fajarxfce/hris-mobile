@@ -40,7 +40,7 @@ class ExportExpenseReceipt(
                     is AppResult.Failed -> return@withTimeoutOrNull result
                     is AppResult.Success -> result.value
                 }
-            val lease = validateExpenseCache(access, snapshot, clock.now())
+            val lease = validateExpenseActionSnapshot(access, snapshot, clock.now())
             if (lease is AppResult.Failed) return@withTimeoutOrNull lease
             val view = snapshot.value
             val submission = view.submission

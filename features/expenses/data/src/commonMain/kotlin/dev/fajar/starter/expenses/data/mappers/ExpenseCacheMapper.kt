@@ -73,7 +73,7 @@ fun <T, D> ExpenseSnapshot<T>.toDto(mapValue: (T) -> D) =
         access.sessionExpiresAt.toString(),
         access.timezone,
         fetchedAt.toString(),
-        expiresAt.toString(),
+        refreshAfter.toString(),
         mapValue(value),
     )
 
@@ -93,10 +93,6 @@ fun <T, D> ExpenseSnapshotDto<D>.toSnapshot(
         )
     val fetched = Instant.parse(fetchedAt)
     val expiry = Instant.parse(expiresAt)
-    require(
-        expiry > fetched &&
-            expiry <= fetched + EXPENSE_CACHE_PERIOD &&
-            expiry <= owner.sessionExpiresAt
-    )
+    require(expiry > fetched && expiry <= fetched + EXPENSE_FRESHNESS_PERIOD)
     return ExpenseSnapshot(owner, generation, mapValue(value), fetched, expiry)
 }

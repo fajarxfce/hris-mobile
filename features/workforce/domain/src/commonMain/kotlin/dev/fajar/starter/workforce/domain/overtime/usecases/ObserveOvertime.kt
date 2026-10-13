@@ -9,7 +9,6 @@ import dev.fajar.starter.workforce.domain.overtime.repositories.OvertimeCacheRep
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
 import kotlin.time.Clock
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 
 class ObserveOvertime(
@@ -52,34 +51,17 @@ class ObserveOvertime(
                 when (admitted) {
                     is AppResult.Failed -> flowOf(admitted)
                     is AppResult.Success ->
-                        cache.observe(admitted.value).flatMapLatest { result ->
-                            flow<AppResult<OvertimeSnapshot<OvertimeOverview>?>> {
-                                if (result is AppResult.Failed) {
-                                    emit(result)
-                                    return@flow
-                                }
-                                val snapshot = (result as AppResult.Success).value
-                                val validation =
-                                    validateOvertimeCache(admitted.value, snapshot, clock.now())
-                                if (validation is AppResult.Failed) {
-                                    emit(validation)
-                                    return@flow
-                                }
-                                emit(result)
-                                val deadline =
-                                    minOf(
-                                        admitted.value.readUntil,
-                                        snapshot?.expiresAt ?: admitted.value.readUntil,
-                                    )
-                                delay((deadline - clock.now()).inWholeMilliseconds.coerceAtLeast(0))
-                                emit(
-                                    overtimeFailure(
-                                        if (admitted.value.readUntil <= deadline)
-                                            admitted.value.expiryCode
-                                        else "client.overtime_cache_expired",
-                                        FailureKind.AccessDenied,
-                                    )
-                                )
+                        cache.observe(admitted.value).map { result ->
+                            when (result) {
+                                is AppResult.Failed -> result
+                                is AppResult.Success ->
+                                    when (
+                                        val ownership =
+                                            validateStoredOvertime(admitted.value, result.value)
+                                    ) {
+                                        is AppResult.Failed -> ownership
+                                        is AppResult.Success -> result
+                                    }
                             }
                         }
                 }

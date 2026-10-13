@@ -35,11 +35,11 @@ fun expensePreparationExpiry(
     requestedAt: Instant,
     now: Instant,
 ): AppResult<Instant> {
-    val bounded = boundExpenseReadAccess(access, policy, now)
+    val bounded = boundExpenseAuthorization(access, policy, now)
     val expiry =
         minOf(
             requestedAt + EXPENSE_PREPARATION_PERIOD,
-            bounded.readUntil,
+            bounded.authorizationExpiresAt,
             access.sessionExpiresAt,
             companyPolicyDeadline(policy),
         )

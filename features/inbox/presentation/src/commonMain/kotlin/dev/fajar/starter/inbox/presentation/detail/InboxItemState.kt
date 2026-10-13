@@ -2,6 +2,7 @@ package dev.fajar.starter.inbox.presentation.detail
 
 import dev.fajar.starter.common.result.Failure
 import dev.fajar.starter.inbox.domain.entities.*
+import dev.fajar.starter.inbox.domain.policies.inboxFailureInvalidatesCache
 import dev.fajar.starter.inbox.presentation.list.inboxVerificationCodes
 
 data class InboxItemState(
@@ -19,6 +20,9 @@ data class InboxItemState(
     val working: Boolean = false,
     val confirmationVersion: Long? = null,
 ) {
+    val readRestricted: Boolean
+        get() = listOfNotNull(cacheFailure, syncFailure).any(::inboxFailureInvalidatesCache)
+
     val outcomeFailure: Failure?
         get() =
             when (val outcome = command?.outcome) {
@@ -38,6 +42,7 @@ data class InboxItemState(
     val canRead: Boolean
         get() =
             actionsReady &&
+                !readRestricted &&
                 !working &&
                 command == null &&
                 cacheFailure == null &&
@@ -47,6 +52,7 @@ data class InboxItemState(
     val canAcknowledge: Boolean
         get() =
             actionsReady &&
+                !readRestricted &&
                 !working &&
                 command == null &&
                 cacheFailure == null &&

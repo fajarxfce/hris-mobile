@@ -106,7 +106,7 @@ class CaptureAttendance(
             val finalOwner = validateWorkforceContinuation(access, currentAccess(workspaceId))
             if (finalOwner is AppResult.Failed) return@withLock finalOwner
             val valid =
-                validateAttendanceCache(
+                validateAttendanceCaptureSnapshot(
                     (finalOwner as AppResult.Success).value,
                     snapshot,
                     clock.now(),

@@ -22,7 +22,44 @@ import kotlinx.coroutines.test.*
 
 class WorkspaceAdmissionTest {
     @Test
-    fun offlineAdmissionCannotOutliveMfaOrSessionAndRejectsAClockRollback() = runTest {
+    fun credentialsExpiringDuringRenewalDoNotRevokeTheStoredSelection() = runTest {
+        val origin = Instant.parse("2026-10-11T00:00:00Z")
+        for (phase in listOf("account", "permissions")) {
+            val base = origin + testScheduler.currentTime.milliseconds
+            val f = AdmissionFixture { origin + testScheduler.currentTime.milliseconds }
+            val session =
+                f.session.copy(
+                    binding =
+                        f.session.binding.copy(
+                            expiresAtEpochMillis = (base + 1.seconds).toEpochMilliseconds()
+                        )
+                )
+            f.identity.value = AppResult.Success(session)
+            val selected =
+                f.workspace.copy(
+                    admission = f.workspace.admission.copy(expiresAt = base + 1.seconds)
+                )
+            f.selected.value = AppResult.Success(selected)
+            if (phase == "account")
+                f.accountCall = {
+                    delay(2.seconds)
+                    AppResult.Success(f.account)
+                }
+            else
+                f.permissionCall = {
+                    delay(2.seconds)
+                    AppResult.Success(selected.permissions)
+                }
+            val result = assertIs<SyncResult.Blocked>(f.refresh())
+            assertEquals("client.authentication_required", result.failure.code)
+            assertEquals(FailureKind.Unavailable, result.failure.kind)
+            assertEquals(AppResult.Success(selected), f.selected.value)
+            assertEquals(AppResult.Success(session), f.identity.value)
+        }
+    }
+
+    @Test
+    fun commandAuthorizationCannotOutliveMfaOrSessionAndRejectsAClockRollback() = runTest {
         val fixture = AdmissionFixture()
         val start = fixture.clock.now()
         val mfa =
@@ -72,7 +109,7 @@ class WorkspaceAdmissionTest {
     }
 
     @Test
-    fun scopeObservationExpiresWithoutAnotherWriteAndRejectsAnotherFamily() = runTest {
+    fun localScopeSurvivesExpiredAuthorityAndRejectsAnotherFamily() = runTest {
         val fixture = AdmissionFixture {
             Instant.parse("2026-10-11T00:00:00Z") + testScheduler.currentTime.milliseconds
         }
@@ -88,8 +125,7 @@ class WorkspaceAdmissionTest {
         val results = mutableListOf<AppResult<Workspace?>>()
         val observing =
             backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
-                ObserveWorkspace(fixture.sessions, fixture.workspaces, fixture.clock)()
-                    .toList(results)
+                ObserveWorkspace(fixture.sessions, fixture.workspaces)().toList(results)
             }
         assertNotNull(assertIs<AppResult.Success<Workspace?>>(results.last()).value)
         fixture.identity.value =
@@ -98,9 +134,10 @@ class WorkspaceAdmissionTest {
             )
         runCurrent()
         assertNotNull(assertIs<AppResult.Success<Workspace?>>(results.last()).value)
-        advanceTimeBy(60_001)
+        advanceTimeBy(3 * 24 * 60 * 60_000L)
         runCurrent()
-        assertNull(assertIs<AppResult.Success<Workspace?>>(results.last()).value)
+        assertNotNull(assertIs<AppResult.Success<Workspace?>>(results.last()).value)
+        assertEquals(1, results.size)
         fixture.selected.value =
             AppResult.Success(
                 fixture.workspace.copy(

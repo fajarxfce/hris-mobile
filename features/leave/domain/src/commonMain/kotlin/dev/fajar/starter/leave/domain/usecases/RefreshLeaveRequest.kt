@@ -94,8 +94,15 @@ class RefreshLeaveRequest(
                 policy.requestedAt + (it.startsAt - policy.policy.serverTime)
             }
         val readAccess =
-            if (maintenance != null && maintenance > now && maintenance < current.readUntil)
-                current.copy(readUntil = maintenance, expiryCode = "company_maintenance")
+            if (
+                maintenance != null &&
+                    maintenance > now &&
+                    maintenance < current.authorizationExpiresAt
+            )
+                current.copy(
+                    authorizationExpiresAt = maintenance,
+                    authorizationExpiryCode = "company_maintenance",
+                )
             else current
         val snapshot =
             LeaveRequestSnapshot(
@@ -104,7 +111,7 @@ class RefreshLeaveRequest(
                 selection,
                 details,
                 now,
-                minOf(now + LEAVE_CACHE_PERIOD, readAccess.readUntil),
+                now + LEAVE_FRESHNESS_PERIOD,
             )
         when (val publication = cache.replaceRequest(access, generation, snapshot)) {
             is AppResult.Failed -> return publication

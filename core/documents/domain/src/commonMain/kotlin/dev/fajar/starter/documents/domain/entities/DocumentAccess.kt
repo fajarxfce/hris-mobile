@@ -9,6 +9,6 @@ data class DocumentAccess(
     val companyId: String,
     val permissions: Set<String>,
     val sessionExpiresAt: Instant,
-    val readUntil: Instant,
-    val expiryCode: String,
+    val authorizationExpiresAt: Instant,
+    val authorizationExpiryCode: String,
 )

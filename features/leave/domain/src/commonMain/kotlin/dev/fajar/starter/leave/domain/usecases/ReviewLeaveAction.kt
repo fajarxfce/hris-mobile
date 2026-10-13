@@ -56,7 +56,7 @@ class ReviewLeaveAction(
                     is AppResult.Success -> result.value
                 }
             currentCoroutineContext().ensureActive()
-            val lease = validateLeaveRequestCache(access, snapshot, clock.now())
+            val lease = validateLeaveActionSnapshot(access, snapshot, clock.now())
             if (lease is AppResult.Failed) return lease
             val receipt = (record.outcome as? LeaveCommandOutcome.Confirmed)?.version
             val cached = snapshot?.request

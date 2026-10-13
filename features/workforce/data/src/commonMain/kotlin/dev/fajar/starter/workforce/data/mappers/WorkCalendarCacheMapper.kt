@@ -2,7 +2,7 @@ package dev.fajar.starter.workforce.data.mappers
 
 import dev.fajar.starter.workforce.data.dto.WorkCalendarSnapshotDto
 import dev.fajar.starter.workforce.domain.entities.*
-import dev.fajar.starter.workforce.domain.policies.WORK_CALENDAR_CACHE_PERIOD
+import dev.fajar.starter.workforce.domain.policies.WORK_CALENDAR_FRESHNESS_PERIOD
 import kotlin.time.Instant
 import kotlinx.datetime.*
 import kotlinx.serialization.json.Json
@@ -37,7 +37,7 @@ fun WorkCalendarSnapshot.toDto() =
         access.permissions,
         access.sessionExpiresAt.toString(),
         fetchedAt.toString(),
-        expiresAt.toString(),
+        refreshAfter.toString(),
     )
 
 fun WorkCalendarSnapshotDto.toSnapshot(
@@ -61,11 +61,7 @@ fun WorkCalendarSnapshotDto.toSnapshot(
     val period = CalendarPeriod(start, start.plus(6, DateTimeUnit.DAY))
     val fetched = Instant.parse(fetchedAt)
     val expiry = Instant.parse(expiresAt)
-    require(
-        expiry > fetched &&
-            expiry <= fetched + WORK_CALENDAR_CACHE_PERIOD &&
-            expiry <= owner.sessionExpiresAt
-    )
+    require(expiry > fetched && expiry <= fetched + WORK_CALENDAR_FRESHNESS_PERIOD)
     require((employeeId == null) == (calendar == null))
     require(
         if (employeeId == null) directory.items.isEmpty()

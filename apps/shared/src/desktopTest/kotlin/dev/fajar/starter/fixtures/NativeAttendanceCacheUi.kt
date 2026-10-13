@@ -9,7 +9,7 @@ import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
 
-/** A single-company cache whose expiry can be advanced during an assembled UI request. */
+/** A single-company cache whose freshness can be advanced during an assembled UI request. */
 class NativeAttendanceCacheUi : AttendanceCacheRepository {
     @Volatile var rejectClear = false
     @Volatile var publicationGate: CompletableDeferred<Unit>? = null
@@ -47,7 +47,7 @@ class NativeAttendanceCacheUi : AttendanceCacheRepository {
 
     fun hasSnapshot(window: AttendanceWindow) = snapshots.getValue(window).value != null
 
-    fun expire(window: AttendanceWindow = AttendanceWindow.RECENT) {
+    fun markStale(window: AttendanceWindow = AttendanceWindow.RECENT) {
         val snapshot = snapshots.getValue(window)
         val previous = checkNotNull(snapshot.value)
         check(
@@ -55,7 +55,7 @@ class NativeAttendanceCacheUi : AttendanceCacheRepository {
                 previous,
                 previous.copy(
                     fetchedAt = previous.fetchedAt - 2.hours,
-                    expiresAt = previous.fetchedAt - 1.hours,
+                    refreshAfter = previous.fetchedAt - 1.hours,
                 ),
             )
         )

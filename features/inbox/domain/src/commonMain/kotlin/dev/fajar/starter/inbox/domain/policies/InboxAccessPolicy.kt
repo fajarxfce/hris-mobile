@@ -6,25 +6,20 @@ import dev.fajar.starter.inbox.domain.entities.*
 import dev.fajar.starter.workspace.domain.entities.CompanyModule
 import dev.fajar.starter.workspace.domain.entities.Workspace
 import dev.fajar.starter.workspace.domain.policies.requireCompanyModule
-import dev.fajar.starter.workspace.domain.policies.validateWorkspaceOwnership
+import dev.fajar.starter.workspace.domain.policies.validateLocalWorkspaceOwnership
 import kotlin.time.Instant
 
 fun admitInbox(
     workspaceId: String,
     workspace: Workspace?,
     session: Session?,
-    now: Instant,
 ): AppResult<InboxAccess> {
-    val ownership = validateWorkspaceOwnership(workspaceId, workspace, session, now)
+    val ownership = validateLocalWorkspaceOwnership(workspaceId, workspace, session)
     if (ownership is AppResult.Failed) return ownership
     requireNotNull(workspace)
     requireNotNull(session)
     val module = requireCompanyModule(workspace, CompanyModule.COMMUNICATIONS)
     if (module is AppResult.Failed) return module
-    if (session.binding.expiresAtEpochMillis <= now.toEpochMilliseconds())
-        return AppResult.Failed(
-            Failure(FailureKind.Unauthorized, "Sign in again.", code = "session_revoked")
-        )
     if ("announcements.read" !in workspace.permissions)
         return AppResult.Failed(
             Failure(
@@ -46,7 +41,7 @@ fun admitInbox(
     )
 }
 
-fun validateInboxCache(
+fun validateInboxActionSnapshot(
     access: InboxAccess,
     checkpoint: InboxCheckpoint?,
     now: Instant,
@@ -55,8 +50,8 @@ fun validateInboxCache(
         access.workspaceExpiresAt <= now ->
             AppResult.Failed(
                 Failure(
-                    FailureKind.AccessDenied,
-                    "Select a company again.",
+                    FailureKind.Unavailable,
+                    "Refresh company access before sending this action.",
                     code = "client.workspace_expired",
                 )
             )
@@ -69,10 +64,10 @@ fun validateInboxCache(
                     code = "client.inbox_scope_changed",
                 )
             )
-        minOf(checkpoint.expiresAt, access.workspaceExpiresAt) <= now ->
+        minOf(checkpoint.refreshAfter, access.workspaceExpiresAt) <= now ->
             AppResult.Failed(
                 Failure(
-                    FailureKind.AccessDenied,
+                    FailureKind.Unavailable,
                     "Connect to refresh the inbox.",
                     code = "client.inbox_cache_expired",
                 )
@@ -88,3 +83,20 @@ fun sameInboxScope(first: InboxAccess, second: InboxAccess): Boolean =
         first.companyId == second.companyId &&
         first.permissions == second.permissions &&
         first.sessionExpiresAt == second.sessionExpiresAt
+
+/** Reading a saved message requires its current local owner, not an unexpired sync cursor. */
+fun validateStoredInbox(access: InboxAccess, checkpoint: InboxCheckpoint?): AppResult<Unit> =
+    if (checkpoint != null && !sameInboxScope(checkpoint.access, access))
+        inboxCommandFailure("client.inbox_scope_changed", FailureKind.AccessDenied)
+    else AppResult.Success(Unit)
+
+/** A freshness or credential-renewal failure is not a revocation of locally owned facts. */
+fun inboxFailureInvalidatesCache(failure: Failure): Boolean =
+    failure.kind in setOf(FailureKind.Unauthorized, FailureKind.AccessDenied) ||
+        failure.code in
+            setOf(
+                "sync_scope_changed",
+                "company_maintenance",
+                "client_update_required",
+                "client_version_required",
+            )

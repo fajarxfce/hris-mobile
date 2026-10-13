@@ -15,7 +15,7 @@ import kotlinx.coroutines.test.*
 
 class PayslipObservationTest {
     @Test
-    fun leaseExpirationHidesRetainedContentAndDisposalRemovesCollectors() = runTest {
+    fun staleReadsKeepTheirCollectorUntilDisposal() = runTest {
         for (detail in listOf(false, true)) {
             val origin = testScheduler.currentTime
             val f = PayrollFixture {
@@ -29,14 +29,14 @@ class PayslipObservationTest {
                     AppResult.Success(
                         (f.detailRecords.value as AppResult.Success)
                             .value!!
-                            .copy(expiresAt = current + 10.seconds)
+                            .copy(refreshAfter = current + 10.seconds)
                     )
             else
                 f.records.value =
                     AppResult.Success(
                         (f.records.value as AppResult.Success)
                             .value!!
-                            .copy(expiresAt = current + 10.seconds)
+                            .copy(refreshAfter = current + 10.seconds)
                     )
             val seen = mutableListOf<AppResult<*>>()
             val source =
@@ -48,12 +48,10 @@ class PayslipObservationTest {
                 }
             assertIs<AppResult.Success<*>>(seen.last())
             assertEquals(1, f.observers)
-            advanceTimeBy(10_001)
+            advanceTimeBy(3 * 24 * 60 * 60_000L)
             runCurrent()
-            assertEquals(
-                "client.payslip_cache_expired",
-                assertIs<AppResult.Failed>(seen.last()).failure.code,
-            )
+            assertIs<AppResult.Success<*>>(seen.last())
+            assertEquals(1, seen.size)
             job.cancelAndJoin()
             assertEquals(0, f.observers)
         }
@@ -81,22 +79,17 @@ class PayslipObservationTest {
     }
 
     @Test
-    fun unrelatedDetailAndExpiredCiphertextNeverBecomeTheRequestedSlip() = runTest {
+    fun unrelatedDetailIsHiddenWhileAnOwnedStaleSlipRemainsReadable() = runTest {
         val f = PayrollFixture()
         f.load(true)
         val snapshot = (f.detailRecords.value as AppResult.Success).value!!
         f.detailRecords.value =
-            AppResult.Success(snapshot.copy(expiresAt = f.clock.now() - 1.seconds))
+            AppResult.Success(snapshot.copy(refreshAfter = f.clock.now() - 1.seconds))
         assertEquals(
             AppResult.Success(null),
             f.observeDetail(f.workspace.id, "55555555-5555-5555-5555-555555555555").first(),
         )
-        assertEquals(
-            "client.payslip_cache_expired",
-            assertIs<AppResult.Failed>(f.observeDetail(f.workspace.id, f.summary.id).first())
-                .failure
-                .code,
-        )
+        assertEquals(f.detailRecords.value, f.observeDetail(f.workspace.id, f.summary.id).first())
     }
 
     @Test

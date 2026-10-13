@@ -9,7 +9,7 @@ import dev.fajar.starter.workspace.domain.policies.*
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Instant
 
-val WORK_CALENDAR_CACHE_PERIOD = 1.hours
+val WORK_CALENDAR_FRESHNESS_PERIOD = 1.hours
 
 fun admitWorkforce(
     workspaceId: String,
@@ -35,7 +35,7 @@ internal fun admitWorkforceAccess(
     now: Instant,
     permissions: Set<String>,
 ): AppResult<WorkforceAccess> {
-    val ownership = validateWorkspaceOwnership(workspaceId, workspace, session, now)
+    val ownership = validateLocalWorkspaceOwnership(workspaceId, workspace, session)
     if (ownership is AppResult.Failed) return ownership
     requireNotNull(workspace)
     requireNotNull(session)
@@ -57,28 +57,37 @@ internal fun admitWorkforceAccess(
     }
     if (workspace.permissions.none { it in permissions })
         return calendarFailure("access_denied", FailureKind.AccessDenied)
-    var deadline = workspace.admission.expiresAt
-    var expiryCode = "client.workspace_expired"
-    val policy = requireNotNull(workspace.policy)
-    policy.policy.maintenance?.let { window ->
-        val start = policy.requestedAt + (window.startsAt - policy.policy.serverTime)
-        if (start > now && start < deadline) {
-            deadline = start
-            expiryCode = "company_maintenance"
-        }
-    }
     return AppResult.Success(
-        WorkforceAccess(
-            session.id,
-            session.user.id,
-            session.binding.audience,
-            workspace.company.id,
-            workspace.permissions.toSet(),
-            Instant.fromEpochMilliseconds(session.binding.expiresAtEpochMillis),
-            deadline,
-            expiryCode,
+        boundWorkforceAuthorization(
+            WorkforceAccess(
+                session.id,
+                session.user.id,
+                session.binding.audience,
+                workspace.company.id,
+                workspace.permissions.toSet(),
+                Instant.fromEpochMilliseconds(session.binding.expiresAtEpochMillis),
+                workspace.admission.expiresAt,
+                "client.workspace_expired",
+            ),
+            requireNotNull(workspace.policy),
+            now,
         )
     )
+}
+
+/** Scheduled maintenance limits action preparation, without expiring already stored facts. */
+fun boundWorkforceAuthorization(
+    access: WorkforceAccess,
+    policy: CompanyPolicySnapshot,
+    now: Instant,
+): WorkforceAccess {
+    val start =
+        policy.policy.maintenance?.let {
+            policy.requestedAt + (it.startsAt - policy.policy.serverTime)
+        }
+    return if (start != null && start > now && start < access.authorizationExpiresAt)
+        access.copy(authorizationExpiresAt = start, authorizationExpiryCode = "company_maintenance")
+    else access
 }
 
 fun sameWorkforceScope(first: WorkforceAccess, second: WorkforceAccess): Boolean =
@@ -100,19 +109,11 @@ fun validateWorkforceContinuation(
             else calendarFailure("client.calendar_scope_changed", FailureKind.AccessDenied)
     }
 
-fun validateCalendarCache(
+/** Stored facts remain readable after freshness expires; commands validate current authority. */
+fun validateStoredCalendar(
     access: WorkforceAccess,
     snapshot: WorkCalendarSnapshot?,
-    now: Instant,
 ): AppResult<Unit> =
-    when {
-        access.readUntil <= now -> calendarFailure(access.expiryCode, FailureKind.AccessDenied)
-        snapshot == null -> AppResult.Success(Unit)
-        !sameWorkforceScope(access, snapshot.access) ->
-            calendarFailure("client.calendar_scope_changed", FailureKind.AccessDenied)
-        snapshot.fetchedAt > now ||
-            snapshot.expiresAt <= now ||
-            snapshot.expiresAt > snapshot.fetchedAt + WORK_CALENDAR_CACHE_PERIOD ->
-            calendarFailure("client.calendar_cache_expired", FailureKind.AccessDenied)
-        else -> AppResult.Success(Unit)
-    }
+    if (snapshot != null && !sameWorkforceScope(access, snapshot.access))
+        calendarFailure("client.calendar_scope_changed", FailureKind.AccessDenied)
+    else AppResult.Success(Unit)

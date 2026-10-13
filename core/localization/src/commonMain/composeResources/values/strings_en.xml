@@ -415,6 +415,7 @@
     <string name="field_rejected_en">This value was not accepted.</string>
     <string name="error_validation_en">Check the information and try again.</string>
     <string name="error_unauthorized_en">Sign in to continue.</string>
+    <string name="sync_sign_in_required_en">Sign in again to synchronize changes.</string>
     <string name="error_network_en">Unable to connect. Check your connection.</string>
     <string name="error_timeout_en">The request timed out. Try again.</string>
     <string name="error_service_en">The service is unavailable. Try again.</string>

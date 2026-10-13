@@ -137,7 +137,7 @@ class LoadDocumentEvidenceTest {
     }
 
     @Test
-    fun pendingReadCannotOutliveWorkspaceAdmission() = runTest {
+    fun evidenceForSubmissionCannotOutliveItsOperationAuthorization() = runTest {
         val f = DocumentFixture()
         f.workspaces.value =
             AppResult.Success(
@@ -150,7 +150,7 @@ class LoadDocumentEvidenceTest {
             AppResult.Success(f.page)
         }
         assertEquals(
-            "client.workspace_expired",
+            "client.document_evidence_expired",
             assertIs<AppResult.Failed>(f.load("workspace", f.query)).failure.code,
         )
     }

@@ -7,6 +7,9 @@ import dev.fajar.starter.workforce.domain.attendance.policies.*
 import dev.fajar.starter.workforce.domain.attendance.usecases.ObserveAttendance
 import dev.fajar.starter.workforce.domain.entities.*
 import kotlin.test.*
+import kotlin.time.Clock
+import kotlin.time.Duration.Companion.hours
+import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Instant
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
@@ -163,7 +166,7 @@ class AttendanceCommandsTest {
     }
 
     @Test
-    fun observationExpiresAndReleasesAllCollectionsWhenDisposed() = runTest {
+    fun savedAttendanceRemainsReadableForDaysAndReleasesAllCollectionsWhenDisposed() = runTest {
         val f = AttendanceFixture()
         val values = mutableListOf<AppResult<AttendanceView>>()
         val owner =
@@ -173,15 +176,18 @@ class AttendanceCommandsTest {
                         f.commands,
                         f.base.sessions,
                         f.base.workspaces,
-                        f.base.clock,
+                        object : Clock {
+                            override fun now() = f.now + testScheduler.currentTime.milliseconds
+                        },
                         f.base.build,
                     )(f.base.workspace.id)
                     .toList(values)
             }
-        assertTrue(values.any { it is AppResult.Success })
-        advanceTimeBy(3_600_001)
+        val initial = assertIs<AppResult.Success<AttendanceView>>(values.last())
+        advanceTimeBy(72.hours)
         runCurrent()
-        assertIs<AppResult.Failed>(values.last())
+        assertEquals(initial, values.last())
+        assertEquals(1, values.size)
         owner.cancelAndJoin()
         assertEquals(0, f.records.subscriptionCount.value)
         assertEquals(0, f.snapshot.subscriptionCount.value)

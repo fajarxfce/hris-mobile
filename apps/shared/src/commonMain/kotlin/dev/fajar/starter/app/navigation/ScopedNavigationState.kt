@@ -88,5 +88,5 @@ fun rememberScopedNavigationState(): ScopedNavigationState {
     }
 }
 
-// Version 2 opens Documents at its catalog and replaces the previous catalog route.
-private const val NAVIGATION_FORMAT = 2
+// Version 3 removes the connection-only workspace recovery route from saved graphs.
+private const val NAVIGATION_FORMAT = 3

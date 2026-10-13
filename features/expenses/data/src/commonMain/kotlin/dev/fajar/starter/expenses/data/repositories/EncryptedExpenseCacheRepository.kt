@@ -79,8 +79,7 @@ class EncryptedExpenseCacheRepository(
                 return@withContext replicas.replace(access.sessionId, partition, previous, null)
             require(
                 sameExpenseScope(access, snapshot.access) &&
-                    snapshot.generation != expectedGeneration &&
-                    snapshot.expiresAt <= snapshot.access.readUntil
+                    snapshot.generation != expectedGeneration
             )
             val dto = snapshot.toDto { it.toDto() }
             dto.toSnapshot(access, snapshot.generation) { it.toOverview(access) }
@@ -163,8 +162,7 @@ class EncryptedExpenseCacheRepository(
                 return@withContext replicas.replace(access.sessionId, partition, previous, null)
             require(
                 sameExpenseScope(access, snapshot.access) &&
-                    snapshot.generation != expectedGeneration &&
-                    snapshot.expiresAt <= snapshot.access.readUntil
+                    snapshot.generation != expectedGeneration
             )
             val dto = snapshot.toDto { it.toDto() }
             dto.toSnapshot(access, snapshot.generation) { it.toView() }

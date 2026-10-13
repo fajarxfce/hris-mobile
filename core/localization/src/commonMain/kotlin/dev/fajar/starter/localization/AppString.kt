@@ -1400,6 +1400,7 @@ enum class AppString(val english: StringResource, val indonesian: StringResource
     FieldRejected(Res.string.field_rejected_en, Res.string.field_rejected_id),
     ErrorValidation(Res.string.error_validation_en, Res.string.error_validation_id),
     ErrorUnauthorized(Res.string.error_unauthorized_en, Res.string.error_unauthorized_id),
+    SyncSignInRequired(Res.string.sync_sign_in_required_en, Res.string.sync_sign_in_required_id),
     ErrorNetwork(Res.string.error_network_en, Res.string.error_network_id),
     ErrorTimeout(Res.string.error_timeout_en, Res.string.error_timeout_id),
     ErrorService(Res.string.error_service_en, Res.string.error_service_id),

@@ -67,7 +67,7 @@ class ObserveLeaveTest {
     }
 
     @Test
-    fun aRenewedWorkspaceCannotExtendTheAgeOfAnExistingSnapshot() = runTest {
+    fun renewalDoesNotRewriteStoredFreshnessAndStaleDataRemainsReadable() = runTest {
         val base = Instant.parse("2026-10-12T01:00:00Z")
         val f = LeaveFixture { base + testScheduler.currentTime.milliseconds }
         f.load()
@@ -90,14 +90,16 @@ class ObserveLeaveTest {
         assertIs<AppResult.Success<LeaveOverview?>>(values.last())
         advanceTimeBy(30.minutes)
         runCurrent()
-        assertEquals(
-            "client.leave_cache_expired",
-            assertIs<AppResult.Failed>(values.last()).failure.code,
-        )
+        val retained = assertIs<AppResult.Success<LeaveOverview?>>(values.last()).value!!
+        assertEquals(base, retained.fetchedAt)
+        assertEquals(base + 1.hours, retained.refreshAfter)
+        advanceTimeBy(72.hours)
+        runCurrent()
+        assertEquals(retained, assertIs<AppResult.Success<LeaveOverview?>>(values.last()).value)
     }
 
     @Test
-    fun knownMaintenanceEndsTheReadLeaseWithoutWaitingForAnotherDatabaseEvent() = runTest {
+    fun newReadRechecksKnownMaintenanceWhileRootOwnsTheApplicationPolicyTimer() = runTest {
         val base = Instant.parse("2026-10-12T01:00:00Z")
         val f = LeaveFixture { base + testScheduler.currentTime.milliseconds }
         val policy =
@@ -113,11 +115,14 @@ class ObserveLeaveTest {
         assertIs<AppResult.Success<LeaveOverview?>>(values.last())
         advanceTimeBy(10.seconds)
         runCurrent()
-        assertEquals("company_maintenance", assertIs<AppResult.Failed>(values.last()).failure.code)
+        assertEquals(
+            "company_maintenance",
+            assertIs<AppResult.Failed>(f.observe(f.workspace.id).first()).failure.code,
+        )
     }
 
     @Test
-    fun aSnapshotFromAnotherScopeAndClockRollbackAreNeverPublished() = runTest {
+    fun anotherScopeIsRejectedButDeviceClockChangesDoNotEraseStoredFacts() = runTest {
         var now = Instant.parse("2026-10-12T01:00:00Z")
         val f = LeaveFixture { now }
         f.load()
@@ -128,15 +133,15 @@ class ObserveLeaveTest {
             "client.leave_scope_changed",
             assertIs<AppResult.Failed>(f.observe(f.workspace.id).first()).failure.code,
         )
-        f.records.value = AppResult.Success(saved.copy(fetchedAt = now + 1.seconds))
+        f.records.value = AppResult.Success(saved)
         assertEquals(
-            "client.leave_cache_expired",
-            assertIs<AppResult.Failed>(f.observe(f.workspace.id).first()).failure.code,
+            saved,
+            assertIs<AppResult.Success<LeaveOverview?>>(f.observe(f.workspace.id).first()).value,
         )
         now -= 1.seconds
         assertEquals(
-            "client.workspace_expired",
-            assertIs<AppResult.Failed>(f.observe(f.workspace.id).first()).failure.code,
+            saved,
+            assertIs<AppResult.Success<LeaveOverview?>>(f.observe(f.workspace.id).first()).value,
         )
     }
 }

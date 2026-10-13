@@ -114,7 +114,7 @@ fun validateExpenseDraftPreparation(
         return expenseFailure("client.expense_scope_changed", FailureKind.AccessDenied)
     if (
         prepared.fetchedAt > now ||
-            now >= minOf(prepared.expiresAt, access.readUntil, access.sessionExpiresAt)
+            now >= minOf(prepared.expiresAt, access.authorizationExpiresAt, access.sessionExpiresAt)
     )
         return expenseFailure("client.expense_preparation_expired", FailureKind.AccessDenied)
     if (

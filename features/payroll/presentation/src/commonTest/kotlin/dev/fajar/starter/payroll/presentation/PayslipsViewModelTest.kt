@@ -174,7 +174,7 @@ class PayslipsViewModelTest {
     }
 
     @Test
-    fun expiryRenewsOnceAndKeepsOldContentHiddenUntilPublication() = runTest {
+    fun explicitRefreshKeepsStaleContentButCompanyReplacementHidesIt() = runTest {
         withModel { f, model, _ ->
             model.onEvent(PayslipsEvent.Entered)
             runCurrent()
@@ -184,19 +184,25 @@ class PayslipsViewModelTest {
                 release.await()
                 AppResult.Success(PayslipPage(listOf(f.summary)))
             }
-            f.records.value = AppResult.Success(saved.copy(expiresAt = f.clock.now() + 1.seconds))
+            f.records.value =
+                AppResult.Success(saved.copy(refreshAfter = f.clock.now() + 1.seconds))
             runCurrent()
             advanceTimeBy(1_001)
             runCurrent()
+            assertFalse(model.state.value.refreshing)
+            assertEquals(1, f.listReads)
+            assertNotNull(model.state.value.content)
+            model.onEvent(PayslipsEvent.RefreshRequested)
+            runCurrent()
             assertTrue(model.state.value.refreshing)
-            assertTrue(model.state.value.readRestricted)
+            assertFalse(model.state.value.readRestricted)
             assertNull(model.state.value.failure)
-            assertNull(model.state.value.content)
+            assertNotNull(model.state.value.content)
             assertEquals(2, f.listReads)
             model.onEvent(PayslipsEvent.RefreshRequested)
             f.records.value = AppResult.Success(saved)
             runCurrent()
-            assertNull(model.state.value.content)
+            assertNotNull(model.state.value.content)
             assertEquals(2, f.listReads)
             release.complete(Unit)
             runCurrent()
@@ -212,21 +218,25 @@ class PayslipsViewModelTest {
     }
 
     @Test
-    fun failedExpiryRenewalShowsItsCauseWithoutRepeatingOrReopeningCache() = runTest {
+    fun failedExplicitRefreshShowsItsCauseAndKeepsStaleContentWithoutRepeating() = runTest {
         withModel { f, model, _ ->
             model.onEvent(PayslipsEvent.Entered)
             runCurrent()
             val saved = assertNotNull(model.state.value.content)
             f.listCall = { payslipFailure("client.network", FailureKind.Network) }
-            f.records.value = AppResult.Success(saved.copy(expiresAt = f.clock.now() + 1.seconds))
+            f.records.value =
+                AppResult.Success(saved.copy(refreshAfter = f.clock.now() + 1.seconds))
             runCurrent()
             advanceTimeBy(1_001)
             runCurrent()
-            assertEquals("client.payslip_cache_expired", model.state.value.cacheFailure?.code)
+            assertEquals(1, f.listReads)
+            model.onEvent(PayslipsEvent.RefreshRequested)
+            runCurrent()
+            assertNull(model.state.value.cacheFailure)
             assertEquals("client.network", model.state.value.failure?.code)
-            assertTrue(model.state.value.readRestricted)
-            assertNull(model.state.value.content)
-            assertEquals(0, f.observers)
+            assertFalse(model.state.value.readRestricted)
+            assertNotNull(model.state.value.content)
+            assertEquals(1, f.observers)
             advanceTimeBy(10_000)
             runCurrent()
             assertEquals(2, f.listReads)
@@ -240,7 +250,7 @@ class PayslipsViewModelTest {
     }
 
     @Test
-    fun leavingDuringAutomaticRenewalCancelsAndIgnoresItsLateFailure() = runTest {
+    fun leavingDuringExplicitRefreshCancelsAndIgnoresItsLateFailure() = runTest {
         withModel { f, model, _ ->
             model.onEvent(PayslipsEvent.Entered)
             runCurrent()
@@ -254,9 +264,12 @@ class PayslipsViewModelTest {
                 }
                 payslipFailure("mfa_required", FailureKind.AccessDenied)
             }
-            f.records.value = AppResult.Success(saved.copy(expiresAt = f.clock.now() + 1.seconds))
+            f.records.value =
+                AppResult.Success(saved.copy(refreshAfter = f.clock.now() + 1.seconds))
             runCurrent()
             advanceTimeBy(1_001)
+            runCurrent()
+            model.onEvent(PayslipsEvent.RefreshRequested)
             runCurrent()
             assertTrue(model.state.value.refreshing)
             model.onEvent(PayslipsEvent.Stopped)

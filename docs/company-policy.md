@@ -15,19 +15,19 @@ permission, retry or scheduling policy belongs in the datasource or safe boundar
 `ObserveWorkspaceContext` exposes a coherent session, company and policy snapshot.
 The policy freshness interval is at most sixty seconds. The request start time
 anchors that interval locally, so transport latency consumes freshness and server
-clock offsets cannot extend it. This short interval is separate from the maximum
-one-hour offline workspace admission.
+clock offsets cannot extend it. This operation freshness is separate from local
+read availability and recent workspace authorization.
 
-Each stored snapshot has at most three observation deadlines: freshness expiry,
-a known scheduled maintenance start, and workspace expiry. Failed refreshes do not
+Each policy snapshot has at most two observation deadlines: freshness becoming
+stale and a known scheduled maintenance start. Failed refreshes do not
 start a polling loop. Foreground entry, a freshness transition and explicit retry
 can request renewal. A known maintenance window closes the company even when its
 cached policy is already stale; reopening requires live confirmation. Tests use
 virtual time, including fractional server deadlines and pending cancellation.
 
 An offline client cannot discover a new administrative change. Admitted local
-content remains available under its bounded lease when the last known policy
-allows it. An absent policy fails closed until a successful check; legacy encrypted
+content remains available while the last known policy allows it; ordinary age
+alone does not make those saved facts inaccessible. An absent policy fails closed until a successful check; legacy encrypted
 workspaces migrate without discarding their identity. Known minimum-build and
 maintenance restrictions remain blocked during a connection failure.
 

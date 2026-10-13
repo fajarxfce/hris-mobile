@@ -5,12 +5,11 @@ import dev.fajar.starter.identity.domain.entities.Session
 import dev.fajar.starter.workspace.domain.entities.Workspace
 import kotlin.time.Instant
 
-/** Pure admission check; use cases acquire the current repository snapshots. */
-fun validateWorkspaceOwnership(
+/** Local ownership survives stale authorization. It never authorizes an API operation. */
+fun validateLocalWorkspaceOwnership(
     expectedId: String,
     workspace: Workspace?,
     session: Session?,
-    now: Instant,
 ): AppResult<Unit> =
     when {
         workspace?.id != expectedId ->
@@ -25,13 +24,29 @@ fun validateWorkspaceOwnership(
             AppResult.Failed(
                 Failure(FailureKind.Unauthorized, "Sign in again.", code = "client.session_changed")
             )
+        else -> AppResult.Success(Unit)
+    }
+
+/** Operations that need recent authority must acquire it separately from local reads. */
+fun validateWorkspaceOwnership(
+    expectedId: String,
+    workspace: Workspace?,
+    session: Session?,
+    now: Instant,
+): AppResult<Unit> {
+    val ownership = validateLocalWorkspaceOwnership(expectedId, workspace, session)
+    if (ownership is AppResult.Failed) return ownership
+    requireNotNull(workspace)
+    requireNotNull(session)
+    return when {
         session.binding.expiresAtEpochMillis <= now.toEpochMilliseconds() ->
-            workspaceFailure("session_revoked", FailureKind.Unauthorized)
+            workspaceFailure("client.authentication_required", FailureKind.Unavailable)
         workspace.admission.checkedAt > now ||
             workspace.admission.expiresAt <= now ||
             workspace.admission.expiresAt >
-                workspace.admission.checkedAt + WORKSPACE_OFFLINE_PERIOD ||
+                workspace.admission.checkedAt + WORKSPACE_AUTHORIZATION_PERIOD ||
             workspace.admission.expiresAt.toEpochMilliseconds() >
                 session.binding.expiresAtEpochMillis -> workspaceFailure("client.workspace_expired")
         else -> AppResult.Success(Unit)
     }
+}

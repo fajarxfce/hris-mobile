@@ -231,7 +231,7 @@ class AttendanceHistoryStorageTest {
             WorkCalendar(null, days.map { WorkDay.Unassigned(it.date) }),
             days,
             f.now,
-            f.access.readUntil,
+            f.access.authorizationExpiresAt,
         )
     }
 }

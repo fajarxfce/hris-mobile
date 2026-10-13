@@ -119,14 +119,14 @@ class RefreshOvertimeRequest(
             return overtimeFailure("client.invalid_response", FailureKind.Unexpected)
         val view = OvertimeRequestView(selection, result)
         val now = clock.now()
-        val readAccess = boundOvertimeReadAccess(current, policy, now)
+        val readAccess = boundOvertimeAuthorization(current, policy, now)
         val snapshot =
             OvertimeSnapshot(
                 readAccess,
                 Uuid.random().toString(),
                 view,
                 now,
-                minOf(now + OVERTIME_CACHE_PERIOD, readAccess.readUntil),
+                now + OVERTIME_FRESHNESS_PERIOD,
             )
         currentCoroutineContext().ensureActive()
         when (val saved = cache.replaceRequest(access, generation, snapshot)) {

@@ -49,24 +49,39 @@ class NativeSessionPolicyTest {
     }
 
     @Test
-    fun anAudienceChangeOrExpiredFamilyClearsLocalCredentialsWithoutSendingThem() = runTest {
-        for (binding in
-            listOf(
-                testSession().binding.copy(audience = "https://other.invalid/"),
-                testSession().binding.copy(expiresAtEpochMillis = 1),
-            )) {
-            val original = testSession().copy(binding = binding)
-            val sessions = TestSessions(original)
-            val remote = Remote()
-            assertEquals(
-                AppResult.Success(null),
-                AcquireSessionTokens(remote, sessions, server)(original.id),
-            )
-            assertEquals(AppResult.Success(null), sessions.current())
-            assertEquals(0, remote.calls)
-            sessions.compareAndSet(null, original)
-            assertEquals(AppResult.Success(null), RestoreSession(sessions, server)())
+    fun anAudienceChangeClearsLocalCredentialsWithoutSendingThem() = runTest {
+        val original =
+            testSession()
+                .copy(binding = testSession().binding.copy(audience = "https://other.invalid/"))
+        val sessions = TestSessions(original)
+        val remote = Remote()
+        assertEquals(
+            AppResult.Success(null),
+            AcquireSessionTokens(remote, sessions, server)(original.id),
+        )
+        assertEquals(AppResult.Success(null), sessions.current())
+        assertEquals(0, remote.calls)
+        sessions.compareAndSet(null, original)
+        assertEquals(AppResult.Success(null), RestoreSession(sessions, server)())
+    }
+
+    @Test
+    fun expiredRemoteCredentialsRetainTheLocalOwnerButCannotBeSentOrRefreshed() = runTest {
+        val original =
+            testSession().copy(binding = testSession().binding.copy(expiresAtEpochMillis = 1))
+        val sessions = TestSessions(original)
+        val remote = Remote()
+        assertEquals(AppResult.Success(original), RestoreSession(sessions, server)())
+        repeat(2) {
+            val denied =
+                assertIs<AppResult.Failed>(
+                    AcquireSessionTokens(remote, sessions, server)(original.id)
+                )
+            assertEquals("client.authentication_required", denied.failure.code)
+            assertEquals(FailureKind.Unavailable, denied.failure.kind)
         }
+        assertEquals(0, remote.calls)
+        assertEquals(AppResult.Success(original), sessions.current())
     }
 
     @Test

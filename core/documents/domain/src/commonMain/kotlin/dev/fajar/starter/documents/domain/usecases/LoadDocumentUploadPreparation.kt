@@ -95,10 +95,10 @@ class LoadDocumentUploadPreparation(
             val expiry =
                 minOf(
                     requestedAt + DOCUMENT_EVIDENCE_PERIOD,
-                    publication.readUntil,
+                    publication.authorizationExpiresAt,
                     publication.sessionExpiresAt,
                     companyPolicyDeadline(policy),
-                    maintenance ?: publication.readUntil,
+                    maintenance ?: publication.authorizationExpiresAt,
                 )
             if (expiry <= clock.now())
                 return@withTimeoutOrNull documentFailure(

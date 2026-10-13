@@ -122,7 +122,7 @@ fun <T, D> OvertimeSnapshot<T>.toDto(mapValue: (T) -> D) =
         access.permissions.toSet(),
         access.sessionExpiresAt.toString(),
         fetchedAt.toString(),
-        expiresAt.toString(),
+        refreshAfter.toString(),
         mapValue(value),
     )
 
@@ -139,10 +139,6 @@ fun <T, D> OvertimeSnapshotDto<D>.toSnapshot(
         )
     val fetched = Instant.parse(fetchedAt)
     val expiry = Instant.parse(expiresAt)
-    require(
-        expiry > fetched &&
-            expiry <= fetched + OVERTIME_CACHE_PERIOD &&
-            expiry <= owner.sessionExpiresAt
-    )
+    require(expiry > fetched && expiry <= fetched + OVERTIME_FRESHNESS_PERIOD)
     return OvertimeSnapshot(owner, generation, mapValue(value, owner), fetched, expiry)
 }

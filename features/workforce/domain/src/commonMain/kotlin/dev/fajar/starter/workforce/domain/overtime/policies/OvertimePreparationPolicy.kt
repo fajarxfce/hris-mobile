@@ -49,9 +49,9 @@ fun validateOvertimePreparation(
         prepared.fetchedAt > now ||
             prepared.expiresAt <= now ||
             prepared.expiresAt > prepared.fetchedAt + OVERTIME_PREPARATION_PERIOD ||
-            prepared.expiresAt > prepared.access.readUntil ||
+            prepared.expiresAt > prepared.access.authorizationExpiresAt ||
             prepared.expiresAt > prepared.access.sessionExpiresAt ||
-            access.readUntil <= now
+            access.authorizationExpiresAt <= now
     )
         return overtimeFailure("client.overtime_review_expired", FailureKind.Conflict)
     val review = prepared.review

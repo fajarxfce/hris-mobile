@@ -16,7 +16,7 @@ fun admitDocumentCatalog(
     now: Instant,
 ): AppResult<DocumentAccess> {
     if (session == null) return documentFailure("client.session_changed", FailureKind.Unauthorized)
-    val ownership = validateWorkspaceOwnership(workspaceId, workspace, session, now)
+    val ownership = validateLocalWorkspaceOwnership(workspaceId, workspace, session)
     if (ownership is AppResult.Failed) return ownership
     requireNotNull(workspace)
     val module = requireCompanyModule(workspace, CompanyModule.DOCUMENTS)
@@ -41,12 +41,12 @@ fun admitDocumentCatalog(
     if ("documents.self.read" !in workspace.permissions)
         return documentFailure("access_denied", FailureKind.AccessDenied)
     var deadline = workspace.admission.expiresAt
-    var expiryCode = "client.workspace_expired"
+    var authorizationExpiryCode = "client.workspace_expired"
     policy.policy.maintenance?.let { window ->
         val start = policy.requestedAt + (window.startsAt - policy.policy.serverTime)
         if (start > now && start < deadline) {
             deadline = start
-            expiryCode = "company_maintenance"
+            authorizationExpiryCode = "company_maintenance"
         }
     }
     return AppResult.Success(
@@ -58,7 +58,7 @@ fun admitDocumentCatalog(
             workspace.permissions.toSet(),
             Instant.fromEpochMilliseconds(session.binding.expiresAtEpochMillis),
             deadline,
-            expiryCode,
+            authorizationExpiryCode,
         )
     )
 }

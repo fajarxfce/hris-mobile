@@ -9,7 +9,7 @@ import dev.fajar.starter.workspace.domain.policies.*
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Instant
 
-val EXPENSE_CACHE_PERIOD = 1.hours
+val EXPENSE_FRESHNESS_PERIOD = 1.hours
 
 fun admitExpenses(
     workspaceId: String,
@@ -18,7 +18,7 @@ fun admitExpenses(
     build: AppBuild,
     now: Instant,
 ): AppResult<ExpenseAccess> {
-    val ownership = validateWorkspaceOwnership(workspaceId, workspace, session, now)
+    val ownership = validateLocalWorkspaceOwnership(workspaceId, workspace, session)
     if (ownership is AppResult.Failed) return ownership
     requireNotNull(workspace)
     requireNotNull(session)
@@ -45,7 +45,7 @@ fun admitExpenses(
     )
         return expenseFailure("access_denied", FailureKind.AccessDenied)
     return AppResult.Success(
-        boundExpenseReadAccess(
+        boundExpenseAuthorization(
             ExpenseAccess(
                 session.id,
                 session.user.id,
@@ -63,7 +63,7 @@ fun admitExpenses(
     )
 }
 
-fun boundExpenseReadAccess(
+fun boundExpenseAuthorization(
     access: ExpenseAccess,
     policy: CompanyPolicySnapshot,
     now: Instant,
@@ -72,8 +72,8 @@ fun boundExpenseReadAccess(
         policy.policy.maintenance?.let {
             policy.requestedAt + (it.startsAt - policy.policy.serverTime)
         }
-    return if (start != null && start > now && start < access.readUntil)
-        access.copy(readUntil = start, expiryCode = "company_maintenance")
+    return if (start != null && start > now && start < access.authorizationExpiresAt)
+        access.copy(authorizationExpiresAt = start, authorizationExpiryCode = "company_maintenance")
     else access
 }
 
@@ -97,19 +97,26 @@ fun validateExpenseContinuation(
             else expenseFailure("client.expense_scope_changed", FailureKind.AccessDenied)
     }
 
-fun validateExpenseCache(
+fun validateExpenseActionSnapshot(
     access: ExpenseAccess,
     snapshot: ExpenseSnapshot<*>?,
     now: Instant,
 ): AppResult<Unit> =
     when {
-        access.readUntil <= now -> expenseFailure(access.expiryCode, FailureKind.AccessDenied)
+        access.authorizationExpiresAt <= now ->
+            expenseFailure(access.authorizationExpiryCode, FailureKind.Unavailable)
         snapshot == null -> AppResult.Success(Unit)
         !sameExpenseScope(access, snapshot.access) ->
             expenseFailure("client.expense_scope_changed", FailureKind.AccessDenied)
         snapshot.fetchedAt > now ||
-            snapshot.expiresAt <= now ||
-            snapshot.expiresAt > snapshot.fetchedAt + EXPENSE_CACHE_PERIOD ->
-            expenseFailure("client.expense_cache_expired", FailureKind.AccessDenied)
+            snapshot.refreshAfter <= now ||
+            snapshot.refreshAfter > snapshot.fetchedAt + EXPENSE_FRESHNESS_PERIOD ->
+            expenseFailure("client.expense_cache_expired", FailureKind.Unavailable)
         else -> AppResult.Success(Unit)
     }
+
+/** Stored facts remain readable after freshness expires; commands validate current authority. */
+fun validateStoredExpense(access: ExpenseAccess, snapshot: ExpenseSnapshot<*>?): AppResult<Unit> =
+    if (snapshot != null && !sameExpenseScope(access, snapshot.access))
+        expenseFailure("client.expense_scope_changed", FailureKind.AccessDenied)
+    else AppResult.Success(Unit)

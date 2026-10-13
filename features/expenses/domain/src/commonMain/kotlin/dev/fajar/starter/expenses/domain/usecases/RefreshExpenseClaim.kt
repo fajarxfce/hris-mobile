@@ -120,14 +120,14 @@ class RefreshExpenseClaim(
         val valid = validateExpenseView(view)
         if (valid is AppResult.Failed) return valid
         val now = clock.now()
-        val lease = boundExpenseReadAccess(current, policy, now)
+        val lease = boundExpenseAuthorization(current, policy, now)
         val snapshot =
             ExpenseSnapshot(
                 lease,
                 Uuid.random().toString(),
                 view,
                 now,
-                minOf(now + EXPENSE_CACHE_PERIOD, lease.readUntil),
+                now + EXPENSE_FRESHNESS_PERIOD,
             )
         when (val result = cache.replaceDetails(access, generation, snapshot)) {
             is AppResult.Failed -> return result

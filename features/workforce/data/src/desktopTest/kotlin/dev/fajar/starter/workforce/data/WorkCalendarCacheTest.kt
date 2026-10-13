@@ -23,7 +23,7 @@ class WorkCalendarCacheTest {
             f.period,
             f.calendar.toCalendar(f.period),
             f.now,
-            f.access.readUntil,
+            f.access.authorizationExpiresAt,
         )
 
     @Test

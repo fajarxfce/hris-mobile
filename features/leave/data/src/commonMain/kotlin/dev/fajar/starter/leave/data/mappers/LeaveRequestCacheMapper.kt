@@ -34,7 +34,7 @@ fun LeaveRequestSnapshot.toDto() =
         access.permissions,
         access.sessionExpiresAt.toString(),
         fetchedAt.toString(),
-        expiresAt.toString(),
+        refreshAfter.toString(),
     )
 
 fun LeaveRequestSnapshotDto.toSnapshot(
@@ -51,11 +51,7 @@ fun LeaveRequestSnapshotDto.toSnapshot(
     require(validateLeaveRequestSelection(selection) is AppResult.Success)
     val fetched = Instant.parse(fetchedAt)
     val expiry = Instant.parse(expiresAt)
-    require(
-        expiry > fetched &&
-            expiry <= fetched + LEAVE_CACHE_PERIOD &&
-            expiry <= owner.sessionExpiresAt
-    )
+    require(expiry > fetched && expiry <= fetched + LEAVE_FRESHNESS_PERIOD)
     return LeaveRequestSnapshot(
         owner,
         generation,

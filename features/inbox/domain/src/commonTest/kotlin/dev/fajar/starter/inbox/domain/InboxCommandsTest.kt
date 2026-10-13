@@ -66,7 +66,7 @@ class InboxCommandsTest {
         fixture.inbox.snapshot.value =
             AppResult.Success(
                 page.copy(
-                    checkpoint = page.checkpoint!!.copy(expiresAt = fixture.inbox.clock.now())
+                    checkpoint = page.checkpoint!!.copy(refreshAfter = fixture.inbox.clock.now())
                 )
             )
         assertEquals(
@@ -152,7 +152,7 @@ class InboxCommandsTest {
         fixture.inbox.snapshot.value =
             AppResult.Success(
                 page.copy(
-                    checkpoint = page.checkpoint!!.copy(expiresAt = fixture.inbox.clock.now())
+                    checkpoint = page.checkpoint!!.copy(refreshAfter = fixture.inbox.clock.now())
                 )
             )
         fixture.replay()
@@ -361,7 +361,7 @@ class InboxCommandsTest {
     }
 
     @Test
-    fun observedCommandsDisappearOnScopeReplacementAndSessionExpiry() = runTest {
+    fun scopeReplacementHidesCommandsButCredentialExpiryRetainsTheirLocalStatus() = runTest {
         val start = kotlin.time.Instant.parse("2026-10-11T00:00:00Z")
         val fixture =
             InboxCommandFixture(
@@ -385,7 +385,7 @@ class InboxCommandsTest {
             fixture.inbox.session.binding.expiresAtEpochMillis - start.toEpochMilliseconds()
         advanceTimeBy(expiresIn)
         runCurrent()
-        assertEquals("session_revoked", assertIs<AppResult.Failed>(results.last()).failure.code)
+        assertNotNull(assertIs<AppResult.Success<InboxCommandRecord?>>(results.last()).value)
         observation.cancel()
     }
 }

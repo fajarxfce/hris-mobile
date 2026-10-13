@@ -16,7 +16,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
-/** Rechecks live company authority without renewing a cached admission after transport failure. */
+/** Rechecks live authority without deleting local reads on credential expiry or network failure. */
 class RefreshWorkspace(
     private val sessions: SessionRepository,
     private val accounts: AccountRepository,
@@ -57,10 +57,7 @@ class RefreshWorkspace(
                 workspaceFailure("client.session_changed", FailureKind.Unauthorized).failure,
             )
         if (session.binding.expiresAtEpochMillis <= startedAt.toEpochMilliseconds())
-            return invalidate(
-                previous,
-                workspaceFailure("session_revoked", FailureKind.Unauthorized).failure,
-            )
+            return workspaceFailure("client.authentication_required", FailureKind.Unavailable)
         val account =
             when (val result = accounts.load(session.id)) {
                 is AppResult.Failed -> return handleRejection(previous, result.failure)
@@ -76,7 +73,7 @@ class RefreshWorkspace(
             account.companies.singleOrNull { it.id == previous.company.id }
                 ?: return invalidate(previous, workspaceFailure("company_access_denied").failure)
         val eligible = workspaceAdmission(session, account.assurance, startedAt, clock.now())
-        if (eligible is AppResult.Failed) return invalidate(previous, eligible.failure)
+        if (eligible is AppResult.Failed) return handleRejection(previous, eligible.failure)
         val permissions =
             when (val result = workspaces.permissions(session.id, company.id)) {
                 is AppResult.Failed -> return handleRejection(previous, result.failure)
@@ -104,7 +101,7 @@ class RefreshWorkspace(
             when (
                 val result = workspaceAdmission(session, account.assurance, startedAt, clock.now())
             ) {
-                is AppResult.Failed -> return invalidate(previous, result.failure)
+                is AppResult.Failed -> return handleRejection(previous, result.failure)
                 is AppResult.Success -> result.value
             }
         val updated =

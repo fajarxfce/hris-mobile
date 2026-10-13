@@ -17,10 +17,9 @@ Detail acquisition reads the claim before and after its history, latest
 submission and payment progress. A changed claim or inconsistent revision
 returns a conflict without publishing a partial view or silently retrying.
 Amounts remain exact decimal domain values; approval does not imply payment.
-Expiry of a displayed list or claim requests one new read through the owning
-ViewModel. Pending recovery keeps private content hidden without displaying the
-cache-expired message. A failed acquisition reports its cause and requires an
-explicit retry; draft and command confirmation are never repeated automatically.
+Stale lists and claims remain readable during refresh or network failure. The
+owning ViewModel keeps confirmed access failures gated; ordinary age never clears
+the content. Draft and command confirmation are not repeated automatically.
 
 ## Draft preparation
 
@@ -49,10 +48,9 @@ chunk identity. Bounded chunks fit the database record limits and publish in
 one compare-and-set transaction. Missing or reordered chunks cannot restore a
 partial snapshot. Temporary keys and plaintext buffers are cleared on exit.
 
-Snapshots expire within one hour and no later than their admitted workspace,
-session or scheduled maintenance boundary. Changes to identity, permissions or
-company timezone invalidate an old view. Transport failure can retain admitted
-content. Known access and MFA failures remain gated through pending/failed
+Saved facts retain their freshness timestamp without an age-based read deadline.
+Changes to identity, permissions or company timezone invalidate an old view.
+Transport failure retains owned content; operation preparation is checked separately. Known access and MFA failures remain gated through pending/failed
 retries, including when cache cleanup fails; a fresh admitted acquisition must
 succeed before observation reopens. There is no automatic retry loop.
 

@@ -1,82 +1,72 @@
 # Company workspace
 
-The selected company is an encrypted, session-owned replica. A restored identity
-can reopen that workspace while offline, provided its admission has not expired.
-Each feature still checks the current session, workspace and permission before
-reading private content or sending a command. The backend independently authorizes
-every request.
+The selected company is an encrypted, session-owned record. An owned selection
+reopens offline without waiting for the server or expiring after one hour.
+Features check account, API audience, company, permissions and known company
+restrictions before exposing local data. The backend authorizes every request.
+See [local-first storage and synchronization](local-first.md) for coverage and limits.
 
-## Admission and renewal
+## Local ownership and live authorization
 
-`SelectWorkspace` reads the current account, company permissions and client policy. It creates
-a new workspace ID and an admission bound to the local session, account, server
-session family and API audience. Offline admission lasts at most one hour from
-the start of that check, and ends earlier when the server family or required MFA
-assurance expires. A future check timestamp is rejected.
+`SelectWorkspace` reads the account, company permissions and client policy. It
+creates a workspace ID bound to the local session, account, server family and API
+audience. Its admission contains a recent authorization deadline: at most one
+hour, shortened by family/MFA expiry. This bounds operation preparation, not the
+lifetime of the selection or saved read models.
 
-`ObserveWorkspace` checks ownership and expiry before exposing the selection.
-Application navigation uses `ObserveWorkspaceContext` to receive identity,
-workspace and [company availability](company-policy.md) together.
-It stops exposing an expired workspace without waiting for a database write.
-The application context keeps only that owned selection's identifier for renewal;
-expired company data and permissions are not exposed. Cold startup opens a
-connection recovery page instead of treating expiry as an absent selection and
-entering online account verification. Foreground entry or an explicit retry
-revalidates the saved company. Successful renewal returns to that company without
-requiring selection again. A failed request stays on recovery and does not poll.
-Changing company remains an explicit local action. A mismatched account, session
-family or API audience cannot retain this renewal identifier.
-Inbox observation applies the earlier of its content expiry and workspace expiry.
-Leaving a workspace removes the selection; ending the session clears derived
-replicas through the account-storage boundary.
+`ObserveWorkspace` validates local ownership. `ObserveWorkspaceContext` supplies
+identity, company and [known availability](company-policy.md) together. Neither
+removes an owned selection because authorization is old. Cold startup restores
+Home from local storage while foreground revalidation runs independently. A
+missing selection still opens company selection; an account/family/audience
+mismatch cannot restore another selection.
 
-`RefreshWorkspace` rechecks the live account, permissions and client policy. Foreground entry
-and the application worker can request it. A mutex serializes checks, and a
-thirty-second deadline bounds each run. Transport failure never extends admission.
-Authoritative session, company or MFA denial conditionally removes the old selection.
-The foreground gate hides protected routes if that invalidation cannot be stored;
-a later offline failure cannot reopen them.
+`RefreshWorkspace` rechecks the account, permissions and client policy. Foreground
+entry and the worker can request it. A mutex serializes runs and a thirty-second
+budget bounds each run. Transport failure retains the selection without updating
+its checked timestamp. Expired local credentials pause synchronization with
+`client.authentication_required`; they do not erase locally owned data.
 
-A renewal that leaves the company and permissions unchanged preserves the
-workspace ID and route owners. Permission or company changes create a new ID.
-The MVI owner triggers checks on foreground/scope changes and policy freshness expiry,
-not every lease update,
-and cancels its pending request on background entry. Late results cannot overwrite
-a newer selection or another account.
+Confirmed session, company or MFA denial conditionally removes the selection. If
+that invalidation cannot be stored, the foreground failure gate hides protected
+routes through subsequent failed retries. A successful admitted renewal clears
+that gate. Logout removes the local identity and derived read replicas.
+
+A renewal with unchanged company and permissions preserves the workspace ID and
+route owners. Permission/company changes create a new ID. Application MVI checks
+on foreground entry, scope changes and a transition to stale policy, not every
+metadata update. Background entry cancels its request. Late results cannot
+replace another account or a newer selection; failed renewal does not poll.
 
 ## Persistence
 
-`EncryptedWorkspaceRepository` coordinates the raw `ReplicaStore`, HTTP datasource,
-content cipher and atomic credential store. It performs mapping and technical
-failure handling; admission and lifecycle decisions remain in use cases.
+`EncryptedWorkspaceRepository` coordinates raw storage, HTTP, encryption and key
+contracts. Mapping and technical failure handling belong in data; selection,
+authorization and lifecycle policy remain in use cases and application MVI.
 
-AES-GCM encrypts the complete company/permission/admission/policy record. Associated data
-includes the audience, local session and storage generation. Android Keystore,
-Apple Keychain, or the configured desktop credential manager protects a separate
-content key. Missing or mismatched keys fail closed. The browser keeps its bearer
-session and keys in memory, so page-close restoration is unavailable there.
+AES-GCM protects the complete company/permission/admission/policy record.
+Associated data includes API audience, local session and storage generation.
+Android Keystore, Apple Keychain or the configured desktop credential manager
+protects the separate content key. Missing/mismatched keys fail closed. Browser
+session keys are memory-only, so page-close restoration is unavailable there.
 
-The database replaces or removes the entire snapshot with a compare-and-set on
-the observed checkpoint inside the account-owned transaction. Observers see one
-complete record. A competing renewal, company selection or account switch cannot
-be overwritten by a stale writer. The snapshot primitive and its SQLite/IndexedDB
-tests also exist in Compose Fluent Starter; HRIS admission policy stays here.
+Replacement/removal compares the observed generation within the account-owned
+database transaction. Observers see complete records; stale writers cannot
+replace a competing renewal or selection. The storage primitive also exists in
+Compose Fluent Starter; HRIS authorization policy belongs here.
 
 ## Validation boundaries
 
-Domain tests cover MFA/session deadlines, expiry without storage events, unchanged
-scope renewal, late success/denial, cancellation and timeout. SQLite/AES-GCM tests
-cover reopening, logout, concurrent writers, missing keys and copied ciphertext.
-Application tests cover foreground cancellation, renewal-loop prevention and
-failed-invalidation recovery. See [validation](validation.md) for device results.
+Domain cases cover three-day local reads, expired credentials, account/family/API
+mismatch, known maintenance, live denial, pending cancellation and late results.
+SQLite/encryption tests cover reopening, concurrent writers, missing keys and
+copied ciphertext. Application tests cover offline startup, finite foreground
+renewal and failed-invalidation recovery. See [validation](validation.md) for
+completed runs and device observations.
 
-Offline admission is a bounded client policy, not immediate offline revocation or
-tamper-resistant device attestation. Server-side changes become known on the next
-successful check; lease timing uses the device clock.
-
-The current application is not fully offline. Only previously acquired snapshots
-can be restored, and the one-hour company admission also bounds feature reads.
-First sign-in, new company selection and renewal after admission expiry require
-the server. Coworker directory and personal-profile acquisition still use live
-reads. A recovery screen makes that boundary visible; it does not extend a lease
-or make stale private data readable.
+First sign-in and selection of a new company need the server. Previously unfetched
+data is unavailable offline. Personal profile and coworker directory currently
+use live reads; existing feature snapshots cover the last acquired view, not all
+history. New sign-in still changes the local session and clears derived read
+replicas. Stable account-owned replicas across reauthentication remain planned.
+An offline device cannot discover a new revocation before reconnecting.

@@ -12,7 +12,6 @@ import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
 import kotlin.time.Clock
 import kotlin.uuid.Uuid
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 
 class ObserveLeaveSubmission(
@@ -71,25 +70,7 @@ class ObserveLeaveSubmission(
             .flatMapLatest { admitted ->
                 when (admitted) {
                     is AppResult.Failed -> flowOf(admitted)
-                    is AppResult.Success ->
-                        commands.observe(admitted.value, employeeId).flatMapLatest { result ->
-                            flow<AppResult<LeaveSubmissionRecord?>> {
-                                val access = admitted.value
-                                val deadline = minOf(access.readUntil, access.sessionExpiresAt)
-                                val remaining = deadline - clock.now()
-                                if (remaining.isPositive()) {
-                                    emit(result)
-                                    delay(remaining)
-                                }
-                                emit(
-                                    leaveFailure(
-                                        if (access.sessionExpiresAt <= deadline) "session_revoked"
-                                        else access.expiryCode,
-                                        FailureKind.AccessDenied,
-                                    )
-                                )
-                            }
-                        }
+                    is AppResult.Success -> commands.observe(admitted.value, employeeId)
                 }
             }
     }

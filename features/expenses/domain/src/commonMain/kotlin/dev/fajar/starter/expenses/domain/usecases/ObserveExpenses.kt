@@ -9,7 +9,6 @@ import dev.fajar.starter.identity.domain.repositories.SessionRepository
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
 import kotlin.time.Clock
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 
 class ObserveExpenses(
@@ -52,34 +51,17 @@ class ObserveExpenses(
                 when (admitted) {
                     is AppResult.Failed -> flowOf(admitted)
                     is AppResult.Success ->
-                        cache.observe(admitted.value).flatMapLatest { result ->
-                            flow<AppResult<ExpenseSnapshot<ExpenseOverview>?>> {
-                                if (result is AppResult.Failed) {
-                                    emit(result)
-                                    return@flow
-                                }
-                                val snapshot = (result as AppResult.Success).value
-                                val validity =
-                                    validateExpenseCache(admitted.value, snapshot, clock.now())
-                                if (validity is AppResult.Failed) {
-                                    emit(validity)
-                                    return@flow
-                                }
-                                emit(result)
-                                val deadline =
-                                    minOf(
-                                        admitted.value.readUntil,
-                                        snapshot?.expiresAt ?: admitted.value.readUntil,
-                                    )
-                                delay((deadline - clock.now()).inWholeMilliseconds.coerceAtLeast(0))
-                                emit(
-                                    expenseFailure(
-                                        if (admitted.value.readUntil <= deadline)
-                                            admitted.value.expiryCode
-                                        else "client.expense_cache_expired",
-                                        FailureKind.AccessDenied,
-                                    )
-                                )
+                        cache.observe(admitted.value).map { result ->
+                            when (result) {
+                                is AppResult.Failed -> result
+                                is AppResult.Success ->
+                                    when (
+                                        val ownership =
+                                            validateStoredExpense(admitted.value, result.value)
+                                    ) {
+                                        is AppResult.Failed -> ownership
+                                        is AppResult.Success -> result
+                                    }
                             }
                         }
                 }

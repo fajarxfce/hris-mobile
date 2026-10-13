@@ -7,7 +7,7 @@ data class PayslipSnapshot<T>(
     val generation: String,
     val value: T,
     val fetchedAt: Instant,
-    val expiresAt: Instant,
+    val refreshAfter: Instant,
 ) {
     override fun toString() = "PayslipSnapshot([redacted])"
 }

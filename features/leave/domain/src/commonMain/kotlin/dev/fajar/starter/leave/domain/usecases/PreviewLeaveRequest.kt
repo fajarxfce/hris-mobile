@@ -79,10 +79,10 @@ class PreviewLeaveRequest(
             val expiresAt =
                 minOf(
                     now + LEAVE_PREPARATION_PERIOD,
-                    current.readUntil,
+                    current.authorizationExpiresAt,
                     current.sessionExpiresAt,
                     policyDeadline,
-                    maintenance ?: current.readUntil,
+                    maintenance ?: current.authorizationExpiresAt,
                 )
             AppResult.Success(LeavePreparation(current, selection, preview, now, expiresAt))
         } ?: leaveFailure("client.leave_timeout", FailureKind.Timeout)

@@ -82,7 +82,7 @@ fun validateOvertimeAction(
 ): AppResult<OvertimeCommandPayload> {
     val allowed = admitSelfOvertimeCommands(access)
     if (allowed is AppResult.Failed) return allowed
-    val lease = validateOvertimeCache(access, snapshot, now)
+    val lease = validateOvertimeActionSnapshot(access, snapshot, now)
     if (lease is AppResult.Failed) return lease
     val explanation = validateOvertimeReason(reason)
     if (explanation is AppResult.Failed) return explanation

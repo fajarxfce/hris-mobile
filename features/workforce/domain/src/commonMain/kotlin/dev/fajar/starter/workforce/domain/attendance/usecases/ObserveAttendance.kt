@@ -11,7 +11,6 @@ import dev.fajar.starter.workforce.domain.policies.*
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
 import kotlin.time.Clock
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 
 class ObserveAttendance(
@@ -59,60 +58,30 @@ class ObserveAttendance(
                     is AppResult.Failed -> flowOf(admitted)
                     is AppResult.Success ->
                         combine(
-                                cache.observe(admitted.value, window),
-                                commands.observe(admitted.value),
-                            ) { snapshot, records ->
-                                snapshot to records
-                            }
-                            .flatMapLatest { (result, records) ->
-                                flow<AppResult<AttendanceView>> {
-                                    if (result is AppResult.Failed) {
-                                        emit(result)
-                                        return@flow
-                                    }
+                            cache.observe(admitted.value, window),
+                            commands.observe(admitted.value),
+                        ) { result, records ->
+                            when {
+                                result is AppResult.Failed -> result
+                                records is AppResult.Failed -> records
+                                else -> {
                                     val snapshot = (result as AppResult.Success).value
-                                    val validation =
-                                        validateAttendanceCache(
-                                            admitted.value,
-                                            snapshot,
-                                            clock.now(),
-                                        )
-                                    if (validation is AppResult.Failed) {
-                                        emit(validation)
-                                        return@flow
-                                    }
-                                    if (records is AppResult.Failed) {
-                                        emit(records)
-                                        return@flow
-                                    }
-                                    emit(
-                                        AppResult.Success(
-                                            AttendanceView(
-                                                snapshot,
-                                                (records as AppResult.Success).value,
+                                    when (
+                                        val ownership =
+                                            validateStoredAttendance(admitted.value, snapshot)
+                                    ) {
+                                        is AppResult.Failed -> ownership
+                                        is AppResult.Success ->
+                                            AppResult.Success(
+                                                AttendanceView(
+                                                    snapshot,
+                                                    (records as AppResult.Success).value,
+                                                )
                                             )
-                                        )
-                                    )
-                                    val deadline =
-                                        minOf(
-                                            admitted.value.readUntil,
-                                            snapshot?.expiresAt ?: admitted.value.readUntil,
-                                        )
-                                    delay(
-                                        (deadline - clock.now())
-                                            .inWholeMilliseconds
-                                            .coerceAtLeast(0)
-                                    )
-                                    emit(
-                                        calendarFailure(
-                                            if (admitted.value.readUntil <= deadline)
-                                                admitted.value.expiryCode
-                                            else "client.attendance_cache_expired",
-                                            FailureKind.AccessDenied,
-                                        )
-                                    )
+                                    }
                                 }
                             }
+                        }
                 }
             }
 }

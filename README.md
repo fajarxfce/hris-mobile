@@ -15,9 +15,10 @@ and verification, recovery codes, token rotation, active-session management, com
 company access. Employees can open their own personal profile, employment terms,
 and organization assignments. The employee inbox synchronizes encrypted company
 correspondence, retains admitted content when a refresh fails, and queues explicit
-read/acknowledgement actions with durable idempotent retries. A time-limited encrypted
-workspace restores the selected company offline for up to one hour. After access
-expires, connection recovery renews the saved selection through the server.
+read/acknowledgement actions with durable idempotent retries. The encrypted workspace
+and previously acquired views reopen offline without waiting for access renewal.
+Stale data remains readable; live credentials and command preparation are checked
+separately. See the [local-first model and remaining work](docs/local-first.md).
 Company policies gate maintenance,
 minimum builds and disabled modules, and pause inbox delivery before transport.
 The weekly work calendar shows assigned shifts, roster overrides and days off,
@@ -50,7 +51,7 @@ submission stays retained before a different action can be prepared.
 Leave shows annual balances and request history with status filters, account-owned
 employment selection and a bounded encrypted offline view. Each request opens its
 submitted dates, duration, reason, current status and paged activity history;
-the last request remains available within its offline read lease. Withdrawal,
+the last request remains available offline without an age limit. Withdrawal,
 cancellation and withdrawal of a pending cancellation retain encrypted commands
 and recover the original request after interrupted delivery. Employees can select
 leave dates and portions, review the server calculation, and submit with durable

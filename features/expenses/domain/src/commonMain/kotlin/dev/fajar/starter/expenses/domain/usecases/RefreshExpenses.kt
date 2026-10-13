@@ -117,14 +117,14 @@ class RefreshExpenses(
         )
             return expenseFailure("client.invalid_response", FailureKind.Unexpected)
         val now = clock.now()
-        val lease = boundExpenseReadAccess(current, policy, now)
+        val lease = boundExpenseAuthorization(current, policy, now)
         val snapshot =
             ExpenseSnapshot(
                 lease,
                 Uuid.random().toString(),
                 ExpenseOverview(directory, selected, page),
                 now,
-                minOf(now + EXPENSE_CACHE_PERIOD, lease.readUntil),
+                now + EXPENSE_FRESHNESS_PERIOD,
             )
         when (val result = cache.replace(access, generation, snapshot)) {
             is AppResult.Failed -> return result

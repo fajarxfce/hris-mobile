@@ -40,7 +40,7 @@ class OvertimeReadsTest {
             assertIs<AppResult.Success<OvertimeSnapshot<OvertimeOverview>?>>(f.records.value)
                 .value!!
         assertEquals(f.base.employee.id, snapshot.value.selection.employeeId)
-        assertEquals(f.base.clock.now() + 1.hours, snapshot.expiresAt)
+        assertEquals(f.base.clock.now() + 1.hours, snapshot.refreshAfter)
     }
 
     @Test
@@ -182,7 +182,7 @@ class OvertimeReadsTest {
     }
 
     @Test
-    fun futureMaintenanceShortensTheOfflineLease() = runTest {
+    fun futureMaintenanceBoundsActionsIndependentlyOfReadFreshness() = runTest {
         val f = OvertimeFixture()
         f.base.policyCall = {
             AppResult.Success(
@@ -197,12 +197,13 @@ class OvertimeReadsTest {
         }
         assertIs<AppResult.Success<*>>(f.load())
         val saved = (f.records.value as AppResult.Success).value!!
-        assertEquals(f.base.clock.now() + 15.minutes, saved.expiresAt)
-        assertEquals("company_maintenance", saved.access.expiryCode)
+        assertEquals(f.base.clock.now() + 1.hours, saved.refreshAfter)
+        assertEquals(f.base.clock.now() + 15.minutes, saved.access.authorizationExpiresAt)
+        assertEquals("company_maintenance", saved.access.authorizationExpiryCode)
     }
 
     @Test
-    fun observationOwnsOneExpiryTimerAndStopsWithItsCollector() = runTest {
+    fun localObservationSurvivesStaleFreshnessAndStopsWithItsCollector() = runTest {
         val start = Instant.parse("2026-10-12T01:00:00Z")
         for (detail in listOf(false, true)) {
             val f = OvertimeFixture { start + testScheduler.currentTime.milliseconds }
@@ -214,9 +215,9 @@ class OvertimeReadsTest {
             }
             runCurrent()
             assertEquals(1, f.observers)
-            advanceTimeBy(3_600_000)
+            advanceTimeBy(3 * 24 * 60 * 60_000L)
             runCurrent()
-            assertIs<AppResult.Failed>(results.last())
+            assertIs<AppResult.Success<*>>(results.last())
             watch.cancelAndJoin()
             assertEquals(0, f.observers)
         }

@@ -221,6 +221,6 @@ class OvertimePreparationTest {
         }
         val prepared = assertIs<AppResult.Success<OvertimePreparation>>(f.load()).value
         assertEquals(now + 15.seconds, prepared.expiresAt)
-        assertEquals(prepared.expiresAt, prepared.access.readUntil)
+        assertEquals(prepared.expiresAt, prepared.access.authorizationExpiresAt)
     }
 }

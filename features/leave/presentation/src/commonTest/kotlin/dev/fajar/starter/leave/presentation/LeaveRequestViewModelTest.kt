@@ -121,7 +121,7 @@ class LeaveRequestViewModelTest {
     }
 
     @Test
-    fun cacheExpiryDuringRefreshHidesContentUntilTheAdmittedPublication() = runTest {
+    fun scopeDenialDuringRefreshHidesContentUntilTheAdmittedPublication() = runTest {
         withRequest { fixture, model, _ ->
             model.onEvent(LeaveRequestEvent.Entered)
             runCurrent()
@@ -134,7 +134,7 @@ class LeaveRequestViewModelTest {
             runCurrent()
             val saved = fixture.records.value
             fixture.records.value =
-                leaveFailure("client.leave_cache_expired", FailureKind.AccessDenied)
+                leaveFailure("client.leave_scope_changed", FailureKind.AccessDenied)
             runCurrent()
             fixture.records.value = saved
             runCurrent()
@@ -284,7 +284,7 @@ class LeaveRequestViewModelTest {
     }
 
     @Test
-    fun expiredVisibleReadRenewsWithoutAnErrorWhilePending() = runTest {
+    fun staleContentRemainsVisibleWhileAnExplicitRefreshIsPending() = runTest {
         withRequest { fixture, model, _ ->
             model.onEvent(LeaveRequestEvent.Entered)
             runCurrent()
@@ -296,13 +296,17 @@ class LeaveRequestViewModelTest {
                 AppResult.Success(fixture.details)
             }
             fixture.records.value =
-                AppResult.Success(saved.copy(expiresAt = fixture.base.clock.now() + 1.seconds))
+                AppResult.Success(saved.copy(refreshAfter = fixture.base.clock.now() + 1.seconds))
             runCurrent()
             advanceTimeBy(1_001)
             runCurrent()
+            assertFalse(model.state.value.refreshing)
+            assertNotNull(model.state.value.content)
+            model.onEvent(LeaveRequestEvent.RefreshRequested)
+            runCurrent()
             assertTrue(model.state.value.refreshing)
-            assertTrue(model.state.value.readRestricted)
-            assertNull(model.state.value.content)
+            assertFalse(model.state.value.readRestricted)
+            assertNotNull(model.state.value.content)
             assertNull(model.state.value.failure)
             assertEquals(writes, fixture.writes)
             release.complete(Unit)
@@ -315,7 +319,7 @@ class LeaveRequestViewModelTest {
     }
 
     @Test
-    fun failedAutomaticRenewalRetainsTheReadGateAndStopsRetrying() = runTest {
+    fun failedExplicitRefreshKeepsStaleContentAndDoesNotRetryAutomatically() = runTest {
         withRequest { fixture, model, _ ->
             model.onEvent(LeaveRequestEvent.Entered)
             runCurrent()
@@ -326,14 +330,18 @@ class LeaveRequestViewModelTest {
                 leaveFailure("client.network", FailureKind.Network)
             }
             fixture.records.value =
-                AppResult.Success(saved.copy(expiresAt = fixture.base.clock.now() + 1.seconds))
+                AppResult.Success(saved.copy(refreshAfter = fixture.base.clock.now() + 1.seconds))
             runCurrent()
             advanceTimeBy(1_001)
             runCurrent()
+            assertEquals(0, attempts)
+            assertNotNull(model.state.value.content)
+            model.onEvent(LeaveRequestEvent.RefreshRequested)
+            runCurrent()
             assertEquals(1, attempts)
             assertEquals("client.network", model.state.value.failure?.code)
-            assertNull(model.state.value.content)
-            assertTrue(model.state.value.readRestricted)
+            assertNotNull(model.state.value.content)
+            assertFalse(model.state.value.readRestricted)
             advanceTimeBy(10_000)
             runCurrent()
             assertEquals(1, attempts)

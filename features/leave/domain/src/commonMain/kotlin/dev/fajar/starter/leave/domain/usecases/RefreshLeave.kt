@@ -138,8 +138,15 @@ class RefreshLeave(
                 policy.requestedAt + (it.startsAt - policy.policy.serverTime)
             }
         val readAccess =
-            if (maintenance != null && maintenance > now && maintenance < current.readUntil)
-                current.copy(readUntil = maintenance, expiryCode = "company_maintenance")
+            if (
+                maintenance != null &&
+                    maintenance > now &&
+                    maintenance < current.authorizationExpiresAt
+            )
+                current.copy(
+                    authorizationExpiresAt = maintenance,
+                    authorizationExpiryCode = "company_maintenance",
+                )
             else current
         val snapshot =
             LeaveOverview(
@@ -150,7 +157,7 @@ class RefreshLeave(
                 balances,
                 requests,
                 now,
-                minOf(now + LEAVE_CACHE_PERIOD, readAccess.readUntil),
+                now + LEAVE_FRESHNESS_PERIOD,
             )
         return publish(workspaceId, previousGeneration, snapshot)
     }

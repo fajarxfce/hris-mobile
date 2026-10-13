@@ -24,19 +24,21 @@ class LoadUnreadInboxTest {
     }
 
     @Test
-    fun missingOrExpiredAdmissionDoesNotReadTheServer() = runTest {
-        var now = Instant.parse("2026-10-11T00:00:00Z")
-        val f = InboxFixture(now = { now })
-        assertIs<AppResult.Failed>(f.unread("another-workspace"))
-        f.workspaceState.value = AppResult.Success(f.workspace.copy(permissions = emptySet()))
-        assertIs<AppResult.Failed>(f.unread(f.workspace.id))
-        f.workspaceState.value = AppResult.Success(f.workspace)
-        now += 2.hours
-        assertIs<AppResult.Failed>(f.unread(f.workspace.id))
-        f.sessionState.value = AppResult.Success(null)
-        assertIs<AppResult.Failed>(f.unread(f.workspace.id))
-        assertEquals(0, f.unreadCalls)
-    }
+    fun missingOwnershipOrPermissionPreventsTransportWhileStaleAdmissionCanBeRevalidated() =
+        runTest {
+            var now = Instant.parse("2026-10-11T00:00:00Z")
+            val f = InboxFixture(now = { now })
+            assertIs<AppResult.Failed>(f.unread("another-workspace"))
+            f.workspaceState.value = AppResult.Success(f.workspace.copy(permissions = emptySet()))
+            assertIs<AppResult.Failed>(f.unread(f.workspace.id))
+            f.workspaceState.value = AppResult.Success(f.workspace)
+            assertEquals(0, f.unreadCalls)
+            now += 2.hours
+            assertEquals(AppResult.Success(36L), f.unread(f.workspace.id))
+            f.sessionState.value = AppResult.Success(null)
+            assertIs<AppResult.Failed>(f.unread(f.workspace.id))
+            assertEquals(1, f.unreadCalls)
+        }
 
     @Test
     fun replacedScopeRejectsLateCountsAndLateNetworkFailures() = runTest {

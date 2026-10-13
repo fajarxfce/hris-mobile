@@ -46,7 +46,7 @@ class PrepareLeaveAction(
                 is AppResult.Success -> result.value
             }
         currentCoroutineContext().ensureActive()
-        val lease = validateLeaveRequestCache(access, snapshot, clock.now())
+        val lease = validateLeaveActionSnapshot(access, snapshot, clock.now())
         if (lease is AppResult.Failed) return lease
         val request = snapshot?.request
         if (request == null || request.id != requestId || request.version != version)
@@ -61,7 +61,7 @@ class PrepareLeaveAction(
         currentCoroutineContext().ensureActive()
         val continuation = validateLeaveContinuation(access, currentAccess(workspaceId))
         if (continuation is AppResult.Failed) return continuation
-        val currentLease = validateLeaveRequestCache(access, snapshot, clock.now())
+        val currentLease = validateLeaveActionSnapshot(access, snapshot, clock.now())
         if (currentLease is AppResult.Failed) return currentLease
         val normalized = reason.trim()
         if (existing != null) return retained(existing, version, action, normalized)

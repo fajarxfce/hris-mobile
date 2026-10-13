@@ -15,11 +15,11 @@ fun initialInboxCheckpoint(access: InboxAccess, generation: String, now: Instant
         null,
         false,
         null,
-        minOf(access.sessionExpiresAt, access.workspaceExpiresAt, now + 15.minutes),
+        now + 15.minutes,
         null,
     )
 
-/** Partial progress never renews offline access or publishes an incomplete replacement. */
+/** Freshness advances only after catch-up; it never expires access to a published replica. */
 internal fun advanceInboxCheckpoint(
     previous: InboxCheckpoint,
     page: InboxSyncPage,
@@ -32,14 +32,7 @@ internal fun advanceInboxCheckpoint(
         cursor = page.cursor,
         published = previous.published || caughtUp,
         refreshedAt = if (caughtUp) now else previous.refreshedAt,
-        expiresAt =
-            if (caughtUp)
-                minOf(
-                    previous.access.sessionExpiresAt,
-                    previous.access.workspaceExpiresAt,
-                    now + 1.hours,
-                )
-            else previous.expiresAt,
+        refreshAfter = if (caughtUp) now + 1.hours else previous.refreshAfter,
         pollAt = if (page.hasMore) null else now + page.pollAfterSeconds.seconds,
     )
 }

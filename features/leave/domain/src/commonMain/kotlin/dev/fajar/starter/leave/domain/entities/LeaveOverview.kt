@@ -11,5 +11,5 @@ data class LeaveOverview(
     val balances: LeavePage<LeaveBalance>,
     val requests: LeavePage<LeaveRequestSummary>,
     val fetchedAt: Instant,
-    val expiresAt: Instant,
+    val refreshAfter: Instant,
 )

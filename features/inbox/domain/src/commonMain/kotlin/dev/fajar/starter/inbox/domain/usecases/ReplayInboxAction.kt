@@ -144,7 +144,8 @@ class ReplayInboxAction(
         }
         if (
             page.checkpoint?.published != true ||
-                validateInboxCache(access, page.checkpoint, clock.now()) is AppResult.Failed
+                validateInboxActionSnapshot(access, page.checkpoint, clock.now()) is
+                    AppResult.Failed
         )
             return AppResult.Success(false)
         val item = page.items.singleOrNull()
@@ -270,7 +271,7 @@ class ReplayInboxAction(
                 is AppResult.Failed -> return result
                 is AppResult.Success -> result.value
             }
-        return admitInbox(workspaceId, workspace, session, clock.now())
+        return admitInbox(workspaceId, workspace, session)
     }
 
     companion object {

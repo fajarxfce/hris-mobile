@@ -16,7 +16,7 @@ import kotlinx.coroutines.test.*
 @OptIn(ExperimentalCoroutinesApi::class)
 class DocumentLocalFilesTest {
     @Test
-    fun observationLosesAccessWithoutStorageActivityAndCancelsItsReader() = runTest {
+    fun localFilesStayObservedAfterStaleAuthorizationUntilDisposal() = runTest {
         val f = LocalFilesFixture()
         f.base.workspaces.value =
             AppResult.Success(
@@ -37,15 +37,20 @@ class DocumentLocalFilesTest {
         f.base.now += 2.seconds
         advanceTimeBy(2_001)
         runCurrent()
-        assertEquals(
-            "client.workspace_expired",
-            assertIs<AppResult.Failed>(seen.last()).failure.code,
-        )
-        assertEquals(0, f.readers)
+        assertIs<AppResult.Success<DocumentLocalFiles>>(seen.last())
+        assertEquals(1, f.readers)
         f.rows.value = AppResult.Success(listOf(f.file.copy(revision = 99)))
         runCurrent()
-        assertIs<AppResult.Failed>(seen.last())
+        assertEquals(
+            99,
+            assertIs<AppResult.Success<DocumentLocalFiles>>(seen.last())
+                .value
+                .files
+                .single()
+                .revision,
+        )
         job.cancelAndJoin()
+        assertEquals(0, f.readers)
         assertEquals(0, f.base.policyReads)
     }
 

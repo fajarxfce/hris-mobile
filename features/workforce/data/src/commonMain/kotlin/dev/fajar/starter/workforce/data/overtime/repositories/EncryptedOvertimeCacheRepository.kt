@@ -77,9 +77,7 @@ class EncryptedOvertimeCacheRepository(
         if (snapshot == null)
             return@safeStorageCall replicas.replace(access.sessionId, partition, previous, null)
         require(
-            sameWorkforceScope(access, snapshot.access) &&
-                snapshot.generation != expectedGeneration &&
-                snapshot.expiresAt <= snapshot.access.readUntil
+            sameWorkforceScope(access, snapshot.access) && snapshot.generation != expectedGeneration
         )
         val dto = snapshot.toDto { it.toDto() }
         dto.toSnapshot(access, snapshot.generation) { value, owner -> value.toOverview(owner) }
@@ -153,9 +151,7 @@ class EncryptedOvertimeCacheRepository(
         if (snapshot == null)
             return@safeStorageCall replicas.replace(access.sessionId, partition, previous, null)
         require(
-            sameWorkforceScope(access, snapshot.access) &&
-                snapshot.generation != expectedGeneration &&
-                snapshot.expiresAt <= snapshot.access.readUntil
+            sameWorkforceScope(access, snapshot.access) && snapshot.generation != expectedGeneration
         )
         val dto = snapshot.toDto { it.toDto() }
         dto.toSnapshot(access, snapshot.generation) { value, owner -> value.toView() }

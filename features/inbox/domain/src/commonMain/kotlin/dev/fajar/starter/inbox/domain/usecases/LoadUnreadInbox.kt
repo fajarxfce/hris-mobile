@@ -6,7 +6,6 @@ import dev.fajar.starter.inbox.domain.entities.InboxAccess
 import dev.fajar.starter.inbox.domain.policies.*
 import dev.fajar.starter.inbox.domain.repositories.InboxRepository
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
-import kotlin.time.Clock
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 
@@ -14,7 +13,6 @@ class LoadUnreadInbox(
     private val remote: InboxRepository,
     private val sessions: SessionRepository,
     private val workspaces: WorkspaceRepository,
-    private val clock: Clock = Clock.System,
 ) {
     suspend operator fun invoke(workspaceId: String): AppResult<Long> {
         val access =
@@ -47,6 +45,6 @@ class LoadUnreadInbox(
                 is AppResult.Failed -> return result
                 is AppResult.Success -> result.value
             }
-        return admitInbox(workspaceId, workspace, session, clock.now())
+        return admitInbox(workspaceId, workspace, session)
     }
 }

@@ -57,7 +57,7 @@ fun validateExpenseAction(
 ): AppResult<ExpenseCommandPayload> {
     val allowed = admitExpenseEditing(access)
     if (allowed is AppResult.Failed) return allowed
-    val lease = validateExpenseCache(access, snapshot, now)
+    val lease = validateExpenseActionSnapshot(access, snapshot, now)
     if (lease is AppResult.Failed) return lease
     if (snapshot.value.claim.version != expectedVersion)
         return expenseFailure("client.expense_changed", FailureKind.Conflict)

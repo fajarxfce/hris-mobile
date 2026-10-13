@@ -45,30 +45,4 @@ class ObserveDocumentAccess(
                 }
             }
             .distinctUntilChanged()
-            .flatMapLatest { admitted ->
-                when (admitted) {
-                    is AppResult.Failed -> flowOf(admitted)
-                    is AppResult.Success ->
-                        flow<AppResult<DocumentAccess>> {
-                            val access = admitted.value
-                            val deadline = minOf(access.readUntil, access.sessionExpiresAt)
-                            val expiry =
-                                documentFailure(
-                                    if (access.sessionExpiresAt <= access.readUntil)
-                                        "session_revoked"
-                                    else access.expiryCode,
-                                    FailureKind.AccessDenied,
-                                )
-                            val remaining = deadline - clock.now()
-                            if (remaining.isPositive()) {
-                                withTimeoutOrNull(remaining) {
-                                    emit(AppResult.Success(access))
-                                    awaitCancellation()
-                                }
-                            }
-                            emit(expiry)
-                        }
-                }
-            }
-            .distinctUntilChanged()
 }

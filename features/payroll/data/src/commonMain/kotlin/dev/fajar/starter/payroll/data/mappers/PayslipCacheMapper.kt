@@ -2,7 +2,7 @@ package dev.fajar.starter.payroll.data.mappers
 
 import dev.fajar.starter.payroll.data.dto.*
 import dev.fajar.starter.payroll.domain.entities.*
-import dev.fajar.starter.payroll.domain.policies.PAYSLIP_CACHE_PERIOD
+import dev.fajar.starter.payroll.domain.policies.PAYSLIP_FRESHNESS_PERIOD
 import kotlin.time.Instant
 import kotlinx.datetime.TimeZone
 
@@ -98,7 +98,7 @@ fun <T, D> PayslipSnapshot<T>.toDto(mapValue: (T) -> D) =
         access.sessionExpiresAt.toString(),
         access.timezone,
         fetchedAt.toString(),
-        expiresAt.toString(),
+        refreshAfter.toString(),
         mapValue(value),
     )
 
@@ -118,10 +118,6 @@ fun <T, D> PayslipSnapshotDto<D>.toSnapshot(
         )
     val fetched = Instant.parse(fetchedAt)
     val expiry = Instant.parse(expiresAt)
-    require(
-        expiry > fetched &&
-            expiry <= fetched + PAYSLIP_CACHE_PERIOD &&
-            expiry <= owner.sessionExpiresAt
-    )
+    require(expiry > fetched && expiry <= fetched + PAYSLIP_FRESHNESS_PERIOD)
     return PayslipSnapshot(owner, generation, mapValue(value), fetched, expiry)
 }

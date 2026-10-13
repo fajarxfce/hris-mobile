@@ -358,23 +358,26 @@ class LeaveSubmissionTest {
     }
 
     @Test
-    fun observationExpiresAndDisposesItsAccountOwnedSubscription() = runTest {
-        val origin = Instant.parse("2026-10-12T01:00:00Z")
-        val f = LeaveSubmissionFixture { origin + testScheduler.currentTime.milliseconds }
-        f.queue()
-        val states = mutableListOf<AppResult<LeaveSubmissionRecord?>>()
-        val job =
-            backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
-                f.observe(f.base.workspace.id, f.prepared.selection.employeeId).toList(states)
-            }
-        assertEquals(1, f.observers)
-        assertIs<AppResult.Success<LeaveSubmissionRecord?>>(states.last())
-        advanceTimeBy(1.hours)
-        runCurrent()
-        assertIs<AppResult.Failed>(states.last())
-        f.base.sessionState.value = AppResult.Success(null)
-        runCurrent()
-        assertEquals(0, f.observers)
-        job.cancelAndJoin()
-    }
+    fun pendingSubmissionSurvivesCredentialExpiryAndDisposesItsAccountOwnedSubscription() =
+        runTest {
+            val origin = Instant.parse("2026-10-12T01:00:00Z")
+            val f = LeaveSubmissionFixture { origin + testScheduler.currentTime.milliseconds }
+            f.queue()
+            val states = mutableListOf<AppResult<LeaveSubmissionRecord?>>()
+            val job =
+                backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
+                    f.observe(f.base.workspace.id, f.prepared.selection.employeeId).toList(states)
+                }
+            assertEquals(1, f.observers)
+            assertIs<AppResult.Success<LeaveSubmissionRecord?>>(states.last())
+            val initial = states.last()
+            advanceTimeBy(72.hours)
+            runCurrent()
+            assertEquals(initial, states.last())
+            assertEquals(1, states.size)
+            f.base.sessionState.value = AppResult.Success(null)
+            runCurrent()
+            assertEquals(0, f.observers)
+            job.cancelAndJoin()
+        }
 }

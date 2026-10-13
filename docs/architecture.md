@@ -73,21 +73,18 @@ can retain the original exception for an appropriate internal sink. Never expose
 bodies, credentials, or exception messages in UI/log output.
 
 Protected read failures remain authoritative while a retry is pending or fails.
-A transport/storage error cannot replace a known access denial or expired read
-lease and make retained cache data readable. Presentation stops that cache
+A transport/storage error cannot replace a confirmed access denial and make
+retained private data readable. Presentation stops that cache
 subscription until a fresh admitted acquisition succeeds. Cache deletion remains
 best effort; tests retain old ciphertext when cleanup fails to verify the gate.
 
-Attendance, calendar, leave, overtime, payslip and expense read screens request one
-fresh acquisition when an already displayed snapshot expires. Their MVI owner
-uses the existing expiry observation and drops duplicate requests. Clearing the
-expired content disarms automatic recovery until a valid snapshot is admitted;
-a failed acquisition therefore cannot start a retry loop. Hidden Home content
-expires without fetching, and resumes through its existing entry policy.
-The read gate stays closed during recovery. Presentation hides the renewable
-cache-expiry message while refreshing and reports a failed acquisition's cause;
-session/MFA/access denials keep their existing gates. Renewal never extends the
-timestamp of old data or resubmits a business command.
+Local read models remain observable after their freshness deadline. Their
+`refreshAfter` timestamp is separate from operation authorization and never
+causes a timer to hide content. A refresh or unavailable network does not replace
+saved facts with a loading screen. Navigation/lifecycle owners request finite
+acquisition; no stale-data emission starts a retry loop. Refresh never rewrites
+an old timestamp or resubmits a business command. Command preparation and exports
+retain explicit, operation-specific validity checks. See [local-first](local-first.md).
 
 Mapped record failures can recover on a later storage emission. An upstream
 storage-flow exception instead ends that subscription after reporting failure.
@@ -106,15 +103,13 @@ workspace is never cleared; repeated contention returns a conflict rather than
 reporting that the old selection was removed. Cancellation stops further attempts.
 Repositories do not own retries, scheduling, or UI loading state.
 Workers are platform application entry points that invoke `SyncTask` use cases.
-The [workspace admission](workspace.md) use cases own offline eligibility and live
+The [workspace](workspace.md) use cases separate local ownership from live
 revalidation. Its repository coordinates encrypted storage and raw remote access;
-foreground lifetime and the protected-route failure gate belong to application MVI.
-An expired company selection is distinct from no selection: application context
-exposes only its owned identifier for renewal, while protected workspace data stays
-absent. MVI can revalidate that identifier without waiting for network during local
-bootstrap. Navigation gives recovery a separate scope, disposing protected route
-owners; a successful renewal reopens the same company. An expiry/recovery transition
-does not change the renewal request's ownership or start a second request on success.
+foreground lifetime and confirmed-access failure gates belong to application MVI.
+Local bootstrap restores an owned selection and its routes before remote work.
+An unchanged renewal retains navigation owners; ordinary authorization age no
+longer creates a recovery route. Scope replacement or a known company restriction
+still disposes protected owners.
 See [native identity](native-identity.md) for the active HRIS integration and
 [inbox](inbox.md) for the first encrypted HRIS feed integration and
 [sync](sync.md) for the inherited worker and command contracts.

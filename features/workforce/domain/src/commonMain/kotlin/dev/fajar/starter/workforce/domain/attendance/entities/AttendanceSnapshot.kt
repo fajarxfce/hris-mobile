@@ -13,7 +13,7 @@ data class AttendanceSnapshot(
     val calendar: WorkCalendar?,
     val days: List<AttendanceDay>,
     val fetchedAt: Instant,
-    val expiresAt: Instant,
+    val refreshAfter: Instant,
     val after: String? = null,
 ) {
     override fun toString() = "AttendanceSnapshot(redacted)"

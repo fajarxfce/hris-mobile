@@ -50,10 +50,6 @@ class WorkCalendarViewModel(
                         ensureActive()
                         if (requested != state.value.selection || state.value.readRestricted)
                             return@collect
-                        val renewExpiredRead =
-                            state.value.content != null &&
-                                result is AppResult.Failed &&
-                                result.failure.code == "client.calendar_cache_expired"
                         when (result) {
                             is AppResult.Failed ->
                                 updateState {
@@ -98,7 +94,6 @@ class WorkCalendarViewModel(
                                     }
                             }
                         }
-                        if (renewExpiredRead) onEvent(WorkCalendarEvent.RefreshRequested)
                     }
             }
         onEvent(WorkCalendarEvent.RefreshRequested)

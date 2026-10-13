@@ -98,14 +98,14 @@ class RefreshPayslips(
         if (page.items.any { it.month.year != selected.year })
             return payslipFailure("client.invalid_response", FailureKind.Unexpected)
         val now = clock.now()
-        val lease = boundPayrollReadAccess(current, policy, now)
+        val lease = boundPayrollAuthorization(current, policy, now)
         val snapshot =
             PayslipSnapshot(
                 lease,
                 Uuid.random().toString(),
                 PayslipOverview(selected, page),
                 now,
-                minOf(now + PAYSLIP_CACHE_PERIOD, lease.readUntil),
+                now + PAYSLIP_FRESHNESS_PERIOD,
             )
         when (val response = cache.replace(access, generation, snapshot)) {
             is AppResult.Failed -> return response

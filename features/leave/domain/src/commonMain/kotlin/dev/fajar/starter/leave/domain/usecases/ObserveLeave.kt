@@ -9,7 +9,6 @@ import dev.fajar.starter.leave.domain.repositories.LeaveCacheRepository
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
 import kotlin.time.Clock
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 
 class ObserveLeave(
@@ -52,34 +51,17 @@ class ObserveLeave(
                 when (admitted) {
                     is AppResult.Failed -> flowOf(admitted)
                     is AppResult.Success ->
-                        cache.observe(admitted.value).flatMapLatest { result ->
-                            flow<AppResult<LeaveOverview?>> {
-                                if (result is AppResult.Failed) {
-                                    emit(result)
-                                    return@flow
-                                }
-                                val snapshot = (result as AppResult.Success).value
-                                val validation =
-                                    validateLeaveCache(admitted.value, snapshot, clock.now())
-                                if (validation is AppResult.Failed) {
-                                    emit(validation)
-                                    return@flow
-                                }
-                                emit(result)
-                                val deadline =
-                                    minOf(
-                                        admitted.value.readUntil,
-                                        snapshot?.expiresAt ?: admitted.value.readUntil,
-                                    )
-                                delay((deadline - clock.now()).inWholeMilliseconds.coerceAtLeast(0))
-                                emit(
-                                    leaveFailure(
-                                        if (admitted.value.readUntil <= deadline)
-                                            admitted.value.expiryCode
-                                        else "client.leave_cache_expired",
-                                        FailureKind.AccessDenied,
-                                    )
-                                )
+                        cache.observe(admitted.value).map { result ->
+                            when (result) {
+                                is AppResult.Failed -> result
+                                is AppResult.Success ->
+                                    when (
+                                        val ownership =
+                                            validateStoredLeave(admitted.value, result.value)
+                                    ) {
+                                        is AppResult.Failed -> ownership
+                                        is AppResult.Success -> result
+                                    }
                             }
                         }
                 }

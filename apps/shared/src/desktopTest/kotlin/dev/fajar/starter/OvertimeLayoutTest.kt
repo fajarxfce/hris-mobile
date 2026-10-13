@@ -270,7 +270,7 @@ class OvertimeLayoutTest {
                     dev.fajar.starter.workforce.domain.overtime.entities.OvertimePage(requests),
                 ),
                 snapshot.fetchedAt,
-                snapshot.expiresAt,
+                snapshot.refreshAfter,
             ),
             loading = false,
         )

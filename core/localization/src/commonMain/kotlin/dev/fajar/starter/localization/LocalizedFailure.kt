@@ -7,6 +7,7 @@ import dev.fajar.starter.common.result.*
 fun failureText(failure: Failure): String =
     appString(
         when (failure.code) {
+            "client.authentication_required" -> AppString.SyncSignInRequired
             "expense_not_editable",
             "expense_submission_not_current" -> AppString.ExpenseActionUnavailable
             "expense_lines_required" -> AppString.ExpenseItemsRequired

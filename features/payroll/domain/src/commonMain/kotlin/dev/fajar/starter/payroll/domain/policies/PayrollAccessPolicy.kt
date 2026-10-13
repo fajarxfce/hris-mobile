@@ -9,7 +9,7 @@ import dev.fajar.starter.workspace.domain.policies.*
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Instant
 
-val PAYSLIP_CACHE_PERIOD = 1.hours
+val PAYSLIP_FRESHNESS_PERIOD = 1.hours
 
 fun admitPayroll(
     workspaceId: String,
@@ -18,7 +18,7 @@ fun admitPayroll(
     build: AppBuild,
     now: Instant,
 ): AppResult<PayrollAccess> {
-    val ownership = validateWorkspaceOwnership(workspaceId, workspace, session, now)
+    val ownership = validateLocalWorkspaceOwnership(workspaceId, workspace, session)
     if (ownership is AppResult.Failed) return ownership
     requireNotNull(workspace)
     requireNotNull(session)
@@ -41,7 +41,7 @@ fun admitPayroll(
     if (workspace.permissions.none { it in setOf("payroll.self.read", "payroll.read") })
         return payslipFailure("access_denied", FailureKind.AccessDenied)
     return AppResult.Success(
-        boundPayrollReadAccess(
+        boundPayrollAuthorization(
             PayrollAccess(
                 session.id,
                 session.user.id,
@@ -59,7 +59,7 @@ fun admitPayroll(
     )
 }
 
-fun boundPayrollReadAccess(
+fun boundPayrollAuthorization(
     access: PayrollAccess,
     policy: CompanyPolicySnapshot,
     now: Instant,
@@ -68,8 +68,8 @@ fun boundPayrollReadAccess(
         policy.policy.maintenance?.let {
             policy.requestedAt + (it.startsAt - policy.policy.serverTime)
         }
-    return if (start != null && start > now && start < access.readUntil)
-        access.copy(readUntil = start, expiryCode = "company_maintenance")
+    return if (start != null && start > now && start < access.authorizationExpiresAt)
+        access.copy(authorizationExpiresAt = start, authorizationExpiryCode = "company_maintenance")
     else access
 }
 
@@ -93,19 +93,26 @@ fun validatePayrollContinuation(
             else payslipFailure("client.payslip_scope_changed", FailureKind.AccessDenied)
     }
 
-fun validatePayslipCache(
+fun validatePayslipExportSnapshot(
     access: PayrollAccess,
     snapshot: PayslipSnapshot<*>?,
     now: Instant,
 ): AppResult<Unit> =
     when {
-        access.readUntil <= now -> payslipFailure(access.expiryCode, FailureKind.AccessDenied)
+        access.authorizationExpiresAt <= now ->
+            payslipFailure(access.authorizationExpiryCode, FailureKind.Unavailable)
         snapshot == null -> AppResult.Success(Unit)
         !samePayrollScope(access, snapshot.access) ->
             payslipFailure("client.payslip_scope_changed", FailureKind.AccessDenied)
         snapshot.fetchedAt > now ||
-            snapshot.expiresAt <= now ||
-            snapshot.expiresAt > snapshot.fetchedAt + PAYSLIP_CACHE_PERIOD ->
-            payslipFailure("client.payslip_cache_expired", FailureKind.AccessDenied)
+            snapshot.refreshAfter <= now ||
+            snapshot.refreshAfter > snapshot.fetchedAt + PAYSLIP_FRESHNESS_PERIOD ->
+            payslipFailure("client.payslip_cache_expired", FailureKind.Unavailable)
         else -> AppResult.Success(Unit)
     }
+
+/** Stored facts remain readable after freshness expires; commands validate current authority. */
+fun validateStoredPayslip(access: PayrollAccess, snapshot: PayslipSnapshot<*>?): AppResult<Unit> =
+    if (snapshot != null && !samePayrollScope(access, snapshot.access))
+        payslipFailure("client.payslip_scope_changed", FailureKind.AccessDenied)
+    else AppResult.Success(Unit)

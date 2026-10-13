@@ -9,7 +9,6 @@ import dev.fajar.starter.workforce.domain.repositories.WorkCalendarCacheReposito
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
 import kotlin.time.Clock
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 
 class ObserveWorkCalendar(
@@ -52,34 +51,17 @@ class ObserveWorkCalendar(
                 when (admitted) {
                     is AppResult.Failed -> flowOf(admitted)
                     is AppResult.Success ->
-                        cache.observe(admitted.value).flatMapLatest { result ->
-                            flow<AppResult<WorkCalendarSnapshot?>> {
-                                if (result is AppResult.Failed) {
-                                    emit(result)
-                                    return@flow
-                                }
-                                val snapshot = (result as AppResult.Success).value
-                                val validation =
-                                    validateCalendarCache(admitted.value, snapshot, clock.now())
-                                if (validation is AppResult.Failed) {
-                                    emit(validation)
-                                    return@flow
-                                }
-                                emit(result)
-                                val deadline =
-                                    minOf(
-                                        admitted.value.readUntil,
-                                        snapshot?.expiresAt ?: admitted.value.readUntil,
-                                    )
-                                delay((deadline - clock.now()).inWholeMilliseconds.coerceAtLeast(0))
-                                emit(
-                                    calendarFailure(
-                                        if (admitted.value.readUntil <= deadline)
-                                            admitted.value.expiryCode
-                                        else "client.calendar_cache_expired",
-                                        FailureKind.AccessDenied,
-                                    )
-                                )
+                        cache.observe(admitted.value).map { result ->
+                            when (result) {
+                                is AppResult.Failed -> result
+                                is AppResult.Success ->
+                                    when (
+                                        val ownership =
+                                            validateStoredCalendar(admitted.value, result.value)
+                                    ) {
+                                        is AppResult.Failed -> ownership
+                                        is AppResult.Success -> result
+                                    }
                             }
                         }
                 }

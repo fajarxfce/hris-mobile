@@ -38,7 +38,7 @@ fun InboxCheckpoint.toDto() =
         phase.name,
         cursor,
         refreshedAt?.toString(),
-        expiresAt.toString(),
+        refreshAfter.toString(),
         pollAt?.toString(),
     )
 
@@ -51,7 +51,7 @@ fun InboxCheckpointDto.toCheckpoint(raw: ReplicaCheckpoint, access: InboxAccess)
     val expiry = Instant.parse(expiresAt)
     val sessionExpiry = Instant.parse(sessionExpiresAt)
     val refreshed = refreshedAt?.let(Instant::parse)
-    require(expiry <= sessionExpiry && (refreshed == null || refreshed < expiry))
+    require(refreshed == null || refreshed < expiry)
     return InboxCheckpoint(
         access.copy(permissions = permissions.toSet(), sessionExpiresAt = sessionExpiry),
         raw.handle.generation,

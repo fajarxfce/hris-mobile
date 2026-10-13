@@ -10,6 +10,7 @@ import dev.fajar.starter.securestorage.*
 import java.nio.file.Files
 import kotlin.io.encoding.Base64
 import kotlin.test.*
+import kotlin.time.Duration.Companion.hours
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
@@ -22,7 +23,7 @@ class PayslipCacheTest {
             "first",
             PayslipOverview(PayslipSelection(2026), f.page.toPage(PayslipSelection(2026))),
             f.now,
-            f.access.readUntil,
+            f.access.authorizationExpiresAt,
         )
     private val details =
         PayslipSnapshot(
@@ -30,8 +31,26 @@ class PayslipCacheTest {
             "first",
             PayslipView(f.detail.toPayslip(f.summary.id), f.payments.toPayments(f.summary.id)),
             f.now,
-            f.access.readUntil,
+            f.access.authorizationExpiresAt,
         )
+
+    @Test
+    fun freshFactsPersistIndependentlyOfAnExpiredAuthorizationDeadline() = runTest {
+        withDatabase { db, keys ->
+            val repo = EncryptedPayslipCacheRepository(db.replicas, AesGcmContentCipher(), keys)
+            val access =
+                f.access.copy(
+                    authorizationExpiresAt = f.now - 1.hours,
+                    sessionExpiresAt = f.now - 1.hours,
+                )
+            val savedList = overview.copy(access = access, refreshAfter = f.now + 1.hours)
+            val savedDetail = details.copy(access = access, refreshAfter = f.now + 1.hours)
+            assertEquals(AppResult.Success(true), repo.replace(access, null, savedList))
+            assertEquals(AppResult.Success(true), repo.replaceDetails(access, null, savedDetail))
+            assertEquals(AppResult.Success(savedList), repo.observe(access).first())
+            assertEquals(AppResult.Success(savedDetail), repo.observeDetails(access).first())
+        }
+    }
 
     @Test
     fun encryptedViewsRestoreExactFinancialFactsIndependently() = runTest {

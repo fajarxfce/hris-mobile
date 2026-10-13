@@ -3,6 +3,7 @@ package dev.fajar.starter.inbox.presentation.detail
 import androidx.lifecycle.viewModelScope
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.inbox.domain.entities.*
+import dev.fajar.starter.inbox.domain.policies.inboxFailureInvalidatesCache
 import dev.fajar.starter.inbox.domain.usecases.*
 import dev.fajar.starter.presentation.mvi.MviViewModel
 import kotlinx.coroutines.*
@@ -57,11 +58,13 @@ class InboxItemViewModel(
     }
 
     private fun observeContent() {
+        if (state.value.readRestricted) return
         contentObservation?.cancel()
         contentObservation =
             viewModelScope.launch {
                 observe(target.workspaceId, InboxCacheQuery.Item(target.itemId)).collect { result ->
                     ensureActive()
+                    if (state.value.readRestricted) return@collect
                     when (result) {
                         is AppResult.Failed ->
                             updateState {
@@ -83,6 +86,7 @@ class InboxItemViewModel(
                                 )
                             }
                     }
+                    if (state.value.readRestricted) contentObservation?.cancel()
                 }
             }
     }
@@ -222,20 +226,44 @@ class InboxItemViewModel(
     }
 
     private suspend fun refreshContent(): Boolean {
-        updateState { it.copy(syncing = true, pending = false, syncFailure = null) }
+        updateState {
+            it.copy(
+                syncing = true,
+                pending = false,
+                cacheFailure =
+                    it.syncFailure?.takeIf(::inboxFailureInvalidatesCache) ?: it.cacheFailure,
+                syncFailure = null,
+            )
+        }
         val result = synchronize(target.workspaceId)
         currentCoroutineContext().ensureActive()
         return when (result) {
             is AppResult.Failed -> {
+                val restricted =
+                    state.value.readRestricted || inboxFailureInvalidatesCache(result.failure)
+                if (restricted) contentObservation?.cancel()
                 updateState {
-                    it.copy(syncing = false, loading = false, syncFailure = result.failure)
+                    it.copy(
+                        syncing = false,
+                        loading = false,
+                        syncFailure = result.failure,
+                        item = if (restricted) null else it.item,
+                        hasSnapshot = !restricted && it.hasSnapshot,
+                        confirmationVersion = if (restricted) null else it.confirmationVersion,
+                    )
                 }
                 false
             }
             is AppResult.Success -> {
                 updateState {
-                    it.copy(syncing = false, loading = false, pending = !result.value.caughtUp)
+                    it.copy(
+                        syncing = false,
+                        loading = false,
+                        pending = !result.value.caughtUp,
+                        cacheFailure = if (result.value.caughtUp) null else it.cacheFailure,
+                    )
                 }
+                if (result.value.caughtUp && contentObservation?.isActive != true) observeContent()
                 result.value.caughtUp
             }
         }

@@ -9,7 +9,7 @@ import dev.fajar.starter.workspace.domain.policies.*
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Instant
 
-val LEAVE_CACHE_PERIOD = 1.hours
+val LEAVE_FRESHNESS_PERIOD = 1.hours
 
 fun admitLeave(
     workspaceId: String,
@@ -18,7 +18,7 @@ fun admitLeave(
     build: AppBuild,
     now: Instant,
 ): AppResult<LeaveAccess> {
-    val ownership = validateWorkspaceOwnership(workspaceId, workspace, session, now)
+    val ownership = validateLocalWorkspaceOwnership(workspaceId, workspace, session)
     if (ownership is AppResult.Failed) return ownership
     requireNotNull(workspace)
     requireNotNull(session)
@@ -41,13 +41,13 @@ fun admitLeave(
     if (workspace.permissions.none { it == "leave.self.manage" || it == "leave.read" })
         return leaveFailure("access_denied", FailureKind.AccessDenied)
     var deadline = workspace.admission.expiresAt
-    var expiryCode = "client.workspace_expired"
+    var authorizationExpiryCode = "client.workspace_expired"
     val policy = requireNotNull(workspace.policy)
     policy.policy.maintenance?.let { window ->
         val start = policy.requestedAt + (window.startsAt - policy.policy.serverTime)
         if (start > now && start < deadline) {
             deadline = start
-            expiryCode = "company_maintenance"
+            authorizationExpiryCode = "company_maintenance"
         }
     }
     return AppResult.Success(
@@ -59,7 +59,7 @@ fun admitLeave(
             workspace.permissions.toSet(),
             Instant.fromEpochMilliseconds(session.binding.expiresAtEpochMillis),
             deadline,
-            expiryCode,
+            authorizationExpiryCode,
         )
     )
 }
@@ -83,19 +83,8 @@ fun validateLeaveContinuation(
             else leaveFailure("client.leave_scope_changed", FailureKind.AccessDenied)
     }
 
-fun validateLeaveCache(
-    access: LeaveAccess,
-    snapshot: LeaveOverview?,
-    now: Instant,
-): AppResult<Unit> =
-    when {
-        access.readUntil <= now -> leaveFailure(access.expiryCode, FailureKind.AccessDenied)
-        snapshot == null -> AppResult.Success(Unit)
-        !sameLeaveScope(access, snapshot.access) ->
-            leaveFailure("client.leave_scope_changed", FailureKind.AccessDenied)
-        snapshot.fetchedAt > now ||
-            snapshot.expiresAt <= now ||
-            snapshot.expiresAt > snapshot.fetchedAt + LEAVE_CACHE_PERIOD ->
-            leaveFailure("client.leave_cache_expired", FailureKind.AccessDenied)
-        else -> AppResult.Success(Unit)
-    }
+/** Stored facts remain readable after freshness expires; commands validate current authority. */
+fun validateStoredLeave(access: LeaveAccess, snapshot: LeaveOverview?): AppResult<Unit> =
+    if (snapshot != null && !sameLeaveScope(access, snapshot.access))
+        leaveFailure("client.leave_scope_changed", FailureKind.AccessDenied)
+    else AppResult.Success(Unit)

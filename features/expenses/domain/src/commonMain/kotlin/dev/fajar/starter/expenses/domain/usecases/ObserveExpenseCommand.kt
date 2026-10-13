@@ -9,7 +9,6 @@ import dev.fajar.starter.identity.domain.repositories.SessionRepository
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
 import kotlin.time.Clock
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 
 class ObserveExpenseCommand(
@@ -70,37 +69,18 @@ class ObserveExpenseCommand(
                 when (admitted) {
                     is AppResult.Failed -> flowOf(admitted)
                     is AppResult.Success ->
-                        commands.observe(admitted.value, slot).flatMapLatest { result ->
-                            flow<AppResult<ExpenseCommandRecord?>> {
-                                val access = admitted.value
-                                val record = (result as? AppResult.Success)?.value
-                                if (
-                                    record != null &&
-                                        (!record.command.belongsTo(access) ||
-                                            record.command.slot() != slot)
-                                ) {
-                                    emit(
-                                        expenseFailure(
-                                            "client.expense_scope_changed",
-                                            FailureKind.AccessDenied,
-                                        )
-                                    )
-                                    return@flow
-                                }
-                                val deadline = minOf(access.readUntil, access.sessionExpiresAt)
-                                val remaining = deadline - clock.now()
-                                if (remaining.isPositive()) {
-                                    emit(result)
-                                    delay(remaining)
-                                }
-                                emit(
-                                    expenseFailure(
-                                        if (access.sessionExpiresAt <= deadline) "session_revoked"
-                                        else access.expiryCode,
-                                        FailureKind.AccessDenied,
-                                    )
+                        commands.observe(admitted.value, slot).map { result ->
+                            val record = (result as? AppResult.Success)?.value
+                            if (
+                                record != null &&
+                                    (!record.command.belongsTo(admitted.value) ||
+                                        record.command.slot() != slot)
+                            )
+                                expenseFailure(
+                                    "client.expense_scope_changed",
+                                    FailureKind.AccessDenied,
                                 )
-                            }
+                            else result
                         }
                 }
             }

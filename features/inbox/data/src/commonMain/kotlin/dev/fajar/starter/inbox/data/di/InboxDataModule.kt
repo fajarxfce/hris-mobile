@@ -18,7 +18,7 @@ class InboxDataModule {
         remote: InboxRepository,
         sessions: SessionRepository,
         workspaces: WorkspaceRepository,
-    ) = LoadUnreadInbox(remote, sessions, workspaces, Clock.System)
+    ) = LoadUnreadInbox(remote, sessions, workspaces)
 
     @Factory
     fun prepareAction(
@@ -33,7 +33,7 @@ class InboxDataModule {
         commands: InboxCommandRepository,
         sessions: SessionRepository,
         workspaces: WorkspaceRepository,
-    ) = ObserveInboxAction(commands, sessions, workspaces, Clock.System)
+    ) = ObserveInboxAction(commands, sessions, workspaces)
 
     @Factory
     fun reviewAction(
@@ -59,7 +59,7 @@ class InboxDataModule {
         cache: InboxCacheRepository,
         sessions: SessionRepository,
         workspaces: WorkspaceRepository,
-    ) = ObserveInbox(cache, sessions, workspaces, Clock.System)
+    ) = ObserveInbox(cache, sessions, workspaces)
 
     @Single(binds = [SyncInbox::class, SyncTask::class])
     fun synchronize(

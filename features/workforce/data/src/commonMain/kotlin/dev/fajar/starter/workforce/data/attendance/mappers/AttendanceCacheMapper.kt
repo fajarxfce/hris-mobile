@@ -4,7 +4,7 @@ import dev.fajar.starter.common.result.AppResult
 import dev.fajar.starter.workforce.data.attendance.dto.AttendanceSnapshotDto
 import dev.fajar.starter.workforce.data.mappers.*
 import dev.fajar.starter.workforce.domain.attendance.entities.*
-import dev.fajar.starter.workforce.domain.attendance.policies.ATTENDANCE_CACHE_PERIOD
+import dev.fajar.starter.workforce.domain.attendance.policies.ATTENDANCE_FRESHNESS_PERIOD
 import dev.fajar.starter.workforce.domain.attendance.policies.attendancePeriod
 import dev.fajar.starter.workforce.domain.entities.*
 import kotlin.time.Instant
@@ -51,7 +51,7 @@ fun AttendanceSnapshot.toDto() =
         access.permissions,
         access.sessionExpiresAt.toString(),
         fetchedAt.toString(),
-        expiresAt.toString(),
+        refreshAfter.toString(),
         after,
     )
 
@@ -77,11 +77,7 @@ fun AttendanceSnapshotDto.toSnapshot(
     require((attendancePeriod(directory.asOf, requested) as? AppResult.Success)?.value == period)
     val fetched = Instant.parse(fetchedAt)
     val expiry = Instant.parse(expiresAt)
-    require(
-        expiry > fetched &&
-            expiry <= fetched + ATTENDANCE_CACHE_PERIOD &&
-            expiry <= owner.sessionExpiresAt
-    )
+    require(expiry > fetched && expiry <= fetched + ATTENDANCE_FRESHNESS_PERIOD)
     require((employeeId == null) == (calendar == null))
     require(
         if (employeeId == null) directory.items.isEmpty() && days.isEmpty()

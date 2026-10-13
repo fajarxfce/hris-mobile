@@ -69,7 +69,7 @@ class ReviewExpenseCommand(
                         is AppResult.Failed -> return@withTimeoutOrNull observed
                         is AppResult.Success -> observed.value
                     }
-                val lease = validateExpenseCache(access, snapshot, clock.now())
+                val lease = validateExpenseActionSnapshot(access, snapshot, clock.now())
                 if (lease is AppResult.Failed) return@withTimeoutOrNull lease
                 if (snapshot == null)
                     return@withTimeoutOrNull expenseFailure(

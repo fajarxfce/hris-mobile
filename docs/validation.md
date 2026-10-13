@@ -1,27 +1,39 @@
 # Validation
 
-## Offline startup and company renewal
+## Local read lifetime and cursor recovery
 
-Root checks passed with 1,174 desktop/JVM tests and Android dev assembly. Eleven
-new cases cover cold offline startup, expired selection recovery, pending and
-failed retries, session/account replacement, read gates after failed cleanup,
-renewal without polling, cancellation and late success/denial. The assembled
-Compose test closes and reopens the real SQLite/encrypted workspace, keeps expired
-private content hidden while transport fails, and returns to the same company
-after an explicit admitted retry.
+Root checks passed with 1,187 desktop/JVM tests and Android dev assembly. The
+identity/workspace domain and Inbox domain/data suites passed 111 Chromium tests.
+Coverage separates stored-data age from operation authority, restores an owned identity
+after credential expiry, and retains local reads through network failure. The
+assembled Compose test closes and reopens real SQLite/encrypted storage with a
+three-day-old workspace and attendance snapshot, opens Home offline, and retains
+the same company while renewal is pending and after it succeeds. Other cases
+cover credentials expiring during renewal, cancellation, late results, company
+replacement and confirmed denials through failed cleanup and pending retries.
 
-API 35 emulator acceptance disabled both Wi-Fi and mobile data, force-stopped
-the application and reopened Home with the stored attendance time. Advancing only
-the emulator clock by two hours reproduced expiry and showed connection recovery
-without account-verification loading or private company content. Restoring time
-and connectivity, then retrying, reopened the same company against the development
-API. Screenshots were inspected; no HRIS crash appeared in that emulator boot.
-System time, automatic time and both network settings were restored afterward.
-The expiry check used a clock adjustment, not a two-hour physical wait.
+Inbox tests retain published data while an expired cursor builds a replacement.
+Real SQLite/AES storage survives database close/reopen with a staged generation,
+then publishes its replacement atomically. A confirmed policy/feed/resource denial
+remains an access failure if cleanup fails or hangs; assembled list/detail tests
+keep that data gated until admitted synchronization succeeds.
 
-This verifies bounded offline snapshots and recovery, not unrestricted offline
-use. The one-hour company admission remains in force; first sign-in, renewal and
-features with live-only reads still require the server.
+API 35 emulator acceptance disabled Wi-Fi and mobile data, force-stopped the app
+and reopened Home and the stored monthly attendance history. Advancing only the
+emulator clock by 73 hours retained both the selected company and historical
+attendance. Restoring time and connectivity, then refreshing, retained the same
+company and cleared connection feedback. Screenshots were inspected; no HRIS crash
+appeared in that emulator boot. System time, automatic time and network settings
+were restored. This uses a clock adjustment, not a three-day physical wait.
+
+This replaces the earlier one-hour local-read gate. Action reviews, exports,
+confirmed authorization changes and unfetched data keep their separate rules.
+See [current coverage and remaining work](local-first.md); these checks do not
+establish full offline drafts or incremental sync for every feature.
+
+After advance notice, the validated APK was installed on the authorized Android 16
+phone at 23:05 on 2026-10-13 with install-only delivery. ADB reported success and
+the package update timestamp was verified; the application was not opened.
 
 ## Overtime command foundation
 

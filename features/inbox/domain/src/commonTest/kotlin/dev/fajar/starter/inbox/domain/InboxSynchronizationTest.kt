@@ -16,6 +16,69 @@ import kotlinx.coroutines.test.*
 
 class InboxSynchronizationTest {
     @Test
+    fun confirmedAccessFailuresKeepTheirClassificationWhenCacheCleanupFailsOrStalls() = runTest {
+        for (stage in listOf("policy", "changes", "hydration")) {
+            for (stalls in listOf(false, true)) {
+                val f = InboxFixture()
+                assertIs<AppResult.Success<*>>(f.sync(f.workspace.id))
+                val published = f.snapshot.value
+                val denial =
+                    AppResult.Failed(
+                        Failure(
+                            FailureKind.AccessDenied,
+                            "Verification required",
+                            code = "mfa_required",
+                        )
+                    )
+                f.clearCall = {
+                    if (stalls) awaitCancellation()
+                    AppResult.Failed(
+                        Failure(FailureKind.Storage, "Storage unavailable", code = "client.storage")
+                    )
+                }
+                when (stage) {
+                    "policy" -> f.policyCall = { denial }
+                    "changes" -> f.changesCall = { denial }
+                    else -> {
+                        f.changesCall = {
+                            AppResult.Success(
+                                SyncChangePage(
+                                    listOf(SyncChange(f.reference, SyncOperation.UPSERT)),
+                                    "next",
+                                    false,
+                                    false,
+                                    5,
+                                    f.clock.now(),
+                                )
+                            )
+                        }
+                        f.itemCall = { denial }
+                    }
+                }
+                assertEquals(denial, f.sync(f.workspace.id))
+                assertEquals(1, f.clearCalls)
+                assertEquals(published, f.snapshot.value)
+            }
+        }
+    }
+
+    @Test
+    fun scopeResetNeverPublishesAnotherGenerationWhenInvalidationFails() = runTest {
+        val f = InboxFixture()
+        assertIs<AppResult.Success<*>>(f.sync(f.workspace.id))
+        val original = f.checkpoint
+        val denial =
+            AppResult.Failed(
+                Failure(FailureKind.Conflict, "Scope changed", code = "sync_scope_changed")
+            )
+        f.changesCall = { denial }
+        f.clearCall = { AppResult.Failed(Failure(FailureKind.Storage, "Storage unavailable")) }
+        assertEquals(denial, f.sync(f.workspace.id))
+        assertEquals(original, f.checkpoint)
+        assertEquals(1, f.bootstrapCalls)
+    }
+
+    @Test
     fun renewingWorkspaceAccessKeepsThePublishedGenerationAndContinuesFromItsCursor() = runTest {
         val base = Instant.parse("2026-10-11T00:00:00Z")
         val f = InboxFixture { base + testScheduler.currentTime.milliseconds }
@@ -43,7 +106,7 @@ class InboxSynchronizationTest {
     }
 
     @Test
-    fun workspaceExpiryHidesCachedContentEvenWhenTheReplicaHasALongerLifetime() = runTest {
+    fun workspaceAuthorizationExpiryDoesNotHideStoredMessages() = runTest {
         val base = Instant.parse("2026-10-11T00:00:00Z")
         val f = InboxFixture { base + testScheduler.currentTime.milliseconds }
         assertIs<AppResult.Success<InboxSyncOutcome>>(f.sync(f.workspace.id))
@@ -56,7 +119,7 @@ class InboxSynchronizationTest {
         f.snapshot.value =
             AppResult.Success(
                 InboxCachePage(
-                    f.checkpoint!!.copy(expiresAt = base + 2.hours),
+                    f.checkpoint!!.copy(refreshAfter = base + 2.hours),
                     listOf(f.item),
                     null,
                 )
@@ -69,10 +132,13 @@ class InboxSynchronizationTest {
         assertIs<AppResult.Success<InboxCachePage>>(emissions.last())
         advanceTimeBy(1001)
         runCurrent()
+        advanceTimeBy(72.hours)
+        runCurrent()
         assertEquals(
-            "client.workspace_expired",
-            assertIs<AppResult.Failed>(emissions.last()).failure.code,
+            listOf(f.item),
+            assertIs<AppResult.Success<InboxCachePage>>(emissions.last()).value.items,
         )
+        assertEquals(1, emissions.size)
         assertEquals(0, f.clearCalls)
         reader.cancelAndJoin()
     }
@@ -233,16 +299,17 @@ class InboxSynchronizationTest {
             )
         f.bootstrapCall = { failure }
         assertSame(failure, f.sync(f.workspace.id))
-        assertEquals(1, f.clearCalls)
+        assertEquals(2, f.clearCalls)
         assertEquals(2, f.bootstrapCalls)
+        assertNull(f.checkpoint)
     }
 
     @Test
-    fun cacheExpiryRemovesPrivateContentWithoutWaitingForAnotherDatabaseWrite() = runTest {
+    fun storedMessagesRemainReadableAfterTheirFreshnessInterval() = runTest {
         val base = Instant.parse("2026-10-11T00:00:00Z")
         val f = InboxFixture { base + testScheduler.currentTime.milliseconds }
         assertIs<AppResult.Success<InboxSyncOutcome>>(f.sync(f.workspace.id))
-        val cp = f.checkpoint!!.copy(expiresAt = base + 1000.milliseconds)
+        val cp = f.checkpoint!!.copy(refreshAfter = base + 1000.milliseconds)
         f.snapshot.value = AppResult.Success(InboxCachePage(cp, listOf(f.item), null))
         val emissions = mutableListOf<AppResult<InboxCachePage>>()
         val reader =
@@ -252,10 +319,13 @@ class InboxSynchronizationTest {
         assertIs<AppResult.Success<InboxCachePage>>(emissions.last())
         advanceTimeBy(1001)
         runCurrent()
+        advanceTimeBy(72.hours)
+        runCurrent()
         assertEquals(
-            "client.inbox_cache_expired",
-            assertIs<AppResult.Failed>(emissions.last()).failure.code,
+            listOf(f.item),
+            assertIs<AppResult.Success<InboxCachePage>>(emissions.last()).value.items,
         )
+        assertEquals(1, emissions.size)
         reader.cancelAndJoin()
     }
 
@@ -283,5 +353,93 @@ class InboxSynchronizationTest {
             assertIs<AppResult.Failed>(emissions.last()).failure.code,
         )
         reader.cancelAndJoin()
+    }
+
+    @Test
+    fun staleFreshnessContinuesTheExistingDeltaCursorInsteadOfDownloadingEverythingAgain() =
+        runTest {
+            val base = Instant.parse("2026-10-11T00:00:00Z")
+            val f = InboxFixture { base + testScheduler.currentTime.milliseconds }
+            assertIs<AppResult.Success<InboxSyncOutcome>>(f.sync(f.workspace.id))
+            val original = requireNotNull(f.checkpoint)
+            advanceTimeBy(2.hours)
+            f.changesCall = { cursor ->
+                assertEquals(original.cursor, cursor)
+                AppResult.Success(
+                    SyncChangePage(emptyList(), "delta-next", false, false, 5, f.clock.now())
+                )
+            }
+            assertIs<AppResult.Success<InboxSyncOutcome>>(f.sync(f.workspace.id))
+            assertEquals(1, f.bootstrapCalls)
+            assertEquals(0, f.clearCalls)
+            assertEquals(original.generation, f.checkpoint!!.generation)
+            assertEquals("delta-next", f.checkpoint!!.cursor)
+            assertEquals(
+                listOf(f.item),
+                assertIs<AppResult.Success<InboxCachePage>>(f.snapshot.value).value.items,
+            )
+        }
+
+    @Test
+    fun anExpiredCursorStagesReplacementWithoutHidingTheLastPublishedInbox() = runTest {
+        val base = Instant.parse("2026-10-11T00:00:00Z")
+        val f = InboxFixture { base + testScheduler.currentTime.milliseconds }
+        assertIs<AppResult.Success<InboxSyncOutcome>>(f.sync(f.workspace.id))
+        val original = requireNotNull(f.checkpoint)
+        val originalPage = f.snapshot.value
+        val hydration = CompletableDeferred<AppResult<InboxItem>>()
+        f.changesCall = {
+            if (f.changesCalls == 2)
+                AppResult.Failed(
+                    Failure(FailureKind.Conflict, "fixture", code = "sync_cursor_expired")
+                )
+            else
+                AppResult.Success(
+                    SyncChangePage(emptyList(), "replacement-delta", false, false, 5, f.clock.now())
+                )
+        }
+        f.itemCall = { hydration.await() }
+        val values = mutableListOf<AppResult<InboxCachePage>>()
+        val reader =
+            backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
+                f.observe(f.workspace.id, InboxCacheQuery.Page()).toList(values)
+            }
+        val syncing = async { f.sync(f.workspace.id) }
+        advanceTimeBy(5_001)
+        runCurrent()
+        assertFalse(syncing.isCompleted)
+        assertNotEquals(original.generation, f.checkpoint!!.generation)
+        assertEquals(originalPage, values.last())
+        assertEquals(0, f.clearCalls)
+        hydration.complete(AppResult.Failed(Failure(FailureKind.Network, "fixture")))
+        assertIs<AppResult.Failed>(syncing.await())
+        assertEquals(originalPage, f.snapshot.value)
+        val changed = f.item.copy(version = f.item.version + 1, title = "Updated notice")
+        f.itemCall = { AppResult.Success(changed) }
+        assertIs<AppResult.Success<InboxSyncOutcome>>(f.sync(f.workspace.id))
+        runCurrent()
+        assertEquals(
+            listOf(changed),
+            assertIs<AppResult.Success<InboxCachePage>>(values.last()).value.items,
+        )
+        assertTrue(values.all { it is AppResult.Success && it.value.items.isNotEmpty() })
+        assertEquals(0, f.clearCalls)
+        reader.cancelAndJoin()
+    }
+
+    @Test
+    fun anAuthoritativeScopeChangeClearsPublishedDataEvenWhenItsReplacementCannotLoad() = runTest {
+        val base = Instant.parse("2026-10-11T00:00:00Z")
+        val f = InboxFixture { base + testScheduler.currentTime.milliseconds }
+        assertIs<AppResult.Success<InboxSyncOutcome>>(f.sync(f.workspace.id))
+        f.changesCall = {
+            AppResult.Failed(Failure(FailureKind.Conflict, "fixture", code = "sync_scope_changed"))
+        }
+        f.bootstrapCall = { AppResult.Failed(Failure(FailureKind.Network, "fixture")) }
+        assertIs<AppResult.Failed>(f.sync(f.workspace.id))
+        assertEquals(1, f.clearCalls)
+        assertTrue(
+            assertIs<AppResult.Success<InboxCachePage>>(f.snapshot.value).value.items.isEmpty()
+        )
     }
 }

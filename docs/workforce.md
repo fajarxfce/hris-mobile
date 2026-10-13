@@ -6,16 +6,15 @@ Home includes today's clock-in/out card above its service grid. Its capture
 ViewModel owns acquisition, permission recovery and pending-command actions.
 Leaving its tab or backgrounding cancels acquisition and user actions. Read-only
 cache/admission observation lives with the navigation ViewModel, so hidden content
-still expires or loses access. Re-entering a loaded, admitted Home does not clear
+still observes ownership and access changes. Re-entering a loaded, admitted Home does not clear
 the card or repeat its request. Incomplete acquisition, invalidated content and
 explicit actions require refresh. Clearing the owner releases its subscriptions.
 Stored, received, pending review and accepted outcomes remain distinct; corrections
 replace the displayed times without enabling another capture.
-An expired visible snapshot requests one refresh. Pending acquisition hides the
-expiry message while the read gate remains closed; duplicate expiry and refresh
-events share that acquisition. A failed refresh reports its cause and waits for
-an explicit retry. Hidden Home expiry performs no network request. Successful
-publication restores the card and read observation.
+Saved content remains visible when stale and during ordinary refresh. Freshness
+has no read-expiration timer. A failed refresh reports its cause and waits for an
+explicit retry; hidden Home data does not trigger HTTP requests. A confirmed
+access denial closes observation until admitted publication succeeds.
 
 Attendance history and work calendar are available from Home shortcuts and the Work
 section in Services. Their routes, MVI owners, repository adapters and policies
@@ -78,8 +77,8 @@ incomplete merely because the company date has changed.
 Changing a month cancels its previous acquisition and clears mismatched data;
 leaving the route cancels both acquisition and observation. Day details are
 read-only. Employment selection remains available when an account has multiple
-employments. The selected monthly snapshot remains readable offline within its
-admission lifetime; selecting another month requires a successful acquisition.
+employments. The selected monthly snapshot remains readable offline regardless of
+age; selecting an uncached month requires a successful acquisition.
 If a new route falls back to that saved month while offline, subsequent refresh
 keeps the displayed month and employment instead of jumping to the current month.
 
@@ -152,11 +151,11 @@ storage failure boundary. Existing v1 recent snapshots remain readable. Associat
 data distinguishes recent and monthly partitions, so ciphertext cannot be moved
 between them. Attendance HTTP responses are bounded to 2 MiB.
 
-Cached reads last at most one hour and never outlive the workspace admission,
-session/MFA authority or a known upcoming maintenance window. Renewing admission
-does not extend an old snapshot. Observation owns one cancellable deadline rather
-than polling. Transport failure retains still-admitted data; authoritative access
-loss hides it and attempts an atomic cache removal. A cleanup failure cannot replace
+`refreshAfter` records when a saved snapshot becomes stale; it does not hide it.
+Recent authorization and reviewed capture evidence retain separate deadlines.
+Renewing authorization cannot make old attendance facts fresh. Local observation
+has no expiry timer. Transport failure retains saved data; confirmed access loss
+hides it and attempts an atomic cache removal. A cleanup failure cannot replace
 the original access failure. Missing content keys do not silently regenerate keys
 for existing ciphertext.
 
@@ -164,8 +163,8 @@ Home attendance, monthly history and the work calendar stop their cache
 subscriptions after an authoritative read failure. They retain that gate through
 pending and failed retries, even if local cleanup fails. Only fresh admitted
 publication reopens observation. Calendar entry pairs acquisition and observation
-with both lifecycle stop and disposal; a successful refresh clears an expiry
-reported while the read was in progress.
+with both lifecycle stop and disposal. Successful publication can reopen an
+observer that ended on a storage failure; ordinary age never closes it.
 
 Android/iOS support encrypted process restoration through their secure key stores.
 The desktop host uses its configured credential storage. Browser keys remain in

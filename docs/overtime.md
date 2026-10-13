@@ -28,9 +28,9 @@ mapping but are not retained in the employee read view.
 Both use cases own a 30-second acquisition deadline, cancellation, scope checks
 after I/O and atomic publication. Repositories map raw datasource values and
 technical failures. Datasources choose no access, retry or subscription policy.
-The read ViewModels request one acquisition when displayed content expires.
-Pending recovery hides the expiry message while retaining the read gate; failure
-reports its cause and stops. Planning and action confirmation remain explicit.
+Stale displayed content remains readable during refresh or network failure.
+Read observation has no timer that clears the page. Planning and action
+confirmation still require separate reviewed input and explicit user actions.
 
 ## Offline reads
 
@@ -40,9 +40,10 @@ owns their encryption key; a reader cannot replace a missing key. Authenticated
 context binds session, account, audience, company, generation and view purpose.
 Compare-and-set rejects an obsolete publication.
 
-Read leases last at most one hour and cannot exceed admitted access or scheduled
-maintenance. Observations own one expiry timer, cancelled with their collector
-or replaced scope. Revocation remains authoritative if local cleanup fails.
+Local facts remain readable after their freshness timestamp. Recent authorization
+bounds planning and action reviews, independently of the saved read model. Account
+or company replacement cancels observation. Confirmed revocation remains
+authoritative if local cleanup fails.
 Presentation must retain that gate through pending or failed recovery and reopen
 observation only after fresh admitted acquisition succeeds.
 

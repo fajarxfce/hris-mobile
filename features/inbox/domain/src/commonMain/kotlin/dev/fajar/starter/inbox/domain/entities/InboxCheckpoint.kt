@@ -10,7 +10,7 @@ data class InboxCheckpoint(
     val cursor: String?,
     val published: Boolean,
     val refreshedAt: Instant?,
-    val expiresAt: Instant,
+    val refreshAfter: Instant,
     val pollAt: Instant?,
 ) {
     override fun toString() = "InboxCheckpoint([redacted])"

@@ -92,20 +92,16 @@ class AppViewModel(
                                             AppStage.SignedIn(
                                                 admitted.sessionId,
                                                 admitted.workspace,
-                                                admitted.expiredWorkspaceId,
                                             )
                                     }
                                 val previous = state.value.stage as? AppStage.SignedIn
                                 val next = nextStage as? AppStage.SignedIn
                                 val changed =
                                     previous?.sessionId != next?.sessionId ||
-                                        previous?.selectedWorkspaceId != next?.selectedWorkspaceId
+                                        previous?.workspace?.id != next?.workspace?.id
                                 val expired =
                                     admitted?.policy?.stale == true &&
                                         state.value.companyPolicy?.stale != true
-                                val renewalRequired =
-                                    next?.expiredWorkspaceId != null &&
-                                        previous?.expiredWorkspaceId == null
                                 if (changed) {
                                     accessRefresh?.cancel()
                                     accessRefresh = null
@@ -123,7 +119,7 @@ class AppViewModel(
                                             if (changed) null else it.workspaceRefreshFailure,
                                     )
                                 }
-                                if ((changed || expired || renewalRequired) && foreground)
+                                if ((changed || expired) && foreground)
                                     onEvent(AppEvent.WorkspaceRefreshRequested)
                             }
                         }
@@ -147,7 +143,7 @@ class AppViewModel(
     private fun onWorkspaceRefreshRequested(event: AppEvent.WorkspaceRefreshRequested) {
         if (!foreground || accessRefresh?.isActive == true || state.value.changingWorkspace) return
         val origin = state.value.stage as? AppStage.SignedIn ?: return
-        val scope = origin.selectedWorkspaceId ?: return
+        val scope = origin.workspace?.id ?: return
         updateState { it.copy(refreshingWorkspace = true, workspaceRefreshFailure = null) }
         val refresh =
             viewModelScope.launch(start = CoroutineStart.LAZY) {
@@ -155,10 +151,7 @@ class AppViewModel(
                     val result = refreshWorkspace()
                     ensureActive()
                     val current = state.value.stage as? AppStage.SignedIn
-                    if (
-                        current?.sessionId != origin.sessionId ||
-                            current.selectedWorkspaceId != scope
-                    )
+                    if (current?.sessionId != origin.sessionId || current.workspace?.id != scope)
                         return@launch
                     when (result) {
                         SyncResult.Complete ->
@@ -193,7 +186,7 @@ class AppViewModel(
     private fun onCompanyChangeRequested(event: AppEvent.CompanyChangeRequested) {
         if (state.value.changingWorkspace) return
         val origin = state.value.stage as? AppStage.SignedIn ?: return
-        val scope = origin.selectedWorkspaceId ?: return
+        val scope = origin.workspace?.id ?: return
         accessRefresh?.cancel()
         accessRefresh = null
         updateState { it.copy(changingWorkspace = true, refreshingWorkspace = false) }
@@ -201,7 +194,7 @@ class AppViewModel(
             val result = leaveWorkspace(scope)
             ensureActive()
             val current = state.value.stage as? AppStage.SignedIn
-            if (current?.sessionId != origin.sessionId || current.selectedWorkspaceId != scope)
+            if (current?.sessionId != origin.sessionId || current.workspace?.id != scope)
                 return@launch
             updateState {
                 it.copy(

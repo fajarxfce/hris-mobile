@@ -158,14 +158,7 @@ class RefreshAttendance(
         if (historyAvailability is AppResult.Failed)
             return reject(access, previousGeneration, historyAvailability, selection.window)
         val now = clock.now()
-        val maintenance =
-            policy.policy.maintenance?.let {
-                policy.requestedAt + (it.startsAt - policy.policy.serverTime)
-            }
-        val readAccess =
-            if (maintenance != null && maintenance > now && maintenance < current.readUntil)
-                current.copy(readUntil = maintenance, expiryCode = "company_maintenance")
-            else current
+        val readAccess = boundWorkforceAuthorization(current, policy, now)
         val snapshot =
             AttendanceSnapshot(
                 readAccess,
@@ -176,7 +169,7 @@ class RefreshAttendance(
                 calendar,
                 history,
                 now,
-                minOf(now + ATTENDANCE_CACHE_PERIOD, readAccess.readUntil),
+                now + ATTENDANCE_FRESHNESS_PERIOD,
                 after = selection.after,
             )
         return publish(workspaceId, previousGeneration, snapshot, selection.window)

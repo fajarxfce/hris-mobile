@@ -11,7 +11,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 
-/** Each snapshot has finite deadlines; failed refreshes cannot cause a polling loop. */
+/** Policy deadlines prompt revalidation; stale authority never removes a local selection. */
 class ObserveWorkspaceContext(
     private val sessions: SessionRepository,
     private val workspaces: WorkspaceRepository,
@@ -55,16 +55,12 @@ class ObserveWorkspaceContext(
                                                             snapshot.policy.serverTime)
                                                 },
                                             )
-                                            .filter {
-                                                it > now && it < workspace.admission.expiresAt
-                                            }
+                                            .filter { it > now }
                                             .distinct()
                                             .sorted()
-                                    // At most freshness, scheduled maintenance, and admission
-                                    // expiry. Timers cross fractional server deadlines before
-                                    // evaluating their state, without polling after failure.
-                                    for (deadline in
-                                        policyDeadlines + workspace.admission.expiresAt) {
+                                    // At most freshness and scheduled maintenance. No polling
+                                    // or offline-read expiry is attached to authorization age.
+                                    for (deadline in policyDeadlines) {
                                         delay(
                                             (deadline - clock.now())
                                                 .inWholeMilliseconds

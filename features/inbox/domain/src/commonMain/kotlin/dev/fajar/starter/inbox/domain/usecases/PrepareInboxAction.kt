@@ -38,7 +38,7 @@ class PrepareInboxAction(
                 is AppResult.Failed -> return result
                 is AppResult.Success -> result.value
             }
-        val admission = validateInboxCache(access, page.checkpoint, clock.now())
+        val admission = validateInboxActionSnapshot(access, page.checkpoint, clock.now())
         if (admission is AppResult.Failed) return admission
         val item =
             page.items.singleOrNull() ?: return inboxCommandFailure("client.inbox_item_unavailable")
@@ -124,6 +124,6 @@ class PrepareInboxAction(
                 is AppResult.Failed -> return result
                 is AppResult.Success -> result.value
             }
-        return admitInbox(workspaceId, workspace, session, clock.now())
+        return admitInbox(workspaceId, workspace, session)
     }
 }

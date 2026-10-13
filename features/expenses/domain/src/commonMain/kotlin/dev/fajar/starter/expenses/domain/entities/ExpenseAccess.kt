@@ -10,8 +10,8 @@ data class ExpenseAccess(
     val timezone: String,
     val permissions: Set<String>,
     val sessionExpiresAt: Instant,
-    val readUntil: Instant,
-    val expiryCode: String,
+    val authorizationExpiresAt: Instant,
+    val authorizationExpiryCode: String,
 ) {
     override fun toString() = "ExpenseAccess([redacted])"
 }

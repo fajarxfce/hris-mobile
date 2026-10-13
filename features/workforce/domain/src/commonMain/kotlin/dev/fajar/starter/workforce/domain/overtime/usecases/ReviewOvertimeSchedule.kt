@@ -91,11 +91,11 @@ class ReviewOvertimeSchedule(
                     is AppResult.Failed -> return@withTimeoutOrNull acquired
                     is AppResult.Success -> acquired.value
                 }
-            val bounded = boundOvertimeReadAccess(current, policy, now)
+            val bounded = boundOvertimeAuthorization(current, policy, now)
             val expiry =
                 minOf(
                     now + OVERTIME_PREPARATION_PERIOD,
-                    bounded.readUntil,
+                    bounded.authorizationExpiresAt,
                     bounded.sessionExpiresAt,
                     policy.requestedAt + (policy.policy.validUntil - policy.policy.serverTime),
                 )

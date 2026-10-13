@@ -9,7 +9,6 @@ import dev.fajar.starter.payroll.domain.repositories.PayslipCacheRepository
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
 import kotlin.time.Clock
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 
 class ObservePayslip(
@@ -57,37 +56,22 @@ class ObservePayslip(
                 when (admitted) {
                     is AppResult.Failed -> flowOf(admitted)
                     is AppResult.Success ->
-                        cache.observeDetails(admitted.value).flatMapLatest { result ->
-                            flow<AppResult<PayslipSnapshot<PayslipView>?>> {
-                                if (result is AppResult.Failed) {
-                                    emit(result)
-                                    return@flow
-                                }
-                                val snapshot =
-                                    (result as AppResult.Success).value?.takeIf {
-                                        it.value.payslip.summary.id == id
+                        cache.observeDetails(admitted.value).map { result ->
+                            when (result) {
+                                is AppResult.Failed -> result
+                                is AppResult.Success ->
+                                    when (
+                                        val ownership =
+                                            validateStoredPayslip(admitted.value, result.value)
+                                    ) {
+                                        is AppResult.Failed -> ownership
+                                        is AppResult.Success ->
+                                            AppResult.Success(
+                                                result.value?.takeIf {
+                                                    it.value.payslip.summary.id == id
+                                                }
+                                            )
                                     }
-                                val validity =
-                                    validatePayslipCache(admitted.value, snapshot, clock.now())
-                                if (validity is AppResult.Failed) {
-                                    emit(validity)
-                                    return@flow
-                                }
-                                emit(AppResult.Success(snapshot))
-                                val deadline =
-                                    minOf(
-                                        admitted.value.readUntil,
-                                        snapshot?.expiresAt ?: admitted.value.readUntil,
-                                    )
-                                delay((deadline - clock.now()).inWholeMilliseconds.coerceAtLeast(0))
-                                emit(
-                                    payslipFailure(
-                                        if (admitted.value.readUntil <= deadline)
-                                            admitted.value.expiryCode
-                                        else "client.payslip_cache_expired",
-                                        FailureKind.AccessDenied,
-                                    )
-                                )
                             }
                         }
                 }

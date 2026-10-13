@@ -69,7 +69,7 @@ class ReviewLeaveSubmission(
                         is AppResult.Failed -> return@withTimeoutOrNull cached
                         is AppResult.Success -> cached.value
                     }
-                val lease = validateLeaveRequestCache(access, snapshot, clock.now())
+                val lease = validateLeaveActionSnapshot(access, snapshot, clock.now())
                 if (lease is AppResult.Failed) return@withTimeoutOrNull lease
                 val cachedRequest = snapshot?.request
                 if (

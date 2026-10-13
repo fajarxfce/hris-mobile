@@ -415,6 +415,7 @@
     <string name="field_rejected_id">Nilai ini tidak diterima.</string>
     <string name="error_validation_id">Periksa informasi dan coba lagi.</string>
     <string name="error_unauthorized_id">Masuk untuk melanjutkan.</string>
+    <string name="sync_sign_in_required_id">Masuk lagi untuk menyinkronkan perubahan.</string>
     <string name="error_network_id">Tidak dapat terhubung. Periksa koneksi Anda.</string>
     <string name="error_timeout_id">Waktu permintaan habis. Coba lagi.</string>
     <string name="error_service_id">Layanan tidak tersedia. Coba lagi.</string>

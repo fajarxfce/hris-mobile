@@ -15,7 +15,7 @@ import kotlin.time.Instant
 import kotlinx.coroutines.*
 import kotlinx.coroutines.test.*
 
-class AppWorkspaceRecoveryTest {
+class AppLocalWorkspaceTest {
     @Test
     fun admittedColdStartOpensWithoutWaitingForAnUnreachableServer() = runTest {
         val f = RecoveryFixture(this, expired = false)
@@ -37,16 +37,13 @@ class AppWorkspaceRecoveryTest {
     }
 
     @Test
-    fun expiredColdStartRetainsCompanyRecoveryWithoutExposingDataOrPolling() = runTest {
+    fun staleColdStartKeepsCompanyDataWithoutWaitingForTheNetworkOrPolling() = runTest {
         val f = RecoveryFixture(this)
         try {
             runCurrent()
             assertEquals(0, f.calls)
-            assertEquals(
-                AppStage.SignedIn(f.session.id, expiredWorkspaceId = f.selected.id),
-                f.vm.state.value.stage,
-            )
-            assertNull(f.vm.state.value.companyPolicy)
+            assertEquals(AppStage.SignedIn(f.session.id, f.selected), f.vm.state.value.stage)
+            assertNotNull(f.vm.state.value.companyPolicy)
             f.vm.onEvent(AppEvent.ForegroundEntered)
             runCurrent()
             assertEquals(1, f.calls)
@@ -55,7 +52,7 @@ class AppWorkspaceRecoveryTest {
             advanceTimeBy(10.minutes)
             runCurrent()
             assertEquals(1, f.calls)
-            assertNull(assertIs<AppStage.SignedIn>(f.vm.state.value.stage).workspace)
+            assertEquals(f.selected, assertIs<AppStage.SignedIn>(f.vm.state.value.stage).workspace)
             assertEquals(AppResult.Success(f.selected), f.workspaces.current(f.session.id))
         } finally {
             f.close()
@@ -63,7 +60,7 @@ class AppWorkspaceRecoveryTest {
     }
 
     @Test
-    fun recoveryStaysClosedDuringRetryAndSuccessfulRenewalDoesNotTriggerAnotherRequest() = runTest {
+    fun localReadsRemainOpenDuringRefreshAndSuccessfulRenewalDoesNotLoop() = runTest {
         val f = RecoveryFixture(this)
         val release = CompletableDeferred<Unit>()
         try {
@@ -79,12 +76,11 @@ class AppWorkspaceRecoveryTest {
             runCurrent()
             assertEquals(2, f.calls)
             assertTrue(f.vm.state.value.refreshingWorkspace)
-            assertNull(assertIs<AppStage.SignedIn>(f.vm.state.value.stage).workspace)
+            assertEquals(f.selected, assertIs<AppStage.SignedIn>(f.vm.state.value.stage).workspace)
             release.complete(Unit)
             runCurrent()
             val admitted = assertIs<AppStage.SignedIn>(f.vm.state.value.stage)
             assertEquals(f.selected.id, admitted.workspace?.id)
-            assertNull(admitted.expiredWorkspaceId)
             assertNull(f.vm.state.value.accessFailure)
             assertNull(f.vm.state.value.workspaceRefreshFailure)
             assertFalse(f.vm.state.value.refreshingWorkspace)
@@ -97,7 +93,7 @@ class AppWorkspaceRecoveryTest {
     }
 
     @Test
-    fun aVisibleWorkspaceExpiringOfflineRequestsOneRenewalWithoutClearingItsSelection() = runTest {
+    fun stalePolicyRequestsOneRefreshWithoutExpiringLocalReads() = runTest {
         val f = RecoveryFixture(this, expired = false)
         try {
             f.vm.onEvent(AppEvent.ForegroundEntered)
@@ -108,14 +104,12 @@ class AppWorkspaceRecoveryTest {
             assertEquals(2, f.calls)
             advanceTimeBy(1.hours)
             runCurrent()
-            assertEquals(3, f.calls)
-            assertEquals(
-                AppStage.SignedIn(f.session.id, expiredWorkspaceId = f.selected.id),
-                f.vm.state.value.stage,
-            )
-            advanceTimeBy(2.hours)
+            assertEquals(2, f.calls)
+            assertEquals(AppStage.SignedIn(f.session.id, f.selected), f.vm.state.value.stage)
+            advanceTimeBy(72.hours)
             runCurrent()
-            assertEquals(3, f.calls)
+            assertEquals(2, f.calls)
+            assertEquals(f.selected, assertIs<AppStage.SignedIn>(f.vm.state.value.stage).workspace)
         } finally {
             f.close()
         }
@@ -139,7 +133,7 @@ class AppWorkspaceRecoveryTest {
             f.vm.onEvent(AppEvent.BootstrapRequested)
             runCurrent()
             assertEquals(storage, f.vm.state.value.accessFailure)
-            assertNull(assertIs<AppStage.SignedIn>(f.vm.state.value.stage).workspace)
+            assertEquals(f.selected, assertIs<AppStage.SignedIn>(f.vm.state.value.stage).workspace)
             assertEquals(AppResult.Success(f.selected), f.workspaces.current(f.session.id))
             f.workspaces.casFailure = null
             f.load = { AppResult.Success(f.account) }
@@ -189,7 +183,7 @@ class AppWorkspaceRecoveryTest {
     }
 
     @Test
-    fun anAccountChangeDiscardsTheExpiredSelectionAndRejectsALateRecoveryResult() = runTest {
+    fun anAccountChangeDiscardsLocalSelectionAndRejectsALateRefreshResult() = runTest {
         val f = RecoveryFixture(this)
         val release = CompletableDeferred<Unit>()
         try {
@@ -214,7 +208,7 @@ class AppWorkspaceRecoveryTest {
     }
 
     @Test
-    fun explicitlyLeavingAnExpiredCompanyIsLocalAndDoesNotFetchAnotherCompany() = runTest {
+    fun explicitlyLeavingAStaleCompanyIsLocalAndDoesNotFetchAnotherCompany() = runTest {
         val f = RecoveryFixture(this)
         try {
             f.vm.onEvent(AppEvent.ForegroundEntered)

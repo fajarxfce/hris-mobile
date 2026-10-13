@@ -11,6 +11,7 @@ import dev.fajar.starter.workforce.domain.overtime.entities.*
 import java.nio.file.Files
 import kotlin.io.encoding.Base64
 import kotlin.test.*
+import kotlin.time.Duration.Companion.hours
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
@@ -27,7 +28,7 @@ class OvertimeCacheTest {
                 f.page.toRequests(f.base.employee.id, f.base.period, null, null),
             ),
             f.base.now,
-            f.access.readUntil,
+            f.access.authorizationExpiresAt,
         )
     private val details =
         OvertimeSnapshot(
@@ -35,8 +36,26 @@ class OvertimeCacheTest {
             "first",
             OvertimeRequestView(f.selection, f.detail.toDetails(f.selection)),
             f.base.now,
-            f.access.readUntil,
+            f.access.authorizationExpiresAt,
         )
+
+    @Test
+    fun freshFactsPersistIndependentlyOfAnExpiredAuthorizationDeadline() = runTest {
+        withDatabase { db, keys ->
+            val repo = EncryptedOvertimeCacheRepository(db.replicas, AesGcmContentCipher(), keys)
+            val access =
+                f.access.copy(
+                    authorizationExpiresAt = f.base.now - 1.hours,
+                    sessionExpiresAt = f.base.now - 1.hours,
+                )
+            val savedList = overview.copy(access = access, refreshAfter = f.base.now + 1.hours)
+            val savedDetail = details.copy(access = access, refreshAfter = f.base.now + 1.hours)
+            assertEquals(AppResult.Success(true), repo.replace(access, null, savedList))
+            assertEquals(AppResult.Success(true), repo.replaceRequest(access, null, savedDetail))
+            assertEquals(AppResult.Success(savedList), repo.observe(access).first())
+            assertEquals(AppResult.Success(savedDetail), repo.observeRequest(access).first())
+        }
+    }
 
     @Test
     fun separateReadViewsRestoreEncryptedFactsAndRejectStaleReplacement() = runTest {

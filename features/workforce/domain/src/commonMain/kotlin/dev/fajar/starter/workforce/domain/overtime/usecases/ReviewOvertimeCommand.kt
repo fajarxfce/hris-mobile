@@ -69,7 +69,7 @@ class ReviewOvertimeCommand(
                         is AppResult.Failed -> return@withTimeoutOrNull observed
                         is AppResult.Success -> observed.value
                     }
-                val lease = validateOvertimeCache(access, snapshot, clock.now())
+                val lease = validateOvertimeActionSnapshot(access, snapshot, clock.now())
                 if (lease is AppResult.Failed) return@withTimeoutOrNull lease
                 if (snapshot == null)
                     return@withTimeoutOrNull overtimeFailure(

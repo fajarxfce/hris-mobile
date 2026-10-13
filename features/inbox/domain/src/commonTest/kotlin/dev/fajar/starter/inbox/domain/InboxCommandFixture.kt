@@ -158,7 +158,7 @@ class InboxCommandFixture(val inbox: InboxFixture = InboxFixture()) {
             inbox.workspaces,
             inbox.clock,
         )
-    val observe = ObserveInboxAction(commands, inbox.sessions, inbox.workspaces, inbox.clock)
+    val observe = ObserveInboxAction(commands, inbox.sessions, inbox.workspaces)
 
     suspend fun queue(action: InboxAction = InboxAction.READ, version: Long = inbox.item.version) =
         prepare(inbox.workspace.id, inbox.item.id, version, action)

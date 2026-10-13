@@ -15,19 +15,29 @@ fun validateLeaveRequestSelection(selection: LeaveRequestSelection): AppResult<U
         else -> AppResult.Success(Unit)
     }
 
-fun validateLeaveRequestCache(
+fun validateLeaveActionSnapshot(
     access: LeaveAccess,
     snapshot: LeaveRequestSnapshot?,
     now: Instant,
 ): AppResult<Unit> =
     when {
-        access.readUntil <= now -> leaveFailure(access.expiryCode, FailureKind.AccessDenied)
+        access.authorizationExpiresAt <= now ->
+            leaveFailure(access.authorizationExpiryCode, FailureKind.Unavailable)
         snapshot == null -> AppResult.Success(Unit)
         !sameLeaveScope(access, snapshot.access) ->
             leaveFailure("client.leave_scope_changed", FailureKind.AccessDenied)
         snapshot.fetchedAt > now ||
-            snapshot.expiresAt <= now ||
-            snapshot.expiresAt > snapshot.fetchedAt + LEAVE_CACHE_PERIOD ->
-            leaveFailure("client.leave_cache_expired", FailureKind.AccessDenied)
+            snapshot.refreshAfter <= now ||
+            snapshot.refreshAfter > snapshot.fetchedAt + LEAVE_FRESHNESS_PERIOD ->
+            leaveFailure("client.leave_cache_expired", FailureKind.Unavailable)
         else -> AppResult.Success(Unit)
     }
+
+/** Stored facts remain readable after freshness expires; commands validate current authority. */
+fun validateStoredLeaveRequest(
+    access: LeaveAccess,
+    snapshot: LeaveRequestSnapshot?,
+): AppResult<Unit> =
+    if (snapshot != null && !sameLeaveScope(access, snapshot.access))
+        leaveFailure("client.leave_scope_changed", FailureKind.AccessDenied)
+    else AppResult.Success(Unit)

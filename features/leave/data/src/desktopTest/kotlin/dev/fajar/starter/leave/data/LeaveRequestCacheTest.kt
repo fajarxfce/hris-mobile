@@ -24,7 +24,7 @@ class LeaveRequestCacheTest {
             LeaveRequestSelection(f.request.id),
             f.detail.toDetails(LeaveRequestSelection(f.request.id)),
             f.now,
-            f.access.readUntil,
+            f.access.authorizationExpiresAt,
         )
 
     @Test
@@ -123,7 +123,7 @@ class LeaveRequestCacheTest {
                     f.balances.toBalances(f.employee.id, 2026, null),
                     f.requests.toRequests(f.employee.id, null, null),
                     f.now,
-                    f.access.readUntil,
+                    f.access.authorizationExpiresAt,
                 )
             coroutineScope {
                 val detailWrite = async { repository.replaceRequest(f.access, null, snapshot) }

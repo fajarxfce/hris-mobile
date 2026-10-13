@@ -10,6 +10,7 @@ import dev.fajar.starter.securestorage.*
 import java.nio.file.Files
 import kotlin.io.encoding.Base64
 import kotlin.test.*
+import kotlin.time.Duration.Companion.hours
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
@@ -27,7 +28,7 @@ class ExpenseCacheTest {
                 f.page.toClaims(selection),
             ),
             f.now,
-            f.access.readUntil,
+            f.access.authorizationExpiresAt,
         )
     private val details =
         ExpenseSnapshot(
@@ -41,8 +42,26 @@ class ExpenseCacheTest {
                 emptyList(),
             ),
             f.now,
-            f.access.readUntil,
+            f.access.authorizationExpiresAt,
         )
+
+    @Test
+    fun freshFactsPersistIndependentlyOfAnExpiredAuthorizationDeadline() = runTest {
+        withDatabase { db, keys ->
+            val repo = EncryptedExpenseCacheRepository(db.replicas, AesGcmContentCipher(), keys)
+            val access =
+                f.access.copy(
+                    authorizationExpiresAt = f.now - 1.hours,
+                    sessionExpiresAt = f.now - 1.hours,
+                )
+            val savedList = overview.copy(access = access, refreshAfter = f.now + 1.hours)
+            val savedDetail = details.copy(access = access, refreshAfter = f.now + 1.hours)
+            assertEquals(AppResult.Success(true), repo.replace(access, null, savedList))
+            assertEquals(AppResult.Success(true), repo.replaceDetails(access, null, savedDetail))
+            assertEquals(AppResult.Success(savedList), repo.observe(access).first())
+            assertEquals(AppResult.Success(savedDetail), repo.observeDetails(access).first())
+        }
+    }
 
     @Test
     fun largeViewsStayInsideDatabaseRecordLimitsAndRejectIncompleteOrReorderedChunks() = runTest {

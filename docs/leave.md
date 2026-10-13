@@ -19,7 +19,7 @@ failures inside `safeApiCall`; storage acquisition, decryption and DTO mapping s
 inside `safeStorageCall`/`safeStorageFlow`. `RefreshLeave` coordinates repositories,
 checks workspace and live module availability, validates the selected employment,
 and publishes only a complete view. It rechecks scope after each pending read.
-`ObserveLeave` owns the admitted cache subscription and its finite expiry timer.
+`ObserveLeave` owns the scoped local subscription without an age-based read timer.
 
 `RefreshLeaveRequest` and `ObserveLeaveRequest` provide the separate request-detail
 read boundary. The API uses `/leave/me/requests/{id}`: an HR or approval grant does
@@ -47,7 +47,7 @@ an HR read/manage permission does not broaden this employee workflow.
 
 Both use cases acquire fresh company policy, recheck session/workspace ownership
 after pending work, propagate cancellation and use a finite deadline. A preview
-cannot outlive the current read lease, session, company policy or known
+cannot outlive recent authorization, the session, company policy or known
 maintenance. The selected dates are copied before acquisition. Data mapping
 rejects contradictory date partitions, totals, years and remaining balances.
 The preview carries a revision of the selected policy, working-day plan and
@@ -135,9 +135,9 @@ duplicate or foreign records cannot restore a partial view. Both partitions use
 complete compare-and-set replacement. A missing encryption key cannot be
 regenerated over either existing partition.
 
-A read lease lasts at most one hour and cannot outlive workspace admission, the
-native session or known maintenance. Authority loss removes content; a transport
-failure may retain an otherwise valid view. Cancellation or a replaced workspace
+Saved facts have a freshness timestamp, without an age-based read limit. Command
+preparation separately requires current authorization and a reviewed version.
+Confirmed authority loss removes content; transport failure retains owned views. Cancellation or a replaced workspace
 cannot publish old results or clear the replacement scope. There is no automatic
 retry, background polling or permission orchestration in the data layer.
 
@@ -154,10 +154,9 @@ not authorize reading the previous view.
 An upstream storage failure can complete the cache flow without ending the outer
 state collector. A successful explicit refresh reopens observation in both the
 overview and detail screens; errors never start an automatic retry loop.
-Expiry of displayed data requests one fresh acquisition, retaining the current
-employment/year/status or detail history selection. Pending recovery shows loading
-instead of a cache-expired error. A failed recovery reports its cause and retains
-the closed read gate until a successful retry.
+Stale data remains visible during explicit refresh, retaining the current
+employment/year/status or detail history selection. A network failure reports its
+cause without expiring that content or starting a hidden retry loop.
 
 Balances have their own year filter; request history explicitly covers all dates.
 Year and status controls remain usable after a transport failure. Cursor actions
@@ -176,8 +175,8 @@ hides its saved content, including through subsequent failed retries.
 ## Durable request actions
 
 Withdrawal, cancellation requests and withdrawal of a pending cancellation have
-separate domain intents. Admission checks the visible request version, its live
-read lease, write permission, available actions and a reason of at most 1,000
+separate domain intents. Preparation checks the visible request version, recent
+authorization, write permission, available actions and a reason of at most 1,000
 characters. A repeated confirmation recovers the same retained intent; different
 input cannot silently replace it.
 

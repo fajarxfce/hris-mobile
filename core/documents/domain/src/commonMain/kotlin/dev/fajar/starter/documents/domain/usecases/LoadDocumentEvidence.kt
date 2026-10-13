@@ -70,10 +70,10 @@ class LoadDocumentEvidence(
                     val expiry =
                         minOf(
                             requestedAt + DOCUMENT_EVIDENCE_PERIOD,
-                            publication.readUntil,
+                            publication.authorizationExpiresAt,
                             publication.sessionExpiresAt,
                             policyDeadline,
-                            maintenance ?: publication.readUntil,
+                            maintenance ?: publication.authorizationExpiresAt,
                         )
                     if (expiry <= clock.now())
                         documentFailure(

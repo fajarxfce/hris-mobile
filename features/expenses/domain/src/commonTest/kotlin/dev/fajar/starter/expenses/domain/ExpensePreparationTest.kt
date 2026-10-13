@@ -286,7 +286,12 @@ class ExpensePreparationTest {
         )
         assertEquals(
             AppResult.Success(now + 8.seconds),
-            expensePreparationExpiry(f.access.copy(readUntil = now + 8.seconds), policy, now, now),
+            expensePreparationExpiry(
+                f.access.copy(authorizationExpiresAt = now + 8.seconds),
+                policy,
+                now,
+                now,
+            ),
         )
     }
 }

@@ -57,7 +57,7 @@ class ReviewInboxAction(
                         is AppResult.Failed -> return result
                         is AppResult.Success -> result.value
                     }
-                val valid = validateInboxCache(access, page.checkpoint, clock.now())
+                val valid = validateInboxActionSnapshot(access, page.checkpoint, clock.now())
                 if (valid is AppResult.Failed) return valid
                 val item = page.items.singleOrNull()
                 if (
@@ -99,6 +99,6 @@ class ReviewInboxAction(
                 is AppResult.Failed -> return result
                 is AppResult.Success -> result.value
             }
-        return admitInbox(workspaceId, workspace, session, clock.now())
+        return admitInbox(workspaceId, workspace, session)
     }
 }

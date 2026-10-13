@@ -217,7 +217,7 @@ class PayslipViewModelTest {
     }
 
     @Test
-    fun expiredVisibleReadRenewsWithoutAnErrorWhilePending() = runTest {
+    fun staleContentRemainsVisibleWhileAnExplicitRefreshIsPending() = runTest {
         withModel { f, model, _ ->
             model.onEvent(PayslipEvent.Entered)
             runCurrent()
@@ -229,13 +229,17 @@ class PayslipViewModelTest {
                 AppResult.Success(f.base.slip)
             }
             f.base.detailRecords.value =
-                AppResult.Success(saved.copy(expiresAt = f.base.clock.now() + 1.seconds))
+                AppResult.Success(saved.copy(refreshAfter = f.base.clock.now() + 1.seconds))
             runCurrent()
             advanceTimeBy(1_001)
             runCurrent()
+            assertFalse(model.state.value.refreshing)
+            assertNotNull(model.state.value.content)
+            model.onEvent(PayslipEvent.RefreshRequested)
+            runCurrent()
             assertTrue(model.state.value.refreshing)
-            assertTrue(model.state.value.readRestricted)
-            assertNull(model.state.value.content)
+            assertFalse(model.state.value.readRestricted)
+            assertNotNull(model.state.value.content)
             assertNull(model.state.value.failure)
             assertEquals(writes, f.base.writes)
             release.complete(Unit)
@@ -248,7 +252,7 @@ class PayslipViewModelTest {
     }
 
     @Test
-    fun failedAutomaticRenewalRetainsTheReadGateAndStopsRetrying() = runTest {
+    fun failedExplicitRefreshKeepsStaleContentAndDoesNotRetryAutomatically() = runTest {
         withModel { f, model, _ ->
             model.onEvent(PayslipEvent.Entered)
             runCurrent()
@@ -259,14 +263,18 @@ class PayslipViewModelTest {
                 payslipFailure("client.network", FailureKind.Network)
             }
             f.base.detailRecords.value =
-                AppResult.Success(saved.copy(expiresAt = f.base.clock.now() + 1.seconds))
+                AppResult.Success(saved.copy(refreshAfter = f.base.clock.now() + 1.seconds))
             runCurrent()
             advanceTimeBy(1_001)
             runCurrent()
+            assertEquals(0, attempts)
+            assertNotNull(model.state.value.content)
+            model.onEvent(PayslipEvent.RefreshRequested)
+            runCurrent()
             assertEquals(1, attempts)
             assertEquals("client.network", model.state.value.failure?.code)
-            assertNull(model.state.value.content)
-            assertTrue(model.state.value.readRestricted)
+            assertNotNull(model.state.value.content)
+            assertFalse(model.state.value.readRestricted)
             advanceTimeBy(10_000)
             runCurrent()
             assertEquals(1, attempts)
@@ -280,7 +288,7 @@ class PayslipViewModelTest {
     }
 
     @Test
-    fun mfaDenialAfterExpirySurvivesFailedRetriesAndRetainedCiphertext() = runTest {
+    fun confirmedMfaDenialSurvivesFailedRetriesAndRetainedCiphertext() = runTest {
         withModel { f, model, _ ->
             model.onEvent(PayslipEvent.Entered)
             runCurrent()
@@ -288,9 +296,11 @@ class PayslipViewModelTest {
             f.base.failCleanup = true
             f.base.detailCall = { payslipFailure("mfa_required", FailureKind.AccessDenied) }
             f.base.detailRecords.value =
-                AppResult.Success(saved.copy(expiresAt = f.base.clock.now() + 1.seconds))
+                AppResult.Success(saved.copy(refreshAfter = f.base.clock.now() + 1.seconds))
             runCurrent()
             advanceTimeBy(1_001)
+            runCurrent()
+            model.onEvent(PayslipEvent.RefreshRequested)
             runCurrent()
             assertTrue(model.state.value.needsVerification)
             assertEquals("mfa_required", model.state.value.failure?.code)

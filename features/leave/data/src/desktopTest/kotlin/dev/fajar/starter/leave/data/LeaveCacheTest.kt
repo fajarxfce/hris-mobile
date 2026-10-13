@@ -23,7 +23,7 @@ class LeaveCacheTest {
             f.balances.toBalances(f.employee.id, 2026, null),
             f.requests.toRequests(f.employee.id, null, null),
             f.now,
-            f.access.readUntil,
+            f.access.authorizationExpiresAt,
         )
 
     @Test

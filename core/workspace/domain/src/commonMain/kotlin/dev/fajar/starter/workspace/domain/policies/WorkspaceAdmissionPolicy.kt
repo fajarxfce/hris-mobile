@@ -6,7 +6,7 @@ import dev.fajar.starter.workspace.domain.entities.*
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Instant
 
-val WORKSPACE_OFFLINE_PERIOD = 1.hours
+val WORKSPACE_AUTHORIZATION_PERIOD = 1.hours
 
 fun workspaceAdmission(
     session: Session,
@@ -15,7 +15,8 @@ fun workspaceAdmission(
     now: Instant,
 ): AppResult<WorkspaceAdmission> {
     val sessionEnd = Instant.fromEpochMilliseconds(session.binding.expiresAtEpochMillis)
-    if (sessionEnd <= now) return workspaceFailure("session_revoked", FailureKind.Unauthorized)
+    if (sessionEnd <= now)
+        return workspaceFailure("client.authentication_required", FailureKind.Unavailable)
     val assuranceEnd =
         if (assurance.required) {
             val end = assurance.validUntilEpochMillis?.let(Instant::fromEpochMilliseconds)
@@ -23,8 +24,9 @@ fun workspaceAdmission(
                 return workspaceFailure("mfa_required")
             end
         } else sessionEnd
-    val expiresAt = minOf(checkedAt + WORKSPACE_OFFLINE_PERIOD, sessionEnd, assuranceEnd)
-    if (checkedAt > now || expiresAt <= now) return workspaceFailure("client.workspace_expired")
+    val expiresAt = minOf(checkedAt + WORKSPACE_AUTHORIZATION_PERIOD, sessionEnd, assuranceEnd)
+    if (checkedAt > now || expiresAt <= now)
+        return workspaceFailure("client.workspace_expired", FailureKind.Unavailable)
     return AppResult.Success(
         WorkspaceAdmission(session.user.id, session.binding.serverId, checkedAt, expiresAt)
     )

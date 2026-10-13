@@ -76,9 +76,8 @@ class SyncInbox(
         val policy =
             when (policyResponse) {
                 is AppResult.Failed -> {
-                    if (policyResponse.failure.code in accessLossCodes) {
-                        val cleared = cache.clear(access)
-                        if (cleared is AppResult.Failed) return cleared
+                    if (inboxFailureInvalidatesCache(policyResponse.failure)) {
+                        withTimeoutOrNull(2.seconds) { cache.clear(access) }
                     }
                     return policyResponse
                 }
@@ -101,10 +100,7 @@ class SyncInbox(
                 is AppResult.Failed -> return result
                 is AppResult.Success -> result.value
             }
-        if (
-            checkpoint != null &&
-                (!sameInboxScope(checkpoint.access, access) || checkpoint.expiresAt <= clock.now())
-        ) {
+        if (checkpoint != null && !sameInboxScope(checkpoint.access, access)) {
             val cleared = cache.clear(access)
             if (cleared is AppResult.Failed) return cleared
             checkpoint = null
@@ -140,15 +136,27 @@ class SyncInbox(
             }
             if (incoming is AppResult.Failed) {
                 if (incoming.failure.code in cursorResetCodes && !restarted) {
-                    val cleared = cache.clear(access)
-                    if (cleared is AppResult.Failed) return cleared
+                    if (incoming.failure.code == "sync_scope_changed") {
+                        // Failed cleanup cannot turn this scope denial into a storage-only error.
+                        val cleared = withTimeoutOrNull(2.seconds) { cache.clear(access) }
+                        if (cleared !is AppResult.Success || !cleared.value) return incoming
+                        checkpoint = null
+                    } else {
+                        // Cursor retention is unrelated to permission to read stored facts.
+                        // Stage a replacement while the published generation stays visible.
+                        val replacement =
+                            initialInboxCheckpoint(access, Uuid.random().toString(), clock.now())
+                        when (val started = cache.begin(replacement, previous.generation)) {
+                            is AppResult.Failed -> return started
+                            is AppResult.Success -> if (!started.value) return staleInboxScope()
+                        }
+                        checkpoint = replacement
+                    }
                     restarted = true
-                    checkpoint = null
                     return@repeat
                 }
-                if (incoming.failure.code in accessLossCodes) {
-                    val cleared = cache.clear(access)
-                    if (cleared is AppResult.Failed) return cleared
+                if (inboxFailureInvalidatesCache(incoming.failure)) {
+                    withTimeoutOrNull(2.seconds) { cache.clear(access) }
                 }
                 return incoming
             }
@@ -163,9 +171,8 @@ class SyncInbox(
             val entries =
                 when (hydrated) {
                     is AppResult.Failed -> {
-                        if (hydrated.failure.code in accessLossCodes) {
-                            val cleared = cache.clear(access)
-                            if (cleared is AppResult.Failed) return cleared
+                        if (inboxFailureInvalidatesCache(hydrated.failure)) {
+                            withTimeoutOrNull(2.seconds) { cache.clear(access) }
                         }
                         return hydrated
                     }
@@ -336,7 +343,7 @@ class SyncInbox(
                 is AppResult.Failed -> return result
                 is AppResult.Success -> result.value
             }
-        return admitInbox(workspaceId, workspace, session, clock.now())
+        return admitInbox(workspaceId, workspace, session)
     }
 
     companion object {
@@ -358,5 +365,3 @@ private val cursorResetCodes =
         "sync_bootstrap_limit",
         "invalid_sync_cursor",
     )
-private val accessLossCodes =
-    setOf("session_revoked", "company_access_denied", "sync_access_denied")

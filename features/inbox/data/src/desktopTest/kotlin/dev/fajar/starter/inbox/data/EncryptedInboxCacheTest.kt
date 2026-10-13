@@ -132,6 +132,92 @@ class EncryptedInboxCacheTest {
     }
 
     @Test
+    fun replacementBootstrapRetainsPublishedDataAcrossDatabaseReopenUntilAtomicPublication() =
+        runTest {
+            val directory = Files.createTempDirectory("inbox-replacement").toFile()
+            var db = createAppDatabase(directory)
+            val keys = MemoryCredentialStore()
+            try {
+                db.accounts.activate(access.sessionId)
+                var repository =
+                    EncryptedInboxCacheRepository(db.replicas, AesGcmContentCipher(), keys)
+                assertEquals(AppResult.Success(true), repository.begin(initial, null))
+                val published =
+                    initial.copy(
+                        revision = 1,
+                        phase = InboxSyncPhase.CHANGES,
+                        cursor = "old-cursor",
+                        published = true,
+                        refreshedAt = now,
+                    )
+                assertEquals(
+                    AppResult.Success(true),
+                    repository.commit(
+                        initial,
+                        published,
+                        listOf(InboxReplicaEntry(item.id, item.version, item)),
+                    ),
+                )
+                val previous = InboxCachePage(published, listOf(item), null)
+                val replacement =
+                    initial.copy(generation = "replacement", refreshAfter = now + 73.hours)
+                assertEquals(
+                    AppResult.Success(true),
+                    repository.begin(replacement, published.generation),
+                )
+                assertEquals(
+                    AppResult.Success(previous),
+                    repository.observe(access, InboxCacheQuery.Page()).first(),
+                )
+                assertEquals(AppResult.Success(replacement), repository.checkpoint(access))
+                db.close()
+                db = createAppDatabase(directory)
+                repository = EncryptedInboxCacheRepository(db.replicas, AesGcmContentCipher(), keys)
+                assertEquals(
+                    AppResult.Success(previous),
+                    repository.observe(access, InboxCacheQuery.Page()).first(),
+                )
+                assertEquals(AppResult.Success(replacement), repository.checkpoint(access))
+                val updated = item.copy(title = "Updated notice", version = item.version + 1)
+                val ready =
+                    replacement.copy(
+                        revision = 1,
+                        phase = InboxSyncPhase.CHANGES,
+                        cursor = "new-cursor",
+                        published = true,
+                        refreshedAt = now + 72.hours,
+                    )
+                assertEquals(
+                    AppResult.Success(true),
+                    repository.commit(
+                        replacement,
+                        ready,
+                        listOf(InboxReplicaEntry(updated.id, updated.version, updated)),
+                    ),
+                )
+                assertEquals(
+                    AppResult.Success(InboxCachePage(ready, listOf(updated), null)),
+                    repository.observe(access, InboxCacheQuery.Page()).first(),
+                )
+                assertEquals(
+                    AppResult.Success(false),
+                    repository.commit(
+                        published,
+                        published.copy(revision = 2),
+                        listOf(InboxReplicaEntry(item.id, item.version, item)),
+                    ),
+                )
+                assertEquals(
+                    AppResult.Success(InboxCachePage(ready, listOf(updated), null)),
+                    repository.observe(access, InboxCacheQuery.Item(item.id)).first(),
+                )
+            } finally {
+                db.close()
+                directory.deleteRecursively()
+            }
+        }
+
+    @Test
     fun ciphertextCannotBeReadWithAnotherAccountAudienceOrKey() = runTest {
         val directory = Files.createTempDirectory("inbox-binding").toFile()
         val db = createAppDatabase(directory)

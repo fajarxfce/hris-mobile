@@ -14,6 +14,7 @@ import kotlinx.serialization.json.*
 /** Independent wire fixture for the native inbox, with no runtime mock registration. */
 class NativeInboxUi {
     @Volatile var offline = false
+    @Volatile var failureCode: String? = null
     @Volatile var archived = false
     @Volatile var loseNextActionResponse = false
     @Volatile var rejectNextAction = false
@@ -44,6 +45,9 @@ class NativeInboxUi {
         if (!path.contains("/sync/") && !path.contains("/inbox/")) return null
         pauseRefresh(path)
         if (offline) throw IOException("Simulated offline inbox")
+        failureCode?.let {
+            return """{"code":"$it"}""" to HttpStatusCode.Forbidden
+        }
         val company = path.split('/').getOrNull(4)
         check(company in setOf(NativeUiServer.COMPANY_ONE, NativeUiServer.COMPANY_TWO))
         val ownCompany = company == NativeUiServer.COMPANY_ONE

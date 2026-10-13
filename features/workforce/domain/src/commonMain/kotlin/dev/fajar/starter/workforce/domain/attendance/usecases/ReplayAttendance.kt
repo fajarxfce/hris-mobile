@@ -140,7 +140,7 @@ class ReplayAttendance(
         currentCoroutineContext().ensureActive()
         val continued = validateWorkforceContinuation(access, currentAccess(workspaceId))
         if (continued is AppResult.Failed) return continued
-        if (validateAttendanceCache(access, snapshot, clock.now()) is AppResult.Failed)
+        if (validateAttendanceCaptureSnapshot(access, snapshot, clock.now()) is AppResult.Failed)
             return AppResult.Success(false)
         if (snapshot.employeeId != record.command.employeeId) return AppResult.Success(false)
         if (

@@ -33,15 +33,20 @@ class AcquireSessionTokens(
                     is AppResult.Success -> result.value
                 }
             if (session == null || session.id != sessionId) return@withLock AppResult.Success(null)
-            if (
-                session.binding.audience != server.audience ||
-                    session.binding.expiresAtEpochMillis <= clock.now().toEpochMilliseconds()
-            ) {
+            if (session.binding.audience != server.audience) {
                 return@withLock when (val cleared = sessions.compareAndSet(session, null)) {
                     is AppResult.Failed -> cleared
                     is AppResult.Success -> AppResult.Success(null)
                 }
             }
+            if (session.binding.expiresAtEpochMillis <= clock.now().toEpochMilliseconds())
+                return@withLock AppResult.Failed(
+                    Failure(
+                        FailureKind.Unavailable,
+                        "Sign in to synchronize changes.",
+                        code = "client.authentication_required",
+                    )
+                )
             val expired =
                 session.tokens.expiresAtEpochMillis <= clock.now().toEpochMilliseconds() + 30_000
             if (

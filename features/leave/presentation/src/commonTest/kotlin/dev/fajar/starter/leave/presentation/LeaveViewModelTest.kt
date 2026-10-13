@@ -200,7 +200,7 @@ class LeaveViewModelTest {
     }
 
     @Test
-    fun cacheExpiryDuringAcquisitionStaysRestrictedUntilFreshPublication() = runTest {
+    fun scopeDenialDuringAcquisitionStaysRestrictedUntilFreshPublication() = runTest {
         withLeave { fixture, model, _ ->
             model.onEvent(LeaveEvent.Entered)
             runCurrent()
@@ -213,7 +213,7 @@ class LeaveViewModelTest {
             runCurrent()
             val saved = fixture.records.value
             fixture.records.value =
-                leaveFailure("client.leave_cache_expired", FailureKind.AccessDenied)
+                leaveFailure("client.leave_scope_changed", FailureKind.AccessDenied)
             runCurrent()
             assertTrue(model.state.value.readRestricted)
             assertEquals(0, fixture.observers)
@@ -345,7 +345,7 @@ class LeaveViewModelTest {
     }
 
     @Test
-    fun expiredVisibleReadRenewsWithoutAnErrorWhilePending() = runTest {
+    fun staleContentRemainsVisibleWhileAnExplicitRefreshIsPending() = runTest {
         withLeave { fixture, model, _ ->
             model.onEvent(LeaveEvent.Entered)
             runCurrent()
@@ -357,13 +357,17 @@ class LeaveViewModelTest {
                 AppResult.Success(fixture.directory)
             }
             fixture.records.value =
-                AppResult.Success(saved.copy(expiresAt = fixture.clock.now() + 1.seconds))
+                AppResult.Success(saved.copy(refreshAfter = fixture.clock.now() + 1.seconds))
             runCurrent()
             advanceTimeBy(1_001)
             runCurrent()
+            assertFalse(model.state.value.refreshing)
+            assertNotNull(model.state.value.content)
+            model.onEvent(LeaveEvent.RefreshRequested)
+            runCurrent()
             assertTrue(model.state.value.refreshing)
-            assertTrue(model.state.value.readRestricted)
-            assertNull(model.state.value.content)
+            assertFalse(model.state.value.readRestricted)
+            assertNotNull(model.state.value.content)
             assertNull(model.state.value.failure)
             assertEquals(writes, fixture.writes)
             release.complete(Unit)
@@ -376,7 +380,7 @@ class LeaveViewModelTest {
     }
 
     @Test
-    fun failedAutomaticRenewalRetainsTheReadGateAndStopsRetrying() = runTest {
+    fun failedExplicitRefreshKeepsStaleContentAndDoesNotRetryAutomatically() = runTest {
         withLeave { fixture, model, _ ->
             model.onEvent(LeaveEvent.Entered)
             runCurrent()
@@ -387,14 +391,18 @@ class LeaveViewModelTest {
                 leaveFailure("client.network", FailureKind.Network)
             }
             fixture.records.value =
-                AppResult.Success(saved.copy(expiresAt = fixture.clock.now() + 1.seconds))
+                AppResult.Success(saved.copy(refreshAfter = fixture.clock.now() + 1.seconds))
             runCurrent()
             advanceTimeBy(1_001)
             runCurrent()
+            assertEquals(0, attempts)
+            assertNotNull(model.state.value.content)
+            model.onEvent(LeaveEvent.RefreshRequested)
+            runCurrent()
             assertEquals(1, attempts)
             assertEquals("client.network", model.state.value.failure?.code)
-            assertNull(model.state.value.content)
-            assertTrue(model.state.value.readRestricted)
+            assertNotNull(model.state.value.content)
+            assertFalse(model.state.value.readRestricted)
             advanceTimeBy(10_000)
             runCurrent()
             assertEquals(1, attempts)
@@ -408,7 +416,7 @@ class LeaveViewModelTest {
     }
 
     @Test
-    fun renewedWorkspaceDoesNotExtendOldDataAndExpiryAcquiresANewSnapshot() = runTest {
+    fun renewedWorkspaceDoesNotRewriteSavedDataOrStartAHiddenRefreshLoop() = runTest {
         withLeave { fixture, model, _ ->
             model.onEvent(LeaveEvent.Entered)
             runCurrent()
@@ -431,14 +439,14 @@ class LeaveViewModelTest {
                 )
             runCurrent()
             assertEquals(previous.generation, model.state.value.content?.generation)
-            assertEquals(previous.expiresAt, model.state.value.content?.expiresAt)
+            assertEquals(previous.refreshAfter, model.state.value.content?.refreshAfter)
             assertEquals(reads, fixture.directoryReads)
             advanceTimeBy(30.minutes + 1.milliseconds)
             runCurrent()
             val renewed = assertNotNull(model.state.value.content)
-            assertNotEquals(previous.generation, renewed.generation)
+            assertEquals(previous.generation, renewed.generation)
             assertEquals(2025, renewed.selection.year)
-            assertEquals(reads + 1, fixture.directoryReads)
+            assertEquals(reads, fixture.directoryReads)
             assertNull(model.state.value.failure)
         }
     }

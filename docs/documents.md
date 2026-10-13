@@ -43,8 +43,9 @@ into a later opening, and pending metadata work is cancelled on dismissal.
 Catalog acquisition is online. It does not persist file contents, silently retry
 or schedule background work. `LoadDocumentEmployments` provides read-only employee
 references without requiring self-upload or People access. `ObserveDocumentAccess`
-separately reports session/company changes and read-lease expiry; the consuming
-route owns that observation. The inherited generic transfer screen is not an HRIS
+separately reports local session/company ownership and known permission changes;
+the consuming route owns that observation. Evidence pickers retain their own
+short-lived review deadline. The inherited generic transfer screen is not an HRIS
 upload implementation.
 
 ## Local file import
@@ -71,9 +72,9 @@ revision. A completed file, including a commit whose response was lost, remains
 recoverable. Failed cleanup may leave encrypted staging records.
 
 The Documents service exposes account/company-scoped local files, explicit import
-and confirmed local removal. `ObserveDocumentFiles` owns session, company and read
-lease checks; lease expiry cancels the storage reader even without another data
-emission. `RemoveDocumentFile` checks the file revision shown in the confirmation;
+and confirmed local removal. `ObserveDocumentFiles` checks local session/company
+ownership. Age or expired remote credentials do not cancel this local reader;
+sign-out or scope replacement does. `RemoveDocumentFile` checks the file revision shown in the confirmation;
 a concurrently changed file cannot be deleted by an older confirmation.
 
 The feature owns its route and MVI state. Its input operation belongs to the route,

@@ -51,41 +51,14 @@ class ObserveDocumentFiles(
                 when (admitted) {
                     is AppResult.Failed -> flowOf(admitted)
                     is AppResult.Success ->
-                        flow<AppResult<DocumentLocalFiles>> {
-                            val access = admitted.value
-                            val deadline = minOf(access.readUntil, access.sessionExpiresAt)
-                            val expiry =
-                                documentFailure(
-                                    if (access.sessionExpiresAt <= access.readUntil)
-                                        "session_revoked"
-                                    else access.expiryCode,
-                                    FailureKind.AccessDenied,
-                                )
-                            val remaining = deadline - clock.now()
-                            if (remaining.isPositive()) {
-                                withTimeoutOrNull(remaining) {
-                                    files.observe(access).collect { result ->
-                                        currentCoroutineContext().ensureActive()
-                                        if (clock.now() >= deadline) emit(expiry)
-                                        else
-                                            emit(
-                                                when (result) {
-                                                    is AppResult.Failed -> result
-                                                    is AppResult.Success ->
-                                                        AppResult.Success(
-                                                            DocumentLocalFiles(
-                                                                access,
-                                                                result.value.toList(),
-                                                            )
-                                                        )
-                                                }
-                                            )
-                                    }
-                                    // A completed storage stream cannot extend the read lease.
-                                    awaitCancellation()
-                                }
+                        files.observe(admitted.value).map { result ->
+                            when (result) {
+                                is AppResult.Failed -> result
+                                is AppResult.Success ->
+                                    AppResult.Success(
+                                        DocumentLocalFiles(admitted.value, result.value.toList())
+                                    )
                             }
-                            emit(expiry)
                         }
                 }
             }

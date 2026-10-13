@@ -4,6 +4,7 @@ import dev.fajar.starter.common.result.*
 import dev.fajar.starter.leave.domain.entities.*
 import dev.fajar.starter.workspace.domain.entities.*
 import kotlin.test.*
+import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.Instant
@@ -34,7 +35,7 @@ class LeaveRequestReadTest {
         assertEquals(overview, f.base.records.value)
         assertEquals(1, f.reads)
         assertEquals(1, f.writes)
-        assertEquals(f.base.workspace.admission.expiresAt, saved.expiresAt)
+        assertEquals(f.base.workspace.admission.expiresAt, saved.refreshAfter)
     }
 
     @Test
@@ -161,7 +162,7 @@ class LeaveRequestReadTest {
     }
 
     @Test
-    fun livePolicyBlocksTransportAndScheduledMaintenanceBoundsCachedReads() = runTest {
+    fun livePolicyBlocksTransportAndSeparatelyBoundsActionAuthorization() = runTest {
         val f = LeaveRequestFixture()
         f.base.policyCall = { AppResult.Success(f.base.policy.copy(enabledModules = emptySet())) }
         assertEquals("company_module_disabled", assertIs<AppResult.Failed>(f.load()).failure.code)
@@ -177,14 +178,18 @@ class LeaveRequestReadTest {
                 g.observe(g.base.workspace.id, g.selection.requestId).toList(values)
             }
         assertEquals(
-            maintenance.startsAt,
-            assertIs<AppResult.Success<LeaveRequestSnapshot?>>(values.last()).value!!.expiresAt,
+            now + 1.hours,
+            assertIs<AppResult.Success<LeaveRequestSnapshot?>>(values.last()).value!!.refreshAfter,
         )
         advanceTimeBy(30.seconds)
         runCurrent()
+        assertIs<AppResult.Success<LeaveRequestSnapshot?>>(values.last())
         assertEquals(
-            "client.leave_cache_expired",
-            assertIs<AppResult.Failed>(values.last()).failure.code,
+            maintenance.startsAt,
+            assertIs<AppResult.Success<LeaveRequestSnapshot?>>(values.last())
+                .value!!
+                .access
+                .authorizationExpiresAt,
         )
         observer.cancelAndJoin()
         assertEquals(0, g.observers)

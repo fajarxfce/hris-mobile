@@ -290,7 +290,6 @@ internal fun bootstrapViewModel(
         dev.fajar.starter.identity.domain.usecases.RestoreSession(
             identity,
             IdentityServer("https://example.invalid/", "Fixture"),
-            clock,
         ),
         ResolveAppLink(AppEnvironment.Dev),
         RefreshWorkspace(identity, accounts, workspaces, clock),

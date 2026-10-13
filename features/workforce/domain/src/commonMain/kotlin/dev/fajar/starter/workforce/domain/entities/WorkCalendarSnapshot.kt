@@ -11,7 +11,7 @@ data class WorkCalendarSnapshot(
     val period: CalendarPeriod,
     val calendar: WorkCalendar?,
     val fetchedAt: Instant,
-    val expiresAt: Instant,
+    val refreshAfter: Instant,
 ) {
     override fun toString() = "WorkCalendarSnapshot([redacted])"
 }

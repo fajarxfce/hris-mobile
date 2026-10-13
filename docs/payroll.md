@@ -19,9 +19,9 @@ and export requests are dropped; selecting a different year cancels obsolete
 work. Row navigation only accepts a visible payslip ID. Refresh preserves an
 admitted snapshot on transport failure. Back releases observation and pending
 work; a known access denial remains gated through retries and failed cleanup.
-Expiry of a displayed list or payslip starts one fresh read. The expiry message
-is suppressed while that read is pending; failure reports its cause without
-reopening old financial content or automatically repeating the request.
+An owned saved list or payslip does not expire because it is old. An explicit
+refresh keeps it visible while pending or offline. A confirmed denial stays gated
+until successful admitted acquisition; failures never start a retry loop.
 
 ## Reads and offline access
 
@@ -42,15 +42,15 @@ List and detail use separate encrypted partitions under the selected session,
 account, API audience and company. Both reuse the workspace content key; a
 missing key fails rather than generating a replacement. Publication uses an
 atomic observed-generation check. A competing or cancelled acquisition cannot
-overwrite the accepted snapshot. The last read remains eligible for at most an
-hour, further bounded by the workspace lease and scheduled maintenance.
+overwrite the accepted snapshot. Freshness is metadata, not a one-hour read limit.
+PDF export still requires a recent review and live authorization.
 
 Session, company, permissions and live company policy are rechecked around
 acquisition. Remote reads have a thirty-second budget. Access-denial cleanup has
 its own two-second budget so a stalled deletion cannot turn a known denial into
 a transient timeout. Presentation must keep that denial gated through pending
 and failed retries, reopening observation only after fresh admitted acquisition.
-Cache observations end with their owner and emit expiry without polling.
+Cache observations end with their owner or a replaced scope; age has no read timer.
 
 Amounts use the shared bounded `DecimalAmount` value. Its formatting retains
 all server digits and supports English and Indonesian separators without binary
@@ -80,7 +80,7 @@ changing company, or disposing its ViewModel cancels pending export work.
 ## Validation
 
 Domain tests cover scope changes, concurrent publication, pending cancellation,
-late success/failure, lease expiry, collector disposal, failed/hanging cleanup and
+late success/failure, stale facts and export expiry, collector disposal, failed/hanging cleanup and
 save-dialog recovery. Data tests cover SELF transport, bounded DTOs, exact amounts,
 conditional PDF integrity and encrypted storage with real SQLite/AES-GCM on JVM.
 An application integration test resolves the generated bindings. Browser checks

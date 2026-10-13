@@ -12,9 +12,9 @@ import dev.fajar.starter.workspace.domain.entities.Workspace
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Instant
 
-val OVERTIME_CACHE_PERIOD = 1.hours
+val OVERTIME_FRESHNESS_PERIOD = 1.hours
 
-fun boundOvertimeReadAccess(
+fun boundOvertimeAuthorization(
     access: WorkforceAccess,
     policy: CompanyPolicySnapshot,
     now: Instant,
@@ -23,8 +23,11 @@ fun boundOvertimeReadAccess(
         policy.policy.maintenance?.let {
             policy.requestedAt + (it.startsAt - policy.policy.serverTime)
         }
-    return if (startsAt != null && startsAt > now && startsAt < access.readUntil)
-        access.copy(readUntil = startsAt, expiryCode = "company_maintenance")
+    return if (startsAt != null && startsAt > now && startsAt < access.authorizationExpiresAt)
+        access.copy(
+            authorizationExpiresAt = startsAt,
+            authorizationExpiryCode = "company_maintenance",
+        )
     else access
 }
 
@@ -55,19 +58,29 @@ fun validateOvertimeContinuation(
             else overtimeFailure("client.overtime_scope_changed", FailureKind.AccessDenied)
     }
 
-fun validateOvertimeCache(
+fun validateOvertimeActionSnapshot(
     access: WorkforceAccess,
     snapshot: OvertimeSnapshot<*>?,
     now: Instant,
 ): AppResult<Unit> =
     when {
-        access.readUntil <= now -> overtimeFailure(access.expiryCode, FailureKind.AccessDenied)
+        access.authorizationExpiresAt <= now ->
+            overtimeFailure(access.authorizationExpiryCode, FailureKind.Unavailable)
         snapshot == null -> AppResult.Success(Unit)
         !sameWorkforceScope(access, snapshot.access) ->
             overtimeFailure("client.overtime_scope_changed", FailureKind.AccessDenied)
         snapshot.fetchedAt > now ||
-            snapshot.expiresAt <= now ||
-            snapshot.expiresAt > snapshot.fetchedAt + OVERTIME_CACHE_PERIOD ->
-            overtimeFailure("client.overtime_cache_expired", FailureKind.AccessDenied)
+            snapshot.refreshAfter <= now ||
+            snapshot.refreshAfter > snapshot.fetchedAt + OVERTIME_FRESHNESS_PERIOD ->
+            overtimeFailure("client.overtime_cache_expired", FailureKind.Unavailable)
         else -> AppResult.Success(Unit)
     }
+
+/** Stored facts remain readable after freshness expires; commands validate current authority. */
+fun validateStoredOvertime(
+    access: WorkforceAccess,
+    snapshot: OvertimeSnapshot<*>?,
+): AppResult<Unit> =
+    if (snapshot != null && !sameWorkforceScope(access, snapshot.access))
+        overtimeFailure("client.overtime_scope_changed", FailureKind.AccessDenied)
+    else AppResult.Success(Unit)

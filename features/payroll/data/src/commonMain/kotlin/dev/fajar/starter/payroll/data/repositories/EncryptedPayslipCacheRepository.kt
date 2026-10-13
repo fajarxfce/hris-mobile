@@ -73,9 +73,7 @@ class EncryptedPayslipCacheRepository(
         if (snapshot == null)
             return@safeStorageCall replicas.replace(access.sessionId, partition, previous, null)
         require(
-            samePayrollScope(access, snapshot.access) &&
-                snapshot.generation != expectedGeneration &&
-                snapshot.expiresAt <= snapshot.access.readUntil
+            samePayrollScope(access, snapshot.access) && snapshot.generation != expectedGeneration
         )
         val dto = snapshot.toDto { it.toDto() }
         dto.toSnapshot(access, snapshot.generation) { it.toOverview() }
@@ -145,9 +143,7 @@ class EncryptedPayslipCacheRepository(
         if (snapshot == null)
             return@safeStorageCall replicas.replace(access.sessionId, partition, previous, null)
         require(
-            samePayrollScope(access, snapshot.access) &&
-                snapshot.generation != expectedGeneration &&
-                snapshot.expiresAt <= snapshot.access.readUntil
+            samePayrollScope(access, snapshot.access) && snapshot.generation != expectedGeneration
         )
         val dto = snapshot.toDto { it.toDto() }
         dto.toSnapshot(access, snapshot.generation) { it.toView() }

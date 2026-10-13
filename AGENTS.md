@@ -37,9 +37,11 @@ Read [docs/architecture.md](docs/architecture.md) and [README.md](README.md) bef
 - Test pending cancellation, late results, disposal, retry, and session recovery when
   changing those behaviors. Run `xvfb-run -a ./gradlew :check` on headless Linux and the
   relevant build targets. Report only checks actually performed.
-- Keep authoritative access, MFA and read-lease failures gated through pending and
-  failed retries. Reopen cached reads only after fresh admitted acquisition succeeds;
-  test the case where local cleanup fails and old ciphertext remains.
+- Separate local ownership, data freshness, cursor retention and live authorization.
+  Ordinary age or expired credentials must not hide owned local facts or pending commands.
+  Keep confirmed access/MFA denials gated through pending and failed retries, including
+  failed cache cleanup. Reopen a denied projection only after admitted acquisition;
+  keep operation-specific preparation and export deadlines separate from local reads.
 - Keep copy short and professional. Make atomic commits without co-author trailers.
   Preserve unrelated changes. Push when authorized; releases require an explicit request.
 - Use the dedicated Android emulator for routine interaction while the user's phone

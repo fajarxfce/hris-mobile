@@ -48,7 +48,7 @@ class OvertimeCommandReviewTest {
                 )
                 .value!!
         f.overtime.detailRecords.value =
-            AppResult.Success(fresh.copy(expiresAt = f.base.clock.now()))
+            AppResult.Success(fresh.copy(refreshAfter = f.base.clock.now()))
         assertIs<AppResult.Failed>(f.clear())
         f.overtime.detailRecords.value =
             AppResult.Success(
@@ -91,7 +91,7 @@ class OvertimeCommandReviewTest {
     }
 
     @Test
-    fun commandObservationExpiresAndReleasesItsScopeOnSignOutOrDisposal() = runTest {
+    fun pendingCommandRemainsVisibleUntilSignOutAndReleasesItsScopeOnDisposal() = runTest {
         val origin = Instant.parse("2026-10-12T13:00:00Z")
         val f = OvertimeCommandFixture { origin + testScheduler.currentTime.milliseconds }
         f.queue()
@@ -103,9 +103,11 @@ class OvertimeCommandReviewTest {
             }
         assertEquals(1, f.observers)
         assertIs<AppResult.Success<OvertimeCommandRecord?>>(states.last())
-        advanceTimeBy(1.hours)
+        val initial = states.last()
+        advanceTimeBy(72.hours)
         runCurrent()
-        assertIs<AppResult.Failed>(states.last())
+        assertEquals(initial, states.last())
+        assertEquals(1, states.size)
         f.base.sessionState.value = AppResult.Success(null)
         runCurrent()
         assertEquals(0, f.observers)

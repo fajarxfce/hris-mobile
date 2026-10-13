@@ -72,10 +72,6 @@ class AttendanceHistoryViewModel(
                                 ) == true
                         )
                             return@collect
-                        val renewExpiredRead =
-                            state.value.content != null &&
-                                result is AppResult.Failed &&
-                                result.failure.code == "client.attendance_cache_expired"
                         when (result) {
                             is AppResult.Failed ->
                                 updateState {
@@ -132,7 +128,6 @@ class AttendanceHistoryViewModel(
                                 }
                             }
                         }
-                        if (renewExpiredRead) onEvent(AttendanceHistoryEvent.RefreshRequested)
                     }
             }
         onEvent(AttendanceHistoryEvent.RefreshRequested)

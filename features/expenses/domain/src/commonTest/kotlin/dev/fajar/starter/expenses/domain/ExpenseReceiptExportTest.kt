@@ -61,7 +61,7 @@ class ExpenseReceiptExportTest {
                             value = view.copy(submission = f.submission.copy(claimVersion = 2))
                         )
                     4 -> f.snapshot.copy(access = f.snapshot.access.copy(companyId = f.receipt.id))
-                    5 -> f.snapshot.copy(expiresAt = f.base.clock.now() - 1.seconds)
+                    5 -> f.snapshot.copy(refreshAfter = f.base.clock.now() - 1.seconds)
                     else -> f.snapshot
                 }
             assertIs<AppResult.Failed>(f.save(if (case == 6) "unknown" else f.receipt.id))

@@ -10,8 +10,11 @@ use cases coordinate session and company policy. Feature ViewModels own screen w
 Password requests carry the original idempotency key while the credentials remain
 unchanged. Editing the form starts another attempt. A successful response retains
 the server family ID, API audience, and family expiry in secure storage. A separate
-local session ID owns caches and navigation. Changing backend or reaching family
-expiry invalidates the local credentials before they can be sent elsewhere.
+local session ID owns caches and navigation. A changed API audience invalidates
+that identity before credentials can be sent elsewhere. Reaching family expiry
+blocks remote acquisition with `client.authentication_required` while retaining
+the local owner and its encrypted read models. A confirmed refresh rejection
+still removes the rejected session.
 
 One container-owned mutex serializes refresh and MFA credential rotation. Refresh
 persists its operation ID before network I/O. MFA proof calls use explicit credentials
@@ -37,10 +40,10 @@ use compare-and-set so a late request cannot overwrite another accepted choice.
 Every selection creates a new workspace ID, including a return to the same company.
 The root navigation graph changes with that ID and disposes the former route owners.
 
-The encrypted selection includes a bounded offline admission tied to the account,
-session family and API audience. Foreground entry rechecks live access; transport
-failure cannot renew admission. Workspace observation hides expired or mismatched
-records. See [company workspaces](workspace.md) for expiry, persistence and races,
+The encrypted selection binds the account, session family and API audience.
+Foreground entry rechecks live access without blocking local restoration. Transport
+failure cannot renew authorization, but age alone does not hide owned records.
+See [company workspaces](workspace.md) for ownership, persistence and races,
 and [inbox](inbox.md) for encrypted content and durable employee actions.
 The same snapshot includes [company availability](company-policy.md). Maintenance,
 minimum-build and module restrictions pause company operations without treating

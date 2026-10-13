@@ -10,11 +10,7 @@ sealed interface AppStage {
     data class SignedIn(
         val sessionId: String,
         val workspace: dev.fajar.starter.workspace.domain.entities.Workspace? = null,
-        val expiredWorkspaceId: String? = null,
-    ) : AppStage {
-        val selectedWorkspaceId: String?
-            get() = workspace?.id ?: expiredWorkspaceId
-    }
+    ) : AppStage
 
     data class Failed(val failure: dev.fajar.starter.common.result.Failure) : AppStage
 }
