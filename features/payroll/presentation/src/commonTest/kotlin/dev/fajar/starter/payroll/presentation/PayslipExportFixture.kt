@@ -84,7 +84,16 @@ class PayslipExportFixture(val base: PayrollFixture = PayrollFixture()) {
                 return releaseCall()
             }
         }
-    val export = ExportPayslip(pdf, output, base.sessions, base.workspaces, base.clock, base.build)
+    val export =
+        ExportPayslip(
+            pdf,
+            output,
+            base.replicas,
+            base.sessions,
+            base.workspaces,
+            base.clock,
+            base.build,
+        )
 
     suspend fun save() = export(base.workspace.id, base.summary.id, PayslipDocumentLanguage.ID)
 }

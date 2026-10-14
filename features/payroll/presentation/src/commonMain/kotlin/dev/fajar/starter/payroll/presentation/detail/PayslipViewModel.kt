@@ -3,6 +3,7 @@ package dev.fajar.starter.payroll.presentation.detail
 import androidx.lifecycle.viewModelScope
 import dev.fajar.starter.common.result.AppResult
 import dev.fajar.starter.payroll.domain.policies.payslipFailureInvalidatesCache
+import dev.fajar.starter.payroll.domain.replica.usecases.SyncPayroll
 import dev.fajar.starter.payroll.domain.usecases.*
 import dev.fajar.starter.payroll.presentation.payslipVerificationCodes
 import dev.fajar.starter.presentation.mvi.MviViewModel
@@ -16,7 +17,7 @@ import org.koin.core.annotation.InjectedParam
 class PayslipViewModel(
     @InjectedParam private val target: PayslipTarget,
     private val observe: ObservePayslip,
-    private val refresh: RefreshPayslip,
+    private val sync: SyncPayroll,
     private val export: ExportPayslip,
 ) : MviViewModel<PayslipState, PayslipEvent, PayslipEffect>(PayslipState()) {
     private var observation: Job? = null
@@ -99,11 +100,12 @@ class PayslipViewModel(
         }
         acquisition =
             viewModelScope.launch {
-                val result = refresh(target.workspaceId, target.id)
+                val result = sync(target.workspaceId)
                 ensureActive()
-                if (result is AppResult.Success) observation?.cancel()
+                val caughtUp = result is AppResult.Success && result.value.caughtUp
+                if (caughtUp) observation?.cancel()
                 updateState { it.withPayslipRefresh(result) }
-                if (result is AppResult.Success) observeContent()
+                if (caughtUp) observeContent()
                 if (
                     result is AppResult.Failed &&
                         result.failure.code in workspaceAccessLossCodes &&

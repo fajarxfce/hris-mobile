@@ -5,40 +5,48 @@ package dev.fajar.starter.payroll.domain
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.payroll.domain.entities.*
 import dev.fajar.starter.payroll.domain.policies.*
+import dev.fajar.starter.payroll.domain.replica.entities.*
 import dev.fajar.starter.workspace.domain.entities.CompanyModule
 import kotlin.test.*
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.Instant
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.*
 
 class PayslipAcquisitionTest {
     @Test
-    fun currentCompanyYearAndIndependentReadViewsComeFromAdmittedServerFacts() = runTest {
+    fun fullSlipAndPaymentFactsPublishTogetherAndYearSelectionUsesLocalCompanyTime() = runTest {
         val f = PayrollFixture { Instant.parse("2025-12-31T18:00:00Z") }
-        var year: Int? = null
-        f.listCall = { selection ->
-            year = selection.year
-            AppResult.Success(PayslipPage(emptyList()))
-        }
-        assertEquals(AppResult.Success(Unit), f.load())
-        assertEquals(2026, year)
-        val overview = f.snapshot(false)
-        assertEquals(AppResult.Success(Unit), f.load(true))
-        assertEquals(overview, f.snapshot(false))
+        assertTrue(assertIs<AppResult.Success<PayrollSyncOutcome>>(f.load()).value.caughtUp)
+        val list =
+            assertIs<AppResult.Success<PayslipSnapshot<PayslipOverview>?>>(
+                    f.observe(f.workspace.id).first()
+                )
+                .value!!
+        assertEquals(2026, list.value.selection.year)
+        assertEquals(listOf(f.summary), list.value.page.items)
         assertEquals(
             f.slip,
-            assertNotNull(f.detailRecords.value.let { (it as AppResult.Success).value })
+            assertIs<AppResult.Success<PayslipSnapshot<PayslipView>?>>(
+                    f.observeDetail(f.workspace.id, f.summary.id).first()
+                )
+                .value!!
                 .value
                 .payslip,
         )
+        assertEquals(1, f.detailReads)
+        assertEquals(1, f.paymentReads)
+        assertEquals(0, f.listReads)
+        f.load()
+        assertEquals(1, f.detailReads)
         assertEquals(2, f.policyReads)
     }
 
     @Test
     fun permissionModuleAndSessionDenialsStopBeforeAnyFinancialRead() = runTest {
-        for (detail in listOf(false, true)) for (case in 0..2) {
+        for (case in 0..2) {
             val f = PayrollFixture()
             when (case) {
                 0 ->
@@ -61,13 +69,20 @@ class PayslipAcquisitionTest {
                         )
                 2 -> f.sessionState.value = AppResult.Success(null)
             }
-            assertIs<AppResult.Failed>(f.load(detail))
-            assertEquals(0, f.policyReads + f.listReads + f.detailReads + f.paymentReads + f.writes)
+            assertIs<AppResult.Failed>(f.load())
+            assertEquals(
+                0,
+                f.policyReads +
+                    f.bootstrapReads +
+                    f.detailReads +
+                    f.paymentReads +
+                    f.replicas.writes,
+            )
         }
     }
 
     @Test
-    fun invalidDatesCursorsAndIdsCannotReachStorageOrTransport() = runTest {
+    fun invalidLocalSelectionsCannotReachStorageOrTransport() = runTest {
         val f = PayrollFixture()
         for (selection in
             listOf(
@@ -79,32 +94,28 @@ class PayslipAcquisitionTest {
             )) {
             assertEquals(
                 FailureKind.Validation,
-                assertIs<AppResult.Failed>(f.refresh(f.workspace.id, selection)).failure.kind,
+                assertIs<AppResult.Failed>(f.observe(f.workspace.id, selection).first())
+                    .failure
+                    .kind,
             )
         }
-        assertIs<AppResult.Failed>(f.refreshDetail(f.workspace.id, "../payments"))
-        assertEquals(0, f.policyReads + f.listReads + f.detailReads)
+        assertIs<AppResult.Failed>(f.observeDetail(f.workspace.id, "../payments").first())
+        assertEquals(0, f.observers + f.policyReads + f.bootstrapReads + f.detailReads)
     }
 
     @Test
-    fun changedCompanyOrIdentityCannotPublishLateResults() = runTest {
-        for (detail in listOf(false, true)) for (logout in listOf(false, true)) {
+    fun changedCompanyOrIdentityRejectsLateSuccessAndFailureBeforeTheNextRead() = runTest {
+        for (logout in listOf(false, true)) for (fails in listOf(false, true)) {
             val f = PayrollFixture()
             val entered = CompletableDeferred<Unit>()
             val release = CompletableDeferred<Unit>()
-            suspend fun waitForResponse() {
+            f.detailCall = {
                 entered.complete(Unit)
                 withContext(NonCancellable) { release.await() }
+                if (fails) payslipFailure("mfa_required", FailureKind.AccessDenied)
+                else AppResult.Success(f.slip)
             }
-            f.listCall = {
-                waitForResponse()
-                AppResult.Success(PayslipPage(listOf(f.summary)))
-            }
-            f.detailCall = {
-                waitForResponse()
-                AppResult.Success(f.slip)
-            }
-            val request = async { f.load(detail) }
+            val request = async { f.load() }
             entered.await()
             if (logout) f.sessionState.value = AppResult.Success(null)
             else
@@ -112,125 +123,134 @@ class PayslipAcquisitionTest {
                     AppResult.Success(f.workspace.copy(id = "another-selection"))
             release.complete(Unit)
             assertIs<AppResult.Failed>(request.await())
-            assertEquals(0, f.writes)
-            assertEquals(0, f.paymentReads)
+            assertEquals(0, f.replicas.writes + f.replicas.clears + f.paymentReads)
+            assertNull(f.replicas.readAdmission.value.denial)
         }
     }
 
     @Test
-    fun cancellationRejectsLateSuccessAndFailureWithoutPublishingOrDeleting() = runTest {
-        for (detail in listOf(false, true)) for (fails in listOf(false, true)) {
+    fun cancellationRejectsLatePaymentSuccessAndFailureWithoutPublishingOrDeleting() = runTest {
+        for (fails in listOf(false, true)) {
             val f = PayrollFixture()
-            assertIs<AppResult.Success<Unit>>(f.load(detail))
-            val old = f.snapshot(detail)
+            f.load()
+            val old = f.snapshot()
+            val writes = f.replicas.writes
+            f.changesCall = { AppResult.Success(f.changePage(listOf(f.changedPayment(1)))) }
             val entered = CompletableDeferred<Unit>()
             val release = CompletableDeferred<Unit>()
-            suspend fun paused() {
+            f.paymentCall = {
                 entered.complete(Unit)
                 withContext(NonCancellable) { release.await() }
+                if (fails) payslipFailure("mfa_required", FailureKind.AccessDenied)
+                else AppResult.Success(f.payment.copy(version = 1))
             }
-            val denial = payslipFailure("mfa_required", FailureKind.AccessDenied)
-            f.listCall = {
-                paused()
-                if (fails) denial else AppResult.Success(PayslipPage(emptyList()))
-            }
-            f.detailCall = {
-                paused()
-                if (fails) denial else AppResult.Success(f.slip)
-            }
-            val request = async { f.load(detail) }
+            val request = async { f.load() }
             entered.await()
             request.cancel()
             release.complete(Unit)
             assertFailsWith<CancellationException> { request.await() }
-            assertEquals(old, f.snapshot(detail))
-            assertEquals(1, f.writes)
-            assertEquals(0, f.clears)
+            assertEquals(old, f.snapshot())
+            assertEquals(writes, f.replicas.writes)
+            assertEquals(0, f.replicas.clears)
+            assertNull(f.replicas.readAdmission.value.denial)
         }
     }
 
     @Test
-    fun concurrentReadsCannotOverwriteTheNewerPublishedGeneration() = runTest {
-        for (detail in listOf(false, true)) {
-            val f = PayrollFixture()
-            val entered = CompletableDeferred<Unit>()
-            val release = CompletableDeferred<Unit>()
-            var calls = 0
-            suspend fun pauseFirst() {
-                if (++calls == 1) {
-                    entered.complete(Unit)
-                    release.await()
-                }
-            }
-            f.listCall = {
-                pauseFirst()
-                AppResult.Success(PayslipPage(listOf(f.summary)))
-            }
-            f.detailCall = {
-                pauseFirst()
-                AppResult.Success(f.slip)
-            }
-            val first = async { f.load(detail) }
-            entered.await()
-            assertIs<AppResult.Success<Unit>>(f.load(detail))
-            val published = f.snapshot(detail)
-            release.complete(Unit)
-            assertEquals(
-                "client.payslip_changed",
-                assertIs<AppResult.Failed>(first.await()).failure.code,
-            )
-            assertEquals(published, f.snapshot(detail))
-            assertEquals(1, f.writes)
-        }
-    }
-
-    @Test
-    fun knownDenialSurvivesFailedOrHangingCleanup() = runTest {
-        for (detail in listOf(false, true)) for (hang in listOf(false, true)) {
-            val f = PayrollFixture()
-            f.load(detail)
-            val retained = f.snapshot(detail)
-            val denied = payslipFailure("mfa_required", FailureKind.AccessDenied)
-            f.policyCall = { denied }
-            f.failCleanup = !hang
-            f.beforeWrite = { deleting -> if (deleting && hang) awaitCancellation() }
-            assertEquals(denied, f.load(detail))
-            assertEquals(retained, f.snapshot(detail))
-        }
-    }
-
-    @Test
-    fun transientPaymentFailureKeepsThePreviouslyAdmittedAggregate() = runTest {
+    fun concurrentUiAndWorkerTriggersShareTheAcquisitionOwner() = runTest {
         val f = PayrollFixture()
-        f.load(true)
-        val retained = f.snapshot(true)
-        f.detailCall = { AppResult.Success(f.slip.copy(companyName = "Changed")) }
-        f.paymentCall = { payslipFailure("network", FailureKind.Network) }
-        assertEquals(FailureKind.Network, assertIs<AppResult.Failed>(f.load(true)).failure.kind)
-        assertEquals(retained, f.snapshot(true))
-        assertEquals(1, f.writes)
+        val entered = CompletableDeferred<Unit>()
+        val release = CompletableDeferred<Unit>()
+        f.detailCall = {
+            entered.complete(Unit)
+            release.await()
+            AppResult.Success(f.slip)
+        }
+        val first = async { f.load() }
+        entered.await()
+        val second = async { f.load() }
+        runCurrent()
+        assertEquals(1, f.policyReads)
+        release.complete(Unit)
+        assertTrue(assertIs<AppResult.Success<PayrollSyncOutcome>>(first.await()).value.caughtUp)
+        assertTrue(assertIs<AppResult.Success<PayrollSyncOutcome>>(second.await()).value.caughtUp)
+        assertEquals(1, f.bootstrapReads)
+        assertEquals(1, f.detailReads)
+        assertEquals(1, f.paymentReads)
+        assertEquals(2, f.changeReads)
     }
 
     @Test
-    fun readsAreBoundedAndExpiredLivePolicyCannotPublish() = runTest {
-        for (detail in listOf(false, true)) {
-            val start = Instant.parse("2026-10-13T00:00:00Z")
-            val origin = testScheduler.currentTime
-            val f = PayrollFixture { start + (testScheduler.currentTime - origin).milliseconds }
-            f.policyCall = { awaitCancellation() }
-            assertEquals(
-                FailureKind.Timeout,
-                assertIs<AppResult.Failed>(f.load(detail)).failure.kind,
-            )
-            assertEquals(0, f.writes)
+    fun transientPaymentFailureKeepsThePublishedFactsAndCursorForRetry() = runTest {
+        val f = PayrollFixture()
+        f.load()
+        val old = f.snapshot()
+        val checkpoint = f.replicas.current
+        f.changesCall = { AppResult.Success(f.changePage(listOf(f.changedPayment(2)))) }
+        f.paymentCall = { payslipFailure("network", FailureKind.Network) }
+        assertEquals(FailureKind.Network, assertIs<AppResult.Failed>(f.load()).failure.kind)
+        assertEquals(old, f.snapshot())
+        assertEquals(checkpoint, f.replicas.current)
+        assertNull(f.replicas.readAdmission.value.denial)
+        f.paymentCall = { AppResult.Success(f.payment.copy(version = 2)) }
+        f.load()
+        assertEquals(
+            2L,
+            (f.snapshot()!!.entries.single { it.record is PayrollRecord.Payments }.record
+                    as PayrollRecord.Payments)
+                .version,
+        )
+        assertEquals(1, f.detailReads)
+    }
+
+    @Test
+    fun deadlinesIncludeWaitingForTheLockAndDoNotPublishUnderAnExpiredLivePolicy() = runTest {
+        val start = Instant.parse("2026-10-13T00:00:00Z")
+        val f = PayrollFixture { start + testScheduler.currentTime.milliseconds }
+        val entered = CompletableDeferred<Unit>()
+        f.policyCall = {
+            entered.complete(Unit)
+            awaitCancellation()
         }
-        var now = Instant.parse("2026-10-13T00:00:00Z")
-        val f = PayrollFixture { now }
-        f.listCall = {
+        val first = async { f.load() }
+        entered.await()
+        val second = async { f.load() }
+        assertFalse(assertIs<AppResult.Success<PayrollSyncOutcome>>(second.await()).value.caughtUp)
+        assertFalse(assertIs<AppResult.Success<PayrollSyncOutcome>>(first.await()).value.caughtUp)
+        assertEquals(30_000L, testScheduler.currentTime)
+        assertEquals(0, f.replicas.writes)
+        var now = start
+        val expired = PayrollFixture { now }
+        expired.detailCall = {
             now += 61.seconds
-            AppResult.Success(PayslipPage(listOf(f.summary)))
+            AppResult.Success(expired.slip)
         }
-        assertIs<AppResult.Failed>(f.load())
-        assertEquals(0, f.writes)
+        assertEquals(
+            "client.company_policy_expired",
+            assertIs<AppResult.Failed>(expired.load()).failure.code,
+        )
+        assertEquals(0, expired.replicas.writes + expired.paymentReads)
+    }
+
+    @Test
+    fun aReadFailureCancelsSiblingHydrationInsteadOfWaitingForItsTimeout() = runTest {
+        val f = PayrollFixture()
+        val other = f.summary.copy(id = "55555555-5555-5555-5555-555555555555")
+        f.slips[other.id] = f.slip.copy(summary = other)
+        var cancelled = false
+        f.detailCall = { id ->
+            if (id == f.summary.id) {
+                try {
+                    awaitCancellation()
+                } finally {
+                    cancelled = true
+                }
+            } else payslipFailure("mfa_required", FailureKind.AccessDenied)
+        }
+        assertEquals("mfa_required", assertIs<AppResult.Failed>(f.load()).failure.code)
+        assertTrue(cancelled)
+        assertEquals(0, f.replicas.writes)
+        assertEquals(0L, testScheduler.currentTime)
+        assertEquals("mfa_required", f.replicas.readAdmission.value.denial?.code)
     }
 }

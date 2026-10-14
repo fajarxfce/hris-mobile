@@ -168,8 +168,11 @@ History pagination changes the visible revision page, not current request facts.
 request. Historical acquisition never renews an action review's timestamp.
 
 The [payslip workflow](payroll.md) keeps employee SELF scope explicit in
-every financial API request. Use cases admit company/session access and publish
-bounded, independently cached list and detail views. PDF export coordinates the
+every financial API request. `SyncPayroll` hydrates the account-owned payslip and
+payment collections; its repository commits full records, indexed summaries and
+cursor atomically. Observation use cases query local years and individual IDs.
+Stored ownership is independent of credential age and unrelated permission changes.
+PDF export coordinates the
 payroll read contract with the generic document-output contract; it does not need
 document-catalog permissions or another feature's use case. The data adapter owns
 protocol validation, exact decimal mapping and temporary byte-buffer ownership.

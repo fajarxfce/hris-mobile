@@ -27,10 +27,11 @@ flowchart TD
   Commit --> Read
 ```
 
-Inbox, Leave, Overtime and Workforce replica identity binds API audience, account and company independently of
-the local session. Database operations still require the active session, so a late
-request from the preceding login cannot mutate retained facts. Other feature
-snapshots still use temporary session ownership until their collection migration.
+Inbox, Leave, Overtime, Workforce and Payroll replica identity binds API audience,
+account and company independently of the local session. Database operations still
+require the active session, so a late request from the preceding login cannot
+mutate retained facts. Expenses still uses temporary session ownership until its
+collection migration.
 Existing read snapshots use authenticated encryption; scope replacement cancels
 their observers. Reading another account/company is never a fallback.
 Local bootstrap does not await `/me`, token refresh or client-policy acquisition.
@@ -66,15 +67,16 @@ rolled-back transactions cannot advance a public cursor. Cursors are opaque,
 scoped to the account/company/projection, and have finite server retention.
 See the [server protocol](https://github.com/fajarxfce/hris-platform/blob/main/docs/synchronization.md).
 
-Inbox, Leave, Overtime and Workforce consume this protocol. One run reads a bounded number of pages,
-hydrates changed resources with bounded concurrency, reconciles versions and
+Inbox, Leave, Overtime, Workforce and Payroll consume this protocol. One run reads
+a bounded number of pages, hydrates changed resources with bounded concurrency,
+reconciles versions and
 tombstones, and atomically stores data with the next cursor. A failed hydration
 cannot advance that cursor. Multiple UI/worker triggers share an execution owner.
 
 Ordinary cursor expiry starts a staging generation. The previous published data
 survives failed hydration and process restart. A successful complete replacement
-switches the visible generation atomically. `sync_scope_changed` instead removes
-the old authorization projection before rebuilding. Neither case silently
+switches the visible generation atomically. `sync_scope_changed` instead gates
+the old authorization projection before cleanup and an admitted rebuild. Neither case silently
 replays employee commands or loops indefinitely.
 
 ## Write path
@@ -108,7 +110,7 @@ submitting it are separate capabilities.
 | Attendance / calendar | Account-owned daily evidence, effective schedule assignments, roster overrides and holidays; local month/week/employment queries | Four explicit collections, staged bootstrap and incremental changes implemented |
 | Leave | Account-owned balances, full requests and acquired activity pages; local employment/year/status and history queries | Request/balance change feed and resumable older-activity acquisition implemented |
 | Overtime | Account-owned full requests and acquired activity; local employment/date/status queries | Request change feed and resumable older-activity acquisition implemented |
-| Payslips | Last selected list and detail | Server collections exist; mobile integration pending |
+| Payslips | Account-owned full payslips, indexed annual summaries and versioned payment progress; local year/page/detail queries | Two explicit collections, staged replacement and incremental changes implemented |
 | Expenses | Last selected list and detail | Server collection exists; mobile integration pending |
 | Local document files | Account/company-owned imports and completed downloads | Upload/download commands; catalog is online |
 | Coworker directory / profile | Live reads | Not implemented |
@@ -229,10 +231,11 @@ its replacement is available. A completed feed's missing parent is authoritative
 ## Next increments
 
 1. Extend stable audience/account/company ownership to the remaining read
-   projections. Inbox, Leave, Overtime and Workforce replicas retain account-owned facts across sign-in; workspace
-   admission and other last-view snapshots remain session-owned. Reauthentication
+   projections. Inbox, Leave, Overtime, Workforce and Payroll replicas retain
+   account-owned facts across sign-in; workspace admission and other last-view
+   snapshots remain session-owned. Reauthentication
    does not reuse an old request guard or old credential-bound feed cursor.
-2. Add projections for the existing expense and payroll collections.
+2. Add projections for the existing expense collection.
    Store versioned facts, then query/filter locally; replace single last-view slots
    as each projection is implemented.
 3. Register backend feeds for documents and coworker data,
@@ -273,3 +276,17 @@ must have observed that denial before starting and complete successfully before 
 can reopen the projection. Freshness, normal credential expiry and cursor retention
 never create this denial. See [Workforce](workforce.md) for ownership, schedule policy,
 command reconciliation and pre-upgrade compatibility.
+
+### Payroll replica
+
+Payslips and payment progress use separate account-owned records under
+`payroll-replica/{company}`. Small summaries have a keyed year index; a list query
+reads twenty-one records, while a detail query reads its payslip and payment
+progress together. No selected-page snapshot replaces this history.
+
+`SyncPayroll` owns two-collection acquisition for UI and worker triggers, with
+bounded concurrency, cursor progress and cancellation. It commits records and
+cursor atomically, keeps the published generation through ordinary cursor
+replacement, and persists confirmed read denials under `payroll-access/{company}`.
+A changed payment does not rewrite the immutable salary breakdown. See
+[employee payslips](payroll.md) for request, storage and export ownership.

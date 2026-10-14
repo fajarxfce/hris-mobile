@@ -2,7 +2,7 @@
 
 `features/payroll/domain` owns employee read admission, acquisition, observation
 and explicit PDF export. `features/payroll/data` maps the API and maintains
-encrypted read snapshots. `features/payroll/presentation` owns the employee
+encrypted account-owned records. `features/payroll/presentation` owns the employee
 list, details, year selection, PDF language dialog and feature navigation.
 The application installs the generated data and presentation modules.
 
@@ -15,9 +15,10 @@ and tax facts. Amounts are published server values; the page does not calculate
 salary or imply settlement from a planned payment date.
 
 Each route owns a separately typed MVI event contract. Duplicate acquisition
-and export requests are dropped; selecting a different year cancels obsolete
-work. Row navigation only accepts a visible payslip ID. Refresh preserves an
-admitted snapshot on transport failure. Back releases observation and pending
+and export requests are dropped. Selecting a year or list page changes a local
+query without cancelling synchronization. Row navigation only accepts a visible
+payslip ID. Refresh preserves an admitted snapshot on transport failure.
+Back releases observation and pending
 work; a known access denial remains gated through retries and failed cleanup.
 An owned saved list or payslip does not expire because it is old. An explicit
 refresh keeps it visible while pending or offline. A confirmed denial stays gated
@@ -25,32 +26,58 @@ until successful admitted acquisition; failures never start a retry loop.
 
 ## Reads and offline access
 
-Every list, detail, payment-progress and PDF request sends `scope=SELF`. A finance
-grant cannot broaden this employee workflow to other people's payslips. Access
-requires the selected company, the PAYROLL module and `payroll.self.read` or
-`payroll.read`. The backend enforces current ownership and financial read authority.
+Every canonical detail, payment-progress and PDF request sends `scope=SELF`.
+`SyncPayroll` explicitly selects `PAYSLIPS` and `PAYROLL_PAYMENTS` from the change
+feed. Both self-service and finance read grants remain limited to the account's
+own employments. Access requires the selected company, the PAYROLL module and
+`payroll.self.read` or `payroll.read`; the backend enforces live ownership and
+financial authority.
 
-The list defaults to the current year in the company timezone, obtained from a
-fresh company policy. It loads at most twenty records per page, ordered by month
-descending and assessment ID ascending. A cursor replaces the visible page;
-identical IDs and nonadvancing cursors are rejected. Detail combines immutable
-published amounts with separately versioned payment attempts. A failed payment
-read retains the previously admitted aggregate, without publishing half a detail.
-Publication is not proof of bank settlement.
+The UI observes the local replica. Year and page selection make indexed local
+queries, defaulting to the company-local year. A query reads at most twenty-one
+small summaries to produce a twenty-item page ordered by month descending and
+assessment ID ascending. Full details and payment progress are stored separately
+for every acquired payslip, so opening another year or detail does not replace
+previously stored facts. A missing, never-acquired record is not an expired record.
 
-List and detail use separate encrypted partitions under the selected session,
-account, API audience and company. Both reuse the workspace content key; a
-missing key fails rather than generating a replacement. Publication uses an
-atomic observed-generation check. A competing or cancelled acquisition cannot
-overwrite the accepted snapshot. Freshness is metadata, not a one-hour read limit.
-PDF export still requires a recent review and live authorization.
+`SyncPayroll` is one application-owned use case shared by routes and workers. Its
+thirty-second budget includes waiting for its mutex. One run handles at most ten
+pages of eight change references and hydrates at most four payslips concurrently.
+Duplicate references are coalesced by resource/version. A failure cancels sibling
+hydration, and a failed or cancelled page cannot advance the stored cursor.
+Incomplete work resumes from its checkpoint on a later trigger.
 
-Session, company, permissions and live company policy are rechecked around
-acquisition. Remote reads have a thirty-second budget. Access-denial cleanup has
-its own two-second budget so a stalled deletion cannot turn a known denial into
-a transient timeout. Presentation must keep that denial gated through pending
-and failed retries, reopening observation only after fresh admitted acquisition.
-Cache observations end with their owner or a replaced scope; age has no read timer.
+Each immutable payslip has version zero. Payment progress has an independent
+monotonic version; acquiring a slip also acquires its empty version-zero progress
+before the first payment attempt. Payment changes update that record without
+rewriting the payslip or its indexed summary. Parent deletion hides its detail and
+summary even if an older payment record remains. Publication does not establish
+bank settlement.
+
+Records belong to the API audience, account and company. A replacement login
+cannot write with the preceding request identity, but it can read the same
+account's retained facts. Other module grants do not change ownership; live
+payroll entitlement is checked independently. The `payroll-replica-content-key`
+is platform-owned and separate from the legacy workspace key. Authenticated
+encryption binds content, version, generation, ordering and keyed filter indexes.
+A missing retained key is an error; it is never replaced with a new key.
+
+Data and cursor commit in the same storage transaction. Ordinary cursor expiry
+starts a staging generation while the preceding published view remains readable;
+only a complete replacement becomes visible. A confirmed scope/access denial
+instead gates reads before bounded cleanup. Its encrypted admission record
+survives restart, and a process-owned write buffer retains it when storage fails.
+A retry cannot clear a newer denial. Reopening requires an admitted, caught-up
+acquisition; failed cleanup does not make retained ciphertext readable. A scope
+change schedules a bounded worker retry to rebuild the projection.
+
+The preceding session-owned list/detail snapshots are migration fallbacks only
+until the first complete replica publishes. They expose only their matching
+selection or ID. Afterwards an empty result is authoritative. Stored data has no
+age-based read limit, and freshness metadata never starts a retry timer or hides
+content. Expired credentials pause server operations separately. PDF export still
+requires live authorization; confirmed export access denials also gate other
+payslip readers.
 
 Amounts use the shared bounded `DecimalAmount` value. Its formatting retains
 all server digits and supports English and Indonesian separators without binary
@@ -79,27 +106,17 @@ changing company, or disposing its ViewModel cancels pending export work.
 
 ## Validation
 
-Domain tests cover scope changes, concurrent publication, pending cancellation,
-late success/failure, stale facts and export expiry, collector disposal, failed/hanging cleanup and
-save-dialog recovery. Data tests cover SELF transport, bounded DTOs, exact amounts,
-conditional PDF integrity and encrypted storage with real SQLite/AES-GCM on JVM.
-An application integration test resolves the generated bindings. Browser checks
-run the portable domain/data tests as well as decimal formatting.
+Domain and MVI tests cover bounded synchronization, local year/page selection,
+independent details, aged facts, changing request owners, late results, cancellation,
+concurrent triggers, read-denial recovery and export lifetime. Shared SQLite and
+IndexedDB contracts cover database reopening, indexed queries, immutable and
+monotonic versions, tombstones, staged replacement, malformed records, missing
+keys and interrupted encryption. Application checks resolve the generated graph
+and verify one sync owner and content-key lifetime.
 
-Presentation tests cover rapid year changes, duplicate requests, issued page
-cursors, failed cleanup, authoritative denials, completed storage subscriptions
-and route disposal. Assembled application tests exercise year navigation,
-published amounts, unset payment status and PDF saving across a temporary
-Activity stop. A separate case covers 200% text and leaving a pending file dialog.
-
-The integrated workspace checks passed with 959 desktop tests and eighteen
-targeted Chromium tests. Android dev assembly and the production Web build
-passed. API 35 emulator acceptance used a published payslip from the development
-API: annual filters, exact amounts, unset payment status, picker cancellation,
-native PDF saving, offline list/detail restoration after background process death,
-and explicit online recovery. Both native themes were inspected. The 11,099-byte
-PDF matched the backend SHA-256. The validated APK was installed on the authorized
-phone with install-only delivery.
+See [validation](validation.md) for executed builds, test results and device
+acceptance. Earlier PDF acceptance verified its exact server SHA-256, native save
+dialog cancellation, temporary Activity stops and 200% text.
 
 The backend contract is documented in
 [HRIS Platform payslips](https://github.com/fajarxfce/hris-platform/blob/main/docs/payroll-payslips.md).

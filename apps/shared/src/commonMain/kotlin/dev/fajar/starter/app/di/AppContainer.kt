@@ -80,6 +80,7 @@ fun createAppContainer(
     leaveReplicaCredentials: CredentialStore = MemoryCredentialStore(),
     overtimeReplicaCredentials: CredentialStore = MemoryCredentialStore(),
     workforceReplicaCredentials: CredentialStore = MemoryCredentialStore(),
+    payrollReplicaCredentials: CredentialStore = MemoryCredentialStore(),
     commandCredentials: AtomicCredentialStore = MemoryCredentialStore(),
     fileCredentials: AtomicCredentialStore = MemoryCredentialStore(),
     workspaceCredentials: AtomicCredentialStore = MemoryCredentialStore(),
@@ -150,6 +151,10 @@ fun createAppContainer(
                 .onClose { it?.close() }
             single<CredentialStore>(named("workforce-replica-content-key")) {
                     workforceReplicaCredentials
+                }
+                .onClose { it?.close() }
+            single<CredentialStore>(named("payroll-replica-content-key")) {
+                    payrollReplicaCredentials
                 }
                 .onClose { it?.close() }
             single<CredentialStore>(named("overtime-replica-content-key")) {

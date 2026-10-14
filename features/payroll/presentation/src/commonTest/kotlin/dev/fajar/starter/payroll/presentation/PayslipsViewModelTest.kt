@@ -7,9 +7,9 @@ import dev.fajar.starter.common.result.*
 import dev.fajar.starter.payroll.domain.entities.*
 import dev.fajar.starter.payroll.domain.policies.payslipFailure
 import dev.fajar.starter.payroll.presentation.overview.*
+import dev.fajar.starter.sync.domain.entities.SyncBootstrapPage
 import kotlin.test.*
 import kotlin.time.Duration.Companion.milliseconds
-import kotlin.time.Duration.Companion.seconds
 import kotlin.time.Instant
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
@@ -22,11 +22,11 @@ class PayslipsViewModelTest {
             model.onEvent(PayslipsEvent.Entered)
             model.onEvent(PayslipsEvent.Entered)
             runCurrent()
-            assertEquals(1, f.listReads)
+            assertEquals(1, f.detailReads)
             assertEquals(1, f.observers)
             assertEquals(2026, model.state.value.filters?.year)
             var cancelled = false
-            f.listCall = {
+            f.changesCall = {
                 try {
                     awaitCancellation()
                 } finally {
@@ -36,7 +36,7 @@ class PayslipsViewModelTest {
             model.onEvent(PayslipsEvent.RefreshRequested)
             model.onEvent(PayslipsEvent.RefreshRequested)
             runCurrent()
-            assertEquals(2, f.listReads)
+            assertEquals(2, f.changeReads)
             assertNotNull(model.state.value.content)
             model.onEvent(PayslipsEvent.Stopped)
             runCurrent()
@@ -44,7 +44,7 @@ class PayslipsViewModelTest {
             assertEquals(0, f.observers)
             assertNull(model.state.value.content)
             assertFalse(model.state.value.refreshing)
-            f.listCall = { AppResult.Success(PayslipPage(listOf(f.summary))) }
+            f.changesCall = { AppResult.Success(f.changePage()) }
             model.onEvent(PayslipsEvent.Entered)
             runCurrent()
             assertNotNull(model.state.value.content)
@@ -55,62 +55,71 @@ class PayslipsViewModelTest {
     }
 
     @Test
-    fun changingYearRejectsCancelledLateFailuresAndKeepsTheNewFilter() = runTest {
+    fun changingYearQueriesLocalFactsWithoutCancellingSyncOrRestoringTheOldFilter() = runTest {
         withModel { f, model, _ ->
             model.onEvent(PayslipsEvent.Entered)
             runCurrent()
             var cancelled = false
-            f.listCall = { selection ->
-                if (selection.year == 2026) {
-                    try {
-                        awaitCancellation()
-                    } catch (_: CancellationException) {
-                        cancelled = true
-                    }
-                    payslipFailure("mfa_required", FailureKind.AccessDenied)
-                } else AppResult.Success(PayslipPage(emptyList()))
+            val release = CompletableDeferred<Unit>()
+            f.changesCall = {
+                try {
+                    release.await()
+                    AppResult.Success(f.changePage())
+                } catch (failure: CancellationException) {
+                    cancelled = true
+                    throw failure
+                }
             }
             model.onEvent(PayslipsEvent.RefreshRequested)
             runCurrent()
             model.onEvent(PayslipsEvent.PreviousYearRequested)
             runCurrent()
-            assertTrue(cancelled)
+            assertFalse(cancelled)
+            assertTrue(model.state.value.refreshing)
+            assertEquals(2025, model.state.value.content?.value?.selection?.year)
+            assertTrue(model.state.value.content!!.value.page.items.isEmpty())
+            assertEquals(1, f.detailReads)
+            release.complete(Unit)
+            runCurrent()
             assertEquals(2025, model.state.value.filters?.year)
             assertEquals(2025, model.state.value.content?.value?.selection?.year)
+            assertFalse(model.state.value.refreshing)
             assertNull(model.state.value.failure)
-            assertEquals(3, f.listReads)
         }
     }
 
     @Test
-    fun onlyVisibleRowsAndIssuedPageCursorsCanNavigateOrAcquire() = runTest {
+    fun onlyVisibleRowsAndIssuedLocalCursorsCanNavigateWithoutAcquisition() = runTest {
         withModel { f, model, _ ->
+            f.slips.clear()
+            for (index in 1..23) {
+                val id = "10000000-0000-0000-0000-" + index.toString().padStart(12, '0')
+                f.slips[id] = f.slip.copy(summary = f.summary.copy(id = id))
+                f.payments[id] = f.payment.copy(payslipId = id)
+            }
             val effects = mutableListOf<PayslipsEffect>()
             backgroundScope.launch { model.effects.collect { effects += it } }
-            val cursor = "2026-09:${f.summary.id}"
-            f.listCall = { selection ->
-                AppResult.Success(
-                    if (selection.after == null) PayslipPage(listOf(f.summary), cursor)
-                    else PayslipPage(emptyList())
-                )
-            }
             model.onEvent(PayslipsEvent.Entered)
             runCurrent()
+            val first = model.state.value.content!!.value.page
+            val id = first.items.first().id
+            val cursor = assertNotNull(first.nextCursor)
             model.onEvent(PayslipsEvent.PayslipSelected("foreign"))
             model.onEvent(PayslipsEvent.PageRequested("foreign"))
             model.onEvent(PayslipsEvent.PageRequested(null))
-            model.onEvent(PayslipsEvent.PayslipSelected(f.summary.id))
+            model.onEvent(PayslipsEvent.PayslipSelected(id))
             runCurrent()
-            assertEquals(listOf<PayslipsEffect>(PayslipsEffect.OpenPayslip(f.summary.id)), effects)
-            assertEquals(1, f.listReads)
+            assertEquals(listOf<PayslipsEffect>(PayslipsEffect.OpenPayslip(id)), effects)
             model.onEvent(PayslipsEvent.PageRequested(cursor))
             runCurrent()
+            assertEquals(3, model.state.value.content!!.value.page.items.size)
             assertEquals(cursor, model.state.value.filters?.after)
-            model.onEvent(PayslipsEvent.PayslipSelected(f.summary.id))
+            model.onEvent(PayslipsEvent.PayslipSelected(id))
             model.onEvent(PayslipsEvent.PageRequested(null))
             runCurrent()
             assertEquals(1, effects.size)
-            assertEquals(3, f.listReads)
+            assertEquals(23, f.detailReads)
+            assertEquals(1, f.changeReads)
             assertNull(model.state.value.filters?.after)
         }
     }
@@ -120,16 +129,16 @@ class PayslipsViewModelTest {
         withModel { f, model, _ ->
             model.onEvent(PayslipsEvent.Entered)
             runCurrent()
-            f.failCleanup = true
-            f.listCall = { payslipFailure("mfa_required", FailureKind.AccessDenied) }
+            f.replicas.failCleanup = true
+            f.changesCall = { payslipFailure("mfa_required", FailureKind.AccessDenied) }
             model.onEvent(PayslipsEvent.RefreshRequested)
             runCurrent()
-            assertNotNull(f.snapshot(false))
+            assertNotNull(f.snapshot())
             assertTrue(model.state.value.needsVerification)
             assertNull(model.state.value.content)
             assertEquals(0, f.observers)
             val release = CompletableDeferred<Unit>()
-            f.listCall = {
+            f.detailCall = {
                 release.await()
                 payslipFailure("fixture.offline", FailureKind.Network)
             }
@@ -142,7 +151,8 @@ class PayslipsViewModelTest {
             runCurrent()
             assertEquals("mfa_required", model.state.value.failure?.code)
             assertEquals(2026, model.state.value.filters?.year)
-            f.listCall = { AppResult.Success(PayslipPage(listOf(f.summary))) }
+            f.detailCall = { AppResult.Success(f.slip) }
+            f.changesCall = { AppResult.Success(f.changePage()) }
             model.onEvent(PayslipsEvent.RefreshRequested)
             runCurrent()
             assertNotNull(model.state.value.content)
@@ -154,11 +164,11 @@ class PayslipsViewModelTest {
     @Test
     fun successfulExplicitAcquisitionReopensACompletedStorageSource() = runTest {
         withModel { f, model, _ ->
-            f.failNextObservation = true
+            f.replicas.failNextObservation = true
             val release = CompletableDeferred<Unit>()
-            f.listCall = {
+            f.detailCall = {
                 release.await()
-                AppResult.Success(PayslipPage(listOf(f.summary)))
+                AppResult.Success(f.slip)
             }
             model.onEvent(PayslipsEvent.Entered)
             runCurrent()
@@ -169,116 +179,84 @@ class PayslipsViewModelTest {
             assertNotNull(model.state.value.content)
             assertNull(model.state.value.failure)
             assertEquals(1, f.observers)
-            assertEquals(1, f.listReads)
+            assertEquals(1, f.detailReads)
         }
     }
 
     @Test
-    fun explicitRefreshKeepsStaleContentButCompanyReplacementHidesIt() = runTest {
+    fun agingStoredFactsDoesNotRefreshHideOrReplaceThePage() = runTest {
         withModel { f, model, _ ->
             model.onEvent(PayslipsEvent.Entered)
             runCurrent()
             val saved = assertNotNull(model.state.value.content)
-            val release = CompletableDeferred<Unit>()
-            f.listCall = {
-                release.await()
-                AppResult.Success(PayslipPage(listOf(f.summary)))
-            }
-            f.records.value =
-                AppResult.Success(saved.copy(refreshAfter = f.clock.now() + 1.seconds))
+            advanceTimeBy(73 * 60 * 60_000L)
             runCurrent()
-            advanceTimeBy(1_001)
-            runCurrent()
+            assertEquals(saved, model.state.value.content)
+            assertEquals(1, f.changeReads)
             assertFalse(model.state.value.refreshing)
-            assertEquals(1, f.listReads)
-            assertNotNull(model.state.value.content)
+            val release = CompletableDeferred<Unit>()
+            f.changesCall = {
+                release.await()
+                AppResult.Success(f.changePage())
+            }
             model.onEvent(PayslipsEvent.RefreshRequested)
             runCurrent()
-            assertTrue(model.state.value.refreshing)
+            assertEquals(saved, model.state.value.content)
             assertFalse(model.state.value.readRestricted)
-            assertNull(model.state.value.failure)
-            assertNotNull(model.state.value.content)
-            assertEquals(2, f.listReads)
-            model.onEvent(PayslipsEvent.RefreshRequested)
-            f.records.value = AppResult.Success(saved)
-            runCurrent()
-            assertNotNull(model.state.value.content)
-            assertEquals(2, f.listReads)
             release.complete(Unit)
             runCurrent()
             assertNotNull(model.state.value.content)
-            assertFalse(model.state.value.readRestricted)
-            assertNull(model.state.value.failure)
             f.workspaceState.value = AppResult.Success(f.workspace.copy(id = "replacement"))
             runCurrent()
             assertNull(model.state.value.content)
             assertTrue(model.state.value.readRestricted)
-            assertEquals(2, f.listReads)
         }
     }
 
     @Test
-    fun failedExplicitRefreshShowsItsCauseAndKeepsStaleContentWithoutRepeating() = runTest {
+    fun failedRefreshKeepsContentAndDoesNotRetryUntilRequested() = runTest {
         withModel { f, model, _ ->
             model.onEvent(PayslipsEvent.Entered)
             runCurrent()
-            val saved = assertNotNull(model.state.value.content)
-            f.listCall = { payslipFailure("client.network", FailureKind.Network) }
-            f.records.value =
-                AppResult.Success(saved.copy(refreshAfter = f.clock.now() + 1.seconds))
-            runCurrent()
-            advanceTimeBy(1_001)
-            runCurrent()
-            assertEquals(1, f.listReads)
+            f.changesCall = { payslipFailure("client.network", FailureKind.Network) }
             model.onEvent(PayslipsEvent.RefreshRequested)
             runCurrent()
-            assertNull(model.state.value.cacheFailure)
             assertEquals("client.network", model.state.value.failure?.code)
             assertFalse(model.state.value.readRestricted)
             assertNotNull(model.state.value.content)
-            assertEquals(1, f.observers)
             advanceTimeBy(10_000)
             runCurrent()
-            assertEquals(2, f.listReads)
-            f.listCall = { AppResult.Success(PayslipPage(listOf(f.summary))) }
+            assertEquals(2, f.changeReads)
+            f.changesCall = { AppResult.Success(f.changePage()) }
             model.onEvent(PayslipsEvent.RefreshRequested)
             runCurrent()
-            assertNotNull(model.state.value.content)
             assertNull(model.state.value.failure)
-            assertEquals(3, f.listReads)
         }
     }
 
     @Test
-    fun leavingDuringExplicitRefreshCancelsAndIgnoresItsLateFailure() = runTest {
+    fun incompleteSyncKeepsItsPendingOutcomeWithoutAutomaticallyRepeating() = runTest {
         withModel { f, model, _ ->
+            var page = 0
+            f.bootstrapCall = { _, _ ->
+                AppResult.Success(
+                    SyncBootstrapPage(
+                        PayrollFixture.collections,
+                        emptyList(),
+                        "page/${++page}",
+                        null,
+                        f.clock.now(),
+                    )
+                )
+            }
             model.onEvent(PayslipsEvent.Entered)
             runCurrent()
-            val saved = assertNotNull(model.state.value.content)
-            var cancelled = false
-            f.listCall = {
-                try {
-                    awaitCancellation()
-                } catch (_: CancellationException) {
-                    cancelled = true
-                }
-                payslipFailure("mfa_required", FailureKind.AccessDenied)
-            }
-            f.records.value =
-                AppResult.Success(saved.copy(refreshAfter = f.clock.now() + 1.seconds))
+            assertEquals(10, f.bootstrapReads)
+            assertTrue(model.state.value.syncPending)
+            assertFalse(model.state.value.loading)
+            advanceTimeBy(10_000)
             runCurrent()
-            advanceTimeBy(1_001)
-            runCurrent()
-            model.onEvent(PayslipsEvent.RefreshRequested)
-            runCurrent()
-            assertTrue(model.state.value.refreshing)
-            model.onEvent(PayslipsEvent.Stopped)
-            runCurrent()
-            assertTrue(cancelled)
-            assertFalse(model.state.value.refreshing)
-            assertNull(model.state.value.content)
-            assertNull(model.state.value.refreshFailure)
-            assertEquals(0, f.observers)
+            assertEquals(10, f.bootstrapReads)
         }
     }
 
@@ -289,7 +267,7 @@ class PayslipsViewModelTest {
         val f = PayrollFixture {
             Instant.parse("2026-10-13T00:00:00Z") + testScheduler.currentTime.milliseconds
         }
-        val model = PayslipsViewModel(f.workspace.id, f.observe, f.refresh)
+        val model = PayslipsViewModel(f.workspace.id, f.observe, f.sync)
         val owner = ViewModelStore().apply { put("payslips", model) }
         try {
             test(f, model, owner)
@@ -297,6 +275,7 @@ class PayslipsViewModelTest {
             owner.clear()
             runCurrent()
             assertEquals(0, f.observers)
+            assertEquals(0, f.replicas.admissionObservers)
             Dispatchers.resetMain()
         }
     }

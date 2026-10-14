@@ -10,6 +10,7 @@ data class PayslipsState(
     val content: PayslipSnapshot<PayslipOverview>? = null,
     val loading: Boolean = true,
     val refreshing: Boolean = false,
+    val syncPending: Boolean = false,
     val cacheFailure: Failure? = null,
     val refreshFailure: Failure? = null,
 ) {

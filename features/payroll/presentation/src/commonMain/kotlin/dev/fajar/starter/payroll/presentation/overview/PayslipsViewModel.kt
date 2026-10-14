@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import dev.fajar.starter.common.result.AppResult
 import dev.fajar.starter.payroll.domain.entities.PayslipSelection
 import dev.fajar.starter.payroll.domain.policies.payslipFailureInvalidatesCache
+import dev.fajar.starter.payroll.domain.replica.usecases.SyncPayroll
 import dev.fajar.starter.payroll.domain.usecases.*
 import dev.fajar.starter.payroll.presentation.payslipVerificationCodes
 import dev.fajar.starter.presentation.mvi.MviViewModel
@@ -17,7 +18,7 @@ import org.koin.core.annotation.InjectedParam
 class PayslipsViewModel(
     @InjectedParam private val workspaceId: String,
     private val observe: ObservePayslips,
-    private val refresh: RefreshPayslips,
+    private val sync: SyncPayroll,
 ) : MviViewModel<PayslipsState, PayslipsEvent, PayslipsEffect>(PayslipsState()) {
     private var observation: Job? = null
     private var acquisition: Job? = null
@@ -51,7 +52,10 @@ class PayslipsViewModel(
                     .distinctUntilChanged()
                     .flatMapLatest { (selection, restricted) ->
                         if (restricted) emptyFlow()
-                        else observe(workspaceId).map { selection to it }
+                        else
+                            observe(workspaceId, selection ?: PayslipSelection()).map {
+                                selection to it
+                            }
                     }
                     .collect { (selection, result) ->
                         ensureActive()
@@ -74,7 +78,6 @@ class PayslipsViewModel(
 
     private fun onRefreshRequested(event: PayslipsEvent.RefreshRequested) {
         if (observation?.isActive != true || acquisition?.isActive == true) return
-        val requested = state.value.filters ?: PayslipSelection()
         updateState {
             it.copy(
                 refreshing = true,
@@ -86,11 +89,12 @@ class PayslipsViewModel(
         }
         acquisition =
             viewModelScope.launch {
-                val result = refresh(workspaceId, requested)
+                val result = sync(workspaceId)
                 ensureActive()
-                if (result is AppResult.Success) observation?.cancel()
-                updateState { it.withPayslipsRefresh(result, requested) }
-                if (result is AppResult.Success) observeSelection()
+                val caughtUp = result is AppResult.Success && result.value.caughtUp
+                if (caughtUp) observation?.cancel()
+                updateState { it.withPayslipsRefresh(result) }
+                if (caughtUp) observeSelection()
                 if (
                     result is AppResult.Failed &&
                         result.failure.code in workspaceAccessLossCodes &&
@@ -122,19 +126,9 @@ class PayslipsViewModel(
 
     private fun select(selection: PayslipSelection) {
         if (observation?.isActive != true || state.value.readRestricted) return
-        acquisition?.cancel()
-        acquisition = null
         updateState {
-            it.copy(
-                selection = selection,
-                content = null,
-                loading = true,
-                refreshing = false,
-                cacheFailure = null,
-                refreshFailure = null,
-            )
+            it.copy(selection = selection, content = null, loading = true, cacheFailure = null)
         }
-        onEvent(PayslipsEvent.RefreshRequested)
     }
 
     private fun onPayslipSelected(event: PayslipsEvent.PayslipSelected) {

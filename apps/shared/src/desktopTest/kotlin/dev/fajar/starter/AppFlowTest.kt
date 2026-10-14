@@ -238,6 +238,8 @@ class AppFlowTest {
             waitFor("September 2026")
             compose.onNode(hasText("September 2026") and hasClickAction()).performClick()
             waitFor("Payment not recorded")
+            assertEquals(0, server.payroll.lists.get())
+            assertEquals(1, server.payroll.details.get())
             compose.onNodeWithText("Paid").assertDoesNotExist()
             compose.onNodeWithText("IDR 10,232,500").assertIsDisplayed()
             capture("payslip-detail")

@@ -17,6 +17,7 @@ fun payslipFailureInvalidatesCache(failure: Failure): Boolean =
         failure.code in
             setOf(
                 "payroll_payslip_not_found",
+                "sync_scope_changed",
                 "company_maintenance",
                 "client_update_required",
                 "client_version_required",

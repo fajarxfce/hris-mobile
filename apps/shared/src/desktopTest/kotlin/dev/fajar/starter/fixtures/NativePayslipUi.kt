@@ -7,12 +7,15 @@ import io.ktor.client.request.HttpResponseData
 import io.ktor.http.*
 import java.util.concurrent.atomic.AtomicInteger
 import kotlin.test.*
+import kotlin.time.Clock
 import kotlinx.serialization.json.*
 
 /** Wire fixture for employee payroll pages, independent of their domain/data implementation. */
 class NativePayslipUi {
     @Volatile var enabled = false
     val lists = AtomicInteger()
+    val bootstraps = AtomicInteger()
+    val changes = AtomicInteger()
     val details = AtomicInteger()
     val inspections = AtomicInteger()
     val downloads = AtomicInteger()
@@ -32,7 +35,10 @@ class NativePayslipUi {
     fun response(request: HttpRequestData, scope: MockRequestHandleScope): HttpResponseData? {
         val base = "/api/v1/companies/${NativeUiServer.COMPANY_ONE}/payroll/payslips"
         val path = request.url.encodedPath
-        if (!enabled || !path.startsWith(base)) return null
+        if (!enabled) return null
+        val sync = "/api/v1/companies/${NativeUiServer.COMPANY_ONE}/sync/"
+        if (path.startsWith(sync)) return syncResponse(request, scope, path.removePrefix(sync))
+        if (!path.startsWith(base)) return null
         assertEquals("SELF", request.url.parameters["scope"])
         val jsonHeaders = headersOf(HttpHeaders.ContentType, "application/json")
         if (path.endsWith("/pdf")) {
@@ -87,6 +93,61 @@ class NativePayslipUi {
                 else -> error("Unexpected payslip fixture path")
             }
         return scope.respond(body, HttpStatusCode.OK, jsonHeaders)
+    }
+
+    private fun syncResponse(
+        request: HttpRequestData,
+        scope: MockRequestHandleScope,
+        action: String,
+    ): HttpResponseData? {
+        if (
+            request.url.parameters["collections"]?.split(',')?.toSet() !=
+                setOf("PAYSLIPS", "PAYROLL_PAYMENTS")
+        )
+            return null
+        assertEquals(HttpMethod.Get, request.method)
+        assertEquals("8", request.url.parameters["limit"])
+        val body =
+            when (action) {
+                "bootstrap" -> {
+                    bootstraps.incrementAndGet()
+                    buildJsonObject {
+                        putJsonArray("collections") {
+                            add("PAYSLIPS")
+                            add("PAYROLL_PAYMENTS")
+                        }
+                        putJsonArray("items") {
+                            add(
+                                buildJsonObject {
+                                    put("collection", "PAYSLIPS")
+                                    put("id", ID)
+                                    put("version", 0)
+                                }
+                            )
+                        }
+                        put("nextCursor", JsonNull)
+                        put("changesCursor", "payroll/head")
+                        put("serverTime", Clock.System.now().toString())
+                    }
+                }
+                "changes" -> {
+                    changes.incrementAndGet()
+                    buildJsonObject {
+                        putJsonArray("items") {}
+                        put("cursor", "payroll/head")
+                        put("hasMore", false)
+                        put("pendingPublication", false)
+                        put("pollAfterSeconds", 5)
+                        put("serverTime", Clock.System.now().toString())
+                    }
+                }
+                else -> error("Unexpected payroll sync fixture action")
+            }
+        return scope.respond(
+            body.toString(),
+            HttpStatusCode.OK,
+            headersOf(HttpHeaders.ContentType, "application/json"),
+        )
     }
 
     companion object {

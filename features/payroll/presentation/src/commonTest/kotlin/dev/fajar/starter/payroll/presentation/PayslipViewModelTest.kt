@@ -9,7 +9,6 @@ import dev.fajar.starter.payroll.domain.policies.payslipFailure
 import dev.fajar.starter.payroll.presentation.detail.*
 import kotlin.test.*
 import kotlin.time.Duration.Companion.milliseconds
-import kotlin.time.Duration.Companion.seconds
 import kotlin.time.Instant
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
@@ -26,7 +25,7 @@ class PayslipViewModelTest {
             assertEquals(1, f.base.paymentReads)
             assertTrue(model.state.value.canSave)
             var cancelled = false
-            f.base.paymentCall = {
+            f.base.changesCall = {
                 try {
                     awaitCancellation()
                 } finally {
@@ -137,12 +136,12 @@ class PayslipViewModelTest {
             backgroundScope.launch { model.effects.collect { effects += it } }
             model.onEvent(PayslipEvent.Entered)
             runCurrent()
-            f.base.failCleanup = true
+            f.base.replicas.failCleanup = true
             f.inspectCall = { payslipFailure("mfa_required", FailureKind.AccessDenied) }
             model.onEvent(PayslipEvent.ExportRequested)
             model.onEvent(PayslipEvent.ExportLanguageSelected(PayslipDocumentLanguage.ID))
             runCurrent()
-            assertNotNull(f.base.snapshot(true))
+            assertNotNull(f.base.snapshot())
             assertNull(model.state.value.content)
             assertTrue(model.state.value.needsVerification)
             assertEquals(0, f.selections)
@@ -199,7 +198,7 @@ class PayslipViewModelTest {
     @Test
     fun successfulRefreshReopensACompletedDetailStorageSource() = runTest {
         withModel { f, model, _ ->
-            f.base.failNextDetailObservation = true
+            f.base.replicas.failNextDetailObservation = true
             val release = CompletableDeferred<Unit>()
             f.base.detailCall = {
                 release.await()
@@ -222,16 +221,14 @@ class PayslipViewModelTest {
             model.onEvent(PayslipEvent.Entered)
             runCurrent()
             val saved = assertNotNull(model.state.value.content)
-            val writes = f.base.writes
+            val writes = f.base.replicas.writes
             val release = CompletableDeferred<Unit>()
-            f.base.detailCall = {
+            f.base.changesCall = {
                 release.await()
-                AppResult.Success(f.base.slip)
+                AppResult.Success(f.base.changePage())
             }
-            f.base.detailRecords.value =
-                AppResult.Success(saved.copy(refreshAfter = f.base.clock.now() + 1.seconds))
             runCurrent()
-            advanceTimeBy(1_001)
+            advanceTimeBy(3_600_001)
             runCurrent()
             assertFalse(model.state.value.refreshing)
             assertNotNull(model.state.value.content)
@@ -241,13 +238,13 @@ class PayslipViewModelTest {
             assertFalse(model.state.value.readRestricted)
             assertNotNull(model.state.value.content)
             assertNull(model.state.value.failure)
-            assertEquals(writes, f.base.writes)
+            assertEquals(writes, f.base.replicas.writes)
             release.complete(Unit)
             runCurrent()
             assertNotNull(model.state.value.content)
             assertFalse(model.state.value.readRestricted)
             assertNull(model.state.value.failure)
-            assertEquals(writes + 1, f.base.writes)
+            assertEquals(writes + 1, f.base.replicas.writes)
         }
     }
 
@@ -258,14 +255,12 @@ class PayslipViewModelTest {
             runCurrent()
             val saved = assertNotNull(model.state.value.content)
             var attempts = 0
-            f.base.detailCall = {
+            f.base.changesCall = {
                 attempts++
                 payslipFailure("client.network", FailureKind.Network)
             }
-            f.base.detailRecords.value =
-                AppResult.Success(saved.copy(refreshAfter = f.base.clock.now() + 1.seconds))
             runCurrent()
-            advanceTimeBy(1_001)
+            advanceTimeBy(3_600_001)
             runCurrent()
             assertEquals(0, attempts)
             assertNotNull(model.state.value.content)
@@ -278,7 +273,7 @@ class PayslipViewModelTest {
             advanceTimeBy(10_000)
             runCurrent()
             assertEquals(1, attempts)
-            f.base.detailCall = { AppResult.Success(f.base.slip) }
+            f.base.changesCall = { AppResult.Success(f.base.changePage()) }
             model.onEvent(PayslipEvent.RefreshRequested)
             runCurrent()
             assertNotNull(model.state.value.content)
@@ -293,12 +288,10 @@ class PayslipViewModelTest {
             model.onEvent(PayslipEvent.Entered)
             runCurrent()
             val saved = assertNotNull(model.state.value.content)
-            f.base.failCleanup = true
-            f.base.detailCall = { payslipFailure("mfa_required", FailureKind.AccessDenied) }
-            f.base.detailRecords.value =
-                AppResult.Success(saved.copy(refreshAfter = f.base.clock.now() + 1.seconds))
+            f.base.replicas.failCleanup = true
+            f.base.changesCall = { payslipFailure("mfa_required", FailureKind.AccessDenied) }
             runCurrent()
-            advanceTimeBy(1_001)
+            advanceTimeBy(3_600_001)
             runCurrent()
             model.onEvent(PayslipEvent.RefreshRequested)
             runCurrent()
@@ -312,10 +305,11 @@ class PayslipViewModelTest {
                 assertTrue(model.state.value.readRestricted)
                 assertEquals("mfa_required", model.state.value.failure?.code)
                 assertNull(model.state.value.content)
-                assertNotNull(f.base.snapshot(true))
+                assertNotNull(f.base.snapshot())
                 assertEquals(0, f.base.observers)
             }
             f.base.detailCall = { AppResult.Success(f.base.slip) }
+            f.base.changesCall = { AppResult.Success(f.base.changePage()) }
             model.onEvent(PayslipEvent.RefreshRequested)
             runCurrent()
             assertNotNull(model.state.value.content)
@@ -336,7 +330,7 @@ class PayslipViewModelTest {
             PayslipViewModel(
                 PayslipTarget(base.workspace.id, base.summary.id),
                 base.observeDetail,
-                base.refreshDetail,
+                base.sync,
                 f.export,
             )
         val owner = ViewModelStore().apply { put("payslip", model) }

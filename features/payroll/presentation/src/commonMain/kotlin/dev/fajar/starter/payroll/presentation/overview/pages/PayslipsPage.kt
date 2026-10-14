@@ -54,6 +54,10 @@ fun PayslipsPage(state: PayslipsState, list: LazyListState, onEvent: (PayslipsEv
         },
     ) {
         if (state.loading) item(key = "loading") { AppLoading(compact = state.content != null) }
+        if (state.syncPending)
+            item(key = "sync-pending") {
+                AppText(appString(AppString.SyncPending), color = AppColors.muted)
+            }
         val snapshot = state.content?.takeUnless { state.readRestricted }
         val overview = snapshot?.value
         if (overview != null && overview.page.items.isEmpty())
@@ -73,13 +77,13 @@ fun PayslipsPage(state: PayslipsState, list: LazyListState, onEvent: (PayslipsEv
                         AppTextButton(
                             appString(AppString.PayslipsFirstPage),
                             { onEvent(PayslipsEvent.PageRequested(null)) },
-                            enabled = !state.refreshing,
+                            enabled = !state.readRestricted,
                         )
                     if (overview.page.nextCursor != null)
                         AppTextButton(
                             appString(AppString.PayslipsMore),
                             { onEvent(PayslipsEvent.PageRequested(overview.page.nextCursor)) },
-                            enabled = !state.refreshing,
+                            enabled = !state.readRestricted,
                         )
                 }
             }

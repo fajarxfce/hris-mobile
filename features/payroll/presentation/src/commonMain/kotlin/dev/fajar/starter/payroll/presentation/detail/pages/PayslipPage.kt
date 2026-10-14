@@ -74,6 +74,10 @@ fun PayslipPage(state: PayslipState, list: LazyListState, onEvent: (PayslipEvent
         },
     ) {
         if (state.loading) item(key = "loading") { AppLoading(compact = state.content != null) }
+        if (state.syncPending)
+            item(key = "sync-pending") {
+                AppText(appString(AppString.SyncPending), color = AppColors.muted)
+            }
         val snapshot = state.content?.takeUnless { state.readRestricted }
         if (snapshot != null) {
             val view = snapshot.value

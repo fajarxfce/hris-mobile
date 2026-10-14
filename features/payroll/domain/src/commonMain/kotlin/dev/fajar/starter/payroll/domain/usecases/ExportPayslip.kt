@@ -9,6 +9,7 @@ import dev.fajar.starter.documents.domain.repositories.DocumentOutputRepository
 import dev.fajar.starter.identity.domain.repositories.SessionRepository
 import dev.fajar.starter.payroll.domain.entities.*
 import dev.fajar.starter.payroll.domain.policies.*
+import dev.fajar.starter.payroll.domain.replica.repositories.PayslipReplicaRepository
 import dev.fajar.starter.payroll.domain.repositories.PayslipPdfRepository
 import dev.fajar.starter.workspace.domain.entities.*
 import dev.fajar.starter.workspace.domain.policies.admitCompanyOperation
@@ -23,6 +24,7 @@ import kotlinx.coroutines.*
 class ExportPayslip(
     private val pdf: PayslipPdfRepository,
     private val outputs: DocumentOutputRepository,
+    private val replicas: PayslipReplicaRepository,
     private val sessions: SessionRepository,
     private val workspaces: WorkspaceRepository,
     private val clock: Clock,
@@ -41,6 +43,26 @@ class ExportPayslip(
                 is AppResult.Failed -> return result
                 is AppResult.Success -> result.value
             }
+        val result = exportFile(workspaceId, access, id, language)
+        currentCoroutineContext().ensureActive()
+        val owner =
+            withTimeoutOrNull(5.seconds) {
+                validatePayrollContinuation(access, currentAccess(workspaceId))
+            } ?: return payslipFailure("client.payslip_export_timeout", FailureKind.Timeout)
+        if (owner is AppResult.Failed) return owner
+        if (result is AppResult.Failed && payslipFailureInvalidatesCache(result.failure)) {
+            withTimeoutOrNull(2.seconds) { replicas.restrict(access, result.failure) }
+            withTimeoutOrNull(2.seconds) { replicas.clear(access) }
+        }
+        return result
+    }
+
+    private suspend fun exportFile(
+        workspaceId: String,
+        access: PayrollAccess,
+        id: String,
+        language: PayslipDocumentLanguage,
+    ): AppResult<Boolean> {
         val metadata =
             when (
                 val result =

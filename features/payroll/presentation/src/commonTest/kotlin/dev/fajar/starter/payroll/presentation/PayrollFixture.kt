@@ -7,8 +7,12 @@ import dev.fajar.starter.identity.domain.entities.*
 import dev.fajar.starter.identity.domain.repositories.SessionRepository
 import dev.fajar.starter.payroll.domain.entities.*
 import dev.fajar.starter.payroll.domain.policies.*
+import dev.fajar.starter.payroll.domain.replica.entities.*
+import dev.fajar.starter.payroll.domain.replica.usecases.SyncPayroll
 import dev.fajar.starter.payroll.domain.repositories.*
 import dev.fajar.starter.payroll.domain.usecases.*
+import dev.fajar.starter.sync.domain.entities.*
+import dev.fajar.starter.sync.domain.repositories.SyncFeedRepository
 import dev.fajar.starter.workspace.domain.entities.*
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
 import kotlin.time.Clock
@@ -173,21 +177,64 @@ class PayrollFixture(instant: () -> Instant = { Instant.parse("2026-10-13T00:00:
         MutableStateFlow<AppResult<PayslipSnapshot<PayslipOverview>?>>(AppResult.Success(null))
     val detailRecords =
         MutableStateFlow<AppResult<PayslipSnapshot<PayslipView>?>>(AppResult.Success(null))
-    var listCall: suspend (PayslipSelection) -> AppResult<PayslipPage> = {
-        AppResult.Success(PayslipPage(listOf(summary)))
-    }
-    var detailCall: suspend () -> AppResult<Payslip> = { AppResult.Success(slip) }
-    var paymentCall: suspend () -> AppResult<PayslipPayments> = { AppResult.Success(payment) }
-    var beforeWrite: suspend (Boolean) -> Unit = {}
-    var failCleanup = false
-    var failNextObservation = false
-    var failNextDetailObservation = false
-    var writes = 0
-    var clears = 0
-    var observers = 0
+    val slips = mutableMapOf(summary.id to slip)
+    val payments = mutableMapOf(summary.id to payment)
     var listReads = 0
     var detailReads = 0
     var paymentReads = 0
+    var bootstrapReads = 0
+    var changeReads = 0
+    var legacyObservers = 0
+    var detailCall: suspend (String) -> AppResult<Payslip> = {
+        AppResult.Success(slips.getValue(it))
+    }
+    var paymentCall: suspend (String) -> AppResult<PayslipPayments> = {
+        AppResult.Success(payments.getValue(it))
+    }
+    var bootstrapCall: suspend (String?, Int) -> AppResult<SyncBootstrapPage> = { cursor, limit ->
+        val after = cursor?.removePrefix("bootstrap/")?.toInt() ?: 0
+        val all = slips.keys.sorted().map { SyncReference(SyncCollection.PAYSLIPS, it, 0) }
+        val page = all.drop(after).take(limit)
+        val more = after + page.size < all.size
+        AppResult.Success(
+            SyncBootstrapPage(
+                collections,
+                page,
+                if (more) "bootstrap/${after + page.size}" else null,
+                if (more) null else "changes/0",
+                clock.now(),
+            )
+        )
+    }
+    var changesCall: suspend (String) -> AppResult<SyncChangePage> = {
+        AppResult.Success(changePage())
+    }
+    val feed =
+        object : SyncFeedRepository {
+            override suspend fun bootstrap(
+                sessionId: String,
+                companyId: String,
+                collections: Set<SyncCollection>,
+                cursor: String?,
+                limit: Int,
+            ): AppResult<SyncBootstrapPage> {
+                check(collections == PayrollFixture.collections && limit == 8)
+                bootstrapReads++
+                return bootstrapCall(cursor, limit)
+            }
+
+            override suspend fun changes(
+                sessionId: String,
+                companyId: String,
+                collections: Set<SyncCollection>,
+                cursor: String,
+                limit: Int,
+            ): AppResult<SyncChangePage> {
+                check(collections == PayrollFixture.collections && limit == 8)
+                changeReads++
+                return changesCall(cursor)
+            }
+        }
     val remote =
         object : PayslipRepository {
             override suspend fun list(
@@ -195,12 +242,12 @@ class PayrollFixture(instant: () -> Instant = { Instant.parse("2026-10-13T00:00:
                 selection: PayslipSelection,
             ): AppResult<PayslipPage> {
                 listReads++
-                return listCall(selection)
+                error("Replica acquisition must not fetch the last selected list.")
             }
 
             override suspend fun details(access: PayrollAccess, id: String): AppResult<Payslip> {
                 detailReads++
-                return detailCall()
+                return detailCall(id)
             }
 
             override suspend fun payments(
@@ -208,32 +255,26 @@ class PayrollFixture(instant: () -> Instant = { Instant.parse("2026-10-13T00:00:
                 id: String,
             ): AppResult<PayslipPayments> {
                 paymentReads++
-                return paymentCall()
+                return paymentCall(id)
             }
         }
     val cache =
         object : PayslipCacheRepository {
             override fun observe(access: PayrollAccess) = flow {
-                observers++
+                legacyObservers++
                 try {
-                    if (failNextObservation) {
-                        failNextObservation = false
-                        emit(payslipFailure("fixture.storage", FailureKind.Storage))
-                    } else emitAll(records)
+                    emitAll(records)
                 } finally {
-                    observers--
+                    legacyObservers--
                 }
             }
 
             override fun observeDetails(access: PayrollAccess) = flow {
-                observers++
+                legacyObservers++
                 try {
-                    if (failNextDetailObservation) {
-                        failNextDetailObservation = false
-                        emit(payslipFailure("fixture.storage", FailureKind.Storage))
-                    } else emitAll(detailRecords)
+                    emitAll(detailRecords)
                 } finally {
-                    observers--
+                    legacyObservers--
                 }
             }
 
@@ -248,12 +289,6 @@ class PayrollFixture(instant: () -> Instant = { Instant.parse("2026-10-13T00:00:
                 expectedGeneration: String?,
                 snapshot: PayslipSnapshot<PayslipOverview>?,
             ): AppResult<Boolean> {
-                beforeWrite(snapshot == null)
-                if (snapshot == null && failCleanup)
-                    return payslipFailure("fixture.storage", FailureKind.Storage)
-                if ((records.value as? AppResult.Success)?.value?.generation != expectedGeneration)
-                    return AppResult.Success(false)
-                if (snapshot == null) clears++ else writes++
                 records.value = AppResult.Success(snapshot)
                 return AppResult.Success(true)
             }
@@ -263,29 +298,50 @@ class PayrollFixture(instant: () -> Instant = { Instant.parse("2026-10-13T00:00:
                 expectedGeneration: String?,
                 snapshot: PayslipSnapshot<PayslipView>?,
             ): AppResult<Boolean> {
-                beforeWrite(snapshot == null)
-                if (snapshot == null && failCleanup)
-                    return payslipFailure("fixture.storage", FailureKind.Storage)
-                if (
-                    (detailRecords.value as? AppResult.Success)?.value?.generation !=
-                        expectedGeneration
-                )
-                    return AppResult.Success(false)
-                if (snapshot == null) clears++ else writes++
                 detailRecords.value = AppResult.Success(snapshot)
                 return AppResult.Success(true)
             }
         }
-    val refresh = RefreshPayslips(remote, cache, sessions, workspaces, clock, build)
-    val refreshDetail = RefreshPayslip(remote, cache, sessions, workspaces, clock, build)
-    val observe = ObservePayslips(cache, sessions, workspaces, clock, build)
-    val observeDetail = ObservePayslip(cache, sessions, workspaces, clock, build)
+    val replicas =
+        PayrollReplicaFake(
+            owns = { access ->
+                (sessionState.value as? AppResult.Success)?.value?.let {
+                    it.id == access.sessionId &&
+                        it.user.id == access.accountId &&
+                        it.binding.audience == access.audience
+                } == true
+            },
+            clearLegacy = {
+                records.value = AppResult.Success(null)
+                detailRecords.value = AppResult.Success(null)
+            },
+        )
+    val sync = SyncPayroll(feed, remote, replicas, sessions, workspaces, clock, build)
+    val observe = ObservePayslips(replicas, cache, sessions, workspaces, clock, build)
+    val observeDetail = ObservePayslip(replicas, cache, sessions, workspaces, clock, build)
+    val observers
+        get() = replicas.observers + legacyObservers
 
-    suspend fun load(detail: Boolean = false): AppResult<Unit> =
-        if (detail) refreshDetail(workspace.id, summary.id)
-        else refresh(workspace.id, PayslipSelection())
+    suspend fun load() = sync(workspace.id)
 
-    fun snapshot(detail: Boolean) =
-        if (detail) (detailRecords.value as? AppResult.Success)?.value
-        else (records.value as? AppResult.Success)?.value
+    fun changePage(
+        items: List<SyncChange> = emptyList(),
+        cursor: String = "changes/next",
+        hasMore: Boolean = false,
+        pending: Boolean = false,
+        poll: Int = 5,
+    ) = SyncChangePage(items, cursor, hasMore, pending, poll, clock.now())
+
+    fun changedPayment(version: Long = payment.version) =
+        SyncChange(
+            SyncReference(SyncCollection.PAYROLL_PAYMENTS, summary.id, version),
+            SyncOperation.UPSERT,
+        )
+
+    fun snapshot() =
+        (replicas.published.value as? AppResult.Success)?.value?.takeIf { it.checkpoint != null }
+
+    companion object {
+        val collections = setOf(SyncCollection.PAYSLIPS, SyncCollection.PAYROLL_PAYMENTS)
+    }
 }

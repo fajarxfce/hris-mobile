@@ -1,5 +1,39 @@
 # Validation
 
+## Payslip replica
+
+Root checks passed with 1,320 desktop/JVM/UI tests, Android dev assembly and
+production Web distribution. Payroll passed 35 domain, 26 data and 18 presentation
+desktop tests, plus 35 domain, 20 data and 18 presentation Chromium tests. The Web
+bundle retains its three existing bundler warnings.
+
+Tests cover local annual paging and independent details, bounded change-feed
+acquisition, payment versions, tombstones, staged cursor replacement and atomic
+publication. They exercise concurrent triggers, cancellation, late ownership
+changes, failed hydration, persisted denials, failed cleanup and a newer denial
+during admission. SQLite and IndexedDB contracts verify indexed query bounds,
+database reopening, authenticated metadata, missing keys and erased temporary
+buffers. Assembled UI checks verify local navigation without list HTTP requests.
+
+API 35 emulator acceptance upgraded the existing installation without clearing
+its data. The real development API published one owned September payslip, its
+indexed summary and empty payment-progress record. After disabling Wi-Fi/mobile
+data and force-stopping the app, Home, the annual list and the full detail reopened
+locally. Selecting another year and returning retained the acquired payslip.
+
+Advancing the emulator clock by 73 hours and restarting the app retained the same
+company, payslip and financial breakdown. All three record payload hashes remained
+unchanged through offline navigation and the clock adjustment. This simulates
+age rather than waiting three physical days. Time, automatic time and connectivity
+were restored; successful online synchronization cleared connection feedback.
+Screenshots were inspected and the crash buffer had no fatal exception. The
+emulator was stopped with its data retained. Multiple-record pagination and legacy
+snapshot migration were covered by automated tests, not this single-slip fixture.
+
+After notice, the validated APK was installed on the authorized Android 16 phone
+at 09:15:08 on 2026-10-14 (WIB), using install-only delivery. The package update
+timestamp and matching installed APK hash were verified without opening the app.
+
 ## Attendance and calendar replica
 
 Root checks passed with 1,295 desktop/UI tests, Android dev assembly and production

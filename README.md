@@ -79,8 +79,9 @@ is not a completed HRIS workflow. See [native identity](docs/native-identity.md)
 [attendance and work calendars](docs/workforce.md), [overtime](docs/overtime.md), the [leave integration](docs/leave.md), and the platform's
 [remaining delivery work](https://github.com/fajarxfce/hris-platform/blob/main/docs/completion.md).
 
-The [employee payslip pages](docs/payroll.md) provide annual history, published
-amounts and payment progress, with encrypted list/detail caches. Employees can
+The [employee payslip pages](docs/payroll.md) query account-owned annual history and
+full details from the local replica. Incremental synchronization retains published
+amounts and payment progress in encrypted records. Employees can
 save an English or Indonesian PDF through the platform file dialog after fresh
 server authorization. Every read remains limited to their own payslips.
 

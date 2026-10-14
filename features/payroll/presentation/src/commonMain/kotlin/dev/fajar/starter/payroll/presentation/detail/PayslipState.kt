@@ -9,6 +9,7 @@ data class PayslipState(
     val content: PayslipSnapshot<PayslipView>? = null,
     val loading: Boolean = true,
     val refreshing: Boolean = false,
+    val syncPending: Boolean = false,
     val saving: Boolean = false,
     val saved: Boolean = false,
     val exportOptions: Boolean = false,

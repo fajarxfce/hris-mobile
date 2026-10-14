@@ -3,6 +3,7 @@ package dev.fajar.starter.payroll.presentation.overview
 import dev.fajar.starter.common.result.AppResult
 import dev.fajar.starter.payroll.domain.entities.*
 import dev.fajar.starter.payroll.domain.policies.payslipFailureInvalidatesCache
+import dev.fajar.starter.payroll.domain.replica.entities.PayrollSyncOutcome
 
 internal fun PayslipsState.withCachedPayslips(
     result: AppResult<PayslipSnapshot<PayslipOverview>?>
@@ -26,13 +27,13 @@ internal fun PayslipsState.withCachedPayslips(
     }
 
 internal fun PayslipsState.withPayslipsRefresh(
-    result: AppResult<Unit>,
-    requested: PayslipSelection,
+    result: AppResult<PayrollSyncOutcome>
 ): PayslipsState =
     when (result) {
         is AppResult.Failed ->
             copy(
                 refreshing = false,
+                syncPending = false,
                 loading = false,
                 refreshFailure = result.failure,
                 content = content?.takeUnless { payslipFailureInvalidatesCache(result.failure) },
@@ -40,9 +41,13 @@ internal fun PayslipsState.withPayslipsRefresh(
         is AppResult.Success ->
             copy(
                 refreshing = false,
-                loading = content == null,
-                cacheFailure = null,
-                refreshFailure = null,
-                selection = requested,
+                loading = false,
+                syncPending = !result.value.caughtUp,
+                cacheFailure =
+                    if (result.value.caughtUp) null
+                    else cacheFailure?.takeIf(::payslipFailureInvalidatesCache),
+                refreshFailure =
+                    if (result.value.caughtUp) null
+                    else refreshFailure?.takeIf(::payslipFailureInvalidatesCache),
             )
     }
