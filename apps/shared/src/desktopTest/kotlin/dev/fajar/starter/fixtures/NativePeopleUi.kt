@@ -1,13 +1,94 @@
 package dev.fajar.starter.fixtures
 
+import io.ktor.client.request.HttpRequestData
 import io.ktor.http.HttpStatusCode
+import java.io.IOException
+import java.util.concurrent.CopyOnWriteArrayList
+import kotlin.test.assertEquals
+import kotlinx.coroutines.*
 import kotlinx.serialization.json.*
 
 /** Fictional wire responses for profile integration tests only. */
 class NativePeopleUi {
     @Volatile var denied = false
 
-    fun response(path: String): Pair<String, HttpStatusCode>? {
+    @Volatile var offline = false
+    @Volatile var employmentCount = 1
+    @Volatile var holdNext = false
+    val started = CompletableDeferred<Unit>()
+    val released = CompletableDeferred<Unit>()
+    val cancelled = CompletableDeferred<Unit>()
+    val queries = CopyOnWriteArrayList<String>()
+    val recordReads = CopyOnWriteArrayList<String>()
+
+    suspend fun response(request: HttpRequestData): Pair<String, HttpStatusCode>? {
+        val path = request.url.encodedPath
+        val sync =
+            path.contains("/sync/") && request.url.parameters["collections"] == "SELF_PROFILES"
+        val canonical = path.contains("/employees/me/profiles/")
+        if (sync || canonical) {
+            if (sync) {
+                assertEquals("50", request.url.parameters["limit"])
+                queries.add(path.substringAfterLast('/'))
+                if (holdNext) {
+                    holdNext = false
+                    started.complete(Unit)
+                    try {
+                        released.await()
+                    } catch (failure: CancellationException) {
+                        cancelled.complete(Unit)
+                        throw failure
+                    }
+                }
+            }
+            if (offline) throw IOException("Simulated offline profile")
+            if (denied) return """{"code":"access_denied"}""" to HttpStatusCode.Forbidden
+            val rows =
+                if (path.split('/')[4] == NativeUiServer.COMPANY_ONE)
+                    (1..employmentCount).map { index ->
+                        buildJsonObject {
+                            put("id", if (index == 1) EMPLOYEE else SECOND_EMPLOYEE)
+                            put("version", 17)
+                            put("timezone", "Asia/Jakarta")
+                            put("employment", employmentDetails(index))
+                            put("profile", personalDetails())
+                        }
+                    }
+                else emptyList()
+            if (canonical) {
+                val id = path.substringAfterLast('/')
+                recordReads.add(id)
+                val row =
+                    rows.singleOrNull { it.getValue("id").jsonPrimitive.content == id }
+                        ?: return """{"code":"self_profile_not_found"}""" to HttpStatusCode.NotFound
+                return row.toString() to HttpStatusCode.OK
+            }
+            val bootstrap = path.endsWith("/bootstrap")
+            return buildJsonObject {
+                    if (bootstrap) putJsonArray("collections") { add("SELF_PROFILES") }
+                    putJsonArray("items") {
+                        if (bootstrap)
+                            rows.forEach { row ->
+                                addJsonObject {
+                                    put("collection", "SELF_PROFILES")
+                                    put("id", row.getValue("id"))
+                                    put("version", row.getValue("version"))
+                                }
+                            }
+                    }
+                    if (bootstrap) {
+                        put("nextCursor", JsonNull)
+                        put("changesCursor", "profile-head")
+                    } else {
+                        put("cursor", "profile-head")
+                        put("hasMore", false)
+                        put("pendingPublication", false)
+                        put("pollAfterSeconds", 5)
+                    }
+                    put("serverTime", "2026-10-14T00:00:00Z")
+                }
+                .toString() to HttpStatusCode.OK
+        }
         val base = "/api/v1/companies/${NativeUiServer.COMPANY_ONE}"
         val body =
             when (path) {
@@ -33,10 +114,10 @@ class NativePeopleUi {
         }
     }
 
-    private fun employee() = buildJsonObject {
-        put("id", EMPLOYEE)
+    private fun employee(index: Int = 1) = buildJsonObject {
+        put("id", if (index == 1) EMPLOYEE else SECOND_EMPLOYEE)
         put("companyId", NativeUiServer.COMPANY_ONE)
-        put("employeeNumber", "NUSA-001")
+        put("employeeNumber", if (index == 1) "NUSA-001" else "NUSA-002")
         put("version", 0)
         put("appliedRevision", 0)
         putJsonObject("person") {
@@ -55,9 +136,9 @@ class NativePeopleUi {
         }
     }
 
-    private fun employmentDetails() = buildJsonObject {
+    private fun employmentDetails(index: Int = 1) = buildJsonObject {
         put("asOf", "2026-10-01")
-        put("employee", employee())
+        put("employee", employee(index))
         putJsonObject("department") {
             put("id", DEPARTMENT)
             put("code", "ENG")
@@ -84,6 +165,7 @@ class NativePeopleUi {
     }
 
     companion object {
+        const val SECOND_EMPLOYEE = "55555555-5555-4555-8555-555555555556"
         const val EMPLOYEE = "55555555-5555-4555-8555-555555555555"
         const val PERSON = "66666666-6666-4666-8666-666666666666"
         const val ACCOUNT = "11111111-1111-4111-8111-111111111111"

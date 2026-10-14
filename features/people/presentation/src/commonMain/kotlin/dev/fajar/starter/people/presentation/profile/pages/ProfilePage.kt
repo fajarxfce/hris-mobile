@@ -1,9 +1,8 @@
 package dev.fajar.starter.people.presentation.profile.pages
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import dev.fajar.starter.designsystem.components.*
 import dev.fajar.starter.localization.*
@@ -12,9 +11,16 @@ import dev.fajar.starter.people.presentation.profile.widgets.*
 import io.github.composefluent.icons.Icons
 import io.github.composefluent.icons.regular.ArrowLeft
 import io.github.composefluent.icons.regular.ArrowSync
+import io.github.composefluent.icons.regular.Person
 
 @Composable
-fun ProfilePage(state: ProfileState, onEvent: (ProfileEvent) -> Unit) {
+fun ProfilePage(
+    state: ProfileState,
+    employmentList: LazyListState,
+    onEvent: (ProfileEvent) -> Unit,
+) {
+    val profile = state.view?.profile
+    val failure = state.failure
     AppLazyPage(
         maxWidth = 720.dp,
         spacing = 16.dp,
@@ -33,18 +39,18 @@ fun ProfilePage(state: ProfileState, onEvent: (ProfileEvent) -> Unit) {
                     AppIconButton(
                         Icons.Regular.ArrowSync,
                         appString(AppString.Refresh),
-                        { onEvent(ProfileEvent.DirectoryRequested()) },
-                        enabled = !state.loadingDirectory,
+                        { onEvent(ProfileEvent.RefreshRequested) },
+                        enabled = !state.syncing,
                     )
                 },
             )
         },
     ) {
-        if (state.loadingDirectory || state.loadingProfile) item(key = "loading") { AppLoading() }
-        if (state.failure != null)
+        if (state.loading || state.syncing) item(key = "loading") { AppLoading() }
+        if (failure != null)
             item(key = "failure") {
                 Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                    AppFeedback(failureText(state.failure))
+                    AppFeedback(failureText(failure))
                     if (state.needsVerification)
                         AppButton(
                             appString(AppString.VerifyAccount),
@@ -53,41 +59,31 @@ fun ProfilePage(state: ProfileState, onEvent: (ProfileEvent) -> Unit) {
                     else
                         AppTextButton(
                             appString(AppString.TryAgain),
-                            { onEvent(ProfileEvent.DirectoryRequested()) },
+                            { onEvent(ProfileEvent.RefreshRequested) },
+                            enabled = !state.syncing,
                         )
                 }
             }
-        if (state.directory?.items?.isEmpty() == true)
+        if (state.view?.employments?.isEmpty() == true)
             item(key = "empty") { AppText(appString(AppString.NoEmployment)) }
-        if (
-            state.directory != null &&
-                (state.directory.items.size > 1 || state.directory.nextCursor != null)
-        ) {
-            item(key = "selection") { AppText(appString(AppString.ChooseEmployment)) }
-            items(state.directory.items, key = { "employment/${it.id}" }) { employee ->
-                AppButton(
-                    employee.employeeNumber,
-                    { onEvent(ProfileEvent.EmploymentSelected(employee.id)) },
-                    Modifier.fillMaxWidth(),
-                    primary = state.selectedId == employee.id,
+        if (state.view != null && state.view.employments.size > 1)
+            item(key = "selection") {
+                AppFilterChip(
+                    profile?.details?.employee?.employeeNumber
+                        ?: appString(AppString.ChooseEmployment),
+                    selected = state.view.selectedId != null,
+                    onClick = { onEvent(ProfileEvent.EmploymentRequested) },
+                    icon = Icons.Regular.Person,
                 )
             }
-        }
-        if (state.directory?.nextCursor != null)
-            item(key = "next") {
-                AppButton(
-                    appString(AppString.MoreEmployments),
-                    { onEvent(ProfileEvent.DirectoryRequested(state.directory.nextCursor)) },
-                    primary = false,
-                )
-            }
-        if (state.profile != null) {
-            item(key = "personal/${state.profile.person.personId}") {
-                PersonalDetails(state.profile.person)
-            }
-            item(key = "work/${state.profile.details.employee.id}") {
-                EmploymentOverview(state.profile.details)
+        if (state.syncPending && !state.syncing && state.view == null && failure == null)
+            item(key = "pending") { AppText(appString(AppString.SyncPending)) }
+        if (profile != null) {
+            item(key = "personal/${profile.person.personId}") { PersonalDetails(profile.person) }
+            item(key = "work/${profile.details.employee.id}") {
+                EmploymentOverview(profile.details)
             }
         }
     }
+    if (state.choosingEmployment) ProfileEmploymentDialog(state, employmentList, onEvent)
 }

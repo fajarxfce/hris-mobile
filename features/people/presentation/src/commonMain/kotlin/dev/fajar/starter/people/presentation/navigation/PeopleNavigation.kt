@@ -1,8 +1,8 @@
 package dev.fajar.starter.people.presentation.navigation
 
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.getValue
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.compose.LifecycleEventEffect
+import androidx.lifecycle.compose.LifecycleStartEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -16,8 +16,10 @@ fun NavGraphBuilder.peopleRoutes(workspaceId: String, onVerify: () -> Unit, onBa
     composable<ProfileRoute> {
         val viewModel = koinViewModel<ProfileViewModel>(parameters = { parametersOf(workspaceId) })
         val state by viewModel.state.collectAsStateWithLifecycle()
-        LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
-            viewModel.onEvent(ProfileEvent.DirectoryRequested())
+        val employmentList = rememberLazyListState()
+        LifecycleStartEffect(viewModel) {
+            viewModel.onEvent(ProfileEvent.Entered)
+            onStopOrDispose { viewModel.onEvent(ProfileEvent.Stopped) }
         }
         CollectEffects(viewModel.effects) { effect ->
             when (effect) {
@@ -25,6 +27,6 @@ fun NavGraphBuilder.peopleRoutes(workspaceId: String, onVerify: () -> Unit, onBa
                 ProfileEffect.VerifyAccount -> onVerify()
             }
         }
-        ProfilePage(state, viewModel::onEvent)
+        ProfilePage(state, employmentList, viewModel::onEvent)
     }
 }

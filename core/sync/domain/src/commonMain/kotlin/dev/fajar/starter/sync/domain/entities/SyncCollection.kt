@@ -16,4 +16,5 @@ enum class SyncCollection {
     EXPENSE_PAYMENTS,
     DIRECTORY_EMPLOYEES,
     DOCUMENT_EVIDENCE,
+    SELF_PROFILES,
 }

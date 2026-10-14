@@ -65,6 +65,7 @@ class PeopleFixture {
             null,
             0,
             0,
+            LocalDate(2025, 1, 1),
         )
     val directory = SelfEmploymentDirectory(date, "Asia/Jakarta", listOf(employee), null)
     val companyDirectory =

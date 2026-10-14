@@ -51,6 +51,8 @@ class StarterApplication : Application(), Configuration.Provider {
             expenseReplicaCredentials = AndroidCredentialStore(this, "expense-replica-content-key"),
             directoryReplicaCredentials =
                 AndroidCredentialStore(this, "directory-replica-content-key"),
+            selfProfileReplicaCredentials =
+                AndroidCredentialStore(this, "self-profile-replica-content-key"),
             documentCatalogCredentials =
                 AndroidCredentialStore(this, "document-catalog-content-key"),
             commandCredentials = AndroidCredentialStore(this, "command-content-key"),

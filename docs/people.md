@@ -1,41 +1,78 @@
 # People
 
-The profile screen uses current-account employment discovery from HRIS Platform.
-It retains one bounded page and loads assignment references and private profile
-fields for the selected employment. An unlinked account receives an empty state;
-no directory fallback or sample employee is substituted.
+The profile screen reads account-owned encrypted employment and personal-profile
+records. Incremental synchronization acquires coherent snapshots from HRIS Platform;
+selection reads local data. An unlinked account receives an empty state.
 
 ## Ownership
 
-`features/people/domain` owns entities, the repository contract, and the read
-use cases. `data` owns API services, the raw datasource contract, bounded DTO
-mapping, and the repository implementation. `presentation` owns separate profile
-and directory MVI state, typed event handlers, widgets, and navigation entries.
-App composition connects the directory tab and standalone route. Home requests
-navigation through an effect without depending on the people feature.
+`features/people/domain` owns entities, repository contracts, use cases and pure
+access/selection policies. `data` owns API services, raw datasource contracts,
+bounded DTO mapping, encryption and repository implementations. `presentation`
+owns separate profile and directory MVI state, typed handlers, widgets and
+navigation entries. App composition connects the directory tab and profile route.
 
-Use cases check the originating workspace, account session, API audience, and
-person linkage before returning data. Repositories acquire and map within
-`safeApiCall`; cancellation propagates. Mapping rejects mismatched resource IDs,
-duplicate entries, invalid dates, invalid reference relationships, and cursors
-that cannot advance. Individual HTTP requests remain bounded; directory synchronization acquires records in finite batches.
+Use cases coordinate local ownership, live company admission and bounded feed
+acquisition. Repositories acquire and map within `safeApiCall` or
+`safeStorageCall`; cancellation propagates. Mapping rejects mismatched IDs,
+account/person linkage, dates, independent revisions and unresolved assignments.
+The company date comes from the server. Birth dates, start dates and effective
+dates remain date-only values without an implicit timezone shift. A transferred
+person may retain their original owner company while the employment belongs to
+the selected company.
 
-The company date comes from the server. Calendar dates remain date-only values,
-so rendering a birth date or start date does not apply an implicit timezone shift.
-A transferred person's private profile may retain its original owning company;
-current account/person linkage still controls self access.
+## Private profiles
 
-## Screen lifetime
+`SyncSelfProfiles` explicitly selects `SELF_PROFILES` and hydrates
+`employees/me/profiles/{employeeId}`. Each canonical response contains employment,
+private person fields and resolved organization/manager references from one server
+snapshot. Its sync revision is separate from employment/person command versions.
+The response's `asOf` date records when facts were projected; ordinary date changes
+do not expire the profile or create artificial content revisions.
 
-Entering or resuming the profile requests current data. Refresh and selection
-clear the previous private fields. A new selection cancels the former detail
-request; a company/account change disposes the route owner. Late results cannot
-be published into another workspace. Reads have no automatic retry loop.
+Access requires `people.self.read`, or both `people.read` and
+`people.profile.read`. Even an administrator reads only employments linked to
+the current account. The People module must be available. Public-directory access
+does not admit a private profile.
 
-An MFA rejection clears the profile and offers verification. Completing the
-challenge returns to the same company and triggers a fresh authorized read.
-General access failures also clear private fields. This screen currently uses
-online reads; it does not grant offline access or persist employee PII.
+Each run has a 30-second execution budget, at most ten feed pages, fifty references
+per page and four concurrent canonical reads. A shared use-case mutex coordinates
+UI and worker requests. Initial and replacement generations publish only after
+feed catch-up reports no pending publication; prior complete records stay readable.
+Records and the processed cursor commit atomically. A versioned withdrawal or
+`self_profile_not_found` removes that employment. Older versions cannot restore it.
+
+The private replica and read-admission record have separate partitions from the
+coworker directory and use their own platform-protected content key. Account,
+company and API audience bind the ciphertext; a session must match the active
+storage owner. No name, birth date, email or employee number appears in plaintext
+record indexes. Local observation admits at most 200 owned employment records and
+checks one committed revision throughout acquisition. A missing retained key is
+reported instead of silently replacing it.
+
+`ObserveSelfProfiles` combines local records with the selected employment ID.
+Selection retains a still-present ID or chooses the first employee number. It does
+not request HTTP or renew authority. Owned records survive process restart and
+reauthentication. Neither ordinary data age nor credential/cursor expiry hides
+them. Cursor expiry starts a staged replacement while local facts remain visible.
+
+## Profile screen lifetime
+
+Entry restores local content immediately and requests finite synchronization when
+needed. An explicit refresh always requests acquisition while retaining existing
+facts. The refresh interval controls scheduling only. Employment selection opens
+a compact radio-list dialog and performs a local query. An unknown selection or
+late emission for the preceding selection cannot replace current state.
+
+Leaving the foreground cancels acquisition while the route-owned local collector
+continues watching ownership and read admission. Disposal cancels that collector.
+A confirmed access/MFA denial hides private content even if cleanup fails. The
+encrypted denial survives restart; a process-owned buffer protects failed writes
+through reauthentication. Only admitted acquisition that observed the latest denial
+revision may reopen it. Transport failures and incomplete retries cannot clear it.
+MFA recovery returns to the selected company before admitted synchronization.
+Successful explicit acquisition also reopens a completed storage subscription;
+there is no automatic retry loop in the read boundary or UI.
 
 ## Coworker directory
 
@@ -43,7 +80,7 @@ Employees reads an account-owned encrypted replica. `SyncCompanyDirectory` selec
 only `DIRECTORY_EMPLOYEES`, consumes bounded bootstrap/change pages, and hydrates
 `employees/directory/{id}` through `DirectoryRecordRepository`. The server grants
 this collection through `people.directory.read` or `people.read`; private profile
-or employment linkage is not required and no private profile is replicated.
+or employment linkage is not required. This collection excludes private profile fields.
 
 Each record contains the employee number, name, position/department identifiers
 and their labels. Versioned deletions remove withdrawn coworkers. A canonical
@@ -100,7 +137,7 @@ and filters, retained tab scroll, interrupted refresh and access recovery.
 
 Development fixture data contains one current coworker. Larger directories and
 fault scenarios use isolated automated fixtures; they do not create production
-employee records. Private profile reads remain online.
+employee records.
 
 The directory integration passed the root checks with 1,397 desktop/JVM tests,
 59 Chromium tests, Android dev assembly and the production Web build. API 35
@@ -113,3 +150,13 @@ A JVM fixture with 5,000 records measured 90 ms for reading/decrypting the compl
 directory and 7 ms for a query reaching its final record. These measurements do not
 describe phone performance; the fixture also asserts that unvisited pages remain
 searchable.
+
+The private-profile integration passed the root checks with 1,475 desktop/JVM
+tests, 86 Chromium People tests, Android dev assembly and the production Web build.
+Coverage includes independent private grants, canonical identity/reference checks,
+versioned withdrawals, pending publication, scoped encrypted restoration, failed
+admission writes, cancellation, local selection and completed storage-flow recovery.
+API 35 acceptance verified the live profile, cold offline restoration, another
+restart after a 73-hour clock advance and retained facts after a failed refresh.
+The emulator clock and network were restored, and its crash buffer contained no
+fatal exception or signal. Phone delivery remains pending ADB availability.

@@ -84,7 +84,7 @@ class NativeUiServer(
             deviceSessions.response(path, request.method)?.let { (body, status) ->
                 return@withLock respond(body, status, headers)
             }
-            (directory.response(request) ?: people.response(path))?.let { (body, status) ->
+            (directory.response(request) ?: people.response(request))?.let { (body, status) ->
                 return@withLock if (requireMfa && !verified)
                     respond("""{"code":"mfa_required"}""", HttpStatusCode.Forbidden, headers)
                 else respond(body, status, headers)

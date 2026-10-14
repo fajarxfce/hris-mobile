@@ -10,37 +10,12 @@ import kotlinx.coroutines.test.*
 
 class ProfileOwnershipTest {
     @Test
-    fun aDifferentPersonCannotEnterSelfStateOrTriggerPrivateProfileAcquisition() = runTest {
+    fun aDifferentAccountCannotEnterTheEmploymentDirectory() = runTest {
         val f = PeopleFixture()
         val other = f.employee.copy(accountId = "other")
         f.directoryCall = { AppResult.Success(f.directory.copy(items = listOf(other))) }
         val directory = LoadSelfEmployments(f.people, f.sessions, f.workspaces)(f.workspace.id)
         assertEquals("client.invalid_response", assertIs<AppResult.Failed>(directory).failure.code)
-        f.employmentCall = { AppResult.Success(f.details.copy(employee = other)) }
-        val result =
-            LoadEmploymentProfile(f.people, f.sessions, f.workspaces)(
-                f.workspace.id,
-                other.id,
-                f.date,
-            )
-        assertEquals("employee_not_found", assertIs<AppResult.Failed>(result).failure.code)
-        assertEquals(0, f.profileReads)
-    }
-
-    @Test
-    fun thePersonAndEmploymentMustReferToTheSameAccountAndIdentity() = runTest {
-        val f = PeopleFixture()
-        val load = LoadEmploymentProfile(f.people, f.sessions, f.workspaces)
-        for (person in
-            listOf(f.profile.copy(personId = "other"), f.profile.copy(accountId = "other"))) {
-            f.profileCall = { AppResult.Success(person) }
-            assertEquals(
-                "client.invalid_response",
-                assertIs<AppResult.Failed>(load(f.workspace.id, f.employee.id, f.date)).failure.code,
-            )
-        }
-        f.profileCall = { AppResult.Success(f.profile.copy(ownerCompanyId = "original-company")) }
-        assertIs<AppResult.Success<*>>(load(f.workspace.id, f.employee.id, f.date))
     }
 
     @Test
@@ -68,26 +43,16 @@ class ProfileOwnershipTest {
     }
 
     @Test
-    fun lateDirectoryAndProfileResultsCannotCrossOwnershipOrCancellationBoundaries() = runTest {
-        for (detail in listOf(false, true)) for (mode in listOf("company", "logout", "cancel")) {
+    fun lateDirectoryResultsCannotCrossOwnershipOrCancellationBoundaries() = runTest {
+        for (mode in listOf("company", "logout", "cancel")) {
             val f = PeopleFixture()
             val release = CompletableDeferred<Unit>()
             f.directoryCall = {
                 withContext(NonCancellable) { release.await() }
                 AppResult.Success(f.directory)
             }
-            f.profileCall = {
-                withContext(NonCancellable) { release.await() }
-                AppResult.Success(f.profile)
-            }
             val pending = async {
-                if (detail)
-                    LoadEmploymentProfile(f.people, f.sessions, f.workspaces)(
-                        f.workspace.id,
-                        f.employee.id,
-                        f.date,
-                    )
-                else LoadSelfEmployments(f.people, f.sessions, f.workspaces)(f.workspace.id)
+                LoadSelfEmployments(f.people, f.sessions, f.workspaces)(f.workspace.id)
             }
             runCurrent()
             when (mode) {

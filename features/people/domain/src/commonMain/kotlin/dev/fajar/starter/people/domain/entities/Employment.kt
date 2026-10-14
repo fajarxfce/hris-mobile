@@ -16,6 +16,7 @@ data class Employment(
     val endDate: LocalDate?,
     val version: Long,
     val appliedRevision: Long,
+    val effectiveFrom: LocalDate,
 )
 
 enum class EmploymentContract {

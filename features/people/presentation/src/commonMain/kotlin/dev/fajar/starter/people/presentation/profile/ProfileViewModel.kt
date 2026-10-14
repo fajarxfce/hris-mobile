@@ -2,85 +2,98 @@ package dev.fajar.starter.people.presentation.profile
 
 import androidx.lifecycle.viewModelScope
 import dev.fajar.starter.common.result.*
-import dev.fajar.starter.people.domain.usecases.*
+import dev.fajar.starter.people.domain.profile.usecases.ObserveSelfProfiles
+import dev.fajar.starter.people.domain.profile.usecases.SyncSelfProfiles
 import dev.fajar.starter.presentation.mvi.MviViewModel
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
 import org.koin.android.annotation.KoinViewModel
 import org.koin.core.annotation.InjectedParam
 
 @KoinViewModel
 class ProfileViewModel(
     @InjectedParam private val workspaceId: String,
-    private val loadDirectory: LoadSelfEmployments,
-    private val loadProfile: LoadEmploymentProfile,
+    private val observe: ObserveSelfProfiles,
+    private val sync: SyncSelfProfiles,
 ) : MviViewModel<ProfileState, ProfileEvent, ProfileEffect>(ProfileState()) {
-    private var profileRequest: Job? = null
+    private var observation: Job? = null
+    private var acquisition: Job? = null
+    private var visible = false
 
     init {
-        on<ProfileEvent.DirectoryRequested>(::onDirectoryRequested)
+        on<ProfileEvent.Entered>(::onEntered)
+        on<ProfileEvent.Stopped>(::onStopped)
+        on<ProfileEvent.RefreshRequested>(::onRefreshRequested)
+        on<ProfileEvent.EmploymentRequested>(::onEmploymentRequested)
+        on<ProfileEvent.EmploymentDismissed>(::onEmploymentDismissed)
         on<ProfileEvent.EmploymentSelected>(::onEmploymentSelected)
         on<ProfileEvent.BackRequested>(::onBackRequested)
         on<ProfileEvent.VerificationRequested>(::onVerificationRequested)
     }
 
-    private fun onDirectoryRequested(event: ProfileEvent.DirectoryRequested) {
-        if (state.value.loadingDirectory) return
-        if (event.after != null && event.after != state.value.directory?.nextCursor) return
-        val previousSelection = state.value.selectedId
-        profileRequest?.cancel()
-        updateState { ProfileState(loadingDirectory = true) }
-        viewModelScope.launch {
-            when (val result = loadDirectory(workspaceId, event.after)) {
-                is AppResult.Failed ->
-                    updateState {
-                        it.copy(
-                            loadingDirectory = false,
-                            failure = result.failure,
-                            needsVerification = result.failure.code in profileVerificationCodes,
-                        )
-                    }
-                is AppResult.Success -> {
-                    updateState { it.copy(directory = result.value, loadingDirectory = false) }
-                    val selected =
-                        result.value.items.firstOrNull { it.id == previousSelection }
-                            ?: result.value.items.singleOrNull()
-                    selected?.let { onEvent(ProfileEvent.EmploymentSelected(it.id)) }
+    private fun onEntered(event: ProfileEvent.Entered) {
+        if (visible) return
+        visible = true
+        if (observation?.isActive != true) observeSelection()
+        acquire(force = false)
+    }
+
+    private fun observeSelection() {
+        observation?.cancel()
+        observation =
+            viewModelScope.launch {
+                observe(workspaceId, state.map { it.selectedId }.distinctUntilChanged()).collect {
+                    result ->
+                    ensureActive()
+                    updateState { it.withProfileView(result) }
                 }
             }
-        }
+    }
+
+    private fun onStopped(event: ProfileEvent.Stopped) {
+        visible = false
+        acquisition?.cancel()
+        acquisition = null
+        updateState { it.copy(loading = false, syncing = false, choosingEmployment = false) }
+    }
+
+    private fun onRefreshRequested(event: ProfileEvent.RefreshRequested) {
+        acquire(force = true)
+    }
+
+    private fun acquire(force: Boolean) {
+        if (!visible || acquisition?.isActive == true) return
+        updateState { it.copy(syncing = true, loading = it.view == null) }
+        acquisition =
+            viewModelScope.launch {
+                val result = sync(workspaceId, force)
+                ensureActive()
+                updateState { it.withProfileSync(result) }
+                // A completed storage flow must be reopened after an admitted refresh.
+                if (result is AppResult.Success && result.value.caughtUp) observeSelection()
+            }
+    }
+
+    private fun onEmploymentRequested(event: ProfileEvent.EmploymentRequested) {
+        if (
+            !visible || state.value.readRestricted || (state.value.view?.employments?.size ?: 0) < 2
+        )
+            return
+        updateState { it.copy(choosingEmployment = true) }
+    }
+
+    private fun onEmploymentDismissed(event: ProfileEvent.EmploymentDismissed) {
+        updateState { it.copy(choosingEmployment = false) }
     }
 
     private fun onEmploymentSelected(event: ProfileEvent.EmploymentSelected) {
-        val directory = state.value.directory ?: return
-        if (state.value.loadingDirectory || directory.items.none { it.id == event.id }) return
-        profileRequest?.cancel()
-        updateState {
-            it.copy(
-                selectedId = event.id,
-                profile = null,
-                loadingProfile = true,
-                failure = null,
-                needsVerification = false,
-            )
-        }
-        profileRequest =
-            viewModelScope.launch {
-                val result = loadProfile(workspaceId, event.id, directory.asOf)
-                ensureActive()
-                when (result) {
-                    is AppResult.Failed ->
-                        updateState {
-                            it.copy(
-                                profile = null,
-                                loadingProfile = false,
-                                failure = result.failure,
-                                needsVerification = result.failure.code in profileVerificationCodes,
-                            )
-                        }
-                    is AppResult.Success ->
-                        updateState { it.copy(profile = result.value, loadingProfile = false) }
-                }
-            }
+        if (
+            !visible ||
+                state.value.readRestricted ||
+                state.value.view?.employments?.none { it.id == event.id } != false
+        )
+            return
+        updateState { it.copy(selectedId = event.id, choosingEmployment = false) }
     }
 
     private fun onBackRequested(event: ProfileEvent.BackRequested) {
@@ -88,10 +101,7 @@ class ProfileViewModel(
     }
 
     private fun onVerificationRequested(event: ProfileEvent.VerificationRequested) {
-        if (state.value.needsVerification)
+        if (visible && state.value.needsVerification)
             viewModelScope.launch { emitEffect(ProfileEffect.VerifyAccount) }
     }
 }
-
-private val profileVerificationCodes =
-    setOf("mfa_required", "mfa_setup_required", "mfa_verification_required")

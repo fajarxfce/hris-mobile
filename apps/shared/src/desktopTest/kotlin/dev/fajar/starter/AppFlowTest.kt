@@ -3398,6 +3398,61 @@ class AppFlowTest {
         }
 
     @Test
+    fun profileEmploymentSelectionAndFailedRefreshReadOwnedLocalFacts() {
+        val server = NativeUiServer()
+        server.people.employmentCount = 2
+        withApplication(server) {
+            signIn()
+            waitFor("Choose a company")
+            compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
+            waitFor("Welcome")
+            openProfile()
+            waitFor("Personal information")
+            compose.waitUntil { server.people.recordReads.size == 2 }
+            val queries = server.people.queries.size
+            server.people.offline = true
+            compose
+                .onNode(hasText("NUSA-001") and hasClickAction())
+                .performScrollTo()
+                .performClick()
+            waitFor("Select an employment record")
+            compose.onNode(hasText("NUSA-002") and hasClickAction()).performClick()
+            compose.onNode(hasText("NUSA-002") and hasClickAction()).assertIsDisplayed()
+            compose.onNodeWithText("1996-02-29").assertExists()
+            assertEquals(queries, server.people.queries.size)
+            assertEquals(2, server.people.recordReads.size)
+            refreshWhenReady()
+            waitFor("Unable to connect. Check your connection.")
+            compose.onNodeWithText("1996-02-29").assertExists()
+            compose.onNode(hasText("NUSA-002") and hasClickAction()).assertIsDisplayed()
+            capture("profile-offline")
+        }
+    }
+
+    @Test
+    fun leavingProfileCancelsPendingRefreshAndReturningReusesAcquiredFacts() {
+        val server = NativeUiServer()
+        server.people.employmentCount = 2
+        withApplication(server) {
+            signIn()
+            waitFor("Choose a company")
+            compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
+            waitFor("Welcome")
+            openProfile()
+            waitFor("Personal information")
+            server.people.holdNext = true
+            refreshWhenReady()
+            compose.waitUntil { server.people.started.isCompleted }
+            compose.onNodeWithText("1996-02-29").assertExists()
+            compose.onNodeWithContentDescription("Back").performClick()
+            compose.waitUntil { server.people.cancelled.isCompleted }
+            openProfile()
+            waitFor("Personal information")
+            assertEquals(2, server.people.recordReads.size)
+        }
+    }
+
+    @Test
     fun revokedProfileAccessRemovesPreviouslyDisplayedPrivateFields() {
         val server = NativeUiServer()
         withApplication(server) {

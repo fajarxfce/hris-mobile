@@ -83,6 +83,7 @@ fun createAppContainer(
     payrollReplicaCredentials: CredentialStore = MemoryCredentialStore(),
     expenseReplicaCredentials: CredentialStore = MemoryCredentialStore(),
     directoryReplicaCredentials: CredentialStore = MemoryCredentialStore(),
+    selfProfileReplicaCredentials: CredentialStore = MemoryCredentialStore(),
     documentCatalogCredentials: CredentialStore = MemoryCredentialStore(),
     commandCredentials: AtomicCredentialStore = MemoryCredentialStore(),
     fileCredentials: AtomicCredentialStore = MemoryCredentialStore(),
@@ -167,6 +168,10 @@ fun createAppContainer(
                 .onClose { it?.close() }
             single<CredentialStore>(named("directory-replica-content-key")) {
                     directoryReplicaCredentials
+                }
+                .onClose { it?.close() }
+            single<CredentialStore>(named("self-profile-replica-content-key")) {
+                    selfProfileReplicaCredentials
                 }
                 .onClose { it?.close() }
             single<CredentialStore>(named("document-catalog-content-key")) {

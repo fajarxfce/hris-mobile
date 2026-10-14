@@ -118,7 +118,7 @@ capabilities.
 | Published documents | Account-owned metadata with local employment/category/page queries | `DOCUMENT_EVIDENCE`, canonical published records and versioned withdrawals |
 | Local document files | Account/company-owned imports and completed downloads | Resumable upload commands; download/export independently reauthorize content |
 | Coworker directory | Account-owned encrypted records; full local search and department/page selection | `DIRECTORY_EMPLOYEES` |
-| Private profile | Live reads | Not implemented |
+| Private profile | Account-owned encrypted employment, person and assignment snapshots; local employment selection | `SELF_PROFILES`, coherent canonical records and versioned withdrawals |
 
 A last-view snapshot does not imply that every month, employee or historical
 request is available offline. Unfetched data needs acquisition. Browser bearer
@@ -319,3 +319,14 @@ page is not a prerequisite. No time-to-live hides the directory. Stored ownershi
 uses account, company and API audience; the current session gates I/O and commits.
 Confirmed read denials, canonical withdrawal, cursor retention and routine refresh
 scheduling are handled separately. See [People](people.md#coworker-directory).
+
+## Private profile
+
+`SyncSelfProfiles` acquires the explicit owned-profile collection. Canonical records
+combine employment, private person fields and organization/manager references in
+one server snapshot. A separate aggregate revision drives the feed; command versions
+remain unchanged. The encrypted replica commits records with its cursor and stages
+initial/replacement publication. Employment selection queries acquired records
+locally without a page visit or live credential renewal. Neither facts nor selection
+expire with age. Account, company and audience ownership, confirmed access/MFA
+denials and server withdrawals remain explicit gates. See [People](people.md#private-profiles).

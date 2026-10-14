@@ -232,6 +232,14 @@ those resources never enter a domain contract or a ViewModel.
 The [file output adapter](file-output.md) owns native save dialogs, bounded writers
 and disposal. Export admission and choosing when to copy remain use-case work.
 
+The [private profile](people.md#private-profiles) has an independent account-owned
+replica and content key. `SyncSelfProfiles` coordinates explicit change references,
+coherent canonical reads and atomic publication; `ObserveSelfProfiles` combines local
+facts with employment selection. DTO mapping validates matching account/person and
+employment identities. Sync revisions remain separate from command versions.
+Confirmed read admission has a durable gate and a process-owned failed-write buffer;
+screen state cannot reopen private facts after a denied or incomplete retry.
+
 ## Navigation
 
 Navigation persistence pairs the SDK stack with its admitted account/company

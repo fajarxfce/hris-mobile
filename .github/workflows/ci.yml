@@ -42,6 +42,8 @@ jobs:
           :features:expenses:domain:wasmJsBrowserTest :features:expenses:data:wasmJsBrowserTest
           :features:expenses:presentation:wasmJsBrowserTest
           :features:leave:presentation:wasmJsBrowserTest :core:location:data:wasmJsBrowserTest
+          :features:people:domain:wasmJsBrowserTest :features:people:data:wasmJsBrowserTest
+          :features:people:presentation:wasmJsBrowserTest
           :core:documents:domain:wasmJsBrowserTest :core:documents:data:wasmJsBrowserTest
           :core:transfers:domain:wasmJsBrowserTest :core:transfers:data:wasmJsBrowserTest
           :features:files:presentation:wasmJsBrowserTest :core:worker:wasmJsBrowserTest

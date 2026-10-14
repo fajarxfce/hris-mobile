@@ -12,8 +12,9 @@ to the starter through [reviewed updates](docs/template-updates.md).
 
 The application uses the HRIS native API for password sign-in, authenticator setup
 and verification, recovery codes, token rotation, active-session management, company selection, and current
-company access. Employees can open their own personal profile, employment terms,
-and organization assignments. The employee inbox synchronizes encrypted company
+company access. Employees open their own personal profile, employment terms and
+organization assignments from encrypted local records. The owned-profile change feed
+updates coherent snapshots; employment selection works offline without an age limit. The employee inbox synchronizes encrypted company
 correspondence, retains admitted content when a refresh fails, and queues explicit
 read/acknowledgement actions with durable idempotent retries. The encrypted workspace
 and previously acquired views reopen offline without waiting for access renewal.

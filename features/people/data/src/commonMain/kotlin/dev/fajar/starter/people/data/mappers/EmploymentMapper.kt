@@ -38,7 +38,7 @@ fun EmploymentDto.toEmployment(expectedCompanyId: String): Employment {
     require(person.legalName.isNotBlank() && person.legalName.length <= 200)
     require(person.email == null || person.email.length <= 254)
     require(version >= 0 && appliedRevision in 0..version)
-    LocalDate.parse(terms.effectiveFrom)
+    val effectiveFrom = LocalDate.parse(terms.effectiveFrom)
     val start = LocalDate.parse(terms.startDate)
     val end = terms.endDate?.let { LocalDate.parse(it) }
     require(end == null || end >= start)
@@ -66,6 +66,7 @@ fun EmploymentDto.toEmployment(expectedCompanyId: String): Employment {
         end,
         version,
         appliedRevision,
+        effectiveFrom,
     )
 }
 
