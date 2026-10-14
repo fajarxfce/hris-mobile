@@ -7,6 +7,8 @@ data class DirectoryEmployee(
     val name: String,
     val position: String?,
     val department: String?,
+    val positionId: String? = null,
+    val departmentId: String? = null,
 ) {
     override fun toString() = "DirectoryEmployee([redacted])"
 }

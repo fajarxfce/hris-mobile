@@ -116,7 +116,8 @@ capabilities.
 | Expenses | Account-owned complete claims, indexed summaries, payment progress and acquired activity; local employment/month/status/page queries | Two explicit collections, canonical claim acquisition and resumable activity backfill implemented |
 | Expense editor | Account/company-owned draft fields, completed lines and one unfinished item; local compare-and-set autosave | Explicit server Save performs fresh review and retains an immutable command; working copies do not replicate as confirmed claims |
 | Local document files | Account/company-owned imports and completed downloads | Upload/download commands; catalog is online |
-| Coworker directory / profile | Live reads | Not implemented |
+| Coworker directory | Account-owned encrypted records; full local search and department/page selection | `DIRECTORY_EMPLOYEES` |
+| Private profile | Live reads | Not implemented |
 
 A last-view snapshot does not imply that every month, employee or historical
 request is available offline. Unfetched data needs acquisition. Browser bearer
@@ -240,7 +241,7 @@ its replacement is available. A completed feed's missing parent is authoritative
    does not reuse an old request guard or old credential-bound feed cursor.
 2. Extend unfinished local draft persistence beyond Expenses, separately from
    immutable prepared commands and acquired server records.
-3. Register backend feeds for documents and coworker data,
+3. Register the remaining document feeds,
    including deletions and authorization changes, before implementing mobile sync.
 4. Keep unsynchronized changes and actionable conflicts clear in each migrated
    editor. Expense autosave distinguishes acknowledged local input from server Save.
@@ -306,3 +307,14 @@ payment-only updates do not renew action-review authority. Background history
 acquisition is bounded and resumes from each claim's frontier. Filter changes do
 not create HTTP requests or interrupt an active sync. Read denials persist across
 routes and process restoration, independently of cleanup and ordinary freshness.
+
+## Coworker directory
+
+`SyncCompanyDirectory` consumes the explicit company-public directory collection.
+Its record and cursor transaction publishes complete bootstrap replacements only
+after catch-up, while retaining the preceding generation. Local observation reads
+all acquired records for name/number search and department selection; visiting a
+page is not a prerequisite. No time-to-live hides the directory. Stored ownership
+uses account, company and API audience; the current session gates I/O and commits.
+Confirmed read denials, canonical withdrawal, cursor retention and routine refresh
+scheduling are handled separately. See [People](people.md#coworker-directory).

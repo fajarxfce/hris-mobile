@@ -44,8 +44,8 @@ fun EmployeesPage(
                         Icons.Regular.ArrowSync,
                         appString(AppString.Refresh),
                         { onEvent(EmployeesEvent.RefreshRequested) },
-                        enabled = !state.loading,
-                        loading = state.loading,
+                        enabled = !state.syncing,
+                        loading = state.syncing,
                     )
                 },
             )

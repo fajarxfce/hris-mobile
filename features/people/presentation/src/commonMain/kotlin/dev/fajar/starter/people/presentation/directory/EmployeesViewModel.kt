@@ -2,28 +2,23 @@ package dev.fajar.starter.people.presentation.directory
 
 import androidx.lifecycle.viewModelScope
 import dev.fajar.starter.common.result.*
-import dev.fajar.starter.people.domain.usecases.LoadCompanyDirectory
-import dev.fajar.starter.people.domain.usecases.LoadDirectoryDepartments
-import dev.fajar.starter.people.presentation.directory.mappers.toDirectoryContent
+import dev.fajar.starter.people.domain.replica.usecases.ObserveCompanyDirectory
+import dev.fajar.starter.people.domain.replica.usecases.SyncCompanyDirectory
 import dev.fajar.starter.presentation.mvi.MviViewModel
-import dev.fajar.starter.workspace.domain.usecases.ObserveWorkspace
-import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.distinctUntilChangedBy
+import kotlinx.coroutines.flow.*
 import org.koin.android.annotation.KoinViewModel
 import org.koin.core.annotation.InjectedParam
 
 @KoinViewModel
 class EmployeesViewModel(
     @InjectedParam private val workspaceId: String,
-    private val load: LoadCompanyDirectory,
-    private val observeWorkspace: ObserveWorkspace,
-    private val loadDepartments: LoadDirectoryDepartments,
+    private val observe: ObserveCompanyDirectory,
+    private val sync: SyncCompanyDirectory,
 ) : MviViewModel<EmployeesState, EmployeesEvent, EmployeesEffect>(EmployeesState()) {
-    private var request: Job? = null
     private var observation: Job? = null
-    private var departmentRequest: Job? = null
+    private var acquisition: Job? = null
     private var visible = false
     private var refreshRequired = true
 
@@ -46,49 +41,42 @@ class EmployeesViewModel(
     private fun onEntered(event: EmployeesEvent.Entered) {
         if (visible) return
         visible = true
-        if (observation?.isActive == true) {
-            if (refreshRequired || state.value.page == null) loadPage(state.value.after)
-            return
-        }
-        // Keep admission observed for the navigation owner's lifetime, including hidden tabs.
+        if (observation?.isActive != true) observeSelection()
+        if (refreshRequired) acquire(force = state.value.page != null)
+    }
+
+    @OptIn(FlowPreview::class)
+    private fun observeSelection() {
+        observation?.cancel()
+        // The retained tab owns this observer. Scope/denial changes also clear a hidden tab.
         observation =
             viewModelScope.launch {
-                observeWorkspace()
-                    // Timestamp-only policy refreshes must not restart an employee search.
-                    .distinctUntilChangedBy { result ->
-                        (result as? AppResult.Success)?.value?.let {
-                            Triple(it.id, it.permissions, it.policy?.policy?.enabledModules)
-                        }
-                    }
-                    .collect {
-                        refreshRequired = true
-                        request?.cancel()
-                        request = null
-                        departmentRequest?.cancel()
-                        departmentRequest = null
-                        updateState { current ->
-                            current.copy(page = null, filter = null, loading = false)
-                        }
-                        if (visible) loadPage(state.value.after)
+                observe(
+                        workspaceId,
+                        state
+                            .map { it.directorySelection() }
+                            .distinctUntilChanged()
+                            .debounce(200.milliseconds),
+                    )
+                    .collect { result ->
+                        ensureActive()
+                        updateState { it.withDirectory(result) }
                     }
             }
     }
 
     private fun onStopped(event: EmployeesEvent.Stopped) {
         visible = false
-        request?.cancel()
-        request = null
-        departmentRequest?.cancel()
-        departmentRequest = null
-        updateState { it.copy(loading = false, filter = null) }
+        acquisition?.cancel()
+        acquisition = null
+        updateState { it.copy(loading = false, syncing = false, filter = null) }
     }
 
     private fun onQueryChanged(event: EmployeesEvent.QueryChanged) {
-        if (!visible) return
+        if (!visible || state.value.readRestricted) return
         val query = event.value.take(120)
         if (query == state.value.query) return
-        updateState { it.copy(query = query, after = null, page = null) }
-        loadPage(null, 300.milliseconds)
+        updateState { it.copy(query = query, after = null, page = null, loading = true) }
     }
 
     private fun onSearchRequested(event: EmployeesEvent.SearchRequested) {
@@ -98,95 +86,75 @@ class EmployeesViewModel(
     }
 
     private fun onFilterRequested(event: EmployeesEvent.FilterRequested) {
-        if (!visible || state.value.filter != null) return
-        updateState { it.copy(filter = DepartmentFilterState()) }
-        loadDepartmentOptions()
+        if (!visible || state.value.filter != null || state.value.readRestricted) return
+        updateState {
+            it.copy(
+                filter =
+                    DepartmentFilterState(
+                        result = it.departments,
+                        loading = it.departments == null && it.syncing,
+                    )
+            )
+        }
     }
 
     private fun onFilterDismissed(event: EmployeesEvent.FilterDismissed) {
-        departmentRequest?.cancel()
-        departmentRequest = null
         updateState { it.copy(filter = null) }
     }
 
     private fun onDepartmentQueryChanged(event: EmployeesEvent.DepartmentQueryChanged) {
         val filter = state.value.filter ?: return
+        if (!visible || state.value.readRestricted) return
         val query = event.value.take(120)
         if (filter.query == query) return
         updateState { it.copy(filter = DepartmentFilterState(query = query)) }
-        loadDepartmentOptions(300.milliseconds)
     }
 
     private fun onDepartmentSelected(event: EmployeesEvent.DepartmentSelected) {
         val filter = state.value.filter ?: return
+        if (!visible || state.value.readRestricted) return
         val choice = filter.result?.items?.firstOrNull { it.id == event.id }
         if (event.id != null && choice == null) return
-        departmentRequest?.cancel()
-        departmentRequest = null
-        updateState { it.copy(department = choice, filter = null, page = null, after = null) }
-        loadPage(null)
+        updateState {
+            it.copy(department = choice, filter = null, page = null, after = null, loading = true)
+        }
         viewModelScope.launch { emitEffect(EmployeesEffect.ScrollToStart) }
     }
 
     private fun onDepartmentRetryRequested(event: EmployeesEvent.DepartmentRetryRequested) {
-        if (visible && departmentRequest?.isActive != true) loadDepartmentOptions()
-    }
-
-    private fun loadDepartmentOptions(debounce: Duration = Duration.ZERO) {
-        val filter = state.value.filter ?: return
-        departmentRequest?.cancel()
-        updateState { it.copy(filter = filter.copy(loading = true, failure = null)) }
-        departmentRequest =
-            viewModelScope.launch {
-                delay(debounce)
-                val result = loadDepartments(workspaceId, filter.query)
-                ensureActive()
-                when (result) {
-                    is AppResult.Success ->
-                        updateState {
-                            it.copy(filter = filter.copy(result = result.value, loading = false))
-                        }
-                    is AppResult.Failed -> {
-                        val transient =
-                            result.failure.kind in setOf(FailureKind.Network, FailureKind.Timeout)
-                        if (!transient) request?.cancel()
-                        updateState {
-                            it.copy(
-                                filter =
-                                    filter.copy(
-                                        result = null,
-                                        loading = false,
-                                        failure = result.failure,
-                                        needsVerification =
-                                            result.failure.code in
-                                                setOf(
-                                                    "mfa_required",
-                                                    "mfa_setup_required",
-                                                    "mfa_verification_required",
-                                                ),
-                                    ),
-                                page = if (transient) it.page else null,
-                                loading = if (transient) it.loading else false,
-                            )
-                        }
-                    }
-                }
-            }
+        if (visible) onEvent(EmployeesEvent.RefreshRequested)
     }
 
     private fun onPageRequested(event: EmployeesEvent.PageRequested) {
         if (
             !visible ||
+                state.value.readRestricted ||
                 state.value.loading ||
                 (event.after != null && event.after != state.value.page?.nextCursor)
         )
             return
-        loadPage(event.after)
+        updateState { it.copy(after = event.after, page = null, loading = true) }
         viewModelScope.launch { emitEffect(EmployeesEffect.ScrollToStart) }
     }
 
     private fun onRefreshRequested(event: EmployeesEvent.RefreshRequested) {
-        if (visible && request?.isActive != true) loadPage(state.value.after)
+        acquire(force = true)
+    }
+
+    private fun acquire(force: Boolean) {
+        if (!visible || acquisition?.isActive == true) return
+        refreshRequired = true
+        updateState { it.copy(syncing = true, loading = it.page == null) }
+        acquisition =
+            viewModelScope.launch {
+                val result = sync(workspaceId, force)
+                ensureActive()
+                val caughtUp = result is AppResult.Success && result.value.caughtUp
+                refreshRequired = result is AppResult.Success && !caughtUp
+                updateState { it.withDirectorySync(result) }
+                // Also reopens a storage source that terminated after a technical failure.
+                if (caughtUp) observeSelection()
+            }
     }
 
     private fun onBackRequested(event: EmployeesEvent.BackRequested) {
@@ -199,56 +167,5 @@ class EmployeesViewModel(
                 (state.value.needsVerification || state.value.filter?.needsVerification == true)
         )
             viewModelScope.launch { emitEffect(EmployeesEffect.VerifyAccount) }
-    }
-
-    /** This screen owns replacement, debounce and cancellation; the use case owns admission. */
-    private fun loadPage(after: String?, debounce: Duration = Duration.ZERO) {
-        refreshRequired = true
-        request?.cancel()
-        val query = state.value.query
-        val departmentId = state.value.department?.id
-        updateState {
-            it.copy(
-                after = after,
-                page = if (after == it.after) it.page else null,
-                loading = true,
-                failure = null,
-                needsVerification = false,
-            )
-        }
-        request =
-            viewModelScope.launch {
-                delay(debounce)
-                val result = load(workspaceId, query, after, departmentId)
-                ensureActive()
-                when (result) {
-                    is AppResult.Success -> {
-                        refreshRequired = false
-                        updateState {
-                            it.copy(page = result.value.toDirectoryContent(), loading = false)
-                        }
-                    }
-                    is AppResult.Failed -> {
-                        val transient =
-                            result.failure.kind in setOf(FailureKind.Network, FailureKind.Timeout)
-                        if (!transient) departmentRequest?.cancel()
-                        updateState {
-                            it.copy(
-                                filter = if (transient) it.filter else null,
-                                page = if (transient) it.page else null,
-                                loading = false,
-                                failure = result.failure,
-                                needsVerification =
-                                    result.failure.code in
-                                        setOf(
-                                            "mfa_required",
-                                            "mfa_setup_required",
-                                            "mfa_verification_required",
-                                        ),
-                            )
-                        }
-                    }
-                }
-            }
     }
 }

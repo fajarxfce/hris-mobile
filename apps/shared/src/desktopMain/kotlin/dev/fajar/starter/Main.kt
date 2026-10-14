@@ -60,6 +60,8 @@ fun main(args: Array<String>) {
                 desktopSessionCredentials(namespace, "payroll-replica-content-key"),
             expenseReplicaCredentials =
                 desktopSessionCredentials(namespace, "expense-replica-content-key"),
+            directoryReplicaCredentials =
+                desktopSessionCredentials(namespace, "directory-replica-content-key"),
             leaveCredentials = desktopSessionCredentials(namespace, "leave-content-key"),
             workspaceCredentials = desktopSessionCredentials(namespace, "workspace-content-key"),
         )

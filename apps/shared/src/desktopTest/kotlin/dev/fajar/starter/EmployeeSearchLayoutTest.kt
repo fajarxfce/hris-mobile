@@ -100,7 +100,7 @@ class EmployeeSearchLayoutTest {
             mutableStateOf(
                 EmployeesState(
                     query = "Alex",
-                    failure = Failure(FailureKind.Network, "Unavailable"),
+                    cacheFailure = Failure(FailureKind.Network, "Unavailable"),
                 )
             )
         compose.setContent {

@@ -49,6 +49,8 @@ class StarterApplication : Application(), Configuration.Provider {
                 AndroidCredentialStore(this, "overtime-replica-content-key"),
             payrollReplicaCredentials = AndroidCredentialStore(this, "payroll-replica-content-key"),
             expenseReplicaCredentials = AndroidCredentialStore(this, "expense-replica-content-key"),
+            directoryReplicaCredentials =
+                AndroidCredentialStore(this, "directory-replica-content-key"),
             commandCredentials = AndroidCredentialStore(this, "command-content-key"),
             fileCredentials = AndroidCredentialStore(this, "file-content-key"),
             workspaceCredentials = AndroidCredentialStore(this, "workspace-content-key"),

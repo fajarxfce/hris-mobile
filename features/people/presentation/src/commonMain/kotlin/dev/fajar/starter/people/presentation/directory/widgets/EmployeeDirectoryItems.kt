@@ -13,10 +13,12 @@ import dev.fajar.starter.people.presentation.directory.*
 /** Shared list rendering for browsing and a route-owned search. */
 fun LazyListScope.employeeDirectoryItems(state: EmployeesState, onEvent: (EmployeesEvent) -> Unit) {
     if (state.loading && state.page == null) item(key = "progress") { AppLoading() }
+    if (state.syncPending && state.page == null && state.failure == null && !state.loading)
+        item(key = "sync-pending") { AppText(appString(AppString.SyncPending)) }
     if (state.failure != null)
         item(key = "failure") {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                AppFeedback(failureText(state.failure))
+                AppFeedback(failureText(requireNotNull(state.failure)))
                 if (state.page != null)
                     AppText(appString(AppString.DirectorySaved), color = AppColors.muted)
                 if (state.needsVerification)
@@ -28,7 +30,7 @@ fun LazyListScope.employeeDirectoryItems(state: EmployeesState, onEvent: (Employ
                     AppTextButton(
                         appString(AppString.Retry),
                         { onEvent(EmployeesEvent.RefreshRequested) },
-                        enabled = !state.loading,
+                        enabled = !state.syncing && !state.loading,
                     )
             }
         }

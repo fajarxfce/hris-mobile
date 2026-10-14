@@ -48,6 +48,8 @@ fun main() {
                 single<PushTokenSource> { push }
             },
             environment,
+            directoryReplicaCredentials =
+                BrowserProtectedCredentialStore(namespace, "directory-replica-content-key"),
             commandCredentials = BrowserProtectedCredentialStore(namespace, "command-content-key"),
             fileCredentials = BrowserProtectedCredentialStore(namespace, "file-content-key"),
             fileInputs = BrowserFileInputSource(),

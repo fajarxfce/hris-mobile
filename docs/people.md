@@ -18,7 +18,7 @@ Use cases check the originating workspace, account session, API audience, and
 person linkage before returning data. Repositories acquire and map within
 `safeApiCall`; cancellation propagates. Mapping rejects mismatched resource IDs,
 duplicate entries, invalid dates, invalid reference relationships, and cursors
-that cannot advance. No request downloads an entire company directory.
+that cannot advance. Individual HTTP requests remain bounded; directory synchronization acquires records in finite batches.
 
 The company date comes from the server. Calendar dates remain date-only values,
 so rendering a birth date or start date does not apply an implicit timezone shift.
@@ -39,57 +39,77 @@ online reads; it does not grant offline access or persist employee PII.
 
 ## Coworker directory
 
-Employees uses `employees/directory` under `people.directory.read` or `people.read`,
-independently of private profile access. It shows only employee number, name,
-position and department for current coworkers. These rows do not navigate to
-someone else's private profile. The server selects eligible employments using
-the company date and rechecks access under its guards.
+Employees reads an account-owned encrypted replica. `SyncCompanyDirectory` selects
+only `DIRECTORY_EMPLOYEES`, consumes bounded bootstrap/change pages, and hydrates
+`employees/directory/{id}` through `DirectoryRecordRepository`. The server grants
+this collection through `people.directory.read` or `people.read`; private profile
+or employment linkage is not required and no private profile is replicated.
 
-Search is debounced and each page contains at most 20 employees. An optional
-department filter applies on the server before paging and combines with name/number
-search. The picker uses a separate bounded lookup (at most 50 departments), with
-its own cancellable search. Closing it cancels pending work; selecting a department
-resets the page. No filtering is limited to the currently loaded employees.
+Each record contains the employee number, name, position/department identifiers
+and their labels. Versioned deletions remove withdrawn coworkers. A canonical
+`directory_employee_not_found` also removes that individual; it does not revoke
+the whole company directory. Old record versions cannot restore a tombstone.
 
-Rows show initials, name, position and department. A search entry opens a dedicated
-page with a fixed Back action and focused search field. Browsing and search use
-the same directory MVI implementation with separate navigation-owned instances;
-their queries, departments, pages and requests remain independent. Returning from
-search retains the browsing selection and scroll; reopening search starts empty.
-A replacement query cancels the former read, while a refresh of the same page retains content
-after a transient network failure. Access failures clear the page. Leaving the
-tab or covering the route stops its request. The navigation ViewModel keeps local
-workspace observation active, invalidating hidden rows when admission changes.
-Returning to a successful page keeps department, pagination and scroll
-without repeating HTTP. Interrupted or failed acquisition is resumed; manual
-refresh still loads current data without inserting a spinner above existing rows.
-Clearing the route owner releases observation. No directory is persisted for offline access, and paging requires an
-explicit action rather than an unbounded prefetch loop.
+The repository commits encrypted records and their processed cursor atomically.
+An initial or replacement bootstrap stays unpublished until change-feed catch-up
+reports no pending publication. The preceding complete generation remains readable
+while a replacement is incomplete or the network is unavailable. Ordinary data,
+credential and cursor age do not withdraw owned local records. Cursor expiry starts
+a replacement; live authorization and confirmed denials have separate gates.
+
+`ObserveCompanyDirectory` verifies current local ownership and directory admission,
+then combines the stored snapshot with the screen's query/page/department selection.
+It never acquires data. Search includes all acquired employees, including pages the
+user has not opened. Pages contain at most 20 employees; the department picker shows
+up to 50 matches and can narrow its query. Neither operation stores plaintext names
+or search terms in database indexes. Storage reads at most 200 encrypted records per
+batch, checks that every batch belongs to one committed revision, and cancels an
+obsolete scan when that revision changes. A navigation-owned collector retains the
+decoded snapshot for filtering and releases it when its owner is disposed.
+
+A confirmed access/MFA denial closes observation even when record cleanup fails.
+An encrypted admission record preserves the denial across process restoration; a
+process-owned buffer also retains failed admission writes across reauthentication.
+Only acquisition that observed the current denial revision can reopen it. A later
+denial wins over an older pending acquisition. Account, company and API audience
+remain separate storage boundaries, and stale sessions cannot commit data.
+
+## Directory screen lifetime
+
+Browsing and search have separate navigation-owned MVI instances. Search opens a
+page with a fixed Back action and focused input. Query replacement is debounced;
+department/page changes query local records. Returning from search retains the
+browsing selection and scroll. Reopening search starts empty.
+
+Successful tab changes do not repeat HTTP. Routine entry can reuse a recently
+synchronized replica; explicit refresh always requests acquisition. This scheduling
+interval never limits local reads. Leaving a route stops acquisition; interrupted
+refresh resumes on return. The retained tab continues observing local ownership and
+read admission, so hidden rows are cleared after access is lost. Route disposal
+cancels the storage collector. Background synchronization uses the same bounded
+use case and execution mutex as manual refresh.
 
 ## Validation
 
-Domain/data and assembled UI tests cover scope changes, cancellation, late results,
-person linkage, DTO validation, paging, search replacement, failure mapping,
-revoked access, MFA renewal and tab disposal. UI API responses use a test-only HTTP
-engine. A separate live API probe verified company-scoped directory results and
-search with the employee role. Android emulator checks cover the directory tab,
-standalone route, search, Back behavior, English/Indonesian and light/dark layouts.
-Development fixture data contains one current employee in its first company;
-larger pages and access changes are exercised by the automated fixtures.
+Regression coverage includes full-directory search, department/page selection,
+credential/data age, account/company changes, cursor replacement, publication
+pending, versioned deletion, raw DTO bounds, cancellation, late results, failed
+admission persistence and disposal. SQLite and IndexedDB run the same replica
+contract. The assembled UI tests cover independent search ownership, offline search
+and filters, retained tab scroll, interrupted refresh and access recovery.
 
-The department-filter increment passed the mobile root checks (401 JVM/UI tests)
-and an Android dev build. Regression coverage includes filter-before-page behavior,
-query replacement, picker cancellation, access loss, large text and maximum UTF-8
-response sizes. A production Web build also passed before the final row-spacing
-and dialog-clipping adjustment. The API 35 emulator verified live search, clearing,
-dialog Back and tab Back with the development API. Development employees currently
-have no department assignment; populated lookup/paging scenarios use isolated
-backend and UI fixtures.
+Development fixture data contains one current coworker. Larger directories and
+fault scenarios use isolated automated fixtures; they do not create production
+employee records. Private profile reads remain online.
 
-Dedicated search adds separate navigation ownership while retaining the browsing
-page. The 759-test desktop suite and five application Chromium tests passed, as
-did Android dev assembly. Regression coverage includes cancellation while leaving
-a pending query, released owners, ignored late results, company replacement,
-independent search filters and browsing-page retention. The API 35 emulator
-verified real API search, clearing, empty results, Back, keyboard focus and
-light/dark layouts including 150% text.
+The directory integration passed the root checks with 1,397 desktop/JVM tests,
+59 Chromium tests, Android dev assembly and the production Web build. API 35
+emulator acceptance verified the live directory, cold offline restoration,
+offline search/filtering and another offline restart after a 73-hour clock advance.
+The emulator clock and network were restored. The validated APK was delivered to
+the authorized phone with install-only delivery.
+
+A JVM fixture with 5,000 records measured 90 ms for reading/decrypting the complete
+directory and 7 ms for a query reaching its final record. These measurements do not
+describe phone performance; the fixture also asserts that unvisited pages remain
+searchable.

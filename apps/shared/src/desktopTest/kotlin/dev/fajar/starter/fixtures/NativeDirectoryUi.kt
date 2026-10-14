@@ -8,7 +8,7 @@ import kotlin.test.assertEquals
 import kotlinx.coroutines.*
 import kotlinx.serialization.json.*
 
-/** Minimal fictional directory responses; never registered in runtime composition. */
+/** Fictional versioned directory protocol; never registered in runtime composition. */
 class NativeDirectoryUi {
     @Volatile var denied = false
     @Volatile var offline = false
@@ -17,123 +17,93 @@ class NativeDirectoryUi {
     val released = CompletableDeferred<Unit>()
     val cancelled = CompletableDeferred<Unit>()
     val queries = CopyOnWriteArrayList<String>()
-
-    val departments = CopyOnWriteArrayList<String?>()
-    val departmentQueries = CopyOnWriteArrayList<String>()
-    @Volatile var holdNextDepartment = false
-    val departmentStarted = CompletableDeferred<Unit>()
-    val departmentReleased = CompletableDeferred<Unit>()
-    val departmentCancelled = CompletableDeferred<Unit>()
+    val recordReads = CopyOnWriteArrayList<String>()
 
     suspend fun response(request: HttpRequestData): Pair<String, HttpStatusCode>? {
-        if (request.url.encodedPath.endsWith("/employees/directory/departments"))
-            return departmentResponse(request)
-        if (!request.url.encodedPath.endsWith("/employees/directory")) return null
-        assertEquals("20", request.url.parameters["limit"])
-        val query = request.url.parameters["query"].orEmpty()
-        val after = request.url.parameters["after"]
-        queries.add(query)
-        val department = request.url.parameters["departmentId"]
-        departments.add(department)
-        if (holdNext) {
-            holdNext = false
-            started.complete(Unit)
-            try {
-                released.await()
-            } catch (failure: CancellationException) {
-                cancelled.complete(Unit)
-                throw failure
+        val path = request.url.encodedPath
+        val sync =
+            path.contains("/sync/") &&
+                request.url.parameters["collections"] == "DIRECTORY_EMPLOYEES"
+        if (!sync && !path.contains("/employees/directory/")) return null
+        if (sync) {
+            assertEquals("50", request.url.parameters["limit"])
+            queries.add(path.substringAfterLast('/'))
+            if (holdNext) {
+                holdNext = false
+                started.complete(Unit)
+                try {
+                    released.await()
+                } catch (failure: CancellationException) {
+                    cancelled.complete(Unit)
+                    throw failure
+                }
             }
         }
         if (offline) throw IOException("Simulated offline directory")
         if (denied) return """{"code":"access_denied"}""" to HttpStatusCode.Forbidden
-        val ownCompany = request.url.encodedPath.split('/')[4] == NativeUiServer.COMPANY_ONE
         val rows =
-            (1..25)
-                .map { index ->
-                    buildJsonObject {
-                        put("id", "90000000-0000-4000-8000-" + index.toString().padStart(12, '0'))
-                        put("employeeNumber", "NUSA-" + index.toString().padStart(3, '0'))
-                        put(
-                            "name",
-                            when (index) {
-                                1 -> "Alex Morgan"
-                                2 -> "Sam Wilson"
-                                else -> "Colleague " + index.toString().padStart(2, '0')
-                            },
-                        )
-                        put("position", if (index == 2) "HR Specialist" else "Engineer")
-                        put("department", if (index == 2) "People" else "Engineering")
-                    }
-                }
-                .filter { row ->
-                    ownCompany &&
-                        (department == null ||
-                            (if (row.getValue("department").jsonPrimitive.content == "People")
-                                PEOPLE
-                            else ENGINEERING) == department) &&
-                        (after == null ||
-                            row.getValue("employeeNumber").jsonPrimitive.content > after) &&
-                        listOf("name", "employeeNumber").any {
-                            row.getValue(it)
-                                .jsonPrimitive
-                                .content
-                                .contains(query, ignoreCase = true)
+            if (path.split('/')[4] == NativeUiServer.COMPANY_ONE) sourceRecords() else emptyList()
+        if (!sync) {
+            val id = path.substringAfterLast('/')
+            recordReads.add(id)
+            val record =
+                rows.singleOrNull { it.getValue("id").jsonPrimitive.content == id }
+                    ?: return """{"code":"directory_employee_not_found"}""" to
+                        HttpStatusCode.NotFound
+            return record.toString() to HttpStatusCode.OK
+        }
+        val bootstrap = path.endsWith("/bootstrap")
+        return buildJsonObject {
+                if (bootstrap) putJsonArray("collections") { add("DIRECTORY_EMPLOYEES") }
+                putJsonArray("items") {
+                    if (bootstrap)
+                        rows.forEach { row ->
+                            addJsonObject {
+                                put("collection", "DIRECTORY_EMPLOYEES")
+                                put("id", row.getValue("id"))
+                                put("version", row.getValue("version"))
+                            }
                         }
                 }
-        return buildJsonObject {
-                put("asOf", "2026-10-11")
-                put("timezone", "Asia/Jakarta")
-                putJsonObject("employees") {
-                    put("items", JsonArray(rows.take(20)))
-                    put(
-                        "nextCursor",
-                        if (rows.size > 20) rows[19].getValue("employeeNumber") else JsonNull,
-                    )
+                if (bootstrap) {
+                    put("nextCursor", JsonNull)
+                    put("changesCursor", "directory-head")
+                } else {
+                    put("cursor", "directory-head")
+                    put("hasMore", false)
+                    put("pendingPublication", false)
+                    put("pollAfterSeconds", 5)
                 }
+                put("serverTime", "2026-10-14T00:00:00Z")
             }
             .toString() to HttpStatusCode.OK
     }
 
-    private suspend fun departmentResponse(request: HttpRequestData): Pair<String, HttpStatusCode> {
-        assertEquals("50", request.url.parameters["limit"])
-        val query = request.url.parameters["query"].orEmpty()
-        departmentQueries.add(query)
-        if (holdNextDepartment) {
-            holdNextDepartment = false
-            departmentStarted.complete(Unit)
-            try {
-                departmentReleased.await()
-            } catch (failure: CancellationException) {
-                departmentCancelled.complete(Unit)
-                throw failure
+    private fun sourceRecords() =
+        (1..25).map { index ->
+            buildJsonObject {
+                put("id", "90000000-0000-4000-8000-" + index.toString().padStart(12, '0'))
+                put("version", 0)
+                put("employeeNumber", "NUSA-" + index.toString().padStart(3, '0'))
+                put(
+                    "name",
+                    when (index) {
+                        1 -> "Alex Morgan"
+                        2 -> "Sam Wilson"
+                        else -> "Colleague " + index.toString().padStart(2, '0')
+                    },
+                )
+                put("positionId", if (index == 2) HR_POSITION else ENGINEER_POSITION)
+                put("position", if (index == 2) "HR Specialist" else "Engineer")
+                put("departmentId", if (index == 2) PEOPLE else ENGINEERING)
+                put("department", if (index == 2) "People" else "Engineering")
             }
         }
-        if (offline) throw IOException("Simulated offline department lookup")
-        if (denied) return """{"code":"access_denied"}""" to HttpStatusCode.Forbidden
-        val ownCompany = request.url.encodedPath.split('/')[4] == NativeUiServer.COMPANY_ONE
-        val items =
-            if (ownCompany)
-                listOf(ENGINEERING to "Engineering", PEOPLE to "People").filter {
-                    it.second.contains(query, ignoreCase = true)
-                }
-            else emptyList()
-        return buildJsonObject {
-                putJsonArray("items") {
-                    items.forEach { (id, name) ->
-                        addJsonObject {
-                            put("id", id)
-                            put("name", name)
-                        }
-                    }
-                }
-                put("hasMore", false)
-            }
-            .toString() to HttpStatusCode.OK
-    }
 
     companion object {
         const val ENGINEERING = "82000000-0000-4000-8000-000000000001"
         const val PEOPLE = "82000000-0000-4000-8000-000000000002"
+        const val HR_POSITION = "82000000-0000-4000-8000-000000000003"
+        const val ENGINEER_POSITION = "82000000-0000-4000-8000-000000000004"
     }
 }

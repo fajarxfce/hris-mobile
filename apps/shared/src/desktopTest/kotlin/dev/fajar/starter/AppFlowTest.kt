@@ -37,7 +37,6 @@ import dev.fajar.starter.documents.presentation.detail.DocumentFileViewModel
 import dev.fajar.starter.fileio.*
 import dev.fajar.starter.fixtures.DocumentInputUi
 import dev.fajar.starter.fixtures.DocumentOutputUi
-import dev.fajar.starter.fixtures.NativeDirectoryUi
 import dev.fajar.starter.fixtures.NativeDocumentsUi
 import dev.fajar.starter.fixtures.NativeInboxCacheUi
 import dev.fajar.starter.fixtures.NativePayslipUi
@@ -2082,7 +2081,7 @@ class AppFlowTest {
                 )
             }
             waitFor("Sam Wilson")
-            assertEquals(reads + 1, server.directory.queries.size)
+            assertEquals(reads, server.directory.queries.size)
         }
     }
 
@@ -2123,12 +2122,12 @@ class AppFlowTest {
     }
 
     @Test
-    fun employeeSearchOwnsItsRequestsAndReturnsToTheRetainedDirectoryWithoutCrossingCompanies() {
+    fun employeeSearchReadsLocallyAndReturnsToTheRetainedDirectoryWithoutCrossingCompanies() {
         val server = NativeUiServer()
         val owners = mutableListOf<EmployeesViewModel>()
         val definitions = module {
             factory<EmployeesViewModel> { parameters ->
-                EmployeesViewModel(parameters.get(), get(), get(), get()).also(owners::add)
+                EmployeesViewModel(parameters.get(), get(), get()).also(owners::add)
             }
         }
         try {
@@ -2156,19 +2155,15 @@ class AppFlowTest {
                 compose
                     .onNodeWithContentDescription("Search employees")
                     .performTextReplacement("Sam")
-                compose.waitUntil { server.directory.queries.lastOrNull() == "Sam" }
                 waitFor("Sam Wilson")
                 compose.onNodeWithText("Alex Morgan").assertDoesNotExist()
                 compose.onNodeWithText("Next page").assertDoesNotExist()
-                server.directory.holdNext = true
+                val beforeReturn = server.directory.queries.size
+                server.directory.offline = true
                 compose
                     .onNodeWithContentDescription("Search employees")
                     .performTextReplacement("Alex")
-                compose.waitUntil { server.directory.started.isCompleted }
-                val beforeReturn = server.directory.queries.size
                 compose.onNodeWithContentDescription("Back").performClick()
-                compose.waitUntil { server.directory.cancelled.isCompleted }
-                server.directory.released.complete(Unit)
                 waitFor("Sam Wilson")
                 compose.runOnIdle {
                     assertFalse(search.viewModelScope.coroutineContext.job.isActive)
@@ -2200,6 +2195,7 @@ class AppFlowTest {
                 compose.onNode(hasText("Home") and isSelectable()).assertIsSelected()
                 compose.onNodeWithContentDescription("Change company").assertDoesNotExist()
                 compose.onNode(hasText("Account") and isSelectable()).performClick()
+                server.directory.offline = false
                 compose.onNodeWithContentDescription("Change company").performClick()
                 waitFor("Choose a company")
                 compose.onNode(hasText("PT Lintas Karya") and hasClickAction()).performClick()
@@ -2248,9 +2244,6 @@ class AppFlowTest {
                     .size == 1
             }
             compose.onNode(hasText("Engineering") and isSelectable()).performClick()
-            compose.waitUntil {
-                server.directory.departments.lastOrNull() == NativeDirectoryUi.ENGINEERING
-            }
             waitFor("Alex Morgan")
             compose.onNodeWithText("Sam Wilson").assertDoesNotExist()
             capture("employees-department")
@@ -2276,50 +2269,41 @@ class AppFlowTest {
             compose.onNode(hasText("Engineering") and hasClickAction()).performClick()
             compose.onNodeWithText("All departments").performClick()
             waitFor("Sam Wilson")
-            compose.waitUntil { server.directory.departments.lastOrNull() == null }
         }
     }
 
     @Test
-    fun closingTheDepartmentPickerCancelsItsPendingSearch() {
+    fun departmentSearchAndDismissalUseLocalDataWhileOffline() {
         val server = NativeUiServer()
-        try {
-            withApplication(server) {
-                signIn()
-                waitFor("Choose a company")
-                compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
-                waitFor("Welcome")
-                compose.onNode(hasText("Employees") and isSelectable()).performClick()
-                waitFor("Sam Wilson")
-                compose.onNodeWithText("All departments").performClick()
-                waitFor("Search departments")
-                server.directory.holdNextDepartment = true
+        withApplication(server) {
+            signIn()
+            waitFor("Choose a company")
+            compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
+            waitFor("Welcome")
+            compose.onNode(hasText("Employees") and isSelectable()).performClick()
+            waitFor("Sam Wilson")
+            val requests = server.directory.queries.size
+            server.directory.offline = true
+            compose.onNodeWithText("All departments").performClick()
+            waitFor("Search departments")
+            compose
+                .onNodeWithContentDescription("Search departments")
+                .performTextReplacement("People")
+            compose.onNodeWithContentDescription("Close").performClick()
+            compose.onNodeWithContentDescription("Search departments").assertDoesNotExist()
+            compose.onNodeWithText("Sam Wilson").assertExists()
+            compose.onNodeWithText("All departments").performClick()
+            waitFor("Search departments")
+            compose.waitUntil {
                 compose
-                    .onNodeWithContentDescription("Search departments")
-                    .performTextReplacement("People")
-                compose.waitUntil { server.directory.departmentStarted.isCompleted }
-                compose.onNodeWithContentDescription("Close").performClick()
-                compose.waitUntil { server.directory.departmentCancelled.isCompleted }
-                server.directory.departmentReleased.complete(Unit)
-                compose.onNodeWithContentDescription("Search departments").assertDoesNotExist()
-                compose.onNodeWithText("Sam Wilson").assertExists()
-                compose.onNodeWithText("All departments").performClick()
-                waitFor("Search departments")
-                compose.waitUntil {
-                    compose
-                        .onAllNodes(hasText("People") and isSelectable())
-                        .fetchSemanticsNodes()
-                        .size == 1
-                }
-                compose.onNode(hasText("People") and isSelectable()).performClick()
-                compose.waitUntil {
-                    server.directory.departments.lastOrNull() == NativeDirectoryUi.PEOPLE
-                }
-                waitFor("Sam Wilson")
-                compose.onNodeWithText("Alex Morgan").assertDoesNotExist()
+                    .onAllNodes(hasText("People") and isSelectable())
+                    .fetchSemanticsNodes()
+                    .size == 1
             }
-        } finally {
-            server.directory.departmentReleased.complete(Unit)
+            compose.onNode(hasText("People") and isSelectable()).performClick()
+            waitFor("Sam Wilson")
+            compose.onNodeWithText("Alex Morgan").assertDoesNotExist()
+            assertEquals(requests, server.directory.queries.size)
         }
     }
 

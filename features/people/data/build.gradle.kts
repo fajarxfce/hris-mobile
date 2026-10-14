@@ -8,10 +8,16 @@ kotlin.sourceSets {
     getByName("commonMain").dependencies {
         api(projects.features.people.domain)
         implementation(projects.core.network)
+        implementation(projects.core.database)
+        implementation(projects.core.storage)
+        implementation(projects.core.securestorage)
         implementation(libs.serialization.json)
     }
     getByName("commonTest").dependencies {
         implementation(libs.coroutines.test)
         implementation(libs.ktor.mock)
+    }
+    getByName("wasmJsTest").dependencies {
+        implementation(npm("@js-joda/timezone", libs.versions.js.joda.timezone.get()))
     }
 }

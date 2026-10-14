@@ -8,6 +8,15 @@ import org.koin.core.annotation.*
 
 @Single
 class PeopleApi(@Named(HttpClients.Authenticated) private val client: HttpClient) {
+    suspend fun directoryRecord(
+        sessionId: String,
+        companyId: String,
+        id: String,
+    ): dev.fajar.starter.people.data.replica.dto.DirectoryRecordDto =
+        client.requestJson("companies/$companyId/employees/directory/$id", maximumBytes = 8192) {
+            forSession(sessionId)
+        }
+
     suspend fun directoryDepartments(
         sessionId: String,
         companyId: String,
