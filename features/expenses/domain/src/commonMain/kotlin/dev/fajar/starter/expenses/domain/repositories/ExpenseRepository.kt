@@ -21,5 +21,5 @@ interface ExpenseRepository {
 
     suspend fun submission(access: ExpenseAccess, id: String): AppResult<ExpenseSubmission>
 
-    suspend fun payments(access: ExpenseAccess, id: String): AppResult<List<ExpensePaymentAttempt>>
+    suspend fun payments(access: ExpenseAccess, id: String): AppResult<ExpenseClaimPayments>
 }

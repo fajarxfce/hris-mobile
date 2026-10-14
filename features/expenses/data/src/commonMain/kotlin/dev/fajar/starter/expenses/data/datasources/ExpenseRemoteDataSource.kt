@@ -81,9 +81,5 @@ interface ExpenseRemoteDataSource {
 
     suspend fun submission(sessionId: String, companyId: String, id: String): ExpenseSubmissionDto
 
-    suspend fun payments(
-        sessionId: String,
-        companyId: String,
-        id: String,
-    ): List<ExpensePaymentAttemptDto>
+    suspend fun payments(sessionId: String, companyId: String, id: String): ExpenseClaimPaymentsDto
 }

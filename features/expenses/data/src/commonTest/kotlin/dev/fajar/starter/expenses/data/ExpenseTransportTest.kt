@@ -52,7 +52,7 @@ class ExpenseTransportTest {
                             }
                             "$prefix/submissions/${f.submission.id}" ->
                                 Json.encodeToString(f.submission)
-                            "$prefix/claims/${f.claim.id}/payments" ->
+                            "$prefix/claims/${f.claim.id}/payment-progress" ->
                                 Json.encodeToString(f.payments)
                             else -> error("Unexpected expense route")
                         }
@@ -84,9 +84,7 @@ class ExpenseTransportTest {
                 repo.history(access, f.claim.id, 1)
             )
             assertIs<AppResult.Success<ExpenseSubmission>>(repo.submission(access, f.submission.id))
-            assertIs<AppResult.Success<List<ExpensePaymentAttempt>>>(
-                repo.payments(access, f.claim.id)
-            )
+            assertIs<AppResult.Success<ExpenseClaimPayments>>(repo.payments(access, f.claim.id))
             assertEquals(6, calls)
         } finally {
             client.close()

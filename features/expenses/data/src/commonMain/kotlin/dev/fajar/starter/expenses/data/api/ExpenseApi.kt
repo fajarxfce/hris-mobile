@@ -255,9 +255,9 @@ class ExpenseApi(@Named(HttpClients.Authenticated) private val client: HttpClien
         sessionId: String,
         companyId: String,
         id: String,
-    ): List<ExpensePaymentAttemptDto> =
+    ): ExpenseClaimPaymentsDto =
         client.requestJson(
-            "companies/$companyId/expenses/claims/$id/payments",
+            "companies/$companyId/expenses/claims/$id/payment-progress",
             maximumBytes = 16_384,
         ) {
             forSession(sessionId)

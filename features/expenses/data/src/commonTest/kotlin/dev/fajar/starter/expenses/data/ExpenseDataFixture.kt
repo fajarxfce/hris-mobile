@@ -190,7 +190,7 @@ class ExpenseDataFixture : ExpenseRemoteDataSource {
             now.toString(),
             null,
         )
-    var payments: List<ExpensePaymentAttemptDto> = emptyList()
+    var payments = ExpenseClaimPaymentsDto(claim.id, 0, emptyList())
     var failure: Exception? = null
 
     val category =
@@ -285,7 +285,7 @@ class ExpenseDataFixture : ExpenseRemoteDataSource {
         sessionId: String,
         companyId: String,
         id: String,
-    ): List<ExpensePaymentAttemptDto> {
+    ): ExpenseClaimPaymentsDto {
         failure?.let { throw it }
         return payments
     }

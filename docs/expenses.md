@@ -17,6 +17,10 @@ Detail acquisition reads the claim before and after its history, latest
 submission and payment progress. A changed claim or inconsistent revision
 returns a conflict without publishing a partial view or silently retrying.
 Amounts remain exact decimal domain values; approval does not imply payment.
+The `/claims/{id}/payment-progress` response has its own version and claim ID.
+Reimbursement updates do not change an approved claim's version. The data adapter
+validates the bounded attempt list and owner before returning domain values;
+the sync protocol represents claim and payment changes as separate collections.
 Stale lists and claims remain readable during refresh or network failure. The
 owning ViewModel keeps confirmed access failures gated; ordinary age never clears
 the content. Draft and command confirmation are not repeated automatically.
@@ -155,9 +159,15 @@ ownership and partial-file behavior.
 
 ## Validation
 
-Root checks passed with 1,144 desktop tests. The additional export-exit regression
-then passed on desktop and Chromium, bringing the desktop total to 1,145.
-The receipt workflow passed 157 expense tests and 36 network tests in Chromium,
+The versioned reimbursement contract passed root checks with 1,327 JVM/desktop
+tests, Android dev assembly and 108 expense domain/data and sync tests in Chromium.
+Tests cover claim binding, independent payment versions, bounded response mapping,
+cancellation and shared resource IDs across selected sync collections. The API 35
+emulator opened a real dev claim, its approval, activity and empty payment progress
+through the new endpoint. This transport update does not expand offline storage;
+the account-owned expense replica remains separate work.
+
+The earlier receipt workflow passed 157 expense tests and 36 network tests in Chromium,
 plus Android dev assembly and production Web compilation. CI for the preceding
 action delivery passed Linux verification, Windows checks and the iOS simulator
 build.

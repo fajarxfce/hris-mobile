@@ -78,7 +78,8 @@ class NativeExpenseUi {
                 "approval":{"id":"$APPROVAL","status":"APPROVED","version":1,"currentStep":0,"stages":[["$REVIEWER"]]},
                 "claimVersion":2,"claimStatus":"APPROVED","current":true,"reviews":[{"claimVersion":2,"approvalVersion":1,"step":0,
                 "actorId":"$REVIEWER","decision":"APPROVE","status":"APPROVED","reason":"Approved for reimbursement","decidedAt":"2026-10-13T03:00:00Z"}]}"""
-                "$base/claims/$ID/payments" -> "[]"
+                "$base/claims/$ID/payment-progress" ->
+                    """{"claimId":"$ID","version":0,"attempts":[]}"""
                 else -> error("Unexpected expense fixture path")
             }
         return body to HttpStatusCode.OK

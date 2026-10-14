@@ -137,20 +137,68 @@ class ExpenseMappingTest {
             f.submission = submission
             assertIs<AppResult.Failed>(repo.submission(f.access, original.id))
         }
-        f.payments = listOf(f.payment)
+        f.payments = ExpenseClaimPaymentsDto(f.claim.id, 2, listOf(f.payment))
         assertEquals(
             ExpensePaymentStatus.PENDING,
-            assertIs<AppResult.Success<List<ExpensePaymentAttempt>>>(
-                    repo.payments(f.access, f.claim.id)
-                )
+            assertIs<AppResult.Success<ExpenseClaimPayments>>(repo.payments(f.access, f.claim.id))
                 .value
+                .attempts
                 .single()
                 .status,
         )
-        f.payments = listOf(f.payment.copy(status = "SUCCEEDED"))
+        f.payments = f.payments.copy(attempts = listOf(f.payment.copy(status = "SUCCEEDED")))
         assertIs<AppResult.Failed>(repo.payments(f.access, f.claim.id))
-        f.payments = listOf(f.payment, f.payment)
+        f.payments = f.payments.copy(attempts = listOf(f.payment, f.payment))
         assertIs<AppResult.Failed>(repo.payments(f.access, f.claim.id))
+    }
+
+    @Test
+    fun paymentVersionsRemainIndependentAndBindOnlyTheRequestedClaim() = runTest {
+        val f = ExpenseDataFixture()
+        val repo = RemoteExpenseRepository(f)
+        assertEquals(
+            ExpenseClaimPayments(f.claim.id, 0, emptyList()),
+            assertIs<AppResult.Success<ExpenseClaimPayments>>(repo.payments(f.access, f.claim.id))
+                .value,
+        )
+        val prepared = f.payment.copy(releasedAt = null)
+        val released = f.payment
+        val settled = f.payment.copy(status = "SUCCEEDED", settledAt = f.now.toString())
+        for ((version, attempt) in listOf(prepared, released, settled).withIndex()) {
+            f.payments = ExpenseClaimPaymentsDto(f.claim.id, version + 1L, listOf(attempt))
+            val progress =
+                assertIs<AppResult.Success<ExpenseClaimPayments>>(
+                        repo.payments(f.access, f.claim.id)
+                    )
+                    .value
+            assertEquals(version + 1L, progress.version)
+            assertEquals(f.claim.id, progress.claimId)
+            assertEquals(1, progress.attempts.size)
+            // The claim itself remains unchanged while reimbursement advances.
+            assertEquals(
+                f.claim.version,
+                assertIs<AppResult.Success<ExpenseClaim>>(repo.claim(f.access, f.claim.id))
+                    .value
+                    .version,
+            )
+        }
+        val valid = f.payments
+        for (invalid in
+            listOf(
+                valid.copy(claimId = f.employee.id),
+                valid.copy(version = -1),
+                valid.copy(version = 61),
+                valid.copy(version = 0),
+                valid.copy(version = 4),
+                valid.copy(attempts = emptyList()),
+                valid.copy(attempts = List(21) { settled }),
+            )) {
+            f.payments = invalid
+            assertEquals(
+                FailureKind.Unexpected,
+                assertIs<AppResult.Failed>(repo.payments(f.access, f.claim.id)).failure.kind,
+            )
+        }
     }
 
     @Test
@@ -159,6 +207,9 @@ class ExpenseMappingTest {
         f.failure = CancellationException("test cancellation")
         assertFailsWith<CancellationException> {
             RemoteExpenseRepository(f).claim(f.access, f.claim.id)
+        }
+        assertFailsWith<CancellationException> {
+            RemoteExpenseRepository(f).payments(f.access, f.claim.id)
         }
     }
 }

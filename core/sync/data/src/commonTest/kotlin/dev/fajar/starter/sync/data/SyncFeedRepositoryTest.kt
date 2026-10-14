@@ -62,6 +62,31 @@ class SyncFeedRepositoryTest {
     }
 
     @Test
+    fun expenseClaimsAndPaymentsKeepSeparateVersionsForTheSameResourceId() = runTest {
+        val selection = setOf(SyncCollection.EXPENSE_CLAIMS, SyncCollection.EXPENSE_PAYMENTS)
+        val selected =
+            page.copy(
+                collections = selection.map { it.name },
+                items =
+                    listOf(
+                        SyncResourceDto("EXPENSE_CLAIMS", id, 5),
+                        SyncResourceDto("EXPENSE_PAYMENTS", id, 2),
+                    ),
+            )
+        val repository = RemoteSyncFeedRepository(FeedSource(selected))
+        val received =
+            assertIs<AppResult.Success<SyncBootstrapPage>>(
+                    repository.bootstrap("session", company, selection, null)
+                )
+                .value
+        assertEquals(selection, received.collections)
+        assertEquals(listOf(5L, 2L), received.items.map { it.version })
+        assertIs<AppResult.Failed>(
+            repository.bootstrap("session", company, setOf(SyncCollection.EXPENSE_CLAIMS), null)
+        )
+    }
+
+    @Test
     fun malformedAndNonProgressingBootstrapPagesCannotEscapeAsDomainValues() = runTest {
         val source = FeedSource(page)
         val repository = RemoteSyncFeedRepository(source)

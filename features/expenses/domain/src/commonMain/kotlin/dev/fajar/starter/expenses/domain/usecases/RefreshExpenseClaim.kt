@@ -116,7 +116,9 @@ class RefreshExpenseClaim(
             }
         if (confirmed != claim)
             return expenseFailure("client.expense_changed", FailureKind.Conflict)
-        val view = ExpenseView(claim, submission, history, historyAfter, payments)
+        if (payments.claimId != id)
+            return expenseFailure("client.invalid_response", FailureKind.Unexpected)
+        val view = ExpenseView(claim, submission, history, historyAfter, payments.attempts)
         val valid = validateExpenseView(view)
         if (valid is AppResult.Failed) return valid
         val now = clock.now()

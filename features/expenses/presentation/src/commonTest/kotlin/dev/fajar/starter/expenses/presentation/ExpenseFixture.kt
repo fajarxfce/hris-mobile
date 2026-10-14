@@ -222,8 +222,8 @@ class ExpenseFixture(instant: () -> Instant = { Instant.parse("2026-10-13T00:00:
     var submissionCall: suspend (String) -> AppResult<ExpenseSubmission> = {
         error("No submission expected")
     }
-    var paymentCall: suspend () -> AppResult<List<ExpensePaymentAttempt>> = {
-        AppResult.Success(emptyList())
+    var paymentCall: suspend () -> AppResult<ExpenseClaimPayments> = {
+        AppResult.Success(ExpenseClaimPayments(claim.id, 0, emptyList()))
     }
     var beforeWrite: suspend (Boolean) -> Unit = {}
     var failCleanup = false
@@ -281,7 +281,7 @@ class ExpenseFixture(instant: () -> Instant = { Instant.parse("2026-10-13T00:00:
             override suspend fun payments(
                 access: ExpenseAccess,
                 id: String,
-            ): AppResult<List<ExpensePaymentAttempt>> {
+            ): AppResult<ExpenseClaimPayments> {
                 paymentReads++
                 return paymentCall()
             }

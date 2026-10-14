@@ -190,6 +190,17 @@ class ExpenseAcquisitionTest {
     }
 
     @Test
+    fun paymentProgressForAnotherClaimCannotPublishACompositeView() = runTest {
+        val f = ExpenseFixture()
+        f.paymentCall = { AppResult.Success(ExpenseClaimPayments(f.employee.id, 0, emptyList())) }
+        assertEquals(
+            "client.invalid_response",
+            assertIs<AppResult.Failed>(f.load(true)).failure.code,
+        )
+        assertEquals(0, f.writes)
+    }
+
+    @Test
     fun staleConcurrentReadCannotReplaceAnAlreadyPublishedGeneration() = runTest {
         val f = ExpenseFixture()
         val entered = CompletableDeferred<Unit>()

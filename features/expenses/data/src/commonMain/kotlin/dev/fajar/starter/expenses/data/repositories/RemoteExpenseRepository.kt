@@ -54,6 +54,8 @@ class RemoteExpenseRepository(private val remote: ExpenseRemoteDataSource) : Exp
     }
 
     override suspend fun payments(access: ExpenseAccess, id: String) = safeApiCall {
-        remote.payments(access.sessionId, expenseId(access.companyId), expenseId(id)).toPayments()
+        remote
+            .payments(access.sessionId, expenseId(access.companyId), expenseId(id))
+            .toClaimPayments(id)
     }
 }
