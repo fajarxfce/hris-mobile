@@ -1460,16 +1460,18 @@ class AppFlowTest {
                 waitFor("Work calendar")
                 compose.onNodeWithText("Work calendar").performScrollTo().performClick()
                 waitFor("Night shift")
-                compose.waitUntil { server.workforce.active.get() == 0 }
-                cache.rejectClear = true
-                server.workforce.failureCode = "mfa_required"
-                refreshWhenReady()
+                refreshWhenReady {
+                    cache.rejectClear = true
+                    server.workforce.failureCode = "mfa_required"
+                }
                 waitFor("Verify your account")
                 compose.waitUntil { cache.subscribers() == 0 }
-                server.workforce.failureCode = null
-                server.workforce.calendarGate = release
-                cache.rejectClear = false
-                refreshWhenReady()
+                // The shared read gate can report denial before acquisition finishes.
+                refreshWhenReady {
+                    server.workforce.failureCode = null
+                    server.workforce.calendarGate = release
+                    cache.rejectClear = false
+                }
                 compose.waitUntil { server.workforce.active.get() == 1 }
                 compose.onNodeWithText("Night shift").assertDoesNotExist()
                 compose.onNodeWithText("Verify your account").assertExists()
@@ -1501,11 +1503,11 @@ class AppFlowTest {
                 waitFor("Work calendar")
                 compose.onNodeWithText("Work calendar").performScrollTo().performClick()
                 waitFor("Night shift")
-                compose.waitUntil { server.workforce.active.get() == 0 }
-                server.workforce.calendarGate = release
-                cache.markStale()
-                compose.onNodeWithText("Night shift").assertExists()
-                refreshWhenReady()
+                refreshWhenReady {
+                    server.workforce.calendarGate = release
+                    cache.markStale()
+                    compose.onNodeWithText("Night shift").assertExists()
+                }
                 compose.waitUntil { server.workforce.active.get() == 1 }
                 assertEquals(2, cache.subscribers())
                 compose.onNodeWithText("Connect to refresh your schedule.").assertDoesNotExist()
@@ -3483,13 +3485,14 @@ class AppFlowTest {
         compose.onNode(hasText("Sign in") and hasClickAction()).performScrollTo().performClick()
     }
 
-    private fun refreshWhenReady() {
+    private fun refreshWhenReady(configureResponse: () -> Unit = {}) {
         compose.waitUntil(15_000) {
             compose
                 .onAllNodes(hasContentDescription("Refresh") and isEnabled())
                 .fetchSemanticsNodes()
                 .size == 1
         }
+        configureResponse()
         compose.onNodeWithContentDescription("Refresh").assertIsEnabled().performClick()
     }
 
