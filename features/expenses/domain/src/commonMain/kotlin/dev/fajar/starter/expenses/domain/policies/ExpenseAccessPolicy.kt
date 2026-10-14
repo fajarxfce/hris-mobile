@@ -111,7 +111,7 @@ fun validateExpenseActionSnapshot(
         snapshot.fetchedAt > now ||
             snapshot.refreshAfter <= now ||
             snapshot.refreshAfter > snapshot.fetchedAt + EXPENSE_FRESHNESS_PERIOD ->
-            expenseFailure("client.expense_cache_expired", FailureKind.Unavailable)
+            expenseFailure("client.expense_review_required", FailureKind.Unavailable)
         else -> AppResult.Success(Unit)
     }
 

@@ -29,7 +29,7 @@ fun validateLeaveActionSnapshot(
         snapshot.fetchedAt > now ||
             snapshot.refreshAfter <= now ||
             snapshot.refreshAfter > snapshot.fetchedAt + LEAVE_FRESHNESS_PERIOD ->
-            leaveFailure("client.leave_cache_expired", FailureKind.Unavailable)
+            leaveFailure("client.leave_review_required", FailureKind.Unavailable)
         else -> AppResult.Success(Unit)
     }
 

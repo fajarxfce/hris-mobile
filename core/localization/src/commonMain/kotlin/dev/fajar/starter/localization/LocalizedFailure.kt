@@ -34,13 +34,14 @@ fun failureText(failure: Failure): String =
             "client.expense_updates_pending" -> AppString.ExpensePendingRequest
             "expense_claim_amount_limit",
             "expense_line_amount_limit" -> AppString.ExpenseLimitExceeded
-            "client.expense_cache_expired" -> AppString.ExpenseCacheExpired
+            "client.expense_cache_expired",
+            "client.expense_review_required" -> AppString.ExpenseReviewRequired
             "expense_claim_not_found",
             "expense_submission_not_found" -> AppString.ExpenseUnavailable
             "client.expense_changed" -> AppString.ExpenseChanged
             "client.expense_scope_changed" -> AppString.CalendarScopeChanged
             "client.expense_timeout" -> AppString.ExpenseTimeout
-            "client.payslip_cache_expired" -> AppString.PayslipCacheExpired
+            "client.payslip_cache_expired" -> AppString.PayslipExportReviewRequired
             "payroll_payslip_not_found" -> AppString.PayslipUnavailable
             "client.payslip_changed" -> AppString.PayslipChanged
             "client.payslip_scope_changed" -> AppString.CalendarScopeChanged
@@ -76,7 +77,8 @@ fun failureText(failure: Failure): String =
             "overtime_outside_requested_window" -> AppString.OvertimeOutsidePlanned
             "overtime_schedule_missing" -> AppString.OvertimeScheduleMissing
             "work_period_locked" -> AppString.OvertimePeriodLocked
-            "client.overtime_cache_expired" -> AppString.OvertimeCacheExpired
+            "client.overtime_cache_expired",
+            "client.overtime_request_review_required" -> AppString.OvertimeRequestReviewRequired
             "overtime_request_not_found" -> AppString.OvertimeRequestUnavailable
             "client.overtime_changed" -> AppString.OvertimeChanged
             "client.overtime_scope_changed" -> AppString.CalendarScopeChanged
@@ -146,6 +148,7 @@ fun failureText(failure: Failure): String =
             "client.leave_action_pending" -> AppString.LeaveActionPending
             "client.leave_action_unconfirmed" -> AppString.LeaveActionUnconfirmed
             "client.leave_updates_pending" -> AppString.LeaveActionConfirmed
+            "client.leave_cache_expired",
             "client.leave_review_required",
             "client.leave_command_changed" -> AppString.LeaveReviewRequired
             "client.leave_retry_limit" -> AppString.LeaveRetryLimit
@@ -156,7 +159,6 @@ fun failureText(failure: Failure): String =
             "payroll_period_frozen" -> AppString.LeavePayrollFrozen
             "leave_request_not_found" -> AppString.LeaveRequestUnavailable
             "leave_account_not_found" -> AppString.LeaveBalanceUnavailable
-            "client.leave_cache_expired" -> AppString.LeaveCacheExpired
             "client.leave_scope_changed" -> AppString.CalendarScopeChanged
             "client.leave_changed" -> AppString.LeaveChanged
             "client.location_permission" -> AppString.LocationPermission
@@ -165,21 +167,21 @@ fun failureText(failure: Failure): String =
             "client.location_unavailable",
             "client.location_timeout",
             "client.location_stale" -> AppString.LocationUnavailable
-            "client.attendance_cache_expired" -> AppString.AttendanceCacheExpired
+            "client.attendance_cache_expired",
+            "client.attendance_review_required" -> AppString.AttendanceReviewRequired
             "client.attendance_refresh_required",
             "client.attendance_changed" -> AppString.AttendanceRefreshRequired
             "client.attendance_already_recorded" -> AppString.AttendanceAlreadyRecorded
             "client.attendance_retry_limit" -> AppString.AttendanceRetryLimit
             "attendance_day_corrected" -> AppString.AttendanceCorrected
 
-            "client.calendar_cache_expired" -> AppString.CalendarCacheExpired
+            "client.calendar_cache_expired" -> AppString.CalendarRefreshRequired
             "client.calendar_scope_changed" -> AppString.CalendarScopeChanged
             "client.calendar_changed" -> AppString.CalendarChanged
             "client.company_policy_unavailable",
             "client.company_policy_expired" -> AppString.CompanyPolicyUnavailable
             "company_module_disabled" -> AppString.CompanyModuleDisabled
             "client.workspace_expired" -> AppString.WorkspaceAccessExpired
-            "client.inbox_cache_expired" -> AppString.InboxCacheExpired
             "client.inbox_item_unavailable",
             "inbox_item_not_found" -> AppString.InboxMessageUnavailable
             "client.inbox_updates_pending" -> AppString.InboxAwaitingSync
@@ -187,6 +189,7 @@ fun failureText(failure: Failure): String =
             "client.inbox_action_pending" -> AppString.InboxActionPending
             "client.inbox_retry_limit" -> AppString.InboxRetryLimit
             "client.command_queue_full" -> AppString.InboxQueueFull
+            "client.inbox_cache_expired",
             "client.inbox_review_required",
             "client.inbox_command_changed",
             "client.inbox_action_unavailable" -> AppString.InboxReviewRequired

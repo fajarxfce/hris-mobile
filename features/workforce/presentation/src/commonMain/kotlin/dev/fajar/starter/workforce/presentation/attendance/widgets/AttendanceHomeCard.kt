@@ -35,8 +35,7 @@ fun AttendanceHomeCard(state: AttendanceState, onEvent: (AttendanceEvent) -> Uni
                 appString(AppString.AttendancePendingActions),
                 { onEvent(AttendanceEvent.QueueRequested) },
             )
-        if (state.feedbackFailure != null && state.dialog == null)
-            AttendanceFeedback(state, onEvent)
+        if (state.failure != null && state.dialog == null) AttendanceFeedback(state, onEvent)
     }
     when (state.dialog) {
         AttendanceDialog.QUEUE -> AttendanceQueueDialog(state, onEvent)

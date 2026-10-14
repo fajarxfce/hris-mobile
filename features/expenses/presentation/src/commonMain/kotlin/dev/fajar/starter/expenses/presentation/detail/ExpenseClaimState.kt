@@ -70,16 +70,12 @@ data class ExpenseClaimState(
         get() =
             commandFailure?.takeIf(::expenseFailureInvalidatesCache)
                 ?: exportFailure?.takeIf(::expenseFailureInvalidatesCache)
-                ?: cacheFailure?.takeIf {
-                    expenseFailureInvalidatesCache(it) && it.code != "client.expense_cache_expired"
-                }
+                ?: cacheFailure?.takeIf(::expenseFailureInvalidatesCache)
                 ?: refreshFailure?.takeIf(::expenseFailureInvalidatesCache)
                 ?: exportFailure
                 ?: refreshFailure
                 ?: commandFailure
-                ?: cacheFailure?.takeUnless {
-                    refreshing && it.code == "client.expense_cache_expired"
-                }
+                ?: cacheFailure
 
     val needsVerification: Boolean
         get() = failure?.code in expenseVerificationCodes

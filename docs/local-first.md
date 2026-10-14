@@ -45,6 +45,13 @@ Four different values have different jobs:
 | Change cursor | Position in retained server history | Stage a new snapshot; keep the old published view until replacement |
 | Credential / action review | Authority to send a request or confirm reviewed input | Pause that operation or request reauthentication/review |
 
+Action preparation reports a feature-specific `*_review_required` code when its
+input needs current facts. It does not report that stored data has expired or
+close an existing read projection. The localization boundary still accepts old
+`*_cache_expired` codes retained in earlier command outcomes, with action-specific
+copy. Ordinary reads never produce those codes. Export authorization and explicit
+business deadlines remain separate from local data retention.
+
 Expired credentials return the localizable `client.authentication_required`
 without deleting the local identity. Confirmed server revocation is different:
 remove the affected projection and keep its presentation gated even if cleanup
@@ -222,13 +229,13 @@ its replacement is available. A completed feed's missing parent is authoritative
 ## Next increments
 
 1. Extend stable audience/account/company ownership to the remaining read
-   projections. Inbox, Leave and Overtime replicas retain account-owned facts across sign-in; workspace
+   projections. Inbox, Leave, Overtime and Workforce replicas retain account-owned facts across sign-in; workspace
    admission and other last-view snapshots remain session-owned. Reauthentication
    does not reuse an old request guard or old credential-bound feed cursor.
 2. Add projections for the existing expense and payroll collections.
    Store versioned facts, then query/filter locally; replace single last-view slots
    as each projection is implemented.
-3. Register backend feeds for attendance, schedules, documents and coworker data,
+3. Register backend feeds for documents and coworker data,
    including deletions and authorization changes, before implementing mobile sync.
 4. Persist unfinished local drafts separately from confirmed server models and
    prepared outbox commands. Show unsynchronized changes and actionable conflicts.

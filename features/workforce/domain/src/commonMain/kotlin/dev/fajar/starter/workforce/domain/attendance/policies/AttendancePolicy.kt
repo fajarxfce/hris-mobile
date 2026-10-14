@@ -31,7 +31,7 @@ fun validateAttendanceCaptureSnapshot(
         snapshot.fetchedAt > now ||
             snapshot.refreshAfter <= now ||
             snapshot.refreshAfter > snapshot.fetchedAt + ATTENDANCE_FRESHNESS_PERIOD ->
-            attendanceFailure("client.attendance_cache_expired", FailureKind.Unavailable)
+            attendanceFailure("client.attendance_review_required", FailureKind.Unavailable)
         else -> AppResult.Success(Unit)
     }
 

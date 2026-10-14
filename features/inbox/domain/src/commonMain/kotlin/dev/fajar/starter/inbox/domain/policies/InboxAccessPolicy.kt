@@ -68,8 +68,8 @@ fun validateInboxActionSnapshot(
             AppResult.Failed(
                 Failure(
                     FailureKind.Unavailable,
-                    "Connect to refresh the inbox.",
-                    code = "client.inbox_cache_expired",
+                    "Review the latest message before sending this action.",
+                    code = "client.inbox_review_required",
                 )
             )
         else -> AppResult.Success(Unit)

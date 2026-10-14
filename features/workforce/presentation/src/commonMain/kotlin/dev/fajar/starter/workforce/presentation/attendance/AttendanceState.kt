@@ -16,10 +16,7 @@ data class AttendanceState(
     val settingsTarget: LocationSettings? = null,
     val withoutLocationKind: AttendanceKind? = null,
     val dialog: AttendanceDialog? = null,
-) {
-    val feedbackFailure: Failure?
-        get() = failure?.takeUnless { refreshing && it.code == "client.attendance_cache_expired" }
-}
+)
 
 enum class AttendanceDialog {
     QUEUE,

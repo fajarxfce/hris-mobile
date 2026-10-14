@@ -93,24 +93,6 @@ fun validatePayrollContinuation(
             else payslipFailure("client.payslip_scope_changed", FailureKind.AccessDenied)
     }
 
-fun validatePayslipExportSnapshot(
-    access: PayrollAccess,
-    snapshot: PayslipSnapshot<*>?,
-    now: Instant,
-): AppResult<Unit> =
-    when {
-        access.authorizationExpiresAt <= now ->
-            payslipFailure(access.authorizationExpiryCode, FailureKind.Unavailable)
-        snapshot == null -> AppResult.Success(Unit)
-        !samePayrollScope(access, snapshot.access) ->
-            payslipFailure("client.payslip_scope_changed", FailureKind.AccessDenied)
-        snapshot.fetchedAt > now ||
-            snapshot.refreshAfter <= now ||
-            snapshot.refreshAfter > snapshot.fetchedAt + PAYSLIP_FRESHNESS_PERIOD ->
-            payslipFailure("client.payslip_cache_expired", FailureKind.Unavailable)
-        else -> AppResult.Success(Unit)
-    }
-
 /** Stored facts remain readable after freshness expires; commands validate current authority. */
 fun validateStoredPayslip(access: PayrollAccess, snapshot: PayslipSnapshot<*>?): AppResult<Unit> =
     if (snapshot != null && !samePayrollScope(access, snapshot.access))

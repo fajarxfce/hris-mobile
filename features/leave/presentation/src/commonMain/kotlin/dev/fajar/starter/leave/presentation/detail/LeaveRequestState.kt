@@ -25,16 +25,12 @@ data class LeaveRequestState(
 
     val failure: Failure?
         get() =
-            cacheFailure?.takeIf {
-                leaveFailureInvalidatesCache(it) && it.code != "client.leave_cache_expired"
-            }
+            cacheFailure?.takeIf(::leaveFailureInvalidatesCache)
                 ?: refreshFailure?.takeIf(::leaveFailureInvalidatesCache)
                 ?: action.failure?.takeIf(::leaveFailureInvalidatesCache)
                 ?: refreshFailure
                 ?: action.failure
-                ?: cacheFailure?.takeUnless {
-                    refreshing && it.code == "client.leave_cache_expired"
-                }
+                ?: cacheFailure
 
     val needsVerification: Boolean
         get() =

@@ -72,7 +72,7 @@ fun validateOvertimeActionSnapshot(
         snapshot.fetchedAt > now ||
             snapshot.refreshAfter <= now ||
             snapshot.refreshAfter > snapshot.fetchedAt + OVERTIME_FRESHNESS_PERIOD ->
-            overtimeFailure("client.overtime_cache_expired", FailureKind.Unavailable)
+            overtimeFailure("client.overtime_request_review_required", FailureKind.Unavailable)
         else -> AppResult.Success(Unit)
     }
 

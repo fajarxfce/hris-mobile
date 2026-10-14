@@ -36,7 +36,7 @@
     <string name="payslip_save_pdf_en">Save PDF</string>
     <string name="payslip_external_copy_en">Choose the PDF language. Saved files are managed outside HRIS.</string>
     <string name="payslip_pdf_saved_en">PDF saved</string>
-    <string name="payslip_cache_expired_en">Refresh to view this payslip again.</string>
+    <string name="payslip_export_review_required_en">Refresh this payslip before saving a PDF.</string>
     <string name="payslip_unavailable_en">This payslip is unavailable for your account.</string>
     <string name="payslip_changed_en">Payslip data changed. Refresh before continuing.</string>
     <string name="payslip_pdf_unavailable_en">The PDF is unavailable. Please try again.</string>
@@ -131,7 +131,7 @@
     <string name="overtime_approval_step_en">Approval step %1$s of %2$s</string>
     <string name="overtime_time_range_en">%1$s – %2$s</string>
     <string name="overtime_dated_time_range_en">%1$s, %2$s – %3$s, %4$s</string>
-    <string name="overtime_cache_expired_en">Refresh overtime to renew access.</string>
+    <string name="overtime_request_review_required_en">Review the latest overtime request before confirming this action.</string>
     <string name="overtime_request_unavailable_en">This overtime request is unavailable.</string>
     <string name="overtime_changed_en">Overtime changed. Refresh to continue.</string>
 
@@ -308,7 +308,6 @@
     <string name="leave_latest_requests_en">Latest requests</string>
     <string name="leave_saved_en">Updated %1$s</string>
     <string name="leave_no_saved_en">Connect to load leave data.</string>
-    <string name="leave_cache_expired_en">Refresh to view current leave data.</string>
     <string name="leave_changed_en">Leave data changed. Refresh to continue.</string>
 
     <string name="home_greeting_en">Welcome</string>
@@ -338,7 +337,7 @@
     <string name="calendar_timezone_en">Time zone: %1$s</string>
     <string name="calendar_first_employments_en">First page</string>
     <string name="calendar_no_saved_en">No saved schedule. Connect to load your calendar.</string>
-    <string name="calendar_cache_expired_en">Connect to refresh your schedule.</string>
+    <string name="calendar_refresh_required_en">Connect to refresh your schedule.</string>
     <string name="calendar_scope_changed_en">Calendar access changed. Refresh your workspace.</string>
     <string name="calendar_changed_en">The saved view changed. Refresh to continue.</string>
     <string name="sign_in_en">Sign in</string>
@@ -538,10 +537,7 @@
     <string name="inbox_saved_en">Showing saved messages.</string>
     <string name="inbox_acknowledgement_required_en">Acknowledgement required</string>
     <string name="inbox_acknowledged_en">Acknowledged</string>
-    <string name="inbox_cache_expired_en">Connect to refresh your inbox.</string>
     <string name="workspace_access_expired_en">Connect to renew company access.</string>
-    <string name="workspace_connection_title_en">Connect to continue</string>
-    <string name="workspace_connection_description_en">Offline access has ended. Connect to reopen your saved company and refresh its data.</string>
     <string name="company_policy_title_en">Company services</string>
     <string name="company_policy_unavailable_en">Connect to check company availability.</string>
     <string name="company_module_disabled_en">This service is unavailable for this company.</string>
@@ -624,7 +620,7 @@
     <string name="attendance_metrics_basis_en">Absence totals use confirmed records.</string>
     <string name="attendance_pending_actions_en">Pending attendance</string>
     <string name="attendance_no_pending_en">No pending attendance.</string>
-    <string name="attendance_cache_expired_en">Saved attendance has expired. Refresh to continue.</string>
+    <string name="attendance_review_required_en">Refresh attendance before recording a new entry.</string>
     <string name="leave_withdraw_en">Withdraw request</string>
     <string name="leave_cancel_request_en">Request cancellation</string>
     <string name="leave_withdraw_cancellation_en">Withdraw cancellation</string>
@@ -693,7 +689,7 @@
     <string name="expense_latest_activity_en">Latest activity</string>
     <string name="expense_earlier_activity_en">Earlier activity</string>
     <string name="expense_no_earlier_activity_en">No earlier activity.</string>
-    <string name="expense_cache_expired_en">Refresh to renew access to saved claims.</string>
+    <string name="expense_review_required_en">Review the latest claim before confirming this action.</string>
     <string name="expense_unavailable_en">This claim is unavailable. Refresh your claims.</string>
     <string name="expense_changed_en">This claim changed while loading. Refresh to view the latest details.</string>
     <string name="expense_timeout_en">Loading took too long. Try refreshing again.</string>

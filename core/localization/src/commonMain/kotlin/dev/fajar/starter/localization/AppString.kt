@@ -284,7 +284,10 @@ enum class AppString(val english: StringResource, val indonesian: StringResource
         Res.string.expense_no_earlier_activity_en,
         Res.string.expense_no_earlier_activity_id,
     ),
-    ExpenseCacheExpired(Res.string.expense_cache_expired_en, Res.string.expense_cache_expired_id),
+    ExpenseReviewRequired(
+        Res.string.expense_review_required_en,
+        Res.string.expense_review_required_id,
+    ),
     ExpenseUnavailable(Res.string.expense_unavailable_en, Res.string.expense_unavailable_id),
     ExpenseChanged(Res.string.expense_changed_en, Res.string.expense_changed_id),
     ExpenseTimeout(Res.string.expense_timeout_en, Res.string.expense_timeout_id),
@@ -352,7 +355,10 @@ enum class AppString(val english: StringResource, val indonesian: StringResource
     PayslipSavePdf(Res.string.payslip_save_pdf_en, Res.string.payslip_save_pdf_id),
     PayslipExternalCopy(Res.string.payslip_external_copy_en, Res.string.payslip_external_copy_id),
     PayslipPdfSaved(Res.string.payslip_pdf_saved_en, Res.string.payslip_pdf_saved_id),
-    PayslipCacheExpired(Res.string.payslip_cache_expired_en, Res.string.payslip_cache_expired_id),
+    PayslipExportReviewRequired(
+        Res.string.payslip_export_review_required_en,
+        Res.string.payslip_export_review_required_id,
+    ),
     PayslipUnavailable(Res.string.payslip_unavailable_en, Res.string.payslip_unavailable_id),
     PayslipChanged(Res.string.payslip_changed_en, Res.string.payslip_changed_id),
     PayslipPdfUnavailable(
@@ -582,9 +588,9 @@ enum class AppString(val english: StringResource, val indonesian: StringResource
         Res.string.overtime_dated_time_range_en,
         Res.string.overtime_dated_time_range_id,
     ),
-    OvertimeCacheExpired(
-        Res.string.overtime_cache_expired_en,
-        Res.string.overtime_cache_expired_id,
+    OvertimeRequestReviewRequired(
+        Res.string.overtime_request_review_required_en,
+        Res.string.overtime_request_review_required_id,
     ),
     OvertimeRequestUnavailable(
         Res.string.overtime_request_unavailable_en,
@@ -976,7 +982,6 @@ enum class AppString(val english: StringResource, val indonesian: StringResource
     LeaveLatestRequests(Res.string.leave_latest_requests_en, Res.string.leave_latest_requests_id),
     LeaveSaved(Res.string.leave_saved_en, Res.string.leave_saved_id),
     LeaveNoSaved(Res.string.leave_no_saved_en, Res.string.leave_no_saved_id),
-    LeaveCacheExpired(Res.string.leave_cache_expired_en, Res.string.leave_cache_expired_id),
     LeaveChanged(Res.string.leave_changed_en, Res.string.leave_changed_id),
     Employees(Res.string.employees_en, Res.string.employees_id),
     EmployeesSummary(Res.string.employees_summary_en, Res.string.employees_summary_id),
@@ -1007,9 +1012,9 @@ enum class AppString(val english: StringResource, val indonesian: StringResource
         Res.string.services_communications_id,
     ),
     Attendance(Res.string.attendance_en, Res.string.attendance_id),
-    AttendanceCacheExpired(
-        Res.string.attendance_cache_expired_en,
-        Res.string.attendance_cache_expired_id,
+    AttendanceReviewRequired(
+        Res.string.attendance_review_required_en,
+        Res.string.attendance_review_required_id,
     ),
     AttendanceNoPending(Res.string.attendance_no_pending_en, Res.string.attendance_no_pending_id),
     AttendancePresent(Res.string.attendance_present_en, Res.string.attendance_present_id),
@@ -1130,9 +1135,9 @@ enum class AppString(val english: StringResource, val indonesian: StringResource
         Res.string.calendar_first_employments_id,
     ),
     CalendarNoSaved(Res.string.calendar_no_saved_en, Res.string.calendar_no_saved_id),
-    CalendarCacheExpired(
-        Res.string.calendar_cache_expired_en,
-        Res.string.calendar_cache_expired_id,
+    CalendarRefreshRequired(
+        Res.string.calendar_refresh_required_en,
+        Res.string.calendar_refresh_required_id,
     ),
     CalendarScopeChanged(
         Res.string.calendar_scope_changed_en,
@@ -1140,14 +1145,6 @@ enum class AppString(val english: StringResource, val indonesian: StringResource
     ),
     CalendarChanged(Res.string.calendar_changed_en, Res.string.calendar_changed_id),
     CompanyPolicyTitle(Res.string.company_policy_title_en, Res.string.company_policy_title_id),
-    WorkspaceConnectionTitle(
-        Res.string.workspace_connection_title_en,
-        Res.string.workspace_connection_title_id,
-    ),
-    WorkspaceConnectionDescription(
-        Res.string.workspace_connection_description_en,
-        Res.string.workspace_connection_description_id,
-    ),
     CompanyPolicyUnavailable(
         Res.string.company_policy_unavailable_en,
         Res.string.company_policy_unavailable_id,
@@ -1195,7 +1192,6 @@ enum class AppString(val english: StringResource, val indonesian: StringResource
         Res.string.inbox_acknowledgement_required_id,
     ),
     InboxAcknowledged(Res.string.inbox_acknowledged_en, Res.string.inbox_acknowledged_id),
-    InboxCacheExpired(Res.string.inbox_cache_expired_en, Res.string.inbox_cache_expired_id),
     WorkspaceAccessExpired(
         Res.string.workspace_access_expired_en,
         Res.string.workspace_access_expired_id,

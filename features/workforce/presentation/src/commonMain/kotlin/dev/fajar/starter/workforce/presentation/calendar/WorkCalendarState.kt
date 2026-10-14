@@ -19,9 +19,5 @@ data class WorkCalendarState(
                 refreshFailure?.let(::calendarFailureInvalidatesCache) == true
 
     val failure: Failure?
-        get() =
-            refreshFailure
-                ?: cacheFailure?.takeUnless {
-                    refreshing && it.code == "client.calendar_cache_expired"
-                }
+        get() = refreshFailure ?: cacheFailure
 }

@@ -23,13 +23,7 @@ data class PayslipsState(
 
     val failure: Failure?
         get() =
-            cacheFailure?.takeIf {
-                payslipFailureInvalidatesCache(it) && it.code != "client.payslip_cache_expired"
-            }
-                ?: refreshFailure
-                ?: cacheFailure?.takeUnless {
-                    refreshing && it.code == "client.payslip_cache_expired"
-                }
+            cacheFailure?.takeIf(::payslipFailureInvalidatesCache) ?: refreshFailure ?: cacheFailure
 
     val needsVerification: Boolean
         get() = failure?.code in payslipVerificationCodes

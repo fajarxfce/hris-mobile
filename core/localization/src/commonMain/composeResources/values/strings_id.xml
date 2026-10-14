@@ -36,7 +36,7 @@
     <string name="payslip_save_pdf_id">Simpan PDF</string>
     <string name="payslip_external_copy_id">Pilih bahasa PDF. File yang disimpan dikelola di luar HRIS.</string>
     <string name="payslip_pdf_saved_id">PDF tersimpan</string>
-    <string name="payslip_cache_expired_id">Refresh untuk melihat slip gaji ini kembali.</string>
+    <string name="payslip_export_review_required_id">Refresh slip gaji ini sebelum menyimpan PDF.</string>
     <string name="payslip_unavailable_id">Slip gaji ini tidak tersedia untuk akun Anda.</string>
     <string name="payslip_changed_id">Data slip gaji berubah. Refresh sebelum melanjutkan.</string>
     <string name="payslip_pdf_unavailable_id">PDF belum tersedia. Silakan coba lagi.</string>
@@ -131,7 +131,7 @@
     <string name="overtime_approval_step_id">Tahap persetujuan %1$s dari %2$s</string>
     <string name="overtime_time_range_id">%1$s – %2$s</string>
     <string name="overtime_dated_time_range_id">%1$s, %2$s – %3$s, %4$s</string>
-    <string name="overtime_cache_expired_id">Muat ulang lembur untuk memperbarui akses.</string>
+    <string name="overtime_request_review_required_id">Periksa pengajuan lembur terbaru sebelum mengonfirmasi tindakan ini.</string>
     <string name="overtime_request_unavailable_id">Pengajuan lembur ini tidak tersedia.</string>
     <string name="overtime_changed_id">Lembur berubah. Muat ulang untuk melanjutkan.</string>
 
@@ -308,7 +308,6 @@
     <string name="leave_latest_requests_id">Pengajuan terbaru</string>
     <string name="leave_saved_id">Diperbarui %1$s</string>
     <string name="leave_no_saved_id">Hubungkan ke internet untuk memuat data cuti.</string>
-    <string name="leave_cache_expired_id">Perbarui untuk melihat data cuti terbaru.</string>
     <string name="leave_changed_id">Data cuti berubah. Perbarui untuk melanjutkan.</string>
 
     <string name="home_greeting_id">Selamat datang</string>
@@ -338,7 +337,7 @@
     <string name="calendar_timezone_id">Zona waktu: %1$s</string>
     <string name="calendar_first_employments_id">Halaman pertama</string>
     <string name="calendar_no_saved_id">Belum ada jadwal tersimpan. Hubungkan internet untuk memuat jadwal.</string>
-    <string name="calendar_cache_expired_id">Hubungkan internet untuk memperbarui jadwal.</string>
+    <string name="calendar_refresh_required_id">Hubungkan internet untuk memperbarui jadwal.</string>
     <string name="calendar_scope_changed_id">Akses jadwal berubah. Perbarui akses perusahaan.</string>
     <string name="calendar_changed_id">Jadwal tersimpan telah berubah. Muat ulang untuk melanjutkan.</string>
     <string name="sign_in_id">Masuk</string>
@@ -538,10 +537,7 @@
     <string name="inbox_saved_id">Menampilkan pesan tersimpan.</string>
     <string name="inbox_acknowledgement_required_id">Perlu konfirmasi</string>
     <string name="inbox_acknowledged_id">Dikonfirmasi</string>
-    <string name="inbox_cache_expired_id">Hubungkan ke internet untuk memperbarui inbox.</string>
     <string name="workspace_access_expired_id">Hubungkan ke internet untuk memperbarui akses perusahaan.</string>
-    <string name="workspace_connection_title_id">Koneksi diperlukan</string>
-    <string name="workspace_connection_description_id">Akses offline telah berakhir. Hubungkan ke internet untuk membuka kembali perusahaan yang tersimpan dan memperbarui datanya.</string>
     <string name="company_policy_title_id">Layanan perusahaan</string>
     <string name="company_policy_unavailable_id">Hubungkan ke internet untuk memeriksa ketersediaan layanan.</string>
     <string name="company_module_disabled_id">Layanan ini tidak tersedia untuk perusahaan ini.</string>
@@ -624,7 +620,7 @@
     <string name="attendance_metrics_basis_id">Total tidak hadir mengikuti catatan yang telah dikonfirmasi.</string>
     <string name="attendance_pending_actions_id">Presensi tertunda</string>
     <string name="attendance_no_pending_id">Tidak ada presensi tertunda.</string>
-    <string name="attendance_cache_expired_id">Data presensi tersimpan sudah kedaluwarsa. Muat ulang untuk melanjutkan.</string>
+    <string name="attendance_review_required_id">Refresh presensi sebelum mencatat entri baru.</string>
     <string name="leave_withdraw_id">Tarik pengajuan</string>
     <string name="leave_cancel_request_id">Ajukan pembatalan</string>
     <string name="leave_withdraw_cancellation_id">Tarik pembatalan</string>
@@ -693,7 +689,7 @@
     <string name="expense_latest_activity_id">Aktivitas terbaru</string>
     <string name="expense_earlier_activity_id">Aktivitas sebelumnya</string>
     <string name="expense_no_earlier_activity_id">Tidak ada aktivitas sebelumnya.</string>
-    <string name="expense_cache_expired_id">Refresh untuk memperbarui akses ke klaim tersimpan.</string>
+    <string name="expense_review_required_id">Periksa klaim terbaru sebelum mengonfirmasi tindakan ini.</string>
     <string name="expense_unavailable_id">Klaim tidak tersedia. Refresh daftar klaim Anda.</string>
     <string name="expense_changed_id">Klaim berubah saat dimuat. Refresh untuk melihat detail terbaru.</string>
     <string name="expense_timeout_id">Proses memuat terlalu lama. Coba refresh kembali.</string>

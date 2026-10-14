@@ -70,7 +70,7 @@ class InboxCommandsTest {
                 )
             )
         assertEquals(
-            "client.inbox_cache_expired",
+            "client.inbox_review_required",
             assertIs<AppResult.Failed>(fixture.queue()).failure.code,
         )
         assertTrue(fixture.records.value.isEmpty())

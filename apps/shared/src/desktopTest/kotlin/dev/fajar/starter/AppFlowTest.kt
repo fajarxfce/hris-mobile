@@ -1755,7 +1755,7 @@ class AppFlowTest {
                 compose.waitUntil { server.workforce.attendanceActive.get() == 1 }
                 assertEquals(2, cache.subscribers())
                 compose
-                    .onNodeWithText("Saved attendance has expired. Refresh to continue.")
+                    .onNodeWithText("Refresh attendance before recording a new entry.")
                     .assertDoesNotExist()
                 compose.onNodeWithText("Present").assertExists()
                 assertEquals(2, cache.subscribers())
@@ -1763,7 +1763,7 @@ class AppFlowTest {
                 release.complete(Unit)
                 waitFor("Present")
                 compose
-                    .onNodeWithText("Saved attendance has expired. Refresh to continue.")
+                    .onNodeWithText("Refresh attendance before recording a new entry.")
                     .assertDoesNotExist()
                 compose.waitUntil { cache.subscribers() == 2 }
                 server.workforce.failureCode = "mfa_required"
@@ -2548,7 +2548,7 @@ class AppFlowTest {
             assertEquals(1, cache.subscribers())
             compose.onNode(hasText("Clock in") and hasClickAction()).assertExists()
             compose
-                .onNodeWithText("Saved attendance has expired. Refresh to continue.")
+                .onNodeWithText("Refresh attendance before recording a new entry.")
                 .assertDoesNotExist()
             release.complete(Unit)
             server.workforce.attendanceGate = null
@@ -2559,7 +2559,7 @@ class AppFlowTest {
                     .isNotEmpty()
             }
             compose
-                .onNodeWithText("Saved attendance has expired. Refresh to continue.")
+                .onNodeWithText("Refresh attendance before recording a new entry.")
                 .assertDoesNotExist()
             server.workforce.offline = true
             refreshWhenReady()

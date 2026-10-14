@@ -2,7 +2,8 @@
 
 ## Attendance and calendar replica
 
-Root checks passed with 1,295 desktop/UI tests and Android dev assembly. Workforce
+Root checks passed with 1,295 desktop/UI tests, Android dev assembly and production
+Web distribution. Workforce
 passed 123 domain and 63 data desktop tests, plus 123 domain and 40 data Chromium
 tests. Coverage includes four-collection acquisition, staged replacement, versioned
 tombstones, bounded indexed historical reads, effective schedule precedence,
@@ -22,8 +23,32 @@ before any successful network response; a pending renewal preserves its company 
 content. Browser verification covers the IndexedDB implementation, not persistence
 of memory-only browser credentials after page closure.
 
-This section records automated checks and build validation. Android emulator and
-phone delivery for this increment are recorded separately after acceptance.
+Action preparation now reports a request for review rather than an expired data
+cache. The localization boundary accepts retained legacy failure codes with the
+same action-specific copy. Read states no longer contain special handling for
+cache-expiry errors, and the unused offline-access-ended screen resources were
+removed. Existing action deadlines, export checks and confirmed-denial gates remain.
+
+API 35 emulator acceptance upgraded the existing application without clearing its
+data. The real development feed published three attendance days, one weekly
+assignment, one roster override and the employment directory; no company holiday
+was present in this fixture. After disabling Wi-Fi/mobile data and force-stopping
+the app, Home, monthly history and the calendar reopened locally. Switching months
+and opening the following week retained the existing records and resolved the
+stored weekly rules without a network response.
+
+Advancing only the emulator clock by 73 hours and restarting the process retained
+the company, attendance history and overnight calendar intervals. Replica payload
+hashes were unchanged throughout those offline reads. This is a clock-adjustment
+test, not a three-day physical wait. Time, automatic time and connectivity were
+restored; explicit online refresh cleared connection feedback without duplicate
+records. Screenshots were inspected and the emulator crash buffer contained no
+fatal exception. The emulator was stopped with its data retained.
+
+After notice, the validated APK was installed on the authorized Android 16 phone
+at 07:51:38 on 2026-10-14 (WIB), using install-only delivery. The package update
+timestamp was verified, and the installed APK hash matched the validated artifact. Its application
+was not opened or driven.
 
 ## Local read lifetime and cursor recovery
 
