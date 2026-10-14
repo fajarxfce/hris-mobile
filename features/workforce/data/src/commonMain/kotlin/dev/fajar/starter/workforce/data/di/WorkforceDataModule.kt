@@ -9,6 +9,8 @@ import dev.fajar.starter.workforce.domain.attendance.repositories.*
 import dev.fajar.starter.workforce.domain.attendance.usecases.*
 import dev.fajar.starter.workforce.domain.overtime.repositories.*
 import dev.fajar.starter.workforce.domain.overtime.usecases.*
+import dev.fajar.starter.workforce.domain.replica.repositories.*
+import dev.fajar.starter.workforce.domain.replica.usecases.SyncWorkforce
 import dev.fajar.starter.workforce.domain.repositories.*
 import dev.fajar.starter.workforce.domain.usecases.*
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
@@ -135,26 +137,29 @@ class WorkforceDataModule {
 
     @Factory
     fun observeAttendance(
+        replicas: WorkforceReplicaRepository,
         cache: AttendanceCacheRepository,
         commands: AttendanceCommandRepository,
         sessions: SessionRepository,
         workspaces: WorkspaceRepository,
         build: AppBuild,
-    ) = ObserveAttendance(cache, commands, sessions, workspaces, Clock.System, build)
+    ) = ObserveAttendance(replicas, cache, commands, sessions, workspaces, Clock.System, build)
 
-    @Single
-    fun refreshAttendance(
-        remote: WorkforceRepository,
-        attendance: AttendanceRepository,
-        cache: AttendanceCacheRepository,
+    @Single(binds = [SyncWorkforce::class, SyncTask::class])
+    fun syncWorkforce(
+        feed: SyncFeedRepository,
+        remote: WorkforceRecordRepository,
+        workforce: WorkforceRepository,
+        replicas: WorkforceReplicaRepository,
         sessions: SessionRepository,
         workspaces: WorkspaceRepository,
         build: AppBuild,
-    ) = RefreshAttendance(remote, attendance, cache, sessions, workspaces, Clock.System, build)
+    ) = SyncWorkforce(feed, remote, workforce, replicas, sessions, workspaces, Clock.System, build)
 
     @Single
     fun captureAttendance(
         remote: AttendanceRepository,
+        replicas: WorkforceReplicaRepository,
         cache: AttendanceCacheRepository,
         commands: AttendanceCommandRepository,
         location: LocationRepository,
@@ -164,6 +169,7 @@ class WorkforceDataModule {
     ) =
         CaptureAttendance(
             remote,
+            replicas,
             cache,
             commands,
             location,
@@ -175,13 +181,24 @@ class WorkforceDataModule {
 
     @Single(binds = [ReplayAttendance::class, SyncTask::class])
     fun replayAttendance(
+        replicas: WorkforceReplicaRepository,
         commands: AttendanceCommandRepository,
         remote: AttendanceRepository,
         cache: AttendanceCacheRepository,
         sessions: SessionRepository,
         workspaces: WorkspaceRepository,
         build: AppBuild,
-    ) = ReplayAttendance(commands, remote, cache, sessions, workspaces, Clock.System, build)
+    ) =
+        ReplayAttendance(
+            commands,
+            remote,
+            replicas,
+            cache,
+            sessions,
+            workspaces,
+            Clock.System,
+            build,
+        )
 
     @Factory
     fun dismissAttendance(
@@ -193,18 +210,10 @@ class WorkforceDataModule {
 
     @Factory
     fun observeCalendar(
+        replicas: WorkforceReplicaRepository,
         cache: WorkCalendarCacheRepository,
         sessions: SessionRepository,
         workspaces: WorkspaceRepository,
         build: AppBuild,
-    ) = ObserveWorkCalendar(cache, sessions, workspaces, Clock.System, build)
-
-    @Single
-    fun refreshCalendar(
-        remote: WorkforceRepository,
-        cache: WorkCalendarCacheRepository,
-        sessions: SessionRepository,
-        workspaces: WorkspaceRepository,
-        build: AppBuild,
-    ) = RefreshWorkCalendar(remote, cache, sessions, workspaces, Clock.System, build)
+    ) = ObserveWorkCalendar(replicas, cache, sessions, workspaces, Clock.System, build)
 }

@@ -6,6 +6,7 @@ import dev.fajar.starter.presentation.mvi.MviViewModel
 import dev.fajar.starter.workforce.domain.attendance.entities.*
 import dev.fajar.starter.workforce.domain.attendance.usecases.*
 import dev.fajar.starter.workforce.domain.policies.calendarFailureInvalidatesCache
+import dev.fajar.starter.workforce.domain.replica.usecases.SyncWorkforce
 import dev.fajar.starter.workforce.presentation.attendance.history.mappers.*
 import dev.fajar.starter.workspace.domain.policies.workspaceAccessLossCodes
 import kotlin.time.Clock
@@ -19,7 +20,7 @@ import org.koin.core.annotation.InjectedParam
 class AttendanceHistoryViewModel(
     @InjectedParam private val workspaceId: String,
     private val observe: ObserveAttendance,
-    private val refresh: RefreshAttendance,
+    private val refresh: SyncWorkforce,
 ) :
     MviViewModel<AttendanceHistoryState, AttendanceHistoryEvent, AttendanceHistoryEffect>(
         AttendanceHistoryState()
@@ -44,8 +45,14 @@ class AttendanceHistoryViewModel(
         on<AttendanceHistoryEvent.DayDismissed>(::onDayDismissed)
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     private fun onEntered(event: AttendanceHistoryEvent.Entered) {
+        if (observation?.isActive == true) return
+        observeContent()
+        onEvent(AttendanceHistoryEvent.RefreshRequested)
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private fun observeContent() {
         if (observation?.isActive == true) return
         updateState { it.copy(loading = true) }
         observation =
@@ -59,7 +66,7 @@ class AttendanceHistoryViewModel(
                     .distinctUntilChanged()
                     .flatMapLatest { (requested, restricted) ->
                         if (restricted) emptyFlow()
-                        else observe(workspaceId, AttendanceWindow.MONTHLY).map { requested to it }
+                        else observe(workspaceId, requested).map { requested to it }
                     }
                     .collect { (requested, result) ->
                         ensureActive()
@@ -130,7 +137,6 @@ class AttendanceHistoryViewModel(
                         }
                     }
             }
-        onEvent(AttendanceHistoryEvent.RefreshRequested)
     }
 
     private fun onStopped(event: AttendanceHistoryEvent.Stopped) {
@@ -151,7 +157,6 @@ class AttendanceHistoryViewModel(
 
     private fun onRefreshRequested(event: AttendanceHistoryEvent.RefreshRequested) {
         if (observation?.isActive != true || acquisition?.isActive == true) return
-        val requested = state.value.selection
         updateState {
             it.copy(
                 refreshing = true,
@@ -166,7 +171,7 @@ class AttendanceHistoryViewModel(
         }
         acquisition =
             viewModelScope.launch {
-                val result = refresh(workspaceId, requested)
+                val result = refresh(workspaceId)
                 ensureActive()
                 when (result) {
                     is AppResult.Failed -> {
@@ -201,16 +206,22 @@ class AttendanceHistoryViewModel(
                         )
                             emitEffect(AttendanceHistoryEffect.RecheckWorkspace)
                     }
-                    is AppResult.Success ->
-                        updateState {
-                            it.copy(
-                                refreshing = false,
-                                loading = it.content == null,
-                                refreshFailure = null,
-                                cacheFailure = null,
-                                needsVerification = false,
-                            )
-                        }
+                    is AppResult.Success -> {
+                        if (result.value.caughtUp) {
+                            observation?.cancel()
+                            observation = null
+                            updateState {
+                                it.copy(
+                                    refreshing = false,
+                                    loading = it.content == null,
+                                    refreshFailure = null,
+                                    cacheFailure = null,
+                                    needsVerification = false,
+                                )
+                            }
+                            observeContent()
+                        } else updateState { it.copy(refreshing = false) }
+                    }
                 }
             }
     }
@@ -273,8 +284,6 @@ class AttendanceHistoryViewModel(
 
     private fun changeSelection(selection: AttendanceSelection) {
         if (observation?.isActive != true) return
-        acquisition?.cancel()
-        acquisition = null
         updateState {
             it.copy(
                 selection = selection,
@@ -282,7 +291,6 @@ class AttendanceHistoryViewModel(
                 selectedDay = null,
                 picker = null,
                 loading = true,
-                refreshing = false,
                 cacheFailure = it.cacheFailure?.takeIf(::calendarFailureInvalidatesCache),
                 refreshFailure = it.refreshFailure?.takeIf(::calendarFailureInvalidatesCache),
                 needsVerification =
@@ -290,7 +298,6 @@ class AttendanceHistoryViewModel(
                         it.refreshFailure?.code in verificationCodes,
             )
         }
-        onEvent(AttendanceHistoryEvent.RefreshRequested)
     }
 
     private fun onDaySelected(event: AttendanceHistoryEvent.DaySelected) {

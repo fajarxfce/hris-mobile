@@ -27,7 +27,7 @@ flowchart TD
   Commit --> Read
 ```
 
-Inbox, Leave and Overtime replica identity binds API audience, account and company independently of
+Inbox, Leave, Overtime and Workforce replica identity binds API audience, account and company independently of
 the local session. Database operations still require the active session, so a late
 request from the preceding login cannot mutate retained facts. Other feature
 snapshots still use temporary session ownership until their collection migration.
@@ -59,7 +59,7 @@ rolled-back transactions cannot advance a public cursor. Cursors are opaque,
 scoped to the account/company/projection, and have finite server retention.
 See the [server protocol](https://github.com/fajarxfce/hris-platform/blob/main/docs/synchronization.md).
 
-Inbox, Leave and Overtime consume this protocol. One run reads a bounded number of pages,
+Inbox, Leave, Overtime and Workforce consume this protocol. One run reads a bounded number of pages,
 hydrates changed resources with bounded concurrency, reconciles versions and
 tombstones, and atomically stores data with the next cursor. A failed hydration
 cannot advance that cursor. Multiple UI/worker triggers share an execution owner.
@@ -98,7 +98,7 @@ submitting it are separate capabilities.
 | --- | --- | --- |
 | Selected company | Encrypted selection, restored without an age limit | Foreground/worker revalidation |
 | Inbox | Account-owned encrypted records survive a new login; list/detail share a published generation | Implemented |
-| Attendance / calendar | Last recent/monthly/calendar snapshots | Snapshot acquisition; server feed not registered |
+| Attendance / calendar | Account-owned daily evidence, effective schedule assignments, roster overrides and holidays; local month/week/employment queries | Four explicit collections, staged bootstrap and incremental changes implemented |
 | Leave | Account-owned balances, full requests and acquired activity pages; local employment/year/status and history queries | Request/balance change feed and resumable older-activity acquisition implemented |
 | Overtime | Account-owned full requests and acquired activity; local employment/date/status queries | Request change feed and resumable older-activity acquisition implemented |
 | Payslips | Last selected list and detail | Server collections exist; mobile integration pending |
@@ -244,3 +244,25 @@ datasources. Use cases coordinate repository contracts and own sync/action polic
 MVI owners observe local use cases and trigger finite work. This keeps the stricter
 layer rules of this workspace instead of copying NIA's repository orchestration
 literally. See [validation](validation.md) for checks actually performed.
+
+### Workforce replica
+
+Attendance days, effective weekly assignments, roster overrides and company holidays
+share one published company replica. `SyncWorkforce` explicitly selects their four
+collections. Its 32-reference pages, four concurrent canonical requests, ten-page
+run limit and 30-second deadline bound work without discarding acquired history.
+The directory is independent of People availability and limited to owned employment.
+
+Local month/week filters query four authenticated indexes, including the effective
+schedule baseline before the selected range. Pure domain policy resolves the weekly
+calendar from those records. The month/week window limits a query, not retention.
+The preceding one-year calendar restriction and last-view-only attendance storage
+no longer determine which acquired dates can be read.
+
+A separate encrypted admission record carries confirmed read denials across Home,
+Attendance and calendar. A failed disk write keeps the restriction in a process-owned
+buffer; a successfully written denial also survives process restart. An acquisition
+must have observed that denial before starting and complete successfully before it
+can reopen the projection. Freshness, normal credential expiry and cursor retention
+never create this denial. See [Workforce](workforce.md) for ownership, schedule policy,
+command reconciliation and pre-upgrade compatibility.

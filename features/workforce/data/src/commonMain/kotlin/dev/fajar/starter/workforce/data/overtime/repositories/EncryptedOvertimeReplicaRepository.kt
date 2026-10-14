@@ -60,7 +60,7 @@ class EncryptedOvertimeReplicaRepository(
                                             document,
                                         )
                                     )
-                                    .toOvertimeReplicaDirectory(access)
+                                    .toWorkforceReplicaDirectory(access)
                             OvertimeReplicaDirectory(checkpoint, directory)
                         }
                     } finally {
@@ -208,7 +208,7 @@ class EncryptedOvertimeReplicaRepository(
         require(next.generation == previous.generation && next.revision == previous.revision + 1)
         require(next.access == previous.access && (!previous.published || next.published))
         val access = previous.access
-        directory.toDto().toOvertimeReplicaDirectory(access)
+        directory.toDto().toWorkforceReplicaDirectory(access)
         val batch = entries.toList()
         require(batch.size <= 8 && batch.distinctBy { it.reference.id }.size == batch.size)
         val key = Base64.decode(requireNotNull(credentials.read()))
@@ -542,7 +542,7 @@ class EncryptedOvertimeReplicaRepository(
                 val json =
                     decodeOvertimeDocument(cipher, key, access, previous.generation, directory)
                 Json.decodeFromString<WorkforceDirectoryDto>(json)
-                    .toOvertimeReplicaDirectory(access)
+                    .toWorkforceReplicaDirectory(access)
                 documents +=
                     encodeOvertimeDocument(
                         cipher,
@@ -654,7 +654,7 @@ class EncryptedOvertimeReplicaRepository(
             if (directory.version != raw.revision) return@safeStorageCall false
             val next = previous.copy(revision = previous.revision + 1)
             val json = decodeOvertimeDocument(cipher, key, access, raw.handle.generation, directory)
-            Json.decodeFromString<WorkforceDirectoryDto>(json).toOvertimeReplicaDirectory(access)
+            Json.decodeFromString<WorkforceDirectoryDto>(json).toWorkforceReplicaDirectory(access)
             val documents =
                 listOf(
                     encodeOvertimeRequestHeader(

@@ -37,14 +37,13 @@ import dev.fajar.starter.documents.presentation.detail.DocumentFileViewModel
 import dev.fajar.starter.fileio.*
 import dev.fajar.starter.fixtures.DocumentInputUi
 import dev.fajar.starter.fixtures.DocumentOutputUi
-import dev.fajar.starter.fixtures.NativeAttendanceCacheUi
-import dev.fajar.starter.fixtures.NativeCalendarCacheUi
 import dev.fajar.starter.fixtures.NativeDirectoryUi
 import dev.fajar.starter.fixtures.NativeDocumentsUi
 import dev.fajar.starter.fixtures.NativeInboxCacheUi
 import dev.fajar.starter.fixtures.NativePayslipUi
 import dev.fajar.starter.fixtures.NativeSessionsUi
 import dev.fajar.starter.fixtures.NativeUiServer
+import dev.fajar.starter.fixtures.NativeWorkforceReplicaUi
 import dev.fajar.starter.fixtures.TestBackDispatcher
 import dev.fajar.starter.identity.domain.entities.Session
 import dev.fajar.starter.identity.domain.repositories.SessionRepository
@@ -54,9 +53,7 @@ import dev.fajar.starter.localization.formatLocalDate
 import dev.fajar.starter.notifications.data.datasources.*
 import dev.fajar.starter.notifications.data.dto.*
 import dev.fajar.starter.people.presentation.directory.EmployeesViewModel
-import dev.fajar.starter.workforce.domain.attendance.entities.AttendanceWindow
-import dev.fajar.starter.workforce.domain.attendance.repositories.AttendanceCacheRepository
-import dev.fajar.starter.workforce.domain.repositories.WorkCalendarCacheRepository
+import dev.fajar.starter.workforce.domain.replica.repositories.WorkforceReplicaRepository
 import dev.fajar.starter.workspace.domain.entities.Workspace
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
 import java.io.File
@@ -1406,9 +1403,9 @@ class AppFlowTest {
                 workforce.attendanceGate = response
                 workforce.asOf = java.time.LocalDate.now(java.time.ZoneId.of("Asia/Jakarta"))
             }
-        val cache = NativeAttendanceCacheUi().apply { publicationGate = publication }
+        val cache = NativeWorkforceReplicaUi().apply { publicationGate = publication }
         try {
-            withApplication(server, module { single<AttendanceCacheRepository> { cache } }) {
+            withApplication(server, module { single<WorkforceReplicaRepository> { cache } }) {
                 signIn()
                 waitFor("Choose a company")
                 compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
@@ -1417,7 +1414,7 @@ class AppFlowTest {
                 val menu = compose.onNode(hasText("Work calendar") and hasClickAction())
                 val pending = menu.fetchSemanticsNode().boundsInRoot
                 response.complete(Unit)
-                compose.waitUntil { cache.hasSnapshot(AttendanceWindow.RECENT) }
+                compose.waitUntil { cache.hasSnapshot() }
                 compose.waitUntil {
                     compose
                         .onAllNodes(hasContentDescription("Refresh") and isEnabled())
@@ -1451,10 +1448,10 @@ class AppFlowTest {
     @Test
     fun calendarReadDenialRemainsAuthoritativeWhenCleanupFailsAndRetryIsPending() {
         val server = NativeUiServer()
-        val cache = NativeCalendarCacheUi()
+        val cache = NativeWorkforceReplicaUi()
         val release = CompletableDeferred<Unit>()
         try {
-            withApplication(server, module { single<WorkCalendarCacheRepository> { cache } }) {
+            withApplication(server, module { single<WorkforceReplicaRepository> { cache } }) {
                 signIn()
                 waitFor("Choose a company")
                 compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
@@ -1481,7 +1478,8 @@ class AppFlowTest {
                 compose.waitUntil { cache.subscribers() == 1 }
                 compose.onNodeWithContentDescription("Back").performClick()
                 waitFor("Welcome")
-                compose.waitUntil { cache.subscribers() == 0 }
+                waitFor("Clock in")
+                compose.waitUntil { cache.subscribers() == 1 }
             }
         } finally {
             release.complete(Unit)
@@ -1491,10 +1489,10 @@ class AppFlowTest {
     @Test
     fun calendarRetainsStaleDataDuringExplicitRefresh() {
         val server = NativeUiServer()
-        val cache = NativeCalendarCacheUi()
+        val cache = NativeWorkforceReplicaUi()
         val release = CompletableDeferred<Unit>()
         try {
-            withApplication(server, module { single<WorkCalendarCacheRepository> { cache } }) {
+            withApplication(server, module { single<WorkforceReplicaRepository> { cache } }) {
                 signIn()
                 waitFor("Choose a company")
                 compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
@@ -1507,12 +1505,12 @@ class AppFlowTest {
                 compose.onNodeWithText("Night shift").assertExists()
                 refreshWhenReady()
                 compose.waitUntil { server.workforce.active.get() == 1 }
-                assertEquals(1, cache.subscribers())
+                assertEquals(2, cache.subscribers())
                 compose.onNodeWithText("Connect to refresh your schedule.").assertDoesNotExist()
                 release.complete(Unit)
                 waitFor("Night shift")
                 compose.onNodeWithText("Connect to refresh your schedule.").assertDoesNotExist()
-                compose.waitUntil { cache.subscribers() == 1 }
+                compose.waitUntil { cache.subscribers() == 2 }
             }
         } finally {
             release.complete(Unit)
@@ -1665,7 +1663,7 @@ class AppFlowTest {
             compose.onNode(hasText("Present") and hasText("1")).assertExists()
             compose.onNode(hasText("Absent") and hasText("1")).assertExists()
             compose.onNode(hasText("Needs review") and hasText("1")).assertExists()
-            compose.onNodeWithText("8 h 0 min").assertExists()
+            compose.onNode(hasText("Verified time") and hasText("8 h 0 min")).assertExists()
             compose.onNodeWithContentDescription("Next month").assertIsNotEnabled()
             capture("attendance-monthly")
             compose.onNode(hasScrollToIndexAction()).performScrollToNode(hasText("Sat, 3 Oct 2026"))
@@ -1683,11 +1681,6 @@ class AppFlowTest {
             waitFor("2024")
             compose.onNodeWithText("February").performClick()
             waitFor("February 2024")
-            compose.waitUntil(10_000) {
-                server.workforce.attendancePeriods.lastOrNull() ==
-                    (java.time.LocalDate.parse("2024-02-01") to
-                        java.time.LocalDate.parse("2024-02-29"))
-            }
             compose.waitUntil {
                 compose
                     .onAllNodes(hasContentDescription("Refresh") and isEnabled())
@@ -1706,29 +1699,20 @@ class AppFlowTest {
             compose.onNodeWithText("February 2024").assertExists()
             compose.onNode(hasText("Present") and hasText("1")).assertExists()
             capture("attendance-monthly-offline")
+            val reloads = server.workforce.syncReads.get()
+            server.workforce.offline = false
+            refreshWhenReady()
+            compose.waitUntil { server.workforce.syncReads.get() > reloads }
+            compose.onNodeWithText("February 2024").assertExists()
             compose.runOnIdle { backDispatcher.pressBack() }
             waitFor("Welcome")
+            server.workforce.offline = true
             compose
                 .onNode(hasText("Attendance") and hasClickAction())
                 .performScrollTo()
                 .performClick()
-            waitFor("February 2024")
+            waitFor("October 2026")
             compose.onNode(hasText("Present") and hasText("1")).assertExists()
-            val reloads = server.workforce.attendancePeriods.size
-            server.workforce.offline = false
-            refreshWhenReady()
-            compose.waitUntil { server.workforce.attendancePeriods.size > reloads }
-            assertEquals(
-                java.time.LocalDate.parse("2024-02-01"),
-                server.workforce.attendancePeriods.last().first,
-            )
-            compose.waitUntil(10_000) {
-                compose
-                    .onAllNodes(hasText("Present") and hasText("1"))
-                    .fetchSemanticsNodes()
-                    .isNotEmpty()
-            }
-            compose.onNodeWithText("February 2024").assertExists()
             compose.runOnIdle { backDispatcher.pressBack() }
             waitFor("Welcome")
             server.workforce.offline = false
@@ -1749,11 +1733,11 @@ class AppFlowTest {
 
     @Test
     fun attendanceHistoryKeepsStaleDataButHonorsConfirmedAccessDenial() {
-        val cache = NativeAttendanceCacheUi()
+        val cache = NativeWorkforceReplicaUi()
         val server = NativeUiServer()
         val release = CompletableDeferred<Unit>()
         try {
-            withApplication(server, module { single<AttendanceCacheRepository> { cache } }) {
+            withApplication(server, module { single<WorkforceReplicaRepository> { cache } }) {
                 signIn()
                 waitFor("Choose a company")
                 compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
@@ -1765,40 +1749,40 @@ class AppFlowTest {
                 waitFor("Present")
                 compose.waitUntil { server.workforce.attendanceActive.get() == 0 }
                 server.workforce.attendanceGate = release
-                cache.markStale(AttendanceWindow.MONTHLY)
+                cache.markStale()
                 compose.onNodeWithText("Present").assertExists()
                 refreshWhenReady()
                 compose.waitUntil { server.workforce.attendanceActive.get() == 1 }
-                assertEquals(1, cache.subscribers(AttendanceWindow.MONTHLY))
+                assertEquals(2, cache.subscribers())
                 compose
                     .onNodeWithText("Saved attendance has expired. Refresh to continue.")
                     .assertDoesNotExist()
                 compose.onNodeWithText("Present").assertExists()
-                assertEquals(1, cache.subscribers(AttendanceWindow.MONTHLY))
+                assertEquals(2, cache.subscribers())
                 server.workforce.attendanceGate = null
                 release.complete(Unit)
                 waitFor("Present")
                 compose
                     .onNodeWithText("Saved attendance has expired. Refresh to continue.")
                     .assertDoesNotExist()
-                compose.waitUntil { cache.subscribers(AttendanceWindow.MONTHLY) == 1 }
+                compose.waitUntil { cache.subscribers() == 2 }
                 server.workforce.failureCode = "mfa_required"
                 refreshWhenReady()
                 waitFor("Verify your account")
                 compose.onNodeWithText("Present").assertDoesNotExist()
-                compose.waitUntil { cache.subscribers(AttendanceWindow.MONTHLY) == 0 }
+                compose.waitUntil { cache.subscribers() == 0 }
                 server.workforce.failureCode = null
                 server.workforce.offline = true
                 refreshWhenReady()
                 waitFor("Unable to connect. Check your connection.")
                 compose.onNodeWithText("Verify your account").assertExists()
                 compose.onNodeWithText("Present").assertDoesNotExist()
-                assertEquals(0, cache.subscribers(AttendanceWindow.MONTHLY))
+                assertEquals(0, cache.subscribers())
                 server.workforce.offline = false
                 refreshWhenReady()
                 waitFor("Present")
                 compose.onNodeWithText("Verify your account").assertDoesNotExist()
-                compose.waitUntil { cache.subscribers(AttendanceWindow.MONTHLY) == 1 }
+                compose.waitUntil { cache.subscribers() == 1 }
             }
         } finally {
             release.complete(Unit)
@@ -1807,9 +1791,9 @@ class AppFlowTest {
 
     @Test
     fun homeAttendanceDoesNotReopenDeniedCacheOnFailedRetry() {
-        val cache = NativeAttendanceCacheUi()
+        val cache = NativeWorkforceReplicaUi()
         val server = NativeUiServer()
-        withApplication(server, module { single<AttendanceCacheRepository> { cache } }) {
+        withApplication(server, module { single<WorkforceReplicaRepository> { cache } }) {
             signIn()
             waitFor("Choose a company")
             compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
@@ -1819,27 +1803,26 @@ class AppFlowTest {
             server.workforce.failureCode = "mfa_required"
             refreshWhenReady()
             waitFor("Verify your account")
-            compose.waitUntil { cache.subscribers(AttendanceWindow.RECENT) == 0 }
+            compose.waitUntil { cache.subscribers() == 0 }
             server.workforce.failureCode = null
             server.workforce.offline = true
             refreshWhenReady()
             waitFor("Unable to connect. Check your connection.")
             compose.onNodeWithText("Verify your account").assertExists()
             compose.onNode(hasText("Clock in") and hasClickAction()).assertDoesNotExist()
-            assertEquals(0, cache.subscribers(AttendanceWindow.RECENT))
+            assertEquals(0, cache.subscribers())
             server.workforce.offline = false
             cache.rejectClear = false
             refreshWhenReady()
             waitFor("Clock in")
-            compose.waitUntil { cache.subscribers(AttendanceWindow.RECENT) == 1 }
+            compose.waitUntil { cache.subscribers() == 1 }
         }
     }
 
     @Test
-    fun replacingTheAttendanceMonthAndLeavingThePageCancelTheirRequests() {
+    fun changingTheLocalMonthKeepsOneSyncAndLeavingThePageCancelsIt() {
         val server = NativeUiServer()
-        val september = CompletableDeferred<Unit>()
-        val august = CompletableDeferred<Unit>()
+        val release = CompletableDeferred<Unit>()
         try {
             withApplication(server) {
                 signIn()
@@ -1852,41 +1835,27 @@ class AppFlowTest {
                     .performClick()
                 waitFor("October 2026")
                 compose.waitUntil { server.workforce.attendanceActive.get() == 0 }
+                server.workforce.attendanceGate = release
+                refreshWhenReady()
+                compose.waitUntil { server.workforce.attendanceActive.get() == 1 }
+                val requests = server.workforce.syncReads.get()
                 val cancelled = server.workforce.attendanceCancelled.get()
-                server.workforce.attendanceGate = september
                 compose.onNodeWithContentDescription("Previous month").performClick()
-                compose.waitUntil(5_000) { server.workforce.attendanceActive.get() == 1 }
-                server.workforce.attendanceGate = august
+                waitFor("September 2026")
                 compose.onNodeWithContentDescription("Previous month").performClick()
                 waitFor("August 2026")
-                compose.waitUntil(5_000) {
-                    server.workforce.attendanceCancelled.get() == cancelled + 1
-                }
-                compose.waitUntil {
-                    server.workforce.attendancePeriods.last().first ==
-                        java.time.LocalDate.parse("2026-08-01")
-                }
-                september.complete(Unit)
-                compose.onNodeWithText("September 2026").assertDoesNotExist()
+                assertEquals(requests, server.workforce.syncReads.get())
+                assertEquals(cancelled, server.workforce.attendanceCancelled.get())
                 server.workforce.attendanceGate = null
                 compose.runOnIdle { backDispatcher.pressBack() }
                 waitFor("Welcome")
-                compose.waitUntil(5_000) {
-                    server.workforce.attendanceCancelled.get() == cancelled + 2
-                }
-                august.complete(Unit)
+                compose.waitUntil { server.workforce.attendanceCancelled.get() == cancelled + 1 }
+                release.complete(Unit)
                 compose.waitUntil { server.workforce.attendanceActive.get() == 0 }
                 compose.onNodeWithText("August 2026").assertDoesNotExist()
-                compose.waitUntil(10_000) {
-                    compose
-                        .onAllNodes(hasText("Clock in") and hasClickAction())
-                        .fetchSemanticsNodes()
-                        .isNotEmpty()
-                }
             }
         } finally {
-            september.complete(Unit)
-            august.complete(Unit)
+            release.complete(Unit)
         }
     }
 
@@ -1961,12 +1930,12 @@ class AppFlowTest {
 
     @Test
     fun rootTabsRetainContentAndScrollWithoutRepeatingSuccessfulRequests() {
-        val cache = NativeAttendanceCacheUi()
+        val cache = NativeWorkforceReplicaUi()
         val server =
             NativeUiServer().apply {
                 workforce.asOf = java.time.LocalDate.now(java.time.ZoneId.of("Asia/Jakarta"))
             }
-        withApplication(server, module { single<AttendanceCacheRepository> { cache } }) {
+        withApplication(server, module { single<WorkforceReplicaRepository> { cache } }) {
             signIn()
             waitFor("Choose a company")
             compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
@@ -1976,7 +1945,7 @@ class AppFlowTest {
                     .fetchSemanticsNodes()
                     .isNotEmpty()
             }
-            val attendanceRequests = server.workforce.attendancePeriods.size
+            val attendanceRequests = server.workforce.syncReads.get()
             compose.onNode(hasText("Employees") and isSelectable()).performClick()
             waitFor("Sam Wilson")
             waitFor("Colleague 03")
@@ -1995,7 +1964,7 @@ class AppFlowTest {
                     compose.onNodeWithText("Colleague 15").fetchSemanticsNode().boundsInRoot
                 assertTrue(kotlin.math.abs(row.top - restored.top) <= 1f)
                 compose.runOnIdle {
-                    assertEquals(attendanceRequests, server.workforce.attendancePeriods.size)
+                    assertEquals(attendanceRequests, server.workforce.syncReads.get())
                     assertEquals(directoryRequests, server.directory.queries.size)
                 }
             }
@@ -2008,43 +1977,43 @@ class AppFlowTest {
             waitFor("Colleague 03")
             compose.onNode(hasText("Home") and isSelectable()).performClick()
             refreshWhenReady()
-            compose.waitUntil { server.workforce.attendancePeriods.size == attendanceRequests + 1 }
+            compose.waitUntil { server.workforce.syncReads.get() == attendanceRequests + 1 }
         }
-        compose.waitUntil { cache.subscribers(AttendanceWindow.RECENT) == 0 }
+        compose.waitUntil { cache.subscribers() == 0 }
     }
 
     @Test
     fun hiddenHomeRetainsStaleDataWithoutFetchingAndOfflineRefreshKeepsItVisible() {
-        val cache = NativeAttendanceCacheUi()
+        val cache = NativeWorkforceReplicaUi()
         val server = NativeUiServer()
-        withApplication(server, module { single<AttendanceCacheRepository> { cache } }) {
+        withApplication(server, module { single<WorkforceReplicaRepository> { cache } }) {
             signIn()
             waitFor("Choose a company")
             compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
             waitFor("Clock in")
-            compose.waitUntil { cache.hasSnapshot(AttendanceWindow.RECENT) }
+            compose.waitUntil { cache.hasSnapshot() }
             compose.onNode(hasText("Employees") and isSelectable()).performClick()
             waitFor("Sam Wilson")
-            assertEquals(1, cache.subscribers(AttendanceWindow.RECENT))
-            val requestsBeforeExpiry = server.workforce.attendancePeriods.size
+            assertEquals(1, cache.subscribers())
+            val requestsBeforeExpiry = server.workforce.syncReads.get()
             cache.markStale()
-            assertEquals(1, cache.subscribers(AttendanceWindow.RECENT))
-            assertEquals(requestsBeforeExpiry, server.workforce.attendancePeriods.size)
+            assertEquals(1, cache.subscribers())
+            assertEquals(requestsBeforeExpiry, server.workforce.syncReads.get())
             server.workforce.offline = true
             compose.onNode(hasText("Home") and isSelectable()).performClick()
             waitFor("Clock in")
-            assertEquals(requestsBeforeExpiry, server.workforce.attendancePeriods.size)
+            assertEquals(requestsBeforeExpiry, server.workforce.syncReads.get())
             refreshWhenReady()
             waitFor("Unable to connect. Check your connection.")
             compose.onNode(hasText("Clock in") and hasClickAction()).assertExists()
-            assertTrue(cache.hasSnapshot(AttendanceWindow.RECENT))
-            assertEquals(1, cache.subscribers(AttendanceWindow.RECENT))
+            assertTrue(cache.hasSnapshot())
+            assertEquals(1, cache.subscribers())
             server.workforce.offline = false
             refreshWhenReady()
             waitFor("Clock in")
-            compose.waitUntil { cache.subscribers(AttendanceWindow.RECENT) == 1 }
+            compose.waitUntil { cache.subscribers() == 1 }
         }
-        compose.waitUntil { cache.subscribers(AttendanceWindow.RECENT) == 0 }
+        compose.waitUntil { cache.subscribers() == 0 }
     }
 
     @Test
@@ -2476,6 +2445,7 @@ class AppFlowTest {
             compose.onNodeWithText("Employees").assertDoesNotExist()
             compose.onNodeWithText("My profile").assertDoesNotExist()
             capture("all-services")
+            server.workforce.attendanceGate = null
             compose.onNodeWithText("Work calendar").performClick()
             waitFor("Night shift")
             compose.runOnIdle { backDispatcher.pressBack() }
@@ -2559,8 +2529,8 @@ class AppFlowTest {
             NativeUiServer().apply {
                 workforce.asOf = java.time.LocalDate.now(java.time.ZoneId.of("Asia/Jakarta"))
             }
-        val cache = NativeAttendanceCacheUi()
-        withApplication(server, module { single<AttendanceCacheRepository> { cache } }) {
+        val cache = NativeWorkforceReplicaUi()
+        withApplication(server, module { single<WorkforceReplicaRepository> { cache } }) {
             signIn()
             waitFor("Choose a company")
             compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
@@ -2575,7 +2545,7 @@ class AppFlowTest {
             refreshWhenReady()
             compose.waitUntil(5_000) { server.workforce.attendanceActive.get() == 1 }
             cache.markStale()
-            assertEquals(1, cache.subscribers(AttendanceWindow.RECENT))
+            assertEquals(1, cache.subscribers())
             compose.onNode(hasText("Clock in") and hasClickAction()).assertExists()
             compose
                 .onNodeWithText("Saved attendance has expired. Refresh to continue.")
@@ -2692,7 +2662,7 @@ class AppFlowTest {
             compose.onNodeWithText("Work calendar").performScrollTo().performClick()
             waitFor("Night shift")
             server.workforce.holdCalendar = true
-            compose.onNodeWithContentDescription("Next week").performClick()
+            refreshWhenReady()
             compose.waitUntil(5_000) { server.workforce.active.get() == 1 }
             server.workforce.holdCalendar = false
             compose.runOnIdle { backDispatcher.pressBack() }
@@ -3411,6 +3381,43 @@ class AppFlowTest {
                 fileOutputs = fileOutputs,
                 http = applicationNetworkModule(AppEnvironment.Dev, server::engine),
             )
+        container.koin.loadModules(
+            listOf(
+                module {
+                    factory {
+                        dev.fajar.starter.workforce.domain.usecases.ObserveWorkCalendar(
+                            get(),
+                            get(),
+                            get(),
+                            get(),
+                            object : kotlin.time.Clock {
+                                override fun now() =
+                                    kotlin.time.Instant.parse(
+                                        server.workforce.asOf.toString() + "T01:00:00Z"
+                                    )
+                            },
+                            get(),
+                        )
+                    }
+                    factory {
+                        dev.fajar.starter.workforce.domain.attendance.usecases.ObserveAttendance(
+                            get(),
+                            get(),
+                            get(),
+                            get(),
+                            get(),
+                            object : kotlin.time.Clock {
+                                override fun now() =
+                                    kotlin.time.Instant.parse(
+                                        server.workforce.asOf.toString() + "T01:00:00Z"
+                                    )
+                            },
+                            get(),
+                        )
+                    }
+                }
+            )
+        )
         if (overrides != null) container.koin.loadModules(listOf(overrides))
         val visible = mutableStateOf(true)
         try {

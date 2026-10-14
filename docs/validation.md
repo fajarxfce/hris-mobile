@@ -1,5 +1,30 @@
 # Validation
 
+## Attendance and calendar replica
+
+Root checks passed with 1,295 desktop/UI tests and Android dev assembly. Workforce
+passed 123 domain and 63 data desktop tests, plus 123 domain and 40 data Chromium
+tests. Coverage includes four-collection acquisition, staged replacement, versioned
+tombstones, bounded indexed historical reads, effective schedule precedence,
+overnight shifts, daylight-saving transitions and account/session replacement.
+Failed hydration cannot advance a cursor, and cancelled or superseded work cannot
+publish into a replacement workspace.
+
+Shared read-admission tests cover failed persistence/cleanup, encrypted restriction
+restoration, a newer denial during pending admission, and denial while capture waits
+for GPS. Confirmed command reconciliation requires its exact server entry and version.
+The assembled tests verify local month/week navigation, one acquisition during filter
+changes, retained Home state, cross-page denial, successful retry and disposal.
+
+Real SQLite/AES startup tests reopen both the replica and the pre-upgrade attendance
+snapshot offline with three-day-old data and workspace metadata. Home becomes usable
+before any successful network response; a pending renewal preserves its company and
+content. Browser verification covers the IndexedDB implementation, not persistence
+of memory-only browser credentials after page closure.
+
+This section records automated checks and build validation. Android emulator and
+phone delivery for this increment are recorded separately after acceptance.
+
 ## Local read lifetime and cursor recovery
 
 Root checks passed with 1,187 desktop/JVM tests and Android dev assembly. The

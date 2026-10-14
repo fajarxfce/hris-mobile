@@ -74,13 +74,13 @@ record is not automatically an absence, and an ongoing overnight shift is not
 incomplete merely because the company date has changed.
 
 `AttendanceHistoryViewModel` coordinates only history observation and refresh.
-Changing a month cancels its previous acquisition and clears mismatched data;
-leaving the route cancels both acquisition and observation. Day details are
-read-only. Employment selection remains available when an account has multiple
-employments. The selected monthly snapshot remains readable offline regardless of
-age; selecting an uncached month requires a successful acquisition.
-If a new route falls back to that saved month while offline, subsequent refresh
-keeps the displayed month and employment instead of jumping to the current month.
+Changing a month or employment switches the local query without starting another
+HTTP request or cancelling shared synchronization. Leaving the route cancels its
+acquisition and observation. Day details are read-only. Every acquired attendance
+day remains available independently of the last selected month. A new route opens
+the current company month; the company timezone and local clock determine that date.
+An empty day is unrecorded, not proof of absence. Before the first complete replica,
+only the exact previously acquired legacy snapshot is available offline.
 
 Capture stays on Home. Pending attendance opens a controlled dialog with explicit
 retry and rejected-command dismissal. Employment selection has its own dialog.
@@ -92,83 +92,100 @@ still requires a new explicit capture action.
 
 Employees open a seven-day work calendar from Home. It shows shift times, breaks,
 work mode, the applicable timezone, roster overrides, holidays and unassigned days.
-Overnight shifts retain their starting work date. Previous/next-week navigation is
-bounded to one year either side of the server's company date.
+Overnight shifts retain their starting work date. Previous/next-week navigation
+queries local records without the previous one-year navigation restriction. Each
+query covers seven days; this does not discard other weeks.
 
 The account's employment directory is paged at 20 entries. Only employments owned
 by that account are selectable. A company without a linked employment shows an
 empty state. Workforce requires its own enabled module and `attendance.self.record`
 or `workforce.read`; disabling People does not disable the calendar.
 
-## Snapshot acquisition and ownership
+## Incremental acquisition and ownership
 
-`RefreshWorkCalendar` coordinates session, workspace, company policy, remote
-calendar and cache repository contracts. It checks current ownership after pending
-reads and before publication. One application-owned mutex serializes acquisition;
-an acquisition has a 30-second timeout and no implicit retry.
+`SyncWorkforce` coordinates current session, selected company, client policy,
+self-service employment directory, change feed, canonical records and replica
+repository contracts. One application-owned execution mutex covers UI and worker
+triggers. A run is limited to 30 seconds including its lock wait, ten feed pages,
+32 references per page and four concurrent canonical requests. A later invocation
+resumes the checkpoint. These work limits do not expire or evict acquired history.
 
-Acquisition reads current company client policy, the self-service employment
-directory and one seven-day calendar. Directory/calendar responses have separate
-byte limits. Their mappers validate scope, unique IDs, dates, contiguous days,
-shift revisions and elapsed time before producing domain values.
+The feed explicitly selects four account-owned projections:
 
-`RefreshAttendance` supports the recent seven-day capture window and a separate
-monthly history window of at most 31 days. A monthly selection starts on the first
-day, cannot select a future month, and uses the server's company date. Its cache
-also retains the selected directory cursor, so a late snapshot from another page
-cannot replace the requested employment page. Both snapshot workflows recheck
-authority after pending I/O and before publication.
+| Collection | Stored fact |
+| --- | --- |
+| `ATTENDANCE_DAYS` | Stable employee/day ID, captured evidence, review and latest correction |
+| `WORK_SCHEDULES` | Latest immutable weekly assignment per employee/effective date |
+| `ROSTER_DAYS` | Stable employee/day override; a null shift explicitly means off |
+| `WORK_HOLIDAYS` | Company date, name and active status for an account with owned employment |
+
+The directory is acquired in pages of 20, with a 200-employment scope bound.
+Canonical responses have independent byte limits. Mapping validates IDs, scope,
+versions, dates and shift values. An invalid response, failed hydration or cancelled
+run cannot advance its cursor. Newer canonical versions are accepted; older updates
+cannot overwrite them. Collection and ID identify a record, including tombstones.
+
+Documents, directory and checkpoint commit in one storage transaction. Initial and
+replacement bootstraps stage their records until complete. Cursor retention expiry
+stages a successor while the prior published generation stays readable. A new login
+for the same account starts its own cursor and retains owned facts. A different
+account/company never receives those facts as a fallback. Confirmed projection
+scope loss requires removing the old projection before rebuilding it.
+
+## Local queries
+
+`ObserveAttendance` and `ObserveWorkCalendar` read storage only. They match directory
+and queried facts by generation and revision, so a racing commit cannot combine
+old employment metadata with newer data. Employment choice, monthly history and
+weekly navigation do not invoke acquisition.
+
+Four indexed queries read attendance, schedule, roster and holiday records for one
+owned employment. A monthly query reads at most 132 documents, including the most
+recent schedule baseline preceding its date range. HMAC tags bind the collection,
+account, company and employment. Authenticated encryption covers scope, identity,
+version, ordering and tags. The indexes reveal structural ordering/equality, not
+unencrypted attendance contents. Missing keys never silently replace keys protecting
+retained records.
+
+Pure domain policy resolves roster overrides first, then active holidays, then the
+latest effective weekly assignment. An explicit roster day off remains an override;
+an inactive holiday does not block work. Unassigned dates remain unassigned.
+Overnight shifts, timezone offsets, daylight-saving gaps and overlaps are handled
+without SDK types in domain. A locally resolved calendar does not invent the server's
+global schedule revision; server-reviewed command input retains its own contract.
 
 `summarizeAttendanceHistory` keeps confirmed absence, missing records, days off,
-unassigned schedules and review status distinct. Future dates do not enter the
-metrics. Queued device commands can appear as pending synchronization, but do not
-add accepted hours or presence. An unfinished shift is not marked incomplete
-before it ends. These classifications belong to domain policy.
+unassigned schedules and review status distinct. Future dates do not enter current
+month metrics. Pending commands never add accepted hours. A confirmed command is
+retired only when its exact server entry and receipt version appear in local facts,
+including an older day outside the current Home window.
 
-The route owns its MVI ViewModel and observation lifetime. Navigation cancels an
-obsolete acquisition; stopping the route releases collectors and clears displayed
-private content. A late snapshot cannot replace a newer selection. Expiry or authoritative denial
-also stops cached observation until a successful refresh; late cache reads cannot
-restore private content after that failure. Repositories
-perform no navigation, permission requests, scheduling or UI-state management.
+## Offline access and admission
 
-## Offline access
+Audience, account and company own the encrypted replica independently of the login
+session. Every storage operation still checks the active session, rejecting late
+writers after account replacement. Before the first complete replica is published,
+observers can read a matching pre-upgrade calendar/recent/monthly snapshot. A complete
+replica's empty result never falls back to an unrelated legacy view.
 
-Each company retains separate encrypted calendar, recent attendance and monthly
-history snapshots. Browsing a month cannot replace capture evidence. A new
-successful acquisition replaces that workflow's snapshot atomically; this is not
-a full schedule or attendance replica.
-Its content key is separate from inbox encryption. Authentication data binds the
-encrypted document to the audience, account, session, company and generation.
-Publication uses the database's account ownership and compare-and-set revision.
+`refreshAfter` marks freshness only. It does not hide local records, clear them on a
+timer or force a loading screen. Local startup and navigation do not wait for HTTP.
+Ordinary age, expired credentials and cursor retention are distinct from confirmed
+access loss. Capture preparation, server windows and reviewed transactions retain
+separate operation-specific checks; refreshing metadata cannot renew old evidence.
 
-Attendance cache format v2 stores encrypted metadata and one record per day in a
-single atomic snapshot. Dates and attendance values are not used as database
-ordering keys. This accommodates dense monthly responses without exceeding a
-record's encryption limit. The data codec performs encryption/DTO encoding only;
-the repository acquires storage/key values and maps DTOs to domain inside the
-storage failure boundary. Existing v1 recent snapshots remain readable. Associated
-data distinguishes recent and monthly partitions, so ciphertext cannot be moved
-between them. Attendance HTTP responses are bounded to 2 MiB.
+Home, history and calendar share an encrypted read-admission record. An authoritative
+MFA, company or projection denial closes every affected local projection. Repositories
+persist the supplied restriction; use cases decide when to restrict or reopen reads.
+A process-owned write buffer preserves the denial while storage is pending or fails.
+Only a complete, admitted acquisition that started after the latest denial can clear
+it. Pending/failed retries and late older completions cannot reopen the data. Durable
+restrictions survive process restoration and reauthentication; failed durable writes
+can only retain their restriction for the current process.
 
-`refreshAfter` records when a saved snapshot becomes stale; it does not hide it.
-Recent authorization and reviewed capture evidence retain separate deadlines.
-Renewing authorization cannot make old attendance facts fresh. Local observation
-has no expiry timer. Transport failure retains saved data; confirmed access loss
-hides it and attempts an atomic cache removal. A cleanup failure cannot replace
-the original access failure. Missing content keys do not silently regenerate keys
-for existing ciphertext.
-
-Home attendance, monthly history and the work calendar stop their cache
-subscriptions after an authoritative read failure. They retain that gate through
-pending and failed retries, even if local cleanup fails. Only fresh admitted
-publication reopens observation. Calendar entry pairs acquisition and observation
-with both lifecycle stop and disposal. Successful publication can reopen an
-observer that ended on a storage failure; ordinary age never closes it.
-
-Android/iOS support encrypted process restoration through their secure key stores.
-The desktop host uses its configured credential storage. Browser keys remain in
-memory, so Web does not claim offline process restoration after closing the page.
+Android/iOS restore encrypted records through their secure key stores. The desktop
+host uses its configured credential storage. Browser keys remain in memory, so Web
+does not claim offline process restoration after closing the page.
 
 ## Platform dates and validation
 
@@ -202,7 +219,7 @@ The validated dev APK was installed on the authorized Android phone using
 `--install-only` on 2026-10-11. Installation and package metadata were verified;
 phone UI acceptance was not performed during that delivery.
 
-Overtime requests, a long-term attendance replica, mobile review/correction,
-biometric or hardware-backed location attestation and background GPS tracking
-are outside this employee attendance increment. Desktop and Web explicitly report
+Mobile review/correction, biometric or hardware-backed location attestation and
+background GPS tracking remain outside this employee attendance increment. Overtime
+has its own [replica and workflows](overtime.md). Desktop and Web explicitly report
 location as unavailable; users can choose capture without location for review.

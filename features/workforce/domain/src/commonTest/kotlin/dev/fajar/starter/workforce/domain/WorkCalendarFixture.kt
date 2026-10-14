@@ -6,6 +6,7 @@ import dev.fajar.starter.identity.domain.entities.*
 import dev.fajar.starter.identity.domain.repositories.SessionRepository
 import dev.fajar.starter.workforce.domain.entities.*
 import dev.fajar.starter.workforce.domain.policies.*
+import dev.fajar.starter.workforce.domain.replica.WorkforceReplicaFixture
 import dev.fajar.starter.workforce.domain.repositories.*
 import dev.fajar.starter.workforce.domain.usecases.*
 import dev.fajar.starter.workspace.domain.entities.*
@@ -205,9 +206,34 @@ class WorkCalendarFixture(instant: () -> Instant = { Instant.parse("2026-10-12T0
                 return AppResult.Success(true)
             }
         }
-    val refresh = RefreshWorkCalendar(remote, cache, sessions, workspaces, clock, build)
-    val observe = ObserveWorkCalendar(cache, sessions, workspaces, clock, build)
+    val replicas = WorkforceReplicaFixture()
+    val observe = ObserveWorkCalendar(replicas, cache, sessions, workspaces, clock, build)
 
-    suspend fun load(selection: WorkCalendarSelection = WorkCalendarSelection()) =
-        refresh(workspace.id, selection)
+    /** Seed the preceding application format to exercise its read-only upgrade path. */
+    suspend fun load(selection: WorkCalendarSelection = WorkCalendarSelection()) {
+        val access =
+            (admitWorkforce(
+                    workspace.id,
+                    (workspaceState.value as AppResult.Success).value,
+                    session,
+                    build,
+                    clock.now(),
+                )
+                    as AppResult.Success)
+                .value
+        val period = (calendarPeriod(directory.asOf, selection.from) as AppResult.Success).value
+        records.value =
+            AppResult.Success(
+                WorkCalendarSnapshot(
+                    access,
+                    "legacy",
+                    directory,
+                    selection.copy(employeeId = employee.id, from = period.from),
+                    period,
+                    (calendarCall(period) as AppResult.Success).value,
+                    clock.now(),
+                    clock.now() + 1.hours,
+                )
+            )
+    }
 }

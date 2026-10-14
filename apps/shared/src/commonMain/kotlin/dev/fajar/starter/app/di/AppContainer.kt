@@ -8,13 +8,7 @@ import dev.fajar.starter.common.config.AppEnvironment
 import dev.fajar.starter.common.config.AppPlatform
 import dev.fajar.starter.common.config.BuildEnvironment
 import dev.fajar.starter.common.config.BuildRuntime
-import dev.fajar.starter.database.AccountCacheStore
 import dev.fajar.starter.database.AppDatabase
-import dev.fajar.starter.database.BlobStore
-import dev.fajar.starter.database.CommandStore
-import dev.fajar.starter.database.InboxStore
-import dev.fajar.starter.database.ReplicaStore
-import dev.fajar.starter.database.TransferStore
 import dev.fajar.starter.datastore.UserPreferencesStore
 import dev.fajar.starter.documents.data.di.DocumentsDataModule
 import dev.fajar.starter.documents.presentation.di.DocumentsPresentationModule
@@ -85,6 +79,7 @@ fun createAppContainer(
     leaveCredentials: CredentialStore = MemoryCredentialStore(),
     leaveReplicaCredentials: CredentialStore = MemoryCredentialStore(),
     overtimeReplicaCredentials: CredentialStore = MemoryCredentialStore(),
+    workforceReplicaCredentials: CredentialStore = MemoryCredentialStore(),
     commandCredentials: AtomicCredentialStore = MemoryCredentialStore(),
     fileCredentials: AtomicCredentialStore = MemoryCredentialStore(),
     workspaceCredentials: AtomicCredentialStore = MemoryCredentialStore(),
@@ -101,6 +96,7 @@ fun createAppContainer(
     modules(
         notificationPlatform,
         http ?: applicationNetworkModule(environment),
+        applicationStorageModule(database, preferences),
         TransferDataModule().module,
         SecurityPresentationModule().module,
         AvailabilityDataModule().module,
@@ -125,7 +121,6 @@ fun createAppContainer(
             }
 
             single<TransferInputSource> { transferInputs }
-            single<TransferStore> { get<AppDatabase>().transfers }
             single { SsoConfiguration(emptyList(), platform) }
             single<BrowserAuthorizationSource> { browserAuthorization }
 
@@ -144,7 +139,6 @@ fun createAppContainer(
                         ?: ForegroundWorkScheduler(getAll<SyncTask>().map { it.key }.toSet())
                 }
                 .onClose { (it as? ForegroundWorkScheduler)?.close() }
-            single<AppDatabase>(createdAtStart = true) { database }.onClose { it?.close() }
             single<CredentialStore> { credentials }.onClose { it?.close() }
             single<CredentialStore>(named("inbox-content-key")) { inboxCredentials }
                 .onClose { it?.close() }
@@ -153,6 +147,10 @@ fun createAppContainer(
             single<CredentialStore>(named("leave-content-key")) { leaveCredentials }
                 .onClose { it?.close() }
             single<CredentialStore>(named("leave-replica-content-key")) { leaveReplicaCredentials }
+                .onClose { it?.close() }
+            single<CredentialStore>(named("workforce-replica-content-key")) {
+                    workforceReplicaCredentials
+                }
                 .onClose { it?.close() }
             single<CredentialStore>(named("overtime-replica-content-key")) {
                     overtimeReplicaCredentials
@@ -164,13 +162,6 @@ fun createAppContainer(
                 .onClose { it?.close() }
             single<AtomicCredentialStore>(named("workspace-content-key")) { workspaceCredentials }
                 .onClose { it?.close() }
-            single<CommandStore> { get<AppDatabase>().commands }
-            single<BlobStore> { get<AppDatabase>().blobs }
-            single<ContentCipher> { AesGcmContentCipher() }
-            single<ReplicaStore> { get<AppDatabase>().replicas }
-            single<AccountCacheStore> { get<AppDatabase>().accounts }
-            single<InboxStore> { get<AppDatabase>().inbox }
-            single<UserPreferencesStore> { preferences }.onClose { it?.close() }
         },
         IdentityModule().module,
         WorkspaceDataModule().module,

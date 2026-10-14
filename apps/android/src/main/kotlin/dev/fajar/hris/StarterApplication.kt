@@ -43,6 +43,8 @@ class StarterApplication : Application(), Configuration.Provider {
             calendarCredentials = AndroidCredentialStore(this, "calendar-content-key"),
             leaveCredentials = AndroidCredentialStore(this, "leave-content-key"),
             leaveReplicaCredentials = AndroidCredentialStore(this, "leave-replica-content-key"),
+            workforceReplicaCredentials =
+                AndroidCredentialStore(this, "workforce-replica-content-key"),
             overtimeReplicaCredentials =
                 AndroidCredentialStore(this, "overtime-replica-content-key"),
             commandCredentials = AndroidCredentialStore(this, "command-content-key"),

@@ -114,9 +114,15 @@ See [native identity](native-identity.md) for the active HRIS integration and
 [inbox](inbox.md) for the first encrypted HRIS feed integration and
 [sync](sync.md) for the inherited worker and command contracts.
 
-The [work calendar and attendance](workforce.md) follow the same ownership
-boundaries with bounded encrypted snapshots. Acquisition and admission belong to
-use cases; repositories map transport/storage data and atomically replace snapshots.
+The [work calendar and attendance](workforce.md) share account-owned encrypted
+attendance days, effective schedule assignments, roster overrides and holidays.
+`SyncWorkforce` owns change-feed acquisition and live admission. Its repository
+commits records, directory metadata and cursor together; observation use cases
+query local dates and resolve schedule precedence through pure domain policy.
+An encrypted read-admission record carries confirmed denials across pages and
+process restoration. A process-owned write buffer keeps that denial observable
+when persistence fails. Only an admitted acquisition started after the latest
+denial may clear it; ordinary age and cursor expiry never set it.
 Attendance capture coordinates the generic [location repository](location.md),
 current workspace and durable command storage. Permission requests, evidence
 freshness and offline admission remain attendance policy. The location datasource

@@ -8,6 +8,7 @@ import dev.fajar.starter.presentation.mvi.MviViewModel
 import dev.fajar.starter.workforce.domain.attendance.entities.*
 import dev.fajar.starter.workforce.domain.attendance.usecases.*
 import dev.fajar.starter.workforce.domain.policies.calendarFailureInvalidatesCache
+import dev.fajar.starter.workforce.domain.replica.usecases.SyncWorkforce
 import dev.fajar.starter.workspace.domain.policies.workspaceAccessLossCodes
 import kotlin.time.Clock
 import kotlinx.coroutines.*
@@ -19,7 +20,7 @@ import org.koin.core.annotation.InjectedParam
 class AttendanceViewModel(
     @InjectedParam private val workspaceId: String,
     private val observe: ObserveAttendance,
-    private val refresh: RefreshAttendance,
+    private val refresh: SyncWorkforce,
     private val capture: CaptureAttendance,
     private val replay: ReplayAttendance,
     private val dismiss: DismissAttendanceRejection,
@@ -67,7 +68,7 @@ class AttendanceViewModel(
                     .distinctUntilChanged()
                     .flatMapLatest { (requested, restricted) ->
                         if (restricted) emptyFlow()
-                        else observe(workspaceId).map { requested to it }
+                        else observe(workspaceId, requested).map { requested to it }
                     }
                     .collect { (requested, result) ->
                         ensureActive()
@@ -134,7 +135,6 @@ class AttendanceViewModel(
     private fun onRefreshRequested(event: AttendanceEvent.RefreshRequested) {
         if (!visible || acquisition?.isActive == true || state.value.working) return
         refreshRequired = true
-        val selection = state.value.selection
         updateState {
             it.copy(
                 refreshing = true,
@@ -147,19 +147,24 @@ class AttendanceViewModel(
         }
         acquisition =
             viewModelScope.launch {
-                val result = refresh(workspaceId, selection)
+                val result = refresh(workspaceId)
                 ensureActive()
                 when (result) {
                     is AppResult.Failed -> reportFailure(result.failure)
-                    is AppResult.Success -> {
-                        refreshRequired = false
-                        observation?.cancel()
-                        observation = null
-                        updateState {
-                            it.copy(failure = null, readFailure = null, needsVerification = false)
+                    is AppResult.Success ->
+                        if (result.value.caughtUp) {
+                            refreshRequired = false
+                            observation?.cancel()
+                            observation = null
+                            updateState {
+                                it.copy(
+                                    failure = null,
+                                    readFailure = null,
+                                    needsVerification = false,
+                                )
+                            }
+                            observeContent()
                         }
-                        observeContent()
-                    }
                 }
                 updateState {
                     it.copy(refreshing = false, loading = it.content == null && it.failure == null)
@@ -261,8 +266,6 @@ class AttendanceViewModel(
                 state.value.content?.snapshot?.directory?.items?.none { it.id == event.id } != false
         )
             return
-        acquisition?.cancel()
-        acquisition = null
         updateState {
             it.copy(
                 selection = it.selection.copy(employeeId = event.id),
@@ -270,7 +273,6 @@ class AttendanceViewModel(
                 dialog = null,
             )
         }
-        onEvent(AttendanceEvent.RefreshRequested)
     }
 
     private fun onEmploymentPageRequested(event: AttendanceEvent.EmploymentPageRequested) {
@@ -281,12 +283,9 @@ class AttendanceViewModel(
                     event.after != state.value.content?.snapshot?.directory?.nextCursor)
         )
             return
-        acquisition?.cancel()
-        acquisition = null
         updateState {
             it.copy(selection = AttendanceSelection(after = event.after), content = null)
         }
-        onEvent(AttendanceEvent.RefreshRequested)
     }
 
     private fun onSettingsRequested(event: AttendanceEvent.SettingsRequested) {

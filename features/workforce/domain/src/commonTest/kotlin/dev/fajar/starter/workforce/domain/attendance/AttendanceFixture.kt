@@ -225,21 +225,20 @@ class AttendanceFixture {
                 return sendCall(command)
             }
         }
-    val refresh =
-        RefreshAttendance(
-            base.remote,
-            remote,
+    val observe =
+        ObserveAttendance(
+            base.replicas,
             cache,
+            commands,
             base.sessions,
             base.workspaces,
             base.clock,
             base.build,
         )
-    val observe =
-        ObserveAttendance(cache, commands, base.sessions, base.workspaces, base.clock, base.build)
     val capture =
         CaptureAttendance(
             remote,
+            base.replicas,
             cache,
             commands,
             location,
@@ -252,6 +251,7 @@ class AttendanceFixture {
         ReplayAttendance(
             commands,
             remote,
+            base.replicas,
             cache,
             base.sessions,
             base.workspaces,

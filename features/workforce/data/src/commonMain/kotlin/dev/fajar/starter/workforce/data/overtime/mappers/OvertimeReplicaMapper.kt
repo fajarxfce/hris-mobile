@@ -87,20 +87,6 @@ fun OvertimeCheckpointDto.toCheckpoint(
     )
 }
 
-fun WorkforceDirectoryDto.toOvertimeReplicaDirectory(access: WorkforceAccess): WorkforceDirectory {
-    require(employments.items.size <= 200 && employments.nextCursor == null)
-    val batches = employments.items.chunked(20).ifEmpty { listOf(emptyList()) }
-    val directory =
-        copy(employments = WorkforcePageDto(batches.first(), null)).toDirectory(access, null)
-    val rows =
-        batches.flatMap {
-            copy(employments = WorkforcePageDto(it, null)).toDirectory(access, null).items
-        }
-    require(rows.distinctBy { it.id }.size == rows.size)
-    require(rows.zipWithNext().all { (first, next) -> first.employeeNumber < next.employeeNumber })
-    return directory.copy(items = rows.toList())
-}
-
 fun OvertimeHistoryPage.toDto() =
     OvertimeHistoryPageDto(
         requestId,

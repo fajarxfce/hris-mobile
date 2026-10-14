@@ -21,8 +21,9 @@ Stale data remains readable; live credentials and command preparation are checke
 separately. See the [local-first model and remaining work](docs/local-first.md).
 Company policies gate maintenance,
 minimum builds and disabled modules, and pause inbox delivery before transport.
-The weekly work calendar shows assigned shifts, roster overrides and days off,
-with a bounded encrypted snapshot for offline access. Attendance supports clock-in,
+The work calendar and attendance history query account-owned encrypted records,
+updated through the change feed. Acquired months and weekly schedule rules remain
+available offline across process restarts and reauthentication. Attendance supports clock-in,
 clock-out, foreground location evidence, encrypted offline commands and idempotent
 delivery. Attendance opens monthly metrics and daily history with a date filter;
 clock-in/out and pending-command recovery stay on Home. Pending review stays

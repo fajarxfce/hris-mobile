@@ -17,10 +17,11 @@ import dev.fajar.starter.app.StarterApp
 import dev.fajar.starter.app.di.*
 import dev.fajar.starter.common.config.*
 import dev.fajar.starter.common.result.*
-import dev.fajar.starter.database.createAppDatabase
+import dev.fajar.starter.database.*
 import dev.fajar.starter.datastore.createUserPreferences
 import dev.fajar.starter.fixtures.NativeUiServer
 import dev.fajar.starter.identity.domain.entities.Session
+import dev.fajar.starter.identity.domain.policies.accountStorageKey
 import dev.fajar.starter.identity.domain.repositories.SessionRepository
 import dev.fajar.starter.identity.domain.usecases.SignIn
 import dev.fajar.starter.notifications.data.datasources.*
@@ -30,7 +31,9 @@ import dev.fajar.starter.securestorage.MemoryCredentialStore
 import dev.fajar.starter.workforce.domain.attendance.entities.*
 import dev.fajar.starter.workforce.domain.attendance.repositories.AttendanceCacheRepository
 import dev.fajar.starter.workforce.domain.attendance.usecases.ObserveAttendance
-import dev.fajar.starter.workforce.domain.attendance.usecases.RefreshAttendance
+import dev.fajar.starter.workforce.domain.replica.entities.*
+import dev.fajar.starter.workforce.domain.replica.repositories.WorkforceReplicaRepository
+import dev.fajar.starter.workforce.domain.replica.usecases.SyncWorkforce
 import dev.fajar.starter.workspace.domain.entities.Workspace
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
 import dev.fajar.starter.workspace.domain.usecases.SelectWorkspace
@@ -51,110 +54,118 @@ import org.koin.dsl.module
 class WorkspaceOfflineStartupTest {
     @Test
     fun reopeningThreeDayOldEncryptedDataOfflineShowsHomeBeforeAnyNetworkResponse() =
-        runComposeUiTest {
-            val directory = Files.createTempDirectory("workspace-startup").toFile()
-            val credentials = MemoryCredentialStore()
-            val keys = MemoryCredentialStore()
-            val calendarKeys = MemoryCredentialStore()
-            var savedAttendance: AttendanceSnapshot? = null
-            val offline = AtomicBoolean(false)
-            val offlineCalls = AtomicInteger()
-            val pauseAccount = AtomicBoolean(false)
-            val pendingAccount = CompletableDeferred<Unit>()
-            val release = CompletableDeferred<Unit>()
-            val server =
-                NativeUiServer(
-                    beforeRequest = { request ->
-                        if (offline.get()) {
-                            offlineCalls.incrementAndGet()
-                            throw IOException("Fixture network is unavailable")
-                        }
-                        if (
-                            request.url.encodedPath == "/api/v1/me" &&
-                                pauseAccount.compareAndSet(true, false)
-                        ) {
-                            pendingAccount.complete(Unit)
-                            release.await()
+        checkOfflineStartup(legacy = false)
+
+    @Test
+    fun anEncryptedPreUpgradeAttendanceSnapshotReopensBeforeTheFirstReplicaAcquisition() =
+        checkOfflineStartup(legacy = true)
+
+    private fun checkOfflineStartup(legacy: Boolean) = runComposeUiTest {
+        val directory = Files.createTempDirectory("workspace-startup").toFile()
+        val credentials = MemoryCredentialStore()
+        val keys = MemoryCredentialStore()
+        val calendarKeys = MemoryCredentialStore()
+        val replicaKeys = MemoryCredentialStore()
+        var savedAttendance: AttendanceSnapshot? = null
+        val offline = AtomicBoolean(false)
+        val offlineCalls = AtomicInteger()
+        val pauseAccount = AtomicBoolean(false)
+        val pendingAccount = CompletableDeferred<Unit>()
+        val release = CompletableDeferred<Unit>()
+        val server =
+            NativeUiServer(
+                beforeRequest = { request ->
+                    if (offline.get()) {
+                        offlineCalls.incrementAndGet()
+                        throw IOException("Fixture network is unavailable")
+                    }
+                    if (
+                        request.url.encodedPath == "/api/v1/me" &&
+                            pauseAccount.compareAndSet(true, false)
+                    ) {
+                        pendingAccount.complete(Unit)
+                        release.await()
+                    }
+                }
+            )
+        fun createContainer() =
+            createAppContainer(
+                createUserPreferences(directory),
+                createAppDatabase(directory),
+                module {
+                    single<NotificationPermissionSource> {
+                        object : NotificationPermissionSource {
+                            override suspend fun check() = NotificationPermission.Granted
+
+                            override suspend fun request() = NotificationPermission.Granted
                         }
                     }
+                    single<NotificationDisplaySource> {
+                        object : NotificationDisplaySource {
+                            override suspend fun show(payload: NotificationPayload) = Unit
+                        }
+                    }
+                    single<PushTokenSource> { UnavailablePushTokenSource() }
+                },
+                environment = AppEnvironment.Dev,
+                platform = AppPlatform.Android,
+                credentials = credentials,
+                workspaceCredentials = keys,
+                calendarCredentials = calendarKeys,
+                workforceReplicaCredentials = replicaKeys,
+                http = applicationNetworkModule(AppEnvironment.Dev, server::engine),
+            )
+        var container = createContainer()
+        val owner =
+            object : LifecycleOwner {
+                override val lifecycle =
+                    LifecycleRegistry.createUnsafe(this).apply {
+                        currentState = Lifecycle.State.RESUMED
+                    }
+            }
+        val visible = mutableStateOf(true)
+        try {
+            val selected = runBlocking {
+                assertIs<AppResult.Success<*>>(
+                    container.koin.get<SignIn>()(
+                        "alex@example.com",
+                        "Fictional-password-123!",
+                        UUID.randomUUID().toString(),
+                    )
                 )
-            fun createContainer() =
-                createAppContainer(
-                    createUserPreferences(directory),
-                    createAppDatabase(directory),
-                    module {
-                        single<NotificationPermissionSource> {
-                            object : NotificationPermissionSource {
-                                override suspend fun check() = NotificationPermission.Granted
-
-                                override suspend fun request() = NotificationPermission.Granted
-                            }
-                        }
-                        single<NotificationDisplaySource> {
-                            object : NotificationDisplaySource {
-                                override suspend fun show(payload: NotificationPayload) = Unit
-                            }
-                        }
-                        single<PushTokenSource> { UnavailablePushTokenSource() }
-                    },
-                    environment = AppEnvironment.Dev,
-                    platform = AppPlatform.Android,
-                    credentials = credentials,
-                    workspaceCredentials = keys,
-                    calendarCredentials = calendarKeys,
-                    http = applicationNetworkModule(AppEnvironment.Dev, server::engine),
+                assertIs<AppResult.Success<*>>(
+                    container.koin.get<OnboardingRepository>().complete()
                 )
-            var container = createContainer()
-            val owner =
-                object : LifecycleOwner {
-                    override val lifecycle =
-                        LifecycleRegistry.createUnsafe(this).apply {
-                            currentState = Lifecycle.State.RESUMED
-                        }
-                }
-            val visible = mutableStateOf(true)
-            try {
-                val selected = runBlocking {
-                    assertIs<AppResult.Success<*>>(
-                        container.koin.get<SignIn>()(
-                            "alex@example.com",
-                            "Fictional-password-123!",
-                            UUID.randomUUID().toString(),
+                val session =
+                    assertIs<AppResult.Success<Session?>>(
+                            container.koin.get<SessionRepository>().current()
                         )
-                    )
-                    assertIs<AppResult.Success<*>>(
-                        container.koin.get<OnboardingRepository>().complete()
-                    )
-                    val session =
-                        assertIs<AppResult.Success<Session?>>(
-                                container.koin.get<SessionRepository>().current()
+                        .value!!
+                val workspace =
+                    assertIs<AppResult.Success<Workspace>>(
+                            container.koin.get<SelectWorkspace>()(
+                                session.id,
+                                NativeUiServer.COMPANY_ONE,
                             )
-                            .value!!
-                    val workspace =
-                        assertIs<AppResult.Success<Workspace>>(
-                                container.koin.get<SelectWorkspace>()(
-                                    session.id,
-                                    NativeUiServer.COMPANY_ONE,
-                                )
+                        )
+                        .value
+                assertIs<AppResult.Success<WorkforceSyncOutcome>>(
+                    container.koin.get<SyncWorkforce>()(workspace.id)
+                )
+                val attendance =
+                    assertNotNull(
+                        assertIs<AppResult.Success<AttendanceView>>(
+                                container.koin.get<ObserveAttendance>()(workspace.id).first()
                             )
                             .value
-                    assertIs<AppResult.Success<Unit>>(
-                        container.koin.get<RefreshAttendance>()(workspace.id, AttendanceSelection())
+                            .snapshot
                     )
-                    val attendance =
-                        assertNotNull(
-                            assertIs<AppResult.Success<AttendanceView>>(
-                                    container.koin.get<ObserveAttendance>()(workspace.id).first()
-                                )
-                                .value
-                                .snapshot
-                        )
-                    val now = Clock.System.now()
-                    val oldAttendance =
+                val now = Clock.System.now()
+                if (legacy) {
+                    val saved =
                         attendance.copy(
-                            access =
-                                attendance.access.copy(authorizationExpiresAt = now - 72.hours),
-                            generation = UUID.randomUUID().toString(),
+                            generation = "legacy-before-upgrade",
+                            calendar = attendance.calendar?.copy(scheduleVersion = 0),
                             fetchedAt = now - 73.hours,
                             refreshAfter = now - 72.hours,
                         )
@@ -162,95 +173,134 @@ class WorkspaceOfflineStartupTest {
                         AppResult.Success(true),
                         container.koin
                             .get<AttendanceCacheRepository>()
-                            .replace(attendance.access, attendance.generation, oldAttendance),
+                            .replace(saved.access, null, saved),
                     )
-                    savedAttendance = oldAttendance
-                    val expired =
-                        workspace.copy(
-                            admission =
-                                workspace.admission.copy(
-                                    checkedAt = now - 73.hours,
-                                    expiresAt = now - 72.hours,
-                                )
-                        )
-                    assertEquals(
-                        AppResult.Success(true),
+                    assertTrue(
                         container.koin
-                            .get<WorkspaceRepository>()
-                            .compareAndSet(session.id, workspace, expired),
+                            .get<ReplicaStore>()
+                            .clear(
+                                ReplicaScope(
+                                    saved.access.sessionId,
+                                    accountStorageKey(saved.access.audience, saved.access.accountId),
+                                ),
+                                "workforce-replica/" + saved.access.companyId,
+                            )
                     )
-                    expired
-                }
-                container.close()
-                offline.set(true)
-                container = createContainer()
-                setContent {
-                    CompositionLocalProvider(LocalLifecycleOwner provides owner) {
-                        if (visible.value)
-                            Box(Modifier.size(390.dp, 844.dp)) { StarterApp(container) }
-                    }
-                }
-                waitUntil(timeoutMillis = 10_000) {
-                    onAllNodesWithText("Clock in").fetchSemanticsNodes().isNotEmpty() &&
-                        offlineCalls.get() > 0
-                }
-                onNodeWithText("Verifying account").assertDoesNotExist()
-                onNodeWithText("Connect to continue").assertDoesNotExist()
-                onNodeWithText("Choose a company").assertDoesNotExist()
-                onNodeWithText("PT Nusa Digital").assertExists()
-                onNode(hasText("Home") and isSelectable()).assertExists()
-                assertEquals(
-                    AppResult.Success(selected),
-                    runBlocking {
-                        container.koin.get<WorkspaceRepository>().current(selected.sessionId)
-                    },
-                )
-                assertEquals(
-                    savedAttendance,
-                    runBlocking {
-                        assertIs<AppResult.Success<AttendanceView>>(
-                                container.koin.get<ObserveAttendance>()(selected.id).first()
+                } else {
+                    val replicas = container.koin.get<WorkforceReplicaRepository>()
+                    val previous =
+                        assertIs<AppResult.Success<WorkforceCheckpoint?>>(
+                                replicas.checkpoint(attendance.access)
+                            )
+                            .value!!
+                    val old =
+                        previous.copy(
+                            revision = previous.revision + 1,
+                            refreshedAt = now - 73.hours,
+                            refreshAfter = now - 72.hours,
+                        )
+                    val metadata =
+                        assertIs<AppResult.Success<WorkforceReplicaDirectory>>(
+                                replicas.observeDirectory(attendance.access).first()
                             )
                             .value
-                            .snapshot
-                    },
+                    assertEquals(
+                        AppResult.Success(true),
+                        replicas.commit(previous, old, metadata.directory!!, emptyList()),
+                    )
+                }
+                val expired =
+                    workspace.copy(
+                        admission =
+                            workspace.admission.copy(
+                                checkedAt = now - 73.hours,
+                                expiresAt = now - 72.hours,
+                            )
+                    )
+                assertEquals(
+                    AppResult.Success(true),
+                    container.koin
+                        .get<WorkspaceRepository>()
+                        .compareAndSet(session.id, workspace, expired),
                 )
-                runOnIdle { owner.lifecycle.currentState = Lifecycle.State.CREATED }
-                offline.set(false)
-                pauseAccount.set(true)
-                runOnIdle { owner.lifecycle.currentState = Lifecycle.State.RESUMED }
-                waitUntil(timeoutMillis = 5_000) { pendingAccount.isCompleted }
-                onNode(hasText("Home") and isSelectable()).assertExists()
-                onNodeWithText("PT Nusa Digital").assertExists()
-                onNode(hasText("Clock in") and hasClickAction()).assertExists()
-                onNodeWithText("Connect to continue").assertDoesNotExist()
-                release.complete(Unit)
-                waitUntil(timeoutMillis = 10_000) {
-                    runBlocking {
-                        val workspace =
-                            (container.koin.get<WorkspaceRepository>().current(selected.sessionId)
-                                    as? AppResult.Success)
-                                ?.value
-                        workspace != null && workspace.admission.expiresAt > Clock.System.now()
-                    }
-                }
-                onNodeWithText("Choose a company").assertDoesNotExist()
-                val renewed = runBlocking {
-                    assertIs<AppResult.Success<Workspace?>>(
-                            container.koin.get<WorkspaceRepository>().current(selected.sessionId)
+                savedAttendance =
+                    assertIs<AppResult.Success<AttendanceView>>(
+                            container.koin.get<ObserveAttendance>()(workspace.id).first()
                         )
-                        .value!!
-                }
-                assertEquals(selected.id, renewed.id)
-                assertTrue(renewed.admission.expiresAt > Clock.System.now())
-                assertTrue(server.unexpectedPaths.isEmpty(), server.unexpectedPaths.toString())
-            } finally {
-                release.complete(Unit)
-                runOnIdle { visible.value = false }
-                waitForIdle()
-                runOnIdle { owner.lifecycle.currentState = Lifecycle.State.DESTROYED }
-                container.close()
-                directory.deleteRecursively()
+                        .value
+                        .snapshot
+                assertEquals(now - 73.hours, savedAttendance!!.fetchedAt)
+                expired
             }
+            container.close()
+            offline.set(true)
+            container = createContainer()
+            setContent {
+                CompositionLocalProvider(LocalLifecycleOwner provides owner) {
+                    if (visible.value) Box(Modifier.size(390.dp, 844.dp)) { StarterApp(container) }
+                }
+            }
+            waitUntil(timeoutMillis = 10_000) {
+                onAllNodesWithText("Clock in").fetchSemanticsNodes().isNotEmpty() &&
+                    offlineCalls.get() > 0
+            }
+            onNodeWithText("Verifying account").assertDoesNotExist()
+            onNodeWithText("Connect to continue").assertDoesNotExist()
+            onNodeWithText("Choose a company").assertDoesNotExist()
+            onNodeWithText("PT Nusa Digital").assertExists()
+            onNode(hasText("Home") and isSelectable()).assertExists()
+            assertEquals(
+                AppResult.Success(selected),
+                runBlocking {
+                    container.koin.get<WorkspaceRepository>().current(selected.sessionId)
+                },
+            )
+            assertEquals(
+                savedAttendance,
+                runBlocking {
+                    assertIs<AppResult.Success<AttendanceView>>(
+                            container.koin.get<ObserveAttendance>()(selected.id).first()
+                        )
+                        .value
+                        .snapshot
+                },
+            )
+            runOnIdle { owner.lifecycle.currentState = Lifecycle.State.CREATED }
+            offline.set(false)
+            pauseAccount.set(true)
+            runOnIdle { owner.lifecycle.currentState = Lifecycle.State.RESUMED }
+            waitUntil(timeoutMillis = 5_000) { pendingAccount.isCompleted }
+            onNode(hasText("Home") and isSelectable()).assertExists()
+            onNodeWithText("PT Nusa Digital").assertExists()
+            onNode(hasText("Clock in") and hasClickAction()).assertExists()
+            onNodeWithText("Connect to continue").assertDoesNotExist()
+            release.complete(Unit)
+            waitUntil(timeoutMillis = 10_000) {
+                runBlocking {
+                    val workspace =
+                        (container.koin.get<WorkspaceRepository>().current(selected.sessionId)
+                                as? AppResult.Success)
+                            ?.value
+                    workspace != null && workspace.admission.expiresAt > Clock.System.now()
+                }
+            }
+            onNodeWithText("Choose a company").assertDoesNotExist()
+            val renewed = runBlocking {
+                assertIs<AppResult.Success<Workspace?>>(
+                        container.koin.get<WorkspaceRepository>().current(selected.sessionId)
+                    )
+                    .value!!
+            }
+            assertEquals(selected.id, renewed.id)
+            assertTrue(renewed.admission.expiresAt > Clock.System.now())
+            assertTrue(server.unexpectedPaths.isEmpty(), server.unexpectedPaths.toString())
+        } finally {
+            release.complete(Unit)
+            runOnIdle { visible.value = false }
+            waitForIdle()
+            runOnIdle { owner.lifecycle.currentState = Lifecycle.State.DESTROYED }
+            container.close()
+            directory.deleteRecursively()
         }
+    }
 }

@@ -74,6 +74,13 @@ fun main(args: Array<String>) {
                         "overtime-replica-content-key",
                     )
                 else MemoryCredentialStore(),
+            workforceReplicaCredentials =
+                if (BuildRuntime.persistDesktopSession)
+                    DesktopCredentialStore(
+                        "hris-mobile.${environment.id}",
+                        "workforce-replica-content-key",
+                    )
+                else MemoryCredentialStore(),
             leaveCredentials =
                 if (BuildRuntime.persistDesktopSession)
                     DesktopCredentialStore("hris-mobile.${environment.id}", "leave-content-key")

@@ -5,6 +5,7 @@ import dev.fajar.starter.common.result.*
 import dev.fajar.starter.presentation.mvi.MviViewModel
 import dev.fajar.starter.workforce.domain.entities.WorkCalendarSelection
 import dev.fajar.starter.workforce.domain.policies.calendarFailureInvalidatesCache
+import dev.fajar.starter.workforce.domain.replica.usecases.SyncWorkforce
 import dev.fajar.starter.workforce.domain.usecases.*
 import dev.fajar.starter.workspace.domain.policies.workspaceAccessLossCodes
 import kotlinx.coroutines.*
@@ -16,7 +17,7 @@ import org.koin.core.annotation.InjectedParam
 class WorkCalendarViewModel(
     @InjectedParam private val workspaceId: String,
     private val observe: ObserveWorkCalendar,
-    private val refresh: RefreshWorkCalendar,
+    private val refresh: SyncWorkforce,
 ) : MviViewModel<WorkCalendarState, WorkCalendarEvent, WorkCalendarEffect>(WorkCalendarState()) {
     private var observation: Job? = null
     private var acquisition: Job? = null
@@ -33,8 +34,14 @@ class WorkCalendarViewModel(
         on<WorkCalendarEvent.VerificationRequested>(::onVerificationRequested)
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     private fun onEntered(event: WorkCalendarEvent.Entered) {
+        if (observation?.isActive == true) return
+        observeContent()
+        onEvent(WorkCalendarEvent.RefreshRequested)
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private fun observeContent() {
         if (observation?.isActive == true) return
         updateState { it.copy(loading = true) }
         observation =
@@ -44,7 +51,7 @@ class WorkCalendarViewModel(
                     .distinctUntilChanged()
                     .flatMapLatest { (requested, restricted) ->
                         if (restricted) emptyFlow()
-                        else observe(workspaceId).map { requested to it }
+                        else observe(workspaceId, requested).map { requested to it }
                     }
                     .collect { (requested, result) ->
                         ensureActive()
@@ -96,7 +103,6 @@ class WorkCalendarViewModel(
                         }
                     }
             }
-        onEvent(WorkCalendarEvent.RefreshRequested)
     }
 
     private fun onStopped(event: WorkCalendarEvent.Stopped) {
@@ -116,7 +122,6 @@ class WorkCalendarViewModel(
 
     private fun onRefreshRequested(event: WorkCalendarEvent.RefreshRequested) {
         if (observation?.isActive != true || acquisition?.isActive == true) return
-        val requested = state.value.selection
         updateState {
             it.copy(
                 refreshing = true,
@@ -131,7 +136,7 @@ class WorkCalendarViewModel(
         }
         acquisition =
             viewModelScope.launch {
-                val result = refresh(workspaceId, requested)
+                val result = refresh(workspaceId)
                 ensureActive()
                 when (result) {
                     is AppResult.Failed -> {
@@ -161,16 +166,22 @@ class WorkCalendarViewModel(
                         )
                             emitEffect(WorkCalendarEffect.RecheckWorkspace)
                     }
-                    is AppResult.Success ->
-                        updateState {
-                            it.copy(
-                                refreshing = false,
-                                loading = it.content == null,
-                                refreshFailure = null,
-                                cacheFailure = null,
-                                needsVerification = false,
-                            )
-                        }
+                    is AppResult.Success -> {
+                        if (result.value.caughtUp) {
+                            observation?.cancel()
+                            observation = null
+                            updateState {
+                                it.copy(
+                                    refreshing = false,
+                                    loading = it.content == null,
+                                    refreshFailure = null,
+                                    cacheFailure = null,
+                                    needsVerification = false,
+                                )
+                            }
+                            observeContent()
+                        } else updateState { it.copy(refreshing = false) }
+                    }
                 }
             }
     }
@@ -178,39 +189,27 @@ class WorkCalendarViewModel(
     private fun onWeekRequested(event: WorkCalendarEvent.WeekRequested) {
         val content = state.value.content ?: return
         if (event.from != content.previousWeek && event.from != content.nextWeek) return
-        acquisition?.cancel()
-        acquisition = null
         updateState { it.copy(selection = content.snapshot.selection.copy(from = event.from)) }
-        onEvent(WorkCalendarEvent.RefreshRequested)
     }
 
     private fun onCurrentWeekRequested(event: WorkCalendarEvent.CurrentWeekRequested) {
-        acquisition?.cancel()
-        acquisition = null
         updateState { it.copy(selection = it.selection.copy(from = null)) }
-        onEvent(WorkCalendarEvent.RefreshRequested)
     }
 
     private fun onEmploymentSelected(event: WorkCalendarEvent.EmploymentSelected) {
         val snapshot = state.value.content?.snapshot ?: return
         if (snapshot.directory.items.none { it.id == event.id }) return
-        acquisition?.cancel()
-        acquisition = null
         updateState { it.copy(selection = snapshot.selection.copy(employeeId = event.id)) }
-        onEvent(WorkCalendarEvent.RefreshRequested)
     }
 
     private fun onEmploymentPageRequested(event: WorkCalendarEvent.EmploymentPageRequested) {
         val snapshot = state.value.content?.snapshot ?: return
         if (event.after != null && event.after != snapshot.directory.nextCursor) return
-        acquisition?.cancel()
-        acquisition = null
         updateState {
             it.copy(
                 selection = WorkCalendarSelection(from = snapshot.period.from, after = event.after)
             )
         }
-        onEvent(WorkCalendarEvent.RefreshRequested)
     }
 
     private fun onBackRequested(event: WorkCalendarEvent.BackRequested) {

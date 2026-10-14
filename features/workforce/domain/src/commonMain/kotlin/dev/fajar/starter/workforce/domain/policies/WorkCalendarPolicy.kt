@@ -24,10 +24,10 @@ fun validateCalendarSelection(selection: WorkCalendarSelection): AppResult<Unit>
 fun calendarWeekStart(date: LocalDate): LocalDate =
     date.minus(date.dayOfWeek.ordinal, DateTimeUnit.DAY)
 
-/** Week navigation is bounded to a year either side of the server's company date. */
+/** Local navigation selects one week without limiting retained calendar history. */
 fun calendarPeriod(today: LocalDate, requestedFrom: LocalDate?): AppResult<CalendarPeriod> {
     val start = requestedFrom ?: calendarWeekStart(today)
-    if (today.daysUntil(start) !in -366..366 || start.dayOfWeek != DayOfWeek.MONDAY)
+    if (start.year !in 1900..9998 || start.dayOfWeek != DayOfWeek.MONDAY)
         return calendarFailure("invalid_calendar_range")
     return AppResult.Success(CalendarPeriod(start, start.plus(6, DateTimeUnit.DAY)))
 }

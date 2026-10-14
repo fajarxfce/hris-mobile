@@ -9,6 +9,8 @@ import dev.fajar.starter.workforce.domain.attendance.policies.*
 import dev.fajar.starter.workforce.domain.attendance.repositories.*
 import dev.fajar.starter.workforce.domain.entities.*
 import dev.fajar.starter.workforce.domain.policies.*
+import dev.fajar.starter.workforce.domain.replica.policies.validateStoredWorkforceReplica
+import dev.fajar.starter.workforce.domain.replica.repositories.WorkforceReplicaRepository
 import dev.fajar.starter.workspace.domain.entities.CompanyModule
 import dev.fajar.starter.workspace.domain.entities.CompanyPolicySnapshot
 import dev.fajar.starter.workspace.domain.policies.admitCompanyOperation
@@ -25,6 +27,7 @@ import kotlinx.coroutines.sync.withLock
 class ReplayAttendance(
     private val commands: AttendanceCommandRepository,
     private val remote: AttendanceRepository,
+    private val replicas: WorkforceReplicaRepository,
     private val cache: AttendanceCacheRepository,
     private val sessions: SessionRepository,
     private val workspaces: WorkspaceRepository,
@@ -132,6 +135,40 @@ class ReplayAttendance(
         access: WorkforceAccess,
         record: AttendanceCommandRecord,
     ): AppResult<Boolean> {
+        val admission =
+            withTimeoutOrNull(5.seconds) { replicas.admission(access) }
+                ?: return attendanceFailure("client.attendance_timeout", FailureKind.Timeout)
+        if (admission is AppResult.Failed) return admission
+        (admission as AppResult.Success).value.denial?.let {
+            return AppResult.Failed(it)
+        }
+        val facts =
+            withTimeoutOrNull(5.seconds) {
+                replicas
+                    .observeFacts(
+                        access,
+                        record.command.employeeId,
+                        CalendarPeriod(record.command.workDate, record.command.workDate),
+                    )
+                    .first()
+            } ?: return attendanceFailure("client.attendance_timeout", FailureKind.Timeout)
+        if (facts is AppResult.Failed) return facts
+        val acquired = (facts as AppResult.Success).value
+        if (acquired.checkpoint != null) {
+            currentCoroutineContext().ensureActive()
+            val continued = validateWorkforceContinuation(access, currentAccess(workspaceId))
+            if (continued is AppResult.Failed) return continued
+            val ownership = validateStoredWorkforceReplica(access, acquired.checkpoint)
+            if (ownership is AppResult.Failed) return ownership
+            val receipt = record.outcome as AttendanceCommandOutcome.Confirmed
+            val present =
+                acquired.attendance.any { day ->
+                    day.day.entries.any {
+                        it.id == record.command.id && it.version >= receipt.version
+                    }
+                }
+            return if (present) commands.remove(access, record) else AppResult.Success(false)
+        }
         val snapshot =
             when (val result = cache.observe(access).first()) {
                 is AppResult.Failed -> return result
@@ -175,17 +212,11 @@ class ReplayAttendance(
         val policy =
             when (policyResponse) {
                 is AppResult.Failed -> {
-                    if (
-                        policyResponse.failure.code in
-                            setOf("session_revoked", "company_access_denied", "sync_access_denied")
-                    ) {
-                        val cleared =
-                            cache.replace(
-                                access,
-                                (cache.generation(access) as? AppResult.Success)?.value,
-                                null,
-                            )
-                        if (cleared is AppResult.Failed) return cleared
+                    if (calendarFailureInvalidatesCache(policyResponse.failure)) {
+                        withTimeoutOrNull(2.seconds) {
+                            replicas.restrict(access, policyResponse.failure)
+                        }
+                        withTimeoutOrNull(2.seconds) { replicas.clear(access) }
                     }
                     return policyResponse
                 }

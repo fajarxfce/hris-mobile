@@ -23,6 +23,7 @@ class NativeWorkforceUi {
     @Volatile var failureCode: String? = null
     @Volatile var historyEvidence = false
     val attendancePeriods = CopyOnWriteArrayList<Pair<LocalDate, LocalDate>>()
+    val syncReads = AtomicInteger()
     val active = AtomicInteger()
     val cancelled = AtomicInteger()
     val calendars = AtomicInteger()
@@ -31,12 +32,44 @@ class NativeWorkforceUi {
 
     suspend fun response(request: HttpRequestData): Pair<String, HttpStatusCode>? {
         val path = request.url.encodedPath
-        if (!path.contains("/workforce/")) return null
+        val sync =
+            path.contains("/sync/") &&
+                request.url.parameters["collections"]?.split(',')?.toSet() == collections
+        if (!path.contains("/workforce/") && !sync) return null
         if (offline) throw IOException("Calendar transport unavailable")
         failureCode?.let {
             return """{"code":"$it","title":"Private diagnostic"}""" to HttpStatusCode.Forbidden
         }
         val company = path.split('/')[4]
+        if (sync) {
+            syncReads.incrementAndGet()
+            active.incrementAndGet()
+            attendanceActive.incrementAndGet()
+            try {
+                attendanceGate?.await()
+                calendarGate?.await()
+                if (holdCalendar) awaitCancellation()
+                return syncPage(request, company).toString() to HttpStatusCode.OK
+            } catch (cancelled: CancellationException) {
+                this.cancelled.incrementAndGet()
+                attendanceCancelled.incrementAndGet()
+                throw cancelled
+            } finally {
+                active.decrementAndGet()
+                attendanceActive.decrementAndGet()
+            }
+        }
+        if (
+            path.contains("/attendance/days/") ||
+                path.contains("/me/roster/") ||
+                path.contains("/me/holidays/")
+        ) {
+            val source =
+                sourceRecords(company).singleOrNull {
+                    it.second.getValue("id").jsonPrimitive.content == path.substringAfterLast('/')
+                } ?: return """{"code":"not_found"}""" to HttpStatusCode.NotFound
+            return source.second.toString() to HttpStatusCode.OK
+        }
         if (path.endsWith("/me/employments"))
             return directory(company).toString() to HttpStatusCode.OK
         if (path.endsWith("/attendance") && request.method == HttpMethod.Get) {
@@ -112,7 +145,11 @@ class NativeWorkforceUi {
             if (pending)
                 add(
                     buildJsonObject {
-                        put("id", "77777777-7777-4777-8777-777777777777")
+                        put(
+                            "id",
+                            java.util.UUID.nameUUIDFromBytes("attendance-entry/$date".toByteArray())
+                                .toString(),
+                        )
                         put("kind", "CLOCK_IN")
                         put("capturedAt", "${date}T02:00:00Z")
                         put("receivedAt", "${date}T03:00:00Z")
@@ -132,7 +169,11 @@ class NativeWorkforceUi {
         put("incomplete", false)
         if (correction)
             putJsonObject("correction") {
-                put("id", "88888888-8888-4888-8888-888888888888")
+                put(
+                    "id",
+                    java.util.UUID.nameUUIDFromBytes("attendance-correction/$date".toByteArray())
+                        .toString(),
+                )
                 put(
                     "clockIn",
                     if (date.dayOfMonth == 3) JsonPrimitive("${date}T02:00:00Z") else JsonNull,
@@ -204,4 +245,83 @@ class NativeWorkforceUi {
             }
         }
     }
+
+    private fun sourceRecords(company: String): List<Pair<String, JsonObject>> {
+        if (company != NativeUiServer.COMPANY_ONE) return emptyList()
+        val monday =
+            asOf.with(
+                java.time.temporal.TemporalAdjusters.previousOrSame(java.time.DayOfWeek.MONDAY)
+            )
+        val shift =
+            calendar(monday, 1).getValue("days").jsonArray.single().jsonObject.getValue("shift")
+        val records = mutableListOf<Pair<String, JsonObject>>()
+        records +=
+            "ROSTER_DAYS" to
+                buildJsonObject {
+                    put("id", "99999999-1111-4111-8111-111111111111")
+                    put("employeeId", NativePeopleUi.EMPLOYEE)
+                    put("version", 0)
+                    put("workDate", monday.toString())
+                    put("shift", shift)
+                }
+        records +=
+            "WORK_HOLIDAYS" to
+                buildJsonObject {
+                    put("id", "55555555-5555-5555-5555-555555555555")
+                    put("version", 0)
+                    put("workDate", monday.plusDays(1).toString())
+                    put("name", "Company holiday")
+                    put("active", true)
+                }
+        if (historyEvidence)
+            for (month in listOf(LocalDate.of(2024, 2, 1), LocalDate.of(2026, 10, 1))) {
+                for (day in 3..5) {
+                    val date = month.withDayOfMonth(day)
+                    records +=
+                        "ATTENDANCE_DAYS" to
+                            buildJsonObject {
+                                put(
+                                    "id",
+                                    java.util.UUID.nameUUIDFromBytes(
+                                            "attendance-day/$date".toByteArray()
+                                        )
+                                        .toString(),
+                                )
+                                put("employeeId", NativePeopleUi.EMPLOYEE)
+                                put("version", 0)
+                                put("day", attendanceDay(date, true))
+                            }
+                }
+            }
+        return records
+    }
+
+    private fun syncPage(request: HttpRequestData, company: String): JsonObject {
+        check(request.url.parameters["limit"] == "32")
+        val bootstrap = request.url.encodedPath.endsWith("/bootstrap")
+        return buildJsonObject {
+            if (bootstrap) putJsonArray("collections") { collections.forEach { add(it) } }
+            putJsonArray("items") {
+                for ((collection, record) in sourceRecords(company)) addJsonObject {
+                    put("collection", collection)
+                    put("id", record.getValue("id"))
+                    put("version", record.getValue("version"))
+                    if (!bootstrap) put("operation", "UPSERT")
+                }
+            }
+            if (bootstrap) {
+                put("nextCursor", JsonNull)
+                put("changesCursor", "workforce-head")
+            } else {
+                put("cursor", "workforce-current")
+                put("hasMore", false)
+                put("pendingPublication", false)
+                put("pollAfterSeconds", 5)
+            }
+            put("serverTime", "2026-10-12T00:00:00Z")
+        }
+    }
+
+    private val collections =
+        setOf("ATTENDANCE_DAYS", "WORK_SCHEDULES", "ROSTER_DAYS", "WORK_HOLIDAYS")
 }

@@ -172,6 +172,7 @@ class AttendanceCommandsTest {
         val owner =
             launch(UnconfinedTestDispatcher(testScheduler)) {
                 ObserveAttendance(
+                        f.base.replicas,
                         f.cache,
                         f.commands,
                         f.base.sessions,

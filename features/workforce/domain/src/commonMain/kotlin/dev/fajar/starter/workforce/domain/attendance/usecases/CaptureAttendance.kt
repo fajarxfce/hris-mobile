@@ -12,6 +12,8 @@ import dev.fajar.starter.workforce.domain.attendance.policies.*
 import dev.fajar.starter.workforce.domain.attendance.repositories.*
 import dev.fajar.starter.workforce.domain.entities.WorkforceAccess
 import dev.fajar.starter.workforce.domain.policies.*
+import dev.fajar.starter.workforce.domain.replica.policies.*
+import dev.fajar.starter.workforce.domain.replica.repositories.WorkforceReplicaRepository
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
 import kotlin.time.Clock
 import kotlin.time.Duration.Companion.seconds
@@ -24,6 +26,7 @@ import kotlinx.coroutines.sync.withLock
 /** Owns permission policy and saves immutable evidence before attendance transport. */
 class CaptureAttendance(
     private val remote: AttendanceRepository,
+    private val replicas: WorkforceReplicaRepository,
     private val cache: AttendanceCacheRepository,
     private val commands: AttendanceCommandRepository,
     private val location: LocationRepository,
@@ -47,7 +50,7 @@ class CaptureAttendance(
                     is AppResult.Success -> result.value
                 }
             val snapshot =
-                when (val result = cache.observe(access).first()) {
+                when (val result = readSnapshot(access, employeeId)) {
                     is AppResult.Failed -> return@withLock result
                     is AppResult.Success -> result.value
                 }
@@ -129,6 +132,53 @@ class CaptureAttendance(
                 )
             retain(workspaceId, access, command)
         }
+
+    /**
+     * Retry one racing local commit; never combine directory and facts from different revisions.
+     */
+    private suspend fun readSnapshot(
+        access: WorkforceAccess,
+        employeeId: String,
+    ): AppResult<AttendanceSnapshot?> =
+        withTimeoutOrNull(5.seconds) {
+            repeat(2) {
+                val metadata =
+                    when (val result = replicas.observeDirectory(access).first()) {
+                        is AppResult.Failed -> return@withTimeoutOrNull result
+                        is AppResult.Success -> result.value
+                    }
+                val checkpoint =
+                    metadata.checkpoint ?: return@withTimeoutOrNull cache.observe(access).first()
+                val owner = validateStoredWorkforceReplica(access, checkpoint)
+                if (owner is AppResult.Failed) return@withTimeoutOrNull owner
+                val directory =
+                    currentWorkforceDirectory(requireNotNull(metadata.directory), clock.now())
+                val selected = selectWorkforceEmployee(directory, employeeId, null)
+                if (selected is AppResult.Failed) return@withTimeoutOrNull selected
+                val dates = attendancePeriod(directory.asOf, AttendanceSelection(employeeId))
+                if (dates is AppResult.Failed) return@withTimeoutOrNull dates
+                val period = (dates as AppResult.Success).value
+                val facts =
+                    when (val result = replicas.observeFacts(access, employeeId, period).first()) {
+                        is AppResult.Failed -> return@withTimeoutOrNull result
+                        is AppResult.Success -> result.value
+                    }
+                if (
+                    facts.checkpoint?.generation == checkpoint.generation &&
+                        facts.checkpoint.revision == checkpoint.revision
+                )
+                    return@withTimeoutOrNull attendanceReplicaSnapshot(
+                        access,
+                        checkpoint,
+                        directory,
+                        employeeId,
+                        period,
+                        null,
+                        facts,
+                    )
+            }
+            attendanceFailure("client.attendance_changed", FailureKind.Conflict)
+        } ?: attendanceFailure("client.attendance_timeout", FailureKind.Timeout)
 
     private suspend fun acquireLocation(
         workspaceId: String,
@@ -234,6 +284,14 @@ class CaptureAttendance(
                 is AppResult.Failed -> return result
                 is AppResult.Success -> result.value
             }
-        return admitWorkforce(workspaceId, workspace, session, build, clock.now())
+        val access = admitWorkforce(workspaceId, workspace, session, build, clock.now())
+        if (access is AppResult.Failed) return access
+        val admission =
+            withTimeoutOrNull(5.seconds) { replicas.admission((access as AppResult.Success).value) }
+                ?: return attendanceFailure("client.attendance_timeout", FailureKind.Timeout)
+        return when (admission) {
+            is AppResult.Failed -> admission
+            is AppResult.Success -> admission.value.denial?.let { AppResult.Failed(it) } ?: access
+        }
     }
 }
