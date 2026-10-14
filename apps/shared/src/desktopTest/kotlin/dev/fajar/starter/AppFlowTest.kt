@@ -136,8 +136,7 @@ class AppFlowTest {
             waitFor("Latest activity")
             compose.onNode(hasScrollToIndexAction()).performScrollToNode(hasText("Draft saved"))
             compose.onNodeWithText("Draft saved").assertIsDisplayed()
-            server.expenses.offline = true
-            compose.onNodeWithContentDescription("Refresh").performClick()
+            refreshWhenReady { server.expenses.offline = true }
             waitFor("Unable to connect. Check your connection.")
             compose.runOnIdle { lifecycle.value = Lifecycle.State.CREATED }
             compose.waitForIdle()
