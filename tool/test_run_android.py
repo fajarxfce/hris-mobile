@@ -74,6 +74,40 @@ class RunAndroidTest(unittest.TestCase):
         devices.assert_not_called()
         run.assert_not_called()
 
+    @patch.object(Path, "is_file", return_value=True)
+    @patch.object(run_android.subprocess, "run")
+    @patch.object(run_android.subprocess, "check_output", return_value=devices)
+    def test_custom_deadline_is_bounded_and_never_changes_install_only(self, devices, run, exists):
+        for seconds in ("30", "600", "900"):
+            with self.subTest(seconds=seconds):
+                run.reset_mock()
+                run_android.main(["10.0.0.2:5555", "--skip-build", "--install-only", "--install-timeout", seconds])
+                run.assert_called_once()
+                self.assertEqual(run.call_args.args[0][1:5], ["-s", "10.0.0.2:5555", "install", "-r"])
+                self.assertEqual(run.call_args.kwargs["timeout"], int(seconds))
+
+    @patch.object(run_android.subprocess, "run")
+    @patch.object(run_android.subprocess, "check_output")
+    def test_invalid_install_deadline_does_not_touch_devices(self, devices, run):
+        for seconds in ("0", "-1", "29", "901", "600.5", "invalid"):
+            with self.subTest(seconds=seconds), contextlib.redirect_stderr(io.StringIO()), self.assertRaises(SystemExit):
+                run_android.main(["emulator-5560", "--install-timeout", seconds])
+        devices.assert_not_called()
+        run.assert_not_called()
+
+    @patch.object(Path, "is_file", return_value=True)
+    @patch.object(run_android.subprocess, "run", side_effect=subprocess.TimeoutExpired("adb", 180))
+    @patch.object(run_android.subprocess, "check_output", return_value=devices)
+    def test_timed_out_install_is_unconfirmed_without_retry_or_launch(self, devices, run, exists):
+        output = io.StringIO()
+        with contextlib.redirect_stderr(output), self.assertRaises(SystemExit) as error:
+            run_android.main(["emulator-5560", "--skip-build"])
+        self.assertEqual(error.exception.code, 1)
+        self.assertIn("unconfirmed", output.getvalue())
+        run.assert_called_once()
+        self.assertEqual(run.call_args.kwargs["timeout"], 180)
+        self.assertEqual(run.call_args.args[0][3], "install")
+
 
 if __name__ == "__main__":
     unittest.main()

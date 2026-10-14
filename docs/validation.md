@@ -1,5 +1,24 @@
 # Validation
 
+## Private-profile APK delivery
+
+On 14 October 2026, the validated 30,229,893-byte dev APK was installed on the
+authorized Android 16 phone with `--skip-build --install-only`. ADB reported
+success and package metadata recorded the update at 21:13:23 WIB. SHA-256:
+`8bdc9ed12491f8219849981b388f9efa26aa6cd739b8ee9836a67a3b4233488f`.
+The existing application data was retained; the phone UI was not opened or driven.
+Profile and offline acceptance used the dedicated emulator, as recorded in
+[People](people.md#private-profiles).
+
+The first VPN transfer exceeded the 180-second installer deadline. Package
+metadata still showed the preceding installation. A subsequent explicit attempt
+with a bounded 600-second deadline succeeded. The runner now accepts 30–900
+seconds, preserves the default, rejects invalid values before device discovery,
+and reports timeout as unconfirmed without retry or launch. All ten runner tests
+passed in this repository and Compose Fluent Starter. Application code and the
+validated APK were unchanged by this tooling correction.
+
+
 ## Payslip replica
 
 Root checks passed with 1,320 desktop/JVM/UI tests, Android dev assembly and

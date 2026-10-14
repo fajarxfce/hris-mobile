@@ -159,4 +159,6 @@ admission writes, cancellation, local selection and completed storage-flow recov
 API 35 acceptance verified the live profile, cold offline restoration, another
 restart after a 73-hour clock advance and retained facts after a failed refresh.
 The emulator clock and network were restored, and its crash buffer contained no
-fatal exception or signal. Phone delivery remains pending ADB availability.
+fatal exception or signal. The validated APK was installed on the authorized
+Android 16 phone on 14 October 2026 at 21:13:23 WIB with install-only delivery.
+Package metadata confirmed the update; its UI was not opened or driven.

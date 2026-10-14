@@ -13,8 +13,11 @@ def main(arguments=None):
     parser.add_argument("--flavor", choices=["dev", "staging", "prod"], default="dev")
     parser.add_argument("--skip-build", action="store_true", help="Install the existing debug APK")
     parser.add_argument("--install-only", action="store_true", help="Update without opening the app")
+    parser.add_argument("--install-timeout", type=int, default=180, metavar="SECONDS", help="APK transfer/install deadline (30–900 seconds; default: 180)")
     parser.add_argument("--reverse-port", type=int, metavar="PORT", help="Forward a loopback development API before installing")
     args = parser.parse_args(arguments)
+    if not 30 <= args.install_timeout <= 900:
+        parser.error("The installation timeout must be between 30 and 900 seconds")
     if args.reverse_port is not None and not 1 <= args.reverse_port <= 65535:
         parser.error("The reverse port must be between 1 and 65535")
 
@@ -38,7 +41,10 @@ def main(arguments=None):
     if args.reverse_port is not None:
         port = f"tcp:{args.reverse_port}"
         subprocess.run([adb, "-s", serial, "reverse", port, port], check=True, timeout=15)
-    subprocess.run([adb, "-s", serial, "install", "-r", str(apk)], check=True, timeout=180)
+    try:
+        subprocess.run([adb, "-s", serial, "install", "-r", str(apk)], check=True, timeout=args.install_timeout)
+    except subprocess.TimeoutExpired:
+        parser.exit(1, "Installation result is unconfirmed after the deadline. Check the device package before retrying.\n")
     if not args.install_only:
         package = f"dev.fajar.hris.mobile{'.' + args.flavor if args.flavor != 'prod' else ''}"
         subprocess.run([adb, "-s", serial, "shell", "am", "start", "-n", f"{package}/dev.fajar.hris.MainActivity"], check=True, timeout=15)

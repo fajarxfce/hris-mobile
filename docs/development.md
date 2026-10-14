@@ -115,6 +115,11 @@ APK on a phone, replace `<phone-serial>` with its actual serial:
 python3 tool/run_android.py <phone-serial> --skip-build --install-only
 ```
 
+For a slow remote connection, `--install-timeout 600` gives the APK transfer and
+installation up to ten minutes. The default is 180 seconds; accepted values are
+30–900 seconds. Timeout leaves the result unconfirmed and never launches or
+retries the app. Check package metadata before retrying with the same APK.
+
 The checked-in dev endpoint is `http://10.77.77.1:8088/api/v1/`. HRIS Platform's
 optional `compose.wireguard.yml` publishes this private interface. A phone needs
 the WireGuard tunnel; the VPS emulator reaches the same host directly. API access

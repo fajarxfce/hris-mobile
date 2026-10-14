@@ -102,6 +102,13 @@ the Android dev build passed; emulator checks verified loaded tabs while offline
 
 ## Bounded Android tooling
 
+The optional `--install-timeout` deadline and its regressions also exist in
+[Compose Fluent Starter](https://github.com/fajarxfce/compose-fluent-starter/blob/main/tool/run_android.py).
+The CLI accepts 30–900 seconds, retains the 180-second default and does not retry
+or launch after timeout. Invalid deadlines fail before ADB discovery. Both
+repositories passed all ten runner tests; no application build is changed.
+
+
 The runner's ADB deadlines, validated optional reverse port, forwarding before
 installation and seven regression tests also exist at
 [8244a00](https://github.com/fajarxfce/compose-fluent-starter/commit/8244a00).
