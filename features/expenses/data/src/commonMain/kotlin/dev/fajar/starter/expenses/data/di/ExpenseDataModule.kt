@@ -6,6 +6,8 @@ import dev.fajar.starter.expenses.domain.replica.repositories.ExpenseReplicaRepo
 import dev.fajar.starter.expenses.domain.replica.usecases.*
 import dev.fajar.starter.expenses.domain.repositories.*
 import dev.fajar.starter.expenses.domain.usecases.*
+import dev.fajar.starter.expenses.domain.working.repositories.ExpenseWorkingCopyRepository
+import dev.fajar.starter.expenses.domain.working.usecases.*
 import dev.fajar.starter.identity.domain.repositories.SessionRepository
 import dev.fajar.starter.sync.domain.SyncTask
 import dev.fajar.starter.sync.domain.repositories.SyncFeedRepository
@@ -18,6 +20,44 @@ import org.koin.core.annotation.*
 @ComponentScan("dev.fajar.starter.expenses.data")
 class ExpenseDataModule {
     @Single @Named("expense-acquisition") fun expenseAcquisition() = Mutex()
+
+    @Single @Named("expense-content-key-creation") fun expenseContentKeyCreation() = Mutex()
+
+    @Factory
+    fun openExpenseWorkingCopy(
+        copies: ExpenseWorkingCopyRepository,
+        replicas: ExpenseReplicaRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        build: AppBuild,
+    ) = OpenExpenseWorkingCopy(copies, replicas, sessions, workspaces, Clock.System, build)
+
+    @Factory
+    fun observeExpenseWorkingCopy(
+        copies: ExpenseWorkingCopyRepository,
+        replicas: ExpenseReplicaRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        build: AppBuild,
+    ) = ObserveExpenseWorkingCopy(copies, replicas, sessions, workspaces, Clock.System, build)
+
+    @Factory
+    fun saveExpenseWorkingCopy(
+        copies: ExpenseWorkingCopyRepository,
+        replicas: ExpenseReplicaRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        build: AppBuild,
+    ) = SaveExpenseWorkingCopy(copies, replicas, sessions, workspaces, Clock.System, build)
+
+    @Factory
+    fun discardExpenseWorkingCopy(
+        copies: ExpenseWorkingCopyRepository,
+        replicas: ExpenseReplicaRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        build: AppBuild,
+    ) = DiscardExpenseWorkingCopy(copies, replicas, sessions, workspaces, Clock.System, build)
 
     @Factory
     fun exportExpenseReceipt(
@@ -35,7 +75,8 @@ class ExpenseDataModule {
         sessions: SessionRepository,
         workspaces: WorkspaceRepository,
         build: AppBuild,
-    ) = LoadExpenseDraftReferences(remote, sessions, workspaces, Clock.System, build)
+        replicas: ExpenseReplicaRepository,
+    ) = LoadExpenseDraftReferences(remote, sessions, workspaces, Clock.System, build, replicas)
 
     @Factory fun prepareExpenseLine() = PrepareExpenseLine()
 
@@ -70,7 +111,8 @@ class ExpenseDataModule {
         sessions: SessionRepository,
         workspaces: WorkspaceRepository,
         build: AppBuild,
-    ) = ObserveExpenseCommand(commands, sessions, workspaces, Clock.System, build)
+        replicas: ExpenseReplicaRepository,
+    ) = ObserveExpenseCommand(commands, sessions, workspaces, Clock.System, build, replicas)
 
     @Factory
     fun reviewExpenseCommand(
@@ -79,7 +121,8 @@ class ExpenseDataModule {
         sessions: SessionRepository,
         workspaces: WorkspaceRepository,
         build: AppBuild,
-    ) = ReviewExpenseCommand(commands, cache, sessions, workspaces, Clock.System, build)
+        copies: ExpenseWorkingCopyRepository,
+    ) = ReviewExpenseCommand(commands, cache, sessions, workspaces, Clock.System, build, copies)
 
     @Factory
     fun loadExpenseDraftPreparation(
@@ -87,7 +130,8 @@ class ExpenseDataModule {
         sessions: SessionRepository,
         workspaces: WorkspaceRepository,
         build: AppBuild,
-    ) = LoadExpenseDraftPreparation(remote, sessions, workspaces, Clock.System, build)
+        replicas: ExpenseReplicaRepository,
+    ) = LoadExpenseDraftPreparation(remote, sessions, workspaces, Clock.System, build, replicas)
 
     @Factory
     fun loadExpenseCategories(
@@ -95,7 +139,8 @@ class ExpenseDataModule {
         sessions: SessionRepository,
         workspaces: WorkspaceRepository,
         build: AppBuild,
-    ) = LoadExpenseCategories(remote, sessions, workspaces, Clock.System, build)
+        replicas: ExpenseReplicaRepository,
+    ) = LoadExpenseCategories(remote, sessions, workspaces, Clock.System, build, replicas)
 
     @Factory
     fun loadExpenseCostCenters(
@@ -103,7 +148,8 @@ class ExpenseDataModule {
         sessions: SessionRepository,
         workspaces: WorkspaceRepository,
         build: AppBuild,
-    ) = LoadExpenseCostCenters(remote, sessions, workspaces, Clock.System, build)
+        replicas: ExpenseReplicaRepository,
+    ) = LoadExpenseCostCenters(remote, sessions, workspaces, Clock.System, build, replicas)
 
     @Factory
     fun observeExpenses(

@@ -11,6 +11,8 @@ sealed interface ExpenseItemEvent {
 
     data object ReloadRequested : ExpenseItemEvent
 
+    data object RetryLocalSave : ExpenseItemEvent
+
     data object DateOpened : ExpenseItemEvent
 
     data class DateMonthChanged(val delta: Int) : ExpenseItemEvent

@@ -81,6 +81,46 @@ older admission attempt. Claim refresh, historical reads and receipt export obey
 this shared boundary. A matching preceding last-view snapshot remains a migration
 fallback until the replica publishes; a complete feed's missing parent is authoritative.
 
+## Local working copies
+
+Unsubmitted input has its own account/company-owned storage, separate from the
+confirmed claim replica and immutable delivery commands. Each employment has one
+new-claim slot; each existing claim has its own editing slot. A new claim receives
+its stable ID before the first server save. Opening a saved copy uses local
+ownership and the shared read-admission gate, without an action-review deadline.
+Creating one offline requires an already acquired employment and, for an existing
+claim, its saved editable revision.
+
+Copies retain the title, description, reason, completed lines and one unfinished
+item. Raw incomplete amounts, such as `12,`, remain editable input until line
+validation succeeds. Selected labels and receipt references are retained for
+display. Discovering new categories, cost centers or receipts still uses the live
+catalog; local metadata never authorizes a purchase or evidence export.
+
+`OpenExpenseWorkingCopy`, `SaveExpenseWorkingCopy`, `ObserveExpenseWorkingCopy`
+and `DiscardExpenseWorkingCopy` own local admission, validation and reviewed
+deletion. Their repository coordinates raw storage and encryption only. Four
+authenticated 64 KiB chunks bound each copy; account, company, slot and local
+mutation identity bind every chunk. A shared key-creation mutex prevents the
+replica and editor from overwriting each other's first content key. Existing
+ciphertext without its key fails closed instead of generating a replacement.
+
+The shared editor ViewModel coalesces waiting input behind one writer. It retains
+an unacknowledged mutation for explicit retry, so a committed write whose response
+was lost can recover its original timestamp before newer input is saved. Storage
+uses compare-and-set revisions; another editor's changes require explicit review.
+Back flushes pending input, and an item returns to its parent only after its
+completed line is durable. Route disposal cancels owned work. A confirmed access
+denial hides retained input and stops writing until admitted synchronization
+succeeds; ordinary age and expired action preparation do not discard it.
+
+Server Save first flushes local input and obtains fresh preparation against the
+original claim version. A competing server change requires explicit reload.
+Confirmed command cleanup removes only matching input through a revision check;
+newer edits and unfinished items remain. Editing a retained unsent/rejected
+command first persists its original input and claim ID, then removes the reviewed
+command revision. An uncertain operation cannot be replaced.
+
 ## Durable commands
 
 Draft creation/editing, submission, draft cancellation and submission withdrawal
@@ -133,13 +173,15 @@ the receipt picker accepts only the owned employment's published receipt catalog
 Selecting a new receipt currently requires Documents self-read access. Existing
 draft labels use the narrower expense reference lookup described below.
 
-Back and Save remain fixed above and below scrolling forms. Leaving a changed
-form asks for confirmation. Backgrounding retains local input and cancels reads;
-returning acquires fresh authority. Retrying a failed acquisition preserves local
-input without asking to discard it. Unsaved fields remain process-local. Save
-first retains an encrypted immutable command, so pending delivery survives a
-process restart. The recovery card distinguishes sending, uncertain, rejected
-and confirmed results; an uncertain operation cannot be edited or discarded.
+Back and Save remain fixed above and below scrolling forms. Local save status
+reflects storage acknowledgement. Back saves input before leaving; a storage
+failure offers retry or explicit exit without the remaining changes. Deleting a
+local draft or unfinished item requires confirmation. Backgrounding cancels reads
+and lets the finite owned save finish; returning observes local input. A retained
+unfinished item opens through Continue item, and server Save remains unavailable
+until it is completed or discarded. Server Save retains an encrypted immutable
+command before transport. The recovery card distinguishes sending, uncertain,
+rejected and confirmed results; an uncertain operation cannot be edited or discarded.
 
 The preparation use case rejects a changed server version against the version
 originally edited, without silently rebasing input. The editor then offers an
@@ -184,6 +226,25 @@ deadlines are bounded. See [file output](file-output.md) for native destination
 ownership and partial-file behavior.
 
 ## Validation
+
+Local working copies passed root checks with 1,369 JVM/desktop tests, 208 expense
+tests and four localization tests in Chromium, Android dev assembly and production
+Web compilation. Tests cover SQLite/IndexedDB persistence, concurrent writes and
+deletion, lost acknowledgements, first-key races, late scope changes, read-denial
+recovery, coalesced input, disposal and interrupted reload of a reviewed server
+version. Layout checks include unfinished-item recovery and fixed actions at 200%
+text.
+
+The API 35 emulator created a draft offline, stopped the app, advanced its clock
+73 hours and restored the title, description and raw amount `12,` without API
+connectivity. Editing remained available. Completing the item locally and attempting
+server Save offline retained the input without creating a claim. Reconnection
+created exactly one claim. A later edit of that claim survived another offline
+process restart while confirmed facts remained unchanged; explicit Save advanced
+the same claim to its next version with the original line ID and exact amount.
+Acknowledgement removed the matching working copy. Emulator clock/network settings
+were restored, and its crash buffer contained no HRIS crash.
+The validated APK was installed on the authorized phone with install-only delivery.
 
 The account-owned replica passed root checks with 1,344 JVM/desktop tests,
 184 expense tests in Chromium, Android dev assembly and production Web compilation.

@@ -12,12 +12,14 @@ import dev.fajar.starter.designsystem.theme.AppColors
 import dev.fajar.starter.expenses.presentation.commands.widgets.ExpenseCommandCard
 import dev.fajar.starter.expenses.presentation.draft.*
 import dev.fajar.starter.expenses.presentation.draft.widgets.*
+import dev.fajar.starter.expenses.presentation.working.ExpenseLocalSaveStatus
 import dev.fajar.starter.localization.*
 import io.github.composefluent.FluentTheme
 import io.github.composefluent.icons.Icons
 import io.github.composefluent.icons.regular.Add
 import io.github.composefluent.icons.regular.ArrowLeft
 import io.github.composefluent.icons.regular.ArrowSync
+import io.github.composefluent.icons.regular.Delete
 
 @Composable
 fun ExpenseDraftPage(
@@ -43,6 +45,17 @@ fun ExpenseDraftPage(
                     )
                 },
                 actions = {
+                    if (
+                        state.persistence != null &&
+                            state.command == null &&
+                            state.restriction == null
+                    )
+                        AppIconButton(
+                            Icons.Regular.Delete,
+                            appString(AppString.ExpenseDiscardLocalDraft),
+                            { onEvent(ExpenseDraftEvent.DiscardLocalRequested) },
+                            enabled = state.editable,
+                        )
                     AppIconButton(
                         Icons.Regular.ArrowSync,
                         appString(AppString.Refresh),
@@ -100,6 +113,17 @@ fun ExpenseDraftPage(
             }
         val form = state.form
         if (form != null && state.command == null && state.restriction == null) {
+            state.persistence?.let { local ->
+                item(key = "local-save") {
+                    ExpenseLocalSaveStatus(
+                        local,
+                        state.active && state.work == null,
+                        { onEvent(ExpenseDraftEvent.RetryLocalSave) },
+                        { onEvent(ExpenseDraftEvent.ReloadRequested) },
+                        appString(AppString.Refresh),
+                    )
+                }
+            }
             item(key = "title") {
                 AppTextField(
                     appString(AppString.ExpenseTitle),
@@ -128,10 +152,30 @@ fun ExpenseDraftPage(
                         Icons.Regular.Add,
                         appString(AppString.ExpenseAddItem),
                         { onEvent(ExpenseDraftEvent.ItemAdded) },
-                        enabled = state.editable && form.lines.size < 20,
+                        enabled =
+                            state.editable &&
+                                form.lines.size < 20 &&
+                                state.persistence?.edited?.item == null,
                     )
                 }
             }
+            if (state.persistence?.edited?.item != null)
+                item(key = "unfinished-item") {
+                    AppListRow(
+                        appString(AppString.ExpenseResumeItem),
+                        { onEvent(ExpenseDraftEvent.ItemResumed) },
+                        supportingText = appString(AppString.ExpenseUnfinishedItem),
+                        enabled = state.editable,
+                        trailing = {
+                            AppIconButton(
+                                Icons.Regular.Delete,
+                                appString(AppString.ExpenseDiscard),
+                                { onEvent(ExpenseDraftEvent.ItemDiscardRequested) },
+                                enabled = state.editable,
+                            )
+                        },
+                    )
+                }
             if (form.lines.isEmpty())
                 item(key = "empty") {
                     AppText(appString(AppString.ExpenseAddItemHint), color = AppColors.muted)

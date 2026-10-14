@@ -771,4 +771,15 @@
     <string name="expense_submission_limit_id">Klaim ini mencapai batas jumlah pengajuan.</string>
     <string name="expense_reason_required_id">Isi alasan (maksimal 1.000 karakter).</string>
     <string name="leave_balance_unavailable_id">Saldo cuti ini tidak tersedia.</string>
+    <string name="expense_saved_locally_id">Tersimpan di perangkat ini</string>
+    <string name="expense_saving_locally_id">Menyimpan di perangkat ini…</string>
+    <string name="expense_working_copy_changed_id">Draft ini berubah di editor lain. Tinjau versi tersimpan sebelum melanjutkan.</string>
+    <string name="expense_working_copy_invalid_id">Sebagian isian draft belum dapat disimpan. Periksa nilai yang dimasukkan.</string>
+    <string name="expense_working_copy_reload_id">Buka draft tersimpan terbaru dan buang perubahan yang sedang ditampilkan?</string>
+    <string name="expense_discard_local_draft_id">Buang draft lokal</string>
+    <string name="expense_discard_local_explanation_id">Hapus draft ini dari perangkat? Klaim yang sudah disimpan ke perusahaan tetap tersedia.</string>
+    <string name="expense_resume_item_id">Lanjutkan item</string>
+    <string name="expense_unfinished_item_id">Item ini belum ditambahkan ke klaim.</string>
+    <string name="expense_discard_item_explanation_id">Buang item yang belum selesai ini? Item klaim lainnya tetap disimpan.</string>
+    <string name="expense_leave_unsaved_explanation_id">Perubahan terakhir belum dapat disimpan di perangkat. Keluar tanpa perubahan tersebut?</string>
 </resources>

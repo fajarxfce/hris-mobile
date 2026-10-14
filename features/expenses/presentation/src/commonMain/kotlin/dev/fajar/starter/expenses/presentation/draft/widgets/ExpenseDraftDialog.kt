@@ -14,9 +14,11 @@ fun ExpenseDraftConfirmation(state: ExpenseDraftState, onEvent: (ExpenseDraftEve
     AppDialog(
         appString(
             when (dialog) {
-                ExpenseDraftDialog.EXIT -> AppString.ExpenseDiscardChanges
+                ExpenseDraftDialog.EXIT -> AppString.ExpenseDiscardLocalDraft
+                ExpenseDraftDialog.LEAVE_UNSAVED -> AppString.ExpenseDiscardChanges
                 ExpenseDraftDialog.RELOAD -> AppString.ExpenseReloadDraft
                 ExpenseDraftDialog.DISCARD_COMMAND -> AppString.ExpenseEditDraft
+                ExpenseDraftDialog.DISCARD_ITEM -> AppString.ExpenseDiscardChanges
             }
         ),
         appString(AppString.Close),
@@ -26,8 +28,16 @@ fun ExpenseDraftConfirmation(state: ExpenseDraftState, onEvent: (ExpenseDraftEve
             AppText(
                 appString(
                     when (dialog) {
-                        ExpenseDraftDialog.EXIT -> AppString.ExpenseUnsavedChanges
-                        ExpenseDraftDialog.RELOAD -> AppString.ExpenseReloadExplanation
+                        ExpenseDraftDialog.EXIT -> AppString.ExpenseDiscardLocalExplanation
+                        ExpenseDraftDialog.LEAVE_UNSAVED -> AppString.ExpenseLeaveUnsavedExplanation
+                        ExpenseDraftDialog.DISCARD_ITEM -> AppString.ExpenseDiscardItemExplanation
+                        ExpenseDraftDialog.RELOAD ->
+                            if (
+                                state.persistence?.failure?.code ==
+                                    "client.expense_working_copy_changed"
+                            )
+                                AppString.ExpenseWorkingCopyReload
+                            else AppString.ExpenseReloadExplanation
                         ExpenseDraftDialog.DISCARD_COMMAND ->
                             AppString.ExpenseEditRequestExplanation
                     }
@@ -37,6 +47,8 @@ fun ExpenseDraftConfirmation(state: ExpenseDraftState, onEvent: (ExpenseDraftEve
                 appString(
                     when (dialog) {
                         ExpenseDraftDialog.EXIT -> AppString.ExpenseDiscard
+                        ExpenseDraftDialog.DISCARD_ITEM -> AppString.ExpenseDiscard
+                        ExpenseDraftDialog.LEAVE_UNSAVED -> AppString.ExpenseDiscard
                         ExpenseDraftDialog.RELOAD -> AppString.Refresh
                         ExpenseDraftDialog.DISCARD_COMMAND -> AppString.ExpenseEditDraft
                     }
@@ -45,6 +57,9 @@ fun ExpenseDraftConfirmation(state: ExpenseDraftState, onEvent: (ExpenseDraftEve
                     onEvent(
                         when (dialog) {
                             ExpenseDraftDialog.EXIT -> ExpenseDraftEvent.ExitConfirmed
+                            ExpenseDraftDialog.LEAVE_UNSAVED -> ExpenseDraftEvent.ExitWithoutSaving
+                            ExpenseDraftDialog.DISCARD_ITEM ->
+                                ExpenseDraftEvent.ItemDiscardConfirmed
                             ExpenseDraftDialog.RELOAD -> ExpenseDraftEvent.ReloadConfirmed
                             ExpenseDraftDialog.DISCARD_COMMAND ->
                                 ExpenseDraftEvent.DiscardCommandConfirmed

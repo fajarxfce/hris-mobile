@@ -39,6 +39,8 @@ fun failureText(failure: Failure): String =
             "expense_claim_not_found",
             "expense_submission_not_found" -> AppString.ExpenseUnavailable
             "client.expense_changed" -> AppString.ExpenseChanged
+            "client.expense_working_copy_changed" -> AppString.ExpenseWorkingCopyChanged
+            "client.expense_working_copy_invalid" -> AppString.ExpenseWorkingCopyInvalid
             "client.expense_scope_changed" -> AppString.CalendarScopeChanged
             "client.expense_timeout" -> AppString.ExpenseTimeout
             "client.payslip_cache_expired" -> AppString.PayslipExportReviewRequired

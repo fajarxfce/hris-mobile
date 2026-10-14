@@ -9,6 +9,9 @@ import dev.fajar.starter.expenses.domain.replica.repositories.ExpenseReplicaRepo
 import dev.fajar.starter.expenses.domain.replica.usecases.*
 import dev.fajar.starter.expenses.domain.repositories.*
 import dev.fajar.starter.expenses.domain.usecases.*
+import dev.fajar.starter.expenses.domain.working.entities.ExpenseWorkingSlot
+import dev.fajar.starter.expenses.domain.working.repositories.ExpenseWorkingCopyRepository
+import dev.fajar.starter.expenses.domain.working.usecases.*
 import dev.fajar.starter.sync.domain.SyncTask
 import java.nio.file.Files
 import kotlin.test.*
@@ -32,6 +35,8 @@ class ExpenseBindingsTest {
             assertNotNull(koin.get<ExpenseRepository>())
             assertNotNull(koin.get<ExpenseCacheRepository>())
             assertNotNull(koin.get<ExpenseReplicaRepository>())
+            assertNotNull(koin.get<ExpenseWorkingCopyRepository>())
+            assertNotNull(koin.get<SaveExpenseWorkingCopy>())
             assertSame(
                 koin.get<SyncExpenses>(),
                 koin.getAll<SyncTask>().single { it.key == SyncExpenses.KEY },
@@ -51,6 +56,21 @@ class ExpenseBindingsTest {
             val id = "44444444-4444-4444-4444-444444444444"
             val results =
                 listOf(
+                    koin.get<OpenExpenseWorkingCopy>()(
+                        "workspace",
+                        id,
+                        ExpenseWorkingSlot.Creation(id),
+                    ),
+                    koin.get<ObserveExpenseWorkingCopy>()(
+                            "workspace",
+                            ExpenseWorkingSlot.Creation(id),
+                        )
+                        .first(),
+                    koin.get<DiscardExpenseWorkingCopy>()(
+                        "workspace",
+                        ExpenseWorkingSlot.Creation(id),
+                        id,
+                    ),
                     koin.get<SyncExpenses>()("workspace"),
                     koin.get<LoadExpenseClaim>()("workspace", id),
                     koin.get<ObserveExpenses>()("workspace").first(),

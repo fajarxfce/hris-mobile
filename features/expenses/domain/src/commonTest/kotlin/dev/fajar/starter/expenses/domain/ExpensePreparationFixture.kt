@@ -86,10 +86,21 @@ class ExpensePreparationFixture(
                 return failure ?: AppResult.Success(ExpensePage(listOf(center)))
             }
         }
-    val draft = LoadExpenseDraftPreparation(f.remote, f.sessions, f.workspaces, f.clock, f.build)
-    val categories = LoadExpenseCategories(remote, f.sessions, f.workspaces, f.clock, f.build)
-    val references = LoadExpenseDraftReferences(remote, f.sessions, f.workspaces, f.clock, f.build)
-    val centers = LoadExpenseCostCenters(remote, f.sessions, f.workspaces, f.clock, f.build)
+    val draft =
+        LoadExpenseDraftPreparation(
+            f.remote,
+            f.sessions,
+            f.workspaces,
+            f.clock,
+            f.build,
+            f.replicas,
+        )
+    val categories =
+        LoadExpenseCategories(remote, f.sessions, f.workspaces, f.clock, f.build, f.replicas)
+    val references =
+        LoadExpenseDraftReferences(remote, f.sessions, f.workspaces, f.clock, f.build, f.replicas)
+    val centers =
+        LoadExpenseCostCenters(remote, f.sessions, f.workspaces, f.clock, f.build, f.replicas)
 
     init {
         f.directoryCall = {

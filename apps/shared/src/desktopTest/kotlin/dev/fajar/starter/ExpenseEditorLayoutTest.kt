@@ -16,6 +16,7 @@ import dev.fajar.starter.common.decimal.DecimalAmount
 import dev.fajar.starter.designsystem.theme.AppTheme
 import dev.fajar.starter.documents.domain.entities.DocumentRevisionStatus
 import dev.fajar.starter.expenses.domain.entities.*
+import dev.fajar.starter.expenses.domain.working.entities.*
 import dev.fajar.starter.expenses.presentation.action.*
 import dev.fajar.starter.expenses.presentation.action.pages.ExpenseActionPage
 import dev.fajar.starter.expenses.presentation.draft.*
@@ -24,6 +25,7 @@ import dev.fajar.starter.expenses.presentation.draft.widgets.ExpenseDraftLineRow
 import dev.fajar.starter.expenses.presentation.item.*
 import dev.fajar.starter.expenses.presentation.item.pages.ExpenseItemPage
 import dev.fajar.starter.expenses.presentation.item.widgets.ExpenseItemPicker
+import dev.fajar.starter.expenses.presentation.working.ExpenseEditPersistence
 import dev.fajar.starter.localization.*
 import dev.fajar.starter.settings.domain.entities.AppLanguage
 import java.io.File
@@ -113,7 +115,7 @@ class ExpenseEditorLayoutTest {
     @Test
     fun itemFieldsReceiptsAndSaveRemainReachableAtLargeTextWithoutExposingIds() {
         val initial = itemForm()
-        var state by mutableStateOf(ExpenseItemState(initial, initial, active = true, ready = true))
+        var state by mutableStateOf(itemState(initial))
         val events = mutableListOf<ExpenseItemEvent>()
         compose.setContent {
             val density = LocalDensity.current
@@ -140,6 +142,9 @@ class ExpenseEditorLayoutTest {
             .performScrollTo()
             .performTextReplacement("75000,25")
         compose.runOnIdle { assertEquals("75000,25", state.form.amount) }
+        compose
+            .onNode(hasScrollToIndexAction())
+            .performScrollToNode(hasContentDescription("Hapus perjalanan-klien.pdf"))
         compose
             .onNodeWithContentDescription("Hapus perjalanan-klien.pdf")
             .performScrollTo()
@@ -172,22 +177,19 @@ class ExpenseEditorLayoutTest {
                 )
             }
         val state =
-            ExpenseItemState(
-                form,
-                form,
-                active = true,
-                ready = true,
-                dialog = ExpenseItemDialog.CostCenters,
-                costCenters =
-                    ExpenseCostCenters(
-                        access(),
-                        "",
-                        null,
-                        ExpensePage(centers, "COST_CENTER:CC20"),
-                        now,
-                        now + 60.seconds,
-                    ),
-            )
+            itemState(form)
+                .copy(
+                    dialog = ExpenseItemDialog.CostCenters,
+                    costCenters =
+                        ExpenseCostCenters(
+                            access(),
+                            "",
+                            null,
+                            ExpensePage(centers, "COST_CENTER:CC20"),
+                            now,
+                            now + 60.seconds,
+                        ),
+                )
         val events = mutableListOf<ExpenseItemEvent>()
         compose.setContent {
             val density = LocalDensity.current
@@ -221,6 +223,42 @@ class ExpenseEditorLayoutTest {
         compose.onNodeWithContentDescription("Tutup").assertIsDisplayed()
         compose.onNodeWithContentDescription("Cari cost center").assertIsDisplayed()
         capture("expense-cost-center-large-text", compose.onNode(isDialog()))
+    }
+
+    @Test
+    fun unfinishedItemCanBeResumedAtLargeTextBeforeTheClaimCanBeSent() {
+        val initial = draftState()
+        val copy = requireNotNull(initial.persistence).stored
+        val state =
+            initial.copy(
+                persistence =
+                    ExpenseEditPersistence(
+                        copy.copy(item = itemState(itemForm()).persistence!!.stored.item)
+                    )
+            )
+        val events = mutableListOf<ExpenseDraftEvent>()
+        compose.setContent {
+            val density = LocalDensity.current
+            CompositionLocalProvider(LocalDensity provides Density(density.density, 2f)) {
+                AppTheme {
+                    Box(Modifier.size(360.dp, 760.dp)) {
+                        ExpenseDraftPage(state, rememberLazyListState(), events::add)
+                    }
+                }
+            }
+        }
+        compose.onNodeWithText("Saved on this device").assertIsDisplayed()
+        compose.onNode(hasText("Save draft") and hasClickAction()).assertIsNotEnabled()
+        compose.onNode(hasScrollToIndexAction()).performScrollToNode(hasText("Continue item"))
+        compose
+            .onNode(hasText("Continue item") and hasClickAction())
+            .assertIsDisplayed()
+            .performClick()
+        compose.runOnIdle {
+            assertEquals(listOf<ExpenseDraftEvent>(ExpenseDraftEvent.ItemResumed), events)
+        }
+        compose.onNodeWithContentDescription("Back").assertIsDisplayed()
+        compose.onNodeWithContentDescription("Discard local draft").assertIsDisplayed()
     }
 
     @Test
@@ -436,18 +474,63 @@ class ExpenseEditorLayoutTest {
                 now,
                 now + 60.seconds,
             )
+        val references =
+            ExpenseReferenceValues(
+                employeeId,
+                listOf(ExpenseLabelReference(categoryId, "TRAVEL", "Perjalanan dinas", true)),
+                emptyList(),
+                emptyList(),
+            )
         return ExpenseDraftState(
             form = form,
             original = form,
             preparation = preparation,
             commandReady = true,
             active = true,
-            references =
-                ExpenseReferenceValues(
-                    employeeId,
-                    listOf(ExpenseLabelReference(categoryId, "TRAVEL", "Perjalanan dinas", true)),
-                    emptyList(),
-                    emptyList(),
+            references = references,
+            persistence =
+                ExpenseEditPersistence(
+                    ExpenseWorkingCopy(
+                        "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
+                        preparation.employee,
+                        "Asia/Jakarta",
+                        ExpenseDraftInput(form.title, form.description, form.lines, form.reason),
+                        null,
+                        null,
+                        "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+                        now,
+                        references,
+                    )
+                ),
+        )
+    }
+
+    private fun itemState(form: ExpenseItemForm): ExpenseItemState {
+        val copy = requireNotNull(draftState().persistence).stored
+        return ExpenseItemState(
+            form,
+            form,
+            active = true,
+            ready = true,
+            persistence =
+                ExpenseEditPersistence(
+                    copy.copy(
+                        item =
+                            ExpenseWorkingItem(
+                                ExpenseLineInput(
+                                    "99999999-9999-4999-8999-999999999999",
+                                    requireNotNull(form.category).id,
+                                    form.date.toString(),
+                                    form.amount,
+                                    form.description,
+                                    form.costCenter?.id,
+                                    form.receipts.map { it.revisionId },
+                                ),
+                                form.category,
+                                form.costCenter,
+                                form.receipts,
+                            )
+                    )
                 ),
         )
     }

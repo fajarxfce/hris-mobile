@@ -4,6 +4,8 @@ import dev.fajar.starter.common.result.Failure
 import dev.fajar.starter.expenses.domain.entities.*
 import dev.fajar.starter.expenses.presentation.expenseVerificationCodes
 import dev.fajar.starter.expenses.presentation.receipts.ExpenseReceiptTarget
+import dev.fajar.starter.expenses.presentation.working.ExpenseEditPersistence
+import dev.fajar.starter.expenses.presentation.working.ExpenseEditorState
 import kotlinx.datetime.LocalDate
 
 data class ExpenseItemState(
@@ -13,7 +15,7 @@ data class ExpenseItemState(
     val ready: Boolean = false,
     val loading: Boolean = false,
     val choicesLoading: Boolean = false,
-    val closing: Boolean = false,
+    override val closing: Boolean = false,
     val categoryPolicy: ExpenseCategory? = null,
     val categories: ExpenseCategories? = null,
     val costCenters: ExpenseCostCenters? = null,
@@ -21,10 +23,19 @@ data class ExpenseItemState(
     val dialog: ExpenseItemDialog? = null,
     val evidenceTarget: ExpenseReceiptTarget? = null,
     val failure: Failure? = null,
-    val restriction: Failure? = null,
-) {
+    override val restriction: Failure? = null,
+    override val persistence: ExpenseEditPersistence? = null,
+    val finishing: Boolean = false,
+) : ExpenseEditorState {
     val editable: Boolean
-        get() = active && ready && !closing && restriction == null
+        get() =
+            active &&
+                ready &&
+                !closing &&
+                !finishing &&
+                restriction == null &&
+                persistence?.edited?.item != null &&
+                persistence?.failure?.code != "client.expense_working_copy_changed"
 
     val canSave: Boolean
         get() = editable && !loading && dialog == null && evidenceTarget == null

@@ -4,6 +4,7 @@ import dev.fajar.starter.common.config.AppBuild
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.expenses.domain.entities.*
 import dev.fajar.starter.expenses.domain.policies.*
+import dev.fajar.starter.expenses.domain.replica.repositories.ExpenseReplicaRepository
 import dev.fajar.starter.expenses.domain.repositories.*
 import dev.fajar.starter.identity.domain.repositories.SessionRepository
 import dev.fajar.starter.workspace.domain.entities.*
@@ -19,6 +20,7 @@ class LoadExpenseCostCenters(
     private val workspaces: WorkspaceRepository,
     private val clock: Clock,
     private val build: AppBuild,
+    private val replicas: ExpenseReplicaRepository,
 ) {
     suspend operator fun invoke(
         workspaceId: String,
@@ -40,7 +42,12 @@ class LoadExpenseCostCenters(
             if (ownership is AppResult.Failed) return@withTimeoutOrNull ownership
             val policy =
                 when (fetchedPolicy) {
-                    is AppResult.Failed -> return@withTimeoutOrNull fetchedPolicy
+                    is AppResult.Failed ->
+                        return@withTimeoutOrNull retainReadDenial(
+                            workspaceId,
+                            access,
+                            fetchedPolicy,
+                        )
                     is AppResult.Success -> CompanyPolicySnapshot(fetchedPolicy.value, requestedAt)
                 }
             val admission = continuation(workspaceId, access, policy)
@@ -53,7 +60,8 @@ class LoadExpenseCostCenters(
                 }
             val page =
                 when (response) {
-                    is AppResult.Failed -> return@withTimeoutOrNull response
+                    is AppResult.Failed ->
+                        return@withTimeoutOrNull retainReadDenial(workspaceId, access, response)
                     is AppResult.Success -> response.value
                 }
             val expiry =
@@ -68,6 +76,22 @@ class LoadExpenseCostCenters(
                 ExpenseCostCenters(publication, query.trim(), after, page, requestedAt, expiry)
             )
         } ?: expenseFailure("client.expense_timeout", FailureKind.Timeout)
+    }
+
+    private suspend fun retainReadDenial(
+        workspaceId: String,
+        access: ExpenseAccess,
+        result: AppResult.Failed,
+    ): AppResult.Failed {
+        if (expenseFailureInvalidatesCache(result.failure)) {
+            val before = validateExpenseContinuation(access, currentAccess(workspaceId))
+            if (before is AppResult.Failed) return before
+            replicas.restrict(access, result.failure)
+            currentCoroutineContext().ensureActive()
+            val after = validateExpenseContinuation(access, currentAccess(workspaceId))
+            if (after is AppResult.Failed) return after
+        }
+        return result
     }
 
     private suspend fun currentAccess(workspaceId: String): AppResult<ExpenseAccess> {

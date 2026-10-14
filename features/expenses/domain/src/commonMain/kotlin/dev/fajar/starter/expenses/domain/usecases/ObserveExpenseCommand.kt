@@ -4,6 +4,7 @@ import dev.fajar.starter.common.config.AppBuild
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.expenses.domain.entities.*
 import dev.fajar.starter.expenses.domain.policies.*
+import dev.fajar.starter.expenses.domain.replica.repositories.ExpenseReplicaRepository
 import dev.fajar.starter.expenses.domain.repositories.ExpenseCommandRepository
 import dev.fajar.starter.identity.domain.repositories.SessionRepository
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
@@ -17,6 +18,7 @@ class ObserveExpenseCommand(
     private val workspaces: WorkspaceRepository,
     private val clock: Clock,
     private val build: AppBuild,
+    private val replicas: ExpenseReplicaRepository,
 ) {
     @OptIn(ExperimentalCoroutinesApi::class)
     operator fun invoke(
@@ -68,12 +70,28 @@ class ObserveExpenseCommand(
             .flatMapLatest { admitted ->
                 when (admitted) {
                     is AppResult.Failed -> flowOf(admitted)
-                    is AppResult.Success ->
-                        commands.observe(admitted.value, slot).map { result ->
+                    is AppResult.Success -> observeAdmittedCommand(admitted.value, slot)
+                }
+            }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private fun observeAdmittedCommand(
+        access: ExpenseAccess,
+        slot: ExpenseCommandSlot,
+    ): Flow<AppResult<ExpenseCommandRecord?>> =
+        replicas.observeAdmission(access).flatMapLatest { admission ->
+            when (admission) {
+                is AppResult.Failed -> flowOf(admission)
+                is AppResult.Success -> {
+                    val denial = admission.value.denial
+                    if (denial != null) flowOf(AppResult.Failed(denial))
+                    else
+                        commands.observe(access, slot).map { result ->
                             val record = (result as? AppResult.Success)?.value
                             if (
                                 record != null &&
-                                    (!record.command.belongsTo(admitted.value) ||
+                                    (!record.command.belongsTo(access) ||
                                         record.command.slot() != slot)
                             )
                                 expenseFailure(
@@ -84,5 +102,5 @@ class ObserveExpenseCommand(
                         }
                 }
             }
-    }
+        }
 }

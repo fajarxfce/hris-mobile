@@ -1,3 +1,5 @@
+@file:OptIn(kotlin.uuid.ExperimentalUuidApi::class)
+
 package dev.fajar.starter.expenses.presentation
 
 import dev.fajar.starter.common.decimal.DecimalAmount
@@ -6,10 +8,13 @@ import dev.fajar.starter.expenses.domain.entities.*
 import dev.fajar.starter.expenses.domain.policies.*
 import dev.fajar.starter.expenses.domain.repositories.*
 import dev.fajar.starter.expenses.domain.usecases.*
+import dev.fajar.starter.expenses.domain.working.entities.*
+import dev.fajar.starter.expenses.domain.working.usecases.*
 import dev.fajar.starter.expenses.presentation.draft.*
 import dev.fajar.starter.expenses.presentation.item.*
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.Instant
+import kotlin.uuid.Uuid
 import kotlinx.coroutines.flow.*
 import kotlinx.datetime.LocalDate
 
@@ -129,12 +134,32 @@ class ExpenseEditorFixture(val f: ExpenseFixture = ExpenseFixture()) {
                 return AppResult.Success(true)
             }
         }
+    val copies = ExpenseWorkingCopyFake { access ->
+        (f.sessionState.value as? AppResult.Success)?.value?.id == access.sessionId
+    }
+    val openCopy =
+        OpenExpenseWorkingCopy(copies, f.replicas, f.sessions, f.workspaces, f.clock, f.build)
+    val observeCopy =
+        ObserveExpenseWorkingCopy(copies, f.replicas, f.sessions, f.workspaces, f.clock, f.build)
+    val saveCopy =
+        SaveExpenseWorkingCopy(copies, f.replicas, f.sessions, f.workspaces, f.clock, f.build)
+    val discardCopy =
+        DiscardExpenseWorkingCopy(copies, f.replicas, f.sessions, f.workspaces, f.clock, f.build)
     val prepare = PrepareExpenseDraft(commands, f.sessions, f.workspaces, f.clock, f.build)
     val action = PrepareExpenseAction(commands, f.sessions, f.workspaces, f.clock, f.build)
     val replay = ReplayExpenseCommands(commands, remote, f.sessions, f.workspaces, f.clock, f.build)
     val review =
-        ReviewExpenseCommand(commands, f.replicas, f.sessions, f.workspaces, f.clock, f.build)
-    val observe = ObserveExpenseCommand(commands, f.sessions, f.workspaces, f.clock, f.build)
+        ReviewExpenseCommand(
+            commands,
+            f.replicas,
+            f.sessions,
+            f.workspaces,
+            f.clock,
+            f.build,
+            copies,
+        )
+    val observe =
+        ObserveExpenseCommand(commands, f.sessions, f.workspaces, f.clock, f.build, f.replicas)
 
     suspend fun save(edited: Boolean = false): AppResult<ExpenseCommandRecord> =
         prepare(
@@ -219,9 +244,16 @@ class ExpenseEditorFixture(val f: ExpenseFixture = ExpenseFixture()) {
             }
         }
     val loadPreparation =
-        LoadExpenseDraftPreparation(f.remote, f.sessions, f.workspaces, f.clock, f.build)
+        LoadExpenseDraftPreparation(
+            f.remote,
+            f.sessions,
+            f.workspaces,
+            f.clock,
+            f.build,
+            f.replicas,
+        )
     val references =
-        LoadExpenseDraftReferences(catalogs, f.sessions, f.workspaces, f.clock, f.build)
+        LoadExpenseDraftReferences(catalogs, f.sessions, f.workspaces, f.clock, f.build, f.replicas)
 
     init {
         f.claimCall = { AppResult.Success(currentClaim) }
@@ -284,19 +316,63 @@ class ExpenseEditorFixture(val f: ExpenseFixture = ExpenseFixture()) {
             replay,
             review,
             f.refreshDetail,
+            openCopy,
+            observeCopy,
+            saveCopy,
+            discardCopy,
+            f.sync,
+            f.clock,
         )
 
-    fun itemTarget(existing: Boolean = false) =
-        ExpenseItemTarget(f.workspace.id, preparation, f.line.takeIf { existing }, null)
+    fun itemTarget(existing: Boolean = false): ExpenseItemTarget {
+        val slot =
+            if (existing) ExpenseWorkingSlot.Claim(f.claim.id)
+            else ExpenseWorkingSlot.Creation(f.employee.id)
+        val retained = copies.values.value[copies.key(f.access, slot)]
+        val copy =
+            retained
+                ?: ExpenseWorkingCopy(
+                        if (existing) f.claim.id else Uuid.random().toString(),
+                        f.employee,
+                        f.access.timezone,
+                        if (existing) input else ExpenseDraftInput("", "", emptyList(), ""),
+                        if (existing) f.claim.version else null,
+                        ExpenseWorkingItem(
+                            ExpenseLineInput(
+                                f.line.id,
+                                if (existing) f.line.categoryId else "",
+                                (if (existing) f.line.occurredOn else f.directory.asOf).toString(),
+                                if (existing) f.line.amount.value else "",
+                                if (existing) f.line.description else "",
+                            ),
+                            if (existing)
+                                ExpenseLabelReference(f.line.categoryId, "TRAVEL", "Travel", true)
+                            else null,
+                        ),
+                        Uuid.random().toString(),
+                        f.clock.now(),
+                    )
+                    .also { copies.seed(f.access, slot, it) }
+        return ExpenseItemTarget(f.workspace.id, slot, copy)
+    }
 
     fun itemModel(target: ExpenseItemTarget = itemTarget()) =
         ExpenseItemViewModel(
             target,
-            loadPreparation,
             references,
-            LoadExpenseCategories(catalogs, f.sessions, f.workspaces, f.clock, f.build),
-            LoadExpenseCostCenters(catalogs, f.sessions, f.workspaces, f.clock, f.build),
+            LoadExpenseCategories(catalogs, f.sessions, f.workspaces, f.clock, f.build, f.replicas),
+            LoadExpenseCostCenters(
+                catalogs,
+                f.sessions,
+                f.workspaces,
+                f.clock,
+                f.build,
+                f.replicas,
+            ),
             PrepareExpenseLine(),
+            observeCopy,
+            saveCopy,
+            f.sync,
             f.clock,
         )
 }

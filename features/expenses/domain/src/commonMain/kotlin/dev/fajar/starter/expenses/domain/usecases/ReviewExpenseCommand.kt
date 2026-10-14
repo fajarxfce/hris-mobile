@@ -9,6 +9,8 @@ import dev.fajar.starter.expenses.domain.entities.ExpenseAccess
 import dev.fajar.starter.expenses.domain.policies.*
 import dev.fajar.starter.expenses.domain.replica.repositories.ExpenseReplicaRepository
 import dev.fajar.starter.expenses.domain.repositories.*
+import dev.fajar.starter.expenses.domain.working.entities.*
+import dev.fajar.starter.expenses.domain.working.repositories.ExpenseWorkingCopyRepository
 import dev.fajar.starter.identity.domain.repositories.SessionRepository
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
 import kotlin.time.Clock
@@ -27,8 +29,13 @@ class ReviewExpenseCommand(
     private val workspaces: WorkspaceRepository,
     private val clock: Clock,
     private val build: AppBuild,
+    private val copies: ExpenseWorkingCopyRepository,
 ) {
-    suspend operator fun invoke(workspaceId: String, commandId: String): AppResult<Boolean> =
+    suspend operator fun invoke(
+        workspaceId: String,
+        commandId: String,
+        expectedRevision: Long? = null,
+    ): AppResult<Boolean> =
         withTimeoutOrNull(10.seconds) {
             if (Uuid.parseOrNull(commandId)?.toString() != commandId)
                 return@withTimeoutOrNull expenseFailure(
@@ -54,6 +61,11 @@ class ReviewExpenseCommand(
                 return@withTimeoutOrNull expenseFailure(
                     "client.expense_scope_changed",
                     FailureKind.AccessDenied,
+                )
+            if (expectedRevision != null && record.revision != expectedRevision)
+                return@withTimeoutOrNull expenseFailure(
+                    "client.expense_command_changed",
+                    FailureKind.Conflict,
                 )
             if (record.outcome is ExpenseCommandOutcome.Unconfirmed)
                 return@withTimeoutOrNull expenseFailure(
@@ -91,12 +103,57 @@ class ReviewExpenseCommand(
                     )
                 val publication = readAdmission(workspaceId, access)
                 if (publication is AppResult.Failed) return@withTimeoutOrNull publication
+                val cleaned = removeSavedInput(workspaceId, access, record.command)
+                if (cleaned is AppResult.Failed) return@withTimeoutOrNull cleaned
             }
             val removal = commands.remove(access, record)
             currentCoroutineContext().ensureActive()
             val publication = validateExpenseContinuation(access, currentAccess(workspaceId))
             if (publication is AppResult.Failed) publication else removal
         } ?: expenseFailure("client.expense_timeout", FailureKind.Timeout)
+
+    /** Confirmed delivery may remove only the exact input it acknowledged, never newer edits. */
+    private suspend fun removeSavedInput(
+        workspaceId: String,
+        access: ExpenseAccess,
+        command: ExpenseCommand,
+    ): AppResult<Unit> {
+        val payload =
+            command.payload as? ExpenseCommandPayload.SaveDraft ?: return AppResult.Success(Unit)
+        for (slot in
+            listOf(
+                ExpenseWorkingSlot.Claim(command.claimId),
+                ExpenseWorkingSlot.Creation(command.employeeId),
+            )) {
+            val observed = copies.observe(access, slot).first()
+            currentCoroutineContext().ensureActive()
+            val continuation = readAdmission(workspaceId, access)
+            if (continuation is AppResult.Failed) return continuation
+            val copy =
+                when (observed) {
+                    is AppResult.Failed -> return observed
+                    is AppResult.Success -> observed.value ?: continue
+                }
+            if (
+                copy.claimId != command.claimId ||
+                    copy.employee.id != command.employeeId ||
+                    copy.item != null ||
+                    copy.expectedVersion != payload.expectedVersion ||
+                    copy.input.reason.trim() != command.reason
+            )
+                continue
+            val normalized = normalizeExpenseDraft(copy.input, copy.expectedVersion)
+            if (normalized !is AppResult.Success || normalized.value != payload) continue
+            val removed = copies.remove(access, slot, copy.revision)
+            currentCoroutineContext().ensureActive()
+            val publication = readAdmission(workspaceId, access)
+            if (publication is AppResult.Failed) return publication
+            if (removed is AppResult.Failed) return removed
+            // A compare-and-set miss means a newer working copy remains; the command is still
+            // confirmed.
+        }
+        return AppResult.Success(Unit)
+    }
 
     private suspend fun readAdmission(workspaceId: String, access: ExpenseAccess): AppResult<Unit> {
         val admission = cache.admission(access)

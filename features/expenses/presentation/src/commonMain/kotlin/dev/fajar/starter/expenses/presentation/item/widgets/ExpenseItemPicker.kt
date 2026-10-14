@@ -153,7 +153,7 @@ fun ExpenseItemPicker(state: ExpenseItemState, onEvent: (ExpenseItemEvent) -> Un
                 }
                 ExpenseItemDialog.Exit ->
                     item(key = "exit") {
-                        AppText(appString(AppString.ExpenseUnsavedChanges))
+                        AppText(appString(AppString.ExpenseLeaveUnsavedExplanation))
                         AppButton(
                             appString(AppString.ExpenseDiscard),
                             { onEvent(ExpenseItemEvent.ExitConfirmed) },

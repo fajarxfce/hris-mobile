@@ -92,8 +92,10 @@ cost centers and published receipts, submit claims, withdraw pending submissions
 cancel drafts, and recover interrupted delivery. Account-owned encrypted records
 receive incremental claim and reimbursement updates. Employment, month, status,
 page and acquired activity selections query local storage across process restarts
-and reauthentication. Saved commands retain their original body and operation ID
-until their outcome is reconciled.
+and reauthentication. Unsubmitted draft fields and unfinished items autosave to
+separate encrypted working copies and reopen locally. Choosing new catalog entries
+and saving to the server still require current online review. Saved commands retain
+their original body and operation ID until their outcome is reconciled.
 
 ## Development
 

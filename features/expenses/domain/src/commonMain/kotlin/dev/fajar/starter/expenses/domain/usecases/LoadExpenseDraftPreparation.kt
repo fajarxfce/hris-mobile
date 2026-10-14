@@ -4,6 +4,7 @@ import dev.fajar.starter.common.config.AppBuild
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.expenses.domain.entities.*
 import dev.fajar.starter.expenses.domain.policies.*
+import dev.fajar.starter.expenses.domain.replica.repositories.ExpenseReplicaRepository
 import dev.fajar.starter.expenses.domain.repositories.*
 import dev.fajar.starter.identity.domain.repositories.SessionRepository
 import dev.fajar.starter.workspace.domain.entities.*
@@ -19,6 +20,7 @@ class LoadExpenseDraftPreparation(
     private val workspaces: WorkspaceRepository,
     private val clock: Clock,
     private val build: AppBuild,
+    private val replicas: ExpenseReplicaRepository,
 ) {
     suspend operator fun invoke(
         workspaceId: String,
@@ -39,7 +41,9 @@ class LoadExpenseDraftPreparation(
                     is AppResult.Failed -> return@withTimeoutOrNull result
                     is AppResult.Success -> result.value
                 }
-            acquire(workspaceId, employeeId, claimId, employmentAfter, access)
+            val result = acquire(workspaceId, employeeId, claimId, employmentAfter, access)
+            if (result is AppResult.Failed) retainReadDenial(workspaceId, access, result)
+            else result
         } ?: expenseFailure("client.expense_timeout", FailureKind.Timeout)
     }
 
@@ -131,6 +135,22 @@ class LoadExpenseDraftPreparation(
             return expenseFailure("expense_not_editable", FailureKind.Conflict)
         val amounts = validateExpenseDraftAmounts(claim.draft)
         return if (amounts is AppResult.Failed) amounts else AppResult.Success(claim)
+    }
+
+    private suspend fun retainReadDenial(
+        workspaceId: String,
+        access: ExpenseAccess,
+        result: AppResult.Failed,
+    ): AppResult.Failed {
+        if (expenseFailureInvalidatesCache(result.failure)) {
+            val before = validateExpenseContinuation(access, currentAccess(workspaceId))
+            if (before is AppResult.Failed) return before
+            replicas.restrict(access, result.failure)
+            currentCoroutineContext().ensureActive()
+            val after = validateExpenseContinuation(access, currentAccess(workspaceId))
+            if (after is AppResult.Failed) return after
+        }
+        return result
     }
 
     private suspend fun currentAccess(workspaceId: String): AppResult<ExpenseAccess> {

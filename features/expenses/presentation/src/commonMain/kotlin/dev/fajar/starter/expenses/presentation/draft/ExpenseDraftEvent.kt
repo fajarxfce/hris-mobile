@@ -19,6 +19,16 @@ sealed interface ExpenseDraftEvent {
 
     data object ItemAdded : ExpenseDraftEvent
 
+    data object ItemResumed : ExpenseDraftEvent
+
+    data object ItemDiscardRequested : ExpenseDraftEvent
+
+    data object ItemDiscardConfirmed : ExpenseDraftEvent
+
+    data object RetryLocalSave : ExpenseDraftEvent
+
+    data object DiscardLocalRequested : ExpenseDraftEvent
+
     data class ItemEdited(val id: String) : ExpenseDraftEvent
 
     data class ItemSaved(val target: ExpenseItemTarget, val value: ExpenseItemResult) :
@@ -43,6 +53,8 @@ sealed interface ExpenseDraftEvent {
     data object BackRequested : ExpenseDraftEvent
 
     data object ExitConfirmed : ExpenseDraftEvent
+
+    data object ExitWithoutSaving : ExpenseDraftEvent
 
     data object VerificationRequested : ExpenseDraftEvent
 }

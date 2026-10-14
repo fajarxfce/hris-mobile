@@ -1,6 +1,7 @@
 package dev.fajar.starter.expenses.presentation.item
 
 import dev.fajar.starter.expenses.domain.entities.*
+import dev.fajar.starter.expenses.domain.working.entities.ExpenseWorkingItem
 import kotlinx.datetime.LocalDate
 
 data class ExpenseItemForm(
@@ -15,18 +16,19 @@ data class ExpenseItemForm(
 }
 
 internal fun ExpenseItemTarget.initialForm(): ExpenseItemForm {
-    val value = line ?: return ExpenseItemForm(preparation.asOf)
+    return requireNotNull(copy.item).toForm()
+}
+
+internal fun ExpenseWorkingItem.toForm(): ExpenseItemForm {
+    val value = input
     return ExpenseItemForm(
-        value.occurredOn,
-        references?.categories?.find { it.id == value.categoryId }
-            ?: ExpenseLabelReference(value.categoryId),
-        value.amount.value,
+        LocalDate.parse(value.occurredOn),
+        category ?: value.categoryId.takeIf { it.isNotEmpty() }?.let { ExpenseLabelReference(it) },
+        value.amount,
         value.description,
-        value.costCenterId?.let { id ->
-            references?.costCenters?.find { it.id == id } ?: ExpenseLabelReference(id)
-        },
-        value.receiptIds.map { id ->
-            references?.receipts?.find { it.revisionId == id } ?: ExpenseReceiptReference(id)
+        value.costCenterId?.let { id -> costCenter ?: ExpenseLabelReference(id) },
+        value.receiptRevisionIds.map { id ->
+            receipts.find { it.revisionId == id } ?: ExpenseReceiptReference(id)
         },
     )
 }

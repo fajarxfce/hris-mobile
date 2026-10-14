@@ -27,6 +27,7 @@ class PrepareExpenseDraft(
         prepared: ExpenseDraftPreparation,
         input: ExpenseDraftInput,
         expectedVersion: Long? = prepared.claim?.version,
+        reservedClaimId: String? = null,
     ): AppResult<ExpenseCommandRecord> =
         withTimeoutOrNull(10.seconds) {
             val access =
@@ -36,6 +37,12 @@ class PrepareExpenseDraft(
                 }
             val valid = validateExpenseDraftPreparation(prepared, access, clock.now())
             if (valid is AppResult.Failed) return@withTimeoutOrNull valid
+            if (
+                reservedClaimId != null &&
+                    (validateExpenseId(reservedClaimId) is AppResult.Failed ||
+                        prepared.claim?.id?.let { it != reservedClaimId } == true)
+            )
+                return@withTimeoutOrNull expenseFailure("client.expense_working_copy_invalid")
             if (prepared.claim?.version != expectedVersion)
                 return@withTimeoutOrNull expenseFailure(
                     "client.expense_changed",
@@ -64,14 +71,21 @@ class PrepareExpenseDraft(
                 }
             val normalized = input.reason.trim()
             if (existing != null)
-                return@withTimeoutOrNull retained(existing, access, prepared, payload, normalized)
+                return@withTimeoutOrNull retained(
+                    existing,
+                    access,
+                    prepared,
+                    payload,
+                    normalized,
+                    reservedClaimId,
+                )
             val command =
                 ExpenseCommand(
                     Uuid.random().toString(),
                     access.accountId,
                     access.audience,
                     access.companyId,
-                    prepared.claim?.id ?: Uuid.random().toString(),
+                    prepared.claim?.id ?: reservedClaimId ?: Uuid.random().toString(),
                     prepared.employee.id,
                     prepared.employee.employeeNumber,
                     prepared.employmentAfter,
@@ -99,7 +113,7 @@ class PrepareExpenseDraft(
             when (stored) {
                 is AppResult.Failed -> stored
                 is AppResult.Success ->
-                    retained(stored.value, access, prepared, payload, normalized)
+                    retained(stored.value, access, prepared, payload, normalized, reservedClaimId)
             }
         } ?: expenseFailure("client.expense_timeout", FailureKind.Timeout)
 
@@ -109,6 +123,7 @@ class PrepareExpenseDraft(
         prepared: ExpenseDraftPreparation,
         payload: ExpenseCommandPayload.SaveDraft,
         reason: String,
+        reservedClaimId: String?,
     ): AppResult<ExpenseCommandRecord> {
         if (record != null && !record.command.belongsTo(access))
             return expenseFailure("client.expense_scope_changed", FailureKind.AccessDenied)
@@ -118,6 +133,7 @@ class PrepareExpenseDraft(
                 record.command.timezone == access.timezone &&
                 record.command.payload == payload &&
                 (prepared.claim == null || record.command.claimId == prepared.claim.id) &&
+                (reservedClaimId == null || record.command.claimId == reservedClaimId) &&
                 record.command.reason == reason
         )
             AppResult.Success(record)

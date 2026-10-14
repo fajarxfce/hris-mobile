@@ -96,10 +96,12 @@ transitions. A local pending command is not a confirmed business result. Respons
 loss preserves the original body and operation ID; a retry does not manufacture
 a new action. Version conflicts need reconciliation rather than last-write-wins.
 
-Current workflows have durable delivery after preparation. Full offline creation
-of every draft is not implemented: some forms still need online policy/evidence
-review before they can be prepared. Saving an unfinished local draft and
-submitting it are separate capabilities.
+Current workflows have durable delivery after preparation. Expense editor input
+and unfinished items also have encrypted local working copies, independent of
+confirmed claims and pending commands. Full offline creation of every draft is
+not implemented: some forms still need online policy/evidence review before they
+can be prepared. Saving an unfinished local draft and submitting it are separate
+capabilities.
 
 ## Current coverage
 
@@ -112,6 +114,7 @@ submitting it are separate capabilities.
 | Overtime | Account-owned full requests and acquired activity; local employment/date/status queries | Request change feed and resumable older-activity acquisition implemented |
 | Payslips | Account-owned full payslips, indexed annual summaries and versioned payment progress; local year/page/detail queries | Two explicit collections, staged replacement and incremental changes implemented |
 | Expenses | Account-owned complete claims, indexed summaries, payment progress and acquired activity; local employment/month/status/page queries | Two explicit collections, canonical claim acquisition and resumable activity backfill implemented |
+| Expense editor | Account/company-owned draft fields, completed lines and one unfinished item; local compare-and-set autosave | Explicit server Save performs fresh review and retains an immutable command; working copies do not replicate as confirmed claims |
 | Local document files | Account/company-owned imports and completed downloads | Upload/download commands; catalog is online |
 | Coworker directory / profile | Live reads | Not implemented |
 
@@ -235,12 +238,12 @@ its replacement is available. A completed feed's missing parent is authoritative
    account-owned facts across sign-in; workspace admission and other last-view
    snapshots remain session-owned. Reauthentication
    does not reuse an old request guard or old credential-bound feed cursor.
-2. Retain unfinished expense editor input across process death, separately from
-   immutable prepared commands and the acquired claim replica.
+2. Extend unfinished local draft persistence beyond Expenses, separately from
+   immutable prepared commands and acquired server records.
 3. Register backend feeds for documents and coworker data,
    including deletions and authorization changes, before implementing mobile sync.
-4. Persist unfinished local drafts separately from confirmed server models and
-   prepared outbox commands. Show unsynchronized changes and actionable conflicts.
+4. Keep unsynchronized changes and actionable conflicts clear in each migrated
+   editor. Expense autosave distinguishes acknowledged local input from server Save.
 5. Exercise offline process restart after several days, expired credentials,
    interrupted bootstrap, duplicates, stale writes, revocation, cancellation and
    disposal for every added projection.

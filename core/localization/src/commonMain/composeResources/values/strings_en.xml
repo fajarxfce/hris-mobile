@@ -771,4 +771,15 @@
     <string name="expense_submission_limit_en">This claim has reached its submission limit.</string>
     <string name="expense_reason_required_en">Enter a reason (up to 1,000 characters).</string>
     <string name="leave_balance_unavailable_en">This leave balance is unavailable.</string>
+    <string name="expense_saved_locally_en">Saved on this device</string>
+    <string name="expense_saving_locally_en">Saving on this device…</string>
+    <string name="expense_working_copy_changed_en">This draft was changed in another editor. Review the saved version before continuing.</string>
+    <string name="expense_working_copy_invalid_en">Some draft fields could not be saved. Check the entered values.</string>
+    <string name="expense_working_copy_reload_en">Open the latest saved draft and discard the changes currently shown?</string>
+    <string name="expense_discard_local_draft_en">Discard local draft</string>
+    <string name="expense_discard_local_explanation_en">Remove this draft from this device? Any claim already saved to the company remains available.</string>
+    <string name="expense_resume_item_en">Continue item</string>
+    <string name="expense_unfinished_item_en">This item has not been added to the claim.</string>
+    <string name="expense_discard_item_explanation_en">Discard this unfinished item? The other claim items will be kept.</string>
+    <string name="expense_leave_unsaved_explanation_en">The latest changes could not be saved on this device. Leave without them?</string>
 </resources>

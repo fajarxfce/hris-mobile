@@ -10,6 +10,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.fajar.starter.expenses.presentation.draft.*
 import dev.fajar.starter.expenses.presentation.draft.pages.ExpenseDraftPage
 import dev.fajar.starter.presentation.mvi.CollectEffects
+import kotlin.time.Clock
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 
@@ -21,7 +22,8 @@ internal fun ExpenseDraftEntry(
     onRecheckWorkspace: () -> Unit,
     onBack: () -> Unit,
 ) {
-    val viewModel = koinViewModel<ExpenseDraftViewModel>(parameters = { parametersOf(target) })
+    val viewModel =
+        koinViewModel<ExpenseDraftViewModel>(parameters = { parametersOf(target, Clock.System) })
     val state by viewModel.state.collectAsStateWithLifecycle()
     val list = rememberLazyListState()
     LifecycleStartEffect(viewModel) {

@@ -123,12 +123,22 @@ class ExpenseCommandFixture(instant: () -> Instant = { Instant.parse("2026-10-13
                 return AppResult.Success(true)
             }
         }
+    val copies = ExpenseWorkingCopyFake()
     val prepare = PrepareExpenseDraft(commands, f.sessions, f.workspaces, f.clock, f.build)
     val action = PrepareExpenseAction(commands, f.sessions, f.workspaces, f.clock, f.build)
     val replay = ReplayExpenseCommands(commands, remote, f.sessions, f.workspaces, f.clock, f.build)
     val review =
-        ReviewExpenseCommand(commands, f.replicas, f.sessions, f.workspaces, f.clock, f.build)
-    val observe = ObserveExpenseCommand(commands, f.sessions, f.workspaces, f.clock, f.build)
+        ReviewExpenseCommand(
+            commands,
+            f.replicas,
+            f.sessions,
+            f.workspaces,
+            f.clock,
+            f.build,
+            copies,
+        )
+    val observe =
+        ObserveExpenseCommand(commands, f.sessions, f.workspaces, f.clock, f.build, f.replicas)
 
     suspend fun save(edited: Boolean = false): AppResult<ExpenseCommandRecord> =
         prepare(

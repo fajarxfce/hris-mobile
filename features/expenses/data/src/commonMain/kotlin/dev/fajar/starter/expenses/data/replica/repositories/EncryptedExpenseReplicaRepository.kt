@@ -35,8 +35,8 @@ class EncryptedExpenseReplicaRepository(
     private val cipher: ContentCipher,
     @Named("expense-replica-content-key") private val credentials: CredentialStore,
     private val admissions: ExpenseReadAdmissionDataSource,
+    @Named("expense-content-key-creation") private val keyCreation: Mutex = Mutex(),
 ) : ExpenseReplicaRepository {
-    private val keyCreation = Mutex()
     private val admissionWrites = Mutex()
 
     @OptIn(ExperimentalCoroutinesApi::class)

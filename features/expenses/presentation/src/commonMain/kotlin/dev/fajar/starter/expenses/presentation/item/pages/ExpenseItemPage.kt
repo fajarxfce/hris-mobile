@@ -11,6 +11,7 @@ import dev.fajar.starter.designsystem.components.*
 import dev.fajar.starter.designsystem.theme.AppColors
 import dev.fajar.starter.expenses.presentation.item.*
 import dev.fajar.starter.expenses.presentation.item.widgets.*
+import dev.fajar.starter.expenses.presentation.working.ExpenseLocalSaveStatus
 import dev.fajar.starter.localization.*
 import io.github.composefluent.icons.Icons
 import io.github.composefluent.icons.regular.ArrowLeft
@@ -47,6 +48,7 @@ fun ExpenseItemPage(
                         { onEvent(ExpenseItemEvent.SaveRequested) },
                         Modifier.fillMaxWidth(),
                         enabled = state.canSave,
+                        loading = state.finishing,
                     )
                 }
         },
@@ -69,6 +71,17 @@ fun ExpenseItemPage(
             }
         }
         if (state.restriction == null) {
+            state.persistence?.let { local ->
+                item(key = "local-save") {
+                    ExpenseLocalSaveStatus(
+                        local,
+                        state.active && !state.finishing,
+                        { onEvent(ExpenseItemEvent.RetryLocalSave) },
+                        { onEvent(ExpenseItemEvent.BackRequested) },
+                        appString(AppString.Back),
+                    )
+                }
+            }
             item(key = "references") {
                 AppCard(Modifier.fillMaxWidth(), padding = 0.dp) {
                     AppListRow(

@@ -7,7 +7,7 @@ import kotlin.io.encoding.Base64
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.withContext
 
-/** Called under the repository's key-creation lock; never replaces a lost retained key. */
+/** Called under the feature's shared key-creation lock; never replaces a lost retained key. */
 suspend fun readOrCreateExpenseReplicaKey(
     replicas: ReplicaStore,
     cipher: ContentCipher,
@@ -17,7 +17,8 @@ suspend fun readOrCreateExpenseReplicaKey(
     if (saved != null) return Base64.decode(saved)
     check(
         !replicas.containsRecords("expense-replica/") &&
-            !replicas.containsRecords("expense-access/")
+            !replicas.containsRecords("expense-access/") &&
+            !replicas.containsRecords("expense-working-copy/")
     ) {
         "Existing replica requires its content key."
     }

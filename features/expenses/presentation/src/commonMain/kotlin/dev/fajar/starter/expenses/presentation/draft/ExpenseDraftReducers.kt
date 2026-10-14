@@ -1,9 +1,16 @@
 package dev.fajar.starter.expenses.presentation.draft
 
 import dev.fajar.starter.expenses.domain.entities.*
-import dev.fajar.starter.expenses.presentation.item.ExpenseItemResult
+import dev.fajar.starter.expenses.domain.working.entities.ExpenseWorkingCopy
+import dev.fajar.starter.expenses.presentation.working.ExpenseEditPersistence
 
 internal fun ExpenseDraftState.withPreparation(value: ExpenseDraftPreparation): ExpenseDraftState {
+    if (persistence != null)
+        return copy(
+            preparation = value,
+            failure = null,
+            remoteChanged = persistence.edited.expectedVersion != value.claim?.version,
+        )
     if (command != null) return copy(preparation = value, restriction = null, failure = null)
     val updated = value.claim?.draft.toForm()
     val changed = form != null && version != value.claim?.version && dirty
@@ -20,32 +27,16 @@ internal fun ExpenseDraftState.withPreparation(value: ExpenseDraftPreparation): 
     else copy(preparation = value, restriction = null, failure = null, remoteChanged = changed)
 }
 
-internal fun ExpenseDraftState.withItem(value: ExpenseItemResult): ExpenseDraftState {
-    val current = form ?: return this
-    val lines =
-        if (current.lines.any { it.id == value.line.id })
-            current.lines.map { if (it.id == value.line.id) value.line else it }
-        else current.lines + value.line
-    val categories =
-        (references?.categories.orEmpty().filterNot { it.id == value.category?.id } +
-                listOfNotNull(value.category))
-            .filter { reference -> lines.any { it.categoryId == reference.id } }
-    val centers =
-        (references?.costCenters.orEmpty().filterNot { it.id == value.costCenter?.id } +
-                listOfNotNull(value.costCenter))
-            .filter { reference -> lines.any { it.costCenterId == reference.id } }
-    val receipts =
-        (references?.receipts.orEmpty().filterNot { old ->
-                value.receipts.any { it.revisionId == old.revisionId }
-            } + value.receipts)
-            .filter { reference -> lines.any { reference.revisionId in it.receiptIds } }
+internal fun ExpenseDraftState.withWorkingCopy(value: ExpenseWorkingCopy): ExpenseDraftState {
+    val input = value.input
+    val form = ExpenseDraftForm(input.title, input.description, input.lines, input.reason)
     return copy(
-        form = current.copy(lines = lines),
-        itemTarget = null,
+        form = form,
+        original = original ?: form,
+        version = value.expectedVersion,
+        references = value.references,
+        persistence = ExpenseEditPersistence(value),
+        restriction = null,
         failure = null,
-        references =
-            preparation?.employee?.id?.let {
-                ExpenseReferenceValues(it, categories, centers, receipts)
-            },
     )
 }

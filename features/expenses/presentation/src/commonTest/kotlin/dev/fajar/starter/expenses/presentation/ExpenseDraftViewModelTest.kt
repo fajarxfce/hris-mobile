@@ -1,4 +1,7 @@
-@file:OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
+@file:OptIn(
+    kotlinx.coroutines.ExperimentalCoroutinesApi::class,
+    kotlin.uuid.ExperimentalUuidApi::class,
+)
 
 package dev.fajar.starter.expenses.presentation
 
@@ -6,11 +9,13 @@ import androidx.lifecycle.ViewModelStore
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.expenses.domain.entities.*
 import dev.fajar.starter.expenses.domain.policies.*
+import dev.fajar.starter.expenses.domain.working.entities.ExpenseWorkingCopy
 import dev.fajar.starter.expenses.presentation.draft.*
 import dev.fajar.starter.expenses.presentation.item.*
 import kotlin.test.*
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Instant
+import kotlin.uuid.Uuid
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.test.*
@@ -58,24 +63,37 @@ class ExpenseDraftViewModelTest {
             val target = assertNotNull(model.state.value.itemTarget)
             model.onEvent(ExpenseDraftEvent.Stopped)
             runCurrent()
+            val line = f.f.line.copy(id = requireNotNull(target.copy.item?.input?.id))
+            val completed =
+                target.copy.copy(
+                    input = target.copy.input.copy(lines = listOf(line)),
+                    item = null,
+                    revision = Uuid.random().toString(),
+                )
+            val saved =
+                assertIs<AppResult.Success<ExpenseWorkingCopy>>(
+                        f.saveCopy(f.f.workspace.id, target.slot, target.copy, completed)
+                    )
+                    .value
             model.onEvent(
                 ExpenseDraftEvent.ItemSaved(
                     target,
                     ExpenseItemResult(
-                        f.f.line,
+                        line,
                         ExpenseLabelReference(f.f.line.categoryId, "TRAVEL", "Travel", true),
                         null,
                         emptyList(),
+                        saved,
                     ),
                 )
             )
             runCurrent()
-            assertEquals(listOf(f.f.line), model.state.value.form?.lines)
+            assertEquals(listOf(line), model.state.value.form?.lines)
             assertNull(model.state.value.itemTarget)
             assertEquals(0, f.insertions)
             model.onEvent(ExpenseDraftEvent.Entered)
             runCurrent()
-            assertEquals(listOf(f.f.line), model.state.value.form?.lines)
+            assertEquals(listOf(line), model.state.value.form?.lines)
         }
     }
 
@@ -226,7 +244,7 @@ class ExpenseDraftViewModelTest {
     }
 
     @Test
-    fun reconnectingReadmitsTheDraftWithoutDiscardingUnsavedInput() = runTest {
+    fun reopeningUsesLocalInputWhileExplicitRefreshKeepsTheFormEditable() = runTest {
         for (editing in listOf(false, true)) withModel(editing) { f, model, _ ->
             model.onEvent(ExpenseDraftEvent.Entered)
             runCurrent()
@@ -239,7 +257,7 @@ class ExpenseDraftViewModelTest {
             f.f.directoryCall = { expenseFailure("fixture.offline", FailureKind.Network) }
             model.onEvent(ExpenseDraftEvent.Entered)
             runCurrent()
-            assertFalse(model.state.value.editable)
+            assertTrue(model.state.value.editable)
             assertEquals(form, model.state.value.form)
             val pending = CompletableDeferred<Unit>()
             f.f.directoryCall = {
@@ -265,6 +283,8 @@ class ExpenseDraftViewModelTest {
         withModel(editing = true) { f, model, _ ->
             f.referenceCall = { expenseFailure("mfa_required", FailureKind.AccessDenied) }
             model.onEvent(ExpenseDraftEvent.Entered)
+            runCurrent()
+            model.onEvent(ExpenseDraftEvent.ReloadRequested)
             runCurrent()
             assertTrue(model.state.value.needsVerification)
             val gate = CompletableDeferred<Unit>()
@@ -323,8 +343,8 @@ class ExpenseDraftViewModelTest {
     }
 
     @Test
-    fun unsavedExitRequiresConfirmationAndRepeatedConfirmationEmitsOneBack() = runTest {
-        withModel { _, model, _ ->
+    fun backPersistsLocalInputAndEmitsOneBack() = runTest {
+        withModel { f, model, _ ->
             val effects = mutableListOf<ExpenseDraftEffect>()
             backgroundScope.launch { model.effects.collect { effects += it } }
             model.onEvent(ExpenseDraftEvent.Entered)
@@ -333,8 +353,8 @@ class ExpenseDraftViewModelTest {
             runCurrent()
             model.onEvent(ExpenseDraftEvent.BackRequested)
             runCurrent()
-            assertTrue(effects.isEmpty())
-            assertEquals(ExpenseDraftDialog.EXIT, model.state.value.dialog)
+            assertEquals("Not saved", f.copies.values.value.values.single().input.title)
+            assertNull(model.state.value.dialog)
             model.onEvent(ExpenseDraftEvent.ExitConfirmed)
             model.onEvent(ExpenseDraftEvent.ExitConfirmed)
             runCurrent()
