@@ -132,6 +132,7 @@ class AppFlowTest {
             compose.waitUntil { server.expenses.historyReads.get() == 1 }
             // The history page is a local observation; HTTP completion and the header's
             // refresh action do not establish that the selected page has reached the UI.
+            compose.waitForIdle()
             waitFor("Latest activity")
             compose.onNode(hasScrollToIndexAction()).performScrollToNode(hasText("Draft saved"))
             compose.onNodeWithText("Draft saved").assertIsDisplayed()
@@ -1921,10 +1922,9 @@ class AppFlowTest {
                     .performClick()
                 waitFor("Present")
                 compose.waitUntil { server.workforce.attendanceActive.get() == 0 }
-                server.workforce.attendanceGate = release
                 cache.markStale()
                 compose.onNodeWithText("Present").assertExists()
-                refreshWhenReady()
+                refreshWhenReady { server.workforce.attendanceGate = release }
                 compose.waitUntil { server.workforce.attendanceActive.get() == 1 }
                 assertEquals(2, cache.subscribers())
                 compose
