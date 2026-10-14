@@ -9,7 +9,8 @@ belong in the generic starter.
 
 Documents opens the published catalog, with Personal and Receipt tabs. The folder
 action opens files on the current device, including while catalog acquisition is
-pending. Leaving the catalog cancels its request. Multiple employments use a
+pending. Leaving the catalog cancels acquisition and user actions while its route
+retains local data and read-admission observation. Multiple employments use a
 separate filter; a single employment needs no selection control.
 
 Add file opens the system picker and then the imported file's upload form. Upload
@@ -19,6 +20,35 @@ catalog or local file list; an interrupted transfer remains available in local
 files. Saving a copy still requires fresh authorization after the native dialog.
 The navigation snapshot version rejects stacks containing the previous catalog
 route before attaching the current graph.
+
+## Published catalog replication
+
+`SyncDocumentCatalog` coordinates current company admission, owned employment
+references, the explicit `DOCUMENT_EVIDENCE` feed and canonical metadata reads.
+Each run has a 30-second deadline, at most ten feed pages, 50 references per page
+and four concurrent canonical reads. One application-owned execution guard covers
+manual and worker acquisition. Employment discovery is bounded to 200 references;
+repeated cursors and inconsistent records fail without advancing the checkpoint.
+
+The encrypted repository commits metadata, employment references and the processed
+cursor atomically. A replacement bootstrap stays staged until publication catches
+up; acquired data remains readable meanwhile. Header versions and tombstones
+prevent an older change from restoring withdrawn evidence. A canonical record
+that disappeared after its feed reference removes that record only.
+
+`ObserveDocumentCatalog` reads account/company/audience-owned records independently
+of session age. Employment, category and page changes issue local queries. An HMAC
+index narrows the database query before decrypting at most 21 records for a
+20-item page. Payload authentication binds scope, generation, identity, version,
+order and index. The content key persists separately from login credentials.
+
+Confirmed access and MFA denials have a separate encrypted admission record and
+a process-owned buffer for failed writes. A pending or failed retry cannot reopen
+the catalog; only admitted acquisition started after the latest denial can clear
+it. Ordinary data, credential and cursor age never withdraw owned local facts.
+The refresh timestamp schedules acquisition, rather than limiting local reads.
+
+## Business evidence review
 
 `LoadDocumentEvidence` coordinates current identity, workspace ownership and fresh
 company policy before acquiring the account's own published revisions. It repeats
@@ -40,7 +70,7 @@ Leave ViewModels or attachment policy. Only accepted personal revisions for the
 form's employment are selectable. A replaced or expired dialog cannot publish
 into a later opening, and pending metadata work is cancelled on dismissal.
 
-Catalog acquisition is online. It does not persist file contents, silently retry
+Business evidence review is online. It does not persist file contents, silently retry
 or schedule background work. `LoadDocumentEmployments` provides read-only employee
 references without requiring self-upload or People access. `ObserveDocumentAccess`
 separately reports local session/company ownership and known permission changes;
@@ -140,7 +170,7 @@ observation and keep data hidden through pending or failed workspace revalidatio
 
 ## Download coordination
 
-`PrepareDocumentDownload` accepts a current catalog selection, rechecks company policy and content access,
+`PrepareDocumentDownload` accepts an owned local catalog selection, rechecks company policy and content access,
 then reserves encrypted local capacity. Existing copies can be reused only after
 fresh admission. A replacement receives a new local ID so an older writer cannot
 complete a removed file's replacement at a reused storage revision.
@@ -186,9 +216,12 @@ on completion and requires File System Access support in a secure context.
 
 Documents separates local files from the published catalog. The catalog offers
 own-employment and category filters with bounded pagination. Its ViewModel owns
-metadata acquisition, admission observation and expiry. An expired page requires
-an explicit refresh; changing a filter cancels the previous request. Known access
-failures hide metadata and remain gated through a failed retry.
+local selection, acquisition and admission observation. Filters read local data;
+refresh retains existing rows. Returning to the route retains its selection and
+does not repeat a completed acquisition. A successful explicit refresh also
+reopens a storage observation that terminated after an I/O failure. Known access
+failures hide metadata and remain gated through a failed retry. Content-download
+authorization remains separate from catalog-read admission.
 
 Selecting a published revision prepares a local reservation and opens its download
 route. That route owns one foreground action and observes committed encrypted

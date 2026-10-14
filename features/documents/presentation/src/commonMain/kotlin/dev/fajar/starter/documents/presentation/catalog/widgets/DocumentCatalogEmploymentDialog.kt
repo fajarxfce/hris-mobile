@@ -28,35 +28,18 @@ fun DocumentCatalogEmploymentDialog(
             contentPadding = PaddingValues(12.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            if (state.loading) item(key = "loading") { AppLoading(compact = true) }
             state.failure?.let { failure ->
                 item(key = "failure") { AppFeedback(failureText(failure)) }
             }
-            if (state.directory?.page?.items?.isEmpty() == true)
+            if (state.employments?.isEmpty() == true)
                 item(key = "empty") { AppText(appString(AppString.NoEmployment)) }
-            items(state.directory?.page?.items.orEmpty(), key = { it.id }) { employment ->
+            items(state.employments.orEmpty(), key = { it.id }) { employment ->
                 AppRadioRow(
                     employment.employeeNumber,
                     state.employment?.id == employment.id,
                     { onEvent(DocumentCatalogEvent.EmploymentSelected(employment.id)) },
                     enabled = state.canChoose,
                 )
-            }
-            item(key = "paging") {
-                FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    AppTextButton(
-                        appString(AppString.CalendarFirstEmployments),
-                        { onEvent(DocumentCatalogEvent.EmploymentPageRequested(null)) },
-                        enabled = state.canChoose,
-                    )
-                    state.directory?.page?.nextCursor?.let { after ->
-                        AppTextButton(
-                            appString(AppString.MoreEmployments),
-                            { onEvent(DocumentCatalogEvent.EmploymentPageRequested(after)) },
-                            enabled = state.canChoose,
-                        )
-                    }
-                }
             }
         }
     }

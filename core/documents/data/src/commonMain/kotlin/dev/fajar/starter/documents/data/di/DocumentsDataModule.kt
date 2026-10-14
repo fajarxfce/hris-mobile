@@ -1,10 +1,13 @@
 package dev.fajar.starter.documents.data.di
 
 import dev.fajar.starter.common.config.AppBuild
+import dev.fajar.starter.documents.domain.replica.repositories.DocumentCatalogRepository
+import dev.fajar.starter.documents.domain.replica.usecases.*
 import dev.fajar.starter.documents.domain.repositories.*
 import dev.fajar.starter.documents.domain.usecases.*
 import dev.fajar.starter.identity.domain.repositories.SessionRepository
 import dev.fajar.starter.sync.domain.SyncTask
+import dev.fajar.starter.sync.domain.repositories.SyncFeedRepository
 import dev.fajar.starter.sync.domain.repositories.SyncScheduleRepository
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
 import kotlin.time.Clock
@@ -14,6 +17,24 @@ import org.koin.core.annotation.*
 @Module
 @ComponentScan("dev.fajar.starter.documents.data")
 class DocumentsDataModule {
+    @Single(binds = [SyncDocumentCatalog::class, SyncTask::class])
+    fun syncCatalog(
+        feed: SyncFeedRepository,
+        remote: DocumentRepository,
+        cache: DocumentCatalogRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        build: AppBuild,
+    ) = SyncDocumentCatalog(feed, remote, cache, sessions, workspaces, Clock.System, build)
+
+    @Factory
+    fun observeCatalog(
+        cache: DocumentCatalogRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        build: AppBuild,
+    ) = ObserveDocumentCatalog(cache, sessions, workspaces, Clock.System, build)
+
     @Factory
     fun exportFile(
         files: DocumentFileRepository,

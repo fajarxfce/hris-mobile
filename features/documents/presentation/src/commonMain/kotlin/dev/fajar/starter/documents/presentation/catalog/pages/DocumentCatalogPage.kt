@@ -57,14 +57,14 @@ fun DocumentCatalogPage(
                         Icons.Regular.ArrowSync,
                         appString(AppString.Refresh),
                         { onEvent(DocumentCatalogEvent.RefreshRequested) },
-                        enabled = !state.busy,
-                        loading = state.loading,
+                        enabled = !state.busy && !state.syncing,
+                        loading = state.syncing,
                     )
                 },
             )
         },
     ) {
-        if (state.loading && state.catalog == null)
+        if ((state.loading || state.syncing) && state.catalog == null)
             item(key = "loading") { AppLoading(compact = true) }
         val failure = state.restriction ?: state.failure
         if (failure != null && !state.choosingEmployment)
@@ -80,24 +80,29 @@ fun DocumentCatalogPage(
                         AppTextButton(
                             appString(AppString.TryAgain),
                             { onEvent(DocumentCatalogEvent.RefreshRequested) },
-                            enabled = !state.busy,
+                            enabled = !state.busy && !state.syncing,
                         )
                 }
             }
-        if (state.directory != null && state.restriction == null) {
-            if (state.directory.page.items.isEmpty() && state.employment == null)
+        if (
+            !state.loading &&
+                !state.syncing &&
+                state.catalog == null &&
+                state.employments == null &&
+                failure == null
+        )
+            item(key = "sync-pending") {
+                AppText(appString(AppString.SyncPending), color = AppColors.muted)
+            }
+        if (state.employments != null && state.restriction == null) {
+            if (state.employments.isEmpty() && state.employment == null)
                 item(key = "no-employment") {
                     AppText(appString(AppString.NoEmployment), color = AppColors.muted)
                 }
             else
                 item(key = "filters") {
                     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        if (
-                            state.directory.page.items.size > 1 ||
-                                state.directory.page.nextCursor != null ||
-                                state.directory.after != null ||
-                                state.employment == null
-                        )
+                        if (state.employments.size > 1 || state.employment == null)
                             AppFilterChip(
                                 state.employment?.employeeNumber
                                     ?: appString(AppString.ChooseEmployment),
@@ -117,18 +122,14 @@ fun DocumentCatalogPage(
                                     appString(AppString.DocumentReceipt),
                                 ),
                             ),
-                            state.classification,
+                            state.selection.classification,
                             { onEvent(DocumentCatalogEvent.ClassificationChanged(it)) },
                             enabled = state.canChoose,
                         )
                     }
                 }
         }
-        if (state.expired)
-            item(key = "expired") {
-                AppText(appString(AppString.DocumentCatalogExpired), color = AppColors.muted)
-            }
-        if (state.catalog != null) {
+        if (state.catalog != null && state.selection.employmentId != null) {
             if (state.catalog.page.items.isEmpty())
                 item(key = "empty") {
                     AppText(appString(AppString.DocumentNoPublished), color = AppColors.muted)
@@ -144,7 +145,7 @@ fun DocumentCatalogPage(
                                     liveRegion = LiveRegionMode.Polite
                             },
                         supportingText = document.fileName,
-                        enabled = state.canChoose && !state.expired,
+                        enabled = state.canChoose,
                         leading = { AppIcon(Icons.Regular.Document) },
                         metadata = {
                             if (state.preparingId == document.revisionId)
@@ -162,13 +163,13 @@ fun DocumentCatalogPage(
                     )
                 }
             }
-            if (state.catalog.query.after != null || state.catalog.page.nextCursor != null)
+            if (state.selection.after != null || state.catalog.page.nextCursor != null)
                 item(key = "paging") {
                     FlowRow(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                         AppTextButton(
                             appString(AppString.DirectoryFirstPage),
                             { onEvent(DocumentCatalogEvent.PageRequested(null)) },
-                            enabled = state.canChoose && state.catalog.query.after != null,
+                            enabled = state.canChoose && state.selection.after != null,
                         )
                         state.catalog.page.nextCursor?.let { after ->
                             AppTextButton(

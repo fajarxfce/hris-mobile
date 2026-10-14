@@ -12,12 +12,21 @@ class NativeDocumentsUi {
     @Volatile var enabled = false
     @Volatile var uploadEnabled = false
     @Volatile var gate: CompletableDeferred<Unit>? = null
+    @Volatile var catalogOffline = false
+    @Volatile var catalogDenied = false
+    @Volatile var catalogVersion = 0L
+    @Volatile var catalogTitle = "Medical certificate"
+    val catalogReads = AtomicInteger()
+    private val validatedAt = Clock.System.now().toString()
     val reads = AtomicInteger()
     val active = AtomicInteger()
     val uploads = NativeDocumentUploadsUi()
     val downloads = NativeDocumentContentUi()
 
     suspend fun response(request: HttpRequestData): Pair<String, HttpStatusCode>? {
+        catalogResponse(request)?.let {
+            return it
+        }
         val endpoint = request.url.encodedPath.substringAfter("/documents/", "")
         if (endpoint == "uploads" || endpoint.startsWith("revisions/"))
             check(enabled && uploadEnabled)
@@ -83,6 +92,61 @@ class NativeDocumentsUi {
         } finally {
             active.decrementAndGet()
         }
+    }
+
+    private fun catalogResponse(request: HttpRequestData): Pair<String, HttpStatusCode>? {
+        val path = request.url.encodedPath
+        val sync =
+            path.contains("/sync/") && request.url.parameters["collections"] == "DOCUMENT_EVIDENCE"
+        if (!sync && !path.contains("/documents/me/evidence/")) return null
+        check(enabled && path.contains("/companies/${NativeUiServer.COMPANY_ONE}/"))
+        catalogReads.incrementAndGet()
+        if (catalogOffline) throw java.io.IOException("Simulated offline catalog")
+        if (catalogDenied) return """{"code":"mfa_required"}""" to HttpStatusCode.Forbidden
+        if (!sync) {
+            check(path.substringAfterLast('/') == DOCUMENT)
+            return buildJsonObject {
+                    put("id", DOCUMENT)
+                    put("version", catalogVersion)
+                    put("employmentId", NativePeopleUi.EMPLOYEE)
+                    put("classification", "PERSONAL")
+                    putJsonObject("evidence") {
+                        (if (downloads.enabled) downloads.attachment() else attachment()).forEach {
+                            (key, value) ->
+                            put(key, value)
+                        }
+                        put("revisionNumber", 1)
+                        put("title", catalogTitle)
+                        put("validatedAt", validatedAt)
+                    }
+                }
+                .toString() to HttpStatusCode.OK
+        }
+        check(request.url.parameters["limit"] == "50")
+        val bootstrap = path.endsWith("/bootstrap")
+        return buildJsonObject {
+                if (bootstrap) putJsonArray("collections") { add("DOCUMENT_EVIDENCE") }
+                putJsonArray("items") {
+                    if (bootstrap || catalogVersion > 0)
+                        addJsonObject {
+                            put("collection", "DOCUMENT_EVIDENCE")
+                            if (!bootstrap) put("operation", "UPSERT")
+                            put("id", DOCUMENT)
+                            put("version", catalogVersion)
+                        }
+                }
+                if (bootstrap) {
+                    put("nextCursor", JsonNull)
+                    put("changesCursor", "document-catalog-head-$catalogVersion")
+                } else {
+                    put("cursor", "document-catalog-head-$catalogVersion")
+                    put("hasMore", false)
+                    put("pendingPublication", false)
+                    put("pollAfterSeconds", 5)
+                }
+                put("serverTime", validatedAt)
+            }
+            .toString() to HttpStatusCode.OK
     }
 
     companion object {

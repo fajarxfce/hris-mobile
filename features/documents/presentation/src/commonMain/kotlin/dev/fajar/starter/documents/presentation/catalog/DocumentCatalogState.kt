@@ -1,20 +1,24 @@
 package dev.fajar.starter.documents.presentation.catalog
 
 import dev.fajar.starter.common.result.Failure
-import dev.fajar.starter.documents.domain.entities.*
+import dev.fajar.starter.documents.domain.entities.DocumentEmployment
+import dev.fajar.starter.documents.domain.replica.entities.DocumentCatalogSelection
+import dev.fajar.starter.documents.domain.replica.entities.DocumentCatalogSnapshot
 
 data class DocumentCatalogState(
-    val directory: DocumentEmploymentSnapshot? = null,
-    val employment: DocumentEmployment? = null,
-    val classification: DocumentClassification = DocumentClassification.PERSONAL,
-    val catalog: DocumentEvidenceSnapshot? = null,
+    val employments: List<DocumentEmployment>? = null,
+    val selection: DocumentCatalogSelection = DocumentCatalogSelection(),
+    val catalog: DocumentCatalogSnapshot? = null,
     val choosingEmployment: Boolean = false,
     val loading: Boolean = true,
+    val syncing: Boolean = false,
     val preparingId: String? = null,
-    val expired: Boolean = false,
     val failure: Failure? = null,
     val restriction: Failure? = null,
 ) {
+    val employment: DocumentEmployment?
+        get() = employments?.firstOrNull { it.id == selection.employmentId }
+
     val busy: Boolean
         get() = loading || preparingId != null
 
@@ -23,6 +27,6 @@ data class DocumentCatalogState(
 
     val needsVerification: Boolean
         get() =
-            restriction?.code in
+            (restriction ?: failure)?.code in
                 setOf("mfa_required", "mfa_setup_required", "mfa_verification_required")
 }

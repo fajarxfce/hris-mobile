@@ -7,8 +7,6 @@ sealed interface DocumentCatalogEffect {
 
     data object ScrollToStart : DocumentCatalogEffect
 
-    data object ScrollEmploymentsToStart : DocumentCatalogEffect
-
     data object VerifyAccount : DocumentCatalogEffect
 
     data object Back : DocumentCatalogEffect

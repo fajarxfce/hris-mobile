@@ -102,8 +102,7 @@ class DocumentFixture {
         object : SessionRepository {
             override val persistent = false
 
-            override fun observe(): Flow<AppResult<Session?>> =
-                error("A catalog read must not subscribe")
+            override fun observe(): Flow<AppResult<Session?>> = sessions
 
             override suspend fun current() = sessions.value
 
@@ -116,8 +115,7 @@ class DocumentFixture {
         }
     val workspaceRepository =
         object : WorkspaceRepository {
-            override fun observe(sessionId: String): Flow<AppResult<Workspace?>> =
-                error("A catalog read must not subscribe")
+            override fun observe(sessionId: String): Flow<AppResult<Workspace?>> = workspaces
 
             override suspend fun current(sessionId: String) = workspaces.value
 
@@ -142,6 +140,13 @@ class DocumentFixture {
         }
     val repository =
         object : DocumentRepository {
+            override suspend fun record(
+                access: DocumentAccess,
+                id: String,
+            ): AppResult<
+                dev.fajar.starter.documents.domain.replica.entities.DocumentCatalogRecord
+            > = error("This evidence selector uses its own live review")
+
             override suspend fun employments(access: DocumentAccess, after: String?) =
                 employmentCall()
 

@@ -6,6 +6,8 @@ import dev.fajar.starter.common.config.AppBuild
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.documents.domain.entities.*
 import dev.fajar.starter.documents.domain.policies.*
+import dev.fajar.starter.documents.domain.replica.entities.DocumentCatalogSnapshot
+import dev.fajar.starter.documents.domain.replica.policies.sameStoredDocumentScope
 import dev.fajar.starter.documents.domain.repositories.*
 import dev.fajar.starter.identity.domain.repositories.SessionRepository
 import dev.fajar.starter.workspace.domain.entities.CompanyModule
@@ -32,7 +34,7 @@ class PrepareDocumentDownload(
 ) {
     suspend operator fun invoke(
         workspaceId: String,
-        catalog: DocumentEvidenceSnapshot,
+        catalog: DocumentCatalogSnapshot,
         revisionId: String,
     ): AppResult<LocalDocumentFile> =
         withTimeoutOrNull(30.seconds) {
@@ -62,12 +64,12 @@ class PrepareDocumentDownload(
                 if (available is AppResult.Failed) return@withLock available
                 val inspected = content.inspect(access, selection.evidence)
                 currentCoroutineContext().ensureActive()
-                val admitted = beforeReservation(workspaceId, access, policy, catalog)
+                val admitted = beforeReservation(workspaceId, access, policy)
                 if (admitted is AppResult.Failed) return@withLock admitted
                 if (inspected is AppResult.Failed) return@withLock inspected
                 val rows = files.observe(access).first()
                 currentCoroutineContext().ensureActive()
-                val continuation = beforeReservation(workspaceId, access, policy, catalog)
+                val continuation = beforeReservation(workspaceId, access, policy)
                 if (continuation is AppResult.Failed) return@withLock continuation
                 val existing =
                     when (rows) {
@@ -98,7 +100,7 @@ class PrepareDocumentDownload(
                         DOCUMENT_LOCAL_FILES,
                     )
                 currentCoroutineContext().ensureActive()
-                val publication = beforeReservation(workspaceId, access, policy, catalog)
+                val publication = beforeReservation(workspaceId, access, policy)
                 if (publication is AppResult.Failed) return@withLock publication
                 when (saved) {
                     is AppResult.Failed -> saved
@@ -126,23 +128,25 @@ class PrepareDocumentDownload(
         } ?: documentFailure("client.document_timeout", FailureKind.Timeout)
 
     private fun validateSelection(
-        catalog: DocumentEvidenceSnapshot,
+        catalog: DocumentCatalogSnapshot,
         revisionId: String,
         access: DocumentAccess,
     ): AppResult<DocumentDownloadSource> {
-        if (!sameDocumentScope(catalog.access, access))
+        val checkpoint =
+            catalog.checkpoint ?: return documentFailure("client.document_selection_invalid")
+        if (!checkpoint.published) return documentFailure("client.document_selection_invalid")
+        if (!sameStoredDocumentScope(checkpoint.access, access))
             return documentFailure("client.document_scope_changed", FailureKind.AccessDenied)
-        if (catalog.expiresAt <= clock.now() || catalog.fetchedAt > clock.now())
-            return documentFailure("client.document_evidence_expired", FailureKind.AccessDenied)
+        val employmentId =
+            catalog.selection.employmentId
+                ?: return documentFailure("client.document_selection_invalid")
+        if (checkpoint.employments.none { it.id == employmentId })
+            return documentFailure("client.document_selection_invalid")
         val evidence =
             catalog.page.items.singleOrNull { it.revisionId == revisionId }
                 ?: return documentFailure("client.document_selection_invalid")
         val selection =
-            DocumentDownloadSource(
-                catalog.query.employmentId,
-                catalog.query.classification,
-                evidence,
-            )
+            DocumentDownloadSource(employmentId, catalog.selection.classification, evidence)
         return when (val valid = validateDocumentDownload(selection)) {
             is AppResult.Failed -> valid
             is AppResult.Success -> AppResult.Success(selection)
@@ -153,12 +157,9 @@ class PrepareDocumentDownload(
         workspaceId: String,
         access: DocumentAccess,
         policy: CompanyPolicySnapshot,
-        catalog: DocumentEvidenceSnapshot,
     ): AppResult<Unit> {
         val ownership = validateDocumentContinuation(access, currentAccess(workspaceId))
         if (ownership is AppResult.Failed) return ownership
-        if (catalog.expiresAt <= clock.now())
-            return documentFailure("client.document_evidence_expired", FailureKind.AccessDenied)
         return admitCompanyOperation(policy, build, CompanyModule.DOCUMENTS, clock.now())
     }
 

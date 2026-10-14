@@ -3,6 +3,8 @@ package dev.fajar.starter.documents.data.datasources
 import dev.fajar.starter.documents.data.dto.*
 
 interface DocumentRemoteDataSource {
+    suspend fun record(sessionId: String, companyId: String, id: String): DocumentCatalogRecordDto
+
     suspend fun employments(
         sessionId: String,
         companyId: String,

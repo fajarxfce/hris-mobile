@@ -7,6 +7,9 @@ import org.koin.core.annotation.Single
 @Single
 class ApiDocumentDataSource(private val api: DocumentsApi) :
     DocumentRemoteDataSource, DocumentContentDataSource {
+    override suspend fun record(sessionId: String, companyId: String, id: String) =
+        api.record(sessionId, companyId, id)
+
     override suspend fun inspect(sessionId: String, companyId: String, revisionId: String) =
         api.inspect(sessionId, companyId, revisionId)
 

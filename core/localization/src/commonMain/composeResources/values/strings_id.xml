@@ -141,7 +141,6 @@
 
     <string name="document_local_files_description_id">Upload dan hasil unduhan.</string>
     <string name="document_preparing_download_id">Menyiapkan unduhan…</string>
-    <string name="document_catalog_expired_id">Perbarui daftar dokumen untuk melanjutkan.</string>
     <string name="document_no_published_id">Belum ada dokumen pada kategori ini.</string>
     <string name="document_downloaded_id">Sudah diunduh</string>
     <string name="document_download_pending_id">Unduhan belum selesai</string>

@@ -141,7 +141,6 @@
 
     <string name="document_local_files_description_en">Uploads and downloaded files.</string>
     <string name="document_preparing_download_en">Preparing download…</string>
-    <string name="document_catalog_expired_en">Refresh the document list to continue.</string>
     <string name="document_no_published_en">No published documents in this category.</string>
     <string name="document_downloaded_en">Downloaded</string>
     <string name="document_download_pending_en">Download incomplete</string>

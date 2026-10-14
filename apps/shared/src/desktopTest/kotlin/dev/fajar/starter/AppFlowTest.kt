@@ -26,9 +26,12 @@ import dev.fajar.starter.app.di.createAppContainer
 import dev.fajar.starter.common.config.AppEnvironment
 import dev.fajar.starter.common.config.AppPlatform
 import dev.fajar.starter.common.result.AppResult
-import dev.fajar.starter.database.createAppDatabase
+import dev.fajar.starter.common.result.FailureKind
+import dev.fajar.starter.database.*
 import dev.fajar.starter.datastore.createUserPreferences
+import dev.fajar.starter.documents.data.replica.repositories.EncryptedDocumentCatalogRepository
 import dev.fajar.starter.documents.domain.entities.LocalDocumentFile
+import dev.fajar.starter.documents.domain.replica.repositories.DocumentCatalogRepository
 import dev.fajar.starter.documents.domain.repositories.DocumentFileRepository
 import dev.fajar.starter.documents.domain.usecases.ImportDocumentFile
 import dev.fajar.starter.documents.domain.usecases.ObserveDocumentFiles
@@ -57,11 +60,17 @@ import dev.fajar.starter.workspace.domain.entities.Workspace
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
 import java.io.File
 import java.nio.file.Files
+import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.atomic.AtomicInteger
 import kotlin.test.*
 import kotlin.time.Duration.Companion.milliseconds
 import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.job
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.*
 import org.jetbrains.skia.Image
@@ -121,12 +130,9 @@ class AppFlowTest {
                 .performScrollToNode(hasText("Earlier activity"))
             compose.onNode(hasText("Earlier activity") and hasClickAction()).performClick()
             compose.waitUntil { server.expenses.historyReads.get() == 1 }
-            compose.waitUntil {
-                compose
-                    .onAllNodes(hasContentDescription("Refresh") and isEnabled())
-                    .fetchSemanticsNodes()
-                    .isNotEmpty()
-            }
+            // The history page is a local observation; HTTP completion and the header's
+            // refresh action do not establish that the selected page has reached the UI.
+            waitFor("Latest activity")
             compose.onNode(hasScrollToIndexAction()).performScrollToNode(hasText("Draft saved"))
             compose.onNodeWithText("Draft saved").assertIsDisplayed()
             server.expenses.offline = true
@@ -632,6 +638,154 @@ class AppFlowTest {
     }
 
     @Test
+    fun publishedCatalogFiltersAndRouteReturnUseLocalRecordsWhileOffline() {
+        val server = NativeUiServer().apply { documents.enabled = true }
+        val lifecycle = mutableStateOf(Lifecycle.State.RESUMED)
+        withApplication(server, lifecycleState = lifecycle) {
+            signIn()
+            waitFor("Choose a company")
+            compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
+            waitFor("Welcome")
+            compose
+                .onNode(hasText("Documents") and hasClickAction())
+                .performScrollTo()
+                .performClick()
+            waitFor("Medical certificate")
+            compose.waitUntil {
+                compose
+                    .onAllNodes(hasContentDescription("Refresh") and isEnabled())
+                    .fetchSemanticsNodes()
+                    .isNotEmpty()
+            }
+            val networkReads = server.documents.catalogReads.get()
+            server.documents.catalogOffline = true
+            compose.onNode(hasText("Receipt") and isSelectable()).performClick()
+            waitFor("No published documents in this category.")
+            compose.onNode(hasText("Personal") and isSelectable()).performClick()
+            waitFor("Medical certificate")
+            compose.runOnIdle { lifecycle.value = Lifecycle.State.CREATED }
+            compose.waitForIdle()
+            compose.runOnIdle { lifecycle.value = Lifecycle.State.RESUMED }
+            waitFor("Medical certificate")
+            compose.onNodeWithContentDescription("On this device").performClick()
+            waitFor("No local files yet.")
+            compose.onNodeWithContentDescription("Back").performClick()
+            waitFor("Medical certificate")
+            assertEquals(networkReads, server.documents.catalogReads.get())
+            refreshWhenReady()
+            waitFor("Unable to connect. Check your connection.")
+            compose.onNodeWithText("Medical certificate").assertExists()
+            compose.onNode(hasText("Receipt") and isSelectable()).performClick()
+            waitFor("No published documents in this category.")
+        }
+    }
+
+    @Test
+    fun publishedCatalogReopensATerminatedStorageSourceAfterRefresh() {
+        val server = NativeUiServer().apply { documents.enabled = true }
+        val failure = CompletableDeferred<Unit>()
+        val armed = AtomicBoolean(true)
+        val active = AtomicInteger()
+        val definitions = module {
+            single<DocumentCatalogRepository> {
+                val original: ReplicaStore = get()
+                val source =
+                    object : ReplicaStore by original {
+                        override fun observeQueries(
+                            scope: ReplicaScope,
+                            partition: String,
+                            queries: List<ReplicaQuery>,
+                        ) = flow {
+                            active.incrementAndGet()
+                            try {
+                                coroutineScope {
+                                    val interruption = launch {
+                                        failure.await()
+                                        if (armed.compareAndSet(true, false))
+                                            throw java.io.IOException(
+                                                "Simulated closed storage source"
+                                            )
+                                    }
+                                    try {
+                                        emitAll(original.observeQueries(scope, partition, queries))
+                                    } finally {
+                                        interruption.cancel()
+                                    }
+                                }
+                            } finally {
+                                active.decrementAndGet()
+                            }
+                        }
+                    }
+                EncryptedDocumentCatalogRepository(
+                    source,
+                    get(),
+                    get(named("document-catalog-content-key")),
+                    get(),
+                )
+            }
+        }
+        withApplication(server, overrides = definitions) {
+            signIn()
+            waitFor("Choose a company")
+            compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
+            waitFor("Welcome")
+            compose
+                .onNode(hasText("Documents") and hasClickAction())
+                .performScrollTo()
+                .performClick()
+            waitFor("Medical certificate")
+            compose.waitUntil { active.get() == 1 }
+            failure.complete(Unit)
+            compose.waitUntil { active.get() == 0 && !armed.get() }
+            compose.onNodeWithText("Medical certificate").assertExists()
+            server.documents.catalogTitle = "Updated certificate"
+            server.documents.catalogVersion = 1
+            refreshWhenReady()
+            waitFor("Updated certificate")
+            compose.waitUntil { active.get() == 1 }
+            compose.onNodeWithContentDescription("Back").performClick()
+            waitFor("Welcome")
+            compose.waitUntil { active.get() == 0 }
+        }
+    }
+
+    @Test
+    fun publishedCatalogDenialRemainsClosedThroughAnOfflineRetry() {
+        val server = NativeUiServer().apply { documents.enabled = true }
+        withApplication(server) {
+            signIn()
+            waitFor("Choose a company")
+            compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
+            waitFor("Welcome")
+            compose
+                .onNode(hasText("Documents") and hasClickAction())
+                .performScrollTo()
+                .performClick()
+            waitFor("Medical certificate")
+            server.documents.catalogDenied = true
+            refreshWhenReady()
+            waitFor("Your account cannot perform this action.")
+            compose.onNodeWithText("Medical certificate").assertDoesNotExist()
+            server.documents.catalogDenied = false
+            server.documents.catalogOffline = true
+            refreshWhenReady()
+            compose.waitUntil {
+                compose
+                    .onAllNodes(hasContentDescription("Refresh") and isEnabled())
+                    .fetchSemanticsNodes()
+                    .isNotEmpty()
+            }
+            compose.onNodeWithText("Your account cannot perform this action.").assertExists()
+            compose.onNodeWithText("Medical certificate").assertDoesNotExist()
+            server.documents.catalogOffline = false
+            refreshWhenReady()
+            waitFor("Medical certificate")
+            compose.onNodeWithText("Your account cannot perform this action.").assertDoesNotExist()
+        }
+    }
+
+    @Test
     fun publishedDocumentDenialStaysClosedUntilContentRevalidationSucceeds() {
         val server =
             NativeUiServer().apply {
@@ -794,6 +948,7 @@ class AppFlowTest {
                 .onNodeWithContentDescription("Description")
                 .performScrollTo()
                 .performTextInput("Retained description")
+            val referenceReads = server.documents.reads.get()
             val owner = owners.single()
             compose.runOnIdle { owner.onEvent(DocumentFileEvent.Closed) }
             compose.waitForIdle()
@@ -805,7 +960,11 @@ class AppFlowTest {
             compose
                 .onNodeWithContentDescription("Description")
                 .assertTextContains("Retained description")
-            assertEquals(3, server.documents.reads.get())
+            assertEquals(
+                referenceReads,
+                server.documents.reads.get(),
+                "Restoring the owned form does not reacquire its employment directory",
+            )
             assertEquals(0, server.documents.uploads.starts.get())
         }
     }
@@ -879,6 +1038,7 @@ class AppFlowTest {
             openDocumentFiles()
             waitFor("No local files yet.")
             val pending = CompletableDeferred<Unit>()
+            val referenceReads = server.documents.reads.get()
             server.documents.gate = pending
             compose.onNodeWithContentDescription("Add file").performClick()
             compose.waitUntil { server.documents.active.get() == 1 }
@@ -892,7 +1052,11 @@ class AppFlowTest {
             compose.onNode(hasText("pending.pdf") and hasClickAction()).performClick()
             waitFor("Upload document")
             compose.onNodeWithText("EMP-001").assertExists()
-            assertEquals(4, server.documents.reads.get())
+            assertEquals(
+                referenceReads + 2,
+                server.documents.reads.get(),
+                "One cancelled acquisition and one admitted form acquisition",
+            )
         }
     }
 
@@ -996,6 +1160,7 @@ class AppFlowTest {
             assertNotNull(koin.get<DocumentFileRepository>())
             openDocumentFiles()
             waitFor("Not uploaded")
+            val referenceReads = server.documents.reads.get()
             compose.onNodeWithText("document.pdf").assertExists()
             compose.onNodeWithContentDescription("Remove document.pdf from device").performClick()
             waitFor("This removes the copy stored on this device.")
@@ -1011,7 +1176,11 @@ class AppFlowTest {
             assertEquals(2, selected.size)
             assertEquals(selected, released)
             capture("document-local-files")
-            assertEquals(3, server.documents.reads.get())
+            assertEquals(
+                referenceReads + 1,
+                server.documents.reads.get(),
+                "Only the new upload form acquires employment references",
+            )
             assertEquals(0, closes)
         }
         assertEquals(1, closes)

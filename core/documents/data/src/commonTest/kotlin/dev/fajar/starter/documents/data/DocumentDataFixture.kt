@@ -36,6 +36,18 @@ class DocumentDataFixture : DocumentRemoteDataSource {
             "a".repeat(64),
             now.toString(),
         )
+    var recordCall: suspend () -> DocumentCatalogRecordDto = {
+        DocumentCatalogRecordDto(
+            item.documentId,
+            0,
+            query.employmentId,
+            query.classification.name,
+            item,
+        )
+    }
+
+    override suspend fun record(sessionId: String, companyId: String, id: String) = recordCall()
+
     var response =
         SelfDocumentEvidenceDto(
             access.accountId,

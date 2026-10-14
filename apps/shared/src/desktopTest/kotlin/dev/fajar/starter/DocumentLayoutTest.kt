@@ -13,6 +13,8 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import dev.fajar.starter.designsystem.theme.AppTheme
 import dev.fajar.starter.documents.domain.entities.*
+import dev.fajar.starter.documents.domain.replica.entities.*
+import dev.fajar.starter.documents.domain.replica.policies.initialDocumentCatalogCheckpoint
 import dev.fajar.starter.documents.presentation.catalog.*
 import dev.fajar.starter.documents.presentation.catalog.pages.DocumentCatalogPage
 import dev.fajar.starter.documents.presentation.download.*
@@ -141,22 +143,20 @@ class DocumentLayoutTest {
                 now,
             )
         return DocumentCatalogState(
-            directory =
-                DocumentEmploymentSnapshot(
-                    access,
-                    DocumentEmploymentPage(listOf(employment), "2026-10-12", "Asia/Jakarta", null),
-                    null,
-                    now,
-                    now,
-                ),
-            employment = employment,
+            employments = listOf(employment),
+            selection = DocumentCatalogSelection(employment.id),
             catalog =
-                DocumentEvidenceSnapshot(
-                    access,
-                    DocumentEvidenceQuery(employment.id, DocumentClassification.PERSONAL),
+                DocumentCatalogSnapshot(
+                    initialDocumentCatalogCheckpoint(access, "generation", now, listOf(employment))
+                        .copy(
+                            revision = 1,
+                            phase = DocumentCatalogSyncPhase.CHANGES,
+                            cursor = "head",
+                            published = true,
+                            refreshedAt = now,
+                        ),
+                    DocumentCatalogSelection(employment.id),
                     DocumentEvidencePage(listOf(document)),
-                    now,
-                    now,
                 ),
             loading = false,
         )

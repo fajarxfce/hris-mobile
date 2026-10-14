@@ -70,8 +70,10 @@ confirmed local removal, scoped to the selected account and company. Employees c
 confirm an employment, title, category and description in the form opened after
 file selection, before a resumable upload.
 Progress, server inspection, explicit retry and cancellation use the retained
-encrypted upload intent. Published documents can be filtered by employment and
-category, downloaded into encrypted storage, paused and explicitly resumed.
+encrypted upload intent. Published document metadata synchronizes into account-owned
+encrypted records. Employment, category and page filters work locally, including
+after restart and reauthentication, without an age limit. Documents can be downloaded
+into encrypted storage, paused and explicitly resumed after current content authorization.
 Completed revisions can be saved through the platform file dialog after fresh
 server authorization; the exported copy is then managed outside the application.
 

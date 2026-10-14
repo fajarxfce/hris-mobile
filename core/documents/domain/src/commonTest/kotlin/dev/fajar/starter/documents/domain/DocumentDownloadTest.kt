@@ -6,7 +6,6 @@ import dev.fajar.starter.common.result.*
 import dev.fajar.starter.documents.domain.entities.*
 import dev.fajar.starter.documents.domain.policies.DOCUMENT_DOWNLOAD_CHUNK_BYTES
 import kotlin.test.*
-import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.*
 import kotlinx.coroutines.test.*
 
@@ -36,13 +35,18 @@ class DocumentDownloadTest {
     }
 
     @Test
-    fun staleOrForeignSelectionsCannotReserveOrReadContent() = runTest {
+    fun missingOrForeignSelectionsCannotReserveOrReadContent() = runTest {
         val f = DocumentDownloadFixture()
         val invalid =
             listOf(
-                f.catalog.copy(expiresAt = f.base.now),
-                f.catalog.copy(fetchedAt = f.base.now + 1.seconds),
-                f.catalog.copy(access = f.access.copy(companyId = f.evidence.documentId)),
+                f.catalog.copy(checkpoint = null),
+                f.catalog.copy(
+                    checkpoint =
+                        f.catalog.checkpoint!!.copy(
+                            access = f.access.copy(companyId = f.evidence.documentId)
+                        )
+                ),
+                f.catalog.copy(selection = f.catalog.selection.copy(employmentId = null)),
                 f.catalog.copy(page = DocumentEvidencePage(emptyList())),
             )
         for (catalog in invalid) assertIs<AppResult.Failed>(
@@ -53,6 +57,35 @@ class DocumentDownloadTest {
         f.base.workspaces.value = AppResult.Success(f.base.workspace.copy(permissions = emptySet()))
         assertEquals("access_denied", assertIs<AppResult.Failed>(f.prepare()).failure.code)
         assertEquals(0, f.inspections)
+    }
+
+    @Test
+    fun oldOwnedCatalogStillRequiresFreshContentAuthorization() = runTest {
+        val f = DocumentDownloadFixture()
+        val old =
+            f.catalog.copy(
+                checkpoint =
+                    f.catalog.checkpoint!!.copy(
+                        access = f.access.copy(sessionId = "older-login"),
+                        refreshedAt = f.base.now - kotlin.time.Duration.parse("73h"),
+                        refreshAfter = f.base.now - kotlin.time.Duration.parse("72h"),
+                    )
+            )
+        assertIs<AppResult.Success<LocalDocumentFile>>(
+            f.prepare(f.base.workspace.id, old, f.evidence.revisionId)
+        )
+        assertEquals(1, f.inspections)
+        f.inspect = {
+            AppResult.Failed(Failure(FailureKind.AccessDenied, "Denied", code = "mfa_required"))
+        }
+        assertEquals(
+            "mfa_required",
+            assertIs<AppResult.Failed>(f.prepare(f.base.workspace.id, old, f.evidence.revisionId))
+                .failure
+                .code,
+        )
+        assertEquals(2, f.inspections)
+        assertEquals(1, f.reservations)
     }
 
     @Test

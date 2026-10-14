@@ -115,7 +115,8 @@ capabilities.
 | Payslips | Account-owned full payslips, indexed annual summaries and versioned payment progress; local year/page/detail queries | Two explicit collections, staged replacement and incremental changes implemented |
 | Expenses | Account-owned complete claims, indexed summaries, payment progress and acquired activity; local employment/month/status/page queries | Two explicit collections, canonical claim acquisition and resumable activity backfill implemented |
 | Expense editor | Account/company-owned draft fields, completed lines and one unfinished item; local compare-and-set autosave | Explicit server Save performs fresh review and retains an immutable command; working copies do not replicate as confirmed claims |
-| Local document files | Account/company-owned imports and completed downloads | Upload/download commands; catalog is online |
+| Published documents | Account-owned metadata with local employment/category/page queries | `DOCUMENT_EVIDENCE`, canonical published records and versioned withdrawals |
+| Local document files | Account/company-owned imports and completed downloads | Resumable upload commands; download/export independently reauthorize content |
 | Coworker directory | Account-owned encrypted records; full local search and department/page selection | `DIRECTORY_EMPLOYEES` |
 | Private profile | Live reads | Not implemented |
 

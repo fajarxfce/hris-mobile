@@ -50,6 +50,8 @@ fun main() {
             environment,
             directoryReplicaCredentials =
                 BrowserProtectedCredentialStore(namespace, "directory-replica-content-key"),
+            documentCatalogCredentials =
+                BrowserProtectedCredentialStore(namespace, "document-catalog-content-key"),
             commandCredentials = BrowserProtectedCredentialStore(namespace, "command-content-key"),
             fileCredentials = BrowserProtectedCredentialStore(namespace, "file-content-key"),
             fileInputs = BrowserFileInputSource(),

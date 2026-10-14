@@ -26,6 +26,13 @@ class ExpenseReceiptFixture(instant: () -> Instant) {
 
     val remote =
         object : DocumentRepository {
+            override suspend fun record(
+                access: DocumentAccess,
+                id: String,
+            ): AppResult<
+                dev.fajar.starter.documents.domain.replica.entities.DocumentCatalogRecord
+            > = error("This evidence selector uses its own live review")
+
             override suspend fun employments(
                 access: DocumentAccess,
                 after: String?,

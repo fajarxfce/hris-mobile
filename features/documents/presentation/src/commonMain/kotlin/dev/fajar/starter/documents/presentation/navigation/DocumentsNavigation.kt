@@ -44,7 +44,6 @@ fun NavGraphBuilder.documentRoutes(
                 DocumentCatalogEffect.Back -> onBack()
                 DocumentCatalogEffect.VerifyAccount -> onVerify()
                 DocumentCatalogEffect.ScrollToStart -> list.requestScrollToItem(0)
-                DocumentCatalogEffect.ScrollEmploymentsToStart -> employments.requestScrollToItem(0)
             }
         }
         DocumentCatalogPage(state, list, employments, viewModel::onEvent)

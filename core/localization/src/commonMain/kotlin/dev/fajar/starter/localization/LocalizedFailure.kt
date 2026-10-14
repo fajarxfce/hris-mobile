@@ -125,6 +125,7 @@ fun failureText(failure: Failure): String =
             "client.file_input_failed",
             "client.file_unavailable",
             "client.file_released" -> AppString.DocumentFileUnavailable
+            "client.document_catalog_changed" -> AppString.TryAgain
             "client.document_evidence_expired" -> AppString.DocumentEvidenceExpired
             "client.document_scope_changed" -> AppString.CalendarScopeChanged
             "client.leave_preview_expired" -> AppString.LeavePreviewExpired

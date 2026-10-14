@@ -4,9 +4,10 @@ import dev.fajar.starter.common.config.*
 import dev.fajar.starter.common.result.AppResult
 import dev.fajar.starter.documents.domain.entities.*
 import dev.fajar.starter.documents.domain.policies.*
+import dev.fajar.starter.documents.domain.replica.entities.*
+import dev.fajar.starter.documents.domain.replica.policies.initialDocumentCatalogCheckpoint
 import dev.fajar.starter.documents.domain.repositories.*
 import dev.fajar.starter.documents.domain.usecases.*
-import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.sync.Mutex
 
@@ -19,12 +20,29 @@ internal class DocumentDownloadFixture {
             .value
     val evidence = base.evidence.copy(size = DOCUMENT_DOWNLOAD_CHUNK_BYTES * 2L + 3)
     val catalog =
-        DocumentEvidenceSnapshot(
-            access,
-            base.query,
+        DocumentCatalogSnapshot(
+            initialDocumentCatalogCheckpoint(
+                    access,
+                    "generation",
+                    base.now,
+                    listOf(
+                        DocumentEmployment(
+                            base.query.employmentId,
+                            "EMP-001",
+                            DocumentEmploymentStatus.ACTIVE,
+                            0,
+                        )
+                    ),
+                )
+                .copy(
+                    revision = 1,
+                    phase = DocumentCatalogSyncPhase.CHANGES,
+                    cursor = "head",
+                    published = true,
+                    refreshedAt = base.now,
+                ),
+            DocumentCatalogSelection(base.query.employmentId, base.query.classification),
             DocumentEvidencePage(listOf(evidence)),
-            base.now,
-            base.now + 60.seconds,
         )
     val rows = MutableStateFlow<List<LocalDocumentFile>>(emptyList())
     val buffers = mutableListOf<ByteArray>()

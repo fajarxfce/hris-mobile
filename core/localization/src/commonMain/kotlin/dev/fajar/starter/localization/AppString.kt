@@ -646,10 +646,6 @@ enum class AppString(val english: StringResource, val indonesian: StringResource
         Res.string.document_preparing_download_en,
         Res.string.document_preparing_download_id,
     ),
-    DocumentCatalogExpired(
-        Res.string.document_catalog_expired_en,
-        Res.string.document_catalog_expired_id,
-    ),
     DocumentNoPublished(Res.string.document_no_published_en, Res.string.document_no_published_id),
     DocumentDownloaded(Res.string.document_downloaded_en, Res.string.document_downloaded_id),
     DocumentDownloadPending(

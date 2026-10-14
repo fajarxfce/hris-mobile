@@ -10,6 +10,14 @@ import org.koin.core.annotation.*
 
 @Single
 class DocumentsApi(@Named(HttpClients.Authenticated) private val client: HttpClient) {
+    suspend fun record(sessionId: String, companyId: String, id: String): DocumentCatalogRecordDto =
+        client.requestJson(
+            "companies/$companyId/documents/me/evidence/$id",
+            maximumBytes = 16_384,
+        ) {
+            forSession(sessionId)
+        }
+
     suspend fun inspect(
         sessionId: String,
         companyId: String,

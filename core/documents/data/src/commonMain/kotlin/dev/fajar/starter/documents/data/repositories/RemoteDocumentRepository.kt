@@ -15,6 +15,12 @@ import org.koin.core.annotation.Single
 @Single
 class RemoteDocumentRepository(private val remote: DocumentRemoteDataSource) :
     DocumentRepository, DocumentUploadRepository {
+    override suspend fun record(access: DocumentAccess, id: String) = safeApiCall {
+        Uuid.parse(access.companyId)
+        Uuid.parse(id)
+        remote.record(access.sessionId, access.companyId, id).toCatalogRecord(id)
+    }
+
     override suspend fun employments(access: DocumentAccess, after: String?) = safeApiCall {
         Uuid.parse(access.companyId)
         require(after == null || after.length in 1..32)

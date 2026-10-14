@@ -15,4 +15,5 @@ enum class SyncCollection {
     WORK_HOLIDAYS,
     EXPENSE_PAYMENTS,
     DIRECTORY_EMPLOYEES,
+    DOCUMENT_EVIDENCE,
 }
