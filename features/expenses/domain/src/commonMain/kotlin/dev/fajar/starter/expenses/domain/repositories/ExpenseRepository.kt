@@ -13,6 +13,12 @@ interface ExpenseRepository {
 
     suspend fun claim(access: ExpenseAccess, id: String): AppResult<ExpenseClaim>
 
+    suspend fun record(
+        access: ExpenseAccess,
+        id: String,
+        historyAfter: Long?,
+    ): AppResult<ExpenseClaimRecord>
+
     suspend fun history(
         access: ExpenseAccess,
         id: String,

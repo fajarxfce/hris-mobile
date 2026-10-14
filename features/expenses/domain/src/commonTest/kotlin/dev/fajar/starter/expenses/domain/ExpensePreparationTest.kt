@@ -161,8 +161,14 @@ class ExpensePreparationTest {
             }
             if (failed) p.failure = expenseFailure("fixture.transport", FailureKind.Network)
             val result = assertIs<AppResult.Failed>(p.load(kind))
-            assertTrue(
-                result.failure.kind in setOf(FailureKind.AccessDenied, FailureKind.Unauthorized)
+            assertEquals(
+                when (case) {
+                    0 -> FailureKind.Unauthorized
+                    1,
+                    2 -> FailureKind.AccessDenied
+                    else -> FailureKind.Conflict
+                },
+                result.failure.kind,
             )
             assertNotEquals("fixture.transport", result.failure.code)
             assertEquals(0, f.claimReads + f.writes)

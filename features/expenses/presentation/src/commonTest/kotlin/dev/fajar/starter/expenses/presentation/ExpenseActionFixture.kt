@@ -96,6 +96,7 @@ class ExpenseActionFixture(instant: () -> Instant) {
             ExpenseActionTarget(f.workspace.id, f.claim.id, mode),
             f.observeDetail,
             f.refreshDetail,
+            f.sync,
             editor.observe,
             editor.action,
             editor.replay,

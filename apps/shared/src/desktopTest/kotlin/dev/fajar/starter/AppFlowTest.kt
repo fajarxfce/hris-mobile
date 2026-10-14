@@ -97,6 +97,7 @@ class AppFlowTest {
             waitFor("Client visit")
             compose.onNodeWithText("IDR 150,000").assertIsDisplayed()
             capture("expenses-overview")
+            assertEquals(0, server.expenses.lists.get())
             compose.onNodeWithContentDescription("Previous month").performClick()
             waitFor("No claims for this month.")
             compose.onNodeWithText("September 2026").assertIsDisplayed()
@@ -120,7 +121,7 @@ class AppFlowTest {
                 .onNode(hasScrollToIndexAction())
                 .performScrollToNode(hasText("Earlier activity"))
             compose.onNode(hasText("Earlier activity") and hasClickAction()).performClick()
-            compose.waitUntil { server.expenses.historyReads.get() == 2 }
+            compose.waitUntil { server.expenses.historyReads.get() == 1 }
             compose.waitUntil {
                 compose
                     .onAllNodes(hasContentDescription("Refresh") and isEnabled())
@@ -1839,8 +1840,7 @@ class AppFlowTest {
                     .performClick()
                 waitFor("October 2026")
                 compose.waitUntil { server.workforce.attendanceActive.get() == 0 }
-                server.workforce.attendanceGate = release
-                refreshWhenReady()
+                refreshWhenReady { server.workforce.attendanceGate = release }
                 compose.waitUntil { server.workforce.attendanceActive.get() == 1 }
                 val requests = server.workforce.syncReads.get()
                 val cancelled = server.workforce.attendanceCancelled.get()

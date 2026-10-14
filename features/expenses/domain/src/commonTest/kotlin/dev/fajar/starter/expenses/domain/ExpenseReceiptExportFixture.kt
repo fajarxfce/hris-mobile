@@ -168,6 +168,7 @@ class ExpenseReceiptExportFixture(val base: ExpenseFixture = ExpenseFixture()) {
         ExportExpenseReceipt(
             repository,
             output,
+            base.replicas,
             base.sessions,
             base.workspaces,
             base.clock,

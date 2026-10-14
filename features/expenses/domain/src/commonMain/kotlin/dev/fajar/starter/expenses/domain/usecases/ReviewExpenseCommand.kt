@@ -7,6 +7,7 @@ import dev.fajar.starter.common.result.*
 import dev.fajar.starter.expenses.domain.entities.*
 import dev.fajar.starter.expenses.domain.entities.ExpenseAccess
 import dev.fajar.starter.expenses.domain.policies.*
+import dev.fajar.starter.expenses.domain.replica.repositories.ExpenseReplicaRepository
 import dev.fajar.starter.expenses.domain.repositories.*
 import dev.fajar.starter.identity.domain.repositories.SessionRepository
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
@@ -21,7 +22,7 @@ import kotlinx.coroutines.flow.first
  */
 class ReviewExpenseCommand(
     private val commands: ExpenseCommandRepository,
-    private val cache: ExpenseCacheRepository,
+    private val cache: ExpenseReplicaRepository,
     private val sessions: SessionRepository,
     private val workspaces: WorkspaceRepository,
     private val clock: Clock,
@@ -60,14 +61,16 @@ class ReviewExpenseCommand(
                     FailureKind.Conflict,
                 )
             if (record.outcome is ExpenseCommandOutcome.Confirmed) {
-                val observed = cache.observeDetails(access).first()
+                val admitted = readAdmission(workspaceId, access)
+                if (admitted is AppResult.Failed) return@withTimeoutOrNull admitted
+                val observed = cache.observeDetails(access, record.command.claimId).first()
                 currentCoroutineContext().ensureActive()
                 val continuation = validateExpenseContinuation(access, currentAccess(workspaceId))
                 if (continuation is AppResult.Failed) return@withTimeoutOrNull continuation
                 val snapshot =
                     when (observed) {
                         is AppResult.Failed -> return@withTimeoutOrNull observed
-                        is AppResult.Success -> observed.value
+                        is AppResult.Success -> observed.value.snapshot
                     }
                 val lease = validateExpenseActionSnapshot(access, snapshot, clock.now())
                 if (lease is AppResult.Failed) return@withTimeoutOrNull lease
@@ -86,12 +89,26 @@ class ReviewExpenseCommand(
                         "client.expense_updates_pending",
                         FailureKind.Conflict,
                     )
+                val publication = readAdmission(workspaceId, access)
+                if (publication is AppResult.Failed) return@withTimeoutOrNull publication
             }
             val removal = commands.remove(access, record)
             currentCoroutineContext().ensureActive()
             val publication = validateExpenseContinuation(access, currentAccess(workspaceId))
             if (publication is AppResult.Failed) publication else removal
         } ?: expenseFailure("client.expense_timeout", FailureKind.Timeout)
+
+    private suspend fun readAdmission(workspaceId: String, access: ExpenseAccess): AppResult<Unit> {
+        val admission = cache.admission(access)
+        currentCoroutineContext().ensureActive()
+        val owner = validateExpenseContinuation(access, currentAccess(workspaceId))
+        if (owner is AppResult.Failed) return owner
+        return when (admission) {
+            is AppResult.Failed -> admission
+            is AppResult.Success ->
+                admission.value.denial?.let { AppResult.Failed(it) } ?: AppResult.Success(Unit)
+        }
+    }
 
     private suspend fun currentAccess(workspaceId: String): AppResult<ExpenseAccess> {
         val session =

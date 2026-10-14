@@ -8,6 +8,7 @@ import dev.fajar.starter.documents.domain.entities.DocumentFileDeclaration
 import dev.fajar.starter.documents.domain.repositories.DocumentOutputRepository
 import dev.fajar.starter.expenses.domain.entities.*
 import dev.fajar.starter.expenses.domain.policies.*
+import dev.fajar.starter.expenses.domain.replica.repositories.ExpenseReplicaRepository
 import dev.fajar.starter.expenses.domain.repositories.ExpenseReceiptRepository
 import dev.fajar.starter.identity.domain.repositories.SessionRepository
 import dev.fajar.starter.workspace.domain.entities.*
@@ -24,6 +25,7 @@ import kotlinx.coroutines.flow.*
 class ExportExpenseReceipt(
     private val receipts: ExpenseReceiptRepository,
     private val outputs: DocumentOutputRepository,
+    private val replicas: ExpenseReplicaRepository,
     private val sessions: SessionRepository,
     private val workspaces: WorkspaceRepository,
     private val clock: Clock,
@@ -42,6 +44,8 @@ class ExportExpenseReceipt(
                 }
             val lease = validateExpenseActionSnapshot(access, snapshot, clock.now())
             if (lease is AppResult.Failed) return@withTimeoutOrNull lease
+            val admission = readAdmission(workspaceId, access)
+            if (admission is AppResult.Failed) return@withTimeoutOrNull admission
             val view = snapshot.value
             val submission = view.submission
             if (
@@ -96,7 +100,7 @@ class ExportExpenseReceipt(
                             FailureKind.Timeout,
                         )
                 currentCoroutineContext().ensureActive()
-                val continued = validateExpenseContinuation(access, currentAccess(workspaceId))
+                val continued = readAdmission(workspaceId, access)
                 if (continued is AppResult.Failed) return@withTimeoutOrNull continued
                 when (selected) {
                     is AppResult.Failed -> return@withTimeoutOrNull selected
@@ -149,7 +153,7 @@ class ExportExpenseReceipt(
                     }
                     when (part) {
                         is AppResult.Failed -> {
-                            failure = part
+                            failure = reject(access, part)
                             return@takeWhile false
                         }
                         is AppResult.Success -> {
@@ -216,7 +220,7 @@ class ExportExpenseReceipt(
         submissionId: String,
         receipt: ExpenseReceipt,
     ): AppResult<CompanyPolicySnapshot> {
-        val before = validateExpenseContinuation(access, currentAccess(workspaceId))
+        val before = readAdmission(workspaceId, access)
         if (before is AppResult.Failed) return before
         val requestedAt = clock.now()
         val fetched = workspaces.clientPolicy(access.sessionId, access.companyId)
@@ -225,7 +229,7 @@ class ExportExpenseReceipt(
         if (continued is AppResult.Failed) return continued
         val policy =
             when (fetched) {
-                is AppResult.Failed -> return fetched
+                is AppResult.Failed -> return reject(access, fetched)
                 is AppResult.Success -> CompanyPolicySnapshot(fetched.value, requestedAt)
             }
         val allowed = admitted(workspaceId, access, policy)
@@ -235,7 +239,7 @@ class ExportExpenseReceipt(
         val after = admitted(workspaceId, access, policy)
         if (after is AppResult.Failed) return after
         return when (inspected) {
-            is AppResult.Failed -> inspected
+            is AppResult.Failed -> reject(access, inspected)
             is AppResult.Success -> AppResult.Success(policy)
         }
     }
@@ -245,9 +249,31 @@ class ExportExpenseReceipt(
         access: ExpenseAccess,
         policy: CompanyPolicySnapshot,
     ): AppResult<Unit> {
-        val continued = validateExpenseContinuation(access, currentAccess(workspaceId))
+        val continued = readAdmission(workspaceId, access)
         if (continued is AppResult.Failed) return continued
-        return admitCompanyOperation(policy, build, CompanyModule.EXPENSES, clock.now())
+        val available = admitCompanyOperation(policy, build, CompanyModule.EXPENSES, clock.now())
+        return if (available is AppResult.Failed) reject(access, available) else available
+    }
+
+    private suspend fun readAdmission(workspaceId: String, access: ExpenseAccess): AppResult<Unit> {
+        val result = replicas.admission(access)
+        currentCoroutineContext().ensureActive()
+        val owner = validateExpenseContinuation(access, currentAccess(workspaceId))
+        if (owner is AppResult.Failed) return owner
+        return when (result) {
+            is AppResult.Failed -> result
+            is AppResult.Success ->
+                result.value.denial?.let { AppResult.Failed(it) } ?: AppResult.Success(Unit)
+        }
+    }
+
+    private suspend fun reject(access: ExpenseAccess, failure: AppResult.Failed): AppResult.Failed {
+        currentCoroutineContext().ensureActive()
+        if (expenseFailureInvalidatesCache(failure.failure)) {
+            withTimeoutOrNull(2.seconds) { replicas.restrict(access, failure.failure) }
+            withTimeoutOrNull(2.seconds) { replicas.clear(access) }
+        }
+        return failure
     }
 
     private suspend fun currentAccess(workspaceId: String): AppResult<ExpenseAccess> {

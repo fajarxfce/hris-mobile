@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import dev.fajar.starter.common.result.AppResult
 import dev.fajar.starter.expenses.domain.entities.ExpenseSelection
 import dev.fajar.starter.expenses.domain.policies.*
+import dev.fajar.starter.expenses.domain.replica.usecases.SyncExpenses
 import dev.fajar.starter.expenses.domain.usecases.*
 import dev.fajar.starter.expenses.presentation.expenseVerificationCodes
 import dev.fajar.starter.presentation.mvi.MviViewModel
@@ -18,7 +19,7 @@ import org.koin.core.annotation.InjectedParam
 class ExpensesViewModel(
     @InjectedParam private val workspaceId: String,
     private val observe: ObserveExpenses,
-    private val refresh: RefreshExpenses,
+    private val sync: SyncExpenses,
 ) : MviViewModel<ExpensesState, ExpensesEvent, ExpensesEffect>(ExpensesState()) {
     private var observation: Job? = null
     private var acquisition: Job? = null
@@ -56,16 +57,16 @@ class ExpensesViewModel(
         observation =
             viewModelScope.launch {
                 state
-                    .map { it.selection to it.readRestricted }
+                    .map { it.selection }
                     .distinctUntilChanged()
-                    .flatMapLatest { (selection, restricted) ->
-                        if (restricted) emptyFlow()
-                        else observe(workspaceId).map { selection to it }
+                    .flatMapLatest { selection ->
+                        observe(workspaceId, selection ?: ExpenseSelection()).map {
+                            selection to it
+                        }
                     }
                     .collect { (selection, result) ->
                         ensureActive()
-                        if (selection != state.value.selection || state.value.readRestricted)
-                            return@collect
+                        if (selection != state.value.selection) return@collect
                         updateState { it.withCachedExpenses(result) }
                     }
             }
@@ -89,7 +90,6 @@ class ExpensesViewModel(
 
     private fun onRefreshRequested(event: ExpensesEvent.RefreshRequested) {
         if (observation?.isActive != true || acquisition?.isActive == true) return
-        val requested = state.value.filters ?: ExpenseSelection()
         updateState {
             it.copy(
                 refreshing = true,
@@ -101,10 +101,10 @@ class ExpensesViewModel(
         }
         acquisition =
             viewModelScope.launch {
-                val result = refresh(workspaceId, requested)
+                val result = sync(workspaceId)
                 ensureActive()
                 if (result is AppResult.Success) observation?.cancel()
-                updateState { it.withExpensesRefresh(result, requested) }
+                updateState { it.withExpensesRefresh(result) }
                 if (result is AppResult.Success) observeSelection()
                 if (
                     result is AppResult.Failed &&
@@ -130,8 +130,7 @@ class ExpensesViewModel(
     }
 
     private fun onFilterOpened(event: ExpensesEvent.FilterOpened) {
-        if (state.value.content == null || state.value.readRestricted || state.value.refreshing)
-            return
+        if (state.value.content == null || state.value.readRestricted) return
         updateState { it.copy(dialog = event.filter, pickerYear = it.filters?.month?.year) }
     }
 
@@ -199,19 +198,15 @@ class ExpensesViewModel(
                 selection == state.value.filters
         )
             return
-        acquisition?.cancel()
-        acquisition = null
         updateState {
             it.copy(
                 selection = selection,
                 content = null,
                 loading = true,
-                refreshing = false,
                 cacheFailure = null,
-                refreshFailure = null,
+                refreshFailure = it.refreshFailure?.takeIf(::expenseFailureInvalidatesCache),
             )
         }
-        onEvent(ExpensesEvent.RefreshRequested)
     }
 
     private fun onClaimSelected(event: ExpensesEvent.ClaimSelected) {

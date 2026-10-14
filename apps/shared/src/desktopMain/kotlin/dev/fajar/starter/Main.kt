@@ -25,6 +25,7 @@ import org.koin.dsl.onClose
 fun main(args: Array<String>) {
     val environment = BuildEnvironment.current
     val directory = java.io.File(System.getProperty("user.home"), ".hris-mobile/${environment.id}")
+    val namespace = "hris-mobile.${environment.id}"
     val links = AppLinkChannel()
     args.firstOrNull()?.let(links::receive)
     val container =
@@ -42,60 +43,25 @@ fun main(args: Array<String>) {
                 single<PushTokenSource> { UnavailablePushTokenSource() }
             },
             browserAuthorization = DesktopBrowserAuthorizationSource(),
-            credentials =
-                if (BuildRuntime.persistDesktopSession)
-                    DesktopCredentialStore("hris-mobile.${environment.id}")
-                else MemoryCredentialStore(),
-            inboxCredentials =
-                if (BuildRuntime.persistDesktopSession)
-                    DesktopCredentialStore("hris-mobile.${environment.id}", "inbox-content-key")
-                else MemoryCredentialStore(),
-            commandCredentials =
-                DesktopCredentialStore("hris-mobile.${environment.id}", "command-content-key"),
-            fileCredentials =
-                DesktopCredentialStore("hris-mobile.${environment.id}", "file-content-key"),
+            credentials = desktopSessionCredentials(namespace),
+            inboxCredentials = desktopSessionCredentials(namespace, "inbox-content-key"),
+            commandCredentials = DesktopCredentialStore(namespace, "command-content-key"),
+            fileCredentials = DesktopCredentialStore(namespace, "file-content-key"),
             fileInputs = DesktopFileInputSource(),
             fileOutputs = DesktopFileOutputSource(),
-            calendarCredentials =
-                if (BuildRuntime.persistDesktopSession)
-                    DesktopCredentialStore("hris-mobile.${environment.id}", "calendar-content-key")
-                else MemoryCredentialStore(),
+            calendarCredentials = desktopSessionCredentials(namespace, "calendar-content-key"),
             leaveReplicaCredentials =
-                if (BuildRuntime.persistDesktopSession)
-                    DesktopCredentialStore(
-                        "hris-mobile.${environment.id}",
-                        "leave-replica-content-key",
-                    )
-                else MemoryCredentialStore(),
+                desktopSessionCredentials(namespace, "leave-replica-content-key"),
             overtimeReplicaCredentials =
-                if (BuildRuntime.persistDesktopSession)
-                    DesktopCredentialStore(
-                        "hris-mobile.${environment.id}",
-                        "overtime-replica-content-key",
-                    )
-                else MemoryCredentialStore(),
+                desktopSessionCredentials(namespace, "overtime-replica-content-key"),
             workforceReplicaCredentials =
-                if (BuildRuntime.persistDesktopSession)
-                    DesktopCredentialStore(
-                        "hris-mobile.${environment.id}",
-                        "workforce-replica-content-key",
-                    )
-                else MemoryCredentialStore(),
+                desktopSessionCredentials(namespace, "workforce-replica-content-key"),
             payrollReplicaCredentials =
-                if (BuildRuntime.persistDesktopSession)
-                    DesktopCredentialStore(
-                        "hris-mobile.${environment.id}",
-                        "payroll-replica-content-key",
-                    )
-                else MemoryCredentialStore(),
-            leaveCredentials =
-                if (BuildRuntime.persistDesktopSession)
-                    DesktopCredentialStore("hris-mobile.${environment.id}", "leave-content-key")
-                else MemoryCredentialStore(),
-            workspaceCredentials =
-                if (BuildRuntime.persistDesktopSession)
-                    DesktopCredentialStore("hris-mobile.${environment.id}", "workspace-content-key")
-                else MemoryCredentialStore(),
+                desktopSessionCredentials(namespace, "payroll-replica-content-key"),
+            expenseReplicaCredentials =
+                desktopSessionCredentials(namespace, "expense-replica-content-key"),
+            leaveCredentials = desktopSessionCredentials(namespace, "leave-content-key"),
+            workspaceCredentials = desktopSessionCredentials(namespace, "workspace-content-key"),
         )
     val workerScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
     startForegroundSync(container, workerScope)
@@ -116,3 +82,11 @@ fun main(args: Array<String>) {
         }
     }
 }
+
+/** Session-owned read keys follow the desktop host's explicit persistence setting. */
+private fun desktopSessionCredentials(
+    namespace: String,
+    recordName: String = "session",
+): AtomicCredentialStore =
+    if (BuildRuntime.persistDesktopSession) DesktopCredentialStore(namespace, recordName)
+    else MemoryCredentialStore()

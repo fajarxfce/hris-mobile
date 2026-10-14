@@ -85,6 +85,13 @@ class ApiExpenseDataSource(private val api: ExpenseApi) : ExpenseRemoteDataSourc
     override suspend fun claim(sessionId: String, companyId: String, id: String) =
         api.claim(sessionId, companyId, id)
 
+    override suspend fun record(
+        sessionId: String,
+        companyId: String,
+        id: String,
+        historyAfter: Long?,
+    ) = api.record(sessionId, companyId, id, historyAfter)
+
     override suspend fun history(sessionId: String, companyId: String, id: String, after: Long?) =
         api.history(sessionId, companyId, id, after)
 

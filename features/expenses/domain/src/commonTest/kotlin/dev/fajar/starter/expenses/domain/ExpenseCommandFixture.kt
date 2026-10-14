@@ -126,7 +126,8 @@ class ExpenseCommandFixture(instant: () -> Instant = { Instant.parse("2026-10-13
     val prepare = PrepareExpenseDraft(commands, f.sessions, f.workspaces, f.clock, f.build)
     val action = PrepareExpenseAction(commands, f.sessions, f.workspaces, f.clock, f.build)
     val replay = ReplayExpenseCommands(commands, remote, f.sessions, f.workspaces, f.clock, f.build)
-    val review = ReviewExpenseCommand(commands, f.cache, f.sessions, f.workspaces, f.clock, f.build)
+    val review =
+        ReviewExpenseCommand(commands, f.replicas, f.sessions, f.workspaces, f.clock, f.build)
     val observe = ObserveExpenseCommand(commands, f.sessions, f.workspaces, f.clock, f.build)
 
     suspend fun save(edited: Boolean = false): AppResult<ExpenseCommandRecord> =
@@ -138,6 +139,6 @@ class ExpenseCommandFixture(instant: () -> Instant = { Instant.parse("2026-10-13
 
     suspend fun details(): ExpenseSnapshot<ExpenseView> {
         check(f.load(true) is AppResult.Success)
-        return (f.detailRecords.value as AppResult.Success).value!!
+        return (f.observeDetail(f.workspace.id, f.claim.id).first() as AppResult.Success).value!!
     }
 }

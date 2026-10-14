@@ -212,10 +212,9 @@ class ExpenseCommandDeliveryTest {
         p.replay(p.f.workspace.id, stored.command.id)
         assertIs<AppResult.Failed>(p.review(p.f.workspace.id, stored.command.id))
         val snapshot = p.details()
-        p.f.detailRecords.value =
-            AppResult.Success(
-                snapshot.copy(value = snapshot.value.copy(claim = p.f.claim.copy(version = 1)))
-            )
+        p.f.seedDetails(
+            snapshot.copy(value = snapshot.value.copy(claim = p.f.claim.copy(version = 1)))
+        )
         p.beforeRemove = {
             p.values.value = p.values.value.map { it.copy(revision = it.revision + 1) }
         }

@@ -19,6 +19,7 @@ class ExpenseReceiptExportViewModelTest {
         withModel { f, model, _ ->
             val effects = mutableListOf<ExpenseClaimEffect>()
             backgroundScope.launch { model.effects.collect { effects += it } }
+            f.base.failCleanup = true
             f.inspectCall = { expenseFailure("mfa_required", FailureKind.AccessDenied) }
             model.onEvent(ExpenseClaimEvent.ExportRequested(f.receipt.id))
             runCurrent()
@@ -199,6 +200,7 @@ class ExpenseReceiptExportViewModelTest {
     @Test
     fun exportDenialKeepsRetainedCacheGatedThroughPendingAndFailedRefresh() = runTest {
         withModel { f, model, _ ->
+            f.base.failCleanup = true
             f.inspectCall = { expenseFailure("mfa_required", FailureKind.AccessDenied) }
             model.onEvent(ExpenseClaimEvent.ExportRequested(f.receipt.id))
             runCurrent()
@@ -206,8 +208,9 @@ class ExpenseReceiptExportViewModelTest {
             assertTrue(model.state.value.needsVerification)
             assertEquals(0, f.selections)
             assertEquals(0, f.base.observers)
-            assertNotNull(assertIs<AppResult.Success<*>>(f.base.detailRecords.value).value)
-            f.base.failCleanup = true
+            assertTrue(
+                (f.base.replicas.published.value as AppResult.Success).value.entries.isNotEmpty()
+            )
             val response = CompletableDeferred<Unit>()
             f.base.claimCall = {
                 response.await()
@@ -287,6 +290,7 @@ class ExpenseReceiptExportViewModelTest {
                 ExpenseClaimTarget(f.base.workspace.id, f.claim.id),
                 f.base.observeDetail,
                 f.base.refreshDetail,
+                f.base.sync,
                 commands.observe,
                 f.export,
             )

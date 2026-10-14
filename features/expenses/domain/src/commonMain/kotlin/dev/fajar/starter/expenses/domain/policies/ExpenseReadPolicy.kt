@@ -18,6 +18,7 @@ fun expenseFailureInvalidatesCache(failure: Failure): Boolean =
                 "expense_claim_not_found",
                 "expense_submission_not_found",
                 "employee_not_found",
+                "sync_scope_changed",
                 "company_maintenance",
                 "client_update_required",
                 "client_version_required",
@@ -39,11 +40,18 @@ fun validateExpenseSelection(selection: ExpenseSelection): AppResult<Unit> {
         selection.after != null &&
             (selection.month == null ||
                 selection.employeeId == null ||
-                validateExpenseId(selection.after) is AppResult.Failed)
+                (validateExpenseId(selection.after) is AppResult.Failed &&
+                    !isExpenseLocalCursor(selection.after)))
     )
         return expenseFailure("invalid_page")
     return AppResult.Success(Unit)
 }
+
+fun isExpenseLocalCursor(cursor: String): Boolean =
+    cursor.length == 52 &&
+        cursor.take(15).all { it in '0'..'9' } &&
+        cursor[15] == '/' &&
+        validateExpenseId(cursor.drop(16)) is AppResult.Success
 
 fun validateExpenseHistoryCursor(after: Long?): AppResult<Unit> =
     if (after == null || after in 0..9_007_199_254_740_991L) AppResult.Success(Unit)

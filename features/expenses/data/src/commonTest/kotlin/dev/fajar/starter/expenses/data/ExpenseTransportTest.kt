@@ -3,6 +3,7 @@ package dev.fajar.starter.expenses.data
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.expenses.data.api.ExpenseApi
 import dev.fajar.starter.expenses.data.datasources.ApiExpenseDataSource
+import dev.fajar.starter.expenses.data.dto.ExpenseClaimRecordDto
 import dev.fajar.starter.expenses.data.repositories.RemoteExpenseRepository
 import dev.fajar.starter.expenses.domain.entities.*
 import dev.fajar.starter.network.RequestSession
@@ -45,6 +46,11 @@ class ExpenseTransportTest {
                                 Json.encodeToString(f.page)
                             }
                             "$prefix/claims/${f.claim.id}" -> Json.encodeToString(f.claim)
+                            "$prefix/claims/${f.claim.id}/record" -> {
+                                assertEquals("20", request.url.parameters["historyLimit"])
+                                assertNull(request.url.parameters["historyAfter"])
+                                Json.encodeToString(ExpenseClaimRecordDto(f.claim, null, f.history))
+                            }
                             "$prefix/claims/${f.claim.id}/history" -> {
                                 assertEquals("20", request.url.parameters["limit"])
                                 assertEquals("1", request.url.parameters["after"])
@@ -85,7 +91,8 @@ class ExpenseTransportTest {
             )
             assertIs<AppResult.Success<ExpenseSubmission>>(repo.submission(access, f.submission.id))
             assertIs<AppResult.Success<ExpenseClaimPayments>>(repo.payments(access, f.claim.id))
-            assertEquals(6, calls)
+            assertIs<AppResult.Success<ExpenseClaimRecord>>(repo.record(access, f.claim.id, null))
+            assertEquals(7, calls)
         } finally {
             client.close()
         }

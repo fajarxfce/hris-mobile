@@ -40,6 +40,14 @@ class RemoteExpenseRepository(private val remote: ExpenseRemoteDataSource) : Exp
         remote.claim(access.sessionId, expenseId(access.companyId), expenseId(id)).toClaim(id)
     }
 
+    override suspend fun record(access: ExpenseAccess, id: String, historyAfter: Long?) =
+        safeApiCall {
+            require(validateExpenseHistoryCursor(historyAfter) is AppResult.Success)
+            remote
+                .record(access.sessionId, expenseId(access.companyId), expenseId(id), historyAfter)
+                .toRecord(id, historyAfter)
+        }
+
     override suspend fun history(access: ExpenseAccess, id: String, after: Long?) = safeApiCall {
         require(validateExpenseHistoryCursor(after) is AppResult.Success)
         remote

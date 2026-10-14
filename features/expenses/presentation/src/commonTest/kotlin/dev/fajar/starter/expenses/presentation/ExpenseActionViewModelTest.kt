@@ -194,7 +194,9 @@ class ExpenseActionViewModelTest {
             model.onEvent(ExpenseActionEvent.RefreshRequested)
             runCurrent()
             assertTrue(model.state.value.needsVerification)
-            assertNotNull(f.f.snapshot(true))
+            assertTrue(
+                (f.f.replicas.published.value as AppResult.Success).value.entries.isNotEmpty()
+            )
             val pending = CompletableDeferred<Unit>()
             f.f.claimCall = {
                 pending.await()
@@ -338,6 +340,7 @@ class ExpenseActionViewModelTest {
                     ExpenseClaimTarget(f.f.workspace.id, f.f.claim.id, "employee-page"),
                     f.f.observeDetail,
                     f.f.refreshDetail,
+                    f.f.sync,
                     f.editor.observe,
                     ExpenseReceiptExportFixture(f.f).export,
                 )
@@ -383,6 +386,7 @@ class ExpenseActionViewModelTest {
                     ExpenseClaimTarget(f.f.workspace.id, f.f.claim.id),
                     f.f.observeDetail,
                     f.f.refreshDetail,
+                    f.f.sync,
                     f.editor.observe,
                     ExpenseReceiptExportFixture(f.f).export,
                 )

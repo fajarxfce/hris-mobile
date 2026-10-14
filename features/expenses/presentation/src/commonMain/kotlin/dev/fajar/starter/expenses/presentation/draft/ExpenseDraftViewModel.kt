@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.expenses.domain.entities.*
 import dev.fajar.starter.expenses.domain.policies.*
+import dev.fajar.starter.expenses.domain.replica.usecases.LoadExpenseClaim
 import dev.fajar.starter.expenses.domain.usecases.*
 import dev.fajar.starter.expenses.presentation.commands.*
 import dev.fajar.starter.expenses.presentation.item.ExpenseItemTarget
@@ -22,7 +23,7 @@ class ExpenseDraftViewModel(
     private val prepareDraft: PrepareExpenseDraft,
     private val replay: ReplayExpenseCommands,
     private val review: ReviewExpenseCommand,
-    private val refreshClaim: RefreshExpenseClaim,
+    private val refreshClaim: LoadExpenseClaim,
 ) :
     MviViewModel<ExpenseDraftState, ExpenseDraftEvent, ExpenseDraftEffect>(
         ExpenseDraftState(editing = target.claimId != null)

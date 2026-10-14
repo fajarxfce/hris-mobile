@@ -5,6 +5,8 @@ import dev.fajar.starter.common.result.*
 import dev.fajar.starter.database.createAppDatabase
 import dev.fajar.starter.datastore.createUserPreferences
 import dev.fajar.starter.expenses.domain.entities.*
+import dev.fajar.starter.expenses.domain.replica.repositories.ExpenseReplicaRepository
+import dev.fajar.starter.expenses.domain.replica.usecases.*
 import dev.fajar.starter.expenses.domain.repositories.*
 import dev.fajar.starter.expenses.domain.usecases.*
 import dev.fajar.starter.sync.domain.SyncTask
@@ -29,6 +31,11 @@ class ExpenseBindingsTest {
             val koin = container.koin
             assertNotNull(koin.get<ExpenseRepository>())
             assertNotNull(koin.get<ExpenseCacheRepository>())
+            assertNotNull(koin.get<ExpenseReplicaRepository>())
+            assertSame(
+                koin.get<SyncExpenses>(),
+                koin.getAll<SyncTask>().single { it.key == SyncExpenses.KEY },
+            )
             assertNotNull(koin.get<ExpensePreparationRepository>())
             assertNotNull(koin.get<ExpenseCommandRepository>())
             assertNotNull(koin.get<ExpenseSubmissionRepository>())
@@ -44,8 +51,8 @@ class ExpenseBindingsTest {
             val id = "44444444-4444-4444-4444-444444444444"
             val results =
                 listOf(
-                    koin.get<RefreshExpenses>()("workspace", ExpenseSelection()),
-                    koin.get<RefreshExpenseClaim>()("workspace", id),
+                    koin.get<SyncExpenses>()("workspace"),
+                    koin.get<LoadExpenseClaim>()("workspace", id),
                     koin.get<ObserveExpenses>()("workspace").first(),
                     koin.get<ObserveExpenseCommand>()("workspace", ExpenseCommandSlot.Creation(id))
                         .first(),

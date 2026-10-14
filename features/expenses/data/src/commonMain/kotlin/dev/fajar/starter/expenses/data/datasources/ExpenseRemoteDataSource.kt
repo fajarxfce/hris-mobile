@@ -72,6 +72,13 @@ interface ExpenseRemoteDataSource {
 
     suspend fun claim(sessionId: String, companyId: String, id: String): ExpenseClaimDto
 
+    suspend fun record(
+        sessionId: String,
+        companyId: String,
+        id: String,
+        historyAfter: Long?,
+    ): ExpenseClaimRecordDto
+
     suspend fun history(
         sessionId: String,
         companyId: String,

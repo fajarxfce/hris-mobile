@@ -28,7 +28,20 @@ fun validateExpenseDraftAmounts(draft: ExpenseDraft): AppResult<Unit> {
 }
 
 fun validateExpenseView(view: ExpenseView): AppResult<Unit> {
+    val record =
+        validateExpenseClaimRecord(
+            ExpenseClaimRecord(view.claim, view.submission, view.history, view.historyAfter)
+        )
+    if (record is AppResult.Failed) return record
+    if (view.payments.isNotEmpty() && view.claim.status != ExpenseStatus.APPROVED)
+        return expenseFailure("client.expense_changed", FailureKind.Conflict)
+    return AppResult.Success(Unit)
+}
+
+fun validateExpenseClaimRecord(view: ExpenseClaimRecord): AppResult<Unit> {
     val claim = view.claim
+    if (view.historyAfter != null && view.historyAfter !in 0..claim.version)
+        return expenseFailure("invalid_page")
     val amounts = validateExpenseDraftAmounts(claim.draft)
     if (amounts is AppResult.Failed) return amounts
     if (view.history.items.any { it.version > claim.version })
@@ -53,7 +66,5 @@ fun validateExpenseView(view: ExpenseView): AppResult<Unit> {
         )
             return expenseFailure("client.invalid_response", FailureKind.Unexpected)
     }
-    if (view.payments.isNotEmpty() && claim.status != ExpenseStatus.APPROVED)
-        return expenseFailure("client.expense_changed", FailureKind.Conflict)
     return AppResult.Success(Unit)
 }

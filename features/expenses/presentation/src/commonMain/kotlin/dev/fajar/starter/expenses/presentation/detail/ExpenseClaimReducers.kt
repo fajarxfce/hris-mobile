@@ -12,14 +12,12 @@ internal fun ExpenseClaimState.withCachedClaim(
         is AppResult.Success -> {
             val snapshot = result.value
             copy(
-                content =
-                    when {
-                        snapshot == null -> null
-                        snapshot.value.historyAfter == historyAfter -> snapshot
-                        else -> content
-                    },
+                content = snapshot,
                 loading = false,
                 cacheFailure = null,
+                refreshFailure = refreshFailure?.takeUnless(::expenseFailureInvalidatesCache),
+                exportFailure = exportFailure?.takeUnless(::expenseFailureInvalidatesCache),
+                commandFailure = commandFailure?.takeUnless(::expenseFailureInvalidatesCache),
             )
         }
     }
@@ -30,15 +28,15 @@ internal fun ExpenseClaimState.withClaimRefresh(result: AppResult<Unit>): Expens
             copy(
                 refreshing = false,
                 loading = false,
-                refreshFailure = result.failure,
+                refreshFailure =
+                    refreshFailure?.takeIf(::expenseFailureInvalidatesCache) ?: result.failure,
                 content = content?.takeUnless { expenseFailureInvalidatesCache(result.failure) },
             )
         is AppResult.Success ->
             copy(
                 refreshing = false,
                 loading = content == null,
-                cacheFailure = null,
-                refreshFailure = null,
-                exportFailure = null,
+                refreshFailure = refreshFailure?.takeIf(::expenseFailureInvalidatesCache),
+                exportFailure = exportFailure?.takeIf(::expenseFailureInvalidatesCache),
             )
     }

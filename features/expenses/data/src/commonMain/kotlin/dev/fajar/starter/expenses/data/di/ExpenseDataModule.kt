@@ -2,25 +2,32 @@ package dev.fajar.starter.expenses.data.di
 
 import dev.fajar.starter.common.config.AppBuild
 import dev.fajar.starter.documents.domain.repositories.DocumentOutputRepository
+import dev.fajar.starter.expenses.domain.replica.repositories.ExpenseReplicaRepository
+import dev.fajar.starter.expenses.domain.replica.usecases.*
 import dev.fajar.starter.expenses.domain.repositories.*
 import dev.fajar.starter.expenses.domain.usecases.*
 import dev.fajar.starter.identity.domain.repositories.SessionRepository
 import dev.fajar.starter.sync.domain.SyncTask
+import dev.fajar.starter.sync.domain.repositories.SyncFeedRepository
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
 import kotlin.time.Clock
+import kotlinx.coroutines.sync.Mutex
 import org.koin.core.annotation.*
 
 @Module
 @ComponentScan("dev.fajar.starter.expenses.data")
 class ExpenseDataModule {
+    @Single @Named("expense-acquisition") fun expenseAcquisition() = Mutex()
+
     @Factory
     fun exportExpenseReceipt(
         receipts: ExpenseReceiptRepository,
         outputs: DocumentOutputRepository,
+        replicas: ExpenseReplicaRepository,
         sessions: SessionRepository,
         workspaces: WorkspaceRepository,
         build: AppBuild,
-    ) = ExportExpenseReceipt(receipts, outputs, sessions, workspaces, Clock.System, build)
+    ) = ExportExpenseReceipt(receipts, outputs, replicas, sessions, workspaces, Clock.System, build)
 
     @Factory
     fun loadExpenseDraftReferences(
@@ -68,7 +75,7 @@ class ExpenseDataModule {
     @Factory
     fun reviewExpenseCommand(
         commands: ExpenseCommandRepository,
-        cache: ExpenseCacheRepository,
+        cache: ExpenseReplicaRepository,
         sessions: SessionRepository,
         workspaces: WorkspaceRepository,
         build: AppBuild,
@@ -100,35 +107,40 @@ class ExpenseDataModule {
 
     @Factory
     fun observeExpenses(
+        replicas: ExpenseReplicaRepository,
         cache: ExpenseCacheRepository,
         sessions: SessionRepository,
         workspaces: WorkspaceRepository,
         build: AppBuild,
-    ) = ObserveExpenses(cache, sessions, workspaces, Clock.System, build)
+    ) = ObserveExpenses(replicas, cache, sessions, workspaces, Clock.System, build)
 
     @Factory
     fun observeExpenseClaim(
+        replicas: ExpenseReplicaRepository,
         cache: ExpenseCacheRepository,
         sessions: SessionRepository,
         workspaces: WorkspaceRepository,
         build: AppBuild,
-    ) = ObserveExpenseClaim(cache, sessions, workspaces, Clock.System, build)
+    ) = ObserveExpenseClaim(replicas, cache, sessions, workspaces, Clock.System, build)
+
+    @Single(binds = [SyncExpenses::class, SyncTask::class])
+    fun syncExpenses(
+        feed: SyncFeedRepository,
+        remote: ExpenseRepository,
+        cache: ExpenseReplicaRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        build: AppBuild,
+        @Named("expense-acquisition") acquisition: Mutex,
+    ) = SyncExpenses(feed, remote, cache, sessions, workspaces, Clock.System, build, acquisition)
 
     @Factory
-    fun refreshExpenses(
+    fun loadExpenseClaim(
         remote: ExpenseRepository,
-        cache: ExpenseCacheRepository,
+        cache: ExpenseReplicaRepository,
         sessions: SessionRepository,
         workspaces: WorkspaceRepository,
         build: AppBuild,
-    ) = RefreshExpenses(remote, cache, sessions, workspaces, Clock.System, build)
-
-    @Factory
-    fun refreshExpenseClaim(
-        remote: ExpenseRepository,
-        cache: ExpenseCacheRepository,
-        sessions: SessionRepository,
-        workspaces: WorkspaceRepository,
-        build: AppBuild,
-    ) = RefreshExpenseClaim(remote, cache, sessions, workspaces, Clock.System, build)
+        @Named("expense-acquisition") acquisition: Mutex,
+    ) = LoadExpenseClaim(remote, cache, sessions, workspaces, Clock.System, build, acquisition)
 }

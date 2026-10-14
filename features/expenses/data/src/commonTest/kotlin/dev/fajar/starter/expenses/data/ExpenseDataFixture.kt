@@ -257,6 +257,20 @@ class ExpenseDataFixture : ExpenseRemoteDataSource {
         return page
     }
 
+    override suspend fun record(
+        sessionId: String,
+        companyId: String,
+        id: String,
+        historyAfter: Long?,
+    ): ExpenseClaimRecordDto {
+        failure?.let { throw it }
+        return ExpenseClaimRecordDto(
+            claim,
+            if (claim.latestSubmissionId == null) null else submission,
+            history,
+        )
+    }
+
     override suspend fun claim(sessionId: String, companyId: String, id: String): ExpenseClaimDto {
         failure?.let { throw it }
         return claim

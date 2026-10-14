@@ -2,28 +2,39 @@
 
 The expense feature has separate domain, data and presentation modules. Domain
 use cases admit company/session access and acquire employee claim views. Data
-adapters map the API and maintain encrypted snapshots. Routes own MVI state,
+adapters map the API and maintain an encrypted account-owned replica. Routes own MVI state,
 filters, observation and acquisition lifetime.
 
 ## Reads
 
 The employee directory uses `/expenses/me/employments`, independently of People
 permissions. Every claim, history, submission and payment request explicitly
-uses `scope=SELF`, including for accounts with finance permissions. The list uses
-company-local creation months, an owned employment, optional status and bounded
-cursor pages. Transaction dates remain individual expense-line facts.
+uses `scope=SELF`, including for accounts with finance permissions. The complete
+owned directory is bounded to 200 employments; displayed directory pages contain
+20. Lists query company-local creation months, employment, status and an indexed
+cursor in local storage. Transaction dates remain expense-line facts.
 
-Detail acquisition reads the claim before and after its history, latest
-submission and payment progress. A changed claim or inconsistent revision
-returns a conflict without publishing a partial view or silently retrying.
-Amounts remain exact decimal domain values; approval does not imply payment.
-The `/claims/{id}/payment-progress` response has its own version and claim ID.
-Reimbursement updates do not change an approved claim's version. The data adapter
-validates the bounded attempt list and owner before returning domain values;
-the sync protocol represents claim and payment changes as separate collections.
-Stale lists and claims remain readable during refresh or network failure. The
-owning ViewModel keeps confirmed access failures gated; ordinary age never clears
-the content. Draft and command confirmation are not repeated automatically.
+`SyncExpenses` hydrates the explicit `EXPENSE_CLAIMS` and `EXPENSE_PAYMENTS`
+collections. The canonical `/claims/{id}/record` returns the current claim,
+latest submission/approval and latest activity under one server read boundary.
+Every new claim invalidation is acquired even when its base version is unchanged:
+approval updates have their own version. `/claims/{id}/payment-progress` has its
+own version and claim ID. A payment-only update keeps an unchanged claim's action
+review timestamp; if the local parent is missing or still precedes approval,
+sync acquires that parent before publishing the combined view.
+
+Cursor and records commit together. Two references per page, at most two parallel
+claim acquisitions, ten pages and a 30-second execution budget bound each run.
+UI and worker triggers share one acquisition mutex. Expired change cursors stage
+a replacement while keeping the preceding published records readable. A failed
+batch does not advance its cursor. No read implicitly submits a command.
+
+`LoadExpenseClaim` reuses acquired detail and activity on entry. Explicit refresh
+and command reconciliation request fresh facts. Older activity has a separate
+bounded, resumable frontier: fetching it neither reacquires the current claim nor
+renews its action-review deadline. Background runs process at most eight pending
+activity pages, and manual history navigation can acquire a missing page.
+Amounts remain exact decimal values; approval does not imply payment.
 
 ## Draft preparation
 
@@ -46,17 +57,29 @@ center; the backend validates current eligibility again during submission.
 
 ## Offline access
 
-List and detail snapshots have independent, bounded partitions. Authenticated
-encryption binds account, session, API audience, company, generation, view and
-chunk identity. Bounded chunks fit the database record limits and publish in
-one compare-and-set transaction. Missing or reordered chunks cannot restore a
-partial snapshot. Temporary keys and plaintext buffers are cleared on exit.
+The replica binds API audience, account and company independently of the login
+session. Active-session guards still reject an obsolete writer. Acquired claims,
+indexed summaries, payment progress, directory metadata and activity pages remain
+readable after process restart and reauthentication for the same account. Ordinary
+age does not hide data or start a refresh loop. New credentials and changed access
+metadata require fresh action review, independently of local reading.
 
-Saved facts retain their freshness timestamp without an age-based read deadline.
-Changes to identity, permissions or company timezone invalidate an old view.
-Transport failure retains owned content; operation preparation is checked separately. Known access and MFA failures remain gated through pending/failed
-retries, including when cache cleanup fails; a fresh admitted acquisition must
-succeed before observation reopens. There is no automatic retry loop.
+Each claim has an authenticated acquisition ID and up to sixteen 64 KiB chunks,
+within a 1 MiB raw-record limit. Empty slots are encrypted too, so payloads can
+shrink and grow at the same base version without reviving a deletion tombstone.
+The acquisition ID prevents chunks from different equal-version invalidations
+being combined. Summary indexes are authenticated and scoped. Missing/tampered
+chunks fail without publishing partial data; temporary keys and plaintext byte
+buffers are cleared. Checkpoint, changed records and directory metadata share a
+compare-and-set transaction.
+
+Confirmed access/MFA denials have their own encrypted admission record and a
+process-owned write buffer. The denial remains authoritative through failed cleanup,
+pending retries and ordinary transport failures. Only admitted full synchronization
+started after that denial can reopen the projection; a later denial defeats an
+older admission attempt. Claim refresh, historical reads and receipt export obey
+this shared boundary. A matching preceding last-view snapshot remains a migration
+fallback until the replica publishes; a complete feed's missing parent is authoritative.
 
 ## Durable commands
 
@@ -71,7 +94,8 @@ employment; existing actions share a claim slot. A concurrent confirmation canno
 replace another retained body. Encryption and JSON work run off Main, with bounded
 request/outcome envelopes and cleared temporary plaintext/key buffers.
 
-Manual delivery and the registered expense sync task share one execution owner.
+Manual delivery and the registered expense command task share one execution owner.
+Read synchronization has its own mutex shared with explicit claim acquisition.
 Each attempt revalidates current company/session policy and marks its outcome
 unconfirmed before transport. Retries retain the original body and operation ID.
 Automatic attempts and batches are finite. A later rejection cannot disprove an
@@ -94,10 +118,12 @@ progress and paged activity. Back and refresh remain in the fixed app bar.
 The pages support English, Indonesian and large text. Draft rows give amounts
 their own wrapping line so large values do not disappear into truncated metadata.
 
-Each screen registers separate typed events. Changing filters cancels obsolete
-acquisition; leaving the route stops acquisition and observation. Only visible
-claim IDs and issued cursors can trigger navigation or paging. Explicit refresh
-can recover an ended storage subscription.
+Each screen registers separate typed events. Changing a filter replaces its local
+query without restarting HTTP or cancelling background sync. Sync completion never
+restores an earlier filter. Leaving the route stops owned acquisition and observation.
+Only visible claim IDs and issued cursors can trigger navigation or paging. Explicit
+refresh can recover an ended storage subscription. Admission remains observable
+while protected record observation is paused.
 
 The add action opens an employment-scoped draft. Draft and returned claims open
 an editor from their detail app bar. A separate item page owns its transaction
@@ -159,13 +185,27 @@ ownership and partial-file behavior.
 
 ## Validation
 
+The account-owned replica passed root checks with 1,344 JVM/desktop tests,
+184 expense tests in Chromium, Android dev assembly and production Web compilation.
+SQLite and IndexedDB tests cover local month/status/page queries, reauthentication,
+equal-version payload growth/shrink, authenticated chunk acquisition IDs, staged
+replacement, atomic mapping failures, cancellation, and durable read-denial races.
+Domain and MVI tests also cover bounded sync/history work, late scope changes,
+unchanged action-review deadlines and local filters during pending synchronization.
+
+The API 35 emulator cold-started without API connectivity after its clock advanced
+73 hours. Four complete claims remained in encrypted storage with unchanged
+payloads. Month/status filters, two individual claim details, approval and activity
+remained readable. Restoring the clock and connectivity allowed explicit refresh
+without losing the saved facts; the emulator's crash buffer contained no app crash.
+The validated APK was installed on the authorized phone with install-only delivery.
+
 The versioned reimbursement contract passed root checks with 1,327 JVM/desktop
 tests, Android dev assembly and 108 expense domain/data and sync tests in Chromium.
 Tests cover claim binding, independent payment versions, bounded response mapping,
 cancellation and shared resource IDs across selected sync collections. The API 35
 emulator opened a real dev claim, its approval, activity and empty payment progress
-through the new endpoint. This transport update does not expand offline storage;
-the account-owned expense replica remains separate work.
+through the versioned payment endpoint. These checks preceded the replica migration.
 
 The earlier receipt workflow passed 157 expense tests and 36 network tests in Chromium,
 plus Android dev assembly and production Web compilation. CI for the preceding

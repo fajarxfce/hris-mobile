@@ -6,32 +6,38 @@ import dev.fajar.starter.common.decimal.DecimalAmount
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.expenses.domain.entities.*
 import dev.fajar.starter.expenses.domain.policies.*
+import dev.fajar.starter.expenses.domain.replica.entities.*
 import dev.fajar.starter.workspace.domain.entities.CompanyModule
 import kotlin.test.*
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Instant
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.*
 import kotlinx.datetime.*
 
 class ExpenseAcquisitionTest {
     @Test
-    fun companyDateAndOwnedEmploymentSelectTheFirstPageWithoutPeoplePermissions() = runTest {
+    fun companyDateAndOwnedEmploymentSelectLocalRecordsWithoutPeoplePermissions() = runTest {
         val f = ExpenseFixture { Instant.parse("2025-12-31T18:00:00Z") }
-        var requested: ExpenseSelection? = null
-        f.listCall = {
-            requested = it
-            AppResult.Success(ExpensePage(emptyList()))
-        }
         assertEquals(AppResult.Success(Unit), f.load())
-        assertEquals(YearMonth(2026, 1), requested?.month)
-        assertEquals(f.employee.id, requested?.employeeId)
-        val overview = f.snapshot(false)
+        val snapshot =
+            assertIs<AppResult.Success<ExpenseSnapshot<ExpenseOverview>?>>(
+                    f.observe(f.workspace.id).first()
+                )
+                .value!!
+        assertEquals(YearMonth(2026, 1), snapshot.value.selection.month)
+        assertEquals(f.employee.id, snapshot.value.selection.employeeId)
+        assertEquals(listOf(f.claim.id), snapshot.value.page.items.map { it.id })
+        assertEquals(0, f.listReads)
+        assertEquals(1, f.recordReads)
         assertEquals(AppResult.Success(Unit), f.load(true))
-        assertEquals(overview, f.snapshot(false))
-        assertEquals(f.claim, (f.detailRecords.value as AppResult.Success).value?.value?.claim)
-        assertEquals(2, f.claimReads)
-        assertEquals(0, f.submissionReads)
+        assertEquals(
+            snapshot,
+            f.observe(f.workspace.id).first().let { (it as AppResult.Success).value },
+        )
+        assertEquals(2, f.recordReads)
+        assertEquals(0, f.historyReads + f.submissionReads)
     }
 
     @Test
@@ -39,19 +45,15 @@ class ExpenseAcquisitionTest {
         val f = ExpenseFixture()
         f.directoryCall = { AppResult.Success(f.directory.copy(items = emptyList())) }
         assertEquals(AppResult.Success(Unit), f.load())
-        assertEquals(0, f.listReads)
-        val value = (f.records.value as AppResult.Success).value!!.value
-        assertNull(value.selection.employeeId)
-        assertTrue(value.page.items.isEmpty())
-        assertEquals(
-            "employee_not_found",
-            assertIs<AppResult.Failed>(
-                    f.refresh(f.workspace.id, ExpenseSelection(employeeId = f.employee.id))
+        val view =
+            assertIs<AppResult.Success<ExpenseSnapshot<ExpenseOverview>?>>(
+                    f.observe(f.workspace.id).first()
                 )
-                .failure
-                .code,
-        )
-        assertEquals(0, f.listReads)
+                .value!!
+                .value
+        assertNull(view.selection.employeeId)
+        assertTrue(view.page.items.isEmpty())
+        assertEquals(0, f.listReads + f.recordReads)
     }
 
     @Test
@@ -62,8 +64,8 @@ class ExpenseAcquisitionTest {
                 ExpenseSelection(employeeId = "../claims"),
                 ExpenseSelection(month = YearMonth(2201, 1)),
                 ExpenseSelection(employmentAfter = " "),
-                ExpenseSelection(after = f.claim.id),
-            )) assertIs<AppResult.Failed>(f.refresh(f.workspace.id, selection))
+                ExpenseSelection(after = "invalid"),
+            )) assertIs<AppResult.Failed>(f.observe(f.workspace.id, selection).first())
         assertIs<AppResult.Failed>(f.refreshDetail(f.workspace.id, f.claim.id, -1))
         assertIs<AppResult.Failed>(f.refreshDetail(f.workspace.id, "../history"))
         assertEquals(0, f.policyReads + f.directoryReads + f.claimReads)
@@ -171,11 +173,7 @@ class ExpenseAcquisitionTest {
         for (case in 0..2) {
             val f = ExpenseFixture()
             when (case) {
-                0 -> f.claimCall = {
-                        AppResult.Success(
-                            if (f.claimReads == 1) f.claim else f.claim.copy(version = 1)
-                        )
-                    }
+                0 -> f.claimCall = { AppResult.Success(f.claim.copy(version = 1)) }
                 1 -> f.historyCall = {
                         AppResult.Success(ExpensePage(listOf(f.change.copy(version = 1))))
                     }
@@ -201,25 +199,24 @@ class ExpenseAcquisitionTest {
     }
 
     @Test
-    fun staleConcurrentReadCannotReplaceAnAlreadyPublishedGeneration() = runTest {
+    fun syncAndSingleClaimAcquisitionShareOneBoundedExecutionOwner() = runTest {
         val f = ExpenseFixture()
         val entered = CompletableDeferred<Unit>()
         val release = CompletableDeferred<Unit>()
         f.directoryCall = {
-            if (f.directoryReads == 1) {
-                entered.complete(Unit)
-                release.await()
-            }
+            entered.complete(Unit)
+            release.await()
             AppResult.Success(f.directory)
         }
         val first = async { f.load() }
         entered.await()
-        assertEquals(AppResult.Success(Unit), f.load())
-        val committed = f.snapshot(false)
+        val second = async { f.load(true) }
+        runCurrent()
+        assertEquals(0, f.recordReads)
         release.complete(Unit)
-        assertEquals(FailureKind.Conflict, assertIs<AppResult.Failed>(first.await()).failure.kind)
-        assertEquals(committed, f.snapshot(false))
-        assertEquals(1, f.writes)
+        assertEquals(AppResult.Success(Unit), first.await())
+        assertEquals(AppResult.Success(Unit), second.await())
+        assertEquals(2, f.recordReads)
     }
 
     @Test
@@ -227,14 +224,19 @@ class ExpenseAcquisitionTest {
         for (detail in listOf(false, true)) for (blocked in listOf(false, true)) {
             val f = ExpenseFixture()
             assertEquals(AppResult.Success(Unit), f.load(detail))
-            val old = f.snapshot(detail)
+            val old = f.replicas.published.value
             val denied = expenseFailure("mfa_required", FailureKind.AccessDenied)
             f.directoryCall = { denied }
             f.claimCall = { denied }
             f.failCleanup = !blocked
             f.beforeWrite = { clearing -> if (clearing && blocked) awaitCancellation() }
             assertEquals(denied, f.load(detail))
-            assertEquals(old, f.snapshot(detail))
+            assertEquals(old, f.replicas.published.value)
+            assertEquals(
+                denied,
+                if (detail) f.observeDetail(f.workspace.id, f.claim.id).first()
+                else f.observe(f.workspace.id).first(),
+            )
         }
     }
 
@@ -248,42 +250,30 @@ class ExpenseAcquisitionTest {
             }
             f.directoryCall = { awaitCancellation() }
             f.claimCall = { awaitCancellation() }
-            assertEquals(
-                "client.expense_timeout",
-                assertIs<AppResult.Failed>(f.load(detail)).failure.code,
-            )
+            if (detail)
+                assertEquals(
+                    "client.expense_timeout",
+                    assertIs<AppResult.Failed>(f.load(true)).failure.code,
+                )
+            else
+                assertEquals(
+                    AppResult.Success(ExpenseSyncOutcome(false, 5)),
+                    f.sync(f.workspace.id),
+                )
             assertEquals(1, f.directoryReads + f.claimReads)
             assertEquals(0, f.writes)
         }
     }
 
     @Test
-    fun unexpectedEmployeeMonthOrStatusCannotEnterTheOverviewCache() = runTest {
+    fun anUnownedClaimCannotEnterTheReplicaOrAdvanceItsCursor() = runTest {
         val f = ExpenseFixture()
-        for (summary in
-            listOf(
-                f.summary.copy(employeeId = "77777777-7777-7777-7777-777777777777"),
-                f.summary.copy(createdAt = Instant.parse("2026-09-30T00:00:00Z")),
-                f.summary.copy(status = ExpenseStatus.REJECTED),
-            )) {
-            f.listCall = { AppResult.Success(ExpensePage(listOf(summary))) }
-            assertEquals(
-                "client.invalid_response",
-                assertIs<AppResult.Failed>(
-                        f.refresh(
-                            f.workspace.id,
-                            ExpenseSelection(
-                                f.employee.id,
-                                YearMonth(2026, 10),
-                                status = ExpenseStatus.DRAFT,
-                            ),
-                        )
-                    )
-                    .failure
-                    .code,
-            )
+        f.claimCall = {
+            AppResult.Success(f.claim.copy(employeeId = "77777777-7777-7777-7777-777777777777"))
         }
+        assertEquals("client.invalid_response", assertIs<AppResult.Failed>(f.load()).failure.code)
         assertEquals(0, f.writes)
+        assertNull(f.replicas.current?.cursor)
     }
 
     @Test

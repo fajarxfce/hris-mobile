@@ -38,20 +38,18 @@ fun ExpenseFilterBar(state: ExpensesState, onEvent: (ExpensesEvent) -> Unit) {
                     Icons.Regular.ChevronLeft,
                     appString(AppString.PreviousMonth),
                     { onEvent(ExpensesEvent.PreviousMonthRequested) },
-                    enabled =
-                        !state.readRestricted && !state.refreshing && month > YearMonth(1900, 1),
+                    enabled = !state.readRestricted && month > YearMonth(1900, 1),
                 )
                 AppTextButton(
                     formatMonth("$month-01", appLanguageTag()),
                     { onEvent(ExpensesEvent.FilterOpened(ExpenseFilter.MONTH)) },
-                    enabled = !state.readRestricted && !state.refreshing && state.content != null,
+                    enabled = !state.readRestricted && state.content != null,
                 )
                 AppIconButton(
                     Icons.Regular.ChevronRight,
                     appString(AppString.NextMonth),
                     { onEvent(ExpensesEvent.NextMonthRequested) },
-                    enabled =
-                        !state.readRestricted && !state.refreshing && month < YearMonth(2200, 12),
+                    enabled = !state.readRestricted && month < YearMonth(2200, 12),
                 )
             }
         }
@@ -65,7 +63,7 @@ fun ExpenseFilterBar(state: ExpensesState, onEvent: (ExpensesEvent) -> Unit) {
                     appString(state.filters?.status?.label() ?: AppString.ExpenseAllStatuses),
                     selected = state.filters?.status != null,
                     onClick = { onEvent(ExpensesEvent.FilterOpened(ExpenseFilter.STATUS)) },
-                    enabled = !state.refreshing,
+                    enabled = !state.readRestricted,
                 )
                 if (
                     content.directory.items.size > 1 ||
@@ -76,7 +74,7 @@ fun ExpenseFilterBar(state: ExpensesState, onEvent: (ExpensesEvent) -> Unit) {
                         appString(AppString.Employment),
                         selected = true,
                         onClick = { onEvent(ExpensesEvent.FilterOpened(ExpenseFilter.EMPLOYMENT)) },
-                        enabled = !state.refreshing,
+                        enabled = !state.readRestricted,
                     )
             }
     }

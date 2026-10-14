@@ -6,12 +6,16 @@ import androidx.lifecycle.ViewModelStore
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.expenses.domain.entities.*
 import dev.fajar.starter.expenses.domain.policies.expenseFailure
+import dev.fajar.starter.expenses.domain.replica.entities.*
+import dev.fajar.starter.expenses.domain.replica.repositories.ExpenseReplicaRepository
+import dev.fajar.starter.expenses.domain.usecases.ObserveExpenseClaim
 import dev.fajar.starter.expenses.presentation.detail.*
 import kotlin.test.*
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.Instant
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.test.*
 
 class ExpenseClaimViewModelTest {
@@ -39,7 +43,7 @@ class ExpenseClaimViewModelTest {
             model.onEvent(ExpenseClaimEvent.Entered)
             model.onEvent(ExpenseClaimEvent.Entered)
             runCurrent()
-            assertEquals(2, f.claimReads)
+            assertEquals(1, f.claimReads)
             assertEquals(1, f.paymentReads)
             assertNotNull(model.state.value.content)
             var cancelled = false
@@ -77,7 +81,7 @@ class ExpenseClaimViewModelTest {
             runCurrent()
             model.onEvent(ExpenseClaimEvent.HistoryRequested(999))
             runCurrent()
-            assertEquals(1, f.historyReads)
+            assertEquals(0, f.historyReads)
             model.onEvent(ExpenseClaimEvent.HistoryRequested(2))
             runCurrent()
             assertEquals(2L, model.state.value.content?.value?.claim?.version)
@@ -102,7 +106,7 @@ class ExpenseClaimViewModelTest {
             f.claimCall = { expenseFailure("mfa_required", FailureKind.AccessDenied) }
             model.onEvent(ExpenseClaimEvent.RefreshRequested)
             runCurrent()
-            assertNotNull(f.snapshot(true))
+            assertTrue((f.replicas.published.value as AppResult.Success).value.entries.isNotEmpty())
             assertTrue(model.state.value.needsVerification)
             assertNull(model.state.value.content)
             val response = CompletableDeferred<Unit>()
@@ -128,8 +132,26 @@ class ExpenseClaimViewModelTest {
 
     @Test
     fun explicitSuccessfulRefreshReopensACompletedDetailSource() = runTest {
-        withModel { f, model, _ ->
-            f.failNextDetailObservation = true
+        withModel(
+            observation = { f ->
+                val source =
+                    object : ExpenseReplicaRepository by f.replicas {
+                        var fail = true
+
+                        override fun observeDetails(
+                            access: ExpenseAccess,
+                            id: String,
+                            historyAfter: Long?,
+                        ): Flow<AppResult<ExpenseReplicaDetails>> = flow {
+                            if (fail) {
+                                fail = false
+                                emit(expenseFailure("fixture.storage", FailureKind.Storage))
+                            } else emitAll(f.replicas.observeDetails(access, id, historyAfter))
+                        }
+                    }
+                ObserveExpenseClaim(source, f.cache, f.sessions, f.workspaces, f.clock, f.build)
+            }
+        ) { f, model, _ ->
             val response = CompletableDeferred<Unit>()
             f.claimCall = {
                 response.await()
@@ -181,8 +203,7 @@ class ExpenseClaimViewModelTest {
                 release.await()
                 AppResult.Success(f.claim)
             }
-            f.detailRecords.value =
-                AppResult.Success(saved.copy(refreshAfter = f.clock.now() + 1.seconds))
+            f.seedDetails(saved.copy(refreshAfter = f.clock.now() + 1.seconds))
             runCurrent()
             advanceTimeBy(1_001)
             runCurrent()
@@ -215,8 +236,7 @@ class ExpenseClaimViewModelTest {
                 attempts++
                 expenseFailure("client.network", FailureKind.Network)
             }
-            f.detailRecords.value =
-                AppResult.Success(saved.copy(refreshAfter = f.clock.now() + 1.seconds))
+            f.seedDetails(saved.copy(refreshAfter = f.clock.now() + 1.seconds))
             runCurrent()
             advanceTimeBy(1_001)
             runCurrent()
@@ -242,6 +262,7 @@ class ExpenseClaimViewModelTest {
 
     private suspend fun TestScope.withModel(
         employmentAfter: String? = null,
+        observation: ((ExpenseFixture) -> ObserveExpenseClaim)? = null,
         test: suspend (ExpenseFixture, ExpenseClaimViewModel, ViewModelStore) -> Unit,
     ) {
         Dispatchers.setMain(StandardTestDispatcher(testScheduler))
@@ -251,8 +272,9 @@ class ExpenseClaimViewModelTest {
         val model =
             ExpenseClaimViewModel(
                 ExpenseClaimTarget(f.workspace.id, f.claim.id, employmentAfter),
-                f.observeDetail,
+                observation?.invoke(f) ?: f.observeDetail,
                 f.refreshDetail,
+                f.sync,
                 ExpenseEditorFixture(f).observe,
                 ExpenseReceiptExportFixture(f).export,
             )

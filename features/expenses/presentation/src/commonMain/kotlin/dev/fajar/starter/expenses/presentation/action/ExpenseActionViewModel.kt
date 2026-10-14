@@ -4,6 +4,8 @@ import androidx.lifecycle.viewModelScope
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.expenses.domain.entities.*
 import dev.fajar.starter.expenses.domain.policies.*
+import dev.fajar.starter.expenses.domain.replica.usecases.LoadExpenseClaim
+import dev.fajar.starter.expenses.domain.replica.usecases.SyncExpenses
 import dev.fajar.starter.expenses.domain.usecases.*
 import dev.fajar.starter.expenses.presentation.commands.*
 import dev.fajar.starter.presentation.mvi.MviViewModel
@@ -17,7 +19,8 @@ import org.koin.core.annotation.InjectedParam
 class ExpenseActionViewModel(
     @InjectedParam private val target: ExpenseActionTarget,
     private val observeClaim: ObserveExpenseClaim,
-    private val refreshClaim: RefreshExpenseClaim,
+    private val refreshClaim: LoadExpenseClaim,
+    private val sync: SyncExpenses,
     private val observeCommand: ObserveExpenseCommand,
     private val prepare: PrepareExpenseAction,
     private val replay: ReplayExpenseCommands,
@@ -119,6 +122,16 @@ class ExpenseActionViewModel(
         operation =
             viewModelScope.launch(start = CoroutineStart.LAZY) {
                 try {
+                    if (state.value.restriction != null) {
+                        when (val synchronized = sync(target.workspaceId)) {
+                            is AppResult.Failed -> {
+                                ensureActive()
+                                reportFailure(synchronized.failure)
+                                return@launch
+                            }
+                            is AppResult.Success -> Unit
+                        }
+                    }
                     val result = refreshClaim(target.workspaceId, target.claimId)
                     ensureActive()
                     when (result) {

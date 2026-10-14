@@ -27,11 +27,11 @@ flowchart TD
   Commit --> Read
 ```
 
-Inbox, Leave, Overtime, Workforce and Payroll replica identity binds API audience,
+Inbox, Leave, Overtime, Workforce, Payroll and Expense replica identity binds API audience,
 account and company independently of the local session. Database operations still
 require the active session, so a late request from the preceding login cannot
-mutate retained facts. Expenses still uses temporary session ownership until its
-collection migration.
+mutate retained facts. The retained directory and financial record scopes do not
+change merely because credentials are renewed.
 Existing read snapshots use authenticated encryption; scope replacement cancels
 their observers. Reading another account/company is never a fallback.
 Local bootstrap does not await `/me`, token refresh or client-policy acquisition.
@@ -67,7 +67,7 @@ rolled-back transactions cannot advance a public cursor. Cursors are opaque,
 scoped to the account/company/projection, and have finite server retention.
 See the [server protocol](https://github.com/fajarxfce/hris-platform/blob/main/docs/synchronization.md).
 
-Inbox, Leave, Overtime, Workforce and Payroll consume this protocol. One run reads
+Inbox, Leave, Overtime, Workforce, Payroll and Expenses consume this protocol. One run reads
 a bounded number of pages, hydrates changed resources with bounded concurrency,
 reconciles versions and
 tombstones, and atomically stores data with the next cursor. A failed hydration
@@ -111,7 +111,7 @@ submitting it are separate capabilities.
 | Leave | Account-owned balances, full requests and acquired activity pages; local employment/year/status and history queries | Request/balance change feed and resumable older-activity acquisition implemented |
 | Overtime | Account-owned full requests and acquired activity; local employment/date/status queries | Request change feed and resumable older-activity acquisition implemented |
 | Payslips | Account-owned full payslips, indexed annual summaries and versioned payment progress; local year/page/detail queries | Two explicit collections, staged replacement and incremental changes implemented |
-| Expenses | Last selected list and detail | Server collection exists; mobile integration pending |
+| Expenses | Account-owned complete claims, indexed summaries, payment progress and acquired activity; local employment/month/status/page queries | Two explicit collections, canonical claim acquisition and resumable activity backfill implemented |
 | Local document files | Account/company-owned imports and completed downloads | Upload/download commands; catalog is online |
 | Coworker directory / profile | Live reads | Not implemented |
 
@@ -231,13 +231,12 @@ its replacement is available. A completed feed's missing parent is authoritative
 ## Next increments
 
 1. Extend stable audience/account/company ownership to the remaining read
-   projections. Inbox, Leave, Overtime, Workforce and Payroll replicas retain
+   projections. Inbox, Leave, Overtime, Workforce, Payroll and Expense replicas retain
    account-owned facts across sign-in; workspace admission and other last-view
    snapshots remain session-owned. Reauthentication
    does not reuse an old request guard or old credential-bound feed cursor.
-2. Add projections for the existing expense collection.
-   Store versioned facts, then query/filter locally; replace single last-view slots
-   as each projection is implemented.
+2. Retain unfinished expense editor input across process death, separately from
+   immutable prepared commands and the acquired claim replica.
 3. Register backend feeds for documents and coworker data,
    including deletions and authorization changes, before implementing mobile sync.
 4. Persist unfinished local drafts separately from confirmed server models and
@@ -290,3 +289,17 @@ cursor atomically, keeps the published generation through ordinary cursor
 replacement, and persists confirmed read denials under `payroll-access/{company}`.
 A changed payment does not rewrite the immutable salary breakdown. See
 [employee payslips](payroll.md) for request, storage and export ownership.
+
+## Expense records
+
+The [expense replica](expenses.md) stores canonical claims and separately versioned
+reimbursement progress. Approval invalidations hydrate the current record even
+when its base claim version is unchanged. Record chunks share an authenticated
+acquisition identity, and summaries carry local employment/month/status indexes.
+The change cursor advances in the same transaction as its records.
+
+Claim and activity navigation reuse local storage. Activity-only acquisition and
+payment-only updates do not renew action-review authority. Background history
+acquisition is bounded and resumes from each claim's frontier. Filter changes do
+not create HTTP requests or interrupt an active sync. Read denials persist across
+routes and process restoration, independently of cleanup and ordinary freshness.

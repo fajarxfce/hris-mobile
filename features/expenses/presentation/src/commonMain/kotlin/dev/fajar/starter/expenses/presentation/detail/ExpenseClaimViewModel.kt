@@ -5,6 +5,8 @@ import dev.fajar.starter.common.result.AppResult
 import dev.fajar.starter.expenses.domain.entities.*
 import dev.fajar.starter.expenses.domain.policies.admitExpenseEditing
 import dev.fajar.starter.expenses.domain.policies.expenseFailureInvalidatesCache
+import dev.fajar.starter.expenses.domain.replica.entities.ExpenseClaimAcquisition
+import dev.fajar.starter.expenses.domain.replica.usecases.*
 import dev.fajar.starter.expenses.domain.usecases.*
 import dev.fajar.starter.expenses.presentation.action.ExpenseActionMode
 import dev.fajar.starter.expenses.presentation.expenseVerificationCodes
@@ -19,7 +21,8 @@ import org.koin.core.annotation.InjectedParam
 class ExpenseClaimViewModel(
     @InjectedParam private val target: ExpenseClaimTarget,
     private val observe: ObserveExpenseClaim,
-    private val refresh: RefreshExpenseClaim,
+    private val load: LoadExpenseClaim,
+    private val sync: SyncExpenses,
     private val observeCommand: ObserveExpenseCommand,
     private val export: ExportExpenseReceipt,
 ) : MviViewModel<ExpenseClaimState, ExpenseClaimEvent, ExpenseClaimEffect>(ExpenseClaimState()) {
@@ -48,7 +51,7 @@ class ExpenseClaimViewModel(
         updateState { it.copy(loading = true) }
         observeContent()
         observeCommands()
-        onEvent(ExpenseClaimEvent.RefreshRequested)
+        acquire(ExpenseClaimAcquisition.LOCAL_FIRST)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -57,15 +60,14 @@ class ExpenseClaimViewModel(
         observation =
             viewModelScope.launch {
                 state
-                    .map { it.historyAfter to it.readRestricted }
+                    .map { it.historyAfter }
                     .distinctUntilChanged()
-                    .flatMapLatest { (after, restricted) ->
-                        if (restricted) emptyFlow()
-                        else observe(target.workspaceId, target.id).map { after to it }
+                    .flatMapLatest { after ->
+                        observe(target.workspaceId, target.id, after).map { after to it }
                     }
                     .collect { (after, result) ->
                         ensureActive()
-                        if (after == state.value.historyAfter && !state.value.readRestricted) {
+                        if (after == state.value.historyAfter) {
                             updateState { it.withCachedClaim(result) }
                             if (state.value.readRestricted) exporting?.cancel()
                         }
@@ -146,6 +148,10 @@ class ExpenseClaimViewModel(
     }
 
     private fun onRefreshRequested(event: ExpenseClaimEvent.RefreshRequested) {
+        acquire(ExpenseClaimAcquisition.FRESH)
+    }
+
+    private fun acquire(mode: ExpenseClaimAcquisition) {
         if (
             state.value.closing ||
                 exporting != null ||
@@ -165,7 +171,18 @@ class ExpenseClaimViewModel(
         }
         acquisition =
             viewModelScope.launch {
-                val result = refresh(target.workspaceId, target.id, after)
+                // Only full admitted acquisition can reopen a previously denied projection.
+                if (state.value.readRestricted) {
+                    when (val result = sync(target.workspaceId)) {
+                        is AppResult.Failed -> {
+                            ensureActive()
+                            updateState { it.withClaimRefresh(result) }
+                            return@launch
+                        }
+                        is AppResult.Success -> Unit
+                    }
+                }
+                val result = load(target.workspaceId, target.id, after, mode)
                 ensureActive()
                 if (result is AppResult.Success) observation?.cancel()
                 updateState { it.withClaimRefresh(result) }
@@ -205,7 +222,7 @@ class ExpenseClaimViewModel(
                 refreshFailure = null,
             )
         }
-        onEvent(ExpenseClaimEvent.RefreshRequested)
+        acquire(ExpenseClaimAcquisition.LOCAL_FIRST)
     }
 
     private fun onActionRequested(event: ExpenseClaimEvent.ActionRequested) {

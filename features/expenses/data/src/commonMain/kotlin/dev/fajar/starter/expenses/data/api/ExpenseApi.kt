@@ -226,6 +226,22 @@ class ExpenseApi(@Named(HttpClients.Authenticated) private val client: HttpClien
             parameter("scope", "SELF")
         }
 
+    suspend fun record(
+        sessionId: String,
+        companyId: String,
+        id: String,
+        historyAfter: Long?,
+    ): ExpenseClaimRecordDto =
+        client.requestJson(
+            "companies/$companyId/expenses/claims/$id/record",
+            maximumBytes = 1_048_576,
+        ) {
+            forSession(sessionId)
+            parameter("scope", "SELF")
+            parameter("historyLimit", 20)
+            historyAfter?.let { parameter("historyAfter", it) }
+        }
+
     suspend fun history(
         sessionId: String,
         companyId: String,

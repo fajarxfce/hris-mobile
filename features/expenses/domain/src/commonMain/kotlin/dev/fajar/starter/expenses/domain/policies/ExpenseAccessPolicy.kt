@@ -93,8 +93,12 @@ fun validateExpenseContinuation(
     when (current) {
         is AppResult.Failed -> current
         is AppResult.Success ->
-            if (sameExpenseScope(expected, current.value)) current
-            else expenseFailure("client.expense_scope_changed", FailureKind.AccessDenied)
+            when {
+                sameExpenseScope(expected, current.value) -> current
+                sameStoredExpenseScope(expected, current.value) ->
+                    expenseFailure("client.expense_changed", FailureKind.Conflict)
+                else -> expenseFailure("client.expense_scope_changed", FailureKind.AccessDenied)
+            }
     }
 
 fun validateExpenseActionSnapshot(
@@ -106,8 +110,10 @@ fun validateExpenseActionSnapshot(
         access.authorizationExpiresAt <= now ->
             expenseFailure(access.authorizationExpiryCode, FailureKind.Unavailable)
         snapshot == null -> AppResult.Success(Unit)
-        !sameExpenseScope(access, snapshot.access) ->
+        !sameStoredExpenseScope(access, snapshot.access) ->
             expenseFailure("client.expense_scope_changed", FailureKind.AccessDenied)
+        !sameExpenseScope(access, snapshot.access) ->
+            expenseFailure("client.expense_review_required", FailureKind.Unavailable)
         snapshot.fetchedAt > now ||
             snapshot.refreshAfter <= now ||
             snapshot.refreshAfter > snapshot.fetchedAt + EXPENSE_FRESHNESS_PERIOD ->
@@ -117,6 +123,11 @@ fun validateExpenseActionSnapshot(
 
 /** Stored facts remain readable after freshness expires; commands validate current authority. */
 fun validateStoredExpense(access: ExpenseAccess, snapshot: ExpenseSnapshot<*>?): AppResult<Unit> =
-    if (snapshot != null && !sameExpenseScope(access, snapshot.access))
+    if (snapshot != null && !sameStoredExpenseScope(access, snapshot.access))
         expenseFailure("client.expense_scope_changed", FailureKind.AccessDenied)
     else AppResult.Success(Unit)
+
+fun sameStoredExpenseScope(first: ExpenseAccess, second: ExpenseAccess): Boolean =
+    first.accountId == second.accountId &&
+        first.audience == second.audience &&
+        first.companyId == second.companyId

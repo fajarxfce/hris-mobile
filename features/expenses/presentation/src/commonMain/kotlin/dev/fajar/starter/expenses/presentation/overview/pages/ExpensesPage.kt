@@ -85,13 +85,13 @@ fun ExpensesPage(state: ExpensesState, list: LazyListState, onEvent: (ExpensesEv
                         AppTextButton(
                             appString(AppString.ExpensesFirstPage),
                             { onEvent(ExpensesEvent.PageRequested(null)) },
-                            enabled = !state.refreshing,
+                            enabled = !state.readRestricted,
                         )
                     if (content.page.nextCursor != null)
                         AppTextButton(
                             appString(AppString.ExpensesMore),
                             { onEvent(ExpensesEvent.PageRequested(content.page.nextCursor)) },
-                            enabled = !state.refreshing,
+                            enabled = !state.readRestricted,
                         )
                 }
             }

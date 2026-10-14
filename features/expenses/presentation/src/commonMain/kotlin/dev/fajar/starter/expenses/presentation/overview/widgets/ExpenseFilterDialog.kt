@@ -29,7 +29,7 @@ fun ExpenseFilterDialog(state: ExpensesState, onEvent: (ExpensesEvent) -> Unit) 
             contentPadding = PaddingValues(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            if (state.loading || state.refreshing) item(key = "loading") { AppLoading() }
+            if (state.loading) item(key = "loading") { AppLoading() }
             when (state.dialog) {
                 ExpenseFilter.MONTH -> {
                     val year = state.pickerYear
@@ -97,7 +97,7 @@ fun ExpenseFilterDialog(state: ExpensesState, onEvent: (ExpensesEvent) -> Unit) 
                                         )
                                     )
                                 },
-                                enabled = !state.refreshing,
+                                enabled = !state.readRestricted,
                             )
                         }
                     if (content?.selection?.employmentAfter != null)
@@ -105,7 +105,7 @@ fun ExpenseFilterDialog(state: ExpensesState, onEvent: (ExpensesEvent) -> Unit) 
                             AppTextButton(
                                 appString(AppString.CalendarFirstEmployments),
                                 { onEvent(ExpensesEvent.EmploymentPageRequested(null)) },
-                                enabled = !state.refreshing,
+                                enabled = !state.readRestricted,
                             )
                         }
                 }

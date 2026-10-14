@@ -81,6 +81,7 @@ fun createAppContainer(
     overtimeReplicaCredentials: CredentialStore = MemoryCredentialStore(),
     workforceReplicaCredentials: CredentialStore = MemoryCredentialStore(),
     payrollReplicaCredentials: CredentialStore = MemoryCredentialStore(),
+    expenseReplicaCredentials: CredentialStore = MemoryCredentialStore(),
     commandCredentials: AtomicCredentialStore = MemoryCredentialStore(),
     fileCredentials: AtomicCredentialStore = MemoryCredentialStore(),
     workspaceCredentials: AtomicCredentialStore = MemoryCredentialStore(),
@@ -94,6 +95,7 @@ fun createAppContainer(
     fileOutputs: FileOutputSource = UnavailableFileOutputSource(),
     http: Module? = null,
 ) = koinApplication {
+    modules(applicationFeatureModules())
     modules(
         notificationPlatform,
         http ?: applicationNetworkModule(environment),
@@ -157,6 +159,10 @@ fun createAppContainer(
                     payrollReplicaCredentials
                 }
                 .onClose { it?.close() }
+            single<CredentialStore>(named("expense-replica-content-key")) {
+                    expenseReplicaCredentials
+                }
+                .onClose { it?.close() }
             single<CredentialStore>(named("overtime-replica-content-key")) {
                     overtimeReplicaCredentials
                 }
@@ -168,6 +174,12 @@ fun createAppContainer(
             single<AtomicCredentialStore>(named("workspace-content-key")) { workspaceCredentials }
                 .onClose { it?.close() }
         },
+    )
+}
+
+/** Feature modules own their registrations; the app only composes their graphs. */
+private fun applicationFeatureModules(): List<Module> =
+    listOf(
         IdentityModule().module,
         WorkspaceDataModule().module,
         DocumentsDataModule().module,
@@ -191,4 +203,3 @@ fun createAppContainer(
         DocumentsPresentationModule().module,
         ApplicationModule().module,
     )
-}

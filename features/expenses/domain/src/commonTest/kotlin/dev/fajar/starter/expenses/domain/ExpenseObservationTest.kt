@@ -23,21 +23,6 @@ class ExpenseObservationTest {
                     (testScheduler.currentTime - origin).milliseconds
             }
             f.load(detail)
-            val current = f.clock.now()
-            if (detail)
-                f.detailRecords.value =
-                    AppResult.Success(
-                        (f.detailRecords.value as AppResult.Success)
-                            .value!!
-                            .copy(refreshAfter = current + 10.seconds)
-                    )
-            else
-                f.records.value =
-                    AppResult.Success(
-                        (f.records.value as AppResult.Success)
-                            .value!!
-                            .copy(refreshAfter = current + 10.seconds)
-                    )
             val seen = mutableListOf<AppResult<*>>()
             val source =
                 if (detail) f.observeDetail(f.workspace.id, f.summary.id)
@@ -82,31 +67,35 @@ class ExpenseObservationTest {
     fun unrelatedDetailIsHiddenWhileAnOwnedStaleClaimRemainsReadable() = runTest {
         val f = ExpenseFixture()
         f.load(true)
-        val snapshot = (f.detailRecords.value as AppResult.Success).value!!
-        f.detailRecords.value =
-            AppResult.Success(snapshot.copy(refreshAfter = f.clock.now() - 1.seconds))
+        val snapshot =
+            (f.observeDetail(f.workspace.id, f.claim.id).first() as AppResult.Success).value!!
+        f.seedDetails(snapshot.copy(refreshAfter = f.clock.now() - 1.seconds))
         assertEquals(
             AppResult.Success(null),
             f.observeDetail(f.workspace.id, "55555555-5555-5555-5555-555555555555").first(),
         )
-        assertEquals(f.detailRecords.value, f.observeDetail(f.workspace.id, f.summary.id).first())
+        assertEquals(
+            AppResult.Success(snapshot.copy(refreshAfter = f.clock.now() - 1.seconds)),
+            f.observeDetail(f.workspace.id, f.summary.id).first(),
+        )
     }
 
     @Test
     fun aRecordFailureCanRecoverOnAValidStorageEmission() = runTest {
         val f = ExpenseFixture()
         f.load()
-        val valid = f.records.value
-        f.records.value = expenseFailure("fixture.storage", FailureKind.Storage)
+        val valid = f.replicas.published.value
+        val expected = f.observe(f.workspace.id).first()
+        f.replicas.published.value = expenseFailure("fixture.storage", FailureKind.Storage)
         val seen = mutableListOf<AppResult<*>>()
         val job =
             backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
                 f.observe(f.workspace.id).collect { seen += it }
             }
         assertIs<AppResult.Failed>(seen.last())
-        f.records.value = valid
+        f.replicas.published.value = valid
         runCurrent()
-        assertEquals(valid, seen.last())
+        assertEquals(expected, seen.last())
         job.cancelAndJoin()
         assertEquals(0, f.observers)
     }

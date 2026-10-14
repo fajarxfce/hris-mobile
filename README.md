@@ -89,9 +89,11 @@ The [expense pages](docs/expenses.md) show employee claims with month/status
 filters, current details, submitted receipt metadata, approval history and
 payment progress. Employees can create or edit drafts, select dated categories,
 cost centers and published receipts, submit claims, withdraw pending submissions,
-cancel drafts, and recover interrupted delivery. List and
-detail views use bounded encrypted offline storage; saved commands retain their
-original body and operation ID until their outcome is reconciled.
+cancel drafts, and recover interrupted delivery. Account-owned encrypted records
+receive incremental claim and reimbursement updates. Employment, month, status,
+page and acquired activity selections query local storage across process restarts
+and reauthentication. Saved commands retain their original body and operation ID
+until their outcome is reconciled.
 
 ## Development
 
