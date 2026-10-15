@@ -1,5 +1,44 @@
 # Validation
 
+## Android acceptance with published amendments
+
+On 16 October 2026, an API 35 emulator used an isolated API, PostgreSQL and worker
+with fictional accounts. The production workflows calculated, independently
+approved and published a September statement, confirmed its payment, then approved
+and published a correction and recorded the resulting returns. The continuation
+browser scenario passed; no payroll rows were inserted directly.
+
+The Android application acquired revision 0 before publication of revision 1.
+Its displayed take-home pay advanced from IDR 9,670,480.75 to IDR 8,800,320.75.
+Selecting revision 0 restored the original statement while retaining the current
+payment balance: IDR 9,670,480.75 transferred, IDR 870,160 returned and no remaining
+payment or overpayment. Both exact-revision API responses remained unchanged.
+
+With Wi-Fi, mobile data and the emulator's API tunnel disabled, a force-stop and
+restart reopened Home, the annual list and current detail from storage. Previous
+and Latest navigation worked offline. All five encrypted payroll records and both
+active generations were unchanged after restart, revision selection and subsequent
+reconnection. Connection feedback cleared after an admitted refresh. At 200% text,
+fixed revision controls remained reachable and amount rows retained their complete
+fractional digits. Screenshots were inspected; the crash buffer was empty.
+
+The Android system save dialog exported revision 0 in English after revision 1
+had already been published, and revision 1 in Indonesian. Both saved files matched
+the exact server response size and SHA-256:
+
+| Statement | Bytes | SHA-256 |
+| --- | --- | --- |
+| Revision 0, English | 11,033 | `eab6e27a69b6dd4fee75a05ea13393fc46f86d621b2b58449b1b5ea6ff515628` |
+| Revision 1, Indonesian | 11,107 | `727072b81e0c980ea75a7c648ef84616671f7ec9a16e140d70572f2f70513671` |
+
+Application source was unchanged. A temporary dev APK used the isolated loopback
+API override; the standard WireGuard APK was restored with its validated SHA-256
+`55b5aafa73dddcf387b1f5015e2069861e3ba6db62b642b5e5e9a140eacce3cf`.
+No new phone installation was needed. Font scale and connectivity were restored,
+the emulator stopped with its data retained, and the isolated services shut down.
+These checks cover Android behavior; they do not establish iOS device acceptance
+or frame-time performance.
+
 ## Retained payslip revisions
 
 On 15 October 2026, root checks passed with 1,527 desktop/JVM/UI and convention
@@ -39,8 +78,8 @@ The validated dev APK is 30,303,300 bytes, with SHA-256
 On 15 October 2026, this APK was installed on the authorized Android 16 phone
 with `--skip-build --install-only`. All 45 recorded source inputs and the artifact
 matched the validated manifest before installation. ADB reported success; the
-application was not launched and no phone UI was operated. Actual-server
-acceptance of nonzero revisions remains separate from this delivery.
+application was not launched and no phone UI was operated. Subsequent actual-server
+acceptance of nonzero revisions is recorded above.
 
 ## Revised payslips and payment balances
 

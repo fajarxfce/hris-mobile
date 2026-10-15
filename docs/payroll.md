@@ -175,6 +175,11 @@ while browsing history and export of the frozen historical revision. The assembl
 UI checks revision controls at 200% text, offline return to acquired statements and
 a revision-pinned PDF. These checks do not establish frame-time performance.
 
+An API 35 emulator also verified current and historical statements against a real
+approved amendment, current payment settlement, an offline process restart and
+both revision-pinned native PDF exports. Encrypted records remained unchanged
+through offline selection and reconnection.
+
 See [validation](validation.md) for executed builds, test results and device
 acceptance. Earlier PDF acceptance verified its exact server SHA-256, native save
 dialog cancellation, temporary Activity stops and 200% text.
