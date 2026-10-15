@@ -45,12 +45,14 @@ class PayrollApi(@Named(HttpClients.Authenticated) private val client: HttpClien
         sessionId: String,
         companyId: String,
         id: String,
+        revision: Long,
         language: String,
     ): PayslipPdfHeadersDto =
         client
             .prepareHead("companies/$companyId/payroll/payslips/$id/pdf") {
                 forSession(sessionId)
                 parameter("scope", "SELF")
+                parameter("revision", revision)
                 parameter("language", language)
                 header(HttpHeaders.Accept, "application/pdf, application/problem+json")
                 expectSuccess = false
@@ -69,6 +71,7 @@ class PayrollApi(@Named(HttpClients.Authenticated) private val client: HttpClien
         sessionId: String,
         companyId: String,
         id: String,
+        revision: Long,
         language: String,
         entityTag: String,
         size: Long,
@@ -81,6 +84,7 @@ class PayrollApi(@Named(HttpClients.Authenticated) private val client: HttpClien
         ) {
             forSession(sessionId)
             parameter("scope", "SELF")
+            parameter("revision", revision)
             parameter("language", language)
             header(HttpHeaders.Accept, "application/pdf, application/problem+json")
             header(HttpHeaders.IfRange, entityTag)

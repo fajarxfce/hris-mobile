@@ -781,4 +781,12 @@
     <string name="expense_unfinished_item_en">This item has not been added to the claim.</string>
     <string name="expense_discard_item_explanation_en">Discard this unfinished item? The other claim items will be kept.</string>
     <string name="expense_leave_unsaved_explanation_en">The latest changes could not be saved on this device. Leave without them?</string>
+    <string name="payslip_revision_en">Revision %1$s</string>
+    <string name="payslip_payment_revision_en">Balance for revision %1$s · %2$s</string>
+    <string name="payslip_entitlement_en">Entitlement</string>
+    <string name="payslip_confirmed_paid_en">Transferred</string>
+    <string name="payslip_confirmed_recovered_en">Returned</string>
+    <string name="payslip_payable_en">Remaining payment</string>
+    <string name="payslip_recoverable_en">Overpayment</string>
+    <string name="payslip_balance_not_saved_en">Balance has not been downloaded.</string>
 </resources>

@@ -7,6 +7,21 @@ import kotlinx.coroutines.test.runTest
 
 class PayrollReplicaTest {
     @Test
+    fun legacyBalancesRemainReadableUntilACompleteFormatUpgrade() = runTest {
+        withDatabase(::checkPayrollLegacyBalanceUpgrade)
+    }
+
+    @Test
+    fun revisedDetailsAndSummariesRetainIndependentPaymentFacts() = runTest {
+        withDatabase(::checkPayrollRevisedDetailsAndSummary)
+    }
+
+    @Test
+    fun mismatchedRevisionsCannotAdvanceTheStoredCursor() = runTest {
+        withDatabase(::checkPayrollRevisionMismatchCannotAdvanceCheckpoint)
+    }
+
+    @Test
     fun readDenialSurvivesRestartAndReauthentication() = runTest {
         withDatabase(::checkPayrollReadDenialSurvivesRepositoryAndSessionReplacement)
     }

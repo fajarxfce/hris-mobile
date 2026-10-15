@@ -20,6 +20,11 @@ fun PayslipSummaryCard(payslip: Payslip) {
         AppText(payslip.summary.employeeName + " · " + payslip.summary.employeeNumber)
         AppText(payslip.companyName, color = AppColors.muted)
         AppText(
+            appString(AppString.PayslipRevision, payslip.summary.version),
+            color = AppColors.muted,
+            style = FluentTheme.typography.caption,
+        )
+        AppText(
             appString(AppString.PayslipTakeHome),
             Modifier.padding(top = 12.dp),
             color = AppColors.muted,

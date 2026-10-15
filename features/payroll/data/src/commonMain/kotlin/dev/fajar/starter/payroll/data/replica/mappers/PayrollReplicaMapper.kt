@@ -45,6 +45,7 @@ fun PayrollCheckpoint.toReplicaDto() =
         refreshedAt?.toString(),
         refreshAfter.toString(),
         pollAt?.toString(),
+        recordVersion = recordVersion,
     )
 
 fun PayrollCheckpointDto.toCheckpoint(
@@ -56,6 +57,7 @@ fun PayrollCheckpointDto.toCheckpoint(
             raw.handle.partition == payrollReplicaPartition(access)
     )
     require(schema == 1 && syncSessionId.length in 1..128)
+    require(recordVersion in 1..PayrollCheckpoint.CURRENT_RECORD_VERSION)
     require(permissions.size <= 256 && permissions.all { it.length in 1..128 })
     require(cursor == null || cursor.length in 1..8192)
     val stage = PayrollSyncPhase.valueOf(phase)
@@ -78,5 +80,6 @@ fun PayrollCheckpointDto.toCheckpoint(
         refreshed,
         refresh,
         pollAt?.let(Instant::parse),
+        recordVersion,
     )
 }

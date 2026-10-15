@@ -14,6 +14,12 @@ data class PayrollCheckpoint(
     val refreshedAt: Instant?,
     val refreshAfter: Instant,
     val pollAt: Instant?,
+    /** Acquisition format; upgrading stages a replacement without hiding published facts. */
+    val recordVersion: Int = CURRENT_RECORD_VERSION,
 ) {
     override fun toString() = "PayrollCheckpoint([redacted])"
+
+    companion object {
+        const val CURRENT_RECORD_VERSION = 2
+    }
 }

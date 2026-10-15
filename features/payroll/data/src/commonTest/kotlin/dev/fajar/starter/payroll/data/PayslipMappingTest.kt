@@ -84,7 +84,7 @@ class PayslipMappingTest {
                 original.copy(
                     summary = f.summary.copy(id = "55555555-5555-5555-5555-555555555555")
                 ),
-                original.copy(summary = f.summary.copy(version = 1)),
+                original.copy(summary = f.summary.copy(version = -1)),
                 original.copy(summary = f.summary.copy(currency = "USD")),
                 original.copy(
                     calculation = f.calculation.copy(tax = f.calculation.tax.copy(withheld = "NaN"))

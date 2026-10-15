@@ -172,7 +172,13 @@ class PayrollFixture(instant: () -> Instant = { Instant.parse("2026-10-13T00:00:
                 "pph21-ter-2026",
             ),
         )
-    val payment = PayslipPayments(summary.id, 0, emptyList())
+    val payment =
+        PayslipPayments(
+            summary.id,
+            0,
+            emptyList(),
+            PayslipSettlement(0, summary.takeHome, zero, zero, summary.takeHome, zero, "IDR"),
+        )
     val records =
         MutableStateFlow<AppResult<PayslipSnapshot<PayslipOverview>?>>(AppResult.Success(null))
     val detailRecords =
@@ -193,7 +199,10 @@ class PayrollFixture(instant: () -> Instant = { Instant.parse("2026-10-13T00:00:
     }
     var bootstrapCall: suspend (String?, Int) -> AppResult<SyncBootstrapPage> = { cursor, limit ->
         val after = cursor?.removePrefix("bootstrap/")?.toInt() ?: 0
-        val all = slips.keys.sorted().map { SyncReference(SyncCollection.PAYSLIPS, it, 0) }
+        val all =
+            slips.keys.sorted().map {
+                SyncReference(SyncCollection.PAYSLIPS, it, slips.getValue(it).summary.version)
+            }
         val page = all.drop(after).take(limit)
         val more = after + page.size < all.size
         AppResult.Success(

@@ -13,4 +13,6 @@ data class PayrollCheckpointDto(
     val refreshAfter: String,
     val pollAt: String?,
     val schema: Int = 1,
+    // An absent field belongs to the preceding acquisition format.
+    val recordVersion: Int = 1,
 )

@@ -86,8 +86,9 @@ is not a completed HRIS workflow. See [native identity](docs/native-identity.md)
 
 The [employee payslip pages](docs/payroll.md) query account-owned annual history and
 full details from the local replica. Incremental synchronization retains published
-amounts and payment progress in encrypted records. Employees can
-save an English or Indonesian PDF through the platform file dialog after fresh
+assessment revisions and independent payment balances in encrypted records.
+Previously acquired records remain readable while their format is upgraded. Employees can
+save the displayed revision as an English or Indonesian PDF through the platform file dialog after fresh
 server authorization. Every read remains limited to their own payslips.
 
 The [expense pages](docs/expenses.md) show employee claims with month/status

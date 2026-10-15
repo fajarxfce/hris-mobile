@@ -25,7 +25,12 @@ class PayslipPdfTest {
             )) {
             f.headers = headers
             assertIs<AppResult.Failed>(
-                repo.inspect(f.access, f.summary.id, PayslipDocumentLanguage.ID)
+                repo.inspect(
+                    f.access,
+                    f.summary.id,
+                    f.metadata.revision,
+                    PayslipDocumentLanguage.ID,
+                )
             )
         }
     }

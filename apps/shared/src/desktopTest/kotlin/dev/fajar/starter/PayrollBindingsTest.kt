@@ -44,7 +44,7 @@ class PayrollBindingsTest {
                     koin.get<SyncPayroll>()("workspace"),
                     koin.get<ObservePayslips>()("workspace").first(),
                     koin.get<ObservePayslip>()("workspace", id).first(),
-                    koin.get<ExportPayslip>()("workspace", id, PayslipDocumentLanguage.ID),
+                    koin.get<ExportPayslip>()("workspace", id, 0, PayslipDocumentLanguage.ID),
                 )
             results.forEach {
                 assertEquals(FailureKind.Unauthorized, assertIs<AppResult.Failed>(it).failure.kind)

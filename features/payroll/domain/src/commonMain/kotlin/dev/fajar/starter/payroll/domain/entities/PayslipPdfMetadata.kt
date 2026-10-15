@@ -5,4 +5,5 @@ data class PayslipPdfMetadata(
     val language: PayslipDocumentLanguage,
     val size: Long,
     val entityTag: String,
+    val revision: Long,
 )

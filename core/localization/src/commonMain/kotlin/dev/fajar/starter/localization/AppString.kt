@@ -364,6 +364,26 @@ enum class AppString(val english: StringResource, val indonesian: StringResource
     ),
     PayslipCurrency(Res.string.payslip_currency_en, Res.string.payslip_currency_id),
     PayslipPayment(Res.string.payslip_payment_en, Res.string.payslip_payment_id),
+    PayslipRevision(Res.string.payslip_revision_en, Res.string.payslip_revision_id),
+    PayslipPaymentRevision(
+        Res.string.payslip_payment_revision_en,
+        Res.string.payslip_payment_revision_id,
+    ),
+    PayslipEntitlement(Res.string.payslip_entitlement_en, Res.string.payslip_entitlement_id),
+    PayslipConfirmedPaid(
+        Res.string.payslip_confirmed_paid_en,
+        Res.string.payslip_confirmed_paid_id,
+    ),
+    PayslipConfirmedRecovered(
+        Res.string.payslip_confirmed_recovered_en,
+        Res.string.payslip_confirmed_recovered_id,
+    ),
+    PayslipPayable(Res.string.payslip_payable_en, Res.string.payslip_payable_id),
+    PayslipRecoverable(Res.string.payslip_recoverable_en, Res.string.payslip_recoverable_id),
+    PayslipBalanceNotSaved(
+        Res.string.payslip_balance_not_saved_en,
+        Res.string.payslip_balance_not_saved_id,
+    ),
     PayslipNoPayment(Res.string.payslip_no_payment_en, Res.string.payslip_no_payment_id),
     PayslipScheduledPayment(
         Res.string.payslip_scheduled_payment_en,

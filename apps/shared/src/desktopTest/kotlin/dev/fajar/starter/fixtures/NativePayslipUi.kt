@@ -13,6 +13,7 @@ import kotlinx.serialization.json.*
 /** Wire fixture for employee payroll pages, independent of their domain/data implementation. */
 class NativePayslipUi {
     @Volatile var enabled = false
+    @Volatile var amended = false
     val lists = AtomicInteger()
     val bootstraps = AtomicInteger()
     val changes = AtomicInteger()
@@ -21,7 +22,7 @@ class NativePayslipUi {
     val downloads = AtomicInteger()
     val bytes = "%PDF-1.4\nFictional employee payslip\n%%EOF".encodeToByteArray()
     val sha256 = Sha256Digest().apply { update(bytes) }.finishHex()
-    private val summary =
+    private val originalSummary =
         Json.parseToJsonElement(
             """{
           "id":"$ID","employeeId":"${NativePeopleUi.EMPLOYEE}",
@@ -31,6 +32,12 @@ class NativePayslipUi {
           "publishedAt":"2026-09-28T01:00:00Z","version":0
         }"""
         )
+
+    private val summary
+        get() =
+            JsonObject(
+                originalSummary.jsonObject + ("version" to JsonPrimitive(if (amended) 2 else 0))
+            )
 
     fun response(request: HttpRequestData, scope: MockRequestHandleScope): HttpResponseData? {
         val base = "/api/v1/companies/${NativeUiServer.COMPANY_ONE}/payroll/payslips"
@@ -44,6 +51,7 @@ class NativePayslipUi {
         if (path.endsWith("/pdf")) {
             assertEquals("$base/$ID/pdf", path)
             assertEquals("ID", request.url.parameters["language"])
+            assertEquals(if (amended) "2" else "0", request.url.parameters["revision"])
             val headers =
                 Headers.build {
                     append(HttpHeaders.ContentType, "application/pdf")
@@ -89,7 +97,15 @@ class NativePayslipUi {
                   }
                 }"""
                 }
-                "$base/$ID/payments" -> """{"assessmentId":"$ID","version":0,"attempts":[]}"""
+                "$base/$ID/payments" ->
+                    if (amended)
+                        """{
+                        "assessmentId":"$ID","version":5,
+                        "settlement":{"assessmentRevision":3,"entitlement":"9000000.75","confirmedPaid":"10000000.75","confirmedRecovered":"400000.25","payable":"0","recoverable":"599999.75","currency":"IDR"},
+                        "attempts":[{"batchId":"55555555-5555-4555-8555-555555555555","itemId":"66666666-6666-4666-8666-666666666666","status":"SUCCEEDED","createdAt":"2026-09-28T01:00:00Z","releasedAt":"2026-09-28T02:00:00Z","resolvedAt":"2026-09-28T03:00:00Z","amount":"10000000.75","assessmentRevision":0}]
+                    }"""
+                    else
+                        """{"assessmentId":"$ID","version":0,"attempts":[],"settlement":{"assessmentRevision":0,"entitlement":"10232500","confirmedPaid":"0","confirmedRecovered":"0","payable":"10232500","recoverable":"0","currency":"IDR"}}"""
                 else -> error("Unexpected payslip fixture path")
             }
         return scope.respond(body, HttpStatusCode.OK, jsonHeaders)
@@ -121,7 +137,7 @@ class NativePayslipUi {
                                 buildJsonObject {
                                     put("collection", "PAYSLIPS")
                                     put("id", ID)
-                                    put("version", 0)
+                                    put("version", if (amended) 2 else 0)
                                 }
                             )
                         }

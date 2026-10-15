@@ -6,7 +6,10 @@ import androidx.lifecycle.ViewModelStore
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.payroll.domain.entities.PayslipDocumentLanguage
 import dev.fajar.starter.payroll.domain.policies.payslipFailure
+import dev.fajar.starter.payroll.domain.replica.entities.PayrollRecord
+import dev.fajar.starter.payroll.domain.replica.entities.PayrollReplicaEntry
 import dev.fajar.starter.payroll.presentation.detail.*
+import dev.fajar.starter.sync.domain.entities.*
 import kotlin.test.*
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Instant
@@ -15,6 +18,45 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.test.*
 
 class PayslipViewModelTest {
+    @Test
+    fun exportFreezesTheVisibleRevisionBeforeLanguageSelectionAndBackgroundUpdates() = runTest {
+        withModel { f, model, _ ->
+            f.base.slips[f.base.summary.id] =
+                f.base.slip.copy(summary = f.base.summary.copy(version = 2))
+            f.metadata = f.metadata.copy(revision = 2)
+            model.onEvent(PayslipEvent.Entered)
+            runCurrent()
+            assertEquals(2L, model.state.value.content!!.value.payslip.summary.version)
+            model.onEvent(PayslipEvent.ExportRequested)
+            runCurrent()
+            assertEquals(2L, model.state.value.exportRevision)
+            // Another sync owner publishes a newer slip while the language dialog remains open.
+            val previous = f.base.replicas.current!!
+            f.base.replicas.commit(
+                previous,
+                previous.copy(revision = previous.revision + 1),
+                listOf(
+                    PayrollReplicaEntry(
+                        SyncReference(SyncCollection.PAYSLIPS, f.base.summary.id, 3),
+                        PayrollRecord.Slip(
+                            f.base.slip.copy(summary = f.base.summary.copy(version = 3))
+                        ),
+                    )
+                ),
+            )
+            runCurrent()
+            assertEquals(3L, model.state.value.content!!.value.payslip.summary.version)
+            assertEquals(2L, model.state.value.exportRevision)
+            model.onEvent(PayslipEvent.ExportLanguageSelected(PayslipDocumentLanguage.ID))
+            runCurrent()
+            assertEquals(listOf(2L, 2L), f.inspectedRevisions)
+            assertEquals(listOf(2L), f.downloadedRevisions)
+            assertEquals("payslip-${f.base.summary.id}-v2-id.pdf", f.declaration!!.name)
+            assertTrue(model.state.value.saved)
+            assertNull(model.state.value.exportRevision)
+        }
+    }
+
     @Test
     fun detailAcquisitionHasOneOwnerAndDisposalCancelsPendingWork() = runTest {
         withModel { f, model, owner ->
@@ -58,7 +100,7 @@ class PayslipViewModelTest {
             model.onEvent(PayslipEvent.ExportLanguageSelected(PayslipDocumentLanguage.ID))
             runCurrent()
             assertTrue(model.state.value.saving)
-            assertFalse(model.state.value.exportOptions)
+            assertNull(model.state.value.exportRevision)
             assertFalse(model.state.value.canSave)
             assertEquals(1, f.selections)
             model.onEvent(PayslipEvent.RefreshRequested)
@@ -157,7 +199,7 @@ class PayslipViewModelTest {
             model.onEvent(PayslipEvent.ExportRequested)
             model.onEvent(PayslipEvent.VerificationRequested)
             runCurrent()
-            assertFalse(model.state.value.exportOptions)
+            assertNull(model.state.value.exportRevision)
             assertEquals(listOf<PayslipEffect>(PayslipEffect.VerifyAccount), effects)
             release.complete(Unit)
             runCurrent()

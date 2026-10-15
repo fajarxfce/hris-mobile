@@ -13,7 +13,7 @@ import kotlinx.datetime.*
 
 fun PayslipSummaryDto.toSummary(): PayslipSummary {
     listOf(id, employeeId).forEach { require(Uuid.parse(it).toString() == it) }
-    require(version == 0L && currency == "IDR")
+    require(version >= 0 && currency == "IDR")
     require(employeeNumber.isNotBlank() && employeeNumber.length <= 64)
     require(employeeName.isNotBlank() && employeeName.length <= 200)
     val month = YearMonth.parse(taxMonth)
@@ -33,6 +33,7 @@ fun PayslipSummaryDto.toSummary(): PayslipSummary {
         DecimalAmount.parse(withheld),
         DecimalAmount.parse(takeHome),
         Instant.parse(publishedAt),
+        version,
     )
 }
 
@@ -117,33 +118,4 @@ fun PayslipDto.toPayslip(expectedId: String): Payslip {
             tax.ruleId,
         ),
     )
-}
-
-fun PayslipPaymentsDto.toPayments(expectedId: String): PayslipPayments {
-    require(
-        Uuid.parse(assessmentId).toString() == assessmentId &&
-            assessmentId == expectedId &&
-            version >= 0 &&
-            attempts.size <= 20
-    )
-    val mapped =
-        attempts.map {
-            listOf(it.batchId, it.itemId).forEach { id -> require(Uuid.parse(id).toString() == id) }
-            PayslipPaymentAttempt(
-                it.batchId,
-                it.itemId,
-                PayslipPaymentStatus.valueOf(it.status),
-                Instant.parse(it.createdAt),
-                it.releasedAt?.let(Instant::parse),
-                it.resolvedAt?.let(Instant::parse),
-            )
-        }
-    require(mapped.map { it.itemId }.distinct().size == mapped.size)
-    require(
-        mapped.zipWithNext().all { (first, next) ->
-            first.createdAt > next.createdAt ||
-                (first.createdAt == next.createdAt && first.itemId > next.itemId)
-        }
-    )
-    return PayslipPayments(assessmentId, version, mapped)
 }

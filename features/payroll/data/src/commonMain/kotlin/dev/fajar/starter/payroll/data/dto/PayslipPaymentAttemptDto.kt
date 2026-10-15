@@ -10,4 +10,6 @@ data class PayslipPaymentAttemptDto(
     val createdAt: String,
     val releasedAt: String?,
     val resolvedAt: String?,
+    val amount: String? = null,
+    val assessmentRevision: Long? = null,
 )

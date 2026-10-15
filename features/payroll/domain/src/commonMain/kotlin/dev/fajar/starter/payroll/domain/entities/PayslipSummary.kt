@@ -17,6 +17,7 @@ data class PayslipSummary(
     val withheld: DecimalAmount,
     val takeHome: DecimalAmount,
     val publishedAt: Instant,
+    val version: Long = 0,
 ) {
     override fun toString() = "PayslipSummary([redacted])"
 }

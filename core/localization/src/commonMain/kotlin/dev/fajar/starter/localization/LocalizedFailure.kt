@@ -44,6 +44,7 @@ fun failureText(failure: Failure): String =
             "client.expense_scope_changed" -> AppString.CalendarScopeChanged
             "client.expense_timeout" -> AppString.ExpenseTimeout
             "client.payslip_cache_expired" -> AppString.PayslipExportReviewRequired
+            "invalid_payslip_revision",
             "payroll_payslip_not_found" -> AppString.PayslipUnavailable
             "client.payslip_changed" -> AppString.PayslipChanged
             "client.payslip_scope_changed" -> AppString.CalendarScopeChanged

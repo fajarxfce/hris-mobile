@@ -23,15 +23,17 @@ class ApiPayrollDataSource(private val api: PayrollApi) : PayrollRemoteDataSourc
         sessionId: String,
         companyId: String,
         id: String,
+        revision: Long,
         language: String,
-    ) = api.inspectPdf(sessionId, companyId, id, language)
+    ) = api.inspectPdf(sessionId, companyId, id, revision, language)
 
     override suspend fun downloadPdf(
         sessionId: String,
         companyId: String,
         id: String,
+        revision: Long,
         language: String,
         entityTag: String,
         size: Long,
-    ) = api.downloadPdf(sessionId, companyId, id, language, entityTag, size)
+    ) = api.downloadPdf(sessionId, companyId, id, revision, language, entityTag, size)
 }

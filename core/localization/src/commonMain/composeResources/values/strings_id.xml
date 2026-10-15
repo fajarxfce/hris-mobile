@@ -781,4 +781,12 @@
     <string name="expense_unfinished_item_id">Item ini belum ditambahkan ke klaim.</string>
     <string name="expense_discard_item_explanation_id">Buang item yang belum selesai ini? Item klaim lainnya tetap disimpan.</string>
     <string name="expense_leave_unsaved_explanation_id">Perubahan terakhir belum dapat disimpan di perangkat. Keluar tanpa perubahan tersebut?</string>
+    <string name="payslip_revision_id">Revisi %1$s</string>
+    <string name="payslip_payment_revision_id">Saldo revisi %1$s · %2$s</string>
+    <string name="payslip_entitlement_id">Hak pembayaran</string>
+    <string name="payslip_confirmed_paid_id">Sudah ditransfer</string>
+    <string name="payslip_confirmed_recovered_id">Sudah dikembalikan</string>
+    <string name="payslip_payable_id">Sisa pembayaran</string>
+    <string name="payslip_recoverable_id">Kelebihan pembayaran</string>
+    <string name="payslip_balance_not_saved_id">Saldo belum tersimpan.</string>
 </resources>

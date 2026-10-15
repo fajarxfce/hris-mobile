@@ -7,7 +7,7 @@ import dev.fajar.starter.payroll.domain.entities.*
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Instant
 
-class PayslipDataFixture : PayrollRemoteDataSource {
+class PayslipDataFixture(val pdfRevision: Long = 0) : PayrollRemoteDataSource {
     val now = Instant.parse("2026-10-13T00:00:00Z")
     val access =
         PayrollAccess(
@@ -62,8 +62,11 @@ class PayslipDataFixture : PayrollRemoteDataSource {
             now.toString(),
             now.toString(),
             null,
+            "10232500",
+            0,
         )
-    var payments = PayslipPaymentsDto(summary.id, 1, listOf(attempt))
+    val settlement = PayslipSettlementDto(0, "10232500", "0", "0", "10232500", "0", "IDR")
+    var payments = PayslipPaymentsDto(summary.id, 1, listOf(attempt), settlement)
     val bytes = "%PDF-1.4\nfixture\n%%EOF".encodeToByteArray()
     val metadata =
         PayslipPdfMetadata(
@@ -71,6 +74,7 @@ class PayslipDataFixture : PayrollRemoteDataSource {
             PayslipDocumentLanguage.ID,
             bytes.size.toLong(),
             "\"${Sha256Digest().apply { update(bytes) }.finishHex()}\"",
+            pdfRevision,
         )
     var headers =
         PayslipPdfHeadersDto(
@@ -111,6 +115,7 @@ class PayslipDataFixture : PayrollRemoteDataSource {
         sessionId: String,
         companyId: String,
         id: String,
+        revision: Long,
         language: String,
     ): PayslipPdfHeadersDto {
         failure?.let { throw it }
@@ -121,6 +126,7 @@ class PayslipDataFixture : PayrollRemoteDataSource {
         sessionId: String,
         companyId: String,
         id: String,
+        revision: Long,
         language: String,
         entityTag: String,
         size: Long,

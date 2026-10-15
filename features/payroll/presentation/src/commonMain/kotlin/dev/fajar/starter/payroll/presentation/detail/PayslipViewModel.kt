@@ -75,7 +75,7 @@ class PayslipViewModel(
                 refreshing = false,
                 saving = false,
                 saved = false,
-                exportOptions = false,
+                exportRevision = null,
             )
         }
     }
@@ -95,7 +95,7 @@ class PayslipViewModel(
                 refreshFailure = it.refreshFailure?.takeIf(::payslipFailureInvalidatesCache),
                 exportFailure = it.exportFailure?.takeIf(::payslipFailureInvalidatesCache),
                 saved = false,
-                exportOptions = false,
+                exportRevision = null,
             )
         }
         acquisition =
@@ -116,22 +116,23 @@ class PayslipViewModel(
     }
 
     private fun onExportRequested(event: PayslipEvent.ExportRequested) {
-        if (state.value.canSave) updateState { it.copy(exportOptions = true) }
+        if (state.value.canSave)
+            updateState { it.copy(exportRevision = it.content?.value?.payslip?.summary?.version) }
     }
 
     private fun onExportDismissed(event: PayslipEvent.ExportDismissed) {
-        updateState { it.copy(exportOptions = false) }
+        updateState { it.copy(exportRevision = null) }
     }
 
     private fun onExportLanguageSelected(event: PayslipEvent.ExportLanguageSelected) {
-        if (!state.value.canSave || !state.value.exportOptions || exporting?.isActive == true)
-            return
+        val revision = state.value.exportRevision ?: return
+        if (!state.value.canSave || exporting?.isActive == true) return
         updateState {
-            it.copy(exportOptions = false, saving = true, saved = false, exportFailure = null)
+            it.copy(exportRevision = null, saving = true, saved = false, exportFailure = null)
         }
         exporting =
             viewModelScope.launch {
-                val result = export(target.workspaceId, target.id, event.language)
+                val result = export(target.workspaceId, target.id, revision, event.language)
                 ensureActive()
                 updateState { it.withPayslipExport(result) }
                 if (

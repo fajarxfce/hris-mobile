@@ -124,5 +124,7 @@ fun PayslipPage(state: PayslipState, list: LazyListState, onEvent: (PayslipEvent
                 AppText(appString(AppString.PayslipsNoSaved), color = AppColors.muted)
             }
     }
-    if (state.exportOptions && state.canSave) PayslipExportDialog(onEvent)
+    state.exportRevision?.let { revision ->
+        if (state.canSave) PayslipExportDialog(revision, onEvent)
+    }
 }

@@ -137,9 +137,10 @@ class SyncPayroll(
         } else if (
             checkpoint != null &&
                 ((replacePublished && checkpoint.published) ||
+                    checkpoint.recordVersion < PayrollCheckpoint.CURRENT_RECORD_VERSION ||
                     !samePayrollScope(checkpoint.access, access))
         ) {
-            // Reauthentication or an earlier denial rebuilds its published projection.
+            // Reauthentication, a format upgrade or an earlier denial rebuilds the projection.
             // An incomplete replacement keeps its cursor across bounded runs.
             val replacement =
                 initialPayrollCheckpoint(access, Uuid.random().toString(), clock.now())
@@ -312,10 +313,7 @@ class SyncPayroll(
         if (
             changes.size > 8 ||
                 changes.any {
-                    it.reference.collection !in payrollCollections ||
-                        it.reference.version < 0 ||
-                        (it.reference.collection == SyncCollection.PAYSLIPS &&
-                            it.reference.version != 0L)
+                    it.reference.collection !in payrollCollections || it.reference.version < 0
                 }
         )
             return payslipFailure("client.invalid_response", FailureKind.Unexpected)
@@ -351,7 +349,7 @@ class SyncPayroll(
         return AppResult.Success(entries.toList())
     }
 
-    /** A slip includes zero-version payment progress even before its first payment attempt. */
+    /** Acquiring a slip also refreshes its independently versioned payment progress. */
     private suspend fun hydratePayslip(
         workspaceId: String,
         access: PayrollAccess,
@@ -376,9 +374,13 @@ class SyncPayroll(
                     is AppResult.Success -> loaded.value
                 }
             currentCoroutineContext().ensureActive()
-            if (value.summary.id != id)
+            if (value.summary.id != id || value.summary.version < slip.reference.version)
                 return payslipFailure("client.invalid_response", FailureKind.Unexpected)
-            entries += PayrollReplicaEntry(slip.reference, PayrollRecord.Slip(value))
+            entries +=
+                PayrollReplicaEntry(
+                    SyncReference(SyncCollection.PAYSLIPS, id, value.summary.version),
+                    PayrollRecord.Slip(value),
+                )
         }
         val ownership = validatePayrollContinuation(access, currentAccess(workspaceId))
         if (ownership is AppResult.Failed) return ownership

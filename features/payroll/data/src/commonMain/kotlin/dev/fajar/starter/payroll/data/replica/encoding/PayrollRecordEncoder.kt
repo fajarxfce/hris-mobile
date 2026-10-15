@@ -19,7 +19,7 @@ suspend fun encodePayrollReplicaEntry(
 ): List<ReplicaDocument> {
     val reference = entry.reference
     require(validatePayslipId(reference.id) is AppResult.Success)
-    require(reference.collection != SyncCollection.PAYSLIPS || reference.version == 0L)
+    require(reference.version >= 0)
     val id = payrollRecordId(reference.collection, reference.id)
     val record = entry.record
     if (record == null) {
@@ -50,7 +50,10 @@ suspend fun encodePayrollReplicaEntry(
             }
             is PayrollRecord.Payments -> {
                 val dto = record.value.toDto()
-                require(dto.toPayments(record.id) == record.value)
+                val mapped =
+                    if (checkpoint.recordVersion >= 2) dto.toPayments(record.id)
+                    else dto.toStoredPayments(record.id)
+                require(mapped == record.value)
                 Json.encodeToString(dto)
             }
         }
@@ -76,7 +79,7 @@ suspend fun encodePayrollReplicaEntry(
                     key,
                     checkpoint,
                     "summary/${record.id}",
-                    0,
+                    summary.version,
                     payrollSummarySortKey(summary.month, summary.id),
                     setOf(payrollReplicaTag(key, access, "year", summary.month.year.toString())),
                     Json.encodeToString(summary.toDto()),

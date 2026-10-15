@@ -12,7 +12,7 @@ data class PayslipState(
     val syncPending: Boolean = false,
     val saving: Boolean = false,
     val saved: Boolean = false,
-    val exportOptions: Boolean = false,
+    val exportRevision: Long? = null,
     val cacheFailure: Failure? = null,
     val refreshFailure: Failure? = null,
     val exportFailure: Failure? = null,

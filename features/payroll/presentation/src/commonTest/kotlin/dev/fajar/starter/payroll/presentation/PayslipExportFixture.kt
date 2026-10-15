@@ -9,18 +9,21 @@ import dev.fajar.starter.payroll.domain.usecases.ExportPayslip
 
 class PayslipExportFixture(val base: PayrollFixture = PayrollFixture()) {
     val bytes = "%PDF-1.4\nfixture\n%%EOF".encodeToByteArray()
-    val metadata =
+    var metadata =
         PayslipPdfMetadata(
             base.summary.id,
             PayslipDocumentLanguage.ID,
             bytes.size.toLong(),
             "\"${"a".repeat(64)}\"",
+            base.summary.version,
         )
     var inspectCall: suspend () -> AppResult<PayslipPdfMetadata> = { AppResult.Success(metadata) }
     var downloadCall: suspend () -> AppResult<ByteArray> = { AppResult.Success(bytes) }
     var selectCall: suspend () -> AppResult<Boolean> = { AppResult.Success(true) }
     var writeCall: suspend () -> AppResult<Unit> = { AppResult.Success(Unit) }
     var releaseCall: suspend () -> AppResult<Unit> = { AppResult.Success(Unit) }
+    val inspectedRevisions = mutableListOf<Long>()
+    val downloadedRevisions = mutableListOf<Long>()
     var inspections = 0
     var downloads = 0
     var selections = 0
@@ -35,9 +38,11 @@ class PayslipExportFixture(val base: PayrollFixture = PayrollFixture()) {
             override suspend fun inspect(
                 access: PayrollAccess,
                 id: String,
+                revision: Long,
                 language: PayslipDocumentLanguage,
             ): AppResult<PayslipPdfMetadata> {
                 inspections++
+                inspectedRevisions += revision
                 return inspectCall()
             }
 
@@ -46,6 +51,7 @@ class PayslipExportFixture(val base: PayrollFixture = PayrollFixture()) {
                 metadata: PayslipPdfMetadata,
             ): AppResult<ByteArray> {
                 downloads++
+                downloadedRevisions += metadata.revision
                 return downloadCall()
             }
         }
@@ -95,5 +101,6 @@ class PayslipExportFixture(val base: PayrollFixture = PayrollFixture()) {
             base.build,
         )
 
-    suspend fun save() = export(base.workspace.id, base.summary.id, PayslipDocumentLanguage.ID)
+    suspend fun save(revision: Long = base.summary.version) =
+        export(base.workspace.id, base.summary.id, revision, PayslipDocumentLanguage.ID)
 }

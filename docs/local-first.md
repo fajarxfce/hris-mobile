@@ -112,7 +112,7 @@ capabilities.
 | Attendance / calendar | Account-owned daily evidence, effective schedule assignments, roster overrides and holidays; local month/week/employment queries | Four explicit collections, staged bootstrap and incremental changes implemented |
 | Leave | Account-owned balances, full requests and acquired activity pages; local employment/year/status and history queries | Request/balance change feed and resumable older-activity acquisition implemented |
 | Overtime | Account-owned full requests and acquired activity; local employment/date/status queries | Request change feed and resumable older-activity acquisition implemented |
-| Payslips | Account-owned full payslips, indexed annual summaries and versioned payment progress; local year/page/detail queries | Two explicit collections, staged replacement and incremental changes implemented |
+| Payslips | Account-owned full payslips, indexed annual summaries and versioned payment progress; local year/page/detail queries | Two explicit collections, revised heads, independent balances and staged format upgrades implemented |
 | Expenses | Account-owned complete claims, indexed summaries, payment progress and acquired activity; local employment/month/status/page queries | Two explicit collections, canonical claim acquisition and resumable activity backfill implemented |
 | Expense editor | Account/company-owned draft fields, completed lines and one unfinished item; local compare-and-set autosave | Explicit server Save performs fresh review and retains an immutable command; working copies do not replicate as confirmed claims |
 | Published documents | Account-owned metadata with local employment/category/page queries | `DOCUMENT_EVIDENCE`, canonical published records and versioned withdrawals |

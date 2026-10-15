@@ -19,6 +19,7 @@ interface PayrollRemoteDataSource {
         sessionId: String,
         companyId: String,
         id: String,
+        revision: Long,
         language: String,
     ): PayslipPdfHeadersDto
 
@@ -26,6 +27,7 @@ interface PayrollRemoteDataSource {
         sessionId: String,
         companyId: String,
         id: String,
+        revision: Long,
         language: String,
         entityTag: String,
         size: Long,

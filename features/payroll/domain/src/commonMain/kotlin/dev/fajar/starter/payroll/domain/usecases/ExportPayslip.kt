@@ -33,17 +33,19 @@ class ExportPayslip(
     suspend operator fun invoke(
         workspaceId: String,
         id: String,
+        revision: Long,
         language: PayslipDocumentLanguage,
     ): AppResult<Boolean> {
         val valid = validatePayslipId(id)
         if (valid is AppResult.Failed) return valid
+        if (revision < 0) return payslipFailure("invalid_payslip_revision")
         val access =
             when (val result = withTimeoutOrNull(5.seconds) { currentAccess(workspaceId) }) {
                 null -> return payslipFailure("client.payslip_export_timeout", FailureKind.Timeout)
                 is AppResult.Failed -> return result
                 is AppResult.Success -> result.value
             }
-        val result = exportFile(workspaceId, access, id, language)
+        val result = exportFile(workspaceId, access, id, revision, language)
         currentCoroutineContext().ensureActive()
         val owner =
             withTimeoutOrNull(5.seconds) {
@@ -61,12 +63,15 @@ class ExportPayslip(
         workspaceId: String,
         access: PayrollAccess,
         id: String,
+        revision: Long,
         language: PayslipDocumentLanguage,
     ): AppResult<Boolean> {
         val metadata =
             when (
                 val result =
-                    withTimeoutOrNull(30.seconds) { review(workspaceId, access, id, language) }
+                    withTimeoutOrNull(30.seconds) {
+                        review(workspaceId, access, id, revision, language)
+                    }
             ) {
                 null -> return payslipFailure("client.payslip_export_timeout", FailureKind.Timeout)
                 is AppResult.Failed -> return result
@@ -79,7 +84,7 @@ class ExportPayslip(
                     outputs.select(
                         requestId,
                         DocumentFileDeclaration(
-                            "payslip-$id-${language.name.lowercase()}.pdf",
+                            "payslip-$id-v$revision-${language.name.lowercase()}.pdf",
                             "application/pdf",
                             metadata.size,
                         ),
@@ -103,6 +108,7 @@ class ExportPayslip(
         workspaceId: String,
         access: PayrollAccess,
         id: String,
+        revision: Long,
         language: PayslipDocumentLanguage,
     ): AppResult<PayslipPdfMetadata> {
         val policy =
@@ -111,7 +117,7 @@ class ExportPayslip(
                 is AppResult.Success -> result.value
             }
         val metadata =
-            when (val result = pdf.inspect(access, id, language)) {
+            when (val result = pdf.inspect(access, id, revision, language)) {
                 is AppResult.Failed -> return result
                 is AppResult.Success -> result.value
             }
@@ -120,7 +126,11 @@ class ExportPayslip(
         if (continued is AppResult.Failed) return continued
         val valid = validatePayslipPdf(metadata)
         if (valid is AppResult.Failed) return valid
-        if (metadata.payslipId != id || metadata.language != language)
+        if (
+            metadata.payslipId != id ||
+                metadata.revision != revision ||
+                metadata.language != language
+        )
             return payslipFailure("client.invalid_response", FailureKind.Unexpected)
         return AppResult.Success(metadata)
     }
@@ -153,7 +163,14 @@ class ExportPayslip(
             if (written is AppResult.Failed) return written
             val verified =
                 when (
-                    val result = review(workspaceId, access, metadata.payslipId, metadata.language)
+                    val result =
+                        review(
+                            workspaceId,
+                            access,
+                            metadata.payslipId,
+                            metadata.revision,
+                            metadata.language,
+                        )
                 ) {
                     is AppResult.Failed -> return result
                     is AppResult.Success -> result.value

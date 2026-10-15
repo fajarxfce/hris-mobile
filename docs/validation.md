@@ -1,5 +1,40 @@
 # Validation
 
+## Revised payslips and payment balances
+
+On 15 October 2026, root checks passed with 1,498 desktop/JVM/UI tests, Android
+dev assembly and production Web distribution. Payroll passed 43 domain, 35 data
+and 19 presentation desktop tests. Targeted Chromium suites passed 108 tests
+across payroll, localization and app integration. The Web bundle retains its
+three existing bundler warnings.
+
+Coverage includes exact decimal settlement, incomplete current responses, legacy
+records, canonical revisions newer or older than change references, interrupted
+acquisition-format replacement and checkpoint resumption. SQLite and IndexedDB
+contracts retain the preceding generation until complete publication. Export
+tests freeze the displayed revision through background updates, conditional PDF
+requests, cancellation and Activity stops. Assembled UI checks exercise an
+independently newer balance and 200% text.
+
+API 35 emulator acceptance upgraded the existing installation while Wi-Fi and
+mobile data were disabled. Home, the annual list and the September payslip reopened
+from storage. Legacy payment status remained visible with no invented balance;
+all three encrypted payroll records and the active generation were unchanged.
+Reconnection to the development API published the replacement generation and its
+current balance. A subsequent offline force-stop and restart retained that balance
+and all three new record hashes. The real fixture used assessment revision zero;
+amended revisions were exercised by automated tests.
+
+The Android system save dialog completed an Indonesian PDF export with `v0` in
+its filename. The saved 11,105-byte file had a valid PDF header. Screenshots were
+inspected, the crash buffer was empty, connectivity was restored and the emulator
+was stopped with its application data retained.
+
+The validated dev APK is 30,094,749 bytes, with SHA-256
+`a4550ad8c1c3c1bedc1d45723c07c5822067ad87d1321fb7be471eb472ca0a08`.
+Phone delivery is pending: the explicit connection attempt to the authorized ADB
+endpoint timed out. This APK has not been installed on the phone.
+
 ## Private-profile APK delivery
 
 On 14 October 2026, the validated 30,229,893-byte dev APK was installed on the

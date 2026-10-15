@@ -11,7 +11,9 @@ The application installs the generated data and presentation modules.
 Payslips appears under All services when payroll is available. Its compact year
 filter and back/refresh actions remain above the scrolling list. Detail groups
 take-home pay, payment progress, earnings, deductions, employer contributions
-and tax facts. Amounts are published server values; the page does not calculate
+and tax facts. Detail identifies the displayed assessment revision and the separate
+payment balance revision. Recorded transfers, confirmed returns, remaining payment
+and overpayment remain separate amounts. Amounts are published server values; the page does not calculate
 salary or imply settlement from a planned payment date.
 
 Each route owns a separately typed MVI event contract. Duplicate acquisition
@@ -47,12 +49,25 @@ Duplicate references are coalesced by resource/version. A failure cancels siblin
 hydration, and a failed or cancelled page cannot advance the stored cursor.
 Incomplete work resumes from its checkpoint on a later trigger.
 
-Each immutable payslip has version zero. Payment progress has an independent
-monotonic version; acquiring a slip also acquires its empty version-zero progress
-before the first payment attempt. Payment changes update that record without
-rewriting the payslip or its indexed summary. Parent deletion hides its detail and
-summary even if an older payment record remains. Publication does not establish
+Published amendments advance the payslip revision. The change feed carries the
+current head; hydration stores the revision actually returned by the canonical
+read, rejecting a response older than its reference. Full detail and indexed
+summary advance atomically. Older changes cannot overwrite a newer stored head.
+Payment progress has an independent monotonic version, current assessment revision
+and settlement. Acquiring a slip also acquires payment progress before the first
+transfer. A payment update does not rewrite the slip or its summary. The page never
+derives a balance from a separately acquired slip. Parent deletion hides its detail
+and summary even if an older payment record remains. Publication does not establish
 bank settlement.
+
+The payment mapper validates bounded exact-decimal amounts, confirmed transfer
+totals, returns and the balance equation inside the data boundary. It rejects
+incomplete current API responses. Legacy encrypted records keep their known
+statuses without inventing missing transfer amounts or balances. Acquisition format
+two stages a one-time complete replacement, retaining the published generation
+through network failure, cancellation and process restart. An unfinished replacement
+resumes its checkpoint; it does not continually restart or erase offline facts.
+The encrypted container and associated-data format remain compatible.
 
 Records belong to the API audience, account and company. A replacement login
 cannot write with the preceding request identity, but it can read the same
@@ -86,7 +101,10 @@ value remains a refund, not a parsing failure.
 
 ## Saving a PDF
 
-`ExportPayslip` obtains authorized HEAD metadata before opening the platform save
+`ExportPayslip` receives the revision frozen when the employee opens the language
+dialog. Authorized HEAD, conditional range and final metadata requests all pin that
+revision; a later amendment cannot substitute a newer PDF. The proposed file name
+includes `v{revision}`. HEAD metadata is acquired before opening the platform save
 dialog. After selection it reacquires current company policy and requests the
 exact conditional byte range. The repository validates size, PDF signature and
 the complete SHA-256 ETag. The PDF is bounded to one MiB, held temporarily in
@@ -113,6 +131,10 @@ IndexedDB contracts cover database reopening, indexed queries, immutable and
 monotonic versions, tombstones, staged replacement, malformed records, missing
 keys and interrupted encryption. Application checks resolve the generated graph
 and verify one sync owner and content-key lifetime.
+
+Browsing retained historical revisions is not implemented in the mobile list;
+it displays the acquired current head. An export already opened for a retained
+revision can finish against that exact revision after a newer head arrives.
 
 See [validation](validation.md) for executed builds, test results and device
 acceptance. Earlier PDF acceptance verified its exact server SHA-256, native save

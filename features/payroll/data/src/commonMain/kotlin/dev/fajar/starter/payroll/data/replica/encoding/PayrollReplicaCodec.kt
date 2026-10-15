@@ -36,6 +36,7 @@ suspend fun encodePayrollCheckpoint(
     key: ByteArray,
     checkpoint: PayrollCheckpoint,
 ): String {
+    require(checkpoint.recordVersion in 1..PayrollCheckpoint.CURRENT_RECORD_VERSION)
     val bytes = Json.encodeToString(checkpoint.toReplicaDto()).encodeToByteArray()
     return try {
         Base64.encode(

@@ -163,7 +163,8 @@ class EncryptedPayslipReplicaRepository(
                                         )
                                         .toSummary()
                                 require(
-                                    document.id == "summary/${summary.id}" && document.version == 0L
+                                    document.id == "summary/${summary.id}" &&
+                                        document.version == summary.version
                                 )
                                 require(summary.month.year == selection.year)
                                 require(
@@ -216,13 +217,14 @@ class EncryptedPayslipReplicaRepository(
                                 )
                             when (document.id) {
                                 "payslip/$id" -> {
-                                    require(document.version == 0L)
                                     slip = Json.decodeFromString<PayslipDto>(json).toPayslip(id)
+                                    require(slip.summary.version == document.version)
                                 }
                                 "payments/$id" -> {
+                                    val dto = Json.decodeFromString<PayslipPaymentsDto>(json)
                                     payments =
-                                        Json.decodeFromString<PayslipPaymentsDto>(json)
-                                            .toPayments(id)
+                                        if (checkpoint.recordVersion >= 2) dto.toPayments(id)
+                                        else dto.toStoredPayments(id)
                                     require(payments.version == document.version)
                                 }
                                 else -> error("Unexpected payslip record.")
@@ -316,6 +318,7 @@ class EncryptedPayslipReplicaRepository(
         currentCoroutineContext().ensureActive()
         require(next.generation == previous.generation && next.revision == previous.revision + 1)
         require(next.access == previous.access && (!previous.published || next.published))
+        require(next.recordVersion == previous.recordVersion)
         val access = previous.access
         val batch = entries.toList()
         require(

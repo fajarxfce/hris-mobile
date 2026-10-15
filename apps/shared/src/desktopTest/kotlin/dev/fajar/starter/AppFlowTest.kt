@@ -217,9 +217,48 @@ class AppFlowTest {
     }
 
     @Test
+    fun revisedPayslipKeepsItsOwnBalanceRevisionAndExportsTheDisplayedAssessment() {
+        val server =
+            NativeUiServer().apply {
+                payroll.enabled = true
+                payroll.amended = true
+            }
+        val output = DocumentOutputUi("payslip-${NativePayslipUi.ID}-v2-id.pdf")
+        withApplication(server, fileOutputs = output) {
+            signIn()
+            waitFor("Choose a company")
+            compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
+            waitFor("Welcome")
+            compose.onNodeWithText("All services").performScrollTo().performClick()
+            waitFor("Payslips")
+            compose
+                .onNode(hasText("Payslips") and hasClickAction())
+                .performScrollTo()
+                .performClick()
+            waitFor("September 2026")
+            compose.onNode(hasText("September 2026") and hasClickAction()).performClick()
+            waitFor("Revision 2")
+            compose.onNodeWithText("IDR 10,232,500").assertIsDisplayed()
+            compose.onNode(hasScrollToIndexAction()).performScrollToNode(hasText("Overpayment"))
+            compose.onNodeWithText("Balance for revision 3 · IDR").assertIsDisplayed()
+            compose.onNodeWithText("599,999.75", useUnmergedTree = true).assertIsDisplayed()
+            compose.onNodeWithText("400,000.25", useUnmergedTree = true).assertIsDisplayed()
+            capture("payslip-revised-balance")
+            compose.onNodeWithContentDescription("Save PDF").assertIsDisplayed().performClick()
+            waitFor("Choose the PDF language. Saved files are managed outside HRIS.")
+            compose.onNode(hasText("Bahasa Indonesia") and hasClickAction()).performClick()
+            waitFor("PDF saved")
+            assertEquals(server.payroll.sha256, output.completedHash)
+            assertEquals(2, server.payroll.inspections.get())
+            assertEquals(1, output.releases.get())
+            assertEquals(0, server.payroll.lists.get())
+        }
+    }
+
+    @Test
     fun nativePayslipsShowPublishedAmountsAndSaveWhileActivityIsStopped() {
         val server = NativeUiServer().apply { payroll.enabled = true }
-        val output = DocumentOutputUi("payslip-${NativePayslipUi.ID}-id.pdf")
+        val output = DocumentOutputUi("payslip-${NativePayslipUi.ID}-v0-id.pdf")
         val choice = CompletableDeferred<Boolean>()
         output.selection = choice
         val lifecycle = mutableStateOf(Lifecycle.State.RESUMED)
@@ -282,7 +321,7 @@ class AppFlowTest {
     @Test
     fun nativePayslipLargeTextKeepsActionsReachableAndBackCancelsThePicker() {
         val server = NativeUiServer().apply { payroll.enabled = true }
-        val output = DocumentOutputUi("payslip-${NativePayslipUi.ID}-id.pdf")
+        val output = DocumentOutputUi("payslip-${NativePayslipUi.ID}-v0-id.pdf")
         val choice = CompletableDeferred<Boolean>()
         output.selection = choice
         withApplication(server, fileOutputs = output, fontScale = 2f) {

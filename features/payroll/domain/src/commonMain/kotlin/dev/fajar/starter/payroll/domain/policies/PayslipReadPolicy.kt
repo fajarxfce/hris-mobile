@@ -46,6 +46,7 @@ fun validatePayslipSelection(selection: PayslipSelection): AppResult<Unit> {
 fun validatePayslipPdf(metadata: PayslipPdfMetadata): AppResult<Unit> =
     if (
         validatePayslipId(metadata.payslipId) is AppResult.Success &&
+            metadata.revision >= 0 &&
             metadata.size in 1..PAYSLIP_PDF_MAXIMUM_BYTES &&
             Regex("\"[0-9a-f]{64}\"").matches(metadata.entityTag)
     )

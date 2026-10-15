@@ -10,7 +10,8 @@ sealed interface PayrollRecord {
         override val id
             get() = value.summary.id
 
-        override val version = 0L
+        override val version
+            get() = value.summary.version
     }
 
     data class Payments(val value: PayslipPayments) : PayrollRecord {

@@ -15,7 +15,7 @@ import io.github.composefluent.icons.Icons
 import io.github.composefluent.icons.regular.ArrowDownload
 
 @Composable
-fun PayslipExportDialog(onEvent: (PayslipEvent) -> Unit) {
+fun PayslipExportDialog(revision: Long, onEvent: (PayslipEvent) -> Unit) {
     AppDialog(
         appString(AppString.PayslipSavePdf),
         appString(AppString.Close),
@@ -25,6 +25,7 @@ fun PayslipExportDialog(onEvent: (PayslipEvent) -> Unit) {
             Modifier.verticalScroll(rememberScrollState())
                 .padding(horizontal = 16.dp, vertical = 12.dp)
         ) {
+            AppText(appString(AppString.PayslipRevision, revision), Modifier.padding(bottom = 8.dp))
             AppText(
                 appString(AppString.PayslipExternalCopy),
                 Modifier.padding(bottom = 8.dp),

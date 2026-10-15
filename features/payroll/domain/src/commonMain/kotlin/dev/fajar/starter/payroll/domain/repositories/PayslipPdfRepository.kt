@@ -7,6 +7,7 @@ interface PayslipPdfRepository {
     suspend fun inspect(
         access: PayrollAccess,
         id: String,
+        revision: Long,
         language: PayslipDocumentLanguage,
     ): AppResult<PayslipPdfMetadata>
 

@@ -14,9 +14,15 @@ internal fun PayslipState.withCachedPayslip(
                 content = null,
                 loading = false,
                 cacheFailure = result.failure,
-                exportOptions = false,
+                exportRevision = null,
             )
-        is AppResult.Success -> copy(content = result.value, loading = false, cacheFailure = null)
+        is AppResult.Success ->
+            copy(
+                content = result.value,
+                loading = false,
+                cacheFailure = null,
+                exportRevision = exportRevision.takeIf { result.value != null },
+            )
     }
 
 internal fun PayslipState.withPayslipRefresh(result: AppResult<PayrollSyncOutcome>): PayslipState =
@@ -28,7 +34,7 @@ internal fun PayslipState.withPayslipRefresh(result: AppResult<PayrollSyncOutcom
                 loading = false,
                 refreshFailure = result.failure,
                 content = content?.takeUnless { payslipFailureInvalidatesCache(result.failure) },
-                exportOptions = false,
+                exportRevision = null,
             )
         is AppResult.Success ->
             copy(

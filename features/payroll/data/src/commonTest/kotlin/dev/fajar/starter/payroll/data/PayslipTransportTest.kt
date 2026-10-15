@@ -18,7 +18,7 @@ import kotlinx.serialization.json.Json
 class PayslipTransportTest {
     @Test
     fun allReadsPinSelfScopeAndPdfRequiresAnExactConditionalRange() = runTest {
-        val f = PayslipDataFixture()
+        val f = PayslipDataFixture(pdfRevision = 3)
         var calls = 0
         val client =
             HttpClient(
@@ -53,6 +53,10 @@ class PayslipTransportTest {
                             )
                         "$path/${f.summary.id}/pdf" -> {
                             assertEquals("ID", request.url.parameters["language"])
+                            assertEquals(
+                                f.metadata.revision.toString(),
+                                request.url.parameters["revision"],
+                            )
                             val headers =
                                 Headers.build {
                                     append(HttpHeaders.ContentType, "application/pdf")
@@ -98,7 +102,7 @@ class PayslipTransportTest {
             assertIs<AppResult.Success<PayslipPayments>>(repo.payments(access, f.summary.id))
             assertEquals(
                 AppResult.Success(f.metadata),
-                repo.inspect(access, f.summary.id, PayslipDocumentLanguage.ID),
+                repo.inspect(access, f.summary.id, f.metadata.revision, PayslipDocumentLanguage.ID),
             )
             val bytes =
                 assertIs<AppResult.Success<ByteArray>>(repo.download(access, f.metadata)).value

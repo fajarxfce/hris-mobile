@@ -8,6 +8,55 @@ import kotlinx.coroutines.test.runTest
 
 class PayslipExportTest {
     @Test
+    fun exportKeepsTheSelectedRevisionWhenTheCurrentSlipChangesDuringSelection() = runTest {
+        val f = PayslipExportFixture()
+        f.metadata = f.metadata.copy(revision = 2)
+        f.selectCall = {
+            f.base.slips[f.base.summary.id] =
+                f.base.slip.copy(summary = f.base.summary.copy(version = 3))
+            AppResult.Success(true)
+        }
+        assertEquals(AppResult.Success(true), f.save(revision = 2))
+        assertEquals(listOf(2L, 2L), f.inspectedRevisions)
+        assertEquals(listOf(2L), f.downloadedRevisions)
+        assertEquals("payslip-${f.base.summary.id}-v2-id.pdf", f.declaration!!.name)
+        assertEquals(1, f.completions)
+        assertEquals(1, f.releases)
+    }
+
+    @Test
+    fun invalidRevisionsAreRejectedBeforeAnyRemoteReadOrOutputSelection() = runTest {
+        val f = PayslipExportFixture()
+        assertEquals(
+            "invalid_payslip_revision",
+            assertIs<AppResult.Failed>(f.save(-1)).failure.code,
+        )
+        assertEquals(0, f.inspections + f.downloads + f.selections + f.writes + f.completions)
+        assertEquals(0, f.base.policyReads)
+    }
+
+    @Test
+    fun metadataForAnotherRevisionCannotSubstituteTheSelectedDocument() = runTest {
+        for (late in listOf(false, true)) {
+            val f = PayslipExportFixture()
+            f.inspectCall = {
+                AppResult.Success(
+                    if (late && f.inspections == 1) f.metadata else f.metadata.copy(revision = 1)
+                )
+            }
+            assertEquals(
+                "client.invalid_response",
+                assertIs<AppResult.Failed>(f.save()).failure.code,
+            )
+            assertEquals(0, f.completions)
+            assertEquals(if (late) 1 else 0, f.selections)
+            assertEquals(if (late) 1 else 0, f.releases)
+            if (late) assertTrue(f.bytes.all { it == 0.toByte() })
+            assertNull(f.base.replicas.readAdmission.value.denial)
+        }
+    }
+
+    @Test
     fun explicitExportReauthorizesAfterSelectionAndBeforeCompletion() = runTest {
         val f = PayslipExportFixture()
         val expected = f.bytes.copyOf()

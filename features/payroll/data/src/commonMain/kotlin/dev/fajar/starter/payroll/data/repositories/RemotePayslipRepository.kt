@@ -40,10 +40,13 @@ class RemotePayslipRepository(private val remote: PayrollRemoteDataSource) :
     override suspend fun inspect(
         access: PayrollAccess,
         id: String,
+        revision: Long,
         language: PayslipDocumentLanguage,
     ) = safeApiCall {
         listOf(access.companyId, id).forEach { require(Uuid.parse(it).toString() == it) }
-        val headers = remote.inspectPdf(access.sessionId, access.companyId, id, language.name)
+        require(revision >= 0)
+        val headers =
+            remote.inspectPdf(access.sessionId, access.companyId, id, revision, language.name)
         require(headers.mediaTypes.singleOrNull()?.lowercase() == "application/pdf")
         require(headers.encodings.isEmpty() || headers.encodings == listOf("identity"))
         val metadata =
@@ -52,6 +55,7 @@ class RemotePayslipRepository(private val remote: PayrollRemoteDataSource) :
                 language,
                 requireNotNull(headers.lengths.singleOrNull()?.toLongOrNull()),
                 requireNotNull(headers.entityTags.singleOrNull()),
+                revision,
             )
         require(validatePayslipPdf(metadata) is AppResult.Success)
         metadata
@@ -71,6 +75,7 @@ class RemotePayslipRepository(private val remote: PayrollRemoteDataSource) :
                         access.sessionId,
                         access.companyId,
                         metadata.payslipId,
+                        metadata.revision,
                         metadata.language.name,
                         metadata.entityTag,
                         metadata.size,

@@ -19,7 +19,7 @@ fun PayslipSummary.toDto() =
         withheld.value,
         takeHome.value,
         publishedAt.toString(),
-        0,
+        version,
     )
 
 fun PayslipOverview.toDto() =
@@ -81,15 +81,29 @@ fun PayslipPayments.toDto() =
                 it.createdAt.toString(),
                 it.releasedAt?.toString(),
                 it.resolvedAt?.toString(),
+                it.amount?.value,
+                it.assessmentRevision,
             )
         },
+        settlement?.toDto(),
+    )
+
+fun PayslipSettlement.toDto() =
+    PayslipSettlementDto(
+        assessmentRevision,
+        entitlement.value,
+        confirmedPaid.value,
+        confirmedRecovered.value,
+        payable.value,
+        recoverable.value,
+        currency,
     )
 
 fun PayslipView.toDto() = PayslipViewDto(payslip.toDto(), payments.toDto())
 
 fun PayslipViewDto.toView(): PayslipView {
     val id = payslip.summary.id
-    return PayslipView(payslip.toPayslip(id), payments.toPayments(id))
+    return PayslipView(payslip.toPayslip(id), payments.toStoredPayments(id))
 }
 
 fun <T, D> PayslipSnapshot<T>.toDto(mapValue: (T) -> D) =

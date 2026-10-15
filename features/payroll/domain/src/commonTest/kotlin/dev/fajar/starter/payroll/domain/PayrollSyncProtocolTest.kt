@@ -174,7 +174,7 @@ class PayrollSyncProtocolTest {
     }
 
     @Test
-    fun nonAdvancingPagesAndInvalidImmutableVersionsCannotPublish() = runTest {
+    fun nonAdvancingPagesAndNegativeVersionsCannotPublish() = runTest {
         for (invalidVersion in listOf(false, true)) {
             val f = PayrollFixture()
             f.bootstrapCall = { _, _ ->
@@ -182,7 +182,7 @@ class PayrollSyncProtocolTest {
                     SyncBootstrapPage(
                         PayrollFixture.collections,
                         if (invalidVersion)
-                            listOf(SyncReference(SyncCollection.PAYSLIPS, f.summary.id, 1))
+                            listOf(SyncReference(SyncCollection.PAYSLIPS, f.summary.id, -1))
                         else emptyList(),
                         "same",
                         null,
