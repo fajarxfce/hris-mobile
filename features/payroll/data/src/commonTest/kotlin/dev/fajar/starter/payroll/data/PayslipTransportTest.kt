@@ -17,6 +17,69 @@ import kotlinx.serialization.json.Json
 
 class PayslipTransportTest {
     @Test
+    fun historyPinsTheRequestedRevisionAndNeverFallsBackToTheCurrentStatement() = runTest {
+        val f = PayslipDataFixture()
+        var calls = 0
+        var mode = "valid"
+        val client =
+            HttpClient(
+                MockEngine { request ->
+                    calls++
+                    assertEquals(
+                        "/api/v1/companies/${f.access.companyId}/payroll/payslips/${f.summary.id}",
+                        request.url.encodedPath,
+                    )
+                    assertEquals("SELF", request.url.parameters["scope"])
+                    assertEquals(listOf("1"), request.url.parameters.getAll("revision"))
+                    assertEquals(f.access.sessionId, request.attributes[RequestSession])
+                    when (mode) {
+                        "missing" ->
+                            respond(
+                                """{"type":"about:blank","title":"Unavailable","status":404,"code":"payroll_payslip_not_found"}""",
+                                HttpStatusCode.NotFound,
+                                headersOf(HttpHeaders.ContentType, "application/problem+json"),
+                            )
+                        else ->
+                            respond(
+                                Json.encodeToString(
+                                    f.detail.copy(
+                                        summary =
+                                            f.summary.copy(version = if (mode == "valid") 1 else 3)
+                                    )
+                                ),
+                                HttpStatusCode.OK,
+                                headersOf(HttpHeaders.ContentType, "application/json"),
+                            )
+                    }
+                }
+            ) {
+                defaultRequest { url("https://hris.example.test/api/v1/") }
+            }
+        try {
+            val repository = RemotePayslipRepository(ApiPayrollDataSource(PayrollApi(client)))
+            assertEquals(
+                1L,
+                assertIs<AppResult.Success<Payslip>>(repository.revision(f.access, f.summary.id, 1))
+                    .value
+                    .summary
+                    .version,
+            )
+            mode = "mismatched"
+            assertIs<AppResult.Failed>(repository.revision(f.access, f.summary.id, 1))
+            mode = "missing"
+            assertEquals(
+                "payroll_payslip_not_found",
+                assertIs<AppResult.Failed>(repository.revision(f.access, f.summary.id, 1))
+                    .failure
+                    .code,
+            )
+            assertEquals(3, calls)
+        } finally {
+            client.close()
+        }
+    }
+
+    @Test
     fun allReadsPinSelfScopeAndPdfRequiresAnExactConditionalRange() = runTest {
         val f = PayslipDataFixture(pdfRevision = 3)
         var calls = 0

@@ -9,10 +9,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.backhandler.LocalBackGestureDispatcher
 import androidx.compose.ui.graphics.asSkiaBitmap
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
@@ -213,6 +215,80 @@ class AppFlowTest {
                 .performScrollToNode(hasText("Transport receipt.pdf"))
             compose.onNodeWithText("Transport receipt.pdf").assertIsDisplayed()
             compose.onNodeWithContentDescription("Back").assertIsDisplayed()
+        }
+    }
+
+    @Test
+    fun payslipHistoryKeepsCompactControlsAtLargeTextAndReopensOwnedRevisionsOffline() {
+        val server =
+            NativeUiServer().apply {
+                payroll.enabled = true
+                payroll.amended = true
+            }
+        val output = DocumentOutputUi("payslip-${NativePayslipUi.ID}-v0-id.pdf")
+        withApplication(server, fileOutputs = output, fontScale = 2f) {
+            signIn()
+            waitFor("Choose a company")
+            compose
+                .onNode(hasText("PT Nusa Digital") and hasClickAction())
+                .performScrollTo()
+                .performClick()
+            waitFor("Welcome")
+            compose.onNodeWithText("All services").performScrollTo().performClick()
+            waitFor("Payslips")
+            compose
+                .onNode(hasText("Payslips") and hasClickAction())
+                .performScrollTo()
+                .performClick()
+            waitFor("September 2026")
+            compose.onNode(hasText("September 2026") and hasClickAction()).performClick()
+            waitForPayslipRevision(2, 2)
+            compose
+                .onNodeWithContentDescription("Previous revision")
+                .assertIsDisplayed()
+                .performClick()
+            waitForPayslipRevision(1, 2)
+            compose.onNodeWithContentDescription("Previous revision").performClick()
+            waitForPayslipRevision(0, 2)
+            assertEquals(2, server.payroll.historyReads.get())
+            compose.onNodeWithContentDescription("Previous revision").assertIsNotEnabled()
+            compose.onNodeWithContentDescription("Next revision").assertIsDisplayed()
+            compose.onNodeWithContentDescription("Back").assertIsDisplayed()
+            compose.onNodeWithText("Latest").assertIsDisplayed()
+            capture("payslip-history-large-text")
+            server.payroll.offline = true
+            server.companyPolicy.offline = true
+            compose.onNodeWithText("Latest").performClick()
+            waitForPayslipRevision(2, 2)
+            compose.onNodeWithContentDescription("Previous revision").performClick()
+            waitForPayslipRevision(1, 2)
+            compose.onNodeWithContentDescription("Previous revision").performClick()
+            waitForPayslipRevision(0, 2)
+            assertEquals(2, server.payroll.historyReads.get())
+            compose.onNode(hasScrollToIndexAction()).performScrollToNode(hasText("Transferred"))
+            compose
+                .onAllNodesWithText("10,000,000.75", useUnmergedTree = true)[0]
+                .performSemanticsAction(SemanticsActions.GetTextLayoutResult) { action ->
+                    val layouts = mutableListOf<TextLayoutResult>()
+                    assertTrue(action(layouts))
+                    assertEquals(1, layouts.single().lineCount)
+                }
+            capture("payslip-history-payment-large-text")
+            compose.onNode(hasScrollToIndexAction()).performScrollToNode(hasText("Overpayment"))
+            compose.onNodeWithText("Balance for revision 3 · IDR").assertExists()
+            compose.onNodeWithContentDescription("Back").assertIsDisplayed()
+            compose.onNodeWithContentDescription("Next revision").assertIsDisplayed()
+            server.payroll.offline = false
+            server.companyPolicy.offline = false
+            compose.onNodeWithContentDescription("Save PDF").performClick()
+            waitFor("Choose the PDF language. Saved files are managed outside HRIS.")
+            compose
+                .onNode(hasText("Bahasa Indonesia") and hasClickAction())
+                .performScrollTo()
+                .performClick()
+            waitFor("PDF saved")
+            assertEquals(listOf(0L, 0L, 0L), server.payroll.pdfRevisions.toList())
+            assertEquals(server.payroll.sha256, output.completedHash)
         }
     }
 
@@ -3774,6 +3850,16 @@ class AppFlowTest {
         compose.waitUntil(15_000) {
             compose
                 .onAllNodes(hasText(text) and hasClickAction() and isEnabled())
+                .fetchSemanticsNodes()
+                .isNotEmpty()
+        }
+    }
+
+    private fun waitForPayslipRevision(revision: Long, current: Long) {
+        waitFor("Revision $revision of $current")
+        compose.waitUntil(15_000) {
+            compose
+                .onAllNodes(hasContentDescription("Save PDF") and isEnabled())
                 .fetchSemanticsNodes()
                 .isNotEmpty()
         }

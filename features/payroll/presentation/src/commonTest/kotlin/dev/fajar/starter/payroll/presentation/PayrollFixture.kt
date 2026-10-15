@@ -185,6 +185,12 @@ class PayrollFixture(instant: () -> Instant = { Instant.parse("2026-10-13T00:00:
         MutableStateFlow<AppResult<PayslipSnapshot<PayslipView>?>>(AppResult.Success(null))
     val slips = mutableMapOf(summary.id to slip)
     val payments = mutableMapOf(summary.id to payment)
+    val remoteRevisions = mutableMapOf((summary.id to summary.version) to slip)
+    val revisionReads = mutableListOf<Pair<String, Long>>()
+    var revisionCall: suspend (String, Long) -> AppResult<Payslip> = { id, version ->
+        remoteRevisions[id to version]?.let { AppResult.Success(it) }
+            ?: payslipFailure("payroll_payslip_not_found", FailureKind.Unavailable)
+    }
     var listReads = 0
     var detailReads = 0
     var paymentReads = 0
@@ -259,6 +265,15 @@ class PayrollFixture(instant: () -> Instant = { Instant.parse("2026-10-13T00:00:
                 return detailCall(id)
             }
 
+            override suspend fun revision(
+                access: PayrollAccess,
+                id: String,
+                revision: Long,
+            ): AppResult<Payslip> {
+                revisionReads += id to revision
+                return revisionCall(id, revision)
+            }
+
             override suspend fun payments(
                 access: PayrollAccess,
                 id: String,
@@ -311,6 +326,13 @@ class PayrollFixture(instant: () -> Instant = { Instant.parse("2026-10-13T00:00:
                 return AppResult.Success(true)
             }
         }
+    val revisions = PayrollRevisionFake { access ->
+        (sessionState.value as? AppResult.Success)?.value?.let {
+            it.id == access.sessionId &&
+                it.user.id == access.accountId &&
+                it.binding.audience == access.audience
+        } == true
+    }
     val replicas =
         PayrollReplicaFake(
             owns = { access ->
@@ -321,15 +343,19 @@ class PayrollFixture(instant: () -> Instant = { Instant.parse("2026-10-13T00:00:
                 } == true
             },
             clearLegacy = {
+                revisions.clear(access)
                 records.value = AppResult.Success(null)
                 detailRecords.value = AppResult.Success(null)
             },
         )
-    val sync = SyncPayroll(feed, remote, replicas, sessions, workspaces, clock, build)
+    val sync = SyncPayroll(feed, remote, replicas, revisions, sessions, workspaces, clock, build)
     val observe = ObservePayslips(replicas, cache, sessions, workspaces, clock, build)
-    val observeDetail = ObservePayslip(replicas, cache, sessions, workspaces, clock, build)
+    val observeDetail =
+        ObservePayslip(replicas, cache, revisions, sessions, workspaces, clock, build)
+    val loadRevision =
+        LoadPayslipRevision(remote, replicas, revisions, sessions, workspaces, clock, build)
     val observers
-        get() = replicas.observers + legacyObservers
+        get() = replicas.observers + legacyObservers + revisions.observers
 
     suspend fun load() = sync(workspace.id)
 

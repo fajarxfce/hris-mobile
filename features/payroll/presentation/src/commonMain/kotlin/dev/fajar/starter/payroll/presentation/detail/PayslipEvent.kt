@@ -9,6 +9,12 @@ sealed interface PayslipEvent {
 
     data object RefreshRequested : PayslipEvent
 
+    data object PreviousRevisionRequested : PayslipEvent
+
+    data object NextRevisionRequested : PayslipEvent
+
+    data object CurrentRevisionRequested : PayslipEvent
+
     data object ExportRequested : PayslipEvent
 
     data object ExportDismissed : PayslipEvent

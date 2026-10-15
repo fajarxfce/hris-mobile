@@ -46,6 +46,8 @@ fun failureText(failure: Failure): String =
             "client.payslip_cache_expired" -> AppString.PayslipExportReviewRequired
             "invalid_payslip_revision",
             "payroll_payslip_not_found" -> AppString.PayslipUnavailable
+            "client.payslip_revision_invalid" -> AppString.PayslipUnavailable
+            "client.payslip_revision_not_saved" -> AppString.PayslipRevisionNotSaved
             "client.payslip_changed" -> AppString.PayslipChanged
             "client.payslip_scope_changed" -> AppString.CalendarScopeChanged
             "client.payslip_export_timeout",

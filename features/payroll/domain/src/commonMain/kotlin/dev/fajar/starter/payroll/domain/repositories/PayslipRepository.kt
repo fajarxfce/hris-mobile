@@ -9,5 +9,7 @@ interface PayslipRepository {
 
     suspend fun details(access: PayrollAccess, id: String): AppResult<Payslip>
 
+    suspend fun revision(access: PayrollAccess, id: String, revision: Long): AppResult<Payslip>
+
     suspend fun payments(access: PayrollAccess, id: String): AppResult<PayslipPayments>
 }

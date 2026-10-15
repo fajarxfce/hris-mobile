@@ -79,7 +79,7 @@ class PayrollReadAdmissionTest {
         assertNotEquals(old!!.checkpoint!!.generation, f.snapshot()!!.checkpoint!!.generation)
         assertNull(f.replicas.readAdmission.value.denial)
         assertNotNull(
-            assertIs<AppResult.Success<PayslipSnapshot<PayslipView>?>>(
+            assertIs<AppResult.Success<PayslipRevisionRead?>>(
                     f.observeDetail(f.workspace.id, f.summary.id).first()
                 )
                 .value

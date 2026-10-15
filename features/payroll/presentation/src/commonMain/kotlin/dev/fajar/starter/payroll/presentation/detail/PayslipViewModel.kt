@@ -18,6 +18,7 @@ class PayslipViewModel(
     @InjectedParam private val target: PayslipTarget,
     private val observe: ObservePayslip,
     private val sync: SyncPayroll,
+    private val loadRevision: LoadPayslipRevision,
     private val export: ExportPayslip,
 ) : MviViewModel<PayslipState, PayslipEvent, PayslipEffect>(PayslipState()) {
     private var observation: Job? = null
@@ -28,6 +29,9 @@ class PayslipViewModel(
         on<PayslipEvent.Entered>(::onEntered)
         on<PayslipEvent.Closed>(::onClosed)
         on<PayslipEvent.RefreshRequested>(::onRefreshRequested)
+        on<PayslipEvent.PreviousRevisionRequested>(::onPreviousRevisionRequested)
+        on<PayslipEvent.NextRevisionRequested>(::onNextRevisionRequested)
+        on<PayslipEvent.CurrentRevisionRequested>(::onCurrentRevisionRequested)
         on<PayslipEvent.ExportRequested>(::onExportRequested)
         on<PayslipEvent.ExportDismissed>(::onExportDismissed)
         on<PayslipEvent.ExportLanguageSelected>(::onExportLanguageSelected)
@@ -45,17 +49,20 @@ class PayslipViewModel(
     @OptIn(ExperimentalCoroutinesApi::class)
     private fun observeContent() {
         observation?.cancel()
+        val revision = state.value.selectedRevision
         observation =
             viewModelScope.launch {
                 state
                     .map { it.readRestricted }
                     .distinctUntilChanged()
                     .flatMapLatest { restricted ->
-                        if (restricted) emptyFlow() else observe(target.workspaceId, target.id)
+                        if (restricted) emptyFlow()
+                        else observe(target.workspaceId, target.id, revision)
                     }
                     .collect { result ->
                         ensureActive()
-                        if (state.value.readRestricted) return@collect
+                        if (state.value.readRestricted || state.value.selectedRevision != revision)
+                            return@collect
                         updateState { it.withCachedPayslip(result) }
                     }
             }
@@ -71,6 +78,8 @@ class PayslipViewModel(
         updateState {
             it.copy(
                 content = null,
+                currentRevision = null,
+                revisionLoading = false,
                 loading = false,
                 refreshing = false,
                 saving = false,
@@ -94,6 +103,7 @@ class PayslipViewModel(
                 cacheFailure = it.restriction ?: it.cacheFailure,
                 refreshFailure = it.refreshFailure?.takeIf(::payslipFailureInvalidatesCache),
                 exportFailure = it.exportFailure?.takeIf(::payslipFailureInvalidatesCache),
+                revisionFailure = it.revisionFailure?.takeIf(::payslipFailureInvalidatesCache),
                 saved = false,
                 exportRevision = null,
             )
@@ -106,6 +116,15 @@ class PayslipViewModel(
                 if (caughtUp) observation?.cancel()
                 updateState { it.withPayslipRefresh(result) }
                 if (caughtUp) observeContent()
+                val revision = state.value.selectedRevision
+                if (caughtUp && revision != null && !state.value.readRestricted) {
+                    updateState { it.copy(revisionLoading = true) }
+                    val selected = loadRevision(target.workspaceId, target.id, revision)
+                    ensureActive()
+                    updateState { it.withRevisionLoad(selected) }
+                    if (selected is AppResult.Success) observeContent()
+                    recheckWorkspace(selected)
+                }
                 if (
                     result is AppResult.Failed &&
                         result.failure.code in workspaceAccessLossCodes &&
@@ -115,8 +134,64 @@ class PayslipViewModel(
             }
     }
 
+    private fun onPreviousRevisionRequested(event: PayslipEvent.PreviousRevisionRequested) {
+        if (state.value.canChoosePrevious)
+            selectRevision(requireNotNull(state.value.displayedRevision) - 1)
+    }
+
+    private fun onNextRevisionRequested(event: PayslipEvent.NextRevisionRequested) {
+        if (state.value.canChooseNext) {
+            val next = requireNotNull(state.value.displayedRevision) + 1
+            selectRevision(next.takeUnless { it == state.value.currentRevision })
+        }
+    }
+
+    private fun onCurrentRevisionRequested(event: PayslipEvent.CurrentRevisionRequested) {
+        if (state.value.canChooseRevision && state.value.selectedRevision != null)
+            selectRevision(null)
+    }
+
+    private fun selectRevision(revision: Long?) {
+        acquisition?.cancel()
+        acquisition = null
+        observation?.cancel()
+        updateState {
+            it.copy(
+                selectedRevision = revision,
+                content = null,
+                loading = true,
+                revisionLoading = revision != null,
+                saved = false,
+                exportRevision = null,
+                cacheFailure = it.restriction,
+                refreshFailure = null,
+                exportFailure = null,
+                revisionFailure = null,
+            )
+        }
+        observeContent()
+        if (revision == null) return
+        acquisition =
+            viewModelScope.launch {
+                val result = loadRevision(target.workspaceId, target.id, revision)
+                ensureActive()
+                updateState { it.withRevisionLoad(result) }
+                if (result is AppResult.Success) observeContent()
+                recheckWorkspace(result)
+            }
+    }
+
+    private suspend fun recheckWorkspace(result: AppResult<*>) {
+        if (
+            result is AppResult.Failed &&
+                result.failure.code in workspaceAccessLossCodes &&
+                result.failure.code !in payslipVerificationCodes
+        )
+            emitEffect(PayslipEffect.RecheckWorkspace)
+    }
+
     private fun onExportRequested(event: PayslipEvent.ExportRequested) {
-        if (state.value.canSave)
+        if (state.value.canSave && state.value.exportRevision == null)
             updateState { it.copy(exportRevision = it.content?.value?.payslip?.summary?.version) }
     }
 

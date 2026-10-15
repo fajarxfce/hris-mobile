@@ -1,5 +1,44 @@
 # Validation
 
+## Retained payslip revisions
+
+On 15 October 2026, root checks passed with 1,527 desktop/JVM/UI and convention
+plugin tests. Android dev assembly and production Web distribution passed.
+Payroll passed 58 domain, 42 data and 25 presentation desktop tests. Targeted
+Chromium suites passed 136 tests across payroll, localization and app integration,
+including the IndexedDB history contracts. The Web bundle retains its three
+existing bundler warnings.
+
+Coverage includes exact-revision acquisition, immutable archive records, retained
+pre-upgrade statements, current payment progress while reading older statements,
+parent deletion, account replacement, cancellation and bounded acquisition.
+Confirmed denials stay gated through failed cleanup and retries; history reads
+cannot clear them or advance the feed cursor. SQLite and IndexedDB checks cover
+database reopening, concurrent/stale writes, authenticated ownership, missing keys
+and temporary-buffer cleanup. DI checks verify one replica/history repository and
+content-key owner.
+
+Assembled Compose checks navigate already acquired revisions offline, retain the
+selected statement through a newer payment balance and save a PDF pinned to that
+revision. At 200% text, fixed navigation remains reachable and payment amounts
+retain their complete fractional digits on one line. Screenshots were inspected.
+These tests use controlled API responses; they do not establish frame-time
+performance or actual-server acceptance of nonzero revisions.
+
+API 35 emulator acceptance upgraded the existing installation with Wi-Fi and
+mobile data disabled. Home, the annual list and the September payslip reopened
+from storage. All three encrypted payroll record hashes and the active generation
+were unchanged. Reconnection cleared connection feedback and retained the same
+statement and balance. Screenshots were inspected, the crash buffer had no fatal
+exception, and the emulator was stopped with connectivity and application data
+retained. This development fixture contains revision zero; historical navigation
+was exercised by the automated tests above.
+
+The validated dev APK is 30,303,300 bytes, with SHA-256
+`55b5aafa73dddcf387b1f5015e2069861e3ba6db62b642b5e5e9a140eacce3cf`.
+Phone delivery is pending: the bounded connection attempt to the authorized ADB
+endpoint timed out. This APK has not been installed on the phone.
+
 ## Revised payslips and payment balances
 
 On 15 October 2026, root checks passed with 1,498 desktop/JVM/UI tests, Android

@@ -26,10 +26,16 @@ class PayrollApi(@Named(HttpClients.Authenticated) private val client: HttpClien
             after?.let { parameter("after", it) }
         }
 
-    suspend fun payslip(sessionId: String, companyId: String, id: String): PayslipDto =
+    suspend fun payslip(
+        sessionId: String,
+        companyId: String,
+        id: String,
+        revision: Long? = null,
+    ): PayslipDto =
         client.requestJson("companies/$companyId/payroll/payslips/$id", maximumBytes = 262_144) {
             forSession(sessionId)
             parameter("scope", "SELF")
+            revision?.let { parameter("revision", it) }
         }
 
     suspend fun payments(sessionId: String, companyId: String, id: String): PayslipPaymentsDto =

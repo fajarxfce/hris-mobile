@@ -3,7 +3,7 @@
 `features/payroll/domain` owns employee read admission, acquisition, observation
 and explicit PDF export. `features/payroll/data` maps the API and maintains
 encrypted account-owned records. `features/payroll/presentation` owns the employee
-list, details, year selection, PDF language dialog and feature navigation.
+list, details, year/revision selection, PDF language dialog and feature navigation.
 The application installs the generated data and presentation modules.
 
 ## Employee pages
@@ -12,7 +12,9 @@ Payslips appears under All services when payroll is available. Its compact year
 filter and back/refresh actions remain above the scrolling list. Detail groups
 take-home pay, payment progress, earnings, deductions, employer contributions
 and tax facts. Detail identifies the displayed assessment revision and the separate
-payment balance revision. Recorded transfers, confirmed returns, remaining payment
+payment balance revision. Amount rows stack their label and value on narrow screens
+or at larger text sizes instead of squeezing numbers into half-width columns.
+Recorded transfers, confirmed returns, remaining payment
 and overpayment remain separate amounts. Amounts are published server values; the page does not calculate
 salary or imply settlement from a planned payment date.
 
@@ -99,6 +101,40 @@ all server digits and supports English and Indonesian separators without binary
 floating-point conversion or local payroll recalculation. A negative withholding
 value remains a refund, not a parsing failure.
 
+## Retained revisions
+
+The detail page provides previous/next revision controls and a Latest action above
+the scrolling content. Changing revision cancels the preceding acquisition. It
+does not navigate to another route or acquire the full history. `ObservePayslip`
+keeps the known current revision separate from the selected statement; missing
+history is an explicit empty selection, never a fallback to a different revision.
+The selected statement retains the latest stored payment projection. Viewing an
+older salary statement does not roll back recorded transfers or balances.
+
+`LoadPayslipRevision` coordinates the current parent, read admission, local archive
+and exact-revision API request. Already acquired revisions use local storage with
+no HTTP or renewed timestamps. A missing revision requires current company policy
+and an admitted `scope=SELF&revision=N` read. Its thirty-second budget includes its
+application-owned mutex. Ownership and read admission are checked around pending
+work and publication. History acquisition never clears a confirmed denial;
+reopening still requires caught-up `SyncPayroll` acquisition.
+
+The encrypted `payroll-history/{company}` partition stores each acquired statement
+once under its ID and revision, independently of feed generations. It shares the
+payroll content-key owner and authenticates account, audience, company, generation,
+revision and record identity. Writes cannot alter an existing revision. Each read
+queries one bounded record; the page does not enumerate all historical revisions.
+The repository implements both replica and history contracts so key creation and
+archive cleanup have one owner.
+
+Before replacing a current head, `SyncPayroll` retains its preceding published
+statement and the acquired successor, including data from installations without
+history support. Archive retention precedes the transaction that commits current
+data and its cursor; an interrupted page does not claim feed progress. A cursor
+replacement leaves history intact. A deleted parent hides its history, and
+confirmed access cleanup also removes the archive. Account reauthentication and
+ordinary age do not expire statements. Missing encryption keys remain errors.
+
 ## Saving a PDF
 
 `ExportPayslip` receives the revision frozen when the employee opens the language
@@ -132,9 +168,12 @@ monotonic versions, tombstones, staged replacement, malformed records, missing
 keys and interrupted encryption. Application checks resolve the generated graph
 and verify one sync owner and content-key lifetime.
 
-Browsing retained historical revisions is not implemented in the mobile list;
-it displays the acquired current head. An export already opened for a retained
-revision can finish against that exact revision after a newer head arrives.
+History contracts cover exact-revision reads, offline navigation, immutable
+archives, parent deletion, account changes, interrupted writes and failed denial
+cleanup. MVI tests cover cancellation when selection changes, current-head updates
+while browsing history and export of the frozen historical revision. The assembled
+UI checks revision controls at 200% text, offline return to acquired statements and
+a revision-pinned PDF. These checks do not establish frame-time performance.
 
 See [validation](validation.md) for executed builds, test results and device
 acceptance. Earlier PDF acceptance verified its exact server SHA-256, native save

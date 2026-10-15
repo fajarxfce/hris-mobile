@@ -5,6 +5,8 @@ import io.ktor.client.engine.mock.*
 import io.ktor.client.request.HttpRequestData
 import io.ktor.client.request.HttpResponseData
 import io.ktor.http.*
+import java.io.IOException
+import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.atomic.AtomicInteger
 import kotlin.test.*
 import kotlin.time.Clock
@@ -14,10 +16,13 @@ import kotlinx.serialization.json.*
 class NativePayslipUi {
     @Volatile var enabled = false
     @Volatile var amended = false
+    @Volatile var offline = false
     val lists = AtomicInteger()
     val bootstraps = AtomicInteger()
     val changes = AtomicInteger()
     val details = AtomicInteger()
+    val historyReads = AtomicInteger()
+    val pdfRevisions = CopyOnWriteArrayList<Long>()
     val inspections = AtomicInteger()
     val downloads = AtomicInteger()
     val bytes = "%PDF-1.4\nFictional employee payslip\n%%EOF".encodeToByteArray()
@@ -46,12 +51,15 @@ class NativePayslipUi {
         val sync = "/api/v1/companies/${NativeUiServer.COMPANY_ONE}/sync/"
         if (path.startsWith(sync)) return syncResponse(request, scope, path.removePrefix(sync))
         if (!path.startsWith(base)) return null
+        if (offline) throw IOException("Payroll transport unavailable in fixture.")
         assertEquals("SELF", request.url.parameters["scope"])
         val jsonHeaders = headersOf(HttpHeaders.ContentType, "application/json")
         if (path.endsWith("/pdf")) {
             assertEquals("$base/$ID/pdf", path)
             assertEquals("ID", request.url.parameters["language"])
-            assertEquals(if (amended) "2" else "0", request.url.parameters["revision"])
+            val revision = requireNotNull(request.url.parameters["revision"]).toLong()
+            assertTrue(revision in 0L..(if (amended) 2L else 0L))
+            pdfRevisions += revision
             val headers =
                 Headers.build {
                     append(HttpHeaders.ContentType, "application/pdf")
@@ -85,9 +93,18 @@ class NativePayslipUi {
                         .toString()
                 }
                 "$base/$ID" -> {
-                    details.incrementAndGet()
+                    val revision = request.url.parameters["revision"]?.toLong()
+                    if (revision == null) details.incrementAndGet()
+                    else historyReads.incrementAndGet()
+                    assertTrue(revision == null || revision in 0L..(if (amended) 2L else 0L))
+                    val selected =
+                        if (revision == null) summary
+                        else
+                            JsonObject(
+                                originalSummary.jsonObject + ("version" to JsonPrimitive(revision))
+                            )
                     """{
-                  "summary":$summary,"companyCode":"ND","companyName":"PT Nusa Digital",
+                  "summary":$selected,"companyCode":"ND","companyName":"PT Nusa Digital",
                   "calculation":{
                     "earnings":[{"kind":"BASIC","code":"BASIC","name":"Basic pay","amount":"10500000","taxable":true}],
                     "contributions":[{"program":"HEALTH","base":"10000000","employeeAmount":"100000","employerAmount":"400000"}],
@@ -121,6 +138,7 @@ class NativePayslipUi {
                 setOf("PAYSLIPS", "PAYROLL_PAYMENTS")
         )
             return null
+        if (offline) throw IOException("Payroll transport unavailable in fixture.")
         assertEquals(HttpMethod.Get, request.method)
         assertEquals("8", request.url.parameters["limit"])
         val body =

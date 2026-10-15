@@ -5,23 +5,24 @@ import dev.fajar.starter.payroll.domain.entities.*
 import dev.fajar.starter.payroll.domain.policies.payslipFailureInvalidatesCache
 import dev.fajar.starter.payroll.domain.replica.entities.PayrollSyncOutcome
 
-internal fun PayslipState.withCachedPayslip(
-    result: AppResult<PayslipSnapshot<PayslipView>?>
-): PayslipState =
+internal fun PayslipState.withCachedPayslip(result: AppResult<PayslipRevisionRead?>): PayslipState =
     when (result) {
         is AppResult.Failed ->
             copy(
                 content = null,
+                currentRevision =
+                    currentRevision?.takeUnless { payslipFailureInvalidatesCache(result.failure) },
                 loading = false,
                 cacheFailure = result.failure,
                 exportRevision = null,
             )
         is AppResult.Success ->
             copy(
-                content = result.value,
-                loading = false,
+                content = result.value?.snapshot,
+                currentRevision = result.value?.currentRevision,
+                loading = result.value?.snapshot == null && revisionLoading,
                 cacheFailure = null,
-                exportRevision = exportRevision.takeIf { result.value != null },
+                exportRevision = exportRevision.takeIf { result.value?.snapshot != null },
             )
     }
 
@@ -34,6 +35,8 @@ internal fun PayslipState.withPayslipRefresh(result: AppResult<PayrollSyncOutcom
                 loading = false,
                 refreshFailure = result.failure,
                 content = content?.takeUnless { payslipFailureInvalidatesCache(result.failure) },
+                currentRevision =
+                    currentRevision?.takeUnless { payslipFailureInvalidatesCache(result.failure) },
                 exportRevision = null,
             )
         is AppResult.Success ->
@@ -50,6 +53,9 @@ internal fun PayslipState.withPayslipRefresh(result: AppResult<PayrollSyncOutcom
                 exportFailure =
                     if (result.value.caughtUp) null
                     else exportFailure?.takeIf(::payslipFailureInvalidatesCache),
+                revisionFailure =
+                    if (result.value.caughtUp) null
+                    else revisionFailure?.takeIf(::payslipFailureInvalidatesCache),
             )
     }
 
@@ -61,6 +67,28 @@ internal fun PayslipState.withPayslipExport(result: AppResult<Boolean>): Payslip
                 saved = false,
                 exportFailure = result.failure,
                 content = content?.takeUnless { payslipFailureInvalidatesCache(result.failure) },
+                currentRevision =
+                    currentRevision?.takeUnless { payslipFailureInvalidatesCache(result.failure) },
             )
         is AppResult.Success -> copy(saving = false, saved = result.value, exportFailure = null)
+    }
+
+internal fun PayslipState.withRevisionLoad(result: AppResult<Unit>): PayslipState =
+    when (result) {
+        is AppResult.Failed ->
+            copy(
+                revisionLoading = false,
+                loading = false,
+                revisionFailure = result.failure,
+                content = content?.takeUnless { payslipFailureInvalidatesCache(result.failure) },
+                currentRevision =
+                    currentRevision?.takeUnless { payslipFailureInvalidatesCache(result.failure) },
+                exportRevision = null,
+            )
+        is AppResult.Success ->
+            copy(
+                revisionLoading = false,
+                loading = false,
+                revisionFailure = revisionFailure?.takeIf(::payslipFailureInvalidatesCache),
+            )
     }

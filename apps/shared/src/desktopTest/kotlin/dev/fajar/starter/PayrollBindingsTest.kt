@@ -33,7 +33,10 @@ class PayrollBindingsTest {
             val koin = container.koin
             assertSame<Any>(koin.get<PayslipRepository>(), koin.get<PayslipPdfRepository>())
             assertNotNull(koin.get<PayslipCacheRepository>())
-            assertNotNull(koin.get<PayslipReplicaRepository>())
+            assertSame<Any>(
+                koin.get<PayslipReplicaRepository>(),
+                koin.get<PayslipRevisionRepository>(),
+            )
             assertSame(
                 koin.get<SyncPayroll>(),
                 koin.getAll<SyncTask>().single { it.key == SyncPayroll.KEY },
@@ -44,6 +47,7 @@ class PayrollBindingsTest {
                     koin.get<SyncPayroll>()("workspace"),
                     koin.get<ObservePayslips>()("workspace").first(),
                     koin.get<ObservePayslip>()("workspace", id).first(),
+                    koin.get<LoadPayslipRevision>()("workspace", id, 0),
                     koin.get<ExportPayslip>()("workspace", id, 0, PayslipDocumentLanguage.ID),
                 )
             results.forEach {

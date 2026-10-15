@@ -41,7 +41,7 @@ fun PayslipPage(state: PayslipState, list: LazyListState, onEvent: (PayslipEvent
                             Icons.Regular.ArrowSync,
                             appString(AppString.Refresh),
                             { onEvent(PayslipEvent.RefreshRequested) },
-                            enabled = !state.refreshing && !state.saving,
+                            enabled = !state.refreshing && !state.revisionLoading && !state.saving,
                             loading = state.refreshing,
                         )
                         AppIconButton(
@@ -53,11 +53,13 @@ fun PayslipPage(state: PayslipState, list: LazyListState, onEvent: (PayslipEvent
                         )
                     },
                 )
+                if ((state.currentRevision ?: 0) > 0 && !state.readRestricted)
+                    PayslipRevisionBar(state, onEvent)
                 state.failure?.let {
                     PayslipReadFeedback(
                         it,
                         state.needsVerification,
-                        state.refreshing || state.saving,
+                        state.refreshing || state.revisionLoading || state.saving,
                     ) {
                         onEvent(PayslipEvent.VerificationRequested)
                     }
@@ -83,6 +85,14 @@ fun PayslipPage(state: PayslipState, list: LazyListState, onEvent: (PayslipEvent
             val view = snapshot.value
             val payslip = view.payslip
             item(key = "summary") { PayslipSummaryCard(payslip) }
+            if (state.selectedRevision != null)
+                item(key = "current-payment-notice") {
+                    AppText(
+                        appString(AppString.PayslipCurrentPaymentNotice),
+                        color = AppColors.muted,
+                        style = FluentTheme.typography.caption,
+                    )
+                }
             item(key = "payment") { PayslipPaymentCard(view) }
             item(key = "currency") {
                 AppText(
@@ -119,9 +129,17 @@ fun PayslipPage(state: PayslipState, list: LazyListState, onEvent: (PayslipEvent
                     style = FluentTheme.typography.caption,
                 )
             }
-        } else if (!state.loading && !state.refreshing && state.failure == null)
+        } else if (
+            !state.loading && !state.refreshing && !state.revisionLoading && state.failure == null
+        )
             item(key = "empty") {
-                AppText(appString(AppString.PayslipsNoSaved), color = AppColors.muted)
+                AppText(
+                    appString(
+                        if (state.selectedRevision == null) AppString.PayslipsNoSaved
+                        else AppString.PayslipRevisionNotSaved
+                    ),
+                    color = AppColors.muted,
+                )
             }
     }
     state.exportRevision?.let { revision ->

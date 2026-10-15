@@ -32,6 +32,14 @@ class RemotePayslipRepository(private val remote: PayrollRemoteDataSource) :
         remote.payslip(access.sessionId, access.companyId, id).toPayslip(id)
     }
 
+    override suspend fun revision(access: PayrollAccess, id: String, revision: Long) = safeApiCall {
+        listOf(access.companyId, id).forEach { require(Uuid.parse(it).toString() == it) }
+        require(revision >= 0)
+        remote.payslip(access.sessionId, access.companyId, id, revision).toPayslip(id).also {
+            require(it.summary.version == revision)
+        }
+    }
+
     override suspend fun payments(access: PayrollAccess, id: String) = safeApiCall {
         listOf(access.companyId, id).forEach { require(Uuid.parse(it).toString() == it) }
         remote.payments(access.sessionId, access.companyId, id).toPayments(id)

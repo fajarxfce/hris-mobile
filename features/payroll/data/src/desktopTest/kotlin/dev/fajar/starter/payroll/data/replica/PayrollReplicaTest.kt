@@ -7,6 +7,36 @@ import kotlinx.coroutines.test.runTest
 
 class PayrollReplicaTest {
     @Test
+    fun historySurvivesReplacementRestartAndReauthentication() = runTest {
+        withDatabase(::checkPayrollHistorySurvivesReplicaReplacementRestartAndSameAccountLogin)
+    }
+
+    @Test
+    fun historyIsImmutableAndIndependentOfCurrentData() = runTest {
+        withDatabase(::checkPayrollHistoryIsImmutableAndDoesNotChangeCurrentDataOrCursor)
+    }
+
+    @Test
+    fun historyAuthenticatesEveryRecordAndItsCheckpoint() = runTest {
+        withDatabase(::checkPayrollHistoryAuthenticatesRecordsAndCheckpoint)
+    }
+
+    @Test
+    fun historyRequiresItsOriginalContentKey() = runTest {
+        withDatabase(::checkPayrollHistoryAlonePreventsRegeneratingAMissingKey)
+    }
+
+    @Test
+    fun cancelledOrReplacedHistoryOwnersCannotPublish() = runTest {
+        withDatabase(::checkPayrollHistoryCancellationAndOwnerReplacementCannotPublish)
+    }
+
+    @Test
+    fun obsoleteHistoryCommitsAndPendingCleanupAreOrdered() = runTest {
+        withDatabase(::checkPayrollHistoryRejectsObsoleteCommitsAndSerializesCleanup)
+    }
+
+    @Test
     fun legacyBalancesRemainReadableUntilACompleteFormatUpgrade() = runTest {
         withDatabase(::checkPayrollLegacyBalanceUpgrade)
     }

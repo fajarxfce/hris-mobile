@@ -11,7 +11,12 @@ interface PayrollRemoteDataSource {
         after: String?,
     ): PayslipPageDto
 
-    suspend fun payslip(sessionId: String, companyId: String, id: String): PayslipDto
+    suspend fun payslip(
+        sessionId: String,
+        companyId: String,
+        id: String,
+        revision: Long? = null,
+    ): PayslipDto
 
     suspend fun payments(sessionId: String, companyId: String, id: String): PayslipPaymentsDto
 

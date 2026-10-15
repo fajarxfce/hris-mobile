@@ -11,6 +11,7 @@ import dev.fajar.starter.payroll.domain.replica.entities.*
 import dev.fajar.starter.payroll.domain.replica.policies.*
 import dev.fajar.starter.payroll.domain.replica.repositories.*
 import dev.fajar.starter.payroll.domain.repositories.PayslipRepository
+import dev.fajar.starter.payroll.domain.repositories.PayslipRevisionRepository
 import dev.fajar.starter.sync.domain.*
 import dev.fajar.starter.sync.domain.entities.*
 import dev.fajar.starter.sync.domain.repositories.SyncFeedRepository
@@ -32,6 +33,7 @@ class SyncPayroll(
     private val feed: SyncFeedRepository,
     private val remote: PayslipRepository,
     private val cache: PayslipReplicaRepository,
+    private val revisions: PayslipRevisionRepository,
     private val sessions: SessionRepository,
     private val workspaces: WorkspaceRepository,
     private val clock: Clock,
@@ -222,6 +224,8 @@ class SyncPayroll(
             val finalAvailability =
                 admitCompanyOperation(policy, build, CompanyModule.PAYROLL, clock.now())
             if (finalAvailability is AppResult.Failed) return finalAvailability
+            val retained = retainStatements(workspaceId, access, policy, entries)
+            if (retained is AppResult.Failed) return retained
             val next = advancePayrollCheckpoint(previous, page, clock.now())
             when (val committed = cache.commit(previous, next, entries)) {
                 is AppResult.Failed -> return committed
@@ -404,6 +408,53 @@ class SyncPayroll(
                 )
         }
         return AppResult.Success(entries.toList())
+    }
+
+    /**
+     * Retain both sides before replacing a head, including replicas acquired before history
+     * support.
+     */
+    private suspend fun retainStatements(
+        workspaceId: String,
+        access: PayrollAccess,
+        policy: CompanyPolicySnapshot,
+        entries: List<PayrollReplicaEntry>,
+    ): AppResult<Unit> {
+        for (entry in entries) {
+            val incoming = (entry.record as? PayrollRecord.Slip)?.value ?: continue
+            val stored = cache.observeDetails(access, incoming.summary.id).first()
+            currentCoroutineContext().ensureActive()
+            val owner = validatePayrollContinuation(access, currentAccess(workspaceId))
+            if (owner is AppResult.Failed) return owner
+            val previous =
+                when (stored) {
+                    is AppResult.Failed -> return stored
+                    is AppResult.Success -> {
+                        val valid = validateStoredPayrollReplica(access, stored.value.checkpoint)
+                        if (valid is AppResult.Failed) return valid
+                        stored.value.view?.payslip
+                    }
+                }
+            val head =
+                previous?.takeIf { it.summary.version > incoming.summary.version } ?: incoming
+            for (statement in listOfNotNull(previous, incoming).distinct()) {
+                val valid = validatePayslipRevision(head, statement.summary.version, statement)
+                if (valid is AppResult.Failed) return valid
+                val available =
+                    admitCompanyOperation(policy, build, CompanyModule.PAYROLL, clock.now())
+                if (available is AppResult.Failed) return available
+                val result = revisions.retainRevision(access, statement)
+                currentCoroutineContext().ensureActive()
+                val continued = validatePayrollContinuation(access, currentAccess(workspaceId))
+                if (continued is AppResult.Failed) return continued
+                when (result) {
+                    is AppResult.Failed -> return result
+                    is AppResult.Success ->
+                        if (!result.value) return publicationConflict(workspaceId, access)
+                }
+            }
+        }
+        return admitCompanyOperation(policy, build, CompanyModule.PAYROLL, clock.now())
     }
 
     private suspend fun publicationConflict(

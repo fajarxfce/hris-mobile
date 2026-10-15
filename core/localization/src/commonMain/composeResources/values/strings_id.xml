@@ -5,6 +5,13 @@
     <string name="payslips_id">Slip gaji</string>
     <string name="payslips_summary_id">Slip gaji yang diterbitkan</string>
     <string name="payslip_title_id">Slip gaji</string>
+    <string name="payslip_revision_position_id">Revisi %1$s dari %2$s</string>
+    <string name="payslip_previous_revision_id">Revisi sebelumnya</string>
+    <string name="payslip_next_revision_id">Revisi berikutnya</string>
+    <string name="payslip_current_revision_id">Terbaru</string>
+    <string name="payslip_historical_revision_id">Slip sebelumnya</string>
+    <string name="payslip_revision_not_saved_id">Revisi ini belum tersimpan. Hubungkan koneksi dan muat ulang untuk membukanya.</string>
+    <string name="payslip_current_payment_notice_id">Saldo pembayaran memakai catatan pembayaran terakhir yang tersimpan.</string>
     <string name="payslips_empty_id">Belum ada slip gaji untuk tahun ini.</string>
     <string name="payslips_no_saved_id">Belum ada slip gaji tersimpan.</string>
     <string name="payslips_first_page_id">Halaman pertama</string>

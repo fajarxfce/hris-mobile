@@ -15,6 +15,7 @@ import dev.fajar.starter.payroll.domain.entities.*
 import dev.fajar.starter.payroll.domain.policies.*
 import dev.fajar.starter.payroll.domain.replica.entities.*
 import dev.fajar.starter.payroll.domain.replica.repositories.PayslipReplicaRepository
+import dev.fajar.starter.payroll.domain.repositories.PayslipRevisionRepository
 import dev.fajar.starter.securestorage.*
 import dev.fajar.starter.storage.*
 import kotlin.io.encoding.Base64
@@ -32,9 +33,10 @@ class EncryptedPayslipReplicaRepository(
     private val cipher: ContentCipher,
     @Named("payroll-replica-content-key") private val credentials: CredentialStore,
     private val admissions: PayrollReadAdmissionDataSource,
-) : PayslipReplicaRepository {
+) : PayslipReplicaRepository, PayslipRevisionRepository {
     private val keyCreation = Mutex()
     private val admissionWrites = Mutex()
+    private val revisionWrites = Mutex()
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun observeAdmission(access: PayrollAccess) =
@@ -275,6 +277,106 @@ class EncryptedPayslipReplicaRepository(
                     }
             }
 
+    override fun observeRevision(access: PayrollAccess, id: String, revision: Long) =
+        safeStorageFlow(
+            flow {
+                require(validatePayslipId(id) is AppResult.Success && revision >= 0)
+                emitAll(
+                    replicas.observeDocument(
+                        payrollReplicaScope(access),
+                        payrollRevisionPartition(access),
+                        payrollRevisionRecordId(id, revision),
+                    )
+                )
+            },
+            mapValue = { page ->
+                val checkpoint = page.checkpoint
+                if (checkpoint == null) {
+                    require(page.documents.isEmpty())
+                    null
+                } else {
+                    val key = Base64.decode(requireNotNull(credentials.read()))
+                    try {
+                        validatePayrollRevisionCheckpoint(cipher, key, access, checkpoint)
+                        require(page.documents.size <= 1)
+                        page.documents.singleOrNull()?.let {
+                            decodePayrollRevision(
+                                cipher,
+                                key,
+                                access,
+                                checkpoint.handle.generation,
+                                it,
+                                id,
+                                revision,
+                            )
+                        }
+                    } finally {
+                        key.fill(0)
+                    }
+                }
+            },
+        )
+
+    override suspend fun retainRevision(access: PayrollAccess, payslip: Payslip) = safeStorageCall {
+        revisionWrites.withLock {
+            val id = payslip.summary.id
+            val version = payslip.summary.version
+            require(validatePayslipId(id) is AppResult.Success && version >= 0)
+            val scope = payrollReplicaScope(access)
+            val partition = payrollRevisionPartition(access)
+            val previous = replicas.checkpoint(scope, partition)
+            val key =
+                keyCreation.withLock {
+                    readOrCreatePayrollReplicaKey(replicas, cipher, credentials)
+                }
+            try {
+                if (previous != null) {
+                    validatePayrollRevisionCheckpoint(cipher, key, access, previous)
+                    val existing =
+                        replicas.document(scope, partition, payrollRevisionRecordId(id, version))
+                    if (existing != null) {
+                        require(
+                            decodePayrollRevision(
+                                cipher,
+                                key,
+                                access,
+                                previous.handle.generation,
+                                existing,
+                                id,
+                                version,
+                            ) == payslip
+                        )
+                        return@withLock replicas.checkpoint(scope, partition) == previous
+                    }
+                }
+                val generation = previous?.handle?.generation ?: Uuid.random().toString()
+                check(previous == null || previous.revision < Long.MAX_VALUE)
+                val revision = previous?.revision?.plus(1) ?: 0
+                val document = encodePayrollRevision(cipher, key, access, generation, payslip)
+                val checkpoint =
+                    encodePayrollRevisionCheckpoint(cipher, key, access, generation, revision)
+                currentCoroutineContext().ensureActive()
+                if (previous == null)
+                    replicas.replace(
+                        scope,
+                        partition,
+                        null,
+                        ReplicaSnapshot(generation, checkpoint, listOf(document)),
+                    )
+                else
+                    replicas.commit(
+                        previous.handle,
+                        previous.revision,
+                        checkpoint,
+                        listOf(document),
+                        true,
+                    )
+            } finally {
+                key.fill(0)
+            }
+        }
+    }
+
     override suspend fun checkpoint(access: PayrollAccess) = safeStorageCall {
         val raw =
             replicas.checkpoint(payrollReplicaScope(access), payrollReplicaPartition(access))
@@ -350,6 +452,11 @@ class EncryptedPayslipReplicaRepository(
     }
 
     override suspend fun clear(access: PayrollAccess) = safeStorageCall {
+        val cleared =
+            revisionWrites.withLock {
+                replicas.clear(payrollReplicaScope(access), payrollRevisionPartition(access))
+            }
+        if (!cleared) return@safeStorageCall false
         // Confirmed denial also removes the preceding last-view migration fallback.
         for (view in listOf("overview", "details")) {
             if (!replicas.clear(ReplicaScope(access.sessionId), payslipPartition(access, view)))

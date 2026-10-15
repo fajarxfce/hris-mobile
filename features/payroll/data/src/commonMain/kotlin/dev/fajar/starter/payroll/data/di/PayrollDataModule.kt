@@ -29,20 +29,32 @@ class PayrollDataModule {
     fun observePayslip(
         replicas: PayslipReplicaRepository,
         cache: PayslipCacheRepository,
+        revisions: PayslipRevisionRepository,
         sessions: SessionRepository,
         workspaces: WorkspaceRepository,
         build: AppBuild,
-    ) = ObservePayslip(replicas, cache, sessions, workspaces, Clock.System, build)
+    ) = ObservePayslip(replicas, cache, revisions, sessions, workspaces, Clock.System, build)
+
+    @Single
+    fun loadPayslipRevision(
+        remote: PayslipRepository,
+        replicas: PayslipReplicaRepository,
+        revisions: PayslipRevisionRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        build: AppBuild,
+    ) = LoadPayslipRevision(remote, replicas, revisions, sessions, workspaces, Clock.System, build)
 
     @Single(binds = [SyncPayroll::class, SyncTask::class])
     fun syncPayroll(
         feed: SyncFeedRepository,
         remote: PayslipRepository,
         replicas: PayslipReplicaRepository,
+        revisions: PayslipRevisionRepository,
         sessions: SessionRepository,
         workspaces: WorkspaceRepository,
         build: AppBuild,
-    ) = SyncPayroll(feed, remote, replicas, sessions, workspaces, Clock.System, build)
+    ) = SyncPayroll(feed, remote, replicas, revisions, sessions, workspaces, Clock.System, build)
 
     @Factory
     fun exportPayslip(

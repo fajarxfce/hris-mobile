@@ -29,10 +29,11 @@ class PayslipAcquisitionTest {
         assertEquals(listOf(f.summary), list.value.page.items)
         assertEquals(
             f.slip,
-            assertIs<AppResult.Success<PayslipSnapshot<PayslipView>?>>(
+            assertIs<AppResult.Success<PayslipRevisionRead?>>(
                     f.observeDetail(f.workspace.id, f.summary.id).first()
                 )
                 .value!!
+                .snapshot!!
                 .value
                 .payslip,
         )

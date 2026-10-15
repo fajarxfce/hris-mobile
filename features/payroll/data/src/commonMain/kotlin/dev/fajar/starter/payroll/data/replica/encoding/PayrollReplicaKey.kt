@@ -17,6 +17,7 @@ suspend fun readOrCreatePayrollReplicaKey(
     if (saved != null) return Base64.decode(saved)
     check(
         !replicas.containsRecords("payroll-replica/") &&
+            !replicas.containsRecords("payroll-history/") &&
             !replicas.containsRecords("payroll-access/")
     ) {
         "Existing replica requires its content key."

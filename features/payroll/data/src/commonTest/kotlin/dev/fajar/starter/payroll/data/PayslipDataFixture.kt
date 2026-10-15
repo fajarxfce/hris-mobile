@@ -97,7 +97,12 @@ class PayslipDataFixture(val pdfRevision: Long = 0) : PayrollRemoteDataSource {
         return page
     }
 
-    override suspend fun payslip(sessionId: String, companyId: String, id: String): PayslipDto {
+    override suspend fun payslip(
+        sessionId: String,
+        companyId: String,
+        id: String,
+        revision: Long?,
+    ): PayslipDto {
         failure?.let { throw it }
         return detail
     }

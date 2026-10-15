@@ -5,6 +5,13 @@
     <string name="payslips_en">Payslips</string>
     <string name="payslips_summary_en">Published pay statements</string>
     <string name="payslip_title_en">Payslip</string>
+    <string name="payslip_revision_position_en">Revision %1$s of %2$s</string>
+    <string name="payslip_previous_revision_en">Previous revision</string>
+    <string name="payslip_next_revision_en">Next revision</string>
+    <string name="payslip_current_revision_en">Latest</string>
+    <string name="payslip_historical_revision_en">Previous statement</string>
+    <string name="payslip_revision_not_saved_en">This revision has not been saved. Connect and refresh to open it.</string>
+    <string name="payslip_current_payment_notice_en">Payment balance uses the latest saved payment records.</string>
     <string name="payslips_empty_en">No payslips for this year.</string>
     <string name="payslips_no_saved_en">No saved payslip is available.</string>
     <string name="payslips_first_page_en">First page</string>

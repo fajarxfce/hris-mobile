@@ -13,8 +13,12 @@ class ApiPayrollDataSource(private val api: PayrollApi) : PayrollRemoteDataSourc
         after: String?,
     ) = api.payslips(sessionId, companyId, from, until, after)
 
-    override suspend fun payslip(sessionId: String, companyId: String, id: String) =
-        api.payslip(sessionId, companyId, id)
+    override suspend fun payslip(
+        sessionId: String,
+        companyId: String,
+        id: String,
+        revision: Long?,
+    ) = api.payslip(sessionId, companyId, id, revision)
 
     override suspend fun payments(sessionId: String, companyId: String, id: String) =
         api.payments(sessionId, companyId, id)

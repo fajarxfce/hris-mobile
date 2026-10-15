@@ -26,11 +26,11 @@ class PayslipObservationTest {
                 f.workspace.copy(permissions = setOf("payroll.read", "expenses.self.manage"))
             )
         val view =
-            assertIs<AppResult.Success<PayslipSnapshot<PayslipView>?>>(
+            assertIs<AppResult.Success<PayslipRevisionRead?>>(
                     f.observeDetail(f.workspace.id, f.summary.id).first()
                 )
                 .value!!
-        assertEquals(f.slip, view.value.payslip)
+        assertEquals(f.slip, view.snapshot!!.value.payslip)
         assertEquals(saved, f.snapshot())
         assertEquals(1, f.detailReads)
     }
@@ -116,11 +116,11 @@ class PayslipObservationTest {
         }
         for (slip in listOf(older, f.slip, older)) {
             val view =
-                assertIs<AppResult.Success<PayslipSnapshot<PayslipView>?>>(
+                assertIs<AppResult.Success<PayslipRevisionRead?>>(
                         f.observeDetail(f.workspace.id, slip.summary.id).first()
                     )
                     .value!!
-            assertEquals(slip, view.value.payslip)
+            assertEquals(slip, view.snapshot!!.value.payslip)
         }
         assertEquals(
             AppResult.Success(null),
@@ -143,12 +143,12 @@ class PayslipObservationTest {
         f.sessionState.value = AppResult.Success(session)
         f.workspaceState.value = AppResult.Success(f.workspace.copy(sessionId = session.id))
         val view =
-            assertIs<AppResult.Success<PayslipSnapshot<PayslipView>?>>(
+            assertIs<AppResult.Success<PayslipRevisionRead?>>(
                     f.observeDetail(f.workspace.id, f.summary.id).first()
                 )
                 .value!!
-        assertEquals(f.slip, view.value.payslip)
-        assertEquals(session.id, view.access.sessionId)
+        assertEquals(f.slip, view.snapshot!!.value.payslip)
+        assertEquals(session.id, view.snapshot!!.access.sessionId)
         assertEquals(retained, f.snapshot())
         assertEquals(1, f.detailReads)
     }

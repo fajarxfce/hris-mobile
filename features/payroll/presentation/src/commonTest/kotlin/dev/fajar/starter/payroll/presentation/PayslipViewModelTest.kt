@@ -47,6 +47,9 @@ class PayslipViewModelTest {
             runCurrent()
             assertEquals(3L, model.state.value.content!!.value.payslip.summary.version)
             assertEquals(2L, model.state.value.exportRevision)
+            model.onEvent(PayslipEvent.ExportRequested)
+            runCurrent()
+            assertEquals(2L, model.state.value.exportRevision)
             model.onEvent(PayslipEvent.ExportLanguageSelected(PayslipDocumentLanguage.ID))
             runCurrent()
             assertEquals(listOf(2L, 2L), f.inspectedRevisions)
@@ -373,6 +376,7 @@ class PayslipViewModelTest {
                 PayslipTarget(base.workspace.id, base.summary.id),
                 base.observeDetail,
                 base.sync,
+                base.loadRevision,
                 f.export,
             )
         val owner = ViewModelStore().apply { put("payslip", model) }
