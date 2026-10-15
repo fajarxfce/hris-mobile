@@ -36,8 +36,11 @@ was exercised by the automated tests above.
 
 The validated dev APK is 30,303,300 bytes, with SHA-256
 `55b5aafa73dddcf387b1f5015e2069861e3ba6db62b642b5e5e9a140eacce3cf`.
-Phone delivery is pending: the bounded connection attempt to the authorized ADB
-endpoint timed out. This APK has not been installed on the phone.
+On 15 October 2026, this APK was installed on the authorized Android 16 phone
+with `--skip-build --install-only`. All 45 recorded source inputs and the artifact
+matched the validated manifest before installation. ADB reported success; the
+application was not launched and no phone UI was operated. Actual-server
+acceptance of nonzero revisions remains separate from this delivery.
 
 ## Revised payslips and payment balances
 
