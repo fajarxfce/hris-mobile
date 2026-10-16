@@ -1360,3 +1360,66 @@ The WireGuard APK was retained separately from the loopback acceptance build. Th
 phone's ADB endpoint did not respond, so it was not installed in this increment.
 Standard development services were unchanged. This correction contains Leave
 policy and storage behavior; it does not require a starter foundation port.
+
+### Leave admission APK delivery
+
+After notice, the validated dev APK from `781604e4` was installed on the authorized
+Android 16 phone on 16 October 2026 at 21:52:30 WIB. ADB reported success, and
+package metadata confirmed the update. The APK is 29,790,320 bytes with SHA-256
+`49f7c461d5d22fc88873e161b9d260130b671c6449ef3f8abe4352d2aa079c76`.
+The installation used `--skip-build --install-only`; the phone application was
+not launched or driven. This APK includes the preceding read-admission and
+calendar improvements; the unfinished-input changes under development were not
+part of that installation. Standard development services were not changed during
+this delivery.
+
+## Leave working copies
+
+On 16 October 2026, root checks passed with 1,576 desktop/JVM/UI tests. The Leave
+domain, data, presentation and assembled application suites passed 236 tests in
+Chromium. The browser run alongside Android compilation disconnected during
+startup; the separate run with one worker passed without changing test deadlines.
+Android dev assembly and production Web distribution passed. The initial Web
+optimizer was terminated under memory pressure; the separate build used one
+Binaryen thread and a 1.5 GiB Gradle heap, retaining the normal optimization and
+existing bundle warnings.
+
+Regression coverage includes offline input after credential expiry, exact evidence
+metadata, authenticated account/company/employment storage, competing edits,
+shared key creation, cancelled encryption, unknown local-save outcomes, coalesced
+edits during pending writes, Back/stop/disposal, and a denial during a pending save.
+Submission tests retain the original working revision and command, preserve newer
+input during confirmed cleanup, and keep recoverable commands after cleanup fails.
+The assembled application reopened unfinished dates, portions and reason offline
+before reviewing evidence and recovering one submission after response loss.
+Normal and 200% text screenshots were inspected; Back and the fixed submit action
+remained reachable.
+
+API 35 acceptance used an isolated API/PostgreSQL/worker and disposable accounts.
+The native form retained its leave type, date range, portion and reason after
+Back and a process restart. With connectivity disabled and the emulator clock
+advanced by 73 hours, a cold start reopened the same input. An offline edit changed
+only the encrypted working copy; acquired fact ciphertext and its published
+generation remained unchanged. Another cold start restored that edit. The SQLite
+snapshot did not contain the plaintext reason.
+
+After restoring time and connectivity, an explicit retry acquired the catalog
+without replacing the input. Review excluded the non-working date and charged
+half a day. Submission produced exactly one pending request, one activity entry
+and one allocation in the isolated server. Confirmation removed the matching
+working copy and retired the command. A new form contained no submitted input;
+explicit discard removed that new copy while retaining the submitted request.
+
+Native screenshots were inspected in dark mode at 200% text, including the discard
+confirmation. No HRIS fatal exception was recorded. Clock, connectivity and display
+settings were restored; the owned services and emulator were stopped with AVD data
+retained. Attachment selection was covered by automated contracts, not by this
+native fixture, which had document storage disabled. This behavior is specific to
+HRIS Leave and does not require a starter foundation port.
+
+After notice, the validated WireGuard dev APK was installed on the authorized
+Android 16 phone on 16 October 2026 at 23:08:56 WIB. ADB reported success and package
+metadata confirmed the update. The 29,856,155-byte APK has SHA-256
+`644a062f4c518fdc801a285915d3976530987cad323b3b823a48bf66e617ce63`.
+Installation used `--skip-build --install-only`; the phone application was not
+launched or driven. Standard development services were unchanged by this delivery.

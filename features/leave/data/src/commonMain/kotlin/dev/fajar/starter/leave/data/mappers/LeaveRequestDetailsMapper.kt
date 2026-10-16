@@ -36,6 +36,7 @@ fun LeaveRequestDto.toDetails(selection: LeaveRequestSelection): LeaveRequestDet
             Uuid.parse(row.documentId)
             Uuid.parse(row.revisionId)
             require(row.fileName.isNotBlank() && row.fileName.length <= 255)
+            require(row.title == null || (row.title.isNotBlank() && row.title.length <= 200))
             require(row.mediaType.isNotBlank() && row.mediaType.length <= 200)
             require(row.size in 1..104_857_600 && Regex("[0-9a-f]{64}").matches(row.sha256))
             LeaveAttachment(
@@ -45,6 +46,7 @@ fun LeaveRequestDto.toDetails(selection: LeaveRequestSelection): LeaveRequestDet
                 row.mediaType,
                 row.size,
                 row.sha256,
+                row.title,
             )
         }
     require(availableActions.size <= LeaveAction.entries.size)
@@ -146,6 +148,7 @@ fun LeaveRequestDetails.toDto() =
                     it.mediaType,
                     it.size,
                     it.sha256,
+                    it.title,
                 )
             },
     )

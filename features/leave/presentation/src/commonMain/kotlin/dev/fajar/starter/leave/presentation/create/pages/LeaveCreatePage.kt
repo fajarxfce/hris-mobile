@@ -11,6 +11,7 @@ import dev.fajar.starter.designsystem.theme.AppColors
 import dev.fajar.starter.leave.presentation.create.*
 import dev.fajar.starter.leave.presentation.create.widgets.LeaveAttachments
 import dev.fajar.starter.leave.presentation.create.widgets.LeaveCreatePicker
+import dev.fajar.starter.leave.presentation.create.widgets.LeaveLocalSaveStatus
 import dev.fajar.starter.leave.presentation.create.widgets.LeaveSubmissionStatus
 import dev.fajar.starter.leave.presentation.formatters.*
 import dev.fajar.starter.leave.presentation.widgets.LeaveDayRow
@@ -21,6 +22,7 @@ import io.github.composefluent.icons.regular.ArrowLeft
 import io.github.composefluent.icons.regular.ArrowSync
 import io.github.composefluent.icons.regular.CalendarLtr
 import io.github.composefluent.icons.regular.ChevronRight
+import io.github.composefluent.icons.regular.Delete
 
 @Composable
 fun LeaveCreatePage(
@@ -44,12 +46,24 @@ fun LeaveCreatePage(
                     )
                 },
                 actions = {
+                    if (
+                        state.persistence != null &&
+                            state.command == null &&
+                            state.restriction == null
+                    )
+                        AppIconButton(
+                            Icons.Regular.Delete,
+                            appString(AppString.LeaveDiscardDraft),
+                            { onEvent(LeaveCreateEvent.DiscardDraftRequested) },
+                            enabled = state.editable && state.work == null,
+                        )
                     AppIconButton(
                         Icons.Regular.ArrowSync,
                         appString(AppString.Refresh),
                         { onEvent(LeaveCreateEvent.ReloadRequested) },
-                        enabled = state.work == null,
-                        loading = state.work == LeaveCreateWork.TYPES,
+                        enabled = state.work == null && !state.closing,
+                        loading =
+                            state.work in setOf(LeaveCreateWork.TYPES, LeaveCreateWork.OPENING),
                     )
                 },
             )
@@ -60,6 +74,8 @@ fun LeaveCreatePage(
                     state.restriction == null &&
                     state.command == null &&
                     state.commandReady &&
+                    state.persistence != null &&
+                    !state.closing &&
                     state.preview != null
             )
                 AppActionBar {
@@ -95,8 +111,14 @@ fun LeaveCreatePage(
             item(key = "retained") { LeaveSubmissionStatus(state, onEvent) }
         val form = state.form
         if (
-            form != null && state.restriction == null && state.command == null && state.commandReady
+            form != null &&
+                state.persistence != null &&
+                !state.closing &&
+                state.restriction == null &&
+                state.command == null &&
+                state.commandReady
         ) {
+            item(key = "local-save") { LeaveLocalSaveStatus(state, onEvent) }
             item(key = "type") {
                 Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                     AppText(

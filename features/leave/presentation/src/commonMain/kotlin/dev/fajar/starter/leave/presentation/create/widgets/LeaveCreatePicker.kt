@@ -19,6 +19,9 @@ fun LeaveCreatePicker(state: LeaveCreateState, onEvent: (LeaveCreateEvent) -> Un
     AppDialog(
         appString(
             when (dialog) {
+                LeaveCreateDialog.DiscardDraft -> AppString.LeaveDiscardDraft
+                LeaveCreateDialog.ReloadDraft -> AppString.LeaveReloadDraft
+                LeaveCreateDialog.LeaveUnsaved -> AppString.LeaveWithoutSaving
                 LeaveCreateDialog.Types -> AppString.LeaveType
                 LeaveCreateDialog.Portion -> AppString.LeavePortion
                 is LeaveCreateDialog.Date ->
@@ -34,6 +37,46 @@ fun LeaveCreatePicker(state: LeaveCreateState, onEvent: (LeaveCreateEvent) -> Un
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             when (dialog) {
+                LeaveCreateDialog.DiscardDraft,
+                LeaveCreateDialog.ReloadDraft,
+                LeaveCreateDialog.LeaveUnsaved ->
+                    item(key = "confirmation") {
+                        Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                            AppText(
+                                appString(
+                                    when (dialog) {
+                                        LeaveCreateDialog.DiscardDraft ->
+                                            AppString.LeaveDiscardDraftExplanation
+                                        LeaveCreateDialog.ReloadDraft ->
+                                            AppString.LeaveReloadDraftExplanation
+                                        else -> AppString.LeaveWithoutSavingExplanation
+                                    }
+                                )
+                            )
+                            AppButton(
+                                appString(
+                                    when (dialog) {
+                                        LeaveCreateDialog.DiscardDraft ->
+                                            AppString.LeaveDiscardDraft
+                                        LeaveCreateDialog.ReloadDraft -> AppString.LeaveReloadDraft
+                                        else -> AppString.LeaveWithoutSaving
+                                    }
+                                ),
+                                {
+                                    onEvent(
+                                        when (dialog) {
+                                            LeaveCreateDialog.DiscardDraft ->
+                                                LeaveCreateEvent.DiscardDraftConfirmed
+                                            LeaveCreateDialog.ReloadDraft ->
+                                                LeaveCreateEvent.ReloadDraftConfirmed
+                                            else -> LeaveCreateEvent.ExitWithoutSaving
+                                        }
+                                    )
+                                },
+                                enabled = state.work == null && !state.closing,
+                            )
+                        }
+                    }
                 LeaveCreateDialog.Portion ->
                     items(LeavePortion.entries, key = { it.name }) { portion ->
                         AppRadioRow(

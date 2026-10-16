@@ -81,13 +81,47 @@ annual balances. Submission retains that revision, allowing the server to reject
 a changed calculation before reserving days. Preparation and submission are
 domain/data boundaries consumed by the feature-owned creation form.
 
+## Unfinished local input
+
+The creation form keeps one working copy per API audience, account, company and
+employment. Dates, selected type metadata, portion, reason and exact document
+revision metadata survive process replacement without an age limit. Opening or
+editing acquired input does not require renewed credentials. Choosing new catalog
+entries, calculating charges and submitting still require current online review.
+
+`OpenLeaveWorkingCopy`, `SaveLeaveWorkingCopy` and `DiscardLeaveWorkingCopy`
+coordinate the local copy, Leave admission/directory, session and workspace
+repository contracts. They require locally acquired employment ownership and
+honor confirmed access denials. Ordinary credential age does not hide the copy;
+a replacement account/company or removed employment cannot expose it. The form
+requests one bounded synchronization if its owned employment directory has not
+been acquired yet. It does not poll until a draft becomes available.
+
+The data repository authenticates a bounded versioned envelope in
+`leave-replica/<company>/working/<employee>`. A shared key-creation lock prevents
+autosave and replica acquisition from creating competing credentials. Clearing
+ordinary Leave facts does not remove unfinished input. Compare-and-set revisions
+reject an older editor; repeating an already committed mutation acknowledges only
+the same stable input. Missing keys and malformed data remain storage failures.
+
+The route owns one serial writer, a 250 ms delay for waiting input, one pending
+mutation and the latest edit. Edits received during a save coalesce; they do not
+cancel the admitted write. A failed save retains its mutation for explicit retry.
+The form shows local save status and requires confirmation before replacing or
+discarding input. Back flushes the latest edit and offers an explicit choice if
+saving fails. A lifecycle stop flushes once; final owner disposal cancels its work.
+A denial stops the writer and hides private input, including during a failed retry.
+
 ## Durable submission
 
 `PrepareLeaveSubmission` admits an unexpired owner preview, a bounded reason and
 document-revision references, then stores one immutable command per employee.
 The operation and request IDs are generated once. Repeated confirmation restores
 that command; changed dates, reason, evidence or preview cannot replace it.
-Missing required evidence is a use-case validation failure.
+Missing required evidence is a use-case validation failure. The form first flushes
+local edits; preparation verifies that the acknowledged working revision matches
+the reviewed dates, portion, reason and evidence. The working revision is local
+command metadata and does not change the HTTP request body.
 
 Submission has its own encrypted partition and repository contract, sharing raw
 command storage and its credential with existing request actions. The original
@@ -107,6 +141,10 @@ revision. A confirmed command first needs canonical request/cache reconciliation
 An ambiguous outcome cannot be discarded as though the server rolled back, and a
 late rejection cannot disprove an earlier uncertain attempt. Competing removal and
 replay use storage revision checks; stale work cannot replace the retained outcome.
+Canonical confirmation removes only the command's matching working revision before
+retiring the command. A newer draft survives. Failed cleanup retains the command;
+unsent, rejected and uncertain delivery never silently discard working input.
+Older retained commands without a working revision remain readable.
 
 ## Creation interface
 
@@ -127,8 +165,8 @@ and replacing the form with its detail route. Back returns to the overview.
 The route owns lifecycle collection; the MVI owner cancels acquisition, command
 observation and its preview-expiry timer when stopped. Current access failures
 hide sensitive content and remain gated through failed retries. A completed command
-source can reopen after explicit recovery and an admitted catalog read. Typed form values are
-process-local until confirmation; confirmed input uses encrypted durable storage.
+source can reopen after explicit recovery and admitted acquisition. Unfinished form input
+uses a separate local working copy; confirmed input uses immutable command storage.
 Employees can select up to three published personal documents through the shared
 [document catalog](documents.md). The picker owns its MVI state, bounded page,
 request and read-deadline timer. Its navigation entry clears a dedicated

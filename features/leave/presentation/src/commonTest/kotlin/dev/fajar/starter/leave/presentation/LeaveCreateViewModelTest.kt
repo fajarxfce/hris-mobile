@@ -202,11 +202,14 @@ class LeaveCreateViewModelTest {
             assertEquals("", model.state.value.form?.reason)
             assertNull(model.state.value.form?.type)
             assertEquals(0, f.observers)
+            val onlinePolicy = f.base.policyCall
+            f.base.policyCall = { AppResult.Failed(Failure(FailureKind.Network, "Offline")) }
             f.typesCall = { AppResult.Failed(Failure(FailureKind.Network, "Offline")) }
             model.onEvent(LeaveCreateEvent.ReloadRequested)
             runCurrent()
             assertEquals("mfa_verification_required", model.state.value.visibleFailure?.code)
             assertFalse(model.state.value.commandReady)
+            f.base.policyCall = onlinePolicy
             f.typesCall = { AppResult.Success(LeavePage(listOf(f.type))) }
             model.onEvent(LeaveCreateEvent.ReloadRequested)
             runCurrent()
@@ -354,7 +357,10 @@ class LeaveCreateViewModelTest {
                     model.onEvent(LeaveCreateEvent.SubmitRequested)
                     runCurrent()
                     assertEquals(
-                        listOf(leaveEvidence(2), leaveEvidence(1)),
+                        listOf(
+                            leaveEvidence(2).toLeaveAttachment(),
+                            leaveEvidence(1).toLeaveAttachment(),
+                        ),
                         model.state.value.form?.attachments,
                     )
                     assertNull(model.state.value.evidenceTarget)

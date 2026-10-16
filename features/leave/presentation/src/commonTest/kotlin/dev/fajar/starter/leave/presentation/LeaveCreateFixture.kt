@@ -14,6 +14,7 @@ import kotlinx.datetime.*
 class LeaveCreateFixture(instant: () -> Instant = { Instant.parse("2026-10-12T01:00:00Z") }) {
     val request = LeaveRequestPresentationFixture(instant)
     val base = request.base
+    val working = LeaveWorkingPresentationFixture(base)
     val target = LeaveCreateTarget(base.workspace.id, base.employee.id, "2026-10-15")
     val type =
         LeaveTypeOption(
@@ -268,6 +269,7 @@ class LeaveCreateFixture(instant: () -> Instant = { Instant.parse("2026-10-12T01
                 base.clock,
                 base.build,
                 base.replica,
+                working.copies,
             ),
             replay,
             ReviewLeaveSubmission(
@@ -278,8 +280,12 @@ class LeaveCreateFixture(instant: () -> Instant = { Instant.parse("2026-10-12T01
                 base.workspaces,
                 base.clock,
                 base.build,
+                working.copies,
             ),
             request.refresh,
             LeaveSyncFixture(base).sync,
+            working.open,
+            working.save,
+            working.discard,
         )
 }

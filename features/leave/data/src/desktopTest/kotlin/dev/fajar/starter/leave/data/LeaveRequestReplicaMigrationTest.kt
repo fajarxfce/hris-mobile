@@ -90,6 +90,7 @@ class LeaveRequestReplicaMigrationTest {
                     f.keys,
                     f.legacyKeys,
                     MemoryLeaveReadAdmissionDataSource(),
+                    f.keyCreation,
                 )
             assertEquals(
                 FailureKind.Storage,

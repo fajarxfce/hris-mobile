@@ -6,6 +6,7 @@ import dev.fajar.starter.identity.domain.repositories.SessionRepository
 import dev.fajar.starter.leave.domain.entities.*
 import dev.fajar.starter.leave.domain.policies.*
 import dev.fajar.starter.leave.domain.repositories.*
+import dev.fajar.starter.leave.domain.working.repositories.LeaveWorkingCopyRepository
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
 import kotlin.time.Clock
 import kotlin.time.Duration.Companion.seconds
@@ -21,6 +22,7 @@ class ReviewLeaveSubmission(
     private val workspaces: WorkspaceRepository,
     private val clock: Clock,
     private val build: AppBuild,
+    private val copies: LeaveWorkingCopyRepository,
 ) {
     suspend operator fun invoke(workspaceId: String, commandId: String): AppResult<Boolean> =
         withTimeoutOrNull(30.seconds) {
@@ -94,6 +96,15 @@ class ReviewLeaveSubmission(
                         "client.leave_updates_pending",
                         FailureKind.Conflict,
                     )
+                record.command.workingRevision?.let { revision ->
+                    val removal =
+                        copies.remove(access, record.command.selection.employeeId, revision)
+                    currentCoroutineContext().ensureActive()
+                    val owner = validateLeaveContinuation(access, currentAccess(workspaceId))
+                    if (owner is AppResult.Failed) return@withTimeoutOrNull owner
+                    if (removal is AppResult.Failed) return@withTimeoutOrNull removal
+                    // An absent copy or a newer edit needs no cleanup by this command.
+                }
             }
             val publication = validateLeaveContinuation(access, currentAccess(workspaceId))
             if (publication is AppResult.Failed) return@withTimeoutOrNull publication

@@ -8,6 +8,8 @@ import kotlinx.datetime.LocalDate
 
 data class LeaveCreateState(
     val form: LeaveCreateForm? = null,
+    val persistence: LeaveEditPersistence? = null,
+    val closing: Boolean = false,
     val catalog: LeavePage<LeaveTypeOption> = LeavePage(emptyList()),
     val catalogAfter: String? = null,
     val preview: LeavePreparation? = null,
@@ -23,6 +25,9 @@ data class LeaveCreateState(
     val editable: Boolean
         get() =
             restriction == null &&
+                persistence != null &&
+                !closing &&
+                persistence.failure?.code != "client.leave_working_copy_changed" &&
                 commandReady &&
                 command == null &&
                 work !in
@@ -30,6 +35,8 @@ data class LeaveCreateState(
                         LeaveCreateWork.SENDING,
                         LeaveCreateWork.REVIEWING,
                         LeaveCreateWork.DISCARDING,
+                        LeaveCreateWork.LEAVING,
+                        LeaveCreateWork.OPENING,
                     )
 
     val canPreview: Boolean
@@ -47,6 +54,7 @@ data class LeaveCreateState(
             editable &&
                 work == null &&
                 preview != null &&
+                persistence?.failure == null &&
                 !previewExpired &&
                 evidenceTarget == null &&
                 (!preview.preview.policy.attachmentRequired ||
@@ -78,11 +86,13 @@ data class LeaveCreateState(
 }
 
 enum class LeaveCreateWork {
+    OPENING,
     TYPES,
     PREVIEW,
     SENDING,
     REVIEWING,
     DISCARDING,
+    LEAVING,
 }
 
 enum class LeaveDateField {
@@ -91,6 +101,12 @@ enum class LeaveDateField {
 }
 
 sealed interface LeaveCreateDialog {
+    data object DiscardDraft : LeaveCreateDialog
+
+    data object ReloadDraft : LeaveCreateDialog
+
+    data object LeaveUnsaved : LeaveCreateDialog
+
     data object Types : LeaveCreateDialog
 
     data object Portion : LeaveCreateDialog

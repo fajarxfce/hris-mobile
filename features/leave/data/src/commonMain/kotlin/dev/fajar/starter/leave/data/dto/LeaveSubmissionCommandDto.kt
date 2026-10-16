@@ -18,4 +18,5 @@ data class LeaveSubmissionCommandDto(
     val reason: String,
     val attachmentRevisionIds: List<String>,
     val createdAt: String,
+    val workingRevision: String? = null,
 )

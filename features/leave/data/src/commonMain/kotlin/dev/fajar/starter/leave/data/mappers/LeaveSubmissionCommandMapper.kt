@@ -54,12 +54,14 @@ fun LeaveSubmissionCommand.toDto() =
         reason,
         attachmentRevisionIds.toList(),
         createdAt.toString(),
+        workingRevision,
     )
 
 fun LeaveSubmissionCommandDto.toSubmissionCommand(): LeaveSubmissionCommand {
     listOf(id, accountId, companyId, requestId, employeeId, typeId).forEach {
         require(Uuid.parse(it).toString() == it)
     }
+    workingRevision?.let { require(Uuid.parse(it).toString() == it) }
     require(reason.isNotBlank() && reason.length <= 1_000 && reason == reason.trim())
     require(
         typeName.isNotBlank() &&
@@ -97,6 +99,7 @@ fun LeaveSubmissionCommandDto.toSubmissionCommand(): LeaveSubmissionCommand {
         reason,
         attachmentRevisionIds.toList(),
         created,
+        workingRevision,
     )
 }
 

@@ -16,6 +16,7 @@ data class LeaveSubmissionCommand(
     val reason: String,
     val attachmentRevisionIds: List<String>,
     val createdAt: Instant,
+    val workingRevision: String? = null,
 ) {
     override fun toString() = "LeaveSubmissionCommand([redacted])"
 }

@@ -234,6 +234,7 @@ suspend fun checkLateRequestEncryptionCannotPublish(f: LeaveRequestReplicaFixtur
                     f.keys,
                     f.legacyKeys,
                     MemoryLeaveReadAdmissionDataSource(),
+                    f.keyCreation,
                 )
             val expected = f.writeCheckpoint()
             val pending = async {

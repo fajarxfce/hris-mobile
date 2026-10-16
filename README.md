@@ -66,7 +66,9 @@ Background synchronization fills older activity in resumable batches. Withdrawal
 cancellation and withdrawal of a pending cancellation retain encrypted commands
 and recover the original request after interrupted delivery. Employees can select
 leave dates and portions, review the server calculation, and submit with durable
-recovery after interrupted delivery. Up to three personal documents can be selected
+recovery after interrupted delivery. Unfinished dates, type, portion, reason and
+selected evidence autosave to a separate encrypted working copy and reopen locally
+without an age limit. Up to three personal documents can be selected
 from the employee's published evidence catalog, including for types requiring an
 attachment. Documents opens the published catalog with category tabs; its folder
 action opens files on the current device. It supports encrypted local import of PDF/JPG/PNG files and

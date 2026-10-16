@@ -32,13 +32,18 @@ fun LeaveAttachments(state: LeaveCreateState, onEvent: (LeaveCreateEvent) -> Uni
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                    AppText(document.title, maxLines = 2, overflow = TextOverflow.Ellipsis)
                     AppText(
-                        document.fileName,
-                        color = AppColors.muted,
+                        document.title ?: document.fileName,
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis,
                     )
+                    if (document.title != null)
+                        AppText(
+                            document.fileName,
+                            color = AppColors.muted,
+                            maxLines = 2,
+                            overflow = TextOverflow.Ellipsis,
+                        )
                 }
                 AppIconButton(
                     Icons.Regular.Dismiss,

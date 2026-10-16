@@ -11,6 +11,7 @@ internal fun LeaveCreateState.withCreateFailure(value: Failure): LeaveCreateStat
         failure = null,
         catalog = catalog.copy(items = emptyList()),
         form = form?.copy(reason = "", type = null, attachments = emptyList()),
+        persistence = null,
         preview = null,
         command = null,
         commandReady = false,

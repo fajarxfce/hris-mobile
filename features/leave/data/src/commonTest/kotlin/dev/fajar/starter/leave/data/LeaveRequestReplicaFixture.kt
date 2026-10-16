@@ -22,9 +22,17 @@ class LeaveRequestReplicaFixture(val db: AppDatabase) {
     val keys = MemoryCredentialStore()
     val legacyKeys = MemoryCredentialStore()
     val cipher = AesGcmContentCipher()
+    val keyCreation = kotlinx.coroutines.sync.Mutex()
     val admissions = MemoryLeaveReadAdmissionDataSource()
     val repository =
-        EncryptedLeaveReplicaRepository(db.replicas, cipher, keys, legacyKeys, admissions)
+        EncryptedLeaveReplicaRepository(
+            db.replicas,
+            cipher,
+            keys,
+            legacyKeys,
+            admissions,
+            keyCreation,
+        )
     private var acquisition = 0
 
     suspend fun activate() =

@@ -209,6 +209,14 @@ an uncertain operation. A preview revision accompanies the original request on
 every delivery, so changed server balances or schedules cannot silently replace
 what the employee confirmed.
 
+Unfinished Leave input has a separate working-copy repository and encrypted
+partition. Its use cases coordinate local employment ownership, read admission and
+revision checks. The creation ViewModel owns a bounded serial autosave writer;
+widgets render save status and dispatch explicit retry, reload and discard events.
+Submission links its immutable body to an acknowledged working revision. Canonical
+reconciliation removes only that revision before retiring the command, preserving
+newer edits and recoverable cleanup failures.
+
 Feature flag definitions and evaluation policy live in `core/featureflags/domain`; each
 consuming feature owns its keys and action guards. A shared refresh use case serializes
 workers and sets the fetch interval. Its repository coordinates Remote Config and the

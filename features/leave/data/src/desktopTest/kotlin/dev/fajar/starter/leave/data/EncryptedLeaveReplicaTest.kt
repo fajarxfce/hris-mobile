@@ -300,6 +300,7 @@ class EncryptedLeaveReplicaTest {
                     keys,
                     keys,
                     MemoryLeaveReadAdmissionDataSource(),
+                    kotlinx.coroutines.sync.Mutex(),
                 )
             assertEquals(
                 expected,
@@ -391,6 +392,7 @@ class EncryptedLeaveReplicaTest {
                     f.keys,
                     f.keys,
                     MemoryLeaveReadAdmissionDataSource(),
+                    f.keyCreation,
                 )
             val writing = async {
                 repository.commit(
@@ -431,6 +433,7 @@ class EncryptedLeaveReplicaTest {
     }
 
     private class Fixture(val db: AppDatabase, val keys: MemoryCredentialStore) {
+        val keyCreation = kotlinx.coroutines.sync.Mutex()
         val raw = LeaveDataFixture()
         val access = raw.access
         val selection = LeaveSelection(raw.employee.id, 2026)
@@ -448,6 +451,7 @@ class EncryptedLeaveReplicaTest {
                 keys,
                 keys,
                 MemoryLeaveReadAdmissionDataSource(),
+                kotlinx.coroutines.sync.Mutex(),
             )
         var current = initialLeaveCheckpoint(access, "generation", raw.now)
 

@@ -6,14 +6,10 @@ import dev.fajar.starter.leave.domain.entities.*
 import dev.fajar.starter.leave.domain.policies.leaveFailure
 import kotlinx.datetime.*
 
-data class LeaveCreateForm(
-    val from: LocalDate,
-    val until: LocalDate,
-    val type: LeaveTypeOption? = null,
-    val portion: LeavePortion = LeavePortion.FULL,
-    val reason: String = "",
-    val attachments: List<DocumentEvidence> = emptyList(),
-)
+typealias LeaveCreateForm = dev.fajar.starter.leave.domain.working.entities.LeaveWorkingInput
+
+internal fun DocumentEvidence.toLeaveAttachment() =
+    LeaveAttachment(documentId, revisionId, fileName, mediaType, size, sha256, title)
 
 /** Expands the bounded date-range control into explicit input; the server selects working days. */
 internal fun LeaveCreateForm.toSelection(employeeId: String): AppResult<LeaveDraftSelection> {

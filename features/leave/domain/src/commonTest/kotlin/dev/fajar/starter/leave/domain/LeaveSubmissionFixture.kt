@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.*
 class LeaveSubmissionFixture(instant: () -> Instant = { Instant.parse("2026-10-12T01:00:00Z") }) {
     val request = LeaveRequestFixture(instant)
     val base = request.base
+    val working = LeaveWorkingFixture(base)
     val preparation = LeavePreparationFixture(base)
     val access =
         (admitLeave(base.workspace.id, base.workspace, base.session, base.build, base.clock.now())
@@ -155,6 +156,7 @@ class LeaveSubmissionFixture(instant: () -> Instant = { Instant.parse("2026-10-1
             base.clock,
             base.build,
             base.replica,
+            working.copies,
         )
     val replay =
         ReplayLeaveSubmission(
@@ -174,6 +176,7 @@ class LeaveSubmissionFixture(instant: () -> Instant = { Instant.parse("2026-10-1
             base.workspaces,
             base.clock,
             base.build,
+            working.copies,
         )
     val observe =
         ObserveLeaveSubmission(

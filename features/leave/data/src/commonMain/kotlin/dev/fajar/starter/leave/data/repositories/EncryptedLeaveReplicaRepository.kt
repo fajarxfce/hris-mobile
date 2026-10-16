@@ -36,7 +36,7 @@ class EncryptedLeaveReplicaRepository(
     @Named("leave-replica-content-key") private val credentials: CredentialStore,
     @Named("leave-content-key") private val legacyCredentials: CredentialStore,
     private val admissions: LeaveReadAdmissionDataSource,
-    @Named("leave-content-key-creation") private val keyCreation: Mutex = Mutex(),
+    @Named("leave-content-key-creation") private val keyCreation: Mutex,
 ) : LeaveReplicaRepository {
     private val admissionWrites = Mutex()
 

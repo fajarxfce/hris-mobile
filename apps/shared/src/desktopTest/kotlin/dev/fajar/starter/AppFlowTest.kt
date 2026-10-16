@@ -1495,6 +1495,28 @@ class AppFlowTest {
                 .onNodeWithContentDescription("Reason")
                 .performScrollTo()
                 .performTextReplacement("Family appointment\nKeep these dates")
+            compose.runOnIdle { backDispatcher.pressBack() }
+            waitFor("Leave balances")
+            server.leave.offline = true
+            compose.onNode(hasText("Request leave") and hasClickAction()).performClick()
+            waitFor("Family appointment\nKeep these dates")
+            compose.onNodeWithText("First half").assertExists()
+            assertEquals(0, server.leave.creation.commits)
+            capture("leave-creation-local-draft")
+            server.leave.offline = false
+            compose.waitUntil {
+                compose
+                    .onAllNodes(hasContentDescription("Refresh") and isEnabled())
+                    .fetchSemanticsNodes()
+                    .isNotEmpty()
+            }
+            compose.onNodeWithContentDescription("Refresh").performClick()
+            compose.waitUntil {
+                compose
+                    .onAllNodes(hasContentDescription("Refresh") and isEnabled())
+                    .fetchSemanticsNodes()
+                    .isNotEmpty()
+            }
             compose
                 .onNode(hasText("Review calculation") and hasClickAction())
                 .performScrollTo()

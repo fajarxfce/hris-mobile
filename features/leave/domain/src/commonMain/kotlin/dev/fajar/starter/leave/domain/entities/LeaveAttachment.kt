@@ -8,4 +8,5 @@ data class LeaveAttachment(
     val mediaType: String,
     val size: Long,
     val sha256: String,
+    val title: String? = null,
 )

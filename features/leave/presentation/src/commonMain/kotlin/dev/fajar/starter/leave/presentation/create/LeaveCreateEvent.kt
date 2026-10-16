@@ -12,6 +12,18 @@ sealed interface LeaveCreateEvent {
 
     data object ReloadRequested : LeaveCreateEvent
 
+    data object SaveRetryRequested : LeaveCreateEvent
+
+    data object ReloadDraftRequested : LeaveCreateEvent
+
+    data object ReloadDraftConfirmed : LeaveCreateEvent
+
+    data object DiscardDraftRequested : LeaveCreateEvent
+
+    data object DiscardDraftConfirmed : LeaveCreateEvent
+
+    data object ExitWithoutSaving : LeaveCreateEvent
+
     data object TypePickerRequested : LeaveCreateEvent
 
     data class TypePageRequested(val after: String?) : LeaveCreateEvent

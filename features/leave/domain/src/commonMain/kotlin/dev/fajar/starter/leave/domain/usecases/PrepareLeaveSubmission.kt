@@ -9,6 +9,8 @@ import dev.fajar.starter.leave.domain.entities.*
 import dev.fajar.starter.leave.domain.policies.*
 import dev.fajar.starter.leave.domain.repositories.LeaveRequestReplicaRepository
 import dev.fajar.starter.leave.domain.repositories.LeaveSubmissionCommandRepository
+import dev.fajar.starter.leave.domain.working.policies.validateLeaveWorkingSubmission
+import dev.fajar.starter.leave.domain.working.repositories.LeaveWorkingCopyRepository
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
 import kotlin.time.Clock
 import kotlin.time.Duration.Companion.seconds
@@ -23,12 +25,14 @@ class PrepareLeaveSubmission(
     private val clock: Clock,
     private val build: AppBuild,
     private val reads: LeaveRequestReplicaRepository,
+    private val copies: LeaveWorkingCopyRepository,
 ) {
     suspend operator fun invoke(
         workspaceId: String,
         prepared: LeavePreparation,
         reason: String,
         attachmentRevisionIds: List<String> = emptyList(),
+        workingRevision: String? = null,
     ): AppResult<LeaveSubmissionRecord> {
         if (prepared.selection.days.size !in 1..366) return leaveFailure("invalid_leave_request")
         if (attachmentRevisionIds.size > MAX_LEAVE_ATTACHMENTS)
@@ -50,6 +54,25 @@ class PrepareLeaveSubmission(
             val valid =
                 validateLeaveSubmission(preparation, access, reason, attachments, clock.now())
             if (valid is AppResult.Failed) return@withTimeoutOrNull valid
+            if (workingRevision != null) {
+                val working = copies.observe(access, preparation.selection.employeeId).first()
+                currentCoroutineContext().ensureActive()
+                val current = validateLeaveContinuation(access, currentAccess(workspaceId))
+                if (current is AppResult.Failed) return@withTimeoutOrNull current
+                val matching =
+                    when (working) {
+                        is AppResult.Failed -> working
+                        is AppResult.Success ->
+                            validateLeaveWorkingSubmission(
+                                working.value,
+                                workingRevision,
+                                preparation.selection,
+                                reason,
+                                attachments,
+                            )
+                    }
+                if (matching is AppResult.Failed) return@withTimeoutOrNull matching
+            }
             val previous = commands.observe(access, preparation.selection.employeeId).first()
             currentCoroutineContext().ensureActive()
             val ownership = validateLeaveContinuation(access, currentAccess(workspaceId))
@@ -70,6 +93,7 @@ class PrepareLeaveSubmission(
                     preparation,
                     normalized,
                     attachments,
+                    workingRevision,
                 )
             val command =
                 LeaveSubmissionCommand(
@@ -85,39 +109,50 @@ class PrepareLeaveSubmission(
                     normalized,
                     attachments,
                     clock.now(),
+                    workingRevision,
                 )
-            val insertion = commands.insert(access, command)
-            currentCoroutineContext().ensureActive()
-            val continuation = validateLeaveContinuation(access, currentAccess(workspaceId))
-            if (continuation is AppResult.Failed) return@withTimeoutOrNull continuation
-            when (insertion) {
-                is AppResult.Failed -> return@withTimeoutOrNull insertion
-                is AppResult.Success ->
-                    when (insertion.value) {
-                        LeaveCommandAdmission.CAPACITY_EXCEEDED ->
-                            return@withTimeoutOrNull leaveFailure(
-                                "client.command_queue_full",
-                                FailureKind.Storage,
-                            )
-                        LeaveCommandAdmission.SCOPE_CHANGED ->
-                            return@withTimeoutOrNull leaveFailure(
-                                "client.leave_scope_changed",
-                                FailureKind.AccessDenied,
-                            )
-                        LeaveCommandAdmission.STORED,
-                        LeaveCommandAdmission.OCCUPIED -> Unit
-                    }
-            }
-            val stored = commands.observe(access, preparation.selection.employeeId).first()
-            currentCoroutineContext().ensureActive()
-            val publication = validateLeaveContinuation(access, currentAccess(workspaceId))
-            if (publication is AppResult.Failed) return@withTimeoutOrNull publication
+            val stored = storeCommand(workspaceId, access, command)
             when (stored) {
                 is AppResult.Failed -> stored
                 is AppResult.Success ->
-                    retained(stored.value, access, preparation, normalized, attachments)
+                    retained(
+                        stored.value,
+                        access,
+                        preparation,
+                        normalized,
+                        attachments,
+                        workingRevision,
+                    )
             }
         } ?: leaveFailure("client.leave_timeout", FailureKind.Timeout)
+    }
+
+    private suspend fun storeCommand(
+        workspaceId: String,
+        access: LeaveAccess,
+        command: LeaveSubmissionCommand,
+    ): AppResult<LeaveSubmissionRecord?> {
+        val insertion = commands.insert(access, command)
+        currentCoroutineContext().ensureActive()
+        val continuation = validateLeaveContinuation(access, currentAccess(workspaceId))
+        if (continuation is AppResult.Failed) return continuation
+        when (insertion) {
+            is AppResult.Failed -> return insertion
+            is AppResult.Success ->
+                when (insertion.value) {
+                    LeaveCommandAdmission.CAPACITY_EXCEEDED ->
+                        return leaveFailure("client.command_queue_full", FailureKind.Storage)
+                    LeaveCommandAdmission.SCOPE_CHANGED ->
+                        return leaveFailure("client.leave_scope_changed", FailureKind.AccessDenied)
+                    LeaveCommandAdmission.STORED,
+                    LeaveCommandAdmission.OCCUPIED -> Unit
+                }
+        }
+        val stored = commands.observe(access, command.selection.employeeId).first()
+        currentCoroutineContext().ensureActive()
+        val publication = validateLeaveContinuation(access, currentAccess(workspaceId))
+        if (publication is AppResult.Failed) return publication
+        return stored
     }
 
     private fun retained(
@@ -126,6 +161,7 @@ class PrepareLeaveSubmission(
         preparation: LeavePreparation,
         reason: String,
         attachments: List<String>,
+        workingRevision: String?,
     ): AppResult<LeaveSubmissionRecord> =
         if (
             record != null &&
@@ -133,7 +169,8 @@ class PrepareLeaveSubmission(
                 record.command.selection == preparation.selection &&
                 record.command.previewRevision == preparation.preview.revision &&
                 record.command.reason == reason &&
-                record.command.attachmentRevisionIds == attachments
+                record.command.attachmentRevisionIds == attachments &&
+                record.command.workingRevision == workingRevision
         )
             AppResult.Success(record)
         else leaveFailure("client.leave_submission_pending", FailureKind.Conflict)

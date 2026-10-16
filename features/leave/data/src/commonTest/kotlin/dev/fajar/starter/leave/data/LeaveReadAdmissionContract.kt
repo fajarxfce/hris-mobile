@@ -29,6 +29,7 @@ suspend fun checkLeaveDenialSurvivesStorageCleanupAndLogin(f: LeaveRequestReplic
             f.keys,
             f.legacyKeys,
             MemoryLeaveReadAdmissionDataSource(),
+            f.keyCreation,
         )
     assertEquals(saved, (restored.admission(f.access) as AppResult.Success).value)
     val login = f.access.copy(sessionId = "new-login")
@@ -63,7 +64,14 @@ suspend fun checkLeaveDenialRemainsKnownAfterFailedStorage(f: LeaveRequestReplic
             }
         }
     val repository =
-        EncryptedLeaveReplicaRepository(store, f.cipher, f.keys, f.legacyKeys, f.admissions)
+        EncryptedLeaveReplicaRepository(
+            store,
+            f.cipher,
+            f.keys,
+            f.legacyKeys,
+            f.admissions,
+            f.keyCreation,
+        )
     val denial = Failure(FailureKind.AccessDenied, "Denied", code = "mfa_required")
     assertIs<AppResult.Failed>(repository.restrict(f.access, denial))
     val saved =
@@ -102,7 +110,14 @@ suspend fun checkLateLeaveAdmissionCannotClearANewerDenial(f: LeaveRequestReplic
                 }
             }
         val repository =
-            EncryptedLeaveReplicaRepository(store, f.cipher, f.keys, f.legacyKeys, f.admissions)
+            EncryptedLeaveReplicaRepository(
+                store,
+                f.cipher,
+                f.keys,
+                f.legacyKeys,
+                f.admissions,
+                f.keyCreation,
+            )
         val denial = Failure(FailureKind.AccessDenied, "Denied", code = "mfa_required")
         repository.restrict(f.access, denial)
         val first = (repository.admission(f.access) as AppResult.Success).value
@@ -150,6 +165,7 @@ suspend fun checkCancelledLeaveDenialRetainsTheProcessGate(f: LeaveRequestReplic
                 f.keys,
                 f.legacyKeys,
                 f.admissions,
+                f.keyCreation,
             )
         val denial = Failure(FailureKind.AccessDenied, "Denied", code = "mfa_required")
         val pending = async { repository.restrict(f.access, denial) }

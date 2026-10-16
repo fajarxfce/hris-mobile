@@ -866,6 +866,35 @@ enum class AppString(val english: StringResource, val indonesian: StringResource
         Res.string.document_evidence_expired_en,
         Res.string.document_evidence_expired_id,
     ),
+    LeaveSavedLocally(Res.string.leave_saved_locally_en, Res.string.leave_saved_locally_id),
+    LeaveSavingLocally(Res.string.leave_saving_locally_en, Res.string.leave_saving_locally_id),
+    LeaveWorkingCopyChanged(
+        Res.string.leave_working_copy_changed_en,
+        Res.string.leave_working_copy_changed_id,
+    ),
+    LeaveWorkingCopyInvalid(
+        Res.string.leave_working_copy_invalid_en,
+        Res.string.leave_working_copy_invalid_id,
+    ),
+    LeaveWorkingCopyUnavailable(
+        Res.string.leave_working_copy_unavailable_en,
+        Res.string.leave_working_copy_unavailable_id,
+    ),
+    LeaveDiscardDraft(Res.string.leave_discard_draft_en, Res.string.leave_discard_draft_id),
+    LeaveDiscardDraftExplanation(
+        Res.string.leave_discard_draft_explanation_en,
+        Res.string.leave_discard_draft_explanation_id,
+    ),
+    LeaveReloadDraft(Res.string.leave_reload_draft_en, Res.string.leave_reload_draft_id),
+    LeaveReloadDraftExplanation(
+        Res.string.leave_reload_draft_explanation_en,
+        Res.string.leave_reload_draft_explanation_id,
+    ),
+    LeaveWithoutSaving(Res.string.leave_without_saving_en, Res.string.leave_without_saving_id),
+    LeaveWithoutSavingExplanation(
+        Res.string.leave_without_saving_explanation_en,
+        Res.string.leave_without_saving_explanation_id,
+    ),
     LeaveNewRequest(Res.string.leave_new_request_en, Res.string.leave_new_request_id),
     LeaveType(Res.string.leave_type_en, Res.string.leave_type_id),
     LeaveChooseType(Res.string.leave_choose_type_en, Res.string.leave_choose_type_id),

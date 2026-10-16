@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import dev.fajar.starter.designsystem.theme.AppTheme
 import dev.fajar.starter.documents.domain.entities.*
 import dev.fajar.starter.leave.domain.entities.*
+import dev.fajar.starter.leave.domain.working.entities.LeaveWorkingCopy
 import dev.fajar.starter.leave.presentation.create.*
 import dev.fajar.starter.leave.presentation.create.pages.LeaveCreatePage
 import dev.fajar.starter.leave.presentation.create.widgets.LeaveCreatePicker
@@ -181,7 +182,21 @@ class LeaveCreateLayoutTest {
         var state by
             mutableStateOf(
                 base.copy(
-                    form = base.form!!.copy(attachments = listOf(evidence)),
+                    form =
+                        base.form!!.copy(
+                            attachments =
+                                listOf(
+                                    LeaveAttachment(
+                                        evidence.documentId,
+                                        evidence.revisionId,
+                                        evidence.fileName,
+                                        evidence.mediaType,
+                                        evidence.size,
+                                        evidence.sha256,
+                                        evidence.title,
+                                    )
+                                )
+                        ),
                     preview =
                         preparation.copy(
                             preview =
@@ -369,6 +384,15 @@ class LeaveCreateLayoutTest {
             )
         return LeaveCreateState(
             form = form,
+            persistence =
+                LeaveEditPersistence(
+                    LeaveWorkingCopy(
+                        selected.employeeId,
+                        form,
+                        "44444444-4444-4444-8444-444444444444",
+                        now,
+                    )
+                ),
             catalog = LeavePage(listOf(type)),
             commandReady = true,
             preview = LeavePreparation(access, selected, preview, now, now + 60.seconds),

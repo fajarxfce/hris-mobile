@@ -4,6 +4,8 @@ import dev.fajar.starter.common.config.AppBuild
 import dev.fajar.starter.identity.domain.repositories.SessionRepository
 import dev.fajar.starter.leave.domain.repositories.*
 import dev.fajar.starter.leave.domain.usecases.*
+import dev.fajar.starter.leave.domain.working.repositories.LeaveWorkingCopyRepository
+import dev.fajar.starter.leave.domain.working.usecases.*
 import dev.fajar.starter.sync.domain.SyncTask
 import dev.fajar.starter.sync.domain.repositories.SyncFeedRepository
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
@@ -19,13 +21,41 @@ class LeaveDataModule {
     @Single @Named("leave-content-key-creation") fun leaveContentKeyCreationLock() = Mutex()
 
     @Factory
+    fun openWorkingCopy(
+        copies: LeaveWorkingCopyRepository,
+        reads: LeaveReplicaRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        build: AppBuild,
+    ) = OpenLeaveWorkingCopy(copies, reads, sessions, workspaces, Clock.System, build)
+
+    @Factory
+    fun saveWorkingCopy(
+        copies: LeaveWorkingCopyRepository,
+        reads: LeaveReplicaRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        build: AppBuild,
+    ) = SaveLeaveWorkingCopy(copies, reads, sessions, workspaces, Clock.System, build)
+
+    @Factory
+    fun discardWorkingCopy(
+        copies: LeaveWorkingCopyRepository,
+        reads: LeaveReplicaRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        build: AppBuild,
+    ) = DiscardLeaveWorkingCopy(copies, reads, sessions, workspaces, Clock.System, build)
+
+    @Factory
     fun prepareSubmission(
         commands: LeaveSubmissionCommandRepository,
+        copies: LeaveWorkingCopyRepository,
         reads: LeaveRequestReplicaRepository,
         sessions: SessionRepository,
         workspaces: WorkspaceRepository,
         build: AppBuild,
-    ) = PrepareLeaveSubmission(commands, sessions, workspaces, Clock.System, build, reads)
+    ) = PrepareLeaveSubmission(commands, sessions, workspaces, Clock.System, build, reads, copies)
 
     @Factory
     fun observeSubmission(
@@ -39,12 +69,23 @@ class LeaveDataModule {
     @Factory
     fun reviewSubmission(
         commands: LeaveSubmissionCommandRepository,
+        copies: LeaveWorkingCopyRepository,
         remote: LeaveRepository,
         cache: LeaveRequestReplicaRepository,
         sessions: SessionRepository,
         workspaces: WorkspaceRepository,
         build: AppBuild,
-    ) = ReviewLeaveSubmission(commands, remote, cache, sessions, workspaces, Clock.System, build)
+    ) =
+        ReviewLeaveSubmission(
+            commands,
+            remote,
+            cache,
+            sessions,
+            workspaces,
+            Clock.System,
+            build,
+            copies,
+        )
 
     @Single(binds = [ReplayLeaveSubmission::class, SyncTask::class])
     fun replaySubmission(

@@ -96,9 +96,9 @@ transitions. A local pending command is not a confirmed business result. Respons
 loss preserves the original body and operation ID; a retry does not manufacture
 a new action. Version conflicts need reconciliation rather than last-write-wins.
 
-Current workflows have durable delivery after preparation. Expense editor input
-and unfinished items also have encrypted local working copies, independent of
-confirmed claims and pending commands. Full offline creation of every draft is
+Current workflows have durable delivery after preparation. Expense editor input,
+unfinished items and Leave creation input have encrypted local working copies,
+independent of confirmed records and pending commands. Full offline creation of every draft is
 not implemented: some forms still need online policy/evidence review before they
 can be prepared. Saving an unfinished local draft and submitting it are separate
 capabilities.
@@ -111,6 +111,7 @@ capabilities.
 | Inbox | Account-owned encrypted records survive a new login; list/detail share a published generation | Implemented |
 | Attendance / calendar | Account-owned daily evidence, effective schedule assignments, roster overrides and holidays; local month/week/employment queries | Four explicit collections, staged bootstrap and incremental changes implemented |
 | Leave | Account-owned balances, full requests and acquired activity pages; local employment/year/status and history queries | Request/balance change feed and resumable older-activity acquisition implemented |
+| Leave editor | Account/company/employment-owned dates, type, portion, reason and exact attachment metadata; local compare-and-set autosave | Explicit submission requires current review and an immutable command; confirmed cleanup removes only its matching draft revision |
 | Overtime | Account-owned full requests and acquired activity; local employment/date/status queries | Request change feed and resumable older-activity acquisition implemented |
 | Payslips | Account-owned full payslips, indexed annual summaries and versioned payment progress; local year/page/detail queries | Two explicit collections, revised heads, independent balances and staged format upgrades implemented |
 | Expenses | Account-owned complete claims, indexed summaries, payment progress and acquired activity; local employment/month/status/page queries | Two explicit collections, canonical claim acquisition and resumable activity backfill implemented |
@@ -254,7 +255,7 @@ its replacement is available. A completed feed's missing parent is authoritative
    account-owned facts across sign-in; workspace admission and other last-view
    snapshots remain session-owned. Reauthentication
    does not reuse an old request guard or old credential-bound feed cursor.
-2. Extend unfinished local draft persistence beyond Expenses, separately from
+2. Extend unfinished local draft persistence beyond Expenses and Leave, separately from
    immutable prepared commands and acquired server records.
 3. Register the remaining document feeds,
    including deletions and authorization changes, before implementing mobile sync.

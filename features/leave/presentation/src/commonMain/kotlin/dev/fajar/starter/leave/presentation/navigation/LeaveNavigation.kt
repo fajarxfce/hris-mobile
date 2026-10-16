@@ -1,8 +1,11 @@
+@file:OptIn(androidx.compose.ui.ExperimentalComposeUiApi::class)
+
 package dev.fajar.starter.leave.presentation.navigation
 
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
+import androidx.compose.ui.backhandler.BackHandler
 import androidx.lifecycle.compose.LifecycleStartEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
@@ -52,6 +55,7 @@ fun NavGraphBuilder.leaveRoutes(
         val viewModel = koinViewModel<LeaveCreateViewModel>(parameters = { parametersOf(target) })
         val state by viewModel.state.collectAsStateWithLifecycle()
         val list = rememberLazyListState()
+        BackHandler { viewModel.onEvent(LeaveCreateEvent.BackRequested) }
         LifecycleStartEffect(viewModel) {
             viewModel.onEvent(LeaveCreateEvent.Entered)
             onStopOrDispose { viewModel.onEvent(LeaveCreateEvent.Stopped) }
