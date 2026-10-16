@@ -13,6 +13,12 @@ interface ReplicaStore {
     fun observeCheckpoint(scope: ReplicaScope, partition: String): Flow<ReplicaCheckpoint?>
 
     /**
+     * Reads only the visible generation's metadata. An incomplete replacement does not hide or
+     * advance it; account ownership and the published checkpoint share one read transaction.
+     */
+    fun observePublishedCheckpoint(scope: ReplicaScope, partition: String): Flow<ReplicaCheckpoint?>
+
+    /**
      * Publishes a complete snapshot, or removes it, only if the current checkpoint still matches.
      * Account ownership, documents and checkpoint change in the same transaction.
      */

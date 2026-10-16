@@ -11,6 +11,12 @@ documents. Collectors can react to committed sync progress without reading or
 decrypting resource payloads. Account replacement and partition removal emit an
 absent checkpoint. Cancellation releases the collector's database observation.
 
+`observePublishedCheckpoint` reads metadata for the visible generation only. A
+replacement may keep staging while this observer retains the preceding published
+checkpoint. Publication updates it atomically; no resource payloads are queried.
+Consumers still own decryption and access admission. A stored timestamp does not
+prove that a worker is running or that the server has received every local action.
+
 `AppDatabase.replicas` is a raw storage contract for bounded, encrypted resource
 replication. It performs no HTTP, permission checks, DTO-to-domain mapping, or
 retry policy. Feature repositories provide authenticated ciphertext; feature use

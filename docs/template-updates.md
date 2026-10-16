@@ -1,5 +1,19 @@
 # Template updates
 
+## Published replica metadata
+
+The shared replica store can observe the visible checkpoint without reading
+resource payloads. An incomplete replacement retains the previous published
+metadata; publication, ownership changes and removal update it atomically.
+Repositories still own decryption, and feature use cases still own admission.
+The same implementation and portable regression are in
+[Compose Fluent Starter](https://github.com/fajarxfce/compose-fluent-starter/blob/main/docs/replica-storage.md).
+
+Both repositories passed root checks, all 25 database Chromium tests and Android
+dev assembly. The regression covers staging, publication, account/company
+isolation, replacement login and observer cancellation. This capability alone
+does not report worker execution or confirm delivery of local actions.
+
 ## Filter labels at large text sizes
 
 `AppFilterChip` now accepts an optional `maxLines` while retaining its single-line

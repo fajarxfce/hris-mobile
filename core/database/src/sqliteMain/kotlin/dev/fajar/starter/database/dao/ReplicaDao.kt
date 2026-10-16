@@ -107,11 +107,17 @@ abstract class ReplicaDao {
     protected abstract suspend fun deleteHead(ownerKey: String, partition: String)
 
     @Transaction
-    open suspend fun checkpoint(scope: ReplicaScope, partition: String): ReplicaCheckpoint? {
+    open suspend fun checkpoint(
+        scope: ReplicaScope,
+        partition: String,
+        publishedOnly: Boolean = false,
+    ): ReplicaCheckpoint? {
         if (!owns(scope.sessionId, scope.accountKey)) return null
         val ownerKey = scope.accountKey.orEmpty()
         val head = head(ownerKey, partition) ?: return null
-        val selected = head.stagingGeneration ?: head.activeGeneration ?: return null
+        val selected =
+            (if (publishedOnly) head.activeGeneration
+            else head.stagingGeneration ?: head.activeGeneration) ?: return null
         val row = generation(ownerKey, partition, selected) ?: return null
         return ReplicaCheckpoint(
             ReplicaHandle(scope, partition, selected),

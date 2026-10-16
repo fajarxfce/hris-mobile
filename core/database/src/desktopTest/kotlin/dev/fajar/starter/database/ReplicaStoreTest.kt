@@ -72,6 +72,7 @@ class ReplicaStoreTest {
         try {
             verifyReplicaPublication(database)
             verifyReplicaCheckpointObservation(database)
+            verifyPublishedReplicaCheckpoint(database)
             verifyReplicaAtomicity(database)
             verifyReplicaTombstones(database)
             verifyReplicaIsolation(database)

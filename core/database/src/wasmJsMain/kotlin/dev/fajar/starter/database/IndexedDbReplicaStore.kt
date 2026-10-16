@@ -21,7 +21,7 @@ internal class IndexedDbReplicaStore(
     override suspend fun checkpoint(scope: ReplicaScope, partition: String): ReplicaCheckpoint? {
         validateReplicaKey(scope, partition)
         return Json.decodeFromString(
-            replicaCheckpoint(database(), Json.encodeToString(scope), partition)
+            replicaCheckpoint(database(), Json.encodeToString(scope), partition, false)
                 .await<JsString>()
                 .toString()
         )
@@ -29,6 +29,18 @@ internal class IndexedDbReplicaStore(
 
     override fun observeCheckpoint(scope: ReplicaScope, partition: String) =
         changes.map { checkpoint(scope, partition) }.distinctUntilChanged()
+
+    override fun observePublishedCheckpoint(scope: ReplicaScope, partition: String) =
+        changes
+            .map {
+                validateReplicaKey(scope, partition)
+                Json.decodeFromString<ReplicaCheckpoint?>(
+                    replicaCheckpoint(database(), Json.encodeToString(scope), partition, true)
+                        .await<JsString>()
+                        .toString()
+                )
+            }
+            .distinctUntilChanged()
 
     override suspend fun replace(
         scope: ReplicaScope,
@@ -222,7 +234,7 @@ internal class IndexedDbReplicaStore(
 private external fun containsReplicaRecords(db: JsAny, prefix: String): Promise<JsBoolean>
 
 @JsFun(
-    """(db, scopeJson, partition) => new Promise((resolve, reject) => {
+    """(db, scopeJson, partition, publishedOnly) => new Promise((resolve, reject) => {
     const scope = JSON.parse(scopeJson), {sessionId, accountKey = null} = scope, ownerKey = accountKey ?? '';
     const tx = db.transaction(['account_scope', 'replica_heads', 'replica_generations'], 'readonly');
     let value = null;
@@ -233,7 +245,7 @@ private external fun containsReplicaRecords(db: JsAny, prefix: String): Promise<
         const head = tx.objectStore('replica_heads').get([ownerKey, partition]);
         head.onsuccess = () => {
             if (!head.result) return;
-            const generation = head.result.stagingGeneration ?? head.result.activeGeneration;
+            const generation = publishedOnly ? head.result.activeGeneration : head.result.stagingGeneration ?? head.result.activeGeneration;
             if (generation == null) return;
             const row = tx.objectStore('replica_generations').get([ownerKey, partition, generation]);
             row.onsuccess = () => {
@@ -249,6 +261,7 @@ private external fun replicaCheckpoint(
     db: JsAny,
     scope: String,
     partition: String,
+    publishedOnly: Boolean,
 ): Promise<JsString>
 
 @JsFun(
