@@ -1255,3 +1255,32 @@ confirmed the update at 05:06:32 WIB. Its SHA-256 is
 The phone application was not opened or driven. The emulator process was stopped
 with application data retained. Attendance, Expenses and Payslips replicas,
 unfinished offline drafts and shared sync-status presentation remain pending.
+
+## Roster reset synchronization
+
+On 16 October 2026, root checks passed with 1,535 desktop tests, including the
+assembled application. The Workforce domain Chromium suite passed 128 tests;
+Android dev assembly and the production Web distribution passed. Five new domain
+regressions cover a withdrawn upsert before a later deletion, reset during
+bootstrap, older references after a newer acquisition, unrelated failures and
+pending cancellation. One attendance navigation test timed out during the initial
+combined build; its isolated rerun and the complete standalone root check passed.
+
+An API 35 emulator used an isolated API/PostgreSQL/worker and disposable accounts.
+The public API created a weekly day shift, a company holiday and an explicit
+roster day off. Reset changed the local roster from version zero to a version-one
+tombstone while retaining the schedule and holiday ciphertext. The UI showed the
+regular day shift and the independent holiday.
+
+With airplane mode enabled and the API's ADB reverse mapping removed, a force-stop
+and cold start reopened Home and the work calendar. Stored document hashes and
+the published generation were unchanged. Reconnection then acquired an overnight
+roster at version two on the same retained head; the UI showed its next-day end
+time. No pending generation remained, and the inspected Android crash buffer
+contained no HRIS entry. Calendar screens at 200% text were inspected.
+
+The fixture services and emulator were stopped with AVD data retained. This change
+contains HRIS-specific sync policy and does not require a starter foundation port.
+The standard WireGuard APK was rebuilt and its signature verified. Its archive
+payloads match the validated standard build. The phone's ADB endpoint did not
+respond, so no phone installation was performed in this increment.

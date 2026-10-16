@@ -407,7 +407,14 @@ class SyncWorkforce(
                                 AppResult.Success(WorkforceReplicaEntry(reference, null))
                             else
                                 when (val response = readRecord(access, reference)) {
-                                    is AppResult.Failed -> response
+                                    is AppResult.Failed ->
+                                        if (
+                                            reference.collection == SyncCollection.ROSTER_DAYS &&
+                                                response.failure.code == "roster_day_not_found"
+                                        )
+                                        // A reviewed reset can withdraw an older queued upsert.
+                                        AppResult.Success(WorkforceReplicaEntry(reference, null))
+                                        else response
                                     is AppResult.Success -> {
                                         val record = response.value
                                         when {

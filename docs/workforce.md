@@ -125,6 +125,16 @@ versions, dates and shift values. An invalid response, failed hydration or cance
 run cannot advance its cursor. Newer canonical versions are accepted; older updates
 cannot overwrite them. Collection and ID identify a record, including tombstones.
 
+A roster reset removes its explicit override while preserving the server's day ID
+and revision history. Its versioned deletion restores the locally resolved weekly
+pattern, holiday or unassigned date. If an older upsert is withdrawn before its
+canonical read, only `roster_day_not_found` from the roster collection becomes a
+tombstone at that reference version. The following change page can then advance;
+an older withdrawal cannot replace a newer acquired record. Other missing-resource,
+transport and authorization failures retain their normal failure behavior.
+See [roster reset validation](validation.md#roster-reset-synchronization) for the
+automated and native offline acceptance checks.
+
 Documents, directory and checkpoint commit in one storage transaction. Initial and
 replacement bootstraps stage their records until complete. Cursor retention expiry
 stages a successor while the prior published generation stays readable. A new login
