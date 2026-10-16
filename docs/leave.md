@@ -57,6 +57,10 @@ fields keep preceding encrypted JSON readable. Leave record format 3 starts one
 replacement bootstrap so unchanged account versions can acquire their carry
 metadata. The previous published generation remains visible through interrupted
 acquisition, cancellation and process restart; publication replaces it atomically.
+The [Android upgrade acceptance](validation.md#android-carried-balance-upgrade-acceptance)
+verified this path with a public finite award: retained balances opened after an
+offline APK upgrade, then acquired carry metadata without new ledger versions and
+reopened after another offline cold start.
 
 ## Request preparation
 

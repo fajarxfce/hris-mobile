@@ -28,6 +28,34 @@ The package recorded its update at 07:14 on 16 October 2026. No phone UI was ope
 This increment's UI and upgrade acceptance used automated tests; installation alone
 does not establish a new device interaction or performance measurement.
 
+## Android carried-balance upgrade acceptance
+
+On 16 October 2026, an API 35 emulator used an isolated API, PostgreSQL and worker
+with fictional accounts. Public policy, balance-adjustment and year-closing APIs
+created 3.5 carried days with a 31 December 2026 deadline in Asia/Jakarta. A separate
+ordinary adjustment made the total 5.5 days. Removing the policy's optional deadline
+after closing preserved the award's original date and UTC boundary. The employee's
+own balance API returned those same facts.
+
+The preceding Android APK acquired format-2 records. With API forwarding removed,
+an in-place upgrade opened the retained 5.5-day balance. Three stored ciphertexts
+and the published generation were unchanged. Reconnecting and explicitly refreshing
+published the carry metadata under a new generation with the same record IDs and
+ledger versions. Another cold start without API access retained the new ciphertexts,
+total and original deadline. The failed refresh remained visible alongside the facts.
+
+At 200% Android text, the English carry amount and company-local date wrapped within
+the card, with fixed back and submission controls still reachable. The scrolled
+screenshot was inspected; the emulator crash buffer contained no HRIS crashes.
+The fixture processes, database container and emulator were stopped, preserving
+AVD data. The temporary loopback APK was never installed on the phone; the standard
+WireGuard build output was restored byte-for-byte.
+
+Root checks and Android assembly passed again, including 163 assembled UI tests.
+Two high-level flow tests now invoke visible accessibility actions after their
+content is revealed; module isolation and offline profile assertions are retained.
+This run does not measure rendering performance or exercise a real expiry deadline.
+
 ## Android acceptance with published amendments
 
 On 16 October 2026, an API 35 emulator used an isolated API, PostgreSQL and worker
