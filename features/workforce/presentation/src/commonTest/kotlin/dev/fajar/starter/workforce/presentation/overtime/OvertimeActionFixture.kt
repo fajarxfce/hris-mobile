@@ -101,6 +101,7 @@ class OvertimeActionFixture(
     private val prepare =
         PrepareOvertimeAction(
             persistence.commands,
+            base.cache,
             base.sessions,
             base.workspaces,
             base.clock,
@@ -110,6 +111,7 @@ class OvertimeActionFixture(
     private val observeCommand =
         ObserveOvertimeCommand(
             persistence.commands,
+            base.cache,
             base.sessions,
             base.workspaces,
             base.clock,
@@ -119,6 +121,7 @@ class OvertimeActionFixture(
         ReplayOvertimeCommands(
             persistence.commands,
             persistence.remote,
+            base.cache,
             base.sessions,
             base.workspaces,
             base.clock,
@@ -145,6 +148,7 @@ class OvertimeActionFixture(
                 prepare,
                 replay,
                 review,
+                base.sync,
             )
             .also { store.put("action", it) }
 }

@@ -141,6 +141,13 @@ canonical reads; its repository commits encrypted records with the cursor.
 `ObserveOvertime` queries date/status selections locally. `LoadOvertimeRequest`
 shares the acquisition mutex, retains each request and reuses acquired activity
 pages without HTTP. Historical acquisition never renews action-review authority.
+An independent encrypted admission record closes overview, request and command
+reads after confirmed access denial. The repository buffers that record while
+storage is pending or unavailable; use cases retain the original failure and
+check admission after pending work. Only complete acquisition started after the
+latest denial can reopen the shared projection. Form and detail ViewModels
+coordinate this recovery before requesting a fresh review; individual reads do
+not clear it. Pending commands remain stored throughout recovery.
 
 Overtime commands use separate preparation, delivery, observation and review use
 cases. Preparation validates the admitted review/request and stores immutable input;

@@ -40,7 +40,8 @@ suspend fun checkOvertimeRangeQueriesAndIndependentDetails(f: OvertimeReplicaFix
                 return f.db.replicas.observeQueries(scope, partition, requests)
             }
         }
-    val repository = EncryptedOvertimeReplicaRepository(store, f.cipher, f.keys, f.legacyKeys)
+    val repository =
+        EncryptedOvertimeReplicaRepository(store, f.cipher, f.keys, f.legacyKeys, f.admissions)
     val selection =
         OvertimeSelection(
             f.raw.base.employee.id,
@@ -282,7 +283,13 @@ suspend fun checkOvertimeCiphertextAndIndexAuthentication(f: OvertimeReplicaFixt
     val missing = MemoryCredentialStore()
     try {
         val replacement =
-            EncryptedOvertimeReplicaRepository(f.db.replicas, f.cipher, missing, f.legacyKeys)
+            EncryptedOvertimeReplicaRepository(
+                f.db.replicas,
+                f.cipher,
+                missing,
+                f.legacyKeys,
+                f.admissions,
+            )
         assertIs<AppResult.Failed>(
             replacement.replaceRequest(
                 f.access,
@@ -320,7 +327,13 @@ suspend fun checkOvertimeCancelledEncryptionCannotPublish(f: OvertimeReplicaFixt
                     }
                 }
             val repository =
-                EncryptedOvertimeReplicaRepository(f.db.replicas, delayed, f.keys, f.legacyKeys)
+                EncryptedOvertimeReplicaRepository(
+                    f.db.replicas,
+                    delayed,
+                    f.keys,
+                    f.legacyKeys,
+                    f.admissions,
+                )
             val running = async {
                 repository.replaceRequest(
                     f.access,

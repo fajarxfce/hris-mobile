@@ -25,6 +25,7 @@ import kotlinx.coroutines.sync.withLock
 class ReplayOvertimeCommands(
     private val commands: OvertimeCommandRepository,
     private val remote: OvertimeSubmissionRepository,
+    private val cache: OvertimeRequestReplicaRepository,
     private val sessions: SessionRepository,
     private val workspaces: WorkspaceRepository,
     private val clock: Clock,
@@ -49,9 +50,11 @@ class ReplayOvertimeCommands(
                         is AppResult.Failed -> return@withLock result
                         is AppResult.Success -> result.value
                     }
+                val admitted = readContinuation(workspaceId, access)
+                if (admitted is AppResult.Failed) return@withLock admitted
                 val stored = commands.find(access, commandId)
                 currentCoroutineContext().ensureActive()
-                val ownership = validateOvertimeContinuation(access, currentAccess(workspaceId))
+                val ownership = readContinuation(workspaceId, access)
                 if (ownership is AppResult.Failed) return@withLock ownership
                 val record =
                     when (stored) {
@@ -95,13 +98,15 @@ class ReplayOvertimeCommands(
                 is AppResult.Failed -> return syncFailure(result.failure)
                 is AppResult.Success -> result.value
             }
+        val admitted = readContinuation(workspace.id, access)
+        if (admitted is AppResult.Failed) return syncFailure(admitted.failure)
         var cursor: String? = null
         var delivered = 0
         // The account command store admits at most 128 records; three 50-row pages cover it.
         repeat(3) {
             val records = commands.page(access, cursor)
             currentCoroutineContext().ensureActive()
-            val ownership = validateOvertimeContinuation(access, currentAccess(workspace.id))
+            val ownership = readContinuation(workspace.id, access)
             if (ownership is AppResult.Failed) return syncFailure(ownership.failure)
             val page =
                 when (records) {
@@ -158,7 +163,7 @@ class ReplayOvertimeCommands(
     ): AppResult<OvertimeCommandRecord> {
         if (!record.command.belongsTo(access))
             return overtimeFailure("client.overtime_scope_changed", FailureKind.AccessDenied)
-        val ownership = validateOvertimeContinuation(access, currentAccess(workspaceId))
+        val ownership = readContinuation(workspaceId, access)
         if (ownership is AppResult.Failed) return ownership
         val permission = admitSelfOvertimeCommands(access)
         if (permission is AppResult.Failed) return permission
@@ -191,12 +196,16 @@ class ReplayOvertimeCommands(
                 outcome = OvertimeCommandOutcome.Unconfirmed(),
             )
         currentCoroutineContext().ensureActive()
-        val continuation = validateOvertimeContinuation(access, currentAccess(workspaceId))
+        val continuation = readContinuation(workspaceId, access)
         if (continuation is AppResult.Failed) return continuation
         val available = admitCompanyOperation(policy, build, CompanyModule.WORKFORCE, clock.now())
-        if (available is AppResult.Failed) return available
+        if (available is AppResult.Failed) return reject(access, available)
         val response = remote.send(access.sessionId, record.command)
         currentCoroutineContext().ensureActive()
+        if (response is AppResult.Failed) {
+            val owner = validateOvertimeContinuation(access, currentAccess(workspaceId))
+            if (owner is AppResult.Success) reject(access, response)
+        }
         val outcome =
             when (response) {
                 is AppResult.Failed ->
@@ -224,7 +233,7 @@ class ReplayOvertimeCommands(
                     return overtimeFailure("client.overtime_command_changed", FailureKind.Conflict)
         }
         currentCoroutineContext().ensureActive()
-        val publication = validateOvertimeContinuation(access, currentAccess(workspaceId))
+        val publication = readContinuation(workspaceId, access)
         if (publication is AppResult.Failed) return publication
         return AppResult.Success(sending.copy(revision = sending.revision + 1, outcome = outcome))
     }
@@ -236,19 +245,45 @@ class ReplayOvertimeCommands(
         val requestedAt = clock.now()
         val response = workspaces.clientPolicy(access.sessionId, access.companyId)
         currentCoroutineContext().ensureActive()
-        val ownership = validateOvertimeContinuation(access, currentAccess(workspaceId))
+        val ownership = readContinuation(workspaceId, access)
         if (ownership is AppResult.Failed) return ownership
         val snapshot =
             when (response) {
-                is AppResult.Failed -> return response
+                is AppResult.Failed -> return reject(access, response)
                 is AppResult.Success -> CompanyPolicySnapshot(response.value, requestedAt)
             }
         return when (
             val available =
                 admitCompanyOperation(snapshot, build, CompanyModule.WORKFORCE, clock.now())
         ) {
-            is AppResult.Failed -> available
+            is AppResult.Failed -> reject(access, available)
             is AppResult.Success -> AppResult.Success(snapshot)
+        }
+    }
+
+    private suspend fun reject(
+        access: WorkforceAccess,
+        failure: AppResult.Failed,
+    ): AppResult.Failed {
+        if (overtimeFailureInvalidatesCache(failure.failure)) {
+            withTimeoutOrNull(2.seconds) { cache.restrict(access, failure.failure) }
+        }
+        return failure
+    }
+
+    private suspend fun readContinuation(
+        workspaceId: String,
+        access: WorkforceAccess,
+    ): AppResult<WorkforceAccess> {
+        val current = validateOvertimeContinuation(access, currentAccess(workspaceId))
+        if (current is AppResult.Failed) return current
+        val admission = cache.admission(access)
+        currentCoroutineContext().ensureActive()
+        val owner = validateOvertimeContinuation(access, currentAccess(workspaceId))
+        if (owner is AppResult.Failed) return owner
+        return when (admission) {
+            is AppResult.Failed -> admission
+            is AppResult.Success -> admission.value.denial?.let { AppResult.Failed(it) } ?: owner
         }
     }
 

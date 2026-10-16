@@ -36,6 +36,7 @@ class OvertimePlanningFixture(now: () -> Instant = { Instant.parse("2026-10-12T0
         ReviewOvertimeSchedule(
             base.remote,
             remote,
+            overtime.cache,
             base.sessions,
             base.workspaces,
             base.clock,

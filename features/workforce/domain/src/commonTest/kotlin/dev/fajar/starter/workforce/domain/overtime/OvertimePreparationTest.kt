@@ -55,12 +55,12 @@ class OvertimePreparationTest {
                 .failure
                 .code,
         )
-        f.base.directoryCall = { AppResult.Success(f.base.directory.copy(items = emptyList())) }
-        assertEquals("employee_not_found", assertIs<AppResult.Failed>(f.load()).failure.code)
         f.base.directoryCall = {
             AppResult.Success(f.base.directory.copy(accountId = "other-account"))
         }
         assertEquals("client.invalid_response", assertIs<AppResult.Failed>(f.load()).failure.code)
+        f.base.directoryCall = { AppResult.Success(f.base.directory.copy(items = emptyList())) }
+        assertEquals("employee_not_found", assertIs<AppResult.Failed>(f.load()).failure.code)
         assertEquals(0, f.calls)
     }
 

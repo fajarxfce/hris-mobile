@@ -196,6 +196,17 @@ class OvertimeFixture(instant: () -> Instant = { Instant.parse("2026-10-12T01:00
         }
     val cache =
         object : OvertimeRequestReplicaRepository {
+            override fun observeAdmission(access: WorkforceAccess) =
+                replicas.observeAdmission(access)
+
+            override suspend fun admission(access: WorkforceAccess) = replicas.admission(access)
+
+            override suspend fun restrict(access: WorkforceAccess, failure: Failure) =
+                replicas.restrict(access, failure)
+
+            override suspend fun admit(access: WorkforceAccess, expectedRevision: String?) =
+                replicas.admit(access, expectedRevision)
+
             override fun observeRequest(
                 access: WorkforceAccess,
                 selection: OvertimeRequestSelection,

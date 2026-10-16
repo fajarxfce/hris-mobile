@@ -1433,3 +1433,40 @@ that it is displayed, then edits it. It retains the calculation, submission and
 fixed Back assertions. Root checks passed again with 1,576 desktop tests after
 this test correction. Application implementation did not change, so this increment
 did not rebuild or reinstall the APK.
+
+### Overtime read admission
+
+Confirmed Overtime restrictions now apply to overview, request and command reads
+through a separate encrypted admission record. Regression tests cover failed
+cleanup, failed or cancelled admission writes, replacement routes and sessions,
+late results, command preservation and a newer denial during older acquisition.
+SQLite and IndexedDB contracts verify encrypted ownership and revision checks.
+MVI tests verify that a read observer cannot cancel the operation persisting its
+own denial, that disposal still cancels recovery, and that later company denials
+request a workspace recheck. A scope-rejected cursor recovers through staged
+replacement even when ordinary fact cleanup fails.
+
+Root checks passed with 1,603 desktop/JVM/UI tests and the 70-module architecture
+check. The selected Workforce and assembled-app Chromium suites passed all 250
+tests. Android dev assembly passed. A restriction whose storage write fails is
+retained for the process lifetime; only a persisted record survives process death.
+Admitted local facts retain their existing age-independent read behavior.
+
+API 35 acceptance used an isolated API/PostgreSQL/worker with a loopback fault
+proxy. A real request remained readable after an offline cold start. Injecting a
+403 `mfa_required` response closed its detail and actions. The encrypted denial
+survived another offline cold start and retry without changing its stored revision.
+After admitted synchronization, overview and detail reopened. Planning and actual
+time forms resolved their production dependencies; the actual-time form also
+recovered from an injected denial. A further offline cold start retained the same
+three encrypted records and active generation. No request was submitted or changed
+by this acceptance run.
+
+Dark appearance at 200% system text was inspected, including the denied and
+recovered screens. No HRIS fatal exception was recorded in the completed run.
+Connectivity was restored and the owned services and emulator were stopped with
+AVD data retained. The initial emulator attempt stalled under an overly restrictive
+memory limit; acceptance completed after adjusting that limit. The local Web
+optimizer was killed by the host OOM handler, so production Web verification is
+delegated to the existing GitHub Actions build rather than repeated on this shared
+VPS. Kotlin Web compilation and the selected Chromium tests had passed.

@@ -144,6 +144,7 @@ class OvertimePlanFixture(
     private val prepare =
         PrepareOvertimePlan(
             commands,
+            base.cache,
             base.sessions,
             base.workspaces,
             base.clock,
@@ -151,11 +152,19 @@ class OvertimePlanFixture(
             dispatcher,
         )
     private val observe =
-        ObserveOvertimeCommand(commands, base.sessions, base.workspaces, base.clock, base.build)
+        ObserveOvertimeCommand(
+            commands,
+            base.cache,
+            base.sessions,
+            base.workspaces,
+            base.clock,
+            base.build,
+        )
     private val replay =
         ReplayOvertimeCommands(
             commands,
             remote,
+            base.cache,
             base.sessions,
             base.workspaces,
             base.clock,
@@ -174,6 +183,7 @@ class OvertimePlanFixture(
         ReviewOvertimeSchedule(
             base.workforce,
             planning,
+            base.cache,
             base.sessions,
             base.workspaces,
             base.clock,
@@ -190,6 +200,7 @@ class OvertimePlanFixture(
                 replay,
                 review,
                 base.refreshRequest,
+                base.sync,
             )
             .also { store.put("plan", it) }
 

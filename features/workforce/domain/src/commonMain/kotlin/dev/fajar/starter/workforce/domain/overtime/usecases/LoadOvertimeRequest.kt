@@ -48,9 +48,11 @@ class LoadOvertimeRequest(
                         is AppResult.Failed -> return@withTimeoutOrNull current
                         is AppResult.Success -> current.value
                     }
+                val admitted = readContinuation(workspaceId, access)
+                if (admitted is AppResult.Failed) return@withTimeoutOrNull admitted
                 val saved = cache.observeRequest(access, selection).first()
                 currentCoroutineContext().ensureActive()
-                val owner = validateOvertimeContinuation(access, currentAccess(workspaceId))
+                val owner = readContinuation(workspaceId, access)
                 if (owner is AppResult.Failed) return@withTimeoutOrNull owner
                 when (saved) {
                     is AppResult.Failed -> return@withTimeoutOrNull saved
@@ -73,18 +75,20 @@ class LoadOvertimeRequest(
                 is AppResult.Failed -> return current
                 is AppResult.Success -> current.value
             }
+        val admitted = readContinuation(workspaceId, access)
+        if (admitted is AppResult.Failed) return admitted
         val generation =
             when (val current = cache.requestCheckpoint(access)) {
                 is AppResult.Failed -> return current
                 is AppResult.Success -> current.value
             }
         currentCoroutineContext().ensureActive()
-        val initialOwnership = validateOvertimeContinuation(access, currentAccess(workspaceId))
+        val initialOwnership = readContinuation(workspaceId, access)
         if (initialOwnership is AppResult.Failed) return initialOwnership
         val requestedAt = clock.now()
         val policyResponse = workspaces.clientPolicy(access.sessionId, access.companyId)
         currentCoroutineContext().ensureActive()
-        val policyOwnership = validateOvertimeContinuation(access, currentAccess(workspaceId))
+        val policyOwnership = readContinuation(workspaceId, access)
         if (policyOwnership is AppResult.Failed) return policyOwnership
         val policy =
             when (policyResponse) {
@@ -107,9 +111,7 @@ class LoadOvertimeRequest(
         val receivedAt = clock.now()
         currentCoroutineContext().ensureActive()
         val current =
-            when (
-                val ownership = validateOvertimeContinuation(access, currentAccess(workspaceId))
-            ) {
+            when (val ownership = readContinuation(workspaceId, access)) {
                 is AppResult.Failed -> return ownership
                 is AppResult.Success -> ownership.value
             }
@@ -159,7 +161,7 @@ class LoadOvertimeRequest(
                     return overtimeFailure("client.overtime_changed", FailureKind.Conflict)
         }
         currentCoroutineContext().ensureActive()
-        val publication = validateOvertimeContinuation(access, currentAccess(workspaceId))
+        val publication = readContinuation(workspaceId, access)
         if (publication is AppResult.Failed) return publication
         return AppResult.Success(Unit)
     }
@@ -172,7 +174,7 @@ class LoadOvertimeRequest(
     ): AppResult<Unit> {
         val directoryResponse = workforce.selfEmployments(access, selection.employmentAfter)
         currentCoroutineContext().ensureActive()
-        val directoryOwnership = validateOvertimeContinuation(access, currentAccess(workspaceId))
+        val directoryOwnership = readContinuation(workspaceId, access)
         if (directoryOwnership is AppResult.Failed) return directoryOwnership
         val directory =
             when (directoryResponse) {
@@ -203,7 +205,7 @@ class LoadOvertimeRequest(
         val after = selection.historyAfter ?: return AppResult.Success(null)
         val response = remote.details(access, selection)
         currentCoroutineContext().ensureActive()
-        val owner = validateOvertimeContinuation(access, currentAccess(workspaceId))
+        val owner = readContinuation(workspaceId, access)
         if (owner is AppResult.Failed) return owner
         val older =
             when (response) {
@@ -220,6 +222,22 @@ class LoadOvertimeRequest(
         return AppResult.Success(
             OvertimeHistoryPage(details.request.id, details.request.version, after, older.history)
         )
+    }
+
+    private suspend fun readContinuation(
+        workspaceId: String,
+        access: WorkforceAccess,
+    ): AppResult<WorkforceAccess> {
+        val current = validateOvertimeContinuation(access, currentAccess(workspaceId))
+        if (current is AppResult.Failed) return current
+        val admission = cache.admission(access)
+        currentCoroutineContext().ensureActive()
+        val owner = validateOvertimeContinuation(access, currentAccess(workspaceId))
+        if (owner is AppResult.Failed) return owner
+        return when (admission) {
+            is AppResult.Failed -> admission
+            is AppResult.Success -> admission.value.denial?.let { AppResult.Failed(it) } ?: owner
+        }
     }
 
     private suspend fun currentAccess(workspaceId: String): AppResult<WorkforceAccess> {
@@ -244,10 +262,12 @@ class LoadOvertimeRequest(
         generation: String?,
         failure: AppResult.Failed,
     ): AppResult.Failed {
-        if (overtimeFailureInvalidatesCache(failure.failure))
+        if (overtimeFailureInvalidatesCache(failure.failure)) {
+            withTimeoutOrNull(2.seconds) { cache.restrict(access, failure.failure) }
             withTimeoutOrNull(2.seconds) {
                 cache.replaceRequest(access, requestId, generation, null)
             }
+        }
         // Cleanup failure cannot replace the authoritative rejection.
         return failure
     }

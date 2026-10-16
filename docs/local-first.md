@@ -248,6 +248,14 @@ its cursor; a newer canonical version first waits for feed reconciliation.
 An acquired legacy request/history page remains a read-only migration source until
 its replacement is available. A completed feed's missing parent is authoritative.
 
+Confirmed Overtime read restrictions have a separate encrypted admission record.
+Overview, detail, schedule preparation and retained-command workflows share that
+gate. Failed fact cleanup never clears it; an account-owned process buffer also
+keeps a failed admission write visible across route and session replacement.
+Only complete, current sync that observed the latest denial may clear it.
+Individual detail/review calls and partial recovery cannot do so. Stored commands
+retain their original input and operation identity until access recovers.
+
 ## Next increments
 
 1. Extend stable audience/account/company ownership to the remaining read

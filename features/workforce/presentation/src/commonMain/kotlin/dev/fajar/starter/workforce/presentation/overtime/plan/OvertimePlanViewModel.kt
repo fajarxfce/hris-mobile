@@ -25,6 +25,7 @@ class OvertimePlanViewModel(
     private val replayCommands: ReplayOvertimeCommands,
     private val reviewCommand: ReviewOvertimeCommand,
     private val refreshRequest: LoadOvertimeRequest,
+    private val synchronize: SyncOvertime,
 ) :
     MviViewModel<OvertimePlanState, OvertimePlanEvent, OvertimePlanEffect>(
         initialOvertimePlanState(target)
@@ -119,6 +120,7 @@ class OvertimePlanViewModel(
     private fun onReloadRequested(event: OvertimePlanEvent.ReloadRequested) {
         if (
             !foreground ||
+                (state.value.restriction != null && operation?.isActive == true) ||
                 state.value.work in
                     setOf(
                         OvertimePlanWork.SENDING,
@@ -142,15 +144,21 @@ class OvertimePlanViewModel(
         operation =
             viewModelScope.launch(start = CoroutineStart.LAZY) {
                 try {
+                    val recovery = synchronize.recoverAccess(target.workspaceId)
+                    ensureActive()
                     val result =
-                        reviewSchedule(
-                            target.workspaceId,
-                            OvertimePlanningSelection(
-                                target.employeeId,
-                                form.workDate,
-                                target.employmentAfter,
-                            ),
-                        )
+                        when (recovery) {
+                            is AppResult.Failed -> recovery
+                            is AppResult.Success ->
+                                reviewSchedule(
+                                    target.workspaceId,
+                                    OvertimePlanningSelection(
+                                        target.employeeId,
+                                        form.workDate,
+                                        target.employmentAfter,
+                                    ),
+                                )
+                        }
                     ensureActive()
                     when (result) {
                         is AppResult.Failed -> reportFailure(result.failure)
@@ -447,15 +455,20 @@ class OvertimePlanViewModel(
     }
 
     private fun reportFailure(failure: Failure) {
+        val previousCode = state.value.restriction?.code
         updateState { it.withPlanFailure(failure) }
         if (overtimeFailureInvalidatesCache(failure)) {
             observation?.cancel()
             observation = null
             expiration?.cancel()
             expiration = null
-            operation?.cancel()
-            operation = null
-            if (failure.code in workspaceAccessLossCodes && !state.value.needsVerification)
+            // The use case may still be persisting this denial or a delivery outcome.
+            // Its deadline bounds completion; leaving the route still cancels it.
+            if (
+                failure.code != previousCode &&
+                    failure.code in workspaceAccessLossCodes &&
+                    !state.value.needsVerification
+            )
                 viewModelScope.launch { emitEffect(OvertimePlanEffect.RecheckWorkspace) }
         }
     }

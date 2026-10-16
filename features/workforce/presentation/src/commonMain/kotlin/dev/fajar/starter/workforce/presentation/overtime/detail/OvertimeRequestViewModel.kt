@@ -18,6 +18,7 @@ class OvertimeRequestViewModel(
     @InjectedParam private val target: OvertimeRequestTarget,
     private val observe: ObserveOvertimeRequest,
     private val refresh: LoadOvertimeRequest,
+    private val synchronize: SyncOvertime,
 ) :
     MviViewModel<OvertimeRequestState, OvertimeRequestEvent, OvertimeRequestEffect>(
         OvertimeRequestState(target.selection)
@@ -89,7 +90,16 @@ class OvertimeRequestViewModel(
         }
         acquisition =
             viewModelScope.launch {
-                val result = refresh(target.workspaceId, requested, mode)
+                val recovery =
+                    if (mode == OvertimeRequestAcquisition.FRESH)
+                        synchronize.recoverAccess(target.workspaceId)
+                    else AppResult.Success(Unit)
+                ensureActive()
+                val result =
+                    when (recovery) {
+                        is AppResult.Failed -> recovery
+                        is AppResult.Success -> refresh(target.workspaceId, requested, mode)
+                    }
                 ensureActive()
                 if (result is AppResult.Success) observation?.cancel()
                 updateState { it.withRequestRefresh(result) }

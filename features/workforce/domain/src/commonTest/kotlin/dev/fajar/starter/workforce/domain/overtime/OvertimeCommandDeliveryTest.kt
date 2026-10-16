@@ -58,6 +58,7 @@ class OvertimeCommandDeliveryTest {
                 ReplayOvertimeCommands(
                     f.commands,
                     f.remote,
+                    f.overtime.cache,
                     f.base.sessions,
                     f.base.workspaces,
                     f.base.clock,

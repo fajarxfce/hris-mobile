@@ -166,13 +166,28 @@ class OvertimeCommandFixture(instant: () -> Instant = { Instant.parse("2026-10-1
             }
         }
     val preparePlan =
-        PrepareOvertimePlan(commands, base.sessions, base.workspaces, base.clock, base.build)
+        PrepareOvertimePlan(
+            commands,
+            overtime.cache,
+            base.sessions,
+            base.workspaces,
+            base.clock,
+            base.build,
+        )
     val prepareAction =
-        PrepareOvertimeAction(commands, base.sessions, base.workspaces, base.clock, base.build)
+        PrepareOvertimeAction(
+            commands,
+            overtime.cache,
+            base.sessions,
+            base.workspaces,
+            base.clock,
+            base.build,
+        )
     val replay =
         ReplayOvertimeCommands(
             commands,
             remote,
+            overtime.cache,
             base.sessions,
             base.workspaces,
             base.clock,
@@ -188,7 +203,14 @@ class OvertimeCommandFixture(instant: () -> Instant = { Instant.parse("2026-10-1
             base.build,
         )
     val observe =
-        ObserveOvertimeCommand(commands, base.sessions, base.workspaces, base.clock, base.build)
+        ObserveOvertimeCommand(
+            commands,
+            overtime.cache,
+            base.sessions,
+            base.workspaces,
+            base.clock,
+            base.build,
+        )
 
     suspend fun queue(reason: String = "Inventory count", proof: OvertimePreparation = prepared) =
         preparePlan(workspace.id, proof, interval, reason)

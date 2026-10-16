@@ -3,6 +3,7 @@ package dev.fajar.starter.workforce.domain.overtime.usecases
 import dev.fajar.starter.common.config.AppBuild
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.identity.domain.repositories.SessionRepository
+import dev.fajar.starter.workforce.domain.entities.WorkforceAccess
 import dev.fajar.starter.workforce.domain.overtime.entities.*
 import dev.fajar.starter.workforce.domain.overtime.policies.*
 import dev.fajar.starter.workforce.domain.overtime.repositories.OvertimeRequestReplicaRepository
@@ -56,20 +57,29 @@ class ObserveOvertimeRequest(
                 when (admitted) {
                     is AppResult.Failed -> flowOf(admitted)
                     is AppResult.Success ->
-                        cache.observeRequest(admitted.value, selection).map { result ->
+                        cache.observeAdmission(admitted.value).flatMapLatest { result ->
                             when (result) {
-                                is AppResult.Failed -> result
-                                is AppResult.Success ->
-                                    when (
-                                        val ownership =
-                                            validateStoredOvertime(admitted.value, result.value)
-                                    ) {
-                                        is AppResult.Failed -> ownership
-                                        is AppResult.Success -> result
-                                    }
+                                is AppResult.Failed -> flowOf(result)
+                                is AppResult.Success -> {
+                                    val denial = result.value.denial
+                                    if (denial != null) flowOf(AppResult.Failed(denial))
+                                    else observeStoredRequest(admitted.value, selection)
+                                }
                             }
                         }
                 }
             }
     }
+
+    private fun observeStoredRequest(access: WorkforceAccess, selection: OvertimeRequestSelection) =
+        cache.observeRequest(access, selection).map { result ->
+            when (result) {
+                is AppResult.Failed -> result
+                is AppResult.Success ->
+                    when (val ownership = validateStoredOvertime(access, result.value)) {
+                        is AppResult.Failed -> ownership
+                        is AppResult.Success -> result
+                    }
+            }
+        }
 }

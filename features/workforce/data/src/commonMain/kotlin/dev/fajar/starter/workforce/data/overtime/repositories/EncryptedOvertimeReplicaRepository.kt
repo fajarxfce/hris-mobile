@@ -1,3 +1,5 @@
+@file:OptIn(kotlin.uuid.ExperimentalUuidApi::class)
+
 package dev.fajar.starter.workforce.data.overtime.repositories
 
 import dev.fajar.starter.common.result.*
@@ -7,6 +9,7 @@ import dev.fajar.starter.storage.*
 import dev.fajar.starter.sync.domain.entities.SyncCollection
 import dev.fajar.starter.workforce.data.dto.*
 import dev.fajar.starter.workforce.data.mappers.*
+import dev.fajar.starter.workforce.data.overtime.datasources.OvertimeReadAdmissionDataSource
 import dev.fajar.starter.workforce.data.overtime.dto.*
 import dev.fajar.starter.workforce.data.overtime.encoding.*
 import dev.fajar.starter.workforce.data.overtime.mappers.*
@@ -16,6 +19,7 @@ import dev.fajar.starter.workforce.domain.overtime.policies.*
 import dev.fajar.starter.workforce.domain.overtime.repositories.*
 import dev.fajar.starter.workforce.domain.policies.sameWorkforceScope
 import kotlin.io.encoding.Base64
+import kotlin.uuid.Uuid
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.sync.Mutex
@@ -29,8 +33,94 @@ class EncryptedOvertimeReplicaRepository(
     private val cipher: ContentCipher,
     @Named("overtime-replica-content-key") private val credentials: CredentialStore,
     @Named("workspace-content-key") private val legacyCredentials: AtomicCredentialStore,
+    private val admissions: OvertimeReadAdmissionDataSource,
 ) : OvertimeReplicaRepository {
     private val keyCreation = Mutex()
+
+    private val admissionWrites = Mutex()
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override fun observeAdmission(access: WorkforceAccess) =
+        admissions
+            .observe(overtimeAdmissionBufferKey(access))
+            .flatMapLatest { pending ->
+                if (pending != null)
+                    safeStorageFlow(flowOf(pending), mapValue = { it.toReadAdmission() })
+                else
+                    safeStorageFlow(
+                        replicas.observeCheckpoint(
+                            overtimeReplicaScope(access),
+                            overtimeAdmissionPartition(access),
+                        ),
+                        mapValue = { raw ->
+                            if (raw == null) OvertimeReadAdmission(null, null)
+                            else {
+                                val key = Base64.decode(requireNotNull(credentials.read()))
+                                try {
+                                    decodeOvertimeReadAdmission(cipher, key, access, raw)
+                                        .toReadAdmission()
+                                } finally {
+                                    key.fill(0)
+                                }
+                            }
+                        },
+                    )
+            }
+            .distinctUntilChanged()
+
+    override suspend fun admission(access: WorkforceAccess) = observeAdmission(access).first()
+
+    override suspend fun restrict(access: WorkforceAccess, failure: Failure) = safeStorageCall {
+        currentCoroutineContext().ensureActive()
+        val bufferKey = overtimeAdmissionBufferKey(access)
+        val dto =
+            OvertimeReadAdmissionDto(Uuid.random().toString(), failure.kind.name, failure.code)
+        dto.toReadAdmission()
+        admissions.write(bufferKey, dto)
+        admissionWrites.withLock {
+            if (admissions.current(bufferKey) != dto) return@withLock false
+            val scope = overtimeReplicaScope(access)
+            val partition = overtimeAdmissionPartition(access)
+            val previous = replicas.checkpoint(scope, partition)
+            val key =
+                keyCreation.withLock {
+                    readOrCreateOvertimeReplicaKey(replicas, cipher, credentials)
+                }
+            try {
+                val sealed = encodeOvertimeReadAdmission(cipher, key, access, dto)
+                currentCoroutineContext().ensureActive()
+                val saved =
+                    replicas.replace(
+                        scope,
+                        partition,
+                        previous,
+                        ReplicaSnapshot(dto.revision, sealed, emptyList()),
+                    )
+                if (saved && admissions.current(bufferKey) == dto) admissions.write(bufferKey, null)
+                saved
+            } finally {
+                key.fill(0)
+            }
+        }
+    }
+
+    override suspend fun admit(access: WorkforceAccess, expectedRevision: String?) =
+        safeStorageCall {
+            admissionWrites.withLock {
+                val bufferKey = overtimeAdmissionBufferKey(access)
+                val scope = overtimeReplicaScope(access)
+                val partition = overtimeAdmissionPartition(access)
+                val previous = replicas.checkpoint(scope, partition)
+                val pending = admissions.current(bufferKey)
+                if ((pending?.revision ?: previous?.handle?.generation) != expectedRevision)
+                    return@withLock false
+                currentCoroutineContext().ensureActive()
+                if (!replicas.replace(scope, partition, previous, null)) return@withLock false
+                if (admissions.current(bufferKey) != pending) return@withLock false
+                admissions.write(bufferKey, null)
+                true
+            }
+        }
 
     override fun observeDirectory(access: WorkforceAccess) =
         safeStorageFlow(

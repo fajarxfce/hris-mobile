@@ -50,6 +50,31 @@ class OvertimeReplicaTest {
     fun thePrecedingEncryptedRequestMigratesWithoutLosingAcquiredHistory() = runTest {
         withDatabase(::checkOvertimeLegacyReadOnlyMigration)
     }
+
+    @Test
+    fun aConfirmedDenialSurvivesCleanupAndReauthentication() = runTest {
+        withDatabase(::checkOvertimeDenialSurvivesStorageCleanupAndLogin)
+    }
+
+    @Test
+    fun storageFailureCannotReopenPrivateOvertime() = runTest {
+        withDatabase(::checkOvertimeDenialRemainsKnownAfterFailedStorage)
+    }
+
+    @Test
+    fun anOldPendingAdmissionCannotRemoveANewerDenial() = runTest {
+        withDatabase(::checkLateOvertimeAdmissionCannotClearANewerDenial)
+    }
+
+    @Test
+    fun cancelledPersistenceKeepsTheProcessAdmissionGate() = runTest {
+        withDatabase(::checkCancelledOvertimeDenialRetainsTheProcessGate)
+    }
+
+    @Test
+    fun admissionCiphertextAuthenticatesItsOwnerAndNeverReplacesALostKey() = runTest {
+        withDatabase(::checkOvertimeAdmissionAuthenticatesItsCompanyAndRetainsALostKey)
+    }
 }
 
 private suspend fun withDatabase(block: suspend (OvertimeReplicaFixture) -> Unit) {

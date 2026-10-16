@@ -8,7 +8,7 @@ import dev.fajar.starter.identity.domain.repositories.SessionRepository
 import dev.fajar.starter.workforce.domain.entities.WorkforceAccess
 import dev.fajar.starter.workforce.domain.overtime.entities.*
 import dev.fajar.starter.workforce.domain.overtime.policies.*
-import dev.fajar.starter.workforce.domain.overtime.repositories.OvertimeCommandRepository
+import dev.fajar.starter.workforce.domain.overtime.repositories.*
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
 import kotlin.time.Clock
 import kotlin.time.Duration.Companion.seconds
@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.first
 
 class PrepareOvertimeAction(
     private val commands: OvertimeCommandRepository,
+    private val cache: OvertimeRequestReplicaRepository,
     private val sessions: SessionRepository,
     private val workspaces: WorkspaceRepository,
     private val clock: Clock,
@@ -60,6 +61,8 @@ class PrepareOvertimeAction(
                     is AppResult.Failed -> return@withTimeoutOrNull result
                     is AppResult.Success -> result.value
                 }
+            val admitted = readContinuation(workspaceId, access)
+            if (admitted is AppResult.Failed) return@withTimeoutOrNull admitted
             val payload =
                 when (
                     val result =
@@ -72,7 +75,7 @@ class PrepareOvertimeAction(
             val slot = OvertimeCommandSlot.Request(request.id)
             val previous = commands.observe(access, slot).first()
             currentCoroutineContext().ensureActive()
-            val ownership = validateOvertimeContinuation(access, currentAccess(workspaceId))
+            val ownership = readContinuation(workspaceId, access)
             if (ownership is AppResult.Failed) return@withTimeoutOrNull ownership
             val stillValid = validateOvertimeAction(snapshot, access, action, reason, clock.now())
             if (stillValid is AppResult.Failed) return@withTimeoutOrNull stillValid
@@ -102,7 +105,7 @@ class PrepareOvertimeAction(
                 )
             val inserted = commands.insert(access, command)
             currentCoroutineContext().ensureActive()
-            val continuation = validateOvertimeContinuation(access, currentAccess(workspaceId))
+            val continuation = readContinuation(workspaceId, access)
             if (continuation is AppResult.Failed) return@withTimeoutOrNull continuation
             when (inserted) {
                 is AppResult.Failed -> return@withTimeoutOrNull inserted
@@ -114,7 +117,7 @@ class PrepareOvertimeAction(
             }
             val stored = commands.observe(access, slot).first()
             currentCoroutineContext().ensureActive()
-            val publication = validateOvertimeContinuation(access, currentAccess(workspaceId))
+            val publication = readContinuation(workspaceId, access)
             if (publication is AppResult.Failed) return@withTimeoutOrNull publication
             when (stored) {
                 is AppResult.Failed -> stored
@@ -142,6 +145,22 @@ class PrepareOvertimeAction(
         )
             AppResult.Success(record)
         else overtimeFailure("client.overtime_command_pending", FailureKind.Conflict)
+    }
+
+    private suspend fun readContinuation(
+        workspaceId: String,
+        access: WorkforceAccess,
+    ): AppResult<WorkforceAccess> {
+        val current = validateOvertimeContinuation(access, currentAccess(workspaceId))
+        if (current is AppResult.Failed) return current
+        val admission = cache.admission(access)
+        currentCoroutineContext().ensureActive()
+        val owner = validateOvertimeContinuation(access, currentAccess(workspaceId))
+        if (owner is AppResult.Failed) return owner
+        return when (admission) {
+            is AppResult.Failed -> admission
+            is AppResult.Success -> admission.value.denial?.let { AppResult.Failed(it) } ?: owner
+        }
     }
 
     private suspend fun currentAccess(workspaceId: String): AppResult<WorkforceAccess> {

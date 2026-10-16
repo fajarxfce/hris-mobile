@@ -58,7 +58,17 @@ class ObserveOvertime(
             .flatMapLatest { admitted ->
                 when (admitted) {
                     is AppResult.Failed -> flowOf(admitted)
-                    is AppResult.Success -> observeReplica(admitted.value, selection)
+                    is AppResult.Success ->
+                        replicas.observeAdmission(admitted.value).flatMapLatest { result ->
+                            when (result) {
+                                is AppResult.Failed -> flowOf(result)
+                                is AppResult.Success -> {
+                                    val denial = result.value.denial
+                                    if (denial != null) flowOf(AppResult.Failed(denial))
+                                    else observeReplica(admitted.value, selection)
+                                }
+                            }
+                        }
                 }
             }
     }

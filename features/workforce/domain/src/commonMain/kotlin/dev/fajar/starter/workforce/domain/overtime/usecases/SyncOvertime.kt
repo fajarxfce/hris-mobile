@@ -45,6 +45,39 @@ class SyncOvertime(
         withTimeoutOrNull(30.seconds) { execution.withLock { synchronize(workspaceId) } }
             ?: AppResult.Success(OvertimeSyncOutcome(false, 5))
 
+    /** Detail/form retry only synchronizes when a retained denial needs new admission. */
+    suspend fun recoverAccess(workspaceId: String): AppResult<Unit> =
+        withTimeoutOrNull(30.seconds) {
+            execution.withLock {
+                val access =
+                    when (val result = currentAccess(workspaceId)) {
+                        is AppResult.Failed -> return@withLock result
+                        is AppResult.Success -> result.value
+                    }
+                val admission = cache.admission(access)
+                currentCoroutineContext().ensureActive()
+                val owner = validateOvertimeContinuation(access, currentAccess(workspaceId))
+                if (owner is AppResult.Failed) return@withLock owner
+                when (admission) {
+                    is AppResult.Failed -> return@withLock admission
+                    is AppResult.Success ->
+                        if (admission.value.denial == null) return@withLock AppResult.Success(Unit)
+                }
+                val result = synchronize(workspaceId)
+                if (result is AppResult.Failed) return@withLock result
+                currentCoroutineContext().ensureActive()
+                val latest = cache.admission(access)
+                currentCoroutineContext().ensureActive()
+                val current = validateOvertimeContinuation(access, currentAccess(workspaceId))
+                if (current is AppResult.Failed) return@withLock current
+                when (latest) {
+                    is AppResult.Failed -> latest
+                    is AppResult.Success ->
+                        latest.value.denial?.let { AppResult.Failed(it) } ?: AppResult.Success(Unit)
+                }
+            }
+        } ?: overtimeFailure("client.overtime_timeout", FailureKind.Timeout)
+
     override suspend fun invoke(): SyncResult {
         val session =
             when (val result = sessions.current()) {
@@ -69,6 +102,14 @@ class SyncOvertime(
                 is AppResult.Failed -> return result
                 is AppResult.Success -> result.value
             }
+        val readAdmission =
+            when (val result = cache.admission(access)) {
+                is AppResult.Failed -> return result
+                is AppResult.Success -> result.value
+            }
+        currentCoroutineContext().ensureActive()
+        val admissionOwner = validateOvertimeContinuation(access, currentAccess(workspaceId))
+        if (admissionOwner is AppResult.Failed) return admissionOwner
         val policyRequestedAt = clock.now()
         val policyResponse = workspaces.clientPolicy(access.sessionId, access.companyId)
         currentCoroutineContext().ensureActive()
@@ -78,12 +119,7 @@ class SyncOvertime(
         }
         val policy =
             when (policyResponse) {
-                is AppResult.Failed -> {
-                    if (overtimeFailureInvalidatesCache(policyResponse.failure)) {
-                        withTimeoutOrNull(2.seconds) { cache.clear(access) }
-                    }
-                    return policyResponse
-                }
+                is AppResult.Failed -> return reject(access, policyResponse)
                 is AppResult.Success ->
                     CompanyPolicySnapshot(policyResponse.value, policyRequestedAt)
             }
@@ -101,11 +137,38 @@ class SyncOvertime(
                 is AppResult.Success -> loaded.value
             }
         val records = synchronizePages(workspaceId, readAccess, policy, directory)
-        return when (records) {
-            is AppResult.Failed -> records
+        currentCoroutineContext().ensureActive()
+        val recordsOwner = validateOvertimeContinuation(access, currentAccess(workspaceId))
+        if (recordsOwner is AppResult.Failed) return recordsOwner
+        val synchronized =
+            when (records) {
+                is AppResult.Failed -> return reject(access, records)
+                is AppResult.Success ->
+                    if (records.value.caughtUp) synchronizeHistory(workspaceId, readAccess, policy)
+                    else records
+            }
+        currentCoroutineContext().ensureActive()
+        val finalOwner = validateOvertimeContinuation(access, currentAccess(workspaceId))
+        if (finalOwner is AppResult.Failed) return finalOwner
+        if (synchronized is AppResult.Failed) return reject(access, synchronized)
+        if (!records.value.caughtUp) return synchronized
+        val available = admitCompanyOperation(policy, build, CompanyModule.WORKFORCE, clock.now())
+        if (available is AppResult.Failed) return reject(access, available)
+        val reopened = cache.admit(access, readAdmission.revision)
+        currentCoroutineContext().ensureActive()
+        val publicationOwner = validateOvertimeContinuation(access, currentAccess(workspaceId))
+        if (publicationOwner is AppResult.Failed) return publicationOwner
+        return when (reopened) {
+            is AppResult.Failed -> reopened
             is AppResult.Success ->
-                if (records.value.caughtUp) synchronizeHistory(workspaceId, readAccess, policy)
-                else records
+                if (reopened.value) synchronized
+                else
+                    when (val current = cache.admission(access)) {
+                        is AppResult.Failed -> current
+                        is AppResult.Success ->
+                            current.value.denial?.let { AppResult.Failed(it) }
+                                ?: publicationConflict(workspaceId, access)
+                    }
         }
     }
 
@@ -172,7 +235,7 @@ class SyncOvertime(
             }
             val stillAvailable =
                 admitCompanyOperation(policy, build, CompanyModule.WORKFORCE, clock.now())
-            if (stillAvailable is AppResult.Failed) return reject(access, stillAvailable)
+            if (stillAvailable is AppResult.Failed) return stillAvailable
             val incoming = nextPage(access, previous)
             currentCoroutineContext().ensureActive()
             val pageOwnership = validateOvertimeContinuation(access, currentAccess(workspaceId))
@@ -180,10 +243,8 @@ class SyncOvertime(
             if (incoming is AppResult.Failed) {
                 if (incoming.failure.code in cursorResetCodes && !restarted) {
                     if (incoming.failure.code == "sync_scope_changed") {
-                        // Failed cleanup cannot turn this scope denial into a storage-only error.
-                        val cleared = withTimeoutOrNull(2.seconds) { cache.clear(access) }
-                        if (cleared !is AppResult.Success || !cleared.value) return incoming
-                        checkpoint = null
+                        // Recovery must start after this denial has been retained.
+                        return incoming
                     } else {
                         // Cursor retention is unrelated to permission to read stored facts.
                         // Stage a replacement while the published generation stays visible.
@@ -199,9 +260,6 @@ class SyncOvertime(
                     restarted = true
                     return@repeat
                 }
-                if (overtimeFailureInvalidatesCache(incoming.failure)) {
-                    withTimeoutOrNull(2.seconds) { cache.clear(access) }
-                }
                 return incoming
             }
             val page = (incoming as AppResult.Success).value
@@ -212,19 +270,14 @@ class SyncOvertime(
             if (hydrationOwnership is AppResult.Failed) return hydrationOwnership
             val entries =
                 when (hydrated) {
-                    is AppResult.Failed -> {
-                        if (overtimeFailureInvalidatesCache(hydrated.failure)) {
-                            withTimeoutOrNull(2.seconds) { cache.clear(access) }
-                        }
-                        return hydrated
-                    }
+                    is AppResult.Failed -> return hydrated
                     is AppResult.Success -> hydrated.value
                 }
             val complete =
                 page.phase == OvertimeSyncPhase.CHANGES && !page.hasMore && !page.pendingPublication
             val finalAvailability =
                 admitCompanyOperation(policy, build, CompanyModule.WORKFORCE, clock.now())
-            if (finalAvailability is AppResult.Failed) return reject(access, finalAvailability)
+            if (finalAvailability is AppResult.Failed) return finalAvailability
             val next = advanceOvertimeCheckpoint(previous, page, clock.now())
             when (val committed = cache.commit(previous, next, directory, entries)) {
                 is AppResult.Failed -> return committed
@@ -248,20 +301,20 @@ class SyncOvertime(
         if (owner is AppResult.Failed) return owner
         val work =
             when (pending) {
-                is AppResult.Failed -> return reject(access, pending)
+                is AppResult.Failed -> return pending
                 is AppResult.Success -> pending.value
             }
         for (item in work) {
             val available =
                 admitCompanyOperation(policy, build, CompanyModule.WORKFORCE, clock.now())
-            if (available is AppResult.Failed) return reject(access, available)
+            if (available is AppResult.Failed) return available
             val acquired = acquireHistoryPage(workspaceId, access, item)
             currentCoroutineContext().ensureActive()
             val ownership = validateOvertimeContinuation(access, currentAccess(workspaceId))
             if (ownership is AppResult.Failed) return ownership
             val page =
                 when (acquired) {
-                    is AppResult.Failed -> return reject(access, acquired)
+                    is AppResult.Failed -> return acquired
                     is AppResult.Success ->
                         acquired.value ?: return AppResult.Success(OvertimeSyncOutcome(false, 5))
                 }
@@ -270,13 +323,13 @@ class SyncOvertime(
                 return overtimeFailure("client.invalid_response", FailureKind.Unexpected)
             val stillAvailable =
                 admitCompanyOperation(policy, build, CompanyModule.WORKFORCE, clock.now())
-            if (stillAvailable is AppResult.Failed) return reject(access, stillAvailable)
+            if (stillAvailable is AppResult.Failed) return stillAvailable
             val stored = cache.storeHistory(access, item, page)
             currentCoroutineContext().ensureActive()
             val committedOwner = validateOvertimeContinuation(access, currentAccess(workspaceId))
             if (committedOwner is AppResult.Failed) return committedOwner
             when (stored) {
-                is AppResult.Failed -> return reject(access, stored)
+                is AppResult.Failed -> return stored
                 is AppResult.Success ->
                     if (!stored.value) return AppResult.Success(OvertimeSyncOutcome(false, 5))
             }
@@ -542,8 +595,23 @@ class SyncOvertime(
         access: WorkforceAccess,
         failure: AppResult.Failed,
     ): AppResult.Failed {
-        if (overtimeFailureInvalidatesCache(failure.failure))
-            withTimeoutOrNull(2.seconds) { cache.clear(access) }
+        if (overtimeFailureInvalidatesCache(failure.failure)) {
+            withTimeoutOrNull(2.seconds) { cache.restrict(access, failure.failure) }
+            withTimeoutOrNull(2.seconds) {
+                if (failure.failure.code == "sync_scope_changed") {
+                    // Keep facts behind their denial while replacing the rejected cursor.
+                    // The next invocation acquires the replacement after this restriction.
+                    val stored = cache.checkpoint(access)
+                    currentCoroutineContext().ensureActive()
+                    val previous = (stored as? AppResult.Success)?.value
+                    if (previous != null) {
+                        val replacement =
+                            initialOvertimeCheckpoint(access, Uuid.random().toString(), clock.now())
+                        cache.begin(replacement, previous.generation)
+                    }
+                } else cache.clear(access)
+            }
+        }
         return failure
     }
 

@@ -5,6 +5,7 @@ import dev.fajar.starter.database.*
 import dev.fajar.starter.securestorage.*
 import dev.fajar.starter.sync.domain.entities.*
 import dev.fajar.starter.workforce.data.mappers.toDirectory
+import dev.fajar.starter.workforce.data.overtime.datasources.MemoryOvertimeReadAdmissionDataSource
 import dev.fajar.starter.workforce.data.overtime.mappers.*
 import dev.fajar.starter.workforce.data.overtime.repositories.EncryptedOvertimeReplicaRepository
 import dev.fajar.starter.workforce.domain.entities.*
@@ -22,7 +23,9 @@ class OvertimeReplicaFixture(val db: AppDatabase) {
     val keys = MemoryCredentialStore()
     val legacyKeys = MemoryCredentialStore()
     val cipher = AesGcmContentCipher()
-    val repository = EncryptedOvertimeReplicaRepository(db.replicas, cipher, keys, legacyKeys)
+    val admissions = MemoryOvertimeReadAdmissionDataSource()
+    val repository =
+        EncryptedOvertimeReplicaRepository(db.replicas, cipher, keys, legacyKeys, admissions)
     val directory = raw.base.directory.toDirectory(access, null)
     private var acquisition = 0
 

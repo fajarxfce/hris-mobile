@@ -39,9 +39,11 @@ class ReviewOvertimeCommand(
                     is AppResult.Failed -> return@withTimeoutOrNull result
                     is AppResult.Success -> result.value
                 }
+            val admitted = readContinuation(workspaceId, access)
+            if (admitted is AppResult.Failed) return@withTimeoutOrNull admitted
             val stored = commands.find(access, commandId)
             currentCoroutineContext().ensureActive()
-            val ownership = validateOvertimeContinuation(access, currentAccess(workspaceId))
+            val ownership = readContinuation(workspaceId, access)
             if (ownership is AppResult.Failed) return@withTimeoutOrNull ownership
             val record =
                 when (stored) {
@@ -72,7 +74,7 @@ class ReviewOvertimeCommand(
                         )
                         .first()
                 currentCoroutineContext().ensureActive()
-                val continuation = validateOvertimeContinuation(access, currentAccess(workspaceId))
+                val continuation = readContinuation(workspaceId, access)
                 if (continuation is AppResult.Failed) return@withTimeoutOrNull continuation
                 val snapshot =
                     when (observed) {
@@ -101,9 +103,25 @@ class ReviewOvertimeCommand(
             }
             val removal = commands.remove(access, record)
             currentCoroutineContext().ensureActive()
-            val publication = validateOvertimeContinuation(access, currentAccess(workspaceId))
+            val publication = readContinuation(workspaceId, access)
             if (publication is AppResult.Failed) publication else removal
         } ?: overtimeFailure("client.overtime_timeout", FailureKind.Timeout)
+
+    private suspend fun readContinuation(
+        workspaceId: String,
+        access: WorkforceAccess,
+    ): AppResult<WorkforceAccess> {
+        val current = validateOvertimeContinuation(access, currentAccess(workspaceId))
+        if (current is AppResult.Failed) return current
+        val admission = cache.admission(access)
+        currentCoroutineContext().ensureActive()
+        val owner = validateOvertimeContinuation(access, currentAccess(workspaceId))
+        if (owner is AppResult.Failed) return owner
+        return when (admission) {
+            is AppResult.Failed -> admission
+            is AppResult.Success -> admission.value.denial?.let { AppResult.Failed(it) } ?: owner
+        }
+    }
 
     private suspend fun currentAccess(workspaceId: String): AppResult<WorkforceAccess> {
         val session =

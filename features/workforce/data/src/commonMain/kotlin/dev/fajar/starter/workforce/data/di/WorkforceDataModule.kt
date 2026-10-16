@@ -24,26 +24,29 @@ class WorkforceDataModule {
     @Factory
     fun prepareOvertimePlan(
         commands: OvertimeCommandRepository,
+        cache: OvertimeRequestReplicaRepository,
         sessions: SessionRepository,
         workspaces: WorkspaceRepository,
         build: AppBuild,
-    ) = PrepareOvertimePlan(commands, sessions, workspaces, Clock.System, build)
+    ) = PrepareOvertimePlan(commands, cache, sessions, workspaces, Clock.System, build)
 
     @Factory
     fun prepareOvertimeAction(
         commands: OvertimeCommandRepository,
+        cache: OvertimeRequestReplicaRepository,
         sessions: SessionRepository,
         workspaces: WorkspaceRepository,
         build: AppBuild,
-    ) = PrepareOvertimeAction(commands, sessions, workspaces, Clock.System, build)
+    ) = PrepareOvertimeAction(commands, cache, sessions, workspaces, Clock.System, build)
 
     @Factory
     fun observeOvertimeCommand(
         commands: OvertimeCommandRepository,
+        cache: OvertimeRequestReplicaRepository,
         sessions: SessionRepository,
         workspaces: WorkspaceRepository,
         build: AppBuild,
-    ) = ObserveOvertimeCommand(commands, sessions, workspaces, Clock.System, build)
+    ) = ObserveOvertimeCommand(commands, cache, sessions, workspaces, Clock.System, build)
 
     @Factory
     fun reviewOvertimeCommand(
@@ -58,19 +61,21 @@ class WorkforceDataModule {
     fun replayOvertimeCommands(
         commands: OvertimeCommandRepository,
         remote: OvertimeSubmissionRepository,
+        cache: OvertimeRequestReplicaRepository,
         sessions: SessionRepository,
         workspaces: WorkspaceRepository,
         build: AppBuild,
-    ) = ReplayOvertimeCommands(commands, remote, sessions, workspaces, Clock.System, build)
+    ) = ReplayOvertimeCommands(commands, remote, cache, sessions, workspaces, Clock.System, build)
 
     @Factory
     fun reviewOvertimeSchedule(
         workforce: WorkforceRepository,
         remote: OvertimePlanningRepository,
+        cache: OvertimeRequestReplicaRepository,
         sessions: SessionRepository,
         workspaces: WorkspaceRepository,
         build: AppBuild,
-    ) = ReviewOvertimeSchedule(workforce, remote, sessions, workspaces, Clock.System, build)
+    ) = ReviewOvertimeSchedule(workforce, remote, cache, sessions, workspaces, Clock.System, build)
 
     @Factory
     fun observeOvertime(

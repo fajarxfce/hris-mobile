@@ -32,9 +32,41 @@ class OvertimeReplicaFixture : OvertimeReplicaRepository {
     var clears = 0
     var directoryObservers = 0
     var pageObservers = 0
+    var admissionObservers = 0
+    var failAdmissionWrite = false
+    var rejectAdmission = false
+    var denials = 0
+    val readAdmission = MutableStateFlow(OvertimeReadAdmission(null, null))
     val selections = mutableListOf<OvertimeSelection>()
     val historyPages = mutableMapOf<Pair<String, Long>, OvertimeHistoryPage>()
     val historyWork = mutableMapOf<String, OvertimeHistoryWork>()
+
+    override fun observeAdmission(access: WorkforceAccess) = flow {
+        admissionObservers++
+        try {
+            emitAll(readAdmission.map { AppResult.Success(it) })
+        } finally {
+            admissionObservers--
+        }
+    }
+
+    override suspend fun admission(access: WorkforceAccess) = AppResult.Success(readAdmission.value)
+
+    override suspend fun restrict(access: WorkforceAccess, failure: Failure): AppResult<Boolean> {
+        readAdmission.value = OvertimeReadAdmission("read-denial-${++denials}", failure)
+        return if (failAdmissionWrite) overtimeFailure("fixture.storage", FailureKind.Storage)
+        else AppResult.Success(true)
+    }
+
+    override suspend fun admit(
+        access: WorkforceAccess,
+        expectedRevision: String?,
+    ): AppResult<Boolean> {
+        if (rejectAdmission || readAdmission.value.revision != expectedRevision)
+            return AppResult.Success(false)
+        readAdmission.value = OvertimeReadAdmission(null, null)
+        return AppResult.Success(true)
+    }
 
     override fun observeDirectory(
         access: WorkforceAccess

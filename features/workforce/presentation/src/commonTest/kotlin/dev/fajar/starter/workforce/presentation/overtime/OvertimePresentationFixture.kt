@@ -72,6 +72,9 @@ class OvertimePresentationFixture(
             policy = CompanyPolicySnapshot(policy, clock.now()),
         )
     val build = AppBuild(AppPlatform.Android, 1, "1.0", null)
+    val access =
+        (admitOvertime(workspace.id, workspace, session, build, clock.now()) as AppResult.Success)
+            .value
     val sessionState = MutableStateFlow<AppResult<Session?>>(AppResult.Success(session))
     val workspaceState = MutableStateFlow<AppResult<Workspace?>>(AppResult.Success(workspace))
     val employee =
@@ -353,6 +356,17 @@ class OvertimePresentationFixture(
         }
     val cache =
         object : OvertimeRequestReplicaRepository {
+            override fun observeAdmission(access: WorkforceAccess) =
+                replicas.observeAdmission(access)
+
+            override suspend fun admission(access: WorkforceAccess) = replicas.admission(access)
+
+            override suspend fun restrict(access: WorkforceAccess, failure: Failure) =
+                replicas.restrict(access, failure)
+
+            override suspend fun admit(access: WorkforceAccess, expectedRevision: String?) =
+                replicas.admit(access, expectedRevision)
+
             override fun observeRequest(
                 access: WorkforceAccess,
                 selection: OvertimeRequestSelection,

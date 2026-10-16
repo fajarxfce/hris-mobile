@@ -3,9 +3,10 @@ package dev.fajar.starter.workforce.domain.overtime.usecases
 import dev.fajar.starter.common.config.AppBuild
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.identity.domain.repositories.SessionRepository
+import dev.fajar.starter.workforce.domain.entities.WorkforceAccess
 import dev.fajar.starter.workforce.domain.overtime.entities.*
 import dev.fajar.starter.workforce.domain.overtime.policies.*
-import dev.fajar.starter.workforce.domain.overtime.repositories.OvertimeCommandRepository
+import dev.fajar.starter.workforce.domain.overtime.repositories.*
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
 import kotlin.time.Clock
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -13,6 +14,7 @@ import kotlinx.coroutines.flow.*
 
 class ObserveOvertimeCommand(
     private val commands: OvertimeCommandRepository,
+    private val cache: OvertimeRequestReplicaRepository,
     private val sessions: SessionRepository,
     private val workspaces: WorkspaceRepository,
     private val clock: Clock,
@@ -69,20 +71,31 @@ class ObserveOvertimeCommand(
                 when (admitted) {
                     is AppResult.Failed -> flowOf(admitted)
                     is AppResult.Success ->
-                        commands.observe(admitted.value, slot).map { result ->
-                            val record = (result as? AppResult.Success)?.value
-                            if (
-                                record != null &&
-                                    (!record.command.belongsTo(admitted.value) ||
-                                        record.command.slot() != slot)
-                            )
-                                overtimeFailure(
-                                    "client.overtime_scope_changed",
-                                    FailureKind.AccessDenied,
-                                )
-                            else result
+                        cache.observeAdmission(admitted.value).flatMapLatest { admission ->
+                            when (admission) {
+                                is AppResult.Failed -> flowOf(admission)
+                                is AppResult.Success -> {
+                                    val denial = admission.value.denial
+                                    if (denial != null) flowOf(AppResult.Failed(denial))
+                                    else observeStoredCommand(admitted.value, slot)
+                                }
+                            }
                         }
                 }
             }
     }
+
+    private fun observeStoredCommand(
+        access: WorkforceAccess,
+        slot: OvertimeCommandSlot,
+    ): Flow<AppResult<OvertimeCommandRecord?>> =
+        commands.observe(access, slot).map { result ->
+            val record = (result as? AppResult.Success)?.value
+            if (
+                record != null &&
+                    (!record.command.belongsTo(access) || record.command.slot() != slot)
+            )
+                overtimeFailure("client.overtime_scope_changed", FailureKind.AccessDenied)
+            else result
+        }
 }

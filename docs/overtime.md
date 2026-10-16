@@ -68,9 +68,26 @@ remain read-only migration sources; production no longer writes the old format.
 
 Local reads ignore ordinary freshness and credential expiry. Action reviews keep
 their original acquisition time, session and authorization deadline. Historical
-activity cannot renew them. Confirmed revocation remains authoritative even if
-local cleanup fails; presentation retains that gate through pending, failed or
-incomplete sync and reopens only after successful admitted acquisition.
+activity cannot renew them.
+
+Confirmed access, MFA and projection denials use a separate encrypted admission
+record. Overview, request and command observers apply it before reading private
+facts, including on replacement routes and after process restoration. Pending
+storage writes also publish an account/audience/company-owned memory record;
+failed persistence cannot reopen another reader in the same process. A failed
+write alone cannot survive process death, so persisted and process-only recovery
+are tested separately. Ordinary data cleanup leaves the admission record intact.
+
+`SyncOvertime` captures the admission revision before acquisition. Only complete,
+current acquisition may clear that exact revision; a newer denial wins over old
+pending work. `recoverAccess` performs no HTTP when there is no retained denial.
+Detail and form retries coordinate it before their fresh request or schedule
+review. An individual read, partial bootstrap or failed retry cannot reopen the
+shared projection. This rule imposes no age limit on admitted offline facts.
+A server scope rejection stages a replacement cursor while the denial keeps old
+facts closed. The next invocation acquires that replacement, even if ordinary
+fact cleanup is unavailable. Successful cursor replacement alone never admits
+the old projection.
 
 ## Presentation
 
@@ -121,6 +138,10 @@ Planning, actual-time submission and withdrawal have typed immutable commands.
 Neither sends HTTP. Competing confirmations recover the canonical stored input.
 One planning command is retained per employment; actual time and withdrawal share
 one slot per request so conflicting actions cannot replace each other.
+Preparation, observation, delivery and discard also check shared read admission.
+A denial hides retained input and pauses delivery without deleting it. Admission
+is checked again after pending local reads/writes; an intent saved during a newly
+denied operation stays recoverable under its original identity.
 
 The data repository stores separate authenticated input and outcome envelopes in
 the account-owned command store. Associated data binds account, audience, company,

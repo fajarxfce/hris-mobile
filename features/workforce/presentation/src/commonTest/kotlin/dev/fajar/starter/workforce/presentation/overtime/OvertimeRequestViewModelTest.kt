@@ -312,6 +312,7 @@ class OvertimeRequestViewModelTest {
                 OvertimeRequestTarget(fixture.workspace.id, fixture.selection),
                 fixture.observeRequest,
                 fixture.refreshRequest,
+                fixture.sync,
             )
         val owner = ViewModelStore().apply { put("overtime-request", model) }
         try {

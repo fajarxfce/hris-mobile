@@ -15,7 +15,6 @@ internal fun OvertimeActionState.withActionFailure(value: Failure): OvertimeActi
             command = null,
             commandReady = false,
             loading = false,
-            work = null,
             dialog = null,
         )
 

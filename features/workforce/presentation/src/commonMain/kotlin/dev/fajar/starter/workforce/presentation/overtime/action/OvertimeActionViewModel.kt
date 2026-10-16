@@ -23,6 +23,7 @@ class OvertimeActionViewModel(
     private val prepareAction: PrepareOvertimeAction,
     private val replayCommands: ReplayOvertimeCommands,
     private val reviewCommand: ReviewOvertimeCommand,
+    private val synchronize: SyncOvertime,
 ) :
     MviViewModel<OvertimeActionState, OvertimeActionEvent, OvertimeActionEffect>(
         OvertimeActionState(target)
@@ -96,8 +97,10 @@ class OvertimeActionViewModel(
                     .collect { (request, command) ->
                         ensureActive()
                         if (state.value.restriction != null) return@collect
-                        updateState { it.withActionReads(request, command) }
-                        state.value.restriction?.let(::reportFailure)
+                        val next = state.value.withActionReads(request, command)
+                        val restriction = next.restriction
+                        if (restriction != null) reportFailure(restriction)
+                        else updateState { next }
                     }
             }
         observation?.start()
@@ -109,7 +112,14 @@ class OvertimeActionViewModel(
         operation =
             viewModelScope.launch(start = CoroutineStart.LAZY) {
                 try {
-                    val result = refreshRequest(target.workspaceId, target.selection)
+                    val recovery = synchronize.recoverAccess(target.workspaceId)
+                    ensureActive()
+                    val result =
+                        when (recovery) {
+                            is AppResult.Failed -> recovery
+                            is AppResult.Success ->
+                                refreshRequest(target.workspaceId, target.selection)
+                        }
                     ensureActive()
                     when (result) {
                         is AppResult.Failed -> reportFailure(result.failure)
@@ -402,13 +412,17 @@ class OvertimeActionViewModel(
     }
 
     private fun reportFailure(failure: Failure) {
+        val previousCode = state.value.restriction?.code
         updateState { it.withActionFailure(failure) }
         if (overtimeFailureInvalidatesCache(failure)) {
             observation?.cancel()
             observation = null
-            operation?.cancel()
-            operation = null
-            if (failure.code in workspaceAccessLossCodes && !state.value.needsVerification)
+            // Shared admission observation must not cancel the write that produced it.
+            if (
+                failure.code != previousCode &&
+                    failure.code in workspaceAccessLossCodes &&
+                    !state.value.needsVerification
+            )
                 viewModelScope.launch { emitEffect(OvertimeActionEffect.RecheckWorkspace) }
         }
     }

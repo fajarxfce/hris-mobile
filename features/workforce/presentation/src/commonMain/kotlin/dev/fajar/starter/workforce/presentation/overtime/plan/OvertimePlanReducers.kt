@@ -16,7 +16,6 @@ internal fun OvertimePlanState.withPlanFailure(value: Failure): OvertimePlanStat
         prepared = null,
         command = null,
         commandReady = false,
-        work = null,
         form = form?.copy(reason = "", startsAt = null, endsAt = null),
         dialog = null,
     )
