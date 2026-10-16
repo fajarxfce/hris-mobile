@@ -1423,3 +1423,13 @@ metadata confirmed the update. The 29,856,155-byte APK has SHA-256
 `644a062f4c518fdc801a285915d3976530987cad323b3b823a48bf66e617ce63`.
 Installation used `--skip-build --install-only`; the phone application was not
 launched or driven. Standard development services were unchanged by this delivery.
+
+### Leave form lookup in CI
+
+The subsequent Linux CI run could not find the Reason field before scrolling:
+the lazy list had not composed that off-screen item. Apple and Windows jobs
+passed. The layout test now scrolls the list to the field's semantics, asserts
+that it is displayed, then edits it. It retains the calculation, submission and
+fixed Back assertions. Root checks passed again with 1,576 desktop tests after
+this test correction. Application implementation did not change, so this increment
+did not rebuild or reinstall the APK.

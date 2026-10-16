@@ -102,8 +102,11 @@ class LeaveCreateLayoutTest {
         }
         val back = compose.onNodeWithContentDescription("Kembali").fetchSemanticsNode().boundsInRoot
         compose
+            .onNode(hasScrollToIndexAction())
+            .performScrollToNode(hasContentDescription("Alasan"))
+        compose
             .onNodeWithContentDescription("Alasan")
-            .performScrollTo()
+            .assertIsDisplayed()
             .performTextReplacement("Keperluan keluarga\nMohon ditinjau")
         compose.runOnIdle { assertEquals("Keperluan keluarga\nMohon ditinjau", state.form?.reason) }
         compose
