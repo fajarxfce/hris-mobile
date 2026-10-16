@@ -72,6 +72,13 @@ class InboxAvailabilityTest {
                 assertTrue(f.transmitted.isEmpty())
                 assertEquals(0, f.inbox.clearCalls)
                 f.inbox.policyCall = { AppResult.Success(policy) }
+                assertEquals(
+                    code,
+                    assertIs<AppResult.Failed>(f.replay(f.inbox.workspace.id, original.command.id))
+                        .failure
+                        .code,
+                )
+                assertIs<AppResult.Success<*>>(f.inbox.sync(f.inbox.workspace.id))
                 assertIs<AppResult.Success<InboxCommandRecord>>(
                     f.replay(f.inbox.workspace.id, original.command.id)
                 )

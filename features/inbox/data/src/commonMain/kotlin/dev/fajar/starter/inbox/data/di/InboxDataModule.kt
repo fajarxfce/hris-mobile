@@ -16,9 +16,10 @@ class InboxDataModule {
     @Factory
     fun unread(
         remote: InboxRepository,
+        cache: InboxCacheRepository,
         sessions: SessionRepository,
         workspaces: WorkspaceRepository,
-    ) = LoadUnreadInbox(remote, sessions, workspaces)
+    ) = LoadUnreadInbox(remote, cache, sessions, workspaces)
 
     @Factory
     fun prepareAction(
@@ -31,9 +32,10 @@ class InboxDataModule {
     @Factory
     fun observeAction(
         commands: InboxCommandRepository,
+        cache: InboxCacheRepository,
         sessions: SessionRepository,
         workspaces: WorkspaceRepository,
-    ) = ObserveInboxAction(commands, sessions, workspaces)
+    ) = ObserveInboxAction(commands, cache, sessions, workspaces)
 
     @Factory
     fun reviewAction(

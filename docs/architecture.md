@@ -114,6 +114,13 @@ See [native identity](native-identity.md) for the active HRIS integration and
 [inbox](inbox.md) for the first encrypted HRIS feed integration and
 [sync](sync.md) for the inherited worker and command contracts.
 
+Inbox list, detail, unread counts and durable actions share an encrypted
+read-admission record. A process-owned datasource buffers confirmed denials while
+persistence is pending or fails. Use cases check that admission after pending
+reads and commands; complete acquisition can clear only the denial revision it
+observed before starting. Fact cleanup never substitutes for access admission,
+and an outcome-write failure cannot erase a confirmed delivery denial.
+
 The [work calendar and attendance](workforce.md) share account-owned encrypted
 attendance days, effective schedule assignments, roster overrides and holidays.
 `SyncWorkforce` owns change-feed acquisition and live admission. Its repository

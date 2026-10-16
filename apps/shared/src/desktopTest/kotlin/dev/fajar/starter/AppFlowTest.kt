@@ -3219,6 +3219,7 @@ class AppFlowTest {
                                 get(),
                                 get(),
                                 get(named("inbox-content-key")),
+                                get(),
                             )
                         )
                     }
@@ -3236,7 +3237,7 @@ class AppFlowTest {
                 refreshWhenReady()
                 waitFor("Verify your account")
                 compose.onNodeWithText("Office closure").assertDoesNotExist()
-                assertTrue(cache.clearAttempts.get() > 0)
+                compose.waitUntil(10_000) { cache.clearAttempts.get() > 0 }
                 compose.waitUntil(10_000) {
                     compose
                         .onAllNodes(hasContentDescription("Refresh") and isEnabled())
@@ -3272,7 +3273,7 @@ class AppFlowTest {
     }
 
     @Test
-    fun inboxDetailKeepsConfirmedDenialThroughFailedCleanupAndPendingOfflineRetry() {
+    fun inboxDetailDenialAlsoGatesTheListAfterFailedCleanupAndPendingOfflineRetry() {
         val server = NativeUiServer()
         try {
             withApplication(
@@ -3284,6 +3285,7 @@ class AppFlowTest {
                                 get(),
                                 get(),
                                 get(named("inbox-content-key")),
+                                get(),
                             )
                         )
                     }
@@ -3303,7 +3305,7 @@ class AppFlowTest {
                 refreshWhenReady()
                 waitFor("Verify your account")
                 compose.onNodeWithText(server.inbox.firstBody).assertDoesNotExist()
-                assertTrue(cache.clearAttempts.get() > 0)
+                compose.waitUntil(10_000) { cache.clearAttempts.get() > 0 }
                 compose.waitUntil(10_000) {
                     compose
                         .onAllNodes(hasContentDescription("Refresh") and isEnabled())
@@ -3326,9 +3328,14 @@ class AppFlowTest {
                 }
                 compose.onNodeWithText("Verify your account").assertExists()
                 compose.onNodeWithText(server.inbox.firstBody).assertDoesNotExist()
+                compose.onNodeWithContentDescription("Back").performClick()
+                waitFor("Verify your account")
+                compose.onNodeWithText("Office closure").assertDoesNotExist()
                 server.inbox.offline = false
                 cache.rejectClear = false
                 refreshWhenReady()
+                waitFor("Office closure")
+                compose.onNode(hasText("Office closure") and hasClickAction()).performClick()
                 waitFor(server.inbox.firstBody)
                 compose.onNodeWithText("Verify your account").assertDoesNotExist()
                 assertTrue(server.inbox.actions.isEmpty())

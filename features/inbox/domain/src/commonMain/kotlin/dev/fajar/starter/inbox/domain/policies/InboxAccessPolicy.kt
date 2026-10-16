@@ -7,6 +7,7 @@ import dev.fajar.starter.workspace.domain.entities.CompanyModule
 import dev.fajar.starter.workspace.domain.entities.Workspace
 import dev.fajar.starter.workspace.domain.policies.requireCompanyModule
 import dev.fajar.starter.workspace.domain.policies.validateLocalWorkspaceOwnership
+import dev.fajar.starter.workspace.domain.policies.workspaceAccessLossCodes
 import kotlin.time.Instant
 
 fun admitInbox(
@@ -79,14 +80,14 @@ fun validateInboxActionSnapshot(
 fun sameInboxScope(first: InboxAccess, second: InboxAccess): Boolean =
     sameStoredInboxScope(first, second) &&
         first.sessionId == second.sessionId &&
-        first.sessionExpiresAt == second.sessionExpiresAt
+        first.sessionExpiresAt == second.sessionExpiresAt &&
+        first.permissions == second.permissions
 
 /** Credential rotation/replacement does not change who owns a published local projection. */
 fun sameStoredInboxScope(first: InboxAccess, second: InboxAccess): Boolean =
     first.accountId == second.accountId &&
         first.audience == second.audience &&
-        first.companyId == second.companyId &&
-        first.permissions == second.permissions
+        first.companyId == second.companyId
 
 /** Reading a saved message requires its current local owner, not an unexpired sync cursor. */
 fun validateStoredInbox(access: InboxAccess, checkpoint: InboxCheckpoint?): AppResult<Unit> =
@@ -97,9 +98,21 @@ fun validateStoredInbox(access: InboxAccess, checkpoint: InboxCheckpoint?): AppR
 /** A freshness or credential-renewal failure is not a revocation of locally owned facts. */
 fun inboxFailureInvalidatesCache(failure: Failure): Boolean =
     failure.kind in setOf(FailureKind.Unauthorized, FailureKind.AccessDenied) ||
+        failure.code in workspaceAccessLossCodes ||
         failure.code in
             setOf(
                 "sync_scope_changed",
+                "company_maintenance",
+                "client_update_required",
+                "client_version_required",
+            )
+
+/** Temporary company availability gates retain owned facts and their cursor for recovery. */
+fun inboxFailureRequiresCleanup(failure: Failure): Boolean =
+    inboxFailureInvalidatesCache(failure) &&
+        failure.code !in
+            setOf(
+                "company_module_disabled",
                 "company_maintenance",
                 "client_update_required",
                 "client_version_required",

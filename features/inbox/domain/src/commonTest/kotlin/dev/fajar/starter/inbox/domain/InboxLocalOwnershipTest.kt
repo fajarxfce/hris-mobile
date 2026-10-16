@@ -65,7 +65,7 @@ class InboxLocalOwnershipTest {
     }
 
     @Test
-    fun changedPermissionsDoNotReuseThePreviousProjectionOrHideADenialBehindStorageFailure() =
+    fun unrelatedPermissionChangesRetainOwnedFactsButRequireAFreshActionReviewAndCursor() =
         runTest {
             val f = InboxFixture()
             assertIs<AppResult.Success<*>>(f.sync(f.workspace.id))
@@ -74,20 +74,26 @@ class InboxLocalOwnershipTest {
                 AppResult.Success(
                     f.workspace.copy(permissions = f.workspace.permissions + "announcements.manage")
                 )
-            assertEquals(
-                "client.inbox_scope_changed",
-                assertIs<AppResult.Failed>(
-                        f.observe(f.workspace.id, InboxCacheQuery.Page()).first()
-                    )
-                    .failure
-                    .code,
+            assertEquals(original, f.observe(f.workspace.id, InboxCacheQuery.Page()).first())
+            val checkpoint = f.checkpoint!!
+            assertIs<AppResult.Failed>(
+                validateInboxActionSnapshot(
+                    f.access.copy(permissions = f.access.permissions + "announcements.manage"),
+                    checkpoint,
+                    f.clock.now(),
+                )
             )
-            f.clearCall = { AppResult.Failed(Failure(FailureKind.Storage, "Fixture")) }
-            val failure = assertIs<AppResult.Failed>(f.sync(f.workspace.id)).failure
-            assertEquals(FailureKind.AccessDenied, failure.kind)
-            assertEquals("client.inbox_scope_changed", failure.code)
+            f.itemCall = { AppResult.Failed(Failure(FailureKind.Network, "Fixture")) }
+            assertEquals(
+                FailureKind.Network,
+                assertIs<AppResult.Failed>(f.sync(f.workspace.id)).failure.kind,
+            )
             assertEquals(original, f.snapshot.value)
-            assertEquals(1, f.bootstrapCalls)
+            assertEquals(original, f.observe(f.workspace.id, InboxCacheQuery.Page()).first())
+            assertEquals(2, f.bootstrapCalls)
+            assertNotEquals(checkpoint.generation, f.checkpoint!!.generation)
+            assertFalse(f.checkpoint!!.published)
+            assertEquals(0, f.clearCalls)
         }
 
     @Test

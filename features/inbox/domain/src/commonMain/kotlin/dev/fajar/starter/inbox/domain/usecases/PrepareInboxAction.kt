@@ -33,11 +33,15 @@ class PrepareInboxAction(
                 is AppResult.Failed -> return result
                 is AppResult.Success -> result.value
             }
+        val admitted = readContinuation(workspaceId, access)
+        if (admitted is AppResult.Failed) return admitted
         val page =
             when (val result = cache.observe(access, InboxCacheQuery.Item(itemId)).first()) {
                 is AppResult.Failed -> return result
                 is AppResult.Success -> result.value
             }
+        val readOwner = readContinuation(workspaceId, access)
+        if (readOwner is AppResult.Failed) return readOwner
         val admission = validateInboxActionSnapshot(access, page.checkpoint, clock.now())
         if (admission is AppResult.Failed) return admission
         val item =
@@ -54,7 +58,7 @@ class PrepareInboxAction(
                 is AppResult.Failed -> return result
                 is AppResult.Success -> result.value
             }
-        when (val current = validateInboxCommandAccess(currentAccess(workspaceId), access)) {
+        when (val current = readContinuation(workspaceId, access)) {
             is AppResult.Failed -> return current
             is AppResult.Success -> Unit
         }
@@ -89,7 +93,7 @@ class PrepareInboxAction(
                 }
         }
         currentCoroutineContext().ensureActive()
-        when (val current = validateInboxCommandAccess(currentAccess(workspaceId), access)) {
+        when (val current = readContinuation(workspaceId, access)) {
             is AppResult.Failed -> return current
             is AppResult.Success -> Unit
         }
@@ -99,13 +103,29 @@ class PrepareInboxAction(
                 is AppResult.Success -> result.value
             }
         currentCoroutineContext().ensureActive()
-        when (val current = validateInboxCommandAccess(currentAccess(workspaceId), access)) {
+        when (val current = readContinuation(workspaceId, access)) {
             is AppResult.Failed -> return current
             is AppResult.Success -> Unit
         }
         return if (retained != null && retained.command.action == action)
             AppResult.Success(retained)
         else inboxCommandFailure("client.inbox_action_pending")
+    }
+
+    private suspend fun readContinuation(
+        workspaceId: String,
+        access: InboxAccess,
+    ): AppResult<Unit> {
+        val current = validateInboxCommandAccess(currentAccess(workspaceId), access)
+        if (current is AppResult.Failed) return current
+        val admission = cache.admission(access)
+        currentCoroutineContext().ensureActive()
+        val owner = validateInboxCommandAccess(currentAccess(workspaceId), access)
+        if (owner is AppResult.Failed) return owner
+        return when (admission) {
+            is AppResult.Failed -> admission
+            is AppResult.Success -> admission.value.denial?.let { AppResult.Failed(it) } ?: owner
+        }
     }
 
     private suspend fun currentAccess(workspaceId: String): AppResult<InboxAccess> {
@@ -124,6 +144,13 @@ class PrepareInboxAction(
                 is AppResult.Failed -> return result
                 is AppResult.Success -> result.value
             }
-        return admitInbox(workspaceId, workspace, session)
+        currentCoroutineContext().ensureActive()
+        val latest =
+            when (val result = sessions.current()) {
+                is AppResult.Failed -> return result
+                is AppResult.Success -> result.value
+            }
+        currentCoroutineContext().ensureActive()
+        return admitInbox(workspaceId, workspace, latest)
     }
 }

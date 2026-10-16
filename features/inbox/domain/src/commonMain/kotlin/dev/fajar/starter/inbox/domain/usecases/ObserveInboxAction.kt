@@ -4,6 +4,7 @@ import dev.fajar.starter.common.result.*
 import dev.fajar.starter.identity.domain.repositories.SessionRepository
 import dev.fajar.starter.inbox.domain.entities.*
 import dev.fajar.starter.inbox.domain.policies.*
+import dev.fajar.starter.inbox.domain.repositories.InboxCacheRepository
 import dev.fajar.starter.inbox.domain.repositories.InboxCommandRepository
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -11,6 +12,7 @@ import kotlinx.coroutines.flow.*
 
 class ObserveInboxAction(
     private val commands: InboxCommandRepository,
+    private val cache: InboxCacheRepository,
     private val sessions: SessionRepository,
     private val workspaces: WorkspaceRepository,
 ) {
@@ -40,7 +42,17 @@ class ObserveInboxAction(
             .flatMapLatest { admitted ->
                 when (admitted) {
                     is AppResult.Failed -> flowOf(admitted)
-                    is AppResult.Success -> commands.observe(admitted.value, itemId)
+                    is AppResult.Success ->
+                        cache.observeAdmission(admitted.value).flatMapLatest { admission ->
+                            when (admission) {
+                                is AppResult.Failed -> flowOf(admission)
+                                is AppResult.Success -> {
+                                    val denial = admission.value.denial
+                                    if (denial != null) flowOf(AppResult.Failed(denial))
+                                    else commands.observe(admitted.value, itemId)
+                                }
+                            }
+                        }
                 }
             }
 }

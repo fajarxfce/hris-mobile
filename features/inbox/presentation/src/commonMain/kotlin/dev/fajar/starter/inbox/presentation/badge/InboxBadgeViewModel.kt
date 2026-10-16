@@ -29,7 +29,10 @@ class InboxBadgeViewModel(
         observation =
             viewModelScope.launch {
                 observe(workspaceId, InboxCacheQuery.Checkpoint).collectLatest { checkpoint ->
-                    if (checkpoint is AppResult.Failed) updateState { InboxBadgeState() }
+                    if (checkpoint is AppResult.Failed) {
+                        updateState { InboxBadgeState() }
+                        return@collectLatest
+                    }
                     // Sync may commit several pages together; only its latest progress needs a
                     // read.
                     delay(150)

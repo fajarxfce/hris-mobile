@@ -115,6 +115,14 @@ class InboxFixture(
     var itemCalls = 0
     var clearCalls = 0
     var clearCall: suspend () -> AppResult<Boolean>? = { null }
+    val readAdmission =
+        MutableStateFlow<AppResult<InboxReadAdmission>>(
+            AppResult.Success(InboxReadAdmission(null, null))
+        )
+    var restrictionWrites = 0
+    var restrictionCall: suspend () -> AppResult<Boolean>? = { null }
+    var admissionCall: suspend () -> AppResult<InboxReadAdmission>? = { null }
+    var admitCall: suspend () -> AppResult<Boolean>? = { null }
     var checkpoint: InboxCheckpoint? = null
     val commits = mutableListOf<InboxCheckpoint>()
     val entries = linkedMapOf<String, InboxReplicaEntry>()
@@ -232,6 +240,39 @@ class InboxFixture(
         }
     val cache =
         object : InboxCacheRepository {
+            override fun observeAdmission(access: InboxAccess) = readAdmission
+
+            override suspend fun admission(access: InboxAccess) =
+                admissionCall() ?: readAdmission.value
+
+            override suspend fun restrict(
+                access: InboxAccess,
+                failure: Failure,
+            ): AppResult<Boolean> {
+                readAdmission.value =
+                    AppResult.Success(InboxReadAdmission("denial-${++restrictionWrites}", failure))
+                return restrictionCall() ?: AppResult.Success(true)
+            }
+
+            override suspend fun admit(
+                access: InboxAccess,
+                expectedRevision: String?,
+            ): AppResult<Boolean> {
+                val previous = readAdmission.value
+                if (previous is AppResult.Failed) return previous
+                if ((previous as AppResult.Success).value.revision != expectedRevision)
+                    return AppResult.Success(false)
+                admitCall()?.let {
+                    if (it is AppResult.Failed || !(it as AppResult.Success).value) return it
+                }
+                return AppResult.Success(
+                    readAdmission.compareAndSet(
+                        previous,
+                        AppResult.Success(InboxReadAdmission(null, null)),
+                    )
+                )
+            }
+
             override fun observe(access: InboxAccess, query: InboxCacheQuery) =
                 snapshot.map { result ->
                     if (result is AppResult.Success && query is InboxCacheQuery.Item)
@@ -300,5 +341,5 @@ class InboxFixture(
         }
     val sync = SyncInbox(feed, remote, cache, sessions, workspaces, clock, build)
     val observe = ObserveInbox(cache, sessions, workspaces)
-    val unread = LoadUnreadInbox(remote, sessions, workspaces)
+    val unread = LoadUnreadInbox(remote, cache, sessions, workspaces)
 }

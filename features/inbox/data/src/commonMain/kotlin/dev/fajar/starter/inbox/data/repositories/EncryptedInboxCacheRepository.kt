@@ -1,6 +1,11 @@
+@file:OptIn(kotlin.uuid.ExperimentalUuidApi::class)
+
 package dev.fajar.starter.inbox.data.repositories
 
+import dev.fajar.starter.common.result.Failure
 import dev.fajar.starter.database.*
+import dev.fajar.starter.inbox.data.datasources.InboxReadAdmissionDataSource
+import dev.fajar.starter.inbox.data.dto.InboxReadAdmissionDto
 import dev.fajar.starter.inbox.data.encoding.*
 import dev.fajar.starter.inbox.data.mappers.*
 import dev.fajar.starter.inbox.domain.entities.*
@@ -9,14 +14,11 @@ import dev.fajar.starter.securestorage.ContentCipher
 import dev.fajar.starter.securestorage.CredentialStore
 import dev.fajar.starter.storage.*
 import kotlin.io.encoding.Base64
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.NonCancellable
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.map
+import kotlin.uuid.Uuid
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import org.koin.core.annotation.*
 
@@ -25,8 +27,89 @@ class EncryptedInboxCacheRepository(
     private val replicas: ReplicaStore,
     private val cipher: ContentCipher,
     @Named("inbox-content-key") private val credentials: CredentialStore,
+    private val admissions: InboxReadAdmissionDataSource,
 ) : InboxCacheRepository {
     private val keyCreation = Mutex()
+    private val admissionWrites = Mutex()
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override fun observeAdmission(access: InboxAccess) =
+        admissions
+            .observe(inboxAdmissionBufferKey(access))
+            .flatMapLatest { pending ->
+                if (pending != null)
+                    safeStorageFlow(flowOf(pending), mapValue = { it.toReadAdmission() })
+                else
+                    safeStorageFlow(
+                        replicas.observeCheckpoint(
+                            inboxReplicaScope(access),
+                            inboxAdmissionPartition(access),
+                        ),
+                        mapValue = { raw ->
+                            if (raw == null) InboxReadAdmission(null, null)
+                            else {
+                                val key = Base64.decode(requireNotNull(credentials.read()))
+                                try {
+                                    decodeInboxReadAdmission(cipher, key, access, raw)
+                                        .toReadAdmission()
+                                } finally {
+                                    key.fill(0)
+                                }
+                            }
+                        },
+                    )
+            }
+            .distinctUntilChanged()
+
+    override suspend fun admission(access: InboxAccess) = observeAdmission(access).first()
+
+    override suspend fun restrict(access: InboxAccess, failure: Failure) = safeStorageCall {
+        currentCoroutineContext().ensureActive()
+        val bufferKey = inboxAdmissionBufferKey(access)
+        val dto = InboxReadAdmissionDto(Uuid.random().toString(), failure.kind.name, failure.code)
+        dto.toReadAdmission()
+        admissions.write(bufferKey, dto)
+        admissionWrites.withLock {
+            if (admissions.current(bufferKey) != dto) return@withLock false
+            val scope = inboxReplicaScope(access)
+            val partition = inboxAdmissionPartition(access)
+            val previous = replicas.checkpoint(scope, partition)
+            val key =
+                keyCreation.withLock { readOrCreateInboxContentKey(replicas, cipher, credentials) }
+            try {
+                val sealed = encodeInboxReadAdmission(cipher, key, access, dto)
+                currentCoroutineContext().ensureActive()
+                val saved =
+                    replicas.replace(
+                        scope,
+                        partition,
+                        previous,
+                        ReplicaSnapshot(dto.revision, sealed, emptyList()),
+                    )
+                if (saved && admissions.current(bufferKey) == dto) admissions.write(bufferKey, null)
+                saved
+            } finally {
+                key.fill(0)
+            }
+        }
+    }
+
+    override suspend fun admit(access: InboxAccess, expectedRevision: String?) = safeStorageCall {
+        admissionWrites.withLock {
+            val bufferKey = inboxAdmissionBufferKey(access)
+            val scope = inboxReplicaScope(access)
+            val partition = inboxAdmissionPartition(access)
+            val previous = replicas.checkpoint(scope, partition)
+            val pending = admissions.current(bufferKey)
+            if ((pending?.revision ?: previous?.handle?.generation) != expectedRevision)
+                return@withLock false
+            currentCoroutineContext().ensureActive()
+            if (!replicas.replace(scope, partition, previous, null)) return@withLock false
+            if (admissions.current(bufferKey) != pending) return@withLock false
+            admissions.write(bufferKey, null)
+            true
+        }
+    }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun observe(access: InboxAccess, query: InboxCacheQuery) =
@@ -110,24 +193,7 @@ class EncryptedInboxCacheRepository(
             require(checkpoint.revision == 0L && !checkpoint.published)
             val access = checkpoint.access
             val key =
-                keyCreation.withLock {
-                    val saved = credentials.read()
-                    if (saved != null) Base64.decode(saved)
-                    else {
-                        check(!replicas.containsRecords("inbox/")) {
-                            "Existing cache requires its content key."
-                        }
-                        val generated = cipher.generateKey()
-                        try {
-                            withContext(NonCancellable) {
-                                credentials.write(Base64.encode(generated))
-                            }
-                            generated.copyOf()
-                        } finally {
-                            generated.fill(0)
-                        }
-                    }
-                }
+                keyCreation.withLock { readOrCreateInboxContentKey(replicas, cipher, credentials) }
             try {
                 val sealed =
                     cipher.encrypt(

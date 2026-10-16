@@ -63,10 +63,11 @@ class InboxSynchronizationTest {
     }
 
     @Test
-    fun scopeResetNeverPublishesAnotherGenerationWhenInvalidationFails() = runTest {
+    fun scopeResetGatesPublishedFactsAndStagesTheNextAdmittedAcquisition() = runTest {
         val f = InboxFixture()
         assertIs<AppResult.Success<*>>(f.sync(f.workspace.id))
-        val original = f.checkpoint
+        val original = f.snapshot.value
+        val generation = f.checkpoint!!.generation
         val denial =
             AppResult.Failed(
                 Failure(FailureKind.Conflict, "Scope changed", code = "sync_scope_changed")
@@ -74,7 +75,10 @@ class InboxSynchronizationTest {
         f.changesCall = { denial }
         f.clearCall = { AppResult.Failed(Failure(FailureKind.Storage, "Storage unavailable")) }
         assertEquals(denial, f.sync(f.workspace.id))
-        assertEquals(original, f.checkpoint)
+        assertEquals(original, f.snapshot.value)
+        assertNotEquals(generation, f.checkpoint!!.generation)
+        assertFalse(f.checkpoint!!.published)
+        assertEquals(denial, f.observe(f.workspace.id, InboxCacheQuery.Page()).first())
         assertEquals(1, f.bootstrapCalls)
     }
 
@@ -291,7 +295,7 @@ class InboxSynchronizationTest {
     }
 
     @Test
-    fun repeatedScopeErrorsResetAtMostOnceAndKeepTheServerFailure() = runTest {
+    fun repeatedScopeErrorsDoNotRetryBeforeRecordingTheNewDenial() = runTest {
         val f = InboxFixture()
         val failure =
             AppResult.Failed(
@@ -299,9 +303,13 @@ class InboxSynchronizationTest {
             )
         f.bootstrapCall = { failure }
         assertSame(failure, f.sync(f.workspace.id))
-        assertEquals(2, f.clearCalls)
+        assertEquals(0, f.clearCalls)
+        assertEquals(1, f.bootstrapCalls)
+        assertFalse(f.checkpoint!!.published)
+        assertEquals(failure, f.observe(f.workspace.id, InboxCacheQuery.Page()).first())
+        assertSame(failure, f.sync(f.workspace.id))
         assertEquals(2, f.bootstrapCalls)
-        assertNull(f.checkpoint)
+        assertEquals(2, f.restrictionWrites)
     }
 
     @Test
@@ -428,18 +436,31 @@ class InboxSynchronizationTest {
     }
 
     @Test
-    fun anAuthoritativeScopeChangeClearsPublishedDataEvenWhenItsReplacementCannotLoad() = runTest {
+    fun anAuthoritativeScopeChangeKeepsFactsUnreadableWhenItsReplacementCannotLoad() = runTest {
         val base = Instant.parse("2026-10-11T00:00:00Z")
         val f = InboxFixture { base + testScheduler.currentTime.milliseconds }
         assertIs<AppResult.Success<InboxSyncOutcome>>(f.sync(f.workspace.id))
+        val original = f.snapshot.value
         f.changesCall = {
             AppResult.Failed(Failure(FailureKind.Conflict, "fixture", code = "sync_scope_changed"))
         }
         f.bootstrapCall = { AppResult.Failed(Failure(FailureKind.Network, "fixture")) }
         assertIs<AppResult.Failed>(f.sync(f.workspace.id))
-        assertEquals(1, f.clearCalls)
-        assertTrue(
-            assertIs<AppResult.Success<InboxCachePage>>(f.snapshot.value).value.items.isEmpty()
+        assertEquals(0, f.clearCalls)
+        assertEquals(original, f.snapshot.value)
+        assertEquals(
+            "sync_scope_changed",
+            assertIs<AppResult.Failed>(f.observe(f.workspace.id, InboxCacheQuery.Page()).first())
+                .failure
+                .code,
+        )
+        assertIs<AppResult.Failed>(f.sync(f.workspace.id))
+        assertEquals(original, f.snapshot.value)
+        assertEquals(
+            "sync_scope_changed",
+            assertIs<AppResult.Failed>(f.observe(f.workspace.id, InboxCacheQuery.Page()).first())
+                .failure
+                .code,
         )
     }
 }

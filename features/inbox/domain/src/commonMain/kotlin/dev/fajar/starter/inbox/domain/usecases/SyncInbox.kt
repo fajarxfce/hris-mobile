@@ -66,6 +66,15 @@ class SyncInbox(
                 is AppResult.Failed -> return result
                 is AppResult.Success -> result.value
             }
+        val admission = cache.admission(access)
+        currentCoroutineContext().ensureActive()
+        val admissionOwner = validateInboxCommandAccess(currentAccess(workspaceId), access)
+        if (admissionOwner is AppResult.Failed) return admissionOwner
+        val readAdmission =
+            when (admission) {
+                is AppResult.Failed -> return admission
+                is AppResult.Success -> admission.value
+            }
         val policyRequestedAt = clock.now()
         val policyResponse = workspaces.clientPolicy(access.sessionId, access.companyId)
         currentCoroutineContext().ensureActive()
@@ -75,19 +84,44 @@ class SyncInbox(
         }
         val policy =
             when (policyResponse) {
-                is AppResult.Failed -> {
-                    if (inboxFailureInvalidatesCache(policyResponse.failure)) {
-                        withTimeoutOrNull(2.seconds) { cache.clear(access) }
-                    }
-                    return policyResponse
-                }
+                is AppResult.Failed -> return reject(access, policyResponse)
                 is AppResult.Success ->
                     CompanyPolicySnapshot(policyResponse.value, policyRequestedAt)
             }
         val availability =
             admitCompanyOperation(policy, build, CompanyModule.COMMUNICATIONS, clock.now())
-        if (availability is AppResult.Failed) return availability
-        return synchronizePages(workspaceId, access, policy)
+        if (availability is AppResult.Failed) return reject(access, availability)
+        val result = synchronizePages(workspaceId, access, policy)
+        currentCoroutineContext().ensureActive()
+        val owner = validateInboxCommandAccess(currentAccess(workspaceId), access)
+        if (owner is AppResult.Failed) return owner
+        if (result is AppResult.Failed) return reject(access, result)
+        if (!(result as AppResult.Success).value.caughtUp) return result
+        val available =
+            admitCompanyOperation(policy, build, CompanyModule.COMMUNICATIONS, clock.now())
+        if (available is AppResult.Failed) return reject(access, available)
+        val reopened = cache.admit(access, readAdmission.revision)
+        currentCoroutineContext().ensureActive()
+        val finalOwner = validateInboxCommandAccess(currentAccess(workspaceId), access)
+        if (finalOwner is AppResult.Failed) return finalOwner
+        return when (reopened) {
+            is AppResult.Failed -> reopened
+            is AppResult.Success ->
+                if (reopened.value) result
+                else {
+                    val latest = cache.admission(access)
+                    currentCoroutineContext().ensureActive()
+                    val current = validateInboxCommandAccess(currentAccess(workspaceId), access)
+                    if (current is AppResult.Failed) current
+                    else
+                        when (latest) {
+                            is AppResult.Failed -> latest
+                            is AppResult.Success ->
+                                latest.value.denial?.let { AppResult.Failed(it) }
+                                    ?: staleInboxScope()
+                        }
+                }
+        }
     }
 
     private suspend fun synchronizePages(
@@ -101,9 +135,7 @@ class SyncInbox(
                 is AppResult.Success -> result.value
             }
         if (checkpoint != null && !sameStoredInboxScope(checkpoint.access, access)) {
-            val cleared = withTimeoutOrNull(2.seconds) { cache.clear(access) }
-            if (cleared !is AppResult.Success || !cleared.value) return staleInboxScope()
-            checkpoint = null
+            return staleInboxScope()
         } else if (checkpoint != null && !sameInboxScope(checkpoint.access, access)) {
             // A replacement login needs its own cursor, while the same owner's facts stay visible.
             val replacement = initialInboxCheckpoint(access, Uuid.random().toString(), clock.now())
@@ -143,28 +175,18 @@ class SyncInbox(
                     if (!sameInboxScope(current.value, access)) return staleInboxScope()
             }
             if (incoming is AppResult.Failed) {
+                if (incoming.failure.code == "sync_scope_changed") return incoming
                 if (incoming.failure.code in cursorResetCodes && !restarted) {
-                    if (incoming.failure.code == "sync_scope_changed") {
-                        // Failed cleanup cannot turn this scope denial into a storage-only error.
-                        val cleared = withTimeoutOrNull(2.seconds) { cache.clear(access) }
-                        if (cleared !is AppResult.Success || !cleared.value) return incoming
-                        checkpoint = null
-                    } else {
-                        // Cursor retention is unrelated to permission to read stored facts.
-                        // Stage a replacement while the published generation stays visible.
-                        val replacement =
-                            initialInboxCheckpoint(access, Uuid.random().toString(), clock.now())
-                        when (val started = cache.begin(replacement, previous.generation)) {
-                            is AppResult.Failed -> return started
-                            is AppResult.Success -> if (!started.value) return staleInboxScope()
-                        }
-                        checkpoint = replacement
+                    // Cursor retention does not revoke locally owned facts.
+                    val replacement =
+                        initialInboxCheckpoint(access, Uuid.random().toString(), clock.now())
+                    when (val started = cache.begin(replacement, previous.generation)) {
+                        is AppResult.Failed -> return started
+                        is AppResult.Success -> if (!started.value) return staleInboxScope()
                     }
+                    checkpoint = replacement
                     restarted = true
                     return@repeat
-                }
-                if (inboxFailureInvalidatesCache(incoming.failure)) {
-                    withTimeoutOrNull(2.seconds) { cache.clear(access) }
                 }
                 return incoming
             }
@@ -178,12 +200,7 @@ class SyncInbox(
             }
             val entries =
                 when (hydrated) {
-                    is AppResult.Failed -> {
-                        if (inboxFailureInvalidatesCache(hydrated.failure)) {
-                            withTimeoutOrNull(2.seconds) { cache.clear(access) }
-                        }
-                        return hydrated
-                    }
+                    is AppResult.Failed -> return hydrated
                     is AppResult.Success -> hydrated.value
                 }
             val complete =
@@ -197,6 +214,25 @@ class SyncInbox(
             if (complete) return AppResult.Success(InboxSyncOutcome(true, page.pollAfterSeconds))
         }
         return AppResult.Success(InboxSyncOutcome(false, 5))
+    }
+
+    private suspend fun reject(access: InboxAccess, failure: AppResult.Failed): AppResult.Failed {
+        if (inboxFailureInvalidatesCache(failure.failure)) {
+            withTimeoutOrNull(2.seconds) { cache.restrict(access, failure.failure) }
+            withTimeoutOrNull(2.seconds) {
+                if (failure.failure.code == "sync_scope_changed") {
+                    val stored = cache.checkpoint(access)
+                    currentCoroutineContext().ensureActive()
+                    val previous = (stored as? AppResult.Success)?.value
+                    if (previous != null) {
+                        val replacement =
+                            initialInboxCheckpoint(access, Uuid.random().toString(), clock.now())
+                        cache.begin(replacement, previous.generation)
+                    }
+                } else if (inboxFailureRequiresCleanup(failure.failure)) cache.clear(access)
+            }
+        }
+        return failure
     }
 
     private suspend fun nextPage(
@@ -327,6 +363,12 @@ class SyncInbox(
                     }
                     .awaitAll()
             }
+            results
+                .filterIsInstance<AppResult.Failed>()
+                .firstOrNull { inboxFailureInvalidatesCache(it.failure) }
+                ?.let {
+                    return it
+                }
             for (result in results) when (result) {
                 is AppResult.Failed -> return result
                 is AppResult.Success -> entries.add(result.value)
@@ -351,7 +393,14 @@ class SyncInbox(
                 is AppResult.Failed -> return result
                 is AppResult.Success -> result.value
             }
-        return admitInbox(workspaceId, workspace, session)
+        currentCoroutineContext().ensureActive()
+        val latest =
+            when (val result = sessions.current()) {
+                is AppResult.Failed -> return result
+                is AppResult.Success -> result.value
+            }
+        currentCoroutineContext().ensureActive()
+        return admitInbox(workspaceId, workspace, latest)
     }
 
     companion object {
@@ -366,7 +415,6 @@ private fun staleInboxScope() =
 
 private val cursorResetCodes =
     setOf(
-        "sync_scope_changed",
         "sync_cursor_expired",
         "sync_cursor_out_of_range",
         "sync_cursor_invalidated",

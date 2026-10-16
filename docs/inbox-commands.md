@@ -12,6 +12,13 @@ so a new session for that account can recover the original operation. A differen
 account or company cannot observe or replay it. The request UUID and precondition
 never change during retry. A missing protected key fails closed.
 
+Preparation, observation, delivery and review share Inbox read admission. A
+confirmed denial preserves the command but closes its readers and further
+delivery until admitted synchronization recovers access. Checks after pending
+reads reject late results. A delivery denial is recorded before its outcome is
+saved, so a failed receipt write cannot reopen facts or replace the access failure
+with a storage error. The original unconfirmed operation remains recoverable.
+
 Before transport, a compare-and-set writes an unconfirmed attempt. Success retains
 the server receipt. Response loss or cancellation leaves uncertainty visible;
 neither a later rejection nor a matching cache value proves that the original

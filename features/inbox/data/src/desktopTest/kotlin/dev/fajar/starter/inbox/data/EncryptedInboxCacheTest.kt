@@ -2,6 +2,7 @@ package dev.fajar.starter.inbox.data
 
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.database.*
+import dev.fajar.starter.inbox.data.datasources.MemoryInboxReadAdmissionDataSource
 import dev.fajar.starter.inbox.data.mappers.*
 import dev.fajar.starter.inbox.data.repositories.EncryptedInboxCacheRepository
 import dev.fajar.starter.inbox.domain.entities.*
@@ -60,7 +61,13 @@ class EncryptedInboxCacheTest {
         val keys = MemoryCredentialStore()
         try {
             db.accounts.activate(access.sessionId, inboxReplicaScope(access).accountKey)
-            var repository = EncryptedInboxCacheRepository(db.replicas, AesGcmContentCipher(), keys)
+            var repository =
+                EncryptedInboxCacheRepository(
+                    db.replicas,
+                    AesGcmContentCipher(),
+                    keys,
+                    MemoryInboxReadAdmissionDataSource(),
+                )
             assertEquals(AppResult.Success(true), repository.begin(initial, null))
             val published =
                 initial.copy(
@@ -83,7 +90,13 @@ class EncryptedInboxCacheTest {
             db = createAppDatabase(directory)
             val renewed = access.copy(sessionId = "new-login")
             db.accounts.activate(renewed.sessionId, inboxReplicaScope(renewed).accountKey)
-            repository = EncryptedInboxCacheRepository(db.replicas, AesGcmContentCipher(), keys)
+            repository =
+                EncryptedInboxCacheRepository(
+                    db.replicas,
+                    AesGcmContentCipher(),
+                    keys,
+                    MemoryInboxReadAdmissionDataSource(),
+                )
             val expected = AppResult.Success(InboxCachePage(published, listOf(item), null))
             assertEquals(expected, repository.observe(renewed, InboxCacheQuery.Page()).first())
             assertEquals(
@@ -170,7 +183,13 @@ class EncryptedInboxCacheTest {
                     ),
                 )
             )
-            val repository = EncryptedInboxCacheRepository(db.replicas, cipher, keys)
+            val repository =
+                EncryptedInboxCacheRepository(
+                    db.replicas,
+                    cipher,
+                    keys,
+                    MemoryInboxReadAdmissionDataSource(),
+                )
             val expected = AppResult.Success(InboxCachePage(old, listOf(item), null))
             assertEquals(expected, repository.observe(access, InboxCacheQuery.Page()).first())
             assertEquals(AppResult.Success(null), repository.checkpoint(access))
@@ -218,7 +237,13 @@ class EncryptedInboxCacheTest {
         val keys = MemoryCredentialStore()
         try {
             db.accounts.activate(access.sessionId, inboxReplicaScope(access).accountKey)
-            val repository = EncryptedInboxCacheRepository(db.replicas, AesGcmContentCipher(), keys)
+            val repository =
+                EncryptedInboxCacheRepository(
+                    db.replicas,
+                    AesGcmContentCipher(),
+                    keys,
+                    MemoryInboxReadAdmissionDataSource(),
+                )
             assertEquals(AppResult.Success(true), repository.begin(initial, null))
             keys.write(null)
             val other =
@@ -245,7 +270,13 @@ class EncryptedInboxCacheTest {
         val keys = MemoryCredentialStore()
         try {
             db.accounts.activate(access.sessionId, inboxReplicaScope(access).accountKey)
-            val repository = EncryptedInboxCacheRepository(db.replicas, AesGcmContentCipher(), keys)
+            val repository =
+                EncryptedInboxCacheRepository(
+                    db.replicas,
+                    AesGcmContentCipher(),
+                    keys,
+                    MemoryInboxReadAdmissionDataSource(),
+                )
             assertEquals(AppResult.Success(true), repository.begin(initial, null))
             val published =
                 initial.copy(
@@ -312,7 +343,13 @@ class EncryptedInboxCacheTest {
         val keys = MemoryCredentialStore()
         try {
             db.accounts.activate(access.sessionId, inboxReplicaScope(access).accountKey)
-            val repository = EncryptedInboxCacheRepository(db.replicas, AesGcmContentCipher(), keys)
+            val repository =
+                EncryptedInboxCacheRepository(
+                    db.replicas,
+                    AesGcmContentCipher(),
+                    keys,
+                    MemoryInboxReadAdmissionDataSource(),
+                )
             assertEquals(AppResult.Success(true), repository.begin(initial, null))
             val staged =
                 initial.copy(
@@ -371,7 +408,13 @@ class EncryptedInboxCacheTest {
                     .first()
             assertFalse(raw.documents.single().payload!!.contains("Private"))
             assertFalse(raw.checkpoint!!.payload.contains("private-cursor"))
-            val restored = EncryptedInboxCacheRepository(db.replicas, AesGcmContentCipher(), keys)
+            val restored =
+                EncryptedInboxCacheRepository(
+                    db.replicas,
+                    AesGcmContentCipher(),
+                    keys,
+                    MemoryInboxReadAdmissionDataSource(),
+                )
             assertEquals(
                 detail,
                 assertIs<AppResult.Success<InboxCachePage>>(
@@ -394,7 +437,12 @@ class EncryptedInboxCacheTest {
             try {
                 db.accounts.activate(access.sessionId, inboxReplicaScope(access).accountKey)
                 var repository =
-                    EncryptedInboxCacheRepository(db.replicas, AesGcmContentCipher(), keys)
+                    EncryptedInboxCacheRepository(
+                        db.replicas,
+                        AesGcmContentCipher(),
+                        keys,
+                        MemoryInboxReadAdmissionDataSource(),
+                    )
                 assertEquals(AppResult.Success(true), repository.begin(initial, null))
                 val published =
                     initial.copy(
@@ -426,7 +474,13 @@ class EncryptedInboxCacheTest {
                 assertEquals(AppResult.Success(replacement), repository.checkpoint(access))
                 db.close()
                 db = createAppDatabase(directory)
-                repository = EncryptedInboxCacheRepository(db.replicas, AesGcmContentCipher(), keys)
+                repository =
+                    EncryptedInboxCacheRepository(
+                        db.replicas,
+                        AesGcmContentCipher(),
+                        keys,
+                        MemoryInboxReadAdmissionDataSource(),
+                    )
                 assertEquals(
                     AppResult.Success(previous),
                     repository.observe(access, InboxCacheQuery.Page()).first(),
@@ -479,7 +533,13 @@ class EncryptedInboxCacheTest {
         try {
             db.accounts.activate(access.sessionId, inboxReplicaScope(access).accountKey)
             val cipher = AesGcmContentCipher()
-            val repository = EncryptedInboxCacheRepository(db.replicas, cipher, keys)
+            val repository =
+                EncryptedInboxCacheRepository(
+                    db.replicas,
+                    cipher,
+                    keys,
+                    MemoryInboxReadAdmissionDataSource(),
+                )
             repository.begin(initial, null)
             val visible =
                 initial.copy(
@@ -522,7 +582,13 @@ class EncryptedInboxCacheTest {
         val keys = MemoryCredentialStore()
         try {
             db.accounts.activate(access.sessionId, inboxReplicaScope(access).accountKey)
-            val repository = EncryptedInboxCacheRepository(db.replicas, AesGcmContentCipher(), keys)
+            val repository =
+                EncryptedInboxCacheRepository(
+                    db.replicas,
+                    AesGcmContentCipher(),
+                    keys,
+                    MemoryInboxReadAdmissionDataSource(),
+                )
             repository.begin(initial, null)
             keys.write(null)
             assertIs<AppResult.Failed>(repository.checkpoint(access))
@@ -554,6 +620,7 @@ class EncryptedInboxCacheTest {
                     db.replicas,
                     AesGcmContentCipher(),
                     MemoryCredentialStore(),
+                    MemoryInboxReadAdmissionDataSource(),
                 )
             repository.begin(initial, null)
             db.accounts.activate("replacement-session")

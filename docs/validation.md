@@ -1548,3 +1548,32 @@ was verified.
 The validated WireGuard APK was installed on the authorized Android 16 phone
 with `--install-only`; no phone UI was opened or operated. Its SHA-256 is
 `a7a6b47daf86bd9b4fa6c173ee6ebb30abd6fd898db2085f697b9933a7ec1c78`.
+
+### Shared Inbox read admission
+
+Inbox list, detail, unread counts and retained actions now share an encrypted
+read-admission record. Root checks passed with 1,679 desktop/JVM/UI tests and
+four build-convention tests, architecture checks, formatting and static analysis.
+All 67 selected Inbox Chromium tests passed, including the IndexedDB admission
+contract. Android dev assembly passed for the WireGuard and loopback endpoints.
+
+API 35 acceptance used an isolated API, PostgreSQL and worker. The native app
+loaded a published message and its unread count. A local fault proxy supplied
+`sync_scope_changed`; reads closed while the original encrypted message remained
+unchanged and a replacement generation staged. After Wi-Fi/mobile data were
+disabled and API forwarding removed, a cold start restored Home. Inbox retained
+its denial through reopening and explicit retry, with identical documents,
+checkpoints and encrypted admission metadata.
+
+Reconnection completed acquisition and reopened the message. Mark as read then
+confirmed version 1 on the server, cleared the unread badge and retired its local
+command after canonical confirmation. No admission record or staging generation
+remained. The denied and recovered screens were inspected in dark appearance at
+200% system text. No HRIS crash was recorded. Device settings matched their
+original values, and the owned API, worker, database, proxy and emulator were
+stopped with cleanup verified.
+
+The validated WireGuard APK was installed on the authorized Android 16 phone
+with `--install-only`. Its installed SHA-256 matched
+`f4628513a7c2332eefb4bd539e87b0ab3cb79cf2392b5d593883a7944297b41d`.
+No phone UI was opened or operated.

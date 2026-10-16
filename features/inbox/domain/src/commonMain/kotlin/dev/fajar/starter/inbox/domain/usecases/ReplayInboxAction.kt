@@ -42,6 +42,8 @@ class ReplayInboxAction(
                     is AppResult.Failed -> return@withLock result
                     is AppResult.Success -> result.value
                 }
+            val admitted = readContinuation(workspaceId, access)
+            if (admitted is AppResult.Failed) return@withLock admitted
             val record =
                 when (val result = commands.find(access, commandId)) {
                     is AppResult.Failed -> return@withLock result
@@ -74,6 +76,8 @@ class ReplayInboxAction(
                 is AppResult.Failed -> return syncFailure(result.failure)
                 is AppResult.Success -> result.value
             }
+        val admitted = readContinuation(workspace.id, access)
+        if (admitted is AppResult.Failed) return syncFailure(admitted.failure)
         var cursor: String? = null
         var delivered = 0
         repeat(3) {
@@ -82,6 +86,8 @@ class ReplayInboxAction(
                     is AppResult.Failed -> return syncFailure(result.failure)
                     is AppResult.Success -> result.value
                 }
+            val owner = readContinuation(workspace.id, access)
+            if (owner is AppResult.Failed) return syncFailure(owner.failure)
             for (record in page.items) {
                 if (record.outcome is InboxCommandOutcome.Confirmed) {
                     when (val result = retireConfirmed(workspace.id, access, record)) {
@@ -138,7 +144,7 @@ class ReplayInboxAction(
                 is AppResult.Success -> result.value
             }
         currentCoroutineContext().ensureActive()
-        when (val current = validateInboxCommandAccess(currentAccess(workspaceId), access)) {
+        when (val current = readContinuation(workspaceId, access)) {
             is AppResult.Failed -> return current
             is AppResult.Success -> Unit
         }
@@ -156,7 +162,10 @@ class ReplayInboxAction(
             return AppResult.Success(false)
         // A published replica either reflects this receipt or no longer exposes the item.
         // Only confirmed evidence is retired; uncertain attempts require their original retry.
-        return commands.remove(access, record)
+        val removed = commands.remove(access, record)
+        currentCoroutineContext().ensureActive()
+        val owner = readContinuation(workspaceId, access)
+        return if (owner is AppResult.Failed) owner else removed
     }
 
     private suspend fun deliver(
@@ -166,7 +175,7 @@ class ReplayInboxAction(
     ): AppResult<InboxCommandRecord> {
         if (!record.command.belongsTo(access))
             return inboxCommandFailure("client.inbox_scope_changed", FailureKind.AccessDenied)
-        when (val current = validateInboxCommandAccess(currentAccess(workspaceId), access)) {
+        when (val current = readContinuation(workspaceId, access)) {
             is AppResult.Failed -> return current
             is AppResult.Success -> Unit
         }
@@ -182,22 +191,15 @@ class ReplayInboxAction(
         }
         val policy =
             when (policyResponse) {
-                is AppResult.Failed -> {
-                    if (
-                        policyResponse.failure.code in
-                            setOf("session_revoked", "company_access_denied", "sync_access_denied")
-                    ) {
-                        val cleared = cache.clear(access)
-                        if (cleared is AppResult.Failed) return cleared
-                    }
-                    return policyResponse
-                }
+                is AppResult.Failed -> return reject(access, policyResponse)
                 is AppResult.Success ->
                     CompanyPolicySnapshot(policyResponse.value, policyRequestedAt)
             }
         val availability =
             admitCompanyOperation(policy, build, CompanyModule.COMMUNICATIONS, clock.now())
-        if (availability is AppResult.Failed) return availability
+        if (availability is AppResult.Failed) return reject(access, availability)
+        val admitted = readContinuation(workspaceId, access)
+        if (admitted is AppResult.Failed) return admitted
         val attempt = record.attempts + 1
         when (
             val saved = commands.update(access, record, InboxCommandOutcome.Unconfirmed(), attempt)
@@ -213,15 +215,19 @@ class ReplayInboxAction(
                 outcome = InboxCommandOutcome.Unconfirmed(),
             )
         currentCoroutineContext().ensureActive()
-        when (val current = validateInboxCommandAccess(currentAccess(workspaceId), access)) {
+        when (val current = readContinuation(workspaceId, access)) {
             is AppResult.Failed -> return current
             is AppResult.Success -> Unit
         }
         val stillAvailable =
             admitCompanyOperation(policy, build, CompanyModule.COMMUNICATIONS, clock.now())
-        if (stillAvailable is AppResult.Failed) return stillAvailable
+        if (stillAvailable is AppResult.Failed) return reject(access, stillAvailable)
         val result = remote.act(access.sessionId, record.command)
         currentCoroutineContext().ensureActive()
+        if (result is AppResult.Failed && inboxFailureInvalidatesCache(result.failure)) {
+            val responseOwner = validateInboxCommandAccess(currentAccess(workspaceId), access)
+            if (responseOwner is AppResult.Success) reject(access, result)
+        }
         val outcome =
             when (result) {
                 is AppResult.Failed -> resolveInboxCommandFailure(record.outcome, result.failure)
@@ -242,17 +248,47 @@ class ReplayInboxAction(
                 }
             }
         // A receipt belongs to this retained account command even if its screen has changed.
-        when (val saved = commands.update(access, sending, outcome)) {
-            is AppResult.Failed -> return saved
-            is AppResult.Success ->
-                if (!saved.value) return inboxCommandFailure("client.inbox_command_changed")
-        }
+        val saved = commands.update(access, sending, outcome)
         currentCoroutineContext().ensureActive()
         when (val current = validateInboxCommandAccess(currentAccess(workspaceId), access)) {
             is AppResult.Failed -> return current
             is AppResult.Success -> Unit
         }
+        if (result is AppResult.Failed && inboxFailureInvalidatesCache(result.failure))
+            return result
+        when (saved) {
+            is AppResult.Failed -> return saved
+            is AppResult.Success ->
+                if (!saved.value) return inboxCommandFailure("client.inbox_command_changed")
+        }
+        val owner = readContinuation(workspaceId, access)
+        if (owner is AppResult.Failed) return owner
         return AppResult.Success(sending.copy(revision = sending.revision + 1, outcome = outcome))
+    }
+
+    private suspend fun reject(access: InboxAccess, failure: AppResult.Failed): AppResult.Failed {
+        if (inboxFailureInvalidatesCache(failure.failure)) {
+            withTimeoutOrNull(2.seconds) { cache.restrict(access, failure.failure) }
+            if (inboxFailureRequiresCleanup(failure.failure))
+                withTimeoutOrNull(2.seconds) { cache.clear(access) }
+        }
+        return failure
+    }
+
+    private suspend fun readContinuation(
+        workspaceId: String,
+        access: InboxAccess,
+    ): AppResult<Unit> {
+        val current = validateInboxCommandAccess(currentAccess(workspaceId), access)
+        if (current is AppResult.Failed) return current
+        val admission = cache.admission(access)
+        currentCoroutineContext().ensureActive()
+        val owner = validateInboxCommandAccess(currentAccess(workspaceId), access)
+        if (owner is AppResult.Failed) return owner
+        return when (admission) {
+            is AppResult.Failed -> admission
+            is AppResult.Success -> admission.value.denial?.let { AppResult.Failed(it) } ?: owner
+        }
     }
 
     private suspend fun currentAccess(workspaceId: String): AppResult<InboxAccess> {
@@ -271,7 +307,14 @@ class ReplayInboxAction(
                 is AppResult.Failed -> return result
                 is AppResult.Success -> result.value
             }
-        return admitInbox(workspaceId, workspace, session)
+        currentCoroutineContext().ensureActive()
+        val latest =
+            when (val result = sessions.current()) {
+                is AppResult.Failed -> return result
+                is AppResult.Success -> result.value
+            }
+        currentCoroutineContext().ensureActive()
+        return admitInbox(workspaceId, workspace, latest)
     }
 
     companion object {

@@ -44,22 +44,28 @@ class ObserveInbox(
                 when (admitted) {
                     is AppResult.Failed -> flowOf(admitted)
                     is AppResult.Success ->
-                        cache.observe(admitted.value, query).map { result ->
-                            when (result) {
-                                is AppResult.Failed -> result
-                                is AppResult.Success ->
-                                    when (
-                                        val ownership =
-                                            validateStoredInbox(
-                                                admitted.value,
-                                                result.value.checkpoint,
-                                            )
-                                    ) {
-                                        is AppResult.Failed -> ownership
-                                        is AppResult.Success -> result
-                                    }
+                        cache.observeAdmission(admitted.value).flatMapLatest { admission ->
+                            when (admission) {
+                                is AppResult.Failed -> flowOf(admission)
+                                is AppResult.Success -> {
+                                    val denial = admission.value.denial
+                                    if (denial != null) flowOf(AppResult.Failed(denial))
+                                    else observeStored(admitted.value, query)
+                                }
                             }
                         }
                 }
             }
+
+    private fun observeStored(access: InboxAccess, query: InboxCacheQuery) =
+        cache.observe(access, query).map { result ->
+            when (result) {
+                is AppResult.Failed -> result
+                is AppResult.Success ->
+                    when (val ownership = validateStoredInbox(access, result.value.checkpoint)) {
+                        is AppResult.Failed -> ownership
+                        is AppResult.Success -> result
+                    }
+            }
+        }
 }

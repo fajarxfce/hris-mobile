@@ -9,13 +9,14 @@ remains subsequent work.
 The Inbox tab displays the account's total unread count from
 `GET /companies/{companyId}/inbox/unread-count`, independently of the list's
 thirty-message page. `LoadUnreadInbox` checks current scope before and after the
-read. A foreground-owned badge ViewModel observes encrypted checkpoint metadata
+read, including shared read admission after a pending response. A foreground-owned
+badge ViewModel observes encrypted checkpoint metadata
 and coalesces sync commits before refreshing the remote total. It never counts
 the loaded page or decrypts message bodies for a badge. Leaving the route stops
 pending reads; company changes and unavailable counts hide the previous value.
 Opening a message does not change the count. Confirmed read/acknowledgement and
 withdrawal updates refresh it through the next committed checkpoint or foreground
-entry. This is not a live push subscription.
+entry. A denied observation stops the count request. This is not a live push subscription.
 
 ## Ownership
 
@@ -45,7 +46,8 @@ hydration retains the previous cursor. A cursor reset may restart once per run.
 An expired/out-of-range cursor stages a replacement generation while the old
 published generation remains visible, including across process restart. Publication
 switches data and cursor atomically only when the replacement is complete. A real
-`sync_scope_changed` instead invalidates the old projection before rebuilding.
+`sync_scope_changed` instead closes read admission and stages the next acquisition.
+Only a subsequent complete, admitted invocation can reopen those facts.
 
 ## Local access and storage
 
@@ -59,18 +61,25 @@ credential manager protect the separate content-key record.
 
 Caught-up data records `refreshedAt` and `refreshAfter`; partial progress cannot
 claim a fresh complete view. These timestamps do not expire locally owned messages.
-Company/account/permission replacement stops the prior observer. Confirmed server
-revocation invalidates the projection. Cleanup is bounded and cannot replace the
-original denial with a storage error; list and detail retain the read gate through
-failed retries until an admitted sync catches up. Logout hides account-owned
+Company/account replacement or loss of the required permission stops the prior
+observer. Unrelated permission changes retain owned facts, while live action
+reviews and sync cursors still require their current scope. Confirmed server
+denials close a separate encrypted read-admission record. A process-owned write
+buffer makes that denial visible even while persistence is pending or unavailable.
+Fact cleanup is bounded and cannot replace the original denial with a storage
+error. List, detail, unread counts and retained commands share the gate across
+observation owners and login. A failed, partial or older acquisition cannot clear
+a newer denial; only complete admitted sync using its captured denial revision
+can reopen reads. Logout hides account-owned
 messages. After the same account signs in and selects an admitted company, its
 saved facts can reopen without a download. A different account, API or company
 uses a different partition. An offline client learns new revocations only when it reconnects.
 
 The encrypted checkpoint retains its acquisition session separately from local
 ownership. A new login starts its own bootstrap without hiding published facts;
-it cannot reuse the previous credential-bound cursor. Changed permissions and a
-confirmed `sync_scope_changed` still invalidate the old projection. Live action
+it cannot reuse the previous credential-bound cursor. Changed permissions also
+stage a fresh cursor without hiding the same owner's facts. A confirmed
+`sync_scope_changed` keeps reads closed while its replacement is incomplete. Live action
 preparation remains separate from permission to read a saved message.
 
 Upgrade retains the preceding session-bound ciphertext for offline reads in that
@@ -96,8 +105,9 @@ for ownership, finite delivery, conflict review and receipt retirement.
 [Company policy](company-policy.md) is checked before feed synchronization and
 each delivery attempt. Disabled modules, maintenance, obsolete builds and failed
 policy reads pause delivery without replacing the original command or consuming
-an attempt during preflight. Re-enabling the module preserves its existing cache
-and cursor, subject to ordinary scope and admission checks.
+an attempt during preflight. These availability gates retain the existing facts
+and cursor. Re-enabling the module requires admitted synchronization before reads
+and delivery resume.
 
 ## Interface and validation
 
@@ -118,6 +128,13 @@ shape and idempotency header. Compose tests cover list paging, offline detail,
 company replacement, withdrawal, large text, acknowledgement cancellation,
 response loss followed by sign-in again, conflict review, and leaving a pending
 operation without losing its identity.
+
+The shared SQLite/IndexedDB admission contract covers encrypted restoration,
+failed persistence, cancellation, newer denials racing an old admission, company
+authentication and lost keys. Domain tests reject late unread counts, partial
+recovery and command outcomes after access changes. A concurrent hydration denial
+takes precedence over a transport error. The Compose regression returns from a
+denied detail to the list with retained ciphertext and failed cleanup.
 
 The platform's separate real API/PostgreSQL/worker test verifies publication,
 native recipient isolation, versioned commands, replay, and archival sync.

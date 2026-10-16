@@ -39,6 +39,8 @@ class InboxCommandFixture(val inbox: InboxFixture = InboxFixture()) {
                 null,
             )
         inbox.checkpoint = checkpoint
+        inbox.entries.clear()
+        inbox.entries[item.id] = InboxReplicaEntry(item.id, item.version, item)
         inbox.snapshot.value = AppResult.Success(InboxCachePage(checkpoint, listOf(item), null))
     }
 
@@ -158,7 +160,7 @@ class InboxCommandFixture(val inbox: InboxFixture = InboxFixture()) {
             inbox.workspaces,
             inbox.clock,
         )
-    val observe = ObserveInboxAction(commands, inbox.sessions, inbox.workspaces)
+    val observe = ObserveInboxAction(commands, inbox.cache, inbox.sessions, inbox.workspaces)
 
     suspend fun queue(action: InboxAction = InboxAction.READ, version: Long = inbox.item.version) =
         prepare(inbox.workspace.id, inbox.item.id, version, action)
