@@ -6,6 +6,7 @@ import dev.fajar.starter.workforce.domain.overtime.entities.*
 import dev.fajar.starter.workforce.domain.overtime.usecases.*
 import dev.fajar.starter.workforce.presentation.overtime.action.*
 import kotlin.test.assertEquals
+import kotlin.time.Instant
 import kotlinx.coroutines.CoroutineDispatcher
 
 /**
@@ -14,9 +15,11 @@ import kotlinx.coroutines.CoroutineDispatcher
 class OvertimeActionFixture(
     dispatcher: CoroutineDispatcher,
     val kind: OvertimeActionKind = OvertimeActionKind.ACTUAL,
+    instant: () -> Instant = { Instant.parse("2026-10-12T13:00:00Z") },
 ) {
-    val persistence = OvertimePlanFixture(dispatcher)
+    val persistence = OvertimePlanFixture(dispatcher, instant)
     val base = persistence.base
+    val working = persistence.actionWorking
     val target = OvertimeActionTarget(base.workspace.id, base.selection, kind)
     var latest = base.details
     private val receipts = mutableMapOf<String, Pair<OvertimeCommand, OvertimeCommandReceipt>>()
@@ -106,6 +109,7 @@ class OvertimeActionFixture(
             base.workspaces,
             base.clock,
             base.build,
+            working.copies,
             dispatcher,
         )
     private val observeCommand =
@@ -135,7 +139,8 @@ class OvertimeActionFixture(
             base.workspaces,
             base.clock,
             base.build,
-            OvertimeWorkingPresentationFixture(base).copies,
+            persistence.working.copies,
+            working.copies,
         )
     private val observeRequest =
         ObserveOvertimeRequest(base.cache, base.sessions, base.workspaces, base.clock, base.build)
@@ -150,6 +155,9 @@ class OvertimeActionFixture(
                 replay,
                 review,
                 base.sync,
+                working.open,
+                working.save,
+                working.discard,
             )
             .also { store.put("action", it) }
 }

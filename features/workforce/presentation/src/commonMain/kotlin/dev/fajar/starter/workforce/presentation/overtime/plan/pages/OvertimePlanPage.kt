@@ -13,7 +13,6 @@ import dev.fajar.starter.localization.*
 import dev.fajar.starter.workforce.domain.overtime.entities.OvertimeCommandOutcome
 import dev.fajar.starter.workforce.presentation.calendar.widgets.CalendarDayCard
 import dev.fajar.starter.workforce.presentation.overtime.plan.*
-import dev.fajar.starter.workforce.presentation.overtime.plan.widgets.OvertimePlanLocalSaveStatus
 import dev.fajar.starter.workforce.presentation.overtime.plan.widgets.OvertimePlanPicker
 import dev.fajar.starter.workforce.presentation.overtime.widgets.*
 import io.github.composefluent.FluentTheme
@@ -91,7 +90,15 @@ fun OvertimePlanPage(
             )
                 AppActionBar {
                     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        OvertimePlanLocalSaveStatus(state, onEvent)
+                        state.persistence?.let { local ->
+                            OvertimeDraftSaveStatus(
+                                local.saved,
+                                local.failure,
+                                !local.writing && state.work == null && !state.closing,
+                                { onEvent(OvertimePlanEvent.SaveRetryRequested) },
+                                { onEvent(OvertimePlanEvent.ReloadDraftRequested) },
+                            )
+                        }
                         if (state.reviewExpired)
                             AppText(
                                 appString(AppString.OvertimeReviewExpired),

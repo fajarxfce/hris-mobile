@@ -16,6 +16,7 @@ class OvertimeCommandFixture(instant: () -> Instant = { Instant.parse("2026-10-1
     val overtime = planning.overtime
     val base = planning.base
     val working = OvertimePlanWorkingFixture(overtime)
+    val actionWorking = OvertimeActionWorkingFixture(overtime)
     val access = overtime.access
     val workspace = overtime.workspace
     val prepared =
@@ -184,6 +185,7 @@ class OvertimeCommandFixture(instant: () -> Instant = { Instant.parse("2026-10-1
             base.workspaces,
             base.clock,
             base.build,
+            actionWorking.copies,
         )
     val replay =
         ReplayOvertimeCommands(
@@ -204,6 +206,7 @@ class OvertimeCommandFixture(instant: () -> Instant = { Instant.parse("2026-10-1
             base.clock,
             base.build,
             working.copies,
+            actionWorking.copies,
         )
     val observe =
         ObserveOvertimeCommand(

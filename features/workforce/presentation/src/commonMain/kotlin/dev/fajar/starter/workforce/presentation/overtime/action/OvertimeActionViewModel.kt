@@ -6,6 +6,7 @@ import dev.fajar.starter.presentation.mvi.MviViewModel
 import dev.fajar.starter.workforce.domain.overtime.entities.*
 import dev.fajar.starter.workforce.domain.overtime.policies.*
 import dev.fajar.starter.workforce.domain.overtime.usecases.*
+import dev.fajar.starter.workforce.domain.overtime.working.usecases.*
 import dev.fajar.starter.workforce.presentation.overtime.action.formatters.actualDateBounds
 import dev.fajar.starter.workspace.domain.policies.workspaceAccessLossCodes
 import kotlinx.coroutines.*
@@ -24,6 +25,9 @@ class OvertimeActionViewModel(
     private val replayCommands: ReplayOvertimeCommands,
     private val reviewCommand: ReviewOvertimeCommand,
     private val synchronize: SyncOvertime,
+    private val openWorkingCopy: OpenOvertimeActionWorkingCopy,
+    private val saveWorkingCopy: SaveOvertimeActionWorkingCopy,
+    private val discardWorkingCopy: DiscardOvertimeActionWorkingCopy,
 ) :
     MviViewModel<OvertimeActionState, OvertimeActionEvent, OvertimeActionEffect>(
         OvertimeActionState(target)
@@ -31,6 +35,7 @@ class OvertimeActionViewModel(
     private var foreground = false
     private var observation: Job? = null
     private var operation: Job? = null
+    private var localSave: Job? = null
 
     init {
         on<OvertimeActionEvent.Entered>(::onEntered)
@@ -53,16 +58,23 @@ class OvertimeActionViewModel(
         on<OvertimeActionEvent.DialogDismissed>(::onDialogDismissed)
         on<OvertimeActionEvent.BackRequested>(::onBackRequested)
         on<OvertimeActionEvent.VerificationRequested>(::onVerificationRequested)
+        on<OvertimeActionEvent.SaveRetryRequested>(::onSaveRetryRequested)
+        on<OvertimeActionEvent.ReloadDraftRequested>(::onReloadDraftRequested)
+        on<OvertimeActionEvent.ReloadDraftConfirmed>(::onReloadDraftConfirmed)
+        on<OvertimeActionEvent.DiscardDraftRequested>(::onDiscardDraftRequested)
+        on<OvertimeActionEvent.DiscardDraftConfirmed>(::onDiscardDraftConfirmed)
+        on<OvertimeActionEvent.ExitWithoutSaving>(::onExitWithoutSaving)
     }
 
     private fun onEntered(event: OvertimeActionEvent.Entered) {
-        if (foreground) return
+        if (foreground || state.value.closing) return
         foreground = true
         observeRetainedAction()
         onEvent(OvertimeActionEvent.RefreshRequested)
     }
 
     private fun onStopped(event: OvertimeActionEvent.Stopped) {
+        persistEdits(immediate = true)
         foreground = false
         observation?.cancel()
         observation = null
@@ -107,24 +119,88 @@ class OvertimeActionViewModel(
     }
 
     private fun onRefreshRequested(event: OvertimeActionEvent.RefreshRequested) {
-        if (!foreground || state.value.work != null) return
-        updateState { it.copy(work = OvertimeActionWork.REFRESH, failure = null, dialog = null) }
+        if (!foreground || state.value.work != null || state.value.closing) return
+        refreshAction()
+    }
+
+    private fun refreshAction(reloadDraft: Boolean = false) {
+        operation?.cancel()
+        if (reloadDraft && state.value.persistence?.writing != true) localSave?.cancel()
+        updateState {
+            it.copy(
+                work =
+                    if (reloadDraft || it.persistence == null) OvertimeActionWork.RESTORING
+                    else OvertimeActionWork.REFRESH,
+                failure = null,
+                dialog = null,
+            )
+        }
         operation =
             viewModelScope.launch(start = CoroutineStart.LAZY) {
                 try {
+                    if (reloadDraft) {
+                        localSave?.join()
+                        ensureActive()
+                        updateState { it.copy(persistence = null) }
+                    }
                     val recovery = synchronize.recoverAccess(target.workspaceId)
                     ensureActive()
-                    val result =
-                        when (recovery) {
-                            is AppResult.Failed -> recovery
-                            is AppResult.Success ->
-                                refreshRequest(target.workspaceId, target.selection)
-                        }
+                    if (recovery is AppResult.Failed) {
+                        reportFailure(recovery.failure)
+                        return@launch
+                    }
+                    var acquisition: AppResult<Unit>? = null
+                    val local =
+                        state.value.persistence
+                            ?: run {
+                                var result =
+                                    openWorkingCopy(
+                                        target.workspaceId,
+                                        target.selection,
+                                        target.kind.action,
+                                    )
+                                ensureActive()
+                                if (
+                                    result is AppResult.Failed &&
+                                        result.failure.code ==
+                                            "client.overtime_working_copy_unavailable"
+                                ) {
+                                    acquisition =
+                                        refreshRequest(target.workspaceId, target.selection)
+                                    ensureActive()
+                                    result =
+                                        when (val fetched = requireNotNull(acquisition)) {
+                                            is AppResult.Failed -> fetched
+                                            is AppResult.Success ->
+                                                openWorkingCopy(
+                                                    target.workspaceId,
+                                                    target.selection,
+                                                    target.kind.action,
+                                                )
+                                        }
+                                }
+                                ensureActive()
+                                when (result) {
+                                    is AppResult.Failed -> {
+                                        reportFailure(result.failure)
+                                        return@launch
+                                    }
+                                    is AppResult.Success ->
+                                        OvertimeActionEditPersistence(result.value)
+                                }
+                            }
+                    updateState {
+                        it.withRestoredActionDraft(local).copy(work = OvertimeActionWork.REFRESH)
+                    }
+                    val result = acquisition ?: refreshRequest(target.workspaceId, target.selection)
                     ensureActive()
                     when (result) {
                         is AppResult.Failed -> reportFailure(result.failure)
                         is AppResult.Success -> {
-                            updateState { it.copy(restriction = null, failure = null) }
+                            updateState {
+                                it.copy(restriction = null, failure = null)
+                                    .withRestoredActionDraft(local)
+                            }
                             observeRetainedAction()
                         }
                     }
@@ -182,6 +258,7 @@ class OvertimeActionViewModel(
                     ),
             )
         }
+        stageEdits()
     }
 
     private fun onTimePickerRequested(event: OvertimeActionEvent.TimePickerRequested) {
@@ -233,31 +310,33 @@ class OvertimeActionViewModel(
                     ),
             )
         }
+        stageEdits()
     }
 
     private fun onBreakChanged(event: OvertimeActionEvent.BreakChanged) {
         val form = state.value.form ?: return
         val actual = form.actual ?: return
         if (
-            foreground &&
-                state.value.editable &&
-                event.value.length <= 3 &&
-                event.value.all { it in '0'..'9' }
+            !foreground ||
+                !state.value.editable ||
+                event.value.length > 3 ||
+                event.value.any { it !in '0'..'9' }
         )
-            updateState {
-                it.copy(
-                    form = form.copy(actual = actual.copy(breakMinutes = event.value)),
-                    failure = null,
-                )
-            }
+            return
+        updateState {
+            it.copy(
+                form = form.copy(actual = actual.copy(breakMinutes = event.value)),
+                failure = null,
+            )
+        }
+        stageEdits()
     }
 
     private fun onReasonChanged(event: OvertimeActionEvent.ReasonChanged) {
         val form = state.value.form ?: return
-        if (foreground && state.value.editable)
-            updateState {
-                it.copy(form = form.copy(reason = event.value.take(1_001)), failure = null)
-            }
+        if (!foreground || !state.value.editable) return
+        updateState { it.copy(form = form.copy(reason = event.value.take(1_001)), failure = null) }
+        stageEdits()
     }
 
     private fun onSubmitRequested(event: OvertimeActionEvent.SubmitRequested) {
@@ -269,6 +348,8 @@ class OvertimeActionViewModel(
         operation =
             viewModelScope.launch(start = CoroutineStart.LAZY) {
                 try {
+                    if (!flushLocalEdits()) return@launch
+                    val revision = state.value.persistence?.stored?.revision ?: return@launch
                     val prepared =
                         when (target.kind) {
                             OvertimeActionKind.ACTUAL ->
@@ -284,6 +365,7 @@ class OvertimeActionViewModel(
                                             snapshot,
                                             interval.value,
                                             form.reason,
+                                            revision,
                                         )
                                 }
                             OvertimeActionKind.WITHDRAW ->
@@ -292,11 +374,15 @@ class OvertimeActionViewModel(
                                     snapshot,
                                     OvertimeRequestedAction.Withdraw,
                                     form.reason,
+                                    revision,
                                 )
                         }
                     ensureActive()
                     when (prepared) {
-                        is AppResult.Failed -> reportFailure(prepared.failure)
+                        is AppResult.Failed ->
+                            if (prepared.failure.code == "client.overtime_working_copy_changed")
+                                reportLocalFailure(prepared.failure)
+                            else reportFailure(prepared.failure)
                         is AppResult.Success -> {
                             updateState {
                                 it.withActionCommand(prepared.value).copy(commandReady = true)
@@ -374,7 +460,10 @@ class OvertimeActionViewModel(
         currentCoroutineContext().ensureActive()
         when (reviewed) {
             is AppResult.Failed -> reportFailure(reviewed.failure)
-            is AppResult.Success -> emitEffect(OvertimeActionEffect.Back)
+            is AppResult.Success -> {
+                updateState { it.copy(closing = true, persistence = null) }
+                emitEffect(OvertimeActionEffect.Back)
+            }
         }
     }
 
@@ -415,6 +504,8 @@ class OvertimeActionViewModel(
         val previousCode = state.value.restriction?.code
         updateState { it.withActionFailure(failure) }
         if (overtimeFailureInvalidatesCache(failure)) {
+            localSave?.cancel()
+            localSave = null
             observation?.cancel()
             observation = null
             // Shared admission observation must not cancel the write that produced it.
@@ -427,17 +518,212 @@ class OvertimeActionViewModel(
         }
     }
 
+    private fun stageEdits() {
+        val form = state.value.form ?: return
+        if (state.value.restriction != null || state.value.command != null) return
+        updateState { it.copy(persistence = it.persistence?.edit(form)) }
+        persistEdits()
+    }
+
+    /** Coalesce waiting input; never cancel an admitted write to start a newer one. */
+    private fun persistEdits(immediate: Boolean = false) {
+        val local = state.value.persistence ?: return
+        if (
+            state.value.closing ||
+                state.value.restriction != null ||
+                local.saved ||
+                local.failure != null
+        )
+            return
+        if (localSave?.isActive == true) {
+            if (!immediate || local.writing) return
+            localSave?.cancel()
+        }
+        localSave =
+            viewModelScope.launch {
+                if (!immediate) delay(250)
+                while (isActive) {
+                    val current = state.value.persistence ?: return@launch
+                    if (
+                        current.saved ||
+                            current.failure != null ||
+                            state.value.restriction != null ||
+                            state.value.closing ||
+                            state.value.command != null
+                    )
+                        return@launch
+                    val mutation =
+                        current.pending
+                            ?: OvertimeActionWorkingMutation(current.stored, current.edited)
+                    updateState {
+                        it.copy(
+                            persistence = it.persistence?.copy(pending = mutation, writing = true)
+                        )
+                    }
+                    val result =
+                        saveWorkingCopy(
+                            target.workspaceId,
+                            target.selection,
+                            mutation.previous,
+                            mutation.updated,
+                        )
+                    ensureActive()
+                    when (result) {
+                        is AppResult.Failed -> {
+                            reportLocalFailure(result.failure)
+                            return@launch
+                        }
+                        is AppResult.Success ->
+                            updateState {
+                                it.copy(persistence = it.persistence?.acknowledge(result.value))
+                            }
+                    }
+                }
+            }
+    }
+
+    private suspend fun flushLocalEdits(): Boolean {
+        persistEdits(immediate = true)
+        localSave?.join()
+        currentCoroutineContext().ensureActive()
+        return state.value.persistence?.saved == true && state.value.restriction == null
+    }
+
+    private fun reportLocalFailure(failure: Failure) {
+        updateState {
+            it.copy(persistence = it.persistence?.copy(writing = false, failure = failure))
+        }
+        if (overtimeFailureInvalidatesCache(failure)) reportFailure(failure)
+    }
+
+    private fun onSaveRetryRequested(event: OvertimeActionEvent.SaveRetryRequested) {
+        val local = state.value.persistence ?: return
+        if (
+            !foreground ||
+                state.value.closing ||
+                state.value.restriction != null ||
+                state.value.work in transactionWork ||
+                local.writing ||
+                local.failure == null ||
+                local.failure.code == "client.overtime_working_copy_changed"
+        )
+            return
+        updateState { it.copy(persistence = local.copy(failure = null)) }
+        persistEdits(immediate = true)
+    }
+
+    private fun onReloadDraftRequested(event: OvertimeActionEvent.ReloadDraftRequested) {
+        if (
+            foreground &&
+                !state.value.closing &&
+                state.value.work == null &&
+                state.value.restriction == null &&
+                state.value.persistence != null &&
+                state.value.command == null
+        )
+            updateState { it.copy(dialog = OvertimeActionDialog.ReloadDraft) }
+    }
+
+    private fun onReloadDraftConfirmed(event: OvertimeActionEvent.ReloadDraftConfirmed) {
+        if (
+            foreground &&
+                state.value.dialog == OvertimeActionDialog.ReloadDraft &&
+                state.value.work == null
+        )
+            refreshAction(reloadDraft = true)
+    }
+
+    private fun onDiscardDraftRequested(event: OvertimeActionEvent.DiscardDraftRequested) {
+        if (foreground && state.value.canManageDraft)
+            updateState { it.copy(dialog = OvertimeActionDialog.DiscardDraft) }
+    }
+
+    private fun onDiscardDraftConfirmed(event: OvertimeActionEvent.DiscardDraftConfirmed) {
+        if (
+            !foreground ||
+                state.value.dialog != OvertimeActionDialog.DiscardDraft ||
+                state.value.work != null ||
+                !state.value.canManageDraft
+        )
+            return
+        updateState { it.copy(dialog = null, work = OvertimeActionWork.DISCARDING) }
+        operation =
+            viewModelScope.launch {
+                try {
+                    if (!flushLocalEdits()) return@launch
+                    val local = state.value.persistence ?: return@launch
+                    val result =
+                        discardWorkingCopy(
+                            target.workspaceId,
+                            target.selection,
+                            target.kind.action,
+                            local.stored.revision,
+                        )
+                    ensureActive()
+                    when (result) {
+                        is AppResult.Failed -> reportLocalFailure(result.failure)
+                        is AppResult.Success ->
+                            if (!result.value) {
+                                reportLocalFailure(
+                                    Failure(
+                                        FailureKind.Conflict,
+                                        "The saved draft changed.",
+                                        code = "client.overtime_working_copy_changed",
+                                    )
+                                )
+                            } else {
+                                updateState { it.copy(closing = true, persistence = null) }
+                                emitEffect(OvertimeActionEffect.Back)
+                            }
+                    }
+                } finally {
+                    if (isActive) updateState { it.copy(work = null) }
+                }
+            }
+    }
+
     private fun onDialogDismissed(event: OvertimeActionEvent.DialogDismissed) {
         updateState { it.copy(dialog = null) }
     }
 
     private fun onBackRequested(event: OvertimeActionEvent.BackRequested) {
-        if (!foreground) return
+        if (!foreground || state.value.closing || state.value.work == OvertimeActionWork.LEAVING)
+            return
         if (state.value.dialog != null) onEvent(OvertimeActionEvent.DialogDismissed)
         else {
-            onEvent(OvertimeActionEvent.Stopped)
-            viewModelScope.launch { emitEffect(OvertimeActionEffect.Back) }
+            operation?.cancel()
+            updateState { it.copy(work = OvertimeActionWork.LEAVING) }
+            operation =
+                viewModelScope.launch {
+                    try {
+                        if (
+                            state.value.restriction == null &&
+                                state.value.persistence != null &&
+                                !flushLocalEdits()
+                        ) {
+                            updateState { it.copy(dialog = OvertimeActionDialog.LeaveUnsaved) }
+                            return@launch
+                        }
+                        foreground = false
+                        observation?.cancel()
+                        observation = null
+                        updateState { it.copy(closing = true) }
+                        emitEffect(OvertimeActionEffect.Back)
+                    } finally {
+                        if (isActive) updateState { it.copy(work = null) }
+                    }
+                }
         }
+    }
+
+    private fun onExitWithoutSaving(event: OvertimeActionEvent.ExitWithoutSaving) {
+        if (state.value.dialog != OvertimeActionDialog.LeaveUnsaved || state.value.closing) return
+        localSave?.cancel()
+        foreground = false
+        observation?.cancel()
+        observation = null
+        updateState { it.copy(closing = true, dialog = null) }
+        viewModelScope.launch { emitEffect(OvertimeActionEffect.Back) }
     }
 
     private fun onVerificationRequested(event: OvertimeActionEvent.VerificationRequested) {
@@ -445,3 +731,11 @@ class OvertimeActionViewModel(
             viewModelScope.launch { emitEffect(OvertimeActionEffect.VerifyAccount) }
     }
 }
+
+private val transactionWork =
+    setOf(
+        OvertimeActionWork.SENDING,
+        OvertimeActionWork.OPENING,
+        OvertimeActionWork.DISCARDING,
+        OvertimeActionWork.LEAVING,
+    )

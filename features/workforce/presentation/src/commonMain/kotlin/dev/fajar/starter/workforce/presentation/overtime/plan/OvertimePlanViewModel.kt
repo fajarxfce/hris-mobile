@@ -379,7 +379,10 @@ class OvertimePlanViewModel(
                         preparePlan(target.workspaceId, prepared, input, form.reason, revision)
                     ensureActive()
                     when (result) {
-                        is AppResult.Failed -> reportFailure(result.failure)
+                        is AppResult.Failed ->
+                            if (result.failure.code == "client.overtime_working_copy_changed")
+                                reportLocalFailure(result.failure)
+                            else reportFailure(result.failure)
                         is AppResult.Success -> {
                             expiration?.cancel()
                             updateState { it.withPlanCommand(result.value) }

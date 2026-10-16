@@ -40,4 +40,16 @@ sealed interface OvertimeActionEvent {
     data object BackRequested : OvertimeActionEvent
 
     data object VerificationRequested : OvertimeActionEvent
+
+    data object SaveRetryRequested : OvertimeActionEvent
+
+    data object ReloadDraftRequested : OvertimeActionEvent
+
+    data object ReloadDraftConfirmed : OvertimeActionEvent
+
+    data object DiscardDraftRequested : OvertimeActionEvent
+
+    data object DiscardDraftConfirmed : OvertimeActionEvent
+
+    data object ExitWithoutSaving : OvertimeActionEvent
 }

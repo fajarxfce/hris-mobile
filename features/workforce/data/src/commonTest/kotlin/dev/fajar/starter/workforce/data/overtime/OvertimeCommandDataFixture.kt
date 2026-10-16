@@ -31,12 +31,17 @@ class OvertimeCommandDataFixture {
     val actual =
         plan.copy(
             id = "30000000-0000-4000-8000-000000000002",
-            payload = OvertimeCommandPayload.Actual(4, source.requested.toInterval()),
+            payload =
+                OvertimeCommandPayload.Actual(
+                    4,
+                    source.requested.toInterval(),
+                    "40000000-0000-4000-8000-000000000002",
+                ),
         )
     val withdrawal =
         plan.copy(
             id = "30000000-0000-4000-8000-000000000003",
-            payload = OvertimeCommandPayload.Withdrawal(5),
+            payload = OvertimeCommandPayload.Withdrawal(5, "40000000-0000-4000-8000-000000000003"),
         )
     val commands = listOf(plan, actual, withdrawal)
 }

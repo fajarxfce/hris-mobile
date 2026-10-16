@@ -9,6 +9,7 @@ import dev.fajar.starter.workforce.domain.entities.WorkforceAccess
 import dev.fajar.starter.workforce.domain.overtime.entities.*
 import dev.fajar.starter.workforce.domain.overtime.policies.*
 import dev.fajar.starter.workforce.domain.overtime.repositories.*
+import dev.fajar.starter.workforce.domain.overtime.working.repositories.OvertimeActionWorkingCopyRepository
 import dev.fajar.starter.workforce.domain.overtime.working.repositories.OvertimePlanWorkingCopyRepository
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
 import kotlin.time.Clock
@@ -28,6 +29,7 @@ class ReviewOvertimeCommand(
     private val clock: Clock,
     private val build: AppBuild,
     private val copies: OvertimePlanWorkingCopyRepository,
+    private val actionCopies: OvertimeActionWorkingCopyRepository,
 ) {
     suspend operator fun invoke(workspaceId: String, commandId: String): AppResult<Boolean> =
         withTimeoutOrNull(10.seconds) {
@@ -102,21 +104,40 @@ class ReviewOvertimeCommand(
                         "client.overtime_updates_pending",
                         FailureKind.Conflict,
                     )
-                (record.command.payload as? OvertimeCommandPayload.Plan)?.workingRevision?.let {
-                    revision ->
-                    val removed = copies.remove(access, record.command.employeeId, revision)
-                    currentCoroutineContext().ensureActive()
-                    val owner = readContinuation(workspaceId, access)
-                    if (owner is AppResult.Failed) return@withTimeoutOrNull owner
-                    if (removed is AppResult.Failed) return@withTimeoutOrNull removed
-                    // This command cannot remove an absent copy or a newer edit.
-                }
+                val removed = removeWorkingCopy(access, record.command)
+                currentCoroutineContext().ensureActive()
+                val owner = readContinuation(workspaceId, access)
+                if (owner is AppResult.Failed) return@withTimeoutOrNull owner
+                if (removed is AppResult.Failed) return@withTimeoutOrNull removed
             }
             val removal = commands.remove(access, record)
             currentCoroutineContext().ensureActive()
             val publication = readContinuation(workspaceId, access)
             if (publication is AppResult.Failed) publication else removal
         } ?: overtimeFailure("client.overtime_timeout", FailureKind.Timeout)
+
+    private suspend fun removeWorkingCopy(
+        access: WorkforceAccess,
+        command: OvertimeCommand,
+    ): AppResult<Boolean> {
+        val revision = command.payload.workingRevision ?: return AppResult.Success(false)
+        return when (command.payload) {
+            is OvertimeCommandPayload.Plan -> copies.remove(access, command.employeeId, revision)
+            else ->
+                actionCopies.remove(
+                    access,
+                    OvertimeRequestSelection(
+                        command.requestId,
+                        command.employeeId,
+                        command.employmentAfter,
+                    ),
+                    if (command.payload is OvertimeCommandPayload.Actual)
+                        OvertimeAction.SUBMIT_ACTUAL
+                    else OvertimeAction.WITHDRAW,
+                    revision,
+                )
+        }
+    }
 
     private suspend fun readContinuation(
         workspaceId: String,

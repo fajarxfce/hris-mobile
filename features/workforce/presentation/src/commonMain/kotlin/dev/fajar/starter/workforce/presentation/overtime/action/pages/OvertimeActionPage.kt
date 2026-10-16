@@ -18,6 +18,7 @@ import dev.fajar.starter.workforce.presentation.overtime.widgets.*
 import io.github.composefluent.icons.Icons
 import io.github.composefluent.icons.regular.ArrowLeft
 import io.github.composefluent.icons.regular.ArrowSync
+import io.github.composefluent.icons.regular.Delete
 
 @Composable
 fun OvertimeActionPage(
@@ -42,11 +43,22 @@ fun OvertimeActionPage(
                         )
                     },
                     actions = {
+                        if (
+                            state.persistence != null &&
+                                state.command == null &&
+                                state.restriction == null
+                        )
+                            AppIconButton(
+                                Icons.Regular.Delete,
+                                appString(AppString.OvertimeDiscardDraft),
+                                { onEvent(OvertimeActionEvent.DiscardDraftRequested) },
+                                enabled = state.canManageDraft,
+                            )
                         AppIconButton(
                             Icons.Regular.ArrowSync,
                             appString(AppString.Refresh),
                             { onEvent(OvertimeActionEvent.RefreshRequested) },
-                            enabled = state.work == null,
+                            enabled = state.work == null && !state.closing,
                             loading = state.work == OvertimeActionWork.REFRESH,
                         )
                     },
@@ -65,27 +77,39 @@ fun OvertimeActionPage(
         bottomBar = {
             if (state.restriction == null && state.command == null && state.content != null) {
                 AppActionBar {
-                    if (state.available && !state.requestChanged && state.form != null)
-                        AppButton(
-                            appString(state.target.kind.submitLabel()),
-                            { onEvent(OvertimeActionEvent.SubmitRequested) },
-                            Modifier.fillMaxWidth(),
-                            enabled = state.canSubmit,
-                            loading = state.work == OvertimeActionWork.SENDING,
-                        )
-                    else
-                        AppButton(
-                            appString(AppString.OvertimeOpenRequest),
-                            { onEvent(OvertimeActionEvent.OpenRequestRequested) },
-                            Modifier.fillMaxWidth(),
-                            primary = false,
-                            enabled = state.work == null,
-                        )
+                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        state.persistence?.let { local ->
+                            OvertimeDraftSaveStatus(
+                                local.saved,
+                                local.failure,
+                                !local.writing && state.work == null && !state.closing,
+                                { onEvent(OvertimeActionEvent.SaveRetryRequested) },
+                                { onEvent(OvertimeActionEvent.ReloadDraftRequested) },
+                            )
+                        }
+                        if (state.available && !state.requestChanged && state.form != null)
+                            AppButton(
+                                appString(state.target.kind.submitLabel()),
+                                { onEvent(OvertimeActionEvent.SubmitRequested) },
+                                Modifier.fillMaxWidth(),
+                                enabled = state.canSubmit,
+                                loading = state.work == OvertimeActionWork.SENDING,
+                            )
+                        else
+                            AppButton(
+                                appString(AppString.OvertimeOpenRequest),
+                                { onEvent(OvertimeActionEvent.OpenRequestRequested) },
+                                Modifier.fillMaxWidth(),
+                                primary = false,
+                                enabled = state.work == null && !state.closing,
+                            )
+                    }
                 }
             }
         },
     ) {
-        if (state.loading) item(key = "loading") { AppLoading(compact = state.content != null) }
+        if (state.loading || state.work == OvertimeActionWork.RESTORING)
+            item(key = "loading") { AppLoading(compact = state.content != null) }
         if (state.restriction == null) {
             val command = state.command
             if (command != null)
@@ -123,7 +147,7 @@ fun OvertimeActionPage(
                     item(key = "unavailable") {
                         AppFeedback(appString(AppString.OvertimeActionUnavailable))
                     }
-                else if (form != null) {
+                if (form != null) {
                     val actual = form.actual
                     if (actual != null) {
                         item(key = "start") {

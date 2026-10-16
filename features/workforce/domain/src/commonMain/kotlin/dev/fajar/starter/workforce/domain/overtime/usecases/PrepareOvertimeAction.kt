@@ -9,6 +9,8 @@ import dev.fajar.starter.workforce.domain.entities.WorkforceAccess
 import dev.fajar.starter.workforce.domain.overtime.entities.*
 import dev.fajar.starter.workforce.domain.overtime.policies.*
 import dev.fajar.starter.workforce.domain.overtime.repositories.*
+import dev.fajar.starter.workforce.domain.overtime.working.policies.validateOvertimeActionWorkingSubmission
+import dev.fajar.starter.workforce.domain.overtime.working.repositories.OvertimeActionWorkingCopyRepository
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
 import kotlin.time.Clock
 import kotlin.time.Duration.Companion.seconds
@@ -23,6 +25,7 @@ class PrepareOvertimeAction(
     private val workspaces: WorkspaceRepository,
     private val clock: Clock,
     private val build: AppBuild,
+    private val copies: OvertimeActionWorkingCopyRepository,
     private val computation: CoroutineDispatcher = Dispatchers.Default,
 ) {
     suspend operator fun invoke(
@@ -30,6 +33,7 @@ class PrepareOvertimeAction(
         snapshot: OvertimeSnapshot<OvertimeRequestView>,
         actual: OvertimeLocalIntervalInput,
         reason: String,
+        workingRevision: String? = null,
     ): AppResult<OvertimeCommandRecord> =
         withTimeoutOrNull(10.seconds) {
             val request = snapshot.value.details.request
@@ -45,6 +49,7 @@ class PrepareOvertimeAction(
                         snapshot,
                         OvertimeRequestedAction.Actual(resolved.value),
                         reason,
+                        workingRevision,
                     )
             }
         } ?: overtimeFailure("client.overtime_timeout", FailureKind.Timeout)
@@ -54,6 +59,7 @@ class PrepareOvertimeAction(
         snapshot: OvertimeSnapshot<OvertimeRequestView>,
         action: OvertimeRequestedAction,
         reason: String,
+        workingRevision: String? = null,
     ): AppResult<OvertimeCommandRecord> =
         withTimeoutOrNull(10.seconds) {
             val access =
@@ -69,9 +75,22 @@ class PrepareOvertimeAction(
                         validateOvertimeAction(snapshot, access, action, reason, clock.now())
                 ) {
                     is AppResult.Failed -> return@withTimeoutOrNull result
-                    is AppResult.Success -> result.value
+                    is AppResult.Success ->
+                        when (val input = result.value) {
+                            is OvertimeCommandPayload.Actual ->
+                                input.copy(workingRevision = workingRevision)
+                            is OvertimeCommandPayload.Withdrawal ->
+                                input.copy(workingRevision = workingRevision)
+                            is OvertimeCommandPayload.Plan ->
+                                return@withTimeoutOrNull overtimeFailure(
+                                    "client.invalid_response",
+                                    FailureKind.Unexpected,
+                                )
+                        }
                 }
             val request = snapshot.value.details.request
+            val working = validateWorkingCopy(workspaceId, access, snapshot, payload, reason)
+            if (working is AppResult.Failed) return@withTimeoutOrNull working
             val slot = OvertimeCommandSlot.Request(request.id)
             val previous = commands.observe(access, slot).first()
             currentCoroutineContext().ensureActive()
@@ -124,6 +143,35 @@ class PrepareOvertimeAction(
                 is AppResult.Success -> retained(stored.value, access, request, payload, normalized)
             }
         } ?: overtimeFailure("client.overtime_timeout", FailureKind.Timeout)
+
+    private suspend fun validateWorkingCopy(
+        workspaceId: String,
+        access: WorkforceAccess,
+        snapshot: OvertimeSnapshot<OvertimeRequestView>,
+        payload: OvertimeCommandPayload,
+        reason: String,
+    ): AppResult<Unit> {
+        val revision = payload.workingRevision ?: return AppResult.Success(Unit)
+        val kind =
+            if (payload is OvertimeCommandPayload.Actual) OvertimeAction.SUBMIT_ACTUAL
+            else OvertimeAction.WITHDRAW
+        val observed = copies.observe(access, snapshot.value.selection, kind).first()
+        currentCoroutineContext().ensureActive()
+        val owner = readContinuation(workspaceId, access)
+        if (owner is AppResult.Failed) return owner
+        val stored =
+            when (observed) {
+                is AppResult.Failed -> return observed
+                is AppResult.Success -> observed.value
+            }
+        return validateOvertimeActionWorkingSubmission(
+            stored,
+            revision,
+            snapshot.value.details.request,
+            payload,
+            reason,
+        )
+    }
 
     private fun retained(
         record: OvertimeCommandRecord?,

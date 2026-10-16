@@ -97,10 +97,11 @@ loss preserves the original body and operation ID; a retry does not manufacture
 a new action. Version conflicts need reconciliation rather than last-write-wins.
 
 Current workflows have durable delivery after preparation. Expense editor input,
-unfinished items, Leave creation input and unfinished Overtime plans have encrypted
-local working copies, independent of confirmed records and pending commands. Full offline creation of every draft is
-not implemented: some forms still need online policy/evidence review before they
-can be prepared. Saving an unfinished local draft and submitting it are separate
+unfinished items, Leave creation input and Overtime planning, actual-time and
+withdrawal input have encrypted local working copies, independent of confirmed
+records and pending commands. Full offline creation of every draft is not
+implemented: some forms still need online policy/evidence review before they can
+be prepared. Saving an unfinished local draft and submitting it are separate
 capabilities.
 
 ## Current coverage
@@ -114,6 +115,7 @@ capabilities.
 | Leave editor | Account/company/employment-owned dates, type, portion, reason and exact attachment metadata; local compare-and-set autosave | Explicit submission requires current review and an immutable command; confirmed cleanup removes only its matching draft revision |
 | Overtime | Account-owned full requests and acquired activity; local employment/date/status queries | Request change feed and resumable older-activity acquisition implemented |
 | Overtime planning | Account/company/employment-owned dates, incomplete times, break input and reason; local compare-and-set autosave | Submission requires current schedule review and pins the acknowledged input revision; canonical reconciliation preserves newer edits |
+| Overtime actions | Separate owned request/action input, including unfinished actual-time breaks and withdrawal reasons; the original request version is retained | Submission validates the acknowledged revision against admitted request facts; canonical reconciliation removes only the matching action draft |
 | Payslips | Account-owned full payslips, indexed annual summaries and versioned payment progress; local year/page/detail queries | Two explicit collections, revised heads, independent balances and staged format upgrades implemented |
 | Expenses | Account-owned complete claims, indexed summaries, payment progress and acquired activity; local employment/month/status/page queries | Two explicit collections, canonical claim acquisition and resumable activity backfill implemented |
 | Expense editor | Account/company-owned draft fields, completed lines and one unfinished item; local compare-and-set autosave | Explicit server Save performs fresh review and retains an immutable command; working copies do not replicate as confirmed claims |
@@ -264,7 +266,7 @@ retain their original input and operation identity until access recovers.
    account-owned facts across sign-in; workspace admission and other last-view
    snapshots remain session-owned. Reauthentication
    does not reuse an old request guard or old credential-bound feed cursor.
-2. Extend unfinished local draft persistence beyond Expenses and Leave, separately from
+2. Extend unfinished local draft persistence beyond Expenses, Leave and Overtime, separately from
    immutable prepared commands and acquired server records.
 3. Register the remaining document feeds,
    including deletions and authorization changes, before implementing mobile sync.

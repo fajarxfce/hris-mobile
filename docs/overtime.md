@@ -130,7 +130,7 @@ shift exclusion, actual-time bounds and completed-work requirement. Datasources
 only acquire DTOs; repository mapping validates protocol consistency and preserves
 localizable server failures.
 
-## Unfinished planning input
+## Unfinished input
 
 Each owned employment has one encrypted planning draft, separate from synchronized
 facts and immutable commands. It retains the work date, start/end dates, incomplete
@@ -145,7 +145,15 @@ company, employment and revision. A missing key cannot replace existing cipherte
 Compare-and-set preserves competing edits. Repeating an uncertain save recovers
 only the same revision and input, including when its acknowledgement was lost.
 
-The planning ViewModel owns a debounced serial writer: one pending mutation and
+Actual-time and withdrawal forms have separate working copies for each owned
+request and action. Actual-time input retains both local dates/times, an unfinished
+break and reason; withdrawal retains its reason. Both retain the request version
+from when editing began. A server change never silently rebases that input: the
+form remains visible for review, with explicit discard available before starting
+again. These copies require previously acquired own-request facts and share the
+same encrypted storage, ownership and admission rules as planning drafts.
+
+Each editor ViewModel owns a debounced serial writer: one pending mutation and
 the newest editor input. New keystrokes coalesce while a write is pending. Stop
 requests an immediate save within the route lifetime; final disposal cancels it.
 Back waits for acknowledgement and offers an explicit choice if saving failed.
@@ -153,11 +161,13 @@ There is no retry loop after a storage failure. Reload and discard require expli
 confirmation; neither may overwrite another editor's revision.
 
 Submission first waits for local durability and still requires current schedule
-review. The command references the exact acknowledged draft revision. After the
+review or admitted request facts. The command references the exact acknowledged
+draft revision and validates its input before insertion. After the
 server receipt and admitted canonical request agree, command review removes only
 that revision, preserving newer edits. Cleanup failure keeps the confirmed command
-recoverable without sending it again. Actual-time and withdrawal commands already
-retain confirmed input; their unfinished forms are not yet persisted as drafts.
+recoverable without sending it again. Actual-time confirmation cannot remove a
+withdrawal draft, and withdrawal cannot remove an actual-time draft. The local
+working revision is not sent as part of the HTTP request.
 
 ## Durable commands
 

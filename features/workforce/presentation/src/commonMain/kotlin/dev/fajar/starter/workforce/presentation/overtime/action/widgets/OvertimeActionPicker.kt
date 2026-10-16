@@ -20,6 +20,9 @@ fun OvertimeActionPicker(state: OvertimeActionState, onEvent: (OvertimeActionEve
                 is OvertimeActionDialog.Date -> dialog.field.dateLabel()
                 is OvertimeActionDialog.Time -> dialog.field.timeLabel()
                 OvertimeActionDialog.Discard -> AppString.OvertimeDiscardCommand
+                OvertimeActionDialog.DiscardDraft -> AppString.OvertimeDiscardDraft
+                OvertimeActionDialog.ReloadDraft -> AppString.OvertimeReloadDraft
+                OvertimeActionDialog.LeaveUnsaved -> AppString.OvertimeWithoutSaving
             }
         ),
         appString(AppString.Close),
@@ -30,6 +33,47 @@ fun OvertimeActionPicker(state: OvertimeActionState, onEvent: (OvertimeActionEve
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             when (dialog) {
+                OvertimeActionDialog.DiscardDraft,
+                OvertimeActionDialog.ReloadDraft,
+                OvertimeActionDialog.LeaveUnsaved ->
+                    item(key = "working-confirmation") {
+                        Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                            AppText(
+                                appString(
+                                    when (dialog) {
+                                        OvertimeActionDialog.DiscardDraft ->
+                                            AppString.OvertimeDiscardDraftExplanation
+                                        OvertimeActionDialog.ReloadDraft ->
+                                            AppString.OvertimeReloadDraftExplanation
+                                        else -> AppString.OvertimeWithoutSavingExplanation
+                                    }
+                                )
+                            )
+                            AppButton(
+                                appString(
+                                    when (dialog) {
+                                        OvertimeActionDialog.DiscardDraft ->
+                                            AppString.OvertimeDiscardDraft
+                                        OvertimeActionDialog.ReloadDraft ->
+                                            AppString.OvertimeReloadDraft
+                                        else -> AppString.OvertimeWithoutSaving
+                                    }
+                                ),
+                                {
+                                    onEvent(
+                                        when (dialog) {
+                                            OvertimeActionDialog.DiscardDraft ->
+                                                OvertimeActionEvent.DiscardDraftConfirmed
+                                            OvertimeActionDialog.ReloadDraft ->
+                                                OvertimeActionEvent.ReloadDraftConfirmed
+                                            else -> OvertimeActionEvent.ExitWithoutSaving
+                                        }
+                                    )
+                                },
+                                enabled = state.work == null && !state.closing,
+                            )
+                        }
+                    }
                 is OvertimeActionDialog.Date ->
                     item(key = "date") {
                         val bounds = state.actualDateBounds()

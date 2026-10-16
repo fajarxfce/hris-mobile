@@ -5,21 +5,27 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 sealed interface OvertimeCommandPayloadDto {
+    val workingRevision: String?
+
     @Serializable
     @SerialName("PLAN")
     data class Plan(
         val expectedEmploymentVersion: Long,
         val requested: OvertimeIntervalDto,
         val planningRevision: String,
-        val workingRevision: String? = null,
+        override val workingRevision: String? = null,
     ) : OvertimeCommandPayloadDto
 
     @Serializable
     @SerialName("ACTUAL")
-    data class Actual(val expectedVersion: Long, val actual: OvertimeIntervalDto) :
-        OvertimeCommandPayloadDto
+    data class Actual(
+        val expectedVersion: Long,
+        val actual: OvertimeIntervalDto,
+        override val workingRevision: String? = null,
+    ) : OvertimeCommandPayloadDto
 
     @Serializable
     @SerialName("WITHDRAWAL")
-    data class Withdrawal(val expectedVersion: Long) : OvertimeCommandPayloadDto
+    data class Withdrawal(val expectedVersion: Long, override val workingRevision: String? = null) :
+        OvertimeCommandPayloadDto
 }

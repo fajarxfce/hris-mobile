@@ -8,6 +8,7 @@ data class OvertimeActionState(
     val target: OvertimeActionTarget,
     val content: OvertimeSnapshot<OvertimeRequestView>? = null,
     val form: OvertimeActionForm? = null,
+    val persistence: OvertimeActionEditPersistence? = null,
     val command: OvertimeCommandRecord? = null,
     val loading: Boolean = true,
     val commandReady: Boolean = false,
@@ -15,6 +16,7 @@ data class OvertimeActionState(
     val failure: Failure? = null,
     val restriction: Failure? = null,
     val dialog: OvertimeActionDialog? = null,
+    val closing: Boolean = false,
 ) {
     val visibleFailure: Failure?
         get() = restriction ?: failure
@@ -39,18 +41,31 @@ data class OvertimeActionState(
     val editable: Boolean
         get() =
             available &&
+                !closing &&
                 !requestChanged &&
                 commandReady &&
                 command == null &&
-                work == null &&
-                form != null
+                work in setOf(null, OvertimeActionWork.REFRESH) &&
+                form != null &&
+                persistence != null &&
+                persistence.failure?.code != "client.overtime_working_copy_changed"
 
     val canSubmit: Boolean
-        get() = editable && dialog == null
+        get() = editable && work == null && dialog == null && persistence?.failure == null
+
+    val canManageDraft: Boolean
+        get() =
+            !closing &&
+                restriction == null &&
+                command == null &&
+                commandReady &&
+                persistence != null &&
+                work == null
 
     val canRetry: Boolean
         get() =
             restriction == null &&
+                !closing &&
                 commandReady &&
                 work == null &&
                 (command?.outcome is OvertimeCommandOutcome.Pending ||
@@ -59,6 +74,7 @@ data class OvertimeActionState(
     val canDiscard: Boolean
         get() =
             restriction == null &&
+                !closing &&
                 commandReady &&
                 work == null &&
                 (command?.outcome is OvertimeCommandOutcome.Pending ||
@@ -74,8 +90,10 @@ data class OvertimeActionState(
 }
 
 enum class OvertimeActionWork {
+    RESTORING,
     REFRESH,
     SENDING,
     OPENING,
     DISCARDING,
+    LEAVING,
 }

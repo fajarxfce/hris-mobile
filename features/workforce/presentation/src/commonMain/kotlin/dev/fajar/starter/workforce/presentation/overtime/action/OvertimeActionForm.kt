@@ -5,34 +5,11 @@ import dev.fajar.starter.workforce.domain.overtime.entities.*
 import dev.fajar.starter.workforce.domain.overtime.policies.overtimeFailure
 import kotlinx.datetime.*
 
-data class OvertimeActionForm(
-    val requestVersion: Long,
-    val actual: OvertimeActualInput?,
-    val reason: String = "",
-)
+typealias OvertimeActionForm =
+    dev.fajar.starter.workforce.domain.overtime.working.entities.OvertimeActionWorkingInput
 
-data class OvertimeActualInput(
-    val startsAt: LocalDateTime,
-    val endsAt: LocalDateTime,
-    val breakMinutes: String,
-)
-
-internal fun overtimeActionForm(
-    kind: OvertimeActionKind,
-    request: OvertimeRequest,
-): OvertimeActionForm {
-    val zone = TimeZone.of(request.timezone)
-    return OvertimeActionForm(
-        request.version,
-        if (kind == OvertimeActionKind.ACTUAL)
-            OvertimeActualInput(
-                request.requested.startsAt.toLocalDateTime(zone),
-                request.requested.endsAt.toLocalDateTime(zone),
-                request.requested.breakMinutes.toString(),
-            )
-        else null,
-    )
-}
+typealias OvertimeActualInput =
+    dev.fajar.starter.workforce.domain.overtime.working.entities.OvertimeActualWorkingInput
 
 internal fun OvertimeActualInput.toIntervalInput(): AppResult<OvertimeLocalIntervalInput> {
     val pause = breakMinutes.toIntOrNull() ?: return overtimeFailure("invalid_overtime_interval")
@@ -58,4 +35,10 @@ sealed interface OvertimeActionDialog {
     }
 
     data object Discard : OvertimeActionDialog
+
+    data object ReloadDraft : OvertimeActionDialog
+
+    data object DiscardDraft : OvertimeActionDialog
+
+    data object LeaveUnsaved : OvertimeActionDialog
 }

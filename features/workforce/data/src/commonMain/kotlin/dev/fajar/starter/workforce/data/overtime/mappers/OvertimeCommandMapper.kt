@@ -70,9 +70,13 @@ fun OvertimeCommand.toDto() =
                     value.workingRevision,
                 )
             is OvertimeCommandPayload.Actual ->
-                OvertimeCommandPayloadDto.Actual(value.expectedVersion, value.actual.toDto())
+                OvertimeCommandPayloadDto.Actual(
+                    value.expectedVersion,
+                    value.actual.toDto(),
+                    value.workingRevision,
+                )
             is OvertimeCommandPayload.Withdrawal ->
-                OvertimeCommandPayloadDto.Withdrawal(value.expectedVersion)
+                OvertimeCommandPayloadDto.Withdrawal(value.expectedVersion, value.workingRevision)
         },
         reason,
         createdAt.toString(),
@@ -94,12 +98,12 @@ fun OvertimeCommandDto.toCommand(): OvertimeCommand {
     TimeZone.of(timezone)
     val created = Instant.parse(createdAt)
     require(created.toEpochMilliseconds() in 0 until 253_402_300_800_000L)
+    payload.workingRevision?.let { require(Uuid.parse(it).toString() == it) }
     val input =
         when (val value = payload) {
             is OvertimeCommandPayloadDto.Plan -> {
                 require(value.expectedEmploymentVersion in 0..9_007_199_254_740_991L)
                 require(Regex("[0-9a-f]{64}").matches(value.planningRevision))
-                value.workingRevision?.let { require(Uuid.parse(it).toString() == it) }
                 OvertimeCommandPayload.Plan(
                     value.expectedEmploymentVersion,
                     value.requested.toInterval(),
@@ -109,11 +113,15 @@ fun OvertimeCommandDto.toCommand(): OvertimeCommand {
             }
             is OvertimeCommandPayloadDto.Actual -> {
                 require(value.expectedVersion in 0..998)
-                OvertimeCommandPayload.Actual(value.expectedVersion, value.actual.toInterval())
+                OvertimeCommandPayload.Actual(
+                    value.expectedVersion,
+                    value.actual.toInterval(),
+                    value.workingRevision,
+                )
             }
             is OvertimeCommandPayloadDto.Withdrawal -> {
                 require(value.expectedVersion in 0..998)
-                OvertimeCommandPayload.Withdrawal(value.expectedVersion)
+                OvertimeCommandPayload.Withdrawal(value.expectedVersion, value.workingRevision)
             }
         }
     return OvertimeCommand(

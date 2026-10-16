@@ -18,6 +18,7 @@ class OvertimePlanFixture(
 ) {
     val base = OvertimePresentationFixture(now)
     val working = OvertimeWorkingPresentationFixture(base)
+    val actionWorking = OvertimeActionWorkingPresentationFixture(base)
 
     init {
         val checkpoint =
@@ -199,6 +200,7 @@ class OvertimePlanFixture(
             base.clock,
             base.build,
             working.copies,
+            actionWorking.copies,
         )
     private val reviewSchedule =
         ReviewOvertimeSchedule(

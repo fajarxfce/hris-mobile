@@ -268,6 +268,35 @@ class OvertimeWorkingEditorTest {
         }
     }
 
+    @Test
+    fun aCompetingRevisionAtConfirmationOffersExplicitDraftReload() = runTest {
+        withEditor { f, model, _ ->
+            f.fill(model)
+            advanceTimeBy(251)
+            runCurrent()
+            val previous = requireNotNull(f.working.stored)
+            val newer =
+                previous.copy(
+                    revision = Uuid.random().toString(),
+                    input = previous.input.copy(reason = "Another editor"),
+                )
+            f.working.stored = newer
+            model.onEvent(OvertimePlanEvent.SubmitRequested)
+            runCurrent()
+            assertEquals(
+                "client.overtime_working_copy_changed",
+                model.state.value.persistence?.failure?.code,
+            )
+            assertFalse(model.state.value.editable)
+            assertTrue(f.transmitted.isEmpty())
+            model.onEvent(OvertimePlanEvent.ReloadDraftRequested)
+            model.onEvent(OvertimePlanEvent.ReloadDraftConfirmed)
+            runCurrent()
+            assertEquals(newer.input, model.state.value.form)
+            assertTrue(model.state.value.persistence!!.saved)
+        }
+    }
+
     private suspend fun TestScope.withEditor(
         fixture: OvertimePlanFixture? = null,
         block:

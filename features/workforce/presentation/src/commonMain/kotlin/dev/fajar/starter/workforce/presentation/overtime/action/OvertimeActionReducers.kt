@@ -12,6 +12,7 @@ internal fun OvertimeActionState.withActionFailure(value: Failure): OvertimeActi
             failure = null,
             content = null,
             form = null,
+            persistence = null,
             command = null,
             commandReady = false,
             loading = false,
@@ -22,7 +23,7 @@ internal fun OvertimeActionState.withActionReads(
     request: AppResult<OvertimeSnapshot<OvertimeRequestView>?>,
     stored: AppResult<OvertimeCommandRecord?>,
 ): OvertimeActionState {
-    if (restriction != null) return this
+    if (restriction != null || closing) return this
     val failed =
         listOfNotNull(
             (request as? AppResult.Failed)?.failure,
@@ -37,25 +38,27 @@ internal fun OvertimeActionState.withActionReads(
                 it.value.selection.employeeId == target.selection.employeeId &&
                 it.value.selection.employmentAfter == target.selection.employmentAfter
         }
-    val updated =
-        copy(
-                content = snapshot,
-                loading = false,
-                failure = failed.firstOrNull() ?: failure,
-                commandReady = stored is AppResult.Success,
-            )
-            .withActionCommand((stored as? AppResult.Success)?.value)
-    return if (updated.form == null && updated.command == null && updated.available)
-        updated.copy(
-            form = overtimeActionForm(target.kind, requireNotNull(snapshot).value.details.request)
+    return copy(
+            content = snapshot,
+            loading = false,
+            failure = failed.firstOrNull() ?: failure,
+            commandReady = stored is AppResult.Success,
         )
-    else updated
+        .withActionCommand((stored as? AppResult.Success)?.value)
+}
+
+internal fun OvertimeActionState.withRestoredActionDraft(
+    local: OvertimeActionEditPersistence
+): OvertimeActionState {
+    if (restriction != null || closing) return this
+    val latest = persistence ?: local
+    return copy(form = latest.edited.input, persistence = latest)
 }
 
 internal fun OvertimeActionState.withActionCommand(
     record: OvertimeCommandRecord?
 ): OvertimeActionState {
-    if (restriction != null) return this
+    if (restriction != null || closing) return this
     val previous = command
     if (
         record != null &&

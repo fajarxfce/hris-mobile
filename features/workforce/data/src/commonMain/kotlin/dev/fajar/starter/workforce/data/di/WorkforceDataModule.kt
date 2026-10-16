@@ -9,7 +9,7 @@ import dev.fajar.starter.workforce.domain.attendance.repositories.*
 import dev.fajar.starter.workforce.domain.attendance.usecases.*
 import dev.fajar.starter.workforce.domain.overtime.repositories.*
 import dev.fajar.starter.workforce.domain.overtime.usecases.*
-import dev.fajar.starter.workforce.domain.overtime.working.repositories.OvertimePlanWorkingCopyRepository
+import dev.fajar.starter.workforce.domain.overtime.working.repositories.*
 import dev.fajar.starter.workforce.domain.overtime.working.usecases.*
 import dev.fajar.starter.workforce.domain.replica.repositories.*
 import dev.fajar.starter.workforce.domain.replica.usecases.SyncWorkforce
@@ -24,6 +24,33 @@ import org.koin.core.annotation.*
 @ComponentScan("dev.fajar.starter.workforce.data")
 class WorkforceDataModule {
     @Single @Named("overtime-content-key-creation") fun overtimeContentKeyCreation() = Mutex()
+
+    @Factory
+    fun openOvertimeActionWorkingCopy(
+        copies: OvertimeActionWorkingCopyRepository,
+        reads: OvertimeRequestReplicaRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        build: AppBuild,
+    ) = OpenOvertimeActionWorkingCopy(copies, reads, sessions, workspaces, Clock.System, build)
+
+    @Factory
+    fun saveOvertimeActionWorkingCopy(
+        copies: OvertimeActionWorkingCopyRepository,
+        reads: OvertimeRequestReplicaRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        build: AppBuild,
+    ) = SaveOvertimeActionWorkingCopy(copies, reads, sessions, workspaces, Clock.System, build)
+
+    @Factory
+    fun discardOvertimeActionWorkingCopy(
+        copies: OvertimeActionWorkingCopyRepository,
+        reads: OvertimeRequestReplicaRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        build: AppBuild,
+    ) = DiscardOvertimeActionWorkingCopy(copies, reads, sessions, workspaces, Clock.System, build)
 
     @Factory
     fun openOvertimePlanWorkingCopy(
@@ -69,7 +96,8 @@ class WorkforceDataModule {
         sessions: SessionRepository,
         workspaces: WorkspaceRepository,
         build: AppBuild,
-    ) = PrepareOvertimeAction(commands, cache, sessions, workspaces, Clock.System, build)
+        copies: OvertimeActionWorkingCopyRepository,
+    ) = PrepareOvertimeAction(commands, cache, sessions, workspaces, Clock.System, build, copies)
 
     @Factory
     fun observeOvertimeCommand(
@@ -88,7 +116,18 @@ class WorkforceDataModule {
         workspaces: WorkspaceRepository,
         build: AppBuild,
         copies: OvertimePlanWorkingCopyRepository,
-    ) = ReviewOvertimeCommand(commands, cache, sessions, workspaces, Clock.System, build, copies)
+        actionCopies: OvertimeActionWorkingCopyRepository,
+    ) =
+        ReviewOvertimeCommand(
+            commands,
+            cache,
+            sessions,
+            workspaces,
+            Clock.System,
+            build,
+            copies,
+            actionCopies,
+        )
 
     @Single(binds = [ReplayOvertimeCommands::class, SyncTask::class])
     fun replayOvertimeCommands(

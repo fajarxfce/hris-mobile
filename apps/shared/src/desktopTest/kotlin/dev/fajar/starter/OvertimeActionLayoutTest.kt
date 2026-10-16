@@ -21,6 +21,7 @@ import dev.fajar.starter.workforce.data.overtime.dto.OvertimeDetailsDto
 import dev.fajar.starter.workforce.data.overtime.mappers.toDetails
 import dev.fajar.starter.workforce.domain.entities.WorkforceAccess
 import dev.fajar.starter.workforce.domain.overtime.entities.*
+import dev.fajar.starter.workforce.domain.overtime.working.entities.OvertimeActionWorkingCopy
 import dev.fajar.starter.workforce.presentation.overtime.action.*
 import dev.fajar.starter.workforce.presentation.overtime.action.pages.OvertimeActionPage
 import io.github.composefluent.*
@@ -205,21 +206,35 @@ class OvertimeActionLayoutTest {
                 now,
                 now + 1.hours,
             )
-        return OvertimeActionState(
-            OvertimeActionTarget("workspace", selection, kind),
-            snapshot,
-            OvertimeActionForm(
-                0,
-                if (kind == OvertimeActionKind.ACTUAL)
-                    OvertimeActualInput(
-                        LocalDateTime(2026, 10, 12, 17, 0),
-                        LocalDateTime(2026, 10, 12, 19, 0),
-                        "0",
+        val state =
+            OvertimeActionState(
+                OvertimeActionTarget("workspace", selection, kind),
+                snapshot,
+                OvertimeActionForm(
+                    0,
+                    if (kind == OvertimeActionKind.ACTUAL)
+                        OvertimeActualInput(
+                            LocalDateTime(2026, 10, 12, 17, 0),
+                            LocalDateTime(2026, 10, 12, 19, 0),
+                            "0",
+                        )
+                    else null,
+                ),
+                loading = false,
+                commandReady = true,
+            )
+        return state.copy(
+            persistence =
+                OvertimeActionEditPersistence(
+                    OvertimeActionWorkingCopy(
+                        selection.requestId,
+                        selection.employeeId,
+                        kind.action,
+                        requireNotNull(state.form),
+                        "40000000-0000-4000-8000-000000000004",
+                        now,
                     )
-                else null,
-            ),
-            loading = false,
-            commandReady = true,
+                )
         )
     }
 

@@ -1508,3 +1508,43 @@ improvements.
 The validated WireGuard APK was installed on the authorized Android 16 phone
 with `--install-only`; no phone UI was opened or operated. Its SHA-256 is
 `65662b5bcced73bb5b61867464c7e9e7c2e3c973ad97aa2032e9a1c42ae04c8f`.
+
+### Overtime actual-time and withdrawal drafts
+
+Actual-time and withdrawal input now has separate encrypted working copies for
+each owned request and action. New domain, storage and MVI tests cover unfinished
+input after three offline days, token renewal, replacement sessions, read denial,
+cancellation, competing editors and lost save acknowledgements. Submission pins
+the acknowledged input and original request version. Confirmation removes only
+its matching draft; newer edits and the other action's draft remain intact.
+Failed cleanup retains the confirmed command for recovery without redelivery.
+
+Root checks passed with 1,664 desktop/JVM/UI tests, the 70-module architecture
+check, formatting and static analysis. The selected Chromium suites passed all
+311 tests, including the IndexedDB contract. Android dev assembly passed. The assembled
+application resolved the new production bindings. Actual-time layout was inspected
+in Indonesian at 200% text in dark appearance; the withdrawal form, fixed actions
+and local save status were also inspected.
+
+API 35 acceptance used an isolated API, PostgreSQL and worker. With Wi-Fi/mobile
+data disabled and API forwarding removed, a cold start restored Home and both
+action drafts. Actual time retained 08:30–11:00, an empty break and its reason;
+withdrawal retained a separate reason. Encrypted records and checkpoints were
+unchanged. An offline edit changed only the actual-time working copy and survived
+another restart. The reasons were absent as plaintext from database copies.
+
+After reconnection, entering a 15-minute break and submitting recorded exactly
+one actual-time change: 135 minutes and request version 1. Canonical confirmation
+removed only that draft. The withdrawal draft still retained version 0 and its
+input, with editing disabled after the server change. Explicit deletion followed
+by a new withdrawal recorded exactly one further change, at version 2. No action
+working heads or retained commands remained after canonical confirmation.
+
+The restored, changed and confirmed screens were inspected in dark appearance
+at 200% system text. No HRIS crash was recorded. Device settings were restored;
+the owned API, worker, database, proxy and emulator were stopped and their cleanup
+was verified.
+
+The validated WireGuard APK was installed on the authorized Android 16 phone
+with `--install-only`; no phone UI was opened or operated. Its SHA-256 is
+`a7a6b47daf86bd9b4fa6c173ee6ebb30abd6fd898db2085f697b9933a7ec1c78`.
