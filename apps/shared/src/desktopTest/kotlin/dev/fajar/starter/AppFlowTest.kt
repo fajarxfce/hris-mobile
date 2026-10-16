@@ -3601,7 +3601,11 @@ class AppFlowTest {
             refreshWhenReady()
             waitFor("Your account cannot perform this action.")
             compose.onNodeWithText("1996-02-29").assertDoesNotExist()
-            compose.onNode(hasText("Verify your account") and hasClickAction()).performClick()
+            compose
+                .onNode(hasText("Verify your account") and hasClickAction())
+                .performScrollTo()
+                .assertIsDisplayed()
+                .performSemanticsAction(SemanticsActions.OnClick) { it() }
             waitFor("Verification code")
             compose.onNodeWithContentDescription("Verification code").performTextInput("123456")
             compose.onNode(hasText("Verify") and hasClickAction()).performScrollTo().performClick()
