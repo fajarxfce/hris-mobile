@@ -29,6 +29,7 @@ fun AttendanceMonthBar(month: AttendanceMonthFilter?, onEvent: (AttendanceHistor
             modifier = Modifier.weight(1f),
             enabled = month != null,
             icon = Icons.Regular.CalendarLtr,
+            maxLines = 2,
         )
         AppIconButton(
             Icons.Regular.ChevronRight,

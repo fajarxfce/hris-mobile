@@ -28,6 +28,7 @@ fun OvertimeMonthBar(month: OvertimeMonthFilter, onEvent: (OvertimeEvent) -> Uni
             { onEvent(OvertimeEvent.MonthFilterRequested) },
             Modifier.weight(1f),
             icon = Icons.Regular.CalendarLtr,
+            maxLines = 2,
         )
         AppIconButton(
             Icons.Regular.ChevronRight,

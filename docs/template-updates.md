@@ -1,5 +1,17 @@
 # Template updates
 
+## Filter labels at large text sizes
+
+`AppFilterChip` now accepts an optional `maxLines` while retaining its single-line
+default. The component and regression test also exist in Compose Fluent Starter.
+The test keeps a complete month and year visible between 48 dp navigation actions
+at 320 dp width and 200% text. Attendance and Overtime select two lines; their
+month selection and data ownership remain in HRIS Mobile.
+
+Both repositories passed root checks and Android dev assembly. Starter checks
+included 284 desktop tests. HRIS also verified an offline Android upgrade and the
+wrapped month label at 200% text.
+
 ## Bounded protocol response bodies
 
 The public `readApiBody` boundary and its regressions also exist in

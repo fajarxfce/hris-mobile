@@ -1,5 +1,51 @@
 # Validation
 
+## Month labels at large text sizes
+
+On 16 October 2026, root checks passed with 1,536 desktop tests and four convention
+tests. Standard Android dev assembly and an isolated loopback assembly passed.
+The shared UI regression verifies the full month and year at 320 dp width and
+200% text, with adjacent 48 dp actions and one click callback.
+
+An API 35 emulator upgraded without clearing application data while offline.
+Home and September attendance reopened locally. At 200% text, the inspected
+screen displayed September and 2026 on separate complete lines. All ten Workforce
+records and both active generations were unchanged after the upgrade and
+navigation. The Android crash buffer was empty. Emulator font and connectivity
+were restored before shutdown.
+
+The validated standard WireGuard APK was restored byte-for-byte with SHA-256
+`81bf986877acd00e28cce9beb53054596b6c629ef3671e66373abe95740611b0`.
+No phone installation was performed for this check.
+
+## Android acceptance with closed attendance adjustments
+
+On 16 October 2026, an API 35 emulator used an isolated API/PostgreSQL/worker with
+fictional accounts. The public workflows created and closed September attendance,
+then received two late offline captures. Independent evidence decisions and an
+overnight correction recorded 23:00–05:00 with a 60-minute break. Mobile history
+changed from one present day and seven hours to two present days and twelve hours.
+The original closing response remained unchanged.
+
+With airplane mode enabled, Wi-Fi/mobile data disabled and API forwarding removed,
+a force-stop and restart reopened Home and monthly history. The corrected five-hour
+day remained readable while the server independently recorded a later absence.
+All ten retained Workforce ciphertexts and both active generations were unchanged
+after offline navigation; no replacement generation was pending.
+
+Reconnection and refresh displayed one present day, one recorded absence and seven
+hours. The corrected canonical day advanced from version four to five. Directory
+metadata refreshed independently; the other eight stored records, including the
+original worked day and the roster, retained their hashes. The original closing
+response still matched its initial value. The inspected Android crash buffer was
+empty. These data checks used application source `13e196a`; a separate large-text
+month-label correction follows from the layout inspection.
+
+The isolated loopback APK was not installed on the phone. Its standard WireGuard
+counterpart was restored byte-for-byte with SHA-256
+`b41f060c94684da8d7b0f5e935417e4a944b45a5432374c158c70ae9c826928c`.
+Physical location acceptance and the staged development rollout remain separate.
+
 ## Carried leave balances
 
 On 16 October 2026, the workspace root checks and Android dev assembly passed.

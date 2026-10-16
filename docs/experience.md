@@ -130,6 +130,11 @@ owner. It adapts its column count to text size and does not acquire data or deci
 which periods an application permits. Month selection resets the history list
 position; refreshes of the same month retain it.
 
+Attendance and Overtime use `AppFilterChip(maxLines = 2)` for the selected month.
+The full month and year can wrap at large text sizes while the adjacent previous
+and next actions retain their 48 dp targets. Other chips keep their single-line
+default unless the displayed value needs more space.
+
 `AppDatePicker` renders a controlled seven-column month grid. The caller supplies
 short localized weekday labels, full-date accessible descriptions, selection and
 availability. Calendar navigation and date policy remain with the feature. Put it

@@ -29,6 +29,7 @@ fun AppFilterChip(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     icon: ImageVector = Icons.Regular.Filter,
+    maxLines: Int = 1,
 ) {
     Row(
         modifier
@@ -51,7 +52,7 @@ fun AppFilterChip(
         AppText(
             label,
             Modifier.weight(1f, fill = false),
-            maxLines = 1,
+            maxLines = maxLines,
             overflow = TextOverflow.Ellipsis,
         )
         AppIcon(Icons.Regular.ChevronDown, modifier = Modifier.size(16.dp), tint = AppColors.muted)
