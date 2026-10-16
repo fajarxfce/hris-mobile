@@ -260,9 +260,13 @@ class SyncLeaveTest {
                 )
             }
             gate.complete(Unit)
-            assertTrue(
-                assertIs<AppResult.Success<LeaveSyncOutcome>>(refresh.await()).value.caughtUp
-            )
+            if (code == "sync_scope_changed") {
+                assertEquals(code, assertIs<AppResult.Failed>(refresh.await()).failure.code)
+                assertTrue(assertIs<AppResult.Success<LeaveSyncOutcome>>(f.run()).value.caughtUp)
+            } else
+                assertTrue(
+                    assertIs<AppResult.Success<LeaveSyncOutcome>>(refresh.await()).value.caughtUp
+                )
             assertEquals(2, f.bootstrapReads)
         }
     }
@@ -349,6 +353,7 @@ class SyncLeaveTest {
             )
             assertEquals(0, f.replica.writes, "$stage/$denied writes")
             assertEquals(0, f.replica.clears, "$stage/$denied clears")
+            assertEquals(0, f.replica.restrictions, "$stage/$denied restrictions")
         }
     }
 

@@ -84,7 +84,15 @@ class LeavePreparationFixture(val base: LeaveFixture = LeaveFixture()) {
                 return previewCall(selection)
             }
         }
-    val types = LoadLeaveTypes(remote, base.sessions, base.workspaces, base.clock, base.build)
+    val types =
+        LoadLeaveTypes(remote, base.sessions, base.workspaces, base.clock, base.build, base.replica)
     val preview =
-        PreviewLeaveRequest(remote, base.sessions, base.workspaces, base.clock, base.build)
+        PreviewLeaveRequest(
+            remote,
+            base.sessions,
+            base.workspaces,
+            base.clock,
+            base.build,
+            base.replica,
+        )
 }

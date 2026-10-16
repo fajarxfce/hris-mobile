@@ -1,7 +1,10 @@
+@file:OptIn(kotlin.uuid.ExperimentalUuidApi::class)
+
 package dev.fajar.starter.leave.data.repositories
 
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.database.*
+import dev.fajar.starter.leave.data.datasources.LeaveReadAdmissionDataSource
 import dev.fajar.starter.leave.data.dto.*
 import dev.fajar.starter.leave.data.encoding.*
 import dev.fajar.starter.leave.data.mappers.*
@@ -16,6 +19,7 @@ import dev.fajar.starter.securestorage.CredentialStore
 import dev.fajar.starter.storage.*
 import kotlin.io.encoding.Base64
 import kotlin.time.Instant
+import kotlin.uuid.Uuid
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
@@ -31,8 +35,88 @@ class EncryptedLeaveReplicaRepository(
     private val cipher: ContentCipher,
     @Named("leave-replica-content-key") private val credentials: CredentialStore,
     @Named("leave-content-key") private val legacyCredentials: CredentialStore,
+    private val admissions: LeaveReadAdmissionDataSource,
+    @Named("leave-content-key-creation") private val keyCreation: Mutex = Mutex(),
 ) : LeaveReplicaRepository {
-    private val keyCreation = Mutex()
+    private val admissionWrites = Mutex()
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override fun observeAdmission(access: LeaveAccess) =
+        admissions
+            .observe(leaveAdmissionBufferKey(access))
+            .flatMapLatest { pending ->
+                if (pending != null)
+                    safeStorageFlow(flowOf(pending), mapValue = { it.toReadAdmission() })
+                else
+                    safeStorageFlow(
+                        replicas.observeCheckpoint(
+                            leaveReplicaScope(access),
+                            leaveAdmissionPartition(access),
+                        ),
+                        mapValue = { raw ->
+                            if (raw == null) LeaveReadAdmission(null, null)
+                            else {
+                                val key = Base64.decode(requireNotNull(credentials.read()))
+                                try {
+                                    decodeLeaveReadAdmission(cipher, key, access, raw)
+                                        .toReadAdmission()
+                                } finally {
+                                    key.fill(0)
+                                }
+                            }
+                        },
+                    )
+            }
+            .distinctUntilChanged()
+
+    override suspend fun admission(access: LeaveAccess) = observeAdmission(access).first()
+
+    override suspend fun restrict(access: LeaveAccess, failure: Failure) = safeStorageCall {
+        val bufferKey = leaveAdmissionBufferKey(access)
+        val dto = LeaveReadAdmissionDto(Uuid.random().toString(), failure.kind.name, failure.code)
+        dto.toReadAdmission()
+        admissions.write(bufferKey, dto)
+        admissionWrites.withLock {
+            if (admissions.current(bufferKey) != dto) return@withLock false
+            val scope = leaveReplicaScope(access)
+            val partition = leaveAdmissionPartition(access)
+            val previous = replicas.checkpoint(scope, partition)
+            val key =
+                keyCreation.withLock { readOrCreateLeaveReplicaKey(replicas, cipher, credentials) }
+            try {
+                val sealed = encodeLeaveReadAdmission(cipher, key, access, dto)
+                currentCoroutineContext().ensureActive()
+                val saved =
+                    replicas.replace(
+                        scope,
+                        partition,
+                        previous,
+                        ReplicaSnapshot(dto.revision, sealed, emptyList()),
+                    )
+                if (saved && admissions.current(bufferKey) == dto) admissions.write(bufferKey, null)
+                saved
+            } finally {
+                key.fill(0)
+            }
+        }
+    }
+
+    override suspend fun admit(access: LeaveAccess, expectedRevision: String?) = safeStorageCall {
+        admissionWrites.withLock {
+            val bufferKey = leaveAdmissionBufferKey(access)
+            val scope = leaveReplicaScope(access)
+            val partition = leaveAdmissionPartition(access)
+            val previous = replicas.checkpoint(scope, partition)
+            val pending = admissions.current(bufferKey)
+            if ((pending?.revision ?: previous?.handle?.generation) != expectedRevision)
+                return@withLock false
+            currentCoroutineContext().ensureActive()
+            if (!replicas.replace(scope, partition, previous, null)) return@withLock false
+            if (admissions.current(bufferKey) != pending) return@withLock false
+            admissions.write(bufferKey, null)
+            true
+        }
+    }
 
     override fun observeDirectory(access: LeaveAccess) =
         safeStorageFlow(

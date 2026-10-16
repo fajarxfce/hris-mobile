@@ -20,9 +20,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
-/**
- * Owns a finite self-service read and complete publication, independently of overview refreshes.
- */
+/** Owns a finite self-service read. Only full synchronization can reopen a denied projection. */
 class LoadLeaveRequest(
     private val remote: LeaveRepository,
     private val cache: LeaveRequestReplicaRepository,
@@ -46,9 +44,11 @@ class LoadLeaveRequest(
                         is AppResult.Failed -> return@withTimeoutOrNull current
                         is AppResult.Success -> current.value
                     }
+                val admitted = readContinuation(workspaceId, access)
+                if (admitted is AppResult.Failed) return@withTimeoutOrNull admitted
                 val saved = cache.observeRequest(access, selection).first()
                 currentCoroutineContext().ensureActive()
-                val ownership = validateLeaveContinuation(access, currentAccess(workspaceId))
+                val ownership = readContinuation(workspaceId, access)
                 if (ownership is AppResult.Failed) return@withTimeoutOrNull ownership
                 when (saved) {
                     is AppResult.Failed -> return@withTimeoutOrNull saved
@@ -71,18 +71,20 @@ class LoadLeaveRequest(
                 is AppResult.Failed -> return current
                 is AppResult.Success -> current.value
             }
+        val admitted = readContinuation(workspaceId, access)
+        if (admitted is AppResult.Failed) return admitted
         val generation =
             when (val current = cache.requestCheckpoint(access)) {
                 is AppResult.Failed -> return current
                 is AppResult.Success -> current.value
             }
         currentCoroutineContext().ensureActive()
-        val initialOwnership = validateLeaveContinuation(access, currentAccess(workspaceId))
+        val initialOwnership = readContinuation(workspaceId, access)
         if (initialOwnership is AppResult.Failed) return initialOwnership
         val requestedAt = clock.now()
         val policyResponse = workspaces.clientPolicy(access.sessionId, access.companyId)
         currentCoroutineContext().ensureActive()
-        val policyOwnership = validateLeaveContinuation(access, currentAccess(workspaceId))
+        val policyOwnership = readContinuation(workspaceId, access)
         if (policyOwnership is AppResult.Failed) return policyOwnership
         val policy =
             when (policyResponse) {
@@ -98,7 +100,7 @@ class LoadLeaveRequest(
         val receivedAt = clock.now()
         currentCoroutineContext().ensureActive()
         val current =
-            when (val ownership = validateLeaveContinuation(access, currentAccess(workspaceId))) {
+            when (val ownership = readContinuation(workspaceId, access)) {
                 is AppResult.Failed -> return ownership
                 is AppResult.Success -> ownership.value
             }
@@ -157,7 +159,7 @@ class LoadLeaveRequest(
                     return leaveFailure("client.leave_changed", FailureKind.Conflict)
         }
         currentCoroutineContext().ensureActive()
-        val publication = validateLeaveContinuation(access, currentAccess(workspaceId))
+        val publication = readContinuation(workspaceId, access)
         if (publication is AppResult.Failed) return publication
         return AppResult.Success(Unit)
     }
@@ -173,7 +175,7 @@ class LoadLeaveRequest(
         val after = selection.historyAfter ?: return AppResult.Success(null)
         val response = remote.details(access, selection)
         currentCoroutineContext().ensureActive()
-        val ownership = validateLeaveContinuation(access, currentAccess(workspaceId))
+        val ownership = readContinuation(workspaceId, access)
         if (ownership is AppResult.Failed) return ownership
         val older =
             when (response) {
@@ -201,7 +203,29 @@ class LoadLeaveRequest(
                 is AppResult.Failed -> return current
                 is AppResult.Success -> current.value
             }
-        return admitLeave(workspaceId, workspace, session, build, clock.now())
+        val latest =
+            when (val current = sessions.current()) {
+                is AppResult.Failed -> return current
+                is AppResult.Success -> current.value
+            }
+        currentCoroutineContext().ensureActive()
+        return admitLeave(workspaceId, workspace, latest, build, clock.now())
+    }
+
+    private suspend fun readContinuation(
+        workspaceId: String,
+        access: LeaveAccess,
+    ): AppResult<LeaveAccess> {
+        val owner = validateLeaveContinuation(access, currentAccess(workspaceId))
+        if (owner is AppResult.Failed) return owner
+        val admission = cache.admission(access)
+        currentCoroutineContext().ensureActive()
+        val latest = validateLeaveContinuation(access, currentAccess(workspaceId))
+        if (latest is AppResult.Failed) return latest
+        return when (admission) {
+            is AppResult.Failed -> admission
+            is AppResult.Success -> admission.value.denial?.let { AppResult.Failed(it) } ?: latest
+        }
     }
 
     private suspend fun reject(
@@ -210,8 +234,12 @@ class LoadLeaveRequest(
         generation: String?,
         failure: AppResult.Failed,
     ): AppResult.Failed {
-        if (leaveFailureInvalidatesCache(failure.failure))
-            cache.replaceRequest(access, requestId, generation, null)
+        if (leaveFailureInvalidatesCache(failure.failure)) {
+            withTimeoutOrNull(2.seconds) { cache.restrict(access, failure.failure) }
+            withTimeoutOrNull(2.seconds) {
+                cache.replaceRequest(access, requestId, generation, null)
+            }
+        }
         return failure
     }
 }

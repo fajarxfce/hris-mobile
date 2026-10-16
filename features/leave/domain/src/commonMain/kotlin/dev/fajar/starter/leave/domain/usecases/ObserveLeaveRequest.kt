@@ -58,23 +58,35 @@ class ObserveLeaveRequest(
                 when (admitted) {
                     is AppResult.Failed -> flowOf(admitted)
                     is AppResult.Success ->
-                        cache.observeRequest(admitted.value, selection).map { result ->
-                            when (result) {
-                                is AppResult.Failed -> result
-                                is AppResult.Success ->
-                                    when (
-                                        val ownership =
-                                            validateStoredLeaveRequest(admitted.value, result.value)
-                                    ) {
-                                        is AppResult.Failed -> ownership
-                                        is AppResult.Success ->
-                                            AppResult.Success(
-                                                result.value?.takeIf { it.request.id == requestId }
-                                            )
-                                    }
+                        cache.observeAdmission(admitted.value).flatMapLatest { admission ->
+                            when (admission) {
+                                is AppResult.Failed -> flowOf(admission)
+                                is AppResult.Success -> {
+                                    val denial = admission.value.denial
+                                    if (denial != null) flowOf(AppResult.Failed(denial))
+                                    else observeAdmittedRequest(admitted.value, selection)
+                                }
                             }
                         }
                 }
             }
     }
+
+    private fun observeAdmittedRequest(
+        access: LeaveAccess,
+        selection: LeaveRequestSelection,
+    ): Flow<AppResult<LeaveRequestSnapshot?>> =
+        cache.observeRequest(access, selection).map { result ->
+            when (result) {
+                is AppResult.Failed -> result
+                is AppResult.Success ->
+                    when (val ownership = validateStoredLeaveRequest(access, result.value)) {
+                        is AppResult.Failed -> ownership
+                        is AppResult.Success ->
+                            AppResult.Success(
+                                result.value?.takeIf { it.request.id == selection.requestId }
+                            )
+                    }
+            }
+        }
 }

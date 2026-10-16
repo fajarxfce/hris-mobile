@@ -237,14 +237,29 @@ class LeaveCreateFixture(instant: () -> Instant = { Instant.parse("2026-10-12T01
     fun model(selected: LeaveCreateTarget = target) =
         LeaveCreateViewModel(
             selected,
-            LoadLeaveTypes(remote, base.sessions, base.workspaces, base.clock, base.build),
-            PreviewLeaveRequest(remote, base.sessions, base.workspaces, base.clock, base.build),
+            LoadLeaveTypes(
+                remote,
+                base.sessions,
+                base.workspaces,
+                base.clock,
+                base.build,
+                base.replica,
+            ),
+            PreviewLeaveRequest(
+                remote,
+                base.sessions,
+                base.workspaces,
+                base.clock,
+                base.build,
+                base.replica,
+            ),
             ObserveLeaveSubmission(
                 commands,
                 base.sessions,
                 base.workspaces,
                 base.clock,
                 base.build,
+                base.replica,
             ),
             PrepareLeaveSubmission(
                 commands,
@@ -252,6 +267,7 @@ class LeaveCreateFixture(instant: () -> Instant = { Instant.parse("2026-10-12T01
                 base.workspaces,
                 base.clock,
                 base.build,
+                base.replica,
             ),
             replay,
             ReviewLeaveSubmission(
@@ -264,5 +280,6 @@ class LeaveCreateFixture(instant: () -> Instant = { Instant.parse("2026-10-12T01
                 base.build,
             ),
             request.refresh,
+            LeaveSyncFixture(base).sync,
         )
 }

@@ -11,6 +11,54 @@ import kotlinx.coroutines.flow.*
  * Domain-port probe. Real encryption, indexing and transaction behavior have separate data tests.
  */
 class LeaveReplicaFixture : LeaveReplicaRepository {
+    val readAdmission =
+        MutableStateFlow<AppResult<LeaveReadAdmission>>(
+            AppResult.Success(LeaveReadAdmission(null, null))
+        )
+    var admissionObservers = 0
+    var restrictions = 0
+    var beforeAdmissionRead: suspend () -> Unit = {}
+    var beforeAdmit: suspend () -> Unit = {}
+    var failAdmissionWrite = false
+
+    override fun observeAdmission(access: LeaveAccess): Flow<AppResult<LeaveReadAdmission>> = flow {
+        admissionObservers++
+        try {
+            emitAll(readAdmission)
+        } finally {
+            admissionObservers--
+        }
+    }
+
+    override suspend fun admission(access: LeaveAccess): AppResult<LeaveReadAdmission> {
+        beforeAdmissionRead()
+        return readAdmission.value
+    }
+
+    override suspend fun restrict(access: LeaveAccess, failure: Failure): AppResult<Boolean> {
+        restrictions++
+        readAdmission.value =
+            AppResult.Success(
+                LeaveReadAdmission(
+                    "00000000-0000-4000-8000-${restrictions.toString().padStart(12, '0')}",
+                    failure,
+                )
+            )
+        return if (failAdmissionWrite) leaveFailure("client.storage", FailureKind.Storage)
+        else AppResult.Success(true)
+    }
+
+    override suspend fun admit(access: LeaveAccess, expectedRevision: String?): AppResult<Boolean> {
+        beforeAdmit()
+        val current = readAdmission.value
+        if (current is AppResult.Failed) return current
+        if ((current as AppResult.Success).value.revision != expectedRevision)
+            return AppResult.Success(false)
+        if (failAdmissionWrite) return leaveFailure("client.storage", FailureKind.Storage)
+        readAdmission.value = AppResult.Success(LeaveReadAdmission(null, null))
+        return AppResult.Success(true)
+    }
+
     data class Published(
         val checkpoint: LeaveCheckpoint?,
         val directory: LeaveDirectory?,

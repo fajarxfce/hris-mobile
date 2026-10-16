@@ -21,6 +21,7 @@ class LeaveRequestViewModel(
     private val prepareAction: PrepareLeaveAction,
     private val replayAction: ReplayLeaveAction,
     private val reviewAction: ReviewLeaveAction,
+    private val synchronize: SyncLeave,
 ) : MviViewModel<LeaveRequestState, LeaveRequestEvent, LeaveRequestEffect>(LeaveRequestState()) {
     private var observation: Job? = null
     private var acquisition: Job? = null
@@ -152,7 +153,16 @@ class LeaveRequestViewModel(
                     ),
             )
         }
-        val result = load(target.workspaceId, requested, policy)
+        val recovery =
+            if (policy == LeaveRequestAcquisition.FRESH)
+                synchronize.recoverAccess(target.workspaceId)
+            else AppResult.Success(Unit)
+        currentCoroutineContext().ensureActive()
+        val result =
+            when (recovery) {
+                is AppResult.Failed -> recovery
+                is AppResult.Success -> load(target.workspaceId, requested, policy)
+            }
         currentCoroutineContext().ensureActive()
         if (result is AppResult.Success) {
             observation?.cancel()

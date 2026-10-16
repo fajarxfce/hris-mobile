@@ -9,6 +9,31 @@ import kotlinx.coroutines.test.runTest
 
 class BrowserLeaveRequestReplicaTest {
     @Test
+    fun readDenialSurvivesFactCleanupAndSessionReplacement() = runTest {
+        withDatabase(::checkLeaveDenialSurvivesStorageCleanupAndLogin)
+    }
+
+    @Test
+    fun failedAdmissionWritesKeepTheProcessGate() = runTest {
+        withDatabase(::checkLeaveDenialRemainsKnownAfterFailedStorage)
+    }
+
+    @Test
+    fun olderRecoveryCannotClearANewerDenial() = runTest {
+        withDatabase(::checkLateLeaveAdmissionCannotClearANewerDenial)
+    }
+
+    @Test
+    fun cancellationBeforePublicationKeepsTheDenialVisible() = runTest {
+        withDatabase(::checkCancelledLeaveDenialRetainsTheProcessGate)
+    }
+
+    @Test
+    fun admissionAuthenticatesItsOwnerAndNeverReplacesALostKey() = runTest {
+        withDatabase(::checkLeaveAdmissionAuthenticatesItsCompanyAndRetainsALostKey)
+    }
+
+    @Test
     fun cancelledLateEncryptionCannotPublishARequestOrHistoryPage() = runTest {
         withDatabase(::checkLateRequestEncryptionCannotPublish)
     }

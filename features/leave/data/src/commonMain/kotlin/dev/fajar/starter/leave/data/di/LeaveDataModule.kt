@@ -16,21 +16,25 @@ import org.koin.core.annotation.*
 class LeaveDataModule {
     @Single @Named("leave-acquisition") fun leaveAcquisitionLock() = Mutex()
 
+    @Single @Named("leave-content-key-creation") fun leaveContentKeyCreationLock() = Mutex()
+
     @Factory
     fun prepareSubmission(
         commands: LeaveSubmissionCommandRepository,
+        reads: LeaveRequestReplicaRepository,
         sessions: SessionRepository,
         workspaces: WorkspaceRepository,
         build: AppBuild,
-    ) = PrepareLeaveSubmission(commands, sessions, workspaces, Clock.System, build)
+    ) = PrepareLeaveSubmission(commands, sessions, workspaces, Clock.System, build, reads)
 
     @Factory
     fun observeSubmission(
         commands: LeaveSubmissionCommandRepository,
+        reads: LeaveRequestReplicaRepository,
         sessions: SessionRepository,
         workspaces: WorkspaceRepository,
         build: AppBuild,
-    ) = ObserveLeaveSubmission(commands, sessions, workspaces, Clock.System, build)
+    ) = ObserveLeaveSubmission(commands, sessions, workspaces, Clock.System, build, reads)
 
     @Factory
     fun reviewSubmission(
@@ -54,18 +58,20 @@ class LeaveDataModule {
     @Factory
     fun loadLeaveTypes(
         remote: LeavePreparationRepository,
+        reads: LeaveRequestReplicaRepository,
         sessions: SessionRepository,
         workspaces: WorkspaceRepository,
         build: AppBuild,
-    ) = LoadLeaveTypes(remote, sessions, workspaces, Clock.System, build)
+    ) = LoadLeaveTypes(remote, sessions, workspaces, Clock.System, build, reads)
 
     @Factory
     fun previewLeaveRequest(
         remote: LeavePreparationRepository,
+        reads: LeaveRequestReplicaRepository,
         sessions: SessionRepository,
         workspaces: WorkspaceRepository,
         build: AppBuild,
-    ) = PreviewLeaveRequest(remote, sessions, workspaces, Clock.System, build)
+    ) = PreviewLeaveRequest(remote, sessions, workspaces, Clock.System, build, reads)
 
     @Factory
     fun prepareAction(
@@ -79,10 +85,11 @@ class LeaveDataModule {
     @Factory
     fun observeAction(
         commands: LeaveCommandRepository,
+        reads: LeaveRequestReplicaRepository,
         sessions: SessionRepository,
         workspaces: WorkspaceRepository,
         build: AppBuild,
-    ) = ObserveLeaveAction(commands, sessions, workspaces, Clock.System, build)
+    ) = ObserveLeaveAction(commands, sessions, workspaces, Clock.System, build, reads)
 
     @Factory
     fun reviewAction(

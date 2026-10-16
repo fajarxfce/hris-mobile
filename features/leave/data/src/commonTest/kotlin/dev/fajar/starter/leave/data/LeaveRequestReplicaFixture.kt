@@ -2,6 +2,7 @@ package dev.fajar.starter.leave.data
 
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.database.*
+import dev.fajar.starter.leave.data.datasources.MemoryLeaveReadAdmissionDataSource
 import dev.fajar.starter.leave.data.dto.*
 import dev.fajar.starter.leave.data.mappers.*
 import dev.fajar.starter.leave.data.repositories.EncryptedLeaveReplicaRepository
@@ -21,7 +22,9 @@ class LeaveRequestReplicaFixture(val db: AppDatabase) {
     val keys = MemoryCredentialStore()
     val legacyKeys = MemoryCredentialStore()
     val cipher = AesGcmContentCipher()
-    val repository = EncryptedLeaveReplicaRepository(db.replicas, cipher, keys, legacyKeys)
+    val admissions = MemoryLeaveReadAdmissionDataSource()
+    val repository =
+        EncryptedLeaveReplicaRepository(db.replicas, cipher, keys, legacyKeys, admissions)
     private var acquisition = 0
 
     suspend fun activate() =

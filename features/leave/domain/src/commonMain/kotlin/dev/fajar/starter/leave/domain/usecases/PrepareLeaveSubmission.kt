@@ -7,6 +7,7 @@ import dev.fajar.starter.common.result.*
 import dev.fajar.starter.identity.domain.repositories.SessionRepository
 import dev.fajar.starter.leave.domain.entities.*
 import dev.fajar.starter.leave.domain.policies.*
+import dev.fajar.starter.leave.domain.repositories.LeaveRequestReplicaRepository
 import dev.fajar.starter.leave.domain.repositories.LeaveSubmissionCommandRepository
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
 import kotlin.time.Clock
@@ -21,6 +22,7 @@ class PrepareLeaveSubmission(
     private val workspaces: WorkspaceRepository,
     private val clock: Clock,
     private val build: AppBuild,
+    private val reads: LeaveRequestReplicaRepository,
 ) {
     suspend operator fun invoke(
         workspaceId: String,
@@ -137,6 +139,22 @@ class PrepareLeaveSubmission(
         else leaveFailure("client.leave_submission_pending", FailureKind.Conflict)
 
     private suspend fun currentAccess(workspaceId: String): AppResult<LeaveAccess> {
+        val access =
+            when (val result = currentScope(workspaceId)) {
+                is AppResult.Failed -> return result
+                is AppResult.Success -> result.value
+            }
+        val admission = reads.admission(access)
+        currentCoroutineContext().ensureActive()
+        val owner = validateLeaveContinuation(access, currentScope(workspaceId))
+        if (owner is AppResult.Failed) return owner
+        return when (admission) {
+            is AppResult.Failed -> admission
+            is AppResult.Success -> admission.value.denial?.let { AppResult.Failed(it) } ?: owner
+        }
+    }
+
+    private suspend fun currentScope(workspaceId: String): AppResult<LeaveAccess> {
         val session =
             when (val result = sessions.current()) {
                 is AppResult.Failed -> return result

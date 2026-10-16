@@ -79,7 +79,7 @@ class LeaveRequestFixture(instant: () -> Instant = { Instant.parse("2026-10-12T0
             }
         }
     val cache =
-        object : LeaveRequestReplicaRepository {
+        object : LeaveRequestReplicaRepository by base.replica {
             override fun observeRequest(
                 access: LeaveAccess,
                 selection: LeaveRequestSelection,

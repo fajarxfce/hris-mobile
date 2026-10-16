@@ -148,7 +148,14 @@ class LeaveSubmissionFixture(instant: () -> Instant = { Instant.parse("2026-10-1
             }
         }
     val prepare =
-        PrepareLeaveSubmission(commands, base.sessions, base.workspaces, base.clock, base.build)
+        PrepareLeaveSubmission(
+            commands,
+            base.sessions,
+            base.workspaces,
+            base.clock,
+            base.build,
+            base.replica,
+        )
     val replay =
         ReplayLeaveSubmission(
             commands,
@@ -169,7 +176,14 @@ class LeaveSubmissionFixture(instant: () -> Instant = { Instant.parse("2026-10-1
             base.build,
         )
     val observe =
-        ObserveLeaveSubmission(commands, base.sessions, base.workspaces, base.clock, base.build)
+        ObserveLeaveSubmission(
+            commands,
+            base.sessions,
+            base.workspaces,
+            base.clock,
+            base.build,
+            base.replica,
+        )
 
     suspend fun queue(
         reason: String = "Personal leave",

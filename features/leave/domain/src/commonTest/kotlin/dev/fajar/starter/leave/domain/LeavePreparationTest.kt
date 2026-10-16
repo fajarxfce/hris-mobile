@@ -218,7 +218,14 @@ class LeavePreparationTest {
                 }
             }
         val load =
-            PreviewLeaveRequest(f.remote, f.base.sessions, workspaces, f.base.clock, f.base.build)
+            PreviewLeaveRequest(
+                f.remote,
+                f.base.sessions,
+                workspaces,
+                f.base.clock,
+                f.base.build,
+                f.base.replica,
+            )
         val pending = async { load("workspace", f.selected) }
         runCurrent()
         f.base.sessionState.value = AppResult.Success(f.base.session.copy(id = "replacement"))

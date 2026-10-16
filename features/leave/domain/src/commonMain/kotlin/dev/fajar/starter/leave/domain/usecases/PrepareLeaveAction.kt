@@ -119,6 +119,22 @@ class PrepareLeaveAction(
         else leaveFailure("client.leave_action_pending", FailureKind.Conflict)
 
     private suspend fun currentAccess(workspaceId: String): AppResult<LeaveAccess> {
+        val access =
+            when (val result = currentScope(workspaceId)) {
+                is AppResult.Failed -> return result
+                is AppResult.Success -> result.value
+            }
+        val admission = cache.admission(access)
+        currentCoroutineContext().ensureActive()
+        val owner = validateLeaveContinuation(access, currentScope(workspaceId))
+        if (owner is AppResult.Failed) return owner
+        return when (admission) {
+            is AppResult.Failed -> admission
+            is AppResult.Success -> admission.value.denial?.let { AppResult.Failed(it) } ?: owner
+        }
+    }
+
+    private suspend fun currentScope(workspaceId: String): AppResult<LeaveAccess> {
         val session =
             when (val result = sessions.current()) {
                 is AppResult.Failed -> return result

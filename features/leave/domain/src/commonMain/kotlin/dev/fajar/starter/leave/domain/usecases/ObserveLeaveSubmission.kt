@@ -7,6 +7,7 @@ import dev.fajar.starter.common.result.*
 import dev.fajar.starter.identity.domain.repositories.SessionRepository
 import dev.fajar.starter.leave.domain.entities.*
 import dev.fajar.starter.leave.domain.policies.*
+import dev.fajar.starter.leave.domain.repositories.LeaveRequestReplicaRepository
 import dev.fajar.starter.leave.domain.repositories.LeaveSubmissionCommandRepository
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
 import kotlin.time.Clock
@@ -20,6 +21,7 @@ class ObserveLeaveSubmission(
     private val workspaces: WorkspaceRepository,
     private val clock: Clock,
     private val build: AppBuild,
+    private val reads: LeaveRequestReplicaRepository,
 ) {
     @OptIn(ExperimentalCoroutinesApi::class)
     operator fun invoke(
@@ -70,7 +72,17 @@ class ObserveLeaveSubmission(
             .flatMapLatest { admitted ->
                 when (admitted) {
                     is AppResult.Failed -> flowOf(admitted)
-                    is AppResult.Success -> commands.observe(admitted.value, employeeId)
+                    is AppResult.Success ->
+                        reads.observeAdmission(admitted.value).flatMapLatest { admission ->
+                            when (admission) {
+                                is AppResult.Failed -> flowOf(admission)
+                                is AppResult.Success -> {
+                                    val denial = admission.value.denial
+                                    if (denial != null) flowOf(AppResult.Failed(denial))
+                                    else commands.observe(admitted.value, employeeId)
+                                }
+                            }
+                        }
                 }
             }
     }

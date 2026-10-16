@@ -2,6 +2,7 @@ package dev.fajar.starter.leave.data
 
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.database.*
+import dev.fajar.starter.leave.data.datasources.MemoryLeaveReadAdmissionDataSource
 import dev.fajar.starter.leave.data.mappers.*
 import dev.fajar.starter.leave.data.repositories.EncryptedLeaveReplicaRepository
 import dev.fajar.starter.leave.domain.entities.*
@@ -227,7 +228,13 @@ suspend fun checkLateRequestEncryptionCannotPublish(f: LeaveRequestReplicaFixtur
                     }
                 }
             val repository =
-                EncryptedLeaveReplicaRepository(f.db.replicas, cipher, f.keys, f.legacyKeys)
+                EncryptedLeaveReplicaRepository(
+                    f.db.replicas,
+                    cipher,
+                    f.keys,
+                    f.legacyKeys,
+                    MemoryLeaveReadAdmissionDataSource(),
+                )
             val expected = f.writeCheckpoint()
             val pending = async {
                 if (historyOnly)

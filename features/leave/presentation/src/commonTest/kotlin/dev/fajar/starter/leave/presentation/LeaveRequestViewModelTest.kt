@@ -17,6 +17,62 @@ import kotlinx.coroutines.test.*
 
 class LeaveRequestViewModelTest {
     @Test
+    fun replacementRouteKeepsTheSharedDenialDuringPendingAndFailedRecovery() = runTest {
+        withRequest { fixture, model, owner ->
+            model.onEvent(LeaveRequestEvent.Entered)
+            runCurrent()
+            val stored = fixture.records.value
+            fixture.cleanupFails = true
+            fixture.base.replica.failAdmissionWrite = true
+            fixture.requestCall = { leaveFailure("mfa_required", FailureKind.AccessDenied) }
+            model.onEvent(LeaveRequestEvent.RefreshRequested)
+            runCurrent()
+            assertTrue(model.state.value.readRestricted)
+            assertEquals(stored, fixture.records.value)
+            owner.clear()
+            runCurrent()
+
+            val policy = fixture.base.policyCall
+            val release = CompletableDeferred<Unit>()
+            fixture.base.policyCall = {
+                release.await()
+                leaveFailure("offline", FailureKind.Network)
+            }
+            val actions = LeaveActionPresentationFixture(fixture)
+            val restored = actions.model()
+            val restoredOwner = ViewModelStore().apply { put("request", restored) }
+            try {
+                val reads = fixture.reads
+                restored.onEvent(LeaveRequestEvent.Entered)
+                runCurrent()
+                assertTrue(restored.state.value.readRestricted)
+                assertNull(restored.state.value.content)
+                assertEquals(0, fixture.observers)
+                release.complete(Unit)
+                runCurrent()
+                assertEquals("mfa_required", restored.state.value.failure?.code)
+                assertEquals(reads, fixture.reads)
+                assertEquals(stored, fixture.records.value)
+
+                fixture.base.policyCall = policy
+                fixture.base.replica.failAdmissionWrite = false
+                fixture.requestCall = { AppResult.Success(fixture.details) }
+                restored.onEvent(LeaveRequestEvent.RefreshRequested)
+                runCurrent()
+                assertFalse(restored.state.value.readRestricted)
+                assertNotNull(restored.state.value.content)
+                assertEquals(1, fixture.observers)
+            } finally {
+                release.complete(Unit)
+                restoredOwner.clear()
+                runCurrent()
+                assertEquals(0, actions.observers)
+                assertEquals(0, fixture.base.replica.admissionObservers)
+            }
+        }
+    }
+
+    @Test
     fun routeLifetimeOwnsOneSubscriptionAndCancelsPendingAcquisition() = runTest {
         withRequest { fixture, model, owner ->
             model.onEvent(LeaveRequestEvent.Entered)

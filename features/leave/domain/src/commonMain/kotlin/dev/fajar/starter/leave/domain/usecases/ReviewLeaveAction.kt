@@ -8,9 +8,11 @@ import dev.fajar.starter.leave.domain.policies.*
 import dev.fajar.starter.leave.domain.repositories.*
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
 import kotlin.time.Clock
+import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.withTimeoutOrNull
 
 /**
  * Retires confirmed/rejected evidence after canonical review; uncertain attempts remain replayable.
@@ -24,7 +26,11 @@ class ReviewLeaveAction(
     private val clock: Clock,
     private val build: AppBuild,
 ) {
-    suspend operator fun invoke(workspaceId: String, commandId: String): AppResult<Boolean> {
+    suspend operator fun invoke(workspaceId: String, commandId: String): AppResult<Boolean> =
+        withTimeoutOrNull(30.seconds) { review(workspaceId, commandId) }
+            ?: leaveFailure("client.leave_timeout", FailureKind.Timeout)
+
+    private suspend fun review(workspaceId: String, commandId: String): AppResult<Boolean> {
         val access =
             when (val result = currentAccess(workspaceId)) {
                 is AppResult.Failed -> return result
@@ -36,18 +42,27 @@ class ReviewLeaveAction(
                 is AppResult.Success -> result.value ?: return AppResult.Success(false)
             }
         currentCoroutineContext().ensureActive()
+        val commandOwner = validateLeaveContinuation(access, currentAccess(workspaceId))
+        if (commandOwner is AppResult.Failed) return commandOwner
         if (!record.command.belongsTo(access))
             return leaveFailure("client.leave_scope_changed", FailureKind.AccessDenied)
         if (record.outcome is LeaveCommandOutcome.Unconfirmed)
             return leaveFailure("client.leave_action_unconfirmed", FailureKind.Conflict)
         if (record.outcome != LeaveCommandOutcome.Pending) {
+            val response = remote.details(access, LeaveRequestSelection(record.command.requestId))
+            currentCoroutineContext().ensureActive()
+            val responseOwner = validateLeaveContinuation(access, currentAccess(workspaceId))
+            if (responseOwner is AppResult.Failed) return responseOwner
             val canonical =
-                when (
-                    val result =
-                        remote.details(access, LeaveRequestSelection(record.command.requestId))
-                ) {
-                    is AppResult.Failed -> return result
-                    is AppResult.Success -> result.value
+                when (response) {
+                    is AppResult.Failed -> {
+                        if (leaveFailureInvalidatesCache(response.failure))
+                            withTimeoutOrNull(2.seconds) {
+                                cache.restrict(access, response.failure)
+                            }
+                        return response
+                    }
+                    is AppResult.Success -> response.value
                 }
             currentCoroutineContext().ensureActive()
             val snapshot =
@@ -61,6 +76,8 @@ class ReviewLeaveAction(
                     is AppResult.Success -> result.value
                 }
             currentCoroutineContext().ensureActive()
+            val snapshotOwner = validateLeaveContinuation(access, currentAccess(workspaceId))
+            if (snapshotOwner is AppResult.Failed) return snapshotOwner
             val lease = validateLeaveActionSnapshot(access, snapshot, clock.now())
             if (lease is AppResult.Failed) return lease
             val receipt = (record.outcome as? LeaveCommandOutcome.Confirmed)?.version
@@ -77,10 +94,29 @@ class ReviewLeaveAction(
         val ownership = validateLeaveContinuation(access, currentAccess(workspaceId))
         if (ownership is AppResult.Failed) return ownership
         // This revision CAS cannot delete a command whose replay began during review.
-        return commands.remove(access, record)
+        val removed = commands.remove(access, record)
+        currentCoroutineContext().ensureActive()
+        val publicationOwner = validateLeaveContinuation(access, currentAccess(workspaceId))
+        return if (publicationOwner is AppResult.Failed) publicationOwner else removed
     }
 
     private suspend fun currentAccess(workspaceId: String): AppResult<LeaveAccess> {
+        val access =
+            when (val result = currentScope(workspaceId)) {
+                is AppResult.Failed -> return result
+                is AppResult.Success -> result.value
+            }
+        val admission = cache.admission(access)
+        currentCoroutineContext().ensureActive()
+        val owner = validateLeaveContinuation(access, currentScope(workspaceId))
+        if (owner is AppResult.Failed) return owner
+        return when (admission) {
+            is AppResult.Failed -> admission
+            is AppResult.Success -> admission.value.denial?.let { AppResult.Failed(it) } ?: owner
+        }
+    }
+
+    private suspend fun currentScope(workspaceId: String): AppResult<LeaveAccess> {
         val session =
             when (val result = sessions.current()) {
                 is AppResult.Failed -> return result
@@ -94,6 +130,12 @@ class ReviewLeaveAction(
                 is AppResult.Success -> result.value
             }
         currentCoroutineContext().ensureActive()
-        return admitLeave(workspaceId, workspace, session, build, clock.now())
+        val latest =
+            when (val result = sessions.current()) {
+                is AppResult.Failed -> return result
+                is AppResult.Success -> result.value
+            }
+        currentCoroutineContext().ensureActive()
+        return admitLeave(workspaceId, workspace, latest, build, clock.now())
     }
 }

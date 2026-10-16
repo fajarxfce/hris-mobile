@@ -1330,3 +1330,33 @@ contains HRIS-specific sync policy and does not require a starter foundation por
 The standard WireGuard APK was rebuilt and its signature verified. Its archive
 payloads match the validated standard build. The phone's ADB endpoint did not
 respond, so no phone installation was performed in this increment.
+
+## Leave read admission
+
+On 16 October 2026, root checks passed with 1,550 desktop/JVM/UI tests. The Leave
+domain, data, presentation and assembled application Chromium suites passed 210
+tests. Android dev assembly and the production Web distribution passed. Regression
+coverage includes failed denial persistence and fact cleanup, replacement routes,
+partial bootstrap, newer denials during acquisition, late account/company results,
+cancelled writes, authenticated storage and command recovery after response loss.
+
+An API 35 emulator used an isolated API/PostgreSQL/worker and disposable accounts.
+It acquired an actual balance, submitted request and activity. A loopback test proxy
+then injected `403 / mfa_required` on Leave reads. Detail closed, and the separate
+encrypted denial remained after ordinary facts were removed. With airplane mode
+enabled and ADB forwarding removed, a cold start and a new Leave route kept reads
+closed. The stored denial generation was unchanged.
+
+After the proxy returned normal responses, a complete acquisition restored six
+encrypted documents and removed the denial. Another offline cold start reopened
+Home, balances, request dates, reason and activity. All six ciphertext hashes and
+the published generation were unchanged by those reads. Screenshots were inspected.
+The inspected crash buffer contained a UIAutomator registration failure from
+overlapping captures; subsequent captures ran sequentially. No HRIS application
+fatal exception was recorded. Emulator connectivity was restored, and the owned
+fixture services and emulator were stopped with application data retained.
+
+The WireGuard APK was retained separately from the loopback acceptance build. The
+phone's ADB endpoint did not respond, so it was not installed in this increment.
+Standard development services were unchanged. This correction contains Leave
+policy and storage behavior; it does not require a starter foundation port.

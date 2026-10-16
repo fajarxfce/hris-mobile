@@ -6,6 +6,7 @@ import dev.fajar.starter.identity.domain.repositories.SessionRepository
 import dev.fajar.starter.leave.domain.entities.*
 import dev.fajar.starter.leave.domain.policies.*
 import dev.fajar.starter.leave.domain.repositories.LeavePreparationRepository
+import dev.fajar.starter.leave.domain.repositories.LeaveRequestReplicaRepository
 import dev.fajar.starter.workspace.domain.entities.CompanyModule
 import dev.fajar.starter.workspace.domain.entities.CompanyPolicySnapshot
 import dev.fajar.starter.workspace.domain.policies.admitCompanyOperation
@@ -20,6 +21,7 @@ class PreviewLeaveRequest(
     private val workspaces: WorkspaceRepository,
     private val clock: Clock,
     private val build: AppBuild,
+    private val reads: LeaveRequestReplicaRepository,
 ) {
     suspend operator fun invoke(
         workspaceId: String,
@@ -42,11 +44,11 @@ class PreviewLeaveRequest(
             if (ownership is AppResult.Failed) return@withTimeoutOrNull ownership
             val policy =
                 when (policyResponse) {
-                    is AppResult.Failed -> return@withTimeoutOrNull policyResponse
+                    is AppResult.Failed -> return@withTimeoutOrNull reject(access, policyResponse)
                     is AppResult.Success -> CompanyPolicySnapshot(policyResponse.value, requestedAt)
                 }
             val available = admitCompanyOperation(policy, build, CompanyModule.LEAVE, clock.now())
-            if (available is AppResult.Failed) return@withTimeoutOrNull available
+            if (available is AppResult.Failed) return@withTimeoutOrNull reject(access, available)
             val response = remote.preview(access, selection)
             currentCoroutineContext().ensureActive()
             val current =
@@ -56,10 +58,11 @@ class PreviewLeaveRequest(
                 }
             val now = clock.now()
             val stillAvailable = admitCompanyOperation(policy, build, CompanyModule.LEAVE, now)
-            if (stillAvailable is AppResult.Failed) return@withTimeoutOrNull stillAvailable
+            if (stillAvailable is AppResult.Failed)
+                return@withTimeoutOrNull reject(access, stillAvailable)
             val preview =
                 when (response) {
-                    is AppResult.Failed -> return@withTimeoutOrNull response
+                    is AppResult.Failed -> return@withTimeoutOrNull reject(access, response)
                     is AppResult.Success -> response.value
                 }
             if (
@@ -89,6 +92,28 @@ class PreviewLeaveRequest(
     }
 
     private suspend fun currentAccess(workspaceId: String): AppResult<LeaveAccess> {
+        val access =
+            when (val result = currentScope(workspaceId)) {
+                is AppResult.Failed -> return result
+                is AppResult.Success -> result.value
+            }
+        val admission = reads.admission(access)
+        currentCoroutineContext().ensureActive()
+        val owner = validateLeaveContinuation(access, currentScope(workspaceId))
+        if (owner is AppResult.Failed) return owner
+        return when (admission) {
+            is AppResult.Failed -> admission
+            is AppResult.Success -> admission.value.denial?.let { AppResult.Failed(it) } ?: owner
+        }
+    }
+
+    private suspend fun reject(access: LeaveAccess, failure: AppResult.Failed): AppResult.Failed {
+        if (leaveFailureInvalidatesCache(failure.failure))
+            withTimeoutOrNull(2.seconds) { reads.restrict(access, failure.failure) }
+        return failure
+    }
+
+    private suspend fun currentScope(workspaceId: String): AppResult<LeaveAccess> {
         val session =
             when (val result = sessions.current()) {
                 is AppResult.Failed -> return result

@@ -146,7 +146,14 @@ class LeaveActionPresentationFixture(val request: LeaveRequestPresentationFixtur
             base.build,
         )
     val observe =
-        ObserveLeaveAction(commands, base.sessions, base.workspaces, base.clock, base.build)
+        ObserveLeaveAction(
+            commands,
+            base.sessions,
+            base.workspaces,
+            base.clock,
+            base.build,
+            base.replica,
+        )
     val replay =
         ReplayLeaveAction(commands, remote, base.sessions, base.workspaces, base.clock, base.build)
     val review =
@@ -169,5 +176,6 @@ class LeaveActionPresentationFixture(val request: LeaveRequestPresentationFixtur
             prepare,
             replay,
             review,
+            LeaveSyncFixture(base).sync,
         )
 }

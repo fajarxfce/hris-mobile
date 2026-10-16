@@ -1571,6 +1571,12 @@ class AppFlowTest {
             compose.onNode(hasText("Request leave") and hasClickAction()).performClick()
             waitFor("The delivery result is not yet known.")
             compose.onNodeWithText("Family appointment\nKeep these dates").assertExists()
+            compose.waitUntil {
+                compose
+                    .onAllNodes(hasText("Retry delivery") and hasClickAction() and isEnabled())
+                    .fetchSemanticsNodes()
+                    .isNotEmpty()
+            }
             server.leave.offline = false
             compose
                 .onNode(hasText("Retry delivery") and hasClickAction())

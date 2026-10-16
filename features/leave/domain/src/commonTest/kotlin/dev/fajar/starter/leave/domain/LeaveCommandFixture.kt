@@ -161,7 +161,14 @@ class LeaveCommandFixture(instant: () -> Instant = { Instant.parse("2026-10-12T0
             base.build,
         )
     val observe =
-        ObserveLeaveAction(commands, base.sessions, base.workspaces, base.clock, base.build)
+        ObserveLeaveAction(
+            commands,
+            base.sessions,
+            base.workspaces,
+            base.clock,
+            base.build,
+            base.replica,
+        )
 
     suspend fun queue(
         action: LeaveRequestAction = LeaveRequestAction.WITHDRAW,

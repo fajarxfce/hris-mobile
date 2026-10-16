@@ -145,6 +145,15 @@ class LeaveRequestReadTest {
         assertSame(unavailable, f.load())
         assertEquals(previous, f.records.value)
         f.cleanupFails = false
+        val reads = f.reads
+        assertEquals(unavailable, f.load())
+        assertEquals(previous, f.records.value)
+        assertEquals(reads, f.reads)
+        assertEquals(unavailable, f.observe(f.base.workspace.id, f.details.id).first())
+        assertEquals(
+            AppResult.Success(Unit),
+            LeaveSyncFixture(f.base).sync.recoverAccess(f.base.workspace.id),
+        )
         assertSame(unavailable, f.load())
         assertEquals(AppResult.Success(null), f.records.value)
     }

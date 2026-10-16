@@ -67,6 +67,22 @@ class ObserveLeave(
         access: LeaveAccess,
         selection: LeaveSelection,
     ): Flow<AppResult<LeaveOverview?>> =
+        replicas.observeAdmission(access).flatMapLatest { admission ->
+            when (admission) {
+                is AppResult.Failed -> flowOf(admission)
+                is AppResult.Success -> {
+                    val denial = admission.value.denial
+                    if (denial != null) flowOf(AppResult.Failed(denial))
+                    else observeAdmittedReplica(access, selection)
+                }
+            }
+        }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private fun observeAdmittedReplica(
+        access: LeaveAccess,
+        selection: LeaveSelection,
+    ): Flow<AppResult<LeaveOverview?>> =
         replicas.observeDirectory(access).flatMapLatest { result ->
             when (result) {
                 is AppResult.Failed -> flowOf(result)

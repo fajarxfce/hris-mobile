@@ -2,6 +2,7 @@ package dev.fajar.starter.leave.data
 
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.database.*
+import dev.fajar.starter.leave.data.datasources.MemoryLeaveReadAdmissionDataSource
 import dev.fajar.starter.leave.data.encoding.*
 import dev.fajar.starter.leave.data.mappers.*
 import dev.fajar.starter.leave.data.repositories.EncryptedLeaveReplicaRepository
@@ -293,7 +294,13 @@ class EncryptedLeaveReplicaTest {
             db.close()
             db = createAppDatabase(directory)
             val restored =
-                EncryptedLeaveReplicaRepository(db.replicas, AesGcmContentCipher(), keys, keys)
+                EncryptedLeaveReplicaRepository(
+                    db.replicas,
+                    AesGcmContentCipher(),
+                    keys,
+                    keys,
+                    MemoryLeaveReadAdmissionDataSource(),
+                )
             assertEquals(
                 expected,
                 assertIs<AppResult.Success<LeaveReplicaPage>>(
@@ -377,7 +384,14 @@ class EncryptedLeaveReplicaTest {
                         }
                     }
                 }
-            val repository = EncryptedLeaveReplicaRepository(f.db.replicas, cipher, f.keys, f.keys)
+            val repository =
+                EncryptedLeaveReplicaRepository(
+                    f.db.replicas,
+                    cipher,
+                    f.keys,
+                    f.keys,
+                    MemoryLeaveReadAdmissionDataSource(),
+                )
             val writing = async {
                 repository.commit(
                     f.current,
@@ -428,7 +442,13 @@ class EncryptedLeaveReplicaTest {
                 raw.balances.toBalances(raw.employee.id, 2026, null).items.single(),
             )
         val repository =
-            EncryptedLeaveReplicaRepository(db.replicas, AesGcmContentCipher(), keys, keys)
+            EncryptedLeaveReplicaRepository(
+                db.replicas,
+                AesGcmContentCipher(),
+                keys,
+                keys,
+                MemoryLeaveReadAdmissionDataSource(),
+            )
         var current = initialLeaveCheckpoint(access, "generation", raw.now)
 
         suspend fun seed(entries: List<LeaveReplicaEntry>, publish: Boolean = true) {

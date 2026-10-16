@@ -2,6 +2,7 @@ package dev.fajar.starter.leave.data
 
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.database.*
+import dev.fajar.starter.leave.data.datasources.MemoryLeaveReadAdmissionDataSource
 import dev.fajar.starter.leave.data.encoding.*
 import dev.fajar.starter.leave.data.mappers.*
 import dev.fajar.starter.leave.data.repositories.EncryptedLeaveReplicaRepository
@@ -83,7 +84,13 @@ class LeaveRequestReplicaMigrationTest {
                         else f.db.replicas.observe(scope, partition, after, limit)
                 }
             val repository =
-                EncryptedLeaveReplicaRepository(missing, f.cipher, f.keys, f.legacyKeys)
+                EncryptedLeaveReplicaRepository(
+                    missing,
+                    f.cipher,
+                    f.keys,
+                    f.legacyKeys,
+                    MemoryLeaveReadAdmissionDataSource(),
+                )
             assertEquals(
                 FailureKind.Storage,
                 assertIs<AppResult.Failed>(

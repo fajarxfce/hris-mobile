@@ -156,8 +156,11 @@ independent of People and Workforce availability. `SyncLeave` admits the selecte
 company and reconciles request/balance change references. Its replica repository
 atomically stores encrypted records, directory metadata and the processed cursor.
 `ObserveLeave` queries those records by employment, year and status; filters do
-not acquire data. The ViewModel owns selection, read gates and cancellation; it
-never recalculates accounting balances or sends technical API types to the page.
+not acquire data. An encrypted admission record retains confirmed read denials;
+a process-owned buffer covers failed writes. Only complete, current acquisition
+started after the latest denial reopens the shared projection. The ViewModel owns
+selection, presentation and cancellation; it never recalculates accounting
+balances or sends technical API types to the page.
 The preceding overview remains a migration fallback until the first complete
 replica publishes. Own-request details have separate acquisition/observation
 use cases and share the account-owned replica. Each request retains its full

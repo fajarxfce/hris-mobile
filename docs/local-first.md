@@ -188,6 +188,14 @@ format-2 facts until complete. A failed or cancelled upgrade resumes that same
 staging generation after restart. Calendar validity remains business metadata;
 passing its date neither deletes local history nor rewrites the stored total.
 
+Leave read admission is stored separately from its facts. Confirmed MFA, scope
+and access denials remain authoritative through failed data cleanup and retries.
+A process-owned buffer covers pending or failed admission writes; persisted
+denials also survive account reauthentication. Only complete, current Leave sync
+started after the latest denial can reopen the projection. Individual request
+reads, type lookup and preview cannot clear it. Explicit detail/form retries
+check whether recovery is needed before acquiring their own data.
+
 Full request acquisition writes the summary, header, date chunks and latest activity
 page together. Date chunks contain at most 128 entries and an activity page at most
 ten changes; requests are retained by ID, independently of the last opened page.

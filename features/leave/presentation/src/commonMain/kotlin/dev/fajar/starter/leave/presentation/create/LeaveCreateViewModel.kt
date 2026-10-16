@@ -25,6 +25,7 @@ class LeaveCreateViewModel(
     private val replaySubmission: ReplayLeaveSubmission,
     private val reviewSubmission: ReviewLeaveSubmission,
     private val refreshRequest: LoadLeaveRequest,
+    private val synchronize: SyncLeave,
 ) :
     MviViewModel<LeaveCreateState, LeaveCreateEvent, LeaveCreateEffect>(
         initialLeaveCreateState(target)
@@ -133,7 +134,14 @@ class LeaveCreateViewModel(
         operation =
             viewModelScope.launch {
                 try {
-                    val result = loadTypes(target.workspaceId, LeaveTypeSelection(form.from, after))
+                    val recovery = synchronize.recoverAccess(target.workspaceId)
+                    ensureActive()
+                    val result =
+                        when (recovery) {
+                            is AppResult.Failed -> recovery
+                            is AppResult.Success ->
+                                loadTypes(target.workspaceId, LeaveTypeSelection(form.from, after))
+                        }
                     ensureActive()
                     when (result) {
                         is AppResult.Failed -> reportFailure(result.failure)

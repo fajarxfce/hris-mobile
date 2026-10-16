@@ -126,8 +126,8 @@ and replacing the form with its detail route. Back returns to the overview.
 
 The route owns lifecycle collection; the MVI owner cancels acquisition, command
 observation and its preview-expiry timer when stopped. Current access failures
-hide sensitive content and remain gated through failed retries. A fresh admitted
-catalog read can reopen a completed command source. Typed form values are
+hide sensitive content and remain gated through failed retries. A completed command
+source can reopen after explicit recovery and an admitted catalog read. Typed form values are
 process-local until confirmation; confirmed input uses encrypted durable storage.
 Employees can select up to three published personal documents through the shared
 [document catalog](documents.md). The picker owns its MVI state, bounded page,
@@ -169,6 +169,19 @@ account, company, generation, ID, version, order and index tags. Keyed filter to
 support bounded SQL/IndexedDB queries by employment and year/status. Key and plaintext
 byte buffers are cleared after use. Cancellation is checked before admitting a
 write; an admitted storage transaction remains atomic.
+
+A separate encrypted read-admission record retains confirmed access, MFA and scope
+denials. A process-owned write buffer keeps a denial observable while its durable
+write is pending or fails. List, detail, preparation and retained-command reads
+share that gate, including the preceding overview fallback. Removing ordinary
+facts does not clear it. A fresh single-request read cannot reopen the collection.
+
+Only complete synchronization started after the latest denial can reopen reads.
+Publication uses the observed denial revision, so an older acquisition cannot
+clear a newer restriction. A bounded partial bootstrap retains the gate until
+catch-up; older activity backfill has its own progress. Detail and form retries
+request this recovery only when a stored denial exists, then resume their own
+operation. Ordinary offline reads and credential age do not trigger recovery.
 
 The preceding session-bound overview remains readable as a migration fallback
 until the first full replica publishes. Known empty replica results never restore
@@ -274,7 +287,7 @@ a local approval or cancellation status.
 A current denial gates the detail through subsequent failed retries and lifecycle
 replacement. An old failure retained as command evidence does not override a new
 successful read. A completed command-storage observer reopens only after an
-explicit successful refresh. Duplicate confirmation, expired reads, changed request
+explicit successful refresh. Duplicate confirmation, expired action reviews, changed request
 versions and obsolete outcomes cannot replace the visible operation.
 
 ## Remaining workflow
@@ -285,6 +298,13 @@ self-service. Published evidence and local file transfer are covered by
 to submit.
 
 ## Validation
+
+The shared read-admission correction passed root checks, 210 targeted Chromium
+tests and Android/Web builds. SQLite and IndexedDB cover durable denials, failed
+writes, competing recovery, cancellation and company-bound encryption. API 35
+acceptance retained a controlled denial across an offline process restart, then
+reacquired data and reopened it offline with unchanged ciphertext. See the
+[executed validation](validation.md#leave-read-admission).
 
 The submission foundation passed complete root checks, 86 Leave domain/data
 Chromium tests, Android dev assembly and the production Web build. New regression
