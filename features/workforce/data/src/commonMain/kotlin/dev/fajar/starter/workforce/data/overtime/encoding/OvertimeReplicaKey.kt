@@ -7,7 +7,7 @@ import kotlin.io.encoding.Base64
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.withContext
 
-/** Called under the repository's key-creation lock; never replaces a lost retained key. */
+/** Called under the shared Overtime key-creation lock; never replaces a lost retained key. */
 suspend fun readOrCreateOvertimeReplicaKey(
     replicas: ReplicaStore,
     cipher: ContentCipher,

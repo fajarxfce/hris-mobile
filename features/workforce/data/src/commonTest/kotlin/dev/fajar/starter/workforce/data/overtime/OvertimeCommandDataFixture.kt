@@ -19,7 +19,12 @@ class OvertimeCommandDataFixture {
             null,
             LocalDate.parse(source.request.workDate),
             source.request.timezone,
-            OvertimeCommandPayload.Plan(7, source.requested.toInterval(), "a".repeat(64)),
+            OvertimeCommandPayload.Plan(
+                7,
+                source.requested.toInterval(),
+                "a".repeat(64),
+                "40000000-0000-4000-8000-000000000001",
+            ),
             "Inventory count\nEnd of quarter",
             source.base.now,
         )

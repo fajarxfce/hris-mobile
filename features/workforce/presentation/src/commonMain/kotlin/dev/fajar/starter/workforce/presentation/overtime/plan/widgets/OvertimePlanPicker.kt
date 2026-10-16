@@ -20,6 +20,9 @@ fun OvertimePlanPicker(state: OvertimePlanState, onEvent: (OvertimePlanEvent) ->
                 is OvertimePlanDialog.Date -> dialog.field.label()
                 is OvertimePlanDialog.Time -> dialog.field.label()
                 OvertimePlanDialog.Discard -> AppString.OvertimeDiscardCommand
+                OvertimePlanDialog.DiscardDraft -> AppString.OvertimeDiscardDraft
+                OvertimePlanDialog.ReloadDraft -> AppString.OvertimeReloadDraft
+                OvertimePlanDialog.LeaveUnsaved -> AppString.OvertimeWithoutSaving
             }
         ),
         appString(AppString.Close),
@@ -30,6 +33,47 @@ fun OvertimePlanPicker(state: OvertimePlanState, onEvent: (OvertimePlanEvent) ->
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             when (dialog) {
+                OvertimePlanDialog.DiscardDraft,
+                OvertimePlanDialog.ReloadDraft,
+                OvertimePlanDialog.LeaveUnsaved ->
+                    item(key = "working-confirmation") {
+                        Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                            AppText(
+                                appString(
+                                    when (dialog) {
+                                        OvertimePlanDialog.DiscardDraft ->
+                                            AppString.OvertimeDiscardDraftExplanation
+                                        OvertimePlanDialog.ReloadDraft ->
+                                            AppString.OvertimeReloadDraftExplanation
+                                        else -> AppString.OvertimeWithoutSavingExplanation
+                                    }
+                                )
+                            )
+                            AppButton(
+                                appString(
+                                    when (dialog) {
+                                        OvertimePlanDialog.DiscardDraft ->
+                                            AppString.OvertimeDiscardDraft
+                                        OvertimePlanDialog.ReloadDraft ->
+                                            AppString.OvertimeReloadDraft
+                                        else -> AppString.OvertimeWithoutSaving
+                                    }
+                                ),
+                                {
+                                    onEvent(
+                                        when (dialog) {
+                                            OvertimePlanDialog.DiscardDraft ->
+                                                OvertimePlanEvent.DiscardDraftConfirmed
+                                            OvertimePlanDialog.ReloadDraft ->
+                                                OvertimePlanEvent.ReloadDraftConfirmed
+                                            else -> OvertimePlanEvent.ExitWithoutSaving
+                                        }
+                                    )
+                                },
+                                enabled = state.work == null && !state.closing,
+                            )
+                        }
+                    }
                 is OvertimePlanDialog.Date ->
                     item(key = "calendar") {
                         val bounds = state.planDateBounds(dialog.field)

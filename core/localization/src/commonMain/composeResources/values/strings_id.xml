@@ -62,7 +62,7 @@
     <string name="overtime_withdraw_request_id">Tarik pengajuan</string>
     <string name="overtime_withdraw_prompt_id">Pengajuan lembur ini akan ditarik.</string>
     <string name="overtime_form_changed_id">Pengajuan berubah. Tinjau pengajuan terbaru sebelum melanjutkan.</string>
-    <string name="overtime_new_plan_id">Rencanakan lembur</string>
+    <string name="overtime_new_plan_id">Rencana lembur</string>
     <string name="overtime_save_plan_id">Kirim rencana</string>
     <string name="overtime_current_schedule_id">Jadwal kerja</string>
     <string name="overtime_review_expired_id">Periksa kembali jadwal kerja sebelum mengirim.</string>
@@ -816,4 +816,15 @@
     <string name="leave_reload_draft_explanation_id">Ganti perubahan yang belum disimpan dengan draft tersimpan di perangkat ini?</string>
     <string name="leave_without_saving_id">Keluar tanpa menyimpan</string>
     <string name="leave_without_saving_explanation_id">Perubahan terakhir belum tersimpan. Keluar tanpa menyimpannya?</string>
+    <string name="overtime_saved_locally_id">Tersimpan di perangkat ini</string>
+    <string name="overtime_saving_locally_id">Menyimpan di perangkat ini…</string>
+    <string name="overtime_working_copy_changed_id">Draft ini berubah di editor lain. Muat ulang versi tersimpan untuk melanjutkan.</string>
+    <string name="overtime_working_copy_invalid_id">Draft ini belum dapat dibaca.</string>
+    <string name="overtime_working_copy_unavailable_id">Hubungkan aplikasi untuk memuat data lembur perusahaan ini.</string>
+    <string name="overtime_discard_draft_id">Hapus draft</string>
+    <string name="overtime_discard_draft_explanation_id">Hapus draft ini dari perangkat?</string>
+    <string name="overtime_reload_draft_id">Muat ulang draft tersimpan</string>
+    <string name="overtime_reload_draft_explanation_id">Ganti perubahan yang belum disimpan dengan draft tersimpan di perangkat ini?</string>
+    <string name="overtime_without_saving_id">Keluar tanpa menyimpan</string>
+    <string name="overtime_without_saving_explanation_id">Perubahan terakhir belum tersimpan. Keluar tanpa menyimpannya?</string>
 </resources>

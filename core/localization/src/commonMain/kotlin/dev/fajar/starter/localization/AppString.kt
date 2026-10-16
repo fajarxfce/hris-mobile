@@ -866,6 +866,47 @@ enum class AppString(val english: StringResource, val indonesian: StringResource
         Res.string.document_evidence_expired_en,
         Res.string.document_evidence_expired_id,
     ),
+    OvertimeSavedLocally(
+        Res.string.overtime_saved_locally_en,
+        Res.string.overtime_saved_locally_id,
+    ),
+    OvertimeSavingLocally(
+        Res.string.overtime_saving_locally_en,
+        Res.string.overtime_saving_locally_id,
+    ),
+    OvertimeWorkingCopyChanged(
+        Res.string.overtime_working_copy_changed_en,
+        Res.string.overtime_working_copy_changed_id,
+    ),
+    OvertimeWorkingCopyInvalid(
+        Res.string.overtime_working_copy_invalid_en,
+        Res.string.overtime_working_copy_invalid_id,
+    ),
+    OvertimeWorkingCopyUnavailable(
+        Res.string.overtime_working_copy_unavailable_en,
+        Res.string.overtime_working_copy_unavailable_id,
+    ),
+    OvertimeDiscardDraft(
+        Res.string.overtime_discard_draft_en,
+        Res.string.overtime_discard_draft_id,
+    ),
+    OvertimeDiscardDraftExplanation(
+        Res.string.overtime_discard_draft_explanation_en,
+        Res.string.overtime_discard_draft_explanation_id,
+    ),
+    OvertimeReloadDraft(Res.string.overtime_reload_draft_en, Res.string.overtime_reload_draft_id),
+    OvertimeReloadDraftExplanation(
+        Res.string.overtime_reload_draft_explanation_en,
+        Res.string.overtime_reload_draft_explanation_id,
+    ),
+    OvertimeWithoutSaving(
+        Res.string.overtime_without_saving_en,
+        Res.string.overtime_without_saving_id,
+    ),
+    OvertimeWithoutSavingExplanation(
+        Res.string.overtime_without_saving_explanation_en,
+        Res.string.overtime_without_saving_explanation_id,
+    ),
     LeaveSavedLocally(Res.string.leave_saved_locally_en, Res.string.leave_saved_locally_id),
     LeaveSavingLocally(Res.string.leave_saving_locally_en, Res.string.leave_saving_locally_id),
     LeaveWorkingCopyChanged(

@@ -9,6 +9,18 @@ sealed interface OvertimePlanEvent {
 
     data object ReloadRequested : OvertimePlanEvent
 
+    data object SaveRetryRequested : OvertimePlanEvent
+
+    data object ReloadDraftRequested : OvertimePlanEvent
+
+    data object ReloadDraftConfirmed : OvertimePlanEvent
+
+    data object DiscardDraftRequested : OvertimePlanEvent
+
+    data object DiscardDraftConfirmed : OvertimePlanEvent
+
+    data object ExitWithoutSaving : OvertimePlanEvent
+
     data class DatePickerRequested(val field: OvertimePlanDateField) : OvertimePlanEvent
 
     data class DateMonthRequested(val offset: Int) : OvertimePlanEvent

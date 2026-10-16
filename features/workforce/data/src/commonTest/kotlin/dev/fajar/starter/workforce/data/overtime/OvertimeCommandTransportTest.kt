@@ -46,7 +46,8 @@ class OvertimeCommandTransportTest {
                         "workedMinutes" in text ||
                             "employeeNumber" in body ||
                             "accountId" in body ||
-                            "timezone" in body
+                            "timezone" in body ||
+                            "workingRevision" in body
                     )
                     when (val payload = command.payload) {
                         is OvertimeCommandPayload.Plan -> {

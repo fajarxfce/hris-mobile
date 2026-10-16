@@ -15,6 +15,7 @@ class OvertimeCommandFixture(instant: () -> Instant = { Instant.parse("2026-10-1
     val planning = OvertimePlanningFixture(instant)
     val overtime = planning.overtime
     val base = planning.base
+    val working = OvertimePlanWorkingFixture(overtime)
     val access = overtime.access
     val workspace = overtime.workspace
     val prepared =
@@ -173,6 +174,7 @@ class OvertimeCommandFixture(instant: () -> Instant = { Instant.parse("2026-10-1
             base.workspaces,
             base.clock,
             base.build,
+            working.copies,
         )
     val prepareAction =
         PrepareOvertimeAction(
@@ -201,6 +203,7 @@ class OvertimeCommandFixture(instant: () -> Instant = { Instant.parse("2026-10-1
             base.workspaces,
             base.clock,
             base.build,
+            working.copies,
         )
     val observe =
         ObserveOvertimeCommand(

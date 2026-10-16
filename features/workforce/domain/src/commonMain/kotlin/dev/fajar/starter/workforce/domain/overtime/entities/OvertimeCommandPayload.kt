@@ -5,6 +5,7 @@ sealed interface OvertimeCommandPayload {
         val expectedEmploymentVersion: Long,
         val requested: OvertimeInterval,
         val planningRevision: String,
+        val workingRevision: String? = null,
     ) : OvertimeCommandPayload
 
     data class Actual(val expectedVersion: Long, val actual: OvertimeInterval) :

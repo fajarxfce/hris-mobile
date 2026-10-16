@@ -48,7 +48,8 @@ details include planned and actual time, approval progress, the reviewed schedul
 and paged activity. Account-owned encrypted records receive incremental changes;
 month, status and page filters query local storage. Acquired requests and activity
 remain available across process restarts and reauthentication. Employees can review the company work schedule, select
-local dates and times, and submit an overtime plan. Saved input survives interrupted
+local dates and times, and submit an overtime plan. Unfinished planning input autosaves
+to a separate encrypted draft and reopens offline without an age limit. Reviewed input survives interrupted
 delivery and process restart; retry keeps the original operation. Request details
 also open actual-time and withdrawal forms with versioned confirmation. An uncertain
 submission stays retained before a different action can be prepared.

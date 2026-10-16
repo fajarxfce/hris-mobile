@@ -135,6 +135,7 @@ class OvertimeActionFixture(
             base.workspaces,
             base.clock,
             base.build,
+            OvertimeWorkingPresentationFixture(base).copies,
         )
     private val observeRequest =
         ObserveOvertimeRequest(base.cache, base.sessions, base.workspaces, base.clock, base.build)

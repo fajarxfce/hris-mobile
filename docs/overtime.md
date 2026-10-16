@@ -130,6 +130,35 @@ shift exclusion, actual-time bounds and completed-work requirement. Datasources
 only acquire DTOs; repository mapping validates protocol consistency and preserves
 localizable server failures.
 
+## Unfinished planning input
+
+Each owned employment has one encrypted planning draft, separate from synchronized
+facts and immutable commands. It retains the work date, start/end dates, incomplete
+times, break input and reason. Local editing and restoration require the matching
+account, API audience, company and acquired employment; ordinary age or credential
+expiry imposes no deadline. First use without an acquired employment directory
+requires admitted synchronization. Confirmed read restrictions still apply.
+
+The repository uses the raw replica store with an independent working partition.
+It shares the Overtime content key and its creation lock; authentication binds the
+company, employment and revision. A missing key cannot replace existing ciphertext.
+Compare-and-set preserves competing edits. Repeating an uncertain save recovers
+only the same revision and input, including when its acknowledgement was lost.
+
+The planning ViewModel owns a debounced serial writer: one pending mutation and
+the newest editor input. New keystrokes coalesce while a write is pending. Stop
+requests an immediate save within the route lifetime; final disposal cancels it.
+Back waits for acknowledgement and offers an explicit choice if saving failed.
+There is no retry loop after a storage failure. Reload and discard require explicit
+confirmation; neither may overwrite another editor's revision.
+
+Submission first waits for local durability and still requires current schedule
+review. The command references the exact acknowledged draft revision. After the
+server receipt and admitted canonical request agree, command review removes only
+that revision, preserving newer edits. Cleanup failure keeps the confirmed command
+recoverable without sending it again. Actual-time and withdrawal commands already
+retain confirmed input; their unfinished forms are not yet persisted as drafts.
+
 ## Durable commands
 
 Planning, actual-time submission and withdrawal have typed immutable commands.
@@ -167,7 +196,7 @@ permission or UI orchestration.
 ## Planning form
 
 The planning route owns typed form events, one schedule acquisition, one command
-observation and the review-expiry timer. Leaving cancels these resources; late
+observation, a local-save writer and the review-expiry timer. Disposal cancels these resources; late
 responses cannot publish into a later entry. A successful explicit review reopens
 completed storage observation, while known access failures remain gated throughout
 pending or failed recovery.

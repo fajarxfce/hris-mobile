@@ -67,6 +67,7 @@ fun OvertimeCommand.toDto() =
                     value.expectedEmploymentVersion,
                     value.requested.toDto(),
                     value.planningRevision,
+                    value.workingRevision,
                 )
             is OvertimeCommandPayload.Actual ->
                 OvertimeCommandPayloadDto.Actual(value.expectedVersion, value.actual.toDto())
@@ -98,10 +99,12 @@ fun OvertimeCommandDto.toCommand(): OvertimeCommand {
             is OvertimeCommandPayloadDto.Plan -> {
                 require(value.expectedEmploymentVersion in 0..9_007_199_254_740_991L)
                 require(Regex("[0-9a-f]{64}").matches(value.planningRevision))
+                value.workingRevision?.let { require(Uuid.parse(it).toString() == it) }
                 OvertimeCommandPayload.Plan(
                     value.expectedEmploymentVersion,
                     value.requested.toInterval(),
                     value.planningRevision,
+                    value.workingRevision,
                 )
             }
             is OvertimeCommandPayloadDto.Actual -> {

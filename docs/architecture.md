@@ -224,6 +224,14 @@ Submission links its immutable body to an acknowledged working revision. Canonic
 reconciliation removes only that revision before retiring the command, preserving
 newer edits and recoverable cleanup failures.
 
+Overtime planning keeps the same separation between acquired facts, unfinished
+local input and immutable commands. Working-copy use cases coordinate stored
+employment ownership, read admission and revision checks; the route owns autosave
+and leaving behavior. Its working repository shares raw storage and content-key
+creation with the replica, without calling another repository. Confirmation pins
+an acknowledged input revision, and canonical reconciliation removes only that
+revision before retiring the command.
+
 Feature flag definitions and evaluation policy live in `core/featureflags/domain`; each
 consuming feature owns its keys and action guards. A shared refresh use case serializes
 workers and sets the fetch interval. Its repository coordinates Remote Config and the

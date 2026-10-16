@@ -131,6 +131,9 @@ fun failureText(failure: Failure): String =
             "client.document_catalog_changed" -> AppString.TryAgain
             "client.document_evidence_expired" -> AppString.DocumentEvidenceExpired
             "client.document_scope_changed" -> AppString.CalendarScopeChanged
+            "client.overtime_working_copy_changed" -> AppString.OvertimeWorkingCopyChanged
+            "client.overtime_working_copy_invalid" -> AppString.OvertimeWorkingCopyInvalid
+            "client.overtime_working_copy_unavailable" -> AppString.OvertimeWorkingCopyUnavailable
             "client.leave_working_copy_changed" -> AppString.LeaveWorkingCopyChanged
             "client.leave_working_copy_invalid" -> AppString.LeaveWorkingCopyInvalid
             "client.leave_working_copy_unavailable" -> AppString.LeaveWorkingCopyUnavailable

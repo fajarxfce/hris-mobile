@@ -97,14 +97,15 @@ class OvertimeAdmissionViewModelTest {
             store = ViewModelStore()
             vm = f.create(store)
             f.read = accepted
-            val bootstrap = f.base.bootstrapCall
-            f.base.bootstrapCall = {
+            val changes = f.base.changesCall
+            f.base.changesCall = {
                 AppResult.Success(
-                    SyncBootstrapPage(
-                        setOf(SyncCollection.OVERTIME_REQUESTS),
+                    SyncChangePage(
                         emptyList(),
-                        "page-${f.base.bootstrapReads}",
-                        null,
+                        "page-${f.base.changesReads}",
+                        true,
+                        false,
+                        5,
                         f.base.clock.now(),
                     )
                 )
@@ -114,16 +115,16 @@ class OvertimeAdmissionViewModelTest {
             assertTrue(vm.state.value.needsVerification)
             vm.onEvent(OvertimePlanEvent.ReloadRequested)
             runCurrent()
-            assertEquals(10, f.base.bootstrapReads)
+            assertEquals(10, f.base.changesReads)
             assertTrue(vm.state.value.needsVerification)
             assertNull(vm.state.value.prepared)
             assertEquals(1, f.reads)
-            f.base.bootstrapCall = { AppResult.Failed(Failure(FailureKind.Network, "Offline")) }
+            f.base.changesCall = { AppResult.Failed(Failure(FailureKind.Network, "Offline")) }
             vm.onEvent(OvertimePlanEvent.ReloadRequested)
             runCurrent()
             assertTrue(vm.state.value.needsVerification)
             assertNull(vm.state.value.prepared)
-            f.base.bootstrapCall = bootstrap
+            f.base.changesCall = changes
             vm.onEvent(OvertimePlanEvent.ReloadRequested)
             runCurrent()
             assertNull(vm.state.value.restriction)
@@ -204,7 +205,7 @@ class OvertimeAdmissionViewModelTest {
             runCurrent()
             assertTrue(vm.state.value.needsVerification)
             assertTrue(effects.isEmpty())
-            f.base.bootstrapCall = {
+            f.base.changesCall = {
                 AppResult.Failed(
                     Failure(FailureKind.AccessDenied, "Denied", code = "company_access_denied")
                 )

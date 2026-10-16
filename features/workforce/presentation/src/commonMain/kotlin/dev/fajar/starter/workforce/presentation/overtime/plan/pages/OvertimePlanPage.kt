@@ -13,6 +13,7 @@ import dev.fajar.starter.localization.*
 import dev.fajar.starter.workforce.domain.overtime.entities.OvertimeCommandOutcome
 import dev.fajar.starter.workforce.presentation.calendar.widgets.CalendarDayCard
 import dev.fajar.starter.workforce.presentation.overtime.plan.*
+import dev.fajar.starter.workforce.presentation.overtime.plan.widgets.OvertimePlanLocalSaveStatus
 import dev.fajar.starter.workforce.presentation.overtime.plan.widgets.OvertimePlanPicker
 import dev.fajar.starter.workforce.presentation.overtime.widgets.*
 import io.github.composefluent.FluentTheme
@@ -22,6 +23,7 @@ import io.github.composefluent.icons.regular.ArrowSync
 import io.github.composefluent.icons.regular.CalendarLtr
 import io.github.composefluent.icons.regular.ChevronRight
 import io.github.composefluent.icons.regular.Clock
+import io.github.composefluent.icons.regular.Delete
 
 @Composable
 fun OvertimePlanPage(
@@ -46,12 +48,25 @@ fun OvertimePlanPage(
                         )
                     },
                     actions = {
+                        if (
+                            state.persistence != null &&
+                                state.command == null &&
+                                state.restriction == null
+                        )
+                            AppIconButton(
+                                Icons.Regular.Delete,
+                                appString(AppString.OvertimeDiscardDraft),
+                                { onEvent(OvertimePlanEvent.DiscardDraftRequested) },
+                                enabled = state.editable,
+                            )
                         AppIconButton(
                             Icons.Regular.ArrowSync,
                             appString(AppString.Refresh),
                             { onEvent(OvertimePlanEvent.ReloadRequested) },
-                            enabled = state.work == null,
-                            loading = state.work == OvertimePlanWork.REVIEW,
+                            enabled = state.work == null && !state.closing,
+                            loading =
+                                state.work in
+                                    setOf(OvertimePlanWork.REVIEW, OvertimePlanWork.RESTORING),
                         )
                     },
                 )
@@ -71,10 +86,12 @@ fun OvertimePlanPage(
                 state.form != null &&
                     state.restriction == null &&
                     state.commandReady &&
-                    state.command == null
+                    state.command == null &&
+                    state.persistence != null
             )
                 AppActionBar {
                     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        OvertimePlanLocalSaveStatus(state, onEvent)
                         if (state.reviewExpired)
                             AppText(
                                 appString(AppString.OvertimeReviewExpired),
@@ -86,8 +103,10 @@ fun OvertimePlanPage(
                                 appString(AppString.OvertimeReviewSchedule),
                                 { onEvent(OvertimePlanEvent.ReloadRequested) },
                                 Modifier.fillMaxWidth(),
-                                enabled = state.work == null,
-                                loading = state.work == OvertimePlanWork.REVIEW,
+                                enabled = state.work == null && !state.closing,
+                                loading =
+                                    state.work in
+                                        setOf(OvertimePlanWork.REVIEW, OvertimePlanWork.RESTORING),
                             )
                         else
                             AppButton(
@@ -101,7 +120,11 @@ fun OvertimePlanPage(
                 }
         },
     ) {
-        if (!state.commandReady && state.restriction == null && state.failure == null)
+        if (
+            (!state.commandReady || state.work == OvertimePlanWork.RESTORING) &&
+                state.restriction == null &&
+                state.failure == null
+        )
             item(key = "initial") { AppLoading() }
         val record = state.command
         if (record != null && state.restriction == null)
@@ -122,7 +145,13 @@ fun OvertimePlanPage(
                 )
             }
         val form = state.form
-        if (form != null && state.restriction == null && state.commandReady && record == null) {
+        if (
+            form != null &&
+                state.persistence != null &&
+                state.restriction == null &&
+                state.commandReady &&
+                record == null
+        ) {
             item(key = "work-date") {
                 AppListRow(
                     appString(AppString.OvertimeWorkDate),

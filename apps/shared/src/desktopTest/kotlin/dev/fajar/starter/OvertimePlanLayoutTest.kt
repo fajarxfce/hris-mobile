@@ -260,8 +260,19 @@ class OvertimePlanLayoutTest {
                 WorkDay.Off(date, CalendarOrigin.ROSTER, 0, null),
                 "a".repeat(64),
             )
+        val form = OvertimePlanForm(date, startsAt = LocalTime(18, 30), endsAt = LocalTime(20, 30))
         return OvertimePlanState(
-            form = OvertimePlanForm(date, startsAt = LocalTime(18, 30), endsAt = LocalTime(20, 30)),
+            form = form,
+            persistence =
+                OvertimePlanEditPersistence(
+                    dev.fajar.starter.workforce.domain.overtime.working.entities
+                        .OvertimePlanWorkingCopy(
+                            NativePeopleUi.EMPLOYEE,
+                            form,
+                            "44444444-4444-4444-8444-444444444444",
+                            now,
+                        )
+                ),
             prepared =
                 OvertimePreparation(
                     access,

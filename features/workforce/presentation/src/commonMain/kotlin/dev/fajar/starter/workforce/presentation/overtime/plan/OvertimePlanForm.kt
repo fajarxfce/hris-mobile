@@ -5,15 +5,8 @@ import dev.fajar.starter.workforce.domain.overtime.entities.OvertimeLocalInterva
 import dev.fajar.starter.workforce.domain.overtime.policies.overtimeFailure
 import kotlinx.datetime.*
 
-data class OvertimePlanForm(
-    val workDate: LocalDate,
-    val startDate: LocalDate = workDate,
-    val endDate: LocalDate = workDate,
-    val startsAt: LocalTime? = null,
-    val endsAt: LocalTime? = null,
-    val breakMinutes: String = "0",
-    val reason: String = "",
-)
+typealias OvertimePlanForm =
+    dev.fajar.starter.workforce.domain.overtime.working.entities.OvertimePlanWorkingInput
 
 internal fun OvertimePlanForm.toIntervalInput(): AppResult<OvertimeLocalIntervalInput> {
     val start = startsAt ?: return overtimeFailure("client.overtime_time_required")
@@ -51,6 +44,12 @@ sealed interface OvertimePlanDialog {
                 return LocalTime(hour, minute)
             }
     }
+
+    data object DiscardDraft : OvertimePlanDialog
+
+    data object ReloadDraft : OvertimePlanDialog
+
+    data object LeaveUnsaved : OvertimePlanDialog
 
     data object Discard : OvertimePlanDialog
 }

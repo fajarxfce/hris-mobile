@@ -17,6 +17,25 @@ class OvertimePlanFixture(
     now: () -> Instant = { Instant.parse("2026-10-12T13:00:00Z") },
 ) {
     val base = OvertimePresentationFixture(now)
+    val working = OvertimeWorkingPresentationFixture(base)
+
+    init {
+        val checkpoint =
+            initialOvertimeCheckpoint(base.access, "plan-owned-directory", base.clock.now())
+                .copy(
+                    revision = 2,
+                    phase = OvertimeSyncPhase.CHANGES,
+                    cursor = "cursor/0",
+                    published = true,
+                    refreshedAt = base.clock.now(),
+                )
+        base.replicas.current = checkpoint
+        base.replicas.published.value =
+            AppResult.Success(
+                OvertimeReplicaFixture.Published(checkpoint, base.directory, emptyList())
+            )
+    }
+
     val target =
         OvertimePlanTarget(base.workspace.id, base.employee.id, base.directory.asOf.toString())
     val retained = MutableStateFlow<AppResult<OvertimeCommandRecord?>>(AppResult.Success(null))
@@ -149,6 +168,7 @@ class OvertimePlanFixture(
             base.workspaces,
             base.clock,
             base.build,
+            working.copies,
             dispatcher,
         )
     private val observe =
@@ -178,6 +198,7 @@ class OvertimePlanFixture(
             base.workspaces,
             base.clock,
             base.build,
+            working.copies,
         )
     private val reviewSchedule =
         ReviewOvertimeSchedule(
@@ -201,6 +222,9 @@ class OvertimePlanFixture(
                 review,
                 base.refreshRequest,
                 base.sync,
+                working.open,
+                working.save,
+                working.discard,
             )
             .also { store.put("plan", it) }
 

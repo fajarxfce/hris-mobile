@@ -1467,6 +1467,44 @@ recovered screens. No HRIS fatal exception was recorded in the completed run.
 Connectivity was restored and the owned services and emulator were stopped with
 AVD data retained. The initial emulator attempt stalled under an overly restrictive
 memory limit; acceptance completed after adjusting that limit. The local Web
-optimizer was killed by the host OOM handler, so production Web verification is
-delegated to the existing GitHub Actions build rather than repeated on this shared
-VPS. Kotlin Web compilation and the selected Chromium tests had passed.
+optimizer was killed by the host OOM handler; production Web subsequently passed
+in [GitHub Actions](https://github.com/fajarxfce/hris-mobile/actions/runs/38943575491),
+alongside Linux verification, Android variants, Windows and Apple builds. The Web
+optimizer was not repeated on the shared VPS. Kotlin Web compilation and the
+selected Chromium tests had also passed locally.
+
+### Overtime planning drafts
+
+Unfinished planning input now has an encrypted employment-owned working copy,
+separate from synchronized requests and immutable commands. New tests cover
+incomplete input after three offline days, token renewal, replacement sessions,
+read denial, cancellation, competing edits, lost save acknowledgements and cleanup
+that preserves newer input. SQLite and IndexedDB share the storage contract.
+MVI cases cover bounded autosave, Back/Stop flushing, disposal, recovery and waiting
+for local durability before submission.
+
+Root checks passed with 1,631 desktop/JVM/UI tests and the 70-module architecture
+check. The selected Chromium suites passed all 278 tests. The assembled application
+resolved the production bindings, and the Indonesian form was inspected at 200%
+text in dark appearance; its shortened title keeps words intact. Browser tests ran
+in a separate bounded Gradle process after memory pressure interrupted the first
+combined run. Production Web optimization remains assigned to GitHub CI.
+
+Android dev assembly passed. API 35 acceptance used an isolated API, PostgreSQL
+and worker. With API forwarding removed and Wi-Fi/mobile data disabled, a cold
+start restored Home and the unfinished plan: start time, empty end time, empty
+break and reason. Its encrypted records and generations were unchanged. An
+offline edit changed only the working copy and survived another process restart;
+neither reason appeared as plaintext in the copied database.
+
+After reconnection and current schedule review, submission created exactly one
+plan with the restored reason, 18:30–20:30 interval and 15-minute break. Canonical
+confirmation removed its working head and retired the command. The detail page
+was inspected in dark appearance at 200% system text. The completed run recorded
+no HRIS crash; original device settings were restored and the owned services,
+database and emulator were stopped. This does not measure frame time or memory
+improvements.
+
+The validated WireGuard APK was installed on the authorized Android 16 phone
+with `--install-only`; no phone UI was opened or operated. Its SHA-256 is
+`65662b5bcced73bb5b61867464c7e9e7c2e3c973ad97aa2032e9a1c42ae04c8f`.

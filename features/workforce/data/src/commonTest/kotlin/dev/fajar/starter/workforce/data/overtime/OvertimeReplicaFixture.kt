@@ -15,6 +15,7 @@ import kotlin.test.*
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.sync.Mutex
 import kotlinx.datetime.LocalDate
 
 class OvertimeReplicaFixture(val db: AppDatabase) {
@@ -24,8 +25,16 @@ class OvertimeReplicaFixture(val db: AppDatabase) {
     val legacyKeys = MemoryCredentialStore()
     val cipher = AesGcmContentCipher()
     val admissions = MemoryOvertimeReadAdmissionDataSource()
+    val keyCreation = Mutex()
     val repository =
-        EncryptedOvertimeReplicaRepository(db.replicas, cipher, keys, legacyKeys, admissions)
+        EncryptedOvertimeReplicaRepository(
+            db.replicas,
+            cipher,
+            keys,
+            legacyKeys,
+            admissions,
+            keyCreation,
+        )
     val directory = raw.base.directory.toDirectory(access, null)
     private var acquisition = 0
 

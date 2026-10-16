@@ -29,6 +29,7 @@ suspend fun checkOvertimeDenialSurvivesStorageCleanupAndLogin(f: OvertimeReplica
             f.keys,
             f.legacyKeys,
             MemoryOvertimeReadAdmissionDataSource(),
+            f.keyCreation,
         )
     assertEquals(saved, (restored.admission(f.access) as AppResult.Success).value)
     val login = f.access.copy(sessionId = "new-login")
@@ -63,7 +64,14 @@ suspend fun checkOvertimeDenialRemainsKnownAfterFailedStorage(f: OvertimeReplica
             }
         }
     val repository =
-        EncryptedOvertimeReplicaRepository(store, f.cipher, f.keys, f.legacyKeys, f.admissions)
+        EncryptedOvertimeReplicaRepository(
+            store,
+            f.cipher,
+            f.keys,
+            f.legacyKeys,
+            f.admissions,
+            f.keyCreation,
+        )
     val denial = Failure(FailureKind.AccessDenied, "Denied", code = "mfa_required")
     assertIs<AppResult.Failed>(repository.restrict(f.access, denial))
     val saved =
@@ -110,7 +118,14 @@ suspend fun checkLateOvertimeAdmissionCannotClearANewerDenial(f: OvertimeReplica
                 }
             }
         val repository =
-            EncryptedOvertimeReplicaRepository(store, f.cipher, f.keys, f.legacyKeys, f.admissions)
+            EncryptedOvertimeReplicaRepository(
+                store,
+                f.cipher,
+                f.keys,
+                f.legacyKeys,
+                f.admissions,
+                f.keyCreation,
+            )
         val denial = Failure(FailureKind.AccessDenied, "Denied", code = "mfa_required")
         repository.restrict(f.access, denial)
         val first = (repository.admission(f.access) as AppResult.Success).value
@@ -158,6 +173,7 @@ suspend fun checkCancelledOvertimeDenialRetainsTheProcessGate(f: OvertimeReplica
                 f.keys,
                 f.legacyKeys,
                 f.admissions,
+                f.keyCreation,
             )
         val denial = Failure(FailureKind.AccessDenied, "Denied", code = "mfa_required")
         val pending = async { repository.restrict(f.access, denial) }

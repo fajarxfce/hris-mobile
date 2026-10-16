@@ -9,6 +9,8 @@ import dev.fajar.starter.workforce.domain.entities.WorkforceAccess
 import dev.fajar.starter.workforce.domain.overtime.entities.*
 import dev.fajar.starter.workforce.domain.overtime.policies.*
 import dev.fajar.starter.workforce.domain.overtime.repositories.*
+import dev.fajar.starter.workforce.domain.overtime.working.policies.validateOvertimePlanWorkingSubmission
+import dev.fajar.starter.workforce.domain.overtime.working.repositories.OvertimePlanWorkingCopyRepository
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
 import kotlin.time.Clock
 import kotlin.time.Duration.Companion.seconds
@@ -23,6 +25,7 @@ class PrepareOvertimePlan(
     private val workspaces: WorkspaceRepository,
     private val clock: Clock,
     private val build: AppBuild,
+    private val copies: OvertimePlanWorkingCopyRepository,
     private val computation: CoroutineDispatcher = Dispatchers.Default,
 ) {
     suspend operator fun invoke(
@@ -30,6 +33,7 @@ class PrepareOvertimePlan(
         prepared: OvertimePreparation,
         input: OvertimeLocalIntervalInput,
         reason: String,
+        workingRevision: String? = null,
     ): AppResult<OvertimeCommandRecord> =
         withTimeoutOrNull(10.seconds) {
             val resolved =
@@ -38,7 +42,8 @@ class PrepareOvertimePlan(
                 }
             when (resolved) {
                 is AppResult.Failed -> resolved
-                is AppResult.Success -> invoke(workspaceId, prepared, resolved.value, reason)
+                is AppResult.Success ->
+                    invoke(workspaceId, prepared, resolved.value, reason, workingRevision)
             }
         } ?: overtimeFailure("client.overtime_timeout", FailureKind.Timeout)
 
@@ -47,6 +52,7 @@ class PrepareOvertimePlan(
         prepared: OvertimePreparation,
         input: OvertimeIntervalInput,
         reason: String,
+        workingRevision: String? = null,
     ): AppResult<OvertimeCommandRecord> =
         withTimeoutOrNull(10.seconds) {
             val access =
@@ -62,8 +68,27 @@ class PrepareOvertimePlan(
                         validateOvertimePlanInput(prepared, access, input, reason, clock.now())
                 ) {
                     is AppResult.Failed -> return@withTimeoutOrNull result
-                    is AppResult.Success -> result.value
+                    is AppResult.Success -> result.value.copy(workingRevision = workingRevision)
                 }
+            if (workingRevision != null) {
+                val working = copies.observe(access, prepared.selection.employeeId).first()
+                currentCoroutineContext().ensureActive()
+                val owner = readContinuation(workspaceId, access)
+                if (owner is AppResult.Failed) return@withTimeoutOrNull owner
+                val matched =
+                    when (working) {
+                        is AppResult.Failed -> working
+                        is AppResult.Success ->
+                            validateOvertimePlanWorkingSubmission(
+                                working.value,
+                                workingRevision,
+                                prepared,
+                                input,
+                                reason,
+                            )
+                    }
+                if (matched is AppResult.Failed) return@withTimeoutOrNull matched
+            }
             val slot = OvertimeCommandSlot.Plan(prepared.selection.employeeId)
             val previous = commands.observe(access, slot).first()
             currentCoroutineContext().ensureActive()

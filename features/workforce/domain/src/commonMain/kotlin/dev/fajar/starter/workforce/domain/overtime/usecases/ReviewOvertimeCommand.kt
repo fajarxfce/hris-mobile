@@ -9,6 +9,7 @@ import dev.fajar.starter.workforce.domain.entities.WorkforceAccess
 import dev.fajar.starter.workforce.domain.overtime.entities.*
 import dev.fajar.starter.workforce.domain.overtime.policies.*
 import dev.fajar.starter.workforce.domain.overtime.repositories.*
+import dev.fajar.starter.workforce.domain.overtime.working.repositories.OvertimePlanWorkingCopyRepository
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
 import kotlin.time.Clock
 import kotlin.time.Duration.Companion.seconds
@@ -26,6 +27,7 @@ class ReviewOvertimeCommand(
     private val workspaces: WorkspaceRepository,
     private val clock: Clock,
     private val build: AppBuild,
+    private val copies: OvertimePlanWorkingCopyRepository,
 ) {
     suspend operator fun invoke(workspaceId: String, commandId: String): AppResult<Boolean> =
         withTimeoutOrNull(10.seconds) {
@@ -100,6 +102,15 @@ class ReviewOvertimeCommand(
                         "client.overtime_updates_pending",
                         FailureKind.Conflict,
                     )
+                (record.command.payload as? OvertimeCommandPayload.Plan)?.workingRevision?.let {
+                    revision ->
+                    val removed = copies.remove(access, record.command.employeeId, revision)
+                    currentCoroutineContext().ensureActive()
+                    val owner = readContinuation(workspaceId, access)
+                    if (owner is AppResult.Failed) return@withTimeoutOrNull owner
+                    if (removed is AppResult.Failed) return@withTimeoutOrNull removed
+                    // This command cannot remove an absent copy or a newer edit.
+                }
             }
             val removal = commands.remove(access, record)
             currentCoroutineContext().ensureActive()

@@ -2,7 +2,20 @@ package dev.fajar.starter.workforce.presentation.overtime.plan
 
 import dev.fajar.starter.common.result.Failure
 import dev.fajar.starter.workforce.domain.overtime.entities.OvertimeCommandRecord
+import dev.fajar.starter.workforce.domain.overtime.entities.OvertimePreparation
 import dev.fajar.starter.workforce.domain.overtime.policies.overtimeFailureInvalidatesCache
+
+internal fun OvertimePlanState.withReviewedSchedule(
+    review: OvertimePreparation,
+    local: OvertimePlanEditPersistence,
+): OvertimePlanState =
+    copy(
+        prepared = review.takeIf { command == null },
+        form = local.edited.input,
+        persistence = persistence ?: local,
+        restriction = null,
+        failure = null,
+    )
 
 internal fun OvertimePlanState.withPlanFailure(value: Failure): OvertimePlanState {
     if (!overtimeFailureInvalidatesCache(value))
@@ -12,6 +25,7 @@ internal fun OvertimePlanState.withPlanFailure(value: Failure): OvertimePlanStat
         )
     return copy(
         restriction = value,
+        persistence = null,
         failure = null,
         prepared = null,
         command = null,

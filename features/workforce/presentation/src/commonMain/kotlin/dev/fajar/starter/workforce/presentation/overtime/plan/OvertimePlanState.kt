@@ -8,6 +8,8 @@ import kotlinx.datetime.LocalDate
 
 data class OvertimePlanState(
     val form: OvertimePlanForm? = null,
+    val persistence: OvertimePlanEditPersistence? = null,
+    val closing: Boolean = false,
     val prepared: OvertimePreparation? = null,
     val reviewExpired: Boolean = false,
     val command: OvertimeCommandRecord? = null,
@@ -18,10 +20,22 @@ data class OvertimePlanState(
     val dialog: OvertimePlanDialog? = null,
 ) {
     val editable: Boolean
-        get() = restriction == null && commandReady && command == null && work == null
+        get() =
+            !closing &&
+                persistence != null &&
+                persistence.failure?.code != "client.overtime_working_copy_changed" &&
+                restriction == null &&
+                commandReady &&
+                command == null &&
+                work == null
 
     val canSubmit: Boolean
-        get() = editable && prepared != null && !reviewExpired && dialog == null
+        get() =
+            editable &&
+                persistence?.failure == null &&
+                prepared != null &&
+                !reviewExpired &&
+                dialog == null
 
     val visibleFailure: Failure?
         get() = restriction ?: failure
@@ -47,6 +61,8 @@ data class OvertimePlanState(
 }
 
 enum class OvertimePlanWork {
+    RESTORING,
+    LEAVING,
     REVIEW,
     SENDING,
     OPENING,

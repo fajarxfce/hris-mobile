@@ -11,6 +11,7 @@ sealed interface OvertimeCommandPayloadDto {
         val expectedEmploymentVersion: Long,
         val requested: OvertimeIntervalDto,
         val planningRevision: String,
+        val workingRevision: String? = null,
     ) : OvertimeCommandPayloadDto
 
     @Serializable

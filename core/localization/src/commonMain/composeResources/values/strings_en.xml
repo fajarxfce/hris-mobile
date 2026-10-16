@@ -816,4 +816,15 @@
     <string name="leave_reload_draft_explanation_en">Replace unsaved changes with the draft saved on this device?</string>
     <string name="leave_without_saving_en">Leave without saving</string>
     <string name="leave_without_saving_explanation_en">The latest changes have not been saved. Leave without them?</string>
+    <string name="overtime_saved_locally_en">Saved on this device</string>
+    <string name="overtime_saving_locally_en">Saving on this device…</string>
+    <string name="overtime_working_copy_changed_en">This draft changed in another editor. Reload the saved version to continue.</string>
+    <string name="overtime_working_copy_invalid_en">This draft could not be read.</string>
+    <string name="overtime_working_copy_unavailable_en">Connect to load overtime data for this company.</string>
+    <string name="overtime_discard_draft_en">Delete draft</string>
+    <string name="overtime_discard_draft_explanation_en">Delete this draft from this device?</string>
+    <string name="overtime_reload_draft_en">Reload saved draft</string>
+    <string name="overtime_reload_draft_explanation_en">Replace unsaved changes with the draft saved on this device?</string>
+    <string name="overtime_without_saving_en">Leave without saving</string>
+    <string name="overtime_without_saving_explanation_en">The latest changes have not been saved. Leave without them?</string>
 </resources>

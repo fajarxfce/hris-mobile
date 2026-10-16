@@ -34,9 +34,8 @@ class EncryptedOvertimeReplicaRepository(
     @Named("overtime-replica-content-key") private val credentials: CredentialStore,
     @Named("workspace-content-key") private val legacyCredentials: AtomicCredentialStore,
     private val admissions: OvertimeReadAdmissionDataSource,
+    @Named("overtime-content-key-creation") private val keyCreation: Mutex,
 ) : OvertimeReplicaRepository {
-    private val keyCreation = Mutex()
-
     private val admissionWrites = Mutex()
 
     @OptIn(ExperimentalCoroutinesApi::class)

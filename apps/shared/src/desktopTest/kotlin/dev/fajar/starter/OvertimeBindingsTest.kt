@@ -9,6 +9,8 @@ import dev.fajar.starter.securestorage.MemoryCredentialStore
 import dev.fajar.starter.sync.domain.SyncTask
 import dev.fajar.starter.workforce.domain.overtime.repositories.*
 import dev.fajar.starter.workforce.domain.overtime.usecases.*
+import dev.fajar.starter.workforce.domain.overtime.working.repositories.OvertimePlanWorkingCopyRepository
+import dev.fajar.starter.workforce.domain.overtime.working.usecases.*
 import java.nio.file.Files
 import kotlin.test.*
 import kotlinx.coroutines.flow.first
@@ -32,6 +34,10 @@ class OvertimeBindingsTest {
         try {
             val koin = container.koin
             assertNotNull(koin.get<OvertimeCacheRepository>())
+            assertNotNull(koin.get<OvertimePlanWorkingCopyRepository>())
+            assertNotNull(koin.get<OpenOvertimePlanWorkingCopy>())
+            assertNotNull(koin.get<SaveOvertimePlanWorkingCopy>())
+            assertNotNull(koin.get<DiscardOvertimePlanWorkingCopy>())
             assertNotNull(koin.get<OvertimeReplicaRepository>())
             assertSame(
                 koin.get<OvertimeReplicaRepository>(),
