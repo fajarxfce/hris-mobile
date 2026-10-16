@@ -1,5 +1,33 @@
 # Validation
 
+## Carried leave balances
+
+On 16 October 2026, the workspace root checks and Android dev assembly passed.
+Leave passed 89 domain, 65 data and 59 presentation desktop tests; all 163 assembled
+UI tests passed. Chromium passed 200 targeted cases across Leave, localization and
+app integration. Production Web distribution passed with its existing three bundle
+warnings.
+
+The new coverage validates carry conservation, account subsets, original UTC
+boundaries, absent metadata and malformed-response mapping. A record-format upgrade
+keeps the published balances while unchanged ledger versions acquire carry data;
+failure, cancellation and a real SQLite/encrypted-store restart retain the staged
+replacement. Publication remains atomic and does not restart bootstrap repeatedly.
+
+At 360 pixels and 200% text, Indonesian carry amounts and the original company date
+fit the balance card. Fixed navigation and submission controls remain reachable.
+The screenshot was inspected. An existing profile MFA workflow test initially
+timed out on a simulated mouse click. It now reveals the visible action and invokes
+its accessibility click before checking renewed verification and restored private
+fields; authentication implementation and workflow assertions are unchanged.
+
+The standard WireGuard APK was installed on the authorized Android phone with
+`--install-only`. Its installed SHA-256 matched the validated 29,773,936-byte file:
+`ab8be6412ff47a1f3284aaee767ea1e4eee07815136e4290addaa350220972d9`.
+The package recorded its update at 07:14 on 16 October 2026. No phone UI was opened.
+This increment's UI and upgrade acceptance used automated tests; installation alone
+does not establish a new device interaction or performance measurement.
+
 ## Android acceptance with published amendments
 
 On 16 October 2026, an API 35 emulator used an isolated API, PostgreSQL and worker

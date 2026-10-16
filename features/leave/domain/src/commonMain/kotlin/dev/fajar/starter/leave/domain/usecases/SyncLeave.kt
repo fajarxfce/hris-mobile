@@ -123,7 +123,8 @@ class SyncLeave(
             checkpoint = null
         } else if (
             checkpoint != null &&
-                (!sameLeaveScope(checkpoint.access, access) || checkpoint.recordSchema < 2)
+                (!sameLeaveScope(checkpoint.access, access) ||
+                    checkpoint.recordSchema < LeaveCheckpoint.CURRENT_RECORD_SCHEMA)
         ) {
             // A new login or expanded projection needs bootstrap; published facts remain readable.
             val replacement = initialLeaveCheckpoint(access, Uuid.random().toString(), clock.now())

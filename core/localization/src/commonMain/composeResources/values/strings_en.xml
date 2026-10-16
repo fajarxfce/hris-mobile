@@ -291,6 +291,15 @@
     <string name="leave_summary_en">Balances and requests</string>
     <string name="leave_balances_en">Leave balances</string>
     <string name="leave_available_en">Available</string>
+    <string name="leave_recorded_balance_en">Recorded balance</string>
+    <string name="leave_carryover_en">Carryover</string>
+    <string name="leave_carry_awarded_en">Awarded: %1$s</string>
+    <string name="leave_carry_included_en">Included in balance: %1$s</string>
+    <string name="leave_carry_expired_en">Expired: %1$s</string>
+    <string name="leave_carry_transferred_en">Transferred: %1$s</string>
+    <string name="leave_carry_deducted_en">Deducted: %1$s</string>
+    <string name="leave_carry_valid_through_en">Valid through %1$s (%2$s)</string>
+    <string name="leave_carry_no_deadline_en">No additional carryover deadline</string>
     <string name="leave_reserved_en">Reserved</string>
     <string name="leave_consumed_en">Used</string>
     <string name="leave_closed_year_en">Year closed</string>

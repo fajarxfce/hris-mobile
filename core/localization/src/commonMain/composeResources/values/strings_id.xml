@@ -291,6 +291,15 @@
     <string name="leave_summary_id">Saldo dan pengajuan</string>
     <string name="leave_balances_id">Saldo cuti</string>
     <string name="leave_available_id">Tersedia</string>
+    <string name="leave_recorded_balance_id">Saldo tercatat</string>
+    <string name="leave_carryover_id">Carryover</string>
+    <string name="leave_carry_awarded_id">Diberikan: %1$s</string>
+    <string name="leave_carry_included_id">Termasuk dalam saldo: %1$s</string>
+    <string name="leave_carry_expired_id">Kedaluwarsa: %1$s</string>
+    <string name="leave_carry_transferred_id">Dialihkan: %1$s</string>
+    <string name="leave_carry_deducted_id">Dikurangi: %1$s</string>
+    <string name="leave_carry_valid_through_id">Berlaku hingga %1$s (%2$s)</string>
+    <string name="leave_carry_no_deadline_id">Tanpa batas carryover tambahan</string>
     <string name="leave_reserved_id">Dicadangkan</string>
     <string name="leave_consumed_id">Terpakai</string>
     <string name="leave_closed_year_id">Tahun ditutup</string>

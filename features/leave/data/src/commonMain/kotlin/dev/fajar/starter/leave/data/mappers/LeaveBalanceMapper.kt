@@ -20,31 +20,8 @@ fun LeaveBalancesDto.toBalances(
     )
     val items =
         balances.items.map { row ->
-            val raw = row.balance
-            Uuid.parse(row.typeId)
-            Uuid.parse(requireNotNull(raw.accountId))
-            require(
-                Regex("[A-Z][A-Z0-9_-]{0,31}").matches(row.typeCode) &&
-                    row.typeName.isNotBlank() &&
-                    row.typeName.length <= 200
-            )
-            require(
-                raw.year == year &&
-                    raw.version in 0..9_007_199_254_740_991L &&
-                    row.typeCode != after
-            )
-            LeaveBalance(
-                raw.accountId,
-                row.typeId,
-                row.typeCode,
-                row.typeName,
-                year,
-                raw.availableDays.toLeaveDays(),
-                raw.reservedDays.toLeaveDays(),
-                raw.consumedDays.toLeaveDays(),
-                raw.closed,
-                raw.version,
-            )
+            require(row.typeCode != after)
+            row.balance.toBalance(row.typeId, row.typeCode, row.typeName, year)
         }
     require(
         items.distinctBy { it.typeId }.size == items.size &&
@@ -77,9 +54,37 @@ fun LeavePage<LeaveBalance>.toBalancesDto(employeeId: String, year: Int) =
                         row.version,
                         row.closed,
                         row.accountId,
+                        row.carry?.toDto(),
                     ),
                 )
             },
             nextCursor,
         ),
     )
+
+fun LeaveBalanceDto.toBalance(
+    typeId: String,
+    typeCode: String,
+    typeName: String,
+    expectedYear: Int,
+): LeaveBalance {
+    val id = requireNotNull(accountId)
+    require(Uuid.parse(id).toString() == id && Uuid.parse(typeId).toString() == typeId)
+    require(Regex("[A-Z][A-Z0-9_-]{0,31}").matches(typeCode))
+    require(typeName.isNotBlank() && typeName.length <= 200)
+    require(year == expectedYear && year in 1900..2200 && version in 0..9_007_199_254_740_991L)
+    val balance =
+        LeaveBalance(
+            id,
+            typeId,
+            typeCode,
+            typeName,
+            year,
+            availableDays.toLeaveDays(),
+            reservedDays.toLeaveDays(),
+            consumedDays.toLeaveDays(),
+            closed,
+            version,
+        )
+    return balance.copy(carry = carry?.toCarryBalance(balance))
+}

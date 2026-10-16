@@ -1035,6 +1035,27 @@ enum class AppString(val english: StringResource, val indonesian: StringResource
     LeaveSummary(Res.string.leave_summary_en, Res.string.leave_summary_id),
     LeaveBalances(Res.string.leave_balances_en, Res.string.leave_balances_id),
     LeaveAvailable(Res.string.leave_available_en, Res.string.leave_available_id),
+    LeaveRecordedBalance(
+        Res.string.leave_recorded_balance_en,
+        Res.string.leave_recorded_balance_id,
+    ),
+    LeaveCarryover(Res.string.leave_carryover_en, Res.string.leave_carryover_id),
+    LeaveCarryAwarded(Res.string.leave_carry_awarded_en, Res.string.leave_carry_awarded_id),
+    LeaveCarryIncluded(Res.string.leave_carry_included_en, Res.string.leave_carry_included_id),
+    LeaveCarryExpired(Res.string.leave_carry_expired_en, Res.string.leave_carry_expired_id),
+    LeaveCarryTransferred(
+        Res.string.leave_carry_transferred_en,
+        Res.string.leave_carry_transferred_id,
+    ),
+    LeaveCarryDeducted(Res.string.leave_carry_deducted_en, Res.string.leave_carry_deducted_id),
+    LeaveCarryValidThrough(
+        Res.string.leave_carry_valid_through_en,
+        Res.string.leave_carry_valid_through_id,
+    ),
+    LeaveCarryNoDeadline(
+        Res.string.leave_carry_no_deadline_en,
+        Res.string.leave_carry_no_deadline_id,
+    ),
     LeaveReserved(Res.string.leave_reserved_en, Res.string.leave_reserved_id),
     LeaveConsumed(Res.string.leave_consumed_en, Res.string.leave_consumed_id),
     LeaveClosedYear(Res.string.leave_closed_year_en, Res.string.leave_closed_year_id),

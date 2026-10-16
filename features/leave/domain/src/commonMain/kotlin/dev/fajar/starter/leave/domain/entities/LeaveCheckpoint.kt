@@ -13,8 +13,12 @@ data class LeaveCheckpoint(
     val refreshedAt: Instant?,
     val refreshAfter: Instant,
     val pollAt: Instant?,
-    val recordSchema: Int = 2,
+    val recordSchema: Int = CURRENT_RECORD_SCHEMA,
 ) {
+    companion object {
+        const val CURRENT_RECORD_SCHEMA = 3
+    }
+
     override fun toString() = "LeaveCheckpoint([redacted])"
 }
 

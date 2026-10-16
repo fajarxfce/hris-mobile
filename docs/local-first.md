@@ -182,6 +182,12 @@ is authoritative; it does not recover an unrelated old filter page. The precedin
 request snapshot remains a read-only compatibility source until the expanded
 request format publishes. Its old writer exists only in migration test fixtures.
 
+Leave record format 3 also hydrates optional carried-balance accounting without
+inventing a newer ledger version. Its replacement generation retains the published
+format-2 facts until complete. A failed or cancelled upgrade resumes that same
+staging generation after restart. Calendar validity remains business metadata;
+passing its date neither deletes local history nor rewrites the stored total.
+
 Full request acquisition writes the summary, header, date chunks and latest activity
 page together. Date chunks contain at most 128 entries and an activity page at most
 ten changes; requests are retained by ID, independently of the last opened page.

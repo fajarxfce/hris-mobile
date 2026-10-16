@@ -46,3 +46,13 @@ fun leaveDateRange(from: LocalDate, until: LocalDate): String =
         formatLocalDate(from.toString(), appLanguageTag()) +
             " – " +
             formatLocalDate(until.toString(), appLanguageTag())
+
+@Composable
+fun leaveCarryValidityText(carry: LeaveCarryBalance): String =
+    carry.validThrough?.let {
+        appString(
+            AppString.LeaveCarryValidThrough,
+            formatLocalDate(it.toString(), appLanguageTag()),
+            carry.timezone,
+        )
+    } ?: appString(AppString.LeaveCarryNoDeadline)

@@ -55,6 +55,9 @@ submission stays retained before a different action can be prepared.
 
 Leave shows annual balances and request history with status filters, account-owned
 employment selection and encrypted records updated through the change feed.
+Tracked carry awards show their included balance, original validity date and
+posted expiry/transfer/deduction amounts. Recorded totals remain readable offline;
+request review checks eligibility for the selected dates.
 Year, status and page changes query the local database. Acquired history and balances
 survive reauthentication for the same account and remain readable offline. Each request opens its
 submitted dates, duration, reason, current status and paged activity history;

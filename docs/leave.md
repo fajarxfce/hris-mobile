@@ -41,6 +41,23 @@ balance/request pages share one published replica checkpoint and contain at most
 20 items. DTO mapping checks ownership, ordering, bounds and supported values.
 Year selection follows the server's 1900–2200 range.
 
+When the server supplies a tracked carry award, the balance card separates the
+recorded total from the carried amount included in it. The retained breakdown
+contains the original award, available/reserved/used amounts, expiry, transfers
+and deductions. An optional validity date uses the award's original company
+calendar and stored UTC boundary; changing device timezone does not rewrite it.
+Business validity never acts as a local-data expiry timer. Ledger totals and
+versions change only through posted accounting operations. Request preview still
+checks which funding is eligible for the requested dates.
+
+The transport mapper validates half-day conservation, main-account subsets,
+closed-account amounts, identifiers and paired date/instant metadata. Older or
+untracked balances omit this metadata and retain their existing display. Optional
+fields keep preceding encrypted JSON readable. Leave record format 3 starts one
+replacement bootstrap so unchanged account versions can acquire their carry
+metadata. The previous published generation remains visible through interrupted
+acquisition, cancellation and process restart; publication replaces it atomically.
+
 ## Request preparation
 
 `LoadLeaveTypes` reads a bounded effective-date catalog and removes inactive

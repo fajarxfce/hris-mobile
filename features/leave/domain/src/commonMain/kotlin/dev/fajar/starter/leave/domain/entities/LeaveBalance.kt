@@ -11,4 +11,5 @@ data class LeaveBalance(
     val consumed: LeaveDays,
     val closed: Boolean,
     val version: Long,
+    val carry: LeaveCarryBalance? = null,
 )

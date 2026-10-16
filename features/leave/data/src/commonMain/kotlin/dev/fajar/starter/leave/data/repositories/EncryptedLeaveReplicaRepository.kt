@@ -170,7 +170,10 @@ class EncryptedLeaveReplicaRepository(
         currentCoroutineContext().ensureActive()
         require(next.generation == previous.generation && next.revision == previous.revision + 1)
         require(next.access == previous.access && (!previous.published || next.published))
-        require(previous.recordSchema == 2 && next.recordSchema == 2)
+        require(
+            previous.recordSchema == LeaveCheckpoint.CURRENT_RECORD_SCHEMA &&
+                next.recordSchema == LeaveCheckpoint.CURRENT_RECORD_SCHEMA
+        )
         val access = previous.access
         require(directory.accountId == access.accountId && directory.companyId == access.companyId)
         require(directory.items.size <= 200 && directory.nextCursor == null)

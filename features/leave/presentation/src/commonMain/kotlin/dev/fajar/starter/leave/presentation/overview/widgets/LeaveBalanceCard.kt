@@ -28,7 +28,10 @@ fun LeaveBalanceCard(balance: LeaveBalance) {
                 verticalArrangement = Arrangement.spacedBy(4.dp),
             ) {
                 AppText(
-                    appString(AppString.LeaveAvailable),
+                    appString(
+                        if (balance.carry == null) AppString.LeaveAvailable
+                        else AppString.LeaveRecordedBalance
+                    ),
                     color = AppColors.muted,
                     style = FluentTheme.typography.caption,
                 )
@@ -65,6 +68,7 @@ fun LeaveBalanceCard(balance: LeaveBalance) {
                     AppText(leaveDaysText(balance.consumed))
                 }
             }
+            balance.carry?.let { LeaveCarryBalanceDetails(it) }
         }
     }
 }

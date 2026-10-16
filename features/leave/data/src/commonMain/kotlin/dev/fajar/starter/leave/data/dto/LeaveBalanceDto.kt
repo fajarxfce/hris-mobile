@@ -11,4 +11,5 @@ data class LeaveBalanceDto(
     val version: Long,
     val closed: Boolean,
     val accountId: String?,
+    val carry: LeaveCarryBalanceDto? = null,
 )

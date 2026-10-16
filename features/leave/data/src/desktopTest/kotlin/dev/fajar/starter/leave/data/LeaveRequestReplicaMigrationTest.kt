@@ -36,7 +36,7 @@ class LeaveRequestReplicaMigrationTest {
             f.publish(listOf(f.raw.requestFacts(version = 22)), publish = false)
             assertEquals(saved, f.request())
             f.publish(listOf(f.raw.requestFacts(version = 22)))
-            assertEquals(2, f.checkpoint()?.recordSchema)
+            assertEquals(LeaveCheckpoint.CURRENT_RECORD_SCHEMA, f.checkpoint()?.recordSchema)
             assertEquals(22L, f.request()?.request?.version)
             assertNull(f.request()?.selection?.historyAfter)
         }

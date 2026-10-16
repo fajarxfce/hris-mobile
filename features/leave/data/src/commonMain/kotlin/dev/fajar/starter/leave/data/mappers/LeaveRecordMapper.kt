@@ -31,23 +31,10 @@ fun LeaveRequestDetails.toSummary() =
 fun LeaveAccountDto.toReplicaBalance(expectedId: String): LeaveReplicaRecord.Balance {
     require(id == expectedId)
     listOf(id, employeeId, typeId).forEach { require(Uuid.parse(it).toString() == it) }
-    require(year in 1900..2200 && version in 0..9_007_199_254_740_991L)
-    require(Regex("[A-Z][A-Z0-9_-]{0,31}").matches(typeCode))
-    require(typeName.isNotBlank() && typeName.length <= 200)
     return LeaveReplicaRecord.Balance(
         employeeId,
-        LeaveBalance(
-            id,
-            typeId,
-            typeCode,
-            typeName,
-            year,
-            availableDays.toLeaveDays(),
-            reservedDays.toLeaveDays(),
-            consumedDays.toLeaveDays(),
-            closed,
-            version,
-        ),
+        LeaveBalanceDto(year, availableDays, reservedDays, consumedDays, version, closed, id, carry)
+            .toBalance(typeId, typeCode, typeName, year),
     )
 }
 
@@ -64,6 +51,7 @@ fun LeaveReplicaRecord.Balance.toDto() =
         value.closed,
         value.typeCode,
         value.typeName,
+        value.carry?.toDto(),
     )
 
 fun LeaveRequestSummary.toDto() =

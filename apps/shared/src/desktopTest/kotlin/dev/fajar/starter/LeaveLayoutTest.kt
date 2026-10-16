@@ -112,6 +112,97 @@ class LeaveLayoutTest {
         }
     }
 
+    @Test
+    fun recordedCarryAndItsOriginalDeadlineRemainReadableAtLargeIndonesianText() {
+        val baseline = overview()
+        val carry =
+            LeaveCarryBalance(
+                "closing",
+                LeaveDays(8),
+                LeaveDays(5),
+                LeaveDays(1),
+                LeaveDays(1),
+                LeaveDays(1),
+                LeaveDays(0),
+                LeaveDays(0),
+                LocalDate(2026, 3, 31),
+                Instant.parse("2026-03-31T17:00:00Z"),
+                "Asia/Jakarta",
+                2,
+            )
+        val balance = baseline.balances.items.single().copy(carry = carry)
+        var state by
+            mutableStateOf(
+                LeaveState(
+                    content = baseline.copy(balances = LeavePage(listOf(balance))),
+                    loading = false,
+                )
+            )
+        compose.setContent {
+            val density = LocalDensity.current
+            CompositionLocalProvider(
+                LocalDensity provides Density(density.density, 2f),
+                LocalAppLanguage provides AppLanguage.Indonesian,
+            ) {
+                AppTheme {
+                    Box(Modifier.size(360.dp, 760.dp).testTag("frame")) {
+                        LeavePage(state, rememberLazyListState(), {})
+                    }
+                }
+            }
+        }
+        compose
+            .onNodeWithText("Saldo tercatat", useUnmergedTree = true)
+            .performScrollTo()
+            .assertIsDisplayed()
+        val included =
+            compose.onNodeWithText("Termasuk dalam saldo: 2,5 hari", useUnmergedTree = true)
+        included.performScrollTo().assertIsDisplayed()
+        compose
+            .onNode(hasText("Berlaku hingga", substring = true), useUnmergedTree = true)
+            .performScrollTo()
+            .assertIsDisplayed()
+        compose
+            .onNodeWithText("Kedaluwarsa: 0,5 hari", useUnmergedTree = true)
+            .performScrollTo()
+            .assertIsDisplayed()
+        val bounds = included.fetchSemanticsNode().boundsInRoot
+        val frame = compose.onNodeWithTag("frame").fetchSemanticsNode().boundsInRoot
+        assertTrue(bounds.left >= frame.left && bounds.right <= frame.right)
+        compose.onNodeWithContentDescription("Kembali").assertIsDisplayed()
+        val image = Image.makeFromBitmap(compose.onRoot().captureToImage().asSkiaBitmap())
+        val data = checkNotNull(image.encodeToData())
+        try {
+            File("build/reports/screenshots").mkdirs()
+            File("build/reports/screenshots/leave-carry-indonesian.png").writeBytes(data.bytes)
+        } finally {
+            data.close()
+            image.close()
+        }
+        compose.runOnIdle {
+            state =
+                state.copy(
+                    content =
+                        baseline.copy(
+                            balances =
+                                LeavePage(
+                                    listOf(
+                                        balance.copy(
+                                            carry =
+                                                carry.copy(validThrough = null, expiresAt = null)
+                                        )
+                                    )
+                                )
+                        )
+                )
+        }
+        compose
+            .onNodeWithText("Tanpa batas carryover tambahan", useUnmergedTree = true)
+            .performScrollTo()
+            .assertIsDisplayed()
+        compose.onNode(hasText("Berlaku hingga", substring = true)).assertDoesNotExist()
+    }
+
     private fun overview(): LeaveOverview {
         val now = Instant.parse("2026-10-12T01:00:00Z")
         return LeaveOverview(

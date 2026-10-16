@@ -2,6 +2,7 @@ package dev.fajar.starter.leave.data
 
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.database.*
+import dev.fajar.starter.leave.data.encoding.*
 import dev.fajar.starter.leave.data.mappers.*
 import dev.fajar.starter.leave.data.repositories.EncryptedLeaveReplicaRepository
 import dev.fajar.starter.leave.domain.entities.*
@@ -9,13 +10,107 @@ import dev.fajar.starter.leave.domain.policies.initialLeaveCheckpoint
 import dev.fajar.starter.securestorage.*
 import dev.fajar.starter.sync.domain.entities.*
 import java.nio.file.Files
+import kotlin.io.encoding.Base64
 import kotlin.test.*
 import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
+import kotlinx.serialization.json.Json
 
 class EncryptedLeaveReplicaTest {
+    @Test
+    fun aCarryMetadataUpgradeSurvivesRestartWithoutHidingThePublishedLegacyBalance() = runTest {
+        val folder = Files.createTempDirectory("leave-carry-upgrade").toFile()
+        val keys = MemoryCredentialStore()
+        var db = createAppDatabase(folder)
+        try {
+            val f = Fixture(db, keys)
+            db.accounts.activate(f.access.sessionId, leaveReplicaScope(f.access).accountKey)
+            val cipher = AesGcmContentCipher()
+            val key = cipher.generateKey()
+            try {
+                keys.write(Base64.encode(key))
+                val legacy =
+                    f.current.copy(
+                        phase = LeaveSyncPhase.CHANGES,
+                        cursor = "legacy-head",
+                        published = true,
+                        refreshedAt = f.raw.now,
+                        recordSchema = 2,
+                    )
+                val document = encodeLeaveReplicaEntry(entry(f.balance), legacy, cipher, key)
+                val directory =
+                    encodeLeaveDocument(
+                        cipher,
+                        key,
+                        legacy,
+                        "directory",
+                        0,
+                        "directory",
+                        emptySet(),
+                        Json.encodeToString(f.raw.directory),
+                    )
+                assertTrue(
+                    db.replicas.replace(
+                        leaveReplicaScope(f.access),
+                        leaveReplicaPartition(f.access),
+                        null,
+                        ReplicaSnapshot(
+                            legacy.generation,
+                            encodeLeaveCheckpoint(cipher, key, legacy),
+                            document + directory,
+                        ),
+                    )
+                )
+                f.current = legacy
+            } finally {
+                key.fill(0)
+            }
+            val saved = f.page()
+            assertNull(saved.balances.items.single().carry)
+            assertEquals(2, saved.checkpoint?.recordSchema)
+            val replacement = initialLeaveCheckpoint(f.access, "carry-upgrade", f.raw.now)
+            assertEquals(
+                AppResult.Success(true),
+                f.repository.begin(replacement, f.current.generation),
+            )
+            f.current = replacement
+            val carried =
+                f.balance.copy(
+                    value =
+                        f.balance.value.copy(
+                            carry = carryBalanceDto().toCarryBalance(f.balance.value)
+                        )
+                )
+            f.commit(listOf(entry(carried)), publish = false)
+            assertEquals(saved, f.page())
+            db.close()
+            db = createAppDatabase(folder)
+            val restored = Fixture(db, keys)
+            restored.current =
+                assertIs<AppResult.Success<LeaveCheckpoint?>>(
+                        restored.repository.checkpoint(restored.access)
+                    )
+                    .value!!
+            assertEquals(LeaveCheckpoint.CURRENT_RECORD_SCHEMA, restored.current.recordSchema)
+            assertFalse(restored.current.published)
+            assertEquals(saved, restored.page())
+            restored.commit(emptyList())
+            val current = restored.page()
+            assertEquals(carried.value, current.balances.items.single())
+            assertEquals(
+                saved.balances.items.single().version,
+                current.balances.items.single().version,
+            )
+            assertEquals(LeaveCheckpoint.CURRENT_RECORD_SCHEMA, current.checkpoint?.recordSchema)
+        } finally {
+            db.close()
+            keys.close()
+            folder.deleteRecursively()
+        }
+    }
+
     @Test
     fun indexedQueriesReadEverySavedYearAndStatusWithIndependentPages() = runTest {
         withReplica { f ->
