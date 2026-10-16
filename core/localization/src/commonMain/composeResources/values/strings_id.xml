@@ -827,4 +827,15 @@
     <string name="overtime_reload_draft_explanation_id">Ganti perubahan yang belum disimpan dengan draft tersimpan di perangkat ini?</string>
     <string name="overtime_without_saving_id">Keluar tanpa menyimpan</string>
     <string name="overtime_without_saving_explanation_id">Perubahan terakhir belum tersimpan. Keluar tanpa menyimpannya?</string>
+    <string name="data_and_sync_id">Data dan sinkronisasi</string>
+    <string name="data_sync_summary_id">Perbarui data tersimpan perusahaan ini. Kirim draft melalui formulir masing-masing.</string>
+    <string name="data_sync_last_completed_id">Sinkronisasi terakhir</string>
+    <string name="data_sync_not_completed_id">Belum tersinkron</string>
+    <string name="data_sync_waiting_id">Menunggu</string>
+    <string name="data_sync_running_id">Menyinkronkan…</string>
+    <string name="data_sync_incomplete_id">Masih ada data yang perlu disinkronkan.</string>
+    <string name="data_sync_cancel_id">Hentikan sinkronisasi</string>
+    <string name="data_sync_all_id">Sinkronkan semua data</string>
+    <string name="data_sync_dataset_id">Sinkronkan %1$s</string>
+    <string name="data_sync_workforce_id">Presensi dan kalender</string>
 </resources>

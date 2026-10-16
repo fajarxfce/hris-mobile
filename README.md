@@ -40,6 +40,9 @@ All services opens a separate page; company
 switching stays in Account. Back returns from an inner page to its tab, then to
 Home before leaving the application. Inner pages keep their back and refresh
 actions above the scrolling content; Settings groups language and security controls.
+Account also opens [Data and sync](docs/data-sync.md), showing the last complete
+sync per data group with individual or combined refresh. Draft submission and
+command delivery stay in their owning workflows.
 Screens support English and Indonesian. System
 appearance and reduced-motion preferences are respected.
 

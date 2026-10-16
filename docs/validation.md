@@ -1577,3 +1577,49 @@ The validated WireGuard APK was installed on the authorized Android 16 phone
 with `--install-only`. Its installed SHA-256 matched
 `f4628513a7c2332eefb4bd539e87b0ab3cb79cf2392b5d593883a7944297b41d`.
 No phone UI was opened or operated.
+
+### Company data synchronization
+
+Account provides [Data and sync](data-sync.md) for nine company datasets. Root
+checks passed with 1,706 desktop/JVM/UI tests and four convention tests, including
+architecture checks for 70 modules, formatting and static analysis. Each feature
+owns its status/admission and shares acquisition with its registered worker.
+
+Thirteen MVI tests cover local entry/return, published timestamps, individual and
+bounded combined refresh, partial completion, failed storage recovery, confirmed
+read restrictions, queued cancellation, late results and disposal. Repeated retry
+during a non-cancellable storage callback exposed overlapping readers; the
+regression now verifies one active reader and rejection of its cancelled result.
+
+The assembled application test opens the page from Account, cancels a real
+fixture request, retries it and returns to the selected tab. Three layout tests
+verify fixed navigation and reachable actions at 200% text, busy-action bounds,
+localized failures and Indonesian dark appearance. Their screenshots were
+inspected.
+
+All 879 selected feature domain/data Chromium tests passed, including metadata
+queries against IndexedDB. The 13 new Home MVI browser tests passed in a separate
+run with unchanged source after the combined run lost its Karma connection on
+that final target. Android dev assembly passed for loopback and WireGuard; both
+APKs passed signature/package/API-target checks and have identical source inputs.
+
+API 35 acceptance used an isolated API, PostgreSQL and worker. All nine datasets
+completed acquisition. With Wi-Fi/mobile data disabled and API forwarding removed,
+a process restart restored Home and the saved synchronization times. Explicit
+offline refresh retained the same encrypted records, checkpoints and generations.
+
+A confirmed Inbox MFA restriction hid its status and survived another offline
+process restart and retry. Reconnection and admitted acquisition restored the
+Inbox timestamp and cleared its restriction. Other datasets retained their saved
+status. Synchronization issued no business writes or pending commands.
+
+The recovered page was inspected in dark appearance at 200% system text. The
+final dataset action remained visible after scrolling, and the fixed Back action
+returned to Account. No HRIS crash was recorded. Emulator settings were restored;
+the owned API, worker, database, proxy and emulator were stopped with cleanup
+verified.
+
+The validated WireGuard APK was installed on the authorized Android 16 phone
+with `--install-only`. Its installed SHA-256 matched
+`c6ab106243cbf591640222588477474a6ca9733e3ab3c45b16f487eae3e1adfc`.
+No phone UI was opened or operated.

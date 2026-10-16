@@ -15,6 +15,8 @@ sealed interface HomeEvent {
 
     data object SettingsRequested : HomeEvent
 
+    data object DataSyncRequested : HomeEvent
+
     data object SessionsRequested : HomeEvent
 
     data object SignOutRequested : HomeEvent

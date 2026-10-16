@@ -276,8 +276,10 @@ retain their original input and operation identity until access recovers.
    interrupted bootstrap, duplicates, stale writes, revocation, cancellation and
    disposal for every added projection.
 6. Show last successful sync, saved-data availability and pending changes
-   consistently. Current pages retain facts with refresh feedback; a shared
-   offline-status presentation is still pending.
+   consistently. [Data and sync](data-sync.md) shows the last complete acquisition
+   of each published read model and supports bounded explicit refresh. A shared
+   summary of unfinished input, pending commands and file transfers remains
+   separate work; read synchronization never implies delivery of those actions.
 
 Datasource contracts perform raw I/O. Repositories map/store facts and coordinate
 datasources. Use cases coordinate repository contracts and own sync/action policy.

@@ -33,6 +33,7 @@ jobs:
           :core:fileio:wasmJsBrowserTest
           :core:sync:data:wasmJsBrowserTest :core:workspace:domain:wasmJsBrowserTest :core:workspace:data:wasmJsBrowserTest
           :features:inbox:domain:wasmJsBrowserTest :features:inbox:data:wasmJsBrowserTest
+          :features:home:presentation:wasmJsBrowserTest
           :features:workforce:domain:wasmJsBrowserTest :features:workforce:data:wasmJsBrowserTest
           :features:workforce:presentation:wasmJsBrowserTest
           :features:leave:domain:wasmJsBrowserTest :features:leave:data:wasmJsBrowserTest

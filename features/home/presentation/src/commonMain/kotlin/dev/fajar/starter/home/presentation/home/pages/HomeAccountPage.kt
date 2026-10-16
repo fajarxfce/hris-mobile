@@ -15,6 +15,7 @@ import dev.fajar.starter.localization.*
 import io.github.composefluent.FluentTheme
 import io.github.composefluent.icons.Icons
 import io.github.composefluent.icons.regular.ArrowRight
+import io.github.composefluent.icons.regular.ArrowSync
 import io.github.composefluent.icons.regular.ChevronDown
 import io.github.composefluent.icons.regular.ChevronRight
 import io.github.composefluent.icons.regular.Key
@@ -81,6 +82,13 @@ fun HomeAccountPage(state: HomeState, onEvent: (HomeEvent) -> Unit) {
                 onClick = { onEvent(HomeEvent.SessionsRequested) },
                 enabled = !state.working,
                 leading = { AppIcon(Icons.Regular.Key) },
+                trailing = { AppIcon(Icons.Regular.ChevronRight) },
+            )
+            AppListRow(
+                title = appString(AppString.DataAndSync),
+                onClick = { onEvent(HomeEvent.DataSyncRequested) },
+                enabled = !state.working,
+                leading = { AppIcon(Icons.Regular.ArrowSync) },
                 trailing = { AppIcon(Icons.Regular.ChevronRight) },
             )
         }

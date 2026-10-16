@@ -31,6 +31,7 @@ class HomeViewModel(
         on<HomeEvent.AllServicesRequested>(::onAllServicesRequested)
         on<HomeEvent.CompanyChangeRequested>(::onCompanyChangeRequested)
         on<HomeEvent.SettingsRequested>(::onSettingsRequested)
+        on<HomeEvent.DataSyncRequested>(::onDataSyncRequested)
         on<HomeEvent.ServiceSelected>(::onServiceSelected)
         on<HomeEvent.SessionsRequested>(::onSessionsRequested)
         on<HomeEvent.SignOutRequested>(::onSignOutRequested)
@@ -91,6 +92,11 @@ class HomeViewModel(
         )
             return
         viewModelScope.launch { emitEffect(HomeEffect.OpenService(event.service)) }
+    }
+
+    private fun onDataSyncRequested(event: HomeEvent.DataSyncRequested) {
+        if (state.value.working) return
+        viewModelScope.launch { emitEffect(HomeEffect.OpenDataSync) }
     }
 
     private fun onSessionsRequested(event: HomeEvent.SessionsRequested) {

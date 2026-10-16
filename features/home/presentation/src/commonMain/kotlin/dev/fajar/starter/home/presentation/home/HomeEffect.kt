@@ -9,5 +9,7 @@ sealed interface HomeEffect {
 
     data object OpenSettings : HomeEffect
 
+    data object OpenDataSync : HomeEffect
+
     data object OpenSessions : HomeEffect
 }

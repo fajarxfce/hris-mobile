@@ -162,6 +162,9 @@ fun AppNavigation(navigation: ScopedNavigationState, incomingLinks: Flow<String>
                         onAllServices = {
                             controller.navigate(ServicesRoute) { launchSingleTop = true }
                         },
+                        onDataSync = {
+                            controller.navigate(DataSyncRoute) { launchSingleTop = true }
+                        },
                         onSessions = {
                             controller.navigate(SessionsRoute) { launchSingleTop = true }
                         },
@@ -214,6 +217,13 @@ fun AppNavigation(navigation: ScopedNavigationState, incomingLinks: Flow<String>
                     servicesRoutes(stage.workspace.id, onService = openService) {
                         controller.popBackStack()
                     }
+                    dataSyncRoutes(
+                        stage.workspace,
+                        onVerify = {
+                            controller.navigate(VerificationRoute) { launchSingleTop = true }
+                        },
+                        onBack = { controller.popBackStack() },
+                    )
                     peopleRoutes(
                         stage.workspace.id,
                         onVerify = {

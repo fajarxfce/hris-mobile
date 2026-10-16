@@ -60,6 +60,7 @@ import dev.fajar.starter.people.presentation.directory.EmployeesViewModel
 import dev.fajar.starter.workforce.domain.replica.repositories.WorkforceReplicaRepository
 import dev.fajar.starter.workspace.domain.entities.Workspace
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
+import dev.fajar.starter.workspace.domain.usecases.ObserveCompanyData
 import java.io.File
 import java.nio.file.Files
 import java.util.concurrent.atomic.AtomicBoolean
@@ -82,6 +83,7 @@ import org.junit.rules.TestName
 import org.koin.core.Koin
 import org.koin.core.module.Module
 import org.koin.core.qualifier.named
+import org.koin.dsl.bind
 import org.koin.dsl.module
 
 class AppFlowTest {
@@ -3155,7 +3157,7 @@ class AppFlowTest {
             waitFor("Mark as read")
             server.inbox.rejectNextAction = true
             compose.onNodeWithText("Mark as read").performScrollTo().performClick()
-            waitFor("Review updates")
+            waitForAction("Review updates")
             compose.onNodeWithText("Review updates").performScrollTo().performClick()
             waitFor("Acknowledge")
             compose.onNodeWithText("Mark as read").assertDoesNotExist()
@@ -3457,6 +3459,59 @@ class AppFlowTest {
             waitFor("Use your account to continue.")
             compose.onNodeWithText("Choose a company").assertDoesNotExist()
             assertEquals(setOf(NativeSessionsUi.CURRENT), server.deviceSessions.revoked)
+        }
+    }
+
+    @Test
+    fun accountDataSyncUsesFeatureBindingsAndBackRetainsTheAccountTab() {
+        val server = NativeUiServer()
+        withApplication(server) {
+            signIn()
+            waitFor("Choose a company")
+            compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
+            waitFor("Welcome")
+            compose.onNode(hasText("Account") and isSelectable()).performClick()
+            compose.onNodeWithText("Data and sync").performScrollTo().performClick()
+            waitFor("Last completed sync")
+            compose.onNode(hasText("Home") and isSelectable()).assertDoesNotExist()
+            compose.onNodeWithContentDescription("Back").assertIsDisplayed()
+            compose.onNodeWithContentDescription("Sync Inbox").performScrollTo().assertIsEnabled()
+            server.inbox.holdNextRefresh = true
+            try {
+                compose.onNodeWithContentDescription("Sync Inbox").performClick()
+                compose.waitUntil(5_000) { server.inbox.refreshStarted.isCompleted }
+                compose.onNodeWithContentDescription("Sync Inbox").assertIsNotEnabled()
+                compose
+                    .onNodeWithContentDescription("Stop syncing")
+                    .assertIsDisplayed()
+                    .performClick()
+                compose.waitUntil(5_000) { server.inbox.refreshCancelled.isCompleted }
+                compose.waitUntil(5_000) {
+                    compose
+                        .onAllNodes(hasContentDescription("Sync Inbox") and isEnabled())
+                        .fetchSemanticsNodes()
+                        .size == 1
+                }
+            } finally {
+                server.inbox.refreshReleased.complete(Unit)
+            }
+            compose.onNodeWithContentDescription("Sync Inbox").performClick()
+            compose.waitUntil(5_000) {
+                compose
+                    .onAllNodes(hasContentDescription("Stop syncing"))
+                    .fetchSemanticsNodes()
+                    .isEmpty()
+            }
+            compose.onNodeWithText("Unable to connect. Check your connection.").assertDoesNotExist()
+            capture("account-data-sync")
+            compose.onNodeWithContentDescription("Back").performClick()
+            compose.waitUntil(5_000) {
+                compose
+                    .onAllNodes(hasText("Account") and isSelected())
+                    .fetchSemanticsNodes()
+                    .size == 1
+            }
+            compose.onNodeWithText("Data and sync").performScrollTo().assertIsDisplayed()
         }
     }
 
@@ -3768,7 +3823,7 @@ class AppFlowTest {
                             },
                             get(),
                         )
-                    }
+                    } bind ObserveCompanyData::class
                     factory {
                         dev.fajar.starter.workforce.domain.attendance.usecases.ObserveAttendance(
                             get(),

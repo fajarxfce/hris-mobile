@@ -827,4 +827,15 @@
     <string name="overtime_reload_draft_explanation_en">Replace unsaved changes with the draft saved on this device?</string>
     <string name="overtime_without_saving_en">Leave without saving</string>
     <string name="overtime_without_saving_explanation_en">The latest changes have not been saved. Leave without them?</string>
+    <string name="data_and_sync_en">Data and sync</string>
+    <string name="data_sync_summary_en">Refresh saved company data. Drafts are submitted from their forms.</string>
+    <string name="data_sync_last_completed_en">Last completed sync</string>
+    <string name="data_sync_not_completed_en">Not synced yet</string>
+    <string name="data_sync_waiting_en">Waiting</string>
+    <string name="data_sync_running_en">Syncing…</string>
+    <string name="data_sync_incomplete_en">More data remains to sync.</string>
+    <string name="data_sync_cancel_en">Stop syncing</string>
+    <string name="data_sync_all_en">Sync all data</string>
+    <string name="data_sync_dataset_en">Sync %1$s</string>
+    <string name="data_sync_workforce_en">Attendance and calendar</string>
 </resources>
