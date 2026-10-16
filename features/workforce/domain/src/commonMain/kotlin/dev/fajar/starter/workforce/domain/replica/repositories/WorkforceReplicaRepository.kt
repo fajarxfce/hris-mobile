@@ -24,6 +24,9 @@ interface WorkforceReplicaRepository {
         period: CalendarPeriod,
     ): Flow<AppResult<WorkforceReplicaFacts>>
 
+    /** Metadata from the visible generation only, without reading its documents. */
+    fun observePublishedCheckpoint(access: WorkforceAccess): Flow<AppResult<WorkforceCheckpoint?>>
+
     suspend fun checkpoint(access: WorkforceAccess): AppResult<WorkforceCheckpoint?>
 
     suspend fun begin(

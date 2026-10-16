@@ -1,3 +1,6 @@
 package dev.fajar.starter.workforce.domain.replica.entities
 
-data class WorkforceSyncOutcome(val caughtUp: Boolean, val pollAfterSeconds: Int)
+import dev.fajar.starter.workspace.domain.entities.CompanyDataSyncOutcome
+
+data class WorkforceSyncOutcome(override val caughtUp: Boolean, val pollAfterSeconds: Int) :
+    CompanyDataSyncOutcome

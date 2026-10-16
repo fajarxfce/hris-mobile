@@ -269,6 +269,10 @@ class EncryptedLeaveReplicaTest {
                         )
                         .value,
                 )
+                assertEquals(
+                    AppResult.Success(original.checkpoint),
+                    f.repository.observePublishedCheckpoint(renewed).first(),
+                )
                 val other = renewed.copy(accountId = id(500))
                 f.db.accounts.activate(other.sessionId, leaveReplicaScope(other).accountKey)
                 assertNull(

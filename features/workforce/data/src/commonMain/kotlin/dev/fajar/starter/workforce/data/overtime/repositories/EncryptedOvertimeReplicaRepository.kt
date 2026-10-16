@@ -252,6 +252,25 @@ class EncryptedOvertimeReplicaRepository(
             },
         )
 
+    override fun observePublishedCheckpoint(access: WorkforceAccess) =
+        safeStorageFlow(
+            replicas.observePublishedCheckpoint(
+                overtimeReplicaScope(access),
+                overtimeReplicaPartition(access),
+            ),
+            mapValue = { raw ->
+                if (raw == null) null
+                else {
+                    val key = Base64.decode(requireNotNull(credentials.read()))
+                    try {
+                        decodeOvertimeCheckpoint(cipher, key, access, raw)
+                    } finally {
+                        key.fill(0)
+                    }
+                }
+            },
+        )
+
     override suspend fun checkpoint(access: WorkforceAccess) = safeStorageCall {
         val raw =
             replicas.checkpoint(overtimeReplicaScope(access), overtimeReplicaPartition(access))

@@ -10,13 +10,15 @@ import dev.fajar.starter.payroll.domain.usecases.*
 import dev.fajar.starter.sync.domain.SyncTask
 import dev.fajar.starter.sync.domain.repositories.SyncFeedRepository
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
+import dev.fajar.starter.workspace.domain.usecases.ObserveCompanyData
+import dev.fajar.starter.workspace.domain.usecases.SyncCompanyData
 import kotlin.time.Clock
 import org.koin.core.annotation.*
 
 @Module
 @ComponentScan("dev.fajar.starter.payroll.data")
 class PayrollDataModule {
-    @Factory
+    @Factory(binds = [ObservePayslips::class, ObserveCompanyData::class])
     fun observePayslips(
         replicas: PayslipReplicaRepository,
         cache: PayslipCacheRepository,
@@ -45,7 +47,7 @@ class PayrollDataModule {
         build: AppBuild,
     ) = LoadPayslipRevision(remote, replicas, revisions, sessions, workspaces, Clock.System, build)
 
-    @Single(binds = [SyncPayroll::class, SyncTask::class])
+    @Single(binds = [SyncPayroll::class, SyncTask::class, SyncCompanyData::class])
     fun syncPayroll(
         feed: SyncFeedRepository,
         remote: PayslipRepository,

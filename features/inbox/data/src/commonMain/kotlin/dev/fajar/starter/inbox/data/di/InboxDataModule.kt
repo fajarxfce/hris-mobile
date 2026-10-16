@@ -7,6 +7,8 @@ import dev.fajar.starter.inbox.domain.usecases.*
 import dev.fajar.starter.sync.domain.SyncTask
 import dev.fajar.starter.sync.domain.repositories.SyncFeedRepository
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
+import dev.fajar.starter.workspace.domain.usecases.ObserveCompanyData
+import dev.fajar.starter.workspace.domain.usecases.SyncCompanyData
 import kotlin.time.Clock
 import org.koin.core.annotation.*
 
@@ -56,14 +58,14 @@ class InboxDataModule {
         build: AppBuild,
     ) = ReplayInboxAction(commands, remote, cache, sessions, workspaces, Clock.System, build)
 
-    @Factory
+    @Factory(binds = [ObserveInbox::class, ObserveCompanyData::class])
     fun observe(
         cache: InboxCacheRepository,
         sessions: SessionRepository,
         workspaces: WorkspaceRepository,
     ) = ObserveInbox(cache, sessions, workspaces)
 
-    @Single(binds = [SyncInbox::class, SyncTask::class])
+    @Single(binds = [SyncInbox::class, SyncTask::class, SyncCompanyData::class])
     fun synchronize(
         feed: SyncFeedRepository,
         remote: InboxRepository,

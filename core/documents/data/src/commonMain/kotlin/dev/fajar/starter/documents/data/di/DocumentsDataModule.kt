@@ -10,6 +10,8 @@ import dev.fajar.starter.sync.domain.SyncTask
 import dev.fajar.starter.sync.domain.repositories.SyncFeedRepository
 import dev.fajar.starter.sync.domain.repositories.SyncScheduleRepository
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
+import dev.fajar.starter.workspace.domain.usecases.ObserveCompanyData
+import dev.fajar.starter.workspace.domain.usecases.SyncCompanyData
 import kotlin.time.Clock
 import kotlinx.coroutines.sync.Mutex
 import org.koin.core.annotation.*
@@ -17,7 +19,7 @@ import org.koin.core.annotation.*
 @Module
 @ComponentScan("dev.fajar.starter.documents.data")
 class DocumentsDataModule {
-    @Single(binds = [SyncDocumentCatalog::class, SyncTask::class])
+    @Single(binds = [SyncDocumentCatalog::class, SyncTask::class, SyncCompanyData::class])
     fun syncCatalog(
         feed: SyncFeedRepository,
         remote: DocumentRepository,
@@ -27,7 +29,7 @@ class DocumentsDataModule {
         build: AppBuild,
     ) = SyncDocumentCatalog(feed, remote, cache, sessions, workspaces, Clock.System, build)
 
-    @Factory
+    @Factory(binds = [ObserveDocumentCatalog::class, ObserveCompanyData::class])
     fun observeCatalog(
         cache: DocumentCatalogRepository,
         sessions: SessionRepository,

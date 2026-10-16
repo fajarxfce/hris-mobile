@@ -13,6 +13,9 @@ interface OvertimeReplicaRepository : OvertimeRequestReplicaRepository {
         selection: OvertimeSelection,
     ): Flow<AppResult<OvertimeReplicaPage>>
 
+    /** Metadata from the visible generation only, without reading its documents. */
+    fun observePublishedCheckpoint(access: WorkforceAccess): Flow<AppResult<OvertimeCheckpoint?>>
+
     suspend fun checkpoint(access: WorkforceAccess): AppResult<OvertimeCheckpoint?>
 
     suspend fun begin(

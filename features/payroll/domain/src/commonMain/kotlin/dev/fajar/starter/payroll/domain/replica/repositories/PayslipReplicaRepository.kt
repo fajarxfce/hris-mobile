@@ -22,6 +22,9 @@ interface PayslipReplicaRepository {
 
     fun observeDetails(access: PayrollAccess, id: String): Flow<AppResult<PayrollReplicaDetails>>
 
+    /** Metadata from the visible generation only, without reading its documents. */
+    fun observePublishedCheckpoint(access: PayrollAccess): Flow<AppResult<PayrollCheckpoint?>>
+
     suspend fun checkpoint(access: PayrollAccess): AppResult<PayrollCheckpoint?>
 
     suspend fun begin(

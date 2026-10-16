@@ -197,6 +197,7 @@ suspend fun checkExpenseStagingDeletionAndLostKeys(f: ExpenseReplicaFixture) {
     assertNull(f.keys.read())
     f.publish(listOf(f.claim, f.payment))
     val saved = f.details().snapshot
+    val completed = f.repository.observePublishedCheckpoint(f.access).first()
     val replacement = initialExpenseCheckpoint(f.access, Uuid.random().toString(), f.raw.now)
     assertEquals(
         AppResult.Success(true),
@@ -205,6 +206,7 @@ suspend fun checkExpenseStagingDeletionAndLostKeys(f: ExpenseReplicaFixture) {
     assertEquals(saved, f.details().snapshot)
     f.publish(listOf(f.claim, f.payment), publish = false)
     assertEquals(saved, f.details().snapshot)
+    assertEquals(completed, f.repository.observePublishedCheckpoint(f.access).first())
     f.publish(emptyList())
     val cp = f.checkpoint()!!
     assertEquals(

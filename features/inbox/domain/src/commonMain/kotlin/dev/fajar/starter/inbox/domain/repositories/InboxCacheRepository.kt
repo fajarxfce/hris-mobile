@@ -17,6 +17,9 @@ interface InboxCacheRepository {
 
     fun observe(access: InboxAccess, query: InboxCacheQuery): Flow<AppResult<InboxCachePage>>
 
+    /** Metadata from the visible generation only, without reading its documents. */
+    fun observePublishedCheckpoint(access: InboxAccess): Flow<AppResult<InboxCheckpoint?>>
+
     suspend fun checkpoint(access: InboxAccess): AppResult<InboxCheckpoint?>
 
     suspend fun begin(checkpoint: InboxCheckpoint, expectedGeneration: String?): AppResult<Boolean>

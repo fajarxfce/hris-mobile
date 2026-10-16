@@ -11,11 +11,13 @@ import dev.fajar.starter.people.domain.replica.repositories.*
 import dev.fajar.starter.sync.domain.*
 import dev.fajar.starter.sync.domain.entities.*
 import dev.fajar.starter.sync.domain.repositories.SyncFeedRepository
+import dev.fajar.starter.workspace.domain.entities.CompanyDataSet
 import dev.fajar.starter.workspace.domain.entities.CompanyModule
 import dev.fajar.starter.workspace.domain.entities.CompanyPolicySnapshot
 import dev.fajar.starter.workspace.domain.policies.admitCompanyOperation
 import dev.fajar.starter.workspace.domain.policies.workspaceFailure
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
+import dev.fajar.starter.workspace.domain.usecases.SyncCompanyData
 import kotlin.time.Clock
 import kotlin.time.Duration.Companion.seconds
 import kotlin.uuid.Uuid
@@ -34,8 +36,12 @@ class SyncCompanyDirectory(
     private val clock: Clock,
     private val build: AppBuild,
     private val execution: Mutex = Mutex(),
-) : SyncTask {
+) : SyncCompanyData {
+    override val dataSet = CompanyDataSet.Employees
     override val key = KEY
+
+    override suspend fun refresh(workspaceId: String): AppResult<DirectorySyncOutcome> =
+        invoke(workspaceId)
 
     suspend operator fun invoke(
         workspaceId: String,

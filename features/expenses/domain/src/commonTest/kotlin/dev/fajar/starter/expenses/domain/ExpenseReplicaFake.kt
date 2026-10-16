@@ -243,6 +243,14 @@ class ExpenseReplicaFake(
         }
     }
 
+    override fun observePublishedCheckpoint(access: ExpenseAccess) =
+        published.map { result ->
+            when (result) {
+                is AppResult.Failed -> result
+                is AppResult.Success -> AppResult.Success(result.value.checkpoint)
+            }
+        }
+
     override suspend fun checkpoint(access: ExpenseAccess) = AppResult.Success(current)
 
     override suspend fun begin(

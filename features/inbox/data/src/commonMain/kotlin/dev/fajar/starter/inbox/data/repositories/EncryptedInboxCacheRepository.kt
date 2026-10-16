@@ -174,6 +174,22 @@ class EncryptedInboxCacheRepository(
             },
         )
 
+    override fun observePublishedCheckpoint(access: InboxAccess) =
+        safeStorageFlow(
+            replicas.observePublishedCheckpoint(inboxReplicaScope(access), inboxPartition(access)),
+            mapValue = { raw ->
+                if (raw == null) null
+                else {
+                    val key = Base64.decode(requireNotNull(credentials.read()))
+                    try {
+                        decodeInboxCheckpoint(cipher, key, access, raw)
+                    } finally {
+                        key.fill(0)
+                    }
+                }
+            },
+        )
+
     override suspend fun checkpoint(access: InboxAccess) = safeStorageCall {
         val raw = replicas.checkpoint(inboxReplicaScope(access), inboxPartition(access))
         if (raw == null) null

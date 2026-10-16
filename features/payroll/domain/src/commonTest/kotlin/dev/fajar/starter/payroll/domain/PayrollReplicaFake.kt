@@ -169,6 +169,14 @@ class PayrollReplicaFake(
         }
     }
 
+    override fun observePublishedCheckpoint(access: PayrollAccess) =
+        published.map { result ->
+            when (result) {
+                is AppResult.Failed -> result
+                is AppResult.Success -> AppResult.Success(result.value.checkpoint)
+            }
+        }
+
     override suspend fun checkpoint(access: PayrollAccess) = AppResult.Success(current)
 
     override suspend fun begin(

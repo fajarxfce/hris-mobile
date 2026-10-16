@@ -121,6 +121,13 @@ reads and commands; complete acquisition can clear only the denial revision it
 observed before starting. Fact cleanup never substitutes for access admission,
 and an outcome-write failure cannot erase a confirmed delivery denial.
 
+Company data observation and refresh have shared ports in workspace domain,
+implemented by each feature's existing use cases. Metadata observation shares
+the feature's normal ownership and read-admission policy. Repositories decrypt
+the published checkpoint without loading resource payloads. Refresh carries an
+explicit workspace ID and reuses the worker's acquisition instance. Consumers
+do not depend on feature repositories or presentation modules.
+
 The [work calendar and attendance](workforce.md) share account-owned encrypted
 attendance days, effective schedule assignments, roster overrides and holidays.
 `SyncWorkforce` owns change-feed acquisition and live admission. Its repository

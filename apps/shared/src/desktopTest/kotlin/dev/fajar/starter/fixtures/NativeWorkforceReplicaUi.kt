@@ -153,6 +153,14 @@ class NativeWorkforceReplicaUi : WorkforceReplicaRepository {
         }
     }
 
+    override fun observePublishedCheckpoint(access: WorkforceAccess) =
+        published.map { result ->
+            when (result) {
+                is AppResult.Failed -> result
+                is AppResult.Success -> AppResult.Success(result.value.checkpoint)
+            }
+        }
+
     override suspend fun checkpoint(access: WorkforceAccess): AppResult<WorkforceCheckpoint?> =
         failure ?: AppResult.Success(current)
 

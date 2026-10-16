@@ -6,6 +6,11 @@ import dev.fajar.starter.documents.domain.policies.documentFailure
 import dev.fajar.starter.documents.domain.replica.entities.*
 import dev.fajar.starter.documents.domain.replica.policies.*
 import dev.fajar.starter.sync.domain.entities.*
+import dev.fajar.starter.workspace.domain.entities.CompanyDataSet
+import dev.fajar.starter.workspace.domain.entities.CompanyDataStatus
+import dev.fajar.starter.workspace.domain.entities.CompanyDataSyncOutcome
+import dev.fajar.starter.workspace.domain.usecases.ObserveCompanyData
+import dev.fajar.starter.workspace.domain.usecases.SyncCompanyData
 import kotlin.test.*
 import kotlin.time.Duration.Companion.hours
 import kotlinx.coroutines.*
@@ -13,6 +18,52 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.test.*
 
 class DocumentCatalogSyncTest {
+    @Test
+    @OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
+    fun publishedStatusRetainsPreviousCompletionWhileStagingAndClosesOnDenial() = runTest {
+        val f = CatalogSyncFixture()
+        val observation: ObserveCompanyData = f.observe
+        val acquisition: SyncCompanyData = f.sync
+        val workspaceId = "workspace"
+        assertEquals(CompanyDataSet.Documents, observation.dataSet)
+        assertEquals(observation.dataSet, acquisition.dataSet)
+        val values = mutableListOf<AppResult<CompanyDataStatus>>()
+        val reader =
+            backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
+                observation.observeStatus(workspaceId).collect { values += it }
+            }
+        runCurrent()
+        assertEquals(AppResult.Success(CompanyDataStatus(null)), values.last())
+        assertTrue(
+            assertIs<AppResult.Success<CompanyDataSyncOutcome>>(acquisition.refresh(workspaceId))
+                .value
+                .caughtUp
+        )
+        runCurrent()
+        val published = requireNotNull(f.store.checkpoint)
+        val expected = AppResult.Success(CompanyDataStatus(assertNotNull(published.refreshedAt)))
+        assertEquals(expected, values.last())
+        val replacement =
+            initialDocumentCatalogCheckpoint(
+                published.access,
+                "status-replacement",
+                published.refreshedAt,
+                published.employments,
+            )
+        assertEquals(AppResult.Success(true), f.store.begin(replacement, published.generation))
+        runCurrent()
+        assertEquals(expected, values.last())
+        val denial =
+            Failure(FailureKind.AccessDenied, "Verification required", code = "mfa_required")
+        f.store.restrict(published.access, denial)
+        runCurrent()
+        assertEquals(AppResult.Failed(denial), values.last())
+        assertEquals(AppResult.Failed(denial), observation.observeStatus(workspaceId).first())
+        assertEquals(0, f.store.snapshot.subscriptionCount.value)
+        reader.cancelAndJoin()
+        assertEquals(0, f.store.snapshot.subscriptionCount.value)
+    }
+
     @Test
     fun liveCredentialExpiryDoesNotWithdrawOwnedDocuments() = runTest {
         val f = CatalogSyncFixture()

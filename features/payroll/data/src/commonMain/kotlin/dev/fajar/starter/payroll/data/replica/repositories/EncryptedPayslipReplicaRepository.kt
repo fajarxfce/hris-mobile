@@ -377,6 +377,25 @@ class EncryptedPayslipReplicaRepository(
         }
     }
 
+    override fun observePublishedCheckpoint(access: PayrollAccess) =
+        safeStorageFlow(
+            replicas.observePublishedCheckpoint(
+                payrollReplicaScope(access),
+                payrollReplicaPartition(access),
+            ),
+            mapValue = { raw ->
+                if (raw == null) null
+                else {
+                    val key = Base64.decode(requireNotNull(credentials.read()))
+                    try {
+                        decodePayrollCheckpoint(cipher, key, access, raw)
+                    } finally {
+                        key.fill(0)
+                    }
+                }
+            },
+        )
+
     override suspend fun checkpoint(access: PayrollAccess) = safeStorageCall {
         val raw =
             replicas.checkpoint(payrollReplicaScope(access), payrollReplicaPartition(access))

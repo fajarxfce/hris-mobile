@@ -176,6 +176,14 @@ class OvertimeReplicaFixture : OvertimeReplicaRepository {
             }
         }
 
+    override fun observePublishedCheckpoint(access: WorkforceAccess) =
+        published.map { result ->
+            when (result) {
+                is AppResult.Failed -> result
+                is AppResult.Success -> AppResult.Success(result.value.checkpoint)
+            }
+        }
+
     override suspend fun checkpoint(access: WorkforceAccess): AppResult<OvertimeCheckpoint?> =
         failure ?: AppResult.Success(current)
 

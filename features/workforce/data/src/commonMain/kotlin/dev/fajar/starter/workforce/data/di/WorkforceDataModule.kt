@@ -16,6 +16,8 @@ import dev.fajar.starter.workforce.domain.replica.usecases.SyncWorkforce
 import dev.fajar.starter.workforce.domain.repositories.*
 import dev.fajar.starter.workforce.domain.usecases.*
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
+import dev.fajar.starter.workspace.domain.usecases.ObserveCompanyData
+import dev.fajar.starter.workspace.domain.usecases.SyncCompanyData
 import kotlin.time.Clock
 import kotlinx.coroutines.sync.Mutex
 import org.koin.core.annotation.*
@@ -149,7 +151,7 @@ class WorkforceDataModule {
         build: AppBuild,
     ) = ReviewOvertimeSchedule(workforce, remote, cache, sessions, workspaces, Clock.System, build)
 
-    @Factory
+    @Factory(binds = [ObserveOvertime::class, ObserveCompanyData::class])
     fun observeOvertime(
         replicas: OvertimeReplicaRepository,
         cache: OvertimeCacheRepository,
@@ -168,7 +170,7 @@ class WorkforceDataModule {
 
     @Single @Named("overtime-acquisition") fun overtimeAcquisition() = Mutex()
 
-    @Single(binds = [SyncOvertime::class, SyncTask::class])
+    @Single(binds = [SyncOvertime::class, SyncTask::class, SyncCompanyData::class])
     fun syncOvertime(
         feed: SyncFeedRepository,
         remote: OvertimeRecordRepository,
@@ -222,7 +224,7 @@ class WorkforceDataModule {
         build: AppBuild,
     ) = ObserveAttendance(replicas, cache, commands, sessions, workspaces, Clock.System, build)
 
-    @Single(binds = [SyncWorkforce::class, SyncTask::class])
+    @Single(binds = [SyncWorkforce::class, SyncTask::class, SyncCompanyData::class])
     fun syncWorkforce(
         feed: SyncFeedRepository,
         remote: WorkforceRecordRepository,
@@ -285,7 +287,7 @@ class WorkforceDataModule {
         build: AppBuild,
     ) = DismissAttendanceRejection(commands, sessions, workspaces, Clock.System, build)
 
-    @Factory
+    @Factory(binds = [ObserveWorkCalendar::class, ObserveCompanyData::class])
     fun observeCalendar(
         replicas: WorkforceReplicaRepository,
         cache: WorkCalendarCacheRepository,

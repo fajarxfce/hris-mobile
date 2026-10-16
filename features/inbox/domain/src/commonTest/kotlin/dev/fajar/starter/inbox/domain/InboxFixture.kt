@@ -286,6 +286,14 @@ class InboxFixture(
                     else result
                 }
 
+            override fun observePublishedCheckpoint(access: InboxAccess) =
+                snapshot.map { result ->
+                    when (result) {
+                        is AppResult.Failed -> result
+                        is AppResult.Success -> AppResult.Success(result.value.checkpoint)
+                    }
+                }
+
             override suspend fun checkpoint(access: InboxAccess) = AppResult.Success(checkpoint)
 
             override suspend fun begin(

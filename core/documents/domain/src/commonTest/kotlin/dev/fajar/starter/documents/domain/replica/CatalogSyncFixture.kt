@@ -210,6 +210,9 @@ class CatalogSyncFixture {
                 )
             }
 
+        override fun observePublishedCheckpoint(access: DocumentAccess) =
+            snapshot.map { AppResult.Success(it.checkpoint) }
+
         override suspend fun checkpoint(access: DocumentAccess) = AppResult.Success(checkpoint)
 
         override suspend fun begin(

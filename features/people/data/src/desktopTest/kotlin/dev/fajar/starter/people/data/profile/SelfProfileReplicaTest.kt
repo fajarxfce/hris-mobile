@@ -14,6 +14,10 @@ class SelfProfileReplicaTest {
         withDatabase { fixture ->
             fixture.publish((1..201).map { selfProfileFixtureRecord(it) })
             assertIs<AppResult.Failed>(fixture.repository.observe(fixture.access).first())
+            kotlin.test.assertEquals(
+                AppResult.Success(fixture.checkpoint()),
+                fixture.repository.observePublishedCheckpoint(fixture.access).first(),
+            )
         }
     }
 

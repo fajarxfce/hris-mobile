@@ -173,6 +173,14 @@ class ProfileFixture {
             }
         }
 
+        override fun observePublishedCheckpoint(access: SelfProfileAccess) =
+            snapshot.map { result ->
+                when (result) {
+                    is AppResult.Failed -> result
+                    is AppResult.Success -> AppResult.Success(result.value.checkpoint)
+                }
+            }
+
         override suspend fun checkpoint(access: SelfProfileAccess) = AppResult.Success(checkpoint)
 
         override suspend fun begin(

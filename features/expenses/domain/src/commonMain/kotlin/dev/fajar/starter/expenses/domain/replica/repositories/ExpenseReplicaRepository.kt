@@ -27,6 +27,9 @@ interface ExpenseReplicaRepository {
         historyAfter: Long? = null,
     ): Flow<AppResult<ExpenseReplicaDetails>>
 
+    /** Metadata from the visible generation only, without reading its documents. */
+    fun observePublishedCheckpoint(access: ExpenseAccess): Flow<AppResult<ExpenseCheckpoint?>>
+
     suspend fun checkpoint(access: ExpenseAccess): AppResult<ExpenseCheckpoint?>
 
     suspend fun begin(

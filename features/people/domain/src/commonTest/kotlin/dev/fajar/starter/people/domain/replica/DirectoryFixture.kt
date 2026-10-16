@@ -147,6 +147,14 @@ class DirectoryFixture {
 
         override fun observe(access: DirectoryAccess) = snapshot
 
+        override fun observePublishedCheckpoint(access: DirectoryAccess) =
+            snapshot.map { result ->
+                when (result) {
+                    is AppResult.Failed -> result
+                    is AppResult.Success -> AppResult.Success(result.value.checkpoint)
+                }
+            }
+
         override suspend fun checkpoint(access: DirectoryAccess) = AppResult.Success(checkpoint)
 
         override suspend fun begin(

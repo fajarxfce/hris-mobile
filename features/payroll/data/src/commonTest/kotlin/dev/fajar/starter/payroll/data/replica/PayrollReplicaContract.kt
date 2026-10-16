@@ -131,6 +131,10 @@ suspend fun checkPayrollStagingAndAccountOwnership(f: PayrollReplicaFixture) {
     )
     f.reopen()
     assertEquals(old, f.details())
+    assertEquals(
+        AppResult.Success(old.checkpoint),
+        f.repository.observePublishedCheckpoint(f.access).first(),
+    )
     f.publish(emptyList())
     assertEquals(2L, f.details().view!!.payments.version)
     val oldWriter = f.checkpoint()!!
@@ -207,6 +211,7 @@ suspend fun checkPayrollAuthenticatedIndexesAndMissingKey(f: PayrollReplicaFixtu
             checkpoint.generation,
         )
     )
+    assertIs<AppResult.Failed>(f.repository.observePublishedCheckpoint(f.access).first())
     assertNull(f.keys.read())
 }
 
@@ -290,6 +295,7 @@ suspend fun checkPayrollMappingFailureDoesNotCommitAnyPartOfTheBatch(f: PayrollR
 suspend fun checkPayrollEmptyAndStagingReadsDoNotRequireAKeyOrClaimCompletion(
     f: PayrollReplicaFixture
 ) {
+    assertEquals(AppResult.Success(null), f.repository.observePublishedCheckpoint(f.access).first())
     assertNull(f.overview().checkpoint)
     assertNull(f.details().view)
     assertNull(f.keys.read())

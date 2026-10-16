@@ -15,6 +15,9 @@ interface DirectoryReplicaRepository {
 
     fun observe(access: DirectoryAccess): Flow<AppResult<DirectorySnapshot>>
 
+    /** Metadata from the visible generation only, without reading its documents. */
+    fun observePublishedCheckpoint(access: DirectoryAccess): Flow<AppResult<DirectoryCheckpoint?>>
+
     suspend fun checkpoint(access: DirectoryAccess): AppResult<DirectoryCheckpoint?>
 
     suspend fun begin(

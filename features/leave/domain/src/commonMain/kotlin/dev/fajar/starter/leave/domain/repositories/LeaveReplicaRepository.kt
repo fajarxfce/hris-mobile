@@ -9,6 +9,9 @@ interface LeaveReplicaRepository : LeaveRequestReplicaRepository {
 
     fun observe(access: LeaveAccess, selection: LeaveSelection): Flow<AppResult<LeaveReplicaPage>>
 
+    /** Metadata from the visible generation only, without reading its documents. */
+    fun observePublishedCheckpoint(access: LeaveAccess): Flow<AppResult<LeaveCheckpoint?>>
+
     suspend fun checkpoint(access: LeaveAccess): AppResult<LeaveCheckpoint?>
 
     suspend fun begin(checkpoint: LeaveCheckpoint, expectedGeneration: String?): AppResult<Boolean>

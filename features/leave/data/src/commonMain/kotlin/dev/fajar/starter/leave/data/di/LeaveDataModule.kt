@@ -9,6 +9,8 @@ import dev.fajar.starter.leave.domain.working.usecases.*
 import dev.fajar.starter.sync.domain.SyncTask
 import dev.fajar.starter.sync.domain.repositories.SyncFeedRepository
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
+import dev.fajar.starter.workspace.domain.usecases.ObserveCompanyData
+import dev.fajar.starter.workspace.domain.usecases.SyncCompanyData
 import kotlin.time.Clock
 import kotlinx.coroutines.sync.Mutex
 import org.koin.core.annotation.*
@@ -169,7 +171,7 @@ class LeaveDataModule {
         @Named("leave-acquisition") execution: Mutex,
     ) = LoadLeaveRequest(remote, cache, sessions, workspaces, Clock.System, build, execution)
 
-    @Factory
+    @Factory(binds = [ObserveLeave::class, ObserveCompanyData::class])
     fun observeLeave(
         replicas: LeaveReplicaRepository,
         cache: LeaveCacheRepository,
@@ -178,7 +180,7 @@ class LeaveDataModule {
         build: AppBuild,
     ) = ObserveLeave(replicas, cache, sessions, workspaces, Clock.System, build)
 
-    @Single(binds = [SyncLeave::class, SyncTask::class])
+    @Single(binds = [SyncLeave::class, SyncTask::class, SyncCompanyData::class])
     fun syncLeave(
         feed: SyncFeedRepository,
         remote: LeaveRecordRepository,

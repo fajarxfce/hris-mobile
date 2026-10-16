@@ -14,11 +14,13 @@ import dev.fajar.starter.workforce.domain.replica.entities.*
 import dev.fajar.starter.workforce.domain.replica.policies.*
 import dev.fajar.starter.workforce.domain.replica.repositories.*
 import dev.fajar.starter.workforce.domain.repositories.WorkforceRepository
+import dev.fajar.starter.workspace.domain.entities.CompanyDataSet
 import dev.fajar.starter.workspace.domain.entities.CompanyModule
 import dev.fajar.starter.workspace.domain.entities.CompanyPolicySnapshot
 import dev.fajar.starter.workspace.domain.policies.admitCompanyOperation
 import dev.fajar.starter.workspace.domain.policies.workspaceFailure
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
+import dev.fajar.starter.workspace.domain.usecases.SyncCompanyData
 import kotlin.time.Clock
 import kotlin.time.Duration.Companion.seconds
 import kotlin.uuid.Uuid
@@ -37,8 +39,12 @@ class SyncWorkforce(
     private val clock: Clock,
     private val build: AppBuild,
     private val execution: Mutex = Mutex(),
-) : SyncTask {
+) : SyncCompanyData {
+    override val dataSet = CompanyDataSet.Workforce
     override val key = KEY
+
+    override suspend fun refresh(workspaceId: String): AppResult<WorkforceSyncOutcome> =
+        invoke(workspaceId)
 
     suspend operator fun invoke(workspaceId: String): AppResult<WorkforceSyncOutcome> =
         withTimeoutOrNull(30.seconds) { execution.withLock { synchronize(workspaceId) } }

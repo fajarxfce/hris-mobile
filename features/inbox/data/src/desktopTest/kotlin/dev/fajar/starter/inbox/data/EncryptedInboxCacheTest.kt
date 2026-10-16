@@ -472,6 +472,10 @@ class EncryptedInboxCacheTest {
                     repository.observe(access, InboxCacheQuery.Page()).first(),
                 )
                 assertEquals(AppResult.Success(replacement), repository.checkpoint(access))
+                assertEquals(
+                    AppResult.Success(published),
+                    repository.observePublishedCheckpoint(access).first(),
+                )
                 db.close()
                 db = createAppDatabase(directory)
                 repository =
@@ -486,6 +490,10 @@ class EncryptedInboxCacheTest {
                     repository.observe(access, InboxCacheQuery.Page()).first(),
                 )
                 assertEquals(AppResult.Success(replacement), repository.checkpoint(access))
+                assertEquals(
+                    AppResult.Success(published),
+                    repository.observePublishedCheckpoint(access).first(),
+                )
                 val updated = item.copy(title = "Updated notice", version = item.version + 1)
                 val ready =
                     replacement.copy(
@@ -502,6 +510,10 @@ class EncryptedInboxCacheTest {
                         ready,
                         listOf(InboxReplicaEntry(updated.id, updated.version, updated)),
                     ),
+                )
+                assertEquals(
+                    AppResult.Success(ready),
+                    repository.observePublishedCheckpoint(access).first(),
                 )
                 assertEquals(
                     AppResult.Success(InboxCachePage(ready, listOf(updated), null)),

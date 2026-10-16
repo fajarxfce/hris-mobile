@@ -15,6 +15,11 @@ interface SelfProfileReplicaRepository {
 
     fun observe(access: SelfProfileAccess): Flow<AppResult<SelfProfileSnapshot>>
 
+    /** Metadata from the visible generation only, without reading its documents. */
+    fun observePublishedCheckpoint(
+        access: SelfProfileAccess
+    ): Flow<AppResult<SelfProfileCheckpoint?>>
+
     suspend fun checkpoint(access: SelfProfileAccess): AppResult<SelfProfileCheckpoint?>
 
     suspend fun begin(

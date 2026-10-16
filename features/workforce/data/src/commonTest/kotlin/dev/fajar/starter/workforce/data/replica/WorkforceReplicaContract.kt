@@ -114,6 +114,10 @@ suspend fun checkWorkforceReplacementAndAccountOwnership(f: WorkforceReplicaFixt
     )
     f.publish(listOf(f.schedule.copy(version = 3, days = emptyMap())), publish = false)
     assertEquals(first, f.facts())
+    assertEquals(
+        AppResult.Success(first.checkpoint),
+        f.repository.observePublishedCheckpoint(f.access).first(),
+    )
     f.publish(emptyList())
     assertTrue(f.facts().attendance.isEmpty())
     assertTrue(f.facts().schedules.single().days.isEmpty())
@@ -134,6 +138,7 @@ suspend fun checkWorkforceReplacementAndAccountOwnership(f: WorkforceReplicaFixt
     val other = nextLogin.copy(accountId = workforceRecordId(555), sessionId = "other-account")
     f.db.accounts.activate(other.sessionId, workforceReplicaScope(other).accountKey)
     assertNull(f.facts(owner = other).checkpoint)
+    assertEquals(AppResult.Success(null), f.repository.observePublishedCheckpoint(other).first())
     f.db.accounts.activate(nextLogin.sessionId, workforceReplicaScope(nextLogin).accountKey)
     assertEquals(3, f.facts(owner = nextLogin).schedules.single().version)
 }

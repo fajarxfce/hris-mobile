@@ -19,6 +19,11 @@ interface DocumentCatalogRepository {
         selection: DocumentCatalogSelection,
     ): Flow<AppResult<DocumentCatalogSnapshot>>
 
+    /** Metadata from the visible generation only, without reading its documents. */
+    fun observePublishedCheckpoint(
+        access: DocumentAccess
+    ): Flow<AppResult<DocumentCatalogCheckpoint?>>
+
     suspend fun checkpoint(access: DocumentAccess): AppResult<DocumentCatalogCheckpoint?>
 
     suspend fun begin(

@@ -210,6 +210,25 @@ class EncryptedLeaveReplicaRepository(
             },
         )
 
+    override fun observePublishedCheckpoint(access: LeaveAccess) =
+        safeStorageFlow(
+            replicas.observePublishedCheckpoint(
+                leaveReplicaScope(access),
+                leaveReplicaPartition(access),
+            ),
+            mapValue = { raw ->
+                if (raw == null) null
+                else {
+                    val key = Base64.decode(requireNotNull(credentials.read()))
+                    try {
+                        decodeLeaveCheckpoint(cipher, key, access, raw)
+                    } finally {
+                        key.fill(0)
+                    }
+                }
+            },
+        )
+
     override suspend fun checkpoint(access: LeaveAccess) = safeStorageCall {
         val raw = replicas.checkpoint(leaveReplicaScope(access), leaveReplicaPartition(access))
         if (raw == null) null

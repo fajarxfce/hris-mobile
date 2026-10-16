@@ -95,6 +95,11 @@ suspend fun checkOvertimeIndividualReadsBeforeAndAfterFeed(f: OvertimeReplicaFix
     )
     assertEquals(one, f.request(one.value.selection.requestId))
     assertEquals(two, f.request(two.value.selection.requestId))
+    assertNull(
+        (f.repository.observePublishedCheckpoint(f.access).first() as AppResult.Success)
+            .value
+            ?.refreshedAt
+    )
     f.publish(listOf(one.value.details, two.value.details))
     assertNotNull(
         (f.repository.observeDirectory(f.access).first() as AppResult.Success).value.checkpoint
@@ -213,6 +218,10 @@ suspend fun checkOvertimeStagingProtectsPublishedFacts(f: OvertimeReplicaFixture
     val staged = initialOvertimeCheckpoint(f.access, "replacement", f.raw.base.now)
     assertEquals(AppResult.Success(true), f.repository.begin(staged, previous.generation))
     assertEquals(old, f.request())
+    assertEquals(
+        AppResult.Success(previous),
+        f.repository.observePublishedCheckpoint(f.access).first(),
+    )
     assertEquals(
         AppResult.Success(false),
         f.repository.replaceRequest(

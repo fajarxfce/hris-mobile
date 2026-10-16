@@ -294,6 +294,25 @@ class EncryptedExpenseReplicaRepository(
                     }
             }
 
+    override fun observePublishedCheckpoint(access: ExpenseAccess) =
+        safeStorageFlow(
+            replicas.observePublishedCheckpoint(
+                expenseReplicaScope(access),
+                expenseReplicaPartition(access),
+            ),
+            mapValue = { raw ->
+                if (raw == null) null
+                else {
+                    val key = Base64.decode(requireNotNull(credentials.read()))
+                    try {
+                        decodeExpenseCheckpoint(cipher, key, access, raw)
+                    } finally {
+                        key.fill(0)
+                    }
+                }
+            },
+        )
+
     override suspend fun checkpoint(access: ExpenseAccess) = safeStorageCall {
         val raw =
             replicas.checkpoint(expenseReplicaScope(access), expenseReplicaPartition(access))

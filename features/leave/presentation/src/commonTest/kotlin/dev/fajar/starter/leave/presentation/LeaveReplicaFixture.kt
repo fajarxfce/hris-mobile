@@ -257,6 +257,14 @@ class LeaveReplicaFixture : LeaveReplicaRepository {
         return AppResult.Success(true)
     }
 
+    override fun observePublishedCheckpoint(access: LeaveAccess) =
+        published.map { result ->
+            when (result) {
+                is AppResult.Failed -> result
+                is AppResult.Success -> AppResult.Success(result.value.checkpoint)
+            }
+        }
+
     override suspend fun checkpoint(access: LeaveAccess): AppResult<LeaveCheckpoint?> =
         failure ?: AppResult.Success(current)
 

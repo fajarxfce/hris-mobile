@@ -219,6 +219,25 @@ class EncryptedDirectoryReplicaRepository(
             .buffer(0)
             .flowOn(Dispatchers.Default)
 
+    override fun observePublishedCheckpoint(access: DirectoryAccess) =
+        safeStorageFlow(
+            replicas.observePublishedCheckpoint(
+                directoryReplicaScope(access),
+                directoryReplicaPartition(access),
+            ),
+            mapValue = { raw ->
+                if (raw == null) null
+                else {
+                    val key = Base64.decode(requireNotNull(credentials.read()))
+                    try {
+                        decodeDirectoryCheckpoint(cipher, key, access, raw)
+                    } finally {
+                        key.fill(0)
+                    }
+                }
+            },
+        )
+
     override suspend fun checkpoint(access: DirectoryAccess) = safeStorageCall {
         val raw =
             replicas.checkpoint(directoryReplicaScope(access), directoryReplicaPartition(access))

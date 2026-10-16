@@ -227,6 +227,25 @@ class EncryptedSelfProfileReplicaRepository(
             .buffer(0)
             .flowOn(Dispatchers.Default)
 
+    override fun observePublishedCheckpoint(access: SelfProfileAccess) =
+        safeStorageFlow(
+            replicas.observePublishedCheckpoint(
+                selfProfileReplicaScope(access),
+                selfProfileReplicaPartition(access),
+            ),
+            mapValue = { raw ->
+                if (raw == null) null
+                else {
+                    val key = Base64.decode(requireNotNull(credentials.read()))
+                    try {
+                        decodeSelfProfileCheckpoint(cipher, key, access, raw)
+                    } finally {
+                        key.fill(0)
+                    }
+                }
+            },
+        )
+
     override suspend fun checkpoint(access: SelfProfileAccess) = safeStorageCall {
         val raw =
             replicas.checkpoint(

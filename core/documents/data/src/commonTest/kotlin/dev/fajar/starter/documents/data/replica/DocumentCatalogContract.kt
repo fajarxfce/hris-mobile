@@ -88,6 +88,10 @@ suspend fun checkCatalogVersionsWithdrawalAndReplacement(f: DocumentCatalogFixtu
     )
     f.publish(listOf(f.record(2)), publish = false)
     assertEquals(retained, f.snapshot())
+    assertEquals(
+        AppResult.Success(retained.checkpoint),
+        f.repository.observePublishedCheckpoint(f.access).first(),
+    )
     previous = f.checkpoint()!!
     assertEquals(
         AppResult.Success(true),

@@ -77,6 +77,10 @@ suspend fun checkSelfProfileVersionsTombstonesAndAtomicReplacement(f: SelfProfil
     )
     f.publish(listOf(selfProfileFixtureRecord(2)), publish = false)
     assertEquals(retained, f.snapshot())
+    assertEquals(
+        AppResult.Success(retained.checkpoint),
+        f.repository.observePublishedCheckpoint(f.access).first(),
+    )
     previous = f.checkpoint()!!
     next = previous.copy(revision = previous.revision + 1, published = true, refreshedAt = f.now)
     assertEquals(AppResult.Success(true), f.repository.commit(previous, next, emptyList()))

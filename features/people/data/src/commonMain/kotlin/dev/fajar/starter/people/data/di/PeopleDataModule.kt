@@ -11,13 +11,15 @@ import dev.fajar.starter.people.domain.usecases.*
 import dev.fajar.starter.sync.domain.SyncTask
 import dev.fajar.starter.sync.domain.repositories.SyncFeedRepository
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
+import dev.fajar.starter.workspace.domain.usecases.ObserveCompanyData
+import dev.fajar.starter.workspace.domain.usecases.SyncCompanyData
 import kotlin.time.Clock
 import org.koin.core.annotation.*
 
 @Module
 @ComponentScan("dev.fajar.starter.people.data")
 class PeopleDataModule {
-    @Factory
+    @Factory(binds = [ObserveSelfProfiles::class, ObserveCompanyData::class])
     fun observeSelfProfiles(
         replicas: SelfProfileReplicaRepository,
         sessions: SessionRepository,
@@ -25,7 +27,7 @@ class PeopleDataModule {
         build: AppBuild,
     ) = ObserveSelfProfiles(replicas, sessions, workspaces, Clock.System, build)
 
-    @Single(binds = [SyncSelfProfiles::class, SyncTask::class])
+    @Single(binds = [SyncSelfProfiles::class, SyncTask::class, SyncCompanyData::class])
     fun syncSelfProfiles(
         feed: SyncFeedRepository,
         remote: SelfProfileRecordRepository,
@@ -35,7 +37,7 @@ class PeopleDataModule {
         build: AppBuild,
     ) = SyncSelfProfiles(feed, remote, replicas, sessions, workspaces, Clock.System, build)
 
-    @Factory
+    @Factory(binds = [ObserveCompanyDirectory::class, ObserveCompanyData::class])
     fun observeCompanyDirectory(
         replicas: DirectoryReplicaRepository,
         sessions: SessionRepository,
@@ -43,7 +45,7 @@ class PeopleDataModule {
         build: AppBuild,
     ) = ObserveCompanyDirectory(replicas, sessions, workspaces, Clock.System, build)
 
-    @Single(binds = [SyncCompanyDirectory::class, SyncTask::class])
+    @Single(binds = [SyncCompanyDirectory::class, SyncTask::class, SyncCompanyData::class])
     fun syncCompanyDirectory(
         feed: SyncFeedRepository,
         remote: DirectoryRecordRepository,

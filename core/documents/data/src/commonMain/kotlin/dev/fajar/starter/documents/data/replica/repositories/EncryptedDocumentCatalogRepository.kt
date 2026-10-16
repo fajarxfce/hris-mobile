@@ -190,6 +190,25 @@ class EncryptedDocumentCatalogRepository(
             .buffer(0)
             .flowOn(Dispatchers.Default)
 
+    override fun observePublishedCheckpoint(access: DocumentAccess) =
+        safeStorageFlow(
+            replicas.observePublishedCheckpoint(
+                documentCatalogReplicaScope(access),
+                documentCatalogReplicaPartition(access),
+            ),
+            mapValue = { raw ->
+                if (raw == null) null
+                else {
+                    val key = Base64.decode(requireNotNull(credentials.read()))
+                    try {
+                        decodeDocumentCatalogCheckpoint(cipher, key, access, raw)
+                    } finally {
+                        key.fill(0)
+                    }
+                }
+            },
+        )
+
     override suspend fun checkpoint(access: DocumentAccess) = safeStorageCall {
         val raw =
             replicas.checkpoint(

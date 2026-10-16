@@ -12,6 +12,8 @@ import dev.fajar.starter.identity.domain.repositories.SessionRepository
 import dev.fajar.starter.sync.domain.SyncTask
 import dev.fajar.starter.sync.domain.repositories.SyncFeedRepository
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
+import dev.fajar.starter.workspace.domain.usecases.ObserveCompanyData
+import dev.fajar.starter.workspace.domain.usecases.SyncCompanyData
 import kotlin.time.Clock
 import kotlinx.coroutines.sync.Mutex
 import org.koin.core.annotation.*
@@ -151,7 +153,7 @@ class ExpenseDataModule {
         replicas: ExpenseReplicaRepository,
     ) = LoadExpenseCostCenters(remote, sessions, workspaces, Clock.System, build, replicas)
 
-    @Factory
+    @Factory(binds = [ObserveExpenses::class, ObserveCompanyData::class])
     fun observeExpenses(
         replicas: ExpenseReplicaRepository,
         cache: ExpenseCacheRepository,
@@ -169,7 +171,7 @@ class ExpenseDataModule {
         build: AppBuild,
     ) = ObserveExpenseClaim(replicas, cache, sessions, workspaces, Clock.System, build)
 
-    @Single(binds = [SyncExpenses::class, SyncTask::class])
+    @Single(binds = [SyncExpenses::class, SyncTask::class, SyncCompanyData::class])
     fun syncExpenses(
         feed: SyncFeedRepository,
         remote: ExpenseRepository,

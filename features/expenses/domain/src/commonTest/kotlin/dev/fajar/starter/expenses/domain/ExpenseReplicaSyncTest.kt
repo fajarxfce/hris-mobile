@@ -6,7 +6,13 @@ import dev.fajar.starter.common.result.*
 import dev.fajar.starter.expenses.domain.entities.*
 import dev.fajar.starter.expenses.domain.policies.*
 import dev.fajar.starter.expenses.domain.replica.entities.*
+import dev.fajar.starter.expenses.domain.replica.policies.initialExpenseCheckpoint
 import dev.fajar.starter.sync.domain.entities.*
+import dev.fajar.starter.workspace.domain.entities.CompanyDataSet
+import dev.fajar.starter.workspace.domain.entities.CompanyDataStatus
+import dev.fajar.starter.workspace.domain.entities.CompanyDataSyncOutcome
+import dev.fajar.starter.workspace.domain.usecases.ObserveCompanyData
+import dev.fajar.starter.workspace.domain.usecases.SyncCompanyData
 import kotlin.test.*
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.seconds
@@ -16,6 +22,47 @@ import kotlinx.coroutines.test.*
 import kotlinx.datetime.YearMonth
 
 class ExpenseReplicaSyncTest {
+    @Test
+    @OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
+    fun publishedStatusRetainsPreviousCompletionWhileStagingAndClosesOnDenial() = runTest {
+        val f = ExpenseFixture()
+        val observation: ObserveCompanyData = f.observe
+        val acquisition: SyncCompanyData = f.sync
+        val workspaceId = f.workspace.id
+        assertEquals(CompanyDataSet.Expenses, observation.dataSet)
+        assertEquals(observation.dataSet, acquisition.dataSet)
+        val values = mutableListOf<AppResult<CompanyDataStatus>>()
+        val reader =
+            backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
+                observation.observeStatus(workspaceId).collect { values += it }
+            }
+        runCurrent()
+        assertEquals(AppResult.Success(CompanyDataStatus(null)), values.last())
+        assertTrue(
+            assertIs<AppResult.Success<CompanyDataSyncOutcome>>(acquisition.refresh(workspaceId))
+                .value
+                .caughtUp
+        )
+        runCurrent()
+        val published = requireNotNull(f.replicas.current)
+        val expected = AppResult.Success(CompanyDataStatus(assertNotNull(published.refreshedAt)))
+        assertEquals(expected, values.last())
+        val replacement =
+            initialExpenseCheckpoint(published.access, "status-replacement", published.refreshedAt)
+        assertEquals(AppResult.Success(true), f.replicas.begin(replacement, published.generation))
+        runCurrent()
+        assertEquals(expected, values.last())
+        val denial =
+            Failure(FailureKind.AccessDenied, "Verification required", code = "mfa_required")
+        f.replicas.restrict(published.access, denial)
+        runCurrent()
+        assertEquals(AppResult.Failed(denial), values.last())
+        assertEquals(AppResult.Failed(denial), observation.observeStatus(workspaceId).first())
+        assertEquals(0, f.replicas.published.subscriptionCount.value)
+        reader.cancelAndJoin()
+        assertEquals(0, f.replicas.published.subscriptionCount.value)
+    }
+
     @Test
     fun anApprovalInvalidationAtTheSameClaimVersionReplacesTheRecordedApproval() = runTest {
         val f = ExpenseFixture()
