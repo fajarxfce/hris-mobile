@@ -3029,7 +3029,11 @@ class AppFlowTest {
             waitFor("Choose a company")
             compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
             waitFor("Welcome")
-            compose.onNodeWithText("All services").performScrollTo().performClick()
+            compose
+                .onNodeWithText("All services")
+                .performScrollTo()
+                .assertIsDisplayed()
+                .performSemanticsAction(SemanticsActions.OnClick) { it() }
             compose.waitUntil {
                 compose.onAllNodesWithContentDescription("Back").fetchSemanticsNodes().isNotEmpty()
             }
@@ -3528,7 +3532,8 @@ class AppFlowTest {
             compose
                 .onNode(hasText("NUSA-001") and hasClickAction())
                 .performScrollTo()
-                .performClick()
+                .assertIsDisplayed()
+                .performSemanticsAction(SemanticsActions.OnClick) { it() }
             waitFor("Select an employment record")
             compose.onNode(hasText("NUSA-002") and hasClickAction()).performClick()
             compose.onNode(hasText("NUSA-002") and hasClickAction()).assertIsDisplayed()
