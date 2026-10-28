@@ -1,5 +1,21 @@
 # Validation
 
+## Firebase provider configuration
+
+On 28 October 2026 the user enabled Email/password and Google in `cmp-fajar`.
+The public Firebase configuration request returned HTTP 200. A supported
+`accounts:createAuthUri` request for Google returned its public web client ID;
+the authorization URL was not opened and no user was signed in or created.
+That ID was added to the ignored, mode-0600 Android configuration for all three
+HRIS flavors. Dev, staging and prod Google Services processing passed in
+`.work/firebase-google-client-validation.log`. This resolves the earlier
+`CONFIGURATION_NOT_FOUND` setup dependency. It does not prove signing-certificate
+registration, Google account selection or Firebase-to-HRIS login on a device.
+
+The backend Firebase exchange and its acceptance evidence are tracked in
+[the platform contract](https://github.com/fajarxfce/hris-platform/blob/feat/firebase-auth/docs/firebase-auth.md).
+Mobile authentication wiring remains active work.
+
 ## Native worker registration metadata
 
 Remote [run 40637280472](https://github.com/fajarxfce/hris-mobile/actions/runs/40637280472)

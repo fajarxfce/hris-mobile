@@ -107,6 +107,9 @@ a verified external identity for HRIS authorization; registration tokens are nev
 account identity. iOS provider configuration, APNs signing and worker FCM service
 credentials remain external acceptance dependencies. Real token issuance, delivery,
 foreground/background provider behavior and Firebase login are not yet claimed.
-The public Firebase Auth configuration request returned `CONFIGURATION_NOT_FOUND`;
-Authentication must be initialized and its intended sign-in provider enabled in
-Firebase Console before real login acceptance. No client key is recorded here.
+The user enabled Email/password and Google. Public Firebase Auth configuration now
+returns HTTP 200. The supported Google authorization setup endpoint supplied the
+public web OAuth client ID; it is installed locally for the three HRIS Android
+flavors. All three Google Services processing tasks passed. The earlier
+`CONFIGURATION_NOT_FOUND` result is resolved. Signing-certificate registration and
+real sign-in still need device acceptance. No client key is recorded here.
