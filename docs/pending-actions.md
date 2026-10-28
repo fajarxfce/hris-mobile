@@ -63,3 +63,25 @@ reauthentication. Presentation tests cover duplicate navigation, retry, disposal
 non-cooperative storage and narrow layouts at 200% text. An application test edits
 a leave draft, reloads this summary without HTTP, and reopens the same input without
 submitting a leave request.
+
+## Android acceptance with the real API
+
+On 28 October 2026, Mobile `9a557dcc` and Platform `1f95e0c3` passed the
+dedicated Android 35 emulator workflow. A fictional account signed in to an
+isolated API/PostgreSQL/worker fixture and opened its assigned company. All six
+rows initially showed no pending actions. Opening an untouched leave form did
+not change the count; editing its reason produced exactly one Leave draft.
+
+A loopback proxy counted only request methods and sanitized paths. Opening and
+reloading the edited summary kept the request counter at 44. After disconnecting
+the emulator's API forwarding and force-stopping the application, the company,
+one-draft count and exact input were restored offline. Reconnecting and retrying
+the owning form preserved the input. Explicitly deleting that draft returned the
+summary to zero. Across the complete session, none of 53 native requests wrote
+company data; the independent API fixture also found no leave request in its
+scheduled fixture date. Sign-out succeeded and the owned services were stopped.
+
+This checks native persistence and workflow navigation for the Leave draft
+projection. Transfer delivery, other workflows' command states and physical
+device acceptance retain their separate validation requirements. See
+[validation](validation.md#pending-actions-on-android) for local evidence.

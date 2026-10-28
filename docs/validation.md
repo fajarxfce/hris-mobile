@@ -1,5 +1,33 @@
 # Validation
 
+## Pending actions on Android
+
+On 28 October 2026, the dev APK at `9a557dcc` built successfully with Java 21 and
+the local Android SDK, then ran on the dedicated Android 35 `emulator-5560`.
+Only this build used the loopback API override. Platform `1f95e0c3` supplied an
+isolated API/PostgreSQL/worker fixture with a fictional member, employment, leave
+policy, balance and reviewer. No Firebase user or physical phone was involved.
+
+The [Pending actions workflow](pending-actions.md#android-acceptance-with-the-real-api)
+passed: pristine form exclusion, one edited draft, summary open/reload without
+HTTP (44 requests before and after), offline process restoration, unchanged input
+after online retry, explicit deletion and sign-out. The proxy observed 53 native
+requests in total, with no company write. The fixture's independent API assertion
+passed; its bounded browser session finished in 5.6 minutes (6.0 including setup).
+Two early UI-driver lookups hit transient/stale layouts; they were corrected and
+the edited-draft observations were repeated before recording these results.
+
+Local evidence is in `.work/pending-native-result.json`,
+`.work/pending-native-assembly.log`, `.work/pending-native-pristine.png`,
+`.work/pending-native-summary.png`, `.work/pending-native-offline-summary.png`,
+`.work/pending-native-offline-draft.png`, `.work/pending-native-restored-online.png`
+and `.work/pending-native-deleted.png`. The summary and offline form screenshots
+were inspected. Platform retains the sanitized counter and fixture result under
+its own `.work/pending-native-*` files. The owned database, API, worker, mail
+fixture, proxy and emulator were stopped, and temporary connection metadata was
+removed. Emulator data was preserved. This documentation increment changes no
+application behavior; no new starter port is needed.
+
 ## Real Firebase Android acceptance
 
 On 28 October 2026, Mobile `d191c61d` ran on the dedicated Android 35 Google APIs
