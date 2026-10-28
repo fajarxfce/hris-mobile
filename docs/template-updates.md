@@ -1,5 +1,21 @@
 # Template updates
 
+## Firebase provider foundation
+
+Mobile `d191c61d` ports to starter `9a13791`: 20 provider source/test files plus
+host wiring and two starter-container regressions. The provider owns Android
+Credential Manager interactions and bounded Firebase REST calls without retaining
+a Firebase SDK session. App-neutral comments and fixture IDs are the deliberate
+source differences. HRIS discovery, approved binding, session exchange, MFA and
+login screens stay in Mobile.
+
+Mobile passed 1,837 desktop/UI and 119 related Chromium tests, Android assembly and
+real Firebase email/password through HRIS MFA on its dedicated Android emulator.
+Google system UI launch/dismissal passed, without Google token acceptance. The
+starter passed 306 desktop/UI tests, 29 identity-data Chromium tests and configured
+Android assembly. All new dependency hashes match the validated Mobile metadata.
+See [Firebase authentication](firebase-auth.md) and [validation](validation.md).
+
 ## Notification resource paths
 
 Mobile `b77d991f` ports to starter `7562e67`. Four source/test files match after
