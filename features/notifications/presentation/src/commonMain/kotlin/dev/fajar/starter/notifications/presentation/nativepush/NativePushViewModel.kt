@@ -9,7 +9,6 @@ import dev.fajar.starter.notifications.domain.usecases.EnableNotifications
 import dev.fajar.starter.presentation.mvi.MviViewModel
 import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.firstOrNull
 import org.koin.android.annotation.KoinViewModel
 
 /** The application host owns this coordinator and its Settings projection. */
@@ -17,7 +16,6 @@ import org.koin.android.annotation.KoinViewModel
 class NativePushViewModel(
     private val observeIdentity: ObserveSessionIdentity,
     private val observeStatus: ObserveNativePushStatus,
-    private val observeTokens: ObserveNativePushTokenChanges,
     private val reconcile: ReconcileNativePush,
     private val enable: EnableNotifications,
 ) : MviViewModel<NativePushState, NativePushEvent, Unit>(NativePushState()) {
@@ -27,7 +25,6 @@ class NativePushViewModel(
     private var generation = 0L
     private var identityJob: Job? = null
     private var statusJob: Job? = null
-    private var tokenJob: Job? = null
     private var mutation: Job? = null
 
     init {
@@ -125,8 +122,7 @@ class NativePushViewModel(
         generation++
         statusJob?.cancel()
         statusJob = null
-        tokenJob?.cancel()
-        // Keep the cancelled jobs until the next mutation joins their completion.
+        // Keep the cancelled mutation until its replacement joins completion.
         mutation?.cancel()
     }
 
@@ -136,15 +132,11 @@ class NativePushViewModel(
         val owner = generation
         val id = sessionId
         val previous = mutation
-        val previousTokens = tokenJob
-        previousTokens?.cancel()
-        tokenJob = null
         updateState { it.copy(busy = true, failure = null) }
         watchStatus(id, owner)
         mutation =
             viewModelScope.launch {
                 previous?.cancelAndJoin()
-                previousTokens?.cancelAndJoin()
                 if (!owns(owner)) return@launch
                 try {
                     val result =
@@ -169,25 +161,11 @@ class NativePushViewModel(
                     when (result) {
                         is AppResult.Success -> {
                             updateState { it.copy(status = result.value, failure = null) }
-                            if (id != null) watchTokens(id, owner)
                         }
                         is AppResult.Failed -> updateState { it.copy(failure = result.failure) }
                     }
                 } finally {
                     if (owns(owner)) updateState { it.copy(busy = false) }
-                }
-            }
-    }
-
-    private fun watchTokens(id: String, owner: Long) {
-        tokenJob =
-            viewModelScope.launch {
-                val result = observeTokens(id).firstOrNull() ?: return@launch
-                currentCoroutineContext().ensureActive()
-                if (!owns(owner)) return@launch
-                when (result) {
-                    is AppResult.Success -> onEvent(NativePushEvent.RetryRequested)
-                    is AppResult.Failed -> updateState { it.copy(failure = result.failure) }
                 }
             }
     }

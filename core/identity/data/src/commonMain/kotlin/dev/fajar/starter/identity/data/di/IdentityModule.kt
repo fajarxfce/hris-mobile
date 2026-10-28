@@ -26,16 +26,6 @@ class IdentityModule {
         build: AppBuild,
     ) = ObserveNativePushStatus(sessions, storage, permissions, server, build, Clock.System)
 
-    @Factory
-    fun observePushTokenChanges(
-        sessions: SessionRepository,
-        storage: NativePushStateRepository,
-        tokens: PushTokenRepository,
-        permissions: NotificationAccessRepository,
-        server: IdentityServer,
-        build: AppBuild,
-    ) = ObserveNativePushTokenChanges(sessions, storage, tokens, permissions, server, build)
-
     @Single @Named("native-push-mutations") fun pushMutations() = Mutex()
 
     @Factory

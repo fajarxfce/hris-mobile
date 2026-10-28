@@ -9,6 +9,7 @@ plugins {
 dependencies {
     implementation(projects.apps.shared)
     implementation(projects.core.identity.data)
+    implementation(projects.core.sync.domain)
     implementation(projects.features.inbox.domain)
     implementation(libs.android.activity)
     implementation(platform(libs.firebase.bom))

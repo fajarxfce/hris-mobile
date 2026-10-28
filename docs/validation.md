@@ -1,5 +1,29 @@
 # Validation
 
+## Background native registration recovery
+
+On 28 October 2026, root checks passed with 1,797 desktop/UI tests, runner and
+distribution suites, architecture, formatting and static analysis. Chromium passed
+49 identity-domain tests, 29 identity-data tests, nine notification-presentation
+tests and 19 app tests. Configured Android dev assembly passed. Output is in
+`.work/native-push-background-validation.log`; the final host check and formatting
+also passed in `.work/native-push-background-final.log`.
+
+Six policy regressions cover empty/unsupported hosts, token rotation and expiry,
+persistent retry bounds, cancellation/receipt recovery, concurrent foreground
+disable and failed attempt persistence. Storage verifies legacy record defaults,
+restart and invalid retry metadata. Two portable worker tests cover stalled/failed
+identity reads, deadline, cancellation, late emission and subscription disposal.
+Updated MVI tests verify that Settings never keeps an SDK token observer and still
+handles resume, response loss, disable and session replacement. The real container
+resolves and invokes the registered worker.
+
+Android callbacks/periodic work and Apple foreground/BGAppRefresh invoke the
+shared task. Apple prioritizes registration before other background acquisition;
+its native host changes require remote execution. This remains automated fixture
+and Android assembly evidence, without real Firebase/APNs or physical-device
+acceptance. Firebase Authentication exchange is separate work.
+
 ## Authorized native Inbox hints
 
 On 28 October 2026, root checks passed with 1,788 desktop/UI tests, runner and
@@ -45,8 +69,10 @@ for registration core `f98a7884` passed Apple simulator/Xcode and Windows checks
 The Linux runner shut down during `compileProductionExecutableKotlinWasmJsOptimize`,
 after the test and Android assembly tasks, leaving that job incomplete. Web
 distribution and its artifact now have a separate job from Linux verification and
-Android packaging. This workflow separation has passed local YAML validation;
-the new remote run remains the packaging evidence gate.
+Android packaging. Remote [run 40634564866](https://github.com/fajarxfce/hris-mobile/actions/runs/40634564866)
+for `5877767b` passed all four jobs: Linux verification/Android, Web distribution,
+Windows and Apple simulator/Xcode. Later hint processing and background worker
+changes have their own local validation and subsequent remote acceptance.
 
 ## Native push Settings and host lifetime
 

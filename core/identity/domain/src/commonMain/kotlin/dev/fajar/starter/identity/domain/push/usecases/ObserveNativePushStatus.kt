@@ -71,7 +71,8 @@ class ObserveNativePushStatus(
                         pending =
                             (owned && state.pending != null) ||
                                 state.retiringToken ||
-                                state.revocations.isNotEmpty(),
+                                state.revocations.isNotEmpty() ||
+                                state.automaticAttempts > 0,
                         access = access,
                         expiresAt = registration?.expiresAt,
                     )

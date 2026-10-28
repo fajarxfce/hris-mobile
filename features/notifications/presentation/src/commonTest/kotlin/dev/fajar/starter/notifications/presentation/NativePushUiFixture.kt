@@ -188,7 +188,6 @@ internal class NativePushUiFixture {
         NativePushViewModel(
             ObserveSessionIdentity(sessions),
             status(),
-            ObserveNativePushTokenChanges(sessions, storage, tokens, permissions, server, build),
             ReconcileNativePush(
                 sessions,
                 registrations,

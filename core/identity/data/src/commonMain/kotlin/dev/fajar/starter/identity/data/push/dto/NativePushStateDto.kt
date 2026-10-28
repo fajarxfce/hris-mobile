@@ -33,6 +33,8 @@ data class NativePushStateDto(
     val retiringToken: Boolean,
     val revocations: List<NativePushOwnerDto>,
     val enableRequested: Boolean = false,
+    val automaticAttempts: Int = 0,
+    val automaticRetryAfter: String? = null,
 ) {
     override fun toString() = "NativePushStateDto([redacted])"
 }

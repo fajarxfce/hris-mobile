@@ -5,6 +5,7 @@ import kotlin.time.Instant
 
 enum class NativePushAction {
     Refresh,
+    Background,
     Enable,
     Disable,
 }

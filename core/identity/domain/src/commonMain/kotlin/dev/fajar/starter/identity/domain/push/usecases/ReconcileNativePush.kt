@@ -12,6 +12,7 @@ import dev.fajar.starter.notifications.domain.entities.NotificationAccess
 import dev.fajar.starter.notifications.domain.repositories.*
 import kotlin.time.Clock
 import kotlin.time.Duration.Companion.days
+import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 import kotlin.uuid.Uuid
 import kotlinx.coroutines.*
@@ -70,9 +71,9 @@ class ReconcileNativePush(
         private var access = NotificationAccess.Unavailable
 
         suspend fun run(): AppResult<NativePushStatus> {
-            initialize()
+            if (!initialize()) return AppResult.Success(status())
             transitionOwner()
-            if (owner == null || state.owner == null) return AppResult.Success(status())
+            if (owner == null || state.owner == null) return complete()
             val currentOwner = requireNotNull(owner)
             if (currentOwner.expiresAt <= clock.now())
                 stop("client.session_expired", FailureKind.Unauthorized)
@@ -81,11 +82,11 @@ class ReconcileNativePush(
             if (state.pending != null) {
                 recoverPending()
                 if (!state.desired) disableCurrent()
-                return AppResult.Success(status())
+                return complete()
             }
             if (!state.desired || access != NotificationAccess.Granted) {
                 disableCurrent()
-                return AppResult.Success(status())
+                return complete()
             }
 
             val observed = registrations.read(currentOwner).required()
@@ -100,7 +101,7 @@ class ReconcileNativePush(
                     )
                 )
                 retireToken()
-                return AppResult.Success(status())
+                return complete()
             }
             val token = tokens.token().required()
             guard()
@@ -114,7 +115,7 @@ class ReconcileNativePush(
                     token != state.token
             if (!needsRenewal) {
                 save(state.copy(registration = observed, enableRequested = false))
-                return AppResult.Success(status())
+                return complete()
             }
             if (observed != null && observed.version >= 9999)
                 stop("push_registration_version_limit", FailureKind.Conflict)
@@ -122,10 +123,15 @@ class ReconcileNativePush(
                 NativePushCommand.Save(Uuid.random().toString(), observed?.version, platform, token)
             save(state.copy(token = token, registration = observed, pending = command))
             recoverPending()
+            return complete()
+        }
+
+        private suspend fun complete(): AppResult<NativePushStatus> {
+            save(state.copy(automaticAttempts = 0, automaticRetryAfter = null))
             return AppResult.Success(status())
         }
 
-        private suspend fun initialize() {
+        private suspend fun initialize(): Boolean {
             val session = sessions.current().required()
             if (session?.id != sessionId) stop("client.session_changed", FailureKind.Unauthorized)
             owner = session?.pushOwner()
@@ -133,6 +139,28 @@ class ReconcileNativePush(
                 stop("client.session_changed", FailureKind.Unauthorized)
             state = storage.read().required()
             guard()
+            if (action == NativePushAction.Background) {
+                if (
+                    state.owner == null &&
+                        !state.desired &&
+                        !state.retiringToken &&
+                        state.revocations.isEmpty()
+                )
+                    return false
+                if (state.automaticAttempts >= 8)
+                    stop("client.push_retry_limit", FailureKind.Conflict)
+                if (state.automaticRetryAfter?.let { it > clock.now() } == true)
+                    stop("client.push_retry_later", FailureKind.Unavailable)
+                val delay = (30.seconds * (1 shl state.automaticAttempts)).coerceAtMost(15.minutes)
+                save(
+                    state.copy(
+                        automaticAttempts = state.automaticAttempts + 1,
+                        automaticRetryAfter = clock.now() + delay,
+                    )
+                )
+            } else {
+                save(state.copy(automaticAttempts = 0, automaticRetryAfter = null))
+            }
             access = permissions.check().required()
             guard()
             when (action) {
@@ -144,10 +172,12 @@ class ReconcileNativePush(
                 }
                 NativePushAction.Disable ->
                     save(state.copy(desired = false, enableRequested = false))
-                NativePushAction.Refresh -> Unit
+                NativePushAction.Refresh,
+                NativePushAction.Background -> Unit
             }
             if (access != NotificationAccess.Granted && state.desired)
                 save(state.copy(desired = false, enableRequested = false))
+            return true
         }
 
         private suspend fun transitionOwner() {
@@ -313,7 +343,10 @@ class ReconcileNativePush(
                     registration.expiresAt > clock.now() &&
                     !state.retiringToken &&
                     access == NotificationAccess.Granted,
-                state.pending != null || state.retiringToken || state.revocations.isNotEmpty(),
+                state.pending != null ||
+                    state.retiringToken ||
+                    state.revocations.isNotEmpty() ||
+                    state.automaticAttempts > 0,
                 access,
                 registration?.expiresAt,
             )

@@ -15,7 +15,7 @@ import kotlinx.coroutines.test.*
 
 class NativePushViewModelTest {
     @Test
-    fun enableObservesRotationAndStopResumeDoesNotReplayOldCallbacksOrPrompt() = runTest {
+    fun enableLeavesRotationToWorkersAndStopResumeDoesNotReplayOldCallbacksOrPrompt() = runTest {
         withFixture { f, vm, _ ->
             f.permission = NotificationAccess.Denied
             start(vm)
@@ -27,19 +27,19 @@ class NativePushViewModelTest {
             assertEquals(1, f.permissionRequests)
             assertTrue(vm.state.value.status!!.registered)
             assertEquals(1, f.commands.size)
-            assertEquals(1, f.listeners)
+            assertEquals(0, f.listeners)
             f.providerToken.value = "provider-token-changed"
             runCurrent()
-            assertEquals(2, f.commands.size)
-            assertEquals(1, f.listeners)
+            assertEquals(1, f.commands.size)
+            assertEquals(0, f.listeners)
             vm.onEvent(NativePushEvent.Stopped)
             runCurrent()
             assertEquals(0, f.listeners)
             f.providerToken.value = "provider-token-after-stop"
             runCurrent()
-            assertEquals(2, f.commands.size)
+            assertEquals(1, f.commands.size)
             start(vm)
-            assertEquals(3, f.commands.size)
+            assertEquals(2, f.commands.size)
             assertEquals(1, f.permissionRequests)
             vm.onEvent(NativePushEvent.DisableRequested)
             runCurrent()

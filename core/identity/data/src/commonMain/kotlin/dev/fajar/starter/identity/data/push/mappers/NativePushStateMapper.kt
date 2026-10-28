@@ -59,6 +59,10 @@ private fun NativePushCommand.toDto() =
 
 fun NativePushStateDto.toState(): NativePushState {
     require(format == 1 && revocations.size <= 32)
+    require(automaticAttempts in 0..8)
+    require((automaticAttempts == 0) == (automaticRetryAfter == null))
+    val retryAfter = automaticRetryAfter?.let(Instant::parse)
+    retryAfter?.let { require(it.toEpochMilliseconds() in 1 until 253_402_300_800_000L) }
     val active = owner?.toOwner()
     val queued = revocations.map { it.toOwner() }
     require(
@@ -80,6 +84,8 @@ fun NativePushStateDto.toState(): NativePushState {
         retiringToken,
         queued,
         enableRequested,
+        automaticAttempts,
+        retryAfter,
     )
 }
 
@@ -104,4 +110,6 @@ fun NativePushState.toDto() =
         retiringToken = retiringToken,
         revocations = revocations.map { it.toDto() },
         enableRequested = enableRequested,
+        automaticAttempts = automaticAttempts,
+        automaticRetryAfter = automaticRetryAfter?.toString(),
     )

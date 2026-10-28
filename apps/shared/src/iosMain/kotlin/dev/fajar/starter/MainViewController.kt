@@ -5,6 +5,7 @@ import dev.fajar.starter.app.StarterApp
 import dev.fajar.starter.app.di.createAppContainer
 import dev.fajar.starter.app.navigation.AppLinkChannel
 import dev.fajar.starter.app.work.InboxPushWorker
+import dev.fajar.starter.app.work.NativePushWorker
 import dev.fajar.starter.app.work.startForegroundSync
 import dev.fajar.starter.common.config.AppPlatform
 import dev.fajar.starter.common.config.BuildEnvironment
@@ -23,6 +24,7 @@ import dev.fajar.starter.observability.*
 import dev.fajar.starter.securestorage.*
 import dev.fajar.starter.security.data.lock.datasources.AppleDeviceAuthenticationSource
 import dev.fajar.starter.sync.domain.*
+import dev.fajar.starter.sync.domain.repositories.SyncScheduleRepository
 import dev.fajar.starter.worker.runSyncTask
 import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.*
@@ -117,6 +119,7 @@ class AppleAppHost(
                     complete =
                         container.koin
                             .getAll<SyncTask>()
+                            .sortedBy { if (it.key == NativePushWorker.KEY) 0 else 1 }
                             .map { runSyncTask(it) }
                             .all { it == SyncResult.Complete }
                 } finally {
@@ -141,6 +144,11 @@ class AppleAppHost(
 
     fun receivedToken(token: String) {
         push.receivedToken(token)
+        scope.launch(start = CoroutineStart.UNDISPATCHED) {
+            withTimeoutOrNull(3.seconds) {
+                container.koin.get<SyncScheduleRepository>().request(NativePushWorker.KEY)
+            }
+        }
     }
 
     fun receivedInboxPush(

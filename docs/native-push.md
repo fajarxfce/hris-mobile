@@ -7,16 +7,30 @@ owned local metadata, so a failed network request does not erase the preference,
 registration expiry or pending outcome. Retry never requests permission.
 
 The application host owns one coordinator shared with Settings. Foreground entry
-and session replacement reconcile registration; current SDK token changes trigger
-renewal. Stop/disposal cancels its session/status/token observations and active
-work. Each mutation joins the old SDK observer before retirement. Replacement
-accounts clear their predecessor's status and reject late results. Logout attempts
-retirement through the session transition; interrupted/failed cleanup resumes on
-the next foreground entry. There is no automatic failed-request retry loop.
+and session replacement reconcile registration; explicit Settings actions retain
+permission and mutation ownership. Stop/disposal cancels its session/status
+observations and active work. Replacement accounts clear their predecessor's
+status and reject late results. Logout attempts retirement through the session
+transition; interrupted cleanup remains retained.
 
-Authorized Inbox hint processing is wired into the native receivers and shared
-worker. Background registration renewal remains integration work. The inherited
-starter notification demo is not mounted by HRIS.
+Android token callbacks request the connected WorkManager task `hris.native-push`.
+Periodic work renews expiring registrations and recovers missed callbacks. Apple
+callbacks request the same shared task for the foreground host; BGAppRefresh runs
+it before the other sync tasks and cancels it when its OS execution expires.
+The UI does not maintain an SDK token observer. All SDK acquisition/deletion and
+backend mutation go through the same reconciliation mutex, including concurrent
+foreground disable and background renewal.
+
+Automatic execution persists its attempt before provider/backend I/O. Uncompleted
+attempts back off from 30 seconds to 15 minutes and stop after eight, including
+process restart or cancellation. Successful reconciliation clears that budget;
+foreground entry or an explicit Settings action permits a new recovery sequence.
+Pending status remains visible from local storage. The worker owns a 35-second
+execution deadline around the existing 30-second reconciliation. Empty or
+unsupported installations never acquire SDK tokens or request OS permission.
+
+Authorized Inbox hint processing is wired into native receivers and the shared
+worker. The inherited starter notification demo is not mounted by HRIS.
 
 ## Ownership and recovery
 

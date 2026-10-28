@@ -2,6 +2,7 @@ package dev.fajar.starter
 
 import dev.fajar.starter.app.di.createAppContainer
 import dev.fajar.starter.app.work.InboxPushWorker
+import dev.fajar.starter.app.work.NativePushWorker
 import dev.fajar.starter.common.result.AppResult
 import dev.fajar.starter.database.createAppDatabase
 import dev.fajar.starter.datastore.createUserPreferences
@@ -64,6 +65,10 @@ class NativePushBindingsTest {
             assertEquals(
                 dev.fajar.starter.sync.domain.SyncResult.Complete,
                 container.koin.get<InboxPushWorker>()(),
+            )
+            assertEquals(
+                dev.fajar.starter.sync.domain.SyncResult.Complete,
+                container.koin.get<NativePushWorker>()(),
             )
             val status =
                 assertIs<AppResult.Success<NativePushStatus>>(

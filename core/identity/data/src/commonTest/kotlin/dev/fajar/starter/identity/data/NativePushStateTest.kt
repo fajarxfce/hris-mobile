@@ -36,6 +36,37 @@ class NativePushStateTest {
         )
 
     @Test
+    fun legacyRecordsDefaultToNoAutomaticAttemptsAndRetryLimitsSurviveRestart() = runTest {
+        val credentials = MemoryCredentialStore()
+        val repository = StoredNativePushStateRepository(credentials)
+        assertEquals(AppResult.Success(true), repository.compareAndSet(NativePushState(), pending))
+        assertFalse(credentials.read()!!.contains("automaticAttempts"))
+        assertEquals(
+            AppResult.Success(pending),
+            StoredNativePushStateRepository(credentials).read(),
+        )
+        val exhausted =
+            pending.copy(
+                automaticAttempts = 8,
+                automaticRetryAfter = Instant.parse("2026-10-28T12:00:00Z"),
+            )
+        assertEquals(AppResult.Success(true), repository.compareAndSet(pending, exhausted))
+        assertEquals(
+            AppResult.Success(exhausted),
+            StoredNativePushStateRepository(credentials).read(),
+        )
+        for (invalid in
+            listOf(
+                exhausted.copy(automaticAttempts = 9),
+                exhausted.copy(automaticAttempts = 0),
+                exhausted.copy(automaticRetryAfter = null),
+            )) {
+            assertIs<AppResult.Failed>(repository.compareAndSet(exhausted, invalid))
+            assertEquals(AppResult.Success(exhausted), repository.read())
+        }
+    }
+
+    @Test
     fun observationPublishesCommittedFactsAndReopensAfterCancellation() = runTest {
         val credentials = MemoryCredentialStore()
         val repository = StoredNativePushStateRepository(credentials)
