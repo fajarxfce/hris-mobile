@@ -25,8 +25,11 @@ configured API override was limited to this local build. Sanitized evidence is i
 
 Remote [run 40643807959](https://github.com/fajarxfce/hris-mobile/actions/runs/40643807959)
 for exchange core `67c455e4` passed Linux/Android, Web, Windows and Apple, including
-the Xcode simulator build. Provider/UI `d191c61d` is tracked by
+the Xcode simulator build. Provider/UI `d191c61d` also passed Linux/Android, Web,
+Windows and Apple simulator tests/full Xcode simulator build in
 [run 40647201802](https://github.com/fajarxfce/hris-mobile/actions/runs/40647201802).
+This confirms cross-platform build/container compatibility; Google token issuance
+and iOS Firebase provider acceptance remain separate from those checks.
 
 ## Firebase provider and login UI
 
