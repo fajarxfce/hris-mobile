@@ -1,5 +1,20 @@
 # Validation
 
+## Hierarchical notification destinations
+
+The notification adapter now validates bounded internal path segments before OS
+I/O. Android appends each segment separately, preserving resource links instead
+of encoding their slashes into one segment. Notification replacement uses the full
+delivery ID as its tag and only alerts once for a replacement.
+
+Two portable regressions cover hierarchical paths and rejection of schemes,
+queries, fragments, encoded separators, controls, empty segments and oversized
+paths. On 28 October 2026, root checks passed with 1,787 desktop/UI tests,
+notification data passed all eight Chromium tests, and configured Android dev
+assembly passed in `.work/inbox-push-validation-2.log`. These totals also include
+Inbox work validated alongside the adapter; the portable change alone does not
+implement HRIS authorization or provider delivery.
+
 ## Independent web packaging in CI
 
 Remote [run 40631137228](https://github.com/fajarxfce/hris-mobile/actions/runs/40631137228)

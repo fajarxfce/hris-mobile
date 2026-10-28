@@ -14,6 +14,7 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import dev.fajar.starter.notifications.data.dto.NotificationPayload
 import dev.fajar.starter.notifications.data.errors.NotificationPermissionException
+import dev.fajar.starter.notifications.data.mappers.notificationDestinationSegments
 
 class AndroidNotificationDisplaySource(
     private val context: Context,
@@ -35,7 +36,11 @@ class AndroidNotificationDisplaySource(
                 NotificationChannel("updates", "Updates", NotificationManager.IMPORTANCE_DEFAULT)
             )
         val link =
-            Uri.Builder().scheme(scheme).authority("app").appendPath(payload.destination).build()
+            notificationDestinationSegments(payload.destination)
+                .fold(Uri.Builder().scheme(scheme).authority("app")) { uri, segment ->
+                    uri.appendPath(segment)
+                }
+                .build()
         val intent =
             Intent(Intent.ACTION_VIEW, link)
                 .setPackage(context.packageName)
@@ -55,7 +60,8 @@ class AndroidNotificationDisplaySource(
                 .setStyle(NotificationCompat.BigTextStyle().bigText(payload.body))
                 .setContentIntent(pending)
                 .setAutoCancel(true)
+                .setOnlyAlertOnce(true)
                 .build()
-        NotificationManagerCompat.from(context).notify(payload.id.hashCode(), notification)
+        NotificationManagerCompat.from(context).notify(payload.id, 0, notification)
     }
 }
