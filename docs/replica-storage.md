@@ -17,6 +17,14 @@ checkpoint. Publication updates it atomically; no resource payloads are queried.
 Consumers still own decryption and access admission. A stored timestamp does not
 prove that a worker is running or that the server has received every local action.
 
+`observePublishedCheckpoints` enumerates visible metadata across a partition prefix,
+ordered by partition with an exclusive partition cursor. Each page contains 1–200
+checkpoints and checks the active session/account in the same read transaction.
+Staging-only partitions remain absent; replacing a published generation leaves its
+previous metadata visible until publication. Prefix and cursor accept only bounded
+ASCII keys, and a cursor must belong to the requested prefix. No document payloads
+are read. Feature repositories own decryption and define any narrower page limits.
+
 `AppDatabase.replicas` is a raw storage contract for bounded, encrypted resource
 replication. It performs no HTTP, permission checks, DTO-to-domain mapping, or
 retry policy. Feature repositories provide authenticated ciphertext; feature use

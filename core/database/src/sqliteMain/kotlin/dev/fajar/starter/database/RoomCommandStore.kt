@@ -7,6 +7,17 @@ import kotlinx.coroutines.flow.map
 internal class RoomCommandStore(private val database: StarterDatabase) : CommandStore {
     private val dao = database.commandDao()
 
+    override fun observeAll(scope: CommandScope, partition: String) =
+        database.invalidationTracker
+            .createFlow("account_scope", "durable_commands")
+            .map {
+                validateCommandScope(scope, partition)
+                dao.page(scope.sessionId, scope.accountKey, partition, null, null, 128).map {
+                    it.toRecord()
+                }
+            }
+            .distinctUntilChanged()
+
     override fun observe(
         scope: CommandScope,
         partition: String,

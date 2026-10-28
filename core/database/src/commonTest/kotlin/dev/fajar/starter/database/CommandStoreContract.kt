@@ -24,6 +24,7 @@ suspend fun verifyCommandAtomicity(database: AppDatabase) = coroutineScope {
     assertFails { store.insert(scope, original.copy(request = "replaced-request")) }
     assertFails { store.insert(scope, original.copy(id = "collision", resourceId = "other")) }
     assertEquals(original, store.get(scope, partition, original.id))
+    assertEquals(listOf(original), store.observeAll(scope, partition).first())
     val writes =
         (1..2).map { value ->
             async { store.update(scope, partition, original.id, 0, "sealed-outcome-" + value) }
@@ -35,11 +36,13 @@ suspend fun verifyCommandAtomicity(database: AppDatabase) = coroutineScope {
     assertTrue(updated.state.startsWith("sealed-outcome-"))
     assertEquals(CommandInsertResult.AlreadyStored, store.insert(scope, original))
     assertEquals(updated, store.get(scope, partition, original.id))
+    assertEquals(listOf(updated), store.observeAll(scope, partition).first())
     assertFalse(store.update(scope, partition, original.id, 0, "late"))
     assertFalse(store.remove(scope, partition, original.id, 0))
     assertTrue(store.remove(scope, partition, original.id, 1))
     assertFalse(store.containsRecords())
     assertTrue(store.observe(scope, partition).first().isEmpty())
+    assertTrue(store.observeAll(scope, partition).first().isEmpty())
 }
 
 suspend fun verifyCommandOwnership(database: AppDatabase) = coroutineScope {
@@ -53,7 +56,7 @@ suspend fun verifyCommandOwnership(database: AppDatabase) = coroutineScope {
     assertEquals(CommandInsertResult.Stored, store.insert(a, otherCompany))
     val cleared =
         async(start = CoroutineStart.UNDISPATCHED) {
-            store.observe(a, partition).first { it.isEmpty() }
+            store.observeAll(a, partition).first { it.isEmpty() }
         }
     database.accounts.activate(null)
     assertTrue(cleared.await().isEmpty())
@@ -63,6 +66,7 @@ suspend fun verifyCommandOwnership(database: AppDatabase) = coroutineScope {
     val b = CommandScope("second-session", "account-b")
     database.accounts.activate(b.sessionId, b.accountKey)
     assertNull(store.get(b, partition, original.id))
+    assertTrue(store.observeAll(b, partition).first().isEmpty())
     assertNull(store.get(b.copy(accountKey = a.accountKey), partition, original.id))
     assertFalse(store.update(a, partition, original.id, 0, "late-account-write"))
     assertEquals(
@@ -72,6 +76,8 @@ suspend fun verifyCommandOwnership(database: AppDatabase) = coroutineScope {
     val resumed = a.copy(sessionId = "new-login")
     database.accounts.activate(resumed.sessionId, resumed.accountKey)
     assertEquals(original, store.get(resumed, partition, original.id))
+    assertEquals(listOf(original), store.observeAll(resumed, partition).first())
+    assertTrue(store.observeAll(a, partition).first().isEmpty())
     assertEquals(otherCompany, store.get(resumed, otherCompany.partition, original.id))
     assertEquals(CommandInsertResult.ScopeChanged, store.insert(a, command("late")))
     assertNull(store.get(a, partition, original.id))
@@ -99,6 +105,7 @@ suspend fun verifyCommandBounds(database: AppDatabase) {
     val second = store.observe(scope, partition, after = first.last().sortKey).first()
     val third = store.observe(scope, partition, after = second.last().sortKey).first()
     assertEquals(entries, first + second + third)
+    assertEquals(entries, store.observeAll(scope, partition).first())
     assertEquals(
         listOf(entries[7]),
         store.observe(scope, partition, resourceId = entries[7].resourceId).first(),

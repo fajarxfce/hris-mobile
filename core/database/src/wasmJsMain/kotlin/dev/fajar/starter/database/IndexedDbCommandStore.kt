@@ -15,6 +15,26 @@ internal class IndexedDbCommandStore(
 ) : CommandStore {
     private val codec = Json { encodeDefaults = true }
 
+    override fun observeAll(scope: CommandScope, partition: String) =
+        changes
+            .map {
+                validateCommandScope(scope, partition)
+                Json.decodeFromString<List<CommandRecord>>(
+                    commandPage(
+                            database(),
+                            scope.sessionId,
+                            scope.accountKey,
+                            partition,
+                            null,
+                            null,
+                            128,
+                        )
+                        .await<JsString>()
+                        .toString()
+                )
+            }
+            .distinctUntilChanged()
+
     override fun observe(
         scope: CommandScope,
         partition: String,

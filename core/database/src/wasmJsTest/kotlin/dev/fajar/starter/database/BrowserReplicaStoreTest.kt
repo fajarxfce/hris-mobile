@@ -57,6 +57,7 @@ class BrowserReplicaStoreTest {
             verifyReplicaPublication(database)
             verifyReplicaCheckpointObservation(database)
             verifyPublishedReplicaCheckpoint(database)
+            verifyPublishedReplicaPages(database)
             verifyReplicaAtomicity(database)
             verifyReplicaTombstones(database)
             verifyReplicaIsolation(database)

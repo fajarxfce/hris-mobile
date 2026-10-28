@@ -67,3 +67,12 @@ fun validateReplicaPage(after: String?, limit: Int) {
     require(limit in 1..200)
     require(after == null || (after.length in 1..200 && after.all { it in '!'..'~' }))
 }
+
+fun validateReplicaPartitionPage(scope: ReplicaScope, prefix: String, after: String?, limit: Int) {
+    validateReplicaKey(scope, prefix)
+    require(limit in 1..200)
+    after?.let {
+        validateReplicaKey(scope, it)
+        require(it.startsWith(prefix))
+    }
+}

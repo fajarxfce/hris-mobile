@@ -34,6 +34,20 @@ internal class RoomReplicaStore(private val database: StarterDatabase) : Replica
             }
             .distinctUntilChanged()
 
+    override fun observePublishedCheckpoints(
+        scope: ReplicaScope,
+        partitionPrefix: String,
+        afterPartition: String?,
+        limit: Int,
+    ) =
+        database.invalidationTracker
+            .createFlow("account_scope", "replica_heads", "replica_generations")
+            .map {
+                validateReplicaPartitionPage(scope, partitionPrefix, afterPartition, limit)
+                dao.publishedCheckpoints(scope, partitionPrefix, afterPartition, limit)
+            }
+            .distinctUntilChanged()
+
     override suspend fun replace(
         scope: ReplicaScope,
         partition: String,

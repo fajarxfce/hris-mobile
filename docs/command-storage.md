@@ -27,6 +27,13 @@ account and 512 per database, with 128 KiB request and 32 KiB outcome envelopes.
 Cancellation leaves an absent or complete transaction. A committed browser write
 still notifies observers if its caller is cancelled. Owners close database resources.
 
+`observeAll` observes the complete selected partition, bounded by the existing
+128-command account capacity. It supports summaries that must include retained
+operations beyond the ordinary 50-record page. It preserves account checks,
+ordering, logout invalidation and cancellation; it does not schedule delivery or
+classify outcomes. SQLite and IndexedDB share coverage through full capacity,
+outcome changes, removal and replacement login.
+
 SQLite and IndexedDB contract tests cover competing writers, lost local responses,
 immutable requests, account/company isolation, logout/re-login, bounded capacity,
 cancellation, migration and reopening. Encryption, backend receipts, UI actions,

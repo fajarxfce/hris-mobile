@@ -42,6 +42,29 @@ internal class IndexedDbReplicaStore(
             }
             .distinctUntilChanged()
 
+    override fun observePublishedCheckpoints(
+        scope: ReplicaScope,
+        partitionPrefix: String,
+        afterPartition: String?,
+        limit: Int,
+    ) =
+        changes
+            .map {
+                validateReplicaPartitionPage(scope, partitionPrefix, afterPartition, limit)
+                Json.decodeFromString<List<ReplicaCheckpoint>>(
+                    replicaPublishedCheckpoints(
+                            database(),
+                            Json.encodeToString(scope),
+                            partitionPrefix,
+                            afterPartition,
+                            limit,
+                        )
+                        .await<JsString>()
+                        .toString()
+                )
+            }
+            .distinctUntilChanged()
+
     override suspend fun replace(
         scope: ReplicaScope,
         partition: String,
@@ -262,6 +285,41 @@ private external fun replicaCheckpoint(
     scope: String,
     partition: String,
     publishedOnly: Boolean,
+): Promise<JsString>
+
+@JsFun(
+    """(db, scopeJson, prefix, after, limit) => new Promise((resolve, reject) => {
+    const scope = JSON.parse(scopeJson), {sessionId, accountKey = null} = scope, ownerKey = accountKey ?? '';
+    const tx = db.transaction(['account_scope', 'replica_heads', 'replica_generations'], 'readonly');
+    const values = [];
+    const owner = tx.objectStore('account_scope').get('current');
+    const account = tx.objectStore('account_scope').get('command-account');
+    account.onsuccess = () => {
+        if (owner.result !== sessionId || (accountKey != null && account.result !== accountKey)) return;
+        const range = IDBKeyRange.bound([ownerKey, after ?? prefix], [ownerKey, prefix + '\uffff'], after != null);
+        const rows = tx.objectStore('replica_heads').openCursor(range);
+        rows.onsuccess = () => {
+            const cursor = rows.result;
+            if (!cursor || values.length === limit) return;
+            const {partition, activeGeneration: generation} = cursor.value;
+            if (generation == null) { cursor.continue(); return; }
+            const row = tx.objectStore('replica_generations').get([ownerKey, partition, generation]);
+            row.onsuccess = () => {
+                if (row.result) values.push({handle:{scope, partition, generation}, revision:row.result.revision, payload:row.result.checkpoint, published:true});
+                if (values.length < limit) cursor.continue();
+            };
+        };
+    };
+    tx.oncomplete = () => resolve(JSON.stringify(values));
+    tx.onabort = () => reject(tx.error || new Error('Replica checkpoint page read failed.'));
+})"""
+)
+private external fun replicaPublishedCheckpoints(
+    db: JsAny,
+    scope: String,
+    prefix: String,
+    after: String?,
+    limit: Int,
 ): Promise<JsString>
 
 @JsFun(

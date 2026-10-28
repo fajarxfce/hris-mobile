@@ -7,6 +7,9 @@ import kotlinx.coroutines.flow.Flow
  * checks the active session/account in the same transaction. No HTTP, retries or command policy.
  */
 interface CommandStore {
+    /** Complete partition observation, bounded by the store's 128-command account capacity. */
+    fun observeAll(scope: CommandScope, partition: String): Flow<List<CommandRecord>>
+
     fun observe(
         scope: CommandScope,
         partition: String,

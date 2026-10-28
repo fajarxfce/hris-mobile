@@ -19,6 +19,18 @@ interface ReplicaStore {
     fun observePublishedCheckpoint(scope: ReplicaScope, partition: String): Flow<ReplicaCheckpoint?>
 
     /**
+     * A bounded page of published metadata, ordered by partition within an exact prefix. Reads
+     * share one account check and transaction; staging generations and document bodies are
+     * excluded.
+     */
+    fun observePublishedCheckpoints(
+        scope: ReplicaScope,
+        partitionPrefix: String,
+        afterPartition: String? = null,
+        limit: Int = 50,
+    ): Flow<List<ReplicaCheckpoint>>
+
+    /**
      * Publishes a complete snapshot, or removes it, only if the current checkpoint still matches.
      * Account ownership, documents and checkpoint change in the same transaction.
      */

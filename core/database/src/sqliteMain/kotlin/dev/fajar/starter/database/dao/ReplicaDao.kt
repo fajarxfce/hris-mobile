@@ -64,6 +64,42 @@ abstract class ReplicaDao {
 
     @Upsert protected abstract suspend fun write(head: ReplicaHeadEntity)
 
+    @Query(
+        "SELECT g.* FROM replica_heads AS h JOIN replica_generations AS g ON g.ownerKey = h.ownerKey AND g.partition = h.partition AND g.generation = h.activeGeneration WHERE h.ownerKey = :ownerKey AND h.partition >= :prefix AND h.partition < :upperBound AND (:after IS NULL OR h.partition > :after) ORDER BY h.partition LIMIT :limit"
+    )
+    protected abstract suspend fun publishedGenerations(
+        ownerKey: String,
+        prefix: String,
+        upperBound: String,
+        after: String?,
+        limit: Int,
+    ): List<ReplicaGenerationEntity>
+
+    @Transaction
+    open suspend fun publishedCheckpoints(
+        scope: ReplicaScope,
+        prefix: String,
+        after: String?,
+        limit: Int,
+    ): List<ReplicaCheckpoint> {
+        if (!owns(scope.sessionId, scope.accountKey)) return emptyList()
+        return publishedGenerations(
+                scope.accountKey.orEmpty(),
+                prefix,
+                prefix + '\u007f',
+                after,
+                limit,
+            )
+            .map { row ->
+                ReplicaCheckpoint(
+                    ReplicaHandle(scope, row.partition, row.generation),
+                    row.revision,
+                    row.checkpoint,
+                    published = true,
+                )
+            }
+    }
+
     @Upsert protected abstract suspend fun write(generation: ReplicaGenerationEntity)
 
     @Insert protected abstract suspend fun insert(document: ReplicaDocumentEntity)
