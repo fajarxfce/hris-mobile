@@ -7,6 +7,7 @@ import dev.fajar.starter.identity.domain.push.repositories.NativePushStateReposi
 import dev.fajar.starter.securestorage.CredentialStore
 import dev.fajar.starter.storage.safeStorageCall
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.serialization.json.Json
@@ -18,10 +19,13 @@ class StoredNativePushStateRepository(
     @Named("native-push-state") private val credentials: CredentialStore
 ) : NativePushStateRepository {
     private val commits = Mutex()
+    private val changes = MutableStateFlow(0L)
     override val persistent
         get() = credentials.persistent
 
     override suspend fun read() = safeStorageCall { commits.withLock { readCurrent() } }
+
+    override fun observe() = changes.map { read() }.distinctUntilChanged()
 
     override suspend fun compareAndSet(expected: NativePushState, updated: NativePushState) =
         safeStorageCall {
@@ -32,7 +36,10 @@ class StoredNativePushStateRepository(
                 val encoded = Json.encodeToString(dto)
                 require(encoded.encodeToByteArray().size <= 32_768)
                 currentCoroutineContext().ensureActive()
-                withContext(NonCancellable) { credentials.write(encoded) }
+                withContext(NonCancellable) {
+                    credentials.write(encoded)
+                    changes.value++
+                }
                 true
             }
         }

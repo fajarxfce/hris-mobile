@@ -21,6 +21,7 @@ import dev.fajar.starter.home.presentation.navigation.*
 import dev.fajar.starter.inbox.presentation.navigation.*
 import dev.fajar.starter.leave.presentation.navigation.*
 import dev.fajar.starter.localization.*
+import dev.fajar.starter.notifications.presentation.navigation.NativePushSettings
 import dev.fajar.starter.onboarding.presentation.navigation.*
 import dev.fajar.starter.payroll.presentation.navigation.*
 import dev.fajar.starter.people.presentation.navigation.*
@@ -451,7 +452,12 @@ fun AppNavigation(navigation: ScopedNavigationState, incomingLinks: Flow<String>
                         },
                         onBack = { controller.popBackStack() },
                     )
-                    settingsRoutes(securitySettings = { AppLockSettings() }) {
+                    settingsRoutes(
+                        securitySettings = {
+                            AppLockSettings()
+                            NativePushSettings()
+                        }
+                    ) {
                         controller.popBackStack()
                     }
                 }

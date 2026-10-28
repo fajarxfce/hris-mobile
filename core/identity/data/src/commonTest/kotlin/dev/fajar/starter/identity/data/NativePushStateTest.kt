@@ -1,3 +1,5 @@
+@file:OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
+
 package dev.fajar.starter.identity.data
 
 import dev.fajar.starter.common.result.*
@@ -7,7 +9,8 @@ import dev.fajar.starter.securestorage.MemoryCredentialStore
 import kotlin.test.*
 import kotlin.time.Instant
 import kotlinx.coroutines.*
-import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.test.*
 
 class NativePushStateTest {
     private val owner =
@@ -31,6 +34,34 @@ class NativePushStateTest {
                     "secret-token-value",
                 ),
         )
+
+    @Test
+    fun observationPublishesCommittedFactsAndReopensAfterCancellation() = runTest {
+        val credentials = MemoryCredentialStore()
+        val repository = StoredNativePushStateRepository(credentials)
+        val observed = mutableListOf<AppResult<NativePushState>>()
+        val reader =
+            backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
+                repository.observe().toList(observed)
+            }
+        runCurrent()
+        assertEquals(AppResult.Success(NativePushState()), observed.single())
+        repository.compareAndSet(NativePushState(), pending)
+        runCurrent()
+        assertEquals(AppResult.Success(pending), observed.last())
+        repository.compareAndSet(NativePushState(), pending.copy(desired = false))
+        runCurrent()
+        assertEquals(2, observed.size)
+        reader.cancelAndJoin()
+        val disabled = pending.copy(desired = false)
+        repository.compareAndSet(pending, disabled)
+        runCurrent()
+        assertEquals(2, observed.size)
+        assertEquals(
+            AppResult.Success(disabled),
+            StoredNativePushStateRepository(credentials).observe().first(),
+        )
+    }
 
     @Test
     fun restartRetainsTheFrozenCommandAndACompetingWriteCannotReplaceIt() = runTest {

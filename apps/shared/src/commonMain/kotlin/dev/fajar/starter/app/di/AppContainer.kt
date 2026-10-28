@@ -35,6 +35,7 @@ import dev.fajar.starter.location.data.datasources.LocationDataSource
 import dev.fajar.starter.location.data.datasources.UnavailableLocationDataSource
 import dev.fajar.starter.location.data.di.LocationDataModule
 import dev.fajar.starter.notifications.data.di.NotificationDataModule
+import dev.fajar.starter.notifications.presentation.di.NotificationPresentationModule
 import dev.fajar.starter.onboarding.data.di.OnboardingDataModule
 import dev.fajar.starter.onboarding.presentation.di.OnboardingPresentationModule
 import dev.fajar.starter.payroll.data.di.PayrollDataModule
@@ -199,6 +200,7 @@ fun createAppContainer(
 private fun applicationFeatureModules(): List<Module> =
     listOf(
         IdentityModule().module,
+        NotificationPresentationModule().module,
         WorkspaceDataModule().module,
         DocumentsDataModule().module,
         OnboardingDataModule().module,

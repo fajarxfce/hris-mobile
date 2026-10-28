@@ -76,6 +76,8 @@ internal class NativePushFixture {
 
             override suspend fun read() = AppResult.Success(state)
 
+            override fun observe() = flow { emit(read()) }
+
             override suspend fun compareAndSet(
                 expected: NativePushState,
                 updated: NativePushState,

@@ -1,4 +1,11 @@
 <resources>
+    <string name="native_push_title_id">Notifikasi kotak masuk</string>
+    <string name="native_push_description_id">Terima pembaruan kotak masuk HRIS di perangkat ini.</string>
+    <string name="native_push_enabled_id">Notifikasi aktif untuk perangkat ini.</string>
+    <string name="native_push_disabled_id">Notifikasi dinonaktifkan.</string>
+    <string name="native_push_pending_id">Perubahan belum selesai. Coba lagi setelah terhubung.</string>
+    <string name="native_push_permission_id">Izinkan notifikasi di pengaturan perangkat, lalu aktifkan di sini.</string>
+    <string name="native_push_unavailable_id">Notifikasi push tersedia di aplikasi Android dan iOS.</string>
     <string name="expense_save_receipt_id">Simpan %1$s</string>
     <string name="expense_receipt_saved_id">Bukti tersimpan.</string>
     <string name="expense_export_timeout_id">Penyimpanan terlalu lama. Coba lagi.</string>

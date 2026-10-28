@@ -1503,6 +1503,22 @@ enum class AppString(val english: StringResource, val indonesian: StringResource
     Workspace(Res.string.workspace_en, Res.string.workspace_id),
     PersonalWorkspace(Res.string.personal_workspace_en, Res.string.personal_workspace_id),
     Notifications(Res.string.notifications_en, Res.string.notifications_id),
+    NativePushTitle(Res.string.native_push_title_en, Res.string.native_push_title_id),
+    NativePushDescription(
+        Res.string.native_push_description_en,
+        Res.string.native_push_description_id,
+    ),
+    NativePushEnabled(Res.string.native_push_enabled_en, Res.string.native_push_enabled_id),
+    NativePushDisabled(Res.string.native_push_disabled_en, Res.string.native_push_disabled_id),
+    NativePushPending(Res.string.native_push_pending_en, Res.string.native_push_pending_id),
+    NativePushPermission(
+        Res.string.native_push_permission_en,
+        Res.string.native_push_permission_id,
+    ),
+    NativePushUnavailable(
+        Res.string.native_push_unavailable_en,
+        Res.string.native_push_unavailable_id,
+    ),
     SignOut(Res.string.sign_out_en, Res.string.sign_out_id),
     RecentChanges(Res.string.recent_changes_en, Res.string.recent_changes_id),
     SampleData(Res.string.sample_data_en, Res.string.sample_data_id),

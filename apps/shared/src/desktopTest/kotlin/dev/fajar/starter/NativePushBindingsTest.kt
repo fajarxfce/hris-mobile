@@ -9,6 +9,7 @@ import dev.fajar.starter.identity.domain.push.repositories.*
 import dev.fajar.starter.identity.domain.push.usecases.ReconcileNativePush
 import dev.fajar.starter.notifications.data.datasources.*
 import dev.fajar.starter.notifications.data.dto.NotificationPermission
+import dev.fajar.starter.notifications.presentation.nativepush.NativePushViewModel
 import java.nio.file.Files
 import kotlin.test.*
 import kotlinx.coroutines.runBlocking
@@ -40,6 +41,7 @@ class NativePushBindingsTest {
             assertSame(storage, container.koin.get<NativePushStateRepository>())
             assertEquals(AppResult.Success(NativePushState()), storage.read())
             assertNotNull(container.koin.get<NativePushRegistrationRepository>())
+            assertNotNull(container.koin.get<NativePushViewModel>())
             val status =
                 assertIs<AppResult.Success<NativePushStatus>>(
                         container.koin.get<ReconcileNativePush>()(null)

@@ -24,6 +24,7 @@ kotlin.sourceSets {
         api(projects.core.worker)
         api(projects.core.featureflags.data)
         api(projects.core.notifications.data)
+        implementation(projects.features.notifications.presentation)
         api(projects.core.location.data)
         api(projects.core.datastore)
         api(projects.core.common)

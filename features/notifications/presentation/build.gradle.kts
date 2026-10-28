@@ -9,6 +9,7 @@ kotlin.sourceSets {
         implementation(projects.core.localization)
         implementation(projects.core.common)
         implementation(projects.core.notifications.domain)
+        implementation(projects.core.identity.domain)
         implementation(projects.core.presentation)
         implementation(projects.core.designsystem)
         implementation(libs.lifecycle.compose)

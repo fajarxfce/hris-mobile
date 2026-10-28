@@ -1,9 +1,21 @@
 # Native push registration
 
-The HRIS identity core implements the native family's push-registration contract.
-It is an integration foundation; the Settings entry, foreground coordinator and
-authorized Inbox hint delivery are still being connected. The inherited starter
-notification demo is not an HRIS registration screen.
+Account → Settings provides **Inbox notifications** on Android/iOS. Enabling the
+switch explicitly requests OS access and registers the current HRIS native family;
+disabling it retains the disable/retirement until recovery completes. Status reads
+owned local metadata, so a failed network request does not erase the preference,
+registration expiry or pending outcome. Retry never requests permission.
+
+The application host owns one coordinator shared with Settings. Foreground entry
+and session replacement reconcile registration; current SDK token changes trigger
+renewal. Stop/disposal cancels its session/status/token observations and active
+work. Each mutation joins the old SDK observer before retirement. Replacement
+accounts clear their predecessor's status and reject late results. Logout attempts
+retirement through the session transition; interrupted/failed cleanup resumes on
+the next foreground entry. There is no automatic failed-request retry loop.
+
+Authorized Inbox hint delivery and reconnect scheduling remain integration work.
+The inherited starter notification demo is not mounted by HRIS.
 
 ## Ownership and recovery
 

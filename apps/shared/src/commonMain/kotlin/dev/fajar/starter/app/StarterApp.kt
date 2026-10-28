@@ -10,6 +10,7 @@ import dev.fajar.starter.app.navigation.rememberScopedNavigationState
 import dev.fajar.starter.availability.presentation.navigation.AvailabilityGate
 import dev.fajar.starter.designsystem.theme.AppColors
 import dev.fajar.starter.designsystem.theme.AppTheme
+import dev.fajar.starter.notifications.presentation.navigation.NativePushHost
 import dev.fajar.starter.security.presentation.navigation.AppLockGate
 import dev.fajar.starter.settings.presentation.navigation.ProvideAppLanguage
 import org.koin.compose.KoinIsolatedContext
@@ -35,8 +36,10 @@ fun StarterApp(
                             )
                             .imePadding()
                     ) {
-                        AvailabilityGate {
-                            AppLockGate { AppNavigation(navigation, incomingLinks) }
+                        NativePushHost {
+                            AvailabilityGate {
+                                AppLockGate { AppNavigation(navigation, incomingLinks) }
+                            }
                         }
                     }
                 }

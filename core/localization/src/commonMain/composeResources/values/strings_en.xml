@@ -1,4 +1,11 @@
 <resources>
+    <string name="native_push_title_en">Inbox notifications</string>
+    <string name="native_push_description_en">Receive updates from your HRIS inbox on this device.</string>
+    <string name="native_push_enabled_en">Notifications are enabled for this device.</string>
+    <string name="native_push_disabled_en">Notifications are turned off.</string>
+    <string name="native_push_pending_en">The change is waiting to finish. Retry when connected.</string>
+    <string name="native_push_permission_en">Allow notifications in device settings, then enable them here.</string>
+    <string name="native_push_unavailable_en">Push notifications are available in the Android and iOS apps.</string>
     <string name="expense_save_receipt_en">Save %1$s</string>
     <string name="expense_receipt_saved_en">Receipt saved.</string>
     <string name="expense_export_timeout_en">Saving took too long. Please try again.</string>

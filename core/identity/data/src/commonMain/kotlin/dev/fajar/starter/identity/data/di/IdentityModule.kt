@@ -3,7 +3,7 @@ package dev.fajar.starter.identity.data.di
 import dev.fajar.starter.common.config.AppBuild
 import dev.fajar.starter.identity.domain.entities.IdentityServer
 import dev.fajar.starter.identity.domain.push.repositories.*
-import dev.fajar.starter.identity.domain.push.usecases.ReconcileNativePush
+import dev.fajar.starter.identity.domain.push.usecases.*
 import dev.fajar.starter.identity.domain.repositories.*
 import dev.fajar.starter.identity.domain.sso.repositories.SsoRepository
 import dev.fajar.starter.identity.domain.sso.usecases.ListSsoProviders
@@ -17,6 +17,25 @@ import org.koin.core.annotation.*
 @Module
 @ComponentScan("dev.fajar.starter.identity.data")
 class IdentityModule {
+    @Factory
+    fun observePushStatus(
+        sessions: SessionRepository,
+        storage: NativePushStateRepository,
+        permissions: NotificationAccessRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) = ObserveNativePushStatus(sessions, storage, permissions, server, build, Clock.System)
+
+    @Factory
+    fun observePushTokenChanges(
+        sessions: SessionRepository,
+        storage: NativePushStateRepository,
+        tokens: PushTokenRepository,
+        permissions: NotificationAccessRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) = ObserveNativePushTokenChanges(sessions, storage, tokens, permissions, server, build)
+
     @Single @Named("native-push-mutations") fun pushMutations() = Mutex()
 
     @Factory

@@ -51,7 +51,7 @@ jobs:
           :core:featureflags:domain:wasmJsBrowserTest :core:featureflags:data:wasmJsBrowserTest
           :core:identity:domain:wasmJsBrowserTest :core:identity:data:wasmJsBrowserTest
           :core:network:wasmJsBrowserTest :core:storage:wasmJsBrowserTest :core:securestorage:wasmJsBrowserTest
-          :core:notifications:data:wasmJsBrowserTest
+          :core:notifications:data:wasmJsBrowserTest :features:notifications:presentation:wasmJsBrowserTest
           :core:settings:data:wasmJsBrowserTest :core:localization:wasmJsBrowserTest :core:observability:wasmJsBrowserTest
           :core:security:domain:wasmJsBrowserTest :core:security:data:wasmJsBrowserTest :features:security:presentation:wasmJsBrowserTest
           :core:availability:domain:wasmJsBrowserTest :core:availability:data:wasmJsBrowserTest

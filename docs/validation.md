@@ -1,5 +1,23 @@
 # Validation
 
+## Native push Settings and host lifetime
+
+On 28 October 2026, root checks passed with 1,764 desktop/UI tests, runner and
+distribution checks, architecture, formatting and static analysis. All 71 identity
+domain/data and nine notification-presentation Chromium tests passed. Android dev
+assembly passed with the supplied Firebase configuration. Output is in
+`.work/native-push-ui-validation-2.log`.
+
+Seven MVI regressions cover explicit permission, token rotation, stop/resume,
+late permission, response loss, later disable, replacement accounts during transport,
+identity-read recovery, expired credentials and disposal. The secure-state observer
+is tested through committed writes, competing writes, cancellation and reopening.
+The application container resolves the mounted coordinator. Two Settings UI tests
+cover explicit switch actions, unavailable platforms, busy controls, localized errors
+and reachable retry with fixed Back navigation at 200% Indonesian text. The dark
+layout screenshot was inspected. Real provider delivery/login and device acceptance
+remain open; this increment does not implement FCM Inbox hint processing.
+
 ## HRIS native push registration core
 
 On 28 October 2026, root checks passed with 1,754 desktop/UI tests, runner and
