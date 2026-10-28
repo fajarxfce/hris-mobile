@@ -8,6 +8,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import dev.fajar.starter.designsystem.components.AppText
 import dev.fajar.starter.designsystem.theme.AppTheme
@@ -31,7 +32,11 @@ class AttendanceCaptureLayoutTest {
     @Test
     fun largeIndonesianScheduleKeepsTheMenuInPlace() = checkSchedule(AppLanguage.Indonesian, 2f)
 
-    private fun checkSchedule(language: AppLanguage, scale: Float) {
+    @Test
+    fun wrappedIndonesianScheduleKeepsTheMenuInPlace() =
+        checkSchedule(AppLanguage.Indonesian, 2f, 280.dp)
+
+    private fun checkSchedule(language: AppLanguage, scale: Float, width: Dp = 360.dp) {
         var state by mutableStateOf(AttendanceState())
         compose.setContent {
             val density = LocalDensity.current
@@ -40,7 +45,7 @@ class AttendanceCaptureLayoutTest {
                 LocalAppLanguage provides language,
             ) {
                 AppTheme(reduceMotion = true) {
-                    Column(Modifier.width(360.dp).padding(16.dp)) {
+                    Column(Modifier.width(width).padding(16.dp)) {
                         AttendanceHomeCard(state) {}
                         AppText("Services", Modifier.testTag("menu"))
                     }
@@ -77,8 +82,14 @@ class AttendanceCaptureLayoutTest {
                 WorkDay.Unassigned(date),
             )) {
             compose.runOnIdle { state = loaded(day) }
-            assertEquals(pending, menu.fetchSemanticsNode().boundsInRoot.top)
+            assertEquals(
+                pending,
+                menu.fetchSemanticsNode().boundsInRoot.top,
+                "Schedule ${day::class.simpleName}, width=$width, scale=$scale",
+            )
         }
+        compose.onAllNodesWithText("00:00 – 00:00 (+1 hari)").assertCountEquals(0)
+        compose.onAllNodesWithText("00:00 – 00:00 (+1 day)").assertCountEquals(0)
     }
 
     private fun loaded(day: WorkDay): AttendanceState {

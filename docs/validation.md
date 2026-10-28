@@ -1,5 +1,15 @@
 # Validation
 
+## Wrapped attendance captions
+
+The attendance card now reserves localized date and schedule text using its actual
+font and available width. Loading, work, overnight, off and unassigned schedules
+keep the following menu in place, including Indonesian at 200% text and 280 dp.
+Hidden measuring text is excluded from accessibility. All three layout regressions
+passed locally; the narrow case failed before the fix. This repairs the layout
+failure observed in Mobile CI run `40627088767`; that run's Windows and Apple
+jobs passed, including the two provider-token Apple simulator regressions.
+
 ## Provider token retirement
 
 On 28 October 2026, root checks passed with 1,735 desktop tests, plus the runner,
