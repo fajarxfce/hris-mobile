@@ -105,11 +105,15 @@ prove provider delivery.
 FCM and Firebase Authentication are both requested. Firebase sign-in must exchange
 a verified external identity for HRIS authorization; registration tokens are never
 account identity. iOS provider configuration, APNs signing and worker FCM service
-credentials remain external acceptance dependencies. Real token issuance, delivery,
-foreground/background provider behavior and Firebase login are not yet claimed.
+credentials remain external acceptance dependencies. Real FCM token issuance,
+delivery and foreground/background provider behavior are not yet claimed.
+Firebase email/password login and the Android system Google sign-in launch/dismiss
+flow have [separate device evidence](validation.md#real-firebase-android-acceptance).
 The user enabled Email/password and Google. Public Firebase Auth configuration now
 returns HTTP 200. The supported Google authorization setup endpoint supplied the
 public web OAuth client ID; it is installed locally for the three HRIS Android
 flavors. All three Google Services processing tasks passed. The earlier
 `CONFIGURATION_NOT_FOUND` result is resolved. Signing-certificate registration and
-real sign-in still need device acceptance. No client key is recorded here.
+Google token issuance/exchange still need provider acceptance. No client key is
+recorded here. [Android URL acceptance](deep-links.md#android-url-acceptance) verifies
+resource navigation and retained read state independently of provider delivery.

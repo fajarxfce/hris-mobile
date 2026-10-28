@@ -1,5 +1,33 @@
 # Validation
 
+## Android URL navigation
+
+On 28 October 2026, Mobile `1c1f9104` and Platform `893db26a` passed the
+[real API/Android URL workflow](deep-links.md#android-url-acceptance) on the dedicated
+Android 35 emulator. The same successfully built dev APK used for Pending actions
+was installed; these documentation commits change no application code.
+
+Actual browsable `VIEW` intents covered cold pre-login entry, explicit company
+selection, repeated message navigation with bounded Back behavior, another account
+or company, unexpected query parameters, background/resume, Inbox/Account/Pending
+actions/Data and sync, and an offline cold launch. An independent native API
+session verified unchanged read/acknowledgement timestamps. After an administrator
+archived the message, a successful refresh removed its contents; an offline cold
+launch and failed refresh kept the archived message unavailable. The proxy
+observed 33 requests, no request for the other company and no native company write.
+
+The bounded fixture passed in 3.4 minutes (3.9 including setup). Local evidence is
+`.work/link-native-result.json`, `.work/link-native-company-selection.png`,
+`.work/link-native-message.png`, `.work/link-native-rejected-scope.png`,
+`.work/link-native-inbox-unread.png`, `.work/link-native-offline-message.png`,
+`.work/link-native-archived.png` and `.work/link-native-archived-offline.png`.
+The message and archived offline screenshots were inspected. Platform retains
+the independent API result and sanitized request evidence in `.work/link-native-*`.
+Sign-out succeeded. The owned database, API, worker, mail fixture, proxy and
+emulator were stopped and connection metadata removed; emulator data was retained.
+Provider push, verified HTTPS associations, iOS and physical devices were not
+exercised. There is no new reusable implementation to port to the starter.
+
 ## Pending actions on Android
 
 On 28 October 2026, the dev APK at `9a557dcc` built successfully with Java 21 and
