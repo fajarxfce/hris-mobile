@@ -10,5 +10,7 @@ import org.koin.core.annotation.Single
 class FirebasePushTokenRepository(private val source: PushTokenSource) : PushTokenRepository {
     override suspend fun token() = safeNotificationCall { source.token() }
 
+    override suspend fun deleteToken() = safeNotificationCall { source.deleteToken() }
+
     override fun observeTokens() = safeNotificationFlow(source.observeTokens())
 }

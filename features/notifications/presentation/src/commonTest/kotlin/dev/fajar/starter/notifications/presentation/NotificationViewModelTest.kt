@@ -98,6 +98,8 @@ class NotificationViewModelTest {
                 override suspend fun token() = AppResult.Success("token")
 
                 override fun observeTokens() = flowOf(AppResult.Success("token"))
+
+                override suspend fun deleteToken() = AppResult.Success(Unit)
             }
         return NotificationViewModel(
             ObserveNotifications(inbox),

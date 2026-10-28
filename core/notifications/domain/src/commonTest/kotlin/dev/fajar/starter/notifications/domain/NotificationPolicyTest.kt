@@ -77,6 +77,8 @@ class NotificationPolicyTest {
                 }
 
                 override fun observeTokens() = flowOf(AppResult.Success("token"))
+
+                override suspend fun deleteToken() = AppResult.Success(Unit)
             }
         assertIs<AppResult.Failed>(GetPushToken(access, tokens)())
         assertEquals(0, calls)

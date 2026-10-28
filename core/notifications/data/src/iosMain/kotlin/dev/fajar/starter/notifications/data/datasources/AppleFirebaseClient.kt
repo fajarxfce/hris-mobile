@@ -7,4 +7,6 @@ interface AppleFirebaseClient {
     val configured: Boolean
 
     fun fetchToken(completion: (String?, NSError?) -> Unit)
+
+    fun deleteToken(completion: (NSError?) -> Unit)
 }

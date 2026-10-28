@@ -1,5 +1,24 @@
 # Validation
 
+## Provider token retirement
+
+On 28 October 2026, root checks passed with 1,735 desktop tests, plus the runner,
+distribution, architecture and format checks. All six notification-data Chromium
+tests and Android dev assembly passed. The run used JDK 21, SDK 36 and Node
+22.23.3; output is in `.work/push-token-validation.log`.
+
+The reusable adapter now supports SDK token deletion without requesting permission
+or acquiring a replacement. Regression coverage reproduces old callback replay
+after retirement and verifies current-token acquisition, bounded callback
+conflation, cancellation, late results, failed deletion and explicit retry. The
+same source/tests are ported to the starter after the Mobile checks.
+
+Two Apple bridge regressions and their simulator CI task were added. They were
+not executed on this Linux host; remote Apple validation is recorded separately
+when it finishes. Provider configuration files were absent from the Android/iOS
+runners. No real Firebase/APNs registration, delivery or device action is claimed
+by this adapter increment. Backend registration ownership remains separate work.
+
 ## Scoped HRIS links and resume behavior
 
 On 28 October 2026, root checks passed with 1,732 desktop tests, ten

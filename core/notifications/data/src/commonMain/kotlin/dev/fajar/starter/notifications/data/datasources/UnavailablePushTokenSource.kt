@@ -7,5 +7,7 @@ import kotlinx.coroutines.flow.flow
 class UnavailablePushTokenSource : PushTokenSource {
     override suspend fun token(): String = throw NotificationUnavailableException()
 
+    override suspend fun deleteToken(): Unit = throw NotificationUnavailableException()
+
     override fun observeTokens(): Flow<String> = flow { throw NotificationUnavailableException() }
 }

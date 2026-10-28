@@ -45,6 +45,11 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
         }
     }
 
+    func deleteToken(completion: @escaping (Error?) -> Void) {
+        guard configured else { completion(NSError(domain: "FirebaseConfiguration", code: 1)); return }
+        Messaging.messaging().deleteToken { error in completion(error as NSError?) }
+    }
+
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         if configured { Messaging.messaging().apnsToken = deviceToken }
     }

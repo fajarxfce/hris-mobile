@@ -28,6 +28,25 @@ updates the existing entry. This is a local inbox, not a server-synchronized not
 history or an exactly-once delivery guarantee. Add an authenticated inbox endpoint if
 history must include messages the platform never delivered to application code.
 
+## Token retirement
+
+`PushTokenRepository.deleteToken()` removes the SDK registration on Android,
+iOS and Web without requesting OS permission or acquiring a replacement token.
+The Swift bridge exposes Firebase's deletion callback. Failure and cancellation
+remain visible to the caller; missing provider configuration is not reported as
+successful deletion.
+
+Android/iOS token callbacks invalidate the current SDK value. Each observer reads
+the current token and repeated callbacks with the same value are deduplicated.
+The adapter no longer keeps token strings in a replay buffer, so a callback from
+before deletion cannot replace a new session's acquired token.
+
+The consuming application owns backend registration/disable, persistent retirement
+intent, session binding and retries. Stop its token observer before retiring a
+registration. Cancelled SDK awaits reject late results; cancellation does not prove
+that an external SDK operation rolled back. Reconcile retirement before registering
+a token under another account. Do not include tokens in diagnostics.
+
 ## Android / Firebase
 
 Register each application ID from [environments](environments.md) in Firebase.

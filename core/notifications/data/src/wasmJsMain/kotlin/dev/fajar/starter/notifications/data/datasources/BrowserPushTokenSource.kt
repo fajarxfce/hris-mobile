@@ -20,6 +20,12 @@ class BrowserPushTokenSource : PushTokenSource {
 
     override fun observeTokens() = flow { emit(token()) }
 
+    override suspend fun deleteToken() {
+        if (!browserFirebaseConfigured()) throw NotificationUnavailableException()
+        if (!deleteBrowserPushToken().await<JsBoolean>().toBoolean())
+            error("Firebase did not delete the registration.")
+    }
+
     fun messages() = callbackFlow {
         if (!browserFirebaseConfigured()) {
             close()
@@ -60,6 +66,16 @@ private external fun browserFirebaseConfigured(): Boolean
 }"""
 )
 private external fun browserPushToken(): Promise<JsString>
+
+@JsFun(
+    """async () => {
+    const app = await import('firebase/app');
+    const messaging = await import('firebase/messaging');
+    const firebaseApp = app.getApps()[0] || app.initializeApp(self.FLUENT_FIREBASE.firebase);
+    return await messaging.deleteToken(messaging.getMessaging(firebaseApp));
+}"""
+)
+private external fun deleteBrowserPushToken(): Promise<JsBoolean>
 
 @JsFun(
     """async (handler) => {
