@@ -1,5 +1,33 @@
 # Validation
 
+## Scoped HRIS links and resume behavior
+
+On 28 October 2026, root checks passed with 1,732 desktop tests, ten
+Android-runner tests and six distribution tests, plus architecture/format checks.
+The application Chromium suite passed 17 tests; Android dev assembly passed.
+The run used JDK 21, SDK 36 and Node 22.23.3; output is in
+`.work/hris-links-validation-2.log`.
+
+The assembled application tests exercise an Inbox resource URL before login,
+first company selection, account/company mismatch, duplicate links, bounded Back
+navigation, host background/resume, denial and admitted recovery. Opening a link
+does not send read/acknowledgement commands. Parser and ownership tests also cover
+malformed inputs, session replacement, stale acknowledgements and expired local
+admission. See [deep links](deep-links.md) for the supported paths and boundaries.
+
+The UI fixture now observes lifecycle state during composition so background
+transitions really reach the host. This exposed an expense detail scroll reset:
+temporary loading rows clamped the retained financial list to the top. A separate
+feedback scroll state now preserves the selected activity position while content
+is cleared and restored through local admission. The full offline expense UI
+regression passes with real stop/resume transitions.
+
+Generic session ownership and resumed-destination navigation were ported to
+starter `29081c5` and validated there independently. No live HRIS API, emulator,
+phone installation, iOS runtime, push-provider delivery or remote CI was exercised
+for this iteration. These checks complete the automated URL-routing increment;
+native push registration and the rest of the product PRD remain open.
+
 ## Pending actions and UI recovery
 
 On 28 October 2026, `xvfb-run -a ./gradlew :check` passed with 1,724 desktop

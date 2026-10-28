@@ -3107,6 +3107,131 @@ class AppFlowTest {
     }
 
     @Test
+    fun scopedInboxLinkWaitsForLoginAndCompanyAndNeverMarksTheMessageRead() {
+        val server = NativeUiServer()
+        val links = dev.fajar.starter.app.navigation.AppLinkChannel()
+        val link = inboxLink(server)
+        links.receive(link)
+        try {
+            withApplication(server, incomingLinks = links.links) {
+                signIn()
+                waitFor("Choose a company")
+                compose.onNodeWithText(server.inbox.firstBody).assertDoesNotExist()
+                compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
+                waitFor(server.inbox.firstBody)
+                waitFor("Mark as read")
+                assertTrue(server.inbox.actions.isEmpty())
+                compose.runOnIdle {
+                    links.receive(link)
+                    links.receive(link)
+                }
+                compose.waitForIdle()
+                waitFor(server.inbox.firstBody)
+                compose.runOnIdle { backDispatcher.pressBack() }
+                waitFor("Office closure")
+                compose.onNodeWithText("Mark as read").assertDoesNotExist()
+                compose.runOnIdle { backDispatcher.pressBack() }
+                waitFor("Welcome")
+                assertTrue(server.inbox.actions.isEmpty())
+                capture("inbox-link-return")
+            }
+        } finally {
+            links.close()
+        }
+    }
+
+    @Test
+    fun inboxLinksForAnotherCompanyOrAccountCannotReplaceTheCurrentWorkspace() {
+        val server = NativeUiServer()
+        val links = dev.fajar.starter.app.navigation.AppLinkChannel()
+        links.receive(inboxLink(server, companyId = NativeUiServer.COMPANY_TWO))
+        try {
+            withApplication(server, incomingLinks = links.links) {
+                signIn()
+                waitFor("Choose a company")
+                compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
+                waitFor("Welcome")
+                compose.runOnIdle {
+                    links.receive(
+                        inboxLink(server, accountId = "99999999-9999-4999-8999-999999999999")
+                    )
+                }
+                compose.waitForIdle()
+                compose.onNodeWithText("Welcome").assertIsDisplayed()
+                compose.onNodeWithText(server.inbox.firstBody).assertDoesNotExist()
+                assertTrue(server.inbox.countCompanies.none { it == NativeUiServer.COMPANY_TWO })
+                compose.runOnIdle { links.receive("hrismobile-dev://app/pending-actions") }
+                waitFor("Pending actions")
+                compose.onNodeWithContentDescription("Reload summary").assertIsDisplayed()
+                compose.runOnIdle { links.receive("hrismobile-dev://app/data-sync") }
+                waitFor("Data and sync")
+                compose.onNodeWithContentDescription("Sync all data").assertIsDisplayed()
+                compose.runOnIdle { links.receive("hrismobile-dev://app/inbox") }
+                waitFor("Office closure")
+                compose.onNode(hasText("Inbox") and isSelectable()).assertIsSelected()
+            }
+        } finally {
+            links.close()
+        }
+    }
+
+    @Test
+    fun externalNavigationWaitsUntilTheApplicationResumes() {
+        val server = NativeUiServer()
+        val links = dev.fajar.starter.app.navigation.AppLinkChannel()
+        val lifecycle = mutableStateOf(Lifecycle.State.RESUMED)
+        try {
+            withApplication(server, incomingLinks = links.links, lifecycleState = lifecycle) {
+                signIn()
+                waitFor("Choose a company")
+                compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
+                waitFor("Welcome")
+                compose.runOnIdle { lifecycle.value = Lifecycle.State.STARTED }
+                compose.waitForIdle()
+                compose.runOnIdle { links.receive("hrismobile-dev://app/account") }
+                compose.waitForIdle()
+                compose.onNodeWithText("Welcome").assertIsDisplayed()
+                compose.runOnIdle { lifecycle.value = Lifecycle.State.RESUMED }
+                waitFor("Active sessions")
+                compose.onNode(hasText("Account") and isSelectable()).assertIsSelected()
+            }
+        } finally {
+            links.close()
+        }
+    }
+
+    @Test
+    fun inboxLinkKeepsDeniedContentClosedUntilAdmittedRecovery() {
+        val server = NativeUiServer().apply { inbox.failureCode = "mfa_required" }
+        val links = dev.fajar.starter.app.navigation.AppLinkChannel()
+        links.receive(inboxLink(server))
+        try {
+            withApplication(server, incomingLinks = links.links) {
+                signIn()
+                waitFor("Choose a company")
+                compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
+                waitFor("Verify your account")
+                compose.onNodeWithText(server.inbox.firstBody).assertDoesNotExist()
+                assertTrue(server.inbox.actions.isEmpty())
+                server.inbox.failureCode = null
+                refreshWhenReady()
+                waitFor(server.inbox.firstBody)
+                waitFor("Mark as read")
+                assertTrue(server.inbox.actions.isEmpty())
+            }
+        } finally {
+            links.close()
+        }
+    }
+
+    private fun inboxLink(
+        server: NativeUiServer,
+        companyId: String = NativeUiServer.COMPANY_ONE,
+        accountId: String = "11111111-1111-4111-8111-111111111111",
+    ) =
+        "hrismobile-dev://app/accounts/$accountId/companies/$companyId/inbox/${server.inbox.firstId}"
+
+    @Test
     fun explicitAcknowledgementRecoversTheSameCommandAfterResponseLossAndSignInAgain() {
         val server = NativeUiServer()
         withApplication(server) {
@@ -3848,6 +3973,7 @@ class AppFlowTest {
         fileOutputs: FileOutputSource = UnavailableFileOutputSource(),
         lifecycleState: MutableState<Lifecycle.State> = mutableStateOf(Lifecycle.State.RESUMED),
         fontScale: Float = 1f,
+        incomingLinks: kotlinx.coroutines.flow.Flow<String> = kotlinx.coroutines.flow.emptyFlow(),
         test: (Koin) -> Unit,
     ) {
         val directory = Files.createTempDirectory("hris-ui").toFile()
@@ -3925,13 +4051,15 @@ class AppFlowTest {
                 DisposableEffect(lifecycleOwner) {
                     onDispose { lifecycleOwner.lifecycle.currentState = Lifecycle.State.DESTROYED }
                 }
-                SideEffect { lifecycleOwner.lifecycle.currentState = lifecycleState.value }
+                val hostState = lifecycleState.value
+                SideEffect { lifecycleOwner.lifecycle.currentState = hostState }
                 CompositionLocalProvider(
                     LocalDensity provides Density(LocalDensity.current.density, fontScale),
                     LocalLifecycleOwner provides lifecycleOwner,
                     LocalBackGestureDispatcher provides backDispatcher,
                 ) {
-                    if (visible.value) Box(Modifier.size(420.dp, 760.dp)) { StarterApp(container) }
+                    if (visible.value)
+                        Box(Modifier.size(420.dp, 760.dp)) { StarterApp(container, incomingLinks) }
                 }
             }
             test(container.koin)
@@ -3942,6 +4070,7 @@ class AppFlowTest {
         } catch (failure: Throwable) {
             // A stalled native renderer must not hide the assertion that initiated capture.
             failure.printStackTrace()
+            compose.mainClock.autoAdvance = false
             runCatching {
                 capture("failure-${testName.methodName}")
                 println(compose.onRoot().printToString())

@@ -92,19 +92,32 @@ fun AppNavigation(navigation: ScopedNavigationState, incomingLinks: Flow<String>
             AppStage.SignedOut -> "signed-out"
             else -> "bootstrap"
         }
-    LaunchedEffect(scope, state.pendingLink) {
+    LaunchedEffect(scope, state.pendingLink, lifecycle) {
         val link = state.pendingLink
         if (
             stage is AppStage.SignedIn &&
                 stage.workspace != null &&
                 !companyBlocked &&
-                link == AppLink.Account
+                link != null &&
+                link.sessionId == stage.sessionId &&
+                link.workspaceId == stage.workspace.id
         ) {
-            controller.navigate(HomeRoute(HomeTab.Account.name)) {
-                popUpTo<HomeRoute> { inclusive = true }
-                launchSingleTop = true
+            lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                controller.awaitAppLinkNavigation(scope)
+                val current = viewModel.state.value
+                val admitted = current.stage as? AppStage.SignedIn
+                if (
+                    current.pendingLink == link &&
+                        admitted != null &&
+                        admitted.sessionId == link.sessionId &&
+                        admitted.workspace?.id == link.workspaceId &&
+                        current.accessFailure == null &&
+                        current.companyPolicy?.availability == CompanyAvailability.Available
+                ) {
+                    controller.openAppLink(link.target)
+                    viewModel.onEvent(AppEvent.LinkHandled(link))
+                }
             }
-            viewModel.onEvent(AppEvent.LinkHandled(link))
         }
     }
     ScopedNavHost(navigation, scope = scope, startDestination = destination) {

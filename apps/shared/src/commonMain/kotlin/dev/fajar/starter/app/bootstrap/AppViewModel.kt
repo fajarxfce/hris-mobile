@@ -1,6 +1,7 @@
 package dev.fajar.starter.app.bootstrap
 
 import androidx.lifecycle.viewModelScope
+import dev.fajar.starter.app.navigation.PendingAppLink
 import dev.fajar.starter.app.navigation.ResolveAppLink
 import dev.fajar.starter.common.result.AppResult
 import dev.fajar.starter.common.result.FailureKind
@@ -109,6 +110,13 @@ class AppViewModel(
                                 updateState {
                                     it.copy(
                                         stage = nextStage,
+                                        pendingLink =
+                                            if (context is AppResult.Failed) it.pendingLink
+                                            else
+                                                it.pendingLink?.inContext(
+                                                    next?.sessionId,
+                                                    next?.workspace,
+                                                ),
                                         accessFailure = if (changed) null else it.accessFailure,
                                         companyPolicy = admitted?.policy,
                                         refreshingWorkspace =
@@ -207,7 +215,9 @@ class AppViewModel(
 
     private fun onLinkReceived(event: AppEvent.LinkReceived) {
         val link = resolveAppLink(event.uri) ?: return
-        updateState { it.copy(pendingLink = link) }
+        val stage = state.value.stage as? AppStage.SignedIn
+        val pending = PendingAppLink(link).inContext(stage?.sessionId, stage?.workspace) ?: return
+        updateState { it.copy(pendingLink = pending) }
     }
 
     private fun onLinkHandled(event: AppEvent.LinkHandled) {

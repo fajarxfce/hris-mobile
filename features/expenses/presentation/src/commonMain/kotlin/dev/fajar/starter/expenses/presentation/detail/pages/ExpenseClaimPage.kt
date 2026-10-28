@@ -3,6 +3,7 @@ package dev.fajar.starter.expenses.presentation.detail.pages
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,8 +27,11 @@ fun ExpenseClaimPage(
     list: LazyListState,
     onEvent: (ExpenseClaimEvent) -> Unit,
 ) {
+    // Stopping clears financial content until local access is observed again. Do not
+    // measure its scroll state against the temporary loading or denial rows.
+    val feedbackList = rememberLazyListState()
     AppLazyPage(
-        state = list,
+        state = if (state.content != null && !state.readRestricted) list else feedbackList,
         maxWidth = 720.dp,
         spacing = 12.dp,
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),

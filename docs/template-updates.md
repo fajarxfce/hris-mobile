@@ -1,5 +1,17 @@
 # Template updates
 
+## Incoming link ownership
+
+Starter `29081c5` ports the session-bound pending-link state, matching
+acknowledgements, and navigation that waits for both the resumed host and entered
+destination. Ownership and cold-login/background regressions pass in both
+applications. Mobile root checks passed with 1,732 desktop tests; starter passed
+286. Their app Chromium suites passed 17 and three tests, respectively, and both
+Android dev assemblies passed.
+
+HRIS account/company resource matching, Inbox routes and company admission stay
+in Mobile. Provider push delivery and physical URL acceptance are separate work.
+
 ## Published partition pages and complete command observation
 
 Mobile `0428aa46`, ported as starter `8707dec`, adds metadata-only pagination across published partitions and

@@ -1,8 +1,12 @@
 # Notifications and deep links
 
-This document describes inherited starter infrastructure. For the active HRIS API
-and current integration status, see [native identity](native-identity.md). Template
-endpoints and demo screens described here are not mounted by the HRIS application.
+For the active HRIS URL routes and account/company ownership, see
+[HRIS deep links](deep-links.md). Native push registration and hint handling remain
+separate integration work; the installed Firebase adapters alone do not complete
+that workflow. See [native identity](native-identity.md) for HRIS authentication.
+
+The sections below describe inherited starter infrastructure. Template endpoints,
+demo routes and notification controls described here are not mounted by HRIS.
 
 Open **Account → Notifications** to request OS access, send a local test, or copy the
 FCM token. Notification permission is requested only after an explicit action.
@@ -104,9 +108,11 @@ Local notifications use the system tray where supported. Clicking the current tr
 notification opens its destination. FCM is unavailable on desktop. Linux desktops without
 a compatible system tray return an unavailable capability instead of claiming delivery.
 
-## Deep links
+## Inherited template deep links
 
-Allowed destinations: `overview`, `activity`, `account`, `inbox`. Unknown paths, query
+The starter's destinations are `overview`, `activity`, `account`, `inbox`. HRIS
+supports the routes in [its own contract](deep-links.md), including scoped Inbox
+detail and excluding the demo activity route. In the starter, unknown paths, query
 parameters, and links for another environment are ignored. Protected destinations wait
 until onboarding and sign-in complete; signing out removes the protected stack. Pending
 links are in-memory intents and do not survive process death.

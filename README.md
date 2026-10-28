@@ -45,6 +45,8 @@ sync per data group with individual or combined refresh. Draft submission and
 command delivery stay in their owning workflows.
 Account also opens [Pending actions](docs/pending-actions.md) for local drafts,
 retained commands and document transfers, with direct links to continue each workflow.
+Supported [HRIS deep links](docs/deep-links.md) open those pages, Inbox or a scoped
+message after login/company selection and keep old intents out of replacement accounts.
 Screens support English and Indonesian. System
 appearance and reduced-motion preferences are respected.
 
