@@ -11,6 +11,7 @@ import dev.fajar.starter.sync.domain.repositories.SyncFeedRepository
 import dev.fajar.starter.sync.domain.repositories.SyncScheduleRepository
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
 import dev.fajar.starter.workspace.domain.usecases.ObserveCompanyData
+import dev.fajar.starter.workspace.domain.usecases.ObservePendingActions
 import dev.fajar.starter.workspace.domain.usecases.SyncCompanyData
 import kotlin.time.Clock
 import kotlinx.coroutines.sync.Mutex
@@ -187,4 +188,13 @@ class DocumentsDataModule {
         workspaces: WorkspaceRepository,
         build: AppBuild,
     ) = LoadDocumentEvidence(remote, sessions, workspaces, Clock.System, build)
+
+    @Factory(binds = [ObservePendingActions::class])
+    fun observeDocumentPending(
+        files: DocumentFileRepository,
+        reads: DocumentCatalogRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        build: AppBuild,
+    ) = ObserveDocumentPending(files, reads, sessions, workspaces, Clock.System, build)
 }

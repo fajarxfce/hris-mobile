@@ -64,6 +64,13 @@ suspend fun checkOvertimeActionWorkingCopySurvivesFactCleanupAndLogin(f: Overtim
         restored.observe(login, actionWorkingSelection(record), record.action).first(),
     )
     val late = copy.copy(revision = overtimeReplicaId(202))
+    val page =
+        assertIs<AppResult.Success<OvertimePage<OvertimeActionWorkingCopy>>>(
+                restored.observePage(login).first()
+            )
+            .value
+    assertEquals(setOf(copy, other), page.items.toSet())
+    assertNull(page.nextCursor)
     assertEquals(AppResult.Success(null), copies.save(f.access, copy.revision, late))
     assertEquals(
         AppResult.Success(copy),

@@ -337,6 +337,14 @@ acquisition is bounded and resumes from each claim's frontier. Filter changes do
 not create HTTP requests or interrupt an active sync. Read denials persist across
 routes and process restoration, independently of cleanup and ordinary freshness.
 
+## Pending actions
+
+Account's [Pending actions](pending-actions.md) summary observes owned draft slots,
+retained commands and local document transfers without acquiring remote data.
+Each feature applies its shared read admission. The summary distinguishes edited
+drafts, frozen commands and incomplete transfers, and reports bounded draft counts
+explicitly. Opening an entry returns to the feature's normal review and delivery.
+
 ## Coworker directory
 
 `SyncCompanyDirectory` consumes the explicit company-public directory collection.

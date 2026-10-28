@@ -1,5 +1,35 @@
 # Validation
 
+## Pending actions and UI recovery
+
+On 28 October 2026, `xvfb-run -a ./gradlew :check` passed with 1,724 desktop
+tests and four build-convention tests using JDK 21 and Android SDK 36. Coverage
+includes the Account pending-actions route, all six DI bindings, returning to an
+edited leave draft without submission, and reloading the summary without HTTP.
+Narrow layouts retain accessible actions at 200% text; Indonesian denial copy
+offers verification without displaying a false empty count.
+
+The domain tests cover draft/command deduplication, unfinished expense items,
+document transfer/validation states, expired authority, failed denial persistence,
+session replacement during a delayed read, cancellation, disposal and explicit
+local retry. Encrypted draft contracts cover bounded metadata enumeration and
+reauthentication. Chromium passed 253 tests: database 25, leave data 46, workforce
+data 55, expense data 49 and document domain 78, using Node 22.23.3.
+Application Web compilation (`:apps:shared:compileKotlinWasmJs`) and standard
+Android dev assembly (`:apps:android:assembleDevDebug`) also passed.
+
+The recovered leave UI regression waits for catalog loading and enabled refresh
+before opening dates, then selects a day within the dialog. A separate weekday
+layout regression reserves the schedule row while attendance loads and checks
+work/off/unassigned transitions at normal English and 200% Indonesian text.
+
+The reusable database source/tests match starter `8707dec`; starter root checks,
+its 25 database Chromium tests and Android dev assembly passed separately. These
+checks did not install or operate a phone/emulator, execute iOS, exercise a live
+HRIS API, publish a PR or trigger remote CI. Local logs are
+`.work/pending-feature-check-3.log`, `.work/pending-ui-browser-check.log` and
+`.work/pending-targets.log`.
+
 ## Month labels at large text sizes
 
 On 16 October 2026, root checks passed with 1,536 desktop tests and four convention

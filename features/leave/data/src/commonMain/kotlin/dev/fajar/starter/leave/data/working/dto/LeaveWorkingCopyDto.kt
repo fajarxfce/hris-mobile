@@ -16,4 +16,5 @@ data class LeaveWorkingCopyDto(
     val revision: String,
     val savedAt: String,
     val format: Int = 1,
+    val hasEdits: Boolean = true,
 )

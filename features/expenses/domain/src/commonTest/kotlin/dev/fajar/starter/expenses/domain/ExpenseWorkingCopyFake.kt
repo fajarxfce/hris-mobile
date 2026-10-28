@@ -35,6 +35,26 @@ class ExpenseWorkingCopyFake(private val owns: (ExpenseAccess) -> Boolean = { tr
         values.value += key(access, slot) to copy
     }
 
+    override fun observePage(access: ExpenseAccess, after: String?) = flow {
+        beforeRead()
+        emitAll(
+            values.map { entries ->
+                AppResult.Success(
+                    dev.fajar.starter.expenses.domain.entities.ExpensePage(
+                        entries
+                            .filterKeys {
+                                it.audience == access.audience &&
+                                    it.accountId == access.accountId &&
+                                    it.companyId == access.companyId
+                            }
+                            .values
+                            .toList()
+                    )
+                )
+            }
+        )
+    }
+
     override fun observe(
         access: ExpenseAccess,
         slot: ExpenseWorkingSlot,

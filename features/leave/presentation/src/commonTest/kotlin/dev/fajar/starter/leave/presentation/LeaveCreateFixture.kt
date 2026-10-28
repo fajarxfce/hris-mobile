@@ -124,6 +124,14 @@ class LeaveCreateFixture(instant: () -> Instant = { Instant.parse("2026-10-12T01
 
     val commands =
         object : LeaveSubmissionCommandRepository {
+            override fun observeAll(access: LeaveAccess) =
+                records.map { result ->
+                    when (result) {
+                        is AppResult.Failed -> result
+                        is AppResult.Success -> AppResult.Success(listOfNotNull(result.value))
+                    }
+                }
+
             override fun observe(
                 access: LeaveAccess,
                 employeeId: String,

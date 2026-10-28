@@ -24,6 +24,15 @@ class LeaveWorkingFixture(val base: LeaveFixture = LeaveFixture()) {
     var removals = 0
     val copies =
         object : LeaveWorkingCopyRepository {
+            override fun observePage(access: LeaveAccess, after: String?) = flow {
+                beforeRead()
+                emit(
+                    AppResult.Success(
+                        dev.fajar.starter.leave.domain.entities.LeavePage(listOfNotNull(stored))
+                    )
+                )
+            }
+
             override fun observe(access: LeaveAccess, employeeId: String) = flow {
                 observations++
                 beforeRead()

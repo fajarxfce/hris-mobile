@@ -838,4 +838,16 @@
     <string name="data_sync_all_id">Sinkronkan semua data</string>
     <string name="data_sync_dataset_id">Sinkronkan %1$s</string>
     <string name="data_sync_workforce_id">Presensi dan kalender</string>
+    <string name="pending_actions_id">Tindakan tertunda</string>
+    <string name="pending_summary_id">Tersimpan di perangkat ini. Buka fitur terkait untuk melanjutkan draft, meninjau tindakan, atau mengelola transfer.</string>
+    <string name="pending_reload_id">Muat ulang ringkasan</string>
+    <string name="pending_none_id">Tidak ada tindakan tertunda</string>
+    <string name="pending_drafts_id">Draft: %1$d</string>
+    <string name="pending_drafts_at_least_id">Draft: setidaknya %1$d</string>
+    <string name="pending_queued_id">Siap dikirim: %1$d</string>
+    <string name="pending_unconfirmed_id">Menunggu konfirmasi: %1$d</string>
+    <string name="pending_review_id">Perlu ditinjau: %1$d</string>
+    <string name="pending_transfers_id">Transfer berkas: %1$d</string>
+    <string name="pending_more_drafts_id">Buka fitur ini untuk meninjau draft lainnya.</string>
+    <string name="pending_open_id">Buka %1$s</string>
 </resources>

@@ -75,7 +75,19 @@ class SaveExpenseWorkingCopy(
                     return@withTimeoutOrNull expenseFailure("client.expense_working_copy_invalid")
             }
             val saved =
-                copies.save(access, slot, previous.revision, updated.copy(savedAt = clock.now()))
+                copies.save(
+                    access,
+                    slot,
+                    previous.revision,
+                    updated.copy(
+                        savedAt = clock.now(),
+                        hasEdits =
+                            reload == null &&
+                                (previous.hasEdits ||
+                                    previous.input != updated.input ||
+                                    previous.item != updated.item),
+                    ),
+                )
             currentCoroutineContext().ensureActive()
             val ownership = validateExpenseContinuation(access, currentAccess(workspaceId))
             if (ownership is AppResult.Failed) return@withTimeoutOrNull ownership

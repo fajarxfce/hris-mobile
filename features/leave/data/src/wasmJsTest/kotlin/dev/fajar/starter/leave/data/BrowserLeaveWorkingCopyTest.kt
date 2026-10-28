@@ -9,6 +9,11 @@ import kotlinx.coroutines.test.runTest
 
 class BrowserLeaveWorkingCopyTest {
     @Test
+    fun pendingDraftPagesAreBoundedAndKeepAccountAndEditState() = runTest {
+        withDatabase(::checkLeaveWorkingPageBoundsAndOwnership)
+    }
+
+    @Test
     fun concurrentAutosaveAndReadDenialUseTheSameContentKey() = runTest {
         withDatabase(::checkConcurrentLeaveWritersShareOneContentKey)
     }

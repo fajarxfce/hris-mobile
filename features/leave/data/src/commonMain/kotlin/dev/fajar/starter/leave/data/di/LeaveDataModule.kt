@@ -10,6 +10,7 @@ import dev.fajar.starter.sync.domain.SyncTask
 import dev.fajar.starter.sync.domain.repositories.SyncFeedRepository
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
 import dev.fajar.starter.workspace.domain.usecases.ObserveCompanyData
+import dev.fajar.starter.workspace.domain.usecases.ObservePendingActions
 import dev.fajar.starter.workspace.domain.usecases.SyncCompanyData
 import kotlin.time.Clock
 import kotlinx.coroutines.sync.Mutex
@@ -201,5 +202,26 @@ class LeaveDataModule {
             Clock.System,
             build,
             execution,
+        )
+
+    @Factory(binds = [ObservePendingActions::class])
+    fun observeLeavePending(
+        copies: LeaveWorkingCopyRepository,
+        submissions: LeaveSubmissionCommandRepository,
+        commands: LeaveCommandRepository,
+        reads: LeaveReplicaRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        build: AppBuild,
+    ) =
+        ObserveLeavePending(
+            copies,
+            submissions,
+            commands,
+            reads,
+            sessions,
+            workspaces,
+            Clock.System,
+            build,
         )
 }

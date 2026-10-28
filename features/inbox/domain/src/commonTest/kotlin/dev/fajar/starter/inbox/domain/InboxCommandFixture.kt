@@ -46,6 +46,23 @@ class InboxCommandFixture(val inbox: InboxFixture = InboxFixture()) {
 
     val commands =
         object : InboxCommandRepository {
+            override fun observeAll(access: InboxAccess) = flow {
+                try {
+                    emitAll(
+                        records.map { rows ->
+                            beforeObserve()
+                            AppResult.Success(
+                                rows.filter {
+                                    it.command.accountId == access.accountId &&
+                                        it.command.companyId == access.companyId &&
+                                        it.command.audience == access.audience
+                                }
+                            )
+                        }
+                    )
+                } finally {}
+            }
+
             override fun observe(access: InboxAccess, itemId: String) =
                 records.map { rows ->
                     beforeObserve()

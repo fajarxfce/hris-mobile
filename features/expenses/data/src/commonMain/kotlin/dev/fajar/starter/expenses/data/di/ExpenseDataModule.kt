@@ -13,6 +13,7 @@ import dev.fajar.starter.sync.domain.SyncTask
 import dev.fajar.starter.sync.domain.repositories.SyncFeedRepository
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
 import dev.fajar.starter.workspace.domain.usecases.ObserveCompanyData
+import dev.fajar.starter.workspace.domain.usecases.ObservePendingActions
 import dev.fajar.starter.workspace.domain.usecases.SyncCompanyData
 import kotlin.time.Clock
 import kotlinx.coroutines.sync.Mutex
@@ -191,4 +192,14 @@ class ExpenseDataModule {
         build: AppBuild,
         @Named("expense-acquisition") acquisition: Mutex,
     ) = LoadExpenseClaim(remote, cache, sessions, workspaces, Clock.System, build, acquisition)
+
+    @Factory(binds = [ObservePendingActions::class])
+    fun observeExpensePending(
+        copies: ExpenseWorkingCopyRepository,
+        commands: ExpenseCommandRepository,
+        reads: ExpenseReplicaRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        build: AppBuild,
+    ) = ObserveExpensePending(copies, commands, reads, sessions, workspaces, Clock.System, build)
 }

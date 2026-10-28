@@ -25,6 +25,11 @@ class OvertimeActionWorkingPresentationFixture(private val base: OvertimePresent
     val mutations = mutableListOf<OvertimeActionWorkingCopy>()
     val copies =
         object : OvertimeActionWorkingCopyRepository {
+            override fun observePage(access: WorkforceAccess, after: String?) = flow {
+                beforeRead()
+                emit(AppResult.Success(OvertimePage(records.values.toList())))
+            }
+
             override fun observe(
                 access: WorkforceAccess,
                 selection: OvertimeRequestSelection,

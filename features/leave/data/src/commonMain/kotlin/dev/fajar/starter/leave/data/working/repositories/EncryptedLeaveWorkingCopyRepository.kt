@@ -31,6 +31,47 @@ class EncryptedLeaveWorkingCopyRepository(
     @Named("leave-replica-content-key") private val credentials: CredentialStore,
     @Named("leave-content-key-creation") private val keyCreation: Mutex,
 ) : LeaveWorkingCopyRepository {
+    override fun observePage(access: LeaveAccess, after: String?) =
+        safeStorageFlow(
+                flow {
+                    emitAll(
+                        records.observePublishedCheckpoints(
+                            leaveReplicaScope(access),
+                            "leave-replica/${access.companyId}/working/",
+                            after,
+                            51,
+                        )
+                    )
+                },
+                mapValue = { rows ->
+                    val prefix = "leave-replica/${access.companyId}/working/"
+                    val selected = rows.take(50)
+                    val copies =
+                        if (selected.isEmpty()) emptyList()
+                        else {
+                            val key = Base64.decode(requireNotNull(credentials.read()))
+                            try {
+                                selected.map { raw ->
+                                    decodeLeaveWorkingCopy(
+                                        access,
+                                        raw.handle.partition.removePrefix(prefix),
+                                        raw,
+                                        cipher,
+                                        key,
+                                    )
+                                }
+                            } finally {
+                                key.fill(0)
+                            }
+                        }
+                    dev.fajar.starter.leave.domain.entities.LeavePage(
+                        copies,
+                        selected.lastOrNull()?.handle?.partition?.takeIf { rows.size > 50 },
+                    )
+                },
+            )
+            .flowOn(Dispatchers.Default)
+
     override fun observe(access: LeaveAccess, employeeId: String) =
         safeStorageFlow(
                 flow {

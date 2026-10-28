@@ -29,6 +29,7 @@ import dev.fajar.starter.settings.presentation.navigation.*
 import dev.fajar.starter.workforce.presentation.attendance.AttendanceEffect
 import dev.fajar.starter.workforce.presentation.navigation.*
 import dev.fajar.starter.workspace.domain.entities.CompanyAvailability
+import dev.fajar.starter.workspace.domain.entities.PendingActionGroup
 import dev.fajar.starter.workspace.presentation.navigation.*
 import dev.fajar.starter.workspace.presentation.policy.*
 import kotlinx.coroutines.flow.Flow
@@ -165,6 +166,9 @@ fun AppNavigation(navigation: ScopedNavigationState, incomingLinks: Flow<String>
                         onDataSync = {
                             controller.navigate(DataSyncRoute) { launchSingleTop = true }
                         },
+                        onPendingActions = {
+                            controller.navigate(PendingActionsRoute) { launchSingleTop = true }
+                        },
                         onSessions = {
                             controller.navigate(SessionsRoute) { launchSingleTop = true }
                         },
@@ -219,6 +223,33 @@ fun AppNavigation(navigation: ScopedNavigationState, incomingLinks: Flow<String>
                     }
                     dataSyncRoutes(
                         stage.workspace,
+                        onVerify = {
+                            controller.navigate(VerificationRoute) { launchSingleTop = true }
+                        },
+                        onBack = { controller.popBackStack() },
+                    )
+                    pendingActionsRoutes(
+                        stage.workspace,
+                        onOpen = { group ->
+                            when (group) {
+                                PendingActionGroup.Inbox ->
+                                    controller.navigate(InboxRoute) { launchSingleTop = true }
+                                PendingActionGroup.Attendance ->
+                                    controller.navigate(HomeRoute(HomeTab.Home.name)) {
+                                        launchSingleTop = true
+                                    }
+                                PendingActionGroup.Overtime ->
+                                    controller.navigate(OvertimeRoute) { launchSingleTop = true }
+                                PendingActionGroup.Leave ->
+                                    controller.navigate(LeaveRoute) { launchSingleTop = true }
+                                PendingActionGroup.Expenses ->
+                                    controller.navigate(ExpensesRoute) { launchSingleTop = true }
+                                PendingActionGroup.Documents ->
+                                    controller.navigate(DocumentFilesRoute) {
+                                        launchSingleTop = true
+                                    }
+                            }
+                        },
                         onVerify = {
                             controller.navigate(VerificationRoute) { launchSingleTop = true }
                         },

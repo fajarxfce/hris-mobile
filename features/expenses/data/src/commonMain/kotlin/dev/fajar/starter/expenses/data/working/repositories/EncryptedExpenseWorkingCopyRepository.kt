@@ -35,6 +35,60 @@ class EncryptedExpenseWorkingCopyRepository(
     @Named("expense-replica-content-key") private val credentials: CredentialStore,
     @Named("expense-content-key-creation") private val keyCreation: Mutex,
 ) : ExpenseWorkingCopyRepository {
+    override fun observePage(access: ExpenseAccess, after: String?) =
+        safeStorageFlow(
+                flow {
+                    emitAll(
+                        records.observePublishedCheckpoints(
+                            expenseReplicaScope(access),
+                            "expense-working-copy/${access.companyId}/",
+                            after,
+                            51,
+                        )
+                    )
+                },
+                mapValue = { rows ->
+                    val prefix = "expense-working-copy/${access.companyId}/"
+                    val selected = rows.take(50)
+                    val copies =
+                        if (selected.isEmpty()) emptyList()
+                        else {
+                            val key = Base64.decode(requireNotNull(credentials.read()))
+                            try {
+                                selected.mapNotNull { raw ->
+                                    run {
+                                        val parts =
+                                            raw.handle.partition.removePrefix(prefix).split('/')
+                                        require(parts.size == 2)
+                                        val slot =
+                                            when (parts[0]) {
+                                                "new" -> ExpenseWorkingSlot.Creation(parts[1])
+                                                "claim" -> ExpenseWorkingSlot.Claim(parts[1])
+                                                else -> error("Invalid expense working slot.")
+                                            }
+                                        val page =
+                                            records
+                                                .observe(
+                                                    expenseReplicaScope(access),
+                                                    raw.handle.partition,
+                                                    limit = 5,
+                                                )
+                                                .first()
+                                        decodeExpenseWorkingCopy(access, slot, page, cipher, key)
+                                    }
+                                }
+                            } finally {
+                                key.fill(0)
+                            }
+                        }
+                    dev.fajar.starter.expenses.domain.entities.ExpensePage(
+                        copies,
+                        selected.lastOrNull()?.handle?.partition?.takeIf { rows.size > 50 },
+                    )
+                },
+            )
+            .flowOn(Dispatchers.Default)
+
     override fun observe(access: ExpenseAccess, slot: ExpenseWorkingSlot) =
         safeStorageFlow(
                 flow {

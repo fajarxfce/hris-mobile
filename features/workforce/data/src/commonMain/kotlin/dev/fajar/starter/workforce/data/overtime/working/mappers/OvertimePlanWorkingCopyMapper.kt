@@ -20,6 +20,7 @@ fun OvertimePlanWorkingCopy.toDto() =
         input.endsAt?.toString(),
         input.breakMinutes,
         input.reason,
+        hasEdits,
     )
 
 fun OvertimePlanWorkingCopyDto.toWorkingCopy() =
@@ -36,5 +37,6 @@ fun OvertimePlanWorkingCopyDto.toWorkingCopy() =
             ),
             revision,
             Instant.parse(savedAt),
+            hasEdits,
         )
         .also { require(validateOvertimePlanWorkingCopy(it) is AppResult.Success) }

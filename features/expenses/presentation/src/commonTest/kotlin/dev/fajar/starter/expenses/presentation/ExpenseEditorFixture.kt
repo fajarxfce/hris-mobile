@@ -59,6 +59,11 @@ class ExpenseEditorFixture(val f: ExpenseFixture = ExpenseFixture()) {
         }
     val commands =
         object : ExpenseCommandRepository {
+            override fun observeAll(access: ExpenseAccess) =
+                values.map { rows ->
+                    AppResult.Success(rows.filter { it.command.belongsTo(access) })
+                }
+
             override fun observe(access: ExpenseAccess, slot: ExpenseCommandSlot) =
                 flow<AppResult<ExpenseCommandRecord?>> {
                     observers++

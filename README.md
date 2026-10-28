@@ -43,6 +43,8 @@ actions above the scrolling content; Settings groups language and security contr
 Account also opens [Data and sync](docs/data-sync.md), showing the last complete
 sync per data group with individual or combined refresh. Draft submission and
 command delivery stay in their owning workflows.
+Account also opens [Pending actions](docs/pending-actions.md) for local drafts,
+retained commands and document transfers, with direct links to continue each workflow.
 Screens support English and Indonesian. System
 appearance and reduced-motion preferences are respected.
 

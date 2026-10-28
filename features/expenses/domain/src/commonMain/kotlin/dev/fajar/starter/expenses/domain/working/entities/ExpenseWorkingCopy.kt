@@ -16,6 +16,7 @@ data class ExpenseWorkingCopy(
     val revision: String,
     val savedAt: Instant,
     val references: ExpenseReferenceValues? = null,
+    val hasEdits: Boolean = true,
 ) {
     override fun toString() = "ExpenseWorkingCopy([redacted])"
 }

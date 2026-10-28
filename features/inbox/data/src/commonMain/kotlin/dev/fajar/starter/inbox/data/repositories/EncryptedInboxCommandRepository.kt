@@ -8,7 +8,9 @@ import dev.fajar.starter.inbox.domain.repositories.InboxCommandRepository
 import dev.fajar.starter.securestorage.*
 import dev.fajar.starter.storage.*
 import kotlin.io.encoding.Base64
+import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.serialization.json.Json
@@ -21,6 +23,30 @@ class EncryptedInboxCommandRepository(
     @Named("command-content-key") private val credentials: AtomicCredentialStore,
 ) : InboxCommandRepository {
     private val insertions = Mutex()
+
+    override fun observeAll(access: InboxAccess) =
+        safeStorageFlow(
+                kotlinx.coroutines.flow.flow {
+                    emitAll(
+                        commands.observeAll(
+                            inboxCommandScope(access),
+                            inboxCommandPartition(access),
+                        )
+                    )
+                },
+                mapValue = { rows ->
+                    if (rows.isEmpty()) emptyList()
+                    else {
+                        val key = readContentKey()
+                        try {
+                            rows.map { decryptRecord(access, it, key) }
+                        } finally {
+                            key.fill(0)
+                        }
+                    }
+                },
+            )
+            .flowOn(kotlinx.coroutines.Dispatchers.Default)
 
     override fun observe(access: InboxAccess, itemId: String) =
         safeStorageFlow(

@@ -8,6 +8,7 @@ data class OvertimePlanWorkingCopy(
     val input: OvertimePlanWorkingInput,
     val revision: String,
     val savedAt: Instant,
+    val hasEdits: Boolean = true,
 ) {
     override fun toString() = "OvertimePlanWorkingCopy([redacted])"
 }

@@ -48,6 +48,26 @@ class ExpenseCommandFixture(instant: () -> Instant = { Instant.parse("2026-10-13
         }
     val commands =
         object : ExpenseCommandRepository {
+            override fun observeAll(access: ExpenseAccess) = flow {
+                observers++
+                try {
+                    emitAll(
+                        values.map { rows ->
+                            beforeRead()
+                            AppResult.Success(
+                                rows.filter {
+                                    it.command.accountId == access.accountId &&
+                                        it.command.companyId == access.companyId &&
+                                        it.command.audience == access.audience
+                                }
+                            )
+                        }
+                    )
+                } finally {
+                    observers--
+                }
+            }
+
             override fun observe(access: ExpenseAccess, slot: ExpenseCommandSlot) =
                 flow<AppResult<ExpenseCommandRecord?>> {
                     observers++

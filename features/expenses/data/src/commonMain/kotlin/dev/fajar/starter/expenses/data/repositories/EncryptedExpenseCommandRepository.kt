@@ -13,6 +13,7 @@ import kotlin.io.encoding.Base64
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
+import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.sync.Mutex
@@ -28,6 +29,30 @@ class EncryptedExpenseCommandRepository(
     @Named("command-content-key") private val credentials: AtomicCredentialStore,
 ) : ExpenseCommandRepository {
     private val insertions = Mutex()
+
+    override fun observeAll(access: ExpenseAccess) =
+        safeStorageFlow(
+                kotlinx.coroutines.flow.flow {
+                    emitAll(
+                        commands.observeAll(
+                            expenseCommandScope(access),
+                            expenseCommandPartition(access),
+                        )
+                    )
+                },
+                mapValue = { rows ->
+                    if (rows.isEmpty()) emptyList()
+                    else {
+                        val key = readContentKey()
+                        try {
+                            rows.map { decryptRecord(access, it, key) }
+                        } finally {
+                            key.fill(0)
+                        }
+                    }
+                },
+            )
+            .flowOn(kotlinx.coroutines.Dispatchers.Default)
 
     override fun observe(access: ExpenseAccess, slot: ExpenseCommandSlot) =
         safeStorageFlow(

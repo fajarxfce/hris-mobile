@@ -17,6 +17,7 @@ import dev.fajar.starter.workforce.domain.repositories.*
 import dev.fajar.starter.workforce.domain.usecases.*
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
 import dev.fajar.starter.workspace.domain.usecases.ObserveCompanyData
+import dev.fajar.starter.workspace.domain.usecases.ObservePendingActions
 import dev.fajar.starter.workspace.domain.usecases.SyncCompanyData
 import kotlin.time.Clock
 import kotlinx.coroutines.sync.Mutex
@@ -295,4 +296,34 @@ class WorkforceDataModule {
         workspaces: WorkspaceRepository,
         build: AppBuild,
     ) = ObserveWorkCalendar(replicas, cache, sessions, workspaces, Clock.System, build)
+
+    @Factory(binds = [ObservePendingActions::class])
+    fun observeOvertimePending(
+        plans: OvertimePlanWorkingCopyRepository,
+        actions: OvertimeActionWorkingCopyRepository,
+        commands: OvertimeCommandRepository,
+        reads: OvertimeReplicaRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        build: AppBuild,
+    ) =
+        ObserveOvertimePending(
+            plans,
+            actions,
+            commands,
+            reads,
+            sessions,
+            workspaces,
+            Clock.System,
+            build,
+        )
+
+    @Factory(binds = [ObservePendingActions::class])
+    fun observeAttendancePending(
+        commands: AttendanceCommandRepository,
+        reads: WorkforceReplicaRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        build: AppBuild,
+    ) = ObserveAttendancePending(commands, reads, sessions, workspaces, Clock.System, build)
 }

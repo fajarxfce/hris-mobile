@@ -18,6 +18,7 @@ import io.github.composefluent.icons.regular.ArrowRight
 import io.github.composefluent.icons.regular.ArrowSync
 import io.github.composefluent.icons.regular.ChevronDown
 import io.github.composefluent.icons.regular.ChevronRight
+import io.github.composefluent.icons.regular.Clock
 import io.github.composefluent.icons.regular.Key
 import io.github.composefluent.icons.regular.Person
 import io.github.composefluent.icons.regular.Settings
@@ -89,6 +90,13 @@ fun HomeAccountPage(state: HomeState, onEvent: (HomeEvent) -> Unit) {
                 onClick = { onEvent(HomeEvent.DataSyncRequested) },
                 enabled = !state.working,
                 leading = { AppIcon(Icons.Regular.ArrowSync) },
+                trailing = { AppIcon(Icons.Regular.ChevronRight) },
+            )
+            AppListRow(
+                title = appString(AppString.PendingActions),
+                onClick = { onEvent(HomeEvent.PendingActionsRequested) },
+                enabled = !state.working,
+                leading = { AppIcon(Icons.Regular.Clock) },
                 trailing = { AppIcon(Icons.Regular.ChevronRight) },
             )
         }

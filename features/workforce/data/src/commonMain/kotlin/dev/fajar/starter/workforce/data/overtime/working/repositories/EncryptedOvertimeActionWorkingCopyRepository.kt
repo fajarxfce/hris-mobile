@@ -32,6 +32,53 @@ class EncryptedOvertimeActionWorkingCopyRepository(
     @Named("overtime-replica-content-key") private val credentials: CredentialStore,
     @Named("overtime-content-key-creation") private val keyCreation: Mutex,
 ) : OvertimeActionWorkingCopyRepository {
+    override fun observePage(access: WorkforceAccess, after: String?) =
+        safeStorageFlow(
+                flow {
+                    emitAll(
+                        records.observePublishedCheckpoints(
+                            overtimeReplicaScope(access),
+                            "overtime-replica/${access.companyId}/working/action/",
+                            after,
+                            51,
+                        )
+                    )
+                },
+                mapValue = { rows ->
+                    val prefix = "overtime-replica/${access.companyId}/working/action/"
+                    val selected = rows.take(50)
+                    val copies =
+                        if (selected.isEmpty()) emptyList()
+                        else {
+                            val key = Base64.decode(requireNotNull(credentials.read()))
+                            try {
+                                selected.map { raw ->
+                                    run {
+                                        val parts =
+                                            raw.handle.partition.removePrefix(prefix).split('/')
+                                        require(parts.size == 3)
+                                        decodeOvertimeActionWorkingCopy(
+                                            access,
+                                            OvertimeRequestSelection(parts[1], parts[0]),
+                                            OvertimeAction.valueOf(parts[2]),
+                                            raw,
+                                            cipher,
+                                            key,
+                                        )
+                                    }
+                                }
+                            } finally {
+                                key.fill(0)
+                            }
+                        }
+                    dev.fajar.starter.workforce.domain.overtime.entities.OvertimePage(
+                        copies,
+                        selected.lastOrNull()?.handle?.partition?.takeIf { rows.size > 50 },
+                    )
+                },
+            )
+            .flowOn(Dispatchers.Default)
+
     override fun observe(
         access: WorkforceAccess,
         selection: OvertimeRequestSelection,

@@ -5,6 +5,8 @@ import dev.fajar.starter.inbox.domain.entities.*
 import kotlinx.coroutines.flow.Flow
 
 interface InboxCommandRepository {
+    fun observeAll(access: InboxAccess): Flow<AppResult<List<InboxCommandRecord>>>
+
     fun observe(access: InboxAccess, itemId: String): Flow<AppResult<InboxCommandRecord?>>
 
     suspend fun find(access: InboxAccess, id: String): AppResult<InboxCommandRecord?>

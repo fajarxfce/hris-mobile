@@ -52,7 +52,15 @@ class SaveOvertimeActionWorkingCopy(
                     is AppResult.Failed -> return@withTimeoutOrNull result
                     is AppResult.Success -> result.value
                 }
-            val saved = copies.save(access, previous.revision, updated.copy(savedAt = clock.now()))
+            val saved =
+                copies.save(
+                    access,
+                    previous.revision,
+                    updated.copy(
+                        savedAt = clock.now(),
+                        hasEdits = previous.hasEdits || previous.input != updated.input,
+                    ),
+                )
             currentCoroutineContext().ensureActive()
             val owner =
                 validateOvertimeWorkingContinuation(access, currentAccess(workspaceId, selection))

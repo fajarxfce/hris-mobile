@@ -22,6 +22,17 @@ class OvertimeActionWorkingFixture(val overtime: OvertimeFixture = OvertimeFixtu
     var removals = 0
     val copies =
         object : OvertimeActionWorkingCopyRepository {
+            override fun observePage(access: WorkforceAccess, after: String?) = flow {
+                beforeRead()
+                emit(
+                    AppResult.Success(
+                        dev.fajar.starter.workforce.domain.overtime.entities.OvertimePage(
+                            records.values.toList()
+                        )
+                    )
+                )
+            }
+
             override fun observe(
                 access: WorkforceAccess,
                 selection: OvertimeRequestSelection,

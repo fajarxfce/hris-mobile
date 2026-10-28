@@ -8,6 +8,7 @@ import dev.fajar.starter.sync.domain.SyncTask
 import dev.fajar.starter.sync.domain.repositories.SyncFeedRepository
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
 import dev.fajar.starter.workspace.domain.usecases.ObserveCompanyData
+import dev.fajar.starter.workspace.domain.usecases.ObservePendingActions
 import dev.fajar.starter.workspace.domain.usecases.SyncCompanyData
 import kotlin.time.Clock
 import org.koin.core.annotation.*
@@ -74,4 +75,12 @@ class InboxDataModule {
         workspaces: WorkspaceRepository,
         build: AppBuild,
     ) = SyncInbox(feed, remote, cache, sessions, workspaces, Clock.System, build)
+
+    @Factory(binds = [ObservePendingActions::class])
+    fun observeInboxPending(
+        commands: InboxCommandRepository,
+        reads: InboxCacheRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+    ) = ObserveInboxPending(commands, reads, sessions, workspaces)
 }

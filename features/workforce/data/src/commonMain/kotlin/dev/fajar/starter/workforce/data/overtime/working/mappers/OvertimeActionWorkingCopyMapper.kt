@@ -20,6 +20,7 @@ fun OvertimeActionWorkingCopy.toDto() =
         input.actual?.endsAt?.toString(),
         input.actual?.breakMinutes,
         input.reason,
+        hasEdits,
     )
 
 fun OvertimeActionWorkingCopyDto.toWorkingCopy(): OvertimeActionWorkingCopy {
@@ -43,6 +44,7 @@ fun OvertimeActionWorkingCopyDto.toWorkingCopy(): OvertimeActionWorkingCopy {
             input,
             revision,
             Instant.parse(savedAt),
+            hasEdits,
         )
         .also { require(validateOvertimeActionWorkingCopy(it) is AppResult.Success) }
 }

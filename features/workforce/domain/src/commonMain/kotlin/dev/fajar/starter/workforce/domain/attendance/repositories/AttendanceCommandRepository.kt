@@ -6,6 +6,8 @@ import dev.fajar.starter.workforce.domain.entities.WorkforceAccess
 import kotlinx.coroutines.flow.Flow
 
 interface AttendanceCommandRepository {
+    fun observeAll(access: WorkforceAccess): Flow<AppResult<List<AttendanceCommandRecord>>>
+
     fun observe(
         access: WorkforceAccess,
         resourceId: String? = null,

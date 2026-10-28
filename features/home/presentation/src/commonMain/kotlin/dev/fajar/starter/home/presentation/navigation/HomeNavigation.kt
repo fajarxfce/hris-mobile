@@ -22,6 +22,7 @@ fun NavGraphBuilder.homeRoutes(
     onService: (HomeService) -> Unit,
     onAllServices: () -> Unit,
     onDataSync: () -> Unit,
+    onPendingActions: () -> Unit,
     onSessions: () -> Unit,
     attendance: @Composable () -> Unit,
     inbox: @Composable () -> Unit,
@@ -43,6 +44,7 @@ fun NavGraphBuilder.homeRoutes(
                 HomeEffect.OpenAllServices -> onAllServices()
                 HomeEffect.OpenSettings -> onSettings()
                 HomeEffect.OpenDataSync -> onDataSync()
+                HomeEffect.OpenPendingActions -> onPendingActions()
                 is HomeEffect.OpenService -> onService(effect.service)
                 HomeEffect.OpenSessions -> onSessions()
             }

@@ -45,6 +45,14 @@ class LeaveActionPresentationFixture(val request: LeaveRequestPresentationFixtur
 
     val commands =
         object : LeaveCommandRepository {
+            override fun observeAll(access: LeaveAccess) =
+                records.map { result ->
+                    when (result) {
+                        is AppResult.Failed -> result
+                        is AppResult.Success -> AppResult.Success(listOfNotNull(result.value))
+                    }
+                }
+
             override fun observe(
                 access: LeaveAccess,
                 requestId: String,

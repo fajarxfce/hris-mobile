@@ -48,7 +48,15 @@ class SaveLeaveWorkingCopy(
                     is AppResult.Failed -> return@withTimeoutOrNull result
                     is AppResult.Success -> result.value
                 }
-            val saved = copies.save(access, previous.revision, snapshot.copy(savedAt = clock.now()))
+            val saved =
+                copies.save(
+                    access,
+                    previous.revision,
+                    snapshot.copy(
+                        savedAt = clock.now(),
+                        hasEdits = previous.hasEdits || previous.input != updated.input,
+                    ),
+                )
             currentCoroutineContext().ensureActive()
             val owner =
                 validateLeaveWorkingContinuation(

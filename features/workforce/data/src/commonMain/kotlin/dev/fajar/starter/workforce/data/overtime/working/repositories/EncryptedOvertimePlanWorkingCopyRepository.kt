@@ -31,6 +31,47 @@ class EncryptedOvertimePlanWorkingCopyRepository(
     @Named("overtime-replica-content-key") private val credentials: CredentialStore,
     @Named("overtime-content-key-creation") private val keyCreation: Mutex,
 ) : OvertimePlanWorkingCopyRepository {
+    override fun observePage(access: WorkforceAccess, after: String?) =
+        safeStorageFlow(
+                flow {
+                    emitAll(
+                        records.observePublishedCheckpoints(
+                            overtimeReplicaScope(access),
+                            "overtime-replica/${access.companyId}/working/plan/",
+                            after,
+                            51,
+                        )
+                    )
+                },
+                mapValue = { rows ->
+                    val prefix = "overtime-replica/${access.companyId}/working/plan/"
+                    val selected = rows.take(50)
+                    val copies =
+                        if (selected.isEmpty()) emptyList()
+                        else {
+                            val key = Base64.decode(requireNotNull(credentials.read()))
+                            try {
+                                selected.map { raw ->
+                                    decodeOvertimePlanWorkingCopy(
+                                        access,
+                                        raw.handle.partition.removePrefix(prefix),
+                                        raw,
+                                        cipher,
+                                        key,
+                                    )
+                                }
+                            } finally {
+                                key.fill(0)
+                            }
+                        }
+                    dev.fajar.starter.workforce.domain.overtime.entities.OvertimePage(
+                        copies,
+                        selected.lastOrNull()?.handle?.partition?.takeIf { rows.size > 50 },
+                    )
+                },
+            )
+            .flowOn(Dispatchers.Default)
+
     override fun observe(access: WorkforceAccess, employeeId: String) =
         safeStorageFlow(
                 flow {

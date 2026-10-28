@@ -1,5 +1,18 @@
 # Template updates
 
+## Published partition pages and complete command observation
+
+Mobile `0428aa46`, ported as starter `8707dec`, adds metadata-only pagination across published partitions and
+complete command observation under the existing 128-command account capacity.
+The twelve database source/test files were copied to the starter only after their
+SQLite and Chromium contracts passed in Mobile, with matching source baselines
+checked before copying. Starter root checks (284 desktop tests), its 25 database
+Chromium tests and Android dev assembly passed on 28 October 2026.
+
+HRIS pending counts, encrypted draft mapping, admission policy and Account UI stay
+in this application. See [pending actions](pending-actions.md),
+[replication storage](replica-storage.md) and [command storage](command-storage.md).
+
 ## Published replica metadata
 
 The shared replica store can observe the visible checkpoint without reading

@@ -75,10 +75,42 @@ suspend fun checkLeaveWorkingCopySurvivesFactCleanupAndLogin(f: LeaveRequestRepl
     val restored =
         EncryptedLeaveWorkingCopyRepository(f.db.replicas, f.cipher, f.keys, f.keyCreation)
     assertEquals(AppResult.Success(copy), restored.observe(login, copy.employeeId).first())
+    assertEquals(AppResult.Success(LeavePage(listOf(copy))), restored.observePage(login).first())
     assertEquals(AppResult.Success(null), restored.observe(login, replicaRequestId(909)).first())
     val late = copy.copy(revision = replicaRequestId(102))
     assertEquals(AppResult.Success(null), copies.save(f.access, copy.revision, late))
     assertEquals(AppResult.Success(copy), restored.observe(login, copy.employeeId).first())
+}
+
+suspend fun checkLeaveWorkingPageBoundsAndOwnership(f: LeaveRequestReplicaFixture) {
+    val copies = EncryptedLeaveWorkingCopyRepository(f.db.replicas, f.cipher, f.keys, f.keyCreation)
+    val expected =
+        (1..51).map { index ->
+            workingLeave(f)
+                .copy(employeeId = replicaRequestId(1000 + index), hasEdits = index % 2 == 0)
+        }
+    expected.forEach { assertEquals(AppResult.Success(it), copies.save(f.access, null, it)) }
+    val first =
+        assertIs<AppResult.Success<LeavePage<LeaveWorkingCopy>>>(
+                copies.observePage(f.access).first()
+            )
+            .value
+    assertEquals(expected.take(50), first.items)
+    val next =
+        assertIs<AppResult.Success<LeavePage<LeaveWorkingCopy>>>(
+                copies.observePage(f.access, requireNotNull(first.nextCursor)).first()
+            )
+            .value
+    assertEquals(expected.takeLast(1), next.items)
+    assertNull(next.nextCursor)
+    assertEquals(
+        AppResult.Success(LeavePage(emptyList())),
+        copies.observePage(f.access.copy(companyId = replicaRequestId(99))).first(),
+    )
+    val renewed = f.access.copy(sessionId = "renewed")
+    f.db.accounts.activate(renewed.sessionId, leaveReplicaScope(renewed).accountKey)
+    assertEquals(AppResult.Success(LeavePage(emptyList())), copies.observePage(f.access).first())
+    assertEquals(AppResult.Success(first), copies.observePage(renewed).first())
 }
 
 suspend fun checkLeaveWorkingAcknowledgementAndCompetingEdits(f: LeaveRequestReplicaFixture) {

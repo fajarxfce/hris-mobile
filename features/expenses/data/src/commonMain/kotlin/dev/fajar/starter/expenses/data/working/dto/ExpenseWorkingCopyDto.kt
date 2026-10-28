@@ -20,4 +20,5 @@ data class ExpenseWorkingCopyDto(
     val savedAt: String,
     val references: ExpenseReferenceValuesDto? = null,
     val schema: Int = 1,
+    val hasEdits: Boolean = true,
 )

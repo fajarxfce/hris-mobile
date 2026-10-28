@@ -36,6 +36,7 @@ fun ExpenseWorkingCopy.toWorkingDto() =
                 value.receipts.map { it.toWorkingReference() },
             )
         },
+        hasEdits = hasEdits,
     )
 
 fun ExpenseWorkingCopyDto.toWorkingCopy(slot: ExpenseWorkingSlot): ExpenseWorkingCopy {
@@ -59,6 +60,7 @@ fun ExpenseWorkingCopyDto.toWorkingCopy(slot: ExpenseWorkingSlot): ExpenseWorkin
             revision,
             Instant.parse(savedAt),
             references?.toReferences(query.value),
+            hasEdits,
         )
     require(validateExpenseWorkingCopy(slot, value) is AppResult.Success)
     return value

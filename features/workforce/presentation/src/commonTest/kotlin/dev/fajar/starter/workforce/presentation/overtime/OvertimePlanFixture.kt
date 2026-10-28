@@ -87,6 +87,14 @@ class OvertimePlanFixture(
         }
     val commands =
         object : OvertimeCommandRepository {
+            override fun observeAll(access: WorkforceAccess) =
+                retained.map { result ->
+                    when (result) {
+                        is AppResult.Failed -> result
+                        is AppResult.Success -> AppResult.Success(listOfNotNull(result.value))
+                    }
+                }
+
             override fun observe(
                 access: WorkforceAccess,
                 slot: OvertimeCommandSlot,

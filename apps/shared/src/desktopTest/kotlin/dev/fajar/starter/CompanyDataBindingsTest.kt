@@ -5,7 +5,9 @@ import dev.fajar.starter.database.createAppDatabase
 import dev.fajar.starter.datastore.createUserPreferences
 import dev.fajar.starter.sync.domain.SyncTask
 import dev.fajar.starter.workspace.domain.entities.CompanyDataSet
+import dev.fajar.starter.workspace.domain.entities.PendingActionGroup
 import dev.fajar.starter.workspace.domain.usecases.ObserveCompanyData
+import dev.fajar.starter.workspace.domain.usecases.ObservePendingActions
 import dev.fajar.starter.workspace.domain.usecases.SyncCompanyData
 import java.nio.file.Files
 import kotlin.test.*
@@ -31,6 +33,9 @@ class CompanyDataBindingsTest {
             assertEquals(CompanyDataSet.entries.size, observers.size)
             assertEquals(CompanyDataSet.entries.size, acquisitions.size)
             acquisitions.forEach { sync -> assertSame(sync, tasks.single { it.key == sync.key }) }
+            val pending = koin.getAll<ObservePendingActions>()
+            assertEquals(PendingActionGroup.entries.toSet(), pending.map { it.group }.toSet())
+            assertEquals(PendingActionGroup.entries.size, pending.size)
         } finally {
             container.close()
             directory.deleteRecursively()

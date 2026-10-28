@@ -67,6 +67,7 @@ class OpenOvertimePlanWorkingCopy(
                     OvertimePlanWorkingInput(asOf),
                     Uuid.random().toString(),
                     clock.now(),
+                    hasEdits = false,
                 )
             val inserted = copies.save(access, null, initial)
             currentCoroutineContext().ensureActive()

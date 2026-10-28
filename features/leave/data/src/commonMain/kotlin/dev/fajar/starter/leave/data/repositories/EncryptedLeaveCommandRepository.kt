@@ -10,7 +10,9 @@ import dev.fajar.starter.storage.*
 import kotlin.io.encoding.Base64
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
+import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.serialization.json.Json
@@ -23,6 +25,30 @@ class EncryptedLeaveCommandRepository(
     @Named("command-content-key") private val credentials: AtomicCredentialStore,
 ) : LeaveCommandRepository {
     private val insertions = Mutex()
+
+    override fun observeAll(access: LeaveAccess) =
+        safeStorageFlow(
+                kotlinx.coroutines.flow.flow {
+                    emitAll(
+                        commands.observeAll(
+                            leaveCommandScope(access),
+                            leaveCommandPartition(access),
+                        )
+                    )
+                },
+                mapValue = { rows ->
+                    if (rows.isEmpty()) emptyList()
+                    else {
+                        val key = readContentKey()
+                        try {
+                            rows.map { decryptRecord(access, it, key) }
+                        } finally {
+                            key.fill(0)
+                        }
+                    }
+                },
+            )
+            .flowOn(kotlinx.coroutines.Dispatchers.Default)
 
     override fun observe(access: LeaveAccess, requestId: String) =
         safeStorageFlow(

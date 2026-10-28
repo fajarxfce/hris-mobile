@@ -56,6 +56,26 @@ class OvertimeCommandFixture(instant: () -> Instant = { Instant.parse("2026-10-1
 
     val commands =
         object : OvertimeCommandRepository {
+            override fun observeAll(access: WorkforceAccess) = flow {
+                observers++
+                try {
+                    emitAll(
+                        records.map { rows ->
+                            beforeObserve()
+                            AppResult.Success(
+                                rows.filter {
+                                    it.command.accountId == access.accountId &&
+                                        it.command.companyId == access.companyId &&
+                                        it.command.audience == access.audience
+                                }
+                            )
+                        }
+                    )
+                } finally {
+                    observers--
+                }
+            }
+
             override fun observe(
                 access: WorkforceAccess,
                 slot: OvertimeCommandSlot,

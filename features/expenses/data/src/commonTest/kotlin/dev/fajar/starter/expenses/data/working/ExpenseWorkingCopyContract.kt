@@ -55,6 +55,18 @@ suspend fun checkWorkingCopyReopensWithoutChangingClaim(f: ExpenseReplicaFixture
     val next = f.access.copy(sessionId = "reauthenticated", sessionExpiresAt = f.raw.now - 73.hours)
     f.reopen(next)
     assertEquals(AppResult.Success(copy), f.workingRepository().observe(next, slot).first())
+    assertEquals(
+        AppResult.Success(ExpensePage(listOf(copy))),
+        f.workingRepository().observePage(next).first(),
+    )
+    assertEquals(
+        AppResult.Success(ExpensePage(emptyList())),
+        f.workingRepository().observePage(next.copy(companyId = expenseFixtureId(90))).first(),
+    )
+    assertEquals(
+        AppResult.Success(ExpensePage(emptyList())),
+        f.workingRepository().observePage(f.access).first(),
+    )
     assertEquals(claim, f.details(owner = next).snapshot)
     assertEquals(
         AppResult.Success(null),

@@ -211,6 +211,7 @@ class OpenExpenseWorkingCopy(
                 null,
                 Uuid.random().toString(),
                 clock.now(),
+                hasEdits = false,
             )
         )
     }

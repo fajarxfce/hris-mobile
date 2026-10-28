@@ -3471,6 +3471,54 @@ class AppFlowTest {
     }
 
     @Test
+    fun pendingActionsReopensAnEditedLocalLeaveDraftWithoutSubmittingIt() {
+        val requests = java.util.concurrent.atomic.AtomicInteger()
+        val server =
+            NativeUiServer(beforeRequest = { requests.incrementAndGet() }).apply {
+                leave.enabled = true
+            }
+        withApplication(server) {
+            signIn()
+            waitFor("Choose a company")
+            compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
+            waitFor("Welcome")
+            compose.onNode(hasText("Leave") and hasClickAction()).performScrollTo().performClick()
+            waitFor("12.5 days")
+            compose.onNode(hasText("Request leave") and hasClickAction()).performClick()
+            waitFor("Select leave type")
+            waitForRefreshReady()
+            compose
+                .onNodeWithContentDescription("Reason")
+                .performScrollTo()
+                .performTextReplacement("Keep this local draft")
+            compose.runOnIdle { backDispatcher.pressBack() }
+            waitFor("Leave balances")
+            compose.runOnIdle { backDispatcher.pressBack() }
+            waitFor("Welcome")
+            compose.onNode(hasText("Account") and hasClickAction()).performClick()
+            compose.onNodeWithText("Pending actions").performScrollTo().performClick()
+            waitFor(
+                "Saved on this device. Open a workflow to continue drafts, review actions, or manage transfers."
+            )
+            compose
+                .onNode(hasScrollToIndexAction())
+                .performScrollToNode(hasTestTag("pending-Leave"))
+            waitFor("Drafts: 1")
+            val before = requests.get()
+            compose.onNodeWithContentDescription("Reload summary").performClick()
+            waitFor("Drafts: 1")
+            assertEquals(before, requests.get())
+            assertEquals(0, server.leave.creation.commits)
+            capture("pending-actions-local-draft")
+            compose.onNodeWithContentDescription("Open Leave").performClick()
+            waitFor("Leave balances")
+            compose.onNode(hasText("Request leave") and hasClickAction()).performClick()
+            waitFor("Keep this local draft")
+            assertEquals(0, server.leave.creation.commits)
+        }
+    }
+
+    @Test
     fun anUnconfirmedRemoteLogoutStillRemovesTheLocalIdentity() {
         val server = NativeUiServer().apply { deviceSessions.loseRevocation = true }
         withApplication(server) {

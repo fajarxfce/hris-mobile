@@ -6,6 +6,11 @@ import dev.fajar.starter.leave.domain.working.entities.LeaveWorkingCopy
 import kotlinx.coroutines.flow.Flow
 
 interface LeaveWorkingCopyRepository {
+    fun observePage(
+        access: LeaveAccess,
+        after: String? = null,
+    ): Flow<AppResult<dev.fajar.starter.leave.domain.entities.LeavePage<LeaveWorkingCopy>>>
+
     fun observe(access: LeaveAccess, employeeId: String): Flow<AppResult<LeaveWorkingCopy?>>
 
     /** A null result means a different revision owns the slot. */

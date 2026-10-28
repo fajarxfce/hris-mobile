@@ -7,6 +7,11 @@ import kotlinx.coroutines.test.runTest
 
 class LeaveWorkingCopyTest {
     @Test
+    fun pendingDraftPagesAreBoundedAndKeepAccountAndEditState() = runTest {
+        withDatabase(::checkLeaveWorkingPageBoundsAndOwnership)
+    }
+
+    @Test
     fun concurrentAutosaveAndReadDenialUseTheSameContentKey() = runTest {
         withDatabase(::checkConcurrentLeaveWritersShareOneContentKey)
     }

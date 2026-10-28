@@ -32,6 +32,7 @@ class HomeViewModel(
         on<HomeEvent.CompanyChangeRequested>(::onCompanyChangeRequested)
         on<HomeEvent.SettingsRequested>(::onSettingsRequested)
         on<HomeEvent.DataSyncRequested>(::onDataSyncRequested)
+        on<HomeEvent.PendingActionsRequested>(::onPendingActionsRequested)
         on<HomeEvent.ServiceSelected>(::onServiceSelected)
         on<HomeEvent.SessionsRequested>(::onSessionsRequested)
         on<HomeEvent.SignOutRequested>(::onSignOutRequested)
@@ -102,6 +103,11 @@ class HomeViewModel(
     private fun onSessionsRequested(event: HomeEvent.SessionsRequested) {
         if (state.value.working) return
         viewModelScope.launch { emitEffect(HomeEffect.OpenSessions) }
+    }
+
+    private fun onPendingActionsRequested(event: HomeEvent.PendingActionsRequested) {
+        if (state.value.working) return
+        viewModelScope.launch { emitEffect(HomeEffect.OpenPendingActions) }
     }
 
     private fun onCompanyChangeRequested(event: HomeEvent.CompanyChangeRequested) {

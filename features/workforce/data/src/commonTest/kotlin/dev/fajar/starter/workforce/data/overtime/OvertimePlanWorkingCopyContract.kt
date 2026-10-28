@@ -47,6 +47,7 @@ suspend fun checkOvertimePlanWorkingCopySurvivesFactCleanupAndLogin(f: OvertimeR
     val restored =
         EncryptedOvertimePlanWorkingCopyRepository(f.db.replicas, f.cipher, f.keys, f.keyCreation)
     assertEquals(AppResult.Success(copy), restored.observe(login, copy.employeeId).first())
+    assertEquals(AppResult.Success(OvertimePage(listOf(copy))), restored.observePage(login).first())
     assertEquals(AppResult.Success(null), restored.observe(login, overtimeReplicaId(909)).first())
     val late = copy.copy(revision = overtimeReplicaId(102))
     assertEquals(AppResult.Success(null), copies.save(f.access, copy.revision, late))

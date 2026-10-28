@@ -36,6 +36,8 @@ class LeaveWorkingCopyTest {
             )
         assertIs<AppResult.Success<*>>(f.save(f.base.workspace.id, initial, edited))
         val stored = requireNotNull(f.stored)
+        assertFalse(initial.hasEdits)
+        assertTrue(stored.hasEdits)
         val remoteReads = f.base.policyReads
         now += 3.days
         f.base.policyCall = { error("Local draft must not request network admission") }

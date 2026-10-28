@@ -123,6 +123,22 @@ class AttendanceFixture {
         }
     val commands =
         object : AttendanceCommandRepository {
+            override fun observeAll(access: WorkforceAccess) = flow {
+                try {
+                    emitAll(
+                        records.map { rows ->
+                            AppResult.Success(
+                                rows.filter {
+                                    it.command.accountId == access.accountId &&
+                                        it.command.companyId == access.companyId &&
+                                        it.command.audience == access.audience
+                                }
+                            )
+                        }
+                    )
+                } finally {}
+            }
+
             override fun observe(access: WorkforceAccess, resourceId: String?) =
                 records.map { rows ->
                     AppResult.Success(

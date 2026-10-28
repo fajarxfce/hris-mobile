@@ -838,4 +838,16 @@
     <string name="data_sync_all_en">Sync all data</string>
     <string name="data_sync_dataset_en">Sync %1$s</string>
     <string name="data_sync_workforce_en">Attendance and calendar</string>
+    <string name="pending_actions_en">Pending actions</string>
+    <string name="pending_summary_en">Saved on this device. Open a workflow to continue drafts, review actions, or manage transfers.</string>
+    <string name="pending_reload_en">Reload summary</string>
+    <string name="pending_none_en">No pending actions</string>
+    <string name="pending_drafts_en">Drafts: %1$d</string>
+    <string name="pending_drafts_at_least_en">Drafts: at least %1$d</string>
+    <string name="pending_queued_en">Ready to send: %1$d</string>
+    <string name="pending_unconfirmed_en">Awaiting confirmation: %1$d</string>
+    <string name="pending_review_en">Needs review: %1$d</string>
+    <string name="pending_transfers_en">File transfers: %1$d</string>
+    <string name="pending_more_drafts_en">Open this workflow to review more drafts.</string>
+    <string name="pending_open_en">Open %1$s</string>
 </resources>

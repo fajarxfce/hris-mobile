@@ -128,6 +128,13 @@ the published checkpoint without loading resource payloads. Refresh carries an
 explicit workspace ID and reuses the worker's acquisition instance. Consumers
 do not depend on feature repositories or presentation modules.
 
+Pending-action observation uses a separate workspace-domain port implemented by
+each owning feature. It combines encrypted working copies, immutable retained
+commands and document transfer state under that feature's shared read admission.
+The route observes local counts and opens workflows; it never prepares or delivers
+commands. Published partition pages and complete capacity-bounded command reads
+remain raw database contracts. See [pending actions](pending-actions.md).
+
 The [work calendar and attendance](workforce.md) share account-owned encrypted
 attendance days, effective schedule assignments, roster overrides and holidays.
 `SyncWorkforce` owns change-feed acquisition and live admission. Its repository

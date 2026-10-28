@@ -5,6 +5,8 @@ import dev.fajar.starter.leave.domain.entities.*
 import kotlinx.coroutines.flow.Flow
 
 interface LeaveSubmissionCommandRepository {
+    fun observeAll(access: LeaveAccess): Flow<AppResult<List<LeaveSubmissionRecord>>>
+
     fun observe(access: LeaveAccess, employeeId: String): Flow<AppResult<LeaveSubmissionRecord?>>
 
     suspend fun find(access: LeaveAccess, id: String): AppResult<LeaveSubmissionRecord?>

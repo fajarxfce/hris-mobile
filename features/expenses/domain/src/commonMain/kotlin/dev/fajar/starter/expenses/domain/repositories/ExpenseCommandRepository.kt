@@ -5,6 +5,8 @@ import dev.fajar.starter.expenses.domain.entities.*
 import kotlinx.coroutines.flow.Flow
 
 interface ExpenseCommandRepository {
+    fun observeAll(access: ExpenseAccess): Flow<AppResult<List<ExpenseCommandRecord>>>
+
     fun observe(
         access: ExpenseAccess,
         slot: ExpenseCommandSlot,

@@ -11,5 +11,7 @@ sealed interface HomeEffect {
 
     data object OpenDataSync : HomeEffect
 
+    data object OpenPendingActions : HomeEffect
+
     data object OpenSessions : HomeEffect
 }

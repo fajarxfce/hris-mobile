@@ -6,6 +6,8 @@ import dev.fajar.starter.workforce.domain.overtime.entities.*
 import kotlinx.coroutines.flow.Flow
 
 interface OvertimeCommandRepository {
+    fun observeAll(access: WorkforceAccess): Flow<AppResult<List<OvertimeCommandRecord>>>
+
     fun observe(
         access: WorkforceAccess,
         slot: OvertimeCommandSlot,

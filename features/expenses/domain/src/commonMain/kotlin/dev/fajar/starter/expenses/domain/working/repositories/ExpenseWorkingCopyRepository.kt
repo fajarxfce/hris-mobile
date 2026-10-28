@@ -7,6 +7,11 @@ import dev.fajar.starter.expenses.domain.working.entities.ExpenseWorkingSlot
 import kotlinx.coroutines.flow.Flow
 
 interface ExpenseWorkingCopyRepository {
+    fun observePage(
+        access: ExpenseAccess,
+        after: String? = null,
+    ): Flow<AppResult<dev.fajar.starter.expenses.domain.entities.ExpensePage<ExpenseWorkingCopy>>>
+
     fun observe(
         access: ExpenseAccess,
         slot: ExpenseWorkingSlot,

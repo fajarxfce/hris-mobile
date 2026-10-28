@@ -8,4 +8,5 @@ data class LeaveWorkingCopy(
     val input: LeaveWorkingInput,
     val revision: String,
     val savedAt: Instant,
+    val hasEdits: Boolean = true,
 )

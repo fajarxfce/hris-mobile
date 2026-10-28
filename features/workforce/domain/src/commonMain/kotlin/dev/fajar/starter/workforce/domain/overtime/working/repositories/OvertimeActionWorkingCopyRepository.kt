@@ -8,6 +8,17 @@ import dev.fajar.starter.workforce.domain.overtime.working.entities.OvertimeActi
 import kotlinx.coroutines.flow.Flow
 
 interface OvertimeActionWorkingCopyRepository {
+    fun observePage(
+        access: WorkforceAccess,
+        after: String? = null,
+    ): Flow<
+        AppResult<
+            dev.fajar.starter.workforce.domain.overtime.entities.OvertimePage<
+                OvertimeActionWorkingCopy
+            >
+        >
+    >
+
     fun observe(
         access: WorkforceAccess,
         selection: OvertimeRequestSelection,

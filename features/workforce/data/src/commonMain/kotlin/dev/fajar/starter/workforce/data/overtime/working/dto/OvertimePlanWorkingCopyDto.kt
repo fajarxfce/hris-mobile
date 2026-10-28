@@ -14,4 +14,5 @@ data class OvertimePlanWorkingCopyDto(
     val endsAt: String?,
     val breakMinutes: String,
     val reason: String,
+    val hasEdits: Boolean = true,
 )

@@ -48,6 +48,7 @@ fun LeaveWorkingCopyDto.toWorkingCopy(): LeaveWorkingCopy {
             ),
             revision,
             Instant.parse(savedAt),
+            hasEdits,
         )
     require(validateLeaveWorkingCopy(value) is AppResult.Success)
     return value
@@ -87,4 +88,5 @@ fun LeaveWorkingCopy.toDto() =
         },
         revision,
         savedAt.toString(),
+        hasEdits = hasEdits,
     )

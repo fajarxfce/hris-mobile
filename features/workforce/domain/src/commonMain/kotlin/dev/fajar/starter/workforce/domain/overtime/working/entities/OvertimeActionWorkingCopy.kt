@@ -10,6 +10,7 @@ data class OvertimeActionWorkingCopy(
     val input: OvertimeActionWorkingInput,
     val revision: String,
     val savedAt: Instant,
+    val hasEdits: Boolean = true,
 ) {
     override fun toString() = "OvertimeActionWorkingCopy(redacted)"
 }

@@ -48,6 +48,22 @@ class ExpenseWorkingCopyFake(private val owns: (ExpenseAccess) -> Boolean = { tr
         }
     }
 
+    override fun observePage(access: ExpenseAccess, after: String?) =
+        values.map { rows ->
+            AppResult.Success(
+                dev.fajar.starter.expenses.domain.entities.ExpensePage(
+                    rows
+                        .filterKeys {
+                            it.audience == access.audience &&
+                                it.accountId == access.accountId &&
+                                it.companyId == access.companyId
+                        }
+                        .values
+                        .toList()
+                )
+            )
+        }
+
     override suspend fun save(
         access: ExpenseAccess,
         slot: ExpenseWorkingSlot,

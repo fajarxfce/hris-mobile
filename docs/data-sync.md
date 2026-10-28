@@ -48,4 +48,5 @@ scheduler enqueue responses do not prove that another worker is running.
 Refresh updates acquired facts. It does not submit unfinished forms or retry
 business commands. Drafts, command outcomes and file transfers remain visible in
 their owning workflows; this page does not count them or infer delivery from a
-completed read-model sync. A shared pending-action summary remains separate work.
+completed read-model sync. Account's [Pending actions](pending-actions.md) page
+observes those local drafts, commands and transfers separately.
