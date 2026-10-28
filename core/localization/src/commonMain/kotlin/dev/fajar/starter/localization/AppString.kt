@@ -1504,6 +1504,7 @@ enum class AppString(val english: StringResource, val indonesian: StringResource
     PersonalWorkspace(Res.string.personal_workspace_en, Res.string.personal_workspace_id),
     Notifications(Res.string.notifications_en, Res.string.notifications_id),
     NativePushTitle(Res.string.native_push_title_en, Res.string.native_push_title_id),
+    NativePushMessage(Res.string.native_push_message_en, Res.string.native_push_message_id),
     NativePushDescription(
         Res.string.native_push_description_en,
         Res.string.native_push_description_id,

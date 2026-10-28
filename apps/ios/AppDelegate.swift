@@ -8,7 +8,7 @@ import FirebaseMessaging
 import StarterKit
 
 final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDelegate, MessagingDelegate, AppleFirebaseClient {
-    lazy var host = AppleAppHost(firebase: self, remoteConfig: FirebaseFeatureFlagClient(), credentials: KeychainClient(), inboxCredentials: KeychainClient(recordName: "inbox-content-key"), calendarCredentials: KeychainClient(recordName: "calendar-content-key"), leaveCredentials: KeychainClient(recordName: "leave-content-key"), leaveReplicaCredentials: KeychainClient(recordName: "leave-replica-content-key"), overtimeReplicaCredentials: KeychainClient(recordName: "overtime-replica-content-key"), workforceReplicaCredentials: KeychainClient(recordName: "workforce-replica-content-key"), payrollReplicaCredentials: KeychainClient(recordName: "payroll-replica-content-key"), expenseReplicaCredentials: KeychainClient(recordName: "expense-replica-content-key"), directoryReplicaCredentials: KeychainClient(recordName: "directory-replica-content-key"), selfProfileReplicaCredentials: KeychainClient(recordName: "self-profile-replica-content-key"), documentCatalogCredentials: KeychainClient(recordName: "document-catalog-content-key"), commandCredentials: KeychainClient(recordName: "command-content-key"), fileCredentials: KeychainClient(recordName: "file-content-key"), workspaceCredentials: KeychainClient(recordName: "workspace-content-key"), pushCredentials: KeychainClient(recordName: "native-push-state"), crash: FirebaseCrashClient(), performance: FirebasePerformanceClient())
+    lazy var host = AppleAppHost(firebase: self, remoteConfig: FirebaseFeatureFlagClient(), credentials: KeychainClient(), inboxCredentials: KeychainClient(recordName: "inbox-content-key"), calendarCredentials: KeychainClient(recordName: "calendar-content-key"), leaveCredentials: KeychainClient(recordName: "leave-content-key"), leaveReplicaCredentials: KeychainClient(recordName: "leave-replica-content-key"), overtimeReplicaCredentials: KeychainClient(recordName: "overtime-replica-content-key"), workforceReplicaCredentials: KeychainClient(recordName: "workforce-replica-content-key"), payrollReplicaCredentials: KeychainClient(recordName: "payroll-replica-content-key"), expenseReplicaCredentials: KeychainClient(recordName: "expense-replica-content-key"), directoryReplicaCredentials: KeychainClient(recordName: "directory-replica-content-key"), selfProfileReplicaCredentials: KeychainClient(recordName: "self-profile-replica-content-key"), documentCatalogCredentials: KeychainClient(recordName: "document-catalog-content-key"), commandCredentials: KeychainClient(recordName: "command-content-key"), fileCredentials: KeychainClient(recordName: "file-content-key"), workspaceCredentials: KeychainClient(recordName: "workspace-content-key"), pushCredentials: KeychainClient(recordName: "native-push-state"), inboxPushCredentials: KeychainClient(recordName: "inbox-push-queue"), crash: FirebaseCrashClient(), performance: FirebasePerformanceClient())
     private let syncIdentifier = Bundle.main.bundleIdentifier! + ".sync"
     var configured: Bool { FirebaseApp.app() != nil }
 
@@ -60,25 +60,36 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
 
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         if notification.request.trigger is UNPushNotificationTrigger {
-            let content = notification.request.content
-            host.receivedNotification(
-                id: content.userInfo["gcm.message_id"] as? String ?? notification.request.identifier,
-                title: content.title, body: content.body,
-                destination: content.userInfo["destination"] as? String ?? "inbox"
-            ) { completionHandler([.banner, .sound, .list]) }
+            guard let fields = inboxFields(notification.request.content.userInfo) else { completionHandler([]); return }
+            host.receivedInboxPush(fields: fields, process: false) { _ in completionHandler([]) }
         } else { completionHandler([.banner, .sound, .list]) }
     }
 
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
         let content = response.notification.request.content
-        let destination = content.userInfo["destination"] as? String ?? "inbox"
-        host.openNotification(destination: destination)
         if response.notification.request.trigger is UNPushNotificationTrigger {
-            host.receivedNotification(
-                id: content.userInfo["gcm.message_id"] as? String ?? response.notification.request.identifier,
-                title: content.title, body: content.body, destination: destination
-            ) { completionHandler() }
-        } else { completionHandler() }
+            guard let fields = inboxFields(content.userInfo) else { completionHandler(); return }
+            host.receivedInboxPush(fields: fields, process: false) { _ in completionHandler() }
+        } else {
+            if let destination = content.userInfo["destination"] as? String { host.openNotification(destination: destination) }
+            completionHandler()
+        }
+    }
+
+    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        guard let fields = inboxFields(userInfo) else { completionHandler(.noData); return }
+        host.receivedInboxPush(fields: fields, process: true) { progressed in
+            completionHandler(progressed.boolValue ? .newData : .noData)
+        }
+    }
+
+    private func inboxFields(_ userInfo: [AnyHashable: Any]) -> [String: String]? {
+        var fields: [String: String] = [:]
+        for name in ["schemaVersion", "eventCode", "eventId", "accountId", "companyId", "inboxId"] {
+            guard let value = userInfo[name] as? String, value.count <= 256 else { return nil }
+            fields[name] = value
+        }
+        return fields
     }
 
     func enterBackground() {

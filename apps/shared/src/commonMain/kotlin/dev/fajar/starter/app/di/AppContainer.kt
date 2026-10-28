@@ -90,6 +90,7 @@ fun createAppContainer(
     fileCredentials: AtomicCredentialStore = MemoryCredentialStore(),
     workspaceCredentials: AtomicCredentialStore = MemoryCredentialStore(),
     pushCredentials: CredentialStore = MemoryCredentialStore(),
+    inboxPushCredentials: CredentialStore = MemoryCredentialStore(),
     remoteFeatureFlags: RemoteFeatureFlagSource = UnavailableFeatureFlagSource(),
     deviceAuthentication: DeviceAuthenticationSource = UnavailableDeviceAuthenticationSource(),
     browserAuthorization: BrowserAuthorizationSource = UnavailableBrowserAuthorizationSource(),
@@ -149,6 +150,8 @@ fun createAppContainer(
                 .onClose { (it as? ForegroundWorkScheduler)?.close() }
             single<CredentialStore> { credentials }.onClose { it?.close() }
             single<CredentialStore>(named("native-push-state")) { pushCredentials }
+                .onClose { it?.close() }
+            single<CredentialStore>(named("inbox-push-queue")) { inboxPushCredentials }
                 .onClose { it?.close() }
             single<CredentialStore>(named("inbox-content-key")) { inboxCredentials }
                 .onClose { it?.close() }

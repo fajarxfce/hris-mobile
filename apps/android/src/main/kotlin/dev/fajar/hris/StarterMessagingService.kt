@@ -2,9 +2,8 @@ package dev.fajar.hris
 
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import dev.fajar.starter.inbox.domain.push.usecases.QueueInboxPushSignal
 import dev.fajar.starter.notifications.data.datasources.AndroidPushTokenSource
-import dev.fajar.starter.notifications.domain.entities.NotificationMessage
-import dev.fajar.starter.notifications.domain.usecases.ReceiveNotification
 import kotlinx.coroutines.runBlocking
 
 /** Firebase invokes this worker-thread entry point; finish local work before returning. */
@@ -19,17 +18,11 @@ class StarterMessagingService : FirebaseMessagingService() {
     }
 
     override fun onMessageReceived(message: RemoteMessage) {
-        val notification =
-            NotificationMessage(
-                id = message.messageId ?: message.data["id"].orEmpty(),
-                title = message.notification?.title ?: message.data["title"].orEmpty(),
-                body = message.notification?.body ?: message.data["body"].orEmpty(),
-                destination = message.data["destination"] ?: "inbox",
-                createdAtEpochMillis = System.currentTimeMillis(),
-            )
+        // HRIS sends data-only hints; provider display payloads are unsupported.
+        if (message.notification != null) return
         runBlocking {
-            (application as StarterApplication).container.koin.get<ReceiveNotification>()(
-                notification
+            (application as StarterApplication).container.koin.get<QueueInboxPushSignal>()(
+                message.data
             )
         }
     }

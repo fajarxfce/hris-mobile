@@ -69,6 +69,7 @@ fun main(args: Array<String>) {
             leaveCredentials = desktopSessionCredentials(namespace, "leave-content-key"),
             workspaceCredentials = desktopSessionCredentials(namespace, "workspace-content-key"),
             pushCredentials = desktopSessionCredentials(namespace, "native-push-state"),
+            inboxPushCredentials = desktopSessionCredentials(namespace, "inbox-push-queue"),
         )
     val workerScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
     startForegroundSync(container, workerScope)

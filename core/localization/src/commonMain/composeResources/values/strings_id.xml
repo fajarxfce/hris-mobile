@@ -1,4 +1,5 @@
 <resources>
+    <string name="native_push_message_id">Buka kotak masuk untuk melihat pembaruan.</string>
     <string name="native_push_title_id">Notifikasi kotak masuk</string>
     <string name="native_push_description_id">Terima pembaruan kotak masuk HRIS di perangkat ini.</string>
     <string name="native_push_enabled_id">Notifikasi aktif untuk perangkat ini.</string>

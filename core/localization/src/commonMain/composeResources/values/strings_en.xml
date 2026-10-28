@@ -1,4 +1,5 @@
 <resources>
+    <string name="native_push_message_en">Open your inbox to view an update.</string>
     <string name="native_push_title_en">Inbox notifications</string>
     <string name="native_push_description_en">Receive updates from your HRIS inbox on this device.</string>
     <string name="native_push_enabled_en">Notifications are enabled for this device.</string>

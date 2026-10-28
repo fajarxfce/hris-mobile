@@ -14,8 +14,9 @@ accounts clear their predecessor's status and reject late results. Logout attemp
 retirement through the session transition; interrupted/failed cleanup resumes on
 the next foreground entry. There is no automatic failed-request retry loop.
 
-Authorized Inbox hint delivery and reconnect scheduling remain integration work.
-The inherited starter notification demo is not mounted by HRIS.
+Authorized Inbox hint processing is wired into the native receivers and shared
+worker. Background registration renewal remains integration work. The inherited
+starter notification demo is not mounted by HRIS.
 
 ## Ownership and recovery
 
@@ -41,6 +42,44 @@ is within one day of expiry. Failed storage, cancellation and replacement sessio
 cannot publish an unowned result. Corrupt local records fail without becoming an
 empty installation or overwriting a retained operation.
 
+## Inbox hints and notification attempts
+
+FCM messages contain only schema/event identifiers and account, company and Inbox
+IDs. Android accepts data-only messages; Apple extracts these bounded fields from
+APNs metadata. Provider titles, bodies and destinations never select displayed
+content or navigation. Receivers validate canonical UUIDs, require the current
+account/API audience, and retain the hint in a separate encrypted installation
+record before scheduling work. Reception has a three-second local deadline.
+
+The queue retains at most 64 pending hints for one day and at most 512 combined
+pending/attempt records. Attempt records retain their own account/company/audience
+for seven days, including across account changes. Duplicate reception cannot
+extend a hint's lifetime. Corrupt/oversized storage fails without overwriting the
+record. These are optional delivery hints; the canonical Inbox is acquired through
+normal synchronization even when a hint expires or cannot be retained.
+
+The worker keeps the selected company, requires current HRIS admission and grants
+each hint at most three durable network preparations. It synchronizes the Inbox,
+then reads the canonical item before display. An unread item must also exist in the
+published local replica at the canonical version or newer. Confirmed denials stay
+gated through failed cleanup; another admitted synchronization must clear them.
+Cancellation, session replacement, changed company, expired preparation, disabled
+push, revoked OS permission and already-read items cannot start a new alert.
+
+Before calling the OS, the worker atomically replaces the pending hint with an
+attempt record. An uncertain/cancelled OS call is not repeated. This trades a
+possible missed optional alert for duplicate suppression; it does not guarantee
+that the OS showed an alert. Android uses the full event ID as the notification
+tag and alerts once for replacement. The notification says only **HRIS** and an
+English/Indonesian prompt to open Inbox. Its internal resource path carries account,
+company and item IDs, and the existing HRIS link admission checks it again on tap.
+Displaying or opening this link does not send a read/acknowledgement command.
+
+Android WorkManager schedules connected work. Apple foreground work and remote
+background fetch share the same serialized worker, with a 25-second fetch owner;
+OS throttling, suspension and force-stop can prevent delivery. Platform SDK and
+real-device acceptance are recorded separately from fixture tests.
+
 ## Provider configuration and acceptance
 
 The supplied Android configuration for Firebase project `cmp-fajar` is installed
@@ -53,4 +92,7 @@ FCM and Firebase Authentication are both requested. Firebase sign-in must exchan
 a verified external identity for HRIS authorization; registration tokens are never
 account identity. iOS provider configuration, APNs signing and worker FCM service
 credentials remain external acceptance dependencies. Real token issuance, delivery,
-foreground/background hint behavior and Firebase login are not yet claimed.
+foreground/background provider behavior and Firebase login are not yet claimed.
+The public Firebase Auth configuration request returned `CONFIGURATION_NOT_FOUND`;
+Authentication must be initialized and its intended sign-in provider enabled in
+Firebase Console before real login acceptance. No client key is recorded here.

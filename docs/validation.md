@@ -1,5 +1,28 @@
 # Validation
 
+## Authorized native Inbox hints
+
+On 28 October 2026, root checks passed with 1,788 desktop/UI tests, runner and
+distribution suites, architecture, formatting and static analysis. Inbox domain
+passed 77 Chromium tests, Inbox data 11, notification data eight and app links 17.
+Configured Android dev assembly passed. Logs are
+`.work/inbox-push-validation-2.log` and `.work/inbox-push-final-validation.log`.
+
+Eight queue, nine delivery and three storage regressions cover strict hint parsing,
+wrong accounts, duplicate reception, retained attempt evidence across accounts,
+capacity/expiry, competing writes, failed scheduling, cancellation, bounded
+preparations, canonical acquisition, failed denial cleanup, disabled push and
+uncertain OS delivery. The final preference-read regression failed before adding
+the post-read session/deadline/admission check and passed afterward.
+
+Two real-container/Ktor/SQLite tests receive a hint, synchronize the encrypted Inbox,
+resolve the generated resource link, and recover from offline/confirmed-MFA failure
+without sending acknowledgement commands. DI tests verify task registry construction
+without prematurely acquiring an OS adapter and explicitly resolve the display path
+with native adapters supplied. Android/iOS receiver wiring is present; this Linux
+validation does not execute Swift, APNs, FCM delivery or device behavior. Background
+registration renewal and Firebase sign-in remain separate work.
+
 ## Hierarchical notification destinations
 
 The notification adapter now validates bounded internal path segments before OS

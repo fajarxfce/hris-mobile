@@ -1,5 +1,15 @@
 # Template updates
 
+## Notification resource paths
+
+Mobile `b77d991f` ports to starter `7562e67`. Four source/test files match after
+checking source baselines. The adapter validates bounded internal destinations,
+appends individual Android URI segments, and replaces notifications using the full
+event ID with one alert. Both repositories passed root checks, all eight
+notification-data Chromium tests and configured Android dev assembly; starter
+passed 291 desktop tests. HRIS queues, authorization and canonical Inbox acquisition
+stay in this application.
+
 ## Incoming link ownership
 
 Starter `29081c5` ports the session-bound pending-link state, matching
