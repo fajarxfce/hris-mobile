@@ -1452,12 +1452,22 @@ class AppFlowTest {
 
     @Test
     fun newLeaveRequestReviewsEvidenceAndRecoversTheSameSubmissionAfterResponseLoss() {
+        val catalogRead = CompletableDeferred<Unit>()
+        val catalogReady = CompletableDeferred<Unit>()
         val server =
-            NativeUiServer().apply {
-                leave.enabled = true
-                leave.creation.attachmentRequired = true
-                documents.enabled = true
-            }
+            NativeUiServer(
+                    beforeRequest = { request ->
+                        if (request.url.encodedPath.endsWith("/leave/types")) {
+                            catalogRead.complete(Unit)
+                            catalogReady.await()
+                        }
+                    }
+                )
+                .apply {
+                    leave.enabled = true
+                    leave.creation.attachmentRequired = true
+                    documents.enabled = true
+                }
         withApplication(server) {
             signIn()
             waitFor("Choose a company")
@@ -1467,22 +1477,33 @@ class AppFlowTest {
             waitFor("12.5 days")
             compose.onNode(hasText("Request leave") and hasClickAction()).performClick()
             waitFor("Select leave type")
+            compose.waitUntil { catalogRead.isCompleted }
+            compose.onNodeWithContentDescription("Refresh").assertIsNotEnabled()
+            catalogReady.complete(Unit)
+            waitForRefreshReady()
             compose
                 .onNode(hasText("Start date") and hasClickAction())
                 .performScrollTo()
+                .assertIsEnabled()
                 .performClick()
-            compose.onNodeWithContentDescription(formatLocalDate("2026-10-15", "en")).performClick()
-            compose.waitUntil {
-                compose
-                    .onAllNodes(hasContentDescription("Refresh") and isEnabled())
-                    .fetchSemanticsNodes()
-                    .isNotEmpty()
-            }
+            compose
+                .onNode(
+                    hasContentDescription(formatLocalDate("2026-10-15", "en")) and
+                        hasAnyAncestor(isDialog())
+                )
+                .performClick()
+            waitForRefreshReady()
             compose
                 .onNode(hasText("End date") and hasClickAction())
                 .performScrollTo()
+                .assertIsEnabled()
                 .performClick()
-            compose.onNodeWithContentDescription(formatLocalDate("2026-10-17", "en")).performClick()
+            compose
+                .onNode(
+                    hasContentDescription(formatLocalDate("2026-10-17", "en")) and
+                        hasAnyAncestor(isDialog())
+                )
+                .performClick()
             compose
                 .onNode(hasText("Select leave type") and hasClickAction())
                 .performScrollTo()
@@ -3906,13 +3927,17 @@ class AppFlowTest {
         compose.onNode(hasText("Sign in") and hasClickAction()).performScrollTo().performClick()
     }
 
-    private fun refreshWhenReady(configureResponse: () -> Unit = {}) {
+    private fun waitForRefreshReady() {
         compose.waitUntil(15_000) {
             compose
                 .onAllNodes(hasContentDescription("Refresh") and isEnabled())
                 .fetchSemanticsNodes()
                 .size == 1
         }
+    }
+
+    private fun refreshWhenReady(configureResponse: () -> Unit = {}) {
+        waitForRefreshReady()
         configureResponse()
         compose.onNodeWithContentDescription("Refresh").assertIsEnabled().performClick()
     }

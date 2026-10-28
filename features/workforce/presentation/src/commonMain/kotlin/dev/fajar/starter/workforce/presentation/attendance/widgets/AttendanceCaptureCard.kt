@@ -10,6 +10,7 @@ import dev.fajar.starter.designsystem.components.*
 import dev.fajar.starter.designsystem.theme.AppColors
 import dev.fajar.starter.localization.*
 import dev.fajar.starter.workforce.domain.attendance.entities.AttendanceKind
+import dev.fajar.starter.workforce.domain.entities.WorkDay
 import dev.fajar.starter.workforce.presentation.attendance.*
 import dev.fajar.starter.workforce.presentation.attendance.formatters.attendanceTime
 import dev.fajar.starter.workforce.presentation.calendar.formatters.calendarTimeRange
@@ -44,8 +45,16 @@ fun AttendanceCaptureCard(
             actions()
         }
         if (content?.employee != null || (content == null && (state.loading || state.refreshing))) {
-            if (content?.shift != null)
-                AppText(calendarTimeRange(content.shift), color = AppColors.muted)
+            val day = content?.snapshot?.calendar?.days?.singleOrNull { it.date == content.date }
+            AppText(
+                when (day) {
+                    is WorkDay.Work -> calendarTimeRange(day)
+                    is WorkDay.Off -> appString(AppString.CalendarOff)
+                    is WorkDay.Unassigned -> appString(AppString.CalendarUnassigned)
+                    null -> "—"
+                },
+                color = AppColors.muted,
+            )
             if (content?.employee != null && content.snapshot.directory.items.size > 1)
                 AppText(content.employee.employeeNumber, color = AppColors.muted)
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
