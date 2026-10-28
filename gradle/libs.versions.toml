@@ -19,6 +19,8 @@ activity = "1.11.0"
 biometric = "1.1.0"
 oidc = "0.18.4"
 appauth = "0.11.1"
+credentials = "1.6.0"
+google-id = "1.2.1"
 ktfmt = "0.59"
 browser = "0.3"
 datastore = "1.2.1"
@@ -45,6 +47,9 @@ datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "d
 cyclonedx-gradle = { module = "org.cyclonedx:cyclonedx-gradle-plugin", version.ref = "cyclonedx" }
 oidc-core = { module = "io.github.kalinjul.kotlin.multiplatform:oidc-core", version.ref = "oidc" }
 android-appauth = { module = "net.openid:appauth", version.ref = "appauth" }
+android-credentials = { module = "androidx.credentials:credentials", version.ref = "credentials" }
+android-credentials-play-services = { module = "androidx.credentials:credentials-play-services-auth", version.ref = "credentials" }
+google-id = { module = "com.google.android.libraries.identity.googleid:googleid", version.ref = "google-id" }
 android-biometric = { module = "androidx.biometric:biometric", version.ref = "biometric" }
 compose-desktop-windows = { module = "org.jetbrains.compose.desktop:desktop-jvm-windows-x64", version.ref = "compose" }
 compose-desktop-macos-arm64 = { module = "org.jetbrains.compose.desktop:desktop-jvm-macos-arm64", version.ref = "compose" }

@@ -23,6 +23,7 @@ import dev.fajar.starter.fileio.UnavailableFileInputSource
 import dev.fajar.starter.fileio.UnavailableFileOutputSource
 import dev.fajar.starter.home.presentation.di.HomePresentationModule
 import dev.fajar.starter.identity.data.di.IdentityModule
+import dev.fajar.starter.identity.data.firebase.datasources.*
 import dev.fajar.starter.identity.data.sso.config.SsoConfiguration
 import dev.fajar.starter.identity.data.sso.datasources.BrowserAuthorizationSource
 import dev.fajar.starter.identity.data.sso.datasources.UnavailableBrowserAuthorizationSource
@@ -94,6 +95,8 @@ fun createAppContainer(
     remoteFeatureFlags: RemoteFeatureFlagSource = UnavailableFeatureFlagSource(),
     deviceAuthentication: DeviceAuthenticationSource = UnavailableDeviceAuthenticationSource(),
     browserAuthorization: BrowserAuthorizationSource = UnavailableBrowserAuthorizationSource(),
+    firebaseOptions: FirebaseClientOptionsSource = UnavailableFirebaseClientOptionsSource(),
+    googleCredentials: GoogleCredentialSource = UnavailableGoogleCredentialSource(),
     platform: AppPlatform = AppPlatform.Desktop,
     transferInputs: TransferInputSource = UnavailableTransferInputSource(),
     location: LocationDataSource = UnavailableLocationDataSource(),
@@ -107,6 +110,7 @@ fun createAppContainer(
         http ?: applicationNetworkModule(environment),
         applicationStorageModule(database, preferences),
         applicationWorkerModule(),
+        applicationFirebaseModule(firebaseOptions, googleCredentials),
         TransferDataModule().module,
         SecurityPresentationModule().module,
         AvailabilityDataModule().module,

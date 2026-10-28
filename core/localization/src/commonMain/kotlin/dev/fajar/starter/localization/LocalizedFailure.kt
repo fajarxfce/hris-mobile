@@ -206,6 +206,11 @@ fun failureText(failure: Failure): String =
             "client.inbox_command_changed",
             "client.inbox_action_unavailable" -> AppString.InboxReviewRequired
             "invalid_credentials" -> AppString.InvalidCredentials
+            "firebase_sign_in_failed" -> AppString.ProviderSignInFailed
+            "sso_sign_in_failed" -> AppString.ProviderAccountRejected
+            "firebase_sign_in_unavailable",
+            "identity.firebase_unavailable" -> AppString.ProviderSignInUnavailable
+            "identity.session_changed" -> AppString.ErrorUnauthorized
             "invalid_mfa_code",
             "invalid_mfa_request" -> AppString.InvalidVerificationCode
             "mfa_enrollment_expired" -> AppString.EnrollmentExpired

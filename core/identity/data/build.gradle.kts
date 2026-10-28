@@ -18,6 +18,10 @@ kotlin.sourceSets {
     getByName("androidMain").dependencies {
         implementation(libs.android.appauth)
         implementation(libs.android.activity)
+        implementation(libs.android.core)
+        implementation(libs.android.credentials)
+        implementation(libs.android.credentials.play.services)
+        implementation(libs.google.id)
     }
     getByName("wasmJsMain").dependencies { implementation(libs.browser) }
     getByName("commonTest").dependencies {

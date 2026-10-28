@@ -514,6 +514,9 @@
     <string name="recovery_codes_saved_en">I have saved these codes</string>
     <string name="verification_uncertain_en">The verification result could not be confirmed. Sign out and sign in again before retrying.</string>
     <string name="invalid_credentials_en">Email or password is incorrect.</string>
+    <string name="provider_sign_in_failed_en">Sign-in was not accepted. Check your account and try again.</string>
+    <string name="provider_sign_in_unavailable_en">This sign-in method is unavailable. Try again later or contact your administrator.</string>
+    <string name="provider_account_rejected_en">This account cannot sign in to HRIS. Contact your administrator.</string>
     <string name="invalid_verification_code_en">The code is invalid or has already been used. Check your authenticator or use another recovery code.</string>
     <string name="enrollment_expired_en">Authenticator setup expired. Start setup again.</string>
     <string name="too_many_attempts_en">Too many attempts. Try again later.</string>

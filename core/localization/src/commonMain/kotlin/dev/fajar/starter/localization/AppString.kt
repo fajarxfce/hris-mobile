@@ -1441,6 +1441,18 @@ enum class AppString(val english: StringResource, val indonesian: StringResource
         Res.string.verification_uncertain_id,
     ),
     InvalidCredentials(Res.string.invalid_credentials_en, Res.string.invalid_credentials_id),
+    ProviderSignInFailed(
+        Res.string.provider_sign_in_failed_en,
+        Res.string.provider_sign_in_failed_id,
+    ),
+    ProviderSignInUnavailable(
+        Res.string.provider_sign_in_unavailable_en,
+        Res.string.provider_sign_in_unavailable_id,
+    ),
+    ProviderAccountRejected(
+        Res.string.provider_account_rejected_en,
+        Res.string.provider_account_rejected_id,
+    ),
     InvalidVerificationCode(
         Res.string.invalid_verification_code_en,
         Res.string.invalid_verification_code_id,

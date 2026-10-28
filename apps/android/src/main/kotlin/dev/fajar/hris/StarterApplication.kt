@@ -12,6 +12,8 @@ import dev.fajar.starter.datastore.createUserPreferences
 import dev.fajar.starter.featureflags.data.datasources.AndroidFeatureFlagSource
 import dev.fajar.starter.fileio.AndroidFileInputSource
 import dev.fajar.starter.fileio.AndroidFileOutputSource
+import dev.fajar.starter.identity.data.firebase.datasources.AndroidFirebaseClientOptionsSource
+import dev.fajar.starter.identity.data.firebase.datasources.AndroidGoogleCredentialSource
 import dev.fajar.starter.identity.data.sso.datasources.AndroidBrowserAuthorizationSource
 import dev.fajar.starter.location.data.datasources.AndroidLocationDataSource
 import dev.fajar.starter.observability.*
@@ -63,6 +65,8 @@ class StarterApplication : Application(), Configuration.Provider {
             remoteFeatureFlags = AndroidFeatureFlagSource(this),
             deviceAuthentication = deviceAuthentication,
             browserAuthorization = browserAuthorization,
+            firebaseOptions = AndroidFirebaseClientOptionsSource(this),
+            googleCredentials = googleCredentials,
             platform = AppPlatform.Android,
             location = location,
             fileInputs = fileInputs,
@@ -71,6 +75,7 @@ class StarterApplication : Application(), Configuration.Provider {
     }
 
     val browserAuthorization by lazy { AndroidBrowserAuthorizationSource(this) }
+    val googleCredentials by lazy { AndroidGoogleCredentialSource(this) }
     val location by lazy { AndroidLocationDataSource(this) }
     val fileInputs by lazy { AndroidFileInputSource(this) }
     val fileOutputs by lazy { AndroidFileOutputSource(this) }

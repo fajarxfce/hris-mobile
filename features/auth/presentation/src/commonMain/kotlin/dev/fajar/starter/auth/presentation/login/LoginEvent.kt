@@ -5,6 +5,8 @@ sealed interface LoginEvent {
 
     data class SsoRequested(val providerId: String) : LoginEvent
 
+    data object GoogleRequested : LoginEvent
+
     data object SsoCancellationRequested : LoginEvent
 
     data class EmailChanged(val value: String) : LoginEvent

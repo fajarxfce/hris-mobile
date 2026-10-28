@@ -55,11 +55,30 @@ fun LoginPage(state: LoginState, onEvent: (LoginEvent) -> Unit) {
                     appString(AppString.SignIn),
                     { onEvent(LoginEvent.SignInRequested) },
                     Modifier.fillMaxWidth(),
-                    loading = state.submitting && state.pendingProviderId == null,
-                    enabled = !state.submitting,
+                    loading =
+                        state.optionsLoading || state.submitting && state.pendingProviderId == null,
+                    enabled =
+                        !state.submitting &&
+                            !state.optionsLoading &&
+                            state.options?.emailAvailable == true,
                 )
+                if (state.options == null && !state.optionsLoading)
+                    AppButton(
+                        appString(AppString.Retry),
+                        { onEvent(LoginEvent.ProvidersRequested) },
+                        primary = false,
+                    )
             }
         }
+        if (state.options?.google == true)
+            AppButton(
+                appString(AppString.SignInWithProvider, "Google"),
+                { onEvent(LoginEvent.GoogleRequested) },
+                Modifier.fillMaxWidth(),
+                primary = false,
+                enabled = !state.submitting && !state.optionsLoading,
+                loading = state.submitting && state.pendingProviderId == "firebase.google",
+            )
         state.providers.forEach { provider ->
             AppButton(
                 appString(AppString.SignInWithProvider, provider.label),
@@ -70,7 +89,7 @@ fun LoginPage(state: LoginState, onEvent: (LoginEvent) -> Unit) {
                 loading = state.submitting && state.pendingProviderId == provider.id,
             )
         }
-        if (state.pendingProviderId != null)
+        if (state.submitting)
             AppButton(
                 appString(AppString.Cancel),
                 { onEvent(LoginEvent.SsoCancellationRequested) },

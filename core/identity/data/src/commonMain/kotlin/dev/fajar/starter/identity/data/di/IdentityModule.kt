@@ -2,6 +2,8 @@ package dev.fajar.starter.identity.data.di
 
 import dev.fajar.starter.common.config.AppBuild
 import dev.fajar.starter.identity.domain.entities.IdentityServer
+import dev.fajar.starter.identity.domain.firebase.repositories.*
+import dev.fajar.starter.identity.domain.firebase.usecases.*
 import dev.fajar.starter.identity.domain.push.repositories.*
 import dev.fajar.starter.identity.domain.push.usecases.*
 import dev.fajar.starter.identity.domain.repositories.*
@@ -17,6 +19,20 @@ import org.koin.core.annotation.*
 @Module
 @ComponentScan("dev.fajar.starter.identity.data")
 class IdentityModule {
+    @Factory
+    fun firebaseOptions(
+        firebase: FirebaseAuthenticationRepository,
+        native: NativeFirebaseSessionRepository,
+    ) = LoadFirebaseSignInOptions(firebase, native)
+
+    @Single
+    fun firebaseSignIn(
+        firebase: FirebaseAuthenticationRepository,
+        native: NativeFirebaseSessionRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+    ) = SignInWithFirebase(firebase, native, sessions, server)
+
     @Factory
     fun observePushStatus(
         sessions: SessionRepository,

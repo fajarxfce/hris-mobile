@@ -514,6 +514,9 @@
     <string name="recovery_codes_saved_id">Saya sudah menyimpan kode</string>
     <string name="verification_uncertain_id">Hasil verifikasi belum dapat dipastikan. Keluar dan masuk kembali sebelum mencoba lagi.</string>
     <string name="invalid_credentials_id">Email atau password tidak sesuai.</string>
+    <string name="provider_sign_in_failed_id">Login belum berhasil. Periksa akun Anda lalu coba lagi.</string>
+    <string name="provider_sign_in_unavailable_id">Metode login ini belum tersedia. Coba lagi nanti atau hubungi administrator.</string>
+    <string name="provider_account_rejected_id">Akun ini belum dapat masuk ke HRIS. Hubungi administrator.</string>
     <string name="invalid_verification_code_id">Kode tidak sesuai atau sudah digunakan. Periksa authenticator atau gunakan recovery code lain.</string>
     <string name="enrollment_expired_id">Setup authenticator sudah kedaluwarsa. Mulai setup kembali.</string>
     <string name="too_many_attempts_id">Terlalu banyak percobaan. Coba lagi nanti.</string>

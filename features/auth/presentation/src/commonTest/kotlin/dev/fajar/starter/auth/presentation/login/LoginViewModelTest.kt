@@ -70,6 +70,7 @@ class LoginViewModelTest {
                 }
             }
         val sessions = TestSessions()
+        val firebase = FirebaseLoginFixture(sessions, enabled = false)
         val viewModel =
             LoginViewModel(
                 SignIn(
@@ -84,8 +85,11 @@ class LoginViewModelTest {
                 ValidateSignIn(),
                 ListSsoProviders(sso),
                 SignInWithSso(sso, repository, sessions),
+                firebase.options,
+                firebase.signIn,
             )
         store.put("login", viewModel)
+        runCurrent()
         viewModel.onEvent(LoginEvent.EmailChanged("demo@example.com"))
         viewModel.onEvent(LoginEvent.PasswordChanged("Demo123!"))
         viewModel.onEvent(LoginEvent.SignInRequested)
@@ -142,6 +146,7 @@ class LoginViewModelTest {
                 }
             }
         val sessions = TestSessions()
+        val firebase = FirebaseLoginFixture(sessions, enabled = false)
         val viewModel =
             LoginViewModel(
                 SignIn(
@@ -156,8 +161,11 @@ class LoginViewModelTest {
                 ValidateSignIn(),
                 ListSsoProviders(sso),
                 SignInWithSso(sso, repository, sessions),
+                firebase.options,
+                firebase.signIn,
             )
         store.put("login", viewModel)
+        runCurrent()
         viewModel.onEvent(LoginEvent.EmailChanged("demo@example.com"))
         viewModel.onEvent(LoginEvent.PasswordChanged("Demo123!"))
         viewModel.onEvent(LoginEvent.SignInRequested)
@@ -198,6 +206,7 @@ class LoginViewModelTest {
                 }
             }
         val sessions = TestSessions()
+        val firebase = FirebaseLoginFixture(sessions, enabled = false)
         val vm =
             LoginViewModel(
                 SignIn(
@@ -212,8 +221,11 @@ class LoginViewModelTest {
                 ValidateSignIn(),
                 ListSsoProviders(sso),
                 SignInWithSso(sso, repository, sessions),
+                firebase.options,
+                firebase.signIn,
             )
         store.put("login", vm)
+        runCurrent()
         vm.onEvent(LoginEvent.SignInRequested)
         runCurrent()
         assertEquals(setOf("email", "password"), vm.state.value.fieldErrors.keys)
@@ -232,7 +244,7 @@ class LoginViewModelTest {
     }
 }
 
-private class TestSessions(initial: Session? = null) : SessionRepository {
+internal class TestSessions(initial: Session? = null) : SessionRepository {
     override val persistent = false
     val value = MutableStateFlow<AppResult<Session?>>(AppResult.Success(initial))
 
@@ -259,7 +271,7 @@ private class TestSessions(initial: Session? = null) : SessionRepository {
     }
 }
 
-private fun testSession() =
+internal fun testSession() =
     Session(
         "session-a",
         User("1", "Alex", "demo@example.com"),
