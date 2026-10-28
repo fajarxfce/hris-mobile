@@ -106,6 +106,7 @@ fun createAppContainer(
         notificationPlatform,
         http ?: applicationNetworkModule(environment),
         applicationStorageModule(database, preferences),
+        applicationWorkerModule(),
         TransferDataModule().module,
         SecurityPresentationModule().module,
         AvailabilityDataModule().module,

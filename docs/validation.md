@@ -1,5 +1,22 @@
 # Validation
 
+## Native worker registration metadata
+
+Remote [run 40637280472](https://github.com/fajarxfce/hris-mobile/actions/runs/40637280472)
+for Inbox hints `ea2c58b7` passed Linux/Android, Web and Windows. Apple passed its
+simulator test step but failed framework linking during Xcode build because Koin
+annotations 2.3.1 emitted the same public `SyncTask` metadata property in the app
+and dependent modules. The application now composes its two worker entry points
+through its own Koin DSL module, preserving their singleton aliases and deferred
+SDK acquisition. Feature use-case registrations remain in their owning modules.
+
+The app's generated metadata no longer exports the conflicting property. Root
+checks passed with 1,797 desktop/UI tests, all 19 app Chromium tests and configured
+Android dev assembly in `.work/native-worker-binding-validation.log`. The container
+regression verifies unique task keys and identical instances through direct and
+scheduler lookup. Apple framework linking still requires the subsequent remote
+run; the original failure is recorded in `.work/ci-inbox-apple.log`.
+
 ## Background native registration recovery
 
 On 28 October 2026, root checks passed with 1,797 desktop/UI tests, runner and

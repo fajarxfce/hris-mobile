@@ -62,6 +62,16 @@ class NativePushBindingsTest {
             )
             assertNotNull(container.koin.get<QueueInboxPushSignal>())
             assertNotNull(container.koin.get<PresentInboxPush>())
+            val tasks = container.koin.getAll<dev.fajar.starter.sync.domain.SyncTask>()
+            assertEquals(tasks.size, tasks.map { it.key }.distinct().size)
+            assertSame(
+                container.koin.get<InboxPushWorker>(),
+                tasks.single { it.key == QueueInboxPushSignal.KEY },
+            )
+            assertSame(
+                container.koin.get<NativePushWorker>(),
+                tasks.single { it.key == NativePushWorker.KEY },
+            )
             assertEquals(
                 dev.fajar.starter.sync.domain.SyncResult.Complete,
                 container.koin.get<InboxPushWorker>()(),

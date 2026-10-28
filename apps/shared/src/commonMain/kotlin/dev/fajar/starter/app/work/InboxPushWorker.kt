@@ -15,10 +15,8 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import org.jetbrains.compose.resources.getString
-import org.koin.core.annotation.Single
 
 /** A worker entry point orchestrates feature use cases without nesting use cases. */
-@Single(binds = [InboxPushWorker::class, SyncTask::class])
 class InboxPushWorker(
     private val prepare: PrepareInboxPush,
     private val synchronize: SyncInbox,

@@ -8,10 +8,8 @@ import dev.fajar.starter.sync.domain.*
 import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.first
-import org.koin.core.annotation.Single
 
 /** Native callbacks request this task; all SDK/backend mutations share the identity mutex. */
-@Single(binds = [NativePushWorker::class, SyncTask::class])
 class NativePushWorker(
     private val identity: ObserveSessionIdentity,
     private val reconcile: Lazy<ReconcileNativePush>,
