@@ -1,5 +1,33 @@
 # Validation
 
+## Real Firebase Android acceptance
+
+On 28 October 2026, Mobile `d191c61d` ran on the dedicated Android 35 Google APIs
+emulator `emulator-5560`. A temporary email/password user in `cmp-fajar` was bound
+only to an isolated local HRIS API/PostgreSQL fixture at platform `8305f435`.
+Firebase password authentication, Google's public-key verification and native HRIS
+issuance succeeded with the production adapters. `/me` correctly reported pending
+MFA and no assurance before verification.
+
+The Android UI completed password login, authenticator enrollment, verification and
+recovery-code acknowledgement, then reached company selection. The fixture account
+had no company assignment, and the application correctly showed no company access.
+Sign-out returned to ready login. Google launched the system account sign-in UI;
+Back dismissed it and restored ready login without an error or stuck submission.
+No Google account was added, so Google token issuance/exchange and signing-certificate
+registration are not yet accepted. No physical phone or iOS acceptance is claimed.
+
+The temporary Firebase account was deleted successfully. The owned API/database and
+emulator were stopped, temporary credentials and MFA dumps were removed, and the
+configured API override was limited to this local build. Sanitized evidence is in
+`.work/firebase-live-result.json`, `.work/firebase-emulator-result.json`,
+`.work/firebase-emulator-mfa.png` and `.work/firebase-emulator-company.png`.
+
+Remote [run 40643807959](https://github.com/fajarxfce/hris-mobile/actions/runs/40643807959)
+for exchange core `67c455e4` passed Linux/Android, Web, Windows and Apple, including
+the Xcode simulator build. Provider/UI `d191c61d` is tracked by
+[run 40647201802](https://github.com/fajarxfce/hris-mobile/actions/runs/40647201802).
+
 ## Firebase provider and login UI
 
 On 28 October 2026, root checks passed with 1,837 desktop/UI tests, runner and

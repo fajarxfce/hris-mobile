@@ -65,9 +65,11 @@ and resource-owning adapter.
 
 Project `cmp-fajar` has local ignored Android configuration for all three HRIS
 flavors. Email/password and Google are enabled, public Auth configuration responds
-200, and Google Services processing accepts the public web client ID. Real Google
-signing-certificate registration, real provider login and device acceptance remain
-separate checks. iOS provider configuration is still unavailable. See
+200, and Google Services processing accepts the public web client ID. Real Firebase
+email/password through Android, native HRIS exchange and application MFA passed on
+the dedicated emulator. Google system sign-in launch and dismissal also passed;
+real Google token exchange, signing-certificate registration and physical-device
+acceptance remain separate checks. iOS provider configuration is still unavailable. See
 [validation](validation.md) for executed checks.
 
 This exchange follows HRIS native-session policy and belongs to HRIS Mobile.
