@@ -1,5 +1,25 @@
 # Validation
 
+## Firebase native session exchange
+
+On 28 October 2026, root checks passed with 1,812 desktop/UI tests, the runner and
+distribution suites, architecture, formatting and static analysis. Identity
+Chromium tests passed all 58 domain and 35 data cases; configured Android dev
+assembly also passed. Output is in `.work/firebase-client-exchange-final.log`.
+
+Nine coordinator regressions cover both providers, matching installed/backend
+projects, unavailable methods, bounded input, preserved failures, explicit retry,
+session replacement at each acquisition boundary, changed proof, expired native
+credentials, concurrent sign-ins, timeout, cancellation and late results. Six
+HTTP adapter regressions verify the public endpoint, unchanged idempotency/payload,
+bounded config/credentials, additive providers, sanitized errors and cancelled I/O.
+Only HRIS credentials reach the session store.
+
+This is the [client exchange core](firebase-auth.md). Provider I/O and login UI
+wiring remain active work; no real Firebase authentication is claimed by these
+signed-backend/mock-client fixtures. The HRIS native API policy is application
+specific and is not a starter port.
+
 ## Firebase provider configuration
 
 On 28 October 2026 the user enabled Email/password and Google in `cmp-fajar`.
@@ -30,8 +50,11 @@ The app's generated metadata no longer exports the conflicting property. Root
 checks passed with 1,797 desktop/UI tests, all 19 app Chromium tests and configured
 Android dev assembly in `.work/native-worker-binding-validation.log`. The container
 regression verifies unique task keys and identical instances through direct and
-scheduler lookup. Apple framework linking still requires the subsequent remote
-run; the original failure is recorded in `.work/ci-inbox-apple.log`.
+scheduler lookup. Remote [run 40640556690](https://github.com/fajarxfce/hris-mobile/actions/runs/40640556690)
+for `23d17e77` passed Web, Windows, Apple simulator tests and the complete Xcode
+simulator build. This verifies the native metadata fix. Linux stopped at a comment
+formatting check; `7f0bdae7` fixes that comment and passed local format checks.
+The original native failure is recorded in `.work/ci-inbox-apple.log`.
 
 ## Background native registration recovery
 
