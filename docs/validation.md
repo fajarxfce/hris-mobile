@@ -1,5 +1,15 @@
 # Validation
 
+## Independent web packaging in CI
+
+Remote [run 40631137228](https://github.com/fajarxfce/hris-mobile/actions/runs/40631137228)
+for registration core `f98a7884` passed Apple simulator/Xcode and Windows checks.
+The Linux runner shut down during `compileProductionExecutableKotlinWasmJsOptimize`,
+after the test and Android assembly tasks, leaving that job incomplete. Web
+distribution and its artifact now have a separate job from Linux verification and
+Android packaging. This workflow separation has passed local YAML validation;
+the new remote run remains the packaging evidence gate.
+
 ## Native push Settings and host lifetime
 
 On 28 October 2026, root checks passed with 1,764 desktop/UI tests, runner and

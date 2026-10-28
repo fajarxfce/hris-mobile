@@ -57,7 +57,6 @@ jobs:
           :core:availability:domain:wasmJsBrowserTest :core:availability:data:wasmJsBrowserTest
           :apps:shared:wasmJsBrowserTest
           :apps:android:assembleDevDebug :apps:android:assembleStagingDebug :apps:android:assembleProdRelease
-          :apps:shared:wasmJsBrowserDistribution
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -65,6 +64,19 @@ jobs:
           path: |
             **/build/reports/
             apps/android/build/outputs/apk/**/*.apk
+  web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: gradle/actions/setup-gradle@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: ./gradlew :apps:shared:wasmJsBrowserDistribution
       - uses: actions/upload-artifact@v4
         with:
           name: web
