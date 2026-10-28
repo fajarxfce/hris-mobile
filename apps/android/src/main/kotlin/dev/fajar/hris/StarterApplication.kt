@@ -58,6 +58,7 @@ class StarterApplication : Application(), Configuration.Provider {
             commandCredentials = AndroidCredentialStore(this, "command-content-key"),
             fileCredentials = AndroidCredentialStore(this, "file-content-key"),
             workspaceCredentials = AndroidCredentialStore(this, "workspace-content-key"),
+            pushCredentials = AndroidCredentialStore(this, "native-push-state"),
             remoteFeatureFlags = AndroidFeatureFlagSource(this),
             deviceAuthentication = deviceAuthentication,
             browserAuthorization = browserAuthorization,

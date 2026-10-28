@@ -46,6 +46,7 @@ class AppleAppHost(
     commandCredentials: AppleCredentialClient,
     fileCredentials: AppleCredentialClient,
     workspaceCredentials: AppleCredentialClient,
+    pushCredentials: AppleCredentialClient,
     crash: AppleCrashClient,
     performance: ApplePerformanceClient,
 ) {
@@ -83,6 +84,7 @@ class AppleAppHost(
             commandCredentials = AppleCredentialStore(commandCredentials),
             fileCredentials = AppleCredentialStore(fileCredentials),
             workspaceCredentials = AppleCredentialStore(workspaceCredentials),
+            pushCredentials = AppleCredentialStore(pushCredentials),
             deviceAuthentication = AppleDeviceAuthenticationSource(),
             browserAuthorization = AppleBrowserAuthorizationSource(),
             remoteFeatureFlags = AppleFeatureFlagSource(remoteConfig),

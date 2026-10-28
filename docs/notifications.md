@@ -3,7 +3,8 @@
 For the active HRIS URL routes and account/company ownership, see
 [HRIS deep links](deep-links.md). Native push registration and hint handling remain
 separate integration work; the installed Firebase adapters alone do not complete
-that workflow. See [native identity](native-identity.md) for HRIS authentication.
+that workflow. The [native registration core](native-push.md) now owns server
+registration and recovery. See [native identity](native-identity.md) for HRIS authentication.
 
 The sections below describe inherited starter infrastructure. Template endpoints,
 demo routes and notification controls described here are not mounted by HRIS.

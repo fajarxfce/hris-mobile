@@ -1,5 +1,21 @@
 # Validation
 
+## HRIS native push registration core
+
+On 28 October 2026, root checks passed with 1,754 desktop/UI tests, runner and
+distribution tests, architecture, formatting and static analysis. All 70 identity
+domain/data Chromium tests passed. Android dev assembly passed with the supplied
+Firebase configuration, as did staging/prod Google Services processing. Logs are
+`.work/native-push-core-validation-2.log`, `.work/native-push-core-final.log` and
+`.work/firebase-configuration-check.log`.
+
+The [registration core](native-push.md) has transport, secure-storage and policy
+coverage for exact frozen replay, response loss, later disable, malformed metadata,
+concurrent storage transitions, failed deletion, permission revocation, account
+replacement, cancellation and late responses. A real-container test resolves its
+DI graph and verifies unsupported desktop avoids provider I/O. Settings/lifecycle
+integration and real provider acceptance remain separate work.
+
 ## Wrapped attendance captions
 
 The attendance card now reserves localized date and schedule text using its actual

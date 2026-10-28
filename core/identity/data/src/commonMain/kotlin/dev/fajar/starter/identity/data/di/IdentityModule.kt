@@ -1,17 +1,49 @@
 package dev.fajar.starter.identity.data.di
 
+import dev.fajar.starter.common.config.AppBuild
 import dev.fajar.starter.identity.domain.entities.IdentityServer
+import dev.fajar.starter.identity.domain.push.repositories.*
+import dev.fajar.starter.identity.domain.push.usecases.ReconcileNativePush
 import dev.fajar.starter.identity.domain.repositories.*
 import dev.fajar.starter.identity.domain.sso.repositories.SsoRepository
 import dev.fajar.starter.identity.domain.sso.usecases.ListSsoProviders
 import dev.fajar.starter.identity.domain.sso.usecases.SignInWithSso
 import dev.fajar.starter.identity.domain.usecases.*
+import dev.fajar.starter.notifications.domain.repositories.*
+import kotlin.time.Clock
 import kotlinx.coroutines.sync.Mutex
 import org.koin.core.annotation.*
 
 @Module
 @ComponentScan("dev.fajar.starter.identity.data")
 class IdentityModule {
+    @Single @Named("native-push-mutations") fun pushMutations() = Mutex()
+
+    @Factory
+    fun reconcilePush(
+        sessions: SessionRepository,
+        registrations: NativePushRegistrationRepository,
+        storage: NativePushStateRepository,
+        tokens: PushTokenRepository,
+        permissions: NotificationAccessRepository,
+        devices: DeviceSessionRepository,
+        server: IdentityServer,
+        build: AppBuild,
+        @Named("native-push-mutations") mutations: Mutex,
+    ) =
+        ReconcileNativePush(
+            sessions,
+            registrations,
+            storage,
+            tokens,
+            permissions,
+            devices,
+            server,
+            build,
+            Clock.System,
+            mutations,
+        )
+
     @Factory fun providers(sso: SsoRepository) = ListSsoProviders(sso)
 
     @Single
