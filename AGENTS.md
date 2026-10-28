@@ -2,6 +2,10 @@
 
 Read [docs/architecture.md](docs/architecture.md) and [README.md](README.md) before changing boundaries.
 
+For continuation, first read [docs/agent-handoff.md](docs/agent-handoff.md). Keep the
+current work, validation, remaining inputs and next steps in Git; local `.work`
+files and chat history are supplementary.
+
 - Domain is Kotlin-only: entities, repository contracts, and use cases. No Compose,
   Koin, Ktor, platform SDK, or serialization imports.
 - Datasources implement contracts, perform raw I/O, and preserve technical exceptions.

@@ -8,6 +8,8 @@ Generated from [Compose Fluent Starter](https://github.com/fajarxfce/compose-flu
 The repositories have independent histories. Reusable foundation fixes also return
 to the starter through [reviewed updates](docs/template-updates.md).
 
+Agent continuation: [current checkpoint and next steps](docs/agent-handoff.md).
+
 ## Current integration
 
 The application uses the HRIS native API for password sign-in, authenticator setup
