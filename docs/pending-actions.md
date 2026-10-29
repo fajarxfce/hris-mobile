@@ -108,3 +108,20 @@ passed in 6.0 minutes (6.4 including setup). The dev APK built in 45 seconds usi
 the loopback override; application source was unchanged. Owned services, private
 connection files and forwarding were removed, and the emulator stopped without
 wiping data. See [validation](validation.md#inbox-command-response-loss-on-android).
+
+
+## Android partial-download recovery
+
+The actual API/PostgreSQL/worker/Garage and Android 35 case passed on 29 October
+2026. A one-MiB partial download remained **File transfers: 1** after offline
+process restart, and Open Documents reached its retained local file. Summary
+open/reload made no request (31 → 31). Reconnection and Resume acquired only the
+remaining ranges; the native saved copy matched all 3,145,841 source bytes and
+SHA-256. All six summary rows then became empty and sign-out succeeded. Across
+49 requests there was no native company mutation. Source inspection metadata was
+fictional; transfer bytes and API/storage/native actions were real.
+
+See [validation](validation.md#partial-download-recovery-on-android) and the
+[tracked fixture](https://github.com/fajarxfce/hris-platform/blob/feat/firebase-auth/docs/native-download-acceptance.md).
+Application code and Starter required no change. Owned fixtures and forwarding
+were removed, the created public copy was cleaned, and emulator app data was retained.

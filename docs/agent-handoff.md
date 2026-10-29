@@ -13,7 +13,7 @@ ground for reusable foundation changes before they are ported to Starter.
 3. Read the [Platform handoff](https://github.com/fajarxfce/hris-platform/blob/feat/firebase-auth/docs/agent-handoff.md)
    and [remaining PRD delivery](https://github.com/fajarxfce/hris-platform/blob/feat/firebase-auth/docs/completion.md#remaining-delivery-sequence).
    Backend and dashboard work is on Platform `feat/firebase-auth`, most recently
-   worker observations `e806caed`; Starter work is on `fix/push-token-lifecycle`.
+   native transfer fixture `f23b73ba` with global audit/schema 99 `adfb7b32`; Starter work is on `fix/push-token-lifecycle`.
 
 The three local checkouts are siblings under `/home/fajar/hris`. A fresh clone
 must be able to continue from tracked evidence; local `.work` logs, screenshots
@@ -23,7 +23,17 @@ release. Preserve unrelated edits and keep implementation, tests and docs togeth
 
 ## Last accepted increments
 
-- The latest acceptance adds an actual unconfirmed Inbox command: server commit
+- Partial-download recovery now passes actual API/PostgreSQL/worker/Garage/Android:
+  one retained MiB and transfer count 1 through offline process restart, summary
+  no-op HTTP (31 → 31), explicit resume from byte 1,048,576, native save matching
+  3,145,841 bytes/SHA-256 and six empty summary rows afterward. The server observed
+  49 requests and zero company mutations. Fixture 9.7m/10.2m with setup; unchanged
+  loopback APK reused. All owned services, control files, forwarding and public
+  copy were removed; emulator app data retained. See
+  [executed evidence](validation.md#partial-download-recovery-on-android) and
+  [Platform fixture](https://github.com/fajarxfce/hris-platform/blob/feat/firebase-auth/docs/native-download-acceptance.md).
+
+- `c650e0d7` adds an actual unconfirmed Inbox command: server commit
   followed by response loss, Pending actions count 1 through offline cold start,
   local summary reload with no HTTP (30 → 30), exact-operation Retry and zero
   pending afterward. The independent server observed two identical read commands,
@@ -49,14 +59,15 @@ Reusable Firebase adapters are already ported to Starter `9a13791` and documente
 at `a16325e`. Notification resource paths, token retirement and incoming-link
 ownership were also ported; consult the file/commit ledger in template updates
 before repeating a port. The latest native acceptance commits change only docs.
-Platform worker observations are HRIS administration work, with no Starter port.
+Platform worker observations/global audit are HRIS administration work, and the
+native transfer fixture changes no application implementation; no Starter port is due.
 
 ## Next work and actual external inputs
 
 Reconcile each remaining acceptance requirement with the code and retained tests
 before creating another feature. Native Pending actions still needs acceptance
-for transfer and other feature outcomes beyond the accepted Leave working-copy
-and unconfirmed Inbox-command cases. Existing per-feature delivery and lifecycle tests are not evidence for every
+for upload/review and other feature outcomes beyond the accepted Leave working-copy,
+unconfirmed Inbox-command and partial-download cases. Existing per-feature delivery and lifecycle tests are not evidence for every
 summary state on a device. Continue useful independent cases while provider input
 is unavailable.
 

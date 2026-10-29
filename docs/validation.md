@@ -1,5 +1,54 @@
 # Validation
 
+## Partial-download recovery on Android
+
+On 29 October 2026, the unchanged application at `c650e0d7` passed a new actual
+API/PostgreSQL/worker/Garage/Android 35 workflow. The source had 3,145,841 bytes,
+uploaded through the API in four parts; accepted inspection metadata was seeded
+under normal database constraints. This case tests transfer recovery, not scanning.
+The [tracked Platform fixture and exact steps](https://github.com/fajarxfce/hris-platform/blob/feat/firebase-auth/docs/native-download-acceptance.md)
+are committed in Platform `f23b73ba`; its application artifacts were `adfb7b32`
+(schema 99).
+
+The proxy allowed one 1,048,576-byte range before returning 503 for the next range
+and later native requests. The detail showed **Download incomplete** and Pending
+actions showed **File transfers: 1**. Opening/reloading the summary made no server
+request (31 → 31). Removing forwarding and force-stopping the app preserved the
+company, pending transfer and local incomplete-file route through offline startup.
+
+After explicit reconnection and Resume download, the app started at byte 1,048,576
+and acquired only the three remaining ranges. Native Save a copy wrote
+`pending-transfer.pdf`; its 3,145,841 bytes matched SHA-256
+`51c7b10f2eb0a8897a8507cca1be050125a585e53f7aa93a75a54ba684931fb9`.
+The UI showed **Copy saved.**, all six summary rows became empty and sign-out
+succeeded. The independent proxy observed 49 requests, four exact successful
+ranges with matching hashes and zero native company mutations.
+
+The manual fixture passed in 9.7 minutes (10.2 including setup). It reused the
+previously built 32,852,906-byte loopback APK with SHA-256
+`70ea4121020fcd9092c9d587fc2c99faee26c2230b54a6bbfa86706f15c5008f`;
+no new application build or root-test execution is claimed. Platform's new
+loopback regression checks interruption/recovery, competing admission bounds and
+cleanup during a pending stream. Biome, TypeScript, production build, architecture
+and formatting passed. No application source or reusable foundation changed, so
+there is no Starter port.
+
+Offline-summary and saved-copy screenshots were inspected. The early application
+launch required explicit authentication-configuration Retry; one UI automation
+read was retried after cold startup completed. No app fix was needed. Owned
+services, connection/control files, forwarding and the created public copy were
+removed. The emulator stopped without wiping app data; the user's phone was not
+used.
+
+Local evidence: `.work/download-native-result.json`, before/after counter JSON,
+and `download-native-incomplete.png`, `download-native-offline-summary.png`,
+`download-native-offline-detail.png`, `download-native-saved.png`,
+`download-native-recovered-summary.png` and `download-native-signed-out.png`.
+Platform retains `.work/download-native-fixture.log`, server-result/range metadata
+and proxy/architecture/lint/type-check logs. This adds a real partial-transfer
+summary case; upload/review and other feature outcomes retain separate acceptance.
+
+
 ## Inbox command response loss on Android
 
 On 29 October 2026, Mobile `9dbaf730` built the dev APK with Java 21 and

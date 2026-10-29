@@ -235,3 +235,15 @@ a transient effect. Pending export belongs to the navigation route and survives
 the Activity stop caused by Android's picker; leaving the route cancels it. A
 content denial hides the file until explicit resource revalidation succeeds,
 including when a workspace refresh succeeds but the resource remains denied.
+
+
+## Android interrupted-transfer acceptance
+
+A 3,145,841-byte published fixture passed actual API/Garage range download,
+offline process restart with one retained MiB, explicit resume from byte 1,048,576
+and native Save a copy with matching final length/SHA-256. Pending actions retained
+one transfer offline and excluded the completed file afterward. Summary reload
+made no HTTP request; the independent proxy saw four exact successful ranges and
+no native company writes. Inspection metadata was seeded for this transfer case;
+antivirus validation was not exercised. See the
+[29 October native evidence](validation.md#partial-download-recovery-on-android).
