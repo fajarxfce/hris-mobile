@@ -22,7 +22,11 @@ user-phone action or live configuration change is part of this increment. Root/A
 found 31 missing SBOM POM hashes (all checked against canonical HTTPS artifacts),
 HRIS UI fixtures hardcoding build 1 (all 1,860 cases now pass at build 73), and
 three dev network XML declarations requiring explicit false subdomain attributes.
-The corrected signed APK/AAB/artifact exercise is in progress; the
+The corrected two-stage signed APK/AAB/SBOM exercise passed in 215.572s (151s
+normal checks, 58s signed build). It verified the actual APK endpoint and manifest,
+both signatures, selected domain statements and all packaged checksums. All
+fixture keys were removed. Full [CI 40909156570](https://github.com/fajarxfce/hris-mobile/actions/runs/40909156570)
+is running at source `3dc81d00`; the
 changed Xcode framework entry point requires the hosted Apple run before the
 portable foundation is accepted in Starter. HRIS's remote-only policy stays here.
 

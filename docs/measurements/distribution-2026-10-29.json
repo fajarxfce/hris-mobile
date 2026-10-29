@@ -15,7 +15,28 @@
     "distributionTests": 17,
     "rootAndroidBeforeSignedFixture": "passed in 124 seconds, 1860 desktop tests in 326 suites",
     "actualSelectedEndpointGenerator": "passed in 18 seconds",
-    "signedArtifactExercise": "running"
+    "signedArtifactExercise": {
+      "passed": true,
+      "elapsedSeconds": 215.572,
+      "sourceParent": "3dc81d00632f965201c2eecc01cfe9a5627d7f1f",
+      "workingTreeIncrement": true,
+      "artifact": "Android dev release APK/AAB, ephemeral fictional certificate",
+      "apiOverrideVerifiedInDex": true,
+      "privateDevEndpointAbsent": true,
+      "manifestAssociationVerified": true,
+      "actualApkAndBundleSignaturesVerified": true,
+      "packagedAssociationFilesAndChecksumsVerified": true,
+      "apkBytes": 23813883,
+      "apkSha256": "b65835d8d24e928dda3f312d9bb3e4e12e5b87ccb8defca4c386a05975e50547",
+      "uploaded": false,
+      "installed": false,
+      "appleSigning": "fixture regressions only; no actual signed IPA",
+      "source": "3dc81d00632f965201c2eecc01cfe9a5627d7f1f",
+      "codeMatchesCommittedSource": true,
+      "normalChecksSeconds": 151,
+      "signedBuildSeconds": 58
+    },
+    "ephemeralFixtureKeysRemoved": true
   },
   "newPomArtifacts": [
     {
@@ -391,13 +412,17 @@
       "coordinatesMatch": true
     }
   ],
-  "existingArtifactHashesPreserved": 3751,
-  "hostedCi": "pending",
+  "hostedCi": {
+    "run": 40909156570,
+    "source": "3dc81d00632f965201c2eecc01cfe9a5627d7f1f",
+    "status": "in progress"
+  },
   "starterPort": "wait for Mobile local and full CI proof",
   "limits": [
     "No upload or release workflow dispatch",
     "No live domain publication",
     "No actual signed Apple IPA; profile/entitlement fixtures and Xcode verification are distinct",
     "Phone data and private runtime preserved"
-  ]
+  ],
+  "existingArtifactEntriesPreserved": 3751
 }

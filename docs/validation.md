@@ -2601,8 +2601,16 @@ all 1,860 desktop cases at build 73. Release lint separately required three expl
 false subdomain attributes; no HTTP host or permission was added.
 
 The release SBOM needed 31 POM checksums absent from ordinary compilation. Every
-new POM matches the canonical HTTPS artifact and coordinates; 3,751 prior hashes
-are unchanged. A signed APK/AAB/SBOM exercise uses an ephemeral fictional key and
+new POM matches the canonical HTTPS artifact and coordinates; 3,751 prior artifact entries retain all their hashes. A signed APK/AAB/SBOM exercise uses an ephemeral fictional key and
 invalid test host, without upload or phone installation; its final result and
 hosted CI belong in [measurements](measurements/distribution-2026-10-29.json).
 The changed Xcode framework script requires hosted Apple proof before a Starter port.
+
+The corrected actual Android distribution entry point passed in 215.572s: normal
+root checks took 151s and the selected signed build 58s. APK/AAB signatures, SBOM,
+version 2.3.4/build 73, the release endpoint in DEX, absence of the private dev
+endpoint, native association and checked domain-file packaging all passed. The
+23,813,883-byte test APK has SHA-256
+`b65835d8d24e928dda3f312d9bb3e4e12e5b87ccb8defca4c386a05975e50547`.
+It was neither uploaded nor installed. The ephemeral keys were removed. Full
+CI `40909156570` is active for source `3dc81d00`; no Apple signing result is inferred.
