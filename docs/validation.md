@@ -20,14 +20,23 @@ the new APK's certificate is
 Only the current `/home/fajar/.android/debug.keystore` was found in the bounded
 keystore search; the root account has no debug keystore. No private key was read
 into diagnostics. The installed public APK was copied locally only to verify its
-signature. This is a failed update, not a successful physical-device acceptance.
+signature. This initial update was rejected; the authorized replacement below
+subsequently succeeded.
 
-The previous app/data remain intact, with no launch or UI interaction. The user
-was asked to choose the matching old signing key or authorize uninstall/reinstall
-with loss of local HRIS login/drafts/data; the answer is pending. Do not uninstall
-until that authorization arrives. Logs and prepared artifact metadata remain under
-`.work/phone-install-2026-10-29*`; the old public APK and previously validated
-loopback APK are separate ignored files.
+The user subsequently explicitly authorized uninstall/reinstall after being told
+that it removes local HRIS login/drafts/data. Uninstalling only
+`dev.fajar.hris.mobile.dev` on the selected phone returned **Success**, followed by
+**Success** from the same `--skip-build --install-only` runner. A read-only SHA-256
+check of the installed `base.apk` matched the prepared artifact above. Package
+metadata reports version 1.0.0 / code 1, new install/update time 2026-10-29 15:48:23
+(device local time), `stopped=true` and `notLaunched=true`. The phone application
+was not launched and its UI was not operated. The local HRIS data was removed as
+authorized; no backup restoration was implied.
+
+The signing-key approval is resolved. This proves package installation, not
+physical FCM, Google authentication or GPS acceptance. Logs, installed-hash proof
+and artifact metadata remain under `.work/phone-install-2026-10-29*`; the old public
+APK and previously validated loopback APK are separate ignored files.
 
 Read-only network checks also found connection refused on the configured
 development API, from both host HTTP and phone TCP probes. No Docker containers or

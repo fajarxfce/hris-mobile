@@ -24,29 +24,32 @@ and `/home/fajar/hris/PRD-PROGRESS.md` are supplementary. The user authorized on
 implementation and a push after every atomic commit. This does not authorize a
 release. Preserve unrelated edits and keep implementation, tests and docs together.
 
-## Current phone delivery: signing-key decision pending
+## Current phone delivery: installed after authorized key replacement
 
-The user requested installation on `10.77.77.3:5555` over WireGuard and authorized
-the ADB connection. The connected device is a Samsung SM-A725F with an existing
-`dev.fajar.hris.mobile.dev` installation. A fresh normal dev APK built successfully
-in 26s at `f740d658`, retaining application `678783b3` and the configured
-`http://10.77.77.1:8088/api/v1/` endpoint. Its signature was verified and the APK
-contains no earlier loopback fixture endpoint. See [delivery evidence](validation.md#phone-update-signing-key-mismatch).
+The user requested installation on the WireGuard-connected Samsung SM-A725F and
+subsequently authorized uninstall/reinstall after the signing-key mismatch was
+explained, including loss of local HRIS login/drafts/data. Both uninstall and the
+install-only command returned **Success** on `10.77.77.3:5555`. The signing-key
+question is resolved; do not ask for that approval again.
 
-The install-only update was **rejected**, `INSTALL_FAILED_UPDATE_INCOMPATIBLE`:
-the old APK's signing certificate differs from the current VPS debug key. The
-previous application and its data remain untouched; the app was not launched.
-A bounded search found only the current debug keystore. The prepared APK is ready,
-but installation requires either the matching old keystore or explicit user
-authorization to uninstall/reinstall and lose local HRIS data. That choice was
-asked asynchronously and is pending; do not assume approval or repeat the question.
+The installed normal dev APK is `dev.fajar.hris.mobile.dev`, version 1.0.0 / code 1,
+32,853,128 bytes, SHA-256
+`1883d1da41fdeabe77165de9fc75f1d106ff7583ae93aa92878940c7a2addd0e`.
+The phone's installed APK hash matches the prepared artifact. Package metadata
+reports the new installation and `stopped=true`, `notLaunched=true`; no app launch
+or phone UI interaction was performed. This build uses application `678783b3`,
+built at `f740d658` in 26s, with the normal `http://10.77.77.1:8088/api/v1/`
+endpoint. See [initial rejection and successful delivery](validation.md#phone-update-signing-key-mismatch).
+The local HRIS app data was removed with the user's authorization.
 
-The configured development API also returned connection refused from both VPS and
-phone; no Docker containers or local development `.env` were found. Historical
-development delivery below does not establish that the service is currently up.
-No server/data recreation or deployment was attempted as part of installing the APK.
-The previously accepted loopback APK is retained separately in ignored
-`.work/fcm-native-validated.apk`; do not distribute it to this phone.
+The configured development API returned connection refused from both VPS and
+phone during delivery; no Docker containers or local development `.env` were found.
+Historical development delivery below does not establish current service health.
+Login/sync require that environment to be restored; no backend/data recreation or
+deployment was performed as part of installation. Physical FCM/Google/location
+acceptance remains separate from this successful package installation. The prior
+loopback APK remains ignored at `.work/fcm-native-validated.apk`; do not distribute
+it to this phone.
 
 ## Accepted result: actual Android FCM passed
 
