@@ -8,6 +8,18 @@ Portable shell/helpers/tests must follow Mobile local and Xcode proof before
 porting. Starter keeps its demo backend, package/project names and release inputs;
 HRIS alone removes the unsupported demo choice. See [handoff](agent-handoff.md).
 
+Source candidate `3dc81d00` has passed real signed Android APK/AAB/SBOM packaging
+and 17 script regressions; full CI `40909156570` is still required. The portable
+files are `apps/ios/build_framework.sh`, `tool/distribution/{app_links.py,
+build_android.sh,test_release_build.py,test_app_links.py,credentials.py,
+apple_signing.py,checksums.py,configuration.py,test_distribution.py}`, the Xcode
+framework shell phase, both manual distribution workflows and their CI checks.
+Normalize only application/project IDs and retain Starter's accepted demo/remote
+configuration and demo test assertion. Add the 31 reviewed POM artifact elements
+without replacing unrelated destination metadata or any existing hash. HRIS's
+three desktop UI-fixture fixes and dev cleartext XML do not belong in Starter.
+The source/destination docs and exact measurements accompany the eventual port.
+
 ## Configurable HTTPS app links — accepted
 
 Final Mobile source `72341ef6` passed all four jobs in full

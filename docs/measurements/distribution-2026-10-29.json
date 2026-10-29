@@ -34,9 +34,22 @@
       "source": "3dc81d00632f965201c2eecc01cfe9a5627d7f1f",
       "codeMatchesCommittedSource": true,
       "normalChecksSeconds": 151,
-      "signedBuildSeconds": 58
+      "signedBuildSeconds": 58,
+      "bundleApiAndManifestVerified": true
     },
-    "ephemeralFixtureKeysRemoved": true
+    "ephemeralFixtureKeysRemoved": true,
+    "normalDevRestoreAndProductionSbom": {
+      "seconds": 39,
+      "passed": true,
+      "fixtureApiAndHostAbsentFromDexAndManifest": true,
+      "version": 1,
+      "installed": false
+    },
+    "privateRuntimeHealth": {
+      "apiHttp": 200,
+      "dashboardHttp": 200,
+      "observedAt": "2026-10-29T16:22:45Z"
+    }
   },
   "newPomArtifacts": [
     {

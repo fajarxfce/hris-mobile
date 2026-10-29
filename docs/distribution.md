@@ -58,6 +58,12 @@ the host, environment path and signing verification; it is null when unconfigure
 Deploy the two files to their exact HTTPS paths using the domain owner's release
 procedure. Retained files do not publish DNS/TLS or establish OS verification.
 
+A workflow prepares only its selected environment. If several environments share
+one host, generate the deployment files from the complete public registration set
+for that host (all applicable `config/app-links/<environment>.json` files) before
+publishing. A single-environment artifact must not replace a shared host's other
+app registrations. Separate hosts can publish their own selected files directly.
+
 ## Android
 
 Environment variables:
