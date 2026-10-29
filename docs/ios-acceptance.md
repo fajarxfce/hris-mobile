@@ -1,6 +1,8 @@
 # iOS provider and device acceptance
 
-This is the remaining device procedure, not an executed acceptance record. The
+The user waived physical iPhone testing on 29 October 2026 for this completion
+pass. This optional future device procedure is not an executed acceptance record
+or a current completion gate. The
 provider implementation at `43cd8ec6` passed full CI `40858176601`, including
 97 simulator cases and the unsigned Xcode application. Android Google/Home and
 actual Android FCM have their own [accepted evidence](validation.md).

@@ -4,6 +4,19 @@ Updated 29 October 2026 (UTC). The overall HRIS PRD remains in progress. This is
 the employee application generated from Compose Fluent Starter, and the proving
 ground for reusable foundation changes before they are ported to Starter.
 
+## Current user direction — 29 October 2026
+
+The user explicitly waived physical iPhone testing for this completion pass
+("iphone gkpp gk ditest juga") and requested continued implementation through
+completion, with each atomic commit pushed. Do not ask for an iPhone again or
+keep that test as a completion blocker. Simulator/contract tests and Xcode builds
+remain required; do not claim actual iOS sign-in or APNs delivery from them.
+Current work completes configurable HTTPS app-link admission and native/domain
+association output in Mobile before porting the reusable foundation to Starter.
+The controlled domain remains a deployment setting, not a reason to leave the
+configurable implementation unfinished. Preserve the accepted Google binding,
+phone data and running private development stack.
+
 ## Start here
 
 1. Read `AGENTS.md`, inspect `git status`, the branch, recent commits and upstream.
