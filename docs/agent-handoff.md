@@ -44,8 +44,10 @@ Chromium cases passed in 3m23s, with 1,854 cases in the desktop report set. Full
 [40858176601](https://github.com/fajarxfce/hris-mobile/actions/runs/40858176601) at
 `43cd8ec6` passed all four jobs. Downloaded Apple reports confirm 97 native cases
 in 26 suites, zero failures/errors/skips, and the complete Xcode app. This closes
-the Mobile verification gate for the generic Google port, now under local
-verification in Starter. Direct iOS-configured HTTPS password preflight also
+the Mobile verification gate for the generic Google port. Starter `e0c6071`
+passed root/Android, 320 desktop and 46 Chromium cases; its full
+[run 40864341588](https://github.com/fajarxfce/compose-fluent-starter/actions/runs/40864341588)
+is in progress. Direct iOS-configured HTTPS password preflight also
 returned Firebase proof for the exact owned fictional fixture, without HRIS
 exchange or binding changes. Source/run details are in
 [measurements](measurements/apple-firebase-2026-10-29.json).

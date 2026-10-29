@@ -9,7 +9,9 @@ Apple verification is pending.
 
 The later Mobile `43cd8ec6` increment passed all four jobs in full run
 `40858176601`, including 97 native cases and Xcode, before its Google port began.
-It also owns Google system-browser
+Starter Google port `e0c6071` passed root/Android, 320 desktop and 46 Chromium
+cases before full run `40864341588` was dispatched. Its hosted result is pending.
+The increment owns Google system-browser
 PKCE, callback correlation and code exchange. The shared callback session accepts
 either an Android ID token or an Apple authorization code, closes its native UI
 before transport and rejects late or mismatched proof. Google OAuth uses the
