@@ -144,5 +144,24 @@
     "source": "738db364efa08e4c033f9acdc921b8c0f87999df",
     "run": 40895798634,
     "status": "in progress"
+  },
+  "finalPhoneUpdate": {
+    "source": "72341ef666e7da516c8b6808e5c6cb5817f54742",
+    "bytes": 32872857,
+    "sha256": "5b3754d5097eb0a535d1a98cff5bc37e508ea12a008eec897895d9289797fe4d",
+    "privateWireGuardEndpointVerified": true,
+    "fixtureEndpointAndRuntimeHostAbsent": true,
+    "fixtureHostAbsentFromBinaryManifest": true,
+    "registeredSigningCertificateMatched": true,
+    "buildSeconds": 28,
+    "installed": true,
+    "installOnly": true,
+    "firstInstallTimeUnchanged": true,
+    "phoneUiDriven": false,
+    "applicationVersion": "1.0.0",
+    "applicationBuild": 1,
+    "actualGoogleHomeAcceptanceSource": "678783b3",
+    "privateApiHealthHttp": 200,
+    "privateDashboardHttp": 200
   }
 }

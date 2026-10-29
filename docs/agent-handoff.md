@@ -15,8 +15,11 @@ Mobile correction `72341ef6` is running full CI `40895095518`. Starter port
 `738db36` passed 326 desktop, seven common/four app Chromium and six build-logic
 cases plus Android assembly; its full CI `40895798634` is running. Inspect all
 jobs and download the final Apple reports before accepting these heads.
-The phone still has the separately recorded `d36a1bc9` APK. Preserve the existing
-Google session and keep phone updates install-only.
+The phone was updated install-only to application `72341ef6` after Linux/Android
+CI passed. APK SHA-256 `5b3754d5097eb0a535d1a98cff5bc37e508ea12a008eec897895d9289797fe4d`,
+32,872,857 bytes; registered certificate/private API match, fixture endpoint/host
+absent from code and binary manifest. First-install time was unchanged and no UI
+was driven. Preserve the existing Google binding and keep updates install-only.
 
 ## Active HTTPS proof — 29 October 2026
 
