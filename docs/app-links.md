@@ -116,3 +116,24 @@ while retaining normal ASCII uppercase input. Seven JVM and seven Chromium cases
 then passed in 31s. This pure parser correction is proved in Mobile before copying
 the same two files to Starter; its final full CI is recorded separately from the
 preceding `d36a1bc9` foundation run. No URL grants account/company access.
+
+## Final accepted verification
+
+Final Mobile source `72341ef6` passed all four jobs in full
+[40895095518](https://github.com/fajarxfce/hris-mobile/actions/runs/40895095518).
+Downloaded Apple reports confirm 104 cases in 28 suites, zero failures/errors/skips
+and the complete Xcode app; compilation/tests/Xcode took 701s/77s/1040s.
+Starter port `738db36` independently passed all three jobs in full
+[40895798634](https://github.com/fajarxfce/compose-fluent-starter/actions/runs/40895798634),
+with 84 Apple cases in 24 downloaded suites, no failures/errors/skips and Xcode;
+compilation/tests/Xcode took 561s/84s/703s. Generated Android/Apple association
+checks passed, and the Xcode/Apple artifact success markers were inspected.
+No CI or owned local acceptance remains active from this increment.
+
+The implementation queue is complete for this development pass. Physical iPhone
+testing was explicitly waived. Public domain/DNS/TLS association, actual APNs,
+physical GPS and production deployment remain separate configuration/target
+observations; no result for those is inferred from builds or fixtures. Default
+native builds do not enable an unconfigured HTTPS host. Reopen implementation for
+an observed failure or a documented requirement; do not recreate accepted modules
+from old next-step paragraphs.

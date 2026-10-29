@@ -134,16 +134,57 @@
     },
     "localSeconds": 31,
     "fullCi": {
-      "source": "72341ef666e7da516c8b6808e5c6cb5817f54742",
       "run": 40895095518,
-      "status": "in progress"
+      "head": "72341ef666e7da516c8b6808e5c6cb5817f54742",
+      "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/40895095518",
+      "conclusion": "success",
+      "jobs": {
+        "apple": "success",
+        "verify": "success",
+        "windows": "success",
+        "web": "success"
+      },
+      "apple": {
+        "tests": 104,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "suites": 28,
+        "stepSeconds": {
+          "Compile iOS simulator tests": 701,
+          "Run iOS simulator tests": 77,
+          "Build iOS simulator app": 1040
+        },
+        "downloadedReportsInspected": true,
+        "xcodeAndAssociationLogMarkersConfirmed": true
+      }
     },
-    "downstreamPolicy": "Copy the two-file pure parser correction only after these Mobile JVM and Chromium regressions pass; both final full CI runs remain required."
+    "downstreamPolicy": "The two-file pure parser correction was copied after Mobile JVM and Chromium regressions passed; both required final full CI runs then passed."
   },
   "starterPort": {
-    "source": "738db364efa08e4c033f9acdc921b8c0f87999df",
     "run": 40895798634,
-    "status": "in progress"
+    "head": "738db364efa08e4c033f9acdc921b8c0f87999df",
+    "url": "https://github.com/fajarxfce/compose-fluent-starter/actions/runs/40895798634",
+    "conclusion": "success",
+    "jobs": {
+      "windows": "success",
+      "apple": "success",
+      "verify": "success"
+    },
+    "apple": {
+      "tests": 84,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "suites": 24,
+      "stepSeconds": {
+        "Compile iOS simulator tests": 561,
+        "Run iOS simulator tests": 84,
+        "Build iOS simulator app": 703
+      },
+      "downloadedReportsInspected": true,
+      "xcodeAndAssociationLogMarkersConfirmed": true
+    }
   },
   "finalPhoneUpdate": {
     "source": "72341ef666e7da516c8b6808e5c6cb5817f54742",
@@ -163,5 +204,6 @@
     "actualGoogleHomeAcceptanceSource": "678783b3",
     "privateApiHealthHttp": 200,
     "privateDashboardHttp": 200
-  }
+  },
+  "implementationQueue": "complete; physical iPhone tests waived, deployment observations remain separate"
 }

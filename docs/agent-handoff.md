@@ -1,47 +1,47 @@
 # Agent continuation — HRIS Mobile
 
-Updated 29 October 2026 (UTC). The overall HRIS PRD remains in progress. This is
-the employee application generated from Compose Fluent Starter, and the proving
+Updated 29 October 2026 (UTC). The implementation queue for this development pass
+is complete. This is the employee application generated from Compose Fluent Starter, and the proving
 ground for reusable foundation changes before they are ported to Starter.
 
-## Current parser correction
+## Completed implementation — 29 October 2026
 
-The HTTPS foundation below passed full CI. During the Starter port review, a new
-Mobile regression reproduced Unicode host case-folding aliasing. A printable-ASCII
-input guard now passes seven JVM and seven Chromium cases in 31s, after the expected
-one-case failure. This two-file correction is being copied to Starter only after
-that local Mobile proof; final full CI for both resulting heads remains required.
-Mobile correction `72341ef6` is running full CI `40895095518`. Starter port
-`738db36` passed 326 desktop, seven common/four app Chromium and six build-logic
-cases plus Android assembly; its full CI `40895798634` is running. Inspect all
-jobs and download the final Apple reports before accepting these heads.
-The phone was updated install-only to application `72341ef6` after Linux/Android
-CI passed. APK SHA-256 `5b3754d5097eb0a535d1a98cff5bc37e508ea12a008eec897895d9289797fe4d`,
-32,872,857 bytes; registered certificate/private API match, fixture endpoint/host
-absent from code and binary manifest. First-install time was unchanged and no UI
-was driven. Preserve the existing Google binding and keep updates install-only.
+Final Mobile source `72341ef6` passed all four jobs in full
+[40895095518](https://github.com/fajarxfce/hris-mobile/actions/runs/40895095518).
+Downloaded Apple reports confirm 104 cases in 28 suites, zero failures/errors/skips
+and the complete Xcode app; compilation/tests/Xcode took 701s/77s/1040s.
+Starter port `738db36` independently passed all three jobs in full
+[40895798634](https://github.com/fajarxfce/compose-fluent-starter/actions/runs/40895798634),
+with 84 Apple cases in 24 downloaded suites, no failures/errors/skips and Xcode;
+compilation/tests/Xcode took 561s/84s/703s. Generated Android/Apple association
+checks passed, and the Xcode/Apple artifact success markers were inspected.
+No CI or owned local acceptance remains active from this increment.
 
-## Active HTTPS proof — 29 October 2026
+The authorized phone has application `72341ef6`, installed with `--install-only`.
+APK SHA-256 `5b3754d5097eb0a535d1a98cff5bc37e508ea12a008eec897895d9289797fe4d`,
+32,872,857 bytes. Its registered certificate/private WireGuard API match, and
+fixture values are absent from runtime code and the binary manifest. First-install
+time was unchanged; no phone UI was driven. Actual Google/Home acceptance remains
+attributed to the earlier `678783b3` user-operated APK. The private API/dashboard
+still returned HTTP 200; preserve the Google binding, keys, volumes and running stack.
 
-Implementation `d36a1bc9` passed local root/Android checks (1859 desktop cases),
-common/app Chromium (6/20 cases), build-logic (10 cases), all three configured
-Android manifests and generated Apple/domain artifacts. The owned Android 35
-HTTPS cold/login/company/scope/offline/archive case then passed in 3.2m/3.6m with
-28 requests, zero company writes and unchanged unread/unacknowledged Inbox state.
-See [contract](app-links.md) and [measurements](measurements/app-links-2026-10-29.json).
-Full CI `40887772486` passed all four jobs at `d36a1bc9`. Downloaded Apple reports
-confirm 103 cases in 28 suites, zero failures/errors/skips and a complete Xcode app.
-Compilation took 648s, simulator tests 64s and Xcode 1082s. Only after this proof
-was the reusable port applied to Starter over `e29b0b2`; its local checks are active.
-No real domain was published. Owned test resources were cleaned, emulator data and
-the persistent private development stack retained.
-The normal WireGuard dev APK from application `d36a1bc9` (built at `0fc16ce4`) was
-then installed successfully on the authorized phone with `--install-only`.
-APK SHA-256 `85ef887b4904107482354e9d0ab40b51e2fad7b786c3112f3a24334b078dbde4`,
-32,872,797 bytes. Binary inspection confirms the private API and excludes the
-fixture endpoint/host. First-install time was unchanged; no phone UI was driven.
-Earlier actual Google/Home acceptance remains attributed to `678783b3`.
+The implementation queue is complete for this development pass. Physical iPhone
+testing was explicitly waived. Public domain/DNS/TLS association, actual APNs,
+physical GPS and production deployment remain separate configuration/target
+observations; no result for those is inferred from builds or fixtures. Default
+native builds do not enable an unconfigured HTTPS host. Reopen implementation for
+an observed failure or a documented requirement; do not recreate accepted modules
+from old next-step paragraphs.
 
+The source foundation `d36a1bc9` first passed full CI `40887772486` (103 Apple
+cases/Xcode) and actual Android HTTPS cold/login/company/scope/offline/archive
+acceptance: 28 requests, no company writes, unchanged read/ack state, 3.2m/3.6m.
+Only then was the reusable foundation ported. The later Unicode correction first
+reproduced a host alias, then passed seven Mobile JVM/seven Chromium cases before
+copying the same two files to Starter. Its own root/Android/Chromium checks passed
+326 desktop, seven common/four app Chromium and six generator cases in 88s.
+[Measurements](measurements/app-links-2026-10-29.json) retain the source boundaries,
+initial failures, corrected checks, final full CI and both phone deliveries.
 
 ## Current user direction — 29 October 2026
 
@@ -50,8 +50,8 @@ The user explicitly waived physical iPhone testing for this completion pass
 completion, with each atomic commit pushed. Do not ask for an iPhone again or
 keep that test as a completion blocker. Simulator/contract tests and Xcode builds
 remain required; do not claim actual iOS sign-in or APNs delivery from them.
-Current work completes configurable HTTPS app-link admission and native/domain
-association output in Mobile before porting the reusable foundation to Starter.
+Configurable HTTPS admission/native associations and the proven Starter port
+are now complete, with the source and destination evidence above.
 The controlled domain remains a deployment setting, not a reason to leave the
 configurable implementation unfinished. Preserve the accepted Google binding,
 phone data and running private development stack.
@@ -60,9 +60,10 @@ The HTTPS implementation is now in Mobile: exact environment-host path admission
 optional ignored public registrations, generated domain/Apple files, variant Android
 manifest transforms, Xcode preparation and Universal Link handoff. Root/Android
 and Chromium passed in 7m25s with 1,859 desktop cases and 26 common/app Chromium
-cases; build-logic tests cover removal and malformed inputs. Configured artifact
-checks and hosted CI follow before the generic port. Platform is separately adding
-a public `/app/...` browser landing route with no session or business requests.
+cases; build-logic tests cover removal and malformed inputs. Configured artifacts
+and full hosted CI passed before the foundation port.
+Platform's public `/app/...` handoff passed 4002 unit and 14 related browser cases
+without session or business requests.
 See [app links](app-links.md); no real domain is enabled by the default build.
 
 ## Start here
@@ -368,7 +369,8 @@ Platform full CI `40820912608` passed all ten jobs. The earlier Mobile and Start
 Apple correction runs also passed. New Mobile provider CI `40858176601` is accepted;
 Starter Google port run `40864341588` also passed all three jobs as recorded above.
 Those provider runs are complete. The newer HTTPS run `40887772486` also passed all four jobs and 103 Apple
-cases/Xcode. Its Starter port is now under independent validation. Do not repeat completed provider-foundation
+cases/Xcode. Its Starter port and the subsequent Unicode correction both passed their final
+full CI runs above. Do not repeat completed provider-foundation
 work or use the older provider CI as proof of the HTTPS increment.
 
 Firebase project `cmp-fajar` has Email/password and Google enabled. Android configs

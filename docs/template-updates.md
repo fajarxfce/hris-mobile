@@ -1,13 +1,26 @@
 # Template updates
 
-## Configurable HTTPS app links
+## Configurable HTTPS app links — accepted
 
-New generic registration/path/manifest/Apple preparation work is being proved in
-Mobile before porting. Local root/Android, 1,859 desktop and 26 common/application
-Chromium cases passed; ten build-logic cases include stale-output retirement.
-Portable code belongs in Starter only after configured artifact and hosted Apple
-verification. HRIS resource routes, company admission, its UI scenario and the
-Platform web landing page remain downstream. See [app links](app-links.md).
+Final Mobile source `72341ef6` passed all four jobs in full
+[40895095518](https://github.com/fajarxfce/hris-mobile/actions/runs/40895095518).
+Downloaded Apple reports confirm 104 cases in 28 suites, zero failures/errors/skips
+and the complete Xcode app; compilation/tests/Xcode took 701s/77s/1040s.
+Starter port `738db36` independently passed all three jobs in full
+[40895798634](https://github.com/fajarxfce/compose-fluent-starter/actions/runs/40895798634),
+with 84 Apple cases in 24 downloaded suites, no failures/errors/skips and Xcode;
+compilation/tests/Xcode took 561s/84s/703s. Generated Android/Apple association
+checks passed, and the Xcode/Apple artifact success markers were inspected.
+No CI or owned local acceptance remains active from this increment.
+
+The foundation followed full Mobile `d36a1bc9` proof and real Android scoped/
+offline/archive acceptance. The two-file printable-ASCII parser correction was
+reproduced and proved by Mobile JVM/Chromium before copying. Nine portable files
+match their recorded Mobile sources; Starter adds the source's JUnit/root-check
+infrastructure and retains its own routes, bundle IDs and three-job matrix.
+HRIS APIs, company/resource policy, private configuration and the Platform web
+landing page remain downstream. No generic port remains from this increment.
+See [app links](app-links.md) and [measurements](measurements/app-links-2026-10-29.json).
 
 ## Apple Firebase authentication
 
