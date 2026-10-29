@@ -24,7 +24,26 @@ and `/home/fajar/hris/PRD-PROGRESS.md` are supplementary. The user authorized on
 implementation and a push after every atomic commit. This does not authorize a
 release. Preserve unrelated edits and keep implementation, tests and docs together.
 
-## Current result: Apple CI correction passed
+## Current result: actual Android FCM passed
+
+The sender credential question is resolved. Platform `55288bc4` installed the supplied service
+account privately outside Git and accepted two actual FCM publications on the
+owned Android 35 emulator, using unchanged Mobile `678783b3`. Both foreground and
+background notifications displayed generic copy; tapping the latter opened the
+correct company/Inbox item without changing either item's unread/unacknowledged
+version-zero state. The 55 native requests made no company mutation. Disable/logout
+removed the server token/hash. Fixture 6.2m/6.6m with setup; all owned resources
+are cleaned and emulator data retained. See [exact evidence and timing limits](validation.md#actual-fcm-foreground-and-background-delivery).
+The initial manual-readiness and two-minute observer timeouts remain recorded;
+the final 350-second observer passed without changing application behavior.
+
+There is no Mobile implementation change or generic Starter port in this increment.
+The existing SDK/queue/navigation foundation passed this actual provider case.
+Google token exchange, iOS/APNs, verified HTTPS associations and physical-location
+acceptance still need their separate inputs. Do not ask for the supplied FCM
+credential again; its private host path is in Platform's current handoff.
+
+## Previous result: Apple CI correction passed
 
 Latest local application change corrects the English Expense count label to
 `Expense items: %1$s`, after inspecting the accepted native screenshots. Root
@@ -48,8 +67,8 @@ correction is accepted in Starter `1817e45`: independent Apple run
 passed 27 simulator tests, the full Xcode build and artifact upload. No port is
 pending. [Measurements](measurements/ci-2026-10-29.json) retain both Mobile runs,
 the later copy-only checks and Starter proof.
-Current local native fixtures are all stopped/cleaned. Provider/device inputs remain
-external and their pending question must not be repeated.
+Current local native fixtures are all stopped/cleaned. Google/iOS/physical inputs
+remain external; the FCM credential and actual Android delivery are now accepted above.
 
 ## Accepted evidence: native Attendance capture recovery
 
@@ -69,8 +88,8 @@ above. Platform full [40820912608](https://github.com/fajarxfce/hris-platform/ac
 then passed all ten jobs at `9345c19b`, including real API/worker/export integration
 and schema-101 restore with a downloaded sanitized artifact. All current CI work
 is complete; no generic port arose from the native HRIS business fixtures.
-FCM server credentials and Google/physical/iOS acceptance still need their actual
-external inputs. Do not repeat the pending Firebase question.
+Google/physical/iOS acceptance still needs its actual external inputs. The supplied
+FCM credential and Android delivery are accepted above.
 
 ## Accepted coverage: read replicas and commands
 
@@ -89,7 +108,7 @@ Platform's payroll period comparison passed 119 API, 94 worker and 12 data tests
 January/February workflow with retained tax continuity and live access withdrawal.
 Push delivery observations also passed schema-101 recovery. Neither administrative
 feature needs a Mobile/Starter port. Continue missing acceptance and concrete PRD
-gaps without repeating completed implementation or the pending Firebase question.
+gaps without repeating completed implementation or the resolved FCM credential question.
 
 ## Accepted evidence: native upload and inspection review
 
@@ -108,8 +127,8 @@ The unchanged `02743a9f` loopback APK was reused; no implementation/Starter port
 due. All owned resources were cleaned and emulator app data retained. Platform
 subsequently accepted actual elapsed export retirement, including the unchanged
 one-hour physical grace and lost deletion receipt retry, at `1abdbce9`. Native
-Google exchange, FCM message/scoped hints and iOS/physical cases still need their
-separate setup. Do not repeat the pending Firebase service-account path question.
+Google exchange and iOS/physical cases still need their separate setup. Actual
+foreground/background FCM hints were subsequently accepted above.
 
 ## Previous checkpoint: native Firebase registration recovery
 
@@ -137,11 +156,10 @@ result; the corrected full command passed in 1m59s. Services, control files and
 forwarding were cleaned, connectivity restored, and emulator data retained. No
 phone was connected. Generic SDK sources did not change; no Starter port applies.
 
-Continue after committing/pushing: actual FCM delivery/scoped hints, Google token
-exchange and iOS/physical acceptance remain. The user rejected stopping after a
-checkpoint. Platform has a pending question for the Firebase service-account file
-path; none was found in the bounded workspace/config scan or relevant env vars.
-Do not repeat that question while independent PRD work is available.
+At this earlier registration checkpoint, server FCM credentials were unavailable.
+The user subsequently supplied the file and actual Android FCM delivery passed
+above. Continue Google token exchange and iOS/physical acceptance when their
+inputs are available; do not repeat the resolved credential question.
 
 ## Last accepted increments
 
@@ -204,12 +222,12 @@ input becomes available; do not repeat completed build/provider-foundation work.
 
 Firebase project `cmp-fajar` has Email/password and Google enabled. Android configs
 exist locally in ignored `apps/android/google-services.json`; do not commit provider
-credentials. The known remaining external work includes actual Google ID-token
-acceptance, FCM service-account configuration and actual message/scoped-hint
-delivery, iOS Firebase/APNs/device setup, verified HTTPS associations and physical
-location/device acceptance. The Firebase sender credential-path question is already
-pending; do not repeat it or rescan for credentials without new input. Public
-Android configuration is not an FCM server credential.
+credentials. Actual FCM foreground/background delivery and notification navigation
+are accepted above. Remaining external work includes actual Google ID-token
+exchange, iOS Firebase/APNs/device setup, verified HTTPS associations and physical
+location/device acceptance. The supplied sender credential is installed privately
+in Platform's host configuration. Public Android config is a separate file; do
+not repeat the resolved credential question.
 
 ## Validation and device ownership
 

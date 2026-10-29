@@ -1,5 +1,42 @@
 # Validation
 
+## Actual FCM foreground and background delivery
+
+On 29 October, Platform `55288bc4`'s [owned real-FCM fixture](https://github.com/fajarxfce/hris-platform/blob/feat/firebase-auth/docs/native-fcm-acceptance.md)
+passed using its supplied private service account for `cmp-fajar`. Mobile
+application `678783b3` on Android 35 (`hris-mobile-dev`, `emulator-5560`) received
+two real publications through Firebase Messaging and showed generic OS alerts,
+one foreground and one background. Tapping the second alert opened the expected
+Inbox item in the same company. Independent server observation confirmed both
+items stayed version zero with no read or acknowledgement. The 55 native requests
+made no company mutation. Explicit notification disable and logout left one
+disabled registration without encrypted token or hash.
+
+The fixture passed in 6.2m/6.6m including setup. Intervals from the driver-ready
+markers to observed OS notifications were 10.032s foreground and 160.633s background,
+including publication, polling and Android scheduling; this is no immediate-delivery
+guarantee. An initial manual-readiness timeout sent no message. A second attempt
+reached FCM but its two-minute OS observer expired before Google's transport
+reconnected. The final 350-second observer passed with unchanged normal priority,
+300-second provider TTL and application sources. Those two failures remain in
+[tracked measurements](https://github.com/fajarxfce/hris-platform/blob/feat/firebase-auth/docs/measurements/native-fcm-2026-10-29.json).
+
+The installed 32,853,122-byte loopback APK has SHA-256
+`59494858f2da47b37307b7f911960c0f895929aa92e90bc8831a6f6b53fde715`.
+Its root/Android assembly validation is recorded in the copy increment below;
+this acceptance required no new application build or generic Starter port.
+Platform's 12 related Python fixture checks (including five new FCM boundaries),
+seven proxy regressions, TypeScript, Biome, production build and architecture passed.
+All owned services/database/markers/forwarding and temporary diagnostic database
+copies were removed. The emulator stopped without wiping app data; connectivity
+and location were unchanged. Screenshots were inspected and remain local under
+`.work/fcm-native-*.png`. No phone or production deployment was used.
+
+The sender credential question is resolved. Actual FCM here covers the correct
+account and selected company; replacement/duplicate/revoked hints retain separate
+automated coverage. Google token exchange, iOS/APNs and physical-device acceptance
+remain separate and must not be inferred from this result.
+
 ## Expense item count copy
 
 On 29 October, inspected native Expense screenshots exposed the English label

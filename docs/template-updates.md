@@ -1,5 +1,14 @@
 # Template updates
 
+## Actual Android FCM acceptance
+
+The 29 October [real-provider case](validation.md#actual-fcm-foreground-and-background-delivery)
+passed foreground/background delivery, generic OS presentation, Inbox navigation
+and retirement on unchanged Mobile `678783b3`. The supplied server credential and
+owned acceptance driver belong to Platform. No reusable source change was needed;
+there is no new Starter port. Existing queue/scope regressions and other platform
+provider acceptance keep their separate evidence.
+
 ## Apple CI compilation budget
 
 Mobile `451a2c4d` separates cold iOS test compilation, simulator execution and

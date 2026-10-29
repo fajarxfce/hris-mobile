@@ -111,11 +111,17 @@ prove provider delivery.
 
 FCM and Firebase Authentication are both requested. Firebase sign-in must exchange
 a verified external identity for HRIS authorization; registration tokens are never
-account identity. iOS provider configuration, APNs signing and worker FCM service
-credentials remain external acceptance dependencies. Actual Firebase SDK token issuance, registration, response-loss recovery,
+account identity. The supplied worker service account now passed actual Android
+FCM delivery; iOS provider configuration and APNs signing remain external inputs.
+Actual Firebase SDK token issuance, registration, response-loss recovery,
 offline restart and explicit retirement now have
 [Android evidence](validation.md#firebase-registration-and-offline-recovery-on-android).
-FCM message delivery and foreground/background provider hints remain unaccepted.
+Real foreground/background FCM messages, generic OS notifications and correct
+notification navigation now have [actual Android evidence](validation.md#actual-fcm-foreground-and-background-delivery).
+Both Inbox rows remained unread/unacknowledged, and disable/logout retired the
+server token. Normal-priority transport and Android scheduling can delay display;
+the measured background case took about 161 seconds. The server credential stays
+private outside Git in Platform's documented host configuration.
 Firebase email/password login and the Android system Google sign-in launch/dismiss
 flow have [separate device evidence](validation.md#real-firebase-android-acceptance).
 The user enabled Email/password and Google. Public Firebase Auth configuration now
