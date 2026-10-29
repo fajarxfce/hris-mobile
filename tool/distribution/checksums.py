@@ -8,6 +8,8 @@ import shutil
 import subprocess
 import sys
 
+from app_links import package_app_links
+
 
 def checked(*args):
     return subprocess.run(args, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE).stdout
@@ -26,7 +28,7 @@ def package(root, platform):
         bundle = root / f'apps/android/build/outputs/bundle/{environment}Release/android-{environment}-release.aab'
         sdk = Path(os.environ.get('ANDROID_HOME') or os.environ['ANDROID_SDK_ROOT'])
         signers = sorted(sdk.glob('build-tools/*/apksigner'), key=lambda p: tuple(int(x) for x in p.parent.name.split('.') if x.isdigit()))
-        checked(str(signers[-1]), 'verify', str(apk))
+        signing = checked(str(signers[-1]), 'verify', '--print-certs', str(apk))
         result = checked('jarsigner', '-J-Duser.language=en', '-J-Duser.country=US', '-verify', str(bundle))
         if b'jar verified.' not in result:
             raise ValueError('The Android bundle is not signed.')
@@ -39,6 +41,7 @@ def package(root, platform):
     elif platform == 'ios':
         archive = directory / 'HrisMobile.xcarchive'
         checked('codesign', '--verify', '--deep', '--strict', str(archive / 'Products/Applications/HrisMobile.app'))
+        signing = checked('codesign', '-d', '--entitlements', ':-', str(archive / 'Products/Applications/HrisMobile.app'))
         ipa = directory / 'ipa/HrisMobile.ipa'
         shutil.copyfile(ipa, destination / ipa.name)
         if (archive / 'dSYMs').exists():
@@ -47,6 +50,7 @@ def package(root, platform):
         raise ValueError('Unsupported platform.')
     metadata['commit'] = checked('git', '-C', str(root), 'rev-parse', 'HEAD').decode().strip()
     metadata['platform'] = platform
+    metadata['appLinks'] = package_app_links(root, destination, metadata, platform, signing)
     (destination / 'build.json').write_text(json.dumps(metadata, indent=2) + '\n')
     files = sorted(p for p in destination.rglob('*') if p.is_file())
     with (destination / 'SHA256SUMS').open('w') as sums:

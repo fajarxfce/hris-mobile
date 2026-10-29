@@ -74,6 +74,14 @@ Keep the selected domain, certificates, signing profile and deployed files in th
 environment's deployment record. Generation alone does not prove DNS/TLS, OS
 domain verification or APNs delivery.
 
+## Distribution builds
+
+The manual Android/iOS workflows accept the environment variable
+`APP_LINKS_CONFIG_BASE64` for the selected public registration. They carry that
+input into the real build, verify the resulting signing identity, and retain the
+matching domain files with checksums. See [distribution](distribution.md#optional-https-application-links).
+A regular unconfigured build still disables HTTPS admission.
+
 ## Validation boundary
 
 Local root/Android and Chromium checks passed: 1,859 desktop cases, six common and

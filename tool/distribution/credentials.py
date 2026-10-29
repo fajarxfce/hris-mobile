@@ -7,6 +7,8 @@ from pathlib import Path
 import shutil
 import sys
 
+from app_links import prepare_app_links
+
 
 def private_file(path, content):
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -47,6 +49,7 @@ def prepare_android(root, directory, values):
     save(root / f'apps/android/src/{environment}/google-services.json', config)
     if values.get('OIDC_CONFIG_BASE64'):
         save(root / f'config/oidc/{environment}.json', decode(values, 'OIDC_CONFIG_BASE64'))
+    prepare_app_links(save, root, environment, values)
 
 
 if __name__ == '__main__':

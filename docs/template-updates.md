@@ -1,5 +1,13 @@
 # Template updates
 
+## Distribution configuration — source verification active
+
+The release audit now fixes explicit per-environment API forwarding and passes
+optional app-link registration through signing preparation and checked artifacts.
+Portable shell/helpers/tests must follow Mobile local and Xcode proof before
+porting. Starter keeps its demo backend, package/project names and release inputs;
+HRIS alone removes the unsupported demo choice. See [handoff](agent-handoff.md).
+
 ## Configurable HTTPS app links — accepted
 
 Final Mobile source `72341ef6` passed all four jobs in full

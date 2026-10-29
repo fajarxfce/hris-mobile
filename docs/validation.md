@@ -2587,3 +2587,22 @@ observations; no result for those is inferred from builds or fixtures. Default
 native builds do not enable an unconfigured HTTPS host. Reopen implementation for
 an observed failure or a documented requirement; do not recreate accepted modules
 from old next-step paragraphs.
+
+## Distribution configuration audit — 29 October 2026
+
+The actual generator reproduced a release API override losing to the dev project
+property. Seventeen Python cases now exercise bounded URL/input validation, both
+real shell entry points, optional public app-link ownership, profile capabilities,
+APK/Apple identity mismatch and generated-file consistency. Root/Android passed
+1,860 desktop cases in 326 suites in 124s. A release-build-73 attempt then exposed
+13 UI fixture failures before deliberate cancellation: the fake server asserted
+header build 1. Correcting that expectation and its minimum-build boundary passed
+all 1,860 desktop cases at build 73. Release lint separately required three explicit
+false subdomain attributes; no HTTP host or permission was added.
+
+The release SBOM needed 31 POM checksums absent from ordinary compilation. Every
+new POM matches the canonical HTTPS artifact and coordinates; 3,751 prior hashes
+are unchanged. A signed APK/AAB/SBOM exercise uses an ephemeral fictional key and
+invalid test host, without upload or phone installation; its final result and
+hosted CI belong in [measurements](measurements/distribution-2026-10-29.json).
+The changed Xcode framework script requires hosted Apple proof before a Starter port.

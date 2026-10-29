@@ -1,5 +1,6 @@
 package dev.fajar.starter.fixtures
 
+import dev.fajar.starter.common.config.BuildRuntime
 import io.ktor.http.HttpStatusCode
 import java.util.concurrent.atomic.AtomicInteger
 import kotlin.time.Clock
@@ -37,7 +38,7 @@ class NativeCompanyPolicyUi {
                 else -> return null
             }
         return when {
-            minimumAndroid > 1 ->
+            minimumAndroid > BuildRuntime.versionNumber ->
                 """{"code":"client_update_required"}""" to HttpStatusCode.Forbidden
             maintenance -> """{"code":"company_maintenance"}""" to HttpStatusCode.ServiceUnavailable
             module in disabledModules ->

@@ -17,12 +17,15 @@ def configuration(values):
         raise ValueError('Version must have three numeric components.')
     if not re.fullmatch(r'[1-9][0-9]{0,8}', build):
         raise ValueError('Build number must be a positive integer with at most nine digits.')
-    if backend not in {'demo', 'remote'}:
-        raise ValueError('Select the demo or remote backend explicitly.')
+    if backend != 'remote':
+        raise ValueError('HRIS distribution requires the remote backend.')
     endpoint = values.get('API_BASE_URL', '')
     if backend == 'remote':
+        if not endpoint or len(endpoint) > 2048 or any(ord(c) < 33 or ord(c) > 126 for c in endpoint) or '\\' in endpoint:
+            raise ValueError('A remote endpoint requires a bounded ASCII HTTPS URL.')
         url = urlparse(endpoint)
-        if url.scheme != 'https' or not url.hostname or url.username or url.password or url.query or url.fragment:
+        if (url.scheme != 'https' or not url.hostname or url.username is not None or url.password is not None
+                or '?' in endpoint or '#' in endpoint or url.port == 0):
             raise ValueError('A remote build requires an HTTPS API_BASE_URL without credentials or query.')
     identifier = 'dev.fajar.hris.mobile' + ('' if environment == 'prod' else f'.{environment}')
     return {'environment': environment, 'variant': environment.capitalize(),

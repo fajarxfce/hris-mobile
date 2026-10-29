@@ -27,6 +27,7 @@ import dev.fajar.starter.app.di.applicationNetworkModule
 import dev.fajar.starter.app.di.createAppContainer
 import dev.fajar.starter.common.config.AppEnvironment
 import dev.fajar.starter.common.config.AppPlatform
+import dev.fajar.starter.common.config.BuildRuntime
 import dev.fajar.starter.common.result.AppResult
 import dev.fajar.starter.common.result.FailureKind
 import dev.fajar.starter.database.*
@@ -3014,7 +3015,8 @@ class AppFlowTest {
 
     @Test
     fun companyAvailabilityPreservesRecoveryAcrossUpdateMaintenanceAndOfflineRetry() {
-        val server = NativeUiServer().apply { companyPolicy.minimumAndroid = 2 }
+        val server =
+            NativeUiServer().apply { companyPolicy.minimumAndroid = BuildRuntime.versionNumber + 1 }
         withApplication(server) {
             signIn()
             waitFor("Choose a company")

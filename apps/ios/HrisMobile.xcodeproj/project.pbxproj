@@ -83,7 +83,7 @@
             isa = PBXShellScriptBuildPhase; alwaysOutOfDate = 1; buildActionMask = 2147483647;
             files = (); inputPaths = (); outputPaths = (); name = "Build Kotlin framework";
             runOnlyForDeploymentPostprocessing = 0; shellPath = /bin/sh;
-            shellScript = "cd \"$SRCROOT/../..\"\n./gradlew -PappEnvironment=\"$HRIS_ENVIRONMENT\" -PappVersion=\"$MARKETING_VERSION\" -PappVersionCode=\"$CURRENT_PROJECT_VERSION\" :apps:shared:embedAndSignAppleFrameworkForXcode\n";
+            shellScript = "sh \"$SRCROOT/build_framework.sh\" \"$HRIS_ENVIRONMENT\"\n";
         };
         A00000000000000000000050 = {isa = XCConfigurationList; buildConfigurations = (A00000000000000000000060, A00000000000000000000061, B00000000000000000000100, B00000000000000000000102, B00000000000000000000104, B00000000000000000000106, B00000000000000000000108, B00000000000000000000110,); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
         A00000000000000000000051 = {isa = XCConfigurationList; buildConfigurations = (A00000000000000000000062, A00000000000000000000063, B00000000000000000000101, B00000000000000000000103, B00000000000000000000105, B00000000000000000000107, B00000000000000000000109, B00000000000000000000111,); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };

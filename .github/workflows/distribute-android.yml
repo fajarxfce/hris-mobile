@@ -14,11 +14,6 @@ on:
       build:
         description: 'Increasing numeric build number'
         required: true
-      backend:
-        type: choice
-        options: [demo, remote]
-        default: demo
-        required: true
       notes:
         description: 'Release notes for testers'
         required: false
@@ -40,7 +35,7 @@ jobs:
       RELEASE_ENVIRONMENT: ${{ inputs.environment }}
       RELEASE_VERSION: ${{ inputs.version }}
       RELEASE_BUILD: ${{ inputs.build }}
-      RELEASE_BACKEND: ${{ inputs.backend }}
+      RELEASE_BACKEND: remote
       RELEASE_NOTES: ${{ inputs.notes }}
       API_BASE_URL: ${{ vars.API_BASE_URL }}
     steps:
@@ -58,22 +53,15 @@ jobs:
           FIREBASE_ANDROID_CONFIG_BASE64: ${{ secrets.FIREBASE_ANDROID_CONFIG_BASE64 }}
           FIREBASE_ANDROID_APP_ID: ${{ vars.FIREBASE_ANDROID_APP_ID }}
           OIDC_CONFIG_BASE64: ${{ secrets.OIDC_CONFIG_BASE64 }}
+          APP_LINKS_CONFIG_BASE64: ${{ vars.APP_LINKS_CONFIG_BASE64 }}
         run: python3 tool/distribution/credentials.py android
       - name: Verify and build signed APK and bundle
         env:
-          VARIANT: ${{ steps.inputs.outputs.variant }}
           ANDROID_KEYSTORE_FILE: ${{ runner.temp }}/fluent-distribution/android.jks
           ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
           ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
           ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
-          ORG_GRADLE_PROJECT_backend: ${{ inputs.backend }}
-          ORG_GRADLE_PROJECT_apiBaseUrl: ${{ vars.API_BASE_URL || 'https://api.example.com/' }}
-        run: >-
-          xvfb-run -a ./gradlew :check ":apps:android:assemble${VARIANT}Release"
-          ":apps:android:bundle${VARIANT}Release" :apps:android:cyclonedxDirectBom
-          -PsbomConfiguration="${RELEASE_ENVIRONMENT}ReleaseRuntimeClasspath"
-          -PrequireSigning=true -PappEnvironment="$RELEASE_ENVIRONMENT"
-          -PappVersion="$RELEASE_VERSION" -PappVersionCode="$RELEASE_BUILD"
+        run: sh tool/distribution/build_android.sh
       - name: Package checksums
         run: python3 tool/distribution/checksums.py android
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02

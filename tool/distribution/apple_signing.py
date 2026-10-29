@@ -13,6 +13,7 @@ import subprocess
 import sys
 
 from credentials import private_file, required, decode
+from app_links import prepare_app_links
 
 
 def validate_profile(profile, identifier, team):
@@ -55,6 +56,7 @@ def prepare(root, directory, values):
     save(directory / 'profile.mobileprovision', decode(values, 'APPLE_PROFILE_BASE64'))
     profile = plistlib.loads(command('security', 'cms', '-D', '-i', str(directory / 'profile.mobileprovision')))
     uuid = validate_profile(profile, identifier, team)
+    prepare_app_links(save, root, environment, values, profile)
     installed = Path.home() / 'Library/MobileDevice/Provisioning Profiles' / (uuid + '.mobileprovision')
     save(installed, (directory / 'profile.mobileprovision').read_bytes())
     save(directory / 'private_keys' / f'AuthKey_{key_id}.p8', decode(values, 'APPLE_API_KEY_BASE64'))

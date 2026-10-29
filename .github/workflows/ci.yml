@@ -64,6 +64,7 @@ jobs:
           :core:availability:domain:wasmJsBrowserTest :core:availability:data:wasmJsBrowserTest
           :apps:shared:wasmJsBrowserTest
           :apps:android:assembleDevDebug :apps:android:assembleStagingDebug :apps:android:assembleProdRelease
+          :apps:android:cyclonedxDirectBom -PsbomConfiguration=prodReleaseRuntimeClasspath
       - name: Verify configured Android app-link manifests and domain files
         run: |
           python3 tool/check_app_links.py prepare --application-id dev.fajar.hris.mobile
@@ -108,6 +109,8 @@ jobs:
           distribution: temurin
           java-version: '21'
       - uses: gradle/actions/setup-gradle@v4
+      - name: Verify distribution configuration and shell entry points
+        run: python3 -m unittest discover -s tool/distribution -p 'test_*.py'
       - name: Prepare public app-link test registrations
         run: python3 tool/check_app_links.py prepare --application-id dev.fajar.hris.mobile
       - name: Compile iOS simulator tests
@@ -124,12 +127,23 @@ jobs:
         timeout-minutes: 15
       - name: Build iOS simulator app
         timeout-minutes: 30
+        env:
+          DISTRIBUTION_BACKEND: remote
+          API_BASE_URL: https://release.example.invalid/api/v1/
         run: >
           xcodebuild -project apps/ios/HrisMobile.xcodeproj -scheme HrisMobile
           -configuration Debug -sdk iphonesimulator -destination 'generic/platform=iOS Simulator'
           -derivedDataPath apps/ios/build CODE_SIGNING_ALLOWED=NO ARCHS=arm64 build
       - name: Verify generated Apple associations
-        run: python3 tool/check_app_links.py verify-apple --application-id dev.fajar.hris.mobile
+        run: |
+          python3 tool/check_app_links.py verify-apple --application-id dev.fajar.hris.mobile
+          python3 - <<'PY'
+          from pathlib import Path
+          value = Path('core/common/build/generated/environment/kotlin/dev/fajar/starter/common/config/BuildEnvironment.kt').read_text()
+          assert 'AppEnvironment.Dev to "https://release.example.invalid/api/v1/"' in value
+          assert 'const val demoBackend: Boolean = false' in value
+          print('Xcode uses the selected distribution API and backend.')
+          PY
       - uses: actions/upload-artifact@v4
         if: always()
         with:

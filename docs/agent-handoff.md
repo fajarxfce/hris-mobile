@@ -1,8 +1,30 @@
 # Agent continuation — HRIS Mobile
 
-Updated 29 October 2026 (UTC). The implementation queue for this development pass
-is complete. This is the employee application generated from Compose Fluent Starter, and the proving
+Updated 29 October 2026 (UTC). The release-configuration audit below is active after the previous
+implementation checkpoint. This is the employee application generated from Compose Fluent Starter, and the proving
 ground for reusable foundation changes before they are ported to Starter.
+
+## Active continuation: distribution configuration
+
+The user requested continued work after the previous completion checkpoint.
+Review found three concrete delivery gaps: HRIS's inherited demo release option
+is rejected by its own generator; a generic release API property loses to a
+checked-in per-environment dev property; and distribution had no app-link input.
+The dev endpoint mismatch was reproduced with the actual Gradle generator, and
+four new input assertions initially failed. The changes now pin the selected
+release endpoint/backend, forward optional public app-link registrations, and
+check actual APK/Apple signing identities before retaining generated domain files.
+
+Seventeen distribution regressions pass, including real shell entry points with
+argument-capture fixtures, bounded inputs, existing-file preservation, profile
+capabilities, signer mismatches and stale generated statements. No release upload,
+user-phone action or live configuration change is part of this increment. Root/Android passed 1,860 desktop cases. A real signed-release exercise additionally
+found 31 missing SBOM POM hashes (all checked against canonical HTTPS artifacts),
+HRIS UI fixtures hardcoding build 1 (all 1,860 cases now pass at build 73), and
+three dev network XML declarations requiring explicit false subdomain attributes.
+The corrected signed APK/AAB/artifact exercise is in progress; the
+changed Xcode framework entry point requires the hosted Apple run before the
+portable foundation is accepted in Starter. HRIS's remote-only policy stays here.
 
 ## Completed implementation — 29 October 2026
 

@@ -14,11 +14,6 @@ on:
       build:
         description: 'Increasing numeric build number'
         required: true
-      backend:
-        type: choice
-        options: [demo, remote]
-        default: demo
-        required: true
       notes:
         description: 'Build notes (test details are managed in App Store Connect)'
         required: false
@@ -40,7 +35,7 @@ jobs:
       RELEASE_ENVIRONMENT: ${{ inputs.environment }}
       RELEASE_VERSION: ${{ inputs.version }}
       RELEASE_BUILD: ${{ inputs.build }}
-      RELEASE_BACKEND: ${{ inputs.backend }}
+      RELEASE_BACKEND: remote
       RELEASE_NOTES: ${{ inputs.notes }}
       API_BASE_URL: ${{ vars.API_BASE_URL }}
     steps:
@@ -65,13 +60,13 @@ jobs:
           APPLE_PROFILE_BASE64: ${{ secrets.APPLE_PROFILE_BASE64 }}
           FIREBASE_IOS_CONFIG_BASE64: ${{ secrets.FIREBASE_IOS_CONFIG_BASE64 }}
           OIDC_CONFIG_BASE64: ${{ secrets.OIDC_CONFIG_BASE64 }}
+          APP_LINKS_CONFIG_BASE64: ${{ vars.APP_LINKS_CONFIG_BASE64 }}
         run: python3 tool/distribution/apple_signing.py prepare
       - name: Verify and archive
         env:
           APPLE_TEAM_ID: ${{ vars.APPLE_TEAM_ID }}
           PROFILE_UUID: ${{ steps.signing.outputs.profile }}
-          ORG_GRADLE_PROJECT_backend: ${{ inputs.backend }}
-          ORG_GRADLE_PROJECT_apiBaseUrl: ${{ vars.API_BASE_URL || 'https://api.example.com/' }}
+          DISTRIBUTION_BACKEND: remote
         run: |
           ./gradlew :architectureCheck :formatCheck :detekt
           xcodebuild -project apps/ios/HrisMobile.xcodeproj -scheme "HrisMobile-$RELEASE_ENVIRONMENT" \

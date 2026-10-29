@@ -1,5 +1,6 @@
 package dev.fajar.starter.fixtures
 
+import dev.fajar.starter.common.config.BuildRuntime
 import io.ktor.client.engine.mock.*
 import io.ktor.client.request.HttpRequestData
 import io.ktor.http.*
@@ -146,7 +147,7 @@ class NativeUiServer(
 
     private fun assertNativeHeaders(request: HttpRequestData) {
         assertEquals("ANDROID", request.headers["X-HRIS-Client-Platform"])
-        assertEquals("1", request.headers["X-HRIS-Client-Build"])
+        assertEquals(BuildRuntime.versionNumber.toString(), request.headers["X-HRIS-Client-Build"])
         if (
             request.url.encodedPath !in
                 setOf("/api/v1/auth/native/login", "/api/v1/auth/native/refresh")

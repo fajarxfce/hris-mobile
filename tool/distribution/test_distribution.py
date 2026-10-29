@@ -14,13 +14,16 @@ from firebase_distribute import FirebaseDistribution, NoRedirects
 
 class DistributionConfigurationTest(unittest.TestCase):
     def test_inputs_reject_injection_and_unsafe_remote_origins(self):
-        values = dict(RELEASE_ENVIRONMENT='staging', RELEASE_VERSION='1.2.3', RELEASE_BUILD='42', RELEASE_BACKEND='demo')
+        values = dict(RELEASE_ENVIRONMENT='staging', RELEASE_VERSION='1.2.3', RELEASE_BUILD='42', RELEASE_BACKEND='remote', API_BASE_URL='https://release.example.invalid/api/v1/')
         self.assertEqual('dev.fajar.hris.mobile.staging', configuration(values)['identifier'])
         for key, bad in [('RELEASE_ENVIRONMENT', '../prod'), ('RELEASE_BUILD', '42\nsecret=1'),
-                         ('RELEASE_VERSION', '$(command)'), ('RELEASE_BACKEND', 'unknown')]:
+                         ('RELEASE_VERSION', '$(command)'), ('RELEASE_BACKEND', 'demo'), ('RELEASE_BACKEND', 'unknown')]:
             with self.subTest(key=key), self.assertRaises(ValueError):
                 configuration({**values, key: bad})
-        for url in ['http://api.example', 'https://secret@api.example', 'https://api.example?token=secret']:
+        for url in ['http://api.example', 'https://secret@api.example', 'https://@api.example',
+                    'https://api.example?token=secret', 'https://api.example/\nextra=value',
+                    'https://api.example:wrong/', 'https://api.example\\other/', 'https://api.example/#',
+                    'https://api.example/?', 'https://api.example/' + 'a' * 2048]:
             with self.subTest(url=url), self.assertRaises(ValueError):
                 configuration({**values, 'RELEASE_BACKEND': 'remote', 'API_BASE_URL': url})
 
