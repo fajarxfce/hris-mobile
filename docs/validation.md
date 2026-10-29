@@ -1,5 +1,21 @@
 # Validation
 
+## Expense item count copy
+
+On 29 October, inspected native Expense screenshots exposed the English label
+`1 expense items`. It now reads `Expense items: 1` (with the unchanged `%1$s`
+placeholder), valid for every count. No command, formatting contract or Indonesian
+resource changes. Headless root `:check` and configured Android dev assembly passed
+in 2m31s: 1,939 tasks, 175 executed, three from cache and 1,761 up to date. The first
+invocation omitted Android SDK discovery and failed before compilation; the corrected
+command supplied `ANDROID_HOME`, `ANDROID_SDK_ROOT`, JDK 21 and `CHROME_BIN`.
+
+This local result follows the hosted runs below; those runs and earlier actual
+native recovery used application `02743a9f`, before this copy edit. Device recovery
+was not repeated for a quantity-invariant text change. Root/Android reports and
+the new APK hash are supplementary under `.work/expense-count-copy-result.json`.
+This is an HRIS label with no generic Starter port.
+
 ## Apple CI cold compilation budget
 
 CI run [40815794384](https://github.com/fajarxfce/hris-mobile/actions/runs/40815794384)

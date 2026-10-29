@@ -730,7 +730,7 @@
     <string name="expense_save_item_en">Save item</string>
     <string name="expense_add_item_hint_en">Add the expenses you want to claim.</string>
     <string name="expense_remove_item_en">Remove %1$s</string>
-    <string name="expense_item_count_en">%1$s expense items</string>
+    <string name="expense_item_count_en">Expense items: %1$s</string>
     <string name="expense_date_en">Date</string>
     <string name="expense_category_en">Category</string>
     <string name="expense_choose_category_en">Choose a category</string>

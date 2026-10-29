@@ -28,6 +28,13 @@ release. Preserve unrelated edits and keep implementation, tests and docs togeth
 
 ## Active correction: Apple CI cold compilation
 
+Latest local application change corrects the English Expense count label to
+`Expense items: %1$s`, after inspecting the accepted native screenshots. Root
+checks and Android dev assembly passed in 2m31s; the initial SDK-path setup failure
+and source/result boundary are recorded in [validation](validation.md#expense-item-count-copy).
+Earlier native fixtures and hosted CI below still refer to `02743a9f` application
+sources. No Starter port applies to this HRIS copy edit.
+
 Full run `40815794384` finished: Windows, Web and Linux/Android passed.
 Its overall conclusion remains failure because Apple timed out.
 Apple timed out during cold test compilation, not an observed compilation error.
