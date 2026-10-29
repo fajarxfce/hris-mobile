@@ -304,7 +304,7 @@ class FirebaseProviderTransportTest {
     @Test
     fun cancellationOwnsTheProviderRequestAndClosesPendingIo() = runTest {
         val entered = CompletableDeferred<Unit>()
-        var released = false
+        val released = CompletableDeferred<Unit>()
         val client =
             createHttpClient(
                 MockEngine {
@@ -312,7 +312,7 @@ class FirebaseProviderTransportTest {
                     try {
                         awaitCancellation()
                     } finally {
-                        released = true
+                        released.complete(Unit)
                     }
                 },
                 "https://firebase-auth.invalid/",
@@ -325,7 +325,7 @@ class FirebaseProviderTransportTest {
             }
             entered.await()
             work.cancelAndJoin()
-            assertTrue(released)
+            withContext(Dispatchers.Default) { withTimeout(5_000) { released.await() } }
         } finally {
             client.cancelAndClose()
         }

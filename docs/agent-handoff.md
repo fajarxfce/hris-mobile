@@ -31,7 +31,10 @@ and the iOS bundle restriction header. Firebase Management supplied all three
 matching ignored iOS plists. The new bundle-source regression suite is included in
 the Apple workflow; 53 focused desktop identity cases passed. Root checks and Android
 assembly passed in 2m27s, with 1,842 desktop cases in the report set and final static
-checks passed. Simulator/Xcode validation is next. **Do not port this increment
+checks passed. Apple run `40853359016` compiled and passed all four bundle-reader
+cases, but failed an existing cancellation fixture (81/82 native cases passed).
+Both Firebase HTTP fixtures now await engine cleanup explicitly; focused desktop
+identity checks passed in 29s. Corrected simulator/Xcode validation is next. **Do not port this increment
 to Starter before Mobile Apple verification passes.** iOS Google interaction remains
 a separate adapter task; do not label it merely a missing configuration file.
 

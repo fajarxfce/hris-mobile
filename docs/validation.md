@@ -18,8 +18,16 @@ Two preceding invocations used unavailable/ambiguous formatter task names and ra
 no tests; the repository's correct task is `:formatKotlin`.
 
 The Apple workflow now also compiles and runs identity-data simulator tests before
-the existing unsigned Xcode build. Its new native reader tests and application
-build are pending; no iOS runtime result is inferred from desktop/Android checks.
+the existing unsigned Xcode build. Run [40853359016](https://github.com/fajarxfce/hris-mobile/actions/runs/40853359016)
+at `64039536` compiled successfully and retained 82 native cases in 22 JUnit suites.
+All four new bundle-reader cases passed; one existing Firebase HTTP cancellation
+case failed by reading an unsynchronized Boolean before the engine dispatcher
+completed cleanup. Xcode was skipped after this failure. Both provider/native
+Firebase cancellation fixtures now await an explicit cleanup acknowledgement with
+a five-second real-dispatcher deadline before closing the shared client. This
+keeps request cancellation, rather than client shutdown, responsible for release.
+Focused desktop identity checks passed again in 29s. The corrected simulator run
+and assembled app remain pending; no result is inferred from desktop checks.
 Google interaction on iOS still requires its own owned adapter. APNs, physical iOS
 provider acceptance and production configuration remain separate. The generic
 Starter port waits for successful Mobile Apple verification.

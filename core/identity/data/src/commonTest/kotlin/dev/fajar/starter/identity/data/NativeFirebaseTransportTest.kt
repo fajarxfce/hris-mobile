@@ -220,7 +220,7 @@ class NativeFirebaseTransportTest {
     @Test
     fun callerCancellationReleasesThePendingTransportWithoutRetry() = runTest {
         val entered = CompletableDeferred<Unit>()
-        var released = false
+        val released = CompletableDeferred<Unit>()
         var calls = 0
         val client =
             createHttpClient(
@@ -230,7 +230,7 @@ class NativeFirebaseTransportTest {
                     try {
                         awaitCancellation()
                     } finally {
-                        released = true
+                        released.complete(Unit)
                     }
                 },
                 "https://hris.invalid/api/v1/",
@@ -239,7 +239,7 @@ class NativeFirebaseTransportTest {
             val pending = async { repository(client).exchange(proof, "Test device", operation) }
             entered.await()
             pending.cancelAndJoin()
-            assertTrue(released)
+            withContext(Dispatchers.Default) { withTimeout(5_000) { released.await() } }
             assertEquals(1, calls)
         } finally {
             client.cancelAndClose()
