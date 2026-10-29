@@ -1,5 +1,36 @@
 # Validation
 
+## Leave submission response loss on Android
+
+The unchanged `02743a9f` APK passed actual Android 35/API/PostgreSQL/worker acceptance
+against Platform `b7f42070` artifacts/schema 101. Fixture `ccae6f8f` creates fictional
+employment, an overnight Monday shift, two opening days and an independent approver.
+Android reviews and submits the first half of one day; the proxy loses the committed
+response. The frozen type/date/portion/reason and one awaiting-confirmation count
+survive offline cold start without double-counting their working copy.
+
+After navigation/session admission settles, Reload summary makes no request:
+33 → 33, including offline reload. An earlier measurement overlapped two late
+navigation reads (31 → 33); it is not used as the stable summary observation.
+API forwarding was removed during offline restart while Wi-Fi remained enabled.
+Exact Retry delivery leaves one version-zero request, one history entry, one
+independent pending approval, 0.5 reserved, 1.5 available and zero consumed days.
+Balance version increases once. Across 43 requests there are two intended company
+writes and one read-only preview POST. All six summary rows clear and logout passes.
+
+The final fresh run passed in 2.8m/3.2m with setup. The initial run failed only the
+fixture's broad POST-as-write assertion; the exact preview/submission sequence
+passed after correction and a new database. Proxy regression, strict TypeScript,
+Biome, production build and dashboard architecture checks passed. Screenshots were
+inspected. All owned resources were cleaned; the dedicated emulator stopped with
+data retained. APK bytes/hash are unchanged from the Expense case below; no Mobile
+code/test rerun, Starter port or phone interaction applies.
+
+[Tracked procedure and measurements](https://github.com/fajarxfce/hris-platform/blob/ccae6f8f/docs/native-leave-acceptance.md)
+include the initial fixture limitation. Local `.work/leave-native-result.json` and
+screenshots supplement Git. Delivery confirmation leaves independent approval
+pending. Attendance-summary and provider/device outcomes remain separate.
+
 ## Expense save response loss on Android
 
 The unchanged `02743a9f` loopback APK passed actual Android 35/API/PostgreSQL/worker

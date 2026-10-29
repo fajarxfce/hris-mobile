@@ -159,3 +159,12 @@ save without a duplicate draft. Summary reloads stay 30 → 30 and 43 → 43, in
 after offline process restart. Check status replays the original command, leaving
 one server claim/line/history entry. All six summary rows clear after confirmation.
 This exercises the distinct Expense input/reason/version deduplication path.
+
+## Native Leave submitted-command outcome
+
+The [Android Leave acceptance](validation.md#leave-submission-response-loss-on-android)
+adds the submitted-command case to the earlier edited-draft acceptance. One frozen
+request survives offline cold start without a matching draft count; stable summary
+reload remains 33 → 33. Exact retry creates no extra request/history/approval and
+reserves only 0.5 days once. All six local summary rows clear while the server
+request awaits independent approval. Server review and local delivery are separate.

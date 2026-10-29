@@ -26,23 +26,24 @@ and `/home/fajar/hris/PRD-PROGRESS.md` are supplementary. The user authorized on
 implementation and a push after every atomic commit. This does not authorize a
 release. Preserve unrelated edits and keep implementation, tests and docs together.
 
-## Current checkpoint: native expense save recovery
+## Current checkpoint: native Leave submission recovery
 
-Actual Android/API/PostgreSQL/worker acceptance of committed save response loss
-passed on the unchanged `02743a9f` APK. One edited draft became one unconfirmed
-command without double-counting, survived offline cold start and replayed exactly.
-Summary reload counters remained 30 → 30 before Save and 43 → 43 after response
-loss/restart. The observer found one version-zero draft, one line, IDR 25,000.25
-and one history entry, across 51 native requests/two identical company writes.
-Six summary rows cleared and logout passed. Fixture 8.3m/8.8m with setup; all owned
-resources removed. See [executed evidence](validation.md#expense-save-response-loss-on-android).
+Platform `ccae6f8f` verifies actual Android/API/PostgreSQL/worker committed-response
+loss and exact Leave replay. The unchanged `02743a9f` APK retained one unconfirmed
+command through offline restart without a duplicate draft. Stable summary reload
+stayed 33 → 33. One request/history/approval and one balance-version increment
+reserved 0.5 days, leaving 1.5 available; six summary rows cleared and logout passed.
+The final fresh fixture passed in 2.8m/3.2m with setup. The initial preview-POST
+counting mistake and navigation-counter overlap are documented in
+[validation](validation.md#leave-submission-response-loss-on-android).
 
-Platform fixture `97e33310` follows Overtime `578a5031`; both use integrated
-`b7f42070` artifacts/schema 101. No application or Starter code change was needed.
-Continue the native Leave submitted-command response-loss case next, then Attendance
-capture pending-summary recovery. Inspect earlier Leave working-copy and capture
-acceptance to avoid repeating completed outcomes. The pending Firebase server
-credential question remains separate and must not be repeated.
+Continue native Attendance capture pending-summary recovery next, preserving its
+independent-review requirement after an explicit capture without location. Prior
+capture and replica acceptance remain valid; inspect them before adding the missing
+summary outcome. All owned services/markers/forwarding are removed and the dedicated
+emulator stopped with data retained. No application change/Starter port applies.
+FCM server credentials and Google/physical/iOS acceptance need their external inputs;
+do not repeat the pending Firebase question.
 
 ## Current continuation: reconcile actual replica coverage
 

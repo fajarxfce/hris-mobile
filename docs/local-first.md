@@ -291,7 +291,7 @@ from these durable records; they are not a missing replica migration.
 attendance, overtime, leave, expenses and document files. It distinguishes edited
 drafts, unsent commands, uncertain outcomes, review failures and file transfers.
 Opening/reloading it performs no HTTP or automatic command delivery. The native
-acceptance ledger now includes Leave working copies, actual Inbox, Overtime and Expense-save response loss,
+acceptance ledger now includes Leave working copies, actual Inbox, Leave, Overtime and Expense-save response loss,
 partial downloads and interrupted uploads/inspection review through offline
 process restarts. Those examples do not prove every feature's pending outcome on
 every device. Existing per-feature tests remain the evidence for other states.
