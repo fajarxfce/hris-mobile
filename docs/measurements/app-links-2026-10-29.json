@@ -1,0 +1,78 @@
+{
+  "date": "2026-10-29",
+  "source": "d36a1bc9e5f8b1e367d6d6db380d2da5ad312cad",
+  "local": {
+    "rootSeconds": 445,
+    "desktopTests": 1859,
+    "desktopSuites": 326,
+    "commonChromiumTests": 6,
+    "appChromiumTests": 20,
+    "buildLogicTests": 10,
+    "failures": 0,
+    "androidDev": "passed",
+    "configuredManifestsAllEnvironments": "passed",
+    "generatedAppleAndSiteArtifacts": "passed",
+    "configuredCheckSeconds": 31
+  },
+  "initialFailure": {
+    "stage": "build-logic test compilation",
+    "cause": "fileTree receiver lambda referenced it.include",
+    "correction": "Use include on receiver; corrected build-logic/core check passed in 28s"
+  },
+  "androidAcceptance": {
+    "date": "2026-10-29",
+    "mobileSource": "d36a1bc9e5f8b1e367d6d6db380d2da5ad312cad",
+    "platformSource": "d21a1346",
+    "schema": 101,
+    "device": "owned Android 35 emulator",
+    "host": "links.example.invalid",
+    "intent": "VIEW/BROWSABLE with explicitly selected package; no forced activity component",
+    "fixtureMinutes": 3.2,
+    "includingSetupMinutes": 3.6,
+    "apkBuildSeconds": 32,
+    "checks": {
+      "coldLinkWaitedForLoginAndCompany": true,
+      "ownScopedMessageOpened": true,
+      "repeatedLinkOneBackToList": true,
+      "wrongAccountRejected": true,
+      "otherCompanyRejected": true,
+      "queryRejected": true,
+      "wrongEnvironmentRejectedByAndroidManifest": true,
+      "wrongHostRejectedByAndroidManifest": true,
+      "accountLinkBackgroundResume": true,
+      "offlineColdStartRetainedOwnedMessage": true,
+      "archivedMessageUnavailable": true,
+      "offlineColdStartAndFailedRefreshKeptArchivedMessageClosed": true
+    },
+    "server": {
+      "readAt": null,
+      "acknowledgedAt": null,
+      "foreignRequests": 0,
+      "archivedDenied": true,
+      "requests": 28,
+      "nativeCompanyWrites": 0
+    },
+    "cleanup": {
+      "ownedApiWorkerDatabaseProxyPreviewRemoved": true,
+      "ownedEmulatorStoppedDataRetained": true,
+      "reverseRemoved": true,
+      "privateDevelopmentStackPreserved": true
+    },
+    "limits": [
+      "Package-selected Android intent is not actual OS domain verification",
+      "Fictional domain; no DNS/TLS/association publication",
+      "No physical Apple device/APNs acceptance; user waived iPhone tests",
+      "No production deployment"
+    ],
+    "setupFailure": {
+      "cause": "Initial Playwright invocation used workspace root instead of dashboard directory",
+      "startedFixtureResources": false,
+      "correction": "Run from apps/dashboard; corrected native fixture passed"
+    }
+  },
+  "ci": {
+    "run": 40887772486,
+    "head": "d36a1bc9e5f8b1e367d6d6db380d2da5ad312cad",
+    "status": "in progress"
+  }
+}

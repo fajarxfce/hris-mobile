@@ -4,6 +4,18 @@ Updated 29 October 2026 (UTC). The overall HRIS PRD remains in progress. This is
 the employee application generated from Compose Fluent Starter, and the proving
 ground for reusable foundation changes before they are ported to Starter.
 
+## Active HTTPS proof — 29 October 2026
+
+Implementation `d36a1bc9` passed local root/Android checks (1859 desktop cases),
+common/app Chromium (6/20 cases), build-logic (10 cases), all three configured
+Android manifests and generated Apple/domain artifacts. The owned Android 35
+HTTPS cold/login/company/scope/offline/archive case then passed in 3.2m/3.6m with
+28 requests, zero company writes and unchanged unread/unacknowledged Inbox state.
+See [contract](app-links.md) and [measurements](measurements/app-links-2026-10-29.json).
+Full CI `40887772486` is still running at this record; do not port before it passes.
+No real domain was published. Owned test resources were cleaned, emulator data and
+the persistent private development stack retained. Starter is still `e29b0b2`.
+
 ## Current user direction — 29 October 2026
 
 The user explicitly waived physical iPhone testing for this completion pass

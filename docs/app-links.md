@@ -89,3 +89,19 @@ registrations. The fixture does not contact the example domain. Exact current
 results belong in [validation](validation.md) and the [handoff](agent-handoff.md).
 The user waived physical iPhone testing for this completion pass; no physical
 iOS or live-domain result is inferred from these automated checks.
+
+## Actual Android routing acceptance — 29 October 2026
+
+Mobile `d36a1bc9` with Platform `d21a1346` / schema 101 passed the owned Android 35
+HTTPS case in 3.2 minutes (3.6 with setup). A package-selected VIEW/BROWSABLE intent
+cold-started the real activity, waited for login/company, and opened the scoped
+Inbox message. Repeated opening needed one Back to the list. Wrong account/company
+and query inputs stayed closed; the manifest rejected wrong host/environment.
+Account navigation survived background/resume. Offline cold start retained the
+owned message; after the server archived it, refresh and another offline cold start
+kept it unavailable. Independent server checks found 28 requests, zero native
+company writes/foreign-company requests and unchanged read/ack/version-zero state.
+All owned fixture resources were removed; emulator data and the private dev stack
+were preserved. [Measurements](measurements/app-links-2026-10-29.json) retain limits.
+The fictional domain and explicit package mean this is native routing acceptance,
+not public DNS/TLS or OS domain verification. Physical iPhone tests are waived.
