@@ -69,6 +69,7 @@ jobs:
           name: android-${{ inputs.environment }}-${{ inputs.version }}-${{ inputs.build }}
           retention-days: 14
           path: build/distribution/artifacts/
+          include-hidden-files: true
           if-no-files-found: error
       - id: firebase
         uses: google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093

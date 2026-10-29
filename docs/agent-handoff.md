@@ -42,6 +42,14 @@ in 23s. Both packages retain the selected API/registration; actual signatures
 and packaged domain files/checksums passed. No upload or installation occurred.
 Final hosted jobs and downloaded Apple reports/Xcode markers remain required.
 
+The pinned artifact action excludes hidden directories by default. Its actual
+`@actions/glob` 0.5.0 discovery, checked against the pinned package integrity,
+initially selected five files and omitted both `.well-known` statements from the
+signed fixture. Both manual workflows now include hidden files only inside
+`build/distribution/artifacts/`; discovery selects all seven files and every
+checksum matches. Credentials remain outside this packaged directory. This
+workflow-only follow-up does not change application/native code or invoke upload.
+
 ## Completed implementation — 29 October 2026
 
 Final Mobile source `72341ef6` passed all four jobs in full

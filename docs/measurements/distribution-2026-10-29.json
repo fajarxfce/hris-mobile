@@ -463,5 +463,22 @@
     "No actual signed Apple IPA; profile/entitlement fixtures and Xcode verification are distinct",
     "Phone data and private runtime preserved"
   ],
-  "existingArtifactEntriesPreserved": 3751
+  "existingArtifactEntriesPreserved": 3751,
+  "artifactUploadSelection": {
+    "actionRevision": "ea165f8d65b6e75b540449e92b4886f43607fa02",
+    "globVersion": "0.5.0",
+    "pinnedGlobIntegrityVerified": true,
+    "beforeSelectedFiles": 5,
+    "beforeMissing": [
+      "app-links/links.example.invalid/.well-known/apple-app-site-association",
+      "app-links/links.example.invalid/.well-known/assetlinks.json"
+    ],
+    "afterSelectedFiles": 7,
+    "allChecksummedFilesSelectedAndVerified": true,
+    "actualUpload": false,
+    "workflowsVerified": [
+      ".github/workflows/distribute-android.yml",
+      ".github/workflows/distribute-ios.yml"
+    ]
+  }
 }

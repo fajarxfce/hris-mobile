@@ -153,6 +153,10 @@ and verify it from its extracted directory with `sha256sum -c SHA256SUMS` (or
 `shasum -a 256 -c SHA256SUMS` on macOS). Checksums detect changes; they are not a
 third-party signing attestation.
 
+Both artifact steps explicitly include hidden files within the packaged directory,
+so `.well-known` association statements survive download and checksum verification.
+Signing credentials and source configuration are outside that upload directory.
+
 Generate the Android dependency inventory locally:
 
 ```sh

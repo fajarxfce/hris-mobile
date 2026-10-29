@@ -2623,3 +2623,13 @@ contains the explicitly selected distribution API and remote backend. Native
 association/domain artifacts and the complete Xcode build markers passed. This
 accepts the Mobile source for the portable Starter port; independent destination
 checks and CI remain required. No actual Apple signing or upload is inferred.
+
+## Hidden association artifact discovery
+
+The pinned artifact action excludes hidden directories by default. Its actual
+`@actions/glob` 0.5.0 discovery, checked against the pinned package integrity,
+initially selected five files and omitted both `.well-known` statements from the
+signed fixture. Both manual workflows now include hidden files only inside
+`build/distribution/artifacts/`; discovery selects all seven files and every
+checksum matches. Credentials remain outside this packaged directory. This
+workflow-only follow-up does not change application/native code or invoke upload.

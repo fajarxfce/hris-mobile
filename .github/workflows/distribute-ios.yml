@@ -86,6 +86,7 @@ jobs:
           name: ios-${{ inputs.environment }}-${{ inputs.version }}-${{ inputs.build }}
           retention-days: 14
           path: build/distribution/artifacts/
+          include-hidden-files: true
           if-no-files-found: error
       - name: Upload to App Store Connect
         env:
