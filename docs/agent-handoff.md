@@ -11,6 +11,10 @@ Mobile regression reproduced Unicode host case-folding aliasing. A printable-ASC
 input guard now passes seven JVM and seven Chromium cases in 31s, after the expected
 one-case failure. This two-file correction is being copied to Starter only after
 that local Mobile proof; final full CI for both resulting heads remains required.
+Mobile correction `72341ef6` is running full CI `40895095518`. Starter port
+`738db36` passed 326 desktop, seven common/four app Chromium and six build-logic
+cases plus Android assembly; its full CI `40895798634` is running. Inspect all
+jobs and download the final Apple reports before accepting these heads.
 The phone still has the separately recorded `d36a1bc9` APK. Preserve the existing
 Google session and keep phone updates install-only.
 

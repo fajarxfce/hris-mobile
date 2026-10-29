@@ -133,7 +133,16 @@
       }
     },
     "localSeconds": 31,
-    "fullCi": "pending",
+    "fullCi": {
+      "source": "72341ef666e7da516c8b6808e5c6cb5817f54742",
+      "run": 40895095518,
+      "status": "in progress"
+    },
     "downstreamPolicy": "Copy the two-file pure parser correction only after these Mobile JVM and Chromium regressions pass; both final full CI runs remain required."
+  },
+  "starterPort": {
+    "source": "738db364efa08e4c033f9acdc921b8c0f87999df",
+    "run": 40895798634,
+    "status": "in progress"
   }
 }
