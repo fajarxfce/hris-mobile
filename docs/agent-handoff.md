@@ -33,8 +33,9 @@ Apple timed out during cold test compilation, not an observed compilation error.
 See [CI correction](validation.md#apple-ci-cold-compilation-budget). The workflow
 now separates compile/test/Xcode time limits, preserves all three test targets,
 and supports manual `scope=apple` with independent concurrency and retained reports.
-Push this change, dispatch Apple at the new head, record its URL and finish its
-acceptance. Do not cancel the original full run's Linux/Android job. Port this generic
+Apple follow-up [40817592306](https://github.com/fajarxfce/hris-mobile/actions/runs/40817592306)
+is running at pushed `451a2c4d`; finish its acceptance and record the result.
+Do not cancel the original full run's Linux/Android job. Port this generic
 workflow correction to Starter only after Mobile Apple passes, then validate there.
 Current local native fixtures are all stopped/cleaned. Provider/device inputs remain
 external and their pending question must not be repeated.

@@ -16,7 +16,8 @@ selects only Apple; main/PR/default manual execution retains all four jobs. Scop
 also separates concurrency groups so an Apple follow-up cannot cancel the original
 full run's Linux/Android work. This changes CI only, not application behavior.
 
-The corrected Apple run must pass before this reusable CI fix is ported to Starter.
+The corrected Apple run [40817592306](https://github.com/fajarxfce/hris-mobile/actions/runs/40817592306)
+at `451a2c4d` is running and must pass before this reusable CI fix is ported to Starter.
 The original full run remains the evidence for unchanged Windows/Web/Linux targets;
 do not describe its failed Apple job as successful. Dispatch with
 `gh workflow run ci.yml --ref feat/native-push -f scope=apple` and record the exact
