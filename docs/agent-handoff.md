@@ -28,7 +28,8 @@ release. Preserve unrelated edits and keep implementation, tests and docs togeth
 
 ## Active correction: Apple CI cold compilation
 
-Full run `40815794384` passed Windows and Web; Linux/Android is still running.
+Full run `40815794384` finished: Windows, Web and Linux/Android passed.
+Its overall conclusion remains failure because Apple timed out.
 Apple timed out during cold test compilation, not an observed compilation error.
 See [CI correction](validation.md#apple-ci-cold-compilation-budget). The workflow
 now separates compile/test/Xcode time limits, preserves all three test targets,

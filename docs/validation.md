@@ -3,7 +3,9 @@
 ## Apple CI cold compilation budget
 
 CI run [40815794384](https://github.com/fajarxfce/hris-mobile/actions/runs/40815794384)
-at `b0a95391` passed Windows (1,115 tasks, 13m1s) and Web (1,363 tasks, 16m2s).
+at `b0a95391` passed Windows (1,115 tasks, 13m1s), Web (1,363 tasks, 16m2s),
+and Linux/Android/root plus browser checks (3,185 tasks, 22m9s; 3,172 executed and
+13 from cache). The overall run concluded failure because Apple timed out.
 Its Apple step reached its 15-minute limit while compiling the notification test
 binary, after the location/file simulator test tasks had run. No compile error was
 reported, but Apple acceptance did not complete. The previous successful Apple run
@@ -52,7 +54,7 @@ are tracked; local `.work/attendance-native-result.json` and screenshots supplem
 Git. This required no Mobile source/test rerun or Starter port. Separately, full
 cross-platform CI [40815794384](https://github.com/fajarxfce/hris-mobile/actions/runs/40815794384)
 was dispatched at `b0a95391` because the prior CI checkpoint predates `02743a9f`;
-its result must be recorded when complete. Physical GPS/provider/iOS-device
+its three non-Apple jobs passed and the separate Apple follow-up is tracked above. Physical GPS/provider/iOS-device
 acceptance remains distinct from these checks.
 
 ## Leave submission response loss on Android
