@@ -26,23 +26,25 @@ and `/home/fajar/hris/PRD-PROGRESS.md` are supplementary. The user authorized on
 implementation and a push after every atomic commit. This does not authorize a
 release. Preserve unrelated edits and keep implementation, tests and docs together.
 
-## Current checkpoint: native Leave submission recovery
+## Current checkpoint: native Attendance capture recovery
 
-Platform `ccae6f8f` verifies actual Android/API/PostgreSQL/worker committed-response
-loss and exact Leave replay. The unchanged `02743a9f` APK retained one unconfirmed
-command through offline restart without a duplicate draft. Stable summary reload
-stayed 33 → 33. One request/history/approval and one balance-version increment
-reserved 0.5 days, leaving 1.5 available; six summary rows cleared and logout passed.
-The final fresh fixture passed in 2.8m/3.2m with setup. The initial preview-POST
-counting mistake and navigation-counter overlap are documented in
-[validation](validation.md#leave-submission-response-loss-on-android).
+Platform `a837320f` verifies actual Android/API/PostgreSQL/worker response loss,
+offline cold restart and exact replay of an explicit capture without location.
+Stable summary reload stayed 21 → 21; one version-zero event retained its original
+capture/receipt time. All six local pending rows cleared while Home/server still
+required independent review with zero accepted minutes. There were 30 requests/two
+intended writes; fixture 4.6m/5.2m with setup. All owned local resources are cleaned,
+location restored and emulator data retained. See
+[validation](validation.md#attendance-capture-response-loss-on-android).
 
-Continue native Attendance capture pending-summary recovery next, preserving its
-independent-review requirement after an explicit capture without location. Prior
-capture and replica acceptance remain valid; inspect them before adding the missing
-summary outcome. All owned services/markers/forwarding are removed and the dedicated
-emulator stopped with data retained. No application change/Starter port applies.
-FCM server credentials and Google/physical/iOS acceptance need their external inputs;
+Continue full CI/PRD reconciliation. CI
+[40815794384](https://github.com/fajarxfce/hris-mobile/actions/runs/40815794384)
+was dispatched at `b0a95391` (same `02743a9f` application sources). Prior complete
+CI was at `d191c61d`, before the latest application fixes. Inspect Linux/Android,
+Windows/Web and Apple simulator jobs, resolve failures and record outcomes in Git.
+This is verification only. Platform needs its full current branch verification;
+read its latest handoff. No Starter port arose from these native business fixtures.
+FCM server credentials and Google/physical/iOS acceptance need external inputs;
 do not repeat the pending Firebase question.
 
 ## Current continuation: reconcile actual replica coverage

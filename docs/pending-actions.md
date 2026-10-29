@@ -168,3 +168,13 @@ request survives offline cold start without a matching draft count; stable summa
 reload remains 33 → 33. Exact retry creates no extra request/history/approval and
 reserves only 0.5 days once. All six local summary rows clear while the server
 request awaits independent approval. Server review and local delivery are separate.
+
+## Native Attendance capture outcome
+
+The [Android Attendance acceptance](validation.md#attendance-capture-response-loss-on-android)
+retains one unconfirmed capture and its original time through offline cold start.
+Stable summary reload stays 21 → 21. Exact replay clears the local queue and all
+six summary rows, while the server/Home retain Pending review for the capture
+without location. No approved attendance minutes are created by confirming delivery.
+Each of the six feature observers now has an actual native recovery example;
+other combinations and physical targets retain their own acceptance requirements.

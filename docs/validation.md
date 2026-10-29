@@ -1,5 +1,37 @@
 # Validation
 
+## Attendance capture response loss on Android
+
+The unchanged `02743a9f` APK passed Android 35/API/PostgreSQL/worker acceptance
+against Platform `b7f42070` artifacts/schema 101. Fixture `a837320f` creates fictional
+employment and today's 09:00–17:00 roster. With location services disabled, the
+native UI explicitly saves Clock in without location; the proxy drops the successful
+response after the real API commits. One awaiting-confirmation count and the
+original 11:03 company time survive offline cold start. Stable summary reload
+remains 21 → 21, including offline reload with API forwarding removed.
+
+Exact retry leaves one version-zero event with the original timestamps, no location,
+OFFLINE/UNVERIFIED_CAPTURE, one pending review and zero accepted minutes. The local
+queue and six summary rows clear while Home shows **Pending review** at the same
+time. Across 30 requests there are two intended company writes. Sign-out passes.
+Delivery confirmation does not approve evidence for payroll.
+
+The case passed in 4.6m/5.2m with setup. Proxy regression, TypeScript, Biome, build
+and dashboard architecture checks passed; screenshots were inspected. An OS
+location-disabled dialog initially covered login; dismissing it and retrying config
+after fixture readiness resolved driver setup. All owned services/containers/proxy,
+markers and forwarding were cleaned, location restored and the emulator stopped
+with data retained. No phone was used. The 32,853,156-byte APK retains SHA-256
+`2b603fff2e40e31ee9cf5a45e694ea6aae8c96ae6c72cd4168d920c2e239c0c9`.
+
+[Reproduction and measurements](https://github.com/fajarxfce/hris-platform/blob/a837320f/docs/native-attendance-acceptance.md)
+are tracked; local `.work/attendance-native-result.json` and screenshots supplement
+Git. This required no Mobile source/test rerun or Starter port. Separately, full
+cross-platform CI [40815794384](https://github.com/fajarxfce/hris-mobile/actions/runs/40815794384)
+was dispatched at `b0a95391` because the prior CI checkpoint predates `02743a9f`;
+its result must be recorded when complete. Physical GPS/provider/iOS-device
+acceptance remains distinct from these checks.
+
 ## Leave submission response loss on Android
 
 The unchanged `02743a9f` APK passed actual Android 35/API/PostgreSQL/worker acceptance
