@@ -4,7 +4,7 @@ Updated 29 October 2026 (UTC). The release-configuration audit below is active a
 implementation checkpoint. This is the employee application generated from Compose Fluent Starter, and the proving
 ground for reusable foundation changes before they are ported to Starter.
 
-## Active continuation: distribution configuration
+## Distribution configuration — source accepted; Starter validation next
 
 The user requested continued work after the previous completion checkpoint.
 Review found three concrete delivery gaps: HRIS's inherited demo release option
@@ -25,10 +25,15 @@ three dev network XML declarations requiring explicit false subdomain attributes
 The corrected two-stage signed APK/AAB/SBOM exercise passed in 215.572s (151s
 normal checks, 58s signed build). It verified the actual APK endpoint and manifest,
 both signatures, selected domain statements and all packaged checksums. All
-fixture keys were removed. Full [CI 40909156570](https://github.com/fajarxfce/hris-mobile/actions/runs/40909156570)
-is running at source `3dc81d00`; the
-changed Xcode framework entry point requires the hosted Apple run before the
-portable foundation is accepted in Starter. HRIS's remote-only policy stays here.
+fixture keys were removed. Full [CI 40909156570](https://github.com/fajarxfce/hris-mobile/actions/runs/40909156570) passed all four jobs at source
+`3dc81d00`. Downloaded Apple reports confirm 104 cases in
+28 suites with zero failures/errors/skips. Compilation, simulator tests
+and Xcode took 791s/122s/1295s; Xcode's generated environment
+contains the explicitly selected distribution API and remote backend. Native
+association/domain artifacts and the complete Xcode build markers passed. This
+accepts the Mobile source for the portable Starter port; independent destination
+checks and CI remain required. No actual Apple signing or upload is inferred.
+
 
 ## Completed implementation — 29 October 2026
 

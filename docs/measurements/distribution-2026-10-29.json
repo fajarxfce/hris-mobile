@@ -427,10 +427,31 @@
   ],
   "hostedCi": {
     "run": 40909156570,
-    "source": "3dc81d00632f965201c2eecc01cfe9a5627d7f1f",
-    "status": "in progress"
+    "head": "3dc81d00632f965201c2eecc01cfe9a5627d7f1f",
+    "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/40909156570",
+    "conclusion": "success",
+    "jobs": {
+      "web": "success",
+      "windows": "success",
+      "apple": "success",
+      "verify": "success"
+    },
+    "apple": {
+      "tests": 104,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "suites": 28,
+      "stepSeconds": {
+        "Compile iOS simulator tests": 791,
+        "Run iOS simulator tests": 122,
+        "Build iOS simulator app": 1295
+      },
+      "downloadedReportsInspected": true,
+      "xcodeAndDistributionMarkersConfirmed": true
+    }
   },
-  "starterPort": "wait for Mobile local and full CI proof",
+  "starterPort": "source accepted; independent destination checks next",
   "limits": [
     "No upload or release workflow dispatch",
     "No live domain publication",

@@ -2613,4 +2613,13 @@ endpoint, native association and checked domain-file packaging all passed. The
 23,813,883-byte test APK has SHA-256
 `b65835d8d24e928dda3f312d9bb3e4e12e5b87ccb8defca4c386a05975e50547`.
 It was neither uploaded nor installed. The ephemeral keys were removed. Full
-CI `40909156570` is active for source `3dc81d00`; no Apple signing result is inferred.
+CI `40909156570` completed successfully for source `3dc81d00`; no Apple signing result is inferred.
+
+Full [CI 40909156570](https://github.com/fajarxfce/hris-mobile/actions/runs/40909156570) passed all four jobs at source
+`3dc81d00`. Downloaded Apple reports confirm 104 cases in
+28 suites with zero failures/errors/skips. Compilation, simulator tests
+and Xcode took 791s/122s/1295s; Xcode's generated environment
+contains the explicitly selected distribution API and remote backend. Native
+association/domain artifacts and the complete Xcode build markers passed. This
+accepts the Mobile source for the portable Starter port; independent destination
+checks and CI remain required. No actual Apple signing or upload is inferred.

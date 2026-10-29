@@ -1,6 +1,6 @@
 # Template updates
 
-## Distribution configuration — source verification active
+## Distribution configuration — source accepted; Starter validation next
 
 The release audit now fixes explicit per-environment API forwarding and passes
 optional app-link registration through signing preparation and checked artifacts.
@@ -9,7 +9,9 @@ porting. Starter keeps its demo backend, package/project names and release input
 HRIS alone removes the unsupported demo choice. See [handoff](agent-handoff.md).
 
 Source candidate `3dc81d00` has passed real signed Android APK/AAB/SBOM packaging
-and 17 script regressions; full CI `40909156570` is still required. The portable
+and 17 script regressions. Full CI `40909156570` now passed all four jobs with
+104 Apple cases and the complete Xcode application; downloaded reports and the
+explicit distribution-API marker were inspected. The portable
 files are `apps/ios/build_framework.sh`, `tool/distribution/{app_links.py,
 build_android.sh,test_release_build.py,test_app_links.py,credentials.py,
 apple_signing.py,checksums.py,configuration.py,test_distribution.py}`, the Xcode
