@@ -125,3 +125,19 @@ See [validation](validation.md#partial-download-recovery-on-android) and the
 [tracked fixture](https://github.com/fajarxfce/hris-platform/blob/feat/firebase-auth/docs/native-download-acceptance.md).
 Application code and Starter required no change. Owned fixtures and forwarding
 were removed, the created public copy was cleaned, and emulator app data was retained.
+
+## Android partial-upload and inspection-review recovery
+
+The real API/PostgreSQL/worker/Garage/Android case passed on 29 October 2026. A
+committed chunk lost its response; one transfer survived offline restart and
+replayed the exact operation/input. Four chunks retained single physical attempts.
+An explicitly stopped scanner-unavailable job then became **Needs review: 1**,
+surviving another offline restart. Summary reload sent no HTTP (32 → 32; 42 → 42).
+Explicit inspection retry and upload cancellation returned six empty rows before
+local deletion; deletion and logout passed. No uninspected document was published.
+
+See [complete evidence](validation.md#interrupted-upload-and-inspection-review-on-android)
+and [the tracked fixture](https://github.com/fajarxfce/hris-platform/blob/feat/firebase-auth/docs/native-upload-acceptance.md).
+The server observed 57 requests and nine intended document writes in 8.7m/9.2m
+with setup. This expands native summary coverage to upload and failed inspection;
+other feature outcomes retain their own acceptance requirements.

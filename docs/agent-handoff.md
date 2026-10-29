@@ -13,7 +13,7 @@ ground for reusable foundation changes before they are ported to Starter.
 3. Read the [Platform handoff](https://github.com/fajarxfce/hris-platform/blob/feat/firebase-auth/docs/agent-handoff.md)
    and [remaining PRD delivery](https://github.com/fajarxfce/hris-platform/blob/feat/firebase-auth/docs/completion.md#remaining-delivery-sequence).
    Backend and dashboard work is on Platform `feat/firebase-auth`, most recently
-   typed account-access audit/schema 100 `c282fa60` plus the native push fixture; Starter work is on `fix/push-token-lifecycle`.
+   native upload/review fixture `ee6c04a3` after schema 100 and native push recovery; Starter work is on `fix/push-token-lifecycle`.
 
 The three local checkouts are siblings under `/home/fajar/hris`. A fresh clone
 must be able to continue from tracked evidence; local `.work` logs, screenshots
@@ -21,7 +21,27 @@ and `/home/fajar/hris/PRD-PROGRESS.md` are supplementary. The user authorized on
 implementation and a push after every atomic commit. This does not authorize a
 release. Preserve unrelated edits and keep implementation, tests and docs together.
 
-## Current checkpoint: native Firebase registration recovery
+## Current checkpoint: native upload and inspection review
+
+The actual Android/API/PostgreSQL/worker/Garage fixture passed in 8.7m/9.2m with
+setup. One committed chunk lost its response; offline restart retained one transfer
+and retry preserved the original command. A stopped scanner-unavailable job became
+one review item, surviving a second offline restart. Explicit inspection retry,
+cancellation, local deletion and logout passed. All six summary rows became empty
+before local deletion. Independent server checks observed 57 requests, nine intended
+company writes, one unpublished cancelled revision and four single-attempt chunks.
+Summary counters stayed 32 → 32 and 42 → 42. See
+[complete evidence](validation.md#interrupted-upload-and-inspection-review-on-android)
+and [Platform's fixture](https://github.com/fajarxfce/hris-platform/blob/feat/firebase-auth/docs/native-upload-acceptance.md).
+
+The unchanged `02743a9f` loopback APK was reused; no implementation/Starter port is
+due. All owned resources were cleaned and emulator app data retained. Continue
+remaining PRD work after pushing: Platform is next checking actual export physical
+expiry/retention with owned storage. Native Google exchange, FCM message/scoped hint
+delivery and iOS/physical cases still require their separate setup. Do not repeat
+the pending question for the Firebase service-account file path.
+
+## Previous checkpoint: native Firebase registration recovery
 
 Actual Android Firebase Messaging token acquisition and HRIS registration now
 pass response loss, offline restart, original-command replay, explicit disable and
@@ -80,7 +100,8 @@ Do not repeat that question while independent PRD work is available.
   offline restart. See [exact URL evidence](deep-links.md#android-url-acceptance).
 - `1c1f9104`: actual Android/API Pending actions acceptance for pristine and edited
   Leave drafts, offline process restart, local summary refresh, reconnect and
-  explicit deletion. Other command/transfer states need their own native evidence.
+  explicit deletion. Other feature command states need their own native evidence; document download
+  and upload/review cases are now accepted below.
 - `9a557dcc` records cross-platform Firebase CI. Provider implementation `d191c61d`
   passed 1,837 desktop/UI tests, 119 related Chromium cases and Android assembly.
   Actual Firebase email/password completed HRIS exchange, MFA, company selection
@@ -99,8 +120,8 @@ native transfer fixture changes no application implementation; no Starter port i
 
 Reconcile each remaining acceptance requirement with the code and retained tests
 before creating another feature. Native Pending actions still needs acceptance
-for upload/review and other feature outcomes beyond the accepted Leave working-copy,
-unconfirmed Inbox-command and partial-download cases. Existing per-feature delivery and lifecycle tests are not evidence for every
+for other feature outcomes beyond the accepted Leave working-copy, unconfirmed
+Inbox-command, partial-download and upload/inspection-review cases. Existing per-feature delivery and lifecycle tests are not evidence for every
 summary state on a device. Continue useful independent cases while provider input
 is unavailable.
 

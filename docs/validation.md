@@ -1,5 +1,54 @@
 # Validation
 
+## Interrupted upload and inspection review on Android
+
+On 29 October 2026, Mobile `02743a9f` passed the actual Android 35/API/PostgreSQL/
+worker/Garage scenario in **8.7 minutes**, **9.2 with setup**. The existing loopback
+APK (32,853,156 bytes, SHA-256
+`2b603fff2e40e31ee9cf5a45e694ea6aae8c96ae6c72cd4168d920c2e239c0c9`)
+was reused. Platform application artifacts were `c282fa60` / schema 100;
+the tracked acceptance fixture is `ee6c04a3`.
+
+The native picker imported a fictional 3,145,841-byte PDF. The proxy dropped the
+first chunk response after one MiB committed. **File transfers: 1**, the company
+and original upload survived a full offline process restart with Wi-Fi/mobile data
+and API forwarding disabled. Summary open/reload made no HTTP request (**32 → 32**).
+Explicit Retry upload sent the same operation/bytes, then only the remaining parts.
+The server retained one revision and four single-attempt chunks, matching SHA-256
+`2fced5a6de049a2b5045b3c2f7c34ff2b89c76d7ce0d486a69c183b9584f760a`.
+
+With the scanner deliberately disabled, the real worker reported
+`document_scanner_not_configured`; an independent administrator stopped that job
+through the normal versioned API. Check status acquired **Check failed**, and
+Pending actions became **Needs review: 1** with no transfer. Reload kept the counter
+at **42 → 42**. A second complete offline restart retained that review count and
+file. After reconnection, explicit Retry check created the second validation job,
+which followed the same controlled stop. No lifecycle row, timestamp, trigger or
+verdict was rewritten, and no uninspected evidence was published.
+
+Explicit cancellation produced **Upload cancelled**. All six summary rows became
+empty before the file was removed. Confirmed local deletion and sign-out succeeded.
+Independent server checks found **57 requests**, nine intended document mutations,
+five chunk calls with the first pair identical, two distinct validation commands,
+one cancellation, and one unpublished cancelled revision. Both offline-summary
+screenshots were inspected.
+
+The [tracked Platform fixture and complete procedure](https://github.com/fajarxfce/hris-platform/blob/feat/firebase-auth/docs/native-upload-acceptance.md)
+includes finite request/connection/admission bounds and three passing loopback
+regressions. Strict TypeScript now includes every native fixture; Biome, production
+build and architecture/format checks passed. Mobile implementation was unchanged,
+so its previously passed root/Chromium/Android checks were not repeated and no
+Starter port is due. Initial config Retry resolved an app launch before fixture
+readiness. Early coordinate taps during dialog/keyboard transitions did not submit;
+fresh UI reads preceded the successful taps, with only one server cancellation.
+
+All owned services, private connection files and markers were removed. Forwarding,
+the public source PDF and UI dump were cleaned; connectivity was restored before
+stopping the emulator with app data retained. No phone interaction occurred. Local
+evidence is `.work/upload-native-result.json`, summary counter JSON, offline UI
+trees and screenshots, plus Platform `upload-native-*` logs/server results. This
+covers native upload/review recovery, not antivirus or every feature outcome.
+
 ## Firebase registration and offline recovery on Android
 
 On 29 October 2026, the dedicated Android 35 emulator used the actual Firebase

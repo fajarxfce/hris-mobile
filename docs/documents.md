@@ -247,3 +247,12 @@ made no HTTP request; the independent proxy saw four exact successful ranges and
 no native company writes. Inspection metadata was seeded for this transfer case;
 antivirus validation was not exercised. See the
 [29 October native evidence](validation.md#partial-download-recovery-on-android).
+
+## Native interrupted-upload acceptance
+
+[Actual Android acceptance](validation.md#interrupted-upload-and-inspection-review-on-android)
+now covers committed chunk response loss, exact replay, offline transfer/review
+restoration, explicit inspection retry/cancellation and local deletion. The real
+API/storage retained one revision and four single-attempt chunks. Scanner-unavailable
+jobs were stopped through the real administrator API; no inspection was fabricated
+and no unvalidated content was published. This required no application source change.

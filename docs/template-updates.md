@@ -1,5 +1,12 @@
 # Template updates
 
+## Native upload/review acceptance
+
+The 29 October real API/storage/Android recovery fixture required no Mobile source
+change. Existing upload transport, encrypted checkpoints, pending counts, inspection
+review and cancellation passed together. No shared foundation correction or Starter
+port is due. See [validation](validation.md#interrupted-upload-and-inspection-review-on-android).
+
 ## HRIS registration recovery
 
 The 29 October native acceptance fixes registration expiry precision and cleanup
