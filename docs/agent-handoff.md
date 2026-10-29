@@ -12,9 +12,12 @@ Android manifests and generated Apple/domain artifacts. The owned Android 35
 HTTPS cold/login/company/scope/offline/archive case then passed in 3.2m/3.6m with
 28 requests, zero company writes and unchanged unread/unacknowledged Inbox state.
 See [contract](app-links.md) and [measurements](measurements/app-links-2026-10-29.json).
-Full CI `40887772486` is still running at this record; do not port before it passes.
+Full CI `40887772486` passed all four jobs at `d36a1bc9`. Downloaded Apple reports
+confirm 103 cases in 28 suites, zero failures/errors/skips and a complete Xcode app.
+Compilation took 648s, simulator tests 64s and Xcode 1082s. Only after this proof
+was the reusable port applied to Starter over `e29b0b2`; its local checks are active.
 No real domain was published. Owned test resources were cleaned, emulator data and
-the persistent private development stack retained. Starter is still `e29b0b2`.
+the persistent private development stack retained.
 The normal WireGuard dev APK from application `d36a1bc9` (built at `0fc16ce4`) was
 then installed successfully on the authorized phone with `--install-only`.
 APK SHA-256 `85ef887b4904107482354e9d0ab40b51e2fad7b786c3112f3a24334b078dbde4`,
@@ -347,8 +350,8 @@ them next work. Continue concrete uncovered requirements or observed failures.
 Platform full CI `40820912608` passed all ten jobs. The earlier Mobile and Starter
 Apple correction runs also passed. New Mobile provider CI `40858176601` is accepted;
 Starter Google port run `40864341588` also passed all three jobs as recorded above.
-Those provider runs are complete. The newer HTTPS run `40887772486` remains
-active, followed by its Starter port. Do not repeat completed provider-foundation
+Those provider runs are complete. The newer HTTPS run `40887772486` also passed all four jobs and 103 Apple
+cases/Xcode. Its Starter port is now under independent validation. Do not repeat completed provider-foundation
 work or use the older provider CI as proof of the HTTPS increment.
 
 Firebase project `cmp-fajar` has Email/password and Google enabled. Android configs

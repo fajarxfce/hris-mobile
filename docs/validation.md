@@ -2554,3 +2554,15 @@ The validated WireGuard APK was installed on the authorized Android 16 phone
 with `--install-only`. Its installed SHA-256 matched
 `c6ab106243cbf591640222588477474a6ca9733e3ab3c45b16f487eae3e1adfc`.
 No phone UI was opened or operated.
+
+## Complete HTTPS source verification — 29 October 2026
+
+Source `d36a1bc9` passed all four jobs in full [CI 40887772486](https://github.com/fajarxfce/hris-mobile/actions/runs/40887772486):
+Linux/Android, Web, Windows and Apple. All configured Android environment manifests
+and public domain files passed. Downloaded native reports retain 103 cases in 28
+suites with no failures/errors/skips; complete Xcode building with configured
+associated-domain entitlements passed. Compilation took 648s, simulator tests 64s
+and Xcode 1082s. Only after this proof was the generic foundation applied over
+Starter `e29b0b2`; its own validation is separate. [Measurements](measurements/app-links-2026-10-29.json)
+retain local root/Chromium, actual Android scope/offline/archive acceptance, phone
+installation and the precise limits of fictional-host/unsigned Apple verification.

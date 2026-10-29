@@ -73,7 +73,27 @@
   "ci": {
     "run": 40887772486,
     "head": "d36a1bc9e5f8b1e367d6d6db380d2da5ad312cad",
-    "status": "in progress"
+    "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/40887772486",
+    "conclusion": "success",
+    "jobs": {
+      "apple": "success",
+      "verify": "success",
+      "windows": "success",
+      "web": "success"
+    },
+    "apple": {
+      "tests": 103,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "suites": 28,
+      "stepSeconds": {
+        "Compile iOS simulator tests": 648,
+        "Run iOS simulator tests": 64,
+        "Build iOS simulator app": 1082
+      },
+      "downloadedReportsInspected": true
+    }
   },
   "phoneUpdate": {
     "source": "d36a1bc9e5f8b1e367d6d6db380d2da5ad312cad",
