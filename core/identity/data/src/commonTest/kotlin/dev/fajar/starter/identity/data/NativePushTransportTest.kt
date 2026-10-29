@@ -3,6 +3,8 @@ package dev.fajar.starter.identity.data
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.identity.data.push.api.NativePushApi
 import dev.fajar.starter.identity.data.push.datasources.ApiNativePushRemoteSource
+import dev.fajar.starter.identity.data.push.mappers.toDto
+import dev.fajar.starter.identity.data.push.mappers.toState
 import dev.fajar.starter.identity.data.push.repositories.RemoteNativePushRegistrationRepository
 import dev.fajar.starter.identity.domain.push.entities.*
 import dev.fajar.starter.network.*
@@ -89,6 +91,46 @@ class NativePushTransportTest {
             )
         } finally {
             client.close()
+        }
+    }
+
+    @Test
+    fun sessionMillisecondPrecisionAdmitsSubmillisecondMetadataWithoutExtendingExpiry() = runTest {
+        val current = owner.copy(expiresAt = Instant.parse("2026-11-27T00:00:00.123Z"))
+        for ((expiry, accepted) in
+            listOf(
+                "2026-11-27T00:00:00.123855Z" to true,
+                "2026-11-27T00:00:00.123999999Z" to true,
+                "2026-11-27T00:00:00.124Z" to false,
+                "2026-11-27T00:00:01Z" to false,
+            )) {
+            val body = metadata.replace("2026-11-27T00:00:00Z", expiry)
+            val client =
+                createHttpClient(
+                    MockEngine { respond(body, headers = jsonHeaders) },
+                    owner.audience,
+                )
+            try {
+                val result = repository(client).read(current)
+                if (!accepted) assertIs<AppResult.Failed>(result)
+                else {
+                    val registration =
+                        assertNotNull(
+                            assertIs<AppResult.Success<NativePushRegistration?>>(result).value
+                        )
+                    assertEquals(current.expiresAt, registration.expiresAt)
+                    val state =
+                        NativePushState(
+                            desired = true,
+                            owner = current,
+                            token = "a".repeat(32),
+                            registration = registration,
+                        )
+                    assertEquals(state, state.toDto().toState())
+                }
+            } finally {
+                client.close()
+            }
         }
     }
 

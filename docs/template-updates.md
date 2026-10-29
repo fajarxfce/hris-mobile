@@ -1,5 +1,14 @@
 # Template updates
 
+## HRIS registration recovery
+
+The 29 October native acceptance fixes registration expiry precision and cleanup
+of an absent previously owned HRIS session family. Both the registration API
+adapter and reconciliation policy exist only in HRIS Mobile. Generic Firebase SDK
+acquisition/deletion, permission and notification adapters are unchanged. Root,
+Chromium and actual SDK/API/emulator recovery passed; no Starter port is needed.
+See [the acceptance evidence](validation.md#firebase-registration-and-offline-recovery-on-android).
+
 ## Firebase provider foundation
 
 Mobile `d191c61d` ports to starter `9a13791`: 20 provider source/test files plus

@@ -12,8 +12,12 @@ fun NativePushRegistrationDto.toRegistration(owner: NativePushOwner): NativePush
     require(version in 0..10_000)
     val first = Instant.parse(registeredAt)
     val updated = Instant.parse(updatedAt)
-    val expires = Instant.parse(expiresAt)
-    require(first <= updated && first < expires && expires <= owner.expiresAt)
+    val sourceExpiry = Instant.parse(expiresAt)
+    // Native credentials persist the family boundary in milliseconds. A server
+    // value inside that final millisecond is valid, but cannot extend local use.
+    require(sourceExpiry.toEpochMilliseconds() <= owner.expiresAt.toEpochMilliseconds())
+    val expires = minOf(sourceExpiry, owner.expiresAt)
+    require(first <= updated && first < expires)
     require(!enabled || (updated < expires && version < 10_000))
     return NativePushRegistration(
         sessionId,

@@ -44,6 +44,7 @@ internal class NativePushFixture {
     var reads = 0
     val commands = mutableListOf<Pair<NativePushOwner, NativePushCommand>>()
     val revocations = mutableListOf<Pair<String, String>>()
+    var revokeFailure: Failure? = null
     val remote = mutableMapOf<String, NativePushRegistration>()
     val receipts = mutableMapOf<String, NativePushReceipt>()
     var beforeSend: suspend () -> Unit = {}
@@ -118,6 +119,9 @@ internal class NativePushFixture {
 
             override suspend fun revoke(sessionId: String, remoteId: String): AppResult<Unit> {
                 revocations += sessionId to remoteId
+                revokeFailure?.let {
+                    return AppResult.Failed(it)
+                }
                 return AppResult.Success(Unit)
             }
         }

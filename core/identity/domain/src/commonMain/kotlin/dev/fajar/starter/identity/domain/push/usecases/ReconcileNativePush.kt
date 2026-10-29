@@ -313,7 +313,14 @@ class ReconcileNativePush(
                     .take(4)) {
                 val result = devices.revoke(current.localSessionId, previous.familyId)
                 guard()
-                if (result is AppResult.Failed) return result.failure
+                // An already absent family cannot deliver to this account. Only
+                // the exact absence result completes its retained retirement.
+                if (
+                    result is AppResult.Failed &&
+                        (result.failure.kind != FailureKind.Unexpected ||
+                            result.failure.code != "native_session_not_found")
+                )
+                    return result.failure
                 save(state.copy(revocations = state.revocations.filterNot { it == previous }))
             }
             return null

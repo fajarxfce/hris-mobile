@@ -13,13 +13,45 @@ ground for reusable foundation changes before they are ported to Starter.
 3. Read the [Platform handoff](https://github.com/fajarxfce/hris-platform/blob/feat/firebase-auth/docs/agent-handoff.md)
    and [remaining PRD delivery](https://github.com/fajarxfce/hris-platform/blob/feat/firebase-auth/docs/completion.md#remaining-delivery-sequence).
    Backend and dashboard work is on Platform `feat/firebase-auth`, most recently
-   native transfer fixture `f23b73ba` with global audit/schema 99 `adfb7b32`; Starter work is on `fix/push-token-lifecycle`.
+   typed account-access audit/schema 100 `c282fa60` plus the native push fixture; Starter work is on `fix/push-token-lifecycle`.
 
 The three local checkouts are siblings under `/home/fajar/hris`. A fresh clone
 must be able to continue from tracked evidence; local `.work` logs, screenshots
 and `/home/fajar/hris/PRD-PROGRESS.md` are supplementary. The user authorized ongoing
 implementation and a push after every atomic commit. This does not authorize a
 release. Preserve unrelated edits and keep implementation, tests and docs together.
+
+## Current checkpoint: native Firebase registration recovery
+
+Actual Android Firebase Messaging token acquisition and HRIS registration now
+pass response loss, offline restart, original-command replay, explicit disable and
+logout. The final fixture observed 51 requests, one registration, two identical
+PUTs, one disable, version 1 and no retained server token. No company writes were
+made. Full acceptance took 9.7m/10.3m with setup. The final emulator APK SHA-256 is
+`2b603fff2e40e31ee9cf5a45e694ea6aae8c96ae6c72cd4168d920c2e239c0c9`.
+
+Two HRIS-specific fixes were required: clamp submillisecond server expiry to the
+session's retained millisecond boundary; and complete retirement when a previously
+owned family returns the exact absent-session result. Other expiry overruns,
+errors and accounts remain rejected/retained. The first upgrade recovered an
+already retained registration command; the second cleared an absent family before
+new registration. See [full evidence and corrections](validation.md#firebase-registration-and-offline-recovery-on-android)
+and [Platform's tracked driver](https://github.com/fajarxfce/hris-platform/blob/feat/firebase-auth/docs/native-push-acceptance.md).
+
+Root checks passed 1,840 desktop/UI tests plus tool/static checks; identity browser
+suites passed 64 domain and 49 data cases. Android assembly passed. Local setup
+requires `ANDROID_HOME=/home/fajar/Android/Sdk`; browser tests use
+`CHROME_BIN=/home/fajar/.cache/ms-playwright/chromium-1248/chrome-linux64/chrome`.
+The first command omitted these environment settings and is not a passing browser
+result; the corrected full command passed in 1m59s. Services, control files and
+forwarding were cleaned, connectivity restored, and emulator data retained. No
+phone was connected. Generic SDK sources did not change; no Starter port applies.
+
+Continue after committing/pushing: actual FCM delivery/scoped hints, Google token
+exchange and iOS/physical acceptance remain. The user rejected stopping after a
+checkpoint. Platform has a pending question for the Firebase service-account file
+path; none was found in the bounded workspace/config scan or relevant env vars.
+Do not repeat that question while independent PRD work is available.
 
 ## Last accepted increments
 
@@ -58,7 +90,8 @@ release. Preserve unrelated edits and keep implementation, tests and docs togeth
 Reusable Firebase adapters are already ported to Starter `9a13791` and documented
 at `a16325e`. Notification resource paths, token retirement and incoming-link
 ownership were also ported; consult the file/commit ledger in template updates
-before repeating a port. The latest native acceptance commits change only docs.
+before repeating a port. The latest native registration increment also fixes the HRIS metadata/cleanup
+policies described above.
 Platform worker observations/global audit are HRIS administration work, and the
 native transfer fixture changes no application implementation; no Starter port is due.
 
@@ -74,7 +107,7 @@ is unavailable.
 Firebase project `cmp-fajar` has Email/password and Google enabled. Android configs
 exist locally in ignored `apps/android/google-services.json`; do not commit provider
 credentials. The known remaining external work includes actual Google ID-token
-acceptance, FCM service-account configuration and real registration/scoped hint
+acceptance, FCM service-account configuration and actual message/scoped-hint
 delivery, iOS Firebase/APNs/device setup, verified HTTPS associations and physical
 location/device acceptance. Recheck local availability before asking for inputs
 already supplied. Public Android config is not an FCM server credential.

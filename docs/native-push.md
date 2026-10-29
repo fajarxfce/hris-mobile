@@ -56,6 +56,13 @@ is within one day of expiry. Failed storage, cancellation and replacement sessio
 cannot publish an unowned result. Corrupt local records fail without becoming an
 empty installation or overwriting a retained operation.
 
+Native family boundaries are retained in milliseconds. Server registration
+metadata inside the same final millisecond is accepted and clamped to that local
+boundary, without extending its lifetime. A later millisecond is invalid. Cleanup
+of a previously owned family treats only the exact `native_session_not_found`
+absence result as retired; other errors stay queued, and another account's family
+is never revoked by the current account.
+
 ## Inbox hints and notification attempts
 
 FCM messages contain only schema/event identifiers and account, company and Inbox
@@ -105,8 +112,10 @@ prove provider delivery.
 FCM and Firebase Authentication are both requested. Firebase sign-in must exchange
 a verified external identity for HRIS authorization; registration tokens are never
 account identity. iOS provider configuration, APNs signing and worker FCM service
-credentials remain external acceptance dependencies. Real FCM token issuance,
-delivery and foreground/background provider behavior are not yet claimed.
+credentials remain external acceptance dependencies. Actual Firebase SDK token issuance, registration, response-loss recovery,
+offline restart and explicit retirement now have
+[Android evidence](validation.md#firebase-registration-and-offline-recovery-on-android).
+FCM message delivery and foreground/background provider hints remain unaccepted.
 Firebase email/password login and the Android system Google sign-in launch/dismiss
 flow have [separate device evidence](validation.md#real-firebase-android-acceptance).
 The user enabled Email/password and Google. Public Firebase Auth configuration now

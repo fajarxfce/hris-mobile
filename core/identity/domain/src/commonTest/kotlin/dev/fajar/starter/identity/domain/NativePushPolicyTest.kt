@@ -13,6 +13,56 @@ import kotlinx.coroutines.test.*
 
 class NativePushPolicyTest {
     @Test
+    fun anAbsentOwnedFamilyCompletesRetirementWithoutTouchingAnotherAccount() = runTest {
+        val f = NativePushFixture()
+        val owner = requireNotNull(f.session).pushOwner()
+        val previous = owner.copy(familyId = "33333333-3333-4333-8333-333333333333")
+        val other = previous.copy(accountId = "44444444-4444-4444-8444-444444444444")
+        f.state = NativePushState(revocations = listOf(previous, other))
+        f.revokeFailure =
+            Failure(FailureKind.Unexpected, "Unavailable family", code = "native_session_not_found")
+        val result =
+            assertIs<AppResult.Success<NativePushStatus>>(
+                f.useCase()("local", NativePushAction.Enable)
+            )
+        assertTrue(result.value.registered)
+        assertEquals(listOf("local" to previous.familyId), f.revocations)
+        assertEquals(listOf(other), f.state.revocations)
+        assertEquals(1, f.commands.size)
+        assertNull(f.state.pending)
+    }
+
+    @Test
+    fun retirementKeepsOtherFailuresAndOnlyRetriesWhenInvoked() = runTest {
+        for (failure in
+            listOf(
+                Failure(FailureKind.Unexpected, "Unknown", code = "other_not_found"),
+                Failure(FailureKind.Service, "Service", code = "native_session_not_found"),
+                Failure(FailureKind.AccessDenied, "Denied", code = "native_session_not_found"),
+                Failure(FailureKind.Unauthorized, "Revoked", code = "session_revoked"),
+                Failure(FailureKind.Network, "Offline"),
+            )) {
+            val f = NativePushFixture()
+            val previous =
+                requireNotNull(f.session)
+                    .pushOwner()
+                    .copy(familyId = "33333333-3333-4333-8333-333333333333")
+            f.state = NativePushState(revocations = listOf(previous))
+            f.revokeFailure = failure
+            assertEquals(
+                failure,
+                assertIs<AppResult.Failed>(f.useCase()("local", NativePushAction.Enable)).failure,
+            )
+            assertEquals(listOf(previous), f.state.revocations)
+            assertTrue(f.commands.isEmpty())
+            assertEquals(1, f.revocations.size)
+            f.revokeFailure = null
+            assertIs<AppResult.Success<NativePushStatus>>(f.useCase()("local"))
+            assertTrue(f.state.revocations.isEmpty())
+        }
+    }
+
+    @Test
     fun explicitEnablePersistsBeforeTransportAndUnchangedForegroundDoesNotRenew() = runTest {
         val f = NativePushFixture()
         f.beforeSend = { assertEquals(f.commands.last().second, f.state.pending) }

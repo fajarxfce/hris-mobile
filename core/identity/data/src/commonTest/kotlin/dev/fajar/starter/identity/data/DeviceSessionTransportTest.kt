@@ -113,6 +113,7 @@ class DeviceSessionTransportTest {
                     .revoke("local", id)
             val failure = assertIs<AppResult.Failed>(result).failure
             assertEquals("native_session_not_found", failure.code)
+            assertEquals(FailureKind.Unexpected, failure.kind)
             assertFalse(failure.message.contains("private"))
             assertEquals(1, calls)
         } finally {

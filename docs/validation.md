@@ -1,5 +1,69 @@
 # Validation
 
+## Firebase registration and offline recovery on Android
+
+On 29 October 2026, the dedicated Android 35 emulator used the actual Firebase
+Messaging SDK with the local `cmp-fajar` configuration and real HRIS API/PostgreSQL/
+worker fixture. Explicit OS permission was granted in the first run. SDK token
+retirement/acquisition and backend registration succeeded without a Firebase Auth
+user or Google account login. The fixture never supplies a fake token to the app.
+
+The first run found a precision bug: the server's family/registration expiry was
+855 microseconds after the session boundary retained locally in milliseconds.
+Successful receipt replay therefore failed metadata validation and stayed pending.
+The mapper now compares at the retained precision and clamps the usable expiry to
+the local boundary. It never extends local session lifetime; the next millisecond
+and later expiries are rejected. Secure-state round-trip coverage preserves this.
+An APK upgrade without clearing data recovered the already retained operation.
+
+A second fixture exposed retirement of a family absent from the replacement
+fixture database. The push use case now accepts only the exact
+`native_session_not_found` absence result for a previously owned family on the
+current account/audience. Other accounts are untouched; other errors retain the
+retirement. The device-session repository still preserves the original error for
+its other callers. Upgrade cleared that retained failure before new registration.
+
+The complete final scenario passed in 9.7 minutes (10.3 with setup): the real SDK
+registered a token, the API committed version 0 before the proxy dropped its
+response, and enabled preference plus frozen command survived process restart
+with Wi-Fi, mobile data and the API forward disabled. Reconnection and Retry sent
+the identical operation/input and displayed enabled. Disabling completed without
+pending state; independent SQL confirmed one registration at version 1, disabled,
+with both encrypted token and token hash removed. Sign-out returned to login.
+There were 51 native requests, exactly two identical PUTs, one disable POST and no
+native company mutations. A first immediate UI read saw deletion still running;
+bounded observation waited for its completed state without repeating the command.
+
+`xvfb-run -a ./gradlew :check` and identity domain/data Chromium suites passed:
+1,840 desktop/UI tests, 64 domain and 49 data browser tests, with no failures or
+skips. Root architecture, formatting, static checks and tool suites passed. The
+first browser run needed the installed `CHROME_BIN`; the corrected command passed
+in 1m59s. Android assembly with the local API override passed in 18 seconds after
+the retirement fix; the preceding precision build passed in 38 seconds after
+setting `ANDROID_HOME`. The final APK is 32,853,156 bytes, SHA-256
+`2b603fff2e40e31ee9cf5a45e694ea6aae8c96ae6c72cd4168d920c2e239c0c9`.
+
+The [tracked Platform procedure](https://github.com/fajarxfce/hris-platform/blob/feat/firebase-auth/docs/native-push-acceptance.md)
+contains setup, driver steps, limits and independent assertions. Both loopback
+proxy regressions passed; fixture TypeScript/production build and Platform
+architecture/format checks passed. Owned services, connection/control files and
+ADB forwarding were removed. The emulator stopped with data retained and
+connectivity restored. Offline/disabled screenshots were inspected. Only the
+emulator was connected; no physical phone or iOS installation is claimed.
+
+Local supplementary evidence: `.work/push-native-final-result.json`,
+`.work/push-native-validation-counts.json`, `.work/push-native-recovery-check.log`,
+`.work/push-native-recovery-build.log`, and `.work/push-native-final-*.png`.
+Platform retains `.work/push-native-fixture.log` and its sanitized server result.
+The initial fixture timed out while the precision issue was being fixed; that
+initial run is not counted as a passing full acceptance.
+
+FCM message delivery, scoped foreground/background provider hints, Google token
+exchange and iOS/APNs remain separate. Worker service-account credentials are
+still unavailable. These fixes interpret HRIS registration metadata and retained
+HRIS family cleanup; the generic SDK adapters are unchanged and need no Starter
+port.
+
 ## Partial-download recovery on Android
 
 On 29 October 2026, the unchanged application at `c650e0d7` passed a new actual
