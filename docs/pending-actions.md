@@ -141,3 +141,12 @@ and [the tracked fixture](https://github.com/fajarxfce/hris-platform/blob/feat/f
 The server observed 57 requests and nine intended document writes in 8.7m/9.2m
 with setup. This expands native summary coverage to upload and failed inspection;
 other feature outcomes retain their own acceptance requirements.
+
+## Native overtime outcome
+
+The [Android Overtime acceptance](validation.md#overtime-command-response-loss-on-android)
+retains one unconfirmed command without counting its matching working copy again.
+The summary survives offline process death with no network work (39 → 39), and
+exact retry leaves one server plan/history entry. All six rows clear afterward.
+This adds an actual device-path result to the existing per-feature regressions;
+Expense-save and other summary combinations retain their own acceptance scope.

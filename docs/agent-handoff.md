@@ -16,7 +16,8 @@ ground for reusable foundation changes before they are ported to Starter.
    native upload/review fixture `ee6c04a3` after schema 100 and native push recovery.
    Platform also has pushed `409abad4` (delivery observations, schema 101) and
    `f757bffd` (original payroll period comparison) on descendant feature branches,
-   awaiting integration after its separately running one-hour retention test.
+   integrated at `b7f42070` after its one-hour retention test passed; native
+   Overtime fixture `578a5031` follows that integration.
    Starter work is on `fix/push-token-lifecycle`.
 
 The three local checkouts are siblings under `/home/fajar/hris`. A fresh clone
@@ -24,6 +25,25 @@ must be able to continue from tracked evidence; local `.work` logs, screenshots
 and `/home/fajar/hris/PRD-PROGRESS.md` are supplementary. The user authorized ongoing
 implementation and a push after every atomic commit. This does not authorize a
 release. Preserve unrelated edits and keep implementation, tests and docs together.
+
+## Current checkpoint: native overtime command recovery
+
+Actual Android/API/PostgreSQL/worker acceptance of a lost committed plan response
+passed using the unchanged `02743a9f` APK. Pending actions retained one unconfirmed
+Overtime command through offline process restart without double-counting its
+working copy. Summary requests stayed 39 → 39. Exact retry produced one version-zero
+plan and one history entry (165 minutes), with 54 native requests and two identical
+company writes. Six summary rows cleared and logout passed. Fixture 7.7m/8.2m with
+setup; all owned resources are removed and emulator data retained. See
+[executed evidence](validation.md#overtime-command-response-loss-on-android).
+
+Platform `578a5031` contains the fixture/docs; its application base is integrated
+`b7f42070` (push delivery, payroll comparison and completed elapsed retirement).
+The earlier branch-integration warning below is historical; the one-hour test
+finished successfully and no classpath is reserved. No Mobile/Starter code changed.
+Continue the explicit native Expense-save response-loss case next, checking its
+working-copy versus frozen-command counts, offline restoration and exact replay.
+Provider inputs remain separate; do not repeat the pending Firebase question.
 
 ## Current continuation: reconcile actual replica coverage
 
@@ -144,7 +164,7 @@ native transfer fixture changes no application implementation; no Starter port i
 Reconcile each remaining acceptance requirement with the code and retained tests
 before creating another feature. Native Pending actions still needs acceptance
 for other feature outcomes beyond the accepted Leave working-copy, unconfirmed
-Inbox-command, partial-download and upload/inspection-review cases. Existing per-feature delivery and lifecycle tests are not evidence for every
+Inbox/Overtime commands, partial-download and upload/inspection-review cases. Existing per-feature delivery and lifecycle tests are not evidence for every
 summary state on a device. Continue useful independent cases while provider input
 is unavailable.
 

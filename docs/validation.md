@@ -1,5 +1,37 @@
 # Validation
 
+## Overtime command response loss on Android
+
+The unchanged `02743a9f` loopback APK passed against Platform `b7f42070` application
+artifacts/schema 101. Platform fixture `578a5031` provisions a fictional holiday,
+employment and independent overtime template, then loses the first successful
+plan response after the real API commits. Android retained **Awaiting confirmation:
+1** without an extra matching draft. Opening/reloading Pending actions made no
+request (39 → 39), including after an offline force-stop/restart.
+
+Opening Overtime → Plan overtime offline restored the original work date,
+08:00–11:00 Asia/Jakarta interval, 15-minute break, reason and Retry. Explicit
+recovery sent the same operation and payload hashes. The independent API observer
+confirmed one plan at version zero, one history entry and 165 planned minutes,
+without actual time. Across 54 native requests, two intended company writes were
+identical. All six summary rows became empty and sign-out returned to login.
+
+The owned Android 35 case passed in 7.7m (8.2m including setup). The proxy regression,
+TypeScript, Biome, browser build and dashboard architecture checks passed. Both API
+and worker JARs rebuilt in 37s. The APK hash remained
+`2b603fff2e40e31ee9cf5a45e694ea6aae8c96ae6c72cd4168d920c2e239c0c9`
+(32,853,156 bytes); no Mobile implementation or Starter port was needed. A transient
+empty UI tree at startup required a driver retry; subsequent UI assertions passed.
+Screenshots were inspected, all owned service/container/forwarding/marker resources
+were removed, and the emulator stopped with its data retained. This did not use the
+user's phone. No additional Mobile test-suite execution is claimed for these
+unchanged sources.
+
+[Reproduction and measured result](https://github.com/fajarxfce/hris-platform/blob/feat/firebase-auth/docs/native-overtime-acceptance.md)
+are tracked in Platform. Supplementary Mobile evidence is `.work/overtime-native-result.json`
+and the pending/offline/recovered screenshots. Other feature outcomes and actual
+external-provider/physical-device cases remain separate.
+
 ## Interrupted upload and inspection review on Android
 
 On 29 October 2026, Mobile `02743a9f` passed the actual Android 35/API/PostgreSQL/
