@@ -42,12 +42,16 @@ built at `f740d658` in 26s, with the normal `http://10.77.77.1:8088/api/v1/`
 endpoint. See [initial rejection and successful delivery](validation.md#phone-update-signing-key-mismatch).
 The local HRIS app data was removed with the user's authorization.
 
-The configured development API returned connection refused from both VPS and
-phone during delivery; no Docker containers or local development `.env` were found.
-Historical development delivery below does not establish current service health.
-Login/sync require that environment to be restored; no backend/data recreation or
-deployment was performed as part of installation. Physical FCM/Google/location
-acceptance remains separate from this successful package installation. The prior
+The API was unavailable during installation. The user then authorized continuing
+development startup: Platform `703af975` records a new persistent private `hris-dev`
+stack at schema 101, with actual HTTP 200 API health from this phone and a dashboard
+user service at `http://10.77.77.1:5173`. Firebase Management confirmed the exact dev
+app and registered this APK's SHA-1; its web client still matches the installed
+configuration. No replacement APK is needed for that provider registration.
+See [current development runtime](https://github.com/fajarxfce/hris-platform/blob/feat/firebase-auth/docs/current-development-runtime.md)
+for ownership, private configuration paths and current account provisioning.
+Human Google sign-in remains pending; physical FCM/location acceptance remains
+separate from successful package installation and network health. The prior
 loopback APK remains ignored at `.work/fcm-native-validated.apk`; do not distribute
 it to this phone.
 
