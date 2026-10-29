@@ -12,9 +12,11 @@ Agent continuation: [current checkpoint and next steps](docs/agent-handoff.md).
 
 ## Current integration
 
-The application uses the HRIS native API for password sign-in, authenticator setup
-and verification, recovery codes, token rotation, active-session management, company selection, and current
-company access. Employees open their own personal profile, employment terms and
+The application uses the HRIS native API for Firebase email/password and Google
+exchange, native password sign-in, authenticator setup and verification, recovery
+codes, token rotation, active-session management, company selection, and current
+company access. [Firebase authentication](docs/firebase-auth.md) discovers the
+installed/backend providers before enabling a login method. Employees open their own personal profile, employment terms and
 organization assignments from encrypted local records. The owned-profile change feed
 updates coherent snapshots; employment selection works offline without an age limit. The employee inbox synchronizes encrypted company
 correspondence, retains admitted content when a refresh fails, and queues explicit
@@ -96,11 +98,11 @@ into encrypted storage, paused and explicitly resumed after current content auth
 Completed revisions can be saved through the platform file dialog after fresh
 server authorization; the exported copy is then managed outside the application.
 
-The runtime contains no demo authentication transport. Other transactional employee workflows
-are still being connected; a generated module
-is not a completed HRIS workflow. See [native identity](docs/native-identity.md), [company workspaces](docs/workspace.md), [employee profiles](docs/people.md), [inbox and synchronization](docs/inbox.md), [company availability](docs/company-policy.md),
+The runtime uses the HRIS authentication transport. The employee workflows described
+here have explicit implementation and acceptance contracts; provider/device and
+deployment acceptance are tracked separately in [validation](docs/validation.md). See [native identity](docs/native-identity.md), [company workspaces](docs/workspace.md), [employee profiles](docs/people.md), [inbox and synchronization](docs/inbox.md), [company availability](docs/company-policy.md),
 [attendance and work calendars](docs/workforce.md), [overtime](docs/overtime.md), the [leave integration](docs/leave.md), and the platform's
-[remaining delivery work](https://github.com/fajarxfce/hris-platform/blob/main/docs/completion.md).
+[remaining delivery work](https://github.com/fajarxfce/hris-platform/blob/feat/firebase-auth/docs/completion.md).
 
 The [employee payslip pages](docs/payroll.md) query account-owned annual history and
 full details from the local replica. Incremental synchronization retains published

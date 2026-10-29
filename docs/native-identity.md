@@ -2,7 +2,8 @@
 
 ## API and ownership
 
-Android/iOS use `/api/v1/auth/native/login`, `/auth/native/refresh`, the native MFA
+Android/iOS use `/api/v1/auth/native/login`, the configured
+`/auth/native/firebase/login` exchange, `/auth/native/refresh`, the native MFA
 endpoints, `/me`, and `/companies/{companyId}/me/access`. API services perform HTTP
 calls; datasource contracts return DTOs; repositories map DTOs and technical errors;
 use cases coordinate session and company policy. Feature ViewModels own screen work.
@@ -67,11 +68,19 @@ signed out. Local storage failures remain explicit.
 Reads and revocations use the ordinary transport boundary and never request MFA,
 retry, or change local credentials from the repository. See [local session ownership](session-ownership.md).
 
-## Remaining identity integration
+## Provider exchange and platform boundaries
 
-A native OIDC callback handoff remains to be connected.
-The backend's existing browser OIDC flow is not a native exchange endpoint, so
-provider buttons remain unavailable rather than trusting client-side claims.
+[Firebase authentication](firebase-auth.md) is connected to the HRIS native exchange:
+installed/backend project and method support gate provider acquisition, then the
+server verifies Firebase proof and resolves an explicit issuer/UID binding. Android
+email/password and real Google sign-in through company/Home are accepted. iOS
+configuration and its owned Google browser/code adapter have separate native and
+provider/device verification; [validation](validation.md) records the current scope.
+Only HRIS credentials enter the session lifecycle described above.
+
+The backend's generic browser OIDC flow is still a browser-cookie flow, not a
+native exchange for arbitrary OIDC providers. Supporting another provider requires
+its explicit native integration; client-side claims never grant HRIS access.
 
 Android/iOS provide uppercase `X-HRIS-Client-Platform` and monotonic
 `X-HRIS-Client-Build` headers. Desktop preview uses the backend's unversioned native
