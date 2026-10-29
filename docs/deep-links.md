@@ -49,7 +49,10 @@ are implemented; provider delivery retains separate acceptance. The handler
 validates the backend schema/event and account/company before constructing the
 internal target; provider URL or display text cannot choose it. Verified HTTPS
 App Links and Universal Links still require a controlled domain and platform
-association configuration.
+association configuration. The current parser accepts only the selected custom
+scheme; HTTPS support also needs explicit environment-bound route admission and
+native declarations. Association files alone do not enable that path. The domain
+question is pending; the [device procedure](ios-acceptance.md) retains this work.
 
 Automated coverage includes strict parsing, first-login binding, session/company
 replacement, cold application entry, background/resume, repeated message links,

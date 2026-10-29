@@ -101,7 +101,8 @@ missing public configuration prerequisite. Google accepted the dev iOS authoriza
 sign-in page without a client/redirect configuration error; no user authenticated
 during that check. The native adapter tests and complete Xcode app passed in full CI `40858176601`,
 with 97 simulator cases. The generic Google port is now being verified in Starter. APNs and actual
-iOS provider/device acceptance remain separate. See [validation](validation.md)
+iOS provider/device acceptance remain separate; the [device procedure](ios-acceptance.md)
+records remaining setup and observations. See [validation](validation.md)
 for executed checks and the [handoff](agent-handoff.md) for current work.
 
 This exchange follows HRIS native-session policy and belongs to HRIS Mobile.

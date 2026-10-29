@@ -55,7 +55,8 @@ exchange or binding changes. Source/run details are in
 
 Actual iOS sign-in/APNs still require device/provider acceptance; injected-browser
 native tests and an unsigned simulator build do not claim that result. A device
-availability question is pending. The provider/owned-browser/crypto changes are
+availability question is pending; the [iOS procedure](ios-acceptance.md) records
+remaining setup, observations and cleanup. The provider/owned-browser/crypto changes are
 reusable; HRIS session policy and configuration stay here. See the
 [Firebase contract](firebase-auth.md) and [validation](validation.md).
 
@@ -299,17 +300,20 @@ and existing employee working copies are reconciled in [local-first coverage](lo
 Do not repeat these features or native cases because an older checkpoint called
 them next work. Continue concrete uncovered requirements or observed failures.
 
-Platform full CI `40820912608` passed all ten jobs. Mobile and Starter Apple
-correction runs also passed, and the reusable port is accepted. No CI or owned
-local test remains active. Continue the external acceptance below when its actual
-input becomes available; do not repeat completed build/provider-foundation work.
+Platform full CI `40820912608` passed all ten jobs. The earlier Mobile and Starter
+Apple correction runs also passed. New Mobile provider CI `40858176601` is accepted;
+Starter Google port run `40864341588` is completing verification as recorded above.
+Continue external acceptance when its actual input becomes available; do not
+repeat completed build/provider-foundation work.
 
 Firebase project `cmp-fajar` has Email/password and Google enabled. Android configs
 exist locally in ignored `apps/android/google-services.json`; do not commit provider
 credentials. Actual FCM foreground/background delivery and notification navigation
-are accepted above. Remaining external work includes actual Google ID-token
-exchange, iOS Firebase/APNs/device setup, verified HTTPS associations and physical
-location/device acceptance. The supplied sender credential is installed privately
+and Android Google/Home are accepted above. Matching public iOS plists are installed.
+Remaining external work includes APNs/device setup, the controlled HTTPS domain
+with native/route association work, and physical location/device acceptance.
+Domain and iPhone availability questions are pending; do not repeat them while
+waiting for the user's answer. The supplied sender credential is installed privately
 in Platform's host configuration. Public Android config is a separate file; do
 not repeat the resolved credential question.
 

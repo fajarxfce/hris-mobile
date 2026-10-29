@@ -112,7 +112,9 @@ prove provider delivery.
 FCM and Firebase Authentication are both requested. Firebase sign-in must exchange
 a verified external identity for HRIS authorization; registration tokens are never
 account identity. The supplied worker service account now passed actual Android
-FCM delivery; iOS provider configuration and APNs signing remain external inputs.
+FCM delivery. Matching public iOS Firebase configurations are now installed;
+APNs signing and actual iOS device delivery remain external inputs. The
+[iOS acceptance procedure](ios-acceptance.md) separates those prerequisites.
 Actual Firebase SDK token issuance, registration, response-loss recovery,
 offline restart and explicit retirement now have
 [Android evidence](validation.md#firebase-registration-and-offline-recovery-on-android).
@@ -122,13 +124,16 @@ Both Inbox rows remained unread/unacknowledged, and disable/logout retired the
 server token. Normal-priority transport and Android scheduling can delay display;
 the measured background case took about 161 seconds. The server credential stays
 private outside Git in Platform's documented host configuration.
-Firebase email/password login and the Android system Google sign-in launch/dismiss
-flow have [separate device evidence](validation.md#real-firebase-android-acceptance).
+Firebase email/password login and the initial Android Google launch/dismiss flow
+have [separate device evidence](validation.md#real-firebase-android-acceptance).
+The user subsequently confirmed actual Google → Firebase → HRIS → company/Home
+on the installed phone, with independent server-session metadata in
+[the current acceptance record](validation.md#actual-google-sign-in-on-the-user-operated-phone).
 The user enabled Email/password and Google. Public Firebase Auth configuration now
 returns HTTP 200. The supported Google authorization setup endpoint supplied the
 public web OAuth client ID; it is installed locally for the three HRIS Android
 flavors. All three Google Services processing tasks passed. The earlier
-`CONFIGURATION_NOT_FOUND` result is resolved. Signing-certificate registration and
-Google token issuance/exchange still need provider acceptance. No client key is
+`CONFIGURATION_NOT_FOUND` result and dev signing-certificate registration are
+resolved; the Android Google exchange is accepted above. No client key is
 recorded here. [Android URL acceptance](deep-links.md#android-url-acceptance) verifies
 resource navigation and retained read state independently of provider delivery.
