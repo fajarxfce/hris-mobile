@@ -20,7 +20,21 @@
     "focusedDesktop": "53 passed in 29s",
     "static": "format/architecture passed in 20s",
     "appleRun": 40855843460,
-    "status": "in progress; simulator step passed, Xcode pending"
+    "status": "success",
+    "appleVerification": {
+      "head": "196c11719f3c81f429bc2c70662ffa5c83900dc4",
+      "junit": {
+        "tests": 82,
+        "suites": 22,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "compileSeconds": 711,
+      "simulatorSeconds": 94,
+      "xcodeSeconds": 1408,
+      "artifactDownloadedAndReviewed": true
+    }
   },
   "googleSource": "43cd8ec68d3018f7418657ba5e57757a51f7a81a",
   "localGoogleValidation": {
@@ -64,8 +78,19 @@
     "status": "in progress"
   },
   "port": {
-    "status": "pending Mobile Apple verification",
-    "destination": "compose-fluent-starter"
+    "passwordSource": "196c1171",
+    "passwordDestination": "8a75de5",
+    "passwordLocalValidation": {
+      "desktopCases": 308,
+      "identityChromiumCases": 31,
+      "runnerTests": 10,
+      "distributionTests": 6,
+      "rootAndAndroidPassed": true,
+      "seconds": 70
+    },
+    "passwordStarterApple": "dispatched; pending",
+    "googleSource": "43cd8ec6",
+    "googleDestination": "pending Mobile full Apple verification"
   },
   "limits": [
     "Native injected-browser tests do not prove real iOS Google UI or APNs/device acceptance.",

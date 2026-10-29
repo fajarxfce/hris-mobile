@@ -33,7 +33,10 @@ passed local password checks at `64039536`; Apple run `40853359016` compiled and
 passed the four reader cases but failed one existing cancellation fixture (81/82
 native cases passed). `196c1171` replaces both Firebase transport fixtures' racy
 Boolean assertion with explicit bounded cleanup acknowledgement. Its Apple
-follow-up is [40855843460](https://github.com/fajarxfce/hris-mobile/actions/runs/40855843460).
+follow-up [40855843460](https://github.com/fajarxfce/hris-mobile/actions/runs/40855843460)
+passed 82 simulator cases and full Xcode before the password/configuration port
+to Starter `8a75de5`. Starter root/Android, 308 desktop and 31 Chromium cases passed;
+its own Apple run is pending. The later Google increment has not been ported.
 
 The Google increment passes 65 focused desktop identity cases and public dev OAuth
 configuration preflight. Root checks, Android assembly and 82 identity/application
@@ -42,7 +45,7 @@ simulator/Xcode verification remains in progress. Full run
 [40858176601](https://github.com/fajarxfce/hris-mobile/actions/runs/40858176601)
 tests application `43cd8ec6`; do not confuse it with the earlier password-only run.
 Direct iOS-configured HTTPS password preflight returned Firebase proof for the
-exact owned fictional fixture, without HRIS exchange or binding changes. **Do not port this increment to Starter before Mobile Apple
+exact owned fictional fixture, without HRIS exchange or binding changes. **Do not port the later Google increment to Starter before its Mobile Apple
 verification passes.** The provider/owned-browser/crypto changes are reusable;
 HRIS session policy and configuration stay here. Actual iOS sign-in/APNs still
 require a device/provider acceptance; an injected-browser native test is not that

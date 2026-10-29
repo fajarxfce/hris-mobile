@@ -78,8 +78,14 @@ completed cleanup. Xcode was skipped after this failure. Both provider/native
 Firebase cancellation fixtures now await an explicit cleanup acknowledgement with
 a five-second real-dispatcher deadline before closing the shared client. This
 keeps request cancellation, rather than client shutdown, responsible for release.
-Focused desktop identity checks passed again in 29s. The corrected simulator run
-and assembled app remain pending; no result is inferred from desktop checks.
+Focused desktop identity checks passed again in 29s. Corrected run
+[40855843460](https://github.com/fajarxfce/hris-mobile/actions/runs/40855843460) at
+`196c1171` then passed all 82 simulator cases in 22 downloaded suites, no failures/
+errors/skips, and the complete Xcode app. Compilation took 711 seconds, simulator
+tests 94 seconds and the Xcode step 1,408 seconds. This accepted password/configuration
+increment was ported to Starter `8a75de5`, whose root/Android and 308 desktop/31
+Chromium cases passed; its own Apple run is pending. The later Google increment
+has the separate source/run boundary above.
 Google interaction on iOS still requires its own owned adapter. APNs, physical iOS
 provider acceptance and production configuration remain separate. The generic
 Starter port waits for successful Mobile Apple verification.

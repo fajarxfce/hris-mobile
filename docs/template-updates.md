@@ -1,8 +1,13 @@
 # Template updates
 
-## Apple Firebase authentication — port pending
+## Apple Firebase authentication
 
-Mobile now reads the selected iOS public plist and owns Google system-browser
+The password/bundle increment from Mobile `196c1171` passed all 82 simulator
+cases and Xcode in run `40855843460`, then ported to Starter `8a75de5`. Starter
+root/Android checks, 308 desktop and 31 identity Chromium cases passed; its own
+Apple verification is pending.
+
+The later Mobile `43cd8ec6` increment also owns Google system-browser
 PKCE, callback correlation and code exchange. The shared callback session accepts
 either an Android ID token or an Apple authorization code, closes its native UI
 before transport and rejects late or mismatched proof. Google OAuth uses the
