@@ -73,10 +73,11 @@ class InstalledFirebaseAuthenticationTest {
             object : GoogleCredentialSource {
                 override val supported = true
 
-                override suspend fun open(webClientId: String): GoogleCredentialSession {
-                    assertEquals(options.googleWebClientId, webClientId)
+                override suspend fun open(clientId: String): GoogleCredentialSession {
+                    assertEquals(options.googleClientId, clientId)
                     return object : GoogleCredentialSession {
-                        override suspend fun idToken() = "google-proof".repeat(5)
+                        override suspend fun credential() =
+                            GoogleCredentialResult.IdToken("google-proof".repeat(5))
 
                         override fun close() {
                             closed = true
@@ -86,6 +87,11 @@ class InstalledFirebaseAuthenticationTest {
             }
         val remote =
             object : FirebaseProviderRemoteSource {
+                override suspend fun googleCode(
+                    clientId: String,
+                    credential: GoogleCredentialResult.AuthorizationCode,
+                ): String = error("Unused")
+
                 override suspend fun password(
                     options: FirebaseClientOptions,
                     request: FirebasePasswordRequest,
@@ -122,9 +128,9 @@ class InstalledFirebaseAuthenticationTest {
             object : GoogleCredentialSource {
                 override val supported = true
 
-                override suspend fun open(webClientId: String) =
+                override suspend fun open(clientId: String) =
                     object : GoogleCredentialSession {
-                        override suspend fun idToken(): String {
+                        override suspend fun credential(): GoogleCredentialResult {
                             entered.complete(Unit)
                             awaitCancellation()
                         }
@@ -160,6 +166,11 @@ class InstalledFirebaseAuthenticationTest {
             )) {
             val remote =
                 object : FirebaseProviderRemoteSource {
+                    override suspend fun googleCode(
+                        clientId: String,
+                        credential: GoogleCredentialResult.AuthorizationCode,
+                    ): String = error("Unused")
+
                     override suspend fun password(
                         options: FirebaseClientOptions,
                         request: FirebasePasswordRequest,

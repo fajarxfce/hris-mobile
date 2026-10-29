@@ -1,9 +1,10 @@
 package dev.fajar.starter.identity.data.firebase.datasources
 
+import dev.fajar.starter.identity.data.firebase.dto.GoogleCredentialResult
 import kotlinx.coroutines.CompletableDeferred
 
 interface GoogleCredentialCallback {
-    fun success(idToken: String)
+    fun success(credential: GoogleCredentialResult)
 
     fun failure(error: Exception)
 }
@@ -13,14 +14,14 @@ class CallbackGoogleCredentialSession(
     private val request: (GoogleCredentialCallback) -> AutoCloseable,
     private val onClosed: () -> Unit,
 ) : GoogleCredentialSession {
-    private val result = CompletableDeferred<String>()
+    private val result = CompletableDeferred<GoogleCredentialResult>()
     private var owned: AutoCloseable? = null
     private var started = false
     private var closed = false
     private val callback =
         object : GoogleCredentialCallback {
-            override fun success(idToken: String) {
-                if (!closed) result.complete(idToken)
+            override fun success(credential: GoogleCredentialResult) {
+                if (!closed) result.complete(credential)
             }
 
             override fun failure(error: Exception) {
@@ -28,7 +29,7 @@ class CallbackGoogleCredentialSession(
             }
         }
 
-    override suspend fun idToken(): String {
+    override suspend fun credential(): GoogleCredentialResult {
         check(!closed && !started) { "Google credential resource cannot be reused" }
         started = true
         val acquired = request(callback)

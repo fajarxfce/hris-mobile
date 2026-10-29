@@ -9,4 +9,9 @@ interface FirebaseProviderRemoteSource {
     ): FirebaseProviderResponse
 
     suspend fun google(options: FirebaseClientOptions, idToken: String): FirebaseProviderResponse
+
+    suspend fun googleCode(
+        clientId: String,
+        credential: GoogleCredentialResult.AuthorizationCode,
+    ): String
 }

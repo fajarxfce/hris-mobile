@@ -46,6 +46,7 @@ cryptography-optimal = { module = "dev.whyoleg.cryptography:cryptography-provide
 datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "datetime" }
 cyclonedx-gradle = { module = "org.cyclonedx:cyclonedx-gradle-plugin", version.ref = "cyclonedx" }
 oidc-core = { module = "io.github.kalinjul.kotlin.multiplatform:oidc-core", version.ref = "oidc" }
+oidc-crypto = { module = "io.github.kalinjul.kotlin.multiplatform:oidc-crypto", version.ref = "oidc" }
 android-appauth = { module = "net.openid:appauth", version.ref = "appauth" }
 android-credentials = { module = "androidx.credentials:credentials", version.ref = "credentials" }
 android-credentials-play-services = { module = "androidx.credentials:credentials-play-services-auth", version.ref = "credentials" }

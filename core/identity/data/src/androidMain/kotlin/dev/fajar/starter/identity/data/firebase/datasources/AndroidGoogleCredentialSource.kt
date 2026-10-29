@@ -11,6 +11,7 @@ import androidx.lifecycle.Lifecycle
 import com.google.android.libraries.identity.googleid.GetSignInWithGoogleOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import dev.fajar.starter.identity.data.firebase.boundary.*
+import dev.fajar.starter.identity.data.firebase.dto.GoogleCredentialResult
 import dev.fajar.starter.identity.data.firebase.mappers.requireGoogleCredentialNonce
 import java.lang.ref.WeakReference
 import java.security.SecureRandom
@@ -40,7 +41,7 @@ class AndroidGoogleCredentialSource(context: Context) : GoogleCredentialSource {
         }
     }
 
-    override suspend fun open(webClientId: String): GoogleCredentialSession {
+    override suspend fun open(clientId: String): GoogleCredentialSession {
         check(Looper.myLooper() == Looper.getMainLooper())
         check(!closed && active == null)
         val activity = owner.get() ?: throw GoogleCredentialUnavailable()
@@ -53,7 +54,7 @@ class AndroidGoogleCredentialSource(context: Context) : GoogleCredentialSource {
         val request =
             GetCredentialRequest.Builder()
                 .addCredentialOption(
-                    GetSignInWithGoogleOption.Builder(webClientId).setNonce(nonce).build()
+                    GetSignInWithGoogleOption.Builder(clientId).setNonce(nonce).build()
                 )
                 .build()
         val host = WeakReference(activity)
@@ -88,8 +89,8 @@ class AndroidGoogleCredentialSource(context: Context) : GoogleCredentialSource {
                                         val token =
                                             GoogleIdTokenCredential.createFrom(credential.data)
                                                 .idToken
-                                        requireGoogleCredentialNonce(token, webClientId, nonce)
-                                        callback.success(token)
+                                        requireGoogleCredentialNonce(token, clientId, nonce)
+                                        callback.success(GoogleCredentialResult.IdToken(token))
                                     } catch (error: Exception) {
                                         callback.failure(GoogleCredentialUnavailable(error))
                                     }

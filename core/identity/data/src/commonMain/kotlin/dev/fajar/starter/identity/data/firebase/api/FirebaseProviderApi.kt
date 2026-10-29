@@ -2,6 +2,7 @@ package dev.fajar.starter.identity.data.firebase.api
 
 import dev.fajar.starter.identity.data.firebase.boundary.FirebaseProviderException
 import dev.fajar.starter.identity.data.firebase.dto.*
+import dev.fajar.starter.identity.data.firebase.mappers.googleRedirectUri
 import dev.fajar.starter.network.HttpClients
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.expectSuccess
@@ -41,6 +42,55 @@ class FirebaseProviderApi(@Named(HttpClients.FirebaseAuth) private val client: H
             "accounts:signInWithIdp",
             json.encodeToString(FirebaseGoogleRequest(form)),
         )
+    }
+
+    suspend fun googleCode(
+        clientId: String,
+        credential: GoogleCredentialResult.AuthorizationCode,
+    ): String {
+        require(credential.redirectUri == googleRedirectUri(clientId))
+        require(
+            credential.code.length in 1..4096 &&
+                credential.code.none { it.isWhitespace() || it.code < 32 || it.code == 127 }
+        )
+        require(credential.verifier.matches(Regex("[A-Za-z0-9._~-]{43,128}")))
+        val body =
+            listOf(
+                    "client_id" to clientId,
+                    "code" to credential.code,
+                    "code_verifier" to credential.verifier,
+                    "redirect_uri" to credential.redirectUri,
+                    "grant_type" to "authorization_code",
+                )
+                .formUrlEncode()
+        return client
+            .preparePost("https://oauth2.googleapis.com/token") {
+                expectSuccess = false
+                header(HttpHeaders.AcceptEncoding, "identity")
+                contentType(ContentType.Application.FormUrlEncoded)
+                setBody(body)
+            }
+            .execute { response ->
+                val accepted = response.status.value == 200
+                val bytes = boundedBody(response, if (accepted) 32_768 else 4096)
+                try {
+                    require(
+                        response.contentType()?.withoutParameters() == ContentType.Application.Json
+                    )
+                    if (!accepted) throw FirebaseProviderException(response.status.value, null)
+                    val value =
+                        json
+                            .parseToJsonElement(bytes.decodeToString())
+                            .jsonObject["id_token"]
+                            ?.jsonPrimitive
+                    require(value?.isString == true)
+                    value.content.also {
+                        require(it.length in 32..8192 && it.none(Char::isWhitespace))
+                    }
+                } finally {
+                    bytes.fill(0)
+                }
+            }
     }
 
     private suspend fun request(

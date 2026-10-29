@@ -3,6 +3,7 @@
 package dev.fajar.starter.identity.data.firebase.datasources
 
 import dev.fajar.starter.identity.data.firebase.dto.FirebaseClientOptions
+import dev.fajar.starter.identity.data.firebase.mappers.googleRedirectUri
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.withContext
@@ -28,11 +29,19 @@ class AppleFirebaseClientOptionsSource(private val bundle: NSBundle = NSBundle.m
                 )
             val bundleId = requireNotNull(bundle.bundleIdentifier)
             require(values["BUNDLE_ID"] == bundleId)
+            val clientId =
+                (values["CLIENT_ID"] as? String)?.also {
+                    require(
+                        values["REVERSED_CLIENT_ID"] == googleRedirectUri(it).substringBefore(':')
+                    )
+                }
+            require(values["CLIENT_ID"] == null || clientId != null)
             coroutineContext.ensureActive()
             FirebaseClientOptions(
                 projectId = requireNotNull(values["PROJECT_ID"] as? String),
                 apiKey = requireNotNull(values["API_KEY"] as? String),
                 iosBundleId = bundleId,
+                googleClientId = clientId,
             )
         }
 }

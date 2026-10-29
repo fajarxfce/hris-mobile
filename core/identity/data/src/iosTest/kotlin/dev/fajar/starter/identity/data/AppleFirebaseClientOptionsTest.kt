@@ -19,7 +19,7 @@ class AppleFirebaseClientOptionsTest {
     }
 
     @Test
-    fun matchingBundleLoadsPasswordConfigurationWithoutAdvertisingGoogleInteraction() = runTest {
+    fun matchingBundleLoadsPasswordAndGoogleConfiguration() = runTest {
         withBundle(configuration()) {
             val options = assertNotNull(AppleFirebaseClientOptionsSource(it).load()).validated()
             assertEquals("fixture-project", options.projectId)
@@ -27,7 +27,7 @@ class AppleFirebaseClientOptionsTest {
             assertEquals("dev.fajar.fixture", options.iosBundleId)
             assertNull(options.androidPackage)
             assertNull(options.androidCertificate)
-            assertNull(options.googleWebClientId)
+            assertEquals("123-ios.apps.googleusercontent.com", options.googleClientId)
             assertEquals("FirebaseClientOptions(<redacted>)", options.toString())
         }
     }
@@ -40,6 +40,40 @@ class AppleFirebaseClientOptionsTest {
             }
         }
     }
+
+    @Test
+    fun missingGoogleClientKeepsPasswordWhileInconsistentInstalledOAuthMetadataIsRejected() =
+        runTest {
+            withBundle(
+                configuration().replace("<key>CLIENT_ID</key>", "<key>UNUSED_CLIENT_ID</key>")
+            ) {
+                assertNull(
+                    assertNotNull(AppleFirebaseClientOptionsSource(it).load()).googleClientId
+                )
+            }
+            for (value in
+                listOf(
+                    configuration()
+                        .replace(
+                            "com.googleusercontent.apps.123-ios",
+                            "com.googleusercontent.apps.999-other",
+                        ),
+                    configuration()
+                        .replace(
+                            "<key>REVERSED_CLIENT_ID</key>",
+                            "<key>MISSING_REVERSED_CLIENT_ID</key>",
+                        ),
+                    configuration()
+                        .replace(
+                            "<string>123-ios.apps.googleusercontent.com</string>",
+                            "<integer>1</integer>",
+                        ),
+                )) withBundle(value) {
+                assertFailsWith<IllegalArgumentException> {
+                    AppleFirebaseClientOptionsSource(it).load()
+                }
+            }
+        }
 
     @Test
     fun malformedMissingAndOversizedInstalledConfigurationCannotBecomeUnavailableFallback() =
@@ -66,7 +100,8 @@ class AppleFirebaseClientOptionsTest {
             "<dict><key>PROJECT_ID</key><string>fixture-project</string>" +
                 "<key>API_KEY</key><string>${"A".repeat(39)}</string>" +
                 "<key>BUNDLE_ID</key><string>$bundle</string>" +
-                "<key>CLIENT_ID</key><string>123-ios.apps.googleusercontent.com</string></dict>"
+                "<key>CLIENT_ID</key><string>123-ios.apps.googleusercontent.com</string>" +
+                "<key>REVERSED_CLIENT_ID</key><string>com.googleusercontent.apps.123-ios</string></dict>"
         )
 
     private suspend fun withBundle(configuration: String?, block: suspend (NSBundle) -> Unit) {

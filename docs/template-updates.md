@@ -1,5 +1,16 @@
 # Template updates
 
+## Apple Firebase authentication — port pending
+
+Mobile now reads the selected iOS public plist and owns Google system-browser
+PKCE, callback correlation and code exchange. The shared callback session accepts
+either an Android ID token or an Apple authorization code, closes its native UI
+before transport and rejects late or mismatched proof. Google OAuth uses the
+existing OIDC 0.18.4 crypto dependency directly; versions and verified artifacts
+are unchanged. Port the generic provider source/tests, iOS host wiring, identity
+native CI targets and catalog entry only after Mobile Apple validation passes.
+Keep HRIS native exchange/session policy and environment configuration here.
+
 ## Actual Android FCM acceptance
 
 The 29 October [real-provider case](validation.md#actual-fcm-foreground-and-background-delivery)

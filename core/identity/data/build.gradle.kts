@@ -9,6 +9,7 @@ kotlin.sourceSets {
         api(projects.core.identity.domain)
         implementation(projects.core.observability)
         implementation(libs.oidc.core)
+        implementation(libs.oidc.crypto)
         implementation(projects.core.securestorage)
         implementation(projects.core.storage)
         implementation(projects.core.database)

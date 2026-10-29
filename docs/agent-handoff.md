@@ -26,21 +26,29 @@ release. Preserve unrelated edits and keep implementation, tests and docs togeth
 
 ## Current phone delivery: installed after authorized key replacement
 
-Current implementation work adds iOS Firebase email/password configuration loading
-and the iOS bundle restriction header. Firebase Management supplied all three
-matching ignored iOS plists. The new bundle-source regression suite is included in
-the Apple workflow; 53 focused desktop identity cases passed. Root checks and Android
-assembly passed in 2m27s, with 1,842 desktop cases in the report set and final static
-checks passed. Apple run `40853359016` compiled and passed all four bundle-reader
-cases, but failed an existing cancellation fixture (81/82 native cases passed).
-Both Firebase HTTP fixtures now await engine cleanup explicitly; focused desktop
-identity checks passed in 29s. Corrected simulator/Xcode validation is next. **Do not port this increment
-to Starter before Mobile Apple verification passes.** iOS Google interaction remains
-a separate adapter task; do not label it merely a missing configuration file.
+Current implementation adds iOS Firebase email/password configuration loading,
+Apple bundle restrictions and an owned Google system-browser PKCE/code exchange.
+All three matching public plists are installed locally and ignored. Mobile first
+passed local password checks at `64039536`; Apple run `40853359016` compiled and
+passed the four reader cases but failed one existing cancellation fixture (81/82
+native cases passed). `196c1171` replaces both Firebase transport fixtures' racy
+Boolean assertion with explicit bounded cleanup acknowledgement. Its Apple
+follow-up is [40855843460](https://github.com/fajarxfce/hris-mobile/actions/runs/40855843460).
+
+The Google increment passes 65 focused desktop identity cases and public dev OAuth
+configuration preflight. Root checks, Android assembly and 82 identity/application
+Chromium cases passed in 3m23s, with 1,854 cases in the desktop report set. Native
+simulator/Xcode verification remains in progress. **Do not port this increment to Starter before Mobile Apple
+verification passes.** The provider/owned-browser/crypto changes are reusable;
+HRIS session policy and configuration stay here. Actual iOS sign-in/APNs still
+require a device/provider acceptance; an injected-browser native test is not that
+acceptance. See [Firebase contract](firebase-auth.md) and [validation](validation.md).
 
 The user subsequently tried Google on the phone. Firebase confirmed the exact
 verified Google identity; Platform `533472ca` records the successful explicit
-binding after retiring the fictional password UID. The user Home retry is pending.
+binding after retiring the fictional password UID. The user retried and confirmed
+company/Home, with one new native session independently visible in authorized
+server metadata. Actual Google → Firebase → HRIS sign-in is accepted on the phone.
 The old emulator session is revoked, with cached data retained; do not reactivate
 its old Firebase binding over the real user's account. Private paths and recovery
 details remain in Platform's current runtime record.
@@ -79,7 +87,7 @@ isolated restoration, followed by successful host/phone network and browser chec
 See [runtime evidence](https://github.com/fajarxfce/hris-platform/blob/feat/firebase-auth/docs/measurements/development-runtime-2026-10-29.json).
 The emulator is stopped with this persistent demo account's data retained.
 There is no application change or generic Starter port in this increment.
-Human Google sign-in remains pending; physical FCM/location acceptance remains
+Human Google sign-in is accepted above; physical FCM/location acceptance remains
 separate from successful package installation and network health. The prior
 loopback APK remains ignored at `.work/fcm-native-validated.apk`; do not distribute
 it to this phone.

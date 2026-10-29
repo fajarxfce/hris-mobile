@@ -46,7 +46,7 @@ disposal and late callbacks cannot reopen an interaction.
 A separate, lazily acquired HTTP client sends neither HRIS authorization/cookies nor
 internal tracing context to Google. Responses and provider error codes are bounded;
 raw provider errors are not shown or logged. The flow retains no Firebase SDK
-session or refresh credential. Google interaction closes before the Firebase HTTP
+session or refresh credential. Google interaction closes before any Google code or Firebase HTTP
 exchange begins. Provider account-link confirmation is rejected rather than silently
 linking accounts.
 
@@ -67,9 +67,18 @@ application restriction and does not send Android certificate metadata or HRIS
 credentials. Provider acquisition still uses the existing cancellation and session
 publication boundaries, with no Firebase Auth SDK session or retained refresh token.
 
-This iOS increment enables email/password. It does not advertise Google interaction
-from an iOS OAuth client alone; the resource-owning Google UI adapter still needs
-implementation and acceptance. Desktop/browser hosts retain unavailable sources.
+iOS Google uses an owned `ASWebAuthenticationSession` with S256 PKCE and independent
+cryptographic nonce/state values. It uses the plist's iOS `CLIENT_ID`, validates its
+`REVERSED_CLIENT_ID`, and accepts only the exact correlated custom-scheme callback.
+Duplicate code/state/error, wrong redirects and malformed callbacks are rejected.
+The UI session and window anchor are released before the bounded Google code
+exchange starts. Both audience and nonce must match before sending Google's ID
+token to Firebase; Firebase verifies the provider signature. Cancellation and late
+callbacks cannot start a replacement exchange. The Google token endpoint receives
+only the public client ID, authorization code, verifier, redirect and grant type;
+no client secret or HRIS credential is sent, and no Google refresh/access token is
+retained. No Google/Firebase Auth SDK session is created. Desktop/browser hosts
+retain unavailable sources.
 
 ## Delivery status
 
@@ -80,15 +89,18 @@ email/password through Android, native HRIS exchange and application MFA passed 
 the dedicated emulator. The current dev signing certificate is now registered.
 The user tried Google on the installed phone: Firebase confirmed a verified Google
 identity, which was explicitly bound in HRIS after retiring the owned fictional
-password binding. The user's Home retry is pending. One active Firebase UID per
+password binding. The user retried and confirmed company/Home; the authorized
+server session directory independently returned a new native session. Actual
+Google → Firebase → HRIS acceptance is complete on the installed Android phone. One active Firebase UID per
 HRIS account/issuer is preserved; enabling both Firebase methods does not authorize
 two separate UIDs to be linked implicitly.
 
 Firebase Management supplied matching ignored iOS configurations for dev/staging/prod
 in `apps/ios/Configuration/<environment>/GoogleService-Info.plist`. This closes the
-missing public configuration prerequisite. Local focused identity tests passed;
-the new bundle-source tests and assembled Apple app still require simulator/Xcode
-verification before the reusable changes are ported to Starter. APNs and actual
+missing public configuration prerequisite. Google accepted the dev iOS authorization request and redirected it to its HTTPS
+sign-in page without a client/redirect configuration error; no user authenticated
+during that check. Native adapter tests and the assembled Apple app still require
+simulator/Xcode verification before the reusable changes are ported to Starter. APNs and actual
 iOS provider/device acceptance remain separate. See [validation](validation.md)
 for executed checks and the [handoff](agent-handoff.md) for current work.
 

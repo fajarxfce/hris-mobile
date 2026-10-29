@@ -3,6 +3,8 @@ package dev.fajar.starter.identity.data.firebase.repositories
 import dev.fajar.starter.identity.data.firebase.boundary.*
 import dev.fajar.starter.identity.data.firebase.datasources.*
 import dev.fajar.starter.identity.data.firebase.dto.FirebasePasswordRequest
+import dev.fajar.starter.identity.data.firebase.dto.GoogleCredentialResult
+import dev.fajar.starter.identity.data.firebase.mappers.requireGoogleCredentialNonce
 import dev.fajar.starter.identity.data.firebase.mappers.validated
 import dev.fajar.starter.identity.domain.firebase.entities.*
 import dev.fajar.starter.identity.domain.firebase.repositories.FirebaseAuthenticationRepository
@@ -24,7 +26,7 @@ class InstalledFirebaseAuthenticationRepository(
                 config.projectId,
                 buildSet {
                     add(FirebaseSignInProvider.EmailPassword)
-                    if (google.supported && config.googleWebClientId != null)
+                    if (google.supported && config.googleClientId != null)
                         add(FirebaseSignInProvider.Google)
                 },
             )
@@ -43,12 +45,21 @@ class InstalledFirebaseAuthenticationRepository(
                         FirebasePasswordRequest(input.email, input.password),
                     )
                 FirebaseSignInInput.Google -> {
-                    val token =
+                    val clientId = config.googleClientId ?: throw GoogleCredentialUnavailable()
+                    val credential =
                         withContext(Dispatchers.Main.immediate) {
-                            val clientId =
-                                config.googleWebClientId ?: throw GoogleCredentialUnavailable()
                             if (!google.supported) throw GoogleCredentialUnavailable()
-                            google.open(clientId).use { it.idToken() }
+                            google.open(clientId).use { it.credential() }
+                        }
+                    currentCoroutineContext().ensureActive()
+                    val token =
+                        when (credential) {
+                            is GoogleCredentialResult.IdToken -> credential.value
+                            is GoogleCredentialResult.AuthorizationCode ->
+                                remote.value.googleCode(clientId, credential).also {
+                                    currentCoroutineContext().ensureActive()
+                                    requireGoogleCredentialNonce(it, clientId, credential.nonce)
+                                }
                         }
                     currentCoroutineContext().ensureActive()
                     remote.value.google(config, token)

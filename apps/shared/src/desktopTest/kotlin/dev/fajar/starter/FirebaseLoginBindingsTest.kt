@@ -8,6 +8,7 @@ import dev.fajar.starter.database.createAppDatabase
 import dev.fajar.starter.datastore.createUserPreferences
 import dev.fajar.starter.identity.data.firebase.datasources.*
 import dev.fajar.starter.identity.data.firebase.dto.FirebaseClientOptions
+import dev.fajar.starter.identity.data.firebase.dto.GoogleCredentialResult
 import dev.fajar.starter.identity.domain.entities.Session
 import dev.fajar.starter.identity.domain.firebase.usecases.SignInWithFirebase
 import dev.fajar.starter.identity.domain.repositories.SessionRepository
@@ -103,9 +104,10 @@ class FirebaseLoginBindingsTest {
             object : GoogleCredentialSource {
                 override val supported = true
 
-                override suspend fun open(webClientId: String) =
+                override suspend fun open(clientId: String) =
                     object : GoogleCredentialSession {
-                        override suspend fun idToken() = "google-proof".repeat(5)
+                        override suspend fun credential() =
+                            GoogleCredentialResult.IdToken("google-proof".repeat(5))
 
                         override fun close() {
                             googleDisposed = true

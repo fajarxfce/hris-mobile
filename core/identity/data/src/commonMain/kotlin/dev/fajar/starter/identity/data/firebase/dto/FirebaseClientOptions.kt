@@ -4,7 +4,7 @@ package dev.fajar.starter.identity.data.firebase.dto
 data class FirebaseClientOptions(
     val projectId: String,
     val apiKey: String,
-    val googleWebClientId: String? = null,
+    val googleClientId: String? = null,
     val androidPackage: String? = null,
     val androidCertificate: String? = null,
     val iosBundleId: String? = null,

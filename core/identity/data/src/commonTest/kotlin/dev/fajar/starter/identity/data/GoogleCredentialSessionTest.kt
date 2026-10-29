@@ -8,6 +8,7 @@ package dev.fajar.starter.identity.data
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.identity.data.firebase.boundary.*
 import dev.fajar.starter.identity.data.firebase.datasources.*
+import dev.fajar.starter.identity.data.firebase.dto.GoogleCredentialResult
 import dev.fajar.starter.identity.data.firebase.mappers.requireGoogleCredentialNonce
 import kotlin.io.encoding.Base64
 import kotlin.test.*
@@ -28,16 +29,16 @@ class GoogleCredentialSessionTest {
                 },
                 { closed++ },
             )
-        val pending = async { session.use { it.idToken() } }
+        val pending = async { session.use { it.credential() } }
         runCurrent()
-        callback.success("first-token")
-        callback.success("second-token")
-        assertEquals("first-token", pending.await())
+        callback.success(GoogleCredentialResult.IdToken("first-token"))
+        callback.success(GoogleCredentialResult.IdToken("second-token"))
+        assertEquals(GoogleCredentialResult.IdToken("first-token"), pending.await())
         callback.failure(GoogleCredentialUnavailable())
         session.close()
         assertEquals(1, cancelled)
         assertEquals(1, closed)
-        assertFailsWith<IllegalStateException> { session.idToken() }
+        assertFailsWith<IllegalStateException> { session.credential() }
     }
 
     @Test
@@ -52,10 +53,10 @@ class GoogleCredentialSessionTest {
                 },
                 {},
             )
-        val pending = async { session.use { it.idToken() } }
+        val pending = async { session.use { it.credential() } }
         runCurrent()
         pending.cancelAndJoin()
-        callback.success("late-token")
+        callback.success(GoogleCredentialResult.IdToken("late-token"))
         assertTrue(cancelled)
         assertTrue(pending.isCancelled)
     }
@@ -65,7 +66,7 @@ class GoogleCredentialSessionTest {
         var closed = 0
         val failed =
             CallbackGoogleCredentialSession({ throw GoogleCredentialUnavailable() }, { closed++ })
-        assertFailsWith<GoogleCredentialUnavailable> { failed.use { it.idToken() } }
+        assertFailsWith<GoogleCredentialUnavailable> { failed.use { it.credential() } }
         assertEquals(1, closed)
         var cancelled = 0
         lateinit var reentrant: CallbackGoogleCredentialSession
@@ -77,18 +78,18 @@ class GoogleCredentialSessionTest {
                 },
                 { closed++ },
             )
-        assertFailsWith<CancellationException> { reentrant.use { it.idToken() } }
+        assertFailsWith<CancellationException> { reentrant.use { it.credential() } }
         assertEquals(1, cancelled)
         assertEquals(2, closed)
         val failingClose =
             CallbackGoogleCredentialSession(
                 { callback ->
-                    callback.success("token")
+                    callback.success(GoogleCredentialResult.IdToken("token"))
                     AutoCloseable { error("close failed") }
                 },
                 { closed++ },
             )
-        assertFailsWith<IllegalStateException> { failingClose.use { it.idToken() } }
+        assertFailsWith<IllegalStateException> { failingClose.use { it.credential() } }
         assertEquals(3, closed)
     }
 

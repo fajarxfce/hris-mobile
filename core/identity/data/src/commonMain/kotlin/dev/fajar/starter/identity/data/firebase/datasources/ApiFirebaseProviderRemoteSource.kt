@@ -14,4 +14,9 @@ class ApiFirebaseProviderRemoteSource(private val api: FirebaseProviderApi) :
 
     override suspend fun google(options: FirebaseClientOptions, idToken: String) =
         api.google(options, idToken)
+
+    override suspend fun googleCode(
+        clientId: String,
+        credential: GoogleCredentialResult.AuthorizationCode,
+    ) = api.googleCode(clientId, credential)
 }

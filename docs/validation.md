@@ -1,5 +1,52 @@
 # Validation
 
+## Actual Google sign-in on the user-operated phone
+
+The user retried after explicit Firebase UID binding and confirmed company/Home.
+Authorized server metadata independently returned one new valid native session,
+created at `2026-10-29T10:24:50.263372Z`. This accepts actual Google → Firebase → HRIS
+sign-in on the already installed `678783b3` application, APK SHA-256
+`1883d1da41fdeabe77165de9fc75f1d106ff7583ae93aa92878940c7a2addd0e`.
+The initial unbound-account rejection and subsequent explicit replacement of the
+owned fictional provider binding preserved HRIS employee grants and binding history.
+No new APK, phone UI automation, implicit email link or authentication policy change
+was needed. [Platform's sanitized evidence](https://github.com/fajarxfce/hris-platform/blob/feat/firebase-auth/docs/measurements/native-google-2026-10-29.json)
+keeps the private email, UID, session identifiers and credentials out of Git.
+Physical push/location and iOS provider acceptance remain separate.
+
+## iOS Google authorization-code ownership
+
+The iOS provider now owns a system-browser request with S256 PKCE and fresh
+cryptographic nonce/state values, validates the exact callback, closes the browser
+before network exchange and admits only a Google ID token matching that request's
+nonce/audience. Firebase remains responsible for Google signature verification.
+The dedicated HTTP client pins the Google token endpoint, sends only the public
+code-exchange form, bounds response/error bodies and retains no Google access or
+refresh token. Android Credential Manager still returns its nonce-validated ID
+token through the shared owned-session contract.
+
+Focused desktop identity checks passed 65 cases in 15 suites, zero failures/errors/
+skips, in 1m40s. The first new-test compilation exposed that the OIDC library's
+crypto helpers are not exported transitively; declaring `oidc-crypto` directly
+uses the existing 0.18.4 version and already verified artifacts. Protocol tests
+include the RFC 7636 S256 vector, wrong/duplicate callback fields, provider dismissal,
+credential redaction, bounded/pinned HTTP, cancellation and proof arriving after
+cancellation. New native source tests exercise independent attempts, container
+closure and late callbacks through an injected browser factory; they do not claim
+actual Google account interaction.
+
+An unauthenticated request using the installed dev iOS public configuration reached
+Google's HTTPS `/v3/signin/identifier` page with HTTP 200 and no client/redirect
+configuration error. No user authenticated and no account was changed. Root checks, Android dev assembly and the identity/application Chromium targets
+passed in 3m23s (2,413 tasks: 792 executed, 1,621 up to date). The current desktop
+report set contains 1,854 cases in 325 suites; Chromium passed 63 identity and 19
+application cases. All report counts have zero failures/errors/skips. The first
+combined invocation stopped at browser launch because `CHROME_BIN` was missing;
+the successful run explicitly used `/usr/bin/chromium`. The new native tests and
+assembled Apple app still require CI verification. Actual iOS provider/device
+and APNs acceptance remain separate. The Starter port
+waits for successful Mobile Apple verification.
+
 ## iOS Firebase password configuration
 
 On 29 October Firebase Management supplied matching public iOS configurations for
