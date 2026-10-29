@@ -1,5 +1,36 @@
 # Validation
 
+## Inbox command response loss on Android
+
+On 29 October 2026, Mobile `9dbaf730` built the dev APK with Java 21 and
+`-PapiBaseUrl.dev=http://127.0.0.1:18082/api/v1/` in 45 seconds. The dedicated
+Android 35 emulator completed the real API/PostgreSQL/worker
+[command recovery workflow](pending-actions.md#android-recovery-after-a-committed-command-loses-its-response).
+One server read command committed before its response was dropped. The device
+retained an unconfirmed command and Pending actions count through offline process
+restart. Summary open/reload made no HTTP requests (30 → 30). Reconnection and
+Retry reused the original operation/input, returned all six summary rows to empty
+and left server version 1 with acknowledgment absent. Sign-out succeeded.
+
+The independent Platform fixture passed in 6.0 minutes (6.4 including setup),
+observing 42 native requests and exactly two identical company read commands.
+TypeScript, Biome and browser production build passed for its new fixture. Owned
+services and connection files were removed, forwarding removed and the emulator
+stopped with data retained. The initial emulator System UI warning and driver
+activity/nested-navigation targets were resolved before completing the workflow.
+No Mobile application code or shared foundation changed; existing root/browser
+application suites were not repeated for acceptance-only documentation.
+
+Local evidence: `.work/pending-command-assembly.log`,
+`.work/inbox-command-native-result.json`, `.work/inbox-command-counter-after.json`,
+`.work/inbox-command-unconfirmed.png`, `.work/inbox-command-pending.png`,
+`.work/inbox-command-offline-pending.png`, `.work/inbox-command-offline-detail.png`,
+`.work/inbox-command-recovered-summary.png` and `.work/inbox-command-signed-out.png`.
+Offline/recovered screenshots were inspected. Platform keeps its independent
+result/request hashes under `.work/inbox-native-*` and the runnable fixture in Git.
+This did not exercise real FCM delivery, iOS or the user's phone and needs no
+Starter port.
+
 ## Android URL navigation
 
 On 28 October 2026, Mobile `1c1f9104` and Platform `893db26a` passed the

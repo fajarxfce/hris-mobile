@@ -85,3 +85,26 @@ This checks native persistence and workflow navigation for the Leave draft
 projection. Transfer delivery, other workflows' command states and physical
 device acceptance retain their separate validation requirements. See
 [validation](validation.md#pending-actions-on-android) for local evidence.
+
+## Android recovery after a committed command loses its response
+
+On 29 October 2026, the dedicated Android 35 emulator also passed an Inbox command
+case against the real isolated API/PostgreSQL/worker. The proxy dropped the first
+successful Mark as read response after server commit and refused later native
+requests until explicit transport restoration. The detail retained Retry and the
+summary showed **Awaiting confirmation: 1**. Opening/reloading the summary kept
+the request counter unchanged at 30. Removing forwarding and force-stopping the
+app preserved the company, pending count and original action through offline startup.
+
+After restoring transport, Retry reused the same operation/input. The independent
+server observer found exactly two forwarded read commands, a single resulting
+version increment to 1, a read timestamp and no acknowledgment. All six summary
+rows then showed no pending actions; sign-out returned to login. Across 42 native
+requests there was no other company write. This expands native evidence to an
+unconfirmed command, without claiming all transfer/feature outcomes were exercised.
+
+The [tracked Platform fixture and steps](https://github.com/fajarxfce/hris-platform/blob/feat/firebase-auth/docs/native-acceptance.md)
+passed in 6.0 minutes (6.4 including setup). The dev APK built in 45 seconds using
+the loopback override; application source was unchanged. Owned services, private
+connection files and forwarding were removed, and the emulator stopped without
+wiping data. See [validation](validation.md#inbox-command-response-loss-on-android).

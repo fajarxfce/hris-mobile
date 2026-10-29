@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 28 October 2026 (UTC). The overall HRIS PRD remains in progress. This is
+Updated 29 October 2026 (UTC). The overall HRIS PRD remains in progress. This is
 the employee application generated from Compose Fluent Starter, and the proving
 ground for reusable foundation changes before they are ported to Starter.
 
@@ -23,6 +23,14 @@ release. Preserve unrelated edits and keep implementation, tests and docs togeth
 
 ## Last accepted increments
 
+- The latest acceptance adds an actual unconfirmed Inbox command: server commit
+  followed by response loss, Pending actions count 1 through offline cold start,
+  local summary reload with no HTTP (30 → 30), exact-operation Retry and zero
+  pending afterward. The independent server observed two identical read commands,
+  version 1 and no acknowledgment across 42 requests. Fixture 6.0m/6.4m with setup;
+  APK assembly 45 seconds. All owned resources were removed and the emulator
+  stopped without wiping data. See [executed evidence](validation.md#inbox-command-response-loss-on-android)
+  and [Platform's tracked procedure](https://github.com/fajarxfce/hris-platform/blob/feat/firebase-auth/docs/native-acceptance.md).
 - `60456c48`: real Android 35/API/PostgreSQL/worker URL and Inbox archival
   acceptance. Cold-login/company gating, repeated/resumed navigation, scope/query
   rejection and offline restoration passed. Independent server reads proved no
@@ -47,8 +55,8 @@ Platform worker observations are HRIS administration work, with no Starter port.
 
 Reconcile each remaining acceptance requirement with the code and retained tests
 before creating another feature. Native Pending actions still needs acceptance
-for retained command/transfer outcomes beyond the accepted Leave working-copy
-case. Existing per-feature delivery and lifecycle tests are not evidence for every
+for transfer and other feature outcomes beyond the accepted Leave working-copy
+and unconfirmed Inbox-command cases. Existing per-feature delivery and lifecycle tests are not evidence for every
 summary state on a device. Continue useful independent cases while provider input
 is unavailable.
 
