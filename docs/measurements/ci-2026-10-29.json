@@ -1,0 +1,150 @@
+{
+  "reviewedAt": "2026-10-29",
+  "applicationBaseline": "02743a9f",
+  "fullRun": {
+    "id": 40815794384,
+    "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/40815794384",
+    "head": "b0a95391da1952d946653233437f09dbce14b881",
+    "conclusion": "failure",
+    "jobs": {
+      "verify": {
+        "conclusion": "success",
+        "tasks": 3185,
+        "duration": "22m9s"
+      },
+      "web": {
+        "conclusion": "success",
+        "tasks": 1363,
+        "duration": "16m2s"
+      },
+      "windows": {
+        "conclusion": "success",
+        "tasks": 1115,
+        "duration": "13m1s"
+      },
+      "apple": {
+        "conclusion": "failure",
+        "reason": "15-minute combined simulator compilation/test deadline; no compile error reported."
+      }
+    }
+  },
+  "appleFollowup": {
+    "id": 40817592306,
+    "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/40817592306",
+    "head": "451a2c4d0b95ffd4a117bba68df6e4fd2125eb00",
+    "conclusion": "success",
+    "compile": "8m3s (134 tasks executed)",
+    "simulatorTests": "52s (137 tasks, 14 executed)",
+    "xcodeStep": "18m54s including Gradle framework build",
+    "junit": {
+      "tests": 27,
+      "suites": [
+        {
+          "suite": "iosSimulatorArm64Test.dev.fajar.starter.fileio.AppleFileOutputTest",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "suite": "iosSimulatorArm64Test.dev.fajar.starter.fileio.FileHandleRegistryTest",
+          "tests": 4,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "suite": "iosSimulatorArm64Test.dev.fajar.starter.fileio.SafeFileCallTest",
+          "tests": 5,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "suite": "iosSimulatorArm64Test.dev.fajar.starter.fileio.Sha256DigestTest",
+          "tests": 1,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "suite": "iosSimulatorArm64Test.dev.fajar.starter.location.data.AppleLocationDataSourceTest",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "suite": "iosSimulatorArm64Test.dev.fajar.starter.location.data.DeviceLocationRepositoryTest",
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "suite": "iosSimulatorArm64Test.dev.fajar.starter.notifications.data.ApplePushTokenSourceTest",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "suite": "iosSimulatorArm64Test.dev.fajar.starter.notifications.data.NotificationDestinationTest",
+          "tests": 2,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "suite": "iosSimulatorArm64Test.dev.fajar.starter.notifications.data.PushTokenLifecycleTest",
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "suite": "iosSimulatorArm64Test.dev.fajar.starter.notifications.data.SafeNotificationCallTest",
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      ],
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "reportArtifact": "ios-simulator-reports downloaded and checked",
+    "scope": "Apple only; three other jobs intentionally skipped and covered by the original full run."
+  },
+  "laterCopyOnlyChange": {
+    "commit": "678783b3",
+    "change": "Expense item count English copy only",
+    "rootAndAndroid": "passed",
+    "duration": "2m31s",
+    "tasks": {
+      "total": 1939,
+      "executed": 175,
+      "fromCache": 3,
+      "upToDate": 1761
+    },
+    "desktopReports": 322,
+    "desktopTests": {
+      "tests": 1840,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apk": {
+      "bytes": 32853122,
+      "sha256": "59494858f2da47b37307b7f911960c0f895929aa92e90bc8831a6f6b53fde715"
+    },
+    "initialAttempt": "SDK location absent; corrected ANDROID_HOME and reran",
+    "deviceAcceptance": "not repeated for copy-only change"
+  },
+  "limits": [
+    "Unsigned simulator build, not physical-device acceptance.",
+    "No real Google token exchange or FCM message delivery is inferred.",
+    "Hosted run predates the Expense copy-only edit; its local root/Android result is separate."
+  ]
+}

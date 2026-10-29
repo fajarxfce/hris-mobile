@@ -1,5 +1,20 @@
 # Template updates
 
+## Apple CI compilation budget
+
+Mobile `451a2c4d` separates cold iOS test compilation, simulator execution and
+unsigned Xcode compilation into bounded steps (25/15/30 minutes; job 75). Manual
+`scope=apple` has independent concurrency, while ordinary/default runs retain
+all targets. Simulator reports are retained even on failure. The original Mobile
+Apple job timed out during compilation; follow-up
+[40817592306](https://github.com/fajarxfce/hris-mobile/actions/runs/40817592306)
+passed 27 simulator tests, the full Xcode build and report upload before porting.
+
+This generic workflow correction is now being validated in Starter. Preserve its
+FluentStarter project/scheme and existing three jobs (Web remains in verify). No
+application source, HRIS configuration or business policy belongs in this port.
+See [CI evidence](validation.md#apple-ci-cold-compilation-budget).
+
 ## Native upload/review acceptance
 
 The 29 October real API/storage/Android recovery fixture required no Mobile source

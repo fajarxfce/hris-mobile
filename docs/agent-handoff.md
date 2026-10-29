@@ -26,7 +26,7 @@ and `/home/fajar/hris/PRD-PROGRESS.md` are supplementary. The user authorized on
 implementation and a push after every atomic commit. This does not authorize a
 release. Preserve unrelated edits and keep implementation, tests and docs together.
 
-## Active correction: Apple CI cold compilation
+## Current result: Apple CI correction passed
 
 Latest local application change corrects the English Expense count label to
 `Expense items: %1$s`, after inspecting the accepted native screenshots. Root
@@ -42,9 +42,12 @@ See [CI correction](validation.md#apple-ci-cold-compilation-budget). The workflo
 now separates compile/test/Xcode time limits, preserves all three test targets,
 and supports manual `scope=apple` with independent concurrency and retained reports.
 Apple follow-up [40817592306](https://github.com/fajarxfce/hris-mobile/actions/runs/40817592306)
-is running at pushed `451a2c4d`; finish its acceptance and record the result.
-Do not cancel the original full run's Linux/Android job. Port this generic
-workflow correction to Starter only after Mobile Apple passes, then validate there.
+passed at `451a2c4d`: 27 simulator tests in ten downloaded JUnit suites, no
+failures/errors/skips, complete unsigned Xcode build and retained artifact. Compile
+took 8m3s, simulator execution 52s and the Xcode step 18m54s. The generic workflow
+correction is now being ported to Starter; complete its independent Apple run
+before calling the port accepted. [Measurements](measurements/ci-2026-10-29.json)
+retain the original failed run, successful follow-up and later copy-only checks.
 Current local native fixtures are all stopped/cleaned. Provider/device inputs remain
 external and their pending question must not be repeated.
 
@@ -63,9 +66,10 @@ Continue full CI/PRD reconciliation. CI
 [40815794384](https://github.com/fajarxfce/hris-mobile/actions/runs/40815794384)
 was dispatched at `b0a95391` (same `02743a9f` application sources). Prior complete
 CI was at `d191c61d`, before the latest application fixes. Inspect Linux/Android,
-Windows/Web and Apple simulator jobs, resolve failures and record outcomes in Git.
-This is verification only. Platform needs its full current branch verification;
-read its latest handoff. No Starter port arose from these native business fixtures.
+Windows/Web and Apple simulator results above are final. This is verification only.
+Platform's corrected full run `40820005213` at `70e5098d` is running after the
+original run passed tests/restore but failed hidden-path artifact upload; read its
+latest handoff. No Starter port arose from these native business fixtures.
 FCM server credentials and Google/physical/iOS acceptance need external inputs;
 do not repeat the pending Firebase question.
 
