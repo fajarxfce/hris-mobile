@@ -52,8 +52,11 @@ the successful run explicitly used `/usr/bin/chromium`. Full run
 `43cd8ec6` passed Linux/Android, Web, Windows and Apple. Downloaded Apple reports
 contain 97 cases in 26 suites, zero failures/errors/skips; all native Google-source
 cases and the full Xcode app passed. Native compilation took 832 seconds, simulator
-tests 81 seconds and the Xcode step 1,425 seconds. The generic Google port to Starter
-follows this complete proof. Actual iOS provider/device and APNs acceptance remain
+tests 81 seconds and the Xcode step 1,425 seconds. Generic Starter port `e0c6071`
+followed this complete proof and independently passed all three jobs in full run
+`40864341588`. Downloaded Apple reports retain 77 native cases in 22 suites, zero
+failures/errors/skips and the full Xcode app. Compilation took 526s, simulator tests
+87s and Xcode 589s. Actual iOS provider/device and APNs acceptance remain
 separate.
 
 ## iOS Firebase password configuration

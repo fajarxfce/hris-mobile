@@ -135,7 +135,32 @@
         "seconds": 260
       },
       "fullCiRun": 40864341588,
-      "fullCiStatus": "in progress"
+      "fullCiStatus": "success",
+      "fullCi": {
+        "id": 40864341588,
+        "url": "https://github.com/fajarxfce/compose-fluent-starter/actions/runs/40864341588",
+        "head": "e0c6071cfdabada41b9026c0c981cf44b1ffe5e3",
+        "status": "completed",
+        "conclusion": "success",
+        "jobs": {
+          "verify": "success",
+          "windows": "success",
+          "apple": "success"
+        },
+        "apple": {
+          "junit": {
+            "tests": 77,
+            "suites": 22,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "compileSeconds": 526,
+          "simulatorSeconds": 87,
+          "xcodeSeconds": 589,
+          "artifactDownloadedAndReviewed": true
+        }
+      }
     }
   },
   "limits": [

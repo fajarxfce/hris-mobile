@@ -12,7 +12,9 @@ Xcode 625s.
 The later Mobile `43cd8ec6` increment passed all four jobs in full run
 `40858176601`, including 97 native cases and Xcode, before its Google port began.
 Starter Google port `e0c6071` passed root/Android, 320 desktop and 46 Chromium
-cases before full run `40864341588` was dispatched. Its hosted result is pending.
+cases before full run `40864341588` passed all three jobs. Downloaded Apple reports
+retain 77 native cases in 22 suites, no failures/errors/skips and the complete
+Xcode app. Compilation took 526s, tests 87s and Xcode 589s. The port is accepted.
 The increment owns Google system-browser
 PKCE, callback correlation and code exchange. The shared callback session accepts
 either an Android ID token or an Apple authorization code, closes its native UI

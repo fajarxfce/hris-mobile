@@ -48,7 +48,10 @@ in 26 suites, zero failures/errors/skips, and the complete Xcode app. This close
 the Mobile verification gate for the generic Google port. Starter `e0c6071`
 passed root/Android, 320 desktop and 46 Chromium cases; its full
 [run 40864341588](https://github.com/fajarxfce/compose-fluent-starter/actions/runs/40864341588)
-is in progress. Direct iOS-configured HTTPS password preflight also
+passed all three jobs. Downloaded Apple reports confirm 77 native cases in 22 suites,
+zero failures/errors/skips and the complete Xcode app. Compilation took 526s,
+tests 87s and Xcode 589s. The generic Google port is accepted. Direct
+iOS-configured HTTPS password preflight also
 returned Firebase proof for the exact owned fictional fixture, without HRIS
 exchange or binding changes. Source/run details are in
 [measurements](measurements/apple-firebase-2026-10-29.json).
@@ -172,7 +175,7 @@ above. Platform full [40820912608](https://github.com/fajarxfce/hris-platform/ac
 then passed all ten jobs at `9345c19b`, including real API/worker/export integration
 and schema-101 restore with a downloaded sanitized artifact. Those CI runs are
 complete; no generic port arose from the native HRIS business fixtures. The newer
-Starter Google port has its separate active run above. Physical/iOS acceptance
+Starter Google port has its separate accepted full run above. Physical/iOS acceptance
 still needs its actual external inputs. Android Google, the supplied FCM credential
 and Android delivery are accepted above.
 
@@ -302,7 +305,8 @@ them next work. Continue concrete uncovered requirements or observed failures.
 
 Platform full CI `40820912608` passed all ten jobs. The earlier Mobile and Starter
 Apple correction runs also passed. New Mobile provider CI `40858176601` is accepted;
-Starter Google port run `40864341588` is completing verification as recorded above.
+Starter Google port run `40864341588` also passed all three jobs as recorded above.
+No CI or owned local test remains active from this increment.
 Continue external acceptance when its actual input becomes available; do not
 repeat completed build/provider-foundation work.
 
