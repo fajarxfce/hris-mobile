@@ -4,6 +4,16 @@ Updated 29 October 2026 (UTC). The overall HRIS PRD remains in progress. This is
 the employee application generated from Compose Fluent Starter, and the proving
 ground for reusable foundation changes before they are ported to Starter.
 
+## Current parser correction
+
+The HTTPS foundation below passed full CI. During the Starter port review, a new
+Mobile regression reproduced Unicode host case-folding aliasing. A printable-ASCII
+input guard now passes seven JVM and seven Chromium cases in 31s, after the expected
+one-case failure. This two-file correction is being copied to Starter only after
+that local Mobile proof; final full CI for both resulting heads remains required.
+The phone still has the separately recorded `d36a1bc9` APK. Preserve the existing
+Google session and keep phone updates install-only.
+
 ## Active HTTPS proof — 29 October 2026
 
 Implementation `d36a1bc9` passed local root/Android checks (1859 desktop cases),

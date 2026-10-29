@@ -57,7 +57,7 @@ channel as ordinary custom URLs. No new navigation or credential owner is create
 
 ## Admission and deployment
 
-The shared parser bounds input to 4,096 characters and accepts only the exact
+The shared parser bounds input to 4,096 printable ASCII characters and accepts only the exact
 configured HTTPS authority and case-sensitive environment prefix. Explicit ports,
 credentials, trailing-dot hosts, queries, fragments, encoding, traversal, empty
 segments and control characters are rejected. The application then admits known
@@ -105,3 +105,14 @@ All owned fixture resources were removed; emulator data and the private dev stac
 were preserved. [Measurements](measurements/app-links-2026-10-29.json) retain limits.
 The fictional domain and explicit package mean this is native routing acceptance,
 not public DNS/TLS or OS domain verification. Physical iPhone tests are waived.
+
+## Unicode authority correction
+
+A new regression reproduced Unicode dotless-i host aliasing under Kotlin's
+case-insensitive matching: the first JVM run failed one of seven cases in 24s.
+The parser now rejects non-ASCII input before matching; configured DNS names and
+supported routes already use ASCII. This also rejects long-s scheme/host aliases
+while retaining normal ASCII uppercase input. Seven JVM and seven Chromium cases
+then passed in 31s. This pure parser correction is proved in Mobile before copying
+the same two files to Starter; its final full CI is recorded separately from the
+preceding `d36a1bc9` foundation run. No URL grants account/company access.

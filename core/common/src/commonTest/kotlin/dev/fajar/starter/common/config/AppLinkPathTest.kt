@@ -55,6 +55,17 @@ class AppLinkPathTest {
     }
 
     @Test
+    fun rejectsNonAsciiSchemeAndHostCaseLookalikes() {
+        listOf(
+                "https://l\u0131nks.example.invalid/app/dev/inbox",
+                "https://link\u017f.example.invalid/app/dev/inbox",
+                "http\u017f://links.example.invalid/app/dev/inbox",
+                AppEnvironment.Dev.linkScheme.replace("s", "\u017f") + "://app/inbox",
+            )
+            .forEach { assertNull(resolve(it), "Non-ASCII scheme/host must not match") }
+    }
+
+    @Test
     fun invalidConfiguredHostsFailBeforeAcceptingExternalInput() {
         listOf(
                 "",

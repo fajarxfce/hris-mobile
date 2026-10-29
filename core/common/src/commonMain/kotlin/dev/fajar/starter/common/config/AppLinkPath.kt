@@ -10,8 +10,8 @@ class AppLinkPath(
     }
 
     operator fun invoke(uri: String): String? {
-        if (uri.length > 4096 || uri.any { it.isWhitespace() || it.code < 32 || it.code == 127 })
-            return null
+        // URI admission is ASCII: Unicode case folding must not alias another DNS host.
+        if (uri.length > 4096 || uri.any { it.code !in 33..126 }) return null
         val customPrefix = "${environment.linkScheme}://app/"
         val httpsPrefix = httpsHost?.let { "https://$it/" }
         val path =

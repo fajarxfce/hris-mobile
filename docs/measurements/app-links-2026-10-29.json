@@ -109,5 +109,31 @@
     "firstInstallTimeUnchanged": true,
     "phoneUiDriven": false,
     "actualGoogleHomeAcceptanceSource": "678783b3"
+  },
+  "unicodeCorrection": {
+    "reproduction": {
+      "tests": 7,
+      "failed": 1,
+      "seconds": 24,
+      "cause": "Unicode case folding accepted a dotless-i HTTPS hostname as the configured ASCII host."
+    },
+    "correction": "Bound URL admission to printable ASCII before case-insensitive scheme/host matching.",
+    "local": {
+      "desktopTest": {
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "wasmJsBrowserTest": {
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "localSeconds": 31,
+    "fullCi": "pending",
+    "downstreamPolicy": "Copy the two-file pure parser correction only after these Mobile JVM and Chromium regressions pass; both final full CI runs remain required."
   }
 }
