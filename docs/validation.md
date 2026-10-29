@@ -47,10 +47,14 @@ passed in 3m23s (2,413 tasks: 792 executed, 1,621 up to date). The current deskt
 report set contains 1,854 cases in 325 suites; Chromium passed 63 identity and 19
 application cases. All report counts have zero failures/errors/skips. The first
 combined invocation stopped at browser launch because `CHROME_BIN` was missing;
-the successful run explicitly used `/usr/bin/chromium`. The new native tests and
-assembled Apple app still require CI verification. Actual iOS provider/device
-and APNs acceptance remain separate. The Starter port
-waits for successful Mobile Apple verification.
+the successful run explicitly used `/usr/bin/chromium`. Full run
+[40858176601](https://github.com/fajarxfce/hris-mobile/actions/runs/40858176601) at
+`43cd8ec6` passed Linux/Android, Web, Windows and Apple. Downloaded Apple reports
+contain 97 cases in 26 suites, zero failures/errors/skips; all native Google-source
+cases and the full Xcode app passed. Native compilation took 832 seconds, simulator
+tests 81 seconds and the Xcode step 1,425 seconds. The generic Google port to Starter
+follows this complete proof. Actual iOS provider/device and APNs acceptance remain
+separate.
 
 ## iOS Firebase password configuration
 
@@ -86,9 +90,9 @@ tests 94 seconds and the Xcode step 1,408 seconds. This accepted password/config
 increment was ported to Starter `8a75de5`, whose root/Android and 308 desktop/31
 Chromium cases passed; its own Apple run is pending. The later Google increment
 has the separate source/run boundary above.
-Google interaction on iOS still requires its own owned adapter. APNs, physical iOS
-provider acceptance and production configuration remain separate. The generic
-Starter port waits for successful Mobile Apple verification.
+The later Google browser/code increment has its separate source and acceptance
+above. APNs, physical iOS provider acceptance and production configuration remain
+separate from the accepted password/configuration port.
 
 ## Phone update signing-key mismatch
 

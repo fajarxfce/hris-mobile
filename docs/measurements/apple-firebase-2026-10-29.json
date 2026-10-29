@@ -75,7 +75,27 @@
     "id": 40858176601,
     "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/40858176601",
     "head": "43cd8ec68d3018f7418657ba5e57757a51f7a81a",
-    "status": "in progress"
+    "status": "completed",
+    "conclusion": "success",
+    "jobs": {
+      "verify": "success",
+      "web": "success",
+      "windows": "success",
+      "apple": "success"
+    },
+    "apple": {
+      "junit": {
+        "tests": 97,
+        "suites": 26,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "compileSeconds": 832,
+      "simulatorSeconds": 81,
+      "xcodeSeconds": 1425,
+      "artifactDownloadedAndReviewed": true
+    }
   },
   "port": {
     "passwordSource": "196c1171",
@@ -88,9 +108,12 @@
       "rootAndAndroidPassed": true,
       "seconds": 70
     },
-    "passwordStarterApple": "dispatched; pending",
+    "passwordStarterApple": {
+      "run": 40861505322,
+      "status": "in progress; native tests passed, Xcode pending"
+    },
     "googleSource": "43cd8ec6",
-    "googleDestination": "pending Mobile full Apple verification"
+    "googleDestination": "port applied after complete Mobile CI proof; Starter local verification in progress"
   },
   "limits": [
     "Native injected-browser tests do not prove real iOS Google UI or APNs/device acceptance.",

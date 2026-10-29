@@ -40,16 +40,21 @@ its own Apple run is pending. The later Google increment has not been ported.
 
 The Google increment passes 65 focused desktop identity cases and public dev OAuth
 configuration preflight. Root checks, Android assembly and 82 identity/application
-Chromium cases passed in 3m23s, with 1,854 cases in the desktop report set. Native
-simulator/Xcode verification remains in progress. Full run
-[40858176601](https://github.com/fajarxfce/hris-mobile/actions/runs/40858176601)
-tests application `43cd8ec6`; do not confuse it with the earlier password-only run.
-Direct iOS-configured HTTPS password preflight returned Firebase proof for the
-exact owned fictional fixture, without HRIS exchange or binding changes. **Do not port the later Google increment to Starter before its Mobile Apple
-verification passes.** The provider/owned-browser/crypto changes are reusable;
-HRIS session policy and configuration stay here. Actual iOS sign-in/APNs still
-require a device/provider acceptance; an injected-browser native test is not that
-acceptance. See [Firebase contract](firebase-auth.md) and [validation](validation.md).
+Chromium cases passed in 3m23s, with 1,854 cases in the desktop report set. Full run
+[40858176601](https://github.com/fajarxfce/hris-mobile/actions/runs/40858176601) at
+`43cd8ec6` passed all four jobs. Downloaded Apple reports confirm 97 native cases
+in 26 suites, zero failures/errors/skips, and the complete Xcode app. This closes
+the Mobile verification gate for the generic Google port, now under local
+verification in Starter. Direct iOS-configured HTTPS password preflight also
+returned Firebase proof for the exact owned fictional fixture, without HRIS
+exchange or binding changes. Source/run details are in
+[measurements](measurements/apple-firebase-2026-10-29.json).
+
+Actual iOS sign-in/APNs still require device/provider acceptance; injected-browser
+native tests and an unsigned simulator build do not claim that result. A device
+availability question is pending. The provider/owned-browser/crypto changes are
+reusable; HRIS session policy and configuration stay here. See the
+[Firebase contract](firebase-auth.md) and [validation](validation.md).
 
 The user subsequently tried Google on the phone. Firebase confirmed the exact
 verified Google identity; Platform `533472ca` records the successful explicit

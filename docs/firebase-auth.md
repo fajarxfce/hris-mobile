@@ -99,8 +99,8 @@ Firebase Management supplied matching ignored iOS configurations for dev/staging
 in `apps/ios/Configuration/<environment>/GoogleService-Info.plist`. This closes the
 missing public configuration prerequisite. Google accepted the dev iOS authorization request and redirected it to its HTTPS
 sign-in page without a client/redirect configuration error; no user authenticated
-during that check. Native adapter tests and the assembled Apple app still require
-simulator/Xcode verification before the reusable changes are ported to Starter. APNs and actual
+during that check. The native adapter tests and complete Xcode app passed in full CI `40858176601`,
+with 97 simulator cases. The generic Google port is now being verified in Starter. APNs and actual
 iOS provider/device acceptance remain separate. See [validation](validation.md)
 for executed checks and the [handoff](agent-handoff.md) for current work.
 
