@@ -12,12 +12,10 @@ ground for reusable foundation changes before they are ported to Starter.
    affected module contract and [template updates](template-updates.md).
 3. Read the [Platform handoff](https://github.com/fajarxfce/hris-platform/blob/feat/firebase-auth/docs/agent-handoff.md)
    and [remaining PRD delivery](https://github.com/fajarxfce/hris-platform/blob/feat/firebase-auth/docs/completion.md#remaining-delivery-sequence).
-   Backend and dashboard work is on Platform `feat/firebase-auth`, most recently
-   native upload/review fixture `ee6c04a3` after schema 100 and native push recovery.
-   Platform also has pushed `409abad4` (delivery observations, schema 101) and
-   `f757bffd` (original payroll period comparison) on descendant feature branches,
-   integrated at `b7f42070` after its one-hour retention test passed; native
-   Overtime fixture `578a5031` follows that integration.
+   Backend/dashboard work is on Platform `feat/firebase-auth`, with application
+   integration `b7f42070` / schema 101 and subsequent native acceptance fixtures.
+   The current full CI at `9345c19b` verifies recovery report upload and the corrected
+   closing-report browser assertion; its exact run is in the Platform handoff.
    Starter work is on `fix/push-token-lifecycle`.
 
 The three local checkouts are siblings under `/home/fajar/hris`. A fresh clone
@@ -189,20 +187,28 @@ native transfer fixture changes no application implementation; no Starter port i
 
 ## Next work and actual external inputs
 
-Reconcile each remaining acceptance requirement with the code and retained tests
-before creating another feature. Native Pending actions still needs acceptance
-for other feature outcomes beyond the accepted Leave working-copy, unconfirmed
-Inbox/Overtime commands, partial-download and upload/inspection-review cases. Existing per-feature delivery and lifecycle tests are not evidence for every
-summary state on a device. Continue useful independent cases while provider input
-is unavailable.
+All six Pending actions feature observers now have actual Android/API recovery
+examples: Inbox, Attendance, Overtime, submitted Leave, saved Expenses and document
+transfers/inspection review. See the specific validation sections for unchanged
+summary counters, exact replay, final server invariants and cleanup; they do not
+prove every state combination or physical target. Nine company data-sync registrations
+and existing employee working copies are reconciled in [local-first coverage](local-first.md).
+Do not repeat these features or native cases because an older checkpoint called
+them next work. Continue concrete uncovered requirements or observed failures.
+
+Current independent work is completion of Platform full CI `40820912608` and
+Starter's Apple port run `40820482699`. Mobile's corrected Apple job has passed;
+record the Starter outcome before closing the generic workflow port. Then continue
+the external acceptance below when its actual input becomes available.
 
 Firebase project `cmp-fajar` has Email/password and Google enabled. Android configs
 exist locally in ignored `apps/android/google-services.json`; do not commit provider
 credentials. The known remaining external work includes actual Google ID-token
 acceptance, FCM service-account configuration and actual message/scoped-hint
 delivery, iOS Firebase/APNs/device setup, verified HTTPS associations and physical
-location/device acceptance. Recheck local availability before asking for inputs
-already supplied. Public Android config is not an FCM server credential.
+location/device acceptance. The Firebase sender credential-path question is already
+pending; do not repeat it or rescan for credentials without new input. Public
+Android configuration is not an FCM server credential.
 
 ## Validation and device ownership
 
@@ -211,6 +217,20 @@ checks use `xvfb-run -a ./gradlew --no-daemon :check`; Android development assem
 is `:apps:android:assembleDevDebug`. Select related Chromium tasks from the owning
 module and inspect [development](development.md) and [distribution](distribution.md).
 Do not infer device/provider acceptance from compilation or fixture responses.
+
+For this workspace, supply tool locations explicitly (adjust paths on another host):
+
+```sh
+JAVA_HOME=/usr/lib/jvm/java-21-openjdk \
+ANDROID_HOME=/home/fajar/Android/Sdk \
+ANDROID_SDK_ROOT=/home/fajar/Android/Sdk \
+CHROME_BIN=/home/fajar/.cache/ms-playwright/chromium-1248/chrome-linux64/chrome \
+PATH=/usr/lib/jvm/java-21-openjdk/bin:$PATH \
+xvfb-run -a ./gradlew --no-daemon :check
+```
+
+Append the affected browser/build targets to that command. Keep fixture-specific
+API overrides local and explicit; this command preserves normal app configuration.
 
 Use AVD `hris-mobile-dev`, serial `emulator-5560`; never wipe its retained data.
 The last acceptance used a build-specific loopback API override. Preserve the
