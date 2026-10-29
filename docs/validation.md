@@ -1,5 +1,39 @@
 # Validation
 
+## Phone update signing-key mismatch
+
+On 29 October the user requested an APK installation on the WireGuard-connected
+Samsung SM-A725F and explicitly authorized its ADB connection. At Mobile `f740d658`
+(unchanged application `678783b3`), normal `:apps:android:assembleDevDebug` passed
+in 26s: 1,505 tasks, 68 executed, three cached and 1,434 up to date. The resulting
+32,853,128-byte APK has SHA-256
+`1883d1da41fdeabe77165de9fc75f1d106ff7583ae93aa92878940c7a2addd0e`.
+Its DEX contains `http://10.77.77.1:8088/api/v1/` and excludes the earlier native
+fixture endpoint. Android SDK 36.0.0 `apksigner verify --print-certs` passed.
+
+`tool/run_android.py 10.77.77.3:5555 --flavor dev --skip-build --install-only`
+attempted an in-place update, but Android returned
+`INSTALL_FAILED_UPDATE_INCOMPATIBLE`. The installed APK's certificate SHA-256 is
+`1f2a86687bfb65c8abcc9a465f39fc7ef22a2fc64e0ee378b8a1dad7911e6dae`;
+the new APK's certificate is
+`aca5ce6a26b978dee1d63c63103b6799848ab760d47ef4cf5ee68620fc8721f3`.
+Only the current `/home/fajar/.android/debug.keystore` was found in the bounded
+keystore search; the root account has no debug keystore. No private key was read
+into diagnostics. The installed public APK was copied locally only to verify its
+signature. This is a failed update, not a successful physical-device acceptance.
+
+The previous app/data remain intact, with no launch or UI interaction. The user
+was asked to choose the matching old signing key or authorize uninstall/reinstall
+with loss of local HRIS login/drafts/data; the answer is pending. Do not uninstall
+until that authorization arrives. Logs and prepared artifact metadata remain under
+`.work/phone-install-2026-10-29*`; the old public APK and previously validated
+loopback APK are separate ignored files.
+
+Read-only network checks also found connection refused on the configured
+development API, from both host HTTP and phone TCP probes. No Docker containers or
+development `.env` were present. No backend or database was recreated. A successful
+APK installation alone will not prove login/sync while that endpoint is unavailable.
+
 ## Actual FCM foreground and background delivery
 
 On 29 October, Platform `55288bc4`'s [owned real-FCM fixture](https://github.com/fajarxfce/hris-platform/blob/feat/firebase-auth/docs/native-fcm-acceptance.md)

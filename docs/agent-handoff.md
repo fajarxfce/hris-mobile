@@ -24,7 +24,31 @@ and `/home/fajar/hris/PRD-PROGRESS.md` are supplementary. The user authorized on
 implementation and a push after every atomic commit. This does not authorize a
 release. Preserve unrelated edits and keep implementation, tests and docs together.
 
-## Current result: actual Android FCM passed
+## Current phone delivery: signing-key decision pending
+
+The user requested installation on `10.77.77.3:5555` over WireGuard and authorized
+the ADB connection. The connected device is a Samsung SM-A725F with an existing
+`dev.fajar.hris.mobile.dev` installation. A fresh normal dev APK built successfully
+in 26s at `f740d658`, retaining application `678783b3` and the configured
+`http://10.77.77.1:8088/api/v1/` endpoint. Its signature was verified and the APK
+contains no earlier loopback fixture endpoint. See [delivery evidence](validation.md#phone-update-signing-key-mismatch).
+
+The install-only update was **rejected**, `INSTALL_FAILED_UPDATE_INCOMPATIBLE`:
+the old APK's signing certificate differs from the current VPS debug key. The
+previous application and its data remain untouched; the app was not launched.
+A bounded search found only the current debug keystore. The prepared APK is ready,
+but installation requires either the matching old keystore or explicit user
+authorization to uninstall/reinstall and lose local HRIS data. That choice was
+asked asynchronously and is pending; do not assume approval or repeat the question.
+
+The configured development API also returned connection refused from both VPS and
+phone; no Docker containers or local development `.env` were found. Historical
+development delivery below does not establish that the service is currently up.
+No server/data recreation or deployment was attempted as part of installing the APK.
+The previously accepted loopback APK is retained separately in ignored
+`.work/fcm-native-validated.apk`; do not distribute it to this phone.
+
+## Accepted result: actual Android FCM passed
 
 The sender credential question is resolved. Platform `55288bc4` installed the supplied service
 account privately outside Git and accepted two actual FCM publications on the
