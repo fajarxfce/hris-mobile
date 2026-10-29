@@ -16,6 +16,7 @@ import dev.fajar.starter.featureflags.data.datasources.AppleFeatureFlagSource
 import dev.fajar.starter.featureflags.data.datasources.AppleRemoteConfigClient
 import dev.fajar.starter.fileio.AppleFileInputSource
 import dev.fajar.starter.fileio.AppleFileOutputSource
+import dev.fajar.starter.identity.data.firebase.datasources.AppleFirebaseClientOptionsSource
 import dev.fajar.starter.identity.data.sso.datasources.AppleBrowserAuthorizationSource
 import dev.fajar.starter.inbox.domain.push.usecases.QueueInboxPushSignal
 import dev.fajar.starter.location.data.datasources.AppleLocationDataSource
@@ -92,6 +93,7 @@ class AppleAppHost(
             inboxPushCredentials = AppleCredentialStore(inboxPushCredentials),
             deviceAuthentication = AppleDeviceAuthenticationSource(),
             browserAuthorization = AppleBrowserAuthorizationSource(),
+            firebaseOptions = AppleFirebaseClientOptionsSource(),
             remoteFeatureFlags = AppleFeatureFlagSource(remoteConfig),
             platform = AppPlatform.Ios,
             location = AppleLocationDataSource(),

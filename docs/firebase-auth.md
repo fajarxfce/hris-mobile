@@ -57,9 +57,19 @@ projects or no shared provider require an explicit retry and never silently swit
 the password authority. Submission owns cancellation through completion, keeps its
 operation ID on retry, and clears the password on successful HRIS publication.
 
-The real application container owns one sign-in coordinator. Other hosts currently
-use unavailable platform sources; iOS provider support needs its own configuration
-and resource-owning adapter.
+The real application container owns one sign-in coordinator. iOS now loads public
+configuration from the selected application's bundled `GoogleService-Info.plist`,
+checks its `BUNDLE_ID` against the running bundle and rejects malformed, missing
+required fields or oversized configuration. An absent file reports unavailable;
+invalid installed configuration never silently selects another password authority.
+The existing bounded HTTPS adapter sends `X-Ios-Bundle-Identifier` for Apple's
+application restriction and does not send Android certificate metadata or HRIS
+credentials. Provider acquisition still uses the existing cancellation and session
+publication boundaries, with no Firebase Auth SDK session or retained refresh token.
+
+This iOS increment enables email/password. It does not advertise Google interaction
+from an iOS OAuth client alone; the resource-owning Google UI adapter still needs
+implementation and acceptance. Desktop/browser hosts retain unavailable sources.
 
 ## Delivery status
 
@@ -67,10 +77,20 @@ Project `cmp-fajar` has local ignored Android configuration for all three HRIS
 flavors. Email/password and Google are enabled, public Auth configuration responds
 200, and Google Services processing accepts the public web client ID. Real Firebase
 email/password through Android, native HRIS exchange and application MFA passed on
-the dedicated emulator. Google system sign-in launch and dismissal also passed;
-real Google token exchange, signing-certificate registration and physical-device
-acceptance remain separate checks. iOS provider configuration is still unavailable. See
-[validation](validation.md) for executed checks.
+the dedicated emulator. The current dev signing certificate is now registered.
+The user tried Google on the installed phone: Firebase confirmed a verified Google
+identity, which was explicitly bound in HRIS after retiring the owned fictional
+password binding. The user's Home retry is pending. One active Firebase UID per
+HRIS account/issuer is preserved; enabling both Firebase methods does not authorize
+two separate UIDs to be linked implicitly.
+
+Firebase Management supplied matching ignored iOS configurations for dev/staging/prod
+in `apps/ios/Configuration/<environment>/GoogleService-Info.plist`. This closes the
+missing public configuration prerequisite. Local focused identity tests passed;
+the new bundle-source tests and assembled Apple app still require simulator/Xcode
+verification before the reusable changes are ported to Starter. APNs and actual
+iOS provider/device acceptance remain separate. See [validation](validation.md)
+for executed checks and the [handoff](agent-handoff.md) for current work.
 
 This exchange follows HRIS native-session policy and belongs to HRIS Mobile.
 Reusable provider and resource-ownership improvements return to the starter after

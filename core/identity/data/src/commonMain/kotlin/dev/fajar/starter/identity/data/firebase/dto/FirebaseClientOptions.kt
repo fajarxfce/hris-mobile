@@ -7,6 +7,7 @@ data class FirebaseClientOptions(
     val googleWebClientId: String? = null,
     val androidPackage: String? = null,
     val androidCertificate: String? = null,
+    val iosBundleId: String? = null,
 ) {
     override fun toString() = "FirebaseClientOptions(<redacted>)"
 }

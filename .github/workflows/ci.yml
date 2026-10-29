@@ -105,10 +105,13 @@ jobs:
         run: >-
           ./gradlew :core:location:data:linkDebugTestIosSimulatorArm64
           :core:fileio:linkDebugTestIosSimulatorArm64
+          :core:identity:data:linkDebugTestIosSimulatorArm64
           :core:notifications:data:linkDebugTestIosSimulatorArm64 --no-daemon
         timeout-minutes: 25
       - name: Run iOS simulator tests
-        run: ./gradlew :core:location:data:iosSimulatorArm64Test :core:fileio:iosSimulatorArm64Test :core:notifications:data:iosSimulatorArm64Test --no-daemon
+        run: >-
+          ./gradlew :core:location:data:iosSimulatorArm64Test :core:fileio:iosSimulatorArm64Test
+          :core:identity:data:iosSimulatorArm64Test :core:notifications:data:iosSimulatorArm64Test --no-daemon
         timeout-minutes: 15
       - name: Build iOS simulator app
         timeout-minutes: 30

@@ -26,6 +26,22 @@ release. Preserve unrelated edits and keep implementation, tests and docs togeth
 
 ## Current phone delivery: installed after authorized key replacement
 
+Current implementation work adds iOS Firebase email/password configuration loading
+and the iOS bundle restriction header. Firebase Management supplied all three
+matching ignored iOS plists. The new bundle-source regression suite is included in
+the Apple workflow; 53 focused desktop identity cases passed. Root checks and Android
+assembly passed in 2m27s, with 1,842 desktop cases in the report set and final static
+checks passed. Simulator/Xcode validation is next. **Do not port this increment
+to Starter before Mobile Apple verification passes.** iOS Google interaction remains
+a separate adapter task; do not label it merely a missing configuration file.
+
+The user subsequently tried Google on the phone. Firebase confirmed the exact
+verified Google identity; Platform `533472ca` records the successful explicit
+binding after retiring the fictional password UID. The user Home retry is pending.
+The old emulator session is revoked, with cached data retained; do not reactivate
+its old Firebase binding over the real user's account. Private paths and recovery
+details remain in Platform's current runtime record.
+
 The user requested installation on the WireGuard-connected Samsung SM-A725F and
 subsequently authorized uninstall/reinstall after the signing-key mismatch was
 explained, including loss of local HRIS login/drafts/data. Both uninstall and the

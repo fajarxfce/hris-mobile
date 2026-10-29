@@ -12,5 +12,7 @@ fun FirebaseClientOptions.validated(): FirebaseClientOptions {
     require((androidPackage == null) == (androidCertificate == null))
     require(androidPackage == null || androidPackage.matches(Regex("[A-Za-z][A-Za-z0-9_.]{1,254}")))
     require(androidCertificate == null || androidCertificate.matches(Regex("[A-F0-9]{40}")))
+    require(iosBundleId == null || iosBundleId.matches(Regex("[A-Za-z0-9][A-Za-z0-9.-]{1,254}")))
+    require(iosBundleId == null || androidPackage == null)
     return this
 }

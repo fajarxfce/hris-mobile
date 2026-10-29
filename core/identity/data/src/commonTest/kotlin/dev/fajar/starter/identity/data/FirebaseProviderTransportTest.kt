@@ -4,6 +4,7 @@ import dev.fajar.starter.common.result.*
 import dev.fajar.starter.identity.data.firebase.api.FirebaseProviderApi
 import dev.fajar.starter.identity.data.firebase.boundary.safeFirebaseAuthenticationCall
 import dev.fajar.starter.identity.data.firebase.dto.*
+import dev.fajar.starter.identity.data.firebase.mappers.validated
 import dev.fajar.starter.network.*
 import io.ktor.client.engine.mock.*
 import io.ktor.http.*
@@ -37,6 +38,7 @@ class FirebaseProviderTransportTest {
                     assertEquals(options.apiKey, request.url.parameters["key"])
                     assertEquals(options.androidPackage, request.headers["X-Android-Package"])
                     assertEquals(options.androidCertificate, request.headers["X-Android-Cert"])
+                    assertNull(request.headers["X-Ios-Bundle-Identifier"])
                     for (name in
                         listOf(
                             HttpHeaders.Authorization,
@@ -102,6 +104,70 @@ class FirebaseProviderTransportTest {
             assertEquals(2, seen.size)
         } finally {
             client.cancelAndClose()
+        }
+    }
+
+    @Test
+    fun applePasswordRequestUsesItsBundleRestrictionWithoutAndroidOrHrisCredentials() = runTest {
+        val apple =
+            FirebaseClientOptions(
+                    "fixture-project",
+                    "A".repeat(39),
+                    iosBundleId = "dev.fajar.fixture",
+                )
+                .validated()
+        var calls = 0
+        val client =
+            createHttpClient(
+                MockEngine { request ->
+                    calls++
+                    assertEquals("identitytoolkit.googleapis.com", request.url.host)
+                    assertEquals("/v1/accounts:signInWithPassword", request.url.encodedPath)
+                    assertEquals(apple.iosBundleId, request.headers["X-Ios-Bundle-Identifier"])
+                    for (name in
+                        listOf(
+                            "X-Android-Package",
+                            "X-Android-Cert",
+                            HttpHeaders.Authorization,
+                            HttpHeaders.Cookie,
+                            "traceparent",
+                            "baggage",
+                        )) {
+                        assertNull(request.headers[name])
+                    }
+                    respond(
+                        success,
+                        headers = headersOf(HttpHeaders.ContentType, "application/json"),
+                    )
+                },
+                "https://firebase-auth.invalid/",
+            )
+        try {
+            assertEquals(
+                token,
+                FirebaseProviderApi(client)
+                    .password(
+                        apple,
+                        FirebasePasswordRequest("fixture@example.test", "fixture-password"),
+                    )
+                    .idToken,
+            )
+            assertEquals(1, calls)
+        } finally {
+            client.cancelAndClose()
+        }
+    }
+
+    @Test
+    fun invalidOrMixedAppleAndAndroidMetadataIsRejectedBeforeProviderAcquisition() {
+        for (bundle in listOf("", "dev.fixture\r\nOther: value", "dev/fixture", "a".repeat(256))) {
+            assertFailsWith<IllegalArgumentException> {
+                FirebaseClientOptions("fixture-project", "A".repeat(39), iosBundleId = bundle)
+                    .validated()
+            }
+        }
+        assertFailsWith<IllegalArgumentException> {
+            options.copy(iosBundleId = "dev.fajar.fixture").validated()
         }
     }
 

@@ -55,6 +55,7 @@ class FirebaseProviderApi(@Named(HttpClients.FirebaseAuth) private val client: H
                 header(HttpHeaders.AcceptEncoding, "identity")
                 options.androidPackage?.let { header("X-Android-Package", it) }
                 options.androidCertificate?.let { header("X-Android-Cert", it) }
+                options.iosBundleId?.let { header("X-Ios-Bundle-Identifier", it) }
                 contentType(ContentType.Application.Json)
                 setBody(body)
             }

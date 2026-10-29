@@ -28,4 +28,5 @@ kotlin.sourceSets {
         implementation(libs.coroutines.test)
         implementation(libs.ktor.mock)
     }
+    getByName("iosTest").dependencies { implementation(libs.okio) }
 }

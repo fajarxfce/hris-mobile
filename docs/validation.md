@@ -1,5 +1,29 @@
 # Validation
 
+## iOS Firebase password configuration
+
+On 29 October Firebase Management supplied matching public iOS configurations for
+the HRIS dev/staging/prod bundle IDs; files remain ignored and outside diagnostics.
+The new Apple bundle reader enables the existing Firebase password protocol and
+requires the installed bundle ID. Missing, malformed, wrong-environment and oversized
+plist cases have native tests. Common transport checks verify the Apple restriction
+header, absence of Android/HRIS credentials, and rejection of invalid/mixed metadata.
+
+Focused desktop identity tests passed: 53 cases, including six provider transport
+cases, in a 37-second Gradle run. Root checks and Android dev assembly then passed
+in 2m27s, 1,939 tasks: 116 executed, 39 cached and 1,784 up to date. The current
+desktop report set has 1,842 cases in 322 suites, zero failures/errors/skips. Final
+format/architecture checks passed in 21s after the native interoperability opt-in.
+Two preceding invocations used unavailable/ambiguous formatter task names and ran
+no tests; the repository's correct task is `:formatKotlin`.
+
+The Apple workflow now also compiles and runs identity-data simulator tests before
+the existing unsigned Xcode build. Its new native reader tests and application
+build are pending; no iOS runtime result is inferred from desktop/Android checks.
+Google interaction on iOS still requires its own owned adapter. APNs, physical iOS
+provider acceptance and production configuration remain separate. The generic
+Starter port waits for successful Mobile Apple verification.
+
 ## Phone update signing-key mismatch
 
 On 29 October the user requested an APK installation on the WireGuard-connected
