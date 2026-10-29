@@ -26,24 +26,23 @@ and `/home/fajar/hris/PRD-PROGRESS.md` are supplementary. The user authorized on
 implementation and a push after every atomic commit. This does not authorize a
 release. Preserve unrelated edits and keep implementation, tests and docs together.
 
-## Current checkpoint: native overtime command recovery
+## Current checkpoint: native expense save recovery
 
-Actual Android/API/PostgreSQL/worker acceptance of a lost committed plan response
-passed using the unchanged `02743a9f` APK. Pending actions retained one unconfirmed
-Overtime command through offline process restart without double-counting its
-working copy. Summary requests stayed 39 → 39. Exact retry produced one version-zero
-plan and one history entry (165 minutes), with 54 native requests and two identical
-company writes. Six summary rows cleared and logout passed. Fixture 7.7m/8.2m with
-setup; all owned resources are removed and emulator data retained. See
-[executed evidence](validation.md#overtime-command-response-loss-on-android).
+Actual Android/API/PostgreSQL/worker acceptance of committed save response loss
+passed on the unchanged `02743a9f` APK. One edited draft became one unconfirmed
+command without double-counting, survived offline cold start and replayed exactly.
+Summary reload counters remained 30 → 30 before Save and 43 → 43 after response
+loss/restart. The observer found one version-zero draft, one line, IDR 25,000.25
+and one history entry, across 51 native requests/two identical company writes.
+Six summary rows cleared and logout passed. Fixture 8.3m/8.8m with setup; all owned
+resources removed. See [executed evidence](validation.md#expense-save-response-loss-on-android).
 
-Platform `578a5031` contains the fixture/docs; its application base is integrated
-`b7f42070` (push delivery, payroll comparison and completed elapsed retirement).
-The earlier branch-integration warning below is historical; the one-hour test
-finished successfully and no classpath is reserved. No Mobile/Starter code changed.
-Continue the explicit native Expense-save response-loss case next, checking its
-working-copy versus frozen-command counts, offline restoration and exact replay.
-Provider inputs remain separate; do not repeat the pending Firebase question.
+Platform fixture `97e33310` follows Overtime `578a5031`; both use integrated
+`b7f42070` artifacts/schema 101. No application or Starter code change was needed.
+Continue the native Leave submitted-command response-loss case next, then Attendance
+capture pending-summary recovery. Inspect earlier Leave working-copy and capture
+acceptance to avoid repeating completed outcomes. The pending Firebase server
+credential question remains separate and must not be repeated.
 
 ## Current continuation: reconcile actual replica coverage
 

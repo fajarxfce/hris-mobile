@@ -149,4 +149,13 @@ retains one unconfirmed command without counting its matching working copy again
 The summary survives offline process death with no network work (39 → 39), and
 exact retry leaves one server plan/history entry. All six rows clear afterward.
 This adds an actual device-path result to the existing per-feature regressions;
-Expense-save and other summary combinations retain their own acceptance scope.
+Other summary combinations retain their own acceptance scope.
+
+## Native expense save outcome
+
+The [Android Expense acceptance](validation.md#expense-save-response-loss-on-android)
+shows one edited working copy with no company write, then one unconfirmed frozen
+save without a duplicate draft. Summary reloads stay 30 → 30 and 43 → 43, including
+after offline process restart. Check status replays the original command, leaving
+one server claim/line/history entry. All six summary rows clear after confirmation.
+This exercises the distinct Expense input/reason/version deduplication path.

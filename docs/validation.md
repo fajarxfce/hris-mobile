@@ -1,5 +1,37 @@
 # Validation
 
+## Expense save response loss on Android
+
+The unchanged `02743a9f` loopback APK passed actual Android 35/API/PostgreSQL/worker
+acceptance against Platform `b7f42070` artifacts/schema 101. Fixture `97e33310`
+creates fictional employment and a receipt-optional expense category through the
+public API, then loses a successful save response after the real server commits.
+
+Before Save, one locally edited draft made zero company writes. Reloading Pending
+actions left the request count at 30 → 30. The frozen save command replaced that
+count with **Awaiting confirmation: 1** and no extra draft. Reload and an actual
+offline force-stop/restart kept the count at 43 → 43. API forwarding was removed;
+Wi-Fi remained enabled. The title, one item and Check status restored offline.
+
+Explicit Check status replayed the same operation and payload hashes. An independent
+API observer confirmed one draft at version/draft revision zero, one exact line,
+IDR 25,000.25, one history entry and no submissions/payments. Across 51 native
+requests there were two intended company writes. Six summary rows cleared, then
+sign-out returned to login. Offline-command and confirmed-detail screenshots were
+inspected. All owned containers/servers/proxy/markers/forwarding were removed and
+the dedicated emulator stopped with data retained. No user's phone was used.
+
+The fixture passed in 8.3m (8.8m with setup). The proxy regression, strict TypeScript,
+Biome, production build and dashboard architecture checks passed. Both JARs from
+the preceding Overtime acceptance were reused. The unchanged APK is 32,853,156 bytes,
+SHA-256 `2b603fff2e40e31ee9cf5a45e694ea6aae8c96ae6c72cd4168d920c2e239c0c9`.
+No Mobile code/test rerun or Starter port is needed for this fixture-only change.
+
+[Reproduction and measured result](https://github.com/fajarxfce/hris-platform/blob/97e33310/docs/native-expense-acceptance.md)
+are tracked in Platform; local `.work/expense-native-result.json` and screenshots
+are supplementary. Leave-command/Attendance-summary and provider/device outcomes
+retain their own acceptance scope.
+
 ## Overtime command response loss on Android
 
 The unchanged `02743a9f` loopback APK passed against Platform `b7f42070` application
