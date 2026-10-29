@@ -49,7 +49,17 @@ user service at `http://10.77.77.1:5173`. Firebase Management confirmed the exac
 app and registered this APK's SHA-1; its web client still matches the installed
 configuration. No replacement APK is needed for that provider registration.
 See [current development runtime](https://github.com/fajarxfce/hris-platform/blob/feat/firebase-auth/docs/current-development-runtime.md)
-for ownership, private configuration paths and current account provisioning.
+for ownership and private configuration/access paths. Fictional company/employee
+provisioning is complete: operator MFA, worker-delivered local invitation, standard
+employee access, independent person link, weekday schedule, demo policies and
+independent approvals. The same normal APK passed actual Firebase email/password
+login, company selection and Home on the owned Android 35 emulator. Its document
+catalog synchronized a real worker-inspected PDF and the detail displayed
+**Downloaded**, 734 B. Platform's private database/content/key checkpoint passed
+isolated restoration, followed by successful host/phone network and browser checks.
+See [runtime evidence](https://github.com/fajarxfce/hris-platform/blob/feat/firebase-auth/docs/measurements/development-runtime-2026-10-29.json).
+The emulator is stopped with this persistent demo account's data retained.
+There is no application change or generic Starter port in this increment.
 Human Google sign-in remains pending; physical FCM/location acceptance remains
 separate from successful package installation and network health. The prior
 loopback APK remains ignored at `.work/fcm-native-validated.apk`; do not distribute
