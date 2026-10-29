@@ -23,7 +23,7 @@ Do not request these configurations or the supplied FCM server credential again.
 | Device signing | An available iPhone, Mac and matching Apple team/development profile are needed for local device delivery. Register the exact bundle and required capabilities. Signed TestFlight delivery has its separate [distribution procedure](distribution.md). |
 | HRIS connectivity | Supply the approved API origin for the selected flavor and verify it from the device under iOS transport policy. The current private HTTP WireGuard endpoint is accepted on Android only; iOS reachability has not been proved. |
 | APNs | Configure an APNs authentication key/certificate for this Apple app in Firebase's Cloud Messaging settings, with the matching Apple team and signed app entitlement. An App Store Connect upload key and the server FCM service account do not configure APNs. Keep keys outside Git/chat. |
-| HTTPS app links | Await the controlled domain. Then implement its environment-specific association files, Android/iOS native declarations and explicit HTTPS route admission; today's custom-scheme routes do not already support arbitrary HTTPS links. |
+| HTTPS app links | [Configurable association generation and HTTPS admission](app-links.md) are implemented. Supply the controlled domain/signing registration, publish the generated association files over valid HTTPS, then exercise OS verification on the target. Unconfigured builds intentionally admit no HTTPS host. |
 
 ## Sign-in procedure
 

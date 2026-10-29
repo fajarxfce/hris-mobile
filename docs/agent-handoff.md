@@ -98,9 +98,9 @@ exchange or binding changes. Source/run details are in
 [measurements](measurements/apple-firebase-2026-10-29.json).
 
 Actual iOS sign-in/APNs still require device/provider acceptance; injected-browser
-native tests and an unsigned simulator build do not claim that result. A device
-availability question is pending; the [iOS procedure](ios-acceptance.md) records
-remaining setup, observations and cleanup. The provider/owned-browser/crypto changes are
+native tests and an unsigned simulator build do not claim that result. Physical iPhone
+testing is waived for this completion pass; the [optional iOS procedure](ios-acceptance.md)
+records future setup, observations and cleanup. The provider/owned-browser/crypto changes are
 reusable; HRIS session policy and configuration stay here. See the
 [Firebase contract](firebase-auth.md) and [validation](validation.md).
 
@@ -347,18 +347,18 @@ them next work. Continue concrete uncovered requirements or observed failures.
 Platform full CI `40820912608` passed all ten jobs. The earlier Mobile and Starter
 Apple correction runs also passed. New Mobile provider CI `40858176601` is accepted;
 Starter Google port run `40864341588` also passed all three jobs as recorded above.
-No CI or owned local test remains active from this increment.
-Continue external acceptance when its actual input becomes available; do not
-repeat completed build/provider-foundation work.
+Those provider runs are complete. The newer HTTPS run `40887772486` remains
+active, followed by its Starter port. Do not repeat completed provider-foundation
+work or use the older provider CI as proof of the HTTPS increment.
 
 Firebase project `cmp-fajar` has Email/password and Google enabled. Android configs
 exist locally in ignored `apps/android/google-services.json`; do not commit provider
 credentials. Actual FCM foreground/background delivery and notification navigation
 and Android Google/Home are accepted above. Matching public iOS plists are installed.
-Remaining external work includes APNs/device setup, the controlled HTTPS domain
-with native/route association work, and physical location/device acceptance.
-Domain and iPhone availability questions are pending; do not repeat them while
-waiting for the user's answer. The supplied sender credential is installed privately
+Configurable native/route association is now implemented. Public domain
+publication, APNs setup and physical location remain deployment observations.
+Physical iPhone testing is waived; only the domain question remains pending.
+Do not repeat it while waiting or request an iPhone again. The supplied sender credential is installed privately
 in Platform's host configuration. Public Android config is a separate file; do
 not repeat the resolved credential question.
 
