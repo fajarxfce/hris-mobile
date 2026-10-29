@@ -14,8 +14,8 @@ ground for reusable foundation changes before they are ported to Starter.
    and [remaining PRD delivery](https://github.com/fajarxfce/hris-platform/blob/feat/firebase-auth/docs/completion.md#remaining-delivery-sequence).
    Backend/dashboard work is on Platform `feat/firebase-auth`, with application
    integration `b7f42070` / schema 101 and subsequent native acceptance fixtures.
-   The current full CI at `9345c19b` verifies recovery report upload and the corrected
-   closing-report browser assertion; its exact run is in the Platform handoff.
+   Full CI at `9345c19b` passed all ten jobs after correcting recovery report upload
+   and a closing-report browser assertion; its exact run is in the Platform handoff.
    Starter work is on `fix/push-token-lifecycle`.
 
 The three local checkouts are siblings under `/home/fajar/hris`. A fresh clone
@@ -51,7 +51,7 @@ the later copy-only checks and Starter proof.
 Current local native fixtures are all stopped/cleaned. Provider/device inputs remain
 external and their pending question must not be repeated.
 
-## Current checkpoint: native Attendance capture recovery
+## Accepted evidence: native Attendance capture recovery
 
 Platform `a837320f` verifies actual Android/API/PostgreSQL/worker response loss,
 offline cold restart and exact replay of an explicit capture without location.
@@ -62,18 +62,17 @@ intended writes; fixture 4.6m/5.2m with setup. All owned local resources are cle
 location restored and emulator data retained. See
 [validation](validation.md#attendance-capture-response-loss-on-android).
 
-Continue full CI/PRD reconciliation. CI
-[40815794384](https://github.com/fajarxfce/hris-mobile/actions/runs/40815794384)
-was dispatched at `b0a95391` (same `02743a9f` application sources). Prior complete
-CI was at `d191c61d`, before the latest application fixes. Inspect Linux/Android,
-Windows/Web and Apple simulator results above are final. This is verification only.
-Platform's corrected full run `40820005213` at `70e5098d` is running after the
-original run passed tests/restore but failed hidden-path artifact upload; read its
-latest handoff. No Starter port arose from these native business fixtures.
-FCM server credentials and Google/physical/iOS acceptance need external inputs;
-do not repeat the pending Firebase question.
+Cross-platform CI `40815794384` was dispatched at `b0a95391`, with the same
+`02743a9f` application sources used by the native fixture. Its three non-Apple jobs
+passed; the separately corrected Apple job and validated Starter port are recorded
+above. Platform full [40820912608](https://github.com/fajarxfce/hris-platform/actions/runs/40820912608)
+then passed all ten jobs at `9345c19b`, including real API/worker/export integration
+and schema-101 restore with a downloaded sanitized artifact. All current CI work
+is complete; no generic port arose from the native HRIS business fixtures.
+FCM server credentials and Google/physical/iOS acceptance still need their actual
+external inputs. Do not repeat the pending Firebase question.
 
-## Current continuation: reconcile actual replica coverage
+## Accepted coverage: read replicas and commands
 
 The [local-first coverage](local-first.md#current-coverage-and-continuation) now
 matches all nine `ObserveCompanyData`/`SyncCompanyData` registrations and the six
@@ -92,7 +91,7 @@ Push delivery observations also passed schema-101 recovery. Neither administrati
 feature needs a Mobile/Starter port. Continue missing acceptance and concrete PRD
 gaps without repeating completed implementation or the pending Firebase question.
 
-## Current checkpoint: native upload and inspection review
+## Accepted evidence: native upload and inspection review
 
 The actual Android/API/PostgreSQL/worker/Garage fixture passed in 8.7m/9.2m with
 setup. One committed chunk lost its response; offline restart retained one transfer
@@ -106,11 +105,11 @@ Summary counters stayed 32 → 32 and 42 → 42. See
 and [Platform's fixture](https://github.com/fajarxfce/hris-platform/blob/feat/firebase-auth/docs/native-upload-acceptance.md).
 
 The unchanged `02743a9f` loopback APK was reused; no implementation/Starter port is
-due. All owned resources were cleaned and emulator app data retained. Continue
-remaining PRD work after pushing: Platform is next checking actual export physical
-expiry/retention with owned storage. Native Google exchange, FCM message/scoped hint
-delivery and iOS/physical cases still require their separate setup. Do not repeat
-the pending question for the Firebase service-account file path.
+due. All owned resources were cleaned and emulator app data retained. Platform
+subsequently accepted actual elapsed export retirement, including the unchanged
+one-hour physical grace and lost deletion receipt retry, at `1abdbce9`. Native
+Google exchange, FCM message/scoped hints and iOS/physical cases still need their
+separate setup. Do not repeat the pending Firebase service-account path question.
 
 ## Previous checkpoint: native Firebase registration recovery
 
@@ -171,8 +170,8 @@ Do not repeat that question while independent PRD work is available.
   offline restart. See [exact URL evidence](deep-links.md#android-url-acceptance).
 - `1c1f9104`: actual Android/API Pending actions acceptance for pristine and edited
   Leave drafts, offline process restart, local summary refresh, reconnect and
-  explicit deletion. Other feature command states need their own native evidence; document download
-  and upload/review cases are now accepted below.
+  explicit deletion. Subsequent cases now cover all six feature observers; consult
+  their individual evidence above without generalizing to every possible state.
 - `9a557dcc` records cross-platform Firebase CI. Provider implementation `d191c61d`
   passed 1,837 desktop/UI tests, 119 related Chromium cases and Android assembly.
   Actual Firebase email/password completed HRIS exchange, MFA, company selection
@@ -198,10 +197,10 @@ and existing employee working copies are reconciled in [local-first coverage](lo
 Do not repeat these features or native cases because an older checkpoint called
 them next work. Continue concrete uncovered requirements or observed failures.
 
-Current independent work is completion of Platform full CI `40820912608`.
-Mobile and Starter Apple correction runs have both passed, and the reusable port
-is accepted. Continue the external acceptance below when its actual input becomes
-available; do not repeat completed build/provider-foundation work.
+Platform full CI `40820912608` passed all ten jobs. Mobile and Starter Apple
+correction runs also passed, and the reusable port is accepted. No CI or owned
+local test remains active. Continue the external acceptance below when its actual
+input becomes available; do not repeat completed build/provider-foundation work.
 
 Firebase project `cmp-fajar` has Email/password and Google enabled. Android configs
 exist locally in ignored `apps/android/google-services.json`; do not commit provider
