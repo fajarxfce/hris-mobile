@@ -1,0 +1,74 @@
+{
+  "reviewedAt": "2026-10-29",
+  "passwordSource": "640395365a5e349ea4602528aa2aa357e76bc920",
+  "firstAppleRun": {
+    "id": 40853359016,
+    "conclusion": "failure",
+    "compilation": "success",
+    "junit": {
+      "tests": 82,
+      "suites": 22,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    },
+    "allFourBundleTestsPassed": true,
+    "failure": "Existing HTTP cancellation fixture read an unsynchronized cleanup Boolean; Xcode skipped."
+  },
+  "cancellationCorrection": {
+    "source": "196c1171",
+    "focusedDesktop": "53 passed in 29s",
+    "static": "format/architecture passed in 20s",
+    "appleRun": 40855843460,
+    "status": "in progress; simulator step passed, Xcode pending"
+  },
+  "googleSource": "43cd8ec68d3018f7418657ba5e57757a51f7a81a",
+  "localGoogleValidation": {
+    "focusedIdentityCases": 65,
+    "focusedSuites": 15,
+    "focusedDurationSeconds": 100,
+    "rootCheck": true,
+    "androidDevAssembly": true,
+    "combinedDurationSeconds": 203,
+    "gradleTasks": 2413,
+    "executedTasks": 792,
+    "upToDateTasks": 1621,
+    "desktopReportCases": 1854,
+    "desktopSuites": 325,
+    "identityChromiumCases": 63,
+    "applicationChromiumCases": 19,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "initialSetupIssues": [
+      "OIDC crypto helpers require a direct dependency on the already verified 0.18.4 module.",
+      "The first combined browser run lacked CHROME_BIN; final run uses /usr/bin/chromium."
+    ]
+  },
+  "providerConfiguration": {
+    "iosDevGoogleAuthorizeHttp": 200,
+    "iosDevGoogleAuthorizeFinalHost": "accounts.google.com",
+    "iosDevGoogleAuthorizeFinalPath": "/v3/signin/identifier",
+    "realGoogleUserAuthenticatedInPreflight": false,
+    "iosDevPasswordHttpsHttp": 200,
+    "iosBundleRestrictionHeaderSent": true,
+    "ownedFictionalFirebaseUidMatched": true,
+    "providerCredentialsPersisted": false,
+    "hrisExchangeAttempted": false,
+    "retiredFixtureBindingReactivated": false
+  },
+  "fullCi": {
+    "id": 40858176601,
+    "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/40858176601",
+    "head": "43cd8ec68d3018f7418657ba5e57757a51f7a81a",
+    "status": "in progress"
+  },
+  "port": {
+    "status": "pending Mobile Apple verification",
+    "destination": "compose-fluent-starter"
+  },
+  "limits": [
+    "Native injected-browser tests do not prove real iOS Google UI or APNs/device acceptance.",
+    "Android user-operated Google/Home acceptance uses the earlier installed 678783b3 application, recorded separately by Platform."
+  ]
+}

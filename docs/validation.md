@@ -37,7 +37,12 @@ actual Google account interaction.
 
 An unauthenticated request using the installed dev iOS public configuration reached
 Google's HTTPS `/v3/signin/identifier` page with HTTP 200 and no client/redirect
-configuration error. No user authenticated and no account was changed. Root checks, Android dev assembly and the identity/application Chromium targets
+configuration error. No real user authenticated and no account was changed. A
+separate direct HTTPS password request used the same dev iOS plist and
+`X-Ios-Bundle-Identifier`, returned HTTP 200 and Firebase proof for the exact owned
+fictional fixture UID, then discarded provider credentials. It did not attempt
+HRIS exchange or reactivate that retired binding. This validates public provider
+configuration and the REST protocol, not iOS UI/device sign-in. Root checks, Android dev assembly and the identity/application Chromium targets
 passed in 3m23s (2,413 tasks: 792 executed, 1,621 up to date). The current desktop
 report set contains 1,854 cases in 325 suites; Chromium passed 63 identity and 19
 application cases. All report counts have zero failures/errors/skips. The first

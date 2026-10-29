@@ -38,7 +38,11 @@ follow-up is [40855843460](https://github.com/fajarxfce/hris-mobile/actions/runs
 The Google increment passes 65 focused desktop identity cases and public dev OAuth
 configuration preflight. Root checks, Android assembly and 82 identity/application
 Chromium cases passed in 3m23s, with 1,854 cases in the desktop report set. Native
-simulator/Xcode verification remains in progress. **Do not port this increment to Starter before Mobile Apple
+simulator/Xcode verification remains in progress. Full run
+[40858176601](https://github.com/fajarxfce/hris-mobile/actions/runs/40858176601)
+tests application `43cd8ec6`; do not confuse it with the earlier password-only run.
+Direct iOS-configured HTTPS password preflight returned Firebase proof for the
+exact owned fictional fixture, without HRIS exchange or binding changes. **Do not port this increment to Starter before Mobile Apple
 verification passes.** The provider/owned-browser/crypto changes are reusable;
 HRIS session policy and configuration stay here. Actual iOS sign-in/APNs still
 require a device/provider acceptance; an injected-browser native test is not that
