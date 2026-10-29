@@ -1,5 +1,27 @@
 # Validation
 
+## Apple CI cold compilation budget
+
+CI run [40815794384](https://github.com/fajarxfce/hris-mobile/actions/runs/40815794384)
+at `b0a95391` passed Windows (1,115 tasks, 13m1s) and Web (1,363 tasks, 16m2s).
+Its Apple step reached its 15-minute limit while compiling the notification test
+binary, after the location/file simulator test tasks had run. No compile error was
+reported, but Apple acceptance did not complete. The previous successful Apple run
+already spent 13m37s in this combined step and another 19m30s in Xcode.
+
+The workflow now separately bounds cold test-binary compilation to 25 minutes,
+unchanged simulator-test execution to 15, and unsigned simulator app build to 30,
+with a 75-minute job limit and always-uploaded simulator reports. Manual `scope=apple`
+selects only Apple; main/PR/default manual execution retains all four jobs. Scope
+also separates concurrency groups so an Apple follow-up cannot cancel the original
+full run's Linux/Android work. This changes CI only, not application behavior.
+
+The corrected Apple run must pass before this reusable CI fix is ported to Starter.
+The original full run remains the evidence for unchanged Windows/Web/Linux targets;
+do not describe its failed Apple job as successful. Dispatch with
+`gh workflow run ci.yml --ref feat/native-push -f scope=apple` and record the exact
+commit and run URL. No distribution workflow is involved.
+
 ## Attendance capture response loss on Android
 
 The unchanged `02743a9f` APK passed Android 35/API/PostgreSQL/worker acceptance

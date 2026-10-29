@@ -26,6 +26,19 @@ and `/home/fajar/hris/PRD-PROGRESS.md` are supplementary. The user authorized on
 implementation and a push after every atomic commit. This does not authorize a
 release. Preserve unrelated edits and keep implementation, tests and docs together.
 
+## Active correction: Apple CI cold compilation
+
+Full run `40815794384` passed Windows and Web; Linux/Android is still running.
+Apple timed out during cold test compilation, not an observed compilation error.
+See [CI correction](validation.md#apple-ci-cold-compilation-budget). The workflow
+now separates compile/test/Xcode time limits, preserves all three test targets,
+and supports manual `scope=apple` with independent concurrency and retained reports.
+Push this change, dispatch Apple at the new head, record its URL and finish its
+acceptance. Do not cancel the original full run's Linux/Android job. Port this generic
+workflow correction to Starter only after Mobile Apple passes, then validate there.
+Current local native fixtures are all stopped/cleaned. Provider/device inputs remain
+external and their pending question must not be repeated.
+
 ## Current checkpoint: native Attendance capture recovery
 
 Platform `a837320f` verifies actual Android/API/PostgreSQL/worker response loss,

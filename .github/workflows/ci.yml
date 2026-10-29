@@ -5,16 +5,23 @@ on:
     branches: [main]
   pull_request:
   workflow_dispatch:
+    inputs:
+      scope:
+        description: Verification scope
+        type: choice
+        default: all
+        options: [all, apple]
 
 permissions:
   contents: read
 
 concurrency:
-  group: ci-${{ github.ref }}
+  group: ci-${{ github.ref }}-${{ inputs.scope || 'all' }}
   cancel-in-progress: true
 
 jobs:
   verify:
+    if: github.event_name != 'workflow_dispatch' || inputs.scope != 'apple'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -65,6 +72,7 @@ jobs:
             **/build/reports/
             apps/android/build/outputs/apk/**/*.apk
   web:
+    if: github.event_name != 'workflow_dispatch' || inputs.scope != 'apple'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -83,6 +91,7 @@ jobs:
           path: apps/shared/build/dist/wasmJs/productionExecutable/
   apple:
     runs-on: macos-15
+    timeout-minutes: 75
     steps:
       - uses: actions/checkout@v4
       - name: Select Xcode 26.3
@@ -92,13 +101,30 @@ jobs:
           distribution: temurin
           java-version: '21'
       - uses: gradle/actions/setup-gradle@v4
-      - run: ./gradlew :core:location:data:iosSimulatorArm64Test :core:fileio:iosSimulatorArm64Test :core:notifications:data:iosSimulatorArm64Test --no-daemon
+      - name: Compile iOS simulator tests
+        run: >-
+          ./gradlew :core:location:data:linkDebugTestIosSimulatorArm64
+          :core:fileio:linkDebugTestIosSimulatorArm64
+          :core:notifications:data:linkDebugTestIosSimulatorArm64 --no-daemon
+        timeout-minutes: 25
+      - name: Run iOS simulator tests
+        run: ./gradlew :core:location:data:iosSimulatorArm64Test :core:fileio:iosSimulatorArm64Test :core:notifications:data:iosSimulatorArm64Test --no-daemon
         timeout-minutes: 15
-      - run: >
+      - name: Build iOS simulator app
+        timeout-minutes: 30
+        run: >
           xcodebuild -project apps/ios/HrisMobile.xcodeproj -scheme HrisMobile
           -configuration Debug -sdk iphonesimulator -destination 'generic/platform=iOS Simulator'
           -derivedDataPath apps/ios/build CODE_SIGNING_ALLOWED=NO ARCHS=arm64 build
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ios-simulator-reports
+          path: |
+            **/build/reports/tests/iosSimulatorArm64Test/
+            **/build/test-results/iosSimulatorArm64Test/
   windows:
+    if: github.event_name != 'workflow_dispatch' || inputs.scope != 'apple'
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
