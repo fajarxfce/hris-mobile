@@ -15,6 +15,13 @@ See [contract](app-links.md) and [measurements](measurements/app-links-2026-10-2
 Full CI `40887772486` is still running at this record; do not port before it passes.
 No real domain was published. Owned test resources were cleaned, emulator data and
 the persistent private development stack retained. Starter is still `e29b0b2`.
+The normal WireGuard dev APK from application `d36a1bc9` (built at `0fc16ce4`) was
+then installed successfully on the authorized phone with `--install-only`.
+APK SHA-256 `85ef887b4904107482354e9d0ab40b51e2fad7b786c3112f3a24334b078dbde4`,
+32,872,797 bytes. Binary inspection confirms the private API and excludes the
+fixture endpoint/host. First-install time was unchanged; no phone UI was driven.
+Earlier actual Google/Home acceptance remains attributed to `678783b3`.
+
 
 ## Current user direction — 29 October 2026
 

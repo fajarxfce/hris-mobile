@@ -74,5 +74,20 @@
     "run": 40887772486,
     "head": "d36a1bc9e5f8b1e367d6d6db380d2da5ad312cad",
     "status": "in progress"
+  },
+  "phoneUpdate": {
+    "source": "d36a1bc9e5f8b1e367d6d6db380d2da5ad312cad",
+    "builtAt": "0fc16ce4",
+    "bytes": 32872797,
+    "sha256": "85ef887b4904107482354e9d0ab40b51e2fad7b786c3112f3a24334b078dbde4",
+    "privateWireGuardEndpointVerified": true,
+    "fixtureEndpointAbsent": true,
+    "fixtureAppLinkHostAbsent": true,
+    "buildSeconds": 25,
+    "installed": true,
+    "installOnly": true,
+    "firstInstallTimeUnchanged": true,
+    "phoneUiDriven": false,
+    "actualGoogleHomeAcceptanceSource": "678783b3"
   }
 }
