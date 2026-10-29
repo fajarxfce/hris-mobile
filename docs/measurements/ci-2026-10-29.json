@@ -146,5 +146,16 @@
     "Unsigned simulator build, not physical-device acceptance.",
     "No real Google token exchange or FCM message delivery is inferred.",
     "Hosted run predates the Expense copy-only edit; its local root/Android result is separate."
-  ]
+  ],
+  "starterPort": {
+    "commit": "1817e45a46eab238c02f0f44d5349c7c8a2c37fc",
+    "run": 40820482699,
+    "url": "https://github.com/fajarxfce/compose-fluent-starter/actions/runs/40820482699",
+    "conclusion": "success",
+    "simulatorTests": 27,
+    "simulatorSuites": 10,
+    "xcode": "complete unsigned simulator app passed",
+    "reports": "downloaded JUnit; zero failures/errors/skips",
+    "ordering": "Mobile Apple success preceded port and Starter dispatch"
+  }
 }

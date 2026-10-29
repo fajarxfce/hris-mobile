@@ -43,9 +43,10 @@ job cleanup passed. The three other jobs were intentionally skipped by this manu
 scope; the original full run remains their evidence and retains its failed overall
 conclusion. [Tracked measurements](measurements/ci-2026-10-29.json) preserve both runs.
 
-This proves the generic workflow correction in Mobile before the Starter port.
-Starter must run its own Apple verification after preserving its project/scheme
-and three-job default matrix. Dispatch with
+This proved the generic workflow correction before Starter port `1817e45`.
+Starter's independent [40820482699](https://github.com/fajarxfce/compose-fluent-starter/actions/runs/40820482699)
+then passed 27 simulator tests, the complete Xcode app build and retained reports.
+Its project/scheme and three-job default matrix were preserved. Dispatch with
 `gh workflow run ci.yml --ref feat/native-push -f scope=apple`. No distribution
 workflow or physical-device/provider acceptance is involved.
 

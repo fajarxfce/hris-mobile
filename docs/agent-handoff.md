@@ -43,9 +43,11 @@ Apple follow-up [40817592306](https://github.com/fajarxfce/hris-mobile/actions/r
 passed at `451a2c4d`: 27 simulator tests in ten downloaded JUnit suites, no
 failures/errors/skips, complete unsigned Xcode build and retained artifact. Compile
 took 8m3s, simulator execution 52s and the Xcode step 18m54s. The generic workflow
-correction is now being ported to Starter; complete its independent Apple run
-before calling the port accepted. [Measurements](measurements/ci-2026-10-29.json)
-retain the original failed run, successful follow-up and later copy-only checks.
+correction is accepted in Starter `1817e45`: independent Apple run
+[40820482699](https://github.com/fajarxfce/compose-fluent-starter/actions/runs/40820482699)
+passed 27 simulator tests, the full Xcode build and artifact upload. No port is
+pending. [Measurements](measurements/ci-2026-10-29.json) retain both Mobile runs,
+the later copy-only checks and Starter proof.
 Current local native fixtures are all stopped/cleaned. Provider/device inputs remain
 external and their pending question must not be repeated.
 
@@ -196,10 +198,10 @@ and existing employee working copies are reconciled in [local-first coverage](lo
 Do not repeat these features or native cases because an older checkpoint called
 them next work. Continue concrete uncovered requirements or observed failures.
 
-Current independent work is completion of Platform full CI `40820912608` and
-Starter's Apple port run `40820482699`. Mobile's corrected Apple job has passed;
-record the Starter outcome before closing the generic workflow port. Then continue
-the external acceptance below when its actual input becomes available.
+Current independent work is completion of Platform full CI `40820912608`.
+Mobile and Starter Apple correction runs have both passed, and the reusable port
+is accepted. Continue the external acceptance below when its actual input becomes
+available; do not repeat completed build/provider-foundation work.
 
 Firebase project `cmp-fajar` has Email/password and Google enabled. Android configs
 exist locally in ignored `apps/android/google-services.json`; do not commit provider

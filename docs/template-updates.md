@@ -10,10 +10,13 @@ Apple job timed out during compilation; follow-up
 [40817592306](https://github.com/fajarxfce/hris-mobile/actions/runs/40817592306)
 passed 27 simulator tests, the full Xcode build and report upload before porting.
 
-This generic workflow correction is now being validated in Starter. Preserve its
-FluentStarter project/scheme and existing three jobs (Web remains in verify). No
-application source, HRIS configuration or business policy belongs in this port.
-See [CI evidence](validation.md#apple-ci-cold-compilation-budget).
+Starter port `1817e45` passed its independent
+[Apple run 40820482699](https://github.com/fajarxfce/compose-fluent-starter/actions/runs/40820482699):
+27 simulator tests in ten suites, full unsigned Xcode build and report upload.
+Local root checks retained 306 desktop cases, ten runner and six distribution
+regressions. It preserves the FluentStarter project/scheme and existing three
+jobs (Web remains in verify). No application source, HRIS configuration or business
+policy was ported. See [CI evidence](validation.md#apple-ci-cold-compilation-budget).
 
 ## Native upload/review acceptance
 
