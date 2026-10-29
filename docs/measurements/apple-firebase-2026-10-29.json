@@ -110,7 +110,19 @@
     },
     "passwordStarterApple": {
       "run": 40861505322,
-      "status": "in progress; native tests passed, Xcode pending"
+      "status": "success",
+      "head": "8a75de5a905a5b10c1d66d8434bf10053ef3aac1",
+      "junit": {
+        "tests": 62,
+        "suites": 18,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "compileSeconds": 611,
+      "simulatorSeconds": 63,
+      "xcodeSeconds": 625,
+      "artifactDownloadedAndReviewed": true
     },
     "googleSource": "43cd8ec6",
     "googleDestination": {

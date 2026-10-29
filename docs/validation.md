@@ -88,10 +88,11 @@ Focused desktop identity checks passed again in 29s. Corrected run
 errors/skips, and the complete Xcode app. Compilation took 711 seconds, simulator
 tests 94 seconds and the Xcode step 1,408 seconds. This accepted password/configuration
 increment was ported to Starter `8a75de5`, whose root/Android and 308 desktop/31
-Chromium cases passed; its own Apple run is pending. The later Google increment
-has the separate source/run boundary above.
-The later Google browser/code increment has its separate source and acceptance
-above. APNs, physical iOS provider acceptance and production configuration remain
+Chromium cases passed. Its independent Apple run `40861505322` passed 62 native
+cases in 18 downloaded suites, zero failures/errors/skips and the full Xcode app.
+Compilation took 611s, tests 63s and Xcode 625s. The later Google browser/code
+increment has its separate source and acceptance above. APNs, physical iOS
+provider acceptance and production configuration remain
 separate from the accepted password/configuration port.
 
 ## Phone update signing-key mismatch

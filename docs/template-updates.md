@@ -4,8 +4,10 @@
 
 The password/bundle increment from Mobile `196c1171` passed all 82 simulator
 cases and Xcode in run `40855843460`, then ported to Starter `8a75de5`. Starter
-root/Android checks, 308 desktop and 31 identity Chromium cases passed; its own
-Apple verification is pending.
+root/Android checks, 308 desktop and 31 identity Chromium cases passed. Its own
+Apple run `40861505322` passed 62 native cases in 18 downloaded suites and the full
+Xcode app, with zero failures/errors/skips. Compilation took 611s, tests 63s and
+Xcode 625s.
 
 The later Mobile `43cd8ec6` increment passed all four jobs in full run
 `40858176601`, including 97 native cases and Xcode, before its Google port began.
@@ -16,8 +18,8 @@ PKCE, callback correlation and code exchange. The shared callback session accept
 either an Android ID token or an Apple authorization code, closes its native UI
 before transport and rejects late or mismatched proof. Google OAuth uses the
 existing OIDC 0.18.4 crypto dependency directly; versions and verified artifacts
-are unchanged. Port the generic provider source/tests, iOS host wiring, identity
-native CI targets and catalog entry only after Mobile Apple validation passes.
+are unchanged. The generic provider source/tests, iOS host wiring, identity
+native CI targets and catalog entry were ported after Mobile Apple validation passed.
 Keep HRIS native exchange/session policy and environment configuration here.
 
 ## Actual Android FCM acceptance

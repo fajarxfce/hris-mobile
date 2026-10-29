@@ -35,8 +35,9 @@ native cases passed). `196c1171` replaces both Firebase transport fixtures' racy
 Boolean assertion with explicit bounded cleanup acknowledgement. Its Apple
 follow-up [40855843460](https://github.com/fajarxfce/hris-mobile/actions/runs/40855843460)
 passed 82 simulator cases and full Xcode before the password/configuration port
-to Starter `8a75de5`. Starter root/Android, 308 desktop and 31 Chromium cases passed;
-its own Apple run is pending. The later Google increment has not been ported.
+to Starter `8a75de5`. Starter root/Android, 308 desktop and 31 Chromium cases passed.
+Its independent Apple run `40861505322` also passed 62 native cases in 18 downloaded
+suites and the full Xcode app, with no failures/errors/skips.
 
 The Google increment passes 65 focused desktop identity cases and public dev OAuth
 configuration preflight. Root checks, Android assembly and 82 identity/application
@@ -121,13 +122,13 @@ the final 350-second observer passed without changing application behavior.
 
 There is no Mobile implementation change or generic Starter port in this increment.
 The existing SDK/queue/navigation foundation passed this actual provider case.
-Google token exchange, iOS/APNs, verified HTTPS associations and physical-location
+Android Google exchange was subsequently accepted above. iOS/APNs, verified HTTPS associations and physical-location
 acceptance still need their separate inputs. Do not ask for the supplied FCM
 credential again; its private host path is in Platform's current handoff.
 
 ## Previous result: Apple CI correction passed
 
-Latest local application change corrects the English Expense count label to
+The earlier local application change `678783b3` corrected the English Expense count label to
 `Expense items: %1$s`, after inspecting the accepted native screenshots. Root
 checks and Android dev assembly passed in 2m31s; the initial SDK-path setup failure
 and source/result boundary are recorded in [validation](validation.md#expense-item-count-copy).
@@ -149,7 +150,7 @@ correction is accepted in Starter `1817e45`: independent Apple run
 passed 27 simulator tests, the full Xcode build and artifact upload. No port is
 pending. [Measurements](measurements/ci-2026-10-29.json) retain both Mobile runs,
 the later copy-only checks and Starter proof.
-Current local native fixtures are all stopped/cleaned. Google/iOS/physical inputs
+Those local native fixtures are all stopped/cleaned. iOS/physical inputs
 remain external; the FCM credential and actual Android delivery are now accepted above.
 
 ## Accepted evidence: native Attendance capture recovery
@@ -168,10 +169,11 @@ Cross-platform CI `40815794384` was dispatched at `b0a95391`, with the same
 passed; the separately corrected Apple job and validated Starter port are recorded
 above. Platform full [40820912608](https://github.com/fajarxfce/hris-platform/actions/runs/40820912608)
 then passed all ten jobs at `9345c19b`, including real API/worker/export integration
-and schema-101 restore with a downloaded sanitized artifact. All current CI work
-is complete; no generic port arose from the native HRIS business fixtures.
-Google/physical/iOS acceptance still needs its actual external inputs. The supplied
-FCM credential and Android delivery are accepted above.
+and schema-101 restore with a downloaded sanitized artifact. Those CI runs are
+complete; no generic port arose from the native HRIS business fixtures. The newer
+Starter Google port has its separate active run above. Physical/iOS acceptance
+still needs its actual external inputs. Android Google, the supplied FCM credential
+and Android delivery are accepted above.
 
 ## Accepted coverage: read replicas and commands
 
@@ -208,8 +210,8 @@ and [Platform's fixture](https://github.com/fajarxfce/hris-platform/blob/feat/fi
 The unchanged `02743a9f` loopback APK was reused; no implementation/Starter port is
 due. All owned resources were cleaned and emulator app data retained. Platform
 subsequently accepted actual elapsed export retirement, including the unchanged
-one-hour physical grace and lost deletion receipt retry, at `1abdbce9`. Native
-Google exchange and iOS/physical cases still need their separate setup. Actual
+one-hour physical grace and lost deletion receipt retry, at `1abdbce9`. iOS/physical
+cases still need their separate setup. Actual Android Google exchange and
 foreground/background FCM hints were subsequently accepted above.
 
 ## Previous checkpoint: native Firebase registration recovery
