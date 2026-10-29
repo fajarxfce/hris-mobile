@@ -454,8 +454,27 @@
   "starterPort": {
     "run": 40916187442,
     "head": "77063862866bb52db5eade28733ceffce1588409",
-    "status": "in_progress",
-    "url": "https://github.com/fajarxfce/compose-fluent-starter/actions/runs/40916187442"
+    "url": "https://github.com/fajarxfce/compose-fluent-starter/actions/runs/40916187442",
+    "conclusion": "success",
+    "jobs": {
+      "verify": "success",
+      "windows": "success",
+      "apple": "success"
+    },
+    "apple": {
+      "tests": 84,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "suites": 24,
+      "stepSeconds": {
+        "Compile iOS simulator tests": 724,
+        "Run iOS simulator tests": 81,
+        "Build iOS simulator app": 744
+      },
+      "downloadedReportsInspected": true,
+      "xcodeAndDistributionMarkersConfirmed": true
+    }
   },
   "limits": [
     "No upload or release workflow dispatch",
@@ -479,6 +498,20 @@
     "workflowsVerified": [
       ".github/workflows/distribute-android.yml",
       ".github/workflows/distribute-ios.yml"
-    ]
-  }
+    ],
+    "sourceFollowUp": "d7e445a8e26696f3d07951037275ab7fbdee365b",
+    "destinationFollowUp": "4c794e7bc6677154b51acbdc27110f5264473684",
+    "globIntegrity": "sha512-tST2rjPvJLRZLuT9NMUtyBjvj9Yo0MiJS3ow004slMvm8GFM+Zv9HvMJ7HWzfUyJnGrJvDsYkWBaaG3YKXRtCw==",
+    "actionSearchSource": "https://github.com/actions/upload-artifact/blob/ea165f8d65b6e75b540449e92b4886f43607fa02/src/shared/search.ts"
+  },
+  "finalPrivateRuntimeHealth": {
+    "observedAt": "2026-10-29T17:20:13Z",
+    "apiHttp": 200,
+    "dashboardHttp": 200,
+    "phoneUiDriven": false,
+    "liveConfigurationChanged": false
+  },
+  "status": "accepted",
+  "phoneInstalledThisIncrement": false,
+  "uploaded": false
 }

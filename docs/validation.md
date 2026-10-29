@@ -2622,7 +2622,7 @@ and Xcode took 791s/122s/1295s; Xcode's generated environment
 contains the explicitly selected distribution API and remote backend. Native
 association/domain artifacts and the complete Xcode build markers passed. This
 accepts the Mobile source for the portable Starter port; independent destination
-checks and CI remain required. No actual Apple signing or upload is inferred.
+checks and CI subsequently passed as recorded below. No actual Apple signing or upload is inferred.
 
 ## Hidden association artifact discovery
 
@@ -2633,3 +2633,41 @@ signed fixture. Both manual workflows now include hidden files only inside
 `build/distribution/artifacts/`; discovery selects all seven files and every
 checksum matches. Credentials remain outside this packaged directory. This
 workflow-only follow-up does not change application/native code or invoke upload.
+
+## Distribution port final acceptance
+
+Mobile source `3dc81d00` passed all 4 jobs in full
+[CI 40909156570](https://github.com/fajarxfce/hris-mobile/actions/runs/40909156570). Downloaded Apple reports
+confirm 104 tests in 28 suites, zero failures/errors/skips;
+compilation/tests/Xcode took 791s/122s/1295s. The complete Xcode app, native/domain
+artifacts and explicit selected distribution API/backend assertions passed.
+
+Starter port `77063862` passed all 3 jobs in full
+[CI 40916187442](https://github.com/fajarxfce/compose-fluent-starter/actions/runs/40916187442). Downloaded Apple reports
+confirm 84 tests in 24 suites, zero failures/errors/skips;
+compilation/tests/Xcode took 724s/81s/744s. The complete Xcode app, native/domain
+artifacts and explicit selected distribution API/backend assertions passed.
+
+Actual local signed Android APK/AAB/SBOM exercises passed in 215.572s on Mobile
+and 136.647s on Starter. Both verify the selected release API and native manifest
+in APK and AAB, actual signatures, retained domain files and checksums. Mobile
+passed 1,860 desktop cases; Starter passed 326 desktop cases in 112 suites. Both
+passed 17 distribution regressions. Normal dev builds and production SBOMs were
+restored afterward (39s Mobile, 23s Starter), with fixture API/host values absent;
+Starter's normal backend remains demo. Every disposable signing key was removed.
+
+No CI, local check or reusable port remains pending for this audit. No distribution
+workflow, upload or phone installation was performed; the installed Mobile APK
+remains `72341ef6`. The private server and accepted Google binding are preserved.
+Real signed Apple IPA, APNs, public domain/DNS/TLS activation, physical GPS and
+production operation retain their separate target requirements. Physical iPhone testing was
+explicitly waived; simulator and unsigned Xcode proof does not imply device delivery.
+
+To reproduce the discovery check without uploading, use the pinned action's
+[search options](https://github.com/actions/upload-artifact/blob/ea165f8d65b6e75b540449e92b4886f43607fa02/src/shared/search.ts) with `@actions/glob` 0.5.0 in an isolated tool directory:
+`followSymbolicLinks: true`, `implicitDescendants: true`,
+`omitBrokenSymbolicLinks: true`, and `excludeHiddenFiles: !includeHiddenFiles`.
+Search the packaged artifact directory, filter directories out, and compare the
+selected relative files and bytes against `SHA256SUMS`. Toggle the final option
+from true to false to reproduce the omitted statements and corrected selection.
+The package integrity is retained in the measurement; no remote upload is required.

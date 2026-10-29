@@ -1,56 +1,58 @@
 # Agent continuation — HRIS Mobile
 
-Updated 29 October 2026 (UTC). The release-configuration audit below is active after the previous
-implementation checkpoint. This is the employee application generated from Compose Fluent Starter, and the proving
-ground for reusable foundation changes before they are ported to Starter.
+Updated 29 October 2026 (UTC). The release-configuration audit and independently
+verified Starter port are complete. This employee application was generated from
+Compose Fluent Starter and is the proving ground for reusable foundation changes.
 
-## Distribution configuration — Starter CI active
+## Distribution configuration — accepted
 
-The user requested continued work after the previous completion checkpoint.
-Review found three concrete delivery gaps: HRIS's inherited demo release option
-is rejected by its own generator; a generic release API property loses to a
-checked-in per-environment dev property; and distribution had no app-link input.
-The dev endpoint mismatch was reproduced with the actual Gradle generator, and
-four new input assertions initially failed. The changes now pin the selected
-release endpoint/backend, forward optional public app-link registrations, and
-check actual APK/Apple signing identities before retaining generated domain files.
+The audit fixes selected release API precedence over per-environment project
+properties, optional app-link configuration through signing and packaging, and
+31 missing SBOM POM verification entries. The original artifact hashes remain
+unchanged. Android checks the normal test configuration before compiling the
+selected release; Xcode forwards the selected backend/API explicitly. The 15
+portable files retain Starter's application IDs, demo/remote choice and three-job
+CI. HRIS's remote-only policy, build-version UI fixtures and explicit dev-network
+XML attributes remain in Mobile.
 
-Seventeen distribution regressions pass, including real shell entry points with
-argument-capture fixtures, bounded inputs, existing-file preservation, profile
-capabilities, signer mismatches and stale generated statements. No release upload,
-user-phone action or live configuration change is part of this increment. Root/Android passed 1,860 desktop cases. A real signed-release exercise additionally
-found 31 missing SBOM POM hashes (all checked against canonical HTTPS artifacts),
-HRIS UI fixtures hardcoding build 1 (all 1,860 cases now pass at build 73), and
-three dev network XML declarations requiring explicit false subdomain attributes.
-The corrected two-stage signed APK/AAB/SBOM exercise passed in 215.572s (151s
-normal checks, 58s signed build). It verified the actual APK endpoint and manifest,
-both signatures, selected domain statements and all packaged checksums. All
-fixture keys were removed. Full [CI 40909156570](https://github.com/fajarxfce/hris-mobile/actions/runs/40909156570) passed all four jobs at source
-`3dc81d00`. Downloaded Apple reports confirm 104 cases in
-28 suites with zero failures/errors/skips. Compilation, simulator tests
-and Xcode took 791s/122s/1295s; Xcode's generated environment
-contains the explicitly selected distribution API and remote backend. Native
-association/domain artifacts and the complete Xcode build markers passed. This
-accepts the Mobile source for the portable Starter port; independent destination
-checks and CI remain required. No actual Apple signing or upload is inferred.
+Mobile source `3dc81d00` passed all 4 jobs in full
+[CI 40909156570](https://github.com/fajarxfce/hris-mobile/actions/runs/40909156570). Downloaded Apple reports
+confirm 104 tests in 28 suites, zero failures/errors/skips;
+compilation/tests/Xcode took 791s/122s/1295s. The complete Xcode app, native/domain
+artifacts and explicit selected distribution API/backend assertions passed.
 
+Starter port `77063862` passed all 3 jobs in full
+[CI 40916187442](https://github.com/fajarxfce/compose-fluent-starter/actions/runs/40916187442). Downloaded Apple reports
+confirm 84 tests in 24 suites, zero failures/errors/skips;
+compilation/tests/Xcode took 724s/81s/744s. The complete Xcode app, native/domain
+artifacts and explicit selected distribution API/backend assertions passed.
 
-Full [Starter CI 40916187442](https://github.com/fajarxfce/compose-fluent-starter/actions/runs/40916187442) is active at port `7706386`. All local
-checks passed: 326 desktop cases, 17 distribution and ten runner cases, actual
-signed APK/AAB/SBOM in 136.647s, and restored normal demo/dev plus production SBOM
-in 23s. Both packages retain the selected API/registration; actual signatures
-and packaged domain files/checksums passed. No upload or installation occurred.
-Final hosted jobs and downloaded Apple reports/Xcode markers remain required.
+Actual local signed Android APK/AAB/SBOM exercises passed in 215.572s on Mobile
+and 136.647s on Starter. Both verify the selected release API and native manifest
+in APK and AAB, actual signatures, retained domain files and checksums. Mobile
+passed 1,860 desktop cases; Starter passed 326 desktop cases in 112 suites. Both
+passed 17 distribution regressions. Normal dev builds and production SBOMs were
+restored afterward (39s Mobile, 23s Starter), with fixture API/host values absent;
+Starter's normal backend remains demo. Every disposable signing key was removed.
 
-The pinned artifact action excludes hidden directories by default. Its actual
-`@actions/glob` 0.5.0 discovery, checked against the pinned package integrity,
-initially selected five files and omitted both `.well-known` statements from the
-signed fixture. Both manual workflows now include hidden files only inside
-`build/distribution/artifacts/`; discovery selects all seven files and every
-checksum matches. Credentials remain outside this packaged directory. This
-workflow-only follow-up does not change application/native code or invoke upload.
+A workflow-only follow-up at Mobile `d7e445a8` and Starter `4c794e7` retains
+`.well-known` files in the manual artifact upload. The pinned action's actual
+`@actions/glob` 0.5.0 selection reproduced five files with both domain statements
+missing on each signed fixture; the correction selects all seven and every
+checksum matches. Both workflows include hidden files only in the packaged
+artifact directory. This separate proof does not invoke upload; application/native
+code and ordinary CI definitions remain at the full-CI sources above.
 
-## Completed implementation — 29 October 2026
+No CI, local check or reusable port remains pending for this audit. No distribution
+workflow, upload or phone installation was performed; the installed Mobile APK
+remains `72341ef6`. The private server and accepted Google binding are preserved.
+Real signed Apple IPA, APNs, public domain/DNS/TLS activation, physical GPS and
+production operation retain their separate target requirements. Physical iPhone testing was
+explicitly waived; simulator and unsigned Xcode proof does not imply device delivery.
+
+See [distribution evidence](measurements/distribution-2026-10-29.json).
+
+## Previous implementation checkpoint — HTTPS links
 
 Final Mobile source `72341ef6` passed all four jobs in full
 [40895095518](https://github.com/fajarxfce/hris-mobile/actions/runs/40895095518).
