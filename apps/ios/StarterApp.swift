@@ -1,4 +1,5 @@
 import SwiftUI
+import Foundation
 
 @main
 struct StarterApp: App {
@@ -16,6 +17,11 @@ struct StarterApp: App {
             }
                 .ignoresSafeArea()
                 .onOpenURL { delegate.host.openLink(uri: $0.absoluteString) }
+                .onContinueUserActivity(NSUserActivityTypeBrowsingWeb) { activity in
+                    if let url = activity.webpageURL {
+                        delegate.host.openLink(uri: url.absoluteString)
+                    }
+                }
                 .onChange(of: scenePhase) { phase in
                     if phase == .active { delegate.host.startForegroundWork() }
                     if phase == .background { delegate.enterBackground() }

@@ -1,5 +1,14 @@
 # Template updates
 
+## Configurable HTTPS app links
+
+New generic registration/path/manifest/Apple preparation work is being proved in
+Mobile before porting. Local root/Android, 1,859 desktop and 26 common/application
+Chromium cases passed; ten build-logic cases include stale-output retirement.
+Portable code belongs in Starter only after configured artifact and hosted Apple
+verification. HRIS resource routes, company admission, its UI scenario and the
+Platform web landing page remain downstream. See [app links](app-links.md).
+
 ## Apple Firebase authentication
 
 The password/bundle increment from Mobile `196c1171` passed all 82 simulator

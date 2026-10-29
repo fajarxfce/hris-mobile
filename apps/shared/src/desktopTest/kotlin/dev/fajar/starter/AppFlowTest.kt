@@ -3107,6 +3107,63 @@ class AppFlowTest {
     }
 
     @Test
+    fun httpsInboxLinkKeepsLoginCompanyLifecycleAndReadReceiptOwnership() {
+        val server = NativeUiServer()
+        val links = dev.fajar.starter.app.navigation.AppLinkChannel()
+        val lifecycle = mutableStateOf(Lifecycle.State.RESUMED)
+        val prefix = "https://links.example.invalid/app/dev/"
+        val link = inboxLink(server).replace("hrismobile-dev://app/", prefix)
+        links.receive(link)
+        try {
+            withApplication(
+                server,
+                module {
+                    single {
+                        dev.fajar.starter.app.navigation.ResolveAppLink(
+                            AppEnvironment.Dev,
+                            "links.example.invalid",
+                        )
+                    }
+                },
+                lifecycleState = lifecycle,
+                incomingLinks = links.links,
+            ) {
+                signIn()
+                waitFor("Choose a company")
+                compose.onNodeWithText(server.inbox.firstBody).assertDoesNotExist()
+                compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
+                waitFor(server.inbox.firstBody)
+                assertTrue(server.inbox.actions.isEmpty())
+                compose.runOnIdle { backDispatcher.pressBack() }
+                waitFor("Office closure")
+                compose.runOnIdle { backDispatcher.pressBack() }
+                waitFor("Welcome")
+                compose.runOnIdle {
+                    links.receive(
+                        inboxLink(server, companyId = NativeUiServer.COMPANY_TWO)
+                            .replace("hrismobile-dev://app/", prefix)
+                    )
+                }
+                compose.waitForIdle()
+                compose.onNodeWithText("Welcome").assertIsDisplayed()
+                compose.onNodeWithText(server.inbox.firstBody).assertDoesNotExist()
+                assertTrue(server.inbox.countCompanies.none { it == NativeUiServer.COMPANY_TWO })
+                compose.runOnIdle { lifecycle.value = Lifecycle.State.STARTED }
+                compose.waitForIdle()
+                compose.runOnIdle { links.receive(link) }
+                compose.waitForIdle()
+                compose.onNodeWithText("Welcome").assertIsDisplayed()
+                compose.runOnIdle { lifecycle.value = Lifecycle.State.RESUMED }
+                waitFor(server.inbox.firstBody)
+                assertTrue(server.inbox.actions.isEmpty())
+                capture("https-inbox-link")
+            }
+        } finally {
+            links.close()
+        }
+    }
+
+    @Test
     fun scopedInboxLinkWaitsForLoginAndCompanyAndNeverMarksTheMessageRead() {
         val server = NativeUiServer()
         val links = dev.fajar.starter.app.navigation.AppLinkChannel()

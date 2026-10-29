@@ -1,6 +1,7 @@
 plugins {
     id("starter.android.application")
     id("starter.android.flavors")
+    id("starter.android.app-links")
     id("starter.android.signing")
     id("starter.sbom")
     id("starter.firebase")

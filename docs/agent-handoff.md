@@ -17,6 +17,15 @@ The controlled domain remains a deployment setting, not a reason to leave the
 configurable implementation unfinished. Preserve the accepted Google binding,
 phone data and running private development stack.
 
+The HTTPS implementation is now in Mobile: exact environment-host path admission,
+optional ignored public registrations, generated domain/Apple files, variant Android
+manifest transforms, Xcode preparation and Universal Link handoff. Root/Android
+and Chromium passed in 7m25s with 1,859 desktop cases and 26 common/app Chromium
+cases; build-logic tests cover removal and malformed inputs. Configured artifact
+checks and hosted CI follow before the generic port. Platform is separately adding
+a public `/app/...` browser landing route with no session or business requests.
+See [app links](app-links.md); no real domain is enabled by the default build.
+
 ## Start here
 
 1. Read `AGENTS.md`, inspect `git status`, the branch, recent commits and upstream.

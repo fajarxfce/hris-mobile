@@ -1,8 +1,10 @@
 # HRIS deep links
 
 The native runners hand URLs to the application through `AppLinkChannel`.
-The current environment's scheme and `app` host are required. Web preview accepts
-the same paths after `#/`; this does not establish production browser identity.
+The current environment's custom scheme and `app` host are accepted. Optional
+[HTTPS registration](app-links.md) also accepts the exact configured host at
+`/app/<environment>/<route>`. Web preview accepts the same paths after `#/`;
+this does not establish production browser identity.
 
 | Path | Destination |
 | --- | --- |
@@ -48,11 +50,11 @@ These are application URL routes. [Native push registration and FCM hint handlin
 are implemented; provider delivery retains separate acceptance. The handler
 validates the backend schema/event and account/company before constructing the
 internal target; provider URL or display text cannot choose it. Verified HTTPS
-App Links and Universal Links still require a controlled domain and platform
-association configuration. The current parser accepts only the selected custom
-scheme; HTTPS support also needs explicit environment-bound route admission and
-native declarations. Association files alone do not enable that path. The domain
-question is pending; the [device procedure](ios-acceptance.md) retains this work.
+App Links and Universal Links now have environment-bound runtime admission,
+generated Android filters/Apple entitlements/domain files and iOS activity handoff.
+Activation requires the selected domain's public registration and deployed
+association files. The domain is not selected yet; default HTTPS admission remains
+disabled. The [configuration contract](app-links.md) retains the complete procedure.
 
 Automated coverage includes strict parsing, first-login binding, session/company
 replacement, cold application entry, background/resume, repeated message links,

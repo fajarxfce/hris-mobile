@@ -1,5 +1,27 @@
 # Validation
 
+## Configurable HTTPS app links
+
+The new registration generator, shared path admission, Android manifest transform
+and iOS Universal Link entry are described in [app links](app-links.md). A first
+build-logic test compile used `it` inside a receiver-style Gradle file-tree action;
+correcting that test DSL allowed all ten build-logic and six common desktop cases
+to pass. Core checks completed in 28s.
+
+Root checks, configured normal Android dev assembly and common/application Chromium
+then passed in 7m25s (2,414 tasks: 2,089 executed, 325 up to date). Reports contain
+1,859 desktop cases in 326 suites, six common Chromium cases in two suites and
+20 app Chromium cases in six suites, all with zero failures/errors/skips. The new
+UI scenario verifies HTTPS login/company gating, another-company rejection,
+background/resume and absence of read/ack mutations. Format/architecture checks
+passed for 70 modules; ten runner and six distribution regressions also passed.
+This run used default disabled HTTPS registration; configured native artifact and
+hosted Apple checks are recorded separately as they complete. The configured
+artifact run then passed in 31s (86 tasks): dev/staging/prod Android merged
+manifests, all Apple entitlement/bundle files and both combined domain JSON files
+were independently inspected by `tool/check_app_links.py`. Its fictional host is
+`links.example.invalid`; no DNS, TLS or OS domain verification is claimed.
+
 ## Actual Google sign-in on the user-operated phone
 
 The user retried after explicit Firebase UID binding and confirmed company/Home.

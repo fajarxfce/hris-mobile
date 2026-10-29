@@ -7,6 +7,20 @@ class ResolveAppLinkTest {
     private val resolve = ResolveAppLink(AppEnvironment.Dev)
 
     @Test
+    fun configuredHttpsUsesTheSameBoundedApplicationRoutePolicy() {
+        val https = ResolveAppLink(AppEnvironment.Dev, "links.example.invalid")
+        val prefix = "https://links.example.invalid/app/dev/"
+        val path =
+            "accounts/11111111-1111-4111-8111-111111111111/companies/22222222-2222-4222-8222-222222222222/inbox/33333333-3333-4333-8333-333333333333"
+        assertEquals(resolve("hrismobile-dev://app/$path"), https(prefix + path))
+        assertEquals(AppLink.Inbox, https(prefix + "inbox"))
+        assertNull(https(prefix + "activity"))
+        assertNull(https(prefix + "accounts/invalid/companies/invalid/inbox/invalid"))
+        assertNull(https(prefix + path + "?read=true"))
+        assertNull(https(prefix.replace("/dev/", "/staging/") + "inbox"))
+    }
+
+    @Test
     fun acceptsOnlyKnownRoutesAndTheCurrentEnvironment() {
         assertEquals(AppLink.Inbox, resolve("hrismobile-dev://app/inbox"))
         assertEquals(AppLink.Overview, resolve("#/overview"))

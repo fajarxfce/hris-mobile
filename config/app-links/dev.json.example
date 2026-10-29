@@ -1,0 +1,12 @@
+{
+  "host": "links.example.com",
+  "android": {
+    "applicationId": "dev.fajar.hris.mobile.dev",
+    "sha256CertFingerprints": [
+      "00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00"
+    ]
+  },
+  "ios": {
+    "applicationId": "ABCDE12345.dev.fajar.hris.mobile.dev"
+  }
+}

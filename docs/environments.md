@@ -52,3 +52,5 @@ aliases for dev/prod. Native release distribution still requires Apple signing.
 
 Firebase configuration and verified HTTPS link association are environment-specific.
 Never put server credentials in BuildConfig, generated Kotlin, or browser assets.
+Optional [app-link registrations](app-links.md) supply one exact host per environment
+and generate runtime admission, native declarations and public domain files together.

@@ -20,6 +20,7 @@ artifacts/
 *.keystore
 
 /config/oidc/*.json
+/config/app-links/*.json
 
 *.p12
 *.p8
