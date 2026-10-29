@@ -13,13 +13,36 @@ ground for reusable foundation changes before they are ported to Starter.
 3. Read the [Platform handoff](https://github.com/fajarxfce/hris-platform/blob/feat/firebase-auth/docs/agent-handoff.md)
    and [remaining PRD delivery](https://github.com/fajarxfce/hris-platform/blob/feat/firebase-auth/docs/completion.md#remaining-delivery-sequence).
    Backend and dashboard work is on Platform `feat/firebase-auth`, most recently
-   native upload/review fixture `ee6c04a3` after schema 100 and native push recovery; Starter work is on `fix/push-token-lifecycle`.
+   native upload/review fixture `ee6c04a3` after schema 100 and native push recovery.
+   Platform also has pushed `409abad4` (delivery observations, schema 101) and
+   `f757bffd` (original payroll period comparison) on descendant feature branches,
+   awaiting integration after its separately running one-hour retention test.
+   Starter work is on `fix/push-token-lifecycle`.
 
 The three local checkouts are siblings under `/home/fajar/hris`. A fresh clone
 must be able to continue from tracked evidence; local `.work` logs, screenshots
 and `/home/fajar/hris/PRD-PROGRESS.md` are supplementary. The user authorized ongoing
 implementation and a push after every atomic commit. This does not authorize a
 release. Preserve unrelated edits and keep implementation, tests and docs together.
+
+## Current continuation: reconcile actual replica coverage
+
+The [local-first coverage](local-first.md#current-coverage-and-continuation) now
+matches all nine `ObserveCompanyData`/`SyncCompanyData` registrations and the six
+pending-action feature observers. Its old next-work list incorrectly still called
+document feeds and the shared pending summary unfinished. Directory, private
+profile and document catalog storage were checked against their account-storage
+mappers and company partitions. Expense/Leave/Overtime working-copy and file/
+attendance command contracts already cover the current employee editors.
+This is a source/documentation reconciliation, with no new runtime acceptance or
+application change; previous measured outcomes remain in their feature ledger.
+
+Platform's payroll period comparison passed 119 API, 94 worker and 12 data tests,
+3,997 dashboard tests, 23 distinct Chromium scenarios and an actual five-actor
+January/February workflow with retained tax continuity and live access withdrawal.
+Push delivery observations also passed schema-101 recovery. Neither administrative
+feature needs a Mobile/Starter port. Continue missing acceptance and concrete PRD
+gaps without repeating completed implementation or the pending Firebase question.
 
 ## Current checkpoint: native upload and inspection review
 

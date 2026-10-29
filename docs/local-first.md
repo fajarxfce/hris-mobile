@@ -27,7 +27,8 @@ flowchart TD
   Commit --> Read
 ```
 
-Inbox, Leave, Overtime, Workforce, Payroll and Expense replica identity binds API audience,
+Inbox, Leave, Overtime, Workforce, Payroll, Expenses, the coworker directory,
+personal profiles and the document catalog bind replica identity to API audience,
 account and company independently of the local session. Database operations still
 require the active session, so a late request from the preceding login cannot
 mutate retained facts. The retained directory and financial record scopes do not
@@ -67,7 +68,7 @@ rolled-back transactions cannot advance a public cursor. Cursors are opaque,
 scoped to the account/company/projection, and have finite server retention.
 See the [server protocol](https://github.com/fajarxfce/hris-platform/blob/main/docs/synchronization.md).
 
-Inbox, Leave, Overtime, Workforce, Payroll and Expenses consume this protocol. One run reads
+All nine registered read models consume this protocol. One run reads
 a bounded number of pages, hydrates changed resources with bounded concurrency,
 reconciles versions and
 tombstones, and atomically stores data with the next cursor. A failed hydration
@@ -259,27 +260,57 @@ Only complete, current sync that observed the latest denial may clear it.
 Individual detail/review calls and partial recovery cannot do so. Stored commands
 retain their original input and operation identity until access recovers.
 
-## Next increments
+## Current coverage and continuation
 
-1. Extend stable audience/account/company ownership to the remaining read
-   projections. Inbox, Leave, Overtime, Workforce, Payroll and Expense replicas retain
-   account-owned facts across sign-in; workspace admission and other last-view
-   snapshots remain session-owned. Reauthentication
-   does not reuse an old request guard or old credential-bound feed cursor.
-2. Extend unfinished local draft persistence beyond Expenses, Leave and Overtime, separately from
-   immutable prepared commands and acquired server records.
-3. Register the remaining document feeds,
-   including deletions and authorization changes, before implementing mobile sync.
-4. Keep unsynchronized changes and actionable conflicts clear in each migrated
-   editor. Expense autosave distinguishes acknowledged local input from server Save.
-5. Exercise offline process restart after several days, expired credentials,
-   interrupted bootstrap, duplicates, stale writes, revocation, cancellation and
-   disposal for every added projection.
-6. Show last successful sync, saved-data availability and pending changes
-   consistently. [Data and sync](data-sync.md) shows the last complete acquisition
-   of each published read model and supports bounded explicit refresh. A shared
-   summary of unfinished input, pending commands and file transfers remains
-   separate work; read synchronization never implies delivery of those actions.
+Reconciled against source and recorded acceptance on 29 October 2026. The earlier
+list below this document's workflow sections had become stale: document feeds,
+private profiles, directory records and the shared pending-action summary are
+implemented. Do not recreate them from an old validation paragraph describing
+what was unfinished at that historical checkpoint.
+
+| Read model | Registered owner | Current contract |
+| --- | --- | --- |
+| Inbox | `InboxDataModule` | Account-owned feed, retained facts and read admission. |
+| Leave | `LeaveDataModule` | Requests, balances and retained activity; working copies and original commands. |
+| Overtime | `WorkforceDataModule` | Requests/history; separate planning and actual-time/withdrawal working copies. |
+| Attendance/calendar | `WorkforceDataModule` | Factual events and calendar replicas; explicit capture/recovery commands. |
+| Payslips | `PayrollDataModule` | Retained published revisions and payment progress. |
+| Expenses | `ExpenseDataModule` | Claims and payment facts; edited working copies and immutable command recovery. |
+| Coworker directory | `PeopleDataModule` | `DIRECTORY_EMPLOYEES`, account-owned encrypted directory partition. |
+| Personal profile | `PeopleDataModule` | `SELF_PROFILES`, account-owned encrypted private-profile partition. |
+| Document catalog | `DocumentsDataModule` in `core/documents/data` | `DOCUMENT_EVIDENCE`, account-owned encrypted catalog; private HR files and incomplete first uploads are excluded. |
+
+All nine bind `ObserveCompanyData` and `SyncCompanyData`; [Data and sync](data-sync.md)
+observes completed checkpoint metadata and invokes bounded explicit acquisition.
+Directory/profile/catalog mappers use `accountStorageKey(audience, accountId)` and
+a company partition while retaining the active session as the database guard.
+Session-bound workspace admission and action-preparation snapshots remain separate
+from these durable records; they are not a missing replica migration.
+
+[Pending actions](pending-actions.md) has six feature observers covering Inbox,
+attendance, overtime, leave, expenses and document files. It distinguishes edited
+drafts, unsent commands, uncertain outcomes, review failures and file transfers.
+Opening/reloading it performs no HTTP or automatic command delivery. The native
+acceptance ledger now includes Leave working copies, actual Inbox response loss,
+partial downloads and interrupted uploads/inspection review through offline
+process restarts. Those examples do not prove every feature's pending outcome on
+every device. Existing per-feature tests remain the evidence for other states.
+
+Continue from an explicit missing workflow or acceptance case:
+
+1. Trace the feature's actual draft/command/replica registration before adding a
+   new one. The current employee editors already persist Expense, Leave and
+   Overtime working copies; file imports and attendance captures have their own
+   durable ownership contracts. HR administration belongs to Platform.
+2. When a projection changes, exercise offline restart, expired credentials,
+   interrupted bootstrap, duplicate/stale versions, revocation, cancellation and
+   disposal for that projection. Distinguish controlled clock regressions from
+   elapsed wall-clock or physical-device acceptance.
+3. Complete actual FCM message/scoped-hint delivery when the server credential is
+   supplied; registration/recovery/retirement is already accepted. Complete Google
+   token exchange and iOS/physical URL/location cases with their required setup.
+4. Keep [agent handoff](agent-handoff.md), feature contracts and the chronological
+   [validation ledger](validation.md) current after each accepted increment.
 
 Datasource contracts perform raw I/O. Repositories map/store facts and coordinate
 datasources. Use cases coordinate repository contracts and own sync/action policy.
