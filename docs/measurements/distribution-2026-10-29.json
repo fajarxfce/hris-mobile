@@ -451,7 +451,12 @@
       "xcodeAndDistributionMarkersConfirmed": true
     }
   },
-  "starterPort": "source accepted; independent destination checks next",
+  "starterPort": {
+    "run": 40916187442,
+    "head": "77063862866bb52db5eade28733ceffce1588409",
+    "status": "in_progress",
+    "url": "https://github.com/fajarxfce/compose-fluent-starter/actions/runs/40916187442"
+  },
   "limits": [
     "No upload or release workflow dispatch",
     "No live domain publication",

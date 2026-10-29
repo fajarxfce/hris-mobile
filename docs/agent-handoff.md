@@ -4,7 +4,7 @@ Updated 29 October 2026 (UTC). The release-configuration audit below is active a
 implementation checkpoint. This is the employee application generated from Compose Fluent Starter, and the proving
 ground for reusable foundation changes before they are ported to Starter.
 
-## Distribution configuration — source accepted; Starter validation next
+## Distribution configuration — Starter CI active
 
 The user requested continued work after the previous completion checkpoint.
 Review found three concrete delivery gaps: HRIS's inherited demo release option
@@ -34,6 +34,13 @@ association/domain artifacts and the complete Xcode build markers passed. This
 accepts the Mobile source for the portable Starter port; independent destination
 checks and CI remain required. No actual Apple signing or upload is inferred.
 
+
+Full [Starter CI 40916187442](https://github.com/fajarxfce/compose-fluent-starter/actions/runs/40916187442) is active at port `7706386`. All local
+checks passed: 326 desktop cases, 17 distribution and ten runner cases, actual
+signed APK/AAB/SBOM in 136.647s, and restored normal demo/dev plus production SBOM
+in 23s. Both packages retain the selected API/registration; actual signatures
+and packaged domain files/checksums passed. No upload or installation occurred.
+Final hosted jobs and downloaded Apple reports/Xcode markers remain required.
 
 ## Completed implementation — 29 October 2026
 

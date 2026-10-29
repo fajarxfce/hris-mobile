@@ -1,6 +1,6 @@
 # Template updates
 
-## Distribution configuration — source accepted; Starter validation next
+## Distribution configuration — Starter CI active
 
 The release audit now fixes explicit per-environment API forwarding and passes
 optional app-link registration through signing preparation and checked artifacts.
@@ -21,6 +21,13 @@ configuration and demo test assertion. Add the 31 reviewed POM artifact elements
 without replacing unrelated destination metadata or any existing hash. HRIS's
 three desktop UI-fixture fixes and dev cleartext XML do not belong in Starter.
 The source/destination docs and exact measurements accompany the eventual port.
+
+Full [Starter CI 40916187442](https://github.com/fajarxfce/compose-fluent-starter/actions/runs/40916187442) is active at port `7706386`. All local
+checks passed: 326 desktop cases, 17 distribution and ten runner cases, actual
+signed APK/AAB/SBOM in 136.647s, and restored normal demo/dev plus production SBOM
+in 23s. Both packages retain the selected API/registration; actual signatures
+and packaged domain files/checksums passed. No upload or installation occurred.
+Final hosted jobs and downloaded Apple reports/Xcode markers remain required.
 
 ## Configurable HTTPS app links — accepted
 
