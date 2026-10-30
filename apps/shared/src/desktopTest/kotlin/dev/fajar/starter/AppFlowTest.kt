@@ -1103,6 +1103,74 @@ class AppFlowTest {
     }
 
     @Test
+    fun firstRejectedDocumentUploadReopensRetainedInputForExplicitCorrection() {
+        val server =
+            NativeUiServer().apply {
+                documents.enabled = true
+                documents.uploadEnabled = true
+                documents.metadataSupported = true
+                documents.uploads.startRejection = "invalid_document_metadata"
+            }
+        withApplication(server, fileInputs = DocumentInputUi("correctable.pdf")) {
+            signIn()
+            waitFor("Choose a company")
+            compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
+            waitFor("Welcome")
+            openDocumentFiles()
+            waitFor("No local files yet.")
+            compose.onNodeWithContentDescription("Add file").performClick()
+            waitFor("Upload document")
+            compose
+                .onNodeWithContentDescription("Description")
+                .performScrollTo()
+                .performTextInput("Retained description")
+            compose
+                .onNodeWithContentDescription("Document number (optional)")
+                .performScrollTo()
+                .performTextInput("AB-123")
+            compose.onNode(hasText("Upload document") and hasClickAction()).performClick()
+            waitFor("Check the document number, country code and dates.")
+            waitForAction("Upload document")
+            compose
+                .onNodeWithText("Check the document number, country code and dates.")
+                .assertIsDisplayed()
+            assertEquals(0, server.documents.uploads.starts.get())
+            compose
+                .onNodeWithContentDescription("Document number (optional)")
+                .performScrollTo()
+                .assertTextContains("AB-123")
+            compose
+                .onNodeWithContentDescription("Description")
+                .performScrollTo()
+                .assertTextContains("Retained description")
+            compose
+                .onNodeWithContentDescription("Title")
+                .performScrollTo()
+                .performTextReplacement("Corrected title")
+            server.documents.uploads.startRejection = null
+            compose.onNode(hasText("Upload document") and hasClickAction()).performClick()
+            waitFor("Ready")
+            assertEquals(2, server.documents.uploads.startOperations.size)
+            assertEquals(2, server.documents.uploads.startOperations.distinct().size)
+            assertEquals(1, server.documents.uploads.starts.get())
+            assertEquals(
+                "Corrected title",
+                server.documents.uploads.submitted?.get("title")?.jsonPrimitive?.content,
+            )
+            assertEquals(
+                "AB-123",
+                server.documents.uploads.submitted
+                    ?.get("metadata")
+                    ?.jsonObject
+                    ?.get("identityNumber")
+                    ?.jsonPrimitive
+                    ?.content,
+            )
+            capture("document-initial-rejection-recovered")
+        }
+    }
+
+    @Test
     fun documentBusinessMetadataIsValidatedAndRetainedThroughTheAssembledUpload() {
         val server =
             NativeUiServer().apply {
@@ -1302,7 +1370,11 @@ class AppFlowTest {
             compose.onNodeWithText("retained-upload.pdf").assertDoesNotExist()
             compose.onNode(hasText("Try again") and hasClickAction()).performClick()
             waitFor("retained-upload.pdf")
-            compose.onNodeWithText("Needs attention").assertExists()
+            waitForAction("Upload document")
+            compose
+                .onNodeWithContentDescription("Description")
+                .assertTextContains("Personal record")
+            assertEquals(0, server.documents.uploads.starts.get())
         }
     }
 

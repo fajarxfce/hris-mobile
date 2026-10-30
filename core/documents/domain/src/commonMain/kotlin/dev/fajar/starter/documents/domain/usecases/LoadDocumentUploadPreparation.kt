@@ -58,7 +58,7 @@ class LoadDocumentUploadPreparation(
                     file.storedBytes != file.draft.declaration.size
             )
                 return@withTimeoutOrNull documentFailure("client.document_import_incomplete")
-            if (file.upload != null)
+            if (file.upload != null && !isDocumentUploadRejected(file.upload))
                 return@withTimeoutOrNull documentFailure(
                     "client.document_upload_active",
                     FailureKind.Conflict,
@@ -105,6 +105,12 @@ class LoadDocumentUploadPreparation(
                     "client.document_preparation_expired",
                     FailureKind.Conflict,
                 )
+            if (
+                directory is AppResult.Success &&
+                    file.upload?.intent?.input?.metadata != null &&
+                    !directory.value.metadataSupported
+            )
+                return@withTimeoutOrNull documentFailure("client.document_metadata_unsupported")
             when (directory) {
                 is AppResult.Failed -> directory
                 is AppResult.Success ->

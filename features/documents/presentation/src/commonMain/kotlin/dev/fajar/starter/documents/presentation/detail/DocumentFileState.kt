@@ -2,6 +2,7 @@ package dev.fajar.starter.documents.presentation.detail
 
 import dev.fajar.starter.common.result.Failure
 import dev.fajar.starter.documents.domain.entities.*
+import dev.fajar.starter.documents.domain.policies.isDocumentUploadRejected
 import dev.fajar.starter.documents.presentation.files.DocumentFileItem
 
 data class DocumentFileState(
@@ -28,12 +29,19 @@ data class DocumentFileState(
     val canWrite: Boolean
         get() = writeAllowed && restriction == null && !busy
 
+    val canPrepareUpload: Boolean
+        get() = file != null && (file.upload == null || isDocumentUploadRejected(file.upload))
+
+    val rejectedFailure: Failure?
+        get() = file?.upload?.takeIf(::isDocumentUploadRejected)?.failure
+
     val canSubmit: Boolean
-        get() = canWrite && form?.employmentId != null && file?.upload == null
+        get() = canWrite && form?.employmentId != null && canPrepareUpload
 
     val canResume: Boolean
         get() =
             canWrite &&
+                !isDocumentUploadRejected(file?.upload) &&
                 file?.upload?.step.let {
                     it is DocumentUploadStep.Start ||
                         it is DocumentUploadStep.Chunk ||
@@ -49,7 +57,7 @@ data class DocumentFileState(
                 file.upload?.step !is DocumentUploadStep.Cancel
 
     val canCheck: Boolean
-        get() = canWrite && file?.upload != null
+        get() = canWrite && file?.upload != null && !isDocumentUploadRejected(file.upload)
 
     val canRetryValidation: Boolean
         get() =

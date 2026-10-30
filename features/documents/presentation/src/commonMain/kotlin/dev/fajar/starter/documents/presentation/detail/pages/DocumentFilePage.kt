@@ -41,7 +41,7 @@ fun DocumentFilePage(
                 },
                 actions = {
                     if (state.file != null && state.writeAllowed) {
-                        if (state.file.upload == null)
+                        if (state.canPrepareUpload)
                             AppIconButton(
                                 Icons.Regular.ArrowSync,
                                 appString(AppString.DocumentRefreshForm),
@@ -74,7 +74,12 @@ fun DocumentFilePage(
     ) {
         if (state.loading || state.formLoading || state.working || state.revalidating)
             item(key = "loading") { AppLoading(compact = true) }
-        val failure = state.restriction ?: state.failure ?: state.readFailure ?: state.formFailure
+        val failure =
+            state.restriction
+                ?: state.failure
+                ?: state.readFailure
+                ?: state.formFailure
+                ?: state.rejectedFailure
         if (failure != null && state.cancellationReason == null && !state.choosingEmployment)
             item(key = "failure") {
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -117,7 +122,7 @@ fun DocumentFilePage(
         }
         if (state.form != null && state.item != null && state.writeAllowed)
             item(key = "form") { DocumentUploadFormContent(state, onEvent) }
-        if (state.file?.upload != null)
+        if (state.file?.upload != null && state.form == null)
             item(key = "upload") { DocumentUploadProgress(state, onEvent) }
     }
     if (state.choosingEmployment) DocumentEmploymentDialog(state, employments, onEvent)

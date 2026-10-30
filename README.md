@@ -92,6 +92,8 @@ confirm an employment, title, classification and description in the form opened
 after file selection, before a resumable upload. Supported servers also accept
 document category, number, issuing country and printed issue/validity dates;
 confirmed facts remain attached to the encrypted original upload during retries.
+A first confirmed rejection can be corrected without importing the file again;
+uncertain requests retain their original operation.
 Progress, server inspection, explicit retry and cancellation use the retained
 encrypted upload intent. Published document metadata synchronizes into account-owned
 encrypted records. Employment, category and page filters work locally, including

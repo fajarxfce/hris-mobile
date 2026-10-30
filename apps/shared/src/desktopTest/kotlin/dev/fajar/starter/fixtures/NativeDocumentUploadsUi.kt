@@ -14,6 +14,8 @@ import kotlinx.serialization.json.*
 /** Minimal authenticated upload protocol for the assembled application tests. */
 class NativeDocumentUploadsUi {
     @Volatile var denied = false
+    @Volatile var startRejection: String? = null
+    val startOperations = java.util.concurrent.CopyOnWriteArrayList<String>()
     val starts = AtomicInteger()
     val chunks = AtomicInteger()
     val validations = AtomicInteger()
@@ -30,6 +32,13 @@ class NativeDocumentUploadsUi {
         if (denied) return """{"code":"document_access_denied"}""" to HttpStatusCode.Forbidden
         if (request.method == HttpMethod.Get) return revision(endpoint)
         val operation = requireNotNull(request.headers["Idempotency-Key"])
+        if (endpoint == "uploads") {
+            startOperations += operation
+            startRejection?.let {
+                return buildJsonObject { put("code", it) }.toString() to
+                    HttpStatusCode.UnprocessableEntity
+            }
+        }
         val body = (request.body as OutgoingContent.ByteArrayContent).bytes()
         val fingerprint =
             endpoint + ":" + request.headers["Upload-Offset"] + ":" + body.contentHashCode()

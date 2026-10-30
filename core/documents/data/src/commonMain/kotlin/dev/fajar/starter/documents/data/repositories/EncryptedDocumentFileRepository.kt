@@ -154,6 +154,19 @@ class EncryptedDocumentFileRepository(
         access: DocumentAccess,
         expected: LocalDocumentFile,
         upload: DocumentUpload,
+    ) = writeUpload(access, expected, upload, replacing = false)
+
+    override suspend fun replaceUpload(
+        access: DocumentAccess,
+        expected: LocalDocumentFile,
+        upload: DocumentUpload,
+    ) = writeUpload(access, expected, upload, replacing = true)
+
+    private suspend fun writeUpload(
+        access: DocumentAccess,
+        expected: LocalDocumentFile,
+        upload: DocumentUpload,
+        replacing: Boolean,
     ) = safeStorageCall {
         if (expected.draft.download != null) return@safeStorageCall false
         val scope = documentBlobScope(access)
@@ -167,7 +180,8 @@ class EncryptedDocumentFileRepository(
             if (
                 actual.draft != expected.draft ||
                     actual.sha256 != expected.sha256 ||
-                    (actual.upload?.intent?.let { it != upload.intent } == true)
+                    (if (replacing) actual != expected || actual.upload == null
+                    else actual.upload?.intent?.let { it != upload.intent } == true)
             )
                 return@safeStorageCall false
             val encrypted = codec.upload(access, actual, upload, key)

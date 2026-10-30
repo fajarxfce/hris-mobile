@@ -32,6 +32,11 @@ class BrowserDocumentFileStorageTest {
     }
 
     @Test
+    fun confirmedRejectedIntentReplacementPreservesBytesAndRejectsStaleWriters() = runTest {
+        withDatabase(::verifyRejectedUploadReplacement)
+    }
+
+    @Test
     fun documentMetadataSurvivesEncryptedUploadRestoration() = runTest {
         withDatabase(::verifyDocumentMetadataUploadStorage)
     }

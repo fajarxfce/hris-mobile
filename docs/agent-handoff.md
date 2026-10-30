@@ -110,10 +110,18 @@ assembly pass (163.698s). The assembled form exposed and now fixes feedback hidd
 above a long form. Read [upload evidence](measurements/document-upload-metadata-2026-10-30.json)
 for earlier fixture failures, the real reproduction, source and APK hashes.
 
-Next: definite initial server rejection recovery when no revision exists, owned
-metadata details, bounded history and versioned corrections with durable original-
-command recovery. Never release an earlier uncertain upload after a later rejection.
-Preserve old omitted JSON/payload hashes and unknown legacy values. Then
+First definite upload rejection recovery is also locally validated. Two genuine
+baseline failures now pass; unknown codes and earlier uncertainty remain pinned.
+The fresh form retains prior fields, and explicit confirmation replaces only the
+exact observed rejected intent while keeping file bytes and proof. Cancellation,
+competing writes, capability loss and read-denial restoration are covered. Full
+root checks, dev APK and Document browser suites pass in 189.354s: 1,888 desktop and
+140 browser cases. [Evidence](measurements/document-upload-rejection-2026-10-30.json)
+records the baseline controls, method-length correction and source/APK hashes.
+
+Next: owned metadata details, bounded history and versioned corrections with durable
+original-command recovery. Preserve old omitted JSON/payload hashes and unknown
+legacy values. Then
 run owned emulator/API/storage acceptance and final Apple/full native checks before
 accepting either requirement, finishing the detailed People review and continuing
 remaining Platform/Mobile/Starter scope. This business increment has no Starter

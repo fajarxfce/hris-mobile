@@ -1,0 +1,589 @@
+{
+  "date": "2026-10-30",
+  "baseHead": "d3888b9f98010f9d6ea6ca608a3d93e9e871c5b9",
+  "status": "initial-definite-rejection-recovery-locally-validated",
+  "reproduction": {
+    "source": "d3888b9f98010f9d6ea6ca608a3d93e9e871c5b9",
+    "seconds": 24,
+    "tests": 4,
+    "failures": 2,
+    "cases": [
+      {
+        "name": "laterRejectionCannotDisproveAnEarlierLostResponseAfterRestart[desktop]",
+        "failed": false,
+        "message": null
+      },
+      {
+        "name": "firstDefiniteRejectionCanBeReviewedAndReconfirmedWithoutReimportingBytes[desktop]",
+        "failed": true,
+        "message": "java.lang.AssertionError: Expected value to be of type <dev.fajar.starter.common.result.AppResult$Success<dev.fajar.starter.documents.domain.entities.DocumentUploadPreparation> (Kotlin reflection is not available)>, actual <class dev.fajar.starter.common.result.AppResult$Failed (Kotlin reflection is not available)>."
+      },
+      {
+        "name": "unchangedInputMayStartAFreshOperationAfterAConfirmedRejection[desktop]",
+        "failed": true,
+        "message": "java.lang.AssertionError: Expected value to be of type <dev.fajar.starter.common.result.AppResult$Success<dev.fajar.starter.documents.domain.entities.DocumentUploadPreparation> (Kotlin reflection is not available)>, actual <class dev.fajar.starter.common.result.AppResult$Failed (Kotlin reflection is not available)>."
+      },
+      {
+        "name": "unrecognizedServerErrorsNeverReleaseTheOriginalUpload[desktop]",
+        "failed": false,
+        "message": null
+      }
+    ]
+  },
+  "focused": {
+    "run": {
+      "name": "rejected-upload-focused",
+      "seconds": 37.249,
+      "exitCode": 0
+    },
+    "domain": 96,
+    "data": 44
+  },
+  "finalRun": {
+    "name": "rejected-upload-final-check",
+    "seconds": 189.354,
+    "exitCode": 0
+  },
+  "desktop": {
+    "totals": {
+      "tests": 1888,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "modules": {
+      "apps/demo": {
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "apps/shared": {
+        "tests": 196,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/availability/data": {
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/availability/domain": {
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/common": {
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/database": {
+        "tests": 27,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/datastore": {
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/documents/data": {
+        "tests": 44,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/documents/domain": {
+        "tests": 96,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/featureflags/data": {
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/featureflags/domain": {
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/fileio": {
+        "tests": 19,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/identity/data": {
+        "tests": 65,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/identity/domain": {
+        "tests": 64,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/localization": {
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/location/data": {
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/network": {
+        "tests": 34,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/notifications/data": {
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/notifications/domain": {
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/observability": {
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/presentation": {
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/securestorage": {
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/security/data": {
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/security/domain": {
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/settings/data": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/storage": {
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/sync/data": {
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/transfers/data": {
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/transfers/domain": {
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/worker": {
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/workspace/data": {
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/workspace/domain": {
+        "tests": 28,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/auth/presentation": {
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/dashboard/data": {
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/dashboard/domain": {
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/dashboard/presentation": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/documents/presentation": {
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/expenses/data": {
+        "tests": 66,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/expenses/domain": {
+        "tests": 88,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/expenses/presentation": {
+        "tests": 73,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/files/presentation": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/home/presentation": {
+        "tests": 18,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/inbox/data": {
+        "tests": 27,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/inbox/domain": {
+        "tests": 77,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/leave/data": {
+        "tests": 76,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/leave/domain": {
+        "tests": 114,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/leave/presentation": {
+        "tests": 69,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/notifications/presentation": {
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/onboarding/data": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/onboarding/presentation": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/payroll/data": {
+        "tests": 42,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/payroll/domain": {
+        "tests": 59,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/payroll/presentation": {
+        "tests": 25,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/people/data": {
+        "tests": 40,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/people/domain": {
+        "tests": 43,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/people/presentation": {
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/security/presentation": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/settings/presentation": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/workforce/data": {
+        "tests": 78,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/workforce/domain": {
+        "tests": 177,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/workforce/presentation": {
+        "tests": 69,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "newCases": [
+      {
+        "suite": "AppFlowTest[desktop]",
+        "name": "firstRejectedDocumentUploadReopensRetainedInputForExplicitCorrection[desktop]",
+        "seconds": 0.752
+      },
+      {
+        "suite": "DocumentFileStorageTest[desktop]",
+        "name": "confirmedRejectedIntentReplacementPreservesBytesAndRejectsStaleWriters[desktop]",
+        "seconds": 0.028
+      },
+      {
+        "suite": "DocumentRejectedUploadTest[desktop]",
+        "name": "laterRejectionCannotDisproveAnEarlierLostResponseAfterRestart[desktop]",
+        "seconds": 0.003
+      },
+      {
+        "suite": "DocumentRejectedUploadTest[desktop]",
+        "name": "firstDefiniteRejectionCanBeReviewedAndReconfirmedWithoutReimportingBytes[desktop]",
+        "seconds": 0.003
+      },
+      {
+        "suite": "DocumentRejectedUploadTest[desktop]",
+        "name": "capabilityLossCannotSilentlyDiscardTheRejectedDocumentFacts[desktop]",
+        "seconds": 0.003
+      },
+      {
+        "suite": "DocumentRejectedUploadTest[desktop]",
+        "name": "aKnownRejectedOperationIsNeverResentByManualOrAutomaticDelivery[desktop]",
+        "seconds": 0.003
+      },
+      {
+        "suite": "DocumentRejectedUploadTest[desktop]",
+        "name": "anotherConfirmationWinsByFileRevisionAndDoesNotLoseItsIntent[desktop]",
+        "seconds": 0.006
+      },
+      {
+        "suite": "DocumentRejectedUploadTest[desktop]",
+        "name": "unchangedInputMayStartAFreshOperationAfterAConfirmedRejection[desktop]",
+        "seconds": 0.003
+      },
+      {
+        "suite": "DocumentRejectedUploadTest[desktop]",
+        "name": "unrecognizedServerErrorsNeverReleaseTheOriginalUpload[desktop]",
+        "seconds": 0.002
+      },
+      {
+        "suite": "DocumentRejectedUploadTest[desktop]",
+        "name": "cancellationAfterReplacementPersistsTheNewOriginalIntentForRecovery[desktop]",
+        "seconds": 0.004
+      }
+    ],
+    "reportsSha256": "5698291977018b0662d94c57eca3d10eb5b46a66795f040a37ad628e6bf16393"
+  },
+  "documentBrowser": {
+    "totals": {
+      "tests": 140,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "modules": {
+      "core/documents/data": {
+        "tests": 44,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "core/documents/domain": {
+        "tests": 96,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "newCases": [
+      {
+        "suite": "wasmJsBrowserTest.dev.fajar.starter.documents.data.BrowserDocumentFileStorageTest",
+        "name": "confirmedRejectedIntentReplacementPreservesBytesAndRejectsStaleWriters[wasmJs, browser, ChromeHeadless156.0.0.0, Linux0.0.0]",
+        "seconds": 0.0
+      },
+      {
+        "suite": "wasmJsBrowserTest.dev.fajar.starter.documents.domain.DocumentRejectedUploadTest",
+        "name": "firstDefiniteRejectionCanBeReviewedAndReconfirmedWithoutReimportingBytes[wasmJs, browser, ChromeHeadless156.0.0.0, Linux0.0.0]",
+        "seconds": 0.0
+      },
+      {
+        "suite": "wasmJsBrowserTest.dev.fajar.starter.documents.domain.DocumentRejectedUploadTest",
+        "name": "unchangedInputMayStartAFreshOperationAfterAConfirmedRejection[wasmJs, browser, ChromeHeadless156.0.0.0, Linux0.0.0]",
+        "seconds": 0.0
+      },
+      {
+        "suite": "wasmJsBrowserTest.dev.fajar.starter.documents.domain.DocumentRejectedUploadTest",
+        "name": "laterRejectionCannotDisproveAnEarlierLostResponseAfterRestart[wasmJs, browser, ChromeHeadless156.0.0.0, Linux0.0.0]",
+        "seconds": 0.0
+      },
+      {
+        "suite": "wasmJsBrowserTest.dev.fajar.starter.documents.domain.DocumentRejectedUploadTest",
+        "name": "unrecognizedServerErrorsNeverReleaseTheOriginalUpload[wasmJs, browser, ChromeHeadless156.0.0.0, Linux0.0.0]",
+        "seconds": 0.0
+      },
+      {
+        "suite": "wasmJsBrowserTest.dev.fajar.starter.documents.domain.DocumentRejectedUploadTest",
+        "name": "aKnownRejectedOperationIsNeverResentByManualOrAutomaticDelivery[wasmJs, browser, ChromeHeadless156.0.0.0, Linux0.0.0]",
+        "seconds": 0.0
+      },
+      {
+        "suite": "wasmJsBrowserTest.dev.fajar.starter.documents.domain.DocumentRejectedUploadTest",
+        "name": "anotherConfirmationWinsByFileRevisionAndDoesNotLoseItsIntent[wasmJs, browser, ChromeHeadless156.0.0.0, Linux0.0.0]",
+        "seconds": 0.0
+      },
+      {
+        "suite": "wasmJsBrowserTest.dev.fajar.starter.documents.domain.DocumentRejectedUploadTest",
+        "name": "cancellationAfterReplacementPersistsTheNewOriginalIntentForRecovery[wasmJs, browser, ChromeHeadless156.0.0.0, Linux0.0.0]",
+        "seconds": 0.0
+      },
+      {
+        "suite": "wasmJsBrowserTest.dev.fajar.starter.documents.domain.DocumentRejectedUploadTest",
+        "name": "capabilityLossCannotSilentlyDiscardTheRejectedDocumentFacts[wasmJs, browser, ChromeHeadless156.0.0.0, Linux0.0.0]",
+        "seconds": 0.0
+      }
+    ],
+    "reportsSha256": "0a1f21b7fb7363781a026ff23c405701ce0f8b1b45e92d5de48ce58e4b4b4f2c"
+  },
+  "changedProductionFiles": {
+    "core/documents/data/src/commonMain/kotlin/dev/fajar/starter/documents/data/repositories/EncryptedDocumentFileRepository.kt": "5345c63fb376b4a8113e924781ccdcd712724634fa3b0b1e3e6861181979be08",
+    "core/documents/domain/src/commonMain/kotlin/dev/fajar/starter/documents/domain/policies/DocumentUploadPolicy.kt": "ee5ffd29f591f5a5f0358437ef47912993e9d6d9151a0ae418e6bfdfa0755831",
+    "core/documents/domain/src/commonMain/kotlin/dev/fajar/starter/documents/domain/policies/DocumentUploadRejectionPolicy.kt": "e167a0759d62f125bf723aa40be17498b510f8b898f3d2d420b5458b8b68f3b7",
+    "core/documents/domain/src/commonMain/kotlin/dev/fajar/starter/documents/domain/repositories/DocumentFileRepository.kt": "7801f75c3741a0e4d923203306336ea0acfc8a5faa9cbb994d33b10624806dc9",
+    "core/documents/domain/src/commonMain/kotlin/dev/fajar/starter/documents/domain/usecases/LoadDocumentUploadPreparation.kt": "1954910eed152bc02d0dc5fb9090f4c44e76fe37db5d24edf12ef9cb6d7a46e9",
+    "core/documents/domain/src/commonMain/kotlin/dev/fajar/starter/documents/domain/usecases/PrepareDocumentUpload.kt": "e860e581a2f3c14e2afe2fbd5926c3b52515a0aacb606fee520c2bde4096c736",
+    "core/documents/domain/src/commonMain/kotlin/dev/fajar/starter/documents/domain/usecases/ReplayDocumentUpload.kt": "87161819c1ec7e09ad1e866da95231b04aedc20a1ed68554fdf9a42244f0a6fb",
+    "features/documents/presentation/src/commonMain/kotlin/dev/fajar/starter/documents/presentation/detail/DocumentFileState.kt": "22319afadc5f4a8131e94130f5ac983e4ba16e9634d955026f1de9840e53d4d7",
+    "features/documents/presentation/src/commonMain/kotlin/dev/fajar/starter/documents/presentation/detail/DocumentFileViewModel.kt": "da0829360d504e07599a926cfe58f49b40b1b5dab53b4745b1f59ecd92af760e",
+    "features/documents/presentation/src/commonMain/kotlin/dev/fajar/starter/documents/presentation/detail/mappers/DocumentUploadFormMapper.kt": "e2f144d73d439f233a3af1a954203e9997fb81c0a71e6ed58e9343d78e30ff27",
+    "features/documents/presentation/src/commonMain/kotlin/dev/fajar/starter/documents/presentation/detail/pages/DocumentFilePage.kt": "36a75cfdbcc7f1a7869517853dbe78999b24dca88c27db7e47a2faa178c24bf1",
+    "features/documents/presentation/src/commonMain/kotlin/dev/fajar/starter/documents/presentation/detail/widgets/DocumentUploadProgress.kt": "97adfa2b7befbd41426021b960c17837d8888b56f3ed795e4ce61e86987c9b5f"
+  },
+  "earlierQualityFailure": {
+    "seconds": 35.209,
+    "cause": "PrepareDocumentUpload.invoke exceeded the 100-line rule at 108. Existing unchanged-file validation was extracted into a pure policy; no policy was relaxed."
+  },
+  "apk": {
+    "sha256": "f79954263f4a2809717c3e7db01d09ab000b69004f1195627f4febba9f4c8f2f",
+    "bytes": 32883840,
+    "installed": false
+  },
+  "inspectedScreenshot": {
+    "file": "document-initial-rejection-recovered.png",
+    "sha256": "c15d85289257b57bc8636904b2eedb3ac6a3967627766e8893d42e429001747e"
+  },
+  "confirmedBehavior": [
+    "Only a known first Start response with one persisted attempt permits correction.",
+    "A later rejection never releases a prior uncertain operation.",
+    "Explicit reconfirmation atomically replaces the observed rejected intent with new IDs; file bytes and proof stay unchanged.",
+    "Cancellation after persistence retains the replacement; competing and stale writers cannot overwrite it.",
+    "Capability loss cannot silently remove retained metadata.",
+    "Current read admission still gates the retained form; reopening never automatically resends."
+  ],
+  "remaining": [
+    "Owned metadata detail/history and durable observed-version correction commands",
+    "Owned emulator/API/storage acceptance",
+    "Final Apple/full native CI",
+    "Remaining full PRD audit"
+  ],
+  "runtimeChanged": false,
+  "starterImplementationPortRequired": false
+}

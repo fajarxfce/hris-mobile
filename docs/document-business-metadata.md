@@ -84,10 +84,39 @@ fixture responses and the actual error-visibility reproduction. See
 [upload measurements](measurements/document-upload-metadata-2026-10-30.json).
 The APK is built, but has not been installed; the private API remains schema 101.
 
-Next: resolve definite initial server rejections without stranding an upload that
-has no server revision; never release a command after an earlier uncertain attempt.
-Add owned metadata details, bounded history, observed-version correction and durable
-recovery of the original metadata command. Then validate actual owned emulator/API/
-storage behavior and final Apple/full native CI. Physical iPhone testing remains
-waived. Neither `documents.02` nor `people.03`, and not the full PRD goal, is accepted
-by these read-model/upload increments. No Starter implementation port is required.
+## First rejected upload — locally validated
+
+A reviewed server rejection on the first persisted Start attempt proves that this
+upload did not commit. Its file and confirmed input remain stored while the user
+reviews a fresh form. Explicit confirmation replaces that exact observed intent
+with new document/revision/operation IDs by compare-and-set; encrypted bytes and
+their proof stay intact. Ordinary upload updates still require the original intent.
+A known rejected operation is not resent automatically or by the old resume action.
+The user may also remove that local file after normal owned-read admission.
+
+An unknown code, transport failure, or rejection after an earlier uncertain attempt
+cannot release the original operation. Persisted attempt counts retain that distinction
+across process recreation. Competing confirmations and stale writers cannot replace
+a newer intent; cancellation after persistence leaves the new intent recoverable.
+If the server stops advertising metadata support, previously confirmed metadata is
+retained and cannot silently disappear from a replacement. Read denials continue to
+hide the form until admitted revalidation; reopening alone sends no upload.
+
+Two genuine preparation/reconfirmation failures at `d3888b9f` now pass. Two baseline
+controls already kept unknown/previously uncertain commands pinned. Final root
+`:check`, development APK and both Document Chromium suites pass in 189.354 seconds:
+1,888 desktop tests and 140 Document browser cases, all without failures/errors/skips.
+Ten new desktop cases cover initial rejection, reconfirmation, transport uncertainty,
+concurrency, cancellation, capability loss, real encrypted storage and the assembled
+application. The storage contract also runs on IndexedDB. The existing denial flow
+now verifies an admitted editable form and no automatic resend. A method-length
+check initially required extracting the existing unchanged-file validation into a
+pure policy; the rule was not relaxed. The recovered-upload screenshot was inspected.
+See [rejection measurements](measurements/document-upload-rejection-2026-10-30.json).
+
+Next: owned metadata details, bounded history, observed-version corrections and
+durable recovery of the original metadata command. Then validate actual owned
+emulator/API/storage behavior and final Apple/full native CI. Physical iPhone testing
+remains waived. Neither `documents.02` nor `people.03`, and not the full PRD goal,
+is accepted by these increments. No Starter implementation port is required. The
+private schema-101 API and installed phone remain unchanged.

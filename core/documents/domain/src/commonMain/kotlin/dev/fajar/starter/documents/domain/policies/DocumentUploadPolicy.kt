@@ -65,18 +65,33 @@ fun validateDocumentUploadInput(input: DocumentUploadInput): AppResult<DocumentU
     return AppResult.Success(input.copy(title = title, reason = reason))
 }
 
+fun validatePreparedDocumentFile(
+    expected: LocalDocumentFile,
+    current: LocalDocumentFile,
+): AppResult<Unit> =
+    if (
+        current.draft != expected.draft ||
+            current.draft.download != null ||
+            current.sha256 == null ||
+            current.sha256 != expected.sha256 ||
+            current.storedBytes != current.draft.declaration.size
+    )
+        documentFailure("client.document_file_changed", FailureKind.Conflict)
+    else AppResult.Success(Unit)
+
 /** Uncertain remote work must retain its original file, confirmation and idempotency keys. */
 fun canRemoveDocumentFile(file: LocalDocumentFile): Boolean =
-    when (val step = file.upload?.step) {
-        null -> true
-        is DocumentUploadStep.Finished ->
-            step.revision.status in
-                setOf(
-                    DocumentRevisionStatus.READY,
-                    DocumentRevisionStatus.REJECTED,
-                    DocumentRevisionStatus.CANCELLED,
-                    DocumentRevisionStatus.EXPIRED,
-                    DocumentRevisionStatus.RETIRED,
-                )
-        else -> false
-    }
+    isDocumentUploadRejected(file.upload) ||
+        when (val step = file.upload?.step) {
+            null -> true
+            is DocumentUploadStep.Finished ->
+                step.revision.status in
+                    setOf(
+                        DocumentRevisionStatus.READY,
+                        DocumentRevisionStatus.REJECTED,
+                        DocumentRevisionStatus.CANCELLED,
+                        DocumentRevisionStatus.EXPIRED,
+                        DocumentRevisionStatus.RETIRED,
+                    )
+            else -> false
+        }

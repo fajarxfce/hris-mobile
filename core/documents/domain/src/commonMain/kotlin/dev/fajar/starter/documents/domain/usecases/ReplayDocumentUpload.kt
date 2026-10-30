@@ -170,7 +170,8 @@ class ReplayDocumentUpload(
                 ?: return documentFailure("client.document_upload_missing", FailureKind.Conflict)
         val ownership = validateDocumentContinuation(access, currentAccess(workspaceId))
         if (ownership is AppResult.Failed) return ownership
-        if (original.step is DocumentUploadStep.Finished) return AppResult.Success(initial)
+        if (original.step is DocumentUploadStep.Finished || isDocumentUploadRejected(original))
+            return AppResult.Success(initial)
         if (original.nextAttemptAt?.let { it > clock.now() } == true)
             return AppResult.Success(initial)
         val policy =

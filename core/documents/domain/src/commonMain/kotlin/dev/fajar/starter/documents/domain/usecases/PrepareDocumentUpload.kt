@@ -68,21 +68,20 @@ class PrepareDocumentUpload(
             currentCoroutineContext().ensureActive()
             val ownership = validateDocumentContinuation(access, currentAccess(workspaceId))
             if (ownership is AppResult.Failed) return@withTimeoutOrNull ownership
-            if (
-                file.draft != prepared.file.draft ||
-                    file.draft.download != null ||
-                    file.sha256 == null ||
-                    file.sha256 != prepared.file.sha256 ||
-                    file.storedBytes != file.draft.declaration.size
-            )
-                return@withTimeoutOrNull documentFailure(
-                    "client.document_file_changed",
-                    FailureKind.Conflict,
-                )
-            file.upload?.let {
-                return@withTimeoutOrNull if (it.intent.input == normalized) AppResult.Success(file)
+            val unchanged = validatePreparedDocumentFile(prepared.file, file)
+            if (unchanged is AppResult.Failed) return@withTimeoutOrNull unchanged
+            val replacing = isDocumentUploadRejected(file.upload)
+            if (file.upload != null && !replacing) {
+                return@withTimeoutOrNull if (file.upload.intent.input == normalized)
+                    AppResult.Success(file)
                 else documentFailure("client.document_upload_active", FailureKind.Conflict)
             }
+            if (
+                replacing &&
+                    file.upload?.intent?.input?.metadata != null &&
+                    normalized.metadata == null
+            )
+                return@withTimeoutOrNull documentFailure("client.document_metadata_unsupported")
             if (file.revision != prepared.file.revision)
                 return@withTimeoutOrNull documentFailure(
                     "client.document_file_changed",
@@ -103,7 +102,9 @@ class PrepareDocumentUpload(
                     ),
                     DocumentUploadStep.Start(Uuid.random().toString()),
                 )
-            val saved = files.updateUpload(access, file, upload)
+            val saved =
+                if (replacing) files.replaceUpload(access, file, upload)
+                else files.updateUpload(access, file, upload)
             currentCoroutineContext().ensureActive()
             val publication = validateDocumentContinuation(access, currentAccess(workspaceId))
             if (publication is AppResult.Failed) return@withTimeoutOrNull publication

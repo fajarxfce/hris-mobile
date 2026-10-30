@@ -125,6 +125,20 @@ class DocumentUploadFixture(size: Long = DOCUMENT_UPLOAD_CHUNK_BYTES + 7L) {
             override suspend fun find(access: DocumentAccess, id: String) =
                 AppResult.Success(rows.value.firstOrNull { it.draft.id == id })
 
+            override suspend fun replaceUpload(
+                access: DocumentAccess,
+                expected: LocalDocumentFile,
+                upload: DocumentUpload,
+            ): AppResult<Boolean> {
+                beforeUpdate(expected, upload)
+                val actual = rows.value.firstOrNull { it.draft.id == expected.draft.id }
+                if (actual != expected || actual.upload == null) return AppResult.Success(false)
+                val saved = actual.copy(revision = actual.revision + 1, upload = upload)
+                rows.value = rows.value.map { if (it.draft.id == saved.draft.id) saved else it }
+                afterUpdate(saved)
+                return AppResult.Success(true)
+            }
+
             override suspend fun updateUpload(
                 access: DocumentAccess,
                 expected: LocalDocumentFile,

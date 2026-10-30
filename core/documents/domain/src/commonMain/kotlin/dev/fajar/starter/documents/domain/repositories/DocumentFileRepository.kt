@@ -24,6 +24,15 @@ interface DocumentFileRepository {
         upload: DocumentUpload,
     ): AppResult<Boolean>
 
+    /**
+     * Replaces a complete observed intent by CAS. The confirming use case owns rejection policy.
+     */
+    suspend fun replaceUpload(
+        access: DocumentAccess,
+        expected: LocalDocumentFile,
+        upload: DocumentUpload,
+    ): AppResult<Boolean>
+
     suspend fun chunk(
         access: DocumentAccess,
         file: LocalDocumentFile,

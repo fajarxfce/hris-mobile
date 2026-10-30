@@ -23,7 +23,8 @@ fun DocumentUploadProgress(state: DocumentFileState, onEvent: (DocumentFileEvent
         }
         state.file?.upload?.intent?.input?.metadata?.let { DocumentMetadataDetails(it) }
         state.file?.upload?.failure?.let { failure ->
-            if (state.failure == null) AppFeedback(failureText(failure))
+            if (state.failure == null && state.rejectedFailure == null)
+                AppFeedback(failureText(failure))
         }
         if (state.writeAllowed)
             FlowRow(

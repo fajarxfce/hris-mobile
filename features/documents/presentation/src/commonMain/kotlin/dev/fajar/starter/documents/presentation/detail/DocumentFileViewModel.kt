@@ -3,8 +3,10 @@ package dev.fajar.starter.documents.presentation.detail
 import androidx.lifecycle.viewModelScope
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.documents.domain.entities.*
+import dev.fajar.starter.documents.domain.policies.isDocumentUploadRejected
 import dev.fajar.starter.documents.domain.usecases.*
 import dev.fajar.starter.documents.presentation.access.documentReadRestricted
+import dev.fajar.starter.documents.presentation.detail.mappers.createDocumentUploadForm
 import dev.fajar.starter.documents.presentation.files.mappers.toFileItem
 import dev.fajar.starter.presentation.mvi.MviViewModel
 import dev.fajar.starter.sync.domain.SyncResult
@@ -146,7 +148,8 @@ class DocumentFileViewModel(
             }
             return
         }
-        if (file.upload != null) formRequest?.cancel()
+        val editable = file.upload == null || isDocumentUploadRejected(file.upload)
+        if (!editable) formRequest?.cancel()
         updateState {
             it.copy(
                 file = file,
@@ -155,14 +158,15 @@ class DocumentFileViewModel(
                 readFailure = null,
                 restriction = if (revalidated) null else it.restriction,
                 writeAllowed = "documents.self.upload" in content.access.permissions,
-                form = if (file.upload == null) it.form else null,
-                choices = if (file.upload == null) it.choices else null,
-                choosingEmployment = file.upload == null && it.choosingEmployment,
-                formLoading = file.upload == null && it.formLoading,
+                form = if (editable) it.form else null,
+                choices = if (editable) it.choices else null,
+                choosingEmployment = editable && it.choosingEmployment,
+                choosingCategory = editable && it.choosingCategory,
+                formLoading = editable && it.formLoading,
             )
         }
         if (
-            file.upload == null &&
+            editable &&
                 file.sha256 != null &&
                 state.value.writeAllowed &&
                 state.value.form == null &&
@@ -203,7 +207,7 @@ class DocumentFileViewModel(
     }
 
     private fun onFormReloadRequested(event: DocumentFileEvent.FormReloadRequested) {
-        if (opened && state.value.canWrite && state.value.file?.upload == null)
+        if (opened && state.value.canWrite && state.value.canPrepareUpload)
             loadForm(state.value.form?.preparation?.after)
     }
 
@@ -223,29 +227,11 @@ class DocumentFileViewModel(
                     is AppResult.Success ->
                         updateState { current ->
                             if (choices) current.copy(choices = result.value, formLoading = false)
-                            else {
-                                val previous = current.form
-                                val employment =
-                                    previous?.employmentId?.takeIf { selected ->
-                                        result.value.employments.items.any { it.id == selected }
-                                    } ?: result.value.employments.items.singleOrNull()?.id
+                            else
                                 current.copy(
                                     formLoading = false,
-                                    form =
-                                        DocumentUploadForm(
-                                            result.value,
-                                            employment,
-                                            previous?.title
-                                                ?: result.value.file.draft.declaration.name
-                                                    .substringBeforeLast('.')
-                                                    .take(160),
-                                            previous?.reason ?: "",
-                                            previous?.classification
-                                                ?: DocumentClassification.PERSONAL,
-                                            previous?.metadata ?: DocumentMetadataInput(),
-                                        ),
+                                    form = createDocumentUploadForm(result.value, current.form),
                                 )
-                            }
                         }
                 }
             }
@@ -481,7 +467,11 @@ class DocumentFileViewModel(
         currentCoroutineContext().ensureActive()
         when (result) {
             is AppResult.Failed -> reportFailure(result.failure)
-            is AppResult.Success -> result.value.upload?.failure?.let(::reportFailure)
+            is AppResult.Success ->
+                result.value.upload?.failure?.let {
+                    reportFailure(it)
+                    emitEffect(DocumentFileEffect.ScrollToStart)
+                }
         }
     }
 

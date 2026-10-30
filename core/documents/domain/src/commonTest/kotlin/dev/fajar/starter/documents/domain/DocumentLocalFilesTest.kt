@@ -174,6 +174,12 @@ private class LocalFilesFixture {
             ): AppResult<DocumentFileCompletion> =
                 error("This operation never completes a download")
 
+            override suspend fun replaceUpload(
+                access: DocumentAccess,
+                expected: LocalDocumentFile,
+                upload: DocumentUpload,
+            ): AppResult<Boolean> = error("This flow never replaces an upload intent")
+
             override suspend fun updateUpload(
                 access: DocumentAccess,
                 expected: LocalDocumentFile,
