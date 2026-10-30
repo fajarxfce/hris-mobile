@@ -7,8 +7,8 @@ Compose Fluent Starter and is the proving ground for reusable foundation changes
 ## Active workspace goal — full feature completion audit
 
 The full PRD review remains active. Platform's [audit](https://github.com/fajarxfce/hris-platform/blob/feat/firebase-auth/docs/feature-audit-2026-10-30.md)
-now covers 31 initial rows across Approvals, Communications, Identity, Documents,
-Expenses and Leave; 30 initial Platform rows and the full Mobile review remain. Keep the original
+now retains thirty reviewed rows across Approvals, Communications, Identity, Expenses,
+Leave and four Document rows; thirty-one Platform rows and full Mobile review remain. Keep the original
 scope; accepted increments do not establish whole-product completion.
 
 - Platform `8014d733` adds optional announcement email, atomic publication capture,
@@ -28,8 +28,8 @@ scope; accepted increments do not establish whole-product completion.
   Twenty read reproductions and nineteen command/enrollment reproductions now
   pass; one inventory-replay scenario was an already-correct positive control.
   All 243 selected API, 18 domain and nine data cases, quality/packages and four
-  actual API/browser workflows passed (42.5s). The five Document rows and ten
-  original detailed sections have recorded local acceptance.
+  actual API/browser workflows passed (42.5s). Four Document rows retain acceptance. The explicit category requirement
+  in `documents.02` is reopened after the People audit found missing metadata.
 
 - Platform `5b60aba3` completes the Expense assurance/input correction and its
   six-row/nine-section review. Twenty-nine genuine failed cases now pass, plus
@@ -55,11 +55,27 @@ Expense [CI 41018107365](https://github.com/fajarxfce/hris-platform/actions/runs
 passed nine jobs and all fourteen worker scenarios, but exceeded the five-minute
 step budget (5.2m); later storage/export checks were skipped. Platform `84d37ad6`
 records the failure and sets bounded eight-minute worker/twenty-minute job budgets.
-Final Leave source `70b92e59e7b41bdafe9f9d1c4b9d5106412777f5` is running in
-[CI 41023645590](https://github.com/fajarxfce/hris-platform/actions/runs/41023645590), including unchanged Expenses and the revised workflow.
-Observe its terminal result without cancelling it. Continue People, the remaining
-Platform requirements, then Mobile and applicable Starter behavior. The full goal
-remains active; this module acceptance does not complete the PRD.
+Final Leave source `70b92e59e7b41bdafe9f9d1c4b9d5106412777f5` passed all ten jobs in
+[CI 41023645590](https://github.com/fajarxfce/hris-platform/actions/runs/41023645590),
+including unchanged Expenses, worker, private exports and recovery. Platform
+`7dae1e26` records the exact outcomes and the failed predecessor.
+
+People reader correction `b0b7c21c` passed 427 API/OpenAPI, 50 domain and fourteen
+repository cases, quality/packages (1124s), three actual browser workflows (36.5s)
+and two actual worker/browser workflows (37.3s), including setup. The later command
+and Organization correction has fifty reproduced failures plus four prior controls;
+all 54 focused API, 52 domain and fourteen data cases plus quality/packages passed
+(142s). Broad API/worker acceptance remains active; two old worker-import fixtures
+omit enrollment during interactive admission and need correction. This in-progress
+People source is not part of the green Leave CI.
+
+The audit confirmed missing distinct document category and foreign identity/document
+business-validity metadata in `documents.02` and `people.03`. Upload deadlines are
+operational; tax residency already belongs separately to Payroll. The previous
+Documents review omitted category, so that row is reopened. See the
+[gap and continuation](https://github.com/fajarxfce/hris-platform/blob/feat/firebase-auth/docs/document-identity-metadata-gap-2026-10-30.md).
+Finish People command acceptance, implement that gap with compatible client flows,
+and continue remaining Platform/Mobile requirements. The full goal stays active.
 
 No client implementation or generic port is due from these server/dashboard
 increments. The private API remains schema 101 with SMTP disabled; preserve the
