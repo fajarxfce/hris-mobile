@@ -234,19 +234,33 @@ zero failures/errors/skips. The final full run repeats all three new assembled f
 six screenshots were visually inspected. [Editor evidence](measurements/document-metadata-editor-2026-10-30.json)
 retains source/APK hashes, actual cases, earlier failures and practical limits.
 
-Next: independent retained command/draft overview with neutral recovery targets so
-local corrections remain discoverable when published binary catalog entries disappear.
-The editor is currently entered from admitted document details. Keep the separate
-resource gate ahead of fallible storage and do not send commands automatically. Apply the new resource gate
-alongside company/catalog admission, with finite remote work and final scope checks.
-Existing CommandStore retains correction intents. Keep current facts separate from
-original operation receipts. Preserve
-old omitted JSON/payload hashes and unknown
-legacy values. Then
-run owned emulator/API/storage acceptance and final Apple/full native checks before
-accepting either requirement, finishing the detailed People review and continuing
-remaining Platform/Mobile/Starter scope. This business increment has no Starter
-implementation port. The full goal remains active.
+The independent retained overview is now locally validated. Catalog opens **Document
+corrections** even when a published binary row disappears. Local commands/drafts
+retain their original input, resource admission and draft page cursor; row selection
+opens the existing editor or neutral admitted recovery. Opening/reloading does not
+send HTTP or replay commands. A 45-copy domain case verifies bounded 20/20/5 paging
+and released subscriptions. Typed neutral restriction targets prevent private titles
+from appearing during resource recovery. Two new presentation regressions exposed
+stale private rows when either local reader failed; both admitted projections must
+now be ready before private rows display. Five state cases cover that boundary,
+denial union, reload and command/draft display deduplication.
+
+Both actual-storage/controlled-HTTP application workflows passed, including the
+retained incomplete draft after binary deletion/offline recovery, and the original
+uncertain correction retried after a later administrative edit. Final root checks,
+APK and Document browsers passed in 190.845s: 1,987 desktop/224 browser, zero
+failures/errors/skips. The full run repeats both workflows. Three screenshots were
+inspected. [Overview evidence](measurements/document-metadata-changes-2026-10-30.json)
+retains exact sources, reproduced failures, actual cases and the uninstalled APK.
+
+Next: add a separate bounded metadata summary to Account's Pending actions and
+link it directly to the overview. Preserve edited-draft/command deduplication,
+original outcomes, local-only reading, resource/company gates and reader disposal.
+Then run owned emulator/API/storage acceptance and final Apple/full native checks
+before accepting either requirement, finishing the detailed People review and
+continuing remaining Platform/Mobile/Starter scope. Keep shared finance/leave
+evidence free of private identity numbers and preserve legacy omitted payloads.
+This business increment has no Starter implementation port. The full goal remains active.
 
 The private API remains schema 101 with SMTP disabled; preserve the accepted Google
 binding and installed phone. The dashboard serves an isolated baseline directory

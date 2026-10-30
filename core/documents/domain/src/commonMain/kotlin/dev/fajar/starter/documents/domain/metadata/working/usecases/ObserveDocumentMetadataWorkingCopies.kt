@@ -5,6 +5,7 @@ package dev.fajar.starter.documents.domain.metadata.working.usecases
 import dev.fajar.starter.common.config.AppBuild
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.documents.domain.entities.DocumentAccess
+import dev.fajar.starter.documents.domain.metadata.entities.DocumentMetadataRestriction
 import dev.fajar.starter.documents.domain.metadata.repositories.*
 import dev.fajar.starter.documents.domain.metadata.working.entities.*
 import dev.fajar.starter.documents.domain.metadata.working.policies.validateDocumentMetadataWorkingCopy
@@ -115,7 +116,7 @@ class ObserveDocumentMetadataWorkingCopies(
                             DocumentMetadataWorkingView(
                                 access,
                                 DocumentMetadataWorkingPage(emptyList(), null),
-                                listOf(denial),
+                                listOf(DocumentMetadataRestriction(id, denial)),
                             )
                         )
                     )
@@ -166,15 +167,27 @@ class ObserveDocumentMetadataWorkingCopies(
         )
             return flowOf(documentFailure("client.document_working_copy_invalid"))
         if (page.items.isEmpty())
-            return flowOf(AppResult.Success(DocumentMetadataWorkingView(access, page, emptyList())))
+            return flowOf(
+                AppResult.Success(DocumentMetadataWorkingView(access, page, emptyList(), after))
+            )
         return combine(
             page.items.map { copy ->
                 admission.observe(access, copy.head.id).map { gate ->
                     when (gate) {
-                        is AppResult.Failed -> WorkingVisibility(null, gate.failure)
+                        is AppResult.Failed ->
+                            WorkingVisibility(
+                                null,
+                                DocumentMetadataRestriction(copy.head.id, gate.failure),
+                            )
                         is AppResult.Success ->
                             if (gate.value.denial != null)
-                                WorkingVisibility(null, gate.value.denial)
+                                WorkingVisibility(
+                                    null,
+                                    DocumentMetadataRestriction(
+                                        copy.head.id,
+                                        requireNotNull(gate.value.denial),
+                                    ),
+                                )
                             else WorkingVisibility(copy, null)
                     }
                 }
@@ -185,11 +198,15 @@ class ObserveDocumentMetadataWorkingCopies(
                 DocumentMetadataWorkingView(
                     access,
                     page.copy(items = values.mapNotNull { it.copy }),
-                    values.mapNotNull { it.failure },
+                    values.mapNotNull { it.restriction },
+                    after,
                 )
             )
         }
     }
 }
 
-private data class WorkingVisibility(val copy: DocumentMetadataWorkingCopy?, val failure: Failure?)
+private data class WorkingVisibility(
+    val copy: DocumentMetadataWorkingCopy?,
+    val restriction: DocumentMetadataRestriction?,
+)

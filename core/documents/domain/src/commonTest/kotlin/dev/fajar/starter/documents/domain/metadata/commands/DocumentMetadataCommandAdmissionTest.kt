@@ -33,7 +33,8 @@ class DocumentMetadataCommandAdmissionTest {
         f.reads.admission.restrict(f.access, f.reads.id, denial)
         val result = observe(f, commands)(f.workspaceId, f.reads.id).first()
         val view = assertIs<AppResult.Success<DocumentMetadataCommandsView>>(result).value
-        assertEquals(listOf(denial), view.restrictions)
+        assertEquals(listOf(denial), view.restrictions.map { it.failure })
+        assertEquals(listOf(f.reads.id), view.restrictions.map { it.documentId })
         assertTrue(view.records.isEmpty())
         assertEquals(0, subscriptions)
     }
@@ -75,7 +76,8 @@ class DocumentMetadataCommandAdmissionTest {
         runCurrent()
         val denied = assertIs<AppResult.Success<DocumentMetadataCommandsView>>(values.last()).value
         assertTrue(denied.records.isEmpty())
-        assertEquals(listOf(denial), denied.restrictions)
+        assertEquals(listOf(denial), denied.restrictions.map { it.failure })
+        assertEquals(listOf(f.reads.id), denied.restrictions.map { it.documentId })
         assertEquals(0, active)
         records.value = AppResult.Success(pending)
         runCurrent()

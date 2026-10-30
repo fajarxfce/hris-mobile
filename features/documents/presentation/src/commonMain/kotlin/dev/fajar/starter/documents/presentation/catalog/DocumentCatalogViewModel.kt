@@ -35,6 +35,7 @@ class DocumentCatalogViewModel(
         on<DocumentCatalogEvent.Closed>(::onClosed)
         on<DocumentCatalogEvent.RefreshRequested>(::onRefreshRequested)
         on<DocumentCatalogEvent.FilesRequested>(::onFilesRequested)
+        on<DocumentCatalogEvent.MetadataChangesRequested>(::onMetadataChangesRequested)
         on<DocumentCatalogEvent.EmploymentRequested>(::onEmploymentRequested)
         on<DocumentCatalogEvent.EmploymentDismissed>(::onEmploymentDismissed)
         on<DocumentCatalogEvent.EmploymentSelected>(::onEmploymentSelected)
@@ -140,6 +141,12 @@ class DocumentCatalogViewModel(
 
     private fun onEmploymentRequested(event: DocumentCatalogEvent.EmploymentRequested) {
         if (opened && state.value.canChoose) updateState { it.copy(choosingEmployment = true) }
+    }
+
+    private fun onMetadataChangesRequested(event: DocumentCatalogEvent.MetadataChangesRequested) {
+        if (!opened || state.value.preparingId != null || state.value.choosingEmployment) return
+        onClosed(DocumentCatalogEvent.Closed)
+        viewModelScope.launch { emitEffect(DocumentCatalogEffect.OpenMetadataChanges) }
     }
 
     private fun onEmploymentDismissed(event: DocumentCatalogEvent.EmploymentDismissed) {

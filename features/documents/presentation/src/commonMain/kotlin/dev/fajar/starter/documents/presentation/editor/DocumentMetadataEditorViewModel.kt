@@ -137,7 +137,7 @@ class DocumentMetadataEditorViewModel(
                             is AppResult.Success -> {
                                 val value = result.value
                                 if (value.restrictions.isNotEmpty())
-                                    report(value.restrictions.first())
+                                    report(value.restrictions.first().failure)
                                 else if (
                                     acceptAccess(value.access) && state.value.restriction == null
                                 )
@@ -162,7 +162,7 @@ class DocumentMetadataEditorViewModel(
                             is AppResult.Success -> {
                                 val value = result.value
                                 if (value.restrictions.isNotEmpty())
-                                    report(value.restrictions.first())
+                                    report(value.restrictions.first().failure)
                                 else if (
                                     acceptAccess(value.access) && state.value.restriction == null
                                 ) {
@@ -240,7 +240,7 @@ class DocumentMetadataEditorViewModel(
                     }
                     val value = (commands as AppResult.Success).value
                     if (value.restrictions.isNotEmpty()) {
-                        report(value.restrictions.first())
+                        report(value.restrictions.first().failure)
                         return@launch
                     }
                     if (value.records.isNotEmpty()) return@launch

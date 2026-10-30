@@ -22,6 +22,7 @@ import io.github.composefluent.icons.regular.ArrowDownload
 import io.github.composefluent.icons.regular.ArrowLeft
 import io.github.composefluent.icons.regular.ArrowSync
 import io.github.composefluent.icons.regular.Document
+import io.github.composefluent.icons.regular.Edit
 import io.github.composefluent.icons.regular.Folder
 import io.github.composefluent.icons.regular.Person
 
@@ -48,6 +49,12 @@ fun DocumentCatalogPage(
                     )
                 },
                 actions = {
+                    AppIconButton(
+                        Icons.Regular.Edit,
+                        appString(AppString.DocumentMetadataChanges),
+                        { onEvent(DocumentCatalogEvent.MetadataChangesRequested) },
+                        enabled = state.preparingId == null && !state.choosingEmployment,
+                    )
                     AppIconButton(
                         Icons.Regular.Folder,
                         appString(AppString.DocumentLocalFiles),

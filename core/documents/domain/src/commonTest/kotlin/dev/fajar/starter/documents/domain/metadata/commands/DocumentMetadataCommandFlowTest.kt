@@ -276,7 +276,7 @@ class DocumentMetadataCommandFlowTest {
                 )
                 .value
         assertTrue(view.records.isEmpty())
-        assertEquals("document_access_denied", view.restrictions.single().code)
+        assertEquals("document_access_denied", view.restrictions.single().failure.code)
     }
 
     @Test
@@ -400,6 +400,7 @@ class DocumentMetadataCommandFlowTest {
                 .value
                 .restrictions
                 .single()
+                .failure
                 .code,
         )
         f.commands.records.value =

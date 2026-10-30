@@ -95,7 +95,7 @@ class DocumentMetadataWorkingFlowTest {
         runCurrent()
         val denied = assertIs<AppResult.Success<DocumentMetadataWorkingView>>(values.last()).value
         assertTrue(denied.page.items.isEmpty())
-        assertEquals("document_access_denied", denied.restrictions.single().code)
+        assertEquals("document_access_denied", denied.restrictions.single().failure.code)
         assertEquals(0, f.copies.active)
         assertIs<AppResult.Failed>(f.open(f.command.workspaceId, original.head.id))
         assertIs<AppResult.Failed>(

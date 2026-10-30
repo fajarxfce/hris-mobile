@@ -1519,8 +1519,18 @@ class AppFlowTest {
             waitFor("Document details")
             server.documents.metadata.correctExternally("ADMIN-456")
             server.documents.metadata.loseSaveResponse = false
-            waitForAction("Correct document details")
-            compose.onNode(hasText("Correct document details") and hasClickAction()).performClick()
+            compose.onNodeWithContentDescription("Back").performClick()
+            waitFor("Documents")
+            compose.onNodeWithContentDescription("Document corrections").performClick()
+            waitFor("Saved corrections")
+            compose
+                .onAllNodesWithTag("metadata-draft-${NativeDocumentsUi.DOCUMENT}")
+                .assertCountEquals(0)
+            assertEquals(1, server.documents.metadata.submissions.size)
+            capture("document-metadata-changes-original-correction")
+            compose
+                .onNodeWithTag("metadata-correction-${NativeDocumentsUi.DOCUMENT}")
+                .performClick()
             waitFor("Delivery has not been confirmed. Retry the saved correction.")
             waitForAction("Retry correction")
             compose.onNodeWithTag("metadata-retry").performScrollTo().performClick()
@@ -1533,10 +1543,104 @@ class AppFlowTest {
                 server.documents.metadata.submissions[1],
             )
             compose.onNodeWithTag("metadata-review").performScrollTo().performClick()
-            waitFor("Document details")
+            waitFor("Document corrections")
+            waitFor("No saved corrections on this page.")
+            compose.onNodeWithContentDescription("Back").performClick()
+            waitFor("Documents")
+            compose.onNodeWithTag("document-details-${NativeDocumentsUi.DOCUMENT}").performClick()
             waitFor("ADMIN-456")
             compose.onAllNodesWithText("ORIGINAL-123").assertCountEquals(0)
             capture("document-metadata-editor-newer-header")
+        }
+    }
+
+    @Test
+    fun metadataChangesRecoverDraftWithoutPublishedBinaryAndKeepDeniedInputHidden() {
+        val server =
+            NativeUiServer().apply {
+                documents.enabled = true
+                documents.uploadEnabled = true
+                documents.metadataSupported = true
+                documents.metadata.enabled = true
+                documents.catalogVersion = documents.metadata.latest + 1
+            }
+        withApplication(server) {
+            signIn()
+            waitFor("Choose a company")
+            compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
+            waitFor("Welcome")
+            openDocumentDetails()
+            waitForAction("Correct document details")
+            compose.onNode(hasText("Correct document details") and hasClickAction()).performClick()
+            waitForMetadataEditor()
+            compose
+                .onNodeWithContentDescription("Document number (optional)")
+                .performScrollTo()
+                .performTextReplacement("RETAINED-OFFLINE")
+            compose
+                .onNodeWithContentDescription("Valid until (optional)")
+                .performScrollTo()
+                .performTextReplacement("202")
+            compose.onNodeWithContentDescription("Back").performClick()
+            waitFor("Document details")
+            compose.onNodeWithContentDescription("Back").performClick()
+            waitFor("Documents")
+            server.documents.catalogRemoved = true
+            server.documents.catalogVersion = server.documents.metadata.latest + 2
+            server.documents.metadata.offline = true
+            compose.onNodeWithContentDescription("Refresh").performClick()
+            waitFor("No published documents in this category.")
+            val reads = server.documents.metadata.headReads.get()
+            compose.onNodeWithContentDescription("Document corrections").performClick()
+            waitFor("Drafts")
+            compose
+                .onNodeWithTag("metadata-draft-${NativeDocumentsUi.DOCUMENT}")
+                .assertIsDisplayed()
+            assertEquals(reads, server.documents.metadata.headReads.get())
+            capture("document-metadata-changes-retained-draft")
+            compose.onNodeWithTag("metadata-draft-${NativeDocumentsUi.DOCUMENT}").performClick()
+            waitForMetadataEditor()
+            compose
+                .onNodeWithContentDescription("Document number (optional)")
+                .assertTextContains("RETAINED-OFFLINE")
+            compose.onNodeWithContentDescription("Valid until (optional)").assertTextContains("202")
+            compose.waitUntil { server.documents.metadata.active.get() == 0 }
+            server.documents.metadata.offline = false
+            server.documents.metadata.denial = "document_access_denied"
+            compose.onNodeWithContentDescription("Refresh").performClick()
+            waitForAction("Try again")
+            compose
+                .onAllNodesWithContentDescription("Document number (optional)")
+                .assertCountEquals(0)
+            compose.onNodeWithContentDescription("Back").performClick()
+            waitFor("Document corrections")
+            waitFor("This document needs an access check.")
+            compose.onAllNodesWithText("Medical certificate").assertCountEquals(0)
+            compose
+                .onAllNodesWithTag("metadata-draft-${NativeDocumentsUi.DOCUMENT}")
+                .assertCountEquals(0)
+            capture("document-metadata-changes-denied")
+            server.documents.metadata.denial = null
+            server.documents.metadata.offline = true
+            compose.onNodeWithTag("metadata-recover-${NativeDocumentsUi.DOCUMENT}").performClick()
+            waitForAction("Try again")
+            compose.onAllNodesWithText("PASSPORT-21").assertCountEquals(0)
+            compose.onNodeWithContentDescription("Back").performClick()
+            waitFor("This document needs an access check.")
+            server.documents.metadata.offline = false
+            compose.onNodeWithTag("metadata-recover-${NativeDocumentsUi.DOCUMENT}").performClick()
+            waitFor("PASSPORT-21")
+            compose.onNodeWithContentDescription("Back").performClick()
+            waitFor("Drafts")
+            compose.onNodeWithTag("metadata-draft-${NativeDocumentsUi.DOCUMENT}").performClick()
+            waitForMetadataEditor()
+            compose
+                .onNodeWithContentDescription("Document number (optional)")
+                .assertTextContains("RETAINED-OFFLINE")
+            compose.onNodeWithContentDescription("Valid until (optional)").assertTextContains("202")
+            assertEquals(0, server.documents.metadata.writes.get())
+            assertTrue(server.documents.metadata.submissions.isEmpty())
+            assertEquals(0, server.documents.uploads.starts.get())
         }
     }
 

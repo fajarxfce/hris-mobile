@@ -741,6 +741,26 @@ enum class AppString(val english: StringResource, val indonesian: StringResource
         Res.string.document_classification_en,
         Res.string.document_classification_id,
     ),
+    DocumentMetadataChanges(
+        Res.string.document_metadata_changes_en,
+        Res.string.document_metadata_changes_id,
+    ),
+    DocumentMetadataChangesHint(
+        Res.string.document_metadata_changes_hint_en,
+        Res.string.document_metadata_changes_hint_id,
+    ),
+    DocumentMetadataChangesEmpty(
+        Res.string.document_metadata_changes_empty_en,
+        Res.string.document_metadata_changes_empty_id,
+    ),
+    DocumentMetadataSavedCorrections(
+        Res.string.document_metadata_saved_corrections_en,
+        Res.string.document_metadata_saved_corrections_id,
+    ),
+    DocumentMetadataDrafts(
+        Res.string.document_metadata_drafts_en,
+        Res.string.document_metadata_drafts_id,
+    ),
     DocumentMetadataEdit(
         Res.string.document_metadata_edit_en,
         Res.string.document_metadata_edit_id,

@@ -26,6 +26,7 @@ fun NavGraphBuilder.documentRoutes(
     onDownload: (String, Boolean) -> Unit,
     onDetails: (String) -> Unit,
     onMetadataEdit: (String) -> Unit,
+    onMetadataChanges: () -> Unit,
     onVerify: () -> Unit,
     onBack: () -> Unit,
 ) {
@@ -42,6 +43,7 @@ fun NavGraphBuilder.documentRoutes(
         CollectEffects(viewModel.effects) { effect ->
             when (effect) {
                 DocumentCatalogEffect.OpenFiles -> onFiles()
+                DocumentCatalogEffect.OpenMetadataChanges -> onMetadataChanges()
                 is DocumentCatalogEffect.OpenDownload -> onDownload(effect.fileId, true)
                 is DocumentCatalogEffect.OpenDetails -> onDetails(effect.documentId)
                 DocumentCatalogEffect.Back -> onBack()
@@ -53,6 +55,7 @@ fun NavGraphBuilder.documentRoutes(
     }
     documentRecordRoute(workspaceId, onMetadataEdit, onVerify, onBack)
     documentMetadataEditorRoute(workspaceId, onVerify, onBack)
+    documentMetadataChangesRoute(workspaceId, onMetadataEdit, onDetails, onVerify, onBack)
     composable<DocumentFilesRoute> {
         val viewModel =
             koinViewModel<DocumentFilesViewModel>(parameters = { parametersOf(workspaceId) })

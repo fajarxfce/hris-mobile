@@ -8,6 +8,7 @@ import dev.fajar.starter.documents.domain.entities.DocumentAccess
 import dev.fajar.starter.documents.domain.metadata.commands.entities.*
 import dev.fajar.starter.documents.domain.metadata.commands.policies.belongsTo
 import dev.fajar.starter.documents.domain.metadata.commands.repositories.DocumentMetadataCommandRepository
+import dev.fajar.starter.documents.domain.metadata.entities.DocumentMetadataRestriction
 import dev.fajar.starter.documents.domain.metadata.repositories.*
 import dev.fajar.starter.documents.domain.policies.*
 import dev.fajar.starter.documents.domain.replica.repositories.DocumentCatalogRepository
@@ -105,7 +106,11 @@ class ObserveDocumentMetadataCommands(
                 denial != null ->
                     flowOf(
                         AppResult.Success(
-                            DocumentMetadataCommandsView(access, emptyList(), listOf(denial))
+                            DocumentMetadataCommandsView(
+                                access,
+                                emptyList(),
+                                listOf(DocumentMetadataRestriction(documentId, denial)),
+                            )
                         )
                     )
                 else ->
@@ -162,10 +167,23 @@ class ObserveDocumentMetadataCommands(
             records.map { record ->
                 admission.observe(access, record.command.change.documentId).map { gate ->
                     when (gate) {
-                        is AppResult.Failed -> CommandVisibility(null, gate.failure)
+                        is AppResult.Failed ->
+                            CommandVisibility(
+                                null,
+                                DocumentMetadataRestriction(
+                                    record.command.change.documentId,
+                                    gate.failure,
+                                ),
+                            )
                         is AppResult.Success ->
                             if (gate.value.denial != null)
-                                CommandVisibility(null, gate.value.denial)
+                                CommandVisibility(
+                                    null,
+                                    DocumentMetadataRestriction(
+                                        record.command.change.documentId,
+                                        requireNotNull(gate.value.denial),
+                                    ),
+                                )
                             else CommandVisibility(record, null)
                     }
                 }
@@ -176,7 +194,7 @@ class ObserveDocumentMetadataCommands(
                 DocumentMetadataCommandsView(
                     access,
                     values.mapNotNull { it.record },
-                    values.mapNotNull { it.failure },
+                    values.mapNotNull { it.restriction },
                 )
             )
         }
@@ -185,5 +203,5 @@ class ObserveDocumentMetadataCommands(
 
 private data class CommandVisibility(
     val record: DocumentMetadataCommandRecord?,
-    val failure: Failure?,
+    val restriction: DocumentMetadataRestriction?,
 )

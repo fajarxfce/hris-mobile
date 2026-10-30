@@ -397,3 +397,43 @@ records the history, exact cases, source and uninstalled APK hashes.
 
 The independent retained command/draft overview remains next. This increment is
 not actual API/emulator/Apple acceptance, and the private API/phone remain unchanged.
+
+
+## Retained correction overview — locally validated
+
+Documents opens **Document corrections**, independently of published binary rows.
+The local overview reads original commands and selected encrypted working copies;
+opening/reloading does not send HTTP or replay commands. A row resumes the reviewed
+editor. Unavailable resources expose only a neutral recovery action into admitted
+details, keeping document title and input hidden. Resource restrictions now retain
+an internal target rather than an unlinked failure. This does not change stored
+payloads or the database schema.
+
+Commands keep the existing account limit of 128. Draft pages retain twenty selected
+copies, their original next cursor, and the selection that produced the result.
+Changing pages releases previous resource subscriptions. A command takes display
+precedence over its working copy; filtering duplicates/denied rows never rewrites
+the storage cursor. Either projection's denial hides both representations. Two
+new presentation regressions exposed stale private rows when one reader failed;
+both projections now wait for admitted ready readers, while known neutral recovery
+targets remain available. Route closure cancels observations and explicit company
+recovery; local reload alone cannot clear a confirmed company denial.
+
+The actual-storage/controlled-HTTP application workflows cover a retained incomplete
+draft after a binary feed deletion, offline opening, denied/offline/admitted recovery,
+and an original uncertain correction retried after an administrative edit. The
+original payload/key is reused and the later header stays current. Merely opening
+the overview performs no metadata request or write. A 45-copy domain scenario
+checks 20/20/5 paging, neutral failure targets, unchanged cursor and released readers.
+Five presentation cases cover denial union, deduplication and failed/replaced readers.
+
+Root checks, development APK and Document Chromium suites passed in 190.845s:
+1,987 desktop and 224 browser cases, all without failures/errors/skips. The full run
+repeats both assembled workflows. Three narrow screenshots were inspected.
+[Evidence](measurements/document-metadata-changes-2026-10-30.json) records exact
+sources, tests, the two reproduced failures and the uninstalled APK hash.
+
+Next, include metadata work in Account's Pending actions with a bounded local
+summary and a direct overview link. Owned emulator/API/storage acceptance and final
+Apple/native checks remain before accepting either metadata PRD requirement. The
+private API remains schema 101, and neither the phone nor live dashboard changed.

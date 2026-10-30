@@ -15,6 +15,7 @@ class NativeDocumentsUi {
     @Volatile var gate: CompletableDeferred<Unit>? = null
     @Volatile var catalogOffline = false
     @Volatile var catalogDenied = false
+    @Volatile var catalogRemoved = false
     @Volatile var catalogVersion = 0L
     @Volatile var catalogTitle = "Medical certificate"
     val catalogReads = AtomicInteger()
@@ -153,10 +154,11 @@ class NativeDocumentsUi {
         return buildJsonObject {
                 if (bootstrap) putJsonArray("collections") { add("DOCUMENT_EVIDENCE") }
                 putJsonArray("items") {
-                    if (bootstrap || catalogVersion > 0)
+                    if ((bootstrap && !catalogRemoved) || (!bootstrap && catalogVersion > 0))
                         addJsonObject {
                             put("collection", "DOCUMENT_EVIDENCE")
-                            if (!bootstrap) put("operation", "UPSERT")
+                            if (!bootstrap)
+                                put("operation", if (catalogRemoved) "DELETE" else "UPSERT")
                             put("id", DOCUMENT)
                             put("version", catalogVersion)
                         }

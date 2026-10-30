@@ -11,6 +11,8 @@ sealed interface DocumentCatalogEvent {
 
     data object FilesRequested : DocumentCatalogEvent
 
+    data object MetadataChangesRequested : DocumentCatalogEvent
+
     data object EmploymentRequested : DocumentCatalogEvent
 
     data object EmploymentDismissed : DocumentCatalogEvent

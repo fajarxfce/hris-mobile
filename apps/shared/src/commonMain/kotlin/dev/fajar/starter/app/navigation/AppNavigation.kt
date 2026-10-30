@@ -455,6 +455,11 @@ fun AppNavigation(navigation: ScopedNavigationState, incomingLinks: Flow<String>
                                 launchSingleTop = true
                             }
                         },
+                        onMetadataChanges = {
+                            controller.navigate(DocumentMetadataChangesRoute) {
+                                launchSingleTop = true
+                            }
+                        },
                         onVerify = {
                             controller.navigate(VerificationRoute) { launchSingleTop = true }
                         },
