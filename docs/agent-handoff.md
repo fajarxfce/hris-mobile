@@ -15,6 +15,17 @@ passed 132 API/OpenAPI, 104 worker and 16 communication module tests, 4,006
 dashboard tests, 15 Chromium scenarios, actual API/worker/SMTP/browser delivery
 and independent schema-102 recovery. Full branch CI is the next verification.
 
+Platform `bbb99b48` closes the second gap: [shared approval history](https://github.com/fajarxfce/hris-platform/blob/feat/firebase-auth/docs/approval-history.md).
+Local acceptance passed 118 API/OpenAPI, 104 worker and 11 approval domain cases,
+4,012 dashboard unit cases, 14 Chromium scenarios and two real API/browser workflows.
+It uses existing immutable tables, current request authorization and versioned
+reassignment pages. No Mobile implementation or Starter port is needed for this
+server/admin-dashboard capability. The next active work reproduces and corrects
+post-acquisition MFA/delegation expiry in older approval readers; full feature review
+remains open. Email source `8014d733` has nine green CI jobs; its dashboard integration
+is still running in [41005223374](https://github.com/fajarxfce/hris-platform/actions/runs/41005223374).
+Do not dispatch a same-branch run that cancels it before completion.
+
 Continue every module and Mobile requirement in that inventory; do not infer full
 completion from this increment or earlier CI. No client code/Starter port is due
 for this server/dashboard feature. The private API still uses schema 101, SMTP
