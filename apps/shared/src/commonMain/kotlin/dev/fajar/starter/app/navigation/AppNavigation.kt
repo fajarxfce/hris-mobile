@@ -447,6 +447,9 @@ fun AppNavigation(navigation: ScopedNavigationState, incomingLinks: Flow<String>
                                 launchSingleTop = true
                             }
                         },
+                        onDetails = { id ->
+                            controller.navigate(DocumentRecordRoute(id)) { launchSingleTop = true }
+                        },
                         onVerify = {
                             controller.navigate(VerificationRoute) { launchSingleTop = true }
                         },

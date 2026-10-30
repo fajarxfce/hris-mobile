@@ -878,4 +878,12 @@
     <string name="document_certificate_id">Sertifikat</string>
     <string name="document_category_receipt_id">Kuitansi</string>
     <string name="document_category_other_id">Lainnya</string>
+    <string name="document_metadata_history_id">Riwayat perubahan</string>
+    <string name="document_metadata_revision_id">Revisi %1$s</string>
+    <string name="document_metadata_initial_id">Catatan awal</string>
+    <string name="document_metadata_unknown_id">Detail tambahan belum tersedia.</string>
+    <string name="document_history_not_saved_id">Bagian riwayat ini belum tersimpan di perangkat ini.</string>
+    <string name="document_history_author_id">Dicatat oleh %1$s</string>
+    <string name="document_history_by_you_id">Dicatat oleh Anda</string>
+    <string name="document_history_author_unknown_id">Pencatat tidak diketahui</string>
 </resources>

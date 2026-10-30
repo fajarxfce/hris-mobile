@@ -24,6 +24,7 @@ fun NavGraphBuilder.documentRoutes(
     onFile: (String) -> Unit,
     onFiles: () -> Unit,
     onDownload: (String, Boolean) -> Unit,
+    onDetails: (String) -> Unit,
     onVerify: () -> Unit,
     onBack: () -> Unit,
 ) {
@@ -41,6 +42,7 @@ fun NavGraphBuilder.documentRoutes(
             when (effect) {
                 DocumentCatalogEffect.OpenFiles -> onFiles()
                 is DocumentCatalogEffect.OpenDownload -> onDownload(effect.fileId, true)
+                is DocumentCatalogEffect.OpenDetails -> onDetails(effect.documentId)
                 DocumentCatalogEffect.Back -> onBack()
                 DocumentCatalogEffect.VerifyAccount -> onVerify()
                 DocumentCatalogEffect.ScrollToStart -> list.requestScrollToItem(0)
@@ -48,6 +50,7 @@ fun NavGraphBuilder.documentRoutes(
         }
         DocumentCatalogPage(state, list, employments, viewModel::onEvent)
     }
+    documentRecordRoute(workspaceId, onVerify, onBack)
     composable<DocumentFilesRoute> {
         val viewModel =
             koinViewModel<DocumentFilesViewModel>(parameters = { parametersOf(workspaceId) })

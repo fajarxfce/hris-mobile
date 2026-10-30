@@ -41,6 +41,7 @@ class DocumentCatalogViewModel(
         on<DocumentCatalogEvent.ClassificationChanged>(::onClassificationChanged)
         on<DocumentCatalogEvent.PageRequested>(::onPageRequested)
         on<DocumentCatalogEvent.DownloadRequested>(::onDownloadRequested)
+        on<DocumentCatalogEvent.DetailsRequested>(::onDetailsRequested)
         on<DocumentCatalogEvent.VerificationRequested>(::onVerificationRequested)
         on<DocumentCatalogEvent.BackRequested>(::onBackRequested)
     }
@@ -224,6 +225,19 @@ class DocumentCatalogViewModel(
     private fun onVerificationRequested(event: DocumentCatalogEvent.VerificationRequested) {
         if (opened && state.value.needsVerification)
             viewModelScope.launch { emitEffect(DocumentCatalogEffect.VerifyAccount) }
+    }
+
+    private fun onDetailsRequested(event: DocumentCatalogEvent.DetailsRequested) {
+        val current = state.value
+        if (
+            !opened ||
+                !current.canChoose ||
+                current.choosingEmployment ||
+                current.catalog?.page?.items?.none { it.id == event.documentId } != false
+        )
+            return
+        onClosed(DocumentCatalogEvent.Closed)
+        viewModelScope.launch { emitEffect(DocumentCatalogEffect.OpenDetails(event.documentId)) }
     }
 
     private fun onBackRequested(event: DocumentCatalogEvent.BackRequested) {

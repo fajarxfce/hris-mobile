@@ -23,8 +23,12 @@ class NativeDocumentsUi {
     val active = AtomicInteger()
     val uploads = NativeDocumentUploadsUi()
     val downloads = NativeDocumentContentUi()
+    val metadata = NativeDocumentMetadataUi()
 
     suspend fun response(request: HttpRequestData): Pair<String, HttpStatusCode>? {
+        metadata.response(request, catalogTitle)?.let {
+            return it
+        }
         catalogResponse(request)?.let {
             return it
         }
@@ -113,7 +117,10 @@ class NativeDocumentsUi {
                     put("employmentId", NativePeopleUi.EMPLOYEE)
                     put("classification", "PERSONAL")
                     put("metadataSupported", metadataSupported)
-                    if (metadataSupported) {
+                    if (metadataSupported && metadata.enabled) {
+                        put("metadataVersion", metadata.latest)
+                        put("metadata", metadata.value(metadata.latest))
+                    } else if (metadataSupported) {
                         put("metadataVersion", 0)
                         putJsonObject("metadata") {
                             put("category", "CERTIFICATE")

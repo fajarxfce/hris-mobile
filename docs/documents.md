@@ -55,8 +55,9 @@ generation readable. A later server capability change also requests canonical
 replacement. Initial upload retains confirmed metadata and supports explicit recovery
 after a definite first rejection. The separate header/history/correction transport
 is validated. The dedicated encrypted detail/history cache and per-document admission
-store also pass SQLite and IndexedDB tests. Read orchestration, correction commands
-and detail/history UI remain next.
+store also pass SQLite and IndexedDB tests. Admitted local observation, finite remote
+acquisition and the detail/history route pass full local checks and assembled UI tests.
+Observed-version correction commands and their editor remain next.
 
 ## Business evidence review
 

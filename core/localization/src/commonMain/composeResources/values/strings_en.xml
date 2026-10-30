@@ -878,4 +878,12 @@
     <string name="document_certificate_en">Certificate</string>
     <string name="document_category_receipt_en">Receipt</string>
     <string name="document_category_other_en">Other</string>
+    <string name="document_metadata_history_en">Change history</string>
+    <string name="document_metadata_revision_en">Revision %1$s</string>
+    <string name="document_metadata_initial_en">Initial record</string>
+    <string name="document_metadata_unknown_en">Additional details are unavailable.</string>
+    <string name="document_history_not_saved_en">This part of the history has not been saved on this device.</string>
+    <string name="document_history_author_en">Recorded by %1$s</string>
+    <string name="document_history_by_you_en">Recorded by you</string>
+    <string name="document_history_author_unknown_en">Author unavailable</string>
 </resources>

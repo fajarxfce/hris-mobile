@@ -5,8 +5,8 @@ The Platform contract is implemented in `27e7f77e`; see its
 Mobile implements the owned read projection, encrypted format upgrade and
 capability-aware initial upload. The separate header/history/correction transport
 is also locally validated, as are the encrypted detail/history cache and per-resource
-read-admission store. Read orchestration, correction/history screens and durable
-metadata commands remain next. This is HRIS business behavior and has no Starter port.
+read-admission store. Admitted read orchestration and the detail/history screen
+also pass local validation. Versioned corrections and durable metadata commands remain next. This is HRIS business behavior and has no Starter port.
 
 `DocumentBusinessMetadata` separates category, document number, issuing country,
 issue date and business-validity date from binary evidence. Dates are calendar
@@ -165,8 +165,8 @@ Per-document read admission is separate from the retained facts. A process-owned
 buffer makes a confirmed denial visible during a pending or failed durable write.
 Persisted denials survive restart and reauthentication. Only clearing the exact
 observed admission revision can reopen the resource; a later denial wins over an
-older pending admission. These components provide storage boundaries; the next
-read use cases must apply this gate together with current company/catalog admission.
+older pending admission. The read use cases apply this gate together with current
+company/catalog admission.
 
 Three domain and eleven real-storage scenarios pass on desktop and Chromium,
 including SQLite/IndexedDB restart, all 1,000 history rows, scoped reads, lost keys,
@@ -179,7 +179,40 @@ One compiler-proven redundant nullable condition was removed; no failed feature
 test or pre-fix reproduction is claimed. See
 [storage measurements](measurements/document-metadata-cache-2026-10-30.json).
 
-Next: admitted metadata acquisition/observation, detail/history UI, observed-version corrections and
+## Detail and history screen — locally validated
+
+The catalog exposes a separate details action alongside its existing download action.
+The route observes owned header/history facts locally, applying company/catalog and
+per-document admission. It neither sends corrections nor expires local facts with
+credentials. A finite acquisition checks the current session/workspace after waits,
+fresh company policy, current owned employment (at most ten directory pages), matching
+server capability and twenty contiguous history rows. It publishes by exact cache
+and admission revision. Legacy servers do not receive an unsupported history request.
+
+History displays the original immutable facts, timestamp, reason and available actor
+information, separate from the latest header. Paging controls precede the history
+cards. Route dismissal cancels acquisition and clears private view state. Pending or
+failed retry cannot reopen a confirmed denial; successful revalidation also restarts
+a storage observation that previously completed with an error. Resource-only success
+cannot clear an unrelated catalog denial.
+
+Two added tests reproduced success incorrectly reported when company policy expired
+during the new cache/admission publication. Completion now checks that policy and
+preserves an earlier denial. Thirteen domain cases and two assembled application
+cases cover those reproductions, directory bounds, legacy support, scope changes,
+cancellation, timeout, storage-source recovery, paging and offline access. The actual
+screen exercises also retain denial through a pending/failed retry and cancel an
+in-flight request on Back. Three narrow screenshots were visually inspected.
+
+Final root checks, Android dev assembly and both Document Chromium suites pass in
+197.437 seconds: 1,927 desktop and 177 browser tests, with no failures/errors/skips.
+An earlier compile attempt required stable local nullable-property bindings; the
+first full check required extracting the new route entry from a 109-line navigation
+method. No quality threshold changed. The focused domain and assembled UI runs
+passed in 34.334s and 108.773s. Exact cases, failures, source/APK and screenshot hashes
+are retained in [read/UI evidence](measurements/document-metadata-read-ui-2026-10-30.json).
+
+Next: observed-version corrections and
 durable recovery of the original metadata command. Then validate actual owned
 emulator/API/storage behavior and final Apple/full native CI. Physical iPhone testing
 remains waived. Neither `documents.02` nor `people.03`, and not the full PRD goal,

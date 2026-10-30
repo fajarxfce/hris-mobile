@@ -1,6 +1,8 @@
 package dev.fajar.starter.documents.data.di
 
 import dev.fajar.starter.common.config.AppBuild
+import dev.fajar.starter.documents.domain.metadata.repositories.*
+import dev.fajar.starter.documents.domain.metadata.usecases.*
 import dev.fajar.starter.documents.domain.replica.repositories.DocumentCatalogRepository
 import dev.fajar.starter.documents.domain.replica.usecases.*
 import dev.fajar.starter.documents.domain.repositories.*
@@ -20,6 +22,52 @@ import org.koin.core.annotation.*
 @Module
 @ComponentScan("dev.fajar.starter.documents.data")
 class DocumentsDataModule {
+    @Single @Named("document-metadata-read") fun metadataReadMutex() = Mutex()
+
+    @Factory
+    fun observeMetadata(
+        cache: DocumentMetadataCacheRepository,
+        admission: DocumentMetadataAdmissionRepository,
+        catalog: DocumentCatalogRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        build: AppBuild,
+    ) =
+        ObserveDocumentMetadata(
+            cache,
+            admission,
+            catalog,
+            sessions,
+            workspaces,
+            Clock.System,
+            build,
+        )
+
+    @Factory
+    fun refreshMetadata(
+        remote: DocumentMetadataRepository,
+        directory: DocumentRepository,
+        cache: DocumentMetadataCacheRepository,
+        admission: DocumentMetadataAdmissionRepository,
+        catalog: DocumentCatalogRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        build: AppBuild,
+        @Named("document-metadata-read") execution: Mutex,
+    ) =
+        RefreshDocumentMetadata(
+            remote,
+            directory,
+            cache,
+            admission,
+            catalog,
+            sessions,
+            workspaces,
+            Clock.System,
+            build,
+            execution,
+        )
+
     @Single(binds = [SyncDocumentCatalog::class, SyncTask::class, SyncCompanyData::class])
     fun syncCatalog(
         feed: SyncFeedRepository,

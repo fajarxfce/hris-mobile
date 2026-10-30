@@ -5,6 +5,7 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
@@ -161,6 +162,14 @@ fun DocumentCatalogPage(
                                 AppProgressRing(appString(AppString.DocumentPreparingDownload))
                             else AppIcon(Icons.Regular.ArrowDownload, appString(AppString.Download))
                         },
+                    )
+                    AppTextButton(
+                        appString(AppString.DocumentDetails),
+                        { onEvent(DocumentCatalogEvent.DetailsRequested(record.id)) },
+                        modifier =
+                            Modifier.padding(horizontal = 8.dp)
+                                .testTag("document-details-${record.id}"),
+                        enabled = state.canChoose,
                     )
                 }
             }

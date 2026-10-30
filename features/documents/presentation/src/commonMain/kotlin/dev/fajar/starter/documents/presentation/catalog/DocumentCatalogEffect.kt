@@ -5,6 +5,8 @@ sealed interface DocumentCatalogEffect {
 
     data class OpenDownload(val fileId: String) : DocumentCatalogEffect
 
+    data class OpenDetails(val documentId: String) : DocumentCatalogEffect
+
     data object ScrollToStart : DocumentCatalogEffect
 
     data object VerifyAccount : DocumentCatalogEffect

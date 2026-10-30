@@ -1240,6 +1240,98 @@ class AppFlowTest {
     }
 
     @Test
+    fun metadataDetailsPageHistoryAndOwnedOfflineFactsRemainReadable() {
+        val server =
+            NativeUiServer().apply {
+                documents.enabled = true
+                documents.metadataSupported = true
+                documents.metadata.enabled = true
+                documents.catalogVersion = documents.metadata.latest + 1
+            }
+        withApplication(server) {
+            signIn()
+            waitFor("Choose a company")
+            compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
+            waitFor("Welcome")
+            openDocumentDetails()
+            waitFor("PASSPORT-21")
+            waitForAction("Next page")
+            capture("document-metadata-details")
+            compose
+                .onNode(hasText("Next page") and hasClickAction())
+                .performScrollTo()
+                .performClick()
+            waitFor("Revision 20")
+            capture("document-metadata-history-page")
+            assertEquals(2, server.documents.metadata.historyReads.get())
+            compose.onNodeWithContentDescription("Back").performClick()
+            waitFor("Medical certificate")
+            server.documents.metadata.offline = true
+            compose
+                .onNodeWithTag("document-details-${NativeDocumentsUi.DOCUMENT}")
+                .performScrollTo()
+                .performClick()
+            waitFor("PASSPORT-21")
+            waitForAction("Next page")
+            compose
+                .onNode(hasText("Next page") and hasClickAction())
+                .performScrollTo()
+                .performClick()
+            waitFor("Revision 20")
+            assertEquals(0, server.documents.uploads.starts.get())
+            capture("document-metadata-history-offline")
+        }
+    }
+
+    @Test
+    fun metadataDenialStaysClosedUntilAdmittedRetryAndLeavingCancelsAcquisition() {
+        val server =
+            NativeUiServer().apply {
+                documents.enabled = true
+                documents.metadataSupported = true
+                documents.metadata.enabled = true
+                documents.catalogVersion = documents.metadata.latest + 1
+            }
+        withApplication(server) {
+            signIn()
+            waitFor("Choose a company")
+            compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
+            waitFor("Welcome")
+            openDocumentDetails()
+            waitFor("PASSPORT-21")
+            compose.waitUntil { server.documents.metadata.active.get() == 0 }
+            server.documents.metadata.denial = "document_access_denied"
+            compose.onNodeWithContentDescription("Refresh").performClick()
+            waitForAction("Try again")
+            compose.onAllNodesWithText("PASSPORT-21").assertCountEquals(0)
+            val gate = CompletableDeferred<Unit>()
+            server.documents.metadata.denial = null
+            server.documents.metadata.gate = gate
+            compose.onNode(hasText("Try again") and hasClickAction()).performClick()
+            compose.waitUntil { server.documents.metadata.active.get() == 1 }
+            compose.onAllNodesWithText("PASSPORT-21").assertCountEquals(0)
+            server.documents.metadata.offline = true
+            gate.complete(Unit)
+            waitForAction("Try again")
+            compose.onAllNodesWithText("PASSPORT-21").assertCountEquals(0)
+            server.documents.metadata.offline = false
+            server.documents.metadata.gate = null
+            compose.onNode(hasText("Try again") and hasClickAction()).performClick()
+            waitFor("PASSPORT-21")
+            capture("document-metadata-admission-restored")
+            val pending = CompletableDeferred<Unit>()
+            server.documents.metadata.gate = pending
+            compose.onNodeWithContentDescription("Refresh").performClick()
+            compose.waitUntil { server.documents.metadata.active.get() == 1 }
+            compose.onNodeWithContentDescription("Back").performClick()
+            waitFor("Medical certificate")
+            compose.waitUntil { server.documents.metadata.active.get() == 0 }
+            pending.complete(Unit)
+            assertEquals(0, server.documents.uploads.starts.get())
+        }
+    }
+
+    @Test
     fun documentFormValidatesConfirmationAndPublishesOnlyAfterTheServerCheck() {
         val server =
             NativeUiServer().apply {
@@ -4347,6 +4439,15 @@ class AppFlowTest {
                 .size == 1
         }
         compose.onNodeWithContentDescription("Search employees").assertIsFocused()
+    }
+
+    private fun openDocumentDetails() {
+        compose.onNode(hasText("Documents") and hasClickAction()).performScrollTo().performClick()
+        waitFor("Medical certificate")
+        compose
+            .onNodeWithTag("document-details-${NativeDocumentsUi.DOCUMENT}")
+            .performScrollTo()
+            .performClick()
     }
 
     private fun openDocumentFiles() {

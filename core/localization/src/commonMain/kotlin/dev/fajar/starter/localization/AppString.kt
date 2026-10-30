@@ -737,6 +737,38 @@ enum class AppString(val english: StringResource, val indonesian: StringResource
         Res.string.document_classification_en,
         Res.string.document_classification_id,
     ),
+    DocumentMetadataHistory(
+        Res.string.document_metadata_history_en,
+        Res.string.document_metadata_history_id,
+    ),
+    DocumentMetadataRevision(
+        Res.string.document_metadata_revision_en,
+        Res.string.document_metadata_revision_id,
+    ),
+    DocumentMetadataInitial(
+        Res.string.document_metadata_initial_en,
+        Res.string.document_metadata_initial_id,
+    ),
+    DocumentMetadataUnknown(
+        Res.string.document_metadata_unknown_en,
+        Res.string.document_metadata_unknown_id,
+    ),
+    DocumentHistoryNotSaved(
+        Res.string.document_history_not_saved_en,
+        Res.string.document_history_not_saved_id,
+    ),
+    DocumentHistoryAuthor(
+        Res.string.document_history_author_en,
+        Res.string.document_history_author_id,
+    ),
+    DocumentHistoryByYou(
+        Res.string.document_history_by_you_en,
+        Res.string.document_history_by_you_id,
+    ),
+    DocumentHistoryAuthorUnknown(
+        Res.string.document_history_author_unknown_en,
+        Res.string.document_history_author_unknown_id,
+    ),
     DocumentBusinessCategory(
         Res.string.document_business_category_en,
         Res.string.document_business_category_id,

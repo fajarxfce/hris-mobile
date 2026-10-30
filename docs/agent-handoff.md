@@ -139,8 +139,18 @@ Root checks, dev APK and both Document browser suites pass in 184.621s: 1,912 de
 and 164 browser cases, without failures/errors/skips. See [storage evidence](measurements/document-metadata-cache-2026-10-30.json).
 The existing workspace key is read-only; no database primitive or Starter port changed.
 
-Next: admitted metadata acquisition/observation, detail/history UI and versioned
-corrections with durable original-command recovery. Apply the new resource gate
+Admitted metadata reads and the actual detail/history route are now locally validated.
+Thirteen domain cases and two assembled UI workflows cover ownership/capability,
+finite directory/history acquisition, cancellation, local history after credential age,
+pending/failed denial recovery and explicit storage-observer restart. Two genuine
+failures in the new publication path exposed policy expiry during cache/admission
+writes; both now pass with the earlier denial retained. Root quality, Android dev
+assembly and Document Chromium suites pass in 197.437s: 1,927 desktop and 177 browser
+cases, all without failures/errors/skips. Three narrow screenshots were inspected.
+[Read/UI evidence](measurements/document-metadata-read-ui-2026-10-30.json) records
+source/APK hashes, actual cases and the earlier compilation/method-length corrections.
+
+Next: versioned corrections with durable original-command recovery. Apply the new resource gate
 alongside company/catalog admission, with finite remote work and final scope checks.
 Existing CommandStore retains correction intents. Keep current facts separate from
 original operation receipts. Preserve

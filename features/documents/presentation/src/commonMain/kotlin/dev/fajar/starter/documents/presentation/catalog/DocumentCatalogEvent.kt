@@ -23,6 +23,8 @@ sealed interface DocumentCatalogEvent {
 
     data class DownloadRequested(val revisionId: String) : DocumentCatalogEvent
 
+    data class DetailsRequested(val documentId: String) : DocumentCatalogEvent
+
     data object VerificationRequested : DocumentCatalogEvent
 
     data object BackRequested : DocumentCatalogEvent
