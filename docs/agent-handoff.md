@@ -65,17 +65,26 @@ repository cases, quality/packages (1124s), three actual browser workflows (36.5
 and two actual worker/browser workflows (37.3s), including setup. The later command
 and Organization correction has fifty reproduced failures plus four prior controls;
 all 54 focused API, 52 domain and fourteen data cases plus quality/packages passed
-(142s). Broad API/worker acceptance remains active; two old worker-import fixtures
-omit enrollment during interactive admission and need correction. This in-progress
-People source is not part of the green Leave CI.
+(142s). Final broad acceptance passed 497 API cases. Two legacy worker-import
+fixture failures were corrected; all 104 ordinary worker cases then passed with
+one independently accepted manual test skipped (226s). Production/package hashes
+matched the broad API run. Three normal browser workflows passed in 36.1s and two
+worker/browser workflows in 36.8s, including setup. Platform `158b81ac` commits the
+complete correction and evidence. Exact source `158b81acce89f637dbf715bb573fffb7b99b92c9`
+is running in [CI 41032184925](https://github.com/fajarxfce/hris-platform/actions/runs/41032184925).
+Observe the terminal result without cancelling the same-branch workflow.
 
 The audit confirmed missing distinct document category and foreign identity/document
 business-validity metadata in `documents.02` and `people.03`. Upload deadlines are
 operational; tax residency already belongs separately to Payroll. The previous
 Documents review omitted category, so that row is reopened. See the
 [gap and continuation](https://github.com/fajarxfce/hris-platform/blob/feat/firebase-auth/docs/document-identity-metadata-gap-2026-10-30.md).
-Finish People command acceptance, implement that gap with compatible client flows,
-and continue remaining Platform/Mobile requirements. The full goal stays active.
+People command acceptance is complete locally; metadata implementation is now
+active under the [working contract](https://github.com/fajarxfce/hris-platform/blob/feat/firebase-auth/docs/document-business-metadata.md)
+committed in `9d0a2677`. Preserve legacy upload/receipt payloads and owned cache
+facts; new metadata must be acquired even after an older client consumed the same
+document version. Finish that feature and the detailed People review, then continue
+remaining Platform/Mobile requirements. The full goal stays active.
 
 No client implementation or generic port is due from these server/dashboard
 increments. The private API remains schema 101 with SMTP disabled; preserve the
