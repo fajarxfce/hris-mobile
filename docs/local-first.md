@@ -145,8 +145,8 @@ Facts and their processed checkpoint commit in one repository-owned storage
 transaction. A worker cannot advance a cursor before the associated records are
 durable. Drafts and pending commands remain separate from confirmed facts, so
 optimistic UI cannot accidentally change a leave balance or finalized payslip.
-These are the next collection boundaries, not a claim that every module already
-has these tables.
+These boundaries describe the implemented projections above; adding another
+projection requires its own typed records and bounded acquisition contract.
 
 ### Leave replica
 
@@ -287,8 +287,9 @@ a company partition while retaining the active session as the database guard.
 Session-bound workspace admission and action-preparation snapshots remain separate
 from these durable records; they are not a missing replica migration.
 
-[Pending actions](pending-actions.md) has six feature observers covering Inbox,
-attendance, overtime, leave, expenses and document files. It distinguishes edited
+[Pending actions](pending-actions.md) has seven observers across six owning areas:
+Inbox, attendance, overtime, leave, expenses and documents. Documents exposes
+separate file-transfer and business-metadata commands. It distinguishes edited
 drafts, unsent commands, uncertain outcomes, review failures and file transfers.
 Opening/reloading it performs no HTTP or automatic command delivery. The native
 acceptance ledger now includes Leave working copies, actual Inbox, Attendance, Leave, Overtime and Expense-save response loss,
@@ -306,9 +307,11 @@ Continue from an explicit missing workflow or acceptance case:
    interrupted bootstrap, duplicate/stale versions, revocation, cancellation and
    disposal for that projection. Distinguish controlled clock regressions from
    elapsed wall-clock or physical-device acceptance.
-3. Complete actual FCM message/scoped-hint delivery when the server credential is
-   supplied; registration/recovery/retirement is already accepted. Complete Google
-   token exchange and iOS/physical URL/location cases with their required setup.
+3. Actual Android FCM foreground/background delivery and Google → Firebase →
+   HRIS → company/Home are accepted in [native push](native-push.md) and
+   [Firebase authentication](firebase-auth.md). Do not repeat credential setup from
+   an old checkpoint. Physical iPhone testing is waived; target-specific signed
+   Apple/APNs and production configuration remain distinct from simulator proof.
 4. Keep [agent handoff](agent-handoff.md), feature contracts and the chronological
    [validation ledger](validation.md) current after each accepted increment.
 

@@ -1,0 +1,1632 @@
+{
+  "date": "2026-10-30",
+  "status": "Mobile and applicable Starter source review complete; Platform Workforce broad/full CI and combined development rollout remain active",
+  "mobileCi": {
+    "runId": 41077194465,
+    "source": "d170810f03852f46a948f9f4d5dea9ca4104bdbd",
+    "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/41077194465",
+    "allJobsPassed": 4,
+    "linuxTargets": {
+      "desktopTest": {
+        "suites": 61,
+        "tests": 1994,
+        "failures": 0,
+        "skipped": 0
+      },
+      "wasmJsBrowserTest": {
+        "suites": 51,
+        "tests": 1676,
+        "failures": 0,
+        "skipped": 0
+      },
+      "test": {
+        "suites": 1,
+        "tests": 10,
+        "failures": 0,
+        "skipped": 0
+      }
+    },
+    "apple": {
+      "tests": 104,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "evidence": "docs/measurements/document-metadata-final-ci-2026-10-30.json",
+    "unchangedTrees": {
+      "apps": "bcd31d705f5148f5d124d6f5ed7795129e275fce",
+      "core": "a1bb59dcb85d6bf775117994c9c7db6ce152f5a0",
+      "features": "a35107fc50327f639b7ec4d9211201709fe56be1",
+      "build-logic": "33e150681446bf9891e9ccc4b29b206b99b31307",
+      "gradle": "d32291033d6bff5d47b7fb72d6cf0205a88e7c0b",
+      "tool": "906a222f7026040680d53c82f31005f6d75654ed",
+      ".github": "afba243c1528384740159d2d29184a642daa00c8"
+    }
+  },
+  "starterCi": {
+    "runId": 40916187442,
+    "source": "77063862866bb52db5eade28733ceffce1588409",
+    "url": "https://github.com/fajarxfce/compose-fluent-starter/actions/runs/40916187442",
+    "allJobsPassed": 3,
+    "unchangedTrees": {
+      "apps": "b3df21495c1217d6660fb0c795ddca15aa9f1dc9",
+      "core": "cec6e11689a91d9600880c33b1f15e02804f1e96",
+      "features": "46715bf57fbd7e91dac4b3538d3d8e9a137aaae3",
+      "build-logic": "2761bb7a6870931e2a67440c0d092ae8fede4484",
+      "gradle": "bc4c0b54eee4074b7ae52e4863975fb698a89de0",
+      "tool": "8897d2a7b0e2091d796aafd2ac62a3f25211d2ab"
+    },
+    "workflowException": "Only distribute-android.yml/distribute-ios.yml differ: separately accepted hidden association-file artifact upload from 4c794e7; no ordinary CI/application change."
+  },
+  "areas": [
+    {
+      "id": "mobile.identity",
+      "status": "reviewed with existing full-source CI and scoped native evidence",
+      "scope": "Native session, Firebase email/password/Google, MFA, refresh and session management",
+      "contracts": [
+        {
+          "path": "docs/native-identity.md",
+          "sha256": "2996145c2ed42231bc5a1fba3f0690dd83e3fcc6a8fe9cf93b391ddd637f0843"
+        },
+        {
+          "path": "docs/firebase-auth.md",
+          "sha256": "c15439f3821dc9506f641046455cefb0d33b414815de6321095709e01195610d"
+        },
+        {
+          "path": "docs/sso.md",
+          "sha256": "67f863fae437bd7cca4d286cef4038e15e79781d16477e1e47a902533e6cca18"
+        }
+      ],
+      "sourcePaths": [
+        "core/identity",
+        "features/auth"
+      ],
+      "ciReports": [
+        {
+          "path": "core/identity/data/build/reports/tests/desktopTest/index.html",
+          "tests": "65",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "1.805s",
+          "sha256": "624eec8be36970510304126d2d3ee294060a2a544363c20da405279126805f15"
+        },
+        {
+          "path": "core/identity/data/build/reports/tests/wasmJsBrowserTest/index.html",
+          "tests": "63",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "1.963s",
+          "sha256": "0b7ddac3655169bc046edd62bebb715646f71503e2bf263564522cbdc80ff475"
+        },
+        {
+          "path": "core/identity/domain/build/reports/tests/desktopTest/index.html",
+          "tests": "64",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "0.954s",
+          "sha256": "98d4537a5b951628f0b9a7b1fbf07da801e019e098b5a3b3e4e17d786434a033"
+        },
+        {
+          "path": "core/identity/domain/build/reports/tests/wasmJsBrowserTest/index.html",
+          "tests": "64",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "1.872s",
+          "sha256": "b437e0d457c18e1d8b33a5a4b441b47917f7d73999af8079a6f1371545f4bb4f"
+        },
+        {
+          "path": "features/auth/presentation/build/reports/tests/desktopTest/index.html",
+          "tests": "9",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "0.805s",
+          "sha256": "7bad2a8768ecd4327b59ca9bb0f4e00e25d6af53064ef75f4efeb4b27462c745"
+        }
+      ]
+    },
+    {
+      "id": "mobile.workspace",
+      "status": "reviewed with existing full-source CI and scoped native evidence",
+      "scope": "Owned company selection, admission, availability, minimum version and module controls",
+      "contracts": [
+        {
+          "path": "docs/workspace.md",
+          "sha256": "0b9264e238650e0b8530863bbd152f3e6c280be6f8a6604292b993e9bbcf82fb"
+        },
+        {
+          "path": "docs/company-policy.md",
+          "sha256": "f3f3bd94927f53ce135a4204ec8616db8cde4ea5c012228d35fd95b61d689cb0"
+        },
+        {
+          "path": "docs/availability.md",
+          "sha256": "eb522fbdcef13a457bd0ca3b95e144d98fdf6284cec115d09bd79049cd82d7a3"
+        }
+      ],
+      "sourcePaths": [
+        "core/workspace",
+        "core/availability"
+      ],
+      "ciReports": [
+        {
+          "path": "core/availability/data/build/reports/tests/desktopTest/index.html",
+          "tests": "2",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "0.688s",
+          "sha256": "c04d0f9c68c3061a202539c276401f6d8189f395681bddfb1fa18a2b9dce7aea"
+        },
+        {
+          "path": "core/availability/data/build/reports/tests/wasmJsBrowserTest/index.html",
+          "tests": "2",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "1.255s",
+          "sha256": "f83c2070553da2a376c2ac612119da620039893a7bf699b1157631b05aa49c5a"
+        },
+        {
+          "path": "core/availability/domain/build/reports/tests/desktopTest/index.html",
+          "tests": "5",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "0.871s",
+          "sha256": "1e54b85e431301db25d9282a06de1063c5464add3dc38e9409124c2364e16191"
+        },
+        {
+          "path": "core/availability/domain/build/reports/tests/wasmJsBrowserTest/index.html",
+          "tests": "5",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "1.246s",
+          "sha256": "fc2eb9590e5312c1f2caf5228a5752d7a4ce71e35c066c9646061979ab7ac392"
+        },
+        {
+          "path": "core/workspace/data/build/reports/tests/desktopTest/index.html",
+          "tests": "9",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "1.086s",
+          "sha256": "bf472f8e58c46f81e9b6857aac1b6906fb65cf399407bc5cbd4c570d99a0dba4"
+        },
+        {
+          "path": "core/workspace/data/build/reports/tests/wasmJsBrowserTest/index.html",
+          "tests": "3",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "2.087s",
+          "sha256": "e44e0637dfb8adac8493b6be3c1e896416b2bde3434fd370717287fa445efec5"
+        },
+        {
+          "path": "core/workspace/domain/build/reports/tests/desktopTest/index.html",
+          "tests": "28",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "0.842s",
+          "sha256": "44e48159b60f3c35593ec63475c798c6d1f0fe653b14409c117cfc0f9cc91113"
+        },
+        {
+          "path": "core/workspace/domain/build/reports/tests/wasmJsBrowserTest/index.html",
+          "tests": "28",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "1.994s",
+          "sha256": "f2cea6af5f2a9988d6348d84392032067af1006ca0204532a5e051d61c50f219"
+        }
+      ]
+    },
+    {
+      "id": "mobile.experience",
+      "status": "reviewed with existing full-source CI and scoped native evidence",
+      "scope": "Home/tabs, retained navigation, localization, large text, reduced motion and app lock",
+      "contracts": [
+        {
+          "path": "docs/experience.md",
+          "sha256": "27d02fd4dd0a599a190128b6792b71385460b53bead307742b1d0791edbfc0dc"
+        },
+        {
+          "path": "docs/accessibility.md",
+          "sha256": "247111675a1d00b88397ddcccecbab868df28294154f7b0e515030010b414323"
+        },
+        {
+          "path": "docs/localization.md",
+          "sha256": "bb0c54a1200f880ea594e3bc4e633238f42c3f147f1834d22029cb956764e1c5"
+        },
+        {
+          "path": "docs/app-lock.md",
+          "sha256": "fc4ac4f5a984830eee32204eb0cee11c1968465ac7689a5860ae495d54e7d316"
+        }
+      ],
+      "sourcePaths": [
+        "apps/shared",
+        "features/home",
+        "core/designsystem",
+        "core/security"
+      ],
+      "ciReports": [
+        {
+          "path": "apps/shared/build/reports/tests/desktopTest/index.html",
+          "tests": "204",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "2m9.05s",
+          "sha256": "cc87f1ecbe35308591d9fce47df7ea9e6f1a3a1c1dc449c4bc542a3b3b810cb5"
+        },
+        {
+          "path": "apps/shared/build/reports/tests/wasmJsBrowserTest/index.html",
+          "tests": "20",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "2.912s",
+          "sha256": "d9d805ccd8b7e4e9f0e4ca307b75e7f19b33b71f30126086f40fbea6d833ebf1"
+        },
+        {
+          "path": "core/security/data/build/reports/tests/desktopTest/index.html",
+          "tests": "4",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "0.668s",
+          "sha256": "4e2bcb13b19f6cf58236eebfa811922f409626dd8036c654b12affbe24dc148e"
+        },
+        {
+          "path": "core/security/data/build/reports/tests/wasmJsBrowserTest/index.html",
+          "tests": "4",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "1.482s",
+          "sha256": "34f3511705130875a4333a220bb88060febc3d47ff0c44f80005bbf0755335ff"
+        },
+        {
+          "path": "core/security/domain/build/reports/tests/desktopTest/index.html",
+          "tests": "6",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "0.625s",
+          "sha256": "30d1e8c918b7b36f0e80bd36583b22a4c9df50a37375c13f1133ef669039eb0d"
+        },
+        {
+          "path": "core/security/domain/build/reports/tests/wasmJsBrowserTest/index.html",
+          "tests": "6",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "1.401s",
+          "sha256": "c050ae876ab36566672ac370ca2cd53ae1fbfdfbec97d9669994740270bea821"
+        },
+        {
+          "path": "features/home/presentation/build/reports/tests/desktopTest/index.html",
+          "tests": "18",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "0.781s",
+          "sha256": "399d408e0e063a886694d7e96ac27102b4e98aaab73803e8748e60c022cef664"
+        },
+        {
+          "path": "features/home/presentation/build/reports/tests/wasmJsBrowserTest/index.html",
+          "tests": "18",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "2.452s",
+          "sha256": "303f562b09b1cf952cd91604b9f3f0f82567c4e93d3213425408b0f259c49574"
+        }
+      ]
+    },
+    {
+      "id": "mobile.inbox",
+      "status": "reviewed with existing full-source CI and scoped native evidence",
+      "scope": "Owned messages, unread/read/ack, durable commands and complete acquisition",
+      "contracts": [
+        {
+          "path": "docs/inbox.md",
+          "sha256": "7c109a9feb3d356164addec0b1c4c135ba83565d99bdf55e1f39149134c2c31f"
+        },
+        {
+          "path": "docs/inbox-commands.md",
+          "sha256": "c606629e6576197dfd4ad9c55ac3ce401522c029ddaf9e012ab93d3e171b086d"
+        }
+      ],
+      "sourcePaths": [
+        "features/inbox"
+      ],
+      "ciReports": [
+        {
+          "path": "features/inbox/data/build/reports/tests/desktopTest/index.html",
+          "tests": "27",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "1.523s",
+          "sha256": "e05b6e063711ac7f33dc6bb82d62043a1d7fc3d1f7a4eefbfbfbe4318d9bbdfc"
+        },
+        {
+          "path": "features/inbox/data/build/reports/tests/wasmJsBrowserTest/index.html",
+          "tests": "11",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "2.415s",
+          "sha256": "a8f4c2353259901b766d5de78db0e387772af5d5a87b8f4bc83df9a237fc2edf"
+        },
+        {
+          "path": "features/inbox/domain/build/reports/tests/desktopTest/index.html",
+          "tests": "77",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "1.059s",
+          "sha256": "08435bee18d91860ac2f5c110bcbc538ace6e0adc63790c3098f2116e5556695"
+        },
+        {
+          "path": "features/inbox/domain/build/reports/tests/wasmJsBrowserTest/index.html",
+          "tests": "77",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "1.802s",
+          "sha256": "8d21a29ddc820eff70277bfc073645962a0b1c75b51fe3acc7e827e91b7fb63e"
+        }
+      ]
+    },
+    {
+      "id": "mobile.people",
+      "status": "reviewed with existing full-source CI and scoped native evidence",
+      "scope": "Encrypted directory and personal employment/profile references",
+      "contracts": [
+        {
+          "path": "docs/people.md",
+          "sha256": "26a7962fa3bb8e91dddbc97fc17e51ed2f6f952ec163f4806ba9f1c4ce4ed639"
+        }
+      ],
+      "sourcePaths": [
+        "features/people"
+      ],
+      "ciReports": [
+        {
+          "path": "features/people/data/build/reports/tests/desktopTest/index.html",
+          "tests": "40",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "2.761s",
+          "sha256": "ba71670274497e36f2a5676ab5e4e82bf01aac6b79bdd14b805936c900f09fdc"
+        },
+        {
+          "path": "features/people/data/build/reports/tests/wasmJsBrowserTest/index.html",
+          "tests": "38",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "3.340s",
+          "sha256": "ff30a8c9ef7f83713ecdc8c886290dcbb6a903b978e4095cc5cb8da99c7c0c24"
+        },
+        {
+          "path": "features/people/domain/build/reports/tests/desktopTest/index.html",
+          "tests": "43",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "0.946s",
+          "sha256": "9442a1bb1a3c67f9537d246997310d7826ce4dbdc00c85335cf34a324a8e46d8"
+        },
+        {
+          "path": "features/people/domain/build/reports/tests/wasmJsBrowserTest/index.html",
+          "tests": "43",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "2.114s",
+          "sha256": "18142ff3bdfbe8de6c89b4c4b51befe804497ee73eb303c61c0db7daf94b9a08"
+        },
+        {
+          "path": "features/people/presentation/build/reports/tests/desktopTest/index.html",
+          "tests": "7",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "0.693s",
+          "sha256": "fca987f7df554a1d1263a276c5ec17cb2a9103268766ef5f859a124384ab65ba"
+        },
+        {
+          "path": "features/people/presentation/build/reports/tests/wasmJsBrowserTest/index.html",
+          "tests": "7",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "2.414s",
+          "sha256": "4bd81041c5a9c92445197ba01f689f596d1da706c23bf3b699228585581e31ed"
+        }
+      ]
+    },
+    {
+      "id": "mobile.workforce",
+      "status": "reviewed with existing full-source CI and scoped native evidence",
+      "scope": "Own attendance capture/history and calendar, offline evidence and record synchronization",
+      "contracts": [
+        {
+          "path": "docs/workforce.md",
+          "sha256": "148a5df0270922938c887985a4737e3abc538ca73a70fce4ba1e8a3a77f76e87"
+        }
+      ],
+      "sourcePaths": [
+        "features/workforce"
+      ],
+      "ciReports": [
+        {
+          "path": "features/workforce/data/build/reports/tests/desktopTest/index.html",
+          "tests": "78",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "3.244s",
+          "sha256": "88df66fdfdb89c532b47ffe003491a485988049301347e2cdb123d6b44274504"
+        },
+        {
+          "path": "features/workforce/data/build/reports/tests/wasmJsBrowserTest/index.html",
+          "tests": "55",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "3.741s",
+          "sha256": "9f3c3e4d20147209998bffab453865cba92f0a5891a7611781c47d9177373523"
+        },
+        {
+          "path": "features/workforce/domain/build/reports/tests/desktopTest/index.html",
+          "tests": "177",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "1.331s",
+          "sha256": "3e2fc32bb74a8ea3f5f869a7be8589b1cf89da78abb9fd1ef6417284582b7b51"
+        },
+        {
+          "path": "features/workforce/domain/build/reports/tests/wasmJsBrowserTest/index.html",
+          "tests": "177",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "2.576s",
+          "sha256": "28e4168ceef6acd372c992d7dae4e2124ebdaf663dd183bcbe156228e046c400"
+        },
+        {
+          "path": "features/workforce/presentation/build/reports/tests/desktopTest/index.html",
+          "tests": "69",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "1.499s",
+          "sha256": "8d211ad6e4fe0d6c9ac73c321e0442249cb52aac97e289ce47bfdb05ee80b45f"
+        },
+        {
+          "path": "features/workforce/presentation/build/reports/tests/wasmJsBrowserTest/index.html",
+          "tests": "69",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "3.386s",
+          "sha256": "f91dbc85b975207d2eee09330e8cc32a0eb8f1ee98d65d5576db44a4aed22977"
+        }
+      ]
+    },
+    {
+      "id": "mobile.overtime",
+      "status": "reviewed with existing full-source CI and scoped native evidence",
+      "scope": "Plan/actual/withdrawal working copies, retained request/activity and command recovery",
+      "contracts": [
+        {
+          "path": "docs/overtime.md",
+          "sha256": "b61f1abe47f2df514a3f3f3896dc77dccd9d181f3854bed678ef77e84728c902"
+        }
+      ],
+      "sourcePaths": [
+        "features/workforce"
+      ],
+      "ciReports": [
+        {
+          "path": "features/workforce/data/build/reports/tests/desktopTest/index.html",
+          "tests": "78",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "3.244s",
+          "sha256": "88df66fdfdb89c532b47ffe003491a485988049301347e2cdb123d6b44274504"
+        },
+        {
+          "path": "features/workforce/data/build/reports/tests/wasmJsBrowserTest/index.html",
+          "tests": "55",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "3.741s",
+          "sha256": "9f3c3e4d20147209998bffab453865cba92f0a5891a7611781c47d9177373523"
+        },
+        {
+          "path": "features/workforce/domain/build/reports/tests/desktopTest/index.html",
+          "tests": "177",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "1.331s",
+          "sha256": "3e2fc32bb74a8ea3f5f869a7be8589b1cf89da78abb9fd1ef6417284582b7b51"
+        },
+        {
+          "path": "features/workforce/domain/build/reports/tests/wasmJsBrowserTest/index.html",
+          "tests": "177",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "2.576s",
+          "sha256": "28e4168ceef6acd372c992d7dae4e2124ebdaf663dd183bcbe156228e046c400"
+        },
+        {
+          "path": "features/workforce/presentation/build/reports/tests/desktopTest/index.html",
+          "tests": "69",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "1.499s",
+          "sha256": "8d211ad6e4fe0d6c9ac73c321e0442249cb52aac97e289ce47bfdb05ee80b45f"
+        },
+        {
+          "path": "features/workforce/presentation/build/reports/tests/wasmJsBrowserTest/index.html",
+          "tests": "69",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "3.386s",
+          "sha256": "f91dbc85b975207d2eee09330e8cc32a0eb8f1ee98d65d5576db44a4aed22977"
+        }
+      ]
+    },
+    {
+      "id": "mobile.leave",
+      "status": "reviewed with existing full-source CI and scoped native evidence",
+      "scope": "Balances/carry, requests/evidence, retained history, local working copy and original actions",
+      "contracts": [
+        {
+          "path": "docs/leave.md",
+          "sha256": "561edc4489d1663047de16ab99ec1269a54301792a2361d113b8a61dcfd1e536"
+        }
+      ],
+      "sourcePaths": [
+        "features/leave"
+      ],
+      "ciReports": [
+        {
+          "path": "features/leave/data/build/reports/tests/desktopTest/index.html",
+          "tests": "76",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "2.619s",
+          "sha256": "b8738ed0fb2f890eb7f0a00a2eddec7053c27858e57f4e88801b2c571ca934d1"
+        },
+        {
+          "path": "features/leave/data/build/reports/tests/wasmJsBrowserTest/index.html",
+          "tests": "46",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "4.092s",
+          "sha256": "1f69e6d87ada9be55749dce25d6f1856fa288c50ac6dcb5960743340d0095135"
+        },
+        {
+          "path": "features/leave/domain/build/reports/tests/desktopTest/index.html",
+          "tests": "114",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "1.035s",
+          "sha256": "a144ea33d6cc58a154cd665bdc33581dd9daba287386e9a510ea8b29fb25fd74"
+        },
+        {
+          "path": "features/leave/domain/build/reports/tests/wasmJsBrowserTest/index.html",
+          "tests": "114",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "2.123s",
+          "sha256": "a1f7b415d19ea2ca825ea4bc165fad7f62978c46b8b6fe61de47d7586660347e"
+        },
+        {
+          "path": "features/leave/presentation/build/reports/tests/desktopTest/index.html",
+          "tests": "69",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "1.264s",
+          "sha256": "3481187c90997e778e65a122b22364f4846ffd1b2fb55bb72a08fa497f126ae6"
+        },
+        {
+          "path": "features/leave/presentation/build/reports/tests/wasmJsBrowserTest/index.html",
+          "tests": "69",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "3.747s",
+          "sha256": "0d6e02189a3c794146b6ca8f2fa455ec8861487f9a53c002c95a9738599527a5"
+        }
+      ]
+    },
+    {
+      "id": "mobile.payroll",
+      "status": "reviewed with existing full-source CI and scoped native evidence",
+      "scope": "Owned retained statement revisions, independent payment balances and selected-revision PDF",
+      "contracts": [
+        {
+          "path": "docs/payroll.md",
+          "sha256": "8923ad479646f8d2d2c51798a38c3efb3a9b0fcf37eb6b5daced71bb8475a54b"
+        }
+      ],
+      "sourcePaths": [
+        "features/payroll"
+      ],
+      "ciReports": [
+        {
+          "path": "features/payroll/data/build/reports/tests/desktopTest/index.html",
+          "tests": "42",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "1.603s",
+          "sha256": "95dec974bc866993e64943a028fd5d270c75ca8d5fb3ced796a1ebf1441a0fd9"
+        },
+        {
+          "path": "features/payroll/data/build/reports/tests/wasmJsBrowserTest/index.html",
+          "tests": "36",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "2.792s",
+          "sha256": "67e2b3bad22ec4c1e033aa8ad0211ac5686c3dc5e535df115caa92a21e629aae"
+        },
+        {
+          "path": "features/payroll/domain/build/reports/tests/desktopTest/index.html",
+          "tests": "59",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "0.769s",
+          "sha256": "ad28aae6e43112959f7a517be1b683de4570be3ed0005a2a5188dd87af2e19be"
+        },
+        {
+          "path": "features/payroll/domain/build/reports/tests/wasmJsBrowserTest/index.html",
+          "tests": "59",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "2.143s",
+          "sha256": "0e6f4f921500252bad1fa1feb6fb851f99324aa0efcf30fa5edaaa08d00fa344"
+        },
+        {
+          "path": "features/payroll/presentation/build/reports/tests/desktopTest/index.html",
+          "tests": "25",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "0.852s",
+          "sha256": "f16c622729b323b38bf61e0ae3314d791b97a9218ad4c0ceea80b8f10e8a6dd8"
+        },
+        {
+          "path": "features/payroll/presentation/build/reports/tests/wasmJsBrowserTest/index.html",
+          "tests": "25",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "2.877s",
+          "sha256": "bb733ec46757c6920070373f1d8bbe7404e20f4cbbab766b8f22263976feabc4"
+        }
+      ]
+    },
+    {
+      "id": "mobile.expenses",
+      "status": "reviewed with existing full-source CI and scoped native evidence",
+      "scope": "Draft/item working copy, submitted receipts/history, original actions and payment facts",
+      "contracts": [
+        {
+          "path": "docs/expenses.md",
+          "sha256": "4f524b038a06d7cced6382686500d476c48beeef54015389bfed42b976d0547e"
+        }
+      ],
+      "sourcePaths": [
+        "features/expenses"
+      ],
+      "ciReports": [
+        {
+          "path": "features/expenses/data/build/reports/tests/desktopTest/index.html",
+          "tests": "66",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "3.398s",
+          "sha256": "74188135d1d9cbfcb945393cfcb1c1a24030dd5a42b7940454d51eb6d0a3fb2e"
+        },
+        {
+          "path": "features/expenses/data/build/reports/tests/wasmJsBrowserTest/index.html",
+          "tests": "49",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "3.488s",
+          "sha256": "a59e098372e0273137dff26801f7cb9505da566d931ccbeab198cef532afcaab"
+        },
+        {
+          "path": "features/expenses/domain/build/reports/tests/desktopTest/index.html",
+          "tests": "88",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "1.315s",
+          "sha256": "cd1fb99eb414a2779d9fc842250a236d838735a58a2fdde961479aa2ed91af75"
+        },
+        {
+          "path": "features/expenses/domain/build/reports/tests/wasmJsBrowserTest/index.html",
+          "tests": "88",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "2.309s",
+          "sha256": "3d04427d29ebb5b27d8438110953a76e4c94716db4e103d977138faee6c0b214"
+        },
+        {
+          "path": "features/expenses/presentation/build/reports/tests/desktopTest/index.html",
+          "tests": "73",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "1.605s",
+          "sha256": "95a0c5fb43543733c7affcb9318997d648b596312b93866709a3b00941b5fc5c"
+        },
+        {
+          "path": "features/expenses/presentation/build/reports/tests/wasmJsBrowserTest/index.html",
+          "tests": "73",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "3.146s",
+          "sha256": "a7b58bea5511e8ef5b92fcdc529e7c4daea153cdfb8d88778e329a11c28ec9c2"
+        }
+      ]
+    },
+    {
+      "id": "mobile.documents",
+      "status": "reviewed with existing full-source CI and scoped native evidence",
+      "scope": "Local file ownership, resumable transfer, catalog and business metadata/revisions",
+      "contracts": [
+        {
+          "path": "docs/documents.md",
+          "sha256": "cee5eab1cbbc3df1fbac6a1e29fe3085736dc4ff8f89b3e08c00af95c0e7f130"
+        },
+        {
+          "path": "docs/document-business-metadata.md",
+          "sha256": "58474b9881bc66890e05cd39ff43b4faa907c60b15e75003d3708a51c8730995"
+        }
+      ],
+      "sourcePaths": [
+        "core/documents",
+        "features/documents"
+      ],
+      "ciReports": [
+        {
+          "path": "core/documents/data/build/reports/tests/desktopTest/index.html",
+          "tests": "75",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "4.071s",
+          "sha256": "2e26b270a59a253cd345b1e5f8323dd396891f5e1ed9cbae528466f60bc41897"
+        },
+        {
+          "path": "core/documents/data/build/reports/tests/wasmJsBrowserTest/index.html",
+          "tests": "75",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "5.611s",
+          "sha256": "cc2d322dd13bddac06619c1c587d53e9e341f407c18e526e84eb85f25ca0fdba"
+        },
+        {
+          "path": "core/documents/domain/build/reports/tests/desktopTest/index.html",
+          "tests": "155",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "1.710s",
+          "sha256": "e3e7d90f6f25bb0ce81d0f84be933f662d36a0cec5e9b5eae3d8e8cf695d9b90"
+        },
+        {
+          "path": "core/documents/domain/build/reports/tests/wasmJsBrowserTest/index.html",
+          "tests": "155",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "2.186s",
+          "sha256": "6aea219be70bd7d3ef718c1d355740b1cb18cc451c1e1df18d703a9aa3d74423"
+        },
+        {
+          "path": "features/documents/presentation/build/reports/tests/desktopTest/index.html",
+          "tests": "11",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "0.493s",
+          "sha256": "5151a8ab1f32bfde122225a2c705f8e5b982dad0dee801719f007fa6d087db7a"
+        }
+      ]
+    },
+    {
+      "id": "mobile.data_sync",
+      "status": "reviewed with existing full-source CI and scoped native evidence",
+      "scope": "Nine admitted record groups and seven local pending observers across six owning feature areas",
+      "contracts": [
+        {
+          "path": "docs/local-first.md",
+          "sha256": "2ddae3eb8c4bdcf4f27fc3e7dfe913d396b212f804e5a9f0ae058a7cc44a3195"
+        },
+        {
+          "path": "docs/data-sync.md",
+          "sha256": "d2e46ce929ed048ebb9e73aeb5424f7c0c58a475bd92aeb2f3a69d4ce344e693"
+        },
+        {
+          "path": "docs/pending-actions.md",
+          "sha256": "7962e2ce8035bb5b5bd2005a277af5b3dc9d90cc6a0213081f45b661453d57c0"
+        },
+        {
+          "path": "docs/sync-feed.md",
+          "sha256": "9a93aac78df2e1fdf9d87b186bd14a7e832af18ff5deb42cf50b581ffab24f63"
+        }
+      ],
+      "sourcePaths": [
+        "features/home",
+        "core/workspace",
+        "core/sync"
+      ],
+      "ciReports": [
+        {
+          "path": "core/sync/data/build/reports/tests/desktopTest/index.html",
+          "tests": "8",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "0.889s",
+          "sha256": "bc4f90c5e7b87a64f89f24265afda928288ff1b3902188110a4149a250aa0375"
+        },
+        {
+          "path": "core/sync/data/build/reports/tests/wasmJsBrowserTest/index.html",
+          "tests": "8",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "2.359s",
+          "sha256": "ff09ce1d2ec2d77956b30b58ab728820fa739ff3eb59321773f7bb284cf71796"
+        },
+        {
+          "path": "core/workspace/data/build/reports/tests/desktopTest/index.html",
+          "tests": "9",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "1.086s",
+          "sha256": "bf472f8e58c46f81e9b6857aac1b6906fb65cf399407bc5cbd4c570d99a0dba4"
+        },
+        {
+          "path": "core/workspace/data/build/reports/tests/wasmJsBrowserTest/index.html",
+          "tests": "3",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "2.087s",
+          "sha256": "e44e0637dfb8adac8493b6be3c1e896416b2bde3434fd370717287fa445efec5"
+        },
+        {
+          "path": "core/workspace/domain/build/reports/tests/desktopTest/index.html",
+          "tests": "28",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "0.842s",
+          "sha256": "44e48159b60f3c35593ec63475c798c6d1f0fe653b14409c117cfc0f9cc91113"
+        },
+        {
+          "path": "core/workspace/domain/build/reports/tests/wasmJsBrowserTest/index.html",
+          "tests": "28",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "1.994s",
+          "sha256": "f2cea6af5f2a9988d6348d84392032067af1006ca0204532a5e051d61c50f219"
+        },
+        {
+          "path": "features/home/presentation/build/reports/tests/desktopTest/index.html",
+          "tests": "18",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "0.781s",
+          "sha256": "399d408e0e063a886694d7e96ac27102b4e98aaab73803e8748e60c022cef664"
+        },
+        {
+          "path": "features/home/presentation/build/reports/tests/wasmJsBrowserTest/index.html",
+          "tests": "18",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "2.452s",
+          "sha256": "303f562b09b1cf952cd91604b9f3f0f82567c4e93d3213425408b0f259c49574"
+        }
+      ]
+    },
+    {
+      "id": "mobile.push_links",
+      "status": "reviewed with existing full-source CI and scoped native evidence",
+      "scope": "Provider registration/retirement, bounded foreground/background hints and scoped navigation",
+      "contracts": [
+        {
+          "path": "docs/native-push.md",
+          "sha256": "f583b137fe660b237e9ceb4bf03f5c82cd1952d9fcd8bd8dc7a831fad8663f0d"
+        },
+        {
+          "path": "docs/notifications.md",
+          "sha256": "492cd23c6c49415ccec46c1c94949424274cc45620a76135c79bc0f70f1f0973"
+        },
+        {
+          "path": "docs/deep-links.md",
+          "sha256": "6ccace0068db3cf2640e09b84985b30241d2bd545a0be5918ad39e2b8f8d5954"
+        },
+        {
+          "path": "docs/app-links.md",
+          "sha256": "d549ffcaeaacf42a98cd87fd7ffd1e04d4bfab20c80b6dd62f3975cd84f387c0"
+        }
+      ],
+      "sourcePaths": [
+        "core/identity",
+        "core/notifications",
+        "apps/shared"
+      ],
+      "ciReports": [
+        {
+          "path": "apps/shared/build/reports/tests/desktopTest/index.html",
+          "tests": "204",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "2m9.05s",
+          "sha256": "cc87f1ecbe35308591d9fce47df7ea9e6f1a3a1c1dc449c4bc542a3b3b810cb5"
+        },
+        {
+          "path": "apps/shared/build/reports/tests/wasmJsBrowserTest/index.html",
+          "tests": "20",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "2.912s",
+          "sha256": "d9d805ccd8b7e4e9f0e4ca307b75e7f19b33b71f30126086f40fbea6d833ebf1"
+        },
+        {
+          "path": "core/identity/data/build/reports/tests/desktopTest/index.html",
+          "tests": "65",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "1.805s",
+          "sha256": "624eec8be36970510304126d2d3ee294060a2a544363c20da405279126805f15"
+        },
+        {
+          "path": "core/identity/data/build/reports/tests/wasmJsBrowserTest/index.html",
+          "tests": "63",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "1.963s",
+          "sha256": "0b7ddac3655169bc046edd62bebb715646f71503e2bf263564522cbdc80ff475"
+        },
+        {
+          "path": "core/identity/domain/build/reports/tests/desktopTest/index.html",
+          "tests": "64",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "0.954s",
+          "sha256": "98d4537a5b951628f0b9a7b1fbf07da801e019e098b5a3b3e4e17d786434a033"
+        },
+        {
+          "path": "core/identity/domain/build/reports/tests/wasmJsBrowserTest/index.html",
+          "tests": "64",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "1.872s",
+          "sha256": "b437e0d457c18e1d8b33a5a4b441b47917f7d73999af8079a6f1371545f4bb4f"
+        },
+        {
+          "path": "core/notifications/data/build/reports/tests/desktopTest/index.html",
+          "tests": "8",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "0.708s",
+          "sha256": "7e42581137eee3e8d534458ddcf5d96a21f1268efbaa48da506e216b750a1bab"
+        },
+        {
+          "path": "core/notifications/data/build/reports/tests/wasmJsBrowserTest/index.html",
+          "tests": "8",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "1.339s",
+          "sha256": "b6b592f45b3ee91d1d142eb7fa9505331ea3c8732ef2e37d0b3260739ff59a87"
+        },
+        {
+          "path": "core/notifications/domain/build/reports/tests/desktopTest/index.html",
+          "tests": "8",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "0.817s",
+          "sha256": "4068ed26824a126a59c21722e65d957a6ac31226c8de45f5d626c1130682a334"
+        }
+      ]
+    },
+    {
+      "id": "mobile.foundation",
+      "status": "reviewed with existing full-source CI and scoped native evidence",
+      "scope": "Raw storage, encryption, cancellation, finite work and platform resource ownership",
+      "contracts": [
+        {
+          "path": "docs/architecture.md",
+          "sha256": "227083eb7b9f20af403ce1030055026c29cb517b1769df8769d8566c88e16d9e"
+        },
+        {
+          "path": "docs/storage.md",
+          "sha256": "52bd622b087bc3c79dbbffdece6443f87408842a8f14975a5bcd1533e02f1313"
+        },
+        {
+          "path": "docs/content-encryption.md",
+          "sha256": "654493fef8fc151b2f8173d1f9a9a414790c6d13aba973b04bf85e61881c004d"
+        },
+        {
+          "path": "docs/replica-storage.md",
+          "sha256": "8374965403eb6b685583cec48368f698ff3ac8b19002db0d5ba6238a35ebc05f"
+        },
+        {
+          "path": "docs/file-input.md",
+          "sha256": "61496fb9ef351ab3f6527ae1f06ce733eaed6c46d18f574b4283f76b4da0b475"
+        },
+        {
+          "path": "docs/file-output.md",
+          "sha256": "dbbd9dc610340c5003e6c18eff68c55bbef1e126a90ec7daf25c506674b1dbae"
+        }
+      ],
+      "sourcePaths": [
+        "core/database",
+        "core/securestorage",
+        "core/fileio",
+        "core/presentation",
+        "core/transfers"
+      ],
+      "ciReports": [
+        {
+          "path": "core/database/build/reports/tests/desktopTest/index.html",
+          "tests": "27",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "2.267s",
+          "sha256": "d5f85a3b02eb9198a9893a10896e8ee9da33fee0cf4f19e7eef59a333d964474"
+        },
+        {
+          "path": "core/database/build/reports/tests/wasmJsBrowserTest/index.html",
+          "tests": "25",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "4.895s",
+          "sha256": "2e30b79b8e3a32b74c65cffc41d941d250eecb69a9ced79ced3b1fc4a2a87345"
+        },
+        {
+          "path": "core/fileio/build/reports/tests/desktopTest/index.html",
+          "tests": "19",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "0.749s",
+          "sha256": "58d99f66f30b7751a8569057d2ec951c95988fc793366ac2bd5538502f425739"
+        },
+        {
+          "path": "core/fileio/build/reports/tests/wasmJsBrowserTest/index.html",
+          "tests": "21",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "2.020s",
+          "sha256": "5001c4a84ea60aeedd3e6f41c3a16d068ded91ed9caa3761fcf6e85e333ab946"
+        },
+        {
+          "path": "core/presentation/build/reports/tests/desktopTest/index.html",
+          "tests": "5",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "0.479s",
+          "sha256": "9beae8c782ad56e53cfaa8215623af2f4648f6cdb27b25ade91745508db9fd3e"
+        },
+        {
+          "path": "core/presentation/build/reports/tests/wasmJsBrowserTest/index.html",
+          "tests": "5",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "3.073s",
+          "sha256": "7ee9438f0024ac755eb831f1542228eb7392e7cbb72158797cf9f4cacc3ed3b5"
+        },
+        {
+          "path": "core/securestorage/build/reports/tests/desktopTest/index.html",
+          "tests": "11",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "0.775s",
+          "sha256": "faca000b89d8b1f072860c365b030619e18570cf1321e20f9ca8b50e4ad9ee4d"
+        },
+        {
+          "path": "core/securestorage/build/reports/tests/wasmJsBrowserTest/index.html",
+          "tests": "16",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "1.478s",
+          "sha256": "9ac7c5fa860d8d0fccedbad294da8fdeb00e96d54a480300681f62c45541c593"
+        },
+        {
+          "path": "core/transfers/data/build/reports/tests/desktopTest/index.html",
+          "tests": "5",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "0.916s",
+          "sha256": "64b96df6419711205f1edc490b53e16130ff468d0331c219481275f053f0f86f"
+        },
+        {
+          "path": "core/transfers/data/build/reports/tests/wasmJsBrowserTest/index.html",
+          "tests": "5",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "1.563s",
+          "sha256": "ce0e691052a426906ec4d4e43d51058879168e0eec58410989622130fbc85cc1"
+        },
+        {
+          "path": "core/transfers/domain/build/reports/tests/desktopTest/index.html",
+          "tests": "8",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "0.632s",
+          "sha256": "ef2823a11912010eb34d2aa0f1719ffe49f901e452b7b77b57c566425b9f467d"
+        },
+        {
+          "path": "core/transfers/domain/build/reports/tests/wasmJsBrowserTest/index.html",
+          "tests": "8",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "1.479s",
+          "sha256": "90ec502fc8246af7ba81c51253cfc1f3f6e0e28f4ed907e5ba94a75c9d578f05"
+        }
+      ]
+    },
+    {
+      "id": "mobile.distribution",
+      "status": "reviewed with existing full-source CI and scoped native evidence",
+      "scope": "Selected environment, signed package configuration, app links, SBOM and portable foundation",
+      "contracts": [
+        {
+          "path": "docs/distribution.md",
+          "sha256": "4bc9effa72f845495d3777b2b5ac922fd2034c1e952d8def974b5dfa9f1a12a6"
+        },
+        {
+          "path": "docs/template-updates.md",
+          "sha256": "b9b4a7d5e56fcf0a41fe14731249376ce36bee7d9779e11a7ea860e6ebc9a1f5"
+        }
+      ],
+      "sourcePaths": [
+        "build-logic",
+        "tool/distribution"
+      ],
+      "ciReports": [
+        {
+          "path": "build-logic/build/reports/tests/test/index.html",
+          "tests": "10",
+          "failures": "0",
+          "skipped": "0",
+          "duration": "1.981s",
+          "sha256": "9d9e88ed88b0946cdbc669aadf6432bc20814e4b0099eb51508b06696d1d3da5"
+        }
+      ]
+    }
+  ],
+  "foundation": {
+    "identicalFiles": 657,
+    "differentFiles": [
+      {
+        "path": "build-logic/src/main/kotlin/starter.android.application.gradle.kts",
+        "reason": "Application IDs, branding, remote-only HRIS transport/private dev API rules and matching package/configuration fixtures.",
+        "mobileSha256": "f2da7ed8c70ccd236b153238c37ad122cccebc47a094acd16556ad4f8b527b9f",
+        "starterSha256": "dc0e846fba8cc80b89b37d165632122fc30fe86a77758234241818d065b49e3b"
+      },
+      {
+        "path": "build-logic/src/main/kotlin/starter.android.flavors.gradle.kts",
+        "reason": "Application IDs, branding, remote-only HRIS transport/private dev API rules and matching package/configuration fixtures.",
+        "mobileSha256": "bbb79d206d13ffc2f593d9b298bef538eab6083768024493865faf9d0e819b18",
+        "starterSha256": "6b06e50bdd7bef84f9582be2d3bf0a716e9be489d7e113e085767f010daa08a9"
+      },
+      {
+        "path": "build-logic/src/main/kotlin/starter.environment.gradle.kts",
+        "reason": "Application IDs, branding, remote-only HRIS transport/private dev API rules and matching package/configuration fixtures.",
+        "mobileSha256": "89732a0c84c62e103224da01aac5a43eec5cb929e44854ba2244d6512b60d71c",
+        "starterSha256": "75480018f3ae777cb93fdbf63bae8597f0fd95dcd5d030f2fe6de4178e68a710"
+      },
+      {
+        "path": "build-logic/src/main/kotlin/starter.sbom.gradle.kts",
+        "reason": "Application IDs, branding, remote-only HRIS transport/private dev API rules and matching package/configuration fixtures.",
+        "mobileSha256": "04b1e0b3325b7bde71cac22fc66ee848a0c031c9a905db9e362b0e0513bd2196",
+        "starterSha256": "d756f9e5863300cc7e24f5cf423284f10687677fa66f6f0f3f95f9fd19bfba29"
+      },
+      {
+        "path": "build-logic/src/main/kotlin/tasks/GenerateEnvironment.kt",
+        "reason": "Application IDs, branding, remote-only HRIS transport/private dev API rules and matching package/configuration fixtures.",
+        "mobileSha256": "26744b4ab0bd6c5cc62a4339448acf523663a67ded9f055f91ede08a4bcbb258",
+        "starterSha256": "104f79e01d5068e4f16197f3e75a83645d478911ecde626b584539df2796237c"
+      },
+      {
+        "path": "build-logic/src/main/kotlin/tasks/GenerateOidcClients.kt",
+        "reason": "Application IDs, branding, remote-only HRIS transport/private dev API rules and matching package/configuration fixtures.",
+        "mobileSha256": "8e681946d6e397f871c31abc5f56a6f6e6a9d914982384ab95121a255073e5f4",
+        "starterSha256": "08ddada622ba1b22618ef3db499120e308cb4dd2fb3a2deef637a3b2be61720d"
+      },
+      {
+        "path": "core/common/src/commonMain/kotlin/dev/fajar/starter/common/config/AppEnvironment.kt",
+        "reason": "Application IDs, branding, remote-only HRIS transport/private dev API rules and matching package/configuration fixtures.",
+        "mobileSha256": "509884d88a8aec0197cf0277c40d528b1342a85eb1836161866f3dc7270fe67d",
+        "starterSha256": "0101780f1df84199a296de06452c9589c4afb8b248ae596111060bf3ada4102f"
+      },
+      {
+        "path": "core/designsystem/src/commonMain/kotlin/dev/fajar/starter/designsystem/components/AppBrand.kt",
+        "reason": "Application branding in logo, OS notification label or device-authentication prompt.",
+        "mobileSha256": "e9cd73906a2827db0c68c437cc3b4f303d83c69fec5013603f1c09fd128f05c0",
+        "starterSha256": "9a698d7183c7b206afb8d4d69b285bdfbde7e915e8ae5b00200070f43a76334a"
+      },
+      {
+        "path": "core/identity/data/build.gradle.kts",
+        "reason": "HRIS native API/session binding, MFA/push composition and matching fixtures; shared provider behavior retained (comments/branding where applicable).",
+        "mobileSha256": "078afa077e95fde7aa1328c7abe368397e97288f8fdad6b57aa5602f9fe65c2d",
+        "starterSha256": "59d1dede12095ef0e62c16d792df6148d478627b4ed377e959db41f0f9ffe022"
+      },
+      {
+        "path": "core/identity/data/src/commonMain/kotlin/dev/fajar/starter/identity/data/api/AuthApi.kt",
+        "reason": "HRIS native API/session binding, MFA/push composition and matching fixtures; shared provider behavior retained (comments/branding where applicable).",
+        "mobileSha256": "9f8db759845c329a98f07687a719f2ac9833139ef1a046b1c4e94ff4c306950f",
+        "starterSha256": "a1c3686f0c416dd278d3108c16ad4d3070930ce22008004fb26c26f26a93d48b"
+      },
+      {
+        "path": "core/identity/data/src/commonMain/kotlin/dev/fajar/starter/identity/data/datasources/ApiAuthRemoteDataSource.kt",
+        "reason": "HRIS native API/session binding, MFA/push composition and matching fixtures; shared provider behavior retained (comments/branding where applicable).",
+        "mobileSha256": "16cdf13c93e9ffc9f3ee8bef8424ac100f2f032b43098767a4767bd0dde69999",
+        "starterSha256": "6bb1195050cd12b8aebfe9da6104b103494ec9ec713d3813d4a1c3f85c8b3ea6"
+      },
+      {
+        "path": "core/identity/data/src/commonMain/kotlin/dev/fajar/starter/identity/data/datasources/AuthRemoteDataSource.kt",
+        "reason": "HRIS native API/session binding, MFA/push composition and matching fixtures; shared provider behavior retained (comments/branding where applicable).",
+        "mobileSha256": "29b7783a95d7363fd80f53e9fd472a1c2f9ba80240afedc556b0abe11a120667",
+        "starterSha256": "b7734d15da87e6edb0da67660adc8ccd552206f3332ec25dd74c68a5b3d1b863"
+      },
+      {
+        "path": "core/identity/data/src/commonMain/kotlin/dev/fajar/starter/identity/data/di/IdentityModule.kt",
+        "reason": "HRIS native API/session binding, MFA/push composition and matching fixtures; shared provider behavior retained (comments/branding where applicable).",
+        "mobileSha256": "b7c73e4bc9c9e274cd9824d243169803097b3ddbb521ca0f806791956c2b735e",
+        "starterSha256": "2695dfc5d8d61490fb5c09231748b9c476c18016e991c81c55a92305f5a569d7"
+      },
+      {
+        "path": "core/identity/data/src/commonMain/kotlin/dev/fajar/starter/identity/data/dto/AuthResponse.kt",
+        "reason": "HRIS native API/session binding, MFA/push composition and matching fixtures; shared provider behavior retained (comments/branding where applicable).",
+        "mobileSha256": "33794f672d4dd468bb4776e9a1cd49bf5f94bbd9dc68349c1d68ad9e639ee720",
+        "starterSha256": "1f0d16fcb4c23c30b67ec04e21e8a066da824fcd03309c82fbc56300076241c4"
+      },
+      {
+        "path": "core/identity/data/src/commonMain/kotlin/dev/fajar/starter/identity/data/dto/SessionDto.kt",
+        "reason": "HRIS native API/session binding, MFA/push composition and matching fixtures; shared provider behavior retained (comments/branding where applicable).",
+        "mobileSha256": "8c1adc88062f4b1577196a4f33f11cc36279811a22ddc0ef5c4639eca82554b1",
+        "starterSha256": "6dc79523020eb0d52bfe2959918c91fe4c646fb0d58ae5cfc1405539db37e268"
+      },
+      {
+        "path": "core/identity/data/src/commonMain/kotlin/dev/fajar/starter/identity/data/dto/SignInRequest.kt",
+        "reason": "HRIS native API/session binding, MFA/push composition and matching fixtures; shared provider behavior retained (comments/branding where applicable).",
+        "mobileSha256": "7fd56970d2e15d3931c3f14a6e28d861fe1e7c3a9816fae2b30aeb3082037b9f",
+        "starterSha256": "d51b7f1d65d9ba43be660d61b2ce49d00aa416807c0ae0b3f043f70af90b943d"
+      },
+      {
+        "path": "core/identity/data/src/commonMain/kotlin/dev/fajar/starter/identity/data/firebase/api/FirebaseProviderApi.kt",
+        "reason": "HRIS native API/session binding, MFA/push composition and matching fixtures; shared provider behavior retained (comments/branding where applicable).",
+        "mobileSha256": "aff491aa80d543e17e85469e12efada09b9ea12cc09c03ec0eef69918f5ee155",
+        "starterSha256": "a23872c664224a7d46d3b46e96f474d3eab8bdfc36ef04b561873df5cb233dc7"
+      },
+      {
+        "path": "core/identity/data/src/commonMain/kotlin/dev/fajar/starter/identity/data/mappers/SessionMapper.kt",
+        "reason": "HRIS native API/session binding, MFA/push composition and matching fixtures; shared provider behavior retained (comments/branding where applicable).",
+        "mobileSha256": "da3b308f40b73de5eef17dc9fce0e728bfde14be24ef9da514946f6ea82c8ffc",
+        "starterSha256": "bd8904a70f8f9df0a457aa5c9c6af76507ae002a4b8474d1d78871201e258986"
+      },
+      {
+        "path": "core/identity/data/src/commonMain/kotlin/dev/fajar/starter/identity/data/repositories/DefaultIdentityRepository.kt",
+        "reason": "HRIS native API/session binding, MFA/push composition and matching fixtures; shared provider behavior retained (comments/branding where applicable).",
+        "mobileSha256": "062c11ada8f429b31321905275e2e3963a541ad381e4d3b6fb62cbe068318f56",
+        "starterSha256": "c3c6dbc30d3f1b43f3858733ca0dadb5bb56329c4c6a1987902809d167705118"
+      },
+      {
+        "path": "core/identity/data/src/commonMain/kotlin/dev/fajar/starter/identity/data/repositories/StoredSessionRepository.kt",
+        "reason": "HRIS native API/session binding, MFA/push composition and matching fixtures; shared provider behavior retained (comments/branding where applicable).",
+        "mobileSha256": "8b16bcb76b3ae20ca8b88e4b2ce05f010ec3273cd509cd724a19a95ace6d475e",
+        "starterSha256": "9a42514a25af6d4a1d3ef75a8a2ba9240a0adbd2f54766d96c0b388d9e46d813"
+      },
+      {
+        "path": "core/identity/data/src/commonTest/kotlin/dev/fajar/starter/identity/data/FirebaseProviderTransportTest.kt",
+        "reason": "HRIS native API/session binding, MFA/push composition and matching fixtures; shared provider behavior retained (comments/branding where applicable).",
+        "mobileSha256": "e5979a09db193e6942335b474d15a9ba3558f65c269c5d3800cb55c63eead743",
+        "starterSha256": "9d0bb3e58545b1d12a5edda9af134b37addcb14c659f5a39d2a1f4fac358214f"
+      },
+      {
+        "path": "core/identity/data/src/commonTest/kotlin/dev/fajar/starter/identity/data/IdentityRepositoryTest.kt",
+        "reason": "HRIS native API/session binding, MFA/push composition and matching fixtures; shared provider behavior retained (comments/branding where applicable).",
+        "mobileSha256": "dd257623764a8c4ea95ced280663693851c77f46799f29ae77c9d3e0f2291f6f",
+        "starterSha256": "50688804cf639e16e13ed46c2d0265bae1c3421d667d3a9916fba112fa30d199"
+      },
+      {
+        "path": "core/identity/data/src/commonTest/kotlin/dev/fajar/starter/identity/data/InstalledFirebaseAuthenticationTest.kt",
+        "reason": "HRIS native API/session binding, MFA/push composition and matching fixtures; shared provider behavior retained (comments/branding where applicable).",
+        "mobileSha256": "90ae7c0c688c7a24c9ac2546f3b0fa5b9a0109fdbab7a3b91da08001941fda1a",
+        "starterSha256": "be6e59496db66b3e153fd0521dec90d9d548ba00ed4b02b012dc939d3ad11561"
+      },
+      {
+        "path": "core/identity/data/src/commonTest/kotlin/dev/fajar/starter/identity/data/RefreshTransportTest.kt",
+        "reason": "HRIS native API/session binding, MFA/push composition and matching fixtures; shared provider behavior retained (comments/branding where applicable).",
+        "mobileSha256": "1d22ef2de4c159596006a5f40f1672d9d4357e924d2ff958f31d79c9fd506aa6",
+        "starterSha256": "ed585d1233456b5f62a10c2b89141cde90f40ac8015666171211b5daf55983d5"
+      },
+      {
+        "path": "core/identity/data/src/commonTest/kotlin/dev/fajar/starter/identity/data/StoredSessionRepositoryTest.kt",
+        "reason": "HRIS native API/session binding, MFA/push composition and matching fixtures; shared provider behavior retained (comments/branding where applicable).",
+        "mobileSha256": "46de39636d576e63732ee64284bf9db2a2b4723d4d5300b59e89a65fb1ad4b1c",
+        "starterSha256": "5ed35e58fe736319219abdc7e9a84527dea1b97ba329defa869ae5699779a23d"
+      },
+      {
+        "path": "core/identity/domain/build.gradle.kts",
+        "reason": "HRIS native API/session binding, MFA/push composition and matching fixtures; shared provider behavior retained (comments/branding where applicable).",
+        "mobileSha256": "8eb2a4e6021c9139ca72f896fb21be7d5ff58d0dc7268cdd8bd55696a828d8f9",
+        "starterSha256": "8b384aec0f0429bf04a70b0a69e1d7ef8e49de8c8d572c332d61e93ef90933e0"
+      },
+      {
+        "path": "core/identity/domain/src/commonMain/kotlin/dev/fajar/starter/identity/domain/entities/AuthenticatedUser.kt",
+        "reason": "HRIS native API/session binding, MFA/push composition and matching fixtures; shared provider behavior retained (comments/branding where applicable).",
+        "mobileSha256": "1eccef6f6d99f55441940a69cbc14d1e699edf01165d4a98ee098f9e658273ee",
+        "starterSha256": "c65512e2180f47f5c4f679ab2218223c1581a6ddf6b78edf7585672a64b6e4e6"
+      },
+      {
+        "path": "core/identity/domain/src/commonMain/kotlin/dev/fajar/starter/identity/domain/entities/Session.kt",
+        "reason": "HRIS native API/session binding, MFA/push composition and matching fixtures; shared provider behavior retained (comments/branding where applicable).",
+        "mobileSha256": "e90fc952e32b05fd7f9634b484bec47fd7e10b2e3a5d1cd3947f95828e606f55",
+        "starterSha256": "9f2104254d299d4d971916a97854bfa922ef64c2f36558b7cff2026d906d398a"
+      },
+      {
+        "path": "core/identity/domain/src/commonMain/kotlin/dev/fajar/starter/identity/domain/firebase/entities/FirebaseSignIn.kt",
+        "reason": "HRIS native API/session binding, MFA/push composition and matching fixtures; shared provider behavior retained (comments/branding where applicable).",
+        "mobileSha256": "688a6bfe6504d0a3f0e4f92e820228cb6179b32782ac307bcec376f02e4f0e2c",
+        "starterSha256": "f252f856b6b5ef2f4d7dd73048cf8b9df123164b55b9168799e7555f519dce0f"
+      },
+      {
+        "path": "core/identity/domain/src/commonMain/kotlin/dev/fajar/starter/identity/domain/repositories/IdentityRepository.kt",
+        "reason": "HRIS native API/session binding, MFA/push composition and matching fixtures; shared provider behavior retained (comments/branding where applicable).",
+        "mobileSha256": "5479868eb72a7365b4715fc6fafe934a18a92c444a9b8d904753ff6d43a6f5d5",
+        "starterSha256": "0b965ee08ad7a2ac7bdf505d835a5ad8c113a21086be22ecbb0a2cd1ab3d1a6e"
+      },
+      {
+        "path": "core/identity/domain/src/commonMain/kotlin/dev/fajar/starter/identity/domain/sso/usecases/SignInWithSso.kt",
+        "reason": "HRIS native API/session binding, MFA/push composition and matching fixtures; shared provider behavior retained (comments/branding where applicable).",
+        "mobileSha256": "11bc5f47d9bdf2768eaacec12a28876f749595f5c2ce5b64cd429442c5098e3e",
+        "starterSha256": "91e9b8fd9be22cdde69d074100b335710839e3ffab0a7e7be0880fe903925d8d"
+      },
+      {
+        "path": "core/identity/domain/src/commonMain/kotlin/dev/fajar/starter/identity/domain/usecases/AcquireSessionTokens.kt",
+        "reason": "HRIS native API/session binding, MFA/push composition and matching fixtures; shared provider behavior retained (comments/branding where applicable).",
+        "mobileSha256": "7aa772bc9aa366a60e4cbd520f1a23f1dedc11da8a539a5553a080ae0704605c",
+        "starterSha256": "1a0b3d3b772b47e1f8cea915e335d1b292219e8fadecb8550b70e5d10c348f03"
+      },
+      {
+        "path": "core/identity/domain/src/commonMain/kotlin/dev/fajar/starter/identity/domain/usecases/RestoreSession.kt",
+        "reason": "HRIS native API/session binding, MFA/push composition and matching fixtures; shared provider behavior retained (comments/branding where applicable).",
+        "mobileSha256": "c587c871612dfd0fbaeb0f77b0b8d36d37f28fd05e59ae54db28590f6ea0ce9d",
+        "starterSha256": "13a6fbc10c25af22b5612fb36eed47559f8c0d9008c55ae7f9dab91f7c7e00b0"
+      },
+      {
+        "path": "core/identity/domain/src/commonMain/kotlin/dev/fajar/starter/identity/domain/usecases/SignIn.kt",
+        "reason": "HRIS native API/session binding, MFA/push composition and matching fixtures; shared provider behavior retained (comments/branding where applicable).",
+        "mobileSha256": "ec441951f370f85bec5be6571beec5567346e4dc1331076bb7634f9140a8a9b9",
+        "starterSha256": "d43934fd2c9ef299c7bd2e7738d292f6b15092fd2dcf698823f003924a66f378"
+      },
+      {
+        "path": "core/identity/domain/src/commonTest/kotlin/dev/fajar/starter/identity/domain/ObserveSessionIdentityTest.kt",
+        "reason": "HRIS native API/session binding, MFA/push composition and matching fixtures; shared provider behavior retained (comments/branding where applicable).",
+        "mobileSha256": "1118a245513d25f248ff9dd2756d6eb4328f9d3e18c55fba66c8c06db8805d7f",
+        "starterSha256": "cb4922f55c02964677427756dad8f19f59a94dc1523e809c917105e9e0b4061d"
+      },
+      {
+        "path": "core/identity/domain/src/commonTest/kotlin/dev/fajar/starter/identity/domain/RefreshRecoveryTest.kt",
+        "reason": "HRIS native API/session binding, MFA/push composition and matching fixtures; shared provider behavior retained (comments/branding where applicable).",
+        "mobileSha256": "11aa165b11a88f499c8b3b470f46a2d7aca0a71ba46cb97593e417f9613aa62a",
+        "starterSha256": "bf66a556db37dd85090dbb8db2e96d41ba6c54e8bb77b8f285f1ab1b02e5d4ad"
+      },
+      {
+        "path": "core/identity/domain/src/commonTest/kotlin/dev/fajar/starter/identity/domain/SessionPolicyTest.kt",
+        "reason": "HRIS native API/session binding, MFA/push composition and matching fixtures; shared provider behavior retained (comments/branding where applicable).",
+        "mobileSha256": "222a5dd42d37455798ebce8dfb0857e027ef640e32d02c5f29be2a3dafc05cba",
+        "starterSha256": "76c5829b66f9c958fbeaf33a0c86be06b6da22d8d3deb62aeffec0d5b43899b9"
+      },
+      {
+        "path": "core/identity/domain/src/commonTest/kotlin/dev/fajar/starter/identity/domain/SignInTest.kt",
+        "reason": "HRIS native API/session binding, MFA/push composition and matching fixtures; shared provider behavior retained (comments/branding where applicable).",
+        "mobileSha256": "7e8658bf5cebfa12cff04f096a65e95c8d9fb2b385bbf79ac51f6eca7c239931",
+        "starterSha256": "d4af8a0af2a9906112bb51caa8d4456352f6bb20c480475e7dc7f4dea0ab5983"
+      },
+      {
+        "path": "core/identity/domain/src/commonTest/kotlin/dev/fajar/starter/identity/domain/sso/SignInWithSsoTest.kt",
+        "reason": "HRIS native API/session binding, MFA/push composition and matching fixtures; shared provider behavior retained (comments/branding where applicable).",
+        "mobileSha256": "48befedf72d24cac5b4390440f1fe37f3ae2e1f76b5f5f45504a7c37484ef712",
+        "starterSha256": "5bcdb3a8e63e087af95a20623463d7a1d14a8d01342ea74adde7df8ebd1645c2"
+      },
+      {
+        "path": "core/localization/src/commonMain/composeResources/values/strings_en.xml",
+        "reason": "HRIS feature vocabulary/error codes and onboarding copy; shared keys retained.",
+        "mobileSha256": "8dd1bfc4c92e16392c3bd358964d54d14f5f049a1975b83817189944a71ddb1b",
+        "starterSha256": "e0a96604bafc1049555d731dd2015d7546f9ab1880aba8077ac3782f5a76ed09"
+      },
+      {
+        "path": "core/localization/src/commonMain/composeResources/values/strings_id.xml",
+        "reason": "HRIS feature vocabulary/error codes and onboarding copy; shared keys retained.",
+        "mobileSha256": "925fe114366e83c6795e9f0637b1d4c325c7d0aa6cdf4e7c8f8a4e2349b86755",
+        "starterSha256": "a4166a2904e92edfcf57851b5dfaab12d5becacbe32fee71829b2a874bef0051"
+      },
+      {
+        "path": "core/localization/src/commonMain/kotlin/dev/fajar/starter/localization/AppString.kt",
+        "reason": "HRIS feature vocabulary/error codes and onboarding copy; shared keys retained.",
+        "mobileSha256": "30894b3ec72768a8e68c30652b31cd6d322bcc5378f980f260a66948b8bdd590",
+        "starterSha256": "da718355717b058bafb629ffc25838667247d0917b730e9cfc9aaa6aaf94abac"
+      },
+      {
+        "path": "core/localization/src/commonMain/kotlin/dev/fajar/starter/localization/LocalizedFailure.kt",
+        "reason": "HRIS feature vocabulary/error codes and onboarding copy; shared keys retained.",
+        "mobileSha256": "c04c239d874dbb8af4b43b91e823e9508607dfc8f63a2125b3da699ab4f4eb1b",
+        "starterSha256": "d56846ccd7c164b3c191f3d0c96c7ec6739a0a330dae59bcff6f0fb316029a6d"
+      },
+      {
+        "path": "core/notifications/data/src/desktopMain/kotlin/dev/fajar/starter/notifications/data/datasources/DesktopNotificationDisplaySource.kt",
+        "reason": "Application branding in logo, OS notification label or device-authentication prompt.",
+        "mobileSha256": "41e6af422b7c7bd6a9f285885031485c289002e0b890a8ddc4b84f0b165c08ef",
+        "starterSha256": "a0d6bd653af32504c777f1db13ca3ea0e7eb56a3ecd3361cd68bd78806bc153b"
+      },
+      {
+        "path": "core/security/data/src/androidMain/res/values-in/strings.xml",
+        "reason": "Application branding in logo, OS notification label or device-authentication prompt.",
+        "mobileSha256": "db6b3ab6570c8b649be5d5502f19797c99c7b1ea297920724ee9dd2d7d777569",
+        "starterSha256": "d02c42879b7a860a6a2e27943ffe555a15f1ecb0c0cfe8347cb2dd5d098c7b79"
+      },
+      {
+        "path": "core/security/data/src/androidMain/res/values/strings.xml",
+        "reason": "Application branding in logo, OS notification label or device-authentication prompt.",
+        "mobileSha256": "a0585037ac3099856669c122fd67b6165696fef816f6afbde5f2b5f221d62f94",
+        "starterSha256": "654c1b86e606298f29ccd8ba8741e7572c0cee5cf3ace21dcf9ceb02a67e39af"
+      },
+      {
+        "path": "core/security/data/src/iosMain/kotlin/dev/fajar/starter/security/data/lock/datasources/AppleDeviceAuthenticationSource.kt",
+        "reason": "Application branding in logo, OS notification label or device-authentication prompt.",
+        "mobileSha256": "8df95446ae7b0bd86481da0ab6625aa816918b4a61e1b7cce25be9de9a30d525",
+        "starterSha256": "1c7c862cd7c85bcf2dc3c343a3148f58599d8de39e2f63aa86103202798e2b6a"
+      },
+      {
+        "path": "core/security/domain/src/commonTest/kotlin/dev/fajar/starter/security/domain/PermissionExpiryTest.kt",
+        "reason": "HRIS server-session binding added to generic fixture constructors; generic assertions retained.",
+        "mobileSha256": "affe36be4ca9c2602941872722c57730cb5393004b0e56750f0a2495addd5a6c",
+        "starterSha256": "f40d551d59cdb213df69acbc6e8a7676ff00096be10f597e74edb44785b30b8e"
+      },
+      {
+        "path": "core/security/domain/src/commonTest/kotlin/dev/fajar/starter/security/domain/lock/AppLockTest.kt",
+        "reason": "HRIS server-session binding added to generic fixture constructors; generic assertions retained.",
+        "mobileSha256": "a5a4de9bfa3fc32c3993caf655408c2bea242cfed65b92f56e903d03ef17a6a4",
+        "starterSha256": "8e0cdd63f2f775e89017c46486632f250e1979baa94bc72c370d00b1a5c1fce3"
+      },
+      {
+        "path": "core/sync/data/build.gradle.kts",
+        "reason": "HRIS company change-feed DTO/HTTP adapter dependencies; generic task/scheduling implementation unchanged.",
+        "mobileSha256": "7f3bf0948ae1e802b2f8beaec55d0d1ff3c536d636b25d2f548d4daca4838c15",
+        "starterSha256": "78f38f2a14baa8bac8898fdcfb4361f68ebd4f8527b6060fbd767d8a6d405dcf"
+      },
+      {
+        "path": "core/transfers/domain/src/commonTest/kotlin/dev/fajar/starter/transfers/domain/TransferFixture.kt",
+        "reason": "HRIS server-session binding added to generic fixture constructors; generic assertions retained.",
+        "mobileSha256": "e0a563360e8785c34d204fb91e01fefa25bab25883ad1e27c121d43e066ce07e",
+        "starterSha256": "201199d4327ffdbbfbb3ebd560f4ced82c470bdad0461c6f22941151c585ce7f"
+      },
+      {
+        "path": "gradle/libs.versions.toml",
+        "reason": "HRIS date/time/icon dependencies and their verification entries; all shared dependency digests and verification policy identical.",
+        "mobileSha256": "54017db659eb23f339df60c51bc301a68778640a3940a09f3531cc24ed795052",
+        "starterSha256": "20afea7b3ab5e0479d79ea288fe34e204392b82cce899ca9851fc68bf9509d0d"
+      },
+      {
+        "path": "gradle/verification-metadata.xml",
+        "reason": "HRIS date/time/icon dependencies and their verification entries; all shared dependency digests and verification policy identical.",
+        "mobileSha256": "21ea2d522bc9433e4ff41d73719525c8288a93ca0b5263fd1a5489ba5dd9f412",
+        "starterSha256": "9e8dda076d4b7fa5ec2c5c296d800297d5d8f8dba39d3df2b14964775d83c7a3"
+      },
+      {
+        "path": "tool/distribution/apple_signing.py",
+        "reason": "Application IDs, branding, remote-only HRIS transport/private dev API rules and matching package/configuration fixtures.",
+        "mobileSha256": "eca047429646aad6f870f6c47d512bff4d1062863b74f0f01dcf2ef757756b2e",
+        "starterSha256": "c736ba3d9faa1922c356df3702d5045e294109ba97e4a32b1b43d795b062e28c"
+      },
+      {
+        "path": "tool/distribution/checksums.py",
+        "reason": "Application IDs, branding, remote-only HRIS transport/private dev API rules and matching package/configuration fixtures.",
+        "mobileSha256": "daa1db20db0222953b847f337bf2f9939de6e0ca55179a78996cd8fca0c2fc50",
+        "starterSha256": "0fcae1c805cf5b097f5cc80996eacdde6490eeca71be8b980677c9e7fc87b731"
+      },
+      {
+        "path": "tool/distribution/configuration.py",
+        "reason": "Application IDs, branding, remote-only HRIS transport/private dev API rules and matching package/configuration fixtures.",
+        "mobileSha256": "395e4b9167a97d371bf43923831c3a1096032d8182f70d3667b4dd2ccdea397a",
+        "starterSha256": "86085776786173792e2c65976da8faf069f6eda0348919ecd9e0bd270eb7eead"
+      },
+      {
+        "path": "tool/distribution/credentials.py",
+        "reason": "Application IDs, branding, remote-only HRIS transport/private dev API rules and matching package/configuration fixtures.",
+        "mobileSha256": "68202278e4f2385f2201473c815e2950ef2a0a8794b4c9e0eb9dbc5a2165e652",
+        "starterSha256": "20d38dad8cd47abd17652294a85ee6fce054afd5846cc782bde043082a188046"
+      },
+      {
+        "path": "tool/distribution/test_app_links.py",
+        "reason": "Application IDs, branding, remote-only HRIS transport/private dev API rules and matching package/configuration fixtures.",
+        "mobileSha256": "8ec2a0c4f47724b7c413a89b2f41a7b70880b424f5a7da5a2ec87d329f279ea5",
+        "starterSha256": "aa9d0c38590a1bf8501af25015bbc14adbff66e7da47e48f217cf99bdbd52942"
+      },
+      {
+        "path": "tool/distribution/test_distribution.py",
+        "reason": "Application IDs, branding, remote-only HRIS transport/private dev API rules and matching package/configuration fixtures.",
+        "mobileSha256": "21efcf9391150c7d76faf8613c6dda812a4b39ec302dde0f15630b7f461e533e",
+        "starterSha256": "3631866a5ceb948b3392b68956d1e6592193958c6e67341af21d6e5bb9f40a07"
+      },
+      {
+        "path": "tool/run_android.py",
+        "reason": "Application IDs, branding, remote-only HRIS transport/private dev API rules and matching package/configuration fixtures.",
+        "mobileSha256": "c33b0df0c5d72b2b647c00917b090e2d3f4d7dd521a2b05416d298cd38e7ecc9",
+        "starterSha256": "026181bec4f5bed893fa5e091daa2e208690fa87126361ea313231098b65d068"
+      }
+    ],
+    "mobileOnlyFiles": 419,
+    "mobileOnlyGroups": {
+      "build-logic/src/main": 1,
+      "build-logic/src/test": 1,
+      "core/documents/data": 115,
+      "core/documents/domain": 148,
+      "core/identity/data": 44,
+      "core/identity/domain": 44,
+      "core/sync/data": 10,
+      "core/sync/domain": 6,
+      "core/transfers/data": 1,
+      "core/workspace/data": 16,
+      "core/workspace/domain": 33
+    },
+    "starterOnlyFiles": 0,
+    "verification": {
+      "sharedArtifacts": 3747,
+      "sameSharedDigests": true,
+      "mobileAdditionalArtifacts": 35,
+      "starterOnlyArtifacts": 0,
+      "sameVerificationPolicy": true
+    },
+    "localization": {
+      "core/localization/src/commonMain/composeResources/values/strings_en.xml": {
+        "shared": 129,
+        "additional": 790,
+        "removed": 0,
+        "changed": {
+          "onboarding_activity_description_en": {
+            "starter": "Review recent activity and follow progress.",
+            "mobile": "Switch between companies assigned to your account."
+          },
+          "onboarding_activity_en": {
+            "starter": "Stay up to date",
+            "mobile": "Company access"
+          },
+          "onboarding_ready_en": {
+            "starter": "Ready to begin",
+            "mobile": "Ready to sign in"
+          },
+          "onboarding_workspace_en": {
+            "starter": "Your workspace",
+            "mobile": "Employee services"
+          },
+          "onboarding_ready_description_en": {
+            "starter": "Sign in to open your workspace.",
+            "mobile": "Continue with your work account."
+          },
+          "onboarding_workspace_description_en": {
+            "starter": "Access your projects and account in one place.",
+            "mobile": "Access attendance, requests, and work information."
+          }
+        }
+      },
+      "core/localization/src/commonMain/composeResources/values/strings_id.xml": {
+        "shared": 129,
+        "additional": 790,
+        "removed": 0,
+        "changed": {
+          "onboarding_activity_description_id": {
+            "starter": "Lihat aktivitas terbaru dan progres proyek.",
+            "mobile": "Pindah antarperusahaan yang terhubung dengan akun Anda."
+          },
+          "onboarding_activity_id": {
+            "starter": "Ikuti perkembangan",
+            "mobile": "Akses perusahaan"
+          },
+          "onboarding_workspace_description_id": {
+            "starter": "Akses proyek dan akun dalam satu aplikasi.",
+            "mobile": "Akses absensi, pengajuan, dan informasi pekerjaan."
+          },
+          "onboarding_workspace_id": {
+            "starter": "Workspace Anda",
+            "mobile": "Layanan karyawan"
+          },
+          "onboarding_ready_description_id": {
+            "starter": "Masuk untuk membuka workspace Anda.",
+            "mobile": "Lanjutkan dengan akun kerja Anda."
+          },
+          "onboarding_ready_id": {
+            "starter": "Siap memulai",
+            "mobile": "Siap masuk"
+          }
+        }
+      }
+    },
+    "newGenericPortRequired": false
+  },
+  "reviewFindings": [
+    "local-first.md still listed Android FCM and Google exchange as pending despite recorded provider/device acceptance; correct that historical queue",
+    "Document metadata adds a seventh pending observer within the six existing owning feature areas; keep the count and scope explicit"
+  ],
+  "limits": [
+    "This review reuses complete CI on unchanged source and historical source-scoped actual native workflows; no duplicate build/test execution or fresh device measurement is claimed.",
+    "Per-area CI report lists overlap and are not additive distinct test totals.",
+    "Physical iPhone testing was explicitly waived; signed IPA/APNs and public production domain/deployment remain target-specific configuration, not demonstrated device delivery.",
+    "Private development runtime remains unchanged by this documentation review."
+  ]
+}
