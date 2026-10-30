@@ -4,9 +4,9 @@ The Platform contract is implemented in `27e7f77e`; see its
 [versioned metadata API](https://github.com/fajarxfce/hris-platform/blob/feat/firebase-auth/docs/document-business-metadata.md).
 Mobile implements the owned read projection, encrypted format upgrade and
 capability-aware initial upload. The separate header/history/correction transport
-is also locally validated. Its persistent facts, correction/history screens and
-durable metadata commands remain next. This is HRIS business behavior and has no
-Starter port.
+is also locally validated, as are the encrypted detail/history cache and per-resource
+read-admission store. Read orchestration, correction/history screens and durable
+metadata commands remain next. This is HRIS business behavior and has no Starter port.
 
 `DocumentBusinessMetadata` separates category, document number, issuing country,
 issue date and business-validity date from binary evidence. Dates are calendar
@@ -142,7 +142,44 @@ The first seven adapter cases also passed a focused 36-second run. These are new
 feature contracts, not a claimed pre-fix reproduction. See
 [transport measurements](measurements/document-metadata-remote-2026-10-30.json).
 
-Next: owned metadata storage/details, bounded history UI, observed-version corrections and
+## Metadata storage and read admission — locally validated
+
+The dedicated account/audience/company/document partition keeps its current header
+and contiguous acquired-history position in an encrypted checkpoint. Each immutable
+history revision has its own authenticated record. An initial replacement and later
+conditional commits change the header with at most twenty rows; opening a page
+decrypts one checkpoint and at most twenty selected rows. This supports all 1,000
+allowed snapshots without a whole-history replacement or unbounded read. Previously
+acquired pages remain readable across process restart, session replacement and
+credential age. Legacy unknown facts can upgrade, while capability loss cannot erase
+known metadata. Current facts cannot regress to a later-retrieved original receipt.
+
+The cache uses the already provisioned workspace content key, reads it without
+creating a replacement, and binds ciphertext to account, audience, company, document,
+generation and record version. Writes compare the complete observed checkpoint;
+stale writers, late account changes, gaps, conflicting immutable rows and regressing
+versions across page boundaries cannot commit. Cancellation before the atomic write
+retains the previous snapshot. Missing keys and manipulated ciphertext fail closed.
+
+Per-document read admission is separate from the retained facts. A process-owned
+buffer makes a confirmed denial visible during a pending or failed durable write.
+Persisted denials survive restart and reauthentication. Only clearing the exact
+observed admission revision can reopen the resource; a later denial wins over an
+older pending admission. These components provide storage boundaries; the next
+read use cases must apply this gate together with current company/catalog admission.
+
+Three domain and eleven real-storage scenarios pass on desktop and Chromium,
+including SQLite/IndexedDB restart, all 1,000 history rows, scoped reads, lost keys,
+ciphertext manipulation, competing writes, cancellation and denial persistence.
+A measured page decrypts exactly 21 envelopes for its header and twenty rows.
+Final root checks, dev APK and Document browser suites pass in 184.621 seconds:
+1,912 desktop and 164 browser tests, without failures/errors/skips. The focused run
+passed 101 domain and 62 data cases in 39.013s before the final manipulation case.
+One compiler-proven redundant nullable condition was removed; no failed feature
+test or pre-fix reproduction is claimed. See
+[storage measurements](measurements/document-metadata-cache-2026-10-30.json).
+
+Next: admitted metadata acquisition/observation, detail/history UI, observed-version corrections and
 durable recovery of the original metadata command. Then validate actual owned
 emulator/API/storage behavior and final Apple/full native CI. Physical iPhone testing
 remains waived. Neither `documents.02` nor `people.03`, and not the full PRD goal,

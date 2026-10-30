@@ -54,7 +54,9 @@ format 2 refreshes unchanged document versions while keeping the previous encryp
 generation readable. A later server capability change also requests canonical
 replacement. Initial upload retains confirmed metadata and supports explicit recovery
 after a definite first rejection. The separate header/history/correction transport
-is validated; its local cache, correction commands and detail/history UI remain next.
+is validated. The dedicated encrypted detail/history cache and per-document admission
+store also pass SQLite and IndexedDB tests. Read orchestration, correction commands
+and detail/history UI remain next.
 
 ## Business evidence review
 

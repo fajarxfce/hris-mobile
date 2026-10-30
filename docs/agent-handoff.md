@@ -127,10 +127,20 @@ boundaries. Root checks, dev APK and both Document browser suites pass in 184.23
 1,898 desktop and 150 browser cases, with no failures/errors/skips. Exact source,
 case names and APK hashes are in [transport evidence](measurements/document-metadata-remote-2026-10-30.json).
 
-Next: owned metadata storage/details, bounded history UI and versioned corrections
-with durable original-command recovery. Existing account-owned ReplicaStore supports
-bounded incremental history storage; existing CommandStore retains correction intents.
-Keep their headers/current facts separate from original operation receipts. Preserve
+Metadata storage and per-document admission now also pass complete local validation.
+Account-owned encrypted headers/history commit at most twenty rows and survive
+restart/reauthentication; a page decrypts exactly one header plus its selected rows.
+Tests retain 1,000 immutable revisions and cover stale writers, scope changes,
+cancellation, lost keys, manipulated ciphertext and pending/failed admission storage.
+Root checks, dev APK and both Document browser suites pass in 184.621s: 1,912 desktop
+and 164 browser cases, without failures/errors/skips. See [storage evidence](measurements/document-metadata-cache-2026-10-30.json).
+The existing workspace key is read-only; no database primitive or Starter port changed.
+
+Next: admitted metadata acquisition/observation, detail/history UI and versioned
+corrections with durable original-command recovery. Apply the new resource gate
+alongside company/catalog admission, with finite remote work and final scope checks.
+Existing CommandStore retains correction intents. Keep current facts separate from
+original operation receipts. Preserve
 old omitted JSON/payload hashes and unknown
 legacy values. Then
 run owned emulator/API/storage acceptance and final Apple/full native checks before
