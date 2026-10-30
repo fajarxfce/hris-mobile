@@ -7,8 +7,8 @@ Compose Fluent Starter and is the proving ground for reusable foundation changes
 ## Active workspace goal — full feature completion audit
 
 The full PRD review remains active. Platform's [audit](https://github.com/fajarxfce/hris-platform/blob/feat/firebase-auth/docs/feature-audit-2026-10-30.md)
-now covers fifteen initial rows across Approvals, Communications and Identity;
-46 initial Platform rows and the full Mobile review remain. Keep the original
+now covers twenty initial rows across Approvals, Communications, Identity and
+Documents; 41 initial Platform rows and the full Mobile review remain. Keep the original
 scope; accepted increments do not establish whole-product completion.
 
 - Platform `8014d733` adds optional announcement email, atomic publication capture,
@@ -24,11 +24,21 @@ scope; accepted increments do not establish whole-product completion.
   Its source trees match accepted `8014d733`; downloaded reports verify 190 API,
   35 domain, 22 data, 17 worker and 95 Chromium cases, including eight real workflows.
 
+- Platform `7a1c0251` and `8e5dd3db` complete Document read/command assurance.
+  Twenty read reproductions and nineteen command/enrollment reproductions now
+  pass; one inventory-replay scenario was an already-correct positive control.
+  All 243 selected API, 18 domain and nine data cases, quality/packages and four
+  actual API/browser workflows passed (42.5s). The five Document rows and ten
+  original detailed sections have recorded local acceptance.
+
 [Approval CI](https://github.com/fajarxfce/hris-platform/actions/runs/41009137720)
-is still running for exact source `fcfdaf26a48718a80bc79468bdbdb3b4cbeae11c`.
-Let it finish before dispatching Communications final-source CI; same-branch
-concurrency cancels earlier work. Continue Documents and the remaining module
-contracts, then Mobile and applicable Starter behavior.
+passed all ten jobs for `fcfdaf26`. Communications and Documents final source
+`8e5dd3db49b2568917c44432574f58ce1eae6dae` is running in
+[CI 41013958569](https://github.com/fajarxfce/hris-platform/actions/runs/41013958569).
+Observe its terminal result without cancelling it with another same-branch run.
+Continue Expenses, remaining Platform contracts, then Mobile and applicable Starter
+behavior. Payment enrollment, receipt delegation completion and mutable expense
+input ownership are undergoing reproduction; they are not accepted corrections.
 
 No client implementation or generic port is due from these server/dashboard
 increments. The private API remains schema 101 with SMTP disabled; preserve the
