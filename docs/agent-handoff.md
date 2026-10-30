@@ -163,8 +163,21 @@ and 186 browser cases, all zero failures/errors/skips. Initial focused tests pas
 [Command storage evidence](measurements/document-metadata-command-store-2026-10-30.json)
 retains exact sources, tests and the uninstalled APK hash.
 
-Next: command intake, scoped observation, delivery/review use cases, mutable working
-copies and the editor, with durable original-command recovery. Apply the new resource gate
+Command intake, scoped observation, manual delivery and explicit review are now
+locally validated. Confirmation stores immutable input without HTTP; replay checks
+current policy/ownership, persists uncertainty before sending, and uses the original
+operation after timeouts or later header edits. Denials fence projections even when
+outcome/admission storage fails. Acknowledgement requires acquired current metadata;
+it never replaces a newer header with an old receipt. No automatic delivery task was
+registered. Fourteen domain scenarios cover those boundaries and release per-resource
+subscriptions. The initial twelve failures were a read-only fixture, not production
+defects; the corrected write fixture and separate read-only control pass. Focused
+retry passed 130 cases in 29.808s, then the final overview case was added. Full root
+checks, dev APK and Document Chromium suites pass in 180.515s: 1,950 desktop and 200
+browser cases, all without failures/errors/skips. [Orchestration evidence](measurements/document-metadata-command-flow-2026-10-30.json)
+retains sources, exact cases, setup failure history and the uninstalled APK hash.
+
+Next: mutable working copies and the editor with durable original-command recovery. Apply the new resource gate
 alongside company/catalog admission, with finite remote work and final scope checks.
 Existing CommandStore retains correction intents. Keep current facts separate from
 original operation receipts. Preserve

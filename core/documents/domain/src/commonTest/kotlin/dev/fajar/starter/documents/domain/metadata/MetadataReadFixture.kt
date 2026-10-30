@@ -70,7 +70,7 @@ class MetadataReadFixture {
         }
     }
 
-    private val remote =
+    val remote =
         object : DocumentMetadataRepository {
             override suspend fun head(
                 access: DocumentAccess,

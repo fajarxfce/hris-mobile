@@ -7,8 +7,8 @@ capability-aware initial upload. The separate header/history/correction transpor
 is also locally validated, as are the encrypted detail/history cache and per-resource
 read-admission store. Admitted read orchestration and the detail/history screen
 also pass local validation. Immutable correction contracts and encrypted command
-storage are validated; command orchestration, mutable working copies and the editor
-remain next. This is HRIS business behavior and has no Starter port.
+storage are validated. Explicit intake, scoped observation, delivery and review also
+pass full local validation; mutable working copies and the editor remain next. This is HRIS business behavior and has no Starter port.
 
 `DocumentBusinessMetadata` separates category, document number, issuing country,
 issue date and business-validity date from binary evidence. Dates are calendar
@@ -244,8 +244,44 @@ cases, all without failures/errors/skips. These are new feature contracts, not a
 claimed baseline failure. [Storage evidence](measurements/document-metadata-command-store-2026-10-30.json)
 retains all case names and source/APK hashes.
 
-Next: command intake, scoped observation, delivery/review use cases, mutable working
-copies and the versioned editor, with
+## Correction orchestration — locally validated
+
+Explicit confirmation checks current account/workspace ownership, edit permission,
+read admission, reviewed header and canonical input before storing a command. It
+sends no HTTP. History acquisition progress can change independently; an unchanged
+reviewed header does not force another confirmation. A changed header, unsupported
+metadata or occupied/capacity-limited command slot cannot silently replace the intent.
+
+Manual delivery has a finite thirty-second budget and shares an execution mutex with
+intake/review. Every attempt checks fresh company policy, current header ownership
+and the owned employment directory before persisting uncertainty and calling HTTP.
+It reuses the exact operation and body, including after a later header version.
+Cancellation, timeout, scope changes or lost responses preserve the original command.
+A response is stored separately from cached current facts; a later read denial remains
+closed even when saving the outcome or admission fails. No automatic sync task sends
+these commands.
+
+Local command observation supports one document and the whole company. Resource
+restrictions hide only the affected command; company/catalog denial closes the whole
+projection. Observation does not fetch or expire pending facts, and dismissal releases
+all subscriptions. Explicit review can discard unsent or definitively rejected input.
+Uncertain input remains retained. A successful receipt can be acknowledged only after
+admitted current metadata at least as new as its receipt has been acquired; newer
+facts never regress to the original receipt.
+
+Fourteen new domain scenarios cover confirmation, permission controls, slot/capacity,
+header concurrency, retry uncertainty, later headers, receipt acknowledgement,
+storage failures, ownership/MFA, cancellation, timeouts and resource subscriptions.
+The first run's twelve failures were fixture setup: the inherited account had only
+read permission and correctly rejected confirmation. The new write fixture now has
+upload permission, and a separate read-only control remains denied. The focused retry
+passed all 130 Document domain cases in 29.808s before the final overview scenario.
+Full root checks, Android dev assembly and Document Chromium suites pass in 180.515s:
+1,950 desktop and 200 browser tests, with no failures/errors/skips. These repository
+fixture tests complement the separately accepted actual encrypted storage and Ktor
+payload checks. See [orchestration evidence](measurements/document-metadata-command-flow-2026-10-30.json).
+
+Next: mutable working copies and the versioned editor, with
 durable recovery of the original metadata command. Then validate actual owned
 emulator/API/storage behavior and final Apple/full native CI. Physical iPhone testing
 remains waived. Neither `documents.02` nor `people.03`, and not the full PRD goal,

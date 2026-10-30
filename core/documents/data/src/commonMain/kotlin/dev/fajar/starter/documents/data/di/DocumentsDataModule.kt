@@ -1,6 +1,8 @@
 package dev.fajar.starter.documents.data.di
 
 import dev.fajar.starter.common.config.AppBuild
+import dev.fajar.starter.documents.domain.metadata.commands.repositories.*
+import dev.fajar.starter.documents.domain.metadata.commands.usecases.*
 import dev.fajar.starter.documents.domain.metadata.repositories.*
 import dev.fajar.starter.documents.domain.metadata.usecases.*
 import dev.fajar.starter.documents.domain.replica.repositories.DocumentCatalogRepository
@@ -22,6 +24,98 @@ import org.koin.core.annotation.*
 @Module
 @ComponentScan("dev.fajar.starter.documents.data")
 class DocumentsDataModule {
+    @Single @Named("document-metadata-command") fun metadataCommandMutex() = Mutex()
+
+    @Factory
+    fun observeMetadataCommands(
+        commands: DocumentMetadataCommandRepository,
+        admission: DocumentMetadataAdmissionRepository,
+        catalog: DocumentCatalogRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        build: AppBuild,
+    ) =
+        ObserveDocumentMetadataCommands(
+            commands,
+            admission,
+            catalog,
+            sessions,
+            workspaces,
+            Clock.System,
+            build,
+        )
+
+    @Factory
+    fun prepareMetadataCommand(
+        commands: DocumentMetadataCommandRepository,
+        cache: DocumentMetadataCacheRepository,
+        admission: DocumentMetadataAdmissionRepository,
+        catalog: DocumentCatalogRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        build: AppBuild,
+        @Named("document-metadata-command") execution: Mutex,
+    ) =
+        PrepareDocumentMetadataCommand(
+            commands,
+            cache,
+            admission,
+            catalog,
+            sessions,
+            workspaces,
+            Clock.System,
+            build,
+            execution,
+        )
+
+    @Factory
+    fun reviewMetadataCommand(
+        commands: DocumentMetadataCommandRepository,
+        cache: DocumentMetadataCacheRepository,
+        admission: DocumentMetadataAdmissionRepository,
+        catalog: DocumentCatalogRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        build: AppBuild,
+        @Named("document-metadata-command") execution: Mutex,
+    ) =
+        ReviewDocumentMetadataCommand(
+            commands,
+            cache,
+            admission,
+            catalog,
+            sessions,
+            workspaces,
+            Clock.System,
+            build,
+            execution,
+        )
+
+    @Factory
+    fun replayMetadataCommand(
+        commands: DocumentMetadataCommandRepository,
+        remote: DocumentMetadataRepository,
+        directory: DocumentRepository,
+        admission: DocumentMetadataAdmissionRepository,
+        catalog: DocumentCatalogRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        build: AppBuild,
+        @Named("document-metadata-command") execution: Mutex,
+    ) =
+        ReplayDocumentMetadataCommand(
+            commands,
+            remote,
+            directory,
+            admission,
+            catalog,
+            sessions,
+            workspaces,
+            Clock.System,
+            build,
+            execution,
+        )
+
     @Single @Named("document-metadata-read") fun metadataReadMutex() = Mutex()
 
     @Factory

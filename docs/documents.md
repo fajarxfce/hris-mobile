@@ -59,7 +59,8 @@ store also pass SQLite and IndexedDB tests. Admitted local observation, finite r
 acquisition and the detail/history route pass full local checks and assembled UI tests.
 Immutable correction command contracts and encrypted storage also pass full local
 checks, including SQLite/IndexedDB restart and bounded shared capacity. Command
-intake, delivery/review, working copies and their editor remain next.
+intake, local observation, manual delivery and explicit review also pass full local
+checks. Mutable working copies and their editor remain next.
 
 ## Business evidence review
 
