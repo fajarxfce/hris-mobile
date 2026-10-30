@@ -8,6 +8,8 @@ import dev.fajar.starter.documents.domain.metadata.commands.policies.*
 import dev.fajar.starter.documents.domain.metadata.commands.repositories.DocumentMetadataCommandRepository
 import dev.fajar.starter.documents.domain.metadata.entities.*
 import dev.fajar.starter.documents.domain.metadata.repositories.*
+import dev.fajar.starter.documents.domain.metadata.working.policies.matchesAcknowledgedMetadataCommand
+import dev.fajar.starter.documents.domain.metadata.working.repositories.DocumentMetadataWorkingRepository
 import dev.fajar.starter.documents.domain.policies.*
 import dev.fajar.starter.documents.domain.replica.repositories.DocumentCatalogRepository
 import dev.fajar.starter.identity.domain.repositories.SessionRepository
@@ -21,6 +23,7 @@ import kotlinx.coroutines.sync.withLock
 /** Discard unsent/rejected input or acknowledge a receipt after current facts have caught up. */
 class ReviewDocumentMetadataCommand(
     private val commands: DocumentMetadataCommandRepository,
+    private val copies: DocumentMetadataWorkingRepository,
     private val cache: DocumentMetadataCacheRepository,
     private val admission: DocumentMetadataAdmissionRepository,
     private val catalog: DocumentCatalogRepository,
@@ -84,9 +87,34 @@ class ReviewDocumentMetadataCommand(
                 }
             }
         }
+        if (outcome is DocumentMetadataCommandOutcome.Confirmed) {
+            val cleaned = removeMatchingDraft(workspaceId, access, expected.command)
+            if (cleaned is AppResult.Failed) return cleaned
+        }
         val removed = commands.remove(access, expected)
         val finalOwner = admitted(workspaceId, access, id)
         return if (finalOwner is AppResult.Failed) finalOwner else removed
+    }
+
+    private suspend fun removeMatchingDraft(
+        workspaceId: String,
+        access: DocumentAccess,
+        command: DocumentMetadataCommand,
+    ): AppResult<Unit> {
+        val stored = copies.current(access, command.change.documentId)
+        val owner = admitted(workspaceId, access, command.change.documentId)
+        if (owner is AppResult.Failed) return owner
+        val copy =
+            when (stored) {
+                is AppResult.Failed -> return stored
+                is AppResult.Success -> stored.value ?: return AppResult.Success(Unit)
+            }
+        if (!matchesAcknowledgedMetadataCommand(copy, command)) return AppResult.Success(Unit)
+        val removed = copies.remove(access, copy)
+        val finalOwner = admitted(workspaceId, access, command.change.documentId)
+        if (finalOwner is AppResult.Failed) return finalOwner
+        // A CAS miss preserves a newer draft; this command's receipt remains acknowledged.
+        return if (removed is AppResult.Failed) removed else AppResult.Success(Unit)
     }
 
     private suspend fun currentAccess(workspaceId: String): AppResult<DocumentAccess> {

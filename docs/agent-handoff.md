@@ -190,8 +190,19 @@ and Document browser suites pass in 180.730s: 1,958 desktop/208 browser cases, a
 without failures/errors/skips. [Draft storage evidence](measurements/document-metadata-working-store-2026-10-30.json)
 retains exact cases, sources and the uninstalled APK hash.
 
-Next: admitted working-copy use cases, matching-draft cleanup on confirmed
-acknowledgement, and the editor with durable original-command recovery. Apply the new resource gate
+Working-copy access and acknowledgement cleanup are now locally validated. Ten
+new domain cases cover reopening the original baseline without published binary
+facts, exact save/delete recovery, concurrent edits, read-only retention, pending
+cancellation/timeouts, ownership changes and denial-before-storage subscription.
+Confirmed command acknowledgement removes only a matching no-later draft; failed
+cleanup retains the receipt and a concurrent replacement survives. Focused domain
+checks passed 143 cases in 37.376s; full root checks, dev APK and Document browsers
+passed in 182.812s: 1,968 desktop/218 browser cases, all zero failures/errors/skips.
+[Working-copy orchestration evidence](measurements/document-metadata-working-flow-2026-10-30.json)
+retains exact cases, source and the uninstalled APK hash.
+
+Next: prove/correct catalog resource-denial propagation, then the editor and retained
+command/draft overview with durable original-command recovery. Apply the new resource gate
 alongside company/catalog admission, with finite remote work and final scope checks.
 Existing CommandStore retains correction intents. Keep current facts separate from
 original operation receipts. Preserve

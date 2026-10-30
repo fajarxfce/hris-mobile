@@ -9,7 +9,8 @@ read-admission store. Admitted read orchestration and the detail/history screen
 also pass local validation. Immutable correction contracts and encrypted command
 storage are validated. Explicit intake, scoped observation, delivery and review also
 pass full local validation, together with encrypted mutable working-copy storage.
-Working-copy orchestration and the editor remain next. This is HRIS business behavior and has no Starter port.
+Working-copy orchestration and matching-draft acknowledgement cleanup also pass full
+local validation. Catalog resource-denial propagation and the editor remain next. This is HRIS business behavior and has no Starter port.
 
 `DocumentBusinessMetadata` separates category, document number, issuing country,
 issue date and business-validity date from binary evidence. Dates are calendar
@@ -319,3 +320,23 @@ emulator/API/storage behavior and final Apple/full native CI. Physical iPhone te
 remains waived. Neither `documents.02` nor `people.03`, and not the full PRD goal,
 is accepted by these increments. No Starter implementation port is required. The
 private schema-101 API and installed phone remain unchanged.
+
+## Local working-copy orchestration — locally validated
+
+Opening retained input preserves its original reviewed header; only a new draft
+reads a current header. Bounded open/save/discard operations check stable ownership,
+company and resource admission. Read-only access can retain/discard owned input;
+new drafts and edits require upload permission. Per-document denial stops storage
+observation before private input can be read. Local save/delete recovery compares
+the exact intended copy and preserves concurrent replacements. No remote request
+or age-based deletion is introduced.
+
+Confirmed acknowledgement first requires current facts at least as new as the
+original receipt, then removes only an unchanged matching draft. Cleanup failure
+keeps the receipt; a newer draft wins its compare-and-set. Presentation must flush
+local edits and stop editing while confirming or acknowledging.
+
+All ten new domain scenarios pass. Root checks, development APK and Document
+Chromium suites passed in 182.812s: 1,968 desktop and 218 browser cases, without
+failures/errors/skips. See [evidence](measurements/document-metadata-working-flow-2026-10-30.json).
+This increment does not yet expose an editor or establish device/API acceptance.

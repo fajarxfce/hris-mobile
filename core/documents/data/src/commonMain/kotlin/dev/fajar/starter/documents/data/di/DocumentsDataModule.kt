@@ -5,6 +5,8 @@ import dev.fajar.starter.documents.domain.metadata.commands.repositories.*
 import dev.fajar.starter.documents.domain.metadata.commands.usecases.*
 import dev.fajar.starter.documents.domain.metadata.repositories.*
 import dev.fajar.starter.documents.domain.metadata.usecases.*
+import dev.fajar.starter.documents.domain.metadata.working.repositories.*
+import dev.fajar.starter.documents.domain.metadata.working.usecases.*
 import dev.fajar.starter.documents.domain.replica.repositories.DocumentCatalogRepository
 import dev.fajar.starter.documents.domain.replica.usecases.*
 import dev.fajar.starter.documents.domain.repositories.*
@@ -24,6 +26,92 @@ import org.koin.core.annotation.*
 @Module
 @ComponentScan("dev.fajar.starter.documents.data")
 class DocumentsDataModule {
+    @Single @Named("document-metadata-working") fun metadataWorkingMutex() = Mutex()
+
+    @Factory
+    fun observeMetadataWorkingCopies(
+        copies: DocumentMetadataWorkingRepository,
+        admission: DocumentMetadataAdmissionRepository,
+        catalog: DocumentCatalogRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        build: AppBuild,
+    ) =
+        ObserveDocumentMetadataWorkingCopies(
+            copies,
+            admission,
+            catalog,
+            sessions,
+            workspaces,
+            Clock.System,
+            build,
+        )
+
+    @Factory
+    fun openMetadataWorkingCopy(
+        copies: DocumentMetadataWorkingRepository,
+        cache: DocumentMetadataCacheRepository,
+        admission: DocumentMetadataAdmissionRepository,
+        catalog: DocumentCatalogRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        build: AppBuild,
+        @Named("document-metadata-working") execution: Mutex,
+    ) =
+        OpenDocumentMetadataWorkingCopy(
+            copies,
+            admission,
+            catalog,
+            sessions,
+            workspaces,
+            Clock.System,
+            build,
+            execution,
+            cache,
+        )
+
+    @Factory
+    fun saveMetadataWorkingCopy(
+        copies: DocumentMetadataWorkingRepository,
+        admission: DocumentMetadataAdmissionRepository,
+        catalog: DocumentCatalogRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        build: AppBuild,
+        @Named("document-metadata-working") execution: Mutex,
+    ) =
+        SaveDocumentMetadataWorkingCopy(
+            copies,
+            admission,
+            catalog,
+            sessions,
+            workspaces,
+            Clock.System,
+            build,
+            execution,
+        )
+
+    @Factory
+    fun discardMetadataWorkingCopy(
+        copies: DocumentMetadataWorkingRepository,
+        admission: DocumentMetadataAdmissionRepository,
+        catalog: DocumentCatalogRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        build: AppBuild,
+        @Named("document-metadata-working") execution: Mutex,
+    ) =
+        DiscardDocumentMetadataWorkingCopy(
+            copies,
+            admission,
+            catalog,
+            sessions,
+            workspaces,
+            Clock.System,
+            build,
+            execution,
+        )
+
     @Single @Named("document-metadata-command") fun metadataCommandMutex() = Mutex()
 
     @Factory
@@ -71,6 +159,7 @@ class DocumentsDataModule {
     @Factory
     fun reviewMetadataCommand(
         commands: DocumentMetadataCommandRepository,
+        copies: DocumentMetadataWorkingRepository,
         cache: DocumentMetadataCacheRepository,
         admission: DocumentMetadataAdmissionRepository,
         catalog: DocumentCatalogRepository,
@@ -81,6 +170,7 @@ class DocumentsDataModule {
     ) =
         ReviewDocumentMetadataCommand(
             commands,
+            copies,
             cache,
             admission,
             catalog,

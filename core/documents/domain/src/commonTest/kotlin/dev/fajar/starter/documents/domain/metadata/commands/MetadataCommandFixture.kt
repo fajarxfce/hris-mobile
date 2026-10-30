@@ -9,6 +9,7 @@ import dev.fajar.starter.documents.domain.metadata.commands.repositories.Documen
 import dev.fajar.starter.documents.domain.metadata.commands.usecases.*
 import dev.fajar.starter.documents.domain.metadata.entities.*
 import dev.fajar.starter.documents.domain.metadata.repositories.DocumentMetadataRepository
+import dev.fajar.starter.documents.domain.metadata.working.MemoryMetadataWorkingCopies
 import kotlin.test.*
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.sync.Mutex
@@ -32,6 +33,7 @@ class MetadataCommandFixture {
         )
     val workspaceId = base.workspace.id
     val commands = MemoryMetadataCommands()
+    val copies = MemoryMetadataWorkingCopies()
     val mutex = Mutex()
     val sent = mutableListOf<DocumentMetadataChange>()
     var saveCall: suspend (DocumentMetadataChange) -> AppResult<DocumentMutationReceipt> = {
@@ -73,6 +75,7 @@ class MetadataCommandFixture {
     val review =
         ReviewDocumentMetadataCommand(
             commands,
+            copies,
             reads.cache,
             reads.admission,
             reads.catalog.store,
