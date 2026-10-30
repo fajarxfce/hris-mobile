@@ -6,7 +6,9 @@ Mobile implements the owned read projection, encrypted format upgrade and
 capability-aware initial upload. The separate header/history/correction transport
 is also locally validated, as are the encrypted detail/history cache and per-resource
 read-admission store. Admitted read orchestration and the detail/history screen
-also pass local validation. Versioned corrections and durable metadata commands remain next. This is HRIS business behavior and has no Starter port.
+also pass local validation. Immutable correction contracts and encrypted command
+storage are validated; command orchestration, mutable working copies and the editor
+remain next. This is HRIS business behavior and has no Starter port.
 
 `DocumentBusinessMetadata` separates category, document number, issuing country,
 issue date and business-validity date from binary evidence. Dates are calendar
@@ -212,7 +214,38 @@ method. No quality threshold changed. The focused domain and assembled UI runs
 passed in 34.334s and 108.773s. Exact cases, failures, source/APK and screenshot hashes
 are retained in [read/UI evidence](measurements/document-metadata-read-ui-2026-10-30.json).
 
-Next: observed-version corrections and
+## Retained correction commands — storage locally validated
+
+A confirmed correction freezes its account, audience, company, employment, title,
+observed document version, metadata, exact reason and operation ID. Its durable
+outcome distinguishes pending, unconfirmed, rejected and confirmed. Only a reviewed
+first definitive rejection proves non-commit. A rejection after earlier uncertainty
+keeps the original operation unresolved. Confirmed and rejected outcomes cannot be
+rewritten by a later failure. The receipt is the original expected version plus one;
+it never replaces a newer header or history.
+
+The encrypted repository uses the existing shared CommandStore and command content
+key: at most 128 commands per account across features and one command per document.
+Authenticated request/outcome envelopes are bounded to 16/4 KiB of plaintext. They
+bind the account, audience, company, document, operation, purpose and state revision.
+Complete observed-record comparison and atomic revision checks protect updates and
+removals; attempt counts cannot regress. Local facts have no credential-age expiry.
+A lost key cannot replace ciphertext in this or another command partition. Failure
+storage retains bounded technical fields and omits private server diagnostics.
+
+Three domain and six actual storage scenarios pass, with SQLite and IndexedDB
+reopening, session replacement, original receipts, shared capacity, resource slots,
+competing writes, Unicode input, missing keys, manipulated/oversized ciphertext,
+cancellation and account changes before insertion. Initial focused validation passed
+116 domain and 69 data cases in 40.635s; final terminal-state assertions and one
+additional domain case are included in the full run. Root quality, Android dev
+assembly and Document Chromium suites pass in 193.331s: 1,936 desktop and 186 browser
+cases, all without failures/errors/skips. These are new feature contracts, not a
+claimed baseline failure. [Storage evidence](measurements/document-metadata-command-store-2026-10-30.json)
+retains all case names and source/APK hashes.
+
+Next: command intake, scoped observation, delivery/review use cases, mutable working
+copies and the versioned editor, with
 durable recovery of the original metadata command. Then validate actual owned
 emulator/API/storage behavior and final Apple/full native CI. Physical iPhone testing
 remains waived. Neither `documents.02` nor `people.03`, and not the full PRD goal,

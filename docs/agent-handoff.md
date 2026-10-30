@@ -150,7 +150,21 @@ cases, all without failures/errors/skips. Three narrow screenshots were inspecte
 [Read/UI evidence](measurements/document-metadata-read-ui-2026-10-30.json) records
 source/APK hashes, actual cases and the earlier compilation/method-length corrections.
 
-Next: versioned corrections with durable original-command recovery. Apply the new resource gate
+Correction command contracts and encrypted storage are also locally validated.
+The existing shared CommandStore retains at most 128 account commands, one per
+document, with immutable input, exact record/revision checks, bounded authenticated
+envelopes and the shared command key. A prior uncertain attempt cannot become a
+proven rejection; original receipts and terminal outcomes remain immutable. Three
+domain and six actual SQLite/IndexedDB cases cover restart, sessions, capacity,
+resource slots, stale writers, lost keys, corruption, cancellation and late accounts.
+Full root checks, dev APK and Document browser suites pass in 193.331s: 1,936 desktop
+and 186 browser cases, all zero failures/errors/skips. Initial focused tests passed
+116 domain/69 data cases in 40.635s before the final terminal assertions.
+[Command storage evidence](measurements/document-metadata-command-store-2026-10-30.json)
+retains exact sources, tests and the uninstalled APK hash.
+
+Next: command intake, scoped observation, delivery/review use cases, mutable working
+copies and the editor, with durable original-command recovery. Apply the new resource gate
 alongside company/catalog admission, with finite remote work and final scope checks.
 Existing CommandStore retains correction intents. Keep current facts separate from
 original operation receipts. Preserve
