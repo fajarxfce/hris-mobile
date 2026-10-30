@@ -1,0 +1,130 @@
+{
+  "date": "2026-10-30",
+  "scope": "Actual owned Android document metadata draft and original correction recovery",
+  "platform_parent": "8586801b055611b765798e4795b63984c2b3f9e7",
+  "mobile_application_source": "3c6db4eb72279b2abffbd4f869dfd78140a7ceb0",
+  "apk": {
+    "bytes": 34211727,
+    "sha256": "b2ca67b4d5fb0f354758bafa59ed50018247bc0e99f613c172abca7048904db9",
+    "api": "http://127.0.0.1:18082/api/v1/",
+    "phone_distributed": false
+  },
+  "schema": 103,
+  "fixture": {
+    "command": [
+      "./node_modules/.bin/playwright",
+      "test",
+      "--config",
+      "playwright.native-metadata.config.ts"
+    ],
+    "elapsed_seconds": 432.451,
+    "exit_code": 0
+  },
+  "server": {
+    "originalCorrectionReplayed": true,
+    "requests": 78,
+    "companyMutations": 2,
+    "metadataVersions": 3,
+    "currentDocumentVersion": 4,
+    "currentMetadataVersion": 2,
+    "unchangedBinaryRevision": true,
+    "sourceSha256": "14bcd090baf31edba64e9cbd8cdfc15f943344aa72cb3675ad8e91bfcbce03ad"
+  },
+  "driver": {
+    "summaryDraftBefore": 36,
+    "mutationsBefore": 0,
+    "summaryDraftAfter": 36,
+    "draftRestoredOffline": true,
+    "summaryUnconfirmedBefore": 48,
+    "summaryUnconfirmedAfter": 48,
+    "unconfirmedRestoredOffline": true,
+    "laterMetadataVersionBeforeRetry": 2,
+    "originalCorrectionConfirmed": true,
+    "reviewRemovedOriginalAndMatchingDraft": true,
+    "emptyPendingGroups": 7,
+    "laterHeaderPreserved": true,
+    "allThreeHistoryVersionsVisible": true,
+    "signedOut": true
+  },
+  "checks": {
+    "proxy_cases": 1,
+    "proxy_duration_ms": 147.695403,
+    "typescript": true,
+    "biome_files": 5,
+    "dashboard_architecture": true,
+    "production_dashboard_build": true,
+    "invalid_lifetime_values_rejected_before_resource_creation": 6
+  },
+  "cleanup": {
+    "owned_ports_closed": [
+      18081,
+      18082,
+      4175
+    ],
+    "labelled_database_containers_remaining": 0,
+    "database_and_password_files_removed": true,
+    "ready_recover_done_markers_removed": true,
+    "adb_reverse_removed": true,
+    "emulator_stopped_without_data_wipe": true,
+    "wifi_and_mobile_data_restored": true
+  },
+  "earlier_attempt": {
+    "result": "incomplete; server fixture lifetime expired before final replay",
+    "elapsed_seconds": 971.758,
+    "driver_exit_code": 130,
+    "cause": "Manual test allowed 1800 seconds but backend default expired after 600 seconds; the abandoned driver was explicitly interrupted",
+    "correction": "Metadata config requests a bounded 1800-second lifetime; ordinary 600/FCM 900 defaults remain unchanged"
+  },
+  "sources": {
+    "apps/dashboard/integration-native/document-metadata.spec.ts": "53fd60d9908d751e7c433c70420cb90e9a1e41654dba5242b2ca932dc762ba1a",
+    "apps/dashboard/integration-native/fixtures/metadata-source.ts": "0f23d8d9b93e3b8ac38f2644b8f02ab45ceef45d601723ea04b69b75f5694b1a",
+    "apps/dashboard/integration-native/fixtures/metadata-proxy.ts": "37eda3874a66338ae61156ce1cc41d60f1fcf29d04f386a528cffb430830a88d",
+    "apps/dashboard/integration-native/fixtures/metadata-proxy.test.mjs": "c5aa3720578acd646eee63e46fdab15cbde7639a6044b69f2cabdd80a679d88c",
+    "apps/dashboard/playwright.native-metadata.config.ts": "b45f1d15fa717f03a928a7553679907ff88f48ec225f693df4d654be574b309b",
+    "tool/dashboard_backend_fixture.py": "b1262732a197ad22d36cfd4603b5e0e3927e165e7e665532f1058d18e55df68f"
+  },
+  "application_artifacts": {
+    "apps/server/build/libs/apps-server.jar": "92b56ab0a2ad7d35013c9528bc421add046fe9461906a7698898dacbf11e637b",
+    "apps/worker/build/libs/apps-worker.jar": "4ff024779da49f78a463e5a763fa61bc22d71daa45df5f5537d3ab7043b7ed04"
+  },
+  "visually_reviewed_screenshots": {
+    "metadata-native-offline-draft.png": "d20e793dfba2ff6083eecb12910071147436753b4a533caf508e799af0ccaaf6",
+    "metadata-native-offline-original.png": "4603b52423501c9a766f6c1ae264ffee6889dcb8007aa6ee36820b72ba9fd889",
+    "metadata-native-confirmed.png": "4084b281b71f86154256c42b0a39f105ab57da831250096312b9fd0ac9207cce",
+    "metadata-native-empty-summary.png": "598e5e9736a4a10a78f19a0be05c000e782ea8c871b27f9bdfa70a010f844d78",
+    "metadata-native-later-header.png": "77eda7a71e6ddbe17a8c3ccb96b6d67d137cf83e61fac94105ca8e6c64a31765"
+  },
+  "limits": [
+    "Fictional source bytes and initial metadata use actual API/private Garage; fixture-only accepted inspection facts use labelled database with normal constraints/triggers. This is not antivirus acceptance.",
+    "Exactly two forwarded successful metadata commands share the same operation and body hashes. A transport-level blocked retry after response loss is retained; no automatic application replay is claimed.",
+    "User runtime, provider configuration and phone are unchanged. Physical iPhone testing remains waived; complete hosted native/Apple checks remain separate."
+  ],
+  "platform_fixture_commit": "1e0522c0",
+  "browser_deadline_correction": {
+    "failed_ci": "https://github.com/fajarxfce/hris-mobile/actions/runs/41071828262",
+    "head": "3c6db4eb72279b2abffbd4f869dfd78140a7ceb0",
+    "failure": "BrowserDocumentMetadataStorageTest.metadataMaximumHistoryRemainsPaged exceeded Mocha 2000ms default",
+    "unchanged_capacity": 1000,
+    "new_bounded_deadline_ms": 20000,
+    "configuration": "core/documents/data/karma.config.d/metadata-storage-tests.js",
+    "configuration_sha256": "0fd96b559e1c4795c1693160d6e16dda7eeda95d2e2930450c33d66e13bc5e54",
+    "local": {
+      "command": [
+        "xvfb-run",
+        "-a",
+        "./gradlew",
+        ":core:documents:data:wasmJsBrowserTest",
+        "--no-daemon"
+      ],
+      "elapsed_seconds": 21.607,
+      "exit_code": 0
+    },
+    "browser_counts": {
+      "tests": 75,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "report_time_caveat": "Gradle browser testcase time 0.0 is not a wall-time measurement; runner elapsed time is retained."
+  }
+}

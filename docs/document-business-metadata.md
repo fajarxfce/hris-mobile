@@ -444,3 +444,21 @@ and 230 browser cases, all zero failures/errors/skips. See [summary evidence](me
 Next: owned emulator/API/storage acceptance and final Apple/native checks before
 accepting either metadata PRD requirement. The private API remains schema 101, and
 neither the phone nor live dashboard changed.
+
+## Actual Android metadata recovery and browser capacity deadline — 30 October 2026
+
+Platform `1e0522c0` records the [owned native acceptance](https://github.com/fajarxfce/hris-platform/blob/feat/firebase-auth/docs/native-metadata-acceptance.md)
+for Mobile application `3c6db4eb`: two offline process restarts, exact original
+correction replay after later administrative changes, matching-draft cleanup and
+all seven pending groups empty. Independent API observations retain the later
+version-4 header, all three metadata revisions and unchanged binary revision.
+The run passed in 432.451s with full fixture cleanup. Five key screenshots were
+inspected; the loopback APK was not distributed to the user's phone.
+
+CI `41071828262` retained a real test deadline failure in the browser's 1,000-revision
+storage capacity case: Mocha's default 2000ms expired. The Document data module now
+uses a bounded 20000ms deadline, matching the existing database capacity harness,
+without changing production code, the test size or its assertions. All 75 affected
+browser cases pass locally in 21.607s. [Evidence](measurements/document-metadata-native-2026-10-30.json)
+retains source/configuration/APK hashes, exact native observations and the earlier
+fixture lifetime failure. Complete hosted Mobile/Apple CI remains required.

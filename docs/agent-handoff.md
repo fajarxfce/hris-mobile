@@ -267,11 +267,31 @@ browser cases, zero failures/errors/skips. Two screenshots were inspected; [summ
 evidence](measurements/document-metadata-pending-2026-10-30.json) retains exact
 sources, cases, runs and the uninstalled APK hash.
 
-Next: run owned emulator/API/storage acceptance and final Apple/full native checks
-before accepting either requirement, finishing the detailed People review and
-continuing remaining Platform/Mobile/Starter scope. Keep shared finance/leave
-evidence free of private identity numbers and preserve legacy omitted payloads.
-This business increment has no Starter implementation port. The full goal remains active.
+The actual Android application `3c6db4eb` now passes owned API/PostgreSQL/private
+Garage acceptance, committed in Platform `1e0522c0`. Two offline process restarts
+retain incomplete input and then the read-only original uncertain correction.
+Retry after an independent later admin edit confirms the same operation/body;
+Done removes its matching draft and command. All seven summary groups empty;
+the current version-4 admin header, three history revisions and binary revision
+remain intact. Summary reloads stay 36→36 and 48→48. The fixture observed 78 native
+requests and exactly two successful company writes; it passed in 432.451s with
+owned cleanup and five inspected screenshots. [Native evidence](measurements/document-metadata-native-2026-10-30.json)
+retains the APK/source hashes, initial fixture-lifetime failure and precise limits.
+
+Full CI `41071828262` at `3c6db4eb` passed Web/Windows and iOS simulator compilation/
+tests, but Linux failed the 1,000-revision browser storage case at Mocha's default
+two-second deadline. A module-local bounded twenty-second deadline preserves all
+assertions; all 75 Document data browser cases pass locally in 21.607s. The complete
+Apple app and replacement full CI still require terminal verification. Do not
+accept the failed predecessor as a full pass.
+
+Next: complete hosted Mobile/Apple checks, then coordinate the controlled schema-103
+API/static-dashboard/Mobile rollout. Finish the detailed People review and continue
+remaining Platform/Mobile/Starter scope. Keep shared finance/leave evidence free
+of private identity numbers and preserve legacy omitted payloads. The browser
+configuration covers an HRIS-only metadata module; Starter's generic database
+capacity suite already has the same bounded I/O deadline. No implementation port
+is due. The full goal remains active.
 
 The private API remains schema 101 with SMTP disabled; preserve the accepted Google
 binding and installed phone. The dashboard serves an isolated baseline directory
