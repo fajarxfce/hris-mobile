@@ -1,0 +1,501 @@
+{
+  "run_id": 41071828262,
+  "source": "3c6db4eb72279b2abffbd4f869dfd78140a7ceb0",
+  "whole_run_conclusion": "failure",
+  "jobs": [
+    {
+      "completedAt": "2026-10-30T14:42:38Z",
+      "conclusion": "success",
+      "databaseId": 124117690484,
+      "name": "windows",
+      "startedAt": "2026-10-30T14:28:55Z",
+      "status": "completed",
+      "steps": [
+        {
+          "completedAt": "2026-10-30T14:28:59Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "startedAt": "2026-10-30T14:28:56Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-30T14:29:07Z",
+          "conclusion": "success",
+          "name": "Run actions/checkout@v4",
+          "number": 2,
+          "startedAt": "2026-10-30T14:28:59Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-30T14:29:08Z",
+          "conclusion": "success",
+          "name": "Run actions/setup-java@v4",
+          "number": 3,
+          "startedAt": "2026-10-30T14:29:07Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-30T14:29:12Z",
+          "conclusion": "success",
+          "name": "Run gradle/actions/setup-gradle@v4",
+          "number": 4,
+          "startedAt": "2026-10-30T14:29:08Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-30T14:42:30Z",
+          "conclusion": "success",
+          "name": "Run ./gradlew.bat :apps:shared:desktopJar",
+          "number": 5,
+          "startedAt": "2026-10-30T14:29:12Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-30T14:42:33Z",
+          "conclusion": "success",
+          "name": "Post Run gradle/actions/setup-gradle@v4",
+          "number": 8,
+          "startedAt": "2026-10-30T14:42:30Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-30T14:42:34Z",
+          "conclusion": "success",
+          "name": "Post Run actions/setup-java@v4",
+          "number": 9,
+          "startedAt": "2026-10-30T14:42:33Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-30T14:42:36Z",
+          "conclusion": "success",
+          "name": "Post Run actions/checkout@v4",
+          "number": 10,
+          "startedAt": "2026-10-30T14:42:34Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-30T14:42:36Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 11,
+          "startedAt": "2026-10-30T14:42:36Z",
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/41071828262/job/124117690484"
+    },
+    {
+      "completedAt": "2026-10-30T14:48:32Z",
+      "conclusion": "failure",
+      "databaseId": 124117691229,
+      "name": "verify",
+      "startedAt": "2026-10-30T14:28:55Z",
+      "status": "completed",
+      "steps": [
+        {
+          "completedAt": "2026-10-30T14:28:58Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "startedAt": "2026-10-30T14:28:55Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-30T14:29:00Z",
+          "conclusion": "success",
+          "name": "Run actions/checkout@v4",
+          "number": 2,
+          "startedAt": "2026-10-30T14:28:58Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-30T14:29:00Z",
+          "conclusion": "success",
+          "name": "Run actions/setup-java@v4",
+          "number": 3,
+          "startedAt": "2026-10-30T14:29:00Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-30T14:29:02Z",
+          "conclusion": "success",
+          "name": "Run gradle/actions/setup-gradle@v4",
+          "number": 4,
+          "startedAt": "2026-10-30T14:29:00Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-30T14:29:03Z",
+          "conclusion": "success",
+          "name": "Run actions/setup-node@v4",
+          "number": 5,
+          "startedAt": "2026-10-30T14:29:02Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-30T14:29:03Z",
+          "conclusion": "success",
+          "name": "Run python3 -m unittest discover -s tool -p 'test_*.py'",
+          "number": 6,
+          "startedAt": "2026-10-30T14:29:03Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-30T14:48:17Z",
+          "conclusion": "failure",
+          "name": "Run xvfb-run -a ./gradlew :check :core:presentation:wasmJsBrowserTest :core:datastore:wasmJsBrowserTest :core:database:wasmJsBrowserTest :core:fileio:wasmJsBrowserTest :core:sync:data:wasmJsBrowserTest :core:workspace:domain:wasmJsBrowserTest :core:workspace:data:wasmJsBrowserTest :features:inbox:domain:wasmJsBrowserTest :features:inbox:data:wasmJsBrowserTest :features:home:presentation:wasmJsBrowserTest :features:workforce:domain:wasmJsBrowserTest :features:workforce:data:wasmJsBrowserTest :features:workforce:presentation:wasmJsBrowserTest :features:leave:domain:wasmJsBrowserTest :features:leave:data:wasmJsBrowserTest :core:common:wasmJsBrowserTest :features:payroll:domain:wasmJsBrowserTest :features:payroll:data:wasmJsBrowserTest :features:payroll:presentation:wasmJsBrowserTest :features:expenses:domain:wasmJsBrowserTest :features:expenses:data:wasmJsBrowserTest :features:expenses:presentation:wasmJsBrowserTest :features:leave:presentation:wasmJsBrowserTest :core:location:data:wasmJsBrowserTest :features:people:domain:wasmJsBrowserTest :features:people:data:wasmJsBrowserTest :features:people:presentation:wasmJsBrowserTest :core:documents:domain:wasmJsBrowserTest :core:documents:data:wasmJsBrowserTest :core:transfers:domain:wasmJsBrowserTest :core:transfers:data:wasmJsBrowserTest :features:files:presentation:wasmJsBrowserTest :core:worker:wasmJsBrowserTest :core:featureflags:domain:wasmJsBrowserTest :core:featureflags:data:wasmJsBrowserTest :core:identity:domain:wasmJsBrowserTest :core:identity:data:wasmJsBrowserTest :core:network:wasmJsBrowserTest :core:storage:wasmJsBrowserTest :core:securestorage:wasmJsBrowserTest :core:notifications:data:wasmJsBrowserTest :features:notifications:presentation:wasmJsBrowserTest :core:settings:data:wasmJsBrowserTest :core:localization:wasmJsBrowserTest :core:observability:wasmJsBrowserTest :core:security:domain:wasmJsBrowserTest :core:security:data:wasmJsBrowserTest :features:security:presentation:wasmJsBrowserTest :core:availability:domain:wasmJsBrowserTest :core:availability:data:wasmJsBrowserTest :apps:shared:wasmJsBrowserTest :apps:android:assembleDevDebug :apps:android:assembleStagingDebug :apps:android:assembleProdRelease :apps:android:cyclonedxDirectBom -PsbomConfiguration=prodReleaseRuntimeClasspath",
+          "number": 7,
+          "startedAt": "2026-10-30T14:29:03Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-30T14:48:17Z",
+          "conclusion": "skipped",
+          "name": "Verify configured Android app-link manifests and domain files",
+          "number": 8,
+          "startedAt": "2026-10-30T14:48:17Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-30T14:48:28Z",
+          "conclusion": "success",
+          "name": "Run actions/upload-artifact@v4",
+          "number": 9,
+          "startedAt": "2026-10-30T14:48:17Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-30T14:48:28Z",
+          "conclusion": "skipped",
+          "name": "Post Run actions/setup-node@v4",
+          "number": 15,
+          "startedAt": "2026-10-30T14:48:28Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-30T14:48:28Z",
+          "conclusion": "success",
+          "name": "Post Run gradle/actions/setup-gradle@v4",
+          "number": 16,
+          "startedAt": "2026-10-30T14:48:28Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-30T14:48:28Z",
+          "conclusion": "success",
+          "name": "Post Run actions/setup-java@v4",
+          "number": 17,
+          "startedAt": "2026-10-30T14:48:28Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-30T14:48:28Z",
+          "conclusion": "success",
+          "name": "Post Run actions/checkout@v4",
+          "number": 18,
+          "startedAt": "2026-10-30T14:48:28Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-30T14:48:28Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 19,
+          "startedAt": "2026-10-30T14:48:28Z",
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/41071828262/job/124117691229"
+    },
+    {
+      "completedAt": "2026-10-30T14:41:25Z",
+      "conclusion": "success",
+      "databaseId": 124117691374,
+      "name": "web",
+      "startedAt": "2026-10-30T14:28:55Z",
+      "status": "completed",
+      "steps": [
+        {
+          "completedAt": "2026-10-30T14:28:58Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "startedAt": "2026-10-30T14:28:56Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-30T14:28:59Z",
+          "conclusion": "success",
+          "name": "Run actions/checkout@v4",
+          "number": 2,
+          "startedAt": "2026-10-30T14:28:58Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-30T14:29:00Z",
+          "conclusion": "success",
+          "name": "Run actions/setup-java@v4",
+          "number": 3,
+          "startedAt": "2026-10-30T14:28:59Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-30T14:29:03Z",
+          "conclusion": "success",
+          "name": "Run gradle/actions/setup-gradle@v4",
+          "number": 4,
+          "startedAt": "2026-10-30T14:29:00Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-30T14:29:03Z",
+          "conclusion": "success",
+          "name": "Run actions/setup-node@v4",
+          "number": 5,
+          "startedAt": "2026-10-30T14:29:03Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-30T14:41:20Z",
+          "conclusion": "success",
+          "name": "Run ./gradlew :apps:shared:wasmJsBrowserDistribution",
+          "number": 6,
+          "startedAt": "2026-10-30T14:29:03Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-30T14:41:22Z",
+          "conclusion": "success",
+          "name": "Run actions/upload-artifact@v4",
+          "number": 7,
+          "startedAt": "2026-10-30T14:41:20Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-30T14:41:22Z",
+          "conclusion": "success",
+          "name": "Post Run actions/setup-node@v4",
+          "number": 11,
+          "startedAt": "2026-10-30T14:41:22Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-30T14:41:22Z",
+          "conclusion": "success",
+          "name": "Post Run gradle/actions/setup-gradle@v4",
+          "number": 12,
+          "startedAt": "2026-10-30T14:41:22Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-30T14:41:22Z",
+          "conclusion": "success",
+          "name": "Post Run actions/setup-java@v4",
+          "number": 13,
+          "startedAt": "2026-10-30T14:41:22Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-30T14:41:23Z",
+          "conclusion": "success",
+          "name": "Post Run actions/checkout@v4",
+          "number": 14,
+          "startedAt": "2026-10-30T14:41:22Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-30T14:41:23Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 15,
+          "startedAt": "2026-10-30T14:41:23Z",
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/41071828262/job/124117691374"
+    },
+    {
+      "completedAt": "2026-10-30T15:01:54Z",
+      "conclusion": "success",
+      "databaseId": 124117691432,
+      "name": "apple",
+      "startedAt": "2026-10-30T14:29:01Z",
+      "status": "completed",
+      "steps": [
+        {
+          "completedAt": "2026-10-30T14:29:04Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "startedAt": "2026-10-30T14:29:02Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-30T14:29:07Z",
+          "conclusion": "success",
+          "name": "Run actions/checkout@v4",
+          "number": 2,
+          "startedAt": "2026-10-30T14:29:04Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-30T14:29:07Z",
+          "conclusion": "success",
+          "name": "Select Xcode 26.3",
+          "number": 3,
+          "startedAt": "2026-10-30T14:29:07Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-30T14:29:08Z",
+          "conclusion": "success",
+          "name": "Run actions/setup-java@v4",
+          "number": 4,
+          "startedAt": "2026-10-30T14:29:07Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-30T14:29:11Z",
+          "conclusion": "success",
+          "name": "Run gradle/actions/setup-gradle@v4",
+          "number": 5,
+          "startedAt": "2026-10-30T14:29:08Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-30T14:29:13Z",
+          "conclusion": "success",
+          "name": "Verify distribution configuration and shell entry points",
+          "number": 6,
+          "startedAt": "2026-10-30T14:29:11Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-30T14:29:13Z",
+          "conclusion": "success",
+          "name": "Prepare public app-link test registrations",
+          "number": 7,
+          "startedAt": "2026-10-30T14:29:13Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-30T14:39:44Z",
+          "conclusion": "success",
+          "name": "Compile iOS simulator tests",
+          "number": 8,
+          "startedAt": "2026-10-30T14:29:13Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-30T14:42:23Z",
+          "conclusion": "success",
+          "name": "Run iOS simulator tests",
+          "number": 9,
+          "startedAt": "2026-10-30T14:39:44Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-30T15:01:30Z",
+          "conclusion": "success",
+          "name": "Build iOS simulator app",
+          "number": 10,
+          "startedAt": "2026-10-30T14:42:23Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-30T15:01:31Z",
+          "conclusion": "success",
+          "name": "Verify generated Apple associations",
+          "number": 11,
+          "startedAt": "2026-10-30T15:01:30Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-30T15:01:47Z",
+          "conclusion": "success",
+          "name": "Run actions/upload-artifact@v4",
+          "number": 12,
+          "startedAt": "2026-10-30T15:01:31Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-30T15:01:47Z",
+          "conclusion": "success",
+          "name": "Post Run gradle/actions/setup-gradle@v4",
+          "number": 22,
+          "startedAt": "2026-10-30T15:01:47Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-30T15:01:48Z",
+          "conclusion": "success",
+          "name": "Post Run actions/setup-java@v4",
+          "number": 23,
+          "startedAt": "2026-10-30T15:01:47Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-30T15:01:48Z",
+          "conclusion": "success",
+          "name": "Post Run actions/checkout@v4",
+          "number": 24,
+          "startedAt": "2026-10-30T15:01:48Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-30T15:01:52Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 25,
+          "startedAt": "2026-10-30T15:01:48Z",
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/41071828262/job/124117691432"
+    }
+  ],
+  "apple": {
+    "xml_suites": 28,
+    "tests": 104,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "reports_sha256": {
+      "core/notifications/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.notifications.data.ApplePushTokenSourceTest.xml": "5ce23cd179808d50d91fbfb23c97b157f85b6b0270308a550ef9162b55a7f6b3",
+      "core/notifications/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.notifications.data.NotificationDestinationTest.xml": "6f72196f1a1df1c910236c2038973530e040864287d192b6c4be3a208dd8a850",
+      "core/notifications/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.notifications.data.PushTokenLifecycleTest.xml": "da597144f3088c3754eb8d37ed3723d351e8f90be780d29364b21a73d47a2c2a",
+      "core/notifications/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.notifications.data.SafeNotificationCallTest.xml": "9f9eedc42e46ba6f8006897678016e04047914c9adcf5d51f79afea8d8edbf75",
+      "core/location/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.location.data.AppleLocationDataSourceTest.xml": "f9a4120cd1d15a96507f488b73ae6be29bcdd17d6c48b5a84902414413e06a61",
+      "core/location/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.location.data.DeviceLocationRepositoryTest.xml": "2654dd433a8ecd4864df5c8bb79c7bdfe31864688b230ffc370ac07de951a784",
+      "core/identity/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.identity.data.AppleFirebaseClientOptionsTest.xml": "700577bd0f1cd25a5050d4a8b1833d82cda2ccafbea7208e4ef10e4aa57d8174",
+      "core/identity/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.identity.data.AppleGoogleCredentialTest.xml": "f428c0e0cc5c71045094705d55c84ee9ff2afdb67c9eb920f2d06693003272e0",
+      "core/identity/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.identity.data.DeviceSessionTransportTest.xml": "661ab3a979e634db9d203dd2277a6433610c9ef0f21a1f3bbfdb0e5327f8ab5b",
+      "core/identity/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.identity.data.FirebaseProviderTransportTest.xml": "1e71481e8d854d20d1703df2281990058a6dba6d75824845a6b1405e2cd27349",
+      "core/identity/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.identity.data.GoogleAuthorizationExchangeTest.xml": "1666fcdf8de3710b14ef0264f7a1726f147665563557b0b8358de424188e562a",
+      "core/identity/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.identity.data.GoogleAuthorizationProtocolTest.xml": "8f91650201c352dae12e5a7cd7242493295b2576de53dc68e2e061afa3e20012",
+      "core/identity/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.identity.data.GoogleCodeTransportTest.xml": "3ad3f9d98a4c9f43f0c4be051353b10aa2f852198ab1c83cefb4fe8fe128c5c6",
+      "core/identity/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.identity.data.GoogleCredentialSessionTest.xml": "b5f1ca753ee3ff33fa5137eac537a620dcd1c0b36c5844b11488daa31fad75fa",
+      "core/identity/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.identity.data.IdentityRepositoryTest.xml": "cc462c52d173cba1f2545f355f37e3ff50d091cc96ea3e1b6380f1ee8c5fcc18",
+      "core/identity/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.identity.data.NativeFirebaseTransportTest.xml": "13c049ca06a338b9e42b864ac4de7ade83162512179f495858ac695bfcb21ce2",
+      "core/identity/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.identity.data.InstalledFirebaseAuthenticationTest.xml": "c6bd5a4102ffe370782dd857ce3be8622a68231cb04268d6c85532b981f81d2c",
+      "core/identity/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.identity.data.NativePushStateTest.xml": "175372693adfe9e1242fbb343a5c0b2ac4158afbe461e1f3b9271aafb2b240dc",
+      "core/identity/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.identity.data.NativePushTransportTest.xml": "058430856b64bdf7ec73a6cc0cc5bdb0a4b80645510de06815bdd6486d16e91c",
+      "core/identity/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.identity.data.RefreshTransportTest.xml": "0cdd8656f6a635179a77bf2f5fe7a864dc17a91c88c907a408bf630acc6ca1b2",
+      "core/identity/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.identity.data.StoredSessionRepositoryTest.xml": "9b54e8d2c08605567644f70c5fe95e973ca30e9559f55a0f38f6c8746290466d",
+      "core/identity/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.identity.data.sso.BrowserSsoRepositoryTest.xml": "30f6652e2632f42d69e392e8b1f79130d3175a0476ad8fb91cd42af77bbb663d",
+      "core/fileio/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.fileio.AppleFileOutputTest.xml": "7a3131ccc782619eb5b981f76fa06430c632b116a6753a66f2bd1b05e78a194c",
+      "core/fileio/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.fileio.FileHandleRegistryTest.xml": "3b35f35b4b6667677fc6d9e41ef2ace8ea764b8aeb0f062531bf417c13c23fa5",
+      "core/fileio/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.fileio.SafeFileCallTest.xml": "eb6b978d12da9237210bf91cdcf4dcd8879ea0bb2bab8f01aefca9a535df2e8c",
+      "core/fileio/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.fileio.Sha256DigestTest.xml": "a5b79ab40f48defb5f0d956a4ea1a55d95c8439e0d3f1702889a9a22ff588e81",
+      "core/common/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.common.config.AppLinkPathTest.xml": "83386a81638dee49cfa8da50eb99704003cfd356c982025a5403ed971484350d",
+      "core/common/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.common.decimal.DecimalAmountTest.xml": "44afb4273a480f44e93ba15e4c7ad8fb062223935d2f64229e22c3ba57344bb3"
+    }
+  },
+  "replacement": {
+    "run_id": 41077194465,
+    "source": "d170810f03852f46a948f9f4d5dea9ca4104bdbd",
+    "status": "in_progress"
+  }
+}

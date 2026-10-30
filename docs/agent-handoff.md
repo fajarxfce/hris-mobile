@@ -7,8 +7,8 @@ Compose Fluent Starter and is the proving ground for reusable foundation changes
 ## Active workspace goal — full feature completion audit
 
 The full PRD review remains active. Platform's [audit](https://github.com/fajarxfce/hris-platform/blob/feat/firebase-auth/docs/feature-audit-2026-10-30.md)
-now retains thirty reviewed rows across Approvals, Communications, Identity, Expenses,
-Leave and four Document rows; thirty-one Platform rows and full Mobile review remain. Keep the original
+now retains thirty-four reviewed rows across Approvals, Communications, Identity, Expenses,
+Leave, four Document and four People rows; twenty-seven Platform rows and full Mobile review remain. Keep the original
 scope; accepted increments do not establish whole-product completion.
 
 - Platform `8014d733` adds optional announcement email, atomic publication capture,
@@ -282,8 +282,11 @@ Full CI `41071828262` at `3c6db4eb` passed Web/Windows and iOS simulator compila
 tests, but Linux failed the 1,000-revision browser storage case at Mocha's default
 two-second deadline. A module-local bounded twenty-second deadline preserves all
 assertions; all 75 Document data browser cases pass locally in 21.607s. The complete
-Apple app and replacement full CI still require terminal verification. Do not
-accept the failed predecessor as a full pass.
+Apple app also passed, with 104 tests in 28 downloaded suites and all terminal
+Apple steps successful. [First CI evidence](measurements/document-metadata-first-ci-2026-10-30.json)
+retains its overall failure and exact source. Replacement full CI `41077194465`
+is running at `d170810f03852f46a948f9f4d5dea9ca4104bdbd`; inspect every final job
+and artifacts before accepting it. Do not relabel the failed predecessor.
 
 Next: complete hosted Mobile/Apple checks, then coordinate the controlled schema-103
 API/static-dashboard/Mobile rollout. Finish the detailed People review and continue

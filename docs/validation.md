@@ -2689,3 +2689,11 @@ without changing production code, the test size or its assertions. All 75 affect
 browser cases pass locally in 21.607s. [Evidence](measurements/document-metadata-native-2026-10-30.json)
 retains source/configuration/APK hashes, exact native observations and the earlier
 fixture lifetime failure. Complete hosted Mobile/Apple CI remains required.
+
+The first metadata CI `41071828262` subsequently completed: Windows, Web and Apple
+passed; Linux retains the browser deadline failure. Downloaded Apple reports
+confirm 104 tests in 28 suites, no failures/errors/skips, alongside successful
+complete Xcode build and generated association checks. [Terminal evidence](measurements/document-metadata-first-ci-2026-10-30.json)
+records every job/step. Replacement full CI `41077194465` at `d170810f` is running.
+Platform's `b241d5e8` accepts four People rows; the overall inventory is now 34
+accepted/reviewed and 27 unverified, with metadata still awaiting complete Mobile CI.
