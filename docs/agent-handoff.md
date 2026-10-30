@@ -4,25 +4,40 @@ Updated 30 October 2026 (UTC). The release-configuration audit and independently
 verified Starter port are complete. This employee application was generated from
 Compose Fluent Starter and is the proving ground for reusable foundation changes.
 
-## Active workspace goal — final Platform gates
+## Completed workspace audit — 30 October 2026
 
-[Mobile and applicable Starter review](feature-review-2026-10-30.md) is complete
-against unchanged accepted source. Its [measurement index](measurements/feature-review-2026-10-30.json)
-records fifteen workflow/foundation areas, current CI reports and source continuity.
-657 shared files match byte-for-byte; all 60 differences are classified as HRIS
-integration/policy, branding, configuration or corresponding fixtures. Shared
-artifact digests/verification policy match. No new generic implementation port is
-required. The stale local-first FCM/Google queue and pending-observer count are fixed.
+The full Platform/Mobile/applicable Starter audit is complete. Platform commit
+`64eb0d14` records all 61 initial requirements and eleven detailed module reviews
+accepted, with final [CI 41094285531](https://github.com/fajarxfce/hris-platform/actions/runs/41094285531)
+at `93438f99`: all ten jobs passed, including 3,090 API cases, 104 active worker
+cases, 1,111 mocked browser scenarios, 56 actual workflows and schema-103 recovery.
+GitHub temporarily returned stale step details; final logs, reports and artifact
+digests prove completion. No cancellation, rerun or source change was required.
 
-Platform Payroll now passes 682 API, three worker, 114 domain and twelve data
-cases plus packages/quality; four actual normal and three worker browser workflows
-passed. Workforce correction `2c2a59e3` passes 57 focused API and 61 domain cases
-after reproducing 24 failures with three existing controls. Its complete broad run
-is active in Platform PTY `41070`; preserve its source, then run actual browser
-acceptance and final source CI. [Reporting/Payroll CI 41087903927](https://github.com/fajarxfce/hris-platform/actions/runs/41087903927)
-remains active at exact `eec8a53a`; do not cancel it with another dispatch. The
-Platform inventory remains 41 accepted / 20 unverified until its remaining gates
-pass. Keep the full workspace goal active. Runtime/phone remain unchanged.
+The private API/worker now run verified application `2c2a59e3` after a fresh
+schema-103 data/key checkpoint. Health, migration history, Google/person bindings,
+active native session IDs, document integrity and runtime environments are verified;
+SMTP stays disabled. Dashboard `1e0522c0` is unchanged. [Current Platform handoff](https://github.com/fajarxfce/hris-platform/blob/feat/firebase-auth/docs/agent-handoff.md)
+and [runtime evidence](https://github.com/fajarxfce/hris-platform/blob/feat/firebase-auth/docs/measurements/final-development-rollout-2026-10-30.json)
+retain current ownership, rollback images and recovery locations.
+
+Mobile's [fifteen-area review](feature-review-2026-10-30.md) and
+[source/CI index](measurements/feature-review-2026-10-30.json) remain accepted at
+`f4f101a1`, against unchanged full-CI source `d170810f` (`41077194465`). The normal
+private APK with application `3c6db4eb` is already installed and required no new
+installation for this backend-only update. Actual Android Google/Home and FCM
+acceptance remain source-scoped; physical iPhone testing is explicitly waived.
+Apple simulator tests and the complete Xcode app passed.
+
+All 657 identical shared files and 60 differences were reviewed. HRIS business
+policy stays downstream; no additional generic Starter port remains. Starter's
+accepted source `77063862` retains its independent full CI and separately proved
+artifact-upload correction. This closing update changes documentation only.
+No implementation, local test or CI remains active. For new work, continue proving
+reusable changes in Mobile before porting them, and use the current Platform
+inventory rather than reopening historical pending paragraphs below. The review
+explicitly records undefined future extensions, including post-approval overtime
+fact amendments; it does not label them implemented or claim production release.
 
 ## Retained acceptance history
 

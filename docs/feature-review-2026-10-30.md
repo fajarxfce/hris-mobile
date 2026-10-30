@@ -68,3 +68,11 @@ delivery. The installed phone APK and private server were not changed here.
 The outdated local-first continuation requesting FCM credentials and Google exchange
 has been corrected to point to their existing acceptance. Finish Platform's active
 Workforce gates and final combined development update before closing the full goal.
+
+## Workspace closure
+
+Platform `64eb0d14` closes all 61 initial requirements and detailed module reviews.
+Final CI `41094285531` passed with complete log/artifact evidence, and the private
+schema-103 API/worker update is verified. Mobile application/test/build sources
+remain unchanged from accepted `d170810f`; no new APK or generic port was required.
+[The current handoff](agent-handoff.md) records closure and the retained scope limits.
