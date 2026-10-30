@@ -20,11 +20,18 @@ Local acceptance passed 118 API/OpenAPI, 104 worker and 11 approval domain cases
 4,012 dashboard unit cases, 14 Chromium scenarios and two real API/browser workflows.
 It uses existing immutable tables, current request authorization and versioned
 reassignment pages. No Mobile implementation or Starter port is needed for this
-server/admin-dashboard capability. The next active work reproduces and corrects
-post-acquisition MFA/delegation expiry in older approval readers; full feature review
-remains open. Email source `8014d733` has nine green CI jobs; its dashboard integration
-is still running in [41005223374](https://github.com/fajarxfce/hris-platform/actions/runs/41005223374).
-Do not dispatch a same-branch run that cancels it before completion.
+server/admin-dashboard capability. Platform `fcfdaf26` also corrects
+post-acquisition MFA/delegation expiry in older approval readers: ten baseline
+reproductions failed, then all 60 approval API and 13 domain cases, quality/packages
+and both real API/browser workflows passed. Its five initial Approvals requirements
+and all detailed sections are locally accepted; 56 initial requirements and Mobile
+review remain. Continue Communications and the rest of the full audit.
+
+Email source `8014d733` passed all ten jobs in
+[41005223374](https://github.com/fajarxfce/hris-platform/actions/runs/41005223374).
+[Full CI 41009137720](https://github.com/fajarxfce/hris-platform/actions/runs/41009137720)
+is queued for exact approval source `fcfdaf26a48718a80bc79468bdbdb3b4cbeae11c`.
+Do not cancel it through another same-branch dispatch before it completes.
 
 Continue every module and Mobile requirement in that inventory; do not infer full
 completion from this increment or earlier CI. No client code/Starter port is due
