@@ -7,8 +7,8 @@ Compose Fluent Starter and is the proving ground for reusable foundation changes
 ## Active workspace goal — full feature completion audit
 
 The full PRD review remains active. Platform's [audit](https://github.com/fajarxfce/hris-platform/blob/feat/firebase-auth/docs/feature-audit-2026-10-30.md)
-now covers 26 initial rows across Approvals, Communications, Identity, Documents
-and Expenses; 35 initial Platform rows and the full Mobile review remain. Keep the original
+now covers 31 initial rows across Approvals, Communications, Identity, Documents,
+Expenses and Leave; 30 initial Platform rows and the full Mobile review remain. Keep the original
 scope; accepted increments do not establish whole-product completion.
 
 - Platform `8014d733` adds optional announcement email, atomic publication capture,
@@ -38,15 +38,28 @@ scope; accepted increments do not establish whole-product completion.
   and four actual browser workflows pass (1.2m with setup). Scope includes current
   enrollment, receipt and decision delegation, and stable admitted command inputs.
 
+- Platform `c68b721a` and `70b92e59` complete Leave read/command/delegation
+  assurance and its five-row/eleven-section review. Ten reader and twenty-five
+  command/scope failures now pass. Broad and final targeted runs cover 485 distinct
+  API/OpenAPI cases (471 broad plus fourteen added cases), with 65 domain cases,
+  quality/packages, six actual browser workflows (50.4s) and three actual worker
+  workflows (53.4s). Scope includes final MFA, original receipt approval, beneficiary
+  exclusion, stable policy input and current delegated access. Eight added capacity
+  compatibility cases preserve ordinary/direct reads without permitting oversized
+  delegated decisions; fixture setup failures are explicitly excluded from defects.
+
 [Approval CI](https://github.com/fajarxfce/hris-platform/actions/runs/41009137720)
-passed all ten jobs for `fcfdaf26`. Communications and Documents final source
-`8e5dd3db49b2568917c44432574f58ce1eae6dae` is running in
-[CI 41013958569](https://github.com/fajarxfce/hris-platform/actions/runs/41013958569).
-Observe its terminal result without cancelling it with another same-branch run.
-The final Expense source CI must follow that predecessor without cancellation.
-Continue Leave, remaining Platform contracts, then Mobile and applicable Starter
-behavior. Preliminary Leave decision-delegation completion needs reproduction;
-no Leave correction is accepted yet.
+passed all ten jobs for `fcfdaf26`. Communications/Documents source `8e5dd3db`
+passed all ten [CI 41013958569](https://github.com/fajarxfce/hris-platform/actions/runs/41013958569) jobs.
+Expense [CI 41018107365](https://github.com/fajarxfce/hris-platform/actions/runs/41018107365)
+passed nine jobs and all fourteen worker scenarios, but exceeded the five-minute
+step budget (5.2m); later storage/export checks were skipped. Platform `84d37ad6`
+records the failure and sets bounded eight-minute worker/twenty-minute job budgets.
+Final Leave source `70b92e59e7b41bdafe9f9d1c4b9d5106412777f5` is running in
+[CI 41023645590](https://github.com/fajarxfce/hris-platform/actions/runs/41023645590), including unchanged Expenses and the revised workflow.
+Observe its terminal result without cancelling it. Continue People, the remaining
+Platform requirements, then Mobile and applicable Starter behavior. The full goal
+remains active; this module acceptance does not complete the PRD.
 
 No client implementation or generic port is due from these server/dashboard
 increments. The private API remains schema 101 with SMTP disabled; preserve the
