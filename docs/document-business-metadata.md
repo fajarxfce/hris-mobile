@@ -3,8 +3,10 @@
 The Platform contract is implemented in `27e7f77e`; see its
 [versioned metadata API](https://github.com/fajarxfce/hris-platform/blob/feat/firebase-auth/docs/document-business-metadata.md).
 Mobile implements the owned read projection, encrypted format upgrade and
-capability-aware initial upload. Correction/history screens and durable metadata
-commands remain next. This is HRIS business behavior and has no Starter port.
+capability-aware initial upload. The separate header/history/correction transport
+is also locally validated. Its persistent facts, correction/history screens and
+durable metadata commands remain next. This is HRIS business behavior and has no
+Starter port.
 
 `DocumentBusinessMetadata` separates category, document number, issuing country,
 issue date and business-validity date from binary evidence. Dates are calendar
@@ -114,7 +116,33 @@ check initially required extracting the existing unchanged-file validation into 
 pure policy; the rule was not relaxed. The recovered-upload screenshot was inspected.
 See [rejection measurements](measurements/document-upload-rejection-2026-10-30.json).
 
-Next: owned metadata details, bounded history, observed-version corrections and
+## Header, history and correction transport — locally validated
+
+`DocumentMetadataRepository` acquires a header independently of published binary
+evidence, reads twenty ascending immutable revisions per request, and sends a
+confirmed correction with its original document version, metadata, reason and
+idempotency key. A valid original receipt must match that document and increment
+the observed version by exactly one; it is not the current header after later edits.
+The adapter carries the active request session and bounds every response body.
+
+The header preserves an older API's unknown metadata and unsupported capability.
+History includes the initial revision's possibly unknown actor/reason without
+inventing a verification event. Mappers reject wrong documents, private HR-only
+classification in the employee model, discontinuous/duplicate history, invalid
+metadata, noncanonical cursors and mismatched receipts. Cancellation propagates,
+server denials retain their classifications, and private server diagnostics and
+identity/reason values do not enter model diagnostic strings. Shared content
+evidence and existing upload requests are unchanged.
+
+Eight adapter and two domain cases pass, including actual Ktor request bodies,
+request-session attributes, replay fields, legacy omission and byte limits. The
+complete root check, development APK and both Document browser suites pass in
+184.233 seconds: 1,898 desktop and 150 browser tests, without failures/errors/skips.
+The first seven adapter cases also passed a focused 36-second run. These are new
+feature contracts, not a claimed pre-fix reproduction. See
+[transport measurements](measurements/document-metadata-remote-2026-10-30.json).
+
+Next: owned metadata storage/details, bounded history UI, observed-version corrections and
 durable recovery of the original metadata command. Then validate actual owned
 emulator/API/storage behavior and final Apple/full native CI. Physical iPhone testing
 remains waived. Neither `documents.02` nor `people.03`, and not the full PRD goal,

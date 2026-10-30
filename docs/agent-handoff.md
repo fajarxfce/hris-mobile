@@ -119,8 +119,19 @@ root checks, dev APK and Document browser suites pass in 189.354s: 1,888 desktop
 140 browser cases. [Evidence](measurements/document-upload-rejection-2026-10-30.json)
 records the baseline controls, method-length correction and source/APK hashes.
 
-Next: owned metadata details, bounded history and versioned corrections with durable
-original-command recovery. Preserve old omitted JSON/payload hashes and unknown
+The separate metadata header/history/correction transport is locally validated.
+It preserves legacy unknown facts, bounded contiguous history and the exact confirmed
+correction/receipt across retry; headers no longer depend on a published binary.
+Ten new cases pass, including authenticated Ktor payloads and denial/cancellation
+boundaries. Root checks, dev APK and both Document browser suites pass in 184.233s:
+1,898 desktop and 150 browser cases, with no failures/errors/skips. Exact source,
+case names and APK hashes are in [transport evidence](measurements/document-metadata-remote-2026-10-30.json).
+
+Next: owned metadata storage/details, bounded history UI and versioned corrections
+with durable original-command recovery. Existing account-owned ReplicaStore supports
+bounded incremental history storage; existing CommandStore retains correction intents.
+Keep their headers/current facts separate from original operation receipts. Preserve
+old omitted JSON/payload hashes and unknown
 legacy values. Then
 run owned emulator/API/storage acceptance and final Apple/full native checks before
 accepting either requirement, finishing the detailed People review and continuing
