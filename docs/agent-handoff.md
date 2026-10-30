@@ -7,8 +7,8 @@ Compose Fluent Starter and is the proving ground for reusable foundation changes
 ## Active workspace goal — full feature completion audit
 
 The full PRD review remains active. Platform's [audit](https://github.com/fajarxfce/hris-platform/blob/feat/firebase-auth/docs/feature-audit-2026-10-30.md)
-now covers twenty initial rows across Approvals, Communications, Identity and
-Documents; 41 initial Platform rows and the full Mobile review remain. Keep the original
+now covers 26 initial rows across Approvals, Communications, Identity, Documents
+and Expenses; 35 initial Platform rows and the full Mobile review remain. Keep the original
 scope; accepted increments do not establish whole-product completion.
 
 - Platform `8014d733` adds optional announcement email, atomic publication capture,
@@ -31,14 +31,22 @@ scope; accepted increments do not establish whole-product completion.
   actual API/browser workflows passed (42.5s). The five Document rows and ten
   original detailed sections have recorded local acceptance.
 
+- Platform `5b60aba3` completes the Expense assurance/input correction and its
+  six-row/nine-section review. Twenty-nine genuine failed cases now pass, plus
+  ordinary-scope controls and delegator-account wait regressions. Broad/final runs
+  cover 335 distinct API, 20 Expense domain and 115 Reporting cases; quality/packages
+  and four actual browser workflows pass (1.2m with setup). Scope includes current
+  enrollment, receipt and decision delegation, and stable admitted command inputs.
+
 [Approval CI](https://github.com/fajarxfce/hris-platform/actions/runs/41009137720)
 passed all ten jobs for `fcfdaf26`. Communications and Documents final source
 `8e5dd3db49b2568917c44432574f58ce1eae6dae` is running in
 [CI 41013958569](https://github.com/fajarxfce/hris-platform/actions/runs/41013958569).
 Observe its terminal result without cancelling it with another same-branch run.
-Continue Expenses, remaining Platform contracts, then Mobile and applicable Starter
-behavior. Payment enrollment, receipt delegation completion and mutable expense
-input ownership are undergoing reproduction; they are not accepted corrections.
+The final Expense source CI must follow that predecessor without cancellation.
+Continue Leave, remaining Platform contracts, then Mobile and applicable Starter
+behavior. Preliminary Leave decision-delegation completion needs reproduction;
+no Leave correction is accepted yet.
 
 No client implementation or generic port is due from these server/dashboard
 increments. The private API remains schema 101 with SMTP disabled; preserve the
