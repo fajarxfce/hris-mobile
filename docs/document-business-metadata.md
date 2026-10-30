@@ -10,7 +10,8 @@ also pass local validation. Immutable correction contracts and encrypted command
 storage are validated. Explicit intake, scoped observation, delivery and review also
 pass full local validation, together with encrypted mutable working-copy storage.
 Working-copy orchestration and matching-draft acknowledgement cleanup also pass full
-local validation. Catalog resource-denial propagation is also validated; the editor remains next. This is HRIS business behavior and has no Starter port.
+local validation. Catalog resource-denial propagation and the typed correction editor are also validated;
+the independent retained command/draft overview remains next. This is HRIS business behavior and has no Starter port.
 
 `DocumentBusinessMetadata` separates category, document number, issuing country,
 issue date and business-validity date from binary evidence. Dates are calendar
@@ -359,3 +360,40 @@ Root checks, dev APK and Document browser suites passed in 183.001s: 1,973 deskt
 and 221 browser tests, no failures/errors/skips. Two narrow screenshots were inspected.
 [Evidence](measurements/document-metadata-catalog-admission-2026-10-30.json) separates
 the real reproduction from a new fixture's initially incomplete metadata.
+
+## Correction editor — locally validated
+
+The detail route offers correction to an admitted owner with upload permission,
+known metadata and remaining revision capacity. A typed editor retains incomplete
+input, category and reason in the encrypted working copy. Its UI edit sequence is
+independent of numeric storage revisions. One writer coalesces waiting input while
+retaining an in-flight exact mutation until acknowledged. Back, confirmation and
+review flush local edits; failed local saving offers explicit retry or leaving with
+the last saved draft. Lifecycle stop releases remote work/subscriptions and requests
+immediate local saving; obsolete jobs cannot reset a newer operation's state.
+
+Confirmation freezes the draft's reviewed header, metadata and reason. Pending or
+uncertain commands display immutable input with manual delivery; a known first
+rejection permits explicit review. A saved original receipt never replaces a later
+current header. Done waits for acquired current facts before acknowledgement and
+matching-draft cleanup. A stale draft requires explicit discard/restart from the
+latest details. Known read denial hides input until admitted recovery, while the
+saved encrypted draft remains available to the restored owner.
+
+Single-document command observation previously subscribed to fallible storage before
+resource admission. Two domain tests reproduced known/later denial being masked by
+storage failure. Admission now owns that storage subscription and remains observable
+through storage failure. The company overview still checks every projected resource.
+
+The three assembled editor workflows pass with actual local storage and controlled
+fictional HTTP, including response loss followed by another server correction. Two
+presentation cases cover coalescing and stale acknowledgements. Explicit refresh now
+reveals stale-draft feedback previously hidden above a scrolled form; buttons also
+wait for pending local initialization. Earlier fixture permission/selector/timing
+failures remain separate from production defects. Final root checks, development APK
+and Document Chromium suites passed in 178.280s: 1,980 desktop and 223 browser cases,
+no failures/errors/skips. Six narrow screenshots were inspected. [Evidence](measurements/document-metadata-editor-2026-10-30.json)
+records the history, exact cases, source and uninstalled APK hashes.
+
+The independent retained command/draft overview remains next. This increment is
+not actual API/emulator/Apple acceptance, and the private API/phone remain unchanged.

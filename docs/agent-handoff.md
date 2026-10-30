@@ -215,9 +215,29 @@ all zero failures/errors/skips. Two narrow screenshots were visually inspected.
 [Catalog admission evidence](measurements/document-metadata-catalog-admission-2026-10-30.json)
 retains the genuine reproduction, fixture correction, source and uninstalled APK hash.
 
-Next: the editor and retained command/draft overview with durable original-command
-recovery. Check that single-document command observation watches resource admission
-before subscribing to fallible command storage, like working-copy observation does. Apply the new resource gate
+The typed correction editor is now locally validated. Its serial writer coalesces UI
+edits into storage revisions and retains the exact pending mutation after a lost local
+acknowledgement. Back/confirmation/review flush edits; incomplete drafts reopen with
+the original reviewed header. Confirmation and manual retry preserve the original
+command, while acknowledgement uses acquired current facts and keeps newer drafts.
+Three assembled flows cover retained incomplete input, successful correction, lost
+response plus a later server edit, explicit stale-baseline reset and denied/offline
+recovery. Two presentation cases cover coalescing and late acknowledgements. A real
+new feedback failure put the stale notice above a scrolled form; explicit refresh now
+reveals it. Control readiness also waits for pending initialization and avoids redundant
+local reloads. Fixture permission, selector and timing failures remain recorded separately.
+Two additional domain failures on `8ca77f19` exposed single-command storage errors
+masking known/later resource denial. Per-document admission now precedes storage and
+remains observed after storage failure. All 148 Document domain cases pass, and final
+root checks, APK and Document browsers passed in 178.280s: 1,980 desktop/223 browser,
+zero failures/errors/skips. The final full run repeats all three new assembled flows;
+six screenshots were visually inspected. [Editor evidence](measurements/document-metadata-editor-2026-10-30.json)
+retains source/APK hashes, actual cases, earlier failures and practical limits.
+
+Next: independent retained command/draft overview with neutral recovery targets so
+local corrections remain discoverable when published binary catalog entries disappear.
+The editor is currently entered from admitted document details. Keep the separate
+resource gate ahead of fallible storage and do not send commands automatically. Apply the new resource gate
 alongside company/catalog admission, with finite remote work and final scope checks.
 Existing CommandStore retains correction intents. Keep current facts separate from
 original operation receipts. Preserve

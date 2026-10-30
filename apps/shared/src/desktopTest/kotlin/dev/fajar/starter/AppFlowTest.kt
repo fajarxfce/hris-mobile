@@ -1255,6 +1255,7 @@ class AppFlowTest {
             waitFor("Welcome")
             openDocumentDetails()
             waitFor("PASSPORT-21")
+            compose.onAllNodesWithText("Correct document details").assertCountEquals(0)
             waitForAction("Next page")
             capture("document-metadata-details")
             compose
@@ -1383,6 +1384,263 @@ class AppFlowTest {
                 .assertCountEquals(0)
             capture("document-catalog-resource-restored")
             assertEquals(0, server.documents.uploads.starts.get())
+        }
+    }
+
+    @Test
+    fun metadataEditorRetainsIncompleteDraftAndConfirmsTheReviewedCorrection() {
+        val server =
+            NativeUiServer().apply {
+                documents.enabled = true
+                documents.uploadEnabled = true
+                documents.metadataSupported = true
+                documents.metadata.enabled = true
+                documents.catalogVersion = documents.metadata.latest + 1
+            }
+        withApplication(server) {
+            signIn()
+            waitFor("Choose a company")
+            compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
+            waitFor("Welcome")
+            openDocumentDetails()
+            waitForAction("Correct document details")
+            compose.onNode(hasText("Correct document details") and hasClickAction()).performClick()
+            waitForMetadataEditor()
+            compose
+                .onNodeWithContentDescription("Document number (optional)")
+                .performScrollTo()
+                .performTextReplacement("PRINTED-123")
+            compose
+                .onNodeWithContentDescription("Valid until (optional)")
+                .performScrollTo()
+                .performTextReplacement("201")
+            compose
+                .onNodeWithContentDescription("Reason for correction")
+                .performScrollTo()
+                .performTextInput("Correct printed number and validity")
+            compose.onNodeWithContentDescription("Back").performClick()
+            waitFor("Document details")
+            assertEquals(0, server.documents.metadata.writes.get())
+            waitForAction("Correct document details")
+            compose.onNode(hasText("Correct document details") and hasClickAction()).performClick()
+            waitForMetadataEditor()
+            compose
+                .onNodeWithContentDescription("Document number (optional)")
+                .assertTextContains("PRINTED-123")
+            compose.onNodeWithContentDescription("Valid until (optional)").assertTextContains("201")
+            compose
+                .onNodeWithContentDescription("Reason for correction")
+                .assertTextContains("Correct printed number and validity")
+            compose
+                .onNodeWithContentDescription("Valid until (optional)")
+                .performScrollTo()
+                .performTextReplacement("2019-01-01")
+            compose
+                .onNode(hasScrollToIndexAction())
+                .performScrollToNode(hasTestTag("metadata-save"))
+            waitFor("Draft saved on this device")
+            capture("document-metadata-editor-draft")
+            compose.onNodeWithTag("metadata-save").performClick()
+            waitFor("Review these details before sending the correction.")
+            compose
+                .onNode(hasScrollToIndexAction() and hasAnyAncestor(isDialog()))
+                .performScrollToNode(hasTestTag("metadata-dialog-confirm"))
+            compose.onNodeWithTag("metadata-dialog-confirm").performClick()
+            waitFor("Correction saved")
+            waitForAction("Done")
+            capture("document-metadata-editor-confirmed")
+            assertEquals(1, server.documents.metadata.writes.get())
+            val input = server.documents.metadata.submissions.single().second
+            assertEquals(
+                "PRINTED-123",
+                input
+                    .getValue("metadata")
+                    .jsonObject
+                    .getValue("identityNumber")
+                    .jsonPrimitive
+                    .content,
+            )
+            assertEquals(
+                "2019-01-01",
+                input.getValue("metadata").jsonObject.getValue("validUntil").jsonPrimitive.content,
+            )
+            compose.onNodeWithTag("metadata-review").performScrollTo().performClick()
+            waitFor("Document details")
+            waitFor("PRINTED-123")
+            assertEquals(0, server.documents.uploads.starts.get())
+        }
+    }
+
+    @Test
+    fun metadataEditorRetriesTheOriginalCorrectionAfterResponseLossAndLaterServerEdits() {
+        val server =
+            NativeUiServer().apply {
+                documents.enabled = true
+                documents.uploadEnabled = true
+                documents.metadataSupported = true
+                documents.metadata.enabled = true
+                documents.metadata.loseSaveResponse = true
+                documents.catalogVersion = documents.metadata.latest + 1
+            }
+        withApplication(server) {
+            signIn()
+            waitFor("Choose a company")
+            compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
+            waitFor("Welcome")
+            openDocumentDetails()
+            waitForAction("Correct document details")
+            compose.onNode(hasText("Correct document details") and hasClickAction()).performClick()
+            waitForMetadataEditor()
+            compose
+                .onNodeWithContentDescription("Document number (optional)")
+                .performScrollTo()
+                .performTextReplacement("ORIGINAL-123")
+            compose
+                .onNodeWithContentDescription("Reason for correction")
+                .performScrollTo()
+                .performTextInput("Printed correction")
+            compose
+                .onNode(hasScrollToIndexAction())
+                .performScrollToNode(hasTestTag("metadata-save"))
+            compose.onNodeWithTag("metadata-save").performClick()
+            waitFor("Review these details before sending the correction.")
+            compose
+                .onNode(hasScrollToIndexAction() and hasAnyAncestor(isDialog()))
+                .performScrollToNode(hasTestTag("metadata-dialog-confirm"))
+            compose.onNodeWithTag("metadata-dialog-confirm").performClick()
+            waitFor("Delivery has not been confirmed. Retry the saved correction.")
+            waitForAction("Retry correction")
+            assertEquals(1, server.documents.metadata.writes.get())
+            compose
+                .onAllNodesWithContentDescription("Document number (optional)")
+                .assertCountEquals(0)
+            capture("document-metadata-editor-unconfirmed")
+            compose.onNodeWithContentDescription("Back").performClick()
+            waitFor("Document details")
+            server.documents.metadata.correctExternally("ADMIN-456")
+            server.documents.metadata.loseSaveResponse = false
+            waitForAction("Correct document details")
+            compose.onNode(hasText("Correct document details") and hasClickAction()).performClick()
+            waitFor("Delivery has not been confirmed. Retry the saved correction.")
+            waitForAction("Retry correction")
+            compose.onNodeWithTag("metadata-retry").performScrollTo().performClick()
+            waitFor("Correction saved")
+            waitForAction("Done")
+            assertEquals(1, server.documents.metadata.writes.get())
+            assertEquals(2, server.documents.metadata.submissions.size)
+            assertEquals(
+                server.documents.metadata.submissions[0],
+                server.documents.metadata.submissions[1],
+            )
+            compose.onNodeWithTag("metadata-review").performScrollTo().performClick()
+            waitFor("Document details")
+            waitFor("ADMIN-456")
+            compose.onAllNodesWithText("ORIGINAL-123").assertCountEquals(0)
+            capture("document-metadata-editor-newer-header")
+        }
+    }
+
+    @Test
+    fun metadataEditorRequiresExplicitDraftResetAndKeepsInputAcrossDeniedReads() {
+        val server =
+            NativeUiServer().apply {
+                documents.enabled = true
+                documents.uploadEnabled = true
+                documents.metadataSupported = true
+                documents.metadata.enabled = true
+                documents.catalogVersion = documents.metadata.latest + 1
+            }
+        withApplication(server) {
+            signIn()
+            waitFor("Choose a company")
+            compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
+            waitFor("Welcome")
+            openDocumentDetails()
+            waitForAction("Correct document details")
+            compose.onNode(hasText("Correct document details") and hasClickAction()).performClick()
+            waitForMetadataEditor()
+            compose
+                .onNodeWithContentDescription("Document number (optional)")
+                .performScrollTo()
+                .performTextReplacement("KEPT-DRAFT")
+            compose
+                .onNodeWithContentDescription("Reason for correction")
+                .performScrollTo()
+                .performTextInput("Unsent correction")
+            compose
+                .onNode(hasScrollToIndexAction())
+                .performScrollToNode(hasTestTag("metadata-save"))
+            waitFor("Draft saved on this device")
+            server.documents.metadata.correctExternally("NEW-SERVER")
+            compose.onNodeWithContentDescription("Refresh").performClick()
+            waitFor(
+                "The document changed. Your draft is kept; review the latest details before starting again."
+            )
+            compose
+                .onNodeWithText(
+                    "The document changed. Your draft is kept; review the latest details before starting again."
+                )
+                .assertIsDisplayed()
+            compose
+                .onNodeWithContentDescription("Document number (optional)")
+                .assertTextContains("KEPT-DRAFT")
+            compose
+                .onNode(hasScrollToIndexAction())
+                .performScrollToNode(hasTestTag("metadata-save"))
+            compose.onNode(hasText("Save correction") and hasClickAction()).assertIsNotEnabled()
+            compose
+                .onNode(hasText("Start from latest details") and hasClickAction())
+                .performScrollTo()
+                .performClick()
+            waitFor("The selected unsent input will be discarded.")
+            compose.onNodeWithTag("metadata-dialog-confirm").performClick()
+            waitForMetadataEditor()
+            compose.waitUntil {
+                compose
+                    .onAllNodes(
+                        hasContentDescription("Document number (optional)") and
+                            hasText("NEW-SERVER")
+                    )
+                    .fetchSemanticsNodes()
+                    .isNotEmpty()
+            }
+            compose
+                .onNodeWithContentDescription("Document number (optional)")
+                .performScrollTo()
+                .performTextReplacement("AFTER-RESET")
+            compose
+                .onNodeWithContentDescription("Reason for correction")
+                .performScrollTo()
+                .performTextInput("Retained through denial")
+            compose
+                .onNode(hasScrollToIndexAction())
+                .performScrollToNode(hasTestTag("metadata-save"))
+            waitFor("Draft saved on this device")
+            server.documents.metadata.denial = "document_access_denied"
+            compose.onNodeWithContentDescription("Refresh").performClick()
+            waitForAction("Try again")
+            compose
+                .onAllNodesWithContentDescription("Document number (optional)")
+                .assertCountEquals(0)
+            capture("document-metadata-editor-denied")
+            server.documents.metadata.denial = null
+            server.documents.metadata.offline = true
+            compose.onNode(hasText("Try again") and hasClickAction()).performClick()
+            waitForAction("Try again")
+            compose
+                .onAllNodesWithContentDescription("Document number (optional)")
+                .assertCountEquals(0)
+            server.documents.metadata.offline = false
+            compose.onNode(hasText("Try again") and hasClickAction()).performClick()
+            waitForMetadataEditor()
+            compose
+                .onNodeWithContentDescription("Document number (optional)")
+                .assertTextContains("AFTER-RESET")
+            compose
+                .onNodeWithContentDescription("Reason for correction")
+                .assertTextContains("Retained through denial")
+            assertEquals(0, server.documents.metadata.writes.get())
+            capture("document-metadata-editor-draft-restored")
         }
     }
 
@@ -4516,6 +4774,19 @@ class AppFlowTest {
         }
         compose.onNodeWithContentDescription("On this device").performClick()
         waitFor("On this device")
+    }
+
+    private fun waitForMetadataEditor() {
+        compose.waitUntil(15_000) {
+            compose
+                .onAllNodes(
+                    hasContentDescription("Document number (optional)") and
+                        isEnabled() and
+                        hasSetTextAction()
+                )
+                .fetchSemanticsNodes()
+                .size == 1
+        }
     }
 
     private fun waitForAction(text: String) {

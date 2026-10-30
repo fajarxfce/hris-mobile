@@ -101,6 +101,9 @@ class NativeDocumentsUi {
     }
 
     private fun catalogResponse(request: HttpRequestData): Pair<String, HttpStatusCode>? {
+        val catalogVersion =
+            if (metadata.enabled) maxOf(this.catalogVersion, metadata.latest + 1)
+            else this.catalogVersion
         val path = request.url.encodedPath
         val sync =
             path.contains("/sync/") && request.url.parameters["collections"] == "DOCUMENT_EVIDENCE"

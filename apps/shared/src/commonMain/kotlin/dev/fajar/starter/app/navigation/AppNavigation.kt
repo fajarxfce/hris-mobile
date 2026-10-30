@@ -450,6 +450,11 @@ fun AppNavigation(navigation: ScopedNavigationState, incomingLinks: Flow<String>
                         onDetails = { id ->
                             controller.navigate(DocumentRecordRoute(id)) { launchSingleTop = true }
                         },
+                        onMetadataEdit = { id ->
+                            controller.navigate(DocumentMetadataEditorRoute(id)) {
+                                launchSingleTop = true
+                            }
+                        },
                         onVerify = {
                             controller.navigate(VerificationRoute) { launchSingleTop = true }
                         },

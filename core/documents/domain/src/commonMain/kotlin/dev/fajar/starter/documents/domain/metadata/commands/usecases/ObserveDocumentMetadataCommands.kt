@@ -81,24 +81,60 @@ class ObserveDocumentMetadataCommands(
             when {
                 module is AppResult.Failed -> flowOf(module)
                 denial != null -> flowOf(AppResult.Failed(denial))
+                documentId != null -> observeOne(access, documentId)
                 else -> {
-                    val records =
-                        if (documentId == null) commands.observeAll(access)
-                        else
-                            commands.observe(access, documentId).map { result ->
-                                when (result) {
-                                    is AppResult.Failed -> result
-                                    is AppResult.Success ->
-                                        AppResult.Success(listOfNotNull(result.value))
-                                }
-                            }
-                    records.flatMapLatest { result ->
+                    commands.observeAll(access).flatMapLatest { result ->
                         when (result) {
                             is AppResult.Failed -> flowOf(result)
                             is AppResult.Success -> visible(access, documentId, result.value)
                         }
                     }
                 }
+            }
+        }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private fun observeOne(
+        access: DocumentAccess,
+        documentId: String,
+    ): Flow<AppResult<DocumentMetadataCommandsView>> =
+        admission.observe(access, documentId).flatMapLatest { gate ->
+            val denial = (gate as? AppResult.Success)?.value?.denial
+            when {
+                gate is AppResult.Failed -> flowOf(gate)
+                denial != null ->
+                    flowOf(
+                        AppResult.Success(
+                            DocumentMetadataCommandsView(access, emptyList(), listOf(denial))
+                        )
+                    )
+                else ->
+                    commands.observe(access, documentId).map { result ->
+                        currentCoroutineContext().ensureActive()
+                        when (result) {
+                            is AppResult.Failed -> result
+                            is AppResult.Success -> {
+                                val record = result.value
+                                if (
+                                    record != null &&
+                                        (!record.command.belongsTo(access) ||
+                                            record.command.change.documentId != documentId)
+                                )
+                                    documentFailure(
+                                        "client.document_scope_changed",
+                                        FailureKind.AccessDenied,
+                                    )
+                                else
+                                    AppResult.Success(
+                                        DocumentMetadataCommandsView(
+                                            access,
+                                            listOfNotNull(record),
+                                            emptyList(),
+                                        )
+                                    )
+                            }
+                        }
+                    }
             }
         }
 

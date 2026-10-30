@@ -25,6 +25,7 @@ fun NavGraphBuilder.documentRoutes(
     onFiles: () -> Unit,
     onDownload: (String, Boolean) -> Unit,
     onDetails: (String) -> Unit,
+    onMetadataEdit: (String) -> Unit,
     onVerify: () -> Unit,
     onBack: () -> Unit,
 ) {
@@ -50,7 +51,8 @@ fun NavGraphBuilder.documentRoutes(
         }
         DocumentCatalogPage(state, list, employments, viewModel::onEvent)
     }
-    documentRecordRoute(workspaceId, onVerify, onBack)
+    documentRecordRoute(workspaceId, onMetadataEdit, onVerify, onBack)
+    documentMetadataEditorRoute(workspaceId, onVerify, onBack)
     composable<DocumentFilesRoute> {
         val viewModel =
             koinViewModel<DocumentFilesViewModel>(parameters = { parametersOf(workspaceId) })

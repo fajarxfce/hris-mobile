@@ -15,6 +15,7 @@ import org.koin.core.parameter.parametersOf
 
 internal fun NavGraphBuilder.documentRecordRoute(
     workspaceId: String,
+    onEdit: (String) -> Unit,
     onVerify: () -> Unit,
     onBack: () -> Unit,
 ) {
@@ -33,6 +34,7 @@ internal fun NavGraphBuilder.documentRecordRoute(
         CollectEffects(viewModel.effects) { effect ->
             when (effect) {
                 DocumentRecordEffect.Back -> onBack()
+                is DocumentRecordEffect.Edit -> onEdit(effect.documentId)
                 DocumentRecordEffect.VerifyAccount -> onVerify()
                 DocumentRecordEffect.ScrollToStart -> list.requestScrollToItem(0)
             }

@@ -12,4 +12,6 @@ sealed interface DocumentRecordEvent {
     data object VerificationRequested : DocumentRecordEvent
 
     data object BackRequested : DocumentRecordEvent
+
+    data object EditRequested : DocumentRecordEvent
 }

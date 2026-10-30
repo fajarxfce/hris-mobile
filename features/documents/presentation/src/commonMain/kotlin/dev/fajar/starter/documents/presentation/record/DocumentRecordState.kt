@@ -11,6 +11,14 @@ data class DocumentRecordState(
     val failure: Failure? = null,
     val restriction: Failure? = null,
 ) {
+    val canEdit
+        get() =
+            canPage &&
+                view?.access?.permissions?.contains("documents.self.upload") == true &&
+                view.snapshot.checkpoint?.head?.let {
+                    it.metadataSupported && it.metadata != null && (it.metadataVersion ?: 999) < 999
+                } == true
+
     val canPage
         get() = !refreshing && !loading && restriction == null && view != null
 

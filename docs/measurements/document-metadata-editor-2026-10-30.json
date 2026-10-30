@@ -1,0 +1,3043 @@
+{
+  "date": "2026-10-30",
+  "baseHead": "8ca77f1907dc674c891176a97f2be60b6eb8ab25",
+  "status": "metadata-correction-editor-locally-validated",
+  "behavior": [
+    "Single-document command admission is observed before fallible private command storage, including later denial after storage failure.",
+    "Typed editor, explicit confirmation and original operation retry use real encrypted local working copies and command storage.",
+    "One serial writer coalesces UI edit sequences into bounded storage revisions and retains an unacknowledged exact local mutation.",
+    "Back/confirmation/review flush local edits; incomplete drafts reopen with their original reviewed header and do not rebase automatically.",
+    "Current header acquisition stays separate from original immutable receipts. Confirmed acknowledgement requires current facts and preserves newer drafts.",
+    "Known denials remove private input until admitted recovery. Scope/lifecycle owners cancel remote work and obsolete subscriptions.",
+    "Explicit stale-draft restart, cancellation/review and leave-unsaved choices; no automatically registered command delivery task.",
+    "Restrained English/Indonesian form and review copy; no HRIS behavior is ported to Starter."
+  ],
+  "history": [
+    {
+      "command": [
+        "xvfb-run",
+        "-a",
+        "./gradlew",
+        ":core:documents:domain:desktopTest",
+        "--tests",
+        "*DocumentMetadataCommandAdmissionTest*",
+        "--no-daemon"
+      ],
+      "elapsed_seconds": 29.624,
+      "exit_code": 1,
+      "name": "metadata-command-admission-repro",
+      "finding": "Two actual domain failures on accepted 8ca77f19: a known or later resource denial was hidden behind unreadable single-command storage."
+    },
+    {
+      "command": [
+        "xvfb-run",
+        "-a",
+        "./gradlew",
+        ":core:documents:domain:desktopTest",
+        ":features:documents:presentation:compileKotlinDesktop",
+        ":apps:shared:compileKotlinDesktop",
+        "--no-daemon"
+      ],
+      "elapsed_seconds": 57.262,
+      "exit_code": 1,
+      "name": "metadata-editor-compile",
+      "finding": "All 148 domain cases passed; editor compilation required the existing Compose BackHandler dependency."
+    },
+    {
+      "command": [
+        "xvfb-run",
+        "-a",
+        "./gradlew",
+        ":apps:shared:desktopTest",
+        "--tests",
+        "dev.fajar.starter.AppFlowTest.metadataEditor*",
+        "--no-daemon"
+      ],
+      "elapsed_seconds": 34.553,
+      "exit_code": 1,
+      "name": "metadata-editor-ui-focused",
+      "finding": "Editor BackHandler required the existing experimental API opt-in."
+    },
+    {
+      "command": [
+        "xvfb-run",
+        "-a",
+        "./gradlew",
+        ":apps:shared:desktopTest",
+        "--tests",
+        "dev.fajar.starter.AppFlowTest.metadataEditor*",
+        "--no-daemon"
+      ],
+      "elapsed_seconds": 120.859,
+      "exit_code": 1,
+      "name": "metadata-editor-ui-focused-retry",
+      "finding": "Both new UI fixtures had read-only grants; the correctly absent Edit action prevented entry. Only new editor fixtures received the upload grant, with a separate read-only control."
+    },
+    {
+      "command": [
+        "xvfb-run",
+        "-a",
+        "./gradlew",
+        ":features:documents:presentation:desktopTest",
+        ":apps:shared:desktopTest",
+        "--tests",
+        "dev.fajar.starter.AppFlowTest.metadataEditor*",
+        "--no-daemon"
+      ],
+      "elapsed_seconds": 41.269,
+      "exit_code": 1,
+      "name": "metadata-editor-ui-fixture-retry",
+      "finding": "Draft/confirmation passed. Response-loss assertion ran after pre-HTTP Unconfirmed persistence but before the request completed; the test now waits for enabled Retry."
+    },
+    {
+      "command": [
+        "xvfb-run",
+        "-a",
+        "./gradlew",
+        ":features:documents:presentation:desktopTest",
+        ":apps:shared:desktopTest",
+        "--tests",
+        "dev.fajar.starter.AppFlowTest.metadataEditor*",
+        "--no-daemon"
+      ],
+      "elapsed_seconds": 120.869,
+      "exit_code": 1,
+      "name": "metadata-editor-ui-final",
+      "finding": "First two UI cases passed; the new stale-draft notice remained above the scrolled form. Explicit Refresh now reveals feedback and the case requires visible notice."
+    },
+    {
+      "command": [
+        "xvfb-run",
+        "-a",
+        "./gradlew",
+        ":features:documents:presentation:desktopTest",
+        ":apps:shared:desktopTest",
+        "--tests",
+        "dev.fajar.starter.AppFlowTest.metadataEditor*",
+        "--no-daemon"
+      ],
+      "elapsed_seconds": 120.956,
+      "exit_code": 1,
+      "name": "metadata-editor-ui-feedback",
+      "finding": "The disabled-button assertion selected a Fluent wrapper rather than its actual button. A confirmed Done interaction also missed while pending local initialization could move the layout."
+    },
+    {
+      "command": [
+        "xvfb-run",
+        "-a",
+        "./gradlew",
+        ":features:documents:presentation:desktopTest",
+        ":apps:shared:desktopTest",
+        "--tests",
+        "dev.fajar.starter.AppFlowTest.metadataEditor*",
+        "--no-daemon"
+      ],
+      "elapsed_seconds": 47.772,
+      "exit_code": 1,
+      "name": "metadata-editor-ui-initialization",
+      "finding": "Actions now wait for initialization and loaded local projections skip redundant initialization; fixtures were adapted to wait for enabled editable fields."
+    },
+    {
+      "command": [
+        "xvfb-run",
+        "-a",
+        "./gradlew",
+        ":features:documents:presentation:desktopTest",
+        ":apps:shared:desktopTest",
+        "--tests",
+        "dev.fajar.starter.AppFlowTest.metadataEditor*",
+        "--no-daemon"
+      ],
+      "elapsed_seconds": 44.681,
+      "exit_code": 0,
+      "name": "metadata-editor-ui-ready",
+      "finding": "All three assembled UI cases and six presentation cases passed, including original retry after later edits, stale baseline reset and denied/offline recovery."
+    }
+  ],
+  "final": {
+    "command": [
+      "xvfb-run",
+      "-a",
+      "./gradlew",
+      ":check",
+      ":apps:android:assembleDevDebug",
+      ":core:documents:domain:wasmJsBrowserTest",
+      ":core:documents:data:wasmJsBrowserTest",
+      "--no-daemon"
+    ],
+    "elapsed_seconds": 178.28,
+    "exit_code": 0
+  },
+  "desktop": {
+    "tests": 1980,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "path": "apps/demo/build/test-results/desktopTest/TEST-dev.fajar.starter.demo.DemoIdempotencyTest.xml",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.AdaptiveUiTest.xml",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.AppFlowTest.xml",
+        "tests": 88,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.AttendanceCaptureLayoutTest.xml",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.BootstrapRecoveryTest.xml",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CompanyDataBindingsTest.xml",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.ContentTabsUiTest.xml",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.DataSyncLayoutTest.xml",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.DatePickerUiTest.xml",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.DocumentLayoutTest.xml",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.EmployeeSearchLayoutTest.xml",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.ExpenseBindingsTest.xml",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.ExpenseEditorLayoutTest.xml",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.ExpenseReceiptLayoutTest.xml",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.FilterChipLabelUiTest.xml",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.FirebaseLoginBindingsTest.xml",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.InboxPushIntegrationTest.xml",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.LeaveBindingsTest.xml",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.LeaveCreateLayoutTest.xml",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.LeaveLayoutTest.xml",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.LeaveRequestLayoutTest.xml",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.LoadingUiTest.xml",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.MonthPickerUiTest.xml",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.MotionUiTest.xml",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.NativePushBindingsTest.xml",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.NativePushSettingsTest.xml",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.NativePushWorkerTest.xml",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.NavigationBadgeUiTest.xml",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.NavigationOwnershipTest.xml",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.NavigationRestorationTest.xml",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.OvertimeActionLayoutTest.xml",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.OvertimeBindingsTest.xml",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.OvertimeLayoutTest.xml",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.OvertimePlanLayoutTest.xml",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.PageActionUiTest.xml",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.PageLayoutTest.xml",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.PayrollBindingsTest.xml",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.PendingActionsLayoutTest.xml",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.SearchAndFiltersUiTest.xml",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.TextFieldLayoutTest.xml",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.WorkforceBindingsTest.xml",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.WorkspaceLayoutTest.xml",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.WorkspaceOfflineStartupTest.xml",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.app.bootstrap.AppLocalWorkspaceTest.xml",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.app.bootstrap.AppViewModelTest.xml",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.app.navigation.PendingAppLinkTest.xml",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.app.navigation.ResolveAppLinkTest.xml",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/availability/data/build/test-results/desktopTest/TEST-dev.fajar.starter.availability.data.StoredAvailabilityRepositoryTest.xml",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/availability/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.availability.domain.AppPolicyTest.xml",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/availability/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.availability.domain.AvailabilityCancellationTest.xml",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/availability/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.availability.domain.MaintenanceExpiryTest.xml",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/common/build/test-results/desktopTest/TEST-dev.fajar.starter.common.config.AppLinkPathTest.xml",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/common/build/test-results/desktopTest/TEST-dev.fajar.starter.common.decimal.DecimalAmountTest.xml",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/database/build/test-results/desktopTest/TEST-dev.fajar.starter.database.BlobMigrationTest.xml",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/database/build/test-results/desktopTest/TEST-dev.fajar.starter.database.BlobStoreTest.xml",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/database/build/test-results/desktopTest/TEST-dev.fajar.starter.database.CommandStoreTest.xml",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/database/build/test-results/desktopTest/TEST-dev.fajar.starter.database.DashboardStoreTest.xml",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/database/build/test-results/desktopTest/TEST-dev.fajar.starter.database.InboxStoreTest.xml",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/database/build/test-results/desktopTest/TEST-dev.fajar.starter.database.ReplicaIndexMigrationTest.xml",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/database/build/test-results/desktopTest/TEST-dev.fajar.starter.database.ReplicaOwnershipMigrationTest.xml",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/database/build/test-results/desktopTest/TEST-dev.fajar.starter.database.ReplicaStoreTest.xml",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/database/build/test-results/desktopTest/TEST-dev.fajar.starter.database.TransferStoreTest.xml",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/datastore/build/test-results/desktopTest/TEST-dev.fajar.starter.datastore.FeatureFlagProtoTest.xml",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/datastore/build/test-results/desktopTest/TEST-dev.fajar.starter.datastore.ProtoUserPreferencesStoreTest.xml",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/documents/data/build/test-results/desktopTest/TEST-dev.fajar.starter.documents.data.DocumentDownloadTransportTest.xml",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/documents/data/build/test-results/desktopTest/TEST-dev.fajar.starter.documents.data.DocumentFileStorageTest.xml",
+        "tests": 14,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/documents/data/build/test-results/desktopTest/TEST-dev.fajar.starter.documents.data.DocumentMetadataTransportTest.xml",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/documents/data/build/test-results/desktopTest/TEST-dev.fajar.starter.documents.data.DocumentRecordTransportTest.xml",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/documents/data/build/test-results/desktopTest/TEST-dev.fajar.starter.documents.data.DocumentRepositoryTest.xml",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/documents/data/build/test-results/desktopTest/TEST-dev.fajar.starter.documents.data.DocumentUploadTransportTest.xml",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/documents/data/build/test-results/desktopTest/TEST-dev.fajar.starter.documents.data.metadata.DocumentMetadataRemoteTest.xml",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/documents/data/build/test-results/desktopTest/TEST-dev.fajar.starter.documents.data.metadata.DocumentMetadataStorageTest.xml",
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/documents/data/build/test-results/desktopTest/TEST-dev.fajar.starter.documents.data.metadata.commands.DocumentMetadataCommandStorageTest.xml",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/documents/data/build/test-results/desktopTest/TEST-dev.fajar.starter.documents.data.metadata.working.DocumentMetadataWorkingStorageTest.xml",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/documents/data/build/test-results/desktopTest/TEST-dev.fajar.starter.documents.data.replica.DocumentCatalogReplicaTest.xml",
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/documents/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.documents.domain.DocumentCatalogAccessTest.xml",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/documents/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.documents.domain.DocumentDownloadTest.xml",
+        "tests": 12,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/documents/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.documents.domain.DocumentExportTest.xml",
+        "tests": 13,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/documents/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.documents.domain.DocumentLocalFilesTest.xml",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/documents/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.documents.domain.DocumentMetadataUploadTest.xml",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/documents/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.documents.domain.DocumentRejectedUploadTest.xml",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/documents/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.documents.domain.DocumentUploadTest.xml",
+        "tests": 14,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/documents/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.documents.domain.ImportDocumentFileTest.xml",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/documents/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.documents.domain.LoadDocumentEvidenceTest.xml",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/documents/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.documents.domain.ObserveDocumentPendingTest.xml",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/documents/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.documents.domain.metadata.DocumentMetadataChangeTest.xml",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/documents/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.documents.domain.metadata.DocumentMetadataCommandPolicyTest.xml",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/documents/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.documents.domain.metadata.DocumentMetadataHistoryTest.xml",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/documents/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.documents.domain.metadata.DocumentMetadataReadTest.xml",
+        "tests": 13,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/documents/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.documents.domain.metadata.DocumentMetadataWorkingPolicyTest.xml",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/documents/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.documents.domain.metadata.commands.DocumentMetadataCommandAdmissionTest.xml",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/documents/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.documents.domain.metadata.commands.DocumentMetadataCommandFlowTest.xml",
+        "tests": 14,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/documents/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.documents.domain.metadata.working.DocumentMetadataWorkingFlowTest.xml",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/documents/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.documents.domain.replica.DocumentCatalogResourceAdmissionTest.xml",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/documents/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.documents.domain.replica.DocumentCatalogSyncTest.xml",
+        "tests": 17,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/documents/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.documents.domain.replica.DocumentMetadataUpgradeTest.xml",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/featureflags/data/build/test-results/desktopTest/TEST-dev.fajar.starter.featureflags.data.CachedFeatureFlagRepositoryTest.xml",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/featureflags/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.featureflags.domain.FeatureFlagPolicyTest.xml",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/fileio/build/test-results/desktopTest/TEST-dev.fajar.starter.fileio.FileHandleRegistryTest.xml",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/fileio/build/test-results/desktopTest/TEST-dev.fajar.starter.fileio.ReadFileChannelTest.xml",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/fileio/build/test-results/desktopTest/TEST-dev.fajar.starter.fileio.SafeFileCallTest.xml",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/fileio/build/test-results/desktopTest/TEST-dev.fajar.starter.fileio.Sha256DigestTest.xml",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/fileio/build/test-results/desktopTest/TEST-dev.fajar.starter.fileio.WriteFileChannelTest.xml",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/identity/data/build/test-results/desktopTest/TEST-dev.fajar.starter.identity.data.DeviceSessionTransportTest.xml",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/identity/data/build/test-results/desktopTest/TEST-dev.fajar.starter.identity.data.FirebaseProviderTransportTest.xml",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/identity/data/build/test-results/desktopTest/TEST-dev.fajar.starter.identity.data.GoogleAuthorizationExchangeTest.xml",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/identity/data/build/test-results/desktopTest/TEST-dev.fajar.starter.identity.data.GoogleAuthorizationProtocolTest.xml",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/identity/data/build/test-results/desktopTest/TEST-dev.fajar.starter.identity.data.GoogleCodeTransportTest.xml",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/identity/data/build/test-results/desktopTest/TEST-dev.fajar.starter.identity.data.GoogleCredentialSessionTest.xml",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/identity/data/build/test-results/desktopTest/TEST-dev.fajar.starter.identity.data.IdentityRepositoryTest.xml",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/identity/data/build/test-results/desktopTest/TEST-dev.fajar.starter.identity.data.InstalledFirebaseAuthenticationTest.xml",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/identity/data/build/test-results/desktopTest/TEST-dev.fajar.starter.identity.data.NativeFirebaseTransportTest.xml",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/identity/data/build/test-results/desktopTest/TEST-dev.fajar.starter.identity.data.NativePushStateTest.xml",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/identity/data/build/test-results/desktopTest/TEST-dev.fajar.starter.identity.data.NativePushTransportTest.xml",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/identity/data/build/test-results/desktopTest/TEST-dev.fajar.starter.identity.data.RefreshTransportTest.xml",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/identity/data/build/test-results/desktopTest/TEST-dev.fajar.starter.identity.data.StoredSessionRepositoryTest.xml",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/identity/data/build/test-results/desktopTest/TEST-dev.fajar.starter.identity.data.sso.BrowserSsoRepositoryTest.xml",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/identity/data/build/test-results/desktopTest/TEST-dev.fajar.starter.identity.data.sso.DesktopAuthorizationTest.xml",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/identity/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.identity.domain.AccountStorageKeyTest.xml",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/identity/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.identity.domain.DeviceSessionPolicyTest.xml",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/identity/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.identity.domain.MfaConcurrencyTest.xml",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/identity/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.identity.domain.NativePushBackgroundTest.xml",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/identity/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.identity.domain.NativePushPolicyTest.xml",
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/identity/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.identity.domain.NativeSessionPolicyTest.xml",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/identity/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.identity.domain.ObserveSessionIdentityTest.xml",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/identity/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.identity.domain.RefreshRecoveryTest.xml",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/identity/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.identity.domain.SessionPolicyTest.xml",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/identity/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.identity.domain.SignInTest.xml",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/identity/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.identity.domain.firebase.LoadFirebaseSignInOptionsTest.xml",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/identity/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.identity.domain.firebase.SignInWithFirebaseTest.xml",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/identity/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.identity.domain.sso.SignInWithSsoTest.xml",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/localization/build/test-results/desktopTest/TEST-dev.fajar.starter.localization.DecimalFormattingTest.xml",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/localization/build/test-results/desktopTest/TEST-dev.fajar.starter.localization.LocalDateFormatTest.xml",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/localization/build/test-results/desktopTest/TEST-dev.fajar.starter.localization.LocalizedResourcesTest.xml",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/location/data/build/test-results/desktopTest/TEST-dev.fajar.starter.location.data.DeviceLocationRepositoryTest.xml",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/network/build/test-results/desktopTest/TEST-dev.fajar.starter.network.ApiProblemTest.xml",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/network/build/test-results/desktopTest/TEST-dev.fajar.starter.network.ApiResponseBodyTest.xml",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/network/build/test-results/desktopTest/TEST-dev.fajar.starter.network.ApiValidationTest.xml",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/network/build/test-results/desktopTest/TEST-dev.fajar.starter.network.ApplicationAvailabilityTest.xml",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/network/build/test-results/desktopTest/TEST-dev.fajar.starter.network.BinaryRangeRequestTest.xml",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/network/build/test-results/desktopTest/TEST-dev.fajar.starter.network.HttpClientOwnershipTest.xml",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/network/build/test-results/desktopTest/TEST-dev.fajar.starter.network.HttpDiagnosticsTest.xml",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/network/build/test-results/desktopTest/TEST-dev.fajar.starter.network.JsonRequestTest.xml",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/network/build/test-results/desktopTest/TEST-dev.fajar.starter.network.SafeApiCallTest.xml",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/network/build/test-results/desktopTest/TEST-dev.fajar.starter.network.SessionAuthenticationTest.xml",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/notifications/data/build/test-results/desktopTest/TEST-dev.fajar.starter.notifications.data.NotificationDestinationTest.xml",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/notifications/data/build/test-results/desktopTest/TEST-dev.fajar.starter.notifications.data.PushTokenLifecycleTest.xml",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/notifications/data/build/test-results/desktopTest/TEST-dev.fajar.starter.notifications.data.SafeNotificationCallTest.xml",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/notifications/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.notifications.domain.NotificationPolicyTest.xml",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/observability/build/test-results/desktopTest/TEST-dev.fajar.starter.observability.DiagnosticsTest.xml",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/observability/build/test-results/desktopTest/TEST-dev.fajar.starter.observability.PerformanceTest.xml",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.presentation.mvi.MviViewModelTest.xml",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.presentation.navigation.EnumNavTypeTest.xml",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/securestorage/build/test-results/desktopTest/TEST-dev.fajar.starter.securestorage.ContentCipherTest.xml",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/securestorage/build/test-results/desktopTest/TEST-dev.fajar.starter.securestorage.ContentIndexesTest.xml",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/securestorage/build/test-results/desktopTest/TEST-dev.fajar.starter.securestorage.CredentialRecordLockTest.xml",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/securestorage/build/test-results/desktopTest/TEST-dev.fajar.starter.securestorage.MemoryCredentialStoreTest.xml",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/security/data/build/test-results/desktopTest/TEST-dev.fajar.starter.security.data.AccessRepositoryTest.xml",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/security/data/build/test-results/desktopTest/TEST-dev.fajar.starter.security.data.lock.StoredAppLockRepositoryTest.xml",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/security/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.security.domain.AccessPolicyTest.xml",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/security/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.security.domain.PermissionExpiryTest.xml",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/security/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.security.domain.lock.AppLockTest.xml",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/settings/data/build/test-results/desktopTest/TEST-dev.fajar.starter.settings.data.StoredSettingsRepositoryTest.xml",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/storage/build/test-results/desktopTest/TEST-dev.fajar.starter.storage.SafeStorageCallTest.xml",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/storage/build/test-results/desktopTest/TEST-dev.fajar.starter.storage.SafeStorageMappedFlowTest.xml",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/sync/data/build/test-results/desktopTest/TEST-dev.fajar.starter.sync.data.SafeWorkCallTest.xml",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/sync/data/build/test-results/desktopTest/TEST-dev.fajar.starter.sync.data.SyncFeedRepositoryTest.xml",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/sync/data/build/test-results/desktopTest/TEST-dev.fajar.starter.sync.data.SyncScheduleRepositoryTest.xml",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/transfers/data/build/test-results/desktopTest/TEST-dev.fajar.starter.transfers.data.TransferProtocolTest.xml",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/transfers/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.transfers.domain.TransferLifecycleTest.xml",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/worker/build/test-results/desktopTest/TEST-dev.fajar.starter.worker.ForegroundSyncWorkerTest.xml",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/workspace/data/build/test-results/desktopTest/TEST-dev.fajar.starter.workspace.data.CompanyPolicyMappingTest.xml",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/workspace/data/build/test-results/desktopTest/TEST-dev.fajar.starter.workspace.data.EncryptedWorkspaceTest.xml",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/workspace/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.workspace.domain.CompanyAvailabilityTest.xml",
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/workspace/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.workspace.domain.WorkspaceAdmissionTest.xml",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/workspace/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.workspace.domain.WorkspaceSelectionTest.xml",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/auth/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.auth.presentation.login.FirebaseLoginViewModelTest.xml",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/auth/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.auth.presentation.login.LoginViewModelTest.xml",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/dashboard/data/build/test-results/desktopTest/TEST-dev.fajar.starter.dashboard.data.LocalFirstDashboardRepositoryTest.xml",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/dashboard/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.dashboard.domain.SyncDashboardTest.xml",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/dashboard/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.dashboard.presentation.home.DashboardViewModelTest.xml",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/documents/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.documents.presentation.catalog.DocumentCatalogStateTest.xml",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/documents/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.documents.presentation.editor.DocumentMetadataEditPersistenceTest.xml",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/expenses/data/build/test-results/desktopTest/TEST-dev.fajar.starter.expenses.data.EncryptedExpenseCommandTest.xml",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/expenses/data/build/test-results/desktopTest/TEST-dev.fajar.starter.expenses.data.ExpenseCacheTest.xml",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/expenses/data/build/test-results/desktopTest/TEST-dev.fajar.starter.expenses.data.ExpenseCommandTransportTest.xml",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/expenses/data/build/test-results/desktopTest/TEST-dev.fajar.starter.expenses.data.ExpenseMappingTest.xml",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/expenses/data/build/test-results/desktopTest/TEST-dev.fajar.starter.expenses.data.ExpensePreparationMappingTest.xml",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/expenses/data/build/test-results/desktopTest/TEST-dev.fajar.starter.expenses.data.ExpensePreparationTransportTest.xml",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/expenses/data/build/test-results/desktopTest/TEST-dev.fajar.starter.expenses.data.ExpenseReceiptDataTest.xml",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/expenses/data/build/test-results/desktopTest/TEST-dev.fajar.starter.expenses.data.ExpenseReceiptTransportTest.xml",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/expenses/data/build/test-results/desktopTest/TEST-dev.fajar.starter.expenses.data.ExpenseReferenceTest.xml",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/expenses/data/build/test-results/desktopTest/TEST-dev.fajar.starter.expenses.data.ExpenseTransportTest.xml",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/expenses/data/build/test-results/desktopTest/TEST-dev.fajar.starter.expenses.data.replica.ExpenseReplicaTest.xml",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/expenses/data/build/test-results/desktopTest/TEST-dev.fajar.starter.expenses.data.working.ExpenseWorkingCopyTest.xml",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/expenses/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.expenses.domain.ExpenseAcquisitionTest.xml",
+        "tests": 13,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/expenses/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.expenses.domain.ExpenseCommandDeliveryTest.xml",
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/expenses/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.expenses.domain.ExpenseDraftCommandTest.xml",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/expenses/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.expenses.domain.ExpenseObservationTest.xml",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/expenses/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.expenses.domain.ExpensePreparationTest.xml",
+        "tests": 12,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/expenses/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.expenses.domain.ExpenseReceiptExportTest.xml",
+        "tests": 13,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/expenses/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.expenses.domain.ExpenseReferenceTest.xml",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/expenses/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.expenses.domain.ExpenseReplicaSyncTest.xml",
+        "tests": 12,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/expenses/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.expenses.domain.ExpenseWorkingCopyTest.xml",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/expenses/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.expenses.domain.ObserveExpensePendingTest.xml",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/expenses/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.expenses.presentation.ExpenseActionViewModelTest.xml",
+        "tests": 13,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/expenses/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.expenses.presentation.ExpenseAutosaveTest.xml",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/expenses/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.expenses.presentation.ExpenseClaimViewModelTest.xml",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/expenses/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.expenses.presentation.ExpenseDraftViewModelTest.xml",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/expenses/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.expenses.presentation.ExpenseItemViewModelTest.xml",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/expenses/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.expenses.presentation.ExpenseReceiptExportViewModelTest.xml",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/expenses/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.expenses.presentation.ExpenseReceiptViewModelTest.xml",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/expenses/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.expenses.presentation.ExpensesViewModelTest.xml",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/files/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.files.presentation.FilesViewModelTest.xml",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/home/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.home.presentation.datasync.DataSyncViewModelTest.xml",
+        "tests": 13,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/home/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.home.presentation.pending.PendingActionsViewModelTest.xml",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/inbox/data/build/test-results/desktopTest/TEST-dev.fajar.starter.inbox.data.EncryptedInboxCacheTest.xml",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/inbox/data/build/test-results/desktopTest/TEST-dev.fajar.starter.inbox.data.EncryptedInboxCommandTest.xml",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/inbox/data/build/test-results/desktopTest/TEST-dev.fajar.starter.inbox.data.InboxCommandTransportTest.xml",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/inbox/data/build/test-results/desktopTest/TEST-dev.fajar.starter.inbox.data.InboxPushStorageTest.xml",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/inbox/data/build/test-results/desktopTest/TEST-dev.fajar.starter.inbox.data.InboxReadAdmissionTest.xml",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/inbox/data/build/test-results/desktopTest/TEST-dev.fajar.starter.inbox.data.InboxUnreadTransportTest.xml",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/inbox/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.inbox.domain.InboxAvailabilityTest.xml",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/inbox/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.inbox.domain.InboxCommandsTest.xml",
+        "tests": 18,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/inbox/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.inbox.domain.InboxLocalOwnershipTest.xml",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/inbox/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.inbox.domain.InboxPushDeliveryTest.xml",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/inbox/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.inbox.domain.InboxPushQueueTest.xml",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/inbox/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.inbox.domain.InboxReadAdmissionTest.xml",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/inbox/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.inbox.domain.InboxSynchronizationTest.xml",
+        "tests": 18,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/inbox/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.inbox.domain.LoadUnreadInboxTest.xml",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/leave/data/build/test-results/desktopTest/TEST-dev.fajar.starter.leave.data.EncryptedLeaveCommandTest.xml",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/leave/data/build/test-results/desktopTest/TEST-dev.fajar.starter.leave.data.EncryptedLeaveReplicaTest.xml",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/leave/data/build/test-results/desktopTest/TEST-dev.fajar.starter.leave.data.EncryptedLeaveSubmissionTest.xml",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/leave/data/build/test-results/desktopTest/TEST-dev.fajar.starter.leave.data.LeaveCacheTest.xml",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/leave/data/build/test-results/desktopTest/TEST-dev.fajar.starter.leave.data.LeaveCarryBalanceRepositoryTest.xml",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/leave/data/build/test-results/desktopTest/TEST-dev.fajar.starter.leave.data.LeaveCommandTransportTest.xml",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/leave/data/build/test-results/desktopTest/TEST-dev.fajar.starter.leave.data.LeavePreparationRepositoryTest.xml",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/leave/data/build/test-results/desktopTest/TEST-dev.fajar.starter.leave.data.LeaveRecordRepositoryTest.xml",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/leave/data/build/test-results/desktopTest/TEST-dev.fajar.starter.leave.data.LeaveRepositoryTest.xml",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/leave/data/build/test-results/desktopTest/TEST-dev.fajar.starter.leave.data.LeaveRequestReplicaMigrationTest.xml",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/leave/data/build/test-results/desktopTest/TEST-dev.fajar.starter.leave.data.LeaveRequestReplicaTest.xml",
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/leave/data/build/test-results/desktopTest/TEST-dev.fajar.starter.leave.data.LeaveRequestRepositoryTest.xml",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/leave/data/build/test-results/desktopTest/TEST-dev.fajar.starter.leave.data.LeaveSubmissionTransportTest.xml",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/leave/data/build/test-results/desktopTest/TEST-dev.fajar.starter.leave.data.LeaveWorkingCopyTest.xml",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/leave/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.leave.domain.LeaveCommandsTest.xml",
+        "tests": 18,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/leave/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.leave.domain.LeavePreparationTest.xml",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/leave/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.leave.domain.LeaveReadAdmissionTest.xml",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/leave/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.leave.domain.LeaveRequestReadTest.xml",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/leave/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.leave.domain.LeaveSubmissionTest.xml",
+        "tests": 18,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/leave/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.leave.domain.LeaveWorkingCopyTest.xml",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/leave/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.leave.domain.LeaveWorkingSubmissionTest.xml",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/leave/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.leave.domain.LoadLeaveRequestTest.xml",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/leave/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.leave.domain.ObserveLeavePendingTest.xml",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/leave/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.leave.domain.ObserveLeaveReplicaTest.xml",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/leave/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.leave.domain.ObserveLeaveTest.xml",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/leave/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.leave.domain.SyncLeaveCarryMigrationTest.xml",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/leave/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.leave.domain.SyncLeaveHistoryTest.xml",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/leave/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.leave.domain.SyncLeaveTest.xml",
+        "tests": 16,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/leave/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.leave.presentation.LeaveActionViewModelTest.xml",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/leave/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.leave.presentation.LeaveCreateViewModelTest.xml",
+        "tests": 15,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/leave/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.leave.presentation.LeaveEvidenceViewModelTest.xml",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/leave/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.leave.presentation.LeaveRequestViewModelTest.xml",
+        "tests": 13,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/leave/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.leave.presentation.LeaveViewModelTest.xml",
+        "tests": 16,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/leave/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.leave.presentation.LeaveWorkingEditorTest.xml",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/notifications/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.notifications.presentation.NativePushViewModelTest.xml",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/notifications/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.notifications.presentation.NotificationViewModelTest.xml",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/onboarding/data/build/test-results/desktopTest/TEST-dev.fajar.starter.onboarding.data.StoredOnboardingRepositoryTest.xml",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/onboarding/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.onboarding.presentation.welcome.OnboardingViewModelTest.xml",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/payroll/data/build/test-results/desktopTest/TEST-dev.fajar.starter.payroll.data.PayslipCacheTest.xml",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/payroll/data/build/test-results/desktopTest/TEST-dev.fajar.starter.payroll.data.PayslipMappingTest.xml",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/payroll/data/build/test-results/desktopTest/TEST-dev.fajar.starter.payroll.data.PayslipPdfTest.xml",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/payroll/data/build/test-results/desktopTest/TEST-dev.fajar.starter.payroll.data.PayslipSettlementTest.xml",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/payroll/data/build/test-results/desktopTest/TEST-dev.fajar.starter.payroll.data.PayslipTransportTest.xml",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/payroll/data/build/test-results/desktopTest/TEST-dev.fajar.starter.payroll.data.replica.PayrollReplicaTest.xml",
+        "tests": 20,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/payroll/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.payroll.domain.PayrollReadAdmissionTest.xml",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/payroll/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.payroll.domain.PayrollRevisionSyncTest.xml",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/payroll/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.payroll.domain.PayrollSyncProtocolTest.xml",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/payroll/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.payroll.domain.PayslipAcquisitionTest.xml",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/payroll/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.payroll.domain.PayslipExportTest.xml",
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/payroll/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.payroll.domain.PayslipHistoryTest.xml",
+        "tests": 15,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/payroll/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.payroll.domain.PayslipObservationTest.xml",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/payroll/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.payroll.presentation.PayslipHistoryViewModelTest.xml",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/payroll/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.payroll.presentation.PayslipViewModelTest.xml",
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/payroll/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.payroll.presentation.PayslipsViewModelTest.xml",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/people/data/build/test-results/desktopTest/TEST-dev.fajar.starter.people.data.CompanyDirectoryRepositoryTest.xml",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/people/data/build/test-results/desktopTest/TEST-dev.fajar.starter.people.data.PeopleRepositoryTest.xml",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/people/data/build/test-results/desktopTest/TEST-dev.fajar.starter.people.data.profile.SelfProfileRecordRepositoryTest.xml",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/people/data/build/test-results/desktopTest/TEST-dev.fajar.starter.people.data.profile.SelfProfileReplicaTest.xml",
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/people/data/build/test-results/desktopTest/TEST-dev.fajar.starter.people.data.replica.DirectoryRecordRepositoryTest.xml",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/people/data/build/test-results/desktopTest/TEST-dev.fajar.starter.people.data.replica.DirectoryReplicaTest.xml",
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/people/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.people.domain.CompanyDirectoryAccessTest.xml",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/people/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.people.domain.ProfileOwnershipTest.xml",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/people/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.people.domain.profile.SelfProfileAccessTest.xml",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/people/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.people.domain.profile.SelfProfileSyncTest.xml",
+        "tests": 14,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/people/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.people.domain.replica.DirectorySyncTest.xml",
+        "tests": 14,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/people/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.people.presentation.profile.ProfileViewModelTest.xml",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/security/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.security.presentation.lock.AppLockViewModelTest.xml",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/settings/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.settings.presentation.LanguageViewModelTest.xml",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/workforce/data/build/test-results/desktopTest/TEST-dev.fajar.starter.workforce.data.WorkCalendarCacheTest.xml",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/workforce/data/build/test-results/desktopTest/TEST-dev.fajar.starter.workforce.data.WorkforceRepositoryTest.xml",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/workforce/data/build/test-results/desktopTest/TEST-dev.fajar.starter.workforce.data.attendance.AttendanceHistoryStorageTest.xml",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/workforce/data/build/test-results/desktopTest/TEST-dev.fajar.starter.workforce.data.attendance.AttendanceStorageTest.xml",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/workforce/data/build/test-results/desktopTest/TEST-dev.fajar.starter.workforce.data.overtime.EncryptedOvertimeCommandTest.xml",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/workforce/data/build/test-results/desktopTest/TEST-dev.fajar.starter.workforce.data.overtime.OvertimeActionWorkingCopyTest.xml",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/workforce/data/build/test-results/desktopTest/TEST-dev.fajar.starter.workforce.data.overtime.OvertimeCacheTest.xml",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/workforce/data/build/test-results/desktopTest/TEST-dev.fajar.starter.workforce.data.overtime.OvertimeCommandTransportTest.xml",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/workforce/data/build/test-results/desktopTest/TEST-dev.fajar.starter.workforce.data.overtime.OvertimePlanWorkingCopyTest.xml",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/workforce/data/build/test-results/desktopTest/TEST-dev.fajar.starter.workforce.data.overtime.OvertimePlanningRepositoryTest.xml",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/workforce/data/build/test-results/desktopTest/TEST-dev.fajar.starter.workforce.data.overtime.OvertimeReplicaTest.xml",
+        "tests": 14,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/workforce/data/build/test-results/desktopTest/TEST-dev.fajar.starter.workforce.data.overtime.OvertimeRepositoryTest.xml",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/workforce/data/build/test-results/desktopTest/TEST-dev.fajar.starter.workforce.data.replica.WorkforceReplicaTest.xml",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/workforce/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.workforce.domain.ObserveWorkCalendarTest.xml",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/workforce/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.workforce.domain.attendance.AttendanceCommandsTest.xml",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/workforce/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.workforce.domain.attendance.AttendanceHistoryTest.xml",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/workforce/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.workforce.domain.attendance.AttendanceSummaryTest.xml",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/workforce/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.workforce.domain.overtime.ObserveOvertimePendingTest.xml",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/workforce/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.workforce.domain.overtime.OvertimeActionWorkingCopyTest.xml",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/workforce/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.workforce.domain.overtime.OvertimeActionWorkingSubmissionTest.xml",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/workforce/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.workforce.domain.overtime.OvertimeCommandAdmissionTest.xml",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/workforce/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.workforce.domain.overtime.OvertimeCommandDeliveryTest.xml",
+        "tests": 14,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/workforce/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.workforce.domain.overtime.OvertimeCommandPreparationTest.xml",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/workforce/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.workforce.domain.overtime.OvertimeCommandReviewTest.xml",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/workforce/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.workforce.domain.overtime.OvertimeIntervalPolicyTest.xml",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/workforce/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.workforce.domain.overtime.OvertimeLocalTimePolicyTest.xml",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/workforce/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.workforce.domain.overtime.OvertimePlanWorkingCopyTest.xml",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/workforce/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.workforce.domain.overtime.OvertimePreparationTest.xml",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/workforce/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.workforce.domain.overtime.OvertimeReadAdmissionTest.xml",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/workforce/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.workforce.domain.overtime.OvertimeReadsTest.xml",
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/workforce/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.workforce.domain.overtime.OvertimeSyncTest.xml",
+        "tests": 18,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/workforce/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.workforce.domain.overtime.OvertimeWorkingSubmissionTest.xml",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/workforce/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.workforce.domain.replica.AttendanceReplicaCommandsTest.xml",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/workforce/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.workforce.domain.replica.LocalWorkCalendarTest.xml",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/workforce/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.workforce.domain.replica.RosterResetSyncTest.xml",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/workforce/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.workforce.domain.replica.WorkforceObservationTest.xml",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/workforce/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.workforce.domain.replica.WorkforceReadAdmissionTest.xml",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/workforce/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.workforce.domain.replica.WorkforceSyncTest.xml",
+        "tests": 14,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/workforce/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.workforce.presentation.AttendanceStampTest.xml",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/workforce/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.workforce.presentation.overtime.OvertimeActionViewModelTest.xml",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/workforce/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.workforce.presentation.overtime.OvertimeActionWorkingEditorTest.xml",
+        "tests": 12,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/workforce/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.workforce.presentation.overtime.OvertimeAdmissionViewModelTest.xml",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/workforce/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.workforce.presentation.overtime.OvertimePlanViewModelTest.xml",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/workforce/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.workforce.presentation.overtime.OvertimeRequestViewModelTest.xml",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/workforce/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.workforce.presentation.overtime.OvertimeViewModelTest.xml",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "features/workforce/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.workforce.presentation.overtime.OvertimeWorkingEditorTest.xml",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ],
+    "changedCases": [
+      {
+        "suite": "AppFlowTest[desktop]",
+        "case": "metadataEditorRequiresExplicitDraftResetAndKeepsInputAcrossDeniedReads[desktop]",
+        "seconds": "2.166",
+        "failed": false
+      },
+      {
+        "suite": "AppFlowTest[desktop]",
+        "case": "metadataEditorRetainsIncompleteDraftAndConfirmsTheReviewedCorrection[desktop]",
+        "seconds": "2.047",
+        "failed": false
+      },
+      {
+        "suite": "AppFlowTest[desktop]",
+        "case": "metadataEditorRetriesTheOriginalCorrectionAfterResponseLossAndLaterServerEdits[desktop]",
+        "seconds": "1.683",
+        "failed": false
+      },
+      {
+        "suite": "DocumentMetadataCommandAdmissionTest[desktop]",
+        "case": "aKnownDocumentDenialDoesNotSubscribeToUnreadableCommandStorage[desktop]",
+        "seconds": "0.162",
+        "failed": false
+      },
+      {
+        "suite": "DocumentMetadataCommandAdmissionTest[desktop]",
+        "case": "aLaterDenialClosesFailedStorageAndReopensOnlyAfterResourceAdmission[desktop]",
+        "seconds": "0.019",
+        "failed": false
+      },
+      {
+        "suite": "DocumentMetadataEditPersistenceTest[desktop]",
+        "case": "aLateAcknowledgementCannotReplaceAnotherPendingMutationOrClearItsFailure[desktop]",
+        "seconds": "0.002",
+        "failed": false
+      },
+      {
+        "suite": "DocumentMetadataEditPersistenceTest[desktop]",
+        "case": "editsDuringAnUnacknowledgedWriteAreCoalescedIntoTheNextStorageRevision[desktop]",
+        "seconds": "0.0",
+        "failed": false
+      }
+    ]
+  },
+  "documentBrowser": {
+    "tests": 223,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "path": "core/documents/data/build/test-results/wasmJsBrowserTest/TEST-wasm-NLLKSBIB43I9Q.dev.fajar.starter.documents.data.metadata.commands.BrowserDocumentMetadataCommandStorageTest.xml",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/documents/data/build/test-results/wasmJsBrowserTest/TEST-wasmJ-KF271FJFV6DSI.dev.fajar.starter.documents.data.metadata.working.BrowserDocumentMetadataWorkingStorageTest.xml",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/documents/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.documents.data.BrowserDocumentFileStorageTest.xml",
+        "tests": 14,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/documents/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.documents.data.DocumentDownloadTransportTest.xml",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/documents/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.documents.data.DocumentMetadataTransportTest.xml",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/documents/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.documents.data.DocumentRecordTransportTest.xml",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/documents/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.documents.data.DocumentRepositoryTest.xml",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/documents/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.documents.data.DocumentUploadTransportTest.xml",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/documents/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.documents.data.metadata.BrowserDocumentMetadataStorageTest.xml",
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/documents/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.documents.data.metadata.DocumentMetadataRemoteTest.xml",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/documents/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.documents.data.replica.BrowserDocumentCatalogReplicaTest.xml",
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/documents/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsB-C4L5GNHG1O0QU.dev.fajar.starter.documents.domain.metadata.commands.DocumentMetadataCommandAdmissionTest.xml",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/documents/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowse-3ELM94Q6AS792.dev.fajar.starter.documents.domain.metadata.commands.DocumentMetadataCommandFlowTest.xml",
+        "tests": 14,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/documents/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowser-FOU0VS7SE75JO.dev.fajar.starter.documents.domain.metadata.working.DocumentMetadataWorkingFlowTest.xml",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/documents/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.documents.domain.DocumentCatalogAccessTest.xml",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/documents/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.documents.domain.DocumentDownloadTest.xml",
+        "tests": 12,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/documents/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.documents.domain.DocumentExportTest.xml",
+        "tests": 13,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/documents/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.documents.domain.DocumentLocalFilesTest.xml",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/documents/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.documents.domain.DocumentMetadataUploadTest.xml",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/documents/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.documents.domain.DocumentRejectedUploadTest.xml",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/documents/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.documents.domain.DocumentUploadTest.xml",
+        "tests": 14,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/documents/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.documents.domain.ImportDocumentFileTest.xml",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/documents/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.documents.domain.LoadDocumentEvidenceTest.xml",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/documents/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.documents.domain.ObserveDocumentPendingTest.xml",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/documents/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.documents.domain.metadata.DocumentMetadataChangeTest.xml",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/documents/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.documents.domain.metadata.DocumentMetadataCommandPolicyTest.xml",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/documents/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.documents.domain.metadata.DocumentMetadataHistoryTest.xml",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/documents/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.documents.domain.metadata.DocumentMetadataReadTest.xml",
+        "tests": 13,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/documents/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.documents.domain.metadata.DocumentMetadataWorkingPolicyTest.xml",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/documents/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.documents.domain.replica.DocumentCatalogResourceAdmissionTest.xml",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/documents/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.documents.domain.replica.DocumentCatalogSyncTest.xml",
+        "tests": 17,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "path": "core/documents/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.documents.domain.replica.DocumentMetadataUpgradeTest.xml",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ],
+    "changedCases": [
+      {
+        "suite": "wasmJsBrowserTest.dev.fajar.starter.documents.domain.metadata.commands.DocumentMetadataCommandAdmissionTest",
+        "case": "aKnownDocumentDenialDoesNotSubscribeToUnreadableCommandStorage[wasmJs, browser, ChromeHeadless156.0.0.0, Linux0.0.0]",
+        "seconds": "0.0",
+        "failed": false
+      },
+      {
+        "suite": "wasmJsBrowserTest.dev.fajar.starter.documents.domain.metadata.commands.DocumentMetadataCommandAdmissionTest",
+        "case": "aLaterDenialClosesFailedStorageAndReopensOnlyAfterResourceAdmission[wasmJs, browser, ChromeHeadless156.0.0.0, Linux0.0.0]",
+        "seconds": "0.0",
+        "failed": false
+      }
+    ]
+  },
+  "sourceFiles": [
+    {
+      "path": "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/navigation/AppNavigation.kt",
+      "sha256": "2b111104a467353137f0a761f9be43c651b4e136962c340c333866820a2b3f22"
+    },
+    {
+      "path": "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/AppFlowTest.kt",
+      "sha256": "e8435b227c39639e57a789e31c6ccfae9a1fef662381f08877011f24709f99cd"
+    },
+    {
+      "path": "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/fixtures/NativeDocumentMetadataUi.kt",
+      "sha256": "95bdb05872ee307b0ba56b6464bb8a0a6da4d9945ec2386a7e4aba9423166bce"
+    },
+    {
+      "path": "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/fixtures/NativeDocumentsUi.kt",
+      "sha256": "88e176ab12c82e9fb1fc144adedad52b4d35d3f541c7a455ada4bea0430a1fe9"
+    },
+    {
+      "path": "core/documents/domain/src/commonMain/kotlin/dev/fajar/starter/documents/domain/metadata/commands/usecases/ObserveDocumentMetadataCommands.kt",
+      "sha256": "1a8ce47f1cd599b24aaa8a0db6c4c5b161dfe9b3cc5edc30e8eb469efcbbb429"
+    },
+    {
+      "path": "core/documents/domain/src/commonTest/kotlin/dev/fajar/starter/documents/domain/metadata/commands/DocumentMetadataCommandAdmissionTest.kt",
+      "sha256": "921892bd44dc287248089b5e58cfcf24629ded6e8f8710d17191f6568876283e"
+    },
+    {
+      "path": "core/localization/src/commonMain/composeResources/values/strings_en.xml",
+      "sha256": "ed8a6c19fa6fccea5fcfef4d5344d0c6b58b4c67a8f88e58739eb41675bc8354"
+    },
+    {
+      "path": "core/localization/src/commonMain/composeResources/values/strings_id.xml",
+      "sha256": "004509d6e987869e4f553baf9c6b4f034ac51ec9f6afc7e7e45f4cddba1ab00f"
+    },
+    {
+      "path": "core/localization/src/commonMain/kotlin/dev/fajar/starter/localization/AppString.kt",
+      "sha256": "4d223701e1709f88e42ee1eb686889157ec47fa6c9b4a91f5d398f9f7e31e9e8"
+    },
+    {
+      "path": "core/localization/src/commonMain/kotlin/dev/fajar/starter/localization/LocalizedFailure.kt",
+      "sha256": "c04c239d874dbb8af4b43b91e823e9508607dfc8f63a2125b3da699ab4f4eb1b"
+    },
+    {
+      "path": "features/documents/presentation/build.gradle.kts",
+      "sha256": "a91a2dd2d4a8e268e9154fc6cba5a7df8ef0903f674154ecef841f2d51c03332"
+    },
+    {
+      "path": "features/documents/presentation/src/commonMain/kotlin/dev/fajar/starter/documents/presentation/editor/DocumentMetadataEditPersistence.kt",
+      "sha256": "6f03ab887477bcc4b155d318b23dd552236fe42d146300ee547721778a215714"
+    },
+    {
+      "path": "features/documents/presentation/src/commonMain/kotlin/dev/fajar/starter/documents/presentation/editor/DocumentMetadataEditorEvent.kt",
+      "sha256": "ec449be5c45cf3ef2ad7457d77423ef81e4a19e82132097faa2758cdc9c15e2d"
+    },
+    {
+      "path": "features/documents/presentation/src/commonMain/kotlin/dev/fajar/starter/documents/presentation/editor/DocumentMetadataEditorState.kt",
+      "sha256": "dd999172f05a4ed9133d947019740cb89f460d492fc1f5b1dadf9134b728f3e8"
+    },
+    {
+      "path": "features/documents/presentation/src/commonMain/kotlin/dev/fajar/starter/documents/presentation/editor/DocumentMetadataEditorViewModel.kt",
+      "sha256": "dabe5abd662d363b2387f7f8482fce91c790a7991c06df5f32806efe87501bdf"
+    },
+    {
+      "path": "features/documents/presentation/src/commonMain/kotlin/dev/fajar/starter/documents/presentation/editor/DocumentMetadataWorkingViewModel.kt",
+      "sha256": "393e44f75bcbd01fde01aa1e8ad08071d4fa05b882eecee038f9b5cec54929b6"
+    },
+    {
+      "path": "features/documents/presentation/src/commonMain/kotlin/dev/fajar/starter/documents/presentation/editor/pages/DocumentMetadataEditorPage.kt",
+      "sha256": "9f9e6b4ee5107a0a089a1d6cf54c09d747c7c93eeabf78ea88c3f4ad87657c9e"
+    },
+    {
+      "path": "features/documents/presentation/src/commonMain/kotlin/dev/fajar/starter/documents/presentation/editor/widgets/DocumentMetadataCommandPanel.kt",
+      "sha256": "11392dc7de084498816215145da16cb44b9f24840c8904a0180faeff19c9a826"
+    },
+    {
+      "path": "features/documents/presentation/src/commonMain/kotlin/dev/fajar/starter/documents/presentation/editor/widgets/DocumentMetadataEditorDialog.kt",
+      "sha256": "3e622a493a63686ad8e436c063e31080eb946c9b641e721f265782504ad02022"
+    },
+    {
+      "path": "features/documents/presentation/src/commonMain/kotlin/dev/fajar/starter/documents/presentation/editor/widgets/DocumentMetadataEditorFields.kt",
+      "sha256": "c52c17dc543d17eca2a9e9db07a8e346b60edc1b60dedeba1a0957e408cead52"
+    },
+    {
+      "path": "features/documents/presentation/src/commonMain/kotlin/dev/fajar/starter/documents/presentation/navigation/DocumentMetadataEditorEntry.kt",
+      "sha256": "f12ef82ce804bf8236e34700ff2f7c148c053be1a063fb0096cb77e1ff03676a"
+    },
+    {
+      "path": "features/documents/presentation/src/commonMain/kotlin/dev/fajar/starter/documents/presentation/navigation/DocumentMetadataEditorRoute.kt",
+      "sha256": "8eb59218f835806dba6523840379ee2d0848824e3a77fec12317bf842d3023ee"
+    },
+    {
+      "path": "features/documents/presentation/src/commonMain/kotlin/dev/fajar/starter/documents/presentation/navigation/DocumentRecordEntry.kt",
+      "sha256": "8bbdffa79eec2c1be718ead0a24a6c592fb4d3e5f38ca5f93bece36e51e195a0"
+    },
+    {
+      "path": "features/documents/presentation/src/commonMain/kotlin/dev/fajar/starter/documents/presentation/navigation/DocumentsNavigation.kt",
+      "sha256": "1d50e1f92cf3d9716f0a3168965382574c49f316c5aee6687be8b541df4d4f14"
+    },
+    {
+      "path": "features/documents/presentation/src/commonMain/kotlin/dev/fajar/starter/documents/presentation/record/DocumentRecordEffect.kt",
+      "sha256": "1dae867de502dd6f2d585d4a07447c6e1de015d1f4bcc766dc8db2773b19bd09"
+    },
+    {
+      "path": "features/documents/presentation/src/commonMain/kotlin/dev/fajar/starter/documents/presentation/record/DocumentRecordEvent.kt",
+      "sha256": "3bf551660806b90d2006fe400d31175749612fda319e7a6d27f90eae3d735b86"
+    },
+    {
+      "path": "features/documents/presentation/src/commonMain/kotlin/dev/fajar/starter/documents/presentation/record/DocumentRecordState.kt",
+      "sha256": "35f38dbde703614d1df9f84db3e1f9348f4414473349bae6c5b86eb6253ae358"
+    },
+    {
+      "path": "features/documents/presentation/src/commonMain/kotlin/dev/fajar/starter/documents/presentation/record/DocumentRecordViewModel.kt",
+      "sha256": "e9904afefaeef06f63ef7f045f0b2e5eac4708c52a924daf3c559e5d6b8f7d8e"
+    },
+    {
+      "path": "features/documents/presentation/src/commonMain/kotlin/dev/fajar/starter/documents/presentation/record/pages/DocumentRecordPage.kt",
+      "sha256": "3dcc773bd9ab892142e4e897c8ccbd5e47cb9d039a9d017b9a394ac4e0030c84"
+    },
+    {
+      "path": "features/documents/presentation/src/commonTest/kotlin/dev/fajar/starter/documents/presentation/editor/DocumentMetadataEditPersistenceTest.kt",
+      "sha256": "444c5e38a4568aa0a2957276c9be84786755f0fbf5dc9349963170f2f3b3f27a"
+    }
+  ],
+  "screenshots": [
+    {
+      "name": "document-metadata-editor-draft",
+      "sha256": "65311bff99d2e8ac48dcfee67dbd6bb544aa5a21b807e2a0b734480bf2a506ae",
+      "visuallyReviewed": true
+    },
+    {
+      "name": "document-metadata-editor-confirmed",
+      "sha256": "6219a8926886a26646bb4ba393815dccf93bfa599d3bd792dfb16deef56a163e",
+      "visuallyReviewed": true
+    },
+    {
+      "name": "document-metadata-editor-unconfirmed",
+      "sha256": "fe10ee5b97bc4385e25beff7f8f8fbca4a896ee4c354646254847eead213cc10",
+      "visuallyReviewed": true
+    },
+    {
+      "name": "document-metadata-editor-newer-header",
+      "sha256": "17009ff23a41632f4f8f6ee7a8789424da653cc0ebc6452e0a66ba41bd634984",
+      "visuallyReviewed": true
+    },
+    {
+      "name": "document-metadata-editor-denied",
+      "sha256": "f58cc0d876ee1af2382294a5328d83b5d724f0be0d206fe37d63ad5a95592d99",
+      "visuallyReviewed": true
+    },
+    {
+      "name": "document-metadata-editor-draft-restored",
+      "sha256": "0bc3682485f677cbf1e107f9af41ee5b773b95e9c74338cd1437791e69062aaf",
+      "visuallyReviewed": true
+    }
+  ],
+  "apk": {
+    "path": "apps/android/build/outputs/apk/dev/debug/android-dev-debug.apk",
+    "bytes": 33046662,
+    "sha256": "96b79da04950dd11d3abe3ed29b85509199011eea2d4fc4695fef1ef8c71e6b8",
+    "installed": false
+  },
+  "limitations": [
+    "Editor entry is currently from admitted document details. Independent retained command/draft overview remains next.",
+    "Assembled tests use controlled fictional HTTP and actual local storage. No actual metadata API/device acceptance or Apple binary build is claimed here.",
+    "Private API remains schema 101, SMTP disabled; phone remains source 72341ef6. No live stack/provider/device changes in this increment.",
+    "The two metadata PRD gaps and full product goal remain open pending complete workflow, native/API acceptance and the remaining audit."
+  ]
+}

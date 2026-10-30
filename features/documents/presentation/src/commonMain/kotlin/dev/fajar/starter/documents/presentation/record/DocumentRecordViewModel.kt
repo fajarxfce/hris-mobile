@@ -37,6 +37,7 @@ class DocumentRecordViewModel(
         on<DocumentRecordEvent.HistoryRequested>(::onHistoryRequested)
         on<DocumentRecordEvent.VerificationRequested>(::onVerificationRequested)
         on<DocumentRecordEvent.BackRequested>(::onBackRequested)
+        on<DocumentRecordEvent.EditRequested>(::onEditRequested)
     }
 
     private fun onOpened(event: DocumentRecordEvent.Opened) {
@@ -160,5 +161,11 @@ class DocumentRecordViewModel(
         if (!opened) return
         onClosed(DocumentRecordEvent.Closed)
         viewModelScope.launch { emitEffect(DocumentRecordEffect.Back) }
+    }
+
+    private fun onEditRequested(event: DocumentRecordEvent.EditRequested) {
+        if (!opened || !state.value.canEdit) return
+        onClosed(DocumentRecordEvent.Closed)
+        viewModelScope.launch { emitEffect(DocumentRecordEffect.Edit(target.documentId)) }
     }
 }

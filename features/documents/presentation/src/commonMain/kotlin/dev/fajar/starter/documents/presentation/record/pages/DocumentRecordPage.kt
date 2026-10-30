@@ -70,6 +70,13 @@ fun DocumentRecordPage(
         val snapshot = view?.snapshot
         val head = snapshot?.checkpoint?.head
         if (head != null && state.restriction == null) {
+            if (state.canEdit)
+                item("edit") {
+                    AppTextButton(
+                        appString(AppString.DocumentMetadataEdit),
+                        { onEvent(DocumentRecordEvent.EditRequested) },
+                    )
+                }
             item("header") {
                 AppCard {
                     Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {

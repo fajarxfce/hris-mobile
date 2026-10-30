@@ -94,9 +94,18 @@ fun failureText(failure: Failure): String =
             "client.file_output_failed" -> AppString.FileSaveFailed
             "client.file_exists" -> AppString.FileAlreadyExists
             "client.document_metadata_invalid",
-            "invalid_document_metadata",
-            "invalid_document_metadata_change" -> AppString.DocumentMetadataInvalid
+            "invalid_document_metadata" -> AppString.DocumentMetadataInvalid
+            "client.document_metadata_change_invalid",
+            "invalid_document_metadata_change" -> AppString.DocumentMetadataChangeInvalid
             "client.document_metadata_unsupported" -> AppString.DocumentMetadataUnsupported
+            "client.document_metadata_changed" -> AppString.DocumentMetadataStale
+            "client.document_working_copy_changed" -> AppString.DocumentMetadataDraftChanged
+            "client.document_updates_pending" -> AppString.DocumentMetadataUpdatesPending
+            "client.document_command_occupied",
+            "client.document_command_changed" -> AppString.DocumentMetadataOccupied
+            "client.document_command_unconfirmed" -> AppString.DocumentMetadataUnconfirmed
+            "document_metadata_unchanged" -> AppString.DocumentMetadataUnchanged
+            "document_metadata_limit" -> AppString.DocumentMetadataLimit
             "client.document_title_invalid" -> AppString.DocumentTitleInvalid
             "client.document_reason_invalid" -> AppString.DocumentReasonInvalid
             "client.document_employment_required" -> AppString.DocumentEmploymentRequired
