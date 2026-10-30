@@ -93,6 +93,10 @@ fun failureText(failure: Failure): String =
             "client.file_write_failed",
             "client.file_output_failed" -> AppString.FileSaveFailed
             "client.file_exists" -> AppString.FileAlreadyExists
+            "client.document_metadata_invalid",
+            "invalid_document_metadata",
+            "invalid_document_metadata_change" -> AppString.DocumentMetadataInvalid
+            "client.document_metadata_unsupported" -> AppString.DocumentMetadataUnsupported
             "client.document_title_invalid" -> AppString.DocumentTitleInvalid
             "client.document_reason_invalid" -> AppString.DocumentReasonInvalid
             "client.document_employment_required" -> AppString.DocumentEmploymentRequired

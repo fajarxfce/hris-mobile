@@ -5,6 +5,7 @@ data class DocumentUploadInput(
     val title: String,
     val classification: DocumentClassification,
     val reason: String,
+    val metadata: DocumentBusinessMetadata? = null,
 ) {
     override fun toString() = "DocumentUploadInput([redacted])"
 }

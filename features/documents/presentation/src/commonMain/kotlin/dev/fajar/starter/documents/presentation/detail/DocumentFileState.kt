@@ -10,6 +10,7 @@ data class DocumentFileState(
     val form: DocumentUploadForm? = null,
     val choices: DocumentUploadPreparation? = null,
     val choosingEmployment: Boolean = false,
+    val choosingCategory: Boolean = false,
     val loading: Boolean = true,
     val formLoading: Boolean = false,
     val working: Boolean = false,

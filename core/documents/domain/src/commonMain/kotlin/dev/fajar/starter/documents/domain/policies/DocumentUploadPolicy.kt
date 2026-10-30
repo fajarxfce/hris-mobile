@@ -29,7 +29,23 @@ fun documentUploadRetryAt(now: Instant, failure: Failure, policy: CompanyPolicyS
     return maxOf(now + delay, retryAt ?: now)
 }
 
+fun prepareDocumentUploadInput(
+    input: DocumentUploadInput,
+    businessDetails: DocumentMetadataInput?,
+): AppResult<DocumentUploadInput> {
+    if (businessDetails == null) return validateDocumentUploadInput(input)
+    if (input.metadata != null) return documentFailure("client.document_metadata_invalid")
+    return when (val metadata = prepareDocumentBusinessMetadata(businessDetails)) {
+        is AppResult.Failed -> metadata
+        is AppResult.Success -> validateDocumentUploadInput(input.copy(metadata = metadata.value))
+    }
+}
+
 fun validateDocumentUploadInput(input: DocumentUploadInput): AppResult<DocumentUploadInput> {
+    input.metadata?.let {
+        val valid = validateDocumentBusinessMetadata(it)
+        if (valid is AppResult.Failed) return valid
+    }
     if (Uuid.parseOrNull(input.employmentId)?.toString() != input.employmentId)
         return documentFailure("client.document_employment_required")
     val title = input.title.trim()

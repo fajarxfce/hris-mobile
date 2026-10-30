@@ -8,6 +8,7 @@ data class DocumentUploadForm(
     val title: String,
     val reason: String,
     val classification: DocumentClassification = DocumentClassification.PERSONAL,
+    val metadata: DocumentMetadataInput = DocumentMetadataInput(),
 ) {
     val employeeNumber: String?
         get() = preparation.employments.items.firstOrNull { it.id == employmentId }?.employeeNumber

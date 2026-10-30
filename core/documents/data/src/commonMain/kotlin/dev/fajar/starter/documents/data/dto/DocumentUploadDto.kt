@@ -16,4 +16,5 @@ data class DocumentUploadDto(
     val attempts: Int,
     val nextAttemptAt: String?,
     val failure: DocumentUploadFailureDto?,
+    val metadata: DocumentBusinessMetadataDto? = null,
 )

@@ -83,8 +83,11 @@ People command acceptance is complete. Platform `27e7f77e` implements metadata
 backend/dashboard with 689 distinct accepted API cases, 104 ordinary worker cases,
 27 database, 18 domain and nine data cases, plus 4,054 dashboard cases, 25 mocked
 and five actual browser workflows. [CI 41038369597](https://github.com/fajarxfce/hris-platform/actions/runs/41038369597)
-is running for exact `27e7f77e722da9e8ac2bde47836353ef92dcc3b3`; observe its
-terminal result without a cancelling same-branch dispatch.
+tests exact `27e7f77e722da9e8ac2bde47836353ef92dcc3b3`: all eight shards passed,
+but recovery rejected schema 103 because the reviewed verifier still stopped at 102.
+Dashboard integration is still running. Platform now has an uncommitted verifier
+correction with 42 Python tests passed; actual schema-103 restore is running. Observe
+the original CI terminal result without a cancelling same-branch dispatch.
 
 Mobile's [owned metadata projection](document-business-metadata.md) is locally
 validated. A real mapper-loss reproduction now passes. Root `:check` passes 1,869
@@ -96,9 +99,18 @@ advertises support. Old encrypted facts remain visible during staging; failed
 cleanup never removes a confirmed read denial. Finance/Leave DocumentEvidence
 stays separate from owned category, identity number and validity facts.
 
-Next: capability-aware initial-upload fields and encrypted intent, retained display,
-bounded metadata history and versioned corrections with durable original-command
-recovery. Preserve old omitted JSON/payload hashes and unknown legacy values. Then
+Initial-upload metadata is now locally validated: the capability-aware form, typed
+confirmation, authenticated payload and encrypted intent retain category/identity/
+printed dates. Legacy omission and pending original operations remain unchanged.
+All 1,878 desktop tests, 131 Document Chromium cases, root quality checks and dev APK
+assembly pass (163.698s). The assembled form exposed and now fixes feedback hidden
+above a long form. Read [upload evidence](measurements/document-upload-metadata-2026-10-30.json)
+for earlier fixture failures, the real reproduction, source and APK hashes.
+
+Next: definite initial server rejection recovery when no revision exists, owned
+metadata details, bounded history and versioned corrections with durable original-
+command recovery. Never release an earlier uncertain upload after a later rejection.
+Preserve old omitted JSON/payload hashes and unknown legacy values. Then
 run owned emulator/API/storage acceptance and final Apple/full native checks before
 accepting either requirement, finishing the detailed People review and continuing
 remaining Platform/Mobile/Starter scope. This business increment has no Starter

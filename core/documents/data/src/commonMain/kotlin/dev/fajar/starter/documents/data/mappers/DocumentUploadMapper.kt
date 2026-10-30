@@ -17,6 +17,7 @@ fun DocumentUpload.toDto(): DocumentUploadDto =
         title = intent.input.title,
         classification = intent.input.classification.name,
         reason = intent.input.reason,
+        metadata = intent.input.metadata?.toBusinessMetadataDto(),
         createdAt = intent.createdAt.toString(),
         step =
             when (val s = step) {
@@ -72,6 +73,7 @@ fun DocumentUploadDto.toUpload(size: Long): DocumentUpload {
             title,
             DocumentClassification.valueOf(classification),
             reason,
+            metadata?.toBusinessMetadata(),
         )
     require(validateDocumentUploadInput(input) == AppResult.Success(input))
     val resolved = step.toDomainStep(size)

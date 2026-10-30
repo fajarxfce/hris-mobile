@@ -36,6 +36,13 @@ class DocumentFileViewModel(
         on<DocumentFileEvent.TitleChanged>(::onTitleChanged)
         on<DocumentFileEvent.ReasonChanged>(::onReasonChanged)
         on<DocumentFileEvent.ClassificationChanged>(::onClassificationChanged)
+        on<DocumentFileEvent.CategoryRequested>(::onCategoryRequested)
+        on<DocumentFileEvent.CategoryDismissed>(::onCategoryDismissed)
+        on<DocumentFileEvent.CategorySelected>(::onCategorySelected)
+        on<DocumentFileEvent.DocumentNumberChanged>(::onDocumentNumberChanged)
+        on<DocumentFileEvent.IssuingCountryChanged>(::onIssuingCountryChanged)
+        on<DocumentFileEvent.IssueDateChanged>(::onIssueDateChanged)
+        on<DocumentFileEvent.ValidUntilChanged>(::onValidUntilChanged)
         on<DocumentFileEvent.EmploymentRequested>(::onEmploymentRequested)
         on<DocumentFileEvent.EmploymentDismissed>(::onEmploymentDismissed)
         on<DocumentFileEvent.EmploymentPageRequested>(::onEmploymentPageRequested)
@@ -79,6 +86,7 @@ class DocumentFileViewModel(
                 revalidating = false,
                 writeAllowed = false,
                 choosingEmployment = false,
+                choosingCategory = false,
                 cancellationReason = null,
             )
         }
@@ -106,6 +114,7 @@ class DocumentFileViewModel(
                                     working = false,
                                     writeAllowed = false,
                                     choosingEmployment = false,
+                                    choosingCategory = false,
                                     cancellationReason = null,
                                 )
                             }
@@ -233,6 +242,7 @@ class DocumentFileViewModel(
                                             previous?.reason ?: "",
                                             previous?.classification
                                                 ?: DocumentClassification.PERSONAL,
+                                            previous?.metadata ?: DocumentMetadataInput(),
                                         ),
                                 )
                             }
@@ -262,9 +272,98 @@ class DocumentFileViewModel(
             }
     }
 
+    private fun metadataEditable(): Boolean =
+        opened &&
+            state.value.canWrite &&
+            !state.value.choosingEmployment &&
+            state.value.form?.preparation?.employments?.metadataSupported == true
+
+    private fun onCategoryRequested(event: DocumentFileEvent.CategoryRequested) {
+        if (metadataEditable()) updateState { it.copy(choosingCategory = true) }
+    }
+
+    private fun onCategoryDismissed(event: DocumentFileEvent.CategoryDismissed) {
+        updateState { it.copy(choosingCategory = false) }
+    }
+
+    private fun onCategorySelected(event: DocumentFileEvent.CategorySelected) {
+        if (metadataEditable() && state.value.choosingCategory)
+            updateState {
+                it.copy(
+                    choosingCategory = false,
+                    form =
+                        it.form?.let { form ->
+                            form.copy(metadata = form.metadata.copy(category = event.value))
+                        },
+                    failure = null,
+                )
+            }
+    }
+
+    private fun onDocumentNumberChanged(event: DocumentFileEvent.DocumentNumberChanged) {
+        if (metadataEditable())
+            updateState {
+                it.copy(
+                    form =
+                        it.form?.let { form ->
+                            form.copy(
+                                metadata =
+                                    form.metadata.copy(identityNumber = event.value.take(241))
+                            )
+                        },
+                    failure = null,
+                )
+            }
+    }
+
+    private fun onIssuingCountryChanged(event: DocumentFileEvent.IssuingCountryChanged) {
+        if (metadataEditable())
+            updateState {
+                it.copy(
+                    form =
+                        it.form?.let { form ->
+                            form.copy(
+                                metadata = form.metadata.copy(issuingCountry = event.value.take(9))
+                            )
+                        },
+                    failure = null,
+                )
+            }
+    }
+
+    private fun onIssueDateChanged(event: DocumentFileEvent.IssueDateChanged) {
+        if (metadataEditable())
+            updateState {
+                it.copy(
+                    form =
+                        it.form?.let { form ->
+                            form.copy(
+                                metadata = form.metadata.copy(issuedOn = event.value.take(17))
+                            )
+                        },
+                    failure = null,
+                )
+            }
+    }
+
+    private fun onValidUntilChanged(event: DocumentFileEvent.ValidUntilChanged) {
+        if (metadataEditable())
+            updateState {
+                it.copy(
+                    form =
+                        it.form?.let { form ->
+                            form.copy(
+                                metadata = form.metadata.copy(validUntil = event.value.take(17))
+                            )
+                        },
+                    failure = null,
+                )
+            }
+    }
+
     private fun onEmploymentRequested(event: DocumentFileEvent.EmploymentRequested) {
         val current = state.value
-        if (opened && current.canWrite && current.form != null)
+        if (opened && current.canWrite && current.form != null && !current.choosingCategory)
             updateState {
                 it.copy(
                     choosingEmployment = true,
@@ -281,6 +380,7 @@ class DocumentFileViewModel(
         updateState {
             it.copy(
                 choosingEmployment = false,
+                choosingCategory = false,
                 choices = null,
                 formLoading = false,
                 formFailure = null,
@@ -315,6 +415,7 @@ class DocumentFileViewModel(
             it.copy(
                 form = it.form?.copy(preparation = choices, employmentId = event.id),
                 choosingEmployment = false,
+                choosingCategory = false,
                 choices = null,
                 formFailure = null,
             )
@@ -324,7 +425,8 @@ class DocumentFileViewModel(
     private fun onUploadConfirmed(event: DocumentFileEvent.UploadConfirmed) {
         val current = state.value
         val form = current.form ?: return
-        if (!opened || !current.canSubmit || current.choosingEmployment) return
+        if (!opened || !current.canSubmit || current.choosingEmployment || current.choosingCategory)
+            return
         val employment = form.employmentId ?: return
         updateState { it.copy(working = true, failure = null) }
         action =
@@ -340,10 +442,14 @@ class DocumentFileViewModel(
                                 form.classification,
                                 form.reason,
                             ),
+                            form.metadata.takeIf { form.preparation.employments.metadataSupported },
                         )
                     ensureActive()
                     when (result) {
-                        is AppResult.Failed -> reportFailure(result.failure)
+                        is AppResult.Failed -> {
+                            reportFailure(result.failure)
+                            emitEffect(DocumentFileEffect.ScrollToStart)
+                        }
                         is AppResult.Success -> {
                             updateState {
                                 it.copy(form = null, choices = null, choosingEmployment = false)

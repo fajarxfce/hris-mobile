@@ -737,6 +737,50 @@ enum class AppString(val english: StringResource, val indonesian: StringResource
         Res.string.document_classification_en,
         Res.string.document_classification_id,
     ),
+    DocumentBusinessCategory(
+        Res.string.document_business_category_en,
+        Res.string.document_business_category_id,
+    ),
+    DocumentNumber(Res.string.document_number_en, Res.string.document_number_id),
+    DocumentIssuingCountry(
+        Res.string.document_issuing_country_en,
+        Res.string.document_issuing_country_id,
+    ),
+    DocumentIssuedOn(Res.string.document_issued_on_en, Res.string.document_issued_on_id),
+    DocumentValidUntil(Res.string.document_valid_until_en, Res.string.document_valid_until_id),
+    DocumentBusinessDatesHint(
+        Res.string.document_business_dates_hint_en,
+        Res.string.document_business_dates_hint_id,
+    ),
+    DocumentCountryHint(Res.string.document_country_hint_en, Res.string.document_country_hint_id),
+    DocumentMetadataInvalid(
+        Res.string.document_metadata_invalid_en,
+        Res.string.document_metadata_invalid_id,
+    ),
+    DocumentMetadataUnsupported(
+        Res.string.document_metadata_unsupported_en,
+        Res.string.document_metadata_unsupported_id,
+    ),
+    DocumentPassport(Res.string.document_passport_en, Res.string.document_passport_id),
+    DocumentNationalId(Res.string.document_national_id_en, Res.string.document_national_id_id),
+    DocumentWorkPermit(Res.string.document_work_permit_en, Res.string.document_work_permit_id),
+    DocumentResidencePermit(
+        Res.string.document_residence_permit_en,
+        Res.string.document_residence_permit_id,
+    ),
+    DocumentEmploymentContract(
+        Res.string.document_employment_contract_en,
+        Res.string.document_employment_contract_id,
+    ),
+    DocumentCertificate(Res.string.document_certificate_en, Res.string.document_certificate_id),
+    DocumentCategoryReceipt(
+        Res.string.document_category_receipt_en,
+        Res.string.document_category_receipt_id,
+    ),
+    DocumentCategoryOther(
+        Res.string.document_category_other_en,
+        Res.string.document_category_other_id,
+    ),
     DocumentPersonal(Res.string.document_personal_en, Res.string.document_personal_id),
     DocumentReceipt(Res.string.document_receipt_en, Res.string.document_receipt_id),
     DocumentQueued(Res.string.document_queued_en, Res.string.document_queued_id),

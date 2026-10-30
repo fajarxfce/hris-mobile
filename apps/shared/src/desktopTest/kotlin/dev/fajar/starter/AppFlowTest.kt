@@ -1041,6 +1041,7 @@ class AppFlowTest {
             NativeUiServer().apply {
                 documents.enabled = true
                 documents.uploadEnabled = true
+                documents.metadataSupported = true
             }
         val owners = mutableListOf<DocumentFileViewModel>()
         val definitions = module {
@@ -1066,6 +1067,14 @@ class AppFlowTest {
                 .onNodeWithContentDescription("Description")
                 .performScrollTo()
                 .performTextInput("Retained description")
+            compose
+                .onNodeWithContentDescription("Document number (optional)")
+                .performScrollTo()
+                .performTextInput("AB-123")
+            compose
+                .onNodeWithContentDescription("Issuing country (optional)")
+                .performScrollTo()
+                .performTextInput("AU")
             val referenceReads = server.documents.reads.get()
             val owner = owners.single()
             compose.runOnIdle { owner.onEvent(DocumentFileEvent.Closed) }
@@ -1083,7 +1092,82 @@ class AppFlowTest {
                 server.documents.reads.get(),
                 "Restoring the owned form does not reacquire its employment directory",
             )
+            compose
+                .onNodeWithContentDescription("Document number (optional)")
+                .assertTextContains("AB-123")
+            compose
+                .onNodeWithContentDescription("Issuing country (optional)")
+                .assertTextContains("AU")
             assertEquals(0, server.documents.uploads.starts.get())
+        }
+    }
+
+    @Test
+    fun documentBusinessMetadataIsValidatedAndRetainedThroughTheAssembledUpload() {
+        val server =
+            NativeUiServer().apply {
+                documents.enabled = true
+                documents.uploadEnabled = true
+                documents.metadataSupported = true
+            }
+        withApplication(server, fileInputs = DocumentInputUi("passport.pdf")) {
+            signIn()
+            waitFor("Choose a company")
+            compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
+            waitFor("Welcome")
+            openDocumentFiles()
+            waitFor("No local files yet.")
+            compose.onNodeWithContentDescription("Add file").performClick()
+            waitFor("Upload document")
+            compose
+                .onNodeWithContentDescription("Description")
+                .performScrollTo()
+                .performTextInput("Identity evidence")
+            compose
+                .onNode(hasText("Document category") and hasClickAction())
+                .performScrollTo()
+                .performClick()
+            compose.onNodeWithText("Passport").performClick()
+            compose
+                .onNodeWithContentDescription("Document number (optional)")
+                .performScrollTo()
+                .performTextInput("AB-123")
+            compose
+                .onNodeWithContentDescription("Issuing country (optional)")
+                .performScrollTo()
+                .performTextInput("ZZ")
+            compose.onNode(hasText("Upload document") and hasClickAction()).performClick()
+            waitFor("Check the document number, country code and dates.")
+            compose
+                .onNodeWithText("Check the document number, country code and dates.")
+                .assertIsDisplayed()
+            assertEquals(0, server.documents.uploads.starts.get())
+            compose
+                .onNodeWithContentDescription("Issuing country (optional)")
+                .performScrollTo()
+                .performTextReplacement(" au ")
+            compose
+                .onNodeWithContentDescription("Issue date (optional)")
+                .performScrollTo()
+                .performTextInput("2000-02-29")
+            compose
+                .onNodeWithContentDescription("Valid until (optional)")
+                .performScrollTo()
+                .performTextInput("2010-02-28")
+            capture("document-business-metadata-upload")
+            compose.onNode(hasText("Upload document") and hasClickAction()).performClick()
+            waitFor("Ready")
+            assertEquals(
+                Json.parseToJsonElement(
+                    """{"category":"PASSPORT","identityNumber":"AB-123","issuingCountry":"AU","issuedOn":"2000-02-29","validUntil":"2010-02-28"}"""
+                ),
+                server.documents.uploads.submitted?.get("metadata"),
+            )
+            compose.onNodeWithText("AB-123").performScrollTo().assertIsDisplayed()
+            compose.onNodeWithText("2010-02-28").performScrollTo().assertIsDisplayed()
+            assertEquals(1, server.documents.uploads.starts.get())
+            assertEquals(1, server.documents.uploads.validations.get())
+            capture("document-business-metadata-retained")
         }
     }
 

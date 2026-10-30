@@ -85,6 +85,7 @@ fun NavGraphBuilder.documentRoutes(
             when (effect) {
                 DocumentFileEffect.Back -> onBack()
                 DocumentFileEffect.VerifyAccount -> onVerify()
+                DocumentFileEffect.ScrollToStart -> list.requestScrollToItem(0)
                 DocumentFileEffect.ScrollEmploymentsToStart -> employments.requestScrollToItem(0)
             }
         }

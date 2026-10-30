@@ -5,5 +5,7 @@ sealed interface DocumentFileEffect {
 
     data object VerifyAccount : DocumentFileEffect
 
+    data object ScrollToStart : DocumentFileEffect
+
     data object ScrollEmploymentsToStart : DocumentFileEffect
 }

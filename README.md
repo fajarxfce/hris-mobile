@@ -88,8 +88,10 @@ from the employee's published evidence catalog, including for types requiring an
 attachment. Documents opens the published catalog with category tabs; its folder
 action opens files on the current device. It supports encrypted local import of PDF/JPG/PNG files and
 confirmed local removal, scoped to the selected account and company. Employees can
-confirm an employment, title, category and description in the form opened after
-file selection, before a resumable upload.
+confirm an employment, title, classification and description in the form opened
+after file selection, before a resumable upload. Supported servers also accept
+document category, number, issuing country and printed issue/validity dates;
+confirmed facts remain attached to the encrypted original upload during retries.
 Progress, server inspection, explicit retry and cancellation use the retained
 encrypted upload intent. Published document metadata synchronizes into account-owned
 encrypted records. Employment, category and page filters work locally, including

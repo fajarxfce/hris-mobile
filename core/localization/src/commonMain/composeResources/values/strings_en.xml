@@ -176,7 +176,7 @@
     <string name="document_details_en">Document details</string>
     <string name="document_upload_title_en">Title</string>
     <string name="document_upload_reason_en">Description</string>
-    <string name="document_classification_en">Category</string>
+    <string name="document_classification_en">Classification</string>
     <string name="document_personal_en">Personal</string>
     <string name="document_receipt_en">Receipt</string>
     <string name="document_queued_en">Waiting to upload</string>
@@ -861,4 +861,21 @@
     <string name="pending_transfers_en">File transfers: %1$d</string>
     <string name="pending_more_drafts_en">Open this workflow to review more drafts.</string>
     <string name="pending_open_en">Open %1$s</string>
+    <string name="document_business_category_en">Document category</string>
+    <string name="document_number_en">Document number (optional)</string>
+    <string name="document_issuing_country_en">Issuing country (optional)</string>
+    <string name="document_issued_on_en">Issue date (optional)</string>
+    <string name="document_valid_until_en">Valid until (optional)</string>
+    <string name="document_business_dates_hint_en">Use YYYY-MM-DD for the dates printed on the document. Expired documents can be retained as evidence.</string>
+    <string name="document_country_hint_en">Two-letter country code, for example ID or AU.</string>
+    <string name="document_metadata_invalid_en">Check the document number, country code and dates.</string>
+    <string name="document_metadata_unsupported_en">Reload the upload details to check available fields.</string>
+    <string name="document_passport_en">Passport</string>
+    <string name="document_national_id_en">National identity card</string>
+    <string name="document_work_permit_en">Work permit</string>
+    <string name="document_residence_permit_en">Residence permit</string>
+    <string name="document_employment_contract_en">Employment contract</string>
+    <string name="document_certificate_en">Certificate</string>
+    <string name="document_category_receipt_en">Receipt</string>
+    <string name="document_category_other_en">Other</string>
 </resources>

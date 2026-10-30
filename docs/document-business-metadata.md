@@ -2,8 +2,8 @@
 
 The Platform contract is implemented in `27e7f77e`; see its
 [versioned metadata API](https://github.com/fajarxfce/hris-platform/blob/feat/firebase-auth/docs/document-business-metadata.md).
-This Mobile increment implements the owned read projection and encrypted format
-upgrade. Initial-upload fields, correction/history screens and durable metadata
+Mobile implements the owned read projection, encrypted format upgrade and
+capability-aware initial upload. Correction/history screens and durable metadata
 commands remain next. This is HRIS business behavior and has no Starter port.
 
 `DocumentBusinessMetadata` separates category, document number, issuing country,
@@ -54,10 +54,40 @@ Wrong task and missing SDK environment attempts executed no tests. Exact counts,
 source and APK hashes, failure history and boundaries are retained in
 [measurements](measurements/document-metadata-read-model-2026-10-30.json).
 
-Next, extend capability-aware upload preparation and the encrypted upload intent
-without adding fields to an old omitted payload. Add category/identity/date input,
-retained display, bounded history, observed-version correction and durable recovery
-of the original command. Validate new submissions and uncertain retries, scope and
-process replacement, then actual owned emulator/API/storage behavior. Apple builds
-remain required; physical iPhone testing is waived. Neither `documents.02` nor
-`people.03`, and not the full PRD goal, is accepted by this read-model increment.
+## Initial upload — locally validated
+
+Upload preparation accepts optional editable business facts only when scoped
+employment discovery advertises support. Pure domain policy trims printed values,
+normalizes ISO country codes, validates canonical dates and freezes typed metadata
+with the original upload intent. The 249 accepted country codes match JDK 21's ISO
+list. Optional values become null; historical expiry remains valid evidence.
+An old server receives the old omitted field, and old encrypted format-1 uploads
+keep their original body and operation. No existing intent can be changed by edits
+or an uncertain delivery. The same encrypted ownership, keys and associated data
+apply after restoring the session or repository.
+
+The English/Indonesian form separates access classification from the eight document
+categories, accepts document number/country/printed dates, and displays retained
+facts with upload status. Typed MVI events preserve unsent edits across route
+attachment and close access after denial. A failed confirmation moves the form
+to its retained feedback: the first assembled exercise reproduced an error hidden
+above the long form, and the corrected test requires it to be immediately visible.
+
+Final root `:check`, Android dev assembly and both Document Chromium suites pass
+in 163.698 seconds. Reports contain 1,878 desktop and 131 Document browser tests,
+with no failures/errors/skips. Nine new desktop cases cover validation, unsupported
+servers, original retries/cancellation, real encrypted legacy/new intent restoration,
+wire bodies and the assembled form/upload; the route-detachment case also now covers
+metadata edits. Narrow upload and retained-details screenshots were inspected.
+Earlier attempts retained a missing-argument test compilation error, two malformed
+fixture responses and the actual error-visibility reproduction. See
+[upload measurements](measurements/document-upload-metadata-2026-10-30.json).
+The APK is built, but has not been installed; the private API remains schema 101.
+
+Next: resolve definite initial server rejections without stranding an upload that
+has no server revision; never release a command after an earlier uncertain attempt.
+Add owned metadata details, bounded history, observed-version correction and durable
+recovery of the original metadata command. Then validate actual owned emulator/API/
+storage behavior and final Apple/full native CI. Physical iPhone testing remains
+waived. Neither `documents.02` nor `people.03`, and not the full PRD goal, is accepted
+by these read-model/upload increments. No Starter implementation port is required.

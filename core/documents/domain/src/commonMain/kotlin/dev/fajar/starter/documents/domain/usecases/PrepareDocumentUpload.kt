@@ -28,10 +28,11 @@ class PrepareDocumentUpload(
         workspaceId: String,
         prepared: DocumentUploadPreparation,
         input: DocumentUploadInput,
+        businessDetails: DocumentMetadataInput? = null,
     ): AppResult<LocalDocumentFile> =
         withTimeoutOrNull(10.seconds) {
             val normalized =
-                when (val result = validateDocumentUploadInput(input)) {
+                when (val result = prepareDocumentUploadInput(input, businessDetails)) {
                     is AppResult.Failed -> return@withTimeoutOrNull result
                     is AppResult.Success -> result.value
                 }
@@ -52,6 +53,8 @@ class PrepareDocumentUpload(
                 )
             if (prepared.employments.items.none { it.id == normalized.employmentId })
                 return@withTimeoutOrNull documentFailure("client.document_employment_required")
+            if (normalized.metadata != null && !prepared.employments.metadataSupported)
+                return@withTimeoutOrNull documentFailure("client.document_metadata_unsupported")
             val file =
                 when (val result = files.find(access, prepared.file.draft.id)) {
                     is AppResult.Failed -> return@withTimeoutOrNull result

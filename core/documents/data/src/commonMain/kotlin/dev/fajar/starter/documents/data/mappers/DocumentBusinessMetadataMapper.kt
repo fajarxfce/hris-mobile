@@ -1,8 +1,10 @@
 package dev.fajar.starter.documents.data.mappers
 
+import dev.fajar.starter.common.result.AppResult
 import dev.fajar.starter.documents.data.dto.DocumentBusinessMetadataDto
 import dev.fajar.starter.documents.domain.entities.DocumentBusinessMetadata
 import dev.fajar.starter.documents.domain.entities.DocumentCategory
+import dev.fajar.starter.documents.domain.policies.validateDocumentBusinessMetadata
 import kotlinx.datetime.LocalDate
 
 fun DocumentBusinessMetadataDto.toBusinessMetadata(): DocumentBusinessMetadata {
@@ -21,12 +23,13 @@ fun DocumentBusinessMetadataDto.toBusinessMetadata(): DocumentBusinessMetadata {
     val until = validUntil?.let(::documentBusinessDate)
     require(issued == null || until == null || until >= issued)
     return DocumentBusinessMetadata(
-        DocumentCategory.valueOf(category),
-        identityNumber,
-        issuingCountry,
-        issued,
-        until,
-    )
+            DocumentCategory.valueOf(category),
+            identityNumber,
+            issuingCountry,
+            issued,
+            until,
+        )
+        .also { require(validateDocumentBusinessMetadata(it) is AppResult.Success) }
 }
 
 fun DocumentBusinessMetadata.toBusinessMetadataDto() =

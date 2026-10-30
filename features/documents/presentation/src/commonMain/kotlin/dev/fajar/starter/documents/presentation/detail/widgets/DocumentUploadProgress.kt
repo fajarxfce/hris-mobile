@@ -6,6 +6,7 @@ import androidx.compose.ui.unit.dp
 import dev.fajar.starter.designsystem.components.*
 import dev.fajar.starter.designsystem.theme.AppColors
 import dev.fajar.starter.documents.presentation.detail.*
+import dev.fajar.starter.documents.presentation.metadata.DocumentMetadataDetails
 import dev.fajar.starter.localization.*
 import io.github.composefluent.FluentTheme
 
@@ -20,6 +21,7 @@ fun DocumentUploadProgress(state: DocumentFileState, onEvent: (DocumentFileEvent
             if (file.status == AppString.DocumentValidationFailed)
                 AppText(appString(AppString.DocumentScanUnavailable), color = AppColors.muted)
         }
+        state.file?.upload?.intent?.input?.metadata?.let { DocumentMetadataDetails(it) }
         state.file?.upload?.failure?.let { failure ->
             if (state.failure == null) AppFeedback(failureText(failure))
         }

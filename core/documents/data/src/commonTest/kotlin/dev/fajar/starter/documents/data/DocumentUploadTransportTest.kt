@@ -83,6 +83,9 @@ class DocumentUploadTransportTest {
                                 assertEquals(f.intent.input.employmentId, body.employmentId)
                                 assertEquals(f.file.sha256, body.sha256)
                                 assertEquals(0L, body.expectedDocumentVersion)
+                                assertFalse(
+                                    "metadata" in Json.parseToJsonElement(bodies.last()).jsonObject
+                                )
                                 Json.encodeToString(DocumentMutationDto(f.intent.revisionId, 0))
                             }
                             endpoint.endsWith("/chunks") -> {
@@ -166,6 +169,60 @@ class DocumentUploadTransportTest {
                 repository.employments(f.base.access, null)
             )
             assertEquals(7, calls.size)
+        } finally {
+            client.close()
+        }
+    }
+
+    @Test
+    fun uploadMetadataSurvivesAuthenticatedTransportWithoutChangingOnRetry() = runTest {
+        val f = UploadTransportFixture()
+        val metadata =
+            DocumentBusinessMetadata(
+                DocumentCategory.PASSPORT,
+                "AB-123",
+                "AU",
+                kotlinx.datetime.LocalDate(2000, 2, 29),
+                kotlinx.datetime.LocalDate(2010, 2, 28),
+            )
+        val intent = f.intent.copy(input = f.intent.input.copy(metadata = metadata))
+        val bodies = mutableListOf<String>()
+        val client =
+            createHttpClient(
+                MockEngine { request ->
+                    assertEquals(f.base.access.sessionId, request.attributes[RequestSession])
+                    assertEquals(
+                        "77777777-7777-7777-7777-777777777777",
+                        request.headers["Idempotency-Key"],
+                    )
+                    bodies += (request.body as TextContent).text
+                    assertEquals(
+                        Json.parseToJsonElement(
+                            """{"category":"PASSPORT","identityNumber":"AB-123","issuingCountry":"AU","issuedOn":"2000-02-29","validUntil":"2010-02-28"}"""
+                        ),
+                        Json.parseToJsonElement(bodies.last()).jsonObject["metadata"],
+                    )
+                    respond(
+                        Json.encodeToString(DocumentMutationDto(intent.revisionId, 0)),
+                        HttpStatusCode.OK,
+                        headersOf(HttpHeaders.ContentType, "application/json"),
+                    )
+                },
+                "https://hris.example.test/api/v1/",
+            )
+        try {
+            val repository = RemoteDocumentRepository(ApiDocumentDataSource(DocumentsApi(client)))
+            repeat(2) {
+                assertIs<AppResult.Success<DocumentMutationReceipt>>(
+                    repository.start(
+                        f.base.access,
+                        f.file,
+                        intent,
+                        "77777777-7777-7777-7777-777777777777",
+                    )
+                )
+            }
+            assertEquals(bodies[0], bodies[1])
         } finally {
             client.close()
         }

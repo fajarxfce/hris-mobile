@@ -176,7 +176,7 @@
     <string name="document_details_id">Detail dokumen</string>
     <string name="document_upload_title_id">Judul</string>
     <string name="document_upload_reason_id">Keterangan</string>
-    <string name="document_classification_id">Kategori</string>
+    <string name="document_classification_id">Klasifikasi</string>
     <string name="document_personal_id">Pribadi</string>
     <string name="document_receipt_id">Bukti transaksi</string>
     <string name="document_queued_id">Menunggu upload</string>
@@ -861,4 +861,21 @@
     <string name="pending_transfers_id">Transfer berkas: %1$d</string>
     <string name="pending_more_drafts_id">Buka fitur ini untuk meninjau draft lainnya.</string>
     <string name="pending_open_id">Buka %1$s</string>
+    <string name="document_business_category_id">Kategori dokumen</string>
+    <string name="document_number_id">Nomor dokumen (opsional)</string>
+    <string name="document_issuing_country_id">Negara penerbit (opsional)</string>
+    <string name="document_issued_on_id">Tanggal terbit (opsional)</string>
+    <string name="document_valid_until_id">Berlaku sampai (opsional)</string>
+    <string name="document_business_dates_hint_id">Gunakan YYYY-MM-DD sesuai tanggal pada dokumen. Dokumen kedaluwarsa tetap dapat disimpan sebagai bukti.</string>
+    <string name="document_country_hint_id">Kode negara dua huruf, misalnya ID atau AU.</string>
+    <string name="document_metadata_invalid_id">Periksa nomor dokumen, kode negara, dan tanggal.</string>
+    <string name="document_metadata_unsupported_id">Muat ulang rincian upload untuk memeriksa kolom yang tersedia.</string>
+    <string name="document_passport_id">Paspor</string>
+    <string name="document_national_id_id">Kartu identitas nasional</string>
+    <string name="document_work_permit_id">Izin kerja</string>
+    <string name="document_residence_permit_id">Izin tinggal</string>
+    <string name="document_employment_contract_id">Kontrak kerja</string>
+    <string name="document_certificate_id">Sertifikat</string>
+    <string name="document_category_receipt_id">Kuitansi</string>
+    <string name="document_category_other_id">Lainnya</string>
 </resources>

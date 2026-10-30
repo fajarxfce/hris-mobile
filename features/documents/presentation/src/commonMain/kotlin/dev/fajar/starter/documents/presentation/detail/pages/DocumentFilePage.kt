@@ -121,5 +121,7 @@ fun DocumentFilePage(
             item(key = "upload") { DocumentUploadProgress(state, onEvent) }
     }
     if (state.choosingEmployment) DocumentEmploymentDialog(state, employments, onEvent)
+    if (state.choosingCategory && state.form != null && state.writeAllowed)
+        DocumentCategoryDialog(state, onEvent)
     if (state.cancellationReason != null) DocumentCancellationDialog(state, onEvent)
 }

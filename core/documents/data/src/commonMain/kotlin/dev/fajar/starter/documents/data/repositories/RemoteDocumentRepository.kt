@@ -51,6 +51,7 @@ class RemoteDocumentRepository(private val remote: DocumentRemoteDataSource) :
                 declaration.size,
                 requireNotNull(file.sha256),
                 intent.input.reason,
+                intent.input.metadata?.toBusinessMetadataDto(),
             )
         remote
             .start(access.sessionId, access.companyId, operationId, request)

@@ -11,6 +11,7 @@ import kotlinx.serialization.json.*
 class NativeDocumentsUi {
     @Volatile var enabled = false
     @Volatile var uploadEnabled = false
+    @Volatile var metadataSupported = false
     @Volatile var gate: CompletableDeferred<Unit>? = null
     @Volatile var catalogOffline = false
     @Volatile var catalogDenied = false
@@ -55,6 +56,7 @@ class NativeDocumentsUi {
                         put("companyId", NativeUiServer.COMPANY_ONE)
                         put("asOf", "2026-10-12")
                         put("timezone", "Asia/Jakarta")
+                        put("metadataSupported", metadataSupported)
                         putJsonObject("employments") {
                             putJsonArray("items") {
                                 addJsonObject {
@@ -110,6 +112,20 @@ class NativeDocumentsUi {
                     put("version", catalogVersion)
                     put("employmentId", NativePeopleUi.EMPLOYEE)
                     put("classification", "PERSONAL")
+                    put("metadataSupported", metadataSupported)
+                    if (metadataSupported) {
+                        put("metadataVersion", 0)
+                        putJsonObject("metadata") {
+                            put("category", "CERTIFICATE")
+                            for (field in
+                                listOf(
+                                    "identityNumber",
+                                    "issuingCountry",
+                                    "issuedOn",
+                                    "validUntil",
+                                )) put(field, JsonNull)
+                        }
+                    }
                     putJsonObject("evidence") {
                         (if (downloads.enabled) downloads.attachment() else attachment()).forEach {
                             (key, value) ->

@@ -56,6 +56,8 @@ fun DocumentUploadFormContent(state: DocumentFileState, onEvent: (DocumentFileEv
                     enabled = !state.working,
                 )
             }
+            if (form.preparation.employments.metadataSupported)
+                DocumentMetadataFields(state, onEvent)
             AppTextField(
                 appString(AppString.DocumentUploadReason),
                 form.reason,

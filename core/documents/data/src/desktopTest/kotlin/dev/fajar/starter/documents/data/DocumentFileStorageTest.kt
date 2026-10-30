@@ -28,6 +28,16 @@ class DocumentFileStorageTest {
     }
 
     @Test
+    fun documentMetadataSurvivesEncryptedUploadRestoration() = runTest {
+        withDatabase(::verifyDocumentMetadataUploadStorage)
+    }
+
+    @Test
+    fun oldUploadCheckpointsRetainTheirOriginalOmittedMetadata() = runTest {
+        withDatabase(::verifyLegacyUploadMetadataOmission)
+    }
+
+    @Test
     fun uploadCheckpointsAreImmutableEncryptedAndRevisionBound() = runTest {
         withDatabase(::verifyDocumentUploadCheckpoint)
     }
