@@ -4320,6 +4320,95 @@ class AppFlowTest {
     }
 
     @Test
+    fun pendingActionsResumesMetadataDraftAndCountsOriginalDeliveryOnce() {
+        val requests = java.util.concurrent.atomic.AtomicInteger()
+        val server =
+            NativeUiServer(beforeRequest = { requests.incrementAndGet() }).apply {
+                documents.enabled = true
+                documents.uploadEnabled = true
+                documents.metadataSupported = true
+                documents.metadata.enabled = true
+                documents.metadata.loseSaveResponse = true
+                documents.catalogVersion = documents.metadata.latest + 1
+            }
+        withApplication(server) {
+            signIn()
+            waitFor("Choose a company")
+            compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
+            waitFor("Welcome")
+            openDocumentDetails()
+            waitForAction("Correct document details")
+            compose.onNode(hasText("Correct document details") and hasClickAction()).performClick()
+            waitForMetadataEditor()
+            compose
+                .onNodeWithContentDescription("Document number (optional)")
+                .performScrollTo()
+                .performTextReplacement("PENDING-ACCOUNT-123")
+            compose
+                .onNodeWithContentDescription("Reason for correction")
+                .performScrollTo()
+                .performTextInput("Keep this correction")
+            compose.onNodeWithContentDescription("Back").performClick()
+            waitFor("Document details")
+            compose.onNodeWithContentDescription("Back").performClick()
+            waitFor("Documents")
+            compose.onNodeWithContentDescription("Back").performClick()
+            waitFor("Welcome")
+            compose.onNode(hasText("Account") and hasClickAction()).performClick()
+            compose.onNodeWithText("Pending actions").performScrollTo().performClick()
+            compose
+                .onNode(hasScrollToIndexAction())
+                .performScrollToNode(hasTestTag("pending-DocumentCorrections"))
+            waitFor("Drafts: 1")
+            val before = requests.get()
+            compose.onNodeWithContentDescription("Reload summary").performClick()
+            waitFor("Drafts: 1")
+            assertEquals(before, requests.get())
+            assertTrue(server.documents.metadata.submissions.isEmpty())
+            capture("pending-actions-metadata-draft")
+            compose.onNodeWithContentDescription("Open Document corrections").performClick()
+            waitFor("Drafts")
+            compose.onNodeWithTag("metadata-draft-${NativeDocumentsUi.DOCUMENT}").performClick()
+            waitForMetadataEditor()
+            compose
+                .onNodeWithContentDescription("Document number (optional)")
+                .assertTextContains("PENDING-ACCOUNT-123")
+            compose
+                .onNodeWithContentDescription("Reason for correction")
+                .assertTextContains("Keep this correction")
+            compose
+                .onNode(hasScrollToIndexAction())
+                .performScrollToNode(hasTestTag("metadata-save"))
+            waitFor("Draft saved on this device")
+            compose.onNodeWithTag("metadata-save").performClick()
+            waitFor("Review these details before sending the correction.")
+            compose
+                .onNode(hasScrollToIndexAction() and hasAnyAncestor(isDialog()))
+                .performScrollToNode(hasTestTag("metadata-dialog-confirm"))
+            compose.onNodeWithTag("metadata-dialog-confirm").performClick()
+            waitFor("Delivery has not been confirmed. Retry the saved correction.")
+            waitForAction("Retry correction")
+            assertEquals(1, server.documents.metadata.submissions.size)
+            compose.onNodeWithContentDescription("Back").performClick()
+            waitFor("Saved corrections")
+            compose.onNodeWithContentDescription("Back").performClick()
+            waitFor("Pending actions")
+            compose
+                .onNode(hasScrollToIndexAction())
+                .performScrollToNode(hasTestTag("pending-DocumentCorrections"))
+            waitFor("Awaiting confirmation: 1")
+            compose.onAllNodesWithText("Drafts: 1").assertCountEquals(0)
+            val after = requests.get()
+            compose.onNodeWithContentDescription("Reload summary").performClick()
+            waitFor("Awaiting confirmation: 1")
+            assertEquals(after, requests.get())
+            assertEquals(1, server.documents.metadata.submissions.size)
+            assertEquals(1, server.documents.metadata.writes.get())
+            capture("pending-actions-metadata-unconfirmed")
+        }
+    }
+
+    @Test
     fun pendingActionsReopensAnEditedLocalLeaveDraftWithoutSubmittingIt() {
         val requests = java.util.concurrent.atomic.AtomicInteger()
         val server =

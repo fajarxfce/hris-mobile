@@ -423,6 +423,27 @@ class DocumentsDataModule {
     ) = LoadDocumentEvidence(remote, sessions, workspaces, Clock.System, build)
 
     @Factory(binds = [ObservePendingActions::class])
+    fun observeDocumentMetadataPending(
+        commands: DocumentMetadataCommandRepository,
+        copies: DocumentMetadataWorkingRepository,
+        admission: DocumentMetadataAdmissionRepository,
+        catalog: DocumentCatalogRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        build: AppBuild,
+    ) =
+        ObserveDocumentMetadataPending(
+            commands,
+            copies,
+            admission,
+            catalog,
+            sessions,
+            workspaces,
+            Clock.System,
+            build,
+        )
+
+    @Factory(binds = [ObservePendingActions::class])
     fun observeDocumentPending(
         files: DocumentFileRepository,
         reads: DocumentCatalogRepository,

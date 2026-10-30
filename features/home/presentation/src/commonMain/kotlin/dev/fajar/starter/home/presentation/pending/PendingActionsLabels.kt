@@ -12,4 +12,5 @@ val PendingActionGroup.title: AppString
             PendingActionGroup.Leave -> AppString.Leave
             PendingActionGroup.Expenses -> AppString.Expenses
             PendingActionGroup.Documents -> AppString.Documents
+            PendingActionGroup.DocumentCorrections -> AppString.DocumentMetadataChanges
         }

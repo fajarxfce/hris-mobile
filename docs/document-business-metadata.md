@@ -433,7 +433,14 @@ repeats both assembled workflows. Three narrow screenshots were inspected.
 [Evidence](measurements/document-metadata-changes-2026-10-30.json) records exact
 sources, tests, the two reproduced failures and the uninstalled APK hash.
 
-Next, include metadata work in Account's Pending actions with a bounded local
-summary and a direct overview link. Owned emulator/API/storage acceptance and final
-Apple/native checks remain before accepting either metadata PRD requirement. The
-private API remains schema 101, and neither the phone nor live dashboard changed.
+Account's Pending actions now includes a separate metadata summary and a direct
+overview link. Its first twenty working copies retain a lower-bound indicator;
+original commands suppress only matching drafts. Unknown/denied resource admission
+hides counts, including after later storage failure. Six domain cases and the actual
+Account flow pass, with unchanged HTTP counts on reload and one uncertain original
+operation. Full checks, dev APK and Document browsers pass in 173.186s: 1,994 desktop
+and 230 browser cases, all zero failures/errors/skips. See [summary evidence](measurements/document-metadata-pending-2026-10-30.json).
+
+Next: owned emulator/API/storage acceptance and final Apple/native checks before
+accepting either metadata PRD requirement. The private API remains schema 101, and
+neither the phone nor live dashboard changed.

@@ -1,11 +1,13 @@
 # Pending actions
 
 Account opens **Pending actions** for the selected company. The page observes local
-Inbox actions, attendance captures, overtime, leave, expenses and document files.
+Inbox actions, attendance captures, overtime, leave, expenses, document files and
+metadata corrections.
 Opening or reloading the summary performs no HTTP request or command delivery.
 Each row opens the owning workflow, where normal review, retry and removal rules
 still apply. Attendance capture and recovery open Home; file transfers open local
-document files.
+document files. Document corrections opens the independent retained correction
+overview, including work whose published binary is no longer in the catalog.
 
 ## Meaning of the counts
 
@@ -178,3 +180,34 @@ six summary rows, while the server/Home retain Pending review for the capture
 without location. No approved attendance minutes are created by confirming delivery.
 Each of the six feature observers now has an actual native recovery example;
 other combinations and physical targets retain their own acceptance requirements.
+
+
+## Document metadata corrections — local integration
+
+Document corrections is a separate owning workflow. It observes all retained
+metadata commands under the existing 128-command account limit and the first twenty
+encrypted working copies. A next cursor labels the draft count as a lower bound.
+Opening an untouched editor checkpoint does not count as an edit. A matching
+original command suppresses only that exact draft; later timestamps, rebased headers,
+different reasons and incomplete edits remain drafts. Pending, uncertain and rejected
+commands map to their respective existing counts. Confirmed commands remain excluded
+while matching-draft cleanup waits for the owning editor.
+
+Every contributing document requires admitted local resource access. One unknown
+or denied resource hides the aggregate; a known denial takes precedence over an
+unreadable gate. The observer retains at most 148 discovered resource IDs through
+later storage failures, preserving denial observation without retaining old counts.
+This state belongs to one access/collector and is released with it. Company denial
+prevents private storage reads. Session changes cancel delayed readers before their
+old result can publish. No HTTP, command delivery or new database schema is introduced.
+
+Six domain cases pass along with the actual-storage/controlled-HTTP Account flow:
+open the same draft, reload without HTTP, confirm explicitly, lose the committed
+response, and reopen one unconfirmed command without a duplicate draft. The existing
+Leave summary workflow and narrow 200-percent text/Indonesian denial controls pass.
+Full root checks, dev APK and Document Chromium suites pass in 173.186s: 1,994 desktop
+and 230 browser cases, zero failures/errors/skips. Two screenshots were inspected.
+[Evidence](measurements/document-metadata-pending-2026-10-30.json) retains exact
+sources, cases, runs and the uninstalled APK hash. Real metadata API/emulator and
+final Apple/native acceptance remain outstanding; previous native results above
+retain their original six-group scope and source versions.

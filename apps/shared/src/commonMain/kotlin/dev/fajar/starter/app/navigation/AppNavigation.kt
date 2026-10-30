@@ -262,6 +262,10 @@ fun AppNavigation(navigation: ScopedNavigationState, incomingLinks: Flow<String>
                                     controller.navigate(DocumentFilesRoute) {
                                         launchSingleTop = true
                                     }
+                                PendingActionGroup.DocumentCorrections ->
+                                    controller.navigate(DocumentMetadataChangesRoute) {
+                                        launchSingleTop = true
+                                    }
                             }
                         },
                         onVerify = {

@@ -57,8 +57,8 @@ class PendingActionsLayoutTest {
         compose.onNodeWithContentDescription("Reload summary").assertIsDisplayed().performClick()
         compose
             .onNode(hasScrollToIndexAction())
-            .performScrollToNode(hasTestTag("pending-Documents"))
-        val action = compose.onNodeWithContentDescription("Open Documents")
+            .performScrollToNode(hasTestTag("pending-DocumentCorrections"))
+        val action = compose.onNodeWithContentDescription("Open Document corrections")
         val bounds = action.assertIsDisplayed().fetchSemanticsNode().boundsInRoot
         val frame = compose.onNodeWithTag("frame").fetchSemanticsNode().boundsInRoot
         assertTrue(bounds.left >= frame.left && bounds.right <= frame.right)
@@ -68,7 +68,7 @@ class PendingActionsLayoutTest {
         assertEquals(
             listOf(
                 PendingActionsEvent.ReloadRequested,
-                PendingActionsEvent.OpenRequested(PendingActionGroup.Documents),
+                PendingActionsEvent.OpenRequested(PendingActionGroup.DocumentCorrections),
             ),
             events,
         )

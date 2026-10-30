@@ -253,10 +253,21 @@ failures/errors/skips. The full run repeats both workflows. Three screenshots we
 inspected. [Overview evidence](measurements/document-metadata-changes-2026-10-30.json)
 retains exact sources, reproduced failures, actual cases and the uninstalled APK.
 
-Next: add a separate bounded metadata summary to Account's Pending actions and
-link it directly to the overview. Preserve edited-draft/command deduplication,
-original outcomes, local-only reading, resource/company gates and reader disposal.
-Then run owned emulator/API/storage acceptance and final Apple/full native checks
+Account's Pending actions now includes the separate metadata summary and direct
+overview link. Six domain cases cover original outcomes, exact draft deduplication,
+untouched input, age-independent bounded pages, resource/company admission, failed
+storage, disposal and delayed session replacement. At most 128 commands and twenty
+working copies contribute; a next cursor marks a lower bound. Known resource gates
+remain observed through storage errors. Unknown/denied resources hide all counts.
+The actual-storage/controlled-HTTP Account flow resumes the same draft, reloads
+without additional HTTP, and counts one original uncertain delivery with no duplicate
+draft. The existing Leave flow and large-text/Indonesian layout controls also pass.
+Full root checks, dev APK and Document browsers passed in 173.186s: 1,994 desktop/230
+browser cases, zero failures/errors/skips. Two screenshots were inspected; [summary
+evidence](measurements/document-metadata-pending-2026-10-30.json) retains exact
+sources, cases, runs and the uninstalled APK hash.
+
+Next: run owned emulator/API/storage acceptance and final Apple/full native checks
 before accepting either requirement, finishing the detailed People review and
 continuing remaining Platform/Mobile/Starter scope. Keep shared finance/leave
 evidence free of private identity numbers and preserve legacy omitted payloads.
