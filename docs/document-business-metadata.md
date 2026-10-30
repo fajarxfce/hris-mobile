@@ -8,7 +8,8 @@ is also locally validated, as are the encrypted detail/history cache and per-res
 read-admission store. Admitted read orchestration and the detail/history screen
 also pass local validation. Immutable correction contracts and encrypted command
 storage are validated. Explicit intake, scoped observation, delivery and review also
-pass full local validation; mutable working copies and the editor remain next. This is HRIS business behavior and has no Starter port.
+pass full local validation, together with encrypted mutable working-copy storage.
+Working-copy orchestration and the editor remain next. This is HRIS business behavior and has no Starter port.
 
 `DocumentBusinessMetadata` separates category, document number, issuing country,
 issue date and business-validity date from binary evidence. Dates are calendar
@@ -281,7 +282,38 @@ Full root checks, Android dev assembly and Document Chromium suites pass in 180.
 fixture tests complement the separately accepted actual encrypted storage and Ktor
 payload checks. See [orchestration evidence](measurements/document-metadata-command-flow-2026-10-30.json).
 
-Next: mutable working copies and the versioned editor, with
+## Mutable drafts — storage locally validated
+
+Each draft retains its reviewed header, editable fields, reason, generation and
+revision. Bounded unfinished dates, country input and multiline reasons can remain
+locally saved; confirmation still applies the separate strict business validation.
+An ordinary draft save cannot replace the reviewed header. Explicit discard and a
+new copy are required to start from another header, preventing an automatic rebase.
+
+The existing ReplicaStore holds one authenticated checkpoint per document, using
+the already provisioned workspace key without creating a replacement. The plaintext
+is bounded to 16 KiB and binds account, audience, company, document, generation and
+revision. Complete decoded-copy comparison and atomic checkpoint checks protect
+writes/deletes. Copies reopen across database and session replacement, and credential
+age does not expire them. Missing keys, altered ciphertext, late account changes and
+cancelled encryption preserve the prior draft.
+
+A company overview uses indexed checkpoint pages with twenty copies and one
+lookahead. A measured full page decrypts exactly twenty envelopes; no entire-draft
+inventory is read. Three pages cover all 45 test copies in stable document-ID order.
+This storage path lets later UI expose drafts independently of the binary catalog.
+The application use cases must apply catalog/resource admission before rendering.
+
+Two domain and six actual SQLite/IndexedDB scenarios pass. Focused validation passed
+133 domain and 75 data cases in 41.438s. Root quality, Android dev assembly and both
+Document browser suites pass in 180.730s: 1,958 desktop and 208 browser cases, all
+without failures/errors/skips. These new contracts do not claim a prior production
+failure. [Draft storage evidence](measurements/document-metadata-working-store-2026-10-30.json)
+retains exact cases and source/APK hashes. No new database primitive or Starter
+implementation port was needed.
+
+Next: admitted working-copy orchestration, matching-draft acknowledgement cleanup
+and the versioned editor, with
 durable recovery of the original metadata command. Then validate actual owned
 emulator/API/storage behavior and final Apple/full native CI. Physical iPhone testing
 remains waived. Neither `documents.02` nor `people.03`, and not the full PRD goal,

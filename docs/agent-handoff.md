@@ -177,7 +177,21 @@ checks, dev APK and Document Chromium suites pass in 180.515s: 1,950 desktop and
 browser cases, all without failures/errors/skips. [Orchestration evidence](measurements/document-metadata-command-flow-2026-10-30.json)
 retains sources, exact cases, setup failure history and the uninstalled APK hash.
 
-Next: mutable working copies and the editor with durable original-command recovery. Apply the new resource gate
+Mutable working-copy contracts and encrypted storage are also locally validated.
+A bounded draft retains incomplete input and its reviewed header; ordinary saves
+cannot change that baseline. The existing ReplicaStore/workspace key holds one
+16-KiB authenticated checkpoint per document, protected by exact-copy and revision
+checks. Copies reopen across sessions without age expiry. Indexed overview pages
+read twenty copies plus a lookahead; a full page decrypts exactly twenty envelopes.
+Two domain and six actual SQLite/IndexedDB cases cover restart, stable paging,
+concurrent edits/deletion, key loss, corruption, cancellation and late accounts.
+Focused tests passed 133 domain/75 data cases in 41.438s; full root checks, dev APK
+and Document browser suites pass in 180.730s: 1,958 desktop/208 browser cases, all
+without failures/errors/skips. [Draft storage evidence](measurements/document-metadata-working-store-2026-10-30.json)
+retains exact cases, sources and the uninstalled APK hash.
+
+Next: admitted working-copy use cases, matching-draft cleanup on confirmed
+acknowledgement, and the editor with durable original-command recovery. Apply the new resource gate
 alongside company/catalog admission, with finite remote work and final scope checks.
 Existing CommandStore retains correction intents. Keep current facts separate from
 original operation receipts. Preserve
