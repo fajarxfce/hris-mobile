@@ -102,7 +102,7 @@ class DocumentCatalogSyncTest {
                     f.observe("workspace", flowOf(f.selection.copy(after = catalogId(40)))).first()
                 )
                 .value
-        assertEquals((41..44).map(::catalogId), last.page.items.map { it.documentId })
+        assertEquals((41..44).map(::catalogId), last.page.items.map { it.id })
         val receipts =
             assertIs<AppResult.Success<DocumentCatalogSnapshot>>(
                     f.observe(
@@ -114,7 +114,7 @@ class DocumentCatalogSyncTest {
                         .first()
                 )
                 .value
-        assertEquals(listOf(catalogId(45)), receipts.page.items.map { it.documentId })
+        assertEquals(listOf(catalogId(45)), receipts.page.items.map { it.id })
         assertEquals(reads, f.reads.size)
         assertEquals(1, f.bootstrapReads)
         assertEquals(1, f.changeReads)
@@ -140,7 +140,7 @@ class DocumentCatalogSyncTest {
                     f.observe("workspace", flowOf(f.selection.copy(after = catalogId(44)))).first()
                 )
                 .value
-        assertEquals("Document 45", view.page.items.single().title)
+        assertEquals("Document 45", view.page.items.single().evidence.title)
         assertEquals(1, f.bootstrapReads)
         assertEquals(1, f.changeReads)
     }

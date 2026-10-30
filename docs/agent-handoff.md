@@ -71,26 +71,45 @@ one independently accepted manual test skipped (226s). Production/package hashes
 matched the broad API run. Three normal browser workflows passed in 36.1s and two
 worker/browser workflows in 36.8s, including setup. Platform `158b81ac` commits the
 complete correction and evidence. Exact source `158b81acce89f637dbf715bb573fffb7b99b92c9`
-is running in [CI 41032184925](https://github.com/fajarxfce/hris-platform/actions/runs/41032184925).
-Observe the terminal result without cancelling the same-branch workflow.
+passed all ten jobs in [CI 41032184925](https://github.com/fajarxfce/hris-platform/actions/runs/41032184925).
+Platform retains the terminal job/step evidence in `06f8dede` and its predecessor.
 
 The audit confirmed missing distinct document category and foreign identity/document
 business-validity metadata in `documents.02` and `people.03`. Upload deadlines are
 operational; tax residency already belongs separately to Payroll. The previous
 Documents review omitted category, so that row is reopened. See the
 [gap and continuation](https://github.com/fajarxfce/hris-platform/blob/feat/firebase-auth/docs/document-identity-metadata-gap-2026-10-30.md).
-People command acceptance is complete locally; metadata implementation is now
-active under the [working contract](https://github.com/fajarxfce/hris-platform/blob/feat/firebase-auth/docs/document-business-metadata.md)
-committed in `9d0a2677`. Preserve legacy upload/receipt payloads and owned cache
-facts; new metadata must be acquired even after an older client consumed the same
-document version. Finish that feature and the detailed People review, then continue
-remaining Platform/Mobile requirements. The full goal stays active.
+People command acceptance is complete. Platform `27e7f77e` implements metadata
+backend/dashboard with 689 distinct accepted API cases, 104 ordinary worker cases,
+27 database, 18 domain and nine data cases, plus 4,054 dashboard cases, 25 mocked
+and five actual browser workflows. [CI 41038369597](https://github.com/fajarxfce/hris-platform/actions/runs/41038369597)
+is running for exact `27e7f77e722da9e8ac2bde47836353ef92dcc3b3`; observe its
+terminal result without a cancelling same-branch dispatch.
 
-No client implementation or generic port is due from these server/dashboard
-increments. The private API remains schema 101 with SMTP disabled; preserve the
-accepted Google binding and installed phone. The dashboard serves an isolated
-baseline directory documented in Platform's handoff, so local test builds cannot
-replace it. Physical iPhone testing stays explicitly waived.
+Mobile's [owned metadata projection](document-business-metadata.md) is locally
+validated. A real mapper-loss reproduction now passes. Root `:check` passes 1,869
+desktop tests, Document Chromium suites pass 123 cases, and the dev APK builds.
+[Measurements](measurements/document-metadata-read-model-2026-10-30.json) preserve
+source/APK hashes and each earlier fixture/setup/lock correction. Format 2 refreshes
+canonical records even at unchanged document versions and when the server later
+advertises support. Old encrypted facts remain visible during staging; failed
+cleanup never removes a confirmed read denial. Finance/Leave DocumentEvidence
+stays separate from owned category, identity number and validity facts.
+
+Next: capability-aware initial-upload fields and encrypted intent, retained display,
+bounded metadata history and versioned corrections with durable original-command
+recovery. Preserve old omitted JSON/payload hashes and unknown legacy values. Then
+run owned emulator/API/storage acceptance and final Apple/full native checks before
+accepting either requirement, finishing the detailed People review and continuing
+remaining Platform/Mobile/Starter scope. This business increment has no Starter
+implementation port. The full goal remains active.
+
+The private API remains schema 101 with SMTP disabled; preserve the accepted Google
+binding and installed phone. The dashboard serves an isolated baseline directory
+documented in Platform's handoff, so local builds cannot replace it. The new APK
+has not been installed. Coordinate the controlled schema-103 API/static-dashboard/
+Mobile rollout after the complete metadata feature is validated. Phone updates are
+install-only with advance notice; physical iPhone testing stays waived.
 
 ## Distribution configuration — accepted
 

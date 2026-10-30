@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import dev.fajar.starter.designsystem.theme.AppTheme
 import dev.fajar.starter.documents.domain.entities.*
 import dev.fajar.starter.documents.domain.replica.entities.*
+import dev.fajar.starter.documents.domain.replica.entities.DocumentCatalogPage as CatalogRecordPage
 import dev.fajar.starter.documents.domain.replica.policies.initialDocumentCatalogCheckpoint
 import dev.fajar.starter.documents.presentation.catalog.*
 import dev.fajar.starter.documents.presentation.catalog.pages.DocumentCatalogPage
@@ -156,7 +157,17 @@ class DocumentLayoutTest {
                             refreshedAt = now,
                         ),
                     DocumentCatalogSelection(employment.id),
-                    DocumentEvidencePage(listOf(document)),
+                    CatalogRecordPage(
+                        listOf(
+                            DocumentCatalogRecord(
+                                document.documentId,
+                                0,
+                                employment.id,
+                                DocumentClassification.PERSONAL,
+                                document,
+                            )
+                        )
+                    ),
                 ),
             loading = false,
         )

@@ -176,7 +176,7 @@ class EncryptedDocumentCatalogRepository(
                     require(validateDocumentCatalogSelection(selection) is AppResult.Success)
                     val raw = page.checkpoint
                     if (raw == null)
-                        DocumentCatalogSnapshot(null, selection, DocumentEvidencePage(emptyList()))
+                        DocumentCatalogSnapshot(null, selection, DocumentCatalogPage(emptyList()))
                     else {
                         val key = Base64.decode(requireNotNull(credentials.read()))
                         try {
@@ -227,6 +227,7 @@ class EncryptedDocumentCatalogRepository(
         safeStorageCall {
             currentCoroutineContext().ensureActive()
             require(checkpoint.revision == 0L && !checkpoint.published)
+            require(checkpoint.recordSchema == DocumentCatalogCheckpoint.CURRENT_RECORD_SCHEMA)
             val key =
                 keyCreation.withLock {
                     readOrCreateDocumentCatalogReplicaKey(replicas, cipher, credentials)
@@ -254,6 +255,11 @@ class EncryptedDocumentCatalogRepository(
         currentCoroutineContext().ensureActive()
         require(next.generation == previous.generation && next.revision == previous.revision + 1)
         require(next.access == previous.access && (!previous.published || next.published))
+        require(
+            previous.recordSchema == DocumentCatalogCheckpoint.CURRENT_RECORD_SCHEMA &&
+                next.recordSchema == previous.recordSchema
+        )
+        require(next.metadataSupported == previous.metadataSupported)
         val access = previous.access
         val batch = entries.toList()
         require(
@@ -275,6 +281,7 @@ class EncryptedDocumentCatalogRepository(
                     val dto = record.toCatalogDto()
                     dto.toCatalogRecord(reference.id)
                     require(record.version == reference.version)
+                    require(record.metadataSupported == next.metadataSupported)
                     documents +=
                         encodeDocumentCatalogDocument(
                             cipher,

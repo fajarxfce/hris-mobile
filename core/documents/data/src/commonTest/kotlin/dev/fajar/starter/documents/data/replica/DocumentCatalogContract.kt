@@ -20,7 +20,7 @@ suspend fun checkCatalogPagesRestartAndOwnership(f: DocumentCatalogFixture) {
     val secondEmployment = f.record(81, employment = f.employments.last().id)
     f.publish(personal + receipt + secondEmployment)
     var cursor: String? = null
-    val acquired = mutableListOf<DocumentEvidence>()
+    val acquired = mutableListOf<DocumentCatalogRecord>()
     repeat(3) {
         val page = f.snapshot(selection = f.selected.copy(after = cursor)).page
         assertTrue(page.items.size <= 20)
@@ -28,15 +28,15 @@ suspend fun checkCatalogPagesRestartAndOwnership(f: DocumentCatalogFixture) {
         cursor = page.nextCursor
     }
     assertNull(cursor)
-    assertEquals(personal.map { it.evidence }, acquired)
+    assertEquals(personal, acquired)
     assertEquals(
-        listOf(receipt.evidence),
+        listOf(receipt),
         f.snapshot(selection = f.selected.copy(classification = DocumentClassification.RECEIPT))
             .page
             .items,
     )
     assertEquals(
-        listOf(secondEmployment.evidence),
+        listOf(secondEmployment),
         f.snapshot(selection = f.selected.copy(employmentId = f.employments.last().id)).page.items,
     )
     val next =
@@ -46,14 +46,14 @@ suspend fun checkCatalogPagesRestartAndOwnership(f: DocumentCatalogFixture) {
             authorizationExpiresAt = f.now - 73.hours,
         )
     f.reopen(next)
-    assertEquals(personal.take(20).map { it.evidence }, f.snapshot(next).page.items)
+    assertEquals(personal.take(20), f.snapshot(next).page.items)
     assertNull(f.snapshot(next.copy(companyId = catalogFixtureId(999))).checkpoint)
     val other = next.copy(sessionId = "other", accountId = catalogFixtureId(998))
     f.activate(other)
     assertNull(f.snapshot(other).checkpoint)
     assertNull(f.snapshot(next).checkpoint)
     f.activate(next)
-    assertEquals(personal.take(20).map { it.evidence }, f.snapshot(next).page.items)
+    assertEquals(personal.take(20), f.snapshot(next).page.items)
 }
 
 suspend fun checkCatalogVersionsWithdrawalAndReplacement(f: DocumentCatalogFixture) {
@@ -61,7 +61,7 @@ suspend fun checkCatalogVersionsWithdrawalAndReplacement(f: DocumentCatalogFixtu
     val newer = f.record.copy(version = 2, evidence = f.record.evidence.copy(title = "Updated"))
     f.publish(listOf(newer))
     f.publish(listOf(f.record.copy(version = 1)))
-    assertEquals("Updated", f.snapshot().page.items.single().title)
+    assertEquals("Updated", f.snapshot().page.items.single().evidence.title)
     var previous = f.checkpoint()!!
     assertEquals(
         AppResult.Success(true),
@@ -101,7 +101,7 @@ suspend fun checkCatalogVersionsWithdrawalAndReplacement(f: DocumentCatalogFixtu
             emptyList(),
         ),
     )
-    assertEquals(listOf(f.record(2).evidence), f.snapshot().page.items)
+    assertEquals(listOf(f.record(2)), f.snapshot().page.items)
 }
 
 suspend fun checkCatalogEncryptionIndexesAndLostKey(f: DocumentCatalogFixture) {
@@ -167,7 +167,7 @@ suspend fun checkCatalogCancellationDuringEncryption(f: DocumentCatalogFixture) 
     entered.await()
     job.cancelAndJoin()
     assertEquals(before, f.checkpoint())
-    assertEquals(listOf(f.record.evidence), f.snapshot().page.items)
+    assertEquals(listOf(f.record), f.snapshot().page.items)
 }
 
 suspend fun checkCatalogReadsOnlyTheSelectedIndexedPage(f: DocumentCatalogFixture) {
@@ -204,7 +204,10 @@ suspend fun checkCatalogReadsOnlyTheSelectedIndexedPage(f: DocumentCatalogFixtur
                 repository.observe(f.access, selected).first()
             )
             .value
-    assertEquals((412..450 step 2).map { f.record(it).evidence }, page.page.items)
+    assertEquals(
+        (412..450 step 2).map { f.record(it, category = DocumentClassification.RECEIPT) },
+        page.page.items,
+    )
     assertNull(page.page.nextCursor)
     assertTrue(decrypted <= 22, "Only the checkpoint and selected page may be decrypted")
 }

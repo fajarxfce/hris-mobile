@@ -9,4 +9,9 @@ data class DocumentCatalogRecord(
     val employmentId: String,
     val classification: DocumentClassification,
     val evidence: DocumentEvidence,
-)
+    val metadata: DocumentBusinessMetadata? = null,
+    val metadataVersion: Long? = null,
+    val metadataSupported: Boolean = false,
+) {
+    override fun toString() = "DocumentCatalogRecord([redacted])"
+}

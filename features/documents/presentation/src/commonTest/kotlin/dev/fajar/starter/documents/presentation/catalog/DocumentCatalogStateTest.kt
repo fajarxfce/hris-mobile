@@ -87,18 +87,24 @@ class DocumentCatalogStateTest {
                     refreshedAt = now,
                 )
         val page =
-            DocumentEvidencePage(
+            DocumentCatalogPage(
                 listOf(
-                    DocumentEvidence(
+                    DocumentCatalogRecord(
                         "document",
-                        "revision",
-                        1,
-                        "Medical certificate",
-                        "certificate.pdf",
-                        "application/pdf",
-                        100,
-                        "a".repeat(64),
-                        now,
+                        0,
+                        employment.id,
+                        DocumentClassification.PERSONAL,
+                        DocumentEvidence(
+                            "document",
+                            "revision",
+                            1,
+                            "Medical certificate",
+                            "certificate.pdf",
+                            "application/pdf",
+                            100,
+                            "a".repeat(64),
+                            now,
+                        ),
                     )
                 )
             )

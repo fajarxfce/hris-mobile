@@ -9,4 +9,5 @@ data class DocumentDirectoryDto(
     val asOf: String,
     val timezone: String,
     val employments: DocumentEmploymentPageDto,
+    val metadataSupported: Boolean = false,
 )

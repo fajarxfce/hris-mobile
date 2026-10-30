@@ -203,7 +203,7 @@ class DocumentCatalogViewModel(
             !opened ||
                 !current.canChoose ||
                 current.choosingEmployment ||
-                catalog.page.items.none { it.revisionId == event.revisionId }
+                catalog.page.items.none { it.evidence.revisionId == event.revisionId }
         )
             return
         updateState { it.copy(preparingId = event.revisionId, failure = null) }

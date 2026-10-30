@@ -143,7 +143,7 @@ class PrepareDocumentDownload(
         if (checkpoint.employments.none { it.id == employmentId })
             return documentFailure("client.document_selection_invalid")
         val evidence =
-            catalog.page.items.singleOrNull { it.revisionId == revisionId }
+            catalog.page.items.singleOrNull { it.evidence.revisionId == revisionId }?.evidence
                 ?: return documentFailure("client.document_selection_invalid")
         val selection =
             DocumentDownloadSource(employmentId, catalog.selection.classification, evidence)

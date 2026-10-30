@@ -15,6 +15,12 @@ data class DocumentCatalogCheckpoint(
     val refreshAfter: Instant,
     val pollAt: Instant?,
     val employments: List<DocumentEmployment>,
+    val recordSchema: Int = CURRENT_RECORD_SCHEMA,
+    val metadataSupported: Boolean = false,
 ) {
     override fun toString() = "DocumentCatalogCheckpoint([redacted])"
+
+    companion object {
+        const val CURRENT_RECORD_SCHEMA = 2
+    }
 }

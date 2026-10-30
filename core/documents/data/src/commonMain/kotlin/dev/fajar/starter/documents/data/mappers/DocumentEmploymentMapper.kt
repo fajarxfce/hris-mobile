@@ -28,7 +28,7 @@ fun DocumentDirectoryDto.toEmploymentPage(
         cursor == null ||
             (items.isNotEmpty() && cursor == items.last().employeeNumber && cursor != after)
     )
-    return DocumentEmploymentPage(items.toList(), asOf, timezone, cursor)
+    return DocumentEmploymentPage(items.toList(), asOf, timezone, cursor, metadataSupported)
 }
 
 fun DocumentEmploymentDto.toEmployment(): DocumentEmployment {

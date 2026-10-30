@@ -48,6 +48,12 @@ the catalog; only admitted acquisition started after the latest denial can clear
 it. Ordinary data, credential and cursor age never withdraw owned local facts.
 The refresh timestamp schedules acquisition, rather than limiting local reads.
 
+The [business metadata projection](document-business-metadata.md) now retains typed
+category/identity/validity facts separately from shared content evidence. Record
+format 2 refreshes unchanged document versions while keeping the previous encrypted
+generation readable. A later server capability change also requests canonical
+replacement. Initial-upload and metadata correction/history UI remain in progress.
+
 ## Business evidence review
 
 `LoadDocumentEvidence` coordinates current identity, workspace ownership and fresh

@@ -52,6 +52,8 @@ fun DocumentCatalogCheckpoint.toReplicaDto() =
         employments.map {
             DocumentEmploymentDto(it.id, it.employeeNumber, it.status.name, it.version)
         },
+        recordSchema = recordSchema,
+        metadataSupported = metadataSupported,
     )
 
 fun DocumentCatalogCheckpointDto.toCheckpoint(
@@ -63,6 +65,8 @@ fun DocumentCatalogCheckpointDto.toCheckpoint(
             raw.handle.partition == documentCatalogReplicaPartition(access)
     )
     require(schema == 1 && syncSessionId.length in 1..128)
+    require(recordSchema in 1..DocumentCatalogCheckpoint.CURRENT_RECORD_SCHEMA)
+    require(recordSchema >= 2 || !metadataSupported)
     require(permissions.size <= 256 && permissions.all { it.length in 1..128 })
     require(cursor == null || cursor.length in 1..8192)
     require(authorizationExpiryCode.length in 1..128)
@@ -95,5 +99,7 @@ fun DocumentCatalogCheckpointDto.toCheckpoint(
         refresh,
         pollAt?.let(Instant::parse),
         directory.toList(),
+        recordSchema,
+        metadataSupported,
     )
 }

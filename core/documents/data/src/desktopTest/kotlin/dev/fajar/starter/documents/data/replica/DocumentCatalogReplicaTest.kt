@@ -7,6 +7,11 @@ import kotlinx.coroutines.test.runTest
 
 class DocumentCatalogReplicaTest {
     @Test
+    fun businessMetadataUpgradeRetainsOldEncryptedFactsAcrossRestart() = runTest {
+        withDatabase(::checkDocumentBusinessMetadataUpgradeAcrossRestart)
+    }
+
+    @Test
     fun pendingDenialSurvivesNewLogin() = runTest {
         withDatabase(::checkCatalogPendingDenialSurvivesReauthentication)
     }

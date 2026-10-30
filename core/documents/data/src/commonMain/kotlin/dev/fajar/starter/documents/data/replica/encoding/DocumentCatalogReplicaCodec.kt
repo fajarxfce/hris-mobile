@@ -6,7 +6,6 @@ import dev.fajar.starter.documents.data.mappers.toCatalogRecord
 import dev.fajar.starter.documents.data.replica.dto.*
 import dev.fajar.starter.documents.data.replica.mappers.*
 import dev.fajar.starter.documents.domain.entities.DocumentAccess
-import dev.fajar.starter.documents.domain.entities.DocumentEvidencePage
 import dev.fajar.starter.documents.domain.policies.DOCUMENT_PAGE_SIZE
 import dev.fajar.starter.documents.domain.replica.entities.*
 import dev.fajar.starter.securestorage.ContentCipher
@@ -166,16 +165,17 @@ suspend fun decodeDocumentCatalogPage(
                     record.classification == selection.classification
             )
             require(checkpoint.employments.any { it.id == record.employmentId })
+            require(record.metadataSupported == checkpoint.metadataSupported)
             selection.after?.let { require(record.id > it) }
-            record.evidence
+            record
         }
     val visible = items.take(DOCUMENT_PAGE_SIZE)
     return DocumentCatalogSnapshot(
         checkpoint,
         selection,
-        DocumentEvidencePage(
+        DocumentCatalogPage(
             visible.toList(),
-            if (items.size > DOCUMENT_PAGE_SIZE) visible.last().documentId else null,
+            if (items.size > DOCUMENT_PAGE_SIZE) visible.last().id else null,
         ),
     )
 }

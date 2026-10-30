@@ -36,6 +36,7 @@ fun initialDocumentCatalogCheckpoint(
     generation: String,
     now: Instant,
     employments: List<DocumentEmployment>,
+    metadataSupported: Boolean = false,
 ) =
     DocumentCatalogCheckpoint(
         access,
@@ -48,6 +49,7 @@ fun initialDocumentCatalogCheckpoint(
         now + DOCUMENT_CATALOG_REFRESH_PERIOD,
         null,
         employments.toList(),
+        metadataSupported = metadataSupported,
     )
 
 internal fun advanceDocumentCatalogCheckpoint(

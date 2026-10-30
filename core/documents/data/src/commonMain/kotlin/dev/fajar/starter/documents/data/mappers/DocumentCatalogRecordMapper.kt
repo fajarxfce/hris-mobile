@@ -11,12 +11,23 @@ fun DocumentCatalogRecordDto.toCatalogRecord(expectedId: String): DocumentCatalo
     require(Uuid.parse(id).toString() == id && id == expectedId)
     require(Uuid.parse(employmentId).toString() == employmentId)
     require(version in 0..9_007_199_254_740_991L && evidence.documentId == id)
+    if (metadataSupported) {
+        require(
+            metadata != null &&
+                metadataVersion != null &&
+                metadataVersion in 0..999 &&
+                metadataVersion <= version
+        )
+    } else require(metadata == null && metadataVersion == null)
     return DocumentCatalogRecord(
         id,
         version,
         employmentId,
         DocumentClassification.valueOf(classification),
         evidence.toEvidence(),
+        metadata?.toBusinessMetadata(),
+        metadataVersion,
+        metadataSupported,
     )
 }
 
@@ -37,4 +48,7 @@ fun DocumentCatalogRecord.toCatalogDto() =
             evidence.sha256,
             evidence.validatedAt.toString(),
         ),
+        metadata?.toBusinessMetadataDto(),
+        metadataVersion,
+        metadataSupported,
     )

@@ -103,6 +103,7 @@ class SyncDocumentCatalog(
             if (
                 retained != null &&
                     retained.published &&
+                    retained.recordSchema == DocumentCatalogCheckpoint.CURRENT_RECORD_SCHEMA &&
                     sameDocumentScope(retained.access, access) &&
                     clock.now() < retained.refreshAfter
             )
@@ -126,9 +127,16 @@ class SyncDocumentCatalog(
         if (availability is AppResult.Failed) return reject(access, availability)
         val directory = acquireEmployments(workspaceId, access, policy)
         if (directory is AppResult.Failed) return reject(access, directory)
-        val employments = (directory as AppResult.Success).value
+        val selectedDirectory = (directory as AppResult.Success).value
         val synchronized =
-            synchronizePages(workspaceId, access, policy, readAdmission.denial != null, employments)
+            synchronizePages(
+                workspaceId,
+                access,
+                policy,
+                readAdmission.denial != null,
+                selectedDirectory.employments,
+                selectedDirectory.metadataSupported,
+            )
         currentCoroutineContext().ensureActive()
         val finalOwner = validateDocumentContinuation(access, currentAccess(workspaceId))
         if (finalOwner is AppResult.Failed) return finalOwner
@@ -152,9 +160,10 @@ class SyncDocumentCatalog(
         workspaceId: String,
         access: DocumentAccess,
         policy: CompanyPolicySnapshot,
-    ): AppResult<List<DocumentEmployment>> {
+    ): AppResult<DocumentCatalogDirectory> {
         val rows = mutableListOf<DocumentEmployment>()
         var after: String? = null
+        var supported: Boolean? = null
         val cursors = mutableSetOf<String>()
         repeat(11) {
             val acquired = remote.employments(access, after)
@@ -169,8 +178,9 @@ class SyncDocumentCatalog(
                     is AppResult.Failed -> return acquired
                     is AppResult.Success -> acquired.value
                 }
-            if (page.items.size > 20)
+            if (page.items.size > 20 || (supported != null && supported != page.metadataSupported))
                 return documentFailure("client.invalid_response", FailureKind.Unexpected)
+            supported = page.metadataSupported
             rows += page.items
             if (rows.size > 200) return documentFailure("sync_scope_limit")
             if (
@@ -178,7 +188,11 @@ class SyncDocumentCatalog(
                     rows.distinctBy { it.employeeNumber }.size != rows.size
             )
                 return documentFailure("client.invalid_response", FailureKind.Unexpected)
-            val cursor = page.nextCursor ?: return AppResult.Success(rows.toList())
+            val cursor =
+                page.nextCursor
+                    ?: return AppResult.Success(
+                        DocumentCatalogDirectory(rows.toList(), page.metadataSupported)
+                    )
             if (page.items.isEmpty() || !cursors.add(cursor))
                 return documentFailure("client.invalid_response", FailureKind.Unexpected)
             after = cursor
@@ -192,6 +206,7 @@ class SyncDocumentCatalog(
         access: DocumentAccess,
         replacePublished: Boolean,
         employments: List<DocumentEmployment>,
+        metadataSupported: Boolean,
     ): AppResult<DocumentCatalogCheckpoint?> {
         var checkpoint =
             when (val result = cache.checkpoint(access)) {
@@ -209,9 +224,11 @@ class SyncDocumentCatalog(
         } else if (
             checkpoint != null &&
                 ((replacePublished && checkpoint.published) ||
-                    !sameDocumentScope(checkpoint.access, access))
+                    !sameDocumentScope(checkpoint.access, access) ||
+                    checkpoint.recordSchema < DocumentCatalogCheckpoint.CURRENT_RECORD_SCHEMA ||
+                    checkpoint.metadataSupported != metadataSupported)
         ) {
-            // Reauthentication or an earlier denial rebuilds its published projection.
+            // Session, format or server capability changes rebuild the owned projection.
             // An incomplete replacement keeps its cursor across bounded runs.
             val replacement =
                 initialDocumentCatalogCheckpoint(
@@ -219,6 +236,7 @@ class SyncDocumentCatalog(
                     Uuid.random().toString(),
                     clock.now(),
                     employments,
+                    metadataSupported,
                 )
             when (val started = cache.begin(replacement, checkpoint.generation)) {
                 is AppResult.Failed -> return started
@@ -236,10 +254,18 @@ class SyncDocumentCatalog(
         policy: CompanyPolicySnapshot,
         replacePublished: Boolean,
         employments: List<DocumentEmployment>,
+        metadataSupported: Boolean,
     ): AppResult<DocumentCatalogSyncOutcome> {
         var checkpoint =
             when (
-                val result = prepareCheckpoint(workspaceId, access, replacePublished, employments)
+                val result =
+                    prepareCheckpoint(
+                        workspaceId,
+                        access,
+                        replacePublished,
+                        employments,
+                        metadataSupported,
+                    )
             ) {
                 is AppResult.Failed -> return result
                 is AppResult.Success -> result.value
@@ -255,6 +281,7 @@ class SyncDocumentCatalog(
                         Uuid.random().toString(),
                         clock.now(),
                         employments,
+                        metadataSupported,
                     )
                 when (val started = cache.begin(initial, null)) {
                     is AppResult.Failed -> return started
@@ -284,6 +311,7 @@ class SyncDocumentCatalog(
                             Uuid.random().toString(),
                             clock.now(),
                             employments,
+                            metadataSupported,
                         )
                     when (val started = cache.begin(replacement, previous.generation)) {
                         is AppResult.Failed -> return started
@@ -297,7 +325,8 @@ class SyncDocumentCatalog(
                 return incoming
             }
             val page = (incoming as AppResult.Success).value
-            val hydrated = hydrate(workspaceId, access, policy, page.changes, employments)
+            val hydrated =
+                hydrate(workspaceId, access, policy, page.changes, employments, metadataSupported)
             currentCoroutineContext().ensureActive()
             val hydrationOwnership =
                 validateDocumentContinuation(access, currentAccess(workspaceId))
@@ -406,6 +435,7 @@ class SyncDocumentCatalog(
         policy: CompanyPolicySnapshot,
         changes: List<SyncChange>,
         employments: List<DocumentEmployment>,
+        metadataSupported: Boolean,
     ): AppResult<List<DocumentCatalogEntry>> {
         if (
             changes.size > 50 ||
@@ -461,6 +491,7 @@ class SyncDocumentCatalog(
                                             val value = loaded.value
                                             if (
                                                 value.id != change.reference.id ||
+                                                    value.metadataSupported != metadataSupported ||
                                                     employments.none {
                                                         it.id == value.employmentId
                                                     } ||

@@ -5,6 +5,7 @@ package dev.fajar.starter.documents.domain
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.documents.domain.entities.*
 import dev.fajar.starter.documents.domain.policies.DOCUMENT_DOWNLOAD_CHUNK_BYTES
+import dev.fajar.starter.documents.domain.replica.entities.DocumentCatalogPage
 import kotlin.test.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.test.*
@@ -47,7 +48,7 @@ class DocumentDownloadTest {
                         )
                 ),
                 f.catalog.copy(selection = f.catalog.selection.copy(employmentId = null)),
-                f.catalog.copy(page = DocumentEvidencePage(emptyList())),
+                f.catalog.copy(page = DocumentCatalogPage(emptyList())),
             )
         for (catalog in invalid) assertIs<AppResult.Failed>(
             f.prepare(f.base.workspace.id, catalog, f.evidence.revisionId)

@@ -202,10 +202,7 @@ class CatalogSyncFixture {
                     DocumentCatalogSnapshot(
                         stored.checkpoint,
                         selection,
-                        DocumentEvidencePage(
-                            page.map { it.evidence },
-                            if (rows.size > 20) page.last().id else null,
-                        ),
+                        DocumentCatalogPage(page, if (rows.size > 20) page.last().id else null),
                     )
                 )
             }

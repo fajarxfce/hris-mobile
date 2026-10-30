@@ -134,7 +134,8 @@ fun DocumentCatalogPage(
                 item(key = "empty") {
                     AppText(appString(AppString.DocumentNoPublished), color = AppColors.muted)
                 }
-            items(state.catalog.page.items, key = { it.revisionId }) { document ->
+            items(state.catalog.page.items, key = { it.id }) { record ->
+                val document = record.evidence
                 AppCard(padding = 0.dp) {
                     AppListRow(
                         document.title,

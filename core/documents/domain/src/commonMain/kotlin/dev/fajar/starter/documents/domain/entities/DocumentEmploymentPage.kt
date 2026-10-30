@@ -5,4 +5,5 @@ data class DocumentEmploymentPage(
     val asOf: String,
     val timezone: String,
     val nextCursor: String?,
+    val metadataSupported: Boolean = false,
 )

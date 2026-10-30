@@ -34,7 +34,7 @@ suspend fun checkCatalogPendingDenialSurvivesReauthentication(f: DocumentCatalog
     val admission =
         assertIs<AppResult.Success<DocumentCatalogReadAdmission>>(repository.admission(next)).value
     assertEquals("mfa_required", admission.denial!!.code)
-    assertEquals(listOf(f.record.evidence), f.snapshot(next).page.items)
+    assertEquals(listOf(f.record), f.snapshot(next).page.items)
     assertEquals(AppResult.Success(true), f.repository.admit(next, admission.revision))
     assertNull(
         assertIs<AppResult.Success<DocumentCatalogReadAdmission>>(repository.admission(next))
@@ -110,7 +110,7 @@ suspend fun checkCatalogReadDenialRemainsVisibleWhenStorageFails(f: DocumentCata
     assertEquals("mfa_required", saved.denial!!.code)
     assertIs<AppResult.Failed>(repository.admit(f.access, saved.revision))
     assertEquals(saved, (repository.admission(f.access) as AppResult.Success).value)
-    assertEquals(listOf(f.record.evidence), f.snapshot().page.items)
+    assertEquals(listOf(f.record), f.snapshot().page.items)
     unavailable = false
     assertEquals(AppResult.Success(false), repository.admit(f.access, null))
     assertEquals(AppResult.Success(true), repository.admit(f.access, saved.revision))

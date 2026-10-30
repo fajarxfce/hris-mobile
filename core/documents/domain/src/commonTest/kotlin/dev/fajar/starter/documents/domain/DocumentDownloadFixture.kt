@@ -42,7 +42,17 @@ internal class DocumentDownloadFixture {
                     refreshedAt = base.now,
                 ),
             DocumentCatalogSelection(base.query.employmentId, base.query.classification),
-            DocumentEvidencePage(listOf(evidence)),
+            DocumentCatalogPage(
+                listOf(
+                    DocumentCatalogRecord(
+                        evidence.documentId,
+                        0,
+                        base.query.employmentId,
+                        base.query.classification,
+                        evidence,
+                    )
+                )
+            ),
         )
     val rows = MutableStateFlow<List<LocalDocumentFile>>(emptyList())
     val buffers = mutableListOf<ByteArray>()

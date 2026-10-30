@@ -9,4 +9,7 @@ data class DocumentCatalogRecordDto(
     val employmentId: String,
     val classification: String,
     val evidence: DocumentEvidenceDto,
+    val metadata: DocumentBusinessMetadataDto? = null,
+    val metadataVersion: Long? = null,
+    val metadataSupported: Boolean = false,
 )

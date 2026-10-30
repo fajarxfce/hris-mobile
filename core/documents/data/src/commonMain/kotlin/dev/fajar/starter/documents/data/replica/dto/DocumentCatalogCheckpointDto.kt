@@ -17,4 +17,6 @@ data class DocumentCatalogCheckpointDto(
     val pollAt: String?,
     val employments: List<DocumentEmploymentDto>,
     val schema: Int = 1,
+    val recordSchema: Int = 1,
+    val metadataSupported: Boolean = false,
 )
