@@ -89,8 +89,11 @@ Dashboard integration also passed: the original run finished with nine successfu
 jobs and one recovery failure. Platform `292a30f1` fixes the verifier; 42 Python tests
 and actual schema-103 restore passed (57.356s), including metadata/history/RLS and
 restored constraint behavior. [Replacement CI 41043798660](https://github.com/fajarxfce/hris-platform/actions/runs/41043798660)
-is queued for exact `292a30f14498b2eee97a9255f22fe645639658e5`. Observe its terminal result
-without a cancelling same-branch dispatch.
+passed all ten jobs for exact `292a30f14498b2eee97a9255f22fe645639658e5`, including
+normal/worker browser integration, private exports and schema-103 recovery. Platform Git
+retains every terminal job/step and the downloaded recovery summary: 104 objects,
+2,098,795 bytes, restored metadata/history/RLS/constraints and completed cleanup.
+The original run remains recorded as a failure; no CI run is pending for this source.
 
 Mobile's [owned metadata projection](document-business-metadata.md) is locally
 validated. A real mapper-loss reproduction now passes. Root `:check` passes 1,869
