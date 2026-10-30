@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-Updated 29 October 2026 (UTC). The release-configuration audit and independently
+Updated 30 October 2026 (UTC). The release-configuration audit and independently
 verified Starter port are complete. This employee application was generated from
 Compose Fluent Starter and is the proving ground for reusable foundation changes.
 
@@ -8,13 +8,19 @@ Compose Fluent Starter and is the proving ground for reusable foundation changes
 
 On 30 October the user requested verification of every specified feature and a
 long run for unfinished work. Platform's [feature audit](https://github.com/fajarxfce/hris-platform/blob/feat/firebase-auth/docs/feature-audit-2026-10-30.md)
-now records a confirmed missing Communications email channel; existing SMTP only
-serves identity invitations/recovery. Platform is implementing its explicit
-announcement choice, immutable capture, bounded delivery and dashboard status.
-The earlier foundation/CI results below retain their narrower scope. Continue
-the full module and Mobile requirement audit afterward; do not infer completion
-from the prior module summary. No generic client port is currently due for this
-server/dashboard capability. Preserve the installed phone and private runtime.
+records the Communications email gap closed by Platform commit `8014d733`:
+explicit draft selection, immutable publication capture, bounded SMTP worker,
+private delivery observations and dashboard authoring/review. Local acceptance
+passed 132 API/OpenAPI, 104 worker and 16 communication module tests, 4,006
+dashboard tests, 15 Chromium scenarios, actual API/worker/SMTP/browser delivery
+and independent schema-102 recovery. Full branch CI is the next verification.
+
+Continue every module and Mobile requirement in that inventory; do not infer full
+completion from this increment or earlier CI. No client code/Starter port is due
+for this server/dashboard feature. The private API still uses schema 101, SMTP
+is off, and the installed phone/Google binding remain intact. The private dashboard
+now serves an isolated baseline asset directory; Platform's handoff records its
+service override so test builds cannot replace it accidentally.
 
 ## Distribution configuration — accepted
 
