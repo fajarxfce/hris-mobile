@@ -6,9 +6,28 @@ Compose Fluent Starter and is the proving ground for reusable foundation changes
 
 ## Active workspace goal — full feature completion audit
 
+Current metadata acceptance: exact source `d170810f` passed all four jobs in
+[CI 41077194465](https://github.com/fajarxfce/hris-mobile/actions/runs/41077194465).
+Downloaded reports verify 1,994 desktop, 1,676 browser, ten build-logic and 104
+Apple simulator cases, with zero failures/skips. The full Xcode app, three Android
+variants, app links and BOM passed. App source remains `3c6db4eb`; the intervening
+change only adjusts the bounded metadata test deadline and records native evidence.
+The normal private API APK is installed on `10.77.77.3:5555`; installed SHA-256 is
+`1a114fbc388c843b45749a8475296f506563493a38bccabd146323ceb87cf791`.
+Install-only took 5.777s; no UI was launched/driven. [Final evidence](measurements/document-metadata-final-ci-2026-10-30.json)
+retains every job/step, report hashes, failed predecessor and installed binary.
+Platform's current runtime is schema 103 with dashboard snapshot `1e0522c0`;
+older schema-101/phone-72341ef6 paragraphs below are historical. SMTP stays disabled.
+
+Platform Administration correction `3c8fb15a` is locally accepted and pushed;
+full CI `41081153648` is active. Reporting review reproduced seven final-policy
+MFA failures and the corrected focused run passes; broader verification continues.
+These are HRIS business changes. No new Starter implementation port is due.
+
+
 The full PRD review remains active. Platform's [audit](https://github.com/fajarxfce/hris-platform/blob/feat/firebase-auth/docs/feature-audit-2026-10-30.md)
-now retains thirty-four reviewed rows across Approvals, Communications, Identity, Expenses,
-Leave, four Document and four People rows; twenty-seven Platform rows and full Mobile review remain. Keep the original
+now retains thirty-six reviewed rows across Approvals, Communications, Identity, Expenses,
+Leave, Documents and People; twenty-five Platform rows and full Mobile review remain. Keep the original
 scope; accepted increments do not establish whole-product completion.
 
 - Platform `8014d733` adds optional announcement email, atomic publication capture,

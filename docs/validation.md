@@ -2697,3 +2697,18 @@ complete Xcode build and generated association checks. [Terminal evidence](measu
 records every job/step. Replacement full CI `41077194465` at `d170810f` is running.
 Platform's `b241d5e8` accepts four People rows; the overall inventory is now 34
 accepted/reviewed and 27 unverified, with metadata still awaiting complete Mobile CI.
+
+## Final metadata acceptance — 30 October 2026
+
+Exact source `d170810f03852f46a948f9f4d5dea9ca4104bdbd` passed all four jobs in
+[CI 41077194465](https://github.com/fajarxfce/hris-mobile/actions/runs/41077194465).
+Downloaded reports verify 1,994 desktop, 1,676 browser, ten build-logic and 104 Apple
+simulator tests without failures/skips. Full Xcode/Windows/web builds, three Android
+variants, app links and BOM passed. The former Linux timeout remains a failed
+predecessor; the replacement retains the 1,000-revision assertions.
+The separately accepted actual Android/API scenario covers offline restart, retained
+draft/command, original receipt recovery after a later admin edit, current history
+and unchanged binary evidence. The normal WireGuard APK from application `3c6db4eb`
+was installed with advance notice and `--install-only` in 5.777s; its installed hash
+was checked directly. [Final measurements](measurements/document-metadata-final-ci-2026-10-30.json)
+retain full scope and limits. Physical iPhone testing remains waived.

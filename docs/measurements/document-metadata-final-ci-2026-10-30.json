@@ -1,0 +1,1750 @@
+{
+  "date": "2026-10-30",
+  "status": "full CI accepted; private APK installed and binary verified",
+  "run": {
+    "conclusion": "success",
+    "headSha": "d170810f03852f46a948f9f4d5dea9ca4104bdbd",
+    "jobs": [
+      {
+        "completedAt": "2026-10-30T15:17:03Z",
+        "conclusion": "success",
+        "databaseId": 124136412358,
+        "name": "windows",
+        "startedAt": "2026-10-30T15:03:44Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-10-30T15:03:47Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-10-30T15:03:45Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-30T15:03:54Z",
+            "conclusion": "success",
+            "name": "Run actions/checkout@v4",
+            "number": 2,
+            "startedAt": "2026-10-30T15:03:47Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-30T15:03:54Z",
+            "conclusion": "success",
+            "name": "Run actions/setup-java@v4",
+            "number": 3,
+            "startedAt": "2026-10-30T15:03:54Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-30T15:03:59Z",
+            "conclusion": "success",
+            "name": "Run gradle/actions/setup-gradle@v4",
+            "number": 4,
+            "startedAt": "2026-10-30T15:03:54Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-30T15:16:58Z",
+            "conclusion": "success",
+            "name": "Run ./gradlew.bat :apps:shared:desktopJar",
+            "number": 5,
+            "startedAt": "2026-10-30T15:03:59Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-30T15:16:59Z",
+            "conclusion": "success",
+            "name": "Post Run gradle/actions/setup-gradle@v4",
+            "number": 8,
+            "startedAt": "2026-10-30T15:16:58Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-30T15:16:59Z",
+            "conclusion": "success",
+            "name": "Post Run actions/setup-java@v4",
+            "number": 9,
+            "startedAt": "2026-10-30T15:16:59Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-30T15:17:02Z",
+            "conclusion": "success",
+            "name": "Post Run actions/checkout@v4",
+            "number": 10,
+            "startedAt": "2026-10-30T15:16:59Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-30T15:17:02Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 11,
+            "startedAt": "2026-10-30T15:17:02Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/41077194465/job/124136412358"
+      },
+      {
+        "completedAt": "2026-10-30T15:19:56Z",
+        "conclusion": "success",
+        "databaseId": 124136412738,
+        "name": "web",
+        "startedAt": "2026-10-30T15:03:43Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-10-30T15:03:46Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-10-30T15:03:44Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-30T15:03:47Z",
+            "conclusion": "success",
+            "name": "Run actions/checkout@v4",
+            "number": 2,
+            "startedAt": "2026-10-30T15:03:46Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-30T15:03:48Z",
+            "conclusion": "success",
+            "name": "Run actions/setup-java@v4",
+            "number": 3,
+            "startedAt": "2026-10-30T15:03:47Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-30T15:03:50Z",
+            "conclusion": "success",
+            "name": "Run gradle/actions/setup-gradle@v4",
+            "number": 4,
+            "startedAt": "2026-10-30T15:03:48Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-30T15:03:53Z",
+            "conclusion": "success",
+            "name": "Run actions/setup-node@v4",
+            "number": 5,
+            "startedAt": "2026-10-30T15:03:50Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-30T15:19:51Z",
+            "conclusion": "success",
+            "name": "Run ./gradlew :apps:shared:wasmJsBrowserDistribution",
+            "number": 6,
+            "startedAt": "2026-10-30T15:03:53Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-30T15:19:53Z",
+            "conclusion": "success",
+            "name": "Run actions/upload-artifact@v4",
+            "number": 7,
+            "startedAt": "2026-10-30T15:19:51Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-30T15:19:53Z",
+            "conclusion": "success",
+            "name": "Post Run actions/setup-node@v4",
+            "number": 11,
+            "startedAt": "2026-10-30T15:19:53Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-30T15:19:54Z",
+            "conclusion": "success",
+            "name": "Post Run gradle/actions/setup-gradle@v4",
+            "number": 12,
+            "startedAt": "2026-10-30T15:19:53Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-30T15:19:54Z",
+            "conclusion": "success",
+            "name": "Post Run actions/setup-java@v4",
+            "number": 13,
+            "startedAt": "2026-10-30T15:19:54Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-30T15:19:54Z",
+            "conclusion": "success",
+            "name": "Post Run actions/checkout@v4",
+            "number": 14,
+            "startedAt": "2026-10-30T15:19:54Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-30T15:19:54Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 15,
+            "startedAt": "2026-10-30T15:19:54Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/41077194465/job/124136412738"
+      },
+      {
+        "completedAt": "2026-10-30T15:24:19Z",
+        "conclusion": "success",
+        "databaseId": 124136412789,
+        "name": "verify",
+        "startedAt": "2026-10-30T15:03:50Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-10-30T15:03:53Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-10-30T15:03:50Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-30T15:03:54Z",
+            "conclusion": "success",
+            "name": "Run actions/checkout@v4",
+            "number": 2,
+            "startedAt": "2026-10-30T15:03:53Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-30T15:03:54Z",
+            "conclusion": "success",
+            "name": "Run actions/setup-java@v4",
+            "number": 3,
+            "startedAt": "2026-10-30T15:03:54Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-30T15:03:57Z",
+            "conclusion": "success",
+            "name": "Run gradle/actions/setup-gradle@v4",
+            "number": 4,
+            "startedAt": "2026-10-30T15:03:54Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-30T15:03:57Z",
+            "conclusion": "success",
+            "name": "Run actions/setup-node@v4",
+            "number": 5,
+            "startedAt": "2026-10-30T15:03:57Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-30T15:03:57Z",
+            "conclusion": "success",
+            "name": "Run python3 -m unittest discover -s tool -p 'test_*.py'",
+            "number": 6,
+            "startedAt": "2026-10-30T15:03:57Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-30T15:23:42Z",
+            "conclusion": "success",
+            "name": "Run xvfb-run -a ./gradlew :check :core:presentation:wasmJsBrowserTest :core:datastore:wasmJsBrowserTest :core:database:wasmJsBrowserTest :core:fileio:wasmJsBrowserTest :core:sync:data:wasmJsBrowserTest :core:workspace:domain:wasmJsBrowserTest :core:workspace:data:wasmJsBrowserTest :features:inbox:domain:wasmJsBrowserTest :features:inbox:data:wasmJsBrowserTest :features:home:presentation:wasmJsBrowserTest :features:workforce:domain:wasmJsBrowserTest :features:workforce:data:wasmJsBrowserTest :features:workforce:presentation:wasmJsBrowserTest :features:leave:domain:wasmJsBrowserTest :features:leave:data:wasmJsBrowserTest :core:common:wasmJsBrowserTest :features:payroll:domain:wasmJsBrowserTest :features:payroll:data:wasmJsBrowserTest :features:payroll:presentation:wasmJsBrowserTest :features:expenses:domain:wasmJsBrowserTest :features:expenses:data:wasmJsBrowserTest :features:expenses:presentation:wasmJsBrowserTest :features:leave:presentation:wasmJsBrowserTest :core:location:data:wasmJsBrowserTest :features:people:domain:wasmJsBrowserTest :features:people:data:wasmJsBrowserTest :features:people:presentation:wasmJsBrowserTest :core:documents:domain:wasmJsBrowserTest :core:documents:data:wasmJsBrowserTest :core:transfers:domain:wasmJsBrowserTest :core:transfers:data:wasmJsBrowserTest :features:files:presentation:wasmJsBrowserTest :core:worker:wasmJsBrowserTest :core:featureflags:domain:wasmJsBrowserTest :core:featureflags:data:wasmJsBrowserTest :core:identity:domain:wasmJsBrowserTest :core:identity:data:wasmJsBrowserTest :core:network:wasmJsBrowserTest :core:storage:wasmJsBrowserTest :core:securestorage:wasmJsBrowserTest :core:notifications:data:wasmJsBrowserTest :features:notifications:presentation:wasmJsBrowserTest :core:settings:data:wasmJsBrowserTest :core:localization:wasmJsBrowserTest :core:observability:wasmJsBrowserTest :core:security:domain:wasmJsBrowserTest :core:security:data:wasmJsBrowserTest :features:security:presentation:wasmJsBrowserTest :core:availability:domain:wasmJsBrowserTest :core:availability:data:wasmJsBrowserTest :apps:shared:wasmJsBrowserTest :apps:android:assembleDevDebug :apps:android:assembleStagingDebug :apps:android:assembleProdRelease :apps:android:cyclonedxDirectBom -PsbomConfiguration=prodReleaseRuntimeClasspath",
+            "number": 7,
+            "startedAt": "2026-10-30T15:03:57Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-30T15:24:05Z",
+            "conclusion": "success",
+            "name": "Verify configured Android app-link manifests and domain files",
+            "number": 8,
+            "startedAt": "2026-10-30T15:23:42Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-30T15:24:15Z",
+            "conclusion": "success",
+            "name": "Run actions/upload-artifact@v4",
+            "number": 9,
+            "startedAt": "2026-10-30T15:24:05Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-30T15:24:16Z",
+            "conclusion": "success",
+            "name": "Post Run actions/setup-node@v4",
+            "number": 15,
+            "startedAt": "2026-10-30T15:24:15Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-30T15:24:16Z",
+            "conclusion": "success",
+            "name": "Post Run gradle/actions/setup-gradle@v4",
+            "number": 16,
+            "startedAt": "2026-10-30T15:24:16Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-30T15:24:16Z",
+            "conclusion": "success",
+            "name": "Post Run actions/setup-java@v4",
+            "number": 17,
+            "startedAt": "2026-10-30T15:24:16Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-30T15:24:16Z",
+            "conclusion": "success",
+            "name": "Post Run actions/checkout@v4",
+            "number": 18,
+            "startedAt": "2026-10-30T15:24:16Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-30T15:24:16Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 19,
+            "startedAt": "2026-10-30T15:24:16Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/41077194465/job/124136412789"
+      },
+      {
+        "completedAt": "2026-10-30T15:34:49Z",
+        "conclusion": "success",
+        "databaseId": 124136412790,
+        "name": "apple",
+        "startedAt": "2026-10-30T15:03:51Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-10-30T15:03:54Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-10-30T15:03:52Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-30T15:03:57Z",
+            "conclusion": "success",
+            "name": "Run actions/checkout@v4",
+            "number": 2,
+            "startedAt": "2026-10-30T15:03:54Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-30T15:03:57Z",
+            "conclusion": "success",
+            "name": "Select Xcode 26.3",
+            "number": 3,
+            "startedAt": "2026-10-30T15:03:57Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-30T15:03:57Z",
+            "conclusion": "success",
+            "name": "Run actions/setup-java@v4",
+            "number": 4,
+            "startedAt": "2026-10-30T15:03:57Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-30T15:04:40Z",
+            "conclusion": "success",
+            "name": "Run gradle/actions/setup-gradle@v4",
+            "number": 5,
+            "startedAt": "2026-10-30T15:03:57Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-30T15:04:41Z",
+            "conclusion": "success",
+            "name": "Verify distribution configuration and shell entry points",
+            "number": 6,
+            "startedAt": "2026-10-30T15:04:40Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-30T15:04:41Z",
+            "conclusion": "success",
+            "name": "Prepare public app-link test registrations",
+            "number": 7,
+            "startedAt": "2026-10-30T15:04:41Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-30T15:15:48Z",
+            "conclusion": "success",
+            "name": "Compile iOS simulator tests",
+            "number": 8,
+            "startedAt": "2026-10-30T15:04:41Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-30T15:17:06Z",
+            "conclusion": "success",
+            "name": "Run iOS simulator tests",
+            "number": 9,
+            "startedAt": "2026-10-30T15:15:48Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-30T15:34:35Z",
+            "conclusion": "success",
+            "name": "Build iOS simulator app",
+            "number": 10,
+            "startedAt": "2026-10-30T15:17:06Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-30T15:34:35Z",
+            "conclusion": "success",
+            "name": "Verify generated Apple associations",
+            "number": 11,
+            "startedAt": "2026-10-30T15:34:35Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-30T15:34:44Z",
+            "conclusion": "success",
+            "name": "Run actions/upload-artifact@v4",
+            "number": 12,
+            "startedAt": "2026-10-30T15:34:35Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-30T15:34:45Z",
+            "conclusion": "success",
+            "name": "Post Run gradle/actions/setup-gradle@v4",
+            "number": 22,
+            "startedAt": "2026-10-30T15:34:44Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-30T15:34:45Z",
+            "conclusion": "success",
+            "name": "Post Run actions/setup-java@v4",
+            "number": 23,
+            "startedAt": "2026-10-30T15:34:45Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-30T15:34:45Z",
+            "conclusion": "success",
+            "name": "Post Run actions/checkout@v4",
+            "number": 24,
+            "startedAt": "2026-10-30T15:34:45Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-30T15:34:47Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 25,
+            "startedAt": "2026-10-30T15:34:45Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/41077194465/job/124136412790"
+      }
+    ],
+    "status": "completed",
+    "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/41077194465"
+  },
+  "linux": {
+    "targets": {
+      "desktopTest": {
+        "suites": 61,
+        "tests": 1994,
+        "failures": 0,
+        "skipped": 0
+      },
+      "wasmJsBrowserTest": {
+        "suites": 51,
+        "tests": 1676,
+        "failures": 0,
+        "skipped": 0
+      },
+      "test": {
+        "suites": 1,
+        "tests": 10,
+        "failures": 0,
+        "skipped": 0
+      }
+    },
+    "reports": [
+      {
+        "path": "apps/demo/build/reports/tests/desktopTest/index.html",
+        "tests": "2",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "0.609s",
+        "sha256": "03d428e33e71888fe77d4df3dddfa58ced660582eeb1447ee8eddac32d00445c"
+      },
+      {
+        "path": "apps/shared/build/reports/tests/desktopTest/index.html",
+        "tests": "204",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "2m9.05s",
+        "sha256": "cc87f1ecbe35308591d9fce47df7ea9e6f1a3a1c1dc449c4bc542a3b3b810cb5"
+      },
+      {
+        "path": "apps/shared/build/reports/tests/wasmJsBrowserTest/index.html",
+        "tests": "20",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "2.912s",
+        "sha256": "d9d805ccd8b7e4e9f0e4ca307b75e7f19b33b71f30126086f40fbea6d833ebf1"
+      },
+      {
+        "path": "build-logic/build/reports/tests/test/index.html",
+        "tests": "10",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "1.981s",
+        "sha256": "9d9e88ed88b0946cdbc669aadf6432bc20814e4b0099eb51508b06696d1d3da5"
+      },
+      {
+        "path": "core/availability/data/build/reports/tests/desktopTest/index.html",
+        "tests": "2",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "0.688s",
+        "sha256": "c04d0f9c68c3061a202539c276401f6d8189f395681bddfb1fa18a2b9dce7aea"
+      },
+      {
+        "path": "core/availability/data/build/reports/tests/wasmJsBrowserTest/index.html",
+        "tests": "2",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "1.255s",
+        "sha256": "f83c2070553da2a376c2ac612119da620039893a7bf699b1157631b05aa49c5a"
+      },
+      {
+        "path": "core/availability/domain/build/reports/tests/desktopTest/index.html",
+        "tests": "5",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "0.871s",
+        "sha256": "1e54b85e431301db25d9282a06de1063c5464add3dc38e9409124c2364e16191"
+      },
+      {
+        "path": "core/availability/domain/build/reports/tests/wasmJsBrowserTest/index.html",
+        "tests": "5",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "1.246s",
+        "sha256": "fc2eb9590e5312c1f2caf5228a5752d7a4ce71e35c066c9646061979ab7ac392"
+      },
+      {
+        "path": "core/common/build/reports/tests/desktopTest/index.html",
+        "tests": "7",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "0.646s",
+        "sha256": "1bb546e9c57a38a76afde271ef20e797e9213bf2b012b4e35da570938ec6d9ed"
+      },
+      {
+        "path": "core/common/build/reports/tests/wasmJsBrowserTest/index.html",
+        "tests": "7",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "1.965s",
+        "sha256": "2e914fa2e1680734945d6de90e07f74d1634fb78cae71175f47894d7789da983"
+      },
+      {
+        "path": "core/database/build/reports/tests/desktopTest/index.html",
+        "tests": "27",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "2.267s",
+        "sha256": "d5f85a3b02eb9198a9893a10896e8ee9da33fee0cf4f19e7eef59a333d964474"
+      },
+      {
+        "path": "core/database/build/reports/tests/wasmJsBrowserTest/index.html",
+        "tests": "25",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "4.895s",
+        "sha256": "2e30b79b8e3a32b74c65cffc41d941d250eecb69a9ced79ced3b1fc4a2a87345"
+      },
+      {
+        "path": "core/datastore/build/reports/tests/desktopTest/index.html",
+        "tests": "3",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "0.662s",
+        "sha256": "3aa5d77c86edfbfe84fc1e671e64cc511539844322685d74f78ed644d11f3a4a"
+      },
+      {
+        "path": "core/datastore/build/reports/tests/wasmJsBrowserTest/index.html",
+        "tests": "4",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "1.569s",
+        "sha256": "da5284765832ae4615fe6b9736c6a299403581f44fac3612b6d7934ab0c7027b"
+      },
+      {
+        "path": "core/documents/data/build/reports/tests/desktopTest/index.html",
+        "tests": "75",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "4.071s",
+        "sha256": "2e26b270a59a253cd345b1e5f8323dd396891f5e1ed9cbae528466f60bc41897"
+      },
+      {
+        "path": "core/documents/data/build/reports/tests/wasmJsBrowserTest/index.html",
+        "tests": "75",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "5.611s",
+        "sha256": "cc2d322dd13bddac06619c1c587d53e9e341f407c18e526e84eb85f25ca0fdba"
+      },
+      {
+        "path": "core/documents/domain/build/reports/tests/desktopTest/index.html",
+        "tests": "155",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "1.710s",
+        "sha256": "e3e7d90f6f25bb0ce81d0f84be933f662d36a0cec5e9b5eae3d8e8cf695d9b90"
+      },
+      {
+        "path": "core/documents/domain/build/reports/tests/wasmJsBrowserTest/index.html",
+        "tests": "155",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "2.186s",
+        "sha256": "6aea219be70bd7d3ef718c1d355740b1cb18cc451c1e1df18d703a9aa3d74423"
+      },
+      {
+        "path": "core/featureflags/data/build/reports/tests/desktopTest/index.html",
+        "tests": "7",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "0.543s",
+        "sha256": "8ea82251ef0f45f605f6139a77d75c57117325978521149f87e5e27a0c84fa3f"
+      },
+      {
+        "path": "core/featureflags/data/build/reports/tests/wasmJsBrowserTest/index.html",
+        "tests": "8",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "1.738s",
+        "sha256": "798fbbfae6bb79dbae95dcc9b3cd8723bd2651bdab7c2957f0b0c62762cfd662"
+      },
+      {
+        "path": "core/featureflags/domain/build/reports/tests/desktopTest/index.html",
+        "tests": "7",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "0.548s",
+        "sha256": "4e99e3f880d21028016ae7a24948c5339033ab63e05f570e961b1a35c01d6d0d"
+      },
+      {
+        "path": "core/featureflags/domain/build/reports/tests/wasmJsBrowserTest/index.html",
+        "tests": "7",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "1.299s",
+        "sha256": "bf2bdf5ae24641579d47ac43ac65a0726b91f47e2a8f1895078be0c7de74b5e4"
+      },
+      {
+        "path": "core/fileio/build/reports/tests/desktopTest/index.html",
+        "tests": "19",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "0.749s",
+        "sha256": "58d99f66f30b7751a8569057d2ec951c95988fc793366ac2bd5538502f425739"
+      },
+      {
+        "path": "core/fileio/build/reports/tests/wasmJsBrowserTest/index.html",
+        "tests": "21",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "2.020s",
+        "sha256": "5001c4a84ea60aeedd3e6f41c3a16d068ded91ed9caa3761fcf6e85e333ab946"
+      },
+      {
+        "path": "core/identity/data/build/reports/tests/desktopTest/index.html",
+        "tests": "65",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "1.805s",
+        "sha256": "624eec8be36970510304126d2d3ee294060a2a544363c20da405279126805f15"
+      },
+      {
+        "path": "core/identity/data/build/reports/tests/wasmJsBrowserTest/index.html",
+        "tests": "63",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "1.963s",
+        "sha256": "0b7ddac3655169bc046edd62bebb715646f71503e2bf263564522cbdc80ff475"
+      },
+      {
+        "path": "core/identity/domain/build/reports/tests/desktopTest/index.html",
+        "tests": "64",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "0.954s",
+        "sha256": "98d4537a5b951628f0b9a7b1fbf07da801e019e098b5a3b3e4e17d786434a033"
+      },
+      {
+        "path": "core/identity/domain/build/reports/tests/wasmJsBrowserTest/index.html",
+        "tests": "64",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "1.872s",
+        "sha256": "b437e0d457c18e1d8b33a5a4b441b47917f7d73999af8079a6f1371545f4bb4f"
+      },
+      {
+        "path": "core/localization/build/reports/tests/desktopTest/index.html",
+        "tests": "5",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "3.193s",
+        "sha256": "8a12411ea84d3dd2ff446ca3195dc796421dba527cf8e6d4742e67046dcc31dc"
+      },
+      {
+        "path": "core/localization/build/reports/tests/wasmJsBrowserTest/index.html",
+        "tests": "4",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "7.003s",
+        "sha256": "ce7e9943c4f66584817621f43572c76ac128e2fc6808c911fd49063375777305"
+      },
+      {
+        "path": "core/location/data/build/reports/tests/desktopTest/index.html",
+        "tests": "3",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "0.712s",
+        "sha256": "afc9a5256126fa6439b66ccedf14b05e46dec0b96902924943eebcdb5513e6a9"
+      },
+      {
+        "path": "core/location/data/build/reports/tests/wasmJsBrowserTest/index.html",
+        "tests": "3",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "1.859s",
+        "sha256": "aebdfc0ba31863dc1e4bf35e7d5fd7ab6de859f8bfd1a94546f3ae940ff36c86"
+      },
+      {
+        "path": "core/network/build/reports/tests/desktopTest/index.html",
+        "tests": "34",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "1.604s",
+        "sha256": "71c0854c56de1992f590f7027b768676fee8f7fc1c716b4be55a04c554888034"
+      },
+      {
+        "path": "core/network/build/reports/tests/wasmJsBrowserTest/index.html",
+        "tests": "36",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "1.817s",
+        "sha256": "5dff411633cd419f0050405bd57214662772b36178da69b2f984b46af130694e"
+      },
+      {
+        "path": "core/notifications/data/build/reports/tests/desktopTest/index.html",
+        "tests": "8",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "0.708s",
+        "sha256": "7e42581137eee3e8d534458ddcf5d96a21f1268efbaa48da506e216b750a1bab"
+      },
+      {
+        "path": "core/notifications/data/build/reports/tests/wasmJsBrowserTest/index.html",
+        "tests": "8",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "1.339s",
+        "sha256": "b6b592f45b3ee91d1d142eb7fa9505331ea3c8732ef2e37d0b3260739ff59a87"
+      },
+      {
+        "path": "core/notifications/domain/build/reports/tests/desktopTest/index.html",
+        "tests": "8",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "0.817s",
+        "sha256": "4068ed26824a126a59c21722e65d957a6ac31226c8de45f5d626c1130682a334"
+      },
+      {
+        "path": "core/observability/build/reports/tests/desktopTest/index.html",
+        "tests": "5",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "0.409s",
+        "sha256": "fb06740ebcfd35e799dbc38b6a743eabab90dfaf9f06c145833de9c0b952a283"
+      },
+      {
+        "path": "core/observability/build/reports/tests/wasmJsBrowserTest/index.html",
+        "tests": "5",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "1.404s",
+        "sha256": "8e839aeca22284b5cf5ecbab09c9e31824dbcf4f147551beaef3f5f251c5bff3"
+      },
+      {
+        "path": "core/presentation/build/reports/tests/desktopTest/index.html",
+        "tests": "5",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "0.479s",
+        "sha256": "9beae8c782ad56e53cfaa8215623af2f4648f6cdb27b25ade91745508db9fd3e"
+      },
+      {
+        "path": "core/presentation/build/reports/tests/wasmJsBrowserTest/index.html",
+        "tests": "5",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "3.073s",
+        "sha256": "7ee9438f0024ac755eb831f1542228eb7392e7cbb72158797cf9f4cacc3ed3b5"
+      },
+      {
+        "path": "core/securestorage/build/reports/tests/desktopTest/index.html",
+        "tests": "11",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "0.775s",
+        "sha256": "faca000b89d8b1f072860c365b030619e18570cf1321e20f9ca8b50e4ad9ee4d"
+      },
+      {
+        "path": "core/securestorage/build/reports/tests/wasmJsBrowserTest/index.html",
+        "tests": "16",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "1.478s",
+        "sha256": "9ac7c5fa860d8d0fccedbad294da8fdeb00e96d54a480300681f62c45541c593"
+      },
+      {
+        "path": "core/security/data/build/reports/tests/desktopTest/index.html",
+        "tests": "4",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "0.668s",
+        "sha256": "4e2bcb13b19f6cf58236eebfa811922f409626dd8036c654b12affbe24dc148e"
+      },
+      {
+        "path": "core/security/data/build/reports/tests/wasmJsBrowserTest/index.html",
+        "tests": "4",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "1.482s",
+        "sha256": "34f3511705130875a4333a220bb88060febc3d47ff0c44f80005bbf0755335ff"
+      },
+      {
+        "path": "core/security/domain/build/reports/tests/desktopTest/index.html",
+        "tests": "6",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "0.625s",
+        "sha256": "30d1e8c918b7b36f0e80bd36583b22a4c9df50a37375c13f1133ef669039eb0d"
+      },
+      {
+        "path": "core/security/domain/build/reports/tests/wasmJsBrowserTest/index.html",
+        "tests": "6",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "1.401s",
+        "sha256": "c050ae876ab36566672ac370ca2cd53ae1fbfdfbec97d9669994740270bea821"
+      },
+      {
+        "path": "core/settings/data/build/reports/tests/desktopTest/index.html",
+        "tests": "1",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "0.712s",
+        "sha256": "7b379070a475eb09dfb8b3d9cd28bd11eb92c7fa55927ff6ed2f4f6b84d1d356"
+      },
+      {
+        "path": "core/settings/data/build/reports/tests/wasmJsBrowserTest/index.html",
+        "tests": "1",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "1.191s",
+        "sha256": "a0eb598c752472e378a0ffe3e190ec37c1cb65ab2c93ba708a71279a2735aa66"
+      },
+      {
+        "path": "core/storage/build/reports/tests/desktopTest/index.html",
+        "tests": "6",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "0.594s",
+        "sha256": "1b83ca03e68da404092144451c6b75fd98906bd6f279c78f11853aa059fcf0da"
+      },
+      {
+        "path": "core/storage/build/reports/tests/wasmJsBrowserTest/index.html",
+        "tests": "10",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "1.323s",
+        "sha256": "dbc89d2b9ac099d1eba463d9a470cc871e16eb4399eb02b95bd7ed750c47b819"
+      },
+      {
+        "path": "core/sync/data/build/reports/tests/desktopTest/index.html",
+        "tests": "8",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "0.889s",
+        "sha256": "bc4f90c5e7b87a64f89f24265afda928288ff1b3902188110a4149a250aa0375"
+      },
+      {
+        "path": "core/sync/data/build/reports/tests/wasmJsBrowserTest/index.html",
+        "tests": "8",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "2.359s",
+        "sha256": "ff09ce1d2ec2d77956b30b58ab728820fa739ff3eb59321773f7bb284cf71796"
+      },
+      {
+        "path": "core/transfers/data/build/reports/tests/desktopTest/index.html",
+        "tests": "5",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "0.916s",
+        "sha256": "64b96df6419711205f1edc490b53e16130ff468d0331c219481275f053f0f86f"
+      },
+      {
+        "path": "core/transfers/data/build/reports/tests/wasmJsBrowserTest/index.html",
+        "tests": "5",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "1.563s",
+        "sha256": "ce0e691052a426906ec4d4e43d51058879168e0eec58410989622130fbc85cc1"
+      },
+      {
+        "path": "core/transfers/domain/build/reports/tests/desktopTest/index.html",
+        "tests": "8",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "0.632s",
+        "sha256": "ef2823a11912010eb34d2aa0f1719ffe49f901e452b7b77b57c566425b9f467d"
+      },
+      {
+        "path": "core/transfers/domain/build/reports/tests/wasmJsBrowserTest/index.html",
+        "tests": "8",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "1.479s",
+        "sha256": "90ec502fc8246af7ba81c51253cfc1f3f6e0e28f4ed907e5ba94a75c9d578f05"
+      },
+      {
+        "path": "core/worker/build/reports/tests/desktopTest/index.html",
+        "tests": "5",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "0.588s",
+        "sha256": "fe0cbbd28967b1bc2d8eef8207732fc2573e406641e72e94787a53b0ac8c72fd"
+      },
+      {
+        "path": "core/worker/build/reports/tests/wasmJsBrowserTest/index.html",
+        "tests": "5",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "1.606s",
+        "sha256": "56dbf4b263f3d3258ff7265b5f3336e8b5e64a055a8d6c79d80618703d2640d1"
+      },
+      {
+        "path": "core/workspace/data/build/reports/tests/desktopTest/index.html",
+        "tests": "9",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "1.086s",
+        "sha256": "bf472f8e58c46f81e9b6857aac1b6906fb65cf399407bc5cbd4c570d99a0dba4"
+      },
+      {
+        "path": "core/workspace/data/build/reports/tests/wasmJsBrowserTest/index.html",
+        "tests": "3",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "2.087s",
+        "sha256": "e44e0637dfb8adac8493b6be3c1e896416b2bde3434fd370717287fa445efec5"
+      },
+      {
+        "path": "core/workspace/domain/build/reports/tests/desktopTest/index.html",
+        "tests": "28",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "0.842s",
+        "sha256": "44e48159b60f3c35593ec63475c798c6d1f0fe653b14409c117cfc0f9cc91113"
+      },
+      {
+        "path": "core/workspace/domain/build/reports/tests/wasmJsBrowserTest/index.html",
+        "tests": "28",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "1.994s",
+        "sha256": "f2cea6af5f2a9988d6348d84392032067af1006ca0204532a5e051d61c50f219"
+      },
+      {
+        "path": "features/auth/presentation/build/reports/tests/desktopTest/index.html",
+        "tests": "9",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "0.805s",
+        "sha256": "7bad2a8768ecd4327b59ca9bb0f4e00e25d6af53064ef75f4efeb4b27462c745"
+      },
+      {
+        "path": "features/dashboard/data/build/reports/tests/desktopTest/index.html",
+        "tests": "4",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "0.791s",
+        "sha256": "2a25cbe93bd8882fd2ce18aa6e693126cc46a6d33d2ea16b14310504597da6c7"
+      },
+      {
+        "path": "features/dashboard/domain/build/reports/tests/desktopTest/index.html",
+        "tests": "6",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "0.725s",
+        "sha256": "b073660db32e84bd4315b9dde0a7a64e630cd920fe3d85ae2138c54d5a88fbaa"
+      },
+      {
+        "path": "features/dashboard/presentation/build/reports/tests/desktopTest/index.html",
+        "tests": "1",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "0.582s",
+        "sha256": "3c039d5354f42772255927f0b6c283d22d5c61bcc546cc99a5937069c2cc2d29"
+      },
+      {
+        "path": "features/documents/presentation/build/reports/tests/desktopTest/index.html",
+        "tests": "11",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "0.493s",
+        "sha256": "5151a8ab1f32bfde122225a2c705f8e5b982dad0dee801719f007fa6d087db7a"
+      },
+      {
+        "path": "features/expenses/data/build/reports/tests/desktopTest/index.html",
+        "tests": "66",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "3.398s",
+        "sha256": "74188135d1d9cbfcb945393cfcb1c1a24030dd5a42b7940454d51eb6d0a3fb2e"
+      },
+      {
+        "path": "features/expenses/data/build/reports/tests/wasmJsBrowserTest/index.html",
+        "tests": "49",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "3.488s",
+        "sha256": "a59e098372e0273137dff26801f7cb9505da566d931ccbeab198cef532afcaab"
+      },
+      {
+        "path": "features/expenses/domain/build/reports/tests/desktopTest/index.html",
+        "tests": "88",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "1.315s",
+        "sha256": "cd1fb99eb414a2779d9fc842250a236d838735a58a2fdde961479aa2ed91af75"
+      },
+      {
+        "path": "features/expenses/domain/build/reports/tests/wasmJsBrowserTest/index.html",
+        "tests": "88",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "2.309s",
+        "sha256": "3d04427d29ebb5b27d8438110953a76e4c94716db4e103d977138faee6c0b214"
+      },
+      {
+        "path": "features/expenses/presentation/build/reports/tests/desktopTest/index.html",
+        "tests": "73",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "1.605s",
+        "sha256": "95a0c5fb43543733c7affcb9318997d648b596312b93866709a3b00941b5fc5c"
+      },
+      {
+        "path": "features/expenses/presentation/build/reports/tests/wasmJsBrowserTest/index.html",
+        "tests": "73",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "3.146s",
+        "sha256": "a7b58bea5511e8ef5b92fcdc529e7c4daea153cdfb8d88778e329a11c28ec9c2"
+      },
+      {
+        "path": "features/files/presentation/build/reports/tests/desktopTest/index.html",
+        "tests": "1",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "1.011s",
+        "sha256": "0b3f5b0c26b9b4907f5bb74b03bc0abffe840d2635e31d95fe49211582b34050"
+      },
+      {
+        "path": "features/files/presentation/build/reports/tests/wasmJsBrowserTest/index.html",
+        "tests": "1",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "2.634s",
+        "sha256": "c1011fb4ba065a5487c0f370d194067cb61e6de6590c5303dc886541d3d30182"
+      },
+      {
+        "path": "features/home/presentation/build/reports/tests/desktopTest/index.html",
+        "tests": "18",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "0.781s",
+        "sha256": "399d408e0e063a886694d7e96ac27102b4e98aaab73803e8748e60c022cef664"
+      },
+      {
+        "path": "features/home/presentation/build/reports/tests/wasmJsBrowserTest/index.html",
+        "tests": "18",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "2.452s",
+        "sha256": "303f562b09b1cf952cd91604b9f3f0f82567c4e93d3213425408b0f259c49574"
+      },
+      {
+        "path": "features/inbox/data/build/reports/tests/desktopTest/index.html",
+        "tests": "27",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "1.523s",
+        "sha256": "e05b6e063711ac7f33dc6bb82d62043a1d7fc3d1f7a4eefbfbfbe4318d9bbdfc"
+      },
+      {
+        "path": "features/inbox/data/build/reports/tests/wasmJsBrowserTest/index.html",
+        "tests": "11",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "2.415s",
+        "sha256": "a8f4c2353259901b766d5de78db0e387772af5d5a87b8f4bc83df9a237fc2edf"
+      },
+      {
+        "path": "features/inbox/domain/build/reports/tests/desktopTest/index.html",
+        "tests": "77",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "1.059s",
+        "sha256": "08435bee18d91860ac2f5c110bcbc538ace6e0adc63790c3098f2116e5556695"
+      },
+      {
+        "path": "features/inbox/domain/build/reports/tests/wasmJsBrowserTest/index.html",
+        "tests": "77",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "1.802s",
+        "sha256": "8d21a29ddc820eff70277bfc073645962a0b1c75b51fe3acc7e827e91b7fb63e"
+      },
+      {
+        "path": "features/leave/data/build/reports/tests/desktopTest/index.html",
+        "tests": "76",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "2.619s",
+        "sha256": "b8738ed0fb2f890eb7f0a00a2eddec7053c27858e57f4e88801b2c571ca934d1"
+      },
+      {
+        "path": "features/leave/data/build/reports/tests/wasmJsBrowserTest/index.html",
+        "tests": "46",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "4.092s",
+        "sha256": "1f69e6d87ada9be55749dce25d6f1856fa288c50ac6dcb5960743340d0095135"
+      },
+      {
+        "path": "features/leave/domain/build/reports/tests/desktopTest/index.html",
+        "tests": "114",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "1.035s",
+        "sha256": "a144ea33d6cc58a154cd665bdc33581dd9daba287386e9a510ea8b29fb25fd74"
+      },
+      {
+        "path": "features/leave/domain/build/reports/tests/wasmJsBrowserTest/index.html",
+        "tests": "114",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "2.123s",
+        "sha256": "a1f7b415d19ea2ca825ea4bc165fad7f62978c46b8b6fe61de47d7586660347e"
+      },
+      {
+        "path": "features/leave/presentation/build/reports/tests/desktopTest/index.html",
+        "tests": "69",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "1.264s",
+        "sha256": "3481187c90997e778e65a122b22364f4846ffd1b2fb55bb72a08fa497f126ae6"
+      },
+      {
+        "path": "features/leave/presentation/build/reports/tests/wasmJsBrowserTest/index.html",
+        "tests": "69",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "3.747s",
+        "sha256": "0d6e02189a3c794146b6ca8f2fa455ec8861487f9a53c002c95a9738599527a5"
+      },
+      {
+        "path": "features/notifications/presentation/build/reports/tests/desktopTest/index.html",
+        "tests": "9",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "0.562s",
+        "sha256": "e6b8ae9bbc19d295d463d9ad572d7cbbb76bb9dd090193e6066eabd93df5933d"
+      },
+      {
+        "path": "features/notifications/presentation/build/reports/tests/wasmJsBrowserTest/index.html",
+        "tests": "9",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "2.208s",
+        "sha256": "6699894acc95ff3e8c245dc0f680db31b5d6a96207d3d3fcd8610ff80a58cc6b"
+      },
+      {
+        "path": "features/onboarding/data/build/reports/tests/desktopTest/index.html",
+        "tests": "1",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "0.418s",
+        "sha256": "6eba6900dbd2142d203c2561b9034ba7f82fd4db5390b24b2bf70fd0e5250530"
+      },
+      {
+        "path": "features/onboarding/presentation/build/reports/tests/desktopTest/index.html",
+        "tests": "1",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "0.456s",
+        "sha256": "e5bb3f8c9120b901561293505cd8a1469e436a1704926792d739053be4b9a223"
+      },
+      {
+        "path": "features/payroll/data/build/reports/tests/desktopTest/index.html",
+        "tests": "42",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "1.603s",
+        "sha256": "95dec974bc866993e64943a028fd5d270c75ca8d5fb3ced796a1ebf1441a0fd9"
+      },
+      {
+        "path": "features/payroll/data/build/reports/tests/wasmJsBrowserTest/index.html",
+        "tests": "36",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "2.792s",
+        "sha256": "67e2b3bad22ec4c1e033aa8ad0211ac5686c3dc5e535df115caa92a21e629aae"
+      },
+      {
+        "path": "features/payroll/domain/build/reports/tests/desktopTest/index.html",
+        "tests": "59",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "0.769s",
+        "sha256": "ad28aae6e43112959f7a517be1b683de4570be3ed0005a2a5188dd87af2e19be"
+      },
+      {
+        "path": "features/payroll/domain/build/reports/tests/wasmJsBrowserTest/index.html",
+        "tests": "59",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "2.143s",
+        "sha256": "0e6f4f921500252bad1fa1feb6fb851f99324aa0efcf30fa5edaaa08d00fa344"
+      },
+      {
+        "path": "features/payroll/presentation/build/reports/tests/desktopTest/index.html",
+        "tests": "25",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "0.852s",
+        "sha256": "f16c622729b323b38bf61e0ae3314d791b97a9218ad4c0ceea80b8f10e8a6dd8"
+      },
+      {
+        "path": "features/payroll/presentation/build/reports/tests/wasmJsBrowserTest/index.html",
+        "tests": "25",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "2.877s",
+        "sha256": "bb733ec46757c6920070373f1d8bbe7404e20f4cbbab766b8f22263976feabc4"
+      },
+      {
+        "path": "features/people/data/build/reports/tests/desktopTest/index.html",
+        "tests": "40",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "2.761s",
+        "sha256": "ba71670274497e36f2a5676ab5e4e82bf01aac6b79bdd14b805936c900f09fdc"
+      },
+      {
+        "path": "features/people/data/build/reports/tests/wasmJsBrowserTest/index.html",
+        "tests": "38",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "3.340s",
+        "sha256": "ff30a8c9ef7f83713ecdc8c886290dcbb6a903b978e4095cc5cb8da99c7c0c24"
+      },
+      {
+        "path": "features/people/domain/build/reports/tests/desktopTest/index.html",
+        "tests": "43",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "0.946s",
+        "sha256": "9442a1bb1a3c67f9537d246997310d7826ce4dbdc00c85335cf34a324a8e46d8"
+      },
+      {
+        "path": "features/people/domain/build/reports/tests/wasmJsBrowserTest/index.html",
+        "tests": "43",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "2.114s",
+        "sha256": "18142ff3bdfbe8de6c89b4c4b51befe804497ee73eb303c61c0db7daf94b9a08"
+      },
+      {
+        "path": "features/people/presentation/build/reports/tests/desktopTest/index.html",
+        "tests": "7",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "0.693s",
+        "sha256": "fca987f7df554a1d1263a276c5ec17cb2a9103268766ef5f859a124384ab65ba"
+      },
+      {
+        "path": "features/people/presentation/build/reports/tests/wasmJsBrowserTest/index.html",
+        "tests": "7",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "2.414s",
+        "sha256": "4bd81041c5a9c92445197ba01f689f596d1da706c23bf3b699228585581e31ed"
+      },
+      {
+        "path": "features/security/presentation/build/reports/tests/desktopTest/index.html",
+        "tests": "1",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "0.507s",
+        "sha256": "222a6333d0ccf5fd74a64f8cd9ef90e2fedb910b4774f64a205c3cd48d0e904d"
+      },
+      {
+        "path": "features/security/presentation/build/reports/tests/wasmJsBrowserTest/index.html",
+        "tests": "1",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "2.890s",
+        "sha256": "7da5a2e738ef474d7f51b967accec1cc2664b4fdec1281fe8bf1943111d9378b"
+      },
+      {
+        "path": "features/settings/presentation/build/reports/tests/desktopTest/index.html",
+        "tests": "1",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "0.544s",
+        "sha256": "57d803fcaa035a8420378fc25cf0dc0a26764330f2000e47e262fcbb494659e2"
+      },
+      {
+        "path": "features/workforce/data/build/reports/tests/desktopTest/index.html",
+        "tests": "78",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "3.244s",
+        "sha256": "88df66fdfdb89c532b47ffe003491a485988049301347e2cdb123d6b44274504"
+      },
+      {
+        "path": "features/workforce/data/build/reports/tests/wasmJsBrowserTest/index.html",
+        "tests": "55",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "3.741s",
+        "sha256": "9f3c3e4d20147209998bffab453865cba92f0a5891a7611781c47d9177373523"
+      },
+      {
+        "path": "features/workforce/domain/build/reports/tests/desktopTest/index.html",
+        "tests": "177",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "1.331s",
+        "sha256": "3e2fc32bb74a8ea3f5f869a7be8589b1cf89da78abb9fd1ef6417284582b7b51"
+      },
+      {
+        "path": "features/workforce/domain/build/reports/tests/wasmJsBrowserTest/index.html",
+        "tests": "177",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "2.576s",
+        "sha256": "28e4168ceef6acd372c992d7dae4e2124ebdaf663dd183bcbe156228e046c400"
+      },
+      {
+        "path": "features/workforce/presentation/build/reports/tests/desktopTest/index.html",
+        "tests": "69",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "1.499s",
+        "sha256": "8d211ad6e4fe0d6c9ac73c321e0442249cb52aac97e289ce47bfdb05ee80b45f"
+      },
+      {
+        "path": "features/workforce/presentation/build/reports/tests/wasmJsBrowserTest/index.html",
+        "tests": "69",
+        "failures": "0",
+        "skipped": "0",
+        "duration": "3.386s",
+        "sha256": "f91dbc85b975207d2eee09330e8cc32a0eb8f1ee98d65d5576db44a4aed22977"
+      }
+    ],
+    "apk_artifacts": [
+      {
+        "path": "apps/android/build/outputs/apk/staging/debug/android-staging-debug.apk",
+        "bytes": 31998458,
+        "sha256": "3bc78e3eb1c4b6022b8d0a606dc48624c04b7bd39cef2c35edcda10e6b1a0e47",
+        "distribution": "CI artifact only; not installed"
+      },
+      {
+        "path": "apps/android/build/outputs/apk/prod/release/android-prod-release-unsigned.apk",
+        "bytes": 24091259,
+        "sha256": "2b42a7b19466d8f300ef7666b4d733973e74a5addde8812983b759deab88827e",
+        "distribution": "CI artifact only; not installed"
+      },
+      {
+        "path": "apps/android/build/outputs/apk/dev/debug/android-dev-debug.apk",
+        "bytes": 31999019,
+        "sha256": "ad609864ed08b22ec0f6a2e3fbdcdf769907d94f8efa4151a22e5866f90a3667",
+        "distribution": "CI artifact only; not installed"
+      }
+    ]
+  },
+  "apple": {
+    "suites": [
+      {
+        "file": "ios-simulator-reports/core/common/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.common.config.AppLinkPathTest.xml",
+        "sha256": "ab1f18506136bd5ed135a8a1f521006f79dcc16d8fc71200beae7285fbe9d988",
+        "name": "iosSimulatorArm64Test.dev.fajar.starter.common.config.AppLinkPathTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "ios-simulator-reports/core/common/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.common.decimal.DecimalAmountTest.xml",
+        "sha256": "cfb1924289557d5f1bcb220decd1bf5098ae707ab4e3e8cdd1c01ade4282014b",
+        "name": "iosSimulatorArm64Test.dev.fajar.starter.common.decimal.DecimalAmountTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "ios-simulator-reports/core/fileio/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.fileio.AppleFileOutputTest.xml",
+        "sha256": "9abfe458bbb0239c44efee03af441f1a56c4dea9e1a9d6d985526c235bed793a",
+        "name": "iosSimulatorArm64Test.dev.fajar.starter.fileio.AppleFileOutputTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "ios-simulator-reports/core/fileio/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.fileio.FileHandleRegistryTest.xml",
+        "sha256": "a67ba160301fad077691146ccdeb61a1722649a33b97411eebc0e7452f587bdb",
+        "name": "iosSimulatorArm64Test.dev.fajar.starter.fileio.FileHandleRegistryTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "ios-simulator-reports/core/fileio/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.fileio.SafeFileCallTest.xml",
+        "sha256": "c3b10c4cd3fe1152960b671b3260ae885a9c813ab9197bfb635840ffe8882738",
+        "name": "iosSimulatorArm64Test.dev.fajar.starter.fileio.SafeFileCallTest",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "ios-simulator-reports/core/fileio/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.fileio.Sha256DigestTest.xml",
+        "sha256": "0885b48df1e4b49420b7f3e4420a287371fc1f16d8b371cc04b86f7a40283b89",
+        "name": "iosSimulatorArm64Test.dev.fajar.starter.fileio.Sha256DigestTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "ios-simulator-reports/core/identity/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.identity.data.AppleFirebaseClientOptionsTest.xml",
+        "sha256": "6781c6522211edaafe76f6d4bbf76b1a4fe9a135447af9e4356cb58fda34f568",
+        "name": "iosSimulatorArm64Test.dev.fajar.starter.identity.data.AppleFirebaseClientOptionsTest",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "ios-simulator-reports/core/identity/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.identity.data.AppleGoogleCredentialTest.xml",
+        "sha256": "c51e1bab3d80b9ade4fc74bddd60b33c0fab26d354f6e2a149737e54ab2c6a4f",
+        "name": "iosSimulatorArm64Test.dev.fajar.starter.identity.data.AppleGoogleCredentialTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "ios-simulator-reports/core/identity/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.identity.data.DeviceSessionTransportTest.xml",
+        "sha256": "b8ebf04482a7ccc73e7bfaf77e8938b42cd0ac568c4d1f2895f2232d507187b8",
+        "name": "iosSimulatorArm64Test.dev.fajar.starter.identity.data.DeviceSessionTransportTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "ios-simulator-reports/core/identity/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.identity.data.FirebaseProviderTransportTest.xml",
+        "sha256": "a4c1c82dadb4b25f0875c5e460903bbbcdfed636d43c68cb1c5704e8ae1b579e",
+        "name": "iosSimulatorArm64Test.dev.fajar.starter.identity.data.FirebaseProviderTransportTest",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "ios-simulator-reports/core/identity/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.identity.data.GoogleAuthorizationExchangeTest.xml",
+        "sha256": "364b3c42e1a49edd7ec23bd4b6d6f285831294b61ad1343267e65b887240e4d0",
+        "name": "iosSimulatorArm64Test.dev.fajar.starter.identity.data.GoogleAuthorizationExchangeTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "ios-simulator-reports/core/identity/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.identity.data.GoogleAuthorizationProtocolTest.xml",
+        "sha256": "4b6f094e36ed7c665937f1ffb089e81764f870157d92e96fc03305973339e9ec",
+        "name": "iosSimulatorArm64Test.dev.fajar.starter.identity.data.GoogleAuthorizationProtocolTest",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "ios-simulator-reports/core/identity/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.identity.data.GoogleCodeTransportTest.xml",
+        "sha256": "a1bcca0980fa07e2910b9513170c92cadc4d745012327f032ac91f97bb32bbaf",
+        "name": "iosSimulatorArm64Test.dev.fajar.starter.identity.data.GoogleCodeTransportTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "ios-simulator-reports/core/identity/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.identity.data.GoogleCredentialSessionTest.xml",
+        "sha256": "011dcf7c75789a99bcc953f2685e8c4eaec225abf0240f29a385a4020d621ab2",
+        "name": "iosSimulatorArm64Test.dev.fajar.starter.identity.data.GoogleCredentialSessionTest",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "ios-simulator-reports/core/identity/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.identity.data.IdentityRepositoryTest.xml",
+        "sha256": "b0646315fed8658df827ec746775b115ba76b7cee230131991ab0967ada796c1",
+        "name": "iosSimulatorArm64Test.dev.fajar.starter.identity.data.IdentityRepositoryTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "ios-simulator-reports/core/identity/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.identity.data.InstalledFirebaseAuthenticationTest.xml",
+        "sha256": "79cb7526d987942f5516110b9471a813144f0efb0756637d6f4b1f0ed70aa272",
+        "name": "iosSimulatorArm64Test.dev.fajar.starter.identity.data.InstalledFirebaseAuthenticationTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "ios-simulator-reports/core/identity/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.identity.data.NativeFirebaseTransportTest.xml",
+        "sha256": "3781e1d38e53935016b12365f6f8c0d75bb7034879a2212018e42d597e01e9aa",
+        "name": "iosSimulatorArm64Test.dev.fajar.starter.identity.data.NativeFirebaseTransportTest",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "ios-simulator-reports/core/identity/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.identity.data.NativePushStateTest.xml",
+        "sha256": "b8fe7498ef3d46512cea3a2f6b45d72918a6ed243c2e6ddc2ce0d63a701b23ed",
+        "name": "iosSimulatorArm64Test.dev.fajar.starter.identity.data.NativePushStateTest",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "ios-simulator-reports/core/identity/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.identity.data.NativePushTransportTest.xml",
+        "sha256": "c2b39f7a6fe785e43f23711873bc2f240c098d6d077e96ec99c139c534126078",
+        "name": "iosSimulatorArm64Test.dev.fajar.starter.identity.data.NativePushTransportTest",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "ios-simulator-reports/core/identity/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.identity.data.RefreshTransportTest.xml",
+        "sha256": "d32d69485bcdce676f3562dbba2fd839cd8cbd1f7b642c90822baca8c43b18ba",
+        "name": "iosSimulatorArm64Test.dev.fajar.starter.identity.data.RefreshTransportTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "ios-simulator-reports/core/identity/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.identity.data.StoredSessionRepositoryTest.xml",
+        "sha256": "c31bf66a7b0ff29fe5768e45b88ac7eb445db5a18917b9baf936b617c2a351de",
+        "name": "iosSimulatorArm64Test.dev.fajar.starter.identity.data.StoredSessionRepositoryTest",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "ios-simulator-reports/core/identity/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.identity.data.sso.BrowserSsoRepositoryTest.xml",
+        "sha256": "602c84bf0d7af71a4e5077833544e82ff3ef0d22d8cf54fe816af8743ab432d8",
+        "name": "iosSimulatorArm64Test.dev.fajar.starter.identity.data.sso.BrowserSsoRepositoryTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "ios-simulator-reports/core/location/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.location.data.AppleLocationDataSourceTest.xml",
+        "sha256": "89c825cdb8aadd4ab4e44cd34a7b2c6695a391a358ef9c5eee49d5e51b012cdc",
+        "name": "iosSimulatorArm64Test.dev.fajar.starter.location.data.AppleLocationDataSourceTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "ios-simulator-reports/core/location/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.location.data.DeviceLocationRepositoryTest.xml",
+        "sha256": "15464993d3ed3cb365ee391d0afc8eafcd451561fe3ef0aa1a43c6f6a18bda4f",
+        "name": "iosSimulatorArm64Test.dev.fajar.starter.location.data.DeviceLocationRepositoryTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "ios-simulator-reports/core/notifications/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.notifications.data.ApplePushTokenSourceTest.xml",
+        "sha256": "787eeb2073e18b2fc9f47e6ec561b2c4cad446f96b68052bd483d5f8efc5f615",
+        "name": "iosSimulatorArm64Test.dev.fajar.starter.notifications.data.ApplePushTokenSourceTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "ios-simulator-reports/core/notifications/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.notifications.data.NotificationDestinationTest.xml",
+        "sha256": "c09abb3165297ed31f32236dabcdd792248f9c16701bcb9697f1336d7feab2c2",
+        "name": "iosSimulatorArm64Test.dev.fajar.starter.notifications.data.NotificationDestinationTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "ios-simulator-reports/core/notifications/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.notifications.data.PushTokenLifecycleTest.xml",
+        "sha256": "be46d899b58e4d448ac6e61d70d1f7f9c8aa5e2021345f42fd5446754fe15dcd",
+        "name": "iosSimulatorArm64Test.dev.fajar.starter.notifications.data.PushTokenLifecycleTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      {
+        "file": "ios-simulator-reports/core/notifications/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.notifications.data.SafeNotificationCallTest.xml",
+        "sha256": "c2b22940f16f8a5e19f1987005fa9e68ca93685522a6c7aa231dbc91851d1893",
+        "name": "iosSimulatorArm64Test.dev.fajar.starter.notifications.data.SafeNotificationCallTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    ],
+    "totals": {
+      "tests": 104,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "artifacts": [
+    {
+      "id": 12989991739,
+      "name": "ios-simulator-reports",
+      "size_in_bytes": 147542,
+      "digest": "sha256:1480cd8d2d1f232dafb919deac9d9a69e6f383b1ef2560ae8236cffb0d8fce61",
+      "expired": false
+    },
+    {
+      "id": 12989321068,
+      "name": "web",
+      "size_in_bytes": 7319542,
+      "digest": "sha256:29c8c3d425a216a472bdbfeb0ba65d4021f4fae2d1735d21dbd0539140145a00",
+      "expired": false
+    },
+    {
+      "id": 12988932594,
+      "name": "reports-and-android",
+      "size_in_bytes": 85409662,
+      "digest": "sha256:0c2410ba01b80c42bcb741ffb7782ca967436532a36f40ddb2106fa3d54064fa",
+      "expired": false
+    }
+  ],
+  "application_source": "3c6db4eb72279b2abffbd4f869dfd78140a7ceb0",
+  "non_application_changes_to_ci_source": [
+    "core/documents/data/karma.config.d/metadata-storage-tests.js",
+    "docs/agent-handoff.md",
+    "docs/document-business-metadata.md",
+    "docs/measurements/document-metadata-native-2026-10-30.json",
+    "docs/validation.md"
+  ],
+  "phone": {
+    "command": [
+      "python3",
+      "tool/run_android.py",
+      "10.77.77.3:5555",
+      "--skip-build",
+      "--install-only",
+      "--install-timeout",
+      "600"
+    ],
+    "elapsed_seconds": 5.777,
+    "exit_code": 0,
+    "apk_sha256": "1a114fbc388c843b45749a8475296f506563493a38bccabd146323ceb87cf791",
+    "app_source": "3c6db4eb72279b2abffbd4f869dfd78140a7ceb0",
+    "accepted_ci_source": "d170810f03852f46a948f9f4d5dea9ca4104bdbd",
+    "ui_launched": false,
+    "ui_driven": false,
+    "installed_apk_sha256": "1a114fbc388c843b45749a8475296f506563493a38bccabd146323ceb87cf791",
+    "installed_binary_verified": true
+  },
+  "preflight": {
+    "apk": ".work/document-business-metadata/mobile-3c6db4eb-private-dev.apk",
+    "sha256": "1a114fbc388c843b45749a8475296f506563493a38bccabd146323ceb87cf791",
+    "bytes": 34211725,
+    "private_api_embedded": true,
+    "native_fixture_api_embedded": false,
+    "package": "package: name='dev.fajar.hris.mobile.dev' versionCode='1' versionName='1.0.0' platformBuildVersionName='16' platformBuildVersionCode='36' compileSdkVersion='36' compileSdkVersionCodename='16'",
+    "certificate_digests": [
+      "Signer #1 certificate SHA-256 digest: aca5ce6a26b978dee1d63c63103b6799848ab760d47ef4cf5ee68620fc8721f3",
+      "Signer #1 certificate SHA-1 digest: 23860b51e4305aa7900090aeab6783d39a12ff33"
+    ],
+    "status": "verified; installation and installed hash confirmed by phone record"
+  },
+  "predecessor": {
+    "run_id": 41071828262,
+    "conclusion": "failure",
+    "reason": "Linux metadata browser capacity case exceeded its former 2-second Mocha deadline; other three jobs passed",
+    "evidence": "document-metadata-first-ci-2026-10-30.json"
+  },
+  "limits": [
+    "Physical iPhone testing waived; selected 104 Apple simulator tests and full Xcode app build passed",
+    "Native metadata flow accepted separately against actual Android/API; CI success is not substituted for that evidence",
+    "Install-only is not a new Google login or FCM delivery test",
+    "Whole PRD audit remains active"
+  ]
+}
