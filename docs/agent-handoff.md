@@ -6,39 +6,35 @@ Compose Fluent Starter and is the proving ground for reusable foundation changes
 
 ## Active workspace goal — full feature completion audit
 
-On 30 October the user requested verification of every specified feature and a
-long run for unfinished work. Platform's [feature audit](https://github.com/fajarxfce/hris-platform/blob/feat/firebase-auth/docs/feature-audit-2026-10-30.md)
-records the Communications email gap closed by Platform commit `8014d733`:
-explicit draft selection, immutable publication capture, bounded SMTP worker,
-private delivery observations and dashboard authoring/review. Local acceptance
-passed 132 API/OpenAPI, 104 worker and 16 communication module tests, 4,006
-dashboard tests, 15 Chromium scenarios, actual API/worker/SMTP/browser delivery
-and independent schema-102 recovery. Full branch CI is the next verification.
+The full PRD review remains active. Platform's [audit](https://github.com/fajarxfce/hris-platform/blob/feat/firebase-auth/docs/feature-audit-2026-10-30.md)
+now covers fifteen initial rows across Approvals, Communications and Identity;
+46 initial Platform rows and the full Mobile review remain. Keep the original
+scope; accepted increments do not establish whole-product completion.
 
-Platform `bbb99b48` closes the second gap: [shared approval history](https://github.com/fajarxfce/hris-platform/blob/feat/firebase-auth/docs/approval-history.md).
-Local acceptance passed 118 API/OpenAPI, 104 worker and 11 approval domain cases,
-4,012 dashboard unit cases, 14 Chromium scenarios and two real API/browser workflows.
-It uses existing immutable tables, current request authorization and versioned
-reassignment pages. No Mobile implementation or Starter port is needed for this
-server/admin-dashboard capability. Platform `fcfdaf26` also corrects
-post-acquisition MFA/delegation expiry in older approval readers: ten baseline
-reproductions failed, then all 60 approval API and 13 domain cases, quality/packages
-and both real API/browser workflows passed. Its five initial Approvals requirements
-and all detailed sections are locally accepted; 56 initial requirements and Mobile
-review remain. Continue Communications and the rest of the full audit.
+- Platform `8014d733` adds optional announcement email, atomic publication capture,
+  bounded SMTP delivery and private observations. Local acceptance, schema-102
+  recovery and all ten [full-CI jobs](https://github.com/fajarxfce/hris-platform/actions/runs/41005223374) passed.
+- `bbb99b48` exposes immutable shared approval history. `fcfdaf26` corrects
+  read-completion MFA/delegation expiry; 60 approval API and 13 domain cases,
+  quality/packages and two actual API/browser workflows passed.
+- `737d39a7` corrects thirteen Communications read-expiry reproductions. All
+  106 selected API, 13 domain and three repository cases passed, plus the actual
+  API/worker/browser/SMTP workflow (37.1s; 1.0m with setup).
+- `a45d5a9b` records Identity's five initial rows and eight detailed sections.
+  Its source trees match accepted `8014d733`; downloaded reports verify 190 API,
+  35 domain, 22 data, 17 worker and 95 Chromium cases, including eight real workflows.
 
-Email source `8014d733` passed all ten jobs in
-[41005223374](https://github.com/fajarxfce/hris-platform/actions/runs/41005223374).
-[Full CI 41009137720](https://github.com/fajarxfce/hris-platform/actions/runs/41009137720)
-is queued for exact approval source `fcfdaf26a48718a80bc79468bdbdb3b4cbeae11c`.
-Do not cancel it through another same-branch dispatch before it completes.
+[Approval CI](https://github.com/fajarxfce/hris-platform/actions/runs/41009137720)
+is still running for exact source `fcfdaf26a48718a80bc79468bdbdb3b4cbeae11c`.
+Let it finish before dispatching Communications final-source CI; same-branch
+concurrency cancels earlier work. Continue Documents and the remaining module
+contracts, then Mobile and applicable Starter behavior.
 
-Continue every module and Mobile requirement in that inventory; do not infer full
-completion from this increment or earlier CI. No client code/Starter port is due
-for this server/dashboard feature. The private API still uses schema 101, SMTP
-is off, and the installed phone/Google binding remain intact. The private dashboard
-now serves an isolated baseline asset directory; Platform's handoff records its
-service override so test builds cannot replace it accidentally.
+No client implementation or generic port is due from these server/dashboard
+increments. The private API remains schema 101 with SMTP disabled; preserve the
+accepted Google binding and installed phone. The dashboard serves an isolated
+baseline directory documented in Platform's handoff, so local test builds cannot
+replace it. Physical iPhone testing stays explicitly waived.
 
 ## Distribution configuration — accepted
 
