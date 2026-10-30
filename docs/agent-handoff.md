@@ -85,9 +85,12 @@ backend/dashboard with 689 distinct accepted API cases, 104 ordinary worker case
 and five actual browser workflows. [CI 41038369597](https://github.com/fajarxfce/hris-platform/actions/runs/41038369597)
 tests exact `27e7f77e722da9e8ac2bde47836353ef92dcc3b3`: all eight shards passed,
 but recovery rejected schema 103 because the reviewed verifier still stopped at 102.
-Dashboard integration is still running. Platform now has an uncommitted verifier
-correction with 42 Python tests passed; actual schema-103 restore is running. Observe
-the original CI terminal result without a cancelling same-branch dispatch.
+Dashboard integration also passed: the original run finished with nine successful
+jobs and one recovery failure. Platform `292a30f1` fixes the verifier; 42 Python tests
+and actual schema-103 restore passed (57.356s), including metadata/history/RLS and
+restored constraint behavior. [Replacement CI 41043798660](https://github.com/fajarxfce/hris-platform/actions/runs/41043798660)
+is queued for exact `292a30f14498b2eee97a9255f22fe645639658e5`. Observe its terminal result
+without a cancelling same-branch dispatch.
 
 Mobile's [owned metadata projection](document-business-metadata.md) is locally
 validated. A real mapper-loss reproduction now passes. Root `:check` passes 1,869
@@ -99,7 +102,7 @@ advertises support. Old encrypted facts remain visible during staging; failed
 cleanup never removes a confirmed read denial. Finance/Leave DocumentEvidence
 stays separate from owned category, identity number and validity facts.
 
-Initial-upload metadata is now locally validated: the capability-aware form, typed
+Initial-upload metadata `41fe79f9` is committed/pushed and locally validated: the capability-aware form, typed
 confirmation, authenticated payload and encrypted intent retain category/identity/
 printed dates. Legacy omission and pending original operations remain unchanged.
 All 1,878 desktop tests, 131 Document Chromium cases, root quality checks and dev APK
