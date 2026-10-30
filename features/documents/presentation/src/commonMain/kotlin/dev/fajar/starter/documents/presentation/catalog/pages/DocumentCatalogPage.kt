@@ -131,10 +131,29 @@ fun DocumentCatalogPage(
                 }
         }
         if (state.catalog != null && state.selection.employmentId != null) {
-            if (state.catalog.page.items.isEmpty())
+            if (state.catalog.page.items.isEmpty() && state.catalog.restrictions.isEmpty())
                 item(key = "empty") {
                     AppText(appString(AppString.DocumentNoPublished), color = AppColors.muted)
                 }
+            items(state.catalog.restrictions, key = { "restricted-${it.documentId}" }) { restriction
+                ->
+                AppCard {
+                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        AppText(appString(AppString.DocumentReadRestricted))
+                        AppTextButton(
+                            appString(AppString.TryAgain),
+                            {
+                                onEvent(
+                                    DocumentCatalogEvent.DetailsRequested(restriction.documentId)
+                                )
+                            },
+                            modifier =
+                                Modifier.testTag("document-recover-${restriction.documentId}"),
+                            enabled = state.canChoose,
+                        )
+                    }
+                }
+            }
             items(state.catalog.page.items, key = { it.id }) { record ->
                 val document = record.evidence
                 AppCard(padding = 0.dp) {

@@ -1332,6 +1332,61 @@ class AppFlowTest {
     }
 
     @Test
+    fun metadataDenialAlsoRedactsTheCatalogAfterReturningFromDetails() {
+        val server =
+            NativeUiServer().apply {
+                documents.enabled = true
+                documents.metadataSupported = true
+                documents.metadata.enabled = true
+                documents.catalogVersion = documents.metadata.latest + 1
+            }
+        withApplication(server) {
+            signIn()
+            waitFor("Choose a company")
+            compose.onNode(hasText("PT Nusa Digital") and hasClickAction()).performClick()
+            waitFor("Welcome")
+            openDocumentDetails()
+            waitFor("PASSPORT-21")
+            compose.waitUntil { server.documents.metadata.active.get() == 0 }
+            server.documents.metadata.denial = "document_access_denied"
+            compose.onNodeWithContentDescription("Refresh").performClick()
+            waitForAction("Try again")
+            compose.onAllNodesWithText("PASSPORT-21").assertCountEquals(0)
+            compose.onNodeWithContentDescription("Back").performClick()
+            waitFor("Documents")
+            compose.onAllNodesWithText("Medical certificate").assertCountEquals(0)
+            compose
+                .onAllNodesWithTag("document-details-${NativeDocumentsUi.DOCUMENT}")
+                .assertCountEquals(0)
+            waitFor("This document needs an access check.")
+            capture("document-catalog-resource-denied")
+            server.documents.metadata.denial = null
+            server.documents.metadata.offline = true
+            compose.onNodeWithTag("document-recover-${NativeDocumentsUi.DOCUMENT}").performClick()
+            waitForAction("Try again")
+            compose.onAllNodesWithText("PASSPORT-21").assertCountEquals(0)
+            compose.onNodeWithContentDescription("Back").performClick()
+            waitFor("This document needs an access check.")
+            compose.onAllNodesWithText("Medical certificate").assertCountEquals(0)
+            val gate = CompletableDeferred<Unit>()
+            server.documents.metadata.offline = false
+            server.documents.metadata.gate = gate
+            compose.onNodeWithTag("document-recover-${NativeDocumentsUi.DOCUMENT}").performClick()
+            compose.waitUntil { server.documents.metadata.active.get() == 1 }
+            compose.onAllNodesWithText("PASSPORT-21").assertCountEquals(0)
+            gate.complete(Unit)
+            waitFor("PASSPORT-21")
+            compose.onNodeWithContentDescription("Back").performClick()
+            waitFor("Medical certificate")
+            compose
+                .onAllNodesWithTag("document-recover-${NativeDocumentsUi.DOCUMENT}")
+                .assertCountEquals(0)
+            capture("document-catalog-resource-restored")
+            assertEquals(0, server.documents.uploads.starts.get())
+        }
+    }
+
+    @Test
     fun documentFormValidatesConfirmationAndPublishesOnlyAfterTheServerCheck() {
         val server =
             NativeUiServer().apply {

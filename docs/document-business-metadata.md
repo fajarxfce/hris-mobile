@@ -10,7 +10,7 @@ also pass local validation. Immutable correction contracts and encrypted command
 storage are validated. Explicit intake, scoped observation, delivery and review also
 pass full local validation, together with encrypted mutable working-copy storage.
 Working-copy orchestration and matching-draft acknowledgement cleanup also pass full
-local validation. Catalog resource-denial propagation and the editor remain next. This is HRIS business behavior and has no Starter port.
+local validation. Catalog resource-denial propagation is also validated; the editor remains next. This is HRIS business behavior and has no Starter port.
 
 `DocumentBusinessMetadata` separates category, document number, issuing country,
 issue date and business-validity date from binary evidence. Dates are calendar
@@ -340,3 +340,22 @@ All ten new domain scenarios pass. Root checks, development APK and Document
 Chromium suites passed in 182.812s: 1,968 desktop and 218 browser cases, without
 failures/errors/skips. See [evidence](measurements/document-metadata-working-flow-2026-10-30.json).
 This increment does not yet expose an editor or establish device/API acceptance.
+
+## Catalog resource admission — locally validated
+
+Returning from denied metadata details previously exposed the cached document title
+and filename in the catalog. An assembled test reproduced that failure on `36ddd5ed`.
+The catalog now observes the resource gate for each of its at most twenty selected
+records. A denied or unreadable gate hides the complete record and exposes only a
+neutral recovery target. Other rows and the original page cursor stay available.
+A successful unrelated catalog sync does not clear resource denial; only admitted
+metadata acquisition reopens its row. Pending download preparation is cancelled
+when its record becomes inaccessible. Page/company changes release subscriptions.
+
+The same assembled workflow now passes denial, Back, offline and pending retries,
+and admitted recovery. Three domain controls cover independent rows, page bounds,
+failed admission storage and reader disposal; one state test covers download removal.
+Root checks, dev APK and Document browser suites passed in 183.001s: 1,973 desktop
+and 221 browser tests, no failures/errors/skips. Two narrow screenshots were inspected.
+[Evidence](measurements/document-metadata-catalog-admission-2026-10-30.json) separates
+the real reproduction from a new fixture's initially incomplete metadata.

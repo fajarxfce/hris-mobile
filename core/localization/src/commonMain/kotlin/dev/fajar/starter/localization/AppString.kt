@@ -728,6 +728,10 @@ enum class AppString(val english: StringResource, val indonesian: StringResource
     FileSaveFailed(Res.string.file_save_failed_en, Res.string.file_save_failed_id),
     FileAlreadyExists(Res.string.file_already_exists_en, Res.string.file_already_exists_id),
     DocumentDetails(Res.string.document_details_en, Res.string.document_details_id),
+    DocumentReadRestricted(
+        Res.string.document_read_restricted_en,
+        Res.string.document_read_restricted_id,
+    ),
     DocumentUploadTitle(Res.string.document_upload_title_en, Res.string.document_upload_title_id),
     DocumentUploadReason(
         Res.string.document_upload_reason_en,

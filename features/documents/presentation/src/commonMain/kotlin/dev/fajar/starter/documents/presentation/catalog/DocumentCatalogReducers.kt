@@ -28,7 +28,12 @@ fun DocumentCatalogState.withCatalog(
                         choosingEmployment ||
                             (employments == null && !directory.isNullOrEmpty() && chosen == null),
                     loading = changed,
-                    preparingId = if (changed) null else preparingId,
+                    preparingId =
+                        if (changed) null
+                        else
+                            preparingId?.takeIf { id ->
+                                snapshot.page.items.any { it.evidence.revisionId == id }
+                            },
                     restriction = null,
                 )
             }

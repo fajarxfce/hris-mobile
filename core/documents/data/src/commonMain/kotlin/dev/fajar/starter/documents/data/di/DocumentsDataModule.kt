@@ -265,10 +265,11 @@ class DocumentsDataModule {
     @Factory(binds = [ObserveDocumentCatalog::class, ObserveCompanyData::class])
     fun observeCatalog(
         cache: DocumentCatalogRepository,
+        resources: DocumentMetadataAdmissionRepository,
         sessions: SessionRepository,
         workspaces: WorkspaceRepository,
         build: AppBuild,
-    ) = ObserveDocumentCatalog(cache, sessions, workspaces, Clock.System, build)
+    ) = ObserveDocumentCatalog(cache, resources, sessions, workspaces, Clock.System, build)
 
     @Factory
     fun exportFile(

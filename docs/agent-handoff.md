@@ -201,8 +201,23 @@ passed in 182.812s: 1,968 desktop/218 browser cases, all zero failures/errors/sk
 [Working-copy orchestration evidence](measurements/document-metadata-working-flow-2026-10-30.json)
 retains exact cases, source and the uninstalled APK hash.
 
-Next: prove/correct catalog resource-denial propagation, then the editor and retained
-command/draft overview with durable original-command recovery. Apply the new resource gate
+Catalog resource admission is now locally validated. An actual assembled failure at
+`36ddd5ed` showed a denied document's title/file still visible after returning from
+details. The catalog now observes at most twenty resource gates, hides the denied
+record, preserves other rows and the original cursor, and retains a neutral recovery
+action. Unrelated catalog sync cannot clear this denial. Three domain, one state and
+one assembled workflow cover subscription disposal, failed admission storage,
+pending downloads and offline/pending/successful recovery. The first focused domain
+failure was incomplete metadata in the new fixture and is recorded separately.
+Focused checks passed 146 domain/four state/one UI case in 100.848s. Full root checks,
+dev APK and Document Chromium suites passed 183.001s: 1,973 desktop/221 browser,
+all zero failures/errors/skips. Two narrow screenshots were visually inspected.
+[Catalog admission evidence](measurements/document-metadata-catalog-admission-2026-10-30.json)
+retains the genuine reproduction, fixture correction, source and uninstalled APK hash.
+
+Next: the editor and retained command/draft overview with durable original-command
+recovery. Check that single-document command observation watches resource admission
+before subscribing to fallible command storage, like working-copy observation does. Apply the new resource gate
 alongside company/catalog admission, with finite remote work and final scope checks.
 Existing CommandStore retains correction intents. Keep current facts separate from
 original operation receipts. Preserve

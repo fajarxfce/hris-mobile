@@ -38,6 +38,7 @@ class CatalogSyncFixture {
                 as AppResult.Success)
             .value
     val store = Records()
+    val resources = CatalogResourceAdmission()
     val employment =
         DocumentEmployment(base.query.employmentId, "EMP-001", DocumentEmploymentStatus.ACTIVE, 0)
     val rows = (1..45).associate { catalogId(it) to record(it) }.toMutableMap()
@@ -127,6 +128,7 @@ class CatalogSyncFixture {
     val observe =
         ObserveDocumentCatalog(
             store,
+            resources,
             base.sessionRepository,
             base.workspaceRepository,
             base.clock,

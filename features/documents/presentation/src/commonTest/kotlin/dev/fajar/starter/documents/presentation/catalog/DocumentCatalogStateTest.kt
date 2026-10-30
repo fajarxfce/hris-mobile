@@ -9,6 +9,32 @@ import kotlin.time.Instant
 
 class DocumentCatalogStateTest {
     @Test
+    fun aResourceDenialClearsItsPendingDownloadAndKeepsUnrelatedControlsAvailable() {
+        val previous = populated().copy(preparingId = "revision")
+        val snapshot = previous.catalog!!
+        val hidden =
+            snapshot.copy(
+                page = snapshot.page.copy(items = emptyList()),
+                restrictions =
+                    listOf(
+                        DocumentCatalogRestriction(
+                            "document",
+                            Failure(
+                                FailureKind.AccessDenied,
+                                "Denied",
+                                code = "document_access_denied",
+                            ),
+                        )
+                    ),
+            )
+        val next = previous.withCatalog(AppResult.Success(hidden))
+        assertNull(next.preparingId)
+        assertNull(next.restriction)
+        assertTrue(next.canChoose)
+        assertEquals(hidden, next.catalog)
+    }
+
+    @Test
     fun ordinaryCredentialAgeAndTechnicalFailuresKeepOwnedFacts() {
         val state = populated()
         for (failure in

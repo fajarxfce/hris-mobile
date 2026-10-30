@@ -3,6 +3,7 @@ package dev.fajar.starter.documents.domain.replica.usecases
 import dev.fajar.starter.common.config.AppBuild
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.documents.domain.entities.DocumentAccess
+import dev.fajar.starter.documents.domain.metadata.repositories.DocumentMetadataAdmissionRepository
 import dev.fajar.starter.documents.domain.policies.*
 import dev.fajar.starter.documents.domain.replica.entities.*
 import dev.fajar.starter.documents.domain.replica.policies.*
@@ -18,6 +19,7 @@ import kotlinx.coroutines.flow.*
 
 class ObserveDocumentCatalog(
     private val replicas: DocumentCatalogRepository,
+    private val resources: DocumentMetadataAdmissionRepository,
     private val sessions: SessionRepository,
     private val workspaces: WorkspaceRepository,
     private val clock: Clock,
@@ -35,27 +37,63 @@ class ObserveDocumentCatalog(
                     val valid = validateDocumentCatalogSelection(selected)
                     if (valid is AppResult.Failed) flowOf(valid)
                     else
-                        replicas.observe(access, selected).map { snapshot ->
+                        replicas.observe(access, selected).flatMapLatest { snapshot ->
                             currentCoroutineContext().ensureActive()
                             when (snapshot) {
-                                is AppResult.Failed -> snapshot
+                                is AppResult.Failed -> flowOf(snapshot)
                                 is AppResult.Success -> {
                                     val checkpoint = snapshot.value.checkpoint
                                     if (
                                         checkpoint != null &&
                                             !sameStoredDocumentScope(access, checkpoint.access)
                                     )
-                                        documentFailure(
-                                            "client.document_scope_changed",
-                                            FailureKind.AccessDenied,
+                                        flowOf(
+                                            documentFailure(
+                                                "client.document_scope_changed",
+                                                FailureKind.AccessDenied,
+                                            )
                                         )
-                                    else snapshot
+                                    else visiblePage(access, snapshot.value)
                                 }
                             }
                         }
                 }
             }
             .distinctUntilChanged()
+
+    private fun visiblePage(
+        access: DocumentAccess,
+        snapshot: DocumentCatalogSnapshot,
+    ): Flow<AppResult<DocumentCatalogSnapshot>> {
+        val records = snapshot.page.items
+        if (records.size > 20 || records.map { it.id }.distinct().size != records.size)
+            return flowOf(
+                documentFailure("client.document_scope_changed", FailureKind.AccessDenied)
+            )
+        if (records.isEmpty())
+            return flowOf(AppResult.Success(snapshot.copy(restrictions = emptyList())))
+        return combine(
+            records.map { record ->
+                resources.observe(access, record.id).map { gate ->
+                    val failure =
+                        when (gate) {
+                            is AppResult.Failed -> gate.failure
+                            is AppResult.Success -> gate.value.denial
+                        }
+                    if (failure == null) CatalogVisibility(record, null)
+                    else CatalogVisibility(null, DocumentCatalogRestriction(record.id, failure))
+                }
+            }
+        ) { values ->
+            currentCoroutineContext().ensureActive()
+            AppResult.Success(
+                snapshot.copy(
+                    page = snapshot.page.copy(items = values.mapNotNull { it.record }),
+                    restrictions = values.mapNotNull { it.restriction },
+                )
+            )
+        }
+    }
 
     override fun observeStatus(workspaceId: String): Flow<AppResult<CompanyDataStatus>> =
         observeAdmitted(workspaceId) { access ->
@@ -129,3 +167,8 @@ class ObserveDocumentCatalog(
             }
             .buffer(0)
 }
+
+private data class CatalogVisibility(
+    val record: DocumentCatalogRecord?,
+    val restriction: DocumentCatalogRestriction?,
+)

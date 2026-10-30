@@ -78,7 +78,8 @@ class DocumentCatalogViewModel(
                     result ->
                     ensureActive()
                     updateState { it.withCatalog(result) }
-                    if (state.value.restriction != null) download?.cancel()
+                    if (state.value.restriction != null || state.value.preparingId == null)
+                        download?.cancel()
                 }
             }
     }
@@ -229,13 +230,12 @@ class DocumentCatalogViewModel(
 
     private fun onDetailsRequested(event: DocumentCatalogEvent.DetailsRequested) {
         val current = state.value
-        if (
-            !opened ||
-                !current.canChoose ||
-                current.choosingEmployment ||
-                current.catalog?.page?.items?.none { it.id == event.documentId } != false
-        )
-            return
+        val available =
+            current.catalog?.let { snapshot ->
+                snapshot.page.items.any { it.id == event.documentId } ||
+                    snapshot.restrictions.any { it.documentId == event.documentId }
+            } == true
+        if (!opened || !current.canChoose || current.choosingEmployment || !available) return
         onClosed(DocumentCatalogEvent.Closed)
         viewModelScope.launch { emitEffect(DocumentCatalogEffect.OpenDetails(event.documentId)) }
     }
