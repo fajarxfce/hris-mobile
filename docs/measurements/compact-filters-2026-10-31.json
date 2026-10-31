@@ -3,7 +3,7 @@
   "scope": "Compact date/status filters with trailing paired navigation",
   "localValidation": {
     "command": "xvfb-run -a ./gradlew formatKotlin :check --no-daemon",
-    "durationSeconds": 212,
+    "durationSeconds": 158,
     "tests": 2002,
     "suites": 349,
     "sharedUiTests": 212,
@@ -147,5 +147,19 @@
     "starterTestCommit": "df2906f",
     "freshRoot": "2002 desktop cases / 349 suites passed in 212s",
     "ciFollowUp": "Manual verify scope preserves existing Apple/Windows/Web validation for identical application source."
+  },
+  "attendanceTestSynchronization": {
+    "failureRun": 41170243851,
+    "failureJob": 124446442736,
+    "failure": "Immediate facts-subscriber assertion observed 0 during flatMapLatest collector replacement.",
+    "correction": "Bounded wait for one settled collector after checkpoint expiry, atomic fake subscription count. Hidden-tab equivalent synchronized too.",
+    "retainedChecks": [
+      "Saved facts stay visible during refresh",
+      "No automatic fetch after freshness expires",
+      "Offline failure and recovery",
+      "Owner teardown"
+    ],
+    "rootResult": "2002 cases / 349 suites, no failures/errors/skips, 158s",
+    "productionChanges": false
   }
 }

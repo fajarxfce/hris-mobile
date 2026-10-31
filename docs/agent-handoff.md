@@ -4,6 +4,19 @@ Updated 31 October 2026 (UTC). The release-configuration audit and independently
 verified Starter port are complete. This employee application was generated from
 Compose Fluent Starter and is the proving ground for reusable foundation changes.
 
+## Final test synchronization follow-up
+
+Root checks passed again in 2m38s (2,002 desktop cases / 349 suites) after resolving
+the second old-CI failure in `AppFlowTest`'s attendance freshness scenario. A
+checkpoint emission switches facts collectors through `flatMapLatest`; its
+subscriber count can briefly be zero. The test now waits for one settled
+collector and the fake counts subscriptions atomically across test/collector
+threads. The same after-expiry assertion in the hidden-tab case is synchronized.
+All saved-content, no-new-fetch, offline recovery and teardown checks remain.
+Production code and installed release 4 are unchanged. The only remaining work
+is final scoped CI verification and recording its result alongside current-source
+Apple/Windows/Web results. The emulator is logged out and stopped.
+
 ## Current delivery and CI follow-up — compact filters
 
 Configured **devRelease 1.0.0 / build 4** from application `e5af27fd` is installed

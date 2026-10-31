@@ -2998,7 +2998,7 @@ class AppFlowTest {
             assertEquals(1, cache.subscribers())
             val requestsBeforeExpiry = server.workforce.syncReads.get()
             cache.markStale()
-            assertEquals(1, cache.subscribers())
+            compose.waitUntil(5_000) { cache.subscribers() == 1 }
             assertEquals(requestsBeforeExpiry, server.workforce.syncReads.get())
             server.workforce.offline = true
             compose.onNode(hasText("Home") and isSelectable()).performClick()
@@ -3531,7 +3531,9 @@ class AppFlowTest {
             refreshWhenReady()
             compose.waitUntil(5_000) { server.workforce.attendanceActive.get() == 1 }
             cache.markStale()
-            assertEquals(1, cache.subscribers())
+            // A directory checkpoint emission switches the facts flow with flatMapLatest.
+            // Wait for its replacement collector; the intermediate subscriber count can be zero.
+            compose.waitUntil(5_000) { cache.subscribers() == 1 }
             compose.onNode(hasText("Clock in") and hasClickAction()).assertExists()
             compose
                 .onNodeWithText("Refresh attendance before recording a new entry.")

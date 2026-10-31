@@ -6,6 +6,7 @@ import dev.fajar.starter.workforce.domain.policies.calendarFailure
 import dev.fajar.starter.workforce.domain.replica.entities.*
 import dev.fajar.starter.workforce.domain.replica.policies.workforceRecordEmployee
 import dev.fajar.starter.workforce.domain.replica.repositories.WorkforceReplicaRepository
+import java.util.concurrent.atomic.AtomicInteger
 import kotlin.time.Duration.Companion.hours
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.*
@@ -35,7 +36,7 @@ class NativeWorkforceReplicaUi : WorkforceReplicaRepository {
     var writes = 0
     var clears = 0
     var directoryObservers = 0
-    var factsObservers = 0
+    private val factsObservers = AtomicInteger()
     val selections = mutableListOf<Pair<String, CalendarPeriod>>()
 
     val readAdmission = MutableStateFlow(WorkforceReadAdmission(null, null))
@@ -101,7 +102,7 @@ class NativeWorkforceReplicaUi : WorkforceReplicaRepository {
         period: CalendarPeriod,
     ): Flow<AppResult<WorkforceReplicaFacts>> = flow {
         selections += employeeId to period
-        factsObservers++
+        factsObservers.incrementAndGet()
         try {
             factsGate?.await()
             emitAll(
@@ -149,7 +150,7 @@ class NativeWorkforceReplicaUi : WorkforceReplicaRepository {
                 }
             )
         } finally {
-            factsObservers--
+            factsObservers.decrementAndGet()
         }
     }
 
@@ -221,7 +222,7 @@ class NativeWorkforceReplicaUi : WorkforceReplicaRepository {
 
     fun hasSnapshot() = (published.value as? AppResult.Success)?.value?.checkpoint != null
 
-    fun subscribers() = factsObservers
+    fun subscribers() = factsObservers.get()
 
     fun markStale() {
         val old = (published.value as AppResult.Success).value
