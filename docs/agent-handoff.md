@@ -2,6 +2,36 @@
 
 ## Active collaboration implementation — 31 October 2026
 
+**Native conversation commands now persist and reconcile through application DI.**
+[Contract](collaboration-conversations.md) and
+[evidence](measurements/collaboration-conversation-commands-2026-10-31.json) cover
+immutable per-peer/room intent, separate authenticated request/outcome envelopes,
+uncertainty before HTTP, original-operation retry and exact-record retirement only
+after observing owned metadata. Preparation validates current device/retry state;
+ordinary app upgrades preserve these control operations. Both conversation and
+setup replay now retain known server denials through failed transport retries.
+No UI submission or automatic retry is connected yet.
+
+Twenty-four new cases pass (12 common domain, four common data, eight real SQLite
+storage). Initial fixture failure reused a unique sort key (53s); corrected focused
+checks pass in 76s. Root/Wasm/Android/lint passed in 193s before denial review, then
+final root/browser/assembly/Android/lint passed in 4m: 2,145 desktop cases, domain
+browser 70/data browser 49, zero lint errors. APK built, not installed.
+
+**Next: product room/timeline ownership and chat UI, owned offline message projections,
+bootstrap/cross-family recovery, logical-ID reconciliation, then all P0–P8.**
+No product group is accepted; no live/schema/phone change. CI `767ed980` now lets
+running control/HRIS proofs finish, retaining only the newest pending workflow.
+`fbb2f3ae` provider CI `41246770541` passes both jobs/all steps, classic 83.930s and
+native 92.938s with two browser cases each; all 14 Platform hashes per mode match
+`e0dbb567`. Its control/HRIS runs `41246770522`/`41246770543` remain in progress.
+Starter AppAuth hosted verify `41245287269` passes all 15 verify steps at `9740cb5`,
+with source hashes checked; Starter records closure at `36116b2`.
+
+## Earlier collaboration checkpoints
+
+Use the latest checkpoint above for the active queue; earlier next-step notes are historical.
+
 **Android SDK synchronization now belongs to its protected runtime lease.**
 Concurrent starts share one acquisition even after caller cancellation; late or
 failed acquisition, bounded waiting and failed/cancelled termination retain clear
@@ -26,9 +56,6 @@ were superseded/cancelled. `50964794` runs `41246022664` and `41246022568` are s
 in progress at this checkpoint. Starter AppAuth port `9740cb5` remains locally
 verified; hosted verify `41245287269` is separate and still running.
 
-## Earlier collaboration checkpoints
-
-Use the latest checkpoint above for the active queue; earlier next-step notes are historical.
 
 **Native conversation discovery/control adapters and scoped reads are now wired.**
 [Contract](collaboration-conversations.md) and

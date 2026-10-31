@@ -1,0 +1,173 @@
+package dev.fajar.starter.collaboration.domain.usecases
+
+import dev.fajar.starter.collaboration.domain.entities.*
+import dev.fajar.starter.collaboration.domain.policies.collaborationSetupFailure
+import dev.fajar.starter.collaboration.domain.policies.retainCollaborationCommandFailure
+import dev.fajar.starter.collaboration.domain.repositories.*
+import dev.fajar.starter.common.config.AppBuild
+import dev.fajar.starter.common.result.*
+import dev.fajar.starter.identity.domain.entities.IdentityServer
+import dev.fajar.starter.identity.domain.repositories.SessionRepository
+import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
+import kotlin.time.Clock
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.ensureActive
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+
+/** One application owner serializes explicit attempts. It never schedules a retry loop. */
+class ReplayCollaborationConversation(
+    private val commands: CollaborationConversationCommandRepository,
+    private val conversations: CollaborationConversationRepository,
+    private val sessions: SessionRepository,
+    private val workspaces: WorkspaceRepository,
+    private val server: IdentityServer,
+    private val build: AppBuild,
+    private val clock: Clock,
+) {
+    private val execution = Mutex()
+
+    suspend operator fun invoke(
+        workspaceId: String,
+        commandId: String,
+    ): AppResult<CollaborationConversationCommandRecord> =
+        execution.withLock {
+            val owner =
+                when (val captured = capture(workspaceId)) {
+                    is AppResult.Failed -> return@withLock captured
+                    is AppResult.Success -> captured.value
+                }
+            val stored = commands.get(owner, commandId)
+            val admitted = continuation(workspaceId, owner)
+            if (admitted is AppResult.Failed) return@withLock admitted
+            val record =
+                when (stored) {
+                    is AppResult.Failed -> return@withLock stored
+                    is AppResult.Success ->
+                        stored.value
+                            ?: return@withLock collaborationSetupFailure(
+                                "client.collaboration_command_changed"
+                            )
+                }
+            if (record.command.id != commandId || record.command.binding != owner.setupBinding())
+                return@withLock collaborationSetupFailure("client.collaboration_command_changed")
+            if (record.outcome is CollaborationConversationOutcome.Confirmed)
+                return@withLock AppResult.Success(record)
+            if (record.attempts >= 1_000)
+                return@withLock collaborationSetupFailure("client.collaboration_attempt_limit")
+            deliver(workspaceId, owner, record)
+        }
+
+    private suspend fun deliver(
+        workspaceId: String,
+        owner: CollaborationOwner,
+        original: CollaborationConversationCommandRecord,
+    ): AppResult<CollaborationConversationCommandRecord> {
+        val uncertain =
+            CollaborationConversationOutcome.Unconfirmed(
+                (original.outcome as? CollaborationConversationOutcome.Unconfirmed)?.failure
+            )
+        val sending =
+            original.copy(
+                revision = original.revision + 1,
+                attempts = original.attempts + 1,
+                outcome = uncertain,
+            )
+        val preparing = commands.update(owner, original, uncertain, sending.attempts)
+        val preparedOwner = continuation(workspaceId, owner)
+        if (preparedOwner is AppResult.Failed) return preparedOwner
+        when (val saved = preparing) {
+            is AppResult.Failed -> return saved
+            is AppResult.Success ->
+                if (!saved.value)
+                    return collaborationSetupFailure("client.collaboration_command_changed")
+        }
+        val admitted = continuation(workspaceId, owner)
+        if (admitted is AppResult.Failed) return admitted
+        val result =
+            when (val delivered = send(owner, original.command)) {
+                is AppResult.Failed ->
+                    AppResult.Failed(
+                        retainCollaborationCommandFailure(
+                            (original.outcome as? CollaborationConversationOutcome.Unconfirmed)
+                                ?.failure,
+                            delivered.failure,
+                        )
+                    )
+                is AppResult.Success -> delivered
+            }
+        val current = continuation(workspaceId, owner)
+        if (current is AppResult.Failed) return current
+        val outcome =
+            when (result) {
+                is AppResult.Failed -> CollaborationConversationOutcome.Unconfirmed(result.failure)
+                is AppResult.Success -> result.value
+            }
+        if (outcome is CollaborationConversationOutcome.Confirmed) {
+            val action = original.command.action
+            if (
+                outcome.receipt.version !in 0..999_999 ||
+                    (action is CollaborationConversationAction.Open &&
+                        outcome.receipt.version != 0L) ||
+                    (action is CollaborationConversationAction.RequestRoom &&
+                        outcome.receipt.id != action.conversationId)
+            )
+                return collaborationSetupFailure("client.collaboration_receipt_changed")
+        }
+        val saved = commands.update(owner, sending, outcome, sending.attempts)
+        val latest = continuation(workspaceId, owner)
+        if (latest is AppResult.Failed) return latest
+        // Confirmed access failures remain authoritative even when outcome persistence fails.
+        if (result is AppResult.Failed) return result
+        return when (saved) {
+            is AppResult.Failed -> saved
+            is AppResult.Success ->
+                if (saved.value)
+                    AppResult.Success(
+                        sending.copy(revision = sending.revision + 1, outcome = outcome)
+                    )
+                else collaborationSetupFailure("client.collaboration_command_changed")
+        }
+    }
+
+    private suspend fun send(
+        owner: CollaborationOwner,
+        command: CollaborationConversationCommand,
+    ): AppResult<CollaborationConversationOutcome> {
+        val result =
+            when (val action = command.action) {
+                is CollaborationConversationAction.Open ->
+                    conversations.open(
+                        owner,
+                        CollaborationOpenDirect(command.id, action.peerAccountId),
+                    )
+                is CollaborationConversationAction.RequestRoom ->
+                    conversations.requestRoom(
+                        owner,
+                        CollaborationRequestDirectRoom(
+                            command.id,
+                            action.conversationId,
+                            action.deviceId,
+                            action.deviceVersion,
+                            action.provisioningVersion,
+                        ),
+                    )
+            }
+        return when (result) {
+            is AppResult.Failed -> result
+            is AppResult.Success ->
+                AppResult.Success(CollaborationConversationOutcome.Confirmed(result.value))
+        }
+    }
+
+    private suspend fun capture(workspaceId: String) =
+        sessions.captureCollaborationOwner(workspaceId, workspaces, server, build, clock)
+
+    private suspend fun continuation(
+        workspaceId: String,
+        owner: CollaborationOwner,
+    ): AppResult<Unit> {
+        currentCoroutineContext().ensureActive()
+        return requireCollaborationOwner(capture(workspaceId), owner)
+    }
+}

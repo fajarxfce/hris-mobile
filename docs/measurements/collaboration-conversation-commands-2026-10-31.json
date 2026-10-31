@@ -1,0 +1,137 @@
+{
+  "date": "2026-10-31",
+  "kind": "native conversation durable intent and receipt reconciliation",
+  "productAcceptance": false,
+  "liveChanged": false,
+  "phoneChanged": false,
+  "baseMobileCommit": "767ed980903130b3d518a8e0eda4e564ff9b0656",
+  "sourceSha256": {
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt": "0fd7f285f6281e14a2f8609f71541be9c077a75eae86d15b0147dca22bbf865e",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt": "0fc4549a2bc4cfb75cb7f32e5e65b9f33fe1368d6585212a7fc39b2e30f0d4aa",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/dto/CollaborationConversationCommandDto.kt": "0c642524efb90324143b930703f3a3eb2e65087a012313e7f9c6784e429e8d7a",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/mappers/CollaborationConversationCommandMapper.kt": "229c5464edba0745fb4f7460e304ed4acd95bca5fa010e73c9c25bb65d664089",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationConversationCommandRepository.kt": "46f072cd9b64e1f2fb80ff9c7f2832421626db1f0abb696531f69ae27049d63c",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationConversationCommandCodecTest.kt": "17a85f95d219175a730919a5d243469f61d70a451dfe9a38e4f3d82d7fbeb568",
+    "features/collaboration/data/src/desktopTest/kotlin/dev/fajar/starter/collaboration/data/EncryptedCollaborationConversationCommandTest.kt": "d288d3da1f7405ebc1d7e05a4fee314052a51ffe40e0de5b255215c8bbb44c5b",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationConversationCommand.kt": "10d467cfdb6dd40e88ba498cc7eac033214e609f18efa5ddd7c2a75329588579",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationCommandFailurePolicy.kt": "f079ee26239285fffc156c28dbc276e222ed32d6821417144986347e15ea85c8",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationConversationCommandRepository.kt": "662222305082d89dc188f00f539518c8d993cdc0c46c2c7221949057bbf067a0",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/PrepareCollaborationConversation.kt": "01a1690f8aca33abfee85243fe9c37d0c4d63f7f0b4fe98dfb3bb05feb454dd7",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ReconcileCollaborationConversation.kt": "b5d510676dda5c0496940bdb744a4136374fe249188410ce84333d2e975f93dd",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ReplayCollaborationConversation.kt": "a732b0c1caf728cb09f515bfc58aeeae9d92dd136e9c02535c34c7f790642332",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ReplayCollaborationSetup.kt": "50bb99dd05e1b2c53e6047e3f59ac59c4bd77d8a4bbc242ea0ee75c12b9f555d",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationConversationCommandFixture.kt": "3a318fa269c34c288e81078515c6cdd5e296003121ffa37a64f4a9daab3310e7",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationConversationCommandTest.kt": "03df0ae4eb6e803e76ac44ab62464635411c28df2d90bee5ecfae07096cef1b8",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationSetupCommandTest.kt": "9ee2382cde49d53de21d9dd15b9d4bf59f5c18e7cdc3bdfa5144674fee9c953c",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/mappers/CollaborationSetupCommandMapper.kt": "c34a1906a922d6eaa20ec7e389448c2a482e22a42f4d96446d07dd3e175b7d78",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/CollaborationSetupOwner.kt": "9e54aa26bea624bd37290d751f1a8e5fc6f2d8fe40969a40604af85ce4b04c38",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationRequestPolicy.kt": "1d7731545a5acfbe42e97e6b42626f867b410b39a5f4805496f91f72b98744f4",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationTransportFixture.kt": "d85aa8eed24265173948d6fafbb6d5a49cb369efe41f831d1a7ee9d8e0843d4a",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationConversationTransportTest.kt": "112ee9918e735c0048e46ae40c04f4c51a595ea19a1dd6ff14f565ab8128e1b7",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationSetupFixture.kt": "dd0a64b5761c31d5a15499679aa049571555d06931728621d2032031af8e7849",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationCommandFixture.kt": "ea481ec084297ed39e759cff19997cdcc1fb426fc1f6f7e47dc45fc4b90a43f5",
+    "core/database/src/commonMain/kotlin/dev/fajar/starter/database/CommandStore.kt": "d80e346839f4adbb011baa0a09222de0f8552375c91360cd8a17269d7fb453a2",
+    "core/database/src/sqliteMain/kotlin/dev/fajar/starter/database/dao/CommandDao.kt": "80117d328991ed43bfcaa095dd240a41e5872e558e8de717deef1dbc972626bf"
+  },
+  "validation": {
+    "initial": {
+      "result": "failed",
+      "seconds": 53,
+      "reason": "Moved-ciphertext fixture reused the unique sort key, so SQLite rejected insertion before the cryptographic boundary. Corrected only the fixture sort key.",
+      "logSha256": "c33f162f1c181252b8779973cbae318b4d5ac2b3806ee2b7a73637494eb5040c"
+    },
+    "focused": {
+      "result": "passed",
+      "seconds": 76,
+      "targets": [
+        "domain/data desktop/browser tests",
+        "data assemble",
+        "format/architecture"
+      ],
+      "logSha256": "b7a6fd266c6697aef59930691ed4a87bef83c4870b28e83534c4685a77445887"
+    },
+    "firstApplication": {
+      "result": "passed",
+      "seconds": 193,
+      "note": "Follow-up review then added preserved denial precedence to both setup and conversation replay.",
+      "logSha256": "904b72bc66de5263adb675c841fdbcff45bafbda29dd08e8da989d3c1cd8cf48"
+    },
+    "final": {
+      "result": "passed",
+      "reportedDuration": "4m",
+      "targets": [
+        ":check",
+        "collaboration domain/data browser",
+        "collaboration data assemble",
+        "application Wasm compile",
+        "Android dev assembly/lint"
+      ],
+      "desktop": {
+        "tests": 2145,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "suites": 369
+      },
+      "lintErrors": 0,
+      "logSha256": "7a214c7ff33f48e73302703133d85f4240018d9f63bb553375bede953da2987a"
+    },
+    "modules": {
+      "domain/desktopTest": {
+        "tests": 70,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "suites": 7
+      },
+      "domain/wasmJsBrowserTest": {
+        "tests": 70,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "suites": 7
+      },
+      "data/desktopTest": {
+        "tests": 71,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "suites": 12
+      },
+      "data/wasmJsBrowserTest": {
+        "tests": 49,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "suites": 9
+      }
+    },
+    "newCases": {
+      "domainCommon": 12,
+      "dataCommon": 4,
+      "dataDesktop": 8
+    },
+    "android": {
+      "sha256": "aa92bef03edcc18eae90946ba2541a79c14522650eb57c5a77d66595e5ea20ec",
+      "bytes": 290196893,
+      "installed": false
+    }
+  },
+  "guarantees": [
+    "Separate AES-GCM request/outcome envelopes bind audience/account/company/native-family/operation/resource/purpose/revision.",
+    "One pending intent per peer or room; the shared command store preserves its existing per-account/global capacity and atomic session guard.",
+    "Original operation/action survive ordinary local session replacement and database reopening; expired age never deletes intent.",
+    "Unconfirmed state commits before transport; retries retain operation and observed versions, including across ordinary app builds.",
+    "Only confirmed receipts with observed conversation participants or provisioning version retire their exact stored record/revision.",
+    "Late cancellation, account/company/permission replacement and failed persistence cannot publish an obsolete receipt or discard uncertain input.",
+    "Known server access/authorization denial survives later failed transport retries for both setup and conversation commands, clearing on confirmed success.",
+    "Stored failure metadata excludes response bodies and messages; lost/wrong keys preserve ciphertext."
+  ],
+  "limits": [
+    "Preparation is live-admitted native control setup, not offline message composition or a product chat page.",
+    "Owned offline projections, room/timeline resources, cross-family recovery and outbox logical-message reconciliation remain required.",
+    "Encrypted-store reopening was exercised on desktop SQLite; common codecs were additionally tested in the browser.",
+    "App bindings resolve the repository and use cases; no UI submission, background retry or live mutation is enabled.",
+    "Hosted verification is queued behind source-matched running proofs; it is separate from this local result."
+  ]
+}

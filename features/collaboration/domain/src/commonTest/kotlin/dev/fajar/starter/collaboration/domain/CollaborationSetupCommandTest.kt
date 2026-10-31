@@ -8,6 +8,31 @@ import kotlinx.coroutines.test.runTest
 
 class CollaborationSetupCommandTest {
     @Test
+    fun setupDenialRemainsAuthoritativeAcrossUnsuccessfulRetries() = runTest {
+        val f = CollaborationCommandFixture()
+        val record = f.retain()
+        val denied =
+            AppResult.Failed(
+                Failure(FailureKind.AccessDenied, "Denied", code = "collaboration_access_denied")
+            )
+        f.response = { denied }
+        assertEquals(denied, f.replay()("selection", record.command.id))
+        f.response = { AppResult.Failed(Failure(FailureKind.Network, "Offline")) }
+        assertEquals(denied, f.replay()("selection", record.command.id))
+        assertEquals(
+            denied.failure,
+            assertIs<CollaborationSetupOutcome.Unconfirmed>(f.record!!.outcome).failure,
+        )
+        f.response = { AppResult.Success(CollaborationSetupReceipt("device", 0)) }
+        val recovered =
+            assertIs<AppResult.Success<CollaborationSetupCommandRecord>>(
+                    f.replay()("selection", record.command.id)
+                )
+                .value
+        assertIs<CollaborationSetupOutcome.Registered>(recovered.outcome)
+    }
+
+    @Test
     fun gatewayReceiptIsRetainedForSdkInstallationAndNeverRetiredByDeviceObservation() = runTest {
         val f = CollaborationCommandFixture()
         val action = CollaborationSetupAction.Bootstrap("device", 1, null)

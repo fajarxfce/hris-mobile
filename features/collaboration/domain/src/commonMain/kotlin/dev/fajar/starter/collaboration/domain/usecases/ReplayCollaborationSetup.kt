@@ -3,6 +3,7 @@ package dev.fajar.starter.collaboration.domain.usecases
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.policies.collaborationGatewayMatchesCommand
 import dev.fajar.starter.collaboration.domain.policies.collaborationSetupFailure
+import dev.fajar.starter.collaboration.domain.policies.retainCollaborationCommandFailure
 import dev.fajar.starter.collaboration.domain.repositories.*
 import dev.fajar.starter.common.config.AppBuild
 import dev.fajar.starter.common.result.*
@@ -92,7 +93,17 @@ class ReplayCollaborationSetup(
         }
         val admitted = continuation(workspaceId, owner)
         if (admitted is AppResult.Failed) return admitted
-        val result = send(owner, original.command)
+        val result =
+            when (val delivered = send(owner, original.command)) {
+                is AppResult.Failed ->
+                    AppResult.Failed(
+                        retainCollaborationCommandFailure(
+                            (original.outcome as? CollaborationSetupOutcome.Unconfirmed)?.failure,
+                            delivered.failure,
+                        )
+                    )
+                is AppResult.Success -> delivered
+            }
         val current = continuation(workspaceId, owner)
         if (current is AppResult.Failed) return current
         val outcome =
