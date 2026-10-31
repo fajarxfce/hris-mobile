@@ -61,3 +61,19 @@ Next gates include protected HRIS company/device sessions, native durable queue
 recovery, verified devices, Apple bindings, MatrixRTC media-key distribution and
 native background calls. None is inferred from the encrypted text exchange.
 No reusable product foundation has yet qualified for a Starter port.
+
+## Apple binding gate
+
+`tool/collaboration-apple-proof` pins Matrix Rust Swift **26.10.27**. The upstream
+package validates the binary XCFramework SHA-256
+`399af06c14c7fdfa86e3bb4d36cf50145d17ae2a20c30edad06d2011a20d9bb6`.
+The `Apple collaboration binding` workflow executes the actual Rust device-key
+store on macOS, reopens it with the original key, rejects a different key, and
+compiles the iOS device slice. It does not start synchronization or contact a
+real provider. Successful binding tests will not establish Apple E2EE interop,
+CallKit/PushKit acceptance or a physical iPhone test.
+
+This SDK requires iOS 16. The isolated package adopts that minimum; the existing
+HRIS app remains iOS 15 until its collaboration integration explicitly changes
+and validates the deployment target. Linux cannot execute this Apple binary;
+record exact hosted results before calling this gate verified.

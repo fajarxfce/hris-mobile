@@ -23,7 +23,14 @@ bind the tested APK. Full root checks and debug lint passed in 4m42s, including
 errors and 45 dependency-version/fixture-packaging warnings. Native CI is defined with that exact Platform driver; record
 its result separately. This is still P0: product sessions, native durable queue,
 Apple bindings, MatrixRTC and native media remain pending. No Starter code port
-is due yet and no phone install was performed.
+is due yet and no phone install was performed. Android proof source is `477f9c60`.
+
+Apple binding work now lives in `tool/collaboration-apple-proof`, pinned to Swift
+SDK 26.10.27. Its hosted workflow must pass real native key-store reopening,
+wrong-key rejection and the iOS device compile. Linux has not run those checks.
+The SDK requires iOS 16; only this isolated package changes its minimum so far.
+Capture the workflow result and resolved Swift package revision in Git, then
+continue protected HRIS integration while the remaining P0 gates stay explicit.
 
 Updated 31 October 2026 (UTC). The release-configuration audit and independently
 verified Starter port are complete. This employee application was generated from
