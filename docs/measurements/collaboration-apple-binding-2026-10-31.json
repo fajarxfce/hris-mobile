@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "kind": "apple_native_binding",
+  "productAcceptance": false,
+  "capacityAcceptance": false,
+  "providerInterop": false,
+  "physicalDeviceAcceptance": false,
+  "sourceCommit": "e210508aab87dde254e46b1a52d0dabb93d6240b",
+  "workflowRun": 41182072489,
+  "workflowUrl": "https://github.com/fajarxfce/hris-mobile/actions/runs/41182072489",
+  "xcode": "16.4",
+  "swift": "6.1.2",
+  "sdk": "26.10.27",
+  "sdkRevision": "989ea1cc1e0c38cb2dd63970b8ab03d7c1e192eb",
+  "binarySha256": "399af06c14c7fdfa86e3bb4d36cf50145d17ae2a20c30edad06d2011a20d9bb6",
+  "checks": {
+    "nativeStoreReopen": true,
+    "wrongStoreKeyRejected": true,
+    "iosDeviceSliceBuild": true,
+    "tests": 1,
+    "failures": 0
+  },
+  "sourceSha256": {
+    "tool/collaboration-apple-proof/.gitignore": "acc718146d21aae829cba1761475e05de39d73209d83af2ab8487a74843cead0",
+    "tool/collaboration-apple-proof/Package.resolved": "c34eef14d7e112a7869b8c3cc0f2c68a4f272b808519b43849efdaf18c305eb5",
+    "tool/collaboration-apple-proof/Package.swift": "2d19b9584b620da19743aa6bc05a9999e30c9b7eb94b16938b78eff172f8a3dd",
+    "tool/collaboration-apple-proof/Sources/HrisCollaborationAppleProof/LocalCryptoProbe.swift": "aa20560479aae695c7cf8472c08c1abfa7217c966f13c03d70cf0ea85cbb9f29",
+    "tool/collaboration-apple-proof/Tests/HrisCollaborationAppleProofTests/LocalCryptoProbeTests.swift": "51d757df9e9f157d5369daf050971b6fd1d873027bdf8a6ac75e47eb845a49f9"
+  }
+}

@@ -77,3 +77,10 @@ This SDK requires iOS 16. The isolated package adopts that minimum; the existing
 HRIS app remains iOS 15 until its collaboration integration explicitly changes
 and validates the deployment target. Linux cannot execute this Apple binary;
 record exact hosted results before calling this gate verified.
+
+The actual Apple workflow passed at `e210508a` in
+[41182072489](https://github.com/fajarxfce/hris-mobile/actions/runs/41182072489):
+one native recovery/rejection case (0.051s) and a successful iOS device build,
+using Xcode 16.4 and Swift 6.1.2. The resolved SDK revision is committed in
+`Package.resolved`; [evidence](measurements/collaboration-apple-binding-2026-10-31.json)
+records the tested source, binary checksum and limited acceptance scope.

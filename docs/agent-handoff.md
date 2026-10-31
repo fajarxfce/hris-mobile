@@ -33,8 +33,14 @@ Apple binding work now lives in `tool/collaboration-apple-proof`, pinned to Swif
 SDK 26.10.27. Its hosted workflow must pass real native key-store reopening,
 wrong-key rejection and the iOS device compile. Linux has not run those checks.
 The SDK requires iOS 16; only this isolated package changes its minimum so far.
-Capture the workflow result and resolved Swift package revision in Git, then
-continue protected HRIS integration while the remaining P0 gates stay explicit.
+Hosted run [41182072489](https://github.com/fajarxfce/hris-mobile/actions/runs/41182072489)
+passed at `e210508a`: one actual native key-store case and the iOS device build,
+using Xcode 16.4 / Swift 6.1.2. The resolved package revision and
+[measurement](measurements/collaboration-apple-binding-2026-10-31.json) are retained
+in Git. This does not prove Apple provider interoperability or native media.
+Continue protected HRIS integration while those remaining P0 gates stay explicit.
+The local dedicated emulator has been stopped after successful Android proof;
+its regular HRIS data and the physical phone were untouched.
 
 Updated 31 October 2026 (UTC). The release-configuration audit and independently
 verified Starter port are complete. This employee application was generated from
