@@ -34,7 +34,45 @@
     "ciStatus": "accepted_across_source_matched_runs",
     "testCommit": "df2906f",
     "verifyRetryRun": 41170810070,
-    "closureCommit": "44d164c"
+    "closureCommit": "44d164c",
+    "acceptedJobs": [
+      {
+        "repo": "compose-fluent-starter",
+        "run": 41170061606,
+        "headSha": "58623f595f693558b7e4cb82170676eb41270985",
+        "required": [
+          "windows",
+          "apple"
+        ],
+        "jobs": [
+          {
+            "name": "windows",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "apple",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "repo": "compose-fluent-starter",
+        "run": 41170810070,
+        "headSha": "df2906f088752d33d6c15de2a4abbc134fa84956",
+        "required": [
+          "verify"
+        ],
+        "jobs": [
+          {
+            "name": "verify",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ]
+      }
+    ]
   },
   "previousMobileCi": {
     "run": 41167886399,
@@ -136,20 +174,78 @@
   },
   "mobileSource": "e5af27fd",
   "ci": {
+    "result": "accepted_across_source_matched_runs",
     "applicationRun": 41170243851,
-    "applicationSource": "e5af27fd",
-    "verifyRetryRun": 41171544190,
-    "verifySource": "f742e09d",
-    "status": "in_progress",
-    "applicationJobs": {
-      "web": "success",
-      "windows": "success",
-      "apple": "success"
-    },
+    "applicationSource": "e5af27fd4d30c19daf5d6ef0275b0e62e6263c2d",
+    "verifyRun": 41171544190,
+    "verifySource": "f742e09dc7ebf69534266899dee700df040fda4d",
+    "acceptedJobs": [
+      {
+        "repo": "hris-mobile",
+        "run": 41170243851,
+        "headSha": "e5af27fd4d30c19daf5d6ef0275b0e62e6263c2d",
+        "required": [
+          "web",
+          "windows",
+          "apple"
+        ],
+        "jobs": [
+          {
+            "name": "windows",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "web",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "name": "apple",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "repo": "hris-mobile",
+        "run": 41171544190,
+        "headSha": "f742e09dc7ebf69534266899dee700df040fda4d",
+        "required": [
+          "verify"
+        ],
+        "jobs": [
+          {
+            "name": "verify",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ]
+      }
+    ],
+    "productionUnchangedAfterApplicationRun": true,
+    "changedPathsAfterApplicationRun": [
+      ".github/workflows/ci.yml",
+      "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/AppFlowTest.kt",
+      "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CompactFiltersLayoutTest.kt",
+      "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/fixtures/NativeWorkforceReplicaUi.kt",
+      "docs/agent-handoff.md",
+      "docs/layout-review-2026-10-31.md",
+      "docs/measurements/compact-filters-2026-10-31.json",
+      "docs/measurements/layout-review-2026-10-31.json",
+      "docs/screenshots/layout-2026-10-31/filters-accessibility.jpg",
+      "docs/screenshots/layout-2026-10-31/filters-before-after.jpg",
+      "docs/screenshots/layout-2026-10-31/filters-pages.jpg"
+    ],
+    "earlierFullRunVerifyFailures": [
+      "Host-font 390 dp row-height assumption",
+      "Immediate attendance facts-subscriber count during flatMapLatest replacement"
+    ],
     "supersededVerifyRun": {
       "run": 41170988888,
-      "result": "cancelled after the final test correction was dispatched"
-    }
+      "result": "cancelled when the final attendance-test correction was dispatched"
+    },
+    "observedAt": "2026-10-31T05:41:17.832189+00:00"
   },
   "portableTestUpdate": {
     "reason": "CI host text metrics use 96 dp at 390 dp; supported reflow must not be mistaken for failure. Retain phone/large-text cases, prove no overlap and full labels, separately assert one row at 640 dp.",
@@ -171,5 +267,6 @@
     ],
     "rootResult": "2002 cases / 349 suites, no failures/errors/skips, 158s",
     "productionChanges": false
-  }
+  },
+  "complete": true
 }

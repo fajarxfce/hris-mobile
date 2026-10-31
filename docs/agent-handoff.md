@@ -4,105 +4,71 @@ Updated 31 October 2026 (UTC). The release-configuration audit and independently
 verified Starter port are complete. This employee application was generated from
 Compose Fluent Starter and is the proving ground for reusable foundation changes.
 
-## Final test synchronization follow-up
+## Completed mobile layout and compact-filter review — 31 October 2026
 
-Current Linux verification: [41171544190](https://github.com/fajarxfce/hris-mobile/actions/runs/41171544190)
-at test source `f742e09d`. This supersedes cancelled `41170988888`. Mobile Web,
-Windows and Apple all passed in `41170243851` at unchanged application source
-`e5af27fd`. Starter is fully closed at `44d164c`: accepted Windows/Apple from
-`41170061606` plus successful scoped Linux/Android/Web `41170810070`.
-Only the current Mobile Linux run and final documentation closure remain.
+The requested employee-page layout/component review, fictional sample data and
+follow-up compact filters are complete. Mobile is the proving ground; reusable
+components and tests were then ported and independently checked in Starter.
 
-Root checks passed again in 2m38s (2,002 desktop cases / 349 suites) after resolving
-the second old-CI failure in `AppFlowTest`'s attendance freshness scenario. A
-checkpoint emission switches facts collectors through `flatMapLatest`; its
-subscriber count can briefly be zero. The test now waits for one settled
-collector and the fake counts subscriptions atomically across test/collector
-threads. The same after-expiry assertion in the hidden-tab case is synchronized.
-All saved-content, no-new-fetch, offline recovery and teardown checks remain.
-Production code and installed release 4 are unchanged. The only remaining work
-is final scoped CI verification and recording its result alongside current-source
-Apple/Windows/Web results. The emulator is logged out and stopped.
+- Mobile application `e5af27fd` includes the earlier form/detail/document fixes
+  from `b73031be`, then lightweight status filters and paired period chevrons on
+  the right. Full labels reflow at narrow widths or large text. Month/year/week/
+  revision limits and each feature's filter scope remain unchanged.
+- Starter production `58623f5`, portable test `df2906f`, closure `44d164c` include
+  the identical generic foundation. No HRIS policy, routes or configuration was
+  copied. No additional port is pending.
+- Platform `1363abee` created 23 fictional visible records for the existing
+  user-linked employee plus leave balance examples, using authorized APIs and
+  retained idempotency receipts. Do not seed again with a fresh manifest. No
+  identity binding, permissions or real payroll/payment action was introduced.
 
-## Current delivery and CI follow-up — compact filters
+Configured **devRelease 1.0.0 / build 4** is installed on the WireGuard phone.
+SHA-256 `20adbce11c8f727d3cf80d24d4909ebfd9dfd1f8c94d39327dd70f91bd701e71`,
+24,127,587 bytes. Signed assembly passed in 142.752s. Install-only and pulled-APK
+verification passed in 25.852s; app identity, first-install time and data were
+preserved. No phone UI was launched/driven. **Future builds require versionCode
+>= 5 and the same signer**. Test/docs-only commits after `e5af27fd` do not require
+another installation. The normal Firebase configuration and private API are
+verified in the actual artifact. Never deliver an unconfigured emulator fixture.
 
-Configured **devRelease 1.0.0 / build 4** from application `e5af27fd` is installed
-on the authorized WireGuard phone. The APK exactly matches the inspected emulator
-release: SHA-256 `20adbce11c8f727d3cf80d24d4909ebfd9dfd1f8c94d39327dd70f91bd701e71`,
-24,127,587 bytes. Install-only plus installed-byte verification passed in 25.852s;
-no data clear, uninstall or phone UI launch. Future builds must use versionCode
-**>= 5** and the existing signer. No further APK rebuild is needed for test/docs-only
-changes after `e5af27fd`.
+The identical configured release was inspected on the dedicated Android 35
+emulator: month/year/week stepping, status selection/reset, normal/200% text,
+dark appearance and landscape. Overtime content begins 72 dp earlier and Expense
+content 80 dp earlier than build 3, measured on matching fictional rows. See the
+[review and screenshot galleries](layout-review-2026-10-31.md) and
+[complete measurements](measurements/compact-filters-2026-10-31.json). The emulator
+was restored to portrait, normal text and light appearance; only its own session
+was logged out, then its process was stopped. Private helpers, raw captures and
+immutable APKs remain under `.work/ui-review-2026-10-31/`; no secret belongs in Git.
+An old emulator auth fixture has build 3: rebuild it with a sufficient version
+before using it again, and keep it on the dedicated emulator only.
 
-Native checks passed month/year/week stepping, status selection/reset, 200% text,
-dark appearance and landscape. The same fictional list rows begin 72 dp earlier
-for Overtime and 80 dp earlier for Expenses than in build 3. Full labels and 48 dp
-touch targets remain. Screenshot galleries and final measurements are being saved.
+Final local checks passed **2,002 Mobile desktop cases / 349 suites** (212 shared
+UI cases) and **331 Starter cases / 114 suites**, without failures/errors/skips.
+Hosted validation is complete and explicitly matched to unchanged production
+source: Mobile Windows/Web/Apple passed in [41170243851](https://github.com/fajarxfce/hris-mobile/actions/runs/41170243851)
+at `e5af27fd`; corrected Linux root/browser/Android/app-link verification passed
+in [41171544190](https://github.com/fajarxfce/hris-mobile/actions/runs/41171544190)
+at `f742e09d`. Starter Windows/Apple passed in `41170061606`, and corrected Linux/
+Android/Web verification passed in `41170810070`. The earlier full runs retained
+failed Linux tests; they are not represented as entirely green runs.
 
-CI found one portable test assuming all desktop fonts fit two labels in a 390 dp
-row. The layout correctly reflows; the fixed test retains the phone scenario,
-asserts no overlap/unclipped labels and proves one row separately at 640 dp.
-Fresh full root validation passed 2,002 desktop cases / 349 suites in 3m32s.
-Starter `df2906f` has the identical test (331 cases / 114 suites passed).
-A manual `verify` CI scope was added to retest Linux checks/builds while unaffected
-full-run Apple/Windows/Web jobs continue. Application source remains unchanged.
-Next: record scoped verify plus full-run results and finish Git evidence/cleanup.
+Those test corrections preserve the intended contracts: host fonts may wrap
+390 dp filter labels, while 640 dp proves a single row; checkpoint publication
+may briefly replace facts collectors through `flatMapLatest`, so tests wait for
+a settled collector and count fake subscriptions atomically. Saved facts,
+no-automatic-fetch, offline recovery, ownership and keyboard/disabled-action
+assertions remain. Production code and APK bytes did not change for these fixes.
+The manual CI `verify` scope keeps default all/PR/push and Apple-only behavior.
+Physical iPhone testing remains explicitly waived; Apple simulator tests and the
+Xcode app build passed.
 
-## Active filter-layout revision — 31 October 2026
-
-The compact-filter implementation now passes the final root check in 2m55s:
-2,001 desktop cases / 349 suites, including 211 shared UI cases, zero failures,
-errors or skips. `AppPeriodNavigation` groups chevrons on the right;
-`AppFilterChip` uses lightweight wrapping text/dropdown controls. All affected
-month/year/week/revision pages adopt the pattern; monthless initial states retain
-their status action. Starter `58623f5` independently passed root/Android/Web
-(330 cases / 114 suites), with CI `41170061606` running.
-
-Release build 4 is assembling from this implementation. Remaining: configured
-release emulator screenshots and filter interactions, install-only phone delivery
-after notification, gallery/evidence updates and final hosted CI results.
-See [filter measurements](measurements/compact-filters-2026-10-31.json).
-
-The user reviewed build 3 and requested a further filter redesign: period arrows
-must not resemble a second Back button beneath the app bar, and status filters
-must stop using large pill/card surfaces and excessive space. This is active
-implementation work, **not verification-only closure**. Keep the Fluent visual
-language, group previous/next on the right, use lightweight filter actions and
-wrap long labels at large text. Retain 48 dp touch targets and existing policies.
-
-Installed local guidance (available automatically from the next turn):
-- Chris Banes `compose-component-design` and `compose-ui-testing-patterns`, from
-  `chrisbanes/skills` at `d2f24b4179179f5e8ec8dcfe0527b3619eda1e0f`.
-- `ui-ux-pro-max`, from `nextlevelbuilder/ui-ux-pro-max-skill` at
-  `9a3f14f7423037ccb8feeb4fee7482291b9c820e`.
-All live under `/home/fajar/.codex/skills/`. The selected guidance supports a
-shared caller-placeable layout, explicit semantics and label reflow; it does
-not call for replacing Fluent or migrating navigation/frameworks.
-
-Mobile `b73031be` is installed as configured devRelease 1.0.0 / build 3 on the
-WireGuard phone. Next delivery must use **versionCode >= 4**, the existing signer,
-and install-only after notifying the user. Its SHA-256 is
-`c5348192d7feeb6eb837cf7453786736e76ef09fb065b356747fcb8f651a63d2`.
-The dedicated emulator was logged out and stopped; phone UI/session untouched.
-The local release/Web retry succeeded in 302.667s with unchanged APK bytes.
-
-Local root checks passed 1,998 desktop cases / 348 suites; a fresh root rerun
-also passed after fixing the hosted Inbox test's synchronization. CI run
-41167886399 exposed one test waiting for an acknowledgement label already present
-on the old projection. It now waits for the refreshed read state plus the enabled
-action, preserving conflict/version/operation assertions. Check remaining CI
-jobs and validate the new filter source before closing the task.
-
-Platform `1363abee` completed 23 fictional sample records via authorized APIs for
-the existing user-linked employment. Do not seed again with a fresh manifest.
-Starter `54cabf5` ports the earlier form/detail components and passed independent
-root/Android/Web checks (327 cases / 113 suites). Prove the new filter foundation
-in Mobile, then port and validate it there as well.
-
-See [review and screenshots](layout-review-2026-10-31.md) and
-[measurements](measurements/layout-review-2026-10-31.json) for build-3 evidence.
-New filter screenshots, validation, release delivery and final Git handoff remain
-pending. Never deliver the unconfigured emulator-only authentication fixture.
+Installed guidance is recorded with source pins in the review: Chris Banes
+`compose-component-design` and `compose-ui-testing-patterns`, plus
+`ui-ux-pro-max`, under `/home/fajar/.codex/skills/`. They become discoverable on
+subsequent turns; their guidance was read and applied to this change.
+No implementation, validation, delivery, sample-data write or user input remains
+pending for this review. Earlier sections below are retained history.
 
 ## Previous Android installation — build 2, 31 October 2026
 
@@ -124,7 +90,7 @@ inputs, source continuity, certificate/package/API checks and installation proof
 The immutable APK and prior debug APK are retained locally under
 `.work/release-phone-2026-10-31/`.
 
-That installation established versionCode 2; the current build-3 floor above
+That installation established versionCode 2; the current build-4 delivery above
 supersedes it. The repository default remains 1 and would be a downgrade.
 Preserve the same certificate and install in place. No application source or
 server change, Firebase distribution upload or generic Starter port was needed.

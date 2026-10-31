@@ -3,7 +3,7 @@
 The user requested a complete layout/component review of the employee mobile app,
 including lists, details, creation/editing and supporting pages, plus fictional
 sample data for the already linked development account. Keep the Fluent visual
-language. This is a new active task after the completed feature audit.
+language. This review and its compact-filter follow-up are complete.
 
 ## Follow-up: compact filters requested by the user
 
@@ -26,10 +26,9 @@ components, dependencies and navigation remain the implementation foundation.
 Focused Compose checks passed in 1m38s. The actual recorded images
 `apps/shared/build/reports/screenshots/compact-filters-phone.png` and
 `compact-filters-large-text.png` were inspected: one row at 390 dp; untruncated
-September/year and selected status at 320 dp / 200% text. Final root checks passed in 2m55s: 2,001 desktop cases / 349 suites,
-including 211 shared UI cases. Starter `58623f5` independently passed
-root/Android/Web (330 cases / 114 suites). Native release screenshots, delivery
-and current-source hosted CI remain in progress.
+September/year and selected status at 320 dp / 200% text. The final source-matched
+root, platform, native-release and Starter checks are complete; current counts
+and delivery evidence follow below.
 
 ### Configured release evidence
 
@@ -51,8 +50,8 @@ The portable test now permits reflow when host fonts require it at 390 dp, while
 retaining full-label/non-overlap checks and separately proving one row at 640 dp.
 Fresh root checks pass **2,002 Mobile cases / 349 suites** and **331 Starter cases /
 114 suites**. The application code and installed APK are unchanged by that test
-correction. Scoped CI verification is running alongside the unaffected platform
-jobs; see [current measurements](measurements/compact-filters-2026-10-31.json).
+correction. Scoped CI verification and the unaffected platform jobs passed; production
+source is unchanged across the matched runs. See [current measurements](measurements/compact-filters-2026-10-31.json).
 The emulator was restored to normal text, light appearance and portrait, its own
 session was logged out, and its process was stopped.
 
@@ -71,7 +70,7 @@ session was logged out, and its process was stopped.
   employment, created through authorized APIs with retained idempotency receipts.
 - [x] Inspect actual rendered before/after screenshots; verify narrow screens,
   Indonesian, large text, dark appearance, keyboard and fixed action reachability.
-- [ ] Required Mobile checks/builds, proven reusable Starter port and independent
+- [x] Required Mobile checks/builds, proven reusable Starter port and independent
   validation; push each atomic commit and update continuation evidence.
 
 ## Scope and rendered coverage
@@ -98,8 +97,8 @@ a screenshot of an empty page where a populated fixture is available.
 `AppSelectField` represents a labelled picker with one accessible action and an
 untruncated value; date/time choices use appropriate icons. `AppDetailField`
 provides a consistent label/value hierarchy. `AppBadgeTone` is additive and retains
-the old informational default. Only these components, their portable large-text
-interaction regression and usage guidance belong in Starter. Session/profile,
+the old informational default. These components, the compact-filter foundation and their portable layout/
+interaction regressions belong in Starter. Session/profile,
 workflow statuses, retained commands and all HRIS routes remain application policy.
 
 ## Sample data — complete
@@ -117,7 +116,7 @@ change the user's Google binding. The temporary emulator login build excludes
 Firebase resources; user delivery must use the normal configured release build.
 No user password, token, private operation manifest or real document belongs in Git.
 
-## Verification in progress
+## Earlier build-3 verification
 
 - Initial Mobile root check passed in 3m21s, including 208 shared UI cases.
 - A second complete run found eight outdated UI expectations after the document
@@ -136,7 +135,7 @@ No user password, token, private operation manifest or real document belongs in 
   installed-byte proof, test counts and gallery hashes. The local release/Web retry completed successfully in 302.667s with unchanged
   APK bytes. The initial hosted verification found an Inbox test synchronization
   race; `eab6225b` waits for the refreshed projection and passed a new local root
-  run. Hosted validation of the new filter source remains pending.
+  run. Subsequent source-matched validation of the filter revision is complete; see the current evidence above.
 - Starter independent root checks, Android dev assembly and production Web build
   passed in 3m55s for the portable components.
 
