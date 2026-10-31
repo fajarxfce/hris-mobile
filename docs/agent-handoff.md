@@ -1,5 +1,18 @@
 # Agent continuation — HRIS Mobile
 
+## Active collaboration implementation — 31 October 2026
+
+The user approved the complete chat/call/meeting plan. Branch
+`feat/communications` starts from `7e12251a` with no inherited edits. The canonical
+[54-group PRD](https://github.com/fajarxfce/hris-platform/blob/feat/communications/docs/collaboration/prd.md)
+and [delivery ledger](https://github.com/fajarxfce/hris-platform/blob/feat/communications/docs/collaboration/delivery.json)
+live in Platform. P0 begins with actual isolated Matrix/LiveKit protocol proof;
+no collaboration feature is accepted yet. Preserve current Firebase/HRIS
+identity and build-4 phone installation. Continue all P0–P8 phases with matching
+tests, source evidence and pushed atomic commits. Prove reusable foundations
+here before porting them to Starter. The completed prior scope below is history,
+not closure of this new implementation request.
+
 Updated 31 October 2026 (UTC). The release-configuration audit and independently
 verified Starter port are complete. This employee application was generated from
 Compose Fluent Starter and is the proving ground for reusable foundation changes.
