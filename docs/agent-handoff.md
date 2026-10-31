@@ -54,6 +54,21 @@ this is policy plumbing for the ongoing chat integration, not a delivered chat U
 Platform schema 105 and its dashboard policy UI carry the matching identifier.
 No Starter port is appropriate for this HRIS company-module catalog entry.
 
+The standard native Matrix refresh mechanism now passes against real Synapse and
+the browser. Four-second native access credentials expire, the SDK refreshes, the
+session delegate saves both replacement tokens and encrypted chat continues with
+the same device signing key. Both provider scenarios passed in 30.586s with owned
+cleanup. [Refresh evidence](measurements/collaboration-native-refresh-2026-10-31.json)
+records hashes, twelve driver cases and the corrected full root check: 2,002
+desktop cases, zero lint errors, debug APK built (2m54s). An initial Detekt long
+method failure led to the separate `ProofSessionStore`; no check was suppressed.
+Native CI now pins Platform `1db0f9fe`; record its hosted result after push.
+This is private fixture storage, not a production Keystore implementation. Use
+SDK standard refresh, never restore again on an initialized SDK client. Continue
+protected HRIS sessions/provisioning/gateway and actual chat UI. No Starter port
+is due for this isolated proof. The dedicated emulator is stopped, data retained;
+no physical phone action occurred.
+
 Updated 31 October 2026 (UTC). The release-configuration audit and independently
 verified Starter port are complete. This employee application was generated from
 Compose Fluent Starter and is the proving ground for reusable foundation changes.

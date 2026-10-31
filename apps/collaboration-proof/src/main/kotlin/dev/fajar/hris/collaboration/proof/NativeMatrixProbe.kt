@@ -7,6 +7,7 @@ import java.util.Base64
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
 import org.json.JSONObject
@@ -15,8 +16,6 @@ import org.matrix.rustcomponents.sdk.ClientBuilder
 import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.RoomMessageLikeEvent
 import org.matrix.rustcomponents.sdk.RoomMessageLikeEventsListener
-import org.matrix.rustcomponents.sdk.Session
-import org.matrix.rustcomponents.sdk.SlidingSyncVersion
 import org.matrix.rustcomponents.sdk.SqliteStoreBuilder
 import org.matrix.rustcomponents.sdk.SyncService
 import org.matrix.rustcomponents.sdk.TaskHandle
@@ -50,30 +49,23 @@ internal class NativeMatrixProbe(private val directory: File) {
             var sync: SyncService? = null
             var room: Room? = null
             var listener: TaskHandle? = null
+            val sessions = ProofSessionStore(fixture, home, directory)
             try {
                 SqliteStoreBuilder(store.absolutePath, cache.absolutePath).use { storeBuilder ->
                     storeBuilder.passphrase(keyFile.readText()).use { encryptedStore ->
                         ClientBuilder().use { initial ->
                             initial.homeserverUrl(home.toString()).use { located ->
                                 located.sqliteStore(encryptedStore).use { configured ->
-                                    client = configured.build()
+                                    configured.setSessionDelegate(sessions).use { owned ->
+                                        client = owned.build()
+                                    }
                                 }
                             }
                         }
                     }
                 }
                 val active = checkNotNull(client)
-                active.restoreSession(
-                    Session(
-                        accessToken = fixture.getString("accessToken"),
-                        refreshToken = null,
-                        userId = fixture.getString("userId"),
-                        deviceId = fixture.getString("deviceId"),
-                        homeserverUrl = home.toString(),
-                        oauthData = null,
-                        slidingSyncVersion = SlidingSyncVersion.NATIVE,
-                    )
-                )
+                active.restoreSession(sessions.initialSession())
                 active.syncService().use { builder -> sync = builder.finish() }
                 checkNotNull(sync).start()
                 room = active.joinRoomById(fixture.getString("roomId"))
@@ -95,21 +87,28 @@ internal class NativeMatrixProbe(private val directory: File) {
                             }
                         },
                     )
-                active.encryption().use { encryption ->
-                    val ready =
-                        JSONObject()
-                            .put("ready", true)
-                            .put("userId", active.userId())
-                            .put("deviceId", active.deviceId())
-                            .put("ed25519", checkNotNull(encryption.ed25519Key()))
-                    File(directory, "ready.json").writeText(ready.toString())
-                }
+                val originalKey =
+                    active.encryption().use { encryption ->
+                        val key = checkNotNull(encryption.ed25519Key())
+                        val ready =
+                            JSONObject()
+                                .put("ready", true)
+                                .put("userId", active.userId())
+                                .put("deviceId", active.deviceId())
+                                .put("ed25519", key)
+                        File(directory, "ready.json").writeText(ready.toString())
+                        key
+                    }
                 val incoming = withTimeout(45_000) { received.await() }
+                // Cross the provider's four-second lifetime while retaining the same client,
+                // crypto store, key and room. The SDK owns the refresh request and token update.
+                delay(6_000)
                 val outgoing =
                     joined.sendRaw(
                         "m.room.message",
                         JSONObject().put("msgtype", "m.text").put("body", replyBody).toString(),
                     )
+                val unchangedKey = active.encryption().use { it.ed25519Key() == originalKey }
                 File(directory, "result.json")
                     .writeText(
                         JSONObject()
@@ -117,6 +116,8 @@ internal class NativeMatrixProbe(private val directory: File) {
                             .put("receivedEventId", incoming.eventId)
                             .put("sentEventId", outgoing)
                             .put("sdk", "26.10.23")
+                            .also { sessions.addEvidence(it) }
+                            .put("deviceKeyUnchanged", unchangedKey)
                             .toString()
                     )
             } finally {

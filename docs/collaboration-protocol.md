@@ -30,7 +30,7 @@ With JDK 21 and Android SDK 36 configured, build:
 
 Boot the existing `hris-mobile-dev` emulator on port 5560 using
 [the development procedure](development.md#headless-android-emulator). From the
-Platform checkout at `a9100ece`, run:
+Platform checkout at `1db0f9fe`, run:
 
 ```sh
 python3 tool/check_collaboration_providers.py --docker-sudo \
@@ -91,3 +91,25 @@ Both actual provider scenarios passed (no failures/skips), with full cleanup in
 66.016s. [The hosted result](measurements/collaboration-android-ci-2026-10-31.json)
 retains the CI APK hash, source revision and fixed Platform driver separately
 from the local APK evidence.
+
+## Standard token refresh
+
+The updated native fixture requests refresh credentials. After the four-second
+access lifetime expires, the SDK renews its credentials while the original
+client/crypto store stays open. Its session delegate persists both new tokens;
+the signing key and bidirectional encrypted chat must remain intact. Both real
+provider scenarios passed in 30.586s including cleanup. [Refresh evidence](measurements/collaboration-native-refresh-2026-10-31.json)
+records the APK and source hashes. Full root checks, debug assembly and lint
+passed in 2m54s (2,002 desktop cases, zero failures/errors/skips; zero lint errors,
+45 existing warnings). The first Detekt method-length failure was corrected by
+extracting the session store; it is retained in the evidence.
+
+`ProofSessionStore` contains only private fictional lab credentials. Production
+Keystore storage, HRIS gateway live admission, lost-response semantics and offline
+queue recovery remain separate implementation work. Initialize each SDK client
+with `restoreSession` only once; subsequent token changes follow the standard
+refresh endpoint and callback. The SDK's pinned Rust source
+`8de215a0aa0026afa5754ae5f05a6d168d1a1d60` enables automatic refresh in its builder.
+CI now pins Platform `1db0f9fe`, which issues the required refresh fixture. Record
+the new hosted run separately. The owned emulator is stopped and no phone
+installation or UI interaction occurred.

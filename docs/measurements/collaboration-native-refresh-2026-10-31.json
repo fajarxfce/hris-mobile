@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 1,
+  "runId": "717b44d26fb049b9ad9bee2f0274133e",
+  "kind": "collaboration_android_standard_token_refresh",
+  "complete": true,
+  "productAcceptance": false,
+  "capacityAcceptance": false,
+  "images": {
+    "synapse": {
+      "reference": "ghcr.io/element-hq/synapse:v1.164.1@sha256:fa4aa980f279bcf26d4e7ecc2a2c9a701c73f2ebe8841da9bdcf3b2fdf693d75",
+      "id": "sha256:fa4aa980f279bcf26d4e7ecc2a2c9a701c73f2ebe8841da9bdcf3b2fdf693d75",
+      "digests": [
+        "ghcr.io/element-hq/synapse@sha256:fa4aa980f279bcf26d4e7ecc2a2c9a701c73f2ebe8841da9bdcf3b2fdf693d75"
+      ]
+    },
+    "livekit": {
+      "reference": "livekit/livekit-server:v1.13.11@sha256:25cd902de7cacbd5f1f779f6a6ac1eae20ba8f56b0935934ce6b0ab80d1e3d20",
+      "id": "sha256:25cd902de7cacbd5f1f779f6a6ac1eae20ba8f56b0935934ce6b0ab80d1e3d20",
+      "digests": [
+        "livekit/livekit-server@sha256:25cd902de7cacbd5f1f779f6a6ac1eae20ba8f56b0935934ce6b0ab80d1e3d20"
+      ]
+    },
+    "postgres": {
+      "reference": "postgres:18.6-alpine@sha256:10a5c69a83035ab5239f5620d708520e8b28f5aa1f2b20143e6024532edadfb5",
+      "id": "sha256:10a5c69a83035ab5239f5620d708520e8b28f5aa1f2b20143e6024532edadfb5",
+      "digests": [
+        "postgres@sha256:10a5c69a83035ab5239f5620d708520e8b28f5aa1f2b20143e6024532edadfb5"
+      ]
+    }
+  },
+  "checks": {
+    "wrong_issuer": true,
+    "wrong_audience": true,
+    "expired_jwt_beyond_provider_leeway": true,
+    "public_registration_disabled": true,
+    "loopback_only_http": true,
+    "isolated_dedicated_network": true,
+    "browser_e2ee_restart_media": true,
+    "android_web_bidirectional_e2ee": true,
+    "android_sdk_refresh_preserves_device_key": true
+  },
+  "cleanup": true,
+  "sourceSha256": {
+    "tool/check_collaboration_providers.py": "9becd24a827a6ec2fbded082375024162bcaa72c28ca5b57648c48dbdc6e9ec2",
+    "tool/test_collaboration_providers.py": "1ddf78841a84a9e0636542a62c661f4d8b07a15f145083d74f7d47449fa67f3a",
+    "tool/collaboration_native_device.py": "d65344ef89e327d5365c2ba657e152d5beacd14c9459d2a6afd3177eadbccf7c",
+    "tool/test_collaboration_native_device.py": "5fd304f28d583682606cb729abdf241d2d1c40dcb730c5481357eb063d03b867",
+    "tool/collaboration-proof/package.json": "f499358763283beb73dd76606dde7e28122b6787494529ad518fef5718062cad",
+    "tool/collaboration-proof/package-lock.json": "031dbd57065817fbe2e119d87bb3e9588e26d4814835219dc950c4dddff51c56",
+    "tool/collaboration-proof/images.json": "63aa4b37949053e6574f9f4ae7ff1d22c02a59d8955a141c6aae5b2257e89f50",
+    "tool/collaboration-proof/index.html": "e5cadc31789aa95d2b718905dd44201da49a29678b913db9a7563fdf907ba7d0",
+    "tool/collaboration-proof/playwright.config.mjs": "33b5dd2896bd6a602e54a9c8154c679ee31b473e7bc9a0ff9da8864ca429381c",
+    "tool/collaboration-proof/src/probe.js": "883a60282b97b4a742f4d44bf130370a8b4bcdaa3805d62d19438725603c16d2",
+    "tool/collaboration-proof/tests/providers.spec.mjs": "a57101427a84090f2ddbbb4f1b1b94a79394baa50a7574a51dc18f153f4207a5",
+    "tool/collaboration-proof/tests/native.spec.mjs": "8390f8aa13a4c0cd370191e42fc5cb2e2a24fdb446ac12bd45b202ce0f7ca5cd"
+  },
+  "observations": {
+    "recent_expired_jwt_accepted_by_provider": true,
+    "strict_hris_broker_expiry_required": true
+  },
+  "native": {
+    "apkSha256": "a493f8a25c61208bb319fd296d96b05953878a34288db0787d733a1ce04e5fb1",
+    "package": "dev.fajar.hris.collaboration.proof",
+    "avd": "hris-mobile-dev",
+    "androidApi": "35"
+  },
+  "browser": {
+    "expected": 2,
+    "unexpected": 0,
+    "flaky": 0,
+    "skipped": 0,
+    "duration": 15736.976999999999
+  },
+  "elapsedSeconds": 30.586,
+  "localChecks": {
+    "driverTests": 12,
+    "mobileDesktopTests": 2002,
+    "mobileDesktopSuites": 349,
+    "mobileRootCheck": true,
+    "mobileDebugAssembly": true,
+    "mobileLintErrors": 0,
+    "mobileLintWarnings": 45,
+    "mobileCheckElapsedSeconds": 174,
+    "initialFailure": "Detekt LongMethod in proof run; extracted cohesive session callback storage, then full checks passed."
+  },
+  "mobileSourceSha256": {
+    "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/MatrixProofInstrumentation.kt": "927f36e7beb4d305e7474c285dfb97fe475f910f1b1c28457f110e12d36b45a5",
+    "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/NativeMatrixProbe.kt": "1c683f56458492eef045c718602b0a6da335f0c88e9565bd39e50b13909b5aab",
+    "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/ProofSessionStore.kt": "1dd061793deb8b3c5bd9b7777b3638ee505b1ea056c1cceb23ef1e3aa6363838"
+  },
+  "limits": [
+    "Standard Synapse refresh with Matrix Rust Kotlin SDK 26.10.23; not yet a protected HRIS gateway.",
+    "Fictional callback credential file is private lab storage, not a product Keystore adapter.",
+    "No physical phone interaction or installation. Owned emulator stopped with data retained."
+  ],
+  "platformDriverCommit": "1db0f9feb13c647a1d83c0233d8a3d5adc368f3a"
+}
