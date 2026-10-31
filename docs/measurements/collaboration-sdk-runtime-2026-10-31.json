@@ -82,7 +82,7 @@
         ":features:collaboration:data:wasmJsBrowserTest"
       ],
       "desktop": {
-        "tests": 2153,
+        "tests": 2059,
         "failures": 0,
         "errors": 0,
         "skipped": 0
@@ -98,5 +98,6 @@
   "next": [
     "Execute the actual HRIS emulator fixture through the protected runtime.",
     "Implement current-admission installation and expired-bootstrap recovery, then durable SDK message queue restart, UI and P0\u2013P8."
-  ]
+  ],
+  "measurementCorrection": "Local suite totals exclude downloaded hosted XML under .work; the initial count included 94 unrelated artifact cases. The root test result is unchanged."
 }
