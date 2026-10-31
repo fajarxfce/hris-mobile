@@ -2712,3 +2712,17 @@ and unchanged binary evidence. The normal WireGuard APK from application `3c6db4
 was installed with advance notice and `--install-only` in 5.777s; its installed hash
 was checked directly. [Final measurements](measurements/document-metadata-final-ci-2026-10-30.json)
 retain full scope and limits. Physical iPhone testing remains waived.
+
+## Private Android release installation — 31 October 2026
+
+At the user's request, current source `5ffb7300` produced a signed `devRelease`
+APK for the existing WireGuard application: version 1.0.0, build 2, non-debuggable.
+Release assembly/vital lint passed in 132.050s. Package identity, the retained
+certificate, correct private API and Firebase app, and absence of fixture endpoints
+were verified. The 24,111,115-byte APK was installed in place on the authorized
+Samsung SM-A725F and pulled back for an exact SHA-256 comparison, in 24.772s.
+App ID/first-install time remain unchanged; no data clear or UI launch occurred.
+[The measurement](measurements/android-release-phone-2026-10-31.json) records exact
+source/build/artifact boundaries. Reusing the existing development certificate
+preserves upgrade/Firebase compatibility; no production signing identity or
+external release upload was created. Future phone builds must use code 2 or higher.

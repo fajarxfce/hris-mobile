@@ -1,8 +1,35 @@
 # Agent continuation — HRIS Mobile
 
-Updated 30 October 2026 (UTC). The release-configuration audit and independently
+Updated 31 October 2026 (UTC). The release-configuration audit and independently
 verified Starter port are complete. This employee application was generated from
 Compose Fluent Starter and is the proving ground for reusable foundation changes.
+
+## Latest Android installation — 31 October 2026
+
+The user explicitly requested the latest release build on the WireGuard phone.
+Source `5ffb7300` retains the accepted `d170810f` application/build/test trees.
+A signed `devRelease` APK, version `1.0.0` / build **2**, is now installed on
+`10.77.77.3:5555` (Samsung SM-A725F, API 36). It is non-debuggable and uses
+`http://10.77.77.1:8088/api/v1/`. Release assembly/vital lint passed in 132.050s.
+The existing development signing certificate was deliberately reused for the
+private in-place update and existing Firebase registration; this is a release
+build, not a new production distribution signing identity.
+
+The 24,111,115-byte installed APK exactly matches SHA-256
+`fa9b20a67148d323b4d8975da147871df6a1d9b576cf9202d0cd8c8cdf45919d`.
+Install-only plus installed-byte verification took 24.772s. The package app ID and
+first-install time are unchanged; no uninstall, data clear or UI launch occurred.
+[Measurements](measurements/android-release-phone-2026-10-31.json) retain build
+inputs, source continuity, certificate/package/API checks and installation proof.
+The immutable APK and prior debug APK are retained locally under
+`.work/release-phone-2026-10-31/`.
+
+**Future phone updates must account for installed versionCode 2.** Use at least 2
+for the same build, or a higher code for subsequent builds. The repository default
+is still 1; blindly installing that default may be rejected as a downgrade.
+Preserve the same certificate and install in place. No application source or
+server change, Firebase distribution upload or generic Starter port was needed.
+Earlier phone hashes/builds below are retained history.
 
 ## Completed workspace audit — 30 October 2026
 

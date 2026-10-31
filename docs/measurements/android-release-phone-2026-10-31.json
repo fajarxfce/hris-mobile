@@ -1,0 +1,95 @@
+{
+  "date": "2026-10-31",
+  "request": "Build and install the latest Android release on the authorized WireGuard phone.",
+  "source": {
+    "source": "5ffb730002173a1e2072b0c2cce2a1e8d0eed6b3",
+    "acceptedCiSource": "d170810f03852f46a948f9f4d5dea9ca4104bdbd",
+    "acceptedCiRun": 41077194465,
+    "unchangedSourcePaths": [
+      "apps",
+      "core",
+      "features",
+      "build-logic",
+      "gradle",
+      "tool",
+      ".github",
+      "gradle.properties"
+    ],
+    "variant": "devRelease",
+    "versionName": "1.0.0",
+    "versionCode": 2,
+    "apiBaseUrl": "http://10.77.77.1:8088/api/v1/",
+    "signing": "Existing installed development certificate, reused for private release-build update; no distribution signing key created."
+  },
+  "build": {
+    "command": [
+      "./gradlew",
+      ":apps:android:assembleDevRelease",
+      "-PrequireSigning=true",
+      "-PappEnvironment=dev",
+      "-PappVersion=1.0.0",
+      "-PappVersionCode=2",
+      "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+      "--no-daemon"
+    ],
+    "startedAt": "2026-10-31T03:15:14.839586+00:00",
+    "elapsedSeconds": 132.05,
+    "exitCode": 0
+  },
+  "artifact": {
+    "artifact": ".work/release-phone-2026-10-31/hris-mobile-dev-release-1.0.0-2.apk",
+    "variant": "devRelease",
+    "applicationId": "dev.fajar.hris.mobile.dev",
+    "versionCode": 2,
+    "versionName": "1.0.0",
+    "bytes": 24111115,
+    "sha256": "fa9b20a67148d323b4d8975da147871df6a1d9b576cf9202d0cd8c8cdf45919d",
+    "debuggable": false,
+    "signatureVerified": true,
+    "sameInstalledSigner": true,
+    "signerSha256": "aca5ce6a26b978dee1d63c63103b6799848ab760d47ef4cf5ee68620fc8721f3",
+    "signerSha1": "23860b51e4305aa7900090aeab6783d39a12ff33",
+    "signingBoundary": "Release build signed with the existing development key for an in-place private-device update.",
+    "privateApiVerifiedInDex": true,
+    "fixtureEndpointsAbsent": true,
+    "firebaseDevAppMatches": true
+  },
+  "installation": {
+    "confirmed": true,
+    "startedAt": "2026-10-31T03:18:45.094816+00:00",
+    "elapsedSecondsIncludingVerification": 24.772,
+    "serial": "10.77.77.3:5555",
+    "variant": "devRelease",
+    "applicationId": "dev.fajar.hris.mobile.dev",
+    "versionCode": 2,
+    "versionName": "1.0.0",
+    "debuggable": false,
+    "installedSha256": "fa9b20a67148d323b4d8975da147871df6a1d9b576cf9202d0cd8c8cdf45919d",
+    "installedBytesMatch": true,
+    "existingAppIdPreserved": true,
+    "firstInstallTimePreserved": true,
+    "updateInPlace": true,
+    "uninstalled": false,
+    "appDataCleared": false,
+    "uiLaunched": false
+  },
+  "device": {
+    "model": "Samsung SM-A725F",
+    "androidApi": 36
+  },
+  "previousApkSha256": "1a114fbc388c843b45749a8475296f506563493a38bccabd146323ceb87cf791",
+  "verification": [
+    "Release assembly and release vital lint passed.",
+    "Package/version, disabled debuggable flag, actual APK signer and existing certificate match verified.",
+    "WireGuard API is present in DEX; native/distribution fixture endpoints are absent.",
+    "Firebase Android dev app matches the configured project.",
+    "Installed base.apk was pulled and its SHA-256 matches the built release exactly.",
+    "App ID and first installation time are unchanged; install -r did not uninstall or clear application data."
+  ],
+  "limits": [
+    "Existing development signing key reused for this private release-build update; no production distribution key was created.",
+    "No UI launch or new Google/FCM interaction test performed.",
+    "No application source, server configuration or Starter port changed."
+  ],
+  "nextBuild": "The phone now has versionCode 2. Use at least 2 for the same build, or increase the code for future builds; the checked-in default remains 1."
+}
