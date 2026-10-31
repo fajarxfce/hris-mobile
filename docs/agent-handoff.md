@@ -24,7 +24,11 @@ No product group is accepted; no live/schema/phone change. CI `767ed980` now let
 running control/HRIS proofs finish, retaining only the newest pending workflow.
 `fbb2f3ae` provider CI `41246770541` passes both jobs/all steps, classic 83.930s and
 native 92.938s with two browser cases each; all 14 Platform hashes per mode match
-`e0dbb567`. Its control/HRIS runs `41246770522`/`41246770543` remain in progress.
+`e0dbb567`. Its control/HRIS runs `41246770522`/`41246770543` also pass every job/step:
+119 desktop, 103 browser and 103 iOS simulator cases; app Android/Wasm/Apple
+compilation passes. Hosted actual HRIS SDK case `001256c3` passes in 70.969s with
+cleanup complete. All 94 Mobile/15 Platform source hashes match the pinned commits.
+The new command implementation has its own queued/running checks.
 Starter AppAuth hosted verify `41245287269` passes all 15 verify steps at `9740cb5`,
 with source hashes checked; Starter records closure at `36116b2`.
 

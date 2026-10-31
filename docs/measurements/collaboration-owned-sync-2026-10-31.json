@@ -356,5 +356,152 @@
       }
     },
     "limit": "Provider-only protocol fixtures use their own sync owner. The lease-owned HRIS lifecycle proof is the separate local run above."
+  },
+  "hostedControlAndHris": {
+    "mobileCommit": "fbb2f3aef2b62fa221ae12d0c5f5b71d3ee1b22f",
+    "platformHrisCommit": "9aaf468883b4e09ab866b90138f616433a533542",
+    "runs": {
+      "control": {
+        "runId": 41246770522,
+        "allJobsAndStepsPassed": true,
+        "statusSha256": "7e52ab59b83ddbd046f20acfb2fa1adc19fd8fb285f7b9356c5f1abfb6d2a2b1"
+      },
+      "hris": {
+        "runId": 41246770543,
+        "allJobsAndStepsPassed": true,
+        "statusSha256": "4573ff5d7cceeab1dba0ecd4516ac6e6affbbd52b946f922229729733f3d1c09"
+      }
+    },
+    "mobileSourceHashesVerified": 94,
+    "platformSourceHashesVerified": 15,
+    "controlCounts": {
+      "collaboration-control-apple/iosSimulatorArm64Test": {
+        "tests": 103,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "collaboration-control-portable/desktopTest": {
+        "tests": 119,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "collaboration-control-portable/wasmJsBrowserTest": {
+        "tests": 103,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "controlXmlSha256": {
+      "collaboration-control-apple/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.CollaborationConversationReadTest.xml": "672f8ba01997a1922383e4972f8a412ed9ae9e881d583649a079c0291d3a1e30",
+      "collaboration-control-apple/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.CollaborationRuntimeInstallationTest.xml": "3ce0fbd42f188c53032a181ee39f80c128ba15d31c73cd3ffbeeff3c6c41f279",
+      "collaboration-control-apple/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.CollaborationRuntimeOwnershipTest.xml": "bfe13b71cacb024dd25069e29fc7a9631e02d80c1df26e3c5eeea377a38f1570",
+      "collaboration-control-apple/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.CollaborationRuntimeRestorationTest.xml": "3862705b5a2a9a234ce9c8b37a312b0c02225a19b84c14b755211b0694c63c0b",
+      "collaboration-control-apple/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.CollaborationSetupCommandTest.xml": "8e161c00b4efe38173efd2f98c6dc171d5d59ccf6ebe6260ac35469a1c3d7b76",
+      "collaboration-control-apple/domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.LoadCollaborationSetupTest.xml": "0675b8374316a93da9b552700b6c540756bc8f8dc546605f492d48f9af4719f5",
+      "collaboration-control-apple/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Tes-U8HOVD9OU7TRU.dev.fajar.starter.collaboration.data.CollaborationConversationValidationTest.xml": "cc75906673d454168c6a0f3a670c8e1123299ce9513e219d3b0e1f9b43d4bc2f",
+      "collaboration-control-apple/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.data.CollaborationConversationTransportTest.xml": "af6ac791793fb7620dc14b3c8b3ab6f4390c184ce7e0a510a5074025ba9b5ec2",
+      "collaboration-control-apple/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.data.CollaborationSdkRecordTest.xml": "aa47a3ef59a89ea3341b856d3506190008c4c6f1544a12b03919b00a954c2bb0",
+      "collaboration-control-apple/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.data.CollaborationSetupTransportTest.xml": "1d3aad1e6d8989e9e0c47ca8ca509256dfb6fd8809bf25d3d74f75fababfdabc",
+      "collaboration-control-apple/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.data.CollaborationSetupValidationTest.xml": "175214af7a6449742ed395a9fa4a062fb40e3495fd17f5095611b2751bcfc91d",
+      "collaboration-control-apple/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.data.SdkSessionPersistenceTest.xml": "5978d289251ac175a5d3e0904fdc9ff70f0f05c5c6aee89f55c3dc600ad6c33f",
+      "collaboration-control-apple/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.data.SdkStoreShutdownTest.xml": "8552cf17ec70900d228193e40bfc6905b37d5a8e2e6561c45b5456c6d25b689c",
+      "collaboration-control-apple/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.data.SdkSyncLifecycleTest.xml": "ed0c6e81fbeeb8bbccd48a23a386f01de2f16ad2c0f35452a33b630868db91eb",
+      "collaboration-control-portable/apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationBindingsTest.xml": "471bce5ac5a410a45bb1afc5b52dc6c8de0f19aa4ad876d0356d6b455fc57db0",
+      "collaboration-control-portable/features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationConversationReadTest.xml": "215737faf4315eab2761dc7f49bb45231dac832ff8efb416b9aab0dc5ebe7549",
+      "collaboration-control-portable/features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationRuntimeOwnershipTest.xml": "d82e2920b7d43bcd113342784662906e097376604166f506dabfb38fb332d2f2",
+      "collaboration-control-portable/features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationRuntimeInstallationTest.xml": "b04a1bc5e6a829a2c39d4dfa872122c40fbe4b53eb3bdb11e8a7c8bf22c8e902",
+      "collaboration-control-portable/features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationRuntimeRestorationTest.xml": "b74e11e9b792fcac98c1d86e3c921fd5dffc454934ab2cc38d52ae27516b635a",
+      "collaboration-control-portable/features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationSetupCommandTest.xml": "aadae662275e3a75b11286269496cd4d19a267d5657b95afe2518dadf7e4ffcc",
+      "collaboration-control-portable/features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.LoadCollaborationSetupTest.xml": "2a898f5f72c098226040f571126fdee3c83f0f656be9815992708ec48bc6a47f",
+      "collaboration-control-portable/features/collaboration/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.domain.CollaborationConversationReadTest.xml": "fcacaa0322dcdd70fd3a0a11e528608755f2ee28d81c55d46ff67358e2c226fc",
+      "collaboration-control-portable/features/collaboration/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.domain.CollaborationRuntimeInstallationTest.xml": "a75b58d44502779062713bc8363eb90cd02c539b5740b72dced9a618845fd982",
+      "collaboration-control-portable/features/collaboration/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.domain.CollaborationRuntimeOwnershipTest.xml": "a61c9e8aa11a439722902da0e8a20fb2e9095fde123f7677ddc1b258c5e17767",
+      "collaboration-control-portable/features/collaboration/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.domain.CollaborationRuntimeRestorationTest.xml": "4a2e0563d260776e20741aed3d776b5fb22cec0e150f7f82528e165ea04bee1c",
+      "collaboration-control-portable/features/collaboration/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.domain.LoadCollaborationSetupTest.xml": "19f1f73754bc34ae42d318936243e602992f68759983f27c4af485db0d72dda1",
+      "collaboration-control-portable/features/collaboration/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.domain.CollaborationSetupCommandTest.xml": "688d9b24554ab34cc3003f6fbce2799993916f0ecfefaf306986624d3a512094",
+      "collaboration-control-portable/features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationConversationTransportTest.xml": "a3ab15094d19be7db7cd6c3fcc41f7189135c1bd10f59c4afdf82ecd1ed46416",
+      "collaboration-control-portable/features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSdkRecordTest.xml": "181d734084de72d08ceb229c89d7c22dced42dcffa4b4d3c9a6e0fb84ce1bafa",
+      "collaboration-control-portable/features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationConversationValidationTest.xml": "4ec35613bfa9138e98950ca9e9d41fbc88932af583f3d75b7d01fb91c201c323",
+      "collaboration-control-portable/features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSetupTransportTest.xml": "71f239ccea2c7f84a9f752b9a8ca337bfe8286c05fd0291508c453aeeff3f823",
+      "collaboration-control-portable/features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSetupValidationTest.xml": "423d0399cbce182e890873eac6942c7a457205c7f9a52429c6fbc671d4ced403",
+      "collaboration-control-portable/features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.EncryptedCollaborationSetupCommandTest.xml": "5efa1f3c6c15d72479e01bf670cdf5ae732cc07bb9930609be27d08268025afe",
+      "collaboration-control-portable/features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.FileCollaborationSdkStoreTest.xml": "00eb96877b8a546c8e8095dde5b81862539f4db5129d8178c0dc89cd0c06c8af",
+      "collaboration-control-portable/features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.SdkSessionPersistenceTest.xml": "af2b63470dab71fcd70aa60144a855b335d0c59afc9c23b344fd32f20a085586",
+      "collaboration-control-portable/features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.SdkStoreShutdownTest.xml": "bbcea8c015149cb1798d72e9d30a764cc79adfa5b252d2cf68422ee7ae25d3ca",
+      "collaboration-control-portable/features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.SdkSyncLifecycleTest.xml": "888a88c629bd4c7c2ecbdcf41f333e41c40694ed5fd5e471d6f583a15f355e59",
+      "collaboration-control-portable/features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.CollaborationConversationTransportTest.xml": "705e1f013a4925f0bdb6e7739ac3add983a017f74f2515877c0200086125d266",
+      "collaboration-control-portable/features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.CollaborationConversationValidationTest.xml": "356bd497f5fa1f87ed1f5638f3caeda6c96ac6d1d4075bc2bdcc98dddff8879b",
+      "collaboration-control-portable/features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.CollaborationSdkRecordTest.xml": "16bf3fd96df19e00f2420ac88820ca7115e890402373ea9e314f9c80f9631298",
+      "collaboration-control-portable/features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.CollaborationSetupTransportTest.xml": "36e35e22ab160ea0e7cc94294e17957da7fd676f7894c5a0550fbf654f8172bb",
+      "collaboration-control-portable/features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.CollaborationSetupValidationTest.xml": "dd4a44fc921a8a4ad75418d5a270e8417162b1a3fff749a84e242ee8cec1ebc6",
+      "collaboration-control-portable/features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.SdkSessionPersistenceTest.xml": "519969827162caad311c6a2e090e5aa3d92aeb90cde2f1bf595579f1e8b58480",
+      "collaboration-control-portable/features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.SdkStoreShutdownTest.xml": "4d4b09e9c015529d288ada13beada51879dc9441137247fe7129fb180f4b0511",
+      "collaboration-control-portable/features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.SdkSyncLifecycleTest.xml": "a7879f81da6023fe3db1fc1980d541aa37deaca1fee298cf5294889475c25999"
+    },
+    "hris": {
+      "runId": "001256c3c0d4487191e9e35ce4fe1e86",
+      "sdkCaseSeconds": 70.969,
+      "result": {
+        "passed": true,
+        "cleanup": true,
+        "artifact": {
+          "apkSha256": "4f71a71b4d38bc52fb554b74e918e59f5eeff60f7c5d145d315a23b862a1f75c",
+          "package": "dev.fajar.hris.collaboration.proof",
+          "avd": "hris-mobile-dev",
+          "androidApi": "35"
+        },
+        "diagnostic": {
+          "instrumentationComplete": true,
+          "failureFrames": []
+        },
+        "proof": {
+          "encryptedBothDirections": true,
+          "logicalIdsPreserved": true,
+          "syncMode": "classic",
+          "protectedStoreReopened": true,
+          "missingRecordPreserved": true,
+          "wrongPassphrasePreserved": true,
+          "exclusiveOwner": true,
+          "queueRestored": true,
+          "transactionReused": true,
+          "identityAfterRestart": true,
+          "senderEventId": "$-3UfRtRqsII2wo5tmRfDBAcc6YwGs6yHjj0UKptaq9o",
+          "recipientEventId": "$30eySMQP02uluYIYtEy29vJgHt94JWiwNDM6PJwqf00",
+          "senderTransaction": "7545c347dbf74de48fbf87fcc31505e6",
+          "recipientTransaction": "022a9fa6ff9840178e6aa9a55797be94",
+          "processRestarted": true
+        }
+      },
+      "serverVerification": {
+        "passed": true,
+        "encryptedBothDirections": true,
+        "logicalIdsPreserved": true,
+        "cleanup": true,
+        "protectedStoreReopened": true,
+        "missingRecordPreserved": true,
+        "wrongPassphrasePreserved": true,
+        "exclusiveOwner": true,
+        "processRestarted": true,
+        "queueRestored": true,
+        "transactionReused": true,
+        "identityAfterRestart": true,
+        "pausedAcrossRestart": true,
+        "artifact": {
+          "apkSha256": "4f71a71b4d38bc52fb554b74e918e59f5eeff60f7c5d145d315a23b862a1f75c",
+          "package": "dev.fajar.hris.collaboration.proof",
+          "avd": "hris-mobile-dev",
+          "androidApi": "35"
+        }
+      },
+      "resultSha256": "d29f9ba89d71a7187c588df844b20a9200419bd64608a500e31419d5ac9e9ab9",
+      "xmlSha256": "522b80c6d51d62fea774a2ca2c6bc9ea6958578b4afc84858ed15e9088ad7f78"
+    },
+    "limits": [
+      "Apple runs common domain/data simulator tests and compiles the app; Apple native chat runtime remains unimplemented.",
+      "These results match fbb2f3ae, before the new durable conversation command implementation."
+    ]
   }
 }
