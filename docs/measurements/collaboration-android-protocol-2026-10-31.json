@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "kind": "isolated_android_protocol",
+  "productAcceptance": false,
+  "capacityAcceptance": false,
+  "sdk": "26.10.23",
+  "androidApi": 35,
+  "apkSha256": "c6355f65c937e984decf0af8b23df7a39f9e1c8a568fb52f27b9ca61d9413c5b",
+  "providerRunId": "7d084be5d4d942c38b8792de1fa1448c",
+  "providerCommit": "a9100ecebbb8ac2f8c1343191ad32135dfaec3dc",
+  "providerEvidence": "https://github.com/fajarxfce/hris-platform/blob/a9100ecebbb8ac2f8c1343191ad32135dfaec3dc/docs/measurements/collaboration-android-web-provider-2026-10-31.json",
+  "sourceSha256": {
+    "apps/collaboration-proof/build.gradle.kts": "0a6809f4e380e619e308c7c004f2a8de595482ce91efcfee70346501862256b5",
+    "apps/collaboration-proof/src/main/AndroidManifest.xml": "2000d1417571840780b15d6a09795f92c2c95ace4e0c83b4f5d92c003010b2ec",
+    "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/MatrixProofInstrumentation.kt": "927f36e7beb4d305e7474c285dfb97fe475f910f1b1c28457f110e12d36b45a5",
+    "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/NativeMatrixProbe.kt": "0939aac3d3c6341443f21b10cae162c86ef10b18c1b6132e589819210858ef7e",
+    "build.gradle.kts": "578b5a79f896b97707afe548a6971c737a887df36fe821277fcc9c4291d8e214",
+    "gradle/libs.versions.toml": "f81abaf71b5318a035ed5f93c48b9e141e02ce7914a0db52572a70b2197a0569",
+    "gradle/verification-metadata.xml": "b825cbd053f2534db4b3009ca14b5df0e7d877cd02a35b26cb952c8423c99fe3",
+    "settings.gradle.kts": "c1dae24fc6b4f312c2d020c09430542f42e5718e1aa842157779dc00274c3b05"
+  },
+  "checks": {
+    "assembleDebug": true,
+    "rootCheck": true,
+    "lintDebug": true,
+    "desktopSuites": 349,
+    "desktopTests": 2002,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "lintErrors": 0,
+    "lintWarnings": 45,
+    "rootAndLintElapsedSeconds": 282
+  }
+}

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <uses-permission android:name="android.permission.INTERNET" />
+    <application
+        android:allowBackup="false"
+        android:label="HRIS Protocol Proof"
+        android:usesCleartextTraffic="true" />
+    <instrumentation
+        android:name=".MatrixProofInstrumentation"
+        android:functionalTest="true"
+        android:targetPackage="dev.fajar.hris.collaboration.proof" />
+</manifest>

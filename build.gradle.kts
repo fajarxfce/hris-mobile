@@ -35,7 +35,10 @@ tasks.named("check") {
     dependsOn("formatCheck")
     dependsOn(
         subprojects
-            .filter { it.buildFile.exists() && it.path != ":apps:android" }
+            .filter {
+                it.buildFile.exists() &&
+                    it.path !in setOf(":apps:android", ":apps:collaboration-proof")
+            }
             .map { "${it.path}:desktopTest" }
     )
 }

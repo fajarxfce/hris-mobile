@@ -25,6 +25,8 @@ dependencyResolutionManagement {
 
 rootProject.name = "hris-mobile"
 
+include(":apps:collaboration-proof")
+
 include(":features:people:domain", ":features:people:data", ":features:people:presentation")
 
 include(":features:inbox:domain", ":features:inbox:data", ":features:inbox:presentation")

@@ -1,0 +1,63 @@
+# Native collaboration protocol proof
+
+The accepted [full collaboration PRD](../../hris-platform/docs/collaboration/prd.md)
+adds employee chat, calls and meetings. This is the first Android interoperability
+proof, not the HRIS product integration. See Platform's delivery ledger for all
+54 feature groups and P0–P8 acceptance.
+
+`apps/collaboration-proof` builds a separate debug-only APK with no launcher,
+Firebase configuration or HRIS app dependency. Its instrumentation restores a
+fictional Matrix session, joins an encrypted room, decrypts a browser message and
+sends an encrypted reply. Every client, sync service and callback has bounded
+ownership and cleanup. The app accepts only a loopback lab server and fictional
+identity. The temporary store passphrase is lab material, not a production
+Keystore adapter. The release variant is disabled.
+
+The dependency is Matrix Rust Kotlin SDK **26.10.23**. Its AAR/module hashes were
+checked against Maven Central's SHA-256 files. Transitive JNA **5.18.1** matched
+Central's published SHA-1 files; both artifacts are pinned locally with SHA-256.
+Gradle dependency verification stays enabled. Sources:
+
+- https://github.com/matrix-org/matrix-rust-components-kotlin/releases/tag/sdk-v26.10.23
+- https://repo.maven.apache.org/maven2/org/matrix/rustcomponents/sdk-android/26.10.23/
+- https://repo.maven.apache.org/maven2/net/java/dev/jna/jna/5.18.1/
+
+With JDK 21 and Android SDK 36 configured, build:
+
+```sh
+./gradlew :apps:collaboration-proof:assembleDebug :apps:collaboration-proof:lintDebug --no-daemon
+```
+
+Boot the existing `hris-mobile-dev` emulator on port 5560 using
+[the development procedure](development.md#headless-android-emulator). From the
+Platform checkout at `a9100ece`, run:
+
+```sh
+python3 tool/check_collaboration_providers.py --docker-sudo \
+  --android-serial emulator-5560 \
+  --android-apk ../hris-mobile/apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk
+```
+
+The driver refuses physical devices, other AVDs, existing proof packages,
+unrelated APK identities and conflicting reverse ports. It serializes owned
+emulator use, sends credentials through stdin into app-private files, and removes
+only the owned APK/mapping on completion. Do not manually install this fixture on
+a phone. Existing HRIS apps and accounts are not used or changed.
+
+Full root checks and debug lint passed in 4m42s: 2,002 desktop cases across 349
+suites, no failures/errors/skips. Lint reports no errors; its 45 warnings cover
+dependency update notices and the intentionally minimal fixture packaging.
+
+The actual Android 35/Web combined run passed both protocol scenarios in 24.590s,
+with no failed/skipped cases and successful cleanup. Both endpoints decrypted the
+other endpoint's message; corresponding server events remained encrypted. See
+[source and artifact evidence](measurements/collaboration-android-protocol-2026-10-31.json)
+and the linked Platform result for the browser/media checks. Hosted workflow
+`Native collaboration protocol` builds this source and uses a fixed Platform
+commit. Its result must be recorded separately; workflow source alone is not a
+passed CI run.
+
+Next gates include protected HRIS company/device sessions, native durable queue
+recovery, verified devices, Apple bindings, MatrixRTC media-key distribution and
+native background calls. None is inferred from the encrypted text exchange.
+No reusable product foundation has yet qualified for a Starter port.

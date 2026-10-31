@@ -13,6 +13,18 @@ tests, source evidence and pushed atomic commits. Prove reusable foundations
 here before porting them to Starter. The completed prior scope below is history,
 not closure of this new implementation request.
 
+P0 native checkpoint: [the separate Android protocol fixture](collaboration-protocol.md)
+uses Matrix Rust Kotlin SDK 26.10.23. Actual Android 35 ↔ browser encrypted text
+exchange and the existing web/media scenario passed together in 24.590s, with
+full owned cleanup. Platform driver/source `a9100ece` records 12 guard tests and
+ciphertext evidence; [Mobile source/artifact hashes](measurements/collaboration-android-protocol-2026-10-31.json)
+bind the tested APK. Full root checks and debug lint passed in 4m42s, including
+2,002 desktop cases across 349 suites (no failures/errors/skips); lint has zero
+errors and 45 dependency-version/fixture-packaging warnings. Native CI is defined with that exact Platform driver; record
+its result separately. This is still P0: product sessions, native durable queue,
+Apple bindings, MatrixRTC and native media remain pending. No Starter code port
+is due yet and no phone install was performed.
+
 Updated 31 October 2026 (UTC). The release-configuration audit and independently
 verified Starter port are complete. This employee application was generated from
 Compose Fluent Starter and is the proving ground for reusable foundation changes.

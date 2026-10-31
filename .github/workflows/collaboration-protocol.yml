@@ -1,0 +1,75 @@
+name: Native collaboration protocol
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main, feat/communications]
+    paths:
+      - apps/collaboration-proof/**
+      - gradle/libs.versions.toml
+      - gradle/verification-metadata.xml
+      - .github/workflows/collaboration-protocol.yml
+  pull_request:
+    paths:
+      - apps/collaboration-proof/**
+      - gradle/libs.versions.toml
+      - gradle/verification-metadata.xml
+      - .github/workflows/collaboration-protocol.yml
+
+permissions:
+  contents: read
+
+jobs:
+  android-web:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: mobile
+      - uses: actions/checkout@v4
+        with:
+          repository: fajarxfce/hris-platform
+          ref: a9100ecebbb8ac2f8c1343191ad32135dfaec3dc
+          path: platform
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: gradle/actions/setup-gradle@v4
+      - uses: android-actions/setup-android@v3
+      - run: sdkmanager 'platforms;android-36' 'build-tools;36.0.0'
+      - name: Build debug-only isolated fixture
+        working-directory: mobile
+        run: ./gradlew :apps:collaboration-proof:assembleDebug :apps:collaboration-proof:lintDebug --no-daemon
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: platform/tool/collaboration-proof/package-lock.json
+      - working-directory: platform/tool/collaboration-proof
+        run: npm ci --ignore-scripts --no-audit --no-fund
+      - working-directory: platform/tool/collaboration-proof
+        run: npx playwright install --with-deps chromium
+      - name: Enable KVM for the owned runner emulator
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          target: google_apis
+          arch: x86_64
+          avd-name: hris-mobile-dev
+          emulator-port: 5560
+          emulator-options: -no-window -no-snapshot -noaudio -no-boot-anim -gpu swiftshader -memory 2048 -cores 2
+          script: python3 platform/tool/check_collaboration_providers.py --android-sdk "$ANDROID_HOME" --android-serial emulator-5560 --android-apk mobile/apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: native-protocol-evidence
+          path: platform/.work/collaboration/*/result.json
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 7
