@@ -27,11 +27,13 @@
   },
   "starter": {
     "commit": "58623f5",
-    "tests": 330,
+    "tests": 331,
     "suites": 114,
     "localRootAndroidWeb": "passed",
     "ciRun": 41170061606,
-    "ciStatus": "in_progress"
+    "ciStatus": "in_progress",
+    "testCommit": "df2906f",
+    "verifyRetryRun": 41170810070
   },
   "previousMobileCi": {
     "run": 41167886399,
@@ -94,7 +96,31 @@
       "uiLaunched": false
     }
   },
-  "renderedReview": "pending native configured-release review",
+  "renderedReview": {
+    "status": "inspected",
+    "device": "Dedicated Android 35 emulator, 1080x2340, 440 dpi; landscape 2340x1080",
+    "releaseSha256": "20adbce11c8f727d3cf80d24d4909ebfd9dfd1f8c94d39327dd70f91bd701e71",
+    "checks": [
+      "Overtime and expense previous/next month; status selection/reset",
+      "Leave balance year stepping; request status remains independent",
+      "Attendance month stepping",
+      "Calendar previous/current week",
+      "Payslip year stepping (no fictional salary/payment generated)",
+      "Dark 200% text with full selected status; landscape row",
+      "Logged out only the emulator session and stopped owned emulator; phone UI untouched"
+    ],
+    "listContentMovesUpDp": {
+      "overtime": 72,
+      "expenses": 80
+    },
+    "measurement": "Matching UIAutomator text bounds on identical fictional rows in builds 3 and 4, divided by density 2.75.",
+    "gallery": {
+      "docs/screenshots/layout-2026-10-31/filters-before-after.jpg": "039ae162f04fd9dc162ce6bb1395c45f5145162171192c10953f2378df602f42",
+      "docs/screenshots/layout-2026-10-31/filters-pages.jpg": "5af894784064271814ef74841f0e775dbb0fdbe149a5f4ecae41375fa70bd45a",
+      "docs/screenshots/layout-2026-10-31/filters-accessibility.jpg": "1901671b3749112a852e8e8f0e3510651edc45fd0ac7f8754214e44a96a1ca7f"
+    },
+    "galleryTreatment": "Cropped top portions and resized screenshots with external captions; landscape full viewport. No application content fabricated."
+  },
   "contrastAgainstCanvas": {
     "lightText": 14.9,
     "lightSelected": 5.39,
@@ -109,7 +135,10 @@
   },
   "mobileSource": "e5af27fd",
   "ci": {
-    "run": 41170243851,
+    "applicationRun": 41170243851,
+    "applicationSource": "e5af27fd",
+    "verifyRetryRun": 41170988888,
+    "verifySource": "9b004324",
     "status": "in_progress"
   },
   "portableTestUpdate": {

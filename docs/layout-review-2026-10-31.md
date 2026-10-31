@@ -31,6 +31,31 @@ including 211 shared UI cases. Starter `58623f5` independently passed
 root/Android/Web (330 cases / 114 suites). Native release screenshots, delivery
 and current-source hosted CI remain in progress.
 
+### Configured release evidence
+
+Build **4** is installed on the WireGuard phone and was exercised in the dedicated
+Android 35 emulator. Identical sample rows begin **72 dp earlier in Overtime** and
+**80 dp earlier in Expenses** than build 3, measured from UIAutomator bounds at
+2.75 density. Month/year/week stepping and status selection/reset passed. Dark
+200% text preserves full labels; landscape fits period and selected status in one
+row. The phone received an in-place install only; only emulator UI was driven.
+
+These galleries show cropped top portions of actual screens (with captions outside
+the capture); the landscape capture preserves the whole viewport:
+
+- [Before/after: date and status filters](screenshots/layout-2026-10-31/filters-before-after.jpg)
+- [Attendance, leave, calendar and payslip filters](screenshots/layout-2026-10-31/filters-pages.jpg)
+- [Dark 200% text and landscape](screenshots/layout-2026-10-31/filters-accessibility.jpg)
+
+The portable test now permits reflow when host fonts require it at 390 dp, while
+retaining full-label/non-overlap checks and separately proving one row at 640 dp.
+Fresh root checks pass **2,002 Mobile cases / 349 suites** and **331 Starter cases /
+114 suites**. The application code and installed APK are unchanged by that test
+correction. Scoped CI verification is running alongside the unaffected platform
+jobs; see [current measurements](measurements/compact-filters-2026-10-31.json).
+The emulator was restored to normal text, light appearance and portrait, its own
+session was logged out, and its process was stopped.
+
 ## Review and implementation queue
 
 - [x] Shared patterns: labelled selection fields, detail label/value hierarchy,
@@ -44,7 +69,7 @@ and current-source hosted CI remain in progress.
 - [x] Payslips list/detail; sessions, pending actions, sync and gated states.
 - [x] Fictional development records associated with the existing user-linked
   employment, created through authorized APIs with retained idempotency receipts.
-- [ ] Inspect actual rendered before/after screenshots; verify narrow screens,
+- [x] Inspect actual rendered before/after screenshots; verify narrow screens,
   Indonesian, large text, dark appearance, keyboard and fixed action reachability.
 - [ ] Required Mobile checks/builds, proven reusable Starter port and independent
   validation; push each atomic commit and update continuation evidence.
