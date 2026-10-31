@@ -1,0 +1,79 @@
+name: Native collaboration through HRIS
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main, feat/communications]
+    paths:
+      - apps/collaboration-proof/**
+      - gradle/libs.versions.toml
+      - gradle/verification-metadata.xml
+      - .github/workflows/collaboration-hris.yml
+  pull_request:
+    paths:
+      - apps/collaboration-proof/**
+      - gradle/libs.versions.toml
+      - gradle/verification-metadata.xml
+      - .github/workflows/collaboration-hris.yml
+
+permissions:
+  contents: read
+
+jobs:
+  android-hris:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: mobile
+      - uses: actions/checkout@v4
+        with:
+          repository: fajarxfce/hris-platform
+          ref: 45ccd56f29871a3474aca676be3464cc7d43bee4
+          path: platform
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: gradle/actions/setup-gradle@v4
+      - uses: android-actions/setup-android@v3
+        with:
+          packages: platform-tools
+      - run: sdkmanager 'platforms;android-36' 'build-tools;36.0.0'
+      - name: Build isolated Android SDK fixture before starting the emulator
+        working-directory: mobile
+        run: ./gradlew --no-daemon --no-parallel --max-workers=1 :apps:collaboration-proof:assembleDebug :apps:collaboration-proof:lintDebug
+      - name: Compile HRIS fixture and verify driver cleanup
+        working-directory: platform
+        run: |
+          python3 -m unittest discover -s tool -p 'test_collaboration*.py'
+          ./gradlew --no-daemon --no-parallel --max-workers=1 :apps:server:testClasses
+      - name: Enable KVM for the owned runner emulator
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - uses: reactivecircus/android-emulator-runner@v2
+        env:
+          HRIS_COLLAB_NATIVE_APK: ${{ github.workspace }}/mobile/apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk
+        with:
+          api-level: 35
+          target: google_apis
+          arch: x86_64
+          avd-name: hris-mobile-dev
+          emulator-port: 5560
+          emulator-options: -no-window -no-snapshot -noaudio -no-boot-anim -gpu swiftshader -memory 2048 -cores 2
+          script: ./platform/gradlew -p platform --no-daemon --no-parallel --max-workers=1 '-Dorg.gradle.jvmargs=-Xmx1536m -Dfile.encoding=UTF-8' :apps:server:cleanTest :apps:server:test --tests '*NativeCollaborationSdkInteropTest'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: native-hris-evidence
+          path: |
+            platform/.work/collaboration/*/result.json
+            platform/.work/collaboration/*/verified.json
+            platform/.work/collaboration/*/gateway-trace.json
+            platform/apps/server/build/test-results/test/TEST-*NativeCollaborationSdkInteropTest.xml
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 7

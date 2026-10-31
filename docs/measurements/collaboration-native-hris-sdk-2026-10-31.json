@@ -1,0 +1,549 @@
+{
+  "date": "2026-10-31",
+  "kind": "actual_android_sdk_through_hris_gateway",
+  "complete": true,
+  "productAcceptance": false,
+  "capacityAcceptance": false,
+  "schema": 113,
+  "runId": "a4a4640555c946ecaac47643d25da747",
+  "result": {
+    "passed": true,
+    "cleanup": true,
+    "artifact": {
+      "apkSha256": "3b10b319b03915d6d90943f059d5f6629be78c7f78bcbb029cf9fcf999bfc6fe",
+      "package": "dev.fajar.hris.collaboration.proof",
+      "avd": "hris-mobile-dev",
+      "androidApi": "35"
+    },
+    "diagnostic": {
+      "instrumentationComplete": true,
+      "failureFrames": []
+    },
+    "proof": {
+      "encryptedBothDirections": true,
+      "logicalIdsPreserved": true,
+      "syncMode": "classic",
+      "senderEventId": "$MMLY3_tTcdmnSjYg7hKcB-jAEoShSZFgaJrl_-DPpqM",
+      "recipientEventId": "$XcxfjsG1Papw5rrWZZdsv77CMM8lSnQ4xVito_XR_-I",
+      "senderTransaction": "c8184397d05a4dc98021d272e8dc6860",
+      "recipientTransaction": "d25eefe4c4b64b509b66c855d0487363"
+    }
+  },
+  "serverVerification": {
+    "passed": true,
+    "encryptedBothDirections": true,
+    "logicalIdsPreserved": true,
+    "cleanup": true,
+    "artifact": {
+      "apkSha256": "3b10b319b03915d6d90943f059d5f6629be78c7f78bcbb029cf9fcf999bfc6fe",
+      "package": "dev.fajar.hris.collaboration.proof",
+      "avd": "hris-mobile-dev",
+      "androidApi": "35"
+    }
+  },
+  "gatewayTrace": [
+    {
+      "method": "GET",
+      "route": "/_matrix/client/versions",
+      "query": [],
+      "unknownQuery": false,
+      "status": 200,
+      "contentLength": -1,
+      "transferEncoding": false,
+      "timeoutMillis": "absent_or_invalid",
+      "errorCode": ""
+    },
+    {
+      "method": "GET",
+      "route": "/_matrix/client/versions",
+      "query": [],
+      "unknownQuery": false,
+      "status": 200,
+      "contentLength": -1,
+      "transferEncoding": false,
+      "timeoutMillis": "absent_or_invalid",
+      "errorCode": ""
+    },
+    {
+      "method": "POST",
+      "route": "/_matrix/client/v3/keys/query",
+      "query": [],
+      "unknownQuery": false,
+      "status": 200,
+      "contentLength": 114,
+      "transferEncoding": false,
+      "timeoutMillis": "absent_or_invalid",
+      "errorCode": ""
+    },
+    {
+      "method": "POST",
+      "route": "/_matrix/client/v3/rooms/_/join",
+      "query": [],
+      "unknownQuery": false,
+      "status": 200,
+      "contentLength": 2,
+      "transferEncoding": false,
+      "timeoutMillis": "absent_or_invalid",
+      "errorCode": ""
+    },
+    {
+      "method": "POST",
+      "route": "/_matrix/client/v3/rooms/_/join",
+      "query": [],
+      "unknownQuery": false,
+      "status": 200,
+      "contentLength": 2,
+      "transferEncoding": false,
+      "timeoutMillis": "absent_or_invalid",
+      "errorCode": ""
+    },
+    {
+      "method": "POST",
+      "route": "/_matrix/client/v3/keys/upload",
+      "query": [],
+      "unknownQuery": false,
+      "status": 200,
+      "contentLength": 17408,
+      "transferEncoding": false,
+      "timeoutMillis": "absent_or_invalid",
+      "errorCode": ""
+    },
+    {
+      "method": "POST",
+      "route": "/_matrix/client/v3/keys/upload",
+      "query": [],
+      "unknownQuery": false,
+      "status": 200,
+      "contentLength": 17408,
+      "transferEncoding": false,
+      "timeoutMillis": "absent_or_invalid",
+      "errorCode": ""
+    },
+    {
+      "method": "GET",
+      "route": "/_matrix/client/v3/sync",
+      "query": [
+        "timeout",
+        "use_state_after"
+      ],
+      "unknownQuery": false,
+      "status": 200,
+      "contentLength": -1,
+      "transferEncoding": false,
+      "timeoutMillis": "1000",
+      "errorCode": ""
+    },
+    {
+      "method": "POST",
+      "route": "/_matrix/client/v3/keys/query",
+      "query": [],
+      "unknownQuery": false,
+      "status": 200,
+      "contentLength": 114,
+      "transferEncoding": false,
+      "timeoutMillis": "absent_or_invalid",
+      "errorCode": ""
+    },
+    {
+      "method": "POST",
+      "route": "/_matrix/client/v3/keys/query",
+      "query": [],
+      "unknownQuery": false,
+      "status": 503,
+      "contentLength": 114,
+      "transferEncoding": false,
+      "timeoutMillis": "absent_or_invalid",
+      "errorCode": "collaboration_provider_busy"
+    },
+    {
+      "method": "POST",
+      "route": "/_matrix/client/v3/keys/upload",
+      "query": [],
+      "unknownQuery": false,
+      "status": 200,
+      "contentLength": 369,
+      "transferEncoding": false,
+      "timeoutMillis": "absent_or_invalid",
+      "errorCode": ""
+    },
+    {
+      "method": "GET",
+      "route": "/_matrix/client/v3/rooms/_/members",
+      "query": [],
+      "unknownQuery": false,
+      "status": 200,
+      "contentLength": -1,
+      "transferEncoding": false,
+      "timeoutMillis": "absent_or_invalid",
+      "errorCode": ""
+    },
+    {
+      "method": "POST",
+      "route": "/_matrix/client/v3/keys/claim",
+      "query": [],
+      "unknownQuery": false,
+      "status": 200,
+      "contentLength": 191,
+      "transferEncoding": false,
+      "timeoutMillis": "absent_or_invalid",
+      "errorCode": ""
+    },
+    {
+      "method": "POST",
+      "route": "/_matrix/client/v3/keys/query",
+      "query": [],
+      "unknownQuery": false,
+      "status": 200,
+      "contentLength": 114,
+      "transferEncoding": false,
+      "timeoutMillis": "absent_or_invalid",
+      "errorCode": ""
+    },
+    {
+      "method": "GET",
+      "route": "/_matrix/client/v3/sync",
+      "query": [
+        "timeout",
+        "use_state_after"
+      ],
+      "unknownQuery": false,
+      "status": 200,
+      "contentLength": -1,
+      "transferEncoding": false,
+      "timeoutMillis": "1000",
+      "errorCode": ""
+    },
+    {
+      "method": "POST",
+      "route": "/_matrix/client/v3/keys/query",
+      "query": [],
+      "unknownQuery": false,
+      "status": 200,
+      "contentLength": 114,
+      "transferEncoding": false,
+      "timeoutMillis": "absent_or_invalid",
+      "errorCode": ""
+    },
+    {
+      "method": "PUT",
+      "route": "/_matrix/client/v3/sendToDevice/m.room.encrypted/_",
+      "query": [],
+      "unknownQuery": false,
+      "status": 200,
+      "contentLength": 2702,
+      "transferEncoding": false,
+      "timeoutMillis": "absent_or_invalid",
+      "errorCode": ""
+    },
+    {
+      "method": "POST",
+      "route": "/_matrix/client/v3/keys/upload",
+      "query": [],
+      "unknownQuery": false,
+      "status": 200,
+      "contentLength": 721,
+      "transferEncoding": false,
+      "timeoutMillis": "absent_or_invalid",
+      "errorCode": ""
+    },
+    {
+      "method": "GET",
+      "route": "/_matrix/client/v3/sync",
+      "query": [
+        "since",
+        "timeout",
+        "use_state_after"
+      ],
+      "unknownQuery": false,
+      "status": 200,
+      "contentLength": -1,
+      "transferEncoding": false,
+      "timeoutMillis": "1000",
+      "errorCode": ""
+    },
+    {
+      "method": "PUT",
+      "route": "/_matrix/client/v3/rooms/_/send/m.room.encrypted/_",
+      "query": [],
+      "unknownQuery": false,
+      "status": 200,
+      "contentLength": 646,
+      "transferEncoding": false,
+      "timeoutMillis": "absent_or_invalid",
+      "errorCode": ""
+    },
+    {
+      "method": "GET",
+      "route": "/_matrix/client/v3/sync",
+      "query": [
+        "since",
+        "timeout",
+        "use_state_after"
+      ],
+      "unknownQuery": false,
+      "status": 200,
+      "contentLength": -1,
+      "transferEncoding": false,
+      "timeoutMillis": "1000",
+      "errorCode": ""
+    },
+    {
+      "method": "GET",
+      "route": "/_matrix/client/v3/sync",
+      "query": [
+        "since",
+        "timeout",
+        "use_state_after"
+      ],
+      "unknownQuery": false,
+      "status": 200,
+      "contentLength": -1,
+      "transferEncoding": false,
+      "timeoutMillis": "1000",
+      "errorCode": ""
+    },
+    {
+      "method": "GET",
+      "route": "/_matrix/client/v3/sync",
+      "query": [
+        "since",
+        "timeout",
+        "use_state_after"
+      ],
+      "unknownQuery": false,
+      "status": 200,
+      "contentLength": -1,
+      "transferEncoding": false,
+      "timeoutMillis": "1000",
+      "errorCode": ""
+    },
+    {
+      "method": "GET",
+      "route": "/_matrix/client/v3/rooms/_/members",
+      "query": [],
+      "unknownQuery": false,
+      "status": 200,
+      "contentLength": -1,
+      "transferEncoding": false,
+      "timeoutMillis": "absent_or_invalid",
+      "errorCode": ""
+    },
+    {
+      "method": "PUT",
+      "route": "/_matrix/client/v3/sendToDevice/m.room.encrypted/_",
+      "query": [],
+      "unknownQuery": false,
+      "status": 200,
+      "contentLength": 2560,
+      "transferEncoding": false,
+      "timeoutMillis": "absent_or_invalid",
+      "errorCode": ""
+    },
+    {
+      "method": "GET",
+      "route": "/_matrix/client/v3/sync",
+      "query": [
+        "since",
+        "timeout",
+        "use_state_after"
+      ],
+      "unknownQuery": false,
+      "status": 200,
+      "contentLength": -1,
+      "transferEncoding": false,
+      "timeoutMillis": "1000",
+      "errorCode": ""
+    },
+    {
+      "method": "PUT",
+      "route": "/_matrix/client/v3/rooms/_/send/m.room.encrypted/_",
+      "query": [],
+      "unknownQuery": false,
+      "status": 200,
+      "contentLength": 646,
+      "transferEncoding": false,
+      "timeoutMillis": "absent_or_invalid",
+      "errorCode": ""
+    },
+    {
+      "method": "GET",
+      "route": "/_matrix/client/v3/sync",
+      "query": [
+        "since",
+        "timeout",
+        "use_state_after"
+      ],
+      "unknownQuery": false,
+      "status": 200,
+      "contentLength": -1,
+      "transferEncoding": false,
+      "timeoutMillis": "1000",
+      "errorCode": ""
+    },
+    {
+      "method": "GET",
+      "route": "/_matrix/client/v3/sync",
+      "query": [
+        "since",
+        "timeout",
+        "use_state_after"
+      ],
+      "unknownQuery": false,
+      "status": 200,
+      "contentLength": -1,
+      "transferEncoding": false,
+      "timeoutMillis": "1000",
+      "errorCode": ""
+    },
+    {
+      "method": "GET",
+      "route": "/_matrix/client/v3/rooms/_/event/_",
+      "query": [],
+      "unknownQuery": false,
+      "status": 200,
+      "contentLength": -1,
+      "transferEncoding": false,
+      "timeoutMillis": "absent_or_invalid",
+      "errorCode": ""
+    },
+    {
+      "method": "GET",
+      "route": "/_matrix/client/v3/rooms/_/event/_",
+      "query": [],
+      "unknownQuery": false,
+      "status": 200,
+      "contentLength": -1,
+      "transferEncoding": false,
+      "timeoutMillis": "absent_or_invalid",
+      "errorCode": ""
+    }
+  ],
+  "validation": {
+    "pythonCases": 27,
+    "pythonFailures": 0,
+    "gatewayAndHttpSuites": [
+      {
+        "suite": "dev.fajar.hris.NativeCollaborationMatrixIdentityHttpTest",
+        "tests": 18,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "seconds": 34.338
+      },
+      {
+        "suite": "dev.fajar.hris.NativeCollaborationSdkInteropTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "seconds": 23.357
+      }
+    ],
+    "formatCheck": "passed",
+    "architectureCheck": "passed",
+    "finalGradleSeconds": 83,
+    "firstCorrectedGradleSeconds": 79,
+    "mobileRootDebugLintSeconds": 69,
+    "mobileRootDebugLint": "passed",
+    "mobileInitialDebugLintSeconds": 274,
+    "mobileInitialRootFailure": "NestedBlockDepth in HrisProofClient; factored builder, no suppression."
+  },
+  "failedAttempts": [
+    {
+      "runId": "a764fd56ebb54b5dbe01898e3e980a92",
+      "gradleSeconds": 82,
+      "diagnostic": {
+        "replyComplete": false,
+        "resultComplete": false,
+        "instrumentationComplete": false,
+        "failureCategory": "TimeoutCancellationException",
+        "failureFrames": []
+      },
+      "cleanup": true,
+      "cause": "Sync rejected an SDK query; sends succeeded but no receive."
+    },
+    {
+      "runId": "1af50edbb97b419d95284cac27ffadd3",
+      "gradleSeconds": 69,
+      "diagnostic": {
+        "replyComplete": false,
+        "resultComplete": false,
+        "instrumentationComplete": false,
+        "failureCategory": "TimeoutCancellationException",
+        "failureFrames": []
+      },
+      "cleanup": true,
+      "cause": "Bounded trace confirmed sync HTTP 400."
+    },
+    {
+      "runId": "213c8430798242a88a24f97f4f3acc38",
+      "gradleSeconds": 73,
+      "diagnostic": {
+        "replyComplete": false,
+        "resultComplete": false,
+        "instrumentationComplete": false,
+        "failureCategory": "TimeoutCancellationException",
+        "failureFrames": []
+      },
+      "cleanup": true,
+      "cause": "Numeric timeout valid; unknown query caused invalid_collaboration_sync_request."
+    },
+    {
+      "runId": "d3220ab9607749c58c031cdbd78e0f41",
+      "gradleSeconds": 98,
+      "diagnostic": {
+        "replyComplete": false,
+        "resultComplete": false,
+        "instrumentationComplete": false,
+        "failureCategory": "TimeoutCancellationException",
+        "failureFrames": []
+      },
+      "cleanup": true,
+      "cause": "First attempted MSC-prefixed spelling did not match pinned Ruma serializer."
+    }
+  ],
+  "sourceSha256": {
+    "apps/server/src/test/kotlin/dev/fajar/hris/NativeCollaborationMatrixIdentityHttpTest.kt": "8dd0c6556b9767d70ccbe5b182d21ec49f9c46c20aff3e2a989d1e5c6c1226fc",
+    "apps/server/src/test/kotlin/dev/fajar/hris/NativeCollaborationSdkInteropTest.kt": "5341519ecdfdb5680afee9e85e524c76281d829ceca03b46e213c153ffed11f8",
+    "apps/server/src/test/kotlin/dev/fajar/hris/NativeGatewaySdkFixture.kt": "cb3af058d0eb49aaee62dd8270d55f0edd88c3ea9a2c781b1b47c95fd5bde41b",
+    "apps/server/src/test/kotlin/dev/fajar/hris/NativeSdkErrorTrace.kt": "0e4325a13ffcdf7853205a3809e186fb557bc8c1ff606c388ee2fd312e8190d9",
+    "apps/server/src/test/kotlin/dev/fajar/hris/NativeSdkGatewayTrace.kt": "968a65844a2c47ed609eae9c53924b4b7413fb3775b3fb449cbfab161a68490a",
+    "apps/server/src/test/kotlin/dev/fajar/hris/NativeSdkMatrixServer.kt": "440e286ec188f12f9248f3eb9286a99857feaca4081ab19011331b0e04a17100",
+    "modules/collaboration/delivery/src/main/kotlin/dev/fajar/hris/collaboration/delivery/controllers/MatrixGatewaySyncController.kt": "2fcbdc3662ab98ca3478281a15d48b7acbc2deaa535346c1cdba18e267eace5c",
+    "tool/collaboration_hris_native.py": "c762e3ea3e7c54aeab34773b5712d87dd1838f5cca6041a609e637548e28a021",
+    "tool/collaboration_native_device.py": "7d938a326bff6ff2585ac80ee122b587a744c9f60654e34e4e174124d0797ed4",
+    "tool/test_collaboration_hris_native.py": "59744cdd7192be15fbf44a13f26c36d2cc06a42c0a2886efe881dd2b64e38c7a"
+  },
+  "mobileSourceSha256": {
+    "apps/collaboration-proof/build.gradle.kts": "0a6809f4e380e619e308c7c004f2a8de595482ce91efcfee70346501862256b5",
+    "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisNativeMatrixProbe.kt": "b1f48a96255ec57f25cbd1905d46dde82645cd23fa0222e41d745badf8b7759b",
+    "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisProofClient.kt": "21efca510882e7d8123621a3cef041e69ae7d50dcd1a5a5d55230aec4850ca9c",
+    "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisProofMessages.kt": "933f8dce4dabbc179936624f6e6325b9e7478a0db179a07241fdc1300ba9d2dc",
+    "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/MatrixProofInstrumentation.kt": "ab41a64b595164cd0220b0b35bd04fd6c7ab77af828ec35aacc182c01941624d",
+    "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/NativeMatrixProbe.kt": "4db9445f98dfce1d488ba505ed768fdb92829a47029bf92ff22c9ace3c9616b9",
+    "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/ProofOfflineInvite.kt": "2bf46cc7068c6735198d4585b56a7f17c1c1427599b7de81d6537c982d4b6108",
+    "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/ProofQueuedMessage.kt": "37d8d208400d78c6c0fb99a929be8e0a76207bcc181fd360a9d19deb27a4aae4",
+    "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/ProofSessionStore.kt": "2aa8d14fc91edfc649fb70822fe7956301049254372076f5d82d8afe9c8780d8",
+    "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/ProofSyncOwner.kt": "631fe789683d845224475fa5a1233c93f26d1cecd24f57caeafa028973417f16",
+    "gradle/libs.versions.toml": "f81abaf71b5318a035ed5f93c48b9e141e02ce7914a0db52572a70b2197a0569",
+    "gradle/verification-metadata.xml": "b825cbd053f2534db4b3009ca14b5df0e7d877cd02a35b26cb952c8423c99fe3"
+  },
+  "pins": {
+    "matrixRustKotlin": "26.10.23",
+    "rustSdk": "8de215a0aa0026afa5754ae5f05a6d168d1a1d60",
+    "ruma": "caf1ac05a9fd347158b60505ef8546a2ff18ae7c",
+    "synapse": "1.164.1@sha256:fa4aa980f279bcf26d4e7ecc2a2c9a701c73f2ebe8841da9bdcf3b2fdf693d75"
+  },
+  "fixtureLimits": [
+    "Device activation and HRIS room publication are fixture SQL; provider room creation, registration/bootstrap, keys/sync/send/event are real.",
+    "Dedicated emulator only; normal HRIS app and phone unchanged.",
+    "Classic sync state-before fallback; no advertised state-after support.",
+    "SDK handles an observed transient concurrent-key provider_busy response."
+  ],
+  "remaining": [
+    "Product SDK session/store ownership and durable queue restart/reconciliation",
+    "Apple, web HRIS admission, verified multiple devices, notifications, media, calls/meetings and all remaining P0\u2013P8 gates"
+  ],
+  "platformCommit": "45ccd56f29871a3474aca676be3464cc7d43bee4",
+  "hrisWorkflowSha256": "958d2d5b1090a87949491b8a7b2b77d3fc423bb536b1fb2996a4bbf10d15ab45"
+}

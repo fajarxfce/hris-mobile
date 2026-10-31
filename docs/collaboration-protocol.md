@@ -1,5 +1,24 @@
 # Native collaboration protocol proof
 
+## Actual HRIS gateway fixture
+
+Instrumentation scenario `hris` runs two fictional Android SDK owners with separate
+crypto/session stores against an owned HRIS API. It verifies bidirectional decrypted
+text and encrypted logical IDs, and lets the Java fixture independently verify the
+stored ciphertext. Gateway tokens are supplied only through private fixture files;
+no provider credential is given to the app. Cleanup closes clients/listeners/sync,
+uninstalls only the proof package and removes only its reverse mapping. Never call
+Synapse logout when disposing a client.
+
+[Platform fixture and reproduction](https://github.com/fajarxfce/hris-platform/blob/45ccd56f29871a3474aca676be3464cc7d43bee4/docs/collaboration/native-hris-sdk.md)
+and [measurement](measurements/collaboration-native-hris-sdk-2026-10-31.json)
+record exact source/APK hashes, failures and final checks. `collaboration-hris.yml`
+pins that Platform commit. This is separate from the earlier direct-provider
+Android/browser fixture below. Device activation and room binding are explicit
+SQL fixtures. Product SDK ownership, durable queue recovery, notifications and
+all remaining chat/call/meeting features still require implementation.
+
+
 The accepted [full collaboration PRD](../../hris-platform/docs/collaboration/prd.md)
 adds employee chat, calls and meetings. This is the first Android interoperability
 proof, not the HRIS product integration. See Platform's delivery ledger for all

@@ -9,10 +9,13 @@ import kotlinx.coroutines.withTimeout
 import org.json.JSONArray
 import org.json.JSONObject
 
-/** An emulator-only, debug-only protocol fixture with no HRIS/Firebase integration. */
+/** An emulator-only, debug-only fixture; gateway mode accepts only fictional HRIS owners. */
 class MatrixProofInstrumentation : Instrumentation() {
+    private var scenario = "provider"
+
     override fun onCreate(arguments: Bundle?) {
         super.onCreate(arguments)
+        scenario = arguments?.getString("scenario") ?: "provider"
         start()
     }
 
@@ -24,7 +27,15 @@ class MatrixProofInstrumentation : Instrumentation() {
                 android.os.Build.FINGERPRINT.contains("generic") ||
                     android.os.Build.MODEL.contains("sdk")
             )
-            runBlocking { withTimeout(90_000) { NativeMatrixProbe(directory).run() } }
+            runBlocking {
+                withTimeout(90_000) {
+                    when (scenario) {
+                        "provider" -> NativeMatrixProbe(directory).run()
+                        "hris" -> HrisNativeMatrixProbe(directory).run()
+                        else -> error("Unknown owned protocol scenario")
+                    }
+                }
+            }
             output.put("complete", true)
         } catch (failure: Exception) {
             output.put("complete", false)

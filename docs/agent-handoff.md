@@ -2,6 +2,33 @@
 
 ## Active collaboration implementation — 31 October 2026
 
+Actual Android SDK ↔ HRIS gateway now passes in both directions against Platform
+[`45ccd56f`](https://github.com/fajarxfce/hris-platform/commit/45ccd56f29871a3474aca676be3464cc7d43bee4).
+Two fictional employees own separate encrypted SDK stores. Keys/claim/to-device,
+Megolm send and classic sync pass real HRIS admission; both clients decrypt the
+expected content and logical ID, and gateway event reads confirm ciphertext.
+[Evidence](measurements/collaboration-native-hris-sdk-2026-10-31.json) retains
+12 Mobile/10 Platform hashes, APK `3b10b319`, four initial timeout failures and
+final 83s Platform checks: 19 API cases, format/architecture. All 27 Python driver
+cases pass. Mobile root/debug/lint passed in 69s after fixing nested builder
+structure; no rules were suppressed. Initial debug/lint passed in 274s.
+
+The pinned SDK/Ruma sends **unprefixed `use_state_after`** even to v1.12. Platform
+now accepts one boolean preference and returns its standard state-before response;
+it does not advertise state-after support. Actual fallback is tested. SQL fixtures
+activate the device/publish the HRIS room binding; registration/bootstrap, provider
+room creation, gateway transport and client crypto are real. SDK handles the
+observed transient concurrent key-upload provider-busy response. This is not product
+queue-restart or verification acceptance. New `collaboration-hris.yml` pins the
+exact Platform fixture and compiles before starting its dedicated CI emulator.
+Inspect its hosted result after push; existing browser/native protocol CI remains.
+
+Dedicated emulator is stopped with normal app data retained. Phone/live/Starter
+unchanged. **Continue product SDK session/store ownership, durable queue restart
+and logical-ID reconciliation, UI and all P0–P8; no product feature is accepted.**
+
+Earlier provider-only evidence follows.
+
 Latest source supports both classic `Client.syncV2` and native `SyncService`, with
 matching builder/session modes and one restore per client. Both actual local
 Android/browser runs passed two cases using APK `d835e1c1`: classic 19.219s / owned
