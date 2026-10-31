@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "runId": "33eaa0e23ae648948f34d247932da3d7",
+  "kind": "isolated_provider_proof",
+  "complete": true,
+  "productAcceptance": false,
+  "capacityAcceptance": false,
+  "images": {
+    "synapse": {
+      "reference": "ghcr.io/element-hq/synapse:v1.164.1@sha256:fa4aa980f279bcf26d4e7ecc2a2c9a701c73f2ebe8841da9bdcf3b2fdf693d75",
+      "id": "sha256:b2d38d6decacc092e0fee11e9f26efdb2045f2dd8cac0bcf41e5b50195c256b4",
+      "digests": [
+        "ghcr.io/element-hq/synapse@sha256:fa4aa980f279bcf26d4e7ecc2a2c9a701c73f2ebe8841da9bdcf3b2fdf693d75"
+      ]
+    },
+    "livekit": {
+      "reference": "livekit/livekit-server:v1.13.11@sha256:25cd902de7cacbd5f1f779f6a6ac1eae20ba8f56b0935934ce6b0ab80d1e3d20",
+      "id": "sha256:0e20c255a2c17000c52d0631b79737a4216c06bc51df13878768df01261c8dfd",
+      "digests": [
+        "livekit/livekit-server@sha256:25cd902de7cacbd5f1f779f6a6ac1eae20ba8f56b0935934ce6b0ab80d1e3d20"
+      ]
+    },
+    "postgres": {
+      "reference": "postgres:18.6-alpine@sha256:10a5c69a83035ab5239f5620d708520e8b28f5aa1f2b20143e6024532edadfb5",
+      "id": "sha256:57b23a0326ee442e83b3d3fa027c5a148be0a392d7c91d1ca4e1e70131ee859a",
+      "digests": [
+        "postgres@sha256:10a5c69a83035ab5239f5620d708520e8b28f5aa1f2b20143e6024532edadfb5"
+      ]
+    }
+  },
+  "checks": {
+    "wrong_issuer": true,
+    "wrong_audience": true,
+    "expired_jwt_beyond_provider_leeway": true,
+    "public_registration_disabled": true,
+    "loopback_only_http": true,
+    "isolated_dedicated_network": true,
+    "browser_e2ee_restart_media": true,
+    "android_web_bidirectional_e2ee": true
+  },
+  "cleanup": true,
+  "sourceSha256": {
+    "tool/check_collaboration_providers.py": "f1718e4e2eaaae3e566c7b65f84340829e152c8835a3289cd1057c79368b1ac4",
+    "tool/test_collaboration_providers.py": "1ddf78841a84a9e0636542a62c661f4d8b07a15f145083d74f7d47449fa67f3a",
+    "tool/collaboration_native_device.py": "d65344ef89e327d5365c2ba657e152d5beacd14c9459d2a6afd3177eadbccf7c",
+    "tool/test_collaboration_native_device.py": "5fd304f28d583682606cb729abdf241d2d1c40dcb730c5481357eb063d03b867",
+    "tool/collaboration-proof/package.json": "f499358763283beb73dd76606dde7e28122b6787494529ad518fef5718062cad",
+    "tool/collaboration-proof/package-lock.json": "031dbd57065817fbe2e119d87bb3e9588e26d4814835219dc950c4dddff51c56",
+    "tool/collaboration-proof/images.json": "63aa4b37949053e6574f9f4ae7ff1d22c02a59d8955a141c6aae5b2257e89f50",
+    "tool/collaboration-proof/index.html": "e5cadc31789aa95d2b718905dd44201da49a29678b913db9a7563fdf907ba7d0",
+    "tool/collaboration-proof/playwright.config.mjs": "33b5dd2896bd6a602e54a9c8154c679ee31b473e7bc9a0ff9da8864ca429381c",
+    "tool/collaboration-proof/src/probe.js": "883a60282b97b4a742f4d44bf130370a8b4bcdaa3805d62d19438725603c16d2",
+    "tool/collaboration-proof/tests/providers.spec.mjs": "a57101427a84090f2ddbbb4f1b1b94a79394baa50a7574a51dc18f153f4207a5",
+    "tool/collaboration-proof/tests/native.spec.mjs": "d33efe1ed37d21c775df6defb5b40b4dec4ed846d3664f3140ecf23a6c7fa3c1"
+  },
+  "observations": {
+    "recent_expired_jwt_accepted_by_provider": true,
+    "strict_hris_broker_expiry_required": true
+  },
+  "native": {
+    "apkSha256": "fc1523cb4d87eef435b010e15ed5370a003fa59f352095dbcd021dfc4708cf63",
+    "package": "dev.fajar.hris.collaboration.proof",
+    "avd": "hris-mobile-dev",
+    "androidApi": "35"
+  },
+  "browser": {
+    "expected": 2,
+    "unexpected": 0,
+    "flaky": 0,
+    "skipped": 0,
+    "duration": 21810.688000000002
+  },
+  "elapsedSeconds": 66.016,
+  "workflow": {
+    "run": 41182128950,
+    "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/41182128950",
+    "sourceCommit": "eefc412102585182e72fdf576087010ef3197089",
+    "providerCommit": "a9100ecebbb8ac2f8c1343191ad32135dfaec3dc"
+  }
+}

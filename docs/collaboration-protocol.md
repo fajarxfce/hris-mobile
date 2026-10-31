@@ -84,3 +84,10 @@ one native recovery/rejection case (0.051s) and a successful iOS device build,
 using Xcode 16.4 and Swift 6.1.2. The resolved SDK revision is committed in
 `Package.resolved`; [evidence](measurements/collaboration-apple-binding-2026-10-31.json)
 records the tested source, binary checksum and limited acceptance scope.
+
+Android hosted verification also passed at `eefc4121` in
+[41182128950](https://github.com/fajarxfce/hris-mobile/actions/runs/41182128950).
+Both actual provider scenarios passed (no failures/skips), with full cleanup in
+66.016s. [The hosted result](measurements/collaboration-android-ci-2026-10-31.json)
+retains the CI APK hash, source revision and fixed Platform driver separately
+from the local APK evidence.
