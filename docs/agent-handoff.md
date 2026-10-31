@@ -10,8 +10,12 @@ not optional summary counts, now gates the offline first message. Final root,
 debug build and lint passed in 23s: 2,002 desktop cases, zero lint errors (47
 warnings). [Evidence](measurements/collaboration-dual-sync-2026-10-31.json) retains
 the three corrected provider failures, compilation/nesting corrections and exact
-source hashes. Workflow pins pushed Platform `d425e6d8` and runs both modes;
-inspect and retain each exact hosted artifact after push. Dedicated emulator is
+source hashes. Workflow pins Platform `d425e6d8`. Exact `b061d390` hosted
+[41212817421](https://github.com/fajarxfce/hris-mobile/actions/runs/41212817421)
+passed every job/step in both modes: classic 31.659s / owned 72.695s, native
+34.002s / owned 81.267s. Both cleanups succeeded; separate hosted APK hashes
+`e5053bb5` / `f65bb8e8` and all source checks are retained in the measurement.
+Driver browser CI `41212746123` also passed every step (10.128s / 33.605s). Dedicated emulator is
 stopped with data retained; phone unchanged. Continue scoped recipient key/query,
 sync/content and product UI/outbox integration; no feature is accepted by this lab.
 

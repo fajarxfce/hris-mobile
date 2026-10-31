@@ -641,5 +641,1163 @@
     "Provider counters aggregate fixture control and SDK requests, not a public gateway allowlist. Native requires observed SlidingSync servlet requests; classic requires zero.",
     "Offline recipient is an already-enrolled browser device; this does not prove never-enrolled recipients, native receiving before join, Apple interop or durable process restart.",
     "Public classic/native sync and content routes remain closed. Hosted matrix evidence must be retained separately after push."
-  ]
+  ],
+  "hostedBrowser": {
+    "url": "https://github.com/fajarxfce/hris-platform/actions/runs/41212746123",
+    "conclusion": "success",
+    "headSha": "d425e6d867f6ddcea326c2d93338fbd828fb0f1c",
+    "jobs": [
+      {
+        "completedAt": "2026-10-31T15:01:41Z",
+        "conclusion": "success",
+        "databaseId": 124570975394,
+        "name": "providers",
+        "startedAt": "2026-10-31T15:00:32Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-10-31T15:00:33Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-10-31T15:00:32Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-31T15:00:36Z",
+            "conclusion": "success",
+            "name": "Run actions/checkout@v4",
+            "number": 2,
+            "startedAt": "2026-10-31T15:00:33Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-31T15:00:37Z",
+            "conclusion": "success",
+            "name": "Run actions/setup-node@v4",
+            "number": 3,
+            "startedAt": "2026-10-31T15:00:36Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-31T15:00:38Z",
+            "conclusion": "success",
+            "name": "Check owned cleanup and diagnostics",
+            "number": 4,
+            "startedAt": "2026-10-31T15:00:37Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-31T15:00:40Z",
+            "conclusion": "success",
+            "name": "Install pinned browser dependencies",
+            "number": 5,
+            "startedAt": "2026-10-31T15:00:38Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-31T15:01:03Z",
+            "conclusion": "success",
+            "name": "Install browser",
+            "number": 6,
+            "startedAt": "2026-10-31T15:00:40Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-31T15:01:04Z",
+            "conclusion": "success",
+            "name": "Build fixture",
+            "number": 7,
+            "startedAt": "2026-10-31T15:01:03Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-31T15:01:37Z",
+            "conclusion": "success",
+            "name": "Exercise actual Matrix and LiveKit",
+            "number": 8,
+            "startedAt": "2026-10-31T15:01:04Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-31T15:01:38Z",
+            "conclusion": "success",
+            "name": "Upload sanitized evidence only",
+            "number": 9,
+            "startedAt": "2026-10-31T15:01:37Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-31T15:01:39Z",
+            "conclusion": "success",
+            "name": "Post Run actions/setup-node@v4",
+            "number": 17,
+            "startedAt": "2026-10-31T15:01:38Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-31T15:01:39Z",
+            "conclusion": "success",
+            "name": "Post Run actions/checkout@v4",
+            "number": 18,
+            "startedAt": "2026-10-31T15:01:39Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-31T15:01:39Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 19,
+            "startedAt": "2026-10-31T15:01:39Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/fajarxfce/hris-platform/actions/runs/41212746123/job/124570975394"
+      }
+    ],
+    "status": "completed",
+    "result": {
+      "schemaVersion": 1,
+      "runId": "0172511d97c44ed09543bfc0c32637a9",
+      "kind": "isolated_provider_proof",
+      "complete": true,
+      "productAcceptance": false,
+      "capacityAcceptance": false,
+      "images": {
+        "synapse": {
+          "reference": "ghcr.io/element-hq/synapse:v1.164.1@sha256:fa4aa980f279bcf26d4e7ecc2a2c9a701c73f2ebe8841da9bdcf3b2fdf693d75",
+          "id": "sha256:b2d38d6decacc092e0fee11e9f26efdb2045f2dd8cac0bcf41e5b50195c256b4",
+          "digests": [
+            "ghcr.io/element-hq/synapse@sha256:fa4aa980f279bcf26d4e7ecc2a2c9a701c73f2ebe8841da9bdcf3b2fdf693d75"
+          ]
+        },
+        "livekit": {
+          "reference": "livekit/livekit-server:v1.13.11@sha256:25cd902de7cacbd5f1f779f6a6ac1eae20ba8f56b0935934ce6b0ab80d1e3d20",
+          "id": "sha256:0e20c255a2c17000c52d0631b79737a4216c06bc51df13878768df01261c8dfd",
+          "digests": [
+            "livekit/livekit-server@sha256:25cd902de7cacbd5f1f779f6a6ac1eae20ba8f56b0935934ce6b0ab80d1e3d20"
+          ]
+        },
+        "postgres": {
+          "reference": "postgres:18.6-alpine@sha256:10a5c69a83035ab5239f5620d708520e8b28f5aa1f2b20143e6024532edadfb5",
+          "id": "sha256:57b23a0326ee442e83b3d3fa027c5a148be0a392d7c91d1ca4e1e70131ee859a",
+          "digests": [
+            "postgres@sha256:10a5c69a83035ab5239f5620d708520e8b28f5aa1f2b20143e6024532edadfb5"
+          ]
+        }
+      },
+      "checks": {
+        "wrong_issuer": true,
+        "wrong_audience": true,
+        "expired_jwt_beyond_provider_leeway": true,
+        "public_registration_disabled": true,
+        "loopback_only_http": true,
+        "isolated_dedicated_network": true,
+        "provider_protocol_counters": true,
+        "browser_e2ee_restart_media": true,
+        "browser_offline_invitee_first_message_sender_offline": true
+      },
+      "cleanup": true,
+      "sourceSha256": {
+        "tool/check_collaboration_providers.py": "da39c44d9a1ec59df4118b4900f11c29be3acf3fae74ec45dd2ce7b5e9b76ba1",
+        "tool/test_collaboration_providers.py": "a22fd049c7ffb11601f9496679b4093ecec64dea47cafcfce3dae827e3110fa0",
+        "tool/collaboration_native_device.py": "7d938a326bff6ff2585ac80ee122b587a744c9f60654e34e4e174124d0797ed4",
+        "tool/test_collaboration_native_device.py": "e52b8af869182cbe73688460709d887746a963a671ec1a0b2907262f544d3eb5",
+        "tool/collaboration_protocol_metrics.py": "602e33d3c946e13468e3345ebe2d39c8ac3b443fee93577c6c71b44a3f5e2bb1",
+        "tool/test_collaboration_protocol_metrics.py": "c83ec8ca57e3d6d9e26e910428480a1d87e4dad0c86df8d5aa2b422ac4327a52",
+        "tool/collaboration-proof/package.json": "f499358763283beb73dd76606dde7e28122b6787494529ad518fef5718062cad",
+        "tool/collaboration-proof/package-lock.json": "031dbd57065817fbe2e119d87bb3e9588e26d4814835219dc950c4dddff51c56",
+        "tool/collaboration-proof/images.json": "63aa4b37949053e6574f9f4ae7ff1d22c02a59d8955a141c6aae5b2257e89f50",
+        "tool/collaboration-proof/index.html": "e5cadc31789aa95d2b718905dd44201da49a29678b913db9a7563fdf907ba7d0",
+        "tool/collaboration-proof/playwright.config.mjs": "33b5dd2896bd6a602e54a9c8154c679ee31b473e7bc9a0ff9da8864ca429381c",
+        "tool/collaboration-proof/src/probe.js": "b452de9882c7f121e811bde62bca92eaf678ce785030d4c715b99b316cb9a5f6",
+        "tool/collaboration-proof/tests/providers.spec.mjs": "1d498852844d41f350fd5ef295484acafb18bc8b90d9eb7daf3d05825c6ca3c2",
+        "tool/collaboration-proof/tests/native.spec.mjs": "4f54d59c7ec413365aa6a40696e030306665b926ea05a86af4a410cb58764835"
+      },
+      "observations": {
+        "recent_expired_jwt_accepted_by_provider": true,
+        "strict_hris_broker_expiry_required": true
+      },
+      "browser": {
+        "expected": 1,
+        "unexpected": 0,
+        "flaky": 0,
+        "skipped": 0,
+        "duration": 10127.743
+      },
+      "protocolCounters": {
+        "scope": "Composite SDK scenarios and explicit fixture control requests; not a gateway allowlist",
+        "requests": [
+          {
+            "method": "GET",
+            "servlet": "CapabilitiesRestServlet",
+            "count": 5
+          },
+          {
+            "method": "GET",
+            "servlet": "GetFilterRestServlet",
+            "count": 3
+          },
+          {
+            "method": "GET",
+            "servlet": "HealthResource",
+            "count": 1
+          },
+          {
+            "method": "GET",
+            "servlet": "PushRuleRestServlet",
+            "count": 5
+          },
+          {
+            "method": "GET",
+            "servlet": "RoomEventContextServlet",
+            "count": 1
+          },
+          {
+            "method": "GET",
+            "servlet": "RoomEventServlet",
+            "count": 4
+          },
+          {
+            "method": "GET",
+            "servlet": "RoomKeysNewVersionServlet",
+            "count": 5
+          },
+          {
+            "method": "GET",
+            "servlet": "RoomMessageListRestServlet",
+            "count": 1
+          },
+          {
+            "method": "GET",
+            "servlet": "SyncRestServlet",
+            "count": 54
+          },
+          {
+            "method": "GET",
+            "servlet": "UserRegisterServlet",
+            "count": 2
+          },
+          {
+            "method": "GET",
+            "servlet": "VersionsRestServlet",
+            "count": 6
+          },
+          {
+            "method": "GET",
+            "servlet": "VoipRestServlet",
+            "count": 5
+          },
+          {
+            "method": "OPTIONS",
+            "servlet": "RootOptionsRedirectResource",
+            "count": 61
+          },
+          {
+            "method": "POST",
+            "servlet": "CreateFilterRestServlet",
+            "count": 2
+          },
+          {
+            "method": "POST",
+            "servlet": "JoinRoomAliasServlet",
+            "count": 2
+          },
+          {
+            "method": "POST",
+            "servlet": "KeyQueryServlet",
+            "count": 21
+          },
+          {
+            "method": "POST",
+            "servlet": "KeyUploadServlet",
+            "count": 8
+          },
+          {
+            "method": "POST",
+            "servlet": "LoginRestServlet",
+            "count": 6
+          },
+          {
+            "method": "POST",
+            "servlet": "OneTimeKeyServlet",
+            "count": 1
+          },
+          {
+            "method": "POST",
+            "servlet": "RegisterRestServlet",
+            "count": 1
+          },
+          {
+            "method": "POST",
+            "servlet": "RoomCreateRestServlet",
+            "count": 2
+          },
+          {
+            "method": "POST",
+            "servlet": "UserRegisterServlet",
+            "count": 2
+          },
+          {
+            "method": "PUT",
+            "servlet": "RoomSendEventRestServlet",
+            "count": 4
+          },
+          {
+            "method": "PUT",
+            "servlet": "SendToDeviceRestServlet",
+            "count": 3
+          }
+        ]
+      },
+      "elapsedSeconds": 33.605
+    }
+  },
+  "hostedAndroid": {
+    "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/41212817421",
+    "conclusion": "success",
+    "headSha": "b061d3904a214f988d3fb94aa6eb272233f740d7",
+    "jobs": [
+      {
+        "completedAt": "2026-10-31T15:08:43Z",
+        "conclusion": "success",
+        "databaseId": 124571176145,
+        "name": "android-web (classic)",
+        "startedAt": "2026-10-31T15:01:20Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-10-31T15:01:23Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-10-31T15:01:21Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-31T15:01:25Z",
+            "conclusion": "success",
+            "name": "Run actions/checkout@v4",
+            "number": 2,
+            "startedAt": "2026-10-31T15:01:23Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-31T15:01:28Z",
+            "conclusion": "success",
+            "name": "Run actions/checkout@v4",
+            "number": 3,
+            "startedAt": "2026-10-31T15:01:25Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-31T15:01:28Z",
+            "conclusion": "success",
+            "name": "Run actions/setup-java@v4",
+            "number": 4,
+            "startedAt": "2026-10-31T15:01:28Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-31T15:01:30Z",
+            "conclusion": "success",
+            "name": "Run gradle/actions/setup-gradle@v4",
+            "number": 5,
+            "startedAt": "2026-10-31T15:01:28Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-31T15:01:38Z",
+            "conclusion": "success",
+            "name": "Run android-actions/setup-android@v3",
+            "number": 6,
+            "startedAt": "2026-10-31T15:01:30Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-31T15:01:40Z",
+            "conclusion": "success",
+            "name": "Run sdkmanager 'platforms;android-36' 'build-tools;36.0.0'",
+            "number": 7,
+            "startedAt": "2026-10-31T15:01:38Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-31T15:05:26Z",
+            "conclusion": "success",
+            "name": "Build debug-only isolated fixture",
+            "number": 8,
+            "startedAt": "2026-10-31T15:01:40Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-31T15:05:29Z",
+            "conclusion": "success",
+            "name": "Run actions/setup-node@v4",
+            "number": 9,
+            "startedAt": "2026-10-31T15:05:26Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-31T15:05:33Z",
+            "conclusion": "success",
+            "name": "Run npm ci --ignore-scripts --no-audit --no-fund",
+            "number": 10,
+            "startedAt": "2026-10-31T15:05:29Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-31T15:05:55Z",
+            "conclusion": "success",
+            "name": "Run npx playwright install --with-deps chromium",
+            "number": 11,
+            "startedAt": "2026-10-31T15:05:33Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-31T15:05:55Z",
+            "conclusion": "success",
+            "name": "Enable KVM for the owned runner emulator",
+            "number": 12,
+            "startedAt": "2026-10-31T15:05:55Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-31T15:08:39Z",
+            "conclusion": "success",
+            "name": "Run reactivecircus/android-emulator-runner@v2",
+            "number": 13,
+            "startedAt": "2026-10-31T15:05:55Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-31T15:08:40Z",
+            "conclusion": "success",
+            "name": "Run actions/upload-artifact@v4",
+            "number": 14,
+            "startedAt": "2026-10-31T15:08:39Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-31T15:08:40Z",
+            "conclusion": "success",
+            "name": "Post Run actions/setup-node@v4",
+            "number": 24,
+            "startedAt": "2026-10-31T15:08:40Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-31T15:08:40Z",
+            "conclusion": "success",
+            "name": "Post Run gradle/actions/setup-gradle@v4",
+            "number": 25,
+            "startedAt": "2026-10-31T15:08:40Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-31T15:08:40Z",
+            "conclusion": "success",
+            "name": "Post Run actions/setup-java@v4",
+            "number": 26,
+            "startedAt": "2026-10-31T15:08:40Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-31T15:08:40Z",
+            "conclusion": "success",
+            "name": "Post Run actions/checkout@v4",
+            "number": 27,
+            "startedAt": "2026-10-31T15:08:40Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-31T15:08:41Z",
+            "conclusion": "success",
+            "name": "Post Run actions/checkout@v4",
+            "number": 28,
+            "startedAt": "2026-10-31T15:08:40Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-31T15:08:41Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 29,
+            "startedAt": "2026-10-31T15:08:41Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/41212817421/job/124571176145"
+      },
+      {
+        "completedAt": "2026-10-31T15:09:57Z",
+        "conclusion": "success",
+        "databaseId": 124571176296,
+        "name": "android-web (native)",
+        "startedAt": "2026-10-31T15:01:20Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-10-31T15:01:25Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-10-31T15:01:22Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-31T15:01:26Z",
+            "conclusion": "success",
+            "name": "Run actions/checkout@v4",
+            "number": 2,
+            "startedAt": "2026-10-31T15:01:25Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-31T15:01:29Z",
+            "conclusion": "success",
+            "name": "Run actions/checkout@v4",
+            "number": 3,
+            "startedAt": "2026-10-31T15:01:26Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-31T15:01:29Z",
+            "conclusion": "success",
+            "name": "Run actions/setup-java@v4",
+            "number": 4,
+            "startedAt": "2026-10-31T15:01:29Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-31T15:01:32Z",
+            "conclusion": "success",
+            "name": "Run gradle/actions/setup-gradle@v4",
+            "number": 5,
+            "startedAt": "2026-10-31T15:01:29Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-31T15:01:41Z",
+            "conclusion": "success",
+            "name": "Run android-actions/setup-android@v3",
+            "number": 6,
+            "startedAt": "2026-10-31T15:01:32Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-31T15:01:43Z",
+            "conclusion": "success",
+            "name": "Run sdkmanager 'platforms;android-36' 'build-tools;36.0.0'",
+            "number": 7,
+            "startedAt": "2026-10-31T15:01:41Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-31T15:06:29Z",
+            "conclusion": "success",
+            "name": "Build debug-only isolated fixture",
+            "number": 8,
+            "startedAt": "2026-10-31T15:01:43Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-31T15:06:32Z",
+            "conclusion": "success",
+            "name": "Run actions/setup-node@v4",
+            "number": 9,
+            "startedAt": "2026-10-31T15:06:29Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-31T15:06:36Z",
+            "conclusion": "success",
+            "name": "Run npm ci --ignore-scripts --no-audit --no-fund",
+            "number": 10,
+            "startedAt": "2026-10-31T15:06:32Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-31T15:07:04Z",
+            "conclusion": "success",
+            "name": "Run npx playwright install --with-deps chromium",
+            "number": 11,
+            "startedAt": "2026-10-31T15:06:36Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-31T15:07:04Z",
+            "conclusion": "success",
+            "name": "Enable KVM for the owned runner emulator",
+            "number": 12,
+            "startedAt": "2026-10-31T15:07:04Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-31T15:09:51Z",
+            "conclusion": "success",
+            "name": "Run reactivecircus/android-emulator-runner@v2",
+            "number": 13,
+            "startedAt": "2026-10-31T15:07:04Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-31T15:09:52Z",
+            "conclusion": "success",
+            "name": "Run actions/upload-artifact@v4",
+            "number": 14,
+            "startedAt": "2026-10-31T15:09:51Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-31T15:09:52Z",
+            "conclusion": "success",
+            "name": "Post Run actions/setup-node@v4",
+            "number": 24,
+            "startedAt": "2026-10-31T15:09:52Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-31T15:09:53Z",
+            "conclusion": "success",
+            "name": "Post Run gradle/actions/setup-gradle@v4",
+            "number": 25,
+            "startedAt": "2026-10-31T15:09:52Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-31T15:09:53Z",
+            "conclusion": "success",
+            "name": "Post Run actions/setup-java@v4",
+            "number": 26,
+            "startedAt": "2026-10-31T15:09:53Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-31T15:09:53Z",
+            "conclusion": "success",
+            "name": "Post Run actions/checkout@v4",
+            "number": 27,
+            "startedAt": "2026-10-31T15:09:53Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-31T15:09:53Z",
+            "conclusion": "success",
+            "name": "Post Run actions/checkout@v4",
+            "number": 28,
+            "startedAt": "2026-10-31T15:09:53Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-31T15:09:53Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 29,
+            "startedAt": "2026-10-31T15:09:53Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/41212817421/job/124571176296"
+      }
+    ],
+    "status": "completed",
+    "driverCommit": "d425e6d867f6ddcea326c2d93338fbd828fb0f1c",
+    "runs": [
+      {
+        "schemaVersion": 1,
+        "runId": "3e99bf7220974571a2a50cc46a535147",
+        "kind": "isolated_provider_proof",
+        "complete": true,
+        "productAcceptance": false,
+        "capacityAcceptance": false,
+        "images": {
+          "synapse": {
+            "reference": "ghcr.io/element-hq/synapse:v1.164.1@sha256:fa4aa980f279bcf26d4e7ecc2a2c9a701c73f2ebe8841da9bdcf3b2fdf693d75",
+            "id": "sha256:b2d38d6decacc092e0fee11e9f26efdb2045f2dd8cac0bcf41e5b50195c256b4",
+            "digests": [
+              "ghcr.io/element-hq/synapse@sha256:fa4aa980f279bcf26d4e7ecc2a2c9a701c73f2ebe8841da9bdcf3b2fdf693d75"
+            ]
+          },
+          "livekit": {
+            "reference": "livekit/livekit-server:v1.13.11@sha256:25cd902de7cacbd5f1f779f6a6ac1eae20ba8f56b0935934ce6b0ab80d1e3d20",
+            "id": "sha256:0e20c255a2c17000c52d0631b79737a4216c06bc51df13878768df01261c8dfd",
+            "digests": [
+              "livekit/livekit-server@sha256:25cd902de7cacbd5f1f779f6a6ac1eae20ba8f56b0935934ce6b0ab80d1e3d20"
+            ]
+          },
+          "postgres": {
+            "reference": "postgres:18.6-alpine@sha256:10a5c69a83035ab5239f5620d708520e8b28f5aa1f2b20143e6024532edadfb5",
+            "id": "sha256:57b23a0326ee442e83b3d3fa027c5a148be0a392d7c91d1ca4e1e70131ee859a",
+            "digests": [
+              "postgres@sha256:10a5c69a83035ab5239f5620d708520e8b28f5aa1f2b20143e6024532edadfb5"
+            ]
+          }
+        },
+        "checks": {
+          "wrong_issuer": true,
+          "wrong_audience": true,
+          "expired_jwt_beyond_provider_leeway": true,
+          "public_registration_disabled": true,
+          "loopback_only_http": true,
+          "isolated_dedicated_network": true,
+          "provider_protocol_counters": true,
+          "browser_e2ee_restart_media": true,
+          "browser_offline_invitee_first_message_sender_offline": true,
+          "android_requested_sync_protocol": true,
+          "android_web_bidirectional_e2ee": true,
+          "android_sdk_refresh_preserves_device_key": true,
+          "android_sdk_queue_encrypted_logical_ids": true,
+          "android_encrypts_for_offline_invitee_before_join": true
+        },
+        "cleanup": true,
+        "sourceSha256": {
+          "tool/check_collaboration_providers.py": "da39c44d9a1ec59df4118b4900f11c29be3acf3fae74ec45dd2ce7b5e9b76ba1",
+          "tool/test_collaboration_providers.py": "a22fd049c7ffb11601f9496679b4093ecec64dea47cafcfce3dae827e3110fa0",
+          "tool/collaboration_native_device.py": "7d938a326bff6ff2585ac80ee122b587a744c9f60654e34e4e174124d0797ed4",
+          "tool/test_collaboration_native_device.py": "e52b8af869182cbe73688460709d887746a963a671ec1a0b2907262f544d3eb5",
+          "tool/collaboration_protocol_metrics.py": "602e33d3c946e13468e3345ebe2d39c8ac3b443fee93577c6c71b44a3f5e2bb1",
+          "tool/test_collaboration_protocol_metrics.py": "c83ec8ca57e3d6d9e26e910428480a1d87e4dad0c86df8d5aa2b422ac4327a52",
+          "tool/collaboration-proof/package.json": "f499358763283beb73dd76606dde7e28122b6787494529ad518fef5718062cad",
+          "tool/collaboration-proof/package-lock.json": "031dbd57065817fbe2e119d87bb3e9588e26d4814835219dc950c4dddff51c56",
+          "tool/collaboration-proof/images.json": "63aa4b37949053e6574f9f4ae7ff1d22c02a59d8955a141c6aae5b2257e89f50",
+          "tool/collaboration-proof/index.html": "e5cadc31789aa95d2b718905dd44201da49a29678b913db9a7563fdf907ba7d0",
+          "tool/collaboration-proof/playwright.config.mjs": "33b5dd2896bd6a602e54a9c8154c679ee31b473e7bc9a0ff9da8864ca429381c",
+          "tool/collaboration-proof/src/probe.js": "b452de9882c7f121e811bde62bca92eaf678ce785030d4c715b99b316cb9a5f6",
+          "tool/collaboration-proof/tests/providers.spec.mjs": "1d498852844d41f350fd5ef295484acafb18bc8b90d9eb7daf3d05825c6ca3c2",
+          "tool/collaboration-proof/tests/native.spec.mjs": "4f54d59c7ec413365aa6a40696e030306665b926ea05a86af4a410cb58764835"
+        },
+        "observations": {
+          "recent_expired_jwt_accepted_by_provider": true,
+          "strict_hris_broker_expiry_required": true
+        },
+        "native": {
+          "apkSha256": "e5053bb5979ca16689cd6bdf892d6a48fde82f5683cf2f3c2d7e1b5099967f11",
+          "package": "dev.fajar.hris.collaboration.proof",
+          "avd": "hris-mobile-dev",
+          "androidApi": "35",
+          "syncMode": "classic"
+        },
+        "browser": {
+          "expected": 2,
+          "unexpected": 0,
+          "flaky": 0,
+          "skipped": 0,
+          "duration": 31658.752
+        },
+        "nativeDiagnostic": {
+          "replyComplete": true,
+          "resultComplete": true,
+          "instrumentationComplete": true,
+          "failureFrames": [],
+          "progress": {
+            "stage": "sending_offline_message"
+          }
+        },
+        "protocolCounters": {
+          "scope": "Composite SDK scenarios and explicit fixture control requests; not a gateway allowlist",
+          "requests": [
+            {
+              "method": "GET",
+              "servlet": "AccountDataServlet",
+              "count": 5
+            },
+            {
+              "method": "GET",
+              "servlet": "CapabilitiesRestServlet",
+              "count": 7
+            },
+            {
+              "method": "GET",
+              "servlet": "GetFilterRestServlet",
+              "count": 4
+            },
+            {
+              "method": "GET",
+              "servlet": "HealthResource",
+              "count": 2
+            },
+            {
+              "method": "GET",
+              "servlet": "PushRuleRestServlet",
+              "count": 7
+            },
+            {
+              "method": "GET",
+              "servlet": "RoomEventContextServlet",
+              "count": 1
+            },
+            {
+              "method": "GET",
+              "servlet": "RoomEventServlet",
+              "count": 7
+            },
+            {
+              "method": "GET",
+              "servlet": "RoomKeysNewVersionServlet",
+              "count": 7
+            },
+            {
+              "method": "GET",
+              "servlet": "RoomMemberListRestServlet",
+              "count": 2
+            },
+            {
+              "method": "GET",
+              "servlet": "RoomMessageListRestServlet",
+              "count": 2
+            },
+            {
+              "method": "GET",
+              "servlet": "RoomStateEventRestServlet",
+              "count": 1
+            },
+            {
+              "method": "GET",
+              "servlet": "SyncRestServlet",
+              "count": 90
+            },
+            {
+              "method": "GET",
+              "servlet": "UserRegisterServlet",
+              "count": 4
+            },
+            {
+              "method": "GET",
+              "servlet": "VersionsRestServlet",
+              "count": 9
+            },
+            {
+              "method": "GET",
+              "servlet": "VoipRestServlet",
+              "count": 7
+            },
+            {
+              "method": "OPTIONS",
+              "servlet": "RootOptionsRedirectResource",
+              "count": 104
+            },
+            {
+              "method": "POST",
+              "servlet": "CreateFilterRestServlet",
+              "count": 3
+            },
+            {
+              "method": "POST",
+              "servlet": "JoinRoomAliasServlet",
+              "count": 3
+            },
+            {
+              "method": "POST",
+              "servlet": "KeyQueryServlet",
+              "count": 34
+            },
+            {
+              "method": "POST",
+              "servlet": "KeyUploadServlet",
+              "count": 14
+            },
+            {
+              "method": "POST",
+              "servlet": "LoginRestServlet",
+              "count": 8
+            },
+            {
+              "method": "POST",
+              "servlet": "OneTimeKeyServlet",
+              "count": 2
+            },
+            {
+              "method": "POST",
+              "servlet": "RefreshTokenServlet",
+              "count": 4
+            },
+            {
+              "method": "POST",
+              "servlet": "RegisterRestServlet",
+              "count": 1
+            },
+            {
+              "method": "POST",
+              "servlet": "RoomCreateRestServlet",
+              "count": 4
+            },
+            {
+              "method": "POST",
+              "servlet": "RoomMembershipRestServlet",
+              "count": 2
+            },
+            {
+              "method": "POST",
+              "servlet": "UserRegisterServlet",
+              "count": 4
+            },
+            {
+              "method": "PUT",
+              "servlet": "AccountDataServlet",
+              "count": 1
+            },
+            {
+              "method": "PUT",
+              "servlet": "RoomSendEventRestServlet",
+              "count": 7
+            },
+            {
+              "method": "PUT",
+              "servlet": "SendToDeviceRestServlet",
+              "count": 6
+            }
+          ]
+        },
+        "elapsedSeconds": 72.695
+      },
+      {
+        "schemaVersion": 1,
+        "runId": "de5018638016476fa6a733badeac3c9c",
+        "kind": "isolated_provider_proof",
+        "complete": true,
+        "productAcceptance": false,
+        "capacityAcceptance": false,
+        "images": {
+          "synapse": {
+            "reference": "ghcr.io/element-hq/synapse:v1.164.1@sha256:fa4aa980f279bcf26d4e7ecc2a2c9a701c73f2ebe8841da9bdcf3b2fdf693d75",
+            "id": "sha256:b2d38d6decacc092e0fee11e9f26efdb2045f2dd8cac0bcf41e5b50195c256b4",
+            "digests": [
+              "ghcr.io/element-hq/synapse@sha256:fa4aa980f279bcf26d4e7ecc2a2c9a701c73f2ebe8841da9bdcf3b2fdf693d75"
+            ]
+          },
+          "livekit": {
+            "reference": "livekit/livekit-server:v1.13.11@sha256:25cd902de7cacbd5f1f779f6a6ac1eae20ba8f56b0935934ce6b0ab80d1e3d20",
+            "id": "sha256:0e20c255a2c17000c52d0631b79737a4216c06bc51df13878768df01261c8dfd",
+            "digests": [
+              "livekit/livekit-server@sha256:25cd902de7cacbd5f1f779f6a6ac1eae20ba8f56b0935934ce6b0ab80d1e3d20"
+            ]
+          },
+          "postgres": {
+            "reference": "postgres:18.6-alpine@sha256:10a5c69a83035ab5239f5620d708520e8b28f5aa1f2b20143e6024532edadfb5",
+            "id": "sha256:57b23a0326ee442e83b3d3fa027c5a148be0a392d7c91d1ca4e1e70131ee859a",
+            "digests": [
+              "postgres@sha256:10a5c69a83035ab5239f5620d708520e8b28f5aa1f2b20143e6024532edadfb5"
+            ]
+          }
+        },
+        "checks": {
+          "wrong_issuer": true,
+          "wrong_audience": true,
+          "expired_jwt_beyond_provider_leeway": true,
+          "public_registration_disabled": true,
+          "loopback_only_http": true,
+          "isolated_dedicated_network": true,
+          "provider_protocol_counters": true,
+          "browser_e2ee_restart_media": true,
+          "browser_offline_invitee_first_message_sender_offline": true,
+          "android_requested_sync_protocol": true,
+          "android_web_bidirectional_e2ee": true,
+          "android_sdk_refresh_preserves_device_key": true,
+          "android_sdk_queue_encrypted_logical_ids": true,
+          "android_encrypts_for_offline_invitee_before_join": true
+        },
+        "cleanup": true,
+        "sourceSha256": {
+          "tool/check_collaboration_providers.py": "da39c44d9a1ec59df4118b4900f11c29be3acf3fae74ec45dd2ce7b5e9b76ba1",
+          "tool/test_collaboration_providers.py": "a22fd049c7ffb11601f9496679b4093ecec64dea47cafcfce3dae827e3110fa0",
+          "tool/collaboration_native_device.py": "7d938a326bff6ff2585ac80ee122b587a744c9f60654e34e4e174124d0797ed4",
+          "tool/test_collaboration_native_device.py": "e52b8af869182cbe73688460709d887746a963a671ec1a0b2907262f544d3eb5",
+          "tool/collaboration_protocol_metrics.py": "602e33d3c946e13468e3345ebe2d39c8ac3b443fee93577c6c71b44a3f5e2bb1",
+          "tool/test_collaboration_protocol_metrics.py": "c83ec8ca57e3d6d9e26e910428480a1d87e4dad0c86df8d5aa2b422ac4327a52",
+          "tool/collaboration-proof/package.json": "f499358763283beb73dd76606dde7e28122b6787494529ad518fef5718062cad",
+          "tool/collaboration-proof/package-lock.json": "031dbd57065817fbe2e119d87bb3e9588e26d4814835219dc950c4dddff51c56",
+          "tool/collaboration-proof/images.json": "63aa4b37949053e6574f9f4ae7ff1d22c02a59d8955a141c6aae5b2257e89f50",
+          "tool/collaboration-proof/index.html": "e5cadc31789aa95d2b718905dd44201da49a29678b913db9a7563fdf907ba7d0",
+          "tool/collaboration-proof/playwright.config.mjs": "33b5dd2896bd6a602e54a9c8154c679ee31b473e7bc9a0ff9da8864ca429381c",
+          "tool/collaboration-proof/src/probe.js": "b452de9882c7f121e811bde62bca92eaf678ce785030d4c715b99b316cb9a5f6",
+          "tool/collaboration-proof/tests/providers.spec.mjs": "1d498852844d41f350fd5ef295484acafb18bc8b90d9eb7daf3d05825c6ca3c2",
+          "tool/collaboration-proof/tests/native.spec.mjs": "4f54d59c7ec413365aa6a40696e030306665b926ea05a86af4a410cb58764835"
+        },
+        "observations": {
+          "recent_expired_jwt_accepted_by_provider": true,
+          "strict_hris_broker_expiry_required": true
+        },
+        "native": {
+          "apkSha256": "f65bb8e8e3c5c9f8f15116370e6de7c24f2f9684dc6354732281947ce6494c1b",
+          "package": "dev.fajar.hris.collaboration.proof",
+          "avd": "hris-mobile-dev",
+          "androidApi": "35",
+          "syncMode": "native"
+        },
+        "browser": {
+          "expected": 2,
+          "unexpected": 0,
+          "flaky": 0,
+          "skipped": 0,
+          "duration": 34001.63
+        },
+        "nativeDiagnostic": {
+          "replyComplete": true,
+          "resultComplete": true,
+          "instrumentationComplete": true,
+          "failureFrames": [],
+          "progress": {
+            "stage": "sending_offline_message"
+          }
+        },
+        "protocolCounters": {
+          "scope": "Composite SDK scenarios and explicit fixture control requests; not a gateway allowlist",
+          "requests": [
+            {
+              "method": "GET",
+              "servlet": "AccountDataServlet",
+              "count": 5
+            },
+            {
+              "method": "GET",
+              "servlet": "CapabilitiesRestServlet",
+              "count": 7
+            },
+            {
+              "method": "GET",
+              "servlet": "GetFilterRestServlet",
+              "count": 4
+            },
+            {
+              "method": "GET",
+              "servlet": "HealthResource",
+              "count": 2
+            },
+            {
+              "method": "GET",
+              "servlet": "PushRuleRestServlet",
+              "count": 7
+            },
+            {
+              "method": "GET",
+              "servlet": "RoomEventContextServlet",
+              "count": 1
+            },
+            {
+              "method": "GET",
+              "servlet": "RoomEventServlet",
+              "count": 7
+            },
+            {
+              "method": "GET",
+              "servlet": "RoomKeysNewVersionServlet",
+              "count": 7
+            },
+            {
+              "method": "GET",
+              "servlet": "RoomMemberListRestServlet",
+              "count": 3
+            },
+            {
+              "method": "GET",
+              "servlet": "RoomMessageListRestServlet",
+              "count": 2
+            },
+            {
+              "method": "GET",
+              "servlet": "SyncRestServlet",
+              "count": 76
+            },
+            {
+              "method": "GET",
+              "servlet": "UserRegisterServlet",
+              "count": 4
+            },
+            {
+              "method": "GET",
+              "servlet": "VersionsRestServlet",
+              "count": 9
+            },
+            {
+              "method": "GET",
+              "servlet": "VoipRestServlet",
+              "count": 7
+            },
+            {
+              "method": "OPTIONS",
+              "servlet": "RootOptionsRedirectResource",
+              "count": 104
+            },
+            {
+              "method": "POST",
+              "servlet": "CreateFilterRestServlet",
+              "count": 3
+            },
+            {
+              "method": "POST",
+              "servlet": "JoinRoomAliasServlet",
+              "count": 3
+            },
+            {
+              "method": "POST",
+              "servlet": "KeyQueryServlet",
+              "count": 34
+            },
+            {
+              "method": "POST",
+              "servlet": "KeyUploadServlet",
+              "count": 13
+            },
+            {
+              "method": "POST",
+              "servlet": "LoginRestServlet",
+              "count": 8
+            },
+            {
+              "method": "POST",
+              "servlet": "OneTimeKeyServlet",
+              "count": 2
+            },
+            {
+              "method": "POST",
+              "servlet": "RefreshTokenServlet",
+              "count": 3
+            },
+            {
+              "method": "POST",
+              "servlet": "RegisterRestServlet",
+              "count": 1
+            },
+            {
+              "method": "POST",
+              "servlet": "RoomCreateRestServlet",
+              "count": 4
+            },
+            {
+              "method": "POST",
+              "servlet": "RoomMembershipRestServlet",
+              "count": 2
+            },
+            {
+              "method": "POST",
+              "servlet": "SlidingSyncRestServlet",
+              "count": 18
+            },
+            {
+              "method": "POST",
+              "servlet": "UserRegisterServlet",
+              "count": 4
+            },
+            {
+              "method": "PUT",
+              "servlet": "AccountDataServlet",
+              "count": 1
+            },
+            {
+              "method": "PUT",
+              "servlet": "RoomSendEventRestServlet",
+              "count": 7
+            },
+            {
+              "method": "PUT",
+              "servlet": "SendToDeviceRestServlet",
+              "count": 6
+            }
+          ]
+        },
+        "elapsedSeconds": 81.267
+      }
+    ]
+  }
 }

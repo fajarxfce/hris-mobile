@@ -10,8 +10,10 @@ actual Android/browser exchange, refresh, queue and offline-invitee proof; see
 [dual-mode evidence](measurements/collaboration-dual-sync-2026-10-31.json). Classic
 uses `Client.syncV2` with `NONE` builder/session mode, while native owns a
 `SyncService` with `NATIVE`. Restore happens once per client in either mode.
-CI runs both modes independently with separate artifacts; inspect those results
-after push before claiming hosted verification.
+CI runs both modes independently with separate artifacts. Exact `b061d390`
+[41212817421](https://github.com/fajarxfce/hris-mobile/actions/runs/41212817421)
+passed every job/step in both modes; the measurement retains each hosted APK
+hash and checks the source and pinned driver against Git.
 
 Both modes verify the complete SDK member list before offline sending. Classic
 did not populate optional summary counts in the experiment; the exact joined
