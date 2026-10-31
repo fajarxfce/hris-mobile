@@ -157,12 +157,13 @@ root/debug/lint checks passed in 48s: 2,002 desktop cases, zero lint errors and 
 warnings. An initial Detekt long-method failure was fixed by extracting result
 serialization; no check was suppressed.
 
-Native CI pins Platform `54eb3a667ebe47ff06fcb0c2a973824215f383b8`. Inspect its
-exact hosted run after this push. This proves Android sender to an already-enrolled
+Native CI pins Platform `54eb3a667ebe47ff06fcb0c2a973824215f383b8`. The
+hosted [41204075013](https://github.com/fajarxfce/hris-mobile/actions/runs/41204075013),
+passed every job/step at `e6dcb5ea`. Both scenarios passed in 34.359s
+(82.746s owned run) with complete cleanup; driver hashes match the pin. This proves Android sender to an already-enrolled
 offline browser invitee, not native recipient-before-join or Swift interoperability.
 Never-enrolled recipients still need a pending product outbox until eligible keys
 exist. Durable restart/coalescing, product sessions/content and UI remain pending.
 The dedicated emulator is stopped with regular HRIS data retained. No physical
 phone, live service or employee message was touched; no Starter port is due for
 the isolated fixture. Continue all P0–P8 implementation.
-
