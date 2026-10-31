@@ -109,5 +109,87 @@
     "The independent existing browser/media key event is not MatrixRTC acceptance.",
     "No phone, live HRIS service or real employee message was used. Owned emulator stopped with data retained."
   ],
-  "platformDriverCommit": "d0731afea37058b9351343380b63b6a47746a0ed"
+  "platformDriverCommit": "d0731afea37058b9351343380b63b6a47746a0ed",
+  "hosted": {
+    "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/41198048864",
+    "commit": "e8a5ceb368e0b88607e215e9828ba1f1968affdc",
+    "conclusion": "success",
+    "allJobsAndStepsSucceeded": true,
+    "providerResult": {
+      "schemaVersion": 1,
+      "runId": "eccff49788f54c1dba2e201024ca39a9",
+      "kind": "isolated_provider_proof",
+      "complete": true,
+      "productAcceptance": false,
+      "capacityAcceptance": false,
+      "images": {
+        "synapse": {
+          "reference": "ghcr.io/element-hq/synapse:v1.164.1@sha256:fa4aa980f279bcf26d4e7ecc2a2c9a701c73f2ebe8841da9bdcf3b2fdf693d75",
+          "id": "sha256:b2d38d6decacc092e0fee11e9f26efdb2045f2dd8cac0bcf41e5b50195c256b4",
+          "digests": [
+            "ghcr.io/element-hq/synapse@sha256:fa4aa980f279bcf26d4e7ecc2a2c9a701c73f2ebe8841da9bdcf3b2fdf693d75"
+          ]
+        },
+        "livekit": {
+          "reference": "livekit/livekit-server:v1.13.11@sha256:25cd902de7cacbd5f1f779f6a6ac1eae20ba8f56b0935934ce6b0ab80d1e3d20",
+          "id": "sha256:0e20c255a2c17000c52d0631b79737a4216c06bc51df13878768df01261c8dfd",
+          "digests": [
+            "livekit/livekit-server@sha256:25cd902de7cacbd5f1f779f6a6ac1eae20ba8f56b0935934ce6b0ab80d1e3d20"
+          ]
+        },
+        "postgres": {
+          "reference": "postgres:18.6-alpine@sha256:10a5c69a83035ab5239f5620d708520e8b28f5aa1f2b20143e6024532edadfb5",
+          "id": "sha256:57b23a0326ee442e83b3d3fa027c5a148be0a392d7c91d1ca4e1e70131ee859a",
+          "digests": [
+            "postgres@sha256:10a5c69a83035ab5239f5620d708520e8b28f5aa1f2b20143e6024532edadfb5"
+          ]
+        }
+      },
+      "checks": {
+        "wrong_issuer": true,
+        "wrong_audience": true,
+        "expired_jwt_beyond_provider_leeway": true,
+        "public_registration_disabled": true,
+        "loopback_only_http": true,
+        "isolated_dedicated_network": true,
+        "browser_e2ee_restart_media": true,
+        "android_web_bidirectional_e2ee": true,
+        "android_sdk_refresh_preserves_device_key": true,
+        "android_sdk_queue_encrypted_logical_ids": true
+      },
+      "cleanup": true,
+      "sourceSha256": {
+        "tool/check_collaboration_providers.py": "92fae39e90f2a550b34b204d0f5a563513379b2e550975faa6627d0b06161c40",
+        "tool/test_collaboration_providers.py": "1ddf78841a84a9e0636542a62c661f4d8b07a15f145083d74f7d47449fa67f3a",
+        "tool/collaboration_native_device.py": "d65344ef89e327d5365c2ba657e152d5beacd14c9459d2a6afd3177eadbccf7c",
+        "tool/test_collaboration_native_device.py": "5fd304f28d583682606cb729abdf241d2d1c40dcb730c5481357eb063d03b867",
+        "tool/collaboration-proof/package.json": "f499358763283beb73dd76606dde7e28122b6787494529ad518fef5718062cad",
+        "tool/collaboration-proof/package-lock.json": "031dbd57065817fbe2e119d87bb3e9588e26d4814835219dc950c4dddff51c56",
+        "tool/collaboration-proof/images.json": "63aa4b37949053e6574f9f4ae7ff1d22c02a59d8955a141c6aae5b2257e89f50",
+        "tool/collaboration-proof/index.html": "e5cadc31789aa95d2b718905dd44201da49a29678b913db9a7563fdf907ba7d0",
+        "tool/collaboration-proof/playwright.config.mjs": "33b5dd2896bd6a602e54a9c8154c679ee31b473e7bc9a0ff9da8864ca429381c",
+        "tool/collaboration-proof/src/probe.js": "df13b2a315d41c793645180ba71b604767087d634c130c8c1d1302a0ffcc40b3",
+        "tool/collaboration-proof/tests/providers.spec.mjs": "a57101427a84090f2ddbbb4f1b1b94a79394baa50a7574a51dc18f153f4207a5",
+        "tool/collaboration-proof/tests/native.spec.mjs": "b2110c9ba51a608ce205cbb50314fb03de69b77f0aef8b6f3f67f9e6ed433a81"
+      },
+      "observations": {
+        "recent_expired_jwt_accepted_by_provider": true,
+        "strict_hris_broker_expiry_required": true
+      },
+      "native": {
+        "apkSha256": "33e4ab705a1efbdfa6757819127588a0f48c74ff49a1f3ff7761eaaee947bc84",
+        "package": "dev.fajar.hris.collaboration.proof",
+        "avd": "hris-mobile-dev",
+        "androidApi": "35"
+      },
+      "browser": {
+        "expected": 2,
+        "unexpected": 0,
+        "flaky": 0,
+        "skipped": 0,
+        "duration": 35403.652
+      },
+      "elapsedSeconds": 84.382
+    }
+  }
 }

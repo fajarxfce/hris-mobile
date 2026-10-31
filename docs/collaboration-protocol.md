@@ -135,3 +135,11 @@ implement durable logical IDs, event aliases/tombstones and conflict handling
 before offline acceptance. No Starter port is due for this isolated proof.
 The dedicated emulator is stopped with regular HRIS data retained; no phone action
 occurred. Native CI now pins Platform `d0731afe`; inspect its exact result after push.
+
+Hosted native queue proof passed at exact `e8a5ceb3` in
+[41198048864](https://github.com/fajarxfce/hris-mobile/actions/runs/41198048864).
+Every job/step succeeded. Both provider scenarios passed without failures/skips
+in 84.382s, with complete cleanup and an independently built APK. The
+[measurement](measurements/collaboration-native-logical-queue-2026-10-31.json)
+retains that result; its driver hashes match pinned Platform `d0731afe`.
+Continue HRIS gateway/content integration and durable recipient reconciliation.
