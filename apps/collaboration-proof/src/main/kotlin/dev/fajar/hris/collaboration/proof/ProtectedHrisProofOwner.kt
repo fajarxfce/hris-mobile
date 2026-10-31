@@ -10,6 +10,7 @@ import dev.fajar.starter.identity.domain.entities.IdentityServer
 import dev.fajar.starter.securestorage.AndroidCredentialStore
 import java.io.File
 import java.net.URI
+import java.security.MessageDigest
 import java.util.UUID
 import kotlin.io.encoding.Base64
 import kotlin.time.Instant
@@ -36,6 +37,10 @@ internal class ProtectedHrisProofOwner(
             IdentityServer(home.toString(), "Fictional SDK peer"),
             CollaborationSdkEndpoint(home.toString(), allowCleartext = true),
         )
+
+    suspend fun restoreStored(): AndroidCollaborationRuntimeLease =
+        requireNotNull(success(runtime.restore(owner, deviceId)))
+            as AndroidCollaborationRuntimeLease
 
     suspend fun installAndReopen(): AndroidCollaborationRuntimeLease {
         var owned: AndroidCollaborationRuntimeLease? = null
@@ -175,3 +180,11 @@ internal suspend fun AndroidCollaborationRuntimeLease.closeProofRuntime() {
     }
     error("Owned runtime did not finish closing")
 }
+
+internal suspend fun AndroidCollaborationRuntimeLease.proofKeyFingerprint(): String =
+    nativeClient.encryption().use {
+        val value = requireNotNull(it.ed25519Key()) + "\u0000" + requireNotNull(it.curve25519Key())
+        MessageDigest.getInstance("SHA-256").digest(value.toByteArray()).joinToString("") { byte ->
+            "%02x".format(byte)
+        }
+    }

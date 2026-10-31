@@ -6,6 +6,7 @@ import dev.fajar.starter.collaboration.domain.entities.CollaborationOwner
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationRuntimeLease
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.storage.safeStorageCall
+import java.util.concurrent.atomic.AtomicBoolean
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.filterNotNull
 import org.matrix.rustcomponents.sdk.Client
@@ -26,6 +27,10 @@ internal constructor(
     private val lifetimeJob = SupervisorJob()
     private val lifetime = CoroutineScope(lifetimeJob + Dispatchers.Default)
     private val shutdown = SdkStoreShutdown(lifetime) { releaseResources() }
+    private val stopRequested = AtomicBoolean()
+    internal val closingRequested
+        get() = stopRequested.get()
+
     private val initialization =
         lifetime.async(start = CoroutineStart.LAZY) {
             nativeClient.encryption().use { it.waitForE2eeInitializationTasks() }
@@ -44,7 +49,10 @@ internal constructor(
 
     override suspend fun retryCredentialWrite() = persistence.retryPending()
 
-    override suspend fun close() = shutdown.close()
+    override suspend fun close(): AppResult<Unit> {
+        stopRequested.set(true)
+        return shutdown.close()
+    }
 
     private suspend fun releaseResources(): SdkShutdownAttempt {
         val credentialResult = persistence.close()

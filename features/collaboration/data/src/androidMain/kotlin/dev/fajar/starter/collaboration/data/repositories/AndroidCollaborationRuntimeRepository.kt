@@ -63,6 +63,13 @@ class AndroidCollaborationRuntimeRepository(
         deviceId: String,
         installation: Pair<CollaborationSetupCommand, CollaborationGateway>?,
     ): AndroidCollaborationRuntimeLease? {
+        // An earlier cancelled installation may have no caller left to retry its
+        // failed drain. An explicit open retries each already-closing owner once;
+        // at most five concurrent five-second waits, never a live lease or a loop.
+        coroutineScope {
+            leases.filter { it.closingRequested }.map { async { it.close() } }.awaitAll()
+        }
+        currentCoroutineContext().ensureActive()
         check(capacity.tryAcquire()) { "SDK runtime capacity is full." }
         var directory: CollaborationSdkStoreLease? = null
         var lease: AndroidCollaborationRuntimeLease? = null

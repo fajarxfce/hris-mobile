@@ -11,17 +11,25 @@ import org.matrix.rustcomponents.sdk.SlidingSyncVersion
 /** SDK callbacks run synchronously; failed writes are retained by the owning repository helper. */
 internal class AndroidSdkSessionDelegate(private val persistence: SdkSessionPersistence) :
     ClientSessionDelegate {
-    override fun retrieveSessionFromKeychain(userId: String): Session = runBlocking {
-        when (val current = persistence.snapshot()) {
-            is AppResult.Failed ->
-                throw ClientException.Generic("Stored session is unavailable.", null)
-            is AppResult.Success -> {
-                if (current.value.matrixUserId != userId)
-                    throw ClientException.Generic("Stored session does not match.", null)
-                current.value.toNativeSession()
+    override fun retrieveSessionFromKeychain(userId: String): Session =
+        try {
+            runBlocking {
+                when (val current = persistence.snapshot()) {
+                    is AppResult.Failed ->
+                        throw ClientException.Generic("Stored session is unavailable.", null)
+                    is AppResult.Success -> {
+                        if (current.value.matrixUserId != userId)
+                            throw ClientException.Generic("Stored session does not match.", null)
+                        current.value.toNativeSession()
+                    }
+                }
             }
+        } catch (expected: ClientException) {
+            throw expected
+        } catch (_: Exception) {
+            persistence.reportCallbackFailure()
+            throw ClientException.Generic("Stored session is unavailable.", null)
         }
-    }
 
     override fun saveSessionInKeychain(session: Session) {
         try {

@@ -2,6 +2,28 @@
 
 ## Active collaboration implementation — 31 October 2026
 
+**Actual Android process death preserves the pending SDK transaction.**
+[Evidence](measurements/collaboration-sdk-process-death-2026-10-31.json) binds APK
+`a14d6bf1` to 71 Mobile/15 Platform sources. The driver force-stops the owned proof
+process after durable enqueue, verifies its exit, then restores both protected
+identities in another PID. The original transaction remains paused until explicit
+release; gateway observation catches any premature encrypted send. Both directions
+decrypt and server reads verify ciphertext. SDK case 33.512s; fixture/quality 62s,
+four API and 32 Python cases pass. Mobile root/debug/lint/browser passes in 66s:
+2,063 desktop/24 data browser cases. Cleanup completed; owned emulator stopped.
+
+Explicit runtime opens now retry already-closing abandoned leases once, preserving
+locks on failed drains. The fallible retrieval bridge normalizes unexpected nonfatal
+exceptions. **Next: admitted bootstrap installation/recovery, application session
+ownership, logical-message reconciliation and DI/UI; continue all P0–P8.** This is
+SDK queue persistence, not full product outbox/notification or Apple acceptance.
+No live/phone/Starter change, and no product feature group accepted.
+
+Predecessor `70bfbd21` hosted runs `41240634120` (actual SDK, 68.188s, cleanup
+true) and `41240634056` (61 desktop, 47 browser, 47 Apple simulator cases) pass
+all jobs/steps. All 70 Mobile/15 Platform source hashes and retained XML are
+verified in the protected-store measurement.
+
 **Protected Android SDK reopening and encrypted HRIS exchange now pass.**
 [Evidence](measurements/collaboration-protected-native-store-2026-10-31.json)
 retains APK `18b072bc`, 70 Mobile/15 Platform source hashes and a 22.732s actual
@@ -17,10 +39,9 @@ The exchange exposed a Platform key-shape bug after retry: fallback IDs may over
 one-time IDs in their independent maps. The fix keeps all identity/signature/marker
 checks. Platform's full 454s run passes 37 domain, 201 data, 39 API plus quality;
 27 Python driver cases pass. Both earlier failed runs remain recorded.
-**Next: recover abandoned failed-close leases and normalize unexpected retrieval
-callback failures, then bootstrap installation/recovery and actual Android message
-queue process death; continue app DI/UI and all P0–P8.** Do not describe reopening
-within one process as process-death acceptance. No app DI/routes, live service,
+The newer checkpoint above adds abandoned-close recovery, retrieval normalization
+and actual Android message queue process death. Continue bootstrap installation/
+recovery, app DI/UI and all P0–P8. No app DI/routes, live service,
 phone or Starter change. The predecessor `4d124732` hosted run `41238521070` also
 passes both jobs/all steps: 57 desktop, 43 browser and 43 iOS simulator cases; all
 52 source hashes and artifact XML are verified in its runtime measurement.

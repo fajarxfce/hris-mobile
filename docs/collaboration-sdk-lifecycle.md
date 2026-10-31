@@ -1,9 +1,9 @@
 # Product SDK session ownership
 
 This is the implementation continuation for the pinned Android Rust SDK. Native
-runtime composition now has protected store reopening evidence; it still needs
-application admission/DI integration. Setup durability and reopening within one
-process do not establish message queue restart acceptance.
+runtime composition now has protected store reopening and actual SDK queue
+process-death evidence; it still needs application admission/DI integration and
+logical-message reconciliation beyond provider transaction retention.
 
 The source audit uses Rust SDK
 [`8de215a0`](https://github.com/matrix-org/matrix-rust-sdk/tree/8de215a0aa0026afa5754ae5f05a6d168d1a1d60).
@@ -23,8 +23,8 @@ The pinned FFI exposes `Client.enableAllSendQueues(false)` independently of sync
 Product restoration must prove that queues can be paused before session restore
 and queue-listener attachment, then explicitly resumed after current admission.
 The send-queue update listener respawns tasks for stored unsent events. Current
-proofs pause before enqueue in the same process; they do not establish the required
-reopen ordering or durable logical-ID reconciliation. Keep one SDK retry owner.
+process-death proof verifies this ordering and the original queued transaction.
+Durable application logical-ID reconciliation remains separate. Keep one SDK retry owner.
 
 `homeserverUrl` plus `disableWellKnownLookup(true)` prevents server discovery from
 redirecting the configured gateway. Cross-signing, automatic backups and background
@@ -107,12 +107,16 @@ callers, timeout, cancellation, failed drain and repeated disposal. Actual execu
 through the protected HRIS fixture now passes; see the
 [protected-store evidence](measurements/collaboration-protected-native-store-2026-10-31.json).
 
-For the next process-death fixture, the pinned queue's `send_serialized` awaits
+In the process-death fixture, the pinned queue's `send_serialized` awaits
 `QueueStorage.push` before publishing `NewLocalEvent`. Global queue subscription
 replays retained local events. Pause precedes restore and subscription; the test
 must kill the owned Android process after the durable local receipt, restore the
 same protected record/store in another process, observe the same transaction and
-then explicitly resume it. A same-process close/reopen does not meet that proof.
+then explicitly resume it. This now passes in 33.512s through the actual HRIS
+gateway with zero encrypted sends before release; both protected device identities
+and the original SDK transaction are unchanged. The driver verifies the old PID is
+gone and a different live PID restored it. It never reinstalls or replaces the
+message. See [evidence](measurements/collaboration-sdk-process-death-2026-10-31.json).
 Keep SDK store-error retry behavior under a bounded application owner; the SDK
 itself backs off and retries store reads. App logical-message reconciliation and
 server transaction-retention limits remain separate from SDK queue persistence.
@@ -125,9 +129,13 @@ shared checks pass; [runtime evidence](measurements/collaboration-sdk-runtime-20
 records compilation and shared checks; native execution is retained in the separate
 protected-store measurement.
 
-Next acceptance: protected store open/reopen and wrong-key preservation on the
-dedicated emulator; one pending logical message across process death; receipt loss
-and exact SDK transaction reuse; credential rotation with write failure; account
-replacement during restoration; cleanup of only the owned resources. Follow with
-the Apple adapter/hosted checks, app DI and chat routes. The physical iPhone waiver
-does not turn missing Apple implementation into acceptance.
+An explicit runtime open now retries each previously closing lease once before
+capacity acquisition. Failed drains keep their ownership and count against the
+five-lease bound; live leases are untouched. Unexpected nonfatal retrieval-bridge
+errors become the declared SDK exception and set the terminal credential gate.
+
+Next acceptance: admitted bootstrap installation/recovery; credential rotation with
+write failure; account replacement during restoration; app outbox reconciliation
+and receipt loss beyond the provider transaction lifetime. Follow with the Apple
+adapter/hosted checks, app DI and chat routes. The physical iPhone waiver does not
+turn missing Apple implementation into acceptance.

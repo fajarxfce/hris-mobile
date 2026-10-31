@@ -38,7 +38,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           repository: fajarxfce/hris-platform
-          ref: 22d8ea3b4e1051ba1869db39bb7e7d367e5de647
+          ref: 9aaf468883b4e09ab866b90138f616433a533542
           path: platform
       - uses: actions/setup-java@v4
         with:
