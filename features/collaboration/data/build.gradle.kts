@@ -4,7 +4,15 @@ plugins {
     id("starter.di")
 }
 
+val commonMain = kotlin.sourceSets.getByName("commonMain")
+val jvmSharedMain = kotlin.sourceSets.create("jvmSharedMain") { dependsOn(commonMain) }
+
+listOf("androidMain", "desktopMain").forEach {
+    kotlin.sourceSets.getByName(it).dependsOn(jvmSharedMain)
+}
+
 kotlin.sourceSets {
+    getByName("androidMain").dependencies { implementation(libs.matrix.sdk.android) }
     getByName("commonMain").dependencies {
         api(projects.features.collaboration.domain)
         implementation(projects.core.network)
@@ -12,6 +20,7 @@ kotlin.sourceSets {
         implementation(projects.core.securestorage)
         implementation(projects.core.database)
         implementation(libs.serialization.json)
+        implementation(libs.cryptography.optimal)
     }
     getByName("commonTest").dependencies {
         implementation(libs.coroutines.test)

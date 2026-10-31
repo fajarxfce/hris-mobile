@@ -131,5 +131,361 @@
     "SDK protected store/session installation and bootstrap reconciliation after replay expiry/build change",
     "Durable SDK message queue restoration and logical-ID reconciliation",
     "App DI, UI, Android/Apple integration and all P0\u2013P8 features"
-  ]
+  ],
+  "hostedVerification": {
+    "runId": 41235576905,
+    "run": {
+      "conclusion": "success",
+      "headSha": "fb1b1c13ef2ddce96d8fb3ab341a108d905d32f6",
+      "jobs": [
+        {
+          "completedAt": "2026-10-31T19:54:03Z",
+          "conclusion": "success",
+          "databaseId": 124638804009,
+          "name": "portable",
+          "startedAt": "2026-10-31T19:45:10Z",
+          "status": "completed",
+          "steps": [
+            {
+              "completedAt": "2026-10-31T19:45:13Z",
+              "conclusion": "success",
+              "name": "Set up job",
+              "number": 1,
+              "startedAt": "2026-10-31T19:45:11Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T19:45:14Z",
+              "conclusion": "success",
+              "name": "Run actions/checkout@v4",
+              "number": 2,
+              "startedAt": "2026-10-31T19:45:13Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T19:45:15Z",
+              "conclusion": "success",
+              "name": "Run actions/setup-java@v4",
+              "number": 3,
+              "startedAt": "2026-10-31T19:45:14Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T19:45:17Z",
+              "conclusion": "success",
+              "name": "Run gradle/actions/setup-gradle@v4",
+              "number": 4,
+              "startedAt": "2026-10-31T19:45:15Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T19:45:26Z",
+              "conclusion": "success",
+              "name": "Run android-actions/setup-android@v3",
+              "number": 5,
+              "startedAt": "2026-10-31T19:45:17Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T19:45:28Z",
+              "conclusion": "success",
+              "name": "Run sdkmanager 'platforms;android-36' 'build-tools;36.0.0'",
+              "number": 6,
+              "startedAt": "2026-10-31T19:45:26Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T19:45:28Z",
+              "conclusion": "success",
+              "name": "Run actions/setup-node@v4",
+              "number": 7,
+              "startedAt": "2026-10-31T19:45:28Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T19:54:00Z",
+              "conclusion": "success",
+              "name": "Check setup transport and ownership",
+              "number": 8,
+              "startedAt": "2026-10-31T19:45:28Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T19:54:01Z",
+              "conclusion": "success",
+              "name": "Run actions/upload-artifact@v4",
+              "number": 9,
+              "startedAt": "2026-10-31T19:54:00Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T19:54:01Z",
+              "conclusion": "success",
+              "name": "Post Run actions/setup-node@v4",
+              "number": 15,
+              "startedAt": "2026-10-31T19:54:01Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T19:54:01Z",
+              "conclusion": "success",
+              "name": "Post Run gradle/actions/setup-gradle@v4",
+              "number": 16,
+              "startedAt": "2026-10-31T19:54:01Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T19:54:02Z",
+              "conclusion": "success",
+              "name": "Post Run actions/setup-java@v4",
+              "number": 17,
+              "startedAt": "2026-10-31T19:54:01Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T19:54:02Z",
+              "conclusion": "success",
+              "name": "Post Run actions/checkout@v4",
+              "number": 18,
+              "startedAt": "2026-10-31T19:54:02Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T19:54:02Z",
+              "conclusion": "success",
+              "name": "Complete job",
+              "number": 19,
+              "startedAt": "2026-10-31T19:54:02Z",
+              "status": "completed"
+            }
+          ],
+          "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/41235576905/job/124638804009"
+        },
+        {
+          "completedAt": "2026-10-31T19:57:09Z",
+          "conclusion": "success",
+          "databaseId": 124638804138,
+          "name": "apple",
+          "startedAt": "2026-10-31T19:45:08Z",
+          "status": "completed",
+          "steps": [
+            {
+              "completedAt": "2026-10-31T19:45:09Z",
+              "conclusion": "success",
+              "name": "Set up job",
+              "number": 1,
+              "startedAt": "2026-10-31T19:45:07Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T19:45:11Z",
+              "conclusion": "success",
+              "name": "Run actions/checkout@v4",
+              "number": 2,
+              "startedAt": "2026-10-31T19:45:09Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T19:45:11Z",
+              "conclusion": "success",
+              "name": "Select Xcode 26.3",
+              "number": 3,
+              "startedAt": "2026-10-31T19:45:11Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T19:45:11Z",
+              "conclusion": "success",
+              "name": "Run actions/setup-java@v4",
+              "number": 4,
+              "startedAt": "2026-10-31T19:45:11Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T19:45:13Z",
+              "conclusion": "success",
+              "name": "Run gradle/actions/setup-gradle@v4",
+              "number": 5,
+              "startedAt": "2026-10-31T19:45:11Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T19:56:54Z",
+              "conclusion": "success",
+              "name": "Check Apple setup adapter",
+              "number": 6,
+              "startedAt": "2026-10-31T19:45:13Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T19:56:57Z",
+              "conclusion": "success",
+              "name": "Run actions/upload-artifact@v4",
+              "number": 7,
+              "startedAt": "2026-10-31T19:56:54Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T19:56:58Z",
+              "conclusion": "success",
+              "name": "Post Run gradle/actions/setup-gradle@v4",
+              "number": 12,
+              "startedAt": "2026-10-31T19:56:57Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T19:56:58Z",
+              "conclusion": "success",
+              "name": "Post Run actions/setup-java@v4",
+              "number": 13,
+              "startedAt": "2026-10-31T19:56:58Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T19:57:00Z",
+              "conclusion": "success",
+              "name": "Post Run actions/checkout@v4",
+              "number": 14,
+              "startedAt": "2026-10-31T19:56:58Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T19:57:08Z",
+              "conclusion": "success",
+              "name": "Complete job",
+              "number": 15,
+              "startedAt": "2026-10-31T19:57:00Z",
+              "status": "completed"
+            }
+          ],
+          "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/41235576905/job/124638804138"
+        }
+      ],
+      "status": "completed"
+    },
+    "verifiedSourceCount": 39,
+    "artifacts": {
+      "collaboration-control-apple": [
+        {
+          "file": "domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.CollaborationSetupCommandTest.xml",
+          "sha256": "7f844d4fa6361886790219b3c1cfb701374ada83f90897f1a79ffce516a3a213",
+          "tests": "15",
+          "failures": "0",
+          "errors": "0",
+          "skipped": "0",
+          "time": "0.031"
+        },
+        {
+          "file": "domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.LoadCollaborationSetupTest.xml",
+          "sha256": "b38b5410866026aa3c416167c8c6216e983fe2522f6dfbb277ca9224855a8030",
+          "tests": "8",
+          "failures": "0",
+          "errors": "0",
+          "skipped": "0",
+          "time": "0.001"
+        },
+        {
+          "file": "data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.data.CollaborationSetupTransportTest.xml",
+          "sha256": "430a1d1b9f30bdee803d47c2759b870c50da866cfafa3b4a1c83b8fae6904618",
+          "tests": "4",
+          "failures": "0",
+          "errors": "0",
+          "skipped": "0",
+          "time": "0.102"
+        },
+        {
+          "file": "data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.data.CollaborationSetupValidationTest.xml",
+          "sha256": "845225ffc6b9fe711a0db3748d31f3b38f3ddc0f789271961ba1380a4b03986b",
+          "tests": "3",
+          "failures": "0",
+          "errors": "0",
+          "skipped": "0",
+          "time": "0.058"
+        }
+      ],
+      "collaboration-control-portable": [
+        {
+          "file": "domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationSetupCommandTest.xml",
+          "sha256": "c3add38826815ad9ba55f30460abdf2dc3b94564b9c99bfd6ba9e837d9bf32a6",
+          "tests": "15",
+          "failures": "0",
+          "errors": "0",
+          "skipped": "0",
+          "time": "0.563"
+        },
+        {
+          "file": "domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.LoadCollaborationSetupTest.xml",
+          "sha256": "b67818c39139c9aefa13fc2a4772f1dedb5e995425b2f06ad90caf4a1614ebdb",
+          "tests": "8",
+          "failures": "0",
+          "errors": "0",
+          "skipped": "0",
+          "time": "0.066"
+        },
+        {
+          "file": "domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.domain.CollaborationSetupCommandTest.xml",
+          "sha256": "65e1ddb92d1a40412f9795fc829f5f5b088bdc70cd880b646dae1446aef86ac9",
+          "tests": "15",
+          "failures": "0",
+          "errors": "0",
+          "skipped": "0",
+          "time": "0.012"
+        },
+        {
+          "file": "domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.domain.LoadCollaborationSetupTest.xml",
+          "sha256": "fc6e3cd6912c198f68508247537c181b215e3c1bc8056e67adec5bf57c57c16c",
+          "tests": "8",
+          "failures": "0",
+          "errors": "0",
+          "skipped": "0",
+          "time": "0.002"
+        },
+        {
+          "file": "data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSetupTransportTest.xml",
+          "sha256": "acab775e69ec26aaa0b25b30a7497c4c6e25bb62004ec9101064af40061d2d40",
+          "tests": "4",
+          "failures": "0",
+          "errors": "0",
+          "skipped": "0",
+          "time": "0.384"
+        },
+        {
+          "file": "data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSetupValidationTest.xml",
+          "sha256": "e9dba333815a048f22014b79423be51ae88d46f8441fed6bfe601f80f24ad6b1",
+          "tests": "3",
+          "failures": "0",
+          "errors": "0",
+          "skipped": "0",
+          "time": "0.078"
+        },
+        {
+          "file": "data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.EncryptedCollaborationSetupCommandTest.xml",
+          "sha256": "5732f6a401c3d380729bac753037c4148c18a3f779dee94d89900d39c56526a4",
+          "tests": "8",
+          "failures": "0",
+          "errors": "0",
+          "skipped": "0",
+          "time": "0.401"
+        },
+        {
+          "file": "data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.CollaborationSetupTransportTest.xml",
+          "sha256": "f0ebb8700bedc0415de2aaf7b77f3456f128336f4c5d5e1f03f2deecb8131f0b",
+          "tests": "4",
+          "failures": "0",
+          "errors": "0",
+          "skipped": "0",
+          "time": "0.003"
+        },
+        {
+          "file": "data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.CollaborationSetupValidationTest.xml",
+          "sha256": "9e6ef9e59dd31dad64510802f591f5faf4724fc16253a6b8b6732c39d9376c9e",
+          "tests": "3",
+          "failures": "0",
+          "errors": "0",
+          "skipped": "0",
+          "time": "0.001"
+        }
+      ]
+    }
+  }
 }

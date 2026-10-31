@@ -2,6 +2,32 @@
 
 ## Active collaboration implementation — 31 October 2026
 
+**SDK store and credential-write components now pass.** The data module has a
+JVM/Android exclusive directory lease, strict scoped SDK record codec, per-lease
+pending credential writer, and an Android factory that pauses queues before its
+single restore. [Lifecycle notes](collaboration-sdk-lifecycle.md) and
+[evidence](measurements/collaboration-sdk-storage-2026-10-31.json) retain the exact
+scope and limits. Final root/assembly/browser checks pass in 57s: 2,058 desktop
+cases and 19 data browser cases; quality zero findings, 73 modules. Six file lease,
+six codec and six credential-write cases include cancellation after acquisition/
+committed write, missing ownership, failed persistence and late callback closure.
+Android factory is compiled, not yet run through the actual SDK fixture.
+
+**Next: compose those parts in the Android runtime repository using the existing
+AndroidCredentialStore and the private noBackupFilesDir; connect its safe SDK
+session delegate, then run protected store reopen and message process-death proof.**
+Do not treat the codec/writer fixture as actual platform Keystore acceptance.
+Session save callback returns void; record failure and retain pending tokens without
+throwing across FFI. Own every SDK listener/sync/task and directory lock through
+shutdown. Inspect initialization tasks before releasing a store while native work
+may still hold it. No provider logout/reset, no app route/DI or phone action yet.
+Continue bootstrap recovery, UI/outbox and all P0–P8; no product group accepted.
+
+Setup `fb1b1c13` hosted run `41235576905` now passes **both Linux and Apple, all
+steps**: 38 desktop, 30 browser and 30 iOS simulator cases. All 39 source hashes
+match the pushed commit; retained artifact XML hashes/counts are appended to its
+setup-command measurement. Prior CI failures/cancellations remain documented.
+
 **Durable product setup commands are implemented.** Prepare persists immutable
 registration/retry/bootstrap input; replay records uncertainty before I/O and uses
 one owner/mutex, captured native family, client build and original operation.

@@ -41,6 +41,40 @@ installed. Exercise write failure, process death and recovery without discarding
 the crypto store. Closing native resources inside a callback also needs explicit
 ownership to avoid deadlocking its caller.
 
+## Implemented storage components
+
+`FileCollaborationSdkStoreSource` acquires an OS file lock and returns retained
+database/cache paths. It checks path identity, probes occupancy without listing an
+unbounded directory, and releases acquired resources after preparation or coroutine
+handoff failure. Closing never deletes content. Tests cover competing JVM handles,
+separate identities, symlinks, failed preparation and cancellation after acquisition.
+The platform must supply its private backup-excluded root.
+
+`CollaborationSdkRecordCodec` authenticates the expected scope before use. A
+SHA-256 namespace binds API audience/account/company/native family/device and the
+explicit root gateway URL, excluding the replaceable local session and tokens.
+Records pin the complete identity, passphrase, bootstrap origin and credential
+revision. Rotation preserves the passphrase and initial deadline facts; it does
+not invent a newer admission timestamp. The serialization is intended only for
+the platform protected credential store; that native repository integration is
+the next step, not established by codec tests.
+
+The per-lease `SdkSessionPersistence` helper serializes protected writes and SDK
+callback state. Failed or cancelled writes keep their pending value and gate
+snapshots until explicit recovery. A committed write whose response was cancelled
+retries the same revision. Closing waits for its write owner and rejects late
+callbacks. `AndroidCollaborationSdkClientSource` compiles with queues paused before
+restore, fixed classic sync, disabled discovery/automatic backup/cross-signing/
+pagination, zero transport retries and bounded request concurrency/timeouts.
+Actual SDK execution through these new components remains required.
+
+[Component evidence](measurements/collaboration-sdk-storage-2026-10-31.json) retains
+final 57s root/assembly/browser checks: 2,058 desktop cases and 19 data browser
+cases. Android assembly and quality pass. This is not protected Android store or
+message-queue restart acceptance. The preceding setup commit `fb1b1c13` now has a
+complete successful hosted control run `41235576905`: desktop 38, browser 30 and
+Apple simulator 30 cases, all steps passed and all 39 source hashes verified.
+
 Next acceptance: protected store open/reopen and wrong-key preservation on the
 dedicated emulator; one pending logical message across process death; receipt loss
 and exact SDK transaction reuse; credential rotation with write failure; account
