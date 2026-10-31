@@ -4,33 +4,48 @@ Updated 31 October 2026 (UTC). The release-configuration audit and independently
 verified Starter port are complete. This employee application was generated from
 Compose Fluent Starter and is the proving ground for reusable foundation changes.
 
-## Active layout and sample-data work — 31 October 2026
+## Active filter-layout revision — 31 October 2026
 
-Mobile implementation `b73031be` is pushed and installed as configured
-`devRelease` **1.0.0 / build 3** on the authorized WireGuard phone. The identical
-24,111,207-byte APK was exercised in the dedicated Android 35 emulator, including
-Indonesian, keyboard, dark mode and 200% system text. Phone install-only and pulled
-APK verification passed in 25.682s; no uninstall, data clear or UI launch occurred.
-SHA-256: `c5348192d7feeb6eb837cf7453786736e76ef09fb065b356747fcb8f651a63d2`.
-**Future phone builds must use versionCode >= 3 and the existing signer.**
+The user reviewed build 3 and requested a further filter redesign: period arrows
+must not resemble a second Back button beneath the app bar, and status filters
+must stop using large pill/card surfaces and excessive space. This is active
+implementation work, **not verification-only closure**. Keep the Fluent visual
+language, group previous/next on the right, use lightweight filter actions and
+wrap long labels at large text. Retain 48 dp touch targets and existing policies.
 
-Final root checks passed 1,998 desktop cases in 348 suites (208 shared UI cases).
-Platform `1363abee` completed 23 fictional visible sample records using authorized
-APIs for the existing user-linked employment, plus leave balance examples. No
-identity binding or role was changed. Starter `54cabf5` ports only three neutral
-components, a portable regression and guidance; its independent root/Android/Web
-checks passed 327 cases in 113 suites.
+Installed local guidance (available automatically from the next turn):
+- Chris Banes `compose-component-design` and `compose-ui-testing-patterns`, from
+  `chrisbanes/skills` at `d2f24b4179179f5e8ec8dcfe0527b3619eda1e0f`.
+- `ui-ux-pro-max`, from `nextlevelbuilder/ui-ux-pro-max-skill` at
+  `9a3f14f7423037ccb8feeb4fee7482291b9c820e`.
+All live under `/home/fajar/.codex/skills/`. The selected guidance supports a
+shared caller-placeable layout, explicit semantics and label reflow; it does
+not call for replacing Fluent or migrating navigation/frameworks.
+
+Mobile `b73031be` is installed as configured devRelease 1.0.0 / build 3 on the
+WireGuard phone. Next delivery must use **versionCode >= 4**, the existing signer,
+and install-only after notifying the user. Its SHA-256 is
+`c5348192d7feeb6eb837cf7453786736e76ef09fb065b356747fcb8f651a63d2`.
+The dedicated emulator was logged out and stopped; phone UI/session untouched.
+The local release/Web retry succeeded in 302.667s with unchanged APK bytes.
+
+Local root checks passed 1,998 desktop cases / 348 suites; a fresh root rerun
+also passed after fixing the hosted Inbox test's synchronization. CI run
+41167886399 exposed one test waiting for an acknowledgement label already present
+on the old projection. It now waits for the refreshed read state plus the enabled
+action, preserving conflict/version/operation assertions. Check remaining CI
+jobs and validate the new filter source before closing the task.
+
+Platform `1363abee` completed 23 fictional sample records via authorized APIs for
+the existing user-linked employment. Do not seed again with a fresh manifest.
+Starter `54cabf5` ports the earlier form/detail components and passed independent
+root/Android/Web checks (327 cases / 113 suites). Prove the new filter foundation
+in Mobile, then port and validate it there as well.
 
 See [review and screenshots](layout-review-2026-10-31.md) and
-[measurements](measurements/layout-review-2026-10-31.json). Remaining work is
-verification closure: Mobile CI `41167886399`, Starter CI `41167913080` and a
-resumed local release/Web command are in progress. The first local combined build
-was terminated with exit 143 during Web optimization after Android assembly;
-the installed APK's package, signer, Firebase resources, API and actual behavior
-were independently verified. Record final build/CI results, resolve any genuine
-failures, stop the owned emulator and push final continuation evidence. No new
-feature implementation or sample-data write is pending unless validation finds
-an issue. Never deliver the earlier unconfigured emulator-only debug fixture.
+[measurements](measurements/layout-review-2026-10-31.json) for build-3 evidence.
+New filter screenshots, validation, release delivery and final Git handoff remain
+pending. Never deliver the unconfigured emulator-only authentication fixture.
 
 ## Previous Android installation — build 2, 31 October 2026
 

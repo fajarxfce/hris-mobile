@@ -105,7 +105,23 @@
       "log": "local release/build-interrupted.log",
       "result": "outer command terminated with 143 after Android assembly; Web optimization incomplete",
       "acceptedAndroidArtifact": "Independently verified signature, manifest, API, Firebase resources and actual emulator UI",
-      "followUp": "Resume the same Gradle inputs and retain the resulting completion status"
+      "followUp": "Same source and inputs completed successfully in 302.667s; Android artifact hash unchanged"
     }
-  ]
+  ],
+  "releaseAndWebBuild": {
+    "command": [
+      "./gradlew",
+      ":apps:android:assembleDevRelease",
+      ":apps:shared:wasmJsBrowserDistribution",
+      "-PrequireSigning=true",
+      "-PappEnvironment=dev",
+      "-PappVersion=1.0.0",
+      "-PappVersionCode=3",
+      "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+      "--no-daemon"
+    ],
+    "startedAt": "2026-10-31T04:22:53.071901+00:00",
+    "elapsedSeconds": 302.667,
+    "exitCode": 0
+  }
 }

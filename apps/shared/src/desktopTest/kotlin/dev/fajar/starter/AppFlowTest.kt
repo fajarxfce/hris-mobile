@@ -4027,7 +4027,15 @@ class AppFlowTest {
             compose.onNodeWithText("Mark as read").assertIsDisplayed().performClick()
             waitForAction("Review updates")
             compose.onNodeWithText("Review updates").performScrollTo().performClick()
-            waitFor("Acknowledge")
+            // The acknowledgement label also exists on the old unread projection. Wait for
+            // the reviewed read status to render before preparing the next command.
+            compose.waitUntil(15_000) {
+                compose.onAllNodesWithText("Mark as read").fetchSemanticsNodes().isEmpty() &&
+                    compose
+                        .onAllNodes(hasText("Acknowledge") and hasClickAction() and isEnabled())
+                        .fetchSemanticsNodes()
+                        .size == 1
+            }
             compose.onNodeWithText("Mark as read").assertDoesNotExist()
             compose.onNodeWithText("Acknowledge").assertIsDisplayed().performClick()
             waitFor("I have read this announcement.")
