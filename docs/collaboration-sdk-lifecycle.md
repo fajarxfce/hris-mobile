@@ -75,6 +75,32 @@ message-queue restart acceptance. The preceding setup commit `fb1b1c13` now has 
 complete successful hosted control run `41235576905`: desktop 38, browser 30 and
 Apple simulator 30 cases, all steps passed and all 39 source hashes verified.
 
+## Android runtime composition
+
+`androidCollaborationRuntimeRepository` supplies the platform Keystore adapter and
+the application's backup-excluded directory. Runtime install/restore owns the
+client before restore can start background work. Replaying the same bootstrap
+keeps the latest protected SDK tokens; a newer bootstrap must preserve the Matrix
+identity and store passphrase. An occupied store without a readable record fails
+without generating another key. Local session replacement does not change its
+audience/account/company/native-family/device namespace.
+
+The lease owns credential callbacks, their failure collector and the one wait for
+native E2EE initialization. Closing pauses queues, rejects late credential access
+and waits for that initialization before releasing client/directory resources.
+Cancellation of a caller's wait cannot detach native initialization and unlock its
+SQLite files. Close reports pending after five seconds; the application repository
+retains the lease until cleanup completes, with a capacity of five. SDK request
+timeouts are finite, but this does not prove termination of every native SDK bug.
+Queue/sync/room listener owners must stop before closing the lease.
+
+Unexpected nonfatal failures in the synchronous void save bridge set a terminal
+failure. An in-flight write cannot erase it, even after successfully committing;
+ordinary storage failures retain the pending tokens for explicit retry. The
+regression exercises that race with a controlled write barrier. Compilation and
+shared checks pass; [runtime evidence](measurements/collaboration-sdk-runtime-2026-10-31.json)
+does not claim native Keystore execution yet.
+
 Next acceptance: protected store open/reopen and wrong-key preservation on the
 dedicated emulator; one pending logical message across process death; receipt loss
 and exact SDK transaction reuse; credential rotation with write failure; account

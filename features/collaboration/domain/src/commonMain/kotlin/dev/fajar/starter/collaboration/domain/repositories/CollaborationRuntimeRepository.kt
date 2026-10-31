@@ -1,0 +1,30 @@
+package dev.fajar.starter.collaboration.domain.repositories
+
+import dev.fajar.starter.collaboration.domain.entities.*
+import dev.fajar.starter.common.result.*
+import kotlinx.coroutines.flow.StateFlow
+
+/** Store I/O and SDK ownership only. Use cases admit installation and live delivery separately. */
+interface CollaborationRuntimeRepository {
+    suspend fun install(
+        owner: CollaborationOwner,
+        command: CollaborationSetupCommandRecord,
+    ): AppResult<CollaborationRuntimeLease>
+
+    suspend fun restore(
+        owner: CollaborationOwner,
+        deviceId: String,
+    ): AppResult<CollaborationRuntimeLease?>
+}
+
+/** The application keeps this resource through its owned SDK work and closes it on replacement. */
+interface CollaborationRuntimeLease {
+    val owner: CollaborationOwner
+    val deviceId: String
+    val installedOperationId: String
+    val credentialFailures: StateFlow<Failure?>
+
+    suspend fun retryCredentialWrite(): AppResult<Unit>
+
+    suspend fun close(): AppResult<Unit>
+}

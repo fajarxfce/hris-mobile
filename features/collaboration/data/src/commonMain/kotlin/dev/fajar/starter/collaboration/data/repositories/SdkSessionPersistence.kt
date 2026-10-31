@@ -8,6 +8,7 @@ import dev.fajar.starter.storage.safeStorageCall
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
@@ -22,11 +23,12 @@ internal class SdkSessionPersistence(
     private var pending: CollaborationSdkRecord? = null
     private var closed = false
     private val failure = MutableStateFlow<Failure?>(null)
+    private val terminalFailure = MutableStateFlow<Failure?>(null)
     val failures = failure.asStateFlow()
 
     suspend fun snapshot(): AppResult<CollaborationSdkRecord> =
         writes.withLock {
-            val denied = failure.value
+            val denied = currentFailure()
             if (denied != null) AppResult.Failed(denied)
             else
                 safeStorageCall {
@@ -56,11 +58,11 @@ internal class SdkSessionPersistence(
             when (prepared) {
                 is AppResult.Failed -> retainFailure(prepared)
                 is AppResult.Success -> {
-                    if (prepared.value == current && pending == null && failure.value == null)
+                    if (prepared.value == current && pending == null && currentFailure() == null)
                         AppResult.Success(Unit)
                     else {
                         pending = prepared.value
-                        failure.value?.let { AppResult.Failed(it) } ?: persistPending()
+                        currentFailure()?.let { AppResult.Failed(it) } ?: persistPending()
                     }
                 }
             }
@@ -68,7 +70,7 @@ internal class SdkSessionPersistence(
 
     suspend fun markInitialized(): AppResult<Unit> =
         writes.withLock {
-            failure.value?.let {
+            currentFailure()?.let {
                 return@withLock AppResult.Failed(it)
             }
             val prepared = safeStorageCall {
@@ -89,6 +91,9 @@ internal class SdkSessionPersistence(
 
     suspend fun retryPending(): AppResult<Unit> =
         writes.withLock {
+            terminalFailure.value?.let {
+                return@withLock AppResult.Failed(it)
+            }
             if (closed) return@withLock pendingFailure()
             if (pending == null)
                 return@withLock failure.value?.let { AppResult.Failed(it) }
@@ -96,10 +101,44 @@ internal class SdkSessionPersistence(
             persistPending()
         }
 
-    suspend fun close() = writes.withLock { closed = true }
+    suspend fun close(): AppResult<Unit> =
+        writes.withLock {
+            if (closed) AppResult.Success(Unit)
+            else {
+                closed = true
+                safeStorageCall { credentials.close() }
+            }
+        }
+
+    /** A failed synchronous bridge cannot safely acknowledge any further SDK refresh. */
+    fun reportCallbackFailure() {
+        terminalFailure.compareAndSet(
+            null,
+            Failure(
+                FailureKind.Storage,
+                "SDK credential callback failed.",
+                code = "client.collaboration_callback_failed",
+            ),
+        )
+        failure.value = terminalFailure.value
+    }
+
+    suspend fun rejectCallback(): AppResult<Unit> =
+        writes.withLock {
+            retainFailure(
+                AppResult.Failed(
+                    Failure(
+                        FailureKind.Storage,
+                        "SDK session did not match its owner.",
+                        code = "client.collaboration_session_changed",
+                    )
+                )
+            )
+        }
 
     /** The exclusive directory lease and this mutex remain held by the repository owner. */
     private suspend fun persistPending(): AppResult<Unit> {
+        val previousFailure = failure.value
         val result =
             try {
                 safeStorageCall {
@@ -109,7 +148,7 @@ internal class SdkSessionPersistence(
                     value
                 }
             } catch (cancelled: CancellationException) {
-                failure.value = pendingFailure().failure
+                failure.update { terminalFailure.value ?: it ?: pendingFailure().failure }
                 throw cancelled
             }
         return when (result) {
@@ -117,16 +156,18 @@ internal class SdkSessionPersistence(
             is AppResult.Success -> {
                 current = result.value
                 pending = null
-                failure.value = null
-                AppResult.Success(Unit)
+                failure.compareAndSet(previousFailure, null)
+                currentFailure()?.let { AppResult.Failed(it) } ?: AppResult.Success(Unit)
             }
         }
     }
 
     private fun retainFailure(result: AppResult.Failed): AppResult.Failed {
-        failure.value = failure.value ?: result.failure
-        return AppResult.Failed(requireNotNull(failure.value))
+        failure.update { terminalFailure.value ?: it ?: result.failure }
+        return AppResult.Failed(requireNotNull(currentFailure()))
     }
+
+    private fun currentFailure() = terminalFailure.value ?: failure.value
 
     private fun pendingFailure() =
         AppResult.Failed(

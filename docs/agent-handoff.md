@@ -2,6 +2,22 @@
 
 ## Active collaboration implementation — 31 October 2026
 
+**Android runtime composition now compiles and passes the shared checks.** The
+application factory supplies Android Keystore records and `noBackupFilesDir`;
+runtime installation pins bootstrap identity and preserves existing SDK-rotated
+credentials on the same operation. Client ownership starts before restore. Closing
+retains the store lock until the SDK's E2EE initialization task has finished;
+callers wait at most five seconds per close, with five outstanding leases allowed.
+The void callback records bridge failures without unwinding across FFI; a concurrent
+successful write cannot clear that terminal gate. [Evidence](measurements/collaboration-sdk-runtime-2026-10-31.json)
+retains focused 58s and root/assembly/browser 50s checks. All 2,059 desktop and
+20 collaboration data browser cases pass. **Next: actual protected native store
+reopen, missing-record/wrong-key preservation and queue process death in the owned
+HRIS emulator fixture.** No app route/DI or physical device change yet. Continue
+through all P0–P8; no product group accepted. Hosted predecessor `b464a805`, run
+`41237201395`, passes both Linux and Apple; all 47 source hashes verified and XML
+evidence appended to the storage measurement.
+
 **SDK store and credential-write components now pass.** The data module has a
 JVM/Android exclusive directory lease, strict scoped SDK record codec, per-lease
 pending credential writer, and an Android factory that pauses queues before its

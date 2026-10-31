@@ -1,0 +1,102 @@
+{
+  "date": "2026-10-31",
+  "kind": "android-sdk-runtime-composition",
+  "productAcceptance": false,
+  "actualNativeStoreReopenAcceptance": false,
+  "sourceSha256": {
+    "features/collaboration/data/build.gradle.kts": "7c802266e7d7f5477d8d2b3dc969bfa2e3532c1f2947e9321505cc1b682b73b9",
+    "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/datasources/AndroidCollaborationSdkClientSource.kt": "36aead59e7c287c1a684ff049d0e78d1e97866c9284e829bc72fb295f45463db",
+    "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/di/AndroidCollaborationRuntimeFactory.kt": "70936d64b3ef51fe7242bec2b02a6dc2a01a160a1cd0364d357cda6f874545dd",
+    "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/repositories/AndroidCollaborationRuntimeLease.kt": "b8f18f02d4794dbd97b32a586a0e0c9f90dc676a45153993f9fde8f1fa5d1b0b",
+    "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/repositories/AndroidCollaborationRuntimeRepository.kt": "4f4095a71969f3684a71a5c6564c24e38c27bddc1b1240ee9b385e0dadc810ac",
+    "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/repositories/AndroidSdkSessionDelegate.kt": "5e73f8f6c4725cf1b8284e790c45004bb2e68847fd751ed934377fc63dcc1fbf",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/api/CollaborationSetupApi.kt": "daefe3f560e71e4e339f38f3d34946e05f69088a3627902ac2573dcc07b77319",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/datasources/ApiCollaborationSetupRemoteSource.kt": "1068be51e7488af5ee18bf0b711f7e1fa0934027526cddcb4d61a0ea90a8ab80",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/datasources/CollaborationSdkStoreSource.kt": "0434fec3bbf600f9d2bfa2dd3e5f8597072572322f5d6d49f86831e1384baf5f",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/datasources/CollaborationSetupRemoteSource.kt": "d4fe295ab314589a14264cbc287746f35d20b0e75a7c5b8095c2151459769cda",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt": "432a25f09ee05f8a000cecf20bd0b6ec786883edf0a1d694338eb29b254836b7",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/dto/CollaborationSetupCommandDto.kt": "c16dbe4b72f8b5701ac3e17ef90e2ba56c080e2ab357f7a5d6dbcb7d800aa37a",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/dto/CollaborationSetupDto.kt": "f7454b125e3a376eb857a91380cc84d65b8be6d0dc2186875a09dd863b5a5991",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/mappers/CollaborationGatewayMapper.kt": "5b57042c4314bd91cc05b94940a8b50d41480ad2737018f8d32c82a811c202d4",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/mappers/CollaborationSetupCommandMapper.kt": "c34a1906a922d6eaa20ec7e389448c2a482e22a42f4d96446d07dd3e175b7d78",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/mappers/CollaborationSetupMapper.kt": "5cdcd68b0a07d01836f2bd61e46092868aee2d72e61c4ea87d40f4aa6ad7a387",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/mappers/CollaborationSetupOutcomeMapper.kt": "9fd786857133f2d26e3dcff112171393f10e43e0c2e270f3187cabc6f9c0121a",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationSetupCommandRepository.kt": "69102828694135969b4e2f128e423ab695600d118f9b5b91141de0923d2b9995",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/RemoteCollaborationSetupRepository.kt": "22da3768c66bbdbb98f632ddd073be919703bee4ca15414f615d5ac931a15244",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/SdkSessionPersistence.kt": "8c9f2a318d1205f05350f041edbf0004e985e33db92b6535e8358db7596f5fc7",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/sdk/CollaborationSdkRecord.kt": "04da1a9d2651d55747b1ba9915eeb7ab543521214bdd626b5f71da235a153fd3",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/sdk/CollaborationSdkRecordCodec.kt": "59f69945cdb57a7ea2b77d2d2ff940e965b344e2b894426d7f21e5d57efe5701",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/sdk/CollaborationSdkScope.kt": "12312984000bf72bff1f05dd6fdb4908ca2e96197c445706d4636987a9ff2038",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSdkRecordTest.kt": "dac8053a312c3458d9c929041ac943a1559d008e4e8e16ff2ea85d46274565a2",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSetupTransportTest.kt": "6a16688dd12d6a83aaa38022b1589126436309d31e79068af829e4de3592c8d9",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSetupValidationTest.kt": "af31347c4c76f716620c3c7178286d35a4483c749c1e51cbab36239fdc9d97ee",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationTransportFixture.kt": "d85aa8eed24265173948d6fafbb6d5a49cb369efe41f831d1a7ee9d8e0843d4a",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/SdkSessionPersistenceTest.kt": "7a6690034f9c7353e0d2cbba6a1fc4724fce88f05f924b557bdbdfe269b0c806",
+    "features/collaboration/data/src/desktopTest/kotlin/dev/fajar/starter/collaboration/data/EncryptedCollaborationSetupCommandTest.kt": "55e76e7fd21414d9412da1f265f781f6227a9fe667b9b532c9cf9c49dcc6c9f4",
+    "features/collaboration/data/src/desktopTest/kotlin/dev/fajar/starter/collaboration/data/FileCollaborationSdkStoreTest.kt": "420a6d3ea3e4ac0bb9180f3885de67935b32fcf07f154738708dd13cb6585d04",
+    "features/collaboration/data/src/jvmSharedMain/kotlin/dev/fajar/starter/collaboration/data/datasources/FileCollaborationSdkStoreSource.kt": "3e580296543825e090e448a09c3b309d6dd9df21136085aaef2a05eb636a3cf6",
+    "features/collaboration/domain/build.gradle.kts": "b95c5a24c279be2b87bbadff36cab419904698a86250dd0ee028780dcbf09d9c",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationDeviceSetup.kt": "a42df08ff1b3915199fa600886202e176dcf7ec6a0d582beab9583c842fc202f",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationGateway.kt": "9212548ee6fc06e579f2f30a4ad6107eafb42f6c8e0aacf5837c561e4eb46220",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationOwner.kt": "763050fad897b67c9a7c2070e95166da9d19521306a33d098d5f033b1a73b546",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSetupCommand.kt": "38dc69f593c667ffaba38ad803ee8576649587b9ee7207d11c3dff001c1c76e7",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSetupCommandRecord.kt": "d0cc5aebf4c3c023342a6c90a14186d0425b5309582ed2b22f01934834ac9b1f",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSetupCommands.kt": "e60005ebdf881a94f430f0f6016948712d97aee8a5370e60340bf5fa994ba6de",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationRequestPolicy.kt": "1d7731545a5acfbe42e97e6b42626f867b410b39a5f4805496f91f72b98744f4",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSetupActionPolicy.kt": "2640fa9e7b64827bf234c73a3865111fb6c05c2ab6bb0872f638022b0d6d4df5",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationRuntimeRepository.kt": "e676adca85457453b9a3568e542f8e51857223561c15e513e9fcdebb66b3b156",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationSetupCommandRepository.kt": "fa07cb2bcfff9dd9596cda27ebb1dc752cce9855f9f54ace5f3fd1c79bafa688",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationSetupRepository.kt": "b98fa02c23b732217cea7271ab4ed9296af21660a88be64bef1c4bd029414e62",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/CollaborationSetupOwner.kt": "9e54aa26bea624bd37290d751f1a8e5fc6f2d8fe40969a40604af85ce4b04c38",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/LoadCollaborationSetup.kt": "e3d394cb020f61e1c937bd0a1c98b827737d2be270a19f5443aec9475c415716",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/PrepareCollaborationSetup.kt": "e909f6049325049c1157334e3708bca23f2f31afa38b07c6d2d7e91624386c2f",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ReconcileCollaborationSetupReceipt.kt": "2679100381cd1fe8517cf49d19c7eaa02c1efdbdc66c5f8386d30a8c01598b21",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ReplayCollaborationSetup.kt": "cb70532bed89c59ad5dee50a4d3f9b4dd7a207a647eac11e911805238423723f",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationCommandFixture.kt": "ea481ec084297ed39e759cff19997cdcc1fb426fc1f6f7e47dc45fc4b90a43f5",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationSetupCommandTest.kt": "effa5982ed82b0c48b71678fd25e4f6c236ed521aee2b6e69c1c44568c38bb15",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationSetupFixture.kt": "dd0a64b5761c31d5a15499679aa049571555d06931728621d2032031af8e7849",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/LoadCollaborationSetupTest.kt": "f5b9d6d453b5a579198315323afc6893bc10f66425a84123105119912b466ad2"
+  },
+  "validation": {
+    "focused": {
+      "seconds": 58,
+      "desktop": {
+        "tests": 34,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "browser": {
+        "tests": 20,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "result": "passed; Android assembly and quality"
+    },
+    "root": {
+      "seconds": 50,
+      "tasks": [
+        ":check",
+        ":features:collaboration:data:assemble",
+        ":features:collaboration:data:wasmJsBrowserTest"
+      ],
+      "desktop": {
+        "tests": 2153,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "result": "passed"
+    }
+  },
+  "limits": [
+    "Android repository/factory compiled; actual Keystore, wrong-key and native reopening execution is next.",
+    "One store lease remains retained until SDK initialization ends, even when the caller stops waiting after five seconds. Five outstanding owners bound quarantine capacity.",
+    "No app DI/routes, queue process-death acceptance, live deployment, phone or Starter change."
+  ],
+  "next": [
+    "Execute the actual HRIS emulator fixture through the protected runtime.",
+    "Implement current-admission installation and expired-bootstrap recovery, then durable SDK message queue restart, UI and P0\u2013P8."
+  ]
+}

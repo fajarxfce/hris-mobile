@@ -15,7 +15,7 @@ import org.matrix.rustcomponents.sdk.SqliteStoreBuilder
  * Raw SDK construction. Its caller owns admission, protected credentials and the directory lease.
  */
 class AndroidCollaborationSdkClientSource {
-    suspend fun openPaused(
+    suspend fun create(
         directory: CollaborationSdkStoreLease,
         passphrase: String,
         initialSession: Session,
@@ -24,17 +24,16 @@ class AndroidCollaborationSdkClientSource {
         require(initialSession.slidingSyncVersion == SlidingSyncVersion.NONE)
         require(initialSession.oauthData == null)
         currentCoroutineContext().ensureActive()
-        val client = build(directory, passphrase, initialSession.homeserverUrl, delegate)
-        try {
-            // Pause before restore and before any queue listener can respawn retained requests.
-            client.enableAllSendQueues(false)
-            client.restoreSession(initialSession)
-            currentCoroutineContext().ensureActive()
-            return client
-        } catch (failure: Throwable) {
-            runCatching { client.close() }.exceptionOrNull()?.let(failure::addSuppressed)
-            throw failure
-        }
+        return build(directory, passphrase, initialSession.homeserverUrl, delegate)
+    }
+
+    suspend fun restorePaused(client: Client, initialSession: Session) {
+        require(initialSession.slidingSyncVersion == SlidingSyncVersion.NONE)
+        require(initialSession.oauthData == null)
+        // The repository already owns this client before any restore/cancellation can occur.
+        client.enableAllSendQueues(false)
+        client.restoreSession(initialSession)
+        currentCoroutineContext().ensureActive()
     }
 
     private suspend fun build(

@@ -43,6 +43,34 @@ class SdkSessionPersistenceTest {
     }
 
     @Test
+    fun callbackBridgeFailureDuringAWriteCannotBeClearedByItsLateSuccess() = runTest {
+        val f = fixture()
+        val entered = CompletableDeferred<Unit>()
+        val release = CompletableDeferred<Unit>()
+        val store =
+            object : CredentialStore by f.store {
+                override suspend fun write(value: String?) {
+                    entered.complete(Unit)
+                    release.await()
+                    f.store.write(value)
+                }
+            }
+        val writer = SdkSessionPersistence(store, f.codec, f.initial)
+        val saving = async { save(writer, f.initial) }
+        entered.await()
+        writer.reportCallbackFailure()
+        val denied = assertNotNull(writer.failures.value)
+        assertEquals("client.collaboration_callback_failed", denied.code)
+        release.complete(Unit)
+        assertEquals(AppResult.Failed(denied), saving.await())
+        assertEquals(newAccess, f.codec.decode(f.store.read()!!).accessToken)
+        assertEquals(AppResult.Failed(denied), writer.snapshot())
+        assertEquals(AppResult.Failed(denied), writer.retryPending())
+        assertEquals(AppResult.Failed(denied), writer.markInitialized())
+        assertEquals(denied, writer.failures.value)
+    }
+
+    @Test
     fun failedWritesKeepThePendingTokensAndBlockSnapshotsUntilExplicitRecovery() = runTest {
         val f = fixture()
         var unavailable = true
