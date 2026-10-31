@@ -1,5 +1,6 @@
 package dev.fajar.starter.collaboration.data.repositories
 
+import dev.fajar.starter.collaboration.data.datasources.AndroidCollaborationTimelineSource
 import dev.fajar.starter.collaboration.data.datasources.CollaborationSdkStoreLease
 import dev.fajar.starter.collaboration.data.datasources.startAndroidCollaborationSync
 import dev.fajar.starter.collaboration.data.sdk.CollaborationSdkRecord
@@ -30,6 +31,7 @@ internal constructor(
     private val shutdown = SdkStoreShutdown(lifetime) { releaseResources() }
     private val stopRequested = AtomicBoolean()
     private val sync = SdkSyncLifecycle(lifetime) { startAndroidCollaborationSync(nativeClient) }
+    private val children = SdkChildResources(lifetime)
     internal val closingRequested
         get() = stopRequested.get()
 
@@ -42,6 +44,7 @@ internal constructor(
             credentialFailures.filterNotNull().collect {
                 safeStorageCall { nativeClient.enableAllSendQueues(false) }
                 sync.stop()
+                children.close()
             }
         }
 
@@ -64,6 +67,40 @@ internal constructor(
             return AppResult.Failed(it)
         }
         return result
+    }
+
+    /** Opens an already-known room; does not join, restore, or resume message delivery. */
+    suspend fun openTimeline(roomId: String): AppResult<AndroidCollaborationTimelineLease> {
+        if (stopRequested.get()) return syncStopped()
+        credentialFailures.value?.let {
+            return AppResult.Failed(it)
+        }
+        if (
+            !roomId.startsWith('!') ||
+                roomId.length !in 2..255 ||
+                roomId.any { it.isWhitespace() || it.isISOControl() }
+        )
+            return AppResult.Failed(Failure(FailureKind.Validation, "Invalid chat room."))
+        val source = AndroidCollaborationTimelineSource(nativeClient, roomId)
+        val result = children.acquire(source, { it.open() }, { it.stop() })
+        var handedOver = false
+        try {
+            currentCoroutineContext().ensureActive()
+            if (stopRequested.get()) return syncStopped()
+            credentialFailures.value?.let {
+                return AppResult.Failed(it)
+            }
+            return when (result) {
+                is AppResult.Failed -> result
+                is AppResult.Success ->
+                    AppResult.Success(
+                            AndroidCollaborationTimelineLease(result.value, source.updates)
+                        )
+                        .also { handedOver = true }
+            }
+        } finally {
+            if (!handedOver && result is AppResult.Success) result.value.close()
+        }
     }
 
     private fun syncStopped() =
@@ -89,6 +126,9 @@ internal constructor(
         val syncStopped = sync.stop()
         if (syncStopped is AppResult.Failed)
             return SdkShutdownAttempt(syncStopped, released = false)
+        val childrenStopped = children.close()
+        if (childrenStopped is AppResult.Failed)
+            return SdkShutdownAttempt(childrenStopped, released = false)
         initialization.start()
         initialization.join()
         // Disabling queues does not abort an in-flight send. Pause drains and closes

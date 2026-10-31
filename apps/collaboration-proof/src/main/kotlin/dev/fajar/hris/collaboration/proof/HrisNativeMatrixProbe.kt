@@ -4,11 +4,13 @@ import android.content.Context
 import android.os.Process
 import android.util.AtomicFile
 import dev.fajar.starter.collaboration.data.repositories.AndroidCollaborationRuntimeLease
+import dev.fajar.starter.collaboration.data.repositories.AndroidCollaborationTimelineLease
 import dev.fajar.starter.common.result.AppResult
 import java.io.File
 import java.net.URI
 import java.util.UUID
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.first
 import org.json.JSONObject
 import org.matrix.rustcomponents.sdk.Room
 
@@ -42,6 +44,8 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
             var senderRoom: Room? = null
             var recipientRoom: Room? = null
             var pending: HrisProofPendingQueue? = null
+            var senderTimeline: AndroidCollaborationTimelineLease? = null
+            var recipientTimeline: AndroidCollaborationTimelineLease? = null
             try {
                 val senderOwner =
                     ProtectedHrisProofOwner(context, fixture.getJSONObject("sender"), home)
@@ -59,7 +63,19 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
                 check(recipient.startSync() is AppResult.Success)
                 senderRoom = sender.nativeClient.joinRoomById(roomId)
                 recipientRoom = recipient.nativeClient.joinRoomById(roomId)
-                if (resuming) resume(fixture, sender, recipient, senderRoom, recipientRoom, pending)
+                senderTimeline = (sender.openTimeline(roomId) as AppResult.Success).value
+                recipientTimeline = (recipient.openTimeline(roomId) as AppResult.Success).value
+                if (resuming)
+                    resume(
+                        fixture,
+                        sender,
+                        recipient,
+                        senderRoom,
+                        recipientRoom,
+                        pending,
+                        senderTimeline,
+                        recipientTimeline,
+                    )
                 else stage(fixture, sender, recipient, senderRoom, pending)
             } finally {
                 withContext(NonCancellable) {
@@ -80,6 +96,13 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
                     }
                     first?.let { throw it }
                 }
+            }
+            for (timeline in listOfNotNull(senderTimeline, recipientTimeline)) {
+                val ended = timeline.updates.first()
+                check(
+                    ended is AppResult.Failed &&
+                        ended.failure.code == "client.collaboration_timeline_closed"
+                )
             }
         }
 
@@ -115,6 +138,8 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
         senderRoom: Room,
         recipientRoom: Room,
         pending: HrisProofPendingQueue,
+        senderTimeline: AndroidCollaborationTimelineLease,
+        recipientTimeline: AndroidCollaborationTimelineLease,
     ) {
         val staged = read("gateway-staged", 4096)
         for (name in protectedFlagNames) check(staged.get(name) == true)
@@ -145,12 +170,30 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
                             ProofQueuedMessage(recipient.nativeClient, recipientRoom)
                                 .send(body(fixture, "reply"), logicalId(fixture, "replyId"))
                         check(returning.eventId() == answered.eventId)
+                        recipientTimeline.awaitMessage(
+                            sent.eventId,
+                            body(fixture, "body"),
+                            logicalId(fixture, "logicalId"),
+                        )
+                        senderTimeline.awaitMessage(
+                            answered.eventId,
+                            body(fixture, "reply"),
+                            logicalId(fixture, "replyId"),
+                        )
+                        check(recipientTimeline.close() is AppResult.Success)
+                        // Screen disposal leaves the sibling runtime/observer usable.
+                        senderTimeline.awaitMessage(
+                            answered.eventId,
+                            body(fixture, "reply"),
+                            logicalId(fixture, "replyId"),
+                        )
                         write(
                             "gateway-result",
                             protectedFlags(JSONObject())
                                 .put("encryptedBothDirections", true)
                                 .put("logicalIdsPreserved", true)
                                 .put("queueRestored", true)
+                                .put("ownedTimelineObserved", true)
                                 .put("transactionReused", true)
                                 .put("identityAfterRestart", true)
                                 .put("senderEventId", sent.eventId)
@@ -162,6 +205,22 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
                         )
                     }
             }
+    }
+
+    private suspend fun AndroidCollaborationTimelineLease.awaitMessage(
+        eventId: String,
+        body: String,
+        logicalId: String,
+    ) {
+        withTimeout(30_000) {
+            updates.first { result ->
+                check(result !is AppResult.Failed)
+                result is AppResult.Success &&
+                    result.value.any {
+                        it.eventId == eventId && it.body == body && it.logicalId == logicalId
+                    }
+            }
+        }
     }
 
     private fun body(value: JSONObject, name: String) =

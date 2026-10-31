@@ -1,9 +1,11 @@
 # Product SDK session ownership
 
 This is the implementation continuation for the pinned Android Rust SDK. Native
-runtime composition now has protected store reopening and actual SDK queue
-process-death evidence; it still needs application admission/DI integration and
-logical-message reconciliation beyond provider transaction retention.
+runtime composition now has protected store reopening, application admission/DI,
+lease-owned synchronization and [owned room/timeline observers](collaboration-timeline.md).
+Actual SDK queue process-death evidence is retained. Product content routes,
+owned offline projections and logical-message reconciliation beyond provider
+transaction retention remain in progress.
 
 The source audit uses Rust SDK
 [`8de215a0`](https://github.com/matrix-org/matrix-rust-sdk/tree/8de215a0aa0026afa5754ae5f05a6d168d1a1d60).

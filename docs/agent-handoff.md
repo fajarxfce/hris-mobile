@@ -2,6 +2,41 @@
 
 ## Active collaboration implementation — 31 October 2026
 
+**Android room/timeline children now belong to their protected runtime.**
+[Contract](collaboration-timeline.md) and
+[evidence](measurements/collaboration-owned-timeline-2026-10-31.json) cover bounded
+child capacity, partial acquisition, late/cancelled waiters, explicit failed
+cleanup retry, sibling disposal and parent drain ordering. The native listener
+copies/disposes FFI values, applies ordered vector batches atomically and retains
+virtual positions. Text, redaction, unavailable keys and pending/failed/sent states
+have typed projections. Local echoes keep unknown logical IDs until reconciliation.
+
+Fifteen new common cases pass. Focused checks pass in 70s; final root/browser/
+Android/Wasm/lint passes in 245s: 2,160 desktop cases, 64 data browser cases and zero
+lint errors. A preceding mistyped Gradle task path failed in 13s before correction.
+Actual SDK run `5aea81cc` passes in 34.340s (53s Gradle, 32 driver cases), checking
+both decrypted timeline replies, explicit child disposal/sibling survival and
+closed snapshots after parent close. All 15 Platform/120 Mobile hashes match
+before/after. One provider-busy key upload returned 503 before successful exchange.
+The emulator is stopped; dev APK `941ce4de` is built, not installed.
+
+**Next: admitted common content ports and app entry, product timeline/history
+windows, owned offline message projections, bootstrap/cross-family recovery,
+logical-ID reconciliation and chat UI; continue all P0–P8.** The platform handle
+currently opens known rooms only and gates vectors above 512 entries. No product
+group is accepted; no live/schema/phone change. No reusable Starter change is
+required by these HRIS SDK adapters.
+
+Conversation command CI `39217be2`/`41248280288` now passes all 26 steps across both
+jobs: 143 desktop, 119 browser and 119 iOS simulator cases; Android/Wasm/Apple
+compilation succeeds. All 26 source hashes were checked against the immutable
+commit. Its actual HRIS run `41248280306` remains in progress at this recording.
+Apple native chat runtime remains pending.
+
+## Earlier collaboration checkpoints
+
+Use the latest checkpoint above for the active queue; earlier next-step notes are historical.
+
 **Native conversation commands now persist and reconcile through application DI.**
 [Contract](collaboration-conversations.md) and
 [evidence](measurements/collaboration-conversation-commands-2026-10-31.json) cover
@@ -31,10 +66,6 @@ cleanup complete. All 94 Mobile/15 Platform source hashes match the pinned commi
 The new command implementation has its own queued/running checks.
 Starter AppAuth hosted verify `41245287269` passes all 15 verify steps at `9740cb5`,
 with source hashes checked; Starter records closure at `36116b2`.
-
-## Earlier collaboration checkpoints
-
-Use the latest checkpoint above for the active queue; earlier next-step notes are historical.
 
 **Android SDK synchronization now belongs to its protected runtime lease.**
 Concurrent starts share one acquisition even after caller cancellation; late or
