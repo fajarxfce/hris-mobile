@@ -1,0 +1,48 @@
+{
+  "date": "2026-10-31",
+  "kind": "deterministic-expense-ui-fixture",
+  "complete": true,
+  "productionChanged": false,
+  "fixtureTime": "2026-10-15T01:00:00Z",
+  "reason": "Company timezone crossed into November; existing October claims were excluded by a real-clock observer.",
+  "initialFailure": {
+    "gradleSeconds": 351,
+    "failed": [
+      {
+        "suite": "AppFlowTest[desktop]",
+        "tests": 90,
+        "failures": [
+          "nativeExpensesKeepApprovalSeparateFromPaymentAndRestoreAdmittedDetailsOffline[desktop]",
+          "nativeExpenseFiltersAndFixedNavigationRemainUsableAtLargeText[desktop]"
+        ]
+      }
+    ],
+    "screenshot": ".work/collaboration-setup-expense-timeout.png",
+    "screenshotSha256": "e9d19b36bb786db5b4fcc28cd080426955727e2601c95dc473357748761b0a19",
+    "observed": "November 2026 selected against October fixture claims after company timezone month rollover."
+  },
+  "focusedRecovery": {
+    "gradleSeconds": 54,
+    "expenseCases": 2,
+    "additionalSetupCases": 15,
+    "result": "passed"
+  },
+  "rootRecovery": {
+    "gradleSeconds": 334,
+    "commands": [
+      ":check",
+      ":features:collaboration:data:assemble"
+    ],
+    "desktop": {
+      "tests": 2017,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "result": "passed",
+    "scope": "Working tree also included the subsequent collaboration setup modules."
+  },
+  "sourceSha256": {
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/AppFlowTest.kt": "98e314c02b2ec9a8b972d9f3741973d99d0c64f885a92b1060682ed49f3480c6"
+  }
+}

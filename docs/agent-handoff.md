@@ -2,6 +2,15 @@
 
 ## Active collaboration implementation — 31 October 2026
 
+Existing expense UI scenarios now pin the observer clock to their October claim
+fixtures. The company timezone had crossed into November, correctly excluding the
+October data in production and exposing a nondeterministic test. No product date
+behavior or screenshot tolerance changed. Both affected cases pass; full root
+checks and the in-progress collaboration adapter assembly passed in 334s.
+[Evidence](measurements/expense-fixture-month-2026-10-31.json) retains the failed
+screenshot hash, 351s initial failure and 54s focused recovery. Continue collaboration
+implementation; this test correction does not finish the approved plan.
+
 Actual Android SDK ↔ HRIS gateway now passes in both directions against Platform
 [`45ccd56f`](https://github.com/fajarxfce/hris-platform/commit/45ccd56f29871a3474aca676be3464cc7d43bee4).
 Two fictional employees own separate encrypted SDK stores. Keys/claim/to-device,

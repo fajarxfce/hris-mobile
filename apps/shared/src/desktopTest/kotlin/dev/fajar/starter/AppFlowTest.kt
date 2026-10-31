@@ -4824,6 +4824,21 @@ class AppFlowTest {
         container.koin.loadModules(
             listOf(
                 module {
+                    // Claims and expected month navigation are fixed in October 2026.
+                    // The production observer intentionally uses the current company date.
+                    factory {
+                        dev.fajar.starter.expenses.domain.usecases.ObserveExpenses(
+                            get(),
+                            get(),
+                            get(),
+                            get(),
+                            object : kotlin.time.Clock {
+                                override fun now() =
+                                    kotlin.time.Instant.parse("2026-10-15T01:00:00Z")
+                            },
+                            get(),
+                        )
+                    } bind ObserveCompanyData::class
                     factory {
                         dev.fajar.starter.workforce.domain.usecases.ObserveWorkCalendar(
                             get(),
