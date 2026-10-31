@@ -2,6 +2,8 @@
 
 ## Active collaboration implementation — 31 October 2026
 
+Latest exact native protocol CI `41207178159` at `7b57865b` passed every job/step. Driver `047897f9` hashes match the sanitized artifact: two scenarios 33.604s, owned run 77.491s, cleanup true; hosted APK `b4cdef67` is retained in `docs/measurements/collaboration-sdk-protocol-surface-2026-10-31.json`. The same driver browser CI `41207148334` also passed every step (8.995s/32.972s). No Kotlin source or product acceptance changed.
+
 The user approved the complete chat/call/meeting plan. Branch
 `feat/communications` starts from `7e12251a` with no inherited edits. The canonical
 [54-group PRD](https://github.com/fajarxfce/hris-platform/blob/feat/communications/docs/collaboration/prd.md)
