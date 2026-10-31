@@ -1,0 +1,112 @@
+{
+  "date": "2026-10-31",
+  "kind": "admitted-existing-runtime-restoration",
+  "complete": true,
+  "productAcceptance": false,
+  "liveChanged": false,
+  "phoneChanged": false,
+  "base": "3cedb0b1bf6fef20a89c99ea3a7407f72041b23c",
+  "sourceSha256": {
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt": "363fcb97c3620e3ad876c1f22e365de3e2906221417a8b77f9a245a8abb005f5",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationDeviceSetup.kt": "a42df08ff1b3915199fa600886202e176dcf7ec6a0d582beab9583c842fc202f",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationGateway.kt": "9212548ee6fc06e579f2f30a4ad6107eafb42f6c8e0aacf5837c561e4eb46220",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationOwner.kt": "763050fad897b67c9a7c2070e95166da9d19521306a33d098d5f033b1a73b546",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSetupCommand.kt": "38dc69f593c667ffaba38ad803ee8576649587b9ee7207d11c3dff001c1c76e7",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSetupCommandRecord.kt": "d0cc5aebf4c3c023342a6c90a14186d0425b5309582ed2b22f01934834ac9b1f",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSetupCommands.kt": "e60005ebdf881a94f430f0f6016948712d97aee8a5370e60340bf5fa994ba6de",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationRequestPolicy.kt": "1d7731545a5acfbe42e97e6b42626f867b410b39a5f4805496f91f72b98744f4",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSetupActionPolicy.kt": "2640fa9e7b64827bf234c73a3865111fb6c05c2ab6bb0872f638022b0d6d4df5",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationRuntimeRepository.kt": "cda930d79846a5d0ced0bf0dc3134e3cc357d62f1342b28be22fd99aeae76ea9",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationSetupCommandRepository.kt": "fa07cb2bcfff9dd9596cda27ebb1dc752cce9855f9f54ace5f3fd1c79bafa688",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationSetupRepository.kt": "b98fa02c23b732217cea7271ab4ed9296af21660a88be64bef1c4bd029414e62",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/CollaborationSetupOwner.kt": "9e54aa26bea624bd37290d751f1a8e5fc6f2d8fe40969a40604af85ce4b04c38",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/InstallCollaborationRuntime.kt": "85716f92569f3206925852ec74413a99e479458182cc464d8f9ea04f269fc3a9",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/LoadCollaborationSetup.kt": "e3d394cb020f61e1c937bd0a1c98b827737d2be270a19f5443aec9475c415716",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/PrepareCollaborationSetup.kt": "e909f6049325049c1157334e3708bca23f2f31afa38b07c6d2d7e91624386c2f",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ReconcileCollaborationSetupReceipt.kt": "2679100381cd1fe8517cf49d19c7eaa02c1efdbdc66c5f8386d30a8c01598b21",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ReplayCollaborationSetup.kt": "cb70532bed89c59ad5dee50a4d3f9b4dd7a207a647eac11e911805238423723f",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/RestoreCollaborationRuntime.kt": "90cb68ca403902b0c678c463997125bd5d90871de4003680034805d7d1d09f54",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationCommandFixture.kt": "ea481ec084297ed39e759cff19997cdcc1fb426fc1f6f7e47dc45fc4b90a43f5",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationRuntimeInstallationTest.kt": "579cfc09234c7d68467af3683df32a172d9d3cd679d9aa9ee93aca611f07693b",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationRuntimeRestorationTest.kt": "b9f00eba6d8aef2b2d2a2f6d8dfb03f2fa4a73217816e59348126da082ebd17b",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationSetupCommandTest.kt": "effa5982ed82b0c48b71678fd25e4f6c236ed521aee2b6e69c1c44568c38bb15",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationSetupFixture.kt": "dd0a64b5761c31d5a15499679aa049571555d06931728621d2032031af8e7849",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/LoadCollaborationSetupTest.kt": "f5b9d6d453b5a579198315323afc6893bc10f66425a84123105119912b466ad2"
+  },
+  "validation": {
+    "seconds": 72,
+    "result": "root check, domain browser, data assembly, format, detekt and architecture passed",
+    "desktopCases": 2083,
+    "domainDesktopCases": 43,
+    "domainBrowserCases": 43,
+    "newCommonCases": 8,
+    "domainXml": {
+      "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationRuntimeRestorationTest.xml": {
+        "sha256": "2e0aea3adeec97d6aa077601802fe37d1740f8ada64e5a37459710119aa01ee0",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationSetupCommandTest.xml": {
+        "sha256": "1e3f2e79fbccd7a5cdf08a9f0115df47a153decc8a8923d9b853ce651bdbba85",
+        "tests": 15,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.LoadCollaborationSetupTest.xml": {
+        "sha256": "b699516abcbbdf0d8ad8224af0cea2457f4bfe69f47076b2c80cae66ecf47fa0",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationRuntimeInstallationTest.xml": {
+        "sha256": "5f1345ced09968b3fc76255d2fac53f52ed48a1f866fab88ca491b60b21c4fb7",
+        "tests": 12,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.domain.CollaborationRuntimeRestorationTest.xml": {
+        "sha256": "0d9f7711c5354867966134866bcfa2948c7cd0b0a0537bd978893c1d7d636cff",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.domain.CollaborationSetupCommandTest.xml": {
+        "sha256": "5b6a3ddd42781fc6a542df946a28c79e35cdd038bf1fe30ba4cd23b2085ef6c5",
+        "tests": 15,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.domain.LoadCollaborationSetupTest.xml": {
+        "sha256": "7a30123ddffd7e64a6e5aa6dfd6b9b6fa3397577d305bea284f825044c7891b1",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.domain.CollaborationRuntimeInstallationTest.xml": {
+        "sha256": "a2ad46acc85d791befa98be887ec1752f1b4b5c558801d49e81703d453105688",
+        "tests": 12,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "logSha256": "55cdc70b56484720410fe2814d6510b334a847462c9b4fc0fa5095a8147e8acc"
+  },
+  "limits": [
+    "This use case restores a paused existing runtime for admitted setup recovery. It neither authorizes live delivery nor implements owned offline message projections.",
+    "Missing records never trigger installation, token issuance or data reset. The native repository separately rejects occupied stores with missing credentials.",
+    "Application-wide session/SDK child ownership, bootstrap uncertainty/build recovery, chat UI and Apple runtime remain unfinished."
+  ],
+  "next": [
+    "Close obsolete application-owned SDK resources when account/company/admission changes, then wire setup and chat UI.",
+    "Keep owned offline facts separate from live SDK admission; implement logical-message reconciliation and all P0\u2013P8."
+  ]
+}

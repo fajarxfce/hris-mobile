@@ -101,3 +101,17 @@ not permission to send messages.
 retains 12 common cases, 35 domain desktop/browser cases and passing root checks
 (2,075 desktop cases). Android/data assembly compiles the binding. Apple runtime,
 bootstrap recovery and application DI/navigation still require implementation.
+
+`RestoreCollaborationRuntime` now recovers an existing protected runtime under
+current setup admission without issuing credentials, installing a replacement or
+changing retained commands. It owns a returned resource before checking admission
+again, rejects mismatched owner/device or failed credential persistence, and closes
+late results after cancellation or scope replacement. A genuinely empty store is
+an explicit null result; occupied stores with missing keys still fail in the native
+repository. Ordinary token rotation preserves the same runtime owner.
+
+[Restoration evidence](measurements/collaboration-runtime-restoration-2026-10-31.json)
+retains eight new common cases and passing root/domain-browser/data-assembly checks
+in 72s: 2,083 desktop cases and 43 domain browser cases. This is admitted setup
+recovery, not an offline message projection or live delivery grant. Application-wide
+SDK child ownership, explicit bootstrap recovery and app routes are next.

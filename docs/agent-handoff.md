@@ -2,6 +2,25 @@
 
 ## Active collaboration implementation — 31 October 2026
 
+**Admitted restore now reopens existing protected runtime ownership.**
+`RestoreCollaborationRuntime` returns a paused matching resource or explicit empty
+result, never issues tokens/installs a replacement, and leaves setup commands intact.
+Late account/company/permission changes, failed credential writes and cancelled
+acquisition close returned leases. [Evidence](measurements/collaboration-runtime-restoration-2026-10-31.json)
+retains eight new common cases and root/browser/data-assembly/quality passing in
+72s: 2,083 desktop, 43 domain browser cases. **Next: application-wide runtime/SDK
+child ownership, bootstrap uncertainty/build recovery, setup/chat UI and all P0–P8.**
+Owned offline message projections remain separate; this is live-admitted setup
+recovery. No product group accepted, live/phone/Starter change.
+
+UI preparation read `ui-ux-pro-max` and `compose-component-design` plus modifier/
+slot references. Verified searches match Chat & Messaging App and Compose LazyColumn;
+the initial design-system landing pattern was unsuitable. Keep the existing Fluent
+tokens, compact top bars, 48dp targets and direct conversation rows. No new UI code
+has been added yet. `9c44fc56` hosted control/HRIS runs were superseded/cancelled;
+its provider workflow still used the old non-atomic signal. Inspect the corrected
+`3cedb0b1` protocol run `41242901470` and the next exact control/HRIS run after push.
+
 **Admitted bootstrap installation now owns confirmed command retirement.**
 `InstallCollaborationRuntime` verifies current owner/build/platform and the original
 attempted bootstrap, acquires a paused protected lease and removes only the observed
