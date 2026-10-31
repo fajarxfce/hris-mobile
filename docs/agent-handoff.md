@@ -18,9 +18,12 @@ recovery, live delivery, app DI/UI and all P0–P8.** No product group accepted.
 
 Provider-only CI `41240634061` at `70bfbd21` passed native sync but failed classic:
 Android observed the empty `offline-ready.json` while its producer was still writing
-(`ProofOfflineInvite.kt:28`). Both modes cleaned up. Platform is changing that
-test signal to publish by rename, followed by actual classic regression and a new
-Mobile protocol-workflow pin. Keep this failure distinct from the successful
+(`ProofOfflineInvite.kt:28`). Both modes cleaned up. Platform `e0dbb567` now
+publishes the completed private file by rename. The corrected actual classic proof
+passes in 35.498s with two browser cases and cleanup true; all 14 source hashes are
+verified. [Evidence](measurements/collaboration-offline-signal-2026-10-31.json) retains
+both predecessor results and the correction. Protocol CI now pins that commit;
+inspect the next hosted classic/native results. This is separate from the successful
 protected HRIS SDK and common-control runs recorded below.
 
 **Actual Android process death preserves the pending SDK transaction.**
