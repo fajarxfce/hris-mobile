@@ -36,6 +36,7 @@ class DocumentLayoutTest {
     @Test
     fun catalogCategoriesAndDocumentProgressRemainReadableAtLargeIndonesianText() {
         var state by mutableStateOf(catalog())
+        val events = mutableListOf<DocumentCatalogEvent>()
         compose.setContent {
             val density = LocalDensity.current
             CompositionLocalProvider(
@@ -48,7 +49,8 @@ class DocumentLayoutTest {
                             state,
                             rememberLazyListState(),
                             rememberLazyListState(),
-                        ) {}
+                            events::add,
+                        )
                     }
                 }
             }
@@ -67,6 +69,17 @@ class DocumentLayoutTest {
                 .boundsInRoot
         val frame = compose.onNodeWithTag("frame").fetchSemanticsNode().boundsInRoot
         assertTrue(title.left >= frame.left && title.right <= frame.right)
+        compose.onNode(hasText("Surat keterangan kesehatan") and hasClickAction()).performClick()
+        compose.onNode(hasText("Download") and hasClickAction()).performScrollTo().performClick()
+        compose.runOnIdle {
+            assertEquals(
+                listOf(
+                    DocumentCatalogEvent.DetailsRequested("document"),
+                    DocumentCatalogEvent.DownloadRequested("revision"),
+                ),
+                events,
+            )
+        }
         capture("document-catalog-large-text")
         compose.runOnIdle { state = state.copy(preparingId = "revision") }
         compose

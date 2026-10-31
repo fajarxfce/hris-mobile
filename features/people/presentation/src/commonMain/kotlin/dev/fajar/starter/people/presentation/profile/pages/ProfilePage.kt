@@ -41,12 +41,14 @@ fun ProfilePage(
                         appString(AppString.Refresh),
                         { onEvent(ProfileEvent.RefreshRequested) },
                         enabled = !state.syncing,
+                        loading = state.syncing,
                     )
                 },
             )
         },
     ) {
-        if (state.loading || state.syncing) item(key = "loading") { AppLoading() }
+        if ((state.loading || state.syncing) && profile == null)
+            item(key = "loading") { AppLoading(compact = state.view != null) }
         if (failure != null)
             item(key = "failure") {
                 Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {

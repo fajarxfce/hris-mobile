@@ -19,7 +19,10 @@ fun PersonalDetails(person: PersonProfile) {
             )
             ProfileField(appString(AppString.FullName), person.legalName)
             ProfileField(appString(AppString.Email), person.email)
-            ProfileField(appString(AppString.BirthDate), person.birthDate?.toString())
+            ProfileField(
+                appString(AppString.BirthDate),
+                person.birthDate?.let { formatLocalDate(it.toString(), appLanguageTag()) },
+            )
             ProfileField(appString(AppString.Nationality), person.nationality)
         }
     }

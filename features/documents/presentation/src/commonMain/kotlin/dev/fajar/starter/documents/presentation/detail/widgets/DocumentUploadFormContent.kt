@@ -8,8 +8,6 @@ import dev.fajar.starter.documents.domain.entities.DocumentClassification
 import dev.fajar.starter.documents.presentation.detail.*
 import dev.fajar.starter.localization.*
 import io.github.composefluent.FluentTheme
-import io.github.composefluent.icons.Icons
-import io.github.composefluent.icons.regular.ChevronDown
 
 @Composable
 fun DocumentUploadFormContent(state: DocumentFileState, onEvent: (DocumentFileEvent) -> Unit) {
@@ -21,13 +19,12 @@ fun DocumentUploadFormContent(state: DocumentFileState, onEvent: (DocumentFileEv
                 { onEvent(DocumentFileEvent.TitleChanged(it)) },
                 enabled = !state.working,
             )
-            AppCard(padding = 0.dp) {
-                AppListRow(
+            Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                AppSelectField(
                     appString(AppString.Employment),
+                    form.employeeNumber ?: appString(AppString.ChooseEmployment),
                     { onEvent(DocumentFileEvent.EmploymentRequested) },
-                    supportingText = form.employeeNumber ?: appString(AppString.ChooseEmployment),
                     enabled = state.canWrite,
-                    trailing = { AppIcon(Icons.Regular.ChevronDown) },
                 )
             }
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {

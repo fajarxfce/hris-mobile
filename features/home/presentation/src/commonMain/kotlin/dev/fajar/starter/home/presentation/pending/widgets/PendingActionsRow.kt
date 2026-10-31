@@ -1,8 +1,11 @@
 package dev.fajar.starter.home.presentation.pending.widgets
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.*
 import androidx.compose.ui.unit.dp
@@ -16,8 +19,16 @@ import io.github.composefluent.icons.regular.ChevronRight
 
 @Composable
 fun PendingActionsRow(state: PendingActionsRowState, onEvent: (PendingActionsEvent) -> Unit) {
+    val openLabel = appString(AppString.PendingOpen, appString(state.group.title))
     Row(
-        Modifier.fillMaxWidth().testTag("pending-${state.group.name}").padding(vertical = 12.dp),
+        Modifier.fillMaxWidth()
+            .testTag("pending-${state.group.name}")
+            .clip(RoundedCornerShape(8.dp))
+            .clickable(role = Role.Button) {
+                onEvent(PendingActionsEvent.OpenRequested(state.group))
+            }
+            .semantics { contentDescription = openLabel }
+            .padding(horizontal = 12.dp, vertical = 14.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -52,10 +63,6 @@ fun PendingActionsRow(state: PendingActionsRowState, onEvent: (PendingActionsEve
                 )
             }
         }
-        AppIconButton(
-            Icons.Regular.ChevronRight,
-            appString(AppString.PendingOpen, appString(state.group.title)),
-            { onEvent(PendingActionsEvent.OpenRequested(state.group)) },
-        )
+        AppIcon(Icons.Regular.ChevronRight, tint = AppColors.muted)
     }
 }

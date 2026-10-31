@@ -36,7 +36,10 @@ fun EmploymentOverview(details: EmploymentDetails) {
                 ),
             )
             ProfileField(appString(AppString.StartDate), details.employee.startDate.toString())
-            ProfileField(appString(AppString.EndDate), details.employee.endDate?.toString())
+            ProfileField(
+                appString(AppString.EndDate),
+                details.employee.endDate?.let { formatLocalDate(it.toString(), appLanguageTag()) },
+            )
             ProfileField(appString(AppString.Position), details.position?.name)
             ProfileField(appString(AppString.Department), details.department?.name)
             ProfileField(appString(AppString.Branch), details.branch?.name)

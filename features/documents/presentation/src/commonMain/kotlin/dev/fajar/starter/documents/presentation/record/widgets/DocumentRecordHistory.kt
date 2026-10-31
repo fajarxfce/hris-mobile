@@ -60,7 +60,7 @@ private fun MetadataHistoryCard(row: DocumentMetadataRevision, accountId: String
                 else appString(AppString.DocumentMetadataRevision, row.version)
             )
             AppText(
-                row.recordedAt.toString(),
+                formatDate(row.recordedAt.toEpochMilliseconds(), appLanguageTag()),
                 color = AppColors.muted,
                 style = FluentTheme.typography.caption,
             )
@@ -69,7 +69,7 @@ private fun MetadataHistoryCard(row: DocumentMetadataRevision, accountId: String
                 when (actor) {
                     null -> appString(AppString.DocumentHistoryAuthorUnknown)
                     accountId -> appString(AppString.DocumentHistoryByYou)
-                    else -> appString(AppString.DocumentHistoryAuthor, actor)
+                    else -> appString(AppString.DocumentHistoryByOther)
                 },
                 color = AppColors.muted,
                 style = FluentTheme.typography.caption,

@@ -104,7 +104,7 @@ fun ExpenseClaimPage(
             item(key = "summary") { ExpenseClaimSummaryCard(view.claim) }
             if (view.claim.draft.description.isNotBlank())
                 item(key = "description") {
-                    AppCard(padding = 16.dp, spacing = 8.dp) {
+                    AppCard(Modifier.fillMaxWidth(), padding = 16.dp, spacing = 8.dp) {
                         AppHeading(
                             appString(AppString.ExpenseDescription),
                             style = FluentTheme.typography.bodyStrong,

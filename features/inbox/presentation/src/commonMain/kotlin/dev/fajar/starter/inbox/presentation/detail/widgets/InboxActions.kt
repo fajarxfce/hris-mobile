@@ -17,7 +17,10 @@ fun InboxActions(state: InboxItemState, onEvent: (InboxItemEvent) -> Unit) {
         AppCard(Modifier.fillMaxWidth()) {
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 AppText(appString(AppString.InboxAcknowledgementPrompt))
-                Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                FlowRow(
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
                     AppButton(
                         appString(AppString.Cancel),
                         { onEvent(InboxItemEvent.AcknowledgementCancelled) },

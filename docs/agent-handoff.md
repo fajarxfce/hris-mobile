@@ -14,6 +14,16 @@ initial observations and validation still required. Preserve the visual language
 account binding and installed versionCode floor of 2. Use the dedicated emulator
 for routine UI work and prove generic changes here before porting them to Starter.
 
+The layout implementation now covers labelled form choices, status cards, detail
+hierarchy/localized dates, fixed create/save/Inbox actions, clear document
+navigation and retained-content refresh. Final Mobile root checks passed in
+2m46s (208 UI cases included). Sample-data provisioning is complete at Platform
+`1363abee`; no identity/role change was made. Starter's three portable components
+and large-text regression passed independent root/Android/Web checks in 3m55s.
+Continue with configured release build 3, final emulator screenshots, install-only
+phone delivery, Git evidence and remaining target verification. The emulator-only
+unconfigured debug login fixture must never be delivered to the user's phone.
+
 ## Latest Android installation — 31 October 2026
 
 The user explicitly requested the latest release build on the WireGuard phone.

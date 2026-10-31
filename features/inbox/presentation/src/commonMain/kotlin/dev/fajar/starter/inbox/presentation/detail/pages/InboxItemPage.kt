@@ -37,9 +37,19 @@ fun InboxItemPage(state: InboxItemState, onEvent: (InboxItemEvent) -> Unit) {
                         appString(AppString.Refresh),
                         { onEvent(InboxItemEvent.RefreshRequested) },
                         enabled = !state.syncing && !state.working,
+                        loading = state.syncing,
                     )
                 },
             )
+        },
+        bottomBar = {
+            if (
+                state.confirmationVersion == null &&
+                    state.command == null &&
+                    state.actionsReady &&
+                    (state.canRead || state.canAcknowledge)
+            )
+                AppActionBar { InboxActions(state, onEvent) }
         },
     ) {
         if (!state.hasSnapshot && (state.syncing || state.loading))
@@ -80,6 +90,7 @@ fun InboxItemPage(state: InboxItemState, onEvent: (InboxItemEvent) -> Unit) {
             item(key = "unavailable") {
                 AppText(appString(AppString.InboxMessageUnavailable), color = AppColors.muted)
             }
-        item(key = "actions") { InboxActions(state, onEvent) }
+        if (state.confirmationVersion != null || state.command != null)
+            item(key = "actions") { InboxActions(state, onEvent) }
     }
 }

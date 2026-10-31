@@ -34,12 +34,13 @@ fun SessionsPage(state: SessionsState, onEvent: (SessionsEvent) -> Unit) {
                         appString(AppString.Refresh),
                         { onEvent(SessionsEvent.RefreshRequested) },
                         enabled = !state.working,
+                        loading = state.working && state.confirmingId == null,
                     )
                 },
             )
         },
     ) {
-        if (state.working) item(key = "loading") { AppLoading() }
+        if (state.working && state.directory == null) item(key = "loading") { AppLoading() }
         if (state.failure != null) item(key = "failure") { AppFeedback(failureText(state.failure)) }
         if (state.directory?.items?.isEmpty() == true)
             item(key = "empty") { AppText(appString(AppString.NoActiveSessions)) }

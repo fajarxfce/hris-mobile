@@ -921,6 +921,23 @@ enum class AppString(val english: StringResource, val indonesian: StringResource
         Res.string.document_business_category_en,
         Res.string.document_business_category_id,
     ),
+    DocumentNumberLabel(Res.string.document_number_label_en, Res.string.document_number_label_id),
+    DocumentIssuingCountryLabel(
+        Res.string.document_issuing_country_label_en,
+        Res.string.document_issuing_country_label_id,
+    ),
+    DocumentIssuedOnLabel(
+        Res.string.document_issued_on_label_en,
+        Res.string.document_issued_on_label_id,
+    ),
+    DocumentValidUntilLabel(
+        Res.string.document_valid_until_label_en,
+        Res.string.document_valid_until_label_id,
+    ),
+    DocumentHistoryByOther(
+        Res.string.document_history_by_other_en,
+        Res.string.document_history_by_other_id,
+    ),
     DocumentNumber(Res.string.document_number_en, Res.string.document_number_id),
     DocumentIssuingCountry(
         Res.string.document_issuing_country_en,

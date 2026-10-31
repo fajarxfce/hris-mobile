@@ -46,6 +46,25 @@ fun DocumentMetadataEditorPage(
                 },
             )
         },
+        bottomBar = {
+            if (state.ready && state.command == null && state.persistence != null)
+                AppActionBar {
+                    AppText(
+                        appString(
+                            if (state.persistence.saved) AppString.DocumentMetadataDraftSaved
+                            else AppString.DocumentMetadataDraftSaving
+                        ),
+                        modifier = Modifier.testTag("metadata-draft-status"),
+                        color = AppColors.muted,
+                    )
+                    AppButton(
+                        appString(AppString.DocumentMetadataSave),
+                        { onEvent(DocumentMetadataEditorEvent.ConfirmRequested) },
+                        enabled = state.canConfirm,
+                        modifier = Modifier.fillMaxWidth().testTag("metadata-save"),
+                    )
+                }
+        },
     ) {
         if (state.refreshing || state.initializing || state.work != DocumentMetadataEditorWork.NONE)
             item("progress") { AppLoading(compact = true) }
@@ -91,24 +110,8 @@ fun DocumentMetadataEditorPage(
                     if (state.stale)
                         item("stale") { AppFeedback(appString(AppString.DocumentMetadataStale)) }
                     item("fields") { DocumentMetadataEditorFields(state, onEvent) }
-                    item("local-status") {
-                        AppText(
-                            appString(
-                                if (local.saved) AppString.DocumentMetadataDraftSaved
-                                else AppString.DocumentMetadataDraftSaving
-                            ),
-                            modifier = Modifier.testTag("metadata-draft-status"),
-                            color = AppColors.muted,
-                        )
-                    }
                     item("actions") {
                         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                            AppButton(
-                                appString(AppString.DocumentMetadataSave),
-                                { onEvent(DocumentMetadataEditorEvent.ConfirmRequested) },
-                                enabled = state.canConfirm,
-                                modifier = Modifier.testTag("metadata-save"),
-                            )
                             if (state.stale)
                                 AppTextButton(
                                     appString(AppString.DocumentMetadataRestart),

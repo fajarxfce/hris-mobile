@@ -923,4 +923,9 @@
     <string name="document_metadata_changes_empty_en">No saved corrections on this page.</string>
     <string name="document_metadata_saved_corrections_en">Saved corrections</string>
     <string name="document_metadata_drafts_en">Drafts</string>
+    <string name="document_number_label_en">Document number</string>
+    <string name="document_issuing_country_label_en">Issuing country</string>
+    <string name="document_issued_on_label_en">Issue date</string>
+    <string name="document_valid_until_label_en">Valid until</string>
+    <string name="document_history_by_other_en">Recorded by another account</string>
 </resources>

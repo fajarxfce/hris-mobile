@@ -719,7 +719,7 @@ class AppFlowTest {
             compose.onNode(hasText("Personal") and isSelectable()).performClick()
             waitFor("Medical certificate")
             capture("document-catalog")
-            compose.onNode(hasText("Medical certificate") and hasClickAction()).performClick()
+            compose.onNode(hasText("Download") and hasClickAction()).performClick()
             waitFor("Pause download")
             compose.waitUntil(15_000) {
                 server.documents.downloads.offsets.size == 2 &&
@@ -921,7 +921,7 @@ class AppFlowTest {
                 .performScrollTo()
                 .performClick()
             waitFor("Medical certificate")
-            compose.onNode(hasText("Medical certificate") and hasClickAction()).performClick()
+            compose.onNode(hasText("Download") and hasClickAction()).performClick()
             waitFor("Save a copy")
             server.documents.downloads.denied = true
             compose.onNodeWithText("Save a copy").assertIsDisplayed().performClick()
@@ -976,7 +976,7 @@ class AppFlowTest {
                 .performScrollTo()
                 .performClick()
             waitFor("Medical certificate")
-            compose.onNode(hasText("Medical certificate") and hasClickAction()).performClick()
+            compose.onNode(hasText("Download") and hasClickAction()).performClick()
             waitFor("Save a copy")
             compose.onNodeWithText("Save a copy").assertIsDisplayed().performClick()
             compose.waitUntil { output.active }
@@ -1232,7 +1232,10 @@ class AppFlowTest {
                 server.documents.uploads.submitted?.get("metadata"),
             )
             compose.onNodeWithText("AB-123").performScrollTo().assertIsDisplayed()
-            compose.onNodeWithText("2010-02-28").performScrollTo().assertIsDisplayed()
+            compose
+                .onNodeWithText(formatLocalDate("2010-02-28", "en"))
+                .performScrollTo()
+                .assertIsDisplayed()
             assertEquals(1, server.documents.uploads.starts.get())
             assertEquals(1, server.documents.uploads.validations.get())
             capture("document-business-metadata-retained")
@@ -1435,12 +1438,11 @@ class AppFlowTest {
                 .onNodeWithContentDescription("Valid until (optional)")
                 .performScrollTo()
                 .performTextReplacement("2019-01-01")
-            compose
-                .onNode(hasScrollToIndexAction())
-                .performScrollToNode(hasTestTag("metadata-save"))
+            compose.onNodeWithTag("metadata-save").assertIsDisplayed()
             waitFor("Draft saved on this device")
             capture("document-metadata-editor-draft")
-            compose.onNodeWithTag("metadata-save").performClick()
+            waitForAction("Save correction")
+            compose.onNodeWithTag("metadata-save").assertIsDisplayed().performClick()
             waitFor("Review these details before sending the correction.")
             compose
                 .onNode(hasScrollToIndexAction() and hasAnyAncestor(isDialog()))
@@ -1499,10 +1501,9 @@ class AppFlowTest {
                 .onNodeWithContentDescription("Reason for correction")
                 .performScrollTo()
                 .performTextInput("Printed correction")
-            compose
-                .onNode(hasScrollToIndexAction())
-                .performScrollToNode(hasTestTag("metadata-save"))
-            compose.onNodeWithTag("metadata-save").performClick()
+            compose.onNodeWithTag("metadata-save").assertIsDisplayed()
+            waitForAction("Save correction")
+            compose.onNodeWithTag("metadata-save").assertIsDisplayed().performClick()
             waitFor("Review these details before sending the correction.")
             compose
                 .onNode(hasScrollToIndexAction() and hasAnyAncestor(isDialog()))
@@ -1671,9 +1672,7 @@ class AppFlowTest {
                 .onNodeWithContentDescription("Reason for correction")
                 .performScrollTo()
                 .performTextInput("Unsent correction")
-            compose
-                .onNode(hasScrollToIndexAction())
-                .performScrollToNode(hasTestTag("metadata-save"))
+            compose.onNodeWithTag("metadata-save").assertIsDisplayed()
             waitFor("Draft saved on this device")
             server.documents.metadata.correctExternally("NEW-SERVER")
             compose.onNodeWithContentDescription("Refresh").performClick()
@@ -1688,13 +1687,14 @@ class AppFlowTest {
             compose
                 .onNodeWithContentDescription("Document number (optional)")
                 .assertTextContains("KEPT-DRAFT")
-            compose
-                .onNode(hasScrollToIndexAction())
-                .performScrollToNode(hasTestTag("metadata-save"))
+            compose.onNodeWithTag("metadata-save").assertIsDisplayed()
             compose.onNode(hasText("Save correction") and hasClickAction()).assertIsNotEnabled()
             compose
+                .onNode(hasScrollToIndexAction())
+                .performScrollToNode(hasText("Start from latest details"))
+            compose
                 .onNode(hasText("Start from latest details") and hasClickAction())
-                .performScrollTo()
+                .assertIsDisplayed()
                 .performClick()
             waitFor("The selected unsent input will be discarded.")
             compose.onNodeWithTag("metadata-dialog-confirm").performClick()
@@ -1716,9 +1716,7 @@ class AppFlowTest {
                 .onNodeWithContentDescription("Reason for correction")
                 .performScrollTo()
                 .performTextInput("Retained through denial")
-            compose
-                .onNode(hasScrollToIndexAction())
-                .performScrollToNode(hasTestTag("metadata-save"))
+            compose.onNodeWithTag("metadata-save").assertIsDisplayed()
             waitFor("Draft saved on this device")
             server.documents.metadata.denial = "document_access_denied"
             compose.onNodeWithContentDescription("Refresh").performClick()
@@ -2208,7 +2206,7 @@ class AppFlowTest {
             }
             compose
                 .onNode(hasText("Review calculation") and hasClickAction())
-                .performScrollTo()
+                .assertIsDisplayed()
                 .performClick()
             compose.waitUntil { server.leave.creation.previews.size == 1 }
             compose.waitUntil {
@@ -2880,7 +2878,7 @@ class AppFlowTest {
             capture("inbox-unread")
             compose.onNodeWithText("Office closure").performClick()
             waitFor(server.inbox.firstBody)
-            compose.onNodeWithText("Mark as read").performScrollTo().performClick()
+            compose.onNodeWithText("Mark as read").assertIsDisplayed().performClick()
             compose.waitUntil(10_000) { server.inbox.actions.size == 1 }
             compose.onNodeWithContentDescription("Back").performClick()
             waitFor("Office closure")
@@ -3967,7 +3965,7 @@ class AppFlowTest {
             waitFor("Office closure")
             compose.onNodeWithText("Office closure").performClick()
             waitFor("Mark as read")
-            compose.onNodeWithText("Acknowledge").performScrollTo().performClick()
+            compose.onNodeWithText("Acknowledge").assertIsDisplayed().performClick()
             waitFor("I have read this announcement.")
             compose.onNodeWithText("Cancel").performClick()
             assertTrue(server.inbox.actions.isEmpty())
@@ -4026,12 +4024,12 @@ class AppFlowTest {
             compose.onNodeWithText("Office closure").performClick()
             waitFor("Mark as read")
             server.inbox.rejectNextAction = true
-            compose.onNodeWithText("Mark as read").performScrollTo().performClick()
+            compose.onNodeWithText("Mark as read").assertIsDisplayed().performClick()
             waitForAction("Review updates")
             compose.onNodeWithText("Review updates").performScrollTo().performClick()
             waitFor("Acknowledge")
             compose.onNodeWithText("Mark as read").assertDoesNotExist()
-            compose.onNodeWithText("Acknowledge").performScrollTo().performClick()
+            compose.onNodeWithText("Acknowledge").assertIsDisplayed().performClick()
             waitFor("I have read this announcement.")
             compose.onNodeWithText("Acknowledge").performClick()
             waitFor("Acknowledged")
@@ -4058,7 +4056,7 @@ class AppFlowTest {
                 compose.onNodeWithText("Office closure").performClick()
                 waitFor("Mark as read")
                 server.inbox.holdNextAction = true
-                compose.onNodeWithText("Mark as read").performScrollTo().performClick()
+                compose.onNodeWithText("Mark as read").assertIsDisplayed().performClick()
                 compose.waitUntil(10_000) { server.inbox.actionStarted.isCompleted }
                 compose.onNodeWithContentDescription("Back").performClick()
                 waitFor("Office closure")
@@ -4376,11 +4374,10 @@ class AppFlowTest {
             compose
                 .onNodeWithContentDescription("Reason for correction")
                 .assertTextContains("Keep this correction")
-            compose
-                .onNode(hasScrollToIndexAction())
-                .performScrollToNode(hasTestTag("metadata-save"))
+            compose.onNodeWithTag("metadata-save").assertIsDisplayed()
             waitFor("Draft saved on this device")
-            compose.onNodeWithTag("metadata-save").performClick()
+            waitForAction("Save correction")
+            compose.onNodeWithTag("metadata-save").assertIsDisplayed().performClick()
             waitFor("Review these details before sending the correction.")
             compose
                 .onNode(hasScrollToIndexAction() and hasAnyAncestor(isDialog()))
@@ -4584,7 +4581,7 @@ class AppFlowTest {
             waitFor("Welcome")
             openProfile()
             waitFor("Personal information")
-            compose.onNodeWithText("1996-02-29").assertExists()
+            compose.onNodeWithText(formatLocalDate("1996-02-29", "en")).assertExists()
             capture("profile")
             compose.onNode(hasScrollToIndexAction()).performScrollToNode(hasText("Mobile Engineer"))
             compose.onNodeWithText("Mobile Engineer").assertIsDisplayed()
@@ -4608,7 +4605,7 @@ class AppFlowTest {
             waitFor("Welcome")
             openProfile()
             waitFor("No employee profile is available. Contact HR to check your account linkage.")
-            compose.onNodeWithText("1996-02-29").assertDoesNotExist()
+            compose.onNodeWithText(formatLocalDate("1996-02-29", "en")).assertDoesNotExist()
             compose.onNodeWithText("Engineering").assertDoesNotExist()
         }
 
@@ -4634,12 +4631,12 @@ class AppFlowTest {
             waitFor("Select an employment record")
             compose.onNode(hasText("NUSA-002") and hasClickAction()).performClick()
             compose.onNode(hasText("NUSA-002") and hasClickAction()).assertIsDisplayed()
-            compose.onNodeWithText("1996-02-29").assertExists()
+            compose.onNodeWithText(formatLocalDate("1996-02-29", "en")).assertExists()
             assertEquals(queries, server.people.queries.size)
             assertEquals(2, server.people.recordReads.size)
             refreshWhenReady()
             waitFor("Unable to connect. Check your connection.")
-            compose.onNodeWithText("1996-02-29").assertExists()
+            compose.onNodeWithText(formatLocalDate("1996-02-29", "en")).assertExists()
             compose.onNode(hasText("NUSA-002") and hasClickAction()).assertIsDisplayed()
             capture("profile-offline")
         }
@@ -4659,7 +4656,7 @@ class AppFlowTest {
             server.people.holdNext = true
             refreshWhenReady()
             compose.waitUntil { server.people.started.isCompleted }
-            compose.onNodeWithText("1996-02-29").assertExists()
+            compose.onNodeWithText(formatLocalDate("1996-02-29", "en")).assertExists()
             compose.onNodeWithContentDescription("Back").performClick()
             compose.waitUntil { server.people.cancelled.isCompleted }
             openProfile()
@@ -4681,7 +4678,7 @@ class AppFlowTest {
             server.people.denied = true
             refreshWhenReady()
             waitFor("Your account cannot perform this action.")
-            compose.onNodeWithText("1996-02-29").assertDoesNotExist()
+            compose.onNodeWithText(formatLocalDate("1996-02-29", "en")).assertDoesNotExist()
             compose.onNodeWithText("Private server detail").assertDoesNotExist()
         }
     }
@@ -4702,7 +4699,7 @@ class AppFlowTest {
             kotlinx.coroutines.runBlocking { server.expireVerification() }
             refreshWhenReady()
             waitFor("Your account cannot perform this action.")
-            compose.onNodeWithText("1996-02-29").assertDoesNotExist()
+            compose.onNodeWithText(formatLocalDate("1996-02-29", "en")).assertDoesNotExist()
             compose
                 .onNode(hasText("Verify your account") and hasClickAction())
                 .performScrollTo()
@@ -4712,7 +4709,7 @@ class AppFlowTest {
             compose.onNodeWithContentDescription("Verification code").performTextInput("123456")
             compose.onNode(hasText("Verify") and hasClickAction()).performScrollTo().performClick()
             waitFor("Personal information")
-            compose.onNodeWithText("1996-02-29").assertExists()
+            compose.onNodeWithText(formatLocalDate("1996-02-29", "en")).assertExists()
             compose.onNodeWithText("Choose a company").assertDoesNotExist()
             assertEquals(0, server.refreshes)
         }

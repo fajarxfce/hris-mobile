@@ -4,6 +4,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import dev.fajar.starter.designsystem.components.*
 import dev.fajar.starter.designsystem.theme.AppColors
@@ -12,7 +15,6 @@ import dev.fajar.starter.documents.presentation.files.widgets.*
 import dev.fajar.starter.localization.*
 import io.github.composefluent.FluentTheme
 import io.github.composefluent.icons.Icons
-import io.github.composefluent.icons.regular.Add
 import io.github.composefluent.icons.regular.ArrowLeft
 
 @Composable
@@ -36,20 +38,24 @@ fun DocumentFilesPage(
                         { onEvent(DocumentFilesEvent.BackRequested) },
                     )
                 },
-                actions = {
-                    if (state.showImportAction)
-                        AppIconButton(
-                            Icons.Regular.Add,
-                            appString(AppString.DocumentAddFile),
-                            { onEvent(DocumentFilesEvent.ImportRequested) },
-                            enabled = state.canImport,
-                            loading = state.importing,
-                        )
-                },
             )
         },
+        bottomBar = {
+            if (state.showImportAction)
+                AppActionBar {
+                    val label = appString(AppString.DocumentAddFile)
+                    AppButton(
+                        label,
+                        { onEvent(DocumentFilesEvent.ImportRequested) },
+                        modifier = Modifier.fillMaxWidth().semantics { contentDescription = label },
+                        enabled = state.canImport,
+                        loading = state.importing,
+                    )
+                }
+        },
     ) {
-        if (state.loading || state.revalidating) item(key = "loading") { AppLoading() }
+        if (state.loading || state.revalidating)
+            item(key = "loading") { AppLoading(compact = state.content != null) }
         val failure = state.restriction ?: state.failure ?: state.readFailure
         if (failure != null)
             item(key = "failure") {

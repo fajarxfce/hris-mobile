@@ -20,7 +20,6 @@ import io.github.composefluent.icons.Icons
 import io.github.composefluent.icons.regular.ArrowLeft
 import io.github.composefluent.icons.regular.ArrowSync
 import io.github.composefluent.icons.regular.CalendarLtr
-import io.github.composefluent.icons.regular.ChevronRight
 import io.github.composefluent.icons.regular.Clock
 import io.github.composefluent.icons.regular.Delete
 
@@ -160,13 +159,12 @@ fun OvertimePlanPage(
                 record == null
         ) {
             item(key = "work-date") {
-                AppListRow(
+                AppSelectField(
                     appString(AppString.OvertimeWorkDate),
+                    formatLocalDate(form.workDate.toString(), appLanguageTag()),
                     { onEvent(OvertimePlanEvent.DatePickerRequested(OvertimePlanDateField.WORK)) },
-                    supportingText = formatLocalDate(form.workDate.toString(), appLanguageTag()),
                     enabled = state.editable,
-                    leading = { AppIcon(Icons.Regular.CalendarLtr) },
-                    trailing = { AppIcon(Icons.Regular.ChevronRight) },
+                    icon = Icons.Regular.CalendarLtr,
                 )
             }
             state.prepared?.let { prepared ->
@@ -186,51 +184,46 @@ fun OvertimePlanPage(
                 }
             }
             item(key = "start") {
-                AppCard(Modifier.fillMaxWidth(), padding = 0.dp) {
-                    AppListRow(
+                Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                    AppSelectField(
                         appString(AppString.OvertimeStartDate),
+                        formatLocalDate(form.startDate.toString(), appLanguageTag()),
                         {
                             onEvent(
                                 OvertimePlanEvent.DatePickerRequested(OvertimePlanDateField.START)
                             )
                         },
-                        supportingText =
-                            formatLocalDate(form.startDate.toString(), appLanguageTag()),
                         enabled = state.editable,
-                        trailing = { AppIcon(Icons.Regular.ChevronRight) },
+                        icon = Icons.Regular.CalendarLtr,
                     )
-                    AppListRow(
+                    AppSelectField(
                         appString(AppString.OvertimeStartTime),
+                        form.startsAt?.toString() ?: appString(AppString.OvertimeChooseTime),
                         { onEvent(OvertimePlanEvent.TimePickerRequested(OvertimeTimeField.START)) },
-                        supportingText =
-                            form.startsAt?.toString() ?: appString(AppString.OvertimeChooseTime),
                         enabled = state.editable,
-                        leading = { AppIcon(Icons.Regular.Clock) },
-                        trailing = { AppIcon(Icons.Regular.ChevronRight) },
+                        icon = Icons.Regular.Clock,
                     )
                 }
             }
             item(key = "end") {
-                AppCard(Modifier.fillMaxWidth(), padding = 0.dp) {
-                    AppListRow(
+                Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                    AppSelectField(
                         appString(AppString.OvertimeEndDate),
+                        formatLocalDate(form.endDate.toString(), appLanguageTag()),
                         {
                             onEvent(
                                 OvertimePlanEvent.DatePickerRequested(OvertimePlanDateField.END)
                             )
                         },
-                        supportingText = formatLocalDate(form.endDate.toString(), appLanguageTag()),
                         enabled = state.editable,
-                        trailing = { AppIcon(Icons.Regular.ChevronRight) },
+                        icon = Icons.Regular.CalendarLtr,
                     )
-                    AppListRow(
+                    AppSelectField(
                         appString(AppString.OvertimeEndTime),
+                        form.endsAt?.toString() ?: appString(AppString.OvertimeChooseTime),
                         { onEvent(OvertimePlanEvent.TimePickerRequested(OvertimeTimeField.END)) },
-                        supportingText =
-                            form.endsAt?.toString() ?: appString(AppString.OvertimeChooseTime),
                         enabled = state.editable,
-                        leading = { AppIcon(Icons.Regular.Clock) },
-                        trailing = { AppIcon(Icons.Regular.ChevronRight) },
+                        icon = Icons.Regular.Clock,
                     )
                 }
             }

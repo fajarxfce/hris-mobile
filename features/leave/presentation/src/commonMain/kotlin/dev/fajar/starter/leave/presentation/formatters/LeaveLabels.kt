@@ -1,6 +1,7 @@
 package dev.fajar.starter.leave.presentation.formatters
 
 import androidx.compose.runtime.Composable
+import dev.fajar.starter.designsystem.components.AppBadgeTone
 import dev.fajar.starter.leave.domain.entities.*
 import dev.fajar.starter.localization.*
 import kotlinx.datetime.LocalDate
@@ -56,3 +57,12 @@ fun leaveCarryValidityText(carry: LeaveCarryBalance): String =
             carry.timezone,
         )
     } ?: appString(AppString.LeaveCarryNoDeadline)
+
+fun LeaveStatus.badgeTone(): AppBadgeTone =
+    when (this) {
+        LeaveStatus.PENDING -> AppBadgeTone.Caution
+        LeaveStatus.APPROVED -> AppBadgeTone.Positive
+        LeaveStatus.REJECTED -> AppBadgeTone.Negative
+        LeaveStatus.CANCELLED -> AppBadgeTone.Neutral
+        LeaveStatus.CANCELLATION_PENDING -> AppBadgeTone.Caution
+    }

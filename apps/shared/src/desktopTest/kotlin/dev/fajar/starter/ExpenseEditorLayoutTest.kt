@@ -6,6 +6,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asSkiaBitmap
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
@@ -40,6 +41,24 @@ import org.junit.Test
 
 class ExpenseEditorLayoutTest {
     @get:Rule val compose = createComposeRule()
+
+    @Test
+    fun expenseItemStartsWithLabelledChoices() {
+        compose.setContent {
+            CompositionLocalProvider(LocalAppLanguage provides AppLanguage.Indonesian) {
+                AppTheme {
+                    Box(Modifier.size(390.dp, 820.dp).testTag("layout-review")) {
+                        ExpenseItemPage(itemState(itemForm()), rememberLazyListState()) {}
+                    }
+                }
+            }
+        }
+        compose.onNodeWithContentDescription("Kembali").assertIsDisplayed()
+        capture(
+            "review-expenseItemStartsWithLabelledChoices",
+            compose.onNodeWithTag("layout-review"),
+        )
+    }
 
     @Test
     fun largeDraftKeepsBackAndSaveFixedWhileFieldsAndItemsRemainReachable() {

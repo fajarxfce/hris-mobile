@@ -21,11 +21,11 @@ fun DocumentMetadataEditorFields(
     val local = state.persistence ?: return
     val input = local.input
     Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-        AppCard(padding = 0.dp) {
-            AppListRow(
+        Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+            AppSelectField(
                 appString(AppString.DocumentBusinessCategory),
+                appString(input.category.label()),
                 { onEvent(DocumentMetadataEditorEvent.CategoryRequested) },
-                supportingText = appString(input.category.label()),
                 enabled = state.canEdit,
             )
         }

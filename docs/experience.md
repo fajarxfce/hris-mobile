@@ -139,3 +139,16 @@ default unless the displayed value needs more space.
 short localized weekday labels, full-date accessible descriptions, selection and
 availability. Calendar navigation and date policy remain with the feature. Put it
 inside a scrollable dialog so large text does not displace the fixed close action.
+
+## Form choices and detail fields
+
+Use `AppSelectField` for a labelled value that opens a picker, with a calendar or
+clock icon for dates and times. It exposes one accessible button, retains the
+full value at large text sizes and delegates selection/visibility to the feature.
+Use `AppDetailField` for read-only label/value pairs. Keep optional-input hints
+out of detail labels and format displayed dates for the selected language.
+
+`AppBadge` accepts a semantic tone while retaining its informational default.
+Always include the full status text; color alone must not carry meaning. Keep
+primary creation/save actions in the fixed `AppActionBar`, secondary navigation
+labelled, and refresh progress beside its existing action.

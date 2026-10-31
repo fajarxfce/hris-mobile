@@ -36,6 +36,24 @@ class LeaveCreateLayoutTest {
     @get:Rule val compose = createComposeRule()
 
     @Test
+    fun leaveFormStartsWithLabelledChoices() {
+        compose.setContent {
+            CompositionLocalProvider(LocalAppLanguage provides AppLanguage.Indonesian) {
+                AppTheme {
+                    Box(Modifier.size(390.dp, 820.dp).testTag("layout-review")) {
+                        LeaveCreatePage(
+                            previewState().copy(preview = null),
+                            rememberLazyListState(),
+                        ) {}
+                    }
+                }
+            }
+        }
+        compose.onNodeWithContentDescription("Kembali").assertIsDisplayed()
+        capture("review-leaveFormStartsWithLabelledChoices", compose.onNodeWithTag("layout-review"))
+    }
+
+    @Test
     fun retainedAttemptDoesNotOfferRetryUntilTheCurrentDeliveryFinishes() {
         val base = previewState()
         val preparation = base.preview!!

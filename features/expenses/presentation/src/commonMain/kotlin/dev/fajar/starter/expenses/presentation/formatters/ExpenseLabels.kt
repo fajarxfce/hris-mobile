@@ -1,5 +1,6 @@
 package dev.fajar.starter.expenses.presentation.formatters
 
+import dev.fajar.starter.designsystem.components.AppBadgeTone
 import dev.fajar.starter.expenses.domain.entities.*
 import dev.fajar.starter.localization.AppString
 
@@ -45,4 +46,14 @@ fun ExpenseChangeKind.label(): AppString =
         ExpenseChangeKind.WITHDRAWN -> AppString.ExpenseWithdrawn
         ExpenseChangeKind.REVIEWED -> AppString.ExpenseReviewed
         ExpenseChangeKind.CANCELLED -> AppString.ExpenseClaimCancelled
+    }
+
+fun ExpenseStatus.badgeTone(): AppBadgeTone =
+    when (this) {
+        ExpenseStatus.DRAFT -> AppBadgeTone.Neutral
+        ExpenseStatus.PENDING -> AppBadgeTone.Caution
+        ExpenseStatus.RETURNED -> AppBadgeTone.Caution
+        ExpenseStatus.APPROVED -> AppBadgeTone.Positive
+        ExpenseStatus.REJECTED -> AppBadgeTone.Negative
+        ExpenseStatus.CANCELLED -> AppBadgeTone.Neutral
     }

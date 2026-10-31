@@ -21,7 +21,6 @@ import io.github.composefluent.icons.Icons
 import io.github.composefluent.icons.regular.ArrowLeft
 import io.github.composefluent.icons.regular.ArrowSync
 import io.github.composefluent.icons.regular.CalendarLtr
-import io.github.composefluent.icons.regular.ChevronRight
 import io.github.composefluent.icons.regular.Delete
 
 @Composable
@@ -75,15 +74,23 @@ fun LeaveCreatePage(
                     state.command == null &&
                     state.commandReady &&
                     state.persistence != null &&
-                    !state.closing &&
-                    state.preview != null
+                    !state.closing
             )
                 AppActionBar {
                     AppButton(
-                        appString(AppString.LeaveSubmit),
-                        { onEvent(LeaveCreateEvent.SubmitRequested) },
+                        appString(
+                            if (state.preview == null) AppString.LeavePreview
+                            else AppString.LeaveSubmit
+                        ),
+                        {
+                            onEvent(
+                                if (state.preview == null) LeaveCreateEvent.PreviewRequested
+                                else LeaveCreateEvent.SubmitRequested
+                            )
+                        },
                         Modifier.fillMaxWidth(),
-                        enabled = state.canSubmit,
+                        enabled = if (state.preview == null) state.canPreview else state.canSubmit,
+                        loading = state.work == LeaveCreateWork.PREVIEW,
                     )
                 }
         },
@@ -120,48 +127,37 @@ fun LeaveCreatePage(
         ) {
             item(key = "local-save") { LeaveLocalSaveStatus(state, onEvent) }
             item(key = "type") {
-                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                    AppText(
-                        appString(AppString.LeaveType),
-                        style = FluentTheme.typography.bodyStrong,
-                    )
-                    AppListRow(
-                        form.type?.name ?: appString(AppString.LeaveChooseType),
-                        { onEvent(LeaveCreateEvent.TypePickerRequested) },
-                        enabled = state.editable,
-                        trailing = { AppIcon(Icons.Regular.ChevronRight) },
-                    )
-                }
+                AppSelectField(
+                    appString(AppString.LeaveType),
+                    form.type?.name ?: appString(AppString.LeaveChooseType),
+                    { onEvent(LeaveCreateEvent.TypePickerRequested) },
+                    enabled = state.editable,
+                )
             }
             item(key = "dates") {
-                AppCard(Modifier.fillMaxWidth(), padding = 0.dp) {
-                    AppListRow(
+                Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                    AppSelectField(
                         appString(AppString.LeaveFromDate),
+                        formatLocalDate(form.from.toString(), appLanguageTag()),
                         { onEvent(LeaveCreateEvent.DatePickerRequested(LeaveDateField.FROM)) },
-                        supportingText = formatLocalDate(form.from.toString(), appLanguageTag()),
                         enabled = state.editable,
-                        leading = { AppIcon(Icons.Regular.CalendarLtr) },
-                        trailing = { AppIcon(Icons.Regular.ChevronRight) },
+                        icon = Icons.Regular.CalendarLtr,
                     )
-                    AppListRow(
+                    AppSelectField(
                         appString(AppString.LeaveUntilDate),
+                        formatLocalDate(form.until.toString(), appLanguageTag()),
                         { onEvent(LeaveCreateEvent.DatePickerRequested(LeaveDateField.UNTIL)) },
-                        supportingText = formatLocalDate(form.until.toString(), appLanguageTag()),
                         enabled = state.editable,
-                        leading = { AppIcon(Icons.Regular.CalendarLtr) },
-                        trailing = { AppIcon(Icons.Regular.ChevronRight) },
+                        icon = Icons.Regular.CalendarLtr,
                     )
                 }
             }
             item(key = "portion") {
-                AppListRow(
+                AppSelectField(
                     appString(AppString.LeavePortion),
+                    appString(form.portion.label()),
                     { onEvent(LeaveCreateEvent.PortionPickerRequested) },
-                    supportingText = appString(form.portion.label()),
                     enabled = state.editable && form.type?.allowPartialDays == true,
-                    trailing = {
-                        if (form.type?.allowPartialDays == true) AppIcon(Icons.Regular.ChevronRight)
-                    },
                 )
             }
             item(key = "reason") {
@@ -174,13 +170,14 @@ fun LeaveCreatePage(
                 )
             }
             item(key = "attachments") { LeaveAttachments(state, onEvent) }
-            item(key = "preview-action") {
-                AppTextButton(
-                    appString(AppString.LeavePreview),
-                    { onEvent(LeaveCreateEvent.PreviewRequested) },
-                    enabled = state.canPreview,
-                )
-            }
+            if (state.preview != null)
+                item(key = "preview-action") {
+                    AppTextButton(
+                        appString(AppString.LeavePreview),
+                        { onEvent(LeaveCreateEvent.PreviewRequested) },
+                        enabled = state.canPreview,
+                    )
+                }
             val prepared = state.preview
             if (prepared != null) {
                 if (state.previewExpired)

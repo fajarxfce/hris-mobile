@@ -1,6 +1,7 @@
 package dev.fajar.starter.workforce.presentation.overtime.formatters
 
 import androidx.compose.runtime.Composable
+import dev.fajar.starter.designsystem.components.AppBadgeTone
 import dev.fajar.starter.localization.*
 import dev.fajar.starter.workforce.domain.overtime.entities.*
 import kotlinx.datetime.*
@@ -39,3 +40,12 @@ fun overtimeTimeRange(interval: OvertimeInterval, timezone: String, workDate: Lo
             end.time.toString(),
         )
 }
+
+fun OvertimeStatus.badgeTone(): AppBadgeTone =
+    when (this) {
+        OvertimeStatus.PLANNED -> AppBadgeTone.Info
+        OvertimeStatus.PENDING -> AppBadgeTone.Caution
+        OvertimeStatus.APPROVED -> AppBadgeTone.Positive
+        OvertimeStatus.REJECTED -> AppBadgeTone.Negative
+        OvertimeStatus.WITHDRAWN -> AppBadgeTone.Neutral
+    }

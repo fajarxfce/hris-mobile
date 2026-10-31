@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
@@ -18,12 +19,10 @@ import dev.fajar.starter.documents.presentation.catalog.widgets.DocumentCatalogE
 import dev.fajar.starter.localization.*
 import io.github.composefluent.FluentTheme
 import io.github.composefluent.icons.Icons
-import io.github.composefluent.icons.regular.ArrowDownload
 import io.github.composefluent.icons.regular.ArrowLeft
 import io.github.composefluent.icons.regular.ArrowSync
+import io.github.composefluent.icons.regular.ChevronRight
 import io.github.composefluent.icons.regular.Document
-import io.github.composefluent.icons.regular.Edit
-import io.github.composefluent.icons.regular.Folder
 import io.github.composefluent.icons.regular.Person
 
 @Composable
@@ -50,18 +49,6 @@ fun DocumentCatalogPage(
                 },
                 actions = {
                     AppIconButton(
-                        Icons.Regular.Edit,
-                        appString(AppString.DocumentMetadataChanges),
-                        { onEvent(DocumentCatalogEvent.MetadataChangesRequested) },
-                        enabled = state.preparingId == null && !state.choosingEmployment,
-                    )
-                    AppIconButton(
-                        Icons.Regular.Folder,
-                        appString(AppString.DocumentLocalFiles),
-                        { onEvent(DocumentCatalogEvent.FilesRequested) },
-                        enabled = state.preparingId == null && !state.choosingEmployment,
-                    )
-                    AppIconButton(
                         Icons.Regular.ArrowSync,
                         appString(AppString.Refresh),
                         { onEvent(DocumentCatalogEvent.RefreshRequested) },
@@ -72,6 +59,28 @@ fun DocumentCatalogPage(
             )
         },
     ) {
+        item(key = "local-tools") {
+            FlowRow(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(4.dp),
+            ) {
+                val filesLabel = appString(AppString.DocumentLocalFiles)
+                AppButton(
+                    filesLabel,
+                    { onEvent(DocumentCatalogEvent.FilesRequested) },
+                    modifier = Modifier.semantics { contentDescription = filesLabel },
+                    primary = false,
+                    enabled = state.preparingId == null && !state.choosingEmployment,
+                )
+                val changesLabel = appString(AppString.DocumentMetadataChanges)
+                AppTextButton(
+                    changesLabel,
+                    { onEvent(DocumentCatalogEvent.MetadataChangesRequested) },
+                    modifier = Modifier.semantics { contentDescription = changesLabel },
+                    enabled = state.preparingId == null && !state.choosingEmployment,
+                )
+            }
+        }
         if ((state.loading || state.syncing) && state.catalog == null)
             item(key = "loading") { AppLoading(compact = true) }
         val failure = state.restriction ?: state.failure
@@ -166,9 +175,9 @@ fun DocumentCatalogPage(
                 AppCard(padding = 0.dp) {
                     AppListRow(
                         document.title,
-                        { onEvent(DocumentCatalogEvent.DownloadRequested(document.revisionId)) },
+                        { onEvent(DocumentCatalogEvent.DetailsRequested(record.id)) },
                         modifier =
-                            Modifier.semantics {
+                            Modifier.testTag("document-details-${record.id}").semantics {
                                 if (state.preparingId == document.revisionId)
                                     liveRegion = LiveRegionMode.Polite
                             },
@@ -186,15 +195,15 @@ fun DocumentCatalogPage(
                         trailing = {
                             if (state.preparingId == document.revisionId)
                                 AppProgressRing(appString(AppString.DocumentPreparingDownload))
-                            else AppIcon(Icons.Regular.ArrowDownload, appString(AppString.Download))
+                            else AppIcon(Icons.Regular.ChevronRight)
                         },
                     )
                     AppTextButton(
-                        appString(AppString.DocumentDetails),
-                        { onEvent(DocumentCatalogEvent.DetailsRequested(record.id)) },
+                        appString(AppString.Download),
+                        { onEvent(DocumentCatalogEvent.DownloadRequested(document.revisionId)) },
                         modifier =
                             Modifier.padding(horizontal = 8.dp)
-                                .testTag("document-details-${record.id}"),
+                                .testTag("document-download-${record.id}"),
                         enabled = state.canChoose,
                     )
                 }

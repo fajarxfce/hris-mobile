@@ -7,6 +7,7 @@ import androidx.compose.ui.unit.dp
 import dev.fajar.starter.designsystem.components.*
 import dev.fajar.starter.designsystem.theme.AppColors
 import dev.fajar.starter.expenses.domain.entities.ExpenseClaim
+import dev.fajar.starter.expenses.presentation.formatters.badgeTone
 import dev.fajar.starter.expenses.presentation.formatters.label
 import dev.fajar.starter.localization.*
 import io.github.composefluent.FluentTheme
@@ -15,7 +16,7 @@ import io.github.composefluent.FluentTheme
 fun ExpenseClaimSummaryCard(claim: ExpenseClaim) {
     AppCard(Modifier.fillMaxWidth(), padding = 16.dp, spacing = 8.dp) {
         AppHeading(claim.draft.title, style = FluentTheme.typography.subtitle)
-        AppBadge(appString(claim.status.label()))
+        AppBadge(appString(claim.status.label()), tone = claim.status.badgeTone())
         AppText(
             claim.draft.employeeName + " · " + claim.draft.employeeNumber,
             color = AppColors.muted,

@@ -15,7 +15,7 @@ import dev.fajar.starter.expenses.presentation.working.ExpenseLocalSaveStatus
 import dev.fajar.starter.localization.*
 import io.github.composefluent.icons.Icons
 import io.github.composefluent.icons.regular.ArrowLeft
-import io.github.composefluent.icons.regular.ChevronRight
+import io.github.composefluent.icons.regular.CalendarLtr
 
 @Composable
 fun ExpenseItemPage(
@@ -83,26 +83,19 @@ fun ExpenseItemPage(
                 }
             }
             item(key = "references") {
-                AppCard(Modifier.fillMaxWidth(), padding = 0.dp) {
-                    AppListRow(
+                Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                    AppSelectField(
                         appString(AppString.ExpenseDate),
+                        formatLocalDate(state.form.date.toString(), appLanguageTag()),
                         { onEvent(ExpenseItemEvent.DateOpened) },
-                        supportingText =
-                            formatLocalDate(state.form.date.toString(), appLanguageTag()),
                         enabled = state.canSave,
-                        trailing = { AppIcon(Icons.Regular.ChevronRight) },
+                        icon = Icons.Regular.CalendarLtr,
                     )
-                    AppListRow(
+                    AppSelectField(
                         appString(AppString.ExpenseCategory),
+                        state.form.category?.name ?: appString(AppString.ExpenseChooseCategory),
                         { onEvent(ExpenseItemEvent.CategoryOpened) },
-                        supportingText =
-                            state.form.category?.name
-                                ?: appString(
-                                    if (state.form.category == null) AppString.ExpenseChooseCategory
-                                    else AppString.ExpenseReferenceUnavailable
-                                ),
                         enabled = state.canSave,
-                        trailing = { AppIcon(Icons.Regular.ChevronRight) },
                     )
                 }
             }
@@ -125,17 +118,11 @@ fun ExpenseItemPage(
                 )
             }
             item(key = "cost-center") {
-                AppListRow(
+                AppSelectField(
                     appString(AppString.ExpenseCostCenter),
+                    state.form.costCenter?.name ?: appString(AppString.ExpenseNoCostCenter),
                     { onEvent(ExpenseItemEvent.CostCenterOpened) },
-                    supportingText =
-                        state.form.costCenter?.name
-                            ?: appString(
-                                if (state.form.costCenter == null) AppString.ExpenseNoCostCenter
-                                else AppString.ExpenseReferenceUnavailable
-                            ),
                     enabled = state.canSave,
-                    trailing = { AppIcon(Icons.Regular.ChevronRight) },
                 )
             }
             item(key = "receipts") { ExpenseItemReceipts(state, onEvent) }

@@ -3,6 +3,7 @@ package dev.fajar.starter.documents.presentation.record.pages
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import dev.fajar.starter.designsystem.components.*
 import dev.fajar.starter.designsystem.theme.AppColors
@@ -46,6 +47,17 @@ fun DocumentRecordPage(
                 },
             )
         },
+        bottomBar = {
+            if (state.showEditAction)
+                AppActionBar {
+                    AppButton(
+                        appString(AppString.DocumentMetadataEdit),
+                        { onEvent(DocumentRecordEvent.EditRequested) },
+                        Modifier.fillMaxWidth(),
+                        enabled = state.canEdit,
+                    )
+                }
+        },
     ) {
         if (state.loading || state.refreshing) item("progress") { AppLoading(compact = true) }
         val failure = state.restriction ?: state.failure
@@ -70,15 +82,8 @@ fun DocumentRecordPage(
         val snapshot = view?.snapshot
         val head = snapshot?.checkpoint?.head
         if (head != null && state.restriction == null) {
-            if (state.canEdit)
-                item("edit") {
-                    AppTextButton(
-                        appString(AppString.DocumentMetadataEdit),
-                        { onEvent(DocumentRecordEvent.EditRequested) },
-                    )
-                }
             item("header") {
-                AppCard {
+                AppCard(Modifier.fillMaxWidth(), padding = 16.dp) {
                     Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                         AppText(head.title, style = FluentTheme.typography.subtitle)
                         val metadata = head.metadata

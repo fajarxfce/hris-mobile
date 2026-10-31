@@ -29,7 +29,7 @@ fun LeaveRequestSummaryCard(request: LeaveRequestDetails) {
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             AppText(leaveDaysText(request.charged), style = FluentTheme.typography.bodyStrong)
-            AppBadge(appString(request.status.label()))
+            AppBadge(appString(request.status.label()), tone = request.status.badgeTone())
         }
         AppText(
             request.employeeName + " · " + request.employeeNumber,

@@ -9,6 +9,7 @@ import dev.fajar.starter.designsystem.theme.AppColors
 import dev.fajar.starter.localization.*
 import dev.fajar.starter.workforce.domain.overtime.entities.*
 import dev.fajar.starter.workforce.presentation.calendar.formatters.calendarDuration
+import dev.fajar.starter.workforce.presentation.overtime.formatters.badgeTone
 import dev.fajar.starter.workforce.presentation.overtime.formatters.label
 import io.github.composefluent.FluentTheme
 
@@ -30,7 +31,7 @@ fun OvertimeRequestSummary(details: OvertimeDetails) {
             horizontalArrangement = Arrangement.spacedBy(12.dp),
             verticalArrangement = Arrangement.spacedBy(6.dp),
         ) {
-            AppBadge(appString(request.status.label()))
+            AppBadge(appString(request.status.label()), tone = request.status.badgeTone())
             AppText(request.employeeNumber, color = AppColors.muted)
         }
         if (request.status == OvertimeStatus.APPROVED)

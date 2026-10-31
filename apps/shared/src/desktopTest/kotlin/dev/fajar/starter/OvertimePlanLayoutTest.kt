@@ -37,6 +37,24 @@ class OvertimePlanLayoutTest {
     @get:Rule val compose = createComposeRule()
 
     @Test
+    fun overtimeFormStartsWithLabelledChoices() {
+        compose.setContent {
+            CompositionLocalProvider(LocalAppLanguage provides AppLanguage.Indonesian) {
+                AppTheme {
+                    Box(Modifier.size(390.dp, 820.dp).testTag("layout-review")) {
+                        OvertimePlanPage(preparedState(), rememberLazyListState()) {}
+                    }
+                }
+            }
+        }
+        compose.onNodeWithContentDescription("Kembali").assertIsDisplayed()
+        capture(
+            "review-overtimeFormStartsWithLabelledChoices",
+            compose.onNodeWithTag("layout-review"),
+        )
+    }
+
+    @Test
     fun largeIndonesianFormKeepsInputBackAndThePrimaryActionReachable() {
         var state by mutableStateOf(preparedState())
         val events = mutableListOf<OvertimePlanEvent>()

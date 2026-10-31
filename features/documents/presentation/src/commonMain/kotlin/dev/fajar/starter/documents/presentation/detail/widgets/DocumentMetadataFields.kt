@@ -8,20 +8,17 @@ import dev.fajar.starter.designsystem.theme.AppColors
 import dev.fajar.starter.documents.presentation.detail.*
 import dev.fajar.starter.documents.presentation.metadata.label
 import dev.fajar.starter.localization.*
-import io.github.composefluent.icons.Icons
-import io.github.composefluent.icons.regular.ChevronDown
 
 @Composable
 fun DocumentMetadataFields(state: DocumentFileState, onEvent: (DocumentFileEvent) -> Unit) {
     val metadata = state.form?.metadata ?: return
     Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-        AppCard(padding = 0.dp) {
-            AppListRow(
+        Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+            AppSelectField(
                 appString(AppString.DocumentBusinessCategory),
+                appString(metadata.category.label()),
                 { onEvent(DocumentFileEvent.CategoryRequested) },
-                supportingText = appString(metadata.category.label()),
                 enabled = state.canWrite,
-                trailing = { AppIcon(Icons.Regular.ChevronDown) },
             )
         }
         AppTextField(

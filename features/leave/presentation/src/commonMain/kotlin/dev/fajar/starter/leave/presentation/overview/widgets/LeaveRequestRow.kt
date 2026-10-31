@@ -1,6 +1,5 @@
 package dev.fajar.starter.leave.presentation.overview.widgets
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -15,7 +14,7 @@ import io.github.composefluent.icons.regular.ChevronRight
 
 @Composable
 fun LeaveRequestRow(request: LeaveRequestSummary, onClick: () -> Unit) {
-    Column(Modifier.fillMaxWidth()) {
+    AppCard(Modifier.fillMaxWidth(), padding = 0.dp) {
         AppListRow(
             title = request.typeName,
             onClick = onClick,
@@ -25,12 +24,11 @@ fun LeaveRequestRow(request: LeaveRequestSummary, onClick: () -> Unit) {
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
                     verticalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
-                    AppBadge(appString(request.status.label()))
+                    AppBadge(appString(request.status.label()), tone = request.status.badgeTone())
                     AppText(leaveDaysText(request.charged), color = AppColors.muted)
                 }
             },
             trailing = { AppIcon(Icons.Regular.ChevronRight) },
         )
-        Box(Modifier.fillMaxWidth().height(1.dp).background(AppColors.border))
     }
 }

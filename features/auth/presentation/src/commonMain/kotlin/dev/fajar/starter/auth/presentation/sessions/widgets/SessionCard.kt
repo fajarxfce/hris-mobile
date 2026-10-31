@@ -10,7 +10,6 @@ import dev.fajar.starter.designsystem.theme.AppColors
 import dev.fajar.starter.identity.domain.entities.DeviceSession
 import dev.fajar.starter.localization.*
 import io.github.composefluent.FluentTheme
-import kotlin.time.Instant
 
 @Composable
 fun SessionCard(
@@ -23,18 +22,21 @@ fun SessionCard(
     AppCard(Modifier.fillMaxWidth()) {
         Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
             AppText(session.deviceName, style = FluentTheme.typography.subtitle)
-            if (current) AppText(appString(AppString.ThisDevice), color = AppColors.muted)
+            if (current) AppBadge(appString(AppString.ThisDevice))
             AppText(
                 appString(
                     AppString.SessionCreated,
-                    Instant.fromEpochMilliseconds(session.createdAtEpochMillis).toString(),
+                    formatDate(session.createdAtEpochMillis, appLanguageTag()),
                 ),
                 color = AppColors.muted,
             )
             if (!current) {
                 if (confirming) {
                     AppText(appString(AppString.EndSessionConfirmation))
-                    Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                    FlowRow(
+                        horizontalArrangement = Arrangement.spacedBy(12.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp),
+                    ) {
                         AppButton(
                             appString(AppString.Cancel),
                             { onEvent(SessionsEvent.RevocationCancelled) },
