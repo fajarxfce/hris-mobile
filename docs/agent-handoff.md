@@ -24,6 +24,10 @@ errors and 45 dependency-version/fixture-packaging warnings. Native CI is define
 its result separately. This is still P0: product sessions, native durable queue,
 Apple bindings, MatrixRTC and native media remain pending. No Starter code port
 is due yet and no phone install was performed. Android proof source is `477f9c60`.
+Its first hosted run `41181935938` failed before compilation because the SDK
+setup action still defaults to Google's retired `tools` package. The workflow
+now requests `platform-tools` explicitly; wait for the corrected run rather than
+reporting that first run as a passed native proof.
 
 Apple binding work now lives in `tool/collaboration-apple-proof`, pinned to Swift
 SDK 26.10.27. Its hosted workflow must pass real native key-store reopening,
