@@ -545,5 +545,1676 @@
     "Apple, web HRIS admission, verified multiple devices, notifications, media, calls/meetings and all remaining P0\u2013P8 gates"
   ],
   "platformCommit": "45ccd56f29871a3474aca676be3464cc7d43bee4",
-  "hrisWorkflowSha256": "958d2d5b1090a87949491b8a7b2b77d3fc423bb536b1fb2996a4bbf10d15ab45"
+  "hrisWorkflowSha256": "958d2d5b1090a87949491b8a7b2b77d3fc423bb536b1fb2996a4bbf10d15ab45",
+  "hostedControl": {
+    "commit": "45ccd56f29871a3474aca676be3464cc7d43bee4",
+    "runId": 41231798310,
+    "sourceHashesVerified": 10,
+    "result": {
+      "conclusion": "success",
+      "jobs": [
+        {
+          "completedAt": "2026-10-31T19:12:51Z",
+          "conclusion": "success",
+          "databaseId": 124627372538,
+          "name": "authority-and-storage",
+          "startedAt": "2026-10-31T18:56:19Z",
+          "status": "completed",
+          "steps": [
+            {
+              "completedAt": "2026-10-31T18:56:23Z",
+              "conclusion": "success",
+              "name": "Set up job",
+              "number": 1,
+              "startedAt": "2026-10-31T18:56:20Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T18:56:25Z",
+              "conclusion": "success",
+              "name": "Run actions/checkout@v4",
+              "number": 2,
+              "startedAt": "2026-10-31T18:56:23Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T18:56:26Z",
+              "conclusion": "success",
+              "name": "Run actions/setup-java@v4",
+              "number": 3,
+              "startedAt": "2026-10-31T18:56:25Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T18:56:29Z",
+              "conclusion": "success",
+              "name": "Run gradle/actions/setup-gradle@v4",
+              "number": 4,
+              "startedAt": "2026-10-31T18:56:26Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T18:56:33Z",
+              "conclusion": "success",
+              "name": "Check boundaries and recovery schema gate",
+              "number": 5,
+              "startedAt": "2026-10-31T18:56:29Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T19:06:29Z",
+              "conclusion": "success",
+              "name": "Verify policies, actual PostgreSQL isolation and backup recovery",
+              "number": 6,
+              "startedAt": "2026-10-31T18:56:33Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T19:12:47Z",
+              "conclusion": "success",
+              "name": "Verify API contracts, native transport and shared worker context",
+              "number": 7,
+              "startedAt": "2026-10-31T19:06:29Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T19:12:48Z",
+              "conclusion": "success",
+              "name": "Run actions/upload-artifact@v4",
+              "number": 8,
+              "startedAt": "2026-10-31T19:12:47Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T19:12:49Z",
+              "conclusion": "success",
+              "name": "Post Run gradle/actions/setup-gradle@v4",
+              "number": 14,
+              "startedAt": "2026-10-31T19:12:48Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T19:12:49Z",
+              "conclusion": "success",
+              "name": "Post Run actions/setup-java@v4",
+              "number": 15,
+              "startedAt": "2026-10-31T19:12:49Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T19:12:49Z",
+              "conclusion": "success",
+              "name": "Post Run actions/checkout@v4",
+              "number": 16,
+              "startedAt": "2026-10-31T19:12:49Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T19:12:49Z",
+              "conclusion": "success",
+              "name": "Complete job",
+              "number": 17,
+              "startedAt": "2026-10-31T19:12:49Z",
+              "status": "completed"
+            }
+          ],
+          "url": "https://github.com/fajarxfce/hris-platform/actions/runs/41231798310/job/124627372538"
+        },
+        {
+          "completedAt": "2026-10-31T18:57:24Z",
+          "conclusion": "success",
+          "databaseId": 124627372702,
+          "name": "company-settings",
+          "startedAt": "2026-10-31T18:56:19Z",
+          "status": "completed",
+          "steps": [
+            {
+              "completedAt": "2026-10-31T18:56:20Z",
+              "conclusion": "success",
+              "name": "Set up job",
+              "number": 1,
+              "startedAt": "2026-10-31T18:56:20Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T18:56:23Z",
+              "conclusion": "success",
+              "name": "Run actions/checkout@v4",
+              "number": 2,
+              "startedAt": "2026-10-31T18:56:20Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T18:56:25Z",
+              "conclusion": "success",
+              "name": "Run actions/setup-node@v4",
+              "number": 3,
+              "startedAt": "2026-10-31T18:56:23Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T18:56:38Z",
+              "conclusion": "success",
+              "name": "Run npm ci --ignore-scripts --no-audit --no-fund",
+              "number": 4,
+              "startedAt": "2026-10-31T18:56:25Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T18:56:42Z",
+              "conclusion": "success",
+              "name": "Run npx tsc --noEmit",
+              "number": 5,
+              "startedAt": "2026-10-31T18:56:38Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T18:56:48Z",
+              "conclusion": "success",
+              "name": "Run npx vitest run src/features/administration src/features/jobs",
+              "number": 6,
+              "startedAt": "2026-10-31T18:56:42Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T18:57:05Z",
+              "conclusion": "success",
+              "name": "Run npx playwright install --with-deps chromium",
+              "number": 7,
+              "startedAt": "2026-10-31T18:56:48Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T18:57:22Z",
+              "conclusion": "success",
+              "name": "Run npx playwright test tests/client-policy.spec.ts tests/client-policy-editor.spec.ts",
+              "number": 8,
+              "startedAt": "2026-10-31T18:57:05Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T18:57:22Z",
+              "conclusion": "success",
+              "name": "Post Run actions/setup-node@v4",
+              "number": 15,
+              "startedAt": "2026-10-31T18:57:22Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T18:57:22Z",
+              "conclusion": "success",
+              "name": "Post Run actions/checkout@v4",
+              "number": 16,
+              "startedAt": "2026-10-31T18:57:22Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T18:57:22Z",
+              "conclusion": "success",
+              "name": "Complete job",
+              "number": 17,
+              "startedAt": "2026-10-31T18:57:22Z",
+              "status": "completed"
+            }
+          ],
+          "url": "https://github.com/fajarxfce/hris-platform/actions/runs/41231798310/job/124627372702"
+        }
+      ],
+      "status": "completed"
+    }
+  },
+  "hostedNative": {
+    "mobileCommit": "538a182723861b8124df7fa9a5c94ec5acfd9ffc",
+    "platformCommit": "45ccd56f29871a3474aca676be3464cc7d43bee4",
+    "runId": 41231913617,
+    "sourceHashesVerified": 12,
+    "result": {
+      "conclusion": "success",
+      "jobs": [
+        {
+          "completedAt": "2026-10-31T19:12:05Z",
+          "conclusion": "success",
+          "databaseId": 124627718966,
+          "name": "android-hris",
+          "startedAt": "2026-10-31T18:57:57Z",
+          "status": "completed",
+          "steps": [
+            {
+              "completedAt": "2026-10-31T18:57:59Z",
+              "conclusion": "success",
+              "name": "Set up job",
+              "number": 1,
+              "startedAt": "2026-10-31T18:57:58Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T18:58:01Z",
+              "conclusion": "success",
+              "name": "Run actions/checkout@v4",
+              "number": 2,
+              "startedAt": "2026-10-31T18:57:59Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T18:58:03Z",
+              "conclusion": "success",
+              "name": "Run actions/checkout@v4",
+              "number": 3,
+              "startedAt": "2026-10-31T18:58:01Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T18:58:03Z",
+              "conclusion": "success",
+              "name": "Run actions/setup-java@v4",
+              "number": 4,
+              "startedAt": "2026-10-31T18:58:03Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T18:58:06Z",
+              "conclusion": "success",
+              "name": "Run gradle/actions/setup-gradle@v4",
+              "number": 5,
+              "startedAt": "2026-10-31T18:58:03Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T18:58:14Z",
+              "conclusion": "success",
+              "name": "Run android-actions/setup-android@v3",
+              "number": 6,
+              "startedAt": "2026-10-31T18:58:06Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T18:58:16Z",
+              "conclusion": "success",
+              "name": "Run sdkmanager 'platforms;android-36' 'build-tools;36.0.0'",
+              "number": 7,
+              "startedAt": "2026-10-31T18:58:14Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T19:03:22Z",
+              "conclusion": "success",
+              "name": "Build isolated Android SDK fixture before starting the emulator",
+              "number": 8,
+              "startedAt": "2026-10-31T18:58:16Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T19:08:50Z",
+              "conclusion": "success",
+              "name": "Compile HRIS fixture and verify driver cleanup",
+              "number": 9,
+              "startedAt": "2026-10-31T19:03:22Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T19:08:50Z",
+              "conclusion": "success",
+              "name": "Enable KVM for the owned runner emulator",
+              "number": 10,
+              "startedAt": "2026-10-31T19:08:50Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T19:12:01Z",
+              "conclusion": "success",
+              "name": "Run reactivecircus/android-emulator-runner@v2",
+              "number": 11,
+              "startedAt": "2026-10-31T19:08:50Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T19:12:02Z",
+              "conclusion": "success",
+              "name": "Run actions/upload-artifact@v4",
+              "number": 12,
+              "startedAt": "2026-10-31T19:12:01Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T19:12:03Z",
+              "conclusion": "success",
+              "name": "Post Run gradle/actions/setup-gradle@v4",
+              "number": 21,
+              "startedAt": "2026-10-31T19:12:02Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T19:12:03Z",
+              "conclusion": "success",
+              "name": "Post Run actions/setup-java@v4",
+              "number": 22,
+              "startedAt": "2026-10-31T19:12:03Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T19:12:03Z",
+              "conclusion": "success",
+              "name": "Post Run actions/checkout@v4",
+              "number": 23,
+              "startedAt": "2026-10-31T19:12:03Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T19:12:03Z",
+              "conclusion": "success",
+              "name": "Post Run actions/checkout@v4",
+              "number": 24,
+              "startedAt": "2026-10-31T19:12:03Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T19:12:03Z",
+              "conclusion": "success",
+              "name": "Complete job",
+              "number": 25,
+              "startedAt": "2026-10-31T19:12:03Z",
+              "status": "completed"
+            }
+          ],
+          "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/41231913617/job/124627718966"
+        }
+      ],
+      "status": "completed"
+    },
+    "verification": {
+      "passed": true,
+      "encryptedBothDirections": true,
+      "logicalIdsPreserved": true,
+      "cleanup": true,
+      "artifact": {
+        "apkSha256": "9900b0412c1fbb4ff7440fccbab3dde4bcb57817ffb075fa1809d97afec2aa16",
+        "package": "dev.fajar.hris.collaboration.proof",
+        "avd": "hris-mobile-dev",
+        "androidApi": "35"
+      }
+    },
+    "native": {
+      "passed": true,
+      "cleanup": true,
+      "artifact": {
+        "apkSha256": "9900b0412c1fbb4ff7440fccbab3dde4bcb57817ffb075fa1809d97afec2aa16",
+        "package": "dev.fajar.hris.collaboration.proof",
+        "avd": "hris-mobile-dev",
+        "androidApi": "35"
+      },
+      "diagnostic": {
+        "instrumentationComplete": true,
+        "failureFrames": []
+      },
+      "proof": {
+        "encryptedBothDirections": true,
+        "logicalIdsPreserved": true,
+        "syncMode": "classic",
+        "senderEventId": "$H5jEG8Zxo-nTy7czGEry-jzvlWlFKOGcoVFrjPHbWrY",
+        "recipientEventId": "$xYEwhSlzwJjilsOGsep2aOxhj4g9Mwn4a2sn30OaDd4",
+        "senderTransaction": "6a32992b8c4b4ef3a9bf23c67ca34504",
+        "recipientTransaction": "687f846bfda1429f928ec33c61e68afc"
+      }
+    },
+    "gatewayTrace": [
+      {
+        "method": "GET",
+        "route": "/_matrix/client/versions",
+        "query": [],
+        "unknownQuery": false,
+        "status": 200,
+        "contentLength": -1,
+        "transferEncoding": false,
+        "timeoutMillis": "absent_or_invalid",
+        "errorCode": ""
+      },
+      {
+        "method": "GET",
+        "route": "/_matrix/client/versions",
+        "query": [],
+        "unknownQuery": false,
+        "status": 200,
+        "contentLength": -1,
+        "transferEncoding": false,
+        "timeoutMillis": "absent_or_invalid",
+        "errorCode": ""
+      },
+      {
+        "method": "POST",
+        "route": "/_matrix/client/v3/keys/query",
+        "query": [],
+        "unknownQuery": false,
+        "status": 200,
+        "contentLength": 114,
+        "transferEncoding": false,
+        "timeoutMillis": "absent_or_invalid",
+        "errorCode": ""
+      },
+      {
+        "method": "POST",
+        "route": "/_matrix/client/v3/keys/query",
+        "query": [],
+        "unknownQuery": false,
+        "status": 200,
+        "contentLength": 114,
+        "transferEncoding": false,
+        "timeoutMillis": "absent_or_invalid",
+        "errorCode": ""
+      },
+      {
+        "method": "POST",
+        "route": "/_matrix/client/v3/rooms/_/join",
+        "query": [],
+        "unknownQuery": false,
+        "status": 200,
+        "contentLength": 2,
+        "transferEncoding": false,
+        "timeoutMillis": "absent_or_invalid",
+        "errorCode": ""
+      },
+      {
+        "method": "POST",
+        "route": "/_matrix/client/v3/rooms/_/join",
+        "query": [],
+        "unknownQuery": false,
+        "status": 200,
+        "contentLength": 2,
+        "transferEncoding": false,
+        "timeoutMillis": "absent_or_invalid",
+        "errorCode": ""
+      },
+      {
+        "method": "POST",
+        "route": "/_matrix/client/v3/keys/upload",
+        "query": [],
+        "unknownQuery": false,
+        "status": 503,
+        "contentLength": 17408,
+        "transferEncoding": false,
+        "timeoutMillis": "absent_or_invalid",
+        "errorCode": "collaboration_provider_busy"
+      },
+      {
+        "method": "POST",
+        "route": "/_matrix/client/v3/keys/upload",
+        "query": [],
+        "unknownQuery": false,
+        "status": 200,
+        "contentLength": 17408,
+        "transferEncoding": false,
+        "timeoutMillis": "absent_or_invalid",
+        "errorCode": ""
+      },
+      {
+        "method": "GET",
+        "route": "/_matrix/client/v3/sync",
+        "query": [
+          "timeout",
+          "use_state_after"
+        ],
+        "unknownQuery": false,
+        "status": 200,
+        "contentLength": -1,
+        "transferEncoding": false,
+        "timeoutMillis": "1000",
+        "errorCode": ""
+      },
+      {
+        "method": "POST",
+        "route": "/_matrix/client/v3/keys/query",
+        "query": [],
+        "unknownQuery": false,
+        "status": 200,
+        "contentLength": 114,
+        "transferEncoding": false,
+        "timeoutMillis": "absent_or_invalid",
+        "errorCode": ""
+      },
+      {
+        "method": "POST",
+        "route": "/_matrix/client/v3/keys/upload",
+        "query": [],
+        "unknownQuery": false,
+        "status": 200,
+        "contentLength": 369,
+        "transferEncoding": false,
+        "timeoutMillis": "absent_or_invalid",
+        "errorCode": ""
+      },
+      {
+        "method": "POST",
+        "route": "/_matrix/client/v3/keys/upload",
+        "query": [],
+        "unknownQuery": false,
+        "status": 200,
+        "contentLength": 17408,
+        "transferEncoding": false,
+        "timeoutMillis": "absent_or_invalid",
+        "errorCode": ""
+      },
+      {
+        "method": "GET",
+        "route": "/_matrix/client/v3/sync",
+        "query": [
+          "since",
+          "timeout",
+          "use_state_after"
+        ],
+        "unknownQuery": false,
+        "status": 200,
+        "contentLength": -1,
+        "transferEncoding": false,
+        "timeoutMillis": "1000",
+        "errorCode": ""
+      },
+      {
+        "method": "GET",
+        "route": "/_matrix/client/v3/sync",
+        "query": [
+          "timeout",
+          "use_state_after"
+        ],
+        "unknownQuery": false,
+        "status": 200,
+        "contentLength": -1,
+        "transferEncoding": false,
+        "timeoutMillis": "1000",
+        "errorCode": ""
+      },
+      {
+        "method": "GET",
+        "route": "/_matrix/client/v3/rooms/_/state/_/",
+        "query": [],
+        "unknownQuery": false,
+        "status": 200,
+        "contentLength": -1,
+        "transferEncoding": false,
+        "timeoutMillis": "absent_or_invalid",
+        "errorCode": ""
+      },
+      {
+        "method": "POST",
+        "route": "/_matrix/client/v3/keys/query",
+        "query": [],
+        "unknownQuery": false,
+        "status": 200,
+        "contentLength": 114,
+        "transferEncoding": false,
+        "timeoutMillis": "absent_or_invalid",
+        "errorCode": ""
+      },
+      {
+        "method": "POST",
+        "route": "/_matrix/client/v3/keys/query",
+        "query": [],
+        "unknownQuery": false,
+        "status": 200,
+        "contentLength": 114,
+        "transferEncoding": false,
+        "timeoutMillis": "absent_or_invalid",
+        "errorCode": ""
+      },
+      {
+        "method": "POST",
+        "route": "/_matrix/client/v3/keys/upload",
+        "query": [],
+        "unknownQuery": false,
+        "status": 200,
+        "contentLength": 369,
+        "transferEncoding": false,
+        "timeoutMillis": "absent_or_invalid",
+        "errorCode": ""
+      },
+      {
+        "method": "GET",
+        "route": "/_matrix/client/v3/rooms/_/members",
+        "query": [],
+        "unknownQuery": false,
+        "status": 200,
+        "contentLength": -1,
+        "transferEncoding": false,
+        "timeoutMillis": "absent_or_invalid",
+        "errorCode": ""
+      },
+      {
+        "method": "POST",
+        "route": "/_matrix/client/v3/keys/claim",
+        "query": [],
+        "unknownQuery": false,
+        "status": 200,
+        "contentLength": 191,
+        "transferEncoding": false,
+        "timeoutMillis": "absent_or_invalid",
+        "errorCode": ""
+      },
+      {
+        "method": "PUT",
+        "route": "/_matrix/client/v3/sendToDevice/m.room.encrypted/_",
+        "query": [],
+        "unknownQuery": false,
+        "status": 200,
+        "contentLength": 2702,
+        "transferEncoding": false,
+        "timeoutMillis": "absent_or_invalid",
+        "errorCode": ""
+      },
+      {
+        "method": "GET",
+        "route": "/_matrix/client/v3/sync",
+        "query": [
+          "since",
+          "timeout",
+          "use_state_after"
+        ],
+        "unknownQuery": false,
+        "status": 200,
+        "contentLength": -1,
+        "transferEncoding": false,
+        "timeoutMillis": "1000",
+        "errorCode": ""
+      },
+      {
+        "method": "POST",
+        "route": "/_matrix/client/v3/keys/upload",
+        "query": [],
+        "unknownQuery": false,
+        "status": 200,
+        "contentLength": 353,
+        "transferEncoding": false,
+        "timeoutMillis": "absent_or_invalid",
+        "errorCode": ""
+      },
+      {
+        "method": "GET",
+        "route": "/_matrix/client/v3/sync",
+        "query": [
+          "since",
+          "timeout",
+          "use_state_after"
+        ],
+        "unknownQuery": false,
+        "status": 200,
+        "contentLength": -1,
+        "transferEncoding": false,
+        "timeoutMillis": "1000",
+        "errorCode": ""
+      },
+      {
+        "method": "PUT",
+        "route": "/_matrix/client/v3/rooms/_/send/m.room.encrypted/_",
+        "query": [],
+        "unknownQuery": false,
+        "status": 200,
+        "contentLength": 646,
+        "transferEncoding": false,
+        "timeoutMillis": "absent_or_invalid",
+        "errorCode": ""
+      },
+      {
+        "method": "GET",
+        "route": "/_matrix/client/v3/sync",
+        "query": [
+          "since",
+          "timeout",
+          "use_state_after"
+        ],
+        "unknownQuery": false,
+        "status": 200,
+        "contentLength": -1,
+        "transferEncoding": false,
+        "timeoutMillis": "1000",
+        "errorCode": ""
+      },
+      {
+        "method": "GET",
+        "route": "/_matrix/client/v3/sync",
+        "query": [
+          "since",
+          "timeout",
+          "use_state_after"
+        ],
+        "unknownQuery": false,
+        "status": 200,
+        "contentLength": -1,
+        "transferEncoding": false,
+        "timeoutMillis": "1000",
+        "errorCode": ""
+      },
+      {
+        "method": "GET",
+        "route": "/_matrix/client/v3/rooms/_/members",
+        "query": [],
+        "unknownQuery": false,
+        "status": 200,
+        "contentLength": -1,
+        "transferEncoding": false,
+        "timeoutMillis": "absent_or_invalid",
+        "errorCode": ""
+      },
+      {
+        "method": "PUT",
+        "route": "/_matrix/client/v3/sendToDevice/m.room.encrypted/_",
+        "query": [],
+        "unknownQuery": false,
+        "status": 200,
+        "contentLength": 2560,
+        "transferEncoding": false,
+        "timeoutMillis": "absent_or_invalid",
+        "errorCode": ""
+      },
+      {
+        "method": "PUT",
+        "route": "/_matrix/client/v3/rooms/_/send/m.room.encrypted/_",
+        "query": [],
+        "unknownQuery": false,
+        "status": 200,
+        "contentLength": 646,
+        "transferEncoding": false,
+        "timeoutMillis": "absent_or_invalid",
+        "errorCode": ""
+      },
+      {
+        "method": "GET",
+        "route": "/_matrix/client/v3/sync",
+        "query": [
+          "since",
+          "timeout",
+          "use_state_after"
+        ],
+        "unknownQuery": false,
+        "status": 200,
+        "contentLength": -1,
+        "transferEncoding": false,
+        "timeoutMillis": "1000",
+        "errorCode": ""
+      },
+      {
+        "method": "GET",
+        "route": "/_matrix/client/v3/sync",
+        "query": [
+          "since",
+          "timeout",
+          "use_state_after"
+        ],
+        "unknownQuery": false,
+        "status": 200,
+        "contentLength": -1,
+        "transferEncoding": false,
+        "timeoutMillis": "1000",
+        "errorCode": ""
+      },
+      {
+        "method": "GET",
+        "route": "/_matrix/client/v3/rooms/_/event/_",
+        "query": [],
+        "unknownQuery": false,
+        "status": 200,
+        "contentLength": -1,
+        "transferEncoding": false,
+        "timeoutMillis": "absent_or_invalid",
+        "errorCode": ""
+      },
+      {
+        "method": "GET",
+        "route": "/_matrix/client/v3/rooms/_/event/_",
+        "query": [],
+        "unknownQuery": false,
+        "status": 200,
+        "contentLength": -1,
+        "transferEncoding": false,
+        "timeoutMillis": "absent_or_invalid",
+        "errorCode": ""
+      }
+    ],
+    "suiteSeconds": 63.437
+  },
+  "hostedProviderRegression": {
+    "runId": 41231913637,
+    "mobileCommit": "538a182723861b8124df7fa9a5c94ec5acfd9ffc",
+    "platformDriverCommit": "d425e6d867f6ddcea326c2d93338fbd828fb0f1c",
+    "result": {
+      "conclusion": "success",
+      "jobs": [
+        {
+          "completedAt": "2026-10-31T19:06:06Z",
+          "conclusion": "success",
+          "databaseId": 124627718790,
+          "name": "android-web (classic)",
+          "startedAt": "2026-10-31T18:57:52Z",
+          "status": "completed",
+          "steps": [
+            {
+              "completedAt": "2026-10-31T18:57:57Z",
+              "conclusion": "success",
+              "name": "Set up job",
+              "number": 1,
+              "startedAt": "2026-10-31T18:57:53Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T18:57:59Z",
+              "conclusion": "success",
+              "name": "Run actions/checkout@v4",
+              "number": 2,
+              "startedAt": "2026-10-31T18:57:57Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T18:58:01Z",
+              "conclusion": "success",
+              "name": "Run actions/checkout@v4",
+              "number": 3,
+              "startedAt": "2026-10-31T18:57:59Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T18:58:01Z",
+              "conclusion": "success",
+              "name": "Run actions/setup-java@v4",
+              "number": 4,
+              "startedAt": "2026-10-31T18:58:01Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T18:58:05Z",
+              "conclusion": "success",
+              "name": "Run gradle/actions/setup-gradle@v4",
+              "number": 5,
+              "startedAt": "2026-10-31T18:58:01Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T18:58:13Z",
+              "conclusion": "success",
+              "name": "Run android-actions/setup-android@v3",
+              "number": 6,
+              "startedAt": "2026-10-31T18:58:05Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T18:58:15Z",
+              "conclusion": "success",
+              "name": "Run sdkmanager 'platforms;android-36' 'build-tools;36.0.0'",
+              "number": 7,
+              "startedAt": "2026-10-31T18:58:13Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T19:02:53Z",
+              "conclusion": "success",
+              "name": "Build debug-only isolated fixture",
+              "number": 8,
+              "startedAt": "2026-10-31T18:58:15Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T19:02:56Z",
+              "conclusion": "success",
+              "name": "Run actions/setup-node@v4",
+              "number": 9,
+              "startedAt": "2026-10-31T19:02:53Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T19:02:58Z",
+              "conclusion": "success",
+              "name": "Run npm ci --ignore-scripts --no-audit --no-fund",
+              "number": 10,
+              "startedAt": "2026-10-31T19:02:56Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T19:03:19Z",
+              "conclusion": "success",
+              "name": "Run npx playwright install --with-deps chromium",
+              "number": 11,
+              "startedAt": "2026-10-31T19:02:58Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T19:03:19Z",
+              "conclusion": "success",
+              "name": "Enable KVM for the owned runner emulator",
+              "number": 12,
+              "startedAt": "2026-10-31T19:03:19Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T19:06:01Z",
+              "conclusion": "success",
+              "name": "Run reactivecircus/android-emulator-runner@v2",
+              "number": 13,
+              "startedAt": "2026-10-31T19:03:19Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T19:06:02Z",
+              "conclusion": "success",
+              "name": "Run actions/upload-artifact@v4",
+              "number": 14,
+              "startedAt": "2026-10-31T19:06:01Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T19:06:02Z",
+              "conclusion": "success",
+              "name": "Post Run actions/setup-node@v4",
+              "number": 24,
+              "startedAt": "2026-10-31T19:06:02Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T19:06:03Z",
+              "conclusion": "success",
+              "name": "Post Run gradle/actions/setup-gradle@v4",
+              "number": 25,
+              "startedAt": "2026-10-31T19:06:02Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T19:06:03Z",
+              "conclusion": "success",
+              "name": "Post Run actions/setup-java@v4",
+              "number": 26,
+              "startedAt": "2026-10-31T19:06:03Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T19:06:03Z",
+              "conclusion": "success",
+              "name": "Post Run actions/checkout@v4",
+              "number": 27,
+              "startedAt": "2026-10-31T19:06:03Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T19:06:03Z",
+              "conclusion": "success",
+              "name": "Post Run actions/checkout@v4",
+              "number": 28,
+              "startedAt": "2026-10-31T19:06:03Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T19:06:03Z",
+              "conclusion": "success",
+              "name": "Complete job",
+              "number": 29,
+              "startedAt": "2026-10-31T19:06:03Z",
+              "status": "completed"
+            }
+          ],
+          "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/41231913637/job/124627718790"
+        },
+        {
+          "completedAt": "2026-10-31T19:04:44Z",
+          "conclusion": "success",
+          "databaseId": 124627718806,
+          "name": "android-web (native)",
+          "startedAt": "2026-10-31T18:57:52Z",
+          "status": "completed",
+          "steps": [
+            {
+              "completedAt": "2026-10-31T18:57:56Z",
+              "conclusion": "success",
+              "name": "Set up job",
+              "number": 1,
+              "startedAt": "2026-10-31T18:57:53Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T18:57:57Z",
+              "conclusion": "success",
+              "name": "Run actions/checkout@v4",
+              "number": 2,
+              "startedAt": "2026-10-31T18:57:56Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T18:58:00Z",
+              "conclusion": "success",
+              "name": "Run actions/checkout@v4",
+              "number": 3,
+              "startedAt": "2026-10-31T18:57:57Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T18:58:00Z",
+              "conclusion": "success",
+              "name": "Run actions/setup-java@v4",
+              "number": 4,
+              "startedAt": "2026-10-31T18:58:00Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T18:58:02Z",
+              "conclusion": "success",
+              "name": "Run gradle/actions/setup-gradle@v4",
+              "number": 5,
+              "startedAt": "2026-10-31T18:58:00Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T18:58:06Z",
+              "conclusion": "success",
+              "name": "Run android-actions/setup-android@v3",
+              "number": 6,
+              "startedAt": "2026-10-31T18:58:02Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T18:58:07Z",
+              "conclusion": "success",
+              "name": "Run sdkmanager 'platforms;android-36' 'build-tools;36.0.0'",
+              "number": 7,
+              "startedAt": "2026-10-31T18:58:06Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T19:01:27Z",
+              "conclusion": "success",
+              "name": "Build debug-only isolated fixture",
+              "number": 8,
+              "startedAt": "2026-10-31T18:58:07Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T19:01:29Z",
+              "conclusion": "success",
+              "name": "Run actions/setup-node@v4",
+              "number": 9,
+              "startedAt": "2026-10-31T19:01:27Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T19:01:31Z",
+              "conclusion": "success",
+              "name": "Run npm ci --ignore-scripts --no-audit --no-fund",
+              "number": 10,
+              "startedAt": "2026-10-31T19:01:29Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T19:01:47Z",
+              "conclusion": "success",
+              "name": "Run npx playwright install --with-deps chromium",
+              "number": 11,
+              "startedAt": "2026-10-31T19:01:31Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T19:01:47Z",
+              "conclusion": "success",
+              "name": "Enable KVM for the owned runner emulator",
+              "number": 12,
+              "startedAt": "2026-10-31T19:01:47Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T19:04:39Z",
+              "conclusion": "success",
+              "name": "Run reactivecircus/android-emulator-runner@v2",
+              "number": 13,
+              "startedAt": "2026-10-31T19:01:47Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T19:04:40Z",
+              "conclusion": "success",
+              "name": "Run actions/upload-artifact@v4",
+              "number": 14,
+              "startedAt": "2026-10-31T19:04:39Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T19:04:41Z",
+              "conclusion": "success",
+              "name": "Post Run actions/setup-node@v4",
+              "number": 24,
+              "startedAt": "2026-10-31T19:04:41Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T19:04:41Z",
+              "conclusion": "success",
+              "name": "Post Run gradle/actions/setup-gradle@v4",
+              "number": 25,
+              "startedAt": "2026-10-31T19:04:41Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T19:04:41Z",
+              "conclusion": "success",
+              "name": "Post Run actions/setup-java@v4",
+              "number": 26,
+              "startedAt": "2026-10-31T19:04:41Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T19:04:41Z",
+              "conclusion": "success",
+              "name": "Post Run actions/checkout@v4",
+              "number": 27,
+              "startedAt": "2026-10-31T19:04:41Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T19:04:41Z",
+              "conclusion": "success",
+              "name": "Post Run actions/checkout@v4",
+              "number": 28,
+              "startedAt": "2026-10-31T19:04:41Z",
+              "status": "completed"
+            },
+            {
+              "completedAt": "2026-10-31T19:04:41Z",
+              "conclusion": "success",
+              "name": "Complete job",
+              "number": 29,
+              "startedAt": "2026-10-31T19:04:41Z",
+              "status": "completed"
+            }
+          ],
+          "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/41231913637/job/124627718806"
+        }
+      ],
+      "status": "completed"
+    },
+    "proofs": [
+      {
+        "schemaVersion": 1,
+        "runId": "7f4ebb141f174091b68133c39f4264ac",
+        "kind": "isolated_provider_proof",
+        "complete": true,
+        "productAcceptance": false,
+        "capacityAcceptance": false,
+        "images": {
+          "synapse": {
+            "reference": "ghcr.io/element-hq/synapse:v1.164.1@sha256:fa4aa980f279bcf26d4e7ecc2a2c9a701c73f2ebe8841da9bdcf3b2fdf693d75",
+            "id": "sha256:b2d38d6decacc092e0fee11e9f26efdb2045f2dd8cac0bcf41e5b50195c256b4",
+            "digests": [
+              "ghcr.io/element-hq/synapse@sha256:fa4aa980f279bcf26d4e7ecc2a2c9a701c73f2ebe8841da9bdcf3b2fdf693d75"
+            ]
+          },
+          "livekit": {
+            "reference": "livekit/livekit-server:v1.13.11@sha256:25cd902de7cacbd5f1f779f6a6ac1eae20ba8f56b0935934ce6b0ab80d1e3d20",
+            "id": "sha256:0e20c255a2c17000c52d0631b79737a4216c06bc51df13878768df01261c8dfd",
+            "digests": [
+              "livekit/livekit-server@sha256:25cd902de7cacbd5f1f779f6a6ac1eae20ba8f56b0935934ce6b0ab80d1e3d20"
+            ]
+          },
+          "postgres": {
+            "reference": "postgres:18.6-alpine@sha256:10a5c69a83035ab5239f5620d708520e8b28f5aa1f2b20143e6024532edadfb5",
+            "id": "sha256:57b23a0326ee442e83b3d3fa027c5a148be0a392d7c91d1ca4e1e70131ee859a",
+            "digests": [
+              "postgres@sha256:10a5c69a83035ab5239f5620d708520e8b28f5aa1f2b20143e6024532edadfb5"
+            ]
+          }
+        },
+        "checks": {
+          "wrong_issuer": true,
+          "wrong_audience": true,
+          "expired_jwt_beyond_provider_leeway": true,
+          "public_registration_disabled": true,
+          "loopback_only_http": true,
+          "isolated_dedicated_network": true,
+          "provider_protocol_counters": true,
+          "browser_e2ee_restart_media": true,
+          "browser_offline_invitee_first_message_sender_offline": true,
+          "android_requested_sync_protocol": true,
+          "android_web_bidirectional_e2ee": true,
+          "android_sdk_refresh_preserves_device_key": true,
+          "android_sdk_queue_encrypted_logical_ids": true,
+          "android_encrypts_for_offline_invitee_before_join": true
+        },
+        "cleanup": true,
+        "sourceSha256": {
+          "tool/check_collaboration_providers.py": "da39c44d9a1ec59df4118b4900f11c29be3acf3fae74ec45dd2ce7b5e9b76ba1",
+          "tool/test_collaboration_providers.py": "a22fd049c7ffb11601f9496679b4093ecec64dea47cafcfce3dae827e3110fa0",
+          "tool/collaboration_native_device.py": "7d938a326bff6ff2585ac80ee122b587a744c9f60654e34e4e174124d0797ed4",
+          "tool/test_collaboration_native_device.py": "e52b8af869182cbe73688460709d887746a963a671ec1a0b2907262f544d3eb5",
+          "tool/collaboration_protocol_metrics.py": "602e33d3c946e13468e3345ebe2d39c8ac3b443fee93577c6c71b44a3f5e2bb1",
+          "tool/test_collaboration_protocol_metrics.py": "c83ec8ca57e3d6d9e26e910428480a1d87e4dad0c86df8d5aa2b422ac4327a52",
+          "tool/collaboration-proof/package.json": "f499358763283beb73dd76606dde7e28122b6787494529ad518fef5718062cad",
+          "tool/collaboration-proof/package-lock.json": "031dbd57065817fbe2e119d87bb3e9588e26d4814835219dc950c4dddff51c56",
+          "tool/collaboration-proof/images.json": "63aa4b37949053e6574f9f4ae7ff1d22c02a59d8955a141c6aae5b2257e89f50",
+          "tool/collaboration-proof/index.html": "e5cadc31789aa95d2b718905dd44201da49a29678b913db9a7563fdf907ba7d0",
+          "tool/collaboration-proof/playwright.config.mjs": "33b5dd2896bd6a602e54a9c8154c679ee31b473e7bc9a0ff9da8864ca429381c",
+          "tool/collaboration-proof/src/probe.js": "b452de9882c7f121e811bde62bca92eaf678ce785030d4c715b99b316cb9a5f6",
+          "tool/collaboration-proof/tests/providers.spec.mjs": "1d498852844d41f350fd5ef295484acafb18bc8b90d9eb7daf3d05825c6ca3c2",
+          "tool/collaboration-proof/tests/native.spec.mjs": "4f54d59c7ec413365aa6a40696e030306665b926ea05a86af4a410cb58764835"
+        },
+        "observations": {
+          "recent_expired_jwt_accepted_by_provider": true,
+          "strict_hris_broker_expiry_required": true
+        },
+        "native": {
+          "apkSha256": "7221d29ac60b90e90c06e10e50fa69fa9e267ffc3cfe2ce60974281746be17d4",
+          "package": "dev.fajar.hris.collaboration.proof",
+          "avd": "hris-mobile-dev",
+          "androidApi": "35",
+          "syncMode": "classic"
+        },
+        "browser": {
+          "expected": 2,
+          "unexpected": 0,
+          "flaky": 0,
+          "skipped": 0,
+          "duration": 35087.592
+        },
+        "nativeDiagnostic": {
+          "replyComplete": true,
+          "resultComplete": true,
+          "instrumentationComplete": true,
+          "failureFrames": [],
+          "progress": {
+            "stage": "sending_offline_message"
+          }
+        },
+        "protocolCounters": {
+          "scope": "Composite SDK scenarios and explicit fixture control requests; not a gateway allowlist",
+          "requests": [
+            {
+              "method": "GET",
+              "servlet": "AccountDataServlet",
+              "count": 5
+            },
+            {
+              "method": "GET",
+              "servlet": "CapabilitiesRestServlet",
+              "count": 7
+            },
+            {
+              "method": "GET",
+              "servlet": "GetFilterRestServlet",
+              "count": 4
+            },
+            {
+              "method": "GET",
+              "servlet": "HealthResource",
+              "count": 2
+            },
+            {
+              "method": "GET",
+              "servlet": "PushRuleRestServlet",
+              "count": 7
+            },
+            {
+              "method": "GET",
+              "servlet": "RoomEventContextServlet",
+              "count": 1
+            },
+            {
+              "method": "GET",
+              "servlet": "RoomEventServlet",
+              "count": 7
+            },
+            {
+              "method": "GET",
+              "servlet": "RoomKeysNewVersionServlet",
+              "count": 7
+            },
+            {
+              "method": "GET",
+              "servlet": "RoomMemberListRestServlet",
+              "count": 2
+            },
+            {
+              "method": "GET",
+              "servlet": "RoomMessageListRestServlet",
+              "count": 2
+            },
+            {
+              "method": "GET",
+              "servlet": "RoomStateEventRestServlet",
+              "count": 1
+            },
+            {
+              "method": "GET",
+              "servlet": "SyncRestServlet",
+              "count": 89
+            },
+            {
+              "method": "GET",
+              "servlet": "UserRegisterServlet",
+              "count": 4
+            },
+            {
+              "method": "GET",
+              "servlet": "VersionsRestServlet",
+              "count": 9
+            },
+            {
+              "method": "GET",
+              "servlet": "VoipRestServlet",
+              "count": 7
+            },
+            {
+              "method": "OPTIONS",
+              "servlet": "RootOptionsRedirectResource",
+              "count": 104
+            },
+            {
+              "method": "POST",
+              "servlet": "CreateFilterRestServlet",
+              "count": 3
+            },
+            {
+              "method": "POST",
+              "servlet": "JoinRoomAliasServlet",
+              "count": 3
+            },
+            {
+              "method": "POST",
+              "servlet": "KeyQueryServlet",
+              "count": 35
+            },
+            {
+              "method": "POST",
+              "servlet": "KeyUploadServlet",
+              "count": 14
+            },
+            {
+              "method": "POST",
+              "servlet": "LoginRestServlet",
+              "count": 8
+            },
+            {
+              "method": "POST",
+              "servlet": "OneTimeKeyServlet",
+              "count": 2
+            },
+            {
+              "method": "POST",
+              "servlet": "RefreshTokenServlet",
+              "count": 3
+            },
+            {
+              "method": "POST",
+              "servlet": "RegisterRestServlet",
+              "count": 1
+            },
+            {
+              "method": "POST",
+              "servlet": "RoomCreateRestServlet",
+              "count": 5
+            },
+            {
+              "method": "POST",
+              "servlet": "RoomMembershipRestServlet",
+              "count": 2
+            },
+            {
+              "method": "POST",
+              "servlet": "UserRegisterServlet",
+              "count": 4
+            },
+            {
+              "method": "PUT",
+              "servlet": "AccountDataServlet",
+              "count": 1
+            },
+            {
+              "method": "PUT",
+              "servlet": "RoomSendEventRestServlet",
+              "count": 7
+            },
+            {
+              "method": "PUT",
+              "servlet": "SendToDeviceRestServlet",
+              "count": 6
+            }
+          ]
+        },
+        "elapsedSeconds": 81.13
+      },
+      {
+        "schemaVersion": 1,
+        "runId": "c59dcef849184cc29e982ebfc94d92d6",
+        "kind": "isolated_provider_proof",
+        "complete": true,
+        "productAcceptance": false,
+        "capacityAcceptance": false,
+        "images": {
+          "synapse": {
+            "reference": "ghcr.io/element-hq/synapse:v1.164.1@sha256:fa4aa980f279bcf26d4e7ecc2a2c9a701c73f2ebe8841da9bdcf3b2fdf693d75",
+            "id": "sha256:b2d38d6decacc092e0fee11e9f26efdb2045f2dd8cac0bcf41e5b50195c256b4",
+            "digests": [
+              "ghcr.io/element-hq/synapse@sha256:fa4aa980f279bcf26d4e7ecc2a2c9a701c73f2ebe8841da9bdcf3b2fdf693d75"
+            ]
+          },
+          "livekit": {
+            "reference": "livekit/livekit-server:v1.13.11@sha256:25cd902de7cacbd5f1f779f6a6ac1eae20ba8f56b0935934ce6b0ab80d1e3d20",
+            "id": "sha256:0e20c255a2c17000c52d0631b79737a4216c06bc51df13878768df01261c8dfd",
+            "digests": [
+              "livekit/livekit-server@sha256:25cd902de7cacbd5f1f779f6a6ac1eae20ba8f56b0935934ce6b0ab80d1e3d20"
+            ]
+          },
+          "postgres": {
+            "reference": "postgres:18.6-alpine@sha256:10a5c69a83035ab5239f5620d708520e8b28f5aa1f2b20143e6024532edadfb5",
+            "id": "sha256:57b23a0326ee442e83b3d3fa027c5a148be0a392d7c91d1ca4e1e70131ee859a",
+            "digests": [
+              "postgres@sha256:10a5c69a83035ab5239f5620d708520e8b28f5aa1f2b20143e6024532edadfb5"
+            ]
+          }
+        },
+        "checks": {
+          "wrong_issuer": true,
+          "wrong_audience": true,
+          "expired_jwt_beyond_provider_leeway": true,
+          "public_registration_disabled": true,
+          "loopback_only_http": true,
+          "isolated_dedicated_network": true,
+          "provider_protocol_counters": true,
+          "browser_e2ee_restart_media": true,
+          "browser_offline_invitee_first_message_sender_offline": true,
+          "android_requested_sync_protocol": true,
+          "android_web_bidirectional_e2ee": true,
+          "android_sdk_refresh_preserves_device_key": true,
+          "android_sdk_queue_encrypted_logical_ids": true,
+          "android_encrypts_for_offline_invitee_before_join": true
+        },
+        "cleanup": true,
+        "sourceSha256": {
+          "tool/check_collaboration_providers.py": "da39c44d9a1ec59df4118b4900f11c29be3acf3fae74ec45dd2ce7b5e9b76ba1",
+          "tool/test_collaboration_providers.py": "a22fd049c7ffb11601f9496679b4093ecec64dea47cafcfce3dae827e3110fa0",
+          "tool/collaboration_native_device.py": "7d938a326bff6ff2585ac80ee122b587a744c9f60654e34e4e174124d0797ed4",
+          "tool/test_collaboration_native_device.py": "e52b8af869182cbe73688460709d887746a963a671ec1a0b2907262f544d3eb5",
+          "tool/collaboration_protocol_metrics.py": "602e33d3c946e13468e3345ebe2d39c8ac3b443fee93577c6c71b44a3f5e2bb1",
+          "tool/test_collaboration_protocol_metrics.py": "c83ec8ca57e3d6d9e26e910428480a1d87e4dad0c86df8d5aa2b422ac4327a52",
+          "tool/collaboration-proof/package.json": "f499358763283beb73dd76606dde7e28122b6787494529ad518fef5718062cad",
+          "tool/collaboration-proof/package-lock.json": "031dbd57065817fbe2e119d87bb3e9588e26d4814835219dc950c4dddff51c56",
+          "tool/collaboration-proof/images.json": "63aa4b37949053e6574f9f4ae7ff1d22c02a59d8955a141c6aae5b2257e89f50",
+          "tool/collaboration-proof/index.html": "e5cadc31789aa95d2b718905dd44201da49a29678b913db9a7563fdf907ba7d0",
+          "tool/collaboration-proof/playwright.config.mjs": "33b5dd2896bd6a602e54a9c8154c679ee31b473e7bc9a0ff9da8864ca429381c",
+          "tool/collaboration-proof/src/probe.js": "b452de9882c7f121e811bde62bca92eaf678ce785030d4c715b99b316cb9a5f6",
+          "tool/collaboration-proof/tests/providers.spec.mjs": "1d498852844d41f350fd5ef295484acafb18bc8b90d9eb7daf3d05825c6ca3c2",
+          "tool/collaboration-proof/tests/native.spec.mjs": "4f54d59c7ec413365aa6a40696e030306665b926ea05a86af4a410cb58764835"
+        },
+        "observations": {
+          "recent_expired_jwt_accepted_by_provider": true,
+          "strict_hris_broker_expiry_required": true
+        },
+        "native": {
+          "apkSha256": "90dc1f61cb6c9d3e31067735c74ebe4774f96fd81545902337362d398aa7e506",
+          "package": "dev.fajar.hris.collaboration.proof",
+          "avd": "hris-mobile-dev",
+          "androidApi": "35",
+          "syncMode": "native"
+        },
+        "browser": {
+          "expected": 2,
+          "unexpected": 0,
+          "flaky": 0,
+          "skipped": 0,
+          "duration": 21794.571
+        },
+        "nativeDiagnostic": {
+          "replyComplete": true,
+          "resultComplete": true,
+          "instrumentationComplete": true,
+          "failureFrames": [],
+          "progress": {
+            "stage": "sending_offline_message"
+          }
+        },
+        "protocolCounters": {
+          "scope": "Composite SDK scenarios and explicit fixture control requests; not a gateway allowlist",
+          "requests": [
+            {
+              "method": "GET",
+              "servlet": "AccountDataServlet",
+              "count": 5
+            },
+            {
+              "method": "GET",
+              "servlet": "CapabilitiesRestServlet",
+              "count": 7
+            },
+            {
+              "method": "GET",
+              "servlet": "GetFilterRestServlet",
+              "count": 4
+            },
+            {
+              "method": "GET",
+              "servlet": "HealthResource",
+              "count": 2
+            },
+            {
+              "method": "GET",
+              "servlet": "PushRuleRestServlet",
+              "count": 7
+            },
+            {
+              "method": "GET",
+              "servlet": "RoomEventContextServlet",
+              "count": 1
+            },
+            {
+              "method": "GET",
+              "servlet": "RoomEventServlet",
+              "count": 7
+            },
+            {
+              "method": "GET",
+              "servlet": "RoomKeysNewVersionServlet",
+              "count": 7
+            },
+            {
+              "method": "GET",
+              "servlet": "RoomMemberListRestServlet",
+              "count": 3
+            },
+            {
+              "method": "GET",
+              "servlet": "RoomMessageListRestServlet",
+              "count": 2
+            },
+            {
+              "method": "GET",
+              "servlet": "SyncRestServlet",
+              "count": 76
+            },
+            {
+              "method": "GET",
+              "servlet": "UserRegisterServlet",
+              "count": 4
+            },
+            {
+              "method": "GET",
+              "servlet": "VersionsRestServlet",
+              "count": 9
+            },
+            {
+              "method": "GET",
+              "servlet": "VoipRestServlet",
+              "count": 7
+            },
+            {
+              "method": "OPTIONS",
+              "servlet": "RootOptionsRedirectResource",
+              "count": 103
+            },
+            {
+              "method": "POST",
+              "servlet": "CreateFilterRestServlet",
+              "count": 3
+            },
+            {
+              "method": "POST",
+              "servlet": "JoinRoomAliasServlet",
+              "count": 3
+            },
+            {
+              "method": "POST",
+              "servlet": "KeyQueryServlet",
+              "count": 36
+            },
+            {
+              "method": "POST",
+              "servlet": "KeyUploadServlet",
+              "count": 13
+            },
+            {
+              "method": "POST",
+              "servlet": "LoginRestServlet",
+              "count": 8
+            },
+            {
+              "method": "POST",
+              "servlet": "OneTimeKeyServlet",
+              "count": 2
+            },
+            {
+              "method": "POST",
+              "servlet": "RefreshTokenServlet",
+              "count": 3
+            },
+            {
+              "method": "POST",
+              "servlet": "RegisterRestServlet",
+              "count": 1
+            },
+            {
+              "method": "POST",
+              "servlet": "RoomCreateRestServlet",
+              "count": 4
+            },
+            {
+              "method": "POST",
+              "servlet": "RoomMembershipRestServlet",
+              "count": 2
+            },
+            {
+              "method": "POST",
+              "servlet": "SlidingSyncRestServlet",
+              "count": 19
+            },
+            {
+              "method": "POST",
+              "servlet": "UserRegisterServlet",
+              "count": 4
+            },
+            {
+              "method": "PUT",
+              "servlet": "AccountDataServlet",
+              "count": 1
+            },
+            {
+              "method": "PUT",
+              "servlet": "RoomSendEventRestServlet",
+              "count": 7
+            },
+            {
+              "method": "PUT",
+              "servlet": "SendToDeviceRestServlet",
+              "count": 6
+            }
+          ]
+        },
+        "elapsedSeconds": 61.379
+      }
+    ]
+  }
 }

@@ -1,0 +1,80 @@
+name: Collaboration control
+
+on:
+  push:
+    branches: [feat/communications]
+    paths:
+      - 'features/collaboration/**'
+      - 'core/network/**'
+      - 'core/workspace/domain/**'
+      - 'settings.gradle.kts'
+      - 'gradle/libs.versions.toml'
+      - 'build-logic/**'
+      - '.github/workflows/collaboration-control.yml'
+  pull_request:
+    paths:
+      - 'features/collaboration/**'
+      - 'core/network/**'
+      - 'core/workspace/domain/**'
+      - 'settings.gradle.kts'
+      - 'gradle/libs.versions.toml'
+      - 'build-logic/**'
+      - '.github/workflows/collaboration-control.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: collaboration-control-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  portable:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: gradle/actions/setup-gradle@v4
+      - uses: android-actions/setup-android@v3
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check setup transport and ownership
+        run: >-
+          ./gradlew --no-daemon --no-parallel --max-workers=2
+          :features:collaboration:domain:desktopTest :features:collaboration:data:desktopTest
+          :features:collaboration:domain:wasmJsBrowserTest :features:collaboration:data:wasmJsBrowserTest
+          :features:collaboration:data:assemble formatCheck detekt architectureCheck
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: collaboration-control-portable
+          path: features/collaboration/**/build/test-results/
+  apple:
+    runs-on: macos-15
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - name: Select Xcode 26.3
+        run: sudo xcode-select -s /Applications/Xcode_26.3.app/Contents/Developer
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Check Apple setup adapter
+        run: >-
+          ./gradlew --no-daemon --no-parallel --max-workers=2
+          :features:collaboration:domain:iosSimulatorArm64Test
+          :features:collaboration:data:iosSimulatorArm64Test
+          :features:collaboration:data:compileKotlinIosArm64
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: collaboration-control-apple
+          path: features/collaboration/**/build/test-results/

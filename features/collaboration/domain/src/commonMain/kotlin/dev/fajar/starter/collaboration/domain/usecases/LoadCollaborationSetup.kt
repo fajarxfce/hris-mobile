@@ -1,0 +1,68 @@
+package dev.fajar.starter.collaboration.domain.usecases
+
+import dev.fajar.starter.collaboration.domain.entities.*
+import dev.fajar.starter.collaboration.domain.policies.collaborationRequestOwner
+import dev.fajar.starter.collaboration.domain.repositories.CollaborationSetupRepository
+import dev.fajar.starter.common.config.AppBuild
+import dev.fajar.starter.common.result.*
+import dev.fajar.starter.identity.domain.entities.IdentityServer
+import dev.fajar.starter.identity.domain.repositories.SessionRepository
+import dev.fajar.starter.workspace.domain.policies.workspaceFailure
+import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
+import kotlin.time.Clock
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.ensureActive
+
+class LoadCollaborationSetup(
+    private val sessions: SessionRepository,
+    private val workspaces: WorkspaceRepository,
+    private val setup: CollaborationSetupRepository,
+    private val server: IdentityServer,
+    private val build: AppBuild,
+    private val clock: Clock,
+) {
+    suspend operator fun invoke(workspaceId: String): AppResult<CollaborationSetup> {
+        val owner =
+            when (val captured = capture(workspaceId)) {
+                is AppResult.Failed -> return captured
+                is AppResult.Success -> captured.value
+            }
+        val result = setup.read(owner)
+        currentCoroutineContext().ensureActive()
+        when (val current = capture(workspaceId)) {
+            is AppResult.Failed -> return current
+            is AppResult.Success ->
+                if (current.value != owner)
+                    return workspaceFailure("client.session_changed", FailureKind.Unauthorized)
+        }
+        currentCoroutineContext().ensureActive()
+        return when (result) {
+            is AppResult.Failed -> result
+            is AppResult.Success -> AppResult.Success(CollaborationSetup(owner, result.value))
+        }
+    }
+
+    private suspend fun capture(workspaceId: String): AppResult<CollaborationOwner> {
+        val session =
+            when (val current = sessions.current()) {
+                is AppResult.Failed -> return current
+                is AppResult.Success ->
+                    current.value
+                        ?: return workspaceFailure(
+                            "client.session_changed",
+                            FailureKind.Unauthorized,
+                        )
+            }
+        val workspace =
+            when (val current = workspaces.current(session.id)) {
+                is AppResult.Failed -> return current
+                is AppResult.Success -> current.value
+            }
+        val latest =
+            when (val current = sessions.current()) {
+                is AppResult.Failed -> return current
+                is AppResult.Success -> current.value
+            }
+        return collaborationRequestOwner(workspaceId, latest, workspace, server, build, clock.now())
+    }
+}

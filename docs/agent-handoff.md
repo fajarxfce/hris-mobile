@@ -2,6 +2,24 @@
 
 ## Active collaboration implementation — 31 October 2026
 
+The product [native setup modules](collaboration-setup.md) now provide bounded
+registration, status, retry and bootstrap adapters plus a scope-safe read use case.
+Eight domain and seven transport cases pass; root checks and setup assembly pass
+in 334s (2,017 desktop cases). [Evidence](measurements/collaboration-mobile-setup-2026-10-31.json)
+retains sources and the initial compilation/UI-fixture corrections. The module is
+not yet installed into app DI or navigation. `collaboration-control.yml` checks
+desktop/browser and Apple targets; inspect its exact hosted result after push.
+Next: encrypted durable setup commands, pinned bootstrap client build, SDK store
+ownership and credentials, then chat UI/outbox and all P0–P8. No feature accepted.
+
+Hosted SDK evidence is now retained: Mobile `538a1827` HRIS run `41231913617`
+passed all steps, 63.437s, cleanup true, APK `9900b041`; twelve Mobile and ten
+Platform hashes match their exact commits. Platform control `41231798310` passed
+both jobs. Dual provider regression `41231913637` also passed both modes with
+cleanup true: classic 35.088s/81.130s, native 21.795s/61.379s. All fourteen driver
+hashes match `d425e6d8`; results are in the native HRIS measurement. These are
+protocol fixtures, not product queue-restart or physical-device acceptance.
+
 Existing expense UI scenarios now pin the observer clock to their October claim
 fixtures. The company timezone had crossed into November, correctly excluding the
 October data in production and exposing a nondeterministic test. No product date
