@@ -1,0 +1,124 @@
+{
+  "date": "2026-10-31",
+  "change": "Native participant/direct/room control adapters, scoped read admission and application bindings",
+  "baseMobileCommit": "9f83dcdc2f42e69441569f050c5428746ef38f8a",
+  "platformContractCommit": "55cf8f941734a6eedd441140a81da69d36f57538",
+  "sourceSha256": {
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt": "bfb45641d60cef8b8a78bb577e4cb218410b5d376e1b213ab0076790e6d46bd7",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/api/CollaborationConversationApi.kt": "747ad6b4a36d8ca6b6b19582c845948026d007515548ef47c8b77fde04a76246",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/datasources/ApiCollaborationConversationRemoteSource.kt": "3d8b32b86c5b4033f3df4052fef1f83d62a4983c1ad8adc4eca28516900bd22a",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/datasources/CollaborationConversationRemoteSource.kt": "a0e15743151f638e6963e4a9e94a9c6de516860710fa43f49561396cd9c76e21",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt": "b29c2c3f610503903505a4442397086cdf0938f741185a3e727556370d04dae5",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/dto/CollaborationConversationDto.kt": "45d9130c8690beaf9ac0accbc5359d43b1cace9e023c9efc1988507c4d53b03b",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/mappers/CollaborationConversationMapper.kt": "402b99349ebc5cb0e2690dcf981a1f7bb63acc7cc4a5d19c40bc5d3d78160284",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/RemoteCollaborationConversationRepository.kt": "9c31cb42ec612dd6464e42a80db25b0b0dea9d1ae35b87c060b8ee01a4d057c6",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationConversationTransportTest.kt": "112ee9918e735c0048e46ae40c04f4c51a595ea19a1dd6ff14f565ab8128e1b7",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationConversationValidationTest.kt": "e085ae94c040893a87f3bf685d9ed0377e98b7bb0000db7e0f01a00cfaf41887",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationConversations.kt": "ee4998c26f113ced2a334c669185e502b5771d8406e50e1cc7a1856de55ee5c4",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationConversationRepository.kt": "8f3867edb86ce2c120fb24994167c79bcc68f2d79e522b9921b8d6643d4f7b0e",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ReadCollaborationConversations.kt": "8ccaef3b4a0a721763133ba3a4f48cbd27766c2aef8618e1c7e389bf9886bf30",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationConversationReadTest.kt": "35e10e3fe88175952cbb5aba2d8433da2bd8419235a13278d4f23b356316b218",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationTransportFixture.kt": "d85aa8eed24265173948d6fafbb6d5a49cb369efe41f831d1a7ee9d8e0843d4a",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationSetupFixture.kt": "dd0a64b5761c31d5a15499679aa049571555d06931728621d2032031af8e7849",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/CollaborationSetupOwner.kt": "9e54aa26bea624bd37290d751f1a8e5fc6f2d8fe40969a40604af85ce4b04c38",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationRequestPolicy.kt": "1d7731545a5acfbe42e97e6b42626f867b410b39a5f4805496f91f72b98744f4",
+    "features/collaboration/data/build.gradle.kts": "7c802266e7d7f5477d8d2b3dc969bfa2e3532c1f2947e9321505cc1b682b73b9",
+    "features/collaboration/domain/build.gradle.kts": "b95c5a24c279be2b87bbadff36cab419904698a86250dd0ee028780dcbf09d9c"
+  },
+  "platformContractSha256": {
+    "modules/collaboration/delivery/src/main/kotlin/dev/fajar/hris/collaboration/delivery/controllers/NativeCollaborationParticipantController.kt": "cce4193c25361a7043a60d6de2011375f12fe17e484a5e4cb184142ddfbaaa2b",
+    "modules/collaboration/delivery/src/main/kotlin/dev/fajar/hris/collaboration/delivery/controllers/NativeCollaborationDirectController.kt": "2c915993bdb62ec31b80227cbe8e5632fdd66a01c6217f8bcb70fc59ef3b01d4",
+    "modules/collaboration/delivery/src/main/kotlin/dev/fajar/hris/collaboration/delivery/controllers/NativeCollaborationDirectRoomController.kt": "07294d0ef34a2f37debcf6cd423bbc32a91719356fe6bc0d2956a8780016c4e7",
+    "docs/collaboration/participants.md": "2486b1c1285eea4c889577fd7df9824ee41f110aa3a7bde3b555300d4de7b77b",
+    "docs/collaboration/direct-conversations.md": "d49a06d176474ed4ecd66ac81b28e9641a5ff6fcac7fd767d392b2956c0046e5",
+    "docs/collaboration/direct-room-provisioning.md": "634736af28fb2aa8c9677bfab696db68ea25a7f5b091bab4e7d5b43028647a34"
+  },
+  "validation": {
+    "initial": {
+      "result": "failed",
+      "durationSeconds": 35,
+      "reason": "Test used nonexistent FailureKind.Forbidden; corrected to existing AccessDenied, without changing production mapping.",
+      "logSha256": "d4dd16592a7106071766a7afcc266b9e321965e36ebbbb0623b83c3565a380bc"
+    },
+    "focused": {
+      "result": "passed",
+      "durationSeconds": 58,
+      "targets": [
+        "domain/data desktopTest",
+        "domain/data wasmJsBrowserTest",
+        "data assemble",
+        "formatCheck",
+        "architectureCheck"
+      ],
+      "logSha256": "e214d0c77733612ec02a901e9434129d0c61634c05226764e95c643c2f47bd0a"
+    },
+    "application": {
+      "result": "passed",
+      "durationSeconds": 196,
+      "targets": [
+        ":check",
+        ":apps:shared:compileKotlinWasmJs",
+        ":apps:android:assembleDevDebug",
+        ":apps:android:lintDevDebug"
+      ],
+      "desktop": {
+        "tests": 2113,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "suites": 365
+      },
+      "lintErrors": 0,
+      "logSha256": "ff2bb67502c568d859fb0809b147035153e908d1cc05d504de184150f910cb9f"
+    },
+    "moduleTests": {
+      "domain/desktopTest": {
+        "tests": 58,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "suites": 6
+      },
+      "domain/wasmJsBrowserTest": {
+        "tests": 58,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "suites": 6
+      },
+      "data/desktopTest": {
+        "tests": 51,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "suites": 9
+      },
+      "data/wasmJsBrowserTest": {
+        "tests": 37,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "suites": 7
+      }
+    },
+    "apk": {
+      "sha256": "0b4376b6ef1f737b78c60a9a1a7fe7ac8058fc066cdad8e80fa168ecd0c41326",
+      "bytes": 290180827,
+      "installed": false
+    }
+  },
+  "coverage": [
+    "Literal participant queries, bounded UUID keyset pages and explicit native session authentication.",
+    "Canonical company/account/conversation scoping, version-12 opaque room identifiers and coherent provisioning states.",
+    "Immutable operation/payload through native refresh; explicit null initial and observed provisioning retry version.",
+    "Late permission/selection/account/native-family/deadline changes, denial priority over both success and failure, cancelled late response.",
+    "Invalid inputs do not reach HTTP; oversized responses and malformed receipts fail without adapter retry.",
+    "Actual application Koin graph resolves new repository and reader without startup network calls."
+  ],
+  "limitations": [
+    "Read transport is live discovery, not a retained offline message projection.",
+    "Mutation ports require durable command preparation/replay before product UI submission.",
+    "No chat routes, message delivery, SDK child ownership, live/schema rollout or phone installation claimed.",
+    "Hosted control/HRIS verification for the predecessor remains in progress; new source requires its own run."
+  ]
+}

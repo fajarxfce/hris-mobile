@@ -2,6 +2,33 @@
 
 ## Active collaboration implementation — 31 October 2026
 
+**Native conversation discovery/control adapters and scoped reads are now wired.**
+[Contract](collaboration-conversations.md) and
+[evidence](measurements/collaboration-conversation-control-2026-10-31.json) cover
+participants, DM list/detail/open and room status/setup. Bounded responses validate
+owner identities, UUID page progress, receipt versions and coherent room states.
+Reads reacquire native/company admission after successful or failed I/O; late
+selection/permission/session changes cannot publish obsolete data. Mutation ports
+preserve operation/payload through refresh but are not yet product actions: durable
+preparation/replay/reconciliation must come before submission from UI.
+
+Twenty new common cases pass: seven domain and thirteen data. Focused desktop/
+browser/assembly/quality passed in 58s after correcting a test enum name (35s
+initial compile failure). Final root/Wasm/Android/lint passed in 196s: 2,113 desktop
+cases, 58 domain browser and 37 data browser cases; zero lint errors. App bindings
+resolve the new reader/repository. APK built, not installed. Predecessor hosted
+control `41245001690` and HRIS `41245001517` are still running at this checkpoint.
+
+**Next: SDK sync/room child ownership, durable conversation commands and chat UI;
+then bootstrap recovery, owned offline projections/logical-ID reconciliation and
+all P0–P8.** No product group is accepted and no live/phone change. Starter AppAuth
+port `9740cb5` passed independent root/Android/lint (331 desktop cases); hosted
+verify `41245287269` remains separate. HRIS control adapters/policy stay here.
+
+## Earlier collaboration checkpoints
+
+Use the latest checkpoint above for the active queue; earlier next-step notes are historical.
+
 **Application DI and Android process ownership are now wired and locally verified.**
 `MaintainCollaborationRuntimeOwnership` closes obsolete SDK leases after session/
 company/permission/deadline changes, retains authoritative denials through cleanup
@@ -24,16 +51,13 @@ checks app bindings, Android assembly/lint, Wasm and Apple app compilation.
 room children owned through shutdown; then bootstrap uncertainty/build recovery,
 offline projections/logical-ID reconciliation and all P0–P8.** No product group is
 accepted. No live/schema or phone change. The generic AppAuth declaration/lint
-guard is being independently ported to Starter; keep HRIS runtime policy here.
+guard is now independently verified in Starter `9740cb5`; keep HRIS runtime policy here.
 
 Corrected provider CI `3cedb0b1`/`41242901470` passes both jobs/all steps: classic
 77.293s and native 75.327s, two browser cases each, cleanup true. All 14 Platform
 source hashes match `e0dbb567`; results are in the offline-signal measurement.
 Earlier cancelled runs and non-atomic-signal failures remain recorded below.
 
-## Earlier collaboration checkpoints
-
-Use the latest checkpoint above for the active queue; earlier next-step notes are historical.
 
 **Admitted restore now reopens existing protected runtime ownership.**
 `RestoreCollaborationRuntime` returns a paused matching resource or explicit empty

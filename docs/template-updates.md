@@ -531,3 +531,12 @@ Starter `58623f5` ports these two components and `CompactFiltersLayoutTest`
 unchanged, with independent root/Android/Web success (330 cases / 114 suites).
 Application pages, date/status scopes and period admission remain downstream.
 Hosted Starter follow-up: `41170061606`; update final evidence when complete.
+
+## Android AppAuth manifest dependency — 31 October 2026
+
+Mobile `9f83dcdc` exposed a missing direct dependency for the manifest redirect
+receiver under Android lint. The existing AppAuth catalog version is now declared
+by the Android app and lint runs in CI. Starter `9740cb5` independently passed
+root checks (331 desktop cases), dev assembly and lint with zero errors; hosted
+verify run `41245287269` follows that commit. HRIS collaboration runtime policy
+and its native API adapters stay in Mobile.
