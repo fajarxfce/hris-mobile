@@ -13,6 +13,24 @@ tests, source evidence and pushed atomic commits. Prove reusable foundations
 here before porting them to Starter. The completed prior scope below is history,
 not closure of this new implementation request.
 
+The latest driver records bounded method/static-servlet request counters from
+its owned Synapse metrics endpoint. Browser baseline passed in 15.512s; the
+Android/browser pair passed in 39.009s (18.498s scenarios), with complete cleanup.
+The unchanged proof APK `d3662eb9` matches source `e6dcb5ea`; no new compilation
+or root-check claim is made. [Protocol evidence](measurements/collaboration-sdk-protocol-surface-2026-10-31.json)
+retains both results and fifteen parser/ownership cases. Counters contain no
+account/room/device IDs, tokens or payloads and include fixture control/negative
+requests; they are not an automatic gateway allowlist.
+
+The fixture explicitly uses SlidingSyncVersion.NATIVE with SyncService. Eighteen
+SlidingSyncRestServlet requests occur only in the combined run; pinned Synapse
+implements MSC4186 Simplified Sliding Sync. Classic Kotlin syncV2/syncOnceV2 entry
+points exist but are not tested by this fixture. Product gateway integration must
+scope native lists/subscriptions/extensions and keep unverified rooms out of sync.
+Native CI now pins Platform `047897f9f5a7b126fd2db4ed5a918db3e11e364e`; inspect
+its exact hosted run after push. The emulator is stopped with data retained; no
+physical phone or live HRIS action occurred. Continue all implementation phases.
+
 The Android sender now creates a version-12 encrypted room with `invited` history
 while the enrolled browser peer is offline. It observes SDK encryption/member
 state, sends through the paused/resumed queue, then closes its SDK. The driver
@@ -25,7 +43,7 @@ warnings. An initial Detekt long-method failure was fixed by extracting result
 serialization; no check was suppressed.
 
 Native CI pins Platform `54eb3a667ebe47ff06fcb0c2a973824215f383b8`. The
-hosted [41204075013](https://github.com/fajarxfce/hris-mobile/actions/runs/41204075013),
+hosted [41204075013](https://github.com/fajarxfce/hris-mobile/actions/runs/41204075013)
 passed every job/step at `e6dcb5ea`. Both scenarios passed in 34.359s
 (82.746s owned run) with complete cleanup; driver hashes match the pin. This proves Android sender to an already-enrolled
 offline browser invitee, not native recipient-before-join or Swift interoperability.

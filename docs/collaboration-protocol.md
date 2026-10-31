@@ -30,7 +30,7 @@ With JDK 21 and Android SDK 36 configured, build:
 
 Boot the existing `hris-mobile-dev` emulator on port 5560 using
 [the development procedure](development.md#headless-android-emulator). From the
-Platform checkout at `54eb3a66`, run:
+Platform checkout at `047897f9`, run:
 
 ```sh
 python3 tool/check_collaboration_providers.py --docker-sudo \
@@ -158,7 +158,7 @@ warnings. An initial Detekt long-method failure was fixed by extracting result
 serialization; no check was suppressed.
 
 Native CI pins Platform `54eb3a667ebe47ff06fcb0c2a973824215f383b8`. The
-hosted [41204075013](https://github.com/fajarxfce/hris-mobile/actions/runs/41204075013),
+hosted [41204075013](https://github.com/fajarxfce/hris-mobile/actions/runs/41204075013)
 passed every job/step at `e6dcb5ea`. Both scenarios passed in 34.359s
 (82.746s owned run) with complete cleanup; driver hashes match the pin. This proves Android sender to an already-enrolled
 offline browser invitee, not native recipient-before-join or Swift interoperability.
@@ -167,3 +167,23 @@ exist. Durable restart/coalescing, product sessions/content and UI remain pendin
 The dedicated emulator is stopped with regular HRIS data retained. No physical
 phone, live service or employee message was touched; no Starter port is due for
 the isolated fixture. Continue all P0–P8 implementation.
+
+## Observed SDK protocol surface
+
+The latest driver records bounded method/static-servlet request counters from
+its owned Synapse metrics endpoint. Browser baseline passed in 15.512s; the
+Android/browser pair passed in 39.009s (18.498s scenarios), with complete cleanup.
+The unchanged proof APK `d3662eb9` matches source `e6dcb5ea`; no new compilation
+or root-check claim is made. [Protocol evidence](measurements/collaboration-sdk-protocol-surface-2026-10-31.json)
+retains both results and fifteen parser/ownership cases. Counters contain no
+account/room/device IDs, tokens or payloads and include fixture control/negative
+requests; they are not an automatic gateway allowlist.
+
+The fixture explicitly uses SlidingSyncVersion.NATIVE with SyncService. Eighteen
+SlidingSyncRestServlet requests occur only in the combined run; pinned Synapse
+implements MSC4186 Simplified Sliding Sync. Classic Kotlin syncV2/syncOnceV2 entry
+points exist but are not tested by this fixture. Product gateway integration must
+scope native lists/subscriptions/extensions and keep unverified rooms out of sync.
+Native CI now pins Platform `047897f9f5a7b126fd2db4ed5a918db3e11e364e`; inspect
+its exact hosted run after push. The emulator is stopped with data retained; no
+physical phone or live HRIS action occurred. Continue all implementation phases.
