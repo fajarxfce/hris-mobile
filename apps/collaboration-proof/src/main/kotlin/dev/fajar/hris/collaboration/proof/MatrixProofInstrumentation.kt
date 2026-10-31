@@ -31,7 +31,7 @@ class MatrixProofInstrumentation : Instrumentation() {
                 withTimeout(90_000) {
                     when (scenario) {
                         "provider" -> NativeMatrixProbe(directory).run()
-                        "hris" -> HrisNativeMatrixProbe(directory).run()
+                        "hris" -> HrisNativeMatrixProbe(targetContext, directory).run()
                         else -> error("Unknown owned protocol scenario")
                     }
                 }

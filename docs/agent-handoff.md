@@ -2,6 +2,29 @@
 
 ## Active collaboration implementation — 31 October 2026
 
+**Protected Android SDK reopening and encrypted HRIS exchange now pass.**
+[Evidence](measurements/collaboration-protected-native-store-2026-10-31.json)
+retains APK `18b072bc`, 70 Mobile/15 Platform source hashes and a 22.732s actual
+SDK case, cleanup true. The proof now uses the real Keystore adapter/private
+runtime: competing opens, a missing record and a wrong passphrase preserve the
+original device keys after restoration. SDK `pause()` drains database stores
+before unlock; shared shutdown tests cover competing callers, timeout, cancellation,
+failed drain retry and repeated close. Final root/debug/lint/browser passes in 78s:
+2,063 desktop/24 data browser cases. Four newly resolved AndroidX metadata files
+match official Google Maven bytes; the initial lint verification failure is retained.
+
+The exchange exposed a Platform key-shape bug after retry: fallback IDs may overlap
+one-time IDs in their independent maps. The fix keeps all identity/signature/marker
+checks. Platform's full 454s run passes 37 domain, 201 data, 39 API plus quality;
+27 Python driver cases pass. Both earlier failed runs remain recorded.
+**Next: recover abandoned failed-close leases and normalize unexpected retrieval
+callback failures, then bootstrap installation/recovery and actual Android message
+queue process death; continue app DI/UI and all P0–P8.** Do not describe reopening
+within one process as process-death acceptance. No app DI/routes, live service,
+phone or Starter change. The predecessor `4d124732` hosted run `41238521070` also
+passes both jobs/all steps: 57 desktop, 43 browser and 43 iOS simulator cases; all
+52 source hashes and artifact XML are verified in its runtime measurement.
+
 **Android runtime composition now compiles and passes the shared checks.** The
 application factory supplies Android Keystore records and `noBackupFilesDir`;
 runtime installation pins bootstrap identity and preserves existing SDK-rotated

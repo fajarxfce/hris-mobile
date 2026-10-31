@@ -8,8 +8,6 @@ import dev.fajar.starter.common.result.*
 import dev.fajar.starter.storage.safeStorageCall
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 import org.matrix.rustcomponents.sdk.Client
 
 /** Platform data access only; feature pages/ViewModels never receive the raw SDK client. */
@@ -27,8 +25,7 @@ internal constructor(
     override val credentialFailures = persistence.failures
     private val lifetimeJob = SupervisorJob()
     private val lifetime = CoroutineScope(lifetimeJob + Dispatchers.Default)
-    private val closing = Mutex()
-    private var closeTask: Deferred<AppResult<Unit>>? = null
+    private val shutdown = SdkStoreShutdown(lifetime) { releaseResources() }
     private val initialization =
         lifetime.async(start = CoroutineStart.LAZY) {
             nativeClient.encryption().use { it.waitForE2eeInitializationTasks() }
@@ -47,30 +44,18 @@ internal constructor(
 
     override suspend fun retryCredentialWrite() = persistence.retryPending()
 
-    override suspend fun close(): AppResult<Unit> =
-        withContext(NonCancellable) {
-            val task =
-                closing.withLock {
-                    closeTask ?: lifetime.async { releaseResources() }.also { closeTask = it }
-                }
-            // The repository retains this lease while SDK initialization finishes. A UI owner
-            // can stop waiting without releasing a store still held by native background work.
-            withTimeoutOrNull(5_000) { task.await() }
-                ?: AppResult.Failed(
-                    Failure(
-                        FailureKind.Unavailable,
-                        "Chat storage is still closing.",
-                        code = "client.collaboration_close_pending",
-                    )
-                )
-        }
+    override suspend fun close() = shutdown.close()
 
-    private suspend fun releaseResources(): AppResult<Unit> {
+    private suspend fun releaseResources(): SdkShutdownAttempt {
         val credentialResult = persistence.close()
         credentialWatcher.cancelAndJoin()
         safeStorageCall { nativeClient.enableAllSendQueues(false) }
         initialization.start()
         initialization.join()
+        // Disabling queues does not abort an in-flight send. Pause drains and closes
+        // the SDK store pools so delayed native work cannot write after our unlock.
+        val drained = safeStorageCall { nativeClient.pause() }
+        if (drained is AppResult.Failed) return SdkShutdownAttempt(drained, released = false)
         val result = safeStorageCall {
             try {
                 nativeClient.close()
@@ -80,7 +65,10 @@ internal constructor(
         }
         released(this)
         lifetimeJob.complete()
-        return if (result is AppResult.Failed) result else credentialResult
+        return SdkShutdownAttempt(
+            if (result is AppResult.Failed) result else credentialResult,
+            released = true,
+        )
     }
 
     override fun toString() = "AndroidCollaborationRuntimeLease([redacted])"

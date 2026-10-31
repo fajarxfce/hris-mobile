@@ -16,4 +16,7 @@ dependencies {
     compileOnly(libs.compose.runtime)
     implementation(libs.matrix.sdk.android)
     implementation(libs.coroutines.core)
+    implementation(projects.features.collaboration.data)
+    implementation(projects.core.identity.domain)
+    implementation(projects.core.securestorage)
 }

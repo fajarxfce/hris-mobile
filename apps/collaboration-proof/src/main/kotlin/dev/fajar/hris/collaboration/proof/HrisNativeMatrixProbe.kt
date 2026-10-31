@@ -1,5 +1,7 @@
 package dev.fajar.hris.collaboration.proof
 
+import android.content.Context
+import dev.fajar.starter.collaboration.data.repositories.AndroidCollaborationRuntimeLease
 import java.io.File
 import java.net.URI
 import java.util.UUID
@@ -13,7 +15,7 @@ import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.Room
 
 /** Two SDK crypto stores talking only to an owned HRIS gateway, never directly to Synapse. */
-internal class HrisNativeMatrixProbe(private val directory: File) {
+internal class HrisNativeMatrixProbe(private val context: Context, private val directory: File) {
     suspend fun run() =
         withContext(Dispatchers.IO) {
             val input = File(directory, "gateway-fixture.json")
@@ -40,27 +42,19 @@ internal class HrisNativeMatrixProbe(private val directory: File) {
             var recipient: Client? = null
             var senderRoom: Room? = null
             var recipientRoom: Room? = null
+            var senderLease: AndroidCollaborationRuntimeLease? = null
+            var recipientLease: AndroidCollaborationRuntimeLease? = null
             val senderSync = ProofSyncOwner(ProofSyncMode.CLASSIC)
             val recipientSync = ProofSyncOwner(ProofSyncMode.CLASSIC)
             try {
-                sender =
-                    createHrisProofClient(
-                        fixture.getJSONObject("sender"),
-                        File(
-                            directory,
-                            "gateway-sender/${fixture.getJSONObject("sender").getString("deviceId")}",
-                        ),
-                        home,
-                    )
-                recipient =
-                    createHrisProofClient(
-                        fixture.getJSONObject("recipient"),
-                        File(
-                            directory,
-                            "gateway-recipient/${fixture.getJSONObject("recipient").getString("deviceId")}",
-                        ),
-                        home,
-                    )
+                senderLease =
+                    ProtectedHrisProofOwner(context, fixture.getJSONObject("sender"), home)
+                        .installAndReopen()
+                sender = senderLease.nativeClient
+                recipientLease =
+                    ProtectedHrisProofOwner(context, fixture.getJSONObject("recipient"), home)
+                        .installAndReopen()
+                recipient = recipientLease.nativeClient
                 senderSync.start(sender)
                 recipientSync.start(recipient)
                 senderRoom = sender.joinRoomById(roomId)
@@ -78,8 +72,8 @@ internal class HrisNativeMatrixProbe(private val directory: File) {
                         recipientSync.close()
                         senderRoom?.close()
                         recipientRoom?.close()
-                        sender?.close()
-                        recipient?.close()
+                        senderLease?.closeProofRuntime()
+                        recipientLease?.closeProofRuntime()
                     }
                 }
             }
@@ -114,6 +108,10 @@ internal class HrisNativeMatrixProbe(private val directory: File) {
                         JSONObject()
                             .put("encryptedBothDirections", true)
                             .put("logicalIdsPreserved", true)
+                            .put("protectedStoreReopened", true)
+                            .put("missingRecordPreserved", true)
+                            .put("wrongPassphrasePreserved", true)
+                            .put("exclusiveOwner", true)
                             .put("senderEventId", sent.eventId)
                             .put("recipientEventId", answered.eventId)
                             .put("senderTransaction", sent.transactionId)

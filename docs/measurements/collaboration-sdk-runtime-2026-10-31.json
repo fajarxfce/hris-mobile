@@ -99,5 +99,56 @@
     "Execute the actual HRIS emulator fixture through the protected runtime.",
     "Implement current-admission installation and expired-bootstrap recovery, then durable SDK message queue restart, UI and P0\u2013P8."
   ],
-  "measurementCorrection": "Local suite totals exclude downloaded hosted XML under .work; the initial count included 94 unrelated artifact cases. The root test result is unchanged."
+  "measurementCorrection": "Local suite totals exclude downloaded hosted XML under .work; the initial count included 94 unrelated artifact cases. The root test result is unchanged.",
+  "hosted": {
+    "run": 41238521070,
+    "sha": "4d1247322da7e6172ded161c28bf08052bd31d48",
+    "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/41238521070",
+    "result": "all jobs and required steps passed",
+    "verifiedSourceCount": 52,
+    "artifacts": [
+      {
+        "artifact": "collaboration-control-apple",
+        "totals": {
+          "tests": 43,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "xmlSha256": {
+          "data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.data.CollaborationSdkRecordTest.xml": "5b4e7c745b9c429135c7ecd252b64579f22894af65cb2e3f93ca5d452bef5687",
+          "data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.data.CollaborationSetupTransportTest.xml": "4da5e699ca848a79a0c305ee6d529b4a93785ba2038de2360558d3ebaea2c88d",
+          "data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.data.CollaborationSetupValidationTest.xml": "7d06eb21606d4d17443da0dce6d4885fcd7ee453fd4fcbaccfc8c7eb3968831d",
+          "data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.data.SdkSessionPersistenceTest.xml": "9dd9f4b3b778ebd5822001f5a472da2c3702531e6307502794e6d494ae2a8883",
+          "domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.CollaborationSetupCommandTest.xml": "71cd8b93f39b43c39e96d5a6f37098ca80bd63d4ddb5def6c065f2141e25cc74",
+          "domain/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.collaboration.domain.LoadCollaborationSetupTest.xml": "c15397bae8e676a2dfecb348bcf34edcd9f571e66b13803fd239371ba057df9f"
+        }
+      },
+      {
+        "artifact": "collaboration-control-portable",
+        "totals": {
+          "tests": 100,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "xmlSha256": {
+          "data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSdkRecordTest.xml": "5d34f8ca9579cda3515338ba682efeee4f83367b994b8a5e7ce4c15a70a3b7fa",
+          "data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSetupTransportTest.xml": "97e52eff4c8962f5bb1a41b485f4bdb18b804d80302c4feefaf6c4b077354a9d",
+          "data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSetupValidationTest.xml": "e519ed7322e5fa7ea111f459e34ea114c64acacbb71d19ce401e1ea0cb4ab255",
+          "data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.EncryptedCollaborationSetupCommandTest.xml": "cf4e301cedd05ea06fd642b00c5f159495f8f60826d88a50e87a76ba235cc383",
+          "data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.FileCollaborationSdkStoreTest.xml": "e85234fac1c80b1afe16cbf72e1a95dc57ff6335579b0c4e0de175b1f462709c",
+          "data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.SdkSessionPersistenceTest.xml": "b670b83aaf173afcc22eb62f232226b41d59fbe63a126f7278ed537fd2e61fb7",
+          "data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.CollaborationSdkRecordTest.xml": "15240a076ec030e52c7611a3428b6828e8a299245625de2f32da83853f01afea",
+          "data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.CollaborationSetupTransportTest.xml": "fc633ae4c37f3f2e846e7d59f5e00c0e7a153049acec3b1b6c6100522247df8e",
+          "data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.CollaborationSetupValidationTest.xml": "8e79822220d41e8bd29ee5f9f7f718ddc9f23f191b5b2ae87d58d035e555e784",
+          "data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.SdkSessionPersistenceTest.xml": "35b2439bdcb7c72c591a260d69d32e90b84aa5a34b03a03cbd4c2be46ac184ca",
+          "domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationSetupCommandTest.xml": "f7d7178e44ba55fe66637a919b3057208f8aeb0f9a838a3599e1c88228bc1c99",
+          "domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.LoadCollaborationSetupTest.xml": "ab5cea5d3383def2b8390d980685a2f0b3ec6b7aa43bbd60551f57e4e60bb0d6",
+          "domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.domain.CollaborationSetupCommandTest.xml": "51cacac90e71ba4e25c4e981b917c41a74e4e65e6ba23e4f1f161f3cd18e6349",
+          "domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.domain.LoadCollaborationSetupTest.xml": "7ed8be68597fdc64702c55441b8e418d0283a950f15b8607ea2c199d7eb515a9"
+        }
+      }
+    ]
+  }
 }

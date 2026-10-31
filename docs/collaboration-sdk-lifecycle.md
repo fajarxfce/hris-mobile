@@ -1,13 +1,15 @@
 # Product SDK session ownership
 
-This is the implementation continuation for the pinned Android Rust SDK. Product
-SDK store/session integration is still required; setup-command durability does
-not establish message queue restart acceptance.
+This is the implementation continuation for the pinned Android Rust SDK. Native
+runtime composition now has protected store reopening evidence; it still needs
+application admission/DI integration. Setup durability and reopening within one
+process do not establish message queue restart acceptance.
 
 The source audit uses Rust SDK
 [`8de215a0`](https://github.com/matrix-org/matrix-rust-sdk/tree/8de215a0aa0026afa5754ae5f05a6d168d1a1d60).
-The existing actual HRIS fixture establishes encrypted transport and identity
-mapping. Its synthetic private store key and proof session JSON are lab-only.
+The actual HRIS fixture now uses the protected Android runtime and verifies
+identity preservation before encrypted transport. The separate provider-only
+fixture's synthetic private store key and session JSON remain lab-only.
 
 The product owner needs an exclusive store lock, a platform-protected passphrase
 and a durable session record bound to HRIS audience/account/company/native family,
@@ -56,8 +58,8 @@ explicit root gateway URL, excluding the replaceable local session and tokens.
 Records pin the complete identity, passphrase, bootstrap origin and credential
 revision. Rotation preserves the passphrase and initial deadline facts; it does
 not invent a newer admission timestamp. The serialization is intended only for
-the platform protected credential store; that native repository integration is
-the next step, not established by codec tests.
+the platform protected credential store. Codec tests establish the record contract;
+the protected Android fixture separately establishes the native integration.
 
 The per-lease `SdkSessionPersistence` helper serializes protected writes and SDK
 callback state. Failed or cancelled writes keep their pending value and gate
@@ -66,7 +68,7 @@ retries the same revision. Closing waits for its write owner and rejects late
 callbacks. `AndroidCollaborationSdkClientSource` compiles with queues paused before
 restore, fixed classic sync, disabled discovery/automatic backup/cross-signing/
 pagination, zero transport retries and bounded request concurrency/timeouts.
-Actual SDK execution through these new components remains required.
+Actual SDK execution through these components now passes in the protected fixture.
 
 [Component evidence](measurements/collaboration-sdk-storage-2026-10-31.json) retains
 final 57s root/assembly/browser checks: 2,058 desktop cases and 19 data browser
@@ -94,12 +96,34 @@ retains the lease until cleanup completes, with a capacity of five. SDK request
 timeouts are finite, but this does not prove termination of every native SDK bug.
 Queue/sync/room listener owners must stop before closing the lease.
 
+The deeper send-queue audit found that `set_enabled(false)` explicitly does not
+abort an already running send. The current implementation therefore also calls
+SDK `Client.pause()` after initialization and before native close/directory unlock.
+At the pinned Rust commit, `crates/matrix-sdk/src/client/mod.rs:4056` disables queues
+and awaits `base_client().close_stores()`. A failed drain retains the client and
+exclusive lock; another explicit close may retry. A completed release is never
+repeated, even when it reported an error. Shared shutdown tests cover competing
+callers, timeout, cancellation, failed drain and repeated disposal. Actual execution
+through the protected HRIS fixture now passes; see the
+[protected-store evidence](measurements/collaboration-protected-native-store-2026-10-31.json).
+
+For the next process-death fixture, the pinned queue's `send_serialized` awaits
+`QueueStorage.push` before publishing `NewLocalEvent`. Global queue subscription
+replays retained local events. Pause precedes restore and subscription; the test
+must kill the owned Android process after the durable local receipt, restore the
+same protected record/store in another process, observe the same transaction and
+then explicitly resume it. A same-process close/reopen does not meet that proof.
+Keep SDK store-error retry behavior under a bounded application owner; the SDK
+itself backs off and retries store reads. App logical-message reconciliation and
+server transaction-retention limits remain separate from SDK queue persistence.
+
 Unexpected nonfatal failures in the synchronous void save bridge set a terminal
 failure. An in-flight write cannot erase it, even after successfully committing;
 ordinary storage failures retain the pending tokens for explicit retry. The
 regression exercises that race with a controlled write barrier. Compilation and
 shared checks pass; [runtime evidence](measurements/collaboration-sdk-runtime-2026-10-31.json)
-does not claim native Keystore execution yet.
+records compilation and shared checks; native execution is retained in the separate
+protected-store measurement.
 
 Next acceptance: protected store open/reopen and wrong-key preservation on the
 dedicated emulator; one pending logical message across process death; receipt loss

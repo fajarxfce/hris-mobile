@@ -1,0 +1,2524 @@
+{
+  "date": "2026-10-31",
+  "kind": "protected-android-sdk-store-through-hris",
+  "complete": true,
+  "productAcceptance": false,
+  "queueProcessDeathAcceptance": false,
+  "capacityAcceptance": false,
+  "schemaChanged": false,
+  "liveChanged": false,
+  "phoneChanged": false,
+  "runId": "4e9c0a1d93f54cb5ab05afbaa4b65b52",
+  "result": {
+    "passed": true,
+    "cleanup": true,
+    "artifact": {
+      "apkSha256": "18b072bc4744597a3a9f4667269a810e1b6060f57eb7a43c0e49c4c936d1f261",
+      "package": "dev.fajar.hris.collaboration.proof",
+      "avd": "hris-mobile-dev",
+      "androidApi": "35"
+    },
+    "diagnostic": {
+      "instrumentationComplete": true,
+      "failureFrames": []
+    },
+    "proof": {
+      "encryptedBothDirections": true,
+      "logicalIdsPreserved": true,
+      "syncMode": "classic",
+      "protectedStoreReopened": true,
+      "missingRecordPreserved": true,
+      "wrongPassphrasePreserved": true,
+      "exclusiveOwner": true,
+      "senderEventId": "$kgdPmALdrPpb0nCYIfmaKulSomowCQmiyLOK91hQxw0",
+      "recipientEventId": "$DAPUk975dxzs5K7P0V2e4fnFuHk2Av9H5GbKXhRCnlA",
+      "senderTransaction": "b43da4b2dcee456aa32c67274be03016",
+      "recipientTransaction": "15bb57c7be354ba795bac3377a10ae02"
+    }
+  },
+  "serverVerification": {
+    "passed": true,
+    "encryptedBothDirections": true,
+    "logicalIdsPreserved": true,
+    "cleanup": true,
+    "protectedStoreReopened": true,
+    "missingRecordPreserved": true,
+    "wrongPassphrasePreserved": true,
+    "exclusiveOwner": true,
+    "artifact": {
+      "apkSha256": "18b072bc4744597a3a9f4667269a810e1b6060f57eb7a43c0e49c4c936d1f261",
+      "package": "dev.fajar.hris.collaboration.proof",
+      "avd": "hris-mobile-dev",
+      "androidApi": "35"
+    }
+  },
+  "gatewayTrace": [
+    {
+      "method": "GET",
+      "route": "/_matrix/client/versions",
+      "query": [],
+      "unknownQuery": false,
+      "status": 200,
+      "contentLength": -1,
+      "transferEncoding": false,
+      "timeoutMillis": "absent_or_invalid",
+      "errorCode": ""
+    },
+    {
+      "method": "GET",
+      "route": "/_matrix/client/versions",
+      "query": [],
+      "unknownQuery": false,
+      "status": 200,
+      "contentLength": -1,
+      "transferEncoding": false,
+      "timeoutMillis": "absent_or_invalid",
+      "errorCode": ""
+    },
+    {
+      "method": "POST",
+      "route": "/_matrix/client/v3/keys/query",
+      "query": [],
+      "unknownQuery": false,
+      "status": 200,
+      "contentLength": 114,
+      "transferEncoding": false,
+      "timeoutMillis": "absent_or_invalid",
+      "errorCode": ""
+    },
+    {
+      "method": "POST",
+      "route": "/_matrix/client/v3/keys/query",
+      "query": [],
+      "unknownQuery": false,
+      "status": 200,
+      "contentLength": 114,
+      "transferEncoding": false,
+      "timeoutMillis": "absent_or_invalid",
+      "errorCode": ""
+    },
+    {
+      "method": "POST",
+      "route": "/_matrix/client/v3/rooms/_/join",
+      "query": [],
+      "unknownQuery": false,
+      "status": 200,
+      "contentLength": 2,
+      "transferEncoding": false,
+      "timeoutMillis": "absent_or_invalid",
+      "errorCode": ""
+    },
+    {
+      "method": "POST",
+      "route": "/_matrix/client/v3/rooms/_/join",
+      "query": [],
+      "unknownQuery": false,
+      "status": 200,
+      "contentLength": 2,
+      "transferEncoding": false,
+      "timeoutMillis": "absent_or_invalid",
+      "errorCode": ""
+    },
+    {
+      "method": "POST",
+      "route": "/_matrix/client/v3/keys/upload",
+      "query": [],
+      "unknownQuery": false,
+      "status": 200,
+      "contentLength": 17408,
+      "transferEncoding": false,
+      "timeoutMillis": "absent_or_invalid",
+      "errorCode": "",
+      "keyShape": {
+        "parsed": true,
+        "devicePresent": true,
+        "oneTimeCount": 50,
+        "fallbackCount": 0,
+        "overlappingIds": 0,
+        "oneTimeMarkedFallback": 0,
+        "fallbackNotMarked": 0,
+        "shapeValid": true
+      }
+    },
+    {
+      "method": "GET",
+      "route": "/_matrix/client/v3/sync",
+      "query": [
+        "timeout",
+        "use_state_after"
+      ],
+      "unknownQuery": false,
+      "status": 200,
+      "contentLength": -1,
+      "transferEncoding": false,
+      "timeoutMillis": "1000",
+      "errorCode": ""
+    },
+    {
+      "method": "POST",
+      "route": "/_matrix/client/v3/keys/query",
+      "query": [],
+      "unknownQuery": false,
+      "status": 200,
+      "contentLength": 114,
+      "transferEncoding": false,
+      "timeoutMillis": "absent_or_invalid",
+      "errorCode": ""
+    },
+    {
+      "method": "POST",
+      "route": "/_matrix/client/v3/keys/upload",
+      "query": [],
+      "unknownQuery": false,
+      "status": 503,
+      "contentLength": 17408,
+      "transferEncoding": false,
+      "timeoutMillis": "absent_or_invalid",
+      "errorCode": "collaboration_provider_busy",
+      "keyShape": {
+        "parsed": true,
+        "devicePresent": true,
+        "oneTimeCount": 50,
+        "fallbackCount": 0,
+        "overlappingIds": 0,
+        "oneTimeMarkedFallback": 0,
+        "fallbackNotMarked": 0,
+        "shapeValid": true
+      }
+    },
+    {
+      "method": "POST",
+      "route": "/_matrix/client/v3/keys/upload",
+      "query": [],
+      "unknownQuery": false,
+      "status": 200,
+      "contentLength": 369,
+      "transferEncoding": false,
+      "timeoutMillis": "absent_or_invalid",
+      "errorCode": "",
+      "keyShape": {
+        "parsed": true,
+        "devicePresent": false,
+        "oneTimeCount": 0,
+        "fallbackCount": 1,
+        "overlappingIds": 0,
+        "oneTimeMarkedFallback": 0,
+        "fallbackNotMarked": 0,
+        "shapeValid": true
+      }
+    },
+    {
+      "method": "GET",
+      "route": "/_matrix/client/v3/sync",
+      "query": [
+        "timeout",
+        "use_state_after"
+      ],
+      "unknownQuery": false,
+      "status": 200,
+      "contentLength": -1,
+      "transferEncoding": false,
+      "timeoutMillis": "1000",
+      "errorCode": ""
+    },
+    {
+      "method": "POST",
+      "route": "/_matrix/client/v3/keys/query",
+      "query": [],
+      "unknownQuery": false,
+      "status": 200,
+      "contentLength": 114,
+      "transferEncoding": false,
+      "timeoutMillis": "absent_or_invalid",
+      "errorCode": ""
+    },
+    {
+      "method": "GET",
+      "route": "/_matrix/client/v3/sync",
+      "query": [
+        "since",
+        "timeout",
+        "use_state_after"
+      ],
+      "unknownQuery": false,
+      "status": 200,
+      "contentLength": -1,
+      "transferEncoding": false,
+      "timeoutMillis": "1000",
+      "errorCode": ""
+    },
+    {
+      "method": "POST",
+      "route": "/_matrix/client/v3/keys/upload",
+      "query": [],
+      "unknownQuery": false,
+      "status": 200,
+      "contentLength": 17776,
+      "transferEncoding": false,
+      "timeoutMillis": "absent_or_invalid",
+      "errorCode": "",
+      "keyShape": {
+        "parsed": true,
+        "devicePresent": true,
+        "oneTimeCount": 50,
+        "fallbackCount": 1,
+        "overlappingIds": 1,
+        "oneTimeMarkedFallback": 0,
+        "fallbackNotMarked": 0,
+        "shapeValid": true
+      }
+    },
+    {
+      "method": "POST",
+      "route": "/_matrix/client/v3/keys/query",
+      "query": [],
+      "unknownQuery": false,
+      "status": 200,
+      "contentLength": 114,
+      "transferEncoding": false,
+      "timeoutMillis": "absent_or_invalid",
+      "errorCode": ""
+    },
+    {
+      "method": "GET",
+      "route": "/_matrix/client/v3/sync",
+      "query": [
+        "since",
+        "timeout",
+        "use_state_after"
+      ],
+      "unknownQuery": false,
+      "status": 200,
+      "contentLength": -1,
+      "transferEncoding": false,
+      "timeoutMillis": "1000",
+      "errorCode": ""
+    },
+    {
+      "method": "POST",
+      "route": "/_matrix/client/v3/keys/query",
+      "query": [],
+      "unknownQuery": false,
+      "status": 200,
+      "contentLength": 114,
+      "transferEncoding": false,
+      "timeoutMillis": "absent_or_invalid",
+      "errorCode": ""
+    },
+    {
+      "method": "GET",
+      "route": "/_matrix/client/v3/rooms/_/members",
+      "query": [],
+      "unknownQuery": false,
+      "status": 200,
+      "contentLength": -1,
+      "transferEncoding": false,
+      "timeoutMillis": "absent_or_invalid",
+      "errorCode": ""
+    },
+    {
+      "method": "POST",
+      "route": "/_matrix/client/v3/keys/claim",
+      "query": [],
+      "unknownQuery": false,
+      "status": 200,
+      "contentLength": 191,
+      "transferEncoding": false,
+      "timeoutMillis": "absent_or_invalid",
+      "errorCode": ""
+    },
+    {
+      "method": "PUT",
+      "route": "/_matrix/client/v3/sendToDevice/m.room.encrypted/_",
+      "query": [],
+      "unknownQuery": false,
+      "status": 200,
+      "contentLength": 2702,
+      "transferEncoding": false,
+      "timeoutMillis": "absent_or_invalid",
+      "errorCode": ""
+    },
+    {
+      "method": "PUT",
+      "route": "/_matrix/client/v3/rooms/_/send/m.room.encrypted/_",
+      "query": [],
+      "unknownQuery": false,
+      "status": 200,
+      "contentLength": 646,
+      "transferEncoding": false,
+      "timeoutMillis": "absent_or_invalid",
+      "errorCode": ""
+    },
+    {
+      "method": "GET",
+      "route": "/_matrix/client/v3/sync",
+      "query": [
+        "since",
+        "timeout",
+        "use_state_after"
+      ],
+      "unknownQuery": false,
+      "status": 200,
+      "contentLength": -1,
+      "transferEncoding": false,
+      "timeoutMillis": "1000",
+      "errorCode": ""
+    },
+    {
+      "method": "POST",
+      "route": "/_matrix/client/v3/keys/upload",
+      "query": [],
+      "unknownQuery": false,
+      "status": 200,
+      "contentLength": 353,
+      "transferEncoding": false,
+      "timeoutMillis": "absent_or_invalid",
+      "errorCode": "",
+      "keyShape": {
+        "parsed": true,
+        "devicePresent": false,
+        "oneTimeCount": 1,
+        "fallbackCount": 0,
+        "overlappingIds": 0,
+        "oneTimeMarkedFallback": 0,
+        "fallbackNotMarked": 0,
+        "shapeValid": true
+      }
+    },
+    {
+      "method": "GET",
+      "route": "/_matrix/client/v3/sync",
+      "query": [
+        "since",
+        "timeout",
+        "use_state_after"
+      ],
+      "unknownQuery": false,
+      "status": 200,
+      "contentLength": -1,
+      "transferEncoding": false,
+      "timeoutMillis": "1000",
+      "errorCode": ""
+    },
+    {
+      "method": "GET",
+      "route": "/_matrix/client/v3/rooms/_/members",
+      "query": [],
+      "unknownQuery": false,
+      "status": 200,
+      "contentLength": -1,
+      "transferEncoding": false,
+      "timeoutMillis": "absent_or_invalid",
+      "errorCode": ""
+    },
+    {
+      "method": "PUT",
+      "route": "/_matrix/client/v3/sendToDevice/m.room.encrypted/_",
+      "query": [],
+      "unknownQuery": false,
+      "status": 200,
+      "contentLength": 2560,
+      "transferEncoding": false,
+      "timeoutMillis": "absent_or_invalid",
+      "errorCode": ""
+    },
+    {
+      "method": "GET",
+      "route": "/_matrix/client/v3/sync",
+      "query": [
+        "since",
+        "timeout",
+        "use_state_after"
+      ],
+      "unknownQuery": false,
+      "status": 200,
+      "contentLength": -1,
+      "transferEncoding": false,
+      "timeoutMillis": "1000",
+      "errorCode": ""
+    },
+    {
+      "method": "PUT",
+      "route": "/_matrix/client/v3/rooms/_/send/m.room.encrypted/_",
+      "query": [],
+      "unknownQuery": false,
+      "status": 200,
+      "contentLength": 646,
+      "transferEncoding": false,
+      "timeoutMillis": "absent_or_invalid",
+      "errorCode": ""
+    },
+    {
+      "method": "GET",
+      "route": "/_matrix/client/v3/sync",
+      "query": [
+        "since",
+        "timeout",
+        "use_state_after"
+      ],
+      "unknownQuery": false,
+      "status": 200,
+      "contentLength": -1,
+      "transferEncoding": false,
+      "timeoutMillis": "1000",
+      "errorCode": ""
+    },
+    {
+      "method": "GET",
+      "route": "/_matrix/client/v3/sync",
+      "query": [
+        "since",
+        "timeout",
+        "use_state_after"
+      ],
+      "unknownQuery": false,
+      "status": 200,
+      "contentLength": -1,
+      "transferEncoding": false,
+      "timeoutMillis": "1000",
+      "errorCode": ""
+    },
+    {
+      "method": "GET",
+      "route": "/_matrix/client/v3/rooms/_/event/_",
+      "query": [],
+      "unknownQuery": false,
+      "status": 200,
+      "contentLength": -1,
+      "transferEncoding": false,
+      "timeoutMillis": "absent_or_invalid",
+      "errorCode": ""
+    },
+    {
+      "method": "GET",
+      "route": "/_matrix/client/v3/rooms/_/event/_",
+      "query": [],
+      "unknownQuery": false,
+      "status": 200,
+      "contentLength": -1,
+      "transferEncoding": false,
+      "timeoutMillis": "absent_or_invalid",
+      "errorCode": ""
+    }
+  ],
+  "sourceSha256": {
+    "apps/server/src/test/kotlin/dev/fajar/hris/NativeCollaborationMatrixIdentityHttpTest.kt": "8dd0c6556b9767d70ccbe5b182d21ec49f9c46c20aff3e2a989d1e5c6c1226fc",
+    "apps/server/src/test/kotlin/dev/fajar/hris/NativeCollaborationSdkInteropTest.kt": "03c35d7c54ab5cd7195d9cfc4ff538078b582fe93f4d5cefd6ce879e4af63d8c",
+    "apps/server/src/test/kotlin/dev/fajar/hris/NativeGatewaySdkFixture.kt": "f0c7f4fb2999642a5d8b05c94ad60e5ba1668fa5789b3d24a99a906672f06cb2",
+    "apps/server/src/test/kotlin/dev/fajar/hris/NativeSdkErrorTrace.kt": "0e4325a13ffcdf7853205a3809e186fb557bc8c1ff606c388ee2fd312e8190d9",
+    "apps/server/src/test/kotlin/dev/fajar/hris/NativeSdkGatewayTrace.kt": "c25116f95800cca9b8cc19de6ddecb573cd0f0286a6c2aa9611a37955fc5f9bf",
+    "apps/server/src/test/kotlin/dev/fajar/hris/NativeSdkKeyShape.kt": "c549ad1f6b54d1e82fe8f37d69f40d9715f566170fc2585b4278847d05ceba38",
+    "apps/server/src/test/kotlin/dev/fajar/hris/NativeSdkKeyShapeTest.kt": "88ba1a310063c8d14b8058acbd7949c11d4b107d475b830e4f58b6d802e45b57",
+    "apps/server/src/test/kotlin/dev/fajar/hris/NativeSdkMatrixServer.kt": "440e286ec188f12f9248f3eb9286a99857feaca4081ab19011331b0e04a17100",
+    "modules/collaboration/data/src/test/kotlin/dev/fajar/hris/collaboration/data/MatrixKeyProviderInteropTest.kt": "83b5ebd4ae425b7af5b46885c29439e99481a46e12a5a1d32e77822cd53ece45",
+    "modules/collaboration/delivery/src/main/kotlin/dev/fajar/hris/collaboration/delivery/controllers/MatrixGatewaySyncController.kt": "2fcbdc3662ab98ca3478281a15d48b7acbc2deaa535346c1cdba18e267eace5c",
+    "modules/collaboration/domain/src/main/kotlin/dev/fajar/hris/collaboration/domain/policies/CollaborationMatrixKeyPolicy.kt": "072a190fcfd08abc923ad8554b54a84e8ccd498a12034e60e5b57f5c0f7cabc6",
+    "modules/collaboration/domain/src/test/kotlin/dev/fajar/hris/collaboration/domain/CollaborationMatrixKeyPolicyTest.kt": "2cc3e1664a0069c81862d6ced80f0f2f1bb929e65f39a61885fe4a8e64339c1a",
+    "tool/collaboration_hris_native.py": "2e97a68a9d5112952d51479d41dc0e50b3cf92f4690c92dac5ab7adb07fbcdbf",
+    "tool/collaboration_native_device.py": "7d938a326bff6ff2585ac80ee122b587a744c9f60654e34e4e174124d0797ed4",
+    "tool/test_collaboration_hris_native.py": "18a2a735f421a296fbaaef123e6d1d044b6f2c6a480153d611735935ebe361bf"
+  },
+  "mobileSourceSha256": {
+    "apps/collaboration-proof/build.gradle.kts": "207b276a2295a21006ecdd1f79802f8c710f9f25daa354d9a62fc702529fe943",
+    "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisNativeMatrixProbe.kt": "6746f01630497dc2fff13ce3cc6ace4d1905ae28413678d8050ac4effc780899",
+    "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisProofMessages.kt": "933f8dce4dabbc179936624f6e6325b9e7478a0db179a07241fdc1300ba9d2dc",
+    "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/MatrixProofInstrumentation.kt": "7beade0b7ccfb6746c6011b86287bafbc0e98a2edbfd5edae24c8d09f3c235df",
+    "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/NativeMatrixProbe.kt": "4db9445f98dfce1d488ba505ed768fdb92829a47029bf92ff22c9ace3c9616b9",
+    "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/ProofOfflineInvite.kt": "2bf46cc7068c6735198d4585b56a7f17c1c1427599b7de81d6537c982d4b6108",
+    "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/ProofQueuedMessage.kt": "37d8d208400d78c6c0fb99a929be8e0a76207bcc181fd360a9d19deb27a4aae4",
+    "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/ProofSessionStore.kt": "2aa8d14fc91edfc649fb70822fe7956301049254372076f5d82d8afe9c8780d8",
+    "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/ProofSyncOwner.kt": "631fe789683d845224475fa5a1233c93f26d1cecd24f57caeafa028973417f16",
+    "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/ProtectedHrisProofOwner.kt": "59dc6e64e2a2466c5a411fcf0873d881630bb9c726f0a37b3006f7b4dccd1bcf",
+    "core/securestorage/src/androidMain/kotlin/dev/fajar/starter/securestorage/AndroidCredentialStore.kt": "329c5e9a2a630900b15c7d940ab468ab9b4ed52751886c74461efb1cc62a2269",
+    "core/securestorage/src/commonMain/kotlin/dev/fajar/starter/securestorage/AesGcmContentCipher.kt": "66b4e668c49aa66a6ceee98f9941aed5cc05a08af72e5a6df372851a23618372",
+    "core/securestorage/src/jvmSharedMain/kotlin/dev/fajar/starter/securestorage/CredentialRecordLock.kt": "cf6397b10eef4e1b1ea70576db8d1d810b2005d8f757011be33e33dd8de3f1ee",
+    "features/collaboration/data/build.gradle.kts": "7c802266e7d7f5477d8d2b3dc969bfa2e3532c1f2947e9321505cc1b682b73b9",
+    "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/datasources/AndroidCollaborationSdkClientSource.kt": "36aead59e7c287c1a684ff049d0e78d1e97866c9284e829bc72fb295f45463db",
+    "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/di/AndroidCollaborationRuntimeFactory.kt": "70936d64b3ef51fe7242bec2b02a6dc2a01a160a1cd0364d357cda6f874545dd",
+    "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/repositories/AndroidCollaborationRuntimeLease.kt": "67fb341589a7cbf1b123e3acdd640f92116e83d2ae78da16299a3efce080eb4f",
+    "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/repositories/AndroidCollaborationRuntimeRepository.kt": "4f4095a71969f3684a71a5c6564c24e38c27bddc1b1240ee9b385e0dadc810ac",
+    "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/repositories/AndroidSdkSessionDelegate.kt": "5e73f8f6c4725cf1b8284e790c45004bb2e68847fd751ed934377fc63dcc1fbf",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/api/CollaborationSetupApi.kt": "daefe3f560e71e4e339f38f3d34946e05f69088a3627902ac2573dcc07b77319",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/datasources/ApiCollaborationSetupRemoteSource.kt": "1068be51e7488af5ee18bf0b711f7e1fa0934027526cddcb4d61a0ea90a8ab80",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/datasources/CollaborationSdkStoreSource.kt": "0434fec3bbf600f9d2bfa2dd3e5f8597072572322f5d6d49f86831e1384baf5f",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/datasources/CollaborationSetupRemoteSource.kt": "d4fe295ab314589a14264cbc287746f35d20b0e75a7c5b8095c2151459769cda",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt": "432a25f09ee05f8a000cecf20bd0b6ec786883edf0a1d694338eb29b254836b7",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/dto/CollaborationSetupCommandDto.kt": "c16dbe4b72f8b5701ac3e17ef90e2ba56c080e2ab357f7a5d6dbcb7d800aa37a",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/dto/CollaborationSetupDto.kt": "f7454b125e3a376eb857a91380cc84d65b8be6d0dc2186875a09dd863b5a5991",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/mappers/CollaborationGatewayMapper.kt": "5b57042c4314bd91cc05b94940a8b50d41480ad2737018f8d32c82a811c202d4",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/mappers/CollaborationSetupCommandMapper.kt": "c34a1906a922d6eaa20ec7e389448c2a482e22a42f4d96446d07dd3e175b7d78",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/mappers/CollaborationSetupMapper.kt": "5cdcd68b0a07d01836f2bd61e46092868aee2d72e61c4ea87d40f4aa6ad7a387",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/mappers/CollaborationSetupOutcomeMapper.kt": "9fd786857133f2d26e3dcff112171393f10e43e0c2e270f3187cabc6f9c0121a",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationSetupCommandRepository.kt": "69102828694135969b4e2f128e423ab695600d118f9b5b91141de0923d2b9995",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/RemoteCollaborationSetupRepository.kt": "22da3768c66bbdbb98f632ddd073be919703bee4ca15414f615d5ac931a15244",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/SdkSessionPersistence.kt": "8c9f2a318d1205f05350f041edbf0004e985e33db92b6535e8358db7596f5fc7",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/SdkStoreShutdown.kt": "fd20f1116146cceae72cd055908a0435a4eb78725b17483bf1bf5fac57a744fd",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/sdk/CollaborationSdkRecord.kt": "04da1a9d2651d55747b1ba9915eeb7ab543521214bdd626b5f71da235a153fd3",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/sdk/CollaborationSdkRecordCodec.kt": "59f69945cdb57a7ea2b77d2d2ff940e965b344e2b894426d7f21e5d57efe5701",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/sdk/CollaborationSdkScope.kt": "12312984000bf72bff1f05dd6fdb4908ca2e96197c445706d4636987a9ff2038",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSdkRecordTest.kt": "dac8053a312c3458d9c929041ac943a1559d008e4e8e16ff2ea85d46274565a2",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSetupTransportTest.kt": "6a16688dd12d6a83aaa38022b1589126436309d31e79068af829e4de3592c8d9",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSetupValidationTest.kt": "af31347c4c76f716620c3c7178286d35a4483c749c1e51cbab36239fdc9d97ee",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationTransportFixture.kt": "d85aa8eed24265173948d6fafbb6d5a49cb369efe41f831d1a7ee9d8e0843d4a",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/SdkSessionPersistenceTest.kt": "7a6690034f9c7353e0d2cbba6a1fc4724fce88f05f924b557bdbdfe269b0c806",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/SdkStoreShutdownTest.kt": "aedbc6dad7bb32bd784d10d552eff7b8e9ba9acb76314a3fb060c61f09aff029",
+    "features/collaboration/data/src/desktopTest/kotlin/dev/fajar/starter/collaboration/data/EncryptedCollaborationSetupCommandTest.kt": "55e76e7fd21414d9412da1f265f781f6227a9fe667b9b532c9cf9c49dcc6c9f4",
+    "features/collaboration/data/src/desktopTest/kotlin/dev/fajar/starter/collaboration/data/FileCollaborationSdkStoreTest.kt": "420a6d3ea3e4ac0bb9180f3885de67935b32fcf07f154738708dd13cb6585d04",
+    "features/collaboration/data/src/jvmSharedMain/kotlin/dev/fajar/starter/collaboration/data/datasources/FileCollaborationSdkStoreSource.kt": "3e580296543825e090e448a09c3b309d6dd9df21136085aaef2a05eb636a3cf6",
+    "features/collaboration/domain/build.gradle.kts": "b95c5a24c279be2b87bbadff36cab419904698a86250dd0ee028780dcbf09d9c",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationDeviceSetup.kt": "a42df08ff1b3915199fa600886202e176dcf7ec6a0d582beab9583c842fc202f",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationGateway.kt": "9212548ee6fc06e579f2f30a4ad6107eafb42f6c8e0aacf5837c561e4eb46220",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationOwner.kt": "763050fad897b67c9a7c2070e95166da9d19521306a33d098d5f033b1a73b546",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSetupCommand.kt": "38dc69f593c667ffaba38ad803ee8576649587b9ee7207d11c3dff001c1c76e7",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSetupCommandRecord.kt": "d0cc5aebf4c3c023342a6c90a14186d0425b5309582ed2b22f01934834ac9b1f",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSetupCommands.kt": "e60005ebdf881a94f430f0f6016948712d97aee8a5370e60340bf5fa994ba6de",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationRequestPolicy.kt": "1d7731545a5acfbe42e97e6b42626f867b410b39a5f4805496f91f72b98744f4",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSetupActionPolicy.kt": "2640fa9e7b64827bf234c73a3865111fb6c05c2ab6bb0872f638022b0d6d4df5",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationRuntimeRepository.kt": "e676adca85457453b9a3568e542f8e51857223561c15e513e9fcdebb66b3b156",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationSetupCommandRepository.kt": "fa07cb2bcfff9dd9596cda27ebb1dc752cce9855f9f54ace5f3fd1c79bafa688",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationSetupRepository.kt": "b98fa02c23b732217cea7271ab4ed9296af21660a88be64bef1c4bd029414e62",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/CollaborationSetupOwner.kt": "9e54aa26bea624bd37290d751f1a8e5fc6f2d8fe40969a40604af85ce4b04c38",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/LoadCollaborationSetup.kt": "e3d394cb020f61e1c937bd0a1c98b827737d2be270a19f5443aec9475c415716",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/PrepareCollaborationSetup.kt": "e909f6049325049c1157334e3708bca23f2f31afa38b07c6d2d7e91624386c2f",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ReconcileCollaborationSetupReceipt.kt": "2679100381cd1fe8517cf49d19c7eaa02c1efdbdc66c5f8386d30a8c01598b21",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ReplayCollaborationSetup.kt": "cb70532bed89c59ad5dee50a4d3f9b4dd7a207a647eac11e911805238423723f",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationCommandFixture.kt": "ea481ec084297ed39e759cff19997cdcc1fb426fc1f6f7e47dc45fc4b90a43f5",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationSetupCommandTest.kt": "effa5982ed82b0c48b71678fd25e4f6c236ed521aee2b6e69c1c44568c38bb15",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationSetupFixture.kt": "dd0a64b5761c31d5a15499679aa049571555d06931728621d2032031af8e7849",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/LoadCollaborationSetupTest.kt": "f5b9d6d453b5a579198315323afc6893bc10f66425a84123105119912b466ad2",
+    "gradle/libs.versions.toml": "f81abaf71b5318a035ed5f93c48b9e141e02ce7914a0db52572a70b2197a0569",
+    "gradle/verification-metadata.xml": "635f50bc43711565337268ee277c29950455d701a433d6d2690e0721e87ca900",
+    "settings.gradle.kts": "f19c10c24b139531db943def8d6dde4a5108159b39e878a76c751d4cb7a7a2c8"
+  },
+  "validation": {
+    "platformRegression": {
+      "seconds": 454,
+      "domain": {
+        "tests": 37,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "data": {
+        "tests": 201,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "api": {
+        "tests": 39,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "result": "passed; format and architecture"
+    },
+    "nativeSdkSeconds": 22.732,
+    "nativeSdkXmlSha256": "f222518488bcc2ff12962805bcda4fa83951aced082504c948cb3cfb2456ea28",
+    "pythonDriver": {
+      "cases": 27,
+      "result": "passed"
+    },
+    "mobile": {
+      "seconds": 78,
+      "root": "passed",
+      "desktop": {
+        "tests": 2063,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "dataBrowser": {
+        "tests": 24,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "android": "proof debug assembly/lint passed",
+      "quality": "format, zero detekt findings, architecture 73 modules"
+    }
+  },
+  "failedAttempts": [
+    {
+      "runId": "d9944efacf504b569e6c37bfcda6904b",
+      "seconds": 74,
+      "result": {
+        "passed": false,
+        "cleanup": true,
+        "artifact": {
+          "apkSha256": "18b072bc4744597a3a9f4667269a810e1b6060f57eb7a43c0e49c4c936d1f261",
+          "package": "dev.fajar.hris.collaboration.proof",
+          "avd": "hris-mobile-dev",
+          "androidApi": "35"
+        },
+        "diagnostic": {
+          "instrumentationComplete": false,
+          "failureCategory": "TimeoutCancellationException",
+          "failureFrames": []
+        },
+        "failureCategory": "RuntimeError"
+      },
+      "trace": [
+        {
+          "method": "GET",
+          "route": "/_matrix/client/versions",
+          "query": [],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": -1,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": ""
+        },
+        {
+          "method": "GET",
+          "route": "/_matrix/client/versions",
+          "query": [],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": -1,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": ""
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/keys/query",
+          "query": [],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": 114,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": ""
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/keys/query",
+          "query": [],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": 114,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": ""
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/rooms/_/join",
+          "query": [],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": 2,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": ""
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/rooms/_/join",
+          "query": [],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": 2,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": ""
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/keys/upload",
+          "query": [],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": 17408,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": ""
+        },
+        {
+          "method": "GET",
+          "route": "/_matrix/client/v3/sync",
+          "query": [
+            "timeout",
+            "use_state_after"
+          ],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": -1,
+          "transferEncoding": false,
+          "timeoutMillis": "1000",
+          "errorCode": ""
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/keys/upload",
+          "query": [],
+          "unknownQuery": false,
+          "status": 503,
+          "contentLength": 17408,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": "collaboration_provider_busy"
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/keys/query",
+          "query": [],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": 114,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": ""
+        },
+        {
+          "method": "GET",
+          "route": "/_matrix/client/v3/sync",
+          "query": [
+            "timeout",
+            "use_state_after"
+          ],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": -1,
+          "transferEncoding": false,
+          "timeoutMillis": "1000",
+          "errorCode": ""
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/keys/upload",
+          "query": [],
+          "unknownQuery": false,
+          "status": 400,
+          "contentLength": 17776,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": "collaboration_device_keys_invalid"
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/keys/upload",
+          "query": [],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": 369,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": ""
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/keys/query",
+          "query": [],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": 114,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": ""
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/keys/upload",
+          "query": [],
+          "unknownQuery": false,
+          "status": 400,
+          "contentLength": 17776,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": "collaboration_device_keys_invalid"
+        },
+        {
+          "method": "GET",
+          "route": "/_matrix/client/v3/sync",
+          "query": [
+            "since",
+            "timeout",
+            "use_state_after"
+          ],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": -1,
+          "transferEncoding": false,
+          "timeoutMillis": "1000",
+          "errorCode": ""
+        },
+        {
+          "method": "GET",
+          "route": "/_matrix/client/v3/sync",
+          "query": [
+            "since",
+            "timeout",
+            "use_state_after"
+          ],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": -1,
+          "transferEncoding": false,
+          "timeoutMillis": "1000",
+          "errorCode": ""
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/keys/upload",
+          "query": [],
+          "unknownQuery": false,
+          "status": 400,
+          "contentLength": 17776,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": "collaboration_device_keys_invalid"
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/keys/upload",
+          "query": [],
+          "unknownQuery": false,
+          "status": 400,
+          "contentLength": 17776,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": "collaboration_device_keys_invalid"
+        },
+        {
+          "method": "GET",
+          "route": "/_matrix/client/v3/sync",
+          "query": [
+            "since",
+            "timeout",
+            "use_state_after"
+          ],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": -1,
+          "transferEncoding": false,
+          "timeoutMillis": "1000",
+          "errorCode": ""
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/keys/upload",
+          "query": [],
+          "unknownQuery": false,
+          "status": 400,
+          "contentLength": 17776,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": "collaboration_device_keys_invalid"
+        },
+        {
+          "method": "GET",
+          "route": "/_matrix/client/v3/sync",
+          "query": [
+            "since",
+            "timeout",
+            "use_state_after"
+          ],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": -1,
+          "transferEncoding": false,
+          "timeoutMillis": "1000",
+          "errorCode": ""
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/keys/upload",
+          "query": [],
+          "unknownQuery": false,
+          "status": 400,
+          "contentLength": 17776,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": "collaboration_device_keys_invalid"
+        },
+        {
+          "method": "GET",
+          "route": "/_matrix/client/v3/sync",
+          "query": [
+            "since",
+            "timeout",
+            "use_state_after"
+          ],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": -1,
+          "transferEncoding": false,
+          "timeoutMillis": "1000",
+          "errorCode": ""
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/keys/upload",
+          "query": [],
+          "unknownQuery": false,
+          "status": 400,
+          "contentLength": 17776,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": "collaboration_device_keys_invalid"
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/keys/upload",
+          "query": [],
+          "unknownQuery": false,
+          "status": 400,
+          "contentLength": 17776,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": "collaboration_device_keys_invalid"
+        },
+        {
+          "method": "GET",
+          "route": "/_matrix/client/v3/sync",
+          "query": [
+            "since",
+            "timeout",
+            "use_state_after"
+          ],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": -1,
+          "transferEncoding": false,
+          "timeoutMillis": "1000",
+          "errorCode": ""
+        },
+        {
+          "method": "GET",
+          "route": "/_matrix/client/v3/sync",
+          "query": [
+            "since",
+            "timeout",
+            "use_state_after"
+          ],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": -1,
+          "transferEncoding": false,
+          "timeoutMillis": "1000",
+          "errorCode": ""
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/keys/upload",
+          "query": [],
+          "unknownQuery": false,
+          "status": 400,
+          "contentLength": 17776,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": "collaboration_device_keys_invalid"
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/keys/upload",
+          "query": [],
+          "unknownQuery": false,
+          "status": 400,
+          "contentLength": 17776,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": "collaboration_device_keys_invalid"
+        },
+        {
+          "method": "GET",
+          "route": "/_matrix/client/v3/sync",
+          "query": [
+            "since",
+            "timeout",
+            "use_state_after"
+          ],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": -1,
+          "transferEncoding": false,
+          "timeoutMillis": "1000",
+          "errorCode": ""
+        },
+        {
+          "method": "GET",
+          "route": "/_matrix/client/v3/sync",
+          "query": [
+            "since",
+            "timeout",
+            "use_state_after"
+          ],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": -1,
+          "transferEncoding": false,
+          "timeoutMillis": "1000",
+          "errorCode": ""
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/keys/upload",
+          "query": [],
+          "unknownQuery": false,
+          "status": 400,
+          "contentLength": 17776,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": "collaboration_device_keys_invalid"
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/keys/upload",
+          "query": [],
+          "unknownQuery": false,
+          "status": 400,
+          "contentLength": 17776,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": "collaboration_device_keys_invalid"
+        },
+        {
+          "method": "GET",
+          "route": "/_matrix/client/v3/sync",
+          "query": [
+            "since",
+            "timeout",
+            "use_state_after"
+          ],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": -1,
+          "transferEncoding": false,
+          "timeoutMillis": "1000",
+          "errorCode": ""
+        },
+        {
+          "method": "GET",
+          "route": "/_matrix/client/v3/sync",
+          "query": [
+            "since",
+            "timeout",
+            "use_state_after"
+          ],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": -1,
+          "transferEncoding": false,
+          "timeoutMillis": "1000",
+          "errorCode": ""
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/keys/upload",
+          "query": [],
+          "unknownQuery": false,
+          "status": 400,
+          "contentLength": 17776,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": "collaboration_device_keys_invalid"
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/keys/upload",
+          "query": [],
+          "unknownQuery": false,
+          "status": 400,
+          "contentLength": 17776,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": "collaboration_device_keys_invalid"
+        },
+        {
+          "method": "GET",
+          "route": "/_matrix/client/v3/sync",
+          "query": [
+            "since",
+            "timeout",
+            "use_state_after"
+          ],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": -1,
+          "transferEncoding": false,
+          "timeoutMillis": "1000",
+          "errorCode": ""
+        },
+        {
+          "method": "GET",
+          "route": "/_matrix/client/v3/sync",
+          "query": [
+            "since",
+            "timeout",
+            "use_state_after"
+          ],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": -1,
+          "transferEncoding": false,
+          "timeoutMillis": "1000",
+          "errorCode": ""
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/keys/upload",
+          "query": [],
+          "unknownQuery": false,
+          "status": 400,
+          "contentLength": 17776,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": "collaboration_device_keys_invalid"
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/keys/upload",
+          "query": [],
+          "unknownQuery": false,
+          "status": 400,
+          "contentLength": 17776,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": "collaboration_device_keys_invalid"
+        },
+        {
+          "method": "GET",
+          "route": "/_matrix/client/v3/sync",
+          "query": [
+            "since",
+            "timeout",
+            "use_state_after"
+          ],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": -1,
+          "transferEncoding": false,
+          "timeoutMillis": "1000",
+          "errorCode": ""
+        },
+        {
+          "method": "GET",
+          "route": "/_matrix/client/v3/sync",
+          "query": [
+            "since",
+            "timeout",
+            "use_state_after"
+          ],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": -1,
+          "transferEncoding": false,
+          "timeoutMillis": "1000",
+          "errorCode": ""
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/keys/upload",
+          "query": [],
+          "unknownQuery": false,
+          "status": 400,
+          "contentLength": 17776,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": "collaboration_device_keys_invalid"
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/keys/upload",
+          "query": [],
+          "unknownQuery": false,
+          "status": 400,
+          "contentLength": 17776,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": "collaboration_device_keys_invalid"
+        },
+        {
+          "method": "GET",
+          "route": "/_matrix/client/v3/sync",
+          "query": [
+            "since",
+            "timeout",
+            "use_state_after"
+          ],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": -1,
+          "transferEncoding": false,
+          "timeoutMillis": "1000",
+          "errorCode": ""
+        },
+        {
+          "method": "GET",
+          "route": "/_matrix/client/v3/sync",
+          "query": [
+            "since",
+            "timeout",
+            "use_state_after"
+          ],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": -1,
+          "transferEncoding": false,
+          "timeoutMillis": "1000",
+          "errorCode": ""
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/keys/upload",
+          "query": [],
+          "unknownQuery": false,
+          "status": 400,
+          "contentLength": 17776,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": "collaboration_device_keys_invalid"
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/keys/upload",
+          "query": [],
+          "unknownQuery": false,
+          "status": 400,
+          "contentLength": 17776,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": "collaboration_device_keys_invalid"
+        },
+        {
+          "method": "GET",
+          "route": "/_matrix/client/v3/sync",
+          "query": [
+            "since",
+            "timeout",
+            "use_state_after"
+          ],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": -1,
+          "transferEncoding": false,
+          "timeoutMillis": "1000",
+          "errorCode": ""
+        },
+        {
+          "method": "GET",
+          "route": "/_matrix/client/v3/sync",
+          "query": [
+            "since",
+            "timeout",
+            "use_state_after"
+          ],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": -1,
+          "transferEncoding": false,
+          "timeoutMillis": "1000",
+          "errorCode": ""
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/keys/upload",
+          "query": [],
+          "unknownQuery": false,
+          "status": 400,
+          "contentLength": 17776,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": "collaboration_device_keys_invalid"
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/keys/upload",
+          "query": [],
+          "unknownQuery": false,
+          "status": 400,
+          "contentLength": 17776,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": "collaboration_device_keys_invalid"
+        },
+        {
+          "method": "GET",
+          "route": "/_matrix/client/v3/sync",
+          "query": [
+            "since",
+            "timeout",
+            "use_state_after"
+          ],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": -1,
+          "transferEncoding": false,
+          "timeoutMillis": "1000",
+          "errorCode": ""
+        },
+        {
+          "method": "GET",
+          "route": "/_matrix/client/v3/sync",
+          "query": [
+            "since",
+            "timeout",
+            "use_state_after"
+          ],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": -1,
+          "transferEncoding": false,
+          "timeoutMillis": "1000",
+          "errorCode": ""
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/keys/upload",
+          "query": [],
+          "unknownQuery": false,
+          "status": 400,
+          "contentLength": 17776,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": "collaboration_device_keys_invalid"
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/keys/upload",
+          "query": [],
+          "unknownQuery": false,
+          "status": 400,
+          "contentLength": 17776,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": "collaboration_device_keys_invalid"
+        },
+        {
+          "method": "GET",
+          "route": "/_matrix/client/v3/sync",
+          "query": [
+            "since",
+            "timeout",
+            "use_state_after"
+          ],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": -1,
+          "transferEncoding": false,
+          "timeoutMillis": "1000",
+          "errorCode": ""
+        },
+        {
+          "method": "GET",
+          "route": "/_matrix/client/v3/sync",
+          "query": [
+            "since",
+            "timeout",
+            "use_state_after"
+          ],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": -1,
+          "transferEncoding": false,
+          "timeoutMillis": "1000",
+          "errorCode": ""
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/keys/upload",
+          "query": [],
+          "unknownQuery": false,
+          "status": 400,
+          "contentLength": 17776,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": "collaboration_device_keys_invalid"
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/keys/upload",
+          "query": [],
+          "unknownQuery": false,
+          "status": 400,
+          "contentLength": 17776,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": "collaboration_device_keys_invalid"
+        },
+        {
+          "method": "GET",
+          "route": "/_matrix/client/v3/sync",
+          "query": [
+            "since",
+            "timeout",
+            "use_state_after"
+          ],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": -1,
+          "transferEncoding": false,
+          "timeoutMillis": "1000",
+          "errorCode": ""
+        },
+        {
+          "method": "GET",
+          "route": "/_matrix/client/v3/sync",
+          "query": [
+            "since",
+            "timeout",
+            "use_state_after"
+          ],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": -1,
+          "transferEncoding": false,
+          "timeoutMillis": "1000",
+          "errorCode": ""
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/keys/upload",
+          "query": [],
+          "unknownQuery": false,
+          "status": 400,
+          "contentLength": 17776,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": "collaboration_device_keys_invalid"
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/keys/upload",
+          "query": [],
+          "unknownQuery": false,
+          "status": 400,
+          "contentLength": 17776,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": "collaboration_device_keys_invalid"
+        },
+        {
+          "method": "GET",
+          "route": "/_matrix/client/v3/sync",
+          "query": [
+            "since",
+            "timeout",
+            "use_state_after"
+          ],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": -1,
+          "transferEncoding": false,
+          "timeoutMillis": "1000",
+          "errorCode": ""
+        },
+        {
+          "method": "GET",
+          "route": "/_matrix/client/v3/sync",
+          "query": [
+            "since",
+            "timeout",
+            "use_state_after"
+          ],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": -1,
+          "transferEncoding": false,
+          "timeoutMillis": "1000",
+          "errorCode": ""
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/keys/upload",
+          "query": [],
+          "unknownQuery": false,
+          "status": 400,
+          "contentLength": 17776,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": "collaboration_device_keys_invalid"
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/keys/upload",
+          "query": [],
+          "unknownQuery": false,
+          "status": 400,
+          "contentLength": 17776,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": "collaboration_device_keys_invalid"
+        },
+        {
+          "method": "GET",
+          "route": "/_matrix/client/v3/sync",
+          "query": [
+            "since",
+            "timeout",
+            "use_state_after"
+          ],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": -1,
+          "transferEncoding": false,
+          "timeoutMillis": "1000",
+          "errorCode": ""
+        },
+        {
+          "method": "GET",
+          "route": "/_matrix/client/v3/sync",
+          "query": [
+            "since",
+            "timeout",
+            "use_state_after"
+          ],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": -1,
+          "transferEncoding": false,
+          "timeoutMillis": "1000",
+          "errorCode": ""
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/keys/upload",
+          "query": [],
+          "unknownQuery": false,
+          "status": 400,
+          "contentLength": 17776,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": "collaboration_device_keys_invalid"
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/keys/upload",
+          "query": [],
+          "unknownQuery": false,
+          "status": 400,
+          "contentLength": 17776,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": "collaboration_device_keys_invalid"
+        },
+        {
+          "method": "GET",
+          "route": "/_matrix/client/v3/sync",
+          "query": [
+            "since",
+            "timeout",
+            "use_state_after"
+          ],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": -1,
+          "transferEncoding": false,
+          "timeoutMillis": "1000",
+          "errorCode": ""
+        },
+        {
+          "method": "GET",
+          "route": "/_matrix/client/v3/sync",
+          "query": [
+            "since",
+            "timeout",
+            "use_state_after"
+          ],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": -1,
+          "transferEncoding": false,
+          "timeoutMillis": "1000",
+          "errorCode": ""
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/keys/upload",
+          "query": [],
+          "unknownQuery": false,
+          "status": 400,
+          "contentLength": 17776,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": "collaboration_device_keys_invalid"
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/keys/upload",
+          "query": [],
+          "unknownQuery": false,
+          "status": 400,
+          "contentLength": 17776,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": "collaboration_device_keys_invalid"
+        },
+        {
+          "method": "GET",
+          "route": "/_matrix/client/v3/sync",
+          "query": [
+            "since",
+            "timeout",
+            "use_state_after"
+          ],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": -1,
+          "transferEncoding": false,
+          "timeoutMillis": "1000",
+          "errorCode": ""
+        },
+        {
+          "method": "GET",
+          "route": "/_matrix/client/v3/sync",
+          "query": [
+            "since",
+            "timeout",
+            "use_state_after"
+          ],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": -1,
+          "transferEncoding": false,
+          "timeoutMillis": "1000",
+          "errorCode": ""
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/keys/upload",
+          "query": [],
+          "unknownQuery": false,
+          "status": 400,
+          "contentLength": 17776,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": "collaboration_device_keys_invalid"
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/keys/upload",
+          "query": [],
+          "unknownQuery": false,
+          "status": 400,
+          "contentLength": 17776,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": "collaboration_device_keys_invalid"
+        },
+        {
+          "method": "GET",
+          "route": "/_matrix/client/v3/sync",
+          "query": [
+            "since",
+            "timeout",
+            "use_state_after"
+          ],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": -1,
+          "transferEncoding": false,
+          "timeoutMillis": "1000",
+          "errorCode": ""
+        },
+        {
+          "method": "GET",
+          "route": "/_matrix/client/v3/sync",
+          "query": [
+            "since",
+            "timeout",
+            "use_state_after"
+          ],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": -1,
+          "transferEncoding": false,
+          "timeoutMillis": "1000",
+          "errorCode": ""
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/keys/upload",
+          "query": [],
+          "unknownQuery": false,
+          "status": 400,
+          "contentLength": 17776,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": "collaboration_device_keys_invalid"
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/keys/upload",
+          "query": [],
+          "unknownQuery": false,
+          "status": 400,
+          "contentLength": 17776,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": "collaboration_device_keys_invalid"
+        },
+        {
+          "method": "GET",
+          "route": "/_matrix/client/v3/sync",
+          "query": [
+            "since",
+            "timeout",
+            "use_state_after"
+          ],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": -1,
+          "transferEncoding": false,
+          "timeoutMillis": "1000",
+          "errorCode": ""
+        },
+        {
+          "method": "GET",
+          "route": "/_matrix/client/v3/sync",
+          "query": [
+            "since",
+            "timeout",
+            "use_state_after"
+          ],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": -1,
+          "transferEncoding": false,
+          "timeoutMillis": "1000",
+          "errorCode": ""
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/keys/upload",
+          "query": [],
+          "unknownQuery": false,
+          "status": 400,
+          "contentLength": 17776,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": "collaboration_device_keys_invalid"
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/keys/upload",
+          "query": [],
+          "unknownQuery": false,
+          "status": 400,
+          "contentLength": 17776,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": "collaboration_device_keys_invalid"
+        },
+        {
+          "method": "GET",
+          "route": "/_matrix/client/v3/sync",
+          "query": [
+            "since",
+            "timeout",
+            "use_state_after"
+          ],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": -1,
+          "transferEncoding": false,
+          "timeoutMillis": "1000",
+          "errorCode": ""
+        },
+        {
+          "method": "GET",
+          "route": "/_matrix/client/v3/sync",
+          "query": [
+            "since",
+            "timeout",
+            "use_state_after"
+          ],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": -1,
+          "transferEncoding": false,
+          "timeoutMillis": "1000",
+          "errorCode": ""
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/keys/upload",
+          "query": [],
+          "unknownQuery": false,
+          "status": 400,
+          "contentLength": 17776,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": "collaboration_device_keys_invalid"
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/keys/upload",
+          "query": [],
+          "unknownQuery": false,
+          "status": 400,
+          "contentLength": 17776,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": "collaboration_device_keys_invalid"
+        },
+        {
+          "method": "GET",
+          "route": "/_matrix/client/v3/sync",
+          "query": [
+            "since",
+            "timeout",
+            "use_state_after"
+          ],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": -1,
+          "transferEncoding": false,
+          "timeoutMillis": "1000",
+          "errorCode": ""
+        },
+        {
+          "method": "GET",
+          "route": "/_matrix/client/v3/sync",
+          "query": [
+            "since",
+            "timeout",
+            "use_state_after"
+          ],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": -1,
+          "transferEncoding": false,
+          "timeoutMillis": "1000",
+          "errorCode": ""
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/keys/upload",
+          "query": [],
+          "unknownQuery": false,
+          "status": 400,
+          "contentLength": 17776,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": "collaboration_device_keys_invalid"
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/keys/upload",
+          "query": [],
+          "unknownQuery": false,
+          "status": 400,
+          "contentLength": 17776,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": "collaboration_device_keys_invalid"
+        },
+        {
+          "method": "GET",
+          "route": "/_matrix/client/v3/sync",
+          "query": [
+            "since",
+            "timeout",
+            "use_state_after"
+          ],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": -1,
+          "transferEncoding": false,
+          "timeoutMillis": "1000",
+          "errorCode": ""
+        },
+        {
+          "method": "GET",
+          "route": "/_matrix/client/v3/sync",
+          "query": [
+            "since",
+            "timeout",
+            "use_state_after"
+          ],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": -1,
+          "transferEncoding": false,
+          "timeoutMillis": "1000",
+          "errorCode": ""
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/keys/upload",
+          "query": [],
+          "unknownQuery": false,
+          "status": 400,
+          "contentLength": 17776,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": "collaboration_device_keys_invalid"
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/keys/upload",
+          "query": [],
+          "unknownQuery": false,
+          "status": 400,
+          "contentLength": 17776,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": "collaboration_device_keys_invalid"
+        },
+        {
+          "method": "GET",
+          "route": "/_matrix/client/v3/sync",
+          "query": [
+            "since",
+            "timeout",
+            "use_state_after"
+          ],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": -1,
+          "transferEncoding": false,
+          "timeoutMillis": "1000",
+          "errorCode": ""
+        },
+        {
+          "method": "GET",
+          "route": "/_matrix/client/v3/sync",
+          "query": [
+            "since",
+            "timeout",
+            "use_state_after"
+          ],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": -1,
+          "transferEncoding": false,
+          "timeoutMillis": "1000",
+          "errorCode": ""
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/keys/upload",
+          "query": [],
+          "unknownQuery": false,
+          "status": 400,
+          "contentLength": 17776,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": "collaboration_device_keys_invalid"
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/keys/upload",
+          "query": [],
+          "unknownQuery": false,
+          "status": 400,
+          "contentLength": 17776,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": "collaboration_device_keys_invalid"
+        },
+        {
+          "method": "GET",
+          "route": "/_matrix/client/v3/sync",
+          "query": [
+            "since",
+            "timeout",
+            "use_state_after"
+          ],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": -1,
+          "transferEncoding": false,
+          "timeoutMillis": "1000",
+          "errorCode": ""
+        },
+        {
+          "method": "GET",
+          "route": "/_matrix/client/v3/sync",
+          "query": [
+            "since",
+            "timeout",
+            "use_state_after"
+          ],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": -1,
+          "transferEncoding": false,
+          "timeoutMillis": "1000",
+          "errorCode": ""
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/keys/upload",
+          "query": [],
+          "unknownQuery": false,
+          "status": 400,
+          "contentLength": 17776,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": "collaboration_device_keys_invalid"
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/keys/upload",
+          "query": [],
+          "unknownQuery": false,
+          "status": 400,
+          "contentLength": 17776,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": "collaboration_device_keys_invalid"
+        },
+        {
+          "method": "GET",
+          "route": "/_matrix/client/v3/sync",
+          "query": [
+            "since",
+            "timeout",
+            "use_state_after"
+          ],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": -1,
+          "transferEncoding": false,
+          "timeoutMillis": "1000",
+          "errorCode": ""
+        },
+        {
+          "method": "GET",
+          "route": "/_matrix/client/v3/sync",
+          "query": [
+            "since",
+            "timeout",
+            "use_state_after"
+          ],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": -1,
+          "transferEncoding": false,
+          "timeoutMillis": "1000",
+          "errorCode": ""
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/keys/upload",
+          "query": [],
+          "unknownQuery": false,
+          "status": 400,
+          "contentLength": 17776,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": "collaboration_device_keys_invalid"
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/keys/upload",
+          "query": [],
+          "unknownQuery": false,
+          "status": 400,
+          "contentLength": 17776,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": "collaboration_device_keys_invalid"
+        },
+        {
+          "method": "GET",
+          "route": "/_matrix/client/v3/sync",
+          "query": [
+            "since",
+            "timeout",
+            "use_state_after"
+          ],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": -1,
+          "transferEncoding": false,
+          "timeoutMillis": "1000",
+          "errorCode": ""
+        },
+        {
+          "method": "GET",
+          "route": "/_matrix/client/v3/sync",
+          "query": [
+            "since",
+            "timeout",
+            "use_state_after"
+          ],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": -1,
+          "transferEncoding": false,
+          "timeoutMillis": "1000",
+          "errorCode": ""
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/keys/upload",
+          "query": [],
+          "unknownQuery": false,
+          "status": 400,
+          "contentLength": 17776,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": "collaboration_device_keys_invalid"
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/keys/upload",
+          "query": [],
+          "unknownQuery": false,
+          "status": 400,
+          "contentLength": 17776,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": "collaboration_device_keys_invalid"
+        },
+        {
+          "method": "GET",
+          "route": "/_matrix/client/v3/sync",
+          "query": [
+            "since",
+            "timeout",
+            "use_state_after"
+          ],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": -1,
+          "transferEncoding": false,
+          "timeoutMillis": "1000",
+          "errorCode": ""
+        },
+        {
+          "method": "GET",
+          "route": "/_matrix/client/v3/sync",
+          "query": [
+            "since",
+            "timeout",
+            "use_state_after"
+          ],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": -1,
+          "transferEncoding": false,
+          "timeoutMillis": "1000",
+          "errorCode": ""
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/keys/upload",
+          "query": [],
+          "unknownQuery": false,
+          "status": 400,
+          "contentLength": 17776,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": "collaboration_device_keys_invalid"
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/keys/upload",
+          "query": [],
+          "unknownQuery": false,
+          "status": 400,
+          "contentLength": 17776,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": "collaboration_device_keys_invalid"
+        },
+        {
+          "method": "GET",
+          "route": "/_matrix/client/v3/sync",
+          "query": [
+            "since",
+            "timeout",
+            "use_state_after"
+          ],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": -1,
+          "transferEncoding": false,
+          "timeoutMillis": "1000",
+          "errorCode": ""
+        },
+        {
+          "method": "GET",
+          "route": "/_matrix/client/v3/sync",
+          "query": [
+            "since",
+            "timeout",
+            "use_state_after"
+          ],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": -1,
+          "transferEncoding": false,
+          "timeoutMillis": "1000",
+          "errorCode": ""
+        }
+      ]
+    },
+    {
+      "runId": "548eea4e6de1458fbf22e656f2ce350b",
+      "seconds": 46,
+      "result": {
+        "passed": false,
+        "cleanup": true,
+        "artifact": {
+          "apkSha256": "18b072bc4744597a3a9f4667269a810e1b6060f57eb7a43c0e49c4c936d1f261",
+          "package": "dev.fajar.hris.collaboration.proof",
+          "avd": "hris-mobile-dev",
+          "androidApi": "35"
+        },
+        "failureCategory": "InterruptedError"
+      },
+      "trace": [
+        {
+          "method": "GET",
+          "route": "/_matrix/client/versions",
+          "query": [],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": -1,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": ""
+        },
+        {
+          "method": "GET",
+          "route": "/_matrix/client/versions",
+          "query": [],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": -1,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": ""
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/keys/query",
+          "query": [],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": 114,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": ""
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/keys/query",
+          "query": [],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": 114,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": ""
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/rooms/_/join",
+          "query": [],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": 2,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": ""
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/rooms/_/join",
+          "query": [],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": 2,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": ""
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/keys/upload",
+          "query": [],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": 17408,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": "",
+          "keyShape": {
+            "parsed": true,
+            "devicePresent": true,
+            "oneTimeCount": 50,
+            "fallbackCount": 0,
+            "overlappingIds": 0,
+            "oneTimeMarkedFallback": 0,
+            "fallbackNotMarked": 0,
+            "shapeValid": true
+          }
+        },
+        {
+          "method": "GET",
+          "route": "/_matrix/client/v3/sync",
+          "query": [
+            "timeout",
+            "use_state_after"
+          ],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": -1,
+          "transferEncoding": false,
+          "timeoutMillis": "1000",
+          "errorCode": ""
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/keys/upload",
+          "query": [],
+          "unknownQuery": false,
+          "status": 503,
+          "contentLength": 17408,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": "collaboration_provider_busy",
+          "keyShape": {
+            "parsed": true,
+            "devicePresent": true,
+            "oneTimeCount": 50,
+            "fallbackCount": 0,
+            "overlappingIds": 0,
+            "oneTimeMarkedFallback": 0,
+            "fallbackNotMarked": 0,
+            "shapeValid": true
+          }
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/keys/query",
+          "query": [],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": 114,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": ""
+        },
+        {
+          "method": "GET",
+          "route": "/_matrix/client/v3/sync",
+          "query": [
+            "timeout",
+            "use_state_after"
+          ],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": -1,
+          "transferEncoding": false,
+          "timeoutMillis": "1000",
+          "errorCode": ""
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/keys/upload",
+          "query": [],
+          "unknownQuery": false,
+          "status": 400,
+          "contentLength": 17776,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": "collaboration_device_keys_invalid",
+          "keyShape": {
+            "parsed": true,
+            "devicePresent": true,
+            "oneTimeCount": 50,
+            "fallbackCount": 1,
+            "overlappingIds": 1,
+            "oneTimeMarkedFallback": 0,
+            "fallbackNotMarked": 0,
+            "shapeValid": false
+          }
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/keys/upload",
+          "query": [],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": 369,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": "",
+          "keyShape": {
+            "parsed": true,
+            "devicePresent": false,
+            "oneTimeCount": 0,
+            "fallbackCount": 1,
+            "overlappingIds": 0,
+            "oneTimeMarkedFallback": 0,
+            "fallbackNotMarked": 0,
+            "shapeValid": true
+          }
+        },
+        {
+          "method": "POST",
+          "route": "/_matrix/client/v3/keys/query",
+          "query": [],
+          "unknownQuery": false,
+          "status": 200,
+          "contentLength": 114,
+          "transferEncoding": false,
+          "timeoutMillis": "absent_or_invalid",
+          "errorCode": ""
+        }
+      ]
+    }
+  ],
+  "dependencyMetadata": [
+    {
+      "name": "datastore-core-jvm",
+      "artifact": "datastore-core-jvm-1.1.7.module",
+      "sha256": "58021c7670af96974556d75ff4e418c099cd121179ce92f8347dfcadc67b0032",
+      "source": "https://dl.google.com/dl/android/maven2/androidx/datastore/datastore-core-jvm/1.1.7/datastore-core-jvm-1.1.7.module"
+    },
+    {
+      "name": "datastore-jvm",
+      "artifact": "datastore-jvm-1.1.7.module",
+      "sha256": "333c371dd12ec174e7d31bfffaa9dc8396ffb9b16b88971eb757c0817aafb9e5",
+      "source": "https://dl.google.com/dl/android/maven2/androidx/datastore/datastore-jvm/1.1.7/datastore-jvm-1.1.7.module"
+    },
+    {
+      "name": "datastore-preferences-core-jvm",
+      "artifact": "datastore-preferences-core-jvm-1.1.7.module",
+      "sha256": "2c5e81aae9a4851801ae6626cf2cba512fd2460956f0f7c4d0cf101db370591c",
+      "source": "https://dl.google.com/dl/android/maven2/androidx/datastore/datastore-preferences-core-jvm/1.1.7/datastore-preferences-core-jvm-1.1.7.module"
+    },
+    {
+      "name": "datastore-preferences-jvm",
+      "artifact": "datastore-preferences-jvm-1.1.7.module",
+      "sha256": "45905e7ec9d518d553d1772a4cab191ed1dd3badff9373b090dda836a1cb0556",
+      "source": "https://dl.google.com/dl/android/maven2/androidx/datastore/datastore-preferences-jvm/1.1.7/datastore-preferences-jvm-1.1.7.module"
+    }
+  ],
+  "buildCorrections": [
+    {
+      "seconds": 77,
+      "result": "proof assembly passed; lint dependency verification rejected four missing AndroidX module checksums"
+    },
+    {
+      "seconds": 29,
+      "result": "debug assembly/lint passed after official Google Maven bytes matched the local artifacts"
+    },
+    {
+      "seconds": 47,
+      "result": "initial root/debug/lint passed before adding native database-drain coordination"
+    }
+  ],
+  "limits": [
+    "Device activation and room-binding publication are SQL fixtures; real registration, bootstrap, provider room creation, SDK crypto and all chat traffic use HRIS admission.",
+    "No actual process death, persisted message queue reconciliation, Apple SDK runtime, app DI/routes, call/meeting behavior or capacity acceptance.",
+    "Client pause drains database pools before directory unlock; failure retains the lease. Application recovery of an abandoned failed-close lease still needs explicit integration.",
+    "No provider logout, live/schema change, phone interaction or Starter port."
+  ],
+  "next": [
+    "Prove one retained SDK transaction across an actual owned Android process death and reconcile encrypted logical IDs.",
+    "Finish native runtime installation, abandoned-close and bootstrap recovery, app DI/UI and all P0\u2013P8."
+  ],
+  "platformCommit": "22d8ea3b4e1051ba1869db39bb7e7d367e5de647",
+  "hostedNative": "Pending the matching pushed Mobile commit; workflow pins this exact Platform revision."
+}
