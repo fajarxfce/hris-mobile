@@ -1,0 +1,111 @@
+{
+  "date": "2026-10-31",
+  "mobileSource": "b73031be269bdb057d1e52e3455c2f32459b0d69",
+  "starterSource": "54cabf5",
+  "sampleDataSource": "hris-platform@1363abee",
+  "localValidation": {
+    "rootCommand": "xvfb-run -a ./gradlew formatKotlin :check --no-daemon",
+    "durationSeconds": 166,
+    "tests": 1998,
+    "suites": 348,
+    "sharedUiTests": 208,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "portableFiles": {
+    "core/designsystem/src/commonMain/kotlin/dev/fajar/starter/designsystem/components/AppSelectField.kt": "677ea11bbe3f4cdc372472d686e08fbac0909b68086d95ab2b7e3b0089162277",
+    "core/designsystem/src/commonMain/kotlin/dev/fajar/starter/designsystem/components/AppDetailField.kt": "373fbea9f51f30d0eea00849cb21ed60e2e8c984f721fb134486347efadbd2a8",
+    "core/designsystem/src/commonMain/kotlin/dev/fajar/starter/designsystem/components/AppBadge.kt": "2841a53be6a8db772f2c443f9b701c46ba2c633457559384dc02840831155a59",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/FormChoiceLayoutTest.kt": "10eae798d730585613f415abf03f3132e73dcc06a2523b99e3de1f29df9cbe01"
+  },
+  "sampleData": {
+    "colleagues": 4,
+    "leaveRequests": 3,
+    "expenseClaims": 3,
+    "overtimeRequests": 3,
+    "attendanceCorrections": 5,
+    "personalInboxAnnouncements": 3,
+    "fictionalDocuments": 2
+  },
+  "ci": {
+    "mobile": 41167886399,
+    "starter": 41167913080,
+    "status": "in_progress"
+  },
+  "delivery": {
+    "status": "installed_and_verified",
+    "artifact": {
+      "artifact": ".work/ui-review-2026-10-31/release/hris-mobile-dev-release-1.0.0-3.apk",
+      "variant": "devRelease",
+      "applicationId": "dev.fajar.hris.mobile.dev",
+      "versionCode": 3,
+      "versionName": "1.0.0",
+      "bytes": 24111207,
+      "sha256": "c5348192d7feeb6eb837cf7453786736e76ef09fb065b356747fcb8f651a63d2",
+      "debuggable": false,
+      "signatureVerified": true,
+      "sameInstalledSigner": true,
+      "signerSha256": "aca5ce6a26b978dee1d63c63103b6799848ab760d47ef4cf5ee68620fc8721f3",
+      "signerSha1": "23860b51e4305aa7900090aeab6783d39a12ff33",
+      "signingBoundary": "Release build signed with the existing development key for an in-place private-device update.",
+      "privateApiVerifiedInDex": true,
+      "fixtureEndpointsAbsent": true,
+      "firebaseDevAppMatches": true
+    },
+    "installation": {
+      "confirmed": true,
+      "startedAt": "2026-10-31T04:25:37.316238+00:00",
+      "elapsedSecondsIncludingVerification": 25.682,
+      "serial": "10.77.77.3:5555",
+      "variant": "devRelease",
+      "applicationId": "dev.fajar.hris.mobile.dev",
+      "versionCode": 3,
+      "versionName": "1.0.0",
+      "debuggable": false,
+      "installedSha256": "c5348192d7feeb6eb837cf7453786736e76ef09fb065b356747fcb8f651a63d2",
+      "installedBytesMatch": true,
+      "existingAppIdPreserved": true,
+      "firstInstallTimePreserved": true,
+      "updateInPlace": true,
+      "uninstalled": false,
+      "appDataCleared": false,
+      "uiLaunched": false
+    }
+  },
+  "screenshots": {
+    "device": "Dedicated Android 35 emulator at 1080x2340 / 440 dpi",
+    "sources": [
+      "Actual private API with fictional employee records",
+      "Rendered Compose integration fixtures for large text, dark appearance, payroll and restricted/recovery states"
+    ],
+    "limits": [
+      "No physical iPhone run",
+      "No real payroll payment generated",
+      "No Google binding or permissions changed"
+    ],
+    "gallery": {
+      "docs/screenshots/layout-2026-10-31/android-lists-details.jpg": "208f8423710fcb3746f86a517e55376268e70625cdba2f46dfac2c313f704ab3",
+      "docs/screenshots/layout-2026-10-31/android-forms.jpg": "e83b02f872f83100c4a31a166c98f09a0fe92783b7d7de418335ba00b528e461",
+      "docs/screenshots/layout-2026-10-31/accessibility.jpg": "3bb43c866bc02ad3b6afb8c57a489cf2905469b8833d84015dc1f8e86716d6b6",
+      "docs/screenshots/layout-2026-10-31/before-fixtures.jpg": "23e3237af6ec598335a5acfacae37a37bbc8d92843e9319f5c7befb420b2cc77"
+    },
+    "releaseApkTested": "c5348192d7feeb6eb837cf7453786736e76ef09fb065b356747fcb8f651a63d2",
+    "actualChecks": [
+      "Configured release upgrade preserves the existing native HRIS session",
+      "Home/services, populated requests and document details",
+      "Document correction footer remains visible above the Android keyboard",
+      "Overtime date/time controls and footer remain readable at 200% text in dark mode",
+      "Owned unsaved expense item is resumed explicitly",
+      "Phone install-only; no phone UI driven"
+    ]
+  },
+  "buildAttempts": [
+    {
+      "log": "local release/build-interrupted.log",
+      "result": "outer command terminated with 143 after Android assembly; Web optimization incomplete",
+      "acceptedAndroidArtifact": "Independently verified signature, manifest, API, Firebase resources and actual emulator UI",
+      "followUp": "Resume the same Gradle inputs and retain the resulting completion status"
+    }
+  ]
+}

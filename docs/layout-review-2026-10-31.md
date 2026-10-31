@@ -78,11 +78,28 @@ No user password, token, private operation manifest or real document belongs in 
   suites, zero failures/errors/skips; 208 shared UI cases included. The two
   document interaction checks now wait for admitted save readiness and scroll
   the lazy list to the secondary reset action explicitly.
-- Native release verification, final screenshots, Starter acceptance evidence
-  and install-only delivery are still pending.
+- Configured `devRelease` build 3 is installed and verified on the authorized
+  phone. Its identical APK was exercised on Android 35 with normal Firebase,
+  keyboard, Indonesian, dark appearance and system font scale 200%.
+- [Measurements](measurements/layout-review-2026-10-31.json) retain APK/signing/API,
+  installed-byte proof, test counts and gallery hashes. Full cross-platform CI
+  and the resumed local Web build remain in progress.
 - Starter independent root checks, Android dev assembly and production Web build
   passed in 3m55s for the portable components.
 
 Initial before captures and fresh Android/Compose captures are retained locally in
 `.work/ui-review-2026-10-31/`. A selected fictional gallery and final measurement
 record will be committed with delivery. No physical iPhone test is claimed.
+
+## Screenshot gallery
+
+These are selected captures, not replacements for the coverage matrix above.
+The first gallery retains fictional Compose fixtures from the initial review.
+The Android galleries show the configured release APK and the real private API's
+fictional records; the accessibility gallery combines an actual Android system
+font-scale/dark-mode capture with focused Compose fixtures.
+
+- [Initial fixtures](screenshots/layout-2026-10-31/before-fixtures.jpg)
+- [Android lists and details](screenshots/layout-2026-10-31/android-lists-details.jpg)
+- [Android forms and keyboard](screenshots/layout-2026-10-31/android-forms.jpg)
+- [Large text and dark appearance](screenshots/layout-2026-10-31/accessibility.jpg)

@@ -6,25 +6,33 @@ Compose Fluent Starter and is the proving ground for reusable foundation changes
 
 ## Active layout and sample-data work — 31 October 2026
 
-The user requested all mobile page layouts/component choices be reviewed through
-screenshots, plus fictional sample data for the existing user-linked development
-employment. This new task is in progress; the earlier completed feature audit does
-not mark it complete. [Review queue](layout-review-2026-10-31.md) records scope,
-initial observations and validation still required. Preserve the visual language,
-account binding and installed versionCode floor of 2. Use the dedicated emulator
-for routine UI work and prove generic changes here before porting them to Starter.
+Mobile implementation `b73031be` is pushed and installed as configured
+`devRelease` **1.0.0 / build 3** on the authorized WireGuard phone. The identical
+24,111,207-byte APK was exercised in the dedicated Android 35 emulator, including
+Indonesian, keyboard, dark mode and 200% system text. Phone install-only and pulled
+APK verification passed in 25.682s; no uninstall, data clear or UI launch occurred.
+SHA-256: `c5348192d7feeb6eb837cf7453786736e76ef09fb065b356747fcb8f651a63d2`.
+**Future phone builds must use versionCode >= 3 and the existing signer.**
 
-The layout implementation now covers labelled form choices, status cards, detail
-hierarchy/localized dates, fixed create/save/Inbox actions, clear document
-navigation and retained-content refresh. Final Mobile root checks passed in
-2m46s (208 UI cases included). Sample-data provisioning is complete at Platform
-`1363abee`; no identity/role change was made. Starter's three portable components
-and large-text regression passed independent root/Android/Web checks in 3m55s.
-Continue with configured release build 3, final emulator screenshots, install-only
-phone delivery, Git evidence and remaining target verification. The emulator-only
-unconfigured debug login fixture must never be delivered to the user's phone.
+Final root checks passed 1,998 desktop cases in 348 suites (208 shared UI cases).
+Platform `1363abee` completed 23 fictional visible sample records using authorized
+APIs for the existing user-linked employment, plus leave balance examples. No
+identity binding or role was changed. Starter `54cabf5` ports only three neutral
+components, a portable regression and guidance; its independent root/Android/Web
+checks passed 327 cases in 113 suites.
 
-## Latest Android installation — 31 October 2026
+See [review and screenshots](layout-review-2026-10-31.md) and
+[measurements](measurements/layout-review-2026-10-31.json). Remaining work is
+verification closure: Mobile CI `41167886399`, Starter CI `41167913080` and a
+resumed local release/Web command are in progress. The first local combined build
+was terminated with exit 143 during Web optimization after Android assembly;
+the installed APK's package, signer, Firebase resources, API and actual behavior
+were independently verified. Record final build/CI results, resolve any genuine
+failures, stop the owned emulator and push final continuation evidence. No new
+feature implementation or sample-data write is pending unless validation finds
+an issue. Never deliver the earlier unconfigured emulator-only debug fixture.
+
+## Previous Android installation — build 2, 31 October 2026
 
 The user explicitly requested the latest release build on the WireGuard phone.
 Source `5ffb7300` retains the accepted `d170810f` application/build/test trees.
@@ -44,9 +52,8 @@ inputs, source continuity, certificate/package/API checks and installation proof
 The immutable APK and prior debug APK are retained locally under
 `.work/release-phone-2026-10-31/`.
 
-**Future phone updates must account for installed versionCode 2.** Use at least 2
-for the same build, or a higher code for subsequent builds. The repository default
-is still 1; blindly installing that default may be rejected as a downgrade.
+That installation established versionCode 2; the current build-3 floor above
+supersedes it. The repository default remains 1 and would be a downgrade.
 Preserve the same certificate and install in place. No application source or
 server change, Firebase distribution upload or generic Starter port was needed.
 Earlier phone hashes/builds below are retained history.
