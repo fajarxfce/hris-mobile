@@ -1,6 +1,7 @@
 package dev.fajar.starter.collaboration.data.repositories
 
 import dev.fajar.starter.collaboration.data.datasources.CollaborationSdkStoreLease
+import dev.fajar.starter.collaboration.data.datasources.startAndroidCollaborationSync
 import dev.fajar.starter.collaboration.data.sdk.CollaborationSdkRecord
 import dev.fajar.starter.collaboration.domain.entities.CollaborationOwner
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationRuntimeLease
@@ -28,6 +29,7 @@ internal constructor(
     private val lifetime = CoroutineScope(lifetimeJob + Dispatchers.Default)
     private val shutdown = SdkStoreShutdown(lifetime) { releaseResources() }
     private val stopRequested = AtomicBoolean()
+    private val sync = SdkSyncLifecycle(lifetime) { startAndroidCollaborationSync(nativeClient) }
     internal val closingRequested
         get() = stopRequested.get()
 
@@ -39,6 +41,7 @@ internal constructor(
         lifetime.launch(start = CoroutineStart.LAZY) {
             credentialFailures.filterNotNull().collect {
                 safeStorageCall { nativeClient.enableAllSendQueues(false) }
+                sync.stop()
             }
         }
 
@@ -46,6 +49,31 @@ internal constructor(
         initialization.start()
         credentialWatcher.start()
     }
+
+    /** Platform data entry point; the owning operation must hold current HRIS admission. */
+    suspend fun startSync(): AppResult<Unit> {
+        if (stopRequested.get()) return syncStopped()
+        credentialFailures.value?.let {
+            return AppResult.Failed(it)
+        }
+        val result = sync.start()
+        currentCoroutineContext().ensureActive()
+        if (stopRequested.get()) return syncStopped()
+        credentialFailures.value?.let {
+            sync.stop()
+            return AppResult.Failed(it)
+        }
+        return result
+    }
+
+    private fun syncStopped() =
+        AppResult.Failed(
+            Failure(
+                FailureKind.Unavailable,
+                "Chat synchronization has stopped.",
+                code = "client.collaboration_sync_stopped",
+            )
+        )
 
     override suspend fun retryCredentialWrite() = persistence.retryPending()
 
@@ -58,6 +86,9 @@ internal constructor(
         val credentialResult = persistence.close()
         credentialWatcher.cancelAndJoin()
         safeStorageCall { nativeClient.enableAllSendQueues(false) }
+        val syncStopped = sync.stop()
+        if (syncStopped is AppResult.Failed)
+            return SdkShutdownAttempt(syncStopped, released = false)
         initialization.start()
         initialization.join()
         // Disabling queues does not abort an in-flight send. Pause drains and closes

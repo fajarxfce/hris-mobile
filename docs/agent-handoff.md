@@ -2,6 +2,34 @@
 
 ## Active collaboration implementation — 31 October 2026
 
+**Android SDK synchronization now belongs to its protected runtime lease.**
+Concurrent starts share one acquisition even after caller cancellation; late or
+failed acquisition, bounded waiting and failed/cancelled termination retain clear
+ownership. Cleanup stops sync before database draining and exclusive-store unlock.
+Credential failure stops sync; reopening is explicit and does not erase owned data.
+[Evidence](measurements/collaboration-owned-sync-2026-10-31.json) retains eight new
+common cases, 15 Platform/94 Mobile source hashes and proof APK `e5c07ded`.
+
+Focused checks passed in 70s. Root/Wasm/Android/proof-lint passed in 192s: 2,121
+desktop cases; data browser has 45 cases. Actual Android/server case `54ab8f5a`
+passed in 35.750s (full fixture 1m), one API and 32 driver cases. Both directions
+decrypt after real process death, original transaction and keys survive, and
+server observation confirms no early encrypted send. Instrumentation/cleanup
+complete and the owned emulator is stopped. One `keys/upload` HTTP 503 provider
+busy is retained in the trace; the SDK exchange subsequently succeeds.
+
+**Next: durable conversation commands, product room/timeline ownership and chat UI;
+then bootstrap recovery, owned offline projections/logical-ID reconciliation and
+all P0–P8.** No product group is accepted; no live/schema/phone change. Conversation
+control is pushed at `50964794`; predecessor `9f83dcdc` hosted control/HRIS runs
+were superseded/cancelled. `50964794` runs `41246022664` and `41246022568` are still
+in progress at this checkpoint. Starter AppAuth port `9740cb5` remains locally
+verified; hosted verify `41245287269` is separate and still running.
+
+## Earlier collaboration checkpoints
+
+Use the latest checkpoint above for the active queue; earlier next-step notes are historical.
+
 **Native conversation discovery/control adapters and scoped reads are now wired.**
 [Contract](collaboration-conversations.md) and
 [evidence](measurements/collaboration-conversation-control-2026-10-31.json) cover
@@ -25,9 +53,6 @@ all P0–P8.** No product group is accepted and no live/phone change. Starter Ap
 port `9740cb5` passed independent root/Android/lint (331 desktop cases); hosted
 verify `41245287269` remains separate. HRIS control adapters/policy stay here.
 
-## Earlier collaboration checkpoints
-
-Use the latest checkpoint above for the active queue; earlier next-step notes are historical.
 
 **Application DI and Android process ownership are now wired and locally verified.**
 `MaintainCollaborationRuntimeOwnership` closes obsolete SDK leases after session/

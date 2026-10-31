@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Process
 import android.util.AtomicFile
 import dev.fajar.starter.collaboration.data.repositories.AndroidCollaborationRuntimeLease
+import dev.fajar.starter.common.result.AppResult
 import java.io.File
 import java.net.URI
 import java.util.UUID
@@ -41,8 +42,6 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
             var senderRoom: Room? = null
             var recipientRoom: Room? = null
             var pending: HrisProofPendingQueue? = null
-            val senderSync = ProofSyncOwner(ProofSyncMode.CLASSIC)
-            val recipientSync = ProofSyncOwner(ProofSyncMode.CLASSIC)
             try {
                 val senderOwner =
                     ProtectedHrisProofOwner(context, fixture.getJSONObject("sender"), home)
@@ -55,8 +54,9 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
                     else recipientOwner.installAndReopen()
                 pending = HrisProofPendingQueue(sender.nativeClient, roomId)
                 pending.attach()
-                senderSync.start(sender.nativeClient)
-                recipientSync.start(recipient.nativeClient)
+                check(sender.startSync() is AppResult.Success)
+                check(sender.startSync() is AppResult.Success)
+                check(recipient.startSync() is AppResult.Success)
                 senderRoom = sender.nativeClient.joinRoomById(roomId)
                 recipientRoom = recipient.nativeClient.joinRoomById(roomId)
                 if (resuming) resume(fixture, sender, recipient, senderRoom, recipientRoom, pending)
@@ -68,10 +68,6 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
                     val operations: List<suspend () -> Unit> =
                         listOf(
                             { pending?.close() },
-                            { withTimeout(5_000) { senderSync.stop() } },
-                            { withTimeout(5_000) { recipientSync.stop() } },
-                            { senderSync.close() },
-                            { recipientSync.close() },
                             { senderRoom?.close() },
                             { recipientRoom?.close() },
                             { sender?.closeProofRuntime() },

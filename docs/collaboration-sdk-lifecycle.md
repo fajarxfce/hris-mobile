@@ -175,3 +175,27 @@ live chat, sync services and room/listener children must join the same owned
 shutdown path. Native setup/restore is not an offline message projection or a
 delivery grant. Conversation controls/UI, bootstrap uncertainty/build recovery,
 logical-message reconciliation, Apple runtime and all remaining P0–P8 still apply.
+
+## Lease-owned classic synchronization
+
+Android runtime leases now own their classic sync task through `SdkSyncLifecycle`.
+Concurrent starts share an acquisition owned by the application lifetime, including
+when a caller is cancelled or its five-second wait expires. New explicit starts
+may retry failed acquisition; no background retry loop is introduced. The raw
+Android source uses a ten-second long poll and cancels, joins and disposes its
+native task on stop. A five-second termination timeout retains the handle for
+explicit cleanup retry. Stopping prevents a late acquisition from publishing a
+started state or another caller from opening a replacement task.
+
+Lease shutdown stops synchronization before database draining and store unlock.
+Credential persistence failure also stops sync; successful credential-write retry
+does not restart it. Reopen the protected runtime to establish a fresh sync
+lifetime under current admission. Starting a task is not evidence of connectivity
+or authorization, and this data entry point never enables message send queues.
+
+[Actual Android evidence](measurements/collaboration-owned-sync-2026-10-31.json)
+uses the production lease instead of the fixture's separate sync owner. It preserves
+the original transaction and device keys across process death, decrypts both
+messages and completes cleanup. The trace includes ten 10,000 ms sync requests
+and one retained `keys/upload` provider-busy response; the complete case passes.
+Product room, timeline/listener ownership, durable commands and UI remain pending.
