@@ -1,0 +1,113 @@
+{
+  "schemaVersion": 1,
+  "runId": "d7f70378aa444cadae44b205fa94f69b",
+  "kind": "collaboration_native_offline_invitee_first_message",
+  "complete": true,
+  "productAcceptance": false,
+  "capacityAcceptance": false,
+  "images": {
+    "synapse": {
+      "reference": "ghcr.io/element-hq/synapse:v1.164.1@sha256:fa4aa980f279bcf26d4e7ecc2a2c9a701c73f2ebe8841da9bdcf3b2fdf693d75",
+      "id": "sha256:fa4aa980f279bcf26d4e7ecc2a2c9a701c73f2ebe8841da9bdcf3b2fdf693d75",
+      "digests": [
+        "ghcr.io/element-hq/synapse@sha256:fa4aa980f279bcf26d4e7ecc2a2c9a701c73f2ebe8841da9bdcf3b2fdf693d75"
+      ]
+    },
+    "livekit": {
+      "reference": "livekit/livekit-server:v1.13.11@sha256:25cd902de7cacbd5f1f779f6a6ac1eae20ba8f56b0935934ce6b0ab80d1e3d20",
+      "id": "sha256:25cd902de7cacbd5f1f779f6a6ac1eae20ba8f56b0935934ce6b0ab80d1e3d20",
+      "digests": [
+        "livekit/livekit-server@sha256:25cd902de7cacbd5f1f779f6a6ac1eae20ba8f56b0935934ce6b0ab80d1e3d20"
+      ]
+    },
+    "postgres": {
+      "reference": "postgres:18.6-alpine@sha256:10a5c69a83035ab5239f5620d708520e8b28f5aa1f2b20143e6024532edadfb5",
+      "id": "sha256:10a5c69a83035ab5239f5620d708520e8b28f5aa1f2b20143e6024532edadfb5",
+      "digests": [
+        "postgres@sha256:10a5c69a83035ab5239f5620d708520e8b28f5aa1f2b20143e6024532edadfb5"
+      ]
+    }
+  },
+  "checks": {
+    "wrong_issuer": true,
+    "wrong_audience": true,
+    "expired_jwt_beyond_provider_leeway": true,
+    "public_registration_disabled": true,
+    "loopback_only_http": true,
+    "isolated_dedicated_network": true,
+    "browser_e2ee_restart_media": true,
+    "browser_offline_invitee_first_message_sender_offline": true,
+    "android_web_bidirectional_e2ee": true,
+    "android_sdk_refresh_preserves_device_key": true,
+    "android_sdk_queue_encrypted_logical_ids": true,
+    "android_encrypts_for_offline_invitee_before_join": true
+  },
+  "cleanup": true,
+  "sourceSha256": {
+    "tool/check_collaboration_providers.py": "2113e86a787a175ad4e52a8ad4c6f57dcdfdf749273fad93bbc430b250529f23",
+    "tool/test_collaboration_providers.py": "1ddf78841a84a9e0636542a62c661f4d8b07a15f145083d74f7d47449fa67f3a",
+    "tool/collaboration_native_device.py": "d65344ef89e327d5365c2ba657e152d5beacd14c9459d2a6afd3177eadbccf7c",
+    "tool/test_collaboration_native_device.py": "5fd304f28d583682606cb729abdf241d2d1c40dcb730c5481357eb063d03b867",
+    "tool/collaboration-proof/package.json": "f499358763283beb73dd76606dde7e28122b6787494529ad518fef5718062cad",
+    "tool/collaboration-proof/package-lock.json": "031dbd57065817fbe2e119d87bb3e9588e26d4814835219dc950c4dddff51c56",
+    "tool/collaboration-proof/images.json": "63aa4b37949053e6574f9f4ae7ff1d22c02a59d8955a141c6aae5b2257e89f50",
+    "tool/collaboration-proof/index.html": "e5cadc31789aa95d2b718905dd44201da49a29678b913db9a7563fdf907ba7d0",
+    "tool/collaboration-proof/playwright.config.mjs": "33b5dd2896bd6a602e54a9c8154c679ee31b473e7bc9a0ff9da8864ca429381c",
+    "tool/collaboration-proof/src/probe.js": "b452de9882c7f121e811bde62bca92eaf678ce785030d4c715b99b316cb9a5f6",
+    "tool/collaboration-proof/tests/providers.spec.mjs": "1d498852844d41f350fd5ef295484acafb18bc8b90d9eb7daf3d05825c6ca3c2",
+    "tool/collaboration-proof/tests/native.spec.mjs": "d8808728797539125c915126cdb98f432cf415fec0a18653be7ac46ae305220b"
+  },
+  "observations": {
+    "recent_expired_jwt_accepted_by_provider": true,
+    "strict_hris_broker_expiry_required": true
+  },
+  "native": {
+    "apkSha256": "d3662eb900e80d29b61010a7f7ee0ad87247ac54500751a1ea0fafa9133b3da1",
+    "package": "dev.fajar.hris.collaboration.proof",
+    "avd": "hris-mobile-dev",
+    "androidApi": "35"
+  },
+  "browser": {
+    "expected": 2,
+    "unexpected": 0,
+    "flaky": 0,
+    "skipped": 0,
+    "duration": 18485.877
+  },
+  "elapsedSeconds": 33.494,
+  "localChecks": {
+    "driverTests": 12,
+    "nativeDriverSyntax": true,
+    "mobileRootCheck": true,
+    "mobileDebugAssembly": true,
+    "mobileLintErrors": 0,
+    "mobileLintWarnings": 47,
+    "mobileDesktopSuites": 349,
+    "mobileDesktopTests": 2002,
+    "mobileCheckElapsedSeconds": 48
+  },
+  "mobileSourceSha256": {
+    "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/MatrixProofInstrumentation.kt": "e8534bf4510266351f50636a8af871bf5da7ef626d465e7888f5408ae769e507",
+    "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/NativeMatrixProbe.kt": "a97350be5db14f35d4c09dd7b63818df8de87784e074984d6bb4cf5eefdb3ee3",
+    "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/ProofOfflineInvite.kt": "4fde8ad0104b26a6377abe616179f76529854499b759c26c716be7fef78bdb7d",
+    "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/ProofQueuedMessage.kt": "37d8d208400d78c6c0fb99a929be8e0a76207bcc181fd360a9d19deb27a4aae4",
+    "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/ProofSessionStore.kt": "1dd061793deb8b3c5bd9b7777b3638ee505b1ea056c1cceb23ef1e3aa6363838"
+  },
+  "correctedFailures": [
+    {
+      "kind": "mobile_root_check",
+      "elapsedSeconds": 36,
+      "result": "Detekt rejected NativeMatrixProbe.run at 119 lines. Extracted result serialization; corrected full root/debug/lint checks passed without suppression."
+    },
+    {
+      "kind": "driver_test_invocation",
+      "result": "Initial unittest invocation omitted tool from PYTHONPATH and failed two module imports before test execution. Corrected PYTHONPATH=tool invocation passed all 12 cases."
+    }
+  ],
+  "limits": [
+    "Android Kotlin SDK 26.10.23 sender encrypts for an already-enrolled offline browser invitee before join; browser decrypts after native sender shutdown. Native recipient-before-join and Swift interoperability are not proved.",
+    "Room version 12 with invited history; SDK encryption and membership state are observed before queued send. Never-enrolled recipients still require pending product outbox admission.",
+    "No product process-restart outbox, recipient durable receipt/coalescing, or MatrixRTC acceptance. Existing standard refresh, queue transaction and encrypted logical ID assertions still pass.",
+    "Owned emulator stopped with regular HRIS data retained; physical phone, live HRIS and real employee accounts untouched."
+  ]
+}

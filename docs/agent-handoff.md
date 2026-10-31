@@ -13,6 +13,26 @@ tests, source evidence and pushed atomic commits. Prove reusable foundations
 here before porting them to Starter. The completed prior scope below is history,
 not closure of this new implementation request.
 
+The Android sender now creates a version-12 encrypted room with `invited` history
+while the enrolled browser peer is offline. It observes SDK encryption/member
+state, sends through the paused/resumed queue, then closes its SDK. The driver
+stops only the proof process before the peer joins, loads history and decrypts.
+Encrypted logical IDs, the SDK transaction mapping, standard refresh and unchanged
+signing key still pass. [Invitation evidence](measurements/collaboration-native-invited-2026-10-31.json)
+records two scenarios in 18.486s (33.494s owned run), with complete cleanup. Full
+root/debug/lint checks passed in 48s: 2,002 desktop cases, zero lint errors and 47
+warnings. An initial Detekt long-method failure was fixed by extracting result
+serialization; no check was suppressed.
+
+Native CI pins Platform `54eb3a667ebe47ff06fcb0c2a973824215f383b8`. Inspect its
+exact hosted run after this push. This proves Android sender to an already-enrolled
+offline browser invitee, not native recipient-before-join or Swift interoperability.
+Never-enrolled recipients still need a pending product outbox until eligible keys
+exist. Durable restart/coalescing, product sessions/content and UI remain pending.
+The dedicated emulator is stopped with regular HRIS data retained. No physical
+phone, live service or employee message was touched; no Starter port is due for
+the isolated fixture. Continue all P0–P8 implementation.
+
 The native queue/extra-content experiment now passes in both directions through
 actual Android 35 and browser E2EE. `org.hris.message_id` remains inside encrypted
 content. The SDK's paused queue emits its local transaction, resumes, then maps

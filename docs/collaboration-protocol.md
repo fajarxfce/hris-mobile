@@ -30,7 +30,7 @@ With JDK 21 and Android SDK 36 configured, build:
 
 Boot the existing `hris-mobile-dev` emulator on port 5560 using
 [the development procedure](development.md#headless-android-emulator). From the
-Platform checkout at `d0731afe`, run:
+Platform checkout at `54eb3a66`, run:
 
 ```sh
 python3 tool/check_collaboration_providers.py --docker-sudo \
@@ -143,3 +143,26 @@ in 84.382s, with complete cleanup and an independently built APK. The
 [measurement](measurements/collaboration-native-logical-queue-2026-10-31.json)
 retains that result; its driver hashes match pinned Platform `d0731afe`.
 Continue HRIS gateway/content integration and durable recipient reconciliation.
+
+## Native first message to an offline invitee
+
+The Android sender now creates a version-12 encrypted room with `invited` history
+while the enrolled browser peer is offline. It observes SDK encryption/member
+state, sends through the paused/resumed queue, then closes its SDK. The driver
+stops only the proof process before the peer joins, loads history and decrypts.
+Encrypted logical IDs, the SDK transaction mapping, standard refresh and unchanged
+signing key still pass. [Invitation evidence](measurements/collaboration-native-invited-2026-10-31.json)
+records two scenarios in 18.486s (33.494s owned run), with complete cleanup. Full
+root/debug/lint checks passed in 48s: 2,002 desktop cases, zero lint errors and 47
+warnings. An initial Detekt long-method failure was fixed by extracting result
+serialization; no check was suppressed.
+
+Native CI pins Platform `54eb3a667ebe47ff06fcb0c2a973824215f383b8`. Inspect its
+exact hosted run after this push. This proves Android sender to an already-enrolled
+offline browser invitee, not native recipient-before-join or Swift interoperability.
+Never-enrolled recipients still need a pending product outbox until eligible keys
+exist. Durable restart/coalescing, product sessions/content and UI remain pending.
+The dedicated emulator is stopped with regular HRIS data retained. No physical
+phone, live service or employee message was touched; no Starter port is due for
+the isolated fixture. Continue all P0–P8 implementation.
+

@@ -40,6 +40,9 @@ internal class NativeMatrixProbe(private val directory: File) {
             val replyLogicalId = UUID.fromString(fixture.getString("replyLogicalId")).toString()
             require(expectedBody.startsWith("fictional-native-") && expectedBody.length < 150)
             require(replyBody.startsWith("fictional-native-") && replyBody.length < 150)
+            val offlineBody = fixture.getString("offlineBody")
+            val offlineLogicalId = UUID.fromString(fixture.getString("offlineLogicalId")).toString()
+            require(offlineBody.startsWith("fictional-native-") && offlineBody.length < 150)
             val store = File(directory, "store").apply { mkdirs() }
             val cache = File(directory, "cache").apply { mkdirs() }
             val keyFile = File(directory, "store-key")
@@ -110,22 +113,19 @@ internal class NativeMatrixProbe(private val directory: File) {
                 // crypto store, key and room. The SDK owns the refresh request and token update.
                 delay(6_000)
                 val outgoing = ProofQueuedMessage(active, joined).send(replyBody, replyLogicalId)
-                val unchangedKey = active.encryption().use { it.ed25519Key() == originalKey }
-                File(directory, "result.json")
+                File(directory, "reply.json")
                     .writeText(
                         JSONObject()
                             .put("receivedEncrypted", true)
                             .put("receivedEventId", incoming.eventId)
                             .put("sentEventId", outgoing.eventId)
-                            .put("queueTransactionId", outgoing.transactionId)
-                            .put("queuedWhilePaused", true)
-                            .put("receivedLogicalId", expectedLogicalId)
-                            .put("sentLogicalId", replyLogicalId)
-                            .put("sdk", "26.10.23")
-                            .also { sessions.addEvidence(it) }
-                            .put("deviceKeyUnchanged", unchangedKey)
                             .toString()
                     )
+                val offline =
+                    ProofOfflineInvite(active, directory)
+                        .send(fixture.getString("offlinePeer"), offlineBody, offlineLogicalId)
+                val unchangedKey = active.encryption().use { it.ed25519Key() == originalKey }
+                writeResult(fixture, incoming, outgoing, offline, sessions, unchangedKey)
             } finally {
                 listener?.cancel()
                 listener?.close()
@@ -140,4 +140,44 @@ internal class NativeMatrixProbe(private val directory: File) {
                 }
             }
         }
+
+    private fun writeResult(
+        fixture: JSONObject,
+        incoming: RoomMessageLikeEvent,
+        outgoing: ProofQueuedMessageResult,
+        offline: ProofOfflineInviteResult,
+        sessions: ProofSessionStore,
+        unchangedKey: Boolean,
+    ) {
+        File(directory, "result.json")
+            .writeText(
+                JSONObject()
+                    .put("receivedEncrypted", true)
+                    .put("receivedEventId", incoming.eventId)
+                    .put("sentEventId", outgoing.eventId)
+                    .put("queueTransactionId", outgoing.transactionId)
+                    .put("queuedWhilePaused", true)
+                    .put(
+                        "receivedLogicalId",
+                        UUID.fromString(fixture.getString("expectedLogicalId")).toString(),
+                    )
+                    .put(
+                        "sentLogicalId",
+                        UUID.fromString(fixture.getString("replyLogicalId")).toString(),
+                    )
+                    .put("offlineRoomId", offline.roomId)
+                    .put("offlineSentEventId", offline.queued.eventId)
+                    .put("offlineQueueTransactionId", offline.queued.transactionId)
+                    .put(
+                        "offlineLogicalId",
+                        UUID.fromString(fixture.getString("offlineLogicalId")).toString(),
+                    )
+                    .put("offlineHistory", "invited")
+                    .put("offlineRoomVersion", "12")
+                    .put("sdk", "26.10.23")
+                    .also { sessions.addEvidence(it) }
+                    .put("deviceKeyUnchanged", unchangedKey)
+                    .toString()
+            )
+    }
 }
