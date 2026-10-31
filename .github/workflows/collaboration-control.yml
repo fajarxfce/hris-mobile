@@ -6,6 +6,9 @@ on:
     paths:
       - 'features/collaboration/**'
       - 'core/network/**'
+      - 'core/database/**'
+      - 'core/securestorage/**'
+      - 'core/storage/**'
       - 'core/workspace/domain/**'
       - 'settings.gradle.kts'
       - 'gradle/libs.versions.toml'
@@ -15,6 +18,9 @@ on:
     paths:
       - 'features/collaboration/**'
       - 'core/network/**'
+      - 'core/database/**'
+      - 'core/securestorage/**'
+      - 'core/storage/**'
       - 'core/workspace/domain/**'
       - 'settings.gradle.kts'
       - 'gradle/libs.versions.toml'

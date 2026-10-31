@@ -2,6 +2,33 @@
 
 ## Active collaboration implementation — 31 October 2026
 
+**Durable product setup commands are implemented.** Prepare persists immutable
+registration/retry/bootstrap input; replay records uncertainty before I/O and uses
+one owner/mutex, captured native family, client build and original operation.
+AES-GCM request/outcome envelopes use the protected shared command key, separate
+from disposable caches. Account/company/family changes, lost keys, stale revisions,
+late denials and cancellation preserve retained facts. Gateway credentials remain
+encrypted until an SDK installation owner can consume them. Only matching observed
+registration/new-job receipts retire; uncertain/bootstrap results stay retained.
+[Contract](collaboration-setup.md) and [evidence](measurements/collaboration-setup-commands-2026-10-31.json)
+retain sources and corrections. Final root/assembly/browser checks passed in 62s:
+2,040 desktop cases, collaboration domain 23/data 15; browser domain 23/data 7.
+Quality has zero findings. Apple runtime checks remain pending.
+
+The preceding control run `41234732498` passed Android setup but portable checks
+stopped at missing Wasm lock entries. The retained lock update adds only four local
+module workspaces; no external dependency version changed. Inspect the next exact
+hosted run. Local Chromium must be selected with `CHROME_BIN` as recorded in the
+measurement. Do not put draft `.kt` files under `.work`: formatCheck scans them;
+use an external owned temporary directory while keeping checked sources frozen.
+
+**Next: product SDK store/session installation and actual process-restart proof.**
+Read [SDK lifecycle findings](collaboration-sdk-lifecycle.md): exclusive owner lock,
+protected passphrase, one restore per client, queue pause before restore/listener,
+void credential-save callback failure handling and no logout/reset. Then bootstrap
+recovery, app DI/chat UI/outbox and the full P0–P8 scope. No product feature is
+accepted. Phone, dedicated emulator, live Platform and Starter remain unchanged.
+
 Control CI run `41234420892` exposed setup-android v3's obsolete default SDK
 package `tools`, before any portable tests ran. The workflow now requests
 `platform-tools` and SDK/build-tools 36 explicitly, matching the passing protocol

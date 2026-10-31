@@ -1,7 +1,6 @@
 package dev.fajar.starter.collaboration.domain.usecases
 
 import dev.fajar.starter.collaboration.domain.entities.*
-import dev.fajar.starter.collaboration.domain.policies.collaborationRequestOwner
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationSetupRepository
 import dev.fajar.starter.common.config.AppBuild
 import dev.fajar.starter.common.result.*
@@ -42,27 +41,6 @@ class LoadCollaborationSetup(
         }
     }
 
-    private suspend fun capture(workspaceId: String): AppResult<CollaborationOwner> {
-        val session =
-            when (val current = sessions.current()) {
-                is AppResult.Failed -> return current
-                is AppResult.Success ->
-                    current.value
-                        ?: return workspaceFailure(
-                            "client.session_changed",
-                            FailureKind.Unauthorized,
-                        )
-            }
-        val workspace =
-            when (val current = workspaces.current(session.id)) {
-                is AppResult.Failed -> return current
-                is AppResult.Success -> current.value
-            }
-        val latest =
-            when (val current = sessions.current()) {
-                is AppResult.Failed -> return current
-                is AppResult.Success -> current.value
-            }
-        return collaborationRequestOwner(workspaceId, latest, workspace, server, build, clock.now())
-    }
+    private suspend fun capture(workspaceId: String) =
+        sessions.captureCollaborationOwner(workspaceId, workspaces, server, build, clock)
 }
