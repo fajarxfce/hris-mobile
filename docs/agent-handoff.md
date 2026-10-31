@@ -4,6 +4,16 @@ Updated 31 October 2026 (UTC). The release-configuration audit and independently
 verified Starter port are complete. This employee application was generated from
 Compose Fluent Starter and is the proving ground for reusable foundation changes.
 
+## Active layout and sample-data work — 31 October 2026
+
+The user requested all mobile page layouts/component choices be reviewed through
+screenshots, plus fictional sample data for the existing user-linked development
+employment. This new task is in progress; the earlier completed feature audit does
+not mark it complete. [Review queue](layout-review-2026-10-31.md) records scope,
+initial observations and validation still required. Preserve the visual language,
+account binding and installed versionCode floor of 2. Use the dedicated emulator
+for routine UI work and prove generic changes here before porting them to Starter.
+
 ## Latest Android installation — 31 October 2026
 
 The user explicitly requested the latest release build on the WireGuard phone.
