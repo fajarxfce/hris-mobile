@@ -8,5 +8,6 @@ enum class CompanyModule {
     PAYROLL,
     DOCUMENTS,
     COMMUNICATIONS,
+    COLLABORATION,
     REPORTING,
 }

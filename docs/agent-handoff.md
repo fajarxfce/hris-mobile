@@ -46,6 +46,14 @@ Continue protected HRIS integration while those remaining P0 gates stay explicit
 The local dedicated emulator has been stopped after successful Android proof;
 its regular HRIS data and the physical phone were untouched.
 
+The workspace policy now recognizes `COLLABORATION` separately from the HRIS
+Inbox's `COMMUNICATIONS` key. The existing data-boundary test retains future-key
+filtering and round-trip validation. All 28 workspace-domain and nine workspace-data
+cases pass; dev-debug assembly passed in 3m54s. No installation was performed:
+this is policy plumbing for the ongoing chat integration, not a delivered chat UI.
+Platform schema 105 and its dashboard policy UI carry the matching identifier.
+No Starter port is appropriate for this HRIS company-module catalog entry.
+
 Updated 31 October 2026 (UTC). The release-configuration audit and independently
 verified Starter port are complete. This employee application was generated from
 Compose Fluent Starter and is the proving ground for reusable foundation changes.

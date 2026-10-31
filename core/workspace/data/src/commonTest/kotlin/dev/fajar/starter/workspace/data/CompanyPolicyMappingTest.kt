@@ -10,7 +10,7 @@ class CompanyPolicyMappingTest {
         CompanyPolicyDto(
             1,
             null,
-            listOf("PEOPLE", "COMMUNICATIONS"),
+            listOf("PEOPLE", "COMMUNICATIONS", "COLLABORATION"),
             CompanyMinimumBuildsDto(1, 0, 2),
             null,
             false,
@@ -22,7 +22,7 @@ class CompanyPolicyMappingTest {
     fun additiveModuleKeysNeverEnableAnUnknownClientCapabilityAndKnownPolicyRoundTrips() {
         val policy = dto.copy(enabledModules = dto.enabledModules + "FUTURE_MODULE").toPolicy()
         assertEquals(
-            setOf(CompanyModule.PEOPLE, CompanyModule.COMMUNICATIONS),
+            setOf(CompanyModule.PEOPLE, CompanyModule.COMMUNICATIONS, CompanyModule.COLLABORATION),
             policy.enabledModules,
         )
         assertEquals(policy, policy.toDto().toPolicy())
