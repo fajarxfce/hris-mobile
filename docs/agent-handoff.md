@@ -62,7 +62,8 @@ cleanup. [Refresh evidence](measurements/collaboration-native-refresh-2026-10-31
 records hashes, twelve driver cases and the corrected full root check: 2,002
 desktop cases, zero lint errors, debug APK built (2m54s). An initial Detekt long
 method failure led to the separate `ProofSessionStore`; no check was suppressed.
-Native CI now pins Platform `1db0f9fe`; record its hosted result after push.
+Native CI pins Platform `1db0f9fe`; hosted run `41187875527` passed at
+`d799e5cf`, both provider scenarios in 54.657s with full cleanup.
 This is private fixture storage, not a production Keystore implementation. Use
 SDK standard refresh, never restore again on an initialized SDK client. Continue
 protected HRIS sessions/provisioning/gateway and actual chat UI. No Starter port

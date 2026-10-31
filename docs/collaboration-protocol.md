@@ -110,6 +110,8 @@ queue recovery remain separate implementation work. Initialize each SDK client
 with `restoreSession` only once; subsequent token changes follow the standard
 refresh endpoint and callback. The SDK's pinned Rust source
 `8de215a0aa0026afa5754ae5f05a6d168d1a1d60` enables automatic refresh in its builder.
-CI now pins Platform `1db0f9fe`, which issues the required refresh fixture. Record
-the new hosted run separately. The owned emulator is stopped and no phone
+CI pins Platform `1db0f9fe`, which issues the required refresh fixture. Hosted
+run [41187875527](https://github.com/fajarxfce/hris-mobile/actions/runs/41187875527)
+passed at exact `d799e5cf`: both scenarios in 54.657s with full cleanup. The
+measurement retains its independently built APK hash and provider summary. The owned emulator is stopped and no phone
 installation or UI interaction occurred.
