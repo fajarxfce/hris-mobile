@@ -64,6 +64,7 @@ jobs:
           :core:availability:domain:wasmJsBrowserTest :core:availability:data:wasmJsBrowserTest
           :apps:shared:wasmJsBrowserTest
           :apps:android:assembleDevDebug :apps:android:assembleStagingDebug :apps:android:assembleProdRelease
+          :apps:android:lintDevDebug
           :apps:android:cyclonedxDirectBom -PsbomConfiguration=prodReleaseRuntimeClasspath
       - name: Verify configured Android app-link manifests and domain files
         run: |

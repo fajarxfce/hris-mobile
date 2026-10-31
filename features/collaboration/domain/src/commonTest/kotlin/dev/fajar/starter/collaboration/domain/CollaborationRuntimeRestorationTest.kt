@@ -162,6 +162,10 @@ private class RestorationFixture {
     var result: suspend () -> AppResult<CollaborationRuntimeLease?> = { AppResult.Success(lease) }
     private val runtimes =
         object : CollaborationRuntimeRepository {
+            override suspend fun closeOtherOwners(
+                retainedOwner: CollaborationOwner?
+            ): AppResult<Unit> = error("Restoration cannot close unrelated owners")
+
             override suspend fun install(
                 owner: CollaborationOwner,
                 command: CollaborationSetupCommandRecord,

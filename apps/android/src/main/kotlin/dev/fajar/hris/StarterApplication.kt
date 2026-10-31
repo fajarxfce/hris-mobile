@@ -3,8 +3,11 @@ package dev.fajar.hris
 import android.app.Application
 import androidx.work.Configuration
 import androidx.work.WorkManager
+import dev.fajar.starter.app.bootstrap.ApplicationCollaborationLifetime
 import dev.fajar.starter.app.di.createAppContainer
 import dev.fajar.starter.app.navigation.AppLinkChannel
+import dev.fajar.starter.collaboration.data.di.androidCollaborationRuntimeRepository
+import dev.fajar.starter.collaboration.data.sdk.CollaborationSdkEndpoint
 import dev.fajar.starter.common.config.AppEnvironment
 import dev.fajar.starter.common.config.AppPlatform
 import dev.fajar.starter.database.createAppDatabase
@@ -71,6 +74,16 @@ class StarterApplication : Application(), Configuration.Provider {
             location = location,
             fileInputs = fileInputs,
             fileOutputs = fileOutputs,
+            collaborationRuntime = { server ->
+                androidCollaborationRuntimeRepository(
+                    this,
+                    server,
+                    CollaborationSdkEndpoint(
+                        server.audience,
+                        allowCleartext = environment == AppEnvironment.Dev,
+                    ),
+                )
+            },
         )
     }
 
@@ -87,5 +100,6 @@ class StarterApplication : Application(), Configuration.Provider {
         Diagnostics.install(AndroidCrashSink(this, enabled = !BuildConfig.DEBUG))
         PerformanceMonitoring.install(AndroidPerformanceSink(this, enabled = !BuildConfig.DEBUG))
         scheduler.installPeriodic(container.koin.getAll<SyncTask>().map { it.key }.toSet())
+        container.koin.get<ApplicationCollaborationLifetime>().start()
     }
 }

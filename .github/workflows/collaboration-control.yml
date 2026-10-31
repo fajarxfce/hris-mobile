@@ -5,6 +5,8 @@ on:
     branches: [feat/communications]
     paths:
       - 'features/collaboration/**'
+      - 'apps/shared/**'
+      - 'apps/android/**'
       - 'core/network/**'
       - 'core/database/**'
       - 'core/securestorage/**'
@@ -17,6 +19,8 @@ on:
   pull_request:
     paths:
       - 'features/collaboration/**'
+      - 'apps/shared/**'
+      - 'apps/android/**'
       - 'core/network/**'
       - 'core/database/**'
       - 'core/securestorage/**'
@@ -59,11 +63,18 @@ jobs:
           :features:collaboration:domain:desktopTest :features:collaboration:data:desktopTest
           :features:collaboration:domain:wasmJsBrowserTest :features:collaboration:data:wasmJsBrowserTest
           :features:collaboration:data:assemble formatCheck detekt architectureCheck
+      - name: Check application bindings and platform compilation
+        run: >-
+          xvfb-run -a ./gradlew --no-daemon --no-parallel --max-workers=2
+          :apps:shared:desktopTest --tests '*CollaborationBindingsTest'
+          :apps:android:assembleDevDebug :apps:android:lintDevDebug :apps:shared:compileKotlinWasmJs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: collaboration-control-portable
-          path: features/collaboration/**/build/test-results/
+          path: |
+            features/collaboration/**/build/test-results/
+            apps/shared/build/test-results/
   apple:
     runs-on: macos-15
     timeout-minutes: 40
@@ -82,6 +93,7 @@ jobs:
           :features:collaboration:domain:iosSimulatorArm64Test
           :features:collaboration:data:iosSimulatorArm64Test
           :features:collaboration:data:compileKotlinIosArm64
+          :apps:shared:compileKotlinIosArm64
       - uses: actions/upload-artifact@v4
         if: always()
         with:

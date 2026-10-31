@@ -2,6 +2,39 @@
 
 ## Active collaboration implementation — 31 October 2026
 
+**Application DI and Android process ownership are now wired and locally verified.**
+`MaintainCollaborationRuntimeOwnership` closes obsolete SDK leases after session/
+company/permission/deadline changes, retains authoritative denials through cleanup
+failure, rejects a second collector and closes all on cancellation. One timer per
+captured frame replaces polling; token rotation preserves its owner. Android's
+Application starts `ApplicationCollaborationLifetime` once, with a protected native
+runtime configured from the HRIS root. Other hosts explicitly report unavailable
+runtime support. Startup does not enroll, bootstrap or open a native client.
+
+[Evidence](measurements/collaboration-application-runtime-2026-10-31.json) retains
+eight new common lifecycle and two application binding cases. Root/Android passed
+in 328s; Wasm compiled but lint exposed the manifest's missing direct AppAuth
+dependency. Declaring the existing catalog version fixed it; final root/Wasm/
+Android assembly/lint passed in 70s, 2,093 desktop cases and zero lint errors.
+Domain browser has 51 passing cases. The initial focused fixture compilation
+needed explicit nullable-list type arguments; recovery passed in 62s. CI now
+checks app bindings, Android assembly/lint, Wasm and Apple app compilation.
+
+**Next: native conversation/participant/room adapters and chat UI, with SDK sync/
+room children owned through shutdown; then bootstrap uncertainty/build recovery,
+offline projections/logical-ID reconciliation and all P0–P8.** No product group is
+accepted. No live/schema or phone change. The generic AppAuth declaration/lint
+guard is being independently ported to Starter; keep HRIS runtime policy here.
+
+Corrected provider CI `3cedb0b1`/`41242901470` passes both jobs/all steps: classic
+77.293s and native 75.327s, two browser cases each, cleanup true. All 14 Platform
+source hashes match `e0dbb567`; results are in the offline-signal measurement.
+Earlier cancelled runs and non-atomic-signal failures remain recorded below.
+
+## Earlier collaboration checkpoints
+
+Use the latest checkpoint above for the active queue; earlier next-step notes are historical.
+
 **Admitted restore now reopens existing protected runtime ownership.**
 `RestoreCollaborationRuntime` returns a paused matching resource or explicit empty
 result, never issues tokens/installs a replacement, and leaves setup commands intact.

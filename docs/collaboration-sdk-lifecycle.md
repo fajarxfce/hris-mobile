@@ -139,3 +139,39 @@ write failure; account replacement during restoration; app outbox reconciliation
 and receipt loss beyond the provider transaction lifetime. Follow with the Apple
 adapter/hosted checks, app DI and chat routes. The physical iPhone waiver does not
 turn missing Apple implementation into acceptance.
+
+## Application resource lifetime
+
+The application container now installs collaboration data/use-case bindings and
+owns one platform runtime factory. Android supplies the application Context,
+Keystore records and backup-excluded directory, using the configured HRIS root
+with cleartext allowed only in Dev. Hosts without a binding return an explicit
+unavailable result instead of creating a substitute native store.
+
+`ApplicationCollaborationLifetime` starts once from Android's Application. It owns
+its coroutine independently of activities/routes, retains observation failures in
+state and cancels observation on container disposal. `MaintainCollaborationRuntimeOwnership`
+admits one collector, observes session/company changes and asks the runtime to
+close obsolete owners. A missing selection, observation failure or denied authority
+closes all resources. Native close retains its exclusive lock through unfinished
+cleanup; it does not remove credentials, databases, history or pending messages.
+
+Each admitted frame has one timer bounded by native parent, workspace/MFA,
+company policy and scheduled maintenance. Its elapsed timer expires that frame
+even if the wall clock moves backwards. A new repository emission revalidates
+its metadata and replaces the timer. Ordinary token rotation preserves the owner;
+there is no polling or automatic SDK reopen. Superseded cleanup responses cannot
+publish old ownership. Cancellation closes all owned runtimes before releasing
+the single-collector guard. Confirmed denials override cleanup failures.
+
+Eight common lifecycle cases and two assembled application binding cases pass.
+[Application evidence](measurements/collaboration-application-runtime-2026-10-31.json)
+retains root, Android and Wasm compilation plus Android lint. An existing manifest
+reference required a direct AppAuth dependency; the app now declares the catalog's
+existing version and CI runs lint. No runtime library version changed.
+
+The application currently maintains SDK resource ownership only. Before enabling
+live chat, sync services and room/listener children must join the same owned
+shutdown path. Native setup/restore is not an offline message projection or a
+delivery grant. Conversation controls/UI, bootstrap uncertainty/build recovery,
+logical-message reconciliation, Apple runtime and all remaining P0–P8 still apply.

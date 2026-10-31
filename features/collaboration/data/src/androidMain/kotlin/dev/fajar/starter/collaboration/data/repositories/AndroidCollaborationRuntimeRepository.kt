@@ -46,6 +46,12 @@ class AndroidCollaborationRuntimeRepository(
         deviceId: String,
     ): AppResult<CollaborationRuntimeLease?> = handover { open(owner, deviceId, null) }
 
+    override suspend fun closeOtherOwners(retainedOwner: CollaborationOwner?): AppResult<Unit> {
+        val obsolete = leases.filter { it.owner != retainedOwner || it.closingRequested }
+        val results = coroutineScope { obsolete.map { async { it.close() } }.awaitAll() }
+        return results.filterIsInstance<AppResult.Failed>().firstOrNull() ?: AppResult.Success(Unit)
+    }
+
     private suspend fun <T : AndroidCollaborationRuntimeLease?> handover(
         block: suspend () -> T
     ): AppResult<T> {

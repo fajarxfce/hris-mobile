@@ -115,3 +115,10 @@ retains eight new common cases and passing root/domain-browser/data-assembly che
 in 72s: 2,083 desktop cases and 43 domain browser cases. This is admitted setup
 recovery, not an offline message projection or live delivery grant. Application-wide
 SDK child ownership, explicit bootstrap recovery and app routes are next.
+
+Application DI now installs these bindings. Android supplies its protected native
+runtime and starts the process-owned admission observer; other hosts report missing
+runtime support explicitly. The application binding test resolves setup, retained
+commands, install/restore and the same runtime instance without enrollment or HTTP.
+Repeated starts share one collector; disposal closes it. Chat routes and live
+sync/room ownership are the next integration, followed by bootstrap recovery.

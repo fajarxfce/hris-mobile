@@ -1,8 +1,12 @@
 package dev.fajar.starter.app.di
 
+import dev.fajar.starter.app.bootstrap.ApplicationCollaborationLifetime
 import dev.fajar.starter.auth.presentation.di.AuthPresentationModule
 import dev.fajar.starter.availability.data.di.AvailabilityDataModule
 import dev.fajar.starter.availability.presentation.di.AvailabilityPresentationModule
+import dev.fajar.starter.collaboration.data.di.CollaborationDataModule
+import dev.fajar.starter.collaboration.data.repositories.UnavailableCollaborationRuntimeRepository
+import dev.fajar.starter.collaboration.domain.repositories.CollaborationRuntimeRepository
 import dev.fajar.starter.common.config.AppBuild
 import dev.fajar.starter.common.config.AppEnvironment
 import dev.fajar.starter.common.config.AppPlatform
@@ -103,6 +107,9 @@ fun createAppContainer(
     fileInputs: FileInputSource = UnavailableFileInputSource(),
     fileOutputs: FileOutputSource = UnavailableFileOutputSource(),
     http: Module? = null,
+    collaborationRuntime: (IdentityServer) -> CollaborationRuntimeRepository = {
+        UnavailableCollaborationRuntimeRepository()
+    },
 ) = koinApplication {
     modules(applicationFeatureModules())
     modules(
@@ -123,6 +130,8 @@ fun createAppContainer(
         NotificationDataModule().module,
         LocationDataModule().module,
         module {
+            single<CollaborationRuntimeRepository> { collaborationRuntime(get()) }
+            single { ApplicationCollaborationLifetime(get()) }.onClose { it?.close() }
             single { environment }
             single<LocationDataSource> { location }.onClose { it?.close() }
             single<FileInputSource> { fileInputs }.onClose { it?.close() }
@@ -216,6 +225,7 @@ private fun applicationFeatureModules(): List<Module> =
         AuthPresentationModule().module,
         WorkspacePresentationModule().module,
         HomePresentationModule().module,
+        CollaborationDataModule().module,
         PeopleDataModule().module,
         PeoplePresentationModule().module,
         InboxDataModule().module,

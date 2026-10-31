@@ -12,6 +12,23 @@ import org.koin.core.annotation.*
 @Module
 @ComponentScan("dev.fajar.starter.collaboration.data")
 class CollaborationDataModule {
+    @Single
+    fun maintainRuntimeOwnership(
+        runtimes: CollaborationRuntimeRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) =
+        MaintainCollaborationRuntimeOwnership(
+            runtimes,
+            sessions,
+            workspaces,
+            server,
+            build,
+            Clock.System,
+        )
+
     @Factory
     fun restoreRuntime(
         runtimes: CollaborationRuntimeRepository,

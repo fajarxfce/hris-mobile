@@ -1,0 +1,30 @@
+package dev.fajar.starter.collaboration.data.repositories
+
+import dev.fajar.starter.collaboration.domain.entities.*
+import dev.fajar.starter.collaboration.domain.repositories.*
+import dev.fajar.starter.common.result.*
+
+/** Hosts without a native binding cannot create a substitute store or claim SDK readiness. */
+class UnavailableCollaborationRuntimeRepository : CollaborationRuntimeRepository {
+    override suspend fun install(
+        owner: CollaborationOwner,
+        command: CollaborationSetupCommandRecord,
+    ): AppResult<CollaborationRuntimeLease> = unavailable()
+
+    override suspend fun restore(
+        owner: CollaborationOwner,
+        deviceId: String,
+    ): AppResult<CollaborationRuntimeLease?> = unavailable()
+
+    override suspend fun closeOtherOwners(retainedOwner: CollaborationOwner?): AppResult<Unit> =
+        AppResult.Success(Unit)
+
+    private fun unavailable() =
+        AppResult.Failed(
+            Failure(
+                FailureKind.Unavailable,
+                "Chat is not available on this platform yet.",
+                code = "client.collaboration_runtime_unavailable",
+            )
+        )
+}

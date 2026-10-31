@@ -16,6 +16,9 @@ interface CollaborationRuntimeRepository {
         owner: CollaborationOwner,
         deviceId: String,
     ): AppResult<CollaborationRuntimeLease?>
+
+    /** Close obsolete resources, never their stored facts. Null closes every owned runtime. */
+    suspend fun closeOtherOwners(retainedOwner: CollaborationOwner?): AppResult<Unit>
 }
 
 /** The application keeps this resource through its owned SDK work and closes it on replacement. */

@@ -320,6 +320,10 @@ private class InstallationFixture {
         }
     private val runtimes =
         object : CollaborationRuntimeRepository {
+            override suspend fun closeOtherOwners(
+                retainedOwner: CollaborationOwner?
+            ): AppResult<Unit> = error("Installation cannot close unrelated owners")
+
             override suspend fun install(
                 owner: CollaborationOwner,
                 command: CollaborationSetupCommandRecord,
