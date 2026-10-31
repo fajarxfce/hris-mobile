@@ -5,6 +5,32 @@ including lists, details, creation/editing and supporting pages, plus fictional
 sample data for the already linked development account. Keep the Fluent visual
 language. This is a new active task after the completed feature audit.
 
+## Follow-up: compact filters requested by the user
+
+Build 3's date/status filters were still visually heavy. The follow-up groups
+previous/next chevrons at the trailing edge, removes filter pill outlines and
+uses wrapping text/dropdown actions. Expense/overtime period and status share
+one 48 dp row when labels fit; expense creation-month context remains explicit.
+Attendance, leave year, payslip year/revision and calendar week use the same
+navigation structure. Leave request status sits beside its section heading and
+continues to apply to all dates, independently of the balance year.
+
+Installed guidance: [Compose Component Design](https://github.com/chrisbanes/skills/tree/d2f24b4179179f5e8ec8dcfe0527b3619eda1e0f/skills/compose-component-design),
+[Compose UI Testing Patterns](https://github.com/chrisbanes/skills/tree/d2f24b4179179f5e8ec8dcfe0527b3619eda1e0f/skills/compose-ui-testing-patterns),
+and [UI/UX Pro Max](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill/tree/9a3f14f7423037ccb8feeb4fee7482291b9c820e/.claude/skills/ui-ux-pro-max).
+The local `compact filter layout` UX query returned relevant label-reflow and
+static-versus-interactive semantics guidance. The Jetpack Compose query returned
+flat hierarchy, theme tokens and reusable layout guidance. Existing Fluent
+components, dependencies and navigation remain the implementation foundation.
+
+Focused Compose checks passed in 1m38s. The actual recorded images
+`apps/shared/build/reports/screenshots/compact-filters-phone.png` and
+`compact-filters-large-text.png` were inspected: one row at 390 dp; untruncated
+September/year and selected status at 320 dp / 200% text. Final root checks passed in 2m55s: 2,001 desktop cases / 349 suites,
+including 211 shared UI cases. Starter `58623f5` independently passed
+root/Android/Web (330 cases / 114 suites). Native release screenshots, delivery
+and current-source hosted CI remain in progress.
+
 ## Review and implementation queue
 
 - [x] Shared patterns: labelled selection fields, detail label/value hierarchy,
@@ -82,8 +108,10 @@ No user password, token, private operation manifest or real document belongs in 
   phone. Its identical APK was exercised on Android 35 with normal Firebase,
   keyboard, Indonesian, dark appearance and system font scale 200%.
 - [Measurements](measurements/layout-review-2026-10-31.json) retain APK/signing/API,
-  installed-byte proof, test counts and gallery hashes. Full cross-platform CI
-  and the resumed local Web build remain in progress.
+  installed-byte proof, test counts and gallery hashes. The local release/Web retry completed successfully in 302.667s with unchanged
+  APK bytes. The initial hosted verification found an Inbox test synchronization
+  race; `eab6225b` waits for the refreshed projection and passed a new local root
+  run. Hosted validation of the new filter source remains pending.
 - Starter independent root checks, Android dev assembly and production Web build
   passed in 3m55s for the portable components.
 

@@ -141,27 +141,31 @@ fun LeavePage(state: LeaveState, list: LazyListState, onEvent: (LeaveEvent) -> U
                     }
                 }
             item(key = "requests-heading") {
-                Column(
-                    Modifier.padding(top = 12.dp),
-                    verticalArrangement = Arrangement.spacedBy(4.dp),
+                FlowRow(
+                    Modifier.fillMaxWidth().padding(top = 12.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
-                    AppText(
-                        appString(AppString.LeaveRequests),
-                        style = FluentTheme.typography.bodyStrong,
-                    )
-                    AppText(
-                        appString(AppString.LeaveAllDates),
-                        color = AppColors.muted,
-                        style = FluentTheme.typography.caption,
+                    Column(
+                        Modifier.heightIn(min = 48.dp),
+                        verticalArrangement = Arrangement.Center,
+                    ) {
+                        AppText(
+                            appString(AppString.LeaveRequests),
+                            style = FluentTheme.typography.bodyStrong,
+                        )
+                        AppText(
+                            appString(AppString.LeaveAllDates),
+                            color = AppColors.muted,
+                            style = FluentTheme.typography.caption,
+                        )
+                    }
+                    AppFilterChip(
+                        appString(selection.status.label()),
+                        selection.status != null,
+                        { onEvent(LeaveEvent.StatusFilterRequested) },
+                        icon = null,
                     )
                 }
-            }
-            item(key = "status-filter") {
-                AppFilterChip(
-                    appString(selection.status.label()),
-                    selection.status != null,
-                    { onEvent(LeaveEvent.StatusFilterRequested) },
-                )
             }
             if (content?.requests?.items?.isEmpty() == true)
                 item(key = "requests-empty") {

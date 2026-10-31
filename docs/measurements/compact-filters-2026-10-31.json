@@ -1,0 +1,57 @@
+{
+  "date": "2026-10-31",
+  "scope": "Compact date/status filters with trailing paired navigation",
+  "localValidation": {
+    "command": "xvfb-run -a ./gradlew formatKotlin :check --no-daemon",
+    "durationSeconds": 175,
+    "tests": 2001,
+    "suites": 349,
+    "sharedUiTests": 211,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "focusedValidation": {
+    "durationSeconds": 98,
+    "phoneWidthDp": 390,
+    "normalFilterRowHeightDp": 48,
+    "largeTextWidthDp": 320,
+    "fontScale": 2,
+    "labelOverflow": false,
+    "minimumTouchTargetDp": 48
+  },
+  "portableFiles": {
+    "core/designsystem/src/commonMain/kotlin/dev/fajar/starter/designsystem/components/AppFilterChip.kt": "daa140d13eb4c8831823b40f593832940eb609dca8046fb2868b7d6908ba0ce3",
+    "core/designsystem/src/commonMain/kotlin/dev/fajar/starter/designsystem/components/AppPeriodNavigation.kt": "16042a2dbde17d699e2e7e741bb79e494f61313907b00599a754814bc3df0962",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CompactFiltersLayoutTest.kt": "62b285fc7c9237508518b5a2f566b61d33a7ff0a778d9ebcbf004d367294d931"
+  },
+  "starter": {
+    "commit": "58623f5",
+    "tests": 330,
+    "suites": 114,
+    "localRootAndroidWeb": "passed",
+    "ciRun": 41170061606,
+    "ciStatus": "in_progress"
+  },
+  "previousMobileCi": {
+    "run": 41167886399,
+    "web": "success",
+    "windows": "success",
+    "apple": "success",
+    "verify": "one Inbox projection synchronization failure; corrected in eab6225b and covered by subsequent full local runs"
+  },
+  "delivery": "release build 4 in progress; never install the unconfigured emulator fixture",
+  "renderedReview": "pending native configured-release review",
+  "contrastAgainstCanvas": {
+    "lightText": 14.9,
+    "lightSelected": 5.39,
+    "lightMuted": 4.69,
+    "darkText": 16.47,
+    "darkSelected": 8.62,
+    "darkMuted": 8.28
+  },
+  "skills": {
+    "chrisbanes/skills": "d2f24b4179179f5e8ec8dcfe0527b3619eda1e0f",
+    "nextlevelbuilder/ui-ux-pro-max-skill": "9a3f14f7423037ccb8feeb4fee7482291b9c820e"
+  }
+}

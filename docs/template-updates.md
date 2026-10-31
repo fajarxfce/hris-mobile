@@ -520,3 +520,14 @@ Room/IndexedDB migrations and scoped HKDF/HMAC token function. Portable regressi
 coverage and format/bound checks are shared; Leave contracts and application
 synchronization remain in HRIS Mobile. Both workspaces passed root checks,
 41 database/secure-storage Chromium tests and Android dev assembly.
+
+## Compact filter follow-up — 31 October 2026
+
+The user's review of build 3 led to a flat, wrapping `AppFilterChip` and shared
+`AppPeriodNavigation`. Period/status labels share a row where space permits;
+previous/next remain paired on the right with 48 dp targets. Mobile's focused
+Compose screenshots prove the 390 dp compact row and 320 dp / 200% reflow.
+Starter `58623f5` ports these two components and `CompactFiltersLayoutTest`
+unchanged, with independent root/Android/Web success (330 cases / 114 suites).
+Application pages, date/status scopes and period admission remain downstream.
+Hosted Starter follow-up: `41170061606`; update final evidence when complete.

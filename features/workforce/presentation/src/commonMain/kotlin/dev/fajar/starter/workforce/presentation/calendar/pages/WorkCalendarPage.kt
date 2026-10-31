@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import dev.fajar.starter.designsystem.components.*
@@ -15,7 +14,6 @@ import dev.fajar.starter.workforce.presentation.calendar.widgets.CalendarDayCard
 import io.github.composefluent.FluentTheme
 import io.github.composefluent.icons.Icons
 import io.github.composefluent.icons.regular.ArrowLeft
-import io.github.composefluent.icons.regular.ArrowRight
 import io.github.composefluent.icons.regular.ArrowSync
 
 @Composable
@@ -73,40 +71,25 @@ fun WorkCalendarPage(
         if (content != null) {
             val snapshot = content.snapshot
             item(key = "week") {
-                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    AppText(
-                        formatLocalDate(snapshot.period.from.toString(), appLanguageTag()) +
-                            " – " +
-                            formatLocalDate(snapshot.period.until.toString(), appLanguageTag())
-                    )
-                    Row(
-                        Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                    ) {
-                        AppIconButton(
-                            Icons.Regular.ArrowLeft,
-                            appString(AppString.CalendarPreviousWeek),
-                            {
-                                content.previousWeek?.let {
-                                    onEvent(WorkCalendarEvent.WeekRequested(it))
-                                }
-                            },
-                            enabled = content.previousWeek != null,
+                AppPeriodNavigation(
+                    appString(AppString.CalendarPreviousWeek),
+                    appString(AppString.CalendarNextWeek),
+                    { content.previousWeek?.let { onEvent(WorkCalendarEvent.WeekRequested(it)) } },
+                    { content.nextWeek?.let { onEvent(WorkCalendarEvent.WeekRequested(it)) } },
+                    Modifier.fillMaxWidth(),
+                    previousEnabled = content.previousWeek != null,
+                    nextEnabled = content.nextWeek != null,
+                ) {
+                    Column {
+                        AppText(
+                            formatLocalDate(snapshot.period.from.toString(), appLanguageTag()) +
+                                " – " +
+                                formatLocalDate(snapshot.period.until.toString(), appLanguageTag()),
+                            style = FluentTheme.typography.bodyStrong,
                         )
                         AppTextButton(
                             appString(AppString.CalendarCurrentWeek),
                             { onEvent(WorkCalendarEvent.CurrentWeekRequested) },
-                        )
-                        AppIconButton(
-                            Icons.Regular.ArrowRight,
-                            appString(AppString.CalendarNextWeek),
-                            {
-                                content.nextWeek?.let {
-                                    onEvent(WorkCalendarEvent.WeekRequested(it))
-                                }
-                            },
-                            enabled = content.nextWeek != null,
                         )
                     }
                 }

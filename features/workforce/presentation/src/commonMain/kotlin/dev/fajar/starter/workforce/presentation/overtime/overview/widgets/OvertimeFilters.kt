@@ -17,34 +17,30 @@ fun OvertimeFilters(state: OvertimeState, onEvent: (OvertimeEvent) -> Unit) {
     val filters = state.filters
     val content = state.content?.value
     if (!state.readRestricted && filters != null) {
-        Column(
-            Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-        ) {
-            state.month?.let { OvertimeMonthBar(it, onEvent) }
-            FlowRow(
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-            ) {
+        Column(Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
+            val statusContent: @Composable () -> Unit = {
                 if (filters.employeeId != null)
                     AppFilterChip(
                         appString(filters.status.label()),
                         filters.status != null,
                         { onEvent(OvertimeEvent.StatusFilterRequested) },
-                    )
-                if (
-                    content != null &&
-                        (content.directory.items.size > 1 ||
-                            content.directory.nextCursor != null ||
-                            filters.employmentAfter != null)
-                )
-                    AppFilterChip(
-                        appString(AppString.ChooseEmployment),
-                        true,
-                        { onEvent(OvertimeEvent.EmploymentFilterRequested) },
-                        icon = Icons.Regular.Person,
+                        icon = null,
                     )
             }
+            val month = state.month
+            if (month != null) OvertimeMonthBar(month, onEvent, statusContent) else statusContent()
+            if (
+                content != null &&
+                    (content.directory.items.size > 1 ||
+                        content.directory.nextCursor != null ||
+                        filters.employmentAfter != null)
+            )
+                AppFilterChip(
+                    appString(AppString.ChooseEmployment),
+                    true,
+                    { onEvent(OvertimeEvent.EmploymentFilterRequested) },
+                    icon = Icons.Regular.Person,
+                )
         }
     }
 }

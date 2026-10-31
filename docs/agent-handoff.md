@@ -6,6 +6,19 @@ Compose Fluent Starter and is the proving ground for reusable foundation changes
 
 ## Active filter-layout revision — 31 October 2026
 
+The compact-filter implementation now passes the final root check in 2m55s:
+2,001 desktop cases / 349 suites, including 211 shared UI cases, zero failures,
+errors or skips. `AppPeriodNavigation` groups chevrons on the right;
+`AppFilterChip` uses lightweight wrapping text/dropdown controls. All affected
+month/year/week/revision pages adopt the pattern; monthless initial states retain
+their status action. Starter `58623f5` independently passed root/Android/Web
+(330 cases / 114 suites), with CI `41170061606` running.
+
+Release build 4 is assembling from this implementation. Remaining: configured
+release emulator screenshots and filter interactions, install-only phone delivery
+after notification, gallery/evidence updates and final hosted CI results.
+See [filter measurements](measurements/compact-filters-2026-10-31.json).
+
 The user reviewed build 3 and requested a further filter redesign: period arrows
 must not resemble a second Back button beneath the app bar, and status filters
 must stop using large pill/card surfaces and excessive space. This is active

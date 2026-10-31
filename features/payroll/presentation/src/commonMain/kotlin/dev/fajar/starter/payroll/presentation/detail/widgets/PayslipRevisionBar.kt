@@ -11,41 +11,36 @@ import dev.fajar.starter.designsystem.theme.AppColors
 import dev.fajar.starter.localization.*
 import dev.fajar.starter.payroll.presentation.detail.*
 import io.github.composefluent.FluentTheme
-import io.github.composefluent.icons.Icons
-import io.github.composefluent.icons.regular.ChevronLeft
-import io.github.composefluent.icons.regular.ChevronRight
 
 @Composable
 fun PayslipRevisionBar(state: PayslipState, onEvent: (PayslipEvent) -> Unit) {
-    Column(Modifier.fillMaxWidth().padding(horizontal = 8.dp)) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            AppIconButton(
-                Icons.Regular.ChevronLeft,
-                appString(AppString.PayslipPreviousRevision),
-                { onEvent(PayslipEvent.PreviousRevisionRequested) },
-                enabled = state.canChoosePrevious,
-            )
-            AppText(
-                appString(
-                    AppString.PayslipRevisionPosition,
-                    state.displayedRevision.toString(),
-                    state.currentRevision.toString(),
-                ),
-                Modifier.weight(1f).semantics { liveRegion = LiveRegionMode.Polite },
-                style = FluentTheme.typography.bodyStrong,
-            )
-            Box(Modifier.size(24.dp), contentAlignment = Alignment.Center) {
-                if (state.revisionLoading) AppProgressRing(appString(AppString.Loading))
+    Column(Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
+        AppPeriodNavigation(
+            appString(AppString.PayslipPreviousRevision),
+            appString(AppString.PayslipNextRevision),
+            { onEvent(PayslipEvent.PreviousRevisionRequested) },
+            { onEvent(PayslipEvent.NextRevisionRequested) },
+            Modifier.fillMaxWidth(),
+            previousEnabled = state.canChoosePrevious,
+            nextEnabled = state.canChooseNext,
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                AppText(
+                    appString(
+                        AppString.PayslipRevisionPosition,
+                        state.displayedRevision.toString(),
+                        state.currentRevision.toString(),
+                    ),
+                    Modifier.weight(1f).semantics { liveRegion = LiveRegionMode.Polite },
+                    style = FluentTheme.typography.bodyStrong,
+                )
+                Box(Modifier.size(24.dp), contentAlignment = Alignment.Center) {
+                    if (state.revisionLoading) AppProgressRing(appString(AppString.Loading))
+                }
             }
-            AppIconButton(
-                Icons.Regular.ChevronRight,
-                appString(AppString.PayslipNextRevision),
-                { onEvent(PayslipEvent.NextRevisionRequested) },
-                enabled = state.canChooseNext,
-            )
         }
         if (state.selectedRevision != null) {
-            Row(Modifier.padding(start = 12.dp), verticalAlignment = Alignment.CenterVertically) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
                 AppText(
                     appString(AppString.PayslipHistoricalRevision),
                     Modifier.weight(1f),

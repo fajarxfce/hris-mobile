@@ -130,10 +130,20 @@ owner. It adapts its column count to text size and does not acquire data or deci
 which periods an application permits. Month selection resets the history list
 position; refreshes of the same month retain it.
 
-Attendance and Overtime use `AppFilterChip(maxLines = 2)` for the selected month.
-The full month and year can wrap at large text sizes while the adjacent previous
-and next actions retain their 48 dp targets. Other chips keep their single-line
-default unless the displayed value needs more space.
+`AppFilterChip` is a lightweight text/dropdown action without a card or pill
+outline. It keeps a 48 dp minimum target and wraps labels by default; selection
+uses the displayed value plus selected semantics and accent text. An optional
+leading icon may clarify otherwise ambiguous filters. Avoid adding decorative
+filter icons to already explicit month/status labels.
+
+`AppPeriodNavigation` places caller-owned period content on the left and paired
+previous/next chevrons on the right. Never place a period arrow in the same left
+column as app Back. Use a `FlowRow` for period and status actions so they share a
+48 dp row when they fit and reflow at narrow widths/large text; do not shrink the
+targets or truncate a selected value to enforce one line. Keep filter scopes
+explicit: expense month is creation month; leave year belongs to balances while
+request status applies across dates. The component never owns period policy,
+data acquisition, selection or accessibility labels for its step controls.
 
 `AppDatePicker` renders a controlled seven-column month grid. The caller supplies
 short localized weekday labels, full-date accessible descriptions, selection and

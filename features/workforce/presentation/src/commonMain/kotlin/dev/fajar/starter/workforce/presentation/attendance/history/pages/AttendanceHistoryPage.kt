@@ -47,7 +47,7 @@ fun AttendanceHistoryPage(
                         )
                     },
                 )
-                Box(Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
+                Box(Modifier.padding(horizontal = 16.dp)) {
                     AttendanceMonthBar(state.month, onEvent)
                 }
             }
