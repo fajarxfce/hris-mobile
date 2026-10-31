@@ -31,9 +31,10 @@
     "suites": 114,
     "localRootAndroidWeb": "passed",
     "ciRun": 41170061606,
-    "ciStatus": "in_progress",
+    "ciStatus": "accepted_across_source_matched_runs",
     "testCommit": "df2906f",
-    "verifyRetryRun": 41170810070
+    "verifyRetryRun": 41170810070,
+    "closureCommit": "44d164c"
   },
   "previousMobileCi": {
     "run": 41167886399,
@@ -137,9 +138,18 @@
   "ci": {
     "applicationRun": 41170243851,
     "applicationSource": "e5af27fd",
-    "verifyRetryRun": 41170988888,
-    "verifySource": "9b004324",
-    "status": "in_progress"
+    "verifyRetryRun": 41171544190,
+    "verifySource": "f742e09d",
+    "status": "in_progress",
+    "applicationJobs": {
+      "web": "success",
+      "windows": "success",
+      "apple": "success"
+    },
+    "supersededVerifyRun": {
+      "run": 41170988888,
+      "result": "cancelled after the final test correction was dispatched"
+    }
   },
   "portableTestUpdate": {
     "reason": "CI host text metrics use 96 dp at 390 dp; supported reflow must not be mistaken for failure. Retain phone/large-text cases, prove no overlap and full labels, separately assert one row at 640 dp.",

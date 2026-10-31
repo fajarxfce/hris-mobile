@@ -6,6 +6,13 @@ Compose Fluent Starter and is the proving ground for reusable foundation changes
 
 ## Final test synchronization follow-up
 
+Current Linux verification: [41171544190](https://github.com/fajarxfce/hris-mobile/actions/runs/41171544190)
+at test source `f742e09d`. This supersedes cancelled `41170988888`. Mobile Web,
+Windows and Apple all passed in `41170243851` at unchanged application source
+`e5af27fd`. Starter is fully closed at `44d164c`: accepted Windows/Apple from
+`41170061606` plus successful scoped Linux/Android/Web `41170810070`.
+Only the current Mobile Linux run and final documentation closure remain.
+
 Root checks passed again in 2m38s (2,002 desktop cases / 349 suites) after resolving
 the second old-CI failure in `AppFlowTest`'s attendance freshness scenario. A
 checkpoint emission switches facts collectors through `flatMapLatest`; its
