@@ -5,6 +5,23 @@ adds employee chat, calls and meetings. This is the first Android interoperabili
 proof, not the HRIS product integration. See Platform's delivery ledger for all
 54 feature groups and P0–P8 acceptance.
 
+The fixture now has explicit `native` and `classic` sync modes. Both pass the same
+actual Android/browser exchange, refresh, queue and offline-invitee proof; see
+[dual-mode evidence](measurements/collaboration-dual-sync-2026-10-31.json). Classic
+uses `Client.syncV2` with `NONE` builder/session mode, while native owns a
+`SyncService` with `NATIVE`. Restore happens once per client in either mode.
+CI runs both modes independently with separate artifacts; inspect those results
+after push before claiming hosted verification.
+
+Both modes verify the complete SDK member list before offline sending. Classic
+did not populate optional summary counts in the experiment; the exact joined
+sender and invited recipient are checked instead, with no extra members. This
+does not relax encrypted version-12/invited-history requirements. Bounded static
+diagnostics survive cleanup without retaining payloads, identifiers or tokens.
+The [initial HRIS transport decision](https://github.com/fajarxfce/hris-platform/blob/d425e6d8/docs/collaboration/sync-mode.md)
+selects classic for the first scoped Android/web integration; native gateway
+authorization and Apple interop retain separate gates.
+
 `apps/collaboration-proof` builds a separate debug-only APK with no launcher,
 Firebase configuration or HRIS app dependency. Its instrumentation restores a
 fictional Matrix session, joins an encrypted room, decrypts a browser message and
@@ -30,12 +47,13 @@ With JDK 21 and Android SDK 36 configured, build:
 
 Boot the existing `hris-mobile-dev` emulator on port 5560 using
 [the development procedure](development.md#headless-android-emulator). From the
-Platform checkout at `047897f9`, run:
+Platform checkout at `d425e6d8`, run:
 
 ```sh
 python3 tool/check_collaboration_providers.py --docker-sudo \
   --android-serial emulator-5560 \
-  --android-apk ../hris-mobile/apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk
+  --android-apk ../hris-mobile/apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk \
+  --android-sync-mode classic
 ```
 
 The driver refuses physical devices, other AVDs, existing proof packages,

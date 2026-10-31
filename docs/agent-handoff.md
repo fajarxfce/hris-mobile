@@ -2,6 +2,19 @@
 
 ## Active collaboration implementation — 31 October 2026
 
+Latest source supports both classic `Client.syncV2` and native `SyncService`, with
+matching builder/session modes and one restore per client. Both actual local
+Android/browser runs passed two cases using APK `d835e1c1`: classic 19.219s / owned
+38.121s; native 18.814s / owned 33.649s; cleanup true. Complete SDK membership,
+not optional summary counts, now gates the offline first message. Final root,
+debug build and lint passed in 23s: 2,002 desktop cases, zero lint errors (47
+warnings). [Evidence](measurements/collaboration-dual-sync-2026-10-31.json) retains
+the three corrected provider failures, compilation/nesting corrections and exact
+source hashes. Workflow pins pushed Platform `d425e6d8` and runs both modes;
+inspect and retain each exact hosted artifact after push. Dedicated emulator is
+stopped with data retained; phone unchanged. Continue scoped recipient key/query,
+sync/content and product UI/outbox integration; no feature is accepted by this lab.
+
 Latest exact native protocol CI `41207178159` at `7b57865b` passed every job/step. Driver `047897f9` hashes match the sanitized artifact: two scenarios 33.604s, owned run 77.491s, cleanup true; hosted APK `b4cdef67` is retained in `docs/measurements/collaboration-sdk-protocol-surface-2026-10-31.json`. The same driver browser CI `41207148334` also passed every step (8.995s/32.972s). No Kotlin source or product acceptance changed.
 
 The user approved the complete chat/call/meeting plan. Branch
@@ -24,7 +37,7 @@ retains both results and fifteen parser/ownership cases. Counters contain no
 account/room/device IDs, tokens or payloads and include fixture control/negative
 requests; they are not an automatic gateway allowlist.
 
-The fixture explicitly uses SlidingSyncVersion.NATIVE with SyncService. Eighteen
+The earlier fixture explicitly used SlidingSyncVersion.NATIVE with SyncService. Eighteen
 SlidingSyncRestServlet requests occur only in the combined run; pinned Synapse
 implements MSC4186 Simplified Sliding Sync. Classic Kotlin syncV2/syncOnceV2 entry
 points exist but are not tested by this fixture. Product gateway integration must

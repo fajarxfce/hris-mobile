@@ -7,11 +7,14 @@ import java.util.concurrent.atomic.AtomicReference
 import org.json.JSONObject
 import org.matrix.rustcomponents.sdk.ClientSessionDelegate
 import org.matrix.rustcomponents.sdk.Session
-import org.matrix.rustcomponents.sdk.SlidingSyncVersion
 
 /** Private, fictional lab credentials. Product storage requires the platform Keystore adapter. */
-internal class ProofSessionStore(fixture: JSONObject, home: URI, private val directory: File) :
-    ClientSessionDelegate {
+internal class ProofSessionStore(
+    fixture: JSONObject,
+    home: URI,
+    private val directory: File,
+    private val syncMode: ProofSyncMode,
+) : ClientSessionDelegate {
     private val initial =
         Session(
             accessToken = fixture.getString("accessToken"),
@@ -20,7 +23,7 @@ internal class ProofSessionStore(fixture: JSONObject, home: URI, private val dir
             deviceId = fixture.getString("deviceId"),
             homeserverUrl = home.toString(),
             oauthData = null,
-            slidingSyncVersion = SlidingSyncVersion.NATIVE,
+            slidingSyncVersion = syncMode.sessionVersion,
         )
     private val current = AtomicReference(initial.copy())
     private val refreshes = AtomicInteger()
@@ -39,6 +42,7 @@ internal class ProofSessionStore(fixture: JSONObject, home: URI, private val dir
             check(session.userId == initial.userId && session.deviceId == initial.deviceId)
             check(session.homeserverUrl.trimEnd('/') == initial.homeserverUrl.trimEnd('/'))
             check(!session.refreshToken.isNullOrBlank())
+            check(session.slidingSyncVersion == syncMode.sessionVersion)
             val next = File(directory, "session.next")
             next.writeText(
                 JSONObject()
@@ -57,6 +61,7 @@ internal class ProofSessionStore(fixture: JSONObject, home: URI, private val dir
             val latest = current.get()
             val persisted = JSONObject(saved.readText())
             result
+                .put("syncMode", syncMode.wireName)
                 .put("sessionRefreshes", refreshes.get())
                 .put(
                     "credentialsRotated",

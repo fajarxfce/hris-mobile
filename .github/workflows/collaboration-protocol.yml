@@ -23,6 +23,10 @@ jobs:
   android-web:
     runs-on: ubuntu-24.04
     timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        sync_mode: [native, classic]
     steps:
       - uses: actions/checkout@v4
         with:
@@ -30,7 +34,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           repository: fajarxfce/hris-platform
-          ref: 047897f9f5a7b126fd2db4ed5a918db3e11e364e
+          ref: d425e6d867f6ddcea326c2d93338fbd828fb0f1c
           path: platform
       - uses: actions/setup-java@v4
         with:
@@ -66,11 +70,11 @@ jobs:
           avd-name: hris-mobile-dev
           emulator-port: 5560
           emulator-options: -no-window -no-snapshot -noaudio -no-boot-anim -gpu swiftshader -memory 2048 -cores 2
-          script: python3 platform/tool/check_collaboration_providers.py --android-sdk "$ANDROID_HOME" --android-serial emulator-5560 --android-apk mobile/apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk
+          script: python3 platform/tool/check_collaboration_providers.py --android-sdk "$ANDROID_HOME" --android-serial emulator-5560 --android-apk mobile/apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk --android-sync-mode ${{ matrix.sync_mode }}
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: native-protocol-evidence
+          name: native-protocol-evidence-${{ matrix.sync_mode }}
           path: platform/.work/collaboration/*/result.json
           include-hidden-files: true
           if-no-files-found: error

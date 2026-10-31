@@ -18,7 +18,6 @@ import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.RoomMessageLikeEvent
 import org.matrix.rustcomponents.sdk.RoomMessageLikeEventsListener
 import org.matrix.rustcomponents.sdk.SqliteStoreBuilder
-import org.matrix.rustcomponents.sdk.SyncService
 import org.matrix.rustcomponents.sdk.TaskHandle
 import uniffi.ruma_events.MessageLikeEventType
 
@@ -53,28 +52,17 @@ internal class NativeMatrixProbe(private val directory: File) {
             }
 
             var client: Client? = null
-            var sync: SyncService? = null
+            var sync: ProofSyncOwner? = null
             var room: Room? = null
             var listener: TaskHandle? = null
-            val sessions = ProofSessionStore(fixture, home, directory)
+            val mode = ProofSyncMode.parse(fixture.optString("syncMode", "native"))
+            val sessions = ProofSessionStore(fixture, home, directory, mode)
             try {
-                SqliteStoreBuilder(store.absolutePath, cache.absolutePath).use { storeBuilder ->
-                    storeBuilder.passphrase(keyFile.readText()).use { encryptedStore ->
-                        ClientBuilder().use { initial ->
-                            initial.homeserverUrl(home.toString()).use { located ->
-                                located.sqliteStore(encryptedStore).use { configured ->
-                                    configured.setSessionDelegate(sessions).use { owned ->
-                                        client = owned.build()
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+                client = buildClient(store, cache, keyFile, sessions, home, mode)
                 val active = checkNotNull(client)
                 active.restoreSession(sessions.initialSession())
-                active.syncService().use { builder -> sync = builder.finish() }
-                checkNotNull(sync).start()
+                sync = ProofSyncOwner(mode)
+                checkNotNull(sync).start(active)
                 room = active.joinRoomById(fixture.getString("roomId"))
                 val joined = checkNotNull(room)
                 val received = CompletableDeferred<RoomMessageLikeEvent>()
@@ -141,6 +129,36 @@ internal class NativeMatrixProbe(private val directory: File) {
             }
         }
 
+    private suspend fun buildClient(
+        store: File,
+        cache: File,
+        keyFile: File,
+        sessions: ProofSessionStore,
+        home: URI,
+        mode: ProofSyncMode,
+    ): Client =
+        SqliteStoreBuilder(store.absolutePath, cache.absolutePath).use { storeBuilder ->
+            storeBuilder.passphrase(keyFile.readText()).use { encryptedStore ->
+                buildWithStore(encryptedStore, sessions, home, mode)
+            }
+        }
+
+    private suspend fun buildWithStore(
+        store: SqliteStoreBuilder,
+        sessions: ProofSessionStore,
+        home: URI,
+        mode: ProofSyncMode,
+    ): Client =
+        ClientBuilder().use { initial ->
+            initial.homeserverUrl(home.toString()).use { located ->
+                located.slidingSyncVersionBuilder(mode.builderVersion).use { selected ->
+                    selected.sqliteStore(store).use { configured ->
+                        configured.setSessionDelegate(sessions).use { owned -> owned.build() }
+                    }
+                }
+            }
+        }
+
     private fun writeResult(
         fixture: JSONObject,
         incoming: RoomMessageLikeEvent,
@@ -174,6 +192,7 @@ internal class NativeMatrixProbe(private val directory: File) {
                     )
                     .put("offlineHistory", "invited")
                     .put("offlineRoomVersion", "12")
+                    .put("offlineMembershipSource", "sdk_members")
                     .put("sdk", "26.10.23")
                     .also { sessions.addEvidence(it) }
                     .put("deviceKeyUnchanged", unchangedKey)
