@@ -4,6 +4,30 @@ Updated 31 October 2026 (UTC). The release-configuration audit and independently
 verified Starter port are complete. This employee application was generated from
 Compose Fluent Starter and is the proving ground for reusable foundation changes.
 
+## Current delivery and CI follow-up — compact filters
+
+Configured **devRelease 1.0.0 / build 4** from application `e5af27fd` is installed
+on the authorized WireGuard phone. The APK exactly matches the inspected emulator
+release: SHA-256 `20adbce11c8f727d3cf80d24d4909ebfd9dfd1f8c94d39327dd70f91bd701e71`,
+24,127,587 bytes. Install-only plus installed-byte verification passed in 25.852s;
+no data clear, uninstall or phone UI launch. Future builds must use versionCode
+**>= 5** and the existing signer. No further APK rebuild is needed for test/docs-only
+changes after `e5af27fd`.
+
+Native checks passed month/year/week stepping, status selection/reset, 200% text,
+dark appearance and landscape. The same fictional list rows begin 72 dp earlier
+for Overtime and 80 dp earlier for Expenses than in build 3. Full labels and 48 dp
+touch targets remain. Screenshot galleries and final measurements are being saved.
+
+CI found one portable test assuming all desktop fonts fit two labels in a 390 dp
+row. The layout correctly reflows; the fixed test retains the phone scenario,
+asserts no overlap/unclipped labels and proves one row separately at 640 dp.
+Fresh full root validation passed 2,002 desktop cases / 349 suites in 3m32s.
+Starter `df2906f` has the identical test (331 cases / 114 suites passed).
+A manual `verify` CI scope was added to retest Linux checks/builds while unaffected
+full-run Apple/Windows/Web jobs continue. Application source remains unchanged.
+Next: record scoped verify plus full-run results and finish Git evidence/cleanup.
+
 ## Active filter-layout revision — 31 October 2026
 
 The compact-filter implementation now passes the final root check in 2m55s:

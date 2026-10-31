@@ -3,10 +3,10 @@
   "scope": "Compact date/status filters with trailing paired navigation",
   "localValidation": {
     "command": "xvfb-run -a ./gradlew formatKotlin :check --no-daemon",
-    "durationSeconds": 175,
-    "tests": 2001,
+    "durationSeconds": 212,
+    "tests": 2002,
     "suites": 349,
-    "sharedUiTests": 211,
+    "sharedUiTests": 212,
     "failures": 0,
     "errors": 0,
     "skipped": 0
@@ -23,7 +23,7 @@
   "portableFiles": {
     "core/designsystem/src/commonMain/kotlin/dev/fajar/starter/designsystem/components/AppFilterChip.kt": "daa140d13eb4c8831823b40f593832940eb609dca8046fb2868b7d6908ba0ce3",
     "core/designsystem/src/commonMain/kotlin/dev/fajar/starter/designsystem/components/AppPeriodNavigation.kt": "16042a2dbde17d699e2e7e741bb79e494f61313907b00599a754814bc3df0962",
-    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CompactFiltersLayoutTest.kt": "62b285fc7c9237508518b5a2f566b61d33a7ff0a778d9ebcbf004d367294d931"
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CompactFiltersLayoutTest.kt": "91495af9b3c6520466a167cbe36908961bdd1e7dec7ac94c03ebb01389e2ae72"
   },
   "starter": {
     "commit": "58623f5",
@@ -40,7 +40,60 @@
     "apple": "success",
     "verify": "one Inbox projection synchronization failure; corrected in eab6225b and covered by subsequent full local runs"
   },
-  "delivery": "release build 4 in progress; never install the unconfigured emulator fixture",
+  "delivery": {
+    "artifact": {
+      "artifact": ".work/ui-review-2026-10-31/filter-release/hris-mobile-dev-release-1.0.0-4.apk",
+      "variant": "devRelease",
+      "applicationId": "dev.fajar.hris.mobile.dev",
+      "versionCode": 4,
+      "versionName": "1.0.0",
+      "bytes": 24127587,
+      "sha256": "20adbce11c8f727d3cf80d24d4909ebfd9dfd1f8c94d39327dd70f91bd701e71",
+      "debuggable": false,
+      "signatureVerified": true,
+      "sameInstalledSigner": true,
+      "signerSha256": "aca5ce6a26b978dee1d63c63103b6799848ab760d47ef4cf5ee68620fc8721f3",
+      "signerSha1": "23860b51e4305aa7900090aeab6783d39a12ff33",
+      "signingBoundary": "Release build signed with the existing development key for an in-place private-device update.",
+      "privateApiVerifiedInDex": true,
+      "fixtureEndpointsAbsent": true,
+      "firebaseDevAppMatches": true
+    },
+    "build": {
+      "command": [
+        "./gradlew",
+        ":apps:android:assembleDevRelease",
+        "-PrequireSigning=true",
+        "-PappEnvironment=dev",
+        "-PappVersion=1.0.0",
+        "-PappVersionCode=4",
+        "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+        "--no-daemon"
+      ],
+      "startedAt": "2026-10-31T04:50:59.373812+00:00",
+      "elapsedSeconds": 142.752,
+      "exitCode": 0
+    },
+    "installation": {
+      "confirmed": true,
+      "startedAt": "2026-10-31T05:01:47.231536+00:00",
+      "elapsedSecondsIncludingVerification": 25.852,
+      "serial": "10.77.77.3:5555",
+      "variant": "devRelease",
+      "applicationId": "dev.fajar.hris.mobile.dev",
+      "versionCode": 4,
+      "versionName": "1.0.0",
+      "debuggable": false,
+      "installedSha256": "20adbce11c8f727d3cf80d24d4909ebfd9dfd1f8c94d39327dd70f91bd701e71",
+      "installedBytesMatch": true,
+      "existingAppIdPreserved": true,
+      "firstInstallTimePreserved": true,
+      "updateInPlace": true,
+      "uninstalled": false,
+      "appDataCleared": false,
+      "uiLaunched": false
+    }
+  },
   "renderedReview": "pending native configured-release review",
   "contrastAgainstCanvas": {
     "lightText": 14.9,
@@ -53,5 +106,17 @@
   "skills": {
     "chrisbanes/skills": "d2f24b4179179f5e8ec8dcfe0527b3619eda1e0f",
     "nextlevelbuilder/ui-ux-pro-max-skill": "9a3f14f7423037ccb8feeb4fee7482291b9c820e"
+  },
+  "mobileSource": "e5af27fd",
+  "ci": {
+    "run": 41170243851,
+    "status": "in_progress"
+  },
+  "portableTestUpdate": {
+    "reason": "CI host text metrics use 96 dp at 390 dp; supported reflow must not be mistaken for failure. Retain phone/large-text cases, prove no overlap and full labels, separately assert one row at 640 dp.",
+    "runtimeSourceUnchanged": "e5af27fd",
+    "starterTestCommit": "df2906f",
+    "freshRoot": "2002 desktop cases / 349 suites passed in 212s",
+    "ciFollowUp": "Manual verify scope preserves existing Apple/Windows/Web validation for identical application source."
   }
 }
