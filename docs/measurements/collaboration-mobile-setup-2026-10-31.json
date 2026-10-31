@@ -74,5 +74,13 @@
     "Product SDK store/session ownership",
     "App DI and chat routes",
     "Durable message reconciliation, UI and complete P0\u2013P8 scope"
-  ]
+  ],
+  "initialHostedRun": {
+    "id": 41234420892,
+    "commit": "680455dd9c2a2971caccadf657f088e8d269390b",
+    "portable": "failed before test execution",
+    "reason": "setup-android v3 defaults to removed SDK package tools.",
+    "correction": "Request platform-tools explicitly, then SDK 36/build-tools 36.0.0, matching both already-passing native workflows.",
+    "apple": "Still running when the workflow correction was prepared; no acceptance claimed."
+  }
 }

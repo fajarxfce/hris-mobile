@@ -2,6 +2,13 @@
 
 ## Active collaboration implementation — 31 October 2026
 
+Control CI run `41234420892` exposed setup-android v3's obsolete default SDK
+package `tools`, before any portable tests ran. The workflow now requests
+`platform-tools` and SDK/build-tools 36 explicitly, matching the passing protocol
+workflows. Inspect the corrected hosted run. Durable setup command storage and
+prepare/replay orchestration are in progress locally; eight real database cases
+already pass, with full validation still pending. Continue implementation.
+
 The product [native setup modules](collaboration-setup.md) now provide bounded
 registration, status, retry and bootstrap adapters plus a scope-safe read use case.
 Eight domain and seven transport cases pass; root checks and setup assembly pass
