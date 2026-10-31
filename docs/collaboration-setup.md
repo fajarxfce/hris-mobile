@@ -3,7 +3,8 @@
 `features/collaboration/domain` owns setup entities, live admission and request
 lifetime. `features/collaboration/data` implements the native registration,
 provisioning retry, setup observation and gateway bootstrap API contracts.
-This increment does not install a chat route or open a Matrix SDK store.
+The runtime installer transfers confirmed bootstrap credentials into protected SDK
+storage. App session ownership and chat routes remain in progress.
 
 `LoadCollaborationSetup` captures the local session, selected company and native
 session family. It admits the collaboration permission/module and current native
@@ -66,9 +67,9 @@ Gateway credentials are encrypted in the confirmed bootstrap outcome. Their owne
 device and head generation must match the original command; expired metadata stays
 readable. `ReconcileCollaborationSetupReceipt` removes only an observed confirmed
 registration or new provisioning-job receipt with a matching command revision.
-It cannot retire an uncertain operation or bootstrap credentials. SDK installation,
-recovery after an expired bootstrap replay/build change, UI wiring and message
-queue recovery remain separate required work.
+It cannot retire an uncertain operation or bootstrap credentials. The runtime
+installer below owns confirmed bootstrap retirement. Recovery after an expired
+bootstrap replay/build change, app ownership and UI wiring remain required work.
 
 Real SQLite tests cover reopening, changed local session, account/company/native
 family isolation, missing/wrong keys, copied envelopes, competing revisions and
@@ -76,3 +77,27 @@ cancellation. Domain cases additionally exercise lost responses, recreated deliv
 owners, storage failures on both sides of I/O, callback cancellation, late denials,
 build changes, receipt reconciliation and exact gateway ownership. These tests
 establish setup-command durability, not SDK message durability.
+
+## Admitted runtime installation
+
+`InstallCollaborationRuntime` serializes explicit installation calls. It captures
+current account/company/native-family admission, reads the retained command and
+checks the original operation, build/platform, attempted bootstrap outcome and
+gateway identity. It owns a successful SDK lease before any later suspending check.
+Only a durably installed matching owner/device/operation without a credential-write
+failure may retire the observed command revision. The returned lease remains paused;
+the caller owns it and must separately acquire live delivery authority.
+
+Cancellation, late owner/permission changes, failed installation, wrong lease
+identity and failed or competing retirement close the acquired lease. Cleanup runs
+even when the caller was cancelled; the runtime repository retains unfinished drain
+ownership. A failed cleanup does not replace a confirmed authorization denial.
+When retirement committed but its response was lost, protected SDK facts remain
+available for explicit restore. No logout, token issuance, retry loop or data reset
+is performed by this use case. Old gateway deadline metadata remains a local fact,
+not permission to send messages.
+
+[Installation evidence](measurements/collaboration-runtime-installation-2026-10-31.json)
+retains 12 common cases, 35 domain desktop/browser cases and passing root checks
+(2,075 desktop cases). Android/data assembly compiles the binding. Apple runtime,
+bootstrap recovery and application DI/navigation still require implementation.

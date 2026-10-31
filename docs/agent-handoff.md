@@ -2,6 +2,27 @@
 
 ## Active collaboration implementation — 31 October 2026
 
+**Admitted bootstrap installation now owns confirmed command retirement.**
+`InstallCollaborationRuntime` verifies current owner/build/platform and the original
+attempted bootstrap, acquires a paused protected lease and removes only the observed
+command revision after matching its owner/device/operation and credential gate.
+Cancellation or late denial closes the acquired resource; lost retirement responses
+preserve already installed facts for restore. Twelve common cases pass, including
+competing calls, credential/cleanup failures, account/company/permission replacement
+and cancelled handoff. [Evidence](measurements/collaboration-runtime-installation-2026-10-31.json)
+retains focused 63s and root/assembly 45s checks: 2,075 desktop cases, 35 domain browser
+cases, quality passed. The initial 17s test compilation error used `copy` on an
+intentionally non-data credential class; the fixture now constructs bounded variants.
+**Next: explicit restore/application session ownership, bootstrap uncertainty/build
+recovery, live delivery, app DI/UI and all P0–P8.** No product group accepted.
+
+Provider-only CI `41240634061` at `70bfbd21` passed native sync but failed classic:
+Android observed the empty `offline-ready.json` while its producer was still writing
+(`ProofOfflineInvite.kt:28`). Both modes cleaned up. Platform is changing that
+test signal to publish by rename, followed by actual classic regression and a new
+Mobile protocol-workflow pin. Keep this failure distinct from the successful
+protected HRIS SDK and common-control runs recorded below.
+
 **Actual Android process death preserves the pending SDK transaction.**
 [Evidence](measurements/collaboration-sdk-process-death-2026-10-31.json) binds APK
 `a14d6bf1` to 71 Mobile/15 Platform sources. The driver force-stops the owned proof

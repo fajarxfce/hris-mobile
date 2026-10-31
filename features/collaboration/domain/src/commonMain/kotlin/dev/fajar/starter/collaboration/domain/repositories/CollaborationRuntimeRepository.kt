@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.StateFlow
 
 /** Store I/O and SDK ownership only. Use cases admit installation and live delivery separately. */
 interface CollaborationRuntimeRepository {
+    /** Success owns a paused client with its scoped identity/credentials durably installed. */
     suspend fun install(
         owner: CollaborationOwner,
         command: CollaborationSetupCommandRecord,
@@ -26,5 +27,6 @@ interface CollaborationRuntimeLease {
 
     suspend fun retryCredentialWrite(): AppResult<Unit>
 
+    /** Bounded wait; the repository retains unfinished cleanup and its exclusive store lock. */
     suspend fun close(): AppResult<Unit>
 }

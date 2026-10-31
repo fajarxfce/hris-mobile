@@ -1,0 +1,108 @@
+{
+  "date": "2026-10-31",
+  "kind": "admitted-protected-runtime-installation",
+  "complete": true,
+  "productAcceptance": false,
+  "liveChanged": false,
+  "phoneChanged": false,
+  "base": "9c44fc56e6713b3156aa8294596064c76158924f",
+  "sourceSha256": {
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt": "1a661a3df1fc5bb4e4e9f03fbbe6e3568c4fc0b2a4a8ce0bfb8b234a57e63150",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationDeviceSetup.kt": "a42df08ff1b3915199fa600886202e176dcf7ec6a0d582beab9583c842fc202f",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationGateway.kt": "9212548ee6fc06e579f2f30a4ad6107eafb42f6c8e0aacf5837c561e4eb46220",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationOwner.kt": "763050fad897b67c9a7c2070e95166da9d19521306a33d098d5f033b1a73b546",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSetupCommand.kt": "38dc69f593c667ffaba38ad803ee8576649587b9ee7207d11c3dff001c1c76e7",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSetupCommandRecord.kt": "d0cc5aebf4c3c023342a6c90a14186d0425b5309582ed2b22f01934834ac9b1f",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSetupCommands.kt": "e60005ebdf881a94f430f0f6016948712d97aee8a5370e60340bf5fa994ba6de",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationRequestPolicy.kt": "1d7731545a5acfbe42e97e6b42626f867b410b39a5f4805496f91f72b98744f4",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationSetupActionPolicy.kt": "2640fa9e7b64827bf234c73a3865111fb6c05c2ab6bb0872f638022b0d6d4df5",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationRuntimeRepository.kt": "cda930d79846a5d0ced0bf0dc3134e3cc357d62f1342b28be22fd99aeae76ea9",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationSetupCommandRepository.kt": "fa07cb2bcfff9dd9596cda27ebb1dc752cce9855f9f54ace5f3fd1c79bafa688",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationSetupRepository.kt": "b98fa02c23b732217cea7271ab4ed9296af21660a88be64bef1c4bd029414e62",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/CollaborationSetupOwner.kt": "9e54aa26bea624bd37290d751f1a8e5fc6f2d8fe40969a40604af85ce4b04c38",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/InstallCollaborationRuntime.kt": "85716f92569f3206925852ec74413a99e479458182cc464d8f9ea04f269fc3a9",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/LoadCollaborationSetup.kt": "e3d394cb020f61e1c937bd0a1c98b827737d2be270a19f5443aec9475c415716",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/PrepareCollaborationSetup.kt": "e909f6049325049c1157334e3708bca23f2f31afa38b07c6d2d7e91624386c2f",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ReconcileCollaborationSetupReceipt.kt": "2679100381cd1fe8517cf49d19c7eaa02c1efdbdc66c5f8386d30a8c01598b21",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ReplayCollaborationSetup.kt": "cb70532bed89c59ad5dee50a4d3f9b4dd7a207a647eac11e911805238423723f",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationCommandFixture.kt": "ea481ec084297ed39e759cff19997cdcc1fb426fc1f6f7e47dc45fc4b90a43f5",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationRuntimeInstallationTest.kt": "579cfc09234c7d68467af3683df32a172d9d3cd679d9aa9ee93aca611f07693b",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationSetupCommandTest.kt": "effa5982ed82b0c48b71678fd25e4f6c236ed521aee2b6e69c1c44568c38bb15",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationSetupFixture.kt": "dd0a64b5761c31d5a15499679aa049571555d06931728621d2032031af8e7849",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/LoadCollaborationSetupTest.kt": "f5b9d6d453b5a579198315323afc6893bc10f66425a84123105119912b466ad2"
+  },
+  "validation": {
+    "focused": {
+      "seconds": 63,
+      "result": "passed; domain desktop/browser, data assembly, format, detekt and architecture"
+    },
+    "root": {
+      "seconds": 45,
+      "result": "passed; root check, domain browser, data assembly",
+      "desktopCases": 2075
+    },
+    "domainXml": {
+      "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationSetupCommandTest.xml": {
+        "sha256": "146a51e7cb9a5f5ae2ee2e99ec4758bd698263ba3d85054fb57b9f20afde6a0c",
+        "tests": 15,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.LoadCollaborationSetupTest.xml": {
+        "sha256": "1e842d80a111fb1d0eacabf4b0f596d95379a0aa7bc538f8e5f9935e81f4eed8",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationRuntimeInstallationTest.xml": {
+        "sha256": "b04c10cd96651f5068687ac08f0e82e329b5ca67c58564fe6ac68701538313cc",
+        "tests": 12,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.domain.CollaborationSetupCommandTest.xml": {
+        "sha256": "737fdf28129077a5ceb4b545fb45070da5ed6fd489764fc28d85cbc22a6c22af",
+        "tests": 15,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.domain.LoadCollaborationSetupTest.xml": {
+        "sha256": "a033be20ea539c7bfb226a1e2fbb94a5e584cd20fef9d2d01d454065bec08116",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "features/collaboration/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.domain.CollaborationRuntimeInstallationTest.xml": {
+        "sha256": "38aefeefb813359bb69a8542c673e44f505e098eddb722009ee3135d36d53f5b",
+        "tests": 12,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
+  },
+  "logs": {
+    "collaboration-runtime-installation-focused.log": "95b65d8a59698a263abbc160b6c66cdc81bb09fb77f61a7f1419e8036540c31e",
+    "collaboration-runtime-installation-recovery.log": "b783df1314b43da47eb49f2de74f717e1121e451e3f26dfb075b16f57fa0acc9",
+    "collaboration-runtime-installation-root.log": "1aca5f81cc0b5ba7eab7b4b3600302fb49a8e770dd30eae1cd0f331d89540a04"
+  },
+  "initialFailure": {
+    "seconds": 17,
+    "kind": "test compilation",
+    "reason": "The test attempted data-class copy on the intentionally opaque CollaborationGateway; use explicit fixture construction."
+  },
+  "limits": [
+    "Returned lease is paused local installation, not current live message admission.",
+    "Runtime repository ownership and actual SDK process-death evidence remain in their separate measurements; this increment adds orchestration policy tests.",
+    "Application DI/session lifecycle, bootstrap uncertainty/build recovery, Apple runtime and all remaining product feature groups are unfinished."
+  ],
+  "next": [
+    "Restore installed protected sessions under current account/company ownership.",
+    "Connect application lifetime, live admission and explicit bootstrap recovery to chat setup/UI, then all P0\u2013P8."
+  ]
+}

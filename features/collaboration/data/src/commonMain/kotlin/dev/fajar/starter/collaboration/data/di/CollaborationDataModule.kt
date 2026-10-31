@@ -12,6 +12,25 @@ import org.koin.core.annotation.*
 @Module
 @ComponentScan("dev.fajar.starter.collaboration.data")
 class CollaborationDataModule {
+    @Single
+    fun installRuntime(
+        commands: CollaborationSetupCommandRepository,
+        runtimes: CollaborationRuntimeRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) =
+        InstallCollaborationRuntime(
+            commands,
+            runtimes,
+            sessions,
+            workspaces,
+            server,
+            build,
+            Clock.System,
+        )
+
     @Factory
     fun loadSetup(
         sessions: SessionRepository,
