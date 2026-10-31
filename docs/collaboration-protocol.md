@@ -30,7 +30,7 @@ With JDK 21 and Android SDK 36 configured, build:
 
 Boot the existing `hris-mobile-dev` emulator on port 5560 using
 [the development procedure](development.md#headless-android-emulator). From the
-Platform checkout at `1db0f9fe`, run:
+Platform checkout at `d0731afe`, run:
 
 ```sh
 python3 tool/check_collaboration_providers.py --docker-sudo \
@@ -115,3 +115,23 @@ run [41187875527](https://github.com/fajarxfce/hris-mobile/actions/runs/41187875
 passed at exact `d799e5cf`: both scenarios in 54.657s with full cleanup. The
 measurement retains its independently built APK hash and provider summary. The owned emulator is stopped and no phone
 installation or UI interaction occurred.
+
+## Encrypted logical IDs and SDK queue
+
+The native queue/extra-content experiment now passes in both directions through
+actual Android 35 and browser E2EE. `org.hris.message_id` remains inside encrypted
+content. The SDK's paused queue emits its local transaction, resumes, then maps
+that same transaction to the server event; standard refresh preserves the signing
+key. Both scenarios pass in 29.090s with complete cleanup. [Queue evidence](measurements/collaboration-native-logical-queue-2026-10-31.json)
+records tested source/APK hashes, twelve driver cases, full root checks with 2,002
+desktop cases and debug assembly/lint (52s; zero errors, 47 warnings).
+
+Two earlier runs failed at synchronous `Room.enableSendQueue` with native
+`InternalException`. Safe class/method/line diagnostics locate the call without
+logging provider messages/credentials. The client owner's asynchronous
+`enableAllSendQueues` passes and is used for connectivity gating. This experiment
+does not prove process-restart queue persistence or recipient deduplication;
+implement durable logical IDs, event aliases/tombstones and conflict handling
+before offline acceptance. No Starter port is due for this isolated proof.
+The dedicated emulator is stopped with regular HRIS data retained; no phone action
+occurred. Native CI now pins Platform `d0731afe`; inspect its exact result after push.

@@ -4,6 +4,7 @@ import java.io.File
 import java.net.URI
 import java.security.SecureRandom
 import java.util.Base64
+import java.util.UUID
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.NonCancellable
@@ -34,6 +35,9 @@ internal class NativeMatrixProbe(private val directory: File) {
             require(fixture.getString("deviceId") == "PROOF_NATIVE")
             val expectedBody = fixture.getString("expectedBody")
             val replyBody = fixture.getString("replyBody")
+            val expectedLogicalId =
+                UUID.fromString(fixture.getString("expectedLogicalId")).toString()
+            val replyLogicalId = UUID.fromString(fixture.getString("replyLogicalId")).toString()
             require(expectedBody.startsWith("fictional-native-") && expectedBody.length < 150)
             require(replyBody.startsWith("fictional-native-") && replyBody.length < 150)
             val store = File(directory, "store").apply { mkdirs() }
@@ -80,6 +84,8 @@ internal class NativeMatrixProbe(private val directory: File) {
                                     runCatching { JSONObject(event.contentJson) }.getOrNull()
                                 if (
                                     content?.optString("body") == expectedBody &&
+                                        content.optString("org.hris.message_id") ==
+                                            expectedLogicalId &&
                                         event.encryptionInfo != null
                                 ) {
                                     received.complete(event)
@@ -103,18 +109,18 @@ internal class NativeMatrixProbe(private val directory: File) {
                 // Cross the provider's four-second lifetime while retaining the same client,
                 // crypto store, key and room. The SDK owns the refresh request and token update.
                 delay(6_000)
-                val outgoing =
-                    joined.sendRaw(
-                        "m.room.message",
-                        JSONObject().put("msgtype", "m.text").put("body", replyBody).toString(),
-                    )
+                val outgoing = ProofQueuedMessage(active, joined).send(replyBody, replyLogicalId)
                 val unchangedKey = active.encryption().use { it.ed25519Key() == originalKey }
                 File(directory, "result.json")
                     .writeText(
                         JSONObject()
                             .put("receivedEncrypted", true)
                             .put("receivedEventId", incoming.eventId)
-                            .put("sentEventId", outgoing)
+                            .put("sentEventId", outgoing.eventId)
+                            .put("queueTransactionId", outgoing.transactionId)
+                            .put("queuedWhilePaused", true)
+                            .put("receivedLogicalId", expectedLogicalId)
+                            .put("sentLogicalId", replyLogicalId)
                             .put("sdk", "26.10.23")
                             .also { sessions.addEvidence(it) }
                             .put("deviceKeyUnchanged", unchangedKey)

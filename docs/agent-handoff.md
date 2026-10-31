@@ -13,6 +13,24 @@ tests, source evidence and pushed atomic commits. Prove reusable foundations
 here before porting them to Starter. The completed prior scope below is history,
 not closure of this new implementation request.
 
+The native queue/extra-content experiment now passes in both directions through
+actual Android 35 and browser E2EE. `org.hris.message_id` remains inside encrypted
+content. The SDK's paused queue emits its local transaction, resumes, then maps
+that same transaction to the server event; standard refresh preserves the signing
+key. Both scenarios pass in 29.090s with complete cleanup. [Queue evidence](measurements/collaboration-native-logical-queue-2026-10-31.json)
+records tested source/APK hashes, twelve driver cases, full root checks with 2,002
+desktop cases and debug assembly/lint (52s; zero errors, 47 warnings).
+
+Two earlier runs failed at synchronous `Room.enableSendQueue` with native
+`InternalException`. Safe class/method/line diagnostics locate the call without
+logging provider messages/credentials. The client owner's asynchronous
+`enableAllSendQueues` passes and is used for connectivity gating. This experiment
+does not prove process-restart queue persistence or recipient deduplication;
+implement durable logical IDs, event aliases/tombstones and conflict handling
+before offline acceptance. No Starter port is due for this isolated proof.
+The dedicated emulator is stopped with regular HRIS data retained; no phone action
+occurred. Native CI now pins Platform `d0731afe`; inspect its exact result after push.
+
 P0 native checkpoint: [the separate Android protocol fixture](collaboration-protocol.md)
 uses Matrix Rust Kotlin SDK 26.10.23. Actual Android 35 ↔ browser encrypted text
 exchange and the existing web/media scenario passed together in 24.590s, with

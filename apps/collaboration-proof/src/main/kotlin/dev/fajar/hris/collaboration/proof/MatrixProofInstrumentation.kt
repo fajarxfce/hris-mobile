@@ -6,6 +6,7 @@ import android.os.Bundle
 import java.io.File
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeout
+import org.json.JSONArray
 import org.json.JSONObject
 
 /** An emulator-only, debug-only protocol fixture with no HRIS/Firebase integration. */
@@ -28,6 +29,18 @@ class MatrixProofInstrumentation : Instrumentation() {
         } catch (failure: Exception) {
             output.put("complete", false)
             output.put("failureCategory", failure.javaClass.simpleName)
+            output.put(
+                "failureFrames",
+                JSONArray(
+                    failure.stackTrace
+                        .filter {
+                            it.className.startsWith("dev.fajar.") ||
+                                it.className.startsWith("org.matrix.")
+                        }
+                        .take(12)
+                        .map { "${it.className}.${it.methodName}:${it.lineNumber}" }
+                ),
+            )
         } finally {
             directory.mkdirs()
             File(directory, "instrumentation.json").writeText(output.toString())
