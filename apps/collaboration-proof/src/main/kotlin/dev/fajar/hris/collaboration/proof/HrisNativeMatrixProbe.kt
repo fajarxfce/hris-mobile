@@ -222,6 +222,14 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
                             body(fixture, "reply"),
                             logicalId(fixture, "replyId"),
                         )
+                        val history =
+                            productQueue.recoverHistory(
+                                sent.eventId,
+                                body(fixture, "body"),
+                                answered.eventId,
+                                recipient.nativeClient.userId(),
+                                body(fixture, "reply"),
+                            )
                         check(recipientTimeline.close() is AppResult.Success)
                         // Screen disposal leaves the sibling runtime/observer usable.
                         senderTimeline.awaitMessage(
@@ -247,6 +255,9 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
                                 .put("commonSenderOwned", true)
                                 .put("receiptJournalRecovered", true)
                                 .put("projectionInterrupted", true)
+                                .put("originalHistoryWindowOwned", true)
+                                .put("historyBodiesRestored", true)
+                                .put("historyWindow", history)
                                 .put("senderEventId", sent.eventId)
                                 .put("recipientEventId", answered.eventId)
                                 .put("senderTransaction", sent.transactionId)

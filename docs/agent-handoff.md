@@ -2,72 +2,63 @@
 
 ## Active collaboration implementation — 1 November 2026
 
-**Canonical original-message storage and owned offline observation are implemented.**
-[History evidence](measurements/collaboration-history-2026-11-01.json) records the
-full **301s** root/browser/Android/Wasm run: **2,354 desktop / 115 Android host /
-184 domain-browser / 144 data-browser** cases, zero failures/errors/skips and zero
-Android lint errors. All **207 source hashes** match. Six new common observer and
-12 shared SQLite/IndexedDB cases cover ownership/admission and real encrypted
-storage. Initial storage checks passed in 68s; the expanded build found a nullable
-fixture argument (48s). One root attempt was stopped when its scripted correction
-had not applied; the explicit correction precedes the passing full run. Dev APK
-**`c757faec`** is built, not installed.
+**An owned Android original-event window now passes through real HRIS and Matrix
+SDKs into canonical encrypted history.** [Evidence](measurements/collaboration-original-window-2026-11-01.json)
+records actual run **`125c8c38739645df9e5cd445fe6f90c2`**, **46.115s native suite /
+77s Gradle**, cleanup complete. Both exact text originals and their event/logical
+indexes survive database reopen; replay leaves the same page. The SDK's focused
+context request returns 200 with its typed membership filter. The prior common
+sender's 3/3/3 live HTTP admissions, paused restart and isolated held room remain
+asserted.
 
-Original identity is scoped by account/company/conversation/room plus authenticated
-sender and logical UUID, with provider-event fallback for legacy content. Exact
-retries share one canonical message; all observed provider aliases remain indexed.
-Another sender copying the ID stays separate. Conflicting original content or
-retargeted provider IDs fail the complete batch. Redaction before original content
-retains a tombstone; confirmed deletion of an alias hides the logical message and
-later original/retry input cannot resurrect it. The first observed primary event
-and ordering timestamp remain stable.
+This is a finite known-anchor snapshot, not complete acquisition or head discovery.
+The shared decoder authenticates original event identity and hashes complete
+canonical original content, retaining unknown fields. Replacements and unavailable
+content cannot establish originals. Seven decoder and seven Android ownership
+cases cover original-versus-edited data, bounds, partial acquisition, late denial
+and retained cleanup. The real fixture contains two unedited text originals plus
+10 unsupported entries. Diagnostic extraction measured **21.967 ms**, **4,732 model
+characters / 937 original JSON characters**. The pinned SDK allocates its diagnostic
+model and internal cache snapshot before application bounds; no large-room memory
+or capacity claim follows from this measurement.
 
-History uses the existing atomic ReplicaStore with independent AES-GCM and HMAC
-keys in a separate OS credential record. It does not share the outbox's 128-message
-capacity. Queries page at most 50 messages plus one lookahead; the 137-message test
-checks paging beyond that outbox bound, not production scale. Atomic batches hold
-1–16 changes and each canonical message at most 128 aliases, without eviction.
-Missing keys cannot regenerate over inactive-account records. Indexed event and
-sender/logical-ID lookups support future ACK recovery. Offline observation learns
-its authenticated room binding from the checkpoint; no SDK or HTTP room discovery
-is needed. Known company denial closes pending observation, and final page checks
-capture account ownership after admission I/O. Ordinary credential age preserves
-owned content.
+The Platform gateway now forwards only validated boolean lazy-member flags for
+messages/context. Unknown/event/sender filters, duplicate keys, trailing input,
+nonboolean or oversized values fail before provider access. The actual runner also
+publishes app signals by completed rename under its exclusive fixture owner;
+partial files can no longer satisfy the APK's ready-file check. Evidence retains
+the original filter rejection, renderer crash, partial-signal race and Android's
+rejection of the first hard-link publisher. Every attempt completed cleanup.
 
-**Continue P0–P8; none of 54 complete groups is accepted. Next implement bounded
-native history windows and original-event decoding/acquisition, close the
-ACK-before-journal gap, then command retirement and Chat list/setup/conversation
-UI.** No native adapter currently supplies the new history port. Its content
-fingerprint must be computed from complete canonical original content, including
-unknown fields; the SDK's `latestJson` may represent an edit. `debugInfo` exposes
-original JSON but also formats the full model, so measure/bound extraction before
-using it. NotificationClient raw JSON is filtered by notification rules and is not
-a general history API. Event-focused timeline windows exist in the pinned SDK;
-creating a default live timeline and rejecting >512 items is not a product window.
-Retain conflicts/uncertainty; do not replace native transactions, clear SDK keys or
-cursors, or introduce a second transport retry owner. Provider acquisition cursors,
-edit projection, quota/overflow recovery and SDK-cache/backup deletion remain.
+Full application checks pass in **290s**: **2,361 desktop / 129 Android host /
+184 domain-browser / 151 data-browser** cases, zero failures/errors/skips
+and zero Android lint errors. All **223 Mobile / 33 Platform source hashes** match.
+Focused backend checks pass in 123s (40 domain / five history data / 21 API);
+35 Python driver cases pass. Dev APK **`6cf0338f`** is built, not installed.
 
-The common sender's actual HRIS/SDK proof remains **`25eb1e1f29fb4bd18643e2536bffce07`**
-(Mobile `20995a8c`, Platform **`6e50bbd05a557ecc7fb82c0ab0a44da99558cdb9`**, still the
-HRIS workflow fixture pin). It checks 3/3/3 HTTP admissions, actual encrypted ACK,
-durable receipt, interrupted `Sent` projection, database reopen and one repair then
-zero on replay. This history increment changes no native adapter/fixture, and no
-new native-device execution is claimed.
+Platform **`61303ade50aac74124be6fb59ef10d880875f594`** is pushed; the HRIS workflow
+pins that verified gateway/filter and atomic-signal fixture source.
 
-Separately audited receipt CI **`41270939965`** at **`8d8fb233`** passed all 28 steps:
-316 portable desktop / 292 browser / **260 iOS simulator** cases, actual **Xcode
-application-host build**, and all **191 immutable source hashes** matched. See the
-receipt measurement's hosted audit. That result does not validate later source.
-Physical iPhone tests are waived; current Apple implementation/build evidence
-continues through CI, and native Apple interoperability remains outstanding.
+**Continue P0–P8; none of 54 complete groups is accepted. Next connect the finite
+history window to the common live-admitted acquisition port, then head discovery,
+provider progress, ACK-before-journal reconciliation, command retirement and Chat
+list/setup/conversation UI.** Do not infer send success from missing native queue
+IDs or drop unresolved history. Keep original native transactions and SDK crypto
+stores/cursors. Apple/web owned content runtimes, edit/attachment projection,
+backup and all call/meeting phases remain. Physical iPhone testing is waived;
+Apple implementation/interoperability is still required.
 
-The emulator is stopped. No live/schema/phone change. Starter remains `36116b2`
-and clean; this HRIS feature/host composition requires no generic port. Atomic
-commits and every-commit pushes remain authorized. Continue after this checkpoint;
-the full chat/calls/meetings implementation is not complete.
+Prior hosted sender run `41273236979` (`20995a8c`) failed with a safe RuntimeError;
+its trace contains provider-busy join and no encrypted send, cleanup complete.
+Later canonical-storage source `ad0848e6` passed existing HRIS proof `41274726916`
+(all 17 steps, 55.798s native suite, 115 Android host cases). Both outcomes are
+retained in their measurement files. They do not validate this new window.
+Current-source Apple/portable evidence must still be audited from hosted CI.
 
-[Storage and observation contract](collaboration-history.md).
+The dedicated emulator is stopped. No live/schema/phone change. Starter remains
+`36116b2`; no reusable foundation change is required by these HRIS adapters.
+Atomic commits and a push after every commit remain authorized. Continue after
+this checkpoint; the collaboration implementation is not complete.
 
 [Earlier November detail](collaboration-implementation-history-2026-11-01.md)
 

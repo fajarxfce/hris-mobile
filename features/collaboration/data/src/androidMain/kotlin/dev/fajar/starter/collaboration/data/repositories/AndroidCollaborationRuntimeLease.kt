@@ -37,6 +37,14 @@ internal constructor(
     private val sync =
         SdkSyncLifecycle(lifetime) { createAndroidCollaborationSync(nativeClient, lifetime) }
     private val children = SdkChildResources(lifetime)
+    private val historyWindows =
+        AndroidCollaborationHistoryWindows(nativeClient, children) {
+            credentialFailures.value
+                ?: sync.failures.value?.takeIf {
+                    it.kind in setOf(FailureKind.Unauthorized, FailureKind.AccessDenied)
+                }
+                ?: if (stopRequested.get()) syncStopped().failure else null
+        }
     private val messageQueues =
         AndroidCollaborationMessageQueues(
             owner,
@@ -125,6 +133,12 @@ internal constructor(
     /** Explicit queue entry acquires a child writer; SDK delivery stays paused. */
     suspend fun acquireMessageQueue(roomId: String): AppResult<CollaborationMessageQueueLease> =
         messageQueues.acquire(roomId)
+
+    /** Explicit admitted acquisition; no join, bootstrap, send-queue enable or provider cursor. */
+    suspend fun readOriginalHistory(
+        roomId: String,
+        anchorEventId: String,
+    ): AppResult<AndroidCollaborationHistoryWindow> = historyWindows.read(roomId, anchorEventId)
 
     private suspend fun acquireTimeline(
         roomId: String,

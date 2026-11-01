@@ -31,6 +31,8 @@ internal class HrisProductQueueProof(
     private val receiptKey =
         AndroidCredentialStore(context, "collaboration-proof-receipt-content-key")
     private val listKey = AndroidCredentialStore(context, "collaboration-proof-list-content-key")
+    private val historyKey =
+        AndroidCredentialStore(context, "collaboration-proof-history-content-key")
     private var application: HrisProofApplicationAccess? = null
     private var messages =
         EncryptedCollaborationMessageRepository(database.commands, AesGcmContentCipher(), key)
@@ -165,15 +167,7 @@ internal class HrisProductQueueProof(
         val journal = success(receipts.read(access, conversationId)).single()
         check(journal.intent == original.intent && journal.transactionId == expectedTransaction)
         check(journal.eventIds.size == 1)
-        database.close()
-        database = createAppDatabase(context)
-        database.accounts.activate(
-            access.sessionId,
-            accountStorageKey(access.audience, access.accountId),
-        )
-        messages =
-            EncryptedCollaborationMessageRepository(database.commands, AesGcmContentCipher(), key)
-        receipts = receiptRepository()
+        reopenDatabase()
         check(success(receipts.read(access, conversationId)) == listOf(journal))
         check(success(messages.get(access, original.intent.id)) == original)
         val reconcile =
@@ -206,6 +200,43 @@ internal class HrisProductQueueProof(
         check(sent.transactionId == transaction && sent.eventId == eventId)
     }
 
+    suspend fun recoverHistory(
+        sentEventId: String,
+        text: String,
+        replyEventId: String,
+        replySender: String,
+        replyText: String,
+    ): org.json.JSONObject {
+        val window = success(runtime.readOriginalHistory(roomId, sentEventId))
+        return HrisProofOriginalHistory(
+                { database.replicas },
+                historyKey,
+                access,
+                conversationId,
+                roomId,
+            )
+            .verify(
+                window,
+                listOf(
+                    Triple(sentEventId, runtime.nativeClient.userId(), text),
+                    Triple(replyEventId, replySender, replyText),
+                ),
+                ::reopenDatabase,
+            )
+    }
+
+    private suspend fun reopenDatabase() {
+        database.close()
+        database = createAppDatabase(context)
+        database.accounts.activate(
+            access.sessionId,
+            accountStorageKey(access.audience, access.accountId),
+        )
+        messages =
+            EncryptedCollaborationMessageRepository(database.commands, AesGcmContentCipher(), key)
+        receipts = receiptRepository()
+    }
+
     suspend fun close() {
         var first: Exception? = null
         val operations: List<suspend () -> Unit> =
@@ -216,6 +247,7 @@ internal class HrisProductQueueProof(
                 { key.close() },
                 { receiptKey.close() },
                 { listKey.close() },
+                { historyKey.close() },
             )
         for (operation in operations) try {
             operation()

@@ -3,9 +3,9 @@
 The collaboration feature now has encrypted, paged storage for original text
 messages and provider event aliases. `ObserveCollaborationHistory` reads acquired
 facts offline under the same account/company admission as the conversation list.
-This is a storage and application-policy foundation. Native history acquisition,
-original-JSON decoding, edit projection, command retirement and Chat UI remain
-separate implementation work.
+An Android prototype can now acquire a finite original-event snapshot around a
+known event through the owned SDK runtime. Common admitted acquisition, provider
+paging, edit projection, command retirement and Chat UI remain separate work.
 
 ## Canonical identity and deletion
 
@@ -14,7 +14,11 @@ authenticated sender, provider ID, optional logical UUID, original timestamp,
 exact text and a SHA-256 fingerprint of the complete canonical original content.
 The adapter must compute that fingerprint, including unknown content fields, and
 verify the original event identity against the SDK. A latest edited presentation
-must never be supplied as an original. No adapter currently supplies this new port.
+must never be supplied as an original. The shared decoder verifies these fields
+against primitive SDK identity, canonicalizes object-key ordering and includes
+unknown nested content in the fingerprint. Replacement events cannot establish
+an original. Unsupported content, unavailable keys and absent original JSON stay
+explicitly unresolved; they do not acknowledge an empty provider page.
 
 Records are scoped by account, company, conversation and room. Within that scope,
 sender plus logical UUID identifies an original send; clients without a usable
@@ -80,6 +84,24 @@ restore. The caller owns the flow collection and cancellation.
 
 ## Verification
 
+The Android prototype owns an event-focused SDK timeline with a 20-event context,
+read-receipt tracking disabled and no automatic thread expansion. It takes only
+the pinned SDK listener's synchronous initial reset, bounded to 128 items, and
+disposes later callbacks. It copies `debugInfo.originalJson` once per text event,
+not the edited display text or `latestJson`. That binding also formats a full
+diagnostic model: only aggregate extraction time and character counts leave the
+proof. Original JSON is bounded to 96,000 UTF-8 bytes and depth 16 before recursive
+parsing; cumulative model/original character counts are each capped at 4,194,304.
+These checks cannot prevent the SDK's preceding diagnostic allocation or its
+internal event-cache snapshot. They do not establish large-room memory bounds.
+
+The parent runtime owns partial initialization and listener/task/timeline/room
+cleanup. A pending or failed release retains ownership, and a late credential
+denial withholds results. The prototype uses an already known encrypted room; it
+does not join, bootstrap another client, start sync or enable the send queue.
+Its known anchor is not head discovery or a provider cursor. The application
+acquisition policy and other platform adapters still need to supply that path.
+
 The shared storage contract runs against real SQLite and IndexedDB with actual
 authenticated encryption: restart and reauthentication, copied sender IDs,
 conflicting immutable originals, redaction before/after originals, bounded paging,
@@ -91,3 +113,6 @@ resolve both the history repository and its observer.
 
 See the [measurement record](measurements/collaboration-history-2026-11-01.json)
 for actual run results, source hashes and remaining acceptance limits.
+The [original-window evidence](measurements/collaboration-original-window-2026-11-01.json)
+adds the actual Android/HRIS context read, encrypted database reopen and measured
+extraction, including the failed filter and fixture attempts that preceded it.

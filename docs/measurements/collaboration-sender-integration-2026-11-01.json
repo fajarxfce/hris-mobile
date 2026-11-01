@@ -317,5 +317,28 @@
     "Only sender private disposable fixture input receives its HRIS API access credential; published artifacts contain safe proof flags/hashes/counters, not credentials.",
     "The native-ACK-before-journal process-death gap remains for incoming history reconciliation. This proof reopens the app database after an observed projection failure; it does not claim a new process death after ACK.",
     "Main app code and APK are unchanged from b5834eb8, whose complete 2336-desktop/115-host/178-domain-browser/132-data-browser checks are retained separately."
-  ]
+  ],
+  "hostedFailureAudit": {
+    "run": 41273236979,
+    "mobileCommit": "20995a8c54b7722433e7d4e043855da90762cd77",
+    "outcome": "failed",
+    "nativeSuiteSeconds": 65.206,
+    "result": {
+      "passed": false,
+      "cleanup": true,
+      "artifact": {
+        "apkSha256": "b1eaa7811331e57e855faeb40b2aa81f9d69e4334a480ab779729edb7b6e4c5c",
+        "package": "dev.fajar.hris.collaboration.proof",
+        "avd": "hris-mobile-dev",
+        "androidApi": "35"
+      },
+      "failureCategory": "RuntimeError"
+    },
+    "artifactsSha256": {
+      "result.json": "4f132185e8f189676dfc410f760647bebac6bbf9f05e47a7af3bf4de1cd990eb",
+      "gateway-trace.json": "d02d777b7edc77a9c83f0734151e79f2950baad3241143f4e53d525d49843b18",
+      "TEST-dev.fajar.hris.NativeCollaborationSdkInteropTest.xml": "128114b9c71c66ade281941cfd70b3142cb3a1b39357823f2e6abb688c99ef9b"
+    },
+    "observation": "Driver reported RuntimeError without instrumentation diagnostic. Gateway trace contains provider-busy 503 during join and no encrypted send; it does not establish a successful sender proof. Cleanup passed. Later ad0848e6 run 41274726916 passed; it is a separate execution."
+  }
 }

@@ -286,5 +286,66 @@
     "Bounds: 1-16 events per atomic batch, 128 aliases per original, 1-50 messages per page plus one lookahead. No command retirement or provider cursor advancement yet.",
     "No new Apple execution for this history commit on the Linux host. Separately audited receipt commit 8d8fb233 has 260 passing simulator cases and an actual Xcode app-host build; see its measurement record.",
     "Continue native bounded windows/original decoding, acquisition and ACK-gap recovery, then command retirement and Chat UI. All P0-P8 groups remain open."
-  ]
+  ],
+  "hostedHrisAudit": {
+    "run": 41274726916,
+    "mobileCommit": "ad0848e6365c65a29be9094f829a3e17f26a40ce",
+    "platformFixtureCommit": "6e50bbd05a557ecc7fb82c0ab0a44da99558cdb9",
+    "all17StepsSucceeded": true,
+    "nativeSuiteSeconds": 55.798,
+    "verified": {
+      "passed": true,
+      "encryptedBothDirections": true,
+      "logicalIdsPreserved": true,
+      "cleanup": true,
+      "protectedStoreReopened": true,
+      "missingRecordPreserved": true,
+      "wrongPassphrasePreserved": true,
+      "exclusiveOwner": true,
+      "processRestarted": true,
+      "queueRestored": true,
+      "transactionReused": true,
+      "identityAfterRestart": true,
+      "messageIntentRestored": true,
+      "queueMappingRecovered": true,
+      "queueWriterExclusive": true,
+      "perRoomDeliveryIsolated": true,
+      "heldQueueRestored": true,
+      "nativeDeliveryOwned": true,
+      "commonSenderOwned": true,
+      "receiptJournalRecovered": true,
+      "projectionInterrupted": true,
+      "applicationAdmittedBeforeSend": true,
+      "applicationAdmissions": {
+        "device": 3,
+        "conversation": 3,
+        "room": 3,
+        "failures": 0
+      },
+      "heldRoomNeverSent": true,
+      "pausedAcrossRestart": true,
+      "syncInterruptedAfterRestart": true,
+      "syncRetriedWithRetainedCursor": true,
+      "artifact": {
+        "apkSha256": "2d6ad4c777852d19f374310443f313e2dea144bfe0b3f25eb312921e730cb1e9",
+        "package": "dev.fajar.hris.collaboration.proof",
+        "avd": "hris-mobile-dev",
+        "androidApi": "35"
+      }
+    },
+    "androidHost": {
+      "suites": 19,
+      "tests": 115,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "artifactsSha256": {
+      "verified.json": "5f5d61be61d19bdac4e7255fa29d0feb74bcc6d3262dbee8cc0bdf13982beb76",
+      "result.json": "7ed8ac6147c4080432c8b5551563c38c45ebba60e3b2b15861d5d457592b8c4d",
+      "gateway-trace.json": "00a93258bfb235439c3aea4c23aad868fd20813ced21ee3653b7b1126653d770",
+      "TEST-dev.fajar.hris.NativeCollaborationSdkInteropTest.xml": "73eac2bbf702d3e62e88ad28afe6750babe8a6edea92079e2dbc01b16de90a44"
+    },
+    "scope": "Existing common sender/receipt proof on canonical-history source; this predecessor does not exercise the new original-history window. No source manifest was uploaded by this workflow."
+  }
 }
