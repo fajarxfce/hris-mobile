@@ -10,13 +10,17 @@ internal class AndroidCollaborationMessageQueueSource(private val acquireRoom: s
     private var room: Room? = null
     private var timeline: Timeline? = null
     private var listener: TaskHandle? = null
+    private var queueInitialized = false
 
     suspend fun open() {
         val acquired = acquireRoom()
         room = acquired
         require(acquired.isEncrypted())
-        acquired.enableSendQueue(false)
+        // The parent's default is paused. First queue access can spawn Rust tasks;
+        // initialize it inside the async FFI runtime before synchronous room controls.
         timeline = acquired.timeline()
+        queueInitialized = true
+        acquired.enableSendQueue(false)
     }
 
     suspend fun snapshot(): Set<String> {
@@ -73,10 +77,13 @@ internal class AndroidCollaborationMessageQueueSource(private val acquireRoom: s
     }
 
     suspend fun stop() {
-        room?.enableSendQueue(false)
+        // A failed encryption/timeline acquisition may not have initialized a queue.
+        // Parent defaults are paused; cleanup must not create a queue from synchronous FFI.
+        if (queueInitialized) room?.enableSendQueue(false)
         stopListener()
         timeline?.close()
         timeline = null
+        queueInitialized = false
         room?.close()
         room = null
     }

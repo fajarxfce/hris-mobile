@@ -18,27 +18,8 @@ import org.matrix.rustcomponents.sdk.Room
 internal class HrisNativeMatrixProbe(private val context: Context, private val directory: File) {
     suspend fun run(resuming: Boolean) =
         withContext(Dispatchers.IO) {
-            val fixture = read("gateway-fixture", 16_384)
-            val home = URI(fixture.getString("baseUrl"))
-            require(
-                home.scheme == "http" &&
-                    home.host == "127.0.0.1" &&
-                    home.port in 1024..65535 &&
-                    home.rawUserInfo == null &&
-                    home.rawQuery == null &&
-                    home.rawFragment == null &&
-                    home.path in listOf("", "/")
-            )
-            require(
-                fixture.getJSONObject("sender").getString("userId") !=
-                    fixture.getJSONObject("recipient").getString("userId")
-            )
-            require(File(directory, "gateway-send.json").exists() == resuming)
-            require(!File(directory, "gateway-resume.json").exists())
+            val (fixture, home) = readFixture(resuming)
             val roomId = fixture.getString("roomId")
-            require(roomId.startsWith('!') && roomId.length in 2..255)
-            for (name in listOf("body", "reply")) body(fixture, name)
-            for (name in listOf("logicalId", "replyId")) logicalId(fixture, name)
             var sender: AndroidCollaborationRuntimeLease? = null
             var recipient: AndroidCollaborationRuntimeLease? = null
             var senderRoom: Room? = null
@@ -62,6 +43,18 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
                 check(sender.startSync() is AppResult.Success)
                 check(sender.startSync() is AppResult.Success)
                 check(recipient.startSync() is AppResult.Success)
+                // Exercise a new product queue before any timeline has initialized this room.
+                val held =
+                    HrisProofHeldQueue(
+                        sender,
+                        fixture.getString("heldRoomId"),
+                        logicalId(fixture, "heldLogicalId"),
+                        body(fixture, "heldBody"),
+                    )
+                held.prepare(
+                    if (resuming) read("gateway-staged", 4096).getString("heldTransactionId")
+                    else null
+                )
                 senderTimeline = senderOwner.enterTimeline(roomId)
                 recipientTimeline = recipientOwner.enterTimeline(roomId)
                 senderRoom = requireNotNull(sender.nativeClient.getRoom(roomId))
@@ -84,8 +77,9 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
                         senderTimeline,
                         recipientTimeline,
                         productQueue,
+                        held,
                     )
-                else stage(fixture, sender, recipient, pending, productQueue)
+                else stage(fixture, sender, recipient, pending, productQueue, held)
             } finally {
                 withContext(NonCancellable) {
                     // Attempt every owned cleanup even if another owner fails or exceeds its wait.
@@ -116,12 +110,38 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
             }
         }
 
+    private fun readFixture(resuming: Boolean): Pair<JSONObject, URI> {
+        val fixture = read("gateway-fixture", 16_384)
+        val home = URI(fixture.getString("baseUrl"))
+        require(
+            home.scheme == "http" &&
+                home.host == "127.0.0.1" &&
+                home.port in 1024..65535 &&
+                home.rawUserInfo == null &&
+                home.rawQuery == null &&
+                home.rawFragment == null &&
+                home.path in listOf("", "/")
+        )
+        require(
+            fixture.getJSONObject("sender").getString("userId") !=
+                fixture.getJSONObject("recipient").getString("userId")
+        )
+        require(File(directory, "gateway-send.json").exists() == resuming)
+        require(!File(directory, "gateway-resume.json").exists())
+        val roomId = fixture.getString("roomId")
+        require(roomId.startsWith('!') && roomId.length in 2..255)
+        for (name in listOf("body", "reply", "heldBody")) body(fixture, name)
+        for (name in listOf("logicalId", "replyId", "heldLogicalId")) logicalId(fixture, name)
+        return fixture to home
+    }
+
     private suspend fun stage(
         fixture: JSONObject,
         sender: AndroidCollaborationRuntimeLease,
         recipient: AndroidCollaborationRuntimeLease,
         pending: HrisProofPendingQueue,
         productQueue: HrisProductQueueProof,
+        held: HrisProofHeldQueue,
     ): Nothing {
         write("gateway-ready", JSONObject().put("ready", true))
         awaitFile("gateway-send")
@@ -132,6 +152,7 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
             "gateway-staged",
             protectedFlags(JSONObject())
                 .put("transactionId", transaction)
+                .put("heldTransactionId", held.transaction)
                 .put("processId", Process.myPid())
                 .put("senderKeyFingerprint", sender.proofKeyFingerprint())
                 .put("recipientKeyFingerprint", recipient.proofKeyFingerprint()),
@@ -151,6 +172,7 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
         senderTimeline: CollaborationTimelineLease,
         recipientTimeline: CollaborationTimelineLease,
         productQueue: HrisProductQueueProof,
+        held: HrisProofHeldQueue,
     ) {
         val staged = read("gateway-staged", 4096)
         for (name in protectedFlagNames) check(staged.get(name) == true)
@@ -187,6 +209,7 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
                             ProofQueuedMessage(recipient.nativeClient, recipientRoom)
                                 .send(body(fixture, "reply"), logicalId(fixture, "replyId"))
                         check(returning.eventId() == answered.eventId)
+                        held.checkRetained()
                         recipientTimeline.awaitMessage(
                             sent.eventId,
                             body(fixture, "body"),
@@ -216,6 +239,8 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
                                 .put("messageIntentRestored", true)
                                 .put("queueMappingRecovered", true)
                                 .put("queueWriterExclusive", true)
+                                .put("perRoomDeliveryIsolated", true)
+                                .put("heldQueueRestored", true)
                                 .put("senderEventId", sent.eventId)
                                 .put("recipientEventId", answered.eventId)
                                 .put("senderTransaction", sent.transactionId)

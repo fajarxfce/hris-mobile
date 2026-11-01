@@ -250,3 +250,63 @@ No live/schema/phone change. Starter remains `36116b2`; these HRIS-specific adap
 need no generic port. Atomic commits and every-commit pushes remain authorized.
 Do not treat a checkpoint as completion. [Earlier November detail](collaboration-implementation-history-2026-11-01.md)
 
+
+
+## Common staging checkpoint — 1 November 2026
+
+`StageCollaborationText` now coordinates live owner/company/device/conversation/
+room admission, the immutable local intent and exclusive paused native writer.
+It saves `Staging` before enqueue, reconciles one original native transaction and
+CAS-publishes `Staged`. Lost responses, cancellation, failed snapshots/writes,
+unknown transactions and another device family preserve uncertainty. Already
+staged/sent results retain their original binding. No delivery is enabled.
+
+Fixed an account-switch race in both local queueing and staging: capture the
+current owner after the final admission I/O. Two deliberate negative-control
+tests failed with the old ordering, then passed after correction. A native
+operation interrupted independently of its caller now retires the protected
+runtime through full child/task/database-pool drain, even if no waiter remains.
+Ordinary caller cancellation/timeout keeps that native operation owned.
+
+[Staging evidence](measurements/collaboration-message-staging-2026-11-01.json):
+16 new common cases. Initial focused checks pass in 62s; the two negative controls
+fail as expected in 25s; corrected focused/proof/quality checks pass in 92s.
+Full root/browser/Android/Wasm/lint passes in **295s**: **2,288 desktop / 384 suites**,
+**150 domain / 112 data browser**, zero failures/errors/skips and app/proof lint
+errors. All **171 Mobile / 24 Platform source hashes** match before/after actual
+execution. Dev APK `ed7d2318` is built, not installed; proof APK `44f9b05d`.
+
+Actual HRIS SDK run **`fa782638a1e94a1a88309c9829c745e1`** passes in **40.127s**
+(69s Gradle/quality). Protected stores, identity, original transaction and the
+encrypted app intent survive real process death before app mapping; exclusive
+writer/closed-handle recovery, both E2EE directions, no early send, sync fault and
+retained-cursor recovery all pass. Every proof/cleanup flag is true. This validates
+the current native primitive; the common staging policy is covered separately by
+portable tests, not production UI. The dedicated emulator is stopped.
+
+**Continue P0–P8; none of the 54 feature groups is accepted. Next prove and implement
+per-room delivery, then durable recipient logical-ID/event-alias reconciliation
+and Chat list/setup/conversation UI.** Pinned Rust source shows that first access
+to a room queue can spawn tasks. The historical synchronous room-enable failure
+may be initialization outside its async runtime. The product writer must initialize
+through an async API before room controls. Run an actual two-room experiment:
+enable the admitted room while another queued room stays paused. Do not use global
+enablement as a substitute. Synapse dedup mappings expire after 24h; recipient
+coalescing remains required. Preserve unknown/cross-family uncertainty and SDK
+keys/cursors. The 512-item observer guard is not a product history window.
+
+Hosted checks for intent commit **`518575387be8ed1622b4c08f020076b09ff9e1df`** are now
+audited: control **`41263763417`**, all 26 steps, **265 desktop / 241 browser / 220
+iOS simulator**; HRIS **`41263763420`**, all 17 steps, SDK **`81d990e0` / 72.312s**,
+all proof/cleanup flags true. All 19 intent source hashes match the immutable commit.
+[Intent evidence](measurements/collaboration-message-intents-2026-11-01.json) includes
+these artifacts. Its older SDK fixture does not exercise the later app mapping.
+Runtime `67d23041` now has three successful CI runs (41262754682 / 41262754762 /
+41262754840), but those artifacts remain unaudited. Native writer `117a5794` protocol
+41264784290 succeeds; HRIS 41264784292 and control 41264784282 were still running.
+
+Latest preceding implementation: Mobile **`117a5794f2d178b273c3834b53012f0660771c80`**,
+Platform **`7e95bffdae322e16c9b904d21461b42c19b20012`** (the current HRIS CI pin).
+No live/schema/phone change. Starter remains `36116b2`; these HRIS SDK/policy
+changes need no generic port. Atomic commits and every-commit pushes remain
+authorized. Continue implementation; a checkpoint is not completion.

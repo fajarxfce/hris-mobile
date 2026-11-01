@@ -129,3 +129,20 @@ records 16 new common cases, including two account-switch regressions first
 executed against the faulty ordering. The actual emulator exchange separately
 rechecks the native storage/process-death primitive with the new runtime changes;
 it does not claim to exercise the common use case through production UI.
+
+
+## Per-room native initialization
+
+The parent runtime keeps its default send queue paused. A new writer initializes
+`Room.timeline()` through async FFI before invoking synchronous room controls:
+first access to the pinned Rust room queue can spawn tasks. This order also works
+for a room that has never had an application timeline observer.
+
+The [two-room proof](measurements/collaboration-room-queue-2026-11-01.json) stages a
+second room before opening the main timeline, kills the real process, restores
+both original transactions and enables only the admitted room. After both encrypted
+directions complete, the other room is still disabled with its original queued
+transaction; the server sees no send attempt for it. The fixture uses per-room
+controls and pauses the admitted room on completion. Product queue leases still
+expose only paused snapshot/enqueue/close. The admitted delivery lifetime and durable
+recipient/history reconciliation are the next implementation, not accepted UI.

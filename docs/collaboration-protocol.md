@@ -168,7 +168,10 @@ desktop cases and debug assembly/lint (52s; zero errors, 47 warnings).
 Two earlier runs failed at synchronous `Room.enableSendQueue` with native
 `InternalException`. Safe class/method/line diagnostics locate the call without
 logging provider messages/credentials. The client owner's asynchronous
-`enableAllSendQueues` passes and is used for connectivity gating. This experiment
+`enableAllSendQueues` passed at that checkpoint. The 1 November
+[two-room proof](measurements/collaboration-room-queue-2026-11-01.json) supersedes
+that workaround: initialize through async FFI before using per-room controls;
+global enable must not substitute for room admission. This earlier experiment
 does not prove process-restart queue persistence or recipient deduplication;
 implement durable logical IDs, event aliases/tombstones and conflict handling
 before offline acceptance. No Starter port is due for this isolated proof.

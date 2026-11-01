@@ -54,7 +54,7 @@ internal class ProofQueuedMessage(private val client: Client, private val room: 
                             check(!sent.isCompleted) {
                                 "Paused SDK queue unexpectedly sent its event"
                             }
-                            client.enableAllSendQueues(true)
+                            room.enableSendQueue(true)
                             val result = withTimeout(45_000) { sent.await() }
                             check(result.transactionId == transaction)
                             return result
@@ -64,7 +64,7 @@ internal class ProofQueuedMessage(private val client: Client, private val room: 
         } finally {
             listener.cancel()
             listener.close()
-            withContext(NonCancellable) { withTimeout(5_000) { client.enableAllSendQueues(false) } }
+            withContext(NonCancellable) { withTimeout(5_000) { room.enableSendQueue(false) } }
         }
     }
 }
