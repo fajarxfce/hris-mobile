@@ -1,4 +1,22 @@
 <resources>
+    <string name="chat_setup_title_en">Set up chat</string>
+    <string name="chat_setup_checking_en">Checking chat setup</string>
+    <string name="chat_setup_activate_en">Chat on this device</string>
+    <string name="chat_setup_waiting_en">Preparing your chat account</string>
+    <string name="chat_setup_retry_en">Setup needs another attempt</string>
+    <string name="chat_setup_resume_en">Continue your chat setup</string>
+    <string name="chat_setup_ready_en">Chat is ready</string>
+    <string name="chat_setup_revoked_en">Chat access was removed</string>
+    <string name="chat_setup_unavailable_en">Chat setup is unavailable</string>
+    <string name="chat_setup_activate_hint_en">Activate this device to chat securely with colleagues in your company.</string>
+    <string name="chat_setup_waiting_hint_en">This may take a moment. Refresh to check its progress.</string>
+    <string name="chat_setup_retry_hint_en">Continue to retry the saved setup request.</string>
+    <string name="chat_setup_resume_hint_en">Your previous request is saved. Continue where you left off.</string>
+    <string name="chat_setup_ready_hint_en">You can now open your conversations.</string>
+    <string name="chat_setup_revoked_hint_en">Contact your administrator to restore access on this device.</string>
+    <string name="chat_setup_check_hint_en">Connect to check this device and continue setup.</string>
+    <string name="chat_setup_enable_en">Activate chat</string>
+    <string name="chat_setup_open_en">Open chat</string>
     <string name="native_push_message_en">Open your inbox to view an update.</string>
     <string name="native_push_title_en">Inbox notifications</string>
     <string name="native_push_description_en">Receive updates from your HRIS inbox on this device.</string>

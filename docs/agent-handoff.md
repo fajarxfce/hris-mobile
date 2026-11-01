@@ -1,5 +1,41 @@
 # Agent continuation — HRIS Mobile
 
+## Recoverable Chat setup validated — 1 November 2026
+
+The setup screen now distinguishes activation, provisioning wait/retry, saved operation
+continuation, revoked access and readiness. Entry reads only; mutations require an
+explicit typed action. Uncertain results replay their retained operation, confirmed
+receipts reconcile without resending, and confirmed bootstrap transfers the protected
+runtime to the application owner before retiring its command. The page receives only
+device identity, with no parent close capability or gateway credentials in state.
+Current active devices restore through Ensure; local ownership remains observed while
+hidden, and late/cancelled resource acquisition is closed by the use case.
+
+`ReadCollaborationControl` now implements owned local setup/direct/room intent reads;
+its records survive ordinary credential age and application upgrades. `LoadCollaborationSetup`
+now maintains shared company admission through received denial, cancellation, failed
+persistence/retry and newer denial revisions. [Contract and screenshots](collaboration-setup-presentation.md)
+and [measurement](measurements/chat-setup-2026-11-01.json) retain 21 matched source hashes
+and every attempt. Focused presentation passes in 227s; full root/browser/Wasm/Android/
+AAR/lint passes in 330s: 2,606 desktop / 415 suites, 311 domain browser, 32 presentation
+browser, zero failures/errors/skips and zero lint errors (one existing warning).
+APK `7d5df852` is built, not installed. No phone/live/Starter change.
+
+**Next: trusted sender identity, message thread, app navigation and owned scheduling,
+then all remaining P0–P8.** All three Chat screens are DI-registered; no Home service
+route is exposed yet. No full PRD group is accepted. Draft identity design: cache an
+immutable account/company Matrix sender from the owned protected SDK record, under an
+authenticated `collaboration-history/self/…` checkpoint. That prefix must participate
+in existing history key-loss protection. Add a local SDK metadata read that never opens
+a client, directory or transport, then compose history/pending messages using exact
+sender/content evidence. Drafts in `.work` are not implemented or validated.
+
+Bootstrap still pins build/platform; cross-build uncertainty, expired issuance,
+cross-family key continuity and lost-key recovery need explicit protocol work. The
+new identity cache must not be presented as cryptographic key continuity. Continue
+the authorized long run and push each validated atomic commit.
+
+
 ## Participant discovery and durable DM acquisition — 1 November 2026
 
 Application DI now registers the Chat presentation module. Participant search uses

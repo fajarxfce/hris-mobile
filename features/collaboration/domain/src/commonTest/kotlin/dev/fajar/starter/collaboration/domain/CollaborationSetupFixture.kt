@@ -132,6 +132,8 @@ internal class CollaborationSetupFixture {
             ): AppResult<CollaborationGateway> = error("No gateway issuance")
         }
 
+    val admission = CollaborationAdmissionFixture()
+
     fun loader(platform: AppPlatform = AppPlatform.Android) =
         LoadCollaborationSetup(
             sessions,
@@ -142,5 +144,6 @@ internal class CollaborationSetupFixture {
             object : Clock {
                 override fun now() = now
             },
+            admission.repository,
         )
 }

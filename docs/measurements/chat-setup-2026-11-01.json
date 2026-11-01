@@ -1,0 +1,127 @@
+{
+  "date": "2026-11-01",
+  "change": "Recoverable Chat setup and owned local control reads",
+  "baseImplementationCommit": "5f03349facc328e1ef1d3071418f472909ad1d20",
+  "sourceSha256": {
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt": "d5136a45c66c9869c054fae7895e74336c46e74fb72498b5551a0135cc848696",
+    "core/localization/src/commonMain/composeResources/values/strings_en.xml": "2eb926d2612d0f211cc5b7cdd1881364f0f065b97af816848c15f1f52e723f6d",
+    "core/localization/src/commonMain/composeResources/values/strings_id.xml": "2cbad8c651f9d1a2258ab684e7dd24b368aa2cb07fe3e10ffd7ebdf85c59dc70",
+    "core/localization/src/commonMain/kotlin/dev/fajar/starter/localization/AppString.kt": "7c192804a10830986814d45f996dc0fd923dad1f687092968b82d807d7862d8c",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt": "2e6913122253a7604f5651b6ce3c72d76ca2e9baec159f0b54a74e620ea96e73",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/InstallCollaborationRuntime.kt": "587f7730fffb5baf0b89c8021aebc5318663646e6a5c9a37117959b0d4bb4e4a",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/LoadCollaborationSetup.kt": "9055a1cb66a2d655fde89792b9524eb99852875fda68dd729615dddd6137f596",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ReadCollaborationControl.kt": "ff1619091dd02c22c8aa1bd63317432dcbab0182466a12251a5b88340a34c423",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationAdmissionFixture.kt": "453f39422aedf00f0bc23e6d8f1b87a7129aece29daa89b59a11c035c5bc3daf",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationRuntimeInstallationTest.kt": "3c2ebd0e885f777be4d72e82b3faf0e4ff3a7331b5a7b204c1e370e849e2728c",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationSetupFixture.kt": "dfb5f3cba5c114dbc07e0c0d1413cc40b3b92344c9a9d0672c4f6334fdb6f4b2",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/LoadCollaborationSetupTest.kt": "00337d5ec07065a7ea1894aae822d852bbca2c7b823c596fc61cacfb876ccec9",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/ReadCollaborationControlTest.kt": "4525cf98e67aa7591d663c668e8d235e0e7c03afcef7c91b082ec3aa40967d3a",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/setup/ChatSetupEffect.kt": "1eacb26e63b56a90e7f1a7f9d191a4640c729df5512cad211c2726889fde1c70",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/setup/ChatSetupEvent.kt": "c7f4a966927a5e3577968fda90db3e2c833c88031e61192853c4e6bde908a2a3",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/setup/ChatSetupState.kt": "6418ad3e9025857718ef7bb4d5a354cee79a77059080c268e085108f9e96bd30",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/setup/ChatSetupViewModel.kt": "218a7734826a5b8678122e8ea255c0c5a0e2aa5869a9e583ad3bc77c97b2b4ca",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/setup/pages/ChatSetupPage.kt": "4c1614aa589bf6ca777334a594c43068cc0c49dbbf675b60d1bdb39cbe08cc04",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/setup/ChatSetupFixture.kt": "1f9984a29112ad1b1f968f2b19f30555d292b241d35a8da54b78dd2db5e2c87a",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/setup/ChatSetupViewModelTest.kt": "4d66429de92a6fd6a22acc4eddc074847c73201700366e00a18c5e8654f54668",
+    "features/collaboration/presentation/src/desktopTest/kotlin/dev/fajar/starter/collaboration/presentation/ChatSetupLayoutTest.kt": "5fa1bd2d1d0afbf17919c25f25ae6137c1c54d430f0f28fb8adde7bd150ad16f"
+  },
+  "sourceManifestMatched": true,
+  "attempts": [
+    {
+      "log": ".work/chat-control-focused.log",
+      "durationSeconds": 45,
+      "outcome": "FAILED",
+      "scope": "Test fixture attempted data-class copy on a sensitive gateway class. Production compiled; fixture now constructs explicit variants."
+    },
+    {
+      "log": ".work/chat-control-corrected.log",
+      "durationSeconds": 131,
+      "outcome": "SUCCESSFUL",
+      "scope": "311 domain desktop/browser cases, application bindings, format/architecture/detekt; included presentation-safe runtime activation."
+    },
+    {
+      "log": ".work/chat-setup-focused.log",
+      "durationSeconds": 227,
+      "outcome": "SUCCESSFUL",
+      "scope": "40 presentation desktop cases (11 new setup VM and two layout), 32 presentation browser and two application binding cases, format/architecture/detekt."
+    },
+    {
+      "log": ".work/chat-setup-full.log",
+      "durationSeconds": 330,
+      "outcome": "SUCCESSFUL",
+      "scope": "Root check, presentation assembly, domain/presentation browser, shared app Wasm compilation, Android dev debug assembly and lint."
+    }
+  ],
+  "reports": {
+    "desktop": {
+      "suites": 415,
+      "tests": 2606,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "domain_desktopTest": {
+      "suites": 25,
+      "tests": 311,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "domain_wasmJsBrowserTest": {
+      "suites": 25,
+      "tests": 311,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "presentation_desktopTest": {
+      "suites": 6,
+      "tests": 40,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "presentation_wasmJsBrowserTest": {
+      "suites": 3,
+      "tests": 32,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "lint": {
+      "Error": 0,
+      "Fatal": 0,
+      "Warning": 1
+    },
+    "apk": {
+      "path": "apps/android/build/outputs/apk/dev/debug/android-dev-debug.apk",
+      "sha256": "7d5df8522b01562667e0ed35326a844ce30e426f38e027600fa26d4d6bd1ad8d"
+    },
+    "androidLibrary": {
+      "path": "features/collaboration/presentation/build/outputs/aar/presentation.aar",
+      "sha256": "25eff87016abf4686afad0800f0894c92209c790bbe661c5d0766256269e6c24"
+    }
+  },
+  "reviewedScreenshots": {
+    "docs/images/chat-setup/chat-setup-ready.png": {
+      "sha256": "94ebf529b28abada6ac6f29c6156399543fd594bfa7506495fc808e620881386",
+      "bytes": 13600
+    },
+    "docs/images/chat-setup/chat-setup-indonesian-large-text.png": {
+      "sha256": "922ef513a7dcc6126a45d8de50caaf573ca04033dc86cdab98032e5c9ccd8dcc",
+      "bytes": 39257
+    }
+  },
+  "applicationDiConnected": true,
+  "applicationNavigationConnected": false,
+  "phoneChanged": false,
+  "liveChanged": false,
+  "productAcceptance": false,
+  "notes": [
+    "Root totals include up-to-date passing reports. Local Linux platform metadata assembly does not establish Apple runtime interoperability.",
+    "Fictional Compose screenshots were visually inspected; Indonesian uses 320x640 dp and 200% text. No physical device or production proof is claimed.",
+    "Pending and uncertain setup commands are never automatically replayed from entry; explicit actions retain their exact operation identity.",
+    "Cross-build uncertain bootstrap, expired gateway issuance and cross-family cryptographic continuity remain explicit protocol work.",
+    "Thread, service/navigation integration, owned delivery and all remaining P0\u2013P8 work continue. No generic Starter change is required."
+  ]
+}

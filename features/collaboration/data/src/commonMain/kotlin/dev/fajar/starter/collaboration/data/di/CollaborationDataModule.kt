@@ -311,6 +311,27 @@ class CollaborationDataModule {
     ) = ObserveCollaborationList(replicas, sessions, workspaces, server, build, Clock.System)
 
     @Factory
+    fun readControl(
+        setupCommands: CollaborationSetupCommandRepository,
+        conversationCommands: CollaborationConversationCommandRepository,
+        admission: CollaborationListRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) =
+        ReadCollaborationControl(
+            setupCommands,
+            conversationCommands,
+            admission,
+            sessions,
+            workspaces,
+            server,
+            build,
+            Clock.System,
+        )
+
+    @Factory
     fun observeAccess(
         replicas: CollaborationListRepository,
         sessions: SessionRepository,
@@ -489,7 +510,8 @@ class CollaborationDataModule {
         setup: CollaborationSetupRepository,
         server: IdentityServer,
         build: AppBuild,
-    ) = LoadCollaborationSetup(sessions, workspaces, setup, server, build, Clock.System)
+        replicas: CollaborationListRepository,
+    ) = LoadCollaborationSetup(sessions, workspaces, setup, server, build, Clock.System, replicas)
 
     @Factory
     fun prepareSetup(

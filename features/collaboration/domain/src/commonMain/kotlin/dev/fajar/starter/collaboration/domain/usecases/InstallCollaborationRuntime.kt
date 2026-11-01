@@ -28,6 +28,19 @@ class InstallCollaborationRuntime(
 ) {
     private val execution = Mutex()
 
+    /**
+     * The application retains the installed runtime; presentation receives no parent close handle.
+     */
+    suspend fun activate(
+        workspaceId: String,
+        commandId: String,
+    ): AppResult<CollaborationRead<String>> =
+        when (val result = invoke(workspaceId, commandId)) {
+            is AppResult.Failed -> result
+            is AppResult.Success ->
+                AppResult.Success(CollaborationRead(result.value.owner, result.value.deviceId))
+        }
+
     suspend operator fun invoke(
         workspaceId: String,
         commandId: String,

@@ -1,4 +1,22 @@
 <resources>
+    <string name="chat_setup_title_id">Siapkan chat</string>
+    <string name="chat_setup_checking_id">Memeriksa kesiapan chat</string>
+    <string name="chat_setup_activate_id">Chat di perangkat ini</string>
+    <string name="chat_setup_waiting_id">Menyiapkan akun chat</string>
+    <string name="chat_setup_retry_id">Penyiapan perlu dicoba lagi</string>
+    <string name="chat_setup_resume_id">Lanjutkan penyiapan chat</string>
+    <string name="chat_setup_ready_id">Chat sudah siap</string>
+    <string name="chat_setup_revoked_id">Akses chat telah dicabut</string>
+    <string name="chat_setup_unavailable_id">Penyiapan chat belum tersedia</string>
+    <string name="chat_setup_activate_hint_id">Aktifkan perangkat ini untuk mengobrol dengan aman bersama rekan perusahaan.</string>
+    <string name="chat_setup_waiting_hint_id">Proses ini mungkin memerlukan waktu. Segarkan untuk memeriksa perkembangannya.</string>
+    <string name="chat_setup_retry_hint_id">Lanjutkan untuk mencoba kembali permintaan penyiapan yang tersimpan.</string>
+    <string name="chat_setup_resume_hint_id">Permintaan sebelumnya sudah tersimpan. Lanjutkan proses yang tertunda.</string>
+    <string name="chat_setup_ready_hint_id">Sekarang Anda dapat membuka percakapan.</string>
+    <string name="chat_setup_revoked_hint_id">Hubungi administrator untuk memulihkan akses di perangkat ini.</string>
+    <string name="chat_setup_check_hint_id">Hubungkan ke internet untuk memeriksa perangkat dan melanjutkan penyiapan.</string>
+    <string name="chat_setup_enable_id">Aktifkan chat</string>
+    <string name="chat_setup_open_id">Buka chat</string>
     <string name="native_push_message_id">Buka kotak masuk untuk melihat pembaruan.</string>
     <string name="native_push_title_id">Notifikasi kotak masuk</string>
     <string name="native_push_description_id">Terima pembaruan kotak masuk HRIS di perangkat ini.</string>

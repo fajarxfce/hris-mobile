@@ -11,6 +11,21 @@ import kotlinx.coroutines.test.runTest
 
 class CollaborationRuntimeInstallationTest {
     @Test
+    fun presentationActivationPublishesOnlyTheOwnedDeviceAfterRetirement() = runTest {
+        val f = InstallationFixture()
+        val result =
+            assertIs<AppResult.Success<CollaborationRead<String>>>(
+                    f.installer().activate("selection", "operation")
+                )
+                .value
+        assertEquals(f.setup.owner, result.owner)
+        assertEquals(f.lease.deviceId, result.value)
+        assertNull(f.setup.record)
+        assertEquals(0, f.lease.closes)
+        f.lease.close()
+    }
+
+    @Test
     fun deniedInstallationSurvivesTheFollowingFailedOwnerRead() = runTest {
         for (kind in listOf(FailureKind.Unauthorized, FailureKind.AccessDenied)) {
             val f = InstallationFixture()
@@ -425,17 +440,19 @@ private class InstallationFixture {
             ): AppResult<CollaborationRuntimeLease?> = error("No implicit restore")
         }
 
+    fun installer() =
+        InstallCollaborationRuntime(
+            commands,
+            runtimes,
+            setup.access.sessions,
+            setup.access.workspaces,
+            setup.server,
+            setup.build,
+            setup.clock,
+        )
+
     fun install(): suspend () -> AppResult<CollaborationRuntimeLease> {
-        val useCase =
-            InstallCollaborationRuntime(
-                commands,
-                runtimes,
-                setup.access.sessions,
-                setup.access.workspaces,
-                setup.server,
-                setup.build,
-                setup.clock,
-            )
+        val useCase = installer()
         return { useCase("selection", "operation") }
     }
 }

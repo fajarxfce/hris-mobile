@@ -3,8 +3,9 @@
 `features/collaboration/presentation` owns Chat state, events, effects and plain
 Fluent pages. The initial inbox reads the encrypted company conversation directory.
 [Participant discovery and durable DM opening](collaboration-discovery.md) are now
-implemented, and application DI registers both ViewModels. Service entry, device
-setup, thread composition and owned delivery scheduling remain integration work. This module alone
+implemented. [Recoverable device setup](collaboration-setup-presentation.md) now has
+its own page and typed ViewModel; application DI registers all three screens.
+Service entry, thread composition and owned delivery scheduling remain integration work. This module alone
 does not expose a Chat destination in the application or accept a PRD feature group.
 
 ## Inbox lifetime

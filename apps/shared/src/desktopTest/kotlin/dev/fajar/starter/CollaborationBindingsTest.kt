@@ -8,6 +8,7 @@ import dev.fajar.starter.collaboration.domain.repositories.*
 import dev.fajar.starter.collaboration.domain.usecases.*
 import dev.fajar.starter.collaboration.presentation.inbox.ChatInboxViewModel
 import dev.fajar.starter.collaboration.presentation.participants.ChatParticipantsViewModel
+import dev.fajar.starter.collaboration.presentation.setup.ChatSetupViewModel
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.database.createAppDatabase
 import dev.fajar.starter.datastore.createUserPreferences
@@ -139,6 +140,7 @@ class CollaborationBindingsTest {
                 assertNotNull(container.koin.get<CollaborationSetupRepository>())
                 assertNotNull(container.koin.get<CollaborationSetupCommandRepository>())
                 assertNotNull(container.koin.get<LoadCollaborationSetup>())
+                assertNotNull(container.koin.get<ReadCollaborationControl>())
                 assertNotNull(container.koin.get<CollaborationConversationRepository>())
                 assertNotNull(container.koin.get<ReadCollaborationConversations>())
                 assertNotNull(container.koin.get<CollaborationListRepository>())
@@ -194,6 +196,10 @@ class CollaborationBindingsTest {
                 assertNotNull(container.koin.get<ObserveCollaborationAccess>())
                 val screens = ViewModelStore()
                 try {
+                    screens.put(
+                        "setup",
+                        container.koin.get<ChatSetupViewModel> { parametersOf("selection") },
+                    )
                     screens.put(
                         "inbox",
                         container.koin.get<ChatInboxViewModel> { parametersOf("selection") },

@@ -11,6 +11,70 @@ import kotlinx.coroutines.test.runTest
 
 class LoadCollaborationSetupTest {
     @Test
+    fun confirmedSetupDenialSurvivesFailedRetryAndReopensOnlyAfterAdmission() = runTest {
+        val f = CollaborationSetupFixture()
+        val denied =
+            Failure(
+                FailureKind.AccessDenied,
+                "Fixture denial",
+                code = "collaboration_access_denied",
+            )
+        f.onRead = { AppResult.Failed(denied) }
+        assertEquals(denied, assertIs<AppResult.Failed>(f.loader()("selection")).failure)
+        assertEquals(denied, f.admission.gate.denial)
+        f.onRead = { AppResult.Failed(Failure(FailureKind.Network, "Offline")) }
+        assertEquals(denied, assertIs<AppResult.Failed>(f.loader()("selection")).failure)
+        f.onRead = { AppResult.Success(f.device) }
+        assertIs<AppResult.Success<*>>(f.loader()("selection"))
+        assertNull(f.admission.gate.denial)
+    }
+
+    @Test
+    fun cancelledReceivedDenialStillClosesSharedContent() = runTest {
+        val f = CollaborationSetupFixture()
+        val denied = Failure(FailureKind.AccessDenied, "Fixture denied")
+        f.onRead = {
+            currentCoroutineContext().cancel()
+            AppResult.Failed(denied)
+        }
+        val job = async { f.loader()("selection") }
+        job.join()
+        assertTrue(job.isCancelled)
+        assertEquals(denied, f.admission.gate.denial)
+    }
+
+    @Test
+    fun newerSharedDenialWinsOverSuccessfulSetupRead() = runTest {
+        val f = CollaborationSetupFixture()
+        val denied = Failure(FailureKind.AccessDenied, "New fixture denial")
+        f.onRead = {
+            f.admission.deny(denied)
+            AppResult.Success(f.device)
+        }
+        assertEquals(denied, assertIs<AppResult.Failed>(f.loader()("selection")).failure)
+        assertEquals(denied, f.admission.gate.denial)
+    }
+
+    @Test
+    fun failedDenialPersistenceCannotMakeTheRetryAdmitted() = runTest {
+        val f = CollaborationSetupFixture()
+        val denied = Failure(FailureKind.AccessDenied, "Fixture denied")
+        f.admission.restrictFailure = Failure(FailureKind.Storage, "Fixture storage")
+        f.onRead = { AppResult.Failed(denied) }
+        assertEquals(denied, assertIs<AppResult.Failed>(f.loader()("selection")).failure)
+        f.onRead = { AppResult.Failed(Failure(FailureKind.Network, "Offline")) }
+        assertEquals(denied, assertIs<AppResult.Failed>(f.loader()("selection")).failure)
+    }
+
+    @Test
+    fun finalAdmissionMustStillBelongToTheCapturedAccount() = runTest {
+        val f = CollaborationSetupFixture()
+        f.admission.beforeAdmit = { f.session = null }
+        assertIs<AppResult.Failed>(f.loader()("selection"))
+        assertEquals(1, f.calls)
+    }
+
+    @Test
     fun aFailedPostRequestReadCannotEraseReceivedServerDenial() = runTest {
         for (remote in
             listOf(

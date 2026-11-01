@@ -5,6 +5,36 @@ import org.jetbrains.compose.resources.StringResource
 
 /** Explicit pairs keep runtime language changes portable across Android, iOS, desktop and Web. */
 enum class AppString(val english: StringResource, val indonesian: StringResource) {
+    ChatSetupTitle(Res.string.chat_setup_title_en, Res.string.chat_setup_title_id),
+    ChatSetupChecking(Res.string.chat_setup_checking_en, Res.string.chat_setup_checking_id),
+    ChatSetupActivate(Res.string.chat_setup_activate_en, Res.string.chat_setup_activate_id),
+    ChatSetupWaiting(Res.string.chat_setup_waiting_en, Res.string.chat_setup_waiting_id),
+    ChatSetupRetry(Res.string.chat_setup_retry_en, Res.string.chat_setup_retry_id),
+    ChatSetupResume(Res.string.chat_setup_resume_en, Res.string.chat_setup_resume_id),
+    ChatSetupReady(Res.string.chat_setup_ready_en, Res.string.chat_setup_ready_id),
+    ChatSetupRevoked(Res.string.chat_setup_revoked_en, Res.string.chat_setup_revoked_id),
+    ChatSetupUnavailable(
+        Res.string.chat_setup_unavailable_en,
+        Res.string.chat_setup_unavailable_id,
+    ),
+    ChatSetupActivateHint(
+        Res.string.chat_setup_activate_hint_en,
+        Res.string.chat_setup_activate_hint_id,
+    ),
+    ChatSetupWaitingHint(
+        Res.string.chat_setup_waiting_hint_en,
+        Res.string.chat_setup_waiting_hint_id,
+    ),
+    ChatSetupRetryHint(Res.string.chat_setup_retry_hint_en, Res.string.chat_setup_retry_hint_id),
+    ChatSetupResumeHint(Res.string.chat_setup_resume_hint_en, Res.string.chat_setup_resume_hint_id),
+    ChatSetupReadyHint(Res.string.chat_setup_ready_hint_en, Res.string.chat_setup_ready_hint_id),
+    ChatSetupRevokedHint(
+        Res.string.chat_setup_revoked_hint_en,
+        Res.string.chat_setup_revoked_hint_id,
+    ),
+    ChatSetupCheckHint(Res.string.chat_setup_check_hint_en, Res.string.chat_setup_check_hint_id),
+    ChatSetupEnable(Res.string.chat_setup_enable_en, Res.string.chat_setup_enable_id),
+    ChatSetupOpen(Res.string.chat_setup_open_en, Res.string.chat_setup_open_id),
     ChatPeoplePrevious(Res.string.chat_people_previous_en, Res.string.chat_people_previous_id),
     ChatPeopleNext(Res.string.chat_people_next_en, Res.string.chat_people_next_id),
     ChatTitle(Res.string.chat_title_en, Res.string.chat_title_id),
