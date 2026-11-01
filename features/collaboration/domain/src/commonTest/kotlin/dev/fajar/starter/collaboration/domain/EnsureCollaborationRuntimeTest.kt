@@ -218,6 +218,14 @@ private class EnsureRuntimeFixture {
         }
     val runtime =
         object : CollaborationRuntimeRepository {
+            override suspend fun readProviderHistory(
+                owner: CollaborationOwner,
+                deviceId: String,
+                matrixRoomId: String,
+                position: String?,
+            ): AppResult<CollaborationProviderHistoryPage> =
+                error("No implicit provider history page")
+
             override suspend fun findHistoryHead(
                 owner: CollaborationOwner,
                 deviceId: String,

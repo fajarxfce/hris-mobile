@@ -6,6 +6,13 @@ import dev.fajar.starter.common.result.*
 
 /** Hosts without a native binding cannot create a substitute store or claim SDK readiness. */
 class UnavailableCollaborationRuntimeRepository : CollaborationRuntimeRepository {
+    override suspend fun readProviderHistory(
+        owner: CollaborationOwner,
+        deviceId: String,
+        matrixRoomId: String,
+        position: String?,
+    ): AppResult<CollaborationProviderHistoryPage> = unavailable()
+
     override suspend fun findHistoryHead(
         owner: CollaborationOwner,
         deviceId: String,

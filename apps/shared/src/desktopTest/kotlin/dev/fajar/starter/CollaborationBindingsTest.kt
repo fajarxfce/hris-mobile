@@ -33,6 +33,14 @@ class CollaborationBindingsTest {
             var suppliedHttp: HttpClient? = null
             val runtime =
                 object : CollaborationRuntimeRepository {
+                    override suspend fun readProviderHistory(
+                        owner: CollaborationOwner,
+                        deviceId: String,
+                        matrixRoomId: String,
+                        position: String?,
+                    ): AppResult<CollaborationProviderHistoryPage> =
+                        error("No implicit provider history page")
+
                     override suspend fun findHistoryHead(
                         owner: CollaborationOwner,
                         deviceId: String,
@@ -132,6 +140,7 @@ class CollaborationBindingsTest {
                 )
                 assertNotNull(container.koin.get<ObserveCollaborationHistory>())
                 assertNotNull(container.koin.get<AcquireCollaborationHistory>())
+                assertNotNull(container.koin.get<AcquireCollaborationProviderHistory>())
                 assertSame(
                     container.koin.get<DeliverCollaborationMessages>(),
                     container.koin.get<DeliverCollaborationMessages>(),

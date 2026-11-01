@@ -1,5 +1,8 @@
 package dev.fajar.starter.collaboration.domain.entities
 
+/** Received reference count, not new messages or successful decryption. */
+data class CollaborationProviderHistoryAcquisition(val references: Int, val exhausted: Boolean)
+
 /** Provider positions are bound to this device/room; locally acquired originals remain separate. */
 data class CollaborationHistoryTraversal(
     val conversationId: String,

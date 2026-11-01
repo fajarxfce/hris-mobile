@@ -420,5 +420,97 @@
     "Actual proof performs one initial read, replays its start and follows next once when present. Gateway asserts exactly 2..3 pages, all but the first positioned, under seven device/conversation/room admissions and no failures.",
     "No provider cursor or unresolved reference is persisted by this increment. Durable atomic page staging and common admission remain next; no UI action is exposed.",
     "Native focus count, allocation and snapshot limitations remain separate. Metadata reads do not paginate or acquire another SDK focus."
-  ]
+  ],
+  "hostedHris": {
+    "run": "https://github.com/fajarxfce/hris-mobile/actions/runs/41285030461",
+    "commit": "3cc585b216e7eabef82e17db5284b790c6ace162",
+    "result": "success",
+    "jobs": [
+      {
+        "name": "android-hris",
+        "conclusion": "success",
+        "steps": 17,
+        "nonPassingSteps": []
+      }
+    ],
+    "tests": {
+      "testAndroidHostTest": {
+        "suites": 25,
+        "tests": 156,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "test": {
+        "suites": 1,
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "immutableSourceHashesMatched": 243,
+    "platformCommit": "26796a33d257992ceebcfe686fe2d6bcb370cee5",
+    "platformImmutableSourceHashesMatched": 33,
+    "sourceManifestUploaded": false,
+    "fixtureRun": "8515479ce5604419a7cc08b2408b716f",
+    "actualSdk": {
+      "passed": true,
+      "encryptedBothDirections": true,
+      "logicalIdsPreserved": true,
+      "cleanup": true,
+      "protectedStoreReopened": true,
+      "missingRecordPreserved": true,
+      "wrongPassphrasePreserved": true,
+      "exclusiveOwner": true,
+      "processRestarted": true,
+      "queueRestored": true,
+      "transactionReused": true,
+      "identityAfterRestart": true,
+      "messageIntentRestored": true,
+      "queueMappingRecovered": true,
+      "queueWriterExclusive": true,
+      "perRoomDeliveryIsolated": true,
+      "heldQueueRestored": true,
+      "nativeDeliveryOwned": true,
+      "commonSenderOwned": true,
+      "receiptJournalRecovered": true,
+      "projectionInterrupted": true,
+      "originalHistoryWindowOwned": true,
+      "historyBodiesRestored": true,
+      "commonHistoryAcquisitionOwned": true,
+      "latestHistoryHeadOwned": true,
+      "admittedSingleHeadRead": true,
+      "providerHistoryPageOwned": true,
+      "admittedProviderPages": true,
+      "historyWindow": {
+        "originals": 2,
+        "unavailable": 9,
+        "extractionNanos": 16839381,
+        "modelCharacters": 4732,
+        "originalCharacters": 937
+      },
+      "applicationAdmittedBeforeSend": true,
+      "applicationAdmittedAroundHistory": true,
+      "applicationAdmissions": {
+        "device": 7,
+        "conversation": 7,
+        "room": 7,
+        "failures": 0
+      },
+      "heldRoomNeverSent": true,
+      "pausedAcrossRestart": true,
+      "syncInterruptedAfterRestart": true,
+      "syncRetriedWithRetainedCursor": true,
+      "artifact": {
+        "apkSha256": "28152f812e352649583c4353bb0f3a10f41daf6b3022cb192b3f8f9d00bc65ae",
+        "package": "dev.fajar.hris.collaboration.proof",
+        "avd": "hris-mobile-dev",
+        "androidApi": "35"
+      }
+    },
+    "testCaseSeconds": 39.558,
+    "testSuiteSeconds": 88.944,
+    "scope": "Validates raw provider-page metadata at 3cc585b2; later traversal storage and common admitted acquisition have separate evidence."
+  }
 }

@@ -6,6 +6,14 @@ import kotlinx.coroutines.flow.StateFlow
 
 /** Store I/O and SDK ownership only. Use cases admit installation and live delivery separately. */
 interface CollaborationRuntimeRepository {
+    /** One bounded metadata page from the owned SDK identity; never advances its sync cursor. */
+    suspend fun readProviderHistory(
+        owner: CollaborationOwner,
+        deviceId: String,
+        matrixRoomId: String,
+        position: String?,
+    ): AppResult<CollaborationProviderHistoryPage>
+
     /**
      * One latest-visible-event lookup, using the installed SDK identity without changing cursors.
      */

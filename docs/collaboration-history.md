@@ -7,7 +7,8 @@ facts offline under the same account/company admission as the conversation list.
 around a supplied event or the latest visible event through the owned Android SDK runtime.
 The Android runtime can also read bounded provider-page metadata through the same
 gateway. Encrypted traversal staging retains every reference with its page position.
-Admitted page acquisition, edit projection, command retirement and Chat UI
+Common admitted page acquisition now stages those references; original-reference
+resolution, edit projection, command retirement and Chat UI
 remain separate work.
 
 ## Canonical identity and deletion
@@ -155,10 +156,35 @@ The actual proof reads an initial page, replays its returned start and follows i
 next position once when present, under HRIS device/conversation/room checks before
 and after. It verifies both encrypted message IDs and exact runtime binding. This
 finite proof does not establish durable progression or complete-history recovery.
-The next common operation must use atomic staging before publishing traversal
-progress, then use the owned SDK to acquire original content. The storage port
-below exists; the admitted acquisition operation is still pending. The metadata
-adapter remains a platform-runtime entry point. Chat UI wiring is pending.
+The common acquisition operation uses atomic staging before reporting progress.
+Original-reference resolution through the owned SDK remains separate work. The
+metadata reader is exposed through the runtime repository; Chat UI wiring is pending.
+
+## Admitted provider-page acquisition
+
+[Common policy and actual SDK evidence](measurements/collaboration-provider-acquisition-2026-11-01.json).
+
+`AcquireCollaborationProviderHistory` captures the live owner and existing company
+read gate, admits the active platform device, owned direct conversation and exact
+ready room, then reads retained traversal progress. A valid exhausted checkpoint
+returns without requesting another provider page. Otherwise one bounded request
+uses its exact stored position. There is no automatic credential refresh, retry,
+cursor reset, SDK installation or send-queue work in this operation.
+
+The use case detaches received references before further suspension and checks the
+full native owner, device, room, requested position and every page primitive. It
+reacquires HRIS device/conversation/room admission before staging all references
+and the position atomically. Current owner and company denial are checked after
+each suspended boundary, including storage. Known denials remain authoritative
+through failed restriction persistence; SDK token expiry and recipient-specific
+failures preserve the existing company read policy. A lost commit response or late
+denial retains already committed facts while withholding success. A competing
+progress revision returns conflict without repeating the request.
+
+The returned count describes received references, including overlaps and state
+events; it is not a new-message or successful-decryption count. The operation is
+registered through the collaboration data module. Unsupported platform adapters
+report unavailable. Callers own invocation and cancellation.
 
 ## Durable traversal staging
 
@@ -193,8 +219,8 @@ An empty advancing page still persists its next position. A terminal page record
 `exhausted` while retaining every existing reference. This flag describes backward
 provider traversal; it does not acknowledge decryption, original projection or
 future new messages. Reference resolution and reset/recovery policy are pending.
-Live device/conversation/room admission remains the owning use case's job, and no
-page acquisition or background retry is started by this repository's DI binding.
+Live device/conversation/room admission belongs to the common acquisition use case;
+this repository's DI binding starts no page acquisition or background retry.
 
 Payloads are bounded to 16 KiB before encryption and 32 KiB after encoding; indexes
 expose sequence information locally but not event IDs, senders or provider cursor

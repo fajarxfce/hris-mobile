@@ -2,6 +2,14 @@ package dev.fajar.starter.collaboration.domain.policies
 
 import dev.fajar.starter.collaboration.domain.entities.*
 
+fun validCollaborationHistoryProgress(progress: CollaborationHistoryProgress): Boolean {
+    val next = progress.next
+    return validCollaborationMessageId(progress.generation) &&
+        progress.revision in 0 until 9_007_199_254_740_991L &&
+        progress.references in 0..9_007_199_254_740_991L &&
+        (next == null || validCollaborationProviderPosition(next))
+}
+
 fun validCollaborationProviderPosition(value: String) =
     value.length in 1..4096 && value.all { it.code in 33..126 }
 

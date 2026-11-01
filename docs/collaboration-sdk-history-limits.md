@@ -63,8 +63,8 @@ SDK still supplies original decrypted content through owned context windows.
 The metadata adapter itself does not persist or acknowledge those references.
 
 An encrypted traversal repository now stages references and positions atomically.
-The next common operation must surround that staging with fresh HRIS admission,
-acquire originals through bounded SDK work and retain unresolved references.
+Common provider-page acquisition now surrounds that staging with fresh HRIS
+admission. Next, acquire originals through bounded SDK work and retain unresolved references.
 Cancellation or a lost outcome must not cause an
 unbounded repeat of native pagination or a false history-end acknowledgement.
 

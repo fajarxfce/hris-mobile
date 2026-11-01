@@ -15,6 +15,25 @@ internal class HrisProofRuntimeAccess(private val runtime: AndroidCollaborationR
     var historyWindow: AndroidCollaborationHistoryWindow? = null
         private set
 
+    var providerPage: CollaborationProviderHistoryPage? = null
+        private set
+
+    var providerReads = 0
+        private set
+
+    override suspend fun readProviderHistory(
+        owner: CollaborationOwner,
+        deviceId: String,
+        matrixRoomId: String,
+        position: String?,
+    ): AppResult<CollaborationProviderHistoryPage> {
+        check(owner == runtime.owner && deviceId == runtime.deviceId)
+        providerReads++
+        return runtime.readProviderHistory(matrixRoomId, position).also {
+            if (it is AppResult.Success) providerPage = it.value
+        }
+    }
+
     override suspend fun findHistoryHead(
         owner: CollaborationOwner,
         deviceId: String,

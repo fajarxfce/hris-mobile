@@ -32,6 +32,26 @@ class AndroidCollaborationRuntimeRepository(
     private val capacity = Semaphore(5)
     private val leases = ConcurrentHashMap.newKeySet<AndroidCollaborationRuntimeLease>()
 
+    override suspend fun readProviderHistory(
+        owner: CollaborationOwner,
+        deviceId: String,
+        matrixRoomId: String,
+        position: String?,
+    ): AppResult<CollaborationProviderHistoryPage> {
+        val runtime =
+            leases.singleOrNull {
+                it.owner == owner && it.deviceId == deviceId && it.availableForEntry
+            }
+                ?: return AppResult.Failed(
+                    Failure(
+                        FailureKind.Unavailable,
+                        "Chat runtime is not open.",
+                        code = "client.collaboration_runtime_not_open",
+                    )
+                )
+        return runtime.readProviderHistory(matrixRoomId, position)
+    }
+
     override suspend fun findHistoryHead(
         owner: CollaborationOwner,
         deviceId: String,

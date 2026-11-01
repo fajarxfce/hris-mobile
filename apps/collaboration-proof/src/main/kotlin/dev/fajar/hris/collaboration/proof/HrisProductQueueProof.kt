@@ -4,6 +4,7 @@ import android.content.Context
 import dev.fajar.starter.collaboration.data.datasources.MemoryCollaborationListAdmissionDataSource
 import dev.fajar.starter.collaboration.data.repositories.AndroidCollaborationRuntimeLease
 import dev.fajar.starter.collaboration.data.repositories.EncryptedCollaborationHistoryRepository
+import dev.fajar.starter.collaboration.data.repositories.EncryptedCollaborationHistoryTraversalRepository
 import dev.fajar.starter.collaboration.data.repositories.EncryptedCollaborationListRepository
 import dev.fajar.starter.collaboration.data.repositories.EncryptedCollaborationMessageRepository
 import dev.fajar.starter.collaboration.data.repositories.EncryptedCollaborationReceiptRepository
@@ -12,6 +13,7 @@ import dev.fajar.starter.collaboration.domain.policies.recoverCollaborationQueue
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationMessageQueueLease
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationMessageRepository
 import dev.fajar.starter.collaboration.domain.usecases.AcquireCollaborationHistory
+import dev.fajar.starter.collaboration.domain.usecases.AcquireCollaborationProviderHistory
 import dev.fajar.starter.collaboration.domain.usecases.DeliverCollaborationMessages
 import dev.fajar.starter.collaboration.domain.usecases.ReconcileCollaborationMessages
 import dev.fajar.starter.common.result.*
@@ -19,6 +21,7 @@ import dev.fajar.starter.database.createAppDatabase
 import dev.fajar.starter.identity.domain.policies.accountStorageKey
 import dev.fajar.starter.securestorage.*
 import kotlin.time.Clock
+import kotlinx.coroutines.flow.first
 
 /** Fictional proof: deliberately die after native commit and before publishing its app mapping. */
 internal class HrisProductQueueProof(
@@ -235,7 +238,13 @@ internal class HrisProductQueueProof(
             acquired.acquiredEvents == 2 &&
                 acquired.unresolvedEvents == window.unavailableEventIds.size
         )
-        HrisProofProviderHistory(runtime, app, conversationId, roomId)
+        HrisProofProviderHistory(
+                runtime,
+                roomId,
+                ::acquireProviderHistory,
+                ::readProviderReferences,
+                ::reopenDatabase,
+            )
             .verify(setOf(sentEventId, replyEventId))
         return HrisProofOriginalHistory(
                 { database.replicas },
@@ -255,7 +264,46 @@ internal class HrisProductQueueProof(
             .put("commonHistoryAcquisitionOwned", true)
             .put("latestHistoryHeadOwned", true)
             .put("providerHistoryPageOwned", true)
+            .put("commonProviderHistoryAcquisitionOwned", true)
+            .put("providerHistoryReferencesRestored", true)
     }
+
+    private suspend fun acquireProviderHistory(
+        runtimeAccess: HrisProofRuntimeAccess
+    ): CollaborationProviderHistoryAcquisition {
+        val app = requireNotNull(application)
+        val acquire =
+            AcquireCollaborationProviderHistory(
+                traversalRepository(),
+                listRepository(),
+                app.conversations,
+                app.setup,
+                runtimeAccess,
+                app.sessions,
+                app.workspaces,
+                app.server,
+                app.build,
+                app.clock,
+            )
+        return success(acquire(app.workspaceId, runtime.deviceId, conversationId))
+    }
+
+    private suspend fun readProviderReferences() =
+        success(
+            traversalRepository()
+                .observeReferences(
+                    access,
+                    CollaborationHistoryTraversal(conversationId, roomId, runtime.deviceId),
+                )
+                .first()
+        )
+
+    private fun traversalRepository() =
+        EncryptedCollaborationHistoryTraversalRepository(
+            database.replicas,
+            AesGcmContentCipher(),
+            historyKey,
+        )
 
     private suspend fun reopenDatabase() {
         database.close()

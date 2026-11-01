@@ -4,50 +4,70 @@ import dev.fajar.starter.collaboration.data.repositories.AndroidCollaborationRun
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.common.result.*
 
-/** Actual scoped metadata traversal. This fixture does not acknowledge or persist page progress. */
+/** Actual admitted acquisition and encrypted reference recovery through the database's owner. */
 internal class HrisProofProviderHistory(
     private val runtime: AndroidCollaborationRuntimeLease,
-    private val application: HrisProofApplicationAccess,
-    private val conversationId: String,
     private val roomId: String,
+    private val acquire:
+        suspend (HrisProofRuntimeAccess) -> CollaborationProviderHistoryAcquisition,
+    private val stored: suspend () -> CollaborationHistoryReferences,
+    private val reopen: suspend () -> Unit,
 ) {
     suspend fun verify(expectedEvents: Set<String>) {
-        admit()
-        val first = read(null)
-        check(first.events.map { it.eventId }.containsAll(expectedEvents))
-        val replayed = read(first.start)
-        check(replayed.events == first.events)
-        first.next?.let { read(it) }
-        admit()
+        val access = HrisProofRuntimeAccess(runtime)
+        val first = acquire(access)
+        val page = requireNotNull(access.providerPage)
+        validate(page, null)
+        check(first.references == page.events.size && first.exhausted == (page.next == null))
+        check(page.events.map { it.eventId }.containsAll(expectedEvents))
+        val persisted = stored()
+        check(
+            persisted.progress?.next == page.next &&
+                persisted.progress?.references == page.events.size.toLong()
+        )
+        check(persisted.events.map { it.event } == page.events && persisted.after == null)
+        reopen()
+        check(stored() == persisted)
+        val replayed = success(runtime.readProviderHistory(roomId, page.start))
+        validate(replayed, page.start)
+        check(replayed.events == page.events)
+        val second = acquire(access)
+        if (page.next == null) {
+            check(
+                access.providerReads == 1 &&
+                    second == CollaborationProviderHistoryAcquisition(0, true)
+            )
+            check(stored() == persisted)
+        } else {
+            val older = requireNotNull(access.providerPage)
+            validate(older, page.next)
+            check(
+                access.providerReads == 2 &&
+                    second.references == older.events.size &&
+                    second.exhausted == (older.next == null)
+            )
+            val retained = stored()
+            val previous = requireNotNull(persisted.progress)
+            val progress = requireNotNull(retained.progress)
+            check(
+                progress.generation == previous.generation &&
+                    progress.revision == previous.revision + 1
+            )
+            check(progress.next == older.next && retained.after == null)
+            check(
+                retained.events.map { it.event.eventId }.toSet() ==
+                    (page.events + older.events).map { it.eventId }.toSet()
+            )
+        }
     }
 
-    private suspend fun read(position: String?): CollaborationProviderHistoryPage {
-        val page = success(runtime.readProviderHistory(roomId, position))
+    private fun validate(page: CollaborationProviderHistoryPage, position: String?) {
         check(
             page.owner == runtime.owner &&
                 page.deviceId == runtime.deviceId &&
                 page.roomId == roomId &&
-                page.requestedPosition == position
-        )
-        check(
-            page.events.size <= 20 &&
-                page.events.map { it.eventId }.distinct().size == page.events.size
-        )
-        return page
-    }
-
-    private suspend fun admit() {
-        val owner = runtime.owner
-        val device = requireNotNull(success(application.setup.read(owner)))
-        check(device.id == runtime.deviceId && device.state == CollaborationDeviceState.ACTIVE)
-        val direct = success(application.conversations.get(owner, conversationId))
-        check(direct.id == conversationId && direct.companyId == owner.companyId)
-        check(owner.accountId in listOf(direct.firstAccountId, direct.secondAccountId))
-        val room = success(application.conversations.room(owner, conversationId))
-        check(
-            room.conversationId == conversationId &&
-                room.matrixRoomId == roomId &&
-                room.state == CollaborationDirectRoomState.READY
+                page.requestedPosition == position &&
+                page.events.size <= 20
         )
     }
 
