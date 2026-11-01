@@ -1,0 +1,143 @@
+{
+  "date": "2026-11-01",
+  "change": "Owned Chat inbox presentation and compact accessible Fluent rows",
+  "baseImplementationCommit": "070d3ab5f718229ab88dcc7b0a36ad3cd1f5a346",
+  "sourceSha256": {
+    ".github/workflows/collaboration-control.yml": "404e76f972769d1abc5990eabc52002a92552fe64221f5a454d70c5359d46305",
+    "core/localization/src/commonMain/composeResources/values/strings_en.xml": "fa9833f531cd079fccf82a4c28a4ed092e5c2f352ce6e05b593ec8511e0fab05",
+    "core/localization/src/commonMain/composeResources/values/strings_id.xml": "21a9825fcc756eac0574dfbd54acb4035c2023eab1cd23205ed7e1d4218fa104",
+    "core/localization/src/commonMain/kotlin/dev/fajar/starter/localization/AppString.kt": "0bd7880be28ecab17254d850dede028458debb1039d4d44c41c325962e622169",
+    "features/collaboration/presentation/build.gradle.kts": "4e913c79bf6963ea7fc48fac63ebfc75d71682bfa6bee3eaf953445c64921515",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/di/CollaborationPresentationModule.kt": "33079f96f200887eb1b930ed0d84f5cb945fbdb3d0ad5293297275b5a85392ab",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/inbox/ChatInboxEffect.kt": "4956f40246a40930f1f48a625737a69cedaad63341eecd37278f4ec8594a1e13",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/inbox/ChatInboxEvent.kt": "19a91398bba79f58fd5d09698f96a2c3b798d87786217d783b719fa77a93c5ad",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/inbox/ChatInboxState.kt": "9bbafdd9506fdf4387fbd38f05a41f2756b6f3855be18d13e25814e5d80782d9",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/inbox/ChatInboxViewModel.kt": "e79d5316574e13baf5266f53be8dd662b9bd74410c1a2e4e6723afd812d515c0",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/inbox/pages/ChatInboxPage.kt": "4df88ebb5f623649bf946bf4e6d512fda4694d70acac8cea37ad2813ef163f0c",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/widgets/ChatPersonRow.kt": "b35d874f7b85709f8b64d7aa82e95c091bde6333d4d4b92ae92356e914ffa188",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/inbox/ChatInboxFixture.kt": "10baa18a090db397f84acf8c562659d8918b8eaf86cfdfe2ad5d1164156ac0bf",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/inbox/ChatInboxViewModelTest.kt": "3cf0ab4212314984e875eaf83369c74c5acff1f1452c0030f20893aebec7148a",
+    "features/collaboration/presentation/src/desktopTest/kotlin/dev/fajar/starter/collaboration/presentation/ChatInboxLayoutTest.kt": "8f0e564452237d4b354b176ca47bf025dfb1fbd817f7f07e6436e76d27cc9da5",
+    "kotlin-js-store/wasm/package-lock.json": "2d312f96d39b95dc89ca092b85d961cdb25138267c9a5c8068f567e552ce8e58",
+    "settings.gradle.kts": "db0744c2aa26c402c1291049ff11dfd2198991c59f2af058c57ea67f895c488e"
+  },
+  "sourceManifestMatched": true,
+  "firstFullSourceSha256": {
+    ".github/workflows/collaboration-control.yml": "c86555ca7553502d28bd17f95ae8fff038aa262a959224587294bd499d5aa8b9",
+    "core/localization/src/commonMain/composeResources/values/strings_en.xml": "fa9833f531cd079fccf82a4c28a4ed092e5c2f352ce6e05b593ec8511e0fab05",
+    "core/localization/src/commonMain/composeResources/values/strings_id.xml": "21a9825fcc756eac0574dfbd54acb4035c2023eab1cd23205ed7e1d4218fa104",
+    "core/localization/src/commonMain/kotlin/dev/fajar/starter/localization/AppString.kt": "0bd7880be28ecab17254d850dede028458debb1039d4d44c41c325962e622169",
+    "features/collaboration/presentation/build.gradle.kts": "4e913c79bf6963ea7fc48fac63ebfc75d71682bfa6bee3eaf953445c64921515",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/di/CollaborationPresentationModule.kt": "33079f96f200887eb1b930ed0d84f5cb945fbdb3d0ad5293297275b5a85392ab",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/inbox/ChatInboxEffect.kt": "4956f40246a40930f1f48a625737a69cedaad63341eecd37278f4ec8594a1e13",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/inbox/ChatInboxEvent.kt": "19a91398bba79f58fd5d09698f96a2c3b798d87786217d783b719fa77a93c5ad",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/inbox/ChatInboxState.kt": "9bbafdd9506fdf4387fbd38f05a41f2756b6f3855be18d13e25814e5d80782d9",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/inbox/ChatInboxViewModel.kt": "cd9810daa761dd12aaf9bd82194390636d62d1a86501cc2ea4c478195f623a99",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/inbox/pages/ChatInboxPage.kt": "4df88ebb5f623649bf946bf4e6d512fda4694d70acac8cea37ad2813ef163f0c",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/widgets/ChatPersonRow.kt": "b35d874f7b85709f8b64d7aa82e95c091bde6333d4d4b92ae92356e914ffa188",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/inbox/ChatInboxFixture.kt": "10baa18a090db397f84acf8c562659d8918b8eaf86cfdfe2ad5d1164156ac0bf",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/inbox/ChatInboxViewModelTest.kt": "3cf0ab4212314984e875eaf83369c74c5acff1f1452c0030f20893aebec7148a",
+    "features/collaboration/presentation/src/desktopTest/kotlin/dev/fajar/starter/collaboration/presentation/ChatInboxLayoutTest.kt": "8f0e564452237d4b354b176ca47bf025dfb1fbd817f7f07e6436e76d27cc9da5",
+    "kotlin-js-store/wasm/package-lock.json": "2d312f96d39b95dc89ca092b85d961cdb25138267c9a5c8068f567e552ce8e58",
+    "settings.gradle.kts": "db0744c2aa26c402c1291049ff11dfd2198991c59f2af058c57ea67f895c488e"
+  },
+  "attempts": [
+    {
+      "log": ".work/collaboration-chat-inbox-compile.log",
+      "outcome": "FAILED",
+      "duration": "1m 40s",
+      "scope": "Initial compile: public nextCursor smart cast rejected; fixed before tests."
+    },
+    {
+      "log": ".work/chat-inbox-focused.log",
+      "outcome": "FAILED",
+      "duration": "38s",
+      "scope": "Seven desktop VM cases passed; browser blocked by new module package lock."
+    },
+    {
+      "log": ".work/chat-inbox-layout-focused.log",
+      "outcome": "FAILED",
+      "duration": "20s",
+      "scope": "Build script rejected desktop dependency accessors in sourceSets scope; moved to kotlin scope."
+    },
+    {
+      "log": ".work/chat-inbox-layout-corrected.log",
+      "outcome": "SUCCESSFUL",
+      "duration": "1m 44s",
+      "scope": "Twelve desktop / eight browser cases passed. Screenshot review found wrapped large-text title; replaced text header action with accessible Add icon."
+    },
+    {
+      "log": ".work/chat-inbox-full.log",
+      "outcome": "SUCCESSFUL",
+      "duration": "12m 34s",
+      "scope": "First full root/browser/Wasm/Android/lint pass after header correction."
+    },
+    {
+      "log": ".work/chat-inbox-final.log",
+      "outcome": "SUCCESSFUL",
+      "duration": "2m 23s",
+      "scope": "Final root/browser/Wasm/Android/lint pass plus standalone Chat Android AAR. Also ignore Back when already stopped."
+    }
+  ],
+  "reports": {
+    "desktop": {
+      "suites": 410,
+      "tests": 2547,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "inboxDesktop": {
+      "suites": 2,
+      "tests": 12,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "inboxBrowser": {
+      "suites": 1,
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "lint": {
+      "Error": 0,
+      "Fatal": 0,
+      "Warning": 1
+    },
+    "apk": {
+      "path": "apps/android/build/outputs/apk/dev/debug/android-dev-debug.apk",
+      "sha256": "9f429467734911b4e7556f8f60527665ffe52a911f8ba329cdb6c1df4f468dc6"
+    },
+    "screenshots": {
+      "features/collaboration/presentation/build/reports/screenshots/chat-inbox-indonesian-large-text.png": {
+        "sha256": "665af1e55c0dd15c9e5848c2e427cd49db7bcd3b693140e13c247a21f6eaf8c8",
+        "bytes": 52553
+      },
+      "features/collaboration/presentation/build/reports/screenshots/chat-inbox-english.png": {
+        "sha256": "dc3f39feca28286455a6c3e84f20f464a656408358ff4f0b52fd2a934792d607",
+        "bytes": 28075
+      }
+    }
+  },
+  "androidLibrary": {
+    "path": "features/collaboration/presentation/build/outputs/aar/presentation.aar",
+    "sha256": "276e72416b8732e3c1769520d650f5c6a2cc85fe9162b052dd703436e6741f79"
+  },
+  "reviewedScreenshots": [
+    "docs/images/chat-inbox/chat-inbox-english.png",
+    "docs/images/chat-inbox/chat-inbox-indonesian-large-text.png"
+  ],
+  "phoneChanged": false,
+  "liveChanged": false,
+  "applicationNavigationConnected": false,
+  "productAcceptance": false,
+  "notes": [
+    "Desktop totals include the root check task graph and up-to-date passing reports; browser scope here is only the new presentation module.",
+    "Screenshot states use fictional people and were visually inspected at 360x760 / 320x640 dp; Indonesian font scale is 200%. No device screenshot baseline is claimed.",
+    "The module is compiled and tested independently. Participant discovery, setup, thread, application navigation and delivery scheduling remain integration work.",
+    "Apple presentation compilation and common tests are added to CI; this local Linux run is not Apple UI validation.",
+    "No generic Starter change is required for this HRIS feature module."
+  ]
+}

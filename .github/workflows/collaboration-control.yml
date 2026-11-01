@@ -62,10 +62,12 @@ jobs:
           node-version: '22'
       - name: Check setup transport and ownership
         run: >-
-          ./gradlew --no-daemon --no-parallel --max-workers=2
+          xvfb-run -a ./gradlew --no-daemon --no-parallel --max-workers=2
           :features:collaboration:domain:desktopTest :features:collaboration:data:desktopTest
           :features:collaboration:domain:wasmJsBrowserTest :features:collaboration:data:wasmJsBrowserTest
-          :features:collaboration:data:assemble formatCheck detekt architectureCheck
+          :features:collaboration:presentation:desktopTest :features:collaboration:presentation:wasmJsBrowserTest
+          :features:collaboration:data:assemble :features:collaboration:presentation:assemble
+          formatCheck detekt architectureCheck
       - name: Check application bindings and platform compilation
         run: >-
           xvfb-run -a ./gradlew --no-daemon --no-parallel --max-workers=2
@@ -77,6 +79,7 @@ jobs:
           name: collaboration-control-portable
           path: |
             features/collaboration/**/build/test-results/
+            features/collaboration/presentation/build/reports/screenshots/
             apps/shared/build/test-results/
   apple:
     runs-on: macos-15
@@ -99,6 +102,8 @@ jobs:
           ./gradlew --no-daemon --no-parallel --max-workers=2
           :features:collaboration:domain:iosSimulatorArm64Test
           :features:collaboration:data:iosSimulatorArm64Test
+          :features:collaboration:presentation:iosSimulatorArm64Test
+          :features:collaboration:presentation:compileKotlinIosArm64
           :features:collaboration:data:compileKotlinIosArm64
           :apps:shared:compileKotlinIosArm64
       - name: Build iOS application host

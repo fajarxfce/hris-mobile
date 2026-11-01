@@ -27,7 +27,11 @@ rootProject.name = "hris-mobile"
 
 include(":apps:collaboration-proof")
 
-include(":features:collaboration:domain", ":features:collaboration:data")
+include(
+    ":features:collaboration:domain",
+    ":features:collaboration:data",
+    ":features:collaboration:presentation",
+)
 
 include(":features:people:domain", ":features:people:data", ":features:people:presentation")
 

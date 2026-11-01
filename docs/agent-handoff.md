@@ -1,5 +1,38 @@
 # Agent continuation — HRIS Mobile
 
+## Chat inbox presentation validated — 1 November 2026
+
+The new `features/collaboration/presentation` module contains typed inbox MVI,
+owned local observation, finite remote refresh, separate local/remote pagination
+and compact Fluent rows. [Contract and screenshots](collaboration-presentation.md)
+and [measurement](measurements/chat-inbox-2026-11-01.json) retain implementation,
+17 source hashes and every validation attempt. Failed refresh preserves first-page
+cache; stopped routes retain only local observation; account/denial changes clear
+hidden content. Admitted refresh reopens completed local subscriptions. One Next
+request advances after local publication. Header Add keeps Chat on one line at
+320 dp / 200% Indonesian text; avatar initials are decorative.
+
+Final root/browser/Wasm/Android/lint/AAR validation passes in 143s after the first
+754s full build. Reports: 2,547 desktop cases / 410 suites, including 8 inbox VM and
+4 Compose layout cases, plus 8 presentation browser cases; zero failures/errors/
+skips and zero Android lint errors (one existing warning). APK `9f429467` is built,
+not installed. Preparatory failures were a smart cast, a new-module package lock,
+and a Gradle DSL scope; each is recorded. CI now includes presentation desktop,
+browser, Android library and Apple common compilation/tests. This is HRIS-specific;
+Starter is unchanged. No phone/live change and no complete PRD group accepted.
+
+**Next: finish participant discovery, setup recovery, thread and app navigation.**
+The module is intentionally not yet connected to a Home service; no dead destination
+is exposed. Add exact conversation summary acquisition under the existing list
+publication mutex, and observe local ownership/admission without reading message
+bodies. Directory reads must retain company denials through cancelled/failed retries.
+Then wire typed participant search to durable Open command preparation/replay, cache
+the selected DM directly, reconcile its receipt and navigate. Continue device setup,
+canonical-history/pending-message composition, owned delivery scheduling and all P0–P8.
+Preserve exact operation IDs, offline facts and explicit resource lifetimes. Continue
+the authorized long run; commit and push each validated increment.
+
+
 ## Hosted HRIS retirement proof — 1 November 2026
 
 [Run 41301133411](https://github.com/fajarxfce/hris-mobile/actions/runs/41301133411)

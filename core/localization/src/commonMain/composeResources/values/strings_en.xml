@@ -928,4 +928,15 @@
     <string name="document_issued_on_label_en">Issue date</string>
     <string name="document_valid_until_label_en">Valid until</string>
     <string name="document_history_by_other_en">Recorded by another account</string>
+    <string name="chat_title_en">Chat</string>
+    <string name="chat_summary_en">Messages with your colleagues</string>
+    <string name="chat_new_en">New chat</string>
+    <string name="chat_empty_en">No conversations yet</string>
+    <string name="chat_empty_hint_en">Start a conversation with a colleague.</string>
+    <string name="chat_saved_en">Showing conversations saved on this device.</string>
+    <string name="chat_previous_en">Previous conversations</string>
+    <string name="chat_next_en">More conversations</string>
+    <string name="chat_search_people_en">Find a colleague</string>
+    <string name="chat_participants_empty_en">No colleagues found</string>
+    <string name="chat_opening_en">Opening conversation…</string>
 </resources>

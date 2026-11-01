@@ -5,6 +5,20 @@ import org.jetbrains.compose.resources.StringResource
 
 /** Explicit pairs keep runtime language changes portable across Android, iOS, desktop and Web. */
 enum class AppString(val english: StringResource, val indonesian: StringResource) {
+    ChatTitle(Res.string.chat_title_en, Res.string.chat_title_id),
+    ChatSummary(Res.string.chat_summary_en, Res.string.chat_summary_id),
+    ChatNew(Res.string.chat_new_en, Res.string.chat_new_id),
+    ChatEmpty(Res.string.chat_empty_en, Res.string.chat_empty_id),
+    ChatEmptyHint(Res.string.chat_empty_hint_en, Res.string.chat_empty_hint_id),
+    ChatSaved(Res.string.chat_saved_en, Res.string.chat_saved_id),
+    ChatPrevious(Res.string.chat_previous_en, Res.string.chat_previous_id),
+    ChatNext(Res.string.chat_next_en, Res.string.chat_next_id),
+    ChatSearchPeople(Res.string.chat_search_people_en, Res.string.chat_search_people_id),
+    ChatParticipantsEmpty(
+        Res.string.chat_participants_empty_en,
+        Res.string.chat_participants_empty_id,
+    ),
+    ChatOpening(Res.string.chat_opening_en, Res.string.chat_opening_id),
     ExpenseSaveReceipt(Res.string.expense_save_receipt_en, Res.string.expense_save_receipt_id),
     ExpenseReceiptSaved(Res.string.expense_receipt_saved_en, Res.string.expense_receipt_saved_id),
     ExpenseExportTimeout(
