@@ -33,6 +33,13 @@ class CollaborationBindingsTest {
             var suppliedHttp: HttpClient? = null
             val runtime =
                 object : CollaborationRuntimeRepository {
+                    override suspend fun prepareHistoryReopen(
+                        owner: CollaborationOwner,
+                        deviceId: String,
+                        matrixRoomId: String,
+                        anchorEventId: String,
+                    ): AppResult<Boolean> = error("No implicit history reopening")
+
                     override suspend fun readProviderHistory(
                         owner: CollaborationOwner,
                         deviceId: String,
@@ -150,6 +157,10 @@ class CollaborationBindingsTest {
                     container.koin.get<ReconcileCollaborationMessages>(),
                 )
                 assertNotNull(container.koin.get<ObserveCollaborationMessages>())
+                assertSame(
+                    container.koin.get<ReopenCollaborationHistory>(),
+                    container.koin.get<ReopenCollaborationHistory>(),
+                )
                 assertSame(
                     container.koin.get<ReconcileCollaborationHistoryReferences>(),
                     container.koin.get<ReconcileCollaborationHistoryReferences>(),

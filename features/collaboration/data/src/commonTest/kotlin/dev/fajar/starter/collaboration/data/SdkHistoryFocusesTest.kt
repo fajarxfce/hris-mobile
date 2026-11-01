@@ -7,6 +7,17 @@ import kotlinx.coroutines.test.runTest
 
 class SdkHistoryFocusesTest {
     @Test
+    fun readinessIsReadOnlyAndOnlyMissingKeysAtCapacityNeedReopening() = runTest {
+        val focuses = SdkHistoryFocuses(1)
+        repeat(20) { assertFalse(focuses.needsReopen("!room:test", "\$first")) }
+        assertTrue(focuses.reserve("!room:test", "\$first"))
+        assertFalse(focuses.needsReopen("!room:test", "\$first"))
+        assertTrue(focuses.needsReopen("!room:test", "\$second"))
+        assertTrue(focuses.needsReopen("!other:test", "\$first"))
+        assertFalse(SdkHistoryFocuses(1).needsReopen("!room:test", "\$second"))
+    }
+
+    @Test
     fun concurrentDistinctKeysCannotExceedTheWholeClientBudget() = runTest {
         val focuses = SdkHistoryFocuses()
         val start = CompletableDeferred<Unit>()

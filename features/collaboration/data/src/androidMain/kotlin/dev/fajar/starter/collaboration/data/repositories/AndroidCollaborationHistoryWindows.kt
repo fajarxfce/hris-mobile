@@ -34,6 +34,9 @@ internal class AndroidCollaborationHistoryWindows(
     private val focuses: SdkHistoryFocuses = SdkHistoryFocuses(),
     private val failure: () -> Failure?,
 ) {
+    suspend fun needsReopen(roomId: String, anchorEventId: String) =
+        focuses.needsReopen(roomId, anchorEventId)
+
     suspend fun read(
         roomId: String,
         anchorEventId: String,

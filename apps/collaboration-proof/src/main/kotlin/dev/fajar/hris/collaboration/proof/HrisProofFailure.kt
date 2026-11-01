@@ -7,6 +7,9 @@ internal class HrisProofFailure(failure: Failure) :
     IllegalStateException("Owned SDK operation failed") {
     val category =
         "HrisProof_${failure.kind.name}_${when (failure.code) {
+        "client.collaboration_close_pending" -> "ClosePending"
+        "client.collaboration_runtime_opening" -> "RuntimeOpening"
+        "client.collaboration_queue_busy" -> "QueueBusy"
         "client.collaboration_child_pending" -> "ChildPending"
         "client.collaboration_child_interrupted" -> "ChildInterrupted"
         "client.collaboration_children_stopped" -> "ChildrenStopped"

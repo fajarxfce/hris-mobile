@@ -21,6 +21,13 @@ internal class HrisProofRuntimeAccess(private val runtime: AndroidCollaborationR
     var providerReads = 0
         private set
 
+    override suspend fun prepareHistoryReopen(
+        owner: CollaborationOwner,
+        deviceId: String,
+        matrixRoomId: String,
+        anchorEventId: String,
+    ): AppResult<Boolean> = error("No implicit history reopening")
+
     override suspend fun readProviderHistory(
         owner: CollaborationOwner,
         deviceId: String,

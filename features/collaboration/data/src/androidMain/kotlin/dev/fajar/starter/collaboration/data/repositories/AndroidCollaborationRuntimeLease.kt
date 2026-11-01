@@ -88,6 +88,38 @@ internal constructor(
     internal val availableForEntry
         get() = acquisitionComplete.get() && !stopRequested.get()
 
+    /** No active queue writer is interrupted to reclaim this client's retained history caches. */
+    internal suspend fun prepareHistoryReopen(
+        roomId: String,
+        anchorEventId: String,
+    ): AppResult<Boolean> {
+        if (closingRequested) return closedForHistory()
+        if (!availableForEntry)
+            return AppResult.Failed(
+                Failure(
+                    FailureKind.Unavailable,
+                    "Chat is still opening.",
+                    code = "client.collaboration_runtime_opening",
+                )
+            )
+        credentialFailures.value?.let {
+            return AppResult.Failed(it)
+        }
+        if (!historyWindows.needsReopen(roomId, anchorEventId)) return AppResult.Success(false)
+        return messageQueues.whileWriterIdle {
+            credentialFailures.value?.let {
+                return@whileWriterIdle AppResult.Failed(it)
+            }
+            closedForHistory()
+        }
+    }
+
+    private suspend fun closedForHistory(): AppResult<Boolean> =
+        when (val result = close()) {
+            is AppResult.Failed -> result
+            is AppResult.Success -> AppResult.Success(true)
+        }
+
     /** Publication follows paused SDK restore and durable initialization. */
     internal fun completeAcquisition() {
         check(!stopRequested.get())

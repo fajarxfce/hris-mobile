@@ -5,6 +5,8 @@ import dev.fajar.starter.collaboration.data.datasources.*
 import dev.fajar.starter.collaboration.data.sdk.*
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.policies.collaborationGatewayMatchesCommand
+import dev.fajar.starter.collaboration.domain.policies.validCollaborationEventId
+import dev.fajar.starter.collaboration.domain.policies.validCollaborationMessageId
 import dev.fajar.starter.collaboration.domain.repositories.*
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.identity.domain.entities.IdentityServer
@@ -31,6 +33,34 @@ class AndroidCollaborationRuntimeRepository(
 ) : CollaborationRuntimeRepository {
     private val capacity = Semaphore(5)
     private val leases = ConcurrentHashMap.newKeySet<AndroidCollaborationRuntimeLease>()
+
+    override suspend fun prepareHistoryReopen(
+        owner: CollaborationOwner,
+        deviceId: String,
+        matrixRoomId: String,
+        anchorEventId: String,
+    ): AppResult<Boolean> {
+        currentCoroutineContext().ensureActive()
+        if (
+            !validCollaborationMessageId(deviceId) ||
+                !validCollaborationEventId(anchorEventId) ||
+                !matrixRoomId.startsWith('!') ||
+                matrixRoomId.length !in 2..255 ||
+                matrixRoomId.any { it.isWhitespace() || it.isISOControl() }
+        )
+            return AppResult.Failed(Failure(FailureKind.Validation, "Invalid history focus."))
+        val matching = leases.filter { it.owner == owner && it.deviceId == deviceId }
+        if (matching.size > 1)
+            return AppResult.Failed(
+                Failure(
+                    FailureKind.Unavailable,
+                    "Chat runtime is busy.",
+                    code = "client.collaboration_runtime_opening",
+                )
+            )
+        return matching.singleOrNull()?.prepareHistoryReopen(matrixRoomId, anchorEventId)
+            ?: AppResult.Success(true)
+    }
 
     override suspend fun readProviderHistory(
         owner: CollaborationOwner,

@@ -24,5 +24,8 @@ internal class SdkHistoryFocuses(private val capacity: Int = 16) {
             retained.add(key)
         }
 
+    suspend fun needsReopen(roomId: String, anchorEventId: String): Boolean =
+        mutation.withLock { (roomId to anchorEventId) !in retained && retained.size >= capacity }
+
     override fun toString() = "SdkHistoryFocuses([redacted])"
 }

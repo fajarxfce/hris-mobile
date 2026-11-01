@@ -12,6 +12,44 @@ marks references with retained originals or confirmed tombstones as resolved.
 Acquisition of remaining originals, edit projection, command retirement and Chat UI
 remain separate work.
 
+## Explicit SDK reopening
+
+`ReopenCollaborationHistory` prepares capacity for one known event anchor. The
+Android client retains up to 16 distinct room/anchor focuses, including uncertain
+attempts. A retained anchor or unused capacity returns `Available` without closing
+anything. Only a missing anchor at capacity requests complete client shutdown.
+The existing client-wide send-queue exclusion guards this request: an active or
+unfinished writer returns `client.collaboration_queue_busy`, leaving its owner in
+place. This also fences a new writer while history-driven shutdown starts.
+
+The common use case admits the live owner, company, registered platform device,
+direct conversation and room before preparation, before restore and after restore.
+Owner replacement, confirmed denial or a changed room prevents continuation. An
+empty protected record returns `SetupRequired`; it never creates another device or
+bootstraps keys. Failed or cancelled restoration retains the existing repository's
+cleanup ownership; a late acquired lease is closed in a non-cancellable block.
+Only an admitted restored lease remains registered. Repeated preparation against
+its fresh capacity is a no-op.
+
+Native shutdown pauses queues, stops synchronization, drains child owners and
+SDK stores, then releases the exclusive directory lock. The same protected record
+and store are restored paused. No original history, reference checkpoint, receipt
+or send intent is deleted, and this operation neither acquires another history
+page nor starts sync/delivery. A previously requested shutdown may finish on an
+explicit retry even when a retained queue child needs cleanup. A failed child
+close on an otherwise open runtime remains busy until its owner explicitly closes
+it; history recovery never forcibly takes an uncertain writer.
+
+[Validation](measurements/collaboration-history-reopening-2026-11-01.json) includes
+12 common-domain cases, four Android-host writer cases, a shared focus-readiness
+case and actual Android/HRIS run `e395fab292fd4d088cae138b4aaebd27` (35.536s case,
+cleanup true). Actual proof preserves keys/bootstrap, an original message, a paused
+sibling transaction and the encrypted reference checkpoint. A first bounded-close
+fixture failure and every corrected check are retained in that evidence.
+
+This is capacity preparation for subsequent admitted acquisition. Apple/web
+adapters, continuous product pagination and Chat UI remain separate work.
+
 ## Canonical identity and deletion
 
 `CollaborationHistoryChange.Text` carries an original decrypted event, its
@@ -91,7 +129,7 @@ Focused cache ownership has a separate [SDK lifetime limit](collaboration-sdk-hi
 The native SDK retains those caches after view disposal, so at most 16 distinct
 room/anchor keys may be created by one owned history runtime. Repeated keys remain
 readable; the limit fails before creating another native focus and does not erase
-local history. Continuous product paging and coordinated reopening are still pending.
+local history. Continuous product paging remains pending; explicit capacity preparation is described above.
 
 ## Latest visible event
 
@@ -218,8 +256,8 @@ verifies no reference is duplicated/reactivated, reopens the database and checks
 that another reconciliation remains a no-op. The server separately requires an
 unpositioned first and last metadata request, only positioned requests between
 them, and increasing successful HRIS admission around every request. This verifies
-explicit traversal restart; retirement of a real provider encryption key and
-coordinated SDK-client reopening remain separate recovery scenarios.
+explicit traversal restart; retirement of a real provider encryption key remains a
+separate recovery scenario. SDK capacity preparation is described above.
 
 ## Offline reference reconciliation
 

@@ -6,6 +6,19 @@ import kotlinx.coroutines.flow.StateFlow
 
 /** Store I/O and SDK ownership only. Use cases admit installation and live delivery separately. */
 interface CollaborationRuntimeRepository {
+    /**
+     * True means this owner has no open client and restore may follow fresh admission. False
+     * retains a client with capacity for this focus. History-initiated closing requires an idle
+     * queue writer; previously requested cleanup may finish. Never deletes stored facts, restores,
+     * bootstraps or retries. Unfinished cleanup stays owned.
+     */
+    suspend fun prepareHistoryReopen(
+        owner: CollaborationOwner,
+        deviceId: String,
+        matrixRoomId: String,
+        anchorEventId: String,
+    ): AppResult<Boolean>
+
     /** One bounded metadata page from the owned SDK identity; never advances its sync cursor. */
     suspend fun readProviderHistory(
         owner: CollaborationOwner,

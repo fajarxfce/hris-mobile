@@ -23,6 +23,17 @@ internal class AndroidCollaborationMessageQueues(
 ) {
     private val occupied = AtomicBoolean()
 
+    /** Uses the writer's own exclusion so a close cannot race a new or unfinished queue owner. */
+    suspend fun <T> whileWriterIdle(operation: suspend () -> AppResult<T>): AppResult<T> {
+        if (!occupied.compareAndSet(false, true))
+            return unavailable("client.collaboration_queue_busy")
+        return try {
+            operation()
+        } finally {
+            occupied.set(false)
+        }
+    }
+
     suspend fun acquire(roomId: String): AppResult<CollaborationMessageQueueLease> {
         failure()?.let {
             return AppResult.Failed(it)

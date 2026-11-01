@@ -5,6 +5,7 @@ import dev.fajar.starter.collaboration.data.di.androidCollaborationRuntimeReposi
 import dev.fajar.starter.collaboration.data.repositories.AndroidCollaborationRuntimeLease
 import dev.fajar.starter.collaboration.data.sdk.CollaborationSdkEndpoint
 import dev.fajar.starter.collaboration.domain.entities.*
+import dev.fajar.starter.collaboration.domain.repositories.CollaborationRuntimeRepository
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationTimelineLease
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.identity.domain.entities.IdentityServer
@@ -42,6 +43,9 @@ internal class ProtectedHrisProofOwner(
             CollaborationSdkEndpoint(home.toString(), allowCleartext = true),
             http,
         )
+
+    val repository: CollaborationRuntimeRepository
+        get() = runtime
 
     suspend fun enterTimeline(roomId: String): CollaborationTimelineLease {
         check(success(runtime.isOpen(owner, deviceId)))

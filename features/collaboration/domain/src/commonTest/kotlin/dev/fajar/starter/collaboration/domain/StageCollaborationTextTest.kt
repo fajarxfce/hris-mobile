@@ -335,6 +335,13 @@ private class StageFixture {
         }
     private val runtimes =
         object : CollaborationRuntimeRepository {
+            override suspend fun prepareHistoryReopen(
+                owner: CollaborationOwner,
+                deviceId: String,
+                matrixRoomId: String,
+                anchorEventId: String,
+            ): AppResult<Boolean> = error("No implicit history reopening")
+
             override suspend fun readProviderHistory(
                 owner: CollaborationOwner,
                 deviceId: String,

@@ -2,51 +2,58 @@
 
 ## Active collaboration implementation — 1 November 2026
 
-**Explicit provider-history restart now passes actual Android/HRIS recovery.**
-[Evidence](measurements/collaboration-history-restart-2026-11-01.json) records
-run **`76ab59a930e54bd3a3c9d612ebb21d7b`**, **46.693s case / 67.767s native suite /
-98s Gradle**, cleanup true. After offline resolution, the common acquisition use
-case requests latest again, preserves all pending/resolved reference identities,
-reopens the database and verifies another reconciliation changes nothing. Original
-bodies, encrypted exchange, process death and queue/receipt isolation still pass.
-The gateway independently requires unpositioned first/last metadata requests,
-positioned intermediate requests and increasing live admission around each one:
-**11/11/11 device/conversation/room reads, zero failures**.
+**Coordinated SDK reopening now passes actual Android/HRIS recovery.**
+[Evidence](measurements/collaboration-history-reopening-2026-11-01.json) records
+run **`e395fab292fd4d088cae138b4aaebd27`**, **35.536s case / 56.375s native suite /
+87s Gradle**, cleanup true. The fixture fills the 16-focus budget, proves that a
+real queue writer blocks history-driven close, then restores the protected client
+and verifies the same encryption keys/bootstrap, original message body, paused
+sibling transaction and encrypted reference checkpoint. Live admission is
+**17/17/17 device/conversation/room reads, zero failures**. The new
+`historyRuntimeReopened` Boolean is mandatory across Android, Python and server.
 
-`CollaborationHistoryPageOrigin.SavedPosition` remains the default and never resets
-a failed or exhausted traversal automatically. Explicit `Latest` omits the old
-provider position while still authenticating retained local progress. It writes
-no intermediate cursor clear: the admitted new page and position commit together
-against the exact previous generation/revision. Unseen references, resolved flags,
-first sequences and keyed identities remain; only new identities increase the total.
-A failed/cancelled request retains old progress; a lost committed response retains
-the complete new batch. Concurrent resolution/acquisition can win the checkpoint;
-the loser reports conflict without retry. SDK keys, queues and sync cursors remain
-outside this operation. Actual retirement of a server cursor-encryption key is a
-separate scenario from this demonstrated explicit restart.
+`ReopenCollaborationHistory` admits the owner/device/direct room before preparation,
+before restore and after restore. `Available` leaves a retained focus or spare
+capacity untouched; `SetupRequired` never enrolls a new identity. A late denied,
+replaced or cancelled restored lease closes. The native operation shares the
+client-wide writer exclusion with message queues. An active/unfinished writer
+stays owned; already-requested parent cleanup can finish. No original, reference,
+intent or receipt is erased, and no history read, sync start or delivery is implicit.
+The repository retains clients; application lifetime only closes obsolete owners.
 
-Four new domain cases and four shared SQLite/IndexedDB cases pass. The first
-focused command failed test compilation in **33s** because two assertions lacked
-explicit nullable list types; that attempt is retained in the measurement. Corrected
-focused checks pass in **137s**. Full root/browser/Android/Wasm/proof/lint passes
-in **230s**: **2,453 desktop / 156 Android host / 235 domain browser / 192 data
-browser**, zero failures/errors/skips and zero lint errors. Platform fixture/quality
-passes in **30s**; 35 Python driver cases pass. All **266 Mobile / 33 Platform
-source hashes** match. Dev APK **`1ad5a772`** is built, not installed; actual proof
-uses **`50845d89`**. The dedicated emulator is stopped.
+Twelve new common-domain cases, four Android-host cases and one common focus case
+pass. Initial focused attempts exposed two assertion type issues, a cleanup-wait
+fixture assumption and a function-length check; all are preserved in the evidence.
+Corrected focused checks pass in **50s**. The first actual run stopped at a bounded
+close; the corrected fixture permits at most six explicit common requests, only
+for `close_pending`. Its corrected proof build/quality passes in **51s**. This is
+fixture-only retry; the product operation never loops. Full root/browser/Android/
+Wasm/proof/lint passes in **231s**: **2,466 desktop / 161 Android host / 247 domain
+browser / 193 data browser**, zero failures/errors/skips and zero lint errors.
+Platform fixture/quality passes in **28s**; 35 Python cases pass. All **272 Mobile /
+33 Platform source hashes** match. Dev APK **`b437c344`** is built, not installed;
+actual proof uses **`e693f636`**. Dedicated emulator stopped; no live/phone change.
 
-**Next: coordinated SDK reopening at its 16 retained focus-key limit, then
-ACK-before-journal recovery, command retirement and Chat UI.** Preserve SDK keys,
-queues, original transactions and sync/history progress. Do not interrupt an active
-command writer to reclaim history caches. The repository retains runtimes; the
-application lifetime only closes obsolete owners. Existing client-wide writer
-exclusion in `AndroidCollaborationMessageQueues` and complete shutdown/store unlock
-ordering must guard reopening, with owner/admission rechecks between close and
-restore and cleanup on late denial/cancellation. No SDK reopening is implemented
-yet. Continue all P0–P8 and all 54 groups; **none is accepted**. Apple/web owned
-adapters, interoperability, backup, rich messaging and every call/meeting phase
-remain. Physical iPhone testing is waived; Apple implementation remains required.
-Starter stays clean at `36116b2`; this HRIS-specific increment has no generic port.
+**Next: ACK-before-journal recovery, command retirement and Chat UI, then all
+P0–P8. None of the 54 groups is accepted.** Original history already indexes exact
+sender/logical ID and canonical full-content hashes. Do not infer ACK from a missing
+native transaction or matching text alone. Current queue sending calls the SDK's
+Markdown constructor, which may add formatted content: recovery needs a trusted
+sender binding and the exact original payload identity before enqueue, not a body-
+only hash. Inspect the pinned SDK content factory and preserve uncertain old work.
+The SDK reopening scenario preserves stores but does not compare a newly synchronized
+cursor after reopening; earlier process-death/429 cursor proof remains separate.
+Apple/web owned adapters, interoperability, backup, rich messages and every call/
+meeting phase remain. Physical iPhone testing is waived; Apple implementation is
+required. Starter stays at `36116b2`; this HRIS-specific increment has no generic port.
+
+Additional predecessor audits are recorded independently. Common acquisition control
+**`41287684753`** at `0cb6509a` passes all 28 steps, **421 desktop / 397 browser /
+342 iOS simulator** cases and Xcode build, with 256 immutable hashes matched.
+Explicit restart HRIS **`41290902971`** at `388d0534` passes all 17 steps and run
+`8f5ec0ad` (**33.788s case / 71.175s suite**), cleanup true, 11/11/11 admissions,
+156 host cases and 266 Mobile/33 Platform hashes matched. Resolution control
+`41289463827` was superseded while pending; it is not claimed as passed.
 
 New predecessor audits are recorded separately. Traversal control **`41286066709`**
 at `e992a053` passes all 28 steps, **407 desktop / 383 browser / 328 iOS simulator**

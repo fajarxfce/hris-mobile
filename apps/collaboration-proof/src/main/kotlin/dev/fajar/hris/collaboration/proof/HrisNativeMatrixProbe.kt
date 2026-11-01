@@ -73,50 +73,71 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
                         fixture.getString("conversationId"),
                         fixture.getJSONObject("sender").getString("hrisAccessToken"),
                     )
-                if (resuming)
-                    resume(
-                        fixture,
-                        sender,
-                        recipient,
-                        senderRoom,
-                        recipientRoom,
-                        pending,
-                        senderTimeline,
-                        recipientTimeline,
-                        productQueue,
-                        held,
-                    )
-                else stage(fixture, sender, recipient, pending, productQueue, held)
-            } finally {
-                withContext(NonCancellable) {
-                    // Attempt every owned cleanup even if another owner fails or exceeds its wait.
-                    var first: Exception? = null
-                    val operations: List<suspend () -> Unit> =
-                        listOf(
-                            { pending?.close() },
-                            { productQueue?.close() },
-                            { senderRoom?.close() },
-                            { recipientRoom?.close() },
-                            { sender?.closeProofRuntime() },
-                            { recipient?.closeProofRuntime() },
-                            { http.cancelAndClose() },
+                if (resuming) {
+                    val result =
+                        resume(
+                            fixture,
+                            sender,
+                            recipient,
+                            senderRoom,
+                            recipientRoom,
+                            pending,
+                            senderTimeline,
+                            recipientTimeline,
+                            productQueue,
+                            held,
                         )
-                    for (operation in operations) try {
-                        operation()
-                    } catch (failure: Exception) {
-                        if (first == null) first = failure else first.addSuppressed(failure)
-                    }
-                    first?.let { throw it }
-                }
-            }
-            for (timeline in listOfNotNull(senderTimeline, recipientTimeline)) {
-                val ended = timeline.updates.first()
-                check(
-                    ended is AppResult.Failed &&
-                        ended.failure.code == "client.collaboration_timeline_closed"
+                    pending.close()
+                    pending = null
+                    senderRoom.close()
+                    senderRoom = null
+                    check(senderTimeline.close() is AppResult.Success)
+                    productQueue.reopenHistory(
+                        senderOwner.repository,
+                        result.getString("senderEventId"),
+                        body(fixture, "body"),
+                        fixture.getString("heldRoomId"),
+                        held.transaction,
+                    )
+                    write("gateway-result", result.put("historyRuntimeReopened", true))
+                } else stage(fixture, sender, recipient, pending, productQueue, held)
+            } finally {
+                closeProofOwners(
+                    listOf(
+                        { pending?.close() },
+                        { productQueue?.close() },
+                        { senderRoom?.close() },
+                        { recipientRoom?.close() },
+                        { sender?.closeProofRuntime() },
+                        { recipient?.closeProofRuntime() },
+                        { http.cancelAndClose() },
+                    )
                 )
             }
+            verifyClosedTimelines(listOfNotNull(senderTimeline, recipientTimeline))
         }
+
+    private suspend fun closeProofOwners(operations: List<suspend () -> Unit>) =
+        withContext(NonCancellable) {
+            // Every owner gets a cleanup attempt even after another owner fails or times out.
+            var first: Exception? = null
+            for (operation in operations) try {
+                operation()
+            } catch (failure: Exception) {
+                if (first == null) first = failure else first.addSuppressed(failure)
+            }
+            first?.let { throw it }
+        }
+
+    private suspend fun verifyClosedTimelines(timelines: List<CollaborationTimelineLease>) {
+        for (timeline in timelines) {
+            val ended = timeline.updates.first()
+            check(
+                ended is AppResult.Failed &&
+                    ended.failure.code == "client.collaboration_timeline_closed"
+            )
+        }
+    }
 
     private fun readFixture(resuming: Boolean): Pair<JSONObject, URI> {
         val fixture = read("gateway-fixture", 16_384)
@@ -181,7 +202,7 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
         recipientTimeline: CollaborationTimelineLease,
         productQueue: HrisProductQueueProof,
         held: HrisProofHeldQueue,
-    ) {
+    ): JSONObject {
         val staged = read("gateway-staged", 4096)
         for (name in protectedFlagNames) check(staged.get(name) == true)
         check(staged.getInt("processId") != Process.myPid())
@@ -191,7 +212,11 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
         productQueue.recover(logicalId(fixture, "logicalId"), body(fixture, "body"), expected)
         check(pending.retainedTransaction() == expected)
         pending.checkPaused()
-        HrisProofMessages(recipientRoom, body(fixture, "body"), logicalId(fixture, "logicalId"))
+        return HrisProofMessages(
+                recipientRoom,
+                body(fixture, "body"),
+                logicalId(fixture, "logicalId"),
+            )
             .use { incoming ->
                 HrisProofMessages(senderRoom, body(fixture, "reply"), logicalId(fixture, "replyId"))
                     .use { returning ->
@@ -244,32 +269,29 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
                             body(fixture, "reply"),
                             logicalId(fixture, "replyId"),
                         )
-                        write(
-                            "gateway-result",
-                            protectedFlags(JSONObject())
-                                .put("encryptedBothDirections", true)
-                                .put("logicalIdsPreserved", true)
-                                .put("queueRestored", true)
-                                .put("ownedTimelineObserved", true)
-                                .put("transactionReused", true)
-                                .put("identityAfterRestart", true)
-                                .put("messageIntentRestored", true)
-                                .put("queueMappingRecovered", true)
-                                .put("queueWriterExclusive", true)
-                                .put("perRoomDeliveryIsolated", true)
-                                .put("heldQueueRestored", true)
-                                .put("nativeDeliveryOwned", true)
-                                .put("commonSenderOwned", true)
-                                .put("receiptJournalRecovered", true)
-                                .put("projectionInterrupted", true)
-                                .withHistoryEvidence(history)
-                                .put("senderEventId", sent.eventId)
-                                .put("recipientEventId", answered.eventId)
-                                .put("senderTransaction", sent.transactionId)
-                                .put("recipientTransaction", answered.transactionId)
-                                .put("processId", Process.myPid())
-                                .put("syncMode", "classic"),
-                        )
+                        protectedFlags(JSONObject())
+                            .put("encryptedBothDirections", true)
+                            .put("logicalIdsPreserved", true)
+                            .put("queueRestored", true)
+                            .put("ownedTimelineObserved", true)
+                            .put("transactionReused", true)
+                            .put("identityAfterRestart", true)
+                            .put("messageIntentRestored", true)
+                            .put("queueMappingRecovered", true)
+                            .put("queueWriterExclusive", true)
+                            .put("perRoomDeliveryIsolated", true)
+                            .put("heldQueueRestored", true)
+                            .put("nativeDeliveryOwned", true)
+                            .put("commonSenderOwned", true)
+                            .put("receiptJournalRecovered", true)
+                            .put("projectionInterrupted", true)
+                            .withHistoryEvidence(history)
+                            .put("senderEventId", sent.eventId)
+                            .put("recipientEventId", answered.eventId)
+                            .put("senderTransaction", sent.transactionId)
+                            .put("recipientTransaction", answered.transactionId)
+                            .put("processId", Process.myPid())
+                            .put("syncMode", "classic")
                     }
             }
     }

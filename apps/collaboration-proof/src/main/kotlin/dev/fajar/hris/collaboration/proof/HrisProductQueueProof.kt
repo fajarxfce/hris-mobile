@@ -12,6 +12,7 @@ import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.policies.recoverCollaborationQueue
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationMessageQueueLease
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationMessageRepository
+import dev.fajar.starter.collaboration.domain.repositories.CollaborationRuntimeRepository
 import dev.fajar.starter.collaboration.domain.usecases.AcquireCollaborationHistory
 import dev.fajar.starter.collaboration.domain.usecases.AcquireCollaborationProviderHistory
 import dev.fajar.starter.collaboration.domain.usecases.DeliverCollaborationMessages
@@ -270,6 +271,33 @@ internal class HrisProductQueueProof(
             .put("providerHistoryReferencesRestored", true)
             .put("providerHistoryReferencesReconciled", true)
             .put("providerHistoryRestartPreserved", true)
+    }
+
+    suspend fun reopenHistory(
+        repository: CollaborationRuntimeRepository,
+        anchor: String,
+        text: String,
+        heldRoom: String,
+        heldTransaction: String,
+    ) {
+        check(writer == null)
+        val retained = readProviderReferences()
+        HrisProofHistoryReopening(
+                repository,
+                runtime,
+                roomId,
+                conversationId,
+                requireNotNull(application),
+                listRepository(),
+            )
+            .verify(anchor, text, heldRoom, heldTransaction)
+        reopenDatabase()
+        check(readProviderReferences() == retained)
+        check(
+            reconcileProviderReferences() ==
+                CollaborationHistoryReconciliation(0, retained.events.size, null)
+        )
+        check(readProviderReferences() == retained)
     }
 
     private suspend fun reconcileProviderReferences(): CollaborationHistoryReconciliation {

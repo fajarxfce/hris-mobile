@@ -543,5 +543,51 @@
     "testCaseSeconds": 64.697,
     "testSuiteSeconds": 110.278,
     "scope": "Validates common admitted page acquisition and encrypted reference recovery at 0cb6509a. Offline original-reference resolution has later separate evidence."
+  },
+  "hostedControl": {
+    "run": "https://github.com/fajarxfce/hris-mobile/actions/runs/41287684753",
+    "commit": "0cb6509a3d3e535afc238e45aa03c86f8742417f",
+    "result": "success",
+    "jobs": [
+      {
+        "name": "portable",
+        "conclusion": "success",
+        "steps": 15,
+        "nonPassingSteps": []
+      },
+      {
+        "name": "apple",
+        "conclusion": "success",
+        "steps": 13,
+        "nonPassingSteps": []
+      }
+    ],
+    "tests": {
+      "iosSimulatorArm64Test": {
+        "suites": 39,
+        "tests": 342,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "desktopTest": {
+        "suites": 48,
+        "tests": 421,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "wasmJsBrowserTest": {
+        "suites": 44,
+        "tests": 397,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "immutableSourceHashesMatched": 256,
+    "sourceManifestUploaded": false,
+    "xcodeAppHostBuildSuccesses": 1,
+    "scope": "Validates common provider-history acquisition at 0cb6509a. Later reference reconciliation, explicit restart and SDK reopening have separate evidence."
   }
 }
