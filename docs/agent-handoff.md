@@ -25,9 +25,10 @@ invokes the worker directly; it does not accept platform scheduling or automatic
 after force-stop. `.work/workmanager-native-next.md` and `.work/scheduled-proof-draft/*.txt`
 are unimplemented design/drafts for a normal proof Activity, actual Android scheduler,
 offline constraints, ordinary PID death and OS job startup. Do not count those as tests.
-After the Platform fixture commit is pushed, apply `.work/collaboration-hris-worker-ci.txt`
-with that pinned SHA and audit its hosted run; the existing workflow runs only the old
-scenario. Remote history, drafts/cancel, push/reply, media/actions, key continuity/backups,
+The native HRIS workflow now pins Platform `784fc9113a4f09fd1ed9bff7541479088263aca5` and runs both
+SDK/sender and application-worker scenarios. It also triggers on apps.shared changes and
+uploads only bounded evidence, never fixture credentials. YAML/target/artifact checks pass;
+audit the hosted run after push before claiming CI acceptance. Remote history, drafts/cancel, push/reply, media/actions, key continuity/backups,
 Apple/web, calls and meetings remain. No complete PRD group is accepted; Starter unchanged.
 
 User additionally requested progress builds installed while the long run continues.

@@ -62,3 +62,8 @@ Continue real WorkManager lifecycle evidence, then remote history, durable draft
 safe pending cancellation, incoming FCM/inline replies, groups/media/actions, key
 continuity/backups, Apple/web adapters, calls and meetings. Keep each accepted boundary
 separate from the remaining product acceptance criteria.
+
+The native HRIS CI workflow pins Platform `784fc9113a4f09fd1ed9bff7541479088263aca5`, executes both scenarios
+on the owned emulator and uploads their bounded result/checkpoint/trace/XML evidence.
+Changes in apps.shared now trigger the workflow. Local native results above remain
+separate from hosted acceptance; audit the matching commit's run/artifacts after push.
