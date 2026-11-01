@@ -8,6 +8,7 @@ import dev.fajar.starter.collaboration.data.sdk.CollaborationSdkEndpoint
 import dev.fajar.starter.identity.domain.entities.IdentityServer
 import dev.fajar.starter.securestorage.AesGcmContentCipher
 import dev.fajar.starter.securestorage.AndroidCredentialStore
+import io.ktor.client.HttpClient
 import java.io.File
 
 /** Application composition owns this repository once per process, never an Activity. */
@@ -15,6 +16,7 @@ fun androidCollaborationRuntimeRepository(
     context: Context,
     server: IdentityServer,
     endpoint: CollaborationSdkEndpoint,
+    http: HttpClient,
 ): AndroidCollaborationRuntimeRepository {
     val application = context.applicationContext
     return AndroidCollaborationRuntimeRepository(
@@ -25,5 +27,6 @@ fun androidCollaborationRuntimeRepository(
         cipher = AesGcmContentCipher(),
         server = server,
         endpoint = endpoint,
+        http = http,
     )
 }

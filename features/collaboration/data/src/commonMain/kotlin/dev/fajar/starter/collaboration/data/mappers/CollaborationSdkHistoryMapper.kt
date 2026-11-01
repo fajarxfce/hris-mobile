@@ -67,7 +67,7 @@ private fun canonicalHistoryContent(value: JsonElement): JsonElement =
     }
 
 /** Bound nesting before the JSON parser or canonicalizer can recurse into untrusted content. */
-private fun validateHistoryJsonDepth(value: String) {
+internal fun validateHistoryJsonDepth(value: String) {
     var depth = 0
     var quoted = false
     var escaped = false

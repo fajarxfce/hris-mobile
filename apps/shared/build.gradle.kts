@@ -30,7 +30,7 @@ kotlin.sourceSets {
         api(projects.core.common)
         api(projects.core.securestorage)
         api(projects.core.observability)
-        implementation(projects.core.network)
+        api(projects.core.network)
         implementation(projects.core.identity.domain)
         implementation(projects.core.identity.data)
         implementation(projects.core.workspace.data)

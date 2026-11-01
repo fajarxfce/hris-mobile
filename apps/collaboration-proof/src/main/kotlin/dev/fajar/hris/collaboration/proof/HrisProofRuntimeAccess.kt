@@ -9,8 +9,28 @@ import dev.fajar.starter.common.result.*
 /** Borrows the already protected fixture runtime. Its outer owner still owns full shutdown. */
 internal class HrisProofRuntimeAccess(private val runtime: AndroidCollaborationRuntimeLease) :
     CollaborationRuntimeRepository {
+    var historyHead: String? = null
+        private set
+
     var historyWindow: AndroidCollaborationHistoryWindow? = null
         private set
+
+    override suspend fun findHistoryHead(
+        owner: CollaborationOwner,
+        deviceId: String,
+        matrixRoomId: String,
+    ): AppResult<CollaborationHistoryHead> {
+        check(owner == runtime.owner && deviceId == runtime.deviceId)
+        return when (val result = runtime.findHistoryHead(matrixRoomId)) {
+            is AppResult.Failed -> result
+            is AppResult.Success -> {
+                historyHead = result.value
+                AppResult.Success(
+                    CollaborationHistoryHead(owner, deviceId, matrixRoomId, result.value)
+                )
+            }
+        }
+    }
 
     override suspend fun readOriginalHistory(
         owner: CollaborationOwner,

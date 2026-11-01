@@ -28,12 +28,12 @@ class AcquireCollaborationHistory(
         workspaceId: String,
         deviceId: String,
         conversationId: String,
-        anchorEventId: String,
+        anchorEventId: String? = null,
     ): AppResult<CollaborationHistoryAcquisition> {
         if (
             !validCollaborationMessageId(deviceId) ||
                 !validCollaborationMessageId(conversationId) ||
-                !validCollaborationEventId(anchorEventId)
+                (anchorEventId != null && !validCollaborationEventId(anchorEventId))
         )
             return failed("client.collaboration_invalid_history", FailureKind.Validation)
         val captured = capture(workspaceId)
@@ -43,7 +43,35 @@ class AcquireCollaborationHistory(
         val admitted = admitRoom(workspaceId, owner, deviceId, conversationId)
         if (admitted is AppResult.Failed) return admitted
         val roomId = (admitted as AppResult.Success).value
-        val received = runtimes.readOriginalHistory(owner, deviceId, roomId, anchorEventId)
+        val anchor =
+            if (anchorEventId != null) anchorEventId
+            else {
+                val found = runtimes.findHistoryHead(owner, deviceId, roomId)
+                continuation(workspaceId, owner, found).let {
+                    if (it is AppResult.Failed) return it
+                }
+                if (found is AppResult.Failed) return found
+                val head = (found as AppResult.Success).value
+                if (
+                    head.owner != owner ||
+                        head.deviceId != deviceId ||
+                        head.roomId != roomId ||
+                        (head.eventId != null && !validCollaborationEventId(head.eventId))
+                )
+                    return failed("client.collaboration_invalid_history_head")
+                if (head.eventId == null) {
+                    val emptyAdmission = admitRoom(workspaceId, owner, deviceId, conversationId)
+                    if (emptyAdmission is AppResult.Failed) return emptyAdmission
+                    if ((emptyAdmission as AppResult.Success).value != roomId)
+                        return failed(
+                            "client.collaboration_conversation_mismatch",
+                            FailureKind.AccessDenied,
+                        )
+                    return AppResult.Success(CollaborationHistoryAcquisition(0, 0))
+                }
+                head.eventId
+            }
+        val received = runtimes.readOriginalHistory(owner, deviceId, roomId, anchor)
         // Detach bounded input before another repository can suspend or mutate its source.
         val snapshot =
             (received as? AppResult.Success)?.value?.let {
@@ -58,7 +86,7 @@ class AcquireCollaborationHistory(
         if (received is AppResult.Failed) return received
         if (
             snapshot == null ||
-                !validCollaborationOriginalWindow(snapshot, owner, deviceId, roomId, anchorEventId)
+                !validCollaborationOriginalWindow(snapshot, owner, deviceId, roomId, anchor)
         )
             return failed("client.collaboration_invalid_history_window")
         val readmitted = admitRoom(workspaceId, owner, deviceId, conversationId)

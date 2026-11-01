@@ -2,70 +2,69 @@
 
 ## Active collaboration implementation — 1 November 2026
 
-**Common live-admitted original-history acquisition is implemented and proved
-through real HRIS APIs and the Android SDK.** [Evidence](measurements/collaboration-history-acquisition-2026-11-01.json)
-records final run **`28029aeb24b04618a8c88a023161eab4`**, **35.719s test case /
-57.460s native suite / 92s Gradle**, cleanup complete. The server records
-**5 device / 5 conversation / 5 room admissions, zero failures**, with counters
-captured at the context request proving fresh admission afterward too. The common
-use case must store both originals before verification; the fixture no longer
-performs the initial merge itself. Exact bodies/event/logical indexes reopen from
-actual encrypted storage and later replay leaves the same page.
+**Latest-event discovery now feeds common original-history acquisition, proved
+through the actual Android SDK and HRIS gateway.** [Evidence](measurements/collaboration-history-head-2026-11-01.json)
+records run **`de144a6572dd4705b6fd608f0cb2a229`**, **24.794s test case /
+45.579s native suite / 75s Gradle**, cleanup complete. The fixture omits the
+anchor, requires the head to equal the newest encrypted reply, restores both
+originals from encrypted storage, and proves exactly one unpositioned
+`/messages?dir=b&limit=1` request with **5/5/5 HRIS admissions, zero failures**.
 
-`AcquireCollaborationHistory` requires a known event anchor and an installed
-runtime/known encrypted room. It binds returned owner/device/room/anchor, detaches
-collections before suspension and validates all events before writing. At most
-128 combined entries enter 1–16-event atomic batches. Later conflicts, cancellation
-or uncertain responses preserve earlier acquired facts; no implicit retry or
-provider cursor advancement occurs. Known company/session denial survives failed
-restriction persistence. Recipient failure does not close all company history.
-The report counts acquired event facts; its unresolved entries can include state
-events and must not be labelled unreadable messages in UI.
+The runtime borrows the application's public HTTP pool and reads the current SDK
+session only after its request child is registered. User/device/homeserver match
+the retained identity; the configured gateway determines the destination. Caller
+or parent cancellation stops the request without closing the shared pool. Bodies
+are bounded to 256 KiB (errors 16 KiB), strict UTF-8 and depth 16; only one valid
+opaque event ID escapes. Empty/unsupported heads do not clear history or certify
+its end. No extra SDK, crypto store, cursor, credential renewal or message retry
+owner is added. Seven common admission cases, six portable transport/mapping
+cases and four Android lifecycle cases cover the change.
 
-Fourteen common acquisition tests cover pre/late denial, owner replacement,
-changed room, cancelled SDK work, partial commits, lost responses, immutable
-input, malformed windows and unsupported anchors. Android decoding/hashing now
-runs on `Dispatchers.Default` within the caller's structured operation. An eighth
-Android window case verifies cleanup while decoding waits in a held dispatcher.
-No extra SDK client, restore, join, sync producer or send-queue owner is added.
+Matrix token rejection cannot distinguish ordinary expiry from HRIS revocation.
+SDK Unauthorized still fails live operations, but no longer persists a company
+read restriction. HRIS control denials continue to gate acquired history and
+pending commands. Only admitted company-summary acquisition reopens that gate.
 
-Full application checks pass in **255s**: **2,375 desktop / 130 Android host /
-198 domain-browser / 151 data-browser** cases, zero failures/errors/skips
-and zero lint errors. All **227 Mobile / 33 Platform source hashes** match.
-Server fixture/quality checks pass in 39s and all 35 Python driver cases pass.
-Dev APK **`d88fd1d5`** is built, not installed.
+Corrected full checks pass in **103s**: **2,388 desktop / 140 Android host /
+205 domain-browser / 157 data-browser** cases, zero failures/errors/skips and
+zero application/proof lint errors. Server fixture/quality checks pass in **38s**;
+all **35 driver cases** pass. All **235 Mobile / 33 Platform source hashes** match
+before/after. Dev APK **`506b96ba`** is built, not installed; proof APK **`a26ebcf5`**
+is the one actually tested. The dedicated emulator is stopped.
 
-Platform **`24e893777e4e4cb9f0ffd7b4c0e2d607f105256f`** is pushed; the HRIS CI
-workflow pins its common-acquisition and before/after admission assertions.
+The first focused command passed new behavior tests and APK creation but failed
+Detekt's 100-line fixture limit (93s); history evidence composition was extracted.
+The first full command passed desktop/browser/quality checks but Android host
+compilation found the public `HttpClient` dependency missing from the host classpath
+(238s); app composition now exports `core.network`. A first Python invocation used
+the wrong module import path; corrected discovery passed. All attempts are retained,
+not presented as successful commands. Native diagnostic extraction measured 9.038ms;
+network/decoding/hash/database latency and native-cache allocation are outside that
+metric. There is no large-room memory or capacity acceptance.
 
-Initial common proof **`a268b22bd45c41ec9a96bdee857987ab`** passed in 107s before
-background decoding. Initial focused/domain checks passed in 87s and APK checks
-in 92s. One worker-check command was deliberately stopped to replace an invalid
-two-test-scheduler fixture; it is not a passing result. Corrected worker/host/APK/
-quality checks passed in 120s. Both actual runs and all source revisions are
-retained. The final fixture measured 10.017 ms for native diagnostic extraction,
-not network/decode/hash/database latency. Native diagnostic/cache allocation still
-precedes app bounds; there is no large-room memory or capacity acceptance.
+Hosted predecessor audits are now recorded: original-window control **`41277971067`**
+at **`5b5cbc73`** passed all 28 steps, **359 desktop / 335 browser / 291 iOS simulator**
+cases and actual Xcode build, with **223 immutable source hashes** matched. Common
+acquisition HRIS **`41279620656`** at **`79028f26`** passed all 17 steps, 130 Android
+host cases and actual native suite 63.208s; all 227 Mobile/33 Platform hashes match.
+Its encrypted run `06cf785c` cleaned up. These predecessors do not validate this
+new head adapter; audit this increment's own hosted CI after push.
 
-**Continue P0–P8; none of 54 complete groups is accepted. Next implement head
-discovery and bounded provider progress, ACK-before-journal reconciliation and
-command retirement, then Chat list/setup/conversation UI.** Preserve original
-native transactions, unresolved events, original-content fingerprints and aliases.
-Do not infer success from absent queue IDs or lose SDK crypto stores/cursors.
-Apple/web owned content adapters, backup, rich messaging and all call/meeting
-phases remain. The physical iPhone test is waived; Apple implementation and
-interoperability are still required.
+**Continue P0–P8; none of 54 complete groups is accepted. Next implement bounded
+provider history progress, ACK-before-journal reconciliation and command retirement,
+then Chat list/setup/conversation UI.** Preserve unresolved events, original-content
+fingerprints, aliases, original native transactions, SDK crypto stores and cursors.
+Do not infer success from absent queue IDs. Apple/web owned content adapters,
+bootstrap/cross-family recovery, backup, rich messaging and all call/meeting phases
+remain. Physical iPhone testing is waived; Apple implementation/interoperability
+is still required. Starter remains clean at `36116b2`; this HRIS composition,
+provider adapter and policy change requires no reusable foundation port.
 
-Canonical-storage CI **`41274726910`** at **`ad0848e6`** is now fully audited:
-all 28 steps, 352 portable desktop / 328 browser / **284 iOS simulator** cases,
-actual **Xcode app-host build**, and 207 recorded source hashes matched immutable
-Git blobs. See its history measurement. This predecessor does not validate the
-later window or this acquisition increment; audit their own hosted CI separately.
+Platform **`7626d684181af320d5d26a02e0afaeb74625bd65`** is pushed; the HRIS workflow
+pins its strict latest-head and before/after admission assertions.
 
-The dedicated emulator is stopped. No live/schema/phone change. Starter is clean
-at `36116b2`; these HRIS policies/adapters require no generic port. Atomic commits
-and a push after every commit remain authorized. Continue after this checkpoint;
-the chat/calls/meetings implementation is not complete.
+No live/schema/phone change. Atomic commits and a push after every commit remain
+authorized. Continue after this checkpoint; the user requested the whole plan.
 
 [Earlier November detail](collaboration-implementation-history-2026-11-01.md)
 

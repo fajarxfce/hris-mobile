@@ -443,5 +443,52 @@
   },
   "androidLintErrors": 0,
   "sourceManifestMatched": true,
-  "devApkSha256": "6cf0338f692c9caeec6cff4111c232dfc137e0e859548c2c0796638d23557c51"
+  "devApkSha256": "6cf0338f692c9caeec6cff4111c232dfc137e0e859548c2c0796638d23557c51",
+  "hostedControl": {
+    "run": "https://github.com/fajarxfce/hris-mobile/actions/runs/41277971067",
+    "commit": "5b5cbc7396bdc78616b7229cb842b1be519297a5",
+    "result": "success",
+    "jobs": [
+      {
+        "name": "portable",
+        "conclusion": "success",
+        "steps": 15,
+        "nonPassingSteps": []
+      },
+      {
+        "name": "apple",
+        "conclusion": "success",
+        "steps": 13,
+        "nonPassingSteps": []
+      }
+    ],
+    "tests": {
+      "desktopTest": {
+        "suites": 42,
+        "tests": 359,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "wasmJsBrowserTest": {
+        "suites": 38,
+        "tests": 335,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "iosSimulatorArm64Test": {
+        "suites": 34,
+        "tests": 291,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "immutableSourceHashesMatched": 223,
+    "mismatches": [],
+    "sourceManifestUploaded": false,
+    "xcodeBuildSucceeded": 1,
+    "scope": "Validates this recorded predecessor only; later head-discovery changes require their own checks."
+  }
 }

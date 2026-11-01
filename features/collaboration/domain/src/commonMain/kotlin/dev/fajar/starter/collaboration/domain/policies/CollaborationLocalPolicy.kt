@@ -47,9 +47,10 @@ fun collaborationLocalAccess(
 fun CollaborationOwner.localListAccess() =
     CollaborationLocalAccess(sessionId, audience, accountId, companyId)
 
-/** Content operations distinguish company/session denial from a single unavailable recipient. */
+/** SDK token expiry stops transport; only HRIS admission confirms a company/session restriction. */
 fun collaborationContentResponseClosesRead(failure: Failure) =
-    failure.kind == FailureKind.Unauthorized ||
+    (failure.kind == FailureKind.Unauthorized &&
+        failure.code != "client.collaboration_sdk_unauthorized") ||
         failure.code in workspaceAccessLossCodes ||
         failure.code in
             setOf(

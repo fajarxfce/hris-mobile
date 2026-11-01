@@ -64,6 +64,7 @@ import dev.fajar.starter.workforce.data.di.WorkforceDataModule
 import dev.fajar.starter.workforce.presentation.di.WorkforcePresentationModule
 import dev.fajar.starter.workspace.data.di.WorkspaceDataModule
 import dev.fajar.starter.workspace.presentation.di.WorkspacePresentationModule
+import io.ktor.client.HttpClient
 import org.koin.core.module.Module
 import org.koin.core.qualifier.named
 import org.koin.dsl.koinApplication
@@ -109,7 +110,7 @@ fun createAppContainer(
     fileInputs: FileInputSource = UnavailableFileInputSource(),
     fileOutputs: FileOutputSource = UnavailableFileOutputSource(),
     http: Module? = null,
-    collaborationRuntime: (IdentityServer) -> CollaborationRuntimeRepository = {
+    collaborationRuntime: (IdentityServer, HttpClient) -> CollaborationRuntimeRepository = { _, _ ->
         UnavailableCollaborationRuntimeRepository()
     },
 ) = koinApplication {

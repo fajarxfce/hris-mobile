@@ -303,6 +303,12 @@ private class EntryFixture {
     var result: suspend () -> AppResult<CollaborationTimelineLease> = { AppResult.Success(lease) }
     private val runtime =
         object : CollaborationRuntimeRepository {
+            override suspend fun findHistoryHead(
+                owner: CollaborationOwner,
+                deviceId: String,
+                matrixRoomId: String,
+            ): AppResult<CollaborationHistoryHead> = error("No implicit history head lookup")
+
             override suspend fun readOriginalHistory(
                 owner: CollaborationOwner,
                 deviceId: String,

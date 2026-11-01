@@ -500,5 +500,95 @@
   },
   "androidLintErrors": 0,
   "sourceManifestMatched": true,
-  "devApkSha256": "d88fd1d591d1a15656b6826ed0b7fffd9a533675b89193b29649a2fb29be5844"
+  "devApkSha256": "d88fd1d591d1a15656b6826ed0b7fffd9a533675b89193b29649a2fb29be5844",
+  "hostedHris": {
+    "run": "https://github.com/fajarxfce/hris-mobile/actions/runs/41279620656",
+    "commit": "79028f26462364e4a445fa906ed4bd1f47b2aad0",
+    "result": "success",
+    "jobs": [
+      {
+        "name": "android-hris",
+        "conclusion": "success",
+        "steps": 17,
+        "nonPassingSteps": []
+      }
+    ],
+    "tests": {
+      "testAndroidHostTest": {
+        "suites": 21,
+        "tests": 130,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "test": {
+        "suites": 1,
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "immutableSourceHashesMatched": 227,
+    "mismatches": [],
+    "sourceManifestUploaded": false,
+    "actualSdk": {
+      "passed": true,
+      "encryptedBothDirections": true,
+      "logicalIdsPreserved": true,
+      "cleanup": true,
+      "protectedStoreReopened": true,
+      "missingRecordPreserved": true,
+      "wrongPassphrasePreserved": true,
+      "exclusiveOwner": true,
+      "processRestarted": true,
+      "queueRestored": true,
+      "transactionReused": true,
+      "identityAfterRestart": true,
+      "messageIntentRestored": true,
+      "queueMappingRecovered": true,
+      "queueWriterExclusive": true,
+      "perRoomDeliveryIsolated": true,
+      "heldQueueRestored": true,
+      "nativeDeliveryOwned": true,
+      "commonSenderOwned": true,
+      "receiptJournalRecovered": true,
+      "projectionInterrupted": true,
+      "originalHistoryWindowOwned": true,
+      "historyBodiesRestored": true,
+      "commonHistoryAcquisitionOwned": true,
+      "historyWindow": {
+        "originals": 2,
+        "unavailable": 10,
+        "extractionNanos": 13084621,
+        "modelCharacters": 4732,
+        "originalCharacters": 937
+      },
+      "applicationAdmittedBeforeSend": true,
+      "applicationAdmittedAroundHistory": true,
+      "applicationAdmissions": {
+        "device": 5,
+        "conversation": 5,
+        "room": 5,
+        "failures": 0
+      },
+      "heldRoomNeverSent": true,
+      "pausedAcrossRestart": true,
+      "syncInterruptedAfterRestart": true,
+      "syncRetriedWithRetainedCursor": true,
+      "artifact": {
+        "apkSha256": "b0da372b21a5ea2e1c725ad68dd3ccd5922a74f2ed64115b6b7111f6f29603b6",
+        "package": "dev.fajar.hris.collaboration.proof",
+        "avd": "hris-mobile-dev",
+        "androidApi": "35"
+      }
+    },
+    "fixtureRun": "06cf785c85d441b88b6c9e86d446a913",
+    "platformCommit": "24e893777e4e4cb9f0ffd7b4c0e2d607f105256f",
+    "platformImmutableSourceHashesMatched": 33,
+    "platformMismatches": [],
+    "testCaseSeconds": 22.923,
+    "testSuiteSeconds": 63.208,
+    "scope": "Validates this recorded predecessor only; later head-discovery changes require their own checks."
+  }
 }

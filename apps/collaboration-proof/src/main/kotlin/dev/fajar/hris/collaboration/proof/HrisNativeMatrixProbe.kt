@@ -6,6 +6,7 @@ import android.util.AtomicFile
 import dev.fajar.starter.collaboration.data.repositories.AndroidCollaborationRuntimeLease
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationTimelineLease
 import dev.fajar.starter.common.result.AppResult
+import dev.fajar.starter.network.*
 import java.io.File
 import java.net.URI
 import java.util.UUID
@@ -20,6 +21,11 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
         withContext(Dispatchers.IO) {
             val (fixture, home) = readFixture(resuming)
             val roomId = fixture.getString("roomId")
+            val http =
+                createHttpClient(
+                    createPlatformHttpEngine(),
+                    HttpClientSettings(home.toString(), allowCleartext = true),
+                )
             var sender: AndroidCollaborationRuntimeLease? = null
             var recipient: AndroidCollaborationRuntimeLease? = null
             var senderRoom: Room? = null
@@ -30,9 +36,9 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
             var recipientTimeline: CollaborationTimelineLease? = null
             try {
                 val senderOwner =
-                    ProtectedHrisProofOwner(context, fixture.getJSONObject("sender"), home)
+                    ProtectedHrisProofOwner(context, fixture.getJSONObject("sender"), home, http)
                 val recipientOwner =
-                    ProtectedHrisProofOwner(context, fixture.getJSONObject("recipient"), home)
+                    ProtectedHrisProofOwner(context, fixture.getJSONObject("recipient"), home, http)
                 sender =
                     if (resuming) senderOwner.restoreStored() else senderOwner.installAndReopen()
                 recipient =
@@ -93,6 +99,7 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
                             { recipientRoom?.close() },
                             { sender?.closeProofRuntime() },
                             { recipient?.closeProofRuntime() },
+                            { http.cancelAndClose() },
                         )
                     for (operation in operations) try {
                         operation()
@@ -255,13 +262,7 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
                                 .put("commonSenderOwned", true)
                                 .put("receiptJournalRecovered", true)
                                 .put("projectionInterrupted", true)
-                                .put("originalHistoryWindowOwned", true)
-                                .put("historyBodiesRestored", true)
-                                .put(
-                                    "commonHistoryAcquisitionOwned",
-                                    history.remove("commonHistoryAcquisitionOwned") == true,
-                                )
-                                .put("historyWindow", history)
+                                .withHistoryEvidence(history)
                                 .put("senderEventId", sent.eventId)
                                 .put("recipientEventId", answered.eventId)
                                 .put("senderTransaction", sent.transactionId)
@@ -271,6 +272,15 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
                         )
                     }
             }
+    }
+
+    private fun JSONObject.withHistoryEvidence(history: JSONObject) = apply {
+        for (flag in listOf("latestHistoryHeadOwned", "commonHistoryAcquisitionOwned")) {
+            put(flag, history.remove(flag) == true)
+        }
+        put("originalHistoryWindowOwned", true)
+        put("historyBodiesRestored", true)
+        put("historyWindow", history)
     }
 
     private suspend fun CollaborationTimelineLease.awaitMessage(

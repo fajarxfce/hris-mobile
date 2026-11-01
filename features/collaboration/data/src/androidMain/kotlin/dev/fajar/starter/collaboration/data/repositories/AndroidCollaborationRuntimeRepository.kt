@@ -1,5 +1,6 @@
 package dev.fajar.starter.collaboration.data.repositories
 
+import dev.fajar.starter.collaboration.data.api.CollaborationHistoryHeadApi
 import dev.fajar.starter.collaboration.data.datasources.*
 import dev.fajar.starter.collaboration.data.sdk.*
 import dev.fajar.starter.collaboration.domain.entities.*
@@ -9,6 +10,7 @@ import dev.fajar.starter.common.result.*
 import dev.fajar.starter.identity.domain.entities.IdentityServer
 import dev.fajar.starter.securestorage.*
 import dev.fajar.starter.storage.safeStorageCall
+import io.ktor.client.HttpClient
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.io.encoding.Base64
 import kotlinx.coroutines.*
@@ -25,9 +27,40 @@ class AndroidCollaborationRuntimeRepository(
     private val cipher: ContentCipher,
     private val server: IdentityServer,
     private val endpoint: CollaborationSdkEndpoint,
+    private val http: HttpClient,
 ) : CollaborationRuntimeRepository {
     private val capacity = Semaphore(5)
     private val leases = ConcurrentHashMap.newKeySet<AndroidCollaborationRuntimeLease>()
+
+    override suspend fun findHistoryHead(
+        owner: CollaborationOwner,
+        deviceId: String,
+        matrixRoomId: String,
+    ): AppResult<CollaborationHistoryHead> {
+        val runtime =
+            leases.singleOrNull {
+                it.owner == owner && it.deviceId == deviceId && it.availableForEntry
+            }
+                ?: return AppResult.Failed(
+                    Failure(
+                        FailureKind.Unavailable,
+                        "Chat runtime is not open.",
+                        code = "client.collaboration_runtime_not_open",
+                    )
+                )
+        return when (val result = runtime.findHistoryHead(matrixRoomId)) {
+            is AppResult.Failed -> result
+            is AppResult.Success ->
+                AppResult.Success(
+                    CollaborationHistoryHead(
+                        runtime.owner,
+                        runtime.deviceId,
+                        matrixRoomId,
+                        result.value,
+                    )
+                )
+        }
+    }
 
     override suspend fun readOriginalHistory(
         owner: CollaborationOwner,
@@ -194,7 +227,14 @@ class AndroidCollaborationRuntimeRepository(
                     AndroidSdkSessionDelegate(persistence),
                 )
             lease =
-                AndroidCollaborationRuntimeLease(owner, client, directory, persistence, retained) {
+                AndroidCollaborationRuntimeLease(
+                    owner,
+                    client,
+                    directory,
+                    persistence,
+                    retained,
+                    CollaborationHistoryHeadApi(http, endpoint),
+                ) {
                     leases.remove(it)
                     capacity.release()
                 }

@@ -4,8 +4,8 @@ The collaboration feature now has encrypted, paged storage for original text
 messages and provider event aliases. `ObserveCollaborationHistory` reads acquired
 facts offline under the same account/company admission as the conversation list.
 `AcquireCollaborationHistory` can now acquire a finite original-event snapshot
-around a known event through the owned Android SDK runtime. Head discovery,
-provider paging, edit projection, command retirement and Chat UI remain separate work.
+around a supplied event or the latest visible event through the owned Android SDK runtime.
+Provider paging, edit projection, command retirement and Chat UI remain separate work.
 
 ## Canonical identity and deletion
 
@@ -81,6 +81,46 @@ admission changes, checks admission again before publishing each page and captur
 current account ownership after that check. Only an admitted acquisition elsewhere
 can reopen the company gate. It performs no network work, key bootstrap or SDK
 restore. The caller owns the flow collection and cancellation.
+
+## Latest visible event
+
+[Validation and actual SDK evidence](measurements/collaboration-history-head-2026-11-01.json).
+
+Omitting the anchor in `AcquireCollaborationHistory` selects the latest visible
+provider event first. The Android runtime makes one `GET /messages?dir=b&limit=1`
+through the existing fixed Matrix gateway. The SDK still owns its credentials,
+crypto store, synchronization and delivery queue. The repository reads the current
+SDK session, checks its user/device/homeserver against the retained runtime and
+uses only the application-configured gateway URL. The bearer never enters domain,
+UI, URLs or diagnostics. This read does not refresh credentials or retry itself;
+an expired token fails the operation until the SDK session is usable again.
+
+The API borrows the application's public HTTP pool (no HRIS authentication plugin,
+no redirects, existing request/connect/socket deadlines). It accepts only HTTP 200,
+bounds success bodies to 256 KiB and errors to 16 KiB, validates UTF-8 and nesting
+before JSON parsing, and accepts at most one event with a valid event ID and matching
+optional room ID. Only the opaque event ID escapes. Content and encrypted provider
+positions are discarded; no sync/history cursor changes. An unsupported state event
+is a valid anchor. A visible empty page is readmitted without opening an SDK window
+or clearing acquired local facts; it does not establish the end of history.
+
+A registered runtime child owns the request job before I/O starts. Caller or parent
+closure cancels and joins that one request, preserving the application's HTTP pool.
+Closed/full child registries cannot leave an unregistered job. The final owner/failure
+check withholds late responses. Decoding runs on the background dispatcher. The
+common use case checks exact head owner/device/room before original acquisition and
+rechecks HRIS device/conversation/room afterward, including the empty result path.
+
+A Matrix `M_UNKNOWN_TOKEN`/HTTP 401 cannot distinguish ordinary SDK token expiry
+from revocation. It stops live acquisition/delivery but does not persist a company
+read restriction. HRIS admission denials still close the existing company gate;
+only admitted company-summary acquisition can reopen it. This distinction preserves
+owned offline history and pending commands without granting new network access.
+
+This finite discovery is not a second Matrix sync client, a provider pagination
+cursor, a complete-history claim, ACK-before-journal recovery or a large-room memory
+acceptance. Event-focused SDK construction still has the earlier native cache and
+diagnostic allocation limitations.
 
 ## Explicit acquisition
 

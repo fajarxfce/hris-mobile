@@ -228,8 +228,8 @@ internal class HrisProductQueueProof(
                 app.build,
                 app.clock,
             )
-        val acquired =
-            success(acquire(app.workspaceId, runtime.deviceId, conversationId, sentEventId))
+        val acquired = success(acquire(app.workspaceId, runtime.deviceId, conversationId))
+        check(runtimeAccess.historyHead == replyEventId)
         val window = requireNotNull(runtimeAccess.historyWindow)
         check(
             acquired.acquiredEvents == 2 &&
@@ -251,6 +251,7 @@ internal class HrisProductQueueProof(
                 ::reopenDatabase,
             )
             .put("commonHistoryAcquisitionOwned", true)
+            .put("latestHistoryHeadOwned", true)
     }
 
     private suspend fun reopenDatabase() {

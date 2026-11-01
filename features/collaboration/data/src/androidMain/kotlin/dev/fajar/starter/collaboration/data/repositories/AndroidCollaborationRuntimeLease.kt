@@ -1,5 +1,6 @@
 package dev.fajar.starter.collaboration.data.repositories
 
+import dev.fajar.starter.collaboration.data.api.CollaborationHistoryHeadApi
 import dev.fajar.starter.collaboration.data.datasources.AndroidCollaborationTimelineSource
 import dev.fajar.starter.collaboration.data.datasources.CollaborationSdkStoreLease
 import dev.fajar.starter.collaboration.data.datasources.createAndroidCollaborationSync
@@ -24,6 +25,7 @@ internal constructor(
     private val directory: CollaborationSdkStoreLease,
     private val persistence: SdkSessionPersistence,
     record: CollaborationSdkRecord,
+    historyApi: CollaborationHistoryHeadApi,
     private val released: (AndroidCollaborationRuntimeLease) -> Unit,
 ) : CollaborationRuntimeLease {
     override val deviceId = record.deviceId
@@ -39,6 +41,22 @@ internal constructor(
     private val children = SdkChildResources(lifetime)
     private val historyWindows =
         AndroidCollaborationHistoryWindows(nativeClient, children) {
+            credentialFailures.value
+                ?: sync.failures.value?.takeIf {
+                    it.kind in setOf(FailureKind.Unauthorized, FailureKind.AccessDenied)
+                }
+                ?: if (stopRequested.get()) syncStopped().failure else null
+        }
+    private val historyHeads =
+        AndroidCollaborationHistoryHeads(
+            nativeClient,
+            record.matrixUserId,
+            record.matrixDeviceId,
+            record.homeserverUrl,
+            children,
+            lifetime,
+            historyApi,
+        ) {
             credentialFailures.value
                 ?: sync.failures.value?.takeIf {
                     it.kind in setOf(FailureKind.Unauthorized, FailureKind.AccessDenied)
@@ -133,6 +151,9 @@ internal constructor(
     /** Explicit queue entry acquires a child writer; SDK delivery stays paused. */
     suspend fun acquireMessageQueue(roomId: String): AppResult<CollaborationMessageQueueLease> =
         messageQueues.acquire(roomId)
+
+    /** Borrowed transport reads only a head; this runtime owns cancellation of that request. */
+    suspend fun findHistoryHead(roomId: String): AppResult<String?> = historyHeads.read(roomId)
 
     /** Explicit admitted acquisition; no join, bootstrap, send-queue enable or provider cursor. */
     suspend fun readOriginalHistory(

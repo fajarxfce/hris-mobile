@@ -1,5 +1,72 @@
 # Collaboration checkpoint history — 1 November 2026
 
+## Common live-admitted history checkpoint — 1 November 2026
+
+**Common live-admitted original-history acquisition is implemented and proved
+through real HRIS APIs and the Android SDK.** [Evidence](measurements/collaboration-history-acquisition-2026-11-01.json)
+records final run **`28029aeb24b04618a8c88a023161eab4`**, **35.719s test case /
+57.460s native suite / 92s Gradle**, cleanup complete. The server records
+**5 device / 5 conversation / 5 room admissions, zero failures**, with counters
+captured at the context request proving fresh admission afterward too. The common
+use case must store both originals before verification; the fixture no longer
+performs the initial merge itself. Exact bodies/event/logical indexes reopen from
+actual encrypted storage and later replay leaves the same page.
+
+`AcquireCollaborationHistory` requires a known event anchor and an installed
+runtime/known encrypted room. It binds returned owner/device/room/anchor, detaches
+collections before suspension and validates all events before writing. At most
+128 combined entries enter 1–16-event atomic batches. Later conflicts, cancellation
+or uncertain responses preserve earlier acquired facts; no implicit retry or
+provider cursor advancement occurs. Known company/session denial survives failed
+restriction persistence. Recipient failure does not close all company history.
+The report counts acquired event facts; its unresolved entries can include state
+events and must not be labelled unreadable messages in UI.
+
+Fourteen common acquisition tests cover pre/late denial, owner replacement,
+changed room, cancelled SDK work, partial commits, lost responses, immutable
+input, malformed windows and unsupported anchors. Android decoding/hashing now
+runs on `Dispatchers.Default` within the caller's structured operation. An eighth
+Android window case verifies cleanup while decoding waits in a held dispatcher.
+No extra SDK client, restore, join, sync producer or send-queue owner is added.
+
+Full application checks pass in **255s**: **2,375 desktop / 130 Android host /
+198 domain-browser / 151 data-browser** cases, zero failures/errors/skips
+and zero lint errors. All **227 Mobile / 33 Platform source hashes** match.
+Server fixture/quality checks pass in 39s and all 35 Python driver cases pass.
+Dev APK **`d88fd1d5`** is built, not installed.
+
+Platform **`24e893777e4e4cb9f0ffd7b4c0e2d607f105256f`** is pushed; the HRIS CI
+workflow pins its common-acquisition and before/after admission assertions.
+
+Initial common proof **`a268b22bd45c41ec9a96bdee857987ab`** passed in 107s before
+background decoding. Initial focused/domain checks passed in 87s and APK checks
+in 92s. One worker-check command was deliberately stopped to replace an invalid
+two-test-scheduler fixture; it is not a passing result. Corrected worker/host/APK/
+quality checks passed in 120s. Both actual runs and all source revisions are
+retained. The final fixture measured 10.017 ms for native diagnostic extraction,
+not network/decode/hash/database latency. Native diagnostic/cache allocation still
+precedes app bounds; there is no large-room memory or capacity acceptance.
+
+**Continue P0–P8; none of 54 complete groups is accepted. Next implement head
+discovery and bounded provider progress, ACK-before-journal reconciliation and
+command retirement, then Chat list/setup/conversation UI.** Preserve original
+native transactions, unresolved events, original-content fingerprints and aliases.
+Do not infer success from absent queue IDs or lose SDK crypto stores/cursors.
+Apple/web owned content adapters, backup, rich messaging and all call/meeting
+phases remain. The physical iPhone test is waived; Apple implementation and
+interoperability are still required.
+
+Canonical-storage CI **`41274726910`** at **`ad0848e6`** is now fully audited:
+all 28 steps, 352 portable desktop / 328 browser / **284 iOS simulator** cases,
+actual **Xcode app-host build**, and 207 recorded source hashes matched immutable
+Git blobs. See its history measurement. This predecessor does not validate the
+later window or this acquisition increment; audit their own hosted CI separately.
+
+The dedicated emulator is stopped. No live/schema/phone change. Starter is clean
+at `36116b2`; these HRIS policies/adapters require no generic port. Atomic commits
+and a push after every commit remain authorized. Continue after this checkpoint;
+the chat/calls/meetings implementation is not complete.
+
 ## Active collaboration implementation — 1 November 2026
 
 **An owned Android original-event window now passes through real HRIS and Matrix

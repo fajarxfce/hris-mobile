@@ -13,6 +13,118 @@ import kotlinx.coroutines.test.runTest
 
 class AcquireCollaborationHistoryTest {
     @Test
+    fun latestAcquisitionUsesTheReturnedHeadAndExplicitAnchorsDoNotReadIt() = runTest {
+        val f = HistoryAcquisitionFixture()
+        assertEquals(AppResult.Success(CollaborationHistoryAcquisition(20, 0)), f.latest())
+        assertEquals(1, f.headReads)
+        assertEquals(1, f.reads)
+        assertEquals(2, f.local.setup.calls)
+        assertIs<AppResult.Success<*>>(f.acquire())
+        assertEquals(1, f.headReads)
+    }
+
+    @Test
+    fun emptyHeadIsReadmittedWithoutClearingExistingFactsOrOpeningAWindow() = runTest {
+        val f = HistoryAcquisitionFixture()
+        f.retained += f.window.changes
+        f.head = f.head.copy(eventId = null)
+        assertEquals(AppResult.Success(CollaborationHistoryAcquisition(0, 0)), f.latest())
+        assertEquals(f.window.changes, f.retained)
+        assertEquals(0, f.reads)
+        assertEquals(2, f.local.setup.calls)
+        assertTrue(f.batches.isEmpty())
+    }
+
+    @Test
+    fun foreignAndMalformedHeadsCannotStartDecryption() = runTest {
+        val head = HistoryAcquisitionFixture().head
+        for (invalid in
+            listOf(
+                head.copy(owner = head.owner.copy(accountId = "foreign")),
+                head.copy(deviceId = "foreign"),
+                head.copy(roomId = "!foreign:test"),
+                head.copy(eventId = "invalid"),
+            )) {
+            val f = HistoryAcquisitionFixture()
+            f.head = invalid
+            assertEquals(
+                "client.collaboration_invalid_history_head",
+                assertIs<AppResult.Failed>(f.latest()).failure.code,
+            )
+            assertEquals(0, f.reads)
+            assertTrue(f.batches.isEmpty())
+        }
+    }
+
+    @Test
+    fun replacementOrDenialWhileHeadWaitsCannotAcquireContent() = runTest {
+        for (denied in listOf(false, true)) {
+            val f = HistoryAcquisitionFixture()
+            f.beforeHeadReturns = {
+                if (denied)
+                    f.local.gate.value = CollaborationListAdmission("blocked", f.local.denied)
+                else f.local.setup.session = null
+            }
+            assertIs<AppResult.Failed>(f.latest())
+            assertEquals(0, f.reads)
+        }
+    }
+
+    @Test
+    fun cancellationStopsPendingHeadWithoutRetryOrDecryption() = runTest {
+        val f = HistoryAcquisitionFixture()
+        val entered = CompletableDeferred<Unit>()
+        var active = false
+        f.beforeHeadReturns = {
+            active = true
+            try {
+                entered.complete(Unit)
+                awaitCancellation()
+            } finally {
+                active = false
+            }
+        }
+        val pending = launch { f.latest() }
+        entered.await()
+        pending.cancelAndJoin()
+        assertFalse(active)
+        assertEquals(1, f.headReads)
+        assertEquals(0, f.reads)
+    }
+
+    @Test
+    fun sdkTokenRejectionStopsHeadAndWindowWithoutGatingOwnedHistory() = runTest {
+        for (head in listOf(false, true)) {
+            val f = HistoryAcquisitionFixture()
+            val expired =
+                Failure(
+                    FailureKind.Unauthorized,
+                    "SDK token unavailable",
+                    code = "client.collaboration_sdk_unauthorized",
+                )
+            if (head) f.headFailure = expired else f.sourceFailure = expired
+            assertEquals(AppResult.Failed(expired), f.latest())
+            assertNull(f.local.gate.value.denial)
+            assertTrue(f.batches.isEmpty())
+        }
+    }
+
+    @Test
+    fun companyDenialDuringHeadOrEmptyReadmissionRemainsRestricted() = runTest {
+        for (duringHead in listOf(false, true)) {
+            val f = HistoryAcquisitionFixture()
+            if (duringHead) f.headFailure = f.local.denied
+            else {
+                f.head = f.head.copy(eventId = null)
+                f.beforeHeadReturns = { f.delivery.control.remoteFailure = f.local.denied }
+            }
+            assertEquals(AppResult.Failed(f.local.denied), f.latest())
+            assertEquals(f.local.denied, f.local.gate.value.denial)
+            assertEquals(0, f.reads)
+        }
+    }
+
+    @Test
     fun liveWindowIsReadmittedAndStoredInBoundedOriginalBatchesWithoutStartingDelivery() = runTest {
         val f = HistoryAcquisitionFixture()
         assertEquals(AppResult.Success(CollaborationHistoryAcquisition(20, 0)), f.acquire())
@@ -225,6 +337,16 @@ private class HistoryAcquisitionFixture {
             },
             emptyList(),
         )
+    var headReads = 0
+    var head =
+        CollaborationHistoryHead(
+            delivery.owner,
+            delivery.device.deviceId,
+            delivery.device.roomId,
+            "\$event-0",
+        )
+    var beforeHeadReturns: suspend () -> Unit = {}
+    var headFailure: Failure? = null
     var reads = 0
     var active = 0
     var rejectBatch = 0
@@ -241,6 +363,19 @@ private class HistoryAcquisitionFixture {
 
     private val runtimes =
         object : CollaborationRuntimeRepository by delivery.runtimes {
+            override suspend fun findHistoryHead(
+                owner: CollaborationOwner,
+                deviceId: String,
+                matrixRoomId: String,
+            ): AppResult<CollaborationHistoryHead> {
+                assertEquals(delivery.owner, owner)
+                assertEquals(delivery.device.deviceId, deviceId)
+                assertEquals(delivery.device.roomId, matrixRoomId)
+                headReads++
+                beforeHeadReturns()
+                return headFailure?.let { AppResult.Failed(it) } ?: AppResult.Success(head)
+            }
+
             override suspend fun readOriginalHistory(
                 owner: CollaborationOwner,
                 deviceId: String,
@@ -321,6 +456,8 @@ private class HistoryAcquisitionFixture {
             local.build,
             local.clock,
         )
+
+    suspend fun latest() = useCase("selection", delivery.device.deviceId, delivery.conversation)
 
     suspend fun acquire() =
         useCase("selection", delivery.device.deviceId, delivery.conversation, "\$event-0")

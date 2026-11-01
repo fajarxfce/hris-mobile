@@ -80,7 +80,7 @@ class StarterApplication : Application(), Configuration.Provider {
             location = location,
             fileInputs = fileInputs,
             fileOutputs = fileOutputs,
-            collaborationRuntime = { server ->
+            collaborationRuntime = { server, http ->
                 androidCollaborationRuntimeRepository(
                     this,
                     server,
@@ -88,6 +88,7 @@ class StarterApplication : Application(), Configuration.Provider {
                         server.audience,
                         allowCleartext = environment == AppEnvironment.Dev,
                     ),
+                    http,
                 )
             },
         )

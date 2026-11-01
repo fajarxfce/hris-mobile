@@ -10,6 +10,7 @@ import dev.fajar.starter.database.createAppDatabase
 import dev.fajar.starter.datastore.createUserPreferences
 import dev.fajar.starter.identity.domain.entities.IdentityServer
 import dev.fajar.starter.network.HttpClients
+import dev.fajar.starter.network.cancelAndClose
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
 import java.nio.file.Files
@@ -29,8 +30,16 @@ class CollaborationBindingsTest {
             val closeCount = AtomicInteger()
             val factoryCount = AtomicInteger()
             var suppliedServer: IdentityServer? = null
+            var suppliedHttp: HttpClient? = null
             val runtime =
                 object : CollaborationRuntimeRepository {
+                    override suspend fun findHistoryHead(
+                        owner: CollaborationOwner,
+                        deviceId: String,
+                        matrixRoomId: String,
+                    ): AppResult<CollaborationHistoryHead> =
+                        error("No implicit history head lookup")
+
                     override suspend fun readOriginalHistory(
                         owner: CollaborationOwner,
                         deviceId: String,
@@ -85,12 +94,17 @@ class CollaborationBindingsTest {
                     module {},
                     http =
                         module {
+                            single<HttpClient>(named(HttpClients.Public)) {
+                                    HttpClient(MockEngine { error("No implicit network request") })
+                                }
+                                .onClose { it?.cancelAndClose() }
                             single<HttpClient>(named(HttpClients.Authenticated)) {
                                     HttpClient(MockEngine { error("No implicit network request") })
                                 }
-                                .onClose { it?.close() }
+                                .onClose { it?.cancelAndClose() }
                         },
-                    collaborationRuntime = { server ->
+                    collaborationRuntime = { server, http ->
+                        suppliedHttp = http
                         suppliedServer = server
                         factoryCount.incrementAndGet()
                         runtime
@@ -102,6 +116,7 @@ class CollaborationBindingsTest {
                 assertSame(runtime, container.koin.get<CollaborationRuntimeRepository>())
                 assertEquals(1, factoryCount.get())
                 assertSame(container.koin.get<IdentityServer>(), suppliedServer)
+                assertSame(container.koin.get<HttpClient>(named(HttpClients.Public)), suppliedHttp)
                 assertNotNull(container.koin.get<CollaborationSetupRepository>())
                 assertNotNull(container.koin.get<CollaborationSetupCommandRepository>())
                 assertNotNull(container.koin.get<LoadCollaborationSetup>())
@@ -157,9 +172,11 @@ class CollaborationBindingsTest {
                 lifetime.start()
                 lifetime.closeAndJoin()
                 assertEquals(2, closeCount.get())
+                assertTrue(requireNotNull(suppliedHttp).coroutineContext.isActive)
             } finally {
                 lifetime.closeAndJoin()
                 container.close()
+                assertFalse(requireNotNull(suppliedHttp).coroutineContext.isActive)
                 directory.deleteRecursively()
             }
         }

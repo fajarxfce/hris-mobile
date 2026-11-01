@@ -9,6 +9,7 @@ import dev.fajar.starter.collaboration.domain.repositories.CollaborationTimeline
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.identity.domain.entities.IdentityServer
 import dev.fajar.starter.securestorage.AndroidCredentialStore
+import io.ktor.client.HttpClient
 import java.io.File
 import java.net.URI
 import java.security.MessageDigest
@@ -23,6 +24,7 @@ internal class ProtectedHrisProofOwner(
     private val context: Context,
     private val fixture: JSONObject,
     home: URI,
+    http: HttpClient,
 ) {
     private var owner =
         CollaborationOwner(
@@ -38,6 +40,7 @@ internal class ProtectedHrisProofOwner(
             context,
             IdentityServer(home.toString(), "Fictional SDK peer"),
             CollaborationSdkEndpoint(home.toString(), allowCleartext = true),
+            http,
         )
 
     suspend fun enterTimeline(roomId: String): CollaborationTimelineLease {

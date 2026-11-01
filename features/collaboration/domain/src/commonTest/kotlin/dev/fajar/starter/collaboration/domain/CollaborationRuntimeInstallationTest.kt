@@ -359,6 +359,12 @@ private class InstallationFixture {
         }
     private val runtimes =
         object : CollaborationRuntimeRepository {
+            override suspend fun findHistoryHead(
+                owner: CollaborationOwner,
+                deviceId: String,
+                matrixRoomId: String,
+            ): AppResult<CollaborationHistoryHead> = error("No implicit history head lookup")
+
             override suspend fun readOriginalHistory(
                 owner: CollaborationOwner,
                 deviceId: String,
