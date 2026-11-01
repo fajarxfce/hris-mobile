@@ -1,5 +1,35 @@
 # Agent continuation — HRIS Mobile
 
+## Android release startup crash corrected — 1 November 2026
+
+User-reported release10 force close is confirmed by its application crash stack:
+StarterApplication resolves CollaborationDeliveryWorker, which constructs the SDK
+endpoint from IdentityServer.audience (`.../api/v1/`). The strict root-only endpoint
+rejects that path before any Activity appears. The Android host now uses an explicit
+`fromApiBaseUrl` factory that validates the original configuration and retains only
+its origin for the gateway. API audience, account partitioning, TLS/Dev opt-in and
+strict directly configured root validation stay intact.
+
+[Evidence](measurements/android-startup-gateway-2026-11-01.json): three regression
+cases, full root check, 2,844 desktop +173 Android host +10 build-logic cases and
+release assembly/lint pass (zero errors, one warning), 856s Gradle /859.865s wall.
+Three source inputs remain unchanged. Actual **StarterApplication**, not the separate
+provider proof app, passes two 12-second stable cold starts with readable/resumed
+onboarding UI and inspected screenshots. Universal release11 test APK SHA256
+0054ee2314c9ffa243ca22779bc8663ec5e097886920d4a905a49cd520d5ce12.
+An emulator watchdog exit before install and obsolete Android35 activity-field
+probe were fixture failures; no additional product change. Final run35.173s.
+The isolated emulator is stopped before the next build.
+
+**Continue immediately:** clean-source arm64 release11 build/install-only on
+10.77.77.3:5555 with notification, existing signer/data and pulled-byte verification.
+Helpers are prepared in `.work/release-phone-2026-11-01-build11/`. Then resume
+Platform queue/FCM delivery. Platform211d5d65 is pushed; its uncommitted handler/
+policy/DI and new SQL/policy tests are formatted but not yet run. Callback/TLS/queue
+are already implemented. Worker adapter/flag, Mobile receive/decrypt/reply, all-company
+recovery, Starter ports and remaining P0–P8 continue; all54 groups remain unaccepted.
+
+
 ## Hosted five-case cancellation recovery verified — 1 November 2026
 
 [Hosted evidence](measurements/chat-cancellation-native-ci-2026-11-01.json) audits

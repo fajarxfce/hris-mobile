@@ -1,11 +1,11 @@
 # Private Android phone updates
 
-Latest prepared artifact (1 November): release 6 from Mobile `2d6753ee`, documented in
-[release evidence](measurements/android-release-history-2026-11-01.json). Its local directory
-is `.work/release-phone-2026-11-01-build6/`, including current preflight/install-only helpers.
-Release 5 below is historical and was never installed. Both are pending phone connectivity;
-prefer the latest validated build and inspect the actual installed version before updating.
-
+Release10 was installed but the user reported an application-startup crash. The
+[release11 hotfix verification](measurements/android-startup-gateway-2026-11-01.json)
+corrects API-path versus Matrix-origin configuration and proves actual release-app
+cold starts. Prepare the clean arm64 artifact using
+`.work/release-phone-2026-11-01-build11/` and inspect the installed version before
+updating. Installation evidence is recorded separately after byte verification.
 
 The authorized tester phone uses `dev.fajar.hris.mobile.dev` through
 `http://10.77.77.1:8088/api/v1/` on WireGuard. Build `devRelease`, keep the existing
@@ -21,7 +21,7 @@ Android SDK, assemble and lint using these Gradle arguments:
 ```text
 :apps:android:assembleDevRelease :apps:android:lintDevRelease
 -PrequireSigning=true -PappEnvironment=dev
--PappVersion=1.0.0 -PappVersionCode=5
+-PappVersion=1.0.0 -PappVersionCode=11
 -PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/
 --no-daemon --no-parallel --max-workers=1 -Dorg.gradle.jvmargs=-Xmx1536m
 ```
@@ -45,6 +45,16 @@ Verify `apksigner`, package/version, disabled debuggable/testOnly flags, expecte
 Firebase app, allowed native ABI and `zipalign -c -P 16 4`. Comparing universal/arm64 DEX
 and resources can establish that only packaging changed; Git/Crashlytics VCS metadata
 can legitimately change between builds. Record the actual artifact hash and build inputs.
+
+Before phone delivery, also cold-start the **actual application** on the owned
+emulator using the release build and a configured API URL containing `/api/v1/`.
+The separate collaboration proof APK does not construct StarterApplication and
+cannot replace this check. Use an isolated emulator data image; install a compatible
+universal/x86_64 release variant, start MainActivity, verify its process remains
+stable for at least 12 seconds, confirm `topResumedActivity`/`ResumedActivity`, and
+inspect the rendered page and process-scoped crash buffer. Repeat after force-stop.
+Retain artifact/input hashes and screenshots. Android35 does not use the older
+`mResumedActivity` dump field. Keep these UI operations on the emulator.
 
 Before each installation, notify the user and explicitly select `10.77.77.3:5555` (or
 the user's updated endpoint). Confirm ADB authorization and actual device ABI. Read the

@@ -84,7 +84,7 @@ class StarterApplication : Application(), Configuration.Provider {
                 androidCollaborationRuntimeRepository(
                     this,
                     server,
-                    CollaborationSdkEndpoint(
+                    CollaborationSdkEndpoint.fromApiBaseUrl(
                         server.audience,
                         allowCleartext = environment == AppEnvironment.Dev,
                     ),

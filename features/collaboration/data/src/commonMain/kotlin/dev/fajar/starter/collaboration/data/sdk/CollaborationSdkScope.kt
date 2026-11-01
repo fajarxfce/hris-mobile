@@ -6,7 +6,9 @@ import dev.fajar.starter.identity.domain.entities.IdentityServer
 import dev.fajar.starter.network.HttpClientSettings
 import dev.whyoleg.cryptography.CryptographyProvider
 import dev.whyoleg.cryptography.algorithms.SHA256
+import io.ktor.http.URLBuilder
 import io.ktor.http.Url
+import io.ktor.http.encodedPath
 import kotlinx.serialization.json.Json
 
 /** Explicit application configuration. Matrix identities and restored records cannot select it. */
@@ -18,6 +20,20 @@ class CollaborationSdkEndpoint(baseUrl: String, allowCleartext: Boolean = false)
         val parsed = Url(baseUrl)
         require(parsed.host.isNotBlank() && parsed.encodedPath in setOf("", "/"))
         this.baseUrl = parsed.toString().trimEnd('/') + "/"
+    }
+
+    companion object {
+        /** HRIS serves the Matrix gateway at the configured API's origin, outside /api/v1. */
+        fun fromApiBaseUrl(
+            apiBaseUrl: String,
+            allowCleartext: Boolean = false,
+        ): CollaborationSdkEndpoint {
+            // Validate the original configuration before removing its path. Credentials, query
+            // parameters and fragments must never be silently discarded into a valid endpoint.
+            HttpClientSettings(apiBaseUrl, allowCleartext = allowCleartext)
+            val root = URLBuilder(apiBaseUrl).apply { encodedPath = "/" }.buildString()
+            return CollaborationSdkEndpoint(root, allowCleartext)
+        }
     }
 }
 

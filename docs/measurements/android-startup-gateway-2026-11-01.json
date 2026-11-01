@@ -1,0 +1,132 @@
+{
+  "date": "2026-11-01",
+  "scope": "Android actual application startup with a configured /api/v1/ audience",
+  "baseCommit": "3941bfc16a430ea1a4437b345bf61b83a372a3af",
+  "sourceSha256": {
+    "apps/android/src/main/kotlin/dev/fajar/hris/StarterApplication.kt": "bae5b3b30ca0794f72f426f861c20893a45717cae6bf69b3dd27a3d052550025",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/sdk/CollaborationSdkScope.kt": "3ba851422e21bf6def700cecaaf804a8e83b7d00a8f57dd0fd3c40a78b01dda6",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationGatewayConfigurationTest.kt": "ed9ba4993dd5ee5c8185a91123947d2434042512cf1f3d873dba9cdf010095c3"
+  },
+  "rootCause": {
+    "applicationId": "dev.fajar.hris.mobile.dev",
+    "versionCode": 10,
+    "scope": "UID 10962 crash buffer; last HRIS main-thread crash only",
+    "frames": [
+      "at dev.fajar.hris.StarterApplication.onCreate(StarterApplication.kt:127)",
+      "Caused by: java.lang.IllegalArgumentException: Failed requirement.",
+      "at dev.fajar.starter.collaboration.data.sdk.CollaborationSdkEndpoint.<init>(CollaborationSdkScope.kt:19)",
+      "at dev.fajar.hris.StarterApplication.container_delegate$lambda$0$0(StarterApplication.kt:87)"
+    ]
+  },
+  "correction": "Validate the original API configuration, derive its scheme/host/port root for the HRIS Matrix gateway, retain the original IdentityServer audience and strict explicit-root endpoint validation. HTTP still requires explicit Dev configuration.",
+  "verification": {
+    "exitCode": 0,
+    "wallSeconds": 859.865,
+    "inputsUnchanged": true,
+    "command": [
+      "xvfb-run",
+      "-a",
+      "./gradlew",
+      ":check",
+      ":apps:android:assembleDevRelease",
+      ":apps:android:lintDevRelease",
+      "-PrequireSigning=true",
+      "-PappEnvironment=dev",
+      "-PappVersion=1.0.0",
+      "-PappVersionCode=11",
+      "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=1",
+      "-Dorg.gradle.jvmargs=-Xmx1536m"
+    ]
+  },
+  "gradleSeconds": 856,
+  "reports": {
+    "desktop": {
+      "tests": 2844,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "androidHost": {
+      "tests": 173,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "buildLogic": {
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "lint": {
+      "Warning": 1
+    }
+  },
+  "newCommonCases": 3,
+  "emulator": {
+    "serial": "emulator-5560",
+    "isolatedEmulatorData": true,
+    "actualApplication": "dev.fajar.hris.StarterApplication",
+    "variant": "devRelease",
+    "debuggable": false,
+    "versionCode": 11,
+    "sha256": "0054ee2314c9ffa243ca22779bc8663ec5e097886920d4a905a49cd520d5ce12",
+    "bytes": 281081384,
+    "elapsedSeconds": 35.173,
+    "coldStarts": [
+      {
+        "coldStart": 1,
+        "pid": 3457,
+        "stableSeconds": 12,
+        "renderedTexts": [
+          "HR",
+          "HRIS",
+          "Skip",
+          "Employee services",
+          "Access attendance, requests, and work information.",
+          "1 of 3",
+          "Continue"
+        ],
+        "resumed": true,
+        "processCrash": false,
+        "elapsedSeconds": 15.914
+      },
+      {
+        "coldStart": 2,
+        "pid": 3629,
+        "stableSeconds": 12,
+        "renderedTexts": [
+          "HR",
+          "HRIS",
+          "Skip",
+          "Employee services",
+          "Access attendance, requests, and work information.",
+          "1 of 3",
+          "Continue"
+        ],
+        "resumed": true,
+        "processCrash": false,
+        "elapsedSeconds": 15.6
+      }
+    ]
+  },
+  "screenshots": {
+    "startup-1.png": "6415b30e41df058d761e7b949ab8d4fd860bf3afb7467df064985a6b86138d37",
+    "startup-2.png": "6415b30e41df058d761e7b949ab8d4fd860bf3afb7467df064985a6b86138d37"
+  },
+  "screenshotsReviewed": true,
+  "earlierSmokeAttempts": [
+    "Owned emulator watchdog reported hanging QEMU threads during the full build and exited before APK installation. Restarted after the build completed.",
+    "First installed-app probe found a stable process but used obsolete mResumedActivity text. Android 35 reports topResumedActivity/ResumedActivity; actual activity and screenshot were healthy. Corrected the harness only, then both cold starts passed."
+  ],
+  "limits": [
+    "The native provider proof application is separate from StarterApplication; its prior passes did not exercise this failing host composition.",
+    "Universal checkpoint APK is a test artifact with three hashed working-tree changes over baseCommit; final phone build will use a clean committed source and the existing signer.",
+    "Emulator data was isolated and contained no user login. No physical-phone UI was launched or driven.",
+    "This changes HRIS-specific gateway configuration; no Starter foundation change or chat push acceptance is claimed."
+  ],
+  "next": "Build clean-source arm64 devRelease version 11; notify, install-only in place on authorized phone, verify pulled bytes and preserved identity, and continue queue/FCM worker implementation."
+}
