@@ -100,10 +100,13 @@ private class IndexedDbInboxStore(
 
 @JsFun(
     """(name) => new Promise((resolve, reject) => {
-    const request = indexedDB.open(name, 9);
+    const request = indexedDB.open(name, 10);
     let settled = false;
     request.onupgradeneeded = event => {
         const db = request.result;
+        if (event.oldVersion < 10) {
+            db.createObjectStore('command_archives', {keyPath:['accountKey', 'partition', 'id']});
+        }
         if (event.oldVersion < 7) {
             db.createObjectStore('durable_blobs', {keyPath:['accountKey', 'partition', 'id']});
             db.createObjectStore('durable_blob_chunks', {keyPath:['accountKey', 'partition', 'id', 'offset']});

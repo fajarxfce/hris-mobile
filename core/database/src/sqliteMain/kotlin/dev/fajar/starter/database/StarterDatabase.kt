@@ -31,10 +31,11 @@ import dev.fajar.starter.database.entities.InboxEntity
             ReplicaDocumentEntity::class,
             ReplicaTagEntity::class,
             CommandEntity::class,
+            CommandArchiveEntity::class,
             BlobEntity::class,
             BlobChunkEntity::class,
         ],
-    version = 10,
+    version = 11,
     exportSchema = true,
     autoMigrations =
         [
@@ -46,6 +47,7 @@ import dev.fajar.starter.database.entities.InboxEntity
             AutoMigration(from = 6, to = 7),
             AutoMigration(from = 7, to = 8),
             AutoMigration(from = 9, to = 10),
+            AutoMigration(from = 10, to = 11),
         ],
 )
 @ConstructedBy(StarterDatabaseConstructor::class)

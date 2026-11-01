@@ -29,3 +29,13 @@ internal fun validateCommandPage(resourceId: String?, after: String?, limit: Int
     after?.let(::validateCommandIdentifier)
     require(limit in 1..50)
 }
+
+internal fun validateCommandArchive(
+    scope: CommandScope,
+    expected: CommandRecord,
+    evidence: String,
+) {
+    validateCommandRecord(scope, expected.copy(revision = 0))
+    require(expected.revision in 0..9_007_199_254_740_991L)
+    require(evidence.isNotEmpty() && evidence.encodeToByteArray().size <= 64 * 1024)
+}

@@ -540,3 +540,14 @@ by the Android app and lint runs in CI. Starter `9740cb5` independently passed
 root checks (331 desktop cases), dev assembly and lint with zero errors; hosted
 verify run `41245287269` follows that commit. HRIS collaboration runtime policy
 and its native API adapters stay in Mobile.
+
+## Command completion archive — 1 November 2026
+
+[Evidence](measurements/command-archive-2026-11-01.json) records an exact 15-file
+foundation port and ten new shared/native/browser scenarios. Mobile focused checks
+pass before copying; final Mobile root/build/browser/lint passes in 326s and Starter
+in 152s. Both use full-record matching when moving encrypted commands to immutable
+completion storage, with insertion fencing after pending capacity is released.
+SQLite 11 / IndexedDB 10 migration, rollback, restart, ownership and same-revision
+replacement are covered. HRIS proof encoding, message retirement, journal cleanup
+and UI remain downstream; this does not copy HRIS policy or configuration.

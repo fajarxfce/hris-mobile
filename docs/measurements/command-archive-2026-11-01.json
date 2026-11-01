@@ -1,0 +1,272 @@
+{
+  "date": "2026-11-01",
+  "change": "Atomic immutable command completion archive with an insertion fence independent of pending queue capacity.",
+  "mobileBaseCommit": "9da09b6b266dd5e129e7233f2262c9c53db9ca39",
+  "starterBaseCommit": "36116b2a43b16d3e0ba2cfcb09c8bbeaa7bd7648",
+  "schema": {
+    "sqlite": 11,
+    "indexedDb": 10
+  },
+  "port": {
+    "sourceFiles": 15,
+    "implementationAndTestsIdentical": true,
+    "allExistingSourcePredecessorsMatched": true,
+    "documentation": "Starter-specific session binding and prior port history were preserved while adding the shared archive contract."
+  },
+  "featurePolicyIntegrated": false,
+  "phoneChanged": false,
+  "liveChanged": false,
+  "notes": [
+    "Ten new scenarios run on both actual SQLite and IndexedDB: seven shared contracts plus persistence, migration and a forced abort between archive creation and pending deletion; complete-record matching rejects equal-revision replacement.",
+    "Exact account/partition/ID archive lookup has no unbounded scan. Pending limits remain 128 per account and 512 per database; completion evidence is capped at 64 KiB UTF-8.",
+    "The same immutable command identity cannot be recreated after archival. Changed request/resource/sort is rejected; identical raw insertion returns AlreadyStored and archive-aware callers must read the retained completion.",
+    "Feature authorization, encrypted proof encoding, receipt cleanup and Chat UI remain subsequent integration work. This raw store does not infer an outcome or start delivery."
+  ],
+  "initialRevisionOnly": {
+    "sourceSha256": {
+      "core/database/src/commonMain/kotlin/dev/fajar/starter/database/CommandArchive.kt": "439535470f32f95cc06467a208d449437cd2dc7a94cd7c95403cf27e08020b52",
+      "core/database/src/commonMain/kotlin/dev/fajar/starter/database/CommandBounds.kt": "f3c27efc9184162251ce93f37c5187e7802b9658e9ba100849a05e513d13544b",
+      "core/database/src/commonMain/kotlin/dev/fajar/starter/database/CommandStore.kt": "6b971c5b116a968b065ce570cb0f09e3ae8e6a28239f44578374b369cf171bdb",
+      "core/database/src/commonTest/kotlin/dev/fajar/starter/database/CommandArchiveContract.kt": "2419640073988f36ca6efae67196cdc9d82bc3f9976a5581f309b697992d1a86",
+      "core/database/src/desktopTest/kotlin/dev/fajar/starter/database/CommandArchiveMigrationTest.kt": "780c7f79623dddf94a85b0c9ab44ae1119e60d807bacf7311ea25e773199c761",
+      "core/database/src/desktopTest/kotlin/dev/fajar/starter/database/CommandStoreTest.kt": "92617935a617750e85828364a0ad56c76c260587d88ec0c40791baedcfd80690",
+      "core/database/src/sqliteMain/kotlin/dev/fajar/starter/database/RoomCommandStore.kt": "91891d1fadc9121e1811f93cf85cb7e83377757d5097e6b177aa3921a63b025a",
+      "core/database/src/sqliteMain/kotlin/dev/fajar/starter/database/StarterDatabase.kt": "c5993f97b83e481302f2454ccb8c564d5a1576fa81fddce8679846aec9a23551",
+      "core/database/src/sqliteMain/kotlin/dev/fajar/starter/database/dao/CommandDao.kt": "11363f8e503314da4e5aaa4b383bacfe0d50376b43e799bda90591a33c9e5dad",
+      "core/database/src/sqliteMain/kotlin/dev/fajar/starter/database/entities/CommandArchiveEntity.kt": "3dba1ed50d51cc9e67e64c3efdfbdec8532fd89a87674a2687e45093337be31b",
+      "core/database/src/wasmJsMain/kotlin/dev/fajar/starter/database/BrowserDatabase.kt": "4116835250995b7888ea961663ff388ee0c69a533cfd40f1d20c9d0f57048f0d",
+      "core/database/src/wasmJsMain/kotlin/dev/fajar/starter/database/IndexedDbCommandStore.kt": "505491b1a7da832c4cad09700f4900a9a4a1144648d31a54fe5bc2252f259fe5",
+      "core/database/src/wasmJsTest/kotlin/dev/fajar/starter/database/BrowserCommandArchiveTest.kt": "4eaef8834684c3f5b484b5d34c0b0025a14a7b55a2f22e137a70005bf08baea6",
+      "core/database/src/wasmJsTest/kotlin/dev/fajar/starter/database/BrowserCommandStoreTest.kt": "de10b7ff1b2f4b057723216ee0723b5a7ecc43083608827b7a7f085f3a7af1c9",
+      "core/database/schemas/dev.fajar.starter.database.StarterDatabase/11.json": "5afce9b0053f1c84c49ad64941c3985186985fe55d96409c07f07f30df008e35"
+    },
+    "validation": {
+      "mobileFocused": {
+        "result": "passed",
+        "seconds": 95,
+        "reports": {
+          "desktopTest": {
+            "suites": 10,
+            "tests": 36,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "wasmJsBrowserTest": {
+            "suites": 6,
+            "tests": 34,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          }
+        },
+        "log": ".work/command-archive-focused.log"
+      },
+      "mobileFull": {
+        "result": "passed",
+        "seconds": 793,
+        "log": ".work/command-archive-mobile.log",
+        "reports": {
+          "tests": {
+            "desktopTest": {
+              "suites": 405,
+              "tests": 2495,
+              "failures": 0,
+              "errors": 0,
+              "skipped": 0
+            },
+            "database/wasmJsBrowserTest": {
+              "suites": 6,
+              "tests": 34,
+              "failures": 0,
+              "errors": 0,
+              "skipped": 0
+            },
+            "data/wasmJsBrowserTest": {
+              "suites": 29,
+              "tests": 198,
+              "failures": 0,
+              "errors": 0,
+              "skipped": 0
+            },
+            "testAndroidHostTest": {
+              "suites": 27,
+              "tests": 165,
+              "failures": 0,
+              "errors": 0,
+              "skipped": 0
+            },
+            "domain/wasmJsBrowserTest": {
+              "suites": 22,
+              "tests": 262,
+              "failures": 0,
+              "errors": 0,
+              "skipped": 0
+            }
+          },
+          "lintErrors": {
+            "android": 0,
+            "collaboration-proof": 0
+          }
+        }
+      },
+      "starterFull": {
+        "result": "passed",
+        "seconds": 167,
+        "reports": {
+          "tests": {
+            "desktopTest": {
+              "suites": 115,
+              "tests": 340,
+              "failures": 0,
+              "errors": 0,
+              "skipped": 0
+            },
+            "database/wasmJsBrowserTest": {
+              "suites": 6,
+              "tests": 34,
+              "failures": 0,
+              "errors": 0,
+              "skipped": 0
+            }
+          },
+          "lintErrors": {
+            "android": 0
+          }
+        },
+        "log": ".work/command-archive-starter.log"
+      }
+    },
+    "reasonSuperseded": "Review found a same-ID delete/reinsert race at equal revision. Archive now compares the complete observed command, including encrypted request/state and resource/sort identity, before mutation or replay.",
+    "mobileArtifactsSha256": {
+      "devApk": "e8afb5a65d24dd7ae86230dc1166fb75d49f972cf4261ee70f15646a2d0e9d45",
+      "proofApk": "c4bbbf6b6bb9ea4da7dd6f38bc62fa7baa4a5305d17516183f29ff1b0c6f490a"
+    },
+    "starterDevApkSha256": "2b6200d01f78b5e227d665b818cbc3f231978ea235e38546701620055ba51092"
+  },
+  "validation": {
+    "completeRecordFocused": {
+      "result": "passed",
+      "seconds": 118,
+      "reports": {
+        "desktopTest": {
+          "suites": 10,
+          "tests": 37,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "wasmJsBrowserTest": {
+          "suites": 6,
+          "tests": 35,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      },
+      "log": ".work/command-archive-complete-record-focused.log"
+    },
+    "mobileFull": {
+      "result": "passed",
+      "seconds": 326,
+      "log": ".work/command-archive-complete-record-mobile.log",
+      "reports": {
+        "tests": {
+          "desktopTest": {
+            "suites": 405,
+            "tests": 2496,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "database/wasmJsBrowserTest": {
+            "suites": 6,
+            "tests": 35,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "data/wasmJsBrowserTest": {
+            "suites": 29,
+            "tests": 198,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "testAndroidHostTest": {
+            "suites": 27,
+            "tests": 165,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "domain/wasmJsBrowserTest": {
+            "suites": 22,
+            "tests": 262,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          }
+        },
+        "lintErrors": {
+          "android": 0,
+          "collaboration-proof": 0
+        }
+      }
+    },
+    "starterFull": {
+      "result": "passed",
+      "seconds": 152,
+      "log": ".work/command-archive-complete-record-starter.log",
+      "reports": {
+        "tests": {
+          "desktopTest": {
+            "suites": 115,
+            "tests": 341,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "database/wasmJsBrowserTest": {
+            "suites": 6,
+            "tests": 35,
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          }
+        },
+        "lintErrors": {
+          "android": 0
+        }
+      }
+    }
+  },
+  "sourceSha256": {
+    "core/database/src/commonMain/kotlin/dev/fajar/starter/database/CommandArchive.kt": "439535470f32f95cc06467a208d449437cd2dc7a94cd7c95403cf27e08020b52",
+    "core/database/src/commonMain/kotlin/dev/fajar/starter/database/CommandBounds.kt": "5f51f455fcf927c4067fb97b4d399fb5d8beddc6f5704e1a77f2e422f1be9426",
+    "core/database/src/commonMain/kotlin/dev/fajar/starter/database/CommandStore.kt": "a7861e30878da4ce8f42b27526b33b3fe5950d46076e9227330eee530372d940",
+    "core/database/src/commonTest/kotlin/dev/fajar/starter/database/CommandArchiveContract.kt": "9f141f5cde95b1645a046a026cda9de0fc80bfeec303720a890a8d29194c7bd2",
+    "core/database/src/desktopTest/kotlin/dev/fajar/starter/database/CommandArchiveMigrationTest.kt": "b005b7d9b4deb8f36555f20e434831b4af385fbfefb77e1859c75903ca5ca912",
+    "core/database/src/desktopTest/kotlin/dev/fajar/starter/database/CommandStoreTest.kt": "60d73c9659ad2022d7cde6c8eecab62c1382f85ae25f045762c5966e4db0c440",
+    "core/database/src/sqliteMain/kotlin/dev/fajar/starter/database/RoomCommandStore.kt": "b1e7a6e370b11c79646bfaad89397c66fcd77e2908de356e43a60f3d0ae9d408",
+    "core/database/src/sqliteMain/kotlin/dev/fajar/starter/database/StarterDatabase.kt": "c5993f97b83e481302f2454ccb8c564d5a1576fa81fddce8679846aec9a23551",
+    "core/database/src/sqliteMain/kotlin/dev/fajar/starter/database/dao/CommandDao.kt": "5124bd9387906224eff4aae3afd26b45ea933d7ff8b1d6365f7f19896b9f084d",
+    "core/database/src/sqliteMain/kotlin/dev/fajar/starter/database/entities/CommandArchiveEntity.kt": "3dba1ed50d51cc9e67e64c3efdfbdec8532fd89a87674a2687e45093337be31b",
+    "core/database/src/wasmJsMain/kotlin/dev/fajar/starter/database/BrowserDatabase.kt": "4116835250995b7888ea961663ff388ee0c69a533cfd40f1d20c9d0f57048f0d",
+    "core/database/src/wasmJsMain/kotlin/dev/fajar/starter/database/IndexedDbCommandStore.kt": "76e2035d624c9dd68094dc1acbaa71460f57d9e2e48fea74d62d8bc3be960139",
+    "core/database/src/wasmJsTest/kotlin/dev/fajar/starter/database/BrowserCommandArchiveTest.kt": "bb879036454be1ec72d2c1ac274b0fadfca2b01effce2f05e3737f7e56fe0024",
+    "core/database/src/wasmJsTest/kotlin/dev/fajar/starter/database/BrowserCommandStoreTest.kt": "ad96e1a3cafca6f7834d3563cbb9701f0d6fa70e4bad8689dbf15e13fee7e941",
+    "core/database/schemas/dev.fajar.starter.database.StarterDatabase/11.json": "5afce9b0053f1c84c49ad64941c3985186985fe55d96409c07f07f30df008e35"
+  },
+  "mobileArtifactsSha256": {
+    "devApk": "ce57d7e02c0c31dfc96ccf47bc03b99f51d553c06467a2161a2ec472f5fd3fd4",
+    "proofApk": "87a2846691c4c13c6738a345bf677c6e2d00fb2cd4a7e4b454fc563a84c12c96"
+  },
+  "starterDevApkSha256": "96eb96c56c3f6443c80cadb0398efcf441ef39b6a4c51b1fb67122f36cab6c01",
+  "sourceRepositories": [
+    "hris-mobile",
+    "compose-fluent-starter"
+  ],
+  "sourceManifestMatched": true,
+  "allFinalChecksPassed": true
+}

@@ -10,6 +10,37 @@ import kotlinx.serialization.json.*
 
 class CommandStoreTest {
     @Test
+    fun archiveCannotSettleAReplacedRecordWithTheSameRevision() = runTest {
+        withDatabase(::verifyCommandArchiveReplacementFence)
+    }
+
+    @Test
+    fun archiveIdentityPreservesCompletion() = runTest {
+        withDatabase(::verifyCommandArchiveIdentity)
+    }
+
+    @Test
+    fun archiveOwnershipPreservesCompletion() = runTest {
+        withDatabase(::verifyCommandArchiveOwnership)
+    }
+
+    @Test
+    fun archiveRacesPreservesCompletion() = runTest { withDatabase(::verifyCommandArchiveRaces) }
+
+    @Test
+    fun archiveCancellationPreservesCompletion() = runTest {
+        withDatabase(::verifyCommandArchiveCancellation)
+    }
+
+    @Test
+    fun archiveCapacityPreservesCompletion() = runTest {
+        withDatabase(::verifyCommandArchiveCapacity)
+    }
+
+    @Test
+    fun archiveBoundsPreservesCompletion() = runTest { withDatabase(::verifyCommandArchiveBounds) }
+
+    @Test
     fun immutableCommandsUseAtomicRevisionChecks() = runTest {
         withDatabase(::verifyCommandAtomicity)
     }

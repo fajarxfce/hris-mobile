@@ -546,5 +546,51 @@
     "The fixture alone makes at most six explicit common-use-case requests, only repeating close_pending. The product operation never loops. Its first run exposed this bounded-wait fixture assumption; corrected actual and full application checks pass on the final recorded sources.",
     "Native sync cursor storage is not reset by the implementation. This scenario does not compare a newly synchronized cursor after history reopening; earlier process-death/429 retained-cursor evidence remains separately reported.",
     "ACK-before-journal recovery, command retirement, Chat UI, Apple/web adapters, rich messages, backup, calls and meetings remain. None of 54 groups is accepted."
-  ]
+  ],
+  "hostedControl": {
+    "run": "https://github.com/fajarxfce/hris-mobile/actions/runs/41293329837",
+    "commit": "69ba59def97733d39885f735f2a9a3df3546c2f0",
+    "result": "success",
+    "jobs": [
+      {
+        "name": "portable",
+        "conclusion": "success",
+        "steps": 15,
+        "nonPassingSteps": []
+      },
+      {
+        "name": "apple",
+        "conclusion": "success",
+        "steps": 13,
+        "nonPassingSteps": []
+      }
+    ],
+    "tests": {
+      "desktopTest": {
+        "suites": 53,
+        "tests": 464,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "wasmJsBrowserTest": {
+        "suites": 49,
+        "tests": 440,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "iosSimulatorArm64Test": {
+        "suites": 42,
+        "tests": 371,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "immutableSourceHashesMatched": 272,
+    "sourceManifestUploaded": false,
+    "xcodeAppHostBuildSuccesses": 1,
+    "scope": "Validates coordinated SDK reopening at 69ba59de. ACK-before-journal recovery and command archiving have separate evidence."
+  }
 }

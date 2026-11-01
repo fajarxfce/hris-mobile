@@ -83,6 +83,51 @@ internal class RoomCommandStore(private val database: StarterDatabase) : Command
         return dao.remove(scope.sessionId, scope.accountKey, partition, id, expectedRevision)
     }
 
+    override suspend fun archived(
+        scope: CommandScope,
+        partition: String,
+        id: String,
+    ): CommandArchive? {
+        validateCommandScope(scope, partition)
+        validateCommandIdentifier(id)
+        return dao.archived(scope.sessionId, scope.accountKey, partition, id)?.let {
+            CommandArchive(
+                CommandRecord(
+                    it.partition,
+                    it.id,
+                    it.resourceId,
+                    it.sortKey,
+                    it.request,
+                    it.state,
+                    it.revision,
+                ),
+                it.evidence,
+            )
+        }
+    }
+
+    override suspend fun archive(
+        scope: CommandScope,
+        expected: CommandRecord,
+        evidence: String,
+    ): Boolean {
+        validateCommandArchive(scope, expected, evidence)
+        return dao.archive(
+            scope.sessionId,
+            CommandEntity(
+                scope.accountKey,
+                expected.partition,
+                expected.id,
+                expected.resourceId,
+                expected.sortKey,
+                expected.request,
+                expected.state,
+                expected.revision,
+            ),
+            evidence,
+        )
+    }
+
     override suspend fun containsRecords() = dao.containsRecords()
 }
 

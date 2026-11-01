@@ -22,8 +22,9 @@ revision. Repeating an identical insertion recovers the existing operation witho
 overwriting a later outcome. An operation cannot silently replace another request.
 
 Every scoped query and write checks the current session/account in the same
-transaction. Pages contain at most 50 records. Storage is limited to 128 records per
-account and 512 per database, with 128 KiB request and 32 KiB outcome envelopes.
+transaction. Pages contain at most 50 records. Pending storage is limited to 128
+records per account and 512 per database, with 128 KiB request and 32 KiB outcome
+envelopes.
 Cancellation leaves an absent or complete transaction. A committed browser write
 still notifies observers if its caller is cancelled. Owners close database resources.
 
@@ -41,3 +42,44 @@ and physical-device behavior require their own integration checks.
 
 Validation: the Linux workspace check, Android dev debug build, and actual SQLite
 and IndexedDB tests passed. This foundation is also ported to Compose Fluent Starter.
+
+## Immutable completion archive
+
+`CommandStore.archive` atomically copies the exact observed command and opaque
+completion evidence to `command_archives`, then removes its pending row. The
+feature owns eligibility and encryption; the raw store cannot infer completion
+from a response, age or state string. The operation fences current account/session
+and the complete observed command in that same transaction: ID, resource, sort key,
+request/state ciphertext and revision. An equal revision after delete/reinsert does
+not make a replaced command eligible. A failed insert/delete rolls both
+changes back. Evidence is bounded to 64 KiB of UTF-8; original request/state bounds
+remain. An identical complete-record/evidence replay succeeds without replacing anything.
+Changed proof, stale or replaced records and missing commands fail without mutation.
+
+`archived` reads one exact account/partition/ID. Ordinary `get` and observations
+continue to describe pending rows only. Archived identity remains immutable and
+fences future `insert` in its database transaction. The same request/resource/sort
+identity returns `AlreadyStored` even if pending is gone; archive-aware callers
+then read `archived` and validate their decrypted identity. Different identity
+cannot recreate that command. State updates and ordinary removal never change an
+archive. A different operation ID may reuse the freed pending resource/sort slot.
+
+The 128-account/512-database pending limits exclude archived rows. Archive reads
+use the primary key; there is no unbounded archive scan or silent eviction.
+`containsRecords` includes archives from inactive accounts so content keys cannot
+regenerate over retained ciphertext. Logout keeps the completion evidence while
+revoking access, and reauthentication binds the original account again.
+
+SQLite schema 11 and IndexedDB version 10 add only the archive table/store. Migration
+retains existing pending commands and account bindings. Shared contract tests cover
+competing updates/archives/inserts, same-revision replacement, immutable replay, lost responses, cancellation,
+account fences, pending capacity and byte bounds. Native/browser tests additionally
+exercise reopening, the previous-schema upgrade, and an injected transaction abort
+between archive creation and pending deletion.
+
+This is a raw storage foundation. A feature must preserve and validate its complete
+completion evidence before requesting archival. Receipt-journal cleanup, history
+projection, local deletion and retention are separate feature policies; no scheduler
+or automatic cleanup is introduced by these methods. Executed validation and the
+Starter port are recorded in the [measurement](measurements/command-archive-2026-11-01.json)
+and Git handoff. Both repositories pass their full local checks.

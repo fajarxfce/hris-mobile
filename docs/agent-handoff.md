@@ -1,5 +1,53 @@
 # Agent continuation — HRIS Mobile
 
+## Validated command completion archive — 1 November 2026
+
+The generic raw archive now passes Mobile and Starter validation. All **15 source,
+test and schema files** match exactly. [Evidence](measurements/command-archive-2026-11-01.json)
+records Mobile base `9da09b6b` and Starter base `36116b2`, final source hashes,
+initial checks and the review-driven strengthening. SQLite schema **11** and
+IndexedDB version **10** preserve existing account bindings and pending commands.
+
+`CommandStore.archive(scope, expectedRecord, evidence)` atomically retains the
+complete encrypted command plus at most **64 KiB** of opaque proof and removes
+pending work. Account/session and every observed field are checked together:
+ID, resource/sort identity, request/state ciphertext and revision. A same-ID
+replacement at equal revision cannot receive an old completion. Matching archive
+replay is immutable; changed proof/record is rejected. The archive fences later
+insertion, so an old operation cannot become pending again. Normal reads and
+observations exclude archives; `archived` is an exact owned lookup. Archived
+ciphertext remains visible to key-loss protection, including inactive accounts.
+Pending capacity remains 128/account and 512/database and is released on archival.
+
+Ten new scenarios pass on both actual SQLite and IndexedDB, including competing
+writes, same-revision replacement, lost responses, cancellation, account changes,
+capacity, UTF-8 bounds, reopen/reauthentication, previous-schema migration and a
+forced abort between archive creation and pending deletion. Corrected focused
+checks pass in **118s** with **37 SQLite desktop / 35 browser** cases and quality.
+Corrected full Mobile checks pass in **326s**: **2,496 desktop / 165 Android host /
+262 domain browser / 198 data browser / 35 database browser**, zero failures,
+errors or skips and zero Android/proof lint errors. Starter root/database/browser/
+Wasm/Android/lint checks pass in **152s**, **341 desktop / 35 database browser**,
+zero failures/errors/skips and zero lint errors. Its source and portable regressions
+were copied only after Mobile focused proof; template-specific docs were preserved.
+
+The first version used revision-only matching and passed focused/full checks
+(**95s / 793s Mobile / 167s Starter**). Review found the delete/reinsert case before
+commit; the final API compares the full record. Initial sources, reports and APK
+hashes remain under `initialRevisionOnly`; they are not attributed to the final
+contract. No test attempt failed. Final Mobile dev APK **`ce57d7e0`**, proof APK
+**`87a28466`**, Starter dev APK **`96eb96c5`** are built, not installed. No phone,
+live service or emulator change occurred in this foundation increment.
+
+**Next: integrate encrypted HRIS completion evidence, exact archived lookup/replay,
+retirement policy and restartable journal cleanup; then Chat UI and all P0–P8.**
+The raw store never decides that a command succeeded and does not call HTTP/SDK.
+Keep uncertain legacy work; validate original history, aliases and immutable device/
+transaction mapping before retirement. Account/denial checks and interrupted cleanup
+must remain explicit. No complete product feature group is accepted by this port.
+
+The next HRIS steps are recorded in [retirement integration](collaboration-retirement.md).
+
 ## Active collaboration implementation — 1 November 2026
 
 **ACK-before-journal recovery now passes actual Android/HRIS process death.**

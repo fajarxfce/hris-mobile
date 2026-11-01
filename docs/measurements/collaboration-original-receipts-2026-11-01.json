@@ -530,5 +530,107 @@
       "sha256": "8f066ba0f0ce2baecb4c6564a0d5afabd8b678aec357590862bf01b1eb89c8c7",
       "installedOnPhone": false
     }
+  },
+  "hostedHris": {
+    "run": "https://github.com/fajarxfce/hris-mobile/actions/runs/41295813903",
+    "commit": "9da09b6b266dd5e129e7233f2262c9c53db9ca39",
+    "result": "success",
+    "jobs": [
+      {
+        "name": "android-hris",
+        "conclusion": "success",
+        "steps": 17,
+        "nonPassingSteps": []
+      }
+    ],
+    "tests": {
+      "testAndroidHostTest": {
+        "suites": 27,
+        "tests": 165,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "test": {
+        "suites": 1,
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "runId": "c1aa858ec2574826a2b55ac28fdc1564",
+    "caseSeconds": 45.883,
+    "suiteSeconds": 95.54,
+    "immutableSourceHashesMatched": {
+      "mobile": 279,
+      "platform": 33
+    },
+    "platformPin": "79f11ee521e7ae3c96f4473773648f4243c1d8a1",
+    "sourceManifestUploaded": false,
+    "verified": {
+      "passed": true,
+      "encryptedBothDirections": true,
+      "logicalIdsPreserved": true,
+      "cleanup": true,
+      "protectedStoreReopened": true,
+      "missingRecordPreserved": true,
+      "wrongPassphrasePreserved": true,
+      "exclusiveOwner": true,
+      "processRestarted": true,
+      "queueRestored": true,
+      "transactionReused": true,
+      "identityAfterRestart": true,
+      "messageIntentRestored": true,
+      "queueMappingRecovered": true,
+      "queueWriterExclusive": true,
+      "perRoomDeliveryIsolated": true,
+      "heldQueueRestored": true,
+      "nativeDeliveryOwned": true,
+      "commonSenderOwned": true,
+      "receiptJournalRecovered": true,
+      "projectionInterrupted": true,
+      "originalHistoryWindowOwned": true,
+      "historyBodiesRestored": true,
+      "commonHistoryAcquisitionOwned": true,
+      "latestHistoryHeadOwned": true,
+      "admittedHistoryHeads": true,
+      "providerHistoryPageOwned": true,
+      "commonProviderHistoryAcquisitionOwned": true,
+      "providerHistoryReferencesRestored": true,
+      "providerHistoryReferencesReconciled": true,
+      "providerHistoryRestartPreserved": true,
+      "historyRuntimeReopened": true,
+      "ackBeforeJournalRecovered": true,
+      "processRestartedAfterAck": true,
+      "encryptedSendCount": 3,
+      "admittedProviderPages": true,
+      "historyWindow": {
+        "originals": 2,
+        "unavailable": 9,
+        "extractionNanos": 13941521,
+        "modelCharacters": 4732,
+        "originalCharacters": 953
+      },
+      "applicationAdmittedBeforeSend": true,
+      "applicationAdmittedAroundHistory": true,
+      "applicationAdmissions": {
+        "device": 22,
+        "conversation": 22,
+        "room": 22,
+        "failures": 0
+      },
+      "heldRoomNeverSent": true,
+      "pausedAcrossRestart": true,
+      "syncInterruptedAfterRestart": true,
+      "syncRetriedWithRetainedCursor": true,
+      "artifact": {
+        "apkSha256": "269756ce76556461466ef972aa35256bc71f7bcf1a0d709f227a2564f35316a8",
+        "package": "dev.fajar.hris.collaboration.proof",
+        "avd": "hris-mobile-dev",
+        "androidApi": "35"
+      }
+    },
+    "scope": "Validates ACK-before-journal recovery at 9da09b6b. The subsequent raw completion archive has separate evidence."
   }
 }

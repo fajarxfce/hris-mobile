@@ -10,6 +10,41 @@ import kotlinx.coroutines.test.runTest
 
 class BrowserCommandStoreTest {
     @Test
+    fun archiveCannotSettleAReplacedRecordWithTheSameRevision() = runTest {
+        withCommandDatabase(::verifyCommandArchiveReplacementFence)
+    }
+
+    @Test
+    fun archiveIdentityPreservesCompletion() = runTest {
+        withCommandDatabase(::verifyCommandArchiveIdentity)
+    }
+
+    @Test
+    fun archiveOwnershipPreservesCompletion() = runTest {
+        withCommandDatabase(::verifyCommandArchiveOwnership)
+    }
+
+    @Test
+    fun archiveRacesPreservesCompletion() = runTest {
+        withCommandDatabase(::verifyCommandArchiveRaces)
+    }
+
+    @Test
+    fun archiveCancellationPreservesCompletion() = runTest {
+        withCommandDatabase(::verifyCommandArchiveCancellation)
+    }
+
+    @Test
+    fun archiveCapacityPreservesCompletion() = runTest {
+        withCommandDatabase(::verifyCommandArchiveCapacity)
+    }
+
+    @Test
+    fun archiveBoundsPreservesCompletion() = runTest {
+        withCommandDatabase(::verifyCommandArchiveBounds)
+    }
+
+    @Test
     fun immutableCommandsUseAtomicRevisionChecks() = runTest {
         withCommandDatabase(::verifyCommandAtomicity)
     }

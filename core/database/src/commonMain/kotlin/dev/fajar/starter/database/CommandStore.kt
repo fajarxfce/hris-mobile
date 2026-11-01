@@ -38,6 +38,18 @@ interface CommandStore {
         expectedRevision: Long,
     ): Boolean
 
+    /** Exact owned completion read. Active observations/get deliberately exclude archives. */
+    suspend fun archived(scope: CommandScope, partition: String, id: String): CommandArchive?
+
+    /**
+     * Atomically copies the exact current command plus opaque completion evidence to immutable
+     * storage and removes its pending row. Caller owns completion policy and encryption. A replay
+     * succeeds only for the same complete record/evidence. Future insertion of this ID cannot
+     * recreate pending work; identical immutable insertion returns AlreadyStored, requiring an
+     * archive read.
+     */
+    suspend fun archive(scope: CommandScope, expected: CommandRecord, evidence: String): Boolean
+
     /** Only an existence bit, used to avoid replacing a lost key over retained ciphertext. */
     suspend fun containsRecords(): Boolean
 }

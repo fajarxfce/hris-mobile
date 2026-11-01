@@ -152,6 +152,44 @@ internal class IndexedDbCommandStore(
         }
     }
 
+    override suspend fun archived(
+        scope: CommandScope,
+        partition: String,
+        id: String,
+    ): CommandArchive? {
+        validateCommandScope(scope, partition)
+        validateCommandIdentifier(id)
+        return Json.decodeFromString(
+            commandArchive(database(), scope.sessionId, scope.accountKey, partition, id)
+                .await<JsString>()
+                .toString()
+        )
+    }
+
+    override suspend fun archive(
+        scope: CommandScope,
+        expected: CommandRecord,
+        evidence: String,
+    ): Boolean {
+        validateCommandArchive(scope, expected, evidence)
+        val db = database()
+        currentCoroutineContext().ensureActive()
+        return withContext(NonCancellable) {
+            val changed =
+                archiveCommand(
+                        db,
+                        scope.sessionId,
+                        scope.accountKey,
+                        codec.encodeToString(expected),
+                        evidence,
+                    )
+                    .await<JsBoolean>()
+                    .toBoolean()
+            if (changed) changes.tryEmit(Unit)
+            changed
+        }
+    }
+
     override suspend fun containsRecords() = anyCommands(database()).await<JsBoolean>().toBoolean()
 }
 
@@ -210,7 +248,7 @@ private external fun commandRecord(
 
 @JsFun(
     """(db, session, account, json) => new Promise((resolve, reject) => {
-    const tx = db.transaction(['account_scope', 'durable_commands'], 'readwrite');
+    const tx = db.transaction(['account_scope', 'durable_commands', 'command_archives'], 'readwrite');
     const scopes = tx.objectStore('account_scope'), owner = scopes.get('current'), principal = scopes.get('command-account');
     const store = tx.objectStore('durable_commands'), entry = {...JSON.parse(json), accountKey:account};
     let result = 'ScopeChanged';
@@ -223,12 +261,20 @@ private external fun commandRecord(
                 if (value.request !== entry.request || value.resourceId !== entry.resourceId || value.sortKey !== entry.sortKey) { tx.abort(); return; }
                 result = 'AlreadyStored'; return;
             }
+            const archived = tx.objectStore('command_archives').get([account, entry.partition, entry.id]);
+            archived.onsuccess = () => {
+                if (archived.result) {
+                    const value = archived.result;
+                    if (value.request !== entry.request || value.resourceId !== entry.resourceId || value.sortKey !== entry.sortKey) { tx.abort(); return; }
+                    result = 'AlreadyStored'; return;
+                }
             const occupied = store.index('resource').getKey([account, entry.partition, entry.resourceId]);
             const total = store.count(), owned = store.index('account').count(account);
             owned.onsuccess = () => {
                 if (occupied.result !== undefined) { result = 'ResourceOccupied'; return; }
                 if (total.result >= 512 || owned.result >= 128) { result = 'CapacityExceeded'; return; }
                 store.add(entry); result = 'Stored';
+            };
             };
         };
     };
@@ -274,10 +320,66 @@ private external fun changeCommand(
 
 @JsFun(
     """(db) => new Promise((resolve, reject) => {
-    const tx = db.transaction('durable_commands', 'readonly');
+    const tx = db.transaction(['durable_commands', 'command_archives'], 'readonly');
     const first = tx.objectStore('durable_commands').openKeyCursor();
-    tx.oncomplete = () => resolve(first.result !== null);
+    const archived = tx.objectStore('command_archives').openKeyCursor();
+    tx.oncomplete = () => resolve(first.result !== null || archived.result !== null);
     tx.onabort = () => reject(tx.error || new Error('Command existence read failed.'));
 })"""
 )
 private external fun anyCommands(db: JsAny): Promise<JsBoolean>
+
+@JsFun(
+    """(db, session, account, partition, id) => new Promise((resolve, reject) => {
+    const tx = db.transaction(['account_scope', 'command_archives'], 'readonly');
+    const scopes = tx.objectStore('account_scope'), owner = scopes.get('current'), principal = scopes.get('command-account');
+    let value = null;
+    principal.onsuccess = () => {
+        if (owner.result !== session || principal.result !== account) return;
+        const read = tx.objectStore('command_archives').get([account, partition, id]);
+        read.onsuccess = () => { if (read.result) { const {accountKey, evidence, ...record} = read.result; value = {record, evidence}; } };
+    };
+    tx.oncomplete = () => resolve(JSON.stringify(value));
+    tx.onabort = () => reject(tx.error || new Error('Command archive read failed.'));
+})"""
+)
+private external fun commandArchive(
+    db: JsAny,
+    session: String,
+    account: String,
+    partition: String,
+    id: String,
+): Promise<JsString>
+
+@JsFun(
+    """(db, session, account, json, evidence) => new Promise((resolve, reject) => {
+    const tx = db.transaction(['account_scope', 'durable_commands', 'command_archives'], 'readwrite');
+    const scopes = tx.objectStore('account_scope'), owner = scopes.get('current'), principal = scopes.get('command-account');
+    const active = tx.objectStore('durable_commands'), archives = tx.objectStore('command_archives');
+    const expected = JSON.parse(json), key = [account, expected.partition, expected.id]; let changed = false;
+    const matches = value => value && value.accountKey === account && value.partition === expected.partition && value.id === expected.id &&
+        value.resourceId === expected.resourceId && value.sortKey === expected.sortKey && value.request === expected.request &&
+        value.state === expected.state && value.revision === expected.revision;
+    principal.onsuccess = () => {
+        if (owner.result !== session || principal.result !== account) return;
+        const retained = archives.get(key);
+        retained.onsuccess = () => {
+            if (retained.result) { changed = matches(retained.result) && retained.result.evidence === evidence; return; }
+            const current = active.get(key);
+            current.onsuccess = () => {
+                if (!matches(current.result)) return;
+                archives.add({...current.result, evidence}); active.delete(key); changed = true;
+            };
+        };
+    };
+    tx.oncomplete = () => resolve(changed);
+    tx.onabort = () => reject(tx.error || new Error('Command archiving failed.'));
+})"""
+)
+private external fun archiveCommand(
+    db: JsAny,
+    session: String,
+    account: String,
+    json: String,
+    evidence: String,
+): Promise<JsBoolean>
