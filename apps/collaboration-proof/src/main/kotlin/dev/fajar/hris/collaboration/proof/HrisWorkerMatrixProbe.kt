@@ -181,8 +181,19 @@ internal class HrisWorkerMatrixProbe(private val context: Context, directory: Fi
                 SyncResult.Complete -> return attempt + 1
                 is SyncResult.Blocked -> throw HrisProofFailure(result.failure)
                 is SyncResult.Retry -> {
-                    check(attempt < 3) { "Bounded worker proof attempts exhausted" }
                     val failure = result.failure
+                    if (attempt == 3) {
+                        // Keep the final controlled retry reason; a generic check loses the
+                        // distinction between delivery, history and runtime recovery failures.
+                        throw HrisProofFailure(
+                            failure
+                                ?: Failure(
+                                    FailureKind.Unavailable,
+                                    "Bounded worker proof attempts exhausted",
+                                    code = "client.collaboration_proof_retry_exhausted",
+                                )
+                        )
+                    }
                     val wait =
                         if (failure == null) 100L
                         else maxOf(30_000L, (failure.retryAfterSeconds ?: 0) * 1_000)

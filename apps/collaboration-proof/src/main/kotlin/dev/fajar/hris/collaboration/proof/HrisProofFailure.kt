@@ -7,6 +7,11 @@ internal class HrisProofFailure(failure: Failure) :
     IllegalStateException("Owned SDK operation failed") {
     val category =
         "HrisProof_${failure.kind.name}_${when (failure.code) {
+        "client.collaboration_proof_retry_exhausted" -> "RetryExhausted"
+        "client.collaboration_delivery_timeout" -> "DeliveryTimeout"
+        "client.collaboration_delivery_pending" -> "DeliveryPending"
+        "client.collaboration_history_pending" -> "HistoryPending"
+        "client.collaboration_room_pending" -> "RoomPending"
         "client.collaboration_history_focus_capacity" -> "HistoryFocusCapacity"
         "client.collaboration_history_unresolved" -> "HistoryUnresolved"
         "client.collaboration_invalid_history_window" -> "InvalidHistoryWindow"

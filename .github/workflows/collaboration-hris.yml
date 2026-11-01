@@ -87,6 +87,7 @@ jobs:
             platform/.work/collaboration-worker/*/result.json
             platform/.work/collaboration-worker/*/acceptance.json
             platform/.work/collaboration-worker/*/gateway-trace.json
+            platform/.work/collaboration-worker/*/gateway-observations.json
             platform/.work/collaboration-worker/*/native-worker-queued.json
             platform/.work/collaboration-worker/*/native-worker-restored.json
             platform/.work/collaboration-worker/*/stopped.json

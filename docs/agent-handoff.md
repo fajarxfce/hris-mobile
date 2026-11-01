@@ -1,5 +1,16 @@
 # Agent continuation — HRIS Mobile
 
+## Failed native retry diagnostics preserved — 1 November 2026
+
+[Audit and follow-up](measurements/chat-window-ci-failure-2026-11-01.json) retain run 41334029287
+as failed, with SDK/scheduled passes and unknown direct delivery. The direct probe now throws
+the final controlled HrisProofFailure category instead of a generic exhausted check. Room,
+history, delivery and timeout aliases are bounded; retry count/waits are unchanged. Native CI
+uploads the already-sanitized `gateway-observations.json` written by Platform's finally block.
+Validation: 190s proof assembly, six cleanup tests, format/architecture/detekt pass; YAML parsed.
+No runtime fix or new acceptance is claimed. Push and audit a matching hosted run while
+continuing composer UI/recovery. Latest product APK remains installed release 7.
+
 ## Draft transition policy validated; composer wiring next — 1 November 2026
 
 Five new domain use-case/helper files and twelve scenarios implement owned Observe/Edit/
