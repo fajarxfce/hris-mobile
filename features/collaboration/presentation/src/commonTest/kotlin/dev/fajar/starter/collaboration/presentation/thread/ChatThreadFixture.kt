@@ -60,9 +60,11 @@ internal class ChatThreadFixture {
     var historyReads = 0
     var historyFull = false
     var historyReopens = 0
+    val reopenedAnchors = mutableListOf<String>()
     var beforeHistoryReopen: suspend () -> Unit = {}
     var pageNext: String? = null
     val requestedPages = mutableListOf<String?>()
+    val past = ChatThreadHistoryFixture(this)
     val transactions = mutableMapOf<String, String>()
 
     init {
@@ -142,7 +144,7 @@ internal class ChatThreadFixture {
                 conversationId: String,
                 roomId: String,
                 eventId: String,
-            ): AppResult<CollaborationHistoryEventFact?> = AppResult.Success(null)
+            ): AppResult<CollaborationHistoryEventFact?> = AppResult.Success(past.facts[eventId])
 
             override suspend fun getByEvent(
                 access: CollaborationLocalAccess,
@@ -164,7 +166,7 @@ internal class ChatThreadFixture {
                 conversationId: String,
                 roomId: String,
                 changes: List<CollaborationHistoryChange>,
-            ): AppResult<Boolean> = error("No fabricated originals")
+            ): AppResult<Boolean> = past.merge(changes)
         }
     val receipts =
         object : CollaborationReceiptRepository {
@@ -245,19 +247,28 @@ internal class ChatThreadFixture {
                 )
             }
 
+            override suspend fun readProviderHistory(
+                owner: CollaborationOwner,
+                deviceId: String,
+                matrixRoomId: String,
+                position: String?,
+            ) = past.provider(owner, deviceId, matrixRoomId, position)
+
             override suspend fun readOriginalHistory(
                 owner: CollaborationOwner,
                 deviceId: String,
                 matrixRoomId: String,
                 anchorEventId: String,
             ): AppResult<CollaborationOriginalWindow> =
-                AppResult.Failed(
-                    Failure(
-                        FailureKind.Unavailable,
-                        "Fixture focus capacity",
-                        code = "client.collaboration_history_focus_capacity",
+                if (historyFull)
+                    AppResult.Failed(
+                        Failure(
+                            FailureKind.Unavailable,
+                            "Fixture focus capacity",
+                            code = "client.collaboration_history_focus_capacity",
+                        )
                     )
-                )
+                else past.original(owner, deviceId, matrixRoomId, anchorEventId)
 
             override suspend fun prepareHistoryReopen(
                 owner: CollaborationOwner,
@@ -266,6 +277,7 @@ internal class ChatThreadFixture {
                 anchorEventId: String,
             ): AppResult<Boolean> {
                 historyReopens++
+                reopenedAnchors += anchorEventId
                 beforeHistoryReopen()
                 historyFull = false
                 return AppResult.Success(true)
@@ -385,6 +397,9 @@ internal class ChatThreadFixture {
                 createEnterCollaborationConversation(),
                 createAcquireCollaborationHistory(),
                 createReopenCollaborationHistory(),
+                createAcquireCollaborationProviderHistory(),
+                createReadCollaborationHistoryReferences(),
+                createReconcileCollaborationHistoryReferences(),
             )
         }
 
@@ -552,6 +567,49 @@ internal class ChatThreadFixture {
                 local,
                 this@ChatThreadFixture.remote,
                 setup.remote,
+                sessions,
+                workspaces,
+                server,
+                build,
+                clock,
+            )
+        }
+
+    private fun createAcquireCollaborationProviderHistory() =
+        with(base) {
+            AcquireCollaborationProviderHistory(
+                past.traversal,
+                local,
+                this@ChatThreadFixture.remote,
+                setup.remote,
+                runtimes,
+                sessions,
+                workspaces,
+                server,
+                build,
+                clock,
+            )
+        }
+
+    private fun createReadCollaborationHistoryReferences() =
+        with(base) {
+            ReadCollaborationHistoryReferences(
+                past.traversal,
+                local,
+                sessions,
+                workspaces,
+                server,
+                build,
+                clock,
+            )
+        }
+
+    private fun createReconcileCollaborationHistoryReferences() =
+        with(base) {
+            ReconcileCollaborationHistoryReferences(
+                past.traversal,
+                history,
+                local,
                 sessions,
                 workspaces,
                 server,

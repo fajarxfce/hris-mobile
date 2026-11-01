@@ -34,7 +34,11 @@ class ReconcileCollaborationHistoryReferences(
         limit: Int = 20,
     ): AppResult<CollaborationHistoryReconciliation> =
         execution.withLock {
-            if (!validCollaborationHistoryTraversal(key) || limit !in 1..20 || !validCursor(after))
+            if (
+                !validCollaborationHistoryTraversal(key) ||
+                    limit !in 1..20 ||
+                    !validCollaborationHistoryReferenceCursor(after)
+            )
                 return@withLock failed()
             val captured = capture(workspaceId)
             if (captured is AppResult.Failed) return@withLock captured
@@ -49,7 +53,8 @@ class ReconcileCollaborationHistoryReferences(
                     ?.let { it.copy(events = it.events.toList()) }
             continuation(workspaceId, access).let { if (it is AppResult.Failed) return@withLock it }
             if (read is AppResult.Failed) return@withLock read
-            if (page == null || !validPage(page, after, limit)) return@withLock failed()
+            if (page == null || !validCollaborationPendingHistoryReferences(page, after, limit))
+                return@withLock failed()
             val resolved = mutableListOf<CollaborationHistoryReference>()
             for (reference in page.events) {
                 val found =
@@ -91,28 +96,6 @@ class ReconcileCollaborationHistoryReferences(
                 )
             )
         }
-
-    private fun validCursor(value: String?) =
-        value == null || (value.length in 1..200 && value.all { it.code in 33..126 })
-
-    private fun validPage(
-        page: CollaborationHistoryReferences,
-        after: String?,
-        limit: Int,
-    ): Boolean {
-        val progress = page.progress
-        if (progress == null) return page.events.isEmpty() && page.after == null
-        return validCollaborationHistoryProgress(progress) &&
-            page.events.all {
-                !it.resolved &&
-                    it.sequence in 0 until progress.references &&
-                    validCollaborationProviderEvent(it.event)
-            } &&
-            page.events.zipWithNext().all { (a, b) -> a.sequence < b.sequence } &&
-            page.events.map { it.event.eventId }.distinct().size == page.events.size &&
-            validCursor(page.after) &&
-            (page.after == null || (page.after != after && page.events.size == limit))
-    }
 
     private suspend fun capture(workspaceId: String) =
         sessions.captureMessageAccess(workspaceId, workspaces, server, build, clock)

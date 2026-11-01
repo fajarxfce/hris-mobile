@@ -58,7 +58,9 @@ fun ChatThreadPage(
                         appString(AppString.Refresh),
                         { onEvent(ChatThreadEvent.RefreshRequested) },
                         enabled =
-                            state.connection != ChatThreadConnection.CONNECTING && !state.syncing,
+                            state.connection != ChatThreadConnection.CONNECTING &&
+                                !state.syncing &&
+                                !state.loadingOlder,
                         loading =
                             state.connection == ChatThreadConnection.CONNECTING || state.syncing,
                     )
@@ -71,7 +73,7 @@ fun ChatThreadPage(
                 contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
                 verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.Bottom),
             ) {
-                val failure = state.localFailure ?: state.failure
+                val failure = state.localFailure ?: state.historyFailure ?: state.failure
                 if (
                     failure != null ||
                         state.submissionPending ||
@@ -81,16 +83,26 @@ fun ChatThreadPage(
                 items(state.rows, key = { it.key }, contentType = { "message" }) {
                     ChatMessageBubble(it)
                 }
-                if (state.loading) item("loading") { AppLoading() }
+                if (state.loading || state.loadingOlder) item("loading") { AppLoading() }
                 if (state.hasOlder)
                     item("older") {
                         AppTextButton(
                             appString(AppString.ChatOlderMessages),
                             { onEvent(ChatThreadEvent.OlderRequested) },
-                            enabled = !state.loading,
+                            enabled = !state.loading && !state.loadingOlder,
                         )
                     }
-                if (!state.loading && state.rows.isEmpty() && failure == null)
+                if (state.historyIncomplete)
+                    item("history-incomplete") {
+                        AppText(appString(AppString.ChatHistoryIncomplete), color = AppColors.muted)
+                    }
+                if (
+                    !state.loading &&
+                        !state.loadingOlder &&
+                        state.rows.isEmpty() &&
+                        failure == null &&
+                        !state.historyIncomplete
+                )
                     item("empty") {
                         AppText(
                             appString(AppString.ChatStartMessage),
@@ -107,7 +119,9 @@ fun ChatThreadPage(
 @Composable
 private fun ChatThreadStatus(state: ChatThreadState, onEvent: (ChatThreadEvent) -> Unit) {
     Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-        (state.localFailure ?: state.failure)?.let { AppFeedback(failureText(it)) }
+        (state.localFailure ?: state.historyFailure ?: state.failure)?.let {
+            AppFeedback(failureText(it))
+        }
         if (state.submissionPending)
             AppText(appString(AppString.ChatSaveUnconfirmed), color = AppColors.muted)
         if (state.connection == ChatThreadConnection.SETUP_REQUIRED)
@@ -115,7 +129,9 @@ private fun ChatThreadStatus(state: ChatThreadState, onEvent: (ChatThreadEvent) 
                 appString(AppString.ChatSetupActivate),
                 { onEvent(ChatThreadEvent.SetupRequested) },
             )
-        else if (state.localFailure != null || state.failure != null)
+        else if (
+            state.localFailure != null || state.historyFailure != null || state.failure != null
+        )
             AppTextButton(
                 appString(AppString.Retry),
                 { onEvent(ChatThreadEvent.RefreshRequested) },

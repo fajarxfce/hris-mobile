@@ -402,6 +402,278 @@ class ChatThreadViewModelTest {
         }
     }
 
+    @Test
+    fun olderRequestFetchesOneProviderPageAcquiresOriginalsAndStopsAtItsEnd() = runTest {
+        withModel { f, vm, _, _ ->
+            f.online()
+            f.past.pages += listOf(f.past.event(2), f.past.event(1))
+            vm.onEvent(ChatThreadEvent.Entered)
+            advanceUntilIdle()
+            assertTrue(vm.state.value.hasOlder)
+            assertTrue(f.past.requestedPositions.isEmpty())
+            vm.onEvent(ChatThreadEvent.OlderRequested)
+            vm.onEvent(ChatThreadEvent.OlderRequested)
+            advanceUntilIdle()
+            assertEquals(listOf<String?>(null), f.past.requestedPositions)
+            assertEquals(
+                listOf("Older message 2", "Older message 1"),
+                vm.state.value.rows.map { it.text },
+            )
+            assertEquals(2, f.past.anchors.size)
+            assertTrue(f.past.references.all { it.resolved })
+            assertFalse(vm.state.value.hasOlder)
+            assertFalse(vm.state.value.historyIncomplete)
+            assertFalse(vm.state.value.loadingOlder)
+            assertEquals(0, f.deliveries)
+        }
+    }
+
+    @Test
+    fun providerPositionContinuesAcrossRequestsWithoutRepeatingTheCommittedPage() = runTest {
+        withModel { f, vm, _, _ ->
+            f.online()
+            f.past.pages += listOf(f.past.event(2))
+            f.past.pages += listOf(f.past.event(1))
+            vm.onEvent(ChatThreadEvent.Entered)
+            advanceUntilIdle()
+            vm.onEvent(ChatThreadEvent.OlderRequested)
+            advanceUntilIdle()
+            assertTrue(vm.state.value.hasOlder)
+            vm.onEvent(ChatThreadEvent.OlderRequested)
+            advanceUntilIdle()
+            assertEquals(listOf(null, "provider-1"), f.past.requestedPositions)
+            assertEquals(2, vm.state.value.rows.size)
+            assertFalse(vm.state.value.hasOlder)
+        }
+    }
+
+    @Test
+    fun unknownReferencesDoNotStarveLaterPagesAndExhaustionNeverClaimsDecryption() = runTest {
+        withModel { f, vm, _, _ ->
+            f.online()
+            f.past.pages += List(20) { f.past.event(40 - it, readable = false) }
+            f.past.pages += listOf(f.past.event(1))
+            vm.onEvent(ChatThreadEvent.Entered)
+            advanceUntilIdle()
+            repeat(3) {
+                vm.onEvent(ChatThreadEvent.OlderRequested)
+                advanceUntilIdle()
+            }
+            assertEquals(2, f.past.requestedPositions.size)
+            assertEquals("Older message 1", vm.state.value.rows.single().text)
+            assertEquals(20, f.past.references.count { !it.resolved })
+            assertTrue(vm.state.value.historyIncomplete)
+            assertFalse(vm.state.value.hasOlder)
+            assertTrue(f.past.anchors.size <= 6)
+        }
+    }
+
+    @Test
+    fun failedOriginalReadRetriesCommittedReferencesBeforeFetchingAnotherProviderPage() = runTest {
+        withModel { f, vm, _, _ ->
+            f.online()
+            f.past.pages += listOf(f.past.event(2))
+            f.past.pages += listOf(f.past.event(1))
+            f.past.originalFailure = f.base.network
+            vm.onEvent(ChatThreadEvent.Entered)
+            advanceUntilIdle()
+            vm.onEvent(ChatThreadEvent.OlderRequested)
+            advanceUntilIdle()
+            assertEquals(f.base.network, vm.state.value.historyFailure)
+            assertTrue(vm.state.value.hasOlder)
+            assertEquals(1, f.past.stages)
+            f.past.originalFailure = null
+            vm.onEvent(ChatThreadEvent.OlderRequested)
+            advanceUntilIdle()
+            assertNull(vm.state.value.historyFailure)
+            assertEquals(1, f.past.requestedPositions.size)
+            assertEquals("Older message 2", vm.state.value.rows.single().text)
+        }
+    }
+
+    @Test
+    fun stoppingDuringUncooperativeProviderReadDoesNotStageOrPublishIt() = runTest {
+        withModel { f, vm, _, _ ->
+            f.online()
+            f.past.pages += listOf(f.past.event(1))
+            val release = CompletableDeferred<Unit>()
+            f.past.beforeProvider = { withContext(NonCancellable) { release.await() } }
+            vm.onEvent(ChatThreadEvent.Entered)
+            advanceUntilIdle()
+            vm.onEvent(ChatThreadEvent.OlderRequested)
+            runCurrent()
+            assertTrue(vm.state.value.loadingOlder)
+            vm.onEvent(ChatThreadEvent.Stopped)
+            runCurrent()
+            release.complete(Unit)
+            advanceUntilIdle()
+            assertEquals(0, f.past.stages)
+            assertTrue(vm.state.value.rows.isEmpty())
+            assertFalse(vm.state.value.loadingOlder)
+            assertEquals(ChatThreadConnection.OFFLINE, vm.state.value.connection)
+            assertEquals(1, f.timelineCloses)
+        }
+    }
+
+    @Test
+    fun lateAccessDenialCannotPublishOrAcknowledgeProviderContent() = runTest {
+        withModel { f, vm, _, _ ->
+            f.online()
+            f.past.pages += listOf(f.past.event(1))
+            val release = CompletableDeferred<Unit>()
+            f.past.beforeOriginal = { withContext(NonCancellable) { release.await() } }
+            vm.onEvent(ChatThreadEvent.Entered)
+            advanceUntilIdle()
+            vm.onEvent(ChatThreadEvent.OlderRequested)
+            runCurrent()
+            assertEquals(1, f.past.stages)
+            f.base.gate.value = CollaborationListAdmission("denied", f.base.denied)
+            runCurrent()
+            release.complete(Unit)
+            advanceUntilIdle()
+            assertTrue(f.past.references.none { it.resolved })
+            assertTrue(vm.state.value.rows.isEmpty())
+            assertEquals(f.base.denied, vm.state.value.localFailure)
+            assertEquals(1, f.timelineCloses)
+        }
+    }
+
+    @Test
+    fun emptyIntermediateProviderPageCanContinueToAnOlderMessage() = runTest {
+        withModel { f, vm, _, _ ->
+            f.online()
+            f.past.pages += emptyList<CollaborationProviderHistoryEvent>()
+            f.past.pages += listOf(f.past.event(1))
+            vm.onEvent(ChatThreadEvent.Entered)
+            advanceUntilIdle()
+            vm.onEvent(ChatThreadEvent.OlderRequested)
+            advanceUntilIdle()
+            assertTrue(vm.state.value.hasOlder)
+            assertTrue(f.past.anchors.isEmpty())
+            vm.onEvent(ChatThreadEvent.OlderRequested)
+            advanceUntilIdle()
+            assertEquals("Older message 1", vm.state.value.rows.single().text)
+            assertFalse(vm.state.value.hasOlder)
+        }
+    }
+
+    @Test
+    fun explicitRefreshRetriesUnavailableOriginalsWithoutRefetchingAnExhaustedProvider() = runTest {
+        withModel { f, vm, _, _ ->
+            f.online()
+            f.past.pages += listOf(f.past.event(1, readable = false))
+            vm.onEvent(ChatThreadEvent.Entered)
+            advanceUntilIdle()
+            vm.onEvent(ChatThreadEvent.OlderRequested)
+            advanceUntilIdle()
+            assertTrue(vm.state.value.historyIncomplete)
+            f.past.event(1)
+            vm.onEvent(ChatThreadEvent.RefreshRequested)
+            advanceUntilIdle()
+            assertEquals("Older message 1", vm.state.value.rows.single().text)
+            assertFalse(vm.state.value.historyIncomplete)
+            assertFalse(vm.state.value.hasOlder)
+            assertEquals(1, f.past.requestedPositions.size)
+        }
+    }
+
+    @Test
+    fun olderCapacityFailureReopensTheFailedAnchorAndKeepsCommittedProviderProgress() = runTest {
+        withModel { f, vm, _, _ ->
+            f.online()
+            val event = f.past.event(1)
+            f.past.pages += listOf(event)
+            vm.onEvent(ChatThreadEvent.Entered)
+            advanceUntilIdle()
+            f.historyFull = true
+            vm.onEvent(ChatThreadEvent.OlderRequested)
+            advanceUntilIdle()
+            assertEquals(
+                "client.collaboration_history_focus_capacity",
+                vm.state.value.historyFailure?.code,
+            )
+            vm.onEvent(ChatThreadEvent.RefreshRequested)
+            advanceUntilIdle()
+            assertEquals(listOf(event.eventId), f.reopenedAnchors)
+            assertEquals(1, f.past.requestedPositions.size)
+            assertEquals("Older message 1", vm.state.value.rows.single().text)
+            assertNull(vm.state.value.historyFailure)
+            assertFalse(vm.state.value.hasOlder)
+            assertEquals(1, f.timelineCloses)
+            assertEquals(2, f.timelineOpens)
+            assertEquals(0, f.deliveries)
+        }
+    }
+
+    @Test
+    fun unrelatedStateReferencesRemainStoredWithoutClaimingMessagesAreMissing() = runTest {
+        withModel { f, vm, _, _ ->
+            f.online()
+            f.past.pages +=
+                listOf(
+                    f.past.event(2, readable = false).copy(type = "m.room.member"),
+                    f.past.event(1),
+                )
+            vm.onEvent(ChatThreadEvent.Entered)
+            advanceUntilIdle()
+            vm.onEvent(ChatThreadEvent.OlderRequested)
+            advanceUntilIdle()
+            assertEquals("Older message 1", vm.state.value.rows.single().text)
+            assertFalse(vm.state.value.historyIncomplete)
+            assertFalse(vm.state.value.hasOlder)
+            assertEquals(1, f.past.references.count { !it.resolved })
+        }
+    }
+
+    @Test
+    fun stateOnlyPageKeepsReferencesWithoutOpeningNativeMessageWindows() = runTest {
+        withModel { f, vm, _, _ ->
+            f.online()
+            f.past.pages +=
+                listOf(
+                    f.past.event(2, readable = false).copy(type = "m.room.member"),
+                    f.past.event(1, readable = false).copy(type = "m.room.create"),
+                )
+            vm.onEvent(ChatThreadEvent.Entered)
+            advanceUntilIdle()
+            vm.onEvent(ChatThreadEvent.OlderRequested)
+            advanceUntilIdle()
+            assertTrue(f.past.anchors.isEmpty())
+            assertEquals(2, f.past.references.count { !it.resolved })
+            assertTrue(vm.state.value.rows.isEmpty())
+            assertFalse(vm.state.value.hasOlder)
+            assertFalse(vm.state.value.historyIncomplete)
+        }
+    }
+
+    @Test
+    fun concurrentProviderGrowthCannotPublishThePreviousSnapshotsEnd() = runTest {
+        withModel { f, vm, _, _ ->
+            f.online()
+            f.past.pages += listOf(f.past.event(1))
+            var extended = false
+            f.past.beforeOriginal = {
+                if (!extended) {
+                    extended = true
+                    val event = f.past.event(2)
+                    f.past.references += CollaborationHistoryReference(1, event)
+                    f.past.progress = requireNotNull(f.past.progress).copy(references = 2)
+                }
+            }
+            vm.onEvent(ChatThreadEvent.Entered)
+            advanceUntilIdle()
+            vm.onEvent(ChatThreadEvent.OlderRequested)
+            advanceUntilIdle()
+            assertTrue(vm.state.value.hasOlder)
+            vm.onEvent(ChatThreadEvent.OlderRequested)
+            advanceUntilIdle()
+            assertFalse(vm.state.value.hasOlder)
+            assertEquals(2, vm.state.value.rows.size)
+            assertEquals(1, f.past.requestedPositions.size)
+            assertTrue(f.past.references.all { it.resolved })
+        }
+    }
+
     private suspend fun TestScope.withModel(
         block:
             suspend TestScope.(

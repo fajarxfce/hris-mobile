@@ -12,6 +12,11 @@ marks references with retained originals or confirmed tombstones as resolved.
 Acquisition of remaining originals, edit projection, command retirement and Chat UI
 remain separate work.
 
+The [foreground remote-history coordinator](collaboration-remote-history.md) now connects
+bounded acquisition and reconciliation to the thread's Older action. Its new UI orchestration
+has separate tests; unlimited local paging and actual native foreground integration remain
+open. The following storage/adapter evidence does not imply those acceptance criteria.
+
 ## Explicit SDK reopening
 
 `ReopenCollaborationHistory` prepares capacity for one known event anchor. The

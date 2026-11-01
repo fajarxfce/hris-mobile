@@ -38,6 +38,9 @@ class ChatThreadViewModel(
     private val enter: EnterCollaborationConversation,
     private val acquireHistory: AcquireCollaborationHistory,
     private val reopenHistory: ReopenCollaborationHistory,
+    acquireProviderHistory: AcquireCollaborationProviderHistory,
+    readHistoryReferences: ReadCollaborationHistoryReferences,
+    reconcileHistoryReferences: ReconcileCollaborationHistoryReferences,
 ) : MviViewModel<ChatThreadState, ChatThreadEvent, ChatThreadEffect>(ChatThreadState()) {
     private var observation: Job? = null
     private var connection: Job? = null
@@ -55,6 +58,18 @@ class ChatThreadViewModel(
     private var reservedText: String? = null
     private var pulse: Channel<Unit>? = null
     private var wakeRequested = false
+    private var olderRequested = false
+    private var olderPosition = ChatThreadHistoryPosition()
+    private var olderScanned = false
+    private var olderKey: CollaborationHistoryTraversal? = null
+    private var olderRecoveryAnchor: String? = null
+    private val olderHistory =
+        ChatThreadHistoryPager(
+            acquireProviderHistory,
+            acquireHistory,
+            readHistoryReferences,
+            reconcileHistoryReferences,
+        )
 
     init {
         on<ChatThreadEvent.Entered>(::onEntered)
@@ -142,6 +157,11 @@ class ChatThreadViewModel(
         submission = null
         pulse = null
         wakeRequested = false
+        olderRequested = false
+        olderPosition = ChatThreadHistoryPosition()
+        olderScanned = false
+        olderKey = null
+        olderRecoveryAnchor = null
         access = null
         context = null
         pending = emptyList()
@@ -184,7 +204,9 @@ class ChatThreadViewModel(
                     it.copy(
                         rows = rows.value,
                         loading = false,
-                        hasOlder = next != null && cursors.value.size < 10,
+                        hasOlder =
+                            cursors.value.size < 10 &&
+                                (next != null || (source != null && !olderScanned)),
                         localFailure = null,
                     )
                 }
@@ -200,8 +222,14 @@ class ChatThreadViewModel(
         pulse = null
         timeline = emptyList()
         source = null
+        olderRequested = false
         updateState {
-            it.copy(connection = ChatThreadConnection.OFFLINE, syncing = false, saving = false)
+            it.copy(
+                connection = ChatThreadConnection.OFFLINE,
+                syncing = false,
+                saving = false,
+                loadingOlder = false,
+            )
         }
         project()
         // Owned local observers stay alive to clear hidden content after account or admission loss.
@@ -223,7 +251,8 @@ class ChatThreadViewModel(
         if (
             !visible ||
                 state.value.connection == ChatThreadConnection.CONNECTING ||
-                state.value.syncing
+                state.value.syncing ||
+                state.value.loadingOlder
         )
             return
         if (access == null || context == null) {
@@ -236,7 +265,10 @@ class ChatThreadViewModel(
                         updateState { it.copy(failure = result.failure) }
                     else observeLocal()
                 }
-        } else if (state.value.failure?.code == "client.collaboration_history_focus_capacity") {
+        } else if (
+            (state.value.historyFailure ?: state.value.failure)?.code ==
+                "client.collaboration_history_focus_capacity"
+        ) {
             connection?.cancel()
             connection = null
             pulse = null
@@ -244,7 +276,15 @@ class ChatThreadViewModel(
             source = null
             project()
             connect(retryRoom = true, recoverHistory = true)
-        } else if (pulse != null) requestSync() else connect(retryRoom = true)
+        } else {
+            if (state.value.historyIncomplete || state.value.historyFailure != null) {
+                olderPosition = ChatThreadHistoryPosition()
+                olderScanned = false
+                olderRequested = true
+                updateState { it.copy(historyIncomplete = false, historyFailure = null) }
+            }
+            if (pulse != null) requestSync() else connect(retryRoom = true)
+        }
     }
 
     private fun onOlderRequested(event: ChatThreadEvent.OlderRequested) {
@@ -255,10 +295,17 @@ class ChatThreadViewModel(
                 cursors.value.size >= 10
         )
             return
-        val after = next ?: return
-        if (after in cursors.value) return
-        updateState { it.copy(loading = true) }
-        cursors.value += after
+        if (state.value.loadingOlder || olderRequested) return
+        val after = next
+        if (after != null) {
+            if (after in cursors.value) return
+            updateState { it.copy(loading = true) }
+            cursors.value += after
+        } else if (source != null && pulse != null && !olderScanned) {
+            olderRequested = true
+            updateState { it.copy(loadingOlder = true, historyFailure = null) }
+            pulse?.trySend(Unit)
+        }
     }
 
     private fun onDraftChanged(event: ChatThreadEvent.DraftChanged) {
@@ -369,7 +416,7 @@ class ChatThreadViewModel(
     }
 
     private suspend fun restoreHistory(deviceId: String): Boolean {
-        val result = reopenHistory(workspaceId, deviceId, conversationId)
+        val result = reopenHistory(workspaceId, deviceId, conversationId, olderRecoveryAnchor)
         currentCoroutineContext().ensureActive()
         if (result is AppResult.Failed) {
             connectionFailed(result.failure)
@@ -382,6 +429,8 @@ class ChatThreadViewModel(
             updateState { it.copy(connection = ChatThreadConnection.SETUP_REQUIRED) }
             return false
         }
+        if (olderRecoveryAnchor != null) olderRequested = true
+        olderRecoveryAnchor = null
         return true
     }
 
@@ -468,28 +517,27 @@ class ChatThreadViewModel(
             }
             val lease = requireNotNull(child)
             source = lease.device
+            val key =
+                CollaborationHistoryTraversal(
+                    conversationId,
+                    lease.device.roomId,
+                    lease.device.deviceId,
+                )
+            if (olderKey != key) {
+                olderPosition = ChatThreadHistoryPosition()
+                olderScanned = false
+                olderRecoveryAnchor = null
+                olderKey = key
+                updateState { it.copy(historyIncomplete = false, historyFailure = null) }
+            }
             updateState { it.copy(connection = ChatThreadConnection.CONNECTED) }
+            project()
             coroutineScope {
                 val signals = Channel<Unit>(Channel.CONFLATED)
                 pulse = signals
                 wakeRequested = false
                 signals.trySend(Unit)
-                val worker = launch {
-                    for (signal in signals) {
-                        val wake = wakeRequested
-                        wakeRequested = false
-                        if (!wake) delay(400)
-                        updateState { it.copy(syncing = true) }
-                        val result = synchronize(deviceId, wake)
-                        ensureActive()
-                        updateState {
-                            it.copy(
-                                syncing = false,
-                                failure = (result as? AppResult.Failed)?.failure,
-                            )
-                        }
-                    }
-                }
+                val worker = launch { consumeHistorySignals(signals, lease.device) }
                 try {
                     lease.updates
                         .takeWhile { result ->
@@ -530,6 +578,53 @@ class ChatThreadViewModel(
         }
     }
 
+    private suspend fun consumeHistorySignals(
+        signals: Channel<Unit>,
+        device: CollaborationMessageDevice,
+    ) {
+        for (signal in signals) {
+            val older = olderRequested
+            olderRequested = false
+            val wake = wakeRequested
+            wakeRequested = false
+            if (!wake && !older) delay(400)
+            updateState { it.copy(syncing = true, loadingOlder = older || olderRequested) }
+            val result = if (older) loadOlder(device) else synchronize(device.deviceId, wake)
+            currentCoroutineContext().ensureActive()
+            updateState {
+                if (older)
+                    it.copy(
+                        syncing = false,
+                        loadingOlder = olderRequested,
+                        historyFailure = (result as? AppResult.Failed)?.failure,
+                    )
+                else
+                    it.copy(
+                        syncing = false,
+                        loadingOlder = olderRequested,
+                        failure = (result as? AppResult.Failed)?.failure,
+                    )
+            }
+            project()
+        }
+    }
+
+    private suspend fun loadOlder(device: CollaborationMessageDevice): AppResult<Unit> {
+        val key = CollaborationHistoryTraversal(conversationId, device.roomId, device.deviceId)
+        val result = olderHistory.load(workspaceId, key, olderPosition)
+        currentCoroutineContext().ensureActive()
+        if (result is AppResult.Failed) {
+            olderRecoveryAnchor = olderHistory.recoveryAnchor
+            return result
+        }
+        val batch = (result as AppResult.Success).value
+        olderRecoveryAnchor = null
+        olderPosition = batch.position
+        olderScanned = batch.scanned
+        updateState { it.copy(historyIncomplete = it.historyIncomplete || batch.unresolved) }
+        return AppResult.Success(Unit)
+    }
+
     private suspend fun synchronize(deviceId: String, wake: Boolean): AppResult<Unit> {
         val acquired = acquireHistory(workspaceId, deviceId, conversationId)
         currentCoroutineContext().ensureActive()
@@ -544,7 +639,12 @@ class ChatThreadViewModel(
         timeline = emptyList()
         source = null
         updateState {
-            it.copy(connection = ChatThreadConnection.OFFLINE, syncing = false, failure = failure)
+            it.copy(
+                connection = ChatThreadConnection.OFFLINE,
+                syncing = false,
+                loadingOlder = false,
+                failure = failure,
+            )
         }
         project()
     }

@@ -17,7 +17,10 @@ actual provider and platform execution evidence next.
    recovery remain separate acceptance criteria. Force-stop blocks automatic Android
    execution until the app is restarted. Use only the dedicated emulator for routine tests.
 
-2. Finish remote older-history paging, durable drafts and safe pending cancellation, then
+2. [Bounded foreground remote history](collaboration-remote-history.md) now passes domain,
+   ViewModel, layout and browser tests. Extend the existing ten-page local window to bounded
+   sliding/bidirectional browsing, and prove the foreground coordinator with the actual SDK
+   and provider. Continue durable drafts and safe pending cancellation, then
    incoming FCM/pusher/gateway integration and inline replies. Keep payloads opaque and
    admission-bound; notification actions must use the same durable command pipeline.
    Android background delivery alone does not supply Apple's PushKit/CallKit, notification

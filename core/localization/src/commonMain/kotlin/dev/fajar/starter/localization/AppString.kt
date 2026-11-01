@@ -23,6 +23,10 @@ enum class AppString(val english: StringResource, val indonesian: StringResource
     ChatConnected(Res.string.chat_connected_en, Res.string.chat_connected_id),
     ChatRoomWaiting(Res.string.chat_room_waiting_en, Res.string.chat_room_waiting_id),
     ChatStartMessage(Res.string.chat_start_message_en, Res.string.chat_start_message_id),
+    ChatHistoryIncomplete(
+        Res.string.chat_history_incomplete_en,
+        Res.string.chat_history_incomplete_id,
+    ),
     ChatOlderMessages(Res.string.chat_older_messages_en, Res.string.chat_older_messages_id),
     ChatSaveUnconfirmed(Res.string.chat_save_unconfirmed_en, Res.string.chat_save_unconfirmed_id),
     ChatServiceSummary(Res.string.chat_service_summary_en, Res.string.chat_service_summary_id),

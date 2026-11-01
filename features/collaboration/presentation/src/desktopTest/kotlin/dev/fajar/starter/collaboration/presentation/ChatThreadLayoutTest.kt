@@ -152,6 +152,51 @@ class ChatThreadLayoutTest {
         compose.onNodeWithText("This message cannot be decrypted yet.").assertIsDisplayed()
     }
 
+    @Test
+    fun olderLoadingKeepsCompositionAvailableAndIncompleteHistoryNoticeReadable() {
+        val events = mutableListOf<ChatThreadEvent>()
+        var state by
+            mutableStateOf(
+                ChatThreadState(
+                    title = "Ari Pratama",
+                    loading = false,
+                    loadingOlder = true,
+                    hasOlder = true,
+                    connection = ChatThreadConnection.CONNECTED,
+                    historyIncomplete = true,
+                )
+            )
+        compose.setContent {
+            val density = LocalDensity.current
+            CompositionLocalProvider(
+                LocalDensity provides Density(density.density, 2f),
+                LocalAppLanguage provides AppLanguage.Indonesian,
+            ) {
+                AppTheme {
+                    Box(Modifier.size(320.dp, 640.dp).testTag("frame")) {
+                        ChatThreadPage(state, rememberLazyListState(), { events += it })
+                    }
+                }
+            }
+        }
+        compose.onNodeWithText("Pesan sebelumnya").performScrollTo().assertIsNotEnabled()
+        compose.onNodeWithContentDescription("Pesan").assertIsDisplayed().assertIsEnabled()
+        compose.runOnIdle { state = state.copy(loadingOlder = false) }
+        compose
+            .onNodeWithText("Pesan sebelumnya")
+            .performScrollTo()
+            .assertIsEnabled()
+            .performClick()
+        compose
+            .onNodeWithText("Sebagian riwayat lama belum tersedia. Segarkan untuk mencoba lagi.")
+            .performScrollTo()
+            .assertIsDisplayed()
+        screenshot("chat-thread-history-large-text")
+        compose.runOnIdle {
+            assertEquals(listOf<ChatThreadEvent>(ChatThreadEvent.OlderRequested), events)
+        }
+    }
+
     private fun rows() =
         listOf(
             row("latest", "Baik, dokumen klaimnya sudah saya periksa.", ChatMessageOwnership.SELF),

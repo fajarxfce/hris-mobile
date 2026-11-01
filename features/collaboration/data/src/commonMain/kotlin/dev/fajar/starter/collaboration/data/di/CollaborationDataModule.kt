@@ -150,6 +150,25 @@ class CollaborationDataModule {
         )
 
     @Factory
+    fun readHistoryReferences(
+        traversal: CollaborationHistoryTraversalRepository,
+        lists: CollaborationListRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) =
+        ReadCollaborationHistoryReferences(
+            traversal,
+            lists,
+            sessions,
+            workspaces,
+            server,
+            build,
+            Clock.System,
+        )
+
+    @Factory
     fun acquireProviderHistory(
         history: CollaborationHistoryTraversalRepository,
         lists: CollaborationListRepository,

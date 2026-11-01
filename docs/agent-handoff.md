@@ -1,5 +1,47 @@
 # Agent continuation — HRIS Mobile
 
+## Foreground remote history validated — 1 November 2026
+
+Older now coordinates retained reference reconciliation, one admitted provider page and at
+most two original windows on the screen-owned signal consumer. Local pages remain first;
+only potential message events become native anchors or missing-content notices. Unknown
+references remain durable without starving later pages. Provider exhaustion is separate
+from decryption; concurrent provider growth/replacement resets the scan. Separate loading
+and failure state preserves the composer/local history, and exact-anchor capacity recovery
+uses explicit admitted reopening. Stop/account denial prevents late publication.
+
+[Contract](collaboration-remote-history.md), [measurement](measurements/chat-remote-history-2026-11-01.json)
+and [screenshot](images/chat-thread/chat-thread-history-large-text.png) bind 18 source inputs.
+Final root/browser run: 220s; 2,733 desktop cases/427 suites, 368 domain-browser cases,
+70 presentation-browser cases, 82 presentation-desktop cases and 170 Android-host cases,
+all with zero failures/errors/skips. The image was visually inspected at 320dp and 200% text.
+Reader checks passed in 117s; first UI checks passed behavior/DI but failed the 100-line
+method rule (101 lines). Extracting the screen-owned consumer fixed that. Full root/browser
+then passed in 260s before two final review tests/corrections. The initial wrong Gradle task
+name failed before tests. Every attempt is recorded; source hashes match the final run.
+
+**Continue the long run; this is a bounded foreground increment, not completion.** The
+existing local window still stops at ten 50-message pages: implement bounded sliding or
+bidirectional browsing. Add actual SDK/provider foreground paging evidence; the new
+orchestration currently has real use-case/repository-fake tests plus Compose layout checks.
+Then durable drafts, safe pending cancellation and all remaining P0–P8. Starter and live
+backend/provider are unchanged. No whole PRD group is accepted.
+
+Before broadening the next feature, prepare the updated phone release and address native
+fixture cleanup: hosted run `41319810722` passed the SDK scenario but failed direct-worker
+instrumentation with `ClosePending` at `HrisWorkerProofContainer.close`. Driver cleanup
+succeeded; it never read the worker result after instrumentation failed, so delivery cannot
+be inferred from this failure. The lease-level proof helper already allows six bounded
+close-pending waits; the application container currently asserts only one. Preserve the
+primary failure if cleanup also fails. Run `41322946959` at `1a114442` is still active in
+native tests; audit its terminal artifacts. Do not relax product ownership/drain guarantees.
+
+Release 5 remains prepared but uninstalled; `10.77.77.3:5555` still timed out at 16:15 UTC.
+The reconnect question remains pending. Prepare a higher validated build for these UI changes,
+then notify and install-only with the saved signer/data preflight when the phone returns.
+No phone UI interaction, uninstall or data clear. Push each validated atomic commit.
+
+
 ## Actual Android scheduling validated — 1 November 2026
 
 The normal proof Activity now queues through AndroidWorkScheduler while the owned emulator

@@ -1,0 +1,133 @@
+{
+  "date": "2026-11-01",
+  "change": "Owned remote older-history coordination, bounded reference reads and separate paging state",
+  "baseImplementationCommit": "1a1144425364706c9d386d3279afbf8b4fcf4cd8",
+  "sourceSha256": {
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt": "812737085266e28ce3828c798ee52094efbd3ef70142f036f838845060c83418",
+    "core/localization/src/commonMain/composeResources/values/strings_en.xml": "8c2f7f52af1577d1469fb74a10c4ec018c8872551e49d754b41080308407768e",
+    "core/localization/src/commonMain/composeResources/values/strings_id.xml": "138d077f9b54c4c3b98fab0ac163dfd77f092c94c6231958e76d3da6d50923fb",
+    "core/localization/src/commonMain/kotlin/dev/fajar/starter/localization/AppString.kt": "4a267001074e22c0f8f60dd0da3fa680c21f4311cfbeddd1f7d995dfae283271",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt": "6baafc4fc09a7b44e77be72cb695d2dfed87e16a0144520e4da34e3d231d0e95",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationHistoryTraversalPolicy.kt": "15c3379ffb20a57de8284db893f35905187f92e11b05cfa152a090b5eeca753d",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ReconcileCollaborationHistoryReferences.kt": "2267f1ac2a760af01df444993e7018f0e77ebddd90b3bc3638e77583e1833b53",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/HistoryReferenceReconciliationFixture.kt": "abf75949753a1dfae7f6fb9d67a5e048376fc8c18d709893b3fc701cd3fa0186",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadState.kt": "11b85e8727df65979fb0780c50fb6c135cfa5922e7bc25937e4bb342ab54247c",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadViewModel.kt": "06ca9992547975c6229c3a45c29aee0e5ecaf60e097ad8221b46235b7d494632",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/pages/ChatThreadPage.kt": "c04fb6f73ce2828858f28cfc61fe841d7d72875310205cc1bb141e622e52d241",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadFixture.kt": "c541d43d93ad84016a5129d676de627fb6193a97c8fec5790b3caabf301b53a6",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadViewModelTest.kt": "34b75f64db1c6bcbd61184926191ca22daa90067447941b5ac69609b25f06d45",
+    "features/collaboration/presentation/src/desktopTest/kotlin/dev/fajar/starter/collaboration/presentation/ChatThreadLayoutTest.kt": "7f0ca5ad89119d992aeab86d0b73f7d6f529b0c56eba6d6e7e7114af370254a7",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ReadCollaborationHistoryReferences.kt": "d5d11451aff42d540d75f9c6fa41919fd90fa752bbb93a098b7104aadfc57d30",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/ReadCollaborationHistoryReferencesTest.kt": "a75800225e2e78dd511b60ff6d0bf7fc1e5b6302e4f92cfdce0fd66f3c348ebe",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadHistoryPager.kt": "3897e667b9306331738a77c4cf215340b97ec88001ee66ada705e8a83353aa4a",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadHistoryFixture.kt": "73a6d7e827f27feea887f8faeb7cd23e78d7e903e25a18605b73d401bd5bdd21"
+  },
+  "sourceManifestMatched": true,
+  "buildInputs": {
+    "appEnvironment": "dev",
+    "appVersion": "1.0.0",
+    "appVersionCode": 5,
+    "apiBaseUrl.dev": "http://10.77.77.1:8088/api/v1/"
+  },
+  "attempts": [
+    {
+      "log": ".work/history-reader-check.log",
+      "scope": "Initial reader check invocation",
+      "outcome": "FAILED",
+      "durationSeconds": 15,
+      "note": "Task name checkFormat did not exist. Failed before compilation/tests; corrected to formatCheck and architectureCheck."
+    },
+    {
+      "log": ".work/history-reader-check-2.log",
+      "scope": "Domain desktop/browser, application bindings and quality",
+      "outcome": "SUCCESSFUL",
+      "durationSeconds": 117,
+      "note": "368 domain cases on each platform, two DI cases; all passed."
+    },
+    {
+      "log": ".work/history-ui-check-1.log",
+      "scope": "Initial foreground integration desktop/bindings/quality",
+      "outcome": "FAILED",
+      "durationSeconds": 175,
+      "note": "77 presentation cases and bindings passed. Detekt rejected observeTimeline at 101 lines, exceeding 100; extracted the screen-owned signal consumer."
+    },
+    {
+      "log": ".work/history-ui-root-browser.log",
+      "scope": "Full root check and presentation browser",
+      "outcome": "SUCCESSFUL",
+      "durationSeconds": 260,
+      "note": "Passed 2731 desktop cases and 68 browser cases. Review then added state-only anchor exclusion and concurrent traversal-growth handling."
+    },
+    {
+      "log": ".work/history-ui-reviewed-check.log",
+      "scope": "Final root check and presentation browser",
+      "outcome": "SUCCESSFUL",
+      "durationSeconds": 220
+    }
+  ],
+  "reports": {
+    "desktop": {
+      "suites": 427,
+      "tests": 2733,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "domainBrowser": {
+      "suites": 31,
+      "tests": 368,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "presentationDesktop": {
+      "suites": 9,
+      "tests": 82,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "presentationBrowser": {
+      "suites": 5,
+      "tests": 70,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "androidDataHost": {
+      "suites": 28,
+      "tests": 170,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "screenshot": {
+    "path": "docs/images/chat-thread/chat-thread-history-large-text.png",
+    "sha256": "a7685b9c17ef17a6d26afcde414c7ff29be671e574652007627785b5001e728c",
+    "frameDp": [
+      320,
+      640
+    ],
+    "fontScale": 2,
+    "language": "Indonesian",
+    "visuallyInspected": true
+  },
+  "acceptance": {
+    "boundedLocalReferenceReads": true,
+    "foregroundOrchestrationWithRepositoryFakes": true,
+    "desktopLayout": true,
+    "browserStateTests": true,
+    "nativeEndToEndForegroundPaging": false,
+    "unlimitedLocalPaging": false,
+    "phoneInstalled": false,
+    "wholePrdGroup": false
+  },
+  "remaining": [
+    "Extend existing ten-page local window (50 originals per page) to bounded bidirectional/sliding browsing.",
+    "Exercise the new foreground pager against actual Android SDK and HRIS provider; original adapters have separate prior evidence.",
+    "Durable drafts and safe pending cancellation, incoming push/replies, media/actions, key continuity/backups, Apple/web SDK adapters, calls and meetings.",
+    "Hosted native run 41319810722 failed during worker container cleanup with ClosePending; only SDK scenario passed. Worker delivery result was not inspected because instrumentation did not finish. Cleanup succeeded. Investigate bounded fixture drain and primary-error preservation; newer hosted run requires audit.",
+    "Release 5 is prepared but phone 10.77.77.3:5555 is unreachable. Prepare updated release after validated commit; use install-only with signer/data checks when reachable."
+  ]
+}

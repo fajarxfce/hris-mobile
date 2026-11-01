@@ -49,3 +49,31 @@ fun validCollaborationProviderPage(
         page.events.size <= 20 &&
         page.events.all(::validCollaborationProviderEvent) &&
         page.events.map { it.eventId }.distinct().size == page.events.size
+
+fun validCollaborationHistoryReferenceCursor(value: String?) =
+    value == null || (value.length in 1..200 && value.all { it.code in 33..126 })
+
+fun validCollaborationPendingHistoryReferences(
+    page: CollaborationHistoryReferences,
+    after: String?,
+    limit: Int,
+): Boolean {
+    if (
+        limit !in 1..20 ||
+            page.events.size > limit ||
+            !validCollaborationHistoryReferenceCursor(after)
+    )
+        return false
+    val progress = page.progress
+    if (progress == null) return page.events.isEmpty() && page.after == null
+    return validCollaborationHistoryProgress(progress) &&
+        page.events.all {
+            !it.resolved &&
+                it.sequence in 0 until progress.references &&
+                validCollaborationProviderEvent(it.event)
+        } &&
+        page.events.zipWithNext().all { (a, b) -> a.sequence < b.sequence } &&
+        page.events.map { it.event.eventId }.distinct().size == page.events.size &&
+        validCollaborationHistoryReferenceCursor(page.after) &&
+        (page.after == null || (page.after != after && page.events.size == limit))
+}
