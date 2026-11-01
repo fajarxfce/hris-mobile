@@ -1,5 +1,23 @@
 # Agent continuation — HRIS Mobile
 
+## Hosted recovery regression audited; continue cancellation UI — 1 November 2026
+
+[Run 41340935053 audit](measurements/chat-draft-recovery-native-ci-2026-11-01.json) at 1ddfba6e /
+Platform 79326538 passes SDK 54.085s, direct 63.689s and scheduled 62.336s, six cleanup cases
+and twenty downloaded evidence hashes. APK `cd32c3984577324f919dee9eaa14e0e65bcb881f47fd2544aefc150ad24263c7`.
+Ordinary queued/foreground proof covers 33 originals, four history actions, 43 references,
+ten state-only and zero admission failures; WorkManager automatically recovers ordinary death
+at attempt 1. It contains application draft recovery but does not directly test frozen-only
+initial state. New four-case run 41344248284 at 448ab3ad / Platform bad75bd0 is still running;
+95964599's pending run was superseded, not a product failure. Audit the completed source.
+
+Queued cancellation policy/storage/application proof is now committed and pushed as 648410c4.
+Implement its confirmation UI next using the immediately following checkpoint and
+`.work/cancel-ui-next.txt`; then release 10+ install-only and continue the entire PRD. Phone is
+still verified release 9. Platform audit d08f07c4 and ledger correction 4d064871 are pushed.
+The ledger now points to completed native/draft evidence while retaining all 54 unaccepted
+feature groups. No live backend/provider deployment occurred.
+
 ## Queued cancellation policy proved; implement confirmation UI now — 1 November 2026
 
 The [cancellation contract](collaboration-cancellation.md) now uses existing full-record archive
