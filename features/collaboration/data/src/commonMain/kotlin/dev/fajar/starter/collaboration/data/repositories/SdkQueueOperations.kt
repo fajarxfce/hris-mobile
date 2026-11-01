@@ -2,24 +2,44 @@ package dev.fajar.starter.collaboration.data.repositories
 
 import dev.fajar.starter.common.result.*
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
 /** One native operation, no backlog. A disappearing waiter cannot cancel a late store commit. */
-internal class SdkQueueOperations(private val lifetime: CoroutineScope) {
+internal class SdkQueueOperations(
+    private val lifetime: CoroutineScope,
+    private val onInterrupted: () -> Unit = {},
+) {
     private val mutation = Mutex()
     private var active: Job? = null
     private var stopped = false
+    private val interrupted = MutableStateFlow(false)
 
     suspend fun <T> execute(operation: suspend () -> AppResult<T>): AppResult<T> {
         currentCoroutineContext().ensureActive()
         val task =
             mutation.withLock {
+                if (interrupted.value) return unavailable("client.collaboration_queue_interrupted")
                 if (stopped || !lifetime.isActive)
                     return unavailable("client.collaboration_queue_closed")
                 if (active?.isCompleted == false)
                     return unavailable("client.collaboration_queue_pending")
-                lifetime.async { operation() }.also { active = it }
+                lifetime
+                    .async { operation() }
+                    .also { task ->
+                        active = task
+                        // Unlike waiter cancellation, cancellation of the native operation itself
+                        // gives no quiescence guarantee for detached SDK storage work. Retire the
+                        // runtime through its full pool drain, even when no waiter remains.
+                        task.invokeOnCompletion { cause ->
+                            if (
+                                cause is CancellationException &&
+                                    interrupted.compareAndSet(false, true)
+                            )
+                                onInterrupted()
+                        }
+                    }
             }
         return try {
             withTimeoutOrNull(5_000) { task.await() }

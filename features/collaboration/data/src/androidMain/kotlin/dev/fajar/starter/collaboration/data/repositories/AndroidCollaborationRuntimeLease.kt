@@ -45,6 +45,9 @@ internal constructor(
             nativeClient,
             lifetime,
             children,
+            onInterrupted = {
+                if (stopRequested.compareAndSet(false, true)) lifetime.launch { shutdown.close() }
+            },
         ) {
             credentialFailures.value
                 ?: sync.failures.value?.takeIf {

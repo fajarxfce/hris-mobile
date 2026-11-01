@@ -78,5 +78,76 @@
     "Account command capacity remains128. Unicode/text and encrypted request/state bounds are enforced. Immutable request and revision-state authentication reject changed intent, stale writes and retargeted native transactions.",
     "Local echoes explicitly have no latest_json. Pure recovery uses a complete paused per-room queue snapshot and one exclusive enqueue; actual native exclusive writer and drain proof remain next.",
     "The native SDK transport was not changed by this increment; actual SDK acceptance is not inferred from storage/policy tests."
-  ]
+  ],
+  "hostedControl": {
+    "runId": 41263763417,
+    "commit": "518575387be8ed1622b4c08f020076b09ff9e1df",
+    "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/41263763417",
+    "steps": 26,
+    "passed": true,
+    "reports": {
+      "desktopTest": {
+        "suites": 33,
+        "tests": 265,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "wasmJsBrowserTest": {
+        "suites": 29,
+        "tests": 241,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "iosSimulatorArm64Test": {
+        "suites": 27,
+        "tests": 220,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "immutableSourceHashesMatched": 19,
+    "statusSha256": "08d0cb790a1ce9767904594ffa863febeff2e37dced49034d14fb06a05408dc8"
+  },
+  "hostedHris": {
+    "runId": 41263763420,
+    "commit": "518575387be8ed1622b4c08f020076b09ff9e1df",
+    "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/41263763420",
+    "steps": 17,
+    "passed": true,
+    "platformCommit": "8813ea9eee28cafc274eafcd41456340f132ae2f",
+    "sdkRunId": "81d990e013474959bc06200d351e38a0",
+    "seconds": 72.312,
+    "verification": {
+      "passed": true,
+      "encryptedBothDirections": true,
+      "logicalIdsPreserved": true,
+      "cleanup": true,
+      "protectedStoreReopened": true,
+      "missingRecordPreserved": true,
+      "wrongPassphrasePreserved": true,
+      "exclusiveOwner": true,
+      "processRestarted": true,
+      "queueRestored": true,
+      "transactionReused": true,
+      "identityAfterRestart": true,
+      "pausedAcrossRestart": true,
+      "syncInterruptedAfterRestart": true,
+      "syncRetriedWithRetainedCursor": true,
+      "artifact": {
+        "apkSha256": "eff7127e5240e7829e5a3a9a4297cfae755cb848c61e8b7dff64e07b178e77cd",
+        "package": "dev.fajar.hris.collaboration.proof",
+        "avd": "hris-mobile-dev",
+        "androidApi": "35"
+      }
+    },
+    "artifactSha256": {
+      "gateway-trace.json": "f5487b9a24328c3b7f55fba04053db9f73fee2c37ec30b269c26a103057f351d",
+      "result.json": "64117af2d2655d166a87f0123411311cc57a8a51da15fe700888bfbfddb337ee",
+      "verified.json": "d48a61ff644ed7c781eab0d1581e52fb16853553abdf78ef7ec38556d67c3dfb"
+    },
+    "scope": "The committed intent source is verified separately. This older actual SDK fixture proves the protected native queue/identity exchange, not the subsequently added app intent mapping or common staging use case."
+  }
 }

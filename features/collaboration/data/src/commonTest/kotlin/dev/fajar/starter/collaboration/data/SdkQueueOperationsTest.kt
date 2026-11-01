@@ -141,7 +141,8 @@ class SdkQueueOperationsTest {
 
     @Test
     fun failureAndNativeCancellationRemainExplicitAndDoNotResetTheQueue() = runTest {
-        val operations = SdkQueueOperations(backgroundScope)
+        var retirements = 0
+        val operations = SdkQueueOperations(backgroundScope) { retirements++ }
         val denied =
             AppResult.Failed(
                 Failure(FailureKind.AccessDenied, "Denied", code = "permission_denied")
@@ -158,8 +159,41 @@ class SdkQueueOperationsTest {
                 .code,
         )
         assertEquals(
-            AppResult.Success("original-transaction"),
-            operations.execute { AppResult.Success("original-transaction") },
+            "client.collaboration_queue_interrupted",
+            assertIs<AppResult.Failed>(
+                    operations.execute<Unit> { error("A full runtime drain is required") }
+                )
+                .failure
+                .code,
+        )
+        assertEquals(1, retirements)
+        operations.stop()
+    }
+
+    @Test
+    fun nativeInterruptionRetiresTheRuntimeEvenAfterItsWaiterDisappears() = runTest {
+        var retirements = 0
+        val operations = SdkQueueOperations(backgroundScope) { retirements++ }
+        val finish = CompletableDeferred<Unit>()
+        val waiter = launch {
+            operations.execute<Unit> {
+                finish.await()
+                throw CancellationException("Native interrupted")
+            }
+        }
+        runCurrent()
+        waiter.cancelAndJoin()
+        assertEquals(0, retirements)
+        finish.complete(Unit)
+        runCurrent()
+        assertEquals(1, retirements)
+        assertEquals(
+            "client.collaboration_queue_interrupted",
+            assertIs<AppResult.Failed>(
+                    operations.execute<Unit> { error("No retry on an undrained store") }
+                )
+                .failure
+                .code,
         )
         operations.stop()
     }

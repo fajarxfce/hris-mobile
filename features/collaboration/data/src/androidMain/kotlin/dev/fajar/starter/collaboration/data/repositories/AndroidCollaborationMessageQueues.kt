@@ -18,6 +18,7 @@ internal class AndroidCollaborationMessageQueues(
     private val client: Client,
     private val lifetime: CoroutineScope,
     private val children: SdkChildResources,
+    private val onInterrupted: () -> Unit,
     private val failure: () -> Failure?,
 ) {
     private val occupied = AtomicBoolean()
@@ -34,7 +35,7 @@ internal class AndroidCollaborationMessageQueues(
         val source = AndroidCollaborationMessageQueueSource {
             requireNotNull(client.getRoom(roomId))
         }
-        val operations = SdkQueueOperations(lifetime)
+        val operations = SdkQueueOperations(lifetime, onInterrupted)
         val acquired =
             children.acquire(
                 source,

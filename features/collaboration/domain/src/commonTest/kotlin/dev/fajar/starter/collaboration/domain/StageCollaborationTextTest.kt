@@ -1,0 +1,428 @@
+package dev.fajar.starter.collaboration.domain
+
+import dev.fajar.starter.collaboration.domain.entities.*
+import dev.fajar.starter.collaboration.domain.repositories.*
+import dev.fajar.starter.collaboration.domain.usecases.StageCollaborationText
+import dev.fajar.starter.common.result.*
+import kotlin.test.*
+import kotlin.time.Duration.Companion.days
+import kotlinx.coroutines.*
+import kotlinx.coroutines.test.runTest
+
+class StageCollaborationTextTest {
+    @Test
+    fun failedSnapshotIsNeverInterpretedAsAnEmptyQueue() = runTest {
+        val f = StageFixture()
+        f.prepare()
+        f.snapshotFailure = f.base.storage
+        assertIs<AppResult.Failed>(f.stage())
+        assertEquals(0, f.enqueues)
+        assertEquals(CollaborationMessageState.Queued, f.record.state)
+        f.snapshotFailure = null
+        f.afterEnqueue = { f.snapshotFailure = f.base.storage }
+        assertIs<AppResult.Failed>(f.stage())
+        assertIs<CollaborationMessageState.Staging>(f.record.state)
+        f.snapshotFailure = null
+        f.afterEnqueue = {}
+        assertIs<AppResult.Success<*>>(f.stage())
+        assertEquals(1, f.enqueues)
+    }
+
+    @Test
+    fun rejectedMappingCasRetainsTheSameNativeAttempt() = runTest {
+        val f = StageFixture()
+        f.prepare()
+        f.rejectMapping = true
+        assertIs<AppResult.Failed>(f.stage())
+        assertIs<CollaborationMessageState.Staging>(f.record.state)
+        f.rejectMapping = false
+        assertIs<AppResult.Success<*>>(f.stage())
+        assertEquals(1, f.enqueues)
+    }
+
+    @Test
+    fun denialAfterNativeCommitPreservesUncertaintyUntilAdmittedRecovery() = runTest {
+        val f = StageFixture()
+        f.prepare()
+        f.afterEnqueue = { f.base.gate.value = CollaborationListAdmission("denied", f.base.denied) }
+        assertEquals(f.base.denied, assertIs<AppResult.Failed>(f.stage()).failure)
+        assertIs<CollaborationMessageState.Staging>(f.record.state)
+        assertEquals(f.base.denied, assertIs<AppResult.Failed>(f.stage()).failure)
+        f.base.gate.value = CollaborationListAdmission("admitted", null)
+        f.afterEnqueue = {}
+        assertIs<AppResult.Success<*>>(f.stage())
+        assertEquals(1, f.enqueues)
+    }
+
+    @Test
+    fun accountReplacementWhileAdmissionReadCannotEnqueue() = runTest {
+        val f = StageFixture()
+        f.prepare()
+        f.base.beforeAdmission = {
+            if (f.record.state is CollaborationMessageState.Staging) f.base.setup.session = null
+        }
+        assertIs<AppResult.Failed>(f.stage())
+        assertEquals(0, f.enqueues)
+        assertIs<CollaborationMessageState.Staging>(f.record.state)
+        assertEquals(1, f.closes)
+    }
+
+    @Test
+    fun nativeEnqueueFollowsDurableUncertaintyAndPublishesOnlyTheOriginalMapping() = runTest {
+        val f = StageFixture()
+        f.prepare()
+        val staged = assertIs<AppResult.Success<CollaborationMessageRecord>>(f.stage()).value
+        assertEquals(CollaborationMessageState.Staged(f.device, "original"), staged.state)
+        assertEquals(listOf("save-staging", "enqueue", "save-staged", "close"), f.events)
+        assertEquals(AppResult.Success(staged), f.stage())
+        assertEquals(1, f.enqueues)
+        assertEquals(1, f.acquisitions)
+    }
+
+    @Test
+    fun nativeCommitBeforeLostResponseIsReconciledWithoutAnotherEnqueue() = runTest {
+        val f = StageFixture()
+        f.prepare()
+        f.enqueueResult = AppResult.Failed(f.base.storage)
+        assertIs<AppResult.Failed>(f.stage())
+        assertIs<CollaborationMessageState.Staging>(f.record.state)
+        f.enqueueResult = AppResult.Success(Unit)
+        assertIs<AppResult.Success<*>>(f.stage())
+        assertEquals(1, f.enqueues)
+        assertEquals(
+            "original",
+            assertIs<CollaborationMessageState.Staged>(f.record.state).transactionId,
+        )
+    }
+
+    @Test
+    fun lostMappingWriteAndFailedLocalPreparationCannotGenerateReplacementTransaction() = runTest {
+        val f = StageFixture()
+        f.prepare()
+        f.failMapping = true
+        assertIs<AppResult.Failed>(f.stage())
+        assertIs<CollaborationMessageState.Staging>(f.record.state)
+        f.failMapping = false
+        assertIs<AppResult.Success<*>>(f.stage())
+        assertEquals(1, f.enqueues)
+        val g = StageFixture()
+        g.prepare()
+        g.failStaging = true
+        assertIs<AppResult.Failed>(g.stage())
+        assertEquals(0, g.enqueues)
+        assertEquals(CollaborationMessageState.Queued, g.record.state)
+    }
+
+    @Test
+    fun cancellationAfterNativeCommitRetainsIntentAndClosesOnlyItsWriter() = runTest {
+        val f = StageFixture()
+        f.prepare()
+        val committed = CompletableDeferred<Unit>()
+        f.afterEnqueue = {
+            committed.complete(Unit)
+            awaitCancellation()
+        }
+        val job = launch { f.stage() }
+        committed.await()
+        job.cancelAndJoin()
+        assertEquals(1, f.closes)
+        assertIs<CollaborationMessageState.Staging>(f.record.state)
+        f.afterEnqueue = {}
+        assertIs<AppResult.Success<*>>(f.stage())
+        assertEquals(1, f.enqueues)
+    }
+
+    @Test
+    fun unknownNativeQueueAndDifferentDeviceUncertaintyStayHeld() = runTest {
+        val f = StageFixture()
+        f.prepare()
+        f.nativeIds += "unknown"
+        assertIs<AppResult.Failed>(f.stage())
+        assertEquals(0, f.enqueues)
+        assertEquals(CollaborationMessageState.Queued, f.record.state)
+        val g = StageFixture()
+        g.prepare()
+        g.replace(
+            g.record.copy(
+                revision = 1,
+                state =
+                    CollaborationMessageState.Staging(
+                        g.device.copy(bootstrapOperationId = stageId(77)),
+                        emptySet(),
+                    ),
+            )
+        )
+        assertEquals(
+            "client.collaboration_queue_other_device",
+            assertIs<AppResult.Failed>(g.stage()).failure.code,
+        )
+        assertEquals(0, g.enqueues)
+    }
+
+    @Test
+    fun uncertainSiblingAndMultipleNewTransactionsCannotBeAttributedToThisIntent() = runTest {
+        val f = StageFixture()
+        f.prepare()
+        f.base.records.value +=
+            f.record.copy(
+                intent = f.record.intent.copy(id = stageId(99)),
+                revision = 1,
+                state = CollaborationMessageState.Staging(f.device, emptySet()),
+            )
+        assertEquals(
+            "client.collaboration_queue_unresolved",
+            assertIs<AppResult.Failed>(f.stage()).failure.code,
+        )
+        assertEquals(0, f.enqueues)
+        val g = StageFixture()
+        g.prepare()
+        g.replace(
+            g.record.copy(
+                revision = 1,
+                state = CollaborationMessageState.Staging(g.device, emptySet()),
+            )
+        )
+        g.nativeIds += setOf("unknown-a", "unknown-b")
+        assertIs<AppResult.Failed>(g.stage())
+        assertEquals(0, g.enqueues)
+    }
+
+    @Test
+    fun expiredAdmissionAndUnavailableDeviceNeverAcquireNativeWriter() = runTest {
+        val f = StageFixture()
+        f.prepare()
+        f.base.setup.now += 2.days
+        assertIs<AppResult.Failed>(f.stage())
+        assertEquals(0, f.acquisitions)
+        assertEquals(1, f.base.records.value.size)
+        val g = StageFixture()
+        g.prepare()
+        g.base.setup.onRead = {
+            AppResult.Success(
+                g.base.setup.device.copy(
+                    id = g.device.deviceId,
+                    state = CollaborationDeviceState.REVOKED,
+                )
+            )
+        }
+        assertIs<AppResult.Failed>(g.stage())
+        assertEquals(0, g.acquisitions)
+    }
+
+    @Test
+    fun lateOwnerReplacementClosesAcquiredWriterBeforeAnyEnqueue() = runTest {
+        val f = StageFixture()
+        f.prepare()
+        f.afterAcquire = { f.base.setup.session = null }
+        assertIs<AppResult.Failed>(f.stage())
+        assertEquals(0, f.enqueues)
+        assertEquals(1, f.closes)
+    }
+
+    @Test
+    fun companyDenialSurvivesFailedGateWriteAndFailedPostRequestSessionRead() = runTest {
+        val f = StageFixture()
+        f.prepare()
+        f.control.remoteFailure = f.base.denied
+        f.control.beforeRemote = { f.base.setup.sessionFailure = f.base.storage }
+        assertEquals(f.base.denied, assertIs<AppResult.Failed>(f.stage()).failure)
+        assertEquals(f.base.denied, f.base.gate.value.denial)
+        assertEquals(0, f.acquisitions)
+    }
+
+    @Test
+    fun receivedRecipientDenialDoesNotRevokeAllLocalCompanyHistory() = runTest {
+        val f = StageFixture()
+        f.prepare()
+        val denied =
+            Failure(
+                FailureKind.AccessDenied,
+                "Unavailable",
+                code = "collaboration_recipient_unavailable",
+            )
+        f.control.remoteFailure = denied
+        assertEquals(denied, assertIs<AppResult.Failed>(f.stage()).failure)
+        assertNull(f.base.gate.value.denial)
+        assertEquals(0, f.acquisitions)
+    }
+}
+
+private class StageFixture {
+    val base = MessageIntentFixture()
+    val control = ConversationCommandFixture()
+    val device =
+        CollaborationMessageDevice(stageId(6), stageId(7), stageId(8), "!room:example.test")
+    private val owner: CollaborationOwner
+        get() =
+            CollaborationOwner(
+                "local",
+                base.server.audience,
+                base.summary!!.conversation.firstAccountId,
+                base.summary!!.conversation.companyId,
+                device.nativeSessionId,
+            )
+
+    val record: CollaborationMessageRecord
+        get() = base.records.value.first()
+
+    val nativeIds = mutableSetOf<String>()
+    val events = mutableListOf<String>()
+    var acquisitions = 0
+    var enqueues = 0
+    var closes = 0
+    var failStaging = false
+    var failMapping = false
+    var rejectMapping = false
+    var snapshotFailure: Failure? = null
+    var enqueueResult: AppResult<Unit> = AppResult.Success(Unit)
+    var afterAcquire: suspend () -> Unit = {}
+    var afterEnqueue: suspend () -> Unit = {}
+
+    init {
+        base.setup.session =
+            base.setup.session!!.copy(
+                binding = base.setup.session!!.binding.copy(serverId = device.nativeSessionId)
+            )
+        base.setup.workspace =
+            base.setup.workspace!!.copy(
+                admission = base.setup.workspace!!.admission.copy(familyId = device.nativeSessionId)
+            )
+        base.setup.onRead = { AppResult.Success(base.setup.device.copy(id = device.deviceId)) }
+        control.conversation = base.summary!!.conversation
+        control.room =
+            CollaborationDirectRoom(
+                control.conversation.id,
+                1,
+                CollaborationDirectRoomState.READY,
+                device.roomId,
+                control.conversation.firstAccountId,
+                false,
+                null,
+            )
+    }
+
+    private val messages =
+        object : CollaborationMessageRepository by base.messages {
+            override suspend fun update(
+                access: CollaborationLocalAccess,
+                expected: CollaborationMessageRecord,
+                state: CollaborationMessageState,
+            ): AppResult<Boolean> {
+                if (state is CollaborationMessageState.Staged && rejectMapping)
+                    return AppResult.Success(false)
+                if (
+                    state is CollaborationMessageState.Staging && failStaging ||
+                        state is CollaborationMessageState.Staged && failMapping
+                )
+                    return AppResult.Failed(base.storage)
+                if (expected != record) return AppResult.Success(false)
+                events +=
+                    if (state is CollaborationMessageState.Staging) "save-staging"
+                    else "save-staged"
+                replace(expected.copy(revision = expected.revision + 1, state = state))
+                return AppResult.Success(true)
+            }
+        }
+    private val lists =
+        object : CollaborationListRepository by base.lists {
+            override suspend fun restrict(
+                access: CollaborationLocalAccess,
+                failure: Failure,
+            ): AppResult<Boolean> {
+                base.gate.value = CollaborationListAdmission("received", failure)
+                return AppResult.Failed(base.storage)
+            }
+        }
+    private val runtimes =
+        object : CollaborationRuntimeRepository {
+            override suspend fun acquireMessageQueue(
+                owner: CollaborationOwner,
+                deviceId: String,
+                matrixRoomId: String,
+            ): AppResult<CollaborationMessageQueueLease> {
+                acquisitions++
+                val queue =
+                    object : CollaborationMessageQueueLease {
+                        override val owner = this@StageFixture.owner
+                        override val device = this@StageFixture.device
+
+                        override suspend fun snapshot(): AppResult<Set<String>> =
+                            snapshotFailure?.let { AppResult.Failed(it) }
+                                ?: AppResult.Success(nativeIds.toSet())
+
+                        override suspend fun enqueue(
+                            logicalId: String,
+                            text: String,
+                        ): AppResult<Unit> {
+                            assertIs<CollaborationMessageState.Staging>(record.state)
+                            assertEquals(record.intent.id, logicalId)
+                            assertEquals(record.intent.text, text)
+                            enqueues++
+                            events += "enqueue"
+                            nativeIds += "original"
+                            afterEnqueue()
+                            return enqueueResult
+                        }
+
+                        override suspend fun close(): AppResult<Unit> {
+                            closes++
+                            events += "close"
+                            return AppResult.Success(Unit)
+                        }
+                    }
+                afterAcquire()
+                return AppResult.Success(queue)
+            }
+
+            override suspend fun isOpen(
+                owner: CollaborationOwner,
+                deviceId: String,
+            ): AppResult<Boolean> = error("No implicit restore")
+
+            override suspend fun install(
+                owner: CollaborationOwner,
+                command: CollaborationSetupCommandRecord,
+            ): AppResult<CollaborationRuntimeLease> = error("No enrollment")
+
+            override suspend fun restore(
+                owner: CollaborationOwner,
+                deviceId: String,
+            ): AppResult<CollaborationRuntimeLease?> = error("No implicit restore")
+
+            override suspend fun enterTimeline(
+                owner: CollaborationOwner,
+                deviceId: String,
+                matrixRoomId: String,
+            ): AppResult<CollaborationTimelineLease> = error("No implicit join")
+
+            override suspend fun closeOtherOwners(
+                retainedOwner: CollaborationOwner?
+            ): AppResult<Unit> = error("No parent close")
+        }
+    private val staging =
+        StageCollaborationText(
+            messages,
+            lists,
+            control.remote,
+            base.setup.remote,
+            runtimes,
+            base.setup.sessions,
+            base.setup.workspaces,
+            base.server,
+            base.build,
+            base.clock,
+        )
+
+    suspend fun prepare() {
+        assertIs<AppResult.Success<*>>(base.queue())
+    }
+
+    suspend fun stage() = staging("selection", device.deviceId, record.intent.id)
+
+    fun replace(value: CollaborationMessageRecord) {
+        base.records.value =
+            base.records.value.map { if (it.intent.id == value.intent.id) value else it }
+    }
+}
+
+private fun stageId(value: Int) = "00000000-0000-0000-0000-" + value.toString().padStart(12, '0')

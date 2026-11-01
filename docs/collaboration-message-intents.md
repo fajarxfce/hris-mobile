@@ -81,14 +81,51 @@ and stops/joins its task before returning. Overflow or malformed IDs fail the
 whole snapshot. It never infers absence from an unhydrated timeline. Enqueue
 keeps the original logical ID in encrypted message content and leaves delivery
 paused. A native lease is a primitive, not permission to discard app uncertainty.
-The common sender still must validate live HRIS admission, reconcile all uncertain
-intents for its room, commit mappings and control delivery explicitly.
+The common staging use case now validates live HRIS admission, reconciles the
+uncertain attempt for its room and commits its native mapping. Delivery still
+requires a separate admitted lifetime.
 
 The expanded fictional HRIS fixture deliberately retains app `Staging` across
 real process death after native enqueue. On restart it checks the exact original
 intent, derives the native transaction from the captured snapshot, stores `Staged`
 and only then resumes the test exchange. This fixture separately checks writer
 exclusivity, closed-handle refusal, re-acquisition and the final `Sent` mapping.
-The [native-writer measurement](measurements/collaboration-native-writer-2026-11-01.json) verifies this actual process-death exchange in 39.509s, with all proof and cleanup flags true. Product sender
-orchestration, durable history, cancellation UI and all chat routes remain pending;
+The [native-writer measurement](measurements/collaboration-native-writer-2026-11-01.json) verifies this actual process-death exchange in 39.509s, with all proof and cleanup flags true. Per-room delivery, durable history, cancellation UI and all chat routes remain pending;
 these native primitives do not accept any complete PRD group.
+
+
+## Admitted common staging
+
+`StageCollaborationText` binds one immutable local intent to its original native
+transaction. The application binding is a singleton with one serialized staging
+attempt. It checks the live native owner, company gate, active platform device,
+owned direct conversation and ready room before acquiring the paused writer.
+Every I/O result is followed by gate and owner validation. The owner is captured
+**after** the gate read, so an account switch during that read cannot publish
+success or authorize enqueue. Received company denial is retained even if the
+subsequent admission read fails; a recipient-specific denial stays scoped to that
+operation.
+
+Before enqueue it reads the bounded owned conversation intents and the complete
+paused native snapshot. Every existing native transaction must have an original
+mapping, and no sibling intent may remain uncertain. It CAS-persists `Staging`
+before native I/O and `Staged` only after identifying exactly one transaction.
+Failed preparation cannot enqueue. A lost response, failed post-enqueue snapshot,
+failed mapping write or caller cancellation leaves the original attempt intact
+for explicit recovery. Unknown transactions, ambiguous snapshots and another
+native family cannot produce a replacement send. Already mapped/sent results are
+idempotent reads of the original outcome; they do not authorize delivery from a
+new device. There is no automatic retry or queue enablement in this use case.
+
+The writer remains a child of the protected runtime after cancellation. If the
+native operation itself is interrupted, even after its caller disappears, the
+runtime is synchronously marked unavailable and retired through full child/task/
+database-pool drain. It cannot admit another enqueue against a store whose late
+commit is uncertain. Normal caller cancellation and waiter timeout keep the
+native operation alive instead.
+
+[Staging evidence](measurements/collaboration-message-staging-2026-11-01.json)
+records 16 new common cases, including two account-switch regressions first
+executed against the faulty ordering. The actual emulator exchange separately
+rechecks the native storage/process-death primitive with the new runtime changes;
+it does not claim to exercise the common use case through production UI.

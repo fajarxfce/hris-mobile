@@ -122,8 +122,8 @@ class QueueCollaborationText(
         access: CollaborationLocalAccess,
     ): AppResult<Unit> {
         currentCoroutineContext().ensureActive()
-        val current = capture(workspaceId)
         val gate = conversations.admission(access)
+        val current = capture(workspaceId)
         currentCoroutineContext().ensureActive()
         if (gate is AppResult.Success)
             gate.value.denial?.let {

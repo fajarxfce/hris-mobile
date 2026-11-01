@@ -187,3 +187,66 @@ are authorized; do not treat a checkpoint as completion.
 
 [Local list contract](collaboration-local-list.md) · [Earlier November detail](collaboration-implementation-history-2026-11-01.md)
 
+
+
+## Native writer checkpoint — 1 November 2026
+
+The protected runtime now owns one exclusive paused native queue writer across
+all its rooms. `SdkQueueOperations` keeps an in-flight native enqueue alive after
+waiter cancellation/timeout; competing operations cannot overtake it. Child cleanup
+drains native work and listeners before releasing exclusivity. Per-room subscription
+captures the full bounded transaction set without relying on local-echo JSON.
+The domain handle exposes snapshot/enqueue/close and never enables delivery.
+
+[Native-writer evidence](measurements/collaboration-native-writer-2026-11-01.json):
+five new common ownership cases; initial focused compile needed explicit generic
+types in two test lambdas (45s), then corrected proof/quality checks pass in 82s.
+Full root/browser/Android/Wasm/lint passes in **228s**: **2,272 desktop / 383 suites**,
+**135 domain / 111 data browser**, zero failures/errors/skips and app/proof lint
+errors. All **168 Mobile / 24 Platform source hashes** match actual execution.
+Dev APK `ec43002c` is built, not installed; proof APK `ad767cf1`.
+
+Actual HRIS SDK run **`6e761470778d411db4ddee83bf9fea2e`** passes in **39.509s**
+(79s Gradle/quality). The Android fixture persists an encrypted app intent and
+`Staging` snapshot, enqueues through the product native writer, then the driver
+force-stops the real process **before app transaction mapping**. Restoration
+recovers the exact original native transaction, CAS-publishes `Staged`, and only
+then resumes the fixture exchange. It checks exclusive-writer refusal, closed
+handles, reacquisition and the final `Sent` mapping. Both encrypted directions,
+original identity/transaction, no early send, injected sync failure and retained-
+cursor recovery still pass. All new proof flags and cleanup are true. The updated
+Python evidence validator passes its 13 cases. HRIS CI now pins the verified
+Platform `7e95bffdae322e16c9b904d21461b42c19b20012`. The dedicated emulator is stopped.
+
+Owned offline intents were pushed at Mobile **`518575387be8ed1622b4c08f020076b09ff9e1df`**:
+14 common domain cases, nine SQLite/IndexedDB message cases and exact-list lookup.
+Its full check passes in 263s (2,267 desktop, 135/106 browser); all 19 source hashes
+match. [Intent contract](collaboration-message-intents.md) separates stable account
+facts, local denial gates, native-family uncertainty and live delivery. Logical IDs
+retain exact text/timestamp across lost responses. The earlier local-echo hydration
+proposal was incorrect: unsent echoes have no JSON. Paused snapshots plus one
+exclusive enqueue are the implemented recovery primitive.
+
+**Continue P0–P8; none of the 54 feature groups is accepted. Next implement the
+common live-admitted sender and per-room delivery lifetime.** Coordinate owned
+intents, device/conversation/room admission, uncertain-attempt reconciliation and
+CAS mapping before enabling delivery. Unknown native transactions and cross-family
+uncertainty must remain held; no second transport retry owner. Then connect Chat
+list/setup/conversation UI, durable message history/windows and bootstrap recovery.
+The actual fixture proves storage/native primitives; it does not replace product
+sender policy, UI, richer chat/calls/meetings or Apple native interoperability.
+Keep SDK keys/cursors intact; the 512-item observer guard is not a history window.
+
+Verified hosted cache checks for Mobile `4980ea00`: control `41261819143` passes
+all 26 steps (230 desktop, 206 browser, 195 iOS simulator); HRIS `41261819051`
+passes all 17 steps and SDK `c2cd4309` in 72.366s. All 22 cache source hashes match.
+[Local-list evidence](measurements/collaboration-local-list-2026-11-01.json) records
+the artifacts. Newer `67d23041` protocol `41262754682` and HRIS `41262754762` report
+success but their artifacts are not yet audited; control `41262754840` was still
+running. Intent `51857538` HRIS `41263763420` was running and control `41263763417`
+was pending. Do not replace running CI or claim its unaudited results as proof.
+
+No live/schema/phone change. Starter remains `36116b2`; these HRIS-specific adapters
+need no generic port. Atomic commits and every-commit pushes remain authorized.
+Do not treat a checkpoint as completion. [Earlier November detail](collaboration-implementation-history-2026-11-01.md)
+

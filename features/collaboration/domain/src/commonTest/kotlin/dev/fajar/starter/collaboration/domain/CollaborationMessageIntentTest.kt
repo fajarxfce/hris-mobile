@@ -16,6 +16,14 @@ import kotlinx.coroutines.test.runTest
 
 class CollaborationMessageIntentTest {
     @Test
+    fun accountReplacementWhileFinalAdmissionReadCannotPublishSuccess() = runTest {
+        val f = MessageIntentFixture()
+        f.beforeAdmission = { if (f.messageReads == 2) f.setup.session = null }
+        assertIs<AppResult.Failed>(f.queue())
+        assertEquals(1, f.records.value.size)
+    }
+
+    @Test
     fun expiredLiveAuthorityStillAcceptsAndObservesAnOwnedOfflineIntent() = runTest {
         val f = MessageIntentFixture()
         f.setup.now += 365.days
@@ -163,7 +171,7 @@ class CollaborationMessageIntentTest {
     }
 }
 
-private class MessageIntentFixture {
+internal class MessageIntentFixture {
     val setup = CollaborationSetupFixture()
     private val account = intentId(1)
     private val company = intentId(2)
@@ -189,6 +197,7 @@ private class MessageIntentFixture {
     var activeMessageObservers = 0
     var afterConversation: suspend () -> Unit = {}
     var afterInsert: suspend () -> Unit = {}
+    var beforeAdmission: suspend () -> Unit = {}
     var insertResult: AppResult<CollaborationMessageInsertion> =
         AppResult.Success(CollaborationMessageInsertion.STORED)
     var summary: CollaborationDirectSummary? =
@@ -263,8 +272,12 @@ private class MessageIntentFixture {
                         ?: AppResult.Success(it)
                 }
 
-            override suspend fun admission(access: CollaborationLocalAccess) =
-                observeAdmission(access).first()
+            override suspend fun admission(
+                access: CollaborationLocalAccess
+            ): AppResult<CollaborationListAdmission> {
+                beforeAdmission()
+                return observeAdmission(access).first()
+            }
 
             override fun observe(
                 access: CollaborationLocalAccess,
@@ -292,9 +305,9 @@ private class MessageIntentFixture {
                 expectedRevision: String?,
             ): AppResult<Boolean> = error("No admission refresh")
         }
-    private val server = IdentityServer(setup.initial.binding.audience, "Fixture")
-    private val build = AppBuild(AppPlatform.Android, 5, "test", null)
-    private val clock =
+    val server = IdentityServer(setup.initial.binding.audience, "Fixture")
+    val build = AppBuild(AppPlatform.Android, 5, "test", null)
+    val clock =
         object : Clock {
             override fun now() = setup.now
         }
