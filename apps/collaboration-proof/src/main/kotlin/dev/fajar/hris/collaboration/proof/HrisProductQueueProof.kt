@@ -3,6 +3,7 @@ package dev.fajar.hris.collaboration.proof
 import android.content.Context
 import dev.fajar.starter.collaboration.data.datasources.MemoryCollaborationListAdmissionDataSource
 import dev.fajar.starter.collaboration.data.repositories.AndroidCollaborationRuntimeLease
+import dev.fajar.starter.collaboration.data.repositories.EncryptedCollaborationHistoryRepository
 import dev.fajar.starter.collaboration.data.repositories.EncryptedCollaborationListRepository
 import dev.fajar.starter.collaboration.data.repositories.EncryptedCollaborationMessageRepository
 import dev.fajar.starter.collaboration.data.repositories.EncryptedCollaborationReceiptRepository
@@ -10,6 +11,7 @@ import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.policies.recoverCollaborationQueue
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationMessageQueueLease
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationMessageRepository
+import dev.fajar.starter.collaboration.domain.usecases.AcquireCollaborationHistory
 import dev.fajar.starter.collaboration.domain.usecases.DeliverCollaborationMessages
 import dev.fajar.starter.collaboration.domain.usecases.ReconcileCollaborationMessages
 import dev.fajar.starter.common.result.*
@@ -207,7 +209,32 @@ internal class HrisProductQueueProof(
         replySender: String,
         replyText: String,
     ): org.json.JSONObject {
-        val window = success(runtime.readOriginalHistory(roomId, sentEventId))
+        val app = requireNotNull(application)
+        val runtimeAccess = HrisProofRuntimeAccess(runtime)
+        val acquire =
+            AcquireCollaborationHistory(
+                EncryptedCollaborationHistoryRepository(
+                    database.replicas,
+                    AesGcmContentCipher(),
+                    historyKey,
+                ),
+                listRepository(),
+                app.conversations,
+                app.setup,
+                runtimeAccess,
+                app.sessions,
+                app.workspaces,
+                app.server,
+                app.build,
+                app.clock,
+            )
+        val acquired =
+            success(acquire(app.workspaceId, runtime.deviceId, conversationId, sentEventId))
+        val window = requireNotNull(runtimeAccess.historyWindow)
+        check(
+            acquired.acquiredEvents == 2 &&
+                acquired.unresolvedEvents == window.unavailableEventIds.size
+        )
         return HrisProofOriginalHistory(
                 { database.replicas },
                 historyKey,
@@ -223,6 +250,7 @@ internal class HrisProductQueueProof(
                 ),
                 ::reopenDatabase,
             )
+            .put("commonHistoryAcquisitionOwned", true)
     }
 
     private suspend fun reopenDatabase() {

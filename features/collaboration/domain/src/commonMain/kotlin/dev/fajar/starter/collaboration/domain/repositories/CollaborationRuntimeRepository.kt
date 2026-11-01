@@ -6,6 +6,14 @@ import kotlinx.coroutines.flow.StateFlow
 
 /** Store I/O and SDK ownership only. Use cases admit installation and live delivery separately. */
 interface CollaborationRuntimeRepository {
+    /** Finite read from an installed runtime and known room; the caller admits network access. */
+    suspend fun readOriginalHistory(
+        owner: CollaborationOwner,
+        deviceId: String,
+        matrixRoomId: String,
+        anchorEventId: String,
+    ): AppResult<CollaborationOriginalWindow>
+
     /** Uses an installed runtime and known room; never resumes queue delivery. */
     suspend fun acquireMessageQueue(
         owner: CollaborationOwner,

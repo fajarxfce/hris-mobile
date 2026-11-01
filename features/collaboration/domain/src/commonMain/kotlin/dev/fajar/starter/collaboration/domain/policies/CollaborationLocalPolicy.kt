@@ -47,6 +47,20 @@ fun collaborationLocalAccess(
 fun CollaborationOwner.localListAccess() =
     CollaborationLocalAccess(sessionId, audience, accountId, companyId)
 
+/** Content operations distinguish company/session denial from a single unavailable recipient. */
+fun collaborationContentResponseClosesRead(failure: Failure) =
+    failure.kind == FailureKind.Unauthorized ||
+        failure.code in workspaceAccessLossCodes ||
+        failure.code in
+            setOf(
+                "permission_denied",
+                "collaboration_access_denied",
+                "company_module_disabled",
+                "company_maintenance",
+                "client_update_required",
+                "client_version_required",
+            )
+
 /**
  * Only company-summary acquisition uses this policy; a rejected recipient is not company denial.
  */

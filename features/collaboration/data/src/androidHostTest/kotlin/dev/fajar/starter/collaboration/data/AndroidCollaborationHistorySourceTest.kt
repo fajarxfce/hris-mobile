@@ -4,6 +4,7 @@ import dev.fajar.starter.collaboration.data.datasources.AndroidCollaborationHist
 import dev.fajar.starter.collaboration.data.repositories.*
 import dev.fajar.starter.collaboration.domain.entities.CollaborationHistoryChange
 import dev.fajar.starter.common.result.*
+import kotlin.coroutines.CoroutineContext
 import kotlin.test.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.test.*
@@ -16,7 +17,14 @@ class AndroidCollaborationHistorySourceTest {
     fun focusedSnapshotCopiesOriginalOnceAndClosesBeforeReturning() = runTest {
         val room = HistoryRoom()
         val children = SdkChildResources(this)
-        val windows = AndroidCollaborationHistoryWindows(client(room), children) { null }
+        val windows =
+            AndroidCollaborationHistoryWindows(
+                client(room),
+                children,
+                StandardTestDispatcher(testScheduler),
+            ) {
+                null
+            }
         val result =
             assertIs<AppResult.Success<AndroidCollaborationHistoryWindow>>(
                     windows.read("!room:test", "\$original")
@@ -113,10 +121,45 @@ class AndroidCollaborationHistorySourceTest {
         val denied = Failure(FailureKind.Unauthorized, "Fixture denied")
         var failure: Failure? = null
         room.beforeListenerReturns = { failure = denied }
-        val windows = AndroidCollaborationHistoryWindows(client(room), children) { failure }
+        val windows =
+            AndroidCollaborationHistoryWindows(
+                client(room),
+                children,
+                StandardTestDispatcher(testScheduler),
+            ) {
+                failure
+            }
         assertEquals(AppResult.Failed(denied), windows.read("!room:test", "\$original"))
         assertEquals(1, room.calls.count { it == "room.close" })
         children.close()
+    }
+
+    @Test
+    fun cancellationWhileDecoderIsQueuedStillReleasesTheOwnedNativeWindow() = runTest {
+        val room = HistoryRoom()
+        val children = SdkChildResources(this)
+        val queued = mutableListOf<Runnable>()
+        val decoder =
+            object : CoroutineDispatcher() {
+                override fun dispatch(context: CoroutineContext, block: Runnable) {
+                    queued += block
+                }
+            }
+        val windows = AndroidCollaborationHistoryWindows(client(room), children, decoder) { null }
+        val pending = async { windows.read("!room:test", "\$original") }
+        runCurrent()
+        assertFalse(pending.isCompleted)
+        assertEquals(1, room.item.copied)
+        assertEquals(0, room.calls.count { it == "room.close" })
+        pending.cancel()
+        assertEquals(1, queued.size)
+        queued.removeAt(0).run()
+        runCurrent()
+        pending.join()
+        assertTrue(pending.isCancelled)
+        assertEquals(1, room.calls.count { it == "listener.cancel" })
+        assertEquals(1, room.calls.count { it == "room.close" })
+        assertEquals(AppResult.Success(Unit), children.close())
     }
 
     @Test
@@ -124,7 +167,14 @@ class AndroidCollaborationHistorySourceTest {
         val room = HistoryRoom()
         room.task.finished = false
         val children = SdkChildResources(this)
-        val windows = AndroidCollaborationHistoryWindows(client(room), children) { null }
+        val windows =
+            AndroidCollaborationHistoryWindows(
+                client(room),
+                children,
+                StandardTestDispatcher(testScheduler),
+            ) {
+                null
+            }
         val pending = async { windows.read("!room:test", "\$original") }
         advanceUntilIdle()
         assertIs<AppResult.Failed>(pending.await())

@@ -7,7 +7,6 @@ import dev.fajar.starter.common.config.AppBuild
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.identity.domain.entities.IdentityServer
 import dev.fajar.starter.identity.domain.repositories.SessionRepository
-import dev.fajar.starter.workspace.domain.policies.workspaceAccessLossCodes
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
 import kotlin.time.Clock
 import kotlinx.coroutines.*
@@ -240,7 +239,7 @@ class DeliverCollaborationMessages(
         received: AppResult<*>?,
     ): AppResult<Unit> {
         val rejected = (received as? AppResult.Failed)?.failure
-        if (rejected != null && closesCompany(rejected))
+        if (rejected != null && collaborationContentResponseClosesRead(rejected))
             withContext(NonCancellable) {
                 withTimeoutOrNull(2_000) { lists.restrict(owner.localListAccess(), rejected) }
             }
@@ -248,7 +247,8 @@ class DeliverCollaborationMessages(
         val gate = lists.admission(owner.localListAccess())
         val current = capture(workspaceId)
         currentCoroutineContext().ensureActive()
-        if (rejected != null && closesCompany(rejected)) return AppResult.Failed(rejected)
+        if (rejected != null && collaborationContentResponseClosesRead(rejected))
+            return AppResult.Failed(rejected)
         if (gate is AppResult.Success)
             gate.value.denial?.let {
                 return AppResult.Failed(it)
@@ -258,19 +258,6 @@ class DeliverCollaborationMessages(
         if (gate is AppResult.Failed) return gate
         return AppResult.Success(Unit)
     }
-
-    private fun closesCompany(failure: Failure) =
-        failure.kind == FailureKind.Unauthorized ||
-            failure.code in workspaceAccessLossCodes ||
-            failure.code in
-                setOf(
-                    "permission_denied",
-                    "collaboration_access_denied",
-                    "company_module_disabled",
-                    "company_maintenance",
-                    "client_update_required",
-                    "client_version_required",
-                )
 
     private suspend fun capture(workspaceId: String) =
         sessions.captureCollaborationOwner(workspaceId, workspaces, server, build, clock)

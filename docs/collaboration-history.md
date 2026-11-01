@@ -3,9 +3,9 @@
 The collaboration feature now has encrypted, paged storage for original text
 messages and provider event aliases. `ObserveCollaborationHistory` reads acquired
 facts offline under the same account/company admission as the conversation list.
-An Android prototype can now acquire a finite original-event snapshot around a
-known event through the owned SDK runtime. Common admitted acquisition, provider
-paging, edit projection, command retirement and Chat UI remain separate work.
+`AcquireCollaborationHistory` can now acquire a finite original-event snapshot
+around a known event through the owned Android SDK runtime. Head discovery,
+provider paging, edit projection, command retirement and Chat UI remain separate work.
 
 ## Canonical identity and deletion
 
@@ -82,6 +82,26 @@ current account ownership after that check. Only an admitted acquisition elsewhe
 can reopen the company gate. It performs no network work, key bootstrap or SDK
 restore. The caller owns the flow collection and cancellation.
 
+## Explicit acquisition
+
+The common runtime port returns a window bound to account/company/native session,
+device, room and requested anchor. The use case validates live owner, device,
+DIRECT conversation and READY room before the SDK read and reacquires those HRIS
+controls afterward. Company/session denials share the existing buffered encrypted
+company gate; failed restriction persistence cannot clear a known denial. A single
+unavailable recipient does not close unrelated company history. Only the existing
+company-summary admission flow reopens that gate.
+
+The use case detaches both returned collections before further suspension, checks
+their identity and all event primitives, and rejects duplicates, foreign windows
+or more than 128 combined entries before writing. Each 1–16-event storage batch
+retains its own atomic commit; a later conflict, cancellation or lost response
+does not roll back earlier acquired facts. Admission and current owner are checked
+after each commit. There is no automatic repeat, provider-position advancement,
+native queue work or sender-receipt inference. Callers own invocation/cancellation.
+The report counts acquired event facts, not newly inserted messages; unresolved
+entries can include state events and are not a count of unreadable chat messages.
+
 ## Verification
 
 The Android prototype owns an event-focused SDK timeline with a 20-event context,
@@ -94,13 +114,16 @@ proof. Original JSON is bounded to 96,000 UTF-8 bytes and depth 16 before recurs
 parsing; cumulative model/original character counts are each capped at 4,194,304.
 These checks cannot prevent the SDK's preceding diagnostic allocation or its
 internal event-cache snapshot. They do not establish large-room memory bounds.
+The Android adapter decodes and hashes the snapshot on `Dispatchers.Default`
+within the caller's structured operation. A cancelled invocation still releases
+its native child even if decoding is waiting in the dispatcher queue.
 
 The parent runtime owns partial initialization and listener/task/timeline/room
 cleanup. A pending or failed release retains ownership, and a late credential
 denial withholds results. The prototype uses an already known encrypted room; it
 does not join, bootstrap another client, start sync or enable the send queue.
 Its known anchor is not head discovery or a provider cursor. The application
-acquisition policy and other platform adapters still need to supply that path.
+still needs bounded provider progress and the other platform adapters.
 
 The shared storage contract runs against real SQLite and IndexedDB with actual
 authenticated encryption: restart and reauthentication, copied sender IDs,
@@ -116,3 +139,6 @@ for actual run results, source hashes and remaining acceptance limits.
 The [original-window evidence](measurements/collaboration-original-window-2026-11-01.json)
 adds the actual Android/HRIS context read, encrypted database reopen and measured
 extraction, including the failed filter and fixture attempts that preceded it.
+The [common acquisition evidence](measurements/collaboration-history-acquisition-2026-11-01.json)
+then proves the application use case performs that first write, brackets the SDK
+read with live HRIS admission and retains cancellation/late-result protection.

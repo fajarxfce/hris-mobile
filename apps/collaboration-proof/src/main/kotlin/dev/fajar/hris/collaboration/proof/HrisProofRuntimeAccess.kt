@@ -1,5 +1,6 @@
 package dev.fajar.hris.collaboration.proof
 
+import dev.fajar.starter.collaboration.data.repositories.AndroidCollaborationHistoryWindow
 import dev.fajar.starter.collaboration.data.repositories.AndroidCollaborationRuntimeLease
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.repositories.*
@@ -8,6 +9,32 @@ import dev.fajar.starter.common.result.*
 /** Borrows the already protected fixture runtime. Its outer owner still owns full shutdown. */
 internal class HrisProofRuntimeAccess(private val runtime: AndroidCollaborationRuntimeLease) :
     CollaborationRuntimeRepository {
+    var historyWindow: AndroidCollaborationHistoryWindow? = null
+        private set
+
+    override suspend fun readOriginalHistory(
+        owner: CollaborationOwner,
+        deviceId: String,
+        matrixRoomId: String,
+        anchorEventId: String,
+    ): AppResult<CollaborationOriginalWindow> {
+        check(owner == runtime.owner && deviceId == runtime.deviceId)
+        check(historyWindow == null)
+        val result = runtime.readOriginalHistory(matrixRoomId, anchorEventId)
+        if (result is AppResult.Failed) return result
+        val window = (result as AppResult.Success).value.also { historyWindow = it }
+        return AppResult.Success(
+            CollaborationOriginalWindow(
+                owner,
+                deviceId,
+                matrixRoomId,
+                anchorEventId,
+                window.originals,
+                window.unavailableEventIds,
+            )
+        )
+    }
+
     override suspend fun acquireMessageQueue(
         owner: CollaborationOwner,
         deviceId: String,

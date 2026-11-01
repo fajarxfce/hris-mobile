@@ -27,7 +27,8 @@ internal class HrisProofOriginalHistory(
             val original = originals.single { it.eventId == eventId }
             check(original.sender == sender && original.text == text && original.logicalId != null)
         }
-        check(success(repository().merge(access, conversationId, roomId, originals)))
+        // Application acquisition must already have stored these facts; do not mask a missing
+        // write.
         val before = success(repository().observe(access, conversationId).first())
         check(before.messages.size == 2 && before.next == null)
         reopen()

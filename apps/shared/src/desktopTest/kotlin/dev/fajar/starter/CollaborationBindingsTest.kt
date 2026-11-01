@@ -31,6 +31,14 @@ class CollaborationBindingsTest {
             var suppliedServer: IdentityServer? = null
             val runtime =
                 object : CollaborationRuntimeRepository {
+                    override suspend fun readOriginalHistory(
+                        owner: CollaborationOwner,
+                        deviceId: String,
+                        matrixRoomId: String,
+                        anchorEventId: String,
+                    ): AppResult<CollaborationOriginalWindow> =
+                        error("No implicit history acquisition")
+
                     override suspend fun acquireMessageQueue(
                         owner: CollaborationOwner,
                         deviceId: String,
@@ -104,6 +112,7 @@ class CollaborationBindingsTest {
                 assertNotNull(container.koin.get<CollaborationReceiptRepository>())
                 assertNotNull(container.koin.get<CollaborationHistoryRepository>())
                 assertNotNull(container.koin.get<ObserveCollaborationHistory>())
+                assertNotNull(container.koin.get<AcquireCollaborationHistory>())
                 assertSame(
                     container.koin.get<DeliverCollaborationMessages>(),
                     container.koin.get<DeliverCollaborationMessages>(),

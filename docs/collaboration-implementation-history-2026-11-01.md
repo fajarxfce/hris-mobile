@@ -2,6 +2,68 @@
 
 ## Active collaboration implementation — 1 November 2026
 
+**An owned Android original-event window now passes through real HRIS and Matrix
+SDKs into canonical encrypted history.** [Evidence](measurements/collaboration-original-window-2026-11-01.json)
+records actual run **`125c8c38739645df9e5cd445fe6f90c2`**, **46.115s native suite /
+77s Gradle**, cleanup complete. Both exact text originals and their event/logical
+indexes survive database reopen; replay leaves the same page. The SDK's focused
+context request returns 200 with its typed membership filter. The prior common
+sender's 3/3/3 live HTTP admissions, paused restart and isolated held room remain
+asserted.
+
+This is a finite known-anchor snapshot, not complete acquisition or head discovery.
+The shared decoder authenticates original event identity and hashes complete
+canonical original content, retaining unknown fields. Replacements and unavailable
+content cannot establish originals. Seven decoder and seven Android ownership
+cases cover original-versus-edited data, bounds, partial acquisition, late denial
+and retained cleanup. The real fixture contains two unedited text originals plus
+10 unsupported entries. Diagnostic extraction measured **21.967 ms**, **4,732 model
+characters / 937 original JSON characters**. The pinned SDK allocates its diagnostic
+model and internal cache snapshot before application bounds; no large-room memory
+or capacity claim follows from this measurement.
+
+The Platform gateway now forwards only validated boolean lazy-member flags for
+messages/context. Unknown/event/sender filters, duplicate keys, trailing input,
+nonboolean or oversized values fail before provider access. The actual runner also
+publishes app signals by completed rename under its exclusive fixture owner;
+partial files can no longer satisfy the APK's ready-file check. Evidence retains
+the original filter rejection, renderer crash, partial-signal race and Android's
+rejection of the first hard-link publisher. Every attempt completed cleanup.
+
+Full application checks pass in **290s**: **2,361 desktop / 129 Android host /
+184 domain-browser / 151 data-browser** cases, zero failures/errors/skips
+and zero Android lint errors. All **223 Mobile / 33 Platform source hashes** match.
+Focused backend checks pass in 123s (40 domain / five history data / 21 API);
+35 Python driver cases pass. Dev APK **`6cf0338f`** is built, not installed.
+
+Platform **`61303ade50aac74124be6fb59ef10d880875f594`** is pushed; the HRIS workflow
+pins that verified gateway/filter and atomic-signal fixture source.
+
+**Continue P0–P8; none of 54 complete groups is accepted. Next connect the finite
+history window to the common live-admitted acquisition port, then head discovery,
+provider progress, ACK-before-journal reconciliation, command retirement and Chat
+list/setup/conversation UI.** Do not infer send success from missing native queue
+IDs or drop unresolved history. Keep original native transactions and SDK crypto
+stores/cursors. Apple/web owned content runtimes, edit/attachment projection,
+backup and all call/meeting phases remain. Physical iPhone testing is waived;
+Apple implementation/interoperability is still required.
+
+Prior hosted sender run `41273236979` (`20995a8c`) failed with a safe RuntimeError;
+its trace contains provider-busy join and no encrypted send, cleanup complete.
+Later canonical-storage source `ad0848e6` passed existing HRIS proof `41274726916`
+(all 17 steps, 55.798s native suite, 115 Android host cases). Both outcomes are
+retained in their measurement files. They do not validate this new window.
+Current-source Apple/portable evidence must still be audited from hosted CI.
+
+The dedicated emulator is stopped. No live/schema/phone change. Starter remains
+`36116b2`; no reusable foundation change is required by these HRIS adapters.
+Atomic commits and a push after every commit remain authorized. Continue after
+this checkpoint; the collaboration implementation is not complete.
+
+[Earlier November detail](collaboration-implementation-history-2026-11-01.md)
+
+## Active collaboration implementation — 1 November 2026
+
 **Canonical original-message storage and owned offline observation are implemented.**
 [History evidence](measurements/collaboration-history-2026-11-01.json) records the
 full **301s** root/browser/Android/Wasm run: **2,354 desktop / 115 Android host /

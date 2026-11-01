@@ -257,6 +257,10 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
                                 .put("projectionInterrupted", true)
                                 .put("originalHistoryWindowOwned", true)
                                 .put("historyBodiesRestored", true)
+                                .put(
+                                    "commonHistoryAcquisitionOwned",
+                                    history.remove("commonHistoryAcquisitionOwned") == true,
+                                )
                                 .put("historyWindow", history)
                                 .put("senderEventId", sent.eventId)
                                 .put("recipientEventId", answered.eventId)

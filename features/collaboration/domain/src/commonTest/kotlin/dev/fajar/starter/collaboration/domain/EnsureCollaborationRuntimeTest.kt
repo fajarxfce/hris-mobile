@@ -218,6 +218,13 @@ private class EnsureRuntimeFixture {
         }
     val runtime =
         object : CollaborationRuntimeRepository {
+            override suspend fun readOriginalHistory(
+                owner: CollaborationOwner,
+                deviceId: String,
+                matrixRoomId: String,
+                anchorEventId: String,
+            ): AppResult<CollaborationOriginalWindow> = error("No implicit history acquisition")
+
             override suspend fun acquireMessageQueue(
                 owner: CollaborationOwner,
                 deviceId: String,

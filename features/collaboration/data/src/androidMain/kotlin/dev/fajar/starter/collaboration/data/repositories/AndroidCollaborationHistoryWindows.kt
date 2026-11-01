@@ -6,8 +6,11 @@ import dev.fajar.starter.collaboration.domain.entities.CollaborationHistoryChang
 import dev.fajar.starter.collaboration.domain.policies.validCollaborationEventId
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.storage.safeStorageCall
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
+import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.Client
 
 /** A finite original snapshot, not a live stream, complete provider history or sync cursor. */
@@ -26,6 +29,7 @@ internal constructor(
 internal class AndroidCollaborationHistoryWindows(
     private val client: Client,
     private val children: SdkChildResources,
+    private val decodingDispatcher: CoroutineDispatcher = Dispatchers.Default,
     private val failure: () -> Failure?,
 ) {
     suspend fun read(
@@ -58,21 +62,23 @@ internal class AndroidCollaborationHistoryWindows(
                     return AppResult.Failed(it)
                 }
                 safeStorageCall {
-                    val snapshot = source.snapshot()
-                    val originals = mutableListOf<CollaborationHistoryChange>()
-                    val unavailable = mutableListOf<String>()
-                    for (event in snapshot.events) {
-                        val original = event.toOriginalHistory()
-                        if (original == null) unavailable += event.eventId
-                        else originals += original
+                    withContext(decodingDispatcher) {
+                        val snapshot = source.snapshot()
+                        val originals = mutableListOf<CollaborationHistoryChange>()
+                        val unavailable = mutableListOf<String>()
+                        for (event in snapshot.events) {
+                            val original = event.toOriginalHistory()
+                            if (original == null) unavailable += event.eventId
+                            else originals += original
+                        }
+                        AndroidCollaborationHistoryWindow(
+                            originals.toList(),
+                            unavailable.toList(),
+                            snapshot.extractionNanos,
+                            snapshot.modelCharacters,
+                            snapshot.originalCharacters,
+                        )
                     }
-                    AndroidCollaborationHistoryWindow(
-                        originals.toList(),
-                        unavailable.toList(),
-                        snapshot.extractionNanos,
-                        snapshot.modelCharacters,
-                        snapshot.originalCharacters,
-                    )
                 }
             } finally {
                 disposed = child.close()
