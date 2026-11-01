@@ -1,0 +1,217 @@
+{
+  "date": "2026-11-01",
+  "runId": 41351236140,
+  "conclusion": "success",
+  "headSha": "302aa192d6fbbe4735187b51a1d9a0fd8eb00995",
+  "status": "completed",
+  "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/41351236140",
+  "platformCommit": "d48ac2f866e7f6395cad035424b9fe76d9fdb743",
+  "artifact": {
+    "apkSha256": "5438147bc67881ec9b2a3f4547e261c1035f5f21336709b4aa9c471dd9427829",
+    "package": "dev.fajar.hris.collaboration.proof",
+    "androidApi": 35
+  },
+  "nativeTests": [
+    {
+      "name": "dev.fajar.hris.NativeCollaborationScheduledInteropTest",
+      "tests": 1,
+      "seconds": 85.907,
+      "cases": [
+        {
+          "name": "androidWorkManagerRestoresConstrainedIntentAfterOrdinaryProcessDeath()",
+          "seconds": 40.478
+        }
+      ]
+    },
+    {
+      "name": "dev.fajar.hris.NativeCollaborationSdkInteropTest",
+      "tests": 1,
+      "seconds": 61.318,
+      "cases": [
+        {
+          "name": "actualAndroidSdkExchangesEncryptedMessagesThroughCurrentHrisGatewayAdmission()",
+          "seconds": 47.815
+        }
+      ]
+    },
+    {
+      "name": "dev.fajar.hris.NativeCollaborationWorkerInteropTest",
+      "tests": 3,
+      "seconds": 186.936,
+      "cases": [
+        {
+          "name": "actualApplicationWorkerRetainsCancelledDraftAcrossDeathAndSendsIndependentIntentOnce()",
+          "seconds": 54.154
+        },
+        {
+          "name": "actualApplicationWorkerRestoresQueuedIntentAfterProcessDeathAndSendsOnce()",
+          "seconds": 53.463
+        },
+        {
+          "name": "actualApplicationWorkerRecoversFrozenOnlyDraftAfterProcessDeathAndSendsOnce()",
+          "seconds": 53.083
+        }
+      ]
+    }
+  ],
+  "cleanupUnitTests": 6,
+  "workers": {
+    "FROZEN_DRAFT": {
+      "processes": 2,
+      "forcedProcessDeaths": 1,
+      "workerEncryptedSends": 1,
+      "peerEncryptedSends": 32,
+      "historyActions": 4,
+      "providerReferences": 43,
+      "stateOnlyReferences": 10,
+      "passes": 1,
+      "applicationAdmissions": {
+        "device": 30,
+        "conversation": 28,
+        "room": 30,
+        "failures": 0
+      },
+      "cleanup": true,
+      "exactOriginalPreservedAcrossDeath": true,
+      "oldestOriginalRetainedAfterStop": true,
+      "pendingCommandsBeforeAndAfterDeath": 0,
+      "exactDraftRevisionPreserved": true,
+      "confirmedDraftCleared": true
+    },
+    "CANCELLED_DRAFT": {
+      "processes": 2,
+      "forcedProcessDeaths": 1,
+      "workerEncryptedSends": 1,
+      "peerEncryptedSends": 32,
+      "historyActions": 4,
+      "providerReferences": 43,
+      "stateOnlyReferences": 10,
+      "passes": 1,
+      "applicationAdmissions": {
+        "device": 30,
+        "conversation": 28,
+        "room": 30,
+        "failures": 0
+      },
+      "cleanup": true,
+      "exactOriginalPreservedAcrossDeath": true,
+      "oldestOriginalRetainedAfterStop": true,
+      "pendingCommandsBeforeAndAfterDeath": 1,
+      "exactCancelledIdentityPreserved": true,
+      "exactCancelledDraftRevisionPreserved": true,
+      "archiveRetained": true,
+      "deliveryReceiptAbsent": true,
+      "replayDidNotSchedule": true,
+      "cancelledDraftConfirmedCleared": true,
+      "cancelledAbsentFromHistory": true
+    },
+    "QUEUED": {
+      "processes": 2,
+      "forcedProcessDeaths": 1,
+      "workerEncryptedSends": 1,
+      "peerEncryptedSends": 32,
+      "historyActions": 4,
+      "providerReferences": 43,
+      "stateOnlyReferences": 10,
+      "passes": 1,
+      "applicationAdmissions": {
+        "device": 30,
+        "conversation": 28,
+        "room": 30,
+        "failures": 0
+      },
+      "cleanup": true,
+      "exactOriginalPreservedAcrossDeath": true,
+      "oldestOriginalRetainedAfterStop": true
+    }
+  },
+  "sdk": {
+    "encryptedSends": 3,
+    "heldRoomNeverSent": true,
+    "ackBeforeJournalRecovered": true,
+    "completionCleanupRecovered": true,
+    "protectedStoreReopened": true,
+    "cleanup": true,
+    "applicationAdmissions": {
+      "device": 22,
+      "conversation": 22,
+      "room": 22,
+      "failures": 0
+    }
+  },
+  "scheduled": {
+    "automaticJobStart": true,
+    "ordinaryProcessDeaths": 1,
+    "networkRestored": true,
+    "workState": "SUCCEEDED",
+    "runAttemptCount": 1,
+    "encryptedSends": 1,
+    "cleanup": true,
+    "applicationAdmissions": {
+      "device": 8,
+      "conversation": 7,
+      "room": 8,
+      "failures": 0
+    }
+  },
+  "downloadedEvidenceSha256": {
+    "native-hris-evidence/platform/apps/server/build/test-results/test/TEST-dev.fajar.hris.NativeCollaborationScheduledInteropTest.xml": "63e48a988423fecf5bc08ff95a5ccd6acfb9076cd9188a435e86ed7c3a159498",
+    "native-hris-evidence/platform/apps/server/build/test-results/test/TEST-dev.fajar.hris.NativeCollaborationSdkInteropTest.xml": "bcea93ea05599b54ab4868a0e647d2654adcce37e6bbbea129750abe374a46d0",
+    "native-hris-evidence/platform/apps/server/build/test-results/test/TEST-dev.fajar.hris.NativeCollaborationWorkerInteropTest.xml": "c97a28a72c12ac1fbe60b0dd07e40704df09016522171dbccee42a23d51717ba",
+    "native-hris-evidence/platform/.work/collaboration/a91d5fd11e17468f8869b3bdb6b959ee/gateway-trace.json": "16b521f6364f2df3ee8ade9f0ccf8e6bc469037cb714f0b368cbf847d36d3d88",
+    "native-hris-evidence/platform/.work/collaboration/a91d5fd11e17468f8869b3bdb6b959ee/result.json": "21f65ea3d1c6231e29e06065c989498cd4b4cf815bced698ca1a0ff43c209fdf",
+    "native-hris-evidence/platform/.work/collaboration/a91d5fd11e17468f8869b3bdb6b959ee/verified.json": "3690e49d74d6b2b498e1a355adda62993c5b878b3674f406001cdddcff7271c6",
+    "native-hris-evidence/platform/.work/collaboration-worker/3ab685729fc647b1b2337e3dc59070ed/acceptance.json": "a261b2add37c77d19c87f71c13c4108c54379cee5dcfaa32a7d800f501b56c6f",
+    "native-hris-evidence/platform/.work/collaboration-worker/3ab685729fc647b1b2337e3dc59070ed/gateway-observations.json": "7ed61896a70d49d75c8ab11dc1c386ee3e129b40f1370971066c086829040a31",
+    "native-hris-evidence/platform/.work/collaboration-worker/3ab685729fc647b1b2337e3dc59070ed/gateway-trace.json": "611f4ac4f6028ab7b15a321115b39cc52ee4f88937a38e4c9985f8b38c44b295",
+    "native-hris-evidence/platform/.work/collaboration-worker/3ab685729fc647b1b2337e3dc59070ed/native-worker-queued.json": "2cf9829b13e887b5c554e188f2792a5e1d55eeaa119f44eccae0ba4dc250a249",
+    "native-hris-evidence/platform/.work/collaboration-worker/3ab685729fc647b1b2337e3dc59070ed/native-worker-restored.json": "8f2393c263a370a500fc2e112db8ee33976cc563ad7fbe5a16b190672008484e",
+    "native-hris-evidence/platform/.work/collaboration-worker/3ab685729fc647b1b2337e3dc59070ed/result.json": "0e612f185009018dfb1fa89cc4f89d1f2239041a8644a7a9a5a562b837051406",
+    "native-hris-evidence/platform/.work/collaboration-worker/c56b2d042861479ba0d06d49a06961eb/acceptance.json": "d1d4f5d96bb6c8ff4694765d9fbc8c6c044596a7453405148c3fa8837dbd7bed",
+    "native-hris-evidence/platform/.work/collaboration-worker/c56b2d042861479ba0d06d49a06961eb/gateway-observations.json": "f96950e900e0607d521bf60f0ee17bd61be760667429b66624a31284df91b47a",
+    "native-hris-evidence/platform/.work/collaboration-worker/c56b2d042861479ba0d06d49a06961eb/gateway-trace.json": "2dcdba5f0aea44a4ea6d12ce0685a22bf117814239276b7cdac1128110ed8368",
+    "native-hris-evidence/platform/.work/collaboration-worker/c56b2d042861479ba0d06d49a06961eb/native-worker-queued.json": "415b8066e57df4e98e0077bd98bab81aefd2a3ef0a17bf621bd6a675e64633b7",
+    "native-hris-evidence/platform/.work/collaboration-worker/c56b2d042861479ba0d06d49a06961eb/native-worker-restored.json": "8991c21a8229bd4d8194d09795fbaf2e37302882a4c61a06e4f808b71987b313",
+    "native-hris-evidence/platform/.work/collaboration-worker/c56b2d042861479ba0d06d49a06961eb/result.json": "806eb54fc7607e40274982d62f8327d9a65a5aa013a24c5810312a6e6de1e43c",
+    "native-hris-evidence/platform/.work/collaboration-worker/cc32720ab25d484a8710213086cab4eb/acceptance.json": "25d643aa2f64a7712a3b68cf97375fe71507cfa4dea11e3a0c79c90a9bcb87f4",
+    "native-hris-evidence/platform/.work/collaboration-worker/cc32720ab25d484a8710213086cab4eb/gateway-observations.json": "9786642fb2f06cb01abfb54001d97cf6f21d2c34c6ec678c9cccb9b2769d3954",
+    "native-hris-evidence/platform/.work/collaboration-worker/cc32720ab25d484a8710213086cab4eb/gateway-trace.json": "58a09008d793cc42cc5383b83d1e06e23ec1bd3c4c4a845dca4723fa56bf19b5",
+    "native-hris-evidence/platform/.work/collaboration-worker/cc32720ab25d484a8710213086cab4eb/native-worker-queued.json": "965a778a949e3fc528d469b2ebc09a47934581586d8eb71f7f14abf5b0b525a8",
+    "native-hris-evidence/platform/.work/collaboration-worker/cc32720ab25d484a8710213086cab4eb/native-worker-restored.json": "1b1b9363aa7cdcc178354e5a884fb6fb7e6f272b2878f65218f4417d6b9b9de1",
+    "native-hris-evidence/platform/.work/collaboration-worker/cc32720ab25d484a8710213086cab4eb/result.json": "8e675815952f14c894155aff1e28f73f5299438ab2d98e2f927f2aeb46c3783a",
+    "native-hris-evidence/platform/.work/collaboration-worker/e7c4d23c46104e0ab5a5c0588d6a15a7/acceptance.json": "1e90ef10e45ad47e8aa4116411f6c00f07b13e6ab35fb497e53193f22bce5996",
+    "native-hris-evidence/platform/.work/collaboration-worker/e7c4d23c46104e0ab5a5c0588d6a15a7/gateway-observations.json": "324fb051c0c2dc472ba6960bee83073c8e8a451f97c08aefd4cadefb521e62bc",
+    "native-hris-evidence/platform/.work/collaboration-worker/e7c4d23c46104e0ab5a5c0588d6a15a7/gateway-trace.json": "6e6e1a87430c1485453eebfbd05f452e0325f508bc9e4483b94a2b0858875044",
+    "native-hris-evidence/platform/.work/collaboration-worker/e7c4d23c46104e0ab5a5c0588d6a15a7/network-before.json": "79dfab35e5f4104e398aa74de7c3d6e56dda0a96ac31d2fcb699ac1df093c6ad",
+    "native-hris-evidence/platform/.work/collaboration-worker/e7c4d23c46104e0ab5a5c0588d6a15a7/result.json": "393fe74963dd5fa5dd3cc7ce75b02a165f2dd07efb51384f220c760716d0c031",
+    "native-hris-evidence/platform/.work/collaboration-worker/e7c4d23c46104e0ab5a5c0588d6a15a7/started.json": "f3d7b59181c20efe3b56d14978e9a308dc00000d7e3e90b9f5b2fec722f39e38",
+    "native-hris-evidence/platform/.work/collaboration-worker/e7c4d23c46104e0ab5a5c0588d6a15a7/stopped.json": "fa37dfba04fad2e017d3e571bd19702bd5ffd3c3b8dd410bcafd539e26469691",
+    "native-hris-evidence/mobile/apps/collaboration-proof/build/test-results/testDebugUnitTest/TEST-dev.fajar.hris.collaboration.proof.HrisProofCleanupTest.xml": "013e6efbc54172de83baf90b5bd1c2f494ebff764992e956aafc13509be7f86a"
+  },
+  "scope": [
+    "Hosted five-case regression on exact Mobile 302aa192 and pinned Platform d48ac2f8, including cancellation across real process death and the corrected pending-key publication response.",
+    "Each worker acquires one encrypted original plus 32 distinct peer originals before Stop. Only the oldest original is individually asserted after Stop.",
+    "Frozen-only recovery requires zero pending commands before and after death, retains the original draft revision/body/ID, queues once and confirms clearing. Ordinary queued recovery remains a separate case.",
+    "The cancelled fixture retains one cancelled frozen original and one independent queued command across real death. The archive, exact ID/body/draft revision and absence of a delivery receipt survive; replay schedules no work, recovery clears only the cancelled draft, and history excludes it. Exactly 33 encrypted room sends confirms the independent original plus 32 peer seeds during the fixture. This is not native queue erasure or remote deletion.",
+    "No live provider rollout, Apple/web runtime, capacity acceptance or complete PRD feature group is claimed.",
+    "The pinned Platform includes retryable pending-publication responses. Observed pending-key 503 counts are reported separately; a passing fixture without such a response does not exercise that branch."
+  ],
+  "pendingKeyResponses": [
+    {
+      "initialState": "FROZEN_DRAFT",
+      "pendingResponses": 0
+    },
+    {
+      "initialState": "CANCELLED_DRAFT",
+      "pendingResponses": 0
+    },
+    {
+      "initialState": "QUEUED",
+      "pendingResponses": 0
+    },
+    {
+      "initialState": "SCHEDULED",
+      "pendingResponses": 0
+    }
+  ]
+}

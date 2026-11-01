@@ -1,5 +1,28 @@
 # Agent continuation — HRIS Mobile
 
+## Hosted five-case cancellation recovery verified — 1 November 2026
+
+[Hosted evidence](measurements/chat-cancellation-native-ci-2026-11-01.json) audits
+41351236140 at Mobile 302aa192 / Platform d48ac2f8: all five native cases and six
+cleanup cases pass, with 32 evidence hashes. Proof APK SHA-256
+`5438147bc67881ec9b2a3f4547e261c1035f5f21336709b4aa9c471dd9427829`.
+SDK suite 61.318s, scheduled 85.907s, three-worker suite 186.936s; worker method
+times cancelled 54.154s, queued 53.463s, frozen 53.083s. Cancelled identity/archive
+and draft revision survive real death beside one independent command; no delivery
+receipt or replay wake appears, recovery clears only that draft and its original
+is absent from acquired history. Each worker confirms one independent encrypted
+original plus 32 peer seeds. This is not remote deletion or native queue erasure.
+Exact pass counts and observed pending-key 503 counts are retained in the evidence.
+
+Continue push implementation. Platform e104414e now has validated immutable encrypted
+pusher binding storage/schema-115 recovery. Outgoing activation through current
+HRIS admission and a fixed vendor endpoint is undergoing real API/worker checks;
+private callback ingress, durable recovery, Mobile receive/reply and reusable
+Starter ports remain next. No live provider/schema rollout or full PRD acceptance.
+Phone remains installed release 10 from c0371a38; these are fixture/docs-only Mobile
+changes. Next validated app product checkpoint must be code 11+, notify first,
+explicit WireGuard serial and install-only. Continue after every commit/install.
+
 ## Installed-source native regression audited — 1 November 2026
 
 [Hosted evidence](measurements/chat-cancellation-ui-native-ci-2026-11-01.json) audits
