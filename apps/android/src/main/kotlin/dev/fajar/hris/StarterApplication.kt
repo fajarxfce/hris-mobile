@@ -58,6 +58,8 @@ class StarterApplication : Application(), Configuration.Provider {
                 AndroidCredentialStore(this, "directory-replica-content-key"),
             collaborationListCredentials =
                 AndroidCredentialStore(this, "collaboration-list-content-key"),
+            collaborationReceiptCredentials =
+                AndroidCredentialStore(this, "collaboration-receipt-content-key"),
             selfProfileReplicaCredentials =
                 AndroidCredentialStore(this, "self-profile-replica-content-key"),
             documentCatalogCredentials =

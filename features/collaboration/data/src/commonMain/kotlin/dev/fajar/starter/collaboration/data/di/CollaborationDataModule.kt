@@ -13,6 +13,27 @@ import org.koin.core.annotation.*
 @ComponentScan("dev.fajar.starter.collaboration.data")
 class CollaborationDataModule {
     @Single
+    fun reconcileMessages(
+        messages: CollaborationMessageRepository,
+        receipts: CollaborationReceiptRepository,
+        lists: CollaborationListRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) =
+        ReconcileCollaborationMessages(
+            messages,
+            receipts,
+            lists,
+            sessions,
+            workspaces,
+            server,
+            build,
+            Clock.System,
+        )
+
+    @Single
     fun stageText(
         messages: CollaborationMessageRepository,
         lists: CollaborationListRepository,

@@ -368,3 +368,64 @@ immutable intent hashes verified. Later unaudited CI must not be claimed as proo
 Starter remains `36116b2`; these HRIS SDK/proof changes need no generic port.
 Atomic commits and every-commit pushes remain authorized. Continue implementation;
 a checkpoint is not completion.
+
+## Native delivery checkpoint — 1 November 2026
+
+**The product native queue lease now owns bounded per-room delivery.** `resume`
+validates a complete initial native snapshot against immutable mapped transactions,
+then permits only that room to send for at most 15 seconds. Results retain observed
+receipts/event aliases separately from pending IDs. Missing native IDs never
+invent acknowledgements. Unknown mutations, malformed/conflicting receipts and
+bounded overflow remain unresolved. Native SDK transport keeps its retry ownership.
+
+Child disposal pauses the room **before** joining the native operation and blocks
+late enablement after a pending listener acquisition. Ordinary caller cancellation
+keeps native work owned. Delivery allows a 25-second caller wait, with an internal
+30-second ceiling; snapshot/enqueue defaults stay five seconds. Finalization
+pauses, cancels/joins listeners and only then releases writer resources. Ignored/
+late callbacks dispose native payloads; slow cleanup retains handles for retry.
+
+[Delivery evidence](measurements/collaboration-delivery-2026-11-01.json): **15 new
+Android host cases** use the SDK's public `NoHandle` constructors, and **9 new common
+cases** exercise receipt bounds/conflicts, partial results and the longer waiter.
+The data module enables host tests; root `check` and HRIS CI include them, with XML
+artifacts retained. All focused checks pass (56s host foundation, 103s initial
+native delivery, 154s updated product proof). Full root/browser/Android/Wasm/lint
+passes in **252s**: **2,297 desktop / 385 suites**, **115 Android host**, **150 domain /
+121 data browser**, zero failures/errors/skips and app/proof lint errors.
+
+Actual HRIS SDK **`4cab930521cc4446a95ab19c8eb89491` / 47.608s** passes (88s Gradle /
+quality). The fixture now calls the product `resume` port after real process death,
+compares its receipt to an independent native observer, commits the original app
+`Sent` mapping and leaves the sibling room paused. Every proof/cleanup flag,
+including **`nativeDeliveryOwned`**, is true. All **179 Mobile / 24 Platform source
+hashes** match. Dev APK `d0eda413` is built, not installed; proof APK `ae26173c`.
+The dedicated emulator is stopped. No live/schema/phone change.
+HRIS CI pins the verified Platform **`a5ec785cc03c9aebd3adc989031ca3bc5310140c`**.
+
+**Continue P0–P8; none of the 54 feature groups is accepted. Next implement durable
+application receipt/history reconciliation and the common live-admitted sender.**
+The native window is a primitive: application admission and durable mappings must
+precede it; all observed aliases need durable handling before accepting product
+sending/history. Preserve original native-family uncertainty. Synapse dedup mappings
+expire after 24h, so recipient ingestion must coalesce identical logical IDs scoped
+by conversation/authenticated sender, reject conflicting reuse and retain event
+aliases/tombstones. Then bounded history windows, bootstrap/cross-family recovery
+and Chat list/setup/conversation UI. No second transport retry owner or key/cursor
+reset. The existing 512-item SDK observer guard is not a product history window.
+
+Newly audited hosted evidence: staging `1a8b6283` control **`41266433679`**, all 26
+steps, **286 desktop / 262 browser / 241 iOS simulator**, all 171 immutable source
+hashes match. Room controls `90c43ed7` HRIS **`41267815552`**, all 17 steps, SDK
+**`5cc68e30` / 68.256s**, all flags/cleanup true, all 172 Mobile / 24 Platform hashes
+match the immutable commit and its `4944b34f` fixture pin. The corresponding
+[staging](measurements/collaboration-message-staging-2026-11-01.json) and
+[room-control](measurements/collaboration-room-queue-2026-11-01.json) measurements
+include these artifacts. The native protocol run `41267815497` reports success but
+has not been audited; control `41267815485` was still running when last checked.
+
+Preceding room-control implementation: Mobile `90c43ed776556199b5f7319c94b6c0773036b7a3`,
+Platform fixture `4944b34f0946d449bc4b7ff4651737db2255ce93`; follow-up handoff `d1a743fe`.
+Starter remains `36116b2`; the SDK adapter/test configuration is HRIS-specific and
+needs no generic port. Atomic commits and every-commit pushes remain authorized.
+Continue implementation; a checkpoint is not completion.

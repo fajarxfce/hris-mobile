@@ -196,3 +196,13 @@ mapping and confirms the sibling room remains paused. The
 the actual run and portable/Android validation. The common live-admitted sender,
 durable recipient aliases/history, richer chat and product routes remain pending;
 this primitive does not accept a complete PRD feature group.
+
+## Durable receipt projection
+
+The [outbound receipt journal](collaboration-receipts.md) now retains immutable
+message/device/transaction mappings and all observed event aliases in a separate
+encrypted store. `ReconcileCollaborationMessages` restores an interrupted `Sent`
+projection from those facts under local ownership and the company gate, including
+after ordinary credential expiry. Native acknowledgement must be journaled before
+command projection; no queue absence can replace that evidence. The common sender
+and incoming history reconciliation still need to connect this foundation.

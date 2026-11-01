@@ -12,9 +12,12 @@ import org.koin.dsl.onClose
 internal fun applicationCollaborationModule(
     runtime: (IdentityServer) -> CollaborationRuntimeRepository,
     listCredentials: AtomicCredentialStore,
+    receiptCredentials: AtomicCredentialStore,
 ) = module {
     single<CollaborationRuntimeRepository> { runtime(get()) }
     single { ApplicationCollaborationLifetime(get()) }.onClose { it?.close() }
     single<AtomicCredentialStore>(named("collaboration-list-content-key")) { listCredentials }
+        .onClose { it?.close() }
+    single<AtomicCredentialStore>(named("collaboration-receipt-content-key")) { receiptCredentials }
         .onClose { it?.close() }
 }

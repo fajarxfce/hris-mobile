@@ -52,6 +52,8 @@ fun main() {
                 BrowserProtectedCredentialStore(namespace, "directory-replica-content-key"),
             collaborationListCredentials =
                 BrowserProtectedCredentialStore(namespace, "collaboration-list-content-key"),
+            collaborationReceiptCredentials =
+                BrowserProtectedCredentialStore(namespace, "collaboration-receipt-content-key"),
             selfProfileReplicaCredentials =
                 BrowserProtectedCredentialStore(namespace, "self-profile-replica-content-key"),
             documentCatalogCredentials =

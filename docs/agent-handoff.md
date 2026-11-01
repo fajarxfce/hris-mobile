@@ -2,64 +2,54 @@
 
 ## Active collaboration implementation — 1 November 2026
 
-**The product native queue lease now owns bounded per-room delivery.** `resume`
-validates a complete initial native snapshot against immutable mapped transactions,
-then permits only that room to send for at most 15 seconds. Results retain observed
-receipts/event aliases separately from pending IDs. Missing native IDs never
-invent acknowledgements. Unknown mutations, malformed/conflicting receipts and
-bounded overflow remain unresolved. Native SDK transport keeps its retry ownership.
+**Encrypted outbound receipts and offline `Sent` reconciliation are implemented.**
+[Contract](collaboration-receipts.md): the journal stores the original complete
+intent/device/transaction and every event alias before command projection. Atomic
+checkpoint/document CAS prevents lost concurrent aliases; immutable mapping and
+cross-message collisions are rejected. Separate receipt keys are wired through
+Android, desktop, browser and Apple Keychain hosts. Missing keys cannot regenerate
+over another inactive account's records. No prior receipt is evicted on capacity.
 
-Child disposal pauses the room **before** joining the native operation and blocks
-late enablement after a pending listener acquisition. Ordinary caller cancellation
-keeps native work owned. Delivery allows a 25-second caller wait, with an internal
-30-second ceiling; snapshot/enqueue defaults stay five seconds. Finalization
-pauses, cancels/joins listeners and only then releases writer resources. Ignored/
-late callbacks dispose native payloads; slow cleanup retains handles for retry.
+`ReconcileCollaborationMessages` repairs a crash between journal and command writes
+without network, SDK acquisition or live credential renewal. Exact staged mappings
+advance; existing sent records retain their original primary event. Missing or
+conflicting evidence stays unresolved. Company gates and account ownership are
+rechecked after every I/O; ordinary expiry keeps facts available, and late denial/
+account change prevents success while preserving committed state.
 
-[Delivery evidence](measurements/collaboration-delivery-2026-11-01.json): **15 new
-Android host cases** use the SDK's public `NoHandle` constructors, and **9 new common
-cases** exercise receipt bounds/conflicts, partial results and the longer waiter.
-The data module enables host tests; root `check` and HRIS CI include them, with XML
-artifacts retained. All focused checks pass (56s host foundation, 103s initial
-native delivery, 154s updated product proof). Full root/browser/Android/Wasm/lint
-passes in **252s**: **2,297 desktop / 385 suites**, **115 Android host**, **150 domain /
-121 data browser**, zero failures/errors/skips and app/proof lint errors.
+[Evidence](measurements/collaboration-receipt-2026-11-01.json): **11 new actual
+SQLite/IndexedDB contract cases and 10 common reconciliation cases**. Focused
+checks pass in **69s**; full root/browser/Android/Wasm/lint passes in **274s**:
+**2,318 desktop / 387 suites, 115 Android host, 160 domain / 132 data browser**, zero
+failures/errors/skips and Android lint errors. All **191 source hashes** match.
+Dev APK `a3e62aa9` is built, not installed. The first command selected a nonexistent
+module detekt task (15s); the corrected run passed 11 SQLite cases but exposed the
+app-container length rule (57s). Moving static registrations into the existing
+feature-module list resolved it, and the full application binding tests pass.
 
-Actual HRIS SDK **`4cab930521cc4446a95ab19c8eb89491` / 47.608s** passes (88s Gradle /
-quality). The fixture now calls the product `resume` port after real process death,
-compares its receipt to an independent native observer, commits the original app
-`Sent` mapping and leaves the sibling room paused. Every proof/cleanup flag,
-including **`nativeDeliveryOwned`**, is true. All **179 Mobile / 24 Platform source
-hashes** match. Dev APK `d0eda413` is built, not installed; proof APK `ae26173c`.
-The dedicated emulator is stopped. No live/schema/phone change.
-HRIS CI pins the verified Platform **`a5ec785cc03c9aebd3adc989031ca3bc5310140c`**.
+Collaboration control CI now compiles the **actual iOS application host** as well
+as Kotlin/Apple tests; its Apple job has a bounded 70-minute lifetime and a
+30-minute app build step. That Xcode build is pending hosted execution. Physical
+iPhone acceptance remains waived. No native SDK source changed in this increment;
+previous actual delivery evidence belongs to Mobile `622d2540` / Platform
+`a5ec785c`, not a new SDK run. HRIS CI retains that immutable fixture pin.
 
-**Continue P0–P8; none of the 54 feature groups is accepted. Next implement durable
-application receipt/history reconciliation and the common live-admitted sender.**
-The native window is a primitive: application admission and durable mappings must
-precede it; all observed aliases need durable handling before accepting product
-sending/history. Preserve original native-family uncertainty. Synapse dedup mappings
-expire after 24h, so recipient ingestion must coalesce identical logical IDs scoped
-by conversation/authenticated sender, reject conflicting reuse and retain event
-aliases/tombstones. Then bounded history windows, bootstrap/cross-family recovery
-and Chat list/setup/conversation UI. No second transport retry owner or key/cursor
-reset. The existing 512-item SDK observer guard is not a product history window.
+**Continue P0–P8; none of 54 complete groups is accepted. Next connect the common
+live-admitted sender to native `resume` and durable receipt append, then incoming
+history reconciliation and Chat list/setup/conversation UI.** The journal alone
+cannot recover a crash before native ACK reaches it: history must coalesce by
+conversation/authenticated sender/logical ID, reject conflicting reuse and retain
+all event aliases/tombstones. Preserve original native-family uncertainty; never
+replace a transaction, infer ACK from queue absence, reset SDK keys/cursors or add
+a second transport retry owner. Current journal bounds are 128 messages / 512
+aliases per conversation, 128 aliases per message and 1–32 messages per append.
+The shared 128-command account bound and no-retirement rule remain until durable
+history supports retirement. These initial bounds are not capacity acceptance.
 
-Newly audited hosted evidence: staging `1a8b6283` control **`41266433679`**, all 26
-steps, **286 desktop / 262 browser / 241 iOS simulator**, all 171 immutable source
-hashes match. Room controls `90c43ed7` HRIS **`41267815552`**, all 17 steps, SDK
-**`5cc68e30` / 68.256s**, all flags/cleanup true, all 172 Mobile / 24 Platform hashes
-match the immutable commit and its `4944b34f` fixture pin. The corresponding
-[staging](measurements/collaboration-message-staging-2026-11-01.json) and
-[room-control](measurements/collaboration-room-queue-2026-11-01.json) measurements
-include these artifacts. The native protocol run `41267815497` reports success but
-has not been audited; control `41267815485` was still running when last checked.
-
-Preceding room-control implementation: Mobile `90c43ed776556199b5f7319c94b6c0773036b7a3`,
-Platform fixture `4944b34f0946d449bc4b7ff4651737db2255ce93`; follow-up handoff `d1a743fe`.
-Starter remains `36116b2`; the SDK adapter/test configuration is HRIS-specific and
-needs no generic port. Atomic commits and every-commit pushes remain authorized.
-Continue implementation; a checkpoint is not completion.
+No live/schema/phone change; emulator remains stopped. Starter stays `36116b2`:
+this HRIS receipt policy/adapter/host graph needs no generic foundation port.
+Atomic commits and every-commit pushes remain authorized. Continue after this
+checkpoint; the long-run implementation is not complete.
 
 [Earlier November detail](collaboration-implementation-history-2026-11-01.md)
 

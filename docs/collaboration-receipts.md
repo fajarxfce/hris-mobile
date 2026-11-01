@@ -1,0 +1,70 @@
+# Durable outbound acknowledgements
+
+`CollaborationReceiptRepository` retains observed server acknowledgements independently
+of mutable command state. A receipt binds the complete original intent, native
+session/device/bootstrap/room, transaction ID, and every observed event alias.
+Repeated append unions aliases in original observation order. Neither content nor
+the original mapping can change. An event cannot belong to two logical messages
+in the same room; a room/device/transaction cannot be assigned to another intent,
+including by changing only its bootstrap or native-session metadata.
+
+The eventual sender must append acknowledged facts **before** projecting command
+`Sent`. Those two stores deliberately do not pretend to share a transaction.
+`ReconcileCollaborationMessages` repairs an interrupted projection from the journal:
+only an exact original `Staged` mapping advances, and an existing `Sent` keeps its
+primary event if that event belongs to the retained aliases. Queued/staging work,
+unknown intent IDs, conflicting content/mappings and malformed aliases remain
+unresolved. All retained pairs are validated before any command changes. A rejected
+CAS or lost response leaves the journal available for the next explicit attempt.
+No receipt means no acknowledgement; an empty native queue never supplies one.
+
+Reconciliation needs local account/workspace ownership and the company read gate.
+It works after ordinary login/admission age, without HTTP, native SDK acquisition,
+enrollment, sending, or retries. Gate and owner are checked after every I/O, with
+owner capture **after** the gate read. Confirmed company denial remains authoritative
+through failed storage/session reads. A late owner/denial prevents publication;
+already committed facts remain durable. Reconciliation never clears the gate.
+
+## Storage bounds and ownership
+
+The adapter uses existing SQLite/IndexedDB `ReplicaStore` transactions. Each owned
+company/conversation partition has one published generation with an authenticated
+count/alias checkpoint and one encrypted document per logical UUID. Checkpoint and
+documents commit together under generation/revision CAS and the raw account fence.
+One bounded read requests at most 129 rows to detect overflow; every retained row
+must match the checkpoint, order and encrypted identity. There is no unbounded scan
+or independently visible alias index. Native transactions, provider event IDs and
+message bodies remain inside ciphertext.
+
+AAD binds audience/account/company/conversation, generation, logical ID or checkpoint
+purpose, and revision. Document ID/sort equality and empty tags are verified. The
+immutable mapping and complete original message are authenticated in the encrypted
+payload. A separate OS-protected `collaboration-receipt-content-key` avoids coupling
+key creation to the command namespace. Lost keys cannot regenerate over **any**
+retained receipt partition, including an inactive account. Hosts provide Android
+protected storage, Apple Keychain, desktop credentials, or browser protected storage.
+
+This initial outbound journal holds at most **128 messages / 512 total aliases per
+conversation**, at most **128 aliases per message**, and **1–32 distinct messages per
+append**. Envelopes are bounded to 128 KiB per row / 4 MiB per write by the existing
+storage contract; the codec bounds plaintext to 98,000 bytes. Inputs are detached
+before suspension. Capacity/conflict never evicts prior acknowledgements. The
+existing shared 128-command account bound still applies; no command retirement is
+enabled here. These are explicit initial bounds, not production chat capacity.
+
+## Evidence and remaining integration
+
+[Receipt measurement](measurements/collaboration-receipt-2026-11-01.json) records
+11 identical actual SQLite/IndexedDB contract cases and ten common reconciliation
+cases. Coverage includes restart/reauthentication, exact immutable content, every
+alias, collision rejection, simultaneous CAS, lost/cancelled commit responses,
+account replacement, inactive-account key loss, tampered indexes/checkpoint,
+input mutation, capacity, expired authority and late denial.
+
+The common live-admitted sender still needs to connect native delivery results to
+this journal. A crash between native acknowledgement and journal commit still
+requires history reconciliation; this store does not invent a receipt to close that
+gap. Incoming history must coalesce by conversation/authenticated sender/logical ID,
+reject conflicting reuse and retain aliases/tombstones. Bounded history windows,
+command retirement and Chat UI remain subsequent work. No complete PRD group or
+capacity target is accepted by this storage increment.

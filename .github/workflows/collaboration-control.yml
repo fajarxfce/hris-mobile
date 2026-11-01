@@ -7,6 +7,7 @@ on:
       - 'features/collaboration/**'
       - 'apps/shared/**'
       - 'apps/android/**'
+      - 'apps/ios/**'
       - 'core/network/**'
       - 'core/database/**'
       - 'core/securestorage/**'
@@ -21,6 +22,7 @@ on:
       - 'features/collaboration/**'
       - 'apps/shared/**'
       - 'apps/android/**'
+      - 'apps/ios/**'
       - 'core/network/**'
       - 'core/database/**'
       - 'core/securestorage/**'
@@ -78,7 +80,9 @@ jobs:
             apps/shared/build/test-results/
   apple:
     runs-on: macos-15
-    timeout-minutes: 40
+    timeout-minutes: 70
+    env:
+      ORG_GRADLE_PROJECT_appLinksConfigDirectory: .work/app-links-check
     steps:
       - uses: actions/checkout@v4
       - name: Select Xcode 26.3
@@ -88,6 +92,8 @@ jobs:
           distribution: temurin
           java-version: '21'
       - uses: gradle/actions/setup-gradle@v4
+      - name: Prepare public app-link test registrations
+        run: python3 tool/check_app_links.py prepare --application-id dev.fajar.hris.mobile
       - name: Check Apple setup adapter
         run: >-
           ./gradlew --no-daemon --no-parallel --max-workers=2
@@ -95,6 +101,15 @@ jobs:
           :features:collaboration:data:iosSimulatorArm64Test
           :features:collaboration:data:compileKotlinIosArm64
           :apps:shared:compileKotlinIosArm64
+      - name: Build iOS application host
+        timeout-minutes: 30
+        env:
+          DISTRIBUTION_BACKEND: remote
+          API_BASE_URL: https://release.example.invalid/api/v1/
+        run: >-
+          xcodebuild -project apps/ios/HrisMobile.xcodeproj -scheme HrisMobile
+          -configuration Debug -sdk iphonesimulator -destination 'generic/platform=iOS Simulator'
+          -derivedDataPath apps/ios/build CODE_SIGNING_ALLOWED=NO ARCHS=arm64 build
       - uses: actions/upload-artifact@v4
         if: always()
         with:
