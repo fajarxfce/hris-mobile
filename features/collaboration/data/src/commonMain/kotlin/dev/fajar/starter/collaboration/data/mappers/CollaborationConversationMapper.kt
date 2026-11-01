@@ -5,9 +5,13 @@ import dev.fajar.starter.collaboration.domain.entities.*
 
 internal fun CollaborationParticipantDto.toParticipant(
     owner: CollaborationOwner
+): CollaborationParticipant = toParticipant(owner.accountId)
+
+private fun CollaborationParticipantDto.toParticipant(
+    ownerAccount: String
 ): CollaborationParticipant {
     val account = collaborationId(accountId)
-    require(account != owner.accountId)
+    require(account != ownerAccount)
     require(
         displayName.isNotBlank() &&
             displayName.length <= 200 &&
@@ -18,12 +22,17 @@ internal fun CollaborationParticipantDto.toParticipant(
 
 internal fun CollaborationDirectDto.toConversation(
     owner: CollaborationOwner
+): CollaborationDirectConversation = toConversation(owner.accountId, owner.companyId)
+
+private fun CollaborationDirectDto.toConversation(
+    ownerAccount: String,
+    company: String,
 ): CollaborationDirectConversation {
     collaborationId(id)
-    require(collaborationId(companyId) == owner.companyId)
+    require(collaborationId(companyId) == company)
     val first = collaborationId(firstAccountId)
     val second = collaborationId(secondAccountId)
-    require(first < second && owner.accountId in listOf(first, second))
+    require(first < second && ownerAccount in listOf(first, second))
     require(collaborationId(createdBy) in listOf(first, second) && version == 0L)
     return CollaborationDirectConversation(
         id,
@@ -38,12 +47,17 @@ internal fun CollaborationDirectDto.toConversation(
 
 internal fun CollaborationDirectSummaryDto.toSummary(
     owner: CollaborationOwner
+): CollaborationDirectSummary = toSummary(owner.accountId, owner.companyId)
+
+internal fun CollaborationDirectSummaryDto.toSummary(
+    ownerAccount: String,
+    company: String,
 ): CollaborationDirectSummary {
-    val direct = conversation.toConversation(owner)
-    val counterpart = peer.toParticipant(owner)
+    val direct = conversation.toConversation(ownerAccount, company)
+    val counterpart = peer.toParticipant(ownerAccount)
     require(
         counterpart.accountId ==
-            if (direct.firstAccountId == owner.accountId) direct.secondAccountId
+            if (direct.firstAccountId == ownerAccount) direct.secondAccountId
             else direct.firstAccountId
     )
     return CollaborationDirectSummary(direct, counterpart)

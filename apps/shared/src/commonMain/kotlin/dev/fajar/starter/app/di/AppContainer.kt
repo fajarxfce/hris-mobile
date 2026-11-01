@@ -1,6 +1,5 @@
 package dev.fajar.starter.app.di
 
-import dev.fajar.starter.app.bootstrap.ApplicationCollaborationLifetime
 import dev.fajar.starter.auth.presentation.di.AuthPresentationModule
 import dev.fajar.starter.availability.data.di.AvailabilityDataModule
 import dev.fajar.starter.availability.presentation.di.AvailabilityPresentationModule
@@ -89,6 +88,7 @@ fun createAppContainer(
     payrollReplicaCredentials: CredentialStore = MemoryCredentialStore(),
     expenseReplicaCredentials: CredentialStore = MemoryCredentialStore(),
     directoryReplicaCredentials: CredentialStore = MemoryCredentialStore(),
+    collaborationListCredentials: AtomicCredentialStore = MemoryCredentialStore(),
     selfProfileReplicaCredentials: CredentialStore = MemoryCredentialStore(),
     documentCatalogCredentials: CredentialStore = MemoryCredentialStore(),
     commandCredentials: AtomicCredentialStore = MemoryCredentialStore(),
@@ -117,6 +117,7 @@ fun createAppContainer(
         http ?: applicationNetworkModule(environment),
         applicationStorageModule(database, preferences),
         applicationWorkerModule(),
+        applicationCollaborationModule(collaborationRuntime, collaborationListCredentials),
         applicationFirebaseModule(firebaseOptions, googleCredentials),
         TransferDataModule().module,
         SecurityPresentationModule().module,
@@ -130,8 +131,6 @@ fun createAppContainer(
         NotificationDataModule().module,
         LocationDataModule().module,
         module {
-            single<CollaborationRuntimeRepository> { collaborationRuntime(get()) }
-            single { ApplicationCollaborationLifetime(get()) }.onClose { it?.close() }
             single { environment }
             single<LocationDataSource> { location }.onClose { it?.close() }
             single<FileInputSource> { fileInputs }.onClose { it?.close() }

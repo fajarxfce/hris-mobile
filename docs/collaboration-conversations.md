@@ -103,3 +103,5 @@ and requires strict UUID page progress. Both methods share the same admission an
 post-request failure policy as other reads. No per-row label request is needed.
 These live reads are not an offline list; [verification](measurements/collaboration-mobile-summaries-2026-11-01.json)
 records the implemented boundary.
+
+Owned offline summary browsing is implemented by the [encrypted list](collaboration-local-list.md), with independent local ownership and read admission.

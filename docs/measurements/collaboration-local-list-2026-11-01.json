@@ -1,0 +1,115 @@
+{
+  "date": "2026-11-01",
+  "change": "Account-owned encrypted direct-conversation list with bounded local pages, mutable counterpart summaries and revisioned read admission",
+  "baseMobileCommit": "820e3c3c11d94e2467c2df9270d785fffdb9d5ee",
+  "platformContractCommit": "8813ea9eee28cafc274eafcd41456340f132ae2f",
+  "sourceSha256": {
+    "apps/android/src/main/kotlin/dev/fajar/hris/StarterApplication.kt": "a3056cc5c2e0ee94635701430e5e29fb3039d9deee15baa9536dc9300546854e",
+    "apps/ios/AppDelegate.swift": "e3ce3db836674b8f4250e30ba99193257b21c5841ecfd736979102e2c2cf9d09",
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/di/AppContainer.kt": "b73125c3ab7cf5114c18bd4aad286994ba0222cc8dd48c01e95114d288e2c096",
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/di/ApplicationCollaborationModule.kt": "56c492cdea1be9d1fad188979ac1ff5f650d82699277109d00b4d64280c7f3bf",
+    "apps/shared/src/desktopMain/kotlin/dev/fajar/starter/Main.kt": "45b66915a3eb5c45b3fdae017876c218d8402f91ee26b19191ed6f0a23f19bf7",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt": "7ca2a9fd2aa9d832838ba730fcec533a20c991d7cb4e9f19ada071e7ea810cc2",
+    "apps/shared/src/iosMain/kotlin/dev/fajar/starter/MainViewController.kt": "71df9a4c7e9f3aef05fb9632e62d8d16dadbaa53a13babab648a334a5d13c8c5",
+    "apps/shared/src/wasmJsMain/kotlin/dev/fajar/starter/Main.kt": "6ae4f6f470412a253bc1de5d37373f29c48cb75ccfa91f36064ff62f8234138b",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/datasources/CollaborationListAdmissionDataSource.kt": "0bc380f3d2cc53787d22061ae9a33bf73411ec8ee968a03e3eda6fe36e9cd52e",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt": "9f21ead490c5127f1a3bc897f8a8fc3315233b6e41782939da5bb1d4c9b3a569",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/mappers/CollaborationConversationMapper.kt": "ccf643603e1ef5617fb81ba6a909e3dbb1600ccaf0db40fa7e08670fc11afda6",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/replica/CollaborationListCodec.kt": "7f146f217f0a33b7cb488eae24c47d33d3355e68af68e17327e1f06d11da37bf",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationListRepository.kt": "287a5c569129351f06c0050289d069470ff9a6ab09e979d9967244fe349e7986",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationListStorageContract.kt": "b13e3369e514a5cbf48150655ee0aa293d2946e88ecadbc54709754dfeb2997a",
+    "features/collaboration/data/src/desktopTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationListStorageTest.kt": "74c97b4efd69ea14bf408a62e3f11b56294336cade3fcecc9a2c0b4226a3faf3",
+    "features/collaboration/data/src/wasmJsTest/kotlin/dev/fajar/starter/collaboration/data/BrowserCollaborationListStorageTest.kt": "8646d4eed26518de71462a8165cb8f1ef79d9401431e09160a5e8c24946f4ffb",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationLocalList.kt": "9b5334caba6fcaa76386444652b2ab11af28e58f21445f09b05a43602ff1e2eb",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationLocalPolicy.kt": "3a75fdbfdbe165495d908ed9f9468de6d3c1d20298dae733d4142db8bf2d0b3b",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationListRepository.kt": "4dcd189c9d1e16eef1581b23471fb605f2a2ecff25099564babb8954fddf204a",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ObserveCollaborationList.kt": "67dc55d0df221d8fffb8756c2a4950fa5edfddc124dd142ce08a2dac6776fafb",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/RefreshCollaborationList.kt": "5a14026d4f313ee396f4a14c50345e78e0b8949445752d16d88b35970028c8db",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationLocalListTest.kt": "724aadd2536ebf6c2973e9129d907cd701bd50c953c0e6edeccda1e369e63e01"
+  },
+  "newCommonCases": {
+    "domain": 13,
+    "realSQLiteAndIndexedDbStorageContract": 11
+  },
+  "validation": {
+    "rootBrowserAndroidWasmLint": {
+      "passed": true,
+      "seconds": 254,
+      "log": ".work/collaboration-local-list-final.log",
+      "counts": {
+        "desktopTest": {
+          "tests": 2232,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "suites": 378
+        },
+        "dataBrowser": {
+          "tests": 96,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "suites": 16
+        },
+        "domainBrowser": {
+          "tests": 110,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "suites": 9
+        }
+      },
+      "lintErrors": 0
+    },
+    "preliminaryRootBrowserAndroidWasmLint": {
+      "passed": true,
+      "seconds": 255,
+      "log": ".work/collaboration-local-list-app-second.log",
+      "scope": "Before final signed-out, received maintenance and rejected admission CAS corrections"
+    },
+    "intentionalBrowserNegativeControl": {
+      "expectedFailureObserved": true,
+      "tests": 1,
+      "failures": 1,
+      "seconds": 43,
+      "log": ".work/collaboration-local-list-browser-negative.log",
+      "xmlSha256": "d9cead5fd52ec989e63537aa7bd518719ae1b36360f2f14be463f88d5dda917f",
+      "description": "Temporarily expected 86 retained rows after 85 asynchronous IndexedDB inserts; runner reported the assertion. Restored the positive contract before final complete verification."
+    },
+    "precedingFailures": [
+      {
+        "seconds": 25,
+        "log": ".work/collaboration-local-list-focused.log",
+        "reason": "Test assertion needed explicit nullable list type"
+      },
+      {
+        "seconds": 36,
+        "log": ".work/collaboration-local-list-focused-second.log",
+        "reason": "Cross-module nullable property required explicit non-null access"
+      },
+      {
+        "seconds": 59,
+        "log": ".work/collaboration-local-list-focused-third.log",
+        "reason": "Focused 107 domain/117 data cases passed; detekt required extracting related host bindings from the full app container"
+      },
+      {
+        "seconds": 59,
+        "log": ".work/collaboration-local-list-app.log",
+        "reason": "Extracted host module required the explicit Koin onClose import"
+      }
+    ]
+  },
+  "devApkSha256": "c21bbe13dcb1bda6f1ae2ed38f658b40a8f0c725bc9d6e2969a03c59cd23b876",
+  "phoneChanged": false,
+  "emulatorChanged": false,
+  "liveChanged": false,
+  "sdkTransportChanged": false,
+  "productAcceptance": false,
+  "notes": [
+    "Local UUID pages are partial acquired facts, not server snapshot completeness or a commit-ordered feed. Empty pages do not delete retained records.",
+    "A 128-scope pending-denial buffer fails closed on overflow. Failed writes and rejected compare-and-set publication retain the received denial. Fresh admission clears only its observed revision.",
+    "No source changes in Starter: this is an HRIS feature adapter over already verified account replica and protected key foundations.",
+    "Actual SDK evidence remains tied to the separately verified hosted commits; no local native provider rerun for this metadata cache.",
+    "An initial editing-script assertion was corrected before launching the final build; it did not start Gradle or alter the retained positive storage contract."
+  ]
+}
