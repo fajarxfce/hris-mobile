@@ -1,5 +1,47 @@
 # Agent continuation — HRIS Mobile
 
+## Cancelled-draft native proof and publication retry corrected — 1 November 2026
+
+[Five-case evidence](measurements/chat-cancellation-native-2026-11-01.json): 356s Gradle / 357.121s wall,
+68 Mobile/five Platform inputs, APK `3c15eb832190528e92cd85c8385e3367815cd6cc6ae809f7dd26525af4c17275`.
+CANCELLED_DRAFT retains an authenticated cancellation and matching frozen draft through real
+death beside one independent command. Replay does not schedule or create a receipt; recovery
+clears only that draft, excludes its history and sends the independent original once plus
+32 peer seeds. QUEUED/FROZEN_DRAFT, SDK and WorkManager remain separate passing cases.
+
+The first run failed frozen-only after bounded delivery retries (409s / 409.864s); the other
+four cases including cancellation passed. Trace: temporary key upload/query 503, then
+sendToDevice 400/device_keys_required, later successful uploads but no room send. Real-SQL
+reproductions confirmed a valid version 0 reservation was being classified as malformed.
+It now returns UNAVAILABLE/device_keys_pending (HTTP 503), preserving confirmed-key/fingerprint
+and current owner/permission gates. No reservation still gives validation; no trust, schema,
+DI or operation-deadline change. Three focused cases pass; full 40 domain/210 data/26 HTTP,
+format/architecture pass 423s / 424.148s. Initial two failed reproductions and full native
+failure are retained. The final QUEUED native case actually receives one pending-key 503, retries in two worker passes and completes exactly 33 encrypted sends; frozen/cancelled cases each take one pass. All cleanup succeeds and the owned emulator is stopped. Mobile proof/quality passed 145s / 148.995s, cleanup six; 69 Python cases pass.
+
+Hosted [448ab3ad run 41344248284](measurements/chat-frozen-native-ci-2026-11-01.json) and
+[648410c4 run 41345994459](measurements/chat-cancellation-policy-regression-native-ci-2026-11-01.json)
+are audited separately, 26 hashes each. Both use the earlier four-case Platform fixture;
+neither proves this newer native cancellation/pending-publication boundary. UI run 41347895253
+at c0371a38 was still running with the old pin; audit its actual source if it completes.
+
+Platform `d48ac2f866e7f6395cad035424b9fe76d9fdb743` is committed, pushed and pinned by Mobile collaboration-hris CI.
+The full job budget is now 45 minutes (the old four-case hosted job took 29m30); operation
+and test retry limits are unchanged. YAML and the remote source ref were verified.
+**Continue immediately:** commit/push this Mobile fixture/evidence, then implement FCM/pusher
+admission, opaque durable notification recovery and native inline replies. Platform `.work/collaboration-push-next.txt` records official Matrix v1.16 and current
+transport/owner findings; move concrete implementation contracts into Git. Current FCM mapper
+is inbox-only NORMAL/silent-Apple; current Mobile runtime and inbox push use selected company.
+Do not silently switch workspace or claim all-company background support. Notifications must
+use current account/company/device/room admission and the same encrypted message outbox.
+Port only verified generic notification/scheduler primitives to Starter. All 54 groups remain
+unaccepted; continue all P0–P8. Live backend/provider deployment is unchanged.
+
+Phone remains verified release 10, source c0371a38, installed 20:44 UTC over 9 with exact pulled APK,
+existing signer/data and no UI launch. These new Mobile edits are fixtures only, so another
+phone build is unnecessary. Next validated app-feature install must use code 11+, notify first,
+install-only on 10.77.77.3:5555. Never drive the phone UI; use the owned emulator for tests.
+
 ## Release 10 installed and verified; native cancellation proof next — 1 November 2026
 
 Clean source `c0371a38d1ae2f8c890c300648ec849089c3836a` is installed in place over code 9 on

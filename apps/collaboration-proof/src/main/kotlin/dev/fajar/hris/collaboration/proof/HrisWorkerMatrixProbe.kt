@@ -20,6 +20,8 @@ import org.matrix.rustcomponents.sdk.Room
 internal class HrisWorkerMatrixProbe(private val context: Context, directory: File) {
     private val files = HrisWorkerProofFiles(directory)
     private val frozenOnly = files.initialState == "FROZEN_DRAFT"
+    private val cancelled =
+        if (files.initialState == "CANCELLED_DRAFT") HrisCancelledWorkerIntent(files) else null
     private val http =
         createHttpClient(
             createPlatformHttpEngine(),
@@ -45,6 +47,7 @@ internal class HrisWorkerMatrixProbe(private val context: Context, directory: Fi
                 app.cacheConversation()
                 check(app.pending().isEmpty())
                 val checkpoint = files.checkpoint()
+                cancelled?.prepare(app, checkpoint)
                 if (frozenOnly) {
                     val frozen = app.freeze(files.logicalId, files.body)
                     check(app.draft() == frozen && app.pending().isEmpty())
@@ -55,7 +58,12 @@ internal class HrisWorkerMatrixProbe(private val context: Context, directory: Fi
                     check(queued.intent.id == files.logicalId && queued.intent.text == files.body)
                     check(app.pending() == listOf(queued))
                 }
-                check(app.scheduledKeys == listOf(QueueCollaborationText.DELIVERY_KEY))
+                check(
+                    app.scheduledKeys ==
+                        List(if (cancelled == null) 1 else 3) {
+                            QueueCollaborationText.DELIVERY_KEY
+                        }
+                )
                 files.write("worker-queued", checkpoint)
                 // Driver confirms this PID and kills the process. No graceful substitute for death.
                 awaitCancellation()
@@ -134,29 +142,8 @@ internal class HrisWorkerMatrixProbe(private val context: Context, directory: Fi
                         files.body,
                         historical,
                     )
-                files.write(
-                    "worker-result",
-                    files
-                        .checkpoint()
-                        .put("state", "COMPLETED")
-                        .put("initialState", files.initialState)
-                        .put("frozenDraftRecovered", frozenOnly)
-                        .put("outboxEmptyBeforeRecovery", frozenOnly)
-                        .put("draftConfirmedCleared", frozenOnly)
-                        .put("eventId", eventId)
-                        .put("passes", passes)
-                        .put("encryptedReceived", true)
-                        .put("senderRuntimeRestoredByWorker", true)
-                        .put("originalHistoryAcquired", true)
-                        .put("completionRetired", true)
-                        .put("repeatedWorkerComplete", true)
-                        .put("foregroundHistoryPaged", true)
-                        .put("foregroundStoppedHistoryRetained", true)
-                        .put("historyPages", foreground.pages)
-                        .put("providerReferences", foreground.references)
-                        .put("pendingStateReferences", foreground.pendingStateReferences)
-                        .put("historyPeerEvents", JSONArray(historical.map { it.eventId })),
-                )
+                cancelled?.completed(app, queued)
+                recordCompletion(eventId, passes, historical, foreground)
             } catch (failure: Exception) {
                 primary = failure
                 throw failure
@@ -174,6 +161,38 @@ internal class HrisWorkerMatrixProbe(private val context: Context, directory: Fi
                 )
             }
         }
+
+    private fun recordCompletion(
+        eventId: String,
+        passes: Int,
+        historical: List<HrisHistoricalMessage>,
+        foreground: HrisForegroundHistoryResult,
+    ) {
+        files.write(
+            "worker-result",
+            files
+                .checkpoint()
+                .put("state", "COMPLETED")
+                .put("initialState", files.initialState)
+                .put("frozenDraftRecovered", frozenOnly)
+                .put("outboxEmptyBeforeRecovery", frozenOnly)
+                .put("draftConfirmedCleared", frozenOnly)
+                .put("eventId", eventId)
+                .put("passes", passes)
+                .put("encryptedReceived", true)
+                .put("senderRuntimeRestoredByWorker", true)
+                .put("originalHistoryAcquired", true)
+                .put("completionRetired", true)
+                .put("repeatedWorkerComplete", true)
+                .put("foregroundHistoryPaged", true)
+                .put("foregroundStoppedHistoryRetained", true)
+                .put("historyPages", foreground.pages)
+                .put("providerReferences", foreground.references)
+                .put("pendingStateReferences", foreground.pendingStateReferences)
+                .put("historyPeerEvents", JSONArray(historical.map { it.eventId }))
+                .also { cancelled?.evidence(it) },
+        )
+    }
 
     private data class RestoredIntent(
         val checkpoint: JSONObject,
@@ -197,6 +216,7 @@ internal class HrisWorkerMatrixProbe(private val context: Context, directory: Fi
                     check(it.intent.id == files.logicalId && it.intent.text == files.body)
                     check(it.state == CollaborationMessageState.Queued)
                 }
+        cancelled?.restore(app, queued, checkpoint)
         return RestoredIntent(checkpoint, command)
     }
 

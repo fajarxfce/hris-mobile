@@ -61,3 +61,12 @@ The regular dialog capture is 1024 × 768; the independent narrow capture establ
 320-pixel boundary. Full and supplemental reports retain their own source attribution.
 
 Release 10 is now installed and verified in place; see [installation evidence](measurements/android-release-cancellation-2026-11-01.json). Continue actual native cancellation interoperability, incoming notifications/replies and all remaining communications work. No generic Starter policy or database schema change is required.
+
+The [actual native proof](measurements/chat-cancellation-native-2026-11-01.json) now also
+preserves a cancelled frozen intent beside an independent Queued message across real process
+death. Archive replay does not schedule or create a receipt; worker recovery clears the exact
+cancelled draft and sends the independent original once. The server confirms exactly that
+send plus 32 peer seeds. Pending publication initially produced a terminal protocol error in
+the separate frozen-only case; its retained failure and server correction are included.
+All five cases subsequently pass with the same APK. These fixture-only Mobile changes do
+not require another phone installation; release 10 remains installed.

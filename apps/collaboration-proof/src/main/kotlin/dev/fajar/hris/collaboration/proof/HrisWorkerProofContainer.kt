@@ -115,6 +115,15 @@ internal class HrisWorkerProofContainer(
             )
         )
 
+    suspend fun cancel(expected: CollaborationMessageRecord) {
+        expect(
+            container.koin.get<CancelCollaborationText>()(application.workspaceId, access, expected)
+        )
+    }
+
+    suspend fun message(id: String): CollaborationMessageRecord? =
+        expect(container.koin.get<CollaborationMessageRepository>().get(access, id))
+
     suspend fun draft(): CollaborationDraft? =
         expect(
             container.koin.get<ObserveCollaborationDraft>()(

@@ -75,13 +75,12 @@ Build `:apps:collaboration-proof:testDebugUnitTest`, `assembleDebug` and `lintDe
 Use the Platform commit pinned by `.github/workflows/collaboration-hris.yml`, Docker,
 and the dedicated `hris-mobile-dev` emulator at `emulator-5560`. Set
 `HRIS_COLLAB_NATIVE_APK` to the proof APK and run the three `NativeCollaboration*InteropTest`
-cases. Each owns its fixtures and cleanup. Never target the user's phone with this
+classes (five cases). Each owns its fixtures and cleanup. Never target the user's phone with this
 driver. CI uploads the exact bounded result/checkpoint/trace and test XML artifacts.
 
 No phone UI, live provider deployment, Apple/web runtime, large-scale acceptance or
-complete PRD group is accepted by this proof. Continue bounded local browsing beyond
-the current ten-page window, durable drafts and safe pending cancellation, incoming
-FCM/inline replies, richer messages, key continuity/backups, calls and meetings.
+complete PRD group is accepted by this proof. Continue incoming FCM/inline replies, richer messages, key continuity/backups, calls and
+meetings. Local browsing, durable drafts and queued cancellation have separate newer evidence.
 
 
 ## Explicit frozen-draft recovery proof
@@ -101,3 +100,23 @@ The exact original provider rejection code was lost; no observed 429 claim is ma
 CI now pins the proven Platform fixture. Hosted execution must still be audited separately.
 Release 8 is already installed; this fixture does not require another phone build. Continue
 the reviewed technical-contention versus true edit-conflict UI distinction and remaining PRD.
+
+## Cancelled draft and pending publication recovery
+
+CANCELLED_DRAFT adds a third direct-worker case beside QUEUED and FROZEN_DRAFT. A frozen
+original is queued and atomically cancelled before death; exactly one independent command
+remains pending. The same cancelled identity/body/draft revision and authenticated archive
+survive death, and replay cannot schedule or produce a delivery receipt. Recovery clears the
+matching frozen draft; acquired history excludes it. The independent original and 32 peer
+seeds account for exactly 33 encrypted sends. No native queue erasure or remote deletion.
+
+[Five-case evidence](measurements/chat-cancellation-native-2026-11-01.json) binds 68 Mobile
+and five Platform inputs, the first failed attempt and the correction. Pending sender-key
+publication now maps to retryable 503 instead of terminal validation, while missing keys and
+live denials retain their gates. All five cases pass with the same Android artifact after
+that server correction. Release 10 is installed; these later Mobile edits are fixtures only.
+
+Earlier hosted [frozen recovery](measurements/chat-frozen-native-ci-2026-11-01.json) and
+[cancellation-policy regression](measurements/chat-cancellation-policy-regression-native-ci-2026-11-01.json)
+remain bound to their four-case sources; neither includes the new pending-publication fix or
+explicit cancelled-draft native case. Audit the newly pinned hosted source separately.

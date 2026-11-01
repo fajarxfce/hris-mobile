@@ -1,0 +1,614 @@
+{
+  "date": "2026-11-01",
+  "mobileBase": "afc25fb8c3bc153bb10fb4fe6b815d753edd16e7",
+  "platformBase": "4d06487115d8410f7e99830de90b1007feaebe77",
+  "mobileSourceSha256": {
+    "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisCancelledWorkerIntent.kt": "cb8f155cf36eeba3e9e8545682b9ee63313075febb46ded18defb0e8bfde7ade",
+    "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisWorkerMatrixProbe.kt": "428460a132a9330d856626e97fa4d6293408875e64b5d8c1711ca8410fe2ef47",
+    "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisWorkerProofContainer.kt": "8a45de03c0f28c0db6b3074304a5dbd821a50764c1ca47df81c26ee50d9836c3",
+    "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisWorkerProofFiles.kt": "8c2a64c9cc2c25cc6ae79ef00c0c87bf50b230ba83252aa0a51f9fc0f07d1f44",
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/di/ApplicationWorkerModule.kt": "98da7cbb82e67a74c5213bc4268272ca21307c9832dcb78096015dfd1f65363f",
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/work/CollaborationDeliveryWorker.kt": "e9df7c595b1fa95b9e21518e7c651510b68d44cb53fec5e435566924ae6b99ec",
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/work/CollaborationDraftRecovery.kt": "b36a97ce80fee2385368ea130a37ef94235d524d384acc336738fb3d3f4d1739",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt": "0963e38a243c048382c62b3811c7d9d7e4e43897b426dfdd40414fa09d8d4a09",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationCancellationWorkerTest.kt": "4774e0505169ee7adf429d3deff152fd484c291a336a24a3e13b7b4a1bd619c4",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationDraftWorkerTest.kt": "d49da48107d4720817c950ab975f24d53418d2c541e76c5190a547857c3fda29",
+    "core/localization/src/commonMain/composeResources/values/strings_en.xml": "51736c0574485590195c8c673d15533a71524e46e816a75be07a2dfd007a7d22",
+    "core/localization/src/commonMain/composeResources/values/strings_id.xml": "ab4965c6a0743e593bfccbd05012efe292e4c9663d9f68a0348fc71acb480631",
+    "core/localization/src/commonMain/kotlin/dev/fajar/starter/localization/AppString.kt": "e692e38bcf1b592013c28a030cfce6cecef973b360e61363a6f26c3aade8f3f1",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt": "bce7196575dc9c9f75f92dd66ad85cb737d3784f473990f4b9aba491845ec05f",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/drafts/CollaborationDraftCodec.kt": "c6c421bce4311422363c5aafd1e1ff6554a942a564f8d8bd0f9f07f93d6939ff",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/drafts/CollaborationDraftRecoveryCursorCodec.kt": "c3b3673cdde3aee3fa4a17071bc42a0a7532e4559261f6604dfbe612b17518bf",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/messages/CollaborationMessageCodec.kt": "a70c45cb401cc1580943ce9b28ee69b0700be550d0aa2d00f089f885a42f1355",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationDraftRecoveryCursorRepository.kt": "bbf5ebf3979f55a75b3b625118a0331b76dd078c88654b7c674f0a8937020b14",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationDraftRepository.kt": "cebfc7a2722d6b1fec8cbb3d1d8d4f6c51f863bddb51814a63b9cad0b6b7f7ee",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationMessageRepository.kt": "97e95d88ed008ed8ad69df5fd7eca205ba144503664b61273cd4e75b8ad14a4c",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationCancellationStorageContract.kt": "31cdd0d22afdfe7857efe17fa0f0f80de28bb2699347aeed971ff5cd96f2c00c",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationDraftStorageContract.kt": "1a0a4462ab98163801161b5b797c8f212b017b1048ad881d07259a283f72f425",
+    "features/collaboration/data/src/desktopTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationCancellationStorageTest.kt": "81ff4077752b34eef6da2f7e2b831d3bbc30e5b1182c09e33db88e6dfbff8f64",
+    "features/collaboration/data/src/desktopTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationDraftStorageTest.kt": "8b0c16f1b05aedb83b35572d38ed225fab5ce727a6e568d297e73d5e5e6a4a3f",
+    "features/collaboration/data/src/wasmJsTest/kotlin/dev/fajar/starter/collaboration/data/BrowserCollaborationCancellationStorageTest.kt": "c4dd8d23a497436f8e4b0e320c6589aca60f90311c40c511a58c191606005006",
+    "features/collaboration/data/src/wasmJsTest/kotlin/dev/fajar/starter/collaboration/data/BrowserCollaborationDraftStorageTest.kt": "94dccd463d0ed14da770f6646ff6ce1b4ec4ee5e808218453019d523c9b98601",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationDraft.kt": "41a8eeb2559ab090726227151b7cc81f7c2fdc025d80d1795ffd3e24ae28df5a",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationDraftRecovery.kt": "f9e273a0ebcd319d7763ff86728e33b12cae0288ded883decf5107cf0ef9ce23",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationMessageIntent.kt": "b9846ba110ae608b230fc8eb9fdf46d3e5e2c1db2abec5917090074f11048c13",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationDeliveryPolicy.kt": "b804bc5784aefdea25e5c3f700153731522ffc4d701a6f5be66b4baf02efc673",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationDraftPolicy.kt": "2d116687fde04ccdfb92ff244ff301bedfffbc055e1ef4bbf61e665ce4d37417",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationMessagePolicy.kt": "e68f1509e64ffd8324c11cbd75f3a6b3a177b6f95bc36d32dd4fff8b3db3b5d0",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationDraftRecoveryCursorRepository.kt": "9aa2221cff7ef7383b4ed5c263d1b0fc5f502e040128e48c5d60b78da8074e52",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationDraftRepository.kt": "aae92ac26730b0a518be1243692b59cb1b7d730584ab0ae0e1e1f4cb3ccaeec8",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationMessageCancellationRepository.kt": "8faa17a2f30c64bf46c47f50bcf01918261833c2038dfef2a68c1c873b4ee8ee",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationMessageRepository.kt": "c412e91a4981f05162c52448c48b1ddc7f5ab18e80bcab7a0a0e749a3980d190",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/AdvanceCollaborationDraftRecovery.kt": "7e3e0666d49ff8a0ef3b88d9081485fdb977b17c1d47e43bdec056692aa75b82",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/CancelCollaborationText.kt": "3099d68457dc207c3d3789170ffb10e969144db419a1b8f7abc313e6234e875e",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/CollaborationDraftAccess.kt": "34b4787210c0960090032c5bbb9933347e3d4d4c75af8ff3da8892146976fc01",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ConfirmCollaborationDraftSend.kt": "a150869b8cfbfa4da68dfdb562822f23960cb93fc11d61b98f1e3dd7e8cafd16",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/EditCollaborationDraft.kt": "a362b6495b7f888c2c306b1fed845b1149513e3da416bbf5ff1e8f908f1bbf98",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ObserveCollaborationDraft.kt": "235987dd4fb98ab253d630fbf3e5d77ed65fbb8859e4382c0951816e47fa1813",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/PrepareCollaborationDraftSend.kt": "8fe41f406e3ed93d49c4af692246bf1685f14898db446fc3bc24e40f754531e4",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/QueueCollaborationText.kt": "d03bd23b1e8d9aaa9a9fc5afcc16369080c9d40b724943cbbbfddffe3b184c45",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ReadCollaborationDraftRecovery.kt": "9ab7096d5a7b4550d949c3677a182d72662f533d07a37a3bfb8021c5141e1188",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/StageCollaborationText.kt": "a901173a7c2e3dd2813d0b59bacefacb162e11e33b95c60a1ccf64a4a8b2626a",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/SuspendCollaborationDraftSend.kt": "5805b5683b874f1290676cf0a96476689306eb0abb96482513a5b219e3ef000e",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CancelCollaborationTextTest.kt": "3fa423367434faa10a49088d30c98a6786daeef70ee39c195b585b13350a8dcc",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationDraftRecoveryTest.kt": "9be17ed31674e950ded802c450c8161256f329a0304cb923f696c7cb303c8cfc",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationDraftUseCasesTest.kt": "031855f7c7a4f678e33296cc8ad6ca4c815500e9fd1496d4dc431a7afc4093f8",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/StageCollaborationTextTest.kt": "c501960da15263287b04b440e9d6ffe3500e2b8b969378aaf051ceaa009442b1",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatCancellationSelection.kt": "e474ec59f662176447c7151b7a27785236e37b3171ea6d7a26fc501c6579d335",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatMessageRow.kt": "0d0c5edf6a0f1cb5448e5f64cfa0233c9e2dcdb396532d50d1d7238b0c118d12",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadEvent.kt": "9537912d751b1fd9383e4d9f4552583583660fce6585be56e0497ad16ddf577b",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadProjection.kt": "89e0c610581ae0c1ae93f915180f6f76b94ff8c7c8a9bee642f7f91d33f108ed",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadState.kt": "2ca3d94a01610c05c921977fdb6ecce81aada535281b5a48e9612a20e182f76a",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadViewModel.kt": "5483b00e8c1cd268c81dead388624a2fcbbc34ecd1f7a5e44f3f290cf8a774e9",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/pages/ChatCancellationDialog.kt": "1e161646637315461a4a17a170ac895f4c8d77ac9737e365a27afd0bfc8b275d",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/pages/ChatComposer.kt": "9ff92684488326148555da75cb7c0443a34e7b03331812c2dd3905eb8fa8f692",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/pages/ChatMessageBubble.kt": "99ad994f46aeb1b6edeee2c4aaa3e3713288e5b00ba34c3450ed414e24318d96",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/pages/ChatThreadPage.kt": "b8e50dbb0156324e1f9d064f28d430714461f20a8ebcd97cbe66075c17875abe",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadCancellationTest.kt": "865180b921da8d0ea348cd32f4f642b8cc91983a3597d4544cc30702827a6524",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadDraftTest.kt": "d59cd86518a1cf79d67ff936d514e51e4f82466170c7dbf5c7e3984d17a2adb5",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadFixture.kt": "f6f37c136630ddb30b874902b7e66268474e017db6aa679740c910edb5b41874",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadProjectionTest.kt": "e4ab8cff1783856952e8e7209377c44839b75413e05aabe0d9c6339757315b9b",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadViewModelTest.kt": "ee74fc236df4d5afeb8bdf62e9c1ffa5cdcb38bd1722371fa423754b501f5bd7",
+    "features/collaboration/presentation/src/desktopTest/kotlin/dev/fajar/starter/collaboration/presentation/ChatCancellationNarrowLayoutTest.kt": "517b62d5e90817337842837dcf0ff90939dab9285de45d68dc72765a80b34033",
+    "features/collaboration/presentation/src/desktopTest/kotlin/dev/fajar/starter/collaboration/presentation/ChatThreadLayoutTest.kt": "ea0f9e751292dcd7a1d642d1211694950dab9eaf947ae519c446722861a152c8"
+  },
+  "platformSourceSha256": {
+    "apps/server/src/test/kotlin/dev/fajar/hris/NativeCollaborationWorkerInteropTest.kt": "1d42352e5d25f7db08ccf336f4907a8ef0017c005c847bab17c01df11b38de83",
+    "tool/collaboration_worker_native.py": "4eddaa861fbfbcc9e50d69723762889034e9f498223244a7d2edcfc925e5837f",
+    "tool/test_collaboration_worker_native.py": "ded9b745fc9674859b20cd7df3c15b00bd5c9ac10c727bc803814b101a17b099",
+    "modules/collaboration/domain/src/main/kotlin/dev/fajar/hris/collaboration/domain/usecases/AccessNativeCollaborationMatrixDevice.kt": "b9a540dc454fa0585b1708b8193e0542ecd409028ffecd425cd70984d4844f48",
+    "modules/collaboration/data/src/test/kotlin/dev/fajar/hris/collaboration/data/NativeCollaborationRegistrationTest.kt": "be0d7a826b4c420dbe89e033bfd82f33c99fc669c974659a24a64363eafad5f5"
+  },
+  "apkSha256": "3c15eb832190528e92cd85c8385e3367815cd6cc6ae809f7dd26525af4c17275",
+  "nativeRun": {
+    "command": [
+      "sudo",
+      "-n",
+      "runuser",
+      "-u",
+      "fajar",
+      "-g",
+      "docker",
+      "--",
+      "env",
+      "JAVA_HOME=/usr/lib/jvm/java-21-openjdk",
+      "PATH=/usr/lib/jvm/java-21-openjdk/bin:/usr/local/bin:/usr/bin",
+      "ANDROID_HOME=/home/fajar/Android/Sdk",
+      "HRIS_COLLAB_NATIVE_APK=/home/fajar/hris/hris-mobile/apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+      "./gradlew",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=1",
+      "-Dorg.gradle.jvmargs=-Xmx1536m",
+      ":apps:server:cleanTest",
+      ":apps:server:test",
+      "--tests",
+      "*NativeCollaborationSdkInteropTest",
+      "--tests",
+      "*NativeCollaborationWorkerInteropTest",
+      "--tests",
+      "*NativeCollaborationScheduledInteropTest"
+    ],
+    "startedAt": "2026-11-01T21:08:44.816145+00:00",
+    "apkSha256": "3c15eb832190528e92cd85c8385e3367815cd6cc6ae809f7dd26525af4c17275",
+    "mobileBase": "afc25fb8c3bc153bb10fb4fe6b815d753edd16e7",
+    "platformBase": "4d06487115d8410f7e99830de90b1007feaebe77",
+    "exit": 0,
+    "seconds": 357.121,
+    "directories": [
+      ".work/collaboration-worker/42fae208b43a4dd5bd51bb8c683d28fd",
+      ".work/collaboration-worker/60d2e5f133b14c97998849c4991c48ac",
+      ".work/collaboration-worker/bb2c3e6c3d514f9a9a10a1225415d5a5",
+      ".work/collaboration-worker/c2ae8ff42dbd4fe580c71e2ac3853a25",
+      ".work/collaboration/8129af2da6b1499d92cb3967487bb0e9"
+    ],
+    "artifactUnchanged": true,
+    "inputsUnchanged": true,
+    "gradleSeconds": 356,
+    "logSha256": "9aee6c339794ae850dbe82696f2388cba096f28aaf61d3becd01d0067b92c5ac"
+  },
+  "nativeTests": [
+    {
+      "name": "dev.fajar.hris.NativeCollaborationScheduledInteropTest",
+      "tests": 1,
+      "seconds": 58.966,
+      "cases": [
+        {
+          "name": "androidWorkManagerRestoresConstrainedIntentAfterOrdinaryProcessDeath()",
+          "seconds": 34.275
+        }
+      ]
+    },
+    {
+      "name": "dev.fajar.hris.NativeCollaborationSdkInteropTest",
+      "tests": 1,
+      "seconds": 55.785,
+      "cases": [
+        {
+          "name": "actualAndroidSdkExchangesEncryptedMessagesThroughCurrentHrisGatewayAdmission()",
+          "seconds": 41.435
+        }
+      ]
+    },
+    {
+      "name": "dev.fajar.hris.NativeCollaborationWorkerInteropTest",
+      "tests": 3,
+      "seconds": 214.72,
+      "cases": [
+        {
+          "name": "actualApplicationWorkerRetainsCancelledDraftAcrossDeathAndSendsIndependentIntentOnce()",
+          "seconds": 51.665
+        },
+        {
+          "name": "actualApplicationWorkerRestoresQueuedIntentAfterProcessDeathAndSendsOnce()",
+          "seconds": 85.246
+        },
+        {
+          "name": "actualApplicationWorkerRecoversFrozenOnlyDraftAfterProcessDeathAndSendsOnce()",
+          "seconds": 50.677
+        }
+      ]
+    }
+  ],
+  "workers": {
+    "QUEUED": {
+      "processes": 2,
+      "forcedProcessDeaths": 1,
+      "workerEncryptedSends": 1,
+      "peerEncryptedSends": 32,
+      "historyActions": 4,
+      "providerReferences": 43,
+      "stateOnlyReferences": 10,
+      "passes": 2,
+      "applicationAdmissions": {
+        "device": 37,
+        "conversation": 34,
+        "room": 37,
+        "failures": 0
+      },
+      "cleanup": true,
+      "exactOriginalPreservedAcrossDeath": true,
+      "oldestOriginalRetainedAfterStop": true
+    },
+    "FROZEN_DRAFT": {
+      "processes": 2,
+      "forcedProcessDeaths": 1,
+      "workerEncryptedSends": 1,
+      "peerEncryptedSends": 32,
+      "historyActions": 4,
+      "providerReferences": 43,
+      "stateOnlyReferences": 10,
+      "passes": 1,
+      "applicationAdmissions": {
+        "device": 30,
+        "conversation": 28,
+        "room": 30,
+        "failures": 0
+      },
+      "cleanup": true,
+      "exactOriginalPreservedAcrossDeath": true,
+      "oldestOriginalRetainedAfterStop": true,
+      "pendingCommandsBeforeAndAfterDeath": 0,
+      "exactDraftRevisionPreserved": true,
+      "confirmedDraftCleared": true
+    },
+    "CANCELLED_DRAFT": {
+      "processes": 2,
+      "forcedProcessDeaths": 1,
+      "workerEncryptedSends": 1,
+      "peerEncryptedSends": 32,
+      "historyActions": 4,
+      "providerReferences": 43,
+      "stateOnlyReferences": 10,
+      "passes": 1,
+      "applicationAdmissions": {
+        "device": 30,
+        "conversation": 28,
+        "room": 30,
+        "failures": 0
+      },
+      "cleanup": true,
+      "exactOriginalPreservedAcrossDeath": true,
+      "oldestOriginalRetainedAfterStop": true,
+      "pendingCommandsBeforeAndAfterDeath": 1,
+      "exactCancelledIdentityPreserved": true,
+      "exactCancelledDraftRevisionPreserved": true,
+      "archiveRetained": true,
+      "deliveryReceiptAbsent": true,
+      "replayDidNotSchedule": true,
+      "cancelledDraftConfirmedCleared": true,
+      "cancelledAbsentFromHistory": true
+    }
+  },
+  "sdk": {
+    "encryptedSends": 3,
+    "heldRoomNeverSent": true,
+    "cleanup": true,
+    "applicationAdmissions": {
+      "device": 22,
+      "conversation": 22,
+      "room": 22,
+      "failures": 0
+    }
+  },
+  "scheduled": {
+    "automaticJobStart": true,
+    "ordinaryProcessDeaths": 1,
+    "networkRestored": true,
+    "workState": "SUCCEEDED",
+    "runAttemptCount": 1,
+    "encryptedSends": 1,
+    "cleanup": true,
+    "applicationAdmissions": {
+      "device": 8,
+      "conversation": 7,
+      "room": 8,
+      "failures": 0
+    }
+  },
+  "localChecks": {
+    "mobile": {
+      "command": [
+        "xvfb-run",
+        "-a",
+        "./gradlew",
+        "--no-daemon",
+        "--no-parallel",
+        "--max-workers=1",
+        "-Dorg.gradle.jvmargs=-Xmx1536m",
+        ":apps:collaboration-proof:testDebugUnitTest",
+        ":apps:collaboration-proof:assembleDebug",
+        ":apps:collaboration-proof:lintDebug",
+        ":formatCheck",
+        ":architectureCheck",
+        ":detekt"
+      ],
+      "exit": 0,
+      "seconds": 148.995,
+      "inputsUnchanged": true,
+      "gradleSeconds": 145,
+      "logSha256": "910c591fe2624467fa19bcd06a19170cef6ca75d9d21c11ca56d5cfa36f69a65"
+    },
+    "platform": {
+      "command": [
+        "sudo",
+        "-n",
+        "runuser",
+        "-u",
+        "fajar",
+        "-g",
+        "docker",
+        "--",
+        "env",
+        "JAVA_HOME=/usr/lib/jvm/java-21-openjdk",
+        "PATH=/usr/lib/jvm/java-21-openjdk/bin:/usr/local/bin:/usr/bin",
+        "./gradlew",
+        "--no-daemon",
+        "--no-parallel",
+        "--max-workers=1",
+        "-Dorg.gradle.jvmargs=-Xmx1536m",
+        ":modules:collaboration:domain:test",
+        ":modules:collaboration:data:test",
+        ":apps:server:test",
+        "--tests",
+        "*NativeCollaborationMatrixIdentityHttpTest",
+        ":formatCheck",
+        ":architectureCheck"
+      ],
+      "exit": 0,
+      "seconds": 424.148,
+      "inputsUnchanged": true,
+      "gradleSeconds": 423,
+      "logSha256": "33871023a4bab4748c4ab7804031a893a4ea71b02c21cdf0b885f6acad207a86"
+    },
+    "driverTests": 69,
+    "proofCleanup": {
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "lint": {
+      "Fatal": 0,
+      "Error": 0,
+      "Warning": 47
+    },
+    "domain": {
+      "suites": 11,
+      "tests": 40,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "data": {
+      "suites": 26,
+      "tests": 210,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "http": {
+      "suites": 1,
+      "tests": 26,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "evidenceSha256": {
+    ".work/native-cancel-interop-2-reports/TEST-dev.fajar.hris.NativeCollaborationScheduledInteropTest.xml": "25d71b093c453d1fc06c177b505032e09bb80c4ebb0291976ae170bb0cbf71d8",
+    ".work/native-cancel-interop-2-reports/TEST-dev.fajar.hris.NativeCollaborationSdkInteropTest.xml": "65e5f85eac22ec2de713bab73f5b7265311fdf9c3088009c6afc1a31c49023ca",
+    ".work/native-cancel-interop-2-reports/TEST-dev.fajar.hris.NativeCollaborationWorkerInteropTest.xml": "c718fcd898a1bd2f580b9f176c4f6ad758142c321f801377e1a2283003851173",
+    ".work/collaboration-worker/42fae208b43a4dd5bd51bb8c683d28fd/acceptance.json": "ce0b9c7566cffc1d6248195e24a9a978d6ea860e852e2a4ae6c00ce7ebfb9f49",
+    ".work/collaboration-worker/42fae208b43a4dd5bd51bb8c683d28fd/gateway-observations.json": "359c8ce8c809e30f30a5bb23db848c7e6a98e72f6d03e3a5264bf635dd2cc80c",
+    ".work/collaboration-worker/42fae208b43a4dd5bd51bb8c683d28fd/gateway-trace.json": "80463196f31ae1f8d265a030d21e035bd8804f5f77be63c9be7129efd8402be6",
+    ".work/collaboration-worker/42fae208b43a4dd5bd51bb8c683d28fd/native-worker-queued.json": "b89c740cd78ab7351ad9cd5d209ee8ae1e07c5e6427013cb893cac693a980160",
+    ".work/collaboration-worker/42fae208b43a4dd5bd51bb8c683d28fd/native-worker-restored.json": "01110a733d7f7939cef6cb564ae4374d20155ba15b85bab8e69874ecb9700b4e",
+    ".work/collaboration-worker/42fae208b43a4dd5bd51bb8c683d28fd/result.json": "878f7e25aea08af2dff360de15fe6e70df91c6bbb125f8a641d0655247e88676",
+    ".work/collaboration-worker/60d2e5f133b14c97998849c4991c48ac/acceptance.json": "df6ef9deb9d5267ee76bba5b885dcbbb5979cd8e01e32702195712b7a59d2568",
+    ".work/collaboration-worker/60d2e5f133b14c97998849c4991c48ac/gateway-observations.json": "aaffa3ef3e6214b17d9cba901a8b733b914cfac96dab7b9799b2fa98a146af63",
+    ".work/collaboration-worker/60d2e5f133b14c97998849c4991c48ac/gateway-trace.json": "de7ee23b151d77aad2145ae9f29ed47287b844c3ba1d0e2d3b2666fa685e63e3",
+    ".work/collaboration-worker/60d2e5f133b14c97998849c4991c48ac/network-before.json": "79dfab35e5f4104e398aa74de7c3d6e56dda0a96ac31d2fcb699ac1df093c6ad",
+    ".work/collaboration-worker/60d2e5f133b14c97998849c4991c48ac/result.json": "07ad8dccdb288bb50984ba1d8c4f4ae14c1e1f1ce65bf384c6132b4dc6591d31",
+    ".work/collaboration-worker/60d2e5f133b14c97998849c4991c48ac/started.json": "88ea4b02e64078dd5ffc90985f70f795b107fab306f4f251c0c0b033d0a35558",
+    ".work/collaboration-worker/60d2e5f133b14c97998849c4991c48ac/stopped.json": "337e30b28ee825e66289e0785cf6292a956f7be30a6c1d0cee70caeeb55719d0",
+    ".work/collaboration-worker/bb2c3e6c3d514f9a9a10a1225415d5a5/acceptance.json": "65b1085c4142afc2f8612e3f9b2c816b87ffcbbc46f3f6a9b7c4d4ce6db795ed",
+    ".work/collaboration-worker/bb2c3e6c3d514f9a9a10a1225415d5a5/gateway-observations.json": "4e74923492a88ce5d5de05bf55492e09188ed059b71c903abcb31c6304b17531",
+    ".work/collaboration-worker/bb2c3e6c3d514f9a9a10a1225415d5a5/gateway-trace.json": "3b14de2c7672b0275e8888ad6ea31a68300a229d8a0d0a3f45d4a46ba62281b4",
+    ".work/collaboration-worker/bb2c3e6c3d514f9a9a10a1225415d5a5/native-worker-queued.json": "e7ba76e1c7f589003fb93fc25eb12fad8f58f77d3378fbae308f0af6d5defb1e",
+    ".work/collaboration-worker/bb2c3e6c3d514f9a9a10a1225415d5a5/native-worker-restored.json": "f3d30bdc2916e68edf5ab4c3dac503324adeffce02c15986a7d7eef7cf69e5f5",
+    ".work/collaboration-worker/bb2c3e6c3d514f9a9a10a1225415d5a5/result.json": "f18969ead0cb34760e2b19257ee11697f255344bb840c41d3ce8a52893d3d927",
+    ".work/collaboration-worker/c2ae8ff42dbd4fe580c71e2ac3853a25/acceptance.json": "f22d1a1d36ed05d0e89172265b5c4ef0bb28c94f8d96ed1dd7dfd31311d62691",
+    ".work/collaboration-worker/c2ae8ff42dbd4fe580c71e2ac3853a25/gateway-observations.json": "90881cd597d89d50b56371f187796af27d42be1b5aaa83216816d274f9828ede",
+    ".work/collaboration-worker/c2ae8ff42dbd4fe580c71e2ac3853a25/gateway-trace.json": "97f02f4192f72df6ef907df8842e818379fd3b89564971dd14c71166aaa0e763",
+    ".work/collaboration-worker/c2ae8ff42dbd4fe580c71e2ac3853a25/native-worker-queued.json": "227af9bb0f0b6bee4b9740ff72f9efcd28c9f0e31f6c51643f93a711ed59de05",
+    ".work/collaboration-worker/c2ae8ff42dbd4fe580c71e2ac3853a25/native-worker-restored.json": "ac981dfe30a5f538e9c16492a5d76bedee2dca514337fd05e62c95fa86a98735",
+    ".work/collaboration-worker/c2ae8ff42dbd4fe580c71e2ac3853a25/result.json": "1b1e974a7819b9293e05aeea2e0523b255b08958d50a9a3d0c6eb3aa2fb19de6",
+    ".work/collaboration/8129af2da6b1499d92cb3967487bb0e9/gateway-trace.json": "05e0757556a702b2bf44b0cd2670b86fb5e678e5bf3e94bf7cd14d0b8144fa2c",
+    ".work/collaboration/8129af2da6b1499d92cb3967487bb0e9/result.json": "ef4d2c3dd8a0db0ef302f3b003f0538f34f9084c36b441c94230afb781e837e7",
+    ".work/collaboration/8129af2da6b1499d92cb3967487bb0e9/verified.json": "30c954eb5c5ca59ee37da7ebd6d3f774863e89b314d4989fc19b00093c179ad0",
+    ".work/native-cancel-interop-1-reports/TEST-dev.fajar.hris.NativeCollaborationScheduledInteropTest.xml": "f6e8abec84980afeb0006b1a32abc15a5c1ce9035eba9f3a96c4596c9ac6fe4f",
+    ".work/native-cancel-interop-1-reports/TEST-dev.fajar.hris.NativeCollaborationSdkInteropTest.xml": "9cac6d8a05e74387dc3206d717b6d78ae855b3de5508a77a5cb6c873c2c20aa4",
+    ".work/native-cancel-interop-1-reports/TEST-dev.fajar.hris.NativeCollaborationWorkerInteropTest.xml": "e56f6586a2d78c55d132c731860e1c37f0d140adeabdebd415dbe6578f1a8e51",
+    ".work/collaboration-worker/2dd77dccef4443e1a269d137e4c52964/native-worker-queued.json": "5d109bd80ac901e2f2443d41f981b871bde3aeed3066bc4996ecbd0b8c79c2dc",
+    ".work/collaboration-worker/2dd77dccef4443e1a269d137e4c52964/native-worker-restored.json": "544af624ac5819cabd5384a42694994dc1358a9cc3f6d4cee98bd99dceb3239d",
+    ".work/collaboration-worker/2dd77dccef4443e1a269d137e4c52964/result.json": "2a8c3e35aa8fc8cb1b8d0dc97bc0848c6ff2ccce8982f11d213dc65ca8fb045e",
+    ".work/collaboration-worker/2dd77dccef4443e1a269d137e4c52964/gateway-observations.json": "737caa0feb9e216590ae73b03d195b32d9116bfe9e1b2f258ccd1600974ef15c",
+    ".work/collaboration-worker/c523ca60971d4243a08b875e198694f6/native-worker-queued.json": "8df83ce57fe8d6a93becde805515a70ab3023a50143faec96b0a0b6ca57f5d0f",
+    ".work/collaboration-worker/c523ca60971d4243a08b875e198694f6/native-worker-restored.json": "ff80ab9fb2996ce9b5b392fc071aa895f1991eed913bf2d5a149796594f62429",
+    ".work/collaboration-worker/c523ca60971d4243a08b875e198694f6/result.json": "a56b895accaaea0720e0e5fb755f1aa865375a2b9505bf06580598e1f4f19f42",
+    ".work/collaboration-worker/c523ca60971d4243a08b875e198694f6/gateway-observations.json": "67975533a7027fca0cb22c8c1569337f000ca41f5f9fec46b292676e848a707d",
+    ".work/collaboration-worker/c523ca60971d4243a08b875e198694f6/gateway-trace.json": "e8ad5113c1ad38e0d4103c554f9c653be4af2c7df3a293067fbd7db3f3396895",
+    ".work/collaboration-worker/c523ca60971d4243a08b875e198694f6/acceptance.json": "b925fc58ef26832d01a51d5f96f8f099520e03e57ce74167dadbe7f5089ff716",
+    ".work/collaboration-worker/cba02e20a9e547859c4f12774945f8d4/native-worker-queued.json": "eded0757ab79a1f35257210f1273bcdc8f3abf6de8e5988fa22806fe62bb6bd3",
+    ".work/collaboration-worker/cba02e20a9e547859c4f12774945f8d4/native-worker-restored.json": "348569df7014bf41818669fd58caf12b6bc6ea34fddcbe9586b83ccb5503f6a4",
+    ".work/collaboration-worker/cba02e20a9e547859c4f12774945f8d4/result.json": "f777d7902cef9519771e37eecdd94aa5d7c25b86b0240d58ab7a3a69f792d83f",
+    ".work/collaboration-worker/cba02e20a9e547859c4f12774945f8d4/gateway-observations.json": "179a8b955f8180d92e91aefbae969323579a00b289b82abc532876efe284a785",
+    ".work/collaboration-worker/cba02e20a9e547859c4f12774945f8d4/gateway-trace.json": "f26d5ff76cf03a9854fa81d554a60871b546bfe0e58656f52cce70761446dd03",
+    ".work/collaboration-worker/cba02e20a9e547859c4f12774945f8d4/acceptance.json": "4826435d0b70a5d70a46ca6a712f34d28ee9e330922e324d1a1d26f75c95abca",
+    ".work/collaboration-worker/df422b4ac3614761bc16ac37f440d473/network-before.json": "79dfab35e5f4104e398aa74de7c3d6e56dda0a96ac31d2fcb699ac1df093c6ad",
+    ".work/collaboration-worker/df422b4ac3614761bc16ac37f440d473/stopped.json": "eee97aeee58e595a930a37bebd0be72fa260d572931c4215ef4629e482299e21",
+    ".work/collaboration-worker/df422b4ac3614761bc16ac37f440d473/started.json": "d728224b825e2397db75efe53b32792745240d49a1b3f660fc6371daaed5e15a",
+    ".work/collaboration-worker/df422b4ac3614761bc16ac37f440d473/result.json": "9e07b59b9250cdb53c92225d8a981574e4943ab0a9cd41482e56df63fba606a6",
+    ".work/collaboration-worker/df422b4ac3614761bc16ac37f440d473/gateway-observations.json": "aaffa3ef3e6214b17d9cba901a8b733b914cfac96dab7b9799b2fa98a146af63",
+    ".work/collaboration-worker/df422b4ac3614761bc16ac37f440d473/gateway-trace.json": "de7ee23b151d77aad2145ae9f29ed47287b844c3ba1d0e2d3b2666fa685e63e3",
+    ".work/collaboration-worker/df422b4ac3614761bc16ac37f440d473/acceptance.json": "2585aa77c4069e0547e496c0308a716f43916e8ebac71bb08c83150452a39a4f",
+    ".work/collaboration/d5628be3fa6248d9bda85d5f17f8ddff/result.json": "3d43f5197a43fb2848615c20aa62bde94330cb138e7d900c800b50b33c868a0f",
+    ".work/collaboration/d5628be3fa6248d9bda85d5f17f8ddff/verified.json": "cc3769ca2b987cee61c2a2a77194265fa4e1fc077397206a82f3707ed4f7d4e8",
+    ".work/collaboration/d5628be3fa6248d9bda85d5f17f8ddff/gateway-trace.json": "b8e89cf362be5dd00c8798f6830b7dd91eab93ed84fadc37ddf175db1ba64267"
+  },
+  "mobileReportSha256": {
+    "apps/collaboration-proof/build/test-results/testDebugUnitTest/TEST-dev.fajar.hris.collaboration.proof.HrisProofCleanupTest.xml": "6e93001c9c7b6c670b7a80489a65bc7e074b9066d1cbaa6628c35bb9babee28d",
+    "apps/collaboration-proof/build/reports/lint-results-debug.xml": "9d8048fe45754cef8d1bd4e2c9fd19bbddad67baae2b0cf114f63392cec9b585"
+  },
+  "scope": [
+    "Actual Android app container, protected SQLite, HRIS API, Matrix Rust SDK and isolated Synapse on owned emulator-5560.",
+    "CANCELLED_DRAFT retains a cancelled frozen original and one independent Queued command across real process death. The same cancelled ID/body/draft revision survives; archive replay does not schedule, no receipt is synthesized, recovery clears the matching frozen draft, and acquired history excludes the cancelled original.",
+    "The independent original and 32 distinct peer seeds are each confirmed; exact33 encrypted PUTs excludes an extra cancelled send during the bounded fixture. This is not remote deletion or native queue erasure.",
+    "QUEUED and FROZEN_DRAFT remain separate regression cases, alongside SDK isolation and automatic WorkManager ordinary-death recovery.",
+    "Each worker asserts all33 originals before Stop and only the oldest individually after Stop.",
+    "Installed release10 sourcec0371a38 includes the validated product inputs. These later fixture-only edits do not require a new phone build; no phone UI was driven.",
+    "Hosted CI remains a separate proof at its pinned source; update Platform pin and retain the older frozen-run audit separately.",
+    "No live provider deployment, Apple/web runtime, capacity acceptance or complete PRD group is claimed. Continue FCM/pusher/gateway, inline replies and all remaining P0\u2013P8."
+  ],
+  "initialNativeFailure": {
+    "run": {
+      "command": [
+        "sudo",
+        "-n",
+        "runuser",
+        "-u",
+        "fajar",
+        "-g",
+        "docker",
+        "--",
+        "env",
+        "JAVA_HOME=/usr/lib/jvm/java-21-openjdk",
+        "PATH=/usr/lib/jvm/java-21-openjdk/bin:/usr/local/bin:/usr/bin",
+        "ANDROID_HOME=/home/fajar/Android/Sdk",
+        "HRIS_COLLAB_NATIVE_APK=/home/fajar/hris/hris-mobile/apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+        "./gradlew",
+        "--no-daemon",
+        "--no-parallel",
+        "--max-workers=1",
+        "-Dorg.gradle.jvmargs=-Xmx1536m",
+        ":apps:server:cleanTest",
+        ":apps:server:test",
+        "--tests",
+        "*NativeCollaborationSdkInteropTest",
+        "--tests",
+        "*NativeCollaborationWorkerInteropTest",
+        "--tests",
+        "*NativeCollaborationScheduledInteropTest"
+      ],
+      "startedAt": "2026-11-01T20:48:09.103378+00:00",
+      "apkSha256": "3c15eb832190528e92cd85c8385e3367815cd6cc6ae809f7dd26525af4c17275",
+      "mobileBase": "afc25fb8c3bc153bb10fb4fe6b815d753edd16e7",
+      "platformBase": "4d06487115d8410f7e99830de90b1007feaebe77",
+      "exit": 1,
+      "seconds": 409.864,
+      "directories": [
+        ".work/collaboration-worker/2dd77dccef4443e1a269d137e4c52964",
+        ".work/collaboration-worker/c523ca60971d4243a08b875e198694f6",
+        ".work/collaboration-worker/cba02e20a9e547859c4f12774945f8d4",
+        ".work/collaboration-worker/df422b4ac3614761bc16ac37f440d473",
+        ".work/collaboration/d5628be3fa6248d9bda85d5f17f8ddff"
+      ],
+      "artifactUnchanged": true,
+      "inputsUnchanged": true
+    },
+    "gradleSeconds": 409,
+    "tests": [
+      {
+        "name": "dev.fajar.hris.NativeCollaborationScheduledInteropTest",
+        "tests": 1,
+        "failures": 0,
+        "seconds": 58.258
+      },
+      {
+        "name": "dev.fajar.hris.NativeCollaborationSdkInteropTest",
+        "tests": 1,
+        "failures": 0,
+        "seconds": 48.19
+      },
+      {
+        "name": "dev.fajar.hris.NativeCollaborationWorkerInteropTest",
+        "tests": 3,
+        "failures": 1,
+        "seconds": 275.273
+      }
+    ],
+    "platformSourceSha256": {
+      "apps/server/src/test/kotlin/dev/fajar/hris/NativeCollaborationWorkerInteropTest.kt": "1d42352e5d25f7db08ccf336f4907a8ef0017c005c847bab17c01df11b38de83",
+      "tool/collaboration_worker_native.py": "4eddaa861fbfbcc9e50d69723762889034e9f498223244a7d2edcfc925e5837f",
+      "tool/test_collaboration_worker_native.py": "ded9b745fc9674859b20cd7df3c15b00bd5c9ac10c727bc803814b101a17b099"
+    },
+    "logSha256": "6a3d5b59cbe12bd984be9a03700689c5dc7e18b4ff7ea41240210191d41aa54e",
+    "cause": "Four cases including cancellation passed. Frozen-only failed after bounded delivery retries. Trace records temporary key-upload/query503, then sendToDevice400/collaboration_device_keys_required, later successful key uploads but no encrypted room send; final native category HrisProof_Timeout_DeliveryTimeout. Exact pending-publication misclassification is separately reproduced against real SQL."
+  },
+  "deterministicReproduction": {
+    "run": {
+      "command": [
+        "sudo",
+        "-n",
+        "runuser",
+        "-u",
+        "fajar",
+        "-g",
+        "docker",
+        "--",
+        "env",
+        "JAVA_HOME=/usr/lib/jvm/java-21-openjdk",
+        "PATH=/usr/lib/jvm/java-21-openjdk/bin:/usr/local/bin:/usr/bin",
+        "./gradlew",
+        "--no-daemon",
+        "--no-parallel",
+        "--max-workers=1",
+        "-Dorg.gradle.jvmargs=-Xmx1536m",
+        ":modules:collaboration:data:test",
+        "--tests",
+        "*NativeCollaborationRegistrationTest.pendingSenderPublication*"
+      ],
+      "exit": 1,
+      "seconds": 34.984,
+      "inputsUnchanged": true
+    },
+    "gradleSeconds": 34,
+    "sourceSha256": {
+      "modules/collaboration/domain/src/main/kotlin/dev/fajar/hris/collaboration/domain/usecases/AccessNativeCollaborationMatrixDevice.kt": "7f2ba54b3347a7d193d0370b6f66bdc27246487f936cb8d82fd26aa83d196e21",
+      "modules/collaboration/data/src/test/kotlin/dev/fajar/hris/collaboration/data/NativeCollaborationRegistrationTest.kt": "be0d7a826b4c420dbe89e033bfd82f33c99fc669c974659a24a64363eafad5f5"
+    },
+    "tests": 3,
+    "failures": 2,
+    "reportSha256": "600de4342be35cdbb455b5663631df723acf74be8f2076c2d073bac3114a2109",
+    "logSha256": "0bf65d89cdd43339056d98456dcab73494e12752df6efc1563c0bec750d82e5c",
+    "cause": "Pending/in-flight and lost-upload-reply sends expected UNAVAILABLE but received VALIDATION. Revoked-permission precedence already passed."
+  },
+  "publicationCorrection": [
+    "Own key version0 reservation under the exact admitted account/company/device returns UNAVAILABLE/collaboration_device_keys_pending. The existing gateway maps this to503 so SDK retries remain possible.",
+    "No reservation remains device_keys_required/validation. Confirmed publication and provider fingerprint validation still gate both to-device and room sending; corruption and ownership mismatch stay rejected. No key trust or publication requirement was relaxed.",
+    "Three real-SQL tests cover concurrent upload, lost reply then exact retained publication, and revoked permission. Full domain/data/HTTP checks and native evidence are recorded separately."
+  ],
+  "platformReportSha256": {
+    ".work/native-cancel-platform-check-2-reports/domain/TEST-dev.fajar.hris.collaboration.domain.CollaborationAdmissionPolicyTest.xml": "897e0fcbbe83b5d12b5a7ac8a9b78440b640f26778dabce686b4f2d3eeee774d",
+    ".work/native-cancel-platform-check-2-reports/domain/TEST-dev.fajar.hris.collaboration.domain.CollaborationDirectMetadataPolicyTest.xml": "6a6c2a6eb0248f328036924a76da4d687422bd74879703d0a8948a2d60ab2fb3",
+    ".work/native-cancel-platform-check-2-reports/domain/TEST-dev.fajar.hris.collaboration.domain.CollaborationDirectRoomRequestTest.xml": "c28ef4dd09cbfc71cb11c29016f2f5f35f13dbf49c97cbbd222b93b253961f29",
+    ".work/native-cancel-platform-check-2-reports/domain/TEST-dev.fajar.hris.collaboration.domain.CollaborationGatewayPolicyTest.xml": "33b1b6673a9ee53b8dfb4be81f085df2f4f0d2dfa5a554151138fde3b9ada325",
+    ".work/native-cancel-platform-check-2-reports/domain/TEST-dev.fajar.hris.collaboration.domain.CollaborationMatrixKeyClaimPolicyTest.xml": "5e82bb4426e0b6090a4dcbdf6003756204919db30cb2690e0891b5111fc147c4",
+    ".work/native-cancel-platform-check-2-reports/domain/TEST-dev.fajar.hris.collaboration.domain.CollaborationMatrixKeyPolicyTest.xml": "a99a16e1b48f5c7889123425b9e0f807a077c08a359de0dd0e00cf26295c6ea2",
+    ".work/native-cancel-platform-check-2-reports/domain/TEST-dev.fajar.hris.collaboration.domain.CollaborationMatrixKeyQueryPolicyTest.xml": "7e65cc41f639346b7cc980761fa1c227c3433172cb4707bd37b6e8f3bdb0d51b",
+    ".work/native-cancel-platform-check-2-reports/domain/TEST-dev.fajar.hris.collaboration.domain.CollaborationMatrixRoomPolicyTest.xml": "eb547b08d68ea1a0757a81ed5d62b2dd4e3d83d4e46359306358b486581b1eb2",
+    ".work/native-cancel-platform-check-2-reports/domain/TEST-dev.fajar.hris.collaboration.domain.CollaborationRoomMessagePolicyTest.xml": "90b25bb878940eceac1a58411a886fc5213fd1f710b820de63f0e102ebb84a37",
+    ".work/native-cancel-platform-check-2-reports/domain/TEST-dev.fajar.hris.collaboration.domain.CollaborationRoomScopePolicyTest.xml": "9131b7d1cde9f146ad35e61f953817f55116311f9aecc9a33c06358e39a03021",
+    ".work/native-cancel-platform-check-2-reports/domain/TEST-dev.fajar.hris.collaboration.domain.CollaborationToDevicePolicyTest.xml": "a27c0a214f66f4336a418fd9cbfd1372de13769b40eeb8e75ff51ef06ed23494",
+    ".work/native-cancel-platform-check-2-reports/data/TEST-dev.fajar.hris.collaboration.data.CollaborationDeviceKeyStorageTest.xml": "0f8256d12a6826d6bd9b3b5c19097b8187051ded22f72c3cfa438ebf63330099",
+    ".work/native-cancel-platform-check-2-reports/data/TEST-dev.fajar.hris.collaboration.data.CollaborationDirectRoomStorageTest.xml": "7b9108d3ba3c4e8a72ba038059dbc1954d0ceeaaf7082c14762ca208d56ed74e",
+    ".work/native-cancel-platform-check-2-reports/data/TEST-dev.fajar.hris.collaboration.data.CollaborationGatewaySessionTest.xml": "510669e137bd72e9b6c9b3fde3ab5952775dcc3463a58da4bdc50d90adaad59d",
+    ".work/native-cancel-platform-check-2-reports/data/TEST-dev.fajar.hris.collaboration.data.CollaborationProviderCredentialTest.xml": "d5e072a88dc451c7e68e017549dbbf71042d5f224e59ae86589eecd6ae63a6f7",
+    ".work/native-cancel-platform-check-2-reports/data/TEST-dev.fajar.hris.collaboration.data.CollaborationRecipientStorageTest.xml": "5919bbbf9b7da8eb531e90236cb629662e122b0a2250e7aa28277dcb3e2d8031",
+    ".work/native-cancel-platform-check-2-reports/data/TEST-dev.fajar.hris.collaboration.data.CollaborationRegistryTest.xml": "e2fbe4d7b66f56fbbbfad3242602f217fd08f787bbb4bb4ab301d1cc9c92c687",
+    ".work/native-cancel-platform-check-2-reports/data/TEST-dev.fajar.hris.collaboration.data.CollaborationSyncCursorTest.xml": "e9860eb04062b405db262083316e5e65cc7cde5f1e1b64c3cb51ddfe979f2fec",
+    ".work/native-cancel-platform-check-2-reports/data/TEST-dev.fajar.hris.collaboration.data.MatrixKeyProviderInteropTest.xml": "b7e545fc3a7420f4ac7a4f21b4fde49e3e4f9e4a4a9bd4891cbbba4757434ae1",
+    ".work/native-cancel-platform-check-2-reports/data/TEST-dev.fajar.hris.collaboration.data.MatrixProviderInteropTest.xml": "0f2b6f43f216ff12f4b257899c0e4c908d557c0370ee57b2d2ef6576f47d117d",
+    ".work/native-cancel-platform-check-2-reports/data/TEST-dev.fajar.hris.collaboration.data.MatrixProviderSettingsTest.xml": "e2e572b940e44b2ae0515f0b9e000649dc9f6cb018cd15fb7056e8e7ed36511d",
+    ".work/native-cancel-platform-check-2-reports/data/TEST-dev.fajar.hris.collaboration.data.MatrixProviderTransportTest.xml": "0ed334dc4540aa3ebb9d6cc555fa2934be290cbeccc78a4829983196aaa976e7",
+    ".work/native-cancel-platform-check-2-reports/data/TEST-dev.fajar.hris.collaboration.data.MatrixRoomAccessInteropTest.xml": "a2d54bf127a639f70824672125f7a2ec5468693f8e98d525fd0aa451022a55fa",
+    ".work/native-cancel-platform-check-2-reports/data/TEST-dev.fajar.hris.collaboration.data.MatrixRoomAccessMappingTest.xml": "93ebe8c88a1423ef561d9e77d5c15978829c70a4e8596081f8c54db7c4db6ec4",
+    ".work/native-cancel-platform-check-2-reports/data/TEST-dev.fajar.hris.collaboration.data.MatrixRoomCursorTest.xml": "5dcd2c7204cc0c65f28365205e7c859472753846aff561795be2715a70c2717a",
+    ".work/native-cancel-platform-check-2-reports/data/TEST-dev.fajar.hris.collaboration.data.MatrixRoomHistoryInteropTest.xml": "b8c400f832843e0e8d52e085eece12de48050d73ba1bf4fd5244f2a946c77e02",
+    ".work/native-cancel-platform-check-2-reports/data/TEST-dev.fajar.hris.collaboration.data.MatrixRoomHistoryMappingTest.xml": "da52de923f763c9fd111f27b551ddd1ac367c9b1a9a73302a55c3186bb0b1997",
+    ".work/native-cancel-platform-check-2-reports/data/TEST-dev.fajar.hris.collaboration.data.MatrixRoomMessageInteropTest.xml": "2b3940fc8fa2edec5d51d2eb93a2bab476ca9db626f254a11f8cbe9265b4e9d6",
+    ".work/native-cancel-platform-check-2-reports/data/TEST-dev.fajar.hris.collaboration.data.MatrixRoomMessageMappingTest.xml": "bbc02ae299b81aebb526c372ed8171df86b26a8c55898aec382d007c050236f3",
+    ".work/native-cancel-platform-check-2-reports/data/TEST-dev.fajar.hris.collaboration.data.MatrixRoomProvisioningInteropTest.xml": "c519a1ac56a861f7f28fb4108fc0bb53c96da31fff34d5aebece95cfe97061e2",
+    ".work/native-cancel-platform-check-2-reports/data/TEST-dev.fajar.hris.collaboration.data.MatrixSyncGatewayInteropTest.xml": "e166339a6fd2b1ed9818934c0d58d3b7bf113fd31b8ccf6f917a72218de35615",
+    ".work/native-cancel-platform-check-2-reports/data/TEST-dev.fajar.hris.collaboration.data.MatrixSyncProjectionTest.xml": "18020e7cf8e3656f8761a457a0874ad58efb3e9fe57baa04fe49ad5ed7bdbb5b",
+    ".work/native-cancel-platform-check-2-reports/data/TEST-dev.fajar.hris.collaboration.data.MatrixSyncScopeInteropTest.xml": "da65b86bd0491d791f50990ca2ebfefe59a678642e0159bd82696c04049a735f",
+    ".work/native-cancel-platform-check-2-reports/data/TEST-dev.fajar.hris.collaboration.data.MatrixSyncTransportTest.xml": "8b267900f8f07c08be3a15c18fed829272572b2ba6543656971a3962bc354f3b",
+    ".work/native-cancel-platform-check-2-reports/data/TEST-dev.fajar.hris.collaboration.data.MatrixToDeviceProviderInteropTest.xml": "7bd6baf0578738cc001d29d75db177efa94fd49dac951a90865fc6c1a56a5394",
+    ".work/native-cancel-platform-check-2-reports/data/TEST-dev.fajar.hris.collaboration.data.MatrixTransactionInteropTest.xml": "6b1dd99921a92cb003b34232fd1d3275d238db95e0318ac01c0de79ffc22bb2e",
+    ".work/native-cancel-platform-check-2-reports/data/TEST-dev.fajar.hris.collaboration.data.NativeCollaborationRegistrationTest.xml": "ea93a786d236402db3954a3113d8fcfcf4a4364b386c9b694f39f12b31378335",
+    ".work/native-cancel-platform-check-2-reports/http/TEST-dev.fajar.hris.NativeCollaborationMatrixIdentityHttpTest.xml": "9a63b56066cac34a05af67e565167641cd4b6384efa6b24206037c97af0a840d"
+  },
+  "nativePendingKeyResponses": [
+    {
+      "initialState": "QUEUED",
+      "pendingResponses": 1,
+      "encryptedSends": 33
+    },
+    {
+      "initialState": "SCHEDULED",
+      "pendingResponses": 0,
+      "encryptedSends": 1
+    },
+    {
+      "initialState": "FROZEN_DRAFT",
+      "pendingResponses": 0,
+      "encryptedSends": 33
+    },
+    {
+      "initialState": "CANCELLED_DRAFT",
+      "pendingResponses": 0,
+      "encryptedSends": 33
+    }
+  ]
+}

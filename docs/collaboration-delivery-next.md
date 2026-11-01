@@ -12,7 +12,7 @@ actual provider and platform execution evidence next.
    [WorkManager scenario](collaboration-workmanager.md) now pass. The latter proves
    task-key-only persistence, offline constraints, ordinary process death, automatic OS
    startup, exact original-history recovery and retirement. Both prior native regressions
-   remain intact. The pinned native CI job includes all three cases; audit its matching
+   remain intact. The pinned native CI job includes five cases across three test classes; audit its matching
    hosted artifacts after each validated increment.
    Deliberate interruption during sending, retry/cancellation races and production login
    recovery remain separate acceptance criteria. Force-stop blocks automatic Android
@@ -24,7 +24,8 @@ actual provider and platform execution evidence next.
    direction; the portable query foundation also passes Starter checks. The actual
    ViewModel/SDK/provider coordinator now passes
    the [native foreground proof](collaboration-native-worker.md), including the Platform
-   publication-race correction. Continue durable drafts and safe pending cancellation, then
+   publication-race correction. Durable drafts and safe queued cancellation now have
+   [native proof](collaboration-native-worker.md) and confirmation UI. Continue
    incoming FCM/pusher/gateway integration and inline replies. Keep payloads opaque and
    admission-bound; notification actions must use the same durable command pipeline.
    Android background delivery alone does not supply Apple's PushKit/CallKit, notification

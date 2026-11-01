@@ -33,7 +33,7 @@ concurrency:
 jobs:
   android-hris:
     runs-on: ubuntu-24.04
-    timeout-minutes: 30
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
         with:
@@ -41,7 +41,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           repository: fajarxfce/hris-platform
-          ref: bad75bd0d73c88afa66db7f16493e5e513ba9250
+          ref: d48ac2f866e7f6395cad035424b9fe76d9fdb743
           path: platform
       - uses: actions/setup-java@v4
         with:

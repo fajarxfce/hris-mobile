@@ -23,7 +23,7 @@ internal class HrisWorkerProofFiles(private val directory: File) {
         }
 
     init {
-        require(initialState in setOf("QUEUED", "FROZEN_DRAFT"))
+        require(initialState in setOf("QUEUED", "FROZEN_DRAFT", "CANCELLED_DRAFT"))
         require(
             home.scheme == "http" &&
                 home.host == "127.0.0.1" &&
