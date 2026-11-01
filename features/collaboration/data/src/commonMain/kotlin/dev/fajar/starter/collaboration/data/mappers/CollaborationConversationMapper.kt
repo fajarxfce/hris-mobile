@@ -36,6 +36,19 @@ internal fun CollaborationDirectDto.toConversation(
     )
 }
 
+internal fun CollaborationDirectSummaryDto.toSummary(
+    owner: CollaborationOwner
+): CollaborationDirectSummary {
+    val direct = conversation.toConversation(owner)
+    val counterpart = peer.toParticipant(owner)
+    require(
+        counterpart.accountId ==
+            if (direct.firstAccountId == owner.accountId) direct.secondAccountId
+            else direct.firstAccountId
+    )
+    return CollaborationDirectSummary(direct, counterpart)
+}
+
 internal fun CollaborationDirectRoomDto.toRoom(
     owner: CollaborationOwner,
     expected: String,

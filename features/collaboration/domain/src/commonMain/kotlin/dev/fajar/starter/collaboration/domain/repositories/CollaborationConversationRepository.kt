@@ -23,6 +23,17 @@ interface CollaborationConversationRepository {
         conversationId: String,
     ): AppResult<CollaborationDirectConversation>
 
+    suspend fun summaries(
+        owner: CollaborationOwner,
+        after: String?,
+        limit: Int,
+    ): AppResult<CollaborationPage<CollaborationDirectSummary>>
+
+    suspend fun summary(
+        owner: CollaborationOwner,
+        conversationId: String,
+    ): AppResult<CollaborationDirectSummary>
+
     suspend fun room(
         owner: CollaborationOwner,
         conversationId: String,

@@ -119,3 +119,12 @@ stopped; no phone, production service or schema change is made.
 structured denials, bounded transport recovery and the actual post-restart 429.
 Fixture failures and corrections remain recorded; product route/history/offline
 acceptance is still pending.
+
+## Native history-window research
+
+The pinned Rust SDK `8de215a0` room event cache auto-shrinks to its last stored
+chunk when no subscribers remain ([source](https://github.com/matrix-org/matrix-rust-sdk/blob/8de215a0aa0026afa5754ae5f05a6d168d1a1d60/crates/matrix-sdk/src/event_cache/caches/room/state.rs#L467)).
+Its inspected `TimelineFocus.Live` configuration exposes thread visibility, while
+event focus takes a target/context count. This is source inspection, not window
+acceptance. Design and test bounded product windows without clearing SDK identity
+or crypto state before replacing the current 512-item defensive gate.

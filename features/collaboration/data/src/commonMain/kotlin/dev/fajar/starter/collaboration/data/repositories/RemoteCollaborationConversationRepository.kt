@@ -46,6 +46,24 @@ class RemoteCollaborationConversationRepository(
         }
     }
 
+    override suspend fun summaries(owner: CollaborationOwner, after: String?, limit: Int) =
+        safeApiCall {
+            validate(owner)
+            pageInput(after, limit)
+            val dto = remote.summaries(owner.sessionId, owner.companyId, after, limit)
+            conversationPage(dto.items.map { it.toSummary(owner) }, dto.nextCursor, after, limit) {
+                it.conversation.id
+            }
+        }
+
+    override suspend fun summary(owner: CollaborationOwner, conversationId: String) = safeApiCall {
+        validate(owner)
+        collaborationId(conversationId)
+        remote.summary(owner.sessionId, owner.companyId, conversationId).toSummary(owner).also {
+            require(it.conversation.id == conversationId)
+        }
+    }
+
     override suspend fun room(owner: CollaborationOwner, conversationId: String) = safeApiCall {
         validate(owner)
         collaborationId(conversationId)

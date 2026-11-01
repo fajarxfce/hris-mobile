@@ -21,6 +21,12 @@ class ApiCollaborationConversationRemoteSource(private val api: CollaborationCon
     override suspend fun get(session: String, company: String, id: String) =
         api.get(session, company, id)
 
+    override suspend fun summaries(session: String, company: String, after: String?, limit: Int) =
+        api.summaries(session, company, after, limit)
+
+    override suspend fun summary(session: String, company: String, id: String) =
+        api.summary(session, company, id)
+
     override suspend fun room(session: String, company: String, id: String) =
         api.room(session, company, id)
 

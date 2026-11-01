@@ -18,6 +18,12 @@ data class CollaborationDirectDto(
 )
 
 @Serializable
+data class CollaborationDirectSummaryDto(
+    val conversation: CollaborationDirectDto,
+    val peer: CollaborationParticipantDto,
+)
+
+@Serializable
 data class CollaborationDirectRoomDto(
     val conversationId: String,
     val version: Long?,

@@ -39,6 +39,25 @@ class CollaborationConversationApi(
             forSession(session)
         }
 
+    suspend fun summaries(
+        session: String,
+        company: String,
+        after: String?,
+        limit: Int,
+    ): CollaborationPageDto<CollaborationDirectSummaryDto> =
+        client.requestJson(direct(company) + "/summaries", maximumBytes = 131072) {
+            page(session, after, limit)
+        }
+
+    suspend fun summary(
+        session: String,
+        company: String,
+        id: String,
+    ): CollaborationDirectSummaryDto =
+        client.requestJson(direct(company) + "/${Uuid.parse(id)}/summary", maximumBytes = 4096) {
+            forSession(session)
+        }
+
     suspend fun room(session: String, company: String, id: String): CollaborationDirectRoomDto =
         client.requestJson(direct(company) + "/${Uuid.parse(id)}/room", maximumBytes = 2048) {
             forSession(session)

@@ -14,8 +14,27 @@ import kotlinx.coroutines.test.runTest
 
 class CollaborationConversationReadTest {
     @Test
+    fun summariesAcquireTheCounterpartAlongsideOwnedMetadataInOneRead() = runTest {
+        for (kind in 4..5) {
+            val f = ReadFixture()
+            val read =
+                assertIs<CollaborationRead<*>>(assertIs<AppResult.Success<*>>(f.read(kind)).value)
+            val summary =
+                if (kind == 4)
+                    assertIs<CollaborationDirectSummary>(
+                        assertIs<CollaborationPage<*>>(read.value).items.single()
+                    )
+                else assertIs<CollaborationDirectSummary>(read.value)
+            assertEquals("conversation", summary.conversation.id)
+            assertEquals(CollaborationParticipant("peer", "Fictional counterpart"), summary.peer)
+            assertEquals(f.owner, read.owner)
+            assertEquals(1, f.calls)
+        }
+    }
+
+    @Test
     fun allReadPathsRetainServerDenialAcrossFailedPostRequestSessionReads() = runTest {
-        for (path in 0..3) for (remote in
+        for (path in 0..5) for (remote in
             listOf(
                 FailureKind.Unauthorized,
                 FailureKind.AccessDenied,
@@ -34,7 +53,7 @@ class CollaborationConversationReadTest {
 
     @Test
     fun currentDenialStillWinsOnEveryDiscoveryPath() = runTest {
-        for (path in 0..3) for (kind in
+        for (path in 0..5) for (kind in
             listOf(FailureKind.Unauthorized, FailureKind.AccessDenied)) {
             val f = ReadFixture()
             val current = Failure(kind, "Fixture current denial", code = "fixture.current")
@@ -47,7 +66,7 @@ class CollaborationConversationReadTest {
 
     @Test
     fun allReadPathsCaptureOwnerAndKeepOrdinaryTokenRotation() = runTest {
-        for (kind in 0..3) {
+        for (kind in 0..5) {
             val f = ReadFixture()
             f.before = {
                 f.setup.session =
@@ -63,7 +82,7 @@ class CollaborationConversationReadTest {
 
     @Test
     fun permissionLossOverridesBothSuccessfulAndFailedAcquisitionOnEveryPath() = runTest {
-        for (kind in 0..3) for (failed in listOf(false, true)) {
+        for (kind in 0..5) for (failed in listOf(false, true)) {
             val f = ReadFixture()
             f.failure = if (failed) Failure(FailureKind.Network, "Network unavailable") else null
             f.before = { f.setup.workspace = f.setup.selected.copy(permissions = emptySet()) }
@@ -74,7 +93,7 @@ class CollaborationConversationReadTest {
 
     @Test
     fun selectionAccountAndNativeParentReplacementRejectLateDiscovery() = runTest {
-        for (kind in 0..3) for (replacement in 0..2) {
+        for (kind in 0..5) for (replacement in 0..2) {
             val f = ReadFixture()
             f.before = {
                 when (replacement) {
@@ -110,7 +129,7 @@ class CollaborationConversationReadTest {
 
     @Test
     fun denialBeforeDiscoveryNeverReachesAnyRemoteRead() = runTest {
-        for (kind in 0..3) {
+        for (kind in 0..5) {
             val f = ReadFixture()
             f.setup.workspace = f.setup.selected.copy(permissions = emptySet())
             assertIs<AppResult.Failed>(f.read(kind))
@@ -162,6 +181,29 @@ private class ReadFixture {
                 before()
                 return failure?.let { AppResult.Failed(it) } ?: AppResult.Success(value)
             }
+
+            override suspend fun summaries(owner: CollaborationOwner, after: String?, limit: Int) =
+                acquire(
+                    CollaborationPage(
+                        listOf(
+                            CollaborationDirectSummary(
+                                conversation,
+                                CollaborationParticipant("peer", "Fictional counterpart"),
+                            )
+                        ),
+                        null,
+                    ),
+                    owner,
+                )
+
+            override suspend fun summary(owner: CollaborationOwner, conversationId: String) =
+                acquire(
+                    CollaborationDirectSummary(
+                        conversation,
+                        CollaborationParticipant("peer", "Fictional counterpart"),
+                    ),
+                    owner,
+                )
 
             override suspend fun participants(
                 owner: CollaborationOwner,
@@ -239,7 +281,9 @@ private class ReadFixture {
             0 -> reader.participants("selection", "Fictional", "cursor", 12)
             1 -> reader.list("selection")
             2 -> reader.get("selection", "conversation")
-            else -> reader.room("selection", "conversation")
+            3 -> reader.room("selection", "conversation")
+            4 -> reader.summaries("selection")
+            else -> reader.summary("selection", "conversation")
         }
     }
 }

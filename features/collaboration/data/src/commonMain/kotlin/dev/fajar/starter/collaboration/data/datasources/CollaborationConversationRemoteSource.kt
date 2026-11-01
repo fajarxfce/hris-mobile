@@ -20,6 +20,15 @@ interface CollaborationConversationRemoteSource {
 
     suspend fun get(session: String, company: String, id: String): CollaborationDirectDto
 
+    suspend fun summaries(
+        session: String,
+        company: String,
+        after: String?,
+        limit: Int,
+    ): CollaborationPageDto<CollaborationDirectSummaryDto>
+
+    suspend fun summary(session: String, company: String, id: String): CollaborationDirectSummaryDto
+
     suspend fun room(session: String, company: String, id: String): CollaborationDirectRoomDto
 
     suspend fun open(

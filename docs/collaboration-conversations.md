@@ -93,3 +93,13 @@ fails before transport, and received denial across outcome-write/read failures.
 [Control verification](measurements/collaboration-control-denial-2026-11-01.json)
 also exercises install/restore credential denials with failed owner reads and
 failed lease cleanup. No automatic replay or metadata retirement is introduced.
+
+## Counterpart summaries
+
+`ReadCollaborationConversations.summaries/summary` acquires the owned direct identity
+and counterpart label together. The transport uses the Platform summary contract,
+limits page/detail bodies to 128 KiB/4 KiB, validates the exact peer and company,
+and requires strict UUID page progress. Both methods share the same admission and
+post-request failure policy as other reads. No per-row label request is needed.
+These live reads are not an offline list; [verification](measurements/collaboration-mobile-summaries-2026-11-01.json)
+records the implemented boundary.

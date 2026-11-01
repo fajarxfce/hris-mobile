@@ -33,6 +33,12 @@ class ReadCollaborationConversations(
     suspend fun get(workspaceId: String, conversationId: String) =
         read(workspaceId) { conversations.get(it, conversationId) }
 
+    suspend fun summaries(workspaceId: String, after: String? = null, limit: Int = 30) =
+        read(workspaceId) { conversations.summaries(it, after, limit) }
+
+    suspend fun summary(workspaceId: String, conversationId: String) =
+        read(workspaceId) { conversations.summary(it, conversationId) }
+
     suspend fun room(workspaceId: String, conversationId: String) =
         read(workspaceId) { conversations.room(it, conversationId) }
 

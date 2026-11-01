@@ -1,0 +1,64 @@
+{
+  "date": "2026-11-01",
+  "change": "Admitted Mobile direct conversation summaries with bounded counterpart validation",
+  "mobileBase": "92d91275d1f110989790620b774ffcf32a83d660",
+  "platformContractCommit": "8813ea9eee28cafc274eafcd41456340f132ae2f",
+  "sourceSha256": {
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/api/CollaborationConversationApi.kt": "63f77fbabb26f41f5ab544168bb02cbf24a839d9dfa3f83d37236e22a7d5001a",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/datasources/ApiCollaborationConversationRemoteSource.kt": "3c71aeebcd88dda8c4eb84b871ee46989e75167caa2a42c6a0461a5715d74a35",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/datasources/CollaborationConversationRemoteSource.kt": "150433fa96ca488c70539680a9ddcf2c9769ab608c1bb08fddb13e07d8c70992",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/dto/CollaborationConversationDto.kt": "1882abd4cdbec95e4fc7af904f3936c48a896a6a10fa71c652ea0e4e32b09045",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/mappers/CollaborationConversationMapper.kt": "10c0f6a85734c32acb35cc9826a871f2db410377d4809a09fef8e357e3a6027f",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/RemoteCollaborationConversationRepository.kt": "c91bbadaa1ab18b2515f8933b1afde39674f5b0ef9cfaeee105534653279f421",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationSummaryTransportTest.kt": "1b6d78181f8672a5dc5e9adae19e5a0edd8afadfe45346dbfbfda70cece74ad4",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationConversations.kt": "8294f158046f5ec51466f56fbe6733b4ec074b8912c77bac6b9ebf93ab614e68",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationConversationRepository.kt": "59a827bbd5a8f68e37e1697cbf728381bc9bb21f00a576a89c110c204c6eff9f",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ReadCollaborationConversations.kt": "e4802cee57d0e420f79d54e428650c81e28cd5ebf4aa1b961b90f7b4dcf4f75f",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationConversationCommandFixture.kt": "203f777a834db4eb71acb8b98e4678b624eec75c69c5836a5539426443a05450",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationConversationReadTest.kt": "90d07f7dc54a660c0c55a1b3253eba124dcf3cf50f2b735e70d43333114bfb90"
+  },
+  "newCases": {
+    "domain": 1,
+    "data": 4
+  },
+  "validation": {
+    "focusedSeconds": 61,
+    "fullSeconds": 232,
+    "rootCheck": true,
+    "desktop": {
+      "tests": 2208,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "suites": 376
+    },
+    "domainBrowser": {
+      "tests": 97,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "suites": 8
+    },
+    "dataBrowser": {
+      "tests": 85,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "suites": 15
+    },
+    "androidAssembly": true,
+    "androidLintErrors": 0,
+    "dataAssembly": true,
+    "wasmApplicationCompilation": true
+  },
+  "liveChanged": false,
+  "phoneChanged": false,
+  "productAcceptance": false,
+  "notes": [
+    "Native summary page/detail requests carry the selected session/company and bounded bodies (128 KiB and 4 KiB).",
+    "Mapping requires the exact owned conversation and counterpart; malformed labels, foreign links, mismatched detail IDs and invalid pagination fail without publishing a partial page.",
+    "Both summary paths participate in current-owner, replacement, permission and denial-retention regression coverage.",
+    "These are live metadata ports; encrypted owned-list/message caches and product UI are next. They do not imply offline messaging acceptance.",
+    "CI HRIS fixture now pins the verified summary backend commit. Existing transport and enrollment remain unchanged."
+  ]
+}

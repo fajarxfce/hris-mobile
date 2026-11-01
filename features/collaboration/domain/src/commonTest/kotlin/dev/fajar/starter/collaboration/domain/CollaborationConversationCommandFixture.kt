@@ -124,6 +124,18 @@ internal class ConversationCommandFixture {
         }
     val remote =
         object : CollaborationConversationRepository {
+            override suspend fun summaries(
+                owner: CollaborationOwner,
+                after: String?,
+                limit: Int,
+            ): AppResult<CollaborationPage<CollaborationDirectSummary>> =
+                error("Commands do not read summary pages")
+
+            override suspend fun summary(
+                owner: CollaborationOwner,
+                conversationId: String,
+            ): AppResult<CollaborationDirectSummary> = error("Commands do not read summaries")
+
             override suspend fun participants(
                 owner: CollaborationOwner,
                 query: String,

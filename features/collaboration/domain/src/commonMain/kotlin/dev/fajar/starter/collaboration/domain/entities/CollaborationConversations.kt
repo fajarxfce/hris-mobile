@@ -18,6 +18,12 @@ data class CollaborationDirectConversation(
     val version: Long,
 )
 
+/** Owned live metadata. A counterpart label does not grant new-message eligibility. */
+data class CollaborationDirectSummary(
+    val conversation: CollaborationDirectConversation,
+    val peer: CollaborationParticipant,
+)
+
 enum class CollaborationDirectRoomState {
     NOT_REQUESTED,
     QUEUED,
