@@ -959,4 +959,22 @@
     <string name="chat_opening_id">Membuka percakapan…</string>
     <string name="chat_people_previous_id">Rekan sebelumnya</string>
     <string name="chat_people_next_id">Rekan lainnya</string>
+    <string name="chat_message_id">Pesan</string>
+    <string name="chat_send_id">Kirim pesan</string>
+    <string name="chat_queued_id">Menunggu dikirim</string>
+    <string name="chat_sent_id">Terkirim</string>
+    <string name="chat_send_failed_id">Gagal dikirim</string>
+    <string name="chat_deleted_id">Pesan dihapus</string>
+    <string name="chat_encrypted_unavailable_id">Pesan ini belum dapat didekripsi.</string>
+    <string name="chat_unsupported_id">Jenis pesan ini belum didukung.</string>
+    <string name="chat_edited_id">Diedit</string>
+    <string name="chat_unknown_sender_id">Pengirim belum diverifikasi</string>
+    <string name="chat_connecting_id">Menghubungkan…</string>
+    <string name="chat_offline_id">Tersimpan di perangkat ini</string>
+    <string name="chat_connected_id">Terhubung</string>
+    <string name="chat_room_waiting_id">Menyiapkan percakapan</string>
+    <string name="chat_start_message_id">Tulis pesan pertama.</string>
+    <string name="chat_older_messages_id">Pesan sebelumnya</string>
+    <string name="chat_save_unconfirmed_id">Penyimpanan terputus. Coba lagi untuk memastikan pesan ini.</string>
+    <string name="chat_service_summary_id">Percakapan dengan rekan kerja</string>
 </resources>

@@ -8,6 +8,7 @@ import io.github.composefluent.icons.Icons
 import io.github.composefluent.icons.regular.CalendarCheckmark
 import io.github.composefluent.icons.regular.CalendarClock
 import io.github.composefluent.icons.regular.CalendarLtr
+import io.github.composefluent.icons.regular.Chat
 import io.github.composefluent.icons.regular.Clock
 import io.github.composefluent.icons.regular.Document
 import io.github.composefluent.icons.regular.Money
@@ -16,6 +17,7 @@ import io.github.composefluent.icons.regular.Receipt
 
 /** A bounded catalog of implemented services; destination state stays with each feature. */
 enum class HomeService(val title: AppString, val summary: AppString, val icon: ImageVector) {
+    Chat(AppString.ChatTitle, AppString.ChatServiceSummary, Icons.Regular.Chat),
     Attendance(AppString.Attendance, AppString.AttendanceSummary, Icons.Regular.Clock),
     Calendar(AppString.WorkCalendar, AppString.CalendarSummary, Icons.Regular.CalendarLtr),
     Leave(AppString.Leave, AppString.LeaveSummary, Icons.Regular.CalendarCheckmark),
@@ -38,6 +40,11 @@ fun homeServices(workspace: Workspace?): HomeServiceCatalog {
     if (workspace == null) return HomeServiceCatalog()
     val permissions = workspace.permissions
     val work = buildList {
+        if (
+            companyModuleAvailable(workspace, CompanyModule.COLLABORATION) &&
+                "collaboration.chat" in permissions
+        )
+            add(HomeService.Chat)
         if (companyModuleAvailable(workspace, CompanyModule.WORKFORCE)) {
             if ("attendance.self.record" in permissions || "workforce.read" in permissions) {
                 add(HomeService.Attendance)

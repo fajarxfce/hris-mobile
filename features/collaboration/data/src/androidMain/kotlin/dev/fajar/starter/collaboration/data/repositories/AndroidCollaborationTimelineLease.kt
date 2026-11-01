@@ -13,12 +13,17 @@ import kotlinx.coroutines.flow.*
 class AndroidCollaborationTimelineLease
 internal constructor(
     override val owner: CollaborationOwner,
-    override val deviceId: String,
-    override val matrixRoomId: String,
+    override val device: CollaborationMessageDevice,
     private val child: SdkChildLease<AndroidCollaborationTimelineSource>,
     source: StateFlow<CollaborationSdkTimelineDto>,
     syncFailures: StateFlow<Failure?>,
 ) : CollaborationTimelineLease {
+    override val deviceId
+        get() = device.deviceId
+
+    override val matrixRoomId
+        get() = device.roomId
+
     override val updates: Flow<AppResult<List<CollaborationTimelineItem>>> =
         source.combine(
             syncFailures

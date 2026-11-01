@@ -5,6 +5,27 @@ import org.jetbrains.compose.resources.StringResource
 
 /** Explicit pairs keep runtime language changes portable across Android, iOS, desktop and Web. */
 enum class AppString(val english: StringResource, val indonesian: StringResource) {
+    ChatMessage(Res.string.chat_message_en, Res.string.chat_message_id),
+    ChatSend(Res.string.chat_send_en, Res.string.chat_send_id),
+    ChatQueued(Res.string.chat_queued_en, Res.string.chat_queued_id),
+    ChatSent(Res.string.chat_sent_en, Res.string.chat_sent_id),
+    ChatSendFailed(Res.string.chat_send_failed_en, Res.string.chat_send_failed_id),
+    ChatDeleted(Res.string.chat_deleted_en, Res.string.chat_deleted_id),
+    ChatEncryptedUnavailable(
+        Res.string.chat_encrypted_unavailable_en,
+        Res.string.chat_encrypted_unavailable_id,
+    ),
+    ChatUnsupported(Res.string.chat_unsupported_en, Res.string.chat_unsupported_id),
+    ChatEdited(Res.string.chat_edited_en, Res.string.chat_edited_id),
+    ChatUnknownSender(Res.string.chat_unknown_sender_en, Res.string.chat_unknown_sender_id),
+    ChatConnecting(Res.string.chat_connecting_en, Res.string.chat_connecting_id),
+    ChatOffline(Res.string.chat_offline_en, Res.string.chat_offline_id),
+    ChatConnected(Res.string.chat_connected_en, Res.string.chat_connected_id),
+    ChatRoomWaiting(Res.string.chat_room_waiting_en, Res.string.chat_room_waiting_id),
+    ChatStartMessage(Res.string.chat_start_message_en, Res.string.chat_start_message_id),
+    ChatOlderMessages(Res.string.chat_older_messages_en, Res.string.chat_older_messages_id),
+    ChatSaveUnconfirmed(Res.string.chat_save_unconfirmed_en, Res.string.chat_save_unconfirmed_id),
+    ChatServiceSummary(Res.string.chat_service_summary_en, Res.string.chat_service_summary_id),
     ChatSetupTitle(Res.string.chat_setup_title_en, Res.string.chat_setup_title_id),
     ChatSetupChecking(Res.string.chat_setup_checking_en, Res.string.chat_setup_checking_id),
     ChatSetupActivate(Res.string.chat_setup_activate_en, Res.string.chat_setup_activate_id),

@@ -21,6 +21,7 @@ class EnterCollaborationConversation(
     private val server: IdentityServer,
     private val build: AppBuild,
     private val clock: Clock,
+    private val lists: CollaborationListRepository,
 ) {
     suspend operator fun invoke(
         workspaceId: String,
@@ -37,6 +38,9 @@ class EnterCollaborationConversation(
                 is AppResult.Failed -> return captured
                 is AppResult.Success -> captured.value
             }
+        continuation(workspaceId, owner, AppResult.Success(Unit)).let {
+            if (it is AppResult.Failed) return it
+        }
         val registered = setup.read(owner)
         continuation(workspaceId, owner, registered).let { if (it is AppResult.Failed) return it }
         val device =
@@ -106,7 +110,11 @@ class EnterCollaborationConversation(
             if (
                 timeline.owner != owner ||
                     timeline.deviceId != deviceId ||
-                    timeline.matrixRoomId != matrixRoomId
+                    timeline.matrixRoomId != matrixRoomId ||
+                    !validCollaborationMessageId(timeline.device.bootstrapOperationId) ||
+                    timeline.device.nativeSessionId != owner.nativeSessionId ||
+                    timeline.device.deviceId != deviceId ||
+                    timeline.device.roomId != matrixRoomId
             )
                 return collaborationSetupFailure("client.session_changed", FailureKind.Unauthorized)
             currentCoroutineContext().ensureActive()
@@ -125,8 +133,25 @@ class EnterCollaborationConversation(
         owner: CollaborationOwner,
         received: AppResult<*>,
     ): AppResult<Unit> {
+        val rejected = (received as? AppResult.Failed)?.failure
+        if (rejected != null && collaborationContentResponseClosesRead(rejected))
+            withContext(NonCancellable) {
+                withTimeoutOrNull(2_000) { lists.restrict(owner.localListAccess(), rejected) }
+            }
         currentCoroutineContext().ensureActive()
-        return requireCollaborationOwner(capture(workspaceId), owner, received)
+        val gate = lists.admission(owner.localListAccess())
+        val current = capture(workspaceId)
+        currentCoroutineContext().ensureActive()
+        if (rejected != null && collaborationContentResponseClosesRead(rejected))
+            return AppResult.Failed(rejected)
+        if (gate is AppResult.Success)
+            gate.value.denial?.let {
+                return AppResult.Failed(it)
+            }
+        val owned = requireCollaborationOwner(current, owner, received)
+        if (owned is AppResult.Failed) return owned
+        if (gate is AppResult.Failed) return gate
+        return AppResult.Success(Unit)
     }
 
     private companion object {

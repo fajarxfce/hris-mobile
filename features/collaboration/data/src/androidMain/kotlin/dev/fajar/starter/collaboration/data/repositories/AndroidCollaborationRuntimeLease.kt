@@ -6,6 +6,7 @@ import dev.fajar.starter.collaboration.data.datasources.CollaborationSdkStoreLea
 import dev.fajar.starter.collaboration.data.datasources.createAndroidCollaborationSync
 import dev.fajar.starter.collaboration.data.mappers.collaborationSdkAcquisitionFailure
 import dev.fajar.starter.collaboration.data.sdk.CollaborationSdkRecord
+import dev.fajar.starter.collaboration.domain.entities.CollaborationMessageDevice
 import dev.fajar.starter.collaboration.domain.entities.CollaborationOwner
 import dev.fajar.starter.collaboration.domain.entities.CollaborationProviderHistoryPage
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationMessageQueueLease
@@ -251,8 +252,12 @@ internal constructor(
                     AppResult.Success(
                             AndroidCollaborationTimelineLease(
                                 owner,
-                                deviceId,
-                                roomId,
+                                CollaborationMessageDevice(
+                                    owner.nativeSessionId,
+                                    deviceId,
+                                    installedOperationId,
+                                    roomId,
+                                ),
                                 result.value,
                                 source.updates,
                                 sync.failures,

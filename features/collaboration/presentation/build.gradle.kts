@@ -11,6 +11,7 @@ kotlin.sourceSets {
         implementation(projects.core.designsystem)
         implementation(projects.core.localization)
         implementation(projects.core.presentation)
+        implementation(libs.datetime)
         implementation(libs.lifecycle.compose)
         implementation(libs.koin.viewmodel)
         implementation(libs.navigation.compose)

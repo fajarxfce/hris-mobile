@@ -12,6 +12,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.compose.composable
 import dev.fajar.starter.app.bootstrap.*
 import dev.fajar.starter.auth.presentation.navigation.*
+import dev.fajar.starter.collaboration.presentation.navigation.*
 import dev.fajar.starter.designsystem.components.*
 import dev.fajar.starter.documents.presentation.navigation.*
 import dev.fajar.starter.expenses.presentation.navigation.*
@@ -153,6 +154,8 @@ fun AppNavigation(navigation: ScopedNavigationState, incomingLinks: Flow<String>
                 if (!companyBlocked) {
                     val openService: (HomeService) -> Unit = { service ->
                         when (service) {
+                            HomeService.Chat ->
+                                controller.navigate(ChatInboxRoute) { launchSingleTop = true }
                             HomeService.Attendance ->
                                 controller.navigate(AttendanceRoute) { launchSingleTop = true }
                             HomeService.Calendar ->
@@ -232,6 +235,25 @@ fun AppNavigation(navigation: ScopedNavigationState, incomingLinks: Flow<String>
                     ) {
                         controller.navigate(SettingsRoute) { launchSingleTop = true }
                     }
+                    collaborationRoutes(
+                        stage.workspace.id,
+                        onNewChat = {
+                            controller.navigate(ChatParticipantsRoute) { launchSingleTop = true }
+                        },
+                        onConversation = {
+                            controller.navigate(ChatThreadRoute(it)) { launchSingleTop = true }
+                        },
+                        onSelectedConversation = {
+                            controller.navigate(ChatThreadRoute(it)) {
+                                popUpTo<ChatParticipantsRoute> { inclusive = true }
+                                launchSingleTop = true
+                            }
+                        },
+                        onSetup = {
+                            controller.navigate(ChatSetupRoute) { launchSingleTop = true }
+                        },
+                        onBack = { controller.popBackStack() },
+                    )
                     servicesRoutes(stage.workspace.id, onService = openService) {
                         controller.popBackStack()
                     }

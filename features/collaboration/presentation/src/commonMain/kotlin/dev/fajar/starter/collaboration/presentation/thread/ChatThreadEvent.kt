@@ -1,0 +1,21 @@
+package dev.fajar.starter.collaboration.presentation.thread
+
+sealed interface ChatThreadEvent {
+    data object Entered : ChatThreadEvent
+
+    data object Stopped : ChatThreadEvent
+
+    data object BackRequested : ChatThreadEvent
+
+    data object SetupRequested : ChatThreadEvent
+
+    data object RefreshRequested : ChatThreadEvent
+
+    data object OlderRequested : ChatThreadEvent
+
+    data object SendRequested : ChatThreadEvent
+
+    data class DraftChanged(val text: String) : ChatThreadEvent {
+        override fun toString() = "DraftChanged([redacted])"
+    }
+}

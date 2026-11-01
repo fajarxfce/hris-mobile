@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.Flow
 /** A child observation, not the parent runtime or a renewable authorization credential. */
 interface CollaborationTimelineLease {
     val owner: CollaborationOwner
+    val device: CollaborationMessageDevice
     val deviceId: String
     val matrixRoomId: String
     val updates: Flow<AppResult<List<CollaborationTimelineItem>>>

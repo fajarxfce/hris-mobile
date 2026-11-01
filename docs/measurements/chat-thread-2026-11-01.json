@@ -1,0 +1,149 @@
+{
+  "date": "2026-11-01",
+  "change": "Owned text message thread, exact projection, foreground send lifecycle and application navigation",
+  "baseImplementationCommit": "5c5b2a81395d2b629e62cacfadbb05ef6cafe031",
+  "sourceSha256": {
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationThreadContext.kt": "50df18053457719b2a572cb02b68083b944455d6168f960920fd2433a9e403ef",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ReadCollaborationThreadContext.kt": "b92d81e5da7907bd908a3f7fea35b1fec8fe75397516d891b8743cceab3529d6",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/ReadCollaborationThreadContextTest.kt": "2aa382ba7a4a03bda77c541e1cf1a30fe72069f7bb474b42b459a3b4bd2d0977",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/navigation/CollaborationNavigation.kt": "ed3067203bda66d8c8d9c849329c9fc7b62a83a2ede59c7b42f9537a1247be03",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatMessageRow.kt": "b2fefb8c9dda54e13e19cae3156382013a3b014ee7dd30451e5a936977b0a701",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadEffect.kt": "ec2d3ada46e70d5861579b1a3e055993d0515356b2ade893b55f638bb95ea1e4",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadEvent.kt": "7fa9549d2a218778613ab92d4cb118577660bcb9e79e3ad79613b3d7bf064ecf",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadProjection.kt": "af625a9bf805db121228d4343d0eb415ad11c6993447ec00155b7499f98e8b93",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadState.kt": "2d91a37ba60c91fbfc20edd9d6161f9cd9a4d29309aa1a686acc368f35944532",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadViewModel.kt": "53a745c1a3868ab37e4279cc2f586bc448e7680843157f378426252c8c19807c",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/pages/ChatComposer.kt": "20e71e2dcd4d05789424fbb75451b4e8230ea70a9ef039fcc8a943351216f001",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/pages/ChatMessageBubble.kt": "b18571c9cc5018a1c4cb16aac27bbad1cb1851992a96c7da60013b201d80c3b0",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/pages/ChatThreadPage.kt": "23011fd7bba12118c774f744fca7f3c05319c35b0cf3c25d2d0bc697eceafbb0",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadFixture.kt": "5cc79a93d324731d4f3a74c3b45c657ef64a00b92ca5bdbb980ebadadb31e0be",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadProjectionTest.kt": "e06fa59313afc811e2eb2d4293d929b64dc4cd1e2e6cb378eed287d337a6f958",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadViewModelTest.kt": "0459d5fa42921f51902be9100bb8b1378dc4d603db28de7d81c667fd18d3d3a5",
+    "features/collaboration/presentation/src/desktopTest/kotlin/dev/fajar/starter/collaboration/presentation/ChatThreadLayoutTest.kt": "5e5dc44602be4efec33e80413f55c8c98972df166ac9add06514d48cdaed6a9b",
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/navigation/AppNavigation.kt": "f62b401584403133eaf9af5586717950fa8daff8c6fe66ce5ace4bd5ebb20f6e",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt": "d89cebc0f6496290c0d379d50f1a662b61ccb728a3b539dcea6fbd34957e83ca",
+    "core/localization/src/commonMain/composeResources/values/strings_en.xml": "3d3b21dd2c3a0d300795a10208bec874dacdcfe2b1e1422aba5c13a1e3f18051",
+    "core/localization/src/commonMain/composeResources/values/strings_id.xml": "f5741db935113d974cbe38c22a0d9bcb3823aefecaf4cd0b279c88dfc4d82da2",
+    "core/localization/src/commonMain/kotlin/dev/fajar/starter/localization/AppString.kt": "7614591c84bec25aca517c38dca9426a5cd7f7b7f851016c2c4635266a8f18ea",
+    "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/repositories/AndroidCollaborationRuntimeLease.kt": "fe3955a12e7e7a5f608e756194e2b875251127cad197acfe6b794ff65de6f24a",
+    "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/repositories/AndroidCollaborationTimelineLease.kt": "03fd92a66d7ed907b72fbfd19e109701318b1110a255e6ffcdabecd6e0afb4af",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt": "21b8164675be6c41d142f6830e6cd854f764d40f3b983277cc19afff7689b0c9",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationTimelineLease.kt": "6535318bb5759d2a278043ffe64b1bb035d70564ecfd90bee93b4bea1a5b92c4",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/EnterCollaborationConversation.kt": "64da8c139d37d5153515601bae1e1b0603035317d71c9db44b69a0f5632bb316",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/EnterCollaborationConversationTest.kt": "a2f4deb12c7941d8602caed5c2dd43cd0a4fb5be356c8fbb9db049557e3cc18e",
+    "features/collaboration/presentation/build.gradle.kts": "42958eb3ca340fa29088d04912059f5a0fc9b4252cb0ffb902a8ab28b0046786",
+    "features/home/presentation/src/commonMain/kotlin/dev/fajar/starter/home/presentation/catalog/HomeService.kt": "5c4a92e0d1fa1ed71697de1c9d33c38c6c4a8ad003af9abd0984559ed8447512"
+  },
+  "sourceManifestMatched": true,
+  "attempts": [
+    {
+      "log": ".work/chat-thread-projection.log",
+      "durationSeconds": 61,
+      "outcome": "FAILED",
+      "scope": "Context and projection desktop tests passed; Android compilation failed on missing source-device import. No later targets claimed."
+    },
+    {
+      "log": ".work/chat-thread-admission.log",
+      "durationSeconds": 154,
+      "outcome": "FAILED",
+      "scope": "Domain desktop/browser, presentation desktop/browser, Android host, bindings and proof APK completed; detekt rejected the projection function length."
+    },
+    {
+      "log": ".work/chat-thread-screen.log",
+      "durationSeconds": 67,
+      "outcome": "FAILED",
+      "scope": "Thread desktop presentation ran 63 tests with one failure: refresh resumed a confirmed-only queue. UI layout tests passed; later targets were not run."
+    },
+    {
+      "log": ".work/chat-thread-navigation.log",
+      "durationSeconds": 247,
+      "outcome": "FAILED",
+      "scope": "332 domain and 63 desktop/52 browser presentation tests, bindings, dev APK and app Wasm passed. Detekt rejected projection and test fixture function lengths."
+    },
+    {
+      "log": ".work/chat-thread-lifecycle.log",
+      "durationSeconds": 88,
+      "outcome": "SUCCESSFUL",
+      "scope": "Refactored projection/fixture and added three lifetime/recovery cases. 66 desktop and 55 browser presentation tests plus format, architecture and detekt passed."
+    },
+    {
+      "log": ".work/chat-thread-full.log",
+      "durationSeconds": 232,
+      "outcome": "SUCCESSFUL",
+      "scope": "Root check, domain/presentation browser, Android host, presentation AAR, app Wasm, dev debug APK, lint and proof APK."
+    }
+  ],
+  "reports": {
+    "desktop": {
+      "suites": 421,
+      "tests": 2660,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "domain_desktopTest": {
+      "suites": 27,
+      "tests": 332,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "domain_wasmJsBrowserTest": {
+      "suites": 27,
+      "tests": 332,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "presentation_desktopTest": {
+      "suites": 9,
+      "tests": 66,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "presentation_wasmJsBrowserTest": {
+      "suites": 5,
+      "tests": 55,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "data_testAndroidHostTest": {
+      "suites": 28,
+      "tests": 170,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "appBindings": {
+      "suites": 1,
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "androidLint": {
+    "Error": 0,
+    "Fatal": 0,
+    "Warning": 1,
+    "Information": 0
+  },
+  "artifacts": {
+    "apps/android/build/outputs/apk/dev/debug/android-dev-debug.apk": "2339d0a5ef47db5b022d8c58df1a0622ec3cccb1dad46dbf50f70a8f68c5e716",
+    "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk": "52633bd5f8b7fbb094ce5b9cd27e0757472ceca37c1f82d8706f08db2a2949b8",
+    "features/collaboration/presentation/build/outputs/aar/presentation.aar": "bfab470b39030e8aa4e81b934998a9d4f9e2a3c562f1bc6629998948d1467bf8"
+  },
+  "screenshots": {
+    "docs/images/chat-thread/chat-thread-english.png": "1db4dd0992f2bb6d32afbadcd8545b867ab1773358bb31cc8a02d9f11333b3e6",
+    "docs/images/chat-thread/chat-thread-indonesian-large-text.png": "8a52c4799c8a824fb6322cd307da8f6e219f67ca53294d6ff11d1c586180d721"
+  },
+  "limitations": [
+    "No new physical device, actual-server/emulator or Apple runtime acceptance is claimed.",
+    "Foreground delivery is not platform background scheduling or full offline acceptance.",
+    "Local pagination covers acquired history only; drafts remain volatile.",
+    "No full PRD feature group is accepted; groups, rich messages, notifications, key continuity, Apple/web adapters, calls and meetings remain.",
+    "No phone, live deployment or Starter change."
+  ]
+}

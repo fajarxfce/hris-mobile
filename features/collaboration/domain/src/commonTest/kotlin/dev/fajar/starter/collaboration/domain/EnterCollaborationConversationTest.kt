@@ -16,6 +16,88 @@ import kotlinx.coroutines.test.runTest
 
 class EnterCollaborationConversationTest {
     @Test
+    fun retainedCompanyDenialStopsBeforeAnySetupOrRoomRead() = runTest {
+        val f = EntryFixture()
+        val denial = Failure(FailureKind.AccessDenied, "Fixture denied", code = "permission_denied")
+        f.access.admission.deny(denial)
+        assertEquals(denial, assertIs<AppResult.Failed>(f.enter()).failure)
+        assertEquals(0, f.access.calls)
+        assertEquals(0, f.entries)
+    }
+
+    @Test
+    fun receivedCompanyDenialIsRetainedBeforeCallerCancellation() = runTest {
+        val f = EntryFixture()
+        val denial = Failure(FailureKind.AccessDenied, "Fixture denied", code = "permission_denied")
+        f.result = {
+            currentCoroutineContext().cancel()
+            AppResult.Failed(denial)
+        }
+        val job = async { f.enter() }
+        job.join()
+        assertTrue(job.isCancelled)
+        assertEquals(denial, f.access.admission.gate.denial)
+    }
+
+    @Test
+    fun newDenialClosesALateChildAndStopsTheNextEntry() = runTest {
+        val f = EntryFixture()
+        val denial = Failure(FailureKind.AccessDenied, "Fixture denied", code = "permission_denied")
+        f.result = {
+            f.access.admission.deny(denial)
+            AppResult.Success(f.lease)
+        }
+        assertEquals(denial, assertIs<AppResult.Failed>(f.enter()).failure)
+        assertEquals(1, f.closes)
+        assertEquals(1, f.entries)
+        assertEquals(denial, assertIs<AppResult.Failed>(f.enter()).failure)
+        assertEquals(1, f.entries)
+    }
+
+    @Test
+    fun failedDenialWriteRetainsTheRestrictionForTheNextEntry() = runTest {
+        val f = EntryFixture()
+        val denial = Failure(FailureKind.AccessDenied, "Fixture denied", code = "permission_denied")
+        f.access.admission.restrictFailure = Failure(FailureKind.Storage, "Fixture storage")
+        f.result = { AppResult.Failed(denial) }
+        assertEquals(denial, assertIs<AppResult.Failed>(f.enter()).failure)
+        f.result = { f.failed }
+        assertEquals(denial, assertIs<AppResult.Failed>(f.enter()).failure)
+        assertEquals(1, f.entries)
+    }
+
+    @Test
+    fun providerCredentialExpiryDoesNotDeclareCompanyContentUnavailable() = runTest {
+        val f = EntryFixture()
+        val expired =
+            Failure(
+                FailureKind.Unauthorized,
+                "Fixture expired",
+                code = "client.collaboration_sdk_unauthorized",
+            )
+        f.result = { AppResult.Failed(expired) }
+        assertEquals(expired, assertIs<AppResult.Failed>(f.enter()).failure)
+        assertNull(f.access.admission.gate.denial)
+    }
+
+    @Test
+    fun foreignOrMalformedTimelineSourceCannotReachPresentation() = runTest {
+        for (change in 0..3) {
+            val f = EntryFixture()
+            val expected = f.lease.device
+            f.sourceDevice =
+                when (change) {
+                    0 -> expected.copy(nativeSessionId = "another-family")
+                    1 -> expected.copy(deviceId = COMMAND_PEER)
+                    2 -> expected.copy(roomId = "!another-room")
+                    else -> expected.copy(bootstrapOperationId = "invalid-bootstrap")
+                }
+            assertIs<AppResult.Failed>(f.enter())
+            assertEquals(1, f.closes)
+        }
+    }
+
+    @Test
     fun aReceivedDenialSurvivesAFailedPostRequestSessionRead() = runTest {
         for (step in listOf("setup", "get", "room", "sdk")) {
             val f = EntryFixture()
@@ -255,6 +337,8 @@ class EnterCollaborationConversationTest {
     }
 }
 
+private const val ENTRY_BOOTSTRAP = "aaaaaaaa-0000-0000-0000-000000000001"
+
 private class EntryFixture {
     val conversations = ConversationCommandFixture()
     val access = conversations.setup
@@ -276,6 +360,7 @@ private class EntryFixture {
     var leaseOwner = owner
     var leaseDevice = COMMAND_DEVICE
     var leaseRoom = "!fixture-room"
+    var sourceDevice: CollaborationMessageDevice? = null
     var entries = 0
     var closes = 0
     var closeFailure = false
@@ -283,6 +368,16 @@ private class EntryFixture {
     val failed = AppResult.Failed(Failure(FailureKind.Network, "Fictional interruption"))
     val lease =
         object : CollaborationTimelineLease {
+            override val device
+                get() =
+                    sourceDevice
+                        ?: CollaborationMessageDevice(
+                            leaseOwner.nativeSessionId,
+                            leaseDevice,
+                            ENTRY_BOOTSTRAP,
+                            leaseRoom,
+                        )
+
             override val owner
                 get() = leaseOwner
 
@@ -401,5 +496,6 @@ private class EntryFixture {
             object : Clock {
                 override fun now() = access.now
             },
+            access.admission.repository,
         )("selection", deviceId, conversationId)
 }

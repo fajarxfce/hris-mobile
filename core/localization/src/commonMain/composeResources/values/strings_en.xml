@@ -959,4 +959,22 @@
     <string name="chat_opening_en">Opening conversation…</string>
     <string name="chat_people_previous_en">Previous colleagues</string>
     <string name="chat_people_next_en">More colleagues</string>
+    <string name="chat_message_en">Message</string>
+    <string name="chat_send_en">Send message</string>
+    <string name="chat_queued_en">Waiting to send</string>
+    <string name="chat_sent_en">Sent</string>
+    <string name="chat_send_failed_en">Send failed</string>
+    <string name="chat_deleted_en">Message deleted</string>
+    <string name="chat_encrypted_unavailable_en">This message cannot be decrypted yet.</string>
+    <string name="chat_unsupported_en">This message type is not supported yet.</string>
+    <string name="chat_edited_en">Edited</string>
+    <string name="chat_unknown_sender_en">Sender not verified</string>
+    <string name="chat_connecting_en">Connecting…</string>
+    <string name="chat_offline_en">Saved on this device</string>
+    <string name="chat_connected_en">Connected</string>
+    <string name="chat_room_waiting_en">Preparing conversation</string>
+    <string name="chat_start_message_en">Write your first message.</string>
+    <string name="chat_older_messages_en">Older messages</string>
+    <string name="chat_save_unconfirmed_en">Saving was interrupted. Retry to confirm this message.</string>
+    <string name="chat_service_summary_en">Conversations with colleagues</string>
 </resources>

@@ -1,5 +1,45 @@
 # Agent continuation — HRIS Mobile
 
+## Owned text thread and application routes validated — 1 November 2026
+
+Chat now opens from the company-gated Home service into inbox, participant selection,
+thread and explicit device setup. The thread reads owned cached context/history before
+live setup; queueing retains exact UUID/text across uncertain storage responses. Its
+projection merges original history, durable commands and native presentation only with
+trusted sender/content or complete native device/transaction evidence. New timeline
+source metadata binds family/device/bootstrap/room, and entry preserves shared company
+denials through cancellation. Local observers clear hidden content after scope loss.
+
+Foreground entry restores an existing runtime; pending messages can request a room with
+retained control IDs, finite readiness polling, exact staging/delivery and acquired-history
+receipt recovery/retirement. Confirmed-only queues do not reopen delivery. A destination
+owns only the child timeline and its cancellable work; the application owns the parent.
+The compact multiline composer stays below the reversed list and handles safe/IME insets.
+[Contract/screenshots](collaboration-thread.md), [measurement](measurements/chat-thread-2026-11-01.json)
+and [next delivery implementation](collaboration-delivery-next.md) are committed.
+
+All 30 source inputs match. Focused checks pass in 88s; full root/browser/Android checks
+in 232s: 2,660 desktop / 421 suites, 332 domain browser, 55 presentation browser,
+170 Android host, zero failures/errors/skips. Lint: zero errors and one existing warning.
+New tests cover 12 domain, 10 projection, 13 ViewModel and 3 desktop layout cases.
+All six attempts, including the corrected confirmed-only refresh and function-length
+failures, are recorded. Fictional English/Indonesian 200% screenshots were opened and
+reviewed. APK `2339d0a5`, AAR `bfab470b` and proof APK `52633bd5` are built, not installed.
+No new actual-server/emulator/Apple runtime, phone/live deployment or Starter change.
+
+**Continue platform-scheduled delivery now, then all remaining P0–P8. Do not stop at
+this checkpoint.** Use existing SyncTask/WorkManager/ForegroundSyncWorker; the scheduler
+stores only the task key and durable encrypted commands remain authoritative. The next
+increment needs queue wakeups, owned company-wide local work discovery, bounded worker
+orchestration, startup/ownership recovery and cancellation/retry tests. Remove route-owned
+transport once the worker owns it. `.work/collaboration-delivery-discovery.txt` is only a
+pending draft, not applied or tested. Local Older currently covers acquired history only;
+drafts are volatile. Pending cancellation, remote paging, groups, rich actions/media,
+notifications/inline reply, cross-family crypto continuity, Apple/web runtime adapters,
+calls and meetings remain. No full PRD feature group is accepted. Keep pushing each
+validated atomic commit during the authorized long run.
+
+
 ## Trusted local sender identity validated — 1 November 2026
 
 `ReadCollaborationIdentity` now reads owned cached identity and can explicitly acquire

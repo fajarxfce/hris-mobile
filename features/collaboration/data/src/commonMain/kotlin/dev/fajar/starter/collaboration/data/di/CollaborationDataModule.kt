@@ -311,6 +311,25 @@ class CollaborationDataModule {
     ) = ObserveCollaborationList(replicas, sessions, workspaces, server, build, Clock.System)
 
     @Factory
+    fun readThreadContext(
+        conversations: CollaborationListRepository,
+        identities: CollaborationIdentityRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) =
+        ReadCollaborationThreadContext(
+            conversations,
+            identities,
+            sessions,
+            workspaces,
+            server,
+            build,
+            Clock.System,
+        )
+
+    @Factory
     fun readIdentity(
         identities: CollaborationIdentityRepository,
         runtimes: CollaborationRuntimeRepository,
@@ -389,6 +408,7 @@ class CollaborationDataModule {
         workspaces: WorkspaceRepository,
         server: IdentityServer,
         build: AppBuild,
+        lists: CollaborationListRepository,
     ) =
         EnterCollaborationConversation(
             runtimes,
@@ -399,6 +419,7 @@ class CollaborationDataModule {
             server,
             build,
             Clock.System,
+            lists,
         )
 
     @Factory
