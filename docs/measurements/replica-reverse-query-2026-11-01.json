@@ -1,0 +1,91 @@
+{
+  "date": "2026-11-01",
+  "mobileBase": "2b2d81b365cd18c21d388a703185d5e5235850b0",
+  "starterBase": "6226bc21b39a63b2a118a21fa052042b0eb0e56c",
+  "portableInputsSha256": {
+    "core/database/src/commonMain/kotlin/dev/fajar/starter/database/ReplicaBounds.kt": "5a5826df36ba4896eaef2f559b1305e0824d639308315b7c95c46bcb21b78d37",
+    "core/database/src/commonMain/kotlin/dev/fajar/starter/database/ReplicaQuery.kt": "837038edc939c4035f0ba71c343fd4796d0e9c7096e55bce772857dbf81f8a38",
+    "core/database/src/commonTest/kotlin/dev/fajar/starter/database/ReplicaQueryContract.kt": "ffdf5ae2922566cd5917445581a932b1d40c5fb41b1178d418c38c7ca6012215",
+    "core/database/src/desktopTest/kotlin/dev/fajar/starter/database/ReplicaStoreTest.kt": "f5ad7e0514dfe8b5db1cd525ff78f310faf1e49a201466d75667e06b408294ca",
+    "core/database/src/sqliteMain/kotlin/dev/fajar/starter/database/dao/ReplicaDao.kt": "7f15ef72be30757ad31d5514f51ca1a60489dd37393806a6f6376c27aada3248",
+    "core/database/src/wasmJsMain/kotlin/dev/fajar/starter/database/ReplicaQueryPages.kt": "5b4e44b9e9b107b36b43aca47f06e51ff91590e1ac4a1795d0132ca940549d13",
+    "core/database/src/wasmJsTest/kotlin/dev/fajar/starter/database/BrowserReplicaStoreTest.kt": "d618bb887d588be5e77c7085d79bd8f580de8ad359c572e5cd4ef837d2db767f",
+    "core/database/src/commonTest/kotlin/dev/fajar/starter/database/ReplicaReverseQueryContract.kt": "f843af3e08884a20337a3647686244ca6ad9c49f6c43a6769bf8d84cda838267"
+  },
+  "contract": {
+    "directions": "exclusive after ascending / exclusive before descending",
+    "anchorsMutuallyExclusive": true,
+    "queriesPerSnapshot": 4,
+    "totalRowsPerSnapshot": 200,
+    "schemaChanged": false,
+    "fixtureRecords": 603,
+    "taggedAndUntagged": true,
+    "publishedCheckpointOwnershipAndCancellation": true,
+    "physicalDeviceChanged": false
+  },
+  "mobileFocused": {
+    "secondsReportedByGradle": 76,
+    "checks": [
+      "core:database:desktopTest",
+      "core:database:wasmJsBrowserTest",
+      "formatCheck",
+      "architectureCheck",
+      "detekt"
+    ],
+    "reports": {
+      "desktopTest": {
+        "tests": 37,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "suites": 10
+      },
+      "wasmJsBrowserTest": {
+        "tests": 35,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "suites": 6
+      }
+    },
+    "logSha256": "fb6899d39fd639f68dc277b326cc71a3f72eb16d51deddb158c2979bba71500c"
+  },
+  "starter": {
+    "secondsReportedByGradle": 268,
+    "checks": [
+      "check",
+      "core:database:wasmJsBrowserTest",
+      "apps:android:assembleDevDebug",
+      "apps:android:lintDevDebug",
+      "apps:shared:wasmJsBrowserProductionWebpack"
+    ],
+    "reports": {
+      "desktop": {
+        "tests": 341,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "suites": 115,
+        "reportsSha256": "18cfa032fd3328c58ce6c9aab6be6e4bb5c2b0e3113587ab3bc622605a7b89c0"
+      },
+      "databaseBrowser": {
+        "tests": 35,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "suites": 6,
+        "reportsSha256": "c5eb74475972b1cab9c3764a9b8be05904b7357914f6b2d651705de4a38b5596"
+      },
+      "lint": {
+        "Fatal": 0,
+        "Error": 0,
+        "Warning": 45
+      },
+      "apkSha256": "b446d8f280ed4c6c939e357576d9d3dabe4871e171f9167241250a897073e340"
+    },
+    "logSha256": "2005959a08b492be831ca163bfc7a578adb309b4babc5bebc152861bc7e2a4ec",
+    "installed": false,
+    "hostedAppleExecutedForThisChange": false
+  },
+  "scope": "Portable raw indexed reads only. HRIS domain cursors, cryptography, window policy, navigation and provider history stay in Mobile. Current shared SQLite tests run on desktop; no new Apple simulator result is claimed."
+}

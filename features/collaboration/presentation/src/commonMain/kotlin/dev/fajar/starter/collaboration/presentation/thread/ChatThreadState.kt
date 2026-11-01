@@ -18,6 +18,8 @@ data class ChatThreadState(
     val saving: Boolean = false,
     val loading: Boolean = true,
     val hasOlder: Boolean = false,
+    val hasNewer: Boolean = false,
+    val browsingHistory: Boolean = false,
     val loadingOlder: Boolean = false,
     val historyIncomplete: Boolean = false,
     val historyFailure: Failure? = null,

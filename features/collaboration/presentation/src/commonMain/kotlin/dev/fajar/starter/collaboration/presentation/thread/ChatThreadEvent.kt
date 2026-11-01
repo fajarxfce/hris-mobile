@@ -13,6 +13,10 @@ sealed interface ChatThreadEvent {
 
     data object OlderRequested : ChatThreadEvent
 
+    data object NewerRequested : ChatThreadEvent
+
+    data object LatestRequested : ChatThreadEvent
+
     data object SendRequested : ChatThreadEvent
 
     data class DraftChanged(val text: String) : ChatThreadEvent {

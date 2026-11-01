@@ -978,4 +978,6 @@
     <string name="chat_save_unconfirmed_en">Saving was interrupted. Retry to confirm this message.</string>
     <string name="chat_service_summary_en">Conversations with colleagues</string>
     <string name="chat_history_incomplete_en">Some older events are not available yet. Refresh to try again.</string>
+    <string name="chat_newer_messages_en">Newer messages</string>
+    <string name="chat_latest_messages_en">Back to latest messages</string>
 </resources>

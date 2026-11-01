@@ -143,6 +143,8 @@ internal class HistoryReferenceReconciliationFixture {
                 roomId: String?,
                 after: String?,
                 limit: Int,
+                before: String?,
+                overlap: Int,
             ): Flow<AppResult<CollaborationHistoryPage>> = error("No full history scan")
 
             override suspend fun getByEvent(

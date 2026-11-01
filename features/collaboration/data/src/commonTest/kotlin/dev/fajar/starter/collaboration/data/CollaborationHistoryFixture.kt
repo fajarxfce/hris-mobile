@@ -53,9 +53,11 @@ internal class CollaborationHistoryFixture(private val owner: CollaborationHisto
         owner: CollaborationLocalAccess = access,
         after: String? = null,
         limit: Int = 50,
+        before: String? = null,
+        overlap: Int = 0,
     ) =
         assertIs<AppResult.Success<CollaborationHistoryPage>>(
-                repository.observe(owner, conversation, room, after, limit).first()
+                repository.observe(owner, conversation, room, after, limit, before, overlap).first()
             )
             .value
 

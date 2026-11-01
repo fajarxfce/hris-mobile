@@ -1,5 +1,17 @@
 # Template updates
 
+## Reverse indexed replica pages — 1 November 2026
+
+Eight portable raw-query source/test files are copied to Starter after Mobile's 76s
+SQLite/IndexedDB/quality proof. Existing baselines matched before copying; final hashes
+match exactly. Starter independently passes root checks (341 desktop cases), 35 browser
+cases, Android assembly/lint and production Web in 268s. There is no schema change.
+`ReplicaQuery.before` reads descending nearest keys under the existing 200-row total
+bound; after remains ascending, and the anchors are mutually exclusive. HRIS history
+normalization, encryption, 150/50 policy and UI stay in Mobile. No new Apple execution
+is claimed; its isolated database fixture/CI follow-up remains required.
+[Evidence](measurements/replica-reverse-query-2026-11-01.json).
+
 ## Distribution configuration — accepted
 
 The audit fixes selected release API precedence over per-environment project

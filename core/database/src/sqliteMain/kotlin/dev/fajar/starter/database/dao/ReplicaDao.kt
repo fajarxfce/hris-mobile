@@ -62,6 +62,29 @@ abstract class ReplicaDao {
         limit: Int,
     ): List<ReplicaDocumentEntity>
 
+    @Query(
+        "SELECT * FROM replica_documents WHERE ownerKey = :ownerKey AND partition = :partition AND generation = :generation AND payload IS NOT NULL AND sortKey < :before ORDER BY sortKey DESC LIMIT :limit"
+    )
+    protected abstract suspend fun precedingRecords(
+        ownerKey: String,
+        partition: String,
+        generation: String,
+        before: String,
+        limit: Int,
+    ): List<ReplicaDocumentEntity>
+
+    @Query(
+        "SELECT d.* FROM replica_tags AS t JOIN replica_documents AS d ON d.ownerKey = t.ownerKey AND d.partition = t.partition AND d.generation = t.generation AND d.id = t.id WHERE t.ownerKey = :ownerKey AND t.partition = :partition AND t.generation = :generation AND t.tag = :tag AND t.sortKey < :before ORDER BY t.sortKey DESC LIMIT :limit"
+    )
+    protected abstract suspend fun precedingTaggedRecords(
+        ownerKey: String,
+        partition: String,
+        generation: String,
+        tag: String,
+        before: String,
+        limit: Int,
+    ): List<ReplicaDocumentEntity>
+
     @Upsert protected abstract suspend fun write(head: ReplicaHeadEntity)
 
     @Query(
@@ -381,7 +404,18 @@ abstract class ReplicaDao {
             ),
             queries.map { query ->
                 val documents =
-                    if (query.tag == null)
+                    if (query.before != null && query.tag == null)
+                        precedingRecords(ownerKey, partition, active, query.before, query.limit)
+                    else if (query.before != null)
+                        precedingTaggedRecords(
+                            ownerKey,
+                            partition,
+                            active,
+                            requireNotNull(query.tag),
+                            query.before,
+                            query.limit,
+                        )
+                    else if (query.tag == null)
                         records(ownerKey, partition, active, query.after, query.limit)
                     else
                         taggedRecords(

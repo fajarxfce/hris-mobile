@@ -73,6 +73,8 @@ internal class OriginalReceiptFixture {
                 roomId: String?,
                 after: String?,
                 limit: Int,
+                before: String?,
+                overlap: Int,
             ): Flow<AppResult<CollaborationHistoryPage>> = error("No history scan")
 
             override suspend fun getByEvent(

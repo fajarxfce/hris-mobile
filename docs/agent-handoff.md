@@ -1,5 +1,46 @@
 # Agent continuation — HRIS Mobile
 
+## Bidirectional local history beyond 500 originals — 1 November 2026
+
+The ten-page stop is removed. One coherent encrypted window reads at most 150 originals
+plus one authenticated lookahead, retaining 50 overlapping keys on each move. Older/Newer
+can traverse the 603-original SQLite/IndexedDB fixture in both directions across reopen;
+there is one active observer and no growing cursor stack. Reaching the head resumes its
+live query. Old windows exclude unrelated pending/live rows while matching edits/redactions
+remain visible. Sending returns to the head after queue success and publication. Drafts
+survive window navigation only; process-durable composer work remains next.
+
+[Contract](collaboration-local-window.md), [measurement](measurements/chat-history-window-2026-11-01.json)
+and [inspected screenshot](images/chat-thread/chat-thread-window-large-text.png) bind 30 inputs.
+Final 595s checks pass root/quality/browser/Android-host/proof APK/lint: 2,742 desktop cases
+in 428 suites, 369 domain / 234 data / 76 presentation browser cases, 170 Android-host and
+six cleanup cases, zero failures/errors/skips. Proof lint has zero fatal/errors and 47 warnings.
+The initial 93s attempt passed domain/data but failed the new lazy-list test's scroll action;
+its reports/source are retained, and the corrected UI test covers 320 dp/200% text, stable
+overlap and interruptible return to latest. Proof APK `8fc2abc6` is built, not installed.
+
+Eight reusable raw-query files match the Starter port exactly. Both pass real SQLite and
+IndexedDB checks; Starter's independent 268s run passes 341 desktop / 35 browser cases,
+Android/lint (zero errors) and production Web. [Portable evidence](measurements/replica-reverse-query-2026-11-01.json).
+No schema migration or HRIS policy was copied. Apple has no new simulator result for this
+increment: add an isolated database iosTest and execute it in Mobile CI before porting that
+additional wrapper. The existing physical-iPhone waiver does not remove this verification.
+
+**Continue the long run.** Build release 7 from the clean pushed tree using the prepared
+`.work/release-phone-2026-11-01-build7/run-reviewed-build.py`, verify its artifact and deliver
+with preflight/install-only when phone `10.77.77.3:5555` returns. Notify before install; preserve
+signer/data and never drive the phone UI. Release 6 remains ready/uninstalled, last confirmed
+installed code is 4 and the reconnect question is pending. Do not reuse build6 install helpers
+for release 7. Latest ADB attempt still timed out. No live service was changed.
+
+Audit native CI run 41331799148 (Mobile 2b2d81b3 / Platform 79326538), currently executing
+its emulator cases; it precedes this larger window. Earlier 41325612922 failed direct-worker
+ClosePending while SDK/scheduled passed; downloaded artifacts and a bounded audit are in
+`.work/ci-41325612922` and `.work/native-ci-predecessor.json`, awaiting the companion hosted
+record. Keep every failure boundary. Next implement encrypted durable composer snapshots,
+exact submission-ID recovery and safe cancellation, incoming push/replies and all remaining
+P0–P8. `.work/chat-drafts-next.txt` is design guidance, not implemented functionality.
+
 ## Actual foreground history and server key-publication race — 1 November 2026
 
 The native fixture now resolves the real ChatThreadViewModel after application-worker

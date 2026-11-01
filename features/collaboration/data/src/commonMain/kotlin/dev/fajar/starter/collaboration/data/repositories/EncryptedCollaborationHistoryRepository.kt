@@ -27,15 +27,19 @@ class EncryptedCollaborationHistoryRepository(
         roomId: String?,
         after: String?,
         limit: Int,
+        before: String?,
+        overlap: Int,
     ) =
         safeStorageFlow(
                 flow {
-                    require(limit in 1..50 && (after == null || historyCursor.matches(after)))
+                    require(limit in 1..150 && overlap in 0..50 && overlap < limit)
+                    require(after == null || before == null)
+                    require(listOfNotNull(after, before).all(historyCursor::matches))
                     emitAll(
                         replicas.observeQueries(
                             historyScope(access),
                             historyPartition(access, conversationId),
-                            listOf(ReplicaQuery(HISTORY_MESSAGES, after, limit + 1)),
+                            listOf(ReplicaQuery(HISTORY_MESSAGES, after, limit + 1, before)),
                         )
                     )
                 },
@@ -53,12 +57,41 @@ class EncryptedCollaborationHistoryRepository(
                                 documents.size <= limit + 1 &&
                                     documents.size.toLong() <= checkpoint.count
                             )
-                            require(documents.zipWithNext().all { (a, b) -> a.sortKey < b.sortKey })
-                            require(documents.all { after == null || it.sortKey > after })
-                            val messages = documents.map { codec.message(raw, it) }
+                            require(
+                                documents.zipWithNext().all { (a, b) ->
+                                    if (before == null) a.sortKey < b.sortKey
+                                    else a.sortKey > b.sortKey
+                                }
+                            )
+                            require(
+                                documents.all {
+                                    (after == null || it.sortKey > after) &&
+                                        (before == null || it.sortKey < before)
+                                }
+                            )
+                            // Authenticate the lookahead as well as the visible messages.
+                            val decoded = documents.map { codec.message(raw, it) }
+                            val selected =
+                                documents.take(limit).let {
+                                    if (before == null) it else it.reversed()
+                                }
+                            val messages =
+                                decoded.take(limit).let {
+                                    if (before == null) it else it.reversed()
+                                }
+                            val hasOlder =
+                                if (before == null) documents.size > limit
+                                else selected.isNotEmpty()
+                            val hasNewer =
+                                if (before == null) after != null else documents.size > limit
+                            val retained =
+                                overlap.coerceAtMost((selected.size - 1).coerceAtLeast(0))
                             CollaborationHistoryPage(
-                                messages.take(limit),
-                                if (messages.size > limit) documents[limit - 1].sortKey else null,
+                                messages,
+                                if (hasOlder) selected[selected.lastIndex - retained].sortKey
+                                else null,
+                                if (hasNewer && selected.isNotEmpty()) selected[retained].sortKey
+                                else null,
                             )
                         }
                 },

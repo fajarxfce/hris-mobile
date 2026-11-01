@@ -22,9 +22,22 @@ import kotlin.js.Promise
             row.onsuccess = () => {
                 if (!row.result) return;
                 value.checkpoint = {handle:{scope, partition, generation}, revision:row.result.revision, payload:row.result.checkpoint, published:true};
-                queries.forEach(({tag = null, after = null, limit = 50}, index) => {
+                queries.forEach(({tag = null, after = null, before = null, limit = 50}, index) => {
                     const prefix = tag == null ? [ownerKey, partition, generation] : [ownerKey, partition, generation, tag];
-                    const range = IDBKeyRange.bound([...prefix, after ?? ''], [...prefix, '\uffff'], after != null);
+                    const range = before == null
+                        ? IDBKeyRange.bound([...prefix, after ?? ''], [...prefix, '\uffff'], after != null)
+                        : IDBKeyRange.bound([...prefix, ''], [...prefix, before], false, true);
+                    if (before != null) {
+                        const cursor = tx.objectStore('replica_documents').index(tag == null ? 'visible' : 'tagged').openCursor(range, 'prev');
+                        cursor.onsuccess = () => {
+                            const row = cursor.result;
+                            if (!row) return;
+                            const {id, version, sortKey, payload, tags = []} = row.value;
+                            value.pages[index].push({id, version, sortKey, payload, tags});
+                            if (value.pages[index].length < limit) row.continue();
+                        };
+                        return;
+                    }
                     const records = tx.objectStore('replica_documents').index(tag == null ? 'visible' : 'tagged').getAll(range, limit);
                     records.onsuccess = () => {
                         value.pages[index] = records.result.map(({id, version, sortKey, payload, tags = []}) => ({id, version, sortKey, payload, tags}));

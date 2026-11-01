@@ -58,7 +58,9 @@ fun validateReplicaTag(tag: String) {
 fun validateReplicaQueries(queries: List<ReplicaQuery>) {
     require(queries.size in 1..4 && queries.sumOf { it.limit.toLong() } <= 200)
     queries.forEach {
+        require(it.after == null || it.before == null)
         validateReplicaPage(it.after, it.limit)
+        validateReplicaPage(it.before, it.limit)
         it.tag?.let(::validateReplicaTag)
     }
 }

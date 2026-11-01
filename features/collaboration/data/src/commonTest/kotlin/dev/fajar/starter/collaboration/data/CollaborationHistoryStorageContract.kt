@@ -302,6 +302,72 @@ abstract class CollaborationHistoryStorageContract {
     }
 
     @Test
+    fun overlappingWindowsTraverseBeyondFiveHundredInBothDirectionsAcrossRestart() =
+        withDatabase { f ->
+            for (batch in (1..603).map(f::event).chunked(16)) f.merge(*batch.toTypedArray())
+            val store =
+                object : ReplicaStore by f.database.replicas {
+                    override fun observeQueries(
+                        scope: ReplicaScope,
+                        partition: String,
+                        queries: List<ReplicaQuery>,
+                    ): Flow<ReplicaQueryPage> {
+                        assertEquals(1, queries.size)
+                        assertEquals(151, queries.single().limit)
+                        assertEquals(HISTORY_MESSAGES, queries.single().tag)
+                        return f.database.replicas.observeQueries(scope, partition, queries)
+                    }
+
+                    override fun observe(
+                        scope: ReplicaScope,
+                        partition: String,
+                        after: String?,
+                        limit: Int,
+                    ): Flow<ReplicaPage> = error("No partition scan")
+                }
+            f.repository = f.repository(store)
+            var page = f.read(limit = 150, overlap = 50)
+            assertNull(page.previous)
+            val visited = page.messages.map { it.primaryEventId }.toMutableSet()
+            var moves = 0
+            while (page.next != null) {
+                val old = page
+                page = f.read(after = page.next, limit = 150, overlap = 50)
+                assertEquals(50, old.messages.intersect(page.messages.toSet()).size)
+                assertTrue(page.messages.size <= 150)
+                assertTrue(page.messages.zipWithNext().all { (a, b) -> a.timestamp > b.timestamp })
+                visited += page.messages.map { it.primaryEventId }
+                moves++
+            }
+            assertEquals((1..603).map { f.event(it).eventId }.toSet(), visited)
+            assertEquals(5, moves)
+            val oldest = page
+            f.reopen()
+            val oldAnchor = requireNotNull(oldest.previous)
+            f.merge(f.event(604))
+            page = f.read(before = oldAnchor, limit = 150, overlap = 50)
+            assertEquals(50, oldest.messages.intersect(page.messages.toSet()).size)
+            assertFalse(page.messages.any { it.primaryEventId == f.event(604).eventId })
+            val returning = page.messages.map { it.primaryEventId }.toMutableSet()
+            while (page.previous != null) {
+                val old = page
+                page = f.read(before = page.previous, limit = 150, overlap = 50)
+                assertEquals(50, old.messages.intersect(page.messages.toSet()).size)
+                returning += page.messages.map { it.primaryEventId }
+            }
+            assertEquals(f.event(604).eventId, page.messages.first().primaryEventId)
+            assertEquals((54..604).map { f.event(it).eventId }.toSet(), returning)
+            // A redaction changes the original in place without changing the retained reverse
+            // anchor.
+            f.merge(CollaborationHistoryChange.Redacted(f.event(104).eventId, f.event(104).sender))
+            val revised = f.read(before = oldAnchor, limit = 150, overlap = 50)
+            assertTrue(
+                revised.messages.single { it.primaryEventId == f.event(104).eventId }.redacted
+            )
+            assertEquals(page.messages.first(), f.read(limit = 150, overlap = 50).messages.first())
+        }
+
+    @Test
     fun competingWritersCannotLoseAnAliasAndReplayUsesTheOriginalIdentity() = withDatabase { f ->
         f.merge(f.event())
         val ready = CompletableDeferred<Unit>()
@@ -461,9 +527,13 @@ abstract class CollaborationHistoryStorageContract {
                         queries: List<ReplicaQuery>,
                     ) = flowOf(ReplicaQueryPage(raw.checkpoint, listOf(listOf(altered))))
                 }
-            assertIs<AppResult.Failed>(
-                f.repository(store).observe(f.access, f.conversation, f.room).first()
-            )
+            for (before in listOf(null, "9999999999999999/m-" + "f".repeat(64))) {
+                assertIs<AppResult.Failed>(
+                    f.repository(store)
+                        .observe(f.access, f.conversation, f.room, before = before)
+                        .first()
+                )
+            }
         }
         assertEquals(raw, f.raw())
     }

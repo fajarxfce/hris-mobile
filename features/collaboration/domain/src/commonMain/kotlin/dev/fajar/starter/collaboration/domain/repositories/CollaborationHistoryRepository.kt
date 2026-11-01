@@ -14,12 +14,19 @@ interface CollaborationHistoryRepository {
         eventId: String,
     ): AppResult<CollaborationHistoryEventFact?>
 
+    /**
+     * One coherent window of 1..150 originals. Exclusive after/before anchors are mutually
+     * exclusive. Up to 50 overlapping originals preserve the viewport when moving either way;
+     * overlap must be smaller than limit. Cursors never represent provider positions.
+     */
     fun observe(
         access: CollaborationLocalAccess,
         conversationId: String,
         roomId: String? = null,
         after: String? = null,
         limit: Int = 50,
+        before: String? = null,
+        overlap: Int = 0,
     ): Flow<AppResult<CollaborationHistoryPage>>
 
     /** Resolves any retained provider alias without scanning the conversation. */

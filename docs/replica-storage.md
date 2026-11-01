@@ -70,6 +70,15 @@ Updating a document replaces its indexes in the same transaction as its content
 and cursor. Tombstones have no tags, and older/equal-version resurrection cannot
 restore an index. Query failures never expose partially updated pages.
 
+
+Reverse pages use `ReplicaQuery.before` as an exclusive upper key and return descending
+results nearest that key. Forward after pages remain ascending; the anchors are mutually
+exclusive. SQLite seeks the same ordered indexes with DESC/LIMIT. IndexedDB uses a bounded
+`prev` cursor and stops at the requested count. No schema change or full-partition reversal
+is needed. The common contract traverses 603 records, verifies tagged/untagged boundaries,
+keeps forward/reverse queries in one checkpoint and checks mutation, account and cancellation
+behavior. HRIS chooses its own normalized message order and overlapping window policy.
+
 Room uses a composite tag/order index with cascading document ownership. IndexedDB
 uses a compound-key multi-entry index on the document. An untagged record remains
 available through ordinary reads. Features must acquire or derive their own tags;

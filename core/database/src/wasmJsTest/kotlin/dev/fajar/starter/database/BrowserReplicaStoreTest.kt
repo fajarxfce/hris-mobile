@@ -70,6 +70,7 @@ class BrowserReplicaStoreTest {
             verifyReplicaQueryIndexes(database)
             verifyReplicaQueryPublication(database)
             verifyReplicaQueryBounds(database)
+            verifyReplicaReverseQueries(database)
         } finally {
             database.close()
             deleteReplicaDatabase("$namespace.database").await<JsAny?>()

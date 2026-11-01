@@ -53,7 +53,11 @@ class ChatThreadViewModel(
     private var timeline = emptyList<CollaborationTimelineItem>()
     private var source: CollaborationMessageDevice? = null
     private var next: String? = null
-    private val cursors = MutableStateFlow(listOf<String?>(null))
+    private var previous: String? = null
+    private val window = MutableStateFlow(ChatThreadLocalWindow())
+    private var displayedWindow = ChatThreadLocalWindow()
+    private var historyLoading = true
+    private var scrollToLatest = false
     private var reservedId: String? = null
     private var reservedText: String? = null
     private var pulse: Channel<Unit>? = null
@@ -78,6 +82,8 @@ class ChatThreadViewModel(
         on<ChatThreadEvent.SetupRequested>(::onSetupRequested)
         on<ChatThreadEvent.RefreshRequested>(::onRefreshRequested)
         on<ChatThreadEvent.OlderRequested>(::onOlderRequested)
+        on<ChatThreadEvent.NewerRequested>(::onNewerRequested)
+        on<ChatThreadEvent.LatestRequested>(::onLatestRequested)
         on<ChatThreadEvent.DraftChanged>(::onDraftChanged)
         on<ChatThreadEvent.SendRequested>(::onSendRequested)
     }
@@ -124,29 +130,52 @@ class ChatThreadViewModel(
 
     private suspend fun observePages(owned: CollaborationLocalAccess) {
         val pages =
-            cursors.flatMapLatest { selected ->
-                combine(selected.map { observeHistory(workspaceId, conversationId, it) }) {
-                    it.toList()
+            window
+                .flatMapLatest { selected ->
+                    observeHistory(
+                            workspaceId,
+                            conversationId,
+                            selected.after,
+                            150,
+                            selected.before,
+                            50,
+                        )
+                        .map { selected to it }
                 }
-            }
+                .buffer(0)
         combine(pages, observeMessages(workspaceId, conversationId)) { loaded, messages ->
-                loaded to messages
+                Triple(loaded.first, loaded.second, messages)
             }
-            .collect { (loaded, messages) ->
+            .collect { (selected, loaded, messages) ->
                 currentCoroutineContext().ensureActive()
-                if (access != owned) return@collect
-                val failed =
-                    loaded.filterIsInstance<AppResult.Failed>().firstOrNull()
-                        ?: messages as? AppResult.Failed
+                if (access != owned || selected != window.value) return@collect
+                val failed = loaded as? AppResult.Failed ?: messages as? AppResult.Failed
                 if (failed != null) {
                     restrict(failed.failure)
                     return@collect
                 }
-                val values = loaded.map { (it as AppResult.Success).value }
-                history = values.flatMap { it.messages }.distinctBy { it.primaryEventId }
+                val page = (loaded as AppResult.Success).value
+                // Once reverse traversal reaches the head, observe the live head instead of keeping
+                // a historical upper boundary. Empty windows after replacement recover the same
+                // way.
+                if (
+                    (selected.before != null && page.previous == null) ||
+                        (!selected.latest && page.messages.isEmpty())
+                ) {
+                    selectWindow(ChatThreadLocalWindow())
+                    return@collect
+                }
+                history = page.messages
                 pending = (messages as AppResult.Success).value
-                next = values.last().next
+                next = page.next
+                previous = page.previous
+                displayedWindow = selected
+                historyLoading = false
                 project()
+                if (scrollToLatest && selected.latest) {
+                    scrollToLatest = false
+                    emitEffect(ChatThreadEffect.ScrollToNewest)
+                }
             }
     }
 
@@ -169,7 +198,11 @@ class ChatThreadViewModel(
         timeline = emptyList()
         source = null
         next = null
-        cursors.value = listOf(null)
+        previous = null
+        window.value = ChatThreadLocalWindow()
+        displayedWindow = ChatThreadLocalWindow()
+        historyLoading = true
+        scrollToLatest = false
         reservedId = null
         reservedText = null
         updateState { ChatThreadState() }
@@ -192,6 +225,7 @@ class ChatThreadViewModel(
                     history,
                     pending,
                     timeline,
+                    includeUnmatched = displayedWindow.latest,
                 )
         ) {
             is AppResult.Failed -> {
@@ -203,10 +237,10 @@ class ChatThreadViewModel(
                 updateState {
                     it.copy(
                         rows = rows.value,
-                        loading = false,
-                        hasOlder =
-                            cursors.value.size < 10 &&
-                                (next != null || (source != null && !olderScanned)),
+                        loading = historyLoading,
+                        hasOlder = next != null || (source != null && !olderScanned),
+                        hasNewer = previous != null,
+                        browsingHistory = !displayedWindow.latest,
                         localFailure = null,
                     )
                 }
@@ -288,24 +322,48 @@ class ChatThreadViewModel(
     }
 
     private fun onOlderRequested(event: ChatThreadEvent.OlderRequested) {
-        if (
-            !visible ||
-                state.value.localFailure != null ||
-                state.value.loading ||
-                cursors.value.size >= 10
-        )
-            return
+        if (!visible || state.value.localFailure != null || state.value.loading) return
         if (state.value.loadingOlder || olderRequested) return
         val after = next
         if (after != null) {
-            if (after in cursors.value) return
-            updateState { it.copy(loading = true) }
-            cursors.value += after
+            selectWindow(ChatThreadLocalWindow(after = after))
         } else if (source != null && pulse != null && !olderScanned) {
             olderRequested = true
             updateState { it.copy(loadingOlder = true, historyFailure = null) }
             pulse?.trySend(Unit)
         }
+    }
+
+    private fun onNewerRequested(event: ChatThreadEvent.NewerRequested) {
+        if (
+            !visible ||
+                state.value.localFailure != null ||
+                state.value.loading ||
+                state.value.loadingOlder
+        )
+            return
+        previous?.let { selectWindow(ChatThreadLocalWindow(before = it)) }
+    }
+
+    private fun onLatestRequested(event: ChatThreadEvent.LatestRequested) {
+        if (!visible || state.value.localFailure != null) return
+        showLatest()
+    }
+
+    private fun showLatest() {
+        if (window.value.latest && displayedWindow.latest && !historyLoading) {
+            viewModelScope.launch { emitEffect(ChatThreadEffect.ScrollToNewest) }
+        } else {
+            scrollToLatest = true
+            selectWindow(ChatThreadLocalWindow())
+        }
+    }
+
+    private fun selectWindow(selected: ChatThreadLocalWindow) {
+        if (window.value == selected) return
+        historyLoading = true
+        updateState { it.copy(loading = true) }
+        window.value = selected
     }
 
     private fun onDraftChanged(event: ChatThreadEvent.DraftChanged) {
@@ -352,7 +410,7 @@ class ChatThreadViewModel(
                         updateState {
                             it.copy(draft = "", submissionPending = false, saving = false)
                         }
-                        emitEffect(ChatThreadEffect.ScrollToNewest)
+                        showLatest()
                         if (pulse != null) requestSync(wake = false) else connect()
                     }
                 }
@@ -655,4 +713,12 @@ class ChatThreadViewModel(
             "Open this conversation again.",
             code = "client.session_changed",
         )
+}
+
+/** Only the active window is retained; no growing back stack of local or provider cursors. */
+private data class ChatThreadLocalWindow(val after: String? = null, val before: String? = null) {
+    val latest: Boolean
+        get() = after == null && before == null
+
+    override fun toString() = "ChatThreadLocalWindow([redacted])"
 }

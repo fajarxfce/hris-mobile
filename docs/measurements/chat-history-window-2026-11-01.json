@@ -1,0 +1,188 @@
+{
+  "date": "2026-11-01",
+  "mobileBase": "2b2d81b365cd18c21d388a703185d5e5235850b0",
+  "sourceSha256": {
+    "core/database/src/commonMain/kotlin/dev/fajar/starter/database/ReplicaBounds.kt": "5a5826df36ba4896eaef2f559b1305e0824d639308315b7c95c46bcb21b78d37",
+    "core/database/src/commonMain/kotlin/dev/fajar/starter/database/ReplicaQuery.kt": "837038edc939c4035f0ba71c343fd4796d0e9c7096e55bce772857dbf81f8a38",
+    "core/database/src/commonTest/kotlin/dev/fajar/starter/database/ReplicaQueryContract.kt": "ffdf5ae2922566cd5917445581a932b1d40c5fb41b1178d418c38c7ca6012215",
+    "core/database/src/desktopTest/kotlin/dev/fajar/starter/database/ReplicaStoreTest.kt": "f5ad7e0514dfe8b5db1cd525ff78f310faf1e49a201466d75667e06b408294ca",
+    "core/database/src/sqliteMain/kotlin/dev/fajar/starter/database/dao/ReplicaDao.kt": "7f15ef72be30757ad31d5514f51ca1a60489dd37393806a6f6376c27aada3248",
+    "core/database/src/wasmJsMain/kotlin/dev/fajar/starter/database/ReplicaQueryPages.kt": "5b4e44b9e9b107b36b43aca47f06e51ff91590e1ac4a1795d0132ca940549d13",
+    "core/database/src/wasmJsTest/kotlin/dev/fajar/starter/database/BrowserReplicaStoreTest.kt": "d618bb887d588be5e77c7085d79bd8f580de8ad359c572e5cd4ef837d2db767f",
+    "core/localization/src/commonMain/composeResources/values/strings_en.xml": "aade88078bdb4bef4d829989f275bb0db9fd2e04502ee297d68ffbf901002e09",
+    "core/localization/src/commonMain/composeResources/values/strings_id.xml": "9aa1307ac67edfc5210eb04dd5c94e8e5909753eb42429b7695a83228152888a",
+    "core/localization/src/commonMain/kotlin/dev/fajar/starter/localization/AppString.kt": "47dbae1dbb0f2946fdb96d26339b47d33b18a73e5ccd497bf4fa11be4b84f9f6",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationHistoryRepository.kt": "7c27ea09856b49de02c11522937619026688b91e28447bbe41a03ca5e83e0a2d",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationHistoryFixture.kt": "340c2a94f4e5b4bccb1782d96a57ae75994305849b88ca133b1aa12e5f1d9a51",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationHistoryStorageContract.kt": "4212a3d326b500f75a0976d8677e45d921f90256ee9aa81064202d8811b29920",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationHistory.kt": "8543a053c663b2fe77e27ecf134835a95a247cf574195ddaa2e2f212a287ddee",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationHistoryRepository.kt": "ad419fb6219fc4b0ff9e4abd963c769a45b93ed66720896810b478bfb5078ca8",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ObserveCollaborationHistory.kt": "ee75362ba17677380f5f625eaca9007c7d8a69a14f8bc9e66a25b1bcba7a9efe",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/AcquireCollaborationHistoryTest.kt": "dab88258b99d832dbac8ead77ae674a82539067b3ec45e87d13bf2b93ac7fa0f",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/HistoryReferenceReconciliationFixture.kt": "c4cd9592da2b9e7cc8801022ad2938a98c77a0c5e42770812d8673c8a8b3735b",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/ObserveCollaborationHistoryTest.kt": "628c879da4eccfddd7f650545b1536e6e08268d4ffcf8887d89721264fa2721a",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/OriginalReceiptFixture.kt": "41cb6c96c211c1692aeb47815ccb751e78d98e15c64cd1b4a9aeccd5051307f9",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadEvent.kt": "c9c00e469e3d9b8c7ccd36c8f5349a54fbd80cdfe9246a6580afef0170351f8a",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadProjection.kt": "20f0917d50977f7ab390c68012a3501511d8077f9e5bb730c7bc1fbe785acdae",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadState.kt": "bf4e9cfce8e9fbac0fb2e84ef498fdd3200f38181ee425c3feae42e07e3e971f",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadViewModel.kt": "6a9d41283b0173d5ed55bc6cc8f29ccd796402e7c99a6f777f35e3a283242759",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/pages/ChatThreadPage.kt": "08e09de4d58a281436b6228c86c8b1682dbe9e5f0f15bcc1566edc27322a1aac",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadFixture.kt": "cce6de2fca6f747ad72b8e27fc4d8ddf6e88f58fe6b90b6a741840f91599095d",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadProjectionTest.kt": "adb8c8fbfe8a883c2e5faa13292e80536735f92dfdfd5a740c6ee279bc2e37b3",
+    "features/collaboration/presentation/src/desktopTest/kotlin/dev/fajar/starter/collaboration/presentation/ChatThreadLayoutTest.kt": "5682839e76200f52bb6ec92ba5ea48a531962fb0aba93991a93341ef32a13d25",
+    "core/database/src/commonTest/kotlin/dev/fajar/starter/database/ReplicaReverseQueryContract.kt": "f843af3e08884a20337a3647686244ca6ad9c49f6c43a6769bf8d84cda838267",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadWindowTest.kt": "df8d583d8047342d0c3a957c0ece1c4f1c5bf88f8239c4e9c829d22f95c35ae7"
+  },
+  "contract": {
+    "localWindowOriginals": 150,
+    "overlap": 50,
+    "indexedDocumentsPerSnapshot": 151,
+    "historyObservers": 1,
+    "growingCursorStack": false,
+    "longHistoryFixtureOriginals": 603,
+    "forwardAndReverse": true,
+    "processReopen": true,
+    "scopeLossAndLateRead": true,
+    "largeTextViewportDp": [
+      320,
+      640
+    ],
+    "fontScale": 2,
+    "stableOverlappingRowVisible": true,
+    "draftNavigationRetained": true,
+    "durableDraftImplemented": false
+  },
+  "attempts": [
+    {
+      "log": ".work/history-window-check-1.log",
+      "logSha256": "55f25efa4a61cb2b0d9a679a263a6bb0eeb36da35bac10a6de95863aef8e7762",
+      "secondsReportedByGradle": 93,
+      "passed": false,
+      "domain": {
+        "tests": 369,
+        "failures": 0
+      },
+      "data": {
+        "tests": 256,
+        "failures": 0
+      },
+      "presentation": {
+        "tests": 89,
+        "failures": 1
+      },
+      "failure": "New layout test tried to scroll a not-yet-composed LazyColumn item directly. Scroll the list by index before asserting the retained key. Product pagination and data/domain cases passed.",
+      "additionalReview": "Keep the return-to-latest control enabled during pending local paging; the ViewModel already cancels superseded selection."
+    },
+    {
+      "log": ".work/history-window-check-2.log",
+      "logSha256": "017987de2aa6cedb417c92155d20d21e20fae4b4980ee15cf148c8d46a1ced54",
+      "secondsReportedByGradle": 595,
+      "passed": true,
+      "checks": [
+        "features:collaboration:presentation:desktopTest",
+        "formatCheck",
+        "architectureCheck",
+        "detekt",
+        "check",
+        "features:collaboration:domain:wasmJsBrowserTest",
+        "features:collaboration:data:wasmJsBrowserTest",
+        "features:collaboration:presentation:wasmJsBrowserTest",
+        "features:collaboration:data:testAndroidHostTest",
+        "apps:collaboration-proof:testDebugUnitTest",
+        "apps:collaboration-proof:assembleDebug",
+        "apps:collaboration-proof:lintDebug"
+      ],
+      "reports": {
+        "desktop": {
+          "tests": 2742,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "suites": 428,
+          "reportsSha256": "e56fa44d8b3e0d99dac49c9ad1e3198a9685ceec056ca0b15e07280376d01113"
+        },
+        "domain-desktopTest": {
+          "tests": 369,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "suites": 31,
+          "reportsSha256": "fb9d348e00c49ee0a12422f4a479afea76ab2d555a4dd21448ddebd231666417"
+        },
+        "domain-wasmJsBrowserTest": {
+          "tests": 369,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "suites": 31,
+          "reportsSha256": "52d6b0ee976131789e83f51040d7f909b2b9017d219901817f839b30ad70a3a9"
+        },
+        "data-desktopTest": {
+          "tests": 256,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "suites": 35,
+          "reportsSha256": "426bad39474823cfa6ccb96fb97d7dbc50a03a0dea052c38c6cddd47d8d5fbec"
+        },
+        "data-wasmJsBrowserTest": {
+          "tests": 234,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "suites": 32,
+          "reportsSha256": "81ab166735f7a845df08f02eca51a4c2cf47f97e7c1ace495a92b5cbea865cb2"
+        },
+        "presentation-desktopTest": {
+          "tests": 89,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "suites": 10,
+          "reportsSha256": "f497f7e929de7175c7abd43b82bc6f9a6332b05fa5ea0fd45c6b50ae06a442f3"
+        },
+        "presentation-wasmJsBrowserTest": {
+          "tests": 76,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "suites": 6,
+          "reportsSha256": "f23de79a8f03c5162865ae70339d53fbe7c032281de6f242bc8451b005ed5227"
+        },
+        "androidHost": {
+          "tests": 170,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "suites": 28,
+          "reportsSha256": "1961a1629eb462d85c0b483feaa1d2958eb538fee415da06fadc72b74369c953"
+        },
+        "proofCleanup": {
+          "tests": 6,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "suites": 1,
+          "reportsSha256": "b5d3f21d7802111cff9c93b3bce4e74c8510d54a8952bf2c2c53cc1535dac27c"
+        },
+        "proofLint": {
+          "Fatal": 0,
+          "Error": 0,
+          "Warning": 47
+        },
+        "proofApkSha256": "8fc2abc67e2697d2e8a18119348da7731f3df1321ad88a122eb119496b44b378"
+      }
+    }
+  ],
+  "screenshot": {
+    "path": "docs/images/chat-thread/chat-thread-window-large-text.png",
+    "sha256": "49841cd1fffd204f20963f3ba23c96638da7f371ee971373fb85be94af4c1bb2",
+    "visuallyInspected": true
+  },
+  "portableFoundation": "replica-reverse-query-2026-11-01.json",
+  "limitations": [
+    "Native long-window provider acceptance is separate from these SQLite/IndexedDB/UI tests. The existing native 33-original proof has its own immutable source.",
+    "No new live provider/backend deployment, physical phone installation or Apple execution is claimed.",
+    "No complete PRD group is accepted. Continue encrypted durable drafts, safe cancellation, push/replies and all remaining P0-P8."
+  ]
+}

@@ -61,11 +61,38 @@ class ChatThreadProjectionTest {
         timeline: List<CollaborationTimelineItem> = emptyList(),
         source: CollaborationMessageDevice? = device,
         identity: CollaborationSelfIdentity? = self,
+        includeUnmatched: Boolean = true,
     ) =
         assertIs<AppResult.Success<List<ChatMessageRow>>>(
-                chatThreadRows(owner, conversation, identity, source, history, pending, timeline)
+                chatThreadRows(
+                    owner,
+                    conversation,
+                    identity,
+                    source,
+                    history,
+                    pending,
+                    timeline,
+                    includeUnmatched,
+                )
             )
             .value
+
+    @Test
+    fun historicalWindowAppliesMatchingLiveEditsButExcludesUnrelatedNewRows() {
+        val extra = staged.copy(intent = intent.copy(id = chatId(80), text = "New pending"))
+        val live = native.copy(eventId = "new-event", sender = "@peer:test", body = "New incoming")
+        val projected =
+            rows(
+                history = listOf(original),
+                pending = listOf(staged, extra),
+                timeline = listOf(native.copy(body = "Edited original", edited = true), live),
+                includeUnmatched = false,
+            )
+        assertEquals(1, projected.size)
+        assertEquals("Edited original", projected.single().text)
+        assertEquals("outgoing:${intent.id}", projected.single().key)
+        assertTrue(projected.single().edited)
+    }
 
     @Test
     fun oneOutgoingRowKeepsItsKeyThroughQueueNativeConfirmationHistoryAndRetirement() {

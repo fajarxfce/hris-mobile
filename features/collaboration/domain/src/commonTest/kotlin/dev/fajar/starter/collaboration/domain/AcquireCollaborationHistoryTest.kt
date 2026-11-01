@@ -429,6 +429,8 @@ private class HistoryAcquisitionFixture {
                 roomId: String?,
                 after: String?,
                 limit: Int,
+                before: String?,
+                overlap: Int,
             ): Flow<AppResult<CollaborationHistoryPage>> =
                 error("Acquisition does not open observers")
 

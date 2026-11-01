@@ -80,6 +80,14 @@ fun ChatThreadPage(
                         state.connection == ChatThreadConnection.SETUP_REQUIRED
                 )
                     item("status") { ChatThreadStatus(state, onEvent) }
+                if (state.hasNewer)
+                    item("newer") {
+                        AppTextButton(
+                            appString(AppString.ChatNewerMessages),
+                            { onEvent(ChatThreadEvent.NewerRequested) },
+                            enabled = !state.loading && !state.loadingOlder,
+                        )
+                    }
                 items(state.rows, key = { it.key }, contentType = { "message" }) {
                     ChatMessageBubble(it)
                 }
@@ -111,6 +119,13 @@ fun ChatThreadPage(
                         )
                     }
             }
+            if (state.browsingHistory)
+                AppTextButton(
+                    appString(AppString.ChatLatestMessages),
+                    { onEvent(ChatThreadEvent.LatestRequested) },
+                    modifier = Modifier.align(Alignment.CenterHorizontally),
+                    enabled = state.localFailure == null,
+                )
             ChatComposer(state, onEvent)
         }
     }

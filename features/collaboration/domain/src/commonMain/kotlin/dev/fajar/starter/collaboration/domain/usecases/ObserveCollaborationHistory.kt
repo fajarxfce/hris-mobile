@@ -28,11 +28,16 @@ class ObserveCollaborationHistory(
         conversationId: String,
         after: String? = null,
         limit: Int = 50,
+        before: String? = null,
+        overlap: Int = 0,
     ): Flow<AppResult<CollaborationHistoryPage>> {
         if (
             !validCollaborationMessageId(conversationId) ||
-                limit !in 1..50 ||
-                (after != null && !Regex("[0-9]{16}/m-[0-9a-f]{64}").matches(after))
+                limit !in 1..150 ||
+                overlap !in 0..50 ||
+                overlap >= limit ||
+                (after != null && before != null) ||
+                listOfNotNull(after, before).any { !Regex("[0-9]{16}/m-[0-9a-f]{64}").matches(it) }
         )
             return flowOf(
                 collaborationSetupFailure(
@@ -57,6 +62,8 @@ class ObserveCollaborationHistory(
                                                 conversationId,
                                                 after = after,
                                                 limit = limit,
+                                                before = before,
+                                                overlap = overlap,
                                             )
                                             .map { checked(workspaceId, access.value, it) }
                             }

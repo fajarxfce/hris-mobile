@@ -83,11 +83,43 @@ class ObserveCollaborationHistoryTest {
     fun invalidSelectionNeverStartsStorage() = runTest {
         val f = HistoryObserverFixture()
         assertIs<AppResult.Failed>(f.observer("selection", "invalid").first())
-        assertIs<AppResult.Failed>(f.observer("selection", f.conversation, limit = 51).first())
+        assertIs<AppResult.Failed>(f.observer("selection", f.conversation, limit = 151).first())
         assertIs<AppResult.Failed>(
             f.observer("selection", f.conversation, after = "invalid").first()
         )
+        assertIs<AppResult.Failed>(
+            f.observer("selection", f.conversation, before = "invalid").first()
+        )
+        val anchor = "0000000000000001/m-" + "a".repeat(64)
+        assertIs<AppResult.Failed>(
+            f.observer("selection", f.conversation, after = anchor, before = anchor).first()
+        )
+        for (overlap in listOf(-1, 50, 51)) {
+            assertIs<AppResult.Failed>(
+                f.observer("selection", f.conversation, overlap = overlap).first()
+            )
+        }
         assertEquals(0, f.started)
+    }
+
+    @Test
+    fun reverseWindowRetainsLocalAdmissionAndExactBoundedSelection() = runTest {
+        val f = HistoryObserverFixture()
+        f.owner.setup.now += 365.days
+        val before = "0000000000000100/m-" + "b".repeat(64)
+        assertEquals(
+            AppResult.Success(f.page),
+            f.observer("selection", f.conversation, before = before, limit = 150, overlap = 50)
+                .first(),
+        )
+        assertEquals(listOf(null, before, "150", "50"), f.selection)
+        f.owner.gate.value = CollaborationListAdmission("denied", f.owner.denied)
+        assertEquals(
+            AppResult.Failed(f.owner.denied),
+            f.observer("selection", f.conversation, before = before).first(),
+        )
+        assertEquals(1, f.started)
+        assertEquals(0, f.active)
     }
 }
 
@@ -110,6 +142,7 @@ private class HistoryObserverFixture {
             ),
             null,
         )
+    var selection = emptyList<String?>()
     var started = 0
     var active = 0
     var beforeRead: suspend () -> Unit = {}
@@ -121,9 +154,12 @@ private class HistoryObserverFixture {
                 roomId: String?,
                 after: String?,
                 limit: Int,
+                before: String?,
+                overlap: Int,
             ) = flow {
                 assertEquals(conversation, conversationId)
                 assertNull(roomId, "Offline history requires no SDK or HTTP room discovery")
+                selection = listOf(after, before, limit.toString(), overlap.toString())
                 started++
                 active++
                 try {

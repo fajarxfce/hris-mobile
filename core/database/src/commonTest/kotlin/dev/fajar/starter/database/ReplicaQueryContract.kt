@@ -97,7 +97,7 @@ suspend fun verifyReplicaQueryPublication(database: AppDatabase) = coroutineScop
     val partition = "query-observer/records"
     val store = database.replicas
     database.accounts.activate(scope.sessionId, scope.accountKey)
-    val queries = listOf(ReplicaQuery("left"), ReplicaQuery("right"))
+    val queries = listOf(ReplicaQuery("left", before = "z"), ReplicaQuery("right"))
     val values = Channel<ReplicaQueryPage>(8)
     val observer =
         launch(start = CoroutineStart.UNDISPATCHED) {
@@ -161,6 +161,9 @@ suspend fun verifyReplicaQueryBounds(database: AppDatabase) {
             listOf(ReplicaQuery("")),
             listOf(ReplicaQuery("private filter")),
             listOf(ReplicaQuery(after = "bad cursor")),
+            listOf(ReplicaQuery(before = "bad cursor")),
+            listOf(ReplicaQuery(before = "")),
+            listOf(ReplicaQuery(after = "01", before = "02")),
             listOf(ReplicaQuery(limit = 0)),
         )) {
         assertFailsWith<IllegalArgumentException> {

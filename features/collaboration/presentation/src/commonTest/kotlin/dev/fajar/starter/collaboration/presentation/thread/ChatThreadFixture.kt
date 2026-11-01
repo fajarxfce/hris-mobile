@@ -7,6 +7,8 @@ import dev.fajar.starter.collaboration.presentation.inbox.chatId
 import dev.fajar.starter.collaboration.presentation.participants.ChatParticipantsFixture
 import dev.fajar.starter.collaboration.presentation.setup.ChatSetupFixture
 import dev.fajar.starter.common.result.*
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.*
 
 internal class ChatThreadFixture {
@@ -64,6 +66,11 @@ internal class ChatThreadFixture {
     var beforeHistoryReopen: suspend () -> Unit = {}
     var pageNext: String? = null
     val requestedPages = mutableListOf<String?>()
+    val requestedWindows = mutableListOf<Pair<String?, String?>>()
+    val historyPages = mutableMapOf<Pair<String?, String?>, AppResult<CollaborationHistoryPage>>()
+    var beforePage: suspend (String?, String?) -> Unit = { _, _ -> }
+    var activeHistory = 0
+    var maxActiveHistory = 0
     val past = ChatThreadHistoryFixture(this)
     val transactions = mutableMapOf<String, String>()
 
@@ -130,12 +137,31 @@ internal class ChatThreadFixture {
                 roomId: String?,
                 after: String?,
                 limit: Int,
+                before: String?,
+                overlap: Int,
             ): Flow<AppResult<CollaborationHistoryPage>> {
                 requestedPages += after
-                return historyRows.map {
-                    AppResult.Success(
-                        CollaborationHistoryPage(it, if (after == null) pageNext else null)
-                    )
+                requestedWindows += after to before
+                return flow {
+                    activeHistory++
+                    maxActiveHistory = maxOf(maxActiveHistory, activeHistory)
+                    try {
+                        beforePage(after, before)
+                        currentCoroutineContext().ensureActive()
+                        emitAll(
+                            historyRows.map {
+                                historyPages[after to before]
+                                    ?: AppResult.Success(
+                                        CollaborationHistoryPage(
+                                            it,
+                                            if (after == null) pageNext else null,
+                                        )
+                                    )
+                            }
+                        )
+                    } finally {
+                        activeHistory--
+                    }
                 }
             }
 

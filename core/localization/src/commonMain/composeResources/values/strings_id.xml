@@ -978,4 +978,6 @@
     <string name="chat_save_unconfirmed_id">Penyimpanan terputus. Coba lagi untuk memastikan pesan ini.</string>
     <string name="chat_service_summary_id">Percakapan dengan rekan kerja</string>
     <string name="chat_history_incomplete_id">Sebagian riwayat lama belum tersedia. Segarkan untuk mencoba lagi.</string>
+    <string name="chat_newer_messages_id">Pesan lebih baru</string>
+    <string name="chat_latest_messages_id">Ke pesan terbaru</string>
 </resources>

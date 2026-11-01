@@ -54,6 +54,8 @@ data class CollaborationHistoryMessage(
 data class CollaborationHistoryPage(
     val messages: List<CollaborationHistoryMessage>,
     val next: String?,
+    /** Exclusive anchor for a reverse query; pages always present messages newest first. */
+    val previous: String? = null,
 ) {
     override fun toString() = "CollaborationHistoryPage([redacted])"
 }

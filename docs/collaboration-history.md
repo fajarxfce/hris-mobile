@@ -110,8 +110,10 @@ Current bounds are explicit:
   existing 131,072-byte bound.
 - One canonical message retains at most 128 aliases. Overflow fails without
   eviction. There is no shared 128-message outbox limit on history.
-- A local page contains 1–50 messages, with one extra indexed result to determine
-  the next cursor. The query never loads the whole conversation.
+- A local window contains 1–150 messages (50 by default), with one authenticated extra
+  indexed result. Exclusive after/before cursors support up to 50 overlapping messages;
+  the thread uses 150/50. The query never loads the whole conversation. See
+  [bounded local browsing](collaboration-local-window.md).
 - Event-ID and sender/logical-ID lookups use keyed indexes. The latter enables
   future recovery when an ACK's event ID was not journaled. Read checkpoints are
   rechecked so a late generation/account change cannot combine incompatible facts.

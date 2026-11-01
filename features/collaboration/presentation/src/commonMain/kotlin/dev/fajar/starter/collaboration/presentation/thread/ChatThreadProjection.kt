@@ -12,6 +12,7 @@ internal fun chatThreadRows(
     history: List<CollaborationHistoryMessage>,
     pending: List<CollaborationMessageRecord>,
     timeline: List<CollaborationTimelineItem>,
+    includeUnmatched: Boolean = true,
 ): AppResult<List<ChatMessageRow>> {
     if (history.size > 500 || pending.size > 128 || timeline.size > 128)
         return invalidThreadProjection()
@@ -73,7 +74,7 @@ internal fun chatThreadRows(
             )
     }
     for (record in pending) {
-        if (record.intent.id in consumed) continue
+        if (!includeUnmatched || record.intent.id in consumed) continue
         val native = timeline.firstOrNull { matchesOwnedEcho(record, timelineDevice, it) }
         native?.eventId?.let(events::add)
         val sent =
@@ -94,7 +95,7 @@ internal fun chatThreadRows(
     }
     for (item in timeline) {
         val eventId = item.eventId ?: continue // Durable owned commands supply local echoes.
-        if (eventId in events) continue
+        if (!includeUnmatched || eventId in events) continue
         rows += nativeRow(eventId, item, self)
         events += eventId
     }

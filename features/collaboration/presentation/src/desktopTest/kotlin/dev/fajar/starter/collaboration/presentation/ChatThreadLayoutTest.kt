@@ -197,6 +197,72 @@ class ChatThreadLayoutTest {
         }
     }
 
+    @Test
+    fun historicalNavigationKeepsLargeTextComposerReachableAndPreservesAnOverlappingRow() {
+        val events = mutableListOf<ChatThreadEvent>()
+        val messages =
+            (300 downTo 1).map {
+                row("row-$it", "Pesan $it", ChatMessageOwnership.COLLEAGUE)
+                    .copy(timestamp = it.toLong())
+            }
+        var state by
+            mutableStateOf(
+                ChatThreadState(
+                    title = "Dewi Kartika",
+                    loading = false,
+                    rows = messages.take(150),
+                    hasOlder = true,
+                    draft = "Draft tetap ada",
+                )
+            )
+        compose.setContent {
+            val density = LocalDensity.current
+            CompositionLocalProvider(
+                LocalDensity provides Density(density.density, 2f),
+                LocalAppLanguage provides AppLanguage.Indonesian,
+            ) {
+                AppTheme {
+                    Box(Modifier.size(320.dp, 640.dp).testTag("frame")) {
+                        ChatThreadPage(state, rememberLazyListState(), { events += it })
+                    }
+                }
+            }
+        }
+        compose.onNode(hasScrollToIndexAction()).performScrollToIndex(149)
+        val anchor = compose.onNodeWithText("Pesan 151").assertIsDisplayed()
+        compose.runOnIdle {
+            state =
+                state.copy(
+                    rows = messages.drop(100).take(150),
+                    browsingHistory = true,
+                    hasNewer = true,
+                )
+        }
+        // The overlapping key remains visible after the head is evicted; no reset to index zero.
+        anchor.assertIsDisplayed()
+        compose.onNodeWithContentDescription("Pesan").assertIsDisplayed().assertIsEnabled()
+        compose.onNodeWithContentDescription("Kirim pesan").assertIsDisplayed()
+        compose
+            .onNodeWithText("Ke pesan terbaru")
+            .assertIsDisplayed()
+            .assertHeightIsAtLeast(48.dp)
+            .performClick()
+        compose.onNode(hasScrollToIndexAction()).performScrollToIndex(0)
+        compose.onNodeWithText("Pesan lebih baru").assertIsDisplayed().performClick()
+        screenshot("chat-thread-window-large-text")
+        compose.runOnIdle {
+            assertEquals(
+                listOf(ChatThreadEvent.LatestRequested, ChatThreadEvent.NewerRequested),
+                events,
+            )
+            state = state.copy(loading = true)
+        }
+        compose.onNodeWithText("Pesan lebih baru").assertIsNotEnabled()
+        compose.onNodeWithText("Ke pesan terbaru").assertIsEnabled().performClick()
+        compose.runOnIdle { assertEquals(ChatThreadEvent.LatestRequested, events.last()) }
+        compose.onNodeWithContentDescription("Pesan").assertIsEnabled()
+    }
+
     private fun rows() =
         listOf(
             row("latest", "Baik, dokumen klaimnya sudah saya periksa.", ChatMessageOwnership.SELF),

@@ -19,8 +19,10 @@ actual provider and platform execution evidence next.
    execution until the app is restarted. Use only the dedicated emulator for routine tests.
 
 2. [Bounded foreground remote history](collaboration-remote-history.md) now passes domain,
-   ViewModel, layout and browser tests. Extend the existing ten-page local window to bounded
-   sliding/bidirectional browsing. The actual ViewModel/SDK/provider coordinator now passes
+   ViewModel, layout and browser tests. [Local windows](collaboration-local-window.md) now
+   traverse beyond 500 originals with a single 150-row/50-overlap observation in either
+   direction; the portable query foundation also passes Starter checks. The actual
+   ViewModel/SDK/provider coordinator now passes
    the [native foreground proof](collaboration-native-worker.md), including the Platform
    publication-race correction. Continue durable drafts and safe pending cancellation, then
    incoming FCM/pusher/gateway integration and inline replies. Keep payloads opaque and
