@@ -1,5 +1,17 @@
 # Agent continuation — HRIS Mobile
 
+## Apple replica execution prepared — 1 November 2026
+
+`AppleReplicaStoreTest` adds two isolated real Room/BundledSQLite cases under iosTest.
+A UUID-named temporary directory keeps the application database untouched. Shared 603-record
+reverse queries, publication/account/cancellation/bounds and close/reopen/reauthentication
+are covered. Mobile CI now explicitly links and runs `core:database` simulator tests.
+[Inputs/checks](measurements/apple-replica-2026-11-01.json): 34s local formatting/architecture/
+detekt and parsed workflow pass. **No native execution result yet:** dispatch Apple CI at
+this exact pushed source and audit the resulting XML before porting the new test/step to
+Starter. No production change; release 7 remains installed. Continue durable draft/submission
+recovery while hosted checks run, then all remaining P0–P8; do not stop at this fixture.
+
 ## Release 7 installed; hosted foreground proof audited — 1 November 2026
 
 **Phone is updated.** Release 7 from Mobile `bf83c71e1688ce5f57ba1dad39f95900b82f8276`

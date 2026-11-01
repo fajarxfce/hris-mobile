@@ -1,0 +1,29 @@
+{
+  "date": "2026-11-01",
+  "base": "39b3c6ef16a58d7cf391d71b13b4968c3fdb3956",
+  "sourceSha256": {
+    "core/database/src/iosTest/kotlin/dev/fajar/starter/database/AppleReplicaStoreTest.kt": "09b0d928c77f6aae7746f4d0d172157d6abff5b72cfa1e923e3043515af8f669",
+    ".github/workflows/ci.yml": "0aebca182da0d52c72850e84a2e1a19774764fc9d9bf6de71d6cbf99d19c5d7b"
+  },
+  "localChecks": {
+    "passed": true,
+    "secondsReportedByGradle": 34,
+    "tasks": [
+      "formatCheck",
+      "architectureCheck",
+      "detekt"
+    ],
+    "yamlParsed": true,
+    "logSha256": "03d5a9e8bf9b7a97843b23ff88d8164f537f4385f279d03e90fdbdcac5e0d8f3"
+  },
+  "hostedApple": {
+    "status": "pending",
+    "executedLocally": false
+  },
+  "scope": [
+    "Two real bundled-SQLite tests in a UUID-named temporary directory, closed and removed by the test owner.",
+    "Reuses 603-record reverse queries plus checkpoint publication, ownership, cancellation and bounds.",
+    "Reopen/reauthentication preserves committed deletion/retagging and the reverse anchor.",
+    "No application-default database, physical iPhone, product code or Starter port is changed."
+  ]
+}
