@@ -1,5 +1,43 @@
 # Agent continuation — HRIS Mobile
 
+## Latest-head history recovery validated — 1 November 2026
+
+`ReopenCollaborationHistory` now accepts an optional event anchor. Without one, it reads
+and validates the complete owned SDK head, re-admits the exact ready room, then performs
+one existing capacity recovery. An absent head neither closes the runtime nor acknowledges
+anything. Owner/company/room changes and cancellation prevent late shutdown/restoration.
+Known-anchor behavior is retained. The worker can recover a lost ACK when the native focus
+cache is full without another enqueue/resume; original evidence still controls completion.
+Initial runtime-opening/close-pending contention now backs off instead of blocking work.
+Explicit thread Refresh on focus capacity releases the old child, performs the admitted
+reopening and opens a new child while retaining owned local content; stopping prevents
+late restore/publication. No automatic bootstrap, enrollment or screen-owned send.
+
+[Contract](collaboration-history-recovery.md) and [measurement](measurements/chat-history-recovery-2026-11-01.json)
+record nine matching source inputs. Focused checks pass in 169s, full checks in 240s:
+2,710 desktop / 426 suites, 358 domain browser, 58 presentation browser, 170 Android
+host, 14 worker integration and two binding cases, with zero failures/errors/skips.
+All format/architecture/detekt and relevant Android/Wasm builds passed. Android lint:
+zero errors and one existing warning. APK `98cd76d4`, AAR `0bba8390`, proof APK `75a576d1`
+are built, not installed. An initial fixture formatting error stopped before Gradle and
+was fixed; Android's incremental DirtyData/QueueCollaborationText cache error successfully
+fell back to compilation. Six new domain, two worker and two thread cases passed.
+No actual SDK/server/WorkManager/emulator, Apple runtime, phone/live deployment or Starter
+change is claimed by these simulated-provider integration tests.
+
+**Continue actual native worker interoperability now, then all remaining P0–P8.**
+[Next work](collaboration-delivery-next.md) preserves the earlier four-process/three-death
+provider proof as separate evidence. `.work/native-worker-proof-plan.md` has supplementary
+composition notes: reuse the actual worker/application container with real encrypted
+Android stores and real HRIS/SDK adapters, seeded fictional owner, task-key-only scheduler,
+process death after Queued persistence, and exact original/retirement evidence. Do not
+restore the sender before the worker; verify the worker restores it. A direct native
+worker proof still needs separate WorkManager lifecycle acceptance. Remote paging,
+drafts/cancel, push/inline replies, groups/rich actions, keys/backups, Apple/web adapters,
+calls and meetings remain. No complete PRD group is accepted. Keep the authorized long
+run moving and push every validated atomic commit.
+
+
 ## Application-owned background delivery validated — 1 November 2026
 
 Text delivery now belongs to a registered singleton application SyncTask. Exact local

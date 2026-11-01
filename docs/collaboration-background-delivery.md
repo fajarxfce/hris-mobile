@@ -52,9 +52,13 @@ does not reopen native delivery. An empty native queue is never interpreted as a
 After sending, original sender/content evidence supports receipt reconciliation and
 completion retirement. Missing originals cause backoff while keeping durable intent.
 A known Sent event anchor permits one explicit focus-capacity reopening and the same
-anchor retry; it does not resend a confirmed message. Capacity recovery without a known
-anchor and complete remote history traversal remain follow-up work. The worker does
-not infer proof beyond the bounded original window.
+anchor retry. Without a receipt anchor, the worker resolves and validates the current
+owned SDK head, re-admits the ready room, then reopens once before acquiring originals.
+It does not send a message to recover history. Initial opening/closing runtime contention
+also uses bounded retry backoff. [Latest-head recovery](collaboration-history-recovery.md)
+includes the corresponding explicit foreground Refresh behavior. Complete provider
+history traversal remains separate; no evidence beyond the bounded original window
+is inferred.
 
 ## Screen boundary and validation limits
 

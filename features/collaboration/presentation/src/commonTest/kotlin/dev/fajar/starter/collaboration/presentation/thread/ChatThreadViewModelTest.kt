@@ -348,6 +348,60 @@ class ChatThreadViewModelTest {
         }
     }
 
+    @Test
+    fun explicitRefreshReopensFullHistoryAndReacquiresAChildWithoutSending() = runTest {
+        withModel { f, vm, _, _ ->
+            f.online()
+            f.historyRows.value = listOf(f.original())
+            f.historyFull = true
+            vm.onEvent(ChatThreadEvent.Entered)
+            runCurrent()
+            advanceTimeBy(400)
+            runCurrent()
+            assertEquals(
+                "client.collaboration_history_focus_capacity",
+                vm.state.value.failure?.code,
+            )
+            vm.onEvent(ChatThreadEvent.RefreshRequested)
+            runCurrent()
+            advanceTimeBy(400)
+            runCurrent()
+            assertEquals(1, f.historyReopens)
+            assertEquals(2, f.timelineOpens)
+            assertEquals(1, f.timelineCloses)
+            assertEquals(ChatThreadConnection.CONNECTED, vm.state.value.connection)
+            assertNull(vm.state.value.failure)
+            assertEquals("Saved conversation", vm.state.value.rows.single().text)
+            assertEquals(0, f.deliveries)
+        }
+    }
+
+    @Test
+    fun stoppingDuringLateCapacityRecoveryCannotRestoreOrOpenAnotherChild() = runTest {
+        withModel { f, vm, _, _ ->
+            f.online()
+            f.historyFull = true
+            val release = CompletableDeferred<Unit>()
+            f.beforeHistoryReopen = { withContext(NonCancellable) { release.await() } }
+            vm.onEvent(ChatThreadEvent.Entered)
+            runCurrent()
+            advanceTimeBy(400)
+            runCurrent()
+            vm.onEvent(ChatThreadEvent.RefreshRequested)
+            runCurrent()
+            assertEquals(1, f.historyReopens)
+            vm.onEvent(ChatThreadEvent.Stopped)
+            runCurrent()
+            release.complete(Unit)
+            runCurrent()
+            assertEquals(0, f.setup.restores)
+            assertEquals(1, f.timelineOpens)
+            assertEquals(1, f.timelineCloses)
+            assertEquals(ChatThreadConnection.OFFLINE, vm.state.value.connection)
+            assertEquals(0, f.deliveries)
+        }
+    }
+
     private suspend fun TestScope.withModel(
         block:
             suspend TestScope.(

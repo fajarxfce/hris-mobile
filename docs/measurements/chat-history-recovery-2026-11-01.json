@@ -1,0 +1,120 @@
+{
+  "date": "2026-11-01",
+  "change": "Admitted latest-head capacity recovery and transient runtime backoff",
+  "baseImplementationCommit": "9bf2c5324fa6801dcdb1020f4058dd8164be038c",
+  "sourceSha256": {
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/work/CollaborationDeliveryWorker.kt": "31c961d0030be958c4ca873feb1a622fde4e7ed6f227b6972c8a1dcd427550cd",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationDeliveryWorkerTest.kt": "8234438f1ff4172c7f76a3fc51c9ca11466fe36c033abee6c17948bcb2f2caa5",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/fixtures/NativeWorkerSdk.kt": "db405bc31c2f1df375d564d51097fbf70d595f3026122b585d63d9c95c2b02be",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ReopenCollaborationHistory.kt": "5d10ea94f0eada4623cdb4980ef04c8f63037fb0cbf4f813ee695638b447f3a9",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/HistoryReopeningFixture.kt": "dbf552fae5241cf2b5fe768fb76be4c93443f14e700425301b7972a91bfda142",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/ReopenCollaborationHistoryTest.kt": "cf0592f95d1292d0c2f49ddfc5fc6998ef22714568ffe401af70e3dc0d9e1ad2",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadViewModel.kt": "504c0f3eeff7d1b4d4382b529183204695b8c9102cfe9ecefef54677a859d096",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadFixture.kt": "7d670397b12afbfeddc210a2649c4b75f152ff0cfd28098a68cd2887b84c14ae",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadViewModelTest.kt": "c2f88fd9e15e5dec2a553f736de3170f3ffe72e895c4426e2cd6e8de217bb0aa"
+  },
+  "sourceManifestMatched": true,
+  "buildWarnings": [
+    "Android compilation fell back from an incremental DirtyData/QueueCollaborationText FqName cache failure; see full attempt outcome."
+  ],
+  "preparationFailures": [
+    "Initial formatter invocation stopped before Gradle because a generated fixture helper lacked a separating newline; corrected before focused build."
+  ],
+  "attempts": [
+    {
+      "log": ".work/chat-history-recovery-focused.log",
+      "durationSeconds": 169,
+      "outcome": "SUCCESSFUL",
+      "scope": "Collaboration domain/presentation desktop/browser, real-store worker integration and app bindings plus format/architecture/detekt."
+    },
+    {
+      "log": ".work/chat-history-recovery-full.log",
+      "durationSeconds": 240,
+      "outcome": "SUCCESSFUL",
+      "scope": "Root check, domain/presentation browser, Android host, presentation AAR, app Wasm, dev debug APK, lint and proof APK."
+    }
+  ],
+  "reports": {
+    "desktop": {
+      "suites": 426,
+      "tests": 2710,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "domain_desktopTest": {
+      "suites": 30,
+      "tests": 358,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "domain_wasmJsBrowserTest": {
+      "suites": 30,
+      "tests": 358,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "data_desktopTest": {
+      "suites": 35,
+      "tests": 255,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "presentation_desktopTest": {
+      "suites": 9,
+      "tests": 69,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "presentation_wasmJsBrowserTest": {
+      "suites": 5,
+      "tests": 58,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "data_testAndroidHostTest": {
+      "suites": 28,
+      "tests": 170,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "appBindings": {
+      "suites": 1,
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "appWorker": {
+      "suites": 1,
+      "tests": 14,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "androidLint": {
+    "Error": 0,
+    "Fatal": 0,
+    "Warning": 1,
+    "Information": 0
+  },
+  "artifacts": {
+    "apps/android/build/outputs/apk/dev/debug/android-dev-debug.apk": "98cd76d4b577067e73f80002800a56f9a4802455174c6bc182a1cf960bf46e37",
+    "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk": "75a576d1aa80e7e5161dcd227abe7a745d880c8c411bfa7396e9e5072c296dc1",
+    "features/collaboration/presentation/build/outputs/aar/presentation.aar": "0bba83909443ec8791c1767c059f8b35907292cd4f159c9133d204858dae1f72"
+  },
+  "limitations": [
+    "Desktop worker integration uses actual encrypted repositories and simulated control-plane/native provider; container restart is not actual Android process death.",
+    "No new Android WorkManager/native server, physical device or Apple runtime acceptance is claimed.",
+    "Complete provider history traversal remains separate; latest-head recovery covers only a bounded original window.",
+    "No full PRD feature group is accepted; notifications, groups, rich actions, crypto continuity, Apple/web adapters, calls and meetings remain.",
+    "No phone, live deployment or Starter change."
+  ]
+}

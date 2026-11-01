@@ -58,6 +58,9 @@ internal class ChatThreadFixture {
     var queueCloses = 0
     var deliveries = 0
     var historyReads = 0
+    var historyFull = false
+    var historyReopens = 0
+    var beforeHistoryReopen: suspend () -> Unit = {}
     var pageNext: String? = null
     val requestedPages = mutableListOf<String?>()
     val transactions = mutableMapOf<String, String>()
@@ -233,8 +236,39 @@ internal class ChatThreadFixture {
             ): AppResult<CollaborationHistoryHead> {
                 historyReads++
                 return AppResult.Success(
-                    CollaborationHistoryHead(owner, deviceId, matrixRoomId, null)
+                    CollaborationHistoryHead(
+                        owner,
+                        deviceId,
+                        matrixRoomId,
+                        if (historyFull) "$" + "focus" else null,
+                    )
                 )
+            }
+
+            override suspend fun readOriginalHistory(
+                owner: CollaborationOwner,
+                deviceId: String,
+                matrixRoomId: String,
+                anchorEventId: String,
+            ): AppResult<CollaborationOriginalWindow> =
+                AppResult.Failed(
+                    Failure(
+                        FailureKind.Unavailable,
+                        "Fixture focus capacity",
+                        code = "client.collaboration_history_focus_capacity",
+                    )
+                )
+
+            override suspend fun prepareHistoryReopen(
+                owner: CollaborationOwner,
+                deviceId: String,
+                matrixRoomId: String,
+                anchorEventId: String,
+            ): AppResult<Boolean> {
+                historyReopens++
+                beforeHistoryReopen()
+                historyFull = false
+                return AppResult.Success(true)
             }
 
             override suspend fun enterTimeline(
@@ -350,6 +384,7 @@ internal class ChatThreadFixture {
                 createPrepareCollaborationConversation(),
                 createEnterCollaborationConversation(),
                 createAcquireCollaborationHistory(),
+                createReopenCollaborationHistory(),
             )
         }
 
@@ -502,6 +537,21 @@ internal class ChatThreadFixture {
                 this@ChatThreadFixture.remote,
                 setup.remote,
                 runtimes,
+                sessions,
+                workspaces,
+                server,
+                build,
+                clock,
+            )
+        }
+
+    private fun createReopenCollaborationHistory() =
+        with(base) {
+            ReopenCollaborationHistory(
+                runtimes,
+                local,
+                this@ChatThreadFixture.remote,
+                setup.remote,
                 sessions,
                 workspaces,
                 server,

@@ -37,6 +37,7 @@ class ChatThreadViewModel(
     private val prepare: PrepareCollaborationConversation,
     private val enter: EnterCollaborationConversation,
     private val acquireHistory: AcquireCollaborationHistory,
+    private val reopenHistory: ReopenCollaborationHistory,
 ) : MviViewModel<ChatThreadState, ChatThreadEvent, ChatThreadEffect>(ChatThreadState()) {
     private var observation: Job? = null
     private var connection: Job? = null
@@ -235,6 +236,14 @@ class ChatThreadViewModel(
                         updateState { it.copy(failure = result.failure) }
                     else observeLocal()
                 }
+        } else if (state.value.failure?.code == "client.collaboration_history_focus_capacity") {
+            connection?.cancel()
+            connection = null
+            pulse = null
+            timeline = emptyList()
+            source = null
+            project()
+            connect(retryRoom = true, recoverHistory = true)
         } else if (pulse != null) requestSync() else connect(retryRoom = true)
     }
 
@@ -308,7 +317,7 @@ class ChatThreadViewModel(
         pulse?.trySend(Unit)
     }
 
-    private fun connect(retryRoom: Boolean = false) {
+    private fun connect(retryRoom: Boolean = false, recoverHistory: Boolean = false) {
         if (!visible || context == null || connection?.isActive == true) return
         val owned = access ?: return
         updateState { it.copy(connection = ChatThreadConnection.CONNECTING, failure = null) }
@@ -350,10 +359,30 @@ class ChatThreadViewModel(
                 when (ready) {
                     is AppResult.Failed -> connectionFailed(ready.failure)
                     is AppResult.Success ->
-                        if (ready.value) observeTimeline(owned, device.id)
-                        else updateState { it.copy(connection = ChatThreadConnection.WAITING) }
+                        if (ready.value) {
+                            if (recoverHistory && !restoreHistory(device.id)) return@launch
+                            ensureActive()
+                            if (access == owned) observeTimeline(owned, device.id)
+                        } else updateState { it.copy(connection = ChatThreadConnection.WAITING) }
                 }
             }
+    }
+
+    private suspend fun restoreHistory(deviceId: String): Boolean {
+        val result = reopenHistory(workspaceId, deviceId, conversationId)
+        currentCoroutineContext().ensureActive()
+        if (result is AppResult.Failed) {
+            connectionFailed(result.failure)
+            return false
+        }
+        if (
+            (result as AppResult.Success).value.value ==
+                CollaborationHistoryRuntimePreparation.SetupRequired
+        ) {
+            updateState { it.copy(connection = ChatThreadConnection.SETUP_REQUIRED) }
+            return false
+        }
+        return true
     }
 
     private suspend fun prepareRoom(

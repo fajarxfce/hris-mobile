@@ -21,6 +21,7 @@ class NativeWorkerSdk(private val wire: NativeCollaborationUi) : CollaborationRu
     var childOpens = 0
     var queueCloses = 0
     var restores = 0
+    var restoreFailure: Failure? = null
     var loseDeliveryReply = false
     var withholdOriginals = false
     var historyCapacityOnce = false
@@ -42,6 +43,9 @@ class NativeWorkerSdk(private val wire: NativeCollaborationUi) : CollaborationRu
         deviceId: String,
     ): AppResult<CollaborationRuntimeLease?> {
         restores++
+        restoreFailure?.let {
+            return AppResult.Failed(it)
+        }
         check(deviceId == wire.deviceId)
         this.owner = owner
         return AppResult.Success(

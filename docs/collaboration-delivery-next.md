@@ -4,16 +4,11 @@ The application worker, durable scheduler wakeups, encrypted fair cursor and thr
 handoff are now implemented. See [current contract](collaboration-background-delivery.md).
 This does not accept all background, provider or product requirements.
 
-1. Finish focus-capacity recovery when an uncertain send has no confirmed event anchor.
-   `AcquireCollaborationHistory` can find the current native head internally, but a
-   capacity failure does not return that anchor. `ReopenCollaborationHistory` currently
-   requires a known event ID. Add an owned/re-admitted latest-head recovery path, bounded
-   to one reopening, with no automatic credential enrollment or repeated send. Validate
-   unknown/mismatched/absent heads, cancellation and admission loss around head lookup,
-   close and restore. Never infer ACK from a missing native transaction. Cover the same
-   issue for repeated foreground incoming-history acquisition.
+Latest-head capacity recovery is now implemented for uncertain delivery and explicit
+foreground Refresh. See [recovery contract](collaboration-history-recovery.md). Continue
+actual provider and platform execution evidence next.
 
-2. Exercise the actual worker with Android protected stores, real SDK and fictional
+1. Exercise the actual worker with Android protected stores, real SDK and fictional
    HRIS/Synapse gateway. Existing apps/collaboration-proof / NativeCollaborationSdkInteropTest
    covers prior sender/recovery use cases, not this application worker. Extend a separately
    identified scenario and evidence, preserving the old four-process/three-death assertions.
@@ -23,13 +18,13 @@ This does not accept all background, provider or product requirements.
    retain exact content/ID, deliver once, acquire originals and retire only with evidence.
    Use the dedicated emulator; never drive the user's phone for routine tests.
 
-3. Finish remote older-history paging, durable drafts and safe pending cancellation, then
+2. Finish remote older-history paging, durable drafts and safe pending cancellation, then
    incoming FCM/pusher/gateway integration and inline replies. Keep payloads opaque and
    admission-bound; notification actions must use the same durable command pipeline.
    Android background delivery alone does not supply Apple's PushKit/CallKit, notification
    service extension or browser service-worker behavior.
 
-4. Continue all remaining P0–P8 / 54 catalog groups: groups, media/stickers/voice notes,
+3. Continue all remaining P0–P8 / 54 catalog groups: groups, media/stickers/voice notes,
    edit/forward/delete, E2EE verification and cross-family keys, backups, full Apple/web
    adapters, calling and meetings. Do not mark provider feasibility as product acceptance.
    Record each tested increment and push its atomic commit during the authorized long run.

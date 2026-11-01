@@ -62,6 +62,11 @@ polling uses at most twelve reads with two-second spacing.
 replay, bounded message batches, original-evidence recovery and completion retirement.
 An empty native queue/history result is never an acknowledgement.
 
+If incoming history reaches native focus capacity, explicit Refresh releases the old
+child, performs an admitted latest-head capacity reopening, and acquires a new child.
+Owned local content stays visible. Cancellation cannot reopen a late replacement child;
+this finite action never starts native message delivery. See [recovery](collaboration-history-recovery.md).
+
 ## Interface and evidence
 
 The compact composer stays below a reversed message list, respects safe-area/keyboard

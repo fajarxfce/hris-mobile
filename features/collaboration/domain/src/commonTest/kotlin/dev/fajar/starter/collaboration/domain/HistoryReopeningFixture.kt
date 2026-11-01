@@ -12,6 +12,15 @@ internal class HistoryReopeningFixture {
     val delivery = CollaborationDeliveryFixture()
     val local = delivery.base
     val events = mutableListOf<String>()
+    var head =
+        CollaborationHistoryHead(
+            delivery.owner,
+            delivery.device.deviceId,
+            delivery.device.roomId,
+            "$" + "anchor",
+        )
+    var headFailure: Failure? = null
+    var afterHead: suspend () -> Unit = {}
     var prepared: AppResult<Boolean> = AppResult.Success(true)
     var afterPrepare: suspend () -> Unit = {}
     var afterRestore: suspend () -> Unit = {}
@@ -55,6 +64,19 @@ internal class HistoryReopeningFixture {
                 dev.fajar.starter.collaboration.domain.entities.CollaborationSelfIdentity?
             > = error("No implicit identity acquisition")
 
+            override suspend fun findHistoryHead(
+                owner: CollaborationOwner,
+                deviceId: String,
+                matrixRoomId: String,
+            ): AppResult<CollaborationHistoryHead> {
+                assertEquals(delivery.owner, owner)
+                assertEquals(delivery.device.deviceId, deviceId)
+                assertEquals(delivery.device.roomId, matrixRoomId)
+                events += "head"
+                afterHead()
+                return headFailure?.let { AppResult.Failed(it) } ?: AppResult.Success(head)
+            }
+
             override suspend fun prepareHistoryReopen(
                 owner: CollaborationOwner,
                 deviceId: String,
@@ -94,8 +116,8 @@ internal class HistoryReopeningFixture {
             local.clock,
         )
 
-    suspend fun reopen() =
-        useCase("selection", delivery.device.deviceId, delivery.conversation, "\$anchor")
+    suspend fun reopen(anchor: String? = "\$anchor") =
+        useCase("selection", delivery.device.deviceId, delivery.conversation, anchor)
 
     fun result(value: CollaborationHistoryRuntimePreparation) =
         AppResult.Success(CollaborationRead(delivery.owner, value))

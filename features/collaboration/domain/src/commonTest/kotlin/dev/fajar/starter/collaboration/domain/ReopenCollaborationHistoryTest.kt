@@ -182,4 +182,111 @@ class ReopenCollaborationHistoryTest {
         assertTrue(f.events.isEmpty())
         assertEquals(0, f.local.setup.calls)
     }
+
+    @Test
+    fun latestOwnedHeadIsReadAndRoomReadmittedBeforeCapacityRecovery() = runTest {
+        val f = HistoryReopeningFixture()
+        assertEquals(f.result(CollaborationHistoryRuntimePreparation.Reopened), f.reopen(null))
+        assertEquals(
+            listOf(
+                "get",
+                "room",
+                "head",
+                "get",
+                "room",
+                "prepare",
+                "get",
+                "room",
+                "restore",
+                "get",
+                "room",
+            ),
+            f.events,
+        )
+        assertEquals(0, f.delivery.acquisitions)
+    }
+
+    @Test
+    fun absentHeadLeavesTheRuntimeAndAcquiredHistoryUntouched() = runTest {
+        val f = HistoryReopeningFixture()
+        f.head = f.head.copy(eventId = null)
+        assertEquals(f.result(CollaborationHistoryRuntimePreparation.Available), f.reopen(null))
+        assertEquals(listOf("get", "room", "head", "get", "room"), f.events)
+        assertEquals(0, f.closes)
+        assertEquals(0, f.delivery.acquisitions)
+    }
+
+    @Test
+    fun unownedOrMalformedHeadNeverClosesOrRestores() = runTest {
+        for (scenario in 0..3) {
+            val f = HistoryReopeningFixture()
+            f.head =
+                when (scenario) {
+                    0 -> f.head.copy(owner = f.head.owner.copy(accountId = "foreign"))
+                    1 -> f.head.copy(deviceId = "foreign")
+                    2 -> f.head.copy(roomId = "!foreign:test")
+                    else -> f.head.copy(eventId = "invalid")
+                }
+            val failed = assertIs<AppResult.Failed>(f.reopen(null))
+            assertEquals("client.collaboration_invalid_history_head", failed.failure.code)
+            assertFalse("prepare" in f.events)
+            assertFalse("restore" in f.events)
+        }
+    }
+
+    @Test
+    fun ownerDenialOrRoomChangeDuringHeadLookupCannotCloseTheOldRuntime() = runTest {
+        for (scenario in 0..2) {
+            val f = HistoryReopeningFixture()
+            f.afterHead = {
+                when (scenario) {
+                    0 -> f.local.setup.session = null
+                    1 -> f.local.gate.value = CollaborationListAdmission("denied", f.local.denied)
+                    else ->
+                        f.delivery.control.room =
+                            f.delivery.control.room.copy(matrixRoomId = "!replacement:test")
+                }
+            }
+            assertIs<AppResult.Failed>(f.reopen(null))
+            assertFalse("prepare" in f.events)
+            assertFalse("restore" in f.events)
+        }
+    }
+
+    @Test
+    fun failedHeadLookupPreservesItsFailureAndConfirmedDenial() = runTest {
+        for (failure in
+            listOf(
+                Failure(FailureKind.Network, "Fixture offline"),
+                HistoryReopeningFixture().local.denied,
+            )) {
+            val f = HistoryReopeningFixture()
+            f.headFailure = failure
+            assertEquals(failure, assertIs<AppResult.Failed>(f.reopen(null)).failure)
+            assertFalse("prepare" in f.events)
+            if (failure.code == f.local.denied.code)
+                assertEquals(failure, f.local.gate.value.denial)
+        }
+    }
+
+    @Test
+    fun cancelledUncooperativeHeadCannotStartShutdownAfterItsLateReply() = runTest {
+        val f = HistoryReopeningFixture()
+        val entered = CompletableDeferred<Unit>()
+        val release = CompletableDeferred<Unit>()
+        f.afterHead = {
+            withContext(NonCancellable) {
+                entered.complete(Unit)
+                release.await()
+            }
+        }
+        val task = launch { f.reopen(null) }
+        entered.await()
+        task.cancel()
+        release.complete(Unit)
+        task.join()
+        assertTrue(task.isCancelled)
+        assertFalse("prepare" in f.events)
+        assertFalse("restore" in f.events)
+    }
 }

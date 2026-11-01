@@ -33,13 +33,13 @@ class ReopenCollaborationHistory(
         workspaceId: String,
         deviceId: String,
         conversationId: String,
-        anchorEventId: String,
+        anchorEventId: String? = null,
     ): AppResult<CollaborationRead<CollaborationHistoryRuntimePreparation>> =
         execution.withLock {
             if (
                 !validCollaborationMessageId(deviceId) ||
                     !validCollaborationMessageId(conversationId) ||
-                    !validCollaborationEventId(anchorEventId)
+                    (anchorEventId != null && !validCollaborationEventId(anchorEventId))
             )
                 return@withLock failed(
                     "client.collaboration_invalid_history",
@@ -54,9 +54,17 @@ class ReopenCollaborationHistory(
             val admitted = admitRoom(workspaceId, owner, deviceId, conversationId)
             if (admitted is AppResult.Failed) return@withLock admitted
             val room = (admitted as AppResult.Success).value
+            val selected =
+                selectAnchor(workspaceId, owner, deviceId, conversationId, room, anchorEventId)
+            if (selected is AppResult.Failed) return@withLock selected
+            val anchor =
+                (selected as AppResult.Success).value
+                    ?: return@withLock AppResult.Success(
+                        CollaborationRead(owner, CollaborationHistoryRuntimePreparation.Available)
+                    )
             val prepared =
                 checked(workspaceId, owner) {
-                    runtimes.prepareHistoryReopen(owner, deviceId, room, anchorEventId)
+                    runtimes.prepareHistoryReopen(owner, deviceId, room, anchor)
                 }
             if (prepared is AppResult.Failed) return@withLock prepared
             if (!(prepared as AppResult.Success).value)
@@ -72,6 +80,33 @@ class ReopenCollaborationHistory(
                 )
             restorePrepared(workspaceId, owner, deviceId, conversationId, room)
         }
+
+    private suspend fun selectAnchor(
+        workspaceId: String,
+        owner: CollaborationOwner,
+        deviceId: String,
+        conversationId: String,
+        room: String,
+        requested: String?,
+    ): AppResult<String?> {
+        if (requested != null) return AppResult.Success(requested)
+        val read = checked(workspaceId, owner) { runtimes.findHistoryHead(owner, deviceId, room) }
+        if (read is AppResult.Failed) return read
+        val head = (read as AppResult.Success).value
+        if (
+            head.owner != owner ||
+                head.deviceId != deviceId ||
+                head.roomId != room ||
+                (head.eventId != null && !validCollaborationEventId(head.eventId))
+        )
+            return failed("client.collaboration_invalid_history_head")
+        val admitted = admitRoom(workspaceId, owner, deviceId, conversationId)
+        if (admitted is AppResult.Failed) return admitted
+        if ((admitted as AppResult.Success).value != room)
+            return failed("client.collaboration_conversation_mismatch", FailureKind.AccessDenied)
+        // An absent head never clears history, closes a runtime, or acknowledges a message.
+        return AppResult.Success(head.eventId)
+    }
 
     private suspend fun restorePrepared(
         workspaceId: String,

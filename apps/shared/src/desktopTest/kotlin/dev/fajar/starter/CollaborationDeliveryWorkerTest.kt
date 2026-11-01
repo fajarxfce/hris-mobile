@@ -254,6 +254,47 @@ class CollaborationDeliveryWorkerTest {
         }
     }
 
+    @Test
+    fun lostAckAndFullHistoryFocusRecoverFromLatestHeadBeforeAnotherSend() = runBlocking {
+        withFixture { f ->
+            val queued = f.queue()
+            f.sdk.loseDeliveryReply = true
+            assertIs<SyncResult.Retry>(f.worker())
+            val records =
+                assertIs<AppResult.Success<List<CollaborationMessageRecord>>>(
+                        f.koin.get<ObserveCollaborationMessages>()(f.workspaceId, f.first).first()
+                    )
+                    .value
+            assertIs<CollaborationMessageState.Staged>(records.single().state)
+            f.reopen()
+            f.sdk.historyCapacityOnce = true
+            assertEquals(SyncResult.Complete, f.worker())
+            assertEquals(1, f.sdk.historyReopens)
+            assertEquals(listOf(queued.intent.id), f.sdk.enqueued)
+            assertEquals(1, f.sdk.deliveries)
+            assertEquals(f.sdk.childOpens, f.sdk.childCloses)
+        }
+    }
+
+    @Test
+    fun openingOrClosingRuntimeBacksOffBeforeAnyNativeSendAndRecoversOnNextPass() = runBlocking {
+        for (code in
+            listOf("client.collaboration_runtime_opening", "client.collaboration_close_pending")) {
+            withFixture { f ->
+                val queued = f.queue()
+                f.sdk.restoreFailure =
+                    Failure(FailureKind.Unavailable, "Fixture runtime busy", code = code)
+                val result = assertIs<SyncResult.Retry>(f.worker())
+                assertEquals(code, result.failure?.code)
+                assertTrue(f.sdk.enqueued.isEmpty())
+                f.sdk.restoreFailure = null
+                assertEquals(SyncResult.Complete, f.worker())
+                assertEquals(listOf(queued.intent.id), f.sdk.enqueued)
+                assertEquals(1, f.sdk.deliveries)
+            }
+        }
+    }
+
     private suspend fun withFixture(block: suspend (CollaborationWorkerFixture) -> Unit) {
         val f = CollaborationWorkerFixture()
         try {

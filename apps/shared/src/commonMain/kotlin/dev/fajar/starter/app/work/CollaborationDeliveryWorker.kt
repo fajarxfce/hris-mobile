@@ -56,7 +56,7 @@ class CollaborationDeliveryWorker(
             return SyncResult.Blocked(setupRequired())
         val restored = ensureRuntime(work.workspaceId, device.id)
         currentCoroutineContext().ensureActive()
-        if (restored is AppResult.Failed) return syncFailure(restored.failure)
+        if (restored is AppResult.Failed) return deliveryFailure(restored.failure)
         if (!(restored as AppResult.Success).value.value) return SyncResult.Blocked(setupRequired())
         var cursor = work.cursor
         var retry: Failure? = null
@@ -273,8 +273,7 @@ class CollaborationDeliveryWorker(
         currentCoroutineContext().ensureActive()
         if (
             acquired is AppResult.Failed &&
-                acquired.failure.code == "client.collaboration_history_focus_capacity" &&
-                anchor != null
+                acquired.failure.code == "client.collaboration_history_focus_capacity"
         ) {
             val prepared = reopenHistory(work.workspaceId, deviceId, conversationId, anchor)
             currentCoroutineContext().ensureActive()
@@ -285,7 +284,8 @@ class CollaborationDeliveryWorker(
             )
                 return AppResult.Failed(setupRequired())
             reopened = prepared.value.value == CollaborationHistoryRuntimePreparation.Reopened
-            // Same owned anchor, at most one explicit recovery; no send is repeated.
+            // One admitted capacity recovery; a missing receipt uses a freshly owned head.
+            // No send is repeated to obtain history.
             acquired = acquire(work.workspaceId, deviceId, conversationId, anchor)
             currentCoroutineContext().ensureActive()
         }
@@ -346,6 +346,7 @@ class CollaborationDeliveryWorker(
             "client.collaboration_delivery_pending",
             "client.collaboration_history_pending",
             "client.collaboration_runtime_opening",
+            "client.collaboration_close_pending",
             "client.collaboration_queue_busy" -> SyncResult.Retry(failure)
             else -> syncFailure(failure)
         }
