@@ -1,5 +1,42 @@
 # Agent continuation — HRIS Mobile
 
+## Release 6 ready; three hosted native cases audited — 1 November 2026
+
+Latest prepared private APK is now release **6**, superseding the uninstalled release 5:
+`.work/release-phone-2026-11-01-build6/hris-mobile-dev-release-1.0.0-6-arm64.apk`.
+SHA-256 `63cba8dccec9c50e73b13f39f4645304b98cec7b84d79b8091f5f5e9299d27ba`,
+87,264,632 bytes, package `dev.fajar.hris.mobile.dev`, version 1.0.0/code 6. It is non-debuggable,
+non-testOnly, arm64-only and ZIP-aligned at 16 KiB. API/Firebase, the previous installed
+signer and embedded VCS commit `2d6753ee64f4616adec6ad05783ad2d197a535e9` match. Source
+stayed clean before/after the 295s Gradle build (299.203s wall). Lint: zero errors/fatal,
+one existing DataExtractionRules warning. [Release evidence](measurements/android-release-history-2026-11-01.json).
+
+**Not installed.** Phone `10.77.77.3:5555` still times out; reconnect question pending,
+last confirmed installed code remains 4. Updated `preflight.py` and `install.py --install-only`
+are in the build6 directory. Notify before installation, verify the current signer/version
+and exact identity, then verify pulled APK bytes and preserved data identity. Do not reuse
+build5 helpers, uninstall, clear app data or drive the phone UI. Continue work independently.
+
+Hosted native run [41322946959](https://github.com/fajarxfce/hris-mobile/actions/runs/41322946959)
+succeeded and downloaded evidence is audited in [this record](measurements/chat-native-ci-2026-11-01.json).
+It binds Mobile `1a114442`, Platform `075e63db` and one proof APK `9a42e773` on Android API 35:
+scheduled case 70.507s, SDK case 61.405s, direct worker 27.600s. Three/one/one encrypted sends
+respectively for SDK/direct/scheduled, zero admission failures, full cleanup; scheduled
+job retained its namespace/CONNECTED/task-only input through ordinary death and restarted
+automatically with the sender closed, then WorkInfo SUCCEEDED. Radio settings were restored.
+This does not include foreground paging from `2d6753ee`, deliberate retry/cancel races or
+capacity acceptance. Earlier run `41319810722` still failed worker cleanup with ClosePending;
+a later successful run does not erase or diagnose that failure.
+
+**Next: continue, do not stop at this release checkpoint.** Implement/validate bounded native
+fixture close draining and primary-error preservation, then actual foreground history via
+the real app ViewModel/container in the native worker scenario. `.work/native-foreground-next.txt`
+is supplementary design only, not implemented. Extend local browsing beyond ten pages,
+then durable drafts/cancellation and all remaining P0–P8. Review explicit Android 12+ backup
+extraction exclusions as a separate reusable foundation change, prove in Mobile before porting
+to Starter. No live backend/provider or Starter change was made here. Push each atomic commit.
+
+
 ## Foreground remote history validated — 1 November 2026
 
 Older now coordinates retained reference reconciliation, one admitted provider page and at

@@ -1,5 +1,12 @@
 # Private Android phone updates
 
+Latest prepared artifact (1 November): release 6 from Mobile `2d6753ee`, documented in
+[release evidence](measurements/android-release-history-2026-11-01.json). Its local directory
+is `.work/release-phone-2026-11-01-build6/`, including current preflight/install-only helpers.
+Release 5 below is historical and was never installed. Both are pending phone connectivity;
+prefer the latest validated build and inspect the actual installed version before updating.
+
+
 The authorized tester phone uses `dev.fajar.hris.mobile.dev` through
 `http://10.77.77.1:8088/api/v1/` on WireGuard. Build `devRelease`, keep the existing
 certificate (SHA-256 `aca5ce6a26b978dee1d63c63103b6799848ab760d47ef4cf5ee68620fc8721f3`)

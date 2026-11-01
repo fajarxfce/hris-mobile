@@ -1,0 +1,117 @@
+{
+  "date": "2026-11-01",
+  "runId": 41322946959,
+  "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/41322946959",
+  "mobileCommit": "1a1144425364706c9d386d3279afbf8b4fcf4cd8",
+  "platformCommit": "075e63dbdc0271ebf00bea4fd9756c7441408328",
+  "conclusion": "success",
+  "artifact": {
+    "apkSha256": "9a42e773db52420f1745c89dfee61e1d7e90a7a1972fefb4eeba054296e54e1e",
+    "package": "dev.fajar.hris.collaboration.proof",
+    "avd": "hris-mobile-dev",
+    "androidApi": "35"
+  },
+  "tests": [
+    {
+      "suite": "dev.fajar.hris.NativeCollaborationScheduledInteropTest",
+      "seconds": 70.507,
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "dev.fajar.hris.NativeCollaborationSdkInteropTest",
+      "seconds": 61.405,
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "dev.fajar.hris.NativeCollaborationWorkerInteropTest",
+      "seconds": 27.6,
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "sdk": {
+    "encryptedSends": 3,
+    "heldRoomNeverSent": true,
+    "applicationAdmissions": {
+      "device": 22,
+      "conversation": 22,
+      "room": 22,
+      "failures": 0
+    },
+    "ackBeforeJournalRecovered": true,
+    "completionCleanupRecovered": true,
+    "protectedStoreReopened": true,
+    "cleanup": true
+  },
+  "worker": {
+    "processes": 2,
+    "forcedProcessDeaths": 1,
+    "passes": 1,
+    "encryptedSends": 1,
+    "applicationAdmissions": {
+      "device": 8,
+      "conversation": 7,
+      "room": 8,
+      "failures": 0
+    },
+    "restoredByActualWorker": true,
+    "originalsAcquired": true,
+    "completionRetired": true,
+    "repeatedWorkerComplete": true,
+    "cleanup": true
+  },
+  "scheduled": {
+    "processes": 2,
+    "ordinaryProcessDeaths": 1,
+    "packageNotForceStopped": true,
+    "systemJobRetained": true,
+    "jobNamespace": "androidx.work.systemjobscheduler",
+    "networkConstraint": "CONNECTED",
+    "inputKeys": [
+      "sync_task"
+    ],
+    "initialRunAttemptCount": 0,
+    "finalRunAttemptCount": 1,
+    "automaticJobStart": true,
+    "senderInitiallyClosed": true,
+    "workState": "SUCCEEDED",
+    "encryptedSends": 1,
+    "applicationAdmissions": {
+      "device": 8,
+      "conversation": 7,
+      "room": 8,
+      "failures": 0
+    },
+    "networkRestored": true,
+    "cleanup": true,
+    "retryCancellationAccepted": false
+  },
+  "downloadedEvidenceSha256": {
+    ".work/collaboration/bf8f7ff755324032aed25b59d9366ca6/result.json": "ac379cc6507df21741f88d00cabe64e3425a4856bd5f78b669f9f7109dad018f",
+    ".work/collaboration/bf8f7ff755324032aed25b59d9366ca6/verified.json": "ba4e36387b4ab5a0abd589bb6ca57c9a6514454c8bf15ca7ad928135d6c3e785",
+    ".work/collaboration/bf8f7ff755324032aed25b59d9366ca6/gateway-trace.json": "f13d6aa1ad851b390eff7d54276ca0e72e4fb985b5ff823fba7a3bb5248173fb",
+    ".work/collaboration-worker/daad84a5f6c848c88c02e96c24f23633/acceptance.json": "eac4fdd9bc13a7adbecf7d52aed0c2449a0526a16921988b5e297ee00f4ef092",
+    ".work/collaboration-worker/daad84a5f6c848c88c02e96c24f23633/gateway-trace.json": "fdb980cd78a8e24d18b16246f1a2224de1c600775cc6b9f570611f20cf084157",
+    ".work/collaboration-worker/daad84a5f6c848c88c02e96c24f23633/result.json": "faac15dc414b87aa12158e38d5426e8c4a98685bff92b6df9690ce1e91bf6d11",
+    ".work/collaboration-worker/002b3315b476450da7356f62717fb1b3/acceptance.json": "a58fddd523208f8337f433a3b6f0d89215398ea811bd17eed67aa30b8f5b73e6",
+    ".work/collaboration-worker/002b3315b476450da7356f62717fb1b3/gateway-trace.json": "bb328ecb2bd34ab191ffa437925c1702814ded095dae41615fdc9fa0db5f041d",
+    ".work/collaboration-worker/002b3315b476450da7356f62717fb1b3/network-before.json": "79dfab35e5f4104e398aa74de7c3d6e56dda0a96ac31d2fcb699ac1df093c6ad",
+    ".work/collaboration-worker/002b3315b476450da7356f62717fb1b3/result.json": "208e5c0a2b8ae7af5dd0dd7d2a5fd91ff70ae33f9c0b58a3e0dff4cbd9e3e1ba",
+    ".work/collaboration-worker/002b3315b476450da7356f62717fb1b3/started.json": "6b96a8c1943f321ef5dd3a7ec96fdae6a2c33373a9c8573ca9d9630c45c831e7",
+    ".work/collaboration-worker/002b3315b476450da7356f62717fb1b3/stopped.json": "612dfd5bbc7566990b9d8ce5d194ab6ab1d34a20a0af95a4e07986871974507c"
+  },
+  "limits": [
+    "Three bounded native fixtures on the hosted API 35 emulator; not capacity or production-login acceptance.",
+    "Does not include new foreground remote-history orchestration from subsequent Mobile commit 2d6753ee.",
+    "Earlier run 41319810722 failed worker cleanup with ClosePending; this later success does not erase that failure or prove it fixed.",
+    "No phone, live provider/backend or Apple acceptance is inferred."
+  ]
+}

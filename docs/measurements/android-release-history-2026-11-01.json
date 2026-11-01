@@ -1,0 +1,80 @@
+{
+  "date": "2026-11-01",
+  "status": "prepared-not-installed",
+  "sourceCommit": "2d6753ee64f4616adec6ad05783ad2d197a535e9",
+  "sourceCleanBeforeAndAfterBuild": true,
+  "sourceValidation": "chat-remote-history-2026-11-01.json",
+  "artifact": {
+    "nativeAbis": [
+      "arm64-v8a"
+    ],
+    "zipAligned16KiB": true,
+    "artifact": ".work/release-phone-2026-11-01-build6/hris-mobile-dev-release-1.0.0-6-arm64.apk",
+    "variant": "devRelease",
+    "applicationId": "dev.fajar.hris.mobile.dev",
+    "versionCode": 6,
+    "versionName": "1.0.0",
+    "bytes": 87264632,
+    "sha256": "63cba8dccec9c50e73b13f39f4645304b98cec7b84d79b8091f5f5e9299d27ba",
+    "debuggable": false,
+    "signatureVerified": true,
+    "samePreviouslyInstalledSigner": true,
+    "signerSha256": "aca5ce6a26b978dee1d63c63103b6799848ab760d47ef4cf5ee68620fc8721f3",
+    "signerSha1": "23860b51e4305aa7900090aeab6783d39a12ff33",
+    "signingBoundary": "Release build signed with the existing development key for an in-place private-device update.",
+    "privateApiVerifiedInDex": true,
+    "fixtureEndpointsAbsent": true,
+    "firebaseDevAppMatches": true,
+    "sourceCommit": "2d6753ee64f4616adec6ad05783ad2d197a535e9",
+    "embeddedVcsCommitVerified": true,
+    "testOnly": false
+  },
+  "build": {
+    "command": [
+      "xvfb-run",
+      "-a",
+      "./gradlew",
+      ":apps:android:assembleDevRelease",
+      ":apps:android:lintDevRelease",
+      "-PrequireSigning=true",
+      "-PappEnvironment=dev",
+      "-PappVersion=1.0.0",
+      "-PappVersionCode=6",
+      "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+      "--init-script",
+      "/home/fajar/hris/hris-mobile/.work/release-phone-2026-11-01-build6/phone-arm64.init.gradle",
+      "--stacktrace",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=1",
+      "-Dorg.gradle.jvmargs=-Xmx1536m"
+    ],
+    "startedAt": "2026-11-01T16:19:15.536295+00:00",
+    "elapsedSeconds": 299.203,
+    "exitCode": 0
+  },
+  "gradleDurationSeconds": 295,
+  "lint": {
+    "Error": 0,
+    "Fatal": 0,
+    "Warning": 1
+  },
+  "existingLintWarning": "DataExtractionRules: allowBackup=false remains configured, but explicit Android 12+ extraction rules still need review.",
+  "phone": {
+    "serial": "10.77.77.3:5555",
+    "connected": false,
+    "installed": false,
+    "lastConfirmedVersionCode": 4,
+    "reconnectQuestionPending": true
+  },
+  "installationHelpers": ".work/release-phone-2026-11-01-build6",
+  "verification": [
+    "APK signature matches the previously pulled phone release. Fresh connected-device preflight remains required.",
+    "Version/app ID, non-debuggable/non-testOnly, arm64 libraries, 16 KiB ZIP alignment, API/Firebase and embedded VCS commit verified.",
+    "Install helper requires --install-only, rechecks exact preflight identity, preserves app ID/firstInstallTime and verifies pulled APK bytes."
+  ],
+  "remaining": [
+    "Install this validated artifact once WireGuard ADB returns; never uninstall, clear data or drive phone UI.",
+    "Continue native foreground history, bounded local paging, durable drafts/cancellation and all remaining PRD groups."
+  ]
+}
