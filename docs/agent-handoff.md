@@ -1,5 +1,30 @@
 # Agent continuation — HRIS Mobile
 
+## Release 9 installed; safe queued cancellation next — 1 November 2026
+
+**Phone updated and verified.** Clean source `448ab3ad` is installed over code 8 at 20:01 UTC
+on `10.77.77.3:5555`. Release build passes in 227s Gradle / 231.48s wall; lint zero
+fatal/errors and one warning. Arm64 APK 87,314,200 bytes, SHA-256
+`acc895f4d7fbb33470678bd0133f1d06edd7d680726c525ac4ca83365bc87db8`. All 41 reviewed source
+hashes, embedded VCS, private API/Firebase, existing signer and 16 KiB alignment match.
+Install plus verification takes 51.397s. Pulled APK matches exactly, app identity and original
+first-install identity remain intact; no uninstall, data clearing or UI launch.
+[Installation evidence](measurements/android-release-draft-retry-2026-11-01.json).
+Future phone updates require version code 10+, notification first and install-only.
+
+**Continue immediately:** safe queued-only cancellation. Use the existing full-record command
+archive CAS so an original ID cannot be resurrected by draft or UI retry. Add archive-only
+Cancelled state with authenticated version/kind and purpose-bound proof; preserve legacy sent
+completion format and never interpret cancellation as delivery. Ordinary state updates cannot
+create Cancelled. Cancel only a complete observed Queued record under captured access and
+current local admission. Staging wins or cancellation wins atomically; uncertain native work
+is always retained. Queue replay must not wake delivery, Stage must avoid SDK acquisition for
+an already-cancelled original. Add SQLite/browser race/reopen/lost-response/key/owner tests,
+domain policy and real application worker regression, then confirmation UI with stale-state,
+disposal and large-text checks. `.work/queued-cancellation-next.txt` holds detailed notes.
+Then incoming push/replies, rich messaging, backups, native/web, calls/meetings and all P0–P8.
+No full PRD group or live provider deployment is claimed by this phone checkpoint.
+
 ## Draft contention feedback validated; release 9 next — 1 November 2026
 
 Technical shared-partition movement and exhausted three-attempt CAS now return
