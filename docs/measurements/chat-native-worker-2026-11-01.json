@@ -1,0 +1,226 @@
+{
+  "date": "2026-11-01",
+  "change": "Actual application worker, encrypted Android storage and Matrix SDK/HRIS interoperability after real process death",
+  "baseMobileCommit": "4213d5f5926ae5f299a0fd1969ceb73f181df4c4",
+  "basePlatformCommit": "422248b01479d9f6658e2f492f489b63017f73ed",
+  "sourceSha256": {
+    "mobile": {
+      "apps/collaboration-proof/build.gradle.kts": "d0be302c27291d9d384b6717bcda3c2ffe8c9f321512dc4cb17821553742b125",
+      "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisProofApplicationAccess.kt": "00e4adf01d0ce94eb0999f458414d6041a30362c2b79c4416bcbf842fea76927",
+      "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisWorkerMatrixProbe.kt": "c58eb2a5bdd2c54d3a1d0f3b65fd6e00dae99c11d124cbee85bbffddaf504eea",
+      "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisWorkerProofContainer.kt": "731170b721b888ce26189e2adbbca5982e472fd73741bb36a1e57d9323ebda2a",
+      "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisWorkerProofFiles.kt": "ba83d9421cd7e69f02fb59628319b6c9d6ec8c3b6eecf10793e5a4656590106a",
+      "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/MatrixProofInstrumentation.kt": "e7105b96a6fab60ee36260612dc86c13f994c2234fcc3d4135a2779ad9e73707",
+      "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/ProtectedHrisProofOwner.kt": "6b8b68853be24f19342c75f659d412d330056c622306686dc609078c7dd07bc2"
+    },
+    "platform": {
+      "apps/server/src/test/kotlin/dev/fajar/hris/NativeCollaborationWorkerInteropTest.kt": "bf854f57801b97b10a8c54a6ad4b40300fbda2628a5f4607ea1cc61c465c9f57",
+      "apps/server/src/test/kotlin/dev/fajar/hris/NativeSdkGatewayTrace.kt": "6f4606f62f114edb6e6551d2b4a7478bb8b18db4bf35664728d9a92f816393dd",
+      "tool/collaboration_worker_native.py": "f460a7abf826df7411db3b14bc3125ca3d8cbf79832f8620fac38a19662bd48d",
+      "tool/test_collaboration_worker_native.py": "b0c6a37b1f33b940e9ce1d9690d3904ecea19dcf108a3e7b6b7b14d40269198a"
+    },
+    "apkSha256": "924cdd452304635263a410ae2396ae9edbba14a8eda6cef1003555585ad1ceee"
+  },
+  "validation": {
+    "initialContainerCompile": {
+      "log": ".work/native-worker-container.log",
+      "sha256": "2d9737adb53fbf0f87c12c844c67d96338be350a88bc9f33e400acc059988e54",
+      "passed": false,
+      "seconds": 46
+    },
+    "scenarioCompile": {
+      "log": ".work/native-worker-scenario.log",
+      "sha256": "dc4f0339a1da9ea0757479cbd0644be6e46a522025439ffa59a0bd42660c955b",
+      "passed": false,
+      "seconds": 36
+    },
+    "protocolManifest": {
+      "log": ".work/native-worker-protocol.log",
+      "sha256": "764bad50fdf04fa9b14d74b731e46a13ab2fa2a203a0f66805ac223f7afff80f",
+      "passed": false,
+      "seconds": 43
+    },
+    "proofBuildAndQuality": {
+      "log": ".work/native-worker-manifest.log",
+      "sha256": "6b7c973411527e2d997689792bb3f498b8c69f14b37fd0c4f9d0e04139c694ee",
+      "passed": true,
+      "seconds": 61
+    },
+    "serverCompileAndQuality": {
+      "log": ".work/native-worker-server-compile.log",
+      "sha256": "7c64851f870f825980584b00f7d3c5ef73becce48dce5c8bdd897dbf8956c3dd",
+      "passed": true,
+      "seconds": 30
+    },
+    "firstWorkerLive": {
+      "log": ".work/native-worker-live-1.log",
+      "sha256": "100031dbe9f4b39e074cb9a92b4e7ce3f6306009111766c2a70867c6cbd71094",
+      "passed": false,
+      "seconds": 53
+    },
+    "workerLive": {
+      "log": ".work/native-worker-live-2.log",
+      "sha256": "caa7d59a0b4419b504559158aa0ad5915ddbdac125708c78db2156df07157b19",
+      "passed": true,
+      "seconds": 70
+    },
+    "priorNativeRegression": {
+      "log": ".work/native-worker-regression.log",
+      "sha256": "a82b6968c205459b6fa58fa53f9af509d709c207c27b2974edf38df74689c97e",
+      "passed": true,
+      "seconds": 78
+    },
+    "firstRootAndRelease": {
+      "log": ".work/release-phone-2026-11-01/build-first.log",
+      "sha256": "63ce00744462763ea347fe9d850a53b09f09926ca93487a28a24a8c437ad030f",
+      "passed": false,
+      "seconds": 524,
+      "rootChecksPassed": true
+    },
+    "releaseRetry": {
+      "log": ".work/release-phone-2026-11-01/build.log",
+      "sha256": "0e6c98bc2f3ae12a8286df6c7581c74505db019e86c5563df9275699fe5cdb61",
+      "passed": true,
+      "seconds": 62
+    }
+  },
+  "driverTests": {
+    "cases": 51,
+    "passed": true,
+    "logSha256": "74236b83a176ba1338199dba5aba7cb58d48eadb41e9bb71ed99a4afbf56c35f"
+  },
+  "worker": {
+    "passed": true,
+    "cleanup": true,
+    "processes": 2,
+    "forcedProcessDeaths": 1,
+    "encryptedSends": 1,
+    "applicationAdmissions": {
+      "device": 8,
+      "conversation": 7,
+      "room": 8,
+      "failures": 0
+    },
+    "proof": {
+      "processId": 3974,
+      "messageId": "118d200c-1d97-4dff-b16a-15b5445ed491",
+      "bodySha256": "da602a43ca4767b9c02cbb2dcbeb29f54c0d53d4d33043abbdc8eae64a07b78e",
+      "state": "COMPLETED",
+      "taskKey": "hris.collaboration-delivery",
+      "encryptedReceived": true,
+      "senderRuntimeRestoredByWorker": true,
+      "originalHistoryAcquired": true,
+      "completionRetired": true,
+      "repeatedWorkerComplete": true,
+      "eventId": "$k-3XlYOe1MkQa1Fr0AwYlf0h1Afh-RCGPBYMiuuncmg",
+      "passes": 1
+    },
+    "artifact": {
+      "apkSha256": "924cdd452304635263a410ae2396ae9edbba14a8eda6cef1003555585ad1ceee",
+      "package": "dev.fajar.hris.collaboration.proof",
+      "avd": "hris-mobile-dev",
+      "androidApi": "35"
+    },
+    "platformWorkManagerAccepted": false
+  },
+  "workerEvidenceSha256": {
+    "acceptance.json": "be3059c44a87ce023c6526ea060e5d430fae7a1476656956c7db1ce6975bc40f",
+    "result.json": "4111c834e04f389889d76b9a80354be81dd6073ffbaab4a322a224acf4b2fbda",
+    "gateway-trace.json": "2532b8f7e9c1cf4f543870b3982238cf43912b20c855d34c87d2cd53faf2ec4f",
+    "native-worker-queued.json": "e19636619a21e78907de56345795c1d9f22e3f6ed47747364d8a6fc85735b81f",
+    "native-worker-restored.json": "238654eb5519d9e937112e3c78017ecfcea03d615d0f1cf70c6164171741afd2"
+  },
+  "nativeRegression": {
+    "verification": {
+      "passed": true,
+      "encryptedBothDirections": true,
+      "logicalIdsPreserved": true,
+      "cleanup": true,
+      "protectedStoreReopened": true,
+      "missingRecordPreserved": true,
+      "wrongPassphrasePreserved": true,
+      "exclusiveOwner": true,
+      "processRestarted": true,
+      "queueRestored": true,
+      "transactionReused": true,
+      "identityAfterRestart": true,
+      "messageIntentRestored": true,
+      "queueMappingRecovered": true,
+      "queueWriterExclusive": true,
+      "perRoomDeliveryIsolated": true,
+      "heldQueueRestored": true,
+      "nativeDeliveryOwned": true,
+      "commonSenderOwned": true,
+      "receiptJournalRecovered": true,
+      "projectionInterrupted": true,
+      "originalHistoryWindowOwned": true,
+      "historyBodiesRestored": true,
+      "commonHistoryAcquisitionOwned": true,
+      "latestHistoryHeadOwned": true,
+      "admittedHistoryHeads": true,
+      "providerHistoryPageOwned": true,
+      "commonProviderHistoryAcquisitionOwned": true,
+      "providerHistoryReferencesRestored": true,
+      "providerHistoryReferencesReconciled": true,
+      "providerHistoryRestartPreserved": true,
+      "historyRuntimeReopened": true,
+      "ackBeforeJournalRecovered": true,
+      "processRestartedAfterAck": true,
+      "completionCleanupRecovered": true,
+      "processRestartedAfterCompletion": true,
+      "encryptedSendCount": 3,
+      "admittedProviderPages": true,
+      "historyWindow": {
+        "originals": 2,
+        "unavailable": 9,
+        "extractionNanos": 9090340,
+        "modelCharacters": 4732,
+        "originalCharacters": 953
+      },
+      "applicationAdmittedBeforeSend": true,
+      "applicationAdmittedAroundHistory": true,
+      "applicationAdmissions": {
+        "device": 22,
+        "conversation": 22,
+        "room": 22,
+        "failures": 0
+      },
+      "heldRoomNeverSent": true,
+      "pausedAcrossRestart": true,
+      "syncInterruptedAfterRestart": true,
+      "syncRetriedWithRetainedCursor": true,
+      "artifact": {
+        "apkSha256": "924cdd452304635263a410ae2396ae9edbba14a8eda6cef1003555585ad1ceee",
+        "package": "dev.fajar.hris.collaboration.proof",
+        "avd": "hris-mobile-dev",
+        "androidApi": "35"
+      }
+    },
+    "processes": 4,
+    "forcedProcessDeaths": 3,
+    "evidenceSha256": {
+      "result.json": "c3c1d35d88a19e6c4a789b2df14cda09d6c5bfe56ed85bb584ac3af3030c1512",
+      "verified.json": "00ab1873177eb6d4bf433266a125d9b2486adb263cc1595d3f8d2222521e5565",
+      "gateway-trace.json": "3f7f0c8b74c005a31fad954776267caac83019a16da521f759d72e0b21e4a236"
+    }
+  },
+  "desktopReports": {
+    "suites": 426,
+    "tests": 2710,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "notes": [
+    "Initial compile corrected the accountStorageKey import and a cross-module nullable smart cast. The transitive AppAuth manifest required a unique proof redirect scheme. All were fixed before successful proof build/quality checks.",
+    "The first live worker run completed real encrypted delivery/retirement, but an application-trace assertion failed because the legitimate conversation-summary GET was unrecognized. A separate strict summary-read counter fixed the fixture without counting that request as direct admission.",
+    "Actual WorkManager scheduling, OS startup, constraints, retry and cancellation remain separate acceptance. The direct worker proof does not demonstrate automatic execution after force-stop.",
+    "All root checks completed successfully (2710 desktop cases), but the first combined invocation failed while packaging the separately requested release APK. The release-only retry is recorded separately. Phone installation is separate; neither native driver targets the phone."
+  ],
+  "platformWorkManagerAccepted": false,
+  "productAcceptance": false,
+  "capacityAcceptance": false,
+  "liveProviderChanged": false,
+  "starterChanged": false,
+  "emulatorStopped": true
+}

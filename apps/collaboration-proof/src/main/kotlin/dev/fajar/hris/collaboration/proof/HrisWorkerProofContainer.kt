@@ -1,0 +1,163 @@
+package dev.fajar.hris.collaboration.proof
+
+import android.content.Context
+import dev.fajar.starter.app.bootstrap.ApplicationCollaborationLifetime
+import dev.fajar.starter.app.di.createAppContainer
+import dev.fajar.starter.app.work.CollaborationDeliveryWorker
+import dev.fajar.starter.collaboration.domain.entities.*
+import dev.fajar.starter.collaboration.domain.policies.localListAccess
+import dev.fajar.starter.collaboration.domain.repositories.*
+import dev.fajar.starter.collaboration.domain.usecases.*
+import dev.fajar.starter.common.config.*
+import dev.fajar.starter.common.result.*
+import dev.fajar.starter.database.*
+import dev.fajar.starter.datastore.createUserPreferences
+import dev.fajar.starter.identity.domain.entities.IdentityServer
+import dev.fajar.starter.identity.domain.policies.accountStorageKey
+import dev.fajar.starter.identity.domain.repositories.SessionRepository
+import dev.fajar.starter.network.HttpClients
+import dev.fajar.starter.securestorage.AndroidCredentialStore
+import dev.fajar.starter.sync.data.datasources.WorkScheduler
+import dev.fajar.starter.sync.domain.SyncTask
+import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
+import io.ktor.client.HttpClient
+import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.withContext
+import org.koin.core.qualifier.named
+import org.koin.dsl.module
+
+/** Actual app bindings/storage/worker, seeded fictional login, actual control-plane and SDK I/O. */
+internal class HrisWorkerProofContainer(
+    context: Context,
+    owner: CollaborationOwner,
+    private val conversationId: String,
+    hrisAccessToken: String,
+    private val runtime: CollaborationRuntimeRepository,
+    nativeHttp: HttpClient,
+) {
+    private val application = HrisProofApplicationAccess(owner, hrisAccessToken)
+    private val database = createAppDatabase(context)
+    private val access = owner.localListAccess()
+    private val requests = mutableListOf<String>()
+    val scheduledKeys: List<String>
+        get() = synchronized(requests) { requests.toList() }
+
+    private val container =
+        createAppContainer(
+                createUserPreferences(context),
+                database,
+                module {},
+                platform = AppPlatform.Android,
+                commandCredentials =
+                    AndroidCredentialStore(context, "worker-proof-command-content-key"),
+                collaborationListCredentials =
+                    AndroidCredentialStore(context, "worker-proof-list-content-key"),
+                collaborationReceiptCredentials =
+                    AndroidCredentialStore(context, "worker-proof-receipt-content-key"),
+                collaborationHistoryCredentials =
+                    AndroidCredentialStore(context, "worker-proof-history-content-key"),
+                workScheduler =
+                    object : WorkScheduler {
+                        override suspend fun enqueue(key: String) {
+                            check(key == QueueCollaborationText.DELIVERY_KEY)
+                            synchronized(requests) { requests += key }
+                        }
+                    },
+                http =
+                    module {
+                        single<HttpClient>(named(HttpClients.Authenticated)) { application.client }
+                        single<HttpClient>(named(HttpClients.Public)) { nativeHttp }
+                    },
+                collaborationRuntime = { _, _ -> runtime },
+            )
+            .also {
+                // Replace seeded platform inputs before any feature/worker binding is resolved.
+                it.koin.loadModules(
+                    listOf(
+                        module {
+                            single<SessionRepository> { application.sessions }
+                            single<WorkspaceRepository> { application.workspaces }
+                            single<IdentityServer> { application.server }
+                            single<AppBuild> { application.build }
+                        }
+                    )
+                )
+            }
+
+    suspend fun activate() {
+        database.accounts.activate(
+            access.sessionId,
+            accountStorageKey(access.audience, access.accountId),
+        )
+    }
+
+    suspend fun cacheConversation() {
+        expect(
+            container.koin
+                .get<RefreshCollaborationList>()
+                .conversation(application.workspaceId, conversationId)
+        )
+    }
+
+    suspend fun queue(id: String, body: String): CollaborationMessageRecord =
+        expect(
+            container.koin.get<QueueCollaborationText>()(
+                application.workspaceId,
+                conversationId,
+                id,
+                body,
+            )
+        )
+
+    suspend fun pending(): List<CollaborationMessageRecord> =
+        expect(
+            container.koin.get<ObserveCollaborationMessages>()(
+                    application.workspaceId,
+                    conversationId,
+                )
+                .first()
+        )
+
+    suspend fun history(): CollaborationHistoryPage =
+        expect(
+            container.koin.get<ObserveCollaborationHistory>()(
+                    application.workspaceId,
+                    conversationId,
+                )
+                .first()
+        )
+
+    suspend fun completion(id: String): CollaborationMessageCompletion? =
+        expect(
+            container.koin
+                .get<CollaborationMessageCompletionRepository>()
+                .readCompletion(access, id)
+        )
+
+    suspend fun runWorker() =
+        container.koin.get<CollaborationDeliveryWorker>().let { worker ->
+            check(container.koin.getAll<SyncTask>().single { it.key == worker.key } === worker)
+            worker()
+        }
+
+    suspend fun close() =
+        withContext(NonCancellable) {
+            try {
+                container.koin.get<ApplicationCollaborationLifetime>().closeAndJoin()
+                expect(runtime.closeOtherOwners(null))
+            } finally {
+                try {
+                    container.close()
+                } finally {
+                    application.close()
+                }
+            }
+        }
+
+    private fun <T> expect(result: AppResult<T>): T =
+        when (result) {
+            is AppResult.Success -> result.value
+            is AppResult.Failed -> throw HrisProofFailure(result.failure)
+        }
+}

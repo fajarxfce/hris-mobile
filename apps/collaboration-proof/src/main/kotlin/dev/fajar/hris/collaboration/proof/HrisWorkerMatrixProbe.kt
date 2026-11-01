@@ -1,0 +1,186 @@
+package dev.fajar.hris.collaboration.proof
+
+import android.content.Context
+import android.os.Process
+import dev.fajar.starter.collaboration.data.repositories.AndroidCollaborationRuntimeLease
+import dev.fajar.starter.collaboration.domain.entities.CollaborationMessageState
+import dev.fajar.starter.collaboration.domain.repositories.CollaborationTimelineLease
+import dev.fajar.starter.collaboration.domain.usecases.QueueCollaborationText
+import dev.fajar.starter.common.result.*
+import dev.fajar.starter.network.*
+import dev.fajar.starter.sync.domain.SyncResult
+import java.io.File
+import kotlinx.coroutines.*
+import org.matrix.rustcomponents.sdk.Room
+
+/** Actual app worker/SDK across process death. Platform scheduling is a separate proof. */
+internal class HrisWorkerMatrixProbe(private val context: Context, directory: File) {
+    private val files = HrisWorkerProofFiles(directory)
+    private val http =
+        createHttpClient(
+            createPlatformHttpEngine(),
+            HttpClientSettings(files.home.toString(), allowCleartext = true),
+        )
+    private val sender =
+        ProtectedHrisProofOwner(context, files.fixture.getJSONObject("sender"), files.home, http)
+    private val recipient =
+        ProtectedHrisProofOwner(context, files.fixture.getJSONObject("recipient"), files.home, http)
+
+    suspend fun stage(): Unit =
+        withContext(Dispatchers.IO) {
+            check(!files.exists("worker-queued") && !files.exists("worker-send"))
+            var senderLease: AndroidCollaborationRuntimeLease? = null
+            var recipientLease: AndroidCollaborationRuntimeLease? = null
+            var application: HrisWorkerProofContainer? = null
+            try {
+                senderLease = sender.installAndReopen()
+                recipientLease = recipient.installAndReopen()
+                val app = openApplication().also { application = it }
+                app.activate()
+                app.cacheConversation()
+                check(app.pending().isEmpty())
+                val queued = app.queue(files.logicalId, files.body)
+                check(queued.state == CollaborationMessageState.Queued)
+                check(queued.intent.id == files.logicalId && queued.intent.text == files.body)
+                check(app.pending() == listOf(queued))
+                check(app.scheduledKeys == listOf(QueueCollaborationText.DELIVERY_KEY))
+                files.write("worker-queued", files.checkpoint())
+                // Driver confirms this PID and kills the process. No graceful substitute for death.
+                awaitCancellation()
+            } finally {
+                closeAll(
+                    listOf(
+                        { application?.close() },
+                        { senderLease?.closeProofRuntime() },
+                        { recipientLease?.closeProofRuntime() },
+                        { http.cancelAndClose() },
+                    )
+                )
+            }
+        }
+
+    suspend fun resume(): Unit =
+        withContext(Dispatchers.IO) {
+            val queued = files.read("worker-queued", 2048)
+            check(queued.getInt("processId") != Process.myPid())
+            check(
+                queued.getString("messageId") == files.logicalId &&
+                    queued.getString("bodySha256") == files.bodyHash
+            )
+            check(queued.getString("state") == "QUEUED")
+            check(!files.exists("worker-send") && !files.exists("worker-result"))
+            var application: HrisWorkerProofContainer? = null
+            var peer: AndroidCollaborationRuntimeLease? = null
+            var timeline: CollaborationTimelineLease? = null
+            var room: Room? = null
+            var received: HrisProofMessages? = null
+            try {
+                val app = openApplication().also { application = it }
+                app.activate()
+                val restored = app.pending().single()
+                check(restored.intent.id == files.logicalId && restored.intent.text == files.body)
+                check(restored.state == CollaborationMessageState.Queued)
+                check(app.scheduledKeys.isEmpty())
+                check(
+                    !expect(
+                        sender.repository.isOpen(sender.currentOwner, sender.registeredDeviceId)
+                    )
+                )
+                peer = recipient.restoreStored()
+                expect(peer.startSync())
+                timeline = recipient.enterTimeline(files.roomId)
+                room = requireNotNull(peer.nativeClient.getRoom(files.roomId))
+                received = HrisProofMessages(room, files.body, files.logicalId)
+                files.write("worker-restored", files.checkpoint().put("senderRuntimeOpen", false))
+                withTimeout(30_000) {
+                    while (!files.exists("worker-send")) delay(100)
+                    check(files.read("worker-send", 128).get("ready") == true)
+                }
+                val passes = deliver(app)
+                val eventId = received.eventId()
+                check(
+                    expect(sender.repository.isOpen(sender.currentOwner, sender.registeredDeviceId))
+                )
+                val original = app.history().messages.single { it.logicalId == files.logicalId }
+                check(
+                    original.text == files.body &&
+                        !original.redacted &&
+                        eventId in original.eventIds
+                )
+                val completed = requireNotNull(app.completion(files.logicalId))
+                check(completed.record.intent == restored.intent && eventId in completed.eventIds)
+                check(app.pending().isEmpty())
+                check(app.runWorker() == SyncResult.Complete)
+                files.write(
+                    "worker-result",
+                    files
+                        .checkpoint()
+                        .put("state", "COMPLETED")
+                        .put("eventId", eventId)
+                        .put("passes", passes)
+                        .put("encryptedReceived", true)
+                        .put("senderRuntimeRestoredByWorker", true)
+                        .put("originalHistoryAcquired", true)
+                        .put("completionRetired", true)
+                        .put("repeatedWorkerComplete", true),
+                )
+            } finally {
+                closeAll(
+                    listOf(
+                        { received?.close() },
+                        { room?.close() },
+                        { timeline?.close()?.let { expect(it) } },
+                        { application?.close() },
+                        { peer?.closeProofRuntime() },
+                        { http.cancelAndClose() },
+                    )
+                )
+            }
+        }
+
+    private fun openApplication() =
+        HrisWorkerProofContainer(
+            context,
+            sender.currentOwner,
+            files.conversationId,
+            files.fixture.getJSONObject("sender").getString("hrisAccessToken"),
+            sender.repository,
+            http,
+        )
+
+    private suspend fun deliver(app: HrisWorkerProofContainer): Int {
+        repeat(4) { attempt ->
+            when (val result = app.runWorker()) {
+                SyncResult.Complete -> return attempt + 1
+                is SyncResult.Blocked -> throw HrisProofFailure(result.failure)
+                is SyncResult.Retry -> {
+                    check(attempt < 3) { "Bounded worker proof attempts exhausted" }
+                    val failure = result.failure
+                    val wait =
+                        if (failure == null) 100L
+                        else maxOf(30_000L, (failure.retryAfterSeconds ?: 0) * 1_000)
+                    check(wait <= 60_000)
+                    delay(wait)
+                }
+            }
+        }
+        error("Worker did not complete")
+    }
+
+    private suspend fun closeAll(operations: List<suspend () -> Unit>) =
+        withContext(NonCancellable) {
+            var first: Exception? = null
+            for (operation in operations) try {
+                operation()
+            } catch (failure: Exception) {
+                if (first == null) first = failure else first.addSuppressed(failure)
+            }
+            first?.let { throw it }
+        }
+
+    private fun <T> expect(result: AppResult<T>): T =
+        when (result) {
+            is AppResult.Success -> result.value
+            is AppResult.Failed -> throw HrisProofFailure(result.failure)
+        }
+}

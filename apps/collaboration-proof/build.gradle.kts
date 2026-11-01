@@ -6,6 +6,7 @@ android {
         applicationId = "dev.fajar.hris.collaboration.proof"
         versionCode = 1
         versionName = "0.1.0-proof"
+        manifestPlaceholders["appAuthRedirectScheme"] = "hris-collaboration-proof-auth"
     }
 }
 
@@ -16,6 +17,7 @@ dependencies {
     compileOnly(libs.compose.runtime)
     implementation(libs.matrix.sdk.android)
     implementation(libs.coroutines.core)
+    implementation(projects.apps.shared)
     implementation(projects.features.collaboration.data)
     implementation(projects.core.identity.domain)
     implementation(projects.core.securestorage)

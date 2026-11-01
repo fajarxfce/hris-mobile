@@ -44,6 +44,12 @@ internal class ProtectedHrisProofOwner(
             http,
         )
 
+    val currentOwner: CollaborationOwner
+        get() = owner
+
+    val registeredDeviceId: String
+        get() = deviceId
+
     val repository: CollaborationRuntimeRepository
         get() = runtime
 

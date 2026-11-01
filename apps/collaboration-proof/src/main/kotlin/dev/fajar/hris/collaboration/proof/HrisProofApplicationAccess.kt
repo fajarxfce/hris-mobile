@@ -117,7 +117,7 @@ internal class HrisProofApplicationAccess(
                 companyId: String,
             ): AppResult<CompanyPolicy> = error("Use actual collaboration API admission")
         }
-    private val client =
+    val client =
         createHttpClient(OkHttp.create(), HttpClientSettings(apiOrigin, allowCleartext = true)) {
             defaultRequest {
                 header("X-HRIS-Client-Platform", "ANDROID")

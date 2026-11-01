@@ -28,9 +28,13 @@ class MatrixProofInstrumentation : Instrumentation() {
                     android.os.Build.MODEL.contains("sdk")
             )
             runBlocking {
-                withTimeout(120_000) {
+                withTimeout(if (scenario.startsWith("hris-worker-")) 210_000 else 120_000) {
                     when (scenario) {
                         "provider" -> NativeMatrixProbe(directory).run()
+                        "hris-worker-stage" ->
+                            HrisWorkerMatrixProbe(targetContext, directory).stage()
+                        "hris-worker-resume" ->
+                            HrisWorkerMatrixProbe(targetContext, directory).resume()
                         "hris-stage" ->
                             HrisNativeMatrixProbe(targetContext, directory).run(resuming = false)
                         "hris-resume" ->

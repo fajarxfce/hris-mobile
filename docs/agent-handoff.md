@@ -1,5 +1,43 @@
 # Agent continuation — HRIS Mobile
 
+## Actual native application worker validated — 1 November 2026
+
+The separate proof app now resolves the real application worker and registered SyncTask
+through `apps.shared`, using real encrypted Android stores, protected SDK records and
+HRIS/Synapse HTTP. Queued exact text/UUID survives a confirmed process death. The second
+process proves its sender remains closed until the worker restores it; the peer decrypts
+the same content, original history is acquired, completion retired and another worker
+pass sends nothing. The gateway confirms exactly one encrypted send and live admission.
+
+[Contract](collaboration-native-worker.md) and [measurement](measurements/chat-native-worker-2026-11-01.json)
+record seven Mobile/four Platform source hashes, all failed/corrected attempts and both
+actual SDK runs. The new worker test passes in 70s (two processes/one death/one send).
+The prior sender regression passes in 78s (four processes/three deaths/three sends,
+held room never sent, 22/22/22 admissions, zero failures). Both use proof APK `924cdd45`.
+All 51 Python driver cases pass. All root checks completed: 2,710 desktop cases across
+426 suites, zero failures/errors/skips. The first combined invocation then failed in
+release APK packaging; an unchanged-code release-only retry passed in 62s. Release lint
+has zero errors and one existing warning. That packaging failure's underlying cause was
+not present in its log; do not relabel it a diagnosed cache issue. Emulator is stopped.
+
+**Continue actual WorkManager lifecycle evidence now, then all P0–P8.** This scenario
+invokes the worker directly; it does not accept platform scheduling or automatic restart
+after force-stop. `.work/workmanager-native-next.md` and `.work/scheduled-proof-draft/*.txt`
+are unimplemented design/drafts for a normal proof Activity, actual Android scheduler,
+offline constraints, ordinary PID death and OS job startup. Do not count those as tests.
+After the Platform fixture commit is pushed, apply `.work/collaboration-hris-worker-ci.txt`
+with that pinned SHA and audit its hosted run; the existing workflow runs only the old
+scenario. Remote history, drafts/cancel, push/reply, media/actions, key continuity/backups,
+Apple/web, calls and meetings remain. No complete PRD group is accepted; Starter unchanged.
+
+User additionally requested progress builds installed while the long run continues.
+WireGuard phone `10.77.77.3:5555` is currently unreachable; an async reconnect question is
+pending. Release build 5 is prepared/verified locally; installation has not started and
+the last confirmed phone version remains 4. Use the preserved signing certificate and
+install-only after explicit serial/signature/version preflight. Never drive the phone UI.
+Keep implementing independently and push each validated atomic commit.
+
+
 ## Latest-head history recovery validated — 1 November 2026
 
 `ReopenCollaborationHistory` now accepts an optional event anchor. Without one, it reads
