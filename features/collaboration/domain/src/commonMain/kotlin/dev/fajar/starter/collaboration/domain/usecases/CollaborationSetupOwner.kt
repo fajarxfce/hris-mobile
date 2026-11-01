@@ -2,6 +2,7 @@ package dev.fajar.starter.collaboration.domain.usecases
 
 import dev.fajar.starter.collaboration.domain.entities.CollaborationOwner
 import dev.fajar.starter.collaboration.domain.policies.collaborationRequestOwner
+import dev.fajar.starter.collaboration.domain.policies.retainCollaborationCommandFailure
 import dev.fajar.starter.common.config.AppBuild
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.identity.domain.entities.IdentityServer
@@ -45,10 +46,21 @@ internal suspend fun SessionRepository.captureCollaborationOwner(
 internal fun requireCollaborationOwner(
     current: AppResult<CollaborationOwner>,
     expected: CollaborationOwner,
-): AppResult<Unit> =
-    when (current) {
-        is AppResult.Failed -> current
-        is AppResult.Success ->
-            if (current.value == expected) AppResult.Success(Unit)
-            else workspaceFailure("client.session_changed", FailureKind.Unauthorized)
-    }
+    received: AppResult<*>?,
+): AppResult<Unit> {
+    val admitted =
+        when (current) {
+            is AppResult.Failed -> current
+            is AppResult.Success ->
+                if (current.value == expected) AppResult.Success(Unit)
+                else workspaceFailure("client.session_changed", FailureKind.Unauthorized)
+        }
+    return if (admitted is AppResult.Failed)
+        AppResult.Failed(
+            retainCollaborationCommandFailure(
+                (received as? AppResult.Failed)?.failure,
+                admitted.failure,
+            )
+        )
+    else admitted
+}

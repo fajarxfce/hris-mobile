@@ -34,7 +34,7 @@ class PrepareCollaborationSetup(
                 is AppResult.Success -> captured.value
             }
         val stored = commands.current(owner)
-        val admitted = continuation(workspaceId, owner)
+        val admitted = continuation(workspaceId, owner, stored)
         if (admitted is AppResult.Failed) return admitted
         val existing =
             when (stored) {
@@ -43,7 +43,7 @@ class PrepareCollaborationSetup(
             }
         if (existing != null) return retained(existing, action, owner)
         val device = setup.read(owner)
-        val refreshed = continuation(workspaceId, owner)
+        val refreshed = continuation(workspaceId, owner, device)
         if (refreshed is AppResult.Failed) return refreshed
         if (device is AppResult.Failed) return device
         val platform =
@@ -68,7 +68,7 @@ class PrepareCollaborationSetup(
             )
         currentCoroutineContext().ensureActive()
         val inserted = commands.insert(owner, command)
-        val insertedOwner = continuation(workspaceId, owner)
+        val insertedOwner = continuation(workspaceId, owner, inserted)
         if (insertedOwner is AppResult.Failed) return insertedOwner
         when (inserted) {
             is AppResult.Failed -> return inserted
@@ -89,7 +89,7 @@ class PrepareCollaborationSetup(
                 }
         }
         val saved = commands.current(owner)
-        val current = continuation(workspaceId, owner)
+        val current = continuation(workspaceId, owner, saved)
         if (current is AppResult.Failed) return current
         return when (saved) {
             is AppResult.Failed -> saved
@@ -119,8 +119,9 @@ class PrepareCollaborationSetup(
     private suspend fun continuation(
         workspaceId: String,
         owner: CollaborationOwner,
+        received: AppResult<*>?,
     ): AppResult<Unit> {
         currentCoroutineContext().ensureActive()
-        return requireCollaborationOwner(capture(workspaceId), owner)
+        return requireCollaborationOwner(capture(workspaceId), owner, received)
     }
 }

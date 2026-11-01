@@ -1,0 +1,66 @@
+{
+  "date": "2026-11-01",
+  "change": "Preserve authorization denial across control preparation, replay, reconciliation and owned runtime installation/restoration",
+  "baseMobileCommit": "d723e556ef75257a62c9c72f86bce7787b63d093",
+  "sourceSha256": {
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationCommandFailurePolicy.kt": "f079ee26239285fffc156c28dbc276e222ed32d6821417144986347e15ea85c8",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/CollaborationSetupOwner.kt": "c614dd48aca0064b0061ff6759dbc5ea055a97d9260c694c71b45f8d6fb68062",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/EnterCollaborationConversation.kt": "5e2b09f9eb5fbda1705f1ac18c6a10615d1e9b8f579be1643abbacae3ab0659b",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/InstallCollaborationRuntime.kt": "c82bfdb24fab6807781f288af730e7a6afa1531b1c081e2e775693570a634873",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/LoadCollaborationSetup.kt": "33fcdd449064c436fa60320693804173db74abd50eae436dd9bb4444c85b22c5",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/PrepareCollaborationConversation.kt": "0e683a57ee7dee51969eadc35eac5daf8c3ad8bc9192c908147f3bde5fdb93ff",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/PrepareCollaborationSetup.kt": "2209d174296728773bb787300fb28ca68c530d1d0c9570facb0037c837217166",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ReadCollaborationConversations.kt": "f5c84802881cecdf41bbb5e6149c50fb0ac871557546f673d2d9a5a259512dc4",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ReconcileCollaborationConversation.kt": "d795bdb277bb92e04e745e3dfdda7dcc610eac909b1da828541c6a4d5bb5d2bf",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ReconcileCollaborationSetupReceipt.kt": "288d148478e3f84b3d9bcc68f83dabd8860ff665806905a27cec5740e0613853",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ReplayCollaborationConversation.kt": "fc5d679cfda897dba981dd4c14c2a4474de5c8ea59d009053402173962a3f541",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ReplayCollaborationSetup.kt": "a5184508f4c635c54182cff44c42032ae10b8e8b1f5b4ac8bd28025850af26eb",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/RestoreCollaborationRuntime.kt": "b882b7fbe906695b869c85899f80977d6005785d9e2c8a991eb9e16f153f8ee4",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationConversationCommandTest.kt": "958e99f243da489f613753230f817ef9e6484eaf3c61ca9361888137cd536a51",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationRuntimeInstallationTest.kt": "7010a7784f112e59659ea3a0fbf6cbe1af8f1e8fa404d4cb9faaf961fda377fa",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationRuntimeRestorationTest.kt": "d808e86902d6fd47466f0365248f2f51a76eccc9cea476f80a388fa0e1377941",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationSetupCommandTest.kt": "116e02b028c3af0dec9e219f68986c1a115ae5cfe564b174767334cf590824a7"
+  },
+  "newCommonCases": 10,
+  "validation": {
+    "focusedSeconds": 45,
+    "rootCheckSeconds": 223,
+    "desktop": {
+      "tests": 2203,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "suites": 375
+    },
+    "domainDesktop": {
+      "tests": 96,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "suites": 8
+    },
+    "domainBrowser": {
+      "tests": 96,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "suites": 8
+    },
+    "wasmApplicationCompilation": true,
+    "androidDevAssembly": true,
+    "androidLintErrors": 0
+  },
+  "emulatorChanged": false,
+  "phoneChanged": false,
+  "liveChanged": false,
+  "productAcceptance": false,
+  "notes": [
+    "All post-request owner guards explicitly receive the preceding result; discovery and timeline entry reuse the same pure policy.",
+    "Preparation and receipt observation preserve received server denial through failed follow-up session reads without changing retained commands.",
+    "Replay retains previous denial if uncertainty persistence fails before another HTTP attempt, and retains received denial through response/outcome owner reads.",
+    "Install and restore retain received SDK denial and the owned credential failure even when local owner reading or resource cleanup fails. Partial and late owned resources still close.",
+    "Focused checks passed before strengthening both cleanup-failure scenarios and requiring explicit received-result arguments. Final root/browser checks cover those final changes.",
+    "Native transport is unchanged; no local SDK interoperability rerun was needed. Earlier successful proof is pinned to Mobile 4d90c6e0 and Platform 013f8092.",
+    "Owned peer labels, app entry, history/offline projections, logical reconciliation and all remaining P0\u2013P8 remain pending."
+  ]
+}

@@ -11,6 +11,45 @@ import kotlinx.coroutines.test.runTest
 
 class CollaborationRuntimeInstallationTest {
     @Test
+    fun deniedInstallationSurvivesTheFollowingFailedOwnerRead() = runTest {
+        for (kind in listOf(FailureKind.Unauthorized, FailureKind.AccessDenied)) {
+            val f = InstallationFixture()
+            val denied = AppResult.Failed(Failure(kind, "Fixture SDK denial"))
+            f.onInstall = {
+                f.setup.access.sessionFailure = f.setup.storageFailure.failure
+                denied
+            }
+            assertEquals(denied, f.install()())
+            assertEquals(f.record, f.setup.record)
+            assertEquals(0, f.removals)
+            assertEquals(0, f.lease.closes)
+        }
+    }
+
+    @Test
+    fun anOwnedRuntimeDenialWinsOverFailedAdmissionReadsAndStillClosesTheResource() = runTest {
+        for (late in listOf(false, true)) for (kind in
+            listOf(FailureKind.Unauthorized, FailureKind.AccessDenied)) {
+            val f = InstallationFixture()
+            val denied = Failure(kind, "Fixture credential denial")
+            f.lease.closeResult = f.setup.storageFailure
+            val revoke = {
+                f.lease.credentialFailures.value = denied
+                f.setup.access.sessionFailure = f.setup.storageFailure.failure
+            }
+            if (late) f.beforeRemove = { revoke() }
+            else
+                f.onInstall = {
+                    revoke()
+                    AppResult.Success(f.lease)
+                }
+            assertEquals(AppResult.Failed(denied), f.install()())
+            assertEquals(1, f.lease.closes)
+            assertEquals(if (late) 1 else 0, f.removals)
+        }
+    }
+
+    @Test
     fun confirmedFactsRetireOnlyAfterProtectedInstallationAndTransferThePausedOwner() = runTest {
         val f = InstallationFixture()
         f.beforeRemove = { assertTrue(f.installed) }

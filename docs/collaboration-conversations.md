@@ -86,3 +86,10 @@ received Unauthorized/AccessDenied when a following session read fails with a
 transport/storage error. A newer authorization denial still takes precedence;
 there is no refresh, provisioning or retry side effect. Existing cancellation
 and scope-replacement guards remain in place. See [verification](measurements/collaboration-read-denial-2026-11-01.json).
+
+The same explicit received-result guard now covers preparation, replay and receipt
+reconciliation. Retry also preserves retained denial when writing uncertainty
+fails before transport, and received denial across outcome-write/read failures.
+[Control verification](measurements/collaboration-control-denial-2026-11-01.json)
+also exercises install/restore credential denials with failed owner reads and
+failed lease cleanup. No automatic replay or metadata retirement is introduced.

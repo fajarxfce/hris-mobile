@@ -2,6 +2,16 @@
 
 ## Active collaboration implementation — 1 November 2026
 
+Control preparation, replay, receipt reconciliation and runtime install/restore
+now preserve denial through failed post-request owner reads. Explicit guards take
+the preceding result. A failed uncertainty write cannot erase the retained denial
+or start another HTTP attempt. Owned credential denial also survives failed local
+admission and failed resource cleanup; partial/late leases still close.
+[Verification](measurements/collaboration-control-denial-2026-11-01.json): ten new
+common cases; preliminary focused checks 45s, final root/browser/Android/Wasm/lint
+223s, 2,203 desktop cases, 96 domain browser, zero lint errors. No native transport
+change or local SDK rerun; earlier SDK proof remains tied to `4d90c6e0`/`013f8092`.
+
 Setup and all four conversation discovery reads now retain received server
 authorization denials if the following session read fails. A newer authorization
 denial still wins. [Evidence](measurements/collaboration-read-denial-2026-11-01.json)
@@ -46,15 +56,13 @@ exposed the SDK's post-join metadata confirmation. Both failures are retained;
 three new domain, three database and two HTTP cases verify the correction,
 including malformed requests, identity isolation and permission loss.
 
-**Continue P0–P8; none of the 54 groups is accepted.** The setup/discovery
-read correction above is complete. Next apply the same preservation through
-preparation, replay, receipt reconciliation and runtime install/restore; their
-post-request owner checks still return a later storage failure directly. Then
-connect product entry, bounded history windows, scoped offline projections,
-bootstrap/cross-family recovery and durable logical-ID reconciliation to chat UI.
-Add a bounded owned peer-label projection before the conversation list; do not
-scan 5,000 participants or issue per-row remote calls. These HRIS adapters do not
-require a Starter port.
+**Continue P0–P8; none of the 54 groups is accepted.** Admission read/control
+corrections above are verified. The next implementation is a bounded owned DM
+summary with counterpart labels, acquired in one database statement rather than
+per-row calls; Platform work is in progress, not yet verified. Then connect app
+entry and its shared runtime, product history windows, scoped offline projections,
+bootstrap/cross-family recovery, logical-ID reconciliation and chat UI. These
+HRIS adapters do not require a Starter port.
 
 Predecessor `0ef8018c` control CI `41250076314` passes all 26 steps:
 158 desktop, 134 browser, 134 iOS simulator cases; 120 source hashes match the

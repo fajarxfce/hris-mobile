@@ -2,6 +2,7 @@ package dev.fajar.starter.collaboration.domain.usecases
 
 import dev.fajar.starter.collaboration.domain.entities.CollaborationOwner
 import dev.fajar.starter.collaboration.domain.policies.collaborationSetupFailure
+import dev.fajar.starter.collaboration.domain.policies.retainCollaborationCommandFailure
 import dev.fajar.starter.collaboration.domain.repositories.*
 import dev.fajar.starter.common.config.AppBuild
 import dev.fajar.starter.common.result.*
@@ -34,8 +35,14 @@ class RestoreCollaborationRuntime(
         try {
             val restored = runtimes.restore(owner, deviceId)
             if (restored is AppResult.Success) lease = restored.value
-            val admitted = continuation(workspaceId, owner)
-            if (admitted is AppResult.Failed) return admitted
+            val admitted = continuation(workspaceId, owner, restored)
+            if (admitted is AppResult.Failed)
+                return AppResult.Failed(
+                    retainCollaborationCommandFailure(
+                        lease?.credentialFailures?.value,
+                        admitted.failure,
+                    )
+                )
             if (restored is AppResult.Failed) return restored
             val runtime = lease ?: return AppResult.Success(null)
             if (runtime.owner != owner || runtime.deviceId != deviceId)
@@ -57,8 +64,9 @@ class RestoreCollaborationRuntime(
     private suspend fun continuation(
         workspaceId: String,
         owner: CollaborationOwner,
+        received: AppResult<*>?,
     ): AppResult<Unit> {
         currentCoroutineContext().ensureActive()
-        return requireCollaborationOwner(capture(workspaceId), owner)
+        return requireCollaborationOwner(capture(workspaceId), owner, received)
     }
 }

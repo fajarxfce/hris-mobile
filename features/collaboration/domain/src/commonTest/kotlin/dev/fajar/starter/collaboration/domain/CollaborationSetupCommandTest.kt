@@ -8,6 +8,76 @@ import kotlinx.coroutines.test.runTest
 
 class CollaborationSetupCommandTest {
     @Test
+    fun setupPreparationAndReceiptReadsRetainServerDenialAcrossFailedOwnerRead() = runTest {
+        for (reconcile in listOf(false, true)) for (kind in
+            listOf(FailureKind.Unauthorized, FailureKind.AccessDenied)) {
+            val f = CollaborationCommandFixture()
+            val denied = AppResult.Failed(Failure(kind, "Fixture denied", code = "fixture.denied"))
+            if (reconcile)
+                f.record =
+                    f.retain()
+                        .copy(
+                            outcome =
+                                CollaborationSetupOutcome.Registered(
+                                    CollaborationSetupReceipt("device", 0)
+                                )
+                        )
+            val retained = f.record
+            f.access.onRead = {
+                f.access.sessionFailure = f.storageFailure.failure
+                denied
+            }
+            val result =
+                if (reconcile) f.reconcile()("selection", "operation")
+                else f.prepare()("selection", CollaborationSetupAction.Register("Fictional phone"))
+            assertEquals(denied, result)
+            assertEquals(retained, f.record)
+            assertTrue(f.calls.isEmpty())
+        }
+    }
+
+    @Test
+    fun setupReplayRetainsDeniedResponseAcrossPostResponseAndPostPersistenceReadFailures() =
+        runTest {
+            for (stage in 0..2) for (kind in
+                listOf(FailureKind.Unauthorized, FailureKind.AccessDenied)) {
+                val f = CollaborationCommandFixture()
+                val record = f.retain()
+                val denied =
+                    AppResult.Failed(Failure(kind, "Fixture denied", code = "fixture.denied"))
+                f.response = {
+                    if (stage == 0) f.access.sessionFailure = f.storageFailure.failure
+                    denied
+                }
+                f.beforeUpdate = {
+                    if (stage > 0 && f.updateCalls == 2)
+                        f.access.sessionFailure = f.storageFailure.failure
+                }
+                if (stage == 2) f.failUpdate = 2
+                assertEquals(denied, f.replay()("selection", record.command.id))
+                assertEquals(1, f.calls.size)
+                assertNotNull(f.record)
+            }
+        }
+
+    @Test
+    fun aKnownSetupDenialSurvivesFailureToPersistTheNextAttempt() = runTest {
+        val f = CollaborationCommandFixture()
+        val record = f.retain()
+        val denied = AppResult.Failed(Failure(FailureKind.AccessDenied, "Fixture denied"))
+        f.response = { denied }
+        assertEquals(denied, f.replay()("selection", record.command.id))
+        f.failUpdate = f.updateCalls + 1
+        f.response = { AppResult.Failed(Failure(FailureKind.Network, "Fixture offline")) }
+        assertEquals(denied, f.replay()("selection", record.command.id))
+        assertEquals(1, f.calls.size)
+        assertEquals(
+            denied.failure,
+            assertIs<CollaborationSetupOutcome.Unconfirmed>(f.record!!.outcome).failure,
+        )
+    }
+
+    @Test
     fun setupDenialRemainsAuthoritativeAcrossUnsuccessfulRetries() = runTest {
         val f = CollaborationCommandFixture()
         val record = f.retain()

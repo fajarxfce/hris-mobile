@@ -49,7 +49,7 @@ class PrepareCollaborationConversation(
                 FailureKind.Validation,
             )
         val stored = commands.current(owner, action.resourceId())
-        val admitted = continuation(workspaceId, owner)
+        val admitted = continuation(workspaceId, owner, stored)
         if (admitted is AppResult.Failed) return admitted
         if (stored is AppResult.Failed) return stored
         (stored as AppResult.Success).value?.let {
@@ -57,7 +57,7 @@ class PrepareCollaborationConversation(
         }
         if (action is CollaborationConversationAction.RequestRoom) {
             val device = setup.read(owner)
-            val current = continuation(workspaceId, owner)
+            val current = continuation(workspaceId, owner, device)
             if (current is AppResult.Failed) return current
             if (device is AppResult.Failed) return device
             val value = (device as AppResult.Success).value
@@ -69,7 +69,7 @@ class PrepareCollaborationConversation(
             )
                 return collaborationSetupFailure("client.collaboration_setup_changed")
             val room = conversations.room(owner, action.conversationId)
-            val latest = continuation(workspaceId, owner)
+            val latest = continuation(workspaceId, owner, room)
             if (latest is AppResult.Failed) return latest
             if (room is AppResult.Failed) return room
             val status = (room as AppResult.Success).value
@@ -99,7 +99,7 @@ class PrepareCollaborationConversation(
             )
         currentCoroutineContext().ensureActive()
         val inserted = commands.insert(owner, command)
-        val current = continuation(workspaceId, owner)
+        val current = continuation(workspaceId, owner, inserted)
         if (current is AppResult.Failed) return current
         if (inserted is AppResult.Failed) return inserted
         when ((inserted as AppResult.Success).value) {
@@ -111,7 +111,7 @@ class PrepareCollaborationConversation(
                 return collaborationSetupFailure("client.session_changed", FailureKind.Unauthorized)
         }
         val saved = commands.current(owner, action.resourceId())
-        val latest = continuation(workspaceId, owner)
+        val latest = continuation(workspaceId, owner, saved)
         if (latest is AppResult.Failed) return latest
         if (saved is AppResult.Failed) return saved
         return (saved as AppResult.Success).value?.let { retained(it, action, owner) }
@@ -136,8 +136,9 @@ class PrepareCollaborationConversation(
     private suspend fun continuation(
         workspaceId: String,
         owner: CollaborationOwner,
+        received: AppResult<*>?,
     ): AppResult<Unit> {
         currentCoroutineContext().ensureActive()
-        return requireCollaborationOwner(capture(workspaceId), owner)
+        return requireCollaborationOwner(capture(workspaceId), owner, received)
     }
 }

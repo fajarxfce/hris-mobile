@@ -31,7 +31,7 @@ class ReconcileCollaborationSetupReceipt(
                 is AppResult.Success -> captured.value
             }
         val stored = commands.current(owner)
-        val admitted = continuation(workspaceId, owner)
+        val admitted = continuation(workspaceId, owner, stored)
         if (admitted is AppResult.Failed) return admitted
         val record =
             when (stored) {
@@ -47,13 +47,13 @@ class ReconcileCollaborationSetupReceipt(
         )
             return AppResult.Success(false)
         val device = setup.read(owner)
-        val current = continuation(workspaceId, owner)
+        val current = continuation(workspaceId, owner, device)
         if (current is AppResult.Failed) return current
         if (device is AppResult.Failed) return device
         if (!collaborationSetupReceiptObserved(record, (device as AppResult.Success).value))
             return AppResult.Success(false)
         val removed = commands.remove(owner, record)
-        val latest = continuation(workspaceId, owner)
+        val latest = continuation(workspaceId, owner, removed)
         return if (latest is AppResult.Failed) latest else removed
     }
 
@@ -63,8 +63,9 @@ class ReconcileCollaborationSetupReceipt(
     private suspend fun continuation(
         workspaceId: String,
         owner: CollaborationOwner,
+        received: AppResult<*>?,
     ): AppResult<Unit> {
         currentCoroutineContext().ensureActive()
-        return requireCollaborationOwner(capture(workspaceId), owner)
+        return requireCollaborationOwner(capture(workspaceId), owner, received)
     }
 }

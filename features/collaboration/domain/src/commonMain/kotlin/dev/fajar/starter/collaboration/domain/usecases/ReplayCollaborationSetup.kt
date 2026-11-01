@@ -39,7 +39,7 @@ class ReplayCollaborationSetup(
                     is AppResult.Success -> captured.value
                 }
             val stored = commands.current(owner)
-            val admitted = continuation(workspaceId, owner)
+            val admitted = continuation(workspaceId, owner, stored)
             if (admitted is AppResult.Failed) return@withLock admitted
             val record =
                 when (stored) {
@@ -82,8 +82,22 @@ class ReplayCollaborationSetup(
                 attempts = original.attempts + 1,
                 outcome = uncertain,
             )
-        val preparing = commands.update(owner, original, uncertain, sending.attempts)
-        val preparedOwner = continuation(workspaceId, owner)
+        val previousFailure = (original.outcome as? CollaborationSetupOutcome.Unconfirmed)?.failure
+        val preparing =
+            when (val saved = commands.update(owner, original, uncertain, sending.attempts)) {
+                is AppResult.Failed ->
+                    AppResult.Failed(
+                        retainCollaborationCommandFailure(previousFailure, saved.failure)
+                    )
+                is AppResult.Success -> saved
+            }
+        val preparedOwner =
+            continuation(
+                workspaceId,
+                owner,
+                if (preparing is AppResult.Failed) preparing
+                else previousFailure?.let { AppResult.Failed(it) },
+            )
         if (preparedOwner is AppResult.Failed) return preparedOwner
         when (val saved = preparing) {
             is AppResult.Failed -> return saved
@@ -91,7 +105,8 @@ class ReplayCollaborationSetup(
                 if (!saved.value)
                     return collaborationSetupFailure("client.collaboration_command_changed")
         }
-        val admitted = continuation(workspaceId, owner)
+        val admitted =
+            continuation(workspaceId, owner, previousFailure?.let { AppResult.Failed(it) })
         if (admitted is AppResult.Failed) return admitted
         val result =
             when (val delivered = send(owner, original.command)) {
@@ -104,7 +119,7 @@ class ReplayCollaborationSetup(
                     )
                 is AppResult.Success -> delivered
             }
-        val current = continuation(workspaceId, owner)
+        val current = continuation(workspaceId, owner, result)
         if (current is AppResult.Failed) return current
         val outcome =
             when (result) {
@@ -117,10 +132,19 @@ class ReplayCollaborationSetup(
         )
             return collaborationSetupFailure("client.session_changed", FailureKind.Unauthorized)
         val saved = commands.update(owner, sending, outcome, sending.attempts)
-        val latest = continuation(workspaceId, owner)
+        val completion =
+            if (saved is AppResult.Failed)
+                AppResult.Failed(
+                    retainCollaborationCommandFailure(
+                        (result as? AppResult.Failed)?.failure,
+                        saved.failure,
+                    )
+                )
+            else result
+        val latest = continuation(workspaceId, owner, completion)
         if (latest is AppResult.Failed) return latest
         // Confirmed access failures remain authoritative even when outcome persistence fails.
-        if (result is AppResult.Failed) return result
+        if (completion is AppResult.Failed) return completion
         return when (saved) {
             is AppResult.Failed -> saved
             is AppResult.Success ->
@@ -191,8 +215,9 @@ class ReplayCollaborationSetup(
     private suspend fun continuation(
         workspaceId: String,
         owner: CollaborationOwner,
+        received: AppResult<*>?,
     ): AppResult<Unit> {
         currentCoroutineContext().ensureActive()
-        return requireCollaborationOwner(capture(workspaceId), owner)
+        return requireCollaborationOwner(capture(workspaceId), owner, received)
     }
 }

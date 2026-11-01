@@ -126,15 +126,7 @@ class EnterCollaborationConversation(
         received: AppResult<*>,
     ): AppResult<Unit> {
         currentCoroutineContext().ensureActive()
-        val current = requireCollaborationOwner(capture(workspaceId), owner)
-        return if (current is AppResult.Failed)
-            AppResult.Failed(
-                retainCollaborationCommandFailure(
-                    (received as? AppResult.Failed)?.failure,
-                    current.failure,
-                )
-            )
-        else current
+        return requireCollaborationOwner(capture(workspaceId), owner, received)
     }
 
     private companion object {

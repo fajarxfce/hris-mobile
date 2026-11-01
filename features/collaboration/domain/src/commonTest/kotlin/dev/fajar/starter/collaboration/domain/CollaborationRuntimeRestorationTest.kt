@@ -11,6 +11,38 @@ import kotlinx.coroutines.test.runTest
 
 class CollaborationRuntimeRestorationTest {
     @Test
+    fun aReceivedRestoreDenialSurvivesTheFollowingLocalSessionReadFailure() = runTest {
+        for (kind in listOf(FailureKind.Unauthorized, FailureKind.AccessDenied)) {
+            val f = RestorationFixture()
+            val denied = AppResult.Failed(Failure(kind, "Fixture SDK denial"))
+            f.result = {
+                f.setup.access.sessionFailure = f.setup.storageFailure.failure
+                denied
+            }
+            assertEquals(denied, f.restore())
+            assertEquals(1, f.calls)
+            assertEquals(0, f.closes)
+        }
+    }
+
+    @Test
+    fun aRestoredCredentialDenialSurvivesFailedOwnerReadAndClosesItsLease() = runTest {
+        for (kind in listOf(FailureKind.Unauthorized, FailureKind.AccessDenied)) {
+            val f = RestorationFixture()
+            val denied = Failure(kind, "Fixture credential denial")
+            f.closeFailure = f.setup.storageFailure.failure
+            f.result = {
+                f.failures.value = denied
+                f.setup.access.sessionFailure = f.setup.storageFailure.failure
+                AppResult.Success(f.lease)
+            }
+            assertEquals(AppResult.Failed(denied), f.restore())
+            assertEquals(1, f.calls)
+            assertEquals(1, f.closes)
+        }
+    }
+
+    @Test
     fun restoresExistingIdentityWithoutTouchingRetainedSetupOrIssuingCredentials() = runTest {
         val f = RestorationFixture()
         val pending = f.setup.retain()
@@ -136,6 +168,7 @@ private class RestorationFixture {
     val setup = CollaborationCommandFixture()
     var calls = 0
     var closes = 0
+    var closeFailure: Failure? = null
     var leaseOwner = setup.owner
     var leaseDevice = "device"
     val failures = MutableStateFlow<Failure?>(null)
@@ -156,7 +189,7 @@ private class RestorationFixture {
             override suspend fun close(): AppResult<Unit> {
                 assertTrue(currentCoroutineContext().isActive)
                 closes++
-                return AppResult.Success(Unit)
+                return closeFailure?.let { AppResult.Failed(it) } ?: AppResult.Success(Unit)
             }
         }
     var result: suspend () -> AppResult<CollaborationRuntimeLease?> = { AppResult.Success(lease) }

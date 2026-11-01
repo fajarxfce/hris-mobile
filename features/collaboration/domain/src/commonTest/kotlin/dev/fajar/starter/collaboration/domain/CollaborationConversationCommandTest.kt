@@ -9,6 +9,91 @@ import kotlinx.coroutines.test.runTest
 
 class CollaborationConversationCommandTest {
     @Test
+    fun preparationAndReceiptReadsRetainDenialAfterTheFollowingOwnerReadFails() = runTest {
+        for (stage in 0..2) for (kind in
+            listOf(FailureKind.Unauthorized, FailureKind.AccessDenied)) {
+            val f = ConversationCommandFixture()
+            val denied = Failure(kind, "Fixture denied", code = "fixture.denied")
+            val record =
+                if (stage == 2)
+                    prepare(f).also {
+                        assertIs<AppResult.Success<*>>(f.replay()("selection", it.command.id))
+                    }
+                else null
+            val retained = f.values.toMap()
+            if (stage == 0)
+                f.setup.onRead = {
+                    f.setup.sessionFailure = Failure(FailureKind.Storage, "Fixture local failure")
+                    AppResult.Failed(denied)
+                }
+            else {
+                f.remoteFailure = denied
+                f.beforeRemote = {
+                    f.setup.sessionFailure = Failure(FailureKind.Storage, "Fixture local failure")
+                }
+            }
+            val result =
+                if (record != null) f.reconcile()("selection", record.command.id)
+                else
+                    f.prepare()(
+                        "selection",
+                        CollaborationConversationAction.RequestRoom(
+                            COMMAND_ROOM,
+                            COMMAND_DEVICE,
+                            1,
+                            null,
+                        ),
+                    )
+            assertEquals(AppResult.Failed(denied), result)
+            assertEquals(retained, f.values)
+        }
+    }
+
+    @Test
+    fun conversationReplayRetainsDenialThroughPostResponseAndOutcomeReadFailures() = runTest {
+        for (stage in 0..2) for (kind in
+            listOf(FailureKind.Unauthorized, FailureKind.AccessDenied)) {
+            val f = ConversationCommandFixture()
+            val record = prepare(f)
+            val denied = Failure(kind, "Fixture denied", code = "fixture.denied")
+            f.remoteFailure = denied
+            f.beforeRemote = {
+                if (stage == 0)
+                    f.setup.sessionFailure = Failure(FailureKind.Storage, "Fixture local failure")
+            }
+            var updates = 0
+            f.beforeStorage = {
+                if (it == "update" && ++updates == 2 && stage > 0)
+                    f.setup.sessionFailure = Failure(FailureKind.Storage, "Fixture local failure")
+            }
+            f.failOutcomeWrite = stage == 2
+            assertEquals(AppResult.Failed(denied), f.replay()("selection", record.command.id))
+            assertEquals(1, f.sent.size)
+            assertNotNull(f.values[record.command.id])
+        }
+    }
+
+    @Test
+    fun aKnownConversationDenialSurvivesFailureToPersistTheNextAttempt() = runTest {
+        val f = ConversationCommandFixture()
+        val record = prepare(f)
+        val denied = Failure(FailureKind.AccessDenied, "Fixture denied")
+        f.remoteFailure = denied
+        assertEquals(AppResult.Failed(denied), f.replay()("selection", record.command.id))
+        f.failOutcomeWrite = true
+        f.remoteFailure = Failure(FailureKind.Network, "Fixture offline")
+        assertEquals(AppResult.Failed(denied), f.replay()("selection", record.command.id))
+        assertEquals(1, f.sent.size)
+        assertEquals(
+            denied,
+            assertIs<CollaborationConversationOutcome.Unconfirmed>(
+                    f.values.getValue(record.command.id).outcome
+                )
+                .failure,
+        )
+    }
+
+    @Test
     fun retainedDenialSurvivesFailedRetriesAndClearsOnlyAfterConfirmedSuccess() = runTest {
         val f = ConversationCommandFixture()
         val record = prepare(f)

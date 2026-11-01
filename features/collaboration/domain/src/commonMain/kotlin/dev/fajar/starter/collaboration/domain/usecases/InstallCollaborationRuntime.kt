@@ -39,7 +39,7 @@ class InstallCollaborationRuntime(
                     is AppResult.Success -> captured.value
                 }
             val stored = commands.current(owner)
-            val admitted = continuation(workspaceId, owner)
+            val admitted = continuation(workspaceId, owner, stored)
             if (admitted is AppResult.Failed) return@withLock admitted
             val record =
                 when (stored) {
@@ -66,8 +66,14 @@ class InstallCollaborationRuntime(
             val installed = runtimes.install(owner, record)
             // Own a late successful resource before any suspending admission check.
             if (installed is AppResult.Success) lease = installed.value
-            val admitted = continuation(workspaceId, owner)
-            if (admitted is AppResult.Failed) return admitted
+            val admitted = continuation(workspaceId, owner, installed)
+            if (admitted is AppResult.Failed)
+                return AppResult.Failed(
+                    retainCollaborationCommandFailure(
+                        lease?.credentialFailures?.value,
+                        admitted.failure,
+                    )
+                )
             if (installed is AppResult.Failed) return installed
             val runtime = checkNotNull(lease)
             val deviceId = (record.command.action as CollaborationSetupAction.Bootstrap).deviceId
@@ -80,8 +86,14 @@ class InstallCollaborationRuntime(
             }
 
             val retired = commands.remove(owner, record)
-            val latest = continuation(workspaceId, owner)
-            if (latest is AppResult.Failed) return latest
+            val latest = continuation(workspaceId, owner, retired)
+            if (latest is AppResult.Failed)
+                return AppResult.Failed(
+                    retainCollaborationCommandFailure(
+                        runtime.credentialFailures.value,
+                        latest.failure,
+                    )
+                )
             when (retired) {
                 is AppResult.Failed -> return retired
                 is AppResult.Success ->
@@ -130,8 +142,9 @@ class InstallCollaborationRuntime(
     private suspend fun continuation(
         workspaceId: String,
         owner: CollaborationOwner,
+        received: AppResult<*>?,
     ): AppResult<Unit> {
         currentCoroutineContext().ensureActive()
-        return requireCollaborationOwner(capture(workspaceId), owner)
+        return requireCollaborationOwner(capture(workspaceId), owner, received)
     }
 }
