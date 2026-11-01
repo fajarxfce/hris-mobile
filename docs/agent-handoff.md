@@ -1,5 +1,29 @@
 # Agent continuation — HRIS Mobile
 
+## Release 10 installed and verified; native cancellation proof next — 1 November 2026
+
+Clean source `c0371a38d1ae2f8c890c300648ec849089c3836a` is installed in place over code 9 on
+10.77.77.3:5555 at 20:44 UTC. Build passes in 241s Gradle / 245.272s wall; release lint
+zero fatal/errors and one warning. Arm64 APK 87,330,800 bytes, SHA-256
+`e366cdcd3eaa997c44004985f53b7de9d15dd75c18c21f0f4d70c0bbd84589c9`. All 64 reviewed inputs, embedded VCS,
+private API/Firebase, existing signer and 16 KiB alignment match. Install and verification
+42.888s; pulled APK matches exactly. App identity and first-install time are preserved,
+with no uninstall, data clearing or UI launch. [Release evidence](measurements/android-release-cancellation-2026-11-01.json).
+Future updates require code 11+, notification first and install-only.
+
+**Continue immediately:** actual cancellation recovery with the real SDK/HRIS/Synapse.
+Add CANCELLED_DRAFT alongside separate QUEUED/FROZEN_DRAFT cases: retain a cancelled frozen
+original through death while one independent queued message sends once. Bind cancellation
+ID/body hash/revision; archived replay must not wake, receipt remains absent, worker clears
+only the matching frozen draft, and exact gateway sends remain one plus 32 peer seeds.
+Platform fixture/driver changes are WIP; 69 Python cases and test compilation/quality pass
+(30.671s wall). Apply the prepared Mobile helper, validate a matching proof APK, run the
+owned emulator, retain source-bound evidence and pin the new Platform commit in hosted CI.
+`.work/native-cancellation-next.txt` and `.work/apply-native-cancel-mobile.py` supplement this
+contract. Hosted frozen audit41344248284 is ready for Git; it predates cancellation.
+Then FCM/pusher/gateway integration, inline replies and all remaining P0–P8. No complete
+feature group or live backend/provider rollout is claimed by this phone update.
+
 ## Queued cancellation UI validated; install release 10 next — 1 November 2026
 
 The [cancellation contract](collaboration-cancellation.md) now includes explicit confirmation,

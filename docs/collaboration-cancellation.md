@@ -60,6 +60,4 @@ Close and Retry stay fixed inside the dialog. Three screenshots were visually in
 The regular dialog capture is 1024 × 768; the independent narrow capture establishes the
 320-pixel boundary. Full and supplemental reports retain their own source attribution.
 
-Next: clean release 10+ installation, then actual native cancellation interoperability,
-incoming notifications/replies and all remaining communications work. Release 9 predates
-cancellation. No generic Starter policy or database schema change is required.
+Release 10 is now installed and verified in place; see [installation evidence](measurements/android-release-cancellation-2026-11-01.json). Continue actual native cancellation interoperability, incoming notifications/replies and all remaining communications work. No generic Starter policy or database schema change is required.
