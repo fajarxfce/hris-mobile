@@ -1,5 +1,19 @@
 # Agent continuation — HRIS Mobile
 
+## Apple replica execution audited; continue indexed draft recovery — 1 November 2026
+
+[Hosted source/XML audit](measurements/apple-replica-hosted-2026-11-01.json) proves run
+41334974289 at Mobile `c0e91d6b`: 106 cases/29 suites, zero failures/errors/skips, including
+two real SQLite replica cases in 1.047s. Compile/tests/Xcode take 628s/83s/941s; simulator
+application and generated association checks pass. This source predates every draft addition.
+The exact temporary-database fixture and two CI tasks are now ported to Starter after its
+local quality checks. Starter's own hosted proof is being dispatched; audit it separately.
+
+Composer commit `cca28f06` is pushed with focused UI/browser/DI checks, not root/Android
+acceptance yet. Continue indexed prepared-send storage and application-owned recovery from
+the preceding handoff, then all required integration checks and a newer install-only release.
+The phone remains on verified release 7; no additional installation occurred for test/docs work.
+
 ## Composer connected and focused recovery tests pass — 1 November 2026
 
 [Composer evidence](measurements/chat-draft-ui-2026-11-01.json) binds 14 inputs and the inspected

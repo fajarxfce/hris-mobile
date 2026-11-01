@@ -25,5 +25,6 @@
     "Reuses 603-record reverse queries plus checkpoint publication, ownership, cancellation and bounds.",
     "Reopen/reauthentication preserves committed deletion/retagging and the reverse anchor.",
     "No application-default database, physical iPhone, product code or Starter port is changed."
-  ]
+  ],
+  "hostedFollowup": "apple-replica-hosted-2026-11-01.json"
 }
