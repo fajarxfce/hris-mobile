@@ -102,6 +102,9 @@ Leaving retries one concurrent metadata refresh of the same workspace. A replace
 workspace is never cleared; repeated contention returns a conflict rather than
 reporting that the old selection was removed. Cancellation stops further attempts.
 Repositories do not own retries, scheduling, or UI loading state.
+A raw streaming adapter may own bounded protocol transport backoff within its
+explicit connection lifetime. This never refreshes application read models,
+replays business commands or renews credentials; see [SDK synchronization](collaboration-sdk-lifecycle.md#lease-owned-classic-synchronization).
 Workers are platform application entry points that invoke `SyncTask` use cases.
 The [workspace](workspace.md) use cases separate local ownership from live
 revalidation. Its repository coordinates encrypted storage and raw remote access;

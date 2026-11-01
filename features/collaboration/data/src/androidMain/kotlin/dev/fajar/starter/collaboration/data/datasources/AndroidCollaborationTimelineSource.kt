@@ -8,10 +8,7 @@ import kotlinx.coroutines.flow.*
 import org.matrix.rustcomponents.sdk.*
 
 /** Owns partial acquisition too. The parent always calls stop, including when open fails. */
-internal class AndroidCollaborationTimelineSource(
-    private val client: Client,
-    private val roomId: String,
-) {
+internal class AndroidCollaborationTimelineSource(private val acquireRoom: suspend () -> Room) {
     private var room: Room? = null
     private var timeline: Timeline? = null
     private var listener: TaskHandle? = null
@@ -23,8 +20,7 @@ internal class AndroidCollaborationTimelineSource(
     val updates = mutableUpdates.asStateFlow()
 
     suspend fun open() {
-        // Local lookup: joining an invitation and live admission belong to separate operations.
-        val acquiredRoom = requireNotNull(client.getRoom(roomId))
+        val acquiredRoom = acquireRoom()
         room = acquiredRoom
         require(acquiredRoom.isEncrypted())
         val acquiredTimeline = acquiredRoom.timeline()

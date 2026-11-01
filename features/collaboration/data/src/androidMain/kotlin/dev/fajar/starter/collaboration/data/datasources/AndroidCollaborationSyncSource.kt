@@ -1,40 +1,55 @@
 package dev.fajar.starter.collaboration.data.datasources
 
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.withTimeoutOrNull
-import org.matrix.rustcomponents.sdk.*
+import dev.fajar.starter.collaboration.data.dto.SdkSyncProblem
+import dev.fajar.starter.collaboration.data.sdk.SdkSyncPump
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineScope
+import org.matrix.rustcomponents.sdk.Client
+import org.matrix.rustcomponents.sdk.ClientException
+import org.matrix.rustcomponents.sdk.ErrorKind
+import org.matrix.rustcomponents.sdk.SyncSettingsV2
 
-/** Raw classic-sync binding. The SDK persists updates; this listener owns no UI callback. */
-internal suspend fun startAndroidCollaborationSync(client: Client): CollaborationSdkSyncConnection {
-    val handle =
-        client.syncV2(
-            SyncSettingsV2(timeoutMs = 10_000uL, fullState = false),
-            object : SyncListenerV2 {
-                override fun onUpdate(response: SyncResponseV2) = Unit
-            },
-        )
-    return AndroidCollaborationSyncConnection(handle)
-}
-
-private class AndroidCollaborationSyncConnection(private var task: TaskHandle?) :
-    CollaborationSdkSyncConnection {
-    override suspend fun stop() {
-        val current = task ?: return
-        current.cancel()
-        // Keep the handle after a timeout/cancellation. The lease keeps its store lock
-        // until a later explicit close observes that the native producer has stopped.
-        checkNotNull(
-            withTimeoutOrNull(5_000) {
-                while (!current.isFinished()) delay(10)
-                Unit
+/** syncOnceV2 reuses the SDK's persisted cursor; the stock FFI loop exits on its first error. */
+internal fun createAndroidCollaborationSync(
+    client: Client,
+    lifetime: CoroutineScope,
+): CollaborationSdkSyncConnection =
+    SdkSyncPump(
+        lifetime,
+        synchronize = {
+            try {
+                client.syncOnceV2(SyncSettingsV2(timeoutMs = 10_000uL, fullState = false))
+                null
+            } catch (cancelled: CancellationException) {
+                throw cancelled
+            } catch (failure: ClientException.MatrixApi) {
+                val code = failure.code.takeIf { it.matches(Regex("M_[A-Z_]{1,64}")) }
+                SdkSyncProblem(
+                    code,
+                    (failure.kind as? ErrorKind.LimitExceeded)
+                        ?.retryAfterMs
+                        ?.coerceAtMost(Long.MAX_VALUE.toULong())
+                        ?.toLong(),
+                    terminal =
+                        code in
+                            setOf(
+                                "M_UNKNOWN_TOKEN",
+                                "M_MISSING_TOKEN",
+                                "M_UNAUTHORIZED",
+                                "M_FORBIDDEN",
+                                "M_GUEST_ACCESS_FORBIDDEN",
+                                "M_USER_DEACTIVATED",
+                                "M_USER_LOCKED",
+                                "M_USER_SUSPENDED",
+                                "M_BAD_JSON",
+                                "M_INVALID_PARAM",
+                                "M_UNRECOGNIZED",
+                            ),
+                )
+            } catch (_: Exception) {
+                // FFI generic errors do not reliably distinguish transport from decoding failures.
+                // Retry is finite; no exception description is parsed or retained.
+                SdkSyncProblem(null)
             }
-        ) {
-            "Native synchronization is still stopping."
-        }
-        try {
-            current.close()
-        } finally {
-            task = null
-        }
-    }
-}
+        },
+    )

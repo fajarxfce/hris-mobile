@@ -282,5 +282,585 @@
     "Current 512-entry limit gates oversized observers. Product window/history paging, admitted common content ports, offline projections, durable logical reconciliation and chat UI remain pending.",
     "Local echoes have no latestJson and no inferred logical ID. This is not exactly-once logical message delivery or product group acceptance.",
     "Emulator stopped after successful cleanup; no phone or live changes. Apple native chat runtime remains pending."
-  ]
+  ],
+  "hostedControl": {
+    "runId": 41250076314,
+    "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/41250076314",
+    "headSha": "0ef8018c08a509470643cba04073d5fc814717c3",
+    "allJobsAndStepsPassed": true,
+    "jobs": [
+      {
+        "name": "portable",
+        "conclusion": "success",
+        "steps": 15
+      },
+      {
+        "name": "apple",
+        "conclusion": "success",
+        "steps": 11
+      }
+    ],
+    "tests": {
+      "desktopTest": {
+        "suites": 23,
+        "tests": 158,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "wasmJsBrowserTest": {
+        "suites": 19,
+        "tests": 134,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "iosSimulatorArm64Test": {
+        "suites": 19,
+        "tests": 134,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "mobileSourceHashesMatched": 120,
+    "appleScope": "Common domain/data tests and app compilation; not native Apple chat interoperability."
+  },
+  "hostedHrisFailure": {
+    "runId": 41250076331,
+    "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/41250076331",
+    "headSha": "0ef8018c08a509470643cba04073d5fc814717c3",
+    "fixtureRunId": "a83ae515c48f4895b1cffc361cb160ed",
+    "result": {
+      "passed": false,
+      "cleanup": true,
+      "artifact": {
+        "apkSha256": "4fbd7c2748ac139af3e5b05202386b51b68567129b89fc44a5f8acff1691b970",
+        "package": "dev.fajar.hris.collaboration.proof",
+        "avd": "hris-mobile-dev",
+        "androidApi": "35"
+      },
+      "diagnostic": {
+        "instrumentationComplete": false,
+        "failureCategory": "TimeoutCancellationException",
+        "failureFrames": []
+      },
+      "failureCategory": "RuntimeError"
+    },
+    "test": {
+      "tests": "1",
+      "failures": "1",
+      "errors": "0",
+      "skipped": "0",
+      "time": "79.752"
+    },
+    "traceSha256": "7c24cbea7ad15f14fbfe2774b01b143302af429cd529ee05b2bc5339770c9aa0",
+    "requests": 26,
+    "statuses": {
+      "200": 23,
+      "503": 1,
+      "429": 2
+    },
+    "sync429": 2,
+    "diagnosis": "Pinned FFI syncV2 exits on its first error. Provider-capacity 429 interrupts sync with no error callback; only one encrypted room send completes. Replacement uses a bounded syncOnceV2 pump, tested with a deterministic post-restart fault. This failure is retained separately from the earlier passing local run."
+  },
+  "hostedProviderProtocol": {
+    "runId": 41250076315,
+    "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/41250076315",
+    "headSha": "0ef8018c08a509470643cba04073d5fc814717c3",
+    "platformCommit": "e0dbb567acc4c5571b82324c515ed8ddc145007d",
+    "allJobsAndStepsPassed": true,
+    "sourceHashesMatchedPerMode": 14,
+    "results": [
+      {
+        "schemaVersion": 1,
+        "runId": "6c69a3a7a6744fb48c08d681d5ba4a6f",
+        "kind": "isolated_provider_proof",
+        "complete": true,
+        "productAcceptance": false,
+        "capacityAcceptance": false,
+        "images": {
+          "synapse": {
+            "reference": "ghcr.io/element-hq/synapse:v1.164.1@sha256:fa4aa980f279bcf26d4e7ecc2a2c9a701c73f2ebe8841da9bdcf3b2fdf693d75",
+            "id": "sha256:b2d38d6decacc092e0fee11e9f26efdb2045f2dd8cac0bcf41e5b50195c256b4",
+            "digests": [
+              "ghcr.io/element-hq/synapse@sha256:fa4aa980f279bcf26d4e7ecc2a2c9a701c73f2ebe8841da9bdcf3b2fdf693d75"
+            ]
+          },
+          "livekit": {
+            "reference": "livekit/livekit-server:v1.13.11@sha256:25cd902de7cacbd5f1f779f6a6ac1eae20ba8f56b0935934ce6b0ab80d1e3d20",
+            "id": "sha256:0e20c255a2c17000c52d0631b79737a4216c06bc51df13878768df01261c8dfd",
+            "digests": [
+              "livekit/livekit-server@sha256:25cd902de7cacbd5f1f779f6a6ac1eae20ba8f56b0935934ce6b0ab80d1e3d20"
+            ]
+          },
+          "postgres": {
+            "reference": "postgres:18.6-alpine@sha256:10a5c69a83035ab5239f5620d708520e8b28f5aa1f2b20143e6024532edadfb5",
+            "id": "sha256:57b23a0326ee442e83b3d3fa027c5a148be0a392d7c91d1ca4e1e70131ee859a",
+            "digests": [
+              "postgres@sha256:10a5c69a83035ab5239f5620d708520e8b28f5aa1f2b20143e6024532edadfb5"
+            ]
+          }
+        },
+        "checks": {
+          "wrong_issuer": true,
+          "wrong_audience": true,
+          "expired_jwt_beyond_provider_leeway": true,
+          "public_registration_disabled": true,
+          "loopback_only_http": true,
+          "isolated_dedicated_network": true,
+          "provider_protocol_counters": true,
+          "browser_e2ee_restart_media": true,
+          "browser_offline_invitee_first_message_sender_offline": true,
+          "android_requested_sync_protocol": true,
+          "android_web_bidirectional_e2ee": true,
+          "android_sdk_refresh_preserves_device_key": true,
+          "android_sdk_queue_encrypted_logical_ids": true,
+          "android_encrypts_for_offline_invitee_before_join": true
+        },
+        "cleanup": true,
+        "sourceSha256": {
+          "tool/check_collaboration_providers.py": "da39c44d9a1ec59df4118b4900f11c29be3acf3fae74ec45dd2ce7b5e9b76ba1",
+          "tool/test_collaboration_providers.py": "a22fd049c7ffb11601f9496679b4093ecec64dea47cafcfce3dae827e3110fa0",
+          "tool/collaboration_native_device.py": "0475be5ae31f5383d924917304fb5a7ef81da8cc1a55168090155fc826f61547",
+          "tool/test_collaboration_native_device.py": "13c541192f42d719595f25d6a8c840bedf029ef189316d2f2c08b4a0826f1e24",
+          "tool/collaboration_protocol_metrics.py": "602e33d3c946e13468e3345ebe2d39c8ac3b443fee93577c6c71b44a3f5e2bb1",
+          "tool/test_collaboration_protocol_metrics.py": "c83ec8ca57e3d6d9e26e910428480a1d87e4dad0c86df8d5aa2b422ac4327a52",
+          "tool/collaboration-proof/package.json": "f499358763283beb73dd76606dde7e28122b6787494529ad518fef5718062cad",
+          "tool/collaboration-proof/package-lock.json": "031dbd57065817fbe2e119d87bb3e9588e26d4814835219dc950c4dddff51c56",
+          "tool/collaboration-proof/images.json": "63aa4b37949053e6574f9f4ae7ff1d22c02a59d8955a141c6aae5b2257e89f50",
+          "tool/collaboration-proof/index.html": "e5cadc31789aa95d2b718905dd44201da49a29678b913db9a7563fdf907ba7d0",
+          "tool/collaboration-proof/playwright.config.mjs": "33b5dd2896bd6a602e54a9c8154c679ee31b473e7bc9a0ff9da8864ca429381c",
+          "tool/collaboration-proof/src/probe.js": "b452de9882c7f121e811bde62bca92eaf678ce785030d4c715b99b316cb9a5f6",
+          "tool/collaboration-proof/tests/providers.spec.mjs": "1d498852844d41f350fd5ef295484acafb18bc8b90d9eb7daf3d05825c6ca3c2",
+          "tool/collaboration-proof/tests/native.spec.mjs": "c36faa5d4ba38061af590cc8e4ef863ddb8c624ffce78b86bc26ecd98613256b"
+        },
+        "observations": {
+          "recent_expired_jwt_accepted_by_provider": true,
+          "strict_hris_broker_expiry_required": true
+        },
+        "native": {
+          "apkSha256": "61560615b1546a7938574f477db0e3b463f42a761ffff90efe8d123d0a794b73",
+          "package": "dev.fajar.hris.collaboration.proof",
+          "avd": "hris-mobile-dev",
+          "androidApi": "35",
+          "syncMode": "classic"
+        },
+        "browser": {
+          "expected": 2,
+          "unexpected": 0,
+          "flaky": 0,
+          "skipped": 0,
+          "duration": 38772.892
+        },
+        "nativeDiagnostic": {
+          "replyComplete": true,
+          "resultComplete": true,
+          "instrumentationComplete": true,
+          "failureFrames": [],
+          "progress": {
+            "stage": "sending_offline_message"
+          }
+        },
+        "protocolCounters": {
+          "scope": "Composite SDK scenarios and explicit fixture control requests; not a gateway allowlist",
+          "requests": [
+            {
+              "method": "GET",
+              "servlet": "AccountDataServlet",
+              "count": 5
+            },
+            {
+              "method": "GET",
+              "servlet": "CapabilitiesRestServlet",
+              "count": 7
+            },
+            {
+              "method": "GET",
+              "servlet": "GetFilterRestServlet",
+              "count": 4
+            },
+            {
+              "method": "GET",
+              "servlet": "HealthResource",
+              "count": 2
+            },
+            {
+              "method": "GET",
+              "servlet": "PushRuleRestServlet",
+              "count": 7
+            },
+            {
+              "method": "GET",
+              "servlet": "RoomEventContextServlet",
+              "count": 1
+            },
+            {
+              "method": "GET",
+              "servlet": "RoomEventServlet",
+              "count": 7
+            },
+            {
+              "method": "GET",
+              "servlet": "RoomKeysNewVersionServlet",
+              "count": 7
+            },
+            {
+              "method": "GET",
+              "servlet": "RoomMemberListRestServlet",
+              "count": 2
+            },
+            {
+              "method": "GET",
+              "servlet": "RoomMessageListRestServlet",
+              "count": 2
+            },
+            {
+              "method": "GET",
+              "servlet": "SyncRestServlet",
+              "count": 90
+            },
+            {
+              "method": "GET",
+              "servlet": "UserRegisterServlet",
+              "count": 4
+            },
+            {
+              "method": "GET",
+              "servlet": "VersionsRestServlet",
+              "count": 9
+            },
+            {
+              "method": "GET",
+              "servlet": "VoipRestServlet",
+              "count": 7
+            },
+            {
+              "method": "OPTIONS",
+              "servlet": "RootOptionsRedirectResource",
+              "count": 104
+            },
+            {
+              "method": "POST",
+              "servlet": "CreateFilterRestServlet",
+              "count": 3
+            },
+            {
+              "method": "POST",
+              "servlet": "JoinRoomAliasServlet",
+              "count": 3
+            },
+            {
+              "method": "POST",
+              "servlet": "KeyQueryServlet",
+              "count": 34
+            },
+            {
+              "method": "POST",
+              "servlet": "KeyUploadServlet",
+              "count": 14
+            },
+            {
+              "method": "POST",
+              "servlet": "LoginRestServlet",
+              "count": 8
+            },
+            {
+              "method": "POST",
+              "servlet": "OneTimeKeyServlet",
+              "count": 2
+            },
+            {
+              "method": "POST",
+              "servlet": "RefreshTokenServlet",
+              "count": 4
+            },
+            {
+              "method": "POST",
+              "servlet": "RegisterRestServlet",
+              "count": 1
+            },
+            {
+              "method": "POST",
+              "servlet": "RoomCreateRestServlet",
+              "count": 4
+            },
+            {
+              "method": "POST",
+              "servlet": "RoomMembershipRestServlet",
+              "count": 2
+            },
+            {
+              "method": "POST",
+              "servlet": "UserRegisterServlet",
+              "count": 4
+            },
+            {
+              "method": "PUT",
+              "servlet": "AccountDataServlet",
+              "count": 1
+            },
+            {
+              "method": "PUT",
+              "servlet": "RoomSendEventRestServlet",
+              "count": 7
+            },
+            {
+              "method": "PUT",
+              "servlet": "SendToDeviceRestServlet",
+              "count": 6
+            }
+          ]
+        },
+        "elapsedSeconds": 90.228
+      },
+      {
+        "schemaVersion": 1,
+        "runId": "5409774ec5dc48f58cded0bab5577bfc",
+        "kind": "isolated_provider_proof",
+        "complete": true,
+        "productAcceptance": false,
+        "capacityAcceptance": false,
+        "images": {
+          "synapse": {
+            "reference": "ghcr.io/element-hq/synapse:v1.164.1@sha256:fa4aa980f279bcf26d4e7ecc2a2c9a701c73f2ebe8841da9bdcf3b2fdf693d75",
+            "id": "sha256:b2d38d6decacc092e0fee11e9f26efdb2045f2dd8cac0bcf41e5b50195c256b4",
+            "digests": [
+              "ghcr.io/element-hq/synapse@sha256:fa4aa980f279bcf26d4e7ecc2a2c9a701c73f2ebe8841da9bdcf3b2fdf693d75"
+            ]
+          },
+          "livekit": {
+            "reference": "livekit/livekit-server:v1.13.11@sha256:25cd902de7cacbd5f1f779f6a6ac1eae20ba8f56b0935934ce6b0ab80d1e3d20",
+            "id": "sha256:0e20c255a2c17000c52d0631b79737a4216c06bc51df13878768df01261c8dfd",
+            "digests": [
+              "livekit/livekit-server@sha256:25cd902de7cacbd5f1f779f6a6ac1eae20ba8f56b0935934ce6b0ab80d1e3d20"
+            ]
+          },
+          "postgres": {
+            "reference": "postgres:18.6-alpine@sha256:10a5c69a83035ab5239f5620d708520e8b28f5aa1f2b20143e6024532edadfb5",
+            "id": "sha256:57b23a0326ee442e83b3d3fa027c5a148be0a392d7c91d1ca4e1e70131ee859a",
+            "digests": [
+              "postgres@sha256:10a5c69a83035ab5239f5620d708520e8b28f5aa1f2b20143e6024532edadfb5"
+            ]
+          }
+        },
+        "checks": {
+          "wrong_issuer": true,
+          "wrong_audience": true,
+          "expired_jwt_beyond_provider_leeway": true,
+          "public_registration_disabled": true,
+          "loopback_only_http": true,
+          "isolated_dedicated_network": true,
+          "provider_protocol_counters": true,
+          "browser_e2ee_restart_media": true,
+          "browser_offline_invitee_first_message_sender_offline": true,
+          "android_requested_sync_protocol": true,
+          "android_web_bidirectional_e2ee": true,
+          "android_sdk_refresh_preserves_device_key": true,
+          "android_sdk_queue_encrypted_logical_ids": true,
+          "android_encrypts_for_offline_invitee_before_join": true
+        },
+        "cleanup": true,
+        "sourceSha256": {
+          "tool/check_collaboration_providers.py": "da39c44d9a1ec59df4118b4900f11c29be3acf3fae74ec45dd2ce7b5e9b76ba1",
+          "tool/test_collaboration_providers.py": "a22fd049c7ffb11601f9496679b4093ecec64dea47cafcfce3dae827e3110fa0",
+          "tool/collaboration_native_device.py": "0475be5ae31f5383d924917304fb5a7ef81da8cc1a55168090155fc826f61547",
+          "tool/test_collaboration_native_device.py": "13c541192f42d719595f25d6a8c840bedf029ef189316d2f2c08b4a0826f1e24",
+          "tool/collaboration_protocol_metrics.py": "602e33d3c946e13468e3345ebe2d39c8ac3b443fee93577c6c71b44a3f5e2bb1",
+          "tool/test_collaboration_protocol_metrics.py": "c83ec8ca57e3d6d9e26e910428480a1d87e4dad0c86df8d5aa2b422ac4327a52",
+          "tool/collaboration-proof/package.json": "f499358763283beb73dd76606dde7e28122b6787494529ad518fef5718062cad",
+          "tool/collaboration-proof/package-lock.json": "031dbd57065817fbe2e119d87bb3e9588e26d4814835219dc950c4dddff51c56",
+          "tool/collaboration-proof/images.json": "63aa4b37949053e6574f9f4ae7ff1d22c02a59d8955a141c6aae5b2257e89f50",
+          "tool/collaboration-proof/index.html": "e5cadc31789aa95d2b718905dd44201da49a29678b913db9a7563fdf907ba7d0",
+          "tool/collaboration-proof/playwright.config.mjs": "33b5dd2896bd6a602e54a9c8154c679ee31b473e7bc9a0ff9da8864ca429381c",
+          "tool/collaboration-proof/src/probe.js": "b452de9882c7f121e811bde62bca92eaf678ce785030d4c715b99b316cb9a5f6",
+          "tool/collaboration-proof/tests/providers.spec.mjs": "1d498852844d41f350fd5ef295484acafb18bc8b90d9eb7daf3d05825c6ca3c2",
+          "tool/collaboration-proof/tests/native.spec.mjs": "c36faa5d4ba38061af590cc8e4ef863ddb8c624ffce78b86bc26ecd98613256b"
+        },
+        "observations": {
+          "recent_expired_jwt_accepted_by_provider": true,
+          "strict_hris_broker_expiry_required": true
+        },
+        "native": {
+          "apkSha256": "5ac1886c6512a051dd4e8895148ed3cb32f70d068c906f87cdacdb2e580923f7",
+          "package": "dev.fajar.hris.collaboration.proof",
+          "avd": "hris-mobile-dev",
+          "androidApi": "35",
+          "syncMode": "native"
+        },
+        "browser": {
+          "expected": 2,
+          "unexpected": 0,
+          "flaky": 0,
+          "skipped": 0,
+          "duration": 37353.105
+        },
+        "nativeDiagnostic": {
+          "replyComplete": true,
+          "resultComplete": true,
+          "instrumentationComplete": true,
+          "failureFrames": [],
+          "progress": {
+            "stage": "sending_offline_message"
+          }
+        },
+        "protocolCounters": {
+          "scope": "Composite SDK scenarios and explicit fixture control requests; not a gateway allowlist",
+          "requests": [
+            {
+              "method": "GET",
+              "servlet": "AccountDataServlet",
+              "count": 5
+            },
+            {
+              "method": "GET",
+              "servlet": "CapabilitiesRestServlet",
+              "count": 7
+            },
+            {
+              "method": "GET",
+              "servlet": "GetFilterRestServlet",
+              "count": 4
+            },
+            {
+              "method": "GET",
+              "servlet": "HealthResource",
+              "count": 2
+            },
+            {
+              "method": "GET",
+              "servlet": "PushRuleRestServlet",
+              "count": 7
+            },
+            {
+              "method": "GET",
+              "servlet": "RoomEventContextServlet",
+              "count": 1
+            },
+            {
+              "method": "GET",
+              "servlet": "RoomEventServlet",
+              "count": 7
+            },
+            {
+              "method": "GET",
+              "servlet": "RoomKeysNewVersionServlet",
+              "count": 7
+            },
+            {
+              "method": "GET",
+              "servlet": "RoomMemberListRestServlet",
+              "count": 3
+            },
+            {
+              "method": "GET",
+              "servlet": "RoomMessageListRestServlet",
+              "count": 2
+            },
+            {
+              "method": "GET",
+              "servlet": "SyncRestServlet",
+              "count": 76
+            },
+            {
+              "method": "GET",
+              "servlet": "UserRegisterServlet",
+              "count": 4
+            },
+            {
+              "method": "GET",
+              "servlet": "VersionsRestServlet",
+              "count": 9
+            },
+            {
+              "method": "GET",
+              "servlet": "VoipRestServlet",
+              "count": 7
+            },
+            {
+              "method": "OPTIONS",
+              "servlet": "RootOptionsRedirectResource",
+              "count": 104
+            },
+            {
+              "method": "POST",
+              "servlet": "CreateFilterRestServlet",
+              "count": 3
+            },
+            {
+              "method": "POST",
+              "servlet": "JoinRoomAliasServlet",
+              "count": 3
+            },
+            {
+              "method": "POST",
+              "servlet": "KeyQueryServlet",
+              "count": 36
+            },
+            {
+              "method": "POST",
+              "servlet": "KeyUploadServlet",
+              "count": 13
+            },
+            {
+              "method": "POST",
+              "servlet": "LoginRestServlet",
+              "count": 8
+            },
+            {
+              "method": "POST",
+              "servlet": "OneTimeKeyServlet",
+              "count": 2
+            },
+            {
+              "method": "POST",
+              "servlet": "RefreshTokenServlet",
+              "count": 2
+            },
+            {
+              "method": "POST",
+              "servlet": "RegisterRestServlet",
+              "count": 1
+            },
+            {
+              "method": "POST",
+              "servlet": "RoomCreateRestServlet",
+              "count": 4
+            },
+            {
+              "method": "POST",
+              "servlet": "RoomMembershipRestServlet",
+              "count": 2
+            },
+            {
+              "method": "POST",
+              "servlet": "SlidingSyncRestServlet",
+              "count": 16
+            },
+            {
+              "method": "POST",
+              "servlet": "UserRegisterServlet",
+              "count": 4
+            },
+            {
+              "method": "PUT",
+              "servlet": "AccountDataServlet",
+              "count": 1
+            },
+            {
+              "method": "PUT",
+              "servlet": "RoomSendEventRestServlet",
+              "count": 7
+            },
+            {
+              "method": "PUT",
+              "servlet": "SendToDeviceRestServlet",
+              "count": 6
+            }
+          ]
+        },
+        "elapsedSeconds": 85.289
+      }
+    ]
+  }
 }

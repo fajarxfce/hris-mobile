@@ -13,6 +13,27 @@ import org.koin.core.annotation.*
 @ComponentScan("dev.fajar.starter.collaboration.data")
 class CollaborationDataModule {
     @Factory
+    fun enterConversation(
+        runtimes: CollaborationRuntimeRepository,
+        conversations: CollaborationConversationRepository,
+        setup: CollaborationSetupRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) =
+        EnterCollaborationConversation(
+            runtimes,
+            conversations,
+            setup,
+            sessions,
+            workspaces,
+            server,
+            build,
+            Clock.System,
+        )
+
+    @Factory
     fun prepareConversation(
         commands: CollaborationConversationCommandRepository,
         conversations: CollaborationConversationRepository,

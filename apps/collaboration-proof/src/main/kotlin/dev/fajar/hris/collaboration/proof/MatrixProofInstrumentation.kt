@@ -42,7 +42,10 @@ class MatrixProofInstrumentation : Instrumentation() {
             output.put("complete", true)
         } catch (failure: Exception) {
             output.put("complete", false)
-            output.put("failureCategory", failure.javaClass.simpleName)
+            output.put(
+                "failureCategory",
+                (failure as? HrisProofFailure)?.category ?: failure.javaClass.simpleName,
+            )
             output.put(
                 "failureFrames",
                 JSONArray(

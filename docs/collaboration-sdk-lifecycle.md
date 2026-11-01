@@ -180,24 +180,47 @@ logical-message reconciliation, Apple runtime and all remaining P0–P8 still ap
 
 ## Lease-owned classic synchronization
 
-Android runtime leases now own their classic sync task through `SdkSyncLifecycle`.
-Concurrent starts share an acquisition owned by the application lifetime, including
-when a caller is cancelled or its five-second wait expires. New explicit starts
-may retry failed acquisition; no background retry loop is introduced. The raw
-Android source uses a ten-second long poll and cancels, joins and disposes its
-native task on stop. A five-second termination timeout retains the handle for
-explicit cleanup retry. Stopping prevents a late acquisition from publishing a
-started state or another caller from opening a replacement task.
+`SdkSyncLifecycle` owns one raw connection per protected runtime. Concurrent starts
+share acquisition even when a caller disappears or its five-second wait expires.
+Only explicit starts retry failed acquisition. The connection owns one transport
+pump; repeated starts never create competing requests or reset its retry budget.
 
-Lease shutdown stops synchronization before database draining and store unlock.
-Credential persistence failure also stops sync; successful credential-write retry
-does not restart it. Reopen the protected runtime to establish a fresh sync
-lifetime under current admission. Starting a task is not evidence of connectivity
-or authorization, and this data entry point never enables message send queues.
+The pinned FFI `Client.syncV2` loop terminates on the first failed sync and only
+logs the error. Hosted HRIS run `41250076331` exposed this after a provider-capacity
+429: only one encrypted direction completed. The adapter now drives
+`syncOnceV2` with a ten-second long poll. Each operation uses the SDK's persisted
+cursor (`SyncToken::ReusePrevious`); Kotlin never supplies/resets that cursor or
+replaces the store. SDK processing still handles E2EE responses and persistence.
 
-[Actual Android evidence](measurements/collaboration-owned-sync-2026-10-31.json)
-uses the production lease instead of the fixture's separate sync owner. It preserves
-the original transaction and device keys across process death, decrypts both
-messages and completes cleanup. The trace includes ten 10,000 ms sync requests
-and one retained `keys/upload` provider-busy response; the complete case passes.
-Product room, timeline/listener ownership, durable commands and UI remain pending.
+Transient transport failures get at most five retries after the initial request,
+with exponential 1/2/4/8/16-second backoff plus up to 250ms jitter. Retry-After is
+never shortened. A delay above 30 seconds pauses until explicit restart after its
+deadline. Exhaustion pauses this same connection; no implicit acquisition, token
+renewal, business-command replay or device reset occurs. Successful requests clear
+the transient failure and reset the budget. Fast successful polls have a one-second
+minimum interval. Structured authentication, access and request-shape errors stop
+automatically; the same connection cannot restart a terminal failure.
+
+The datasource owns this bounded protocol scheduling; repositories only own the
+connection and map its sanitized failures. This is distinct from application read
+refresh and command retry policies. Raw provider descriptions are never retained.
+Authorization failures gate timeline snapshots, pause send queues and close child
+observers; ordinary transport failure leaves retained snapshots available.
+
+Stop wakes backoff immediately and prevents another request, but waits for an
+in-flight SDK operation to finish without cancelling its foreign coroutine. The
+parent close still returns after at most five seconds while its shutdown producer
+retains the client and exclusive store lock. Database drain and unlock follow
+actual completion. A cancelled close waiter cannot release the store early. A final authentication
+or access denial is retained even if its observer is being disposed or native
+termination fails.
+Credential persistence failure also stops sync; fixing its write does not restart
+it. Reopen under current admission. Starting a pump is not evidence of connectivity
+or authorization and never enables message delivery.
+
+The actual HRIS fixture injects one `M_LIMIT_EXCEEDED` response only after process
+death and store restoration. It compares cursor digests in memory and requires a
+successful retry with the same cursor, then both decrypted replies and complete
+cleanup. Cursor values, digests and credentials are excluded from the report.
+The original transaction and device identity must survive throughout. Product
+routes, offline projections and logical-message reconciliation remain separate.

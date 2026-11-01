@@ -46,6 +46,29 @@ class AndroidCollaborationRuntimeRepository(
         deviceId: String,
     ): AppResult<CollaborationRuntimeLease?> = handover { open(owner, deviceId, null) }
 
+    override suspend fun enterTimeline(
+        owner: CollaborationOwner,
+        deviceId: String,
+        matrixRoomId: String,
+    ): AppResult<CollaborationTimelineLease> {
+        val runtime =
+            leases.singleOrNull {
+                it.owner == owner && it.deviceId == deviceId && !it.closingRequested
+            }
+                ?: return AppResult.Failed(
+                    Failure(
+                        FailureKind.Unavailable,
+                        "Chat runtime is not open.",
+                        code = "client.collaboration_runtime_not_open",
+                    )
+                )
+        when (val syncing = runtime.startSync()) {
+            is AppResult.Failed -> return syncing
+            is AppResult.Success -> Unit
+        }
+        return runtime.enterTimeline(matrixRoomId)
+    }
+
     override suspend fun closeOtherOwners(retainedOwner: CollaborationOwner?): AppResult<Unit> {
         val obsolete = leases.filter { it.owner != retainedOwner || it.closingRequested }
         val results = coroutineScope { obsolete.map { async { it.close() } }.awaitAll() }

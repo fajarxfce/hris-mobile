@@ -4,7 +4,7 @@ import android.content.Context
 import android.os.Process
 import android.util.AtomicFile
 import dev.fajar.starter.collaboration.data.repositories.AndroidCollaborationRuntimeLease
-import dev.fajar.starter.collaboration.data.repositories.AndroidCollaborationTimelineLease
+import dev.fajar.starter.collaboration.domain.repositories.CollaborationTimelineLease
 import dev.fajar.starter.common.result.AppResult
 import java.io.File
 import java.net.URI
@@ -44,8 +44,8 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
             var senderRoom: Room? = null
             var recipientRoom: Room? = null
             var pending: HrisProofPendingQueue? = null
-            var senderTimeline: AndroidCollaborationTimelineLease? = null
-            var recipientTimeline: AndroidCollaborationTimelineLease? = null
+            var senderTimeline: CollaborationTimelineLease? = null
+            var recipientTimeline: CollaborationTimelineLease? = null
             try {
                 val senderOwner =
                     ProtectedHrisProofOwner(context, fixture.getJSONObject("sender"), home)
@@ -61,10 +61,10 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
                 check(sender.startSync() is AppResult.Success)
                 check(sender.startSync() is AppResult.Success)
                 check(recipient.startSync() is AppResult.Success)
-                senderRoom = sender.nativeClient.joinRoomById(roomId)
-                recipientRoom = recipient.nativeClient.joinRoomById(roomId)
-                senderTimeline = (sender.openTimeline(roomId) as AppResult.Success).value
-                recipientTimeline = (recipient.openTimeline(roomId) as AppResult.Success).value
+                senderTimeline = senderOwner.enterTimeline(roomId)
+                recipientTimeline = recipientOwner.enterTimeline(roomId)
+                senderRoom = requireNotNull(sender.nativeClient.getRoom(roomId))
+                recipientRoom = requireNotNull(recipient.nativeClient.getRoom(roomId))
                 if (resuming)
                     resume(
                         fixture,
@@ -138,8 +138,8 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
         senderRoom: Room,
         recipientRoom: Room,
         pending: HrisProofPendingQueue,
-        senderTimeline: AndroidCollaborationTimelineLease,
-        recipientTimeline: AndroidCollaborationTimelineLease,
+        senderTimeline: CollaborationTimelineLease,
+        recipientTimeline: CollaborationTimelineLease,
     ) {
         val staged = read("gateway-staged", 4096)
         for (name in protectedFlagNames) check(staged.get(name) == true)
@@ -207,7 +207,7 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
             }
     }
 
-    private suspend fun AndroidCollaborationTimelineLease.awaitMessage(
+    private suspend fun CollaborationTimelineLease.awaitMessage(
         eventId: String,
         body: String,
         logicalId: String,

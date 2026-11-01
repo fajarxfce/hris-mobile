@@ -16,6 +16,12 @@ class UnavailableCollaborationRuntimeRepository : CollaborationRuntimeRepository
         deviceId: String,
     ): AppResult<CollaborationRuntimeLease?> = unavailable()
 
+    override suspend fun enterTimeline(
+        owner: CollaborationOwner,
+        deviceId: String,
+        matrixRoomId: String,
+    ): AppResult<CollaborationTimelineLease> = unavailable()
+
     override suspend fun closeOtherOwners(retainedOwner: CollaborationOwner?): AppResult<Unit> =
         AppResult.Success(Unit)
 

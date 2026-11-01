@@ -17,6 +17,13 @@ interface CollaborationRuntimeRepository {
         deviceId: String,
     ): AppResult<CollaborationRuntimeLease?>
 
+    /** Uses an installed owned runtime, joins the admitted room and acquires a child timeline. */
+    suspend fun enterTimeline(
+        owner: CollaborationOwner,
+        deviceId: String,
+        matrixRoomId: String,
+    ): AppResult<CollaborationTimelineLease>
+
     /** Close obsolete resources, never their stored facts. Null closes every owned runtime. */
     suspend fun closeOtherOwners(retainedOwner: CollaborationOwner?): AppResult<Unit>
 }

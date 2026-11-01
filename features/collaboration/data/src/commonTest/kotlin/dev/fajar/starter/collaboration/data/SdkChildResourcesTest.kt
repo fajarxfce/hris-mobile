@@ -2,12 +2,36 @@ package dev.fajar.starter.collaboration.data
 
 import dev.fajar.starter.collaboration.data.repositories.SdkChildResources
 import dev.fajar.starter.common.result.*
+import dev.fajar.starter.storage.safeStorageCall
 import kotlin.test.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.test.*
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class SdkChildResourcesTest {
+    @Test
+    fun authoritativeInitializationFailureSurvivesFailedCleanupAndKeepsTheChildOwned() = runTest {
+        val parent = SdkChildResources(backgroundScope)
+        val denial = AppResult.Failed(Failure(FailureKind.AccessDenied, "Rejected"))
+        val child = Child().apply { release = { error("Still closing") } }
+        assertEquals(
+            denial,
+            parent.acquire(
+                child,
+                { denial },
+                {
+                    it.releaseAttempts++
+                    it.release()
+                    it.released++
+                },
+            ),
+        )
+        assertEquals(0, child.released)
+        child.release = {}
+        assertEquals(AppResult.Success(Unit), parent.close())
+        assertEquals(1, child.released)
+    }
+
     @Test
     fun closingOneScreenDoesNotCloseItsSiblingAndParentClosesEveryRemainingChild() = runTest {
         val parent = SdkChildResources(backgroundScope)
@@ -151,8 +175,10 @@ private suspend fun SdkChildResources.open(child: Child) =
     acquire(
         child,
         {
-            it.initialized++
-            it.initialize()
+            safeStorageCall {
+                it.initialized++
+                it.initialize()
+            }
         },
         {
             it.releaseAttempts++

@@ -1,0 +1,24 @@
+package dev.fajar.hris.collaboration.proof
+
+import dev.fajar.starter.common.result.Failure
+
+/** Controlled categories only; neither provider descriptions nor request values enter evidence. */
+internal class HrisProofFailure(failure: Failure) :
+    IllegalStateException("Owned SDK operation failed") {
+    val category =
+        "HrisProof_${failure.kind.name}_${when (failure.code) {
+        "client.collaboration_child_pending" -> "ChildPending"
+        "client.collaboration_child_interrupted" -> "ChildInterrupted"
+        "client.collaboration_children_stopped" -> "ChildrenStopped"
+        "client.collaboration_children_full" -> "ChildrenFull"
+        "client.collaboration_sync_pending" -> "SyncPending"
+        "client.collaboration_sync_stopped" -> "SyncStopped"
+        "client.collaboration_sync_interrupted" -> "SyncInterrupted"
+        "client.collaboration_runtime_not_open" -> "RuntimeNotOpen"
+        "client.collaboration_sdk_not_found" -> "SdkNotFound"
+        "client.collaboration_sdk_unauthorized" -> "SdkUnauthorized"
+        "client.collaboration_sdk_access_denied" -> "SdkDenied"
+        "client.collaboration_sdk_unavailable" -> "SdkUnavailable"
+        else -> "Unclassified"
+    }}"
+}

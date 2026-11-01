@@ -1,6 +1,65 @@
 # Agent continuation — HRIS Mobile
 
-## Active collaboration implementation — 31 October 2026
+## Active collaboration implementation — 1 November 2026
+
+[Evidence](measurements/collaboration-sync-recovery-2026-11-01.json) · [Contract](collaboration-sdk-lifecycle.md)
+
+The actual HRIS CI fixture now pins Platform `013f8092114eef7a603930bdf242aed859ccba7c`,
+which includes the required direct-metadata contract.
+
+Common admitted conversation entry and retained-cursor sync recovery are implemented.
+Entry verifies the active device, owned DM, READY room and current owner after each
+request; a late result closes only its child. Structured SDK denials survive failed
+post-request reads and disposal. The pinned FFI loop stops on its first error;
+the replacement owns one `syncOnceV2` request, bounded backoff and the SDK's cursor.
+Final denied responses remain visible even when cleanup fails. The gateway also
+confirms the SDK's post-join `m.direct` only when it matches the existing HRIS
+DIRECT scope. No provider metadata writes or arbitrary account-data are enabled. The server fixture
+injects a sync 429 only after actual process death and requires a successful retry
+with that same cursor, both encrypted replies and the original queued transaction.
+
+Twenty-nine new common cases pass. Final full root/browser/Android/Wasm/lint passes
+in 240s: 2,189 desktop cases, 82 domain/81 data browser,
+zero lint errors. Later proof-only corrections each rerun root/proof assembly/lint
+(66s diagnostic, 64s current owner, 65s bounded explicit entry attempts). Actual
+SDK run `c17b1b10` passes in 39.126s (66s Gradle/quality,
+one API and 32 driver cases), with cleanup complete. Backend regression passes
+in 411s with 40 domain, 204 data and 20 HTTP
+cases; focused verification passes in 54s. Format and architecture checks pass. All 24 Platform/131 Mobile
+hashes match before/after. Proof APK `8a212769`; dev APK `87631d85` is built,
+not installed. Emulator stopped; no live/schema/phone changes.
+
+The earlier missing-room failures were a fixture ownership bug: restoration changed
+the local session, but entry retained its old owner. RuntimeNotOpen correctly rejected
+it before SDK join. The initial room-ID hypothesis was incorrect; all attempts are
+retained. A later 503 provider-busy join is also retained. The fixture permits at most
+four explicit idempotent entry attempts; product repositories still issue each join
+once, with no automatic enrollment. The deterministic sync fault remains independent. Two subsequent failed runs
+exposed the SDK's post-join metadata confirmation. Both failures are retained;
+three new domain, three database and two HTTP cases verify the correction,
+including malformed requests, identity isolation and permission loss.
+
+**Continue P0–P8; none of the 54 groups is accepted.** Next, retain received
+server denials in setup/discovery reads when their follow-up session read fails
+(`LoadCollaborationSetup` / `ReadCollaborationConversations` still return that
+later failure directly). Preparation, replay and runtime restoration use the same post-request pattern;
+review their denial propagation as part of that correction. Then connect product entry, bounded history windows,
+scoped offline projections, bootstrap/cross-family recovery and durable logical-ID
+reconciliation to chat UI. Existing DM metadata has actor IDs, so add a bounded
+owned peer-label projection before presenting the conversation list. Do not scan
+5,000 participants or add per-row remote calls. Keep generic verified foundations
+in Starter; these HRIS SDK/admission adapters do not require a Starter port.
+
+Predecessor `0ef8018c` control CI `41250076314` passes all 26 steps:
+158 desktop, 134 browser, 134 iOS simulator cases; 120 source hashes match the
+immutable commit. Provider CI `41250076315` passes both modes/all steps, classic
+90.228s/native 85.289s, with 14 matching Platform hashes per mode. HRIS CI
+`41250076331` failed after provider-capacity sync 429s; its timeout/cleanup evidence
+and the pinned SDK diagnosis are retained. Earlier command CI `39217be2` HRIS
+`41248280306` also passes all 17 steps: 68.983s, cleanup complete, 108 Mobile/15
+Platform hashes verified. Apple native chat interoperability remains pending.
+
+## Previous collaboration checkpoint — 31 October 2026
 
 **Android room/timeline children now belong to their protected runtime.**
 [Contract](collaboration-timeline.md) and

@@ -1,14 +1,57 @@
 package dev.fajar.starter.collaboration.data
 
 import dev.fajar.starter.collaboration.data.datasources.CollaborationSdkSyncConnection
+import dev.fajar.starter.collaboration.data.dto.SdkSyncProblem
 import dev.fajar.starter.collaboration.data.repositories.SdkSyncLifecycle
 import dev.fajar.starter.common.result.*
 import kotlin.test.*
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.*
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class SdkSyncLifecycleTest {
+    @Test
+    fun finalNativeDenialSurvivesCollectorDisposalAndFailedCleanup() = runTest {
+        for (failCleanup in listOf(false, true)) {
+            val connection = Connection()
+            val owner = SdkSyncLifecycle(backgroundScope) { connection }
+            owner.start()
+            connection.onStop = {
+                connection.problems.value = SdkSyncProblem("M_UNKNOWN_TOKEN", terminal = true)
+                if (failCleanup) error("Fictional termination failure")
+            }
+            val result = owner.stop()
+            assertEquals(failCleanup, result is AppResult.Failed)
+            assertEquals(FailureKind.Unauthorized, owner.failures.value?.kind)
+        }
+    }
+
+    @Test
+    fun structuredSyncFailuresReachOwnerAndRecoveryClearsOnlyTransientFailure() = runTest {
+        val connection = Connection()
+        val owner = SdkSyncLifecycle(backgroundScope) { connection }
+        assertIs<AppResult.Success<Unit>>(owner.start())
+        connection.problems.value = SdkSyncProblem("M_LIMIT_EXCEEDED", 1_001)
+        runCurrent()
+        assertEquals(FailureKind.Service, owner.failures.value?.kind)
+        assertEquals(2, owner.failures.value?.retryAfterSeconds)
+        connection.problems.value = null
+        runCurrent()
+        assertNull(owner.failures.value)
+        connection.problems.value = SdkSyncProblem("M_FORBIDDEN", terminal = true)
+        runCurrent()
+        assertEquals(FailureKind.AccessDenied, owner.failures.value?.kind)
+        assertEquals(
+            FailureKind.AccessDenied,
+            assertIs<AppResult.Failed>(owner.start()).failure.kind,
+        )
+        owner.stop()
+        connection.problems.value = null
+        runCurrent()
+        assertEquals(FailureKind.AccessDenied, owner.failures.value?.kind)
+    }
+
     @Test
     fun concurrentStartsShareOneAcquisitionAndTerminationIsIdempotent() = runTest {
         var acquisitions = 0
@@ -197,6 +240,10 @@ class SdkSyncLifecycleTest {
 }
 
 private class Connection : CollaborationSdkSyncConnection {
+    override val problems = MutableStateFlow<SdkSyncProblem?>(null)
+
+    override suspend fun start(): SdkSyncProblem? = problems.value?.takeIf { it.terminal }
+
     var calls = 0
     var releases = 0
     var onStop: suspend () -> Unit = {}

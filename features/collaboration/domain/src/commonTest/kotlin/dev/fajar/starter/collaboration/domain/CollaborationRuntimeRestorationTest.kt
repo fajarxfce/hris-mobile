@@ -162,6 +162,12 @@ private class RestorationFixture {
     var result: suspend () -> AppResult<CollaborationRuntimeLease?> = { AppResult.Success(lease) }
     private val runtimes =
         object : CollaborationRuntimeRepository {
+            override suspend fun enterTimeline(
+                owner: CollaborationOwner,
+                deviceId: String,
+                matrixRoomId: String,
+            ): AppResult<CollaborationTimelineLease> = error("No implicit conversation entry")
+
             override suspend fun closeOtherOwners(
                 retainedOwner: CollaborationOwner?
             ): AppResult<Unit> = error("Restoration cannot close unrelated owners")

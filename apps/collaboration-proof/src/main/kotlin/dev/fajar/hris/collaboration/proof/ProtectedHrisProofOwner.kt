@@ -5,7 +5,8 @@ import dev.fajar.starter.collaboration.data.di.androidCollaborationRuntimeReposi
 import dev.fajar.starter.collaboration.data.repositories.AndroidCollaborationRuntimeLease
 import dev.fajar.starter.collaboration.data.sdk.CollaborationSdkEndpoint
 import dev.fajar.starter.collaboration.domain.entities.*
-import dev.fajar.starter.common.result.AppResult
+import dev.fajar.starter.collaboration.domain.repositories.CollaborationTimelineLease
+import dev.fajar.starter.common.result.*
 import dev.fajar.starter.identity.domain.entities.IdentityServer
 import dev.fajar.starter.securestorage.AndroidCredentialStore
 import java.io.File
@@ -14,6 +15,7 @@ import java.security.MessageDigest
 import java.util.UUID
 import kotlin.io.encoding.Base64
 import kotlin.time.Instant
+import kotlinx.coroutines.delay
 import org.json.JSONObject
 
 /** Only fictional emulator data. Deliberate record faults never touch the employee application. */
@@ -22,7 +24,7 @@ internal class ProtectedHrisProofOwner(
     private val fixture: JSONObject,
     home: URI,
 ) {
-    private val owner =
+    private var owner =
         CollaborationOwner(
             UUID.randomUUID().toString(),
             home.toString(),
@@ -37,6 +39,41 @@ internal class ProtectedHrisProofOwner(
             IdentityServer(home.toString(), "Fictional SDK peer"),
             CollaborationSdkEndpoint(home.toString(), allowCleartext = true),
         )
+
+    suspend fun enterTimeline(roomId: String): CollaborationTimelineLease {
+        val replaced =
+            runtime.enterTimeline(owner.copy(sessionId = "replaced-local-owner"), deviceId, roomId)
+        check(
+            replaced is AppResult.Failed &&
+                replaced.failure.code == "client.collaboration_runtime_not_open"
+        )
+        // A different room with the provider's syntax, including v12 reference-hash length.
+        val missingRoom = roomId.replaceRange(1, 2, if (roomId[1] == 'a') "b" else "a")
+        val missing = runtime.enterTimeline(owner, deviceId, missingRoom)
+        check(missing is AppResult.Failed)
+        if (
+            missing.failure.kind != FailureKind.Unavailable ||
+                missing.failure.code != "client.collaboration_sdk_not_found"
+        )
+            throw HrisProofFailure(missing.failure)
+        // Explicit fixture attempts model retrying this idempotent admitted entry. The product
+        // repository itself never retries joins, enrolls a device, or replaces its owner.
+        repeat(4) { attempt ->
+            val entered = runtime.enterTimeline(owner, deviceId, roomId)
+            if (entered is AppResult.Success) return entered.value
+            val failure = (entered as AppResult.Failed).failure
+            if (
+                attempt == 3 ||
+                    failure.code != "client.collaboration_sdk_unavailable" ||
+                    failure.kind in setOf(FailureKind.Unauthorized, FailureKind.AccessDenied)
+            )
+                throw HrisProofFailure(failure)
+            val wait = maxOf(2_000L shl attempt, (failure.retryAfterSeconds ?: 0) * 1_000)
+            if (wait > 10_000) throw HrisProofFailure(failure)
+            delay(wait)
+        }
+        error("Owned entry attempts exhausted")
+    }
 
     suspend fun restoreStored(): AndroidCollaborationRuntimeLease =
         requireNotNull(success(runtime.restore(owner, deviceId)))
@@ -102,6 +139,7 @@ internal class ProtectedHrisProofOwner(
                     as AndroidCollaborationRuntimeLease
             check(owned.owner == renewedOwner && identity(owned) == keys)
             check(owned.installedOperationId == fixture.getString("bootstrapOperationId"))
+            owner = renewedOwner
             return owned.also { owned = null }
         } finally {
             owned?.closeProofRuntime()
@@ -165,6 +203,7 @@ internal class ProtectedHrisProofOwner(
     }
 
     private fun <T> success(value: AppResult<T>): T {
+        if (value is AppResult.Failed) throw HrisProofFailure(value.failure)
         check(value is AppResult.Success) { "Owned protected runtime failed" }
         return value.value
     }

@@ -3,8 +3,40 @@
 The Android protected runtime now owns room/timeline children as well as classic
 sync. `openTimeline` is a platform data operation over an already-known encrypted
 room. It does not join an invitation, enroll a device, restore a second SDK client,
-resume delivery, or grant HRIS access. A common admitted content port and feature
-routes must still connect it to the product.
+resume delivery, or grant HRIS access. `EnterCollaborationConversation` adds the
+common admitted entry port described below. Feature routes and owned offline
+projections must still connect it to the product.
+
+## Admitted entry
+
+`EnterCollaborationConversation` captures current HRIS admission, reads the active
+device for the current native platform, verifies the owned direct conversation
+and requires its matching READY room. It rechecks the owner after every pending
+read, including a failed read. It then invokes the runtime repository with the
+observed room ID. No setup registration, bootstrap, room provisioning, device
+reset or parent-runtime restoration is implicit in entry.
+
+The repository requires an already-installed lease matching the complete owner
+and device. It shares that lease's sync producer and acquires a child that joins
+the room before observing it. Partial join/timeline initialization still belongs
+to the parent. Replaced local sessions cannot borrow another runtime. The common
+`CollaborationTimelineLease` binds owner, device and Matrix room; the entry use
+case verifies all three before handover. A cancelled/late result or new access
+denial closes only the acquired child. Cleanup failure cannot replace the
+authoritative operation result.
+
+Structured SDK Matrix errors retain unauthorized/access-denied classifications.
+Missing rooms have a separate unavailable code; rate limits use bounded delays.
+Unknown provider codes and exception descriptions never enter domain parameters.
+Received denials survive simultaneous local credential/shutdown failures and a
+failed post-request session read. Only explicit admitted acquisition can reopen
+a consumer's denial gate; an ordinary failed retry is not permission. This
+stateless entry operation does not itself persist the consumer's read admission.
+
+Entry is a live operation. The child's Flow is a primitive observation resource,
+not a renewable authorization token or an offline-history repository. Product
+consumers still need scoped observation/disposal and the separate owned read
+model, preserving cached facts through ordinary expiry or unavailable network.
 
 ## Lifetime
 
@@ -21,6 +53,8 @@ Closing one screen leaves siblings open. Parent close first rejects new children
 then closes all retained children before SDK database draining and store unlock.
 An unfinished child prevents parent release. Credential persistence failure also
 stops children; explicit protected runtime reopening is required after recovery.
+Structured sync denials gate snapshots before closing children. A denial returned
+by an in-flight sync during disposal remains authoritative even if cleanup fails.
 
 The pinned Rust SDK calls the initial timeline RESET synchronously before
 `addListener` returns its task handle. The source installs its projection lock and
@@ -78,3 +112,10 @@ and actual SDK run `5aea81cc` passing in 34.340s (53s Gradle, 32 driver cases).
 All 15 Platform/120 Mobile source hashes match before and after execution. One
 provider-busy key upload returned 503 before successful completion. Emulator
 stopped; no phone, production service or schema change is made.
+
+## Admitted entry and interrupted-sync verification
+
+[The 1 November evidence](measurements/collaboration-sync-recovery-2026-11-01.json) verifies the common entry port,
+structured denials, bounded transport recovery and the actual post-restart 429.
+Fixture failures and corrections remain recorded; product route/history/offline
+acceptance is still pending.

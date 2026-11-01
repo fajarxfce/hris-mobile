@@ -21,7 +21,7 @@ internal class SdkChildResources(
 
     suspend fun <T> acquire(
         resource: T,
-        initialize: suspend (T) -> Unit,
+        initialize: suspend (T) -> AppResult<Unit>,
         release: suspend (T) -> Unit,
     ): AppResult<SdkChildLease<T>> {
         val child =
@@ -72,15 +72,15 @@ internal class SdkChildResources(
 internal class SdkChildLease<T>(
     lifetime: CoroutineScope,
     private val resource: T,
-    initialize: suspend (T) -> Unit,
+    initialize: suspend (T) -> AppResult<Unit>,
     release: suspend (T) -> Unit,
     released: suspend (SdkChildLease<T>) -> Unit,
 ) {
     private val acquisition =
         lifetime.async {
-            safeStorageCall {
-                initialize(resource)
-                resource
+            when (val initialized = initialize(resource)) {
+                is AppResult.Failed -> initialized
+                is AppResult.Success -> AppResult.Success(resource)
             }
         }
     private val shutdown =

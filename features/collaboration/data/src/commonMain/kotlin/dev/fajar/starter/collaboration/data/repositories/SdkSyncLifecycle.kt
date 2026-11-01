@@ -1,13 +1,18 @@
 package dev.fajar.starter.collaboration.data.repositories
 
 import dev.fajar.starter.collaboration.data.datasources.CollaborationSdkSyncConnection
+import dev.fajar.starter.collaboration.data.dto.SdkSyncProblem
+import dev.fajar.starter.collaboration.data.mappers.collaborationSdkFailure
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.storage.safeStorageCall
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
-/** One SDK lease owns acquisition even when its caller disappears. No automatic retry. */
+/**
+ * One SDK lease owns acquisition even when its caller disappears. No automatic acquisition retry.
+ */
 internal class SdkSyncLifecycle(
     private val lifetime: CoroutineScope,
     private val acquire: suspend () -> CollaborationSdkSyncConnection,
@@ -15,6 +20,9 @@ internal class SdkSyncLifecycle(
     private val mutation = Mutex()
     private val stopping = Mutex()
     private var stopped = false
+    private var observation: Job? = null
+    private val mutableFailures = MutableStateFlow<Failure?>(null)
+    val failures = mutableFailures.asStateFlow()
     private var opening: Deferred<AppResult<CollaborationSdkSyncConnection>>? = null
 
     suspend fun start(): AppResult<Unit> {
@@ -27,7 +35,20 @@ internal class SdkSyncLifecycle(
                     existing != null && existing.isCompleted && existing.await() is AppResult.Failed
                 )
                     opening = null
-                opening ?: lifetime.async { safeStorageCall { acquire() } }.also { opening = it }
+                opening
+                    ?: lifetime
+                        .async {
+                            val result = safeStorageCall { acquire() }
+                            if (result is AppResult.Success)
+                                observation =
+                                    lifetime.launch {
+                                        result.value.problems.collect {
+                                            mutableFailures.value = it?.toFailure()
+                                        }
+                                    }
+                            result
+                        }
+                        .also { opening = it }
             }
         val result =
             withTimeoutOrNull(5_000) { pending.await() }
@@ -38,7 +59,13 @@ internal class SdkSyncLifecycle(
             else
                 when (result) {
                     is AppResult.Failed -> result
-                    is AppResult.Success -> AppResult.Success(Unit)
+                    is AppResult.Success ->
+                        when (val started = safeStorageCall { result.value.start() }) {
+                            is AppResult.Failed -> started
+                            is AppResult.Success ->
+                                started.value?.let { AppResult.Failed(it.toFailure()) }
+                                    ?: AppResult.Success(Unit)
+                        }
                 }
         }
     }
@@ -51,10 +78,24 @@ internal class SdkSyncLifecycle(
                     stopped = true
                     opening
                 } ?: return@withLock AppResult.Success(Unit)
-            when (val acquired = pending.await()) {
-                is AppResult.Failed -> AppResult.Success(Unit)
-                is AppResult.Success -> safeStorageCall { acquired.value.stop() }
-            }
+            val result =
+                when (val acquired = pending.await()) {
+                    is AppResult.Failed -> AppResult.Success(Unit)
+                    is AppResult.Success -> {
+                        val stopped = safeStorageCall { acquired.value.stop() }
+                        // The collector may not run between native completion and its disposal.
+                        // Preserve an authoritative response received by that last pending call.
+                        acquired.value.problems.value?.toFailure()?.let {
+                            if (
+                                it.kind in setOf(FailureKind.Unauthorized, FailureKind.AccessDenied)
+                            )
+                                mutableFailures.value = it
+                        }
+                        stopped
+                    }
+                }
+            if (result is AppResult.Success) observation?.cancelAndJoin()
+            result
         }
 
     private fun unavailable(code: String) =
@@ -62,3 +103,15 @@ internal class SdkSyncLifecycle(
             Failure(FailureKind.Unavailable, "Chat synchronization is unavailable.", code = code)
         )
 }
+
+private fun SdkSyncProblem.toFailure(): Failure =
+    when (matrixCode) {
+        null,
+        "CLIENT_SYNC_STOPPED" ->
+            Failure(
+                FailureKind.Unavailable,
+                "Chat synchronization is interrupted.",
+                code = "client.collaboration_sync_interrupted",
+            )
+        else -> collaborationSdkFailure(matrixCode, retryAfterMillis?.coerceAtLeast(0)?.toULong())
+    }

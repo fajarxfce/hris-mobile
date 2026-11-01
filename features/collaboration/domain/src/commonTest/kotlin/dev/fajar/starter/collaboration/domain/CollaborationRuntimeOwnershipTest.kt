@@ -266,6 +266,12 @@ private class OwnershipFixture(private val scheduler: TestCoroutineScheduler) {
         }
     private val runtimes =
         object : CollaborationRuntimeRepository {
+            override suspend fun enterTimeline(
+                owner: CollaborationOwner,
+                deviceId: String,
+                matrixRoomId: String,
+            ): AppResult<CollaborationTimelineLease> = error("No implicit conversation entry")
+
             override suspend fun install(
                 owner: CollaborationOwner,
                 command: CollaborationSetupCommandRecord,

@@ -2,7 +2,8 @@ package dev.fajar.starter.collaboration.data.repositories
 
 import dev.fajar.starter.collaboration.data.datasources.AndroidCollaborationTimelineSource
 import dev.fajar.starter.collaboration.data.datasources.CollaborationSdkStoreLease
-import dev.fajar.starter.collaboration.data.datasources.startAndroidCollaborationSync
+import dev.fajar.starter.collaboration.data.datasources.createAndroidCollaborationSync
+import dev.fajar.starter.collaboration.data.mappers.collaborationSdkAcquisitionFailure
 import dev.fajar.starter.collaboration.data.sdk.CollaborationSdkRecord
 import dev.fajar.starter.collaboration.domain.entities.CollaborationOwner
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationRuntimeLease
@@ -12,6 +13,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.filterNotNull
 import org.matrix.rustcomponents.sdk.Client
+import org.matrix.rustcomponents.sdk.Room
 
 /** Platform data access only; feature pages/ViewModels never receive the raw SDK client. */
 class AndroidCollaborationRuntimeLease
@@ -30,7 +32,8 @@ internal constructor(
     private val lifetime = CoroutineScope(lifetimeJob + Dispatchers.Default)
     private val shutdown = SdkStoreShutdown(lifetime) { releaseResources() }
     private val stopRequested = AtomicBoolean()
-    private val sync = SdkSyncLifecycle(lifetime) { startAndroidCollaborationSync(nativeClient) }
+    private val sync =
+        SdkSyncLifecycle(lifetime) { createAndroidCollaborationSync(nativeClient, lifetime) }
     private val children = SdkChildResources(lifetime)
     internal val closingRequested
         get() = stopRequested.get()
@@ -38,6 +41,15 @@ internal constructor(
     private val initialization =
         lifetime.async(start = CoroutineStart.LAZY) {
             nativeClient.encryption().use { it.waitForE2eeInitializationTasks() }
+        }
+    private val syncWatcher =
+        lifetime.launch(start = CoroutineStart.LAZY) {
+            sync.failures.filterNotNull().collect { failure ->
+                if (failure.kind in setOf(FailureKind.Unauthorized, FailureKind.AccessDenied)) {
+                    safeStorageCall { nativeClient.enableAllSendQueues(false) }
+                    children.close()
+                }
+            }
         }
     private val credentialWatcher =
         lifetime.launch(start = CoroutineStart.LAZY) {
@@ -51,6 +63,7 @@ internal constructor(
     internal fun startMonitoring() {
         initialization.start()
         credentialWatcher.start()
+        syncWatcher.start()
     }
 
     /** Platform data entry point; the owning operation must hold current HRIS admission. */
@@ -61,16 +74,29 @@ internal constructor(
         }
         val result = sync.start()
         currentCoroutineContext().ensureActive()
-        if (stopRequested.get()) return syncStopped()
+        if (stopRequested.get())
+            return AppResult.Failed(
+                collaborationSdkAcquisitionFailure(result, syncStopped().failure)
+            )
         credentialFailures.value?.let {
-            sync.stop()
-            return AppResult.Failed(it)
+            // The mandatory credential watcher owns termination even if this waiter disappears.
+            return AppResult.Failed(collaborationSdkAcquisitionFailure(result, it))
         }
         return result
     }
 
     /** Opens an already-known room; does not join, restore, or resume message delivery. */
-    suspend fun openTimeline(roomId: String): AppResult<AndroidCollaborationTimelineLease> {
+    suspend fun openTimeline(roomId: String): AppResult<AndroidCollaborationTimelineLease> =
+        acquireTimeline(roomId) { requireNotNull(nativeClient.getRoom(roomId)) }
+
+    /** The admitted entry operation may join; the resulting child still belongs to this parent. */
+    suspend fun enterTimeline(roomId: String): AppResult<AndroidCollaborationTimelineLease> =
+        acquireTimeline(roomId) { nativeClient.joinRoomById(roomId) }
+
+    private suspend fun acquireTimeline(
+        roomId: String,
+        acquireRoom: suspend () -> Room,
+    ): AppResult<AndroidCollaborationTimelineLease> {
         if (stopRequested.get()) return syncStopped()
         credentialFailures.value?.let {
             return AppResult.Failed(it)
@@ -81,20 +107,31 @@ internal constructor(
                 roomId.any { it.isWhitespace() || it.isISOControl() }
         )
             return AppResult.Failed(Failure(FailureKind.Validation, "Invalid chat room."))
-        val source = AndroidCollaborationTimelineSource(nativeClient, roomId)
-        val result = children.acquire(source, { it.open() }, { it.stop() })
+        val source = AndroidCollaborationTimelineSource(acquireRoom)
+        val result =
+            children.acquire(source, { safeAndroidCollaborationCall { it.open() } }, { it.stop() })
         var handedOver = false
         try {
             currentCoroutineContext().ensureActive()
-            if (stopRequested.get()) return syncStopped()
+            if (stopRequested.get())
+                return AppResult.Failed(
+                    collaborationSdkAcquisitionFailure(result, syncStopped().failure)
+                )
             credentialFailures.value?.let {
-                return AppResult.Failed(it)
+                return AppResult.Failed(collaborationSdkAcquisitionFailure(result, it))
             }
             return when (result) {
                 is AppResult.Failed -> result
                 is AppResult.Success ->
                     AppResult.Success(
-                            AndroidCollaborationTimelineLease(result.value, source.updates)
+                            AndroidCollaborationTimelineLease(
+                                owner,
+                                deviceId,
+                                roomId,
+                                result.value,
+                                source.updates,
+                                sync.failures,
+                            )
                         )
                         .also { handedOver = true }
             }
@@ -122,6 +159,7 @@ internal constructor(
     private suspend fun releaseResources(): SdkShutdownAttempt {
         val credentialResult = persistence.close()
         credentialWatcher.cancelAndJoin()
+        syncWatcher.cancelAndJoin()
         safeStorageCall { nativeClient.enableAllSendQueues(false) }
         val syncStopped = sync.stop()
         if (syncStopped is AppResult.Failed)

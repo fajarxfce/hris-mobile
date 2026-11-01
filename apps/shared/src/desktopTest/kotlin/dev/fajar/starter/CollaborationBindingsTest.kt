@@ -31,6 +31,13 @@ class CollaborationBindingsTest {
             var suppliedServer: IdentityServer? = null
             val runtime =
                 object : CollaborationRuntimeRepository {
+                    override suspend fun enterTimeline(
+                        owner: CollaborationOwner,
+                        deviceId: String,
+                        matrixRoomId: String,
+                    ): AppResult<CollaborationTimelineLease> =
+                        error("No implicit conversation entry")
+
                     override suspend fun install(
                         owner: CollaborationOwner,
                         command: CollaborationSetupCommandRecord,
@@ -88,6 +95,7 @@ class CollaborationBindingsTest {
                 assertNotNull(container.koin.get<ReconcileCollaborationSetupReceipt>())
                 assertNotNull(container.koin.get<InstallCollaborationRuntime>())
                 assertNotNull(container.koin.get<RestoreCollaborationRuntime>())
+                assertNotNull(container.koin.get<EnterCollaborationConversation>())
                 lifetime.start()
                 lifetime.start()
                 withTimeout(5_000) { firstClose.await() }
@@ -124,6 +132,12 @@ class CollaborationBindingsTest {
                 )
             val result = assertIs<AppResult.Failed>(runtime.restore(owner, "device"))
             assertEquals("client.collaboration_runtime_unavailable", result.failure.code)
+            assertEquals(
+                "client.collaboration_runtime_unavailable",
+                assertIs<AppResult.Failed>(runtime.enterTimeline(owner, "device", "!room"))
+                    .failure
+                    .code,
+            )
             assertEquals(AppResult.Success(Unit), runtime.closeOtherOwners(null))
         } finally {
             container.close()
