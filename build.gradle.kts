@@ -31,6 +31,7 @@ tasks.named("check") {
     dependsOn("architectureCheck")
     dependsOn("distributionCheck")
     dependsOn("androidRunnerCheck")
+    dependsOn(":features:collaboration:data:testAndroidHostTest")
     dependsOn(gradle.includedBuild("build-logic").task(":test"))
     dependsOn("formatCheck")
     dependsOn(

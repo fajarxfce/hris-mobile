@@ -459,5 +459,54 @@
     "Subsequent source review added an initialization flag so partial encryption/timeline acquisition cleanup cannot create a queue through synchronous FFI. The earlier actual runs used the source delta recorded above; the final actual run matches all current source hashes.",
     "Common source is unchanged in this increment. Root and Android/proof checks run; browser tests are not rerun, with the prior common staging evidence remaining separate.",
     "Only the fixture enables a room. Product queue leases still expose paused snapshot/enqueue/close; admitted delivery lifetime, recipient logical-ID/event aliases and product history/UI remain pending."
-  ]
+  ],
+  "hostedHris": {
+    "runId": 41267815552,
+    "commit": "90c43ed776556199b5f7319c94b6c0773036b7a3",
+    "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/41267815552",
+    "steps": 17,
+    "passed": true,
+    "sdkRunId": "5cc68e30107245e8a03c58397082e1f5",
+    "seconds": 68.256,
+    "platformCommit": "4944b34f0946d449bc4b7ff4651737db2255ce93",
+    "verification": {
+      "passed": true,
+      "encryptedBothDirections": true,
+      "logicalIdsPreserved": true,
+      "cleanup": true,
+      "protectedStoreReopened": true,
+      "missingRecordPreserved": true,
+      "wrongPassphrasePreserved": true,
+      "exclusiveOwner": true,
+      "processRestarted": true,
+      "queueRestored": true,
+      "transactionReused": true,
+      "identityAfterRestart": true,
+      "messageIntentRestored": true,
+      "queueMappingRecovered": true,
+      "queueWriterExclusive": true,
+      "perRoomDeliveryIsolated": true,
+      "heldQueueRestored": true,
+      "heldRoomNeverSent": true,
+      "pausedAcrossRestart": true,
+      "syncInterruptedAfterRestart": true,
+      "syncRetriedWithRetainedCursor": true,
+      "artifact": {
+        "apkSha256": "b77d551336edc952cd41b5330cce4fddd46b10cf0824b4393736fca995a2a3ef",
+        "package": "dev.fajar.hris.collaboration.proof",
+        "avd": "hris-mobile-dev",
+        "androidApi": "35"
+      }
+    },
+    "immutableSourceHashesMatched": {
+      "mobile": 172,
+      "platform": 24
+    },
+    "artifactSha256": {
+      "result.json": "81bcddee77725fab57894cb2fd69892bc0d86d540d574945848d3ac81f006ca4",
+      "verified.json": "66bc84c940eef6990f2f123f3146a2a6c0f537cf94e782f8af7bbd1b1ce6a484",
+      "gateway-trace.json": "e3398e0cf9a4a48bb358b64c70ca56afa3bae12e6ee341f5de022f9614d3d131"
+    },
+    "statusSha256": "e3fd7ff4dc6e4ee36eae952a96c222d034f80bd0705d2388000d43aad85db14a"
+  }
 }

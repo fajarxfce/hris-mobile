@@ -364,6 +364,11 @@ private class StageFixture {
                             return enqueueResult
                         }
 
+                        override suspend fun resume(
+                            mappedTransactions: Set<String>
+                        ): AppResult<CollaborationQueueDelivery> =
+                            error("Staging never enables delivery")
+
                         override suspend fun close(): AppResult<Unit> {
                             closes++
                             events += "close"

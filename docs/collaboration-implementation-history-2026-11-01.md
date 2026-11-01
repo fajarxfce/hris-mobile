@@ -310,3 +310,61 @@ Platform **`7e95bffdae322e16c9b904d21461b42c19b20012`** (the current HRIS CI pin
 No live/schema/phone change. Starter remains `36116b2`; these HRIS SDK/policy
 changes need no generic port. Atomic commits and every-commit pushes remain
 authorized. Continue implementation; a checkpoint is not completion.
+
+## Per-room initialization checkpoint — 1 November 2026
+
+**Per-room queue enablement is proven; global enable is not room admission.**
+The Android product writer now initializes `Room.timeline()` through async FFI
+before synchronous queue controls. Pinned Rust first access may spawn tasks.
+Cleanup tracks completed initialization, so failed encryption/timeline acquisition
+cannot accidentally create a queue from synchronous FFI. Product leases still
+expose paused snapshot/enqueue/close; the fixture alone enables delivery.
+
+[Two-room evidence](measurements/collaboration-room-queue-2026-11-01.json):
+final actual HRIS SDK **`837dfb7f8f154058a06d65faa46229a6` / 52.330s** (92s Gradle /
+quality), all proof and cleanup flags true. A second room is staged before any
+main timeline, then both original transactions survive real process death. The
+admitted room exchanges encrypted messages in both directions while the other
+room stays disabled with its exact transaction. HRIS counts **zero attempted
+sends** for the held room. Existing store/identity/intent-mapping/exclusivity/sync-
+fault/retained-cursor checks continue to pass.
+
+An intentional global-enable APK **fails as expected** at
+`HrisProofHeldQueue.checkPaused`: SDK **`03148dbf` / 43.455s**, 60s Gradle, cleanup
+true. The first positive **`ad5d25ae` / 47.760s** and restored positive
+**`f685907d`** use a byte-identical APK. Subsequent cleanup review added the
+initialization guard; final actual execution matches all **172 Mobile / 24
+Platform hashes**. The measurement records the earlier one-file source delta.
+
+Initial quality failed the fixture's 100-line function bound (109 lines, 32s).
+Extracted fixture parsing; corrected root/Android/proof checks pass in 86s.
+Final root/Android/proof checks after the cleanup adjustment pass in **95s**:
+**2,288 desktop / 384 suites**, zero failures/errors/skips and app/proof lint errors.
+The 13 Python driver tests pass, including two new rejected proof-flag variants.
+Common source is unchanged; browser tests were not repeated in this increment.
+Final dev APK `6648df90` is built, not installed; proof APK `a6e73c0a`.
+The dedicated emulator is stopped. No live/schema/phone change.
+HRIS CI pins the verified Platform **`4944b34f0946d449bc4b7ff4651737db2255ce93`**.
+
+**Continue P0–P8; none of the 54 feature groups is accepted. Next implement the
+admitted per-room delivery lifetime and durable result reconciliation.** Preserve
+ACKs and unresolved native transactions; bound delivery/listener lifetimes and
+pause before releasing ownership or allowing another writer. A caller disappearing
+cannot cancel a native commit. Do not introduce another transport retry owner or
+clear keys/cursors. Recipient logical-ID/event-alias coalescing, bounded durable
+history, bootstrap/cross-family recovery and Chat list/setup/conversation UI still
+remain. Synapse transaction mappings expire after 24h; stable SDK transaction IDs
+alone do not prevent duplicate recipient presentation.
+
+Common staging is pushed at Mobile **`1a8b6283`**, its cross-repository handoff at
+Platform **`e4800f12`**. Sixteen new common cases include two account-switch negative
+controls; 295s root/browser/Android/Wasm checks pass (2,288 desktop, 150/112 browser).
+Actual native primitive `fa782638` passes in 40.127s. See
+[staging evidence](measurements/collaboration-message-staging-2026-11-01.json).
+Hosted intent `51857538` remains audited: control 41263763417 (265 desktop / 241
+browser / 220 iOS simulator), HRIS 41263763420 (72.312s, all flags true), all 19
+immutable intent hashes verified. Later unaudited CI must not be claimed as proof.
+
+Starter remains `36116b2`; these HRIS SDK/proof changes need no generic port.
+Atomic commits and every-commit pushes remain authorized. Continue implementation;
+a checkpoint is not completion.

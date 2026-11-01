@@ -9,6 +9,28 @@ import kotlinx.coroutines.test.*
 @OptIn(ExperimentalCoroutinesApi::class)
 class SdkQueueOperationsTest {
     @Test
+    fun boundedDeliveryWaitCanOutliveTheShortEnqueueWaitWithoutLosingItsResult() = runTest {
+        val operations = SdkQueueOperations(backgroundScope)
+        val waiter = async {
+            operations.execute(waitMillis = 25_000) {
+                delay(15_000)
+                AppResult.Success("observed receipt")
+            }
+        }
+        runCurrent()
+        advanceTimeBy(5_000)
+        runCurrent()
+        assertFalse(waiter.isCompleted)
+        advanceTimeBy(10_000)
+        runCurrent()
+        assertEquals(AppResult.Success("observed receipt"), waiter.await())
+        assertFailsWith<IllegalArgumentException> {
+            operations.execute<Unit>(waitMillis = 30_001) { error("Unbounded wait is forbidden") }
+        }
+        operations.stop()
+    }
+
+    @Test
     fun cancelledWaiterLeavesNativeCommitOwnedAndRejectsACompetingSnapshot() = runTest {
         val operations = SdkQueueOperations(backgroundScope)
         val finish = CompletableDeferred<Unit>()

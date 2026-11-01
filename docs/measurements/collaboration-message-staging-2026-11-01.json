@@ -310,5 +310,37 @@
     "Ordinary caller cancellation keeps native work alive; interruption of the native operation retires the runtime through full child/task/database-pool drain, including after a waiter disappears.",
     "The actual SDK exchange rechecks the protected native primitive with current source; common use-case policy is exercised by focused and portable tests, not by production UI.",
     "Per-room delivery, durable recipient logical-ID/alias reconciliation, history windows and chat UI remain pending. Initial per-room binding must be asynchronously initialized before relying on synchronous room queue controls."
-  ]
+  ],
+  "hostedControl": {
+    "runId": 41266433679,
+    "commit": "1a8b628356c622cd099413f9f4e58991fa93f72b",
+    "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/41266433679",
+    "steps": 26,
+    "passed": true,
+    "reports": {
+      "iosSimulatorArm64Test": {
+        "suites": 29,
+        "tests": 241,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "desktopTest": {
+        "suites": 35,
+        "tests": 286,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "wasmJsBrowserTest": {
+        "suites": 31,
+        "tests": 262,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "immutableMobileSourceHashesMatched": 171,
+    "statusSha256": "e3fd7ff4dc6e4ee36eae952a96c222d034f80bd0705d2388000d43aad85db14a"
+  }
 }

@@ -49,6 +49,9 @@ internal class AndroidCollaborationMessageQueues(
                     }
                 },
                 release = {
+                    // Pause before waiting for the owned operation; disposal cannot leave a
+                    // delivery window enabled while an acknowledgement is still pending.
+                    it.requestStop()
                     operations.stop()
                     it.stop()
                     if (ownsWriter) {

@@ -198,7 +198,8 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
                             sender.credentialFailures.value == null &&
                                 recipient.credentialFailures.value == null
                         )
-                        val sent = pending.resume(expected)
+                        val sent = productQueue.deliver(expected)
+                        check(pending.accepted(expected) == sent)
                         productQueue.accepted(
                             logicalId(fixture, "logicalId"),
                             sent.transactionId,
@@ -241,6 +242,7 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
                                 .put("queueWriterExclusive", true)
                                 .put("perRoomDeliveryIsolated", true)
                                 .put("heldQueueRestored", true)
+                                .put("nativeDeliveryOwned", true)
                                 .put("senderEventId", sent.eventId)
                                 .put("recipientEventId", answered.eventId)
                                 .put("senderTransaction", sent.transactionId)

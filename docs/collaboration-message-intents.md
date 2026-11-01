@@ -69,8 +69,9 @@ native device/family/bootstrap/room binding is exposed through a domain handle;
 the raw Matrix client remains in Android data.
 
 `SdkQueueOperations` owns at most one native operation and no waiting backlog.
-Its five-second waiter can time out or be cancelled while the operation remains
-owned by the runtime. A competing snapshot/enqueue reports pending until the
+Snapshot/enqueue waiters are bounded to five seconds; the delivery waiter allows
+25 seconds for its bounded window and listener cleanup. A waiter can time out or
+be cancelled while the operation remains owned by the runtime. A competing snapshot/enqueue reports pending until the
 operation finishes. Child shutdown stops new operations, drains the active one,
 stops any captured listener, closes timeline/room handles and only then releases
 exclusivity. Failed or slow cleanup remains owned through the existing parent
@@ -143,6 +144,55 @@ second room before opening the main timeline, kills the real process, restores
 both original transactions and enables only the admitted room. After both encrypted
 directions complete, the other room is still disabled with its original queued
 transaction; the server sees no send attempt for it. The fixture uses per-room
-controls and pauses the admitted room on completion. Product queue leases still
-expose only paused snapshot/enqueue/close. The admitted delivery lifetime and durable
-recipient/history reconciliation are the next implementation, not accepted UI.
+controls and pauses the admitted room on completion. Product queue leases now also expose a bounded delivery window. The common
+live-admitted sender and durable recipient/history reconciliation still need to
+connect that primitive to product UI.
+
+
+## Owned delivery windows
+
+`CollaborationMessageQueueLease.resume` consumes an immutable set of original
+mapped transaction IDs. Its application caller must have current HRIS admission
+and durable intent mappings for the original device/family/room. It captures the
+per-room queue before enablement; any unknown native transaction keeps the room
+paused. Empty native history never becomes a fabricated acknowledgement.
+
+One native operation owns the listener and a 15-second delivery window. The SDK
+owns network sending and retry. Primitive receipts, pending IDs and terminal
+reasons are copied under the callback/control lock. Valid duplicate receipts are
+idempotent; multiple provider event aliases for one original transaction are
+retained. One event cannot acknowledge different transactions. Collections are
+bounded to 128; unknown mutations, malformed identities and overflow terminate
+the window as unresolved without discarding earlier valid receipts. Provider
+error descriptions are not copied into diagnostics or UI.
+
+Child release requests stop **before** joining its native operation. This pauses
+the room and wakes a pending delivery waiter. If stop races listener acquisition,
+that late acquisition cannot enable the room. Ordinary caller cancellation leaves
+the native operation owned; the five-second default wait is not used for the
+15-second delivery window. Delivery permits a 25-second wait, with a hard internal
+30-second ceiling. The existing native-interruption retirement rule still applies.
+
+Finalization pauses only the owned room, cancels/joins its listener, closes handles
+and then releases the exclusive writer. Slow listener cleanup retains its handle
+for retry. Ignored and late queue callbacks dispose SDK payloads too; malformed
+disposal cannot unwind through FFI. A timeout or local stop returns only observed
+receipts and leaves the remaining transactions pending. `DRAINED` describes the
+captured native window; it does not confirm every application intent supplied by
+the caller. The app still needs durable receipt/history reconciliation.
+
+The Android data module now enables host tests using the pinned SDK's public
+`NoHandle` fake constructors. Root `check` includes them; HRIS CI builds/tests
+that adapter before the emulator and retains the XML reports. Fifteen targeted
+Android cases exercise partial acquisition, bounded snapshots, native cleanup,
+late enablement, cancellation, partial receipts, timeout and payload disposal.
+Nine new common cases cover bounded receipt accumulation and the longer owned
+wait. These tests complement the actual SDK exchange.
+
+The real HRIS fixture now resumes through the product lease, cross-checks its
+receipt against an independent native observer, commits the original app `Sent`
+mapping and confirms the sibling room remains paused. The
+[delivery measurement](measurements/collaboration-delivery-2026-11-01.json) records
+the actual run and portable/Android validation. The common live-admitted sender,
+durable recipient aliases/history, richer chat and product routes remain pending;
+this primitive does not accept a complete PRD feature group.

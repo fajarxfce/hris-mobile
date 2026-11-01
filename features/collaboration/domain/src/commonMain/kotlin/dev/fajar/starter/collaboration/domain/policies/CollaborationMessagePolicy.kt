@@ -15,6 +15,11 @@ fun validCollaborationTransactionId(value: String) =
     value.length in 1..128 &&
         value.all { it in 'A'..'Z' || it in 'a'..'z' || it in '0'..'9' || it in "._~:-" }
 
+fun validCollaborationEventId(value: String) =
+    value.startsWith('$') &&
+        value.length in 2..255 &&
+        value.none { it.isWhitespace() || it.isISOControl() }
+
 fun validCollaborationMessageDevice(device: CollaborationMessageDevice) =
     listOf(device.nativeSessionId, device.deviceId, device.bootstrapOperationId)
         .all(::validCollaborationMessageId) &&
@@ -35,9 +40,7 @@ fun validCollaborationMessageState(state: CollaborationMessageState): Boolean =
         is CollaborationMessageState.Sent ->
             validCollaborationMessageDevice(state.device) &&
                 validCollaborationTransactionId(state.transactionId) &&
-                state.eventId.startsWith('$') &&
-                state.eventId.length in 2..255 &&
-                state.eventId.none { it.isWhitespace() || it.isISOControl() }
+                validCollaborationEventId(state.eventId)
     }
 
 /** Native uncertainty and a durable transaction mapping can never be reset or retargeted. */

@@ -16,7 +16,11 @@ internal class SdkQueueOperations(
     private var stopped = false
     private val interrupted = MutableStateFlow(false)
 
-    suspend fun <T> execute(operation: suspend () -> AppResult<T>): AppResult<T> {
+    suspend fun <T> execute(
+        waitMillis: Long = 5_000,
+        operation: suspend () -> AppResult<T>,
+    ): AppResult<T> {
+        require(waitMillis in 1..30_000)
         currentCoroutineContext().ensureActive()
         val task =
             mutation.withLock {
@@ -42,7 +46,7 @@ internal class SdkQueueOperations(
                     }
             }
         return try {
-            withTimeoutOrNull(5_000) { task.await() }
+            withTimeoutOrNull(waitMillis) { task.await() }
                 ?: unavailable("client.collaboration_queue_pending")
         } catch (cancelled: CancellationException) {
             currentCoroutineContext().ensureActive()

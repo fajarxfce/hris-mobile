@@ -1,7 +1,10 @@
 package dev.fajar.starter.collaboration.data.datasources
 
+import dev.fajar.starter.collaboration.data.sdk.SdkQueueDelivery
+import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.policies.validCollaborationTransactionId
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
 import kotlinx.serialization.json.*
 import org.matrix.rustcomponents.sdk.*
 
@@ -11,6 +14,9 @@ internal class AndroidCollaborationMessageQueueSource(private val acquireRoom: s
     private var timeline: Timeline? = null
     private var listener: TaskHandle? = null
     private var queueInitialized = false
+    private val controls = Any()
+    private var stopping = false
+    private var delivery: DeliveryObservation? = null
 
     suspend fun open() {
         val acquired = acquireRoom()
@@ -24,7 +30,7 @@ internal class AndroidCollaborationMessageQueueSource(private val acquireRoom: s
     }
 
     suspend fun snapshot(): Set<String> {
-        check(listener == null)
+        check(listener == null && !stopping)
         val acquired = requireNotNull(room)
         check(!acquired.isSendQueueEnabled())
         val guard = Any()
@@ -36,16 +42,24 @@ internal class AndroidCollaborationMessageQueueSource(private val acquireRoom: s
                 acquired.subscribeToSendQueueUpdates(
                     object : SendQueueListener {
                         override fun onUpdate(update: RoomSendQueueUpdate) {
-                            synchronized(guard) {
-                                if (!collecting || invalid) return
-                                if (update is RoomSendQueueUpdate.NewLocalEvent) {
-                                    val id = update.transactionId
-                                    if (
-                                        !validCollaborationTransactionId(id) ||
-                                            (id !in ids && ids.size == 128)
-                                    )
-                                        invalid = true
-                                    else ids.add(id)
+                            try {
+                                synchronized(guard) {
+                                    if (!collecting || invalid) return
+                                    if (update is RoomSendQueueUpdate.NewLocalEvent) {
+                                        val id = update.transactionId
+                                        if (
+                                            !validCollaborationTransactionId(id) ||
+                                                (id !in ids && ids.size == 128)
+                                        )
+                                            invalid = true
+                                        else ids.add(id)
+                                    }
+                                }
+                            } finally {
+                                try {
+                                    update.destroy()
+                                } catch (_: Exception) {
+                                    synchronized(guard) { invalid = true }
                                 }
                             }
                         }
@@ -64,7 +78,7 @@ internal class AndroidCollaborationMessageQueueSource(private val acquireRoom: s
     }
 
     suspend fun enqueue(logicalId: String, text: String) {
-        check(listener == null)
+        check(listener == null && !stopping)
         check(!requireNotNull(room).isSendQueueEnabled())
         messageEventContentFromMarkdown(text).use { content ->
             requireNotNull(timeline)
@@ -76,16 +90,119 @@ internal class AndroidCollaborationMessageQueueSource(private val acquireRoom: s
         }
     }
 
+    suspend fun resume(mapped: Set<String>): CollaborationQueueDelivery {
+        check(listener == null)
+        val acquired = requireNotNull(room)
+        val observation = DeliveryObservation(SdkQueueDelivery(mapped))
+        synchronized(controls) {
+            check(!stopping && !acquired.isSendQueueEnabled())
+            delivery = observation
+        }
+        try {
+            listener =
+                acquired.subscribeToSendQueueUpdates(
+                    object : SendQueueListener {
+                        override fun onUpdate(update: RoomSendQueueUpdate) =
+                            receive(observation, update)
+                    }
+                )
+            val enabled =
+                synchronized(controls) {
+                    if (stopping || !observation.queue.ready()) false
+                    else {
+                        acquired.enableSendQueue(true)
+                        true
+                    }
+                }
+            if (enabled)
+                withTimeoutOrNull(15_000) {
+                    observation.signal.first {
+                        synchronized(controls) { stopping || observation.queue.ended }
+                    }
+                }
+            return synchronized(controls) {
+                observation.queue.result(
+                    when {
+                        stopping -> CollaborationQueueDeliveryReason.STOPPED
+                        observation.queue.ended -> CollaborationQueueDeliveryReason.DRAINED
+                        else -> CollaborationQueueDeliveryReason.TIMED_OUT
+                    }
+                )
+            }
+        } finally {
+            try {
+                synchronized(controls) {
+                    delivery = null
+                    acquired.enableSendQueue(false)
+                }
+            } finally {
+                stopListener()
+            }
+        }
+    }
+
+    private fun receive(observation: DeliveryObservation, update: RoomSendQueueUpdate) {
+        try {
+            synchronized(controls) {
+                if (delivery !== observation || stopping) return
+                when (update) {
+                    is RoomSendQueueUpdate.NewLocalEvent ->
+                        observation.queue.local(update.transactionId)
+                    is RoomSendQueueUpdate.SentEvent ->
+                        observation.queue.sent(update.transactionId, update.eventId)
+                    is RoomSendQueueUpdate.SendError ->
+                        observation.queue.failed(update.transactionId)
+                    is RoomSendQueueUpdate.RetryEvent ->
+                        observation.queue.retry(update.transactionId)
+                    else -> observation.queue.unresolved()
+                }
+                if (observation.queue.ended) room?.enableSendQueue(false)
+                observation.signal.value =
+                    observation.queue.result(CollaborationQueueDeliveryReason.TIMED_OUT)
+            }
+        } catch (_: Exception) {
+            synchronized(controls) {
+                observation.queue.unresolved()
+                observation.signal.value =
+                    observation.queue.result(CollaborationQueueDeliveryReason.UNRESOLVED)
+            }
+        } finally {
+            try {
+                update.destroy()
+            } catch (_: Exception) {
+                synchronized(controls) {
+                    observation.queue.unresolved()
+                    observation.signal.value =
+                        observation.queue.result(CollaborationQueueDeliveryReason.UNRESOLVED)
+                }
+            }
+        }
+    }
+
+    /** Synchronous fence: child disposal pauses the room before joining pending native work. */
+    fun requestStop() =
+        synchronized(controls) {
+            stopping = true
+            delivery?.let {
+                it.signal.value = it.queue.result(CollaborationQueueDeliveryReason.STOPPED)
+            }
+            // A failed encryption/timeline acquisition may not have initialized a queue.
+            // Parent defaults are paused; cleanup must not create a queue from synchronous FFI.
+            if (queueInitialized) room?.enableSendQueue(false)
+        }
+
     suspend fun stop() {
-        // A failed encryption/timeline acquisition may not have initialized a queue.
-        // Parent defaults are paused; cleanup must not create a queue from synchronous FFI.
-        if (queueInitialized) room?.enableSendQueue(false)
+        requestStop()
         stopListener()
         timeline?.close()
         timeline = null
         queueInitialized = false
         room?.close()
         room = null
+    }
+
+    private class DeliveryObservation(val queue: SdkQueueDelivery) {
+        val signal = MutableStateFlow(queue.result(CollaborationQueueDeliveryReason.TIMED_OUT))
     }
 
     private suspend fun stopListener() {

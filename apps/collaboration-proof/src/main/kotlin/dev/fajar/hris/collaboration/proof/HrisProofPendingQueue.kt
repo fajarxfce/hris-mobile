@@ -45,20 +45,10 @@ internal class HrisProofPendingQueue(private val client: Client, private val roo
         check(!remote.isCompleted) { "Owned queue sent before explicit admission" }
     }
 
-    suspend fun resume(expectedTransaction: String): ProofQueuedMessageResult {
+    suspend fun accepted(expectedTransaction: String): ProofQueuedMessageResult {
         check(retainedTransaction() == expectedTransaction)
-        checkPaused()
-        // Product recovery already initialized this room queue through async FFI.
-        return requireNotNull(client.getRoom(roomId)).use { room ->
-            check(!room.isSendQueueEnabled())
-            try {
-                room.enableSendQueue(true)
-                withTimeout(45_000) { remote.await() }
-                    .also { check(it.transactionId == expectedTransaction) }
-            } finally {
-                room.enableSendQueue(false)
-            }
-        }
+        return withTimeout(45_000) { remote.await() }
+            .also { check(it.transactionId == expectedTransaction) }
     }
 
     override fun close() {

@@ -39,7 +39,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           repository: fajarxfce/hris-platform
-          ref: 4944b34f0946d449bc4b7ff4651737db2255ce93
+          ref: a5ec785cc03c9aebd3adc989031ca3bc5310140c
           path: platform
       - uses: actions/setup-java@v4
         with:
@@ -52,7 +52,7 @@ jobs:
       - run: sdkmanager 'platforms;android-36' 'build-tools;36.0.0'
       - name: Build isolated Android SDK fixture before starting the emulator
         working-directory: mobile
-        run: ./gradlew --no-daemon --no-parallel --max-workers=1 :apps:collaboration-proof:assembleDebug :apps:collaboration-proof:lintDebug
+        run: ./gradlew --no-daemon --no-parallel --max-workers=1 :features:collaboration:data:testAndroidHostTest :apps:collaboration-proof:assembleDebug :apps:collaboration-proof:lintDebug
       - name: Compile HRIS fixture and verify driver cleanup
         working-directory: platform
         run: |
@@ -83,6 +83,7 @@ jobs:
             platform/.work/collaboration/*/verified.json
             platform/.work/collaboration/*/gateway-trace.json
             platform/apps/server/build/test-results/test/TEST-*NativeCollaborationSdkInteropTest.xml
+            mobile/features/collaboration/data/build/test-results/testAndroidHostTest/TEST-*.xml
           include-hidden-files: true
           if-no-files-found: error
           retention-days: 7

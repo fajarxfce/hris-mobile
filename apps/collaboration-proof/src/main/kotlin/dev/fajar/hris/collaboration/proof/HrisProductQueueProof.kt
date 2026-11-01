@@ -92,6 +92,23 @@ internal class HrisProductQueueProof(
         }
     }
 
+    suspend fun deliver(expectedTransaction: String): ProofQueuedMessageResult {
+        val queue = acquire()
+        try {
+            val result = success(queue.resume(setOf(expectedTransaction)))
+            check(
+                result.reason == CollaborationQueueDeliveryReason.DRAINED &&
+                    result.pending.isEmpty()
+            )
+            val receipt = result.receipts.single()
+            check(receipt.transactionId == expectedTransaction)
+            return ProofQueuedMessageResult(receipt.eventId, receipt.transactionId)
+        } finally {
+            success(queue.close())
+            writer = null
+        }
+    }
+
     suspend fun accepted(logicalId: String, transaction: String, eventId: String) {
         val record = requireNotNull(success(messages.get(access, logicalId)))
         val staged = record.state as CollaborationMessageState.Staged

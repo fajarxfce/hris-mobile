@@ -36,6 +36,23 @@ internal class AndroidCollaborationMessageQueueLease(
         }
     }
 
+    override suspend fun resume(
+        mappedTransactions: Set<String>
+    ): AppResult<CollaborationQueueDelivery> {
+        val mapped = mappedTransactions.toSet()
+        if (mapped.size > 128 || !mapped.all(::validCollaborationTransactionId))
+            return collaborationSetupFailure(
+                "client.collaboration_invalid_queue",
+                FailureKind.Validation,
+            )
+        return operations.execute(waitMillis = 25_000) {
+            failure()?.let {
+                return@execute AppResult.Failed(it)
+            }
+            safeAndroidCollaborationCall { source.resume(mapped) }
+        }
+    }
+
     override suspend fun close() = child.close()
 
     override fun toString() = "AndroidCollaborationMessageQueueLease([redacted])"
