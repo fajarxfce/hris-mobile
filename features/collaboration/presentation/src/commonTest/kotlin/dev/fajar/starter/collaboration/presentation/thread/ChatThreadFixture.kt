@@ -97,6 +97,8 @@ internal class ChatThreadFixture {
         }
     val draftSlot = MutableStateFlow<CollaborationDraft?>(null)
     val draftWrites = mutableListOf<CollaborationDraft>()
+    val draftWriteAttempts = mutableListOf<CollaborationDraft>()
+    var beforeDraftWriteFailure: Failure? = null
     var beforeDraft: suspend () -> Unit = {}
     var afterDraftWrite: suspend (CollaborationDraft) -> Unit = {}
     var draftWriteFailure: Failure? = null
@@ -128,6 +130,10 @@ internal class ChatThreadFixture {
                 expected: CollaborationDraft?,
                 replacement: CollaborationDraft,
             ): AppResult<Boolean> {
+                draftWriteAttempts += replacement
+                beforeDraftWriteFailure?.let {
+                    return AppResult.Failed(it)
+                }
                 if (draftSlot.value == replacement) return AppResult.Success(true)
                 if (draftSlot.value != expected) return AppResult.Success(false)
                 draftSlot.value = replacement

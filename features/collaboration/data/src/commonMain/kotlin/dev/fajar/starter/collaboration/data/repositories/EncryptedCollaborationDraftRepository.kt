@@ -124,16 +124,23 @@ class EncryptedCollaborationDraftRepository(
         when (this) {
             is AppResult.Failed -> this
             is AppResult.Success ->
-                if (value.second) AppResult.Success(value.first)
-                else
-                    AppResult.Failed(
-                        Failure(
-                            FailureKind.Conflict,
-                            "The draft changed. Try again.",
-                            code = "client.collaboration_draft_changed",
-                        )
-                    )
+                if (value.second) AppResult.Success(value.first) else busyDraft()
         }
+
+    private fun AppResult<Boolean?>.completedWrite(): AppResult<Boolean> =
+        when (this) {
+            is AppResult.Failed -> this
+            is AppResult.Success -> value?.let { AppResult.Success(it) } ?: busyDraft()
+        }
+
+    private fun busyDraft() =
+        AppResult.Failed(
+            Failure(
+                FailureKind.Conflict,
+                "The draft is busy. Try again.",
+                code = "client.collaboration_draft_busy",
+            )
+        )
 
     override suspend fun replace(
         access: CollaborationLocalAccess,
@@ -141,58 +148,61 @@ class EncryptedCollaborationDraftRepository(
         replacement: CollaborationDraft,
     ) =
         withContext(Dispatchers.Default) {
-            safeStorageCall {
-                require(validCollaborationDraft(replacement))
-                require(
-                    expected == null ||
-                        (validCollaborationDraft(expected) &&
-                            expected.conversationId == replacement.conversationId)
-                )
-                val scope = historyScope(access)
-                val partition = draftPartition(access)
-                // Technical CAS contention from another document must not drop this mutation.
-                // Every attempt rereads this exact target; a changed target is never overwritten.
-                repeat(3) {
-                    currentCoroutineContext().ensureActive()
-                    val page =
-                        replicas
-                            .observeDocument(scope, partition, replacement.conversationId)
-                            .first()
-                    val current = decode(access, replacement.conversationId, page)
-                    if (replicas.checkpoint(scope, partition) != page.checkpoint) return@repeat
-                    if (current == replacement) return@safeStorageCall true
-                    if (current != expected) return@safeStorageCall false
-                    require(current?.revision != replacement.revision)
-                    val written =
-                        keys.use(create = page.checkpoint == null) { content, _ ->
-                            val codec = CollaborationDraftCodec(access, cipher, content)
-                            val raw = page.checkpoint
-                            val generation = raw?.handle?.generation ?: Uuid.random().toString()
-                            val revision = raw?.revision?.plus(1) ?: 0L
-                            require(revision in 0 until 9_007_199_254_740_991L)
-                            val checkpoint = codec.checkpoint(generation, revision)
-                            val document = codec.encode(generation, revision, replacement)
-                            currentCoroutineContext().ensureActive()
-                            if (raw == null)
-                                replicas.replace(
-                                    scope,
-                                    partition,
-                                    null,
-                                    ReplicaSnapshot(generation, checkpoint, listOf(document)),
-                                )
-                            else
-                                replicas.commit(
-                                    raw.handle,
-                                    raw.revision,
-                                    checkpoint,
-                                    listOf(document),
-                                    true,
-                                )
-                        }
-                    if (written) return@safeStorageCall true
+            safeStorageCall<Boolean?> {
+                    require(validCollaborationDraft(replacement))
+                    require(
+                        expected == null ||
+                            (validCollaborationDraft(expected) &&
+                                expected.conversationId == replacement.conversationId)
+                    )
+                    val scope = historyScope(access)
+                    val partition = draftPartition(access)
+                    // Technical CAS contention from another document must not drop this mutation.
+                    // Every attempt rereads this exact target; a changed target is never
+                    // overwritten.
+                    repeat(3) {
+                        currentCoroutineContext().ensureActive()
+                        val page =
+                            replicas
+                                .observeDocument(scope, partition, replacement.conversationId)
+                                .first()
+                        val current = decode(access, replacement.conversationId, page)
+                        if (replicas.checkpoint(scope, partition) != page.checkpoint) return@repeat
+                        if (current == replacement) return@safeStorageCall true
+                        if (current != expected) return@safeStorageCall false
+                        require(current?.revision != replacement.revision)
+                        val written =
+                            keys.use(create = page.checkpoint == null) { content, _ ->
+                                val codec = CollaborationDraftCodec(access, cipher, content)
+                                val raw = page.checkpoint
+                                val generation = raw?.handle?.generation ?: Uuid.random().toString()
+                                val revision = raw?.revision?.plus(1) ?: 0L
+                                require(revision in 0 until 9_007_199_254_740_991L)
+                                val checkpoint = codec.checkpoint(generation, revision)
+                                val document = codec.encode(generation, revision, replacement)
+                                currentCoroutineContext().ensureActive()
+                                if (raw == null)
+                                    replicas.replace(
+                                        scope,
+                                        partition,
+                                        null,
+                                        ReplicaSnapshot(generation, checkpoint, listOf(document)),
+                                    )
+                                else
+                                    replicas.commit(
+                                        raw.handle,
+                                        raw.revision,
+                                        checkpoint,
+                                        listOf(document),
+                                        true,
+                                    )
+                            }
+                        if (written) return@safeStorageCall true
+                    }
+                    // Exhausted technical retries do not prove that the target draft changed.
+                    null
                 }
-                false
-            }
+                .completedWrite()
         }
 
     private suspend fun decode(

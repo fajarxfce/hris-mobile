@@ -17,7 +17,11 @@ class CollaborationDraftWorkerTest {
     @Test
     fun discoveryContentionRetriesBeforeAndAfterAdmissionWithoutDuplicatingTheMessage() =
         runBlocking {
-            for (failAt in listOf(1, 2)) withFixture { f ->
+            for (failureCode in
+                listOf(
+                    "client.collaboration_draft_changed",
+                    "client.collaboration_draft_busy",
+                )) for (failAt in listOf(1, 2)) withFixture { f ->
                 val frozen = f.freeze("Concurrent editor during discovery $failAt")
                 val drafts = f.koin.get<CollaborationDraftRepository>()
                 var reads = 0
@@ -34,7 +38,7 @@ class CollaborationDraftWorkerTest {
                                     Failure(
                                         FailureKind.Conflict,
                                         "Draft changed",
-                                        code = "client.collaboration_draft_changed",
+                                        code = failureCode,
                                     )
                                 )
                             else drafts.prepared(access, afterConversationId, limit)
@@ -44,7 +48,7 @@ class CollaborationDraftWorkerTest {
                     listOf(module { single<CollaborationDraftRepository> { fault } })
                 )
                 val retry = assertIs<SyncResult.Retry>(f.worker())
-                assertEquals("client.collaboration_draft_changed", retry.failure?.code)
+                assertEquals(failureCode, retry.failure?.code)
                 assertEquals(SyncResult.Complete, f.worker())
                 assertEquals(listOf(frozen.submissionId), f.sdk.enqueued)
                 assertEquals(1, f.sdk.deliveries)

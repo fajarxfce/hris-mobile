@@ -32,8 +32,11 @@ one lookahead, including the checkpoint. No history scan or second best-effort i
 
 Complete-target CAS rejects another editor's change. At most three technical attempts handle
 an unrelated conversation advancing the shared checkpoint, rereading the target each time.
-A valid page followed by checkpoint movement returns retryable draft conflict, not generic
-storage failure or stale data. Malformed ciphertext and missing protected keys remain storage
+A valid page followed by checkpoint movement, or three exhausted technical CAS attempts,
+returns `client.collaboration_draft_busy`. Composer Retry retains the original text and
+operation revision without asking to reload. A known different target still returns the
+existing `client.collaboration_draft_changed` conflict and requires explicit reload. The worker
+retries both classifications. Malformed ciphertext and missing protected keys remain storage
 failures. Account, company, purpose, generation and record metadata are authenticated.
 
 The existing protected history key owns drafts and their separate recovery cursor. Inactive
@@ -67,6 +70,12 @@ now verifies frozen-only process death with protected SQLite, HRIS/Synapse and M
 zero commands on both sides of death, same draft revision/body/ID, one encrypted send and
 confirmed draft clearing. Ordinary queue, SDK and WorkManager regressions pass alongside it.
 Hosted execution remains separate; older hosted runs do not establish this new boundary.
+
+[Contention feedback evidence](measurements/chat-draft-contention-2026-11-01.json) covers the
+subsequent classification fix: three failed CAS attempts preserve the target, retry commits
+the same intended replacement, and composer text survives without a reload dialog. All
+2,802 desktop, 732 collaboration browser, 170 Android host and six proof cleanup cases pass;
+proof APK/lint and quality gates pass. The earlier native proof remains tied to its own source.
 
 ## Format history and remaining scope
 

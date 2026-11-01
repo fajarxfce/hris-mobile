@@ -242,7 +242,7 @@ abstract class CollaborationDraftStorageContract {
                     return f.database.replicas.checkpoint(scope, partition)
                 }
             }
-        assertEquals(AppResult.Success(false), f.drafts(store).replace(f.access, null, draft))
+        assertIs<AppResult.Failed>(f.drafts(store).replace(f.access, null, draft))
         f.activate()
         assertIs<AppResult.Failed>(f.drafts(store).get(f.access, f.conversation))
         f.activate()
@@ -284,7 +284,7 @@ abstract class CollaborationDraftStorageContract {
                     else f.drafts(store).get(f.access, f.conversation)
                 val failure = assertIs<AppResult.Failed>(read).failure
                 assertEquals(FailureKind.Conflict, failure.kind)
-                assertEquals("client.collaboration_draft_changed", failure.code)
+                assertEquals("client.collaboration_draft_busy", failure.code)
                 assertTrue(changed)
                 assertEquals(AppResult.Success(original), f.drafts().get(f.access, f.conversation))
                 assertEquals(
@@ -505,6 +505,7 @@ abstract class CollaborationDraftStorageContract {
         val editing = f.draft()
         assertEquals(AppResult.Success(true), f.drafts().replace(f.access, null, editing))
         var commits = 0
+        var rejectCommit = true
         var queryCalls = 0
         val store =
             object : ReplicaStore by f.database.replicas {
@@ -516,7 +517,15 @@ abstract class CollaborationDraftStorageContract {
                     publish: Boolean,
                 ): Boolean {
                     commits++
-                    return false
+                    return if (rejectCommit) false
+                    else
+                        f.database.replicas.commit(
+                            handle,
+                            expectedRevision,
+                            checkpoint,
+                            documents,
+                            publish,
+                        )
                 }
 
                 override fun observeQueries(
@@ -529,16 +538,20 @@ abstract class CollaborationDraftStorageContract {
                 }
             }
         val repository = f.drafts(store)
-        assertEquals(
-            AppResult.Success(false),
-            repository.replace(
-                f.access,
-                editing,
-                editing.copy(revision = historyId(53_000), text = "Changed"),
-            ),
-        )
+        val replacement = editing.copy(revision = historyId(53_000), text = "Changed")
+        val busy = assertIs<AppResult.Failed>(repository.replace(f.access, editing, replacement))
+        assertEquals(FailureKind.Conflict, busy.failure.kind)
+        assertEquals("client.collaboration_draft_busy", busy.failure.code)
         assertEquals(3, commits)
-        assertEquals(AppResult.Success(editing), repository.get(f.access, editing.conversationId))
+        assertEquals(AppResult.Success(editing), f.drafts().get(f.access, f.conversation))
+        rejectCommit = false
+        assertEquals(AppResult.Success(true), repository.replace(f.access, editing, replacement))
+        assertEquals(4, commits)
+        assertEquals(AppResult.Success(replacement), f.drafts().get(f.access, f.conversation))
+        assertEquals(
+            AppResult.Success(replacement),
+            repository.get(f.access, editing.conversationId),
+        )
         for (limit in listOf(0, 9, Int.MAX_VALUE)) assertIs<AppResult.Failed>(
             repository.prepared(f.access, limit = limit)
         )

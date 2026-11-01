@@ -13,6 +13,34 @@ import kotlinx.coroutines.test.*
 
 class ChatThreadDraftTest {
     @Test
+    fun technicalContentionRetriesOriginalTextAndRevisionWithoutAskingToReload() = runTest {
+        withDraft { f, vm, _, _ ->
+            f.beforeDraftWriteFailure =
+                Failure(FailureKind.Conflict, "Busy", code = "client.collaboration_draft_busy")
+            vm.onEvent(ChatThreadEvent.Entered)
+            runCurrent()
+            vm.onEvent(ChatThreadEvent.DraftChanged("Keep my unsaved text"))
+            advanceUntilIdle()
+            val attempted = f.draftWriteAttempts.single()
+            assertEquals("Keep my unsaved text", vm.state.value.draft)
+            assertEquals("client.collaboration_draft_busy", vm.state.value.draftFailure?.code)
+            assertNull(f.draftSlot.value)
+            assertTrue(f.draftWrites.isEmpty())
+            f.beforeDraftWriteFailure = null
+            vm.onEvent(ChatThreadEvent.DraftRetryRequested)
+            advanceUntilIdle()
+            assertNull(vm.state.value.draftDialog)
+            assertNull(vm.state.value.draftFailure)
+            assertEquals(2, f.draftWriteAttempts.size)
+            val saved = f.draftWrites.single()
+            assertEquals(attempted.revision, saved.revision)
+            assertEquals(attempted.text, saved.text)
+            assertEquals("Keep my unsaved text", vm.state.value.draft)
+            assertEquals(saved, f.draftSlot.value)
+        }
+    }
+
+    @Test
     fun pendingInitialReadDoesNotAllowTypingOverAnExistingDraft() = runTest {
         withDraft { f, vm, _, _ ->
             val ready = CompletableDeferred<Unit>()

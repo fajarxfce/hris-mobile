@@ -88,7 +88,12 @@ class CollaborationDraftRecovery(
 
     private fun recoveryFailure(failure: Failure): SyncResult =
         if (
-            failure.code in setOf("client.command_queue_full", "client.collaboration_draft_changed")
+            failure.code in
+                setOf(
+                    "client.command_queue_full",
+                    "client.collaboration_draft_changed",
+                    "client.collaboration_draft_busy",
+                )
         )
             SyncResult.Retry(failure)
         else syncFailure(failure)

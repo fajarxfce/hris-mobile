@@ -1,5 +1,33 @@
 # Agent continuation — HRIS Mobile
 
+## Draft contention feedback validated; release 9 next — 1 November 2026
+
+Technical shared-partition movement and exhausted three-attempt CAS now return
+`client.collaboration_draft_busy`. Composer Retry keeps the immutable write/text and does
+not request reload; actual competing-target edits remain changed/reload. Worker discovery
+retries both at initial and final boundaries. No encryption, schema or draft format change.
+
+[Evidence](measurements/chat-draft-contention-2026-11-01.json) binds 41 cumulative inputs and
+536 reports. Final full integration passes in 190s Gradle / 194.218s wall: 2,802 desktop,
+390 domain/252 data/90 presentation browser, 170 Android host, six cleanup cases, proof APK,
+lint zero fatal/errors (47 warnings), format/architecture/detekt. Focused storage 18, draft
+ViewModel 14 and app worker six cases pass. The initial 202s run failed one leftover test
+assertion expecting the old value after newly added successful retry; corrected the expected
+replacement and retained the failed inputs/log/XML. This correction required no runtime edit.
+
+**Continue immediately:** commit/push this fix, build clean signed release 9 using
+`.work/release-phone-2026-11-01-build9/run-reviewed-build.py`, notify and install-only on
+10.77.77.3:5555, then verify the pulled APK and commit/push installation evidence. Phone is
+still release 8 until that succeeds. Do not launch or drive its UI. Continue safe queued
+cancellation using immutable cancellation archives (`.work/queued-cancellation-next.txt`),
+then incoming push/replies and all remaining P0–P8. No full PRD group is accepted.
+
+Hosted native run 41340935053 at 1ddfba6e is still running; 41343165448 at 95964599 is pending
+and may be superseded by the next push. Audit the actual completed source. New native CI
+uses Platform bad75bd0 and four cases including frozen-only death; the older queued run
+does not establish that new boundary. Local actual proof is already committed as 95964599
+with its own source hashes and must not be relabelled as validation of this newer fix.
+
 ## Native frozen-draft recovery proved; fix contention feedback next — 1 November 2026
 
 [Actual native evidence](measurements/chat-frozen-native-2026-11-01.json) binds 44 Mobile/four
