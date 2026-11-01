@@ -1,0 +1,309 @@
+package dev.fajar.starter.collaboration.data
+
+import dev.fajar.starter.collaboration.data.drafts.*
+import dev.fajar.starter.collaboration.data.history.*
+import dev.fajar.starter.collaboration.data.repositories.EncryptedCollaborationDraftRepository
+import dev.fajar.starter.collaboration.domain.entities.*
+import dev.fajar.starter.common.result.*
+import dev.fajar.starter.database.*
+import kotlin.test.*
+import kotlin.time.Instant
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.test.runTest
+
+abstract class CollaborationDraftStorageContract {
+    protected abstract fun databaseOwner(): CollaborationHistoryDatabaseOwner
+
+    @Test
+    fun draftAndFrozenSubmissionSurviveReopenWithoutPlaintextOrNewKeys() = withDatabase { f ->
+        var repository = f.drafts()
+        assertEquals(AppResult.Success(null), repository.get(f.access, f.conversation))
+        assertNull(f.keys.read())
+        val draft = f.draft(text = "  review\nplease 😀  ")
+        assertEquals(AppResult.Success(true), repository.replace(f.access, null, draft))
+        val key = f.keys.read()
+        val raw = f.draftPage()
+        assertFalse(raw.toString().contains(draft.text))
+        assertTrue(requireNotNull(raw.checkpoint).payload.length <= 32_768)
+        f.reopen()
+        repository = f.drafts()
+        assertEquals(AppResult.Success(draft), repository.get(f.access, f.conversation))
+        val frozen = draft.copy(revision = historyId(1002), submissionId = historyId(1003))
+        assertEquals(AppResult.Success(true), repository.replace(f.access, draft, frozen))
+        val renewed = f.access.copy(sessionId = "renewed-draft-login")
+        f.reopen(renewed)
+        repository = f.drafts()
+        assertEquals(AppResult.Success(frozen), repository.get(renewed, f.conversation))
+        assertEquals(AppResult.Success(null), repository.get(f.access, f.conversation))
+        assertEquals(key, f.keys.read())
+    }
+
+    @Test
+    fun exactReplayAndEmptyRevisionFenceLateEditsAndSameRevisionReplacement() = withDatabase { f ->
+        val repository = f.drafts()
+        val first = f.draft()
+        assertEquals(AppResult.Success(true), repository.replace(f.access, null, first))
+        assertEquals(AppResult.Success(true), repository.replace(f.access, null, first))
+        assertIs<AppResult.Failed>(
+            repository.replace(f.access, first, first.copy(text = "changed under same revision"))
+        )
+        val cleared = first.copy(revision = historyId(1002), text = "")
+        assertEquals(AppResult.Success(true), repository.replace(f.access, first, cleared))
+        assertEquals(AppResult.Success(false), repository.replace(f.access, null, first))
+        assertEquals(
+            AppResult.Success(false),
+            repository.replace(f.access, first, first.copy(revision = historyId(1004))),
+        )
+        f.reopen()
+        assertEquals(AppResult.Success(cleared), f.drafts().get(f.access, f.conversation))
+    }
+
+    @Test
+    fun competingInitialWritersCommitOnlyOneDraftAndUseOneProtectedKey() = withDatabase { f ->
+        val release = CompletableDeferred<Unit>()
+        var arrived = 0
+        val barrier = Mutex()
+        val store =
+            object : ReplicaStore by f.database.replicas {
+                override suspend fun replace(
+                    scope: ReplicaScope,
+                    partition: String,
+                    expected: ReplicaCheckpoint?,
+                    snapshot: ReplicaSnapshot?,
+                ): Boolean {
+                    barrier.withLock { if (++arrived == 2) release.complete(Unit) }
+                    release.await()
+                    return f.database.replicas.replace(scope, partition, expected, snapshot)
+                }
+            }
+        val one = f.draft()
+        val two = one.copy(revision = historyId(1002), text = "Another writer")
+        val results = coroutineScope {
+            listOf(
+                    async { f.drafts(store).replace(f.access, null, one) },
+                    async { f.drafts(store).replace(f.access, null, two) },
+                )
+                .awaitAll()
+        }
+        assertEquals(1, results.count { it == AppResult.Success(true) })
+        assertEquals(1, results.count { it == AppResult.Success(false) })
+        val retained =
+            assertIs<AppResult.Success<CollaborationDraft?>>(
+                    f.drafts().get(f.access, f.conversation)
+                )
+                .value
+        assertTrue(retained in listOf(one, two))
+    }
+
+    @Test
+    fun committedWriteWithLostReplyReplaysWithoutReplacingItsRevision() = withDatabase { f ->
+        val draft = f.draft(submissionId = historyId(1005))
+        val store =
+            object : ReplicaStore by f.database.replicas {
+                override suspend fun replace(
+                    scope: ReplicaScope,
+                    partition: String,
+                    expected: ReplicaCheckpoint?,
+                    snapshot: ReplicaSnapshot?,
+                ): Boolean {
+                    assertTrue(f.database.replicas.replace(scope, partition, expected, snapshot))
+                    error("Lost local reply")
+                }
+            }
+        assertIs<AppResult.Failed>(f.drafts(store).replace(f.access, null, draft))
+        val raw = f.draftPage()
+        f.reopen()
+        assertEquals(AppResult.Success(true), f.drafts().replace(f.access, null, draft))
+        assertEquals(raw, f.draftPage())
+    }
+
+    @Test
+    fun maximumUtf8DraftUsesABoundedDocumentInsteadOfOverflowingTheCheckpoint() =
+        withDatabase { f ->
+            val draft = f.draft(text = "é".repeat(16_384))
+            assertEquals(AppResult.Success(true), f.drafts().replace(f.access, null, draft))
+            val raw = f.draftPage()
+            assertTrue(raw.documents.single().payload!!.length > 32_768)
+            assertTrue(raw.checkpoint!!.payload.length < 200)
+            assertEquals(AppResult.Success(draft), f.drafts().get(f.access, f.conversation))
+        }
+
+    @Test
+    fun invalidTextIdentityOrFrozenEmptyInputNeverCreatesAKeyOrRecord() = withDatabase { f ->
+        val good = f.draft()
+        for (draft in
+            listOf(
+                good.copy(text = "x".repeat(16_385)),
+                good.copy(text = "\uD800"),
+                good.copy(text = "\u0000"),
+                good.copy(text = "€".repeat(16_384)),
+                good.copy(revision = "invalid"),
+                good.copy(savedAt = Instant.fromEpochMilliseconds(-1)),
+                good.copy(text = "", submissionId = historyId(1003)),
+            )) {
+            assertIs<AppResult.Failed>(f.drafts().replace(f.access, null, draft))
+        }
+        assertNull(f.keys.read())
+        assertNull(f.draftPage().checkpoint)
+    }
+
+    @Test
+    fun substitutedOwnershipGenerationCiphertextAndDocumentMetadataFailClosed() =
+        withDatabase { f ->
+            assertEquals(AppResult.Success(true), f.drafts().replace(f.access, null, f.draft()))
+            val raw = f.draftPage()
+            val checkpoint = requireNotNull(raw.checkpoint)
+            val doc = raw.documents.single()
+            val malformed =
+                listOf(
+                    raw.copy(checkpoint = checkpoint.copy(revision = 1)),
+                    raw.copy(
+                        checkpoint =
+                            checkpoint.copy(
+                                handle = checkpoint.handle.copy(generation = historyId(999))
+                            )
+                    ),
+                    raw.copy(documents = listOf(doc.copy(id = "another"))),
+                    raw.copy(documents = listOf(doc.copy(sortKey = "another"))),
+                    raw.copy(documents = listOf(doc.copy(version = 1))),
+                    raw.copy(documents = listOf(doc.copy(tags = setOf("forged")))),
+                    raw.copy(documents = listOf(doc.copy(payload = checkpoint.payload))),
+                    raw.copy(documents = listOf(doc, doc)),
+                )
+            for (page in malformed) {
+                val store =
+                    object : ReplicaStore by f.database.replicas {
+                        override fun observeDocument(
+                            scope: ReplicaScope,
+                            partition: String,
+                            id: String,
+                        ) = flowOf(page)
+                    }
+                assertIs<AppResult.Failed>(
+                    f.drafts(store).observe(f.access, f.conversation).first()
+                )
+            }
+            val wrong = f.access.copy(companyId = historyId(999))
+            val renamed =
+                raw.copy(
+                    checkpoint =
+                        checkpoint.copy(
+                            handle =
+                                checkpoint.handle.copy(
+                                    scope = historyScope(wrong),
+                                    partition = draftPartition(wrong, f.conversation),
+                                )
+                        )
+                )
+            val store =
+                object : ReplicaStore by f.database.replicas {
+                    override fun observeDocument(
+                        scope: ReplicaScope,
+                        partition: String,
+                        id: String,
+                    ) = flowOf(renamed)
+                }
+            assertIs<AppResult.Failed>(f.drafts(store).observe(wrong, f.conversation).first())
+            assertEquals(raw, f.draftPage())
+        }
+
+    @Test
+    fun missingKeyProtectsInactiveDraftsFromReplacementAndHistoryKeyRegeneration() =
+        withDatabase { f ->
+            assertEquals(AppResult.Success(true), f.drafts().replace(f.access, null, f.draft()))
+            val raw = f.draftPage()
+            f.keys.write(null)
+            val other = f.access.copy(sessionId = "other-draft-account", accountId = historyId(999))
+            f.activate(other)
+            assertIs<AppResult.Failed>(f.drafts().replace(other, null, f.draft()))
+            assertIs<AppResult.Failed>(
+                f.repository.merge(other, f.conversation, f.room, listOf(f.event()))
+            )
+            assertNull(f.keys.read())
+            f.activate()
+            assertEquals(raw, f.draftPage())
+            assertIs<AppResult.Failed>(f.drafts().get(f.access, f.conversation))
+        }
+
+    @Test
+    fun lateOwnershipReplacementCannotAcknowledgeAnExactReplay() = withDatabase { f ->
+        val draft = f.draft()
+        assertEquals(AppResult.Success(true), f.drafts().replace(f.access, null, draft))
+        val store =
+            object : ReplicaStore by f.database.replicas {
+                override suspend fun checkpoint(
+                    scope: ReplicaScope,
+                    partition: String,
+                ): ReplicaCheckpoint? {
+                    f.activate(f.access.copy(sessionId = "changed", accountId = historyId(998)))
+                    return f.database.replicas.checkpoint(scope, partition)
+                }
+            }
+        assertEquals(AppResult.Success(false), f.drafts(store).replace(f.access, null, draft))
+        f.activate()
+        assertIs<AppResult.Failed>(f.drafts(store).get(f.access, f.conversation))
+        f.activate()
+        assertEquals(AppResult.Success(draft), f.drafts().get(f.access, f.conversation))
+    }
+
+    @Test
+    fun cancellingAPendingReadClosesTheOwnedSubscription() = withDatabase { f ->
+        val entered = CompletableDeferred<Unit>()
+        val stopped = CompletableDeferred<Unit>()
+        val store =
+            object : ReplicaStore by f.database.replicas {
+                override fun observeDocument(
+                    scope: ReplicaScope,
+                    partition: String,
+                    id: String,
+                ): Flow<ReplicaPage> = flow {
+                    entered.complete(Unit)
+                    try {
+                        awaitCancellation()
+                    } finally {
+                        stopped.complete(Unit)
+                    }
+                }
+            }
+        coroutineScope {
+            val read = async { f.drafts(store).get(f.access, f.conversation) }
+            entered.await()
+            read.cancelAndJoin()
+            assertTrue(stopped.isCompleted)
+        }
+        assertNull(f.keys.read())
+    }
+
+    private fun CollaborationHistoryFixture.drafts(store: ReplicaStore = database.replicas) =
+        EncryptedCollaborationDraftRepository(store, cipher, keys)
+
+    private fun CollaborationHistoryFixture.draft(
+        text: String = "Unsent draft",
+        submissionId: String? = null,
+    ) =
+        CollaborationDraft(
+            conversation,
+            historyId(1001),
+            text,
+            Instant.fromEpochMilliseconds(1_793_491_200_000),
+            submissionId,
+        )
+
+    private suspend fun CollaborationHistoryFixture.draftPage() =
+        database.replicas
+            .observeDocument(historyScope(access), draftPartition(access, conversation), "draft")
+            .first()
+
+    private fun withDatabase(block: suspend (CollaborationHistoryFixture) -> Unit) = runTest {
+        val f = CollaborationHistoryFixture(databaseOwner())
+        try {
+            f.activate()
+            block(f)
+        } finally {
+            f.close()
+        }
+    }
+}

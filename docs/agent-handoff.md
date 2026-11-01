@@ -1,5 +1,35 @@
 # Agent continuation — HRIS Mobile
 
+## Composer storage validated; policy/UI next — 1 November 2026
+
+[Draft storage](collaboration-drafts.md) adds eight domain/data/test inputs: immutable draft
+slots, validation, raw repository contract and encrypted atomic snapshots under each history
+partition's `/composer` suffix. Existing history credentials/AAD isolation protect all hosts;
+no new key wiring. Empty revisions fence late writes; complete-record CAS and exact replay
+survive lost replies. Get/replay recheck the checkpoint after decryption, and inactive
+composer-only data prevents key regeneration. Maximum UTF-8 text uses a document, not the
+smaller checkpoint. [Evidence](measurements/chat-draft-storage-2026-11-01.json): 101s focused
+SQLite/browser/quality checks, ten new storage scenarios on each engine, no failures.
+This is storage only; no user flow or new phone build yet. Root/application checks follow
+its actual integration. Release 7 remains installed.
+
+**Continue immediately:** add owned Observe/Edit/Prepare/Confirm draft use cases and UI.
+Prepare can use the prior editing revision UUID as its stable message ID and a fresh draft
+revision, so a lost freeze response can match `current.submissionId == expected.revision`
+without conflating a later identical-text draft. Freeze the exact body before queueing;
+confirm against `messages.get`, which already reads authenticated archived completions.
+Clearing must preserve a newer draft; explicit retry reuses the saved ID. Bound save work,
+retain dirty input across late observations, and test failure/account/cancellation races.
+Decide/implement prepared-send recovery across the prepare-to-outbox crash gap; never claim
+ordinary queued-worker recovery proves that separate boundary. Then safe pending cancellation,
+incoming push/replies and all P0–P8. No generic Starter port for this HRIS storage policy.
+
+Apple CI [41334974289](https://github.com/fajarxfce/hris-mobile/actions/runs/41334974289) runs at
+`c0e91d6b` and was compiling simulator tests. Audit its exact XML before porting the new
+iosTest/CI step to Starter. Native [41334029287](https://github.com/fajarxfce/hris-mobile/actions/runs/41334029287)
+was executing emulator cases at `bf83c71e` (the installed release source). Both run against
+immutable earlier sources; do not attribute them to this draft addition.
+
 ## Apple replica execution prepared — 1 November 2026
 
 `AppleReplicaStoreTest` adds two isolated real Room/BundledSQLite cases under iosTest.

@@ -1,0 +1,45 @@
+{
+  "date": "2026-11-01",
+  "base": "c0e91d6bb1bb1def0ac746bc13e700e0082e53fb",
+  "sourceSha256": {
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/drafts/CollaborationDraftCodec.kt": "598006d03554f866e7a0177a77182e0b6b3539ecc53b476443ca0a670b019e8f",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationDraftRepository.kt": "64aae7de8a1bd20260edc3193e152ed58d7dad21aa9c3d782f776c03bb59bde1",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationDraftStorageContract.kt": "498b2f6096e4aa5371e1e3284c1b753c281fa7122b98cdec865638dfe158f77d",
+    "features/collaboration/data/src/desktopTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationDraftStorageTest.kt": "8b0c16f1b05aedb83b35572d38ed225fab5ce727a6e568d297e73d5e5e6a4a3f",
+    "features/collaboration/data/src/wasmJsTest/kotlin/dev/fajar/starter/collaboration/data/BrowserCollaborationDraftStorageTest.kt": "94dccd463d0ed14da770f6646ff6ce1b4ec4ee5e808218453019d523c9b98601",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationDraft.kt": "412dae4978998464da454cb9a05b5135e1c31254fe4a6ca31bf1fb26afd19856",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationDraftPolicy.kt": "2ed9f64057cb3f0203da70d7ae5d09f55f4887e461f34c5769537da1454dc942",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationDraftRepository.kt": "3716cc3690dd1bef1f68b0cbb43864c4bc072f266e27a87e51097488353b96fd"
+  },
+  "checks": {
+    "passed": true,
+    "secondsReportedByGradle": 101,
+    "tasks": [
+      "features:collaboration:data:desktopTest --tests *CollaborationDraftStorageTest",
+      "features:collaboration:data:wasmJsBrowserTest",
+      "formatCheck",
+      "architectureCheck",
+      "detekt"
+    ],
+    "reports": {
+      "desktopTest": {
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "suites": 1,
+        "reportsSha256": "2f378cd3ed902f1747561c318863dbd0757614577904232d41f915d959ab2521"
+      },
+      "wasmJsBrowserTest": {
+        "tests": 244,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "suites": 33,
+        "reportsSha256": "b6af53c42c11696bb958c70d802102b212ba16c89665495c71d9dcf9ebe70c4e"
+      }
+    },
+    "logSha256": "3805aec632356d9a310eea5e4e392d0ab58254782e2510e7f12282749ca53973"
+  },
+  "boundary": "Storage foundation only. No composer use cases, UI, background prepared-send recovery or new installed feature yet. Root/application integration checks follow when the use cases and UI are wired."
+}
