@@ -1,0 +1,174 @@
+{
+  "date": "2026-11-01",
+  "request": "Install validated progress on the authorized WireGuard phone while continuing the implementation.",
+  "source": {
+    "productCommit": "4213d5f5926ae5f299a0fd1969ceb73f181df4c4",
+    "unchangedProductPaths": [
+      "apps/android",
+      "apps/shared",
+      "core",
+      "features",
+      "build-logic",
+      "gradle",
+      "gradle.properties"
+    ],
+    "embeddedRevision": [
+      "ccc7c4fc5bd91f2ae99e3133b932dcdfa8f8ecd8"
+    ],
+    "trackedInputHashes": 3370,
+    "inputManifestSha256": "49af5709d34c65578b204be233f2ca76e678f7287927b9b3b232de18d161f8dd",
+    "packagingOverride": "gradle.beforeProject { project ->\n    project.pluginManager.withPlugin('com.android.application') {\n        if (project.path == ':apps:android') {\n            def filters = project.extensions.getByName('android').defaultConfig.ndk.abiFilters\n            filters.clear()\n            filters.add('arm64-v8a')\n        }\n    }\n}\n",
+    "packagingOverrideSha256": "d4e769b81092e3bcfca45a9180661f31980a1dd5c8927410ab61e02f99ed26ef"
+  },
+  "attempts": {
+    "firstCombinedRootAndRelease": {
+      "command": [
+        "xvfb-run",
+        "-a",
+        "./gradlew",
+        ":check",
+        ":apps:android:assembleDevRelease",
+        ":apps:android:lintDevRelease",
+        "-PrequireSigning=true",
+        "-PappEnvironment=dev",
+        "-PappVersion=1.0.0",
+        "-PappVersionCode=5",
+        "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+        "--no-daemon",
+        "--no-parallel",
+        "--max-workers=1",
+        "-Dorg.gradle.jvmargs=-Xmx1536m"
+      ],
+      "startedAt": "2026-11-01T14:53:16.309484+00:00",
+      "elapsedSeconds": 528.361,
+      "exitCode": 1
+    },
+    "universalRetry": {
+      "command": [
+        "xvfb-run",
+        "-a",
+        "./gradlew",
+        ":apps:android:assembleDevRelease",
+        ":apps:android:lintDevRelease",
+        "-PrequireSigning=true",
+        "-PappEnvironment=dev",
+        "-PappVersion=1.0.0",
+        "-PappVersionCode=5",
+        "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+        "--stacktrace",
+        "--no-daemon",
+        "--no-parallel",
+        "--max-workers=1",
+        "-Dorg.gradle.jvmargs=-Xmx1536m"
+      ],
+      "startedAt": "2026-11-01T15:03:42.641402+00:00",
+      "elapsedSeconds": 66.123,
+      "exitCode": 0
+    },
+    "arm64Package": {
+      "command": [
+        "xvfb-run",
+        "-a",
+        "./gradlew",
+        ":apps:android:assembleDevRelease",
+        ":apps:android:lintDevRelease",
+        "-PrequireSigning=true",
+        "-PappEnvironment=dev",
+        "-PappVersion=1.0.0",
+        "-PappVersionCode=5",
+        "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+        "--init-script",
+        "/home/fajar/hris/hris-mobile/.work/release-phone-2026-11-01/phone-arm64.init.gradle",
+        "--stacktrace",
+        "--no-daemon",
+        "--no-parallel",
+        "--max-workers=1",
+        "-Dorg.gradle.jvmargs=-Xmx1536m"
+      ],
+      "startedAt": "2026-11-01T15:07:33.371779+00:00",
+      "elapsedSeconds": 47.937,
+      "exitCode": 0
+    }
+  },
+  "rootChecks": {
+    "passed": true,
+    "desktopTests": 2710,
+    "suites": 426,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "releaseLint": {
+    "Error": 0,
+    "Fatal": 0,
+    "Warning": 1
+  },
+  "artifact": {
+    "artifact": ".work/release-phone-2026-11-01/hris-mobile-dev-release-1.0.0-5-arm64.apk",
+    "variant": "devRelease",
+    "applicationId": "dev.fajar.hris.mobile.dev",
+    "versionCode": 5,
+    "versionName": "1.0.0",
+    "bytes": 87248188,
+    "sha256": "ab31489690b4d311665e0005878a7e221ee4b1ebba2f2aadb2964beb5d660036",
+    "debuggable": false,
+    "signatureVerified": true,
+    "samePreviouslyInstalledSigner": true,
+    "signerSha256": "aca5ce6a26b978dee1d63c63103b6799848ab760d47ef4cf5ee68620fc8721f3",
+    "signerSha1": "23860b51e4305aa7900090aeab6783d39a12ff33",
+    "signingBoundary": "Release build signed with the existing development key for an in-place private-device update.",
+    "privateApiVerifiedInDex": true,
+    "fixtureEndpointsAbsent": true,
+    "firebaseDevAppMatches": true,
+    "nativeAbis": [
+      "arm64-v8a"
+    ],
+    "universalDexIdentical": true,
+    "universalResourcesDifferOnlyInVcsMetadata": true,
+    "changedResourceNames": [
+      "string/com.google.firebase.crashlytics.version_control_info"
+    ],
+    "embeddedSourceRevisions": [
+      "ccc7c4fc5bd91f2ae99e3133b932dcdfa8f8ecd8"
+    ],
+    "zipAligned16KiB": true,
+    "packagingOverrideSha256": "d4e769b81092e3bcfca45a9180661f31980a1dd5c8927410ab61e02f99ed26ef"
+  },
+  "universalArtifact": {
+    "artifact": ".work/release-phone-2026-11-01/hris-mobile-dev-release-1.0.0-5.apk",
+    "variant": "devRelease",
+    "applicationId": "dev.fajar.hris.mobile.dev",
+    "versionCode": 5,
+    "versionName": "1.0.0",
+    "bytes": 280998772,
+    "sha256": "d7b3a7046edb5f740f72e3de8c7852c66697f70db7fac8f1f4753d8733386c63",
+    "debuggable": false,
+    "signatureVerified": true,
+    "samePreviouslyInstalledSigner": true,
+    "signerSha256": "aca5ce6a26b978dee1d63c63103b6799848ab760d47ef4cf5ee68620fc8721f3",
+    "signerSha1": "23860b51e4305aa7900090aeab6783d39a12ff33",
+    "signingBoundary": "Release build signed with the existing development key for an in-place private-device update.",
+    "privateApiVerifiedInDex": true,
+    "fixtureEndpointsAbsent": true,
+    "firebaseDevAppMatches": true
+  },
+  "installation": {
+    "confirmed": false,
+    "attempted": false,
+    "reason": "WireGuard ADB connection times out; reconnect question is pending.",
+    "serial": "10.77.77.3:5555",
+    "lastConfirmedVersionCode": 4,
+    "uninstalled": false,
+    "appDataCleared": false,
+    "uiLaunched": false
+  },
+  "verificationNotes": [
+    "Initial combined invocation completed all root checks but failed in APK packaging without an underlying cause in the log. An unchanged-code release-only retry passed.",
+    "ARM64 filtering changes only packaging. DEX is identical to the universal release. Strict resource byte equality initially failed because the later Git commit changed Crashlytics VCS metadata; resource comparison confirms that this is the only resource difference.",
+    "Selected arm64 APK is 87248188 bytes, 69% smaller than the 280998772-byte universal package; it retains the existing development signing certificate and verifies 16-KiB ZIP alignment.",
+    "Install requires a fresh serial/ABI/version/current-certificate preflight, then install -r without launching UI and pull/hash verification. No installation is claimed until those steps succeed."
+  ],
+  "liveBackendChanged": false,
+  "liveMatrixProviderChanged": false,
+  "completeCommunicationsProduct": false
+}

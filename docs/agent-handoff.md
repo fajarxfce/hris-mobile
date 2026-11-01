@@ -1,5 +1,32 @@
 # Agent continuation — HRIS Mobile
 
+## Release build 5 prepared; phone connection pending — 1 November 2026
+
+The user asked to install progress and continue. The selected private `devRelease` APK is
+`.work/release-phone-2026-11-01/hris-mobile-dev-release-1.0.0-5-arm64.apk`, SHA-256
+`ab31489690b4d311665e0005878a7e221ee4b1ebba2f2aadb2964beb5d660036`, 87,248,188 bytes.
+Package `dev.fajar.hris.mobile.dev`, version 1.0.0/code 5, non-debuggable, correct WireGuard
+API/Firebase configuration and the existing signing certificate are verified. Its DEX
+matches the universal release; only Crashlytics VCS resource metadata differs. APK ZIP
+alignment passes at 16 KiB. Product sources match validated `4213d5f5`; the embedded Git
+revision is `ccc7c4fc`. Root tests: 2,710/426 suites, zero failures/errors/skips. Release
+lint: zero errors/one existing warning. First packaging failure, successful retry and
+44-second arm64 assembly/lint are retained in the [measurement](measurements/android-release-progress-2026-11-01.json).
+The [private update recipe](android-private-device-release.md) documents the procedure.
+
+**Not installed yet.** `10.77.77.3:5555` still times out; the reconnect question is pending.
+Last confirmed phone version is 4. When available, notify before installation, run the
+saved preflight (including actual arm64 ABI/current signer/version), then install-only
+and verify pulled APK hash plus preserved app ID/firstInstallTime. Helpers are under
+`.work/release-phone-2026-11-01/`. Do not uninstall, clear data or drive the phone UI.
+The live backend/provider are unchanged; this is not full communications acceptance.
+Continue WorkManager and the remaining plan while the phone is unavailable.
+
+Native worker CI at `55d5e15e` is queued as run `41319810722` behind the prior sender-only
+run. Audit its terminal result/artifacts later; local native proof is already recorded
+below. Do not claim the new CI run has passed until verified.
+
+
 ## Actual native application worker validated — 1 November 2026
 
 The separate proof app now resolves the real application worker and registered SyncTask
