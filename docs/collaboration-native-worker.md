@@ -1,73 +1,84 @@
-# Native application-worker recovery
+# Native application-worker recovery and foreground history
 
-The separate debug-only `apps/collaboration-proof` application now depends on the real
-shared application container. `HrisWorkerProofContainer` resolves the same registered
-`CollaborationDeliveryWorker` used by the product. It uses Android SQLite, protected
-content keys, encrypted command/history/receipt repositories, the actual Matrix SDK and
-real HRIS HTTP admission. Only login/workspace inputs are seeded fictional fixtures;
-its scheduler records the task key without executing it.
+The separate debug-only `apps/collaboration-proof` application resolves the real
+shared application container, `CollaborationDeliveryWorker`, SyncTask and
+`ChatThreadViewModel`. It uses Android SQLite, protected content keys, encrypted
+command/history/receipt repositories, the actual Matrix SDK and real HRIS HTTP
+admission. Only login/workspace inputs are seeded fictional fixtures. The direct
+worker scenario's scheduler records its task key without executing it; actual
+Android scheduling has its separate [WorkManager proof](collaboration-workmanager.md).
 
-## Process boundary and evidence
+## Process and history boundaries
 
-The stage process initializes protected sender/recipient SDK records, acquires the
-conversation summary through HRIS and queues exact text through `QueueCollaborationText`.
-The driver confirms the acknowledged Queued record and live PID, then force-stops only
-the proof package on the dedicated emulator. No graceful teardown substitutes for death.
+The first process initializes protected sender/recipient records, acquires the
+conversation summary through HRIS and queues exact text through
+`QueueCollaborationText`. The driver verifies the acknowledged Queued record and
+live PID, then force-stops only the proof package on the dedicated emulator.
 
-The second process reopens the encrypted application stores and verifies the original
-UUID, exact body and Queued state. It confirms that the sender runtime is still closed.
-After server admission is enabled, the actual worker restores the sender, stages and
-delivers the message, acquires original history and retires the command with its exact
-completion evidence. The recipient SDK decrypts the original content and logical ID.
-A repeated worker invocation completes without another encrypted send.
+The second process reopens encrypted application storage and verifies the original
+UUID, exact body and Queued state with the sender runtime still closed. After
+server admission is enabled, the real worker restores that runtime, sends the
+message, acquires its original and retires the command with exact completion
+evidence. The peer decrypts its body and logical ID. A repeated worker pass
+completes without another encrypted send.
 
-`NativeCollaborationWorkerInteropTest` independently checks the gateway trace: no early
-send, exactly one encrypted room event, device/conversation/room admission before send,
-zero application admission failures and two device-key publications. Reading the stored
-provider event confirms ciphertext and the expected sender. The legitimate summary read
-has its own trace counter; it cannot substitute for direct-conversation admission.
+The peer then sends 32 distinct encrypted fixture messages. The actual thread
+ViewModel enters normally through a public lifecycle ViewModelProvider. Its newest
+original must reach canonical storage while the oldest peer original remains
+absent. Up to four explicit older-history actions must finish provider traversal
+and recover every exact original. Stopping the screen connection must preserve
+the oldest canonical row and clear the incomplete-history notice. No fixture
+key refresh or direct history-store insertion bypasses this path.
 
-Private fixture files contain disposable credentials and are removed during cleanup.
-Checkpoints export bounded PID/UUID/state/task-key/body-digest evidence; diagnostics
-retain only classified failures and bounded source frames. The native driver rejects
-changed identity, replayed PID, malformed flags, missing evidence and oversized output.
+The server independently verifies 33 encrypted events: one worker event and 32
+peer seed events, each with the expected sender and ciphertext. The worker's
+single-send invariant, no early sends, receipt/completion retirement and current
+application admission checks remain separate from the seed. The seed's test-only
+Synapse message burst is 64; other cases keep 10. This is a bounded fixture, not
+production capacity evidence.
 
-## Measured scope
+## Publication race and cleanup
 
-The successful worker run used two Android processes, one forced process death, one
-worker pass and exactly one encrypted send. The existing native sender/recovery proof
-also passed unchanged: four processes, three deaths, three encrypted sends and no send
-to the held room. Both used proof APK `924cdd452304635263a410ae2396ae9edbba14a8eda6cef1003555585ad1ceee`
-on `hris-mobile-dev`, API 35. The new run passed in 70 seconds; the regression in 78.
-The first worker run delivered successfully but failed a fixture assertion because its
-summary GET was not recognized by the application trace; that classification was fixed
-without weakening the admission checks. Compile/manifest corrections are also retained
-in [the measurement](measurements/chat-native-worker-2026-11-01.json).
+The first foreground runs connected but retained only the original worker message.
+Forcing a fresh peer key query made the diagnostic experiment pass. The final
+fixture removes that intervention. Platform schema 114 fixes the server race:
+key discovery can validate a provider key against its earlier immutable reservation
+before the publisher records final readback. Claims and encrypted sends keep their
+confirmed-publication requirements. The same APK failed before and passed after
+that server correction. See the Platform
+[contract](https://github.com/fajarxfce/hris-platform/blob/feat/communications/docs/collaboration/key-publication-race.md).
 
-This accepts the real application worker/Android store/SDK/server composition after
-process death. WorkManager did not execute this scenario: Android scheduling, constraints,
-retry/cancellation and OS-driven process startup still require separate evidence.
-Force-stop itself prevents Android background execution until the application is started
-again. No phone UI, live provider, Apple runtime, scale or full PRD group is accepted here.
+Fixture cleanup follows the existing product close contract for at most six calls,
+retrying only ClosePending. It attempts every resource operation, preserves the
+primary exception and attaches cleanup failures as suppressed exceptions. Product
+shutdown deadlines are unchanged. Six JVM tests cover bounded drain, non-pending
+failure, exception preservation and cancellation. Instrumentation diagnostics
+contain only controlled categories, bounded counters and source frames.
 
-The separate [WorkManager scenario](collaboration-workmanager.md) now exercises actual
-Android scheduling after ordinary process death; the direct-worker evidence above retains
-its original scope.
+## Evidence and continuation
 
-## Reproduce and continue
+The normal foreground run passed in 94 seconds on API 35 with APK SHA-256
+`d685231d6b49439dd4517abc42e072cb0490a8e5bd3326c02a4a726ca6697b55`.
+It used two processes, one forced death, one worker pass and four history actions.
+All 33 originals were acquired; the oldest remained projected after Stop. Traversal
+covered 43 references; the ten remaining references were state-only. Application admission counts were 30 device, 28
+conversation and 30 room reads, with zero failures and complete cleanup.
 
-Build `:apps:collaboration-proof:assembleDebug`. Start the owned `hris-mobile-dev` emulator
-at `emulator-5560`, then run the Platform server test with `HRIS_COLLAB_NATIVE_APK` pointing
-to that APK and Docker access. Run `*NativeCollaborationWorkerInteropTest` and
-`*NativeCollaborationSdkInteropTest` separately; each owns its disposable provider/HRIS
-fixtures and cleans the proof package. Never target the user's phone with this driver.
+[The measurement](measurements/chat-foreground-native-2026-11-01.json) retains all
+failed attempts, the temporary key-query experiment, final source hashes, dependency
+verification, 2,733 desktop cases, six cleanup cases, and the distinct SDK/scheduled
+regressions. [Earlier direct-worker evidence](measurements/chat-native-worker-2026-11-01.json)
+retains the original single-message scenario. Hosted CI acceptance is audited
+separately from these local runs.
 
-Continue real WorkManager lifecycle evidence, then remote history, durable drafts and
-safe pending cancellation, incoming FCM/inline replies, groups/media/actions, key
-continuity/backups, Apple/web adapters, calls and meetings. Keep each accepted boundary
-separate from the remaining product acceptance criteria.
+Build `:apps:collaboration-proof:testDebugUnitTest`, `assembleDebug` and `lintDebug`.
+Use the Platform commit pinned by `.github/workflows/collaboration-hris.yml`, Docker,
+and the dedicated `hris-mobile-dev` emulator at `emulator-5560`. Set
+`HRIS_COLLAB_NATIVE_APK` to the proof APK and run the three `NativeCollaboration*InteropTest`
+cases. Each owns its fixtures and cleanup. Never target the user's phone with this
+driver. CI uploads the exact bounded result/checkpoint/trace and test XML artifacts.
 
-The native HRIS CI workflow pins Platform `784fc9113a4f09fd1ed9bff7541479088263aca5`, executes both scenarios
-on the owned emulator and uploads their bounded result/checkpoint/trace/XML evidence.
-Changes in apps.shared now trigger the workflow. Local native results above remain
-separate from hosted acceptance; audit the matching commit's run/artifacts after push.
+No phone UI, live provider deployment, Apple/web runtime, large-scale acceptance or
+complete PRD group is accepted by this proof. Continue bounded local browsing beyond
+the current ten-page window, durable drafts and safe pending cancellation, incoming
+FCM/inline replies, richer messages, key continuity/backups, calls and meetings.

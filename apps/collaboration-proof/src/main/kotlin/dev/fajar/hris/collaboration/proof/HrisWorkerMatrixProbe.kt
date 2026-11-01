@@ -10,7 +10,9 @@ import dev.fajar.starter.common.result.*
 import dev.fajar.starter.network.*
 import dev.fajar.starter.sync.domain.SyncResult
 import java.io.File
+import java.util.UUID
 import kotlinx.coroutines.*
+import org.json.JSONArray
 import org.matrix.rustcomponents.sdk.Room
 
 /** Actual app worker/SDK across process death. Platform scheduling is a separate proof. */
@@ -32,6 +34,7 @@ internal class HrisWorkerMatrixProbe(private val context: Context, directory: Fi
             var senderLease: AndroidCollaborationRuntimeLease? = null
             var recipientLease: AndroidCollaborationRuntimeLease? = null
             var application: HrisWorkerProofContainer? = null
+            var primary: Exception? = null
             try {
                 senderLease = sender.installAndReopen()
                 recipientLease = recipient.installAndReopen()
@@ -47,14 +50,18 @@ internal class HrisWorkerMatrixProbe(private val context: Context, directory: Fi
                 files.write("worker-queued", files.checkpoint())
                 // Driver confirms this PID and kills the process. No graceful substitute for death.
                 awaitCancellation()
+            } catch (failure: Exception) {
+                primary = failure
+                throw failure
             } finally {
-                closeAll(
+                closeHrisProofResources(
+                    primary,
                     listOf(
                         { application?.close() },
                         { senderLease?.closeProofRuntime() },
                         { recipientLease?.closeProofRuntime() },
                         { http.cancelAndClose() },
-                    )
+                    ),
                 )
             }
         }
@@ -74,6 +81,7 @@ internal class HrisWorkerMatrixProbe(private val context: Context, directory: Fi
             var timeline: CollaborationTimelineLease? = null
             var room: Room? = null
             var received: HrisProofMessages? = null
+            var primary: Exception? = null
             try {
                 val app = openApplication().also { application = it }
                 app.activate()
@@ -111,6 +119,15 @@ internal class HrisWorkerMatrixProbe(private val context: Context, directory: Fi
                 check(completed.record.intent == restored.intent && eventId in completed.eventIds)
                 check(app.pending().isEmpty())
                 check(app.runWorker() == SyncResult.Complete)
+                val historical = seedHistory(requireNotNull(peer), requireNotNull(room))
+                val foreground =
+                    app.foregroundHistory(
+                        sender.registeredDeviceId,
+                        files.roomId,
+                        eventId,
+                        files.body,
+                        historical,
+                    )
                 files.write(
                     "worker-result",
                     files
@@ -122,10 +139,20 @@ internal class HrisWorkerMatrixProbe(private val context: Context, directory: Fi
                         .put("senderRuntimeRestoredByWorker", true)
                         .put("originalHistoryAcquired", true)
                         .put("completionRetired", true)
-                        .put("repeatedWorkerComplete", true),
+                        .put("repeatedWorkerComplete", true)
+                        .put("foregroundHistoryPaged", true)
+                        .put("foregroundStoppedHistoryRetained", true)
+                        .put("historyPages", foreground.pages)
+                        .put("providerReferences", foreground.references)
+                        .put("pendingStateReferences", foreground.pendingStateReferences)
+                        .put("historyPeerEvents", JSONArray(historical.map { it.eventId })),
                 )
+            } catch (failure: Exception) {
+                primary = failure
+                throw failure
             } finally {
-                closeAll(
+                closeHrisProofResources(
+                    primary,
                     listOf(
                         { received?.close() },
                         { room?.close() },
@@ -133,7 +160,7 @@ internal class HrisWorkerMatrixProbe(private val context: Context, directory: Fi
                         { application?.close() },
                         { peer?.closeProofRuntime() },
                         { http.cancelAndClose() },
-                    )
+                    ),
                 )
             }
         }
@@ -167,16 +194,17 @@ internal class HrisWorkerMatrixProbe(private val context: Context, directory: Fi
         error("Worker did not complete")
     }
 
-    private suspend fun closeAll(operations: List<suspend () -> Unit>) =
-        withContext(NonCancellable) {
-            var first: Exception? = null
-            for (operation in operations) try {
-                operation()
-            } catch (failure: Exception) {
-                if (first == null) first = failure else first.addSuppressed(failure)
-            }
-            first?.let { throw it }
+    private suspend fun seedHistory(
+        peer: AndroidCollaborationRuntimeLease,
+        room: Room,
+    ): List<HrisHistoricalMessage> {
+        val seed = ProofQueuedMessage(peer.nativeClient, room)
+        return List(32) { index ->
+            val body = "history-$index-${files.logicalId}"
+            val sent = seed.send(body, UUID.randomUUID().toString())
+            HrisHistoricalMessage(sent.eventId, body)
         }
+    }
 
     private fun <T> expect(result: AppResult<T>): T =
         when (result) {

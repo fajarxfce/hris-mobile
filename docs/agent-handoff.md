@@ -1,5 +1,44 @@
 # Agent continuation — HRIS Mobile
 
+## Actual foreground history and server key-publication race — 1 November 2026
+
+The native fixture now resolves the real ChatThreadViewModel after application-worker
+recovery. It sends 32 encrypted peer seeds, confirms the oldest original is initially
+absent, pages provider history, verifies all 33 originals and retains the oldest row
+after Stop. Cleanup drains the existing close contract and preserves primary failures;
+six unit tests cover bounded retry, all-resource cleanup and cancellation. Product
+shutdown deadlines are unchanged. No forced peer key refresh remains in the fixture.
+
+[Contract](collaboration-native-worker.md) and
+[measurement](measurements/chat-foreground-native-2026-11-01.json) bind 10 Mobile/13
+Platform inputs and all failed attempts. The same APK `d685231d` failed before and
+passed after Platform's schema-114 publication correction: 94s, four older actions,
+43 references, ten state-only references, no unresolved message references, admissions
+30/28/30 with zero failures and complete cleanup. SDK/scheduled regressions pass in
+120s combined (55.826s/46.057s test time): three/one encrypted sends, held room isolated,
+automatic ordinary-death startup and restored network settings. These are local results;
+new hosted artifacts still require their separate audit.
+
+Platform `79326538942e83ef89bf6a2b4c251888db7fdd6d` is pushed and pinned by native CI.
+Read-only discovery verifies provider keys against the prior immutable reservation;
+room send, one-time claims and to-device send still require publication confirmation.
+Final server checks: 110 registration/crypto-admission and 26 API cases pass, with
+schema-114 upgrade/restore and recovery-gate evidence retained. The broad run's three
+failures and their correction remain recorded. Mobile's final 305s run passes APK,
+lint, formatting, architecture, detekt and root checks: 2,733 desktop cases/427 suites
+plus six cleanup tests, zero failures/errors/skips. CI now runs and uploads cleanup
+unit XML alongside all three native cases.
+
+**Continue, do not stop at this checkpoint.** Push the companion commit and audit
+hosted CI, then bounded local browsing beyond ten pages, durable drafts, safe pending
+cancellation, incoming push/replies and all remaining P0–P8. No complete PRD group,
+Apple/web acceptance, live deployment or Starter port. The emulator is stopped.
+Release 6 remains prepared but uninstalled: latest WireGuard ADB attempt timed out,
+reconnect question is pending and last confirmed installed code was 4. Use the build6
+preflight/install-only helpers, notify before install, preserve signer/data and never
+drive phone UI. Product release source remains `2d6753ee`; this increment's Mobile
+changes are fixture/test infrastructure.
+
 ## Release 6 ready; three hosted native cases audited — 1 November 2026
 
 Latest prepared private APK is now release **6**, superseding the uninstalled release 5:

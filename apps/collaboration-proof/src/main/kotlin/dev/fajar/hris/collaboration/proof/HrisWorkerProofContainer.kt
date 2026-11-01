@@ -8,6 +8,7 @@ import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.policies.localListAccess
 import dev.fajar.starter.collaboration.domain.repositories.*
 import dev.fajar.starter.collaboration.domain.usecases.*
+import dev.fajar.starter.collaboration.presentation.thread.ChatThreadViewModel
 import dev.fajar.starter.common.config.*
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.database.*
@@ -24,6 +25,7 @@ import io.ktor.client.HttpClient
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
+import org.koin.core.parameter.parametersOf
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
@@ -146,11 +148,36 @@ internal class HrisWorkerProofContainer(
 
     suspend fun runWorker() = syncTasks().single { it.key == QueueCollaborationText.DELIVERY_KEY }()
 
+    suspend fun foregroundHistory(
+        deviceId: String,
+        roomId: String,
+        originalEventId: String,
+        originalBody: String,
+        historical: List<HrisHistoricalMessage>,
+    ): HrisForegroundHistoryResult =
+        HrisForegroundHistoryProbe(
+                factory = {
+                    container.koin.get<ChatThreadViewModel> {
+                        parametersOf(application.workspaceId, conversationId)
+                    }
+                },
+                snapshot = { history() },
+                references = {
+                    expect(
+                        container.koin.get<ReadCollaborationHistoryReferences>()(
+                            application.workspaceId,
+                            CollaborationHistoryTraversal(conversationId, roomId, deviceId),
+                        )
+                    )
+                },
+            )
+            .run(originalEventId, originalBody, historical)
+
     suspend fun close() =
         withContext(NonCancellable) {
             try {
                 container.koin.get<ApplicationCollaborationLifetime>().closeAndJoin()
-                expect(runtime.closeOtherOwners(null))
+                drainHrisProofRuntime { runtime.closeOtherOwners(null) }
             } finally {
                 try {
                     container.close()

@@ -226,15 +226,8 @@ internal class ProtectedHrisProofOwner(
     }
 }
 
-internal suspend fun AndroidCollaborationRuntimeLease.closeProofRuntime() {
-    repeat(6) {
-        when (val result = close()) {
-            is AppResult.Success -> return
-            is AppResult.Failed ->
-                check(result.failure.code == "client.collaboration_close_pending")
-        }
-    }
-    error("Owned runtime did not finish closing")
+internal suspend fun AndroidCollaborationRuntimeLease.closeProofRuntime() = drainHrisProofRuntime {
+    close()
 }
 
 internal suspend fun AndroidCollaborationRuntimeLease.proofKeyFingerprint(): String =

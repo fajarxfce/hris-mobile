@@ -1,0 +1,506 @@
+{
+  "date": "2026-11-01",
+  "change": "Native foreground history, bounded proof cleanup and reservation-aware device-key discovery",
+  "baseMobileCommit": "97ef063901bdc685c503a434b9b652dcbffdc3de",
+  "basePlatformCommit": "2b5080eec09f60db000995f144c63d00ec438416",
+  "sourceSha256": {
+    "mobile": {
+      "apps/collaboration-proof/build.gradle.kts": "e88f4c37894754c36f18d2e98b37715924146d73de921f0fd1c0f25775556b29",
+      "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisProofFailure.kt": "dffe4f4b65ce3a7c0ec96ba98dcc6fe36850efe8bd81e336674a44df51aa8310",
+      "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisWorkerMatrixProbe.kt": "b0a66403817c69778a4fb8766565e1351bb734c0421951b57ee65c126a42d67e",
+      "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisWorkerProofContainer.kt": "e6e3e3bf4cc51d0371e851646776de68c0eea9056e2732dae7d1d5794aaf1438",
+      "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/MatrixProofInstrumentation.kt": "b4ddff69cfe5c89492c2aa28005c3887f5d954471e5acba6252854b89e4039e5",
+      "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/ProtectedHrisProofOwner.kt": "e0891c2e585f94bbdf8317293f8efc9a8a89354664d23ecdf4a39fa7bb95e35e",
+      "gradle/verification-metadata.xml": "bcdc7e7f226238fe3702d7695feab5359678f55a948d3384d43e5488e11bafc8",
+      "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisForegroundHistoryProbe.kt": "28a0f4faa2f8a26d78aaaf081f780ca90665ddcf867cb49202f928076aabb807",
+      "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisProofCleanup.kt": "8103250bcd60ff5e89af3246ca40a8ca03ec4e7aa66d8100d1d60ab25c38be51",
+      "apps/collaboration-proof/src/test/kotlin/dev/fajar/hris/collaboration/proof/HrisProofCleanupTest.kt": "ef15b07113ede42c04c1459e52b41ddb4e7a1f4f4d4dd0cada6f00c93c1708e7"
+    },
+    "platform": {
+      "apps/server/src/test/kotlin/dev/fajar/hris/NativeCollaborationMatrixIdentityHttpTest.kt": "28ff05be0aadec03af5fa5460350591f09b42e31691ef8b268ea104bba8b1715",
+      "apps/server/src/test/kotlin/dev/fajar/hris/NativeCollaborationWorkerInteropTest.kt": "84e74b3a9da87f8b3f7791ca67ae64ae7542acd4cb67a3012f8b59c3bd691fd6",
+      "apps/server/src/test/kotlin/dev/fajar/hris/NativeSdkMatrixServer.kt": "53cbfceff98f446b0e1a4e2962ae95f80fdb44482c5c0eb9b5246ec666f1210a",
+      "modules/collaboration/data/src/main/kotlin/dev/fajar/hris/collaboration/data/repositories/StoredCollaborationRecipientRepository.kt": "55c8ebb6ace53fd21071fe394ef46cecc86b286159f0ce5f4ea879e849b26fda",
+      "modules/collaboration/data/src/test/kotlin/dev/fajar/hris/collaboration/data/CollaborationRecipientStorageTest.kt": "ea765b91ec68d2deffac442e93df8e07b7168898d83cd4483270942e0c199586",
+      "modules/collaboration/data/src/test/kotlin/dev/fajar/hris/collaboration/data/NativeCollaborationRegistrationTest.kt": "3c6cfdd6fdf0fbe2a15639a5f8a932ee8534c2a5c702d8e3ccaa538648ac2cf3",
+      "modules/collaboration/domain/src/main/kotlin/dev/fajar/hris/collaboration/domain/entities/CollaborationRecipientDevice.kt": "6dbef91885954a034fefc3f5c1a190c421811270461cfb9df3ad6fbc9cc86fba",
+      "modules/collaboration/domain/src/main/kotlin/dev/fajar/hris/collaboration/domain/usecases/AccessNativeCollaborationMatrixDevice.kt": "7f2ba54b3347a7d193d0370b6f66bdc27246487f936cb8d82fd26aa83d196e21",
+      "tool/collaboration_worker_native.py": "66d61c0e0b1c653c063012cd8fca476110fd51163fcbf1db74f4598d2eebb9de",
+      "tool/recovery_set.py": "a54e119edb162c3153730f1ddf6a3626cd1f8e945c4b57e7f740ddc46543ed04",
+      "tool/test_collaboration_worker_native.py": "c7026b8ba1c47be5988e2f5ed4f392ae48cfd1a0eb6f35f41b2877be48ae9f93",
+      "tool/test_recovery_set.py": "3604ba4c45231b462b15352dbaaf41a66ede8b65bf554b44791e364a4079f51c",
+      "core/database/src/main/resources/db/migration/V114__collaboration_reserved_recipient_keys.sql": "69fa8324129f1ad81fcc0fac33fd3a7eadcf5477332c425cdee9523f5d46b51f"
+    },
+    "apkSha256": "d685231d6b49439dd4517abc42e072cb0490a8e5bd3326c02a4a726ca6697b55"
+  },
+  "sourcesVerifiedAfterNativeRegressions": true,
+  "validation": {
+    "mobileBuilds": [
+      {
+        "log": ".work/foreground-proof-build-1.log",
+        "sha256": "9795bdab1aa0f7fe8895d5e7dc369f0081cfa90784734f9e54fe3b03f430230d",
+        "passed": false,
+        "seconds": 42,
+        "note": "Strict verification rejected two previously unused AAR variants; official Google Maven bytes matched before checksums were added."
+      },
+      {
+        "log": ".work/foreground-proof-build-2.log",
+        "sha256": "2bd3e0c2a83ab249dbdb641ab654f6b35ad180125753cc982e3e955116549dc5",
+        "passed": false,
+        "seconds": 42,
+        "note": "Compose compiler required an explicit runtime on the proof unit-test classpath."
+      },
+      {
+        "log": ".work/foreground-proof-build-3.log",
+        "sha256": "5a7d16dd4f0665643e0567b85d8d6260a63baec8d49660e903fa4b40add3c9f2",
+        "passed": false,
+        "seconds": 40,
+        "note": "One cleanup test incorrectly assumed exception object identity despite coroutine stack recovery; cause and original suppressed failures are now checked."
+      },
+      {
+        "log": ".work/foreground-proof-build-4.log",
+        "sha256": "aa0a3ba551dad258cc3d098614585cb7a3bae9d0462a263d6416624a9a0d9710",
+        "passed": false,
+        "seconds": 92,
+        "note": "All six unit tests and APK assembly passed; lint rejected restricted ViewModelStore.put. Replaced with public ViewModelProvider factory."
+      },
+      {
+        "log": ".work/foreground-proof-build-5.log",
+        "sha256": "0e2824af548f80a613a1e7c2f5316971ebf0f606bc93177aa53e07b71cd655b4",
+        "passed": true,
+        "seconds": 86,
+        "note": "Proof unit tests, assembly, lint, format, architecture and detekt passed."
+      },
+      {
+        "log": ".work/foreground-proof-build-6.log",
+        "sha256": "b6a2e691d02a1f660f2b5eea6016ab34891f82b1abcd426cd252e87b798da51f",
+        "passed": true,
+        "seconds": 46,
+        "note": "Added bounded phase/state/count timeout diagnostics; assembly passed."
+      },
+      {
+        "log": ".work/foreground-proof-build-7.log",
+        "sha256": "8d395fcc331d3f936694c227ee07fd77314f8ef641c9f567d713e6a3b9d00847",
+        "passed": true,
+        "seconds": 41,
+        "note": "Temporary forced peer-key-query diagnostic experiment; this intervention is absent from final source."
+      },
+      {
+        "log": ".work/foreground-proof-reviewed.log",
+        "sha256": "1f93ca3a91ee047b9d821efcffa664f51ddd6f9403768669fcda6a60d70db0df",
+        "passed": true,
+        "seconds": 305,
+        "note": "Final non-experimental APK, six cleanup tests, lint/quality and root checks."
+      }
+    ],
+    "platformBuilds": [
+      {
+        "log": ".work/foreground-server-compile.log",
+        "sha256": "05ee631d4cad039dece14af541ceb4a4041e0c76edc1f0448b41e8717faaee82",
+        "passed": false,
+        "seconds": 20,
+        "note": "Initial Jackson3 JsonNode mapping did not yield a Kotlin list."
+      },
+      {
+        "log": ".work/foreground-server-compile-2.log",
+        "sha256": "f9389feddb99a6baa9da572ce14d2ffc665536bf32c4cdaa6808cd001c547f18",
+        "passed": true,
+        "seconds": 25,
+        "note": "Bounded indexed JSON array parsing compiled."
+      },
+      {
+        "log": ".work/foreground-server-compile-3.log",
+        "sha256": "64fbd6c7e67f46cdbbe38ad2d1a4dc4dfb31294087429b931aa1c33c3a55fdbd",
+        "passed": true,
+        "seconds": 20,
+        "note": "Explicit test-only seed burst compiled."
+      },
+      {
+        "log": ".work/recipient-race-focused-1.log",
+        "sha256": "8a47d0b7e72b29363894478ead2c7fa49e34f422b546582590c77344e727865e",
+        "passed": false,
+        "seconds": 111,
+        "note": "Seven storage/upgrade/restore tests passed. Two of 25 API tests expected the wrong existing HTTP error status."
+      },
+      {
+        "log": ".work/recipient-race-focused-2.log",
+        "sha256": "5f995d929b18c606680b828aa77df96c943377cd004a717a1e7c13e156ef2e1f",
+        "passed": true,
+        "seconds": 87,
+        "note": "Seven storage tests and 25 API cases pass; format/architecture pass."
+      },
+      {
+        "log": ".work/recipient-race-reviewed.log",
+        "sha256": "362cc52cdc78fea65deb0dcf912d4db733b5d411d094b22c92a4619d06abcba3",
+        "passed": false,
+        "seconds": 405,
+        "note": "40 domain and 207 data cases ran; three data failures exposed one obsolete discovery expectation and overly broad claim/to-device eligibility. API phase was not reached."
+      },
+      {
+        "log": ".work/recipient-race-admission-reviewed.log",
+        "sha256": "f798fb0de888b346e0f872c1d2ac4b4d70097a921bc375d5f78f99872e6fb53f",
+        "passed": true,
+        "seconds": 198,
+        "note": "Final 110 registration/crypto-admission and 26 API cases pass; only discovery includes reservations. Format/architecture pass."
+      }
+    ],
+    "desktop": {
+      "suites": 427,
+      "tests": 2733,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "reportsSha256": "9e1ff0319f7ad793bf198e75e6d08eadfbfd9aa79fa15fc6b0e7c007c0183b02"
+    },
+    "proofCleanupUnit": {
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "reportSha256": "5f392aee880a26f4bc363d1e81f4c6d56e45c835f700de11799b589fce89b8b8"
+    },
+    "finalRegistration": {
+      "tests": 110,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 99.493,
+      "sha256": "3ca8179b413f4756be7222eecd79cbf3fdac6c74ae60e8f24e75e9d57fc91c0f"
+    },
+    "finalApi": {
+      "tests": 26,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 47.216,
+      "sha256": "85ade7ba69d34977e43ced5ac5fc593aa4fbbc0743cc9f30fd2978574905067e"
+    },
+    "storageUpgradeAndRestore": {
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 15.878,
+      "sha256": "37f7fb5beb54e5a7398106ac03e72e8cd974fbabf264fe77d0047a645f1f0007"
+    },
+    "domain": {
+      "tests": 40,
+      "suites": 11,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "otherDataCases": {
+      "tests": 97,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "source": "Earlier broad run; includes the seven storage cases. These unchanged cases are separate from the final 110-case registration rerun."
+    },
+    "pythonDrivers": {
+      "tests": 63,
+      "passed": true,
+      "log": ".work/foreground-driver-tests.log",
+      "sha256": "5b4d1b22080a2989d1a97eba698124f1289c7bf06eb261cb35c499aea766cd61"
+    },
+    "recoverySchemaGate": {
+      "tests": 11,
+      "passed": true,
+      "maximumReviewedSchema": 114,
+      "nextSchemaRejected": 115,
+      "log": ".work/recipient-race-recovery-tests.log",
+      "sha256": "1d83585b97486319bb9c2fff2996c7435fd78e26e63e611aae2ad6791d35db6b"
+    }
+  },
+  "dependencyVerification": [
+    {
+      "coordinate": "androidx.lifecycle:lifecycle-viewmodel-savedstate:2.9.4",
+      "artifact": "lifecycle-viewmodel-savedstate-2.9.4.aar",
+      "url": "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-viewmodel-savedstate/2.9.4/lifecycle-viewmodel-savedstate-2.9.4.aar",
+      "sha256": "ae70b02386c0733b193644c58a42608ad3e4f8e7731eda859f7888405b5f36b9",
+      "cachedBytesMatchOfficial": true
+    },
+    {
+      "coordinate": "androidx.savedstate:savedstate:1.3.3",
+      "artifact": "savedstate-1.3.3.aar",
+      "url": "https://dl.google.com/dl/android/maven2/androidx/savedstate/savedstate/1.3.3/savedstate-1.3.3.aar",
+      "sha256": "85ea36f18a33c4acf6ed62747a1b4cbef191f218121ab37a51175d82c5be89ad",
+      "cachedBytesMatchOfficial": true
+    }
+  ],
+  "nativeAttempts": [
+    {
+      "log": ".work/foreground-native-live-1.log",
+      "sha256": "0f04e5e4e69cf6fa37e71eb50ad6faefb2ac4dbe6c1bd6566821b3cd591455cc",
+      "passed": false,
+      "seconds": 133,
+      "directory": ".work/collaboration-worker/4b06fa08234a4775a31c072c74271264",
+      "apkSha256": "49baa223c7b9ec8eeb4a6d3d50a4ff0e11be083c1fe0581d75f2d66526b0b344",
+      "cleanup": true,
+      "diagnosticExperiment": false,
+      "artifacts": [
+        {
+          "path": ".work/collaboration-worker/4b06fa08234a4775a31c072c74271264/result.json",
+          "sha256": "1696301215a8cc871f1aa4051d9fb7b8e8e66e44bdf08cb47ec1b98787973fc8"
+        },
+        {
+          "path": ".work/collaboration-worker/4b06fa08234a4775a31c072c74271264/gateway-observations.json",
+          "sha256": "549a8f6657e6e8ec7a217f156be2a66f5f16397c7695a4967882bc15f4dbb3ed"
+        }
+      ],
+      "diagnostic": {
+        "replyComplete": false,
+        "resultComplete": false,
+        "instrumentationComplete": false,
+        "failureCategory": "IllegalStateException",
+        "failureFrames": [
+          "dev.fajar.hris.collaboration.proof.HrisForegroundHistoryProbe.await:105",
+          "dev.fajar.hris.collaboration.proof.HrisForegroundHistoryProbe.access$await:22",
+          "dev.fajar.hris.collaboration.proof.HrisForegroundHistoryProbe$await$1.invokeSuspend:15"
+        ]
+      }
+    },
+    {
+      "log": ".work/foreground-native-live-2.log",
+      "sha256": "fb0f5258a8ca09f48a550e36a4d8c9ed8df4a676db29a8d537c4ee474b12f2d6",
+      "passed": false,
+      "seconds": 129,
+      "directory": ".work/collaboration-worker/b8ea33e5f8a54be3b5e997cab46f8027",
+      "apkSha256": "d685231d6b49439dd4517abc42e072cb0490a8e5bd3326c02a4a726ca6697b55",
+      "cleanup": true,
+      "diagnosticExperiment": false,
+      "artifacts": [
+        {
+          "path": ".work/collaboration-worker/b8ea33e5f8a54be3b5e997cab46f8027/result.json",
+          "sha256": "d2fe2883122098b581e888cf2a2045539c690188b6f154f1dc26bf34aca76304"
+        },
+        {
+          "path": ".work/collaboration-worker/b8ea33e5f8a54be3b5e997cab46f8027/gateway-observations.json",
+          "sha256": "ee71e6dab0ba0d465d35437f1b311b067ed18ae8ff4f2bd501be6deccf026ffd"
+        }
+      ],
+      "diagnostic": {
+        "replyComplete": false,
+        "resultComplete": false,
+        "instrumentationComplete": false,
+        "failureCategory": "Foreground_LATEST_CONNECTED_Rows24_Saved1",
+        "failureFrames": [
+          "dev.fajar.hris.collaboration.proof.HrisForegroundHistoryProbe.await:111",
+          "dev.fajar.hris.collaboration.proof.HrisForegroundHistoryProbe.access$await:22",
+          "dev.fajar.hris.collaboration.proof.HrisForegroundHistoryProbe$await$1.invokeSuspend:15"
+        ]
+      }
+    },
+    {
+      "log": ".work/foreground-native-live-3.log",
+      "sha256": "6f39f7bb659f9d198720f0c9ef44c432c1231c65049974d7dbcde6362adae0b4",
+      "passed": true,
+      "seconds": 79,
+      "directory": ".work/collaboration-worker/d09cb87bdf5340c6afc7f68df73cae9c",
+      "apkSha256": "bb53ee2859e4f4046e237af4111434b0f6baeeb2767ba466573164395bf8c439",
+      "cleanup": true,
+      "diagnosticExperiment": true,
+      "artifacts": [
+        {
+          "path": ".work/collaboration-worker/d09cb87bdf5340c6afc7f68df73cae9c/result.json",
+          "sha256": "92679ffb63fe8d7f26fe9220c7e47a688dbfbef447165d7e87138da0086d4366"
+        },
+        {
+          "path": ".work/collaboration-worker/d09cb87bdf5340c6afc7f68df73cae9c/gateway-observations.json",
+          "sha256": "92eb5abdbd5581feddc59e2d7587d94f692511ad0db99e99f2fc7e87f962debc"
+        },
+        {
+          "path": ".work/collaboration-worker/d09cb87bdf5340c6afc7f68df73cae9c/acceptance.json",
+          "sha256": "d3c4595a9933ae0331f15aaf40bff56aad05de06a76513f61375b30fa1d751b1"
+        }
+      ],
+      "history": {
+        "passes": 1,
+        "historyPages": 4,
+        "providerReferences": 43,
+        "pendingStateReferences": 10,
+        "foregroundHistoryPaged": true,
+        "foregroundStoppedHistoryRetained": true
+      }
+    },
+    {
+      "log": ".work/foreground-native-live-4.log",
+      "sha256": "2fdd3b6bb5245d95341f252ee8060d038e4999878b68c868490dab095e54b477",
+      "passed": true,
+      "seconds": 94,
+      "directory": ".work/collaboration-worker/685fd89db7b142f9bdbdb6794b216158",
+      "apkSha256": "d685231d6b49439dd4517abc42e072cb0490a8e5bd3326c02a4a726ca6697b55",
+      "cleanup": true,
+      "diagnosticExperiment": false,
+      "artifacts": [
+        {
+          "path": ".work/collaboration-worker/685fd89db7b142f9bdbdb6794b216158/result.json",
+          "sha256": "006011d527416d777cad1be840237a3f3f98e9a2f6dcb91f47ce1dd5948e00f9"
+        },
+        {
+          "path": ".work/collaboration-worker/685fd89db7b142f9bdbdb6794b216158/gateway-observations.json",
+          "sha256": "abe225eefd77ae696dc030af46d4af92ce6b9d31217cecf2c75c7b317d4cf847"
+        },
+        {
+          "path": ".work/collaboration-worker/685fd89db7b142f9bdbdb6794b216158/acceptance.json",
+          "sha256": "8480a9317bf7edae4ae783bc5f6fb67cf971279e8eba501356f85d8a9cbfff77"
+        }
+      ],
+      "history": {
+        "passes": 1,
+        "historyPages": 4,
+        "providerReferences": 43,
+        "pendingStateReferences": 10,
+        "foregroundHistoryPaged": true,
+        "foregroundStoppedHistoryRetained": true
+      }
+    }
+  ],
+  "finalDirectWorker": {
+    "junit": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 76.206,
+      "sha256": "f6c697120d7fe5f834e85837708cc38ed58b99fc3671e4acfaa39c25030a5616"
+    },
+    "processes": 2,
+    "forcedProcessDeaths": 1,
+    "workerEncryptedSends": 1,
+    "peerEncryptedSeeds": 32,
+    "totalEncryptedSends": 33,
+    "historyActions": 4,
+    "references": 43,
+    "pendingStateReferences": 10,
+    "unresolvedMessageReferences": 0,
+    "applicationAdmissions": {
+      "device": 30,
+      "conversation": 28,
+      "room": 30,
+      "failures": 0
+    },
+    "platformWorkManagerAccepted": false,
+    "canonicalOriginalsAcquired": 33,
+    "oldestCanonicalRowRetainedAfterStop": true
+  },
+  "regressions": {
+    "log": ".work/foreground-native-regressions.log",
+    "sha256": "67f1d784cd5f04827772cb20c2ae62094c03a2802adb550e89c3c31bb05ae92a",
+    "passed": true,
+    "seconds": 120,
+    "sdk": {
+      "junit": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "seconds": 55.826,
+        "sha256": "77e54519c330809299aa44bbd3ff77f6579f02e9886fa8359d025f0ee9cfcd44"
+      },
+      "processes": 4,
+      "forcedProcessDeaths": 3,
+      "encryptedSends": 3,
+      "heldRoomNeverSent": true,
+      "applicationAdmissions": {
+        "device": 22,
+        "conversation": 22,
+        "room": 22,
+        "failures": 0
+      },
+      "cleanup": true,
+      "artifacts": [
+        {
+          "path": ".work/collaboration/2bde0679b7844ce89cbb0652dca1284d/result.json",
+          "sha256": "306ddf65883493ed39645ad5845572c52a4d9be4795eccb18621d55a36626259"
+        },
+        {
+          "path": ".work/collaboration/2bde0679b7844ce89cbb0652dca1284d/verified.json",
+          "sha256": "d0832a496731e1a512410101fc89ac181407599e22701ac8541c55ca8b2fa2c7"
+        },
+        {
+          "path": ".work/collaboration/2bde0679b7844ce89cbb0652dca1284d/gateway-trace.json",
+          "sha256": "e9fb3780fffd4f62e82b4885f71a75f4afae4dce1bd0afc5e8b4da98849e10b4"
+        },
+        {
+          "path": ".work/collaboration/2bde0679b7844ce89cbb0652dca1284d/native-staged.json",
+          "sha256": "3ff5ef2098ad189433f0c0a014f32826b88cc1abf75c6c58527247dde628cd73"
+        },
+        {
+          "path": ".work/collaboration/2bde0679b7844ce89cbb0652dca1284d/native-acknowledged.json",
+          "sha256": "221d1669f36eac0a01da68a3cdb292ee6cbf991e2fefcc9c11edb84812bb1e10"
+        },
+        {
+          "path": ".work/collaboration/2bde0679b7844ce89cbb0652dca1284d/native-ack-restored.json",
+          "sha256": "750eccf87be6252f396c192760a2e76da8d032a21574ca450eafa5fd7390b7c7"
+        },
+        {
+          "path": ".work/collaboration/2bde0679b7844ce89cbb0652dca1284d/native-completion-restored.json",
+          "sha256": "1069ddc7e82ea38c6bee18504761c7ea011491955673254c3327f084057af1d1"
+        }
+      ],
+      "distinctCheckpointProcesses": 4
+    },
+    "scheduled": {
+      "junit": {
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "seconds": 46.057,
+        "sha256": "d85368987f9e934712b515e53cfdaa10ffc5e5b09c73977049be2aac0dee6a20"
+      },
+      "processes": 2,
+      "ordinaryProcessDeaths": 1,
+      "automaticJobStart": true,
+      "networkRestored": true,
+      "encryptedSends": 1,
+      "applicationAdmissions": {
+        "device": 8,
+        "conversation": 7,
+        "room": 8,
+        "failures": 0
+      },
+      "runAttemptCount": 1,
+      "workManagerExecutionAccepted": true,
+      "retryCancellationAccepted": false,
+      "cleanup": true,
+      "artifacts": [
+        {
+          "path": ".work/collaboration-worker/f87ea7440a274682955a51c9e6b68ca0/result.json",
+          "sha256": "65349ca574c3a7804fae5b43a01eb976b905cfe8822cb46cd89c4fc1f6bfedb6"
+        },
+        {
+          "path": ".work/collaboration-worker/f87ea7440a274682955a51c9e6b68ca0/acceptance.json",
+          "sha256": "2dca00e187ad483301b10ca1136835623f33457c69e6694248fa57e75a5ad268"
+        },
+        {
+          "path": ".work/collaboration-worker/f87ea7440a274682955a51c9e6b68ca0/gateway-trace.json",
+          "sha256": "3e7f0cf39819d4877a8cf7ece5adf2e6bd4e461c8ae41463f89717c29d8571aa"
+        },
+        {
+          "path": ".work/collaboration-worker/f87ea7440a274682955a51c9e6b68ca0/network-before.json",
+          "sha256": "79dfab35e5f4104e398aa74de7c3d6e56dda0a96ac31d2fcb699ac1df093c6ad"
+        },
+        {
+          "path": ".work/collaboration-worker/f87ea7440a274682955a51c9e6b68ca0/started.json",
+          "sha256": "c697924ee842c3029ddd77722b9d25f5b91c7d412cb3adbb68ce913eb335cd7a"
+        },
+        {
+          "path": ".work/collaboration-worker/f87ea7440a274682955a51c9e6b68ca0/stopped.json",
+          "sha256": "a812cfa0d979ee39cfc337f97c3d413bf132565d32cdc6e5536da79208069f0d"
+        }
+      ]
+    }
+  },
+  "limits": [
+    "Owned API-35 emulator and fictional provider/HRIS fixtures only; no live deployment.",
+    "Direct fixture seeds 32 peer messages with test-only burst 64; other fixtures retain burst 10. No scale acceptance.",
+    "Foreground ViewModel and canonical storage are real; this increment does not render or drive native Activity UI.",
+    "Ordinary OS scheduling and direct worker invocation are distinct. Retry/cancellation acceptance remains separate.",
+    "Key discovery includes immutable reservations; room send, key claim and to-device send still require confirmed publication.",
+    "No forced peer key refresh remains in final source; product shutdown deadlines are unchanged.",
+    "Physical phone unavailable; release 6 remains prepared, not installed. Last confirmed installed code was 4.",
+    "Starter, Apple/web implementation and complete PRD-group acceptance are unchanged."
+  ]
+}

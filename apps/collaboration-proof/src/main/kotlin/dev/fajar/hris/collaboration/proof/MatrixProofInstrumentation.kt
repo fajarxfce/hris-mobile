@@ -52,7 +52,9 @@ class MatrixProofInstrumentation : Instrumentation() {
             output.put("complete", false)
             output.put(
                 "failureCategory",
-                (failure as? HrisProofFailure)?.category ?: failure.javaClass.simpleName,
+                (failure as? HrisProofFailure)?.category
+                    ?: (failure as? HrisForegroundTimeout)?.category
+                    ?: failure.javaClass.simpleName,
             )
             output.put(
                 "failureFrames",
