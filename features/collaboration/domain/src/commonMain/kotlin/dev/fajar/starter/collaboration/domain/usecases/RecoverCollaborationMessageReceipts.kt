@@ -27,6 +27,7 @@ class RecoverCollaborationMessageReceipts(
     private val server: IdentityServer,
     private val build: AppBuild,
     private val clock: Clock,
+    private val completions: CollaborationMessageCompletionRepository,
 ) {
     private val execution = Mutex()
 
@@ -58,9 +59,16 @@ class RecoverCollaborationMessageReceipts(
                 }
             if (read is AppResult.Failed) return@withLock read
             val records = (read as AppResult.Success).value
+            val retained = completedReceipts(workspaceId, access, conversationId, records, known)
+            if (retained is AppResult.Failed) return@withLock retained
             if (
-                collaborationReceiptProjection(access, conversationId, records, known) == null ||
-                    records.any { !validCollaborationMessageState(it.state) }
+                collaborationReceiptProjection(
+                    access,
+                    conversationId,
+                    records,
+                    known,
+                    (retained as AppResult.Success).value,
+                ) == null || records.any { !validCollaborationMessageState(it.state) }
             )
                 return@withLock failed()
             val found =
@@ -124,6 +132,34 @@ class RecoverCollaborationMessageReceipts(
             if (batch.size == 32) break
         }
         return AppResult.Success(batch.toList())
+    }
+
+    private suspend fun completedReceipts(
+        workspaceId: String,
+        access: CollaborationLocalAccess,
+        conversationId: String,
+        records: List<CollaborationMessageRecord>,
+        journal: List<CollaborationMessageReceipt>,
+    ): AppResult<List<CollaborationMessageCompletion>> {
+        val ids =
+            missingCollaborationReceiptIds(access, conversationId, records, journal)
+                ?: return failed()
+        val result = mutableListOf<CollaborationMessageCompletion>()
+        for (id in ids) {
+            val read =
+                checked(workspaceId, access) {
+                    when (val proof = completions.readCompletion(access, id)) {
+                        is AppResult.Failed -> proof
+                        is AppResult.Success ->
+                            AppResult.Success(
+                                proof.value?.let { it.copy(eventIds = it.eventIds.toList()) }
+                            )
+                    }
+                }
+            if (read is AppResult.Failed) return read
+            result += (read as AppResult.Success).value ?: return failed()
+        }
+        return AppResult.Success(result.toList())
     }
 
     private suspend fun <T> checked(

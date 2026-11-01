@@ -1,5 +1,61 @@
 # Agent continuation — HRIS Mobile
 
+## Validated HRIS completion and journal retirement — 1 November 2026
+
+Encrypted completion and owned local retirement now pass common, SQLite/IndexedDB,
+application and actual Android/HRIS process-death proof. [Measurement](measurements/collaboration-retirement-2026-11-01.json)
+binds 307 Mobile / 33 Platform inputs. Platform fixture `f80be73987224fda12d5a3a08a96ec6716538cc9`
+is pushed and pinned by the Mobile HRIS workflow. [Contract](collaboration-retirement.md)
+describes retained identity, exact replay, bounded cleanup and later aliases.
+
+Message `get`/matching `insert` recover validated archives, while pending observations
+exclude them. Proof encryption binds the complete retained raw command and owned
+account/company; key loss cannot generate a replacement over archives. Exact Sent
+mapping, durable receipt, trusted original sender/logical ID/full-content hash and
+all aliases are required before local retirement. Legacy or missing evidence stays
+pending. At most 32 completions are prepared and archived per call, then their exact
+journal entries are removed under the current checkpoint CAS. An authenticated empty
+checkpoint preserves journal key protection. Reconcile, ACK recovery and delivery
+recognize archived journal entries, including later aliases that do not repeat the
+old primary event; cleanup verifies new aliases against acquired original history.
+
+Actual run `90ac7444ccff4f258b1a78f6c076a226` passes with four distinct processes and
+three forced deaths, including after completion archival and before journal cleanup.
+Process four starts no sync/delivery, recognizes both archived receipts, cleans the
+two entries, reopens SQLite and verifies exact replay plus changed-intent rejection.
+Server sees exactly three encrypted sends, no held-room send and 22/22/22 admission
+reads with zero failures. Case 43.141s / suite 65.560s / Gradle 95s; cleanup true.
+Proof APK `9e9dcdbd` matches actual and final full builds; emulator stopped.
+
+Final focused integration passes in 150s: 280 domain desktop / 280 domain browser,
+241 data desktop / 219 data browser, 165 Android host and two app binding cases,
+plus format/architecture/detekt and proof build. Final fixture build/quality passes
+in 55s; Platform compile/quality 31s; 45 Python driver cases pass. Full root/browser/
+Wasm/Android/proof/lint passes in 197s with 2,535 desktop, 165 Android host, 280 domain
+browser, 219 data browser and 35 database browser cases, zero failures/errors/skips
+and zero lint errors. Initial completion-only attempts hit a test assertion type
+inference error (116s, then an unchanged 37s rerun after a failed scripted edit);
+explicit `assertSame<Any>` passed in 53s. Those attempts remain in the measurement.
+Dev APK `5c9487c1` is built, not installed. No phone or live service change.
+
+**Next: Chat presentation and owned scheduling, then all remaining P0–P8. No PRD
+group is accepted by this storage increment.** There is currently no collaboration
+presentation module. Add the Fluent Chat service entry, owned inbox, setup recovery,
+participant discovery and DM navigation, then compose history with durable pending
+messages without duplicate/disappearing rows. Domain setup/conversation/send/history
+operations already exist; application lifetime currently closes obsolete runtimes.
+Keep delivery/admission/cleanup lifetimes explicit and preserve offline local facts.
+Then finish Apple/web owned adapters/interoperability, backup, rich messages and every
+call/meeting phase. Physical iPhone testing is waived; implementation is required.
+Continue the authorized long run with atomic commits pushed and Git handoffs.
+
+Previous hosted audits remain separate: ACK control `41295813930` passes 484 desktop /
+460 browser / 389 iOS simulator cases and Xcode, 279 hashes matched. Starter archive
+Apple `41298641454` passes 84 simulator cases and Xcode with all 16 Apple steps and
+15 matching hashes; other jobs were explicitly skipped. Starter evidence is pushed
+at `6226bc21`; HRIS completion/retirement stays out of the generic template.
+
+
 ## Validated command completion archive — 1 November 2026
 
 The generic raw archive now passes Mobile and Starter validation. All **15 source,

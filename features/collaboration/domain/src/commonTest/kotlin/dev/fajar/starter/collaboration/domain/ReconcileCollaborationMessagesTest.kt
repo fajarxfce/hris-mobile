@@ -163,6 +163,7 @@ class ReconcileCollaborationMessagesTest {
 
 private class ReceiptReconciliationFixture {
     val base = MessageIntentFixture()
+    val completions = CollaborationCompletionFixture(base)
     val device =
         CollaborationMessageDevice(
             reconciliationId(1),
@@ -226,6 +227,7 @@ private class ReceiptReconciliationFixture {
             base.server,
             base.build,
             base.clock,
+            completions,
         )
 
     suspend fun prepare() {

@@ -162,6 +162,7 @@ internal class HrisProductQueueProof(
                 app.server,
                 app.build,
                 app.clock,
+                messages,
             )
         val result = sender(app.workspaceId, staged.device.deviceId, conversationId)
         check(result is AppResult.Failed)
@@ -241,6 +242,7 @@ internal class HrisProductQueueProof(
                 app.server,
                 app.build,
                 app.clock,
+                messages,
             )
         val result = sender(app.workspaceId, runtime.deviceId, conversationId)
         if (result is AppResult.Failed) throw HrisProofFailure(result.failure)
@@ -302,6 +304,7 @@ internal class HrisProductQueueProof(
                 app.server,
                 app.build,
                 app.clock,
+                messages,
             )
         check(success(recovery(app.workspaceId, conversationId)) == 1)
         check(success(recovery(app.workspaceId, conversationId)) == 0)
@@ -313,6 +316,33 @@ internal class HrisProductQueueProof(
             )
         }
     }
+
+    suspend fun crashAfterCompletion(
+        logicalId: String,
+        transaction: String,
+        checkpoint: suspend (String) -> Unit,
+    ) = retirementProof(requireNotNull(application)).crash(logicalId, transaction, checkpoint)
+
+    suspend fun recoverCompletion(logicalId: String, transaction: String) =
+        retirementProof(prepareAckApplication()).recover(logicalId, transaction)
+
+    private fun retirementProof(app: HrisProofApplicationAccess) =
+        HrisProofMessageRetirement(
+            access,
+            conversationId,
+            { messages },
+            { receipts },
+            {
+                EncryptedCollaborationHistoryRepository(
+                    database.replicas,
+                    AesGcmContentCipher(),
+                    historyKey,
+                )
+            },
+            { listRepository() },
+            app,
+            ::reopenDatabase,
+        )
 
     private suspend fun prepareAckApplication(): HrisProofApplicationAccess {
         check(writer == null && application == null)
@@ -345,6 +375,7 @@ internal class HrisProductQueueProof(
                 app.server,
                 app.build,
                 app.clock,
+                messages,
             )
         check(success(reconcile(app.workspaceId, conversationId)) == 1)
         check(success(reconcile(app.workspaceId, conversationId)) == 0)

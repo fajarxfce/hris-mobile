@@ -337,6 +337,269 @@ abstract class CollaborationReceiptStorageContract {
         assertEquals(full, f.read())
     }
 
+    @Test
+    fun exactCleanupKeepsAnAuthenticatedEmptyCheckpointAcrossReopen() = withDatabase { f ->
+        val first = f.receipt()
+        val second = f.receipt(2)
+        f.append(first, second)
+        val initial = assertNotNull(f.raw().checkpoint)
+        assertEquals(
+            AppResult.Success(true),
+            f.repository.removeReceipts(f.access, f.conversation, listOf(first)),
+        )
+        assertEquals(listOf(second), f.read())
+        assertEquals(initial.handle, f.raw().checkpoint!!.handle)
+        assertEquals(
+            AppResult.Success(true),
+            f.repository.removeReceipts(f.access, f.conversation, listOf(second)),
+        )
+        assertTrue(f.read().isEmpty())
+        assertTrue(f.raw().documents.isEmpty())
+        val empty = assertNotNull(f.raw().checkpoint)
+        assertEquals(initial.revision + 2, empty.revision)
+        f.reopen()
+        assertTrue(f.read().isEmpty())
+        assertEquals(empty, f.raw().checkpoint)
+        val key = f.keys.read()
+        f.keys.write(null)
+        assertIs<AppResult.Failed>(f.repository.read(f.access, f.conversation))
+        assertIs<AppResult.Failed>(
+            f.repository.append(f.access, f.conversation, listOf(f.receipt(3)))
+        )
+        assertNull(f.keys.read())
+        f.keys.write(key)
+        assertEquals(
+            AppResult.Success(false),
+            f.repository.removeReceipts(f.access, f.conversation, listOf(first)),
+        )
+        f.append(first.copy(eventIds = listOf("$" + "later")))
+        assertEquals(listOf("$" + "later"), f.read().single().eventIds)
+        assertEquals(initial.handle, f.raw().checkpoint!!.handle)
+    }
+
+    @Test
+    fun changedReceiptOrInvalidBatchCannotEraseTheObservedLedger() = withDatabase { f ->
+        val first = f.receipt()
+        val second = f.receipt(2)
+        f.append(first, second)
+        for (changed in
+            listOf(
+                first.copy(eventIds = first.eventIds + ("$" + "unseen")),
+                first.copy(transactionId = "changed"),
+                first.copy(intent = first.intent.copy(text = "changed")),
+                f.receipt(3),
+            )) {
+            assertEquals(
+                AppResult.Success(false),
+                f.repository.removeReceipts(f.access, f.conversation, listOf(second, changed)),
+            )
+            assertEquals(listOf(first, second), f.read())
+        }
+        for (invalid in
+            listOf(
+                emptyList(),
+                listOf(first, first),
+                (1..33).map(f::receipt),
+                listOf(first.copy(eventIds = emptyList())),
+            )) {
+            assertIs<AppResult.Failed>(
+                f.repository.removeReceipts(f.access, f.conversation, invalid)
+            )
+        }
+        assertEquals(listOf(first, second), f.read())
+    }
+
+    @Test
+    fun concurrentAliasAppendRejectsCleanupCheckpointWithoutLosingEitherReceipt() =
+        withDatabase { f ->
+            val first = f.receipt()
+            f.append(first, f.receipt(2))
+            val entered = CompletableDeferred<Unit>()
+            val release = CompletableDeferred<Unit>()
+            val store = f.database.replicas
+            val held =
+                object : ReplicaStore by store {
+                    override suspend fun commit(
+                        handle: ReplicaHandle,
+                        expectedRevision: Long,
+                        checkpoint: String,
+                        documents: List<ReplicaDocument>,
+                        publish: Boolean,
+                    ): Boolean {
+                        entered.complete(Unit)
+                        release.await()
+                        return store.commit(
+                            handle,
+                            expectedRevision,
+                            checkpoint,
+                            documents,
+                            publish,
+                        )
+                    }
+                }
+            coroutineScope {
+                val pending = async {
+                    f.repository(held).removeReceipts(f.access, f.conversation, listOf(first))
+                }
+                try {
+                    entered.await()
+                    f.append(first.copy(eventIds = listOf("$" + "late")))
+                } finally {
+                    release.complete(Unit)
+                }
+                assertEquals(AppResult.Success(false), pending.await())
+            }
+            assertEquals(first.eventIds + ("$" + "late"), f.read().first().eventIds)
+            assertEquals(2, f.read().size)
+        }
+
+    @Test
+    fun ownerReplacementAtCleanupCommitPreservesTheOriginalJournal() = withDatabase { f ->
+        val first = f.receipt()
+        f.append(first)
+        val store = f.database.replicas
+        val changed =
+            object : ReplicaStore by store {
+                override suspend fun commit(
+                    handle: ReplicaHandle,
+                    expectedRevision: Long,
+                    checkpoint: String,
+                    documents: List<ReplicaDocument>,
+                    publish: Boolean,
+                ): Boolean {
+                    f.activate(f.access.copy(sessionId = "other", accountId = receiptId(8001)))
+                    return store.commit(handle, expectedRevision, checkpoint, documents, publish)
+                }
+            }
+        assertEquals(
+            AppResult.Success(false),
+            f.repository(changed).removeReceipts(f.access, f.conversation, listOf(first)),
+        )
+        f.activate()
+        assertEquals(listOf(first), f.read())
+    }
+
+    @Test
+    fun cancellationBeforeCleanupCommitLeavesAllReceiptsForAnExplicitRetry() = withDatabase { f ->
+        val first = f.receipt()
+        f.append(first)
+        val entered = CompletableDeferred<Unit>()
+        val store = f.database.replicas
+        val held =
+            object : ReplicaStore by store {
+                override suspend fun commit(
+                    handle: ReplicaHandle,
+                    expectedRevision: Long,
+                    checkpoint: String,
+                    documents: List<ReplicaDocument>,
+                    publish: Boolean,
+                ): Boolean {
+                    entered.complete(Unit)
+                    awaitCancellation()
+                }
+            }
+        coroutineScope {
+            val pending = launch {
+                f.repository(held).removeReceipts(f.access, f.conversation, listOf(first))
+            }
+            entered.await()
+            pending.cancelAndJoin()
+        }
+        assertEquals(listOf(first), f.read())
+        assertEquals(
+            AppResult.Success(true),
+            f.repository.removeReceipts(f.access, f.conversation, listOf(first)),
+        )
+    }
+
+    @Test
+    fun cleanupCommitWithLostResponseRemainsRemovedAfterRestart() = withDatabase { f ->
+        val first = f.receipt()
+        f.append(first, f.receipt(2))
+        val store = f.database.replicas
+        val lost =
+            object : ReplicaStore by store {
+                override suspend fun commit(
+                    handle: ReplicaHandle,
+                    expectedRevision: Long,
+                    checkpoint: String,
+                    documents: List<ReplicaDocument>,
+                    publish: Boolean,
+                ): Boolean {
+                    assertTrue(
+                        store.commit(handle, expectedRevision, checkpoint, documents, publish)
+                    )
+                    error("Fixture lost cleanup response")
+                }
+            }
+        assertIs<AppResult.Failed>(
+            f.repository(lost).removeReceipts(f.access, f.conversation, listOf(first))
+        )
+        f.reopen()
+        assertEquals(listOf(f.receipt(2)), f.read())
+        assertEquals(
+            AppResult.Success(false),
+            f.repository.removeReceipts(f.access, f.conversation, listOf(first)),
+        )
+    }
+
+    @Test
+    fun cleanupDetachesNestedCallerAliasesBeforeReadingStorage() = withDatabase { f ->
+        val first = f.receipt()
+        f.append(first)
+        val aliases = first.eventIds.toMutableList()
+        val batch = mutableListOf(first.copy(eventIds = aliases))
+        val entered = CompletableDeferred<Unit>()
+        val release = CompletableDeferred<Unit>()
+        val store = f.database.replicas
+        val held =
+            object : ReplicaStore by store {
+                override fun observe(
+                    scope: ReplicaScope,
+                    partition: String,
+                    after: String?,
+                    limit: Int,
+                ) = flow {
+                    entered.complete(Unit)
+                    release.await()
+                    emitAll(store.observe(scope, partition, after, limit))
+                }
+            }
+        coroutineScope {
+            val pending = async {
+                f.repository(held).removeReceipts(f.access, f.conversation, batch)
+            }
+            try {
+                entered.await()
+                aliases.clear()
+                batch.clear()
+            } finally {
+                release.complete(Unit)
+            }
+            assertEquals(AppResult.Success(true), pending.await())
+        }
+        assertTrue(f.read().isEmpty())
+    }
+
+    @Test
+    fun boundedCleanupReleasesLedgerCapacityWithoutEvictingUnselectedMessages() =
+        withDatabase { f ->
+            val full = (1..128).map(f::receipt)
+            for (batch in full.chunked(32)) f.append(*batch.toTypedArray())
+            assertEquals(
+                AppResult.Success(true),
+                f.repository.removeReceipts(f.access, f.conversation, full.take(32)),
+            )
+            assertEquals(full.drop(32), f.read())
+            val added = (129..160).map(f::receipt)
+            f.append(*added.toTypedArray())
+            assertEquals(full.drop(32) + added, f.read())
+            assertIs<AppResult.Failed>(
+                f.repository.append(f.access, f.conversation, listOf(f.receipt(161)))
+            )
+            assertEquals(128, f.raw().documents.size)
+        }
+
     private fun withDatabase(block: suspend (CollaborationReceiptFixture) -> Unit) = runTest {
         val fixture = CollaborationReceiptFixture(databaseOwner())
         try {

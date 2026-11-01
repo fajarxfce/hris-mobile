@@ -39,7 +39,7 @@ internal class OriginalReceiptFixture {
         }
     }
 
-    private val history =
+    val history =
         object : CollaborationHistoryRepository {
             override suspend fun getByLogicalId(
                 access: CollaborationLocalAccess,
@@ -100,6 +100,7 @@ internal class OriginalReceiptFixture {
             base.server,
             base.build,
             base.clock,
+            delivery.completions,
         )
 
     suspend fun recover() = useCase("selection", delivery.conversation)

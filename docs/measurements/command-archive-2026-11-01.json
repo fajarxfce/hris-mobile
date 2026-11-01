@@ -268,5 +268,42 @@
     "compose-fluent-starter"
   ],
   "sourceManifestMatched": true,
-  "allFinalChecksPassed": true
+  "allFinalChecksPassed": true,
+  "hostedStarterApple": {
+    "run": "https://github.com/fajarxfce/compose-fluent-starter/actions/runs/41298641454",
+    "commit": "8afab2a30c7313ecaa1d4b2c88359f45d942aa18",
+    "result": "success",
+    "jobs": [
+      {
+        "name": "apple",
+        "conclusion": "success",
+        "steps": 16,
+        "nonPassingSteps": []
+      },
+      {
+        "name": "windows",
+        "conclusion": "skipped",
+        "steps": 0,
+        "nonPassingSteps": []
+      },
+      {
+        "name": "verify",
+        "conclusion": "skipped",
+        "steps": 0,
+        "nonPassingSteps": []
+      }
+    ],
+    "tests": {
+      "iosSimulatorArm64Test": {
+        "suites": 24,
+        "tests": 84,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "immutableSourceHashesMatched": 15,
+    "xcodeAppHostBuildSuccesses": 1,
+    "scope": "Starter Apple simulator tests and app build for the raw command archive at 8afab2a3. HRIS completion and retirement have separate evidence."
+  }
 }

@@ -12,6 +12,7 @@ interface CollaborationMessageRepository {
         conversationId: String?,
     ): Flow<AppResult<List<CollaborationMessageRecord>>>
 
+    /** Exact identity lookup also returns a validated immutable completion after archival. */
     suspend fun get(
         access: CollaborationLocalAccess,
         id: String,

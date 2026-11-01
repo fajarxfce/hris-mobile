@@ -4,7 +4,7 @@ package dev.fajar.starter.collaboration.data.repositories
 
 import dev.fajar.starter.collaboration.data.messages.*
 import dev.fajar.starter.collaboration.domain.entities.*
-import dev.fajar.starter.collaboration.domain.repositories.CollaborationReceiptRepository
+import dev.fajar.starter.collaboration.domain.repositories.*
 import dev.fajar.starter.database.*
 import dev.fajar.starter.securestorage.*
 import dev.fajar.starter.storage.safeStorageCall
@@ -22,7 +22,7 @@ class EncryptedCollaborationReceiptRepository(
     private val replicas: ReplicaStore,
     private val cipher: ContentCipher,
     @Named("collaboration-receipt-content-key") private val credentials: AtomicCredentialStore,
-) : CollaborationReceiptRepository {
+) : CollaborationReceiptRepository, CollaborationReceiptRetirementRepository {
     private val keyCreation = Mutex()
 
     override suspend fun read(access: CollaborationLocalAccess, conversationId: String) =
@@ -79,6 +79,39 @@ class EncryptedCollaborationReceiptRepository(
                 )
             else replicas.commit(raw.handle, raw.revision, checkpoint, changed, true)
         }
+    }
+
+    override suspend fun removeReceipts(
+        access: CollaborationLocalAccess,
+        conversationId: String,
+        expected: List<CollaborationMessageReceipt>,
+    ) = safeStorageCall {
+        require(expected.size in 1..32 && expected.all { it.eventIds.size in 1..128 })
+        val batch = expected.map { it.copy(eventIds = it.eventIds.toList()) }
+        require(batch.map { it.intent.id }.distinct().size == batch.size)
+        val page = page(access, conversationId)
+        val raw = page.checkpoint
+        if (raw == null) {
+            require(page.documents.isEmpty())
+            false
+        } else
+            withKey(access, conversationId) { codec ->
+                batch.forEach(codec::validate)
+                val previous = codec.read(page)
+                val byId = previous.associateBy { it.intent.id }
+                if (batch.any { byId[it.intent.id] != it }) false
+                else {
+                    val removed = batch.map { it.intent.id }.toSet()
+                    val remaining = previous.filterNot { it.intent.id in removed }
+                    require(raw.revision < 9_007_199_254_740_991L)
+                    val revision = raw.revision + 1
+                    val checkpoint = codec.checkpoint(raw.handle.generation, revision, remaining)
+                    val tombstones =
+                        batch.map { ReplicaDocument(it.intent.id, revision, it.intent.id, null) }
+                    currentCoroutineContext().ensureActive()
+                    replicas.commit(raw.handle, raw.revision, checkpoint, tombstones, true)
+                }
+            }
     }
 
     private suspend fun page(access: CollaborationLocalAccess, conversationId: String) =

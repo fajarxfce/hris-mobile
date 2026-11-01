@@ -13,7 +13,35 @@ import org.koin.core.annotation.*
 @ComponentScan("dev.fajar.starter.collaboration.data")
 class CollaborationDataModule {
     @Single
+    fun retireMessages(
+        messages: CollaborationMessageRepository,
+        completions: CollaborationMessageCompletionRepository,
+        receipts: CollaborationReceiptRepository,
+        retirement: CollaborationReceiptRetirementRepository,
+        history: CollaborationHistoryRepository,
+        lists: CollaborationListRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) =
+        RetireCollaborationMessages(
+            messages,
+            completions,
+            receipts,
+            retirement,
+            history,
+            lists,
+            sessions,
+            workspaces,
+            server,
+            build,
+            Clock.System,
+        )
+
+    @Single
     fun recoverMessageReceipts(
+        completions: CollaborationMessageCompletionRepository,
         history: CollaborationHistoryRepository,
         messages: CollaborationMessageRepository,
         receipts: CollaborationReceiptRepository,
@@ -33,6 +61,7 @@ class CollaborationDataModule {
             server,
             build,
             Clock.System,
+            completions,
         )
 
     @Single
@@ -150,6 +179,7 @@ class CollaborationDataModule {
 
     @Single
     fun deliverMessages(
+        completions: CollaborationMessageCompletionRepository,
         messages: CollaborationMessageRepository,
         receipts: CollaborationReceiptRepository,
         lists: CollaborationListRepository,
@@ -173,10 +203,12 @@ class CollaborationDataModule {
             server,
             build,
             Clock.System,
+            completions,
         )
 
     @Single
     fun reconcileMessages(
+        completions: CollaborationMessageCompletionRepository,
         messages: CollaborationMessageRepository,
         receipts: CollaborationReceiptRepository,
         lists: CollaborationListRepository,
@@ -194,6 +226,7 @@ class CollaborationDataModule {
             server,
             build,
             Clock.System,
+            completions,
         )
 
     @Single

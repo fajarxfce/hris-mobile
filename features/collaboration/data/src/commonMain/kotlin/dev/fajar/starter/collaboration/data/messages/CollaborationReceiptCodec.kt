@@ -62,7 +62,8 @@ internal class CollaborationReceiptCodec(
             Json.decodeFromString<ReceiptCheckpointDto>(
                 open(raw.handle.generation, "checkpoint", raw.revision, raw.payload)
             )
-        require(summary.schema == 1 && summary.count in 1..128 && summary.aliases in 1..512)
+        require(summary.schema == 1 && summary.count in 0..128 && summary.aliases in 0..512)
+        require((summary.count == 0) == (summary.aliases == 0))
         require(page.documents.size == summary.count)
         val ids = page.documents.map { it.id }
         require(ids.zipWithNext().all { (a, b) -> a < b })

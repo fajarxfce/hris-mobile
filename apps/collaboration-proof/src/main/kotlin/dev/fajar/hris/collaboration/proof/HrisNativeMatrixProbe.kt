@@ -202,12 +202,91 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
                         transaction,
                     )
                 write(
-                    "gateway-result",
+                    "gateway-precompletion-result",
                     result
                         .put("processId", Process.myPid())
                         .put("ackBeforeJournalRecovered", true)
                         .put("ackSenderEventId", sent.eventId)
                         .put("ackTransaction", sent.transactionId),
+                )
+                proof.crashAfterCompletion(logicalId(fixture, "ackLogicalId"), transaction) {
+                    retained ->
+                    write(
+                        "gateway-completed",
+                        JSONObject()
+                            .put("processId", Process.myPid())
+                            .put("transactionId", retained)
+                            .put("archiveRetained", true)
+                            .put("receiptRetained", true),
+                    )
+                }
+            } finally {
+                closeProofOwners(
+                    listOf(
+                        { proof?.close() },
+                        { runtime?.closeProofRuntime() },
+                        { http.cancelAndClose() },
+                    )
+                )
+            }
+        }
+
+    suspend fun runCompletionRecovery() =
+        withContext(Dispatchers.IO) {
+            val (fixture, home) = readFixture(resuming = true, afterAck = true)
+            val checkpoint = read("gateway-completed", 4096)
+            val result = read("gateway-precompletion-result", 8192)
+            check(
+                checkpoint.get("archiveRetained") == true &&
+                    checkpoint.get("receiptRetained") == true
+            )
+            check(
+                checkpoint.getInt("processId") == result.getInt("processId") &&
+                    checkpoint.getInt("processId") != Process.myPid()
+            )
+            val transaction = checkpoint.getString("transactionId")
+            check(
+                transaction.matches(Regex("[A-Za-z0-9._~-]{1,128}")) &&
+                    transaction == result.getString("ackTransaction")
+            )
+            val http =
+                createHttpClient(
+                    createPlatformHttpEngine(),
+                    HttpClientSettings(home.toString(), allowCleartext = true),
+                )
+            var runtime: AndroidCollaborationRuntimeLease? = null
+            var proof: HrisProductQueueProof? = null
+            try {
+                runtime =
+                    ProtectedHrisProofOwner(context, fixture.getJSONObject("sender"), home, http)
+                        .restoreStored()
+                check(
+                    runtime.proofKeyFingerprint() ==
+                        read("gateway-staged", 4096).getString("senderKeyFingerprint")
+                )
+                // Cleanup reads owned local evidence. No sync or delivery is started in this
+                // process.
+                proof =
+                    HrisProductQueueProof(
+                        context,
+                        runtime,
+                        fixture.getString("roomId"),
+                        fixture.getString("conversationId"),
+                        fixture.getJSONObject("sender").getString("hrisAccessToken"),
+                    )
+                write(
+                    "gateway-completion-restored",
+                    JSONObject().put("processId", Process.myPid()).put("transactionId", transaction),
+                )
+                awaitFile("gateway-completion-resume")
+                val sent = proof.recoverCompletion(logicalId(fixture, "ackLogicalId"), transaction)
+                check(
+                    sent.eventId == result.getString("ackSenderEventId") &&
+                        sent.transactionId == transaction
+                )
+                write(
+                    "gateway-result",
+                    result.put("processId", Process.myPid()).put("completionCleanupRecovered", true),
                 )
             } finally {
                 closeProofOwners(

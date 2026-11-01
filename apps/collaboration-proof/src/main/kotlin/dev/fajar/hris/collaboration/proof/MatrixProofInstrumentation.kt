@@ -37,6 +37,8 @@ class MatrixProofInstrumentation : Instrumentation() {
                             HrisNativeMatrixProbe(targetContext, directory).run(resuming = true)
                         "hris-ack-recover" ->
                             HrisNativeMatrixProbe(targetContext, directory).runAckRecovery()
+                        "hris-completion-recover" ->
+                            HrisNativeMatrixProbe(targetContext, directory).runCompletionRecovery()
                         else -> error("Unknown owned protocol scenario")
                     }
                 }

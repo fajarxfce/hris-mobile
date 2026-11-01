@@ -632,5 +632,51 @@
       }
     },
     "scope": "Validates ACK-before-journal recovery at 9da09b6b. The subsequent raw completion archive has separate evidence."
+  },
+  "hostedControl": {
+    "run": "https://github.com/fajarxfce/hris-mobile/actions/runs/41295813930",
+    "commit": "9da09b6b266dd5e129e7233f2262c9c53db9ca39",
+    "result": "success",
+    "jobs": [
+      {
+        "name": "apple",
+        "conclusion": "success",
+        "steps": 13,
+        "nonPassingSteps": []
+      },
+      {
+        "name": "portable",
+        "conclusion": "success",
+        "steps": 15,
+        "nonPassingSteps": []
+      }
+    ],
+    "tests": {
+      "desktopTest": {
+        "suites": 55,
+        "tests": 484,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "wasmJsBrowserTest": {
+        "suites": 51,
+        "tests": 460,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "iosSimulatorArm64Test": {
+        "suites": 44,
+        "tests": 389,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "immutableSourceHashesMatched": 279,
+    "sourceManifestUploaded": false,
+    "xcodeAppHostBuildSuccesses": 1,
+    "scope": "Validates ACK-before-journal recovery common code at 9da09b6b. Android process-death evidence is separate; command completion archives and retirement are not attributed to this run."
   }
 }

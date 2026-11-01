@@ -47,12 +47,13 @@ fun collaborationReceiptState(
     }
 }
 
-fun collaborationReceiptProjection(
+/** Bounds pending work and the journal separately before any exact archive lookups. */
+fun missingCollaborationReceiptIds(
     access: CollaborationLocalAccess,
     conversationId: String,
     records: List<CollaborationMessageRecord>,
     receipts: List<CollaborationMessageReceipt>,
-): List<Pair<CollaborationMessageRecord, CollaborationMessageState.Sent>>? {
+): List<String>? {
     if (
         records.size > 128 ||
             !validCollaborationReceiptLedger(receipts) ||
@@ -60,15 +61,45 @@ fun collaborationReceiptProjection(
             records.any {
                 it.intent.owner != access.messageOwner() ||
                     it.intent.conversationId != conversationId
+            } ||
+            receipts.any {
+                it.intent.owner != access.messageOwner() ||
+                    it.intent.conversationId != conversationId
             }
     )
         return null
+    val pending = records.map { it.intent.id }.toSet()
+    return receipts.map { it.intent.id }.filterNot { it in pending }
+}
+
+fun collaborationReceiptProjection(
+    access: CollaborationLocalAccess,
+    conversationId: String,
+    records: List<CollaborationMessageRecord>,
+    receipts: List<CollaborationMessageReceipt>,
+    completions: List<CollaborationMessageCompletion> = emptyList(),
+): List<Pair<CollaborationMessageRecord, CollaborationMessageState.Sent>>? {
+    val missing =
+        missingCollaborationReceiptIds(access, conversationId, records, receipts) ?: return null
+    if (
+        completions.size > 128 ||
+            completions.map { it.record.intent.id }.toSet() != missing.toSet() ||
+            completions.map { it.record.intent.id }.distinct().size != completions.size
+    )
+        return null
     val byId = records.associateBy { it.intent.id }
+    val completed = completions.associateBy { it.record.intent.id }
     val updates = mutableListOf<Pair<CollaborationMessageRecord, CollaborationMessageState.Sent>>()
     for (receipt in receipts) {
-        val record = byId[receipt.intent.id] ?: return null
-        val sent = collaborationReceiptState(record, receipt) ?: return null
-        updates += record to sent
+        val pending = byId[receipt.intent.id]
+        if (pending != null) {
+            val sent = collaborationReceiptState(pending, receipt) ?: return null
+            updates += pending to sent
+        } else {
+            val proof = completed[receipt.intent.id] ?: return null
+            val sent = collaborationCompletedReceiptState(proof, receipt) ?: return null
+            updates += proof.record to sent
+        }
     }
     return updates
 }

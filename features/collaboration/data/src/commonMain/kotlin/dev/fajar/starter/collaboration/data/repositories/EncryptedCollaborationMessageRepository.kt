@@ -3,7 +3,7 @@ package dev.fajar.starter.collaboration.data.repositories
 import dev.fajar.starter.collaboration.data.messages.*
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.policies.*
-import dev.fajar.starter.collaboration.domain.repositories.CollaborationMessageRepository
+import dev.fajar.starter.collaboration.domain.repositories.*
 import dev.fajar.starter.common.result.AppResult
 import dev.fajar.starter.database.*
 import dev.fajar.starter.securestorage.*
@@ -20,7 +20,7 @@ class EncryptedCollaborationMessageRepository(
     private val commands: CommandStore,
     private val cipher: ContentCipher,
     @Named("command-content-key") private val credentials: AtomicCredentialStore,
-) : CollaborationMessageRepository {
+) : CollaborationMessageRepository, CollaborationMessageCompletionRepository {
     private val insertions = Mutex()
 
     override fun observe(
@@ -52,8 +52,44 @@ class EncryptedCollaborationMessageRepository(
 
     override suspend fun get(access: CollaborationLocalAccess, id: String) = safeStorageCall {
         require(validCollaborationMessageId(id))
-        commands.get(messageScope(access), messagePartition(access), id)?.let { raw ->
-            withKey(access) { it.record(raw) }
+        val (active, archived) = existing(messageScope(access), messagePartition(access), id)
+        if (active == null && archived == null) null
+        else withKey(access) { decode(it, active, archived) }
+    }
+
+    override suspend fun readCompletion(access: CollaborationLocalAccess, id: String) =
+        safeStorageCall {
+            require(validCollaborationMessageId(id))
+            commands.archived(messageScope(access), messagePartition(access), id)?.let { raw ->
+                withKey(access) { it.completion(raw) }
+            }
+        }
+
+    override suspend fun archiveCompletion(
+        access: CollaborationLocalAccess,
+        completion: CollaborationMessageCompletion,
+    ) = safeStorageCall {
+        require(completion.eventIds.size in 1..128)
+        val detached = completion.copy(eventIds = completion.eventIds.toList())
+        detached.record.intent.toDto(access)
+        require(collaborationCompletionReceipt(detached) != null)
+        val scope = messageScope(access)
+        val partition = messagePartition(access)
+        val id = detached.record.intent.id
+        val archived = commands.archived(scope, partition, id)
+        if (archived != null) withKey(access) { it.completion(archived) == detached }
+        else {
+            val raw = commands.get(scope, partition, id)
+            if (raw == null) false
+            else
+                withKey(access) { codec ->
+                    if (codec.record(raw) != detached.record) false
+                    else {
+                        val proof = codec.completion(raw, detached.eventIds)
+                        currentCoroutineContext().ensureActive()
+                        commands.archive(scope, raw, proof)
+                    }
+                }
         }
     }
 
@@ -65,10 +101,10 @@ class EncryptedCollaborationMessageRepository(
         val scope = messageScope(access)
         insertions.withLock {
             val partition = messagePartition(access)
-            val previous = commands.get(scope, partition, intent.id)
-            withKey(access, create = previous == null) { codec ->
-                if (previous != null) {
-                    require(codec.record(previous).intent == intent)
+            val (previous, completed) = existing(scope, partition, intent.id)
+            withKey(access, create = previous == null && completed == null) { codec ->
+                if (previous != null || completed != null) {
+                    require(requireNotNull(decode(codec, previous, completed)).intent == intent)
                     CollaborationMessageInsertion.STORED
                 } else {
                     val request = codec.request(intent)
@@ -89,12 +125,9 @@ class EncryptedCollaborationMessageRepository(
                     ) {
                         CommandInsertResult.Stored -> CollaborationMessageInsertion.STORED
                         CommandInsertResult.AlreadyStored -> {
+                            val (active, archived) = existing(scope, partition, intent.id)
                             require(
-                                codec
-                                    .record(
-                                        requireNotNull(commands.get(scope, partition, intent.id))
-                                    )
-                                    .intent == intent
+                                requireNotNull(decode(codec, active, archived)).intent == intent
                             )
                             CollaborationMessageInsertion.STORED
                         }
@@ -134,6 +167,22 @@ class EncryptedCollaborationMessageRepository(
                 }
             }
     }
+
+    private suspend fun existing(
+        scope: CommandScope,
+        partition: String,
+        id: String,
+    ): Pair<CommandRecord?, CommandArchive?> {
+        val active = commands.get(scope, partition, id)
+        return active to if (active == null) commands.archived(scope, partition, id) else null
+    }
+
+    private suspend fun decode(
+        codec: CollaborationMessageCodec,
+        active: CommandRecord?,
+        archived: CommandArchive?,
+    ): CollaborationMessageRecord? =
+        if (active != null) codec.record(active) else archived?.let { codec.completion(it).record }
 
     private suspend fun <T> withKey(
         access: CollaborationLocalAccess,

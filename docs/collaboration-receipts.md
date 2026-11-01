@@ -68,3 +68,10 @@ this journal, using [exact owned originals](collaboration-original-receipts.md).
 Native queue absence alone remains insufficient. Command retirement and Chat UI
 remain subsequent work. No complete PRD group or capacity target is accepted by
 this storage increment.
+
+## Completion retirement
+
+Exact journal cleanup and recovery of archived commands are implemented by the
+[retirement contract](collaboration-retirement.md). Cleanup retains an encrypted
+empty checkpoint and only removes exact observed receipts after durable completion
+and original-history validation. It does not imply UI scheduling or product acceptance.

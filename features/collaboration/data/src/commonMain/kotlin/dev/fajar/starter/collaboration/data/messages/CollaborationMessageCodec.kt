@@ -5,6 +5,8 @@ import dev.fajar.starter.collaboration.domain.policies.*
 import dev.fajar.starter.database.*
 import dev.fajar.starter.identity.domain.policies.accountStorageKey
 import dev.fajar.starter.securestorage.ContentCipher
+import dev.whyoleg.cryptography.CryptographyProvider
+import dev.whyoleg.cryptography.algorithms.SHA256
 import kotlin.io.encoding.Base64
 import kotlin.time.Instant
 import kotlinx.serialization.Serializable
@@ -155,6 +157,11 @@ internal fun MessageStateDto.toState(): CollaborationMessageState {
     return result
 }
 
+@Serializable
+internal data class MessageCompletionDto(val eventIds: List<String>) {
+    override fun toString() = "MessageCompletionDto([redacted])"
+}
+
 internal class CollaborationMessageCodec(
     private val access: CollaborationLocalAccess,
     private val cipher: ContentCipher,
@@ -182,6 +189,69 @@ internal class CollaborationMessageCodec(
                 .toState()
         require((raw.revision == 0L) == (state == CollaborationMessageState.Queued))
         return CollaborationMessageRecord(intent, raw.revision, state)
+    }
+
+    suspend fun completion(raw: CommandRecord, eventIds: List<String>): String {
+        val detached = eventIds.toList()
+        require(
+            collaborationCompletionReceipt(CollaborationMessageCompletion(record(raw), detached)) !=
+                null
+        )
+        val bytes =
+            Json.encodeToString(MessageCompletionDto(detached))
+                .encodeToByteArray(throwOnInvalidSequence = true)
+        return try {
+            require(bytes.size <= 48_000)
+            Base64.encode(cipher.encrypt(key, completionAad(raw), bytes)).also {
+                require(it.length <= 65_536)
+            }
+        } finally {
+            bytes.fill(0)
+        }
+    }
+
+    suspend fun completion(raw: CommandArchive): CollaborationMessageCompletion {
+        val record = record(raw.record)
+        require(raw.evidence.length in 1..65_536)
+        val bytes = cipher.decrypt(key, completionAad(raw.record), Base64.decode(raw.evidence))
+        return try {
+            require(bytes.size <= 48_000)
+            val proof =
+                Json.decodeFromString<MessageCompletionDto>(
+                    bytes.decodeToString(throwOnInvalidSequence = true)
+                )
+            CollaborationMessageCompletion(record, proof.eventIds.toList()).also {
+                require(collaborationCompletionReceipt(it) != null)
+            }
+        } finally {
+            bytes.fill(0)
+        }
+    }
+
+    private suspend fun completionAad(raw: CommandRecord): ByteArray {
+        // Bind even the retained ciphertext and ordering metadata. A proof cannot be transplanted
+        // onto a different valid record with the same logical ID/revision.
+        val bytes =
+            Json.encodeToString(
+                    listOf(
+                        raw.partition,
+                        raw.id,
+                        raw.resourceId,
+                        raw.sortKey,
+                        raw.request,
+                        raw.state,
+                        raw.revision.toString(),
+                    )
+                )
+                .encodeToByteArray(throwOnInvalidSequence = true)
+        val digest =
+            try {
+                require(bytes.size <= 200_000)
+                CryptographyProvider.Default.get(SHA256).hasher().hash(bytes).toHexString()
+            } finally {
+                bytes.fill(0)
+            }
+        return aad(raw.id, "completion-" + digest, raw.revision)
     }
 
     private fun aad(id: String, purpose: String, revision: Long) =

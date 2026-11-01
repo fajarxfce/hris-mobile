@@ -9,6 +9,7 @@ import kotlin.test.*
 
 internal class CollaborationDeliveryFixture {
     val base = MessageIntentFixture()
+    val completions = CollaborationCompletionFixture(base)
     val control = ConversationCommandFixture()
     val device =
         CollaborationMessageDevice(
@@ -277,6 +278,7 @@ internal class CollaborationDeliveryFixture {
             base.server,
             base.build,
             base.clock,
+            completions,
         )
     private val reconcile =
         ReconcileCollaborationMessages(
@@ -288,6 +290,7 @@ internal class CollaborationDeliveryFixture {
             base.server,
             base.build,
             base.clock,
+            completions,
         )
 
     suspend fun prepare(count: Int = 1) {

@@ -346,7 +346,7 @@ abstract class CollaborationMessageStorageContract {
     }
 }
 
-private class MessageStorageFixture(private val owner: CollaborationListDatabaseOwner) {
+internal class MessageStorageFixture(private val owner: CollaborationListDatabaseOwner) {
     var database = owner.open()
     val keys = MemoryCredentialStore()
     var access =

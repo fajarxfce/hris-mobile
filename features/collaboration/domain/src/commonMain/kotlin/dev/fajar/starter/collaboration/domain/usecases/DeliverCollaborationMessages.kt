@@ -29,6 +29,7 @@ class DeliverCollaborationMessages(
     private val server: IdentityServer,
     private val build: AppBuild,
     private val clock: Clock,
+    private val completions: CollaborationMessageCompletionRepository,
 ) {
     private val execution = Mutex()
 
@@ -163,12 +164,16 @@ class DeliverCollaborationMessages(
         val journal = checked(workspaceId, owner) { receipts.read(access, conversationId) }
         if (journal is AppResult.Failed) return journal
         val records = (read as AppResult.Success).value
+        val known = (journal as AppResult.Success).value
+        val retained = completedReceipts(workspaceId, owner, conversationId, records, known)
+        if (retained is AppResult.Failed) return retained
         val updates =
             collaborationReceiptProjection(
                 access,
                 conversationId,
                 records,
-                (journal as AppResult.Success).value,
+                known,
+                (retained as AppResult.Success).value,
             ) ?: return failed("client.collaboration_receipt_unresolved")
         val next = records.associateBy { it.intent.id }.toMutableMap()
         for ((record, sent) in updates) {
@@ -221,6 +226,37 @@ class DeliverCollaborationMessages(
         )
             return failed("client.collaboration_room_not_ready", FailureKind.Unavailable)
         return AppResult.Success(id)
+    }
+
+    private suspend fun completedReceipts(
+        workspaceId: String,
+        owner: CollaborationOwner,
+        conversationId: String,
+        records: List<CollaborationMessageRecord>,
+        journal: List<CollaborationMessageReceipt>,
+    ): AppResult<List<CollaborationMessageCompletion>> {
+        val access = owner.localListAccess()
+        val ids =
+            missingCollaborationReceiptIds(access, conversationId, records, journal)
+                ?: return failed("client.collaboration_receipt_unresolved")
+        val result = mutableListOf<CollaborationMessageCompletion>()
+        for (id in ids) {
+            val read =
+                checked(workspaceId, owner) {
+                    when (val proof = completions.readCompletion(access, id)) {
+                        is AppResult.Failed -> proof
+                        is AppResult.Success ->
+                            AppResult.Success(
+                                proof.value?.let { it.copy(eventIds = it.eventIds.toList()) }
+                            )
+                    }
+                }
+            if (read is AppResult.Failed) return read
+            result +=
+                (read as AppResult.Success).value
+                    ?: return failed("client.collaboration_receipt_unresolved")
+        }
+        return AppResult.Success(result.toList())
     }
 
     private suspend fun <T> checked(
