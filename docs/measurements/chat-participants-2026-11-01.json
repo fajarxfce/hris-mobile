@@ -1,0 +1,139 @@
+{
+  "date": "2026-11-01",
+  "change": "Owned participant discovery and durable direct conversation acquisition",
+  "baseImplementationCommit": "829b2566065cc78ea289445dc416c692dc63a6e5",
+  "sourceSha256": {
+    "apps/shared/build.gradle.kts": "9e3e03c0b7cdad2ddfc95d56cfc3b55e068b0e6e01fdf73d70229956556b8ee8",
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/di/AppContainer.kt": "8bd2d5c096005787d69c715e6bd3a9660ca392a30b27f9f1fe9409f7919154ca",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt": "eb74bcbab5e482000f24102580de5ea6061a18ee6af5ab5b7ec55e21bf4502bf",
+    "core/localization/src/commonMain/composeResources/values/strings_en.xml": "5104714975150606210a1a6c4e8b9e267e7e28af2f5b8e15697a2d3e6106874a",
+    "core/localization/src/commonMain/composeResources/values/strings_id.xml": "9ba523746b9e8d5a7e3b8664f7437aa1b444d5fa5088a09cd84ad84011e63292",
+    "core/localization/src/commonMain/kotlin/dev/fajar/starter/localization/AppString.kt": "f5798f45a620ed549e9f6bbde3f21045d1281becc78ad4424209daad319de762",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt": "f74d9f17626bd45faf4d7f1aa0d0ecb4dade3dedc265f7f836c540b8e647860f",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ObserveCollaborationAccess.kt": "a7e26f1745461fd9c8b99ae8c32f338f0a91ac21955533df96ba5b419c679a63",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ReadCollaborationConversations.kt": "99278540024249695459b9363316d8d79e7a65808d8814fedd04e79594055b92",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/RefreshCollaborationList.kt": "69cb8ca16f1fab59fc861db6c76d82becdc0595341cced67e85338ea09d5a16a",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationConversationReadTest.kt": "6d08a47252a2f27550c4f72041f01e367fd3811abe9ed36ea552f92d78092ae6",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationLocalListTest.kt": "f9aa974e0d64bf25a1e8fcd6ebedc6481e234d35cb523181c78463ad88d7fab3",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/participants/ChatParticipantsEffect.kt": "2c231146e1cf8510a420e7e488accf79cf763c209be5cdbf671ed712c2403140",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/participants/ChatParticipantsEvent.kt": "e0e5e85d9cfbcdecd3c79ba5b7b5c29d1cee29e2af41378531c6844a7dc9058a",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/participants/ChatParticipantsState.kt": "cf6444381c7f1bc6bd7d6e4ea4f653ffafde549ec090264e4d002ea5c3433034",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/participants/ChatParticipantsViewModel.kt": "bf6f38b54b7489aa84c9f9ef5525ca2471b16b70c1198811ec76afc77ea71fff",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/participants/pages/ChatParticipantsPage.kt": "173012bde97fda9ab1ad07b107857d8e5125e2c07895391a28cfa27fa059586a",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/inbox/ChatInboxFixture.kt": "ee1abd629a92f0f5771cd8653348f60657ccf1bae7fd699810e522e3297174d6",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/participants/ChatParticipantsFixture.kt": "9b64626a93c6eda4b8b0a5cd47bd29f752978bdefad2a2936eb29c75cc76877e",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/participants/ChatParticipantsViewModelTest.kt": "d1ab80d2c781896e02123cd93e395fad89f032a911e63a5933ff4b34d4f8600b",
+    "features/collaboration/presentation/src/desktopTest/kotlin/dev/fajar/starter/collaboration/presentation/ChatParticipantsLayoutTest.kt": "b0f81068baf8959f232ecb60b84694ad6a17018f20307f6325d33d6654d231c5"
+  },
+  "sourceManifestMatched": true,
+  "attempts": [
+    {
+      "log": ".work/chat-discovery-focused.log",
+      "durationSeconds": 126,
+      "outcome": "SUCCESSFUL",
+      "scope": "Initial domain access, point acquisition and directory admission checks before participant UI; 294 domain desktop/browser, 12 presentation desktop and 8 browser, two app bindings."
+    },
+    {
+      "log": ".work/chat-participants-focused.log",
+      "durationSeconds": 82,
+      "outcome": "FAILED",
+      "scope": "Production compiled; test expected collections required explicit generic types. No participant tests executed."
+    },
+    {
+      "log": ".work/chat-participants-corrected.log",
+      "durationSeconds": 36,
+      "outcome": "FAILED",
+      "scope": "UI test trailing lambda bound to Modifier; corrected to named onEvent."
+    },
+    {
+      "log": ".work/chat-participants-lambda-fixed.log",
+      "durationSeconds": 33,
+      "outcome": "FAILED",
+      "scope": "26 of 27 presentation tests passed; disabled input has no Focused semantics property. Assertion now requires disabled and absent or false focus."
+    },
+    {
+      "log": ".work/chat-participants-focus-fixed.log",
+      "durationSeconds": 235,
+      "outcome": "SUCCESSFUL",
+      "scope": "295 domain desktop/browser, 27 presentation desktop, 21 presentation browser, two application binding cases and format/architecture/detekt."
+    },
+    {
+      "log": ".work/chat-participants-full.log",
+      "durationSeconds": 401,
+      "outcome": "SUCCESSFUL",
+      "scope": "Root check, standalone presentation assembly, domain/presentation browser, app Wasm compilation, Android dev debug assembly and lint."
+    }
+  ],
+  "reports": {
+    "desktop": {
+      "suites": 412,
+      "tests": 2577,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "domain_desktopTest": {
+      "suites": 24,
+      "tests": 295,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "domain_wasmJsBrowserTest": {
+      "suites": 24,
+      "tests": 295,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "presentation_desktopTest": {
+      "suites": 4,
+      "tests": 27,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "presentation_wasmJsBrowserTest": {
+      "suites": 2,
+      "tests": 21,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "lint": {
+      "Error": 0,
+      "Fatal": 0,
+      "Warning": 1
+    },
+    "apk": {
+      "path": "apps/android/build/outputs/apk/dev/debug/android-dev-debug.apk",
+      "sha256": "3a093eba0a297043231bb87cc7a2db68a9983e408e82a68d74f98be633fe476f"
+    },
+    "androidLibrary": {
+      "path": "features/collaboration/presentation/build/outputs/aar/presentation.aar",
+      "sha256": "a5b9604c32024f45c1a84e7e38a918ff9d278a8bf3f109e1a12b45f53ceb6d4d"
+    }
+  },
+  "reviewedScreenshots": {
+    "docs/images/chat-participants/chat-participants-retry.png": {
+      "sha256": "552ae23b0e67dd75a8f778840f4b290b567e496914ce184004ed2c897cf6848b",
+      "bytes": 14679
+    },
+    "docs/images/chat-participants/chat-participants-indonesian-large-text.png": {
+      "sha256": "456b54e82fb40aa3acc1f987ad7efa55d613df95bb15f57aa60bc2614cf6fdd4",
+      "bytes": 52070
+    }
+  },
+  "applicationDiConnected": true,
+  "applicationNavigationConnected": false,
+  "phoneChanged": false,
+  "liveChanged": false,
+  "productAcceptance": false,
+  "notes": [
+    "Desktop totals include up-to-date passing reports in the root check graph.",
+    "Reviewed Compose screenshots render fictional states; Indonesian uses 320x640 dp at 200% text. They are not physical device or production evidence.",
+    "Setup recovery, message thread, navigation, delivery scheduling and the remaining P0\u2013P8 work continue.",
+    "No local Apple runtime test or new hosted result is claimed.",
+    "No generic Starter change is required for this HRIS presentation and admission policy."
+  ]
+}

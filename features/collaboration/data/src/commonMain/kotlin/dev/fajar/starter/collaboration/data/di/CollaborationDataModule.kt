@@ -310,6 +310,15 @@ class CollaborationDataModule {
         build: AppBuild,
     ) = ObserveCollaborationList(replicas, sessions, workspaces, server, build, Clock.System)
 
+    @Factory
+    fun observeAccess(
+        replicas: CollaborationListRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) = ObserveCollaborationAccess(replicas, sessions, workspaces, server, build, Clock.System)
+
     @Single
     fun refreshList(
         replicas: CollaborationListRepository,
@@ -416,6 +425,7 @@ class CollaborationDataModule {
         conversations: CollaborationConversationRepository,
         server: IdentityServer,
         build: AppBuild,
+        replicas: CollaborationListRepository,
     ) =
         ReadCollaborationConversations(
             sessions,
@@ -424,6 +434,7 @@ class CollaborationDataModule {
             server,
             build,
             Clock.System,
+            replicas,
         )
 
     @Single

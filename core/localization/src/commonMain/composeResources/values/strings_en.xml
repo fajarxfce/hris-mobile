@@ -939,4 +939,6 @@
     <string name="chat_search_people_en">Find a colleague</string>
     <string name="chat_participants_empty_en">No colleagues found</string>
     <string name="chat_opening_en">Opening conversation…</string>
+    <string name="chat_people_previous_en">Previous colleagues</string>
+    <string name="chat_people_next_en">More colleagues</string>
 </resources>

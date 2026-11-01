@@ -939,4 +939,6 @@
     <string name="chat_search_people_id">Cari rekan kerja</string>
     <string name="chat_participants_empty_id">Rekan kerja tidak ditemukan</string>
     <string name="chat_opening_id">Membuka percakapan…</string>
+    <string name="chat_people_previous_id">Rekan sebelumnya</string>
+    <string name="chat_people_next_id">Rekan lainnya</string>
 </resources>

@@ -1,5 +1,38 @@
 # Agent continuation — HRIS Mobile
 
+## Participant discovery and durable DM acquisition — 1 November 2026
+
+Application DI now registers the Chat presentation module. Participant search uses
+owned company admission, bounded/debounced queries and explicit pagination; selection
+prepares/replays the retained Open operation, directly acquires the confirmed summary,
+and reconciles the exact peer/version before navigation. Lost responses reuse the
+same command. Confirmed results survive a failed follow-up read without another Open.
+Directory and individual-resource denial policies stay separate. Company denial is
+retained through cancellation, failed persistence and failed recovery; ordinary age
+does not hide owned local access. The shared list publication mutex covers point reads.
+
+[Contract and reviewed fictional screenshots](collaboration-discovery.md) and
+[measurement](measurements/chat-participants-2026-11-01.json) contain 21 verified source
+hashes and all six attempts, including three corrected test compilation/assertion
+failures. Final focused pass takes 235s; full root/domain+presentation browser/Wasm/
+Android/AAR/lint takes 401s. Reports: 2,577 desktop / 412 suites, 295 domain browser,
+21 presentation browser, zero failures/errors/skips. Android lint has zero errors and
+one existing warning. APK `3a093eba` is built, not installed. No phone/live change;
+Starter remains unchanged because this increment is HRIS-specific.
+
+**Next: setup recovery, message thread, app routes and owned scheduling, then all
+remaining P0–P8.** No service destination is exposed yet, and no full PRD group is
+accepted. `ReadCollaborationControl` is only a local draft, not implemented. Setup UI
+must inspect retained action before preparing another operation: confirmed registration
+can reconcile across builds, but bootstrap installation currently pins build/platform.
+The native encrypted SDK store currently includes native session family in its scope;
+explicit recovery must preserve keys and never silently reset uncertain work. Actual
+`RuntimeRepository.enterTimeline` already starts owned sync; do not add an unnecessary
+second sync owner. Canonical history needs a trusted local Matrix sender identity for
+multi-device alignment and safe pending-message composition. Continue the long run and
+push each validated atomic commit.
+
+
 ## Chat inbox presentation validated — 1 November 2026
 
 The new `features/collaboration/presentation` module contains typed inbox MVI,

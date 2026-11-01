@@ -2,8 +2,9 @@
 
 `features/collaboration/presentation` owns Chat state, events, effects and plain
 Fluent pages. The initial inbox reads the encrypted company conversation directory.
-Application service entry, participant selection, device setup, thread composition
-and owned delivery scheduling remain the next integration work. This module alone
+[Participant discovery and durable DM opening](collaboration-discovery.md) are now
+implemented, and application DI registers both ViewModels. Service entry, device
+setup, thread composition and owned delivery scheduling remain integration work. This module alone
 does not expose a Chat destination in the application or accept a PRD feature group.
 
 ## Inbox lifetime
@@ -48,9 +49,8 @@ people, not evidence of a deployed chat service or device interoperability.
 
 ## Next integration
 
-Add owned participant discovery and exact acquisition of the selected conversation,
-then setup recovery and a thread joining canonical history with durable pending
-messages. Keep confirmed outcomes recoverable from storage; retries must reuse their
+Connect the owned inbox and participant destinations to setup recovery and a
+thread joining canonical history with durable pending messages. Keep confirmed outcomes recoverable from storage; retries must reuse their
 operation identity. Observe local ownership without interpreting credential age as
 loss of cached facts. Only expose the service after its destinations are connected;
 continue all rich messaging, backup, native call and meeting phases in the accepted

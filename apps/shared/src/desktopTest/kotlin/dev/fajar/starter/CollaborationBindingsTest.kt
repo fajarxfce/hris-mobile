@@ -1,10 +1,13 @@
 package dev.fajar.starter
 
+import androidx.lifecycle.ViewModelStore
 import dev.fajar.starter.app.bootstrap.ApplicationCollaborationLifetime
 import dev.fajar.starter.app.di.createAppContainer
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.repositories.*
 import dev.fajar.starter.collaboration.domain.usecases.*
+import dev.fajar.starter.collaboration.presentation.inbox.ChatInboxViewModel
+import dev.fajar.starter.collaboration.presentation.participants.ChatParticipantsViewModel
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.database.createAppDatabase
 import dev.fajar.starter.datastore.createUserPreferences
@@ -17,6 +20,7 @@ import java.nio.file.Files
 import java.util.concurrent.atomic.AtomicInteger
 import kotlin.test.*
 import kotlinx.coroutines.*
+import org.koin.core.parameter.parametersOf
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import org.koin.dsl.onClose
@@ -187,6 +191,20 @@ class CollaborationBindingsTest {
                     container.koin.get<QueueCollaborationText>(),
                 )
                 assertNotNull(container.koin.get<ObserveCollaborationList>())
+                assertNotNull(container.koin.get<ObserveCollaborationAccess>())
+                val screens = ViewModelStore()
+                try {
+                    screens.put(
+                        "inbox",
+                        container.koin.get<ChatInboxViewModel> { parametersOf("selection") },
+                    )
+                    screens.put(
+                        "participants",
+                        container.koin.get<ChatParticipantsViewModel> { parametersOf("selection") },
+                    )
+                } finally {
+                    screens.clear()
+                }
                 assertSame(
                     container.koin.get<RefreshCollaborationList>(),
                     container.koin.get<RefreshCollaborationList>(),

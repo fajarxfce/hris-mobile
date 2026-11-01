@@ -18,6 +18,160 @@ import kotlinx.coroutines.test.*
 
 class CollaborationLocalListTest {
     @Test
+    fun individualConversationPublishesDirectlyWithoutScanningTheDirectory() = runTest {
+        val f = LocalListFixture()
+        val result =
+            assertIs<AppResult.Success<CollaborationRead<CollaborationDirectSummary>>>(
+                f.refresh.conversation("selection", "direct")
+            )
+        assertEquals(f.summary, result.value.value)
+        assertEquals(listOf("direct"), f.pointCalls)
+        assertEquals(0, f.remoteCalls)
+        assertEquals(listOf(listOf(f.summary)), f.published)
+    }
+
+    @Test
+    fun pointAcquisitionSharesThePagePublicationMutex() = runTest {
+        val f = LocalListFixture()
+        val entered = CompletableDeferred<Unit>()
+        val release = CompletableDeferred<Unit>()
+        f.beforeRemoteReturn = {
+            entered.complete(Unit)
+            release.await()
+        }
+        val page = async { f.refresh("selection") }
+        entered.await()
+        val point = async { f.refresh.conversation("selection", "direct") }
+        runCurrent()
+        assertTrue(f.pointCalls.isEmpty())
+        release.complete(Unit)
+        assertIs<AppResult.Success<*>>(page.await())
+        assertIs<AppResult.Success<*>>(point.await())
+        assertEquals(listOf("direct"), f.pointCalls)
+        assertEquals(2, f.merges)
+    }
+
+    @Test
+    fun failedPointCannotReopenAnEarlierDenialAndAdmittedPointCan() = runTest {
+        val f = LocalListFixture()
+        f.pointResult = AppResult.Failed(f.denied)
+        assertEquals(
+            f.denied,
+            assertIs<AppResult.Failed>(f.refresh.conversation("selection", "direct")).failure,
+        )
+        f.pointResult = AppResult.Failed(f.network)
+        assertEquals(
+            f.denied,
+            assertIs<AppResult.Failed>(f.refresh.conversation("selection", "direct")).failure,
+        )
+        assertEquals(0, f.merges)
+        f.pointResult = AppResult.Success(f.summary)
+        assertIs<AppResult.Success<*>>(f.refresh.conversation("selection", "direct"))
+        assertNull(f.gate.value.denial)
+        assertEquals(1, f.merges)
+    }
+
+    @Test
+    fun aRejectedPointDoesNotHideOtherOwnedConversations() = runTest {
+        val f = LocalListFixture()
+        f.pointResult =
+            AppResult.Failed(
+                Failure(
+                    FailureKind.AccessDenied,
+                    "Fixture resource denial",
+                    code = "fixture.resource_denied",
+                )
+            )
+        assertIs<AppResult.Failed>(f.refresh.conversation("selection", "direct"))
+        assertNull(f.gate.value.denial)
+        assertEquals(0, f.restricts)
+        assertEquals(listOf(f.summary), f.observe().items)
+    }
+
+    @Test
+    fun mismatchedPointCannotPublishAnotherConversation() = runTest {
+        val f = LocalListFixture()
+        assertIs<AppResult.Failed>(f.refresh.conversation("selection", "other"))
+        assertEquals(0, f.merges)
+        assertEquals(0, f.admits)
+    }
+
+    @Test
+    fun latePointSuccessCannotPublishAfterCancellationOrAccountReplacement() = runTest {
+        for (cancel in listOf(false, true)) {
+            val f = LocalListFixture()
+            val entered = CompletableDeferred<Unit>()
+            val release = CompletableDeferred<Unit>()
+            f.beforeRemoteReturn = {
+                withContext(NonCancellable) {
+                    entered.complete(Unit)
+                    release.await()
+                }
+            }
+            val request = async { f.refresh.conversation("selection", "direct") }
+            entered.await()
+            if (cancel) request.cancel() else f.setup.session = null
+            release.complete(Unit)
+            if (cancel) request.join() else assertIs<AppResult.Failed>(request.await())
+            assertEquals(0, f.merges)
+            assertEquals(0, f.admits)
+        }
+    }
+
+    @Test
+    fun cancelledPointStillRetainsReceivedCompanyDenial() = runTest {
+        val f = LocalListFixture()
+        val entered = CompletableDeferred<Unit>()
+        val release = CompletableDeferred<Unit>()
+        f.pointResult = AppResult.Failed(f.denied)
+        f.beforeRemoteReturn = {
+            withContext(NonCancellable) {
+                entered.complete(Unit)
+                release.await()
+            }
+        }
+        val request = async { f.refresh.conversation("selection", "direct") }
+        entered.await()
+        request.cancel()
+        release.complete(Unit)
+        request.join()
+        assertEquals(f.denied, f.gate.value.denial)
+        assertEquals(0, f.merges)
+    }
+
+    @Test
+    fun localAccessObservationDoesNotReadBodiesOrRequireLiveCredentials() = runTest {
+        val f = LocalListFixture()
+        f.setup.now += 365.days
+        val result =
+            assertIs<AppResult.Success<CollaborationLocalAccess>>(f.access("selection").first())
+        assertEquals("account", result.value.accountId)
+        assertEquals(0, f.localReads)
+        assertEquals(0, f.remoteCalls)
+    }
+
+    @Test
+    fun localAccessKeepsObservingTheCompanyGateWithoutReadingRows() = runTest {
+        val f = LocalListFixture()
+        val values = mutableListOf<AppResult<CollaborationLocalAccess>>()
+        val observation =
+            backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
+                f.access("selection").toList(values)
+            }
+        runCurrent()
+        assertIs<AppResult.Success<*>>(values.last())
+        f.gate.value = CollaborationListAdmission("denied", f.denied)
+        runCurrent()
+        assertEquals(f.denied, assertIs<AppResult.Failed>(values.last()).failure)
+        f.gate.value = CollaborationListAdmission("reopened", null)
+        runCurrent()
+        assertIs<AppResult.Success<*>>(values.last())
+        observation.cancelAndJoin()
+        assertEquals(0, f.localReads)
+        assertEquals(0, f.remoteCalls)
+    }
+
+    @Test
     fun expiredAuthorityRetainsOwnedLocalFactsWithoutAnyRequest() = runTest {
         val f = LocalListFixture()
         f.setup.now += 365.days
@@ -256,6 +410,9 @@ private class LocalListFixture {
     val gate = MutableStateFlow(CollaborationListAdmission(null, null))
     var remoteResult: AppResult<CollaborationPage<CollaborationDirectSummary>> =
         AppResult.Success(CollaborationPage(listOf(summary), null))
+    var pointResult: AppResult<CollaborationDirectSummary> = AppResult.Success(summary)
+    val pointCalls = mutableListOf<String>()
+    val published = mutableListOf<List<CollaborationDirectSummary>>()
     var restrictResult: AppResult<Boolean> = AppResult.Success(true)
     var mergeResult: AppResult<Boolean> = AppResult.Success(true)
     var beforeRemoteReturn: suspend () -> Unit = {}
@@ -298,6 +455,7 @@ private class LocalListFixture {
                 acquiredAt: Instant,
             ): AppResult<Boolean> {
                 merges++
+                published += items.toList()
                 beforeMerge()
                 return mergeResult
             }
@@ -361,7 +519,11 @@ private class LocalListFixture {
             override suspend fun summary(
                 owner: CollaborationOwner,
                 conversationId: String,
-            ): AppResult<CollaborationDirectSummary> = error("No detail")
+            ): AppResult<CollaborationDirectSummary> {
+                pointCalls += conversationId
+                beforeRemoteReturn()
+                return pointResult
+            }
 
             override suspend fun room(
                 owner: CollaborationOwner,
@@ -395,6 +557,8 @@ private class LocalListFixture {
         }
     val refresh =
         RefreshCollaborationList(replica, remote, setup.sessions, workspaces, server, build, clock)
+    val access =
+        ObserveCollaborationAccess(replica, setup.sessions, workspaces, server, build, clock)
     val observer =
         ObserveCollaborationList(replica, setup.sessions, workspaces, server, build, clock)
 

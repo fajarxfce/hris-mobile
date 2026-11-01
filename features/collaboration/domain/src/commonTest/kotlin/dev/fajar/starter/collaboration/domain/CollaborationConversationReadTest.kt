@@ -1,7 +1,7 @@
 package dev.fajar.starter.collaboration.domain
 
 import dev.fajar.starter.collaboration.domain.entities.*
-import dev.fajar.starter.collaboration.domain.repositories.CollaborationConversationRepository
+import dev.fajar.starter.collaboration.domain.repositories.*
 import dev.fajar.starter.collaboration.domain.usecases.ReadCollaborationConversations
 import dev.fajar.starter.common.config.*
 import dev.fajar.starter.common.result.*
@@ -9,10 +9,104 @@ import dev.fajar.starter.identity.domain.entities.IdentityServer
 import kotlin.test.*
 import kotlin.time.Clock
 import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Instant
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.test.runTest
 
 class CollaborationConversationReadTest {
+    @Test
+    fun failedDirectoryRetryKeepsCompanyDenialUntilFreshAdmittedDiscovery() = runTest {
+        for (path in listOf(0, 1, 4)) {
+            val f = ReadFixture()
+            val denied =
+                Failure(FailureKind.AccessDenied, "Fixture denial", code = "permission_denied")
+            f.failure = denied
+            assertEquals(denied, assertIs<AppResult.Failed>(f.read(path)).failure)
+            assertEquals(denied, f.gate.denial)
+            f.failure = Failure(FailureKind.Network, "Fixture offline")
+            assertEquals(denied, assertIs<AppResult.Failed>(f.read(path)).failure)
+            assertEquals(0, f.admissions)
+            f.failure = null
+            assertIs<AppResult.Success<*>>(f.read(path))
+            assertNull(f.gate.denial)
+            assertEquals(1, f.admissions)
+            assertEquals(3, f.calls)
+        }
+    }
+
+    @Test
+    fun rejectedIndividualResourceDoesNotCloseCompanyContent() = runTest {
+        for (path in listOf(2, 3, 5)) {
+            val f = ReadFixture()
+            f.failure =
+                Failure(
+                    FailureKind.AccessDenied,
+                    "Fixture resource denial",
+                    code = "fixture.resource_denied",
+                )
+            assertIs<AppResult.Failed>(f.read(path))
+            assertNull(f.gate.denial)
+            assertEquals(0, f.denialWrites)
+        }
+    }
+
+    @Test
+    fun cancelledReceivedCompanyDenialStillClosesAllDiscoveryPaths() = runTest {
+        for (path in 0..5) {
+            val f = ReadFixture()
+            val entered = CompletableDeferred<Unit>()
+            val release = CompletableDeferred<Unit>()
+            val denied =
+                Failure(FailureKind.Service, "Fixture maintenance", code = "company_maintenance")
+            f.failure = denied
+            f.before = {
+                withContext(NonCancellable) {
+                    entered.complete(Unit)
+                    release.await()
+                }
+            }
+            val request = async { f.read(path) }
+            entered.await()
+            request.cancel()
+            release.complete(Unit)
+            request.join()
+            assertEquals(denied, f.gate.denial)
+            assertEquals(0, f.admissions)
+        }
+    }
+
+    @Test
+    fun successfulOlderReadCannotReopenANewerCompanyDenial() = runTest {
+        val f = ReadFixture()
+        val denied =
+            Failure(FailureKind.AccessDenied, "Fixture later denial", code = "permission_denied")
+        f.beforeAdmission = { f.gate = CollaborationListAdmission("newer", denied) }
+        assertEquals(denied, assertIs<AppResult.Failed>(f.read(0)).failure)
+        assertEquals(denied, f.gate.denial)
+    }
+
+    @Test
+    fun lateDiscoveryAdmissionCannotPublishToAReplacedAccount() = runTest {
+        val f = ReadFixture()
+        f.beforeAdmission = { f.setup.session = null }
+        assertIs<AppResult.Failed>(f.read(0))
+        assertEquals(1, f.calls)
+    }
+
+    @Test
+    fun failedDenialPersistenceDoesNotEraseItsProcessGateOrRetryFailure() = runTest {
+        val f = ReadFixture()
+        val denied = Failure(FailureKind.AccessDenied, "Fixture denial", code = "permission_denied")
+        f.failure = denied
+        f.persistenceFailure = Failure(FailureKind.Storage, "Fixture write failure")
+        assertEquals(denied, assertIs<AppResult.Failed>(f.read(0)).failure)
+        f.failure = Failure(FailureKind.Network, "Fixture offline")
+        assertEquals(denied, assertIs<AppResult.Failed>(f.read(0)).failure)
+        assertEquals(denied, f.gate.denial)
+        assertEquals(0, f.admissions)
+    }
+
     @Test
     fun summariesAcquireTheCounterpartAlongsideOwnedMetadataInOneRead() = runTest {
         for (kind in 4..5) {
@@ -173,6 +267,60 @@ private class ReadFixture {
     var failure: Failure? = null
     var calls = 0
     var owner: CollaborationOwner? = null
+    var gate = CollaborationListAdmission(null, null)
+    var denialWrites = 0
+    var admissions = 0
+    var persistenceFailure: Failure? = null
+    var beforeAdmission: suspend () -> Unit = {}
+    val replicas =
+        object : CollaborationListRepository {
+            override suspend fun get(
+                access: CollaborationLocalAccess,
+                conversationId: String,
+            ): AppResult<CollaborationDirectSummary?> = error("No cached bodies")
+
+            override fun observe(
+                access: CollaborationLocalAccess,
+                selection: CollaborationListSelection,
+            ): Flow<AppResult<CollaborationLocalList>> = error("No cached bodies")
+
+            override suspend fun checkpoint(
+                access: CollaborationLocalAccess
+            ): AppResult<CollaborationListCheckpoint?> = error("No list refresh")
+
+            override suspend fun merge(
+                access: CollaborationLocalAccess,
+                expected: CollaborationListCheckpoint?,
+                items: List<CollaborationDirectSummary>,
+                acquiredAt: Instant,
+            ): AppResult<Boolean> = error("No list refresh")
+
+            override fun observeAdmission(access: CollaborationLocalAccess) =
+                flowOf(AppResult.Success(gate))
+
+            override suspend fun admission(access: CollaborationLocalAccess) =
+                AppResult.Success(gate)
+
+            override suspend fun restrict(
+                access: CollaborationLocalAccess,
+                failure: Failure,
+            ): AppResult<Boolean> {
+                denialWrites++
+                gate = CollaborationListAdmission("denial-$denialWrites", failure)
+                return persistenceFailure?.let { AppResult.Failed(it) } ?: AppResult.Success(true)
+            }
+
+            override suspend fun admit(
+                access: CollaborationLocalAccess,
+                expectedRevision: String?,
+            ): AppResult<Boolean> {
+                admissions++
+                beforeAdmission()
+                if (gate.revision != expectedRevision) return AppResult.Success(false)
+                gate = CollaborationListAdmission(expectedRevision, null)
+                return AppResult.Success(true)
+            }
+        }
     val conversations =
         object : CollaborationConversationRepository {
             private suspend fun <T> acquire(value: T, scope: CollaborationOwner): AppResult<T> {
@@ -276,6 +424,7 @@ private class ReadFixture {
                 object : Clock {
                     override fun now() = setup.now
                 },
+                replicas,
             )
         return when (kind) {
             0 -> reader.participants("selection", "Fictional", "cursor", 12)

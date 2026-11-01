@@ -42,6 +42,7 @@ kotlin.sourceSets {
         implementation(projects.features.workspace.presentation)
         implementation(projects.features.home.presentation)
         api(projects.features.collaboration.data)
+        implementation(projects.features.collaboration.presentation)
         implementation(projects.features.people.data)
         implementation(projects.features.people.presentation)
         implementation(projects.features.inbox.data)

@@ -197,7 +197,7 @@ internal class ChatInboxFixture {
                 return AppResult.Success(true)
             }
         }
-    private val remote =
+    val remote =
         object : CollaborationConversationRepository {
             override suspend fun summaries(
                 owner: CollaborationOwner,

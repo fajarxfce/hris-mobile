@@ -6,6 +6,7 @@ import dev.fajar.starter.availability.presentation.di.AvailabilityPresentationMo
 import dev.fajar.starter.collaboration.data.di.CollaborationDataModule
 import dev.fajar.starter.collaboration.data.repositories.UnavailableCollaborationRuntimeRepository
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationRuntimeRepository
+import dev.fajar.starter.collaboration.presentation.di.CollaborationPresentationModule
 import dev.fajar.starter.common.config.AppBuild
 import dev.fajar.starter.common.config.AppEnvironment
 import dev.fajar.starter.common.config.AppPlatform
@@ -222,6 +223,7 @@ private fun applicationFeatureModules(): List<Module> =
         WorkspacePresentationModule().module,
         HomePresentationModule().module,
         CollaborationDataModule().module,
+        CollaborationPresentationModule().module,
         PeopleDataModule().module,
         PeoplePresentationModule().module,
         InboxDataModule().module,

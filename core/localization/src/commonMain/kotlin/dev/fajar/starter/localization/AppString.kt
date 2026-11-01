@@ -5,6 +5,8 @@ import org.jetbrains.compose.resources.StringResource
 
 /** Explicit pairs keep runtime language changes portable across Android, iOS, desktop and Web. */
 enum class AppString(val english: StringResource, val indonesian: StringResource) {
+    ChatPeoplePrevious(Res.string.chat_people_previous_en, Res.string.chat_people_previous_id),
+    ChatPeopleNext(Res.string.chat_people_next_en, Res.string.chat_people_next_id),
     ChatTitle(Res.string.chat_title_en, Res.string.chat_title_id),
     ChatSummary(Res.string.chat_summary_en, Res.string.chat_summary_id),
     ChatNew(Res.string.chat_new_en, Res.string.chat_new_id),

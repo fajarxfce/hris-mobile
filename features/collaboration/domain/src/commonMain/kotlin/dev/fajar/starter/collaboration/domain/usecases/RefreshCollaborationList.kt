@@ -13,9 +13,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
-/**
- * One explicit live page. The shared instance serializes mutable labels; missing rows are retained.
- */
+/** Explicit summary acquisition. Pages and individual conversations share one publication mutex. */
 class RefreshCollaborationList(
     private val replicas: CollaborationListRepository,
     private val conversations: CollaborationConversationRepository,
@@ -32,6 +30,42 @@ class RefreshCollaborationList(
         after: String? = null,
         limit: Int = 30,
     ): AppResult<CollaborationRead<CollaborationPage<CollaborationDirectSummary>>> =
+        acquire(
+            workspaceId,
+            { conversations.summaries(it, after, limit) },
+            { it.items },
+            ::collaborationListResponseClosesRead,
+        )
+
+    /** Acquires a new/opened DM directly, including one absent from the first directory page. */
+    suspend fun conversation(
+        workspaceId: String,
+        conversationId: String,
+    ): AppResult<CollaborationRead<CollaborationDirectSummary>> =
+        acquire(
+            workspaceId,
+            { owner ->
+                when (val received = conversations.summary(owner, conversationId)) {
+                    is AppResult.Failed -> received
+                    is AppResult.Success ->
+                        if (received.value.conversation.id == conversationId) received
+                        else
+                            collaborationSetupFailure(
+                                "client.collaboration_conversation_mismatch",
+                                FailureKind.Unexpected,
+                            )
+                }
+            },
+            { listOf(it) },
+            ::collaborationContentResponseClosesRead,
+        )
+
+    private suspend fun <T> acquire(
+        workspaceId: String,
+        read: suspend (CollaborationOwner) -> AppResult<T>,
+        items: (T) -> List<CollaborationDirectSummary>,
+        closesRead: (Failure) -> Boolean,
+    ): AppResult<CollaborationRead<T>> =
         acquisition.withLock {
             val owner =
                 when (val captured = capture(workspaceId)) {
@@ -49,7 +83,7 @@ class RefreshCollaborationList(
                 AppResult.Failed(
                     if (
                         retainedDenial?.let(::collaborationListResponseClosesRead) == true &&
-                            !collaborationListResponseClosesRead(failure)
+                            !closesRead(failure)
                     )
                         requireNotNull(retainedDenial)
                     else failure
@@ -61,12 +95,9 @@ class RefreshCollaborationList(
                 }
             val before = requireCollaborationOwner(capture(workspaceId), owner, null)
             if (before is AppResult.Failed) return@withLock failed(before.failure)
-            val received = conversations.summaries(owner, after, limit)
+            val received = read(owner)
             // A received denial must reach the process gate even if the route is cancelled now.
-            if (
-                received is AppResult.Failed &&
-                    collaborationListResponseClosesRead(received.failure)
-            ) {
+            if (received is AppResult.Failed && closesRead(received.failure)) {
                 retainedDenial = received.failure
                 withContext(NonCancellable) {
                     withTimeoutOrNull(2_000) { replicas.restrict(access, received.failure) }
@@ -77,7 +108,7 @@ class RefreshCollaborationList(
             if (admitted is AppResult.Failed) return@withLock failed(admitted.failure)
             if (received is AppResult.Failed) return@withLock failed(received.failure)
             val page = (received as AppResult.Success).value
-            val merged = replicas.merge(access, checkpoint, page.items, clock.now())
+            val merged = replicas.merge(access, checkpoint, items(page), clock.now())
             currentCoroutineContext().ensureActive()
             val afterWrite = requireCollaborationOwner(capture(workspaceId), owner, merged)
             if (afterWrite is AppResult.Failed) return@withLock failed(afterWrite.failure)
