@@ -2,6 +2,13 @@
 
 ## Active collaboration implementation — 1 November 2026
 
+Setup and all four conversation discovery reads now retain received server
+authorization denials if the following session read fails. A newer authorization
+denial still wins. [Evidence](measurements/collaboration-read-denial-2026-11-01.json)
+records four new common cases, focused verification in 43s and full root/browser/
+Android/Wasm/lint in 202s (2,193 desktop, 86 domain browser, zero lint errors).
+No provider transport changed; native SDK evidence below remains at `4d90c6e0`.
+
 [Evidence](measurements/collaboration-sync-recovery-2026-11-01.json) · [Contract](collaboration-sdk-lifecycle.md)
 
 The actual HRIS CI fixture now pins Platform `013f8092114eef7a603930bdf242aed859ccba7c`,
@@ -39,16 +46,15 @@ exposed the SDK's post-join metadata confirmation. Both failures are retained;
 three new domain, three database and two HTTP cases verify the correction,
 including malformed requests, identity isolation and permission loss.
 
-**Continue P0–P8; none of the 54 groups is accepted.** Next, retain received
-server denials in setup/discovery reads when their follow-up session read fails
-(`LoadCollaborationSetup` / `ReadCollaborationConversations` still return that
-later failure directly). Preparation, replay and runtime restoration use the same post-request pattern;
-review their denial propagation as part of that correction. Then connect product entry, bounded history windows,
-scoped offline projections, bootstrap/cross-family recovery and durable logical-ID
-reconciliation to chat UI. Existing DM metadata has actor IDs, so add a bounded
-owned peer-label projection before presenting the conversation list. Do not scan
-5,000 participants or add per-row remote calls. Keep generic verified foundations
-in Starter; these HRIS SDK/admission adapters do not require a Starter port.
+**Continue P0–P8; none of the 54 groups is accepted.** The setup/discovery
+read correction above is complete. Next apply the same preservation through
+preparation, replay, receipt reconciliation and runtime install/restore; their
+post-request owner checks still return a later storage failure directly. Then
+connect product entry, bounded history windows, scoped offline projections,
+bootstrap/cross-family recovery and durable logical-ID reconciliation to chat UI.
+Add a bounded owned peer-label projection before the conversation list; do not
+scan 5,000 participants or issue per-row remote calls. These HRIS adapters do not
+require a Starter port.
 
 Predecessor `0ef8018c` control CI `41250076314` passes all 26 steps:
 158 desktop, 134 browser, 134 iOS simulator cases; 120 source hashes match the

@@ -14,6 +14,38 @@ import kotlinx.coroutines.test.runTest
 
 class CollaborationConversationReadTest {
     @Test
+    fun allReadPathsRetainServerDenialAcrossFailedPostRequestSessionReads() = runTest {
+        for (path in 0..3) for (remote in
+            listOf(
+                FailureKind.Unauthorized,
+                FailureKind.AccessDenied,
+                FailureKind.Network,
+            )) for (local in listOf(FailureKind.Storage, FailureKind.Network)) {
+            val f = ReadFixture()
+            val received = Failure(remote, "Fixture response", code = "fixture.remote")
+            val later = Failure(local, "Fixture read", code = "fixture.local")
+            f.failure = received
+            f.before = { f.setup.sessionFailure = later }
+            val expected = if (remote == FailureKind.Network) later else received
+            assertEquals(expected, assertIs<AppResult.Failed>(f.read(path)).failure)
+            assertEquals(1, f.calls)
+        }
+    }
+
+    @Test
+    fun currentDenialStillWinsOnEveryDiscoveryPath() = runTest {
+        for (path in 0..3) for (kind in
+            listOf(FailureKind.Unauthorized, FailureKind.AccessDenied)) {
+            val f = ReadFixture()
+            val current = Failure(kind, "Fixture current denial", code = "fixture.current")
+            f.failure = Failure(FailureKind.AccessDenied, "Fixture server denial")
+            f.before = { f.setup.sessionFailure = current }
+            assertEquals(current, assertIs<AppResult.Failed>(f.read(path)).failure)
+            assertEquals(1, f.calls)
+        }
+    }
+
+    @Test
     fun allReadPathsCaptureOwnerAndKeepOrdinaryTokenRotation() = runTest {
         for (kind in 0..3) {
             val f = ReadFixture()

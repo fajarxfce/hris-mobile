@@ -1,6 +1,7 @@
 package dev.fajar.starter.collaboration.domain.usecases
 
 import dev.fajar.starter.collaboration.domain.entities.*
+import dev.fajar.starter.collaboration.domain.policies.retainCollaborationCommandFailure
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationConversationRepository
 import dev.fajar.starter.common.config.AppBuild
 import dev.fajar.starter.common.result.*
@@ -46,7 +47,13 @@ class ReadCollaborationConversations(
         val result = acquire(owner)
         currentCoroutineContext().ensureActive()
         val admitted = requireCollaborationOwner(capture(workspaceId), owner)
-        if (admitted is AppResult.Failed) return admitted
+        if (admitted is AppResult.Failed)
+            return AppResult.Failed(
+                retainCollaborationCommandFailure(
+                    (result as? AppResult.Failed)?.failure,
+                    admitted.failure,
+                )
+            )
         currentCoroutineContext().ensureActive()
         return when (result) {
             is AppResult.Failed -> result

@@ -11,6 +11,41 @@ import kotlinx.coroutines.test.runTest
 
 class LoadCollaborationSetupTest {
     @Test
+    fun aFailedPostRequestReadCannotEraseReceivedServerDenial() = runTest {
+        for (remote in
+            listOf(
+                FailureKind.Unauthorized,
+                FailureKind.AccessDenied,
+                FailureKind.Network,
+            )) for (local in listOf(FailureKind.Storage, FailureKind.Network)) {
+            val f = CollaborationSetupFixture()
+            val received = Failure(remote, "Fixture response", code = "fixture.remote")
+            val later = Failure(local, "Fixture read", code = "fixture.local")
+            f.onRead = {
+                f.sessionFailure = later
+                AppResult.Failed(received)
+            }
+            val expected = if (remote == FailureKind.Network) later else received
+            assertEquals(expected, assertIs<AppResult.Failed>(f.loader()("selection")).failure)
+            assertEquals(1, f.calls)
+        }
+    }
+
+    @Test
+    fun aNewCurrentDenialStillSupersedesReceivedDenial() = runTest {
+        for (kind in listOf(FailureKind.Unauthorized, FailureKind.AccessDenied)) {
+            val f = CollaborationSetupFixture()
+            val current = Failure(kind, "Fixture current denial", code = "fixture.current")
+            f.onRead = {
+                f.sessionFailure = current
+                AppResult.Failed(Failure(FailureKind.AccessDenied, "Fixture server denial"))
+            }
+            assertEquals(current, assertIs<AppResult.Failed>(f.loader()("selection")).failure)
+            assertEquals(1, f.calls)
+        }
+    }
+
+    @Test
     fun loadsTheCapturedOwnerAndAllowsOrdinaryTokenRefreshWithoutChangingDeviceIdentity() =
         runTest {
             val fixture = CollaborationSetupFixture()

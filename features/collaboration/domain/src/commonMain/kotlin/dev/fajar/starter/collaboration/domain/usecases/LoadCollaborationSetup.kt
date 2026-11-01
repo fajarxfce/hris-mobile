@@ -1,12 +1,12 @@
 package dev.fajar.starter.collaboration.domain.usecases
 
 import dev.fajar.starter.collaboration.domain.entities.*
+import dev.fajar.starter.collaboration.domain.policies.retainCollaborationCommandFailure
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationSetupRepository
 import dev.fajar.starter.common.config.AppBuild
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.identity.domain.entities.IdentityServer
 import dev.fajar.starter.identity.domain.repositories.SessionRepository
-import dev.fajar.starter.workspace.domain.policies.workspaceFailure
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
 import kotlin.time.Clock
 import kotlinx.coroutines.currentCoroutineContext
@@ -28,12 +28,14 @@ class LoadCollaborationSetup(
             }
         val result = setup.read(owner)
         currentCoroutineContext().ensureActive()
-        when (val current = capture(workspaceId)) {
-            is AppResult.Failed -> return current
-            is AppResult.Success ->
-                if (current.value != owner)
-                    return workspaceFailure("client.session_changed", FailureKind.Unauthorized)
-        }
+        val admitted = requireCollaborationOwner(capture(workspaceId), owner)
+        if (admitted is AppResult.Failed)
+            return AppResult.Failed(
+                retainCollaborationCommandFailure(
+                    (result as? AppResult.Failed)?.failure,
+                    admitted.failure,
+                )
+            )
         currentCoroutineContext().ensureActive()
         return when (result) {
             is AppResult.Failed -> result

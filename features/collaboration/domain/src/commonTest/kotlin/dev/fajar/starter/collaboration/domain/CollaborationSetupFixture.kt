@@ -28,6 +28,7 @@ internal class CollaborationSetupFixture {
             ),
         )
     var session: Session? = initial
+    var sessionFailure: Failure? = null
     val selected =
         Workspace(
             "selection",
@@ -69,7 +70,8 @@ internal class CollaborationSetupFixture {
 
             override fun observe() = flowOf(AppResult.Success(session))
 
-            override suspend fun current() = AppResult.Success(session)
+            override suspend fun current(): AppResult<Session?> =
+                sessionFailure?.let { AppResult.Failed(it) } ?: AppResult.Success(session)
 
             override suspend fun compareAndSet(
                 expected: Session?,

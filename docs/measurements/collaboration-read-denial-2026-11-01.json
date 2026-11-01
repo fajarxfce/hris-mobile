@@ -1,0 +1,54 @@
+{
+  "date": "2026-11-01",
+  "change": "Retain received authorization denial through failed post-request owner reads in setup and all conversation discovery paths",
+  "baseMobileCommit": "4d90c6e093e529abac636deddd969c79f2118448",
+  "sourceSha256": {
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationCommandFailurePolicy.kt": "f079ee26239285fffc156c28dbc276e222ed32d6821417144986347e15ea85c8",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/CollaborationSetupOwner.kt": "9e54aa26bea624bd37290d751f1a8e5fc6f2d8fe40969a40604af85ce4b04c38",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/LoadCollaborationSetup.kt": "c4426b5719e92d45492f0d010cacdea88e2f156e82eb79c7e19d5235999a5be0",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ReadCollaborationConversations.kt": "0d82af103d2e45a8666f9b3362a2d5b8d08deeddca0ba5ef6ac06e7ab7ad5be6",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationConversationReadTest.kt": "5323c80a99f988cb54301a1be9c8cc3a25a15397ac245d045e640d305f4389c1",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationSetupFixture.kt": "10885ad7b98ab1266ddea31a24e2a7a2e35de330106fcf654c759a9d4b0840b4",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/LoadCollaborationSetupTest.kt": "0f10df47c68aab71bae102a627cc6996bd93582812e612e1bb9937fca8fd95b3"
+  },
+  "newCommonCases": 4,
+  "validation": {
+    "focusedSeconds": 43,
+    "rootCheckSeconds": 202,
+    "desktop": {
+      "tests": 2193,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "suites": 375
+    },
+    "domainDesktop": {
+      "tests": 86,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "suites": 8
+    },
+    "domainBrowser": {
+      "tests": 86,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "suites": 8
+    },
+    "wasmApplicationCompilation": true,
+    "androidDevAssembly": true,
+    "androidLintErrors": 0
+  },
+  "emulatorChanged": false,
+  "phoneChanged": false,
+  "liveChanged": false,
+  "productAcceptance": false,
+  "notes": [
+    "Unauthorized and AccessDenied server responses remain authoritative if the later local session read reports Storage or Network.",
+    "A newer local authorization denial still takes precedence; an ordinary network response does not override a subsequent read failure.",
+    "One setup path and all four conversation discovery paths are covered; cancellation and owner replacement cases continue to pass.",
+    "Native transport was not changed or rerun locally; prior SDK interoperability is recorded for Mobile 4d90c6e0 and Platform 013f8092.",
+    "Preparation, replay, receipt reconciliation and runtime installation/restoration still require the corresponding post-request failure review before product wiring."
+  ]
+}

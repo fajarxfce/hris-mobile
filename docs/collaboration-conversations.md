@@ -78,3 +78,11 @@ records real SQLite/AES-GCM reopening, common browser codecs, competing writes,
 lost responses, original-operation retries, scope/permission changes, failed cleanup
 and safe receipt retirement. This is control preparation; offline message composition,
 product pending-action UI and cross-family recovery are separate remaining work.
+
+## Read failure precedence
+
+Setup, participant search, conversation list/detail and room-state reads retain
+received Unauthorized/AccessDenied when a following session read fails with a
+transport/storage error. A newer authorization denial still takes precedence;
+there is no refresh, provisioning or retry side effect. Existing cancellation
+and scope-replacement guards remain in place. See [verification](measurements/collaboration-read-denial-2026-11-01.json).
