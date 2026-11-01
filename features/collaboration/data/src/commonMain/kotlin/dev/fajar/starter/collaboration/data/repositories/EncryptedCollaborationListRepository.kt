@@ -30,6 +30,31 @@ class EncryptedCollaborationListRepository(
     private val keyCreation = Mutex()
     private val admissionWrites = Mutex()
 
+    override suspend fun get(access: CollaborationLocalAccess, conversationId: String) =
+        safeStorageCall {
+            val page =
+                replicas
+                    .observeDocument(
+                        listScope(access),
+                        listPartition(access),
+                        collaborationId(conversationId),
+                    )
+                    .first()
+            require(page.documents.size <= 1)
+            val raw = page.checkpoint
+            if (raw == null) {
+                require(page.documents.isEmpty())
+                null
+            } else
+                withKey(access) { codec ->
+                    val checkpoint = codec.checkpoint(raw)
+                    page.documents.singleOrNull()?.let {
+                        require(it.id == conversationId)
+                        codec.document(checkpoint, it)
+                    }
+                }
+        }
+
     override fun observe(
         access: CollaborationLocalAccess,
         selection: CollaborationListSelection,

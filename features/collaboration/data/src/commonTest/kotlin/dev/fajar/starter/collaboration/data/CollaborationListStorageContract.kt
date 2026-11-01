@@ -20,6 +20,34 @@ abstract class CollaborationListStorageContract {
     protected abstract fun databaseOwner(): CollaborationListDatabaseOwner
 
     @Test
+    fun exactRetainedConversationLookupSharesOwnedCheckpointAndSurvivesReopen() =
+        withDatabase { f ->
+            assertEquals(
+                AppResult.Success(null),
+                f.repository.get(f.access, listSummary(1).conversation.id),
+            )
+            f.merge(listOf(listSummary(1), listSummary(2)))
+            assertEquals(
+                AppResult.Success(listSummary(2)),
+                f.repository.get(f.access, listSummary(2).conversation.id),
+            )
+            val renewed = f.access.copy(sessionId = "another-login")
+            f.reopen(renewed)
+            assertEquals(
+                AppResult.Success(listSummary(2)),
+                f.repository.get(renewed, listSummary(2).conversation.id),
+            )
+            assertEquals(
+                AppResult.Success(null),
+                f.repository.get(f.access, listSummary(2).conversation.id),
+            )
+            assertEquals(
+                AppResult.Success(null),
+                f.repository.get(renewed, listSummary(3).conversation.id),
+            )
+        }
+
+    @Test
     fun boundedPagesAndAccountFactsSurviveDatabaseAndLocalSessionReplacement() = withDatabase { f ->
         for (batch in (1..85).map(::listSummary).chunked(50)) f.merge(batch)
         assertEquals(85, f.checkpoint()!!.count)

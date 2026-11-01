@@ -2,6 +2,36 @@
 
 ## Active collaboration implementation — 1 November 2026
 
+Owned offline text intents are now implemented through `QueueCollaborationText`
+and `ObserveCollaborationMessages`, using the encrypted account command store.
+Retried logical IDs retain exact text/timestamp; native attempt states cannot reset
+uncertainty or retarget a mapped transaction. Local preparation reads an acquired
+owned conversation, preserves facts through ordinary expiry, and respects confirmed
+company denial. It never enrolls, joins, refreshes credentials or sends HTTP.
+[Contract](collaboration-message-intents.md) and
+[evidence](measurements/collaboration-message-intents-2026-11-01.json): 14 new common
+domain cases, nine real SQLite/IndexedDB message cases and one exact-list lookup
+case. Focused checks pass in 64s; full root/browser/Android/Wasm/lint passes in 263s:
+**2,267 desktop / 382 suites**, **135 domain / 106 data browser**, all zero failures,
+errors/skips and zero Android lint errors. All 19 source hashes match; dev APK
+`abd3ff29` is built, not installed.
+
+**Next: implement the exclusive native queue writer and its cancellation/drain
+ownership, persist native transaction mapping before delivery, and prove actual
+process death between enqueue and mapping. Then connect Chat list/setup/conversation
+UI and durable history.** The SDK explicitly exposes no JSON/logical ID on unsent
+local echoes; the earlier hydration proposal was incorrect and is superseded by
+complete paused queue snapshots under one exclusive enqueue owner. The pure set-
+difference recovery policy is implemented; its native owner is not connected yet.
+No second transport retry owner or automatic cross-device resubmission is allowed.
+
+Mobile `4980ea00` hosted checks are now verified: control `41261819143` passes all
+26 steps (230 desktop, 206 browser, 195 iOS simulator); HRIS `41261819051` passes
+all 17 steps and SDK recovery `c2cd4309` in **72.366s**, with all verification and
+cleanup flags true. All 22 cache source hashes match its immutable checkout;
+Platform pin remains `8813ea9e`. The measurement retains exact artifacts/digests.
+These hosted runs predate the message-intent code. No product group is accepted.
+
 Admitted application entry now reuses an initialized SDK runtime through
 `EnsureCollaborationRuntime`; it returns scoped readiness without lending a parent
 close handle to a route. Concurrent entries share one restore, incomplete native
@@ -44,18 +74,12 @@ cleanup. Earlier `92d91275` hosted control/HRIS evidence (201/177/177 cases,
 64.046s SDK) is in [control denial](measurements/collaboration-control-denial-2026-11-01.json).
 These SDK runs do not validate the later cache source; its native transport is unchanged.
 
-**Continue P0–P8; none of the 54 feature groups is accepted.** Implement the
-application's immutable message intents and native transaction reconciliation,
-then connect Chat list/setup/conversation UI to the verified cache and shared
-entry. Product history windows, offline message projections, bootstrap/cross-family
-recovery, all richer chat/call/meeting behavior and Apple native interoperability
-remain pending. Keep SDK keys/cursors intact; the 512-item observer guard is not a
-product history window. Common Apple checks and a physical-device waiver do not
-replace native interoperability. Mobile `docs/collaboration-timeline.md` records
-source findings for the next queue owner: per-room subscription replays captured
-transaction IDs before returning, but timeline local-echo hydration is asynchronous.
-Proposed delivery stays paused until the logical-ID/native-transaction mapping is
-durable; this sender and its crash boundaries are not implemented yet.
+**Continue P0–P8; none of the 54 feature groups is accepted.** The next native
+writer/delivery and product UI work is listed above. Bounded history, offline
+message projections, bootstrap/cross-family recovery, richer chat/calls/meetings
+and Apple native interoperability remain pending. Keep SDK keys/cursors intact;
+the 512-item observer guard is not a product history window. Common Apple checks
+and the physical-device waiver do not replace native interoperability.
 
 No live/schema/phone change; the dedicated emulator remains stopped. Starter
 stays at `36116b2`: no new generic foundation change requires a port. Keep HRIS

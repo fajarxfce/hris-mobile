@@ -135,15 +135,18 @@ Source research at Rust SDK `8de215a0aa0026afa5754ae5f05a6d168d1a1d60` confirms 
 [room send-queue subscription](https://github.com/matrix-org/matrix-rust-sdk/blob/8de215a0aa0026afa5754ae5f05a6d168d1a1d60/bindings/matrix-sdk-ffi/src/room.rs#L967)
 replays the captured local transaction IDs synchronously before returning its task
 handle. This is stronger than waiting for a quiet timeline. Its FFI updates contain
-transaction IDs, not full message content. The existing native timeline mapper can
-read the logical ID from `event.lazyProvider.latestJson()`; timeline-local-echo
-hydration itself is asynchronous. The global queue subscription acquires its initial
+transaction IDs, not full message content. `event.lazyProvider.latestJson()` is
+available for remote events and explicitly absent for unsent local echoes. Waiting
+for timeline hydration therefore cannot recover a queued message's logical ID.
+The global queue subscription acquires its initial
 local echoes before subscribing and is not assumed to have the same snapshot boundary.
 
-The product enqueue/recovery owner still needs implementation and crash tests.
-The proposed boundary is: retain the immutable logical intent, pause native message
-delivery, enqueue once, reconcile captured native transactions with hydrated logical
-IDs, persist the mapping, and only then admit delivery. Startup must restore paused
+The [owned message-intent contract](collaboration-message-intents.md) supersedes the
+earlier hydration proposal. Its implemented storage and pure recovery policy retain
+the immutable intent and pre-enqueue transaction snapshot. The native exclusive
+writer still needs implementation and crash tests: pause delivery, persist the
+snapshot, enqueue once, derive the original transaction from the complete snapshot
+difference, persist the mapping, and only then admit delivery. Startup must restore paused
 and finish that reconciliation before enabling queues. A crash after SDK enqueue
 and before the application mapping must recover from the paused SDK queue; an empty
 or not-yet-hydrated timeline is not proof that no enqueue occurred. Previously mapped

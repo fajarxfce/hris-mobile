@@ -269,6 +269,11 @@ private class LocalListFixture {
     val cursors = mutableListOf<String?>()
     val replica =
         object : CollaborationListRepository {
+            override suspend fun get(
+                access: CollaborationLocalAccess,
+                conversationId: String,
+            ): AppResult<CollaborationDirectSummary?> = error("No individual read")
+
             override fun observe(
                 access: CollaborationLocalAccess,
                 selection: CollaborationListSelection,

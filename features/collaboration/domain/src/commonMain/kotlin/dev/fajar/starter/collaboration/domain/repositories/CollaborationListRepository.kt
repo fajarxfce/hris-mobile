@@ -7,6 +7,12 @@ import kotlinx.coroutines.flow.Flow
 
 /** Encrypted acquired metadata; no message contents, provider credentials or implicit delivery. */
 interface CollaborationListRepository {
+    /** One retained owned conversation; no network acquisition. */
+    suspend fun get(
+        access: CollaborationLocalAccess,
+        conversationId: String,
+    ): AppResult<CollaborationDirectSummary?>
+
     fun observe(
         access: CollaborationLocalAccess,
         selection: CollaborationListSelection,

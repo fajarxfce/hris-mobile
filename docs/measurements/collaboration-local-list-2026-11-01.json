@@ -111,5 +111,74 @@
     "No source changes in Starter: this is an HRIS feature adapter over already verified account replica and protected key foundations.",
     "Actual SDK evidence remains tied to the separately verified hosted commits; no local native provider rerun for this metadata cache.",
     "An initial editing-script assertion was corrected before launching the final build; it did not start Gradle or alter the retained positive storage contract."
-  ]
+  ],
+  "hostedControl": {
+    "head": "4980ea00e5f19c8e9a71c9bf5593e04b058263a4",
+    "runId": 41261819143,
+    "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/41261819143",
+    "jobs": {
+      "apple": 11,
+      "portable": 15
+    },
+    "reports": {
+      "desktopTest": {
+        "suites": 29,
+        "tests": 230,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "wasmJsBrowserTest": {
+        "suites": 25,
+        "tests": 206,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "iosSimulatorArm64Test": {
+        "suites": 24,
+        "tests": 195,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "allStepsSuccessful": true,
+    "sourceHashesMatched": 22
+  },
+  "hostedHris": {
+    "head": "4980ea00e5f19c8e9a71c9bf5593e04b058263a4",
+    "runId": 41261819051,
+    "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/41261819051",
+    "allStepsSuccessful": true,
+    "steps": 17,
+    "platformPin": "8813ea9eee28cafc274eafcd41456340f132ae2f",
+    "sdkRun": "c2cd4309ad3642d789ab111f0a46e466",
+    "sdkSeconds": 72.366,
+    "verification": {
+      "passed": true,
+      "encryptedBothDirections": true,
+      "logicalIdsPreserved": true,
+      "cleanup": true,
+      "protectedStoreReopened": true,
+      "missingRecordPreserved": true,
+      "wrongPassphrasePreserved": true,
+      "exclusiveOwner": true,
+      "processRestarted": true,
+      "queueRestored": true,
+      "transactionReused": true,
+      "identityAfterRestart": true,
+      "pausedAcrossRestart": true,
+      "syncInterruptedAfterRestart": true,
+      "syncRetriedWithRetainedCursor": true,
+      "artifact": {
+        "apkSha256": "ffd46203009e5c51d4c1cc8390e8572937fcee915b3d79ce7a7e1d3af0f59707",
+        "package": "dev.fajar.hris.collaboration.proof",
+        "avd": "hris-mobile-dev",
+        "androidApi": "35"
+      }
+    },
+    "verifiedSha256": "981d471f2fac46c4d9c6c2a807f3348929201465fb6b0a0fc9229b41e5597c51",
+    "xmlSha256": "8326ad0f735528beba20d425126861615a14ff34f1f04015b49af00f9620eeb1"
+  }
 }

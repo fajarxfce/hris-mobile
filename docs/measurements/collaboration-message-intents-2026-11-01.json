@@ -1,0 +1,82 @@
+{
+  "date": "2026-11-01",
+  "change": "Owned encrypted offline text intents, exact conversation lookup, immutable native-attempt states and complete-snapshot recovery policy",
+  "baseMobileCommit": "67d23041f2d7735772a9017a752c033b316a33c7",
+  "sourceSha256": {
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt": "550437e3f60a5c56f62f2fbcf642de15587bc5bd8469b09cdc8e1de802db579a",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt": "d8bf56d5d0fd9ae63cd0178631004eca1b19749d28100c0d8c73d3f178a8e88e",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/messages/CollaborationMessageCodec.kt": "c3c84c3d2f7215dfaa7531a5a82f4989b50ab135d8ec5d61d79138c1deb40734",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationListRepository.kt": "bb1bd87fab532176e7cbc2f571463b420eec2bc45633e3eaf06abf3a1f349aea",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationMessageRepository.kt": "46e01a5ef5debd099647c2c4898aee982dc80273e5365eab229f772d7942da54",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationListStorageContract.kt": "024a721431d3d24d9fa985c194111eacb3f4b3ba69cd07019cabdce6e5f304f7",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationMessageStorageContract.kt": "c96d289d8ec5342926f52d998332e149124debf18ad4253ba0ab8beb14bf7a93",
+    "features/collaboration/data/src/desktopTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationMessageStorageTest.kt": "e2be2ac9800c2d72e1a04ef8b0079749c1e522dbb7cce10a23595c3fee63ac18",
+    "features/collaboration/data/src/wasmJsTest/kotlin/dev/fajar/starter/collaboration/data/BrowserCollaborationMessageStorageTest.kt": "4a5f3c80e17cc1c7e19e33d58c4438cd7fb8eaf01c732f8ca12bfce89e9498b8",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationMessageIntent.kt": "8c3f06bae63848a85c563b999703509dc773d2f8c2583cdd9f9250def08c6e62",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationMessagePolicy.kt": "41aa7bcd60b37205462e5aa18527b26c913cb1b2ce6e8901eb0b744750579809",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationListRepository.kt": "2c1ede198ffe6f1e2551299ccc390df235f24868a6313c679c3a2175fc0ac1d8",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationMessageRepository.kt": "6a7e5fbd119ccb94ac3273a058a5b56041dd491f6a0490ed0cae91985e3ac439",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/CollaborationMessageAccess.kt": "6c7f6a64caacbd682d1b3a5616693b444d59c16253659efcebfaf2987969edb8",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ObserveCollaborationMessages.kt": "b0265e9ddf8bf8380c053493e8e42f27e2aef360bf265c831fd6d487fefd5c15",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/QueueCollaborationText.kt": "200edb46959eb37d759ce5062e8af93955d4bf75322a97f9d455f1c7c7bb39c1",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationLocalListTest.kt": "80a6d9b0aaab9faa57bf2889b1eb2872b52682d217e8f760730d4b55247e73bb",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationMessageIntentTest.kt": "42949dca94b4f60cbb70a93a1d9d243067c367ecaf377d4ae5a89e7d7a2b27f9",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationQueueRecoveryTest.kt": "0661639e251c88ac7668ba9c58aaa7331bb1b9f9ca81f84ee1a887e2833b9b70"
+  },
+  "newCommonCases": {
+    "domainIntent": 9,
+    "domainRecovery": 5,
+    "storageSQLiteAndIndexedDb": 9,
+    "localConversationLookupSQLiteAndIndexedDb": 1
+  },
+  "validation": {
+    "focused": {
+      "seconds": 64,
+      "sha256": "91dc3aa50d1d7634d30e7900eedb0e7745e8df7d9ea0c62bced024305126e835",
+      "log": ".work/collaboration-message-intent-focused.log",
+      "passed": true
+    },
+    "full": {
+      "seconds": 263,
+      "sha256": "c43b2419d25d491614b1a7662aff98335108d6fbc800575271ff4e93ceb9e55d",
+      "log": ".work/collaboration-message-intent-app.log",
+      "passed": true
+    }
+  },
+  "reports": {
+    "desktop": {
+      "suites": 382,
+      "tests": 2267,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "domainBrowser": {
+      "suites": 12,
+      "tests": 135,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "dataBrowser": {
+      "suites": 17,
+      "tests": 106,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "androidLintErrors": 0,
+  "devApkSha256": "abd3ff291a31862e06c8733eb48aeca9629f877daec3dba7095338a60d5dee80",
+  "sdkSenderConnected": false,
+  "nativeInteropRerun": false,
+  "productAcceptance": false,
+  "phoneChanged": false,
+  "liveChanged": false,
+  "notes": [
+    "Preparation and observation have no SDK/network dependency. Ordinary expiry preserves owned facts; denial stops publication and observation without deleting commands.",
+    "Account command capacity remains128. Unicode/text and encrypted request/state bounds are enforced. Immutable request and revision-state authentication reject changed intent, stale writes and retargeted native transactions.",
+    "Local echoes explicitly have no latest_json. Pure recovery uses a complete paused per-room queue snapshot and one exclusive enqueue; actual native exclusive writer and drain proof remain next.",
+    "The native SDK transport was not changed by this increment; actual SDK acceptance is not inferred from storage/policy tests."
+  ]
+}
