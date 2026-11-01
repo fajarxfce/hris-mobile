@@ -36,16 +36,20 @@ internal suspend fun CollaborationSdkHistoryEventDto.toOriginalHistory():
     val text = content.text("body") ?: return null
     require(validCollaborationText(text))
     val logical = content.text("org.hris.message_id")?.takeIf(::validCollaborationMessageId)
+    val hash = collaborationHistoryContentHash(content)
+    return CollaborationHistoryChange.Text(eventId, sender, logical, timestamp, text, hash)
+}
+
+/** Shared by original acquisition and the exact pre-enqueue plaintext encoder. */
+internal suspend fun collaborationHistoryContentHash(content: JsonObject): String {
     val canonical =
         canonicalHistoryContent(content).toString().encodeToByteArray(throwOnInvalidSequence = true)
-    val hash =
-        try {
-            require(canonical.size <= 96_000)
-            CryptographyProvider.Default.get(SHA256).hasher().hash(canonical).toHexString()
-        } finally {
-            canonical.fill(0)
-        }
-    return CollaborationHistoryChange.Text(eventId, sender, logical, timestamp, text, hash)
+    return try {
+        require(canonical.size <= 96_000)
+        CryptographyProvider.Default.get(SHA256).hasher().hash(canonical).toHexString()
+    } finally {
+        canonical.fill(0)
+    }
 }
 
 private fun JsonObject.text(name: String) =

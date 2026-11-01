@@ -1,11 +1,11 @@
 package dev.fajar.starter.collaboration.data.datasources
 
+import dev.fajar.starter.collaboration.data.messages.collaborationTextContent
 import dev.fajar.starter.collaboration.data.sdk.SdkQueueDelivery
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.policies.validCollaborationTransactionId
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import kotlinx.serialization.json.*
 import org.matrix.rustcomponents.sdk.*
 
 /** Raw paused SDK operations. The runtime owns exclusivity and every in-flight operation. */
@@ -80,12 +80,9 @@ internal class AndroidCollaborationMessageQueueSource(private val acquireRoom: s
     suspend fun enqueue(logicalId: String, text: String) {
         check(listener == null && !stopping)
         check(!requireNotNull(room).isSendQueueEnabled())
-        messageEventContentFromMarkdown(text).use { content ->
+        messageEventContentNew(MessageType.Text(TextMessageContent(text, null))).use { content ->
             requireNotNull(timeline)
-                .sendWithExtraContent(
-                    content,
-                    buildJsonObject { put("org.hris.message_id", logicalId) }.toString(),
-                )
+                .sendWithExtraContent(content, collaborationTextContent(logicalId, text).toString())
                 .close()
         }
     }

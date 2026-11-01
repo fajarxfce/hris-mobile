@@ -181,39 +181,20 @@ class StageCollaborationText(
         val snapshot = (current as AppResult.Success).value.toSet()
         if (snapshot.size > 128 || !snapshot.all(::validCollaborationTransactionId))
             return failed("client.collaboration_queue_unresolved")
-        val pending =
-            when (val state = original.state) {
-                CollaborationMessageState.Queued -> {
-                    if (!mapped.containsAll(snapshot))
-                        return failed("client.collaboration_queue_unresolved")
-                    if (snapshot.size == 128)
-                        return failed("client.command_queue_full", FailureKind.Storage)
-                    val attempt = CollaborationMessageState.Staging(queue.device, snapshot)
-                    val saved =
-                        checked(workspaceId, owner) { messages.update(access, original, attempt) }
-                    if (saved is AppResult.Failed) return saved
-                    if (!(saved as AppResult.Success).value)
-                        return failed("client.collaboration_message_changed")
-                    original.copy(revision = original.revision + 1, state = attempt)
-                }
-                is CollaborationMessageState.Staging -> {
-                    if (state.device != queue.device)
-                        return failed("client.collaboration_queue_other_device")
-                    if (!mapped.containsAll(state.before))
-                        return failed("client.collaboration_queue_unresolved")
-                    original
-                }
-                else -> return failed("client.collaboration_message_changed")
-            }
+        val retained = retainAttempt(workspaceId, owner, original, queue, mapped, snapshot)
+        if (retained is AppResult.Failed) return retained
+        val pending = (retained as AppResult.Success).value
         val attempt = pending.state as CollaborationMessageState.Staging
         val recovery = recoverCollaborationQueue(attempt, queue.device, snapshot)
         val transaction =
             when (recovery) {
                 is CollaborationQueueRecovery.Found -> recovery.transactionId
                 CollaborationQueueRecovery.Missing -> {
+                    val origin =
+                        attempt.origin ?: return failed("client.collaboration_queue_unresolved")
                     val sent =
                         checked(workspaceId, owner) {
-                            queue.enqueue(pending.intent.id, pending.intent.text)
+                            queue.enqueue(pending.intent.id, pending.intent.text, origin)
                         }
                     if (sent is AppResult.Failed) return sent
                     val after = checked(workspaceId, owner) { queue.snapshot() }
@@ -231,12 +212,55 @@ class StageCollaborationText(
                 else -> return failed("client.collaboration_queue_unresolved")
             }
         if (transaction in mapped) return failed("client.collaboration_queue_unresolved")
-        val state = CollaborationMessageState.Staged(queue.device, transaction)
+        val state = CollaborationMessageState.Staged(queue.device, transaction, attempt.origin)
         val saved = checked(workspaceId, owner) { messages.update(access, pending, state) }
         if (saved is AppResult.Failed) return saved
         if (!(saved as AppResult.Success).value)
             return failed("client.collaboration_message_changed")
         return AppResult.Success(pending.copy(revision = pending.revision + 1, state = state))
+    }
+
+    private suspend fun retainAttempt(
+        workspaceId: String,
+        owner: CollaborationOwner,
+        original: CollaborationMessageRecord,
+        queue: CollaborationMessageQueueLease,
+        mapped: Set<String>,
+        snapshot: Set<String>,
+    ): AppResult<CollaborationMessageRecord> {
+        return when (val state = original.state) {
+            CollaborationMessageState.Queued -> {
+                if (!mapped.containsAll(snapshot))
+                    return failed("client.collaboration_queue_unresolved")
+                if (snapshot.size == 128)
+                    return failed("client.command_queue_full", FailureKind.Storage)
+                val prepared =
+                    checked(workspaceId, owner) {
+                        queue.prepareText(original.intent.id, original.intent.text)
+                    }
+                if (prepared is AppResult.Failed) return prepared
+                val origin = (prepared as AppResult.Success).value
+                if (!validCollaborationMessageOrigin(origin))
+                    return failed("client.collaboration_invalid_message_origin")
+                val attempt = CollaborationMessageState.Staging(queue.device, snapshot, origin)
+                val saved =
+                    checked(workspaceId, owner) {
+                        messages.update(owner.localListAccess(), original, attempt)
+                    }
+                if (saved is AppResult.Failed) return saved
+                if (!(saved as AppResult.Success).value)
+                    return failed("client.collaboration_message_changed")
+                AppResult.Success(original.copy(revision = original.revision + 1, state = attempt))
+            }
+            is CollaborationMessageState.Staging -> {
+                if (state.device != queue.device)
+                    return failed("client.collaboration_queue_other_device")
+                if (!mapped.containsAll(state.before))
+                    return failed("client.collaboration_queue_unresolved")
+                AppResult.Success(original)
+            }
+            else -> failed("client.collaboration_message_changed")
+        }
     }
 
     private suspend fun <T> checked(

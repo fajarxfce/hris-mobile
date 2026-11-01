@@ -59,6 +59,16 @@ writer. A quiet or empty timeline is insufficient. Multiple new IDs and differen
 device families remain unresolved. A native operation must stay owned after caller
 cancellation so a late SDK commit cannot race the next snapshot.
 
+## Original payload identity
+
+New staging prepares the exact plaintext payload before enqueue and persists its
+trusted Matrix sender and full canonical content hash beside the native attempt.
+The paused writer checks that identity again before mutating the SDK queue. Staging,
+Staged and Sent preserve it immutably. Existing envelopes without an origin still
+open, but an uncertain legacy attempt is never assigned a newly inferred identity.
+See [ACK recovery](collaboration-original-receipts.md) for the precise evidence
+required after process death and the literal text content contract.
+
 ## Exclusive native queue ownership
 
 `CollaborationRuntimeRepository.acquireMessageQueue` now acquires a paused child

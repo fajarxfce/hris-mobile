@@ -50,8 +50,9 @@ without another native delivery. The remaining message keeps its original mappin
 All terminal paths close the child writer under its existing owned cleanup.
 Native work already in progress remains under the runtime if a cancelled caller
 does not receive its result. A crash/cancellation **before ACK reaches the journal**
-still requires history reconciliation. The use case cannot manufacture evidence
-to close that gap, and does not claim notification/background-send acceptance.
+uses the separate [original receipt recovery](collaboration-original-receipts.md)
+operation after admitted history acquisition. This sender never infers acknowledgement
+from queue absence and does not claim notification/background-send acceptance.
 
 ## Verification
 

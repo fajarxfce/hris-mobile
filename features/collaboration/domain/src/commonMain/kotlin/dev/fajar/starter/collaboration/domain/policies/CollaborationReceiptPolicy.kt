@@ -34,6 +34,7 @@ fun collaborationReceiptState(
                     state.device,
                     state.transactionId,
                     receipt.eventIds.first(),
+                    state.origin,
                 )
             else null
         is CollaborationMessageState.Sent ->

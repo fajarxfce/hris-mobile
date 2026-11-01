@@ -123,6 +123,7 @@ internal class CollaborationReceiptCodec(
             )
         val mapping = dto.mapping.toState() as? CollaborationMessageState.Staged
         requireNotNull(mapping)
+        require(mapping.origin == null)
         return CollaborationMessageReceipt(
                 dto.intent.toIntent(access),
                 mapping.device,

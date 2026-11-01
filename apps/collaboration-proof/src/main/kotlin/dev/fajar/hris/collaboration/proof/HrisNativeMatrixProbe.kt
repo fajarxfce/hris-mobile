@@ -99,7 +99,10 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
                         fixture.getString("heldRoomId"),
                         held.transaction,
                     )
-                    write("gateway-result", result.put("historyRuntimeReopened", true))
+                    write("gateway-preack-result", result.put("historyRuntimeReopened", true))
+                    productQueue.close()
+                    productQueue = null
+                    crashAfterAck(fixture, senderOwner)
                 } else stage(fixture, sender, recipient, pending, productQueue, held)
             } finally {
                 closeProofOwners(
@@ -115,6 +118,106 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
                 )
             }
             verifyClosedTimelines(listOfNotNull(senderTimeline, recipientTimeline))
+        }
+
+    private suspend fun crashAfterAck(fixture: JSONObject, owner: ProtectedHrisProofOwner) {
+        val runtime = owner.restoreStored()
+        var proof: HrisProductQueueProof? = null
+        try {
+            check(runtime.startSync() is AppResult.Success)
+            proof =
+                HrisProductQueueProof(
+                    context,
+                    runtime,
+                    fixture.getString("roomId"),
+                    fixture.getString("conversationId"),
+                    fixture.getJSONObject("sender").getString("hrisAccessToken"),
+                )
+            proof.crashAfterAcknowledgement(
+                logicalId(fixture, "ackLogicalId"),
+                body(fixture, "ackBody"),
+            ) { transaction ->
+                write(
+                    "gateway-acknowledged",
+                    JSONObject()
+                        .put("processId", Process.myPid())
+                        .put("transactionId", transaction)
+                        .put("ackObserved", true)
+                        .put("receiptAbsent", true),
+                )
+            }
+        } finally {
+            closeProofOwners(listOf({ proof?.close() }, { runtime.closeProofRuntime() }))
+        }
+    }
+
+    suspend fun runAckRecovery() =
+        withContext(Dispatchers.IO) {
+            val (fixture, home) = readFixture(resuming = true, afterAck = true)
+            val checkpoint = read("gateway-acknowledged", 4096)
+            val result = read("gateway-preack-result", 8192)
+            check(checkpoint.get("ackObserved") == true && checkpoint.get("receiptAbsent") == true)
+            check(
+                checkpoint.getInt("processId") == result.getInt("processId") &&
+                    checkpoint.getInt("processId") != Process.myPid()
+            )
+            val transaction = checkpoint.getString("transactionId")
+            check(
+                transaction.matches(Regex("[A-Za-z0-9._~-]{1,128}")) &&
+                    transaction != result.getString("senderTransaction")
+            )
+            val http =
+                createHttpClient(
+                    createPlatformHttpEngine(),
+                    HttpClientSettings(home.toString(), allowCleartext = true),
+                )
+            var runtime: AndroidCollaborationRuntimeLease? = null
+            var proof: HrisProductQueueProof? = null
+            try {
+                val owner =
+                    ProtectedHrisProofOwner(context, fixture.getJSONObject("sender"), home, http)
+                runtime = owner.restoreStored()
+                check(
+                    runtime.proofKeyFingerprint() ==
+                        read("gateway-staged", 4096).getString("senderKeyFingerprint")
+                )
+                check(runtime.startSync() is AppResult.Success)
+                proof =
+                    HrisProductQueueProof(
+                        context,
+                        runtime,
+                        fixture.getString("roomId"),
+                        fixture.getString("conversationId"),
+                        fixture.getJSONObject("sender").getString("hrisAccessToken"),
+                    )
+                write(
+                    "gateway-ack-restored",
+                    JSONObject().put("processId", Process.myPid()).put("transactionId", transaction),
+                )
+                awaitFile("gateway-ack-resume")
+                val sent =
+                    proof.recoverAcknowledgement(
+                        logicalId(fixture, "ackLogicalId"),
+                        body(fixture, "ackBody"),
+                        transaction,
+                    )
+                write(
+                    "gateway-result",
+                    result
+                        .put("processId", Process.myPid())
+                        .put("ackBeforeJournalRecovered", true)
+                        .put("ackSenderEventId", sent.eventId)
+                        .put("ackTransaction", sent.transactionId),
+                )
+            } finally {
+                closeProofOwners(
+                    listOf(
+                        { proof?.close() },
+                        { runtime?.closeProofRuntime() },
+                        { http.cancelAndClose() },
+                    )
+                )
+            }
         }
 
     private suspend fun closeProofOwners(operations: List<suspend () -> Unit>) =
@@ -139,7 +242,7 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
         }
     }
 
-    private fun readFixture(resuming: Boolean): Pair<JSONObject, URI> {
+    private fun readFixture(resuming: Boolean, afterAck: Boolean = false): Pair<JSONObject, URI> {
         val fixture = read("gateway-fixture", 16_384)
         val home = URI(fixture.getString("baseUrl"))
         require(
@@ -156,11 +259,14 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
                 fixture.getJSONObject("recipient").getString("userId")
         )
         require(File(directory, "gateway-send.json").exists() == resuming)
-        require(!File(directory, "gateway-resume.json").exists())
+        require(File(directory, "gateway-resume.json").exists() == afterAck)
         val roomId = fixture.getString("roomId")
         require(roomId.startsWith('!') && roomId.length in 2..255)
-        for (name in listOf("body", "reply", "heldBody")) body(fixture, name)
-        for (name in listOf("logicalId", "replyId", "heldLogicalId")) logicalId(fixture, name)
+        for (name in listOf("body", "reply", "heldBody", "ackBody")) body(fixture, name)
+        for (name in listOf("logicalId", "replyId", "heldLogicalId", "ackLogicalId")) logicalId(
+            fixture,
+            name,
+        )
         return fixture to home
     }
 

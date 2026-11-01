@@ -28,13 +28,15 @@ class MatrixProofInstrumentation : Instrumentation() {
                     android.os.Build.MODEL.contains("sdk")
             )
             runBlocking {
-                withTimeout(90_000) {
+                withTimeout(120_000) {
                     when (scenario) {
                         "provider" -> NativeMatrixProbe(directory).run()
                         "hris-stage" ->
                             HrisNativeMatrixProbe(targetContext, directory).run(resuming = false)
                         "hris-resume" ->
                             HrisNativeMatrixProbe(targetContext, directory).run(resuming = true)
+                        "hris-ack-recover" ->
+                            HrisNativeMatrixProbe(targetContext, directory).runAckRecovery()
                         else -> error("Unknown owned protocol scenario")
                     }
                 }

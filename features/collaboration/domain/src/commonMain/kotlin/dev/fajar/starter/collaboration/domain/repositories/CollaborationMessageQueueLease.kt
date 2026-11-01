@@ -11,8 +11,17 @@ interface CollaborationMessageQueueLease {
     /** Complete captured per-room IDs, not a possibly unhydrated timeline or a quiet-time guess. */
     suspend fun snapshot(): AppResult<Set<String>>
 
+    /**
+     * Describes exact outgoing content under this owned SDK identity, without enqueue or delivery.
+     */
+    suspend fun prepareText(logicalId: String, text: String): AppResult<CollaborationMessageOrigin>
+
     /** The caller durably records Staging first; cancellation can leave this enqueue committed. */
-    suspend fun enqueue(logicalId: String, text: String): AppResult<Unit>
+    suspend fun enqueue(
+        logicalId: String,
+        text: String,
+        origin: CollaborationMessageOrigin,
+    ): AppResult<Unit>
 
     /**
      * One bounded delivery window after live admission and durable mapping of every queued ID. Only

@@ -62,9 +62,9 @@ account replacement, inactive-account key loss, tampered indexes/checkpoint,
 input mutation, capacity, expired authority and late denial.
 
 The [common live-admitted sender](collaboration-sender.md) now connects native
-delivery results to this journal under original account fencing before projection. A crash between native acknowledgement and journal commit still
-requires history reconciliation; this store does not invent a receipt to close that
-gap. Incoming history must coalesce by conversation/authenticated sender/logical ID,
-reject conflicting reuse and retain aliases/tombstones. Bounded history windows,
-command retirement and Chat UI remain subsequent work. No complete PRD group or
-capacity target is accepted by this storage increment.
+delivery results to this journal under original account fencing before projection.
+`RecoverCollaborationMessageReceipts` separately repairs an ACK that never reached
+this journal, using [exact owned originals](collaboration-original-receipts.md).
+Native queue absence alone remains insufficient. Command retirement and Chat UI
+remain subsequent work. No complete PRD group or capacity target is accepted by
+this storage increment.

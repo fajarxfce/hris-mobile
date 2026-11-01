@@ -1,6 +1,7 @@
 package dev.fajar.starter.collaboration.data.repositories
 
 import dev.fajar.starter.collaboration.data.datasources.AndroidCollaborationMessageQueueSource
+import dev.fajar.starter.collaboration.data.messages.collaborationTextOrigin
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.policies.*
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationMessageQueueLease
@@ -9,6 +10,7 @@ import dev.fajar.starter.common.result.*
 internal class AndroidCollaborationMessageQueueLease(
     override val owner: CollaborationOwner,
     override val device: CollaborationMessageDevice,
+    private val matrixSender: String,
     private val source: AndroidCollaborationMessageQueueSource,
     private val operations: SdkQueueOperations,
     private val child: SdkChildLease<AndroidCollaborationMessageQueueSource>,
@@ -22,7 +24,10 @@ internal class AndroidCollaborationMessageQueueLease(
             safeAndroidCollaborationCall { source.snapshot() }
         }
 
-    override suspend fun enqueue(logicalId: String, text: String): AppResult<Unit> {
+    override suspend fun prepareText(
+        logicalId: String,
+        text: String,
+    ): AppResult<CollaborationMessageOrigin> {
         if (!validCollaborationMessageId(logicalId) || !validCollaborationText(text))
             return collaborationSetupFailure(
                 "client.collaboration_invalid_message",
@@ -32,6 +37,32 @@ internal class AndroidCollaborationMessageQueueLease(
             failure()?.let {
                 return@execute AppResult.Failed(it)
             }
+            safeAndroidCollaborationCall { collaborationTextOrigin(matrixSender, logicalId, text) }
+        }
+    }
+
+    override suspend fun enqueue(
+        logicalId: String,
+        text: String,
+        origin: CollaborationMessageOrigin,
+    ): AppResult<Unit> {
+        if (!validCollaborationMessageId(logicalId) || !validCollaborationText(text))
+            return collaborationSetupFailure(
+                "client.collaboration_invalid_message",
+                FailureKind.Validation,
+            )
+        return operations.execute {
+            failure()?.let {
+                return@execute AppResult.Failed(it)
+            }
+            val expected = safeAndroidCollaborationCall {
+                collaborationTextOrigin(matrixSender, logicalId, text)
+            }
+            if (expected is AppResult.Failed) return@execute expected
+            if ((expected as AppResult.Success).value != origin)
+                return@execute collaborationSetupFailure(
+                    "client.collaboration_message_content_changed"
+                )
             safeAndroidCollaborationCall { source.enqueue(logicalId, text) }
         }
     }

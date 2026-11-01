@@ -48,6 +48,8 @@ internal data class MessageStateDto(
     val before: List<String>? = null,
     val transactionId: String? = null,
     val eventId: String? = null,
+    val originSender: String? = null,
+    val originContentHash: String? = null,
 ) {
     override fun toString() = "MessageStateDto([redacted])"
 }
@@ -107,10 +109,19 @@ internal fun CollaborationMessageState.toDto(): MessageStateDto {
             else -> null
         },
         (this as? CollaborationMessageState.Sent)?.eventId,
+        origin?.sender,
+        origin?.contentHash,
     )
 }
 
 internal fun MessageStateDto.toState(): CollaborationMessageState {
+    val origin =
+        if (originSender == null && originContentHash == null) null
+        else
+            CollaborationMessageOrigin(
+                requireNotNull(originSender),
+                requireNotNull(originContentHash),
+            )
     val result =
         if (phase == "QUEUED") CollaborationMessageState.Queued
         else {
@@ -123,13 +134,19 @@ internal fun MessageStateDto.toState(): CollaborationMessageState {
                 )
             when (phase) {
                 "STAGING" ->
-                    CollaborationMessageState.Staging(device, requireNotNull(before).toSet())
-                "STAGED" -> CollaborationMessageState.Staged(device, requireNotNull(transactionId))
+                    CollaborationMessageState.Staging(
+                        device,
+                        requireNotNull(before).toSet(),
+                        origin,
+                    )
+                "STAGED" ->
+                    CollaborationMessageState.Staged(device, requireNotNull(transactionId), origin)
                 "SENT" ->
                     CollaborationMessageState.Sent(
                         device,
                         requireNotNull(transactionId),
                         requireNotNull(eventId),
+                        origin,
                     )
                 else -> error("Unsupported message state")
             }

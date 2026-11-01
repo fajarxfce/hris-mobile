@@ -15,6 +15,7 @@ internal class AndroidCollaborationMessageQueues(
     private val owner: CollaborationOwner,
     private val deviceId: String,
     private val bootstrapId: String,
+    private val matrixSender: String,
     private val client: Client,
     private val lifetime: CoroutineScope,
     private val children: SdkChildResources,
@@ -82,6 +83,7 @@ internal class AndroidCollaborationMessageQueues(
                     AndroidCollaborationMessageQueueLease(
                         owner,
                         device,
+                        matrixSender,
                         source,
                         operations,
                         (acquired as AppResult.Success).value,

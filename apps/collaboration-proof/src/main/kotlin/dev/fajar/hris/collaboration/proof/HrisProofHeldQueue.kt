@@ -20,7 +20,9 @@ internal class HrisProofHeldQueue(
             val before = success(writer.snapshot())
             if (original == null) {
                 check(before.isEmpty())
-                success(writer.enqueue(logicalId, body))
+                success(
+                    writer.enqueue(logicalId, body, success(writer.prepareText(logicalId, body)))
+                )
                 transaction = success(writer.snapshot()).single()
             } else {
                 check(before == setOf(original))

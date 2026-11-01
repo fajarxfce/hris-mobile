@@ -17,10 +17,91 @@ abstract class CollaborationMessageStorageContract {
     protected abstract fun databaseOwner(): CollaborationListDatabaseOwner
 
     @Test
+    fun originalSenderAndContentIdentitySurviveEveryPhaseAndCannotBeRetargeted() =
+        withDatabase { f ->
+            f.insert()
+            val origin = CollaborationMessageOrigin("@fictional:example.test", "a".repeat(64))
+            assertEquals(
+                AppResult.Success(true),
+                f.repo.update(
+                    f.access,
+                    f.read(),
+                    CollaborationMessageState.Staging(f.device, emptySet(), origin),
+                ),
+            )
+            f.reopen(f.access.copy(sessionId = "renewed"))
+            assertEquals(origin, f.read().state.origin)
+            for (changed in
+                listOf(
+                    null,
+                    origin.copy(sender = "@other:example.test"),
+                    origin.copy(contentHash = "b".repeat(64)),
+                )) assertIs<AppResult.Failed>(
+                f.repo.update(
+                    f.access,
+                    f.read(),
+                    CollaborationMessageState.Staged(f.device, "original", changed),
+                )
+            )
+            assertEquals(
+                AppResult.Success(true),
+                f.repo.update(
+                    f.access,
+                    f.read(),
+                    CollaborationMessageState.Staged(f.device, "original", origin),
+                ),
+            )
+            f.reopen(f.access)
+            assertEquals(origin, f.read().state.origin)
+            assertIs<AppResult.Failed>(
+                f.repo.update(
+                    f.access,
+                    f.read(),
+                    CollaborationMessageState.Sent(f.device, "original", "\$event"),
+                )
+            )
+            assertEquals(
+                AppResult.Success(true),
+                f.repo.update(
+                    f.access,
+                    f.read(),
+                    CollaborationMessageState.Sent(f.device, "original", "\$event", origin),
+                ),
+            )
+            f.reopen(f.access)
+            assertEquals(origin, f.read().state.origin)
+        }
+
+    @Test
+    fun incompleteInvalidAndUnexpectedOriginFieldsCannotDecodeAsLegacyState() = withDatabase { f ->
+        val legacy = CollaborationMessageState.Staged(f.device, "legacy").toDto()
+        assertNull(legacy.toState().origin)
+        for (invalid in
+            listOf(
+                legacy.copy(originSender = "@fictional:example.test"),
+                legacy.copy(originContentHash = "a".repeat(64)),
+                legacy.copy(originSender = "bad", originContentHash = "a".repeat(64)),
+                legacy.copy(originSender = "@fictional:example.test", originContentHash = "bad"),
+                MessageStateDto(
+                    "QUEUED",
+                    originSender = "@fictional:example.test",
+                    originContentHash = "a".repeat(64),
+                ),
+            )) {
+            assertFailsWith<IllegalArgumentException> { invalid.toState() }
+        }
+    }
+
+    @Test
     fun maximumQueueSnapshotFitsTheAuthenticatedStateEnvelope() = withDatabase { f ->
         f.insert()
         val before = (1..128).map { it.toString().padStart(128, 'a') }.toSet()
-        val staged = CollaborationMessageState.Staging(f.device, before)
+        val staged =
+            CollaborationMessageState.Staging(
+                f.device,
+                before,
+                CollaborationMessageOrigin("@" + "a".repeat(249) + ":test", "a".repeat(64)),
+            )
         assertEquals(AppResult.Success(true), f.repo.update(f.access, f.read(), staged))
         f.reopen(f.access)
         assertEquals(staged, f.read().state)

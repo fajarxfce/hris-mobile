@@ -27,21 +27,27 @@ fun validCollaborationMessageDevice(device: CollaborationMessageDevice) =
         device.roomId.length in 2..255 &&
         device.roomId.none { it.isWhitespace() || it.isISOControl() }
 
+fun validCollaborationMessageOrigin(origin: CollaborationMessageOrigin) =
+    validCollaborationHistorySender(origin.sender) &&
+        origin.contentHash.length == 64 &&
+        origin.contentHash.all { it in '0'..'9' || it in 'a'..'f' }
+
 fun validCollaborationMessageState(state: CollaborationMessageState): Boolean =
-    when (state) {
-        CollaborationMessageState.Queued -> true
-        is CollaborationMessageState.Staging ->
-            validCollaborationMessageDevice(state.device) &&
-                state.before.size <= 128 &&
-                state.before.all(::validCollaborationTransactionId)
-        is CollaborationMessageState.Staged ->
-            validCollaborationMessageDevice(state.device) &&
-                validCollaborationTransactionId(state.transactionId)
-        is CollaborationMessageState.Sent ->
-            validCollaborationMessageDevice(state.device) &&
-                validCollaborationTransactionId(state.transactionId) &&
-                validCollaborationEventId(state.eventId)
-    }
+    (state.origin == null || validCollaborationMessageOrigin(requireNotNull(state.origin))) &&
+        when (state) {
+            CollaborationMessageState.Queued -> true
+            is CollaborationMessageState.Staging ->
+                validCollaborationMessageDevice(state.device) &&
+                    state.before.size <= 128 &&
+                    state.before.all(::validCollaborationTransactionId)
+            is CollaborationMessageState.Staged ->
+                validCollaborationMessageDevice(state.device) &&
+                    validCollaborationTransactionId(state.transactionId)
+            is CollaborationMessageState.Sent ->
+                validCollaborationMessageDevice(state.device) &&
+                    validCollaborationTransactionId(state.transactionId) &&
+                    validCollaborationEventId(state.eventId)
+        }
 
 /** Native uncertainty and a durable transaction mapping can never be reset or retargeted. */
 fun collaborationMessageTransition(
@@ -54,10 +60,12 @@ fun collaborationMessageTransition(
             CollaborationMessageState.Queued -> next is CollaborationMessageState.Staging
             is CollaborationMessageState.Staging ->
                 next is CollaborationMessageState.Staged &&
+                    next.origin == previous.origin &&
                     next.device == previous.device &&
                     next.transactionId !in previous.before
             is CollaborationMessageState.Staged ->
                 next is CollaborationMessageState.Sent &&
+                    next.origin == previous.origin &&
                     next.device == previous.device &&
                     next.transactionId == previous.transactionId
             is CollaborationMessageState.Sent -> false

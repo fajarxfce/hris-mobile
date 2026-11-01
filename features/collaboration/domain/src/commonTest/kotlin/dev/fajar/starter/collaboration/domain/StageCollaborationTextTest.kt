@@ -11,6 +11,64 @@ import kotlinx.coroutines.test.runTest
 
 class StageCollaborationTextTest {
     @Test
+    fun preparationIsRetainedBeforeEnqueueAndSurvivesMappingRecovery() = runTest {
+        val f = StageFixture()
+        f.prepare()
+        assertIs<AppResult.Success<*>>(f.stage())
+        assertEquals(f.origin, f.record.state.origin)
+        assertEquals(1, f.preparations)
+        assertEquals(1, f.enqueues)
+        assertIs<AppResult.Success<*>>(f.stage())
+        assertEquals(1, f.preparations)
+        assertEquals(1, f.enqueues)
+    }
+
+    @Test
+    fun invalidOrFailedPreparationNeverWritesAnAttemptOrEnqueues() = runTest {
+        for (scenario in 0..2) {
+            val f = StageFixture()
+            f.prepare()
+            when (scenario) {
+                0 -> f.origin = f.origin.copy(sender = "invalid")
+                1 -> f.origin = f.origin.copy(contentHash = "bad")
+                else -> f.prepareFailure = f.base.storage
+            }
+            assertIs<AppResult.Failed>(f.stage())
+            assertEquals(CollaborationMessageState.Queued, f.record.state)
+            assertEquals(0, f.enqueues)
+            assertEquals(1, f.closes)
+        }
+    }
+
+    @Test
+    fun ownerReplacementWhilePreparingCannotPublishNativeWork() = runTest {
+        val f = StageFixture()
+        f.prepare()
+        f.afterPrepare = { f.base.setup.session = null }
+        assertIs<AppResult.Failed>(f.stage())
+        assertEquals(CollaborationMessageState.Queued, f.record.state)
+        assertEquals(0, f.enqueues)
+        assertEquals(1, f.closes)
+    }
+
+    @Test
+    fun cancellationWhilePreparingReleasesTheWriterWithoutStaging() = runTest {
+        val f = StageFixture()
+        f.prepare()
+        val entered = CompletableDeferred<Unit>()
+        f.afterPrepare = {
+            entered.complete(Unit)
+            awaitCancellation()
+        }
+        val task = launch { f.stage() }
+        entered.await()
+        task.cancelAndJoin()
+        assertEquals(CollaborationMessageState.Queued, f.record.state)
+        assertEquals(0, f.enqueues)
+        assertEquals(1, f.closes)
+    }
+
+    @Test
     fun failedSnapshotIsNeverInterpretedAsAnEmptyQueue() = runTest {
         val f = StageFixture()
         f.prepare()
@@ -72,7 +130,7 @@ class StageCollaborationTextTest {
         val f = StageFixture()
         f.prepare()
         val staged = assertIs<AppResult.Success<CollaborationMessageRecord>>(f.stage()).value
-        assertEquals(CollaborationMessageState.Staged(f.device, "original"), staged.state)
+        assertEquals(CollaborationMessageState.Staged(f.device, "original", f.origin), staged.state)
         assertEquals(listOf("save-staging", "enqueue", "save-staged", "close"), f.events)
         assertEquals(AppResult.Success(staged), f.stage())
         assertEquals(1, f.enqueues)
@@ -248,6 +306,10 @@ class StageCollaborationTextTest {
 }
 
 private class StageFixture {
+    var origin = CollaborationMessageOrigin("@fixture:example.test", "a".repeat(64))
+    var prepareFailure: Failure? = null
+    var preparations = 0
+    var afterPrepare: suspend () -> Unit = {}
     val base = MessageIntentFixture()
     val control = ConversationCommandFixture()
     val device =
@@ -378,11 +440,27 @@ private class StageFixture {
                             snapshotFailure?.let { AppResult.Failed(it) }
                                 ?: AppResult.Success(nativeIds.toSet())
 
+                        override suspend fun prepareText(
+                            logicalId: String,
+                            text: String,
+                        ): AppResult<CollaborationMessageOrigin> {
+                            assertEquals(record.intent.id, logicalId)
+                            assertEquals(record.intent.text, text)
+                            preparations++
+                            afterPrepare()
+                            return prepareFailure?.let { AppResult.Failed(it) }
+                                ?: AppResult.Success(origin)
+                        }
+
                         override suspend fun enqueue(
                             logicalId: String,
                             text: String,
+                            origin: CollaborationMessageOrigin,
                         ): AppResult<Unit> {
-                            assertIs<CollaborationMessageState.Staging>(record.state)
+                            assertEquals(
+                                origin,
+                                assertIs<CollaborationMessageState.Staging>(record.state).origin,
+                            )
                             assertEquals(record.intent.id, logicalId)
                             assertEquals(record.intent.text, text)
                             enqueues++

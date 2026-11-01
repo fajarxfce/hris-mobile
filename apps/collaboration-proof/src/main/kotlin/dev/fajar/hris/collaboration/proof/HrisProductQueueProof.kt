@@ -12,17 +12,21 @@ import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.policies.recoverCollaborationQueue
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationMessageQueueLease
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationMessageRepository
+import dev.fajar.starter.collaboration.domain.repositories.CollaborationReceiptRepository
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationRuntimeRepository
 import dev.fajar.starter.collaboration.domain.usecases.AcquireCollaborationHistory
 import dev.fajar.starter.collaboration.domain.usecases.AcquireCollaborationProviderHistory
 import dev.fajar.starter.collaboration.domain.usecases.DeliverCollaborationMessages
 import dev.fajar.starter.collaboration.domain.usecases.ReconcileCollaborationHistoryReferences
 import dev.fajar.starter.collaboration.domain.usecases.ReconcileCollaborationMessages
+import dev.fajar.starter.collaboration.domain.usecases.RecoverCollaborationMessageReceipts
+import dev.fajar.starter.collaboration.domain.usecases.StageCollaborationText
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.database.createAppDatabase
 import dev.fajar.starter.identity.domain.policies.accountStorageKey
 import dev.fajar.starter.securestorage.*
 import kotlin.time.Clock
+import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.flow.first
 
 /** Fictional proof: deliberately die after native commit and before publishing its app mapping. */
@@ -77,9 +81,10 @@ internal class HrisProductQueueProof(
         val queued = requireNotNull(success(messages.get(access, logicalId)))
         val before = success(queue.snapshot())
         check(before.isEmpty())
-        val attempt = CollaborationMessageState.Staging(queue.device, before)
+        val origin = success(queue.prepareText(logicalId, text))
+        val attempt = CollaborationMessageState.Staging(queue.device, before, origin)
         check(success(messages.update(access, queued, attempt)))
-        success(queue.enqueue(logicalId, text))
+        success(queue.enqueue(logicalId, text, origin))
         val recovered = recoverCollaborationQueue(attempt, queue.device, success(queue.snapshot()))
         check(recovered is CollaborationQueueRecovery.Found)
         // Keep Staging durable, with no native transaction mapping. The driver now kills us.
@@ -99,7 +104,8 @@ internal class HrisProductQueueProof(
         check(record.revision == 1L)
         val recovered = recoverCollaborationQueue(attempt, queue.device, success(queue.snapshot()))
         check(recovered == CollaborationQueueRecovery.Found(expectedTransaction))
-        val staged = CollaborationMessageState.Staged(queue.device, expectedTransaction)
+        val staged =
+            CollaborationMessageState.Staged(queue.device, expectedTransaction, attempt.origin)
         check(success(messages.update(access, record, staged)))
         check(requireNotNull(success(messages.get(access, logicalId))).state == staged)
         success(queue.close())
@@ -166,16 +172,168 @@ internal class HrisProductQueueProof(
         return recoverReceipt(app, original, expectedTransaction)
     }
 
+    suspend fun crashAfterAcknowledgement(
+        logicalId: String,
+        text: String,
+        acknowledged: suspend (String) -> Unit,
+    ) {
+        val app = prepareAckApplication()
+        val intent =
+            CollaborationMessageIntent(
+                logicalId,
+                access.messageOwner(),
+                conversationId,
+                Clock.System.now(),
+                text,
+            )
+        check(success(messages.insert(access, intent)) == CollaborationMessageInsertion.STORED)
+        val stage =
+            StageCollaborationText(
+                messages,
+                listRepository(),
+                app.conversations,
+                app.setup,
+                HrisProofRuntimeAccess(runtime),
+                app.sessions,
+                app.workspaces,
+                app.server,
+                app.build,
+                app.clock,
+            )
+        val record = success(stage(app.workspaceId, runtime.deviceId, logicalId))
+        val state = record.state as CollaborationMessageState.Staged
+        check(requireNotNull(state.origin).sender == runtime.nativeClient.userId())
+        val withheld =
+            object : CollaborationReceiptRepository by receipts {
+                override suspend fun append(
+                    access: CollaborationLocalAccess,
+                    conversationId: String,
+                    receipts: List<CollaborationMessageReceipt>,
+                ): AppResult<Boolean> {
+                    val receipt = receipts.single()
+                    check(
+                        receipt.intent == intent &&
+                            receipt.transactionId == state.transactionId &&
+                            receipt.eventIds.size == 1
+                    )
+                    check(
+                        success(this@HrisProductQueueProof.receipts.read(access, conversationId))
+                            .none { it.intent.id == logicalId }
+                    )
+                    check(success(messages.get(access, logicalId)) == record)
+                    // No ACK event ID or body is written to the checkpoint. The driver kills this
+                    // process while this receipt write is suspended under the sender's bounded
+                    // wait.
+                    acknowledged(state.transactionId)
+                    awaitCancellation()
+                }
+            }
+        val sender =
+            DeliverCollaborationMessages(
+                messages,
+                withheld,
+                listRepository(),
+                app.conversations,
+                app.setup,
+                HrisProofRuntimeAccess(runtime),
+                app.sessions,
+                app.workspaces,
+                app.server,
+                app.build,
+                app.clock,
+            )
+        val result = sender(app.workspaceId, runtime.deviceId, conversationId)
+        if (result is AppResult.Failed) throw HrisProofFailure(result.failure)
+        error("ACK crash fixture was not interrupted")
+    }
+
+    suspend fun recoverAcknowledgement(
+        logicalId: String,
+        text: String,
+        expectedTransaction: String,
+    ): ProofQueuedMessageResult {
+        val app = prepareAckApplication()
+        val original = requireNotNull(success(messages.get(access, logicalId)))
+        val staged = original.state as CollaborationMessageState.Staged
+        check(
+            staged.transactionId == expectedTransaction &&
+                staged.origin != null &&
+                original.intent.text == text
+        )
+        check(success(receipts.read(access, conversationId)).none { it.intent.id == logicalId })
+        val queue = success(runtime.acquireMessageQueue(roomId))
+        try {
+            check(success(queue.snapshot()).isEmpty())
+        } finally {
+            success(queue.close())
+        }
+        val acquire =
+            AcquireCollaborationHistory(
+                EncryptedCollaborationHistoryRepository(
+                    database.replicas,
+                    AesGcmContentCipher(),
+                    historyKey,
+                ),
+                listRepository(),
+                app.conversations,
+                app.setup,
+                HrisProofRuntimeAccess(runtime),
+                app.sessions,
+                app.workspaces,
+                app.server,
+                app.build,
+                app.clock,
+            )
+        check(
+            success(acquire(app.workspaceId, runtime.deviceId, conversationId)).acquiredEvents >= 1
+        )
+        val recovery =
+            RecoverCollaborationMessageReceipts(
+                EncryptedCollaborationHistoryRepository(
+                    database.replicas,
+                    AesGcmContentCipher(),
+                    historyKey,
+                ),
+                messages,
+                receipts,
+                listRepository(),
+                app.sessions,
+                app.workspaces,
+                app.server,
+                app.build,
+                app.clock,
+            )
+        check(success(recovery(app.workspaceId, conversationId)) == 1)
+        check(success(recovery(app.workspaceId, conversationId)) == 0)
+        check(success(messages.get(access, logicalId)) == original)
+        return recoverReceipt(app, original, expectedTransaction).also {
+            check(
+                requireNotNull(success(messages.get(access, logicalId))).state.origin ==
+                    staged.origin
+            )
+        }
+    }
+
+    private suspend fun prepareAckApplication(): HrisProofApplicationAccess {
+        check(writer == null && application == null)
+        database.accounts.activate(
+            access.sessionId,
+            accountStorageKey(access.audience, access.accountId),
+        )
+        return HrisProofApplicationAccess(runtime.owner, hrisAccessToken).also { application = it }
+    }
+
     private suspend fun recoverReceipt(
         app: HrisProofApplicationAccess,
         original: CollaborationMessageRecord,
         expectedTransaction: String,
     ): ProofQueuedMessageResult {
-        val journal = success(receipts.read(access, conversationId)).single()
+        val before = success(receipts.read(access, conversationId))
+        val journal = before.single { it.intent.id == original.intent.id }
         check(journal.intent == original.intent && journal.transactionId == expectedTransaction)
         check(journal.eventIds.size == 1)
         reopenDatabase()
-        check(success(receipts.read(access, conversationId)) == listOf(journal))
+        check(success(receipts.read(access, conversationId)) == before)
         check(success(messages.get(access, original.intent.id)) == original)
         val reconcile =
             ReconcileCollaborationMessages(

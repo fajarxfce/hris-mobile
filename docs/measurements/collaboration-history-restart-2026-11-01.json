@@ -588,5 +588,38 @@
     "testCaseSeconds": 33.788,
     "testSuiteSeconds": 71.175,
     "scope": "Validates explicit provider-history restart at 388d0534. SDK capacity reopening has later separate evidence."
+  },
+  "hostedControlReports": {
+    "run": "https://github.com/fajarxfce/hris-mobile/actions/runs/41290902945",
+    "commit": "388d0534cbaa9c11c80acc1a7794cc7ba5eb61f1",
+    "reportedConclusion": "success",
+    "tests": {
+      "iosSimulatorArm64Test": {
+        "suites": 41,
+        "tests": 358,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "desktopTest": {
+        "suites": 52,
+        "tests": 451,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "wasmJsBrowserTest": {
+        "suites": 48,
+        "tests": 427,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "immutableSourceHashesMatched": 266,
+    "sourceManifestUploaded": false,
+    "jobStepEvidenceAvailable": false,
+    "xcodeBuildEvidenceAvailable": false,
+    "scope": "Downloaded common control test reports at the explicit provider-restart commit. API returned no job/step records and the run log was empty; no independent Xcode build claim is made from this audit."
   }
 }

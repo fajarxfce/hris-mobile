@@ -204,9 +204,16 @@ internal class CollaborationDeliveryFixture {
                         override suspend fun snapshot(): AppResult<Set<String>> =
                             error("Native resume validates its own complete snapshot")
 
+                        override suspend fun prepareText(
+                            logicalId: String,
+                            text: String,
+                        ): AppResult<CollaborationMessageOrigin> =
+                            error("Delivery never prepares content")
+
                         override suspend fun enqueue(
                             logicalId: String,
                             text: String,
+                            origin: CollaborationMessageOrigin,
                         ): AppResult<Unit> = error("Delivery never replaces native work")
 
                         override suspend fun resume(

@@ -13,6 +13,47 @@ import org.matrix.rustcomponents.sdk.*
 @OptIn(ExperimentalCoroutinesApi::class)
 class AndroidCollaborationWriterExclusionTest {
     @Test
+    fun preparedContentBindsTheOwnedSenderAndCannotBeSubstitutedBeforeEnqueue() = runTest {
+        val f = WriterExclusionFixture(backgroundScope)
+        val writer =
+            assertIs<AppResult.Success<CollaborationMessageQueueLease>>(
+                    f.queues.acquire("!room:test")
+                )
+                .value
+        val id = "00000000-0000-4000-8000-000000000004"
+        val text = " literal **text** 🙂 "
+        val origin =
+            assertIs<
+                    AppResult.Success<
+                        dev.fajar.starter.collaboration.domain.entities.CollaborationMessageOrigin
+                    >
+                >(
+                    writer.prepareText(id, text)
+                )
+                .value
+        assertEquals("@fixture:example.test", origin.sender)
+        val before = f.room.calls.toList()
+        for (changed in
+            listOf(
+                origin.copy(sender = "@other:example.test"),
+                origin.copy(contentHash = "b".repeat(64)),
+            )) {
+            assertEquals(
+                "client.collaboration_message_content_changed",
+                assertIs<AppResult.Failed>(writer.enqueue(id, text, changed)).failure.code,
+            )
+        }
+        assertEquals(
+            "client.collaboration_message_content_changed",
+            assertIs<AppResult.Failed>(writer.enqueue(id, "different", origin)).failure.code,
+        )
+        assertEquals(before, f.room.calls)
+        assertIs<AppResult.Success<*>>(writer.close())
+        assertIs<AppResult.Failed>(writer.prepareText(id, text))
+        assertIs<AppResult.Success<*>>(f.children.close())
+    }
+
+    @Test
     fun anActiveWriterBlocksReopeningUntilItsOwnerClosesIt() = runTest {
         val f = WriterExclusionFixture(backgroundScope)
         val writer =
@@ -129,6 +170,7 @@ private class WriterExclusionFixture(lifetime: CoroutineScope) {
             ),
             "00000000-0000-4000-8000-000000000002",
             "00000000-0000-4000-8000-000000000003",
+            "@fixture:example.test",
             object : Client(NoHandle) {
                 override fun getRoom(roomId: String): Room = room
             },

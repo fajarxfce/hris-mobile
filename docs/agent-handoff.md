@@ -2,6 +2,59 @@
 
 ## Active collaboration implementation — 1 November 2026
 
+**ACK-before-journal recovery now passes actual Android/HRIS process death.**
+[Evidence](measurements/collaboration-original-receipts-2026-11-01.json) binds
+**279 Mobile / 33 Platform source hashes** to run
+`39775a6b851040e19d1f4c97059025c8`: **41.453s case / 62.142s native suite /
+91s Gradle**, cleanup true. The driver verifies three different processes across
+staging and ACK deaths. The final process recovers the missing receipt from exact
+original history, reopens the database and projects Sent once. The ACK checkpoint
+contains no event ID or body. The server verifies exactly **three encrypted sends**
+for the initial message, reply and separate ACK message; held-room sends remain zero.
+Live admission is **22/22/22 device/conversation/room reads, zero failures**.
+`ackBeforeJournalRecovered`, driver-owned `processRestartedAfterAck` and the two
+admitted latest-history boundaries are mandatory evidence.
+
+New staging persists trusted sender and canonical full-content hash before enqueue.
+The native writer verifies that identity before mutation; Staging/Staged/Sent keep
+it immutable. Explicit plain text replaces the SDK Markdown constructor: Markdown,
+HTML, emoji and newlines remain literal content, with empty mentions and the logical
+ID included in the hash. Old envelopes remain readable without invented identity.
+`RecoverCollaborationMessageReceipts` is a local-only, owned/gated operation: up to
+128 command candidates, at most 32 appended receipts, exact sender/logical ID/hash,
+all event aliases and confirmed redactions. Missing originals stay pending; conflicts
+reject the batch before append. Lost writes and late denial retain journal facts.
+It never fetches history, starts SDK delivery or projects commands implicitly.
+
+Focused domain/storage/host/DI checks pass in **132s**, followed by proof build and
+quality in **55s**, Platform fixture/quality in **40s**, and **40 Python cases**.
+Full root/browser/Android/Wasm/proof/lint passes in **235s**: **2,486 desktop /
+165 Android host / 262 domain browser / 198 data browser**, zero failures/errors/
+skips and zero lint errors. All attempts for this increment pass first time.
+Dev APK **`1eb5a9a4`** is built, not installed; actual proof uses **`8f066ba0`**.
+Emulator stopped; no phone or live change. Starter remains `36116b2`; this increment
+is HRIS-specific and has no generic port.
+
+**Next: safe command/journal retirement, Chat UI, then all P0–P8. None of the 54
+groups is accepted.** Retirement must free the shared 128-command capacity while
+preserving complete durable identity and retry deduplication; deleting Sent rows
+alone would let an old logical UUID enqueue again. Account-owned raw storage must
+atomically fence insertion against retained completion evidence. Command and receipt
+stores currently have separate transactions. Preserve uncertain legacy work and all
+aliases; validate interrupted retirement and lost responses before enabling cleanup.
+Then integrate scheduling/UI, Apple/web owned adapters and interoperability, backup,
+rich messages and all call/meeting phases. Physical iPhone testing is waived; Apple
+implementation remains required. Continue the authorized long run, with atomic
+commits pushed and this handoff updated; do not treat this checkpoint as completion.
+
+Predecessor control report audit `41290902945` at `388d0534` reports success and
+contains **451 desktop / 427 browser / 358 iOS simulator** passing cases; 266
+immutable source hashes match. The API returned no job/step records and an empty
+run log, so this audit does not independently claim an Xcode host build. See the
+explicit limitations in the restart measurement's `hostedControlReports`.
+
+### Previous SDK reopening checkpoint
+
 **Coordinated SDK reopening now passes actual Android/HRIS recovery.**
 [Evidence](measurements/collaboration-history-reopening-2026-11-01.json) records
 run **`e395fab292fd4d088cae138b4aaebd27`**, **35.536s case / 56.375s native suite /

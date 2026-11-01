@@ -69,6 +69,7 @@ internal constructor(
             owner,
             deviceId,
             installedOperationId,
+            record.matrixUserId,
             nativeClient,
             lifetime,
             children,

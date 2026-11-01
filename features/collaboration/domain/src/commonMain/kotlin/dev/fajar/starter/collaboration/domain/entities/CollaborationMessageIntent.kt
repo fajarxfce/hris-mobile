@@ -33,17 +33,27 @@ data class CollaborationMessageDevice(
 }
 
 sealed interface CollaborationMessageState {
+    /** Null only for previously stored commands that lack a pre-enqueue content identity. */
+    val origin: CollaborationMessageOrigin?
+        get() = null
+
     data object Queued : CollaborationMessageState
 
     /** Written before enqueue while SDK delivery and the exclusive writer are paused. */
-    data class Staging(val device: CollaborationMessageDevice, val before: Set<String>) :
-        CollaborationMessageState {
+    data class Staging(
+        val device: CollaborationMessageDevice,
+        val before: Set<String>,
+        override val origin: CollaborationMessageOrigin? = null,
+    ) : CollaborationMessageState {
         override fun toString() = "Staging([redacted])"
     }
 
     /** The mapping must be durable before the SDK can deliver this transaction. */
-    data class Staged(val device: CollaborationMessageDevice, val transactionId: String) :
-        CollaborationMessageState {
+    data class Staged(
+        val device: CollaborationMessageDevice,
+        val transactionId: String,
+        override val origin: CollaborationMessageOrigin? = null,
+    ) : CollaborationMessageState {
         override fun toString() = "Staged([redacted])"
     }
 
@@ -51,6 +61,7 @@ sealed interface CollaborationMessageState {
         val device: CollaborationMessageDevice,
         val transactionId: String,
         val eventId: String,
+        override val origin: CollaborationMessageOrigin? = null,
     ) : CollaborationMessageState {
         override fun toString() = "Sent([redacted])"
     }
