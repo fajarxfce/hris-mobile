@@ -28,6 +28,7 @@ class EditCollaborationDraft(
         expected: CollaborationDraft?,
         operationRevision: String,
         text: String,
+        expectedAccess: CollaborationLocalAccess? = null,
     ): AppResult<CollaborationDraft> {
         if (
             !validCollaborationMessageId(conversationId) ||
@@ -43,6 +44,8 @@ class EditCollaborationDraft(
         val captured = sessions.captureMessageAccess(workspaceId, workspaces, server, build, clock)
         if (captured is AppResult.Failed) return captured
         val access = (captured as AppResult.Success).value
+        if (expectedAccess != null && access != expectedAccess)
+            return collaborationSetupFailure("client.session_changed", FailureKind.Unauthorized)
         guard(workspaceId, access).let { if (it is AppResult.Failed) return it }
         val summary = lists.get(access, conversationId)
         guard(workspaceId, access).let { if (it is AppResult.Failed) return it }

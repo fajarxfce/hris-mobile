@@ -13,5 +13,6 @@ fun validCollaborationDraft(draft: CollaborationDraft): Boolean =
         validCollaborationMessageId(draft.revision) &&
         validCollaborationDraftText(draft.text) &&
         draft.savedAt.toEpochMilliseconds() in 0 until 253_402_300_800_000L &&
+        (!draft.reviewRequired || draft.submissionId != null) &&
         (draft.submissionId == null ||
             (validCollaborationMessageId(draft.submissionId) && validCollaborationText(draft.text)))

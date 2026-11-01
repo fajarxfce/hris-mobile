@@ -13,6 +13,7 @@ import kotlinx.coroutines.sync.withLock
 
 /** A bounded platform entry point. The encrypted command store, not this worker, owns intent. */
 class CollaborationDeliveryWorker(
+    private val recoverDrafts: CollaborationDraftRecovery,
     private val discover: ReadCollaborationDeliveryWork,
     private val advance: AdvanceCollaborationDelivery,
     private val observeAccess: ObserveCollaborationAccess,
@@ -42,10 +43,12 @@ class CollaborationDeliveryWorker(
         }
 
     private suspend fun process(): SyncResult {
+        val draftResult = recoverDrafts()
+        currentCoroutineContext().ensureActive()
         val found = discover()
         currentCoroutineContext().ensureActive()
         if (found is AppResult.Failed) return syncFailure(found.failure)
-        val work = (found as AppResult.Success).value ?: return SyncResult.Complete
+        val work = (found as AppResult.Success).value ?: return draftResult
         val setup = loadSetup(work.workspaceId)
         currentCoroutineContext().ensureActive()
         if (setup is AppResult.Failed) return syncFailure(setup.failure)
@@ -88,7 +91,7 @@ class CollaborationDeliveryWorker(
         val remaining = discover()
         currentCoroutineContext().ensureActive()
         if (remaining is AppResult.Failed) return syncFailure(remaining.failure)
-        val pending = (remaining as AppResult.Success).value ?: return SyncResult.Complete
+        val pending = (remaining as AppResult.Success).value ?: return draftResult
         if (retry != null) return SyncResult.Retry(retry)
         // A blocked room must not stop bounded batches or newly queued independent work.
         if (pending.conversationIds.any { it !in blockedRooms }) return SyncResult.Retry()

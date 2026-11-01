@@ -384,7 +384,7 @@ class ChatThreadViewModel(
     }
 
     private suspend fun observeComposer(owned: CollaborationLocalAccess) {
-        observeDraft(workspaceId, conversationId).collect { result ->
+        observeDraft(workspaceId, conversationId, owned).collect { result ->
             currentCoroutineContext().ensureActive()
             if (access != owned) return@collect
             when (result) {
@@ -464,6 +464,7 @@ class ChatThreadViewModel(
                             mutation.expected,
                             mutation.revision,
                             mutation.text,
+                            owned,
                         )
                     ensureActive()
                     if (access != owned) return@launch
@@ -521,7 +522,12 @@ class ChatThreadViewModel(
     }
 
     private fun onDraftDialogConfirmed(event: ChatThreadEvent.DraftDialogConfirmed) {
-        if (!visible || state.value.saving || state.value.draftSaving) return
+        if (
+            !visible ||
+                state.value.saving ||
+                (state.value.draftSaving && state.value.draftDialog != ChatDraftDialog.LEAVE)
+        )
+            return
         when (state.value.draftDialog) {
             ChatDraftDialog.LEAVE -> {
                 val effect = departureEffect ?: return
@@ -537,7 +543,7 @@ class ChatThreadViewModel(
                         updateState {
                             it.copy(draftSaving = true, saving = true, draftDialog = null)
                         }
-                        val read = observeDraft(workspaceId, conversationId).first()
+                        val read = observeDraft(workspaceId, conversationId, owned).first()
                         ensureActive()
                         if (access != owned) return@launch
                         when (read) {
@@ -572,7 +578,7 @@ class ChatThreadViewModel(
                 updateState { it.copy(leaving = true) }
                 val saved =
                     if (state.value.submissionPending || !state.value.draftReady) true
-                    else flushDraft()
+                    else withTimeoutOrNull(1_500) { flushDraft() } ?: false
                 ensureActive()
                 if (access != owned) return@launch
                 updateState { it.copy(leaving = false) }
@@ -624,7 +630,7 @@ class ChatThreadViewModel(
                 updateState { it.copy(submissionPending = true) }
                 val frozen =
                     if (expected.submissionId != null) AppResult.Success(expected)
-                    else prepareDraftSend(workspaceId, expected)
+                    else prepareDraftSend(workspaceId, expected, owned)
                 ensureActive()
                 if (access != owned) return@launch
                 if (frozen is AppResult.Failed) {
@@ -640,6 +646,7 @@ class ChatThreadViewModel(
                         conversationId,
                         requireNotNull(draft.submissionId),
                         draft.text,
+                        owned,
                     )
                 ensureActive()
                 if (access != owned) return@launch
@@ -649,7 +656,7 @@ class ChatThreadViewModel(
                     else updateState { it.copy(saving = false, failure = result.failure) }
                     return@launch
                 }
-                val confirmed = confirmDraftSend(workspaceId, draft)
+                val confirmed = confirmDraftSend(workspaceId, draft, owned)
                 ensureActive()
                 if (access != owned) return@launch
                 when (confirmed) {

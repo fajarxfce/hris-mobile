@@ -250,6 +250,55 @@ abstract class CollaborationDraftStorageContract {
     }
 
     @Test
+    fun unrelatedAutosaveDuringReadReturnsRetryableConflictWithoutPublishingAStalePage() =
+        withDatabase { f ->
+            val original = f.draft().copy(submissionId = historyId(980))
+            assertEquals(AppResult.Success(true), f.drafts().replace(f.access, null, original))
+            for (indexed in listOf(false, true)) {
+                var changed = false
+                val store =
+                    object : ReplicaStore by f.database.replicas {
+                        override suspend fun checkpoint(
+                            scope: ReplicaScope,
+                            partition: String,
+                        ): ReplicaCheckpoint? {
+                            if (!changed) {
+                                changed = true
+                                val unrelated =
+                                    f.draft()
+                                        .copy(
+                                            conversationId = historyId(if (indexed) 981 else 982),
+                                            text =
+                                                "An unrelated editor saved while this page was decrypted",
+                                        )
+                                assertEquals(
+                                    AppResult.Success(true),
+                                    f.drafts().replace(f.access, null, unrelated),
+                                )
+                            }
+                            return f.database.replicas.checkpoint(scope, partition)
+                        }
+                    }
+                val read =
+                    if (indexed) f.drafts(store).prepared(f.access)
+                    else f.drafts(store).get(f.access, f.conversation)
+                val failure = assertIs<AppResult.Failed>(read).failure
+                assertEquals(FailureKind.Conflict, failure.kind)
+                assertEquals("client.collaboration_draft_changed", failure.code)
+                assertTrue(changed)
+                assertEquals(AppResult.Success(original), f.drafts().get(f.access, f.conversation))
+                assertEquals(
+                    listOf(original),
+                    assertIs<AppResult.Success<CollaborationPreparedDraftPage>>(
+                            f.drafts().prepared(f.access)
+                        )
+                        .value
+                        .drafts,
+                )
+            }
+        }
+
+    @Test
     fun cancellingAPendingReadClosesTheOwnedSubscription() = withDatabase { f ->
         val entered = CompletableDeferred<Unit>()
         val stopped = CompletableDeferred<Unit>()
@@ -456,7 +505,7 @@ abstract class CollaborationDraftStorageContract {
         val editing = f.draft()
         assertEquals(AppResult.Success(true), f.drafts().replace(f.access, null, editing))
         var commits = 0
-        var queries = 0
+        var queryCalls = 0
         val store =
             object : ReplicaStore by f.database.replicas {
                 override suspend fun commit(
@@ -473,9 +522,9 @@ abstract class CollaborationDraftStorageContract {
                 override fun observeQueries(
                     scope: ReplicaScope,
                     partition: String,
-                    query: List<ReplicaQuery>,
+                    queries: List<ReplicaQuery>,
                 ): Flow<ReplicaQueryPage> {
-                    queries++
+                    queryCalls++
                     error("Invalid input must be rejected first")
                 }
             }
@@ -494,7 +543,7 @@ abstract class CollaborationDraftStorageContract {
             repository.prepared(f.access, limit = limit)
         )
         assertIs<AppResult.Failed>(repository.prepared(f.access, afterConversationId = "bad"))
-        assertEquals(0, queries)
+        assertEquals(0, queryCalls)
     }
 
     @Test
@@ -523,6 +572,72 @@ abstract class CollaborationDraftStorageContract {
             }
         assertIs<AppResult.Failed>(f.drafts(store).prepared(f.access))
     }
+
+    @Test
+    fun reviewHoldRetainsOriginalAcrossReopenButLeavesTheAutomaticIndex() = withDatabase { f ->
+        val frozen = f.draft(submissionId = historyId(60_000))
+        assertEquals(AppResult.Success(true), f.drafts().replace(f.access, null, frozen))
+        val held = frozen.copy(revision = historyId(60_001), reviewRequired = true)
+        assertEquals(AppResult.Success(true), f.drafts().replace(f.access, frozen, held))
+        f.reopen()
+        assertEquals(AppResult.Success(held), f.drafts().get(f.access, f.conversation))
+        assertEquals(
+            AppResult.Success(CollaborationPreparedDraftPage(emptyList(), null)),
+            f.drafts().prepared(f.access),
+        )
+        assertIs<AppResult.Failed>(
+            f.drafts()
+                .replace(
+                    f.access,
+                    held,
+                    held.copy(revision = historyId(60_002), submissionId = null),
+                )
+        )
+        assertEquals(AppResult.Success(held), f.drafts().get(f.access, f.conversation))
+    }
+
+    @Test
+    fun recoveryCursorReopensIndependentlyAndRejectsCompetingGenerationOrLostKey() =
+        withDatabase { f ->
+            fun repository() =
+                dev.fajar.starter.collaboration.data.repositories
+                    .EncryptedCollaborationDraftRecoveryCursorRepository(
+                        f.database.replicas,
+                        f.cipher,
+                        f.keys,
+                    )
+            assertEquals(AppResult.Success(null), repository().current(f.access))
+            val first =
+                assertIs<AppResult.Success<CollaborationDraftRecoveryCursor?>>(
+                        repository().advance(f.access, null, historyId(61_000))
+                    )
+                    .value!!
+            f.reopen()
+            assertEquals(AppResult.Success(first), repository().current(f.access))
+            val second =
+                assertIs<AppResult.Success<CollaborationDraftRecoveryCursor?>>(
+                        repository().advance(f.access, first, historyId(61_001))
+                    )
+                    .value!!
+            assertEquals(
+                AppResult.Success(null),
+                repository().advance(f.access, first, historyId(61_002)),
+            )
+            assertNotEquals(first.generation, second.generation)
+            val delivery =
+                dev.fajar.starter.collaboration.data.repositories
+                    .EncryptedCollaborationDeliveryCursorRepository(
+                        f.database.replicas,
+                        f.cipher,
+                        f.keys,
+                    )
+            assertEquals(AppResult.Success(null), delivery.current(f.access))
+            f.keys.write(null)
+            val other = f.access.copy(sessionId = "other-recovery", accountId = historyId(61_003))
+            f.activate(other)
+            assertIs<AppResult.Failed>(repository().advance(other, null, historyId(61_004)))
+            assertNull(f.keys.read())
+        }
 
     private fun CollaborationHistoryFixture.drafts(store: ReplicaStore = database.replicas) =
         EncryptedCollaborationDraftRepository(store, cipher, keys)

@@ -1,5 +1,39 @@
 # Agent continuation — HRIS Mobile
 
+## Prepared-draft recovery integrated and validated — 1 November 2026
+
+The application delivery worker now recovers up to eight indexed frozen drafts before draining
+ordinary outbox work, using the original body/ID and captured account ownership. Its separate
+encrypted cursor advances before attempts and wraps once. Freeze wakes the existing payload-free
+task; startup independently wakes it. Confirmed unqueueable contexts retain review-required
+originals outside the automatic index, so more than one failed batch cannot starve valid work.
+No command is erased. Back flush is bounded to 1,500 ms and keeps an admitted writer alive.
+
+[Contract](collaboration-drafts.md) and [source/report evidence](measurements/chat-draft-recovery-2026-11-01.json)
+bind 41 cumulative inputs. Final integration passes in 286s Gradle / 290.427s wall:
+2,801 desktop cases/433 suites; 390 domain, 252 data and 89 presentation browser cases;
+170 Android host cases, six proof cleanup cases, proof APK, lint (zero fatal/errors,
+47 warnings), format/architecture/detekt. Focused counts: six app/SQLite worker cases,
+eighteen storage cases, nine recovery policy cases and thirteen draft ViewModel cases.
+All report counts have zero failures/errors/skips. Initial full integration also passed
+(423s/426.6s, 2,799 desktop); review then identified read contention incorrectly classified
+as storage failure. Final tests prove initial/final discovery retries and no stale-page
+publication when another conversation advances the checkpoint. Real malformed/key failures
+remain blocked. The original passing inputs/log are retained in the final measurement.
+
+**Continue immediately:** commit/push, clean signed release 8+ build from these reviewed
+inputs, notify then install-only on 10.77.77.3:5555, verify the pulled APK and continue.
+Release 7 is currently installed; nothing newer has yet been built/installed. The prepared
+build8 helpers are local under `.work/release-phone-2026-11-01-build8`; run-reviewed-build
+checks this measurement and a clean tree. Do not install old versions 5/6/7 over a newer app.
+
+Application recovery tests use the real SQLite/DI/use cases with a fake native transport.
+Add actual SDK/server freeze-only process-death proof next; current hosted native fixtures
+still exercise ordinary queued recovery. Preserve the existing WorkManager queued scenario
+and add an explicitly identified frozen-draft scenario, not a renamed queued assertion.
+Then safe pending cancellation, incoming FCM/replies and all remaining P0–P8. No complete
+PRD group, generic Starter policy port or new core schema is claimed.
+
 ## Indexed prepared drafts validated; app recovery next — 1 November 2026
 
 `composer-v2` replaces the uninstalled v1 prototype with one account/company partition and

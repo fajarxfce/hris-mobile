@@ -31,6 +31,7 @@ class ConfirmCollaborationDraftSend(
     suspend operator fun invoke(
         workspaceId: String,
         expected: CollaborationDraft,
+        expectedAccess: CollaborationLocalAccess? = null,
     ): AppResult<CollaborationDraft?> {
         if (!validCollaborationDraft(expected) || expected.submissionId == null)
             return invalidDraft()
@@ -38,6 +39,8 @@ class ConfirmCollaborationDraftSend(
         val captured = sessions.captureMessageAccess(workspaceId, workspaces, server, build, clock)
         if (captured is AppResult.Failed) return captured
         val access = (captured as AppResult.Success).value
+        if (expectedAccess != null && access != expectedAccess)
+            return collaborationSetupFailure("client.session_changed", FailureKind.Unauthorized)
         guard(workspaceId, access).let { if (it is AppResult.Failed) return it }
         val command = messages.get(access, expected.submissionId)
         guard(workspaceId, access).let { if (it is AppResult.Failed) return it }
@@ -58,13 +61,15 @@ class ConfirmCollaborationDraftSend(
         if (read is AppResult.Failed) return read
         val current = (read as AppResult.Success).value
         // A previous acknowledgement or a concurrent editor owns the new slot; preserve it.
-        if (current != expected) return AppResult.Success(current)
+        if (current?.submissionId != expected.submissionId || current.text != expected.text)
+            return AppResult.Success(current)
         val replacement =
             current.copy(
                 revision = Uuid.random().toString(),
                 text = "",
                 savedAt = clock.now(),
                 submissionId = null,
+                reviewRequired = false,
             )
         currentCoroutineContext().ensureActive()
         val written = drafts.replace(access, current, replacement)

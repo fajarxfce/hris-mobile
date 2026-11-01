@@ -14,6 +14,67 @@ import org.koin.core.annotation.*
 @ComponentScan("dev.fajar.starter.collaboration.data")
 class CollaborationDataModule {
     @Factory
+    fun readDraftRecovery(
+        drafts: CollaborationDraftRepository,
+        cursors: CollaborationDraftRecoveryCursorRepository,
+        lists: CollaborationListRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) =
+        ReadCollaborationDraftRecovery(
+            drafts,
+            cursors,
+            lists,
+            sessions,
+            workspaces,
+            server,
+            build,
+            Clock.System,
+        )
+
+    @Factory
+    fun advanceDraftRecovery(
+        cursors: CollaborationDraftRecoveryCursorRepository,
+        lists: CollaborationListRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) =
+        AdvanceCollaborationDraftRecovery(
+            cursors,
+            lists,
+            sessions,
+            workspaces,
+            server,
+            build,
+            Clock.System,
+        )
+
+    @Factory
+    fun suspendDraftSend(
+        drafts: CollaborationDraftRepository,
+        lists: CollaborationListRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        server: IdentityServer,
+        build: AppBuild,
+        messages: CollaborationMessageRepository,
+    ) =
+        SuspendCollaborationDraftSend(
+            drafts,
+            lists,
+            sessions,
+            workspaces,
+            server,
+            build,
+            Clock.System,
+            messages,
+        )
+
+    @Factory
     fun observeDraft(
         drafts: CollaborationDraftRepository,
         lists: CollaborationListRepository,
@@ -41,6 +102,7 @@ class CollaborationDataModule {
         workspaces: WorkspaceRepository,
         server: IdentityServer,
         build: AppBuild,
+        schedules: SyncScheduleRepository,
     ) =
         PrepareCollaborationDraftSend(
             drafts,
@@ -50,6 +112,7 @@ class CollaborationDataModule {
             server,
             build,
             Clock.System,
+            schedules,
         )
 
     @Factory

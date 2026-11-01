@@ -150,7 +150,8 @@ fun ChatThreadPage(
                 AppButton(
                     title,
                     { onEvent(ChatThreadEvent.DraftDialogConfirmed) },
-                    enabled = !state.saving && !state.draftSaving,
+                    enabled =
+                        dialog == ChatDraftDialog.LEAVE || (!state.saving && !state.draftSaving),
                 )
             }
         }

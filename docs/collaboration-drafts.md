@@ -1,71 +1,80 @@
-# Durable composer foundation
+# Durable composer and prepared-send recovery
 
-## Indexed recovery format
+## Editor ownership
 
-The current pre-release format is `composer-v2`. One account/company partition contains a
-separately authenticated document per conversation. Its logical draft revision remains
-independent of the partition's monotonic checkpoint. A frozen draft's `prepared` tag and
-exact ID/body commit atomically in the same SQLite/IndexedDB transaction. Indexed reads return
-at most eight candidates and one authenticated lookahead; editing and empty tombstone rows
-are excluded. No history scan, new platform key or core database migration is needed.
+Each account/company/conversation has an encrypted draft slot with an immutable logical
+revision. One serial writer coalesces waiting input while retaining an uncertain write's
+exact revision and body. A late successful observer emission never replaces active input.
+Initial loading gates editing; captured access fences every edit, preparation, queue and
+confirmation against account replacement, including a co-participant in the same company.
+Ordinary credential expiry does not hide owned local text; confirmed denial remains gated.
 
-Complete-target compare-and-set still rejects another editor's change. At most three technical
-CAS attempts tolerate a different conversation advancing the shared checkpoint; every attempt
-rereads the exact target and ownership. No target mutation is silently rebased. The 603-draft
-fixture finds 201 frozen drafts across reopen and proves at most ten decryptions per page
-(checkpoint plus nine bodies). Lost commits preserve body/index together; malformed lookahead
-fails the entire page. [Validation](measurements/chat-draft-index-2026-11-01.json): 15 SQLite,
-249 data browser, 381 domain cases on each target, quality pass. Root/Android integration and
-automatic worker coordination remain next.
+Send first flushes input, then freezes the exact body with the editing revision as its
+stable submission ID. A lost preparation response can recover that original operation.
+Queue admission and draft confirmation are separate durable steps. Confirmation requires
+the exact command or authenticated completion, and preserves a newer draft. A review-held
+revision can be cleared only for that same original ID/body. Empty tombstones retain a new
+logical revision so late writers cannot resurrect cleared text.
 
-This replaces the earlier per-conversation `composer-v1` storage prototype before any
-draft-capable release has been installed. Verified phone release 7 predates all draft storage;
-there is no user draft partition to migrate in that build. The earlier v1 measurements below
-are historical foundation evidence, not the current storage layout.
+Back waits up to 1,500 ms for the local writer and then offers an explicit leave choice.
+Timing out the wait does not cancel an admitted write. Reloading a conflicting draft also
+requires an in-product choice. Feedback is localized near the composer; the retained
+[320 dp / 200% text screenshot](images/chat-thread/chat-draft-failure-large-text.png) shows
+its failure actions remain reachable.
 
-## Earlier storage and current editor contracts
+## Atomic indexed storage
 
+The first distributed draft format is `composer-v2`: one account/company replica partition
+with a separately authenticated document per conversation. The frozen body and `prepared`
+tag commit in one SQLite/IndexedDB transaction. Editing, empty and review-held rows are
+excluded from automatic discovery. Reads authenticate at most eight selected drafts and
+one lookahead, including the checkpoint. No history scan or second best-effort index is used.
 
-The initial v1 encrypted draft repository owned one revisioned slot per account/company/conversation.
-Empty replacements retain a revision, fencing late writers after clearing. Compare-and-set
-checks the entire previous draft and checkpoint; replaying the exact immutable replacement
-succeeds after a lost response. A different value under the same revision is rejected.
+Complete-target CAS rejects another editor's change. At most three technical attempts handle
+an unrelated conversation advancing the shared checkpoint, rereading the target each time.
+A valid page followed by checkpoint movement returns retryable draft conflict, not generic
+storage failure or stale data. Malformed ciphertext and missing protected keys remain storage
+failures. Account, company, purpose, generation and record metadata are authenticated.
 
-Each slot has an authenticated small checkpoint and one bounded document. Maximum supported
-message text (16,384 characters / 32,768 UTF-8 bytes) fits without exceeding the 32 KiB
-checkpoint limit. Original whitespace survives. Invalid Unicode/control characters and
-invalid frozen-empty submissions fail before creating keys or records. Metadata, generation,
-owner, conversation and payload purpose are authenticated; raw records contain no text.
+The existing protected history key owns drafts and their separate recovery cursor. Inactive
+draft data prevents key regeneration. No new core schema or platform credential is needed.
+The 603-row fixture contains 201 prepared drafts and 402 editing/empty drafts; at most ten
+decryptions occur per page. Cursor state uses its own authenticated partition and generation
+fence, independent of ordinary outbox delivery.
 
-The slot uses the existing protected history key, a separate `/composer` partition and
-`hris-composer-content-v1` authenticated context. It needs no SDK room or new platform
-credential. Key-loss protection covers inactive draft-only partitions and prevents history
-key regeneration over them. A late account change cannot acknowledge an exact replay.
-The repository performs raw persistence only; use cases must enforce admission and the
-prepare/queue/confirm transition. A frozen draft retains an exact submission ID/body.
+## Application recovery
 
-[SQLite/IndexedDB evidence](measurements/chat-draft-storage-2026-11-01.json) covers reopen,
-reauthentication, concurrent initial writers, lost replies, empty-revision fencing, maximum
-UTF-8 size, malformed metadata/ownership, key loss and cancellation. [Owned policy evidence](measurements/chat-draft-policy-2026-11-01.json) adds local
-Observe/Edit/Prepare/Confirm operations. Expired credentials keep owned text readable;
-confirmed denial wins over later failed reads. Edit retains the caller's operation ID across
-lost replies. Prepare uses the editing revision as the command ID and a fresh slot revision,
-so retry matches the exact original preparation instead of conflating identical text from
-a later draft. Confirm requires the exact command/archive identity and body before clearing;
-it preserves a competing/newer draft. Twelve added scenarios pass on JVM and browser.
-Koin bindings and the composer now use these operations. Initial loading gates editing;
-one serial writer coalesces waiting input while retaining an uncertain operation unchanged.
-Late successful storage emissions never replace active text. Sending flushes the latest edit,
-freezes the body/ID, queues it and confirms durable ownership before applying the next slot.
-Frozen sends can be retried after process recreation with the same ID. Leaving flushes
-pending input; a failed flush or reload of a competing draft requires an explicit UI choice.
-Localized failure feedback stays beside the composer, with a 320 dp / 200% text screenshot.
-[Focused UI evidence](measurements/chat-draft-ui-2026-11-01.json) records 102 JVM / 88 browser
-presentation cases and two application-binding cases, including twelve new recovery/race
-scenarios. Root/Android integration remains pending with automatic recovery below.
+Freezing an eligible draft wakes the existing payload-free delivery task, with a 1,500 ms
+scheduler deadline; startup independently wakes the same key. The application worker first
+recovers at most eight prepared drafts, within its existing 60-second deadline, then drains
+ordinary outbox work. A full command queue therefore cannot prevent its own progress.
+The cursor advances before each attempt and discovery wraps at most once, so one failed
+conversation cannot monopolize a batch.
 
-Automatic recovery of a freeze that precedes queue admission is still separate work. The v2 indexed prepared query is now available; do not infer that a regular outbox scan
-uses it yet. Before the first draft-capable release, add application-owned Queue/Confirm
-coordination and prove the separate freeze-only restart boundary. Empty draft
-revisions must still fence late writers, and the index and frozen body must commit together.
-The installed release 7 predates this storage addition. No full chat acceptance is claimed.
+The worker coordinates Queue and Confirm using captured ownership and original ID/body.
+Freeze-only restart, lost queue reply and lost clear reply all retain the same operation.
+Retryable storage contention and capacity return platform retry. Shared authority/key/storage
+failures retain data and wait for a later trigger. Individual unqueueable contexts are held
+for explicit retry only after current command/list facts reproduce the reason. Held drafts
+keep their text and submission ID and are atomically excluded from automatic discovery;
+known racing queue admission cannot be mistaken for cancellation. No SDK command is erased.
+
+[Integration evidence](measurements/chat-draft-recovery-2026-11-01.json) records root, browser,
+Android host, proof APK/lint and quality checks, with six application/SQLite worker cases,
+eighteen SQLite storage cases and the matching portable contracts. Application recovery tests
+use a fake native transport: they do not establish native freeze-only process-death acceptance.
+That actual SDK/server scenario remains the next proof. Existing hosted native regression
+has an earlier source and must not be attributed to these new draft boundaries.
+
+## Format history and remaining scope
+
+The original `composer-v1` prototype was never distributed. Verified phone release 7 contains
+neither draft format; v2 replaces v1 before the first draft-capable release, without a user-data
+migration. Historical [storage](measurements/chat-draft-storage-2026-11-01.json),
+[policy](measurements/chat-draft-policy-2026-11-01.json),
+[UI](measurements/chat-draft-ui-2026-11-01.json) and
+[index](measurements/chat-draft-index-2026-11-01.json) evidence remains separately attributable.
+
+This is HRIS application policy and is not copied to Starter. It does not complete the
+communications PRD: safe pending cancellation, incoming push/replies, rich messages,
+backup/recovery, remaining native/web adapters, calls and meetings continue separately.

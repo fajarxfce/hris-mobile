@@ -65,11 +65,13 @@ internal class CollaborationDraftCodec(
                 dto.text,
                 Instant.parse(dto.savedAt),
                 dto.submissionId,
+                dto.reviewRequired,
             )
         require(validCollaborationDraft(draft))
         require(
             document.tags ==
-                if (draft.submissionId == null) emptySet<String>() else setOf(PREPARED_DRAFT_TAG)
+                if (draft.submissionId == null || draft.reviewRequired) emptySet<String>()
+                else setOf(PREPARED_DRAFT_TAG)
         )
         return draft
     }
@@ -87,6 +89,7 @@ internal class CollaborationDraftCodec(
                     text = draft.text,
                     savedAt = draft.savedAt.toString(),
                     submissionId = draft.submissionId,
+                    reviewRequired = draft.reviewRequired,
                 )
             )
         return ReplicaDocument(
@@ -101,7 +104,8 @@ internal class CollaborationDraftCodec(
                 payload,
                 131_072,
             ),
-            if (draft.submissionId == null) emptySet() else setOf(PREPARED_DRAFT_TAG),
+            if (draft.submissionId == null || draft.reviewRequired) emptySet()
+            else setOf(PREPARED_DRAFT_TAG),
         )
     }
 
@@ -167,6 +171,7 @@ private data class DraftDto(
     val text: String,
     val savedAt: String,
     val submissionId: String? = null,
+    val reviewRequired: Boolean = false,
 ) {
     override fun toString() = "DraftDto([redacted])"
 }

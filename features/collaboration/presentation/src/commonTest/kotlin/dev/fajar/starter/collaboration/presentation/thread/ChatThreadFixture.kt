@@ -485,6 +485,7 @@ internal class ChatThreadFixture {
                     server,
                     build,
                     clock,
+                    schedules,
                 ),
                 ConfirmCollaborationDraftSend(
                     drafts,

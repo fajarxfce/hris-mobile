@@ -33,6 +33,7 @@ class QueueCollaborationText(
         conversationId: String,
         id: String,
         text: String,
+        expectedAccess: CollaborationLocalAccess? = null,
     ): AppResult<CollaborationMessageRecord> =
         submissions.withLock {
             if (
@@ -47,6 +48,11 @@ class QueueCollaborationText(
             val captured = capture(workspaceId)
             if (captured is AppResult.Failed) return@withLock captured
             val access = (captured as AppResult.Success).value
+            if (expectedAccess != null && access != expectedAccess)
+                return@withLock collaborationSetupFailure(
+                    "client.session_changed",
+                    FailureKind.Unauthorized,
+                )
             continuation(workspaceId, access).let { if (it is AppResult.Failed) return@withLock it }
             val retained = messages.get(access, id)
             continuation(workspaceId, access).let { if (it is AppResult.Failed) return@withLock it }
@@ -131,6 +137,7 @@ class QueueCollaborationText(
         conversationId: String,
         id: String,
         text: String,
+        expectedAccess: CollaborationLocalAccess? = null,
     ): AppResult<CollaborationMessageRecord> =
         if (
             record.intent.owner == access.messageOwner() &&

@@ -10,6 +10,7 @@ data class CollaborationDraft(
     val savedAt: Instant,
     /** Non-null freezes this exact body and ID until its local command is reconciled. */
     val submissionId: String? = null,
+    val reviewRequired: Boolean = false,
 ) {
     override fun toString() = "CollaborationDraft([redacted])"
 }

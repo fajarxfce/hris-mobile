@@ -26,6 +26,7 @@ class ObserveCollaborationDraft(
     operator fun invoke(
         workspaceId: String,
         conversationId: String,
+        expectedAccess: CollaborationLocalAccess? = null,
     ): Flow<AppResult<CollaborationDraft?>> {
         if (!validCollaborationMessageId(conversationId)) return flowOf(invalidDraft())
         return sessions
@@ -34,16 +35,24 @@ class ObserveCollaborationDraft(
                 when (access) {
                     is AppResult.Failed -> flowOf(access)
                     is AppResult.Success ->
-                        lists.observeAdmission(access.value).flatMapLatest { gate ->
-                            when (gate) {
-                                is AppResult.Failed -> flowOf(gate)
-                                is AppResult.Success ->
-                                    gate.value.denial?.let { flowOf(AppResult.Failed(it)) }
-                                        ?: drafts.observe(access.value, conversationId).map {
-                                            checked(workspaceId, access.value, it)
-                                        }
+                        if (expectedAccess != null && access.value != expectedAccess)
+                            flowOf(
+                                collaborationSetupFailure(
+                                    "client.session_changed",
+                                    FailureKind.Unauthorized,
+                                )
+                            )
+                        else
+                            lists.observeAdmission(access.value).flatMapLatest { gate ->
+                                when (gate) {
+                                    is AppResult.Failed -> flowOf(gate)
+                                    is AppResult.Success ->
+                                        gate.value.denial?.let { flowOf(AppResult.Failed(it)) }
+                                            ?: drafts.observe(access.value, conversationId).map {
+                                                checked(workspaceId, access.value, it)
+                                            }
+                                }
                             }
-                        }
                 }
             }
             .buffer(0)

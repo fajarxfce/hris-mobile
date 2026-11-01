@@ -227,7 +227,7 @@ class CollaborationDraftUseCasesTest {
     }
 }
 
-private class DraftIntentFixture {
+internal class DraftIntentFixture {
     val f = MessageIntentFixture()
     private val conversation = f.summary!!.conversation.id
     val slot = MutableStateFlow<CollaborationDraft?>(null)
@@ -238,7 +238,7 @@ private class DraftIntentFixture {
     var afterRead: suspend () -> Unit = {}
     var afterWrite: suspend () -> Unit = {}
     var commandOverride: AppResult<CollaborationMessageRecord?>? = null
-    private val drafts =
+    val drafts =
         object : CollaborationDraftRepository {
             override suspend fun prepared(
                 access: CollaborationLocalAccess,
@@ -303,6 +303,7 @@ private class DraftIntentFixture {
             f.server,
             f.build,
             f.clock,
+            f.schedules,
         )
     private val confirmer =
         ConfirmCollaborationDraftSend(

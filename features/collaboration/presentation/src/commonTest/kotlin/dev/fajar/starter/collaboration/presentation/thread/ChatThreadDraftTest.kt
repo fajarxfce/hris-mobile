@@ -272,6 +272,31 @@ class ChatThreadDraftTest {
         }
     }
 
+    @Test
+    fun slowAdmittedWriteCannotTrapBackNavigationAndLateCompletionCannotPublish() = runTest {
+        withDraft { f, vm, store, effects ->
+            val release = CompletableDeferred<Unit>()
+            f.afterDraftWrite = { withContext(NonCancellable) { release.await() } }
+            vm.onEvent(ChatThreadEvent.Entered)
+            runCurrent()
+            vm.onEvent(ChatThreadEvent.DraftChanged("Slow write"))
+            advanceTimeBy(250)
+            runCurrent()
+            vm.onEvent(ChatThreadEvent.BackRequested)
+            advanceTimeBy(1_500)
+            runCurrent()
+            assertTrue(vm.state.value.draftSaving)
+            assertEquals(ChatDraftDialog.LEAVE, vm.state.value.draftDialog)
+            vm.onEvent(ChatThreadEvent.DraftDialogConfirmed)
+            runCurrent()
+            assertEquals(listOf<ChatThreadEffect>(ChatThreadEffect.Back), effects)
+            store.clear()
+            release.complete(Unit)
+            runCurrent()
+            assertEquals(listOf<ChatThreadEffect>(ChatThreadEffect.Back), effects)
+        }
+    }
+
     private fun ChatThreadFixture.savedDraft(text: String) =
         CollaborationDraft(conversationId, chatId(86), text, base.clock.now())
 

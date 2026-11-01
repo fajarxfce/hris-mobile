@@ -7,6 +7,7 @@ import dev.fajar.starter.collaboration.data.history.*
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.policies.*
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationDraftRepository
+import dev.fajar.starter.common.result.*
 import dev.fajar.starter.database.*
 import dev.fajar.starter.securestorage.*
 import dev.fajar.starter.storage.*
@@ -42,14 +43,14 @@ class EncryptedCollaborationDraftRepository(
     override suspend fun get(access: CollaborationLocalAccess, conversationId: String) =
         withContext(Dispatchers.Default) {
             safeStorageCall {
-                require(validCollaborationMessageId(conversationId))
-                val scope = historyScope(access)
-                val partition = draftPartition(access)
-                val page = replicas.observeDocument(scope, partition, conversationId).first()
-                val result = decode(access, conversationId, page)
-                require(replicas.checkpoint(scope, partition) == page.checkpoint)
-                result
-            }
+                    require(validCollaborationMessageId(conversationId))
+                    val scope = historyScope(access)
+                    val partition = draftPartition(access)
+                    val page = replicas.observeDocument(scope, partition, conversationId).first()
+                    val result = decode(access, conversationId, page)
+                    result to (replicas.checkpoint(scope, partition) == page.checkpoint)
+                }
+                .stableRead()
         }
 
     override suspend fun prepared(
@@ -59,61 +60,79 @@ class EncryptedCollaborationDraftRepository(
     ) =
         withContext(Dispatchers.Default) {
             safeStorageCall {
-                require(
-                    limit in 1..8 &&
-                        (afterConversationId == null ||
-                            validCollaborationMessageId(afterConversationId))
-                )
-                val scope = historyScope(access)
-                val partition = draftPartition(access)
-                val page =
-                    replicas
-                        .observeQueries(
-                            scope,
-                            partition,
-                            listOf(
-                                ReplicaQuery(
-                                    PREPARED_DRAFT_TAG,
-                                    after = afterConversationId,
-                                    limit = limit + 1,
-                                )
-                            ),
+                    require(
+                        limit in 1..8 &&
+                            (afterConversationId == null ||
+                                validCollaborationMessageId(afterConversationId))
+                    )
+                    val scope = historyScope(access)
+                    val partition = draftPartition(access)
+                    val page =
+                        replicas
+                            .observeQueries(
+                                scope,
+                                partition,
+                                listOf(
+                                    ReplicaQuery(
+                                        PREPARED_DRAFT_TAG,
+                                        after = afterConversationId,
+                                        limit = limit + 1,
+                                    )
+                                ),
+                            )
+                            .first()
+                    val documents = page.pages.single()
+                    val checkpoint = page.checkpoint
+                    val drafts =
+                        if (checkpoint == null) {
+                            require(documents.isEmpty())
+                            emptyList()
+                        } else
+                            keys.use { content, _ ->
+                                val codec = CollaborationDraftCodec(access, cipher, content)
+                                codec.checkpoint(checkpoint)
+                                require(documents.size <= limit + 1)
+                                documents
+                                    .map { codec.decode(checkpoint, it) }
+                                    .also { values ->
+                                        require(
+                                            values.all {
+                                                it.submissionId != null &&
+                                                    !it.reviewRequired &&
+                                                    (afterConversationId == null ||
+                                                        it.conversationId > afterConversationId)
+                                            }
+                                        )
+                                        require(
+                                            values.map { it.conversationId } ==
+                                                values.map { it.conversationId }.distinct().sorted()
+                                        )
+                                    }
+                            }
+                    val selected = drafts.take(limit)
+                    CollaborationPreparedDraftPage(
+                        selected,
+                        if (drafts.size > limit) selected.last().conversationId else null,
+                    ) to (replicas.checkpoint(scope, partition) == checkpoint)
+                }
+                .stableRead()
+        }
+
+    // A concurrent draft write can advance the shared partition after a valid read. It is
+    // retryable contention, distinct from malformed ciphertext or inaccessible key material.
+    private fun <T> AppResult<Pair<T, Boolean>>.stableRead(): AppResult<T> =
+        when (this) {
+            is AppResult.Failed -> this
+            is AppResult.Success ->
+                if (value.second) AppResult.Success(value.first)
+                else
+                    AppResult.Failed(
+                        Failure(
+                            FailureKind.Conflict,
+                            "The draft changed. Try again.",
+                            code = "client.collaboration_draft_changed",
                         )
-                        .first()
-                val documents = page.pages.single()
-                val checkpoint = page.checkpoint
-                val drafts =
-                    if (checkpoint == null) {
-                        require(documents.isEmpty())
-                        emptyList()
-                    } else
-                        keys.use { content, _ ->
-                            val codec = CollaborationDraftCodec(access, cipher, content)
-                            codec.checkpoint(checkpoint)
-                            require(documents.size <= limit + 1)
-                            documents
-                                .map { codec.decode(checkpoint, it) }
-                                .also { values ->
-                                    require(
-                                        values.all {
-                                            it.submissionId != null &&
-                                                (afterConversationId == null ||
-                                                    it.conversationId > afterConversationId)
-                                        }
-                                    )
-                                    require(
-                                        values.map { it.conversationId } ==
-                                            values.map { it.conversationId }.distinct().sorted()
-                                    )
-                                }
-                        }
-                require(replicas.checkpoint(scope, partition) == checkpoint)
-                val selected = drafts.take(limit)
-                CollaborationPreparedDraftPage(
-                    selected,
-                    if (drafts.size > limit) selected.last().conversationId else null,
-                )
-            }
+                    )
         }
 
     override suspend fun replace(
