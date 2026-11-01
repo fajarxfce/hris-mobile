@@ -1,5 +1,27 @@
 # Agent continuation — HRIS Mobile
 
+## Hosted native regressions and Starter Apple port audited — 1 November 2026
+
+[Native f904 run 41335935547](measurements/chat-window-native-ci-2026-11-01.json) passes
+SDK/direct/scheduled in 53.186s/56.09s/82.571s, APK `85583fca`, eighteen downloaded hashes.
+[Native cca28 run 41338026431](measurements/chat-draft-composer-native-ci-2026-11-01.json)
+passes in 42.32s/56.409s/59.092s, APK `c8185d69`, twenty hashes including sanitized gateway
+observations. Both use Platform `79326538`, six cleanup cases, 33 original-history assertions
+and automatic ordinary-death WorkManager recovery. Only the oldest original is individually
+asserted after Stop. The prior bf83 exhausted-retry failure remains retained and unexplained.
+The cca28 source includes composer-v1 UI; neither fixture exercises draft transition recovery,
+and neither source includes current v2/application recovery. New source `1ddfba6e` is pushed.
+
+[Starter Apple run 41338065450](measurements/apple-replica-hosted-2026-11-01.json) at `c46151e7`
+passes 86 simulator cases/25 suites, including two actual SQLite replica tests in 0.715s.
+Compile/tests/Xcode take 594s/68s/627s; associations pass, portable/Windows intentionally skip.
+The fixture matches preceding Mobile proof. Starter audit `fdd7f7b` is pushed. No physical
+iPhone execution, live provider deployment or additional phone installation is claimed here.
+
+Continue immediately with clean release 8+ from the validated recovery input hashes, notify
+and install-only; then actual native freeze-only proof and the rest of the communications PRD.
+The phone remains on verified release 7 until that separate installation succeeds.
+
 ## Prepared-draft recovery integrated and validated — 1 November 2026
 
 The application delivery worker now recovers up to eight indexed frozen drafts before draining

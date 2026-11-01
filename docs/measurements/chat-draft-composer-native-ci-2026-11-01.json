@@ -1,0 +1,254 @@
+{
+  "date": "2026-11-01",
+  "runId": 41338026431,
+  "conclusion": "success",
+  "headSha": "cca28f0610b00bbe0685428448b3608091408c34",
+  "status": "completed",
+  "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/41338026431",
+  "platformCommit": "79326538942e83ef89bf6a2b4c251888db7fdd6d",
+  "artifact": {
+    "apkSha256": "c8185d69c0bb41a520bea39a067bb051c74073aa862acb1dab6dd95e12e28431",
+    "package": "dev.fajar.hris.collaboration.proof",
+    "androidApi": 35
+  },
+  "nativeTests": [
+    {
+      "name": "dev.fajar.hris.NativeCollaborationScheduledInteropTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 59.092
+    },
+    {
+      "name": "dev.fajar.hris.NativeCollaborationSdkInteropTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 42.32
+    },
+    {
+      "name": "dev.fajar.hris.NativeCollaborationWorkerInteropTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 56.409
+    }
+  ],
+  "cleanupUnitTests": 6,
+  "worker": {
+    "processes": 2,
+    "forcedProcessDeaths": 1,
+    "encryptedSends": 33,
+    "peerSeeds": 32,
+    "canonicalOriginalsAcquired": 33,
+    "historyActions": 4,
+    "providerReferences": 43,
+    "pendingStateOnlyReferences": 10,
+    "oldestOriginalRetainedAfterStop": true,
+    "cleanup": true,
+    "applicationAdmissions": {
+      "device": 30,
+      "conversation": 28,
+      "room": 30,
+      "failures": 0
+    }
+  },
+  "sdk": {
+    "encryptedSends": 3,
+    "heldRoomNeverSent": true,
+    "ackBeforeJournalRecovered": true,
+    "completionCleanupRecovered": true,
+    "protectedStoreReopened": true,
+    "cleanup": true,
+    "applicationAdmissions": {
+      "device": 22,
+      "conversation": 22,
+      "room": 22,
+      "failures": 0
+    }
+  },
+  "scheduled": {
+    "processes": 2,
+    "ordinaryProcessDeaths": 1,
+    "packageNotForceStopped": true,
+    "systemJobRetained": true,
+    "jobNamespace": "androidx.work.systemjobscheduler",
+    "networkConstraint": "CONNECTED",
+    "inputKeys": [
+      "sync_task"
+    ],
+    "automaticJobStart": true,
+    "senderInitiallyClosed": true,
+    "workState": "SUCCEEDED",
+    "runAttemptCount": 1,
+    "encryptedSends": 1,
+    "networkRestored": true,
+    "cleanup": true,
+    "retryCancellationAccepted": false,
+    "applicationAdmissions": {
+      "device": 8,
+      "conversation": 7,
+      "room": 8,
+      "failures": 0
+    }
+  },
+  "downloadedEvidenceSha256": {
+    "mobile/apps/collaboration-proof/build/test-results/testDebugUnitTest/TEST-dev.fajar.hris.collaboration.proof.HrisProofCleanupTest.xml": "0684d3962b044e68d9935b82c2b907cdfc0533edd287a24abd5d51c6ca76cd8f",
+    "platform/.work/collaboration/30d4dd795e524dfc90643c62a127db4f/gateway-trace.json": "76556fb901d1a2963b9fbc9f4ebf87ade31e9679970c98f0109d379578d5d65e",
+    "platform/.work/collaboration/30d4dd795e524dfc90643c62a127db4f/result.json": "13924cd6d4f3cdd3bd1fafd73782f47e71264c22696314a604e24d3759eb05e1",
+    "platform/.work/collaboration/30d4dd795e524dfc90643c62a127db4f/verified.json": "9e885807980db49ee2e10a1954025197865729f0aae0894d669b7cc44c196399",
+    "platform/.work/collaboration-worker/b2b19c6bb93e411e9f319f82f1563fe6/acceptance.json": "867d3ed0192badfc7e2af3ad2c225297d198655fa74e26e57a5c65947af306cc",
+    "platform/.work/collaboration-worker/b2b19c6bb93e411e9f319f82f1563fe6/gateway-observations.json": "3f675298191f1ebd73c3de3a11e707141e9594b2fa7bf29ed0a4ed405f981166",
+    "platform/.work/collaboration-worker/b2b19c6bb93e411e9f319f82f1563fe6/gateway-trace.json": "accd7417046c68f9ee3d2389bc5c2e5a882d0da96f2610fa2c4e7c456e360e64",
+    "platform/.work/collaboration-worker/b2b19c6bb93e411e9f319f82f1563fe6/native-worker-queued.json": "b384733d98aeb569ad34778d44f51d8948005e0bb345cc003aa746460589d8cb",
+    "platform/.work/collaboration-worker/b2b19c6bb93e411e9f319f82f1563fe6/native-worker-restored.json": "e6875a8920f6698db661dd9cdf778da36110d5206f63294b35a5b79415d99899",
+    "platform/.work/collaboration-worker/b2b19c6bb93e411e9f319f82f1563fe6/result.json": "2ce565b39915875407e84bfa37be9d2ccf746fd57eb3746596b2afed517f2b8e",
+    "platform/.work/collaboration-worker/cb481a4c0782499cb38caa0d20aa3fbe/acceptance.json": "02bd9ae81b0560cba8b40dcb561994dbb6b9c08e9e4709ce0914292fcd8e5d79",
+    "platform/.work/collaboration-worker/cb481a4c0782499cb38caa0d20aa3fbe/gateway-observations.json": "dfbfc318da45450068346f20af4ea10e894deec46c4967c8c1b5cf81497f0295",
+    "platform/.work/collaboration-worker/cb481a4c0782499cb38caa0d20aa3fbe/gateway-trace.json": "9b61f14ec6854d140ab21d1da0015ba2642f5691e32f3529eadb14510837204c",
+    "platform/.work/collaboration-worker/cb481a4c0782499cb38caa0d20aa3fbe/network-before.json": "79dfab35e5f4104e398aa74de7c3d6e56dda0a96ac31d2fcb699ac1df093c6ad",
+    "platform/.work/collaboration-worker/cb481a4c0782499cb38caa0d20aa3fbe/result.json": "01944cfa5aa1ddff9ef8ca1db32ba9887afa5b437764a1a6ce05606bfddd0e84",
+    "platform/.work/collaboration-worker/cb481a4c0782499cb38caa0d20aa3fbe/started.json": "ae6e5f952e8153612a72632966ec9754228dd65ceffb523600460a39ee014888",
+    "platform/.work/collaboration-worker/cb481a4c0782499cb38caa0d20aa3fbe/stopped.json": "910920846593a35cca02f375408cb1a57e9b59d3c697a369fbae8d423f966a96",
+    "platform/apps/server/build/test-results/test/TEST-dev.fajar.hris.NativeCollaborationScheduledInteropTest.xml": "a8d5953fb61b5c1c038487a86d0707793f0739e5af4ad079eca178255548d208",
+    "platform/apps/server/build/test-results/test/TEST-dev.fajar.hris.NativeCollaborationSdkInteropTest.xml": "47b88bdcc5f98f2bfa206d151e441e944bf076793d3aed8a914bb0dd8202906a",
+    "platform/apps/server/build/test-results/test/TEST-dev.fajar.hris.NativeCollaborationWorkerInteropTest.xml": "779d601e0bca93d369aaa45d1ed7ea3e25fbe95632cc6315ebf563248dbd7b3b"
+  },
+  "predecessor": {
+    "date": "2026-11-01",
+    "runId": 41334029287,
+    "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/41334029287",
+    "mobileCommit": "bf83c71e1688ce5f57ba1dad39f95900b82f8276",
+    "platformCommit": "79326538942e83ef89bf6a2b4c251888db7fdd6d",
+    "conclusion": "failure",
+    "artifact": {
+      "apkSha256": "8d391c22a0d5887e40dbe275e9e078c3248b00b7027c6e7c173237c5df5cf076",
+      "package": "dev.fajar.hris.collaboration.proof",
+      "avd": "hris-mobile-dev",
+      "androidApi": "35"
+    },
+    "nativeTests": [
+      {
+        "name": "dev.fajar.hris.NativeCollaborationScheduledInteropTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "seconds": 56.862
+      },
+      {
+        "name": "dev.fajar.hris.NativeCollaborationSdkInteropTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "seconds": 47.387
+      },
+      {
+        "name": "dev.fajar.hris.NativeCollaborationWorkerInteropTest",
+        "tests": 1,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0,
+        "seconds": 163.103
+      }
+    ],
+    "sdk": {
+      "passed": true,
+      "encryptedSends": 3,
+      "heldRoomNeverSent": true,
+      "cleanup": true,
+      "applicationAdmissions": {
+        "device": 22,
+        "conversation": 22,
+        "room": 22,
+        "failures": 0
+      }
+    },
+    "scheduled": {
+      "passed": true,
+      "processes": 2,
+      "ordinaryProcessDeaths": 1,
+      "automaticJobStart": true,
+      "networkRestored": true,
+      "workState": "SUCCEEDED",
+      "encryptedSends": 1,
+      "cleanup": true,
+      "retryCancellationAccepted": false,
+      "applicationAdmissions": {
+        "device": 8,
+        "conversation": 7,
+        "room": 8,
+        "failures": 0
+      }
+    },
+    "direct": {
+      "passed": false,
+      "cleanup": true,
+      "restoredQueuedIntent": true,
+      "failureCategory": "IllegalStateException",
+      "location": "HrisWorkerMatrixProbe.deliver:184",
+      "causeKnown": "Four bounded worker attempts exhausted before foreground assertions.",
+      "finalRetryReasonKnown": false,
+      "deliveryOutcome": "unknown",
+      "gatewayObservationsUploaded": false
+    },
+    "downloadedEvidenceSha256": {
+      "mobile/apps/collaboration-proof/build/test-results/testDebugUnitTest/TEST-dev.fajar.hris.collaboration.proof.HrisProofCleanupTest.xml": "c71067b3e8b524d15b45f0f5932612e9123b1ab341616a581b2ea74267dfe275",
+      "platform/.work/collaboration/8eb8f760aec64ec2bb13d35afe40d04f/gateway-trace.json": "a5407546896a507d9b88b86d7846b4df7f49c9b0fc8b094ff63c46caf805cdef",
+      "platform/.work/collaboration/8eb8f760aec64ec2bb13d35afe40d04f/result.json": "00365125b2ab6925edcb48136f62d2c95f86536597a403d72e64bb2fdfa9a418",
+      "platform/.work/collaboration/8eb8f760aec64ec2bb13d35afe40d04f/verified.json": "5bb3211646c49e4ca235a2ac519cacd9887fe70df599d6030efd71b2fd7eefec",
+      "platform/.work/collaboration-worker/4a81b32016844ed798707a2e6a31176f/native-worker-queued.json": "ea7404cc481ffac7eec36724e36d2d05e76df9ec18d98c3ace5de884470b8d8c",
+      "platform/.work/collaboration-worker/4a81b32016844ed798707a2e6a31176f/native-worker-restored.json": "7b2dd75862e9c9255805b10601d44cdab1d186319116eddbd35c0ac00c2f194a",
+      "platform/.work/collaboration-worker/4a81b32016844ed798707a2e6a31176f/result.json": "c6e7be94f492ffce74272d67e5a13ad161af455695a77a82b9681484e79cc6b7",
+      "platform/.work/collaboration-worker/96a27ccc72d64fc0be15c01485cce184/acceptance.json": "8ab49d52cef23498e52a500567db6f164d716951023dbdb94f97299296ae698b",
+      "platform/.work/collaboration-worker/96a27ccc72d64fc0be15c01485cce184/gateway-trace.json": "2ac2e3027358b5e88760b3352da0437658187919faa42b2067ede4825d3a7924",
+      "platform/.work/collaboration-worker/96a27ccc72d64fc0be15c01485cce184/network-before.json": "79dfab35e5f4104e398aa74de7c3d6e56dda0a96ac31d2fcb699ac1df093c6ad",
+      "platform/.work/collaboration-worker/96a27ccc72d64fc0be15c01485cce184/result.json": "a30bed5ff081180cd30af73755633304db7ef782b09e86914b09e3eda3c25cca",
+      "platform/.work/collaboration-worker/96a27ccc72d64fc0be15c01485cce184/started.json": "26253ea6fe9ead44612a77b32e2c25f542251a911698ed74c06cc74e981da96d",
+      "platform/.work/collaboration-worker/96a27ccc72d64fc0be15c01485cce184/stopped.json": "fbd6a95e0964f122d0ea85bc589c7220e3346411dfb26fcdaec6cf0b09ae93ee",
+      "platform/apps/server/build/test-results/test/TEST-dev.fajar.hris.NativeCollaborationScheduledInteropTest.xml": "7015c9dc09798a7bf5a94af59266fd2d1f0a1ec3e5cf9a09f13cd99607ad9c81",
+      "platform/apps/server/build/test-results/test/TEST-dev.fajar.hris.NativeCollaborationSdkInteropTest.xml": "7509b4d5d82d1a4dd16c8eb8ced7c0c94f7c2ffae665a32c8e60b7ef46e43f4f",
+      "platform/apps/server/build/test-results/test/TEST-dev.fajar.hris.NativeCollaborationWorkerInteropTest.xml": "df4d7be38541f79550839487ec19c3a3f54867d8ac2fb579527d96317cff6d41"
+    },
+    "next": [
+      "Preserve the final controlled retry category instead of throwing a generic exhausted check.",
+      "Upload the already-sanitized gateway-observations.json created by the Platform fixture finally block; the current artifact allowlist omits it.",
+      "Run matching hosted evidence and diagnose actual retry before changing runtime deadlines or marking the window native acceptance passed."
+    ],
+    "scope": [
+      "The failure is retained; the earlier passing 2b2d source does not override it.",
+      "Release 7 remains installed; proof APK is a separate package and was not installed on the user phone.",
+      "Draft additions are newer than this run and not covered."
+    ],
+    "diagnosticFollowup": {
+      "inputsSha256": {
+        "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisProofFailure.kt": "a287032407abecfdb271bbe7bddd435810d5c605c29fe803d67c458da8a3dd5d",
+        "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisWorkerMatrixProbe.kt": "6c1ca53adeaaee71f0dc2d6e755e3339e4c9a3edf3056d9d6dae54f05af56837",
+        ".github/workflows/collaboration-hris.yml": "08c5adedaf67bb2b086a757ea82808aef67e9d9a4ff8bfd2d87b1cd74f32c52e"
+      },
+      "changes": [
+        "Final retry raises its controlled HrisProofFailure category, including room/history/delivery/timeout aliases. Four attempts and waits are unchanged.",
+        "Upload existing sanitized gateway observations written on failure; no credentials or raw request bodies."
+      ],
+      "validation": {
+        "gradleSeconds": 190,
+        "command": ":apps:collaboration-proof:testDebugUnitTest :apps:collaboration-proof:assembleDebug :formatCheck :architectureCheck :detekt",
+        "exit": 0,
+        "cleanupCases": 6,
+        "workflowYamlParsed": true,
+        "apkSha256": "fc7d737ef24fd1640f6db88f7ad800b4483b3875d7d0d6255740974a9a8c1630"
+      },
+      "hostedAcceptance": "pending; this diagnostic improvement does not resolve or override the failed run"
+    }
+  },
+  "scope": [
+    "Actual worker recovery, foreground original acquisition and existing SDK/WorkManager cases on the pinned source.",
+    "After Stop the oldest original is explicitly asserted. All 33 originals are asserted before Stop, not individually after Stop.",
+    "Includes local-window source, composer-v1 storage/policy/UI and controlled exhausted-retry diagnostics. The native fixture asserts 33 originals through existing worker/foreground behavior; it does not exercise draft persistence or freeze-only recovery. Composer-v2 and indexed draft recovery are newer and unproved by this run.",
+    "No live service deployment, physical/iOS/web acceptance, capacity acceptance or complete PRD group follows from these fixtures."
+  ]
+}
