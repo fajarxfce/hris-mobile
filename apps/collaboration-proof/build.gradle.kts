@@ -20,4 +20,8 @@ dependencies {
     implementation(projects.core.identity.domain)
     implementation(projects.core.securestorage)
     implementation(projects.core.database)
+    implementation(projects.core.network)
+    implementation(projects.core.workspace.domain)
+    implementation(libs.ktor.core)
+    implementation(libs.ktor.okhttp)
 }

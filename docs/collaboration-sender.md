@@ -68,7 +68,16 @@ belongs to preceding Mobile `622d2540`: run `41269736098` passes all 17 steps,
 match the immutable commits. It proves the native primitive, not this new common
 sender through production UI.
 
-Next prove the common sender and receipt recovery together through the actual
-SDK fixture, then implement incoming canonical history, bounded windows, command
-retirement and the Chat routes. No complete PRD group or capacity target is
-accepted by these component checks.
+The [actual sender integration](measurements/collaboration-sender-integration-2026-11-01.json)
+now passes through real product HRIS API adapters and the SDK. Server counters
+verify two successful admission rounds before the first encrypted send and a
+third before projection. The fixture rejects `Sent` after the real ACK is
+journaled, reopens the actual app database, verifies retained facts and reconciles
+once; a second reconciliation is idempotent. Independent native observation,
+both encrypted directions, staging process death and held-room isolation still
+pass. Local login/workspace are fixture state, and this adds database reopening
+after ACK rather than a new process death at that point.
+
+Next implement incoming canonical history, bounded windows, command retirement
+and the Chat routes. No complete PRD group or capacity target is accepted by
+these component checks.

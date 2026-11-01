@@ -65,6 +65,7 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
                         sender,
                         roomId,
                         fixture.getString("conversationId"),
+                        fixture.getJSONObject("sender").getString("hrisAccessToken"),
                     )
                 if (resuming)
                     resume(
@@ -198,7 +199,7 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
                             sender.credentialFailures.value == null &&
                                 recipient.credentialFailures.value == null
                         )
-                        val sent = productQueue.deliver(expected)
+                        val sent = productQueue.deliver(logicalId(fixture, "logicalId"), expected)
                         check(pending.accepted(expected) == sent)
                         productQueue.accepted(
                             logicalId(fixture, "logicalId"),
@@ -243,6 +244,9 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
                                 .put("perRoomDeliveryIsolated", true)
                                 .put("heldQueueRestored", true)
                                 .put("nativeDeliveryOwned", true)
+                                .put("commonSenderOwned", true)
+                                .put("receiptJournalRecovered", true)
+                                .put("projectionInterrupted", true)
                                 .put("senderEventId", sent.eventId)
                                 .put("recipientEventId", answered.eventId)
                                 .put("senderTransaction", sent.transactionId)

@@ -2,65 +2,60 @@
 
 ## Active collaboration implementation — 1 November 2026
 
-**The common live-admitted sender now connects original native mappings to the
-receipt journal and command projection.** [Contract](collaboration-sender.md):
-`DeliverCollaborationMessages` checks active device, owned DM/ready room, company
-gate and exact native owner; acquires the paused writer; repairs existing receipt
-projections; rejects uncertain/foreign/unmapped work; re-admits before `resume`.
-It never enqueues, replaces a transaction, creates/restores a runtime, or owns a
-second transport retry loop. Application/background invocation ownership and UI
-are still pending.
+**The common sender and receipt recovery now pass through real HRIS APIs and the
+Android SDK.** [Integration evidence](measurements/collaboration-sender-integration-2026-11-01.json):
+actual run **`25eb1e1f29fb4bd18643e2536bffce07`**, **25.386s test case / 46.694s suite**,
+**83s Gradle including Platform quality**. Server-side counters verify **3 device /
+3 conversation / 3 room HTTP admissions, zero failures**, with two successful
+rounds before the first encrypted send and the third before `Sent` projection.
+Product API classes/remote repositories, `DeliverCollaborationMessages`, the native
+writer and actual encrypted receipt store participate. Local login/workspace state
+is seeded fixture input; this does not exercise login UI.
 
-Received valid aliases are journaled in 1–32-message batches under the captured
-raw account fence and a **five-second noncancellable bound** before `Sent` changes.
-This retains already received facts after late expiry, cancellation or company
-closure without authorizing another send or private publication. Replacement
-accounts fail the store fence. Gate/owner and fresh remote admission follow capture
-before projection. Partial receipts/writes survive; absence never invents ACK.
-Existing `Sent` primary events remain unchanged. All terminal paths close the
-writer through existing runtime-owned cleanup.
+The fixture deliberately rejects `Sent` projection after the real ACK is journaled.
+It checks the original `Staged` record, closes/reopens the actual app database,
+checks the retained receipt and runs product `ReconcileCollaborationMessages`:
+one repair, then zero on replay. The independent native observer agrees on the
+original event/transaction. Encrypted exchange in both directions, previous actual
+staging process death, native key/cursor recovery, held sibling room and cleanup
+all remain passing. New strict flags `commonSenderOwned`, `receiptJournalRecovered`
+and `projectionInterrupted` supplement server-owned `applicationAdmittedBeforeSend`
+and bounded admission counters. Only the private sender fixture receives an HRIS
+API credential; published artifacts have safe flags/hashes/counters.
 
-[Sender evidence](measurements/collaboration-sender-2026-11-01.json): **18 new common
-cases**, including partial 33-message journal capture/reconciliation, late denial,
-account changes, expiry, cancellation, five-second storage timeout, conflicts and
-primary preservation. Focused checks pass in **66s**; full root/browser/Android/
-Wasm/lint passes in **270s**: **2,336 desktop / 388 suites, 115 Android host,
-178 domain / 132 data browser**, zero failures/errors/skips and Android lint errors.
-All **196 source hashes** match. Initial compile failed on a report/enum name
-collision (21s); the report was renamed before the passing checks. Dev APK
-`f06f2d5a` is built, not installed. Native SDK implementation is unchanged.
+All **198 Mobile / 24 Platform source hashes** match. Proof build/lint/format/detekt/
+architecture passes in **67s**, with zero lint errors; **13 driver tests** pass,
+including rejected variants of the new flags. Initial Platform compilation failed
+on nullable-Boolean atomic CAS warnings (17s; no SDK execution); an integer marker
+resolved it before the passing actual run. Proof APK **`a7b6bb8b`**. No production
+source changed after Mobile **`b5834eb84e6f2f89fdd3d63976e86e8d6112f1f4`**, whose
+full **2,336 desktop / 115 host / 178 domain-browser / 132 data-browser** checks
+pass in 270s. Its Dev APK `f06f2d5a` remains built, not installed.
 
-Newly audited prior [native delivery CI](measurements/collaboration-delivery-2026-11-01.json):
-Mobile `622d2540` run **`41269736098`**, all **17 steps / 115 Android host cases** pass.
-Actual HRIS SDK run **`6aee6870e76d4fd9b50cfd85701329e2` / 22.689s case / 62.419s
-suite**, all proof/cleanup flags including `nativeDeliveryOwned` true. All **179
-Mobile / 24 Platform** hashes match immutable `622d2540` / `a5ec785c`. This proves
-the preceding native primitive, not the new common sender. Protocol `41269736107`
-reports success but is unaudited. Control `41269736119` was running. Receipt
-`8d8fb233feee480e6e7dc7bc0430195ccf906005` control **`41270939965`** was pending;
-HRIS **`41270940059`** was running. That control adds actual Xcode app-host compile;
-physical iPhone acceptance remains waived. No new actual SDK run is claimed here.
+**Continue P0–P8; none of 54 complete groups is accepted. Next implement incoming
+canonical history and bounded SDK history windows, then command retirement and
+Chat list/setup/conversation UI.** This integration reopens the database after
+projection failure; it does not add process death after ACK. History must close
+native-ACK-before-journal loss, coalesce by conversation/authenticated sender/
+logical ID, reject conflicting reuse and retain all aliases/tombstones. Original
+content must stay distinct from edits. SDK `latestJson` may contain the latest
+edit; `loadOrFetchEvent` exposes typed content without the custom logical-ID JSON.
+Inspect/measure the pinned SDK original-event and bounded-window APIs before
+choosing the adapter; a 512-item overflow guard is not a product history window.
+No replacement transactions, SDK key/cursor resets or second transport retry owner.
 
-**Continue P0–P8; none of 54 complete groups is accepted. Next exercise the common
-sender and journal together through the real HRIS APIs and Android SDK fixture.**
-Use the existing `HrisProductQueueProof` after actual staging process death; add
-fixture-native HRIS API credentials privately from `NativeGatewaySdkFixture.Native.access`
-to drive the product setup/conversation API adapters. Preserve the independent
-native receipt observer and held sibling-room checks. Inject failed `Sent` projection,
-reopen the actual app database, and reconcile the durable original receipt; do not
-claim local fixture session/workspace setup exercises login UI. Then incoming
-history must close ACK-before-journal loss with conversation/authenticated-sender/
-logical-ID coalescing, conflict rejection and retained aliases/tombstones. Add
-bounded windows, command retirement and Chat list/setup/conversation routes.
+Current journal bounds remain 128 messages / 512 aliases per conversation,
+128 aliases per message and 1–32 per append. The shared 128-command account limit
+still has no retirement. These initial bounds are not capacity acceptance.
+Application/background invocation ownership and notification/call/meeting work
+remain. Physical iPhone testing is waived; Apple implementation/interoperability
+and the hosted Xcode app build still need evidence. Prior native/control run IDs
+and exact earlier proofs are in the archive and measurement files.
 
-No key/cursor resets or replacement transactions. Initial receipt bounds remain
-128 messages / 512 aliases per conversation, 128 aliases per message and 1–32 per
-append; the shared 128-command account bound still has no retirement. These are
-not capacity acceptance. HRIS CI retains Platform fixture pin `a5ec785c` until
-actual fixture code changes. No live/schema/phone change; emulator is stopped.
-Starter remains `36116b2`; current HRIS code needs no generic foundation port.
-Atomic commits and every-commit pushes remain authorized. Continue after this
-checkpoint; the long-run implementation is not complete.
+The dedicated emulator is stopped. No live/schema/phone change. Starter stays
+`36116b2`; this HRIS fixture/adapter work needs no generic port. HRIS CI now pins verified Platform fixture
+**`6e50bbd05a557ecc7fb82c0ab0a44da99558cdb9`**. Atomic commits and every-commit pushes remain authorized. Continue after
+this checkpoint; the long-run implementation is not complete.
 
 [Earlier November detail](collaboration-implementation-history-2026-11-01.md)
 

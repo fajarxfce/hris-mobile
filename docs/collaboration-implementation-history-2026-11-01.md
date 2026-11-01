@@ -480,3 +480,65 @@ No live/schema/phone change; emulator remains stopped. Starter stays `36116b2`:
 this HRIS receipt policy/adapter/host graph needs no generic foundation port.
 Atomic commits and every-commit pushes remain authorized. Continue after this
 checkpoint; the long-run implementation is not complete.
+
+## Common sender checkpoint — 1 November 2026
+
+**The common live-admitted sender now connects original native mappings to the
+receipt journal and command projection.** [Contract](collaboration-sender.md):
+`DeliverCollaborationMessages` checks active device, owned DM/ready room, company
+gate and exact native owner; acquires the paused writer; repairs existing receipt
+projections; rejects uncertain/foreign/unmapped work; re-admits before `resume`.
+It never enqueues, replaces a transaction, creates/restores a runtime, or owns a
+second transport retry loop. Application/background invocation ownership and UI
+are still pending.
+
+Received valid aliases are journaled in 1–32-message batches under the captured
+raw account fence and a **five-second noncancellable bound** before `Sent` changes.
+This retains already received facts after late expiry, cancellation or company
+closure without authorizing another send or private publication. Replacement
+accounts fail the store fence. Gate/owner and fresh remote admission follow capture
+before projection. Partial receipts/writes survive; absence never invents ACK.
+Existing `Sent` primary events remain unchanged. All terminal paths close the
+writer through existing runtime-owned cleanup.
+
+[Sender evidence](measurements/collaboration-sender-2026-11-01.json): **18 new common
+cases**, including partial 33-message journal capture/reconciliation, late denial,
+account changes, expiry, cancellation, five-second storage timeout, conflicts and
+primary preservation. Focused checks pass in **66s**; full root/browser/Android/
+Wasm/lint passes in **270s**: **2,336 desktop / 388 suites, 115 Android host,
+178 domain / 132 data browser**, zero failures/errors/skips and Android lint errors.
+All **196 source hashes** match. Initial compile failed on a report/enum name
+collision (21s); the report was renamed before the passing checks. Dev APK
+`f06f2d5a` is built, not installed. Native SDK implementation is unchanged.
+
+Newly audited prior [native delivery CI](measurements/collaboration-delivery-2026-11-01.json):
+Mobile `622d2540` run **`41269736098`**, all **17 steps / 115 Android host cases** pass.
+Actual HRIS SDK run **`6aee6870e76d4fd9b50cfd85701329e2` / 22.689s case / 62.419s
+suite**, all proof/cleanup flags including `nativeDeliveryOwned` true. All **179
+Mobile / 24 Platform** hashes match immutable `622d2540` / `a5ec785c`. This proves
+the preceding native primitive, not the new common sender. Protocol `41269736107`
+reports success but is unaudited. Control `41269736119` was running. Receipt
+`8d8fb233feee480e6e7dc7bc0430195ccf906005` control **`41270939965`** was pending;
+HRIS **`41270940059`** was running. That control adds actual Xcode app-host compile;
+physical iPhone acceptance remains waived. No new actual SDK run is claimed here.
+
+**Continue P0–P8; none of 54 complete groups is accepted. Next exercise the common
+sender and journal together through the real HRIS APIs and Android SDK fixture.**
+Use the existing `HrisProductQueueProof` after actual staging process death; add
+fixture-native HRIS API credentials privately from `NativeGatewaySdkFixture.Native.access`
+to drive the product setup/conversation API adapters. Preserve the independent
+native receipt observer and held sibling-room checks. Inject failed `Sent` projection,
+reopen the actual app database, and reconcile the durable original receipt; do not
+claim local fixture session/workspace setup exercises login UI. Then incoming
+history must close ACK-before-journal loss with conversation/authenticated-sender/
+logical-ID coalescing, conflict rejection and retained aliases/tombstones. Add
+bounded windows, command retirement and Chat list/setup/conversation routes.
+
+No key/cursor resets or replacement transactions. Initial receipt bounds remain
+128 messages / 512 aliases per conversation, 128 aliases per message and 1–32 per
+append; the shared 128-command account bound still has no retirement. These are
+not capacity acceptance. HRIS CI retains Platform fixture pin `a5ec785c` until
+actual fixture code changes. No live/schema/phone change; emulator is stopped.
+Starter remains `36116b2`; current HRIS code needs no generic foundation port.
+Atomic commits and every-commit pushes remain authorized. Continue after this
+checkpoint; the long-run implementation is not complete.
