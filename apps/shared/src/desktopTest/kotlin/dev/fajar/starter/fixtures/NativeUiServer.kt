@@ -38,6 +38,7 @@ class NativeUiServer(
     val payroll = NativePayslipUi()
     val expenses = NativeExpenseUi()
     val inbox = NativeInboxUi()
+    val collaboration = NativeCollaborationUi()
     val deviceSessions = NativeSessionsUi()
     val companyPolicy = NativeCompanyPolicyUi()
     var rejectSessionAccessOnce = false
@@ -59,13 +60,7 @@ class NativeUiServer(
                     HttpStatusCode.Forbidden,
                     headers,
                 )
-            inbox.response(request)?.let { (body, status) ->
-                return@withLock respond(body, status, headers)
-            }
-            (workforce.response(request) ?: overtime.response(request))?.let { (body, status) ->
-                return@withLock respond(body, status, headers)
-            }
-            (leave.response(request) ?: expenses.response(request))?.let { (body, status) ->
+            fixtureResponse(request)?.let { (body, status) ->
                 return@withLock respond(body, status, headers)
             }
             (documents.downloads.response(request, this) ?: payroll.response(request, this))?.let {
@@ -145,6 +140,14 @@ class NativeUiServer(
         }
     }
 
+    private suspend fun fixtureResponse(request: HttpRequestData) =
+        collaboration.response(request)
+            ?: inbox.response(request)
+            ?: workforce.response(request)
+            ?: overtime.response(request)
+            ?: leave.response(request)
+            ?: expenses.response(request)
+
     private fun assertNativeHeaders(request: HttpRequestData) {
         assertEquals("ANDROID", request.headers["X-HRIS-Client-Platform"])
         assertEquals(BuildRuntime.versionNumber.toString(), request.headers["X-HRIS-Client-Build"])
@@ -174,6 +177,7 @@ class NativeUiServer(
                 add("people.self.read")
                 add("people.directory.read")
                 add("announcements.read")
+                if (collaboration.enabled) add("collaboration.chat")
                 add("attendance.self.record")
                 if (overtime.enabled) add("overtime.self.manage")
                 if (leave.enabled) add("leave.self.manage")

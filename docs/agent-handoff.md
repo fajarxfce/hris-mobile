@@ -1,5 +1,46 @@
 # Agent continuation — HRIS Mobile
 
+## Application-owned background delivery validated — 1 November 2026
+
+Text delivery now belongs to a registered singleton application SyncTask. Exact local
+queue acknowledgement survives failed/bounded scheduling; task payloads contain only
+`hris.collaboration-delivery`. Startup/owner renewal wakes the task. Local selected-company
+discovery validates owned commands and an encrypted restart-safe CAS cursor provides
+round-robin room turns. Worker passes are bounded to 60s / 12s per room / eight staging
+candidates. It replays exact room operations, requires explicit failed-room retry, acquires
+original evidence before uncertain native replay, and retires only proven completion.
+Confirmed-only work does not resume native sending. Blocked rooms do not halt healthy
+remaining batches. Cancellation and owner loss release late child timelines.
+
+The thread now queues/observes and wakes delivery; it no longer stages, sends, reconciles
+receipts or retires messages. Explicit failed-room retry persists control intent for the
+worker. [Contract](collaboration-background-delivery.md), [measurement](measurements/chat-background-delivery-2026-11-01.json)
+and [next implementation](collaboration-delivery-next.md) describe the exact boundary.
+
+All 32 source inputs match. Full validation passes in 320s: 2,700 desktop / 426 suites,
+352 domain browser, 233 data browser, 56 presentation browser, 170 Android host,
+12 worker integration cases and two binding cases, with zero failures/errors/skips.
+Format, architecture, detekt, app Wasm, Android APK/AAR and proof APK passed; Android lint
+has zero errors and one existing warning. APK `4e47ea8c`, AAR `97a1280f`, proof APK
+`17ad74cc` are built, not installed. All eight attempts are retained, including corrected
+fixture contract, type and function-length failures and an earlier successful compiler
+cache fallback. Worker tests use real encrypted repositories/SQLite with simulated wire
+and SDK; container restart is not actual Android process-death evidence. No new native
+server/emulator, Apple runtime, phone/live deployment or Starter change is claimed.
+
+**Continue latest-head capacity recovery and actual native worker interoperability now,
+then all P0–P8. Do not stop here.** Known Sent anchors support one capacity reopening;
+uncertain work without a known event anchor still needs an admitted latest-head recovery
+path. Drafts `.work/reopen-history-latest.txt` and `.work/reopen-history-latest-tests.txt`
+are not applied or tested. Also handle repeated foreground incoming-history capacity.
+Then extend the owned Android proof using the actual worker, preserving earlier provider
+proof assertions. Remote paging, durable drafts/cancel, incoming notifications/inline reply,
+groups/rich content/actions, cross-family keys, Apple/web adapters, calls and meetings
+remain. No complete PRD feature group is accepted. Keep pushing each validated atomic
+commit during the authorized long run. Other running Gradle daemons belong to experiment
+or CodePush work; do not kill them while managing this repository's build memory.
+
+
 ## Owned text thread and application routes validated — 1 November 2026
 
 Chat now opens from the company-gated Home service into inbox, participant selection,

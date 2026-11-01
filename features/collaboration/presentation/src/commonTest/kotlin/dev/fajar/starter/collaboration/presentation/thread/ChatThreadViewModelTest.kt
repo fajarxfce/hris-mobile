@@ -152,34 +152,44 @@ class ChatThreadViewModelTest {
     }
 
     @Test
-    fun sendUsesOneNativeTransactionAndRetainsReceiptWithoutPretendingHistoryIsAcquired() =
-        runTest {
-            withModel { f, vm, _, _ ->
-                f.online()
-                vm.onEvent(ChatThreadEvent.Entered)
-                runCurrent()
-                vm.onEvent(ChatThreadEvent.DraftChanged("one send"))
-                vm.onEvent(ChatThreadEvent.SendRequested)
-                runCurrent()
-                assertEquals(1, f.insertions.size)
-                assertEquals(1, f.deliveries)
-                assertIs<CollaborationMessageState.Sent>(f.records.value.single().state)
-                assertEquals(1, f.receiptRows.size)
-                assertEquals(
-                    CollaborationMessageDelivery.SENT,
-                    vm.state.value.rows.single().delivery,
+    fun sendStoresAndSchedulesWhileExternalDeliveryUpdatesTheOwnedProjection() = runTest {
+        withModel { f, vm, _, _ ->
+            f.online()
+            vm.onEvent(ChatThreadEvent.Entered)
+            runCurrent()
+            vm.onEvent(ChatThreadEvent.DraftChanged("one send"))
+            vm.onEvent(ChatThreadEvent.SendRequested)
+            runCurrent()
+            assertEquals(1, f.insertions.size)
+            assertEquals(0, f.deliveries)
+            assertEquals(CollaborationMessageState.Queued, f.records.value.single().state)
+            assertTrue(f.scheduledKeys.isNotEmpty())
+            val queued = f.records.value.single()
+            f.records.value =
+                listOf(
+                    queued.copy(
+                        state =
+                            CollaborationMessageState.Sent(
+                                f.source,
+                                "tx",
+                                "$" + "event",
+                                CollaborationMessageOrigin(f.self.matrixUserId, "a".repeat(64)),
+                            )
+                    )
                 )
-                assertTrue(f.historyRows.value.isEmpty())
-                assertTrue(f.queueCloses >= 2)
-                vm.onEvent(ChatThreadEvent.RefreshRequested)
-                runCurrent()
-                assertEquals(1, f.deliveries)
-                assertEquals(1, f.records.value.size)
-            }
+            runCurrent()
+            assertEquals(CollaborationMessageDelivery.SENT, vm.state.value.rows.single().delivery)
+            assertTrue(f.historyRows.value.isEmpty())
+            vm.onEvent(ChatThreadEvent.RefreshRequested)
+            runCurrent()
+            assertEquals(0, f.deliveries)
+            assertEquals(0, f.queueCloses)
+            assertEquals(1, f.records.value.size)
         }
+    }
 
     @Test
-    fun roomIsRequestedOnlyForDurablePendingMessageAndLostReplyReusesOperation() = runTest {
+    fun roomPreparationIsScheduledForTheWorkerAndReadinessIsObservedSeparately() = runTest {
         withModel { f, vm, _, _ ->
             f.online()
             f.room =
@@ -192,23 +202,50 @@ class ChatThreadViewModelTest {
             runCurrent()
             assertTrue(f.roomRequests.isEmpty())
             assertEquals(ChatThreadConnection.WAITING, vm.state.value.connection)
-            val commit = f.sendRoom
-            f.sendRoom = {
-                commit(it)
-                AppResult.Failed(f.base.network)
-            }
             vm.onEvent(ChatThreadEvent.DraftChanged("first"))
             vm.onEvent(ChatThreadEvent.SendRequested)
             runCurrent()
-            val first = f.roomRequests.single()
-            assertTrue(f.controls.retained.isNotEmpty())
-            f.room = f.room.copy(matrixRoomId = f.source.roomId)
-            f.sendRoom = commit
+            assertTrue(f.scheduledKeys.isNotEmpty())
+            assertTrue(f.controls.retained.isEmpty())
+            assertTrue(f.roomRequests.isEmpty())
+            f.room =
+                f.room.copy(
+                    state = CollaborationDirectRoomState.READY,
+                    matrixRoomId = f.source.roomId,
+                    version = 1,
+                )
+            advanceTimeBy(2_000)
+            runCurrent()
+            assertEquals(ChatThreadConnection.CONNECTED, vm.state.value.connection)
+            assertEquals(0, f.deliveries)
+            assertEquals(CollaborationMessageState.Queued, f.records.value.single().state)
+        }
+    }
+
+    @Test
+    fun failedRoomRetryRetainsExplicitIntentAndWakesWorkerWithoutSendingFromTheScreen() = runTest {
+        withModel { f, vm, _, _ ->
+            f.online()
+            f.room =
+                f.room.copy(
+                    state = CollaborationDirectRoomState.FAILED,
+                    matrixRoomId = null,
+                    retryable = true,
+                    retryAt = f.base.now.toEpochMilliseconds(),
+                )
+            vm.onEvent(ChatThreadEvent.Entered)
+            runCurrent()
+            vm.onEvent(ChatThreadEvent.DraftChanged("retry after review"))
+            vm.onEvent(ChatThreadEvent.SendRequested)
+            runCurrent()
+            assertTrue(f.controls.retained.isEmpty())
+            assertTrue(f.roomRequests.isEmpty())
             vm.onEvent(ChatThreadEvent.RefreshRequested)
             runCurrent()
-            assertEquals(listOf(first, first), f.roomRequests)
-            assertTrue(f.controls.retained.isEmpty())
-            assertEquals(1, f.deliveries)
+            assertEquals(1, f.controls.retained.size)
+            assertTrue(f.roomRequests.isEmpty())
+            assertEquals(0, f.deliveries)
+            assertTrue(f.scheduledKeys.isNotEmpty())
         }
     }
 
@@ -266,30 +303,27 @@ class ChatThreadViewModelTest {
     }
 
     @Test
-    fun cancelledNativeReplyRetainsReceiptAndReentryDoesNotSendAgain() = runTest {
+    fun stoppingKeepsDurableWorkAndReentryDoesNotCreateAnotherSend() = runTest {
         withModel { f, vm, _, _ ->
             f.online()
-            val release = CompletableDeferred<Unit>()
-            f.beforeResume = { withContext(NonCancellable) { release.await() } }
             vm.onEvent(ChatThreadEvent.Entered)
             runCurrent()
-            vm.onEvent(ChatThreadEvent.DraftChanged("one native send"))
+            vm.onEvent(ChatThreadEvent.DraftChanged("continue after closing"))
             vm.onEvent(ChatThreadEvent.SendRequested)
             runCurrent()
-            assertIs<CollaborationMessageState.Staged>(f.records.value.single().state)
+            val stored = f.records.value.single()
+            val keys = f.scheduledKeys.toList()
             vm.onEvent(ChatThreadEvent.Stopped)
             runCurrent()
-            release.complete(Unit)
-            runCurrent()
-            assertEquals(1, f.deliveries)
-            assertEquals(1, f.receiptRows.size)
+            assertEquals(listOf(stored), f.records.value)
+            assertEquals(keys, f.scheduledKeys)
             assertEquals(1, f.timelineCloses)
             assertEquals(ChatThreadConnection.OFFLINE, vm.state.value.connection)
             vm.onEvent(ChatThreadEvent.Entered)
             runCurrent()
-            assertEquals(1, f.deliveries)
+            assertEquals(0, f.deliveries)
             assertEquals(1, f.insertions.size)
-            assertIs<CollaborationMessageState.Sent>(f.records.value.single().state)
+            assertEquals(listOf(stored), f.records.value)
         }
     }
 

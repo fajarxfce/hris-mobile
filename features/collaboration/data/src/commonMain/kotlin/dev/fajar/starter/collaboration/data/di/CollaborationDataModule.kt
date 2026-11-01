@@ -5,6 +5,7 @@ import dev.fajar.starter.collaboration.domain.usecases.*
 import dev.fajar.starter.common.config.AppBuild
 import dev.fajar.starter.identity.domain.entities.IdentityServer
 import dev.fajar.starter.identity.domain.repositories.SessionRepository
+import dev.fajar.starter.sync.domain.repositories.SyncScheduleRepository
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
 import kotlin.time.Clock
 import org.koin.core.annotation.*
@@ -12,6 +13,46 @@ import org.koin.core.annotation.*
 @Module
 @ComponentScan("dev.fajar.starter.collaboration.data")
 class CollaborationDataModule {
+    @Factory
+    fun advanceDelivery(
+        cursors: CollaborationDeliveryCursorRepository,
+        lists: CollaborationListRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) =
+        AdvanceCollaborationDelivery(
+            cursors,
+            lists,
+            sessions,
+            workspaces,
+            server,
+            build,
+            Clock.System,
+        )
+
+    @Factory
+    fun readDeliveryWork(
+        messages: CollaborationMessageRepository,
+        lists: CollaborationListRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        server: IdentityServer,
+        build: AppBuild,
+        cursors: CollaborationDeliveryCursorRepository,
+    ) =
+        ReadCollaborationDeliveryWork(
+            messages,
+            lists,
+            sessions,
+            workspaces,
+            server,
+            build,
+            Clock.System,
+            cursors,
+        )
+
     @Single
     fun retireMessages(
         messages: CollaborationMessageRepository,
@@ -262,6 +303,7 @@ class CollaborationDataModule {
         workspaces: WorkspaceRepository,
         server: IdentityServer,
         build: AppBuild,
+        schedules: SyncScheduleRepository,
     ) =
         QueueCollaborationText(
             messages,
@@ -271,6 +313,26 @@ class CollaborationDataModule {
             server,
             build,
             Clock.System,
+            schedules,
+        )
+
+    @Factory
+    fun requestDelivery(
+        lists: CollaborationListRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        server: IdentityServer,
+        build: AppBuild,
+        schedules: SyncScheduleRepository,
+    ) =
+        RequestCollaborationDelivery(
+            lists,
+            sessions,
+            workspaces,
+            server,
+            build,
+            Clock.System,
+            schedules,
         )
 
     @Factory

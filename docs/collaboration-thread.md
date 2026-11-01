@@ -47,20 +47,20 @@ Projection itself never acknowledges, retires, deletes or re-enqueues a command.
 
 Entry reads setup and restores an existing application-owned runtime. Missing setup
 is an explicit activation action; local reading and owned queueing remain available.
-Viewing a new conversation alone does not provision a room. A durable pending message
-can prepare its room; uncertain control commands retain their operation ID, confirmed
-receipts reconcile without replay, and room readiness is checked independently of the
-receipt. A foreground provisioning wait makes at most twelve reads with two-second
-spacing. Failed/cancelled room retries use the explicit refresh action and server policy.
+A ready thread owns only its child timeline and a conflated history-acquisition channel.
+Stop cancels screen work and closes late children; parent runtime and delivery belong to
+the application. Local observers continue clearing hidden content after ownership loss.
 
-A ready thread owns only a child timeline. Its lifetime also owns a serial conflated
-work channel. Explicit send/refresh and initial entry can perform a finite flush;
-timeline updates request debounced history acquisition. The flush reconciles receipts,
-stages unsent owned intents, and opens one admitted SDK delivery window. Already
-confirmed-only queues do not reopen delivery. Acquired originals support missing-receipt
-recovery and completion retirement; an empty SDK queue/history result is never an ACK.
-Stop cancels network/native work; late child acquisition is still closed. Parent SDK
-ownership stays with the application. Child close runs even after cancellation.
+Sending persists local intent and schedules the application worker. The screen never
+stages or resumes a native send queue, reconciles receipts or retires commands. Timeline
+updates acquire originals for the owned projection and may wake pending delivery. Explicit
+refresh also requests delivery. A failed room retry persists explicit control intent and
+wakes the worker; opening the screen does not silently retry failed provisioning. Readiness
+polling uses at most twelve reads with two-second spacing.
+
+[Application delivery](collaboration-background-delivery.md) owns exact room-operation
+replay, bounded message batches, original-evidence recovery and completion retirement.
+An empty native queue/history result is never an acknowledgement.
 
 ## Interface and evidence
 
@@ -73,14 +73,14 @@ Desktop layout tests capture fictional [English](images/chat-thread/chat-thread-
 and [Indonesian 200% text](images/chat-thread/chat-thread-indonesian-large-text.png) examples.
 The screenshots were opened for visual review; they are not physical-device evidence.
 
-[Validation](measurements/chat-thread-2026-11-01.json) binds 30 matching source inputs
+The original thread [validation](measurements/chat-thread-2026-11-01.json) binds 30 matching source inputs
 and all six attempts. Focused checks pass in 88 seconds and the full root/browser/Android
 checks pass in 232 seconds: 2,660 desktop tests, 332 domain browser, 55 presentation browser
 and 170 Android host tests, with zero failures/errors/skips. Android lint has zero errors
 and one existing warning. The dev APK, presentation AAR and proof APK are built; no new
 actual-server/emulator or Apple runtime run is claimed.
 No full PRD feature group is accepted by the thread alone. Remaining work includes
-application/platform background delivery, remote history pagination, durable drafts,
+native background-worker interoperability, remote history pagination, durable drafts,
 groups, verification and key migration, search, notifications/inline reply, richer
-message types/actions, Apple/web SDK adapters, calls and meetings. Foreground-only
-sending does not satisfy the offline or WhatsApp-style background requirements.
+message types/actions, Apple/web SDK adapters, calls and meetings. Application scheduling
+alone does not establish all WhatsApp-style background acceptance criteria.

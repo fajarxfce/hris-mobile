@@ -1,0 +1,180 @@
+{
+  "date": "2026-11-01",
+  "change": "Application-owned background text delivery, encrypted restart-safe cursor and screen handoff",
+  "baseImplementationCommit": "b78553c3b7b093e6a106e279ca432a3c02dc8453",
+  "sourceSha256": {
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/bootstrap/ApplicationCollaborationLifetime.kt": "131d908d58ef32afdbccd18f9d04ea99ecb8d4cfcaafad495dd8c19dbd34413c",
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/di/ApplicationCollaborationModule.kt": "44cfeaf6f3ad7953c70c2d834bdcece46cd219d98fbef93fae93bd53044910c7",
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/di/ApplicationWorkerModule.kt": "67020a6e205e3015c335a8661be7fbbe283f1c2b79494ebb61f0d6e9fde1e813",
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/work/CollaborationDeliveryWorker.kt": "906c6773b86d8bd8c06217d995f0434e5532a8fa6f0de8001675c9d516fe44d4",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt": "f26e10ea5f44e8e8fd59db4fb1a1746c1d81b53ce5e41aac5a4ef6535dbb0022",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationDeliveryWorkerTest.kt": "332f635c6c0c56c490d469a60d73514c1033022e39ddbb1875c70c9f1fea4b79",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/fixtures/CollaborationWorkerFixture.kt": "8837bd54aa8bb36571a5395788e6c276b80267003b491b7838c74ce19c9c9d5b",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/fixtures/NativeCollaborationUi.kt": "416c939c330977bc8139e49e55d330f79766ab90467a78811d20fbb93f43f9c4",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/fixtures/NativeCompanyPolicyUi.kt": "135ff643837a304a6314a42393bade72deba1fa2c320ab3781871d220cbe1fb7",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/fixtures/NativeUiServer.kt": "067fc8495cde50369db9715df88a11292e8940060de8a06b54493a25cb8e3da5",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/fixtures/NativeWorkerSdk.kt": "1fbe9738ebed346571166b8c3a6e1d369f903b24cf74b268e967eddda5b9aaac",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/delivery/CollaborationDeliveryCursorCodec.kt": "d0a2abbef281053855d9de7abf2fa485c8266c9a497638f486e7019b8102a1c7",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt": "054df7e99dcdf600fc4097c4971fceb744fc194cd9a2a4331d6f4d01e5d9f317",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationDeliveryCursorRepository.kt": "b5718950877c8b71cf4d477f6d3099f0d40c17eaee1b9df4509569553a56ed31",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationDeliveryCursorStorageContract.kt": "cb9acb036bfcdc17b49fd7f156461ee939fa431792d5251f3ec24b0e20a59ea9",
+    "features/collaboration/data/src/desktopTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationDeliveryCursorStorageTest.kt": "ac9dea05dd1aca6bb8357e2a75150e11295dcb590fb436b31aa9e2fd47933021",
+    "features/collaboration/data/src/wasmJsTest/kotlin/dev/fajar/starter/collaboration/data/BrowserCollaborationDeliveryCursorStorageTest.kt": "f82ff2674c6fba0b72b5c4a14756c29a3f97a77b8dc6f11a3157409fa5ba4760",
+    "features/collaboration/domain/build.gradle.kts": "68268c5f45d1e2297d9b5ff2682e72d60ff931fe198af614aa4debc90078184a",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationDeliveryCursor.kt": "5a1a521d47ec5a3594fb15bcedd6486b18ca60d96928d14e06eb1c15beb5cb8f",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationDeliveryWork.kt": "57dfd97dc8f46ba754cb52d71e0d0a42e4d92515ee85f46dd72966f3d0d914a7",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationDeliveryCursorRepository.kt": "5a5406277bc094e47c2377e788e1e1c6f348d33157ab8658849c3cf081b4a3a1",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/AdvanceCollaborationDelivery.kt": "3caec0bb3d73c92fa4fcfbaa3465cb0b201ca154e961d49b64a50169af389b2a",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/QueueCollaborationText.kt": "f4c36606f831ea048d8aefa2cf37422f3ab8b2f53cfa80b158b4c40e305f5d82",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ReadCollaborationDeliveryWork.kt": "1d0972ed4c2dec0b65cf669025ed45f77018af2b798a577f943a35bc50828879",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/RequestCollaborationDelivery.kt": "caaeef05c674e144a9032ea0b1673f536aa1b1f791979eb999d31bb87edf21d8",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationDeliverySchedulingTest.kt": "7c2a317381db854cd2439045c09bd884f0e0cbe6f903c47159dd23b629d1d0e2",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationMessageIntentTest.kt": "60e69aef7f8c05c7b938121a9ca93f83de81718672188ebb196945e315b5f74c",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/ReadCollaborationDeliveryWorkTest.kt": "178c8432cb8e62d8bd3ae0a354ac20b1374cb8d5c9b1b7a33d91af6fceaea83f",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/RequestCollaborationDeliveryTest.kt": "926fb468de2a22130dd545ce530899fec0520bf0ee0c078d5c18197d17f21b3a",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadViewModel.kt": "8ee0d410f1fabc6eac44acdd7286840b10fa079e00f6bfd3db0abd4b3530ff4f",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadFixture.kt": "489d3610e2703dbdc3d97bb53d318570c479f9a521492e1603717ffb8826190b",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadViewModelTest.kt": "c93216d750b4c0612e756020cbbe7e8601b0e7b7728bf2db2f87ad3cf2ba4897"
+  },
+  "sourceManifestMatched": true,
+  "attempts": [
+    {
+      "log": ".work/chat-delivery-foundation.log",
+      "durationSeconds": 118,
+      "outcome": "SUCCESSFUL",
+      "scope": "Initial scheduling/local discovery: domain desktop/browser and app binding/quality checks passed before cursor/worker integration."
+    },
+    {
+      "log": ".work/chat-delivery-cursor.log",
+      "durationSeconds": 134,
+      "outcome": "SUCCESSFUL",
+      "scope": "Cursor rotation and encrypted SQLite/IndexedDB contracts passed with domain/data desktop/browser and bindings/quality. Kotlin incremental cache fell back successfully to nonincremental compilation."
+    },
+    {
+      "log": ".work/chat-delivery-worker-bindings.log",
+      "durationSeconds": 64,
+      "outcome": "SUCCESSFUL",
+      "scope": "Initial worker/lifetime registration compiled; app bindings and quality passed before worker behavior tests."
+    },
+    {
+      "log": ".work/chat-delivery-integration.log",
+      "durationSeconds": 44,
+      "outcome": "FAILED",
+      "scope": "9 integration/binding tests ran; 2 fixture contract errors: NOT_REQUESTED creator and missing unresolved original anchor. Existing production validation correctly rejected both."
+    },
+    {
+      "log": ".work/chat-delivery-recovery.log",
+      "durationSeconds": 60,
+      "outcome": "FAILED",
+      "scope": "10 worker integration cases and 2 bindings passed; detekt rejected NativeUiServer.engine length."
+    },
+    {
+      "log": ".work/chat-delivery-screen.log",
+      "durationSeconds": 75,
+      "outcome": "FAILED",
+      "scope": "Domain desktop/browser passed; presentation test compilation rejected Instant for millisecond retryAt. No later checks claimed."
+    },
+    {
+      "log": ".work/chat-delivery-batches.log",
+      "durationSeconds": 109,
+      "outcome": "FAILED",
+      "scope": "Domain and presentation desktop/browser passed; app fixture compilation required suspend on extracted response helper. New worker batching test had not run."
+    },
+    {
+      "log": ".work/chat-delivery-full.log",
+      "durationSeconds": 320,
+      "outcome": "SUCCESSFUL",
+      "scope": "Root check, collaboration domain/data/presentation browser, Android host, presentation AAR, app Wasm, dev debug APK, lint and proof APK."
+    }
+  ],
+  "reports": {
+    "desktop": {
+      "suites": 426,
+      "tests": 2700,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "domain_desktopTest": {
+      "suites": 30,
+      "tests": 352,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "domain_wasmJsBrowserTest": {
+      "suites": 30,
+      "tests": 352,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "data_desktopTest": {
+      "suites": 35,
+      "tests": 255,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "data_wasmJsBrowserTest": {
+      "suites": 32,
+      "tests": 233,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "presentation_desktopTest": {
+      "suites": 9,
+      "tests": 67,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "presentation_wasmJsBrowserTest": {
+      "suites": 5,
+      "tests": 56,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "data_testAndroidHostTest": {
+      "suites": 28,
+      "tests": 170,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "appBindings": {
+      "suites": 1,
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "appWorker": {
+      "suites": 1,
+      "tests": 12,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "androidLint": {
+    "Error": 0,
+    "Fatal": 0,
+    "Warning": 1,
+    "Information": 0
+  },
+  "artifacts": {
+    "apps/android/build/outputs/apk/dev/debug/android-dev-debug.apk": "4e47ea8cfef0d7a84a64d6329662b2c55adf8b924b94a7911fa4f9d4c9e9f8ee",
+    "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk": "17ad74cc54c7c9844f3b83b1214dd32d578d507e4578fd138650fa1ae20374b0",
+    "features/collaboration/presentation/build/outputs/aar/presentation.aar": "97a1280fe9ce534033a74ad6ddb8e6cb6ed281fc3cc6998ee7c10caad29a8b39"
+  },
+  "limitations": [
+    "Desktop worker integration uses actual encrypted repositories and simulated control-plane/native provider; container restart is not actual Android process death.",
+    "No new Android WorkManager/native server, physical device or Apple runtime acceptance is claimed.",
+    "Unknown-anchor capacity recovery and complete provider paging remain separate follow-up work.",
+    "No full PRD feature group is accepted; notifications, groups, rich actions, crypto continuity, Apple/web adapters, calls and meetings remain.",
+    "No phone, live deployment or Starter change."
+  ]
+}

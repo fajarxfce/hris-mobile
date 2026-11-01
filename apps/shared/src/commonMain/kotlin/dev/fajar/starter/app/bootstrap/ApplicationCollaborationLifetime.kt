@@ -2,13 +2,16 @@ package dev.fajar.starter.app.bootstrap
 
 import dev.fajar.starter.collaboration.domain.entities.CollaborationOwner
 import dev.fajar.starter.collaboration.domain.usecases.MaintainCollaborationRuntimeOwnership
+import dev.fajar.starter.collaboration.domain.usecases.QueueCollaborationText
 import dev.fajar.starter.common.result.*
+import dev.fajar.starter.sync.domain.repositories.SyncScheduleRepository
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
 /** The application process owns observation independently of activities and chat routes. */
 class ApplicationCollaborationLifetime(
     private val maintain: MaintainCollaborationRuntimeOwnership,
+    private val schedules: SyncScheduleRepository,
     dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) : AutoCloseable {
     private val lifetime = SupervisorJob()
@@ -22,7 +25,16 @@ class ApplicationCollaborationLifetime(
         if (!started.compareAndSet(false, true)) return
         scope.launch {
             try {
-                maintain().collect { mutableState.value = it }
+                maintain().collect { result ->
+                    mutableState.value = result
+                    if (result is AppResult.Success && result.value != null) {
+                        // Durable commands survive startup and ownership renewal. The worker
+                        // rechecks current scope; this wakeup carries no account or message body.
+                        withTimeoutOrNull(1_500) {
+                            schedules.request(QueueCollaborationText.DELIVERY_KEY)
+                        }
+                    }
+                }
             } catch (cancelled: CancellationException) {
                 throw cancelled
             } catch (_: Exception) {

@@ -66,6 +66,14 @@ internal class ChatThreadFixture {
         base.records.value = listOf(summary)
     }
 
+    val scheduledKeys = mutableListOf<String>()
+    val schedules =
+        object : dev.fajar.starter.sync.domain.repositories.SyncScheduleRepository {
+            override suspend fun request(key: String): AppResult<Unit> {
+                scheduledKeys += key
+                return AppResult.Success(Unit)
+            }
+        }
     val identities =
         object : CollaborationIdentityRepository {
             override suspend fun current(access: CollaborationLocalAccess) = AppResult.Success(self)
@@ -333,21 +341,15 @@ internal class ChatThreadFixture {
                 createObserveCollaborationHistory(),
                 createObserveCollaborationMessages(),
                 createQueueCollaborationText(),
+                createRequestCollaborationDelivery(),
                 createLoadCollaborationSetup(),
                 createEnsureCollaborationRuntime(),
                 createReadCollaborationIdentity(),
                 createReadCollaborationConversations(),
                 createReadCollaborationControl(),
                 createPrepareCollaborationConversation(),
-                createReplayCollaborationConversation(),
-                createReconcileCollaborationConversation(),
                 createEnterCollaborationConversation(),
-                createStageCollaborationText(),
-                createDeliverCollaborationMessages(),
-                createReconcileCollaborationMessages(),
                 createAcquireCollaborationHistory(),
-                createRetireCollaborationMessages(),
-                createRecoverCollaborationMessageReceipts(),
             )
         }
 
@@ -387,7 +389,29 @@ internal class ChatThreadFixture {
 
     private fun createQueueCollaborationText() =
         with(base) {
-            QueueCollaborationText(messages, local, sessions, workspaces, server, build, clock)
+            QueueCollaborationText(
+                messages,
+                local,
+                sessions,
+                workspaces,
+                server,
+                build,
+                clock,
+                schedules,
+            )
+        }
+
+    private fun createRequestCollaborationDelivery() =
+        with(base) {
+            RequestCollaborationDelivery(
+                local,
+                sessions,
+                workspaces,
+                server,
+                build,
+                clock,
+                schedules,
+            )
         }
 
     private fun createLoadCollaborationSetup() =
@@ -455,32 +479,6 @@ internal class ChatThreadFixture {
             )
         }
 
-    private fun createReplayCollaborationConversation() =
-        with(base) {
-            ReplayCollaborationConversation(
-                controls.commands,
-                this@ChatThreadFixture.remote,
-                sessions,
-                workspaces,
-                server,
-                build,
-                clock,
-            )
-        }
-
-    private fun createReconcileCollaborationConversation() =
-        with(base) {
-            ReconcileCollaborationConversation(
-                controls.commands,
-                this@ChatThreadFixture.remote,
-                sessions,
-                workspaces,
-                server,
-                build,
-                clock,
-            )
-        }
-
     private fun createEnterCollaborationConversation() =
         with(base) {
             EnterCollaborationConversation(
@@ -493,55 +491,6 @@ internal class ChatThreadFixture {
                 build,
                 clock,
                 local,
-            )
-        }
-
-    private fun createStageCollaborationText() =
-        with(base) {
-            StageCollaborationText(
-                messages,
-                local,
-                this@ChatThreadFixture.remote,
-                setup.remote,
-                runtimes,
-                sessions,
-                workspaces,
-                server,
-                build,
-                clock,
-            )
-        }
-
-    private fun createDeliverCollaborationMessages() =
-        with(base) {
-            DeliverCollaborationMessages(
-                messages,
-                receipts,
-                local,
-                this@ChatThreadFixture.remote,
-                setup.remote,
-                runtimes,
-                sessions,
-                workspaces,
-                server,
-                build,
-                clock,
-                completions,
-            )
-        }
-
-    private fun createReconcileCollaborationMessages() =
-        with(base) {
-            ReconcileCollaborationMessages(
-                messages,
-                receipts,
-                local,
-                sessions,
-                workspaces,
-                server,
-                build,
-                clock,
-                completions,
             )
         }
 
@@ -558,39 +507,6 @@ internal class ChatThreadFixture {
                 server,
                 build,
                 clock,
-            )
-        }
-
-    private fun createRetireCollaborationMessages() =
-        with(base) {
-            RetireCollaborationMessages(
-                messages,
-                completions,
-                receipts,
-                retirement,
-                history,
-                local,
-                sessions,
-                workspaces,
-                server,
-                build,
-                clock,
-            )
-        }
-
-    private fun createRecoverCollaborationMessageReceipts() =
-        with(base) {
-            RecoverCollaborationMessageReceipts(
-                history,
-                messages,
-                receipts,
-                local,
-                sessions,
-                workspaces,
-                server,
-                build,
-                clock,
-                completions,
             )
         }
 }

@@ -1,5 +1,6 @@
 package dev.fajar.starter.app.di
 
+import dev.fajar.starter.app.work.CollaborationDeliveryWorker
 import dev.fajar.starter.app.work.InboxPushWorker
 import dev.fajar.starter.app.work.NativePushWorker
 import dev.fajar.starter.sync.domain.SyncTask
@@ -13,4 +14,27 @@ fun applicationWorkerModule() = module {
     // when Kotlin/Native links the framework. Direct app composition emits no such marker.
     single { InboxPushWorker(get(), get(), inject(), get()) } bind SyncTask::class
     single { NativePushWorker(get(), inject()) } bind SyncTask::class
+    single {
+        CollaborationDeliveryWorker(
+            discover = get(),
+            advance = get(),
+            observeAccess = get(),
+            loadSetup = get(),
+            ensureRuntime = get(),
+            control = get(),
+            read = get(),
+            prepare = get(),
+            replay = get(),
+            reconcileRoom = get(),
+            enter = get(),
+            messages = get(),
+            reconcile = get(),
+            stage = get(),
+            deliver = get(),
+            acquire = get(),
+            reopenHistory = get(),
+            recover = get(),
+            retire = get(),
+        )
+    } bind SyncTask::class
 }

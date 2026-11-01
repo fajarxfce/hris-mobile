@@ -7,6 +7,7 @@ import dev.fajar.starter.common.config.AppBuild
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.identity.domain.entities.IdentityServer
 import dev.fajar.starter.identity.domain.repositories.SessionRepository
+import dev.fajar.starter.sync.domain.repositories.SyncScheduleRepository
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
 import kotlin.time.Clock
 import kotlinx.coroutines.*
@@ -22,6 +23,7 @@ class QueueCollaborationText(
     private val server: IdentityServer,
     private val build: AppBuild,
     private val clock: Clock,
+    private val schedules: SyncScheduleRepository,
 ) {
     private val submissions = Mutex()
 
@@ -50,7 +52,11 @@ class QueueCollaborationText(
             continuation(workspaceId, access).let { if (it is AppResult.Failed) return@withLock it }
             if (retained is AppResult.Failed) return@withLock retained
             (retained as AppResult.Success).value?.let {
-                return@withLock matching(it, access, conversationId, id, text)
+                return@withLock wake(
+                    workspaceId,
+                    access,
+                    matching(it, access, conversationId, id, text),
+                )
             }
             val acquired = conversations.get(access, conversationId)
             continuation(workspaceId, access).let { if (it is AppResult.Failed) return@withLock it }
@@ -94,9 +100,30 @@ class QueueCollaborationText(
             continuation(workspaceId, access).let { if (it is AppResult.Failed) return@withLock it }
             if (stored is AppResult.Failed) return@withLock stored
             (stored as AppResult.Success).value?.let {
-                matching(it, access, conversationId, id, text)
+                wake(workspaceId, access, matching(it, access, conversationId, id, text))
             } ?: collaborationSetupFailure("client.collaboration_message_changed")
         }
+
+    /** Scheduler payloads contain only this key; the encrypted command is the durable work. */
+    companion object {
+        const val DELIVERY_KEY = "hris.collaboration-delivery"
+    }
+
+    private suspend fun wake(
+        workspaceId: String,
+        access: CollaborationLocalAccess,
+        result: AppResult<CollaborationMessageRecord>,
+    ): AppResult<CollaborationMessageRecord> {
+        if (result is AppResult.Failed) return result
+        if ((result as AppResult.Success).value.state !is CollaborationMessageState.Sent) {
+            // Failed scheduling cannot undo a committed intent. Startup/periodic recovery scans
+            // durable commands. Cancellation still prevents a late UI acknowledgement.
+            withTimeoutOrNull(1_500) { schedules.request(DELIVERY_KEY) }
+            val current = continuation(workspaceId, access)
+            if (current is AppResult.Failed) return current
+        }
+        return result
+    }
 
     private fun matching(
         record: CollaborationMessageRecord,

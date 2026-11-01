@@ -1,60 +1,40 @@
-# Next concrete increment: platform scheduled delivery
+# Continue native delivery recovery and interoperability
 
-Use the existing SyncTask / SyncScheduleRepository / Android WorkManager integration.
-Android scheduler already persists task-key-only APPEND_OR_REPLACE requests, CONNECTED
-constraint, exponential 30s backoff and periodic recovery. Non-Android hosts already
-own cancellable ForegroundSyncWorker with bounded backoff. Do not introduce another
-SDK send queue or a screen-owned forever loop.
+The application worker, durable scheduler wakeups, encrypted fair cursor and thread
+handoff are now implemented. See [current contract](collaboration-background-delivery.md).
+This does not accept all background, provider or product requirements.
 
-1. Add core.sync.domain dependency to collaboration.domain; QueueCollaborationText
-   receives SyncScheduleRepository. Once exact stored intent is confirmed, request a
-   constant feature-owned key. Preserve a successful local storage acknowledgement
-   when scheduling fails; periodic/startup recovery finds durable pending commands.
-   Never create an alternative ID. Request again when replay finds a non-Sent intent.
-   Bound scheduling to a short interval; keep cancellation/owner checks around it.
-   Tests: local commit survives schedule failure, exact replay reawakens once, cancelled
-   write cannot fabricate success, Sent completion does not request transport again.
-   Only three construction callsites currently exist: data DI, domain MessageIntentFixture,
-   presentation ChatThreadFixture. Do not silently add an optional no-op production port.
+1. Finish focus-capacity recovery when an uncertain send has no confirmed event anchor.
+   `AcquireCollaborationHistory` can find the current native head internally, but a
+   capacity failure does not return that anchor. `ReopenCollaborationHistory` currently
+   requires a known event ID. Add an owned/re-admitted latest-head recovery path, bounded
+   to one reopening, with no automatic credential enrollment or repeated send. Validate
+   unknown/mismatched/absent heads, cancellation and admission loss around head lookup,
+   close and restore. Never infer ACK from a missing native transaction. Cover the same
+   issue for repeated foreground incoming-history acquisition.
 
-2. Add a local selected-workspace outbox discovery use case. It reads Session.current,
-   selected Workspace.current, validates local collaboration access (ordinary expiry
-   preserves owned records), checks shared admission, reads messages.observe(access,null)
-   once, rechecks session/workspace/admission, validates bounds and exact record ownership,
-   returns workspaceId + account/company + finite conversation IDs (no body in scheduler).
-   Null/no workspace is empty work; unknown/corrupt/denied state is a classified failure.
-   Native/live permission is rechecked by each existing transport use case.
+2. Exercise the actual worker with Android protected stores, real SDK and fictional
+   HRIS/Synapse gateway. Existing apps/collaboration-proof / NativeCollaborationSdkInteropTest
+   covers prior sender/recovery use cases, not this application worker. Extend a separately
+   identified scenario and evidence, preserving the old four-process/three-death assertions.
+   The proof app may depend on apps.shared to invoke the same orchestration class; do not
+   duplicate the worker into fixture code. Keep provider/SDK proof distinct from WorkManager
+   lifecycle proof. A queued command must survive process death before platform execution,
+   retain exact content/ID, deliver once, acquire originals and retire only with evidence.
+   Use the dedicated emulator; never drive the user's phone for routine tests.
 
-3. App-level CollaborationDeliveryWorker orchestrates real feature use cases like
-   InboxPushWorker, under one mutex and bounded total timeout. Load setup / ensure existing
-   runtime; no silent enrollment, bootstrap or failed room retry. For each finite room:
-   reconcile journal, resume retained room command or prepare NOT_REQUESTED room only
-   when a pending intent exists, reconcile confirmed control, wait via scheduler if not
-   ready. Stage a bounded oldest batch, deliver the exact mapped room queue, acquire
-   originals, recover missing receipts, retire proven completion. No already-confirmed-only
-   native resume. Continue independent room work where allowed; company/session denials
-   stop scope immediately. Fairness/retry state needs tests, not an unbounded first-room loop.
-   Use scoped child timeline only if native sync requires it; inspect actual adapter before
-   choosing. Every acquired child is closed in finally even for late cancellation.
+3. Finish remote older-history paging, durable drafts and safe pending cancellation, then
+   incoming FCM/pusher/gateway integration and inline replies. Keep payloads opaque and
+   admission-bound; notification actions must use the same durable command pipeline.
+   Android background delivery alone does not supply Apple's PushKit/CallKit, notification
+   service extension or browser service-worker behavior.
 
-4. Register SyncTask in ApplicationWorkerModule. Application collaboration ownership
-   changes can request the key after a valid owner returns, so blocked company/session
-   recovery wakes without waiting for periodic work. Avoid coupling a route to a worker.
-   Startup and process-death tests must prove the durable command is the work source.
+4. Continue all remaining P0–P8 / 54 catalog groups: groups, media/stickers/voice notes,
+   edit/forward/delete, E2EE verification and cross-family keys, backups, full Apple/web
+   adapters, calling and meetings. Do not mark provider feasibility as product acceptance.
+   Record each tested increment and push its atomic commit during the authorized long run.
 
-5. Thread then keeps local queueing + timeline/history observation; transport work belongs
-   to the application worker. Refresh may explicitly request delivery. Retain distinct
-   signal for manual retry of failed room provisioning, not a silent background retry.
-   Validate race between active thread and background worker; shared use-case mutexes and
-   exclusive native queue lease retain exact identities. Change UI claims only after proof.
-
-Remaining outside this increment: provider older-page UI, durable drafts/cancel,
-notifications/inline replies (pusher/gateway/NSE), iOS real background limits/web service
-worker, groups, cross-family cryptographic key continuity, all rich content/calls/meetings.
-
-`RefreshWorkspace` is already a registered periodic SyncTask; do not bypass its live
-account/assurance/policy checks. A successful ownership renewal can wake blocked chat
-work. Its failure still preserves owned local history and pending intent.
-Android runtime `enterTimeline` starts sync and may join; `acquireMessageQueue` alone
-does not join a missing room. A background delivery pass needs a scoped admitted child
-when opening a ready room for the first time, with guaranteed cleanup.
+`RefreshWorkspace` remains the registered periodic live policy renewal task. Known
+company/MFA denials remain gated until admitted acquisition; owned local history and
+pending intent survive ordinary freshness/credential expiry. Never hide a denial merely
+because another read or scheduler trigger started.

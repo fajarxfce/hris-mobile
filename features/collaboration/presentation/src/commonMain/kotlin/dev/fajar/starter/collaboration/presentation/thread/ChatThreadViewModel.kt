@@ -28,21 +28,15 @@ class ChatThreadViewModel(
     private val observeHistory: ObserveCollaborationHistory,
     private val observeMessages: ObserveCollaborationMessages,
     private val queue: QueueCollaborationText,
+    private val requestDelivery: RequestCollaborationDelivery,
     private val loadSetup: LoadCollaborationSetup,
     private val ensureRuntime: EnsureCollaborationRuntime,
     private val identity: ReadCollaborationIdentity,
     private val read: ReadCollaborationConversations,
     private val control: ReadCollaborationControl,
     private val prepare: PrepareCollaborationConversation,
-    private val replay: ReplayCollaborationConversation,
-    private val reconcileConversation: ReconcileCollaborationConversation,
     private val enter: EnterCollaborationConversation,
-    private val stage: StageCollaborationText,
-    private val deliver: DeliverCollaborationMessages,
-    private val reconcileMessages: ReconcileCollaborationMessages,
     private val acquireHistory: AcquireCollaborationHistory,
-    private val retire: RetireCollaborationMessages,
-    private val recoverReceipts: RecoverCollaborationMessageReceipts,
 ) : MviViewModel<ChatThreadState, ChatThreadEvent, ChatThreadEffect>(ChatThreadState()) {
     private var observation: Job? = null
     private var connection: Job? = null
@@ -59,7 +53,7 @@ class ChatThreadViewModel(
     private var reservedId: String? = null
     private var reservedText: String? = null
     private var pulse: Channel<Unit>? = null
-    private var flushRequested = false
+    private var wakeRequested = false
 
     init {
         on<ChatThreadEvent.Entered>(::onEntered)
@@ -146,7 +140,7 @@ class ChatThreadViewModel(
         submission?.cancel()
         submission = null
         pulse = null
-        flushRequested = false
+        wakeRequested = false
         access = null
         context = null
         pending = emptyList()
@@ -241,7 +235,7 @@ class ChatThreadViewModel(
                         updateState { it.copy(failure = result.failure) }
                     else observeLocal()
                 }
-        } else if (pulse != null) requestFlush() else connect(retryRoom = true)
+        } else if (pulse != null) requestSync() else connect(retryRoom = true)
     }
 
     private fun onOlderRequested(event: ChatThreadEvent.OlderRequested) {
@@ -303,14 +297,14 @@ class ChatThreadViewModel(
                             it.copy(draft = "", submissionPending = false, saving = false)
                         }
                         emitEffect(ChatThreadEffect.ScrollToNewest)
-                        if (pulse != null) requestFlush() else connect()
+                        if (pulse != null) requestSync(wake = false) else connect()
                     }
                 }
             }
     }
 
-    private fun requestFlush() {
-        flushRequested = true
+    private fun requestSync(wake: Boolean = true) {
+        wakeRequested = wakeRequested || wake
         pulse?.trySend(Unit)
     }
 
@@ -369,7 +363,7 @@ class ChatThreadViewModel(
         val retained = control.room(workspaceId, conversationId)
         currentCoroutineContext().ensureActive()
         if (retained is AppResult.Failed) return retained
-        var command = (retained as AppResult.Success).value.value
+        val command = (retained as AppResult.Success).value.value
         val status = read.room(workspaceId, conversationId)
         currentCoroutineContext().ensureActive()
         if (status is AppResult.Failed) return status
@@ -384,15 +378,15 @@ class ChatThreadViewModel(
         if (
             command == null &&
                 hasPending &&
-                (room.state == CollaborationDirectRoomState.NOT_REQUESTED ||
-                    (retry &&
-                        room.retryable &&
-                        room.state in
-                            setOf(
-                                CollaborationDirectRoomState.FAILED,
-                                CollaborationDirectRoomState.CANCELLED,
-                            )))
+                retry &&
+                room.retryable &&
+                room.state in
+                    setOf(
+                        CollaborationDirectRoomState.FAILED,
+                        CollaborationDirectRoomState.CANCELLED,
+                    )
         ) {
+            // A failed provisioning attempt requires explicit user intent. The worker sends it.
             val prepared =
                 prepare(
                     workspaceId,
@@ -400,24 +394,16 @@ class ChatThreadViewModel(
                         conversationId,
                         device.id,
                         device.version,
-                        if (room.state == CollaborationDirectRoomState.NOT_REQUESTED) null
-                        else room.version,
+                        room.version,
                     ),
                 )
             currentCoroutineContext().ensureActive()
             if (prepared is AppResult.Failed) return prepared
-            command = (prepared as AppResult.Success).value
         }
-        if (command != null) {
-            if (command.outcome !is CollaborationConversationOutcome.Confirmed) {
-                val sent = replay(workspaceId, command.command.id)
-                currentCoroutineContext().ensureActive()
-                if (sent is AppResult.Failed) return sent
-            }
-            val reconciled = reconcileConversation(workspaceId, command.command.id)
+        if (hasPending || command != null) {
+            val requested = requestDelivery(workspaceId)
             currentCoroutineContext().ensureActive()
-            if (reconciled is AppResult.Failed) return reconciled
-            if (!(reconciled as AppResult.Success).value) return AppResult.Success(false)
+            if (requested is AppResult.Failed) return requested
         }
         if (!hasPending) return AppResult.Success(room.state == CollaborationDirectRoomState.READY)
         repeat(12) { attempt ->
@@ -429,7 +415,11 @@ class ChatThreadViewModel(
             if (current.state == CollaborationDirectRoomState.READY) return AppResult.Success(true)
             if (
                 current.state !in
-                    setOf(CollaborationDirectRoomState.QUEUED, CollaborationDirectRoomState.RUNNING)
+                    setOf(
+                        CollaborationDirectRoomState.NOT_REQUESTED,
+                        CollaborationDirectRoomState.QUEUED,
+                        CollaborationDirectRoomState.RUNNING,
+                    )
             )
                 return AppResult.Success(false)
             updateState { it.copy(connection = ChatThreadConnection.WAITING) }
@@ -453,15 +443,15 @@ class ChatThreadViewModel(
             coroutineScope {
                 val signals = Channel<Unit>(Channel.CONFLATED)
                 pulse = signals
-                flushRequested = true
+                wakeRequested = false
                 signals.trySend(Unit)
                 val worker = launch {
                     for (signal in signals) {
-                        val flush = flushRequested
-                        flushRequested = false
-                        if (!flush) delay(400)
+                        val wake = wakeRequested
+                        wakeRequested = false
+                        if (!wake) delay(400)
                         updateState { it.copy(syncing = true) }
-                        val result = synchronize(deviceId, flush)
+                        val result = synchronize(deviceId, wake)
                         ensureActive()
                         updateState {
                             it.copy(
@@ -511,49 +501,14 @@ class ChatThreadViewModel(
         }
     }
 
-    private suspend fun synchronize(deviceId: String, flush: Boolean): AppResult<Unit> {
-        if (flush) {
-            val repaired = reconcileMessages(workspaceId, conversationId)
-            currentCoroutineContext().ensureActive()
-            if (repaired is AppResult.Failed) return repaired
-            val read = observeMessages(workspaceId, conversationId).first()
-            currentCoroutineContext().ensureActive()
-            if (read is AppResult.Failed) return read
-            val waiting =
-                (read as AppResult.Success).value.filter {
-                    it.state !is CollaborationMessageState.Sent
-                }
-            for (record in waiting) {
-                val staged = stage(workspaceId, deviceId, record.intent.id)
-                currentCoroutineContext().ensureActive()
-                if (staged is AppResult.Failed) return staged
-            }
-            if (waiting.isNotEmpty()) {
-                val sent = deliver(workspaceId, deviceId, conversationId)
-                currentCoroutineContext().ensureActive()
-                if (sent is AppResult.Failed) return sent
-                if ((sent as AppResult.Success).value.unresolved.isNotEmpty())
-                    return AppResult.Failed(
-                        Failure(
-                            FailureKind.Unavailable,
-                            "Some messages are waiting to send.",
-                            code = "client.collaboration_messages_pending",
-                        )
-                    )
-            }
-        }
+    private suspend fun synchronize(deviceId: String, wake: Boolean): AppResult<Unit> {
         val acquired = acquireHistory(workspaceId, deviceId, conversationId)
         currentCoroutineContext().ensureActive()
         if (acquired is AppResult.Failed) return acquired
-        val recovered = recoverReceipts(workspaceId, conversationId)
-        currentCoroutineContext().ensureActive()
-        if (recovered is AppResult.Failed) return recovered
-        val retired = retire(workspaceId, conversationId)
-        currentCoroutineContext().ensureActive()
-        return when (retired) {
-            is AppResult.Failed -> retired
-            is AppResult.Success -> AppResult.Success(Unit)
-        }
+        // Original history belongs to the local projection. The application worker owns delivery,
+        // receipt reconciliation and retirement even after this screen is disposed.
+        if (wake || pending.isNotEmpty()) return requestDelivery(workspaceId)
+        return AppResult.Success(Unit)
     }
 
     private fun connectionFailed(failure: Failure) {

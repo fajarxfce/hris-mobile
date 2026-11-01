@@ -197,6 +197,15 @@ internal class MessageIntentFixture {
     var activeMessageObservers = 0
     var afterConversation: suspend () -> Unit = {}
     var afterInsert: suspend () -> Unit = {}
+    val scheduledKeys = mutableListOf<String>()
+    var schedule: suspend () -> AppResult<Unit> = { AppResult.Success(Unit) }
+    val schedules =
+        object : dev.fajar.starter.sync.domain.repositories.SyncScheduleRepository {
+            override suspend fun request(key: String): AppResult<Unit> {
+                scheduledKeys += key
+                return schedule()
+            }
+        }
     var beforeAdmission: suspend () -> Unit = {}
     var insertResult: AppResult<CollaborationMessageInsertion> =
         AppResult.Success(CollaborationMessageInsertion.STORED)
@@ -320,6 +329,7 @@ internal class MessageIntentFixture {
             server,
             build,
             clock,
+            schedules,
         )
     private val observer =
         ObserveCollaborationMessages(

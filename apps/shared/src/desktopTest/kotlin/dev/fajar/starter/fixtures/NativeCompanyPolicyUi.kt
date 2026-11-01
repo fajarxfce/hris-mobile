@@ -10,6 +10,7 @@ import kotlinx.coroutines.CompletableDeferred
 import kotlinx.serialization.json.*
 
 class NativeCompanyPolicyUi {
+    @Volatile var extraModules: Set<String> = emptySet()
     @Volatile var disabledModules: Set<String> = emptySet()
     @Volatile var minimumAndroid: Long = 0
     @Volatile var maintenance = false
@@ -31,6 +32,7 @@ class NativeCompanyPolicyUi {
             when {
                 path.contains("/sync/") || path.contains("/inbox/") || path.endsWith("/inbox") ->
                     "COMMUNICATIONS"
+                path.contains("/collaboration/") -> "COLLABORATION"
                 path.contains("/people/") -> "PEOPLE"
                 path.contains("/leave/") -> "LEAVE"
                 path.contains("/documents/") -> "DOCUMENTS"
@@ -65,6 +67,7 @@ class NativeCompanyPolicyUi {
                         "COMMUNICATIONS",
                         "REPORTING",
                     )
+                    .plus(extraModules)
                     .filter { !restricted || it !in disabledModules }
                     .forEach { add(it) }
             }
