@@ -1,0 +1,284 @@
+{
+  "date": "2026-11-01",
+  "change": "Actual Android WorkManager delivery after offline persistence and ordinary process death",
+  "baseMobileCommit": "8569705e4fdf401cb32f199778177f3843f21a14",
+  "basePlatformCommit": "784fc9113a4f09fd1ed9bff7541479088263aca5",
+  "sourceSha256": {
+    "mobile": {
+      "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisScheduledProofActivity.kt": "6466afbc9c5c49b5e07107e30840fcc9909391ba93c0bef4dec105345f0d9f48",
+      "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisScheduledProofApplication.kt": "947202a78cffa4b75f662ac5ccb96c4257dbcd1bc31ac416ef8040ea06a74ee0",
+      "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisScheduledWorkState.kt": "8c7c94874045435cecbc9679be14307ada75872ee08e9580f03a43b2551fc972",
+      "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisScheduledWorkerProbe.kt": "e22989a2b85ad6e64cbc9c962efcc62e6368dd3a91cf2b96cee6d27735430842",
+      "apps/collaboration-proof/src/main/AndroidManifest.xml": "f004af021febfbe2b2a58d756567d077874d0aab91ff4ff5e326c938d01b5d2e",
+      "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisWorkerProofContainer.kt": "21ec4eb1001dce5b7a92718567981345cef28ab70986ac2eef46636aaa0a125c"
+    },
+    "platform": {
+      "apps/server/src/test/kotlin/dev/fajar/hris/NativeCollaborationScheduledInteropTest.kt": "53fc1bc0808c618eb00341d3a377931b8d3b542c5b9f895074637986ee73b67d",
+      "tool/collaboration_scheduled_native.py": "a634d887342f6476b20331ec46aa49530c55a98e27630e6079504e4be39fb89b",
+      "tool/collaboration_scheduled_network.py": "91157e1e575956424fec534fa393e8827f551b0524a472787a21508d9d4e58ec",
+      "tool/test_collaboration_scheduled_native.py": "15b507d9d9d48f7b3f519d88d92fd23b86f4c9f0c2f1d9cfee410077da0effc2"
+    },
+    "apkSha256": "3b5eb0d593c42aa52d5fdd6a67addeff5b879f105957668c201c08da06d34221"
+  },
+  "attempts": {
+    "initialProofBuild": {
+      "path": ".work/scheduled-proof-build.log",
+      "sha256": "98733345fa1664b3518dbdea58be478541f489251a9c535f63c4bac4742ca7bc",
+      "passed": true,
+      "seconds": 97
+    },
+    "ownerInitializationReview": {
+      "path": ".work/scheduled-proof-owner.log",
+      "sha256": "9228ee26d341826f32ba9e359d0d0d3b004e769d84b61ecb76d188d0a347fafa",
+      "passed": true,
+      "seconds": 79
+    },
+    "serverCompile": {
+      "path": ".work/scheduled-server-compile.log",
+      "sha256": "37ac109ebc5f92c65e199d78ec1f07e330b35ebd9b478e0825d646d7dcc1d34a",
+      "passed": true,
+      "seconds": 28
+    },
+    "firstScheduledRun": {
+      "path": ".work/scheduled-live-1.log",
+      "sha256": "a6fdc32c731e569f91b079fe7c3a08feba80af7c995aab91483ac7a04f81c23f",
+      "passed": false,
+      "seconds": 71
+    },
+    "namespaceProofBuild": {
+      "path": ".work/scheduled-namespace-build.log",
+      "sha256": "2d364e1df728a84395a07f21ee8022fb4971005f9d5c7aa148361a81ac686800",
+      "passed": true,
+      "seconds": 85
+    },
+    "scheduledRun": {
+      "path": ".work/scheduled-live-2.log",
+      "sha256": "38b73b9d53bd63ccfc6a3496db86fdfa26f71caad561e2cacb6e4ccd42ab7bcb",
+      "passed": true,
+      "seconds": 76
+    },
+    "nativeRegressions": {
+      "path": ".work/scheduled-regressions.log",
+      "sha256": "a03ec3d99642c95d2a6cfaafb5c63c6eb6f31e2537067f3ff22a4b32b3b3c25d",
+      "passed": true,
+      "seconds": 112
+    },
+    "rootCheck": {
+      "path": ".work/scheduled-root-check.log",
+      "sha256": "76c34a774ed8239116e2f446b202f646acb0c62e33070658bffea9e45b994c7e",
+      "passed": true,
+      "seconds": 57
+    }
+  },
+  "pythonTests": {
+    "cases": 62,
+    "passed": true,
+    "logSha256": "e55b793835f70dbd4dcd0511753db813c8110d39137e0ae2d7ebae90f3385c82"
+  },
+  "scheduled": {
+    "passed": true,
+    "cleanup": true,
+    "processes": 2,
+    "ordinaryProcessDeaths": 1,
+    "automaticJobStart": true,
+    "networkRestored": true,
+    "encryptedSends": 1,
+    "applicationAdmissions": {
+      "device": 8,
+      "conversation": 7,
+      "room": 8,
+      "failures": 0
+    },
+    "proof": {
+      "processId": 5852,
+      "messageId": "f544ca1e-8c09-4a26-b8ce-5357ea8d7311",
+      "bodySha256": "49d254c658bb155645d966548bb84a54bf81e50cf8866f46938566c7b002a9fa",
+      "state": "COMPLETED",
+      "taskKey": "hris.collaboration-delivery",
+      "workId": "30f11c03-9f68-4e15-ad3a-c16eb93eb300",
+      "workState": "SUCCEEDED",
+      "eventId": "$8vucVv9vh-T1zmxUxZexG6o8kufsfdR3QuxbYQQTLKs",
+      "runAttemptCount": 1,
+      "senderRuntimeRestoredByWorker": true,
+      "originalHistoryAcquired": true,
+      "completionRetired": true
+    },
+    "artifact": {
+      "apkSha256": "3b5eb0d593c42aa52d5fdd6a67addeff5b879f105957668c201c08da06d34221",
+      "package": "dev.fajar.hris.collaboration.proof",
+      "avd": "hris-mobile-dev",
+      "androidApi": "35"
+    },
+    "workManagerExecutionAccepted": true,
+    "retryCancellationAccepted": false
+  },
+  "stopped": {
+    "processId": 5135,
+    "messageId": "f544ca1e-8c09-4a26-b8ce-5357ea8d7311",
+    "bodySha256": "49d254c658bb155645d966548bb84a54bf81e50cf8866f46938566c7b002a9fa",
+    "state": "QUEUED",
+    "taskKey": "hris.collaboration-delivery",
+    "workState": "ENQUEUED",
+    "networkConstraint": "CONNECTED",
+    "inputKeys": [
+      "sync_task"
+    ],
+    "workerClass": "dev.fajar.starter.worker.SyncWorker",
+    "workId": "30f11c03-9f68-4e15-ad3a-c16eb93eb300",
+    "jobId": 0,
+    "jobNamespace": "androidx.work.systemjobscheduler",
+    "runAttemptCount": 0,
+    "ordinaryProcessDeath": true,
+    "packageNotForceStopped": true,
+    "systemJobRetained": true
+  },
+  "started": {
+    "processId": 5852,
+    "messageId": "f544ca1e-8c09-4a26-b8ce-5357ea8d7311",
+    "bodySha256": "49d254c658bb155645d966548bb84a54bf81e50cf8866f46938566c7b002a9fa",
+    "state": "QUEUED",
+    "taskKey": "hris.collaboration-delivery",
+    "workId": "30f11c03-9f68-4e15-ad3a-c16eb93eb300",
+    "senderRuntimeOpen": false
+  },
+  "scheduledEvidenceSha256": {
+    "acceptance.json": "b15c6c21e6fd1f3e2907d6c4f595a5dd42d0d481e76b3e74f38cfc1f8925a64c",
+    "result.json": "d3c4b36701942e2462e378e206272115a21b4cd1488a659cd908e5f6c117b0b6",
+    "stopped.json": "1310b8e1e069b690ead44e52758db2fa5dc304acf3cf3d8a25ac8d0e193f8797",
+    "started.json": "b2be0f707c2febcf81fdbfb24279361f3b5849dde40c630c2be297849d5186de",
+    "network-before.json": "79dfab35e5f4104e398aa74de7c3d6e56dda0a96ac31d2fcb699ac1df093c6ad",
+    "gateway-trace.json": "638ae9ef2d11f10af245ba0beabfd831f8c194abfc51ffc9bdf5ffdf84ad649f"
+  },
+  "directWorkerRegression": {
+    "passed": true,
+    "cleanup": true,
+    "processes": 2,
+    "forcedProcessDeaths": 1,
+    "encryptedSends": 1,
+    "applicationAdmissions": {
+      "device": 8,
+      "conversation": 7,
+      "room": 8,
+      "failures": 0
+    },
+    "proof": {
+      "processId": 8085,
+      "messageId": "7b4527c3-7478-459f-8eb6-68113329e410",
+      "bodySha256": "10b31f7ec4ab551e0a91c694df604108a6b36d7214bf9a8a727bf616ac878f95",
+      "state": "COMPLETED",
+      "taskKey": "hris.collaboration-delivery",
+      "encryptedReceived": true,
+      "senderRuntimeRestoredByWorker": true,
+      "originalHistoryAcquired": true,
+      "completionRetired": true,
+      "repeatedWorkerComplete": true,
+      "eventId": "$vTyVR4iVVAkFMjKeOvesae2rbBeJKFWli0cFZmVXf-k",
+      "passes": 1
+    },
+    "artifact": {
+      "apkSha256": "3b5eb0d593c42aa52d5fdd6a67addeff5b879f105957668c201c08da06d34221",
+      "package": "dev.fajar.hris.collaboration.proof",
+      "avd": "hris-mobile-dev",
+      "androidApi": "35"
+    },
+    "platformWorkManagerAccepted": false
+  },
+  "senderRegression": {
+    "passed": true,
+    "encryptedBothDirections": true,
+    "logicalIdsPreserved": true,
+    "cleanup": true,
+    "protectedStoreReopened": true,
+    "missingRecordPreserved": true,
+    "wrongPassphrasePreserved": true,
+    "exclusiveOwner": true,
+    "processRestarted": true,
+    "queueRestored": true,
+    "transactionReused": true,
+    "identityAfterRestart": true,
+    "messageIntentRestored": true,
+    "queueMappingRecovered": true,
+    "queueWriterExclusive": true,
+    "perRoomDeliveryIsolated": true,
+    "heldQueueRestored": true,
+    "nativeDeliveryOwned": true,
+    "commonSenderOwned": true,
+    "receiptJournalRecovered": true,
+    "projectionInterrupted": true,
+    "originalHistoryWindowOwned": true,
+    "historyBodiesRestored": true,
+    "commonHistoryAcquisitionOwned": true,
+    "latestHistoryHeadOwned": true,
+    "admittedHistoryHeads": true,
+    "providerHistoryPageOwned": true,
+    "commonProviderHistoryAcquisitionOwned": true,
+    "providerHistoryReferencesRestored": true,
+    "providerHistoryReferencesReconciled": true,
+    "providerHistoryRestartPreserved": true,
+    "historyRuntimeReopened": true,
+    "ackBeforeJournalRecovered": true,
+    "processRestartedAfterAck": true,
+    "completionCleanupRecovered": true,
+    "processRestartedAfterCompletion": true,
+    "encryptedSendCount": 3,
+    "admittedProviderPages": true,
+    "historyWindow": {
+      "originals": 2,
+      "unavailable": 9,
+      "extractionNanos": 8414455,
+      "modelCharacters": 4732,
+      "originalCharacters": 953
+    },
+    "applicationAdmittedBeforeSend": true,
+    "applicationAdmittedAroundHistory": true,
+    "applicationAdmissions": {
+      "device": 22,
+      "conversation": 22,
+      "room": 22,
+      "failures": 0
+    },
+    "heldRoomNeverSent": true,
+    "pausedAcrossRestart": true,
+    "syncInterruptedAfterRestart": true,
+    "syncRetriedWithRetainedCursor": true,
+    "artifact": {
+      "apkSha256": "3b5eb0d593c42aa52d5fdd6a67addeff5b879f105957668c201c08da06d34221",
+      "package": "dev.fajar.hris.collaboration.proof",
+      "avd": "hris-mobile-dev",
+      "androidApi": "35"
+    }
+  },
+  "regressionEvidenceSha256": {
+    "direct": {
+      "acceptance.json": "af30d9ff7f9bc4d53982f278df56c987d74bddffc501e05e6b5bd9de891fe733",
+      "result.json": "13d916a8f3415a95f60db2c11a0137eae093c095810a0f9313e51ca587d96e26",
+      "gateway-trace.json": "0b708ed141d303e0f95aa04c773140094d54e4759779eed2bbf18694cac7a396"
+    },
+    "sender": {
+      "verified.json": "f48e61da0987f7eb0a131a784c03bd432f1ec075206575cfe3d850084f79e03e",
+      "result.json": "3e5d0a7c78e2cbb3a7acdf176225c55f12b3f2babe95dfa5408cf40c1611512c",
+      "gateway-trace.json": "37375ec3e33acfb8de62d527a9f03e75b9e8f3ad95b7539e3b6abcb6a58686a8"
+    }
+  },
+  "desktopReports": {
+    "suites": 426,
+    "tests": 2710,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "notes": [
+    "The initial Android build passed. Review then delayed stage container construction until the protected fixture owner had completed renewal; the corrected build passed before native execution.",
+    "The first live run timed out while looking for pending work. Android logs confirmed that WorkManager had scheduled its job and correctly held it offline. The fixture queried the default JobScheduler namespace, while Android 14+ WorkManager uses a dedicated namespace.",
+    "The correction enumerates owned pending jobs across namespaces, binds the WorkSpec ID and uses the recorded namespace for read-only job inspection. It changes no product scheduler behavior.",
+    "The normal proof Activity is confirmed backgrounded before run-as SIGKILL. The package is not force-stopped, the job remains registered, and restored connectivity triggers OS startup without instrumentation or a manual jobscheduler run command.",
+    "The application observer never invokes the task; actual WorkInfo SUCCEEDED, exact original content, archived completion and one encrypted gateway send establish completion. Raw runAttemptCount is retained, not relabeled as a deliberate retry test.",
+    "Cleanup restores only the original owned-emulator radio state and stops/uninstalls only the claimed proof package. Production login inputs remain seeded fixtures.",
+    "Root checks and all three actual native scenarios passed on the recorded inputs. Deliberate interruption during send and retry/cancellation races remain separate acceptance."
+  ],
+  "emulatorStopped": true,
+  "phoneInstalled": false,
+  "liveProviderChanged": false,
+  "starterChanged": false,
+  "completeProductAccepted": false
+}

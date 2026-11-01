@@ -8,15 +8,14 @@ Latest-head capacity recovery is now implemented for uncertain delivery and expl
 foreground Refresh. See [recovery contract](collaboration-history-recovery.md). Continue
 actual provider and platform execution evidence next.
 
-1. Actual worker/Android protected store/SDK/HRIS interoperability now passes after a real
-   process death. [Native worker evidence](collaboration-native-worker.md) remains separate
-   from the preserved four-process/three-death sender regression. Continue actual Android
-   WorkManager execution: persisted task-key-only requests, connected-network constraints,
-   OS-driven process recovery and retry/cancellation. Do not call a direct worker invocation
-   platform lifecycle acceptance. Force-stop blocks automatic Android execution until the
-   app is restarted; use an explicit process-death scenario that preserves scheduled work.
-   Keep the same exact command/history/retirement checks. Use the dedicated emulator;
-   never drive the user's phone for routine tests.
+1. [Native worker evidence](collaboration-native-worker.md) and the separate
+   [WorkManager scenario](collaboration-workmanager.md) now pass. The latter proves
+   task-key-only persistence, offline constraints, ordinary process death, automatic OS
+   startup, exact original-history recovery and retirement. Both prior native regressions
+   remain intact. Add this scenario to the pinned native CI job and audit its artifacts.
+   Deliberate interruption during sending, retry/cancellation races and production login
+   recovery remain separate acceptance criteria. Force-stop blocks automatic Android
+   execution until the app is restarted. Use only the dedicated emulator for routine tests.
 
 2. Finish remote older-history paging, durable drafts and safe pending cancellation, then
    incoming FCM/pusher/gateway integration and inline replies. Keep payloads opaque and

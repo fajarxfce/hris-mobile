@@ -35,6 +35,7 @@ internal class HrisWorkerProofContainer(
     hrisAccessToken: String,
     private val runtime: CollaborationRuntimeRepository,
     nativeHttp: HttpClient,
+    platformScheduler: WorkScheduler? = null,
 ) {
     private val application = HrisProofApplicationAccess(owner, hrisAccessToken)
     private val database = createAppDatabase(context)
@@ -58,12 +59,13 @@ internal class HrisWorkerProofContainer(
                 collaborationHistoryCredentials =
                     AndroidCredentialStore(context, "worker-proof-history-content-key"),
                 workScheduler =
-                    object : WorkScheduler {
-                        override suspend fun enqueue(key: String) {
-                            check(key == QueueCollaborationText.DELIVERY_KEY)
-                            synchronized(requests) { requests += key }
-                        }
-                    },
+                    platformScheduler
+                        ?: object : WorkScheduler {
+                            override suspend fun enqueue(key: String) {
+                                check(key == QueueCollaborationText.DELIVERY_KEY)
+                                synchronized(requests) { requests += key }
+                            }
+                        },
                 http =
                     module {
                         single<HttpClient>(named(HttpClients.Authenticated)) { application.client }
@@ -135,11 +137,14 @@ internal class HrisWorkerProofContainer(
                 .readCompletion(access, id)
         )
 
-    suspend fun runWorker() =
-        container.koin.get<CollaborationDeliveryWorker>().let { worker ->
-            check(container.koin.getAll<SyncTask>().single { it.key == worker.key } === worker)
-            worker()
-        }
+    fun syncTasks(): List<SyncTask> {
+        val tasks = container.koin.getAll<SyncTask>()
+        val worker = container.koin.get<CollaborationDeliveryWorker>()
+        check(tasks.single { it.key == worker.key } === worker)
+        return tasks
+    }
+
+    suspend fun runWorker() = syncTasks().single { it.key == QueueCollaborationText.DELIVERY_KEY }()
 
     suspend fun close() =
         withContext(NonCancellable) {

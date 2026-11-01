@@ -1,5 +1,44 @@
 # Agent continuation — HRIS Mobile
 
+## Actual Android scheduling validated — 1 November 2026
+
+The normal proof Activity now queues through AndroidWorkScheduler while the owned emulator
+is offline. Read-only checks bind the exact WorkSpec, production worker class, CONNECTED
+constraint and task-key-only input. The driver backgrounds the Activity, kills its exact
+PID without force-stopping the package, and confirms the system job remains registered.
+Restoring connectivity causes Android to start a new process and run the actual registered
+worker; no instrumentation or manual job-run command starts it. The sender is closed at
+bootstrap, then restored by the worker. Actual WorkInfo SUCCEEDED, original text/history,
+archived completion and one encrypted gateway event establish delivery.
+
+[Contract](collaboration-workmanager.md) and [measurement](measurements/chat-workmanager-2026-11-01.json)
+bind six Mobile/four Platform inputs. Scheduled run: 76s, two processes/one ordinary death,
+automatic startup, one encrypted send, zero admission failures and complete cleanup/network
+restoration. Both prior native scenarios pass in a combined 112s on the same APK `3b5eb0d5`:
+four-process/three-death sender recovery (three sends, held room never sent), and direct
+worker recovery (one send and peer decryption). All 62 Python cases pass. Initial Android
+build 97s, owner-initialization review build 79s, final build/lint/quality 85s; server compile
+28s; root checks 57s with 2,710 desktop cases/426 suites and no failures/errors/skips.
+The first native run failed because the fixture queried the default JobScheduler namespace;
+actual WorkManager jobs use a dedicated namespace on Android 14+. Namespace-aware inspection
+fixed the fixture. Every attempt is retained. Emulator is stopped.
+
+**Continue remote older history, durable drafts and safe pending cancellation now, then
+all remaining P0–P8.** Scheduled execution is accepted only for this scenario. Deliberate
+interruption while sending, retry/cancellation races, production login recovery, incoming
+FCM/replies, Apple/web runtime and scale remain separate criteria. No complete PRD group is
+accepted. No live provider or Starter change. Add the new scenario to the native CI workflow
+after the Platform fixture commit is pushed; keep both existing regressions and upload only
+bounded evidence. The older sender-only hosted run `41319561027` reports success; the two-
+scenario run `41319810722` is running. Audit artifacts before claiming hosted equivalence.
+
+Release build 5 remains prepared but uninstalled because WireGuard ADB is unreachable; the
+reconnect question is still pending. Use the saved preflight/install-only helpers when the
+phone returns, preserving signer/data and avoiding UI interaction. Continue independently
+while unavailable and push every validated atomic commit. Current uncommitted WorkManager
+code supersedes the earlier `.work/scheduled-proof-draft` design files.
+
+
 ## Release build 5 prepared; phone connection pending — 1 November 2026
 
 The user asked to install progress and continue. The selected private `devRelease` APK is

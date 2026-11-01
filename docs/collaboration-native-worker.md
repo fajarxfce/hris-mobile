@@ -50,6 +50,10 @@ retry/cancellation and OS-driven process startup still require separate evidence
 Force-stop itself prevents Android background execution until the application is started
 again. No phone UI, live provider, Apple runtime, scale or full PRD group is accepted here.
 
+The separate [WorkManager scenario](collaboration-workmanager.md) now exercises actual
+Android scheduling after ordinary process death; the direct-worker evidence above retains
+its original scope.
+
 ## Reproduce and continue
 
 Build `:apps:collaboration-proof:assembleDebug`. Start the owned `hris-mobile-dev` emulator
