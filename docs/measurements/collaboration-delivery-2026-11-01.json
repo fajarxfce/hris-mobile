@@ -332,5 +332,81 @@
     "Observed receipts and provider aliases are bounded and preserved separately from pending transactions. No missing native ID is treated as an acknowledgement; the common admitted sender and durable app receipt/history reconciliation remain pending.",
     "The pinned SDK NoHandle constructors permit Android host tests without a native library. Fifteen adapter cases and nine new common cases cover failures, cancellation, timeout, payload disposal, immutable inputs and receipt conflicts. Root check and HRIS CI include host validation.",
     "Actual HRIS execution now resumes through the product queue lease, compares its receipt to an independent native observer, stores the original Sent mapping and verifies the sibling queue never sends. All 179 Mobile / 24 Platform source hashes match."
-  ]
+  ],
+  "hostedHris": {
+    "runId": 41269736098,
+    "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/41269736098",
+    "mobileCommit": "622d2540d87529df38443d802fd21da9233e69a0",
+    "platformCommit": "a5ec785cc03c9aebd3adc989031ca3bc5310140c",
+    "requiredStepsPassed": 17,
+    "nativeRunId": "6aee6870e76d4fd9b50cfd85701329e2",
+    "sdkCaseSeconds": 22.689,
+    "suiteSeconds": 62.419,
+    "androidHost": {
+      "suites": 19,
+      "tests": 115,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "verification": {
+      "passed": true,
+      "encryptedBothDirections": true,
+      "logicalIdsPreserved": true,
+      "cleanup": true,
+      "protectedStoreReopened": true,
+      "missingRecordPreserved": true,
+      "wrongPassphrasePreserved": true,
+      "exclusiveOwner": true,
+      "processRestarted": true,
+      "queueRestored": true,
+      "transactionReused": true,
+      "identityAfterRestart": true,
+      "messageIntentRestored": true,
+      "queueMappingRecovered": true,
+      "queueWriterExclusive": true,
+      "perRoomDeliveryIsolated": true,
+      "heldQueueRestored": true,
+      "nativeDeliveryOwned": true,
+      "heldRoomNeverSent": true,
+      "pausedAcrossRestart": true,
+      "syncInterruptedAfterRestart": true,
+      "syncRetriedWithRetainedCursor": true,
+      "artifact": {
+        "apkSha256": "e80c514735d8069117e5a844e278e295f1e16fc8a1af37ee542d3d0a6706a633",
+        "package": "dev.fajar.hris.collaboration.proof",
+        "avd": "hris-mobile-dev",
+        "androidApi": "35"
+      }
+    },
+    "immutableSourceHashesVerified": {
+      "mobile": 179,
+      "platform": 24
+    },
+    "artifactSha256": {
+      "platform/.work/collaboration/6aee6870e76d4fd9b50cfd85701329e2/verified.json": "8fff63956d2265c1265c65cf78a8b73bc8eec8dc1a1f6ff82a2cd905620199a8",
+      "platform/.work/collaboration/6aee6870e76d4fd9b50cfd85701329e2/result.json": "4f5cb720f6ec926d3f172bb1beab111795f73ff675e50339206c61010bbe9564",
+      "platform/.work/collaboration/6aee6870e76d4fd9b50cfd85701329e2/gateway-trace.json": "1148ebceb70ae424448e2d303946383d38fed57832b02638b2f8f8c2dc336252",
+      "platform/apps/server/build/test-results/test/TEST-dev.fajar.hris.NativeCollaborationSdkInteropTest.xml": "831f2d5620d34ca48f6ac8dcd53197d529cfec8777179854fb054c182e01d319",
+      "mobile/features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.AndroidCollaborationQueueDeliveryTest.xml": "d05f672481c5b4c89d9dd7135bf9787fda8e63f4dd279e7c3bf3a9e0b558fc43",
+      "mobile/features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.AndroidCollaborationQueueSourceTest.xml": "1993f36bb25be394ec5fa6456bf63de6888d4d3a3a3b4dc655eb9ebf196076d2",
+      "mobile/features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.CollaborationConversationCommandCodecTest.xml": "41c22e1050dc3bd4110f1f8f98fc13f60de45a41e6d2532e79a4fb24fa4be101",
+      "mobile/features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.CollaborationConversationTransportTest.xml": "77bb3ed45774dfdb44afac5638a92066741ab5cb5abafb71ced96ff70feaa443",
+      "mobile/features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.CollaborationConversationValidationTest.xml": "6399cf86451bd3c5d861145c7e370d67120b86ee2dbcdcfc437271c4fa2c8b31",
+      "mobile/features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSdkFailureMapperTest.xml": "0e733e3218771fa425beb2d110118216082b830c7017a773f9d397a854efd6d3",
+      "mobile/features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSdkLogicalIdTest.xml": "3990275dc1db5412911d07b3591d1d62f5167ef4aeed60fdc9d4a593a58febba",
+      "mobile/features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSdkRecordTest.xml": "df34da6f69e9629bbbe0da727ddbaabd65b8773df902952de4f5d9c4d830b34f",
+      "mobile/features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSetupTransportTest.xml": "67d5d6e0d1cd92a6b32e687ffc33b15f4b05966fa079a7a7b1bd569a7c0bd684",
+      "mobile/features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSetupValidationTest.xml": "534ddec0ba10d9cbe8007c71632d87a7c50b1f1ae90325a3093e96ff4012f5de",
+      "mobile/features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSummaryTransportTest.xml": "5728a35ce1c0f3172abac9addecbb61bb0adb205303a1346b838e5e0131209d3",
+      "mobile/features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.SdkChildResourcesTest.xml": "181d0cdf66b769310cdaef98d4cfa5da4652d06d8932ca3d3b6f683f79a9fad4",
+      "mobile/features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.SdkQueueDeliveryTest.xml": "2fe53c57b9391f6c8b4881c234f50d503bbc39dcdff41f4bdf7ff223ff936e3a",
+      "mobile/features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.SdkQueueOperationsTest.xml": "83ffd76bf3a2b3c13f1ba333572d21ebc89c57cf90fff5707ce9ac9c729dcb36",
+      "mobile/features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.SdkSessionPersistenceTest.xml": "157f97a3c5faeb758b29e53c70dbfec77cfaece0338d0b685511168bbd1c7e1b",
+      "mobile/features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.SdkStoreShutdownTest.xml": "f386eb756cf57aeb95e059b3c596c30e1c93a8b694de6564c38510a12cd7147c",
+      "mobile/features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.SdkSyncLifecycleTest.xml": "b13c7d2871dd86ce849a8802eab6cea8663c6705e17e8e632c45dd16382f757c",
+      "mobile/features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.SdkSyncPumpTest.xml": "6948347e3a3ccccc6a94757eadbfb6b802ba52b35ce1d6fe321eabd5e0befcb3",
+      "mobile/features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.SdkTimelineDeltaTest.xml": "7c92d436affe716f14c9bec487fb08e11e0a43b1bed318b2e190921cc351470e"
+    }
+  }
 }

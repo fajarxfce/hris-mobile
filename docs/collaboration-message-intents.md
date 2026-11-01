@@ -204,5 +204,5 @@ message/device/transaction mappings and all observed event aliases in a separate
 encrypted store. `ReconcileCollaborationMessages` restores an interrupted `Sent`
 projection from those facts under local ownership and the company gate, including
 after ordinary credential expiry. Native acknowledgement must be journaled before
-command projection; no queue absence can replace that evidence. The common sender
-and incoming history reconciliation still need to connect this foundation.
+command projection; no queue absence can replace that evidence. The [common sender](collaboration-sender.md) now connects this journal to the
+original native mappings. Incoming history reconciliation and product routes remain.

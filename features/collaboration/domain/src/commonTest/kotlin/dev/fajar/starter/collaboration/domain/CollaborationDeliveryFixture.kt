@@ -1,0 +1,288 @@
+package dev.fajar.starter.collaboration.domain
+
+import dev.fajar.starter.collaboration.domain.entities.*
+import dev.fajar.starter.collaboration.domain.policies.*
+import dev.fajar.starter.collaboration.domain.repositories.*
+import dev.fajar.starter.collaboration.domain.usecases.*
+import dev.fajar.starter.common.result.*
+import kotlin.test.*
+
+internal class CollaborationDeliveryFixture {
+    val base = MessageIntentFixture()
+    val control = ConversationCommandFixture()
+    val device =
+        CollaborationMessageDevice(
+            deliveryId(6),
+            deliveryId(7),
+            deliveryId(8),
+            "!room:example.test",
+        )
+    val records
+        get() = base.records.value
+
+    val conversation
+        get() = base.summary!!.conversation.id
+
+    val owner
+        get() =
+            CollaborationOwner(
+                "local",
+                base.server.audience,
+                base.summary!!.conversation.firstAccountId,
+                base.summary!!.conversation.companyId,
+                device.nativeSessionId,
+            )
+
+    var journal = emptyList<CollaborationMessageReceipt>()
+    var window =
+        CollaborationQueueDelivery(
+            listOf(CollaborationQueueReceipt("original", "\$first")),
+            emptySet(),
+            CollaborationQueueDeliveryReason.DRAINED,
+        )
+    var resumeFailure: Failure? = null
+    var appendFailure: Failure? = null
+    var journalFailure: Failure? = null
+    var rejectAppendAt = 0
+    var rejectProjection = false
+    var acquisitions = 0
+    var windows = 0
+    var appends = 0
+    var projections = 0
+    var closes = 0
+    val events = mutableListOf<String>()
+    var knownTransactions = emptySet<String>()
+    var afterAcquire: suspend () -> Unit = {}
+    var afterResume: suspend () -> Unit = {}
+    var beforeAppend: suspend () -> Unit = {}
+    var afterAppend: suspend () -> Unit = {}
+    var afterProject: suspend () -> Unit = {}
+
+    init {
+        base.setup.session =
+            base.setup.session!!.copy(
+                binding = base.setup.session!!.binding.copy(serverId = device.nativeSessionId)
+            )
+        base.setup.workspace =
+            base.setup.workspace!!.copy(
+                admission = base.setup.workspace!!.admission.copy(familyId = device.nativeSessionId)
+            )
+        base.setup.onRead = { AppResult.Success(base.setup.device.copy(id = device.deviceId)) }
+        control.conversation = base.summary!!.conversation
+        control.room =
+            CollaborationDirectRoom(
+                conversation,
+                1,
+                CollaborationDirectRoomState.READY,
+                device.roomId,
+                control.conversation.firstAccountId,
+                false,
+                null,
+            )
+    }
+
+    val messages =
+        object : CollaborationMessageRepository by base.messages {
+            override suspend fun update(
+                access: CollaborationLocalAccess,
+                expected: CollaborationMessageRecord,
+                state: CollaborationMessageState,
+            ): AppResult<Boolean> {
+                assertIs<CollaborationMessageState.Sent>(state)
+                assertTrue(
+                    journal.any { it.intent == expected.intent && state.eventId in it.eventIds }
+                )
+                projections++
+                if (rejectProjection || expected !in records) return AppResult.Success(false)
+                base.records.value =
+                    records.map {
+                        if (it == expected) it.copy(revision = it.revision + 1, state = state)
+                        else it
+                    }
+                events += "project"
+                afterProject()
+                return AppResult.Success(true)
+            }
+        }
+
+    val receipts =
+        object : CollaborationReceiptRepository {
+            override suspend fun read(
+                access: CollaborationLocalAccess,
+                conversationId: String,
+            ): AppResult<List<CollaborationMessageReceipt>> =
+                journalFailure?.let { AppResult.Failed(it) } ?: AppResult.Success(journal.toList())
+
+            override suspend fun append(
+                access: CollaborationLocalAccess,
+                conversationId: String,
+                receipts: List<CollaborationMessageReceipt>,
+            ): AppResult<Boolean> {
+                appends++
+                assertTrue(receipts.size in 1..32)
+                beforeAppend()
+                // The real repository's SQLite/IndexedDB tests verify this fence at atomic commit.
+                val current = base.setup.session
+                if (
+                    current?.id != access.sessionId ||
+                        current.user.id != access.accountId ||
+                        appends == rejectAppendAt
+                )
+                    return AppResult.Success(false)
+                val merged = journal.associateBy { it.intent.id }.toMutableMap()
+                for (receipt in receipts) {
+                    val old = merged[receipt.intent.id]
+                    merged[receipt.intent.id] =
+                        if (old == null) receipt
+                        else {
+                            assertEquals(old.intent, receipt.intent)
+                            assertEquals(old.device, receipt.device)
+                            assertEquals(old.transactionId, receipt.transactionId)
+                            old.copy(eventIds = (old.eventIds + receipt.eventIds).distinct())
+                        }
+                }
+                journal = merged.values.toList()
+                assertTrue(validCollaborationReceiptLedger(journal))
+                events += "journal"
+                afterAppend()
+                return appendFailure?.let { AppResult.Failed(it) } ?: AppResult.Success(true)
+            }
+        }
+
+    val lists =
+        object : CollaborationListRepository by base.lists {
+            override suspend fun restrict(
+                access: CollaborationLocalAccess,
+                failure: Failure,
+            ): AppResult<Boolean> {
+                base.gate.value = CollaborationListAdmission("received", failure)
+                return AppResult.Failed(base.storage)
+            }
+        }
+
+    val runtimes =
+        object : CollaborationRuntimeRepository {
+            override suspend fun acquireMessageQueue(
+                owner: CollaborationOwner,
+                deviceId: String,
+                matrixRoomId: String,
+            ): AppResult<CollaborationMessageQueueLease> {
+                acquisitions++
+                val queue =
+                    object : CollaborationMessageQueueLease {
+                        override val owner = this@CollaborationDeliveryFixture.owner
+                        override val device = this@CollaborationDeliveryFixture.device
+
+                        override suspend fun snapshot(): AppResult<Set<String>> =
+                            error("Native resume validates its own complete snapshot")
+
+                        override suspend fun enqueue(
+                            logicalId: String,
+                            text: String,
+                        ): AppResult<Unit> = error("Delivery never replaces native work")
+
+                        override suspend fun resume(
+                            mappedTransactions: Set<String>
+                        ): AppResult<CollaborationQueueDelivery> {
+                            windows++
+                            knownTransactions = mappedTransactions.toSet()
+                            events += "resume"
+                            val captured =
+                                resumeFailure?.let { AppResult.Failed(it) }
+                                    ?: AppResult.Success(window)
+                            afterResume()
+                            return captured
+                        }
+
+                        override suspend fun close(): AppResult<Unit> {
+                            closes++
+                            events += "close"
+                            return AppResult.Success(Unit)
+                        }
+                    }
+                afterAcquire()
+                return AppResult.Success(queue)
+            }
+
+            override suspend fun isOpen(
+                owner: CollaborationOwner,
+                deviceId: String,
+            ): AppResult<Boolean> = error("No implicit restore")
+
+            override suspend fun install(
+                owner: CollaborationOwner,
+                command: CollaborationSetupCommandRecord,
+            ): AppResult<CollaborationRuntimeLease> = error("No enrollment")
+
+            override suspend fun restore(
+                owner: CollaborationOwner,
+                deviceId: String,
+            ): AppResult<CollaborationRuntimeLease?> = error("No restore")
+
+            override suspend fun enterTimeline(
+                owner: CollaborationOwner,
+                deviceId: String,
+                matrixRoomId: String,
+            ): AppResult<CollaborationTimelineLease> = error("No join")
+
+            override suspend fun closeOtherOwners(
+                retainedOwner: CollaborationOwner?
+            ): AppResult<Unit> = error("No parent close")
+        }
+    private val delivery =
+        DeliverCollaborationMessages(
+            messages,
+            receipts,
+            lists,
+            control.remote,
+            base.setup.remote,
+            runtimes,
+            base.setup.sessions,
+            base.setup.workspaces,
+            base.server,
+            base.build,
+            base.clock,
+        )
+    private val reconcile =
+        ReconcileCollaborationMessages(
+            messages,
+            receipts,
+            lists,
+            base.setup.sessions,
+            base.setup.workspaces,
+            base.server,
+            base.build,
+            base.clock,
+        )
+
+    suspend fun prepare(count: Int = 1) {
+        val queued = assertIs<AppResult.Success<CollaborationMessageRecord>>(base.queue()).value
+        base.records.value =
+            (1..count).map { index ->
+                queued.copy(
+                    intent = queued.intent.copy(id = deliveryId(100 + index)),
+                    revision = 2,
+                    state =
+                        CollaborationMessageState.Staged(
+                            device,
+                            if (index == 1) "original" else "tx-$index",
+                        ),
+                )
+            }
+    }
+
+    suspend fun deliver() = delivery("selection", device.deviceId, conversation)
+
+    suspend fun reconcile() = reconcile("selection", conversation)
+
+    fun receipt(record: CollaborationMessageRecord = records.first(), event: String = "\$first") =
+        CollaborationMessageReceipt(
+            record.intent,
+            device,
+            (record.state as CollaborationMessageState.Staged).transactionId,
+            listOf(event),
+        )
+}
+
+internal fun deliveryId(value: Int) =
+    "c3000000-0000-4000-8000-${value.toString().padStart(12, '0')}"

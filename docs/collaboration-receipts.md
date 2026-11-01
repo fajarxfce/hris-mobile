@@ -61,8 +61,8 @@ alias, collision rejection, simultaneous CAS, lost/cancelled commit responses,
 account replacement, inactive-account key loss, tampered indexes/checkpoint,
 input mutation, capacity, expired authority and late denial.
 
-The common live-admitted sender still needs to connect native delivery results to
-this journal. A crash between native acknowledgement and journal commit still
+The [common live-admitted sender](collaboration-sender.md) now connects native
+delivery results to this journal under original account fencing before projection. A crash between native acknowledgement and journal commit still
 requires history reconciliation; this store does not invent a receipt to close that
 gap. Incoming history must coalesce by conversation/authenticated sender/logical ID,
 reject conflicting reuse and retain aliases/tombstones. Bounded history windows,

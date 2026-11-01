@@ -43,7 +43,8 @@ class ReconcileCollaborationMessages(
             if (read is AppResult.Failed) return@withLock read
             val records = (read as AppResult.Success).value
             val updates =
-                prepare(access, conversationId, records, acknowledged) ?: return@withLock failed()
+                collaborationReceiptProjection(access, conversationId, records, acknowledged)
+                    ?: return@withLock failed()
             var changed = 0
             for ((record, sent) in updates) {
                 if (record.state == sent) continue
@@ -54,33 +55,6 @@ class ReconcileCollaborationMessages(
             }
             AppResult.Success(changed)
         }
-
-    private fun prepare(
-        access: CollaborationLocalAccess,
-        conversationId: String,
-        records: List<CollaborationMessageRecord>,
-        receipts: List<CollaborationMessageReceipt>,
-    ): List<Pair<CollaborationMessageRecord, CollaborationMessageState.Sent>>? {
-        if (
-            records.size > 128 ||
-                !validCollaborationReceiptLedger(receipts) ||
-                records.map { it.intent.id }.distinct().size != records.size ||
-                records.any {
-                    it.intent.owner != access.messageOwner() ||
-                        it.intent.conversationId != conversationId
-                }
-        )
-            return null
-        val byId = records.associateBy { it.intent.id }
-        val updates =
-            mutableListOf<Pair<CollaborationMessageRecord, CollaborationMessageState.Sent>>()
-        for (receipt in receipts) {
-            val record = byId[receipt.intent.id] ?: return null
-            val sent = collaborationReceiptState(record, receipt) ?: return null
-            updates += record to sent
-        }
-        return updates
-    }
 
     private suspend fun <T> checked(
         workspaceId: String,

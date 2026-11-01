@@ -45,3 +45,29 @@ fun collaborationReceiptState(
         else -> null
     }
 }
+
+fun collaborationReceiptProjection(
+    access: CollaborationLocalAccess,
+    conversationId: String,
+    records: List<CollaborationMessageRecord>,
+    receipts: List<CollaborationMessageReceipt>,
+): List<Pair<CollaborationMessageRecord, CollaborationMessageState.Sent>>? {
+    if (
+        records.size > 128 ||
+            !validCollaborationReceiptLedger(receipts) ||
+            records.map { it.intent.id }.distinct().size != records.size ||
+            records.any {
+                it.intent.owner != access.messageOwner() ||
+                    it.intent.conversationId != conversationId
+            }
+    )
+        return null
+    val byId = records.associateBy { it.intent.id }
+    val updates = mutableListOf<Pair<CollaborationMessageRecord, CollaborationMessageState.Sent>>()
+    for (receipt in receipts) {
+        val record = byId[receipt.intent.id] ?: return null
+        val sent = collaborationReceiptState(record, receipt) ?: return null
+        updates += record to sent
+    }
+    return updates
+}

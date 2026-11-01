@@ -429,3 +429,54 @@ Platform fixture `4944b34f0946d449bc4b7ff4651737db2255ce93`; follow-up handoff `
 Starter remains `36116b2`; the SDK adapter/test configuration is HRIS-specific and
 needs no generic port. Atomic commits and every-commit pushes remain authorized.
 Continue implementation; a checkpoint is not completion.
+
+## Receipt journal checkpoint — 1 November 2026
+
+**Encrypted outbound receipts and offline `Sent` reconciliation are implemented.**
+[Contract](collaboration-receipts.md): the journal stores the original complete
+intent/device/transaction and every event alias before command projection. Atomic
+checkpoint/document CAS prevents lost concurrent aliases; immutable mapping and
+cross-message collisions are rejected. Separate receipt keys are wired through
+Android, desktop, browser and Apple Keychain hosts. Missing keys cannot regenerate
+over another inactive account's records. No prior receipt is evicted on capacity.
+
+`ReconcileCollaborationMessages` repairs a crash between journal and command writes
+without network, SDK acquisition or live credential renewal. Exact staged mappings
+advance; existing sent records retain their original primary event. Missing or
+conflicting evidence stays unresolved. Company gates and account ownership are
+rechecked after every I/O; ordinary expiry keeps facts available, and late denial/
+account change prevents success while preserving committed state.
+
+[Evidence](measurements/collaboration-receipt-2026-11-01.json): **11 new actual
+SQLite/IndexedDB contract cases and 10 common reconciliation cases**. Focused
+checks pass in **69s**; full root/browser/Android/Wasm/lint passes in **274s**:
+**2,318 desktop / 387 suites, 115 Android host, 160 domain / 132 data browser**, zero
+failures/errors/skips and Android lint errors. All **191 source hashes** match.
+Dev APK `a3e62aa9` is built, not installed. The first command selected a nonexistent
+module detekt task (15s); the corrected run passed 11 SQLite cases but exposed the
+app-container length rule (57s). Moving static registrations into the existing
+feature-module list resolved it, and the full application binding tests pass.
+
+Collaboration control CI now compiles the **actual iOS application host** as well
+as Kotlin/Apple tests; its Apple job has a bounded 70-minute lifetime and a
+30-minute app build step. That Xcode build is pending hosted execution. Physical
+iPhone acceptance remains waived. No native SDK source changed in this increment;
+previous actual delivery evidence belongs to Mobile `622d2540` / Platform
+`a5ec785c`, not a new SDK run. HRIS CI retains that immutable fixture pin.
+
+**Continue P0–P8; none of 54 complete groups is accepted. Next connect the common
+live-admitted sender to native `resume` and durable receipt append, then incoming
+history reconciliation and Chat list/setup/conversation UI.** The journal alone
+cannot recover a crash before native ACK reaches it: history must coalesce by
+conversation/authenticated sender/logical ID, reject conflicting reuse and retain
+all event aliases/tombstones. Preserve original native-family uncertainty; never
+replace a transaction, infer ACK from queue absence, reset SDK keys/cursors or add
+a second transport retry owner. Current journal bounds are 128 messages / 512
+aliases per conversation, 128 aliases per message and 1–32 messages per append.
+The shared 128-command account bound and no-retirement rule remain until durable
+history supports retirement. These initial bounds are not capacity acceptance.
+
+No live/schema/phone change; emulator remains stopped. Starter stays `36116b2`:
+this HRIS receipt policy/adapter/host graph needs no generic foundation port.
+Atomic commits and every-commit pushes remain authorized. Continue after this
+checkpoint; the long-run implementation is not complete.
