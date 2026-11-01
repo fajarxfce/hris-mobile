@@ -1,0 +1,77 @@
+{
+  "date": "2026-11-01",
+  "baseCommit": "4e370262",
+  "inputsSha256": {
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/drafts/CollaborationDraftCodec.kt": "d41589c5c73f94fff071185eeaf9604cc3ca5584a090d97323639f9557e71b0a",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationDraftRepository.kt": "6840c41beb111daa98c89efb37caec917182947f0b930e79d99c9b5bd207497c",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationDraftStorageContract.kt": "cd89263271bbbd9259091d55065eb98138ffaa1578eedcfff015c824b52f4327",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationDraft.kt": "b4ed17d0c24f01c8c195c3e7605aad398170c56cd12dfa14d6d7739bd544ac56",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationDraftRepository.kt": "aae92ac26730b0a518be1243692b59cb1b7d730584ab0ae0e1e1f4cb3ccaeec8",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationDraftUseCasesTest.kt": "7c21b34a7e1f987b5bb47300ef927b96d64e8f6cae4f318a28cc7bba20f0f750",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadFixture.kt": "5a39889a52cf1ce9ace8f2460249a7c3171ba2461a6156c84598d6d4e2bc52f3"
+  },
+  "format": "composer-v2, one account/company partition; first draft-capable release has not been built or installed",
+  "validation": {
+    "gradleSeconds": 113,
+    "wallSeconds": 116.59,
+    "exit": 0,
+    "command": ":features:collaboration:data:desktopTest --tests *CollaborationDraftStorageTest :features:collaboration:data:wasmJsBrowserTest :features:collaboration:domain:desktopTest :features:collaboration:domain:wasmJsBrowserTest :formatCheck :architectureCheck :detekt",
+    "focusedDataDesktop": {
+      "suites": 1,
+      "tests": 15,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "dataBrowser": {
+      "suites": 33,
+      "tests": 249,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "domainPerTarget": {
+      "suites": 32,
+      "tests": 381,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "logSha256": "a052ef661e96360596fdc86e41d9ea76cabe2ebd43ad783e57eed5909096d737"
+  },
+  "initialAttempt": {
+    "gradleSeconds": 42,
+    "wallSeconds": 45.99,
+    "stage": "data desktop compilation",
+    "cause": "Cross-module nullable checkpoint cannot be smart cast; captured a stable local value. No tests executed in that attempt.",
+    "inputsSha256": {
+      "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/drafts/CollaborationDraftCodec.kt": "d41589c5c73f94fff071185eeaf9604cc3ca5584a090d97323639f9557e71b0a",
+      "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationDraftRepository.kt": "bb73bd81d4e525de89973d01ceeb9e255fc7e1f54dec6b49197d99de85077e51",
+      "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationDraftStorageContract.kt": "cd89263271bbbd9259091d55065eb98138ffaa1578eedcfff015c824b52f4327",
+      "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationDraft.kt": "b4ed17d0c24f01c8c195c3e7605aad398170c56cd12dfa14d6d7739bd544ac56",
+      "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationDraftRepository.kt": "aae92ac26730b0a518be1243692b59cb1b7d730584ab0ae0e1e1f4cb3ccaeec8",
+      "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationDraftUseCasesTest.kt": "7c21b34a7e1f987b5bb47300ef927b96d64e8f6cae4f318a28cc7bba20f0f750",
+      "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadFixture.kt": "5a39889a52cf1ce9ace8f2460249a7c3171ba2461a6156c84598d6d4e2bc52f3"
+    },
+    "logSha256": "5445b8d9d0fac77febe0f3eefcee3a5bab697463f978e42d8d4d82310201bb31"
+  },
+  "indexedFixture": {
+    "drafts": 603,
+    "prepared": 201,
+    "editingAndEmptyExcluded": 402,
+    "pageSize": 8,
+    "lookahead": 1,
+    "maxDecryptionsPerPage": 10,
+    "reopened": true,
+    "independentConversationContentionCommits": 3,
+    "maxTechnicalCasAttempts": 3
+  },
+  "scope": [
+    "Frozen body and prepared tag are one atomic replica mutation; no separate best-effort index.",
+    "Existing bounded SQLite/IndexedDB indexed queries; no core schema or generic Starter change.",
+    "Exact target CAS fences late writes and three technical attempts handle another conversation changing the global checkpoint.",
+    "All original ownership/key-loss/cancellation/replay cases still pass.",
+    "This intentionally replaces uninstalled composer-v1 prototype storage before the first draft-capable release; installed release 7 contains neither version.",
+    "Automatic application recovery and root/Android integration remain pending."
+  ]
+}

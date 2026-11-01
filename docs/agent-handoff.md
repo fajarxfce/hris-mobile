@@ -1,5 +1,37 @@
 # Agent continuation — HRIS Mobile
 
+## Indexed prepared drafts validated; app recovery next — 1 November 2026
+
+`composer-v2` replaces the uninstalled v1 prototype with one account/company partition and
+one encrypted document per conversation. The prepared tag and frozen body commit together;
+indexed reads authenticate up to eight candidates plus one lookahead. Three bounded technical
+CAS attempts tolerate unrelated-document checkpoint movement, never overwrite changed target
+text. The same protected history key/AAD scope and empty logical revision fences remain.
+No core database schema or Starter policy port. Verified installed release 7 has no drafts;
+no first draft-capable build has been made or installed.
+
+[Evidence](measurements/chat-draft-index-2026-11-01.json): 113s Gradle / 116.59s wall, fifteen
+SQLite cases, 249 data browser and 381 domain cases per JVM/browser, quality checks pass.
+603 mixed drafts yield 201 frozen candidates, maximum ten decryptions/page; reopen, atomic
+index/body under a lost reply, competing conversations, bounded CAS and forged lookahead are
+proved. Initial compilation failure from a nullable cross-module property was corrected and
+retained. Full root/Android checks still follow application recovery integration.
+
+**Continue immediately:** add owned indexed draft recovery/cursor use cases, wake the existing
+payload-free delivery key after freeze, and have the application worker coordinate Queue and
+Confirm before ordinary outbox delivery. Preserve original IDs on lost replies and clear only
+matching confirmed drafts. Keep batches/deadlines/fairness explicit; permanently unavailable
+individual conversations must not spin or starve others (consider a durable review-required
+flag excluded from automatic discovery, with explicit retry retaining the ID). Storage or
+scope failures must not erase intent. Then root/browser/Android/proof/lint, release 8+ with
+install-only, and remaining PRD. A bounded Back flush/leave choice should also remain usable
+while an uncooperative local write is pending; test that boundary during integration.
+
+Native run 41335935547 at f904 is PASS; artifacts are downloading into `.work/ci-41335935547`
+for audit. It predates composer UI/v2; do not infer those are accepted. Native cca28 run
+41338026431 is in progress and contains controlled retry diagnostics. Starter Apple run
+41338065450 at c46151e is compiling tests; Mobile Apple audit is already committed.
+
 ## Apple replica execution audited; continue indexed draft recovery — 1 November 2026
 
 [Hosted source/XML audit](measurements/apple-replica-hosted-2026-11-01.json) proves run

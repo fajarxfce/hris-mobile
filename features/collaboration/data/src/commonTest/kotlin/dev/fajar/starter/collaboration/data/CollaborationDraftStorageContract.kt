@@ -194,7 +194,7 @@ abstract class CollaborationDraftStorageContract {
                             handle =
                                 checkpoint.handle.copy(
                                     scope = historyScope(wrong),
-                                    partition = draftPartition(wrong, f.conversation),
+                                    partition = draftPartition(wrong),
                                 )
                         )
                 )
@@ -277,6 +277,253 @@ abstract class CollaborationDraftStorageContract {
         assertNull(f.keys.read())
     }
 
+    @Test
+    fun indexedPreparedPagesCross603MixedDraftsWithoutReadingEditingBodies() = withDatabase { f ->
+        val repository = f.drafts()
+        val all =
+            (0 until 603).map { index ->
+                f.draft(
+                        text = if (index % 3 == 2) "" else "Draft $index",
+                        submissionId = if (index % 3 == 0) historyId(20_000 + index) else null,
+                    )
+                    .copy(
+                        conversationId = historyId(10_000 + index),
+                        revision = historyId(30_000 + index),
+                    )
+            }
+        for (draft in all) assertEquals(
+            AppResult.Success(true),
+            repository.replace(f.access, null, draft),
+        )
+        f.reopen()
+        var decryptions = 0
+        val cipher =
+            object : dev.fajar.starter.securestorage.ContentCipher by f.cipher {
+                override suspend fun decrypt(
+                    key: ByteArray,
+                    associatedData: ByteArray,
+                    ciphertext: ByteArray,
+                ): ByteArray {
+                    decryptions++
+                    return f.cipher.decrypt(key, associatedData, ciphertext)
+                }
+            }
+        val store =
+            object : ReplicaStore by f.database.replicas {
+                override fun observe(
+                    scope: ReplicaScope,
+                    partition: String,
+                    after: String?,
+                    limit: Int,
+                ): Flow<ReplicaPage> = error("Prepared discovery must use its index")
+
+                override fun observeDocument(
+                    scope: ReplicaScope,
+                    partition: String,
+                    id: String,
+                ): Flow<ReplicaPage> = error("Prepared discovery must not decrypt every draft")
+
+                override fun observeQueries(
+                    scope: ReplicaScope,
+                    partition: String,
+                    queries: List<ReplicaQuery>,
+                ): Flow<ReplicaQueryPage> {
+                    assertEquals(1, queries.size)
+                    assertEquals(PREPARED_DRAFT_TAG, queries.single().tag)
+                    assertEquals(9, queries.single().limit)
+                    return f.database.replicas.observeQueries(scope, partition, queries)
+                }
+            }
+        val indexed = EncryptedCollaborationDraftRepository(store, cipher, f.keys)
+        val collected = mutableListOf<CollaborationDraft>()
+        var after: String? = null
+        do {
+            decryptions = 0
+            val page =
+                assertIs<AppResult.Success<CollaborationPreparedDraftPage>>(
+                        indexed.prepared(f.access, after)
+                    )
+                    .value
+            assertTrue(page.drafts.size <= 8)
+            assertTrue(
+                decryptions <= 10,
+                "Only the checkpoint and at most nine indexed bodies may be decrypted",
+            )
+            collected += page.drafts
+            after = page.next
+        } while (after != null)
+        assertEquals(
+            all.filter { it.submissionId != null }.sortedBy { it.conversationId },
+            collected,
+        )
+        assertEquals(201, collected.size)
+        val first = collected.first()
+        val cleared = first.copy(revision = historyId(40_000), text = "", submissionId = null)
+        assertEquals(AppResult.Success(true), f.drafts().replace(f.access, first, cleared))
+        val page =
+            assertIs<AppResult.Success<CollaborationPreparedDraftPage>>(indexed.prepared(f.access))
+                .value
+        assertFalse(page.drafts.any { it.conversationId == first.conversationId })
+        assertEquals(AppResult.Success(all[1]), f.drafts().get(f.access, all[1].conversationId))
+        val wrong = f.access.copy(companyId = historyId(50_000))
+        assertEquals(
+            AppResult.Success(CollaborationPreparedDraftPage(emptyList(), null)),
+            indexed.prepared(wrong),
+        )
+    }
+
+    @Test
+    fun competingDifferentConversationsRetainBothWithBoundedCheckpointRetry() = withDatabase { f ->
+        assertEquals(AppResult.Success(true), f.drafts().replace(f.access, null, f.draft()))
+        val release = CompletableDeferred<Unit>()
+        val barrier = Mutex()
+        var commits = 0
+        val store =
+            object : ReplicaStore by f.database.replicas {
+                override suspend fun commit(
+                    handle: ReplicaHandle,
+                    expectedRevision: Long,
+                    checkpoint: String,
+                    documents: List<ReplicaDocument>,
+                    publish: Boolean,
+                ): Boolean {
+                    barrier.withLock { if (++commits == 2) release.complete(Unit) }
+                    release.await()
+                    return f.database.replicas.commit(
+                        handle,
+                        expectedRevision,
+                        checkpoint,
+                        documents,
+                        publish,
+                    )
+                }
+            }
+        val one = f.draft().copy(conversationId = historyId(51_000))
+        val two = f.draft().copy(conversationId = historyId(51_001), text = "Another conversation")
+        val results = coroutineScope {
+            listOf(
+                    async { f.drafts(store).replace(f.access, null, one) },
+                    async { f.drafts(store).replace(f.access, null, two) },
+                )
+                .awaitAll()
+        }
+        assertEquals(listOf(AppResult.Success(true), AppResult.Success(true)), results)
+        assertEquals(3, commits)
+        assertEquals(AppResult.Success(one), f.drafts().get(f.access, one.conversationId))
+        assertEquals(AppResult.Success(two), f.drafts().get(f.access, two.conversationId))
+        assertEquals(AppResult.Success(f.draft()), f.drafts().get(f.access, f.conversation))
+    }
+
+    @Test
+    fun frozenIndexCommitsWithItsBodyEvenWhenTheCommitReplyIsLost() = withDatabase { f ->
+        val editing = f.draft()
+        assertEquals(AppResult.Success(true), f.drafts().replace(f.access, null, editing))
+        var commits = 0
+        val store =
+            object : ReplicaStore by f.database.replicas {
+                override suspend fun commit(
+                    handle: ReplicaHandle,
+                    expectedRevision: Long,
+                    checkpoint: String,
+                    documents: List<ReplicaDocument>,
+                    publish: Boolean,
+                ): Boolean {
+                    commits++
+                    assertTrue(
+                        f.database.replicas.commit(
+                            handle,
+                            expectedRevision,
+                            checkpoint,
+                            documents,
+                            publish,
+                        )
+                    )
+                    error("Lost commit reply")
+                }
+            }
+        val frozen = editing.copy(revision = historyId(52_000), submissionId = editing.revision)
+        assertIs<AppResult.Failed>(f.drafts(store).replace(f.access, editing, frozen))
+        assertEquals(
+            AppResult.Success(CollaborationPreparedDraftPage(listOf(frozen), null)),
+            f.drafts().prepared(f.access),
+        )
+        assertEquals(AppResult.Success(true), f.drafts(store).replace(f.access, editing, frozen))
+        assertEquals(1, commits)
+    }
+
+    @Test
+    fun failedCasHasAFiniteBudgetAndInvalidDiscoveryDoesNoStorageWork() = withDatabase { f ->
+        val editing = f.draft()
+        assertEquals(AppResult.Success(true), f.drafts().replace(f.access, null, editing))
+        var commits = 0
+        var queries = 0
+        val store =
+            object : ReplicaStore by f.database.replicas {
+                override suspend fun commit(
+                    handle: ReplicaHandle,
+                    expectedRevision: Long,
+                    checkpoint: String,
+                    documents: List<ReplicaDocument>,
+                    publish: Boolean,
+                ): Boolean {
+                    commits++
+                    return false
+                }
+
+                override fun observeQueries(
+                    scope: ReplicaScope,
+                    partition: String,
+                    query: List<ReplicaQuery>,
+                ): Flow<ReplicaQueryPage> {
+                    queries++
+                    error("Invalid input must be rejected first")
+                }
+            }
+        val repository = f.drafts(store)
+        assertEquals(
+            AppResult.Success(false),
+            repository.replace(
+                f.access,
+                editing,
+                editing.copy(revision = historyId(53_000), text = "Changed"),
+            ),
+        )
+        assertEquals(3, commits)
+        assertEquals(AppResult.Success(editing), repository.get(f.access, editing.conversationId))
+        for (limit in listOf(0, 9, Int.MAX_VALUE)) assertIs<AppResult.Failed>(
+            repository.prepared(f.access, limit = limit)
+        )
+        assertIs<AppResult.Failed>(repository.prepared(f.access, afterConversationId = "bad"))
+        assertEquals(0, queries)
+    }
+
+    @Test
+    fun malformedPreparedLookaheadCannotPublishAnApparentlyValidFirstPage() = withDatabase { f ->
+        val repository = f.drafts()
+        for (index in 0..8) {
+            val draft =
+                f.draft(submissionId = historyId(54_000 + index))
+                    .copy(conversationId = historyId(55_000 + index))
+            assertEquals(AppResult.Success(true), repository.replace(f.access, null, draft))
+        }
+        val store =
+            object : ReplicaStore by f.database.replicas {
+                override fun observeQueries(
+                    scope: ReplicaScope,
+                    partition: String,
+                    queries: List<ReplicaQuery>,
+                ) =
+                    f.database.replicas.observeQueries(scope, partition, queries).map { page ->
+                        val rows = page.pages.single()
+                        assertEquals(9, rows.size)
+                        page.copy(
+                            pages = listOf(rows.dropLast(1) + rows.last().copy(tags = emptySet()))
+                        )
+                    }
+            }
+        assertIs<AppResult.Failed>(f.drafts(store).prepared(f.access))
+    }
+
     private fun CollaborationHistoryFixture.drafts(store: ReplicaStore = database.replicas) =
         EncryptedCollaborationDraftRepository(store, cipher, keys)
 
@@ -294,7 +541,7 @@ abstract class CollaborationDraftStorageContract {
 
     private suspend fun CollaborationHistoryFixture.draftPage() =
         database.replicas
-            .observeDocument(historyScope(access), draftPartition(access, conversation), "draft")
+            .observeDocument(historyScope(access), draftPartition(access), conversation)
             .first()
 
     private fun withDatabase(block: suspend (CollaborationHistoryFixture) -> Unit) = runTest {

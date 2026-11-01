@@ -103,6 +103,13 @@ internal class ChatThreadFixture {
     var draftFlow: Flow<AppResult<CollaborationDraft?>>? = null
     val drafts =
         object : CollaborationDraftRepository {
+            override suspend fun prepared(
+                access: CollaborationLocalAccess,
+                afterConversationId: String?,
+                limit: Int,
+            ): AppResult<CollaborationPreparedDraftPage> =
+                error("No recovery discovery while editing")
+
             override fun observe(access: CollaborationLocalAccess, conversationId: String) = flow {
                 beforeDraft()
                 emitAll(draftFlow ?: draftSlot.map { AppResult.Success(it) })

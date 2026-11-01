@@ -16,6 +16,13 @@ interface CollaborationDraftRepository {
         conversationId: String,
     ): AppResult<CollaborationDraft?>
 
+    /** At most eight frozen drafts plus an authenticated lookahead; no full-partition scan. */
+    suspend fun prepared(
+        access: CollaborationLocalAccess,
+        afterConversationId: String? = null,
+        limit: Int = 8,
+    ): AppResult<CollaborationPreparedDraftPage>
+
     /**
      * Compare the complete previous slot and atomically replace it. Replaying the exact immutable
      * replacement succeeds; a competing revision or owner returns false. Clearing writes an empty

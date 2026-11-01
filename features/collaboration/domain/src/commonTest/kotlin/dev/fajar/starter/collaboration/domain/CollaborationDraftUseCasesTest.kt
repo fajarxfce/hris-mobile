@@ -240,6 +240,13 @@ private class DraftIntentFixture {
     var commandOverride: AppResult<CollaborationMessageRecord?>? = null
     private val drafts =
         object : CollaborationDraftRepository {
+            override suspend fun prepared(
+                access: CollaborationLocalAccess,
+                afterConversationId: String?,
+                limit: Int,
+            ): AppResult<CollaborationPreparedDraftPage> =
+                error("No recovery discovery while editing")
+
             override fun observe(access: CollaborationLocalAccess, conversationId: String) = flow {
                 observers++
                 try {

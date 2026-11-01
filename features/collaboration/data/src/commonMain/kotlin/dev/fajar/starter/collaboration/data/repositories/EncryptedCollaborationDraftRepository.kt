@@ -1,13 +1,16 @@
+@file:OptIn(kotlin.uuid.ExperimentalUuidApi::class)
+
 package dev.fajar.starter.collaboration.data.repositories
 
 import dev.fajar.starter.collaboration.data.drafts.*
 import dev.fajar.starter.collaboration.data.history.*
 import dev.fajar.starter.collaboration.domain.entities.*
-import dev.fajar.starter.collaboration.domain.policies.validCollaborationDraft
+import dev.fajar.starter.collaboration.domain.policies.*
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationDraftRepository
 import dev.fajar.starter.database.*
 import dev.fajar.starter.securestorage.*
 import dev.fajar.starter.storage.*
+import kotlin.uuid.Uuid
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import org.koin.core.annotation.*
@@ -23,11 +26,12 @@ class EncryptedCollaborationDraftRepository(
     override fun observe(access: CollaborationLocalAccess, conversationId: String) =
         safeStorageFlow(
                 flow {
+                    require(validCollaborationMessageId(conversationId))
                     emitAll(
                         replicas.observeDocument(
                             historyScope(access),
-                            draftPartition(access, conversationId),
-                            "draft",
+                            draftPartition(access),
+                            conversationId,
                         )
                     )
                 },
@@ -38,12 +42,77 @@ class EncryptedCollaborationDraftRepository(
     override suspend fun get(access: CollaborationLocalAccess, conversationId: String) =
         withContext(Dispatchers.Default) {
             safeStorageCall {
+                require(validCollaborationMessageId(conversationId))
                 val scope = historyScope(access)
-                val partition = draftPartition(access, conversationId)
-                val page = replicas.observeDocument(scope, partition, "draft").first()
+                val partition = draftPartition(access)
+                val page = replicas.observeDocument(scope, partition, conversationId).first()
                 val result = decode(access, conversationId, page)
                 require(replicas.checkpoint(scope, partition) == page.checkpoint)
                 result
+            }
+        }
+
+    override suspend fun prepared(
+        access: CollaborationLocalAccess,
+        afterConversationId: String?,
+        limit: Int,
+    ) =
+        withContext(Dispatchers.Default) {
+            safeStorageCall {
+                require(
+                    limit in 1..8 &&
+                        (afterConversationId == null ||
+                            validCollaborationMessageId(afterConversationId))
+                )
+                val scope = historyScope(access)
+                val partition = draftPartition(access)
+                val page =
+                    replicas
+                        .observeQueries(
+                            scope,
+                            partition,
+                            listOf(
+                                ReplicaQuery(
+                                    PREPARED_DRAFT_TAG,
+                                    after = afterConversationId,
+                                    limit = limit + 1,
+                                )
+                            ),
+                        )
+                        .first()
+                val documents = page.pages.single()
+                val checkpoint = page.checkpoint
+                val drafts =
+                    if (checkpoint == null) {
+                        require(documents.isEmpty())
+                        emptyList()
+                    } else
+                        keys.use { content, _ ->
+                            val codec = CollaborationDraftCodec(access, cipher, content)
+                            codec.checkpoint(checkpoint)
+                            require(documents.size <= limit + 1)
+                            documents
+                                .map { codec.decode(checkpoint, it) }
+                                .also { values ->
+                                    require(
+                                        values.all {
+                                            it.submissionId != null &&
+                                                (afterConversationId == null ||
+                                                    it.conversationId > afterConversationId)
+                                        }
+                                    )
+                                    require(
+                                        values.map { it.conversationId } ==
+                                            values.map { it.conversationId }.distinct().sorted()
+                                    )
+                                }
+                        }
+                require(replicas.checkpoint(scope, partition) == checkpoint)
+                val selected = drafts.take(limit)
+                CollaborationPreparedDraftPage(
+                    selected,
+                    if (drafts.size > limit) selected.last().conversationId else null,
+                )
             }
         }
 
@@ -61,21 +130,49 @@ class EncryptedCollaborationDraftRepository(
                             expected.conversationId == replacement.conversationId)
                 )
                 val scope = historyScope(access)
-                val partition = draftPartition(access, replacement.conversationId)
-                val page = replicas.observeDocument(scope, partition, "draft").first()
-                val current = decode(access, replacement.conversationId, page)
-                if (replicas.checkpoint(scope, partition) != page.checkpoint)
-                    return@safeStorageCall false
-                if (current == replacement) return@safeStorageCall true
-                if (current != expected) return@safeStorageCall false
-                require(current?.revision != replacement.revision)
-                val snapshot =
-                    keys.use(create = page.checkpoint == null) { content, _ ->
-                        CollaborationDraftCodec(access, replacement.conversationId, cipher, content)
-                            .encode(replacement)
-                    }
-                currentCoroutineContext().ensureActive()
-                replicas.replace(scope, partition, page.checkpoint, snapshot)
+                val partition = draftPartition(access)
+                // Technical CAS contention from another document must not drop this mutation.
+                // Every attempt rereads this exact target; a changed target is never overwritten.
+                repeat(3) {
+                    currentCoroutineContext().ensureActive()
+                    val page =
+                        replicas
+                            .observeDocument(scope, partition, replacement.conversationId)
+                            .first()
+                    val current = decode(access, replacement.conversationId, page)
+                    if (replicas.checkpoint(scope, partition) != page.checkpoint) return@repeat
+                    if (current == replacement) return@safeStorageCall true
+                    if (current != expected) return@safeStorageCall false
+                    require(current?.revision != replacement.revision)
+                    val written =
+                        keys.use(create = page.checkpoint == null) { content, _ ->
+                            val codec = CollaborationDraftCodec(access, cipher, content)
+                            val raw = page.checkpoint
+                            val generation = raw?.handle?.generation ?: Uuid.random().toString()
+                            val revision = raw?.revision?.plus(1) ?: 0L
+                            require(revision in 0 until 9_007_199_254_740_991L)
+                            val checkpoint = codec.checkpoint(generation, revision)
+                            val document = codec.encode(generation, revision, replacement)
+                            currentCoroutineContext().ensureActive()
+                            if (raw == null)
+                                replicas.replace(
+                                    scope,
+                                    partition,
+                                    null,
+                                    ReplicaSnapshot(generation, checkpoint, listOf(document)),
+                                )
+                            else
+                                replicas.commit(
+                                    raw.handle,
+                                    raw.revision,
+                                    checkpoint,
+                                    listOf(document),
+                                    true,
+                                )
+                        }
+                    if (written) return@safeStorageCall true
+                }
+                false
             }
         }
 
@@ -84,12 +181,19 @@ class EncryptedCollaborationDraftRepository(
         conversationId: String,
         page: ReplicaPage,
     ): CollaborationDraft? {
-        if (page.checkpoint == null) {
+        val checkpoint = page.checkpoint
+        if (checkpoint == null) {
             require(page.documents.isEmpty())
             return null
         }
         return keys.use { content, _ ->
-            CollaborationDraftCodec(access, conversationId, cipher, content).decode(page)
+            val codec = CollaborationDraftCodec(access, cipher, content)
+            codec.checkpoint(checkpoint)
+            require(page.documents.size <= 1)
+            page.documents.singleOrNull()?.let {
+                require(it.id == conversationId)
+                codec.decode(checkpoint, it)
+            }
         }
     }
 }

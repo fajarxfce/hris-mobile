@@ -1,6 +1,32 @@
 # Durable composer foundation
 
-The encrypted draft repository owns one revisioned slot per account/company/conversation.
+## Indexed recovery format
+
+The current pre-release format is `composer-v2`. One account/company partition contains a
+separately authenticated document per conversation. Its logical draft revision remains
+independent of the partition's monotonic checkpoint. A frozen draft's `prepared` tag and
+exact ID/body commit atomically in the same SQLite/IndexedDB transaction. Indexed reads return
+at most eight candidates and one authenticated lookahead; editing and empty tombstone rows
+are excluded. No history scan, new platform key or core database migration is needed.
+
+Complete-target compare-and-set still rejects another editor's change. At most three technical
+CAS attempts tolerate a different conversation advancing the shared checkpoint; every attempt
+rereads the exact target and ownership. No target mutation is silently rebased. The 603-draft
+fixture finds 201 frozen drafts across reopen and proves at most ten decryptions per page
+(checkpoint plus nine bodies). Lost commits preserve body/index together; malformed lookahead
+fails the entire page. [Validation](measurements/chat-draft-index-2026-11-01.json): 15 SQLite,
+249 data browser, 381 domain cases on each target, quality pass. Root/Android integration and
+automatic worker coordination remain next.
+
+This replaces the earlier per-conversation `composer-v1` storage prototype before any
+draft-capable release has been installed. Verified phone release 7 predates all draft storage;
+there is no user draft partition to migrate in that build. The earlier v1 measurements below
+are historical foundation evidence, not the current storage layout.
+
+## Earlier storage and current editor contracts
+
+
+The initial v1 encrypted draft repository owned one revisioned slot per account/company/conversation.
 Empty replacements retain a revision, fencing late writers after clearing. Compare-and-set
 checks the entire previous draft and checkpoint; replaying the exact immutable replacement
 succeeds after a lost response. A different value under the same revision is rejected.
@@ -38,9 +64,8 @@ Localized failure feedback stays beside the composer, with a 320 dp / 200% text 
 presentation cases and two application-binding cases, including twelve new recovery/race
 scenarios. Root/Android integration remains pending with automatic recovery below.
 
-Automatic recovery of a freeze that precedes queue admission is still separate work. The
-current per-conversation snapshot lacks an atomic prepared-send index; do not infer that a
-regular outbox scan finds it. Before the first draft-capable release, implement a bounded
-indexed prepared-draft query and application-owned Queue/Confirm coordination. Empty draft
+Automatic recovery of a freeze that precedes queue admission is still separate work. The v2 indexed prepared query is now available; do not infer that a regular outbox scan
+uses it yet. Before the first draft-capable release, add application-owned Queue/Confirm
+coordination and prove the separate freeze-only restart boundary. Empty draft
 revisions must still fence late writers, and the index and frozen body must commit together.
 The installed release 7 predates this storage addition. No full chat acceptance is claimed.

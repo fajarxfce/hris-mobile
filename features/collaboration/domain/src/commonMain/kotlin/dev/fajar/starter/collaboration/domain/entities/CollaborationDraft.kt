@@ -13,3 +13,8 @@ data class CollaborationDraft(
 ) {
     override fun toString() = "CollaborationDraft([redacted])"
 }
+
+/** Bounded indexed candidates; next is the final returned conversation only when more exist. */
+data class CollaborationPreparedDraftPage(val drafts: List<CollaborationDraft>, val next: String?) {
+    override fun toString() = "CollaborationPreparedDraftPage([redacted])"
+}
