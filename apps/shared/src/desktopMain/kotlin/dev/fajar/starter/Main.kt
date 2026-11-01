@@ -66,6 +66,8 @@ fun main(args: Array<String>) {
                 desktopSessionCredentials(namespace, "collaboration-list-content-key"),
             collaborationReceiptCredentials =
                 desktopSessionCredentials(namespace, "collaboration-receipt-content-key"),
+            collaborationHistoryCredentials =
+                desktopSessionCredentials(namespace, "collaboration-history-content-key"),
             selfProfileReplicaCredentials =
                 desktopSessionCredentials(namespace, "self-profile-replica-content-key"),
             documentCatalogCredentials =

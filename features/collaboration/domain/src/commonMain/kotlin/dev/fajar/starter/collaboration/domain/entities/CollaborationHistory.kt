@@ -1,0 +1,49 @@
+package dev.fajar.starter.collaboration.domain.entities
+
+/** Original, decrypted provider events, never a timeline's latest edited presentation. */
+sealed interface CollaborationHistoryChange {
+    val eventId: String
+    val sender: String
+
+    data class Text(
+        override val eventId: String,
+        override val sender: String,
+        val logicalId: String?,
+        val timestamp: Long,
+        val text: String,
+        /**
+         * SHA-256 of the adapter's canonical original content, including unknown content fields.
+         */
+        val contentHash: String,
+    ) : CollaborationHistoryChange {
+        override fun toString() = "HistoryText([redacted])"
+    }
+
+    /** The SDK has confirmed the redacted event and its original sender, not the redactor. */
+    data class Redacted(override val eventId: String, override val sender: String) :
+        CollaborationHistoryChange {
+        override fun toString() = "HistoryRedacted([redacted])"
+    }
+}
+
+/** One original send action with all observed provider aliases. Primary ordering stays stable. */
+data class CollaborationHistoryMessage(
+    val sender: String,
+    val logicalId: String?,
+    val primaryEventId: String,
+    val timestamp: Long,
+    val contentHash: String,
+    val text: String?,
+    val eventIds: List<String>,
+    val redacted: Boolean,
+) {
+    override fun toString() = "CollaborationHistoryMessage([redacted])"
+}
+
+/** Newest first; the opaque cursor belongs to this account/company/conversation projection. */
+data class CollaborationHistoryPage(
+    val messages: List<CollaborationHistoryMessage>,
+    val next: String?,
+) {
+    override fun toString() = "CollaborationHistoryPage([redacted])"
+}

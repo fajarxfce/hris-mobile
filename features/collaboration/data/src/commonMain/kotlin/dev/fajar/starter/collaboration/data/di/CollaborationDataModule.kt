@@ -12,6 +12,25 @@ import org.koin.core.annotation.*
 @Module
 @ComponentScan("dev.fajar.starter.collaboration.data")
 class CollaborationDataModule {
+    @Factory
+    fun observeHistory(
+        history: CollaborationHistoryRepository,
+        lists: CollaborationListRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) =
+        ObserveCollaborationHistory(
+            history,
+            lists,
+            sessions,
+            workspaces,
+            server,
+            build,
+            Clock.System,
+        )
+
     @Single
     fun deliverMessages(
         messages: CollaborationMessageRepository,

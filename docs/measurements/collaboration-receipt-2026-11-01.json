@@ -269,5 +269,43 @@
     "128 retained messages / 512 total aliases per conversation; 128 aliases per message; 1..32 messages per append. Existing shared 128-command account limit and no retirement remain.",
     "Native callback-to-journal gap still requires incoming history reconciliation. Common live-admitted sender, recipient coalescing, bounded history and Chat UI remain.",
     "SDK delivery source is unchanged from Mobile 622d2540 and Platform a5ec785c; no new actual-native acceptance is claimed."
-  ]
+  ],
+  "hostedControlAudit": {
+    "runId": 41270939965,
+    "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/41270939965",
+    "headSha": "8d8fb233feee480e6e7dc7bc0430195ccf906005",
+    "conclusion": "success",
+    "allJobsAndStepsSucceeded": true,
+    "steps": 28,
+    "sourceHashesMatchedAgainstImmutableCommit": 191,
+    "portable": {
+      "desktop": {
+        "suites": 38,
+        "tests": 316,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "browser": {
+        "suites": 34,
+        "tests": 292,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "apple": {
+      "suites": 31,
+      "tests": 260,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "iosArm64Compilation": true,
+      "simulatorAppHostXcodeBuildSucceeded": true,
+      "codeSigning": false,
+      "physicalDeviceTest": false
+    },
+    "appleLogSha256": "4ba72f3874d1521291408773351cce2f9ff29f8332526153746a8e1e07052281",
+    "scope": "Receipt commit only; this hosted result does not validate the later sender or history increments."
+  }
 }

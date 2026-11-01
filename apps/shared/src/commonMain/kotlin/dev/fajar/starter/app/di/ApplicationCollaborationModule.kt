@@ -13,11 +13,14 @@ internal fun applicationCollaborationModule(
     runtime: (IdentityServer) -> CollaborationRuntimeRepository,
     listCredentials: AtomicCredentialStore,
     receiptCredentials: AtomicCredentialStore,
+    historyCredentials: AtomicCredentialStore,
 ) = module {
     single<CollaborationRuntimeRepository> { runtime(get()) }
     single { ApplicationCollaborationLifetime(get()) }.onClose { it?.close() }
     single<AtomicCredentialStore>(named("collaboration-list-content-key")) { listCredentials }
         .onClose { it?.close() }
     single<AtomicCredentialStore>(named("collaboration-receipt-content-key")) { receiptCredentials }
+        .onClose { it?.close() }
+    single<AtomicCredentialStore>(named("collaboration-history-content-key")) { historyCredentials }
         .onClose { it?.close() }
 }

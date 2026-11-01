@@ -102,6 +102,8 @@ class CollaborationBindingsTest {
                 assertNotNull(container.koin.get<CollaborationListRepository>())
                 assertNotNull(container.koin.get<CollaborationMessageRepository>())
                 assertNotNull(container.koin.get<CollaborationReceiptRepository>())
+                assertNotNull(container.koin.get<CollaborationHistoryRepository>())
+                assertNotNull(container.koin.get<ObserveCollaborationHistory>())
                 assertSame(
                     container.koin.get<DeliverCollaborationMessages>(),
                     container.koin.get<DeliverCollaborationMessages>(),
