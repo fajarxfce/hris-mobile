@@ -1,5 +1,27 @@
 # Agent continuation — HRIS Mobile
 
+## Installed-source native regression audited — 1 November 2026
+
+[Hosted evidence](measurements/chat-cancellation-ui-native-ci-2026-11-01.json) audits
+41347895253 at c0371a38, the release-10 product source installed on the phone.
+Its older Platform bad75bd0 fixture passes SDK 60.410s, scheduled 88.926s and queued/
+frozen pair 105.883s, six cleanup tests and 26 artifact hashes. Proof APK SHA-256
+`86d3115afa863b36759b59d477c73e5365425cb31d61d0de5663320314c1dcd4`.
+Both workers take one pass, acquire 33 originals/four history actions/43 references
+(ten state-only); frozen recovery retains exact identity/revision and zero initial
+commands. This headless run does not exercise the cancellation dialog or cancelled
+original, and predates the corrected pending-key response. Separate newer local
+five-case proof remains authoritative for those cancellation/publication boundaries.
+
+The newer five-case 41351236140 at 302aa192 / Platform d48ac2f8 is now running.
+Continue notifications: Platform a31cd57a adds validated FCM visible/background
+profiles (15 push, 13 policy, eight real worker cases); fixed opaque Matrix pusher
+transport is being validated next, followed by admitted binding/durable callback
+recovery and Mobile receive/reply. No live provider rollout or PRD acceptance.
+Phone remains verified release 10. Install the next validated product checkpoint
+as code 11+ with notification, explicit WireGuard serial and install-only; do not
+drive its UI. Continue the full implementation after each commit/install.
+
 ## Cancelled-draft native proof and publication retry corrected — 1 November 2026
 
 [Five-case evidence](measurements/chat-cancellation-native-2026-11-01.json): 356s Gradle / 357.121s wall,

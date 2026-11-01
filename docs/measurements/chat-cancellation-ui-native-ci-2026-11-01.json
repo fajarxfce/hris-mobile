@@ -1,0 +1,161 @@
+{
+  "date": "2026-11-01",
+  "runId": 41347895253,
+  "conclusion": "success",
+  "headSha": "c0371a38d1ae2f8c890c300648ec849089c3836a",
+  "status": "completed",
+  "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/41347895253",
+  "platformCommit": "bad75bd0d73c88afa66db7f16493e5e513ba9250",
+  "artifact": {
+    "apkSha256": "86d3115afa863b36759b59d477c73e5365425cb31d61d0de5663320314c1dcd4",
+    "package": "dev.fajar.hris.collaboration.proof",
+    "androidApi": 35
+  },
+  "nativeTests": [
+    {
+      "name": "dev.fajar.hris.NativeCollaborationScheduledInteropTest",
+      "tests": 1,
+      "seconds": 88.926,
+      "cases": [
+        {
+          "name": "androidWorkManagerRestoresConstrainedIntentAfterOrdinaryProcessDeath()",
+          "seconds": 40.188
+        }
+      ]
+    },
+    {
+      "name": "dev.fajar.hris.NativeCollaborationSdkInteropTest",
+      "tests": 1,
+      "seconds": 60.41,
+      "cases": [
+        {
+          "name": "actualAndroidSdkExchangesEncryptedMessagesThroughCurrentHrisGatewayAdmission()",
+          "seconds": 47.308
+        }
+      ]
+    },
+    {
+      "name": "dev.fajar.hris.NativeCollaborationWorkerInteropTest",
+      "tests": 2,
+      "seconds": 105.883,
+      "cases": [
+        {
+          "name": "actualApplicationWorkerRestoresQueuedIntentAfterProcessDeathAndSendsOnce()",
+          "seconds": 43.185
+        },
+        {
+          "name": "actualApplicationWorkerRecoversFrozenOnlyDraftAfterProcessDeathAndSendsOnce()",
+          "seconds": 43.729
+        }
+      ]
+    }
+  ],
+  "cleanupUnitTests": 6,
+  "workers": {
+    "QUEUED": {
+      "processes": 2,
+      "forcedProcessDeaths": 1,
+      "workerEncryptedSends": 1,
+      "peerEncryptedSends": 32,
+      "historyActions": 4,
+      "providerReferences": 43,
+      "stateOnlyReferences": 10,
+      "passes": 1,
+      "applicationAdmissions": {
+        "device": 30,
+        "conversation": 28,
+        "room": 30,
+        "failures": 0
+      },
+      "cleanup": true,
+      "exactOriginalPreservedAcrossDeath": true,
+      "oldestOriginalRetainedAfterStop": true
+    },
+    "FROZEN_DRAFT": {
+      "processes": 2,
+      "forcedProcessDeaths": 1,
+      "workerEncryptedSends": 1,
+      "peerEncryptedSends": 32,
+      "historyActions": 4,
+      "providerReferences": 43,
+      "stateOnlyReferences": 10,
+      "passes": 1,
+      "applicationAdmissions": {
+        "device": 30,
+        "conversation": 28,
+        "room": 30,
+        "failures": 0
+      },
+      "cleanup": true,
+      "exactOriginalPreservedAcrossDeath": true,
+      "oldestOriginalRetainedAfterStop": true,
+      "pendingCommandsBeforeAndAfterDeath": 0,
+      "exactDraftRevisionPreserved": true,
+      "confirmedDraftCleared": true
+    }
+  },
+  "sdk": {
+    "encryptedSends": 3,
+    "heldRoomNeverSent": true,
+    "ackBeforeJournalRecovered": true,
+    "completionCleanupRecovered": true,
+    "protectedStoreReopened": true,
+    "cleanup": true,
+    "applicationAdmissions": {
+      "device": 22,
+      "conversation": 22,
+      "room": 22,
+      "failures": 0
+    }
+  },
+  "scheduled": {
+    "automaticJobStart": true,
+    "ordinaryProcessDeaths": 1,
+    "networkRestored": true,
+    "workState": "SUCCEEDED",
+    "runAttemptCount": 1,
+    "encryptedSends": 1,
+    "cleanup": true,
+    "applicationAdmissions": {
+      "device": 8,
+      "conversation": 7,
+      "room": 8,
+      "failures": 0
+    }
+  },
+  "downloadedEvidenceSha256": {
+    "native-hris-evidence/platform/apps/server/build/test-results/test/TEST-dev.fajar.hris.NativeCollaborationScheduledInteropTest.xml": "1501905b77590c6693d0d960cc27bf94cb11254332dff9e44f06a2d93e830c05",
+    "native-hris-evidence/platform/apps/server/build/test-results/test/TEST-dev.fajar.hris.NativeCollaborationSdkInteropTest.xml": "15db98fca327d5de9076e57dde55acd775733a5fb3f15e128cec558be13234d5",
+    "native-hris-evidence/platform/apps/server/build/test-results/test/TEST-dev.fajar.hris.NativeCollaborationWorkerInteropTest.xml": "2deca0d505552a2555c6f41b59b6f6eab2faf061586738fe6d988d481594f6c4",
+    "native-hris-evidence/platform/.work/collaboration/b04d7dc6a0dc44058160c847db8b89b7/gateway-trace.json": "c33b311252cf47ffcab186f623a4a7da5fc81bffbdde761fa29b9af4e03bf868",
+    "native-hris-evidence/platform/.work/collaboration/b04d7dc6a0dc44058160c847db8b89b7/result.json": "979c6b6a745c28e1b56594c627b12f67046dbf12409e9c62fd97fb14588612ac",
+    "native-hris-evidence/platform/.work/collaboration/b04d7dc6a0dc44058160c847db8b89b7/verified.json": "dc3c6636fa7f049988d050dbaa0ef22938637619f4a6d502c7562227cc5ffa1f",
+    "native-hris-evidence/platform/.work/collaboration-worker/22c847f56389465c908a916e4bf03aa6/acceptance.json": "77a68867724fa2d2371f5edc2aed093b398d14102c7df3f975c4319c8a49db85",
+    "native-hris-evidence/platform/.work/collaboration-worker/22c847f56389465c908a916e4bf03aa6/gateway-observations.json": "17b9b602b4619d6829a410dc0fd6f6764627dcac1aa9b556b289647c7f875b93",
+    "native-hris-evidence/platform/.work/collaboration-worker/22c847f56389465c908a916e4bf03aa6/gateway-trace.json": "3dc7a24f33ec8fb674a7e213fa7ab4208659a561049bf5099276663d7f1717fb",
+    "native-hris-evidence/platform/.work/collaboration-worker/22c847f56389465c908a916e4bf03aa6/native-worker-queued.json": "12ff75c6e410741884e4e50bb576278500099985724cfd82b213130500a94ca2",
+    "native-hris-evidence/platform/.work/collaboration-worker/22c847f56389465c908a916e4bf03aa6/native-worker-restored.json": "52926aafcbd8d80c6f3146e79ed50b598431a03f7975ec071a2e25d0a42b3f23",
+    "native-hris-evidence/platform/.work/collaboration-worker/22c847f56389465c908a916e4bf03aa6/result.json": "39a72082f2774f989a643d61f1b8b1ceb11c45b601038dbfc1ad1561d641713c",
+    "native-hris-evidence/platform/.work/collaboration-worker/4aa4f147db754df0a4aa1ef130c9ae87/acceptance.json": "f1fbea17b47a28ae2b532295373ef8780fbfc9ab8258ea957e77dfee86aa3917",
+    "native-hris-evidence/platform/.work/collaboration-worker/4aa4f147db754df0a4aa1ef130c9ae87/gateway-observations.json": "9035bcaf65b9eb76163228acf2b390f095acfca0078316c9842b7fc8b7609ea3",
+    "native-hris-evidence/platform/.work/collaboration-worker/4aa4f147db754df0a4aa1ef130c9ae87/gateway-trace.json": "c273f5974e3760b0280e909461ac752a84597c98a3537a8d0da8feb7a934a382",
+    "native-hris-evidence/platform/.work/collaboration-worker/4aa4f147db754df0a4aa1ef130c9ae87/native-worker-queued.json": "30825e30cc34afb8aa87b732aab78d810b16538d79ca82fce5ad97100f2ff18a",
+    "native-hris-evidence/platform/.work/collaboration-worker/4aa4f147db754df0a4aa1ef130c9ae87/native-worker-restored.json": "fb2748895d50d917106fb45927f5ff7ac138288cd1dc87c341a3e5f790d445aa",
+    "native-hris-evidence/platform/.work/collaboration-worker/4aa4f147db754df0a4aa1ef130c9ae87/result.json": "7a15829fc0d134241c8cdcb76630a433b8853e5afed35bbc9ec169a00adab1be",
+    "native-hris-evidence/platform/.work/collaboration-worker/6aa38a47df8744abbb0d1e7ace065826/acceptance.json": "4a120f7d5cfb59d24466455ba605f3d6e9d132f307b0cf284bcdf9d65bac397a",
+    "native-hris-evidence/platform/.work/collaboration-worker/6aa38a47df8744abbb0d1e7ace065826/gateway-observations.json": "6529f5c426b5c63d378db22a9cf296ca49d94c6e5b56a46c5c2bb14d93351682",
+    "native-hris-evidence/platform/.work/collaboration-worker/6aa38a47df8744abbb0d1e7ace065826/gateway-trace.json": "fbe55fd1f92f4aa43bf5d797ba1192a87ad4fbf8e4af3cab797e8111cd7ede81",
+    "native-hris-evidence/platform/.work/collaboration-worker/6aa38a47df8744abbb0d1e7ace065826/network-before.json": "79dfab35e5f4104e398aa74de7c3d6e56dda0a96ac31d2fcb699ac1df093c6ad",
+    "native-hris-evidence/platform/.work/collaboration-worker/6aa38a47df8744abbb0d1e7ace065826/result.json": "31a387a06d378cc4307186580578ea41788bf1e9ecdc29e1bea8726ee6583bea",
+    "native-hris-evidence/platform/.work/collaboration-worker/6aa38a47df8744abbb0d1e7ace065826/started.json": "42069f1d803d79a5412a2220657d08c2b53207986d842761cda1be6e6d59b6f2",
+    "native-hris-evidence/platform/.work/collaboration-worker/6aa38a47df8744abbb0d1e7ace065826/stopped.json": "3f9a103a05704100a2593779cbcfd7ff59d72192811f13d3c5bd0ecd3e7b37e1",
+    "native-hris-evidence/mobile/apps/collaboration-proof/build/test-results/testDebugUnitTest/TEST-dev.fajar.hris.collaboration.proof.HrisProofCleanupTest.xml": "3c0a4664ae8b0cc9c83189e8bae5e2b8494d696db6843f4c6ae6ecd6b56cd174"
+  },
+  "scope": [
+    "Hosted four-case regression on exact Mobile c0371a38 and pinned Platform bad75bd0, including queued-cancellation UI/policy/storage and prior draft recovery product inputs.",
+    "Each worker acquires one encrypted original plus 32 distinct peer originals before Stop. Only the oldest original is individually asserted after Stop.",
+    "Frozen-only recovery requires zero pending commands before and after death, retains the original draft revision/body/ID, queues once and confirms clearing. Ordinary queued recovery remains a separate case.",
+    "This source includes the installed release-10 cancellation UI and policy; these headless fixtures do not exercise the dialog. The four-case fixture directly tests queued/frozen recovery, not a cancelled original; later five-case native evidence exercises actual cancellation. It also predates the pending-key-publication response correction.",
+    "No live provider rollout, Apple/web runtime, capacity acceptance or complete PRD feature group is claimed."
+  ]
+}
