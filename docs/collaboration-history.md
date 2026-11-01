@@ -82,6 +82,12 @@ current account ownership after that check. Only an admitted acquisition elsewhe
 can reopen the company gate. It performs no network work, key bootstrap or SDK
 restore. The caller owns the flow collection and cancellation.
 
+Focused cache ownership has a separate [SDK lifetime limit](collaboration-sdk-history-limits.md).
+The native SDK retains those caches after view disposal, so at most 16 distinct
+room/anchor keys may be created by one owned history runtime. Repeated keys remain
+readable; the limit fails before creating another native focus and does not erase
+local history. Continuous product paging and coordinated reopening are still pending.
+
 ## Latest visible event
 
 [Validation and actual SDK evidence](measurements/collaboration-history-head-2026-11-01.json).

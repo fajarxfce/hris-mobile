@@ -5,6 +5,7 @@ import dev.fajar.starter.collaboration.data.mappers.toOriginalHistory
 import dev.fajar.starter.collaboration.domain.entities.CollaborationHistoryChange
 import dev.fajar.starter.collaboration.domain.policies.validCollaborationEventId
 import dev.fajar.starter.common.result.*
+import dev.fajar.starter.network.RequestFailureException
 import dev.fajar.starter.storage.safeStorageCall
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -30,6 +31,7 @@ internal class AndroidCollaborationHistoryWindows(
     private val client: Client,
     private val children: SdkChildResources,
     private val decodingDispatcher: CoroutineDispatcher = Dispatchers.Default,
+    private val focuses: SdkHistoryFocuses = SdkHistoryFocuses(),
     private val failure: () -> Failure?,
 ) {
     suspend fun read(
@@ -51,7 +53,23 @@ internal class AndroidCollaborationHistoryWindows(
                 requireNotNull(client.getRoom(roomId))
             }
         val acquired =
-            children.acquire(source, { safeAndroidCollaborationCall { it.open() } }, { it.stop() })
+            children.acquire(
+                source,
+                {
+                    safeAndroidCollaborationCall {
+                        if (!focuses.reserve(roomId, anchorEventId))
+                            throw RequestFailureException(
+                                Failure(
+                                    FailureKind.Unavailable,
+                                    "Chat history needs to reopen.",
+                                    code = "client.collaboration_history_focus_capacity",
+                                )
+                            )
+                        it.open()
+                    }
+                },
+                { it.stop() },
+            )
         if (acquired is AppResult.Failed) return acquired
         val child = (acquired as AppResult.Success).value
         val disposed: AppResult<Unit>

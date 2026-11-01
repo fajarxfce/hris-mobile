@@ -1,5 +1,71 @@
 # Collaboration checkpoint history — 1 November 2026
 
+## Latest-event discovery checkpoint — 1 November 2026
+
+**Latest-event discovery now feeds common original-history acquisition, proved
+through the actual Android SDK and HRIS gateway.** [Evidence](measurements/collaboration-history-head-2026-11-01.json)
+records run **`de144a6572dd4705b6fd608f0cb2a229`**, **24.794s test case /
+45.579s native suite / 75s Gradle**, cleanup complete. The fixture omits the
+anchor, requires the head to equal the newest encrypted reply, restores both
+originals from encrypted storage, and proves exactly one unpositioned
+`/messages?dir=b&limit=1` request with **5/5/5 HRIS admissions, zero failures**.
+
+The runtime borrows the application's public HTTP pool and reads the current SDK
+session only after its request child is registered. User/device/homeserver match
+the retained identity; the configured gateway determines the destination. Caller
+or parent cancellation stops the request without closing the shared pool. Bodies
+are bounded to 256 KiB (errors 16 KiB), strict UTF-8 and depth 16; only one valid
+opaque event ID escapes. Empty/unsupported heads do not clear history or certify
+its end. No extra SDK, crypto store, cursor, credential renewal or message retry
+owner is added. Seven common admission cases, six portable transport/mapping
+cases and four Android lifecycle cases cover the change.
+
+Matrix token rejection cannot distinguish ordinary expiry from HRIS revocation.
+SDK Unauthorized still fails live operations, but no longer persists a company
+read restriction. HRIS control denials continue to gate acquired history and
+pending commands. Only admitted company-summary acquisition reopens that gate.
+
+Corrected full checks pass in **103s**: **2,388 desktop / 140 Android host /
+205 domain-browser / 157 data-browser** cases, zero failures/errors/skips and
+zero application/proof lint errors. Server fixture/quality checks pass in **38s**;
+all **35 driver cases** pass. All **235 Mobile / 33 Platform source hashes** match
+before/after. Dev APK **`506b96ba`** is built, not installed; proof APK **`a26ebcf5`**
+is the one actually tested. The dedicated emulator is stopped.
+
+The first focused command passed new behavior tests and APK creation but failed
+Detekt's 100-line fixture limit (93s); history evidence composition was extracted.
+The first full command passed desktop/browser/quality checks but Android host
+compilation found the public `HttpClient` dependency missing from the host classpath
+(238s); app composition now exports `core.network`. A first Python invocation used
+the wrong module import path; corrected discovery passed. All attempts are retained,
+not presented as successful commands. Native diagnostic extraction measured 9.038ms;
+network/decoding/hash/database latency and native-cache allocation are outside that
+metric. There is no large-room memory or capacity acceptance.
+
+Hosted predecessor audits are now recorded: original-window control **`41277971067`**
+at **`5b5cbc73`** passed all 28 steps, **359 desktop / 335 browser / 291 iOS simulator**
+cases and actual Xcode build, with **223 immutable source hashes** matched. Common
+acquisition HRIS **`41279620656`** at **`79028f26`** passed all 17 steps, 130 Android
+host cases and actual native suite 63.208s; all 227 Mobile/33 Platform hashes match.
+Its encrypted run `06cf785c` cleaned up. These predecessors do not validate this
+new head adapter; audit this increment's own hosted CI after push.
+
+**Continue P0–P8; none of 54 complete groups is accepted. Next implement bounded
+provider history progress, ACK-before-journal reconciliation and command retirement,
+then Chat list/setup/conversation UI.** Preserve unresolved events, original-content
+fingerprints, aliases, original native transactions, SDK crypto stores and cursors.
+Do not infer success from absent queue IDs. Apple/web owned content adapters,
+bootstrap/cross-family recovery, backup, rich messaging and all call/meeting phases
+remain. Physical iPhone testing is waived; Apple implementation/interoperability
+is still required. Starter remains clean at `36116b2`; this HRIS composition,
+provider adapter and policy change requires no reusable foundation port.
+
+Platform **`7626d684181af320d5d26a02e0afaeb74625bd65`** is pushed; the HRIS workflow
+pins its strict latest-head and before/after admission assertions.
+
+No live/schema/phone change. Atomic commits and a push after every commit remain
+authorized. Continue after this checkpoint; the user requested the whole plan.
+
 ## Common live-admitted history checkpoint — 1 November 2026
 
 **Common live-admitted original-history acquisition is implemented and proved

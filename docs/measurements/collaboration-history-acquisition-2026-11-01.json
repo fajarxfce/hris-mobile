@@ -590,5 +590,52 @@
     "testCaseSeconds": 22.923,
     "testSuiteSeconds": 63.208,
     "scope": "Validates this recorded predecessor only; later head-discovery changes require their own checks."
+  },
+  "hostedControl": {
+    "run": "https://github.com/fajarxfce/hris-mobile/actions/runs/41279620583",
+    "commit": "79028f26462364e4a445fa906ed4bd1f47b2aad0",
+    "result": "success",
+    "jobs": [
+      {
+        "name": "apple",
+        "conclusion": "success",
+        "steps": 13,
+        "nonPassingSteps": []
+      },
+      {
+        "name": "portable",
+        "conclusion": "success",
+        "steps": 15,
+        "nonPassingSteps": []
+      }
+    ],
+    "tests": {
+      "desktopTest": {
+        "suites": 43,
+        "tests": 373,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "wasmJsBrowserTest": {
+        "suites": 39,
+        "tests": 349,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "iosSimulatorArm64Test": {
+        "suites": 35,
+        "tests": 305,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "immutableSourceHashesMatched": 227,
+    "mismatches": [],
+    "sourceManifestUploaded": false,
+    "xcodeBuildSucceeded": 1,
+    "scope": "Validates common acquisition at 79028f26; does not validate later head discovery or focused-cache ownership changes."
   }
 }

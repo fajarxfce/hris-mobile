@@ -188,6 +188,90 @@ class AndroidCollaborationHistorySourceTest {
         assertEquals(1, room.calls.count { it == "room.close" })
     }
 
+    @Test
+    fun disposingWindowsDoesNotReleaseNativeFocusKeysButAnExistingKeyCanBeReadAgain() = runTest {
+        val acquired = mutableListOf<HistoryRoom>()
+        val sdk =
+            object : Client(NoHandle) {
+                override fun getRoom(roomId: String): Room = HistoryRoom().also { acquired += it }
+            }
+        val children = SdkChildResources(this)
+        val windows =
+            AndroidCollaborationHistoryWindows(
+                sdk,
+                children,
+                StandardTestDispatcher(testScheduler),
+                SdkHistoryFocuses(2),
+            ) {
+                null
+            }
+        for (room in listOf("!one:test", "!two:test")) assertIs<AppResult.Success<*>>(
+            windows.read(room, "\$original")
+        )
+        assertEquals(
+            "client.collaboration_history_focus_capacity",
+            assertIs<AppResult.Failed>(windows.read("!third:test", "\$original")).failure.code,
+        )
+        assertEquals(2, acquired.size)
+        assertTrue(acquired.all { it.calls.count { call -> call == "room.close" } == 1 })
+        assertIs<AppResult.Success<*>>(windows.read("!one:test", "\$original"))
+        assertEquals(3, acquired.size)
+        assertEquals(AppResult.Success(Unit), children.close())
+    }
+
+    @Test
+    fun uncertainFailedNativeCreationRetainsItsKeyAfterEveryResourceCloses() = runTest {
+        var acquired = 0
+        val sdk =
+            object : Client(NoHandle) {
+                override fun getRoom(roomId: String): Room =
+                    HistoryRoom().also {
+                        acquired++
+                        if (acquired == 1)
+                            it.beforeTimeline = { error("Uncertain native cache creation") }
+                    }
+            }
+        val children = SdkChildResources(this)
+        val windows =
+            AndroidCollaborationHistoryWindows(
+                sdk,
+                children,
+                StandardTestDispatcher(testScheduler),
+                SdkHistoryFocuses(1),
+            ) {
+                null
+            }
+        assertIs<AppResult.Failed>(windows.read("!one:test", "\$original"))
+        assertEquals(
+            "client.collaboration_history_focus_capacity",
+            assertIs<AppResult.Failed>(windows.read("!two:test", "\$original")).failure.code,
+        )
+        assertEquals(1, acquired)
+        assertIs<AppResult.Success<*>>(windows.read("!one:test", "\$original"))
+        assertEquals(2, acquired)
+        assertEquals(AppResult.Success(Unit), children.close())
+    }
+
+    @Test
+    fun rejectedChildRegistrationNeverConsumesAnUncreatedNativeFocus() = runTest {
+        val children = SdkChildResources(this)
+        assertEquals(AppResult.Success(Unit), children.close())
+        val focuses = SdkHistoryFocuses(1)
+        val room = HistoryRoom()
+        val windows =
+            AndroidCollaborationHistoryWindows(
+                client(room),
+                children,
+                StandardTestDispatcher(testScheduler),
+                focuses,
+            ) {
+                null
+            }
+        assertIs<AppResult.Failed>(windows.read("!one:test", "\$original"))
+        assertTrue(room.calls.isEmpty())
+        assertTrue(focuses.reserve("!two:test", "\$other"))
+    }
+
     private fun client(room: HistoryRoom) =
         object : Client(NoHandle) {
             override fun getRoom(roomId: String): Room = room

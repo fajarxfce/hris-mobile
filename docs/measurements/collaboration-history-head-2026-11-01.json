@@ -439,5 +439,95 @@
   },
   "sourceManifestMatched": true,
   "emulatorStopped": true,
-  "platformFixtureCommit": "7626d684181af320d5d26a02e0afaeb74625bd65"
+  "platformFixtureCommit": "7626d684181af320d5d26a02e0afaeb74625bd65",
+  "hostedHris": {
+    "run": "https://github.com/fajarxfce/hris-mobile/actions/runs/41281748950",
+    "commit": "ac13550f062c172f44260d699621dd50addc5dfe",
+    "result": "success",
+    "jobs": [
+      {
+        "name": "android-hris",
+        "conclusion": "success",
+        "steps": 17,
+        "nonPassingSteps": []
+      }
+    ],
+    "tests": {
+      "testAndroidHostTest": {
+        "suites": 23,
+        "tests": 140,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "test": {
+        "suites": 1,
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "immutableSourceHashesMatched": 235,
+    "platformCommit": "7626d684181af320d5d26a02e0afaeb74625bd65",
+    "platformImmutableSourceHashesMatched": 33,
+    "sourceManifestUploaded": false,
+    "fixtureRun": "cf1d6a8a30af45d8a91c4a1f46e7e6a7",
+    "actualSdk": {
+      "passed": true,
+      "encryptedBothDirections": true,
+      "logicalIdsPreserved": true,
+      "cleanup": true,
+      "protectedStoreReopened": true,
+      "missingRecordPreserved": true,
+      "wrongPassphrasePreserved": true,
+      "exclusiveOwner": true,
+      "processRestarted": true,
+      "queueRestored": true,
+      "transactionReused": true,
+      "identityAfterRestart": true,
+      "messageIntentRestored": true,
+      "queueMappingRecovered": true,
+      "queueWriterExclusive": true,
+      "perRoomDeliveryIsolated": true,
+      "heldQueueRestored": true,
+      "nativeDeliveryOwned": true,
+      "commonSenderOwned": true,
+      "receiptJournalRecovered": true,
+      "projectionInterrupted": true,
+      "originalHistoryWindowOwned": true,
+      "historyBodiesRestored": true,
+      "commonHistoryAcquisitionOwned": true,
+      "latestHistoryHeadOwned": true,
+      "admittedSingleHeadRead": true,
+      "historyWindow": {
+        "originals": 2,
+        "unavailable": 9,
+        "extractionNanos": 19725092,
+        "modelCharacters": 4732,
+        "originalCharacters": 937
+      },
+      "applicationAdmittedBeforeSend": true,
+      "applicationAdmittedAroundHistory": true,
+      "applicationAdmissions": {
+        "device": 5,
+        "conversation": 5,
+        "room": 5,
+        "failures": 0
+      },
+      "heldRoomNeverSent": true,
+      "pausedAcrossRestart": true,
+      "syncInterruptedAfterRestart": true,
+      "syncRetriedWithRetainedCursor": true,
+      "artifact": {
+        "apkSha256": "d47ac7db088cf655ba27a46e047e70ec83562bef456bb129990ff0b04dbab31b",
+        "package": "dev.fajar.hris.collaboration.proof",
+        "avd": "hris-mobile-dev",
+        "androidApi": "35"
+      }
+    },
+    "testCaseSeconds": 24.07,
+    "testSuiteSeconds": 68.99,
+    "scope": "Validates latest-head discovery at ac13550f; later focused-cache accounting has separate local/hosted checks."
+  }
 }
