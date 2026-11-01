@@ -11,6 +11,28 @@ import kotlinx.coroutines.test.runTest
 
 class StageCollaborationTextTest {
     @Test
+    fun cancelledOriginalNeverAcquiresTheNativeQueue() = runTest {
+        val f = StageFixture()
+        f.prepare()
+        f.replace(f.record.copy(state = CollaborationMessageState.Cancelled))
+        assertEquals(AppResult.Success(f.record), f.stage())
+        assertEquals(0, f.acquisitions)
+        assertEquals(0, f.preparations)
+        assertEquals(0, f.enqueues)
+    }
+
+    @Test
+    fun cancellationWinningDuringPreparationPreventsNativeEnqueue() = runTest {
+        val f = StageFixture()
+        f.prepare()
+        f.afterPrepare = { f.replace(f.record.copy(state = CollaborationMessageState.Cancelled)) }
+        assertIs<AppResult.Failed>(f.stage())
+        assertEquals(CollaborationMessageState.Cancelled, f.record.state)
+        assertEquals(0, f.enqueues)
+        assertEquals(1, f.closes)
+    }
+
+    @Test
     fun preparationIsRetainedBeforeEnqueueAndSurvivesMappingRecovery() = runTest {
         val f = StageFixture()
         f.prepare()

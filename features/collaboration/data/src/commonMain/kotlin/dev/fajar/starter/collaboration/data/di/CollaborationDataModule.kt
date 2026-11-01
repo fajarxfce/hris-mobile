@@ -459,6 +459,25 @@ class CollaborationDataModule {
         )
 
     @Factory
+    fun cancelText(
+        cancellations: CollaborationMessageCancellationRepository,
+        lists: CollaborationListRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) =
+        CancelCollaborationText(
+            cancellations,
+            lists,
+            sessions,
+            workspaces,
+            server,
+            build,
+            Clock.System,
+        )
+
+    @Factory
     fun requestDelivery(
         lists: CollaborationListRepository,
         sessions: SessionRepository,

@@ -23,6 +23,7 @@ fun collaborationDeliveryMappings(
         val transaction =
             when (val state = record.state) {
                 CollaborationMessageState.Queued -> null
+                CollaborationMessageState.Cancelled -> return null
                 is CollaborationMessageState.Staging -> return null
                 is CollaborationMessageState.Staged -> {
                     if (state.device != device) return null

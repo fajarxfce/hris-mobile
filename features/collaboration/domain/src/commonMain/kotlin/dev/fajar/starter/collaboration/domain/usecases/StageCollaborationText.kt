@@ -62,7 +62,8 @@ class StageCollaborationText(
                 return@withLock failed("client.collaboration_message_changed")
             if (
                 record.state is CollaborationMessageState.Staged ||
-                    record.state is CollaborationMessageState.Sent
+                    record.state is CollaborationMessageState.Sent ||
+                    record.state == CollaborationMessageState.Cancelled
             )
                 return@withLock AppResult.Success(record)
             val room = admitRoom(workspaceId, owner, deviceId, record.intent.conversationId)

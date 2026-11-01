@@ -20,7 +20,10 @@ class EncryptedCollaborationMessageRepository(
     private val commands: CommandStore,
     private val cipher: ContentCipher,
     @Named("command-content-key") private val credentials: AtomicCredentialStore,
-) : CollaborationMessageRepository, CollaborationMessageCompletionRepository {
+) :
+    CollaborationMessageRepository,
+    CollaborationMessageCompletionRepository,
+    CollaborationMessageCancellationRepository {
     private val insertions = Mutex()
 
     override fun observe(
@@ -92,6 +95,52 @@ class EncryptedCollaborationMessageRepository(
                 }
         }
     }
+
+    override suspend fun cancel(
+        access: CollaborationLocalAccess,
+        expected: CollaborationMessageRecord,
+    ) = safeStorageCall {
+        expected.intent.toDto(access)
+        require(validCollaborationCancellation(expected))
+        val scope = messageScope(access)
+        val partition = messagePartition(access)
+        val archived = commands.archived(scope, partition, expected.intent.id)
+        if (archived != null) matchingCancellation(access, expected, archived)
+        else {
+            val raw = commands.get(scope, partition, expected.intent.id)
+            if (raw == null)
+                matchingCancellation(
+                    access,
+                    expected,
+                    commands.archived(scope, partition, expected.intent.id),
+                )
+            else
+                withKey(access) { codec ->
+                    if (codec.record(raw) != expected) false
+                    else {
+                        val proof = codec.cancellation(raw)
+                        currentCoroutineContext().ensureActive()
+                        if (commands.archive(scope, raw, proof)) true
+                        else
+                            commands.archived(scope, partition, expected.intent.id)?.let {
+                                codec.archivedRecord(it) ==
+                                    expected.copy(state = CollaborationMessageState.Cancelled)
+                            } == true
+                    }
+                }
+        }
+    }
+
+    private suspend fun matchingCancellation(
+        access: CollaborationLocalAccess,
+        expected: CollaborationMessageRecord,
+        archived: CommandArchive?,
+    ): Boolean =
+        archived != null &&
+            withKey(access) {
+                it.archivedRecord(archived) ==
+                    expected.copy(state = CollaborationMessageState.Cancelled)
+            }
 
     override suspend fun insert(
         access: CollaborationLocalAccess,
@@ -182,7 +231,7 @@ class EncryptedCollaborationMessageRepository(
         active: CommandRecord?,
         archived: CommandArchive?,
     ): CollaborationMessageRecord? =
-        if (active != null) codec.record(active) else archived?.let { codec.completion(it).record }
+        if (active != null) codec.record(active) else archived?.let { codec.archivedRecord(it) }
 
     private suspend fun <T> withKey(
         access: CollaborationLocalAccess,

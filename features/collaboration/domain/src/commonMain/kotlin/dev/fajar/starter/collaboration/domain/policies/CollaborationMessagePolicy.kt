@@ -35,7 +35,8 @@ fun validCollaborationMessageOrigin(origin: CollaborationMessageOrigin) =
 fun validCollaborationMessageState(state: CollaborationMessageState): Boolean =
     (state.origin == null || validCollaborationMessageOrigin(requireNotNull(state.origin))) &&
         when (state) {
-            CollaborationMessageState.Queued -> true
+            CollaborationMessageState.Queued,
+            CollaborationMessageState.Cancelled -> true
             is CollaborationMessageState.Staging ->
                 validCollaborationMessageDevice(state.device) &&
                     state.before.size <= 128 &&
@@ -68,8 +69,18 @@ fun collaborationMessageTransition(
                     next.origin == previous.origin &&
                     next.device == previous.device &&
                     next.transactionId == previous.transactionId
-            is CollaborationMessageState.Sent -> false
+            is CollaborationMessageState.Sent,
+            CollaborationMessageState.Cancelled -> false
         }
+
+/** Cancellation has no SDK uncertainty to recover and may only settle the original local row. */
+fun validCollaborationCancellation(record: CollaborationMessageRecord): Boolean =
+    record.state == CollaborationMessageState.Queued &&
+        record.revision == 0L &&
+        validCollaborationMessageId(record.intent.id) &&
+        validCollaborationMessageId(record.intent.conversationId) &&
+        validCollaborationText(record.intent.text) &&
+        record.intent.createdAt.toEpochMilliseconds() in 0 until 253_402_300_800_000L
 
 /**
  * A per-room SDK subscription replays its captured IDs before returning. With one exclusive enqueue

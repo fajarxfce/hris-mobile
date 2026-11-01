@@ -39,6 +39,9 @@ sealed interface CollaborationMessageState {
 
     data object Queued : CollaborationMessageState
 
+    /** Authenticated archive of the original queued record; never an active SDK command. */
+    data object Cancelled : CollaborationMessageState
+
     /** Written before enqueue while SDK delivery and the exclusive writer are paused. */
     data class Staging(
         val device: CollaborationMessageDevice,

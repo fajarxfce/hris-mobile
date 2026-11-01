@@ -62,6 +62,10 @@ for explicit retry only after current command/list facts reproduce the reason. H
 keep their text and submission ID and are atomically excluded from automatic discovery;
 known racing queue admission cannot be mistaken for cancellation. No SDK command is erased.
 
+An authenticated [local cancellation archive](collaboration-cancellation.md) also settles the
+same frozen intent without requeuing or delivering it. Confirmation clears only its matching
+ID/body and leaves a newer draft intact. Cancellation does not produce a sent receipt.
+
 [Integration evidence](measurements/chat-draft-recovery-2026-11-01.json) records root, browser,
 Android host, proof APK/lint and quality checks, with six application/SQLite worker cases,
 eighteen SQLite storage cases and the matching portable contracts. Application recovery tests

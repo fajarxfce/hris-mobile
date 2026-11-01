@@ -86,13 +86,15 @@ internal fun MessageIntentDto.toIntent(access: CollaborationLocalAccess) =
 
 internal fun CollaborationMessageState.toDto(): MessageStateDto {
     require(validCollaborationMessageState(this))
+    require(this != CollaborationMessageState.Cancelled) { "Cancellation requires an archive" }
     if (this == CollaborationMessageState.Queued) return MessageStateDto("QUEUED")
     val device =
         when (this) {
             is CollaborationMessageState.Staging -> device
             is CollaborationMessageState.Staged -> device
             is CollaborationMessageState.Sent -> device
-            CollaborationMessageState.Queued -> error("Unreachable")
+            CollaborationMessageState.Queued,
+            CollaborationMessageState.Cancelled -> error("Unreachable")
         }
     return MessageStateDto(
         when (this) {
@@ -162,6 +164,11 @@ internal data class MessageCompletionDto(val eventIds: List<String>) {
     override fun toString() = "MessageCompletionDto([redacted])"
 }
 
+@Serializable
+internal data class MessageCancellationDto(val version: Int, val kind: String) {
+    override fun toString() = "MessageCancellationDto([redacted])"
+}
+
 internal class CollaborationMessageCodec(
     private val access: CollaborationLocalAccess,
     private val cipher: ContentCipher,
@@ -210,7 +217,49 @@ internal class CollaborationMessageCodec(
         }
     }
 
-    suspend fun completion(raw: CommandArchive): CollaborationMessageCompletion {
+    suspend fun archivedRecord(raw: CommandArchive): CollaborationMessageRecord =
+        if (raw.record.revision == 0L) cancelled(raw) else requireNotNull(completion(raw)).record
+
+    suspend fun cancellation(raw: CommandRecord): String {
+        require(validCollaborationCancellation(record(raw)))
+        val bytes = Json.encodeToString(MessageCancellationDto(1, "CANCELLED")).encodeToByteArray()
+        return try {
+            Base64.encode(cipher.encrypt(key, archiveAad(raw, "cancellation-v1"), bytes)).also {
+                require(it.length <= 1_024)
+            }
+        } finally {
+            bytes.fill(0)
+        }
+    }
+
+    private suspend fun cancelled(raw: CommandArchive): CollaborationMessageRecord {
+        val queued = record(raw.record)
+        require(validCollaborationCancellation(queued))
+        require(raw.evidence.length in 1..1_024)
+        val bytes =
+            cipher.decrypt(
+                key,
+                archiveAad(raw.record, "cancellation-v1"),
+                Base64.decode(raw.evidence),
+            )
+        return try {
+            require(bytes.size <= 1_024)
+            val proof =
+                Json.decodeFromString<MessageCancellationDto>(
+                    bytes.decodeToString(throwOnInvalidSequence = true)
+                )
+            require(proof == MessageCancellationDto(1, "CANCELLED"))
+            queued.copy(state = CollaborationMessageState.Cancelled)
+        } finally {
+            bytes.fill(0)
+        }
+    }
+
+    suspend fun completion(raw: CommandArchive): CollaborationMessageCompletion? {
+        if (raw.record.revision == 0L) {
+            cancelled(raw) // Validate the terminal proof before reporting no delivery receipt.
+            return null
+        }
         val record = record(raw.record)
         require(raw.evidence.length in 1..65_536)
         val bytes = cipher.decrypt(key, completionAad(raw.record), Base64.decode(raw.evidence))
@@ -229,6 +278,10 @@ internal class CollaborationMessageCodec(
     }
 
     private suspend fun completionAad(raw: CommandRecord): ByteArray {
+        return archiveAad(raw, "completion")
+    }
+
+    private suspend fun archiveAad(raw: CommandRecord, purpose: String): ByteArray {
         // Bind even the retained ciphertext and ordering metadata. A proof cannot be transplanted
         // onto a different valid record with the same logical ID/revision.
         val bytes =
@@ -251,7 +304,7 @@ internal class CollaborationMessageCodec(
             } finally {
                 bytes.fill(0)
             }
-        return aad(raw.id, "completion-" + digest, raw.revision)
+        return aad(raw.id, purpose + "-" + digest, raw.revision)
     }
 
     private fun aad(id: String, purpose: String, revision: Long) =

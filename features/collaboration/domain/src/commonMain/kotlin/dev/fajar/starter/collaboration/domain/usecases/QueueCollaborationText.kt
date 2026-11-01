@@ -121,7 +121,10 @@ class QueueCollaborationText(
         result: AppResult<CollaborationMessageRecord>,
     ): AppResult<CollaborationMessageRecord> {
         if (result is AppResult.Failed) return result
-        if ((result as AppResult.Success).value.state !is CollaborationMessageState.Sent) {
+        val state = (result as AppResult.Success).value.state
+        if (
+            state !is CollaborationMessageState.Sent && state != CollaborationMessageState.Cancelled
+        ) {
             // Failed scheduling cannot undo a committed intent. Startup/periodic recovery scans
             // durable commands. Cancellation still prevents a late UI acknowledgement.
             withTimeoutOrNull(1_500) { schedules.request(DELIVERY_KEY) }

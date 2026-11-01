@@ -1,5 +1,39 @@
 # Agent continuation — HRIS Mobile
 
+## Queued cancellation policy proved; implement confirmation UI now — 1 November 2026
+
+The [cancellation contract](collaboration-cancellation.md) now uses existing full-record archive
+CAS to arbitrate against Staging. Cancelled is archive-only with an authenticated version/kind
+and distinct purpose; legacy sent proofs remain compatible. Same-ID insertion stays fenced,
+Queue replay does not wake, and Stage avoids native acquisition for an already-cancelled ID.
+Captured access and complete expected Queued record gate the explicit use case. Expired owned
+local access remains usable; confirmed denial/caller cancellation/late ownership stays gated.
+Frozen draft recovery clears only that exact cancelled intent, preserving newer drafts and
+independent messages. No core schema/Starter business port or native queue erasure.
+
+[Measurement](measurements/chat-cancellation-policy-2026-11-01.json): 56 cumulative inputs,
+18 changed Kotlin files, 541 report hashes. Full check passes 348s Gradle / 352.19s wall:
+2,827 desktop/436 suites; 401 domain, 263 data, 90 presentation browser; 170 Android host;
+six cleanup cases, proof APK/lint (zero fatal/errors, 47 warnings), format/architecture/detekt.
+Focused tests: eleven storage, nine policy, three real application SQLite/DI worker cases
+plus two Stage cases. The first 143s/146.642s run failed test compilation because assertSame
+needed an explicit Any type for two interfaces; corrected only the test and retained evidence.
+The worker transport is fake; do not reassign earlier actual native proofs to this source.
+
+**Continue immediately:** commit/push, then implement cancellation UI. Only unmatched owned
+Queued/revision-0 rows expose the action. VM retains a complete immutable selected record and
+captured access; confirmation invokes CancelCollaborationText, suppresses duplicate clicks,
+and retries lost replies using that same selection even if the pending row disappeared.
+Changed/started work is unavailable, never success. Scope loss/Stopped/disposal clears private
+selection and cancels obsolete waiters; object identity plus access fences uncooperative late
+results. Neutral Close wording must not imply undoing a committed cancellation. Keep controls
+reachable with long text, 320 dp and 200% font; capture/inspect the separate dialog root at its
+actual dimensions. Do not stack draft and cancellation dialogs. Add ViewModel/projection,
+semantics/disposal/stale-selection tests, root/browser/Android checks and source-bound evidence.
+`.work/cancel-ui-next.txt` retains more details. Then clean release 10+, notify/install-only,
+verify the phone and continue native cancellation proof, push/replies and all P0–P8.
+Phone remains verified release 9; no cancellation UI is installed yet. No full PRD group accepted.
+
 ## Release 9 installed; safe queued cancellation next — 1 November 2026
 
 **Phone updated and verified.** Clean source `448ab3ad` is installed over code 8 at 20:01 UTC
