@@ -38,6 +38,13 @@ class CollaborationBindingsTest {
             var suppliedHttp: HttpClient? = null
             val runtime =
                 object : CollaborationRuntimeRepository {
+                    override suspend fun selfIdentity(
+                        owner: CollaborationOwner,
+                        deviceId: String,
+                    ): AppResult<
+                        dev.fajar.starter.collaboration.domain.entities.CollaborationSelfIdentity?
+                    > = error("No implicit identity acquisition")
+
                     override suspend fun prepareHistoryReopen(
                         owner: CollaborationOwner,
                         deviceId: String,
@@ -141,6 +148,8 @@ class CollaborationBindingsTest {
                 assertNotNull(container.koin.get<CollaborationSetupCommandRepository>())
                 assertNotNull(container.koin.get<LoadCollaborationSetup>())
                 assertNotNull(container.koin.get<ReadCollaborationControl>())
+                assertNotNull(container.koin.get<ReadCollaborationIdentity>())
+                assertNotNull(container.koin.get<CollaborationIdentityRepository>())
                 assertNotNull(container.koin.get<CollaborationConversationRepository>())
                 assertNotNull(container.koin.get<ReadCollaborationConversations>())
                 assertNotNull(container.koin.get<CollaborationListRepository>())

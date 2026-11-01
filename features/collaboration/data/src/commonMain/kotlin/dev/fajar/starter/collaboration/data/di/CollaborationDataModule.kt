@@ -311,6 +311,27 @@ class CollaborationDataModule {
     ) = ObserveCollaborationList(replicas, sessions, workspaces, server, build, Clock.System)
 
     @Factory
+    fun readIdentity(
+        identities: CollaborationIdentityRepository,
+        runtimes: CollaborationRuntimeRepository,
+        admission: CollaborationListRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) =
+        ReadCollaborationIdentity(
+            identities,
+            runtimes,
+            admission,
+            sessions,
+            workspaces,
+            server,
+            build,
+            Clock.System,
+        )
+
+    @Factory
     fun readControl(
         setupCommands: CollaborationSetupCommandRepository,
         conversationCommands: CollaborationConversationCommandRepository,

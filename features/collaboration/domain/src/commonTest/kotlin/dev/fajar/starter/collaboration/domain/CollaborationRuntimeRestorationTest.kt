@@ -195,6 +195,13 @@ private class RestorationFixture {
     var result: suspend () -> AppResult<CollaborationRuntimeLease?> = { AppResult.Success(lease) }
     private val runtimes =
         object : CollaborationRuntimeRepository {
+            override suspend fun selfIdentity(
+                owner: CollaborationOwner,
+                deviceId: String,
+            ): AppResult<
+                dev.fajar.starter.collaboration.domain.entities.CollaborationSelfIdentity?
+            > = error("No implicit identity acquisition")
+
             override suspend fun prepareHistoryReopen(
                 owner: CollaborationOwner,
                 deviceId: String,

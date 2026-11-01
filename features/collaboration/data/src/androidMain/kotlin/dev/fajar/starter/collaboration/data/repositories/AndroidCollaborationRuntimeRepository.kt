@@ -34,6 +34,24 @@ class AndroidCollaborationRuntimeRepository(
     private val capacity = Semaphore(5)
     private val leases = ConcurrentHashMap.newKeySet<AndroidCollaborationRuntimeLease>()
 
+    override suspend fun selfIdentity(owner: CollaborationOwner, deviceId: String) =
+        safeStorageCall {
+            val scope = collaborationSdkScope(owner, deviceId, server, endpoint)
+            val credentials = credentialFactory(scope.credentialRecordName)
+            try {
+                check(credentials.persistent) {
+                    "SDK identity requires protected persistent storage."
+                }
+                credentials
+                    .read()
+                    ?.let { CollaborationSdkRecordCodec(scope).decode(it) }
+                    ?.takeIf { it.initialized }
+                    ?.let { CollaborationSelfIdentity(it.matrixUserId) }
+            } finally {
+                credentials.close()
+            }
+        }
+
     override suspend fun prepareHistoryReopen(
         owner: CollaborationOwner,
         deviceId: String,

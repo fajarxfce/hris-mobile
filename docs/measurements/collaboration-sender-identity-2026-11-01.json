@@ -1,0 +1,130 @@
+{
+  "date": "2026-11-01",
+  "change": "Trusted local Matrix sender identity and account-bound encrypted retention",
+  "baseImplementationCommit": "980c7d76ba3d7555d9d584bee47951629ad1eeab",
+  "sourceSha256": {
+    "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisProofRuntimeAccess.kt": "d006ec3e4ced68354e6b8368edb9f18dc29e651a6461c7a97a65c323a2c71bd3",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt": "3e7432a5c2dabf1cd95a1a355a1bd4b4230729504e59d6c3b7e145e133b590b2",
+    "features/collaboration/data/src/androidHostTest/kotlin/dev/fajar/starter/collaboration/data/AndroidCollaborationIdentityTest.kt": "e429a7bb61c8f997932391736c0d1cd9b986af787d704fb18861f83c26c2756d",
+    "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/repositories/AndroidCollaborationRuntimeRepository.kt": "2991b79dc1b55a446dca34057b400769390f5b0f7272ec1ca9bb47e1b6362d6d",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt": "cb91ddfd6e92b320dc033b8437e55412c50e04be126b4d49058234548d66a125",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/identity/CollaborationIdentityCodec.kt": "b82821f9b3336381007d1c1f8cf9658049209951608d8159fbc0232b4a2c9f3c",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationIdentityRepository.kt": "11f5e4b7efcb33c977ae32c3b92222b7eddd53ced7763443f9dd5af5d3fc71b1",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/UnavailableCollaborationRuntimeRepository.kt": "309a1f439b4fbb2bdb9555959b37afe52afd65e2a01367df1ad4557f544b185f",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationIdentityStorageContract.kt": "e8ba2071bca0a8ce9e4db686745196f37838ef63f180a90f625adebf2bba260c",
+    "features/collaboration/data/src/desktopTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationIdentityStorageTest.kt": "7e9eb6ae4a2e082904e11c9628f5adbac5841ac516cbe2710771ba3f7532cf02",
+    "features/collaboration/data/src/wasmJsTest/kotlin/dev/fajar/starter/collaboration/data/BrowserCollaborationIdentityStorageTest.kt": "2980ea49b0a74c72191dfee97d7448db63b269a26298ebce2472710666e818a2",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSelfIdentity.kt": "4e7b617fdc0605c6b0ca23484be7b7886419ecc90660830387fa1a2481d61eb6",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationIdentityRepository.kt": "cea327356d0751b34d375d5af693956bcc54759690b4356dc5f2221094db3090",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationRuntimeRepository.kt": "fb8c91a10840eeb7be663b93f1a83676993f02abf9fa19f738714ecfea362bf0",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/CollaborationSetupOwner.kt": "00c98cfb3bd20b55b6ce145c6d876f5a3c412c6512bc39a404dfcb568b54c4ac",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ReadCollaborationControl.kt": "4b710a671136bd57086fbc4c9c7888c50ea929df5ac1981b854fec967023fdac",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ReadCollaborationIdentity.kt": "a9577552b7e11f621d0f907d635cda7ac64d1fe8e1c848fb93ff735b7986b001",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/AcquireCollaborationHistoryTest.kt": "0f77c8fd95a0466aa2cfb68e2b0608f57c3b37dc1212de888e9e272c533d629a",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationDeliveryFixture.kt": "ee33cc2780b513ef2cdd4492a06a9674da097543ede11c3154758951933c4d72",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationRuntimeInstallationTest.kt": "4c0721210cfb5d5af0d53dd14397bfb76f4a3943d811985d414ea7864212bcec",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationRuntimeOwnershipTest.kt": "f3e49191bb4c43f63e575c1eaeca8214b093c84be657f99e7b6b6fb36195ba6a",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationRuntimeRestorationTest.kt": "30b88c2781625b97a9b5482e39b29545df91df5b9c6c0f4b3c2bdc52b193d28a",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/EnsureCollaborationRuntimeTest.kt": "83711d4179df782e8c0095b4e01902a3796926f3988bd6aae98cdd6171535104",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/EnterCollaborationConversationTest.kt": "253186fb2f4ebc079a8bbfd294f53043f8bf461761ddca271996d28f72714487",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/HistoryReopeningFixture.kt": "90571698068c6b0dda6a8c4212ee6163ba0684b9b2984fc384214a7992b9ce6b",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/ProviderHistoryAcquisitionFixture.kt": "15a9d0086c144547e82028d931a89297ba8a5f205b0a462e78946f59342e2586",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/ReadCollaborationIdentityTest.kt": "14b353d4785583793b73f46560457ceb373f6a78348675fc0dad4c0d74158549",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/StageCollaborationTextTest.kt": "75749998ae673caba052f091445fa6aad7d9bec27e89eb3361b32b85fd381cd5",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/setup/ChatSetupFixture.kt": "9e4b732d51db3a4d02ffca4e2204bc2ffdd849ce45b9339dd41100a82b3210fc"
+  },
+  "sourceManifestMatched": true,
+  "attempts": [
+    {
+      "log": ".work/chat-identity-focused.log",
+      "durationSeconds": 14,
+      "outcome": "FAILED",
+      "scope": "Incorrect Android host task name; task selection failed before test execution."
+    },
+    {
+      "log": ".work/chat-identity-corrected.log",
+      "durationSeconds": 62,
+      "outcome": "FAILED",
+      "scope": "Nine new domain cases passed. Data desktop ran 248 cases with one failure: the account-fence CAS correctly returned Success(false), while the test expected Failed. No identity was written into either account."
+    },
+    {
+      "log": ".work/chat-identity-account-fixed.log",
+      "durationSeconds": 162,
+      "outcome": "SUCCESSFUL",
+      "scope": "Corrected assertion; domain/data desktop+browser, Android host, app bindings, proof APK assembly, format/architecture/detekt passed."
+    },
+    {
+      "log": ".work/chat-identity-full.log",
+      "durationSeconds": 203,
+      "outcome": "SUCCESSFUL",
+      "scope": "Root check, domain/data browser, Android host, shared app Wasm, dev debug APK and Android lint passed."
+    }
+  ],
+  "reports": {
+    "desktop": {
+      "suites": 417,
+      "tests": 2622,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "domain_desktopTest": {
+      "suites": 26,
+      "tests": 320,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "domain_wasmJsBrowserTest": {
+      "suites": 26,
+      "tests": 320,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "data_desktopTest": {
+      "suites": 34,
+      "tests": 248,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "data_wasmJsBrowserTest": {
+      "suites": 31,
+      "tests": 226,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "data_testAndroidHostTest": {
+      "suites": 28,
+      "tests": 170,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "lint": {
+      "Error": 0,
+      "Fatal": 0,
+      "Warning": 1
+    },
+    "apk": {
+      "path": "apps/android/build/outputs/apk/dev/debug/android-dev-debug.apk",
+      "sha256": "51944ab4f40d57f1ffb37a877130bf0b40ced7024c4bcee73969a48096602604"
+    },
+    "proofApk": {
+      "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+      "sha256": "fe5b22b5636771a71dc6f0af5398f60bc4cfb24a9fc13d85af3c8254fa7eae95"
+    }
+  },
+  "phoneChanged": false,
+  "liveChanged": false,
+  "productAcceptance": false,
+  "notes": [
+    "Desktop totals include up-to-date passing reports.",
+    "Seven storage contract cases run on actual SQLite and IndexedDB. Five Android host cases exercise protected-record reads with forbidden directory/network paths, handle cleanup and record ownership.",
+    "Proof APK is compiled only; this increment does not claim a new emulator/actual-server interoperability run or Apple runtime validation.",
+    "No cryptographic key migration, backup, provider-identity replacement or new schema is implemented by identity retention.",
+    "Thread composition, app navigation, owned scheduling and all remaining P0\u2013P8 work continue. No generic Starter change is required."
+  ]
+}

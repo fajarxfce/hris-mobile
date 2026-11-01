@@ -21,6 +21,12 @@ internal class HrisProofRuntimeAccess(private val runtime: AndroidCollaborationR
     var providerReads = 0
         private set
 
+    override suspend fun selfIdentity(
+        owner: CollaborationOwner,
+        deviceId: String,
+    ): AppResult<dev.fajar.starter.collaboration.domain.entities.CollaborationSelfIdentity?> =
+        error("No implicit identity acquisition")
+
     override suspend fun prepareHistoryReopen(
         owner: CollaborationOwner,
         deviceId: String,

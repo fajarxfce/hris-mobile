@@ -1,5 +1,43 @@
 # Agent continuation — HRIS Mobile
 
+## Trusted local sender identity validated — 1 November 2026
+
+`ReadCollaborationIdentity` now reads owned cached identity and can explicitly acquire
+it from the initialized protected SDK record. Android opens only a short-lived protected
+credential handle; no client, directory, sync or network is acquired and no credential
+is rewritten. Handle cleanup covers cancellation/failure. The identity cache uses a
+separate authenticated payload under `collaboration-history/self/<company>` and the
+existing protected history key. First-write or exact replay only; changed provider
+identity requires migration. Existing key-loss protection includes identity-only records.
+Local account identity survives age and native-family replacement; native crypto keys
+remain family-scoped. [Contract](collaboration-sender-identity.md) and
+[measurement](measurements/collaboration-sender-identity-2026-11-01.json) retain 29 matched
+source inputs and all attempts. The existing local owner capture was extracted and its
+control tests still pass. Application DI resolves the new repository/use case.
+
+Focused checks pass in 162s; full checks in 203s. Reports: 2,622 desktop /
+417 suites, 320 domain browser, 226 data browser and 170 Android host, zero
+failures/errors/skips; Android lint has zero errors and one existing warning. Seven
+new storage cases run on both real SQLite and IndexedDB, nine new domain cases and
+five new Android host cases pass. Initial attempts had an incorrect task name and an
+incorrect expected CAS result; both are recorded. APK `51944ab4` and proof
+APK `fe5b22b5` are built, not installed. No new actual-server/emulator or
+Apple runtime result is claimed. No phone/live/Starter change or PRD group acceptance.
+
+**Next: implement the message thread, application routes and owned delivery scheduling,
+then all remaining P0–P8.** Draft `.work/chat-thread-projection.txt` and
+`.work/chat-thread-integration-notes.md` are not applied/tested. Compose canonical history,
+durable pending intent and SDK presentation using exact sender/content identity or
+persisted transaction mapping; never a message-controlled logical ID alone. Preserve
+stable outgoing keys through confirmation/retirement and test spoofed IDs, hash changes,
+redaction, cancellation, local pagination and late owner changes. Inbox must remain
+accessible offline; setup should be a separate action from a thread that lacks a ready
+device. `QueueCollaborationText` accepts a caller-retained UUID after uncertain storage.
+`EnterCollaborationConversation` owns a child timeline; application owns the parent SDK.
+A screen-only send loop does not complete background/offline delivery requirements.
+Continue the authorized long run and push each tested atomic commit.
+
+
 ## Recoverable Chat setup validated — 1 November 2026
 
 The setup screen now distinguishes activation, provisioning wait/retry, saved operation

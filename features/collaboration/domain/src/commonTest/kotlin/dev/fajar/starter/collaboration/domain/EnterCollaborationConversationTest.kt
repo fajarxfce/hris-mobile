@@ -303,6 +303,13 @@ private class EntryFixture {
     var result: suspend () -> AppResult<CollaborationTimelineLease> = { AppResult.Success(lease) }
     private val runtime =
         object : CollaborationRuntimeRepository {
+            override suspend fun selfIdentity(
+                owner: CollaborationOwner,
+                deviceId: String,
+            ): AppResult<
+                dev.fajar.starter.collaboration.domain.entities.CollaborationSelfIdentity?
+            > = error("No implicit identity acquisition")
+
             override suspend fun prepareHistoryReopen(
                 owner: CollaborationOwner,
                 deviceId: String,

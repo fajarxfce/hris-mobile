@@ -7,7 +7,6 @@ import dev.fajar.starter.common.config.AppBuild
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.identity.domain.entities.IdentityServer
 import dev.fajar.starter.identity.domain.repositories.SessionRepository
-import dev.fajar.starter.workspace.domain.policies.workspaceFailure
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
 import kotlin.time.Clock
 import kotlinx.coroutines.currentCoroutineContext
@@ -99,41 +98,8 @@ class ReadCollaborationControl(
         }
     }
 
-    private suspend fun capture(workspaceId: String): AppResult<CollaborationOwner> {
-        val initial = sessions.current()
-        if (initial is AppResult.Failed) return initial
-        val session =
-            (initial as AppResult.Success).value
-                ?: return workspaceFailure("client.session_changed", FailureKind.Unauthorized)
-        val selected = workspaces.current(session.id)
-        currentCoroutineContext().ensureActive()
-        if (selected is AppResult.Failed) return selected
-        val latest = sessions.current()
-        currentCoroutineContext().ensureActive()
-        if (latest is AppResult.Failed) return latest
-        val identity = (latest as AppResult.Success).value
-        val access =
-            collaborationLocalAccess(
-                workspaceId,
-                (selected as AppResult.Success).value,
-                identity,
-                server.audience,
-                build,
-                clock.now(),
-            )
-        if (access is AppResult.Failed) return access
-        requireNotNull(identity)
-        val local = (access as AppResult.Success).value
-        return AppResult.Success(
-            CollaborationOwner(
-                local.sessionId,
-                local.audience,
-                local.accountId,
-                local.companyId,
-                identity.binding.serverId,
-            )
-        )
-    }
+    private suspend fun capture(workspaceId: String) =
+        sessions.captureCollaborationLocalOwner(workspaceId, workspaces, server, build, clock)
 
     private companion object {
         val canonicalId = Regex("[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}")

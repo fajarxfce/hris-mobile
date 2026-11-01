@@ -1,8 +1,7 @@
 package dev.fajar.starter.collaboration.domain.usecases
 
-import dev.fajar.starter.collaboration.domain.entities.CollaborationOwner
-import dev.fajar.starter.collaboration.domain.policies.collaborationRequestOwner
-import dev.fajar.starter.collaboration.domain.policies.retainCollaborationCommandFailure
+import dev.fajar.starter.collaboration.domain.entities.*
+import dev.fajar.starter.collaboration.domain.policies.*
 import dev.fajar.starter.common.config.AppBuild
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.identity.domain.entities.IdentityServer
@@ -63,4 +62,47 @@ internal fun requireCollaborationOwner(
             )
         )
     else admitted
+}
+
+/** Owned local control/identity facts remain readable without live credential freshness. */
+internal suspend fun SessionRepository.captureCollaborationLocalOwner(
+    workspaceId: String,
+    workspaces: WorkspaceRepository,
+    server: IdentityServer,
+    build: AppBuild,
+    clock: Clock,
+): AppResult<CollaborationOwner> {
+    val initial = current()
+    if (initial is AppResult.Failed) return initial
+    val session =
+        (initial as AppResult.Success).value
+            ?: return workspaceFailure("client.session_changed", FailureKind.Unauthorized)
+    val selected = workspaces.current(session.id)
+    currentCoroutineContext().ensureActive()
+    if (selected is AppResult.Failed) return selected
+    val latest = current()
+    currentCoroutineContext().ensureActive()
+    if (latest is AppResult.Failed) return latest
+    val identity = (latest as AppResult.Success).value
+    val access =
+        collaborationLocalAccess(
+            workspaceId,
+            (selected as AppResult.Success).value,
+            identity,
+            server.audience,
+            build,
+            clock.now(),
+        )
+    if (access is AppResult.Failed) return access
+    requireNotNull(identity)
+    val local = (access as AppResult.Success).value
+    return AppResult.Success(
+        CollaborationOwner(
+            local.sessionId,
+            local.audience,
+            local.accountId,
+            local.companyId,
+            identity.binding.serverId,
+        )
+    )
 }

@@ -6,6 +6,12 @@ import kotlinx.coroutines.flow.StateFlow
 
 /** Store I/O and SDK ownership only. Use cases admit installation and live delivery separately. */
 interface CollaborationRuntimeRepository {
+    /** Reads only the protected scoped record. No SDK client, store lease, sync or network. */
+    suspend fun selfIdentity(
+        owner: CollaborationOwner,
+        deviceId: String,
+    ): AppResult<CollaborationSelfIdentity?>
+
     /**
      * True means this owner has no open client and restore may follow fresh admission. False
      * retains a client with capacity for this focus. History-initiated closing requires an idle

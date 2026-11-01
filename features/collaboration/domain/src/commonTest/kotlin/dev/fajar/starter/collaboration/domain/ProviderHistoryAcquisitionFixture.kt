@@ -57,6 +57,13 @@ internal class ProviderHistoryAcquisitionFixture {
 
     private val runtime =
         object : CollaborationRuntimeRepository by delivery.runtimes {
+            override suspend fun selfIdentity(
+                owner: CollaborationOwner,
+                deviceId: String,
+            ): AppResult<
+                dev.fajar.starter.collaboration.domain.entities.CollaborationSelfIdentity?
+            > = error("No implicit identity acquisition")
+
             override suspend fun prepareHistoryReopen(
                 owner: CollaborationOwner,
                 deviceId: String,
