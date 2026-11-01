@@ -8,12 +8,9 @@ import dev.fajar.starter.collaboration.domain.repositories.CollaborationHistoryR
 import dev.fajar.starter.database.*
 import dev.fajar.starter.securestorage.*
 import dev.fajar.starter.storage.*
-import kotlin.io.encoding.Base64
 import kotlin.uuid.Uuid
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 import org.koin.core.annotation.*
 
 @Single
@@ -22,7 +19,7 @@ class EncryptedCollaborationHistoryRepository(
     private val cipher: ContentCipher,
     @Named("collaboration-history-content-key") private val credentials: AtomicCredentialStore,
 ) : CollaborationHistoryRepository {
-    private val keyCreation = Mutex()
+    private val keys = CollaborationHistoryKeys(replicas, cipher, credentials)
 
     override fun observe(
         access: CollaborationLocalAccess,
@@ -160,48 +157,10 @@ class EncryptedCollaborationHistoryRepository(
         create: Boolean = false,
         operation: suspend (CollaborationHistoryCodec) -> T,
     ): T {
-        val key =
-            if (create) keyCreation.withLock { acquireKey() }
-            else Base64.decode(requireNotNull(credentials.read()))
-        var contentKey = byteArrayOf()
-        var indexKey = byteArrayOf()
-        return try {
-            require(key.size == 64)
-            contentKey = key.copyOfRange(0, 32)
-            indexKey = key.copyOfRange(32, 64)
+        return keys.use(create) { content, index ->
             operation(
-                CollaborationHistoryCodec(
-                    access,
-                    conversationId,
-                    roomId,
-                    cipher,
-                    contentKey,
-                    indexKey,
-                )
+                CollaborationHistoryCodec(access, conversationId, roomId, cipher, content, index)
             )
-        } finally {
-            key.fill(0)
-            contentKey.fill(0)
-            indexKey.fill(0)
-        }
-    }
-
-    private suspend fun acquireKey(): ByteArray {
-        credentials.read()?.let {
-            return Base64.decode(it)
-        }
-        check(!replicas.containsRecords(COLLABORATION_HISTORY_PREFIX))
-        val content = cipher.generateKey()
-        var index = byteArrayOf()
-        var generated = byteArrayOf()
-        return try {
-            index = cipher.generateKey()
-            generated = content + index
-            Base64.decode(credentials.writeIfAbsent(Base64.encode(generated)))
-        } finally {
-            content.fill(0)
-            index.fill(0)
-            generated.fill(0)
         }
     }
 }

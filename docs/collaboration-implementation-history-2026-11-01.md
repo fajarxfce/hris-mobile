@@ -927,3 +927,55 @@ accounting is HRIS data work, with no generic foundation port.
 
 No live/schema/phone change. Atomic commits and push after every commit remain
 authorized. Continue after this checkpoint; the user requested the full plan.
+
+## Owned provider-page metadata — 1 November 2026
+
+**Bounded provider-history metadata now works through the owned Android SDK session.**
+[Evidence](measurements/collaboration-provider-page-2026-11-01.json) records actual
+run **`13e0275e7cc64f1da459b75b8ae252e1`**, **16.096s test case / 38.094s suite /
+72s Gradle**, cleanup complete. The gateway verifies initial and positioned reads
+under **7/7/7 HRIS device/conversation/room admissions, zero failures**. Existing
+head discovery, canonical originals, encrypted exchange, queue isolation and real
+process-death recovery continue to pass.
+
+The shared request owner now handles head and page reads. One backward page has
+at most 20 unique event references, a 2 MiB response and depth 16. Positions remain
+opaque; empty advancing pages retain continuation and repeated positions fail.
+Provider order is preserved independently of timestamps. Only metadata escapes;
+SDK credentials, crypto, synchronization and delivery retain their existing owner.
+Parent/caller cancellation stops the registered request without closing the borrowed
+HTTP pool. Late denial withholds its result. No page progress is persisted yet.
+
+Seven new common and three Android cases pass. Focused checks take **115s**;
+full root/browser/Android/Wasm/proof/lint checks take **238s**: **2,398 desktop /
+156 Android host / 205 domain browser / 167 data browser**, zero failures/errors/
+skips and zero lint errors. Platform fixture compilation/quality takes **28s**;
+35 Python driver cases pass. All **243 Mobile / 33 Platform source hashes** match
+before and after. Dev APK **`42adb359`** is built, not installed; actual proof uses
+**`252f5410`**. The dedicated emulator is stopped. Platform adds fixture assertions
+only; the HRIS workflow pins tested Platform **`26796a33`**.
+
+**Next: implement admitted common page acquisition with atomic encrypted staging
+of every unresolved reference and the page position; then acquire originals through
+bounded SDK windows.** Only persisted references may justify traversal progress.
+An empty provider page can advance; an empty decrypted UI snapshot cannot establish
+history end. The SDK still retains focused caches: 16 distinct room/anchor keys per
+client. Add coordinated reopening while preserving keys/cursors/transactions,
+close the ACK-before-journal gap and retire commands, then build Chat UI. No native
+pagination is introduced by this metadata adapter. See [the history contract](collaboration-history.md#provider-page-metadata).
+
+Hosted focus-budget HRIS **`41283261746`** at **`17b1fc77`** is now audited:
+all 17 steps, 146 Android host cases and native run **`eb83226a`** pass;
+**26.926s case / 58.905s suite**, cleanup true, all 237 Mobile/33 Platform immutable
+source hashes matched. Its report is in the focus-budget measurement. This is
+predecessor evidence, separate from the new page adapter. Head control
+**`41281748999`** still has an in-progress Apple app-host build at the last audit;
+its portable job passed. Focus control **`41283261749`** is pending. Inspect later
+terminal artifacts and this increment's own CI after push.
+
+Continue **all P0–P8 and 54 groups; none is accepted**. Apple/web owned adapters,
+bootstrap/cross-family recovery, backup, rich chat and all call/meeting phases
+remain. Physical iPhone testing is waived; Apple implementation/interoperability
+are required. Starter remains clean at `36116b2`; no generic foundation change
+belongs to these HRIS adapters. No live/schema/phone change. Atomic commits and
+push after every commit remain authorized; continue after this checkpoint.

@@ -62,9 +62,10 @@ treating the asynchronous UI timeline as the source of traversal progress. The
 SDK still supplies original decrypted content through owned context windows.
 The metadata adapter itself does not persist or acknowledge those references.
 
-The common operation must atomically stage page references and positions, acquire
-originals through bounded SDK work, retain unresolved references and persist facts
-under fresh HRIS admission. Cancellation or a lost outcome must not cause an
+An encrypted traversal repository now stages references and positions atomically.
+The next common operation must surround that staging with fresh HRIS admission,
+acquire originals through bounded SDK work and retain unresolved references.
+Cancellation or a lost outcome must not cause an
 unbounded repeat of native pagination or a false history-end acknowledgement.
 
 A fresh timeline view of the **same** existing focus is a candidate snapshot barrier:

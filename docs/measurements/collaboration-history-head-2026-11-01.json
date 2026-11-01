@@ -529,5 +529,51 @@
     "testCaseSeconds": 24.07,
     "testSuiteSeconds": 68.99,
     "scope": "Validates latest-head discovery at ac13550f; later focused-cache accounting has separate local/hosted checks."
+  },
+  "hostedControl": {
+    "run": "https://github.com/fajarxfce/hris-mobile/actions/runs/41281748999",
+    "commit": "ac13550f062c172f44260d699621dd50addc5dfe",
+    "result": "success",
+    "jobs": [
+      {
+        "name": "apple",
+        "conclusion": "success",
+        "steps": 13,
+        "nonPassingSteps": []
+      },
+      {
+        "name": "portable",
+        "conclusion": "success",
+        "steps": 15,
+        "nonPassingSteps": []
+      }
+    ],
+    "tests": {
+      "desktopTest": {
+        "suites": 44,
+        "tests": 386,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "wasmJsBrowserTest": {
+        "suites": 40,
+        "tests": 362,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "iosSimulatorArm64Test": {
+        "suites": 36,
+        "tests": 318,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "immutableSourceHashesMatched": 235,
+    "sourceManifestUploaded": false,
+    "xcodeAppHostBuildSuccesses": 1,
+    "scope": "Validates latest history head discovery at ac13550f. Later focus accounting, provider pages and traversal storage have separate evidence."
   }
 }

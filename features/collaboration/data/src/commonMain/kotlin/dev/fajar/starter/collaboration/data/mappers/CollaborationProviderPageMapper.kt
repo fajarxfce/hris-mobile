@@ -5,9 +5,6 @@ import dev.fajar.starter.collaboration.domain.entities.CollaborationProviderHist
 import dev.fajar.starter.collaboration.domain.policies.*
 import kotlinx.serialization.json.*
 
-internal fun validCollaborationHistoryPosition(position: String) =
-    position.length in 1..4096 && position.all { it.code in 33..126 }
-
 /** Empty advancing pages retain their next position. No body/ciphertext enters the projection. */
 internal fun collaborationProviderPage(
     json: String,
@@ -18,14 +15,14 @@ internal fun collaborationProviderPage(
     validateHistoryJsonDepth(json)
     val page = Json.parseToJsonElement(json).jsonObject
     val start = requireNotNull(page.string("start"))
-    require(validCollaborationHistoryPosition(start))
+    require(validCollaborationProviderPosition(start))
     val next =
         when (val value = page["end"]) {
             null,
             JsonNull -> null
             else -> {
                 require(value is JsonPrimitive && value.isString)
-                value.content.also { require(validCollaborationHistoryPosition(it)) }
+                value.content.also { require(validCollaborationProviderPosition(it)) }
             }
         }
     require(next == null || (next != start && next != requestedPosition))

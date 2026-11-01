@@ -4,6 +4,7 @@ import dev.fajar.starter.collaboration.data.api.CollaborationHistoryApi
 import dev.fajar.starter.collaboration.data.datasources.CollaborationHistoryRequestSource
 import dev.fajar.starter.collaboration.data.dto.*
 import dev.fajar.starter.collaboration.data.mappers.*
+import dev.fajar.starter.collaboration.domain.policies.validCollaborationProviderPosition
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.network.*
 import kotlinx.coroutines.*
@@ -37,7 +38,7 @@ internal class AndroidCollaborationHistoryReads(
             return AppResult.Failed(it)
         }
         val position = (query as? CollaborationHistoryRequest.Page)?.position
-        if (position != null && !validCollaborationHistoryPosition(position))
+        if (position != null && !validCollaborationProviderPosition(position))
             return AppResult.Failed(Failure(FailureKind.Validation, "Invalid history position."))
         val roomId = query.roomId
         if (

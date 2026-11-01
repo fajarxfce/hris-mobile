@@ -6,7 +6,8 @@ facts offline under the same account/company admission as the conversation list.
 `AcquireCollaborationHistory` can now acquire a finite original-event snapshot
 around a supplied event or the latest visible event through the owned Android SDK runtime.
 The Android runtime can also read bounded provider-page metadata through the same
-gateway. Durable page staging, edit projection, command retirement and Chat UI
+gateway. Encrypted traversal staging retains every reference with its page position.
+Admitted page acquisition, edit projection, command retirement and Chat UI
 remain separate work.
 
 ## Canonical identity and deletion
@@ -154,10 +155,51 @@ The actual proof reads an initial page, replays its returned start and follows i
 next position once when present, under HRIS device/conversation/room checks before
 and after. It verifies both encrypted message IDs and exact runtime binding. This
 finite proof does not establish durable progression or complete-history recovery.
-The next common operation must atomically retain every unresolved reference and
-its page position before publishing traversal progress, then use the owned SDK to
-acquire original content. Until that storage/policy operation exists, the metadata
-adapter is exposed only on the platform runtime and is not a Chat UI action.
+The next common operation must use atomic staging before publishing traversal
+progress, then use the owned SDK to acquire original content. The storage port
+below exists; the admitted acquisition operation is still pending. The metadata
+adapter remains a platform-runtime entry point. Chat UI wiring is pending.
+
+## Durable traversal staging
+
+[SQLite/IndexedDB validation](measurements/collaboration-history-traversal-2026-11-01.json).
+
+`CollaborationHistoryTraversalRepository` stores provider positions and event
+references in a separate `collaboration-history/{company}/{conversation}/pages/{device}`
+partition. It shares the original-history content/index key format, with separate
+AEAD contexts and HMAC indexes bound to account, company, conversation, room and
+device. Active local session ownership is checked by the underlying transaction.
+Ordinary reauthentication can read the same owned facts; another account, device
+or room cannot reuse them. Missing keys cannot regenerate over retained originals
+or traversal-only records, including inactive accounts.
+
+One stage operation accepts at most 20 unique references and the exact previously
+observed progress. References and the next opaque position commit in the same
+SQLite/IndexedDB transaction under generation/revision compare-and-set. A lost
+response is recovered by rereading that checkpoint. A competing or replaced owner
+returns false; no implicit retry, reset, eviction or deletion occurs. Every input
+collection is detached before suspending for storage. Whole-page validation and
+metadata conflicts fail before any commit.
+
+Each new event receives a monotonically increasing first-observed sequence. An
+identical event repeated in an overlapping page preserves that sequence and adds
+no row. Changed sender, timestamp or type for the same provider ID rejects the
+whole page. Timestamp order does not control the acquisition queue. Reference
+reads use an indexed 1–50-row page and one lookahead, without a full conversation
+scan or the message outbox's 128-command limit. The 141-reference case establishes
+that boundary only; disk quotas and production capacity remain separate work.
+
+An empty advancing page still persists its next position. A terminal page records
+`exhausted` while retaining every existing reference. This flag describes backward
+provider traversal; it does not acknowledge decryption, original projection or
+future new messages. Reference resolution and reset/recovery policy are pending.
+Live device/conversation/room admission remains the owning use case's job, and no
+page acquisition or background retry is started by this repository's DI binding.
+
+Payloads are bounded to 16 KiB before encryption and 32 KiB after encoding; indexes
+expose sequence information locally but not event IDs, senders or provider cursor
+contents. Authenticated room/device bindings, ciphertext and row metadata are
+validated when reading. Cleanup clears owned temporary key/plaintext byte arrays.
 
 ## Explicit acquisition
 
