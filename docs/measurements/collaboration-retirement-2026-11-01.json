@@ -707,5 +707,39 @@
         "androidApi": "35"
       }
     }
+  },
+  "hostedControl": {
+    "runId": 41301133469,
+    "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/41301133469",
+    "mobileCommit": "070d3ab5f718229ab88dcc7b0a36ad3cd1f5a346",
+    "status": "success",
+    "successfulSteps": 28,
+    "reports": {
+      "desktopTest": {
+        "suites": 58,
+        "tests": 523,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "wasmJsBrowserTest": {
+        "suites": 54,
+        "tests": 499,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "iosSimulatorArm64Test": {
+        "suites": 46,
+        "tests": 407,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "xcodeBuildSucceeded": true,
+    "sourceManifestMatched": {
+      "mobile": 308
+    }
   }
 }

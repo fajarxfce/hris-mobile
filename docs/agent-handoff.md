@@ -33,6 +33,23 @@ Preserve exact operation IDs, offline facts and explicit resource lifetimes. Con
 the authorized long run; commit and push each validated increment.
 
 
+## Hosted retirement control and Apple build — 1 November 2026
+
+[Control run 41301133469](https://github.com/fajarxfce/hris-mobile/actions/runs/41301133469)
+passes all 28 steps at Mobile `070d3ab5`: 523 desktop / 58 suites, 499 browser /
+54 suites and 407 iOS simulator / 46 suites, zero failures/errors/skips. The downloaded
+log contains one Xcode BUILD SUCCEEDED marker. All 308 recorded Mobile source hashes
+match that immutable commit. The [retirement measurement](measurements/collaboration-retirement-2026-11-01.json)
+retains this evidence separately from the actual Android four-process proof. It is
+not evidence of Apple message transport interoperability or of the later Chat UI.
+
+The first Chat inbox module is now pushed at Mobile `829b2566065cc78ea289445dc416c692dc63a6e5`;
+its [contract and reviewed screenshots](https://github.com/fajarxfce/hris-mobile/blob/829b2566065cc78ea289445dc416c692dc63a6e5/docs/collaboration-presentation.md)
+and source-bound measurement cover local ownership, paging, cancellation and layout.
+Participant discovery, setup, thread, app navigation and all remaining P0–P8 work
+continue. No complete PRD feature group is accepted and no phone/live change occurred.
+
+
 ## Hosted HRIS retirement proof — 1 November 2026
 
 [Run 41301133411](https://github.com/fajarxfce/hris-mobile/actions/runs/41301133411)
