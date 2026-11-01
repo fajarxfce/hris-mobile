@@ -175,6 +175,11 @@ class CollaborationBindingsTest {
                     container.koin.get<CollaborationHistoryTraversalRepository>(),
                     container.koin.get<CollaborationHistoryTraversalRepository>(),
                 )
+                assertNotNull(container.koin.get<CollaborationDraftRepository>())
+                assertNotNull(container.koin.get<ObserveCollaborationDraft>())
+                assertNotNull(container.koin.get<EditCollaborationDraft>())
+                assertNotNull(container.koin.get<PrepareCollaborationDraftSend>())
+                assertNotNull(container.koin.get<ConfirmCollaborationDraftSend>())
                 assertNotNull(container.koin.get<ObserveCollaborationHistory>())
                 assertNotNull(container.koin.get<AcquireCollaborationHistory>())
                 assertNotNull(container.koin.get<AcquireCollaborationProviderHistory>())

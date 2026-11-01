@@ -980,4 +980,12 @@
     <string name="chat_history_incomplete_en">Some older events are not available yet. Refresh to try again.</string>
     <string name="chat_newer_messages_en">Newer messages</string>
     <string name="chat_latest_messages_en">Back to latest messages</string>
+    <string name="chat_draft_saving_en">Saving draft</string>
+    <string name="chat_draft_not_saved_en">Draft not saved</string>
+    <string name="chat_draft_changed_en">This draft changed in another window. Your text is still here.</string>
+    <string name="chat_draft_reload_en">Load saved draft</string>
+    <string name="chat_draft_reload_explanation_en">Replace this text with the latest saved draft? Unsaved changes in this window will be lost.</string>
+    <string name="chat_draft_leave_en">Leave without saving</string>
+    <string name="chat_draft_leave_explanation_en">Your latest changes could not be saved. Leave this conversation and keep only the last saved draft?</string>
+    <string name="chat_draft_invalid_en">Check the message length and characters.</string>
 </resources>

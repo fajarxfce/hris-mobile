@@ -980,4 +980,12 @@
     <string name="chat_history_incomplete_id">Sebagian riwayat lama belum tersedia. Segarkan untuk mencoba lagi.</string>
     <string name="chat_newer_messages_id">Pesan lebih baru</string>
     <string name="chat_latest_messages_id">Ke pesan terbaru</string>
+    <string name="chat_draft_saving_id">Menyimpan draf</string>
+    <string name="chat_draft_not_saved_id">Draf belum tersimpan</string>
+    <string name="chat_draft_changed_id">Draf berubah di jendela lain. Teks Anda masih ada di sini.</string>
+    <string name="chat_draft_reload_id">Muat draf tersimpan</string>
+    <string name="chat_draft_reload_explanation_id">Ganti teks ini dengan draf tersimpan terbaru? Perubahan yang belum tersimpan di jendela ini akan hilang.</string>
+    <string name="chat_draft_leave_id">Keluar tanpa menyimpan</string>
+    <string name="chat_draft_leave_explanation_id">Perubahan terakhir belum dapat disimpan. Keluar dari percakapan dan hanya mempertahankan draf terakhir yang tersimpan?</string>
+    <string name="chat_draft_invalid_id">Periksa panjang dan karakter pesan.</string>
 </resources>

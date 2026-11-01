@@ -276,7 +276,7 @@ class ChatThreadViewModelTest {
             vm.onEvent(ChatThreadEvent.DraftChanged("bad\u0000text"))
             vm.onEvent(ChatThreadEvent.SendRequested)
             runCurrent()
-            assertEquals(FailureKind.Validation, vm.state.value.failure?.kind)
+            assertEquals(FailureKind.Validation, vm.state.value.draftFailure?.kind)
             assertTrue(vm.state.value.canCompose)
             assertFalse(vm.state.value.submissionPending)
             assertTrue(f.insertions.isEmpty())

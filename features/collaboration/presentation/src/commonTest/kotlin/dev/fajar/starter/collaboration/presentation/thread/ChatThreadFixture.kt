@@ -95,6 +95,40 @@ internal class ChatThreadFixture {
                 identity: CollaborationSelfIdentity,
             ) = AppResult.Success(identity == self)
         }
+    val draftSlot = MutableStateFlow<CollaborationDraft?>(null)
+    val draftWrites = mutableListOf<CollaborationDraft>()
+    var beforeDraft: suspend () -> Unit = {}
+    var afterDraftWrite: suspend (CollaborationDraft) -> Unit = {}
+    var draftWriteFailure: Failure? = null
+    var draftFlow: Flow<AppResult<CollaborationDraft?>>? = null
+    val drafts =
+        object : CollaborationDraftRepository {
+            override fun observe(access: CollaborationLocalAccess, conversationId: String) = flow {
+                beforeDraft()
+                emitAll(draftFlow ?: draftSlot.map { AppResult.Success(it) })
+            }
+
+            override suspend fun get(
+                access: CollaborationLocalAccess,
+                conversationId: String,
+            ): AppResult<CollaborationDraft?> {
+                beforeDraft()
+                return AppResult.Success(draftSlot.value)
+            }
+
+            override suspend fun replace(
+                access: CollaborationLocalAccess,
+                expected: CollaborationDraft?,
+                replacement: CollaborationDraft,
+            ): AppResult<Boolean> {
+                if (draftSlot.value == replacement) return AppResult.Success(true)
+                if (draftSlot.value != expected) return AppResult.Success(false)
+                draftSlot.value = replacement
+                draftWrites += replacement
+                afterDraftWrite(replacement)
+                return draftWriteFailure?.let { AppResult.Failed(it) } ?: AppResult.Success(true)
+            }
+        }
     val messages =
         object : CollaborationMessageRepository {
             override fun observe(access: CollaborationLocalAccess, conversationId: String?) =
@@ -426,6 +460,35 @@ internal class ChatThreadFixture {
                 createAcquireCollaborationProviderHistory(),
                 createReadCollaborationHistoryReferences(),
                 createReconcileCollaborationHistoryReferences(),
+                ObserveCollaborationDraft(
+                    drafts,
+                    local,
+                    sessions,
+                    workspaces,
+                    server,
+                    build,
+                    clock,
+                ),
+                EditCollaborationDraft(drafts, local, sessions, workspaces, server, build, clock),
+                PrepareCollaborationDraftSend(
+                    drafts,
+                    local,
+                    sessions,
+                    workspaces,
+                    server,
+                    build,
+                    clock,
+                ),
+                ConfirmCollaborationDraftSend(
+                    drafts,
+                    local,
+                    sessions,
+                    workspaces,
+                    server,
+                    build,
+                    clock,
+                    messages,
+                ),
             )
         }
 

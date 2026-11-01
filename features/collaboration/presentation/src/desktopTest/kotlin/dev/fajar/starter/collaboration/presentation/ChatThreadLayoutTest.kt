@@ -27,11 +27,54 @@ class ChatThreadLayoutTest {
     @get:Rule val compose = createComposeRule()
 
     @Test
+    fun draftReadAndCompactFailureKeepInputAndRetryUsableAtLargeText() {
+        val events = mutableListOf<ChatThreadEvent>()
+        var state by
+            mutableStateOf(
+                ChatThreadState(title = "Dewi Kartika", loading = false, draft = "Draf tersimpan")
+            )
+        compose.setContent {
+            val density = LocalDensity.current
+            CompositionLocalProvider(
+                LocalDensity provides Density(density.density, 2f),
+                LocalAppLanguage provides AppLanguage.Indonesian,
+            ) {
+                AppTheme {
+                    Box(Modifier.size(320.dp, 640.dp).testTag("frame")) {
+                        ChatThreadPage(state, rememberLazyListState(), { events += it })
+                    }
+                }
+            }
+        }
+        compose.onNodeWithContentDescription("Pesan").assertIsDisplayed().assertIsNotEnabled()
+        compose.runOnIdle {
+            state =
+                state.copy(
+                    draftReady = true,
+                    draftFailure =
+                        dev.fajar.starter.common.result.Failure(
+                            dev.fajar.starter.common.result.FailureKind.Storage,
+                            "Unavailable",
+                        ),
+                )
+        }
+        compose.onNodeWithContentDescription("Pesan").assertIsDisplayed().assertIsEnabled()
+        compose.onNodeWithText("Draf belum tersimpan").assertIsDisplayed()
+        compose.onNodeWithText("Coba lagi").assertIsDisplayed().performClick()
+        compose.onNodeWithContentDescription("Kembali").assertIsDisplayed()
+        compose.runOnIdle {
+            assertEquals(listOf<ChatThreadEvent>(ChatThreadEvent.DraftRetryRequested), events)
+        }
+        screenshot("chat-draft-failure-large-text")
+    }
+
+    @Test
     fun narrowLargeTextKeepsComposerAndBackReachableWhileMessagesScroll() {
         val events = mutableListOf<ChatThreadEvent>()
         var state by
             mutableStateOf(
                 ChatThreadState(
+                    draftReady = true,
                     title = "Dewi Kartika",
                     rows = rows(),
                     loading = false,
@@ -82,6 +125,7 @@ class ChatThreadLayoutTest {
         var state by
             mutableStateOf(
                 ChatThreadState(
+                    draftReady = true,
                     title = "Ari Pratama",
                     loading = false,
                     connection = ChatThreadConnection.CONNECTED,
@@ -122,6 +166,7 @@ class ChatThreadLayoutTest {
                 AppTheme {
                     ChatThreadPage(
                         ChatThreadState(
+                            draftReady = true,
                             title = "Ari",
                             loading = false,
                             rows =
@@ -158,6 +203,7 @@ class ChatThreadLayoutTest {
         var state by
             mutableStateOf(
                 ChatThreadState(
+                    draftReady = true,
                     title = "Ari Pratama",
                     loading = false,
                     loadingOlder = true,
@@ -208,6 +254,7 @@ class ChatThreadLayoutTest {
         var state by
             mutableStateOf(
                 ChatThreadState(
+                    draftReady = true,
                     title = "Dewi Kartika",
                     loading = false,
                     rows = messages.take(150),

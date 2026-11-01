@@ -1,5 +1,41 @@
 # Agent continuation — HRIS Mobile
 
+## Composer connected and focused recovery tests pass — 1 November 2026
+
+[Composer evidence](measurements/chat-draft-ui-2026-11-01.json) binds 14 inputs and the inspected
+320 dp/200% text screenshot. 215s Gradle / 218.71s wall passes 102 JVM presentation cases,
+88 browser cases and two application-binding cases plus format/architecture/detekt. Twelve
+new scenarios cover loading, coalescing, uncertain edits, late emissions, recreation at
+freeze-before-queue and queue-before-ACK, lost clear response/newer draft, invalid input,
+explicit navigation/reload choices and hidden ownership loss. Initial 67s attempt had one
+old assertion expecting thread failure; the composer-specific error assertion and localized
+validation guidance were corrected. That failure is retained in the measurement.
+
+One serial writer owns autosave. Sending flushes the latest text, persists original ID/body,
+queues and confirms exact durable command/archive. Known frozen IDs skip re-preparation on
+retry so a later clear/new draft cannot cause another insertion. Successful observer values
+initialize once; they never overwrite active text. New input and immutable uncertain write
+are separate. Back/Setup flush edits, with in-product confirmation on unsaved exit/reload.
+**No new phone build:** release 7 remains installed. Full root/Android checks follow the
+pending indexed recovery integration; focused tests are not full application acceptance.
+
+**Continue immediately:** implement bounded indexed prepared-draft discovery and app-owned
+Queue/Confirm recovery before the first draft-capable release. Preferred design is one
+account/company replica partition with a document per conversation, authenticated prepared
+tags committed atomically with the frozen body, and existing indexed queries; no new core DB
+schema. The current per-conversation v1 has never been in the verified installed APK. Preserve
+empty revision fences and complete-target CAS, handle unrelated-conversation checkpoint
+contention with bounded technical retry, retain key-loss/ownership protections, and prove
+603 mixed drafts plus freeze-only worker restart. `.work/chat-draft-index-next.txt` contains
+concrete design notes. Do not use a separate non-atomic index or decrypt every conversation.
+Then full root/browser/Android/proof/lint, signed release 8+ install-only, and all remaining PRD.
+
+Mobile Apple run 41334974289 at `c0e91d6b` is now audited PASS: 106 cases/29 suites (two new
+SQLite cases, 1.047s), compile 628s, tests 83s, Xcode 941s. Its fixture/CI step is being ported
+to Starter, whose local quality check is running. Commit separate Apple evidence and dispatch
+Starter hosted execution. Native f904 run 41335935547 was compiling server fixtures; diagnostic
+bfbb run 41337171686 is pending. Keep audits tied to immutable sources; neither covers this UI.
+
 ## Failed native retry diagnostics preserved — 1 November 2026
 
 [Audit and follow-up](measurements/chat-window-ci-failure-2026-11-01.json) retain run 41334029287

@@ -14,6 +14,66 @@ import org.koin.core.annotation.*
 @ComponentScan("dev.fajar.starter.collaboration.data")
 class CollaborationDataModule {
     @Factory
+    fun observeDraft(
+        drafts: CollaborationDraftRepository,
+        lists: CollaborationListRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) = ObserveCollaborationDraft(drafts, lists, sessions, workspaces, server, build, Clock.System)
+
+    @Factory
+    fun editDraft(
+        drafts: CollaborationDraftRepository,
+        lists: CollaborationListRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) = EditCollaborationDraft(drafts, lists, sessions, workspaces, server, build, Clock.System)
+
+    @Factory
+    fun prepareDraftSend(
+        drafts: CollaborationDraftRepository,
+        lists: CollaborationListRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) =
+        PrepareCollaborationDraftSend(
+            drafts,
+            lists,
+            sessions,
+            workspaces,
+            server,
+            build,
+            Clock.System,
+        )
+
+    @Factory
+    fun confirmDraftSend(
+        drafts: CollaborationDraftRepository,
+        lists: CollaborationListRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        server: IdentityServer,
+        build: AppBuild,
+        messages: CollaborationMessageRepository,
+    ) =
+        ConfirmCollaborationDraftSend(
+            drafts,
+            lists,
+            sessions,
+            workspaces,
+            server,
+            build,
+            Clock.System,
+            messages,
+        )
+
+    @Factory
     fun advanceDelivery(
         cursors: CollaborationDeliveryCursorRepository,
         lists: CollaborationListRepository,

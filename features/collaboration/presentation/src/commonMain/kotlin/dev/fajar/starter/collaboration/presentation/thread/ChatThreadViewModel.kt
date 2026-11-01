@@ -7,6 +7,7 @@ package dev.fajar.starter.collaboration.presentation.thread
 
 import androidx.lifecycle.viewModelScope
 import dev.fajar.starter.collaboration.domain.entities.*
+import dev.fajar.starter.collaboration.domain.policies.collaborationContentResponseClosesRead
 import dev.fajar.starter.collaboration.domain.policies.localListAccess
 import dev.fajar.starter.collaboration.domain.policies.validCollaborationText
 import dev.fajar.starter.collaboration.domain.usecases.*
@@ -41,6 +42,10 @@ class ChatThreadViewModel(
     acquireProviderHistory: AcquireCollaborationProviderHistory,
     readHistoryReferences: ReadCollaborationHistoryReferences,
     reconcileHistoryReferences: ReconcileCollaborationHistoryReferences,
+    private val observeDraft: ObserveCollaborationDraft,
+    private val editDraft: EditCollaborationDraft,
+    private val prepareDraftSend: PrepareCollaborationDraftSend,
+    private val confirmDraftSend: ConfirmCollaborationDraftSend,
 ) : MviViewModel<ChatThreadState, ChatThreadEvent, ChatThreadEffect>(ChatThreadState()) {
     private var observation: Job? = null
     private var connection: Job? = null
@@ -58,8 +63,12 @@ class ChatThreadViewModel(
     private var displayedWindow = ChatThreadLocalWindow()
     private var historyLoading = true
     private var scrollToLatest = false
-    private var reservedId: String? = null
-    private var reservedText: String? = null
+    private var localDraft: CollaborationDraft? = null
+    private var preparingDraft: CollaborationDraft? = null
+    private var draftWrite: ChatDraftWrite? = null
+    private var localSave: Job? = null
+    private var departure: Job? = null
+    private var departureEffect: ChatThreadEffect? = null
     private var pulse: Channel<Unit>? = null
     private var wakeRequested = false
     private var olderRequested = false
@@ -86,6 +95,9 @@ class ChatThreadViewModel(
         on<ChatThreadEvent.LatestRequested>(::onLatestRequested)
         on<ChatThreadEvent.DraftChanged>(::onDraftChanged)
         on<ChatThreadEvent.SendRequested>(::onSendRequested)
+        on<ChatThreadEvent.DraftRetryRequested>(::onDraftRetryRequested)
+        on<ChatThreadEvent.DraftDialogDismissed>(::onDraftDialogDismissed)
+        on<ChatThreadEvent.DraftDialogConfirmed>(::onDraftDialogConfirmed)
     }
 
     private fun onEntered(event: ChatThreadEvent.Entered) {
@@ -123,7 +135,10 @@ class ChatThreadViewModel(
                         it.copy(title = value.value.summary.peer.displayName, localFailure = null)
                     }
                     if (visible) connect()
-                    observePages(owned)
+                    coroutineScope {
+                        launch { observeComposer(owned) }
+                        observePages(owned)
+                    }
                 }
             }
     }
@@ -203,8 +218,14 @@ class ChatThreadViewModel(
         displayedWindow = ChatThreadLocalWindow()
         historyLoading = true
         scrollToLatest = false
-        reservedId = null
-        reservedText = null
+        localSave?.cancel()
+        localSave = null
+        departure?.cancel()
+        departure = null
+        departureEffect = null
+        localDraft = null
+        preparingDraft = null
+        draftWrite = null
         updateState { ChatThreadState() }
     }
 
@@ -270,15 +291,11 @@ class ChatThreadViewModel(
     }
 
     private fun onBackRequested(event: ChatThreadEvent.BackRequested) {
-        if (!visible) return
-        onStopped(ChatThreadEvent.Stopped)
-        viewModelScope.launch { emitEffect(ChatThreadEffect.Back) }
+        leaveThread(ChatThreadEffect.Back)
     }
 
     private fun onSetupRequested(event: ChatThreadEvent.SetupRequested) {
-        if (!visible) return
-        onStopped(ChatThreadEvent.Stopped)
-        viewModelScope.launch { emitEffect(ChatThreadEffect.Setup) }
+        leaveThread(ChatThreadEffect.Setup)
     }
 
     private fun onRefreshRequested(event: ChatThreadEvent.RefreshRequested) {
@@ -366,49 +383,287 @@ class ChatThreadViewModel(
         window.value = selected
     }
 
+    private suspend fun observeComposer(owned: CollaborationLocalAccess) {
+        observeDraft(workspaceId, conversationId).collect { result ->
+            currentCoroutineContext().ensureActive()
+            if (access != owned) return@collect
+            when (result) {
+                is AppResult.Failed -> reportDraftFailure(result.failure)
+                is AppResult.Success ->
+                    if (!state.value.draftReady) {
+                        localDraft = result.value
+                        updateState {
+                            it.copy(
+                                draftReady = true,
+                                draft = result.value?.text.orEmpty(),
+                                submissionPending = result.value?.submissionId != null,
+                                draftFailure = null,
+                            )
+                        }
+                    }
+            }
+            // Subsequent values are invalidations, not editor replacements. Only acknowledged
+            // CAS results or an explicit reload replace text; delayed emissions cannot undo input.
+        }
+    }
+
     private fun onDraftChanged(event: ChatThreadEvent.DraftChanged) {
         if (!visible || !state.value.canCompose) return
         val bounded =
             event.text.take(16_384).let {
                 if (it.lastOrNull()?.isHighSurrogate() == true) it.dropLast(1) else it
             }
-        updateState { it.copy(draft = bounded) }
+        updateState {
+            it.copy(
+                draft = bounded,
+                draftFailure =
+                    it.draftFailure?.takeIf { failure ->
+                        failure.code == "client.collaboration_draft_changed"
+                    },
+            )
+        }
+        persistDraft()
+    }
+
+    /** One writer, one immutable uncertain mutation, and the most recent waiting text. */
+    private fun persistDraft(immediate: Boolean = false) {
+        if (
+            !state.value.draftReady ||
+                state.value.localFailure != null ||
+                state.value.draftFailure != null ||
+                localDraft?.submissionId != null ||
+                preparingDraft != null
+        )
+            return
+        if (localSave?.isActive == true) {
+            if (!immediate || state.value.draftSaving) return
+            localSave?.cancel() // Only the debounce; never cancel an admitted write to replace it.
+        }
+        val owned = access ?: return
+        localSave =
+            viewModelScope.launch {
+                if (!immediate) delay(250)
+                while (isActive && access == owned) {
+                    if (state.value.localFailure != null || state.value.draftFailure != null)
+                        return@launch
+                    if (draftWrite == null && state.value.draft == localDraft?.text.orEmpty())
+                        return@launch
+                    val mutation =
+                        draftWrite
+                            ?: ChatDraftWrite(
+                                localDraft,
+                                Uuid.random().toString(),
+                                state.value.draft,
+                            )
+                    draftWrite = mutation
+                    updateState { it.copy(draftSaving = true) }
+                    val result =
+                        editDraft(
+                            workspaceId,
+                            conversationId,
+                            mutation.expected,
+                            mutation.revision,
+                            mutation.text,
+                        )
+                    ensureActive()
+                    if (access != owned) return@launch
+                    when (result) {
+                        is AppResult.Failed -> {
+                            reportDraftFailure(result.failure)
+                            return@launch
+                        }
+                        is AppResult.Success -> {
+                            localDraft = result.value
+                            draftWrite = null
+                            updateState { it.copy(draftSaving = false, draftFailure = null) }
+                        }
+                    }
+                }
+            }
+    }
+
+    private suspend fun flushDraft(): Boolean {
+        persistDraft(immediate = true)
+        localSave?.join()
+        currentCoroutineContext().ensureActive()
+        return state.value.draftReady &&
+            state.value.localFailure == null &&
+            state.value.draftFailure == null &&
+            draftWrite == null &&
+            state.value.draft == localDraft?.text.orEmpty()
+    }
+
+    private fun reportDraftFailure(failure: Failure) {
+        // Input validation runs before I/O; this rejected body can safely be corrected.
+        if (
+            failure.kind == FailureKind.Validation &&
+                failure.code == "client.collaboration_invalid_message"
+        )
+            draftWrite = null
+        if (collaborationContentResponseClosesRead(failure)) {
+            restrict(failure)
+        } else updateState { it.copy(draftSaving = false, saving = false, draftFailure = failure) }
+    }
+
+    private fun onDraftRetryRequested(event: ChatThreadEvent.DraftRetryRequested) {
+        if (!visible || state.value.saving || state.value.draftSaving || state.value.leaving) return
+        if (state.value.draftFailure?.code == "client.collaboration_draft_changed") {
+            updateState { it.copy(draftDialog = ChatDraftDialog.RELOAD) }
+            return
+        }
+        updateState { it.copy(draftFailure = null) }
+        if (!state.value.draftReady) observeLocal() else persistDraft(immediate = true)
+    }
+
+    private fun onDraftDialogDismissed(event: ChatThreadEvent.DraftDialogDismissed) {
+        updateState { it.copy(draftDialog = null) }
+        departureEffect = null
+    }
+
+    private fun onDraftDialogConfirmed(event: ChatThreadEvent.DraftDialogConfirmed) {
+        if (!visible || state.value.saving || state.value.draftSaving) return
+        when (state.value.draftDialog) {
+            ChatDraftDialog.LEAVE -> {
+                val effect = departureEffect ?: return
+                departureEffect = null
+                updateState { it.copy(draftDialog = null) }
+                onStopped(ChatThreadEvent.Stopped)
+                viewModelScope.launch { emitEffect(effect) }
+            }
+            ChatDraftDialog.RELOAD -> {
+                val owned = access ?: return
+                localSave =
+                    viewModelScope.launch {
+                        updateState {
+                            it.copy(draftSaving = true, saving = true, draftDialog = null)
+                        }
+                        val read = observeDraft(workspaceId, conversationId).first()
+                        ensureActive()
+                        if (access != owned) return@launch
+                        when (read) {
+                            is AppResult.Failed -> reportDraftFailure(read.failure)
+                            is AppResult.Success -> {
+                                localDraft = read.value
+                                preparingDraft = null
+                                draftWrite = null
+                                updateState {
+                                    it.copy(
+                                        draft = read.value?.text.orEmpty(),
+                                        draftReady = true,
+                                        submissionPending = read.value?.submissionId != null,
+                                        saving = false,
+                                        draftSaving = false,
+                                        draftFailure = null,
+                                    )
+                                }
+                            }
+                        }
+                    }
+            }
+            null -> Unit
+        }
+    }
+
+    private fun leaveThread(effect: ChatThreadEffect) {
+        if (!visible || departure?.isActive == true) return
+        val owned = access
+        departure =
+            viewModelScope.launch {
+                updateState { it.copy(leaving = true) }
+                val saved =
+                    if (state.value.submissionPending || !state.value.draftReady) true
+                    else flushDraft()
+                ensureActive()
+                if (access != owned) return@launch
+                updateState { it.copy(leaving = false) }
+                if (!saved) {
+                    departureEffect = effect
+                    updateState { it.copy(draftDialog = ChatDraftDialog.LEAVE) }
+                    return@launch
+                }
+                onStopped(ChatThreadEvent.Stopped)
+                emitEffect(effect)
+            }
     }
 
     private fun onSendRequested(event: ChatThreadEvent.SendRequested) {
         if (!visible || !state.value.canSend || submission?.isActive == true) return
         val owned = access ?: return
-        val id = reservedId ?: Uuid.random().toString()
-        val text = reservedText ?: state.value.draft
-        if (!validCollaborationText(text)) {
-            updateState {
-                it.copy(
-                    failure =
-                        Failure(
-                            FailureKind.Validation,
-                            "Check the message length and characters.",
-                            code = "client.collaboration_invalid_message",
-                        )
+        if (!validCollaborationText(state.value.draft)) {
+            reportDraftFailure(
+                Failure(
+                    FailureKind.Validation,
+                    "Check the message length and characters.",
+                    code = "client.collaboration_invalid_message",
                 )
-            }
+            )
             return
         }
-        reservedId = id
-        reservedText = text
-        updateState { it.copy(submissionPending = true, saving = true, failure = null) }
+        if (
+            !state.value.submissionPending &&
+                state.value.draftFailure?.code == "client.collaboration_draft_changed"
+        )
+            return
+        updateState { it.copy(saving = true, draftFailure = null, failure = null) }
         submission =
             viewModelScope.launch {
-                val result = queue(workspaceId, conversationId, id, text)
+                if (!state.value.submissionPending && !flushDraft()) {
+                    updateState { it.copy(saving = false) }
+                    return@launch
+                }
                 ensureActive()
                 if (access != owned) return@launch
-                when (result) {
-                    is AppResult.Failed ->
-                        updateState { it.copy(saving = false, failure = result.failure) }
+                val expected =
+                    preparingDraft
+                        ?: localDraft
+                        ?: run {
+                            updateState { it.copy(saving = false) }
+                            return@launch
+                        }
+                preparingDraft = expected
+                updateState { it.copy(submissionPending = true) }
+                val frozen =
+                    if (expected.submissionId != null) AppResult.Success(expected)
+                    else prepareDraftSend(workspaceId, expected)
+                ensureActive()
+                if (access != owned) return@launch
+                if (frozen is AppResult.Failed) {
+                    reportDraftFailure(frozen.failure)
+                    return@launch
+                }
+                localDraft = (frozen as AppResult.Success).value
+                preparingDraft = null
+                val draft = frozen.value
+                val result =
+                    queue(
+                        workspaceId,
+                        conversationId,
+                        requireNotNull(draft.submissionId),
+                        draft.text,
+                    )
+                ensureActive()
+                if (access != owned) return@launch
+                if (result is AppResult.Failed) {
+                    if (collaborationContentResponseClosesRead(result.failure))
+                        restrict(result.failure)
+                    else updateState { it.copy(saving = false, failure = result.failure) }
+                    return@launch
+                }
+                val confirmed = confirmDraftSend(workspaceId, draft)
+                ensureActive()
+                if (access != owned) return@launch
+                when (confirmed) {
+                    is AppResult.Failed -> reportDraftFailure(confirmed.failure)
                     is AppResult.Success -> {
-                        reservedId = null
-                        reservedText = null
+                        localDraft = confirmed.value
+                        draftWrite = null
                         updateState {
-                            it.copy(draft = "", submissionPending = false, saving = false)
+                            it.copy(
+                                draft = confirmed.value?.text.orEmpty(),
+                                submissionPending = confirmed.value?.submissionId != null,
+                                saving = false,
+                                draftFailure = null,
+                            )
                         }
                         showLatest()
                         if (pulse != null) requestSync(wake = false) else connect()
@@ -721,4 +976,13 @@ private data class ChatThreadLocalWindow(val after: String? = null, val before: 
         get() = after == null && before == null
 
     override fun toString() = "ChatThreadLocalWindow([redacted])"
+}
+
+/** At most one uncertain write is retained alongside the latest visible input. */
+private data class ChatDraftWrite(
+    val expected: CollaborationDraft?,
+    val revision: String,
+    val text: String,
+) {
+    override fun toString() = "ChatDraftWrite([redacted])"
 }

@@ -27,5 +27,20 @@ lost replies. Prepare uses the editing revision as the command ID and a fresh sl
 so retry matches the exact original preparation instead of conflating identical text from
 a later draft. Confirm requires the exact command/archive identity and body before clearing;
 it preserves a competing/newer draft. Twelve added scenarios pass on JVM and browser.
-Koin bindings, UI integration and prepared-send recovery remain next.
+Koin bindings and the composer now use these operations. Initial loading gates editing;
+one serial writer coalesces waiting input while retaining an uncertain operation unchanged.
+Late successful storage emissions never replace active text. Sending flushes the latest edit,
+freezes the body/ID, queues it and confirms durable ownership before applying the next slot.
+Frozen sends can be retried after process recreation with the same ID. Leaving flushes
+pending input; a failed flush or reload of a competing draft requires an explicit UI choice.
+Localized failure feedback stays beside the composer, with a 320 dp / 200% text screenshot.
+[Focused UI evidence](measurements/chat-draft-ui-2026-11-01.json) records 102 JVM / 88 browser
+presentation cases and two application-binding cases, including twelve new recovery/race
+scenarios. Root/Android integration remains pending with automatic recovery below.
+
+Automatic recovery of a freeze that precedes queue admission is still separate work. The
+current per-conversation snapshot lacks an atomic prepared-send index; do not infer that a
+regular outbox scan finds it. Before the first draft-capable release, implement a bounded
+indexed prepared-draft query and application-owned Queue/Confirm coordination. Empty draft
+revisions must still fence late writers, and the index and frozen body must commit together.
 The installed release 7 predates this storage addition. No full chat acceptance is claimed.

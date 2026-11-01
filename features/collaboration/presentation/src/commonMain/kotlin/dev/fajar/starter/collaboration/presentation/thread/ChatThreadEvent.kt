@@ -19,6 +19,12 @@ sealed interface ChatThreadEvent {
 
     data object SendRequested : ChatThreadEvent
 
+    data object DraftRetryRequested : ChatThreadEvent
+
+    data object DraftDialogDismissed : ChatThreadEvent
+
+    data object DraftDialogConfirmed : ChatThreadEvent
+
     data class DraftChanged(val text: String) : ChatThreadEvent {
         override fun toString() = "DraftChanged([redacted])"
     }

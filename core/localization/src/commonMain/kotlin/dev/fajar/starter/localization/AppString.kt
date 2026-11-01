@@ -5,6 +5,20 @@ import org.jetbrains.compose.resources.StringResource
 
 /** Explicit pairs keep runtime language changes portable across Android, iOS, desktop and Web. */
 enum class AppString(val english: StringResource, val indonesian: StringResource) {
+    ChatDraftInvalid(Res.string.chat_draft_invalid_en, Res.string.chat_draft_invalid_id),
+    ChatDraftSaving(Res.string.chat_draft_saving_en, Res.string.chat_draft_saving_id),
+    ChatDraftNotSaved(Res.string.chat_draft_not_saved_en, Res.string.chat_draft_not_saved_id),
+    ChatDraftChanged(Res.string.chat_draft_changed_en, Res.string.chat_draft_changed_id),
+    ChatDraftReload(Res.string.chat_draft_reload_en, Res.string.chat_draft_reload_id),
+    ChatDraftReloadExplanation(
+        Res.string.chat_draft_reload_explanation_en,
+        Res.string.chat_draft_reload_explanation_id,
+    ),
+    ChatDraftLeave(Res.string.chat_draft_leave_en, Res.string.chat_draft_leave_id),
+    ChatDraftLeaveExplanation(
+        Res.string.chat_draft_leave_explanation_en,
+        Res.string.chat_draft_leave_explanation_id,
+    ),
     ChatMessage(Res.string.chat_message_en, Res.string.chat_message_id),
     ChatSend(Res.string.chat_send_en, Res.string.chat_send_id),
     ChatQueued(Res.string.chat_queued_en, Res.string.chat_queued_id),

@@ -129,6 +129,32 @@ fun ChatThreadPage(
             ChatComposer(state, onEvent)
         }
     }
+    state.draftDialog?.let { dialog ->
+        val title =
+            appString(
+                if (dialog == ChatDraftDialog.RELOAD) AppString.ChatDraftReload
+                else AppString.ChatDraftLeave
+            )
+        AppDialog(
+            title,
+            appString(AppString.Close),
+            { onEvent(ChatThreadEvent.DraftDialogDismissed) },
+        ) {
+            Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                AppText(
+                    appString(
+                        if (dialog == ChatDraftDialog.RELOAD) AppString.ChatDraftReloadExplanation
+                        else AppString.ChatDraftLeaveExplanation
+                    )
+                )
+                AppButton(
+                    title,
+                    { onEvent(ChatThreadEvent.DraftDialogConfirmed) },
+                    enabled = !state.saving && !state.draftSaving,
+                )
+            }
+        }
+    }
 }
 
 @Composable
