@@ -6,6 +6,9 @@ import kotlinx.coroutines.flow.StateFlow
 
 /** Store I/O and SDK ownership only. Use cases admit installation and live delivery separately. */
 interface CollaborationRuntimeRepository {
+    /** Observes an existing application-owned runtime without borrowing its close capability. */
+    suspend fun isOpen(owner: CollaborationOwner, deviceId: String): AppResult<Boolean>
+
     /** Success owns a paused client with its scoped identity/credentials durably installed. */
     suspend fun install(
         owner: CollaborationOwner,

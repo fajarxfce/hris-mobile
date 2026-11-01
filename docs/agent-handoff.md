@@ -2,6 +2,19 @@
 
 ## Active collaboration implementation — 1 November 2026
 
+Admitted application entry now reuses an initialized SDK runtime through
+`EnsureCollaborationRuntime`; it returns scoped readiness without lending a parent
+close handle to a route. Concurrent entries share one restore, incomplete native
+initialization reports opening, and late/cancelled new acquisitions clean up only
+their own lease. [Evidence](measurements/collaboration-runtime-reuse-2026-11-01.json):
+11 new common cases; focused proof build/checks 84s, final full root/browser/Android/
+Wasm/proof/lint 251s (**2,243 desktop / 379 suites**, **121 domain / 96 data browser**,
+zero failures/errors/skips and zero app/proof lint errors). Actual HRIS SDK run
+`f0cfaed6` passes in **61.058s** (95s Gradle), including open/closed owner probes,
+process death, both encrypted directions, original queued transaction and same-cursor
+sync recovery. All **153 Mobile / 24 Platform hashes** match before/after; proof APK
+`a7a39c54`. Dedicated emulator stopped after cleanup; phone/live remain unchanged.
+
 The owned direct-conversation list now persists encrypted account/company facts
 across database restart and reauthentication. One explicit live page merges at
 most 50 summaries atomically; local browsing reads at most 51 indexed records.
@@ -31,14 +44,18 @@ cleanup. Earlier `92d91275` hosted control/HRIS evidence (201/177/177 cases,
 64.046s SDK) is in [control denial](measurements/collaboration-control-denial-2026-11-01.json).
 These SDK runs do not validate the later cache source; its native transport is unchanged.
 
-**Continue P0–P8; none of the 54 feature groups is accepted.** Next, add admitted
-app entry that reuses an already-owned SDK runtime without acquiring a second
-store or closing a borrowed parent. Then build Chat navigation/list/setup and
-conversation UI, bounded product history windows, offline message projections,
-bootstrap/cross-family recovery and logical-message reconciliation. Keep the
-SDK's keys and cursor intact. The existing 512-item observer guard is not a
-product history window. Apple native chat interoperability remains pending;
-common Apple tests and the physical-device waiver do not replace it.
+**Continue P0–P8; none of the 54 feature groups is accepted.** Implement the
+application's immutable message intents and native transaction reconciliation,
+then connect Chat list/setup/conversation UI to the verified cache and shared
+entry. Product history windows, offline message projections, bootstrap/cross-family
+recovery, all richer chat/call/meeting behavior and Apple native interoperability
+remain pending. Keep SDK keys/cursors intact; the 512-item observer guard is not a
+product history window. Common Apple checks and a physical-device waiver do not
+replace native interoperability. Mobile `docs/collaboration-timeline.md` records
+source findings for the next queue owner: per-room subscription replays captured
+transaction IDs before returning, but timeline local-echo hydration is asynchronous.
+Proposed delivery stays paused until the logical-ID/native-transaction mapping is
+durable; this sender and its crash boundaries are not implemented yet.
 
 No live/schema/phone change; the dedicated emulator remains stopped. Starter
 stays at `36116b2`: no new generic foundation change requires a port. Keep HRIS

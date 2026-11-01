@@ -32,11 +32,21 @@ internal constructor(
     private val lifetime = CoroutineScope(lifetimeJob + Dispatchers.Default)
     private val shutdown = SdkStoreShutdown(lifetime) { releaseResources() }
     private val stopRequested = AtomicBoolean()
+    private val acquisitionComplete = AtomicBoolean()
     private val sync =
         SdkSyncLifecycle(lifetime) { createAndroidCollaborationSync(nativeClient, lifetime) }
     private val children = SdkChildResources(lifetime)
     internal val closingRequested
         get() = stopRequested.get()
+
+    internal val availableForEntry
+        get() = acquisitionComplete.get() && !stopRequested.get()
+
+    /** Publication follows paused SDK restore and durable initialization. */
+    internal fun completeAcquisition() {
+        check(!stopRequested.get())
+        check(acquisitionComplete.compareAndSet(false, true))
+    }
 
     private val initialization =
         lifetime.async(start = CoroutineStart.LAZY) {

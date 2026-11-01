@@ -41,6 +41,8 @@ internal class ProtectedHrisProofOwner(
         )
 
     suspend fun enterTimeline(roomId: String): CollaborationTimelineLease {
+        check(success(runtime.isOpen(owner, deviceId)))
+        check(!success(runtime.isOpen(owner.copy(sessionId = "replaced-local-owner"), deviceId)))
         val replaced =
             runtime.enterTimeline(owner.copy(sessionId = "replaced-local-owner"), deviceId, roomId)
         check(
@@ -84,9 +86,11 @@ internal class ProtectedHrisProofOwner(
         try {
             owned = success(runtime.install(owner, command())) as AndroidCollaborationRuntimeLease
             val keys = identity(owned)
+            check(success(runtime.isOpen(owner, deviceId)))
             check(runtime.restore(owner, deviceId) is AppResult.Failed)
             owned.closeProofRuntime()
             owned = null
+            check(!success(runtime.isOpen(owner, deviceId)))
 
             val (file, original) = retainedRecord()
             val credentials = AndroidCredentialStore(context, file.name.removeSuffix(".enc"))

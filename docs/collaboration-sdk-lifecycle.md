@@ -224,3 +224,24 @@ successful retry with the same cursor, then both decrypted replies and complete
 cleanup. Cursor values, digests and credentials are excluded from the report.
 The original transaction and device identity must survive throughout. Product
 routes, offline projections and logical-message reconciliation remain separate.
+
+## Application entry reuse
+
+`EnsureCollaborationRuntime` admits the current HRIS owner and checks `isOpen`
+without handing a parent close capability to the route. An existing client is
+reused; otherwise the shared acquisition instance restores a paused stored client
+once. False means an explicit bootstrap is needed. Neither branch enrolls a device,
+starts synchronization, resumes delivery or resets protected keys. Missing native
+bindings report unavailable rather than pretending bootstrap would work.
+
+The repository publishes entry availability only after SDK restoration and durable
+initialization finish. A registered but incomplete client reports opening; it cannot
+be used for timeline entry. Closing clients also stop being available. All resources
+remain registered with the application owner through pending cleanup.
+
+Owner checks follow the probe and restoration. Late/cancelled/mismatched restoration
+closes only the lease created by that attempt. A reused application parent is never
+closed by a cancelled route. Received and owned credential denial survive failed
+post-request reads and failed disposal. The use case returns scoped readiness,
+not a raw SDK client or parent lease. Existing explicit install/restore APIs retain
+their separate ownership contracts for setup and recovery.

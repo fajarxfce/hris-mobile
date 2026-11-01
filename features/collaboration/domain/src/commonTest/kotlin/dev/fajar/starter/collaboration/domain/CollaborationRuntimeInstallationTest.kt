@@ -359,6 +359,11 @@ private class InstallationFixture {
         }
     private val runtimes =
         object : CollaborationRuntimeRepository {
+            override suspend fun isOpen(
+                owner: CollaborationOwner,
+                deviceId: String,
+            ): AppResult<Boolean> = error("No implicit runtime probe")
+
             override suspend fun enterTimeline(
                 owner: CollaborationOwner,
                 deviceId: String,

@@ -31,6 +31,11 @@ class CollaborationBindingsTest {
             var suppliedServer: IdentityServer? = null
             val runtime =
                 object : CollaborationRuntimeRepository {
+                    override suspend fun isOpen(
+                        owner: CollaborationOwner,
+                        deviceId: String,
+                    ): AppResult<Boolean> = error("No implicit runtime probe")
+
                     override suspend fun enterTimeline(
                         owner: CollaborationOwner,
                         deviceId: String,
@@ -101,6 +106,10 @@ class CollaborationBindingsTest {
                 assertNotNull(container.koin.get<ReconcileCollaborationSetupReceipt>())
                 assertNotNull(container.koin.get<InstallCollaborationRuntime>())
                 assertNotNull(container.koin.get<RestoreCollaborationRuntime>())
+                assertSame(
+                    container.koin.get<EnsureCollaborationRuntime>(),
+                    container.koin.get<EnsureCollaborationRuntime>(),
+                )
                 assertNotNull(container.koin.get<EnterCollaborationConversation>())
                 lifetime.start()
                 lifetime.start()

@@ -29,6 +29,26 @@ class AndroidCollaborationRuntimeRepository(
     private val capacity = Semaphore(5)
     private val leases = ConcurrentHashMap.newKeySet<AndroidCollaborationRuntimeLease>()
 
+    override suspend fun isOpen(owner: CollaborationOwner, deviceId: String): AppResult<Boolean> {
+        currentCoroutineContext().ensureActive()
+        val existing =
+            leases.singleOrNull {
+                it.owner == owner && it.deviceId == deviceId && !it.closingRequested
+            } ?: return AppResult.Success(false)
+        existing.credentialFailures.value?.let {
+            return AppResult.Failed(it)
+        }
+        if (!existing.availableForEntry)
+            return AppResult.Failed(
+                Failure(
+                    FailureKind.Unavailable,
+                    "Chat is still opening.",
+                    code = "client.collaboration_runtime_opening",
+                )
+            )
+        return AppResult.Success(true)
+    }
+
     override suspend fun install(
         owner: CollaborationOwner,
         command: CollaborationSetupCommandRecord,
@@ -53,7 +73,7 @@ class AndroidCollaborationRuntimeRepository(
     ): AppResult<CollaborationTimelineLease> {
         val runtime =
             leases.singleOrNull {
-                it.owner == owner && it.deviceId == deviceId && !it.closingRequested
+                it.owner == owner && it.deviceId == deviceId && it.availableForEntry
             }
                 ?: return AppResult.Failed(
                     Failure(
@@ -135,6 +155,7 @@ class AndroidCollaborationRuntimeRepository(
                 is AppResult.Success -> Unit
             }
             currentCoroutineContext().ensureActive()
+            lease.completeAcquisition()
             handedOver = true
             return lease
         } finally {
