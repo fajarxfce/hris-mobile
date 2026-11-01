@@ -1,0 +1,44 @@
+{
+  "date": "2026-11-01",
+  "baseCommit": "f9041e62",
+  "inputsSha256": {
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationDraft.kt": "412dae4978998464da454cb9a05b5135e1c31254fe4a6ca31bf1fb26afd19856",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationDraftPolicy.kt": "2ed9f64057cb3f0203da70d7ae5d09f55f4887e461f34c5769537da1454dc942",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationDraftRepository.kt": "3716cc3690dd1bef1f68b0cbb43864c4bc072f266e27a87e51097488353b96fd",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/CollaborationDraftAccess.kt": "34b4787210c0960090032c5bbb9933347e3d4d4c75af8ff3da8892146976fc01",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ConfirmCollaborationDraftSend.kt": "0a231e665e4a2d9a0d28ea79901be01383df2c8a959ecb964315be182f4962ed",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/EditCollaborationDraft.kt": "ff4c691c32e81829c2f764e842bec39ab4e8e0b85f2f79f757d215d9879cb855",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ObserveCollaborationDraft.kt": "acdf78c7c8c72bde2bb1e54ab46493b16286190964aa47c6643c7486c11d4b7d",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/PrepareCollaborationDraftSend.kt": "4d8875b2cb30c74100fdac0596392e931afd307098645ffa89aeb6a2a29ba448",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationDraftUseCasesTest.kt": "c169b2b777ee1e7cf823f2429b144913d6954c8c0507be4cf7b8158b17bbe319"
+  },
+  "validation": {
+    "command": "xvfb-run -a ./gradlew --no-daemon --no-parallel --max-workers=1 -Dorg.gradle.jvmargs=-Xmx1536m :features:collaboration:domain:desktopTest :features:collaboration:domain:wasmJsBrowserTest :formatCheck :architectureCheck :detekt",
+    "gradleSeconds": 75,
+    "wallSeconds": 78.44,
+    "exit": 0,
+    "desktop": {
+      "suites": 32,
+      "tests": 381,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "browser": {
+      "suites": 32,
+      "tests": 381,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "newScenariosPerTarget": 12,
+    "logSha256": "a7eb905cef89f07258fd2681f167a178990ffb775b9e892e40c7e14e734d032c"
+  },
+  "scope": [
+    "Local Observe/Edit/Prepare/Confirm policy only; no SDK or delivery in preparation.",
+    "Prepare freezes exact text with prior editing revision as submission ID and a fresh draft revision.",
+    "Confirmation uses the repository exact command/archive lookup; missing/failed/mismatching lookup retains draft, and newer slots are preserved.",
+    "No UI/application integration or prepare-to-outbox recovery acceptance yet.",
+    "Release 7 remains installed; these additions are not in that APK."
+  ]
+}

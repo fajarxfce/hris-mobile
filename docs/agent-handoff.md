@@ -1,5 +1,25 @@
 # Agent continuation — HRIS Mobile
 
+## Draft transition policy validated; composer wiring next — 1 November 2026
+
+Five new domain use-case/helper files and twelve scenarios implement owned Observe/Edit/
+Prepare/Confirm. Local age does not hide drafts; denial/cancellation/late owner checks bracket
+I/O. Editing retries its caller-retained revision; freeze uses the prior editing revision as
+submission ID and a fresh draft revision. Confirmation requires exact durable command or
+archived completion and preserves newer text. [Evidence](measurements/chat-draft-policy-2026-11-01.json):
+75s Gradle / 78.44s wall; 381 JVM and 381 browser cases in 32 suites each, quality checks pass.
+No UI/DI integration yet. Release 7 is still installed. Continue immediately with a bounded
+composer save owner, process reopen/retry, explicit prepare-to-outbox crash recovery, then all
+remaining PRD work. Do not treat this policy checkpoint as completion.
+
+Hosted native 41334029287 at `bf83c71e` **failed**: SDK 47.387s and scheduled 56.862s pass,
+direct worker 163.103s exhausts four bounded attempts at HrisWorkerMatrixProbe:184 before
+foreground assertions. All use proof APK `8d391c22`; driver cleanup true. Final retry reason
+was lost to a generic check, so direct delivery is unknown. Artifacts/log are retained under
+`.work/ci-41334029287`; audit/record and add bounded controlled retry diagnostics before
+investigating/re-running. Apple 41334974289 at `c0e91d6b` was building its simulator app;
+compile passed, test execution has not yet been audited. Do not port its fixture before proof.
+
 ## Composer storage validated; policy/UI next — 1 November 2026
 
 [Draft storage](collaboration-drafts.md) adds eight domain/data/test inputs: immutable draft
