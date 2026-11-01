@@ -1,4 +1,9 @@
 <resources>
+    <string name="chat_cancel_send_id">Batalkan kirim</string>
+    <string name="chat_cancel_title_id">Batalkan pesan ini?</string>
+    <string name="chat_cancel_explanation_id">Hanya pesan yang belum mulai dikirim yang dapat dibatalkan.</string>
+    <string name="chat_cancellation_pending_id">Pembatalan belum terkonfirmasi. Coba lagi untuk memeriksa pesan ini.</string>
+    <string name="chat_cancellation_unavailable_id">Pesan sudah berubah atau mulai dikirim sehingga tidak dapat dibatalkan.</string>
     <string name="chat_setup_title_id">Siapkan chat</string>
     <string name="chat_setup_checking_id">Memeriksa kesiapan chat</string>
     <string name="chat_setup_activate_id">Chat di perangkat ini</string>

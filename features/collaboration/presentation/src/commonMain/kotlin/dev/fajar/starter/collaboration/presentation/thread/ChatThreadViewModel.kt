@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.policies.collaborationContentResponseClosesRead
 import dev.fajar.starter.collaboration.domain.policies.localListAccess
+import dev.fajar.starter.collaboration.domain.policies.validCollaborationCancellation
 import dev.fajar.starter.collaboration.domain.policies.validCollaborationText
 import dev.fajar.starter.collaboration.domain.usecases.*
 import dev.fajar.starter.common.result.*
@@ -46,10 +47,13 @@ class ChatThreadViewModel(
     private val editDraft: EditCollaborationDraft,
     private val prepareDraftSend: PrepareCollaborationDraftSend,
     private val confirmDraftSend: ConfirmCollaborationDraftSend,
+    private val cancelText: CancelCollaborationText,
 ) : MviViewModel<ChatThreadState, ChatThreadEvent, ChatThreadEffect>(ChatThreadState()) {
     private var observation: Job? = null
     private var connection: Job? = null
     private var submission: Job? = null
+    private var cancellationJob: Job? = null
+    private var cancellationSelection: ChatCancellationSelection? = null
     private var visible = false
     private var access: CollaborationLocalAccess? = null
     private var context: CollaborationThreadContext? = null
@@ -98,6 +102,9 @@ class ChatThreadViewModel(
         on<ChatThreadEvent.DraftRetryRequested>(::onDraftRetryRequested)
         on<ChatThreadEvent.DraftDialogDismissed>(::onDraftDialogDismissed)
         on<ChatThreadEvent.DraftDialogConfirmed>(::onDraftDialogConfirmed)
+        on<ChatThreadEvent.CancelRequested>(::onCancelRequested)
+        on<ChatThreadEvent.CancellationConfirmed>(::onCancellationConfirmed)
+        on<ChatThreadEvent.CancellationDismissed>(::onCancellationDismissed)
     }
 
     private fun onEntered(event: ChatThreadEvent.Entered) {
@@ -195,6 +202,7 @@ class ChatThreadViewModel(
     }
 
     private fun clearScope() {
+        dismissCancellation()
         connection?.cancel()
         connection = null
         submission?.cancel()
@@ -236,6 +244,17 @@ class ChatThreadViewModel(
 
     private fun project() {
         val owned = access ?: return
+        val selectedCancellation = cancellationSelection
+        val dialog = state.value.cancellationDialog
+        if (
+            selectedCancellation != null &&
+                dialog != null &&
+                !dialog.busy &&
+                dialog.failure == null &&
+                selectedCancellation.record !in pending
+        ) {
+            updateState { it.copy(cancellationDialog = dialog.copy(unavailable = true)) }
+        }
         when (
             val rows =
                 chatThreadRows(
@@ -270,6 +289,7 @@ class ChatThreadViewModel(
 
     private fun onStopped(event: ChatThreadEvent.Stopped) {
         visible = false
+        dismissCancellation()
         connection?.cancel()
         connection = null
         submission?.cancel()
@@ -291,11 +311,106 @@ class ChatThreadViewModel(
     }
 
     private fun onBackRequested(event: ChatThreadEvent.BackRequested) {
+        if (state.value.cancellationDialog != null) {
+            dismissCancellation()
+            return
+        }
         leaveThread(ChatThreadEffect.Back)
     }
 
     private fun onSetupRequested(event: ChatThreadEvent.SetupRequested) {
+        dismissCancellation()
         leaveThread(ChatThreadEffect.Setup)
+    }
+
+    private fun onCancelRequested(event: ChatThreadEvent.CancelRequested) {
+        val owned = access ?: return
+        val current = state.value
+        if (
+            !visible ||
+                current.leaving ||
+                current.localFailure != null ||
+                current.saving ||
+                current.draftDialog != null ||
+                current.cancellationDialog != null
+        )
+            return
+        if (current.rows.none { it.localId == event.id && it.canCancel }) return
+        val record = pending.singleOrNull { it.intent.id == event.id } ?: return
+        if (record.intent.owner != owned.messageOwner() || !validCollaborationCancellation(record))
+            return
+        cancellationSelection = ChatCancellationSelection(owned, record)
+        updateState { it.copy(cancellationDialog = ChatCancellationDialog(record.intent.text)) }
+    }
+
+    private fun onCancellationConfirmed(event: ChatThreadEvent.CancellationConfirmed) {
+        val selected = cancellationSelection ?: return
+        val dialog = state.value.cancellationDialog ?: return
+        if (
+            !visible ||
+                dialog.busy ||
+                dialog.unavailable ||
+                state.value.localFailure != null ||
+                selected.access != access
+        )
+            return
+        updateState { it.copy(cancellationDialog = dialog.copy(busy = true, failure = null)) }
+        cancellationJob =
+            viewModelScope.launch {
+                val result =
+                    withTimeoutOrNull(5_000) {
+                        cancelText(workspaceId, selected.access, selected.record)
+                    }
+                        ?: AppResult.Failed(
+                            Failure(
+                                FailureKind.Unavailable,
+                                "Cancellation is unconfirmed.",
+                                code = "client.collaboration_cancellation_pending",
+                            )
+                        )
+                ensureActive()
+                if (selected !== cancellationSelection || selected.access != access) return@launch
+                cancellationJob = null
+                when (result) {
+                    is AppResult.Success -> {
+                        cancellationSelection = null
+                        updateState { it.copy(cancellationDialog = null) }
+                    }
+                    is AppResult.Failed -> {
+                        if (collaborationContentResponseClosesRead(result.failure))
+                            restrict(result.failure)
+                        else
+                            updateState {
+                                it.copy(
+                                    cancellationDialog =
+                                        dialog.copy(
+                                            busy = false,
+                                            failure = result.failure,
+                                            unavailable =
+                                                result.failure.code ==
+                                                    "client.collaboration_cancellation_unavailable",
+                                        )
+                                )
+                            }
+                    }
+                }
+            }
+    }
+
+    private fun onCancellationDismissed(event: ChatThreadEvent.CancellationDismissed) {
+        dismissCancellation()
+    }
+
+    private fun dismissCancellation() {
+        cancellationJob?.cancel()
+        cancellationJob = null
+        cancellationSelection = null
+        updateState { it.copy(cancellationDialog = null) }
+    }
+
+    override fun onCleared() {
+        dismissCancellation()
+        super.onCleared()
     }
 
     private fun onRefreshRequested(event: ChatThreadEvent.RefreshRequested) {
@@ -507,6 +622,7 @@ class ChatThreadViewModel(
     }
 
     private fun onDraftRetryRequested(event: ChatThreadEvent.DraftRetryRequested) {
+        if (state.value.cancellationDialog != null) return
         if (!visible || state.value.saving || state.value.draftSaving || state.value.leaving) return
         if (state.value.draftFailure?.code == "client.collaboration_draft_changed") {
             updateState { it.copy(draftDialog = ChatDraftDialog.RELOAD) }

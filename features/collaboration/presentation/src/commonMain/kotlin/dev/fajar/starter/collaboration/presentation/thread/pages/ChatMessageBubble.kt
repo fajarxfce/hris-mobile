@@ -11,16 +11,23 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.presentation.thread.*
+import dev.fajar.starter.designsystem.components.AppIconButton
 import dev.fajar.starter.designsystem.components.AppText
 import dev.fajar.starter.designsystem.theme.AppColors
 import dev.fajar.starter.localization.*
 import io.github.composefluent.FluentTheme
+import io.github.composefluent.icons.Icons
+import io.github.composefluent.icons.regular.Dismiss
 import kotlin.time.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
 @Composable
-internal fun ChatMessageBubble(row: ChatMessageRow, modifier: Modifier = Modifier) {
+internal fun ChatMessageBubble(
+    row: ChatMessageRow,
+    modifier: Modifier = Modifier,
+    onCancel: (() -> Unit)? = null,
+) {
     val own = row.ownership == ChatMessageOwnership.SELF
     Box(
         modifier.fillMaxWidth(),
@@ -73,11 +80,20 @@ internal fun ChatMessageBubble(row: ChatMessageRow, modifier: Modifier = Modifie
                         )
                     )
             }
-            AppText(
-                details.joinToString(" · "),
-                style = FluentTheme.typography.caption,
-                color = AppColors.muted,
-            )
+            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                AppText(
+                    details.joinToString(" · "),
+                    modifier = Modifier.weight(1f),
+                    style = FluentTheme.typography.caption,
+                    color = AppColors.muted,
+                )
+                if (onCancel != null)
+                    AppIconButton(
+                        Icons.Regular.Dismiss,
+                        appString(AppString.ChatCancelSend),
+                        onCancel,
+                    )
+            }
         }
     }
 }

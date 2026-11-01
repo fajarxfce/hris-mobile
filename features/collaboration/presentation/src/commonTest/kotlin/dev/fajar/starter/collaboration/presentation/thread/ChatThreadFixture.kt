@@ -36,6 +36,12 @@ internal class ChatThreadFixture {
             null,
         )
     val records = MutableStateFlow<List<CollaborationMessageRecord>>(emptyList())
+    val cancelled = mutableMapOf<String, CollaborationMessageRecord>()
+    val cancellations = mutableListOf<CollaborationMessageRecord>()
+    var beforeCancel: suspend () -> Unit = {}
+    var afterCancel: suspend () -> Unit = {}
+    var cancelFailure: Failure? = null
+    var rejectCancel = false
     val historyRows = MutableStateFlow<List<CollaborationHistoryMessage>>(emptyList())
     val updates =
         MutableStateFlow<AppResult<List<CollaborationTimelineItem>>>(AppResult.Success(emptyList()))
@@ -148,7 +154,7 @@ internal class ChatThreadFixture {
                 records.map { AppResult.Success(it) }
 
             override suspend fun get(access: CollaborationLocalAccess, id: String) =
-                AppResult.Success(records.value.find { it.intent.id == id })
+                AppResult.Success(records.value.find { it.intent.id == id } ?: cancelled[id])
 
             override suspend fun insert(
                 access: CollaborationLocalAccess,
@@ -174,6 +180,25 @@ internal class ChatThreadFixture {
                         else it
                     }
                 return AppResult.Success(true)
+            }
+        }
+    val cancellationRepository =
+        object : CollaborationMessageCancellationRepository {
+            override suspend fun cancel(
+                access: CollaborationLocalAccess,
+                expected: CollaborationMessageRecord,
+            ): AppResult<Boolean> {
+                cancellations += expected
+                beforeCancel()
+                currentCoroutineContext().ensureActive()
+                if (rejectCancel) return AppResult.Success(false)
+                val retained = expected.copy(state = CollaborationMessageState.Cancelled)
+                if (cancelled[expected.intent.id] == retained) return AppResult.Success(true)
+                if (expected !in records.value) return AppResult.Success(false)
+                records.value -= expected
+                cancelled[expected.intent.id] = retained
+                afterCancel()
+                return cancelFailure?.let { AppResult.Failed(it) } ?: AppResult.Success(true)
             }
         }
     val history =
@@ -502,6 +527,15 @@ internal class ChatThreadFixture {
                     build,
                     clock,
                     messages,
+                ),
+                CancelCollaborationText(
+                    cancellationRepository,
+                    local,
+                    sessions,
+                    workspaces,
+                    server,
+                    build,
+                    clock,
                 ),
             )
         }

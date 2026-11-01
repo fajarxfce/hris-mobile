@@ -18,6 +18,7 @@ data class ChatThreadState(
     val draftSaving: Boolean = false,
     val draftFailure: Failure? = null,
     val draftDialog: ChatDraftDialog? = null,
+    val cancellationDialog: ChatCancellationDialog? = null,
     val leaving: Boolean = false,
     val submissionPending: Boolean = false,
     val saving: Boolean = false,
@@ -41,6 +42,7 @@ data class ChatThreadState(
                 !submissionPending &&
                 !saving &&
                 !leaving &&
+                cancellationDialog == null &&
                 draftDialog == null
 
     val canSend: Boolean
@@ -49,11 +51,21 @@ data class ChatThreadState(
                 draftReady &&
                 !leaving &&
                 draftDialog == null &&
+                cancellationDialog == null &&
                 localFailure == null &&
                 !saving &&
                 (submissionPending || draft.isNotBlank())
 
     override fun toString() = "ChatThreadState([redacted])"
+}
+
+data class ChatCancellationDialog(
+    val text: String,
+    val busy: Boolean = false,
+    val failure: Failure? = null,
+    val unavailable: Boolean = false,
+) {
+    override fun toString() = "ChatCancellationDialog([redacted])"
 }
 
 enum class ChatDraftDialog {

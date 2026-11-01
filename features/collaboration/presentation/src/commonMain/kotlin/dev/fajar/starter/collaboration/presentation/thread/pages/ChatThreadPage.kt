@@ -89,7 +89,19 @@ fun ChatThreadPage(
                         )
                     }
                 items(state.rows, key = { it.key }, contentType = { "message" }) {
-                    ChatMessageBubble(it)
+                    val id = it.localId
+                    ChatMessageBubble(
+                        it,
+                        onCancel =
+                            if (
+                                it.canCancel &&
+                                    id != null &&
+                                    state.localFailure == null &&
+                                    !state.leaving
+                            )
+                                ({ onEvent(ChatThreadEvent.CancelRequested(id)) })
+                            else null,
+                    )
                 }
                 if (state.loading || state.loadingOlder) item("loading") { AppLoading() }
                 if (state.hasOlder)
@@ -156,6 +168,7 @@ fun ChatThreadPage(
             }
         }
     }
+    state.cancellationDialog?.let { ChatCancellationDialog(it, onEvent) }
 }
 
 @Composable

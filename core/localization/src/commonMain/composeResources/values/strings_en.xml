@@ -1,4 +1,9 @@
 <resources>
+    <string name="chat_cancel_send_en">Cancel send</string>
+    <string name="chat_cancel_title_en">Cancel this message?</string>
+    <string name="chat_cancel_explanation_en">Only a message that has not started sending can be cancelled.</string>
+    <string name="chat_cancellation_pending_en">Cancellation is not confirmed yet. Retry to check this message.</string>
+    <string name="chat_cancellation_unavailable_en">This message has changed or started sending and can no longer be cancelled.</string>
     <string name="chat_setup_title_en">Set up chat</string>
     <string name="chat_setup_checking_en">Checking chat setup</string>
     <string name="chat_setup_activate_en">Chat on this device</string>

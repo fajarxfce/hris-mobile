@@ -1,5 +1,32 @@
 # Agent continuation — HRIS Mobile
 
+## Queued cancellation UI validated; install release 10 next — 1 November 2026
+
+The [cancellation contract](collaboration-cancellation.md) now includes explicit confirmation,
+exact-selection retry after lost replies, duplicate suppression, a five-second waiter deadline,
+changed/started-message rejection and late account/disposal fences. Only eligible owned Queued
+rows expose the action. The current draft is preserved; modal interactions cannot stack.
+
+[UI measurement](measurements/chat-cancellation-ui-2026-11-01.json): 64 cumulative inputs,
+17 changed source files. Full check passes 205s Gradle / 208.895s wall with 2,840 desktop,
+401 domain/263 data/101 presentation browser, 170 Android host, six cleanup cases, proof
+APK/lint (zero fatal/errors, 47 warnings) and format/architecture/detekt. Focused cancellation
+ViewModel ten and thread layout eight cases pass. Initial compilation failed only two test
+generic-inference expressions; corrected and retained. A subsequent new desktop-only test
+runs an actual 320 × 640 dialog at 200% font; desktop/quality passes 48s / 51.475s with fixed
+Close/Retry controls while the long body scrolls. Three screenshots were visually inspected;
+full and supplemental commands keep separate source/report attribution.
+
+**Continue immediately:** commit/push, then clean signed release 10 using
+`.work/release-phone-2026-11-01-build10/run-reviewed-build.py`. Notify before installing,
+use install-only on 10.77.77.3:5555, verify the pulled APK and commit/push release evidence.
+Phone remains release 9 until that succeeds. Then actual native cancellation proof,
+FCM/replies and all remaining P0–P8. No complete feature group or live provider rollout.
+
+Hosted four-case run 41344248284 at 448ab3ad / Platform bad75bd0 has completed successfully;
+download and audit its exact artifacts next. It predates cancellation. The earlier three-case
+41340935053 audit is already recorded. All previous checkpoints below are historical.
+
 ## Hosted recovery regression audited; continue cancellation UI — 1 November 2026
 
 [Run 41340935053 audit](measurements/chat-draft-recovery-native-ci-2026-11-01.json) at 1ddfba6e /

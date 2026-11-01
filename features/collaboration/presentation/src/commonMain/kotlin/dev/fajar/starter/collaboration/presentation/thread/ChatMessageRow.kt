@@ -19,6 +19,7 @@ data class ChatMessageRow(
     val text: String?,
     val delivery: CollaborationMessageDelivery,
     val edited: Boolean = false,
+    val canCancel: Boolean = false,
 ) {
     override fun toString() = "ChatMessageRow([redacted])"
 }

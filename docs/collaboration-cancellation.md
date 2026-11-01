@@ -35,8 +35,31 @@ proof substitution and caller/account cancellation. Nine policy cases and three 
 SQLite/DI worker cases pass, plus Stage regressions. Application tests use a fake native
 transport; earlier actual SDK/Synapse proofs remain attributed to their original source.
 
-Next: expose an explicit confirmation action only on owned Queued messages, retain the exact
-selection through uncertain replies, fence late results after scope changes/disposal, and
-verify narrow/large-text controls. Then native cancellation interoperability, incoming
-notifications/replies and all remaining communications work. Release 9 predates cancellation.
-No generic Starter policy or database schema change is required.
+The confirmation UI exposes a 48 dp action only on unmatched owned Queued/revision-0
+rows. The ViewModel retains the complete selected record and captured access across lost
+replies; duplicate confirmations are ignored, and retry uses that same identity even after
+the pending row disappears. Changed/started work becomes unavailable. A five-second waiter
+deadline retains an unconfirmed result for retry. Close, Back, Stop and disposal cancel the
+obsolete waiter; object identity and access reject uncooperative late results. Closing a
+dialog does not undo an archive commit. Draft and cancellation modals cannot stack.
+
+[UI evidence](measurements/chat-cancellation-ui-2026-11-01.json) binds 64 cumulative inputs
+and 17 changed source files. Full integration passed in 205s Gradle / 208.895s wall with
+2,840 desktop cases, 401 domain/263 data/101 presentation browser, 170 Android host and six
+proof cleanup cases. Ten cancellation ViewModel cases cover retry, late disposal/scope
+results and competing selections; eight thread layout cases pass. Lint has zero fatal/errors
+and 47 warnings. The first attempt failed only two test generic-inference expressions; both
+were corrected and the failed source/log retained.
+
+A separate 48s / 51.475s desktop/quality pass adds an actual 320 × 640 dialog-window test
+without changing production inputs. At 200% font, long preview/failure content scrolls while
+Close and Retry stay fixed inside the dialog. Three screenshots were visually inspected:
+[queued action](images/chat-thread/chat-cancel-queued-large-text.png),
+[regular dialog](images/chat-thread/chat-cancellation-dialog-large-text.png), and
+[narrow dialog](images/chat-thread/chat-cancellation-dialog-narrow-large-text.png).
+The regular dialog capture is 1024 × 768; the independent narrow capture establishes the
+320-pixel boundary. Full and supplemental reports retain their own source attribution.
+
+Next: clean release 10+ installation, then actual native cancellation interoperability,
+incoming notifications/replies and all remaining communications work. Release 9 predates
+cancellation. No generic Starter policy or database schema change is required.

@@ -7,6 +7,40 @@ import kotlin.test.*
 import kotlin.time.Instant
 
 class ChatThreadProjectionTest {
+    @Test
+    fun cancellationIsAvailableOnlyForAnUnmatchedOriginalQueuedRow() {
+        val queued = CollaborationMessageRecord(intent, 0, CollaborationMessageState.Queued)
+        assertTrue(rows(pending = listOf(queued)).single().canCancel)
+        assertFalse(rows(pending = listOf(queued.copy(revision = 1))).single().canCancel)
+        assertFalse(rows(pending = listOf(staged)).single().canCancel)
+        assertFalse(
+            rows(
+                    pending =
+                        listOf(
+                            staged.copy(
+                                state =
+                                    CollaborationMessageState.Staging(device, emptySet(), origin)
+                            )
+                        )
+                )
+                .single()
+                .canCancel
+        )
+        assertFalse(rows(history = listOf(original), pending = listOf(staged)).single().canCancel)
+        assertFalse(rows(timeline = listOf(native)).single().canCancel)
+        assertIs<AppResult.Failed>(
+            chatThreadRows(
+                owner,
+                conversation,
+                self,
+                device,
+                emptyList(),
+                listOf(queued.copy(state = CollaborationMessageState.Cancelled)),
+                emptyList(),
+            )
+        )
+    }
+
     private val sender = "@self:example.test"
     private val self = CollaborationSelfIdentity(sender)
     private val owner =

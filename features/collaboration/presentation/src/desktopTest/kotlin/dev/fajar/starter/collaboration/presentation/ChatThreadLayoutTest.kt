@@ -27,6 +27,115 @@ class ChatThreadLayoutTest {
     @get:Rule val compose = createComposeRule()
 
     @Test
+    fun queuedMessageCancelActionRemainsReachableAtNarrowLargeText() {
+        val events = mutableListOf<ChatThreadEvent>()
+        val queued =
+            row("queued", "Pesan ini masih menunggu koneksi.", ChatMessageOwnership.SELF)
+                .copy(
+                    localId = "queued",
+                    eventId = null,
+                    delivery = CollaborationMessageDelivery.PENDING,
+                    canCancel = true,
+                )
+        compose.setContent {
+            val density = LocalDensity.current
+            CompositionLocalProvider(
+                LocalDensity provides Density(density.density, 2f),
+                LocalAppLanguage provides AppLanguage.Indonesian,
+            ) {
+                AppTheme {
+                    Box(Modifier.size(320.dp, 640.dp).testTag("frame")) {
+                        ChatThreadPage(
+                            ChatThreadState(
+                                title = "Dewi Kartika",
+                                rows = listOf(queued),
+                                loading = false,
+                                draftReady = true,
+                            ),
+                            rememberLazyListState(),
+                            events::add,
+                        )
+                    }
+                }
+            }
+        }
+        compose
+            .onNodeWithContentDescription("Batalkan kirim")
+            .assertIsDisplayed()
+            .assertWidthIsAtLeast(48.dp)
+            .assertHeightIsAtLeast(48.dp)
+            .performClick()
+        compose.onNodeWithContentDescription("Kembali").assertIsDisplayed()
+        compose.onNodeWithContentDescription("Pesan").assertIsDisplayed()
+        compose.runOnIdle {
+            assertEquals(listOf<ChatThreadEvent>(ChatThreadEvent.CancelRequested("queued")), events)
+        }
+        screenshot("chat-cancel-queued-large-text")
+    }
+
+    @Test
+    fun cancellationDialogRetainsReachableControlsAndDoesNotConfirmTwiceWhileBusy() {
+        val events = mutableListOf<ChatThreadEvent>()
+        var dialog by
+            mutableStateOf(ChatCancellationDialog("Cuplikan pesan yang dipilih. ".repeat(150)))
+        compose.setContent {
+            val density = LocalDensity.current
+            CompositionLocalProvider(
+                LocalDensity provides Density(density.density, 2f),
+                LocalAppLanguage provides AppLanguage.Indonesian,
+            ) {
+                AppTheme {
+                    ChatThreadPage(
+                        ChatThreadState(
+                            title = "Dewi Kartika",
+                            loading = false,
+                            cancellationDialog = dialog,
+                        ),
+                        rememberLazyListState(),
+                        { event ->
+                            events += event
+                            if (event == ChatThreadEvent.CancellationConfirmed)
+                                dialog = dialog.copy(busy = true)
+                        },
+                    )
+                }
+            }
+        }
+        val action = compose.onNode(hasText("Batalkan kirim") and hasClickAction())
+        action.assertIsDisplayed().assertHeightIsAtLeast(48.dp).performClick()
+        action.assertIsNotEnabled()
+        compose.onNodeWithContentDescription("Tutup").assertIsDisplayed()
+        compose.runOnIdle {
+            assertEquals(listOf<ChatThreadEvent>(ChatThreadEvent.CancellationConfirmed), events)
+            dialog =
+                dialog.copy(
+                    busy = false,
+                    failure =
+                        dev.fajar.starter.common.result.Failure(
+                            dev.fajar.starter.common.result.FailureKind.Storage,
+                            "Unavailable",
+                        ),
+                )
+        }
+        compose
+            .onNode(hasText("Coba lagi") and hasClickAction())
+            .assertIsDisplayed()
+            .assertIsEnabled()
+        Image.makeFromBitmap(compose.onNode(isDialog()).captureToImage().asSkiaBitmap()).use { image
+            ->
+            checkNotNull(image.encodeToData()).use { data ->
+                File("build/reports/screenshots").mkdirs()
+                File("build/reports/screenshots/chat-cancellation-dialog-large-text.png")
+                    .writeBytes(data.bytes)
+            }
+        }
+        compose.runOnIdle { dialog = dialog.copy(unavailable = true) }
+        compose.onNode(hasText("Coba lagi") and hasClickAction()).assertDoesNotExist()
+        compose.onNode(hasText("Tutup") and hasClickAction()).assertIsDisplayed().performClick()
+        compose.runOnIdle { assertEquals(ChatThreadEvent.CancellationDismissed, events.last()) }
+    }
+
+    @Test
     fun draftReadAndCompactFailureKeepInputAndRetryUsableAtLargeText() {
         val events = mutableListOf<ChatThreadEvent>()
         var state by

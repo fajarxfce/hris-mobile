@@ -1,6 +1,7 @@
 package dev.fajar.starter.collaboration.presentation.thread
 
 import dev.fajar.starter.collaboration.domain.entities.*
+import dev.fajar.starter.collaboration.domain.policies.validCollaborationCancellation
 import dev.fajar.starter.common.result.*
 
 /** Presentation only: no ACK, retirement, queue replay or durable history mutation. */
@@ -19,6 +20,8 @@ internal fun chatThreadRows(
     if (pending.map { it.intent.id }.distinct().size != pending.size)
         return invalidThreadProjection()
     if (pending.any { it.intent.owner != owner || it.intent.conversationId != conversationId })
+        return invalidThreadProjection()
+    if (pending.any { it.state == CollaborationMessageState.Cancelled })
         return invalidThreadProjection()
     if (timeline.isNotEmpty() && timelineDevice == null) return invalidThreadProjection()
     val rows = mutableListOf<ChatMessageRow>()
@@ -91,6 +94,7 @@ internal fun chatThreadRows(
                 record.intent.text,
                 if (sent) CollaborationMessageDelivery.SENT
                 else native?.delivery ?: CollaborationMessageDelivery.PENDING,
+                canCancel = !sent && native == null && validCollaborationCancellation(record),
             )
     }
     for (item in timeline) {
