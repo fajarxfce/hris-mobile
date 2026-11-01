@@ -282,6 +282,7 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
                 "providerHistoryPageOwned",
                 "commonProviderHistoryAcquisitionOwned",
                 "providerHistoryReferencesRestored",
+                "providerHistoryReferencesReconciled",
             )) {
             put(flag, history.remove(flag) == true)
         }

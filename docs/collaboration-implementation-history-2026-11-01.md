@@ -1035,3 +1035,61 @@ counterpart changes documentation only.
 
 No live/schema/phone change. Atomic commits and push after every commit remain
 authorized. Continue after this checkpoint; the user requested the full plan.
+
+## Common admitted provider-page acquisition — 1 November 2026
+
+**The common provider-page acquisition now admits and persists actual Android history.**
+[Evidence](measurements/collaboration-provider-acquisition-2026-11-01.json) records
+run **`a2ba509605044f839df46181f997094f`**, **41.858s test case / 63.401s native suite /
+95s Gradle**, cleanup complete. The proof stages the initial page through the common
+use case, reopens the real encrypted database, verifies every reference/checkpoint,
+replays the start and acquires again using its restored continuation. Gateway
+observations require increasing admission counts between each metadata request and
+after the last one: **9/9/9 device/conversation/room reads, zero failures**. Earlier
+original bodies, encrypted exchange, queue isolation and process-death checks pass.
+
+`AcquireCollaborationProviderHistory` checks the live owner, company read gate,
+active platform device, owned direct conversation and ready room. It reads the
+saved progress, makes one bounded request, validates the full native owner and
+exact requested position, readmits the room and stages all references atomically.
+Every suspended boundary rechecks owner/gate, including after commit. A cancelled,
+conflicting, late-denied or lost response cannot become success or trigger a retry.
+SDK token expiry/recipient failures retain the existing company read policy.
+An exhausted checkpoint starts no provider request. The count describes received
+references, not new messages or decrypted bodies. No bootstrap, queue delivery,
+cursor reset or original-reference resolution was added. See [the history contract](collaboration-history.md#admitted-provider-page-acquisition).
+
+Fourteen new common cases pass. Focused domain desktop/browser, Android host,
+proof assembly and quality checks pass in **113s**. After adding actual persistence
+callbacks and stricter trace checks, full root/browser/Android/Wasm/proof/lint
+passes in **322s**: **2,423 desktop / 156 Android host / 219 domain browser /
+178 data browser**, zero failures/errors/skips and zero lint errors. Platform
+fixture compilation/quality passes in **34s**; 35 Python driver cases pass.
+All **256 Mobile / 33 Platform source hashes** match. Dev APK **`5dce0767`** is
+built, not installed; actual proof uses **`2deadcd9`**. The emulator is stopped.
+The HRIS workflow pins the tested Platform fixture **`14290348`**.
+
+**Next: resolve retained references into original-message projections while keeping
+unsupported/unavailable references recoverable.** Preserve first-observed reference
+identity and atomic progress; do not equate provider exhaustion with complete
+message decryption. Add explicit cursor-reset/reference-resolution policy,
+coordinated SDK reopening (16 retained focus keys per client), ACK-before-journal
+reconciliation and command retirement, then Chat UI. Continue all P0–P8 and all
+54 groups; **none is accepted**. Apple/web owned adapters, cross-family recovery,
+backup, rich messaging and every call/meeting phase remain. Physical iPhone testing
+is waived; Apple implementation/interoperability remains required. Starter stays
+clean at `36116b2`; this HRIS policy/storage work has no generic foundation port.
+
+Provider-page HRIS **`41285030461`** at **`3cc585b2`** is now audited: all 17 steps,
+156 Android host cases and native run **`8515479c`** pass, **39.558s case / 88.944s
+suite**, cleanup true and all 243 Mobile/33 Platform immutable hashes matched.
+Its protocol **`41285030493`** also reports success; its pending control
+**`41285030577`** was superseded/cancelled. This is predecessor evidence in the
+provider-page measurement. Traversal-storage HRIS **`41286066653`** remains in its
+emulator step; control **`41286066709`** is pending behind running focus control
+**`41283261749`**. Audit terminal artifacts and this increment's CI after push.
+
+No live/schema/phone change. Atomic commits and push after every commit remain
+authorized. Continue after this checkpoint; the user requested the full plan.
+
+[Earlier November detail](collaboration-implementation-history-2026-11-01.md)

@@ -72,7 +72,9 @@ class EncryptedCollaborationHistoryTraversalRepository(
                             require(documents.zipWithNext().all { (a, b) -> a.sortKey < b.sortKey })
                             require(documents.all { after == null || it.sortKey > after })
                             val references = documents.map { codec.reference(raw, it) }
-                            require(references.all { it.sequence < progress.references })
+                            require(
+                                references.all { !it.resolved && it.sequence < progress.references }
+                            )
                             CollaborationHistoryReferences(
                                 progress,
                                 references.take(limit),
@@ -132,6 +134,43 @@ class EncryptedCollaborationHistoryTraversalRepository(
                     ReplicaSnapshot(progress.generation, checkpoint, documents),
                 )
             else replicas.commit(raw.handle, raw.revision, checkpoint, documents, true)
+        }
+    }
+
+    override suspend fun resolve(
+        access: CollaborationLocalAccess,
+        traversal: CollaborationHistoryTraversal,
+        expected: CollaborationHistoryProgress,
+        references: List<CollaborationHistoryReference>,
+    ) = safeStorageCall {
+        require(references.size in 1..20)
+        val captured = references.toList()
+        require(validCollaborationHistoryProgress(expected))
+        require(captured.map { it.event.eventId }.distinct().size == captured.size)
+        require(
+            captured.all {
+                !it.resolved &&
+                    it.sequence in 0 until expected.references &&
+                    validCollaborationProviderEvent(it.event)
+            }
+        )
+        val scope = historyScope(access)
+        val partition = traversalPartition(access, traversal)
+        val raw = replicas.checkpoint(scope, partition) ?: return@safeStorageCall false
+        withCodec(access, traversal) { codec ->
+            if (codec.progress(raw) != expected) return@withCodec false
+            for (reference in captured) {
+                val row =
+                    requireNotNull(
+                        replicas.document(scope, partition, codec.id(reference.event.eventId))
+                    )
+                require(codec.reference(raw, row) == reference)
+            }
+            val progress = expected.copy(revision = expected.revision + 1)
+            val documents = captured.map { codec.reference(progress, it.copy(resolved = true)) }
+            val checkpoint = codec.checkpoint(progress)
+            currentCoroutineContext().ensureActive()
+            replicas.commit(raw.handle, raw.revision, checkpoint, documents, true)
         }
     }
 

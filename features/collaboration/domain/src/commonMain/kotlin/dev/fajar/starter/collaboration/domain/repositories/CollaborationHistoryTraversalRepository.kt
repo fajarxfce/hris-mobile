@@ -11,7 +11,7 @@ interface CollaborationHistoryTraversalRepository {
         traversal: CollaborationHistoryTraversal,
     ): AppResult<CollaborationHistoryProgress?>
 
-    /** Indexed bounded references; no network, decryption retry, deletion or projection ACK. */
+    /** Indexed bounded pending references; no network, decryption retry or deletion. */
     fun observeReferences(
         access: CollaborationLocalAccess,
         traversal: CollaborationHistoryTraversal,
@@ -29,5 +29,17 @@ interface CollaborationHistoryTraversalRepository {
         traversal: CollaborationHistoryTraversal,
         expected: CollaborationHistoryProgress?,
         page: CollaborationProviderHistoryPage,
+    ): AppResult<Boolean>
+
+    /**
+     * Atomically marks 1..20 exact pending references as resolved and increments the revision.
+     * Callers must establish retained original/tombstone facts first. Identity, first sequence,
+     * total references and provider position remain unchanged. False means a progress/owner race.
+     */
+    suspend fun resolve(
+        access: CollaborationLocalAccess,
+        traversal: CollaborationHistoryTraversal,
+        expected: CollaborationHistoryProgress,
+        references: List<CollaborationHistoryReference>,
     ): AppResult<Boolean>
 }

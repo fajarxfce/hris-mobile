@@ -375,5 +375,97 @@
     "The 141-reference indexed traversal case exceeds message-outbox capacity without a full partition scan; it is not production capacity or disk quota acceptance.",
     "The new storage port resolves through application DI without starting network or key I/O. Live admitted page acquisition, provider-reference resolution, coordinated SDK reopening and Chat UI remain next.",
     "No new actual-SDK run was required for this storage-only increment. The unchanged provider-reader proof at 3cc585b2/26796a33 has separate evidence; current behavior is checked using real encrypted SQLite/IndexedDB and full app builds."
-  ]
+  ],
+  "hostedHris": {
+    "run": "https://github.com/fajarxfce/hris-mobile/actions/runs/41286066653",
+    "commit": "e992a05318829132a0b8b569ecaa9bc6ac3d2ee5",
+    "result": "success",
+    "jobs": [
+      {
+        "name": "android-hris",
+        "conclusion": "success",
+        "steps": 17,
+        "nonPassingSteps": []
+      }
+    ],
+    "tests": {
+      "testAndroidHostTest": {
+        "suites": 25,
+        "tests": 156,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "test": {
+        "suites": 1,
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "immutableSourceHashesMatched": 253,
+    "sourceManifestUploaded": false,
+    "platformCommit": "26796a33d257992ceebcfe686fe2d6bcb370cee5",
+    "platformImmutableSourceHashesMatched": 33,
+    "fixtureRun": "a39d9f3d523d456d915eb0a016ea4991",
+    "actualSdk": {
+      "passed": true,
+      "encryptedBothDirections": true,
+      "logicalIdsPreserved": true,
+      "cleanup": true,
+      "protectedStoreReopened": true,
+      "missingRecordPreserved": true,
+      "wrongPassphrasePreserved": true,
+      "exclusiveOwner": true,
+      "processRestarted": true,
+      "queueRestored": true,
+      "transactionReused": true,
+      "identityAfterRestart": true,
+      "messageIntentRestored": true,
+      "queueMappingRecovered": true,
+      "queueWriterExclusive": true,
+      "perRoomDeliveryIsolated": true,
+      "heldQueueRestored": true,
+      "nativeDeliveryOwned": true,
+      "commonSenderOwned": true,
+      "receiptJournalRecovered": true,
+      "projectionInterrupted": true,
+      "originalHistoryWindowOwned": true,
+      "historyBodiesRestored": true,
+      "commonHistoryAcquisitionOwned": true,
+      "latestHistoryHeadOwned": true,
+      "admittedSingleHeadRead": true,
+      "providerHistoryPageOwned": true,
+      "admittedProviderPages": true,
+      "historyWindow": {
+        "originals": 2,
+        "unavailable": 9,
+        "extractionNanos": 13347057,
+        "modelCharacters": 4732,
+        "originalCharacters": 937
+      },
+      "applicationAdmittedBeforeSend": true,
+      "applicationAdmittedAroundHistory": true,
+      "applicationAdmissions": {
+        "device": 7,
+        "conversation": 7,
+        "room": 7,
+        "failures": 0
+      },
+      "heldRoomNeverSent": true,
+      "pausedAcrossRestart": true,
+      "syncInterruptedAfterRestart": true,
+      "syncRetriedWithRetainedCursor": true,
+      "artifact": {
+        "apkSha256": "d461199a4ab2cc2718648d73a3d48974ae684e8f485cc20daffed996c3fbc9fa",
+        "package": "dev.fajar.hris.collaboration.proof",
+        "avd": "hris-mobile-dev",
+        "androidApi": "35"
+      }
+    },
+    "testCaseSeconds": 52.113,
+    "testSuiteSeconds": 95.813,
+    "scope": "Builds traversal storage at e992a053; actual native fixture still covers raw metadata. Later common persisted acquisition and reference resolution have separate evidence."
+  }
 }

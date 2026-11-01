@@ -12,6 +12,7 @@ internal class HrisProofProviderHistory(
         suspend (HrisProofRuntimeAccess) -> CollaborationProviderHistoryAcquisition,
     private val stored: suspend () -> CollaborationHistoryReferences,
     private val reopen: suspend () -> Unit,
+    private val reconcile: suspend () -> CollaborationHistoryReconciliation,
 ) {
     suspend fun verify(expectedEvents: Set<String>) {
         val access = HrisProofRuntimeAccess(runtime)
@@ -59,6 +60,27 @@ internal class HrisProofProviderHistory(
                     (page.events + older.events).map { it.eventId }.toSet()
             )
         }
+        val before = stored()
+        val progress = requireNotNull(before.progress)
+        val pending = before.events.filter { it.event.eventId !in expectedEvents }
+        check(before.events.size - pending.size == expectedEvents.size && before.after == null)
+        check(
+            reconcile() ==
+                CollaborationHistoryReconciliation(expectedEvents.size, pending.size, null)
+        )
+        val resolved = stored()
+        check(
+            resolved ==
+                CollaborationHistoryReferences(
+                    progress.copy(revision = progress.revision + 1),
+                    pending,
+                    null,
+                )
+        )
+        reopen()
+        check(stored() == resolved)
+        check(reconcile() == CollaborationHistoryReconciliation(0, pending.size, null))
+        check(stored() == resolved)
     }
 
     private fun validate(page: CollaborationProviderHistoryPage, position: String?) {

@@ -38,6 +38,7 @@ private data class HistoryReferenceDto(
     val sender: String,
     val timestamp: Long,
     val type: String,
+    val resolved: Boolean = false,
 )
 
 /** Device/room-bound AEAD with separate keyed indexes; no provider IDs or cursors in plaintext. */
@@ -117,7 +118,7 @@ internal class CollaborationHistoryTraversalCodec(
         checkpoint: ReplicaCheckpoint,
         raw: ReplicaDocument,
     ): CollaborationHistoryReference {
-        require(raw.version in 0..checkpoint.revision && raw.tags == setOf(HISTORY_REFERENCES))
+        require(raw.version in 0..checkpoint.revision)
         require(historyReferenceId.matches(raw.id) && historyReferenceCursor.matches(raw.sortKey))
         val value =
             Json.decodeFromString<HistoryReferenceDto>(
@@ -136,12 +137,13 @@ internal class CollaborationHistoryTraversalCodec(
                 value.timestamp,
                 value.type,
             )
+        require(raw.tags == if (value.resolved) emptySet<String>() else setOf(HISTORY_REFERENCES))
         require(
             validCollaborationProviderEvent(event) &&
                 value.sequence in 0 until 9_007_199_254_740_991L
         )
         require(raw.id == id(value.eventId) && raw.sortKey == sort(value.sequence, raw.id))
-        return CollaborationHistoryReference(value.sequence, event)
+        return CollaborationHistoryReference(value.sequence, event, value.resolved)
     }
 
     suspend fun reference(
@@ -171,10 +173,11 @@ internal class CollaborationHistoryTraversalCodec(
                         event.sender,
                         event.timestamp,
                         event.type,
+                        value.resolved,
                     )
                 ),
             ),
-            setOf(HISTORY_REFERENCES),
+            if (value.resolved) emptySet() else setOf(HISTORY_REFERENCES),
         )
     }
 

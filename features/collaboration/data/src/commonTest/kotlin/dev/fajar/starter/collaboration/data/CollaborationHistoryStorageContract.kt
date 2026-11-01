@@ -14,6 +14,132 @@ abstract class CollaborationHistoryStorageContract {
     protected abstract fun databaseOwner(): CollaborationHistoryDatabaseOwner
 
     @Test
+    fun eventFactsKeepAliasTimestampsAndTombstonesAcrossReopen() = withDatabase { f ->
+        val first = f.event()
+        val retry = first.copy(eventId = "\$retry-fact", timestamp = first.timestamp + 86_400_001)
+        assertEquals(
+            AppResult.Success(null),
+            f.repository.getEventFact(f.access, f.conversation, f.room, first.eventId),
+        )
+        assertNull(f.keys.read())
+        f.merge(first, retry)
+        f.reopen()
+        for (event in listOf(first, retry)) assertEquals(
+            AppResult.Success(
+                CollaborationHistoryEventFact(event.eventId, event.sender, event.timestamp, false)
+            ),
+            f.repository.getEventFact(f.access, f.conversation, f.room, event.eventId),
+        )
+        assertEquals(first.timestamp, f.lookup(retry.eventId)!!.timestamp)
+        f.merge(CollaborationHistoryChange.Redacted(retry.eventId, retry.sender))
+        assertEquals(
+            AppResult.Success(
+                CollaborationHistoryEventFact(first.eventId, first.sender, first.timestamp, true)
+            ),
+            f.repository.getEventFact(f.access, f.conversation, f.room, first.eventId),
+        )
+        val absent = f.event(3)
+        f.merge(CollaborationHistoryChange.Redacted(absent.eventId, absent.sender))
+        f.reopen()
+        assertEquals(
+            AppResult.Success(
+                CollaborationHistoryEventFact(absent.eventId, absent.sender, null, true)
+            ),
+            f.repository.getEventFact(f.access, f.conversation, f.room, absent.eventId),
+        )
+        assertNull(f.lookup(absent.eventId))
+    }
+
+    @Test
+    fun eventFactLookupRejectsWrongScopeSubstitutedAliasesAndLateCheckpointChanges() =
+        withDatabase { f ->
+            f.merge(f.event(), f.event(2))
+            assertIs<AppResult.Failed>(
+                f.repository.getEventFact(
+                    f.access,
+                    f.conversation,
+                    "!another:test",
+                    f.event().eventId,
+                )
+            )
+            val aliases = f.raw().documents.filter { it.id.startsWith("e-") }
+            for (kind in 0..2) {
+                var reads = 0
+                val store =
+                    object : ReplicaStore by f.database.replicas {
+                        override suspend fun document(
+                            scope: ReplicaScope,
+                            partition: String,
+                            id: String,
+                        ): ReplicaDocument? {
+                            if (kind == 0 && id.startsWith("e-"))
+                                return aliases.first { it.id != id }
+                            return f.database.replicas.document(scope, partition, id)?.let {
+                                if (kind == 1 && id.startsWith("e-")) it.copy(payload = "corrupt")
+                                else it
+                            }
+                        }
+
+                        override suspend fun checkpoint(
+                            scope: ReplicaScope,
+                            partition: String,
+                        ): ReplicaCheckpoint? {
+                            if (kind == 2 && ++reads == 2) f.merge(f.event(3))
+                            return f.database.replicas.checkpoint(scope, partition)
+                        }
+                    }
+                assertIs<AppResult.Failed>(
+                    f.repository(store)
+                        .getEventFact(f.access, f.conversation, f.room, f.event().eventId)
+                )
+            }
+        }
+
+    @Test
+    fun eventFactLookupDoesNotPublishThroughLogoutOrCancelledStorage() = withDatabase { f ->
+        f.merge(f.event())
+        val entered = CompletableDeferred<Unit>()
+        val store =
+            object : ReplicaStore by f.database.replicas {
+                override suspend fun document(
+                    scope: ReplicaScope,
+                    partition: String,
+                    id: String,
+                ): ReplicaDocument? {
+                    entered.complete(Unit)
+                    awaitCancellation()
+                }
+            }
+        coroutineScope {
+            val pending = async {
+                f.repository(store)
+                    .getEventFact(f.access, f.conversation, f.room, f.event().eventId)
+            }
+            entered.await()
+            pending.cancelAndJoin()
+        }
+        var reads = 0
+        val changed =
+            object : ReplicaStore by f.database.replicas {
+                override suspend fun checkpoint(
+                    scope: ReplicaScope,
+                    partition: String,
+                ): ReplicaCheckpoint? {
+                    if (++reads == 2)
+                        f.activate(
+                            f.access.copy(sessionId = "replaced", accountId = historyId(888))
+                        )
+                    return f.database.replicas.checkpoint(scope, partition)
+                }
+            }
+        assertIs<AppResult.Failed>(
+            f.repository(changed).getEventFact(f.access, f.conversation, f.room, f.event().eventId)
+        )
+        f.activate()
+        assertNotNull(f.lookup())
+    }
+
+    @Test
     fun aliasesSurviveRestartReauthenticationAndReplayWithNoPlaintextIndexes() = withDatabase { f ->
         assertTrue(f.read().messages.isEmpty())
         assertNull(f.keys.read())

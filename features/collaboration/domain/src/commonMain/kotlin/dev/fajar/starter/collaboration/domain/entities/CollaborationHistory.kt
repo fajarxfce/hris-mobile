@@ -1,5 +1,15 @@
 package dev.fajar.starter.collaboration.domain.entities
 
+/** Verified alias identity. A null timestamp denotes a confirmed tombstone before its original. */
+data class CollaborationHistoryEventFact(
+    val eventId: String,
+    val sender: String,
+    val timestamp: Long?,
+    val redacted: Boolean,
+) {
+    override fun toString() = "CollaborationHistoryEventFact([redacted])"
+}
+
 /** Original, decrypted provider events, never a timeline's latest edited presentation. */
 sealed interface CollaborationHistoryChange {
     val eventId: String

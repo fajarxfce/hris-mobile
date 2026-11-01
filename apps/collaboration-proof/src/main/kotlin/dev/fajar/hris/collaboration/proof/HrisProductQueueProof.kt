@@ -15,6 +15,7 @@ import dev.fajar.starter.collaboration.domain.repositories.CollaborationMessageR
 import dev.fajar.starter.collaboration.domain.usecases.AcquireCollaborationHistory
 import dev.fajar.starter.collaboration.domain.usecases.AcquireCollaborationProviderHistory
 import dev.fajar.starter.collaboration.domain.usecases.DeliverCollaborationMessages
+import dev.fajar.starter.collaboration.domain.usecases.ReconcileCollaborationHistoryReferences
 import dev.fajar.starter.collaboration.domain.usecases.ReconcileCollaborationMessages
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.database.createAppDatabase
@@ -244,6 +245,7 @@ internal class HrisProductQueueProof(
                 ::acquireProviderHistory,
                 ::readProviderReferences,
                 ::reopenDatabase,
+                ::reconcileProviderReferences,
             )
             .verify(setOf(sentEventId, replyEventId))
         return HrisProofOriginalHistory(
@@ -266,6 +268,32 @@ internal class HrisProductQueueProof(
             .put("providerHistoryPageOwned", true)
             .put("commonProviderHistoryAcquisitionOwned", true)
             .put("providerHistoryReferencesRestored", true)
+            .put("providerHistoryReferencesReconciled", true)
+    }
+
+    private suspend fun reconcileProviderReferences(): CollaborationHistoryReconciliation {
+        val app = requireNotNull(application)
+        val reconcile =
+            ReconcileCollaborationHistoryReferences(
+                traversalRepository(),
+                EncryptedCollaborationHistoryRepository(
+                    database.replicas,
+                    AesGcmContentCipher(),
+                    historyKey,
+                ),
+                listRepository(),
+                app.sessions,
+                app.workspaces,
+                app.server,
+                app.build,
+                app.clock,
+            )
+        return success(
+            reconcile(
+                app.workspaceId,
+                CollaborationHistoryTraversal(conversationId, roomId, runtime.deviceId),
+            )
+        )
     }
 
     private suspend fun acquireProviderHistory(

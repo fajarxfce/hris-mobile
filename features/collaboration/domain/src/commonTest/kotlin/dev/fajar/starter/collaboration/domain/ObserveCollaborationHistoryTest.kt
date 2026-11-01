@@ -135,6 +135,13 @@ private class HistoryObserverFixture {
                 }
             }
 
+            override suspend fun getEventFact(
+                access: CollaborationLocalAccess,
+                conversationId: String,
+                roomId: String,
+                eventId: String,
+            ): AppResult<CollaborationHistoryEventFact?> = error("No reference reconciliation")
+
             override suspend fun getByEvent(
                 access: CollaborationLocalAccess,
                 conversationId: String,

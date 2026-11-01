@@ -7,8 +7,9 @@ facts offline under the same account/company admission as the conversation list.
 around a supplied event or the latest visible event through the owned Android SDK runtime.
 The Android runtime can also read bounded provider-page metadata through the same
 gateway. Encrypted traversal staging retains every reference with its page position.
-Common admitted page acquisition now stages those references; original-reference
-resolution, edit projection, command retirement and Chat UI
+Common admitted page acquisition stages those references. Offline reconciliation now
+marks references with retained originals or confirmed tombstones as resolved.
+Acquisition of remaining originals, edit projection, command retirement and Chat UI
 remain separate work.
 
 ## Canonical identity and deletion
@@ -186,6 +187,41 @@ events; it is not a new-message or successful-decryption count. The operation is
 registered through the collaboration data module. Unsupported platform adapters
 report unavailable. Callers own invocation and cancellation.
 
+## Offline reference reconciliation
+
+`ReconcileCollaborationHistoryReferences` reads at most 20 pending references and
+looks up each provider ID in retained original history. It makes no SDK, network,
+bootstrap or credential-renewal request. Ordinary credential age does not hide
+owned facts; the current account/company and persisted read restriction are
+checked before the first read and after every suspended read/write. Cancellation,
+a known denial or replacement owner cannot publish success. A single DI-owned
+mutex serializes this operation; storage also checks its expected checkpoint.
+
+An indexed `getEventFact` resolves the original alias and its canonical message,
+validating both against the authenticated checkpoint and rechecking that checkpoint
+after I/O. Each alias exposes its own provider timestamp, not the first message's
+ordering timestamp. A tombstone acquired before its original has no timestamp;
+it is usable only with its confirmed original sender. The redactor's sender is
+never substituted for that original identity. A missing fact stays pending. A
+mismatched identity/timestamp or failed lookup fails the entire reconciliation
+without acknowledging previously matched references from the same page.
+
+`resolve` commits the exact 1–20 matched pending rows and a new checkpoint revision
+in one transaction. The encrypted row now records `resolved=true` and drops only
+its pending query tag. Its keyed ID, first-observed sequence and provider metadata
+remain. Total references, generation and the provider's next position are unchanged.
+An overlapping provider page therefore validates and preserves that resolved row;
+it cannot recreate it as new work. Missing `resolved` in older payloads defaults to
+false, retaining the existing pending tag without a database migration. Readers
+validate tag membership against authenticated payload state.
+
+The result counts resolved/unresolved entries in this page, with its opaque local
+continuation. Unsupported events and unavailable decryption keys remain recoverable
+without preventing traversal of later pending references. No automatic retry or
+loop is started. A lost commit response is recovered from the next owned read,
+including after process/database restart. These operations do not assert full
+history decryption, secure erasure, cursor reset, SDK reopening or send-command ACK.
+
 ## Durable traversal staging
 
 [SQLite/IndexedDB validation](measurements/collaboration-history-traversal-2026-11-01.json).
@@ -210,7 +246,7 @@ metadata conflicts fail before any commit.
 Each new event receives a monotonically increasing first-observed sequence. An
 identical event repeated in an overlapping page preserves that sequence and adds
 no row. Changed sender, timestamp or type for the same provider ID rejects the
-whole page. Timestamp order does not control the acquisition queue. Reference
+whole page. Timestamp order does not control the acquisition queue. Pending-reference
 reads use an indexed 1–50-row page and one lookahead, without a full conversation
 scan or the message outbox's 128-command limit. The 141-reference case establishes
 that boundary only; disk quotas and production capacity remain separate work.
@@ -218,7 +254,7 @@ that boundary only; disk quotas and production capacity remain separate work.
 An empty advancing page still persists its next position. A terminal page records
 `exhausted` while retaining every existing reference. This flag describes backward
 provider traversal; it does not acknowledge decryption, original projection or
-future new messages. Reference resolution and reset/recovery policy are pending.
+future new messages. Explicit cursor reset/recovery policy remains pending.
 Live device/conversation/room admission belongs to the common acquisition use case;
 this repository's DI binding starts no page acquisition or background retry.
 

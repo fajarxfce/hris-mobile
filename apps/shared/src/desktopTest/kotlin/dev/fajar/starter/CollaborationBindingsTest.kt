@@ -151,6 +151,10 @@ class CollaborationBindingsTest {
                 )
                 assertNotNull(container.koin.get<ObserveCollaborationMessages>())
                 assertSame(
+                    container.koin.get<ReconcileCollaborationHistoryReferences>(),
+                    container.koin.get<ReconcileCollaborationHistoryReferences>(),
+                )
+                assertSame(
                     container.koin.get<StageCollaborationText>(),
                     container.koin.get<StageCollaborationText>(),
                 )

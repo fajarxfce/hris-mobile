@@ -532,5 +532,51 @@
     "testCaseSeconds": 26.926,
     "testSuiteSeconds": 58.905,
     "scope": "Validates per-client focus reservations at 17b1fc77; subsequent provider-page metadata has separate checks."
+  },
+  "hostedControl": {
+    "run": "https://github.com/fajarxfce/hris-mobile/actions/runs/41283261749",
+    "commit": "17b1fc77e41e33bb2ebde06ce9b21c0b2f57ac95",
+    "result": "success",
+    "jobs": [
+      {
+        "name": "portable",
+        "conclusion": "success",
+        "steps": 15,
+        "nonPassingSteps": []
+      },
+      {
+        "name": "apple",
+        "conclusion": "success",
+        "steps": 13,
+        "nonPassingSteps": []
+      }
+    ],
+    "tests": {
+      "desktopTest": {
+        "suites": 45,
+        "tests": 389,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "wasmJsBrowserTest": {
+        "suites": 41,
+        "tests": 365,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "iosSimulatorArm64Test": {
+        "suites": 37,
+        "tests": 321,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "immutableSourceHashesMatched": 237,
+    "sourceManifestUploaded": false,
+    "xcodeAppHostBuildSuccesses": 1,
+    "scope": "Validates retained native focus-key accounting at 17b1fc77. Later history storage/acquisition/reconciliation have separate evidence."
   }
 }

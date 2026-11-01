@@ -2,56 +2,57 @@
 
 ## Active collaboration implementation — 1 November 2026
 
-**The common provider-page acquisition now admits and persists actual Android history.**
-[Evidence](measurements/collaboration-provider-acquisition-2026-11-01.json) records
-run **`a2ba509605044f839df46181f997094f`**, **41.858s test case / 63.401s native suite /
-95s Gradle**, cleanup complete. The proof stages the initial page through the common
-use case, reopens the real encrypted database, verifies every reference/checkpoint,
-replays the start and acquires again using its restored continuation. Gateway
-observations require increasing admission counts between each metadata request and
-after the last one: **9/9/9 device/conversation/room reads, zero failures**. Earlier
-original bodies, encrypted exchange, queue isolation and process-death checks pass.
+**Offline reference reconciliation now passes actual Android/HRIS recovery.**
+[Evidence](measurements/collaboration-history-resolution-2026-11-01.json) records
+run **`cfd1d97c98f84338a57ac19d1852aa78`**, **49.920s case / 72.239s native suite /
+104s Gradle**, cleanup true. The proof resolves the two retained original messages,
+keeps nine unresolved metadata entries, reopens the encrypted database and checks
+that a second reconciliation changes nothing. Existing encrypted exchange,
+process-death, paused sibling queue, receipt recovery and original-body checks pass.
+The gateway still observes **9/9/9 admissions, zero failures**; reconciliation
+makes no SDK/network request. Strict evidence flags are mandatory at each boundary.
 
-`AcquireCollaborationProviderHistory` checks the live owner, company read gate,
-active platform device, owned direct conversation and ready room. It reads the
-saved progress, makes one bounded request, validates the full native owner and
-exact requested position, readmits the room and stages all references atomically.
-Every suspended boundary rechecks owner/gate, including after commit. A cancelled,
-conflicting, late-denied or lost response cannot become success or trigger a retry.
-SDK token expiry/recipient failures retain the existing company read policy.
-An exhausted checkpoint starts no provider request. The count describes received
-references, not new messages or decrypted bodies. No bootstrap, queue delivery,
-cursor reset or original-reference resolution was added. See [the history contract](collaboration-history.md#admitted-provider-page-acquisition).
+`ReconcileCollaborationHistoryReferences` reads one pending page of at most 20.
+It validates each original alias's event ID, original sender and own timestamp;
+a confirmed tombstone before its original may omit the timestamp. Mismatches fail
+the whole page, while missing originals stay pending. Current local ownership and
+persisted read restrictions are checked after every suspension, including commit.
+Ordinary credential age does not hide owned facts. `resolve` atomically marks the
+exact rows resolved and removes their pending query tags, preserving their keyed
+identities, first sequences, total references and provider position. Overlap cannot
+reactivate resolved work. Older payloads default to pending without a DB migration.
 
-Fourteen new common cases pass. Focused domain desktop/browser, Android host,
-proof assembly and quality checks pass in **113s**. After adding actual persistence
-callbacks and stricter trace checks, full root/browser/Android/Wasm/proof/lint
-passes in **322s**: **2,423 desktop / 156 Android host / 219 domain browser /
-178 data browser**, zero failures/errors/skips and zero lint errors. Platform
-fixture compilation/quality passes in **34s**; 35 Python driver cases pass.
-All **256 Mobile / 33 Platform source hashes** match. Dev APK **`5dce0767`** is
-built, not installed; actual proof uses **`2deadcd9`**. The emulator is stopped.
-The HRIS workflow pins the tested Platform fixture **`14290348`**.
+Twelve new domain cases and ten SQLite/IndexedDB cases pass. Focused checks pass
+in **136s**. Full root/browser/Android/Wasm/proof/lint passes in **283s**:
+**2,445 desktop / 156 Android host / 231 domain browser / 188 data browser**, zero
+failures/errors/skips and zero lint errors. Platform fixture/quality passes in
+**30s**; 35 Python driver cases pass. All **262 Mobile / 33 Platform source hashes**
+match. Dev APK **`67c44ca4`** is built, not installed; actual proof uses **`17a3b2be`**.
+The emulator is stopped. The complete final source and artifact hashes are in Git.
 
-**Next: resolve retained references into original-message projections while keeping
-unsupported/unavailable references recoverable.** Preserve first-observed reference
-identity and atomic progress; do not equate provider exhaustion with complete
-message decryption. Add explicit cursor-reset/reference-resolution policy,
-coordinated SDK reopening (16 retained focus keys per client), ACK-before-journal
-reconciliation and command retirement, then Chat UI. Continue all P0–P8 and all
-54 groups; **none is accepted**. Apple/web owned adapters, cross-family recovery,
+**Next: explicit provider-cursor recovery that preserves retained references, then
+coordinated SDK reopening, ACK-before-journal recovery and command retirement,
+then Chat UI.** Keep unknown/rich/edited references recoverable and preserve
+original identities, SDK crypto stores/cursors and native transactions. The native
+client still retains at most 16 distinct focus keys. Continue all P0–P8 and all
+54 groups; **none is accepted**. Apple/web owned adapters, interoperability,
 backup, rich messaging and every call/meeting phase remain. Physical iPhone testing
-is waived; Apple implementation/interoperability remains required. Starter stays
-clean at `36116b2`; this HRIS policy/storage work has no generic foundation port.
+is waived; Apple implementation remains required. Starter stays clean at `36116b2`;
+this HRIS-specific policy/storage increment has no generic foundation port.
 
-Provider-page HRIS **`41285030461`** at **`3cc585b2`** is now audited: all 17 steps,
-156 Android host cases and native run **`8515479c`** pass, **39.558s case / 88.944s
-suite**, cleanup true and all 243 Mobile/33 Platform immutable hashes matched.
-Its protocol **`41285030493`** also reports success; its pending control
-**`41285030577`** was superseded/cancelled. This is predecessor evidence in the
-provider-page measurement. Traversal-storage HRIS **`41286066653`** remains in its
-emulator step; control **`41286066709`** is pending behind running focus control
-**`41283261749`**. Audit terminal artifacts and this increment's CI after push.
+Predecessor CI audits are recorded separately. Focus control **`41283261749`** at
+`17b1fc77` passes all 28 steps, **389 desktop / 365 browser / 321 iOS simulator**
+cases and actual Xcode build, with 237 hashes matched. Traversal HRIS
+**`41286066653`** at `e992a053` passes 17 steps, 156 host cases and native run
+`a39d9f3d` (**52.113s / 95.813s**), cleanup true, 253/33 hashes matched. Common
+acquisition HRIS **`41287684469`** at `0cb6509a` passes 17 steps, 156 host cases and
+run `809ee2a4` (**64.697s / 110.278s**), cleanup true, strict persisted-acquisition
+flags and 256/33 hashes matched. Acquisition protocol **`41287684394`** reports
+success. Traversal control `41286066709` is still running; acquisition control
+`41287684753` was pending at the last check. Audit terminal artifacts and this
+increment's own CI after push; earlier proofs do not validate later code.
+
+The HRIS workflow pins the tested Platform fixture **`7de15969`**, now pushed.
 
 No live/schema/phone change. Atomic commits and push after every commit remain
 authorized. Continue after this checkpoint; the user requested the full plan.

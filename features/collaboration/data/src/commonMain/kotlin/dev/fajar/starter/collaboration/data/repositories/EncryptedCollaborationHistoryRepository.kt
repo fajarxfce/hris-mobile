@@ -70,15 +70,42 @@ class EncryptedCollaborationHistoryRepository(
         conversationId: String,
         roomId: String,
         eventId: String,
+    ) = safeStorageCall { readEvent(access, conversationId, roomId, eventId)?.second }
+
+    override suspend fun getEventFact(
+        access: CollaborationLocalAccess,
+        conversationId: String,
+        roomId: String,
+        eventId: String,
     ) = safeStorageCall {
+        readEvent(access, conversationId, roomId, eventId)?.let { (alias, message) ->
+            CollaborationHistoryEventFact(
+                alias.eventId,
+                alias.sender,
+                alias.timestamp,
+                alias.redacted || message?.redacted == true,
+            )
+        }
+    }
+
+    private suspend fun readEvent(
+        access: CollaborationLocalAccess,
+        conversationId: String,
+        roomId: String,
+        eventId: String,
+    ): Pair<HistoryAliasDto, CollaborationHistoryMessage?>? {
         val scope = historyScope(access)
         val partition = historyPartition(access, conversationId)
         // A missing owned partition does not require (or create) a content key.
-        val raw = replicas.checkpoint(scope, partition) ?: return@safeStorageCall null
-        withKey(access, conversationId, roomId) { codec ->
+        val raw = replicas.checkpoint(scope, partition) ?: return null
+        return withKey(access, conversationId, roomId) { codec ->
             codec.checkpoint(raw)
             val aliasId = codec.aliasId(eventId)
-            val alias = replicas.document(scope, partition, aliasId)?.let { codec.alias(raw, it) }
+            val alias =
+                replicas.document(scope, partition, aliasId)?.let {
+                    require(it.id == aliasId)
+                    codec.alias(raw, it)
+                }
             val message =
                 alias?.messageId?.let { id ->
                     val document = requireNotNull(replicas.document(scope, partition, id))
@@ -90,7 +117,7 @@ class EncryptedCollaborationHistoryRepository(
                 }
             // Do not combine different generations/revisions or publish through a late logout.
             require(replicas.checkpoint(scope, partition) == raw)
-            message
+            alias?.let { it to message }
         }
     }
 

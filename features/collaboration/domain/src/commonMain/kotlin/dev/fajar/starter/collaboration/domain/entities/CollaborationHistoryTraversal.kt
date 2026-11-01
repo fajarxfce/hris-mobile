@@ -29,8 +29,18 @@ data class CollaborationHistoryProgress(
 data class CollaborationHistoryReference(
     val sequence: Long,
     val event: CollaborationProviderHistoryEvent,
+    val resolved: Boolean = false,
 ) {
     override fun toString() = "CollaborationHistoryReference([redacted])"
+}
+
+/** Counts only this bounded pending page, never all unresolved history. */
+data class CollaborationHistoryReconciliation(
+    val resolved: Int,
+    val unresolved: Int,
+    val next: String?,
+) {
+    override fun toString() = "CollaborationHistoryReconciliation([redacted])"
 }
 
 data class CollaborationHistoryReferences(

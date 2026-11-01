@@ -96,6 +96,13 @@ internal class ProviderHistoryAcquisitionFixture {
             ): Flow<AppResult<CollaborationHistoryReferences>> =
                 error("Acquisition does not open a reference observer")
 
+            override suspend fun resolve(
+                access: CollaborationLocalAccess,
+                traversal: CollaborationHistoryTraversal,
+                expected: CollaborationHistoryProgress,
+                references: List<CollaborationHistoryReference>,
+            ): AppResult<Boolean> = error("No implicit reconciliation")
+
             override suspend fun stage(
                 access: CollaborationLocalAccess,
                 traversal: CollaborationHistoryTraversal,

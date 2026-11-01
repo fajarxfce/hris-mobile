@@ -449,5 +449,99 @@
     "The gateway requires 2..3 metadata requests, monotonic successful admission counts between each request and after the last one, and final 9/9/9 device/conversation/room admissions with no failures.",
     "The focused run precedes the added actual proof callbacks and stricter server trace. Final root/build/lint and actual SDK checks use the complete recorded source inventory.",
     "Original-reference resolution, cursor reset/recovery, coordinated SDK reopening, ACK-before-journal reconciliation, command retirement and Chat UI remain next. Retained references and provider exhaustion do not assert complete decryption or message projection."
-  ]
+  ],
+  "hostedHris": {
+    "run": "https://github.com/fajarxfce/hris-mobile/actions/runs/41287684469",
+    "commit": "0cb6509a3d3e535afc238e45aa03c86f8742417f",
+    "result": "success",
+    "jobs": [
+      {
+        "name": "android-hris",
+        "conclusion": "success",
+        "steps": 17,
+        "nonPassingSteps": []
+      }
+    ],
+    "tests": {
+      "testAndroidHostTest": {
+        "suites": 25,
+        "tests": 156,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "test": {
+        "suites": 1,
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "immutableSourceHashesMatched": 256,
+    "platformCommit": "14290348de701f5bebf51eeff0ed4149d8bc8ac5",
+    "platformImmutableSourceHashesMatched": 33,
+    "sourceManifestUploaded": false,
+    "fixtureRun": "809ee2a422bf4a71bc5e2418615deefb",
+    "actualSdk": {
+      "passed": true,
+      "encryptedBothDirections": true,
+      "logicalIdsPreserved": true,
+      "cleanup": true,
+      "protectedStoreReopened": true,
+      "missingRecordPreserved": true,
+      "wrongPassphrasePreserved": true,
+      "exclusiveOwner": true,
+      "processRestarted": true,
+      "queueRestored": true,
+      "transactionReused": true,
+      "identityAfterRestart": true,
+      "messageIntentRestored": true,
+      "queueMappingRecovered": true,
+      "queueWriterExclusive": true,
+      "perRoomDeliveryIsolated": true,
+      "heldQueueRestored": true,
+      "nativeDeliveryOwned": true,
+      "commonSenderOwned": true,
+      "receiptJournalRecovered": true,
+      "projectionInterrupted": true,
+      "originalHistoryWindowOwned": true,
+      "historyBodiesRestored": true,
+      "commonHistoryAcquisitionOwned": true,
+      "latestHistoryHeadOwned": true,
+      "admittedSingleHeadRead": true,
+      "providerHistoryPageOwned": true,
+      "commonProviderHistoryAcquisitionOwned": true,
+      "providerHistoryReferencesRestored": true,
+      "admittedProviderPages": true,
+      "historyWindow": {
+        "originals": 2,
+        "unavailable": 9,
+        "extractionNanos": 12816069,
+        "modelCharacters": 4732,
+        "originalCharacters": 937
+      },
+      "applicationAdmittedBeforeSend": true,
+      "applicationAdmittedAroundHistory": true,
+      "applicationAdmissions": {
+        "device": 9,
+        "conversation": 9,
+        "room": 9,
+        "failures": 0
+      },
+      "heldRoomNeverSent": true,
+      "pausedAcrossRestart": true,
+      "syncInterruptedAfterRestart": true,
+      "syncRetriedWithRetainedCursor": true,
+      "artifact": {
+        "apkSha256": "0436e9a03675fc161958900366db81cddb8f7aa0996a0d8150d9cdeb5abea629",
+        "package": "dev.fajar.hris.collaboration.proof",
+        "avd": "hris-mobile-dev",
+        "androidApi": "35"
+      }
+    },
+    "testCaseSeconds": 64.697,
+    "testSuiteSeconds": 110.278,
+    "scope": "Validates common admitted page acquisition and encrypted reference recovery at 0cb6509a. Offline original-reference resolution has later separate evidence."
+  }
 }

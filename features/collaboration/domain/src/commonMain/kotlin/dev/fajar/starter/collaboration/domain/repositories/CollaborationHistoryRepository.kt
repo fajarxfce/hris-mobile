@@ -6,6 +6,14 @@ import kotlinx.coroutines.flow.Flow
 
 /** Encrypted owned facts. Callers own admission and SDK lifecycle; no network or retries here. */
 interface CollaborationHistoryRepository {
+    /** Indexed original-alias or tombstone identity, with the alias's own provider timestamp. */
+    suspend fun getEventFact(
+        access: CollaborationLocalAccess,
+        conversationId: String,
+        roomId: String,
+        eventId: String,
+    ): AppResult<CollaborationHistoryEventFact?>
+
     fun observe(
         access: CollaborationLocalAccess,
         conversationId: String,
