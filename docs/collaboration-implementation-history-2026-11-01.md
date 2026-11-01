@@ -98,3 +98,92 @@ and the pinned SDK diagnosis are retained. Earlier command CI `39217be2` HRIS
 `41248280306` also passes all 17 steps: 68.983s, cleanup complete, 108 Mobile/15
 Platform hashes verified. Apple native chat interoperability remains pending.
 
+
+## Offline intents and runtime reuse checkpoint
+
+Owned offline text intents are now implemented through `QueueCollaborationText`
+and `ObserveCollaborationMessages`, using the encrypted account command store.
+Retried logical IDs retain exact text/timestamp; native attempt states cannot reset
+uncertainty or retarget a mapped transaction. Local preparation reads an acquired
+owned conversation, preserves facts through ordinary expiry, and respects confirmed
+company denial. It never enrolls, joins, refreshes credentials or sends HTTP.
+[Contract](collaboration-message-intents.md) and
+[evidence](measurements/collaboration-message-intents-2026-11-01.json): 14 new common
+domain cases, nine real SQLite/IndexedDB message cases and one exact-list lookup
+case. Focused checks pass in 64s; full root/browser/Android/Wasm/lint passes in 263s:
+**2,267 desktop / 382 suites**, **135 domain / 106 data browser**, all zero failures,
+errors/skips and zero Android lint errors. All 19 source hashes match; dev APK
+`abd3ff29` is built, not installed.
+
+**Next: implement the exclusive native queue writer and its cancellation/drain
+ownership, persist native transaction mapping before delivery, and prove actual
+process death between enqueue and mapping. Then connect Chat list/setup/conversation
+UI and durable history.** The SDK explicitly exposes no JSON/logical ID on unsent
+local echoes; the earlier hydration proposal was incorrect and is superseded by
+complete paused queue snapshots under one exclusive enqueue owner. The pure set-
+difference recovery policy is implemented; its native owner is not connected yet.
+No second transport retry owner or automatic cross-device resubmission is allowed.
+
+Mobile `4980ea00` hosted checks are now verified: control `41261819143` passes all
+26 steps (230 desktop, 206 browser, 195 iOS simulator); HRIS `41261819051` passes
+all 17 steps and SDK recovery `c2cd4309` in **72.366s**, with all verification and
+cleanup flags true. All 22 cache source hashes match its immutable checkout;
+Platform pin remains `8813ea9e`. The measurement retains exact artifacts/digests.
+These hosted runs predate the message-intent code. No product group is accepted.
+
+Admitted application entry now reuses an initialized SDK runtime through
+`EnsureCollaborationRuntime`; it returns scoped readiness without lending a parent
+close handle to a route. Concurrent entries share one restore, incomplete native
+initialization reports opening, and late/cancelled new acquisitions clean up only
+their own lease. [Evidence](measurements/collaboration-runtime-reuse-2026-11-01.json):
+11 new common cases; focused proof build/checks 84s, final full root/browser/Android/
+Wasm/proof/lint 251s (**2,243 desktop / 379 suites**, **121 domain / 96 data browser**,
+zero failures/errors/skips and zero app/proof lint errors). Actual HRIS SDK run
+`f0cfaed6` passes in **61.058s** (95s Gradle), including open/closed owner probes,
+process death, both encrypted directions, original queued transaction and same-cursor
+sync recovery. All **153 Mobile / 24 Platform hashes** match before/after; proof APK
+`a7a39c54`. Dedicated emulator stopped after cleanup; phone/live remain unchanged.
+
+The owned direct-conversation list now persists encrypted account/company facts
+across database restart and reauthentication. One explicit live page merges at
+most 50 summaries atomically; local browsing reads at most 51 indexed records.
+Mutable counterpart labels use a local publication revision. Missing or empty
+live pages do not delete saved conversations or claim snapshot completeness.
+Ordinary expiry preserves local reads. Confirmed access/maintenance denial has
+an independent encrypted gate plus a bounded process buffer; failed writes and
+rejected CAS cannot discard it. Only fresh acquisition of the observed denial
+revision can reopen reads. No SDK store reset, device enrollment or implicit send.
+
+[Evidence](measurements/collaboration-local-list-2026-11-01.json): 13 new domain
+cases and an 11-case real SQLite/IndexedDB contract. Final root/browser/Android/
+Wasm/lint passes in 254s: **2,232 desktop / 378 suites**, **110 domain browser**,
+**96 data browser**, zero failures/errors/skips and zero lint errors. The earlier
+255s full pass, four initial build/quality corrections and intentional browser
+negative control are retained. All 22 recorded source hashes match. The negative
+control proves async storage assertions are awaited; its positive case was
+restored before final verification. New dev APK `c21bbe13` is built, not installed.
+
+Owned-summary Mobile `820e3c3c` also has verified hosted evidence: control
+`41259805423` passes all 26 steps (206 desktop, 182 browser, 182 iOS simulator);
+HRIS `41259805464` passes all 17 steps and actual SDK recovery in **69.753s**.
+All 132 Mobile/24 Platform source hashes match the pinned checkouts. CI pins
+Platform `8813ea9eee28cafc274eafcd41456340f132ae2f`. [Summary evidence](measurements/collaboration-mobile-summaries-2026-11-01.json)
+retains process restart, both encrypted directions, same-cursor recovery and
+cleanup. Earlier `92d91275` hosted control/HRIS evidence (201/177/177 cases,
+64.046s SDK) is in [control denial](measurements/collaboration-control-denial-2026-11-01.json).
+These SDK runs do not validate the later cache source; its native transport is unchanged.
+
+**Continue P0–P8; none of the 54 feature groups is accepted.** The next native
+writer/delivery and product UI work is listed above. Bounded history, offline
+message projections, bootstrap/cross-family recovery, richer chat/calls/meetings
+and Apple native interoperability remain pending. Keep SDK keys/cursors intact;
+the 512-item observer guard is not a product history window. Common Apple checks
+and the physical-device waiver do not replace native interoperability.
+
+No live/schema/phone change; the dedicated emulator remains stopped. Starter
+stays at `36116b2`: no new generic foundation change requires a port. Keep HRIS
+policy/adapters in Mobile and Platform. Atomic commits and every-commit pushes
+are authorized; do not treat a checkpoint as completion.
+
+[Local list contract](collaboration-local-list.md) · [Earlier November detail](collaboration-implementation-history-2026-11-01.md)
+

@@ -41,7 +41,7 @@ server event. No transition discards uncertainty, changes device/room, invents a
 replacement transaction or resets a sent message. Retirement requires a future
 durable message projection; there is deliberately no removal operation yet.
 
-## Native boundary to connect next
+## Native transaction recovery
 
 The pinned Matrix Rust FFI explicitly returns no `latest_json` for unsent local
 echoes. Waiting for timeline hydration cannot recover their application logical
@@ -59,7 +59,36 @@ writer. A quiet or empty timeline is insufficient. Multiple new IDs and differen
 device families remain unresolved. A native operation must stay owned after caller
 cancellation so a late SDK commit cannot race the next snapshot.
 
-The exclusive native writer, lifecycle drain, durable mapping before delivery,
-actual process-death integration, product history projection and UI connection
-are the next implementation increment. The storage/pure-policy tests do not claim
-that this product sender is already connected or that any PRD group is accepted.
+## Exclusive native queue ownership
+
+`CollaborationRuntimeRepository.acquireMessageQueue` now acquires a paused child
+writer for a known encrypted room. All rooms on one protected runtime share one
+exclusive writer. It does not join, bootstrap, refresh product data or enable
+SDK delivery. Unsupported hosts explicitly report unavailable. The retained
+native device/family/bootstrap/room binding is exposed through a domain handle;
+the raw Matrix client remains in Android data.
+
+`SdkQueueOperations` owns at most one native operation and no waiting backlog.
+Its five-second waiter can time out or be cancelled while the operation remains
+owned by the runtime. A competing snapshot/enqueue reports pending until the
+operation finishes. Child shutdown stops new operations, drains the active one,
+stops any captured listener, closes timeline/room handles and only then releases
+exclusivity. Failed or slow cleanup remains owned through the existing parent
+child registry; it cannot unlock the SDK database early.
+
+A per-room snapshot owns one FFI listener, validates at most 128 transaction IDs,
+and stops/joins its task before returning. Overflow or malformed IDs fail the
+whole snapshot. It never infers absence from an unhydrated timeline. Enqueue
+keeps the original logical ID in encrypted message content and leaves delivery
+paused. A native lease is a primitive, not permission to discard app uncertainty.
+The common sender still must validate live HRIS admission, reconcile all uncertain
+intents for its room, commit mappings and control delivery explicitly.
+
+The expanded fictional HRIS fixture deliberately retains app `Staging` across
+real process death after native enqueue. On restart it checks the exact original
+intent, derives the native transaction from the captured snapshot, stores `Staged`
+and only then resumes the test exchange. This fixture separately checks writer
+exclusivity, closed-handle refusal, re-acquisition and the final `Sent` mapping.
+The [native-writer measurement](measurements/collaboration-native-writer-2026-11-01.json) verifies this actual process-death exchange in 39.509s, with all proof and cleanup flags true. Product sender
+orchestration, durable history, cancellation UI and all chat routes remain pending;
+these native primitives do not accept any complete PRD group.

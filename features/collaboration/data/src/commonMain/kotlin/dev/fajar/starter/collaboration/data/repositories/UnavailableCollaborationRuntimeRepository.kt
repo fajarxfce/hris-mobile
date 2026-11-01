@@ -6,6 +6,12 @@ import dev.fajar.starter.common.result.*
 
 /** Hosts without a native binding cannot create a substitute store or claim SDK readiness. */
 class UnavailableCollaborationRuntimeRepository : CollaborationRuntimeRepository {
+    override suspend fun acquireMessageQueue(
+        owner: CollaborationOwner,
+        deviceId: String,
+        matrixRoomId: String,
+    ): AppResult<CollaborationMessageQueueLease> = unavailable()
+
     override suspend fun isOpen(owner: CollaborationOwner, deviceId: String): AppResult<Boolean> =
         unavailable()
 

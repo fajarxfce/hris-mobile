@@ -44,6 +44,7 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
             var senderRoom: Room? = null
             var recipientRoom: Room? = null
             var pending: HrisProofPendingQueue? = null
+            var productQueue: HrisProductQueueProof? = null
             var senderTimeline: CollaborationTimelineLease? = null
             var recipientTimeline: CollaborationTimelineLease? = null
             try {
@@ -65,6 +66,13 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
                 recipientTimeline = recipientOwner.enterTimeline(roomId)
                 senderRoom = requireNotNull(sender.nativeClient.getRoom(roomId))
                 recipientRoom = requireNotNull(recipient.nativeClient.getRoom(roomId))
+                productQueue =
+                    HrisProductQueueProof(
+                        context,
+                        sender,
+                        roomId,
+                        fixture.getString("conversationId"),
+                    )
                 if (resuming)
                     resume(
                         fixture,
@@ -75,8 +83,9 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
                         pending,
                         senderTimeline,
                         recipientTimeline,
+                        productQueue,
                     )
-                else stage(fixture, sender, recipient, senderRoom, pending)
+                else stage(fixture, sender, recipient, pending, productQueue)
             } finally {
                 withContext(NonCancellable) {
                     // Attempt every owned cleanup even if another owner fails or exceeds its wait.
@@ -84,6 +93,7 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
                     val operations: List<suspend () -> Unit> =
                         listOf(
                             { pending?.close() },
+                            { productQueue?.close() },
                             { senderRoom?.close() },
                             { recipientRoom?.close() },
                             { sender?.closeProofRuntime() },
@@ -110,13 +120,13 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
         fixture: JSONObject,
         sender: AndroidCollaborationRuntimeLease,
         recipient: AndroidCollaborationRuntimeLease,
-        senderRoom: Room,
         pending: HrisProofPendingQueue,
+        productQueue: HrisProductQueueProof,
     ): Nothing {
         write("gateway-ready", JSONObject().put("ready", true))
         awaitFile("gateway-send")
-        val transaction =
-            pending.stage(senderRoom, body(fixture, "body"), logicalId(fixture, "logicalId"))
+        val transaction = productQueue.stage(logicalId(fixture, "logicalId"), body(fixture, "body"))
+        check(pending.retainedTransaction() == transaction)
         pending.checkPaused()
         write(
             "gateway-staged",
@@ -140,6 +150,7 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
         pending: HrisProofPendingQueue,
         senderTimeline: CollaborationTimelineLease,
         recipientTimeline: CollaborationTimelineLease,
+        productQueue: HrisProductQueueProof,
     ) {
         val staged = read("gateway-staged", 4096)
         for (name in protectedFlagNames) check(staged.get(name) == true)
@@ -147,6 +158,7 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
         check(staged.getString("senderKeyFingerprint") == sender.proofKeyFingerprint())
         check(staged.getString("recipientKeyFingerprint") == recipient.proofKeyFingerprint())
         val expected = staged.getString("transactionId")
+        productQueue.recover(logicalId(fixture, "logicalId"), body(fixture, "body"), expected)
         check(pending.retainedTransaction() == expected)
         pending.checkPaused()
         HrisProofMessages(recipientRoom, body(fixture, "body"), logicalId(fixture, "logicalId"))
@@ -165,6 +177,11 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
                                 recipient.credentialFailures.value == null
                         )
                         val sent = pending.resume(expected)
+                        productQueue.accepted(
+                            logicalId(fixture, "logicalId"),
+                            sent.transactionId,
+                            sent.eventId,
+                        )
                         check(incoming.eventId() == sent.eventId)
                         val answered =
                             ProofQueuedMessage(recipient.nativeClient, recipientRoom)
@@ -196,6 +213,9 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
                                 .put("ownedTimelineObserved", true)
                                 .put("transactionReused", true)
                                 .put("identityAfterRestart", true)
+                                .put("messageIntentRestored", true)
+                                .put("queueMappingRecovered", true)
+                                .put("queueWriterExclusive", true)
                                 .put("senderEventId", sent.eventId)
                                 .put("recipientEventId", answered.eventId)
                                 .put("senderTransaction", sent.transactionId)

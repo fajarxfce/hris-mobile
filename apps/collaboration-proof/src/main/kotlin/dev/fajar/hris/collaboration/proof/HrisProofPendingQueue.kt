@@ -2,7 +2,6 @@ package dev.fajar.hris.collaboration.proof
 
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.withTimeout
-import org.json.JSONObject
 import org.matrix.rustcomponents.sdk.*
 
 /** Observes the SDK's persisted queue without preparing a second message after restoration. */
@@ -36,21 +35,6 @@ internal class HrisProofPendingQueue(private val client: Client, private val roo
                     }
                 }
             )
-    }
-
-    suspend fun stage(room: Room, body: String, logicalId: String): String {
-        room.timeline().use { timeline ->
-            messageEventContentFromMarkdown(body).use { content ->
-                timeline
-                    .sendWithExtraContent(
-                        content,
-                        JSONObject().put("org.hris.message_id", logicalId).toString(),
-                    )
-                    .use {
-                        return retainedTransaction().also { checkPaused() }
-                    }
-            }
-        }
     }
 
     suspend fun retainedTransaction(): String =

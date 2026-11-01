@@ -6,6 +6,7 @@ import dev.fajar.starter.collaboration.data.datasources.createAndroidCollaborati
 import dev.fajar.starter.collaboration.data.mappers.collaborationSdkAcquisitionFailure
 import dev.fajar.starter.collaboration.data.sdk.CollaborationSdkRecord
 import dev.fajar.starter.collaboration.domain.entities.CollaborationOwner
+import dev.fajar.starter.collaboration.domain.repositories.CollaborationMessageQueueLease
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationRuntimeLease
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.storage.safeStorageCall
@@ -36,6 +37,21 @@ internal constructor(
     private val sync =
         SdkSyncLifecycle(lifetime) { createAndroidCollaborationSync(nativeClient, lifetime) }
     private val children = SdkChildResources(lifetime)
+    private val messageQueues =
+        AndroidCollaborationMessageQueues(
+            owner,
+            deviceId,
+            installedOperationId,
+            nativeClient,
+            lifetime,
+            children,
+        ) {
+            credentialFailures.value
+                ?: sync.failures.value?.takeIf {
+                    it.kind in setOf(FailureKind.Unauthorized, FailureKind.AccessDenied)
+                }
+                ?: if (stopRequested.get()) syncStopped().failure else null
+        }
     internal val closingRequested
         get() = stopRequested.get()
 
@@ -102,6 +118,10 @@ internal constructor(
     /** The admitted entry operation may join; the resulting child still belongs to this parent. */
     suspend fun enterTimeline(roomId: String): AppResult<AndroidCollaborationTimelineLease> =
         acquireTimeline(roomId) { nativeClient.joinRoomById(roomId) }
+
+    /** Explicit queue entry acquires a child writer; SDK delivery stays paused. */
+    suspend fun acquireMessageQueue(roomId: String): AppResult<CollaborationMessageQueueLease> =
+        messageQueues.acquire(roomId)
 
     private suspend fun acquireTimeline(
         roomId: String,

@@ -303,6 +303,14 @@ private class EntryFixture {
     var result: suspend () -> AppResult<CollaborationTimelineLease> = { AppResult.Success(lease) }
     private val runtime =
         object : CollaborationRuntimeRepository {
+            override suspend fun acquireMessageQueue(
+                owner: CollaborationOwner,
+                deviceId: String,
+                matrixRoomId: String,
+            ): AppResult<
+                dev.fajar.starter.collaboration.domain.repositories.CollaborationMessageQueueLease
+            > = error("No implicit queue acquisition")
+
             override suspend fun isOpen(
                 owner: CollaborationOwner,
                 deviceId: String,

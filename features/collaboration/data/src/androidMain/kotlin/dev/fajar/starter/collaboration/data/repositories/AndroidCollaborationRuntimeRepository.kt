@@ -29,6 +29,25 @@ class AndroidCollaborationRuntimeRepository(
     private val capacity = Semaphore(5)
     private val leases = ConcurrentHashMap.newKeySet<AndroidCollaborationRuntimeLease>()
 
+    override suspend fun acquireMessageQueue(
+        owner: CollaborationOwner,
+        deviceId: String,
+        matrixRoomId: String,
+    ): AppResult<CollaborationMessageQueueLease> {
+        val runtime =
+            leases.singleOrNull {
+                it.owner == owner && it.deviceId == deviceId && it.availableForEntry
+            }
+                ?: return AppResult.Failed(
+                    Failure(
+                        FailureKind.Unavailable,
+                        "Chat runtime is not open.",
+                        code = "client.collaboration_runtime_not_open",
+                    )
+                )
+        return runtime.acquireMessageQueue(matrixRoomId)
+    }
+
     override suspend fun isOpen(owner: CollaborationOwner, deviceId: String): AppResult<Boolean> {
         currentCoroutineContext().ensureActive()
         val existing =

@@ -19,4 +19,5 @@ dependencies {
     implementation(projects.features.collaboration.data)
     implementation(projects.core.identity.domain)
     implementation(projects.core.securestorage)
+    implementation(projects.core.database)
 }
