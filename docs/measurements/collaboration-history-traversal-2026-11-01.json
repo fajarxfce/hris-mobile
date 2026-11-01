@@ -467,5 +467,51 @@
     "testCaseSeconds": 52.113,
     "testSuiteSeconds": 95.813,
     "scope": "Builds traversal storage at e992a053; actual native fixture still covers raw metadata. Later common persisted acquisition and reference resolution have separate evidence."
+  },
+  "hostedControl": {
+    "run": "https://github.com/fajarxfce/hris-mobile/actions/runs/41286066709",
+    "commit": "e992a05318829132a0b8b569ecaa9bc6ac3d2ee5",
+    "result": "success",
+    "jobs": [
+      {
+        "name": "portable",
+        "conclusion": "success",
+        "steps": 15,
+        "nonPassingSteps": []
+      },
+      {
+        "name": "apple",
+        "conclusion": "success",
+        "steps": 13,
+        "nonPassingSteps": []
+      }
+    ],
+    "tests": {
+      "iosSimulatorArm64Test": {
+        "suites": 38,
+        "tests": 328,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "desktopTest": {
+        "suites": 47,
+        "tests": 407,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "wasmJsBrowserTest": {
+        "suites": 43,
+        "tests": 383,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "immutableSourceHashesMatched": 253,
+    "sourceManifestUploaded": false,
+    "xcodeAppHostBuildSuccesses": 1,
+    "scope": "Validates atomic traversal storage at e992a053. Later admitted acquisition, reference reconciliation and explicit restart have separate evidence."
   }
 }

@@ -28,6 +28,7 @@ class AcquireCollaborationProviderHistory(
         workspaceId: String,
         deviceId: String,
         conversationId: String,
+        origin: CollaborationHistoryPageOrigin = CollaborationHistoryPageOrigin.SavedPosition,
     ): AppResult<CollaborationProviderHistoryAcquisition> {
         if (!validCollaborationMessageId(deviceId) || !validCollaborationMessageId(conversationId))
             return failed("client.collaboration_invalid_history", FailureKind.Validation)
@@ -45,9 +46,11 @@ class AcquireCollaborationProviderHistory(
         val previous = (loaded as AppResult.Success).value
         if (previous != null && !validCollaborationHistoryProgress(previous))
             return failed("client.collaboration_invalid_history_progress")
-        if (previous?.exhausted == true)
+        val latest = origin == CollaborationHistoryPageOrigin.Latest
+        if (!latest && previous?.exhausted == true)
             return AppResult.Success(CollaborationProviderHistoryAcquisition(0, true))
-        val received = runtimes.readProviderHistory(owner, deviceId, roomId, previous?.next)
+        val position = if (latest) null else previous?.next
+        val received = runtimes.readProviderHistory(owner, deviceId, roomId, position)
         val snapshot =
             (received as? AppResult.Success)?.value?.let {
                 if (it.events.size > 20) null else it.copy(events = it.events.toList())
@@ -57,7 +60,7 @@ class AcquireCollaborationProviderHistory(
         if (
             snapshot == null ||
                 snapshot.owner != owner ||
-                snapshot.requestedPosition != previous?.next ||
+                snapshot.requestedPosition != position ||
                 !validCollaborationProviderPage(snapshot, owner.localListAccess(), traversal)
         )
             return failed("client.collaboration_invalid_history_page")
@@ -65,7 +68,7 @@ class AcquireCollaborationProviderHistory(
         if (readmitted is AppResult.Failed) return readmitted
         if ((readmitted as AppResult.Success).value != roomId)
             return failed("client.collaboration_conversation_mismatch", FailureKind.AccessDenied)
-        val staged = history.stage(owner.localListAccess(), traversal, previous, snapshot)
+        val staged = history.stage(owner.localListAccess(), traversal, previous, snapshot, origin)
         continuation(workspaceId, owner, staged).let { if (it is AppResult.Failed) return it }
         if (staged is AppResult.Failed) return staged
         if (!(staged as AppResult.Success).value)

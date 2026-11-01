@@ -47,6 +47,9 @@ internal class ProviderHistoryAcquisitionFixture {
     var beforePageReturns: suspend () -> Unit = {}
     var afterStage: suspend () -> Unit = {}
     val saved = mutableListOf<CollaborationProviderHistoryPage>()
+    val positions = mutableListOf<String?>()
+    val stagedOrigins = mutableListOf<CollaborationHistoryPageOrigin>()
+    val stagedProgress = mutableListOf<CollaborationHistoryProgress?>()
 
     init {
         delivery.control.beforeRemote = { admissions += it }
@@ -63,7 +66,7 @@ internal class ProviderHistoryAcquisitionFixture {
                 assertEquals(delivery.owner, owner)
                 assertEquals(traversal.deviceId, deviceId)
                 assertEquals(traversal.roomId, matrixRoomId)
-                assertEquals(progress?.next, position)
+                positions += position
                 reads++
                 active++
                 try {
@@ -108,10 +111,13 @@ internal class ProviderHistoryAcquisitionFixture {
                 traversal: CollaborationHistoryTraversal,
                 expected: CollaborationHistoryProgress?,
                 page: CollaborationProviderHistoryPage,
+                origin: CollaborationHistoryPageOrigin,
             ): AppResult<Boolean> {
                 checkScope(access, traversal)
                 assertEquals(delivery.owner, page.owner)
                 stages++
+                stagedOrigins += origin
+                stagedProgress += expected
                 if (rejectStage || expected != progress) return AppResult.Success(false)
                 saved += page
                 progress =
@@ -145,7 +151,9 @@ internal class ProviderHistoryAcquisitionFixture {
             local.clock,
         )
 
-    suspend fun acquire() = useCase("selection", traversal.deviceId, traversal.conversationId)
+    suspend fun acquire(
+        origin: CollaborationHistoryPageOrigin = CollaborationHistoryPageOrigin.SavedPosition
+    ) = useCase("selection", traversal.deviceId, traversal.conversationId, origin)
 
     companion object {
         const val generation = "b1000000-0000-4000-8000-000000000001"

@@ -269,6 +269,7 @@ internal class HrisProductQueueProof(
             .put("commonProviderHistoryAcquisitionOwned", true)
             .put("providerHistoryReferencesRestored", true)
             .put("providerHistoryReferencesReconciled", true)
+            .put("providerHistoryRestartPreserved", true)
     }
 
     private suspend fun reconcileProviderReferences(): CollaborationHistoryReconciliation {
@@ -297,7 +298,8 @@ internal class HrisProductQueueProof(
     }
 
     private suspend fun acquireProviderHistory(
-        runtimeAccess: HrisProofRuntimeAccess
+        runtimeAccess: HrisProofRuntimeAccess,
+        origin: CollaborationHistoryPageOrigin,
     ): CollaborationProviderHistoryAcquisition {
         val app = requireNotNull(application)
         val acquire =
@@ -313,7 +315,7 @@ internal class HrisProductQueueProof(
                 app.build,
                 app.clock,
             )
-        return success(acquire(app.workspaceId, runtime.deviceId, conversationId))
+        return success(acquire(app.workspaceId, runtime.deviceId, conversationId, origin))
     }
 
     private suspend fun readProviderReferences() =

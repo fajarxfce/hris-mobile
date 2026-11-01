@@ -9,14 +9,16 @@ internal class HrisProofProviderHistory(
     private val runtime: AndroidCollaborationRuntimeLease,
     private val roomId: String,
     private val acquire:
-        suspend (HrisProofRuntimeAccess) -> CollaborationProviderHistoryAcquisition,
+        suspend (
+            HrisProofRuntimeAccess, CollaborationHistoryPageOrigin,
+        ) -> CollaborationProviderHistoryAcquisition,
     private val stored: suspend () -> CollaborationHistoryReferences,
     private val reopen: suspend () -> Unit,
     private val reconcile: suspend () -> CollaborationHistoryReconciliation,
 ) {
     suspend fun verify(expectedEvents: Set<String>) {
         val access = HrisProofRuntimeAccess(runtime)
-        val first = acquire(access)
+        val first = acquire(access, CollaborationHistoryPageOrigin.SavedPosition)
         val page = requireNotNull(access.providerPage)
         validate(page, null)
         check(first.references == page.events.size && first.exhausted == (page.next == null))
@@ -32,7 +34,7 @@ internal class HrisProofProviderHistory(
         val replayed = success(runtime.readProviderHistory(roomId, page.start))
         validate(replayed, page.start)
         check(replayed.events == page.events)
-        val second = acquire(access)
+        val second = acquire(access, CollaborationHistoryPageOrigin.SavedPosition)
         if (page.next == null) {
             check(
                 access.providerReads == 1 &&
@@ -81,6 +83,31 @@ internal class HrisProofProviderHistory(
         check(stored() == resolved)
         check(reconcile() == CollaborationHistoryReconciliation(0, pending.size, null))
         check(stored() == resolved)
+        verifyRestart(access, resolved)
+    }
+
+    private suspend fun verifyRestart(
+        access: HrisProofRuntimeAccess,
+        before: CollaborationHistoryReferences,
+    ) {
+        val reads = access.providerReads
+        val result = acquire(access, CollaborationHistoryPageOrigin.Latest)
+        val page = requireNotNull(access.providerPage)
+        validate(page, null)
+        check(access.providerReads == reads + 1)
+        check(
+            result == CollaborationProviderHistoryAcquisition(page.events.size, page.next == null)
+        )
+        val previous = requireNotNull(before.progress)
+        val retained = stored()
+        check(
+            retained.progress == previous.copy(revision = previous.revision + 1, next = page.next)
+        )
+        check(retained.events == before.events && retained.after == before.after)
+        reopen()
+        check(stored() == retained)
+        check(reconcile() == CollaborationHistoryReconciliation(0, retained.events.size, null))
+        check(stored() == retained)
     }
 
     private fun validate(page: CollaborationProviderHistoryPage, position: String?) {

@@ -94,6 +94,7 @@ internal class HistoryReferenceReconciliationFixture {
                 traversal: CollaborationHistoryTraversal,
                 expected: CollaborationHistoryProgress?,
                 page: CollaborationProviderHistoryPage,
+                origin: CollaborationHistoryPageOrigin,
             ): AppResult<Boolean> = error("Offline reconciliation never fetches pages")
 
             override suspend fun resolve(

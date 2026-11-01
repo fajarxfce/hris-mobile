@@ -22,13 +22,15 @@ interface CollaborationHistoryTraversalRepository {
     /**
      * Atomically retains every page reference and the next position, including empty pages.
      * Duplicates preserve first traversal order; conflicting metadata fails the entire batch. False
-     * means the expected progress or active owner changed. No implicit retry or reset.
+     * means the expected progress or active owner changed. Latest explicitly replaces only the
+     * provider position; pending/resolved identities and first sequences remain. No implicit retry.
      */
     suspend fun stage(
         access: CollaborationLocalAccess,
         traversal: CollaborationHistoryTraversal,
         expected: CollaborationHistoryProgress?,
         page: CollaborationProviderHistoryPage,
+        origin: CollaborationHistoryPageOrigin = CollaborationHistoryPageOrigin.SavedPosition,
     ): AppResult<Boolean>
 
     /**

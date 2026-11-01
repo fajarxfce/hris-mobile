@@ -1093,3 +1093,60 @@ No live/schema/phone change. Atomic commits and push after every commit remain
 authorized. Continue after this checkpoint; the user requested the full plan.
 
 [Earlier November detail](collaboration-implementation-history-2026-11-01.md)
+
+## Offline original-reference reconciliation — 1 November 2026
+
+**Offline reference reconciliation now passes actual Android/HRIS recovery.**
+[Evidence](measurements/collaboration-history-resolution-2026-11-01.json) records
+run **`cfd1d97c98f84338a57ac19d1852aa78`**, **49.920s case / 72.239s native suite /
+104s Gradle**, cleanup true. The proof resolves the two retained original messages,
+keeps nine unresolved metadata entries, reopens the encrypted database and checks
+that a second reconciliation changes nothing. Existing encrypted exchange,
+process-death, paused sibling queue, receipt recovery and original-body checks pass.
+The gateway still observes **9/9/9 admissions, zero failures**; reconciliation
+makes no SDK/network request. Strict evidence flags are mandatory at each boundary.
+
+`ReconcileCollaborationHistoryReferences` reads one pending page of at most 20.
+It validates each original alias's event ID, original sender and own timestamp;
+a confirmed tombstone before its original may omit the timestamp. Mismatches fail
+the whole page, while missing originals stay pending. Current local ownership and
+persisted read restrictions are checked after every suspension, including commit.
+Ordinary credential age does not hide owned facts. `resolve` atomically marks the
+exact rows resolved and removes their pending query tags, preserving their keyed
+identities, first sequences, total references and provider position. Overlap cannot
+reactivate resolved work. Older payloads default to pending without a DB migration.
+
+Twelve new domain cases and ten SQLite/IndexedDB cases pass. Focused checks pass
+in **136s**. Full root/browser/Android/Wasm/proof/lint passes in **283s**:
+**2,445 desktop / 156 Android host / 231 domain browser / 188 data browser**, zero
+failures/errors/skips and zero lint errors. Platform fixture/quality passes in
+**30s**; 35 Python driver cases pass. All **262 Mobile / 33 Platform source hashes**
+match. Dev APK **`67c44ca4`** is built, not installed; actual proof uses **`17a3b2be`**.
+The emulator is stopped. The complete final source and artifact hashes are in Git.
+
+**Next: explicit provider-cursor recovery that preserves retained references, then
+coordinated SDK reopening, ACK-before-journal recovery and command retirement,
+then Chat UI.** Keep unknown/rich/edited references recoverable and preserve
+original identities, SDK crypto stores/cursors and native transactions. The native
+client still retains at most 16 distinct focus keys. Continue all P0–P8 and all
+54 groups; **none is accepted**. Apple/web owned adapters, interoperability,
+backup, rich messaging and every call/meeting phase remain. Physical iPhone testing
+is waived; Apple implementation remains required. Starter stays clean at `36116b2`;
+this HRIS-specific policy/storage increment has no generic foundation port.
+
+Predecessor CI audits are recorded separately. Focus control **`41283261749`** at
+`17b1fc77` passes all 28 steps, **389 desktop / 365 browser / 321 iOS simulator**
+cases and actual Xcode build, with 237 hashes matched. Traversal HRIS
+**`41286066653`** at `e992a053` passes 17 steps, 156 host cases and native run
+`a39d9f3d` (**52.113s / 95.813s**), cleanup true, 253/33 hashes matched. Common
+acquisition HRIS **`41287684469`** at `0cb6509a` passes 17 steps, 156 host cases and
+run `809ee2a4` (**64.697s / 110.278s**), cleanup true, strict persisted-acquisition
+flags and 256/33 hashes matched. Acquisition protocol **`41287684394`** reports
+success. Traversal control `41286066709` is still running; acquisition control
+`41287684753` was pending at the last check. Audit terminal artifacts and this
+increment's own CI after push; earlier proofs do not validate later code.
+
+The HRIS workflow pins the tested Platform fixture **`7de15969`**, now pushed.
+
+No live/schema/phone change. Atomic commits and push after every commit remain
+authorized. Continue after this checkpoint; the user requested the full plan.

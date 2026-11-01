@@ -167,9 +167,10 @@ metadata reader is exposed through the runtime repository; Chat UI wiring is pen
 
 `AcquireCollaborationProviderHistory` captures the live owner and existing company
 read gate, admits the active platform device, owned direct conversation and exact
-ready room, then reads retained traversal progress. A valid exhausted checkpoint
-returns without requesting another provider page. Otherwise one bounded request
-uses its exact stored position. There is no automatic credential refresh, retry,
+ready room, then reads retained traversal progress. With the default `SavedPosition`
+origin, a valid exhausted checkpoint returns without requesting another provider
+page; otherwise one bounded request uses its exact stored position. `Latest` is an
+explicit restart described below. There is no automatic credential refresh, retry,
 cursor reset, SDK installation or send-queue work in this operation.
 
 The use case detaches received references before further suspension and checks the
@@ -186,6 +187,39 @@ The returned count describes received references, including overlaps and state
 events; it is not a new-message or successful-decryption count. The operation is
 registered through the collaboration data module. Unsupported platform adapters
 report unavailable. Callers own invocation and cancellation.
+
+## Explicit provider-cursor recovery
+
+[Validation and actual SDK evidence](measurements/collaboration-history-restart-2026-11-01.json).
+
+`AcquireCollaborationProviderHistory(..., origin = Latest)` explicitly requests a
+new first page. It can recover from an unusable provider position or revisit an
+exhausted traversal to discover newer events. It still authenticates the retained
+local checkpoint; malformed or unavailable local storage is never discarded to
+make recovery appear successful. The default `SavedPosition` path never silently
+switches origin on a conflict, transport error or empty/exhausted response.
+
+The request omits the old provider position. After the same live admission and
+whole-page validation as continuation, storage commits the new page and provider
+position against the exact previous generation/revision. No intermediate cursor
+clear is written. Failure before commit retains the old cursor and all references;
+a lost response after commit retains the new cursor and its complete batch.
+
+Existing references keep their ID, first sequence, metadata and resolved status,
+including those not present in the newly received page. Overlaps cannot reactivate
+resolved work. New references receive the next first-observed sequences, and only
+new identities increase the total. Empty/terminal first pages are still valid
+commits. A concurrent resolution or acquisition can win the checkpoint; the loser
+reports conflict and never retries automatically. SDK crypto keys, sync cursors,
+queues and original-message projections are not replaced by this operation.
+
+The actual Android fixture explicitly fetches latest after offline resolution,
+verifies no reference is duplicated/reactivated, reopens the database and checks
+that another reconciliation remains a no-op. The server separately requires an
+unpositioned first and last metadata request, only positioned requests between
+them, and increasing successful HRIS admission around every request. This verifies
+explicit traversal restart; retirement of a real provider encryption key and
+coordinated SDK-client reopening remain separate recovery scenarios.
 
 ## Offline reference reconciliation
 
@@ -254,7 +288,8 @@ that boundary only; disk quotas and production capacity remain separate work.
 An empty advancing page still persists its next position. A terminal page records
 `exhausted` while retaining every existing reference. This flag describes backward
 provider traversal; it does not acknowledge decryption, original projection or
-future new messages. Explicit cursor reset/recovery policy remains pending.
+future new messages. Explicit `Latest` acquisition can begin again while retaining
+every pending/resolved reference, as described below.
 Live device/conversation/room admission belongs to the common acquisition use case;
 this repository's DI binding starts no page acquisition or background retry.
 

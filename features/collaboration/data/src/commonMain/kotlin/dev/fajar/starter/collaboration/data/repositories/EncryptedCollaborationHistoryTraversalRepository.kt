@@ -90,12 +90,14 @@ class EncryptedCollaborationHistoryTraversalRepository(
         traversal: CollaborationHistoryTraversal,
         expected: CollaborationHistoryProgress?,
         page: CollaborationProviderHistoryPage,
+        origin: CollaborationHistoryPageOrigin,
     ) = safeStorageCall {
         require(page.events.size <= 20)
         val captured = page.copy(events = page.events.toList())
         require(validCollaborationProviderPage(captured, access, traversal))
-        require(expected == null || !expected.exhausted)
-        require(captured.requestedPosition == expected?.next)
+        val latest = origin == CollaborationHistoryPageOrigin.Latest
+        require(latest || expected == null || !expected.exhausted)
+        require(captured.requestedPosition == if (latest) null else expected?.next)
         val scope = historyScope(access)
         val partition = traversalPartition(access, traversal)
         val raw = replicas.checkpoint(scope, partition)

@@ -471,5 +471,100 @@
     "The final trace retains 9/9/9 admitted device/conversation/room reads with zero failures; offline reconciliation introduces no provider requests. Earlier encrypted exchange, process death, queue/receipt isolation and restored original bodies still pass.",
     "The focused command precedes strengthening the substituted-alias fixture to return a different valid alias. The complete application and actual SDK commands validate the final recorded sources.",
     "Explicit provider-cursor recovery, coordinated SDK reopening, ACK-before-journal reconciliation, command retirement, remaining original/rich-event acquisition and Chat UI remain. None of 54 groups is accepted."
-  ]
+  ],
+  "hostedHris": {
+    "run": "https://github.com/fajarxfce/hris-mobile/actions/runs/41289463686",
+    "commit": "61c6b516cc635c9d651e3feda30bba756271424b",
+    "result": "success",
+    "jobs": [
+      {
+        "name": "android-hris",
+        "conclusion": "success",
+        "steps": 17,
+        "nonPassingSteps": []
+      }
+    ],
+    "tests": {
+      "testAndroidHostTest": {
+        "suites": 25,
+        "tests": 156,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "test": {
+        "suites": 1,
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "immutableSourceHashesMatched": 262,
+    "platformCommit": "7de159691bec0d03aaac7cb9cfae5ac5d066c59c",
+    "platformImmutableSourceHashesMatched": 33,
+    "sourceManifestUploaded": false,
+    "fixtureRun": "21032404adae48d98fc594b1a3132b08",
+    "actualSdk": {
+      "passed": true,
+      "encryptedBothDirections": true,
+      "logicalIdsPreserved": true,
+      "cleanup": true,
+      "protectedStoreReopened": true,
+      "missingRecordPreserved": true,
+      "wrongPassphrasePreserved": true,
+      "exclusiveOwner": true,
+      "processRestarted": true,
+      "queueRestored": true,
+      "transactionReused": true,
+      "identityAfterRestart": true,
+      "messageIntentRestored": true,
+      "queueMappingRecovered": true,
+      "queueWriterExclusive": true,
+      "perRoomDeliveryIsolated": true,
+      "heldQueueRestored": true,
+      "nativeDeliveryOwned": true,
+      "commonSenderOwned": true,
+      "receiptJournalRecovered": true,
+      "projectionInterrupted": true,
+      "originalHistoryWindowOwned": true,
+      "historyBodiesRestored": true,
+      "commonHistoryAcquisitionOwned": true,
+      "latestHistoryHeadOwned": true,
+      "admittedSingleHeadRead": true,
+      "providerHistoryPageOwned": true,
+      "commonProviderHistoryAcquisitionOwned": true,
+      "providerHistoryReferencesRestored": true,
+      "providerHistoryReferencesReconciled": true,
+      "admittedProviderPages": true,
+      "historyWindow": {
+        "originals": 2,
+        "unavailable": 9,
+        "extractionNanos": 15533551,
+        "modelCharacters": 4732,
+        "originalCharacters": 937
+      },
+      "applicationAdmittedBeforeSend": true,
+      "applicationAdmittedAroundHistory": true,
+      "applicationAdmissions": {
+        "device": 9,
+        "conversation": 9,
+        "room": 9,
+        "failures": 0
+      },
+      "heldRoomNeverSent": true,
+      "pausedAcrossRestart": true,
+      "syncInterruptedAfterRestart": true,
+      "syncRetriedWithRetainedCursor": true,
+      "artifact": {
+        "apkSha256": "3ffcbb2e8bc4bb3c4f7e9fabc10740b2aaa32981e1e19621aaa8e990a2209b1c",
+        "package": "dev.fajar.hris.collaboration.proof",
+        "avd": "hris-mobile-dev",
+        "androidApi": "35"
+      }
+    },
+    "testCaseSeconds": 50.626,
+    "testSuiteSeconds": 91.17,
+    "scope": "Validates offline original-reference resolution at 61c6b516. Explicit provider restart has later separate evidence."
+  }
 }

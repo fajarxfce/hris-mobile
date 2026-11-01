@@ -1,5 +1,11 @@
 package dev.fajar.starter.collaboration.domain.entities
 
+/** Latest explicitly restarts provider traversal while retaining all local reference identities. */
+enum class CollaborationHistoryPageOrigin {
+    SavedPosition,
+    Latest,
+}
+
 /** Received reference count, not new messages or successful decryption. */
 data class CollaborationProviderHistoryAcquisition(val references: Int, val exhausted: Boolean)
 
