@@ -27,16 +27,16 @@ fixed the fixture. Every attempt is retained. Emulator is stopped.
 all remaining P0–P8.** Scheduled execution is accepted only for this scenario. Deliberate
 interruption while sending, retry/cancellation races, production login recovery, incoming
 FCM/replies, Apple/web runtime and scale remain separate criteria. No complete PRD group is
-accepted. No live provider or Starter change. Add the new scenario to the native CI workflow
-after the Platform fixture commit is pushed; keep both existing regressions and upload only
-bounded evidence. The older sender-only hosted run `41319561027` reports success; the two-
+accepted. No live provider or Starter change. The native CI workflow now pins Platform `075e63dbdc0271ebf00bea4fd9756c7441408328`, runs all three scenarios
+and uploads only bounded checkpoint/trace/result evidence. YAML/target checks pass; audit
+the matching hosted run after push before claiming its acceptance. The older sender-only hosted run `41319561027` reports success; the two-
 scenario run `41319810722` is running. Audit artifacts before claiming hosted equivalence.
 
 Release build 5 remains prepared but uninstalled because WireGuard ADB is unreachable; the
 reconnect question is still pending. Use the saved preflight/install-only helpers when the
 phone returns, preserving signer/data and avoiding UI interaction. Continue independently
-while unavailable and push every validated atomic commit. Current uncommitted WorkManager
-code supersedes the earlier `.work/scheduled-proof-draft` design files.
+while unavailable and push every validated atomic commit. The implemented WorkManager
+proof supersedes the earlier `.work/scheduled-proof-draft` design files.
 
 
 ## Release build 5 prepared; phone connection pending — 1 November 2026

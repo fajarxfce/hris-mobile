@@ -64,3 +64,8 @@ Continue remote older-history paging, durable drafts and safe pending cancellati
 then incoming notifications/replies, groups/media/actions, verification/key continuity,
 backups, full Apple/web adapters, calls and meetings. Keep platform interruption coverage
 explicit while completing those product paths.
+
+The native HRIS workflow pins Platform `075e63dbdc0271ebf00bea4fd9756c7441408328` and runs all three
+scenarios sequentially on its owned emulator. It archives bounded job/intent/checkpoint
+evidence and excludes private fixture credentials. Hosted acceptance requires auditing
+the corresponding run and artifacts; local results above do not imply that CI has passed.

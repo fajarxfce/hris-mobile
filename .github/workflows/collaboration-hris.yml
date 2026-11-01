@@ -41,7 +41,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           repository: fajarxfce/hris-platform
-          ref: 784fc9113a4f09fd1ed9bff7541479088263aca5
+          ref: 075e63dbdc0271ebf00bea4fd9756c7441408328
           path: platform
       - uses: actions/setup-java@v4
         with:
@@ -75,7 +75,7 @@ jobs:
           avd-name: hris-mobile-dev
           emulator-port: 5560
           emulator-options: -no-window -no-snapshot -noaudio -no-boot-anim -gpu swiftshader -memory 2048 -cores 2
-          script: ./platform/gradlew -p platform --no-daemon --no-parallel --max-workers=1 '-Dorg.gradle.jvmargs=-Xmx1536m -Dfile.encoding=UTF-8' :apps:server:cleanTest :apps:server:test --tests '*NativeCollaborationSdkInteropTest' --tests '*NativeCollaborationWorkerInteropTest'
+          script: ./platform/gradlew -p platform --no-daemon --no-parallel --max-workers=1 '-Dorg.gradle.jvmargs=-Xmx1536m -Dfile.encoding=UTF-8' :apps:server:cleanTest :apps:server:test --tests '*NativeCollaborationSdkInteropTest' --tests '*NativeCollaborationWorkerInteropTest' --tests '*NativeCollaborationScheduledInteropTest'
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -89,6 +89,9 @@ jobs:
             platform/.work/collaboration-worker/*/gateway-trace.json
             platform/.work/collaboration-worker/*/native-worker-queued.json
             platform/.work/collaboration-worker/*/native-worker-restored.json
+            platform/.work/collaboration-worker/*/stopped.json
+            platform/.work/collaboration-worker/*/started.json
+            platform/.work/collaboration-worker/*/network-before.json
             platform/apps/server/build/test-results/test/TEST-*NativeCollaboration*InteropTest.xml
             mobile/features/collaboration/data/build/test-results/testAndroidHostTest/TEST-*.xml
           include-hidden-files: true
