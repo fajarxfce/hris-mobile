@@ -1,5 +1,28 @@
 # Agent continuation — HRIS Mobile
 
+## Release 8 installed; continue native frozen-draft proof — 1 November 2026
+
+**Phone updated.** Release 8 from clean source `43cce8c0031c310d714890f4912052fe3316cdae` is installed
+in place over code 7 on `10.77.77.3:5555` at 19:22 UTC. Build passes in 230s Gradle /
+234.022s wall, lint zero fatal/errors and one warning. Signed arm64 APK is 87,314,204 bytes,
+SHA-256 `c2858829bcfe87139adde011333369e639f2700d215a652c2b1a569fb1e9f2c4`.
+Private API/Firebase, embedded VCS, non-debuggable flags and 16 KiB alignment are verified.
+Post-install pull exactly matches bytes/hash; package/signer/application identity and original
+first-install identity are preserved. No uninstall, data clearing or UI launch. [Release evidence](measurements/android-release-drafts-2026-11-01.json).
+This is the first installed composer-v2 build; do not downgrade to earlier APKs. Future
+updates must use code 9+ and notify first, install-only. Helpers/artifacts remain in
+`.work/release-phone-2026-11-01-build8`.
+
+**Continue immediately:** actual native frozen-only process-death proof. WIP adds an explicit
+FROZEN_DRAFT initial state to the Mobile proof app and Platform driver; pending command count
+must remain zero before/after death and the exact draft revision/body/ID must survive. The
+new server case retains a separate ordinary QUEUED case and uses isolated Spring trace state.
+Python driver 65 cases pass; Kotlin/server compilation and matching proof APK/native execution
+are still being completed. These fixture changes were made after release verification and
+are not part of the installed APK. Capture source/results, retain failures and commit/push
+them after proof. Then safe pending cancellation, push/replies and all remaining P0–P8.
+No full communication group is marked complete. Physical iPhone tests remain waived only.
+
 ## Hosted native regressions and Starter Apple port audited — 1 November 2026
 
 [Native f904 run 41335935547](measurements/chat-window-native-ci-2026-11-01.json) passes
