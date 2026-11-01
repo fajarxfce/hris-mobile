@@ -1,5 +1,36 @@
 # Agent continuation — HRIS Mobile
 
+## Release 7 installed; hosted foreground proof audited — 1 November 2026
+
+**Phone is updated.** Release 7 from Mobile `bf83c71e1688ce5f57ba1dad39f95900b82f8276`
+was installed in place over code 4 on `10.77.77.3:5555` at 18:02 UTC. Versions 5/6 were
+never installed. Build: 249s Gradle / 253.35s wall, clean before/after, private API/Firebase,
+16 KiB alignment and embedded VCS verified; lint zero fatal/errors and one warning.
+APK is 87,264,680 bytes, SHA-256 `1ab847df1e169cfaf5563296159d772148896e193aaa5cc1c969b05ba1f4a47b`.
+Preflight confirmed the existing signer. Post-install pull matches exact bytes and confirms
+version 1.0.0/code 7, non-debuggable, same application identity and first-install identity.
+No uninstall, data clearing or UI launch. [Release evidence](measurements/android-release-window-2026-11-01.json).
+The build7 helpers/artifacts are retained under `.work/release-phone-2026-11-01-build7`.
+Do not install older prepared builds. Notify before each future install; keep install-only.
+
+Native hosted [run 41331799148](https://github.com/fajarxfce/hris-mobile/actions/runs/41331799148)
+is fully audited: Mobile `2b2d81b3`, Platform `79326538`, APK `d94ba860`, Android API 35.
+All three cases pass: SDK 56.228s, direct worker/foreground 67.626s, scheduled worker 90.851s;
+six cleanup unit cases also pass. Direct recovery verifies 33 encrypted originals, four
+history actions, 43 references/ten state-only references, zero admission failures and complete
+cleanup. The oldest original is explicitly retained after Stop; all 33 are checked before
+Stop. Scheduled recovery keeps the OS job through ordinary death, starts automatically,
+restores networking and finishes SUCCEEDED. [Audited 18 files](measurements/chat-foreground-ci-2026-11-01.json)
+retain the earlier run 41325612922 ClosePending failure and its unknown direct delivery result.
+
+This hosted result precedes the new 150/50 window: matching native run 41334029287 at
+`bf83c71e` is still separate. Starter port `cd7022e` is pushed. No live server deployment.
+**Continue:** apply `.work/apple-replica-test.txt` to an isolated iosTest and wire Mobile CI,
+execute hosted simulator proof before porting that additional test/step; then durable drafts,
+exact submission recovery, safe cancellation, incoming push/replies and every unaccepted
+P0–P8 group. Physical iPhone tests remain waived. The prepared `.work/chat-drafts-next.txt`
+is guidance only. Do not end the long run at this installed checkpoint.
+
 ## Bidirectional local history beyond 500 originals — 1 November 2026
 
 The ten-page stop is removed. One coherent encrypted window reads at most 150 originals
