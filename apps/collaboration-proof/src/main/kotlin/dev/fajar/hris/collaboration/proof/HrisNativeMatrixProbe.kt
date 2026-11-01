@@ -275,7 +275,12 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
     }
 
     private fun JSONObject.withHistoryEvidence(history: JSONObject) = apply {
-        for (flag in listOf("latestHistoryHeadOwned", "commonHistoryAcquisitionOwned")) {
+        for (flag in
+            listOf(
+                "latestHistoryHeadOwned",
+                "commonHistoryAcquisitionOwned",
+                "providerHistoryPageOwned",
+            )) {
             put(flag, history.remove(flag) == true)
         }
         put("originalHistoryWindowOwned", true)

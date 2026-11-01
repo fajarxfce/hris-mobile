@@ -53,18 +53,25 @@ exposes identity, timestamp and typed content, without the complete raw original
 content/custom fields needed for logical IDs and canonical fingerprints. Reusing
 it alone would weaken the already-proved original-content contract.
 
-## Next implementation
+## Provider metadata and remaining implementation
 
-A bounded page adapter must preserve this ordering: reserve its focus/page work,
-complete the SDK page request, acquire a coherent snapshot of the completed cache,
-retain unresolved originals, persist acquired facts, then publish progress under
-fresh HRIS admission. Cancellation or a lost outcome must not cause an unbounded
-repeat of native pagination or a false history-end acknowledgement.
+The next adapter uses [bounded provider-page metadata](collaboration-history.md#provider-page-metadata)
+through the existing gateway and current SDK credentials. This obtains explicit
+opaque positions and event references, including empty advancing pages, without
+treating the asynchronous UI timeline as the source of traversal progress. The
+SDK still supplies original decrypted content through owned context windows.
+The metadata adapter itself does not persist or acknowledge those references.
+
+The common operation must atomically stage page references and positions, acquire
+originals through bounded SDK work, retain unresolved references and persist facts
+under fresh HRIS admission. Cancellation or a lost outcome must not cause an
+unbounded repeat of native pagination or a false history-end acknowledgement.
 
 A fresh timeline view of the **same** existing focus is a candidate snapshot barrier:
 its awaited initialization subscribes to the focused cache under its read lock and
 builds initial items from that cache. The SDK key ignores initial-context size.
-Validate this with delayed-update tests and actual SDK evidence before wiring it;
+This remains an alternative if native pagination is introduced later. Validate
+it with delayed-update tests and actual SDK evidence before wiring it;
 retain/dispose both views explicitly and account for the additional native room
 cache clone. It is not implemented or accepted by the focus-budget change.
 

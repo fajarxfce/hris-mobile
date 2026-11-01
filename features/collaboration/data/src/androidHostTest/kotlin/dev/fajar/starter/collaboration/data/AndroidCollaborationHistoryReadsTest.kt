@@ -1,6 +1,6 @@
 package dev.fajar.starter.collaboration.data
 
-import dev.fajar.starter.collaboration.data.api.CollaborationHistoryHeadApi
+import dev.fajar.starter.collaboration.data.api.CollaborationHistoryApi
 import dev.fajar.starter.collaboration.data.repositories.*
 import dev.fajar.starter.collaboration.data.sdk.CollaborationSdkEndpoint
 import dev.fajar.starter.common.result.*
@@ -12,7 +12,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.test.*
 import org.matrix.rustcomponents.sdk.*
 
-class AndroidCollaborationHistoryHeadsTest {
+class AndroidCollaborationHistoryReadsTest {
     private val home = "https://gateway.example.test/"
     private val room = "!room:test"
     private val user = "@fictional:test"
@@ -20,6 +20,132 @@ class AndroidCollaborationHistoryHeadsTest {
 
     private fun session(token: String = "current-fictional-token") =
         Session(token, "refresh", user, device, home, null, SlidingSyncVersion.NONE)
+
+    @Test
+    fun invalidPagePositionsNeverReadSdkCredentialsOrStartTransport() = runTest {
+        var sessions = 0
+        val http = createHttpClient(MockEngine { error("No invalid-position transport") }, home)
+        val children = SdkChildResources(this)
+        val sdk =
+            object : Client(NoHandle) {
+                override fun session(): Session {
+                    sessions++
+                    return this@AndroidCollaborationHistoryReadsTest.session()
+                }
+            }
+        val reads =
+            AndroidCollaborationHistoryReads(
+                sdk,
+                user,
+                device,
+                home,
+                children,
+                this,
+                CollaborationHistoryApi(http, CollaborationSdkEndpoint(home)),
+            ) {
+                null
+            }
+        try {
+            for (position in listOf("", "bad\nposition", "é", "x".repeat(4097))) {
+                assertEquals(
+                    FailureKind.Validation,
+                    assertIs<AppResult.Failed>(reads.page(room, position)).failure.kind,
+                )
+            }
+            assertEquals(0, sessions)
+        } finally {
+            children.close()
+            http.cancelAndClose()
+        }
+    }
+
+    @Test
+    fun parentCancellationStopsAProviderPageAndPreservesTheBorrowedPool() = runTest {
+        val entered = CompletableDeferred<Unit>()
+        val stopped = CompletableDeferred<Unit>()
+        var requests = 0
+        val http =
+            createHttpClient(
+                MockEngine {
+                    requests++
+                    assertEquals("opaque-position", it.url.parameters["from"])
+                    assertEquals("20", it.url.parameters["limit"])
+                    try {
+                        entered.complete(Unit)
+                        awaitCancellation()
+                    } finally {
+                        stopped.complete(Unit)
+                    }
+                },
+                home,
+            )
+        val children = SdkChildResources(this)
+        val sdk =
+            object : Client(NoHandle) {
+                override fun session() = this@AndroidCollaborationHistoryReadsTest.session()
+            }
+        val reads =
+            AndroidCollaborationHistoryReads(
+                sdk,
+                user,
+                device,
+                home,
+                children,
+                this,
+                CollaborationHistoryApi(http, CollaborationSdkEndpoint(home)),
+            ) {
+                null
+            }
+        try {
+            val pending = async { reads.page(room, "opaque-position") }
+            entered.await()
+            assertEquals(AppResult.Success(Unit), children.close())
+            assertIs<AppResult.Failed>(pending.await())
+            stopped.await()
+            assertEquals(1, requests)
+            assertTrue(http.coroutineContext.isActive)
+        } finally {
+            children.close()
+            http.cancelAndClose()
+        }
+    }
+
+    @Test
+    fun pageDecodingCannotPublishPastLateRuntimeDenial() = runTest {
+        val denied = Failure(FailureKind.AccessDenied, "Denied", code = "permission_denied")
+        var failure: Failure? = null
+        val http =
+            createHttpClient(
+                MockEngine {
+                    failure = denied
+                    respond("""{"start":"opaque","chunk":[]}""")
+                },
+                home,
+            )
+        val children = SdkChildResources(this)
+        val sdk =
+            object : Client(NoHandle) {
+                override fun session() = this@AndroidCollaborationHistoryReadsTest.session()
+            }
+        val reads =
+            AndroidCollaborationHistoryReads(
+                sdk,
+                user,
+                device,
+                home,
+                children,
+                this,
+                CollaborationHistoryApi(http, CollaborationSdkEndpoint(home)),
+            ) {
+                failure
+            }
+        try {
+            assertEquals(AppResult.Failed(denied), reads.page(room, null))
+        } finally {
+            children.close()
+            http.cancelAndClose()
+        }
+    }
 
     @Test
     fun currentSdkTokenIsReadPerRequestAndBorrowedTransportSurvivesChildAndParentClose() = runTest {
@@ -40,14 +166,14 @@ class AndroidCollaborationHistoryHeadsTest {
                 override fun session() = session(token)
             }
         val heads =
-            AndroidCollaborationHistoryHeads(
+            AndroidCollaborationHistoryReads(
                 sdk,
                 user,
                 device,
                 home,
                 children,
                 this,
-                CollaborationHistoryHeadApi(http, CollaborationSdkEndpoint(home)),
+                CollaborationHistoryApi(http, CollaborationSdkEndpoint(home)),
             ) {
                 null
             }
@@ -85,14 +211,14 @@ class AndroidCollaborationHistoryHeadsTest {
                         override fun session() = value
                     }
                 val heads =
-                    AndroidCollaborationHistoryHeads(
+                    AndroidCollaborationHistoryReads(
                         sdk,
                         user,
                         device,
                         home,
                         children,
                         this,
-                        CollaborationHistoryHeadApi(http, CollaborationSdkEndpoint(home)),
+                        CollaborationHistoryApi(http, CollaborationSdkEndpoint(home)),
                     ) {
                         null
                     }
@@ -126,17 +252,17 @@ class AndroidCollaborationHistoryHeadsTest {
             val children = SdkChildResources(this)
             val sdk =
                 object : Client(NoHandle) {
-                    override fun session() = this@AndroidCollaborationHistoryHeadsTest.session()
+                    override fun session() = this@AndroidCollaborationHistoryReadsTest.session()
                 }
             val heads =
-                AndroidCollaborationHistoryHeads(
+                AndroidCollaborationHistoryReads(
                     sdk,
                     user,
                     device,
                     home,
                     children,
                     this,
-                    CollaborationHistoryHeadApi(http, CollaborationSdkEndpoint(home)),
+                    CollaborationHistoryApi(http, CollaborationSdkEndpoint(home)),
                 ) {
                     null
                 }
@@ -176,17 +302,17 @@ class AndroidCollaborationHistoryHeadsTest {
             val children = SdkChildResources(this)
             val sdk =
                 object : Client(NoHandle) {
-                    override fun session() = this@AndroidCollaborationHistoryHeadsTest.session()
+                    override fun session() = this@AndroidCollaborationHistoryReadsTest.session()
                 }
             val heads =
-                AndroidCollaborationHistoryHeads(
+                AndroidCollaborationHistoryReads(
                     sdk,
                     user,
                     device,
                     home,
                     children,
                     this,
-                    CollaborationHistoryHeadApi(http, CollaborationSdkEndpoint(home)),
+                    CollaborationHistoryApi(http, CollaborationSdkEndpoint(home)),
                 ) {
                     failure
                 }

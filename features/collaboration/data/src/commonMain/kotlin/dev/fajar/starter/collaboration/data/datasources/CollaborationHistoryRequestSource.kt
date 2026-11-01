@@ -1,15 +1,16 @@
 package dev.fajar.starter.collaboration.data.datasources
 
-import dev.fajar.starter.collaboration.data.api.CollaborationHistoryHeadApi
+import dev.fajar.starter.collaboration.data.api.CollaborationHistoryApi
+import dev.fajar.starter.collaboration.data.dto.CollaborationHistoryRequest
 import kotlinx.coroutines.*
 
 /**
  * Registered before starting I/O; disposal cancels this request, never the borrowed HTTP client.
  */
-internal class CollaborationHistoryHeadSource(
+internal class CollaborationHistoryRequestSource(
     private val lifetime: CoroutineScope,
-    private val api: CollaborationHistoryHeadApi,
-    private val roomId: String,
+    private val api: CollaborationHistoryApi,
+    private val query: CollaborationHistoryRequest,
 ) {
     private var request: Deferred<Result<String>>? = null
 
@@ -18,7 +19,7 @@ internal class CollaborationHistoryHeadSource(
         request =
             lifetime.async {
                 try {
-                    Result.success(api.read(accessToken, roomId))
+                    Result.success(api.read(accessToken, query))
                 } catch (cancelled: CancellationException) {
                     throw cancelled
                 } catch (failure: Exception) {

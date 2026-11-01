@@ -1,6 +1,6 @@
 package dev.fajar.starter.collaboration.data
 
-import dev.fajar.starter.collaboration.data.api.CollaborationHistoryHeadApi
+import dev.fajar.starter.collaboration.data.api.CollaborationHistoryApi
 import dev.fajar.starter.collaboration.data.mappers.collaborationHistoryHead
 import dev.fajar.starter.collaboration.data.sdk.CollaborationSdkEndpoint
 import dev.fajar.starter.common.result.*
@@ -36,7 +36,7 @@ class CollaborationHistoryHeadTest {
             )
         try {
             val api =
-                CollaborationHistoryHeadApi(
+                CollaborationHistoryApi(
                     client,
                     CollaborationSdkEndpoint("https://gateway.example.test/"),
                 )
@@ -100,7 +100,7 @@ class CollaborationHistoryHeadTest {
                 )
             try {
                 val api =
-                    CollaborationHistoryHeadApi(
+                    CollaborationHistoryApi(
                         client,
                         CollaborationSdkEndpoint("https://gateway.example.test/"),
                     )
@@ -129,7 +129,7 @@ class CollaborationHistoryHeadTest {
                 )
             try {
                 val api =
-                    CollaborationHistoryHeadApi(
+                    CollaborationHistoryApi(
                         client,
                         CollaborationSdkEndpoint("https://gateway.example.test/"),
                     )
@@ -151,7 +151,7 @@ class CollaborationHistoryHeadTest {
             )
         try {
             val api =
-                CollaborationHistoryHeadApi(
+                CollaborationHistoryApi(
                     client,
                     CollaborationSdkEndpoint("https://gateway.example.test/"),
                 )

@@ -867,3 +867,63 @@ actual fixture code changes. No live/schema/phone change; emulator is stopped.
 Starter remains `36116b2`; current HRIS code needs no generic foundation port.
 Atomic commits and every-commit pushes remain authorized. Continue after this
 checkpoint; the long-run implementation is not complete.
+
+## Retained history-focus budget — 1 November 2026
+
+**The Android history adapter now bounds retained SDK focus keys for the entire
+client lifetime.** [Evidence](measurements/collaboration-history-focus-2026-11-01.json)
+records actual run **`344f7eb3689645f697c0aebe3272be7c`**, **24.892s test case /
+46.683s native suite / 79s Gradle**, cleanup complete. The existing latest-head,
+original-history, queue, process-death and 5/5/5 HRIS admission assertions still pass.
+
+See [SDK history limits and pagination ordering](collaboration-sdk-history-limits.md).
+Source review of pinned Matrix SDK `8de215a0` found strong per-room maps of
+focused caches that survive timeline disposal. `SdkHistoryFocuses` now reserves
+at most **16 distinct room/anchor keys per client**, inside registered child
+initialization before native acquisition. Repeated keys remain readable. Failed
+or cancelled native creation conservatively retains its key; view disposal cannot
+release it. Exhaustion returns `client.collaboration_history_focus_capacity`
+before opening another native focus. It does not clear history or close the
+company read gate. A replacement SDK client has a fresh budget; **product-managed
+reopening and bounded pagination per focus remain to be implemented**. This is a
+bound on owned focus keys, not all native allocations or process memory.
+
+Six new cases cover competing requests, repeated keys, lifetime separation,
+window disposal, uncertain initialization and rejected child registration. Full
+root/browser/Android/proof/lint checks pass in **278s**: **2,391 desktop / 146 Android
+host / 160 data-browser** cases, zero failures/errors/skips and zero lint errors.
+Only the concurrency test was then strengthened to run 64 contenders on worker
+threads; desktop/browser/Android-host and quality checks pass again in **78s**.
+All **237 Mobile / 33 Platform source hashes** match at final validation. Dev APK
+**`c6fc2968`** is built, not installed; actual proof uses **`d98a181c`**. The emulator
+is stopped. Native diagnostic extraction was 9.276ms; it excludes network, mapping,
+hashing and storage and does not establish capacity acceptance.
+
+**Next: qualify a coherent bounded SDK page snapshot, persist unresolved originals
+and progress, add safe client reopening with retained keys/cursors, reconcile the
+ACK-before-journal gap and retire commands, then build Chat UI.** The SDK's page
+method updates its focused cache before an asynchronous task updates public
+Timeline items. Its returned Boolean is not a timeline-snapshot barrier. A fresh
+view of the same cache is a candidate; test delayed application and actual SDK
+behavior before using it. The pinned raw-event binding also omits complete original
+custom content, so it cannot replace canonical fingerprint/logical-ID extraction.
+No native pagination has been wired by this focus-budget increment.
+
+Hosted common-acquisition control **`41279620583`** at **`79028f26`** is now fully
+audited: all 28 steps, **373 desktop / 349 browser / 305 iOS simulator** cases,
+actual Xcode app-host build and **227 immutable source hashes** matched. That
+predecessor does not validate this focus budget. Audit this increment's own hosted
+CI after push. Head discovery's HRIS run **`41281748950`** at **`ac13550f`**
+also passes all 17 steps, 140 Android host cases and native suite **68.990s**;
+its `cf1d6a8a` run cleaned up and all 235 Mobile/33 Platform hashes match.
+The HRIS workflow still pins Platform **`7626d684`**; its tested
+fixture code is unchanged by this documentation-only Platform counterpart.
+
+Continue **all P0–P8 and 54 groups; none is accepted**. Apple/web owned adapters,
+bootstrap/cross-family recovery, backup, rich messaging and all call/meeting phases
+remain. Physical iPhone testing is waived; Apple implementation and interoperability
+are still required. Starter stays clean at `36116b2`; this SDK-specific resource
+accounting is HRIS data work, with no generic foundation port.
+
+No live/schema/phone change. Atomic commits and push after every commit remain
+authorized. Continue after this checkpoint; the user requested the full plan.

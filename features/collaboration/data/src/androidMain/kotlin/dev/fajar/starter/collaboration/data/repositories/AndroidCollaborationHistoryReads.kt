@@ -1,37 +1,52 @@
 package dev.fajar.starter.collaboration.data.repositories
 
-import dev.fajar.starter.collaboration.data.api.CollaborationHistoryHeadApi
-import dev.fajar.starter.collaboration.data.datasources.CollaborationHistoryHeadSource
+import dev.fajar.starter.collaboration.data.api.CollaborationHistoryApi
+import dev.fajar.starter.collaboration.data.datasources.CollaborationHistoryRequestSource
+import dev.fajar.starter.collaboration.data.dto.*
 import dev.fajar.starter.collaboration.data.mappers.*
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.network.*
 import kotlinx.coroutines.*
 import org.matrix.rustcomponents.sdk.Client
 
-/**
- * A single gateway page selects an anchor; it neither decrypts content nor advances SDK cursors.
- */
-internal class AndroidCollaborationHistoryHeads(
+/** Finite gateway metadata reads; the SDK remains the crypto, credential and sync-cursor owner. */
+internal class AndroidCollaborationHistoryReads(
     private val client: Client,
     private val expectedUserId: String,
     private val expectedDeviceId: String,
     private val expectedHomeserverUrl: String,
     private val children: SdkChildResources,
     private val lifetime: CoroutineScope,
-    private val api: CollaborationHistoryHeadApi,
+    private val api: CollaborationHistoryApi,
     private val failure: () -> Failure?,
 ) {
-    suspend fun read(roomId: String): AppResult<String?> {
+    suspend fun read(roomId: String): AppResult<String?> =
+        request(CollaborationHistoryRequest.Head(roomId)) { collaborationHistoryHead(it, roomId) }
+
+    suspend fun page(roomId: String, position: String?): AppResult<CollaborationProviderPageDto> {
+        return request(CollaborationHistoryRequest.Page(roomId, position)) {
+            collaborationProviderPage(it, roomId, position)
+        }
+    }
+
+    private suspend fun <T> request(
+        query: CollaborationHistoryRequest,
+        decode: (String) -> T,
+    ): AppResult<T> {
         failure()?.let {
             return AppResult.Failed(it)
         }
+        val position = (query as? CollaborationHistoryRequest.Page)?.position
+        if (position != null && !validCollaborationHistoryPosition(position))
+            return AppResult.Failed(Failure(FailureKind.Validation, "Invalid history position."))
+        val roomId = query.roomId
         if (
             !roomId.startsWith('!') ||
                 roomId.length !in 2..255 ||
                 roomId.any { it.isWhitespace() || it.isISOControl() }
         )
             return AppResult.Failed(Failure(FailureKind.Validation, "Invalid history room."))
-        val source = CollaborationHistoryHeadSource(lifetime, api, roomId)
+        val source = CollaborationHistoryRequestSource(lifetime, api, query)
         val acquired =
             children.acquire(
                 source,
@@ -73,7 +88,7 @@ internal class AndroidCollaborationHistoryHeads(
                                 else -> throw rejected
                             }
                         }
-                    withContext(Dispatchers.Default) { collaborationHistoryHead(json, roomId) }
+                    withContext(Dispatchers.Default) { decode(json) }
                 }
             } catch (cancelled: CancellationException) {
                 currentCoroutineContext().ensureActive()

@@ -235,6 +235,8 @@ internal class HrisProductQueueProof(
             acquired.acquiredEvents == 2 &&
                 acquired.unresolvedEvents == window.unavailableEventIds.size
         )
+        HrisProofProviderHistory(runtime, app, conversationId, roomId)
+            .verify(setOf(sentEventId, replyEventId))
         return HrisProofOriginalHistory(
                 { database.replicas },
                 historyKey,
@@ -252,6 +254,7 @@ internal class HrisProductQueueProof(
             )
             .put("commonHistoryAcquisitionOwned", true)
             .put("latestHistoryHeadOwned", true)
+            .put("providerHistoryPageOwned", true)
     }
 
     private suspend fun reopenDatabase() {

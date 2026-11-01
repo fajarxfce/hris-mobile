@@ -1,12 +1,13 @@
 package dev.fajar.starter.collaboration.data.repositories
 
-import dev.fajar.starter.collaboration.data.api.CollaborationHistoryHeadApi
+import dev.fajar.starter.collaboration.data.api.CollaborationHistoryApi
 import dev.fajar.starter.collaboration.data.datasources.AndroidCollaborationTimelineSource
 import dev.fajar.starter.collaboration.data.datasources.CollaborationSdkStoreLease
 import dev.fajar.starter.collaboration.data.datasources.createAndroidCollaborationSync
 import dev.fajar.starter.collaboration.data.mappers.collaborationSdkAcquisitionFailure
 import dev.fajar.starter.collaboration.data.sdk.CollaborationSdkRecord
 import dev.fajar.starter.collaboration.domain.entities.CollaborationOwner
+import dev.fajar.starter.collaboration.domain.entities.CollaborationProviderHistoryPage
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationMessageQueueLease
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationRuntimeLease
 import dev.fajar.starter.common.result.*
@@ -25,7 +26,7 @@ internal constructor(
     private val directory: CollaborationSdkStoreLease,
     private val persistence: SdkSessionPersistence,
     record: CollaborationSdkRecord,
-    historyApi: CollaborationHistoryHeadApi,
+    historyApi: CollaborationHistoryApi,
     private val released: (AndroidCollaborationRuntimeLease) -> Unit,
 ) : CollaborationRuntimeLease {
     override val deviceId = record.deviceId
@@ -47,8 +48,8 @@ internal constructor(
                 }
                 ?: if (stopRequested.get()) syncStopped().failure else null
         }
-    private val historyHeads =
-        AndroidCollaborationHistoryHeads(
+    private val historyReads =
+        AndroidCollaborationHistoryReads(
             nativeClient,
             record.matrixUserId,
             record.matrixDeviceId,
@@ -153,7 +154,30 @@ internal constructor(
         messageQueues.acquire(roomId)
 
     /** Borrowed transport reads only a head; this runtime owns cancellation of that request. */
-    suspend fun findHistoryHead(roomId: String): AppResult<String?> = historyHeads.read(roomId)
+    suspend fun findHistoryHead(roomId: String): AppResult<String?> = historyReads.read(roomId)
+
+    /**
+     * Provider references only. The admitted caller owns durable progress and content acquisition.
+     */
+    suspend fun readProviderHistory(
+        roomId: String,
+        position: String?,
+    ): AppResult<CollaborationProviderHistoryPage> =
+        when (val result = historyReads.page(roomId, position)) {
+            is AppResult.Failed -> result
+            is AppResult.Success ->
+                AppResult.Success(
+                    CollaborationProviderHistoryPage(
+                        owner,
+                        deviceId,
+                        roomId,
+                        position,
+                        result.value.start,
+                        result.value.next,
+                        result.value.events.toList(),
+                    )
+                )
+        }
 
     /** Explicit admitted acquisition; no join, bootstrap, send-queue enable or provider cursor. */
     suspend fun readOriginalHistory(

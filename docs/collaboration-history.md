@@ -5,7 +5,9 @@ messages and provider event aliases. `ObserveCollaborationHistory` reads acquire
 facts offline under the same account/company admission as the conversation list.
 `AcquireCollaborationHistory` can now acquire a finite original-event snapshot
 around a supplied event or the latest visible event through the owned Android SDK runtime.
-Provider paging, edit projection, command retirement and Chat UI remain separate work.
+The Android runtime can also read bounded provider-page metadata through the same
+gateway. Durable page staging, edit projection, command retirement and Chat UI
+remain separate work.
 
 ## Canonical identity and deletion
 
@@ -127,6 +129,35 @@ This finite discovery is not a second Matrix sync client, a provider pagination
 cursor, a complete-history claim, ACK-before-journal recovery or a large-room memory
 acceptance. Event-focused SDK construction still has the earlier native cache and
 diagnostic allocation limitations.
+
+## Provider-page metadata
+
+[Validation and actual gateway evidence](measurements/collaboration-provider-page-2026-11-01.json).
+
+`AndroidCollaborationRuntimeLease.readProviderHistory` makes one backward gateway
+read with a 20-event limit and an optional opaque position. Head discovery and
+pages share the same registered request owner, current SDK session validation,
+application HTTP pool and cancellation/failure rules. The page body has a 2 MiB
+limit; positions are 1–4,096 printable ASCII characters, JSON nesting is at most
+16 and every event must have a unique valid ID, sender, type and numeric timestamp.
+Foreign optional room IDs or malformed entries fail the whole page. Provider order
+is preserved even when timestamps disagree. Only event metadata and positions
+escape; bodies and ciphertext are discarded.
+
+An empty page may advance. Only an absent/null `end` signals no continuation for
+that response. A repeated start/request position cannot masquerade as progress.
+Neither a short chunk nor the count of decrypted timeline items determines the
+end of history. The SDK remains the crypto, send-queue and synchronization owner;
+these positions belong to explicit history traversal, not its sync cursor.
+
+The actual proof reads an initial page, replays its returned start and follows its
+next position once when present, under HRIS device/conversation/room checks before
+and after. It verifies both encrypted message IDs and exact runtime binding. This
+finite proof does not establish durable progression or complete-history recovery.
+The next common operation must atomically retain every unresolved reference and
+its page position before publishing traversal progress, then use the owned SDK to
+acquire original content. Until that storage/policy operation exists, the metadata
+adapter is exposed only on the platform runtime and is not a Chat UI action.
 
 ## Explicit acquisition
 

@@ -1,6 +1,6 @@
 package dev.fajar.starter.collaboration.data.repositories
 
-import dev.fajar.starter.collaboration.data.api.CollaborationHistoryHeadApi
+import dev.fajar.starter.collaboration.data.api.CollaborationHistoryApi
 import dev.fajar.starter.collaboration.data.datasources.*
 import dev.fajar.starter.collaboration.data.sdk.*
 import dev.fajar.starter.collaboration.domain.entities.*
@@ -233,7 +233,7 @@ class AndroidCollaborationRuntimeRepository(
                     directory,
                     persistence,
                     retained,
-                    CollaborationHistoryHeadApi(http, endpoint),
+                    CollaborationHistoryApi(http, endpoint),
                 ) {
                     leases.remove(it)
                     capacity.release()
