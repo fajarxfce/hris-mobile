@@ -15,6 +15,7 @@ internal class HrisWorkerProofFiles(private val directory: File) {
     val roomId = fixture.getString("roomId")
     val conversationId = canonicalId("conversationId")
     val logicalId = canonicalId("logicalId")
+    val initialState = fixture.optString("initialState", "QUEUED")
     val body = fixture.getString("body")
     val bodyHash =
         MessageDigest.getInstance("SHA-256").digest(body.toByteArray()).joinToString("") {
@@ -22,6 +23,7 @@ internal class HrisWorkerProofFiles(private val directory: File) {
         }
 
     init {
+        require(initialState in setOf("QUEUED", "FROZEN_DRAFT"))
         require(
             home.scheme == "http" &&
                 home.host == "127.0.0.1" &&
@@ -51,7 +53,7 @@ internal class HrisWorkerProofFiles(private val directory: File) {
             .put("processId", Process.myPid())
             .put("messageId", logicalId)
             .put("bodySha256", bodyHash)
-            .put("state", "QUEUED")
+            .put("state", initialState)
             .put("taskKey", "hris.collaboration-delivery")
 
     fun read(name: String, maximum: Int): JSONObject {

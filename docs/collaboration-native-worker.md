@@ -82,3 +82,22 @@ No phone UI, live provider deployment, Apple/web runtime, large-scale acceptance
 complete PRD group is accepted by this proof. Continue bounded local browsing beyond
 the current ten-page window, durable drafts and safe pending cancellation, incoming
 FCM/inline replies, richer messages, key continuity/backups, calls and meetings.
+
+
+## Explicit frozen-draft recovery proof
+
+The direct fixture now preserves ordinary QUEUED recovery and adds a separate FROZEN_DRAFT
+case. Before and after actual process death, it verifies zero commands, exact draft revision,
+submission ID and body. The worker then admits/sends that original once, archives its receipt,
+and clears the matching draft. SDK and WorkManager regressions remain separate cases.
+
+[Native evidence](measurements/chat-frozen-native-2026-11-01.json) records the final four-case,
+227s run, exact APK `1a664545`, 44 Mobile/four Platform inputs and forty evidence hashes.
+Both workers acquire 33 originals with four history actions and retain the oldest after Stop;
+all application admissions succeed. Initial PREPARED-validator and provider-setup failures,
+as well as the fixture-method length check failure, are retained with their corrections.
+The exact original provider rejection code was lost; no observed 429 claim is made.
+
+CI now pins the proven Platform fixture. Hosted execution must still be audited separately.
+Release 8 is already installed; this fixture does not require another phone build. Continue
+the reviewed technical-contention versus true edit-conflict UI distinction and remaining PRD.

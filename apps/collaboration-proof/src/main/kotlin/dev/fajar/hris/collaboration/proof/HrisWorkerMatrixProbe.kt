@@ -3,7 +3,7 @@ package dev.fajar.hris.collaboration.proof
 import android.content.Context
 import android.os.Process
 import dev.fajar.starter.collaboration.data.repositories.AndroidCollaborationRuntimeLease
-import dev.fajar.starter.collaboration.domain.entities.CollaborationMessageState
+import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationTimelineLease
 import dev.fajar.starter.collaboration.domain.usecases.QueueCollaborationText
 import dev.fajar.starter.common.result.*
@@ -13,11 +13,13 @@ import java.io.File
 import java.util.UUID
 import kotlinx.coroutines.*
 import org.json.JSONArray
+import org.json.JSONObject
 import org.matrix.rustcomponents.sdk.Room
 
 /** Actual app worker/SDK across process death. Platform scheduling is a separate proof. */
 internal class HrisWorkerMatrixProbe(private val context: Context, directory: File) {
     private val files = HrisWorkerProofFiles(directory)
+    private val frozenOnly = files.initialState == "FROZEN_DRAFT"
     private val http =
         createHttpClient(
             createPlatformHttpEngine(),
@@ -42,12 +44,19 @@ internal class HrisWorkerMatrixProbe(private val context: Context, directory: Fi
                 app.activate()
                 app.cacheConversation()
                 check(app.pending().isEmpty())
-                val queued = app.queue(files.logicalId, files.body)
-                check(queued.state == CollaborationMessageState.Queued)
-                check(queued.intent.id == files.logicalId && queued.intent.text == files.body)
-                check(app.pending() == listOf(queued))
+                val checkpoint = files.checkpoint()
+                if (frozenOnly) {
+                    val frozen = app.freeze(files.logicalId, files.body)
+                    check(app.draft() == frozen && app.pending().isEmpty())
+                    checkpoint.put("draftRevision", frozen.revision).put("pendingCommandCount", 0)
+                } else {
+                    val queued = app.queue(files.logicalId, files.body)
+                    check(queued.state == CollaborationMessageState.Queued)
+                    check(queued.intent.id == files.logicalId && queued.intent.text == files.body)
+                    check(app.pending() == listOf(queued))
+                }
                 check(app.scheduledKeys == listOf(QueueCollaborationText.DELIVERY_KEY))
-                files.write("worker-queued", files.checkpoint())
+                files.write("worker-queued", checkpoint)
                 // Driver confirms this PID and kills the process. No graceful substitute for death.
                 awaitCancellation()
             } catch (failure: Exception) {
@@ -74,7 +83,7 @@ internal class HrisWorkerMatrixProbe(private val context: Context, directory: Fi
                 queued.getString("messageId") == files.logicalId &&
                     queued.getString("bodySha256") == files.bodyHash
             )
-            check(queued.getString("state") == "QUEUED")
+            check(queued.getString("state") == files.initialState)
             check(!files.exists("worker-send") && !files.exists("worker-result"))
             var application: HrisWorkerProofContainer? = null
             var peer: AndroidCollaborationRuntimeLease? = null
@@ -85,9 +94,7 @@ internal class HrisWorkerMatrixProbe(private val context: Context, directory: Fi
             try {
                 val app = openApplication().also { application = it }
                 app.activate()
-                val restored = app.pending().single()
-                check(restored.intent.id == files.logicalId && restored.intent.text == files.body)
-                check(restored.state == CollaborationMessageState.Queued)
+                val restored = restore(app, queued)
                 check(app.scheduledKeys.isEmpty())
                 check(
                     !expect(
@@ -99,7 +106,7 @@ internal class HrisWorkerMatrixProbe(private val context: Context, directory: Fi
                 timeline = recipient.enterTimeline(files.roomId)
                 room = requireNotNull(peer.nativeClient.getRoom(files.roomId))
                 received = HrisProofMessages(room, files.body, files.logicalId)
-                files.write("worker-restored", files.checkpoint().put("senderRuntimeOpen", false))
+                files.write("worker-restored", restored.checkpoint)
                 withTimeout(30_000) {
                     while (!files.exists("worker-send")) delay(100)
                     check(files.read("worker-send", 128).get("ready") == true)
@@ -115,8 +122,7 @@ internal class HrisWorkerMatrixProbe(private val context: Context, directory: Fi
                         !original.redacted &&
                         eventId in original.eventIds
                 )
-                val completed = requireNotNull(app.completion(files.logicalId))
-                check(completed.record.intent == restored.intent && eventId in completed.eventIds)
+                verifyCompletion(app, restored.command, queued, eventId)
                 check(app.pending().isEmpty())
                 check(app.runWorker() == SyncResult.Complete)
                 val historical = seedHistory(requireNotNull(peer), requireNotNull(room))
@@ -133,6 +139,10 @@ internal class HrisWorkerMatrixProbe(private val context: Context, directory: Fi
                     files
                         .checkpoint()
                         .put("state", "COMPLETED")
+                        .put("initialState", files.initialState)
+                        .put("frozenDraftRecovered", frozenOnly)
+                        .put("outboxEmptyBeforeRecovery", frozenOnly)
+                        .put("draftConfirmedCleared", frozenOnly)
                         .put("eventId", eventId)
                         .put("passes", passes)
                         .put("encryptedReceived", true)
@@ -164,6 +174,50 @@ internal class HrisWorkerMatrixProbe(private val context: Context, directory: Fi
                 )
             }
         }
+
+    private data class RestoredIntent(
+        val checkpoint: JSONObject,
+        val command: CollaborationMessageRecord?,
+    )
+
+    private suspend fun restore(app: HrisWorkerProofContainer, queued: JSONObject): RestoredIntent {
+        val checkpoint = files.checkpoint().put("senderRuntimeOpen", false)
+        val command =
+            if (frozenOnly) {
+                val frozen = requireNotNull(app.draft())
+                check(app.pending().isEmpty() && queued.getInt("pendingCommandCount") == 0)
+                check(frozen.submissionId == files.logicalId && frozen.text == files.body)
+                check(
+                    frozen.revision == queued.getString("draftRevision") && !frozen.reviewRequired
+                )
+                checkpoint.put("draftRevision", frozen.revision).put("pendingCommandCount", 0)
+                null
+            } else
+                app.pending().single().also {
+                    check(it.intent.id == files.logicalId && it.intent.text == files.body)
+                    check(it.state == CollaborationMessageState.Queued)
+                }
+        return RestoredIntent(checkpoint, command)
+    }
+
+    private suspend fun verifyCompletion(
+        app: HrisWorkerProofContainer,
+        restored: CollaborationMessageRecord?,
+        queued: JSONObject,
+        eventId: String,
+    ) {
+        val completed = requireNotNull(app.completion(files.logicalId))
+        check(eventId in completed.eventIds)
+        if (restored != null) check(completed.record.intent == restored.intent)
+        else {
+            val intent = completed.record.intent
+            check(intent.id == files.logicalId && intent.text == files.body)
+            check(intent.conversationId == files.conversationId)
+            val cleared = requireNotNull(app.draft())
+            check(cleared.text.isEmpty() && cleared.submissionId == null && !cleared.reviewRequired)
+            check(cleared.revision != queued.getString("draftRevision"))
+        }
+    }
 
     private fun openApplication() =
         HrisWorkerProofContainer(

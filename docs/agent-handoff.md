@@ -1,5 +1,41 @@
 # Agent continuation — HRIS Mobile
 
+## Native frozen-draft recovery proved; fix contention feedback next — 1 November 2026
+
+[Actual native evidence](measurements/chat-frozen-native-2026-11-01.json) binds 44 Mobile/four
+Platform inputs, forty evidence hashes and proof APK `1a6645456001c0c06c1db8ec12ed405c2d9015986ff7366ca9fe32e1b2d2363d`.
+Final run 227s/227.82s: four cases/three suites pass. SDK 48.362s, WorkManager 44.822s,
+worker pair 110.945s (queued 50.339s/frozen 40.341s methods). Both workers finish in one pass,
+with one encrypted original plus 32 peer seeds, four history actions, 43 references/10 state-only,
+30/28/30 admissions and zero failures. Frozen-only checkpoints prove zero commands and the
+same draft revision/body/ID across real death; matching confirmation clears it. Cleanup
+passes and the owned emulator is stopped. Source still matches installed release 8 product
+inputs; only fixture changes are newer, so no phone rebuild follows this proof.
+
+Initial failures remain recorded: detekt rejected a 130-line fixture function (now split),
+shared checkpoint validation omitted WorkManager PREPARED (restored with regression), and
+the second worker case failed at provider login before Android. Its exact failure code was
+not captured; provider and Spring trace are now isolated per test and safe kind/code
+assertions diagnose future failures. Do not call the original failure an observed 429.
+Mobile checks 80s/84.218s pass proof APK/lint/six cleanup cases/quality. Platform checks
+28s/28.739s and 66 Python cases pass. Platform `bad75bd0d73c88afa66db7f16493e5e513ba9250` is pushed and
+pinned in Mobile CI. Commit/push this companion fixture and audit its hosted run separately.
+
+Prior [CI 41338809672](measurements/chat-draft-index-native-ci-2026-11-01.json) at 500a8edd
+passes SDK 60.948s/direct 65.728s/scheduled 75.829s, APK 649f1640, twenty evidence hashes.
+It includes indexed storage but predates app recovery; it does not prove frozen-only recovery.
+
+**Continue immediately:** distinguish retryable technical draft contention from a changed
+target. Current stable-read checkpoint movement uses client.collaboration_draft_changed,
+which makes DraftRetry ask to reload even if only another conversation changed. Introduce
+client.collaboration_draft_busy for valid-read movement and bounded technical CAS exhaustion;
+keep true target conflicts as changed/reload. Worker retries both; UI retries the immutable
+write with its text/ID intact. Add SQLite/browser, app-worker and ViewModel regression cases,
+then required integration checks, commit/push and release 9+ install-only at a validated feature
+checkpoint. `.work/draft-contention-ui-next.txt` holds details. Continue safe cancellation,
+FCM/replies, rich messaging, backups, calls/meetings and all other unaccepted P0–P8 afterward.
+No complete PRD group or live provider deployment is claimed. Phone remains release 8.
+
 ## Release 8 installed; continue native frozen-draft proof — 1 November 2026
 
 **Phone updated.** Release 8 from clean source `43cce8c0031c310d714890f4912052fe3316cdae` is installed

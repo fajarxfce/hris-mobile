@@ -111,8 +111,45 @@ internal class HrisWorkerProofContainer(
                 conversationId,
                 id,
                 body,
+                access,
             )
         )
+
+    suspend fun draft(): CollaborationDraft? =
+        expect(
+            container.koin.get<ObserveCollaborationDraft>()(
+                    application.workspaceId,
+                    conversationId,
+                    access,
+                )
+                .first()
+        )
+
+    suspend fun freeze(id: String, body: String): CollaborationDraft {
+        check(draft() == null)
+        val edited =
+            expect(
+                container.koin.get<EditCollaborationDraft>()(
+                    application.workspaceId,
+                    conversationId,
+                    null,
+                    id,
+                    body,
+                    access,
+                )
+            )
+        return expect(
+                container.koin.get<PrepareCollaborationDraftSend>()(
+                    application.workspaceId,
+                    edited,
+                    access,
+                )
+            )
+            .also {
+                check(it.submissionId == id && it.text == body && !it.reviewRequired)
+                check(it.revision != id)
+            }
+    }
 
     suspend fun pending(): List<CollaborationMessageRecord> =
         expect(

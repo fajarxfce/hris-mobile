@@ -62,9 +62,11 @@ known racing queue admission cannot be mistaken for cancellation. No SDK command
 [Integration evidence](measurements/chat-draft-recovery-2026-11-01.json) records root, browser,
 Android host, proof APK/lint and quality checks, with six application/SQLite worker cases,
 eighteen SQLite storage cases and the matching portable contracts. Application recovery tests
-use a fake native transport: they do not establish native freeze-only process-death acceptance.
-That actual SDK/server scenario remains the next proof. Existing hosted native regression
-has an earlier source and must not be attributed to these new draft boundaries.
+use a fake native transport. The separate [actual native proof](measurements/chat-frozen-native-2026-11-01.json)
+now verifies frozen-only process death with protected SQLite, HRIS/Synapse and Matrix Rust SDK:
+zero commands on both sides of death, same draft revision/body/ID, one encrypted send and
+confirmed draft clearing. Ordinary queue, SDK and WorkManager regressions pass alongside it.
+Hosted execution remains separate; older hosted runs do not establish this new boundary.
 
 ## Format history and remaining scope
 

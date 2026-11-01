@@ -1,0 +1,432 @@
+{
+  "date": "2026-11-01",
+  "mobileBase": "401145506e0e81bd4dcbea23d811d2642d95cae0",
+  "platformBase": "75213154bcb28014fa1f8826f18eb59297632bb0",
+  "mobileSourceSha256": {
+    "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisWorkerMatrixProbe.kt": "7fa0aea79094fa86e0b8f90fd767d2a34fcfabcbb237213f44e5842cd405be8d",
+    "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisWorkerProofContainer.kt": "3dfb0a4c14ff4971bd1cfdd3d3b7641f973b5d63bfacac2eb2d90e6c1771acd7",
+    "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisWorkerProofFiles.kt": "1e1d92f8ac91c21fc1e07ed747abcbb560fd8425467a4f999266bfc134f8c79a",
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/di/ApplicationWorkerModule.kt": "98da7cbb82e67a74c5213bc4268272ca21307c9832dcb78096015dfd1f65363f",
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/work/CollaborationDeliveryWorker.kt": "e9df7c595b1fa95b9e21518e7c651510b68d44cb53fec5e435566924ae6b99ec",
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/work/CollaborationDraftRecovery.kt": "4b39dab4fa1bbcd690c94679c31e3e21202cc499ffe65792e7458aef4fb588b4",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt": "4a54d7ef0d9e57ed919d4a09746be49768954e334e41c5769ca0e9c69c13edd1",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationDraftWorkerTest.kt": "f14c9127936f2c38c688249ac1d84464e2f3fad94135498e7ba35b83e7701910",
+    "core/localization/src/commonMain/composeResources/values/strings_en.xml": "bd5da22f5dc2b559466d680ae4ff9032879e20cdab24deaf7fe3a797c931fe46",
+    "core/localization/src/commonMain/composeResources/values/strings_id.xml": "ce1905d80e2ed1dc2713c57f1d95835434b1276d69ee6c09b59bdf64c2ca6c62",
+    "core/localization/src/commonMain/kotlin/dev/fajar/starter/localization/AppString.kt": "5180ed7f1fb2613ba1b4a2977dc0d98c21d7b17c800bf8b5dcc8ec29138026bb",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt": "730d3d6cdf423e35c1b0e8db2a98137aef0b369472cfe492adb780e1feb04a3e",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/drafts/CollaborationDraftCodec.kt": "c6c421bce4311422363c5aafd1e1ff6554a942a564f8d8bd0f9f07f93d6939ff",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/drafts/CollaborationDraftRecoveryCursorCodec.kt": "c3b3673cdde3aee3fa4a17071bc42a0a7532e4559261f6604dfbe612b17518bf",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationDraftRecoveryCursorRepository.kt": "bbf5ebf3979f55a75b3b625118a0331b76dd078c88654b7c674f0a8937020b14",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationDraftRepository.kt": "940977223fe0c5a15e3786a35ba60dcabc6c6c8e4359f0de0d0f201ec43d5698",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationDraftStorageContract.kt": "82dfd778c62d87ccf393f32422e76668cdf6327f445bfc00c29b3ed3c6e820a2",
+    "features/collaboration/data/src/desktopTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationDraftStorageTest.kt": "8b0c16f1b05aedb83b35572d38ed225fab5ce727a6e568d297e73d5e5e6a4a3f",
+    "features/collaboration/data/src/wasmJsTest/kotlin/dev/fajar/starter/collaboration/data/BrowserCollaborationDraftStorageTest.kt": "94dccd463d0ed14da770f6646ff6ce1b4ec4ee5e808218453019d523c9b98601",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationDraft.kt": "41a8eeb2559ab090726227151b7cc81f7c2fdc025d80d1795ffd3e24ae28df5a",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationDraftRecovery.kt": "f9e273a0ebcd319d7763ff86728e33b12cae0288ded883decf5107cf0ef9ce23",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationDraftPolicy.kt": "2d116687fde04ccdfb92ff244ff301bedfffbc055e1ef4bbf61e665ce4d37417",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationDraftRecoveryCursorRepository.kt": "9aa2221cff7ef7383b4ed5c263d1b0fc5f502e040128e48c5d60b78da8074e52",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationDraftRepository.kt": "aae92ac26730b0a518be1243692b59cb1b7d730584ab0ae0e1e1f4cb3ccaeec8",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/AdvanceCollaborationDraftRecovery.kt": "7e3e0666d49ff8a0ef3b88d9081485fdb977b17c1d47e43bdec056692aa75b82",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/CollaborationDraftAccess.kt": "34b4787210c0960090032c5bbb9933347e3d4d4c75af8ff3da8892146976fc01",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ConfirmCollaborationDraftSend.kt": "a150869b8cfbfa4da68dfdb562822f23960cb93fc11d61b98f1e3dd7e8cafd16",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/EditCollaborationDraft.kt": "a362b6495b7f888c2c306b1fed845b1149513e3da416bbf5ff1e8f908f1bbf98",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ObserveCollaborationDraft.kt": "235987dd4fb98ab253d630fbf3e5d77ed65fbb8859e4382c0951816e47fa1813",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/PrepareCollaborationDraftSend.kt": "8fe41f406e3ed93d49c4af692246bf1685f14898db446fc3bc24e40f754531e4",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/QueueCollaborationText.kt": "3aaed8ecf7caea80a825bebb1e2e9b1395d62ea71008c4deead14793013788a2",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ReadCollaborationDraftRecovery.kt": "9ab7096d5a7b4550d949c3677a182d72662f533d07a37a3bfb8021c5141e1188",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/SuspendCollaborationDraftSend.kt": "5805b5683b874f1290676cf0a96476689306eb0abb96482513a5b219e3ef000e",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationDraftRecoveryTest.kt": "9be17ed31674e950ded802c450c8161256f329a0304cb923f696c7cb303c8cfc",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationDraftUseCasesTest.kt": "031855f7c7a4f678e33296cc8ad6ca4c815500e9fd1496d4dc431a7afc4093f8",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadEvent.kt": "e3b483d6283334f2e41f11f745d2b1105bdc60f91c8548243d74bbcecbb1c94f",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadState.kt": "a6626b53af13151ecc7db0f39442b17bdfb782716d6aa84dcc0f0faccaa8d487",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadViewModel.kt": "b9e862e389936fe379abf4526f6778974f95f9e69cf13db510468af1c7da77fe",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/pages/ChatComposer.kt": "9ff92684488326148555da75cb7c0443a34e7b03331812c2dd3905eb8fa8f692",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/pages/ChatThreadPage.kt": "5fd97caadc4e2aa14a49fe6a065575bedf43b512170229628e6d3b2c61b20571",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadDraftTest.kt": "c0c2b69d1649779b07ed23dc50afc487fa822681e00522aebbab1bb605f8b2fc",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadFixture.kt": "a4d9e19815910c913b48032476d72aea6e85572a7177110d4c84e1f5bdfa68ae",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadViewModelTest.kt": "ee74fc236df4d5afeb8bdf62e9c1ffa5cdcb38bd1722371fa423754b501f5bd7",
+    "features/collaboration/presentation/src/desktopTest/kotlin/dev/fajar/starter/collaboration/presentation/ChatThreadLayoutTest.kt": "725e2bd975f0326e2c5b16f7a9be829278266716b108e6b9d903e5a5f097aaf9"
+  },
+  "platformSourceSha256": {
+    "apps/server/src/test/kotlin/dev/fajar/hris/NativeCollaborationWorkerInteropTest.kt": "f9d322dbab88ea35ec86a96b9546c72674ac773071c44734d67fca598bcd026e",
+    "tool/collaboration_worker_native.py": "f893d3055e76e208a8c723eda7947ad02ee1ff188ec6e97fd294d725d2523d83",
+    "tool/test_collaboration_worker_native.py": "761fe0a9863d0a5b5729e57f52a24e00366f854fbb12393cf51afe60d833a31f",
+    "tool/test_collaboration_scheduled_native.py": "1cb08fb22da4cbff5432b34833d9e5e83ab16e9d8e1e991b3d0820f45cdd3654"
+  },
+  "apkSha256": "1a6645456001c0c06c1db8ec12ed405c2d9015986ff7366ca9fe32e1b2d2363d",
+  "nativeRun": {
+    "command": [
+      "sudo",
+      "-n",
+      "runuser",
+      "-u",
+      "fajar",
+      "-g",
+      "docker",
+      "--",
+      "env",
+      "JAVA_HOME=/usr/lib/jvm/java-21-openjdk",
+      "PATH=/usr/lib/jvm/java-21-openjdk/bin:/usr/local/bin:/usr/bin",
+      "ANDROID_HOME=/home/fajar/Android/Sdk",
+      "HRIS_COLLAB_NATIVE_APK=/home/fajar/hris/hris-mobile/apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+      "./gradlew",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=1",
+      "-Dorg.gradle.jvmargs=-Xmx1536m",
+      ":apps:server:cleanTest",
+      ":apps:server:test",
+      "--tests",
+      "*NativeCollaborationSdkInteropTest",
+      "--tests",
+      "*NativeCollaborationWorkerInteropTest",
+      "--tests",
+      "*NativeCollaborationScheduledInteropTest"
+    ],
+    "startedAt": "2026-11-01T19:36:25.188721+00:00",
+    "apkSha256": "1a6645456001c0c06c1db8ec12ed405c2d9015986ff7366ca9fe32e1b2d2363d",
+    "mobileBase": "401145506e0e81bd4dcbea23d811d2642d95cae0",
+    "platformBase": "75213154bcb28014fa1f8826f18eb59297632bb0",
+    "exit": 0,
+    "seconds": 227.82,
+    "directories": [
+      ".work/collaboration-worker/2c4d751360ec4cbbb6f3009803aafe44",
+      ".work/collaboration-worker/51f633b175bc4fb784548fcef4b93b11",
+      ".work/collaboration-worker/8e7c6314dec7435092947bd73122b7e7",
+      ".work/collaboration/7477bdb6d7894e689d13782850105b34"
+    ],
+    "artifactUnchanged": true,
+    "inputsUnchanged": true,
+    "gradleSeconds": 227
+  },
+  "nativeTests": [
+    {
+      "name": "dev.fajar.hris.NativeCollaborationScheduledInteropTest",
+      "tests": 1,
+      "seconds": 44.822,
+      "cases": [
+        {
+          "name": "androidWorkManagerRestoresConstrainedIntentAfterOrdinaryProcessDeath()",
+          "seconds": 22.867
+        }
+      ]
+    },
+    {
+      "name": "dev.fajar.hris.NativeCollaborationSdkInteropTest",
+      "tests": 1,
+      "seconds": 48.362,
+      "cases": [
+        {
+          "name": "actualAndroidSdkExchangesEncryptedMessagesThroughCurrentHrisGatewayAdmission()",
+          "seconds": 33.817
+        }
+      ]
+    },
+    {
+      "name": "dev.fajar.hris.NativeCollaborationWorkerInteropTest",
+      "tests": 2,
+      "seconds": 110.945,
+      "cases": [
+        {
+          "name": "actualApplicationWorkerRestoresQueuedIntentAfterProcessDeathAndSendsOnce()",
+          "seconds": 50.339
+        },
+        {
+          "name": "actualApplicationWorkerRecoversFrozenOnlyDraftAfterProcessDeathAndSendsOnce()",
+          "seconds": 40.341
+        }
+      ]
+    }
+  ],
+  "workers": {
+    "QUEUED": {
+      "processes": 2,
+      "forcedProcessDeaths": 1,
+      "workerEncryptedSends": 1,
+      "peerEncryptedSends": 32,
+      "historyActions": 4,
+      "providerReferences": 43,
+      "stateOnlyReferences": 10,
+      "passes": 1,
+      "applicationAdmissions": {
+        "device": 30,
+        "conversation": 28,
+        "room": 30,
+        "failures": 0
+      },
+      "cleanup": true,
+      "exactOriginalPreservedAcrossDeath": true,
+      "oldestOriginalRetainedAfterStop": true
+    },
+    "FROZEN_DRAFT": {
+      "processes": 2,
+      "forcedProcessDeaths": 1,
+      "workerEncryptedSends": 1,
+      "peerEncryptedSends": 32,
+      "historyActions": 4,
+      "providerReferences": 43,
+      "stateOnlyReferences": 10,
+      "passes": 1,
+      "applicationAdmissions": {
+        "device": 30,
+        "conversation": 28,
+        "room": 30,
+        "failures": 0
+      },
+      "cleanup": true,
+      "exactOriginalPreservedAcrossDeath": true,
+      "oldestOriginalRetainedAfterStop": true,
+      "pendingCommandsBeforeAndAfterDeath": 0,
+      "exactDraftRevisionPreserved": true,
+      "confirmedDraftCleared": true
+    }
+  },
+  "sdk": {
+    "encryptedSends": 3,
+    "heldRoomNeverSent": true,
+    "cleanup": true,
+    "applicationAdmissions": {
+      "device": 22,
+      "conversation": 22,
+      "room": 22,
+      "failures": 0
+    }
+  },
+  "scheduled": {
+    "automaticJobStart": true,
+    "ordinaryProcessDeaths": 1,
+    "networkRestored": true,
+    "workState": "SUCCEEDED",
+    "runAttemptCount": 1,
+    "encryptedSends": 1,
+    "cleanup": true,
+    "applicationAdmissions": {
+      "device": 8,
+      "conversation": 7,
+      "room": 8,
+      "failures": 0
+    }
+  },
+  "localChecks": {
+    "mobileFinal": {
+      "command": [
+        "xvfb-run",
+        "-a",
+        "./gradlew",
+        "--no-daemon",
+        "--no-parallel",
+        "--max-workers=1",
+        "-Dorg.gradle.jvmargs=-Xmx1536m",
+        ":apps:collaboration-proof:testDebugUnitTest",
+        ":apps:collaboration-proof:assembleDebug",
+        ":apps:collaboration-proof:lintDebug",
+        ":formatCheck",
+        ":architectureCheck",
+        ":detekt"
+      ],
+      "exit": 0,
+      "seconds": 84.218,
+      "gradleSeconds": 80
+    },
+    "platformFinal": {
+      "command": [
+        "./gradlew",
+        "--no-daemon",
+        "--no-parallel",
+        "--max-workers=1",
+        "-Dorg.gradle.jvmargs=-Xmx1536m",
+        ":apps:server:testClasses",
+        ":formatCheck",
+        ":architectureCheck"
+      ],
+      "exit": 0,
+      "seconds": 28.739,
+      "gradleSeconds": 28
+    },
+    "driverTests": 66,
+    "proofCleanupTests": 6,
+    "proofCleanup": {
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "lint": {
+      "Fatal": 0,
+      "Error": 0,
+      "Warning": 47
+    }
+  },
+  "initialMobileQualityFailure": {
+    "run": {
+      "command": [
+        "xvfb-run",
+        "-a",
+        "./gradlew",
+        "--no-daemon",
+        "--no-parallel",
+        "--max-workers=1",
+        "-Dorg.gradle.jvmargs=-Xmx1536m",
+        ":apps:collaboration-proof:testDebugUnitTest",
+        ":apps:collaboration-proof:assembleDebug",
+        ":apps:collaboration-proof:lintDebug",
+        ":formatCheck",
+        ":architectureCheck",
+        ":detekt"
+      ],
+      "exit": 1,
+      "seconds": 144.762,
+      "gradleSeconds": 141
+    },
+    "inputsSha256": {
+      "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisWorkerProofFiles.kt": "1e1d92f8ac91c21fc1e07ed747abcbb560fd8425467a4f999266bfc134f8c79a",
+      "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisWorkerProofContainer.kt": "3dfb0a4c14ff4971bd1cfdd3d3b7641f973b5d63bfacac2eb2d90e6c1771acd7",
+      "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisWorkerMatrixProbe.kt": "d4c3564f931cfa2178ef3f7a3732696fbe03d776f80fe706bd351461b97c73d4"
+    },
+    "artifact": {
+      "sha256": "91c41fd2744279e775409db7d1b772dea7eadaeb40b5165e2104b5d9f9ff4c80",
+      "bytes": 343275325,
+      "nativeExecuted": false,
+      "checkFailure": "detekt LongMethod resume=130, maximum100; APK/lint and six cleanup cases passed before quality failure"
+    },
+    "correction": "Split restore and completion verification into owned fixture helpers; all assertions and resource lifetime retained."
+  },
+  "initialNativeFailure": {
+    "run": {
+      "command": [
+        "sudo",
+        "-n",
+        "runuser",
+        "-u",
+        "fajar",
+        "-g",
+        "docker",
+        "--",
+        "env",
+        "JAVA_HOME=/usr/lib/jvm/java-21-openjdk",
+        "PATH=/usr/lib/jvm/java-21-openjdk/bin:/usr/local/bin:/usr/bin",
+        "ANDROID_HOME=/home/fajar/Android/Sdk",
+        "HRIS_COLLAB_NATIVE_APK=/home/fajar/hris/hris-mobile/apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+        "./gradlew",
+        "--no-daemon",
+        "--no-parallel",
+        "--max-workers=1",
+        "-Dorg.gradle.jvmargs=-Xmx1536m",
+        ":apps:server:cleanTest",
+        ":apps:server:test",
+        "--tests",
+        "*NativeCollaborationSdkInteropTest",
+        "--tests",
+        "*NativeCollaborationWorkerInteropTest",
+        "--tests",
+        "*NativeCollaborationScheduledInteropTest"
+      ],
+      "startedAt": "2026-11-01T19:29:44.877791+00:00",
+      "apkSha256": "1a6645456001c0c06c1db8ec12ed405c2d9015986ff7366ca9fe32e1b2d2363d",
+      "mobileBase": "401145506e0e81bd4dcbea23d811d2642d95cae0",
+      "platformBase": "75213154bcb28014fa1f8826f18eb59297632bb0",
+      "exit": 1,
+      "seconds": 187.366,
+      "directories": [
+        ".work/collaboration-worker/3cd6468813274bed9a217dd160b569e2",
+        ".work/collaboration-worker/e4783688d7354e13804796b979f3f6b5",
+        ".work/collaboration/3f525ee3f7544a4daf6e963ebb76c0f5"
+      ],
+      "artifactUnchanged": true,
+      "inputsUnchanged": true,
+      "gradleSeconds": 187
+    },
+    "tests": [
+      {
+        "name": "dev.fajar.hris.NativeCollaborationScheduledInteropTest",
+        "tests": 1,
+        "failures": 1,
+        "seconds": 37.102
+      },
+      {
+        "name": "dev.fajar.hris.NativeCollaborationSdkInteropTest",
+        "tests": 1,
+        "failures": 0,
+        "seconds": 56.476
+      },
+      {
+        "name": "dev.fajar.hris.NativeCollaborationWorkerInteropTest",
+        "tests": 2,
+        "failures": 1,
+        "seconds": 67.024
+      }
+    ],
+    "platformInputsSha256": {
+      "apps/server/src/test/kotlin/dev/fajar/hris/NativeCollaborationWorkerInteropTest.kt": "907cfa153c19d8961abb2e7fafc51112ff502a8c98a49901f9992435b5435bd3",
+      "tool/collaboration_worker_native.py": "94632224614ae086b5ca4caa1a44ea06d419926b06c39f53216a1de605ba1571",
+      "tool/test_collaboration_worker_native.py": "761fe0a9863d0a5b5729e57f52a24e00366f854fbb12393cf51afe60d833a31f"
+    },
+    "causes": [
+      "Scheduled fixture failed before Android acceptance because the new shared checkpoint whitelist omitted existing PREPARED. Added the state and explicit scheduler-handshake regression.",
+      "Frozen-only case failed at provider login before its Android driver. The original assertion did not retain the provider failure code. Shared per-class provider includes a documented five-login address bucket; now each case owns a fresh provider alongside its fresh Spring trace. A controlled kind/code diagnostic was added; the original exact cause is not asserted."
+    ],
+    "scope": "SDK and ordinary queued worker passed in this attempt; frozen-only and scheduled acceptance did not."
+  },
+  "evidenceSha256": {
+    ".work/native-frozen-interop-2-reports/TEST-dev.fajar.hris.NativeCollaborationScheduledInteropTest.xml": "d0316319302aa37823b0c5a32d33ff59fe969645ec06b57438340c1c39748ce6",
+    ".work/native-frozen-interop-2-reports/TEST-dev.fajar.hris.NativeCollaborationSdkInteropTest.xml": "e45bba9eba39f755a31bde6b4d50d496467ee3714088b1d02b623d5c6c91ac54",
+    ".work/native-frozen-interop-2-reports/TEST-dev.fajar.hris.NativeCollaborationWorkerInteropTest.xml": "1788fef6b4ff4fa825208abd5191324c8c9433120729ed0ae81769a128995cf8",
+    ".work/collaboration-worker/2c4d751360ec4cbbb6f3009803aafe44/acceptance.json": "9c44628b3c175627500eeefbd7a85877ef7105cd799ee9689927816b5b8adef4",
+    ".work/collaboration-worker/2c4d751360ec4cbbb6f3009803aafe44/gateway-observations.json": "b43c59bd4f464257d2910139e9af7ce439ba71167756e4551308a90fd6413225",
+    ".work/collaboration-worker/2c4d751360ec4cbbb6f3009803aafe44/gateway-trace.json": "dc8057b8257ffc70a6d78ceb76cbdf3127680b5165b3939c3322953e8bd6423f",
+    ".work/collaboration-worker/2c4d751360ec4cbbb6f3009803aafe44/native-worker-queued.json": "7f99da92ed966b85e3ec810b164939ff19abcaba5d0bc6fd6bdd229a1d3dd6d7",
+    ".work/collaboration-worker/2c4d751360ec4cbbb6f3009803aafe44/native-worker-restored.json": "73b946535a2f0a5a1e171ae51f8355639100dbe2b9bb4da707ac13f0da82a8c0",
+    ".work/collaboration-worker/2c4d751360ec4cbbb6f3009803aafe44/result.json": "e6061623512aaff8bde94ead895d1bf93373e8d7abcaf283918a30259d3cd56b",
+    ".work/collaboration-worker/51f633b175bc4fb784548fcef4b93b11/acceptance.json": "28ed5d9421b4c3fdc82361c8c4f8b94c62ea7f19fa3dd5a6472df546ecf53da5",
+    ".work/collaboration-worker/51f633b175bc4fb784548fcef4b93b11/gateway-observations.json": "510afdd01141c9428c540bba7bd4e5c064ba0cba5111192b70a7231af9b30e33",
+    ".work/collaboration-worker/51f633b175bc4fb784548fcef4b93b11/gateway-trace.json": "1d299a3c9b7a5bcfff0628cc511750f95d261a202b15e6cd9a8f7d703be4bfd8",
+    ".work/collaboration-worker/51f633b175bc4fb784548fcef4b93b11/native-worker-queued.json": "8b5284717706a9a1fcbb056bb91e399433c8cb3293c91a7a6a29c2d20f35862c",
+    ".work/collaboration-worker/51f633b175bc4fb784548fcef4b93b11/native-worker-restored.json": "45bd6118f350da6b2ae67ad13c1dd039513026eb3c52f44cec943e55cad6f492",
+    ".work/collaboration-worker/51f633b175bc4fb784548fcef4b93b11/result.json": "10712c570cee11c842bcf8834921430838ecf53f398dcab7513bef90673545a6",
+    ".work/collaboration-worker/8e7c6314dec7435092947bd73122b7e7/acceptance.json": "2fc2109a62eadb9397b4a1153d8723751abe1e36660c33c42493b1b72136f322",
+    ".work/collaboration-worker/8e7c6314dec7435092947bd73122b7e7/gateway-observations.json": "eabdfe0a2f1f28e22e84e4a1ac6f215a593800bf9bbfb649c595e36bb1505532",
+    ".work/collaboration-worker/8e7c6314dec7435092947bd73122b7e7/gateway-trace.json": "4d8812d3bb359b3a03d5fb4da56d50d921bb26a7ef91d7e6f346c375b47a3b16",
+    ".work/collaboration-worker/8e7c6314dec7435092947bd73122b7e7/network-before.json": "79dfab35e5f4104e398aa74de7c3d6e56dda0a96ac31d2fcb699ac1df093c6ad",
+    ".work/collaboration-worker/8e7c6314dec7435092947bd73122b7e7/result.json": "f0b2318cfe70f9382e13bfc8b854c35bfd41e5f56258c6c38b72c3813b13bbe5",
+    ".work/collaboration-worker/8e7c6314dec7435092947bd73122b7e7/started.json": "c9e2a8a3e51e5d6d71cee8c003bbff545bc52fa11b954f64aac7338347e80dff",
+    ".work/collaboration-worker/8e7c6314dec7435092947bd73122b7e7/stopped.json": "a34e712c9855255ff36cb7b98060806292b75d1ef95b1717f489285308b259c2",
+    ".work/collaboration/7477bdb6d7894e689d13782850105b34/gateway-trace.json": "bb90bb8bb3332a2e7849f49960b6f2c6aaf7f752d52de6ca042ab2e55bb345da",
+    ".work/collaboration/7477bdb6d7894e689d13782850105b34/result.json": "6a8ebcf5e56fbed8e4dfd8bbccaf9b0fad112da58cbf588fb068ee01d3ca6174",
+    ".work/collaboration/7477bdb6d7894e689d13782850105b34/verified.json": "4ffdfe240578c781e7f8d5c9606d519a4e50b85d806d3c3f5410dee6126cc66f",
+    ".work/native-frozen-interop-1-reports/TEST-dev.fajar.hris.NativeCollaborationScheduledInteropTest.xml": "194ef57d2eb410fc701dc664545240403586708cd7e0a8dada5ceebb02959963",
+    ".work/native-frozen-interop-1-reports/TEST-dev.fajar.hris.NativeCollaborationSdkInteropTest.xml": "df267dc9535009cbc959997e72f08d68d1bd6c9e3ebec69d2d8bcf7f0b0a1a4b",
+    ".work/native-frozen-interop-1-reports/TEST-dev.fajar.hris.NativeCollaborationWorkerInteropTest.xml": "bc605fd24aaf931394a2e02c134f0cee19fb2321ab0c22fa6457486c955d96d3",
+    ".work/collaboration-worker/3cd6468813274bed9a217dd160b569e2/native-worker-queued.json": "9bc1e8788daae5d5e7ba753f1f07e8b9e21f2d8e133e7013cffd0becc9262116",
+    ".work/collaboration-worker/3cd6468813274bed9a217dd160b569e2/native-worker-restored.json": "4289ec973acfb3d8841f662cab8135db2969204811d527c6a1e455b7c0859fdc",
+    ".work/collaboration-worker/3cd6468813274bed9a217dd160b569e2/result.json": "c532adf4bdd0afdba9f036f6fee5faf964b036e9d4aecfa51e5653c4540b776e",
+    ".work/collaboration-worker/3cd6468813274bed9a217dd160b569e2/gateway-observations.json": "6d318a87dbd5602424eb6adb18d7b0856f54d415add28096a76f67aacef3414c",
+    ".work/collaboration-worker/3cd6468813274bed9a217dd160b569e2/gateway-trace.json": "18bddb4af552b40fbf99a6d5c732f9005854dc477ba93af1409d8e9568154fee",
+    ".work/collaboration-worker/3cd6468813274bed9a217dd160b569e2/acceptance.json": "7e714a12bbc4bb95a26587069a6ca0c83f42748efec615b60a0c2c3a188b4212",
+    ".work/collaboration-worker/e4783688d7354e13804796b979f3f6b5/network-before.json": "79dfab35e5f4104e398aa74de7c3d6e56dda0a96ac31d2fcb699ac1df093c6ad",
+    ".work/collaboration-worker/e4783688d7354e13804796b979f3f6b5/result.json": "dd537df8eb5cd0e2a75afc6fbcc3cb571bf53fa3c1b5a2995d33c2e2552f83bf",
+    ".work/collaboration-worker/e4783688d7354e13804796b979f3f6b5/gateway-observations.json": "d498f538d22a7e46e11eb7d95db734f22a3304e8ff866e12781a8e6c143a509a",
+    ".work/collaboration/3f525ee3f7544a4daf6e963ebb76c0f5/result.json": "791f8521ecc47001180d7813ccc151f17e15e1900ebaa37e6999d5afe8b27d54",
+    ".work/collaboration/3f525ee3f7544a4daf6e963ebb76c0f5/verified.json": "d1d1028e3c696d51573b696c49b9f20d85e38fd923e927c6f4b12013b9d6cd7a",
+    ".work/collaboration/3f525ee3f7544a4daf6e963ebb76c0f5/gateway-trace.json": "8f79fa05b8262e7adb52a67bf1173ce48b8bc7a694daadc5f99aa3393ed4b016"
+  },
+  "scope": [
+    "Actual Android app container, protected SQLite, HRIS API, Matrix Rust SDK and isolated Synapse exercised on emulator-5560.",
+    "FROZEN_DRAFT starts with zero commands, preserves exact draft revision/body/ID through real process death, then sends one encrypted original and confirms draft clearing. Ordinary QUEUED recovery remains a separate case.",
+    "Each worker acquires one original plus 32 encrypted peer seeds. All33 are asserted before Stop; only oldest is individually asserted after Stop.",
+    "Local native proof is distinct from hosted CI; pin the committed Platform fixture and audit the matching Mobile run.",
+    "Phone remains on verified release8 at43cce8c0; these proof-only edits were made afterward and do not require a phone rebuild.",
+    "No live provider deployment, physical iPhone/web runtime, capacity acceptance or full PRD feature group is claimed. Continue draft contention UI distinction and all remaining communication scope."
+  ],
+  "logSha256": {
+    "mobileInitialCheck": "d546da30a5cb51ddc403e906cad3da8635046a13882d28cf09ffd05245d8cab4",
+    "mobileFinalCheck": "5abac692677cc77a03c03e78b493d487f07e7ee9b9cd83594b939d52c00e96a2",
+    "platformFinalCheck": "37ac109ebc5f92c65e199d78ec1f07e330b35ebd9b478e0825d646d7dcc1d34a",
+    "initialNativeLog": "261bf6d0f7d80d2c3712dde27e7f32f6b5b91894be03afb267c36a1fb38846c7",
+    "finalNativeLog": "b010399edec1062a0668e6a70995de5bc366f56b521bde734a2df3f1d71a82a9"
+  },
+  "mobileReportSha256": {
+    "apps/collaboration-proof/build/test-results/testDebugUnitTest/TEST-dev.fajar.hris.collaboration.proof.HrisProofCleanupTest.xml": "1ebc1d78fe3181eab2e5bc9becb9a8338a08dc0f3b6865c20b9ec5fe069c23ce",
+    "apps/collaboration-proof/build/reports/lint-results-debug.xml": "9d8048fe45754cef8d1bd4e2c9fd19bbddad67baae2b0cf114f63392cec9b585"
+  }
+}
