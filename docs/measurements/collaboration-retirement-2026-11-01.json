@@ -609,5 +609,103 @@
     "No Chat UI scheduling or complete PRD group is accepted. Continue Chat UI, Apple/web adapters, backup, rich messages and every call/meeting phase.",
     "After actual local proof, the workflow checkout was pinned to validated Platform fixture f80be739 before full Mobile validation; executable source inputs are unchanged."
   ],
-  "platformFixtureCommit": "f80be73987224fda12d5a3a08a96ec6716538cc9"
+  "platformFixtureCommit": "f80be73987224fda12d5a3a08a96ec6716538cc9",
+  "hostedHris": {
+    "runId": 41301133411,
+    "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/41301133411",
+    "mobileCommit": "070d3ab5f718229ab88dcc7b0a36ad3cd1f5a346",
+    "platformFixtureCommit": "f80be73987224fda12d5a3a08a96ec6716538cc9",
+    "status": "success",
+    "successfulSteps": 17,
+    "sourceManifestMatched": {
+      "mobile": 308,
+      "platform": 33
+    },
+    "reports": {
+      "androidHost": {
+        "suites": 27,
+        "tests": 165,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "nativeHris": {
+        "suites": 1,
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    "duration": {
+      "suiteSeconds": 94.355,
+      "caseSeconds": 50.609
+    },
+    "fixtureRunId": "7d92ab3729f544daa05111bc4df00a75",
+    "actualSdk": {
+      "passed": true,
+      "encryptedBothDirections": true,
+      "logicalIdsPreserved": true,
+      "cleanup": true,
+      "protectedStoreReopened": true,
+      "missingRecordPreserved": true,
+      "wrongPassphrasePreserved": true,
+      "exclusiveOwner": true,
+      "processRestarted": true,
+      "queueRestored": true,
+      "transactionReused": true,
+      "identityAfterRestart": true,
+      "messageIntentRestored": true,
+      "queueMappingRecovered": true,
+      "queueWriterExclusive": true,
+      "perRoomDeliveryIsolated": true,
+      "heldQueueRestored": true,
+      "nativeDeliveryOwned": true,
+      "commonSenderOwned": true,
+      "receiptJournalRecovered": true,
+      "projectionInterrupted": true,
+      "originalHistoryWindowOwned": true,
+      "historyBodiesRestored": true,
+      "commonHistoryAcquisitionOwned": true,
+      "latestHistoryHeadOwned": true,
+      "admittedHistoryHeads": true,
+      "providerHistoryPageOwned": true,
+      "commonProviderHistoryAcquisitionOwned": true,
+      "providerHistoryReferencesRestored": true,
+      "providerHistoryReferencesReconciled": true,
+      "providerHistoryRestartPreserved": true,
+      "historyRuntimeReopened": true,
+      "ackBeforeJournalRecovered": true,
+      "processRestartedAfterAck": true,
+      "completionCleanupRecovered": true,
+      "processRestartedAfterCompletion": true,
+      "encryptedSendCount": 3,
+      "admittedProviderPages": true,
+      "historyWindow": {
+        "originals": 2,
+        "unavailable": 9,
+        "extractionNanos": 14113557,
+        "modelCharacters": 4732,
+        "originalCharacters": 953
+      },
+      "applicationAdmittedBeforeSend": true,
+      "applicationAdmittedAroundHistory": true,
+      "applicationAdmissions": {
+        "device": 22,
+        "conversation": 22,
+        "room": 22,
+        "failures": 0
+      },
+      "heldRoomNeverSent": true,
+      "pausedAcrossRestart": true,
+      "syncInterruptedAfterRestart": true,
+      "syncRetriedWithRetainedCursor": true,
+      "artifact": {
+        "apkSha256": "f4a2ff13c158a9b72bcfb50a15410bfff0c50b5600202a90e3e3d648b3e751e5",
+        "package": "dev.fajar.hris.collaboration.proof",
+        "avd": "hris-mobile-dev",
+        "androidApi": "35"
+      }
+    }
+  }
 }

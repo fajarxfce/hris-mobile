@@ -1,5 +1,23 @@
 # Agent continuation — HRIS Mobile
 
+## Hosted HRIS retirement proof — 1 November 2026
+
+[Run 41301133411](https://github.com/fajarxfce/hris-mobile/actions/runs/41301133411)
+passes at Mobile `070d3ab5f718229ab88dcc7b0a36ad3cd1f5a346` with Platform fixture
+`f80be73987224fda12d5a3a08a96ec6716538cc9`: all 17 steps, 165 Android host cases
+and the actual HRIS emulator case, zero failures/errors/skips. Fixture
+`7d92ab3729f544daa05111bc4df00a75` takes 50.609s (suite 94.355s), confirms completion
+cleanup after the third forced death, exactly three encrypted sends, no held-room
+send, 22/22/22 successful admissions and cleanup true. All 308 recorded Mobile and
+33 Platform source hashes match those immutable commits; the extra Mobile input
+relative to the 307-file local pre-build set is the final HRIS workflow pin.
+
+The existing [retirement measurement](measurements/collaboration-retirement-2026-11-01.json)
+now retains the independently checked hosted results. Chat presentation remains in
+progress; this proof accepts no complete PRD feature group. Continue P0–P8 and push
+each tested commit. No phone or live service changed.
+
+
 ## Validated HRIS completion and journal retirement — 1 November 2026
 
 Encrypted completion and owned local retirement now pass common, SQLite/IndexedDB,
