@@ -14,6 +14,37 @@ import org.koin.core.annotation.*
 @ComponentScan("dev.fajar.starter.collaboration.data")
 class CollaborationDataModule {
     @Factory
+    fun readReadState(
+        states: CollaborationReadStateRepository,
+        lists: CollaborationListRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) = ReadCollaborationReadState(states, lists, sessions, workspaces, server, build, Clock.System)
+
+    @Single
+    fun markMessagesRead(
+        states: CollaborationReadStateRepository,
+        history: CollaborationHistoryRepository,
+        lists: CollaborationListRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) =
+        MarkCollaborationMessagesRead(
+            states,
+            history,
+            lists,
+            sessions,
+            workspaces,
+            server,
+            build,
+            Clock.System,
+        )
+
+    @Factory
     fun queuePushSignal(
         sessions: SessionRepository,
         schedules: SyncScheduleRepository,

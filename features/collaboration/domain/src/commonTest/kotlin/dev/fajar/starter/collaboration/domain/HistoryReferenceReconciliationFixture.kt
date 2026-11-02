@@ -135,7 +135,7 @@ internal class HistoryReferenceReconciliationFixture(
                 return writeFailure?.let { AppResult.Failed(it) } ?: AppResult.Success(true)
             }
         }
-    private val history =
+    val history =
         object : CollaborationHistoryRepository {
             override suspend fun getEventFact(
                 access: CollaborationLocalAccess,

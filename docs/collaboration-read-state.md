@@ -3,8 +3,8 @@
 Read state stores exact acquired event IDs and a bounded queue of receipt intents
 in the account/company/conversation partition. It does not infer coverage from
 message timestamps, read an unseen history gap or treat a server receipt as a
-recipient's durable delivery ACK. The owning use case must admit local access and
-validate the selected original history before invoking this storage contract.
+recipient's durable delivery ACK. Local read/mark use cases admit the current account and retained content gate.
+Marking validates each selected original or confirmed tombstone before storage.
 
 A mark atomically adds one to128 exact read facts and appends its immutable intent.
 The observed generation/revision must still match. Other read facts and pending
@@ -47,7 +47,32 @@ fixture now awaits its own transport completion signal with a5-second bound and
 asserts no result publication. Five browser transport cases independently pass
 25.118s. No production HTTP behavior changed.
 
-This increment is storage only. Common runtime receipt entry, local admission,
-admitted replay, notification suppression/actions, mute/privacy and multi-device
-receipt reconciliation remain separate integration work. It does not enable live
-chat push or accept a whole communications feature.
+`ReadCollaborationReadState` returns a finite detached projection for a selected
+workspace or captured account/company scope. `MarkCollaborationMessagesRead` verifies
+the owned direct-conversation pair and every selected original/tombstone, then uses
+the observed checkpoint for one atomic mutation. It never treats an unseen gap,
+canonical timestamp or an outgoing local echo as acquired read coverage. Empty
+queries may inspect metadata, while an explicit mark requires1..128 distinct events
+and an intent whose target is in that selection. Reuse of an active/last-acknowledged
+intent recovers a lost response; a changed known intent rejects. Both operations
+check local ownership and retained denial after pending work. Ordinary credential
+age does not prevent owned offline use; a replacement account/session cannot receive
+late results. Optional expected-access binding rejects stale notification actions.
+
+The shared mark instance rejects concurrent work instead of queuing it and gives
+one operation10seconds. Cancellation joins suspended work and releases exclusion.
+A failed/late response preserves an already committed intent. Marking never calls
+the provider, enables sync, removes an intent, acknowledges server delivery or
+requests a scheduler. Queue capacity and checkpoint conflicts require explicit
+recovery; there is no internal retry or timestamp coalescing.
+
+[Local policy evidence](measurements/chat-read-state-policy-2026-11-02.json):14 domain
+cases and two assembled-container cases pass128.050s; full root plus14 browser cases
+pass270.921s, with3287 desktop/230 Android host/10 build-logic cases including explicit
+reuse.1716 cases in220 suites execute freshly with zero failures/errors/skips. The
+first42.074s attempt stopped at a test assertion's incompatible generic expected
+type; no tests ran, and production source was unchanged by that correction.
+
+Common runtime receipt entry, admitted replay, notification suppression/actions,
+mute/privacy and multi-device receipt reconciliation remain separate integration
+work. No live chat push or whole communications feature is accepted here.

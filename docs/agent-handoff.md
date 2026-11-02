@@ -1,5 +1,39 @@
 # Agent continuation — HRIS Mobile
 
+## Local read/mark admission accepted — 2 November 2026
+
+[Contract](collaboration-read-state.md) / [evidence](measurements/chat-read-state-policy-2026-11-02.json):
+finite local read and singleton mark use cases now guard current/captured ownership,
+retained content denial, the direct-conversation pair and every exact acquired event.
+No fresh credentials required for owned local work; no unseen-gap/timestamp inference.
+Mark has10-second cancellation and try-lock exclusion, observed-version CAS, stable
+caller intent recovery, explicit capacity rejection and no hidden retry. Failed/late
+responses never erase committed intent/coverage. No scheduling/provider/UI call yet.
+
+Focused check2 PASSES128.050s with14 domain/two real-container cases. Full check3
+PASSES270.921s:3287 desktop/230 Android host/10 build-logic/14 browser cases including
+explicit reused tasks;1716 cases/220 suites fresh, zero failures/errors/skips. Initial
+check1 stops42.074s at incompatible generic types in a new test assertion, corrected
+before tests executed. All nine source/test inputs and report/log hashes recorded.
+
+Next: runtime receipt contract/Android adapter/fake additions are PREPARED ONLY in
+.work/chat-read-receipt-replay-2026-11-02/staged.json (14 hashed source baselines plus
+.txt files). Additional .txt drafts contain DeliverCollaborationReadReceipts, result,
+fixture and12 tests. They are not applied/validated/accepted. Apply only after this
+commit and verify baselines; review the draft before compiling. Replay must recheck
+live owner/device/exact room before writes and after provider success, retain the
+original intent on uncertainty and ACK only its identical queued entry. Then wire
+worker, foreground reads, notification/privacy/mute/inline replies and all54 groups.
+New common changes need full Apple/Xcode coverage. No generic Starter port here.
+
+Phone remains release17, live API/worker dac6fb0d/schema116, chat push OFF. User now
+explicitly requests installing the next validated build too: notify immediately
+before every install, explicit10.77.77.3:5555 --install-only, preserve data/signing,
+never drive the phone UI. Chat UI exists in17; voice/video/meeting UI remains absent.
+Latest user confirmation was release11's crash fix, not a17 chat/phone UI acceptance.
+Push this commit and continue long run; this is not task completion.
+
+
 ## Encrypted local read state accepted — 2 November 2026
 
 [Contract](collaboration-read-state.md) / [evidence](measurements/chat-read-state-2026-11-02.json):

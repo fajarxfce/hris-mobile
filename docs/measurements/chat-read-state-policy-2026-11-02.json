@@ -1,0 +1,280 @@
+{
+  "date": "2026-11-02",
+  "baseCommit": "875edab6029eaddfa8387de713daf4d8bc269904",
+  "scope": "Local read-state ownership and exact-history mark admission; no provider, scheduler, worker, UI or notification invocation.",
+  "checks": [
+    {
+      "startedAt": "2026-11-02T15:22:14.398009+00:00",
+      "exitCode": 1,
+      "wallSeconds": 42.074,
+      "inputsUnchanged": true,
+      "command": [
+        "xvfb-run",
+        "-a",
+        "./gradlew",
+        ":features:collaboration:domain:desktopTest",
+        "--tests",
+        "*CollaborationReadStateUseCasesTest",
+        ":apps:shared:desktopTest",
+        "--tests",
+        "*CollaborationBindingsTest",
+        ":formatCheck",
+        ":architectureCheck",
+        ":detekt",
+        "-Pkotlin.compiler.execution.strategy=in-process",
+        "--no-daemon",
+        "--no-parallel",
+        "--max-workers=1",
+        "-Dorg.gradle.jvmargs=-Xmx1536m"
+      ],
+      "freshReports": {
+        "suites": 0,
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "logSha256": "a8017faa62703c8d5f53de0b9af740145baec32a8c6321e0d7f1a4bd0a16993e",
+      "reportManifestSha256": "c549b92d33923820022b91e2df75aceb56cd9de96b8de5e5b7ae96c2e4ddd6d3",
+      "sourceInputs": {
+        "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt": "29139d6b8e2517d15b5df6023be1e3de3184e239023766541b6faf700b2886ab",
+        "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt": "2c944ffd419b4bd94113a7209b6c0fae2a93bb522c7e46a70b9fdc8013ba8502",
+        "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/HistoryReferenceReconciliationFixture.kt": "6fe7c698dcd47d22cb6ddcfe3262d2407c194dc9dc155d42cfd666d5a07f3b55",
+        "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationReadStatePolicy.kt": "7d139fd297bbad0d432881b2c8910b9f5194eb4745a80b4ff2aa13527788155b",
+        "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/CollaborationReadStateAccess.kt": "36307aed645bd37a41d9051b4e4b2031d982f61c122f36bfa69d107bf9976c89",
+        "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/MarkCollaborationMessagesRead.kt": "1e709a17b0d326383fc1a2ca9d185a5e7d02f9fa3e8a5f6591af6ac16f545f97",
+        "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ReadCollaborationReadState.kt": "e113763249c33b627272ba8a13fd055325cfd58127f5f38dbd5517b899cca2aa",
+        "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationReadStateFixture.kt": "575ab8ddcde62eba537a22e1f121260381f9e053f64140b3631d3a5ea9629c28",
+        "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationReadStateUseCasesTest.kt": "671a39eac628a63e7d6b82a82a85353132f496ec53d81bbe8c9deba0e2101c84"
+      },
+      "outcome": "FAIL: new test assertion compared AppResult<Boolean> with AppResult<CollaborationReadState>; corrected expected failure type before tests ran."
+    },
+    {
+      "startedAt": "2026-11-02T15:23:35.354302+00:00",
+      "exitCode": 0,
+      "wallSeconds": 128.05,
+      "inputsUnchanged": true,
+      "command": [
+        "xvfb-run",
+        "-a",
+        "./gradlew",
+        ":features:collaboration:domain:desktopTest",
+        "--tests",
+        "*CollaborationReadStateUseCasesTest",
+        ":apps:shared:desktopTest",
+        "--tests",
+        "*CollaborationBindingsTest",
+        ":formatCheck",
+        ":architectureCheck",
+        ":detekt",
+        "-Pkotlin.compiler.execution.strategy=in-process",
+        "--no-daemon",
+        "--no-parallel",
+        "--max-workers=1",
+        "-Dorg.gradle.jvmargs=-Xmx1536m"
+      ],
+      "freshReports": {
+        "suites": 2,
+        "tests": 16,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "logSha256": "4c87d3878f98fc81f546181a27f406e6fea7033720168c66be6139e7a433bbfd",
+      "reportManifestSha256": "43b868fd0ad37dd678d4ba176f6691e5e0768a8c0e30c58c7947ac15f08b0953",
+      "sourceInputs": {
+        "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt": "29139d6b8e2517d15b5df6023be1e3de3184e239023766541b6faf700b2886ab",
+        "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt": "2c944ffd419b4bd94113a7209b6c0fae2a93bb522c7e46a70b9fdc8013ba8502",
+        "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/HistoryReferenceReconciliationFixture.kt": "6fe7c698dcd47d22cb6ddcfe3262d2407c194dc9dc155d42cfd666d5a07f3b55",
+        "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationReadStatePolicy.kt": "7d139fd297bbad0d432881b2c8910b9f5194eb4745a80b4ff2aa13527788155b",
+        "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/CollaborationReadStateAccess.kt": "36307aed645bd37a41d9051b4e4b2031d982f61c122f36bfa69d107bf9976c89",
+        "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/MarkCollaborationMessagesRead.kt": "1e709a17b0d326383fc1a2ca9d185a5e7d02f9fa3e8a5f6591af6ac16f545f97",
+        "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ReadCollaborationReadState.kt": "e113763249c33b627272ba8a13fd055325cfd58127f5f38dbd5517b899cca2aa",
+        "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationReadStateFixture.kt": "575ab8ddcde62eba537a22e1f121260381f9e053f64140b3631d3a5ea9629c28",
+        "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationReadStateUseCasesTest.kt": "ecfd29f2a17af458b550e7ed714c18bd5c0fbc6e6b00c87953534ba1ec10d04d"
+      },
+      "outcome": "PASS"
+    },
+    {
+      "startedAt": "2026-11-02T15:26:29.016505+00:00",
+      "exitCode": 0,
+      "wallSeconds": 270.921,
+      "inputsUnchanged": true,
+      "command": [
+        "xvfb-run",
+        "-a",
+        "./gradlew",
+        ":check",
+        ":features:collaboration:domain:wasmJsBrowserTest",
+        "--tests",
+        "*CollaborationReadStateUseCasesTest*",
+        "-Pkotlin.compiler.execution.strategy=in-process",
+        "--no-daemon",
+        "--no-parallel",
+        "--max-workers=1",
+        "-Dorg.gradle.jvmargs=-Xmx1536m"
+      ],
+      "freshReports": {
+        "suites": 220,
+        "tests": 1716,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "logSha256": "2c0ad788a1cf0845c92da9fbf3dbb471e26b27dd0b53f7957e4984a0213d7380",
+      "reportManifestSha256": "011eb3a3ecd82349f809a43d9d1b17e4038df828353570c0aac42c42f3af11d0",
+      "sourceInputs": {
+        "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt": "29139d6b8e2517d15b5df6023be1e3de3184e239023766541b6faf700b2886ab",
+        "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt": "2c944ffd419b4bd94113a7209b6c0fae2a93bb522c7e46a70b9fdc8013ba8502",
+        "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/HistoryReferenceReconciliationFixture.kt": "6fe7c698dcd47d22cb6ddcfe3262d2407c194dc9dc155d42cfd666d5a07f3b55",
+        "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationReadStatePolicy.kt": "7d139fd297bbad0d432881b2c8910b9f5194eb4745a80b4ff2aa13527788155b",
+        "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/CollaborationReadStateAccess.kt": "36307aed645bd37a41d9051b4e4b2031d982f61c122f36bfa69d107bf9976c89",
+        "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/MarkCollaborationMessagesRead.kt": "1e709a17b0d326383fc1a2ca9d185a5e7d02f9fa3e8a5f6591af6ac16f545f97",
+        "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ReadCollaborationReadState.kt": "e113763249c33b627272ba8a13fd055325cfd58127f5f38dbd5517b899cca2aa",
+        "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationReadStateFixture.kt": "575ab8ddcde62eba537a22e1f121260381f9e053f64140b3631d3a5ea9629c28",
+        "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationReadStateUseCasesTest.kt": "ecfd29f2a17af458b550e7ed714c18bd5c0fbc6e6b00c87953534ba1ec10d04d"
+      },
+      "outcome": "PASS"
+    }
+  ],
+  "fullTaskResultsIncludingExplicitReuse": {
+    "desktop": {
+      "tests": 3287,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "suites": 487,
+      "tasks": {
+        ":apps:demo:desktopTest": "UP-TO-DATE",
+        ":apps:shared:desktopTest": "EXECUTED",
+        ":core:common:desktopTest": "UP-TO-DATE",
+        ":core:database:desktopTest": "UP-TO-DATE",
+        ":core:datastore:desktopTest": "UP-TO-DATE",
+        ":core:fileio:desktopTest": "UP-TO-DATE",
+        ":core:localization:desktopTest": "UP-TO-DATE",
+        ":core:network:desktopTest": "UP-TO-DATE",
+        ":core:observability:desktopTest": "UP-TO-DATE",
+        ":core:presentation:desktopTest": "UP-TO-DATE",
+        ":core:securestorage:desktopTest": "UP-TO-DATE",
+        ":core:storage:desktopTest": "UP-TO-DATE",
+        ":core:worker:desktopTest": "UP-TO-DATE",
+        ":core:availability:data:desktopTest": "UP-TO-DATE",
+        ":core:availability:domain:desktopTest": "UP-TO-DATE",
+        ":core:documents:data:desktopTest": "UP-TO-DATE",
+        ":core:documents:domain:desktopTest": "UP-TO-DATE",
+        ":core:featureflags:data:desktopTest": "UP-TO-DATE",
+        ":core:featureflags:domain:desktopTest": "UP-TO-DATE",
+        ":core:identity:data:desktopTest": "UP-TO-DATE",
+        ":core:identity:domain:desktopTest": "UP-TO-DATE",
+        ":core:location:data:desktopTest": "UP-TO-DATE",
+        ":core:notifications:data:desktopTest": "UP-TO-DATE",
+        ":core:notifications:domain:desktopTest": "UP-TO-DATE",
+        ":core:security:data:desktopTest": "UP-TO-DATE",
+        ":core:security:domain:desktopTest": "UP-TO-DATE",
+        ":core:settings:data:desktopTest": "UP-TO-DATE",
+        ":core:sync:data:desktopTest": "UP-TO-DATE",
+        ":core:transfers:data:desktopTest": "UP-TO-DATE",
+        ":core:transfers:domain:desktopTest": "UP-TO-DATE",
+        ":core:workspace:data:desktopTest": "UP-TO-DATE",
+        ":core:workspace:domain:desktopTest": "UP-TO-DATE",
+        ":features:auth:presentation:desktopTest": "UP-TO-DATE",
+        ":features:collaboration:data:desktopTest": "EXECUTED",
+        ":features:collaboration:domain:desktopTest": "EXECUTED",
+        ":features:collaboration:presentation:desktopTest": "EXECUTED",
+        ":features:dashboard:data:desktopTest": "UP-TO-DATE",
+        ":features:dashboard:domain:desktopTest": "UP-TO-DATE",
+        ":features:dashboard:presentation:desktopTest": "UP-TO-DATE",
+        ":features:documents:presentation:desktopTest": "UP-TO-DATE",
+        ":features:expenses:data:desktopTest": "UP-TO-DATE",
+        ":features:expenses:domain:desktopTest": "UP-TO-DATE",
+        ":features:expenses:presentation:desktopTest": "UP-TO-DATE",
+        ":features:files:presentation:desktopTest": "UP-TO-DATE",
+        ":features:home:presentation:desktopTest": "UP-TO-DATE",
+        ":features:inbox:data:desktopTest": "UP-TO-DATE",
+        ":features:inbox:domain:desktopTest": "UP-TO-DATE",
+        ":features:leave:data:desktopTest": "UP-TO-DATE",
+        ":features:leave:domain:desktopTest": "UP-TO-DATE",
+        ":features:leave:presentation:desktopTest": "UP-TO-DATE",
+        ":features:notifications:presentation:desktopTest": "UP-TO-DATE",
+        ":features:onboarding:data:desktopTest": "UP-TO-DATE",
+        ":features:onboarding:presentation:desktopTest": "UP-TO-DATE",
+        ":features:payroll:data:desktopTest": "UP-TO-DATE",
+        ":features:payroll:domain:desktopTest": "UP-TO-DATE",
+        ":features:payroll:presentation:desktopTest": "UP-TO-DATE",
+        ":features:people:data:desktopTest": "UP-TO-DATE",
+        ":features:people:domain:desktopTest": "UP-TO-DATE",
+        ":features:people:presentation:desktopTest": "UP-TO-DATE",
+        ":features:security:presentation:desktopTest": "UP-TO-DATE",
+        ":features:settings:presentation:desktopTest": "UP-TO-DATE",
+        ":features:workforce:data:desktopTest": "UP-TO-DATE",
+        ":features:workforce:domain:desktopTest": "UP-TO-DATE",
+        ":features:workforce:presentation:desktopTest": "UP-TO-DATE"
+      }
+    },
+    "buildLogic": {
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "suites": 2,
+      "tasks": {
+        ":build-logic:test": "UP-TO-DATE"
+      }
+    },
+    "androidHost": {
+      "tests": 230,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "suites": 37,
+      "tasks": {
+        ":features:collaboration:data:testAndroidHostTest": "EXECUTED"
+      }
+    },
+    "browser": {
+      "tests": 14,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "suites": 1,
+      "tasks": {
+        ":features:collaboration:domain:wasmJsBrowserTest": "EXECUTED"
+      }
+    }
+  },
+  "primaryFreshReports": {
+    "features/collaboration/domain/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.domain.CollaborationReadStateUseCasesTest.xml": {
+      "sha256": "a2b772ad4ea84d0cdf17ae1b57c5ebba22976b471ff283b1d34b626d692efffb",
+      "tests": 14,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/collaboration/domain/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.domain.CollaborationReadStateUseCasesTest.xml": {
+      "sha256": "baca04556c3d4425b2679e4f14d0a4f876cead5b0aacf702142a820ace457e92",
+      "tests": 14,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationBindingsTest.xml": {
+      "sha256": "54f028f69b1a3fbe8ce3bd5a009d8970ac5b5bb563369bf855c9428bddccb821",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "fullReportManifestSha256": "88d0f05e5f5883e97454b15db4de3ae6e5e9161386c26971bbfd70d4b55db9da",
+  "phone": {
+    "installedVersionCode": 17,
+    "changed": false,
+    "nextValidatedBuild": "Install on 10.77.77.3:5555 after notice with --install-only; do not launch or drive user UI."
+  },
+  "limits": [
+    "No native provider proof in this increment. Earlier receipt proof is recorded separately.",
+    "New common source still needs full Apple/Xcode coverage after runtime integration.",
+    "No live rollout; API/worker remain dac6fb0d, schema116; chat push remains OFF.",
+    "All54 communications groups remain open; no generic Starter port applies."
+  ]
+}
