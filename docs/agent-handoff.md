@@ -34,11 +34,18 @@ b57d30c9e85011db99386586f6ddc0f0998ff6e1572b6ed816f5b22c31d3a02a.
 This is actual raw IPC, not HRIS admission, notification-input OS death, or phone UI.
 
 Hosted Native HRIS workflow now runs tool/check_native_notifications.py on owned5560
-before its existing five SDK/WorkManager cases, preserving separate raw evidence. That
-new hosted run is not yet accepted. Consolidated full Apple is prepared at
-.work/chat-native-notification-apple-2026-11-02/dispatch.py for175 source paths; dispatch
-once after the code commit/push and follow actual result. Last audited Apple remains
-bb95ff1d/41539628582:895/101/full Xcode964s, excludes issuer/lifecycle/this increment.
+before its existing five SDK/WorkManager cases. New run41547370301 atdb74e22d is PENDING
+behind eac2ac98/41544727565 in progress. Track its raw artifact plus the five existing
+cases separately; do not claim either pending run as acceptance. Native protocol
+41547370414 is also in progress.
+
+Consolidated full [Apple41547382869](https://github.com/fajarxfce/hris-mobile/actions/runs/41547382869)
+was dispatched once at2026-11-02T23:41:45Z fordb74e22d9dbb9a4ffcdc7ada0a211337041aba3e,
+175 verified source paths. It is IN PROGRESS. Follow .work/chat-native-notification-apple-
+2026-11-02/audit.py after actual success; do not redispatch/cancel. Tracked
+[pending evidence](measurements/native-notification-actions-apple-2026-11-02.json).
+Last audited Apple remainsbb95ff1d/41539628582:895/101/full Xcode964s; it excludes issuer,
+lifecycle and this increment. No local heavy job or owned emulator remains now.
 
 NEXT implement the serialized application surface lifetime and admitted coordinator,
 then callback retention/review/routing, company/settings/read invalidation and focused
