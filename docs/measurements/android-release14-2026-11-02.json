@@ -1,0 +1,125 @@
+{
+  "recordedAt": "2026-11-02T03:33:00Z",
+  "scope": "Private Android devRelease 14 update after user-confirmed release 11 startup recovery. No live collaboration push rollout or complete PRD acceptance.",
+  "source": {
+    "commit": "8c5577167f86f47d0eebd03ff04e57ae5351a99e",
+    "cleanBeforeBuild": true,
+    "cleanAfterBuild": true
+  },
+  "artifact": {
+    "nativeAbis": [
+      "arm64-v8a"
+    ],
+    "zipAligned16KiB": true,
+    "artifact": ".work/release-phone-2026-11-02-build14/hris-mobile-dev-release-1.0.0-14-arm64.apk",
+    "variant": "devRelease",
+    "applicationId": "dev.fajar.hris.mobile.dev",
+    "versionCode": 14,
+    "versionName": "1.0.0",
+    "bytes": 87347192,
+    "sha256": "be3d42117c0d52e961f668b37ee05625916ef5bece72d0e067500b14fad2945d",
+    "debuggable": false,
+    "signatureVerified": true,
+    "samePreviouslyInstalledSigner": true,
+    "signerSha256": "aca5ce6a26b978dee1d63c63103b6799848ab760d47ef4cf5ee68620fc8721f3",
+    "signerSha1": "23860b51e4305aa7900090aeab6783d39a12ff33",
+    "signingBoundary": "Release build signed with the existing development key for an in-place private-device update.",
+    "privateApiVerifiedInDex": true,
+    "fixtureEndpointsAbsent": true,
+    "firebaseDevAppMatches": true,
+    "sameInstalledSigner": true
+  },
+  "build-arm64": {
+    "command": [
+      "xvfb-run",
+      "-a",
+      "./gradlew",
+      ":apps:android:assembleDevRelease",
+      "-Pkotlin.compiler.execution.strategy=in-process",
+      ":apps:android:lintDevRelease",
+      "-PrequireSigning=true",
+      "-PappEnvironment=dev",
+      "-PappVersion=1.0.0",
+      "-PappVersionCode=14",
+      "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+      "--init-script",
+      "/home/fajar/hris/hris-mobile/.work/release-phone-2026-11-02-build14/phone-arm64.init.gradle",
+      "--stacktrace",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=1",
+      "-Dorg.gradle.jvmargs=-Xmx2048m"
+    ],
+    "startedAt": "2026-11-02T03:24:21.482393+00:00",
+    "elapsedSeconds": 65.98,
+    "exitCode": 0
+  },
+  "startup-code-equivalence": {
+    "arm64Sha256": "be3d42117c0d52e961f668b37ee05625916ef5bece72d0e067500b14fad2945d",
+    "startupUniversalSha256": "64b05d5326fbb10fe85ae04012ba37170c0da7e4436a8369def4fe7329ad5649",
+    "dexFilesIdentical": 8,
+    "dexSha256": {
+      "classes.dex": "ba299ecff211ac2b1db8e254083d85e4c4c5337da905d3d7936add4041b0ea93",
+      "classes2.dex": "5817d022eea8a81aced96fd29e6984fa618c4cba2048abc034efdea4efdaebec",
+      "classes3.dex": "9a9e119a2c5f57634e4b5e58a3100f6e671cd473ac703dab10d891b5592a3a30",
+      "classes4.dex": "3268bbc9b65a31d633ddb300d476e8779f0067b2840acf8becfdb72f3d51d43f",
+      "classes5.dex": "5291287d741c347ebdcce1c091690b17a703276716a298f3955294d692a2f32d",
+      "classes6.dex": "6ea84caf1985eb062dc49418d43242a48f9247338326414a36c07404b3a7d55a",
+      "classes7.dex": "34dd3928fbea55a42f3a0cd78ebe601c48342606b8cbf5b6b12af36bf4ebceab",
+      "classes8.dex": "a408104343f3f317d6dc8b4c676ecf7e201e3481130f940f9548a4bf9a17fc6a"
+    },
+    "startupProof": "docs/measurements/chat-background-runtime-2026-11-02.json",
+    "cleanSource": {
+      "commit": "8c5577167f86f47d0eebd03ff04e57ae5351a99e",
+      "cleanBeforeBuild": true,
+      "cleanAfterBuild": true
+    }
+  },
+  "install-result": {
+    "confirmed": true,
+    "startedAt": "2026-11-02T03:28:32.160280+00:00",
+    "elapsedSecondsIncludingVerification": 85.325,
+    "serial": "10.77.77.3:5555",
+    "variant": "devRelease",
+    "applicationId": "dev.fajar.hris.mobile.dev",
+    "versionCode": 14,
+    "versionName": "1.0.0",
+    "debuggable": false,
+    "installedSha256": "be3d42117c0d52e961f668b37ee05625916ef5bece72d0e067500b14fad2945d",
+    "installedBytesMatch": true,
+    "existingAppIdPreserved": true,
+    "firstInstallTimePreserved": true,
+    "updateInPlace": true,
+    "uninstalled": false,
+    "appDataCleared": false,
+    "uiLaunched": false,
+    "after": {
+      "appId": "10962",
+      "firstInstallTime": "2026-10-29 15:48:23",
+      "lastUpdateTime": "2026-11-02 10:28:50",
+      "versionCode": "14 minSdk=24 targetSdk=36",
+      "versionName": "1.0.0",
+      "debuggable": false
+    }
+  },
+  "validation": {
+    "buildGradleSeconds": 62,
+    "appLintErrors": 0,
+    "appLintExistingWarnings": 1,
+    "startupEvidence": "chat-background-runtime-2026-11-02.json",
+    "startupBoundary": "Two 12-second stable cold starts of actual StarterApplication on owned emulator; all eight DEX files match this arm64 artifact. User phone was not launched or UI-driven.",
+    "userConfirmation": "User confirmed release 11 can open; no user confirmation of release 14 claimed.",
+    "backgroundRuntimeSource": "8c5577167f86f47d0eebd03ff04e57ae5351a99e",
+    "existingApplicationIdPreserved": true,
+    "dataClearOrUninstallPerformed": false,
+    "notificationBeforeInstall": true
+  },
+  "localEvidenceSha256": {
+    "artifact.json": "2c27657d6ce9d7cac1c050d67875b4bdcda39acd8ee4f1c1dad502b0081701b0",
+    "source.json": "e43af0a43b1689bb559a8a4dfa7fdefa8f715fe87102aa8f1ef418bdc35aba55",
+    "build-arm64.json": "b41b8ff91903f0fa4c84139e8b515081c87f1c5617a28fa56e4552730028f20a",
+    "startup-code-equivalence.json": "4e4602a03944210241a2e42b79c431fcab20c0a52597ee12ac24223fbb072095",
+    "install-result.json": "7bba515414f398609a84d43b531a103095c225d91003f4b3ca2eb61a6fd909e7",
+    "install.log": "781a31c82430c97897af612ece5e0ca2205e301cb5ff121ce2660541ea5182c7"
+  }
+}

@@ -1,5 +1,27 @@
 # Agent continuation — HRIS Mobile
 
+## Release 14 installed on the authorized phone — 2 November 2026
+
+[Installation evidence](measurements/android-release14-2026-11-02.json): clean
+source `8c557716` built arm64 devRelease14 in 62s Gradle /65.98s wall with lint
+passing. The 87,347,192-byte APK (`be3d4211`) has all eight DEX files identical to
+startup-tested universal14. It retains the existing development signer and private
+WireGuard API; no fixture endpoint or debuggable flag is present.
+
+After notification and signer preflight, the install-only update to
+`10.77.77.3:5555` completed and was verified by pulling the installed APK. Its
+full hash matches. Version14, application UID and original first-install time are
+verified; no uninstall, app-data clear or UI launch occurred. Installation plus
+verification took85.325s. The user's latest confirmation was that release11 opens;
+release14 has automated startup/code-equivalence proof, not a new user confirmation.
+
+**Continue immediately:** apply the seven-file typed native/history scope candidate
+mentioned below only after verifying its baseline hashes. Validate shared history
+and child-resource cancellation rules, then continue shared outbox and durable
+all-company incoming recovery. Phone now has14; older phone11 notes below are
+historical. Keep backend delivery disabled and continue after each pushed checkpoint.
+No live server rollout, generic Starter port or full PRD-group acceptance.
+
 ## Finite background runtime references validated — 2 November 2026
 
 [Contract](collaboration-background-runtime.md) /
