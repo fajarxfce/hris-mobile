@@ -13,6 +13,26 @@ import org.koin.core.annotation.*
 @Module
 @ComponentScan("dev.fajar.starter.collaboration.data")
 class CollaborationDataModule {
+    @Factory
+    fun requestRecovery(
+        wakes: CollaborationRecoveryWakeRepository,
+        schedules: SyncScheduleRepository,
+    ) = RequestCollaborationRecovery(wakes, schedules)
+
+    @Factory
+    fun resumeRecovery(
+        wakes: CollaborationRecoveryWakeRepository,
+        schedules: SyncScheduleRepository,
+    ) = ResumeCollaborationRecovery(wakes, schedules)
+
+    @Factory
+    fun readRecoveryWake(wakes: CollaborationRecoveryWakeRepository) =
+        ReadCollaborationRecoveryWake(wakes)
+
+    @Factory
+    fun completeRecoveryWake(wakes: CollaborationRecoveryWakeRepository) =
+        CompleteCollaborationRecoveryWake(wakes)
+
     @Single
     fun loadDevicePage(
         recovery: CollaborationRecoveryRepository,

@@ -187,6 +187,26 @@ class CollaborationBindingsTest {
                     container.koin.get<CollaborationRecoveryRepository>(),
                 )
                 assertNotNull(container.koin.get<ReadCollaborationControl>())
+                val wakeRepository = container.koin.get<CollaborationRecoveryWakeRepository>()
+                assertSame(
+                    wakeRepository,
+                    container.koin.get<CollaborationRecoveryWakeRepository>(),
+                )
+                assertNotNull(container.koin.get<RequestCollaborationRecovery>())
+                assertNotNull(container.koin.get<ResumeCollaborationRecovery>())
+                val readWake = container.koin.get<ReadCollaborationRecoveryWake>()
+                val completeWake = container.koin.get<CompleteCollaborationRecoveryWake>()
+                assertEquals(AppResult.Success(null), readWake())
+                val firstWake =
+                    assertIs<AppResult.Success<CollaborationRecoveryWake>>(wakeRepository.request())
+                        .value
+                val laterWake =
+                    assertIs<AppResult.Success<CollaborationRecoveryWake>>(wakeRepository.request())
+                        .value
+                assertEquals(AppResult.Success(false), completeWake(firstWake))
+                assertEquals(AppResult.Success(laterWake), readWake())
+                assertEquals(AppResult.Success(true), completeWake(laterWake))
+                assertEquals(AppResult.Success(null), readWake())
                 assertNotNull(container.koin.get<ReadCollaborationIdentity>())
                 assertNotNull(container.koin.get<ReadCollaborationThreadContext>())
                 assertNotNull(container.koin.get<ReadCollaborationDeliveryWork>())

@@ -1,33 +1,47 @@
 # Agent continuation — HRIS Mobile
 
-## Starter wake port proved; HRIS scheduling policy under test — 2 November 2026
+## HRIS durable recovery request policy validated — 2 November 2026
 
-Starter [dab675a8](https://github.com/fajarxfce/compose-fluent-starter/commit/dab675a8804fb15a205e4a66329a096755f067eb)
-is pushed with the exact 15 Mobile-proven raw storage/test/schema files. Independent
-root/database-browser/Android/lint/production Web checks pass in301s /305.231s:
-348 desktop,42 database-browser and six build-logic cases, zero failures/errors/skips.
-Lint has zero fatal/errors and45 existing warnings; APK is built, not installed.
-[Port ledger](template-updates.md) and both storage measurements retain proof.
+[Contract](collaboration-recovery-wakes.md) / [evidence](measurements/chat-recovery-wake-2026-11-02.json):
+fixed-key wake mapping, fresh UUID generations, capacity32 and Request/Resume/Read/
+Complete operations now preserve persisted hints through scheduling failure,
+timeout, cancellation and competing completion. Ten domain/six data cases plus
+assembled application DI/SQLite checks pass. Focused checks pass in154s /158.169s
+(530 domain,300 data,two DI); full root/affected browser/app-Wasm passes in316s /
+319.907s on12 unchanged inputs: 3016 desktop,215 Android host,
+808 affected browser and10 build-logic cases, zero failures/errors/skips.
+These use cases have NO registered all-company consumer/FCM entry caller yet.
 
-Mobile [Apple-only CI41396150119](https://github.com/fajarxfce/hris-mobile/actions/runs/41396150119)
-continues at exact `be8ebc7b03bf765a4d4f34c493be4653d6e56d7f`; no native acceptance
-yet. Audit downloaded XML, including six AppleWorkWakeStoreTest cases and Xcode.
-Do not dispatch another same-branch Apple run while active. After success, copy
-only its isolated fixture to Starter and run independent hosted Apple validation.
+**Continue immediately:** implement bounded Android scheduling. Three source/test
+candidates and eight common concurrency/cancellation cases are prepared UNAPPLIED
+under `.work/collapsed-scheduling-2026-11-02/candidate.json`; design.txt is corrected.
+Earlier tag/APPEND_OR_REPLACE reasoning was insufficient: WorkManager deletes whole
+WorkSpecs on failed/cancelled leaves, cascading tag deletion. Do not use that design.
+Use two independently named one-time slots per fresh opted-in key. Query unfinished
+states for both names after the durable write. Reuse a waiting slot; otherwise fill
+a vacant slot with a fresh-ID request and KEEP for that independent name. A running
+slot is never reused; two occupied running slots fail and leave durable recovery.
+Existing ordinary keys retain APPEND_OR_REPLACE. Bound admitted callers/keys to32.
+Actual Android proof must cover two simultaneous jobs, competing scheduler instances,
+backoff, slot cancellation/failure, cancellation/overflow and process-death repair
+before accepting or porting this generic scheduler. No HRIS activation yet.
 
-Current uncommitted HRIS increment: fixed-key StoredCollaborationRecoveryWakeRepository
-and Request/Resume/Read/Complete use cases, generated fresh UUIDs, bounded capacity
-mapping and persist-before-enqueue with1.5s timeout. Ten domain/six data regressions
-and actual application DI/SQLite checks are prepared. Focused checks run on12 frozen
-inputs via `.work/recovery-wake-2026-11-02/check.py 1 focused`; preserve any failures,
-then full root/affected browser checks before accepting or committing the product.
-These operations are not yet invoked by a registered all-company worker/FCM path.
+Starter dab675a is pushed with15 identical raw database/test/schema files; independent
+301s /305.231s root/browser/Android/lint/Web proof passes348 desktop,42 browser,six
+build-logic,zero failures/skips. Apple wrapper still awaits Mobile hosted proof.
+[CI41396150119](https://github.com/fajarxfce/hris-mobile/actions/runs/41396150119)
+at exact be8ebc7b has completed compile/tests and is building Xcode at this observation.
+Audit downloaded XML (six AppleWorkWakeStoreTest cases) and final steps before acceptance.
+Do not dispatch another same-branch Apple run until done. Then port its isolated
+wrapper to Starter and run independent Apple CI. This older run is not proof of
+this later HRIS recovery policy. Continue local implementation meanwhile.
 
-Continue bounded WorkManager coordination and actual fair all-company discovery/
-receive. Existing generic one-time tasks use APPEND_OR_REPLACE; never replace with
-plain KEEP or duplicate deterministic WorkRequest IDs. See the following checkpoint.
-Phone remains verified15; backend push disabled and private server unchanged.
-Continue after each push; all54 PRD groups remain open.
+Then connect parent publication, fair native-directory/room cursors and actual
+incoming acquisition independent of local outgoing messages. RefreshCollaborationList
+already accepts operation scope; trace Background support before duplicating it.
+Receive/decrypt/notification/privacy/deep links/encrypted replies remain. Phone
+stays verified15 from30d7faab, server unchanged, push disabled, all54 PRD groups open.
+Owned5560 remains stopped; preserve unrelated jobs/5558. Continue after every push.
 
 ## Durable raw work wakes validated — 2 November 2026
 

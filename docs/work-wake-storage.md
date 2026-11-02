@@ -39,3 +39,5 @@ and IndexedDB generation races,40 competing capacity requests, same-generation
 replay, cancellation, account replacement, close/reopen and previous-schema
 migration. It preserves the first failed cancellation case and its fix. The six
 isolated Apple cases are prepared for separately audited hosted execution.
+
+HRIS maps this primitive through [durable chat recovery requests](collaboration-recovery-wakes.md).
