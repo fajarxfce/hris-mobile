@@ -14,6 +14,31 @@ import org.koin.core.annotation.*
 @ComponentScan("dev.fajar.starter.collaboration.data")
 class CollaborationDataModule {
     @Factory
+    fun prepareMessageNotification(
+        settings: CollaborationNotificationSettingsRepository,
+        reads: CollaborationReadStateRepository,
+        history: CollaborationHistoryRepository,
+        identities: CollaborationIdentityRepository,
+        lists: CollaborationListRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) =
+        PrepareCollaborationMessageNotification(
+            settings,
+            reads,
+            history,
+            identities,
+            lists,
+            sessions,
+            workspaces,
+            server,
+            build,
+            Clock.System,
+        )
+
+    @Factory
     fun readNotificationSettings(
         settings: CollaborationNotificationSettingsRepository,
         lists: CollaborationListRepository,

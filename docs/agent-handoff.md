@@ -1,5 +1,54 @@
 # Agent continuation — HRIS Mobile
 
+## Local notification projection accepted — 2 November 2026
+
+A captured-account exact event can now be prepared from encrypted original history,
+retained direct-room labels, protected self identity, mute/preview settings and read
+coverage. Muted/self/read/redacted sources suppress; missing data remains pending;
+a confirmed tombstone suppresses even before its original is available. Defaults
+expose no names/body, previews are bounded and avoid splitting surrogate pairs.
+Source alias lists are detached; final original and settings comparisons detect
+pending changes, and retained denial/current ownership surround each suspension.
+No SDK/network, implicit retry, read mark, receipt ACK, UI or OS display is added.
+[Contract](collaboration-notification-projection.md),
+[evidence](measurements/chat-notification-projection-2026-11-02.json).
+
+Focused10 cases initially passed141.782s. Review then added exact missing-original
+tombstone lookup and moved final settings comparison after read-state/original reads;
+three regressions were added. Final focused13 cases pass137.768s (11 domain/two
+assembled DI). Full root/proof/Wasm/browser passes333.788s:3346 desktop/494 suites,
+230 Android host/37, ten build-logic/two, six proof-host/one,11 browser/one, including
+explicit task reuse;1778 cases/228 suites fresh, zero failures/errors/skips. Seven
+source/test inputs unchanged during final validation. No new native/provider or
+phone interaction test. No Starter port for this HRIS policy.
+
+Settings7d35e975 is pushed. Apple41487045428 at exact
+7d35e975d32bd04fcfdebb0487de23a03dff6174 remains QUEUED; audit eventual full Xcode
+and simulator artifacts. It excludes this newer projection; dispatch Apple against
+a later accepted head after it finishes, avoiding same-scope cancellation. Latest
+accepted Apple remains42f5d157/run41480512291,54 hashes and780 cases plus full Xcode.
+Phone18/source42f5d157 and live304be027/schema116 remain, all chat push OFF.
+
+Next: commit/push this increment, then implement encrypted notification delivery/
+action state, owned display/cancellation, UI controls and native inline reply. All54
+groups stay open; continue long run. Source stamps are not an atomic OS display lease;
+coordinator must serialize/revalidate and retire stale cards. Suppression is not a
+blanket cancel for an unrelated card: reproject that card's canonical original.
+
+.work/chat-notification-projection-2026-11-02 .txt drafts were ALREADY APPLIED and
+then corrected in actual Kotlin. Do not reapply stale drafts. check-3/audit.py passed;
+accepted full checks need no repeat absent changes/failures. Next design notes are
+.work/chat-notification-delivery-2026-11-02/notes.md: do not consume the generic
+CommandStore's global128 employee-action capacity for display bookkeeping; use
+scoped encrypted notification state, bounded operations and exact acknowledgments.
+Avoid decrypted chat text in generic plaintext notification history. Define initial
+backlog/source handling rather than treating timestamp order as processing authority.
+Reply tokens must survive duplicate callbacks and rotate after consumption; preserve
+text on conflicts without overwriting a composer. iOS extension/store concurrency
+and current-owner native cancellation remain separate required work. Next product
+phone build must exceed18, notify first, explicit10.77.77.3:5555, --install-only,
+preserve signing/data and never drive its UI.
+
 ## Notification settings accepted; release18 Apple audit — 2 November 2026
 
 Encrypted per-conversation mute/preview settings and bounded local read/update use

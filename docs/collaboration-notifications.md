@@ -2,8 +2,9 @@
 
 [Per-conversation mute and preview storage](collaboration-notification-settings.md)
 now supplies account-bound encrypted preferences and conditional offline changes.
-System display, UI controls, mute cancellation and native action consumers still
-need integration; live chat push remains disabled.
+[Local candidate preparation](collaboration-notification-projection.md) also filters
+owned originals by mute/read/privacy state. System display, UI controls, cancellation
+and native action consumers still need integration; live chat push remains disabled.
 
 The managed-pusher client operation is implemented. It is not yet invoked
 automatically by the application or worker. Native [push receive routing](collaboration-push-receive.md) now persists
@@ -36,18 +37,20 @@ binding. Client-side activation does not expose the capability or FCM token.
 domain cases, seven Android host transport/lifetime cases, real shared-container
 bindings, root checks, browser checks, release assembly/lint and two actual-app cold
 starts. Android host transport uses MockEngine and a stubbed SDK session getter;
-native SDK → HRIS → Synapse → FCM acceptance is still separate. Release12 is a local
-universal validation APK; the phone retains accepted release11.
+native SDK → HRIS → Synapse → FCM acceptance is still separate. The pusher-only
+evidence predates the currently installed release18; see its
+[verified installation](measurements/android-release-phone-2026-11-02-build18.json).
+Release18 does not automatically activate the chat pusher.
 
 The [native recovery client](collaboration-native-recovery.md) now discovers bounded
 device references for the current parent and acquires separate company admission.
-Discovery metadata is not an authority grant. The background worker still needs
-to consume these operations before content I/O. Background leases must coexist
-with the foreground runtime without changing the selected workspace, escaping an
-account/session change or opening the same cryptographic store twice. Collapsed
-push hints, reconnect and periodic recovery must visit every owned company with
-bounded durable cursors. Notification replies must first persist owned encrypted
-commands through the existing pipeline and survive duplicate actions/process death.
+Discovery metadata is not an authority grant. The admitted background worker now
+consumes this scoped recovery without requiring a selected workspace or outgoing
+command. Owned leases coexist with the foreground runtime; captured account/session
+ownership gates late results and avoids opening the same store twice. Incoming
+company/room progress and push priority are separate durable positions. Notification
+replies still need owned encrypted actions through the existing command pipeline,
+with duplicate-action and process-death recovery.
 
 The pinned Rust SDK NotificationClient requires sliding sync. The current product
 uses classic SyncV2 with `SlidingSyncVersion.NONE`; do not wire it in on the
