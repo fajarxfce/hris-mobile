@@ -1,5 +1,31 @@
 # Agent continuation — HRIS Mobile
 
+## Android backup exclusions validated — 2 November 2026
+
+[Contract](android-data-extraction.md) / [evidence](measurements/android-data-extraction-2026-11-02.json):
+Android12+ explicitly excludes all nine local storage domains from cloud backup and
+device transfer, while legacy allowBackup/fullBackupContent are false. No migration,
+deleting stores, key transfer or user-managed encrypted backup feature. Root/release
+resources/lint passes148.202s on the two unchanged manifest/XML inputs, with zero
+Android lint issues. Actual linked binary XML and merged attributes inspected; the
+measurement distinguishes executed/cache/up-to-date reports. No physical transfer.
+
+Push this configuration, then port identical XML/attributes to Starter and run its
+own root/Android checks. Shared/Apple Kotlin and Gradle sources are unchanged, so
+active Apple41446374520 atcc4c11f1 still covers those exact inputs; do not duplicate.
+Existing clean release16 artifact remains intact but excludes these rules. Prepare
+release17+ from a clean accepted commit with the same signer/private API after the
+port checks, then install only after compatible server rollout and prior notice.
+Phone currently15, explicit10.77.77.3:5555 --install-only, no UI driving.
+
+Platform2334e266 fixes only the outage fixture's immediate-retry assumption;116 active
+worker cases pass298.222s. Replacement full Verify41448616746 is ACTIVE at that exact
+source; the prior41442782804 failure remains recorded. Prepared rollout scripts now
+target replacement source/run, but no HRIS checkpoint/migration/deploy/grant yet.
+Private Matrix/pre-enrollment recovery and immutable dashboard candidate are ready;
+HRIS schema103/API-worker2c2a59e3/dashboard1e0522c0 still run. Continue after this port;
+notifications/actions/replies, actual priority SDK and all54 PRD groups remain open.
+
 ## Release16 staged; compatible server rollout pending — 2 November 2026
 
 [Build/evidence](measurements/android-release-phone-2026-11-02-build16.json): exact
