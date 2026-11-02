@@ -1,5 +1,20 @@
 # Template updates
 
+## Bounded Android scheduling and Apple wake proof — 2 November 2026
+
+Mobile e00ab4ee proves three reusable scheduler/test files with actual Android
+WorkManager/SQLite, two competing owners, generation fencing, backoff, cancellation
+and process-death repair. Starter [136d2e5a](https://github.com/fajarxfce/compose-fluent-starter/commit/136d2e5a607fb20b6f5ccd07bd88ed14b0a6b668)
+ports them exactly plus the six-case Apple wake fixture proved by Mobile CI41396150119.
+Its independent root/worker-browser/Android/lint/Web checks pass148s /152.12s:
+356 desktop,13 worker-browser and six build-logic cases,zero failures/errors/skips;
+lint has zero fatal/errors and45 existing warnings. APK is built, not installed.
+
+[Starter evidence](https://github.com/fajarxfce/compose-fluent-starter/blob/136d2e5a607fb20b6f5ccd07bd88ed14b0a6b668/docs/measurements/bounded-work-2026-11-02.json)
+contains exact source/report/artifact hashes. Its own [Apple CI41400133440](https://github.com/fajarxfce/compose-fluent-starter/actions/runs/41400133440)
+is in progress at that exact head; audit XML and Xcode before acceptance. No HRIS
+recovery policy, proof application, configuration or task opt-in is copied.
+
 ## Durable work wake storage — 2 November 2026
 
 Mobile `be8ebc7b` proves the raw application-global key/generation/pending store,

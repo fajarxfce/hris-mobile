@@ -808,5 +808,19 @@
     "native-1/work-wake-resume.log": "5e9411f645c6d27ebbd5e1090293e0798c6bb11a73f2d788ba4d540d002a33d6",
     "emulator-port-conflict.json": "087523868ee31e4ff5df73c049324f70bb52419688b0602b389815ef1a626005",
     "emulator-stop.json": "8055551e96e8348ef350d2a620aa71c4eea5a2e7e5d5fe226017e93c478575f9"
+  },
+  "starterPort": {
+    "commit": "136d2e5a607fb20b6f5ccd07bd88ed14b0a6b668",
+    "portableSchedulerFiles": 3,
+    "appleWrapperAlsoPorted": true,
+    "gradleSeconds": 148,
+    "wallSeconds": 152.12,
+    "desktopTests": 356,
+    "workerBrowserTests": 13,
+    "buildLogicTests": 6,
+    "apkInstalled": false,
+    "appleRun": 41400133440,
+    "appleStatus": "in_progress",
+    "appleAcceptance": false
   }
 }

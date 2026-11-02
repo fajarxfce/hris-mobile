@@ -1,5 +1,33 @@
 # Agent continuation — HRIS Mobile
 
+## Starter port pushed and hosted validation running — 2 November 2026
+
+Mobile e00ab4ee is pushed. Starter [136d2e5a](https://github.com/fajarxfce/compose-fluent-starter/commit/136d2e5a607fb20b6f5ccd07bd88ed14b0a6b668)
+now contains three identical generic scheduler/test files and the previously
+Mobile-proven Apple wake fixture. Independent checks pass356 desktop,13 worker-
+browser,six build-logic,Android/lint/Web in148s /152.12s. Its [Apple CI41400133440](https://github.com/fajarxfce/compose-fluent-starter/actions/runs/41400133440)
+is in progress at exact 136d2e5a607fb20b6f5ccd07bd88ed14b0a6b668; do not cancel it with another dispatch. Audit
+six AppleWorkWakeStoreTest cases, all downloaded XML and Xcode before accepting.
+[Port ledger](template-updates.md) and measurements retain exact boundaries.
+
+Continue implementing HRIS account-owned company recovery progress and the actual
+all-company consumer. No new source for this next increment is applied yet. Native
+parent publication, directory/admission, captured delivery, raw wakes and bounded
+Android scheduling are ready. RefreshCollaborationList already supports Background
+scope; do not duplicate it. Cursor state must survive restart without a synthetic
+company/session, preserve account boundaries and prevent a failing company starving
+others. Advance/attempt/finish crash gaps must not falsely acknowledge all recovery.
+Use encrypted account-scoped metadata under the protected history key namespace;
+start new finite sweeps without resetting progress on every incoming wake.
+
+Keep scheduler limits explicit: two OS jobs can run, so consumer admission owns
+processing. Reusing an ENQUEUED backoff request proves eventual scheduling, not
+immediate high-priority FCM latency; that integration/measurement remains separate.
+Registered HRIS recovery task, real receive/decrypt, notification privacy/read/mute/
+deep links and encrypted reply still remain. No backend activation or employee APK
+update: phone15, all54 PRD groups open. Owned5562 stopped;5560 is unrelated CodePush.
+Continue after each push and while hosted CI executes.
+
 ## Bounded Android wake scheduling proved — 2 November 2026
 
 [Contract](bounded-work-scheduling.md) / [evidence](measurements/android-collapsed-work-2026-11-02.json):
