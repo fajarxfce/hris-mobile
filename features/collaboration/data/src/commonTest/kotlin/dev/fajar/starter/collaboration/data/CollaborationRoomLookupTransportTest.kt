@@ -92,24 +92,28 @@ class CollaborationRoomLookupTransportTest {
     }
 
     @Test
-    fun cancellationJoinsPendingHttpAndCannotPublishLateSuccess() = runTest {
+    fun callerCancellationStopsPendingHttpWithoutPublishingSuccess() = runTest {
         val entered = CompletableDeferred<Unit>()
-        var released = false
+        val stopped = CompletableDeferred<Unit>()
+        var published = false
         withConversations(
             MockEngine {
-                entered.complete(Unit)
                 try {
+                    entered.complete(Unit)
                     awaitCancellation()
                 } finally {
-                    released = true
+                    stopped.complete(Unit)
                 }
             }
         ) { repo ->
-            val task = async { repo.summaryByRoom(setupOwner, room) }
+            val task = async { repo.summaryByRoom(setupOwner, room).also { published = true } }
             entered.await()
             task.cancelAndJoin()
+            // Ktor's engine request belongs to the HTTP client, not the waiting test task.
+            // Await that separate completion signal instead of racing an unsynchronized flag.
+            withContext(Dispatchers.Default) { withTimeout(5_000) { stopped.await() } }
             assertTrue(task.isCancelled)
-            assertTrue(released)
+            assertFalse(published)
         }
     }
 }

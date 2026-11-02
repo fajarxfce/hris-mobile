@@ -1,0 +1,453 @@
+{
+  "date": "2026-11-02",
+  "status": "local_read_state_storage_passed",
+  "baseCommit": "c0ad592f23feb83d8ab899df36ecfd81213951c4",
+  "inputs": {
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationReadState.kt": "6a44ec825ee6015d5daf745a406c931dacd3d3fa353d1ff5196a3ad014997f59",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationReadStateRepository.kt": "8c6ebc630ecde0efc6568972108d5884372c054eea1426523d68da7056c237e4",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/readstate/CollaborationReadStateCodec.kt": "15ecd1785b02eb3e6d51e2e6d8ce346e2cecbf0e3518c63837aaa4a32c27b07b",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationReadStateRepository.kt": "02c08aadcd48c627c9a82baf55ab902168a92743d090554821fc2e11cffd4d1f",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationReadStateStorageContract.kt": "0b6aea426c6e3fb9f7d259e2b7f905d8e4d7f5762b98c9849a0cc6338dee944f",
+    "features/collaboration/data/src/desktopTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationReadStateStorageTest.kt": "b95cd104271f0b40e0327bd0b17558ee6144a75a9f0f1206e1f85ba7b857a5a3",
+    "features/collaboration/data/src/wasmJsTest/kotlin/dev/fajar/starter/collaboration/data/BrowserCollaborationReadStateStorageTest.kt": "fcf15fcadb10e269bd4813990df49096a80d1d5b880fe616ea6be0ab07954963",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt": "832133373bc08e686cfe702c0de8c85ccfd278db3aad2f0e9d4a5636ced24779",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationRoomLookupTransportTest.kt": "55f02402b14966da2e64b2b6159f7f6715e90f9dde91278c28a6c04d33e24a23"
+  },
+  "checks": [
+    {
+      "attempt": "check-1",
+      "startedAt": "2026-11-02T14:58:53.973640+00:00",
+      "wallSeconds": 125.002,
+      "exitCode": 0,
+      "inputsUnchanged": true,
+      "inputManifest": {
+        "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationReadState.kt": "08d0d8a9d2e26fbef803bfec31fade29b5319ccc58136d1a55e04b530a1ce232",
+        "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationReadStateRepository.kt": "b53487843f198a0dc4bf3e10940dd2f9572c76afffe2ad2b9abffddc64f9ae56",
+        "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/readstate/CollaborationReadStateCodec.kt": "12e837ab4678923dd1eed55ab54524d9f9afb5e0727d9f5a71ef3f08ddb3ed1d",
+        "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationReadStateRepository.kt": "19e090824b86ce085976e639bee78318c1524a1265333242d67c84a7c89c1785",
+        "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationReadStateStorageContract.kt": "8f31cd0b9eed592e890470ceafb26beb655c876fb2324de9529467929d9e6666",
+        "features/collaboration/data/src/desktopTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationReadStateStorageTest.kt": "b95cd104271f0b40e0327bd0b17558ee6144a75a9f0f1206e1f85ba7b857a5a3",
+        "features/collaboration/data/src/wasmJsTest/kotlin/dev/fajar/starter/collaboration/data/BrowserCollaborationReadStateStorageTest.kt": "fcf15fcadb10e269bd4813990df49096a80d1d5b880fe616ea6be0ab07954963",
+        "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt": "832133373bc08e686cfe702c0de8c85ccfd278db3aad2f0e9d4a5636ced24779"
+      },
+      "command": [
+        "xvfb-run",
+        "-a",
+        "./gradlew",
+        ":features:collaboration:data:desktopTest",
+        "--tests",
+        "*CollaborationReadStateStorageTest",
+        ":apps:shared:desktopTest",
+        "--tests",
+        "*CollaborationBindingsTest",
+        ":formatCheck",
+        ":architectureCheck",
+        ":detekt",
+        "-Pkotlin.compiler.execution.strategy=in-process",
+        "--no-daemon",
+        "--no-parallel",
+        "--max-workers=1",
+        "-Dorg.gradle.jvmargs=-Xmx1536m"
+      ],
+      "freshCounts": {
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "suites": 2
+      },
+      "logSha256": "19038526ea0670d654494b1c1d2ff66a44aac477ecb155dd6489cb5f3d1f758a",
+      "reportManifestSha256": "21af1c9f6989a7f6f34fee775dc2aa6776987a352e9baafdc735f972ebe1b633"
+    },
+    {
+      "attempt": "check-2",
+      "startedAt": "2026-11-02T15:02:00.453811+00:00",
+      "wallSeconds": 247.689,
+      "exitCode": 1,
+      "inputsUnchanged": true,
+      "inputManifest": {
+        "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationReadState.kt": "6a44ec825ee6015d5daf745a406c931dacd3d3fa353d1ff5196a3ad014997f59",
+        "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationReadStateRepository.kt": "8c6ebc630ecde0efc6568972108d5884372c054eea1426523d68da7056c237e4",
+        "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/readstate/CollaborationReadStateCodec.kt": "15ecd1785b02eb3e6d51e2e6d8ce346e2cecbf0e3518c63837aaa4a32c27b07b",
+        "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationReadStateRepository.kt": "02c08aadcd48c627c9a82baf55ab902168a92743d090554821fc2e11cffd4d1f",
+        "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationReadStateStorageContract.kt": "0b6aea426c6e3fb9f7d259e2b7f905d8e4d7f5762b98c9849a0cc6338dee944f",
+        "features/collaboration/data/src/desktopTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationReadStateStorageTest.kt": "b95cd104271f0b40e0327bd0b17558ee6144a75a9f0f1206e1f85ba7b857a5a3",
+        "features/collaboration/data/src/wasmJsTest/kotlin/dev/fajar/starter/collaboration/data/BrowserCollaborationReadStateStorageTest.kt": "fcf15fcadb10e269bd4813990df49096a80d1d5b880fe616ea6be0ab07954963",
+        "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt": "832133373bc08e686cfe702c0de8c85ccfd278db3aad2f0e9d4a5636ced24779"
+      },
+      "command": [
+        "xvfb-run",
+        "-a",
+        "./gradlew",
+        ":check",
+        ":features:collaboration:data:wasmJsBrowserTest",
+        "--tests",
+        "*BrowserCollaborationReadStateStorageTest*",
+        "-Pkotlin.compiler.execution.strategy=in-process",
+        "--no-daemon",
+        "--no-parallel",
+        "--max-workers=1",
+        "-Dorg.gradle.jvmargs=-Xmx1536m"
+      ],
+      "freshCounts": {
+        "tests": 698,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0,
+        "suites": 111
+      },
+      "logSha256": "4db274820b7194761616a22239b2fbfaff594c691106bfb13fbea0f5a2419962",
+      "reportManifestSha256": "46fcbd3b2fd718febddcdd5b03160831c710a10b8db277c3cc9afab1efa04536"
+    },
+    {
+      "attempt": "check-3",
+      "startedAt": "2026-11-02T15:07:31.982433+00:00",
+      "wallSeconds": 161.148,
+      "exitCode": 0,
+      "inputsUnchanged": true,
+      "inputManifest": {
+        "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationReadState.kt": "6a44ec825ee6015d5daf745a406c931dacd3d3fa353d1ff5196a3ad014997f59",
+        "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationReadStateRepository.kt": "8c6ebc630ecde0efc6568972108d5884372c054eea1426523d68da7056c237e4",
+        "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/readstate/CollaborationReadStateCodec.kt": "15ecd1785b02eb3e6d51e2e6d8ce346e2cecbf0e3518c63837aaa4a32c27b07b",
+        "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationReadStateRepository.kt": "02c08aadcd48c627c9a82baf55ab902168a92743d090554821fc2e11cffd4d1f",
+        "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationReadStateStorageContract.kt": "0b6aea426c6e3fb9f7d259e2b7f905d8e4d7f5762b98c9849a0cc6338dee944f",
+        "features/collaboration/data/src/desktopTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationReadStateStorageTest.kt": "b95cd104271f0b40e0327bd0b17558ee6144a75a9f0f1206e1f85ba7b857a5a3",
+        "features/collaboration/data/src/wasmJsTest/kotlin/dev/fajar/starter/collaboration/data/BrowserCollaborationReadStateStorageTest.kt": "fcf15fcadb10e269bd4813990df49096a80d1d5b880fe616ea6be0ab07954963",
+        "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt": "832133373bc08e686cfe702c0de8c85ccfd278db3aad2f0e9d4a5636ced24779",
+        "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationRoomLookupTransportTest.kt": "55f02402b14966da2e64b2b6159f7f6715e90f9dde91278c28a6c04d33e24a23"
+      },
+      "command": [
+        "xvfb-run",
+        "-a",
+        "./gradlew",
+        ":check",
+        ":features:collaboration:data:wasmJsBrowserTest",
+        "--tests",
+        "*BrowserCollaborationReadStateStorageTest*",
+        "-Pkotlin.compiler.execution.strategy=in-process",
+        "--no-daemon",
+        "--no-parallel",
+        "--max-workers=1",
+        "-Dorg.gradle.jvmargs=-Xmx1536m"
+      ],
+      "freshCounts": {
+        "tests": 1373,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "suites": 156
+      },
+      "logSha256": "6e9ffaae63bc8ee6c57d072699ea914b8dd089c97b07a56f5eaace13c79dd873",
+      "reportManifestSha256": "b854f799d1520ae009525f7e79697dd7c7451b4a68f331c9e6d10d492f8bf6ed"
+    },
+    {
+      "attempt": "check-4",
+      "startedAt": "2026-11-02T15:11:01.872919+00:00",
+      "wallSeconds": 25.118,
+      "exitCode": 0,
+      "inputsUnchanged": true,
+      "inputManifest": {
+        "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationReadState.kt": "6a44ec825ee6015d5daf745a406c931dacd3d3fa353d1ff5196a3ad014997f59",
+        "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationReadStateRepository.kt": "8c6ebc630ecde0efc6568972108d5884372c054eea1426523d68da7056c237e4",
+        "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/readstate/CollaborationReadStateCodec.kt": "15ecd1785b02eb3e6d51e2e6d8ce346e2cecbf0e3518c63837aaa4a32c27b07b",
+        "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationReadStateRepository.kt": "02c08aadcd48c627c9a82baf55ab902168a92743d090554821fc2e11cffd4d1f",
+        "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationReadStateStorageContract.kt": "0b6aea426c6e3fb9f7d259e2b7f905d8e4d7f5762b98c9849a0cc6338dee944f",
+        "features/collaboration/data/src/desktopTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationReadStateStorageTest.kt": "b95cd104271f0b40e0327bd0b17558ee6144a75a9f0f1206e1f85ba7b857a5a3",
+        "features/collaboration/data/src/wasmJsTest/kotlin/dev/fajar/starter/collaboration/data/BrowserCollaborationReadStateStorageTest.kt": "fcf15fcadb10e269bd4813990df49096a80d1d5b880fe616ea6be0ab07954963",
+        "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt": "832133373bc08e686cfe702c0de8c85ccfd278db3aad2f0e9d4a5636ced24779",
+        "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationRoomLookupTransportTest.kt": "55f02402b14966da2e64b2b6159f7f6715e90f9dde91278c28a6c04d33e24a23"
+      },
+      "command": [
+        "xvfb-run",
+        "-a",
+        "./gradlew",
+        ":features:collaboration:data:wasmJsBrowserTest",
+        "--tests",
+        "*CollaborationRoomLookupTransportTest*",
+        "-Pkotlin.compiler.execution.strategy=in-process",
+        "--no-daemon",
+        "--no-parallel",
+        "--max-workers=1",
+        "-Dorg.gradle.jvmargs=-Xmx1536m"
+      ],
+      "freshCounts": {
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "suites": 1
+      },
+      "logSha256": "b0e422b022fead80e74b8f6a8ca77dffc3103039e1e815637e2e0bc77f922046",
+      "reportManifestSha256": "574e0d607229caa53f0ba0da4d95f0483be77ed17c075305a44430c54053d119"
+    }
+  ],
+  "acceptedRootGroupsIncludingExplicitReuse": {
+    "desktop": {
+      "tests": 3273,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "suites": 486,
+      "tasks": {
+        ":apps:demo:desktopTest": "UP-TO-DATE",
+        ":apps:shared:desktopTest": "UP-TO-DATE",
+        ":core:common:desktopTest": "UP-TO-DATE",
+        ":core:database:desktopTest": "UP-TO-DATE",
+        ":core:datastore:desktopTest": "UP-TO-DATE",
+        ":core:fileio:desktopTest": "UP-TO-DATE",
+        ":core:localization:desktopTest": "UP-TO-DATE",
+        ":core:network:desktopTest": "UP-TO-DATE",
+        ":core:observability:desktopTest": "UP-TO-DATE",
+        ":core:presentation:desktopTest": "UP-TO-DATE",
+        ":core:securestorage:desktopTest": "UP-TO-DATE",
+        ":core:storage:desktopTest": "UP-TO-DATE",
+        ":core:worker:desktopTest": "UP-TO-DATE",
+        ":core:availability:data:desktopTest": "UP-TO-DATE",
+        ":core:availability:domain:desktopTest": "UP-TO-DATE",
+        ":core:documents:data:desktopTest": "UP-TO-DATE",
+        ":core:documents:domain:desktopTest": "UP-TO-DATE",
+        ":core:featureflags:data:desktopTest": "UP-TO-DATE",
+        ":core:featureflags:domain:desktopTest": "UP-TO-DATE",
+        ":core:identity:data:desktopTest": "UP-TO-DATE",
+        ":core:identity:domain:desktopTest": "UP-TO-DATE",
+        ":core:location:data:desktopTest": "UP-TO-DATE",
+        ":core:notifications:data:desktopTest": "UP-TO-DATE",
+        ":core:notifications:domain:desktopTest": "UP-TO-DATE",
+        ":core:security:data:desktopTest": "UP-TO-DATE",
+        ":core:security:domain:desktopTest": "UP-TO-DATE",
+        ":core:settings:data:desktopTest": "UP-TO-DATE",
+        ":core:sync:data:desktopTest": "UP-TO-DATE",
+        ":core:transfers:data:desktopTest": "UP-TO-DATE",
+        ":core:transfers:domain:desktopTest": "UP-TO-DATE",
+        ":core:workspace:data:desktopTest": "UP-TO-DATE",
+        ":core:workspace:domain:desktopTest": "UP-TO-DATE",
+        ":features:auth:presentation:desktopTest": "UP-TO-DATE",
+        ":features:collaboration:data:desktopTest": "EXECUTED",
+        ":features:collaboration:domain:desktopTest": "EXECUTED",
+        ":features:collaboration:presentation:desktopTest": "EXECUTED",
+        ":features:dashboard:data:desktopTest": "UP-TO-DATE",
+        ":features:dashboard:domain:desktopTest": "UP-TO-DATE",
+        ":features:dashboard:presentation:desktopTest": "UP-TO-DATE",
+        ":features:documents:presentation:desktopTest": "UP-TO-DATE",
+        ":features:expenses:data:desktopTest": "UP-TO-DATE",
+        ":features:expenses:domain:desktopTest": "UP-TO-DATE",
+        ":features:expenses:presentation:desktopTest": "UP-TO-DATE",
+        ":features:files:presentation:desktopTest": "UP-TO-DATE",
+        ":features:home:presentation:desktopTest": "UP-TO-DATE",
+        ":features:inbox:data:desktopTest": "UP-TO-DATE",
+        ":features:inbox:domain:desktopTest": "UP-TO-DATE",
+        ":features:leave:data:desktopTest": "UP-TO-DATE",
+        ":features:leave:domain:desktopTest": "UP-TO-DATE",
+        ":features:leave:presentation:desktopTest": "UP-TO-DATE",
+        ":features:notifications:presentation:desktopTest": "UP-TO-DATE",
+        ":features:onboarding:data:desktopTest": "UP-TO-DATE",
+        ":features:onboarding:presentation:desktopTest": "UP-TO-DATE",
+        ":features:payroll:data:desktopTest": "UP-TO-DATE",
+        ":features:payroll:domain:desktopTest": "UP-TO-DATE",
+        ":features:payroll:presentation:desktopTest": "UP-TO-DATE",
+        ":features:people:data:desktopTest": "UP-TO-DATE",
+        ":features:people:domain:desktopTest": "UP-TO-DATE",
+        ":features:people:presentation:desktopTest": "UP-TO-DATE",
+        ":features:security:presentation:desktopTest": "UP-TO-DATE",
+        ":features:settings:presentation:desktopTest": "UP-TO-DATE",
+        ":features:workforce:data:desktopTest": "UP-TO-DATE",
+        ":features:workforce:domain:desktopTest": "UP-TO-DATE",
+        ":features:workforce:presentation:desktopTest": "UP-TO-DATE"
+      }
+    },
+    "buildLogic": {
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "suites": 2,
+      "tasks": {
+        ":build-logic:test": "UP-TO-DATE"
+      }
+    },
+    "androidHost": {
+      "tests": 230,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "suites": 37,
+      "tasks": {
+        ":features:collaboration:data:testAndroidHostTest": "EXECUTED"
+      }
+    },
+    "browser": {
+      "tests": 11,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "suites": 1,
+      "tasks": {
+        ":features:collaboration:data:wasmJsBrowserTest": "EXECUTED"
+      }
+    }
+  },
+  "allRootReportManifestSha256": "3d261fe40c31ce0986096cc9cfdbf603306e8750fcd13e7ba22a9dff42a2c625",
+  "selectedReports": {
+    "check-2/reports/apps/shared/build/test-results/desktopTest/TEST-dev.fajar.starter.CollaborationBindingsTest.xml": {
+      "sha256": "9b5ba357ebedd86251f7ebdc1c05fbca26e92a96cbc3fafc1fd1cf651111748f",
+      "seconds": 0.032,
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "cases": [
+        "hostsWithoutThePlatformBindingNeverClaimAnInstalledOrEmptyNativeStore[desktop]",
+        "oneApplicationRuntimeOwnsObservationAcrossRepeatedStartsAndClosesBeforeDisposal[desktop]"
+      ]
+    },
+    "check-2/reports/features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationReadStateStorageTest.xml": {
+      "sha256": "467b2fa5e7c7f0e9345c498f0b150f6d9138262b13dbaf1268376aea46a4ba7f",
+      "seconds": 0.383,
+      "tests": 11,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "cases": [
+        "queueRetainsDistinctReadPointsAndRejectsCapacityWithoutLosingAnyCoverage[desktop]",
+        "boundsAndCallerMutationPreserveTheOriginalCapturedReadIntent[desktop]",
+        "cancellationBeforeCommitKeepsEarlierFactsAndIntent[desktop]",
+        "lostMarkAndAcknowledgementResponsesRetainTheirAtomicFactsAcrossRestart[desktop]",
+        "competingFirstWritersShareTheHistoryKeyAndRequireExplicitObservedRetry[desktop]",
+        "staleMarkAndLateAcknowledgementCannotDiscardNewerReadIntentOrCoverage[desktop]",
+        "replayDoesNotDuplicateQueuedIntentOrRebindAnObservedId[desktop]",
+        "exactCoverageAndPendingIntentSurviveReopenWithoutPlaintextOrAgeLimit[desktop]",
+        "substitutedMetadataCiphertextRoomAndLateCheckpointCannotPublishReadCoverage[desktop]",
+        "missingHistoryKeyNeverRegeneratesOverInactiveReadRecords[desktop]",
+        "changedAccountBeforeCommitCannotWriteIntoEitherOwnersReadState[desktop]"
+      ]
+    },
+    "check-2/reports/features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationRoomLookupTransportTest.xml": {
+      "sha256": "0108b5977b1a7d241aa60c14f1f0f2b6f85ded7d8fbc9aefbd68578555f63ee2",
+      "seconds": 0.031,
+      "tests": 5,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0,
+      "cases": [
+        "malformedRoomOrForeignAudienceNeverReachesTransport[desktop]",
+        "roomIsEncodedAsOneQueryParameterWithNativeSessionAndBoundedOwnedSummary[desktop]",
+        "substitutedOwnerPeerAndOversizedPayloadCannotBecomeOwnedFacts[desktop]",
+        "cancellationJoinsPendingHttpAndCannotPublishLateSuccess[desktop]",
+        "currentAccessDenialRetainsItsClassification[desktop]"
+      ]
+    },
+    "check-3/reports/features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationReadStateStorageTest.xml": {
+      "sha256": "8685b0932727fc87d342954d91828a1bed45445d43141d97555e8f085a7d8449",
+      "seconds": 0.241,
+      "tests": 11,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "cases": [
+        "queueRetainsDistinctReadPointsAndRejectsCapacityWithoutLosingAnyCoverage[desktop]",
+        "boundsAndCallerMutationPreserveTheOriginalCapturedReadIntent[desktop]",
+        "cancellationBeforeCommitKeepsEarlierFactsAndIntent[desktop]",
+        "lostMarkAndAcknowledgementResponsesRetainTheirAtomicFactsAcrossRestart[desktop]",
+        "competingFirstWritersShareTheHistoryKeyAndRequireExplicitObservedRetry[desktop]",
+        "staleMarkAndLateAcknowledgementCannotDiscardNewerReadIntentOrCoverage[desktop]",
+        "replayDoesNotDuplicateQueuedIntentOrRebindAnObservedId[desktop]",
+        "exactCoverageAndPendingIntentSurviveReopenWithoutPlaintextOrAgeLimit[desktop]",
+        "substitutedMetadataCiphertextRoomAndLateCheckpointCannotPublishReadCoverage[desktop]",
+        "missingHistoryKeyNeverRegeneratesOverInactiveReadRecords[desktop]",
+        "changedAccountBeforeCommitCannotWriteIntoEitherOwnersReadState[desktop]"
+      ]
+    },
+    "check-3/reports/features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationRoomLookupTransportTest.xml": {
+      "sha256": "c630814c5930740d7087bb2e2438d46d7dde8e8160ccbd44bdf1f5cbb94e2739",
+      "seconds": 0.288,
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "cases": [
+        "malformedRoomOrForeignAudienceNeverReachesTransport[desktop]",
+        "roomIsEncodedAsOneQueryParameterWithNativeSessionAndBoundedOwnedSummary[desktop]",
+        "callerCancellationStopsPendingHttpWithoutPublishingSuccess[desktop]",
+        "substitutedOwnerPeerAndOversizedPayloadCannotBecomeOwnedFacts[desktop]",
+        "currentAccessDenialRetainsItsClassification[desktop]"
+      ]
+    },
+    "check-3/reports/features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.BrowserCollaborationReadStateStorageTest.xml": {
+      "sha256": "cfb6fde05237b69e24f587b8b7d458140d90526a1b13c25a09c6a8d165d3f0a0",
+      "seconds": 0.008,
+      "tests": 11,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "cases": [
+        "exactCoverageAndPendingIntentSurviveReopenWithoutPlaintextOrAgeLimit[wasmJs, browser, ChromeHeadless156.0.0.0, Linux0.0.0]",
+        "staleMarkAndLateAcknowledgementCannotDiscardNewerReadIntentOrCoverage[wasmJs, browser, ChromeHeadless156.0.0.0, Linux0.0.0]",
+        "competingFirstWritersShareTheHistoryKeyAndRequireExplicitObservedRetry[wasmJs, browser, ChromeHeadless156.0.0.0, Linux0.0.0]",
+        "lostMarkAndAcknowledgementResponsesRetainTheirAtomicFactsAcrossRestart[wasmJs, browser, ChromeHeadless156.0.0.0, Linux0.0.0]",
+        "missingHistoryKeyNeverRegeneratesOverInactiveReadRecords[wasmJs, browser, ChromeHeadless156.0.0.0, Linux0.0.0]",
+        "changedAccountBeforeCommitCannotWriteIntoEitherOwnersReadState[wasmJs, browser, ChromeHeadless156.0.0.0, Linux0.0.0]",
+        "substitutedMetadataCiphertextRoomAndLateCheckpointCannotPublishReadCoverage[wasmJs, browser, ChromeHeadless156.0.0.0, Linux0.0.0]",
+        "boundsAndCallerMutationPreserveTheOriginalCapturedReadIntent[wasmJs, browser, ChromeHeadless156.0.0.0, Linux0.0.0]",
+        "cancellationBeforeCommitKeepsEarlierFactsAndIntent[wasmJs, browser, ChromeHeadless156.0.0.0, Linux0.0.0]",
+        "queueRetainsDistinctReadPointsAndRejectsCapacityWithoutLosingAnyCoverage[wasmJs, browser, ChromeHeadless156.0.0.0, Linux0.0.0]",
+        "replayDoesNotDuplicateQueuedIntentOrRebindAnObservedId[wasmJs, browser, ChromeHeadless156.0.0.0, Linux0.0.0]"
+      ]
+    },
+    "check-3/reports/features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.CollaborationRoomLookupTransportTest.xml": {
+      "sha256": "94b5819286ceb4c6986bb8c403ecea84bb3e3c74c91cbc27918f1780572a2e15",
+      "seconds": 0.018,
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "cases": [
+        "malformedRoomOrForeignAudienceNeverReachesTransport",
+        "roomIsEncodedAsOneQueryParameterWithNativeSessionAndBoundedOwnedSummary",
+        "callerCancellationStopsPendingHttpWithoutPublishingSuccess",
+        "substitutedOwnerPeerAndOversizedPayloadCannotBecomeOwnedFacts",
+        "currentAccessDenialRetainsItsClassification"
+      ]
+    },
+    "check-4/reports/features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.CollaborationRoomLookupTransportTest.xml": {
+      "sha256": "a0fcfd61a93d73bbcb7185eb5422f130f1c53873d90d91642d3a0db9fe5f5a76",
+      "seconds": 0.007,
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "cases": [
+        "roomIsEncodedAsOneQueryParameterWithNativeSessionAndBoundedOwnedSummary[wasmJs, browser, ChromeHeadless156.0.0.0, Linux0.0.0]",
+        "malformedRoomOrForeignAudienceNeverReachesTransport[wasmJs, browser, ChromeHeadless156.0.0.0, Linux0.0.0]",
+        "substitutedOwnerPeerAndOversizedPayloadCannotBecomeOwnedFacts[wasmJs, browser, ChromeHeadless156.0.0.0, Linux0.0.0]",
+        "currentAccessDenialRetainsItsClassification[wasmJs, browser, ChromeHeadless156.0.0.0, Linux0.0.0]",
+        "callerCancellationStopsPendingHttpWithoutPublishingSuccess[wasmJs, browser, ChromeHeadless156.0.0.0, Linux0.0.0]"
+      ]
+    }
+  },
+  "reviewChange": "Initial replaceable-intent storage passed9 SQLite and2 DI cases. Before shipment, review replaced supersession with a128-item queue: receipt order must not be inferred from timestamps, and older unsent points must not be lost. Expanded contract has11 cases per actual storage backend.",
+  "failureAndCorrection": "Full check2 failed an existing RoomLookupTransport test immediately reading a Boolean written by MockEngine after caller cancelAndJoin. New storage11 cases passed. The fixture now awaits a separate completion signal on Default with a5-second deadline and asserts no result publication. No HTTP production code changed. Check3 full root+11 IndexedDB cases passes; check4 separately passes all5 browser transport cases.",
+  "storage": {
+    "exactReadBatchMaximum": 128,
+    "pendingIntentMaximum": 128,
+    "plaintextMaximumBytes": 64000,
+    "ciphertextMaximumCharacters": 96000,
+    "key": "Existing protected history content/index key; distinct authenticated purpose and keyed indexes",
+    "namespace": "collaboration-history/read/",
+    "ageEviction": false,
+    "migration": false,
+    "clearExistingRecords": false,
+    "atomic": "New exact read markers and queued intent; exact intent removal and acknowledgement; generation/revision and active-account guards"
+  },
+  "limits": {
+    "commonRuntimeReceiptEntry": false,
+    "admittedLocalMarkAndReplay": false,
+    "uiNotificationsMutePrivacy": false,
+    "multiDeviceReadReconciliation": false,
+    "newAppleXcodeValidation": false,
+    "physicalPhoneTouched": false,
+    "installedPhoneVersion": 17,
+    "liveApi": "dac6fb0d/schema116, all chat push OFF",
+    "starterPort": "None: HRIS collaboration state and its transport fixture only",
+    "wholeFeatureGroupsAccepted": 0
+  }
+}

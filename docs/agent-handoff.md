@@ -1,5 +1,43 @@
 # Agent continuation — HRIS Mobile
 
+## Encrypted local read state accepted — 2 November 2026
+
+[Contract](collaboration-read-state.md) / [evidence](measurements/chat-read-state-2026-11-02.json):
+exact read markers and a128-intent queue now share an authenticated atomic checkpoint.
+One mark adds at most128 exact acquired references; it does not infer unseen coverage
+or provider ordering. Pending points remain until their identical acknowledgement;
+late ACK preserves other queued points. Active/last-acknowledged replay deduplicates,
+known ID rebinding and queue overflow reject without evicting facts. Shared history
+key guard includes the separate read namespace and inactive accounts. No schema/key
+replacement, timestamps, data reset or age eviction. New repository resolves in the
+real shared container; common local admission/replay/UI integration is still absent.
+
+Initial single-pending draft passed125.002s (nine SQLite/two DI cases), then review
+required retaining all unsent points instead of assuming monotonic supersession.
+Full check2 failed247.689s on an existing RoomLookupTransport test's immediate read
+of a Boolean written by MockEngine after caller cancellation; new11 storage cases
+passed. Fixture now awaits a separate completion signal on Default with a5-second
+bound and verifies no result publication; HTTP production unchanged.
+
+Check3 PASSES161.148s:3273 desktop/230 Android host/10 build-logic/11 IndexedDB cases,
+with explicit cached/up-to-date statuses;1373 cases/156 suites freshly executed.
+Check4 separately passes the corrected five browser transport cases25.118s. Nine
+source/test input hashes and all attempts/reports retained. No emulator/phone work.
+Native receipt counterpart Mobile c0ad592f and Platform f87a4562 are pushed; real
+SDK109.111s proves five HRIS receipt POSTs, private isolation and store recovery.
+Phone17 and live dac6fb0d/schema116 remain unchanged, chat push OFF.
+
+Next: expose receipt methods through common runtime ownership; add local read-state
+observation/mark use cases with captured-account/content-denial guards and exact
+owned-history validation, then live-admitted bounded queued replay. Wire the worker
+and UI/notification actions afterward. Retain all unsent points without timestamp
+coalescing. Privacy changes need explicit suppression/cancellation of queued public
+receipts; do not label an unsent cancellation as a server acknowledgement. Follow
+with mute/privacy/actions/inline replies and all54 groups. New common changes need
+full Apple/Xcode coverage; physical iPhone waiver still applies only to device tests.
+No generic Starter port. Continue long run and push every commit; not task completion.
+
+
 ## Native public/private read receipts accepted — 2 November 2026
 
 [Contract](collaboration-read-receipts.md) / [evidence](measurements/chat-read-receipt-client-2026-11-02.json):
