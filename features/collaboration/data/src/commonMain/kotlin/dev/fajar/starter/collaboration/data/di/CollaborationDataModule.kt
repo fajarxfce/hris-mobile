@@ -40,6 +40,25 @@ class CollaborationDataModule {
     ) = CompleteCollaborationPushPriority(priorities, sessions, server, build)
 
     @Factory
+    fun readHistoryEvent(
+        history: CollaborationHistoryRepository,
+        lists: CollaborationListRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) =
+        ReadCollaborationHistoryEvent(
+            history,
+            lists,
+            sessions,
+            workspaces,
+            server,
+            build,
+            Clock.System,
+        )
+
+    @Factory
     fun readRoomRecovery(
         progress: CollaborationRoomRecoveryRepository,
         lists: CollaborationListRepository,

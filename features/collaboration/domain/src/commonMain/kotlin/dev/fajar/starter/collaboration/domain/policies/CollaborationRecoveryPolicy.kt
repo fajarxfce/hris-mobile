@@ -66,12 +66,57 @@ fun admitCollaborationBackgroundObservation(
     requestedAt: Instant,
     receivedAt: Instant,
     parentExpiresAt: Instant,
+): AppResult<CollaborationBackgroundAdmission> =
+    admitBackgroundObservation(
+        observation,
+        parent,
+        device.companyId,
+        device.deviceId,
+        device.version,
+        requestedAt,
+        receivedAt,
+        parentExpiresAt,
+    )
+
+/** A hint has no device version; only the freshly returned observation supplies it. */
+fun admitCollaborationHintObservation(
+    observation: CollaborationAdmissionObservation,
+    parent: CollaborationNativeParent,
+    companyId: String,
+    deviceId: String,
+    requestedAt: Instant,
+    receivedAt: Instant,
+    parentExpiresAt: Instant,
+): AppResult<CollaborationBackgroundAdmission> =
+    admitBackgroundObservation(
+        observation,
+        parent,
+        companyId,
+        deviceId,
+        null,
+        requestedAt,
+        receivedAt,
+        parentExpiresAt,
+    )
+
+private fun admitBackgroundObservation(
+    observation: CollaborationAdmissionObservation,
+    parent: CollaborationNativeParent,
+    companyId: String,
+    deviceId: String,
+    minimumDeviceVersion: Long?,
+    requestedAt: Instant,
+    receivedAt: Instant,
+    parentExpiresAt: Instant,
 ): AppResult<CollaborationBackgroundAdmission> {
     val duration = observation.expiresAt - observation.admittedAt
     if (
-        observation.owner != parent.owner(device.companyId) ||
-            observation.deviceId != device.deviceId ||
-            observation.deviceVersion < device.version ||
+        !validCollaborationMessageId(companyId) ||
+            !validCollaborationMessageId(deviceId) ||
+            (minimumDeviceVersion != null && minimumDeviceVersion < 0) ||
+            observation.owner != parent.owner(companyId) ||
+            observation.deviceId != deviceId ||
+            (minimumDeviceVersion != null && observation.deviceVersion < minimumDeviceVersion) ||
             observation.deviceVersion < 0 ||
             observation.nativeSessionVersion < 0 ||
             observation.credentialVersion < 0 ||

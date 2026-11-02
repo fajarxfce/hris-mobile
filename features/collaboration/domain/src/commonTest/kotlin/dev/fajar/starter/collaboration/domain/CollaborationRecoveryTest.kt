@@ -249,6 +249,128 @@ class CollaborationRecoveryTest {
         assertEquals(1, f.admissionCalls)
     }
 
+    @Test
+    fun hintedAdmissionUsesFreshReturnedVersionWithoutReadingTheDirectory() = runTest {
+        val f = Fixture()
+        f.onAdmission = { AppResult.Success(f.observation.copy(deviceVersion = 0)) }
+        val admitted =
+            assertIs<AppResult.Success<CollaborationBackgroundAdmission>>(f.admitHint()).value
+        assertEquals(0L, admitted.observation.deviceVersion)
+        assertEquals(f.device.deviceId, admitted.observation.deviceId)
+        assertEquals(0, f.pageCalls)
+        assertEquals(1, f.admissionCalls)
+        assertIs<AppResult.Failed>(f.admit())
+    }
+
+    @Test
+    fun hintedResponseCannotSubstituteOwnerDeviceOrAdmissionLifetime() = runTest {
+        val f = Fixture()
+        for (observation in
+            listOf(
+                f.observation.copy(
+                    owner = f.observation.owner.copy(companyId = f.parent.accountId)
+                ),
+                f.observation.copy(
+                    owner = f.observation.owner.copy(nativeSessionId = f.parent.accountId)
+                ),
+                f.observation.copy(deviceId = f.parent.accountId),
+                f.observation.copy(deviceVersion = -1),
+                f.observation.copy(expiresAt = f.observation.admittedAt + 61.seconds),
+            )) {
+            f.onAdmission = { AppResult.Success(observation) }
+            assertEquals(
+                FailureKind.Unexpected,
+                assertIs<AppResult.Failed>(f.admitHint()).failure.kind,
+            )
+        }
+        assertEquals(0, f.pageCalls)
+    }
+
+    @Test
+    fun invalidAndExpiredHintsCannotAcquireAndLateParentCannotPublish() = runTest {
+        val f = Fixture()
+        assertIs<AppResult.Failed>(f.admitHint(companyId = "invalid"))
+        assertIs<AppResult.Failed>(f.admitHint(deviceId = "invalid"))
+        f.setup.session = f.session.copy(binding = f.session.binding.copy(expiresAtEpochMillis = 0))
+        assertIs<AppResult.Failed>(f.admitHint())
+        assertEquals(0, f.admissionCalls)
+        f.setup.session = f.session
+        f.onAdmission = {
+            f.setup.session = f.session.copy(id = "replacement")
+            AppResult.Success(f.observation)
+        }
+        assertEquals(
+            "client.session_changed",
+            assertIs<AppResult.Failed>(f.admitHint()).failure.code,
+        )
+    }
+
+    @Test
+    fun hintedAdmissionChargesRequestTimeAndMonotonicDeadline() = runTest {
+        val source = TestTimeSource()
+        val f = Fixture(source)
+        f.onAdmission = {
+            source += 61.seconds
+            AppResult.Success(f.observation)
+        }
+        assertEquals(
+            "client.collaboration_revalidation_required",
+            assertIs<AppResult.Failed>(f.admitHint()).failure.code,
+        )
+        val delayed = Fixture()
+        delayed.onAdmission = {
+            delayed.setup.now += 16.seconds
+            AppResult.Success(delayed.observation)
+        }
+        assertEquals(
+            "client.collaboration_revalidation_required",
+            assertIs<AppResult.Failed>(delayed.admitHint()).failure.code,
+        )
+    }
+
+    @Test
+    fun hintedAndDirectoryAdmissionShareOneSlotAndCancellationReleasesIt() = runTest {
+        val f = Fixture()
+        val entered = CompletableDeferred<Unit>()
+        var closed = false
+        f.onAdmission = {
+            entered.complete(Unit)
+            try {
+                awaitCancellation()
+            } finally {
+                closed = true
+            }
+        }
+        val job = async { f.admitHint() }
+        entered.await()
+        assertEquals(
+            "client.collaboration_recovery_busy",
+            assertIs<AppResult.Failed>(f.admit()).failure.code,
+        )
+        job.cancelAndJoin()
+        assertTrue(closed)
+        f.onAdmission = { AppResult.Success(f.observation) }
+        assertIs<AppResult.Success<*>>(f.admit())
+    }
+
+    @Test
+    fun cancelledHintResponseStillRetainsConfirmedDenialDespiteCleanupFailure() = runTest {
+        val f = Fixture()
+        f.setup.admission.restrictFailure = f.storage
+        f.onAdmission = {
+            currentCoroutineContext().cancel()
+            AppResult.Failed(f.denied)
+        }
+        val job = launch {
+            f.admitHint()
+            error("Cancelled hint admission returned")
+        }
+        job.join()
+        assertTrue(job.isCancelled)
+        assertEquals(f.denied, f.setup.admission.gate.denial)
+        assertEquals(0, f.pageCalls)
+    }
+
     private class Fixture(private val timeSource: TimeSource = TimeSource.Monotonic) {
         val setup = CollaborationSetupFixture()
         val parent =
@@ -334,6 +456,11 @@ class CollaborationRecoveryTest {
                 clock,
                 timeSource,
             )
+
+        suspend fun admitHint(
+            companyId: String = device.companyId,
+            deviceId: String = device.deviceId,
+        ) = acquire.forHint(parent, companyId, deviceId)
 
         suspend fun admit(
             parent: CollaborationNativeParent = this.parent,

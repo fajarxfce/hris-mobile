@@ -27,6 +27,7 @@ class AcquireCollaborationBackgroundAdmission(
         parent: CollaborationNativeParent,
         device: CollaborationDeviceReference,
     ): AppResult<CollaborationBackgroundAdmission> {
+        currentCoroutineContext().ensureActive()
         if (
             !validCollaborationMessageId(device.companyId) ||
                 !validCollaborationMessageId(device.deviceId) ||
@@ -44,13 +45,40 @@ class AcquireCollaborationBackgroundAdmission(
                 "client.collaboration_device_unavailable",
                 FailureKind.Unavailable,
             )
+        return execute(parent, device.companyId, device.deviceId, device)
+    }
+
+    /** No directory version is synthesized from an untrusted push revision. */
+    suspend fun forHint(
+        parent: CollaborationNativeParent,
+        companyId: String,
+        deviceId: String,
+    ): AppResult<CollaborationBackgroundAdmission> {
+        currentCoroutineContext().ensureActive()
+        if (!validCollaborationMessageId(companyId) || !validCollaborationMessageId(deviceId))
+            return collaborationRecoveryFailure(
+                "client.collaboration_invalid_request",
+                FailureKind.Validation,
+            )
+        return execute(parent, companyId, deviceId, null)
+    }
+
+    private suspend fun execute(
+        parent: CollaborationNativeParent,
+        companyId: String,
+        deviceId: String,
+        expectedDevice: CollaborationDeviceReference?,
+    ): AppResult<CollaborationBackgroundAdmission> {
+        currentCoroutineContext().ensureActive()
         if (!execution.tryLock())
             return collaborationRecoveryFailure(
                 "client.collaboration_recovery_busy",
                 FailureKind.Unavailable,
             )
         try {
-            return withTimeoutOrNull(15_000) { acquire(parent, device) }
+            return withTimeoutOrNull(15_000) {
+                acquire(parent, companyId, deviceId, expectedDevice)
+            }
                 ?: collaborationRecoveryFailure(
                     "client.collaboration_recovery_timeout",
                     FailureKind.Timeout,
@@ -62,13 +90,15 @@ class AcquireCollaborationBackgroundAdmission(
 
     private suspend fun acquire(
         parent: CollaborationNativeParent,
-        device: CollaborationDeviceReference,
+        companyId: String,
+        deviceId: String,
+        expectedDevice: CollaborationDeviceReference?,
     ): AppResult<CollaborationBackgroundAdmission> {
         val initial = capture(parent)
         if (initial is AppResult.Failed) return initial
         val requestedAt = clock.now()
         val requestedMark = timeSource.markNow()
-        val owner = parent.owner(device.companyId)
+        val owner = parent.owner(companyId)
         val received = recovery.admission(owner)
         val rejected = (received as? AppResult.Failed)?.failure
         if (rejected != null && collaborationContentResponseClosesRead(rejected))
@@ -81,15 +111,29 @@ class AcquireCollaborationBackgroundAdmission(
         if (received is AppResult.Failed) return received
         if (current is AppResult.Failed) return current
         val session = (current as AppResult.Success).value
+        val observation = (received as AppResult.Success).value
+        val expiresAt = Instant.fromEpochMilliseconds(session.binding.expiresAtEpochMillis)
         val admitted =
-            admitCollaborationBackgroundObservation(
-                (received as AppResult.Success).value,
-                parent,
-                device,
-                requestedAt,
-                clock.now(),
-                Instant.fromEpochMilliseconds(session.binding.expiresAtEpochMillis),
-            )
+            if (expectedDevice == null) {
+                admitCollaborationHintObservation(
+                    observation,
+                    parent,
+                    companyId,
+                    deviceId,
+                    requestedAt,
+                    clock.now(),
+                    expiresAt,
+                )
+            } else {
+                admitCollaborationBackgroundObservation(
+                    observation,
+                    parent,
+                    expectedDevice,
+                    requestedAt,
+                    clock.now(),
+                    expiresAt,
+                )
+            }
         if (admitted is AppResult.Failed) return admitted
         val grant = (admitted as AppResult.Success).value
         val deadline = requestedMark + (grant.expiresAt - grant.requestedAt)
@@ -103,6 +147,7 @@ class AcquireCollaborationBackgroundAdmission(
 
     private suspend fun capture(parent: CollaborationNativeParent): AppResult<Session> {
         val captured = sessions.current()
+        currentCoroutineContext().ensureActive()
         if (captured is AppResult.Failed) return captured
         val session = (captured as AppResult.Success).value
         val current = collaborationNativeParent(session, server, build, clock.now())

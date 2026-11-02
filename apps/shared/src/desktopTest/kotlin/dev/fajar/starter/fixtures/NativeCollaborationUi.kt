@@ -4,12 +4,17 @@ import dev.fajar.starter.collaboration.data.dto.*
 import io.ktor.client.request.HttpRequestData
 import io.ktor.http.*
 import kotlin.time.Clock
+import kotlin.time.Duration.Companion.seconds
 import kotlinx.serialization.json.Json
 
 /** Opt-in control-plane wire fixture. Native delivery has a separate owned fake SDK. */
 class NativeCollaborationUi {
     var enabled = false
     var activeDevice = true
+    var nativeSessionId: String? = null
+    var admissionFailureCode: String? = null
+    var admissionDeviceId: String? = null
+    var returnedRoomId: String? = null
     var failureCode: String? = null
     var loseRoomReply = false
     var holdProvisioning = false
@@ -37,6 +42,27 @@ class NativeCollaborationUi {
         reads += path
         failureCode?.let {
             return """{"code":"$it"}""" to HttpStatusCode.ServiceUnavailable
+        }
+        if (path.endsWith("/native-device/admission")) {
+            check(request.method == HttpMethod.Get)
+            check(request.headers["X-HRIS-Client-Platform"] == "ANDROID")
+            admissionFailureCode?.let {
+                return """{"code":"$it"}""" to HttpStatusCode.Forbidden
+            }
+            val now = Clock.System.now()
+            return wire(
+                CollaborationAdmissionDto(
+                    companyId = NativeUiServer.COMPANY_ONE,
+                    accountId = accountId,
+                    deviceId = admissionDeviceId ?: deviceId,
+                    deviceVersion = 0,
+                    nativeSessionId = checkNotNull(nativeSessionId),
+                    nativeSessionVersion = 0,
+                    credentialVersion = 0,
+                    admittedAt = now.toString(),
+                    expiresAt = (now + 60.seconds).toString(),
+                )
+            )
         }
         if (path.endsWith("/native-device")) {
             check(request.method == HttpMethod.Get) { "No automatic enrollment or bootstrap" }
@@ -120,7 +146,7 @@ class NativeCollaborationUi {
             id,
             if (state == "NOT_REQUESTED") null else versions[id] ?: 0,
             state,
-            if (state == "READY") roomId(id) else null,
+            if (state == "READY") returnedRoomId ?: roomId(id) else null,
             if (state == "NOT_REQUESTED") null else accountId,
             false,
             null,

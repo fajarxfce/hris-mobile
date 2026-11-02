@@ -8,6 +8,7 @@ import dev.fajar.starter.app.work.CollaborationDeliveryWorker
 import dev.fajar.starter.app.work.CollaborationDraftRecovery
 import dev.fajar.starter.app.work.CollaborationIncomingHistoryRecovery
 import dev.fajar.starter.app.work.CollaborationIncomingRecovery
+import dev.fajar.starter.app.work.CollaborationPriorityRecovery
 import dev.fajar.starter.app.work.CollaborationRecoveryWorker
 import dev.fajar.starter.app.work.InboxPushWorker
 import dev.fajar.starter.app.work.NativePushWorker
@@ -38,10 +39,11 @@ fun applicationWorkerModule() = module {
     single { InboxPushWorker(get(), get(), inject(), get()) } bind SyncTask::class
     single { NativePushWorker(get(), inject()) } bind SyncTask::class
     single { CollaborationDraftRecovery(get(), get(), get(), get(), get()) }
-    single { CollaborationIncomingHistoryRecovery(get(), get(), get(), get(), get()) }
+    single { CollaborationIncomingHistoryRecovery(get(), get(), get(), get(), get(), get()) }
     single {
         CollaborationIncomingRecovery(get(), get(), get(), get(), get(), get(), get(), get(), get())
     }
+    single { CollaborationPriorityRecovery(get(), get(), get(), get()) }
     single {
         val incoming = inject<CollaborationIncomingRecovery>()
         val outgoing = inject<CollaborationDeliveryWorker>()
@@ -50,6 +52,7 @@ fun applicationWorkerModule() = module {
     single {
         val parent = inject<ApplicationCollaborationLifetime>()
         val company = inject<CollaborationCompanyRecovery>()
+        val priority = inject<CollaborationPriorityRecovery>()
         CollaborationRecoveryWorker(
             states = lazy { parent.value.state },
             ensureWake = get(),
@@ -61,6 +64,7 @@ fun applicationWorkerModule() = module {
             devices = get(),
             admit = get(),
             build = get(),
+            recoverPriority = { priority.value(it) },
             recoverCompany = { company.value(it) },
         )
     } bind SyncTask::class

@@ -1,5 +1,48 @@
 # Agent continuation — HRIS Mobile
 
+## Push priority recovery validated — 2 November 2026
+
+[Contract](collaboration-priority-recovery.md) / [evidence](measurements/chat-priority-processing-2026-11-02.json):
+The worker gives one encrypted hint a20s turn with fresh hinted company/device admission,
+admitted room lookup and independently checked exact binding. It acquires one original
+anchor, then verifies a retained original alias/tombstone under local owner/denial gates.
+No directory version is invented from push revision; normal company/room/Browse/Incoming
+seek remains independent. Runtime/timeline cleanup is joined, incoming15s/room12s unchanged.
+An exact snapshot CAS retires only acquired facts or ineligible scheduling metadata.
+Every unsuccessful acquisition retains priority, including expired native credentials.
+Normal fair company recovery still runs and the global wake remains until both lanes finish.
+
+Focused1 passed200.440s:642 domain/57 suites,361 data/47,104 app collaboration/13,
+Android release/static. Inspection then found premature completion of Blocked results.
+A new real DI/SQLite expired-credential regression failed as intended45.795s against
+unchanged production (expected Blocked, actual Complete). Corrected unsuccessful-result
+retention and added full-worker fairness coverage. Full3 passes344.646s on16 unchanged
+Kotlin inputs:3,262 desktop485 suites,222 Android host36,981 affected browser101 and
+10 build-logic2; zero failures/errors/skips. The measurement archives all three attempts,
+source/report hashes and task statuses. Seven actual app-container/SQLite priority cases
+cover no cached list/workspace, mismatched binding, confirmed denial, unresolved original,
+capacity, newer revision, cancellation/reopen and expired local credentials. SDK is a double.
+
+Apple41441078558 at exact d93e8cd5eef294d3488a7ccb7f64cac6222ed241 remains ACTIVE:
+Swift extraction11s, simulator compile672s/tests150s passed; full Xcode in progress.
+Do not cancel or dispatch another Apple run until complete. Audit final artifact counts
+and source hashes, then dispatch this next pushed head. Current16 inputs are excluded.
+Earlier receiver dd1a449b Apple41436278627 is completely audited in queue evidence below.
+
+Platform source2124c6fc passes both Collaboration control jobs41437984098. Full ten-job
+Verify41442782804 is now active at that exact source for packages/recovery/private rollout.
+Do not infer success or cancel it. Private rollout preparation .work/chat-private-rollout-
+2026-11-02/plan.txt in Platform is READ ONLY so far: persistent internal Matrix/PostgreSQL,
+protected JWT/config overlay, fresh coordinated checkpoint and isolated103→116 upgrade
+before live changes. Existing Google/native/document state must be retained. Chat push stays
+off until read/mute/privacy notification projection and durable actions/inline replies exist.
+Continue that implementation and native SDK priority proof alongside rollout preparation.
+
+Private schema103/API-worker2c2a59e3, phone15 and Starter5679c51 unchanged. Next authorized
+phone build16+ needs notice first, explicit10.77.77.3:5555 and --install-only, no UI drive.
+All54 groups remain open. No owned emulator, active goal or subagent. Continue after push;
+this is not PRD completion.
+
 ## Encrypted push priority queue validated — 2 November 2026
 
 [Contract](collaboration-push-priority.md) / [evidence](measurements/chat-push-priority-2026-11-02.json):

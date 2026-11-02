@@ -2,6 +2,7 @@ package dev.fajar.starter.app.work
 
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.policies.localListAccess
+import dev.fajar.starter.collaboration.domain.policies.validCollaborationPushHint
 import dev.fajar.starter.collaboration.domain.repositories.*
 import dev.fajar.starter.collaboration.domain.usecases.*
 import dev.fajar.starter.common.result.*
@@ -27,7 +28,56 @@ class CollaborationIncomingRecovery(
 ) {
     private val execution = Mutex()
 
-    suspend operator fun invoke(admission: CollaborationBackgroundAdmission): SyncResult {
+    suspend operator fun invoke(admission: CollaborationBackgroundAdmission): SyncResult =
+        bounded(admission) { process(admission) }
+
+    suspend fun priority(
+        admission: CollaborationBackgroundAdmission,
+        hint: CollaborationPushHint,
+    ): SyncResult {
+        currentCoroutineContext().ensureActive()
+        if (
+            !validCollaborationPushHint(hint) ||
+                hint.roomId == null ||
+                hint.matrixEventId == null ||
+                hint.companyId != admission.owner.companyId ||
+                hint.deviceId != admission.observation.deviceId
+        )
+            return SyncResult.Blocked(failure("invalid_hint", FailureKind.Validation))
+        return bounded(admission) {
+            val scope = CollaborationOperationScope.Background(admission)
+            val configured = setup(scope)
+            currentCoroutineContext().ensureActive()
+            if (configured is AppResult.Failed)
+                return@bounded collaborationWorkFailure(configured.failure)
+            val current = (configured as AppResult.Success).value
+            val device = current.device
+            if (
+                current.owner != admission.owner ||
+                    device?.id != hint.deviceId ||
+                    device.state != CollaborationDeviceState.ACTIVE
+            )
+                return@bounded SyncResult.Blocked(
+                    failure("setup_required", FailureKind.Unavailable)
+                )
+            val found = refresh.byRoom(scope, requireNotNull(hint.roomId))
+            currentCoroutineContext().ensureActive()
+            if (found is AppResult.Failed) return@bounded collaborationWorkFailure(found.failure)
+            val summary = (found as AppResult.Success).value
+            if (summary.owner != admission.owner)
+                return@bounded SyncResult.Blocked(
+                    failure("owner_changed", FailureKind.Unauthorized)
+                )
+            withTimeoutOrNull(12.seconds) {
+                room(admission, hint.deviceId, summary.value.conversation.id, hint)
+            } ?: SyncResult.Retry(failure("room_timeout"))
+        }
+    }
+
+    private suspend fun bounded(
+        admission: CollaborationBackgroundAdmission,
+        operation: suspend () -> SyncResult,
+    ): SyncResult {
         currentCoroutineContext().ensureActive()
         if (!execution.tryLock()) return SyncResult.Retry(failure("busy", FailureKind.Unavailable))
         try {
@@ -38,8 +88,7 @@ class CollaborationIncomingRecovery(
                     -admission.monotonicDeadline.elapsedNow(),
                 )
             if (budget <= Duration.ZERO) return SyncResult.Retry(failure("timeout"))
-            return withTimeoutOrNull(budget) { process(admission) }
-                ?: SyncResult.Retry(failure("timeout"))
+            return withTimeoutOrNull(budget) { operation() } ?: SyncResult.Retry(failure("timeout"))
         } finally {
             execution.unlock()
         }
@@ -105,6 +154,7 @@ class CollaborationIncomingRecovery(
         admission: CollaborationBackgroundAdmission,
         deviceId: String,
         conversationId: String,
+        hint: CollaborationPushHint? = null,
     ): SyncResult {
         val scope = CollaborationOperationScope.Background(admission)
         val metadata = readRoom.room(scope, conversationId)
@@ -121,6 +171,8 @@ class CollaborationIncomingRecovery(
                 return SyncResult.Blocked(failure("room_review_required", FailureKind.Unavailable))
             CollaborationDirectRoomState.READY -> Unit
         }
+        if (hint != null && binding.matrixRoomId != hint.roomId)
+            return SyncResult.Blocked(failure("room_mismatch", FailureKind.AccessDenied))
         var lease: CollaborationBackgroundRuntimeLease? = null
         try {
             val borrowed = acquireRuntime(admission)
@@ -133,7 +185,13 @@ class CollaborationIncomingRecovery(
                 observeAccess(CollaborationLocalScope.Captured(access)),
                 access,
             ) {
-                originals(scope, deviceId, conversationId, binding.matrixRoomId)
+                originals(
+                    scope,
+                    deviceId,
+                    conversationId,
+                    binding.matrixRoomId,
+                    hint?.matrixEventId,
+                )
             }
         } finally {
             withContext(NonCancellable) { lease?.close() }
@@ -145,6 +203,7 @@ class CollaborationIncomingRecovery(
         deviceId: String,
         conversationId: String,
         roomId: String?,
+        priorityEventId: String?,
     ): SyncResult {
         var child: CollaborationTimelineLease? = null
         try {
@@ -153,15 +212,15 @@ class CollaborationIncomingRecovery(
             currentCoroutineContext().ensureActive()
             if (opened is AppResult.Failed) return collaborationWorkFailure(opened.failure)
             if (roomId == null) return SyncResult.Retry(failure("room_pending"))
-            return recoverHistory(
-                scope,
+            val key =
                 CollaborationHistoryTraversal(
                     conversationId,
                     roomId,
                     deviceId,
                     CollaborationHistoryPurpose.Incoming,
-                ),
-            )
+                )
+            return if (priorityEventId == null) recoverHistory(scope, key)
+            else recoverHistory.priority(scope, key, priorityEventId)
         } finally {
             withContext(NonCancellable) { child?.close() }
         }

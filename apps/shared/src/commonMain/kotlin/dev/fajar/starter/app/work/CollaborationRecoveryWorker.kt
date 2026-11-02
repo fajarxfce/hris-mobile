@@ -24,6 +24,7 @@ class CollaborationRecoveryWorker(
     private val updateProgress: UpdateCollaborationRecoveryProgress,
     private val devices: LoadCollaborationDevicePage,
     private val admit: AcquireCollaborationBackgroundAdmission,
+    private val recoverPriority: suspend (CollaborationNativeParent) -> SyncResult,
     private val build: AppBuild,
     private val recoverCompany: suspend (CollaborationBackgroundAdmission) -> SyncResult,
 ) : SyncTask {
@@ -69,6 +70,11 @@ class CollaborationRecoveryWorker(
     private suspend fun process(parent: CollaborationNativeParent): SyncResult {
         val wake = ensureWake()
         if (wake is AppResult.Failed) return retry(wake)
+        // Priority cannot consume the ordinary company's reserved turn or reset its seek.
+        val priority =
+            withTimeoutOrNull(20.seconds) { recoverPriority(parent) }
+                ?: SyncResult.Retry(failure("priority_timeout", FailureKind.Timeout))
+        currentCoroutineContext().ensureActive()
         val found = readProgress()
         if (found is AppResult.Failed) return retry(found)
         var snapshot = (found as AppResult.Success).value
@@ -121,6 +127,14 @@ class CollaborationRecoveryWorker(
             (finished as AppResult.Success).value.completedWake
                 ?: return if (healthyContinuation) continuePending()
                 else SyncResult.Retry(failure("sweep_pending"))
+        // Keep the independent wake until both lanes have finished; a failed priority never
+        // skips the fair company turn above.
+        when (priority) {
+            is SyncResult.Retry ->
+                return if (priority.failure == null) continuePending() else priority
+            is SyncResult.Blocked -> return SyncResult.Retry(priority.failure)
+            SyncResult.Complete -> Unit
+        }
         val acknowledged = completeWake(completion)
         if (acknowledged is AppResult.Failed) return retry(acknowledged)
         // An ACK can lose to a new wake; check even after success because a later write can win.

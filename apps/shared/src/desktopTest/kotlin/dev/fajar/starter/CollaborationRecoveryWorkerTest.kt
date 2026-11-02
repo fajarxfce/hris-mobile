@@ -14,6 +14,71 @@ import kotlinx.coroutines.test.*
 
 class CollaborationRecoveryWorkerTest {
     @Test
+    fun blockedPriorityRetainsWakeWhileOtherOwnedCompanyWorkStillRuns() = runTest {
+        val f = RecoveryWorkerFixture(testScheduler, 1)
+        val denied = Failure(FailureKind.AccessDenied, "Fictional company denial")
+        f.onPriority = { SyncResult.Blocked(denied) }
+        assertEquals(SyncResult.Retry(denied), f.worker()())
+        assertEquals(listOf(recoveryId(1)), f.attempted)
+        assertNotNull(f.wake)
+        assertEquals(0, f.acknowledgments)
+    }
+
+    @Test
+    fun failedPriorityStillVisitsEveryCompanyAndCannotAcknowledgeTheGlobalWake() = runTest {
+        val f = RecoveryWorkerFixture(testScheduler, 3)
+        val unavailable = Failure(FailureKind.Network, "Fictional priority failure")
+        var priorities = 0
+        f.onPriority = {
+            priorities++
+            SyncResult.Retry(unavailable)
+        }
+        val worker = f.worker()
+        repeat(2) { assertEquals(SyncResult.Complete, worker()) }
+        assertEquals(SyncResult.Retry(unavailable), worker())
+        assertEquals((1..3).map(::recoveryId), f.attempted)
+        assertEquals(3, priorities)
+        assertNotNull(f.wake)
+        assertEquals(0, f.acknowledgments)
+        f.onPriority = { SyncResult.Complete }
+        repeat(3) { assertEquals(SyncResult.Complete, worker()) }
+        assertNull(f.wake)
+        assertEquals(1, f.acknowledgments)
+    }
+
+    @Test
+    fun priorityTimeoutJoinsItsWorkAndLeavesTimeForTheFairCompanyTurn() = runTest {
+        val f = RecoveryWorkerFixture(testScheduler, 1)
+        var closed = false
+        f.onPriority = {
+            try {
+                awaitCancellation()
+            } finally {
+                closed = true
+            }
+        }
+        val started = testScheduler.currentTime
+        val result = assertIs<SyncResult.Retry>(f.worker()())
+        assertEquals("client.collaboration_recovery_priority_timeout", result.failure?.code)
+        assertEquals(20_000L, testScheduler.currentTime - started)
+        assertEquals(listOf(recoveryId(1)), f.attempted)
+        assertTrue(closed)
+        assertNotNull(f.wake)
+        assertEquals(0, f.acknowledgments)
+    }
+
+    @Test
+    fun healthyPriorityContinuationRetainsWakeAndSchedulesWithoutFailureBackoff() = runTest {
+        val f = RecoveryWorkerFixture(testScheduler, 1)
+        f.onPriority = { SyncResult.Retry() }
+        assertEquals(SyncResult.Complete, f.worker()())
+        assertNotNull(f.wake)
+        assertEquals(0, f.acknowledgments)
+        assertEquals(listOf(CollaborationRecoveryWake.WORK_KEY), f.scheduled)
+        assertEquals(listOf(recoveryId(1)), f.attempted)
+    }
+
+    @Test
     fun multipleHealthyBatchesCoverEveryCompanyWithoutFailureBackoffOrEarlyAcknowledgment() =
         runTest {
             val f = RecoveryWorkerFixture(testScheduler)

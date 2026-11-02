@@ -15,7 +15,31 @@ class CollaborationIncomingHistoryRecovery(
     private val readReferences: ReadCollaborationHistoryReferences,
     private val reconcileReferences: ReconcileCollaborationHistoryReferences,
     private val advanceReferences: AdvanceCollaborationIncomingReferences,
+    private val readEvent: ReadCollaborationHistoryEvent,
 ) {
+    /**
+     * An exact admitted original/tombstone resolves the hint without advancing either traversal.
+     */
+    suspend fun priority(
+        scope: CollaborationOperationScope.Background,
+        key: CollaborationHistoryTraversal,
+        eventId: String,
+    ): SyncResult {
+        val acquired = acquireOriginals(scope, key.deviceId, key.conversationId, eventId)
+        currentCoroutineContext().ensureActive()
+        if (acquired is AppResult.Failed) return collaborationWorkFailure(acquired.failure)
+        val retained =
+            readEvent(
+                CollaborationLocalScope.Captured(scope.admission.owner.localListAccess()),
+                key,
+                eventId,
+            )
+        currentCoroutineContext().ensureActive()
+        if (retained is AppResult.Failed) return collaborationWorkFailure(retained.failure)
+        return if ((retained as AppResult.Success).value != null) SyncResult.Complete
+        else SyncResult.Retry(pendingFailure())
+    }
+
     suspend operator fun invoke(
         scope: CollaborationOperationScope.Background,
         key: CollaborationHistoryTraversal,
