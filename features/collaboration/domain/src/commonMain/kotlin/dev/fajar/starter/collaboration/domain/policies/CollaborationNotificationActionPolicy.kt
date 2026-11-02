@@ -2,10 +2,8 @@ package dev.fajar.starter.collaboration.domain.policies
 
 import dev.fajar.starter.collaboration.domain.entities.*
 
-fun validCollaborationNotificationAction(value: CollaborationNotificationAction): Boolean {
-    val target = value.target
-    return validCollaborationMessageId(value.operationId) &&
-        validCollaborationMessageId(target.companyId) &&
+fun validCollaborationNotificationTarget(target: CollaborationNotificationActionTarget): Boolean =
+    validCollaborationMessageId(target.companyId) &&
         validCollaborationMessageId(target.notificationId) &&
         validCollaborationMessageId(target.renderId) &&
         validCollaborationReadSelection(
@@ -13,7 +11,10 @@ fun validCollaborationNotificationAction(value: CollaborationNotificationAction)
             target.roomId,
             listOf(target.eventId),
             false,
-        ) &&
+        )
+
+fun validCollaborationNotificationAction(value: CollaborationNotificationAction): Boolean =
+    validCollaborationMessageId(value.operationId) &&
+        validCollaborationNotificationTarget(value.target) &&
         (value !is CollaborationNotificationAction.Mute ||
             validCollaborationNotificationRevision(value.expected))
-}

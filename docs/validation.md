@@ -1,5 +1,21 @@
 # Validation
 
+## Encrypted chat publication journal and release19 — 2 November 2026
+
+The [journal contract](collaboration-notification-publications.md) passes focused35
+cases and full6 checks in449.328s: 3528 desktop/511 suites, 10 buildLogic/2 suites, 230 androidHost/37 suites, 6 proofHost/1 suites, 23 browser/2 suites, zero failures/errors/skips.
+[Evidence](measurements/chat-notification-publication-2026-11-02.json) records initial
+compile/padding failures, a separate unchanged navigation timeout/retest, actual
+SQLite/IndexedDB coverage and explicit report reuse. This is raw storage; native
+publication/actions and review UI remain pending, chat push OFF.
+
+[Release19](measurements/android-release-phone-2026-11-02-build19.json) fromc0 is installed
+on the authorized phone using install-only with same signer/data. It passed build/lint,
+artifact verification and two dedicated-emulator cold starts; helper failures are
+preserved separately. No user-phone UI driving or new user confirmation is claimed.
+The samec0 source passes [full Apple895/101 and Xcode](measurements/chat-notification-reply-worker-apple-2026-11-02.json),
+which excludes the later journal. Continue through [current handoff](agent-handoff.md).
+
 ## Android release15 recovery and private-device update
 
 Clean source30d7faab passes five actual SDK/HRIS/Synapse regressions with cleanup,

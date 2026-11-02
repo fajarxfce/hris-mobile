@@ -1,5 +1,68 @@
 # Agent continuation — HRIS Mobile
 
+## Raw publication journal accepted; continue admitted issuance and native delivery
+
+The account-owned encrypted publication journal now retains exact rendered previews and
+four action envelopes, with one atomic checkpoint/document update,64 active slots and
+four-record discovery pages. Inactive conversation watermarks release active capacity
+and omit preview/actions. Old acknowledgments/dismissals cannot replace a newer render;
+uncertain commits reopen with original envelopes. Existing history keys only, no schema
+migration or new credential. Raw reading is NOT current company/native publication
+admission. [Contract](collaboration-notification-publications.md),
+[evidence](measurements/chat-notification-publication-2026-11-02.json).
+
+Focused3 passed35 cases/four suites in250.861s. Full6 passed in449.328s:
+3528 desktop/511 suites, 10 buildLogic/2 suites, 230 androidHost/37 suites, 6 proofHost/1 suites, 23 browser/2 suites, zero failures/errors/skips. 1972 fresh cases/246 suites;
+explicit task reuse recorded,11 input hashes unchanged. Root format/architecture74/
+detekt, proof host/assembly and shared Wasm passed. Browser executes14 actual IndexedDB
+publication cases plus nine existing action cases; SQLite uses the same14-case contract.
+Fixture credentials retained in memory across reopen; no reply-input OS process death
+or native publication/callback acceptance.
+
+Failed attempts remain recorded. Focused1 failed test compilation (cross-module nullable
+smart casts and nonexistent credential clear method). Focused2 rejected real issuer
+Base64 padding; all14 publication cases failed and one waited60s at an unreachable
+commit barrier. Fixed canonical encoding validation and commit-or-result test select,
+with malformed padding/unused-bit cases. Focused3 accepted. Full4 failed903.650s with
+one of373 fresh cases: AppFlow Welcome wait at3912, BEFORE lifecycle/navigation action.
+Host memory/I/O pressure observed, not proved causality. Unchanged isolated scenario5
+passed47.020s; no UI/timeout modification, then accepted full6. The focused artifact
+helper also shadowed a folder variable; corrected helper only, removed its generated
+copies and used archived fresh XML. No failed run is described as acceptance.
+
+Full Apple [41530048115](https://github.com/fajarxfce/hris-mobile/actions/runs/41530048115)
+atc0fafd8592bfaa1eaab40f153235a18f66afa59f is now AUDITED:895 simulator cases/101 suites,
+zero failures/errors/skips,141 source hashes and GitHub ZIP digest verified. Artifact
+13183286547 SHA2568874cfd4d6da386cd3c681d97816e7aa54bded7f855efe648c847f7f3fa5b07b;
+compile496s/tests85s/full Xcode910s. Covers durable reply cycle/application worker,
+excludes this publication journal. [Apple evidence](measurements/chat-notification-reply-worker-apple-2026-11-02.json).
+Physical iPhone waived; no APNs/CallKit/native notification acceptance. At last check,
+c0 control41530010424 and protocol41530010464 succeeded (not separately artifact-audited);
+9129 native41528135379 succeeded (not independently audited), c0 native41530010432 runs.
+Latest independently audited native five-case source remains1eb/41523212486 below.
+
+NEXT: commit/push this accepted journal, then dispatch prepared full Apple exactly once
+from .work/chat-notification-publication-apple-2026-11-02/dispatch.py (150 source paths,
+no dispatch yet at this checkpoint). Follow its actual result; never redispatch if its
+request file exists. Then continue .work/chat-notification-issuance-2026-11-02: twelve
+Kotlin inputs drafted as .txt ONLY, not applied/compiled. apply.py requires clean Git
+and accepted journal measurement, records base hashes and rejects duplicate apply.
+Review source before applying: internal current-family/company/source authority,
+issuer with exact envelope replay, deterministic acquired timestamp/eventId watermark
+(explicitly not causal order),16 domain and three actual Koin/SQLite integration cases,
+shared preview factory/Prepare refactor, candidate validation and owning DI bindings.
+Then format/focused1 (expected55) and full/browser (expected50/four suites). Draft
+hypotheses are NOT tested acceptance. Native source discovery/backfill behavior,
+revalidation/serialized owner lease, exact retirement, Android/iOS callbacks, retained
+input review UI and notification-specific OS death proof still remain.
+
+Release19 remains installed on10.77.77.3:5555, sourcec0/signature/data preserved; no new
+phone install or UI launch in this increment. Notify before every future install and
+use explicit serial/install-only, next version>19. Chat UI exists; voice/video/meeting
+UI and native chat actions still absent. Live304/schema116/chat push OFF unchanged.
+All54 PRD groups open; continue long run and push every atomic commit, no final here.
+No generic Starter port for HRIS storage/policy. Earlier sections are historical.
+
 ## Release19 installed; continue native notification publication
 
 Release19 (devRelease1.0.0, arm64, non-debuggable) from
