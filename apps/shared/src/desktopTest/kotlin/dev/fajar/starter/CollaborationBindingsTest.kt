@@ -39,6 +39,11 @@ class CollaborationBindingsTest {
             var suppliedHttp: HttpClient? = null
             val runtime =
                 object : CollaborationRuntimeRepository {
+                    override suspend fun activatePusher(
+                        owner: CollaborationOwner,
+                        deviceId: String,
+                    ): AppResult<Unit> = error("No implicit pusher activation")
+
                     override suspend fun selfIdentity(
                         owner: CollaborationOwner,
                         deviceId: String,
@@ -148,6 +153,10 @@ class CollaborationBindingsTest {
                 assertNotNull(container.koin.get<CollaborationSetupRepository>())
                 assertNotNull(container.koin.get<CollaborationSetupCommandRepository>())
                 assertNotNull(container.koin.get<LoadCollaborationSetup>())
+                assertSame(
+                    container.koin.get<ActivateCollaborationPusher>(),
+                    container.koin.get<ActivateCollaborationPusher>(),
+                )
                 assertNotNull(container.koin.get<ReadCollaborationControl>())
                 assertNotNull(container.koin.get<ReadCollaborationIdentity>())
                 assertNotNull(container.koin.get<ReadCollaborationThreadContext>())

@@ -1,0 +1,274 @@
+{
+  "date": "2026-11-02",
+  "baseCommit": "50a8395244ab9b167a13846ad1573be70d7ddb86",
+  "scope": "Admitted managed-pusher client operation and owned Android request transport. Automatic activation/receive/reply are not enabled.",
+  "sourceSha256": {
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt": "bb8fb9f16504d160a1553242ae183322f841e56c7ab0dbe8e9e401df15932a5d",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/fixtures/NativeWorkerSdk.kt": "62f3cd94ab51322bae3ff84a33d0b2236fc90014ddffd3607dda2b0b4e13e502",
+    "features/collaboration/data/src/androidHostTest/kotlin/dev/fajar/starter/collaboration/data/AndroidCollaborationPusherTest.kt": "b07fccb04d741560f1237bb75bb461a7a177c19671a21d509966a89a2368bbc0",
+    "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/repositories/AndroidCollaborationPusher.kt": "823d17532eb0caf19a81e2a4dcac482c4328231a9d38b324822c74629cd4fbc8",
+    "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/repositories/AndroidCollaborationRuntimeLease.kt": "6bbcc80130685a8a73ee5c88f131566fee89a384734ac885b5bbda6a3b651648",
+    "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/repositories/AndroidCollaborationRuntimeRepository.kt": "d0c3aa351a6bbe50e58df4f6b2dd6202f491730036dd07223239513b16bf0fe6",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/api/CollaborationPusherApi.kt": "a657ff7deef7e51203a22922b2e419524553fe6b8ccda501c2b356a6730c0d3f",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/datasources/CollaborationPusherRequestSource.kt": "514a29713e7d6a2d9742aa48af9e46458c2403c7e706ed5f4b95f1b0697e263a",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt": "d238dab376c37a652ca0c8baf8a14790275d729750025b903d2cb38628819bbc",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/UnavailableCollaborationRuntimeRepository.kt": "f07b29e2bfa21ca914725f3698a5d4cc9491e57998b3c6ad6274758c8f4912d3",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationRuntimeRepository.kt": "d047b3581c350603c2f15047eac0652570b408250d9e1127daa8bc988c4085c3",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ActivateCollaborationPusher.kt": "eabd6eaae1189a0eecb247608bbea7644885bfae5e1c6f072e6355f4dabacb88",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/ActivateCollaborationPusherTest.kt": "995db54b4f297c04eab9e413d128b3fc73a959baca4232fda4f696f0ef2c3aca",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationDeliveryFixture.kt": "580a3800b49f0f5440d78c3a728cf2f5ad2dd7ff3e53a4cc2314134a22a810bf",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationRuntimeInstallationTest.kt": "bd9d6d69223c763661c5514f6ebcb240d5b8623b24320bd8a17661a4b1cbe071",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationRuntimeOwnershipTest.kt": "57dfa53cb8f9f8a89ecbc59c2f84cf3de4d8e761243517a43f162162014d9e95",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationRuntimeRestorationTest.kt": "5b5d7cdb7f2a9e7dfcb883c77ab79dbf0e23799307dc83b79fc42eab7e921c9b",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/EnsureCollaborationRuntimeTest.kt": "35b5535fcd50f527b6d8db45b8ea95d38d484f81f296ea550fb7ddfd5ba42fe2",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/EnterCollaborationConversationTest.kt": "d8de55dbba94fb112a3e0d73b406f541719c6bb1a5e1d5d5eae7030a50732e3d",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/StageCollaborationTextTest.kt": "4a7fc26ce2484ab0d4f301533b8214d03ed8ff3b197b91d315f91102947dc4a0",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/setup/ChatSetupFixture.kt": "312b107cbcc2a86c8bcc68e06a470dbd02b80f6ef7c60808e5346c3fc2e3e05c"
+  },
+  "finalRun": {
+    "exitCode": 0,
+    "wallSeconds": 565.616,
+    "inputsUnchanged": true,
+    "command": [
+      "xvfb-run",
+      "-a",
+      "./gradlew",
+      ":check",
+      ":features:collaboration:domain:wasmJsBrowserTest",
+      ":features:collaboration:data:wasmJsBrowserTest",
+      ":apps:android:assembleDevRelease",
+      ":apps:android:lintDevRelease",
+      "-PrequireSigning=true",
+      "-PappEnvironment=dev",
+      "-PappVersion=1.0.0",
+      "-PappVersionCode=12",
+      "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=1",
+      "-Dorg.gradle.jvmargs=-Xmx1536m"
+    ]
+  },
+  "gradleSeconds": 562,
+  "reports": {
+    "test": {
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "desktopTest": {
+      "tests": 2852,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "wasmJsBrowserTest": {
+      "tests": 675,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "testAndroidHostTest": {
+      "tests": 180,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "browserModules": {
+    "features/collaboration/domain": {
+      "tests": 409,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/collaboration/data": {
+      "tests": 266,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "focusedRun": {
+    "exitCode": 0,
+    "wallSeconds": 148.967,
+    "inputsUnchanged": true,
+    "command": [
+      "xvfb-run",
+      "-a",
+      "./gradlew",
+      ":features:collaboration:domain:desktopTest",
+      ":features:collaboration:data:testAndroidHostTest",
+      ":apps:shared:desktopTest",
+      "--tests",
+      "*CollaborationBindingsTest",
+      ":formatCheck",
+      ":architectureCheck",
+      ":detekt",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=1",
+      "-Dorg.gradle.jvmargs=-Xmx1536m"
+    ]
+  },
+  "focusedGradleSeconds": 145,
+  "focusedReports": {
+    "domain": {
+      "tests": 409,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "android": {
+      "tests": 180,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "bindings": {
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "lint": {
+    "errors": 0,
+    "warnings": [
+      {
+        "id": "DataExtractionRules"
+      }
+    ]
+  },
+  "earlierRuns": [
+    {
+      "result": {
+        "exitCode": 1,
+        "wallSeconds": 48.639,
+        "inputsUnchanged": true,
+        "command": [
+          "xvfb-run",
+          "-a",
+          "./gradlew",
+          ":features:collaboration:domain:desktopTest",
+          ":features:collaboration:data:testAndroidHostTest",
+          ":apps:shared:desktopTest",
+          "--tests",
+          "*CollaborationBindingsTest",
+          ":formatCheck",
+          ":architectureCheck",
+          ":detekt",
+          "--no-daemon",
+          "--no-parallel",
+          "--max-workers=1",
+          "-Dorg.gradle.jvmargs=-Xmx1536m"
+        ]
+      },
+      "gradleSeconds": 45,
+      "domainTests": 408,
+      "domainFailures": 1,
+      "reason": "Test incorrectly expected SDK token expiry to close owned local chat facts. Existing policy was preserved; fixture now uses actual company denial and separately proves that SDK expiry does not close local reads."
+    },
+    {
+      "result": {
+        "exitCode": 1,
+        "wallSeconds": 69.028,
+        "inputsUnchanged": true,
+        "command": [
+          "xvfb-run",
+          "-a",
+          "./gradlew",
+          ":features:collaboration:domain:desktopTest",
+          ":features:collaboration:data:testAndroidHostTest",
+          ":apps:shared:desktopTest",
+          "--tests",
+          "*CollaborationBindingsTest",
+          ":formatCheck",
+          ":architectureCheck",
+          ":detekt",
+          "--no-daemon",
+          "--no-parallel",
+          "--max-workers=1",
+          "-Dorg.gradle.jvmargs=-Xmx1536m"
+        ]
+      },
+      "gradleSeconds": 65,
+      "domainTests": 409,
+      "domainFailures": 0,
+      "androidHostTests": 180,
+      "androidHostFailures": 3,
+      "reason": "Default-dispatched MockEngine raced the virtual timeout clock. Fixture transport now shares the test dispatcher; HTTP 503 expectation was also aligned with the existing Service classification. No production timeout/policy was weakened."
+    }
+  ],
+  "checked": [
+    "Current selected company/session/native-parent ownership, active matching registered device and retained content-denial gate before and after activation; no implicit enrollment, restore, token refresh or automatic retry.",
+    "One active use-case invocation without a waiting queue and a 15-second whole-operation budget. Cancellation propagates and a later explicit invocation can reuse the stable server-side binding.",
+    "Runtime matches the installed SDK user/device/homeserver and reads the current bearer per request. One 10-second request is registered as a runtime child before transport.",
+    "Fixed empty POST /_matrix/client/unstable/dev.fajar.hris/pusher using the public HTTP pool plus SDK bearer. No cookies, caller-selected pushkey/callback/native token or message content.",
+    "Success requires HTTP 200 and an empty JSON object within 1 KiB. Redirects, malformed/trailing/oversized acknowledgment and other successful status codes fail.",
+    "Parent or caller cancellation stops the exact request; child disposal leaves the borrowed HTTP pool alive. Current credential/runtime denial defeats late success or transport failure.",
+    "Eight domain activation cases, seven Android host transport/lifetime cases and actual shared application-container binding resolution pass.",
+    "Root check, both affected browser suites, signed universal devRelease assembly/lint, format/architecture and detekt pass. Root Python checks report 10 Android runner and 17 distribution cases."
+  ],
+  "limits": [
+    "Android adapter tests override the SDK session getter and use MockEngine; they do not prove a real managed-pusher call from the native SDK through HRIS/Synapse/FCM.",
+    "No automatic app/worker invocation, FCM receiver, decrypted notification or inline reply is wired by this increment. The backend delivery opt-in remains disabled.",
+    "All-company ownership, durable hint/reconnect recovery, notification privacy/mute/read/deep-link actions and Apple/web adapters remain required before CHAT-13 acceptance.",
+    "No generic Starter foundation change, live provider/schema rollout or phone replacement occurs in this increment. Phone release 11 remains user-confirmed working."
+  ],
+  "actualReleaseStartup": {
+    "serial": "emulator-5560",
+    "isolatedEmulatorData": true,
+    "actualApplication": "dev.fajar.hris.StarterApplication",
+    "variant": "devRelease",
+    "debuggable": false,
+    "versionCode": 12,
+    "sha256": "a1c38929645ff3deb0911012b3c568752072855eac0bea9dbd1562f3f00e062a",
+    "bytes": 281065008,
+    "elapsedSeconds": 36.563,
+    "coldStarts": [
+      {
+        "coldStart": 1,
+        "pid": 3043,
+        "stableSeconds": 12,
+        "renderedTexts": [
+          "HR",
+          "HRIS",
+          "Skip",
+          "Employee services",
+          "Access attendance, requests, and work information.",
+          "1 of 3",
+          "Continue"
+        ],
+        "resumed": true,
+        "processCrash": false,
+        "elapsedSeconds": 16.733
+      },
+      {
+        "coldStart": 2,
+        "pid": 3230,
+        "stableSeconds": 12,
+        "renderedTexts": [
+          "HR",
+          "HRIS",
+          "Skip",
+          "Employee services",
+          "Access attendance, requests, and work information.",
+          "1 of 3",
+          "Continue"
+        ],
+        "resumed": true,
+        "processCrash": false,
+        "elapsedSeconds": 15.897
+      }
+    ],
+    "source": "Base 50a83952 plus the 21 unchanged source inputs listed above; universal validation APK, not a clean-commit phone distribution.",
+    "screenshots": {
+      "startup-1.png": "4d551bb8561836ea5b5e6279d95c7d3ccd27cf74d545919e81355f8b2c4bf7bc",
+      "startup-2.png": "4d551bb8561836ea5b5e6279d95c7d3ccd27cf74d545919e81355f8b2c4bf7bc"
+    },
+    "visualInspection": "Both screenshots show readable onboarding title, description, page indicator, Skip and Continue without clipping or a crash surface.",
+    "cleanup": "Only owned emulator-5560 stopped after both cold starts; ADB confirms it is absent. No phone UI interaction or installation."
+  }
+}

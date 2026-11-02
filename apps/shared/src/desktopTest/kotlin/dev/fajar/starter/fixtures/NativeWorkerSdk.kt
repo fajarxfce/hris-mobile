@@ -71,6 +71,11 @@ class NativeWorkerSdk(private val wire: NativeCollaborationUi) : CollaborationRu
         return AppResult.Success(Unit)
     }
 
+    override suspend fun activatePusher(
+        owner: CollaborationOwner,
+        deviceId: String,
+    ): AppResult<Unit> = error("No implicit pusher activation")
+
     override suspend fun selfIdentity(owner: CollaborationOwner, deviceId: String) =
         AppResult.Success(CollaborationSelfIdentity(sender))
 

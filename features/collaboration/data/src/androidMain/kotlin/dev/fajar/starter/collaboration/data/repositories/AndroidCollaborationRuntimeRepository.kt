@@ -1,6 +1,7 @@
 package dev.fajar.starter.collaboration.data.repositories
 
 import dev.fajar.starter.collaboration.data.api.CollaborationHistoryApi
+import dev.fajar.starter.collaboration.data.api.CollaborationPusherApi
 import dev.fajar.starter.collaboration.data.datasources.*
 import dev.fajar.starter.collaboration.data.sdk.*
 import dev.fajar.starter.collaboration.domain.entities.*
@@ -33,6 +34,24 @@ class AndroidCollaborationRuntimeRepository(
 ) : CollaborationRuntimeRepository {
     private val capacity = Semaphore(5)
     private val leases = ConcurrentHashMap.newKeySet<AndroidCollaborationRuntimeLease>()
+
+    override suspend fun activatePusher(
+        owner: CollaborationOwner,
+        deviceId: String,
+    ): AppResult<Unit> {
+        val runtime =
+            leases.singleOrNull {
+                it.owner == owner && it.deviceId == deviceId && it.availableForEntry
+            }
+                ?: return AppResult.Failed(
+                    Failure(
+                        FailureKind.Unavailable,
+                        "Chat runtime is not open.",
+                        code = "client.collaboration_runtime_not_open",
+                    )
+                )
+        return runtime.activatePusher()
+    }
 
     override suspend fun selfIdentity(owner: CollaborationOwner, deviceId: String) =
         safeStorageCall {
@@ -302,6 +321,7 @@ class AndroidCollaborationRuntimeRepository(
                     persistence,
                     retained,
                     CollaborationHistoryApi(http, endpoint),
+                    CollaborationPusherApi(http, endpoint),
                 ) {
                     leases.remove(it)
                     capacity.release()

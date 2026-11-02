@@ -374,6 +374,11 @@ private class InstallationFixture {
         }
     private val runtimes =
         object : CollaborationRuntimeRepository {
+            override suspend fun activatePusher(
+                owner: CollaborationOwner,
+                deviceId: String,
+            ): AppResult<Unit> = error("No implicit pusher activation")
+
             override suspend fun selfIdentity(
                 owner: CollaborationOwner,
                 deviceId: String,

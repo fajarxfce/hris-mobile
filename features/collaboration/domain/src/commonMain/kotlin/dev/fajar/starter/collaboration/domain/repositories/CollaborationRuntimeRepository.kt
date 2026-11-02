@@ -6,6 +6,9 @@ import kotlinx.coroutines.flow.StateFlow
 
 /** Store I/O and SDK ownership only. Use cases admit installation and live delivery separately. */
 interface CollaborationRuntimeRepository {
+    /** Uses an installed SDK bearer and the fixed managed endpoint. Never opens or enrolls. */
+    suspend fun activatePusher(owner: CollaborationOwner, deviceId: String): AppResult<Unit>
+
     /** Reads only the protected scoped record. No SDK client, store lease, sync or network. */
     suspend fun selfIdentity(
         owner: CollaborationOwner,

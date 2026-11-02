@@ -1,6 +1,7 @@
 package dev.fajar.starter.collaboration.data.repositories
 
 import dev.fajar.starter.collaboration.data.api.CollaborationHistoryApi
+import dev.fajar.starter.collaboration.data.api.CollaborationPusherApi
 import dev.fajar.starter.collaboration.data.datasources.AndroidCollaborationTimelineSource
 import dev.fajar.starter.collaboration.data.datasources.CollaborationSdkStoreLease
 import dev.fajar.starter.collaboration.data.datasources.createAndroidCollaborationSync
@@ -28,6 +29,7 @@ internal constructor(
     private val persistence: SdkSessionPersistence,
     record: CollaborationSdkRecord,
     historyApi: CollaborationHistoryApi,
+    pusherApi: CollaborationPusherApi,
     private val released: (AndroidCollaborationRuntimeLease) -> Unit,
 ) : CollaborationRuntimeLease {
     override val deviceId = record.deviceId
@@ -41,6 +43,22 @@ internal constructor(
     private val sync =
         SdkSyncLifecycle(lifetime) { createAndroidCollaborationSync(nativeClient, lifetime) }
     private val children = SdkChildResources(lifetime)
+    private val pusher =
+        AndroidCollaborationPusher(
+            nativeClient,
+            record.matrixUserId,
+            record.matrixDeviceId,
+            record.homeserverUrl,
+            children,
+            lifetime,
+            pusherApi,
+        ) {
+            credentialFailures.value
+                ?: sync.failures.value?.takeIf {
+                    it.kind in setOf(FailureKind.Unauthorized, FailureKind.AccessDenied)
+                }
+                ?: if (stopRequested.get()) syncStopped().failure else null
+        }
     private val historyWindows =
         AndroidCollaborationHistoryWindows(nativeClient, children) {
             credentialFailures.value
@@ -189,6 +207,8 @@ internal constructor(
 
     /** Borrowed transport reads only a head; this runtime owns cancellation of that request. */
     suspend fun findHistoryHead(roomId: String): AppResult<String?> = historyReads.read(roomId)
+
+    suspend fun activatePusher(): AppResult<Unit> = pusher.activate()
 
     /**
      * Provider references only. The admitted caller owns durable progress and content acquisition.

@@ -3,6 +3,8 @@
 The application worker, durable scheduler wakeups, encrypted fair cursor and thread
 handoff are now implemented. See [current contract](collaboration-background-delivery.md).
 This does not accept all background, provider or product requirements.
+Managed pusher activation is now implemented and validated locally; see
+[notification integration](collaboration-notifications.md) for its bounds and remaining receive/recovery work.
 
 Latest-head capacity recovery is now implemented for uncertain delivery and explicit
 foreground Refresh. See [recovery contract](collaboration-history-recovery.md). Continue

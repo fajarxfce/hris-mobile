@@ -1,5 +1,38 @@
 # Agent continuation — HRIS Mobile
 
+
+## Managed pusher client validated; background recovery next — 2 November 2026
+
+[Contract](collaboration-notifications.md) / [evidence](measurements/chat-pusher-client-2026-11-02.json):
+explicit pusher activation now checks current company/native-parent ownership,
+active device and retained admission denial. Android borrows the owned SDK bearer,
+registers one finite request as a runtime child and posts to the fixed gateway
+endpoint. No implicit enrollment, restore, refresh or retry. Application DI resolves
+its singleton. Automatic worker invocation and incoming notifications remain next.
+
+Full root check, affected browser suites and signed universal release12 assembly/lint
+pass: 2,852 desktop, 180 Android host, 675 browser and ten build-logic tests; zero
+failures. Lint has zero errors/one DataExtractionRules warning. Final build 562s
+Gradle /565.616s wall, 21 unchanged source inputs. Both actual StarterApplication
+cold starts remain stable for12s with rendered/resumed onboarding; screenshots
+inspected, smoke36.563s. Owned emulator5560 stopped. This is local evidence, not a
+hosted native provider/FCM proof. Earlier fixture failures are retained in the record.
+
+Platform e1da924b has the bounded default-disabled push worker. Its own-parent
+paginated device directory and separate protected company admission endpoint are
+undergoing actual API/worker/SQL tests. Continue the Mobile typed background
+admission and finite runtime ownership, durable collapsed wake/reconnect recovery,
+receive/decrypt/privacy and inline replies without changing visible workspace.
+Current SDK NotificationClient requires sliding sync while product uses SyncV2;
+do not assume compatibility or expose an unscoped sliding-sync gateway.
+
+Keep backend delivery disabled until the receive/recovery path is validated. Phone
+release11 remains user-confirmed working; no phone install in this API-only increment.
+Next validated product update12+, notify first, explicit10.77.77.3:5555 install-only
+and preserve signer/data. No generic Starter change in this HRIS adapter. All54
+catalog groups remain unaccepted; continue P0–P8 after each pushed checkpoint.
+
+
 ## Release11 installed; user confirms startup recovered — 2 November 2026
 
 Clean source56a46938 is installed in place over release10 on 10.77.77.3:5555.
