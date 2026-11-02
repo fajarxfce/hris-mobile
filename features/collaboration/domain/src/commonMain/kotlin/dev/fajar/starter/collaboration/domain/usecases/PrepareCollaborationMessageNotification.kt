@@ -125,23 +125,15 @@ class PrepareCollaborationMessageNotification(
         val repeated = checked(scope, access) { settings.read(access, conversationId) }
         if (repeated is AppResult.Failed) return repeated
         if ((repeated as AppResult.Success).value != preference) return changed()
-        val preview = preference.settings.preview
         return AppResult.Success(
             CollaborationNotificationProjection.Ready(
-                CollaborationMessageNotification(
+                collaborationNotificationMessage(
                     access,
-                    conversationId,
+                    summary,
                     roomId,
-                    original.primaryEventId,
-                    original.contentHash,
-                    preference.version,
-                    read.version,
-                    preview,
-                    if (preview == CollaborationNotificationPreview.Hidden) null
-                    else collaborationNotificationPreviewText(summary.peer.displayName, 160),
-                    if (preview == CollaborationNotificationPreview.Message)
-                        collaborationNotificationPreviewText(requireNotNull(original.text), 400)
-                    else null,
+                    original,
+                    preference,
+                    read,
                 )
             )
         )

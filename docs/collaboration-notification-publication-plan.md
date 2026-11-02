@@ -1,5 +1,11 @@
 # Native notification publication follow-through
 
+The [raw journal](collaboration-notification-publications.md) and
+[admitted issuance](collaboration-notification-issuance.md) now have separate contracts
+and recorded validation. They do not activate native notifications. Continue through
+exact native revalidation, serialized publication/cleanup, callbacks and retained-input
+review; keep chat push off until that flow is usable.
+
 1. Inspect PrepareCollaborationMessageNotification and current app/native push lifetimes before changing boundaries. Its Ready projection includes access/conversation/room/event/contentHash/settingsVersion/readVersion/preview/sender/body. It is preparation only, not a lasting OS publication grant.
 2. Add a bounded account-owned encrypted publication journal under existing collaboration-history credentials (create=false). Keep stable opaque native-card ID per company/conversation and fresh render UUID. Persist exact action envelopes plus immutable projection source stamps BEFORE OS publication; replay that render after uncertainty rather than resealing it. Never put decrypted chat in generic plaintext notification history. Bound cards/bytes and raw ID page discovery; exact CAS and original owner checks throughout.
 3. Separate raw encrypted journal IO from admission. Repository implementations must not call other repositories. Domain issuance/revalidation coordinates repos; application coordinator may orchestrate existing projection UC plus new issuance UC (no UC-to-UC calls). Persist rendered payload/tokens only after validating owned facts/current native family/company denial/settings/read revisions. Handle malformed/cross-owner/version/key-loss results without publishing.
@@ -10,3 +16,37 @@
 8. Add real encrypted storage/browser tests; cancellation/late account/replaced render/revocation/key-loss/uncertain OS result tests; actual app graph and native OS process-death input replay. Reuse existing SDK/WorkManager proof fixtures but add notification-specific scenarios; pre-existing five native cases do not test reply inputs. Do not repeat long local emulator hang attempts; use isolated hosted native proof when needed.
 9. Build state-driven explicit review UI for retained inputs (reason, editable text with new operation only on user submission, safe dismiss for exact input). Use UI/UX/Compose skills when implementing components, real Compose semantics/screenshot inspection on dedicated emulator. Never drive user phone UI. Full Apple Xcode required; physical iPhone waived.
 10. Chat push remains OFF until publication/callback/review flows usable. Release19 itself only activates internal reply recovery; it is not native notification/call/video/meeting acceptance. All54 PRD groups remain open; continue full communications plan after this step.
+
+## Exact lifecycle boundary
+
+- Revalidation must compare the exact journal snapshot, current native family/company
+  admission, source timestamp/hash, settings/read/identity/peer facts and all four
+  authenticated actions. Return a point-in-time check, not a lasting OS grant.
+- Published is an acknowledgment of native submission. It requires the current family
+  and exact active render. Dismissed/Cancelled remove preview/actions by exact CAS and
+  return only opaque native target/version details. Contention must never clear a newer
+  journal or OS render; native cancellation compares the OS card's render metadata.
+- Cleanup differs from content access. The current account may retire its own older
+  native-family records without a fresh company content grant, but may not mark them
+  Published. Retained company denial must not prevent cleanup of a displayed private
+  card. Parent replacement uses namespace cleanup independently of old-account
+  decryption; post-I/O guards still withhold late results and preserve committed facts.
+- OS submission is external IPC. Serialize submission and cleanup and join invalidation;
+  do not claim an atomic transaction across database/session state and the OS service.
+
+## Candidate discovery and foreground scope
+
+Use acquired originals as candidates, with the issuer's explicit timestamp/event-ID
+presentation watermark. This is not causal order. Bootstrap and history backfill must
+not flood notifications, and suppression of one unrelated candidate must not cancel
+another current card. An app-owned route/lifecycle registration should suppress banners
+for the current focused conversation. Register and dispose that scope in navigation
+composition; do not store UI state in business repositories or depend on a race with
+visible-message read receipts.
+
+Android PendingIntent uniqueness must include opaque card/render identity in the
+intent data, rather than relying on a 32-bit request-code hash. Only RemoteInput reply
+is mutable. Use explicit private receivers and complete bounded callbacks exactly once;
+private text must reach durable reply storage before any send/ack workflow. Test real
+notification-specific OS death/replay, since existing SDK and WorkManager interop cases
+do not cover those inputs. User-phone updates remain notify-then-install-only.

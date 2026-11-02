@@ -1,5 +1,16 @@
 # Validation
 
+## Admitted chat notification issuance — 2 November 2026
+
+[Issuance](collaboration-notification-issuance.md) passes55 focused cases with explicit
+reuse, then full checks in437.218s:3547 desktop/513 suites,230 Android-host/37, six
+proof-host/one, ten build-logic/two,50 actual browser/four, zero failures/errors/skips.
+[Evidence](measurements/chat-notification-issuance-2026-11-02.json) records12 source
+hashes,2018 fresh cases/250 suites and the corrected test-only denial-message assertion.
+Actual application SQLite/action-cipher/reply-flow cases use fictional HTTP and a
+simulated SDK. Native publication, callbacks and OS-death reply proof remain pending;
+no native notification/call/meeting UI activation or new phone install is claimed.
+
 ## Encrypted chat publication journal and release19 — 2 November 2026
 
 The [journal contract](collaboration-notification-publications.md) passes focused35

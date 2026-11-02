@@ -53,6 +53,30 @@ fun validCollaborationNotificationPublicationBody(
             !validCollaborationNotificationRevision(message.settingsVersion)
     )
         return false
+    return validCollaborationNotificationMessage(message) &&
+        listOf(actions.reply, actions.markRead, actions.mute, actions.dismiss)
+            .all(::validPublicationToken)
+}
+
+/** Bounded immutable candidate shape only; acquired source and current admission are separate. */
+fun validCollaborationNotificationMessage(message: CollaborationMessageNotification): Boolean {
+    val access = message.access
+    if (
+        access.sessionId.length !in 1..128 ||
+            access.sessionId.any { it.code !in 33..126 } ||
+            access.audience.length !in 1..2048 ||
+            !validCollaborationMessageId(access.accountId) ||
+            !validCollaborationMessageId(access.companyId) ||
+            !validCollaborationReadSelection(
+                message.conversationId,
+                message.roomId,
+                listOf(message.eventId),
+                false,
+            ) ||
+            !publicationHash.matches(message.contentHash) ||
+            !validCollaborationNotificationRevision(message.settingsVersion)
+    )
+        return false
     val read = message.readVersion
     if (
         read != null &&
@@ -69,9 +93,7 @@ fun validCollaborationNotificationPublicationBody(
             CollaborationNotificationPreview.Message ->
                 validPreview(message.senderName, 160) && validPreview(message.body, 400)
         }
-    return preview &&
-        listOf(actions.reply, actions.markRead, actions.mute, actions.dismiss)
-            .all(::validPublicationToken)
+    return preview
 }
 
 /** Canonical encoding only, including issuer padding; this does not authenticate the envelope. */

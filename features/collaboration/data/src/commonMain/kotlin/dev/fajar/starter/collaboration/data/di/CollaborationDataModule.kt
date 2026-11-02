@@ -149,6 +149,35 @@ class CollaborationDataModule {
             Clock.System,
         )
 
+    @Single
+    fun issueMessageNotification(
+        journal: CollaborationNotificationPublicationRepository,
+        actions: CollaborationNotificationActionRepository,
+        settings: CollaborationNotificationSettingsRepository,
+        reads: CollaborationReadStateRepository,
+        history: CollaborationHistoryRepository,
+        identities: CollaborationIdentityRepository,
+        lists: CollaborationListRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) =
+        IssueCollaborationMessageNotification(
+            journal,
+            actions,
+            settings,
+            reads,
+            history,
+            identities,
+            lists,
+            sessions,
+            workspaces,
+            server,
+            build,
+            Clock.System,
+        )
+
     @Factory
     fun prepareMessageNotification(
         settings: CollaborationNotificationSettingsRepository,

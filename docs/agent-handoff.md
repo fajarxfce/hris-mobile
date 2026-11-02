@@ -1,5 +1,65 @@
 # Agent continuation — HRIS Mobile
 
+## Admitted issuance accepted; continue exact native validation and cleanup
+
+IssueCollaborationMessageNotification now retains an admitted exact Prepared render,
+using actual native parent, retained company gate, acquired DM, original/self/read/
+settings/peer facts and repeated source checks. It reuses authenticated stored action
+envelopes after uncertainty; new renders preserve the stable card ID and use fresh
+render/operation UUIDs. Singleton nonwaiting mutex,10s budget, no network/selected
+workspace/credential renewal, exact CAS/no hidden retry. Timestamp/event-ID ordering
+is an explicit acquired presentation watermark, NOT causal order. Same inactive source
+cannot revive; changed source stamps or room binding conflict. Ready is not an OS
+lease. [Contract](collaboration-notification-issuance.md),
+[evidence](measurements/chat-notification-issuance-2026-11-02.json).
+
+Focused2 passed67.523s:55 cases/six suites with explicit reuse, five fresh app/DI cases.
+Sixteen domain issuance,11 projection,14 raw publication, nine action-envelope, three
+actual Koin/SQLite issuance-flow and two DI cases. Full3 passed437.218s:3547 desktop/
+513 suites,230 Android-host/37, six proof-host/one, ten build-logic/two,50 browser/four;
+2018 fresh cases/250 suites, zero failures/errors/skips and12 unchanged input hashes.
+Root quality/architecture74/detekt, proof assembly and shared Wasm compile passed.
+Browser executes16 issuance+11 projection+14 publication+9 actions. Actual app tests
+prove reply-token reopen and one retained command through submission flow, lost actual
+journal response recovery, and retained denial across reopen. Fictional HTTP/simulated
+SDK; fixture credentials remain in memory, not notification-specific OS death proof.
+
+Focused1 failed one of55 fresh cases in165.353s: the actual denial fixture compared the
+whole Failure, including its original message, although admission storage intentionally
+retains kind/code and reconstructs a canonical message. Corrected test-only assertions
+before/after reopen; production denial policy was unchanged. No other failure in this
+increment. All .txt drafts under .work/chat-notification-issuance-2026-11-02 are APPLIED/
+STALE; do not reapply. No local heavy job or owned emulator remains at this checkpoint.
+
+Raw-journal full Apple41539628582 atbb95ff1d is still RUNNING (last full Xcode simulator
+app build),150 verified source paths. Follow .work/chat-notification-publication-apple-
+2026-11-02/audit.py only after actual success; no duplicate dispatch or cancellation.
+It EXCLUDES this issuer. Latest audited full Apple remainsc0/41530048115 (895/101,
+full Xcode910s), and native1eb/41523212486 remains the last independent five-case audit.
+Once current Apple finishes, validate a later consolidated source containing issuance
+and any following lifecycle changes; do not claim pending CI as acceptance.
+
+NEXT implement the [native lifecycle boundary](collaboration-notification-publication-plan.md#exact-lifecycle-boundary).
+Supplementary .work/chat-notification-native-next-2026-11-02/plan.txt is design ONLY,
+no native lifecycle code drafted/applied yet. Add finite exact publication revalidation;
+submission acknowledgment and retirement return only opaque target/version details.
+A current account may clean its own older-native-family records without a company
+content grant, but may not publish them. Retirement must strip preview/actions, preserve
+watermarks and reject stale expected versions. OS cancellation matches exact render;
+parent replacement uses independent namespace cleanup. Serialize native publication/
+cleanup and join invalidation; do not claim distributed atomicity with the OS service.
+Then candidate/backfill and focused-thread suppression, Android/iOS callbacks, explicit
+retained-input review UI and notification-specific OS process-death proof. Use UI/UX/
+Compose skills for UI, dedicated emulator only. No tests on user accounts/messages.
+
+Phone19/sourcec0 remains installed with signer/data preserved; no further product build
+or phone install in this increment. Next product version>19: notify immediately before
+install-only using explicit10.77.77.3:5555, never launch/drive its UI while in use. Chat
+UI exists; native notification actions and voice/video/meeting UI still absent. Live304/
+schema116/chat push OFF unchanged. All54 PRD groups remain open; keep long run going,
+commit/push every atomic increment, no final here. No Starter port for HRIS policies.
+Earlier sections below are historical.
+
 ## Raw publication journal accepted; continue admitted issuance and native delivery
 
 The account-owned encrypted publication journal now retains exact rendered previews and
