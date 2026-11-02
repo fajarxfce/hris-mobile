@@ -1,5 +1,61 @@
 # Agent continuation — HRIS Mobile
 
+## Durable raw work wakes validated — 2 November 2026
+
+[Contract](work-wake-storage.md) / [evidence](measurements/work-wake-storage-2026-11-02.json):
+AppDatabase now exposes bounded application-global key/generation/pending metadata.
+It contains no account/company identity, credential or message. Requests collapse
+per stable task key; same-current-generation replay retains existing acknowledgment.
+An old completion cannot erase a newer generation. Transactional key capacity allows
+existing keys to advance at capacity, with no implicit pruning of completed keys.
+Room11→12 and IndexedDB10→11 upgrades preserve prior commands and inbox records.
+
+The first63s /66.872s run found one real cancellation bug among44 SQLite cases:
+Room committed an already-cancelled call before propagating cancellation. Explicit
+checks now precede DAO operations; the common regression also covers acknowledgement.
+Once I/O starts, a durable commit can still race cancellation and must be recovered.
+Corrected focused checks pass in321s /325.382s:44 SQLite,42 browser and two actual
+DI cases, proof Kotlin compilation and static checks. Full root/database-browser/
+app-Wasm checks pass in298s /302.234s on17 unchanged inputs:3,000 desktop,
+209 Android host,42 database-browser and10 build-logic cases, zero failures/skips.
+Mobile's application container binds WorkWakeStore. Six isolated Apple wrappers
+are included but NOT executed on Linux; hosted acceptance remains separate.
+
+**Continue immediately:** after pushing this commit, dispatch Mobile ci.yml with
+scope=apple, capture the exact head SHA/run ID, and audit the downloaded XML,
+including all six AppleWorkWakeStoreTest cases. Last prior Mobile CI41334974289
+is completed, so no active branch CI was found during preparation. Avoid cancelling
+unrelated work. Continue local implementation while hosted checks execute.
+
+Port the15 shared raw source/test/schema files to Starter only after this Mobile
+proof. All14 pre-existing/new baselines match there. Prepared supplementary Starter
+`.work/durable-wake-2026-11-02/port.py` verifies clean committed/pushed Mobile source
+and exact hashes; its check.py runs independent root/database-browser/Android dev/
+lint/production Web checks. Exclude Mobile ApplicationStorageModule: Starter exposes
+raw stores via AppDatabase and has different app composition. Exclude the new Apple
+wrapper until its Mobile hosted proof, then port it and run Starter Apple CI. Keep
+Starter demo/application configuration intact and record the reviewed port in Git.
+
+Then connect actual HRIS recovery. This primitive still has NO wake repository/use
+case, OS scheduler, all-company coordinator or FCM receiver. Use a fixed registered
+task key, fresh non-reused generations and operation-specific capacity mapping;
+persist before requesting execution. Consume native directory/current admission,
+keep fair company/room cursors and sweep startup/reconnect/periodically, including
+after account change. Incoming discovery must work without outgoing local messages.
+Current one-time Android scheduler uses APPEND_OR_REPLACE. Preserve its finishing
+race protection while bounding requests: inspect only unfinished jobs after durable
+wake commit, and test concurrent pending/running transitions, retry/backoff,
+overload and write/enqueue/ack process-death gaps on actual WorkManager. Duplicate
+APPEND of a retained WorkRequest ID can form self-dependency; do not assume otherwise.
+
+Supplementary continuation: `.work/durable-wake-2026-11-02/next.txt` and the parent
+publication scratch design/upstream source. Phone remains verified15 from30d7faab;
+no newer APK/install or server rollout occurred. Native receive/decrypt, notification
+privacy/read/mute/deep links and encrypted replies remain open. Backend push stays
+disabled, private server stays schema103/API-worker2c2a59e3, and all54 PRD groups
+remain open. Owned5560 stopped; preserve unrelated5558/jobs. Temporary8GiB swap
+remains active pending safe RAM headroom. Continue after each push.
+
 ## Processed parent publication validated — 2 November 2026
 
 [Contract](collaboration-parent-readiness.md#processed-publication-and-application-lifetime) /

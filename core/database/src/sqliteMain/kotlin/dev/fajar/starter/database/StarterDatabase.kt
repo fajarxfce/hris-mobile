@@ -12,6 +12,7 @@ import dev.fajar.starter.database.dao.DashboardDao
 import dev.fajar.starter.database.dao.InboxDao
 import dev.fajar.starter.database.dao.ReplicaDao
 import dev.fajar.starter.database.dao.TransferDao
+import dev.fajar.starter.database.dao.WorkWakeDao
 import dev.fajar.starter.database.entities.*
 import dev.fajar.starter.database.entities.InboxEntity
 
@@ -32,10 +33,11 @@ import dev.fajar.starter.database.entities.InboxEntity
             ReplicaTagEntity::class,
             CommandEntity::class,
             CommandArchiveEntity::class,
+            WorkWakeEntity::class,
             BlobEntity::class,
             BlobChunkEntity::class,
         ],
-    version = 11,
+    version = 12,
     exportSchema = true,
     autoMigrations =
         [
@@ -48,6 +50,7 @@ import dev.fajar.starter.database.entities.InboxEntity
             AutoMigration(from = 7, to = 8),
             AutoMigration(from = 9, to = 10),
             AutoMigration(from = 10, to = 11),
+            AutoMigration(from = 11, to = 12),
         ],
 )
 @ConstructedBy(StarterDatabaseConstructor::class)
@@ -63,6 +66,8 @@ abstract class StarterDatabase : RoomDatabase() {
     abstract fun replicaDao(): ReplicaDao
 
     abstract fun commandDao(): CommandDao
+
+    abstract fun workWakeDao(): WorkWakeDao
 
     abstract fun blobDao(): BlobDao
 }

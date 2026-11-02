@@ -1,0 +1,182 @@
+{
+  "date": "2026-11-02",
+  "baseCommit": "1a55c2a5c53cc3d343e2857ed1cd016fd356ff24",
+  "scope": "Bounded application-global raw wake generations, transactional acknowledgment fencing and additive SQLite/IndexedDB schema upgrades. No scheduler or incoming FCM activation.",
+  "sourceSha256": {
+    "core/database/src/commonMain/kotlin/dev/fajar/starter/database/WorkWakeStore.kt": "e6d096442d0e9432422b35c11fb23902cca90a73f32b2c56ec28f1fe55934a50",
+    "core/database/src/commonMain/kotlin/dev/fajar/starter/database/AppDatabase.kt": "e5f891f69bc69a145992f044029a1cab4dce73c1fb8ed6ee3fb1fcdc61f5a4f8",
+    "core/database/src/sqliteMain/kotlin/dev/fajar/starter/database/entities/WorkWakeEntity.kt": "cc6a8687ea648380fe651776454dd1c1113e2e4cf49a0a29562d34f407e7830d",
+    "core/database/src/sqliteMain/kotlin/dev/fajar/starter/database/dao/WorkWakeDao.kt": "0c7da97335dd04349f01f308200c56af8ce12cc9de33f1092d6d76eb1d8f9be5",
+    "core/database/src/sqliteMain/kotlin/dev/fajar/starter/database/RoomWorkWakeStore.kt": "2df4a5f7c4aceb6241f8f95d09373a1770995f188c45930c52f983d44a777925",
+    "core/database/src/sqliteMain/kotlin/dev/fajar/starter/database/StarterDatabase.kt": "d8246483dad98921202076d12303c86753bdeff940fbd6682c74c27f6832304a",
+    "core/database/src/sqliteMain/kotlin/dev/fajar/starter/database/RoomAppDatabase.kt": "10d1a4731915ceb73f8e44c8ba77e643669b4a3498f1cc2d4093ce31ffbb6166",
+    "core/database/src/wasmJsMain/kotlin/dev/fajar/starter/database/BrowserDatabase.kt": "b19e8f20f3d906ac08defc79179dcf24aa7e14a16f0dfa8247739998844a352a",
+    "core/database/src/wasmJsMain/kotlin/dev/fajar/starter/database/IndexedDbWorkWakeStore.kt": "503670285d6cc8a78caed74cabc08e064c1234a26bc5c47b78a751dea8afd114",
+    "core/database/src/commonTest/kotlin/dev/fajar/starter/database/WorkWakeStoreContract.kt": "745fad177d47edaf6d64d1f17bb568c017d9633eb25f6e613a3df59bb3d6e9bd",
+    "core/database/src/desktopTest/kotlin/dev/fajar/starter/database/WorkWakeStoreTest.kt": "169658db399c83d98aadfc5975f48c9db863012dc3b70a7f46dcc9b65c746ebf",
+    "core/database/src/wasmJsTest/kotlin/dev/fajar/starter/database/BrowserWorkWakeStoreTest.kt": "6ef7ab14aebad0f674dc329fc6e7326cef723f983d14cd0df4ee72040ee86a1b",
+    "core/database/src/wasmJsTest/kotlin/dev/fajar/starter/database/WorkWakeMigrationFixture.kt": "82c8546f8b12f8a62fdd7307be70c8a2ab7081eeadf3a24d1eb770806a9ea112",
+    "core/database/src/desktopTest/kotlin/dev/fajar/starter/database/WorkWakeMigrationTest.kt": "ad215bef8dc4ae2ea03287e1f44df28c7c00224e79e635bcf530b6b8fe654f64",
+    "core/database/schemas/dev.fajar.starter.database.StarterDatabase/12.json": "319a4c028e36fd14eb47341e8367f451a38c1dbec7f16aad9b77c53dd08e9ba3",
+    "core/database/src/iosTest/kotlin/dev/fajar/starter/database/AppleWorkWakeStoreTest.kt": "67c903ae0084658566d97bc7308d70362a44e4c071dc3ed638361e8bb792c1a0",
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/di/ApplicationStorageModule.kt": "05767b83eaf07b8a25c13dbdd865b03c534af1d08290eec06bc4b930e0677cc5"
+  },
+  "initialRun": {
+    "exitCode": 1,
+    "wallSeconds": 66.872,
+    "inputsUnchanged": true,
+    "command": [
+      "xvfb-run",
+      "-a",
+      "./gradlew",
+      ":core:database:desktopTest",
+      ":core:database:wasmJsBrowserTest",
+      ":apps:shared:desktopTest",
+      "--tests",
+      "*CollaborationBindingsTest",
+      ":apps:collaboration-proof:compileDebugKotlin",
+      ":formatCheck",
+      ":architectureCheck",
+      ":detekt",
+      "-Pkotlin.compiler.execution.strategy=in-process",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=1",
+      "-Dorg.gradle.jvmargs=-Xmx1536m"
+    ]
+  },
+  "initialGradleSeconds": 63,
+  "initialDatabaseReports": {
+    "tests": 44,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 0
+  },
+  "initialFailure": "An already-cancelled caller reached the Room transaction, committed a pending wake, then received cancellation. Explicit cancellation checks now precede DAO operations; the retained regression also checks cancelled acknowledgment.",
+  "correctedFocusedRun": {
+    "exitCode": 0,
+    "wallSeconds": 325.382,
+    "inputsUnchanged": true,
+    "command": [
+      "xvfb-run",
+      "-a",
+      "./gradlew",
+      ":core:database:desktopTest",
+      ":core:database:wasmJsBrowserTest",
+      ":apps:shared:desktopTest",
+      "--tests",
+      "*CollaborationBindingsTest",
+      ":apps:collaboration-proof:compileDebugKotlin",
+      ":formatCheck",
+      ":architectureCheck",
+      ":detekt",
+      "-Pkotlin.compiler.execution.strategy=in-process",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=1",
+      "-Dorg.gradle.jvmargs=-Xmx1536m"
+    ]
+  },
+  "correctedFocusedGradleSeconds": 321,
+  "correctedFocusedReports": {
+    "database-desktop": {
+      "tests": 44,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "database-browser": {
+      "tests": 42,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "bindings": {
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "finalRun": {
+    "exitCode": 0,
+    "wallSeconds": 302.234,
+    "inputsUnchanged": true,
+    "command": [
+      "xvfb-run",
+      "-a",
+      "./gradlew",
+      ":check",
+      ":core:database:wasmJsBrowserTest",
+      ":apps:shared:compileKotlinWasmJs",
+      "-Pkotlin.compiler.execution.strategy=in-process",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=1",
+      "-Dorg.gradle.jvmargs=-Xmx1536m"
+    ]
+  },
+  "finalGradleSeconds": 298,
+  "reports": {
+    "desktopTest": {
+      "tests": 3000,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "testAndroidHostTest": {
+      "tests": 209,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "databaseBrowser": {
+      "tests": 42,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "buildLogic": {
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "sqliteVersion": 12,
+  "previousSqliteVersion": 11,
+  "indexedDbVersion": 11,
+  "previousIndexedDbVersion": 10,
+  "portableDesktopAndBrowserNewCases": 14,
+  "appleCasesPrepared": 6,
+  "appleCasesExecutedLocally": 0,
+  "checked": [
+    "One application-global record per registered task key stores only bounded key/generation/pending metadata. It does not impersonate an account/session and contains no message, credential or remote authority.",
+    "Request atomically retains a fresh caller generation as pending. Same-current-generation replay returns existing state, including prior acknowledgment. Generation creation/non-reuse and registered task admission remain caller policy.",
+    "Acknowledgment updates only the exact still-pending generation. Concurrent newer requests remain pending in either transaction order; no historical generation or owned payload is overwritten.",
+    "Key capacity is checked inside the same write transaction. Forty concurrent new-key requests admit exactly eight when capacity is eight; existing keys can still advance at capacity. Completed keys remain reserved.",
+    "Already-cancelled mutations are rejected before DAO/IndexedDB I/O. Once transaction I/O begins, cancellation may race a durable commit; callers must recover observed generations rather than assume rollback.",
+    "Pending and acknowledged states survive database close/reopen and account replacement. SQLite11 and a frozen genuine IndexedDB10 schema preserve prior stored commands/inbox while adding wake storage.",
+    "44 real SQLite and42 real browser database cases plus two application DI cases, proof Kotlin compilation and static checks pass after the cancellation fix.",
+    "Final checks include the application raw-store binding and six isolated Apple test wrappers. Their native execution requires the separate hosted Apple run; Linux checks do not establish Apple acceptance."
+  ],
+  "limits": [
+    "No all-company coordinator, durable wake scheduling, FCM receive/decrypt, notifications or inline reply is connected by this raw primitive.",
+    "Only caller-created fresh non-reused generations are safe. Keys are stable application task identifiers, never raw FCM identifiers or account/message data.",
+    "Preserving pending data and safely coordinating platform enqueue are separate. The upcoming bounded scheduler must test write/enqueue/ack process-death gaps and retain APPEND_OR_REPLACE finishing-race protection.",
+    "Starter shared-source baselines match, but no port or hosted Apple result is claimed here until separately recorded.",
+    "No new APK/phone/server rollout in this increment. Phone remains verified15 from30d7faab; backend collaboration delivery stays disabled and all54 PRD groups remain open."
+  ],
+  "localEvidenceSha256": {
+    "check-1.log": "4d7da62bdbf49f6e8134a9010f465411cc953f9582ee08a76f1105c8903a1fdb",
+    "check-1.json": "4fb3fd49deed71f317b7b4b49293158602b96c5a93755989dc7cf9494e3c9d18",
+    "check-2.log": "b8a31d0b1fe5aa67f60d73d7375cd8d6b70db55793169fc39fe5fe0b6382f8dc",
+    "check-2.json": "8447614de4d4af79cddc2c745bc4388280888e66b8ccdf4db8112600cdca53a4",
+    "check-3.log": "4e2fd7b2904c460a90dc5d39de89cef120d7906754f054142b9818e8386049e6",
+    "check-3.json": "9f18f2b18eef4ecd54f0819382d0db938e0b42b127132dd36b46d0ea4458b781",
+    "inputs-1.json": "fd993de60eac50be965193d95de437a6e2ae1112e58941ed9eb12f607b03e49f",
+    "inputs-2.json": "c4dec196c1f1d98f2e83e2f5166fe7e2f9a54f6c8a044ff6d5df7ff5ee8120cb",
+    "inputs-3.json": "2241108175a4d53e5cafe9707ccad15dcef20009b7d22a96356ca52196871a0d",
+    "reports-2.json": "1dcd2c0cc65a0f2691f087628e45d58af1af27e746d4206f9f8ab375df3c24b9"
+  }
+}

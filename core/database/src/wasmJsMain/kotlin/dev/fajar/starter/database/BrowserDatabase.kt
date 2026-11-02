@@ -64,6 +64,7 @@ private class IndexedDbAppDatabase(name: String) : AppDatabase {
         IndexedDbReplicaStore(replicaChanges) { database.await<JsAny>() }
     override val commands: CommandStore =
         IndexedDbCommandStore(commandChanges) { database.await<JsAny>() }
+    override val workWakes: WorkWakeStore = IndexedDbWorkWakeStore { database.await<JsAny>() }
     override val blobs: BlobStore = IndexedDbBlobStore(blobChanges) { database.await<JsAny>() }
 
     override fun close() {
@@ -100,10 +101,13 @@ private class IndexedDbInboxStore(
 
 @JsFun(
     """(name) => new Promise((resolve, reject) => {
-    const request = indexedDB.open(name, 10);
+    const request = indexedDB.open(name, 11);
     let settled = false;
     request.onupgradeneeded = event => {
         const db = request.result;
+        if (event.oldVersion < 11) {
+            db.createObjectStore('work_wakes', {keyPath:'key'});
+        }
         if (event.oldVersion < 10) {
             db.createObjectStore('command_archives', {keyPath:['accountKey', 'partition', 'id']});
         }
