@@ -20,16 +20,22 @@ class BeginCollaborationNotificationReplyRecoveryCycle(
     private val server: IdentityServer,
     private val build: AppBuild,
 ) {
-    suspend operator fun invoke(): AppResult<CollaborationNotificationReplyRecoverySnapshot?> {
+    suspend operator fun invoke(
+        expectedParent: CollaborationNativeParent? = null
+    ): AppResult<CollaborationNotificationReplyRecoverySnapshot?> {
         currentCoroutineContext().ensureActive()
-        return withTimeoutOrNull(8_000) { begin() }
+        return withTimeoutOrNull(8_000) { begin(expectedParent) }
             ?: notificationReplyCycleFailure(FailureKind.Timeout)
     }
 
-    private suspend fun begin(): AppResult<CollaborationNotificationReplyRecoverySnapshot?> {
+    private suspend fun begin(
+        expectedParent: CollaborationNativeParent?
+    ): AppResult<CollaborationNotificationReplyRecoverySnapshot?> {
         val captured = sessions.capturePushParent(server, build)
         if (captured is AppResult.Failed) return captured
         val parent = (captured as AppResult.Success).value
+        if (expectedParent != null && parent != expectedParent)
+            return notificationReplyCycleFailure(FailureKind.Unauthorized)
         val access =
             CollaborationRecoveryAccess(parent.sessionId, parent.audience, parent.accountId)
         val found = cursors.current(access)

@@ -1,5 +1,60 @@
 # Agent continuation — HRIS Mobile
 
+## Application reply recovery accepted; build/install release19, then native publication
+
+The real Koin application now runs a bounded reply phase inside global chat recovery.
+It uses the durable Begin/Advance/Settle/Finish cycle, four IDs/eight seconds total,
+two seconds per attempt, no waiting processor or in-invocation wrap. Begin checks the
+worker's captured native parent before storage. Company denial retains input; other
+failures retain retry state across later healthy pages/reopen. Global recovery reserves
+reply8s/priority20s/company50s within90s; independent failures beat healthy continuation
+and cannot skip the ordinary company turn or acknowledge pending work. The isolated
+company-only proof fixture explicitly supplies no reply work, not native reply proof.
+[Worker contract](collaboration-notification-reply-worker.md),
+[evidence](measurements/chat-notification-reply-worker-2026-11-02.json).
+
+Focused1 passed 73 cases/five suites in 171.264s: 18 cycle domain, seven actual SQLite/
+Koin reply-worker, 17 existing submission-flow, 29 global worker and two DI cases.
+Full2 passed in 415.399s: 3514 desktop/510 suites, 230 Android-host/37, six proof-host/
+one, ten build-logic/two, 18 actual browser cycle cases/one. 1953 fresh cases/244 suites,
+zero failures/errors/skips; explicit reuse and all ten input hashes unchanged.
+Format/architecture74/detekt, proof APK assembly and shared Wasm compile passed.
+No failed attempts. SQLite fixture credentials stay in memory; no OS-death reply-input,
+native display or callback acceptance yet. Source drafts under .work/chat-notification-
+reply-worker-2026-11-02 are now APPLIED; do not reapply them.
+
+NEXT release: .work/release-phone-2026-11-02-build19 contains PREPARED scripts only.
+Read-only pre-build check found authorized phone10.77.77.3:5555 connected on code18;
+code19 is newer. No installation or UI driving occurred. Build from this clean pushed
+source using build-arm64.py (assembleDevRelease +lint, existing dev signer, private API),
+verify-arm64.py, owned emulator5562 cold startup/screenshot inspection, then preflight
+and notify immediately before install.py --install-only. Preserve data/signature and
+Google session; never launch/drive user phone UI. Use owned cleanup stop-emulator.py
+on either emulator outcome; startup failure must also clean up the recorded owned PID.
+No local heavy job remains after full2. Existing CodePush emulator5580 is unrelated and
+must remain untouched. Do not repeat the failed long local provider-worker attempts.
+Keep tracked files clean during the product build; archive other CI results in .work
+until build's clean-source verification completes.
+
+Dispatch full Apple on this committed source with the prepared .work/chat-notification-
+reply-worker-apple-2026-11-02/dispatch.py after push. It checks 141 source paths and
+records the dispatch before sending; on uncertain result recover the existing run,
+never blindly dispatch twice. Latest accepted full Xcode remains 8ca/41520480368
+(863 simulator cases/98 suites), excluding seek/cycle/worker. Control41523212264 and
+native41523212486 at1eb last running; cycle9129 control41528135677/native41528135379
+pending and may be superseded by this push. No new native result is accepted yet.
+Prepared native1eb audit/sources are .work/chat-reply-seek-native-hosted-2026-11-02;
+download its actual final artifact first, then audit. Existing five scenarios do not
+exercise notification replies. Latest audited native remains1a92 below.
+
+After release installation, continue [native publication/receiver plan](collaboration-notification-publication-plan.md):
+encrypted exact-render journal, admitted issuance, owned OS publication and actions,
+explicit retained-input review UI, and actual native process-death proof. Chat push
+stays OFF until usable. This release adds internal recovery, not voice/video/meeting
+UI. Phone18/source42f5d157 and live304/schema116 remain unchanged at this checkpoint.
+All54 PRD groups remain open; continue long run, atomic commits and push each. No
+Starter port for this HRIS policy. Earlier checkpoints below are historical.
+
 ## Durable reply cycle accepted; connect the bounded application worker next
 
 The encrypted cursor now retains a cycle UUID and initial/in-flight/sticky-retry/

@@ -5,6 +5,7 @@ import dev.fajar.starter.app.bootstrap.ApplicationCollaborationLifetime
 import dev.fajar.starter.app.di.createAppContainer
 import dev.fajar.starter.app.notifications.CollaborationNotificationCommands
 import dev.fajar.starter.app.notifications.CollaborationNotificationReplies
+import dev.fajar.starter.app.work.CollaborationNotificationReplyRecoveryWorker
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.repositories.*
 import dev.fajar.starter.collaboration.domain.usecases.*
@@ -285,6 +286,10 @@ class CollaborationBindingsTest {
                 assertNotNull(container.koin.get<CollaborationNotificationReplyRepository>())
                 assertNotNull(
                     container.koin.get<CollaborationNotificationReplyRecoveryCursorRepository>()
+                )
+                assertSame(
+                    container.koin.get<CollaborationNotificationReplyRecoveryWorker>(),
+                    container.koin.get<CollaborationNotificationReplyRecoveryWorker>(),
                 )
                 assertNotNull(container.koin.get<ReadCollaborationNotificationReplyRecovery>())
                 assertNotNull(container.koin.get<AdvanceCollaborationNotificationReplyRecovery>())

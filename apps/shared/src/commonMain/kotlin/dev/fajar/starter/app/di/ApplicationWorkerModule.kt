@@ -10,6 +10,7 @@ import dev.fajar.starter.app.work.CollaborationDeliveryWorker
 import dev.fajar.starter.app.work.CollaborationDraftRecovery
 import dev.fajar.starter.app.work.CollaborationIncomingHistoryRecovery
 import dev.fajar.starter.app.work.CollaborationIncomingRecovery
+import dev.fajar.starter.app.work.CollaborationNotificationReplyRecoveryWorker
 import dev.fajar.starter.app.work.CollaborationPriorityRecovery
 import dev.fajar.starter.app.work.CollaborationRecoveryWorker
 import dev.fajar.starter.app.work.InboxPushWorker
@@ -25,6 +26,9 @@ import org.koin.dsl.module
 fun applicationWorkerModule() = module {
     single { CollaborationNotificationCommands(get(), get(), get(), get(), get()) }
     single { CollaborationNotificationReplies(get(), get(), get(), get(), get(), get()) }
+    single {
+        CollaborationNotificationReplyRecoveryWorker(get(), get(), get(), get(), get(), get())
+    }
     single {
         val inbox = inject<InboxPushWorker>()
         val chat = inject<CollaborationRecoveryWorker>()
@@ -68,6 +72,7 @@ fun applicationWorkerModule() = module {
         val parent = inject<ApplicationCollaborationLifetime>()
         val company = inject<CollaborationCompanyRecovery>()
         val priority = inject<CollaborationPriorityRecovery>()
+        val replies = inject<CollaborationNotificationReplyRecoveryWorker>()
         CollaborationRecoveryWorker(
             states = lazy { parent.value.state },
             ensureWake = get(),
@@ -79,6 +84,7 @@ fun applicationWorkerModule() = module {
             devices = get(),
             admit = get(),
             build = get(),
+            recoverReplies = { replies.value(it) },
             recoverPriority = { priority.value(it) },
             recoverCompany = { company.value(it) },
         )

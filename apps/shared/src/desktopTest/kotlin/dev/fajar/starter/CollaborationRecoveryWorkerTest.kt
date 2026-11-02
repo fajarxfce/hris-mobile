@@ -14,6 +14,119 @@ import kotlinx.coroutines.test.*
 
 class CollaborationRecoveryWorkerTest {
     @Test
+    fun failedReplyRetainsWakeDespiteHealthyContinuationsAndStillReservesOtherLanes() = runTest {
+        val f = RecoveryWorkerFixture(testScheduler, 2)
+        val unavailable = Failure(FailureKind.Network, "Fictional reply failure")
+        val order = mutableListOf<String>()
+        f.onReplies = {
+            order += "reply"
+            SyncResult.Retry(unavailable)
+        }
+        f.onPriority = {
+            order += "priority"
+            SyncResult.Retry()
+        }
+        f.onCompany = {
+            order += "company"
+            SyncResult.Retry()
+        }
+        assertEquals(SyncResult.Retry(unavailable), f.worker()())
+        assertEquals(listOf("reply", "priority", "company"), order)
+        assertEquals(listOf(recoveryId(1)), f.attempted)
+        assertNotNull(f.wake)
+        assertEquals(0, f.acknowledgments)
+        assertTrue(f.scheduled.isEmpty())
+    }
+
+    @Test
+    fun priorityFailureWinsOverReplyContinuationBeforeTheCompanySweepEnds() = runTest {
+        val f = RecoveryWorkerFixture(testScheduler, 2)
+        val unavailable = Failure(FailureKind.Network, "Fictional priority failure")
+        f.onReplies = { SyncResult.Retry() }
+        f.onPriority = { SyncResult.Retry(unavailable) }
+        assertEquals(SyncResult.Retry(unavailable), f.worker()())
+        assertEquals(listOf(recoveryId(1)), f.attempted)
+        assertNotNull(f.wake)
+        assertTrue(f.scheduled.isEmpty())
+    }
+
+    @Test
+    fun replyDeadlineJoinsAndLeavesBothPriorityAndCompanyBudgetsAvailable() = runTest {
+        val f = RecoveryWorkerFixture(testScheduler, 1)
+        var joined = false
+        f.onReplies = {
+            try {
+                awaitCancellation()
+            } finally {
+                joined = true
+            }
+        }
+        f.onPriority = {
+            assertTrue(joined)
+            delay(19_000)
+            SyncResult.Complete
+        }
+        f.onCompany = {
+            assertTrue(joined)
+            delay(49_000)
+            SyncResult.Complete
+        }
+        val start = testScheduler.currentTime
+        val result = assertIs<SyncResult.Retry>(f.worker()())
+        assertEquals("client.collaboration_recovery_reply_timeout", result.failure?.code)
+        assertEquals(76_000L, testScheduler.currentTime - start)
+        assertTrue(joined)
+        assertEquals(listOf(recoveryId(1)), f.attempted)
+        assertNotNull(f.wake)
+        assertEquals(0, f.acknowledgments)
+        assertEquals(0, f.states.subscriptionCount.value)
+    }
+
+    @Test
+    fun healthyReplyContinuationCannotAcknowledgeUntilItsLaterFinishedTurn() = runTest {
+        val f = RecoveryWorkerFixture(testScheduler, 1)
+        f.onReplies = { SyncResult.Retry() }
+        assertEquals(SyncResult.Complete, f.worker()())
+        assertNotNull(f.wake)
+        assertEquals(0, f.acknowledgments)
+        assertEquals(listOf(CollaborationRecoveryWake.WORK_KEY), f.scheduled)
+        f.onReplies = { SyncResult.Complete }
+        assertEquals(SyncResult.Complete, f.worker()())
+        assertNull(f.wake)
+        assertEquals(1, f.acknowledgments)
+    }
+
+    @Test
+    fun parentReplacementCancelsAndJoinsReplyBeforeStartingOtherLanes() = runTest {
+        val f = RecoveryWorkerFixture(testScheduler, 1)
+        val entered = CompletableDeferred<Unit>()
+        var joined = false
+        var priorities = 0
+        f.onReplies = {
+            try {
+                entered.complete(Unit)
+                awaitCancellation()
+            } finally {
+                joined = true
+            }
+        }
+        f.onPriority = {
+            priorities++
+            SyncResult.Complete
+        }
+        val job = async { f.worker()() }
+        entered.await()
+        f.states.value = f.publication(null)
+        assertIs<SyncResult.Blocked>(job.await())
+        assertTrue(joined)
+        assertEquals(0, priorities)
+        assertTrue(f.attempted.isEmpty())
+        assertNotNull(f.wake)
+        assertEquals(0, f.acknowledgments)
+        assertEquals(0, f.states.subscriptionCount.value)
+    }
+
+    @Test
     fun blockedPriorityRetainsWakeWhileOtherOwnedCompanyWorkStillRuns() = runTest {
         val f = RecoveryWorkerFixture(testScheduler, 1)
         val denied = Failure(FailureKind.AccessDenied, "Fictional company denial")
@@ -34,7 +147,7 @@ class CollaborationRecoveryWorkerTest {
             SyncResult.Retry(unavailable)
         }
         val worker = f.worker()
-        repeat(2) { assertEquals(SyncResult.Complete, worker()) }
+        repeat(2) { assertEquals(SyncResult.Retry(unavailable), worker()) }
         assertEquals(SyncResult.Retry(unavailable), worker())
         assertEquals((1..3).map(::recoveryId), f.attempted)
         assertEquals(3, priorities)

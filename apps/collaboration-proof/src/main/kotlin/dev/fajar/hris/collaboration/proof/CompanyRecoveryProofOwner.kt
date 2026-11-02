@@ -170,7 +170,9 @@ internal class CompanyRecoveryProofOwner(context: Context) {
                 build,
                 clock,
             ),
-            // This isolated company-sweep fixture has no push hints. Native priority is
+            // This isolated company-sweep fixture has no reply inputs or push hints.
+            recoverReplies = { SyncResult.Complete },
+            // Native priority is
             // exercised separately through the actual application container and Matrix SDK.
             recoverPriority = { SyncResult.Complete },
             build = build,

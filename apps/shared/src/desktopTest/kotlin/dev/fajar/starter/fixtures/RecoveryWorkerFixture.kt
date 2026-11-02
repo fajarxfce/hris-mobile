@@ -247,6 +247,8 @@ internal class RecoveryWorkerFixture(val scheduler: TestCoroutineScheduler, coun
             ) = error("No implicit read reopening")
         }
 
+    var onReplies: suspend (CollaborationNativeParent) -> SyncResult = { SyncResult.Complete }
+
     var onPriority: suspend (CollaborationNativeParent) -> SyncResult = { SyncResult.Complete }
 
     fun worker(platform: AppPlatform = AppPlatform.Android) =
@@ -268,6 +270,7 @@ internal class RecoveryWorkerFixture(val scheduler: TestCoroutineScheduler, coun
                 clock,
                 scheduler.timeSource,
             ),
+            { onReplies(it) },
             { onPriority(it) },
             build.copy(platform = platform),
         ) { grant ->

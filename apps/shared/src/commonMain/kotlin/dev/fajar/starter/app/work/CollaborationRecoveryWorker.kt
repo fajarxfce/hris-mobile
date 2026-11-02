@@ -24,6 +24,7 @@ class CollaborationRecoveryWorker(
     private val updateProgress: UpdateCollaborationRecoveryProgress,
     private val devices: LoadCollaborationDevicePage,
     private val admit: AcquireCollaborationBackgroundAdmission,
+    private val recoverReplies: suspend (CollaborationNativeParent) -> SyncResult,
     private val recoverPriority: suspend (CollaborationNativeParent) -> SyncResult,
     private val build: AppBuild,
     private val recoverCompany: suspend (CollaborationBackgroundAdmission) -> SyncResult,
@@ -70,11 +71,23 @@ class CollaborationRecoveryWorker(
     private suspend fun process(parent: CollaborationNativeParent): SyncResult {
         val wake = ensureWake()
         if (wake is AppResult.Failed) return retry(wake)
+        val replies =
+            withTimeoutOrNull(8.seconds) { recoverReplies(parent) }
+                ?: SyncResult.Retry(failure("reply_timeout", FailureKind.Timeout))
+        currentCoroutineContext().ensureActive()
         // Priority cannot consume the ordinary company's reserved turn or reset its seek.
         val priority =
             withTimeoutOrNull(20.seconds) { recoverPriority(parent) }
                 ?: SyncResult.Retry(failure("priority_timeout", FailureKind.Timeout))
         currentCoroutineContext().ensureActive()
+        return companies(parent, (wake as AppResult.Success).value, independent(replies, priority))
+    }
+
+    private suspend fun companies(
+        parent: CollaborationNativeParent,
+        wake: CollaborationRecoveryWake,
+        independent: SyncResult,
+    ): SyncResult {
         val found = readProgress()
         if (found is AppResult.Failed) return retry(found)
         var snapshot = (found as AppResult.Success).value
@@ -84,11 +97,7 @@ class CollaborationRecoveryWorker(
         )
             return SyncResult.Blocked(collaborationRecoveryParentChanged())
         if (snapshot.progress?.sweep == null) {
-            val begun =
-                updateProgress(
-                    snapshot,
-                    CollaborationRecoveryChange.Begin((wake as AppResult.Success).value),
-                )
+            val begun = updateProgress(snapshot, CollaborationRecoveryChange.Begin(wake))
             if (begun is AppResult.Failed) return retry(begun)
             snapshot = (begun as AppResult.Success).value.snapshot
         }
@@ -117,7 +126,7 @@ class CollaborationRecoveryWorker(
             if (completed is AppResult.Failed) return retry(completed)
             snapshot = (completed as AppResult.Success).value.snapshot
         }
-        if (directory.nextAfterCompanyId != null) return continuePending()
+        if (directory.nextAfterCompanyId != null) return continueWhenHealthy(independent)
         val sweep = requireNotNull(snapshot.progress?.sweep)
         val healthyContinuation =
             sweep.continuationRequired && !sweep.retryRequired && sweep.inFlightCompanyId == null
@@ -125,16 +134,10 @@ class CollaborationRecoveryWorker(
         if (finished is AppResult.Failed) return retry(finished)
         val completion =
             (finished as AppResult.Success).value.completedWake
-                ?: return if (healthyContinuation) continuePending()
+                ?: return if (healthyContinuation) continueWhenHealthy(independent)
                 else SyncResult.Retry(failure("sweep_pending"))
-        // Keep the independent wake until both lanes have finished; a failed priority never
-        // skips the fair company turn above.
-        when (priority) {
-            is SyncResult.Retry ->
-                return if (priority.failure == null) continuePending() else priority
-            is SyncResult.Blocked -> return SyncResult.Retry(priority.failure)
-            SyncResult.Complete -> Unit
-        }
+        // An independent phase cannot acknowledge a wake while another phase is pending.
+        if (independent != SyncResult.Complete) return continueWhenHealthy(independent)
         val acknowledged = completeWake(completion)
         if (acknowledged is AppResult.Failed) return retry(acknowledged)
         // An ACK can lose to a new wake; check even after success because a later write can win.
@@ -143,6 +146,20 @@ class CollaborationRecoveryWorker(
         return if ((pending as AppResult.Success).value == null) SyncResult.Complete
         else continuePending()
     }
+
+    private fun independent(vararg results: SyncResult): SyncResult {
+        for (result in results) when (result) {
+            is SyncResult.Blocked -> return SyncResult.Retry(result.failure)
+            is SyncResult.Retry -> if (result.failure != null) return result
+            SyncResult.Complete -> Unit
+        }
+        return if (results.any { it is SyncResult.Retry }) SyncResult.Retry()
+        else SyncResult.Complete
+    }
+
+    private suspend fun continueWhenHealthy(independent: SyncResult): SyncResult =
+        if (independent is SyncResult.Retry && independent.failure != null) independent
+        else continuePending()
 
     private suspend fun company(
         parent: CollaborationNativeParent,

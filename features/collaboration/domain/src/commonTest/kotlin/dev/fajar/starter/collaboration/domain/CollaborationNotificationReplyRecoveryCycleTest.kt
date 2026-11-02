@@ -9,6 +9,23 @@ import kotlinx.coroutines.test.runTest
 
 class CollaborationNotificationReplyRecoveryCycleTest {
     @Test
+    fun staleCapturedCallerCannotReadOrStartAnotherNativeParentsCycle() = runTest {
+        val f = Fixture()
+        val parent = f.base.records.first().candidate.parent
+        for (wrong in
+            listOf(
+                parent.copy(sessionId = "replaced-local"),
+                parent.copy(nativeSessionId = f.base.id(901)),
+                parent.copy(accountId = f.base.id(902)),
+                parent.copy(audience = "https://another.example.test/"),
+            )) assertKind(FailureKind.Unauthorized, f.beginUseCase(wrong))
+        assertEquals(0, f.base.cursorReads)
+        assertEquals(0, f.base.advances)
+        assertTrue(f.base.pageAfters.isEmpty())
+        assertNotNull(expect(f.beginUseCase(parent)))
+    }
+
+    @Test
     fun newCycleStartsAtMinimumWhileRepeatedBeginKeepsTheSameActiveCycle() = runTest {
         val f = Fixture()
         f.base.cursor = CollaborationNotificationReplyRecoveryCursor(f.base.id(500), 100)

@@ -21,7 +21,8 @@ newer cycle even at the same sequence.
 ## Beginning and discovering a cycle
 
 `BeginCollaborationNotificationReplyRecoveryCycle` captures the native parent and
-keeps an interrupted active cycle. For an absent, legacy or finished cycle it
+keeps an interrupted active cycle. A worker passes its expected native parent;
+mismatch is rejected before storage reads or writes. For an absent, legacy or finished cycle it
 validates a bounded pending-input probe before starting from the minimum sequence.
 An empty queue returns no work without creating a cursor or requesting a history
 key. This also works for a newly signed-in account with no prior history key.
@@ -57,23 +58,18 @@ parent ownership after pending storage. Late account/family changes withhold suc
 while preserving committed state. Retained local ownership and current send
 admission remain separate. Reopening storage does not grant a token or a send.
 
-## Integration still required
+## Application integration
 
-These domain transitions, encrypted SQLite/IndexedDB storage and assembled data
-bindings are implemented. Actual application/global recovery wiring is next:
-reserve a bounded independent reply phase; advance before each attempt; settle its
-result; finish the durable cycle; combine wake completion with priority and ordinary
-company recovery. Any failure/backoff must take precedence over a healthy immediate
-continuation. Denied-only completed cycles must not become an immediate retry loop.
-
-The previous application-worker draft with only ephemeral page outcomes is obsolete.
-Its healthy last page could forget an earlier transient input. The replacement must
-use Begin/Advance/Settle/Finish and include actual worker budget, cancellation,
-other-company progress and wake acknowledgment tests before activation.
+The [bounded application worker](collaboration-notification-reply-worker.md) now
+uses these transitions inside an independent global recovery phase. It reserves
+ordinary company progress and combines wake acknowledgment across pending phases.
+Its tests cover actual application/SQLite recovery separately from global budget,
+lifetime and wake coordination. See [worker validation](measurements/chat-notification-reply-worker-2026-11-02.json).
 
 Native display journal/issuer/callbacks, notification reply review UI and OS-death
 reply-input acceptance remain outstanding. Chat push remains off. The existing
 native interop scenarios cover other recovery paths, not this input lifecycle.
+[Publication follow-through](collaboration-notification-publication-plan.md).
 
 Validation: [original seek](measurements/chat-notification-reply-recovery-2026-11-02.json)
 and [durable cycle](measurements/chat-notification-reply-cycle-2026-11-02.json).
