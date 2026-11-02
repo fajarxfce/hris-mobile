@@ -1,5 +1,26 @@
 # Agent continuation — HRIS Mobile
 
+## Apple wake proof running; Starter port under validation — 2 November 2026
+
+Mobile storage commit`be8ebc7b03bf765a4d4f34c493be4653d6e56d7f` is pushed.
+[Apple-only CI41396150119](https://github.com/fajarxfce/hris-mobile/actions/runs/41396150119)
+is in progress at that exact head. Its result is NOT yet accepted. Audit downloaded
+XML, especially six AppleWorkWakeStoreTest cases, plus simulator compilation/Xcode
+before recording success. Do not dispatch another Apple run on this branch while
+it is running; the concurrency group cancels its preceding run.
+
+The15 shared raw source/test/schema files are now applied to Starter from that
+Mobile commit; the Apple wrapper and Mobile app binding are excluded. Independent
+Starter root/database-browser/Android/lint/production-Web checks are running under
+`.work/durable-wake-2026-11-02/check.py` (first run). Keep its15 input files frozen;
+retain failures and fixes if needed, then document/commit/push. Source hashes and
+original Starter head are in its port.json. No Starter acceptance is claimed yet.
+
+Continue HRIS fixed-key durable wake repository/use cases and bounded scheduler
+coordination while Apple CI runs; one heavy local Gradle build at a time. Current
+raw primitive remains unconnected to incoming FCM/all-company receive. All other
+boundaries and next steps in the following checkpoint remain in force.
+
 ## Durable raw work wakes validated — 2 November 2026
 
 [Contract](work-wake-storage.md) / [evidence](measurements/work-wake-storage-2026-11-02.json):

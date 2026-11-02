@@ -178,5 +178,13 @@
     "inputs-2.json": "c4dec196c1f1d98f2e83e2f5166fe7e2f9a54f6c8a044ff6d5df7ff5ee8120cb",
     "inputs-3.json": "2241108175a4d53e5cafe9707ccad15dcef20009b7d22a96356ca52196871a0d",
     "reports-2.json": "1dcd2c0cc65a0f2691f087628e45d58af1af27e746d4206f9f8ab375df3c24b9"
+  },
+  "hostedApple": {
+    "runId": 41396150119,
+    "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/41396150119",
+    "headSha": "be8ebc7b03bf765a4d4f34c493be4653d6e56d7f",
+    "scope": "apple",
+    "observedStatus": "in_progress",
+    "acceptance": false
   }
 }
