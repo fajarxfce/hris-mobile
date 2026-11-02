@@ -1,8 +1,9 @@
 # Chat notification integration
 
 The managed-pusher client operation is implemented. It is not yet invoked
-automatically by the application or worker. Incoming FCM recovery, decrypted
-notifications and inline replies remain required before enabling backend delivery.
+automatically by the application or worker. Native [push receive routing](collaboration-push-receive.md) now persists
+recovery wakes. Live FCM acceptance, decrypted notifications and inline replies remain
+required before enabling backend delivery.
 
 `ActivateCollaborationPusher` requires the current admitted company/native parent,
 an active matching registered device and an already installed owned runtime. It

@@ -60,16 +60,16 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
 
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         if notification.request.trigger is UNPushNotificationTrigger {
-            guard let fields = inboxFields(notification.request.content.userInfo) else { completionHandler([]); return }
-            host.receivedInboxPush(fields: fields, process: false) { _ in completionHandler([]) }
+            guard let fields = applicationPushFields(notification.request.content.userInfo) else { completionHandler([]); return }
+            host.receivedPush(fields: fields, process: false) { _ in completionHandler([]) }
         } else { completionHandler([.banner, .sound, .list]) }
     }
 
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
         let content = response.notification.request.content
         if response.notification.request.trigger is UNPushNotificationTrigger {
-            guard let fields = inboxFields(content.userInfo) else { completionHandler(); return }
-            host.receivedInboxPush(fields: fields, process: false) { _ in completionHandler() }
+            guard let fields = applicationPushFields(content.userInfo) else { completionHandler(); return }
+            host.receivedPush(fields: fields, process: false) { _ in completionHandler() }
         } else {
             if let destination = content.userInfo["destination"] as? String { host.openNotification(destination: destination) }
             completionHandler()
@@ -77,19 +77,10 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
     }
 
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-        guard let fields = inboxFields(userInfo) else { completionHandler(.noData); return }
-        host.receivedInboxPush(fields: fields, process: true) { progressed in
+        guard let fields = applicationPushFields(userInfo) else { completionHandler(.noData); return }
+        host.receivedPush(fields: fields, process: true) { progressed in
             completionHandler(progressed.boolValue ? .newData : .noData)
         }
-    }
-
-    private func inboxFields(_ userInfo: [AnyHashable: Any]) -> [String: String]? {
-        var fields: [String: String] = [:]
-        for name in ["schemaVersion", "eventCode", "eventId", "accountId", "companyId", "inboxId"] {
-            guard let value = userInfo[name] as? String, value.count <= 256 else { return nil }
-            fields[name] = value
-        }
-        return fields
     }
 
     func enterBackground() {

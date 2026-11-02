@@ -4,12 +4,11 @@ import androidx.compose.ui.window.ComposeUIViewController
 import dev.fajar.starter.app.StarterApp
 import dev.fajar.starter.app.di.createAppContainer
 import dev.fajar.starter.app.navigation.AppLinkChannel
-import dev.fajar.starter.app.work.InboxPushWorker
+import dev.fajar.starter.app.work.ApplicationPushReceiver
 import dev.fajar.starter.app.work.NativePushWorker
 import dev.fajar.starter.app.work.startForegroundSync
 import dev.fajar.starter.common.config.AppPlatform
 import dev.fajar.starter.common.config.BuildEnvironment
-import dev.fajar.starter.common.result.AppResult
 import dev.fajar.starter.database.createAppDatabase
 import dev.fajar.starter.datastore.createUserPreferences
 import dev.fajar.starter.featureflags.data.datasources.AppleFeatureFlagSource
@@ -19,7 +18,6 @@ import dev.fajar.starter.fileio.AppleFileOutputSource
 import dev.fajar.starter.identity.data.firebase.datasources.AppleFirebaseClientOptionsSource
 import dev.fajar.starter.identity.data.firebase.datasources.AppleGoogleCredentialSource
 import dev.fajar.starter.identity.data.sso.datasources.AppleBrowserAuthorizationSource
-import dev.fajar.starter.inbox.domain.push.usecases.QueueInboxPushSignal
 import dev.fajar.starter.location.data.datasources.AppleLocationDataSource
 import dev.fajar.starter.notifications.data.datasources.*
 import dev.fajar.starter.observability.*
@@ -161,7 +159,7 @@ class AppleAppHost(
         }
     }
 
-    fun receivedInboxPush(
+    fun receivedPush(
         fields: Map<String, String>,
         process: Boolean,
         completion: (Boolean) -> Unit,
@@ -171,17 +169,7 @@ class AppleAppHost(
                 var progressed = false
                 try {
                     progressed =
-                        withTimeoutOrNull(25.seconds) {
-                            val queued = container.koin.get<QueueInboxPushSignal>()(fields)
-                            if (queued !is AppResult.Success || !queued.value)
-                                return@withTimeoutOrNull false
-                            if (!process) return@withTimeoutOrNull true
-                            when (val result = runSyncTask(container.koin.get<InboxPushWorker>())) {
-                                SyncResult.Complete -> true
-                                is SyncResult.Retry -> result.failure == null
-                                is SyncResult.Blocked -> false
-                            }
-                        } ?: false
+                        container.koin.get<ApplicationPushReceiver>().receive(fields, process)
                 } finally {
                     completion(progressed)
                 }

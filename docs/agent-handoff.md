@@ -1,5 +1,50 @@
 # Agent continuation — HRIS Mobile
 
+## Native push receive routing validated — 2 November 2026
+
+[Contract](collaboration-push-receive.md) / [evidence](measurements/chat-push-receive-2026-11-02.json):
+Android data-only and Apple remote callbacks share ApplicationPushReceiver. Chat's
+strict10/12-field parser accepts canonical positive Long revisions as strings;
+old valid hints can request recovery. Local account/audience/native-family ownership
+is independent of credential age. QueueCollaborationPushSignal commits a fresh
+durable global wake before fixed scheduling, guards late identity changes/cancellation,
+and never reads workspace, starts SDK, acquires content or displays packet data.
+Inbox routing remains separate. Apple caller owns cancellation/completion and25s
+processing budget; receive3s/schedule1.5s. Real app DI/SQLite checks no-selection/no-SDK
+and fresh wake persistence across container reopen, including stale-ACK rejection.
+
+Focused1 passes601 domain/52 suites and15 app push/6 suites plus Android/static checks
+216.813s. Review found a too-small JS-safe-integer revision cap; corrected to positive
+Long and added producer Long.MAX_VALUE-1/maximum-envelope case. Full2 passes3,195
+desktop476 suites,217 Android host35,602 domain browser52,10 build-logic2 plus root/
+Android release/Wasm in407.797s. Its app-browser filter selected zero actual cases;
+one skipped task placeholder retained. Unfiltered browser3 passes 26/7 suites,
+including six new receiver cases, in34.754s on the same18 inputs. No actual final
+case failed/errored/skipped. Source/report hashes and both corrections are recorded.
+
+Prior incoming-wave Apple41433354322 at8972dc962833526a4b0d3b67c376fc9ce04496a6 failed
+before runner allocation after15min queued. Annotation: hosted runner not acquired;
+macOS arm64 capacity constrained. No test ran. New workflow adds ten standalone Swift
+extraction cases before full app compile. Dispatch the new exact head after push;
+there is no active Apple run now. Previous cacae157 audit remains valid for that source.
+
+Platform companion room-lookup work is IN PROGRESS in .work/chat-room-lookup-2026-11-02:
+summary-by-room uses current native admission and existing participant-owned binding,
+no directory scan/migration. Five inputs. Check1 failed test compilation only (private
+fixture DSL); fixed with fixture-owned roomScopes factory. Check2 running; inspect
+its saved check2 log/JSON before any further heavy local check. Shared DI changed, so
+API HTTP and :apps:worker:test are required in that command. Do not claim it accepted.
+
+Continue bounded encrypted push priority hints and current-admission room resolution,
+read/mute/privacy notification projection, durable actions and encrypted replies.
+Global full sweep alone is not notification latency/scale acceptance. Consider compatible
+private backend/Matrix rollout plus release16+ to expose validated chat progress while
+keeping chat push off until usable. Notice before phone install; explicit serial and
+--install-only. Phone15/private schema103/API-worker2c2a59e3 remain unchanged.
+All54 PRD groups remain open. No Starter port, owned emulator, goal or subagent.
+Do not stop at this checkpoint.
+
+
 ## Bounded incoming waves and real Android catchup validated — 2 November 2026
 
 [Contract](collaboration-incoming-history.md) / [evidence](measurements/chat-incoming-history-waves-2026-11-02.json):

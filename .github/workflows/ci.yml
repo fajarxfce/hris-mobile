@@ -106,6 +106,10 @@ jobs:
       - uses: actions/checkout@v4
       - name: Select Xcode 26.3
         run: sudo xcode-select -s /Applications/Xcode_26.3.app/Contents/Developer
+      - name: Verify native push envelope extraction
+        run: |
+          swiftc apps/ios/ApplicationPushFields.swift tool/test_application_push_fields.swift -o "$RUNNER_TEMP/hris-push-fields"
+          "$RUNNER_TEMP/hris-push-fields"
       - uses: actions/setup-java@v4
         with:
           distribution: temurin

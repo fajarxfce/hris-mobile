@@ -1,6 +1,8 @@
 package dev.fajar.starter.app.di
 
 import dev.fajar.starter.app.bootstrap.ApplicationCollaborationLifetime
+import dev.fajar.starter.app.work.ApplicationPush
+import dev.fajar.starter.app.work.ApplicationPushReceiver
 import dev.fajar.starter.app.work.CollaborationCompanyRecovery
 import dev.fajar.starter.app.work.CollaborationDeliveryWorker
 import dev.fajar.starter.app.work.CollaborationDraftRecovery
@@ -9,12 +11,27 @@ import dev.fajar.starter.app.work.CollaborationIncomingRecovery
 import dev.fajar.starter.app.work.CollaborationRecoveryWorker
 import dev.fajar.starter.app.work.InboxPushWorker
 import dev.fajar.starter.app.work.NativePushWorker
+import dev.fajar.starter.collaboration.domain.usecases.QueueCollaborationPushSignal
+import dev.fajar.starter.inbox.domain.push.usecases.QueueInboxPushSignal
 import dev.fajar.starter.sync.domain.SyncTask
+import dev.fajar.starter.worker.runSyncTask
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
 /** App entry points share one instance with the scheduler; feature use cases keep their own DI. */
 fun applicationWorkerModule() = module {
+    single {
+        val inbox = inject<InboxPushWorker>()
+        val chat = inject<CollaborationRecoveryWorker>()
+        val queueInbox = inject<QueueInboxPushSignal>()
+        val queueChat = inject<QueueCollaborationPushSignal>()
+        ApplicationPushReceiver({ queueInbox.value(it) }, { queueChat.value(it) }) { target ->
+            when (target) {
+                ApplicationPush.Inbox -> runSyncTask(inbox.value)
+                ApplicationPush.Chat -> runSyncTask(chat.value)
+            }
+        }
+    }
     // Koin annotations 2.3.1 metadata for an app-level SyncTask bind collides with dependency
     // metadata
     // when Kotlin/Native links the framework. Direct app composition emits no such marker.
