@@ -1,0 +1,119 @@
+{
+  "date": "2026-11-02",
+  "baseCommit": "0539e241da108e702d7dc70377e64406c2f5172f",
+  "scope": "Publish native parent before first workspace observation; retain same-parent foreground and monotonic effective time/hard expiry.",
+  "sourceSha256": {
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/MaintainCollaborationRuntimeOwnership.kt": "b8dfde8861df9e44e87540ffe5bda1a21d48e1cc5a995f1fd169c64855734773",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/CollaborationRuntimeParentObservation.kt": "e0acd95a1ef72d55a3b277ec21050eaf9cdc0f9863087889af4ded7f2235334d",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationRuntimeOwnershipTest.kt": "85789d91dcc39c83b9cf99f24aee22c4235d3f3fda233396df7e91e909fdd3a3"
+  },
+  "focusedRun": {
+    "exitCode": 0,
+    "wallSeconds": 160.787,
+    "inputsUnchanged": true,
+    "command": [
+      "xvfb-run",
+      "-a",
+      "./gradlew",
+      ":features:collaboration:domain:desktopTest",
+      ":apps:shared:desktopTest",
+      "--tests",
+      "*Collaboration*Test",
+      ":apps:collaboration-proof:compileDebugKotlin",
+      ":formatCheck",
+      ":architectureCheck",
+      ":detekt",
+      "-Pkotlin.compiler.execution.strategy=in-process",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=1",
+      "-Dorg.gradle.jvmargs=-Xmx1536m"
+    ]
+  },
+  "focusedGradleSeconds": 157,
+  "focusedReports": {
+    "domain": {
+      "tests": 516,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "application": {
+      "tests": 43,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "finalRun": {
+    "exitCode": 0,
+    "wallSeconds": 348.943,
+    "inputsUnchanged": true,
+    "command": [
+      "xvfb-run",
+      "-a",
+      "./gradlew",
+      ":check",
+      ":features:collaboration:domain:wasmJsBrowserTest",
+      ":features:collaboration:data:wasmJsBrowserTest",
+      ":apps:shared:compileKotlinWasmJs",
+      "-Pkotlin.compiler.execution.strategy=in-process",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=1",
+      "-Dorg.gradle.jvmargs=-Xmx1536m"
+    ]
+  },
+  "finalGradleSeconds": 345,
+  "reports": {
+    "desktopTest": {
+      "tests": 2983,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "testAndroidHostTest": {
+      "tests": 209,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "wasmJsBrowserTest": {
+      "tests": 788,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "buildLogic": {
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "addedDomainCases": 7,
+  "checked": [
+    "A pending first workspace observation no longer withholds the valid native parent. Its observed company later adds foreground ownership.",
+    "Same-parent token rotation seeds the last observed workspace, preserving foreground while the replacement observation is pending. Replacement/logout do not reuse another parents snapshot.",
+    "One bounded per-collector snapshot anchors effective time to monotonic elapsed time and a nondecreasing wall baseline. Minimum observed hard-family expiry cannot extend across same-parent updates.",
+    "Parent expiry fires without any workspace emission. Repeated session/workspace observations under clock rollback, read failure and forward/backward clock changes cannot resurrect an elapsed grant.",
+    "Existing denial retention, timer renewal, observer exclusion, cancellation and stale cleanup tests remain. Exact stream assertions now include the intentional initial parent-only phase.",
+    "516 domain and43 actual app collaboration cases, including both assembled DI cases, proof adapter compilation and static checks pass without failures.",
+    "Full root, affected browser tests and app Wasm compilation pass on three unchanged Kotlin inputs."
+  ],
+  "limits": [
+    "The effective-time floor is conservative for fresh timestamps created while the wall clock is far behind. This snapshot is per collector, not a persistent trusted clock across process restarts.",
+    "Pending cooperative workspace cancellation is covered. This does not claim termination of a repository source with unbounded noncooperative teardown.",
+    "ApplicationCollaborationLifetime default Success(null) is not a readiness publication. The future all-company coordinator needs explicit processed-parent evidence from the existing collector, with cleanup outcome separate from parent identity.",
+    "No new JNI, APK or phone acceptance here. Actual Android validation/release15 preparation is next; phone remains verified14 from8c557716.",
+    "No live rollout or generic Starter port. Backend push stays disabled; all54 PRD groups remain open."
+  ],
+  "localEvidenceSha256": {
+    "check-1.log": "0173df49400f94c82ac53b0a9531d33611ccb5f16273300c1f07b16b7332e8f5",
+    "check-1.json": "3d73c169f9a88f3f57fbdc2ae72a8ad5f40ff9ed625b79bd901f7573d0dbc350",
+    "check-2.log": "0c79c940f2e8d6816c3cfaad1a43f96ff36b1f243a4e8a0f0e3f0b0bac95c6bb",
+    "check-2.json": "8fddb386aaa6f7833dae6cffe7669adc7df9cf948a026631619a104bbcd1c535",
+    "inputs-1.json": "f3d937a40cc638dc519cd6c8026ac2a0f6f52788b66de755a87024e9013cbb35",
+    "inputs-2.json": "f3d937a40cc638dc519cd6c8026ac2a0f6f52788b66de755a87024e9013cbb35"
+  }
+}

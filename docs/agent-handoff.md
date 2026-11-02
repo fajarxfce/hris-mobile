@@ -1,5 +1,53 @@
 # Agent continuation — HRIS Mobile
 
+## Native parent startup and monotonic ownership validated — 2 November 2026
+
+[Contract](collaboration-parent-readiness.md) /
+[evidence](measurements/chat-parent-readiness-2026-11-02.json): the single Maintain
+collector publishes a valid parent before the first workspace emission. Same-parent
+token updates seed the last observed workspace instead of clearing foreground.
+A replacement parent starts empty. One bounded snapshot holds a monotonic effective
+time floor and minimum hard-family expiry across repeated observations, read failures
+and clock rollback. Initial stream expectations explicitly include parent-only state.
+
+Seven new cases pass within516 domain and43 actual app collaboration tests, including
+both DI cases. Proof adapter compilation and static checks pass in157s /160.787s.
+Final three-input root/browser/app-Wasm checks pass in345s /348.943s:
+2,983 desktop, 209 Android host, 788 browser and 10 build-logic cases,
+zero failures/errors/skips in either run. Existing denial, renewal, observer exclusion
+and late cleanup cases remain. No new JNI, employee APK or phone install yet.
+
+**Continue immediately:** actual Android/provider regression and a meaningful release15
+update to the authorized phone. Mobile prepared runners are in
+`.work/android-recovery-2026-11-02-build15`: build.py (proof/release), start-emulator.py
+and smoke.py; phone scripts are in `.work/release-phone-2026-11-02-build15`.
+All are supplementary and unexecuted at this checkpoint. Build the proof APK from
+clean committed source first; compileDebugKotlin alone does not refresh its bytes.
+Platform prepared `.work/android-recovery-2026-11-02-build15/run-native.py` runs all
+five actual SDK/HRIS/Synapse cases on owned emulator5560. Verify its input hashes and
+artifact before/after, preserve every interruption/failure and cleanup record.
+Details: `.work/parent-readiness-2026-11-02/next-android.txt`.
+
+Then build signed devRelease15 with2048MiB/inprocess compilation, perform two actual
+application cold starts on owned emulator, and build arm64 from the same clean head.
+Require matching DEX between universal startup-tested APK and phone artifact. Notify
+before installation; use explicit10.77.77.3:5555 and install-only, same signer/data.
+Pull installed bytes and verify UID/firstInstall retention. Current phone remains14
+from8c557716 until new evidence confirms installation. Stop only owned emulator when
+done. Owned8GiB temporary swap remains active/full with about10GiB RAM available;
+keep heavy builds sequential, preserve unrelated CodePush/AVD5558, clean swap only
+when used pages and safe headroom fit RAM. Never delete active swap.
+
+Continue explicit processed-parent publication for the future all-company coordinator:
+ApplicationCollaborationLifetime.state defaults to Success(null), which is not proof
+of publication. Reuse the same collector; keep failed cleanup separate from parent
+identity so an eventual drain cannot leave a permanently false readiness marker.
+Do not add a second observer or an implicit retry loop. Durable all-company wake
+generations/fair cursors, directory/reconnect/periodic sweeps, receive/decrypt,
+notification privacy/read/mute/deep links and encrypted inline replies remain open.
+Backend delivery stays disabled. No generic Starter or live rollout; all54 PRD groups
+remain open. Continue after every push. Physical iPhone acceptance is waived only.
+
 ## Shared admitted background worker validated — 2 November 2026
 
 [Contract](collaboration-admitted-worker.md) /

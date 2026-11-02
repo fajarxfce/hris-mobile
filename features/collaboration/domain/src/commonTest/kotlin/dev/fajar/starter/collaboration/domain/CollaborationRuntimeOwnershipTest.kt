@@ -21,11 +21,207 @@ import kotlinx.coroutines.test.*
 
 class CollaborationRuntimeOwnershipTest {
     @Test
+    fun pendingInitialWorkspacePublishesItsParentBeforeAddingTheObservedForeground() = runTest {
+        val f = OwnershipFixture(testScheduler)
+        val release = CompletableDeferred<Unit>()
+        f.beforeWorkspaceObservation = { release.await() }
+        val task = backgroundScope.launch { f.maintain().collect(f.observed::add) }
+        runCurrent()
+        assertEquals(listOf(CollaborationRuntimeRetention(f.parent, null)), f.retentions)
+        assertEquals(listOf<AppResult<CollaborationOwner?>>(AppResult.Success(null)), f.observed)
+        assertEquals(1, f.workspaceObservers)
+        release.complete(Unit)
+        runCurrent()
+        assertEquals(f.owner, f.retentions.last().foreground)
+        assertEquals(AppResult.Success(f.owner), f.observed.last())
+        task.cancelAndJoin()
+        assertEquals(0, f.workspaceObservers)
+        assertNull(f.retentions.last().parent)
+    }
+
+    @Test
+    fun sameParentTokenRotationKeepsForegroundWhileItsNextWorkspaceObservationIsPending() =
+        runTest {
+            val f = OwnershipFixture(testScheduler)
+            val task = backgroundScope.launch { f.maintain().collect(f.observed::add) }
+            runCurrent()
+            val retained = f.retentions.toList()
+            f.beforeWorkspaceObservation = { awaitCancellation() }
+            f.session.value =
+                AppResult.Success(
+                    f.initial.copy(tokens = f.initial.tokens.copy(accessToken = "rotated"))
+                )
+            runCurrent()
+            assertEquals(retained, f.retentions)
+            assertEquals(f.owner, f.retentions.last().foreground)
+            assertEquals(1, f.workspaceObservers)
+            task.cancelAndJoin()
+            assertEquals(0, f.workspaceObservers)
+        }
+
+    @Test
+    fun logoutOrReplacementInvalidatesAParentEvenWithTheInitialWorkspaceStillPending() = runTest {
+        for (logout in listOf(false, true)) {
+            val f = OwnershipFixture(testScheduler)
+            f.beforeWorkspaceObservation = { awaitCancellation() }
+            val task = backgroundScope.launch { f.maintain().collect(f.observed::add) }
+            runCurrent()
+            val next =
+                f.initial.copy(
+                    binding =
+                        f.initial.binding.copy(serverId = "a1000000-0000-4000-8000-000000000099")
+                )
+            f.session.value = AppResult.Success(if (logout) null else next)
+            runCurrent()
+            if (logout) {
+                assertNull(f.retentions.last().parent)
+                assertEquals(0, f.workspaceObservers)
+            } else {
+                assertEquals(next.binding.serverId, f.retentions.last().parent?.nativeSessionId)
+                assertEquals(1, f.workspaceObservers)
+            }
+            assertNull(f.retentions.last().foreground)
+            task.cancelAndJoin()
+            assertEquals(0, f.workspaceObservers)
+        }
+    }
+
+    @Test
+    fun hardParentExpiryStillFiresBeforeAnyInitialWorkspaceEmission() = runTest {
+        val f = OwnershipFixture(testScheduler)
+        f.session.value =
+            AppResult.Success(
+                f.initial.copy(
+                    binding =
+                        f.initial.binding.copy(
+                            expiresAtEpochMillis = (f.now() + 1.seconds).toEpochMilliseconds()
+                        )
+                )
+            )
+        f.beforeWorkspaceObservation = { awaitCancellation() }
+        val task = backgroundScope.launch { f.maintain().collect(f.observed::add) }
+        runCurrent()
+        assertEquals(f.parent, f.retentions.last().parent)
+        advanceTimeBy(1_000)
+        runCurrent()
+        assertNull(f.retentions.last().parent)
+        assertIs<AppResult.Failed>(f.observed.last())
+        task.cancelAndJoin()
+        assertEquals(0, f.workspaceObservers)
+    }
+
+    @Test
+    fun repeatedTokenAndWorkspaceObservationsCannotExtendExpiryWhenTheClockRollsBack() = runTest {
+        val f = OwnershipFixture(testScheduler)
+        val start = f.now()
+        val session =
+            f.initial.copy(
+                binding =
+                    f.initial.binding.copy(
+                        expiresAtEpochMillis = (start + 2.seconds).toEpochMilliseconds()
+                    )
+            )
+        f.session.value = AppResult.Success(session)
+        val policy = checkNotNull(f.selected.policy)
+        val workspace =
+            f.selected.copy(
+                admission = f.selected.admission.copy(expiresAt = start + 2.seconds),
+                policy = policy.copy(policy = policy.policy.copy(validUntil = start + 1.seconds)),
+            )
+        f.workspace.value = AppResult.Success(workspace)
+        val task = backgroundScope.launch { f.maintain().collect(f.observed::add) }
+        runCurrent()
+        advanceTimeBy(500)
+        f.clockOffset = -1.hours.inWholeMilliseconds
+        f.session.value =
+            AppResult.Success(session.copy(tokens = session.tokens.copy(accessToken = "rotated")))
+        f.workspace.value =
+            AppResult.Success(workspace.copy(permissions = workspace.permissions + "unrelated"))
+        runCurrent()
+        assertEquals(f.owner, f.retentions.last().foreground)
+        advanceTimeBy(500)
+        runCurrent()
+        assertNull(f.retentions.last().foreground)
+        assertEquals(f.parent, f.retentions.last().parent)
+        f.session.value =
+            AppResult.Success(
+                session.copy(tokens = session.tokens.copy(accessToken = "rotated-again"))
+            )
+        runCurrent()
+        assertNull(f.retentions.last().foreground)
+        advanceTimeBy(1_000)
+        runCurrent()
+        assertNull(f.retentions.last().parent)
+        task.cancelAndJoin()
+    }
+
+    @Test
+    fun expiredParentCannotResurrectAfterReadFailureRollbackAndALaterSameFamilyExpiry() = runTest {
+        val f = OwnershipFixture(testScheduler)
+        val start = f.now()
+        f.session.value =
+            AppResult.Success(
+                f.initial.copy(
+                    binding =
+                        f.initial.binding.copy(
+                            expiresAtEpochMillis = (start + 1.seconds).toEpochMilliseconds()
+                        )
+                )
+            )
+        val task = backgroundScope.launch { f.maintain().collect(f.observed::add) }
+        runCurrent()
+        advanceTimeBy(1_000)
+        runCurrent()
+        assertNull(f.retentions.last().parent)
+        f.session.value = f.setup.storageFailure
+        runCurrent()
+        val count = f.retentions.size
+        f.clockOffset = -1.hours.inWholeMilliseconds
+        f.session.value =
+            AppResult.Success(
+                f.initial.copy(tokens = f.initial.tokens.copy(accessToken = "renewed"))
+            )
+        runCurrent()
+        assertTrue(f.retentions.drop(count).all { it.parent == null && it.foreground == null })
+        assertNull(f.retentions.last().parent)
+        assertIs<AppResult.Failed>(f.observed.last())
+        task.cancelAndJoin()
+    }
+
+    @Test
+    fun aForwardClockJumpFollowedByRollbackCannotReopenTheSameParentsElapsedGrant() = runTest {
+        val f = OwnershipFixture(testScheduler)
+        val start = f.now()
+        val session =
+            f.initial.copy(
+                binding =
+                    f.initial.binding.copy(
+                        expiresAtEpochMillis = (start + 2.seconds).toEpochMilliseconds()
+                    )
+            )
+        f.session.value = AppResult.Success(session)
+        val task = backgroundScope.launch { f.maintain().collect(f.observed::add) }
+        runCurrent()
+        f.clockOffset = 3_000
+        f.session.value =
+            AppResult.Success(session.copy(tokens = session.tokens.copy(accessToken = "forward")))
+        runCurrent()
+        assertNull(f.retentions.last().parent)
+        f.clockOffset = -1.hours.inWholeMilliseconds
+        f.session.value =
+            AppResult.Success(session.copy(tokens = session.tokens.copy(accessToken = "rollback")))
+        runCurrent()
+        assertNull(f.retentions.last().parent)
+        assertIs<AppResult.Failed>(f.observed.last())
+        task.cancelAndJoin()
+    }
+
+    @Test
     fun leavingACompanyDropsForegroundRetentionWhileKeepingTheNativeParent() = runTest {
         val f = OwnershipFixture(testScheduler)
         val job = backgroundScope.launch { f.maintain().collect(f.observed::add) }
         runCurrent()
-        assertEquals(listOf<CollaborationOwner?>(f.owner), f.closedExcept)
+        assertEquals(listOf<CollaborationOwner?>(null, f.owner), f.closedExcept)
         f.workspace.value = AppResult.Success(null)
         runCurrent()
         assertEquals(AppResult.Success(null), f.observed.last())
@@ -156,11 +352,17 @@ class CollaborationRuntimeOwnershipTest {
                 )
             val job = backgroundScope.launch { f.maintain().collect(f.observed::add) }
             runCurrent()
-            assertEquals(AppResult.Success(f.owner), f.observed.single())
+            assertEquals(
+                listOf<AppResult<CollaborationOwner?>>(
+                    AppResult.Success(null),
+                    AppResult.Success(f.owner),
+                ),
+                f.observed,
+            )
             f.clockOffset = -1.hours.inWholeMilliseconds
             advanceTimeBy(999)
             runCurrent()
-            assertEquals(1, f.observed.size)
+            assertEquals(2, f.observed.size)
             advanceTimeBy(1)
             runCurrent()
             assertEquals(
@@ -208,8 +410,14 @@ class CollaborationRuntimeOwnershipTest {
         runCurrent()
         advanceTimeBy(501)
         runCurrent()
-        assertEquals(listOf<AppResult<CollaborationOwner?>>(AppResult.Success(f.owner)), f.observed)
-        assertEquals(listOf<CollaborationOwner?>(f.owner), f.closedExcept)
+        assertEquals(
+            listOf<AppResult<CollaborationOwner?>>(
+                AppResult.Success(null),
+                AppResult.Success(f.owner),
+            ),
+            f.observed,
+        )
+        assertEquals(listOf<CollaborationOwner?>(null, f.owner), f.closedExcept)
         advanceTimeBy(1_499)
         runCurrent()
         assertIs<AppResult.Failed>(f.observed.last())
@@ -227,8 +435,8 @@ class CollaborationRuntimeOwnershipTest {
                 f.initial.copy(tokens = f.initial.tokens.copy(accessToken = "renewed"))
             )
         runCurrent()
-        assertEquals(listOf<CollaborationOwner?>(f.owner), f.closedExcept)
-        assertEquals(1, f.observed.size)
+        assertEquals(listOf<CollaborationOwner?>(null, f.owner), f.closedExcept)
+        assertEquals(2, f.observed.size)
         job.cancelAndJoin()
     }
 
@@ -270,8 +478,14 @@ class CollaborationRuntimeOwnershipTest {
         runCurrent()
         release.complete(Unit)
         runCurrent()
-        assertEquals(listOf<AppResult<CollaborationOwner?>>(AppResult.Success(null)), f.observed)
-        assertEquals(listOf(f.owner, null), f.closedExcept)
+        assertEquals(
+            listOf<AppResult<CollaborationOwner?>>(
+                AppResult.Success(null),
+                AppResult.Success(null),
+            ),
+            f.observed,
+        )
+        assertEquals(listOf(null, f.owner, null), f.closedExcept)
         job.cancelAndJoin()
     }
 
@@ -288,7 +502,10 @@ class CollaborationRuntimeOwnershipTest {
         assertEquals(calls, f.closedExcept.size)
         job.cancelAndJoin()
         assertNull(f.closedExcept.last())
-        assertEquals(AppResult.Success(f.owner), f.maintain().first())
+        assertEquals(
+            AppResult.Success(f.owner),
+            f.maintain().first { it == AppResult.Success(f.owner) },
+        )
         assertNull(f.closedExcept.last())
     }
 
@@ -308,7 +525,7 @@ class CollaborationRuntimeOwnershipTest {
         entered.await()
         job.cancelAndJoin()
         assertNull(f.closedExcept.last())
-        assertTrue(f.observed.isEmpty())
+        assertEquals(listOf<AppResult<CollaborationOwner?>>(AppResult.Success(null)), f.observed)
     }
 }
 
@@ -359,9 +576,19 @@ private class OwnershipFixture(private val scheduler: TestCoroutineScheduler) {
         object : SessionRepository by setup.access.sessions {
             override fun observe() = session
         }
+    var beforeWorkspaceObservation: suspend () -> Unit = {}
+    var workspaceObservers = 0
     private val workspaces =
         object : WorkspaceRepository by setup.access.workspaces {
-            override fun observe(sessionId: String) = workspace
+            override fun observe(sessionId: String) = flow {
+                workspaceObservers++
+                try {
+                    beforeWorkspaceObservation()
+                    emitAll(workspace)
+                } finally {
+                    workspaceObservers--
+                }
+            }
         }
     private val runtimes =
         object : CollaborationRuntimeRepository {

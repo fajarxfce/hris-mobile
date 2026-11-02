@@ -65,27 +65,61 @@ class MaintainCollaborationRuntimeOwnership(
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    private fun owners(): Flow<RuntimeOwnershipDecision> =
-        sessions.observe().flatMapLatest { identity ->
-            when (identity) {
-                is AppResult.Failed -> flowOf(decision(null, identity))
-                is AppResult.Success -> {
-                    val session = identity.value
-                    if (session == null) flowOf(decision(null, AppResult.Success(null)))
-                    else workspaces.observe(session.id).flatMapLatest { admitted(session, it) }
+    private fun owners(): Flow<RuntimeOwnershipDecision> = flow {
+        var previous: CollaborationRuntimeParentObservation? = null
+        emitAll(
+            sessions.observe().flatMapLatest { identity ->
+                when (identity) {
+                    is AppResult.Failed -> flowOf(decision(null, identity))
+                    is AppResult.Success -> {
+                        val session = identity.value
+                        if (session == null) {
+                            previous = null
+                            flowOf(decision(null, AppResult.Success(null)))
+                        } else {
+                            val observation =
+                                previous?.takeIf { it.matches(session) }
+                                    ?: CollaborationRuntimeParentObservation(
+                                        session,
+                                        clock.now(),
+                                        timeSource.markNow(),
+                                    )
+                            previous = observation
+                            val now = observation.observe(session, clock.now())
+                            val parent = collaborationNativeParent(session, server, build, now)
+                            when {
+                                parent is AppResult.Failed -> flowOf(decision(null, parent))
+                                now >= observation.expiresAt -> flowOf(decision(null, expired()))
+                                else ->
+                                    workspaces
+                                        .observe(session.id)
+                                        .onStart {
+                                            emit(observation.selected ?: AppResult.Success(null))
+                                        }
+                                        .onEach { observation.selected = it }
+                                        .flatMapLatest { admitted(session, it, observation) }
+                            }
+                        }
+                    }
                 }
             }
-        }
+        )
+    }
 
     private fun admitted(
         session: Session,
         selected: AppResult<Workspace?>,
+        observation: CollaborationRuntimeParentObservation,
     ): Flow<RuntimeOwnershipDecision> = flow {
         val elapsed = timeSource.markNow()
-        val now = clock.now()
+        val now = observation.observe(session, clock.now())
         val captured = collaborationNativeParent(session, server, build, now)
         if (captured is AppResult.Failed) {
             emit(decision(null, captured))
+            return@flow
+        }
+        if (now >= observation.expiresAt) {
+            emit(decision(null, expired()))
             return@flow
         }
         val parent = (captured as AppResult.Success).value
@@ -98,7 +132,7 @@ class MaintainCollaborationRuntimeOwnership(
                     collaborationRequestOwner(workspace.id, session, workspace, server, build, now)
             }
         emit(decision(parent, candidate, workspace))
-        val parentDeadline = Instant.fromEpochMilliseconds(session.binding.expiresAtEpochMillis)
+        val parentDeadline = observation.expiresAt
         val parentWait = (parentDeadline - now).inWholeMilliseconds.coerceAtLeast(0)
         val foregroundDeadline =
             if (candidate is AppResult.Success && candidate.value != null && workspace != null)
@@ -106,11 +140,7 @@ class MaintainCollaborationRuntimeOwnership(
             else parentDeadline
         val firstWait = (foregroundDeadline - now).inWholeMilliseconds.coerceIn(0, parentWait)
         delay((firstWait - elapsed.elapsedNow().inWholeMilliseconds).coerceAtLeast(0))
-        val expired =
-            collaborationSetupFailure(
-                "client.collaboration_revalidation_required",
-                FailureKind.Unavailable,
-            )
+        val expired = expired()
         if (firstWait < parentWait) {
             emit(decision(parent, expired))
             // Keep the original relative deadline even if the wall clock moves backward.
@@ -118,6 +148,12 @@ class MaintainCollaborationRuntimeOwnership(
         }
         emit(decision(null, expired))
     }
+
+    private fun expired() =
+        collaborationSetupFailure(
+            "client.collaboration_revalidation_required",
+            FailureKind.Unavailable,
+        )
 
     private fun foregroundDeadline(
         workspace: Workspace,
