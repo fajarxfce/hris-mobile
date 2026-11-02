@@ -1,5 +1,18 @@
 # Agent continuation — HRIS Mobile
 
+## Apple validation and next integration — 2 November 2026
+
+Mobile ae4a1b27 and Platform304be027 are pushed, with actual admitted read-receipt
+replay/process recovery and all local checks described below. The Apple CI workflow
+now also links/runs the collaboration domain's common tests alongside the existing
+native core cases and full Xcode app build. This workflow-only increment does not
+change the accepted runtime/proof sources. Dispatch `ci.yml` with scope=apple on
+feat/communications after pushing; track its exact head/run and audit its reports.
+No Apple success is claimed yet. Continue account-bound background/foreground
+receipt integration while hosted Apple runs. Next validated product build must also
+be installed on the authorized phone after notice; current release17 is unchanged.
+
+
 ## Admitted read-receipt replay and actual recovery accepted — 2 November 2026
 
 [Contract](collaboration-read-receipts.md) / [evidence](measurements/chat-read-receipt-replay-2026-11-02.json):
