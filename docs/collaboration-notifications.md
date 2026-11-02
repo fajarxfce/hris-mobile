@@ -1,5 +1,10 @@
 # Chat notification integration
 
+[Per-conversation mute and preview storage](collaboration-notification-settings.md)
+now supplies account-bound encrypted preferences and conditional offline changes.
+System display, UI controls, mute cancellation and native action consumers still
+need integration; live chat push remains disabled.
+
 The managed-pusher client operation is implemented. It is not yet invoked
 automatically by the application or worker. Native [push receive routing](collaboration-push-receive.md) now persists
 recovery wakes. Live FCM acceptance, decrypted notifications and inline replies remain

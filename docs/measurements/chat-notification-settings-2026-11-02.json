@@ -1,0 +1,178 @@
+{
+  "date": "2026-11-02",
+  "scope": "Encrypted per-conversation mute/preview checkpoint and locally admitted conditional changes; no system display or public read-receipt preference change",
+  "inputsSha256": {
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt": "363332259cf265fb9dae505ffa5e9bdb6f7a53e66e395418d21eba60f2b93b23",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt": "69abd4c55253a0b360f006f8919b6b4c31df1b626aa3b9ae8ffec91408e108d2",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/notifications/CollaborationNotificationSettingsCodec.kt": "0e867fc95f9ffe71846976fc050e544bc5d78d2126f71ca533bab3587b2e9708",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationNotificationSettingsRepository.kt": "5e522d1aab977b39d7429853fe3776acf35a49b56de186164d704767ffad5c38",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationNotificationSettingsStorageContract.kt": "14f994f23cb932072e280ecc83e4d1b0e82ca9b6024fa5891c57b710aeb008cc",
+    "features/collaboration/data/src/desktopTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationNotificationSettingsStorageTest.kt": "b02dd5e7972fb4e4727ccba46cf365a8835ea061abc4abfc5159d839127f342f",
+    "features/collaboration/data/src/wasmJsTest/kotlin/dev/fajar/starter/collaboration/data/BrowserCollaborationNotificationSettingsStorageTest.kt": "7947db5b2ebb2b9a322c2af303fd9609db7fab6f770cfe55e8602039c64e1ed6",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationNotificationSettings.kt": "4fdce8e6a89451242870141e149222176a9b4fa11d8b6aac26e38841b6320b46",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationNotificationSettingsPolicy.kt": "0b00345a08879e30c3729be0dfbfcf1a5ef08e801508754a7e3707c1d7da869f",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationNotificationSettingsRepository.kt": "c93958fd2e307271c14eac20f5f1deea63d3eeab45c43ccfb7145569e7aada62",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/CollaborationNotificationSettingsAccess.kt": "b76608990e2af31f477a569b1171071989f03292ed2cee9d3ea5a40e96c66d96",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ReadCollaborationNotificationSettings.kt": "9f4e4fdc50237b337118648f03017093e9c2e70d6698c71fa8b29a4cd2c9dac4",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/UpdateCollaborationNotificationSettings.kt": "b62a8d935df6cd5c82c63a22492999d11f1fa51b80be27de840a4bc1e03441bb",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationNotificationSettingsFixture.kt": "08bb3cac607a698238bc08fd0b2fe6ed8725ab3652d92d12c099fc3e5a71792d",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationNotificationSettingsTest.kt": "6df0737fca8b324c6724d2ee2f200e5f70a5654648dacb3cfa5c8cb4b653fb2c"
+  },
+  "attempts": [
+    {
+      "startedAt": "2026-11-02T16:45:23.245269+00:00",
+      "exitCode": 1,
+      "wallSeconds": 55.332,
+      "inputsUnchanged": true,
+      "command": [
+        "xvfb-run",
+        "-a",
+        "./gradlew",
+        ":features:collaboration:domain:desktopTest",
+        "--tests",
+        "*CollaborationNotificationSettingsTest",
+        ":features:collaboration:data:desktopTest",
+        "--tests",
+        "*CollaborationNotificationSettingsStorageTest",
+        ":apps:shared:desktopTest",
+        "--tests",
+        "*CollaborationBindingsTest",
+        ":formatCheck",
+        ":architectureCheck",
+        ":detekt",
+        "-Pkotlin.compiler.execution.strategy=in-process",
+        "--no-daemon",
+        "--no-parallel",
+        "--max-workers=1",
+        "-Dorg.gradle.jvmargs=-Xmx1536m"
+      ],
+      "freshReports": {
+        "suites": 1,
+        "tests": 10,
+        "failures": 2,
+        "errors": 0,
+        "skipped": 0
+      },
+      "logSha256": "2db0dc8308584bf3de8769c7fd87ca03e5d8c924284f52075941942b9c7ea34f"
+    },
+    {
+      "startedAt": "2026-11-02T16:46:49.237775+00:00",
+      "exitCode": 0,
+      "wallSeconds": 232.667,
+      "inputsUnchanged": true,
+      "command": [
+        "xvfb-run",
+        "-a",
+        "./gradlew",
+        ":features:collaboration:domain:desktopTest",
+        "--tests",
+        "*CollaborationNotificationSettingsTest",
+        ":features:collaboration:data:desktopTest",
+        "--tests",
+        "*CollaborationNotificationSettingsStorageTest",
+        ":apps:shared:desktopTest",
+        "--tests",
+        "*CollaborationBindingsTest",
+        ":formatCheck",
+        ":architectureCheck",
+        ":detekt",
+        "-Pkotlin.compiler.execution.strategy=in-process",
+        "--no-daemon",
+        "--no-parallel",
+        "--max-workers=1",
+        "-Dorg.gradle.jvmargs=-Xmx1536m"
+      ],
+      "freshReports": {
+        "suites": 3,
+        "tests": 21,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "logSha256": "8ba28d3e63ff7cc7055fa5a572cd87cb0c09472396717752d85a9e2d01ec157d"
+    },
+    {
+      "startedAt": "2026-11-02T16:51:04.500979+00:00",
+      "exitCode": 0,
+      "wallSeconds": 400.043,
+      "inputsUnchanged": true,
+      "command": [
+        "xvfb-run",
+        "-a",
+        "./gradlew",
+        ":check",
+        ":apps:collaboration-proof:testDebugUnitTest",
+        ":apps:collaboration-proof:assembleDebug",
+        ":apps:shared:compileKotlinWasmJs",
+        ":features:collaboration:data:wasmJsBrowserTest",
+        "--tests",
+        "*BrowserCollaborationNotificationSettingsStorageTest*",
+        ":features:collaboration:domain:wasmJsBrowserTest",
+        "--tests",
+        "*CollaborationNotificationSettingsTest*",
+        "-Pkotlin.compiler.execution.strategy=in-process",
+        "--no-daemon",
+        "--no-parallel",
+        "--max-workers=1",
+        "-Dorg.gradle.jvmargs=-Xmx1536m"
+      ],
+      "freshReports": {
+        "suites": 228,
+        "tests": 1775,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "logSha256": "61e273ea4f5be321d409a188ef58269f0d1913ac90e6235c788ee2bbb071f486"
+    }
+  ],
+  "fullCountsIncludingExplicitTaskReuse": {
+    "desktop": {
+      "tests": 3335,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "suites": 493
+    },
+    "buildLogic": {
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "suites": 2
+    },
+    "androidHost": {
+      "tests": 230,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "suites": 37
+    },
+    "proofHost": {
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "suites": 1
+    },
+    "browser": {
+      "tests": 19,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "suites": 2
+    }
+  },
+  "fullReportManifestSha256": "22b9f25cecf277318f7f61546c86323f80ed44d9164ef1281fce973a3e0beaff",
+  "failuresAndCorrections": [
+    "First focused run executed10 domain cases with2 fixture failures: missing captured scope after deliberate conversation removal and session storage failure injected before initial ownership capture. Corrected fixture sequencing; production unchanged.",
+    "Second focused21 cases passes232.667s; full root/proof/Wasm/browser passes400.043s with19 actual browser cases and no failures/errors/skips."
+  ],
+  "limits": [
+    "SQLite and IndexedDB reopen actual database stores with a retained test credential store; not a new physical OS-death proof.",
+    "Actual assembled application DI bindings verified; no new native provider/FCM/phone/Apple runtime claim.",
+    "No UI preferences controls, OS notification display/cancellation, inline reply or delivery ledger yet.",
+    "Phone remains release18 from42f5d157; source here is newer. All54 PRD groups remain open."
+  ],
+  "starterPort": "No generic foundation change; keep HRIS account/company/conversation policy in Mobile."
+}

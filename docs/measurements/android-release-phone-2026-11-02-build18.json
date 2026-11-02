@@ -135,7 +135,13 @@
   "apple": {
     "run": "https://github.com/fajarxfce/hris-mobile/actions/runs/41480512291",
     "source": "42f5d1573d6abc481f399dfaf22127ac72f205f0",
-    "statusAtInstallation": "Full Xcode app build in progress after simulator tests; not yet accepted."
+    "statusAtInstallation": "Full Xcode app build in progress after simulator tests; not yet accepted.",
+    "conclusion": "success",
+    "evidence": "chat-visible-read-apple-2026-11-02.json",
+    "tests": 780,
+    "suites": 89,
+    "fullXcodeBuildSeconds": 1315,
+    "githubArchiveDigestVerified": true
   },
   "limits": [
     "Two cold starts verify anonymous startup only, not authenticated chat.",

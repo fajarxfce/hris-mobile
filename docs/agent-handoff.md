@@ -1,5 +1,47 @@
 # Agent continuation — HRIS Mobile
 
+## Notification settings accepted; release18 Apple audit — 2 November 2026
+
+Encrypted per-conversation mute/preview settings and bounded local read/update use
+cases are implemented. Defaults hide names/content; mute supports expiry or forever.
+Stable operation plus observed generation/revision recovers lost replies and rejects
+old actions after newer changes. Same-account reauthentication retains settings but
+invalidates old captured OS-action ownership. Current local direct binding and
+retained denial surround pending I/O; no fresh token/selected company required.
+Existing history key/AAD protects one checkpoint; inactive missing-key guards remain.
+No schema/key reset, hidden retry, read-receipt preference change or provider I/O.
+[Contract](collaboration-notification-settings.md),
+[evidence](measurements/chat-notification-settings-2026-11-02.json).
+
+Focused21 cases pass232.667s: ten domain, nine SQLite, two actual DI. Full
+root/proof/Wasm/browser passes400.043s:3335 desktop/493 suites,230 Android host/37,
+ten build-logic/two, six proof-host/one,19 browser/two, including explicit task reuse.
+1775 cases/228 suites fresh; zero failures/errors/skips. First focused55.332s had
+two fixture failures only; captured-scope and denial sequencing fixed before all
+checks passed. Database reopen uses a retained test credential store, not a new OS
+process-death acceptance. No UI controls/display/cancellation/native action consumer
+exists yet. This increment has no generic Starter port.
+
+Release18/source42f5d157 Apple41480512291 is fully audited:780 cases/89 suites, zero
+failures/errors/skips,54 accepted source hashes, artifact13162038114 digest
+f48d985d395c78e855cab177782b9084b8f024b5142ef21d160efbbfccd49e0f.
+Simulator compile758s/tests75s, full Xcode app1315s. Covers worker/viewport, excludes
+these newer notification settings. [Apple evidence](measurements/chat-visible-read-apple-2026-11-02.json).
+Phone remains verified18, live API/worker304be027/schema116, all chat push OFF.
+
+Next: commit/push settings, then dispatch Apple on that exact head (previous Apple
+finished; workflow concurrency would cancel a running same-scope run). Continue
+notification projection, durable encrypted display/action ledger, mute/read cancellation,
+UI controls and native inline reply, then all54 PRD groups. Three production and two
+test .txt drafts under .work/chat-notification-projection-2026-11-02 are UNAPPLIED,
+UNVALIDATED. Review source stamps/alias snapshots/Unicode bounds and sender-label
+binding, then wire owning DI/tests before applying. notes.md documents renderer
+races and RemoteInput duplication; a local projection alone cannot atomically order
+OS display against concurrent preference writes. Settings .work/check-3 already
+passed; don't rerun accepted broad tests without changes/failures. All54 groups stay
+open; continue long run and push every commit. Next product phone build must exceed18,
+notify first, explicit10.77.77.3:5555, --install-only, preserve data/signing, no UI driving.
+
 ## Release18 installed; receipt gateway live — 2 November 2026
 
 Clean42f5d157 built signed devRelease18/1.0.0 (arm64, non-debuggable) and lint in
