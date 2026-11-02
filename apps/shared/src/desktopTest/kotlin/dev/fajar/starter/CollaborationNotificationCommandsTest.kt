@@ -23,6 +23,139 @@ import kotlinx.coroutines.flow.first
 /** Real shared graph, crypto and SQLite, with fictional HTTP and an explicitly simulated SDK. */
 class CollaborationNotificationCommandsTest {
     @Test
+    fun completionReproducesQueuedAndArchivedCancelledCommandsAfterDatabaseReopen() = runBlocking {
+        for (cancelled in listOf(false, true)) withFixture { f, target ->
+            val action = CollaborationNotificationAction.Reply(id(), target)
+            val token = f.seal(action)
+            val input =
+                assertIs<AppResult.Success<CollaborationNotificationReplyInput>>(
+                        f.koin.get<RetainCollaborationNotificationReply>()(
+                            token,
+                            "Retained before dispatch",
+                        )
+                    )
+                    .value
+            assertEquals(
+                AppResult.Success(CollaborationNotificationReplyCompletion.Pending),
+                f.koin.get<CompleteCollaborationNotificationReply>()(input),
+            )
+            assertIs<AppResult.Success<*>>(
+                f.koin.get<CollaborationNotificationCommands>()(
+                    input.candidate.token,
+                    input.candidate.text,
+                )
+            )
+            if (cancelled) {
+                val record =
+                    assertIs<AppResult.Success<CollaborationMessageRecord?>>(
+                            f.koin
+                                .get<CollaborationMessageRepository>()
+                                .get(f.access(), action.operationId)
+                        )
+                        .value!!
+                assertEquals(
+                    AppResult.Success(true),
+                    f.koin
+                        .get<CollaborationMessageCancellationRepository>()
+                        .cancel(f.access(), record),
+                )
+                val pending =
+                    assertIs<AppResult.Success<List<CollaborationMessageRecord>>>(
+                            f.koin
+                                .get<CollaborationMessageRepository>()
+                                .observe(f.access(), null)
+                                .first()
+                        )
+                        .value
+                assertTrue(pending.isEmpty())
+            }
+            f.reopen()
+            f.withoutIncomingSelection()
+            val state =
+                if (cancelled) CollaborationMessageState.Cancelled
+                else CollaborationMessageState.Queued
+            assertEquals(
+                AppResult.Success(CollaborationNotificationReplyCompletion.Retired(state)),
+                f.koin.get<CompleteCollaborationNotificationReply>()(input),
+            )
+            f.reopen()
+            f.withoutIncomingSelection()
+            assertEquals(
+                AppResult.Success(CollaborationNotificationReplyCompletion.Absent),
+                f.koin.get<CompleteCollaborationNotificationReply>()(input),
+            )
+            val saved =
+                assertIs<AppResult.Success<CollaborationMessageRecord?>>(
+                        f.koin
+                            .get<CollaborationMessageRepository>()
+                            .get(f.access(), action.operationId)
+                    )
+                    .value!!
+            assertEquals(input.candidate.text, saved.intent.text)
+            assertEquals(state, saved.state)
+            assertTrue(f.sdk.enqueued.isEmpty())
+        }
+    }
+
+    @Test
+    fun changedReplyTextRemainsEncryptedAfterFirstInputCompletesAndDatabaseReopens() = runBlocking {
+        withFixture { f, target ->
+            val token = f.seal(CollaborationNotificationAction.Reply(id(), target))
+            val retain = f.koin.get<RetainCollaborationNotificationReply>()
+            val first =
+                assertIs<AppResult.Success<CollaborationNotificationReplyInput>>(
+                        retain(token, "First reply")
+                    )
+                    .value
+            val changed =
+                assertIs<AppResult.Success<CollaborationNotificationReplyInput>>(
+                        retain(token, "Changed reply")
+                    )
+                    .value
+            assertNotEquals(first.id, changed.id)
+            assertIs<AppResult.Success<*>>(
+                f.koin.get<CollaborationNotificationCommands>()(
+                    first.candidate.token,
+                    first.candidate.text,
+                )
+            )
+            assertIs<AppResult.Success<*>>(
+                f.koin.get<CompleteCollaborationNotificationReply>()(first)
+            )
+            assertEquals(
+                FailureKind.Conflict,
+                assertIs<AppResult.Failed>(
+                        f.koin.get<CompleteCollaborationNotificationReply>()(changed)
+                    )
+                    .failure
+                    .kind,
+            )
+            f.reopen()
+            f.withoutIncomingSelection()
+            val access =
+                f.access().let {
+                    CollaborationRecoveryAccess(it.sessionId, it.audience, it.accountId)
+                }
+            assertEquals(
+                AppResult.Success(changed),
+                f.koin.get<CollaborationNotificationReplyRepository>().get(access, changed.id),
+            )
+            assertEquals(
+                AppResult.Success(null),
+                f.koin.get<CollaborationNotificationReplyRepository>().get(access, first.id),
+            )
+            val message =
+                assertIs<AppResult.Success<CollaborationMessageRecord?>>(
+                        f.koin
+                            .get<CollaborationMessageRepository>()
+                            .get(f.access(), first.candidate.action.operationId)
+                    )
+                    .value!!
+            assertEquals("First reply", message.intent.text)
+        }
+    }
+
+    @Test
     fun encryptedReplyUsesOneDurableOperationAcrossReopenAndRejectsDifferentText() = runBlocking {
         withFixture { f, target ->
             val action = CollaborationNotificationAction.Reply(id(), target)

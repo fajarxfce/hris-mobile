@@ -1,5 +1,44 @@
 # Agent continuation — HRIS Mobile
 
+## Exact reply completion accepted — 2 November 2026
+
+CompleteCollaborationNotificationReply now reproduces the exact immutable command
+before removing an exact retained input version. Account/company/conversation/ID/text
+and valid command revision/state must match. It recognizes queued through sent and
+authenticated cancelled archives without original history or fresh credentials.
+Same-account reauthentication may recognize the old command; no old token becomes a
+new send grant. Missing input (`Absent`), missing command (`Pending`) and retirement
+with actual command state remain distinct. Current-family/retained-denial checks
+surround every pending operation, and newer reviewed/recreated input is preserved.
+[Contract and required follow-through](collaboration-notification-reply-completion.md),
+[evidence](measurements/chat-notification-reply-completion-2026-11-02.json).
+
+Focused26 cases/three suites pass166.107s:13 domain,11 actual application integration
+(two added),two assembled DI. Full root/proof/Wasm/browser passes348.963s:3421 desktop/
+502 suites,230 Android host/37,ten build-logic/two,six proof-host/one and13 actual browser/
+one, with explicit reuse.1855 fresh/236 suites; zero failures/errors/skips. Seven
+source/test hashes unchanged; format, architecture74 modules and detekt pass. No failed
+attempts. Actual SQLite reopen proves queued/cancelled archives and changed-input
+preservation, with test credentials retained in memory and an explicitly simulated SDK;
+not OS process-death or native notification acceptance. No generic Starter port.
+
+Next: commit/push; validate repaired native backend compatibility against all three
+interop classes using an owned emulator and a frozen copy of the accepted proof APK.
+Do not use the phone. Hosted repaired native41502174267/control41502174144 are still
+pending behind b870; full Apple41502192261 atdf0a1d40 compiles simulator tests and
+EXCLUDES this completion. Prepared final audit under .work/chat-ci-repair-apple-2026-11-02
+with105 source hashes already verified against accepted measurements. Latest accepted
+full Apple remains222bd441/41492596519. Do not cancel/claim pending jobs accepted.
+
+Then current-owner input read, reproduced review, complete application reply wrapper,
+durable fair recovery, display journal/issuer/native callbacks. Details are in the
+linked contract and supplemental .work/chat-notification-reply-completion-2026-11-02/
+next.md and reply-review-plan.md. Already reviewed inputs must not silently dispatch;
+Absent grants no new send or OS cancellation; transient failure is not permanent review.
+Phone18/source42f5d157 and live304be027/schema116 remain; chat push OFF, all54 PRD groups
+open. Continue long run and push every atomic commit. Next product phone build >18:
+notify first, explicit10.77.77.3:5555 --install-only, preserve signer/data, no UI driving.
+
 ## CI fixture corrections locally accepted; hosted verification required
 
 Native HRIS workflow now pins Platform304be02700cf07e496421c17e90f5a471b4bd68c,
