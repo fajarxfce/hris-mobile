@@ -72,3 +72,5 @@ denied-only finite completion, and denied/slow first input with other-company pr
 The current standalone seek foundation does not implement these cycle transitions.
 The supplementary application-worker draft with only ephemeral page outcomes is
 incomplete and must be rewritten before activation.
+
+Validation of the standalone seek: [recorded checks and limits](measurements/chat-notification-reply-recovery-2026-11-02.json).
