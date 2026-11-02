@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-## Full Apple and native completion-source CI accepted; read/review rerun active
+## Reply input read/review accepted; next application callback workflow
 
 Full Apple41508567222 attempt2 at2dd94e94ea6b74b9f4d9430f25348cb64a7f7f30
 (docs-only after1a92) PASSED:843 simulator cases/96 suites, no failures/errors/skips;
@@ -26,17 +26,25 @@ not separately artifact-audited here. Full Xcode evidence above is independently
 Both failed local worker attempts and failed diagnostic boot below remain failures;
 local emulator host hang unresolved, no emulator running, no repeat required.
 
-Uncommitted read/review has20 domain cases and actual SQLite/assembled-DI coverage.
-Focused33 cases/four suites passed but detekt rejected review length103/max100;
-extracted exact hold-and-reread helper. Full check2 eventually logged BUILD SUCCESSFUL
-47m7s and produced1882 fresh passing cases/239 suites including20 actual browser/two.
-The Python wrapper timed out1800s and killed only xvfb-run; Gradle child continued,
-so its actual exit code was not collected. This is NOT a clean command pass. Preserved
-all fresh reports and input hashes, recorded wrapper failure separately. Host I/O
-pressure was extreme (load260, IO some65/full36 over60s); no unrelated processes stopped.
-Updated local harness now owns a process group and terminates descendants on timeout.
-Full check3 RUNNING with unchanged eight Kotlin inputs, rerunning the20 browser cases;
-required before commit. Directory .work/chat-notification-reply-review-2026-11-02.
+Read/review accepted with20 domain cases and updated actual SQLite/assembled-DI
+coverage. Read uses current native owner and company admission before exposing text;
+review reproduces command conflict, replaced family or absent acquired context, then
+holds the exact input version. Matching commands need completion; transient failures
+and retained denials never create permanent holds. Already-held text stays held; no
+automatic sending or clearing. [Contract](collaboration-notification-reply-review.md),
+[evidence](measurements/chat-notification-reply-review-2026-11-02.json).
+
+Focused33 cases/four suites passed, but detekt first rejected review length103/max100;
+extracted hold-and-reread helper. Full check2 eventually logged BUILD SUCCESSFUL47m7s
+with1882 fresh passing cases/239 suites including20 browser/two. Python wrapper timed
+out1800s and killed only xvfb-run; Gradle child finished without its exit code collected.
+Preserved that failure and reports separately. Host I/O pressure was extreme; no
+unrelated process stopped. Harness now owns/terminates its process group on timeout.
+Unchanged-source check3 finished cleanly77.541s:3441 desktop/504 suites,230 Android-host/
+37,six proof-host/one,ten build-logic/two,20 actual browser/two. Explicit reuse recorded;
+20 browser cases rerun fresh, all failures/errors/skips zero. All eight input hashes
+unchanged; format/architecture74 modules/detekt and proof assembly/Wasm compile pass.
+No generic Starter port, native receiver, UI review page or recovery loop activated.
 
 Next application reply wrapper has UNAPPLIED .txt drafts under
 .work/chat-notification-reply-flow-2026-11-02 (wrapper/result/14 assembled-storage tests).

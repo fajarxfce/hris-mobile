@@ -130,19 +130,22 @@ class CollaborationNotificationCommandsTest {
                     .failure
                     .kind,
             )
+            val held =
+                assertIs<AppResult.Success<CollaborationNotificationReplyInput?>>(
+                        f.koin.get<ReviewCollaborationNotificationReply>()(changed)
+                    )
+                    .value!!
+            assertEquals(CollaborationNotificationReplyReview.MessageChanged, held.review)
+            assertEquals(changed.candidate, held.candidate)
             f.reopen()
             f.withoutIncomingSelection()
-            val access =
-                f.access().let {
-                    CollaborationRecoveryAccess(it.sessionId, it.audience, it.accountId)
-                }
             assertEquals(
-                AppResult.Success(changed),
-                f.koin.get<CollaborationNotificationReplyRepository>().get(access, changed.id),
+                AppResult.Success(held),
+                f.koin.get<ReadCollaborationNotificationReply>()(held.id),
             )
             assertEquals(
                 AppResult.Success(null),
-                f.koin.get<CollaborationNotificationReplyRepository>().get(access, first.id),
+                f.koin.get<ReadCollaborationNotificationReply>()(first.id),
             )
             val message =
                 assertIs<AppResult.Success<CollaborationMessageRecord?>>(
@@ -362,6 +365,14 @@ class CollaborationNotificationCommandsTest {
     fun retainedDenialBlocksTheActionAndKeepsTheOriginalEncryptedHistory() = runBlocking {
         withFixture { f, target ->
             val token = f.seal(CollaborationNotificationAction.Reply(id(), target))
+            val input =
+                assertIs<AppResult.Success<CollaborationNotificationReplyInput>>(
+                        f.koin.get<RetainCollaborationNotificationReply>()(
+                            token,
+                            "Retained by native caller",
+                        )
+                    )
+                    .value
             val denied = Failure(FailureKind.AccessDenied, "Restricted", code = "permission_denied")
             assertIs<AppResult.Success<*>>(
                 f.koin.get<CollaborationListRepository>().restrict(f.access(), denied)
@@ -376,6 +387,25 @@ class CollaborationNotificationCommandsTest {
                     .failure
             assertEquals(denied.kind, rejected.kind)
             assertEquals(denied.code, rejected.code)
+            f.reopen()
+            f.withoutIncomingSelection()
+            for (result in
+                listOf(
+                    f.koin.get<ReadCollaborationNotificationReply>()(input.id),
+                    f.koin.get<ReviewCollaborationNotificationReply>()(input),
+                )) {
+                val failure = assertIs<AppResult.Failed>(result).failure
+                assertEquals(denied.kind, failure.kind)
+                assertEquals(denied.code, failure.code)
+            }
+            val access =
+                f.access().let {
+                    CollaborationRecoveryAccess(it.sessionId, it.audience, it.accountId)
+                }
+            assertEquals(
+                AppResult.Success(input),
+                f.koin.get<CollaborationNotificationReplyRepository>().get(access, input.id),
+            )
             assertNotNull(
                 assertIs<AppResult.Success<CollaborationHistoryMessage?>>(
                         f.koin
