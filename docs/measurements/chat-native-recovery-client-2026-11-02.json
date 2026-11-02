@@ -1,0 +1,197 @@
+{
+  "date": "2026-11-02",
+  "baseCommit": "10dce241e9ed090f0fe695233f74f6cc0d223807",
+  "platformContractCommit": "8b77c4fab7f49fc646336412324830261651247c",
+  "scope": "Native-parent device discovery and ephemeral company admission independent of foreground selection. Background SDK retention/sweeps/notifications are not wired.",
+  "sourceSha256": {
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt": "d6c15606c1d78229793d3b8f8bfed47e1249a35e763481ec415424a2a632e4dc",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/api/CollaborationRecoveryApi.kt": "bfa99325cb1d1205f95f6c786fe8d9ec41c639cd2074d5dbfea6dd1973bb77c5",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/datasources/ApiCollaborationRecoveryRemoteSource.kt": "51dd64976a62ca7e3fd45b8a0600e4191c9f819a61f34d834bffb56247ca9a3b",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/datasources/CollaborationRecoveryRemoteSource.kt": "42512b39c9d41df80ffa67afedcf007fa92cb6f62e02584abd0d32cd254c94c7",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt": "cb3e9ad7aa18d1118c2ee7c2b135b1c24fb721013420850f27e5dd6d825a14e7",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/dto/CollaborationRecoveryDto.kt": "0e7d1b934bc9a1731bd7e26eb5e52c745daf5b30fbbc45b4f702996674c29f5b",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/RemoteCollaborationRecoveryRepository.kt": "8da6f9cb9a037eb8431546701627873503bc8c4f0ad1c719a950ae03cd7705b0",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationRecoveryTransportTest.kt": "9bc97e651b30271288851b918c98e72979978113b0dae3ef264d519d648d70b8",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationRecovery.kt": "829879af3452033719d9622a4d806a036625566ba73e0635fa3edcd7fb554ca3",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationRecoveryPolicy.kt": "c72a12d715c75c5b970867db1fbe7b1f7cc8ddc15fb9fb6cc8775d1ebe35d98e",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationRecoveryRepository.kt": "28b7923af2154f1e1b91e40b23219ca102b460180ee0eaac6e533de085f859ce",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/AcquireCollaborationBackgroundAdmission.kt": "b13df9d07bb94b170a4b430c57f4ca88ad3ed4e168e76624bf66d39b4fd8f550",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/LoadCollaborationDevicePage.kt": "2d4d79eb5ad1638dde09be35265ec4173d205e04ad8f4e248ca4e68c6c961f81",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationRecoveryTest.kt": "d24842af0d7ba869b1bdf1130fef33d8886de7642ac13352e04c2cbb3d24b3c9"
+  },
+  "focusedRun": {
+    "exitCode": 0,
+    "wallSeconds": 167.899,
+    "inputsUnchanged": true,
+    "command": [
+      "xvfb-run",
+      "-a",
+      "./gradlew",
+      ":features:collaboration:domain:desktopTest",
+      ":features:collaboration:data:desktopTest",
+      ":apps:shared:desktopTest",
+      "--tests",
+      "*CollaborationBindingsTest",
+      ":formatCheck",
+      ":architectureCheck",
+      ":detekt",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=1",
+      "-Dorg.gradle.jvmargs=-Xmx1536m"
+    ]
+  },
+  "focusedGradleSeconds": 164,
+  "focusedReports": {
+    "domain": {
+      "tests": 418,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "data": {
+      "tests": 294,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "bindings": {
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "finalRun": {
+    "exitCode": 0,
+    "wallSeconds": 549.631,
+    "inputsUnchanged": true,
+    "command": [
+      "xvfb-run",
+      "-a",
+      "./gradlew",
+      ":check",
+      ":features:collaboration:domain:wasmJsBrowserTest",
+      ":features:collaboration:data:wasmJsBrowserTest",
+      ":apps:android:assembleDevRelease",
+      ":apps:android:lintDevRelease",
+      "-PrequireSigning=true",
+      "-PappEnvironment=dev",
+      "-PappVersion=1.0.0",
+      "-PappVersionCode=13",
+      "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=1",
+      "-Dorg.gradle.jvmargs=-Xmx1536m"
+    ]
+  },
+  "gradleSeconds": 546,
+  "reports": {
+    "desktopTest": {
+      "tests": 2867,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "wasmJsBrowserTest": {
+      "tests": 690,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "testAndroidHostTest": {
+      "tests": 186,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "test": {
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "lintIssues": [
+    {
+      "id": "DataExtractionRules",
+      "severity": "Warning"
+    }
+  ],
+  "pythonChecks": {
+    "androidRunner": 10,
+    "distribution": 17
+  },
+  "checked": [
+    "Nine new domain cases and six transport/mapping cases pass. Real shared application-container singleton resolution passes.",
+    "Discovery and company admission do not read or mutate foreground workspace selection. Cursor continuation requires its originating local/native parent.",
+    "One active invocation per use-case singleton, no waiting queue, 15-second budget, caller cancellation, late ownership/clock checks and explicit subsequent retry.",
+    "Strict owned page size/order/identity/unique-device/cursor validation; directory data does not authorize content.",
+    "Active matching platform/device admission with nonnegative observed versions and maximum60-second lifetime. Local deadline charges request latency and cannot outlive current native parent.",
+    "Confirmed company/MFA denial remains in the retained gate despite failed local storage. Successful observation never clears that gate.",
+    "Authenticated origin/session pinning with bounded16KiB/2KiB response acquisition. Foreign scopes, malformed times/versions, byte limits and cancellation are checked.",
+    "Root check, affected browser suites, release assembly/lint, format, architecture74modules and detekt pass."
+  ],
+  "limits": [
+    "Transport uses MockEngine; no real native SDK/HRIS/Synapse/FCM call occurs in these new client cases. Matching actual Platform endpoints have separate evidence at8b77c4fa.",
+    "This increment does not borrow/restore SDK resources, schedule all-company sweeps, consume FCM or post/reply to notifications.",
+    "Background lifetime ownership, typed existing acquisition/outbox scope, durable cursors/hints, privacy/read/mute actions, Apple/web behavior and provider acceptance remain required.",
+    "No generic Starter port or live schema/provider change. Keep push delivery disabled. Phone release11 remains user-confirmed working.",
+    "Only the domain/data browser suites requested in the command are counted; older reports from other browser modules are excluded."
+  ],
+  "actualReleaseStartup": {
+    "serial": "emulator-5560",
+    "isolatedEmulatorData": true,
+    "actualApplication": "dev.fajar.hris.StarterApplication",
+    "variant": "devRelease",
+    "debuggable": false,
+    "versionCode": 13,
+    "sha256": "5ab1226278ae8c8e6a2e87fbd7c63a5a3296d414d83ba40ebdeab94b47fbc6bc",
+    "bytes": 281081392,
+    "elapsedSeconds": 38.649,
+    "coldStarts": [
+      {
+        "coldStart": 1,
+        "pid": 2995,
+        "stableSeconds": 12,
+        "renderedTexts": [
+          "HR",
+          "HRIS",
+          "Skip",
+          "Employee services",
+          "Access attendance, requests, and work information.",
+          "1 of 3",
+          "Continue"
+        ],
+        "resumed": true,
+        "processCrash": false,
+        "elapsedSeconds": 16.427
+      },
+      {
+        "coldStart": 2,
+        "pid": 3163,
+        "stableSeconds": 12,
+        "renderedTexts": [
+          "HR",
+          "HRIS",
+          "Skip",
+          "Employee services",
+          "Access attendance, requests, and work information.",
+          "1 of 3",
+          "Continue"
+        ],
+        "resumed": true,
+        "processCrash": false,
+        "elapsedSeconds": 15.273
+      }
+    ],
+    "source": "Base10dce241 plus the fourteen unchanged source inputs above; local universal validation build, not phone distribution.",
+    "screenshots": {
+      "startup-1.png": "1936bc44ee4bea05337cd1cc0db2dd3c8b05f9c7a931073a02ed4d834677af48",
+      "startup-2.png": "d95addccef01086b013ed004d841ec6eb54584db7fd7717bab1864c1bdb0a968"
+    },
+    "visualInspection": "Both screenshots show readable onboarding title, copy, indicator and actions without clipping or a crash surface.",
+    "cleanup": "Owned emulator5560 stopped and absence verified; phone not installed or driven."
+  }
+}

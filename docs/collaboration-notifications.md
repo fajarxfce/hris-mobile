@@ -33,9 +33,10 @@ starts. Android host transport uses MockEngine and a stubbed SDK session getter;
 native SDK → HRIS → Synapse → FCM acceptance is still separate. Release12 is a local
 universal validation APK; the phone retains accepted release11.
 
-Next, discover all device references for the current native parent through the
-bounded Platform directory, then acquire separate company admission before content
-I/O. Discovery metadata is not an authority grant. Background leases must coexist
+The [native recovery client](collaboration-native-recovery.md) now discovers bounded
+device references for the current parent and acquires separate company admission.
+Discovery metadata is not an authority grant. The background worker still needs
+to consume these operations before content I/O. Background leases must coexist
 with the foreground runtime without changing the selected workspace, escaping an
 account/session change or opening the same cryptographic store twice. Collapsed
 push hints, reconnect and periodic recovery must visit every owned company with

@@ -14,6 +14,31 @@ import org.koin.core.annotation.*
 @ComponentScan("dev.fajar.starter.collaboration.data")
 class CollaborationDataModule {
     @Single
+    fun loadDevicePage(
+        recovery: CollaborationRecoveryRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) = LoadCollaborationDevicePage(recovery, sessions, server, build, Clock.System)
+
+    @Single
+    fun acquireBackgroundAdmission(
+        recovery: CollaborationRecoveryRepository,
+        lists: CollaborationListRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) =
+        AcquireCollaborationBackgroundAdmission(
+            recovery,
+            lists,
+            sessions,
+            server,
+            build,
+            Clock.System,
+        )
+
+    @Single
     fun activatePusher(
         runtimes: CollaborationRuntimeRepository,
         setup: CollaborationSetupRepository,

@@ -157,6 +157,18 @@ class CollaborationBindingsTest {
                     container.koin.get<ActivateCollaborationPusher>(),
                     container.koin.get<ActivateCollaborationPusher>(),
                 )
+                assertSame(
+                    container.koin.get<LoadCollaborationDevicePage>(),
+                    container.koin.get<LoadCollaborationDevicePage>(),
+                )
+                assertSame(
+                    container.koin.get<AcquireCollaborationBackgroundAdmission>(),
+                    container.koin.get<AcquireCollaborationBackgroundAdmission>(),
+                )
+                assertSame(
+                    container.koin.get<CollaborationRecoveryRepository>(),
+                    container.koin.get<CollaborationRecoveryRepository>(),
+                )
                 assertNotNull(container.koin.get<ReadCollaborationControl>())
                 assertNotNull(container.koin.get<ReadCollaborationIdentity>())
                 assertNotNull(container.koin.get<ReadCollaborationThreadContext>())

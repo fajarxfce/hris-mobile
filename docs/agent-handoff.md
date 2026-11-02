@@ -1,6 +1,45 @@
 # Agent continuation — HRIS Mobile
 
 
+## Native-parent discovery and company admission client validated — 2 November 2026
+
+[Contract](collaboration-native-recovery.md) / [evidence](measurements/chat-native-recovery-client-2026-11-02.json):
+one bounded device page and separate active-device company admission now work without
+reading/changing foreground selection. Local/native-parent identity, current scope,
+strict metadata, versions and request-time-calibrated deadlines are checked. Each
+use case owns one15-second request without a waiting queue. Received company/MFA
+denial stays gated despite cleanup failure; successful observation never clears it.
+
+Nine new domain and six transport cases plus actual container bindings pass.
+Focused418 domain/294 data/two DI cases pass in164s /167.899s. Full root check,
+affected browser suites and signed universal devRelease13 assembly/lint pass in
+546s Gradle /549.631s wall:2,867 desktop,186 Android host,690 browser and10 build-logic
+cases; root Python10 runner/17 distribution checks. Fourteen inputs unchanged,
+format/architecture74modules/detekt pass, lint zero errors/one existing warning.
+Both actual-app cold starts remain stable12s with readable/resumed onboarding and
+inspected screenshots,38.649s smoke. Owned emulator5560 stopped. Older unrelated
+browser reports are excluded; no hosted/native-provider or phone-install claim.
+
+Platform8b77c4fa has matching actual HTTP/SQL/API+worker proof. Continue typed
+Selected/Background operation scope through the existing acquisition/outbox use
+cases, then finite SDK background borrowing alongside foreground ownership. Never
+swap WorkspaceRepository selection, duplicate a cryptographic store, expose a parent
+close handle to a borrower or let late work survive parent replacement. Concrete
+notes and a four-file UNAPPLIED/UNTESTED candidate are in
+.work/native-recovery-client-2026-11-02/runtime-next.txt and typed-scope-prepared.json;
+Git contracts remain authoritative. The candidate covers list/conversation reads
+only and must gain tests, strict grant validation and runtime integration.
+
+Use classic SyncV2 history for notification recovery; built-in NotificationClient
+requires sliding sync. Durable all-company hint/reconnect/periodic recovery, receiver,
+privacy/read/mute/deep links and inline replies still remain. Keep backend delivery
+disabled. Phone remains accepted release11; next useful product update12+, notify
+first, explicit10.77.77.3:5555 install-only and same signer/data. Release13 above is
+only a local validation artifact. No generic Starter port or live schema/provider
+rollout. All54 groups remain unaccepted; continue P0–P8 after each pushed checkpoint.
+
+
+
 ## Managed pusher client validated; background recovery next — 2 November 2026
 
 [Contract](collaboration-notifications.md) / [evidence](measurements/chat-pusher-client-2026-11-02.json):
