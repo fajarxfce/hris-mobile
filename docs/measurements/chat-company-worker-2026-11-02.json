@@ -879,5 +879,13 @@
     "Registered all-company consumer currently invokes captured outgoing delivery; independent incoming acquisition, room progress and FCM remain separate.",
     "No new actual WorkManager or SDK/provider execution by these checks. Native emulator proof is the next step.",
     "No employee APK or server rollout; phone remains release15. No new Apple execution yet."
-  ]
+  ],
+  "apple": {
+    "runId": 41405822268,
+    "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/41405822268",
+    "headSha": "338fea17b5738698f45c824cd1d6a06142050946",
+    "scope": "apple",
+    "status": "in_progress",
+    "acceptance": false
+  }
 }

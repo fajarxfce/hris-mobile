@@ -1,5 +1,34 @@
 # Agent continuation — HRIS Mobile
 
+## Native consumer fixture and hosted validation running — 2 November 2026
+
+Mobile338fea17 is pushed. [Apple CI41405822268](https://github.com/fajarxfce/hris-mobile/actions/runs/41405822268)
+is running at exact338fea17b5738698f45c824cd1d6a06142050946. Do not dispatch another
+Apple run on this branch while active. Audit downloaded simulator XML and the
+complete Xcode app. Hosted core simulator suites do not substitute for the new
+worker's desktop tests or actual Android execution; retain each source boundary.
+
+The native proof candidates below ARE NOW APPLIED as three UNCOMMITTED Kotlin
+files in apps/collaboration-proof. Source files are authoritative; scratch .txt
+candidates predate a fixture-only refactor. Build1 assembled the APK but failed
+Detekt LongMethod (run126 lines;79s /82.79s). Build2 extracts burst/resume helpers
+and per-run counters, preserving all14 proven consumer inputs. It is under APK/
+static validation with17 frozen inputs. No native emulator execution yet.
+Supplementary evidence/run helpers: `.work/company-worker-native-2026-11-02/`.
+
+After a successful build, verify emulator port5562 and owned userdata are unused,
+start the dedicated AVD, and execute native.py with the accepted build attempt.
+It installs/clears ONLY the separate proof package and runs company-recovery,
+company-recovery-stage, company-recovery-resume with an explicit intervening process
+stop. Preserve failures; check two OS tasks/one company processor,40 rejected
+schedules retaining durable newer wakes, zero healthy-pagination Retry results,
+real Room/Keystore restart and uncertain-company fairness, then bounded cleanup.
+Do not claim SDK/provider acceptance from these synthetic directory/company callbacks.
+Stop the owned emulator afterward; never touch unrelated CodePush5560 or the phone.
+
+Continue actual incoming recovery and all unaccepted PRD groups after this proof;
+phone remains15, private backend unchanged/push disabled, temporary swap removed.
+
 ## All-company consumer registered and locally validated — 2 November 2026
 
 [Contract](collaboration-company-worker.md) / [evidence](measurements/chat-company-worker-2026-11-02.json):
