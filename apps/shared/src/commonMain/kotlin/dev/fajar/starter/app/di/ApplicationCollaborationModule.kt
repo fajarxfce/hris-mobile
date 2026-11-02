@@ -19,7 +19,7 @@ internal fun applicationCollaborationModule(
     single<CollaborationRuntimeRepository> {
         runtime(get(), get(named(dev.fajar.starter.network.HttpClients.Public)))
     }
-    single { ApplicationCollaborationLifetime(get(), get()) }.onClose { it?.close() }
+    single { ApplicationCollaborationLifetime(get(), get(), get(), get()) }.onClose { it?.close() }
     single<AtomicCredentialStore>(named("collaboration-list-content-key")) { listCredentials }
         .onClose { it?.close() }
     single<AtomicCredentialStore>(named("collaboration-receipt-content-key")) { receiptCredentials }

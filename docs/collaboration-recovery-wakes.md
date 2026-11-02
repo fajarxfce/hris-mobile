@@ -32,3 +32,8 @@ six data regressions on desktop/browser, plus assembled application DI and actua
 SQLite fencing. The [bounded Android scheduler](bounded-work-scheduling.md) now has separate real
 WorkManager proof. Registered all-company workers, FCM receive/decrypt and notifications
 remain outstanding. These HRIS operations currently have no application entry-point callers.
+
+The [all-company consumer](collaboration-company-worker.md) now registers this key,
+creates periodic hints without recursive scheduling, and consumes the retained
+progress. Startup and Android slot opt-in are wired. Its current company callback
+covers outgoing delivery; incoming/notification/provider acceptance remains separate.

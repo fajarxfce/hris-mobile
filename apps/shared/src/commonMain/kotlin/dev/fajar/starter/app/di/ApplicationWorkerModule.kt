@@ -1,7 +1,9 @@
 package dev.fajar.starter.app.di
 
+import dev.fajar.starter.app.bootstrap.ApplicationCollaborationLifetime
 import dev.fajar.starter.app.work.CollaborationDeliveryWorker
 import dev.fajar.starter.app.work.CollaborationDraftRecovery
+import dev.fajar.starter.app.work.CollaborationRecoveryWorker
 import dev.fajar.starter.app.work.InboxPushWorker
 import dev.fajar.starter.app.work.NativePushWorker
 import dev.fajar.starter.sync.domain.SyncTask
@@ -16,6 +18,23 @@ fun applicationWorkerModule() = module {
     single { InboxPushWorker(get(), get(), inject(), get()) } bind SyncTask::class
     single { NativePushWorker(get(), inject()) } bind SyncTask::class
     single { CollaborationDraftRecovery(get(), get(), get(), get(), get()) }
+    single {
+        val parent = inject<ApplicationCollaborationLifetime>()
+        val delivery = inject<CollaborationDeliveryWorker>()
+        CollaborationRecoveryWorker(
+            states = lazy { parent.value.state },
+            ensureWake = get(),
+            readWake = get(),
+            completeWake = get(),
+            resume = inject(),
+            readProgress = get(),
+            updateProgress = get(),
+            devices = get(),
+            admit = get(),
+            build = get(),
+            recoverCompany = { delivery.value(it) },
+        )
+    } bind SyncTask::class
     single {
         CollaborationDeliveryWorker(
             recoverDrafts = get(),

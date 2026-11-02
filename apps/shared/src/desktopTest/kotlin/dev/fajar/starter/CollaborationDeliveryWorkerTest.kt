@@ -114,18 +114,31 @@ class CollaborationDeliveryWorkerTest {
     }
 
     @Test
-    fun ownerStartupRequestsOnlyTheTaskKeyAndDoesNotRunNetworkDeliveryItself() = runBlocking {
-        withFixture { f ->
-            f.queue()
-            f.scheduled.clear()
-            val lifetime = f.koin.get<ApplicationCollaborationLifetime>()
-            lifetime.start()
-            withTimeout(5_000) { while (f.scheduled.isEmpty()) yield() }
-            assertEquals(listOf(QueueCollaborationText.DELIVERY_KEY), f.scheduled)
-            assertEquals(0, f.sdk.deliveries)
-            lifetime.closeAndJoin()
+    fun ownerStartupRequestsOnlyRegisteredTaskKeysAndDoesNotRunNetworkDeliveryItself() =
+        runBlocking {
+            withFixture { f ->
+                f.queue()
+                f.scheduled.clear()
+                val lifetime = f.koin.get<ApplicationCollaborationLifetime>()
+                lifetime.start()
+                withTimeout(5_000) {
+                    while (QueueCollaborationText.DELIVERY_KEY !in f.scheduled) yield()
+                }
+                assertEquals(
+                    listOf(CollaborationRecoveryWake.WORK_KEY, QueueCollaborationText.DELIVERY_KEY),
+                    f.scheduled,
+                )
+                assertNotNull(
+                    assertIs<AppResult.Success<CollaborationRecoveryWake?>>(
+                            f.koin.get<ReadCollaborationRecoveryWake>()()
+                        )
+                        .value
+                )
+                assertEquals(0, f.sdk.deliveries)
+                assertEquals(0, f.sdk.backgroundAcquisitions)
+                lifetime.closeAndJoin()
+            }
         }
-    }
 
     @Test
     fun cancelledLateChildIsClosedAndPersistedTurnLetsAnotherRoomRunAfterRestart() = runBlocking {

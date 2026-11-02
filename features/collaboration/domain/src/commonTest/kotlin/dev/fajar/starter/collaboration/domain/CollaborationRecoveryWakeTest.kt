@@ -11,6 +11,53 @@ import kotlinx.coroutines.test.runTest
 
 class CollaborationRecoveryWakeTest {
     @Test
+    fun periodicEntryCreatesOrReusesAWakeWithoutRecursivelyScheduling() = runTest {
+        val f = WakeFixture()
+        val ensure = EnsureCollaborationRecoveryWake(f.wakes)
+        val first = assertIs<AppResult.Success<CollaborationRecoveryWake>>(ensure()).value
+        assertEquals(AppResult.Success(first), ensure())
+        assertEquals(1, f.writes)
+        assertTrue(f.scheduled.isEmpty())
+        assertEquals(AppResult.Success(true), f.complete(first))
+        val next = assertIs<AppResult.Success<CollaborationRecoveryWake>>(ensure()).value
+        assertNotEquals(first, next)
+        assertEquals(2, f.writes)
+        assertTrue(f.scheduled.isEmpty())
+    }
+
+    @Test
+    fun periodicReadOrWriteFailureCannotInventAPendingWake() = runTest {
+        val f = WakeFixture()
+        val ensure = EnsureCollaborationRecoveryWake(f.wakes)
+        f.readFailure = f.storage
+        assertEquals(AppResult.Failed(f.storage), ensure())
+        assertEquals(listOf("read"), f.calls)
+        f.readFailure = null
+        f.writeFailure = f.storage
+        assertEquals(AppResult.Failed(f.storage), ensure())
+        assertNull(f.retained)
+        assertTrue(f.scheduled.isEmpty())
+    }
+
+    @Test
+    fun cancelledPeriodicReadsCannotCreateAWakeAndLostWriteResponsesKeepIt() = runTest {
+        for (afterWrite in listOf(false, true)) {
+            val f = WakeFixture()
+            val ensure = EnsureCollaborationRecoveryWake(f.wakes)
+            if (afterWrite) f.afterWrite = { currentCoroutineContext().cancel() }
+            else f.afterRead = { currentCoroutineContext().cancel() }
+            val job = launch {
+                ensure()
+                error("Cancelled periodic publication")
+            }
+            job.join()
+            assertTrue(job.isCancelled)
+            assertEquals(afterWrite, f.retained != null)
+            assertTrue(f.scheduled.isEmpty())
+        }
+    }
+
+    @Test
     fun failedRetentionNeverEnqueuesAndSuccessfulEnqueueNeverAcknowledges() = runTest {
         val f = WakeFixture()
         f.writeFailure = f.storage
@@ -147,6 +194,7 @@ class CollaborationRecoveryWakeTest {
                 { f.request() },
                 { f.resume() },
                 { f.read() },
+                { EnsureCollaborationRecoveryWake(f.wakes)() },
                 { f.complete(CollaborationRecoveryWake("old")) },
             )
         for (action in actions) {

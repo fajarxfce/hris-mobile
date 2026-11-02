@@ -72,3 +72,8 @@ new domain and six application cases pass alongside existing startup/DI checks.
 Durable all-company wakes, fair directory/room cursors, receive/reconnect/periodic
 recovery, notification privacy/read/mute and encrypted inline replies remain open.
 No provider, incoming-FCM or physical-device acceptance follows from these tests.
+
+The [all-company consumer](collaboration-company-worker.md) now uses this processed
+state. A changed native parent requests durable recovery; same-parent renewal does
+not replace its wake. The worker owns cancellation on parent change, independently
+of selected-company delivery. No publication itself admits SDK acquisition.

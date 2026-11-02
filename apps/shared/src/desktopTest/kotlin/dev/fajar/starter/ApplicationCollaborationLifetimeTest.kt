@@ -4,8 +4,10 @@ package dev.fajar.starter
 
 import dev.fajar.starter.app.bootstrap.*
 import dev.fajar.starter.collaboration.domain.entities.*
+import dev.fajar.starter.collaboration.domain.repositories.CollaborationRecoveryWakeRepository
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationRuntimeRepository
 import dev.fajar.starter.collaboration.domain.usecases.MaintainCollaborationRuntimeOwnership
+import dev.fajar.starter.collaboration.domain.usecases.RequestCollaborationRecovery
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.fixtures.CollaborationWorkerFixture
 import dev.fajar.starter.identity.domain.entities.Session
@@ -43,7 +45,8 @@ class ApplicationCollaborationLifetimeTest {
                 assertEquals(f.app.session.id, published.retention.parent?.sessionId)
                 assertNull(published.retention.foreground)
                 assertEquals(1, f.workspaceObservers)
-                assertTrue(f.scheduled.isEmpty())
+                assertEquals(listOf(CollaborationRecoveryWake.WORK_KEY), f.scheduled)
+                assertEquals(1, f.recoveryWakeWrites)
             }
         }
 
@@ -61,7 +64,7 @@ class ApplicationCollaborationLifetimeTest {
                 assertIs<AppResult.Success<*>>(published.ownership)
                 assertEquals(failure, published.cleanup)
                 assertEquals(failure, published.result)
-                assertTrue(f.scheduled.isEmpty())
+                assertEquals(listOf(CollaborationRecoveryWake.WORK_KEY), f.scheduled)
                 assertEquals(0, f.app.sdk.backgroundAcquisitions)
             }
         }
@@ -178,7 +181,30 @@ class ApplicationCollaborationLifetimeTest {
             f.scheduler.runCurrent()
             assertNull(f.published().retention.parent)
             assertEquals(0, f.workspaceObservers)
-            assertTrue(f.scheduled.isEmpty())
+            assertEquals(List(2) { CollaborationRecoveryWake.WORK_KEY }, f.scheduled)
+            assertEquals(2, f.recoveryWakeWrites)
+        }
+    }
+
+    @Test
+    fun sameParentRenewalDoesNotReplaceThePendingWakeAndFailedSchedulingKeepsIt() = runBlocking {
+        withFixture { f ->
+            f.beforeWorkspace = { awaitCancellation() }
+            f.scheduleFailure = Failure(FailureKind.Unavailable, "Scheduler unavailable")
+            f.lifetime.start()
+            f.scheduler.runCurrent()
+            val wake = assertNotNull(f.retainedWake)
+            assertEquals(1, f.recoveryWakeWrites)
+            val current = f.app.session
+            f.session.value =
+                AppResult.Success(
+                    current.copy(tokens = current.tokens.copy(accessToken = "renewed"))
+                )
+            f.scheduler.runCurrent()
+            assertEquals(wake, f.retainedWake)
+            assertEquals(1, f.recoveryWakeWrites)
+            assertEquals(listOf(CollaborationRecoveryWake.WORK_KEY), f.scheduled)
+            assertNotNull(f.published().retention.parent)
         }
     }
 
@@ -227,6 +253,22 @@ private class LifetimeFixture(val app: CollaborationWorkerFixture, selected: Wor
         AppResult.Success(Unit)
     }
     val scheduled = mutableListOf<String>()
+    var recoveryWakeWrites = 0
+    var retainedWake: CollaborationRecoveryWake? = null
+    var scheduleFailure: Failure? = null
+    private val recoveryWakes =
+        object : CollaborationRecoveryWakeRepository {
+            override suspend fun pending() = AppResult.Success(retainedWake)
+
+            override suspend fun request(): AppResult<CollaborationRecoveryWake> {
+                val wake = CollaborationRecoveryWake("wake-${++recoveryWakeWrites}")
+                retainedWake = wake
+                return AppResult.Success(wake)
+            }
+
+            override suspend fun acknowledge(wake: CollaborationRecoveryWake) =
+                error("No startup acknowledgment")
+        }
     private val sessions =
         object : SessionRepository by app.koin.get<SessionRepository>() {
             override fun observe() = flow {
@@ -264,7 +306,7 @@ private class LifetimeFixture(val app: CollaborationWorkerFixture, selected: Wor
         object : SyncScheduleRepository {
             override suspend fun request(key: String): AppResult<Unit> {
                 scheduled += key
-                return AppResult.Success(Unit)
+                return scheduleFailure?.let { AppResult.Failed(it) } ?: AppResult.Success(Unit)
             }
         }
     val lifetime =
@@ -280,6 +322,8 @@ private class LifetimeFixture(val app: CollaborationWorkerFixture, selected: Wor
                 scheduler.timeSource,
             ),
             schedules,
+            RequestCollaborationRecovery(recoveryWakes, schedules),
+            app.koin.get(),
             StandardTestDispatcher(scheduler),
         )
 

@@ -1,5 +1,59 @@
 # Agent continuation — HRIS Mobile
 
+## All-company consumer registered and locally validated — 2 November 2026
+
+[Contract](collaboration-company-worker.md) / [evidence](measurements/chat-company-worker-2026-11-02.json):
+the fresh recovery key now uses bounded Android scheduling and a singleton app
+worker. One processor/one resource-free waiter capture current processed-parent
+ownership; parent replacement cancels/joins old work, while selected-company changes
+do not. Startup persists a wake for a changed native parent; same-parent renewal
+preserves it. Periodic execution can create an absent hint without recursive enqueue.
+Each bounded page covers at most two companies with durable Attempt/Complete/Finish,
+fresh admission and exact old/new wake acknowledgment. Healthy pagination schedules
+same-generation continuation instead of deliberately increasing platform backoff.
+
+The current company callback is the existing captured outgoing delivery worker.
+It still exits with no outgoing work. Independent incoming discovery/acquisition,
+fair room progress, FCM, notification privacy/actions and encrypted replies remain.
+No backend activation, employee APK or provider acceptance is implied by registration.
+
+Focused validation passes545 domain and36 application cases plus release/proof
+Android Kotlin/static checks in148s /152.151s on13 unchanged inputs. Full2 found
+one old startup-test expectation among278 app cases (172s /176.151s): it awaited
+any one request and expected only selected delivery. The corrected test awaits that
+selected key, checks exactly recovery plus delivery keys, verifies a durable wake
+and zero SDK deliveries/background acquisitions. Production source did not change.
+Full3 root/affected browser/app-Wasm now passes in305s /309.378s on14 unchanged
+inputs:3,064 desktop,215 Android host,831 browser and10 build-logic, zero failures,
+errors or skips. New coverage includes16 worker,one lifetime and three domain cases.
+Failed and successful report/source hashes remain in the measurement.
+
+**Continue immediately with native proof.** Two UNAPPLIED fixture candidates are in
+`.work/company-worker-native-2026-11-02/CompanyRecoveryProofOwner.txt` and
+`CompanyRecoveryProbe.txt`. They use the actual app worker, domain operations,
+AndroidWorkScheduler/WorkManager, encrypted Room progress and Android Keystore with
+fictional directory/admission/company callbacks. Add three instrumentation branches:
+company-recovery, company-recovery-stage and company-recovery-resume. Build the proof
+APK/static checks, freeze source/artifact hashes, then run on a verified owned
+emulator only. Main checks two OS tasks/one company processor,40 failed enqueues
+retaining newer wakes, healthy continuation and exact-generation completion. Stage
+persists an unfinished first-company attempt; force-stop before Resume, then verify
+later companies advance before retry and the original wake is acknowledged. This
+is consumer/OS/storage proof, not SDK/HRIS/FCM acceptance. Review candidates before
+applying; their cleanup closes admission before draining actual workers.
+
+Next run actual SDK/captured delivery and incoming receive independently, then
+notification/reply work. Use current directory/admission; do not change the selected
+workspace. Physical iPhone was waived, implementation/hosted Apple checks were not.
+No new Apple run is dispatched for this worker yet. Starter5679c51 generic port is
+complete (92 Apple cases/26 suites at136d2e5a). HRIS policy stays in Mobile.
+
+Phone remains15. Private schema103/API-worker2c2a59e3 remain, push disabled, all54
+PRD groups open. Owned5562 remains stopped;5560 is unrelated CodePush. Recheck all
+emulator ownership before reuse. Temporary8GiB swap was safely disabled/removed
+in47.997s after local builds finished; original /swap/swapfile was preserved.
+Continue after each push; do not stop at this checkpoint.
+
 ## Account-owned company recovery progress validated — 2 November 2026
 
 [Contract](collaboration-company-recovery.md) / [evidence](measurements/chat-company-recovery-2026-11-02.json):

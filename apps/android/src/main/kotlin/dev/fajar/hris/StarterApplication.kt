@@ -35,7 +35,16 @@ class StarterApplication : Application(), Configuration.Provider {
                 .setWorkerFactory(SyncWorkerFactory { container.koin.getAll<SyncTask>() })
                 .build()
 
-    private val scheduler by lazy { AndroidWorkScheduler(WorkManager.getInstance(this)) }
+    private val scheduler by lazy {
+        AndroidWorkScheduler(
+            WorkManager.getInstance(this),
+            collapsedKeys =
+                setOf(
+                    dev.fajar.starter.collaboration.domain.entities.CollaborationRecoveryWake
+                        .WORK_KEY
+                ),
+        )
+    }
     val container by lazy {
         createAppContainer(
             createUserPreferences(this),

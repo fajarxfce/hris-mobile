@@ -1,7 +1,11 @@
 package dev.fajar.starter.app.bootstrap
 
+import dev.fajar.starter.app.work.recoveryParent
+import dev.fajar.starter.collaboration.domain.entities.CollaborationNativeParent
 import dev.fajar.starter.collaboration.domain.usecases.MaintainCollaborationRuntimeOwnership
 import dev.fajar.starter.collaboration.domain.usecases.QueueCollaborationText
+import dev.fajar.starter.collaboration.domain.usecases.RequestCollaborationRecovery
+import dev.fajar.starter.common.config.*
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.sync.domain.repositories.SyncScheduleRepository
 import kotlinx.coroutines.*
@@ -11,6 +15,8 @@ import kotlinx.coroutines.flow.*
 class ApplicationCollaborationLifetime(
     private val maintain: MaintainCollaborationRuntimeOwnership,
     private val schedules: SyncScheduleRepository,
+    private val requestRecovery: RequestCollaborationRecovery,
+    private val build: AppBuild,
     dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) : AutoCloseable {
     private val lifetime = SupervisorJob()
@@ -23,6 +29,7 @@ class ApplicationCollaborationLifetime(
     fun start() {
         if (!started.compareAndSet(false, true)) return
         scope.launch {
+            var lastParent: CollaborationNativeParent? = null
             try {
                 maintain.publications().collect { publication ->
                     val current =
@@ -31,6 +38,17 @@ class ApplicationCollaborationLifetime(
                             else ApplicationCollaborationState.Observed(publication)
                         }
                     val result = (publication as? AppResult.Success)?.value?.result
+                    val parent = current.recoveryParent()
+                    if (parent != lastParent) {
+                        lastParent = parent
+                        if (
+                            parent != null &&
+                                build.platform in setOf(AppPlatform.Android, AppPlatform.Ios)
+                        ) {
+                            currentCoroutineContext().ensureActive()
+                            withTimeoutOrNull(1_500) { requestRecovery() }
+                        }
+                    }
                     if (
                         current is ApplicationCollaborationState.Observed &&
                             result is AppResult.Success &&
