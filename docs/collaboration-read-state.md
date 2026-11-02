@@ -75,6 +75,34 @@ type; no tests ran, and production source was unchanged by that correction.
 
 [Common runtime entry and admitted replay](collaboration-read-receipts.md) now
 consume this queue and are proven through actual HRIS/Synapse/Android process-death
-recovery. Worker/foreground invocation, notification suppression/actions, mute/privacy
+recovery. Notification suppression/actions, mute/privacy
 and multi-device reconciliation remain. No live chat push or whole communications
 feature is accepted here.
+
+## Active viewport read marks — 2 November 2026
+
+Chat now records exact local read coverage from a resumed, focused conversation.
+The route observes visible stable keys; a current owner token and acquired original
+history determine eligible colleague events. Dialogs, backgrounding, focus loss,
+leaving and confirmed access loss interrupt marking. The authenticated history page
+supplies its retained room binding, so an offline restart needs no live room lookup.
+No offscreen gap or pending echo is marked. A long message needs at least half of
+the viewport visible; smaller messages need at least half of their own height.
+
+The ViewModel's tracker serializes cancelled storage work, retains uncertain intent,
+skips already-read events and requests bounded background recovery after local
+persistence. Initial viewport receipts are private to the user's own Matrix identity.
+Public-sharing preferences and peer read ticks are not implemented by this increment.
+No UI/Compose provider I/O, hidden polling or recipient delivery ACK is added.
+
+Focused28 cases pass133.840s: eight ViewModel, two actual Compose
+lifecycle/viewport,16 SQLite history and two assembled-container cases. Portrait375dp
+with2x text and landscape720×375dp cover scroll, focus, dialog, pause/resume/disposal.
+Full root/proof/Wasm compile passes389.235s: 3316 desktop, 10 buildLogic, 230 androidHost, 6 proofHost, including
+explicit reuse; 1737 cases/224 suites fresh, zero failures/errors/skips.
+The first browser filters selected zero cases. Corrected trailing-wildcard filters
+pass31.689s separately:16 IndexedDB history and eight browser ViewModel cases,
+zero failures/errors/skips, with actual fresh JUnit reports; source unchanged.
+Initial two Compose failures were a missing test-only desktop Main dispatcher; the
+existing Swing dispatcher dependency fixes their host without changing production.
+[Evidence](measurements/chat-visible-read-2026-11-02.json).

@@ -48,6 +48,9 @@ class ChatThreadViewModel(
     private val prepareDraftSend: PrepareCollaborationDraftSend,
     private val confirmDraftSend: ConfirmCollaborationDraftSend,
     private val cancelText: CancelCollaborationText,
+    readState: ReadCollaborationReadState,
+    markRead: MarkCollaborationMessagesRead,
+    requestRecovery: RequestCollaborationRecovery,
 ) : MviViewModel<ChatThreadState, ChatThreadEvent, ChatThreadEffect>(ChatThreadState()) {
     private var observation: Job? = null
     private var connection: Job? = null
@@ -61,6 +64,16 @@ class ChatThreadViewModel(
     private var history = emptyList<CollaborationHistoryMessage>()
     private var timeline = emptyList<CollaborationTimelineItem>()
     private var source: CollaborationMessageDevice? = null
+    private var historyRoomId: String? = null
+    private var viewportKeys = emptyList<String>()
+    private val readTracker =
+        ChatThreadReadTracker(
+            viewModelScope,
+            readState,
+            markRead,
+            requestRecovery,
+            onFailure = { if (collaborationContentResponseClosesRead(it)) restrict(it) },
+        )
     private var next: String? = null
     private var previous: String? = null
     private val window = MutableStateFlow(ChatThreadLocalWindow())
@@ -91,6 +104,7 @@ class ChatThreadViewModel(
     init {
         on<ChatThreadEvent.Entered>(::onEntered)
         on<ChatThreadEvent.Stopped>(::onStopped)
+        on<ChatThreadEvent.ViewportChanged>(::onViewportChanged)
         on<ChatThreadEvent.BackRequested>(::onBackRequested)
         on<ChatThreadEvent.SetupRequested>(::onSetupRequested)
         on<ChatThreadEvent.RefreshRequested>(::onRefreshRequested)
@@ -139,7 +153,11 @@ class ChatThreadViewModel(
                     }
                     context = value.value
                     updateState {
-                        it.copy(title = value.value.summary.peer.displayName, localFailure = null)
+                        it.copy(
+                            title = value.value.summary.peer.displayName,
+                            localFailure = null,
+                            readViewportToken = it.readViewportToken ?: Uuid.random().toString(),
+                        )
                     }
                     if (visible) connect()
                     coroutineScope {
@@ -187,6 +205,8 @@ class ChatThreadViewModel(
                     selectWindow(ChatThreadLocalWindow())
                     return@collect
                 }
+                if (historyRoomId != page.roomId) readTracker.clear()
+                historyRoomId = page.roomId
                 history = page.messages
                 pending = (messages as AppResult.Success).value
                 next = page.next
@@ -202,6 +222,9 @@ class ChatThreadViewModel(
     }
 
     private fun clearScope() {
+        readTracker.clear()
+        viewportKeys = emptyList()
+        historyRoomId = null
         dismissCancellation()
         connection?.cancel()
         connection = null
@@ -285,10 +308,54 @@ class ChatThreadViewModel(
                     )
                 }
         }
+        updateReadViewport()
+    }
+
+    private fun onViewportChanged(event: ChatThreadEvent.ViewportChanged) {
+        if (event.token == null || event.token != state.value.readViewportToken) return
+        viewportKeys = if (event.rowKeys.size <= 128) event.rowKeys.toList() else emptyList()
+        updateReadViewport()
+    }
+
+    private fun updateReadViewport(retry: Boolean = false) {
+        val current = state.value
+        val owned = access
+        val room = historyRoomId
+        val admitted =
+            visible &&
+                owned != null &&
+                room != null &&
+                current.localFailure == null &&
+                !current.leaving &&
+                current.draftDialog == null &&
+                current.cancellationDialog == null
+        val selected =
+            if (!admitted) emptyList()
+            else
+                current.rows
+                    .filter {
+                        it.key in viewportKeys &&
+                            it.ownership == ChatMessageOwnership.COLLEAGUE &&
+                            it.kind in
+                                setOf(
+                                    CollaborationMessageKind.TEXT,
+                                    CollaborationMessageKind.REDACTED,
+                                ) &&
+                            history.any { original -> original.primaryEventId == it.eventId }
+                    }
+                    .mapNotNull { it.eventId }
+                    .distinct()
+        readTracker.update(
+            if (selected.isEmpty() || owned == null || room == null) null
+            else ChatThreadReadSelection(owned, conversationId, room, selected),
+            retry,
+        )
     }
 
     private fun onStopped(event: ChatThreadEvent.Stopped) {
         visible = false
+        viewportKeys = emptyList()
+        readTracker.update(null)
         dismissCancellation()
         connection?.cancel()
         connection = null
@@ -409,11 +476,13 @@ class ChatThreadViewModel(
     }
 
     override fun onCleared() {
+        readTracker.clear()
         dismissCancellation()
         super.onCleared()
     }
 
     private fun onRefreshRequested(event: ChatThreadEvent.RefreshRequested) {
+        if (visible) updateReadViewport(retry = true)
         if (
             !visible ||
                 state.value.connection == ChatThreadConnection.CONNECTING ||
@@ -692,6 +761,7 @@ class ChatThreadViewModel(
         departure =
             viewModelScope.launch {
                 updateState { it.copy(leaving = true) }
+                readTracker.update(null)
                 val saved =
                     if (state.value.submissionPending || !state.value.draftReady) true
                     else withTimeoutOrNull(1_500) { flushDraft() } ?: false

@@ -12,6 +12,8 @@ enum class ChatThreadConnection {
 
 data class ChatThreadState(
     val title: String? = null,
+    /** Ephemeral owner generation for viewport callbacks; never a credential. */
+    val readViewportToken: String? = null,
     val rows: List<ChatMessageRow> = emptyList(),
     val draft: String = "",
     val draftReady: Boolean = false,

@@ -1,5 +1,52 @@
 # Agent continuation — HRIS Mobile
 
+## Active viewport read marks — 2 November 2026
+
+Chat now records exact local read coverage from a resumed, focused conversation.
+The route observes visible stable keys; a current owner token and acquired original
+history determine eligible colleague events. Dialogs, backgrounding, focus loss,
+leaving and confirmed access loss interrupt marking. The authenticated history page
+supplies its retained room binding, so an offline restart needs no live room lookup.
+No offscreen gap or pending echo is marked. A long message needs at least half of
+the viewport visible; smaller messages need at least half of their own height.
+
+The ViewModel's tracker serializes cancelled storage work, retains uncertain intent,
+skips already-read events and requests bounded background recovery after local
+persistence. Initial viewport receipts are private to the user's own Matrix identity.
+Public-sharing preferences and peer read ticks are not implemented by this increment.
+No UI/Compose provider I/O, hidden polling or recipient delivery ACK is added.
+
+Focused28 cases pass133.840s: eight ViewModel, two actual Compose
+lifecycle/viewport,16 SQLite history and two assembled-container cases. Portrait375dp
+with2x text and landscape720×375dp cover scroll, focus, dialog, pause/resume/disposal.
+Full root/proof/Wasm compile passes389.235s: 3316 desktop, 10 buildLogic, 230 androidHost, 6 proofHost, including
+explicit reuse; 1737 cases/224 suites fresh, zero failures/errors/skips.
+The first browser filters selected zero cases. Corrected trailing-wildcard filters
+pass31.689s separately:16 IndexedDB history and eight browser ViewModel cases,
+zero failures/errors/skips, with actual fresh JUnit reports; source unchanged.
+Initial two Compose failures were a missing test-only desktop Main dispatcher; the
+existing Swing dispatcher dependency fixes their host without changing production.
+[Evidence](measurements/chat-visible-read-2026-11-02.json).
+
+Worker c361aa1f is pushed. Earlier Apple41475111107 at04e5cf7e PASSED full Xcode
+(947s), simulator compilation613s and native tests59s:780 cases/89 suites, no
+failures/errors/skips. Archive13158956537 digest500aee72a25ef2378491d42f9a900b3beb81006d7800118ed6445f4de412444d
+and37 accepted source hashes verified. [Apple evidence](measurements/chat-read-receipt-apple-2026-11-02.json).
+This excludes the newer worker/viewport; dispatch Apple again against this eventual
+commit. Platform full Verify41475356301 at304be027: all8 backend/4 dashboard shards
+and recovery passed; dashboard integration remains running. Backend artifacts audit
+3159 API cases/436 suites (five existing optional skips),117 worker/24 per shard
+(one existing optional skip), no failures/errors. Gateway receipt rollout remains
+separate: live runtime dac6fb0d/schema116, chat push OFF, phone17.
+
+Next: commit/push this increment, dispatch Apple on that head, build validated
+release18 and install on10.77.77.3:5555 after notice, --install-only, same signer/data,
+no phone UI interaction. Prepared .work/release-phone-2026-11-02-build18 scripts are
+not yet run. Continue privacy/mute/notification actions/inline replies and all54
+groups. No Starter port for HRIS policy. Continue long run; this is not completion.
+.work/chat-visible-read-2026-11-02 stage.py/.txt drafts were already applied: do not
+rerun them over accepted code. Reports/audit scripts remain supplementary to Git.
+
 ## Receipt recovery worker accepted — 2 November 2026
 
 The existing incoming room turn now invokes admitted receipt replay: limit2 with

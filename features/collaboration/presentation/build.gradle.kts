@@ -24,6 +24,7 @@ kotlin {
     sourceSets.getByName("desktopTest").dependencies {
         implementation(compose.desktop.currentOs)
         implementation(compose.desktop.uiTestJUnit4)
+        implementation(libs.coroutines.swing)
         implementation(projects.core.settings.domain)
     }
 }

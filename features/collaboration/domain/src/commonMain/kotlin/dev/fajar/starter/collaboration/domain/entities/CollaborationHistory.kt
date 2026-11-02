@@ -56,6 +56,8 @@ data class CollaborationHistoryPage(
     val next: String?,
     /** Exclusive anchor for a reverse query; pages always present messages newest first. */
     val previous: String? = null,
+    /** Authenticated retained room binding; null only when no history checkpoint exists. */
+    val roomId: String? = null,
 ) {
     override fun toString() = "CollaborationHistoryPage([redacted])"
 }

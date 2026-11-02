@@ -227,6 +227,7 @@ internal class ChatThreadFixture {
                                         CollaborationHistoryPage(
                                             it,
                                             if (after == null) pageNext else null,
+                                            roomId = source.roomId,
                                         )
                                     )
                             }
@@ -476,6 +477,8 @@ internal class ChatThreadFixture {
             false,
         )
 
+    val readState = ChatThreadReadFixture(this)
+
     fun model() =
         with(base) {
             ChatThreadViewModel(
@@ -538,6 +541,9 @@ internal class ChatThreadFixture {
                     build,
                     clock,
                 ),
+                readState.reader,
+                readState.marker,
+                readState.recovery,
             )
         }
 

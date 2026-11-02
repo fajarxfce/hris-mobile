@@ -171,7 +171,7 @@ abstract class CollaborationHistoryStorageContract {
             ),
         )
         assertEquals(
-            AppResult.Success(CollaborationHistoryPage(listOf(expected), null)),
+            AppResult.Success(CollaborationHistoryPage(listOf(expected), null, roomId = f.room)),
             f.repository.observe(f.access, f.conversation).first(),
         )
         for (raw in f.raw().documents) {
@@ -182,6 +182,7 @@ abstract class CollaborationHistoryStorageContract {
         val renewed = f.access.copy(sessionId = "renewed-login")
         f.reopen(renewed)
         assertEquals(listOf(expected), f.read(renewed).messages)
+        assertEquals(f.room, f.read(renewed).roomId)
         assertTrue(f.read().messages.isEmpty())
         assertEquals(
             AppResult.Success(false),

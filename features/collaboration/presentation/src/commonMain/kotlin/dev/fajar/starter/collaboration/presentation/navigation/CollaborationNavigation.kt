@@ -141,5 +141,6 @@ private fun ChatThreadEntry(
             ChatThreadEffect.ScrollToNewest -> list.requestScrollToItem(0)
         }
     }
+    ChatThreadViewportObserver(state, list, vm::onEvent)
     ChatThreadPage(state, list, vm::onEvent)
 }

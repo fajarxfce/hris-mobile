@@ -3,8 +3,8 @@
 Android's installed runtime now has finite public/private receipt operations and
 an own-receipt read from the SDK store. The common runtime contract now
 exposes these operations, and finite admitted replay consumes durable local read
-intents. The incoming recovery worker now invokes replay; foreground/UI and notification
-actions remain separate work. The caller must
+intents. The incoming worker invokes replay; the active chat viewport retains private
+read intent and requests recovery. Notification actions remain separate work. The caller must
 admit the current owner/device/room and durably retain its read intent before a
 write. Receipt timestamps never supply application event ordering.
 
@@ -66,7 +66,7 @@ Android host/10 build-logic/six proof-host cases including explicit reused tasks
 1732 cases/222 suites execute freshly, zero failures/errors/skips. Twenty-seven
 Python driver cases pass0.104s and reject missing/non-Boolean recovery claims.
 
-Foreground invocation, notification suppression/actions, privacy/mute
+Notification suppression/actions, privacy/mute
 preferences and multi-device receipt reconciliation remain. A read receipt is
 separate from recipient durable delivery ACK; neither wall-clock ordering nor one
 receipt proves an unseen gap was acquired. No whole communications feature closes
@@ -89,3 +89,6 @@ during delivery, and retained facts after confirmed denial. Focused23 cases pass
 host,10 build-logic and6 proof host cases including reuse;339 cases/65 suites fresh,
 zero failures/errors/skips. Initial focused check failed one assertion comparing
 safe gate copy with provider wording; kind/code and retained facts are now asserted.
+
+Active chat viewport integration is described in [local read state](collaboration-read-state.md)
+and [its source/Compose evidence](measurements/chat-visible-read-2026-11-02.json).

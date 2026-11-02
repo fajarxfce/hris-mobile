@@ -89,3 +89,9 @@ native background-worker interoperability, remote history pagination, durable dr
 groups, verification and key migration, search, notifications/inline reply, richer
 message types/actions, Apple/web SDK adapters, calls and meetings. Application scheduling
 alone does not establish all WhatsApp-style background acceptance criteria.
+
+The resumed, focused viewport now marks exact acquired colleague originals as locally
+read and retains private receipt intent before requesting worker recovery. Offline
+reopen uses the authenticated history room binding. Hidden rows, dialogs and stopped
+windows do not mark. No peer read/delivery tick is inferred. See [read-state contract](collaboration-read-state.md)
+and [viewport/lifecycle evidence](measurements/chat-visible-read-2026-11-02.json).

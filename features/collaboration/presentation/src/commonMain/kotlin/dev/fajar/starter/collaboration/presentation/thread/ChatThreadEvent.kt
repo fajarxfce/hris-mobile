@@ -5,6 +5,10 @@ sealed interface ChatThreadEvent {
 
     data object Stopped : ChatThreadEvent
 
+    data class ViewportChanged(val token: String?, val rowKeys: List<String>) : ChatThreadEvent {
+        override fun toString() = "ViewportChanged([redacted])"
+    }
+
     data object BackRequested : ChatThreadEvent
 
     data object SetupRequested : ChatThreadEvent
