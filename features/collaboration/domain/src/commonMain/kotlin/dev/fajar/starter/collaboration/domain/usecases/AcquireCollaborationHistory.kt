@@ -29,27 +29,39 @@ class AcquireCollaborationHistory(
         deviceId: String,
         conversationId: String,
         anchorEventId: String? = null,
+    ): AppResult<CollaborationHistoryAcquisition> =
+        invoke(
+            CollaborationOperationScope.Selected(workspaceId),
+            deviceId,
+            conversationId,
+            anchorEventId,
+        )
+
+    suspend operator fun invoke(
+        scope: CollaborationOperationScope,
+        deviceId: String,
+        conversationId: String,
+        anchorEventId: String? = null,
     ): AppResult<CollaborationHistoryAcquisition> {
         if (
             !validCollaborationMessageId(deviceId) ||
+                !collaborationOperationOwnsDevice(scope, deviceId) ||
                 !validCollaborationMessageId(conversationId) ||
                 (anchorEventId != null && !validCollaborationEventId(anchorEventId))
         )
             return failed("client.collaboration_invalid_history", FailureKind.Validation)
-        val captured = capture(workspaceId)
+        val captured = capture(scope)
         if (captured is AppResult.Failed) return captured
         val owner = (captured as AppResult.Success).value
-        continuation(workspaceId, owner, null).let { if (it is AppResult.Failed) return it }
-        val admitted = admitRoom(workspaceId, owner, deviceId, conversationId)
+        continuation(scope, owner, null).let { if (it is AppResult.Failed) return it }
+        val admitted = admitRoom(scope, owner, deviceId, conversationId)
         if (admitted is AppResult.Failed) return admitted
         val roomId = (admitted as AppResult.Success).value
         val anchor =
             if (anchorEventId != null) anchorEventId
             else {
                 val found = runtimes.findHistoryHead(owner, deviceId, roomId)
-                continuation(workspaceId, owner, found).let {
-                    if (it is AppResult.Failed) return it
-                }
+                continuation(scope, owner, found).let { if (it is AppResult.Failed) return it }
                 if (found is AppResult.Failed) return found
                 val head = (found as AppResult.Success).value
                 if (
@@ -60,7 +72,7 @@ class AcquireCollaborationHistory(
                 )
                     return failed("client.collaboration_invalid_history_head")
                 if (head.eventId == null) {
-                    val emptyAdmission = admitRoom(workspaceId, owner, deviceId, conversationId)
+                    val emptyAdmission = admitRoom(scope, owner, deviceId, conversationId)
                     if (emptyAdmission is AppResult.Failed) return emptyAdmission
                     if ((emptyAdmission as AppResult.Success).value != roomId)
                         return failed(
@@ -82,20 +94,20 @@ class AcquireCollaborationHistory(
                         unresolvedEventIds = it.unresolvedEventIds.toList(),
                     )
             }
-        continuation(workspaceId, owner, received).let { if (it is AppResult.Failed) return it }
+        continuation(scope, owner, received).let { if (it is AppResult.Failed) return it }
         if (received is AppResult.Failed) return received
         if (
             snapshot == null ||
                 !validCollaborationOriginalWindow(snapshot, owner, deviceId, roomId, anchor)
         )
             return failed("client.collaboration_invalid_history_window")
-        val readmitted = admitRoom(workspaceId, owner, deviceId, conversationId)
+        val readmitted = admitRoom(scope, owner, deviceId, conversationId)
         if (readmitted is AppResult.Failed) return readmitted
         if ((readmitted as AppResult.Success).value != roomId)
             return failed("client.collaboration_conversation_mismatch", FailureKind.AccessDenied)
         for (batch in snapshot.changes.chunked(16)) {
             val merged = history.merge(owner.localListAccess(), conversationId, roomId, batch)
-            continuation(workspaceId, owner, merged).let { if (it is AppResult.Failed) return it }
+            continuation(scope, owner, merged).let { if (it is AppResult.Failed) return it }
             if (merged is AppResult.Failed) return merged
             if (!(merged as AppResult.Success).value)
                 return failed("client.collaboration_history_changed")
@@ -106,12 +118,12 @@ class AcquireCollaborationHistory(
     }
 
     private suspend fun admitRoom(
-        workspaceId: String,
+        scope: CollaborationOperationScope,
         owner: CollaborationOwner,
         deviceId: String,
         conversationId: String,
     ): AppResult<String> {
-        val registered = checked(workspaceId, owner) { setup.read(owner) }
+        val registered = checked(scope, owner) { setup.read(owner) }
         if (registered is AppResult.Failed) return registered
         val device = (registered as AppResult.Success).value
         if (
@@ -120,7 +132,7 @@ class AcquireCollaborationHistory(
                 device.platform.name != build.platform.name.uppercase()
         )
             return failed("client.collaboration_device_unavailable", FailureKind.Unavailable)
-        val read = checked(workspaceId, owner) { conversations.get(owner, conversationId) }
+        val read = checked(scope, owner) { conversations.get(owner, conversationId) }
         if (read is AppResult.Failed) return read
         val direct = (read as AppResult.Success).value
         if (
@@ -129,7 +141,7 @@ class AcquireCollaborationHistory(
                 owner.accountId !in listOf(direct.firstAccountId, direct.secondAccountId)
         )
             return failed("client.collaboration_conversation_mismatch", FailureKind.AccessDenied)
-        val loaded = checked(workspaceId, owner) { conversations.room(owner, conversationId) }
+        val loaded = checked(scope, owner) { conversations.room(owner, conversationId) }
         if (loaded is AppResult.Failed) return loaded
         val room = (loaded as AppResult.Success).value
         if (room.conversationId != conversationId)
@@ -147,17 +159,17 @@ class AcquireCollaborationHistory(
     }
 
     private suspend fun <T> checked(
-        workspaceId: String,
+        scope: CollaborationOperationScope,
         owner: CollaborationOwner,
         operation: suspend () -> AppResult<T>,
     ): AppResult<T> {
         val result = operation()
-        val admitted = continuation(workspaceId, owner, result)
+        val admitted = continuation(scope, owner, result)
         return if (admitted is AppResult.Failed) admitted else result
     }
 
     private suspend fun continuation(
-        workspaceId: String,
+        scope: CollaborationOperationScope,
         owner: CollaborationOwner,
         received: AppResult<*>?,
     ): AppResult<Unit> {
@@ -168,7 +180,7 @@ class AcquireCollaborationHistory(
             }
         currentCoroutineContext().ensureActive()
         val gate = lists.admission(owner.localListAccess())
-        val current = capture(workspaceId)
+        val current = capture(scope)
         currentCoroutineContext().ensureActive()
         if (rejected != null && collaborationContentResponseClosesRead(rejected))
             return AppResult.Failed(rejected)
@@ -182,8 +194,8 @@ class AcquireCollaborationHistory(
         return AppResult.Success(Unit)
     }
 
-    private suspend fun capture(workspaceId: String) =
-        sessions.captureCollaborationOwner(workspaceId, workspaces, server, build, clock)
+    private suspend fun capture(scope: CollaborationOperationScope) =
+        sessions.captureCollaborationOwner(scope, workspaces, server, build, clock)
 
     private fun failed(code: String, kind: FailureKind = FailureKind.Conflict) =
         collaborationSetupFailure(code, kind)

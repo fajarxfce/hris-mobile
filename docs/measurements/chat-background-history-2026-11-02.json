@@ -1,0 +1,135 @@
+{
+  "date": "2026-11-02",
+  "baseCommit": "4e4c1bd9",
+  "scope": "Shared Selected/Background native conversation entry, original history and provider history. Separate from incoming worker or actual FCM receive acceptance.",
+  "sourceSha256": {
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/EnterCollaborationConversation.kt": "3f06154a7ff85d1276f64c58beb54e51b0378738a24cd1f7057b1317b3e3eeb9",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/AcquireCollaborationHistory.kt": "73ceb7084a02e409a47a678607f75356cbabed0554666dc88d38414b0e3dc0e4",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/AcquireCollaborationProviderHistory.kt": "6fa5a634816aa5a389bc4945f7026987bc87395618abec3e2cc3742dcb4dd7f3",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/CollaborationOperationOwner.kt": "767576f431e79028a1ded93844596e251290c585080b13838d17917edc24286a",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/AcquireCollaborationHistoryTest.kt": "c3b61b4f03a40af006e7a0b1be3b8c55b8177081cad9f059dd19f809068f1c95",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationBackgroundHistoryScopeTest.kt": "3999b7a00233ee844d61e21efe5e061d0437f4d03dc926d542ce2645ecfc1442",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/EnterCollaborationConversationTest.kt": "26015227b284c9fee56cde465c8fa7aa4316b7537ee80814f81e5657dd7ea7f4"
+  },
+  "initialRun": {
+    "exitCode": 1,
+    "wallSeconds": 205.445,
+    "inputsUnchanged": true,
+    "command": [
+      "xvfb-run",
+      "-a",
+      "./gradlew",
+      ":features:collaboration:domain:desktopTest",
+      ":apps:shared:desktopTest",
+      "--tests",
+      "*CollaborationBindingsTest",
+      ":apps:collaboration-proof:compileDebugKotlin",
+      ":formatCheck",
+      ":architectureCheck",
+      ":detekt",
+      "-Pkotlin.compiler.execution.strategy=in-process",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=1",
+      "-Dorg.gradle.jvmargs=-Xmx1536m"
+    ]
+  },
+  "initialGradleSeconds": 202,
+  "initialReports": {
+    "domain": {
+      "tests": 457,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "bindings": {
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "validationTransitions": {
+    "attempt1": {
+      "domainTests": 457,
+      "domainFailures": 0,
+      "bindingTests": 2,
+      "bindingFailures": 0,
+      "proofKotlinCompiled": true,
+      "formatPassed": true,
+      "architecturePassed": true,
+      "failedCheck": "detekt LongMethod: typed Enter.invoke reached101 lines, maximum100",
+      "correction": "Extracted the returned native timeline ownership predicate without changing its conditions."
+    }
+  },
+  "finalRun": {
+    "exitCode": 0,
+    "wallSeconds": 329.525,
+    "inputsUnchanged": true,
+    "command": [
+      "xvfb-run",
+      "-a",
+      "./gradlew",
+      ":check",
+      ":features:collaboration:domain:wasmJsBrowserTest",
+      ":features:collaboration:data:wasmJsBrowserTest",
+      "-Pkotlin.compiler.execution.strategy=in-process",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=1",
+      "-Dorg.gradle.jvmargs=-Xmx1536m"
+    ]
+  },
+  "finalGradleSeconds": 326,
+  "reports": {
+    "desktopTest": {
+      "tests": 2906,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "testAndroidHostTest": {
+      "tests": 209,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "wasmJsBrowserTest": {
+      "tests": 729,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "buildLogic": {
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "addedCases": 13,
+  "checked": [
+    "Background entry and original/provider acquisition never read or change workspace selection. Explicitly requested device must match admission before setup or native I/O.",
+    "Shared owner/denial continuation, bounded original merges and provider progress CAS remain authoritative for both scopes.",
+    "Native child acquisition after monotonic expiry or cancellation closes the late resource; no ownership transfer occurs.",
+    "Expired original acquisition cannot merge; parent replacement cannot stage a provider page; concurrent company denial preserves earlier owned originals.",
+    "A received company denial is retained under cancellation despite failed cleanup. Pending history reader releases without retry.",
+    "An atomic page commit remains retained after subsequent owner loss; expired permission does not erase or hide general offline history."
+  ],
+  "limits": [
+    "Native scope tests use controlled fixtures. No new actual JNI/provider acceptance in this increment; previously recorded native borrowing evidence is separate.",
+    "Proof adapter compiled during initial run; final private predicate extraction is validated by full root/domain/browser checks. No proof APK assembly or employee APK build here.",
+    "Phone remains installed release14 from source8c557716, verified in android-release14-2026-11-02.json. It does not contain this subsequent scope increment.",
+    "Shared outbox, initial parent readiness, durable all-company wake/reconnect/periodic recovery, incoming notification and inline reply integration remain next. Keep backend delivery disabled.",
+    "No live backend rollout, generic Starter port or full PRD group acceptance."
+  ],
+  "localEvidenceSha256": {
+    "check-1.log": "9e6d26875fc2a2fcf65c09825f3f49dd14c4c117a05ee570958021a662be5b0c",
+    "check-1.json": "fd659e78fb6610b2a07b45eb987d8340c286320c4eda38c6fa5c2865e3158151",
+    "check-2.log": "66e4a376462694950d33ed8edb8b9205d6838b7ed13c7978f947ff264eb3046e",
+    "check-2.json": "dcebdd5c29967feb092581303cfee13d9c5abe216421a9d09cbc10a7fdf95ee3",
+    "inputs-1.json": "5758d2dddee669581bc9ff9aefee00206ee3b7d2cd106213def755d089f17c5a",
+    "inputs-2.json": "0d45b73546fcf4501704797143b59a22fed4543e1f896084131c68dad85e24ee",
+    "validation-transitions.json": "893b6b214db348c60b32593771704465ca9b92786273032ff78f703cc67d6552"
+  }
+}

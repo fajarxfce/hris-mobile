@@ -27,22 +27,33 @@ class EnterCollaborationConversation(
         workspaceId: String,
         deviceId: String,
         conversationId: String,
+    ): AppResult<CollaborationTimelineLease> =
+        invoke(CollaborationOperationScope.Selected(workspaceId), deviceId, conversationId)
+
+    suspend operator fun invoke(
+        scope: CollaborationOperationScope,
+        deviceId: String,
+        conversationId: String,
     ): AppResult<CollaborationTimelineLease> {
-        if (!canonicalId.matches(deviceId) || !canonicalId.matches(conversationId))
+        if (
+            !canonicalId.matches(deviceId) ||
+                !canonicalId.matches(conversationId) ||
+                !collaborationOperationOwnsDevice(scope, deviceId)
+        )
             return collaborationSetupFailure(
                 "client.collaboration_invalid_request",
                 FailureKind.Validation,
             )
         val owner =
-            when (val captured = capture(workspaceId)) {
+            when (val captured = capture(scope)) {
                 is AppResult.Failed -> return captured
                 is AppResult.Success -> captured.value
             }
-        continuation(workspaceId, owner, AppResult.Success(Unit)).let {
+        continuation(scope, owner, AppResult.Success(Unit)).let {
             if (it is AppResult.Failed) return it
         }
         val registered = setup.read(owner)
-        continuation(workspaceId, owner, registered).let { if (it is AppResult.Failed) return it }
+        continuation(scope, owner, registered).let { if (it is AppResult.Failed) return it }
         val device =
             when (registered) {
                 is AppResult.Failed -> return registered
@@ -59,7 +70,7 @@ class EnterCollaborationConversation(
                 FailureKind.Unavailable,
             )
         val direct = conversations.get(owner, conversationId)
-        continuation(workspaceId, owner, direct).let { if (it is AppResult.Failed) return it }
+        continuation(scope, owner, direct).let { if (it is AppResult.Failed) return it }
         val conversation =
             when (direct) {
                 is AppResult.Failed -> return direct
@@ -76,7 +87,7 @@ class EnterCollaborationConversation(
                 FailureKind.AccessDenied,
             )
         val provisioned = conversations.room(owner, conversationId)
-        continuation(workspaceId, owner, provisioned).let { if (it is AppResult.Failed) return it }
+        continuation(scope, owner, provisioned).let { if (it is AppResult.Failed) return it }
         val room =
             when (provisioned) {
                 is AppResult.Failed -> return provisioned
@@ -104,18 +115,10 @@ class EnterCollaborationConversation(
         try {
             val entered = runtimes.enterTimeline(owner, deviceId, matrixRoomId)
             if (entered is AppResult.Success) acquired = entered.value
-            continuation(workspaceId, owner, entered).let { if (it is AppResult.Failed) return it }
+            continuation(scope, owner, entered).let { if (it is AppResult.Failed) return it }
             if (entered is AppResult.Failed) return entered
             val timeline = requireNotNull(acquired)
-            if (
-                timeline.owner != owner ||
-                    timeline.deviceId != deviceId ||
-                    timeline.matrixRoomId != matrixRoomId ||
-                    !validCollaborationMessageId(timeline.device.bootstrapOperationId) ||
-                    timeline.device.nativeSessionId != owner.nativeSessionId ||
-                    timeline.device.deviceId != deviceId ||
-                    timeline.device.roomId != matrixRoomId
-            )
+            if (!matchesTimeline(timeline, owner, deviceId, matrixRoomId))
                 return collaborationSetupFailure("client.session_changed", FailureKind.Unauthorized)
             currentCoroutineContext().ensureActive()
             handedOver = true
@@ -125,11 +128,25 @@ class EnterCollaborationConversation(
         }
     }
 
-    private suspend fun capture(workspaceId: String) =
-        sessions.captureCollaborationOwner(workspaceId, workspaces, server, build, clock)
+    private fun matchesTimeline(
+        timeline: CollaborationTimelineLease,
+        owner: CollaborationOwner,
+        deviceId: String,
+        matrixRoomId: String,
+    ) =
+        timeline.owner == owner &&
+            timeline.deviceId == deviceId &&
+            timeline.matrixRoomId == matrixRoomId &&
+            validCollaborationMessageId(timeline.device.bootstrapOperationId) &&
+            timeline.device.nativeSessionId == owner.nativeSessionId &&
+            timeline.device.deviceId == deviceId &&
+            timeline.device.roomId == matrixRoomId
+
+    private suspend fun capture(scope: CollaborationOperationScope) =
+        sessions.captureCollaborationOwner(scope, workspaces, server, build, clock)
 
     private suspend fun continuation(
-        workspaceId: String,
+        scope: CollaborationOperationScope,
         owner: CollaborationOwner,
         received: AppResult<*>,
     ): AppResult<Unit> {
@@ -140,7 +157,7 @@ class EnterCollaborationConversation(
             }
         currentCoroutineContext().ensureActive()
         val gate = lists.admission(owner.localListAccess())
-        val current = capture(workspaceId)
+        val current = capture(scope)
         currentCoroutineContext().ensureActive()
         if (rejected != null && collaborationContentResponseClosesRead(rejected))
             return AppResult.Failed(rejected)

@@ -10,11 +10,73 @@ import dev.fajar.starter.identity.domain.repositories.SessionRepository
 import kotlin.test.*
 import kotlin.time.Clock
 import kotlin.time.Duration.Companion.hours
+import kotlin.time.Duration.Companion.seconds
+import kotlin.time.TestTimeSource
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 
 class EnterCollaborationConversationTest {
+    @Test
+    fun backgroundEntryUsesItsAdmittedParentWithoutSelectingACompany() = runTest {
+        val f = EntryFixture()
+        val scope = f.background(TestTimeSource())
+        assertSame(f.lease, assertIs<AppResult.Success<*>>(f.enter(scope = scope)).value)
+        assertEquals(1, f.entries)
+        assertEquals(0, f.closes)
+        assertNull(f.access.workspace)
+        f.lease.close()
+    }
+
+    @Test
+    fun backgroundEntryRejectsAnotherDeviceBeforeAnySetupRead() = runTest {
+        val f = EntryFixture()
+        val scope = f.background(TestTimeSource())
+        assertIs<AppResult.Failed>(f.enter(deviceId = deliveryId(99), scope = scope))
+        assertEquals(0, f.access.calls)
+        assertEquals(0, f.entries)
+    }
+
+    @Test
+    fun backgroundExpiryClosesALateNativeChildWithoutTransferringIt() = runTest {
+        val f = EntryFixture()
+        val elapsed = TestTimeSource()
+        val scope = f.background(elapsed)
+        f.result = {
+            elapsed += 60.seconds
+            AppResult.Success(f.lease)
+        }
+        assertEquals(
+            "client.collaboration_revalidation_required",
+            assertIs<AppResult.Failed>(f.enter(scope = scope)).failure.code,
+        )
+        assertEquals(1, f.entries)
+        assertEquals(1, f.closes)
+    }
+
+    @Test
+    fun cancelledBackgroundEntryOwnsCleanupOfAnUncooperativeNativeResult() = runTest {
+        val f = EntryFixture()
+        val scope = f.background(TestTimeSource())
+        val started = CompletableDeferred<Unit>()
+        val release = CompletableDeferred<Unit>()
+        f.result = {
+            withContext(NonCancellable) {
+                started.complete(Unit)
+                release.await()
+                AppResult.Success(f.lease)
+            }
+        }
+        val task = launch { f.enter(scope = scope) }
+        started.await()
+        task.cancel()
+        release.complete(Unit)
+        task.join()
+        assertTrue(task.isCancelled)
+        assertEquals(1, f.closes)
+        assertEquals(1, f.entries)
+    }
+
     @Test
     fun retainedCompanyDenialStopsBeforeAnySetupOrRoomRead() = runTest {
         val f = EntryFixture()
@@ -349,7 +411,7 @@ private class EntryFixture {
                 captureFailure ?: access.sessions.current()
         }
     val device = access.device.copy(id = COMMAND_DEVICE)
-    val owner =
+    var owner =
         CollaborationOwner(
             "local",
             access.initial.binding.audience,
@@ -502,7 +564,53 @@ private class EntryFixture {
         conversations.beforeRemote = { reads += it }
     }
 
-    suspend fun enter(deviceId: String = COMMAND_DEVICE, conversationId: String = COMMAND_ROOM) =
+    fun background(elapsed: TestTimeSource): CollaborationOperationScope.Background {
+        owner =
+            owner.copy(
+                accountId = deliveryId(90),
+                companyId = deliveryId(91),
+                nativeSessionId = deliveryId(92),
+            )
+        leaseOwner = owner
+        val previous = requireNotNull(access.session)
+        access.session =
+            previous.copy(
+                user = previous.user.copy(id = owner.accountId),
+                binding = previous.binding.copy(serverId = owner.nativeSessionId),
+            )
+        access.workspace = null
+        access.beforeWorkspace = { error("Background entry cannot read foreground selection") }
+        conversations.conversation =
+            conversations.conversation.copy(
+                companyId = owner.companyId,
+                firstAccountId = owner.accountId,
+                createdBy = owner.accountId,
+            )
+        conversations.room = conversations.room.copy(creatorAccountId = owner.accountId)
+        val now = access.now
+        return CollaborationOperationScope.Background(
+            CollaborationBackgroundAdmission(
+                CollaborationAdmissionObservation(
+                    owner,
+                    COMMAND_DEVICE,
+                    1,
+                    1,
+                    1,
+                    now,
+                    now + 60.seconds,
+                ),
+                now,
+                now + 60.seconds,
+                elapsed.markNow() + 60.seconds,
+            )
+        )
+    }
+
+    suspend fun enter(
+        deviceId: String = COMMAND_DEVICE,
+        conversationId: String = COMMAND_ROOM,
+        scope: CollaborationOperationScope = CollaborationOperationScope.Selected("selection"),
+    ) =
         EnterCollaborationConversation(
             runtime,
             conversations.remote,
@@ -515,5 +623,5 @@ private class EntryFixture {
                 override fun now() = access.now
             },
             access.admission.repository,
-        )("selection", deviceId, conversationId)
+        )(scope, deviceId, conversationId)
 }

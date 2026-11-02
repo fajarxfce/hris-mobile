@@ -315,7 +315,7 @@ class AcquireCollaborationHistoryTest {
     }
 }
 
-private class HistoryAcquisitionFixture {
+internal class HistoryAcquisitionFixture {
     val delivery = CollaborationDeliveryFixture()
     val local = delivery.base
     val admissions = mutableListOf<String>()

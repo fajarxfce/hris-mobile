@@ -1,5 +1,43 @@
 # Agent continuation — HRIS Mobile
 
+## Shared background native entry and history validated — 2 November 2026
+
+[Contract](collaboration-background-history.md) /
+[evidence](measurements/chat-background-history-2026-11-02.json): EnterConversation,
+AcquireHistory and AcquireProviderHistory now share Selected/Background scope.
+String callers retain their existing selected-workspace path. Background checks the
+current native parent, original monotonic admission and exact device without reading
+or changing workspace selection. Native child cleanup, bounded original merges,
+provider-page CAS and retained denials remain shared. Local owned facts stay intact.
+
+All 13 new cases pass within 457 domain tests. Actual container bindings pass both
+cases; the initial run compiles the proof adapter and passes format/architecture,
+then reports one detekt LongMethod violation (101 lines). The returned timeline's
+ownership predicate was extracted without changing its conditions. That initial
+202s /205.445s run remains recorded. Final root and affected browser checks pass in
+326s Gradle /329.525s wall with all seven Kotlin inputs unchanged:
+2,906 desktop, 209 Android host, 729 browser and 10 build-logic cases.
+This increment has no new JNI run, employee APK build or phone install. Phone stays
+on verified release14 from8c557716; its source predates these overloads.
+
+**Continue immediately:** shared Stage/Deliver background scope plus the SDK-token
+failure classification correction. A five-file candidate with 12 cases is
+UNAPPLIED/UNTESTED in `.work/background-history-2026-11-02/next-outbox-candidate.json`;
+verify its baseline hashes before applying. Preserve observed-send receipt append
+before remote continuation, so expiry/cancellation cannot erase proof or cause a
+second send. No native-parent close handle belongs to a child writer.
+
+Then convert room-control commands and local discovery/reconciliation/draft cursor
+operations with separate captured local ownership and remote admission. Local reads
+must not inherit a60s remote TTL. Reuse the existing bounded delivery worker and
+application lifetime; test initial parent readiness while workspace observation is
+pending, retaining the foreground owner across token rotation. Detailed scratch
+notes are in `continuation-design.txt`; Git contracts are authoritative. Continue
+durable all-company hints/reconnect/periodic recovery, notification projection and
+inline replies. Keep backend delivery disabled; all54 PRD groups remain open.
+No live rollout or generic Starter port. The owned temporary swapfile below remains
+active pending safe cleanup; preserve unrelated CodePush jobs/AVD5558.
+
 ## Release 14 installed on the authorized phone — 2 November 2026
 
 [Installation evidence](measurements/android-release14-2026-11-02.json): clean

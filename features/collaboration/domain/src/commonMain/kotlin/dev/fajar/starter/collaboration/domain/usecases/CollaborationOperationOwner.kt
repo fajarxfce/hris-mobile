@@ -40,3 +40,14 @@ internal suspend fun SessionRepository.captureCollaborationBackgroundOwner(
             collaborationBackgroundOwner(admission, captured.value, server, build, clock.now())
     }
 }
+
+/** A company observation cannot be reused for a different enrolled device. */
+internal fun collaborationOperationOwnsDevice(
+    scope: CollaborationOperationScope,
+    deviceId: String,
+) =
+    when (scope) {
+        is CollaborationOperationScope.Selected -> true
+        is CollaborationOperationScope.Background ->
+            scope.admission.observation.deviceId == deviceId
+    }
