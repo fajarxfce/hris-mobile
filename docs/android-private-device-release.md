@@ -1,11 +1,11 @@
 # Private Android phone updates
 
-Release10 was installed but the user reported an application-startup crash. The
-[release11 hotfix verification](measurements/android-startup-gateway-2026-11-01.json)
-corrects API-path versus Matrix-origin configuration and proves actual release-app
-cold starts. Prepare the clean arm64 artifact using
-`.work/release-phone-2026-11-01-build11/` and inspect the installed version before
-updating. Installation evidence is recorded separately after byte verification.
+Release11 from56a46938 is installed and the user confirms startup works again.
+[Installation evidence](measurements/android-release-startup-2026-11-02.json) includes
+exact pulled-byte verification, preserved signer/data, all-eight-DEX equivalence
+to the tested emulator release and physical user acceptance. The
+[startup regression evidence](measurements/android-startup-gateway-2026-11-01.json)
+records the earlier root-cause fix. Next product update must use version12 or newer.
 
 The authorized tester phone uses `dev.fajar.hris.mobile.dev` through
 `http://10.77.77.1:8088/api/v1/` on WireGuard. Build `devRelease`, keep the existing

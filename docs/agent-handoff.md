@@ -1,5 +1,27 @@
 # Agent continuation — HRIS Mobile
 
+## Release11 installed; user confirms startup recovered — 2 November 2026
+
+Clean source56a46938 is installed in place over release10 on 10.77.77.3:5555.
+[Evidence](measurements/android-release-startup-2026-11-02.json): arm64 build/lint
+66s Gradle /70.331s wall, APK87,330,800 bytes, SHA256
+`e914fad7f195d74ab55889b404c1c9da72cddd5deefb3c3522bf1a0de1c91579`.
+All eight DEX files match the universal release that passed both actual-app cold
+starts. VCS/private API/Firebase/signature/16KiB alignment verified. Installation
+and post-pull verification59.620s preserve appId10962 and firstInstallTime; no
+uninstall, data clearing or phone UI launch. User subsequently confirms **“Sudah
+bisa dibuka”**. The force-close fix has physical user acceptance. Next product
+phone update must use12+ and the same notification/install-only protocol.
+
+Continue Platform push delivery. Focused55 domain plus18 SQL cases have just run;
+one SQL retry fixture failed because it tried to rewrite available_at outside a
+fenced lease transition. Preserve that database protection and fix the fixture's
+clock/backoff approach before further tests. Seven other new delivery cases and
+all ten callback cases pass. Handler/policy/DI and tests remain uncommitted there.
+Worker adapter/flag, API+worker context validation, Mobile notifications/reply and
+all-company recovery remain next, followed by remaining P0–P8 and reusable ports.
+
+
 ## Android release startup crash corrected — 1 November 2026
 
 User-reported release10 force close is confirmed by its application crash stack:

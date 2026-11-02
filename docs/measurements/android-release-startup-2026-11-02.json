@@ -1,0 +1,111 @@
+{
+  "date": "2026-11-02",
+  "source": {
+    "commit": "56a469386fbe48a744dfb253c762417611ba5759",
+    "cleanBeforeBuild": true,
+    "validation": "docs/measurements/android-startup-gateway-2026-11-01.json",
+    "productSourceSha256": {
+      "apps/android/src/main/kotlin/dev/fajar/hris/StarterApplication.kt": "bae5b3b30ca0794f72f426f861c20893a45717cae6bf69b3dd27a3d052550025",
+      "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/sdk/CollaborationSdkScope.kt": "3ba851422e21bf6def700cecaaf804a8e83b7d00a8f57dd0fd3c40a78b01dda6",
+      "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationGatewayConfigurationTest.kt": "ed9ba4993dd5ee5c8185a91123947d2434042512cf1f3d873dba9cdf010095c3"
+    },
+    "cleanAfterBuild": true
+  },
+  "build": {
+    "command": [
+      "xvfb-run",
+      "-a",
+      "./gradlew",
+      ":apps:android:assembleDevRelease",
+      ":apps:android:lintDevRelease",
+      "-PrequireSigning=true",
+      "-PappEnvironment=dev",
+      "-PappVersion=1.0.0",
+      "-PappVersionCode=11",
+      "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+      "--init-script",
+      "/home/fajar/hris/hris-mobile/.work/release-phone-2026-11-01-build11/phone-arm64.init.gradle",
+      "--stacktrace",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=1",
+      "-Dorg.gradle.jvmargs=-Xmx1536m"
+    ],
+    "startedAt": "2026-11-01T23:58:47.211996+00:00",
+    "elapsedSeconds": 70.331,
+    "exitCode": 0
+  },
+  "gradleSeconds": 66,
+  "artifact": {
+    "nativeAbis": [
+      "arm64-v8a"
+    ],
+    "zipAligned16KiB": true,
+    "artifact": ".work/release-phone-2026-11-01-build11/hris-mobile-dev-release-1.0.0-11-arm64.apk",
+    "variant": "devRelease",
+    "applicationId": "dev.fajar.hris.mobile.dev",
+    "versionCode": 11,
+    "versionName": "1.0.0",
+    "bytes": 87330800,
+    "sha256": "e914fad7f195d74ab55889b404c1c9da72cddd5deefb3c3522bf1a0de1c91579",
+    "debuggable": false,
+    "signatureVerified": true,
+    "samePreviouslyInstalledSigner": true,
+    "signerSha256": "aca5ce6a26b978dee1d63c63103b6799848ab760d47ef4cf5ee68620fc8721f3",
+    "signerSha1": "23860b51e4305aa7900090aeab6783d39a12ff33",
+    "signingBoundary": "Release build signed with the existing development key for an in-place private-device update.",
+    "privateApiVerifiedInDex": true,
+    "fixtureEndpointsAbsent": true,
+    "firebaseDevAppMatches": true,
+    "sameInstalledSigner": true
+  },
+  "startupCodeEquivalence": {
+    "allDexMatchEmulatorRelease": true,
+    "dexSha256": {
+      "classes.dex": "ba299ecff211ac2b1db8e254083d85e4c4c5337da905d3d7936add4041b0ea93",
+      "classes2.dex": "5817d022eea8a81aced96fd29e6984fa618c4cba2048abc034efdea4efdaebec",
+      "classes3.dex": "9a9e119a2c5f57634e4b5e58a3100f6e671cd473ac703dab10d891b5592a3a30",
+      "classes4.dex": "bf94447865ce1cb92bc22342ea7d8e4fd0b351a1570fbd71e9ec44a498e55a9e",
+      "classes5.dex": "05f134a20277bde3b56fcda99dd098af13828d8943e141199a78701a37390d5a",
+      "classes6.dex": "4a7451e67f50971d3b35b70643501651f8a03965b55e4268e7887bfc0db0bd30",
+      "classes7.dex": "9da6b7ecc28436978c435b02a4f9f7c1be4261b1cef9a445d4de166c87f82d22",
+      "classes8.dex": "eb66454be9d53c3860cc2b37ea4d842baf04c585408e76fa2acce896f836bb83"
+    },
+    "emulatorApkSha256": "0054ee2314c9ffa243ca22779bc8663ec5e097886920d4a905a49cd520d5ce12"
+  },
+  "installation": {
+    "confirmed": true,
+    "startedAt": "2026-11-02T00:01:34.528901+00:00",
+    "elapsedSecondsIncludingVerification": 59.62,
+    "serial": "10.77.77.3:5555",
+    "variant": "devRelease",
+    "applicationId": "dev.fajar.hris.mobile.dev",
+    "versionCode": 11,
+    "versionName": "1.0.0",
+    "debuggable": false,
+    "installedSha256": "e914fad7f195d74ab55889b404c1c9da72cddd5deefb3c3522bf1a0de1c91579",
+    "installedBytesMatch": true,
+    "existingAppIdPreserved": true,
+    "firstInstallTimePreserved": true,
+    "updateInPlace": true,
+    "uninstalled": false,
+    "appDataCleared": false,
+    "uiLaunched": false,
+    "after": {
+      "appId": "10962",
+      "firstInstallTime": "2026-10-29 15:48:23",
+      "lastUpdateTime": "2026-11-02 07:01:51",
+      "versionCode": "11 minSdk=24 targetSdk=36",
+      "versionName": "1.0.0",
+      "debuggable": false
+    }
+  },
+  "physicalUserAcceptance": {
+    "confirmed": true,
+    "reply": "Sudah bisa dibuka",
+    "receivedDateUtc": "2026-11-02",
+    "scope": "User opened the updated application successfully; assistant performed install-only."
+  },
+  "priorValidation": "docs/measurements/android-startup-gateway-2026-11-01.json",
+  "remainingWork": "Continue collaboration queue/FCM worker, native receive/reply and all P0-P8 requirements. This fixes host startup, not complete communications acceptance."
+}
