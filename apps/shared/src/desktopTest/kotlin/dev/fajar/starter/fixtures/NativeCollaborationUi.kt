@@ -18,6 +18,7 @@ class NativeCollaborationUi {
     val rooms = mutableMapOf<String, String>()
     val versions = mutableMapOf<String, Long>()
     val ids = (1..3).map { "aaaaaaaa-0000-0000-0000-" + it.toString().padStart(12, '0') }
+    var listedIds = ids
     val deviceId = "bbbbbbbb-0000-0000-0000-000000000001"
     val bootstrapId = "bbbbbbbb-0000-0000-0000-000000000002"
     val accountId = "11111111-1111-4111-8111-111111111111"
@@ -49,7 +50,19 @@ class NativeCollaborationUi {
         }
         val base =
             "/api/v1/companies/${NativeUiServer.COMPANY_ONE}/collaboration/direct-conversations"
-        if (path == "$base/summaries") return wire(CollaborationPageDto(ids.map(::summary), null))
+        if (path == "$base/summaries") {
+            val after = request.url.parameters["after"]
+            val limit = request.url.parameters["limit"]?.toInt() ?: 30
+            check(limit in 1..50)
+            val remaining = listedIds.filter { after == null || it > after }
+            val page = remaining.take(limit)
+            return wire(
+                CollaborationPageDto(
+                    page.map(::summary),
+                    page.lastOrNull()?.takeIf { remaining.size > limit },
+                )
+            )
+        }
         val suffix = path.removePrefix("$base/")
         val id = suffix.substringBefore('/')
         check(id in ids) { "Unknown fixture conversation" }

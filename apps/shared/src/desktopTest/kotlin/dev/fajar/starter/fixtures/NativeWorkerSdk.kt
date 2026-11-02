@@ -34,9 +34,27 @@ class NativeWorkerSdk(private val wire: NativeCollaborationUi) : CollaborationRu
     var withholdOriginals = false
     var historyCapacityOnce = false
     var historyReopens = 0
+    var historyReads = 0
+    var beforeHistory: suspend () -> Unit = {}
     var beforeResume: suspend () -> Unit = {}
     var beforeEnter: suspend () -> Unit = {}
     val sender = "@fictional:example.test"
+
+    fun incoming(conversationId: String, text: String): CollaborationHistoryChange.Text {
+        check(conversationId in wire.ids)
+        val id = java.util.UUID.randomUUID().toString()
+        val event =
+            CollaborationHistoryChange.Text(
+                "\$incoming-$id",
+                "@peer:example.test",
+                id,
+                Clock.System.now().toEpochMilliseconds(),
+                text,
+                hash(text),
+            )
+        originals.getOrPut(wire.roomId(conversationId)) { mutableListOf() }.add(event)
+        return event
+    }
 
     override suspend fun isOpen(owner: CollaborationOwner, deviceId: String) =
         AppResult.Success(this.owner == owner && deviceId == wire.deviceId)
@@ -179,6 +197,8 @@ class NativeWorkerSdk(private val wire: NativeCollaborationUi) : CollaborationRu
         matrixRoomId: String,
         anchorEventId: String,
     ): AppResult<CollaborationOriginalWindow> {
+        historyReads++
+        beforeHistory()
         if (historyCapacityOnce) {
             historyCapacityOnce = false
             return AppResult.Failed(

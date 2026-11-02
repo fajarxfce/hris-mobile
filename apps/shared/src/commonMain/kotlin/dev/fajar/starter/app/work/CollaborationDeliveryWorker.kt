@@ -71,7 +71,7 @@ class CollaborationDeliveryWorker(
         // Fresh setup can readmit an old company gate before any local discovery or SDK borrowing.
         val setup = loadSetup(scope)
         currentCoroutineContext().ensureActive()
-        if (setup is AppResult.Failed) return deliveryFailure(setup.failure)
+        if (setup is AppResult.Failed) return collaborationWorkFailure(setup.failure)
         val configured = (setup as AppResult.Success).value
         if (configured.owner != admission.owner) return SyncResult.Blocked(changed())
         val device = configured.device ?: return SyncResult.Blocked(setupRequired())
@@ -80,7 +80,7 @@ class CollaborationDeliveryWorker(
         currentCoroutineContext().ensureActive()
         val found = discover(local)
         currentCoroutineContext().ensureActive()
-        if (found is AppResult.Failed) return deliveryFailure(found.failure)
+        if (found is AppResult.Failed) return collaborationWorkFailure(found.failure)
         val work = (found as AppResult.Success).value ?: return draftResult
         if (work.access != local.access) return SyncResult.Blocked(changed())
         var lease: CollaborationBackgroundRuntimeLease? = null
@@ -88,7 +88,7 @@ class CollaborationDeliveryWorker(
             val acquired = acquireBackground(admission)
             if (acquired is AppResult.Success) lease = acquired.value
             currentCoroutineContext().ensureActive()
-            if (acquired is AppResult.Failed) return deliveryFailure(acquired.failure)
+            if (acquired is AppResult.Failed) return collaborationWorkFailure(acquired.failure)
             val borrowed = lease ?: return SyncResult.Blocked(setupRequired())
             return monitorCollaborationBackgroundDelivery(
                 borrowed,
@@ -122,7 +122,7 @@ class CollaborationDeliveryWorker(
             return SyncResult.Blocked(setupRequired())
         val restored = ensureRuntime(scope.workspaceId, device.id)
         currentCoroutineContext().ensureActive()
-        if (restored is AppResult.Failed) return deliveryFailure(restored.failure)
+        if (restored is AppResult.Failed) return collaborationWorkFailure(restored.failure)
         if (!(restored as AppResult.Success).value.value) return SyncResult.Blocked(setupRequired())
         return processPrepared(work, scope, device, draftResult)
     }
@@ -149,7 +149,7 @@ class CollaborationDeliveryWorker(
                     ?: AppResult.Failed(timeout())
             currentCoroutineContext().ensureActive()
             if (result is AppResult.Failed) {
-                when (val classified = deliveryFailure(result.failure)) {
+                when (val classified = collaborationWorkFailure(result.failure)) {
                     is SyncResult.Retry -> retry = retry ?: classified.failure
                     is SyncResult.Blocked -> {
                         blocked = blocked ?: classified.failure
@@ -420,20 +420,6 @@ class CollaborationDeliveryWorker(
         if ((current as AppResult.Success).value != work.access) return AppResult.Failed(changed())
         return AppResult.Success(Unit)
     }
-
-    private fun deliveryFailure(failure: Failure): SyncResult =
-        when (failure.code) {
-            "client.collaboration_room_pending",
-            "client.collaboration_delivery_pending",
-            "client.collaboration_history_pending",
-            "client.collaboration_runtime_opening",
-            "client.collaboration_close_pending",
-            "client.collaboration_queue_busy",
-            "client.collaboration_runtime_busy",
-            "client.collaboration_history_focus_capacity",
-            "client.collaboration_revalidation_required" -> SyncResult.Retry(failure)
-            else -> syncFailure(failure)
-        }
 
     private fun busy() =
         Failure(

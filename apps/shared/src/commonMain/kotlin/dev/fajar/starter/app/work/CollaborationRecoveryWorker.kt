@@ -86,7 +86,7 @@ class CollaborationRecoveryWorker(
             if (begun is AppResult.Failed) return retry(begun)
             snapshot = (begun as AppResult.Success).value.snapshot
         }
-        val page = devices(parent, snapshot.progress?.sweep?.afterCompanyId, limit = 2)
+        val page = devices(parent, snapshot.progress?.sweep?.afterCompanyId, limit = 1)
         if (page is AppResult.Failed) return retry(page)
         val directory = (page as AppResult.Success).value
         for (device in directory.devices) {
@@ -96,7 +96,7 @@ class CollaborationRecoveryWorker(
             if (attempted is AppResult.Failed) return retry(attempted)
             snapshot = (attempted as AppResult.Success).value.snapshot
             val result =
-                withTimeoutOrNull(30.seconds) { company(parent, device) }
+                withTimeoutOrNull(50.seconds) { company(parent, device) }
                     ?: SyncResult.Retry(failure("company_timeout", FailureKind.Timeout))
             currentCoroutineContext().ensureActive()
             val completed =

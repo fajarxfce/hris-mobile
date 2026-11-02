@@ -1,5 +1,52 @@
 # Agent continuation — HRIS Mobile
 
+## Incoming worker and fair company turns validated — 2 November 2026
+
+[Contract](collaboration-incoming-recovery.md) / [evidence](measurements/chat-incoming-worker-2026-11-02.json):
+actual app binding now runs incoming before outgoing with separate15-second lanes
+and the same original admission. Root quantum is one company,50s including admission,
+within90s processing/180s wait+processing. Incoming checks fresh setup, seeks one room,
+persists Attempt before external work, acquires an owned latest original window with
+no outbox/selection, and closes timelines/runtime/monitors on completion or cancellation.
+Room retry/continuation survives restart; provisioning never creates rooms implicitly.
+
+Fourteen actual DI/domain/SQLite app cases plus seven virtual-time coordinator cases
+cover no-outbox restart, both lanes together, failure fairness, empty/provisioning,
+readmission, contention, deadlines, cancellation, late runtime/account/denial and joined
+cleanup. HTTP/SDK are fictional here. Focused2 passes567 domain,320 data,91 app plus
+Android release Kotlin/proof APK/static97s /101.311s on12 unchanged Kotlin inputs.
+Focused1 failed two incorrect null-position assertions; three assertions now expect
+the intentionally retained empty generation-bearing position. Production unchanged.
+
+Actual WorkManager/domain/Room/Keystore regression passes all four scenarios46.417s:
+burst3.502s,stage0.876s,resume31.545s,backlog1.700s. New one-company quantum covers
+21 healthy callbacks in21 OS completions with zero Retry; uncertainty still backs off.
+Twelve changed inputs plus three unchanged committed proof sources and APKd026d7ff
+are bound in evidence. SDK/directory/admission/company callbacks remain synthetic.
+Proof process and owned5562/PID65117 stopped (1.404s); phone15/unrelated5560 untouched.
+Full3 root, Android/proof, affected browser/app-Wasm passes184s /188.013s:
+3,123 desktop,215 host,865 browser,10 build-logic; zero failures/errors/skips.
+
+Apple41409790492 at5a39b53f is complete/audited:112 core cases/30 suites, six wake
+cases0.083s, compile672s/tests74s/Xcode1269s/associations1s. Ten exact source hashes
+and XML verified. It excludes later room af5cb4dc and this incoming increment; dispatch
+new exact-head Apple after push, without cancelling an active run. Core Apple does
+not execute these app desktop cases. Physical iPhone testing remains waived.
+
+**Continue immediately:** prove incoming via actual SDK/HRIS/Synapse independently of
+outbox/selected workspace, then independent durable recent catchup, opaque FCM hints,
+notification privacy/actions and encrypted replies. Current latest window<=128 does
+NOT cover a long offline gap and must not reset foreground Older traversal. Existing
+HrisWorkerMatrixProbe seeds32 encrypted peer events before foreground acquisition;
+close the sender app/runtime before seeding and prove captured incoming restoration,
+local history across reopen, and original identity before foreground paging. Use fresh
+real recovery directory/admission, not fabricated content grants. Keep seeded login and
+provider binding limitations explicit. Current Platform drivers are being updated to
+accept HRIS_COLLAB_NATIVE_SERIAL=emulator-5562 while checking the exact HRIS AVD.
+Never use unrelated5560. Preserve all54 PRD groups. Backend private103/branch116 and
+chat push disabled remain; compatible rollout required before employee release.
+No generic Starter port is due. Continue after every commit/push.
+
 ## Room recovery and captured reference scope validated — 2 November 2026
 
 [Contract](collaboration-room-recovery.md) / [evidence](measurements/chat-room-recovery-2026-11-02.json):

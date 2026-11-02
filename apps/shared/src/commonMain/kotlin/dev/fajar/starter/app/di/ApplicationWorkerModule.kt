@@ -1,8 +1,10 @@
 package dev.fajar.starter.app.di
 
 import dev.fajar.starter.app.bootstrap.ApplicationCollaborationLifetime
+import dev.fajar.starter.app.work.CollaborationCompanyRecovery
 import dev.fajar.starter.app.work.CollaborationDeliveryWorker
 import dev.fajar.starter.app.work.CollaborationDraftRecovery
+import dev.fajar.starter.app.work.CollaborationIncomingRecovery
 import dev.fajar.starter.app.work.CollaborationRecoveryWorker
 import dev.fajar.starter.app.work.InboxPushWorker
 import dev.fajar.starter.app.work.NativePushWorker
@@ -19,8 +21,16 @@ fun applicationWorkerModule() = module {
     single { NativePushWorker(get(), inject()) } bind SyncTask::class
     single { CollaborationDraftRecovery(get(), get(), get(), get(), get()) }
     single {
+        CollaborationIncomingRecovery(get(), get(), get(), get(), get(), get(), get(), get(), get())
+    }
+    single {
+        val incoming = inject<CollaborationIncomingRecovery>()
+        val outgoing = inject<CollaborationDeliveryWorker>()
+        CollaborationCompanyRecovery({ incoming.value(it) }, { outgoing.value(it) })
+    }
+    single {
         val parent = inject<ApplicationCollaborationLifetime>()
-        val delivery = inject<CollaborationDeliveryWorker>()
+        val company = inject<CollaborationCompanyRecovery>()
         CollaborationRecoveryWorker(
             states = lazy { parent.value.state },
             ensureWake = get(),
@@ -32,7 +42,7 @@ fun applicationWorkerModule() = module {
             devices = get(),
             admit = get(),
             build = get(),
-            recoverCompany = { delivery.value(it) },
+            recoverCompany = { company.value(it) },
         )
     } bind SyncTask::class
     single {

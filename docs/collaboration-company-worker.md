@@ -18,14 +18,14 @@ holds no account grant or native resource. Admission beyond two returns Retry.
 Waiting count is separate from admitted count so a finishing call cannot be mistaken
 for future processing. Wait plus execution is bounded to 180 seconds; processing
 is bounded to 90 seconds, initial parent observation to five seconds and each
-company attempt to 30 seconds. Current native admission keeps its own original
+company attempt to 50 seconds, including fresh admission and both recovery lanes. Current native admission keeps its own original
 monotonic deadline, including its transport time. Parent replacement, logout or a
 stopped source cancels and joins the owned processing job and monitor. Foreground
 company changes alone do not replace the native parent.
 
 `EnsureCollaborationRecoveryWake` reads or creates a pending hint for a running
 periodic consumer without recursively enqueueing it. The worker captures account
-progress and requests at most two live device references after its saved seek.
+progress and requests at most one live device reference after its saved seek.
 Each Attempt is durable before admission and company work. Inactive/revoked/foreign-
 platform references are covered without enrollment or content acquisition. Complete
 preserves retry and healthy-continuation requirements; another company can progress after a transient failure.
@@ -46,13 +46,21 @@ are at most three scheduling attempts with 100ms gaps; each request has the exis
 also leaves durable work for later startup/periodic recovery. Urgent FCM latency and
 Doze behavior require separate integration and measurement.
 
-The application currently supplies the existing captured outgoing delivery worker
-as the company processor. Its shared no-wait delivery mutex, draft/command recovery,
-fresh setup, native admission, lease ownership and original-message reconciliation
-remain unchanged. That processor still exits when no outgoing work exists. Incoming
-room discovery/history acquisition, fair room progress, FCM receive, notification
-privacy/actions and encrypted inline replies remain necessary before push activation.
-No live backend activation or employee release is implied by task registration.
+The application supplies `CollaborationCompanyRecovery`: incoming acquisition runs
+first, then outgoing delivery, each with a separate15-second turn and the exact
+same original admission. Timeout or retained work in one lane does not skip the
+other. External cancellation drains the active lane before returning and does not
+start the next. Neither lane renews the admission deadline. Real Retry failures
+win over healthy continuation; blocked work stays retained for its required action.
+One company per quantum leaves room for admission and both lanes within the
+90-second processor budget. Structured cleanup is joined rather than abandoned.
+
+[Incoming recovery](collaboration-incoming-recovery.md) now discovers/acquires
+originals independently of the outbox. The existing captured delivery worker's
+shared no-wait mutex, draft/command recovery, original reconciliation and separately
+registered foreground task remain. FCM receive, notification privacy/actions,
+encrypted inline replies and independent long-offline catchup remain necessary
+before push activation. No live backend activation or employee release is implied.
 
 [Validation](measurements/chat-company-worker-2026-11-02.json) binds exact source and
 reports. Sixteen new application cases use actual domain operations with explicit
@@ -70,7 +78,7 @@ end, Finish first commits the restarted sweep; a healthy continuation schedules 
 same wake without OS failure backoff. Real failures or interrupted attempts win even
 when other companies report healthy remaining work. Scheduling failure still returns
 Retry and retains the restarted sweep and original wake. No pending command is
-acknowledged by this coverage marker. Incoming recovery remains the next integration.
+acknowledged by this coverage marker. Incoming recovery shares the same healthy-continuation contract.
 
 The [continuation regression evidence](measurements/chat-company-continuation-2026-11-02.json)
 records two domain, three shared storage and four app cases plus real Android

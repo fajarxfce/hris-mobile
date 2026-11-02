@@ -21,7 +21,7 @@ class CollaborationRecoveryWorkerTest {
             f.onCompany = {
                 if (f.attempted.size <= 10) SyncResult.Retry() else SyncResult.Complete
             }
-            repeat(8) {
+            repeat(14) {
                 assertEquals(SyncResult.Complete, worker())
                 assertNotNull(f.wake)
                 assertEquals(0, f.acknowledgments)
@@ -31,7 +31,7 @@ class CollaborationRecoveryWorkerTest {
             assertNull(f.wake)
             assertEquals(1, f.wakeWrites)
             assertEquals(1, f.acknowledgments)
-            assertEquals(8, f.scheduled.size)
+            assertEquals(14, f.scheduled.size)
             assertEquals(0L, testScheduler.currentTime)
             assertEquals(0, f.states.subscriptionCount.value)
         }
@@ -45,10 +45,10 @@ class CollaborationRecoveryWorkerTest {
         assertTrue(f.progress!!.sweep!!.continuationRequired)
         assertFalse(f.progress!!.sweep!!.retryRequired)
         f.onCompany = { SyncResult.Complete }
-        assertEquals(SyncResult.Complete, f.worker()())
+        repeat(2) { assertEquals(SyncResult.Complete, f.worker()()) }
         assertEquals(wake, f.wake)
         assertNull(f.progress!!.sweep!!.afterCompanyId)
-        repeat(2) { assertEquals(SyncResult.Complete, f.worker()()) }
+        repeat(3) { assertEquals(SyncResult.Complete, f.worker()()) }
         assertEquals(List(2) { (1..3).map(::recoveryId) }.flatten(), f.attempted)
         assertNull(f.wake)
         assertEquals(1, f.acknowledgments)
@@ -62,14 +62,14 @@ class CollaborationRecoveryWorkerTest {
                 SyncResult.Retry(Failure(FailureKind.Network, "Temporarily unavailable"))
             else SyncResult.Retry()
         }
-        assertEquals(SyncResult.Complete, f.worker()())
+        repeat(2) { assertEquals(SyncResult.Complete, f.worker()()) }
         assertTrue(f.progress!!.sweep!!.retryRequired)
         assertTrue(f.progress!!.sweep!!.continuationRequired)
         assertNotNull(assertIs<SyncResult.Retry>(f.worker()()).failure)
         assertEquals((1..3).map(::recoveryId), f.attempted)
         assertNotNull(f.wake)
         assertEquals(0, f.acknowledgments)
-        assertEquals(1, f.scheduled.size)
+        assertEquals(2, f.scheduled.size)
     }
 
     @Test
@@ -105,12 +105,12 @@ class CollaborationRecoveryWorkerTest {
         }
         assertEquals(SyncResult.Complete, worker())
         val original = f.wake
-        assertEquals(SyncResult.Complete, worker())
+        repeat(3) { assertEquals(SyncResult.Complete, worker()) }
         assertIs<SyncResult.Retry>(worker())
         assertEquals((1..5).map(::recoveryId), f.attempted)
         assertEquals(original, f.wake)
         assertNull(f.progress!!.sweep!!.afterCompanyId)
-        repeat(3) { assertEquals(SyncResult.Complete, worker()) }
+        repeat(5) { assertEquals(SyncResult.Complete, worker()) }
         assertNull(f.wake)
         assertEquals(1, f.acknowledgments)
         assertEquals(1, f.wakeWrites)
@@ -127,12 +127,12 @@ class CollaborationRecoveryWorkerTest {
         val newest = f.wake
         assertEquals(SyncResult.Complete, worker())
         assertEquals(original, f.progress!!.sweep!!.wakeGeneration)
-        assertEquals(SyncResult.Complete, worker())
+        repeat(3) { assertEquals(SyncResult.Complete, worker()) }
         assertEquals((1..5).map(::recoveryId), f.attempted)
         assertEquals(newest, f.wake)
         assertEquals(0, f.acknowledgments)
         assertNull(f.progress!!.sweep)
-        repeat(3) { worker() }
+        repeat(5) { worker() }
         assertNull(f.wake)
         assertEquals(1, f.acknowledgments)
     }
@@ -153,12 +153,12 @@ class CollaborationRecoveryWorkerTest {
             val original = f.wake
             f.onCompany = { SyncResult.Complete }
             val next = f.worker()
+            assertEquals(SyncResult.Complete, next())
             assertIs<SyncResult.Retry>(next())
             assertEquals((1..3).map(::recoveryId), f.attempted)
             assertEquals(original, f.wake)
             assertNull(f.progress!!.sweep!!.afterCompanyId)
-            assertEquals(SyncResult.Complete, next())
-            assertEquals(SyncResult.Complete, next())
+            repeat(3) { assertEquals(SyncResult.Complete, next()) }
             assertNull(f.wake)
         }
 
@@ -193,7 +193,7 @@ class CollaborationRecoveryWorkerTest {
         release.complete(Unit)
         assertEquals(SyncResult.Complete, first.await())
         assertEquals(SyncResult.Complete, next.await())
-        assertEquals((1..4).map(::recoveryId), f.attempted)
+        assertEquals((1..2).map(::recoveryId), f.attempted)
         assertEquals(1, maximum)
         assertEquals(0, active)
         assertEquals(1, f.scheduled.size)
@@ -224,7 +224,7 @@ class CollaborationRecoveryWorkerTest {
             assertEquals(SyncResult.Complete, first.await())
             assertEquals(1, f.scheduled.size)
             assertEquals(SyncResult.Complete, worker())
-            assertEquals((1..4).map(::recoveryId), f.attempted)
+            assertEquals((1..2).map(::recoveryId), f.attempted)
         }
 
     @Test
@@ -328,8 +328,7 @@ class CollaborationRecoveryWorkerTest {
         f.references[1] = f.references[1].copy(state = CollaborationDeviceState.PROVISIONING)
         f.references[2] = f.references[2].copy(platform = CollaborationNativePlatform.IOS)
         val worker = f.worker()
-        assertEquals(SyncResult.Complete, worker())
-        assertEquals(SyncResult.Complete, worker())
+        repeat(3) { assertEquals(SyncResult.Complete, worker()) }
         assertTrue(f.admitted.isEmpty())
         assertTrue(f.attempted.isEmpty())
         assertNull(f.wake)
@@ -350,7 +349,7 @@ class CollaborationRecoveryWorkerTest {
                 )
             else admitted(owner)
         }
-        assertEquals(SyncResult.Complete, f.worker()())
+        repeat(2) { assertEquals(SyncResult.Complete, f.worker()()) }
         assertEquals(listOf(recoveryId(1)), f.denied)
         assertEquals(listOf(recoveryId(2)), f.attempted)
         assertNull(f.wake)
@@ -367,7 +366,7 @@ class CollaborationRecoveryWorkerTest {
             assertEquals(200L, testScheduler.currentTime)
             val original = f.wake
             f.scheduleFailure = null
-            assertEquals(SyncResult.Complete, worker())
+            repeat(2) { assertEquals(SyncResult.Complete, worker()) }
             assertEquals(1, f.wakeWrites)
             assertNotNull(original)
             assertNull(f.wake)
@@ -386,9 +385,10 @@ class CollaborationRecoveryWorkerTest {
                 }
             } else SyncResult.Complete
         }
+        assertEquals(SyncResult.Complete, f.worker()())
         assertIs<SyncResult.Retry>(f.worker()())
         assertTrue(released)
-        assertEquals(30_000L, testScheduler.currentTime)
+        assertEquals(50_000L, testScheduler.currentTime)
         assertEquals((1..2).map(::recoveryId), f.attempted)
         assertNotNull(f.wake)
         assertEquals(0, f.acknowledgments)

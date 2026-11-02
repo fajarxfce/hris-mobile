@@ -73,7 +73,8 @@ separately from these local runs.
 
 Build `:apps:collaboration-proof:testDebugUnitTest`, `assembleDebug` and `lintDebug`.
 Use the Platform commit pinned by `.github/workflows/collaboration-hris.yml`, Docker,
-and the dedicated `hris-mobile-dev` emulator at `emulator-5560`. Set
+and the dedicated `hris-mobile-dev` emulator. On this shared host use
+`HRIS_COLLAB_NATIVE_SERIAL=emulator-5562`;5560 belongs to another project. Set
 `HRIS_COLLAB_NATIVE_APK` to the proof APK and run the three `NativeCollaboration*InteropTest`
 classes (five cases). Each owns its fixtures and cleanup. Never target the user's phone with this
 driver. CI uploads the exact bounded result/checkpoint/trace and test XML artifacts.
