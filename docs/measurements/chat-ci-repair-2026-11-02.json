@@ -1,0 +1,240 @@
+{
+  "startedAt": "2026-11-02T18:34:11.222413+00:00",
+  "exitCode": 0,
+  "wallSeconds": 86.528,
+  "inputsUnchanged": true,
+  "command": [
+    "xvfb-run",
+    "-a",
+    "./gradlew",
+    ":check",
+    "-Pkotlin.compiler.execution.strategy=in-process",
+    "--no-daemon",
+    "--no-parallel",
+    "--max-workers=1",
+    "-Dorg.gradle.jvmargs=-Xmx1536m"
+  ],
+  "sourceSha256": {
+    ".github/workflows/collaboration-hris.yml": "990769e436b15bb5620b48ffe7867426ea268b1c134d3b8fdc60bcc5f221653e",
+    "features/collaboration/presentation/src/desktopTest/kotlin/dev/fajar/starter/collaboration/presentation/ChatThreadLayoutTest.kt": "83c3a859e6fcd01f682d0813af075949077f83ae0f40958cb1367a5396c7b097"
+  },
+  "freshReports": {
+    "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.ChatCancellationNarrowLayoutTest.xml": {
+      "sha256": "1365c5877cfe9638399d7369b88c522307f8ebd3419259450f869bd870183b0a",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.ChatInboxLayoutTest.xml": {
+      "sha256": "03e7b77a54060c09fe41f1a9c94c61553a020206f441b466c72a63b7e9af6fd8",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.ChatParticipantsLayoutTest.xml": {
+      "sha256": "ed6fdad12f08726aa8c400d1bc8764b4ab6fb84d2b47c9d217c691c302d1910a",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.ChatSetupLayoutTest.xml": {
+      "sha256": "97384185353d8cb63121c4609aaa2f3c13a55ac018f2e14bf4343a05da206826",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.ChatThreadLayoutTest.xml": {
+      "sha256": "83d17036876a24e083c7f7b61d40a46383222c33ae16654b42037618d7a28b43",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.ChatThreadViewportTest.xml": {
+      "sha256": "7e2082d28a25754394382cd296185061df1a022e90e4f987c5287aa6e5034e26",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.inbox.ChatInboxViewModelTest.xml": {
+      "sha256": "d0cb975111bbf2a3ec7d6e648f4851a711130e40b63222e70297fdaa86be9a0f",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.participants.ChatParticipantsViewModelTest.xml": {
+      "sha256": "9ef7fac32b2b1f75ca0e4d56c4f987582a991a6cc2395738e11a50a8498d9ef1",
+      "tests": 13,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.setup.ChatSetupViewModelTest.xml": {
+      "sha256": "561ababa8c2e7e5b39a400e7a1e2035cf93c0019cbda3b1d3d80690456227b4b",
+      "tests": 11,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.thread.ChatThreadCancellationTest.xml": {
+      "sha256": "cf7fbd0b2eb02689675d96620b9f2434decdcf188c0e2b5fd098ee2c3a31fde2",
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.thread.ChatThreadDraftTest.xml": {
+      "sha256": "8b6a628c1ab2446d9b75728fd9d663eee7dc942f26d059e8e8453443633f3a30",
+      "tests": 14,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.thread.ChatThreadProjectionTest.xml": {
+      "sha256": "7d8b0bd69bbac440f89e4d71526ec0335bda3ff63563c17c0591e367155930ef",
+      "tests": 12,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.thread.ChatThreadReadTest.xml": {
+      "sha256": "1f058916fd0473376b7af304988291cc52b91950432052a3299261c62eca783b",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.thread.ChatThreadViewModelTest.xml": {
+      "sha256": "deafd6bb9579b44297b067046a9e0848256d5811340088c1772ace41b56e8f1d",
+      "tests": 28,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "features/collaboration/presentation/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.presentation.thread.ChatThreadWindowTest.xml": {
+      "sha256": "38c6d46874a8d0b103965e66642416855291ada8ddac86e48b98417a72768df4",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "rootTaskReportsIncludingExplicitReuse": {
+    "desktopTest": {
+      "tests": 3406,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "suites": 501
+    },
+    "testAndroidHostTest": {
+      "tests": 230,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "suites": 37
+    },
+    "test": {
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "suites": 2
+    }
+  },
+  "taskStatuses": {
+    ":apps:demo:desktopTest": "UP-TO-DATE",
+    ":apps:shared:desktopTest": "UP-TO-DATE",
+    ":core:common:desktopTest": "UP-TO-DATE",
+    ":core:database:desktopTest": "UP-TO-DATE",
+    ":core:datastore:desktopTest": "UP-TO-DATE",
+    ":core:fileio:desktopTest": "UP-TO-DATE",
+    ":core:localization:desktopTest": "UP-TO-DATE",
+    ":core:network:desktopTest": "UP-TO-DATE",
+    ":core:observability:desktopTest": "UP-TO-DATE",
+    ":core:presentation:desktopTest": "UP-TO-DATE",
+    ":core:securestorage:desktopTest": "UP-TO-DATE",
+    ":core:storage:desktopTest": "UP-TO-DATE",
+    ":core:worker:desktopTest": "UP-TO-DATE",
+    ":core:availability:data:desktopTest": "UP-TO-DATE",
+    ":core:availability:domain:desktopTest": "UP-TO-DATE",
+    ":core:documents:data:desktopTest": "UP-TO-DATE",
+    ":core:documents:domain:desktopTest": "UP-TO-DATE",
+    ":core:featureflags:data:desktopTest": "UP-TO-DATE",
+    ":core:featureflags:domain:desktopTest": "UP-TO-DATE",
+    ":core:identity:data:desktopTest": "UP-TO-DATE",
+    ":core:identity:domain:desktopTest": "UP-TO-DATE",
+    ":core:location:data:desktopTest": "UP-TO-DATE",
+    ":core:notifications:data:desktopTest": "UP-TO-DATE",
+    ":core:notifications:domain:desktopTest": "UP-TO-DATE",
+    ":core:security:data:desktopTest": "UP-TO-DATE",
+    ":core:security:domain:desktopTest": "UP-TO-DATE",
+    ":core:settings:data:desktopTest": "UP-TO-DATE",
+    ":core:sync:data:desktopTest": "UP-TO-DATE",
+    ":core:transfers:data:desktopTest": "UP-TO-DATE",
+    ":core:transfers:domain:desktopTest": "UP-TO-DATE",
+    ":core:workspace:data:desktopTest": "UP-TO-DATE",
+    ":core:workspace:domain:desktopTest": "UP-TO-DATE",
+    ":features:auth:presentation:desktopTest": "UP-TO-DATE",
+    ":features:collaboration:data:desktopTest": "UP-TO-DATE",
+    ":features:collaboration:data:testAndroidHostTest": "UP-TO-DATE",
+    ":features:collaboration:domain:desktopTest": "UP-TO-DATE",
+    ":features:collaboration:presentation:desktopTest": "EXECUTED",
+    ":features:dashboard:data:desktopTest": "UP-TO-DATE",
+    ":features:dashboard:domain:desktopTest": "UP-TO-DATE",
+    ":features:dashboard:presentation:desktopTest": "UP-TO-DATE",
+    ":features:documents:presentation:desktopTest": "UP-TO-DATE",
+    ":features:expenses:data:desktopTest": "UP-TO-DATE",
+    ":features:expenses:domain:desktopTest": "UP-TO-DATE",
+    ":features:expenses:presentation:desktopTest": "UP-TO-DATE",
+    ":features:files:presentation:desktopTest": "UP-TO-DATE",
+    ":features:home:presentation:desktopTest": "UP-TO-DATE",
+    ":features:inbox:data:desktopTest": "UP-TO-DATE",
+    ":features:inbox:domain:desktopTest": "UP-TO-DATE",
+    ":features:leave:data:desktopTest": "UP-TO-DATE",
+    ":features:leave:domain:desktopTest": "UP-TO-DATE",
+    ":features:leave:presentation:desktopTest": "UP-TO-DATE",
+    ":features:notifications:presentation:desktopTest": "UP-TO-DATE",
+    ":features:onboarding:data:desktopTest": "UP-TO-DATE",
+    ":features:onboarding:presentation:desktopTest": "UP-TO-DATE",
+    ":features:payroll:data:desktopTest": "UP-TO-DATE",
+    ":features:payroll:domain:desktopTest": "UP-TO-DATE",
+    ":features:payroll:presentation:desktopTest": "UP-TO-DATE",
+    ":features:people:data:desktopTest": "UP-TO-DATE",
+    ":features:people:domain:desktopTest": "UP-TO-DATE",
+    ":features:people:presentation:desktopTest": "UP-TO-DATE",
+    ":features:security:presentation:desktopTest": "UP-TO-DATE",
+    ":features:settings:presentation:desktopTest": "UP-TO-DATE",
+    ":features:workforce:data:desktopTest": "UP-TO-DATE",
+    ":features:workforce:domain:desktopTest": "UP-TO-DATE",
+    ":features:workforce:presentation:desktopTest": "UP-TO-DATE",
+    ":build-logic:test": "UP-TO-DATE"
+  },
+  "screenshotSha256": {
+    "features/collaboration/presentation/build/reports/screenshots/chat-thread-indonesian-large-text.png": "8a52c4799c8a824fb6322cd307da8f6e219f67ca53294d6ff11d1c586180d721",
+    "features/collaboration/presentation/build/reports/screenshots/chat-thread-indonesian-large-text-scrolled.png": "8d5cb3735b13c0b6870ea581e2a95ef27b64a32af2f662f92433f95c0e7d825f"
+  },
+  "baseCommit": "ca3d7ee4e74774ddd794ed18987efef6fa85dbb0",
+  "scope": "Repair stale native HRIS test checkout and scroll an uncomposed lazy message using collection semantics; preserve and strengthen fixed-header/composer assertions.",
+  "priorFailures": {
+    "native": 41493788108,
+    "portable": [
+      41489333369,
+      41497227558
+    ],
+    "nativeDiagnosis": "Platform8b77c4f lacks receipt gateway and current incoming/priority worker fixture. Pin accepted304be027; all native cases must pass in follow-up CI.",
+    "portableDiagnosis": "performScrollTo targeted a node outside the composed lazy window. Fixture now has27 rows, asserts target absent initially, scrolls collection to matching text, then checks exact header/composer bounds and48dp actions."
+  },
+  "limits": [
+    "Both actual before/after local screenshots inspected; recorded evidence only, no pixel baseline comparison.",
+    "No production UI/source behavior or APK changed by this repair.",
+    "Hosted portable and native compatibility acceptance remains pending until the repaired commit runs.",
+    "No phone interaction, no generic Starter port, all54 PRD groups still open."
+  ]
+}

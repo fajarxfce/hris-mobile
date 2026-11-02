@@ -1,5 +1,29 @@
 # Agent continuation — HRIS Mobile
 
+## CI fixture corrections locally accepted; hosted verification required
+
+Native HRIS workflow now pins Platform304be02700cf07e496421c17e90f5a471b4bd68c,
+including the receipt gateway and current incoming/priority worker fixture. Prior
+8b77c4f was incompatible with the newer proof APK. The failing large-text layout test
+now uses collection scroll semantics for a definitely uncomposed target:27 rows,
+initial target absence, then visible old text and unchanged header/composer bounds.
+Back/send48dp assertions and submit disabling remain. No production UI/API changed.
+
+Root check passes86.528s:128 fresh presentation cases/15 suites; including explicit
+reuse3406 desktop/501,230 Android host/37 and ten build-logic/two, zero failures,
+errors/skips. Format, architecture and detekt pass. Workflow YAML parsed and target
+commit/receipt route checked. Both actual local before/after2x screenshots inspected;
+recording only, not pixel baseline comparison. Two input hashes unchanged.
+[Evidence](measurements/chat-ci-repair-2026-11-02.json).
+
+Commit/push, then monitor repaired native and portable workflows to completion; do
+not call hosted failures resolved from local success alone. Direct completed job log
+125457030851 confirms b870 portable failed only the same lazy-item assertion
+(128 cases/one failure). Latest full Apple remains222bd441/41492596519; dispatch
+scope=apple at this repaired source and audit source/artifact/JUnit/full Xcode.
+Continue reply completion/recovery work while hosted checks run. Phone18 unchanged;
+next product install >18 only after notice, explicit serial and --install-only.
+
 ## Notification reply input accepted; CI repair next — 2 November 2026
 
 Reply text, exact token and original native family now persist in a separate encrypted

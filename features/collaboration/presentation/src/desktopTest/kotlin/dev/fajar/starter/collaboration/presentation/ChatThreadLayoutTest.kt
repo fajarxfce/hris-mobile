@@ -180,12 +180,22 @@ class ChatThreadLayoutTest {
     @Test
     fun narrowLargeTextKeepsComposerAndBackReachableWhileMessagesScroll() {
         val events = mutableListOf<ChatThreadEvent>()
+        val messages = rows()
         var state by
             mutableStateOf(
                 ChatThreadState(
                     draftReady = true,
                     title = "Dewi Kartika",
-                    rows = rows(),
+                    rows =
+                        messages.take(2) +
+                            (1..24).map {
+                                row(
+                                    "history-$it",
+                                    "Riwayat percakapan $it",
+                                    ChatMessageOwnership.COLLEAGUE,
+                                )
+                            } +
+                            messages.last(),
                     loading = false,
                     draft = "Baik, terima kasih.",
                 )
@@ -211,15 +221,22 @@ class ChatThreadLayoutTest {
                 .assertHeightIsAtLeast(48.dp)
                 .fetchSemanticsNode()
                 .boundsInRoot
-        compose.onNodeWithContentDescription("Pesan").assertIsDisplayed()
+        val composer = compose.onNodeWithContentDescription("Pesan").assertIsDisplayed()
+        val composerBounds = composer.fetchSemanticsNode().boundsInRoot
         compose
             .onNodeWithContentDescription("Kirim pesan")
             .assertIsDisplayed()
             .assertWidthIsAtLeast(48.dp)
             .assertHeightIsAtLeast(48.dp)
         screenshot("chat-thread-indonesian-large-text")
-        compose.onNodeWithText("Pesan lama untuk pengujian.").performScrollTo().assertIsDisplayed()
+        // Lazy items outside the composed window have no node to performScrollTo on.
+        val oldMessage = "Pesan lama untuk pengujian."
+        compose.onNodeWithText(oldMessage).assertDoesNotExist()
+        compose.onNode(hasScrollToIndexAction()).performScrollToNode(hasText(oldMessage))
+        compose.onNodeWithText(oldMessage).assertIsDisplayed()
         assertEquals(bounds, back.fetchSemanticsNode().boundsInRoot)
+        assertEquals(composerBounds, composer.assertIsDisplayed().fetchSemanticsNode().boundsInRoot)
+        screenshot("chat-thread-indonesian-large-text-scrolled")
         compose.onNodeWithContentDescription("Kirim pesan").assertIsDisplayed().performClick()
         compose.runOnIdle {
             assertEquals(listOf<ChatThreadEvent>(ChatThreadEvent.SendRequested), events)

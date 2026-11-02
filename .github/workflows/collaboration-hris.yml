@@ -41,7 +41,8 @@ jobs:
       - uses: actions/checkout@v4
         with:
           repository: fajarxfce/hris-platform
-          ref: 8b77c4fab7f49fc646336412324830261651247c
+          # Includes the receipt gateway and current read/process-recovery fixture.
+          ref: 304be02700cf07e496421c17e90f5a471b4bd68c
           path: platform
       - uses: actions/setup-java@v4
         with:
