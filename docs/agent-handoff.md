@@ -1,5 +1,55 @@
 # Agent continuation — HRIS Mobile
 
+## Native compatibility investigation running — keep source frozen
+
+Current accepted application source1a92d53c2a523dec1b943d416bce6dd32bd49d21 is pushed.
+All completion checks below pass. Frozen debug protocol APK343275325 bytes has SHA256
+b8d1520f68bd6863c6c36b117cdfce05f6b34369699ab4dbad2ee52515468566; this is not the
+product phone APK. Backend code matches304be027; checkout72447fb8 differs only in docs.
+3628 Mobile/4197 Platform source hashes are frozen for local native verification.
+[Current evidence](measurements/chat-ci-native-investigation-2026-11-02.json).
+
+Native attempt1 ran719.592s:five cases/three suites,three failures. Actual SDK and
+Android WorkManager pass, including receipt gateway, OS death and constrained-job
+recovery. All three application-worker cases fail: cancelled-draft queued/restored
+in distinct processes, then the owned emulator hung and the420s driver deadline
+expired; remaining cases found no emulator. Emulator37.2.12/PID1140927 stopped with
+SIGSEGV; coredump top thread is HangDetector::LooperWatcher -> CrashReporter::
+GenerateDumpAndDie. Exact emulator hang cause unresolved; no application defect/fix
+inferred. Not a kernel OOM kill. All source/APK hashes unchanged. First attempt
+results, JUnit and coredump metadata preserved under Platform .work/chat-ci-repair-native-2026-11-02/native-1.
+SDK/WorkManager success does not accept the failed worker cases.
+
+Attempt2 RUNNING:only three failed worker cases, same frozen APK/source. Fresh
+owned emulator5562/PID1167388, modern swiftshader mode used by CI, boot24.279s.
+Only the known leftover protocol package from attempt1 was removed0.223s, after
+serial/AVD/userdata ownership checks. No phone touched. Platform runner
+.work/chat-ci-repair-native-2026-11-02/run-native-2.py writes native-2/result.json
+and stops its owned emulator in finally. One heavy job at a time. Do not modify
+tracked source while its7825 input hashes are guarded. Documentation is excluded.
+All87 Python driver tests pass0.326s wall (unittest0.178s). Do not rerun native-1
+audit.py blindly: it intentionally requires five passing cases and cannot accept
+attempt1. Audit SDK/WorkManager from1 and workers from2 separately if retry passes;
+record failure/renderer adjustment and current cleanup accurately.
+
+Repaired native CI41502174267 atdf0a1d40 now running; latest1a92 native41504255602
+and control41504255605 pending. Old b870 native41497227823 finished failure:receipt
+denial plus three peer-seed failures under stale8b77 pin; scheduled case passed.
+Full Apple41502192261 atdf0a1d40 has passed simulator compilation/tests and builds
+the full Xcode app. Prepared105-source artifact audit is still required; excludes
+completion1a92. Old control41497227558 portable failed the known lazy-item test;
+its Apple host build was still running. Follow actual final outcomes.
+
+Next after native proof is settled: current-owner reply read/reproduced review,
+application reply wrapper, fair durable recovery and native display/action integration.
+Unapplied/unvalidated .txt drafts for ReadCollaborationNotificationReply and
+ReviewCollaborationNotificationReply are under Mobile .work/chat-notification-reply-completion-2026-11-02.
+Do not mistake them for implemented code; review, add meaningful ownership/CAS/
+cancellation tests, bind the actual app graph and run required checks when applied.
+Phone18/source42f5d157 and live304be027/schema116 pushOFF remain; all54 PRD groups
+open. Keep long run/push every atomic commit. Next product phone install >18:
+notify first, explicit10.77.77.3:5555 --install-only; preserve data/signing, no UI driving.
+
 ## Exact reply completion accepted — 2 November 2026
 
 CompleteCollaborationNotificationReply now reproduces the exact immutable command

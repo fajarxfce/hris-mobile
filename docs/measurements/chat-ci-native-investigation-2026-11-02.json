@@ -1,0 +1,128 @@
+{
+  "date": "2026-11-02",
+  "status": "worker_retry_in_progress_not_accepted",
+  "mobileSource": {
+    "count": 3628,
+    "manifestSha256": "6091e8a38ad1fa5908fcf88de3a0d9d6ae6e4f1d593a08ca611ff035df6b087e",
+    "commit": "1a92d53c2a523dec1b943d416bce6dd32bd49d21"
+  },
+  "platformSource": {
+    "count": 4197,
+    "manifestSha256": "f279ceed080e680284e17e098da35301c65fde93ca0c85b0dcdd95a669d71e54",
+    "commit": "72447fb8ec1c76dab244b65590427dce783389c9"
+  },
+  "runtimeSource": "304be02700cf07e496421c17e90f5a471b4bd68c",
+  "proofArtifact": {
+    "sha256": "b8d1520f68bd6863c6c36b117cdfce05f6b34369699ab4dbad2ee52515468566",
+    "bytes": 343275325,
+    "path": "/home/fajar/hris/hris-platform/.work/chat-ci-repair-native-2026-11-02/collaboration-proof-debug.apk"
+  },
+  "firstAttempt": {
+    "startedAt": "2026-11-02T18:51:33.291781+00:00",
+    "wallSeconds": 719.592,
+    "exitCode": 1,
+    "artifactUnchanged": true,
+    "inputsUnchanged": true,
+    "reports": {
+      "tests": 5,
+      "failures": 3,
+      "errors": 0,
+      "skipped": 0,
+      "suites": 3
+    },
+    "reportSha256": {
+      "TEST-dev.fajar.hris.NativeCollaborationSdkInteropTest.xml": "1f75af3e29ff1d3c0cdbfe69286ef28dbe0eb71ccb9d2d8188c91320d7053175",
+      "TEST-dev.fajar.hris.NativeCollaborationWorkerInteropTest.xml": "87f36a84e8f7e9cfd60aa893ed926375daf10e5b3bf0a55b45e04addfc827aba",
+      "TEST-dev.fajar.hris.NativeCollaborationScheduledInteropTest.xml": "288bb946c9432d48ede00315f5b4a16bde9d46ad81fe186b19541eea008262b7"
+    }
+  },
+  "firstAttemptReview": {
+    "cause": "Owned emulator37.2.12 stopped with SIGSEGV; coredump crashing thread is HangDetector::LooperWatcher -> CrashReporter::GenerateDumpAndDie. Host dmesg records emulator PID1140927 signal11, not a kernel OOM kill. Precise underlying emulator hang remains unresolved.",
+    "firstResults": {
+      "sdk": 1,
+      "androidWorkManager": 1,
+      "workerFailed": 3
+    },
+    "firstWorker": "CANCELLED_DRAFT queued and restored in distinct Android processes, then driver exceeded420s. Other worker cases found absent emulator.",
+    "next": "Repeat only3 failed worker cases with a fresh owned emulator process and the modern swiftshader mode used by CI. Same frozen APK/backend source; remove only the known leftover proof package from this failed run if present. Keep successful SDK/WorkManager evidence separate.",
+    "applicationSourceChanged": false,
+    "phoneTouched": false,
+    "coreInfoSha256": "55d4f479c5436044dbcf6047576844c5c0f5f53de5f4f87de3456a875033aeb8"
+  },
+  "emulatorFirst": {
+    "pid": 1140927,
+    "serial": "emulator-5562",
+    "command": [
+      "/home/fajar/Android/Sdk/emulator/emulator",
+      "-avd",
+      "hris-mobile-dev",
+      "-port",
+      "5562",
+      "-data",
+      "/home/fajar/hris/hris-mobile/.work/startup-fix-2026-11-01/clean-userdata.img",
+      "-no-window",
+      "-no-snapshot",
+      "-no-audio",
+      "-no-boot-anim",
+      "-gpu",
+      "swiftshader_indirect",
+      "-memory",
+      "1536",
+      "-cores",
+      "2",
+      "-feature",
+      "-Vulkan"
+    ],
+    "bootSeconds": 24.26
+  },
+  "emulatorFirstStop": {
+    "serial": "emulator-5562",
+    "pid": 1140927,
+    "alreadyExited": true,
+    "serialAbsent": true,
+    "wallSeconds": 0.0
+  },
+  "retryCleanup": {
+    "serial": "emulator-5562",
+    "ownedEmulatorPid": 1167388,
+    "package": "dev.fajar.hris.collaboration.proof",
+    "presentBefore": true,
+    "scope": "Only leftover protocol APK from failed native-1, whose queued/restored outputs prove installation in this owned userdata image.",
+    "phoneTouched": false,
+    "uninstalled": true,
+    "wallSeconds": 0.223
+  },
+  "driverTests": {
+    "command": [
+      "python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tool",
+      "-p",
+      "test_collaboration*.py"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 0.326
+  },
+  "driverCaseCount": 87,
+  "pending": {
+    "localWorkerRetry": "Platform .work/chat-ci-repair-native-2026-11-02/native-2",
+    "ownedEmulatorPid": 1167388,
+    "serial": "emulator-5562",
+    "gpu": "swiftshader",
+    "sourceChanges": false,
+    "hostedNativeRepairedRun": 41502174267,
+    "hostedNativeLatestPending": 41504255602,
+    "hostedControlLatestPending": 41504255605,
+    "appleFull": 41502192261
+  },
+  "limits": [
+    "First attempt proves SDK and Android WorkManager cases only; three application-worker cases are not accepted.",
+    "First cancelled-draft case has distinct queued/restored Android process IDs before the emulator host hung. It exceeded the driver deadline; remaining cases had no emulator.",
+    "Coredump shows emulator HangDetector/CrashReporter fatal path. Exact underlying emulator hang is unresolved; no application fix inferred.",
+    "Same frozen proof APK and backend code are reused. This is not a product phone APK or native notification acceptance.",
+    "Phone18/source42f5d157 remains; no phone interaction. Live304be027/schema116 pushOFF; all54 PRD groups remain open."
+  ]
+}
