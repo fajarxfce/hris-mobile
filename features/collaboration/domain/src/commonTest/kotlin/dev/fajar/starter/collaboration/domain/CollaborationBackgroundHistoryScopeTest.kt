@@ -158,7 +158,7 @@ class CollaborationBackgroundHistoryScopeTest {
     }
 }
 
-private fun CollaborationDeliveryFixture.historyBackground(
+internal fun CollaborationDeliveryFixture.historyBackground(
     elapsed: TestTimeSource
 ): CollaborationOperationScope.Background {
     base.setup.workspace = null

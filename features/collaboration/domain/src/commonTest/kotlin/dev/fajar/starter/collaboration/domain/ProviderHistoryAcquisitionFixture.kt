@@ -8,7 +8,9 @@ import dev.fajar.starter.common.result.*
 import kotlin.test.*
 import kotlinx.coroutines.flow.Flow
 
-internal class ProviderHistoryAcquisitionFixture {
+internal class ProviderHistoryAcquisitionFixture(
+    purpose: CollaborationHistoryPurpose = CollaborationHistoryPurpose.Browse
+) {
     val delivery = CollaborationDeliveryFixture()
     val local = delivery.base
     val traversal =
@@ -16,6 +18,7 @@ internal class ProviderHistoryAcquisitionFixture {
             delivery.conversation,
             delivery.device.roomId,
             delivery.device.deviceId,
+            purpose,
         )
     val admissions = mutableListOf<String>()
     var page =
@@ -167,7 +170,14 @@ internal class ProviderHistoryAcquisitionFixture {
 
     suspend fun acquire(
         origin: CollaborationHistoryPageOrigin = CollaborationHistoryPageOrigin.SavedPosition
-    ) = useCase("selection", traversal.deviceId, traversal.conversationId, origin)
+    ) =
+        useCase(
+            "selection",
+            traversal.deviceId,
+            traversal.conversationId,
+            origin,
+            traversal.purpose,
+        )
 
     companion object {
         const val generation = "b1000000-0000-4000-8000-000000000001"

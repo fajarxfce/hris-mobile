@@ -13,6 +13,8 @@ import kotlinx.coroutines.test.runTest
 abstract class CollaborationHistoryTraversalStorageContract {
     protected abstract fun databaseOwner(): CollaborationHistoryDatabaseOwner
 
+    protected open val purpose = CollaborationHistoryPurpose.Browse
+
     @Test
     fun emptyAdvancingAndTerminalPagesSurviveReopenWithoutAcknowledgingReferences() =
         withDatabase { f ->
@@ -419,7 +421,7 @@ abstract class CollaborationHistoryTraversalStorageContract {
 
     private fun withDatabase(block: suspend (CollaborationHistoryTraversalFixture) -> Unit) =
         runTest {
-            val fixture = CollaborationHistoryTraversalFixture(databaseOwner())
+            val fixture = CollaborationHistoryTraversalFixture(databaseOwner(), purpose)
             try {
                 fixture.local.activate()
                 block(fixture)

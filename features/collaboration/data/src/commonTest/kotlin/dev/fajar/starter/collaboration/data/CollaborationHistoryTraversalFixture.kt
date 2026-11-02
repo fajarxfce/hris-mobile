@@ -9,13 +9,15 @@ import kotlin.test.*
 import kotlinx.coroutines.flow.first
 
 internal class CollaborationHistoryTraversalFixture(
-    databaseOwner: CollaborationHistoryDatabaseOwner
+    databaseOwner: CollaborationHistoryDatabaseOwner,
+    purpose: CollaborationHistoryPurpose = CollaborationHistoryPurpose.Browse,
 ) {
     val local = CollaborationHistoryFixture(databaseOwner)
     val access
         get() = local.access
 
-    val traversal = CollaborationHistoryTraversal(local.conversation, local.room, historyId(9100))
+    val traversal =
+        CollaborationHistoryTraversal(local.conversation, local.room, historyId(9100), purpose)
     val owner =
         CollaborationOwner(
             access.sessionId,

@@ -20,7 +20,12 @@ internal fun traversalPartition(
     traversal: CollaborationHistoryTraversal,
 ): String {
     require(validCollaborationHistoryTraversal(traversal))
-    return historyPartition(access, traversal.conversationId) + "/pages/" + traversal.deviceId
+    val lane =
+        when (traversal.purpose) {
+            CollaborationHistoryPurpose.Browse -> "/pages/"
+            CollaborationHistoryPurpose.Incoming -> "/incoming-pages/"
+        }
+    return historyPartition(access, traversal.conversationId) + lane + traversal.deviceId
 }
 
 @Serializable
@@ -185,7 +190,10 @@ internal class CollaborationHistoryTraversalCodec(
 
     private fun context() =
         listOf(
-            "hris-history-pages-v1",
+            when (traversal.purpose) {
+                CollaborationHistoryPurpose.Browse -> "hris-history-pages-v1"
+                CollaborationHistoryPurpose.Incoming -> "hris-incoming-history-pages-v1"
+            },
             access.audience,
             access.accountId,
             access.companyId,

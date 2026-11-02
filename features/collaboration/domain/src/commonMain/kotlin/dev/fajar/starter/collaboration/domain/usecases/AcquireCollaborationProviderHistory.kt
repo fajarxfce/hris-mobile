@@ -29,14 +29,22 @@ class AcquireCollaborationProviderHistory(
         deviceId: String,
         conversationId: String,
         origin: CollaborationHistoryPageOrigin = CollaborationHistoryPageOrigin.SavedPosition,
+        purpose: CollaborationHistoryPurpose = CollaborationHistoryPurpose.Browse,
     ): AppResult<CollaborationProviderHistoryAcquisition> =
-        invoke(CollaborationOperationScope.Selected(workspaceId), deviceId, conversationId, origin)
+        invoke(
+            CollaborationOperationScope.Selected(workspaceId),
+            deviceId,
+            conversationId,
+            origin,
+            purpose,
+        )
 
     suspend operator fun invoke(
         scope: CollaborationOperationScope,
         deviceId: String,
         conversationId: String,
         origin: CollaborationHistoryPageOrigin = CollaborationHistoryPageOrigin.SavedPosition,
+        purpose: CollaborationHistoryPurpose = CollaborationHistoryPurpose.Browse,
     ): AppResult<CollaborationProviderHistoryAcquisition> {
         if (
             !validCollaborationMessageId(deviceId) ||
@@ -51,7 +59,7 @@ class AcquireCollaborationProviderHistory(
         val admitted = admitRoom(scope, owner, deviceId, conversationId)
         if (admitted is AppResult.Failed) return admitted
         val roomId = (admitted as AppResult.Success).value
-        val traversal = CollaborationHistoryTraversal(conversationId, roomId, deviceId)
+        val traversal = CollaborationHistoryTraversal(conversationId, roomId, deviceId, purpose)
         val loaded = checked(scope, owner) { history.progress(owner.localListAccess(), traversal) }
         if (loaded is AppResult.Failed) return loaded
         val previous = (loaded as AppResult.Success).value

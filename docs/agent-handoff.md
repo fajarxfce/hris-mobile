@@ -1,5 +1,58 @@
 # Agent continuation — HRIS Mobile
 
+## Incoming traversal isolation and concurrent key creation validated — 2 November 2026
+
+[Contract](collaboration-incoming-history.md) / [evidence](measurements/chat-incoming-history-purpose-2026-11-02.json)
+add explicit Browse/Incoming purposes to provider acquisition and encrypted traversal.
+Browse retains its exact partition/AAD/schema; Incoming has separate authenticated
+payload/index context and seek/reference state. Original content remains shared.
+Existing captured reference operations carry the key unchanged. No worker catchup
+caller is added yet. Four domain, four cross-purpose storage and eleven inherited
+incoming storage cases cover admission, cancellation, legacy bytes, transplant
+rejection, interleaved restart/resolution, independent writes and all existing
+CAS/key-loss/account/reopen/bounded-query behaviors on SQLite and IndexedDB.
+
+The first full check failed one existing concurrent company-progress case among336
+data cases in244.747s; all15 new storage cases passed. That run did not reach new
+domain/Android/browser tasks (retained567 domain XML is not new execution evidence).
+Inspection found the shared history-key guard can observe no key, then a different
+repository's newly committed ciphertext. A deterministic barrier test reproduces
+Failed instead of CAS loser Success(null) before the correction (39.46s).
+The original random failure did not retain its technical cause; the new scenario
+explicitly establishes the guard race. The guard now rereads a retained key once;
+missing/malformed credentials still fail without creating keys over old records.
+Final full root/Android release/affected browser passes333s /336.845s with16
+unchanged Kotlin inputs:3,144 desktop468 suites,216 host35,886 browser89 and10
+build-logic2; zero failures/errors/skips. Both failed attempts remain in evidence.
+
+Apple [41414832120](https://github.com/fajarxfce/hris-mobile/actions/runs/41414832120)
+at3062bff25c678639204bcf4a5e2e95be85c155d4 is COMPLETE and audited:112 core cases/30
+suites, six wake cases0.124s, compile610s/tests123s/Xcode1323s/associations1s,12 source
+hashes verified. It excludes later ee888802 and this isolation/key change; core tests
+do not execute app worker desktop cases. Dispatch the next exact committed head now.
+
+Platform [04b0b6c8](https://github.com/fajarxfce/hris-platform/commit/04b0b6c8) is pushed:
+actual incoming provider/empty-outbox/no-selection proof and all81 driver cases.
+A NEW UNCOMMITTED MatrixRoomHistoryInteropTest extension is running locally in
+`.work/incoming-history-boundary-2026-11-02` (one heavy local check at a time).
+The gateway already supports encrypted `from` AND `to` positions, bound to company/
+account/device/server/room. Prefer these provider boundaries over overlap heuristics.
+The new test attempts47 additional metadata events, five more during partial paging,
+adapter recreation, exact wave separation and an empty caught-up wave. It is not yet
+accepted. It uses synthetic encrypted payloads, not SDK plaintext/E2EE acceptance.
+
+**Continue immediately:** verify that provider boundary test, add optional untilPosition
+through Mobile's API/runtime/page contracts, and persist each incoming wave's first
+start, previous completed boundary, next seek and fair pending-reference cursor.
+Do not reset unfinished scans or Browse on each wake. Original/tombstone reconciliation
+remains distinct; state-only/missing-key references cannot starve later work. Native
+SDK caps16 retained focuses per client, so respect foreground/borrowed ownership when
+recovering capacity. Then prove an actual incoming gap beyond128, FCM privacy/actions/
+encrypted replies and compatible private server rollout. Do not stop after this push.
+All54 groups remain open; phone15, private schema103/API-worker2c2a59e3, branch116 and
+chat push disabled remain. No Starter port is due for these HRIS-specific changes.
+No emulator or user phone operation by this increment; next employee release16+.
+
 ## Actual incoming SDK/provider proof passed; generic Matrix retry corrected — 2 November 2026
 
 [Evidence](measurements/chat-incoming-provider-2026-11-02.json) records five real

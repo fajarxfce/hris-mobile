@@ -9,11 +9,18 @@ enum class CollaborationHistoryPageOrigin {
 /** Received reference count, not new messages or successful decryption. */
 data class CollaborationProviderHistoryAcquisition(val references: Int, val exhausted: Boolean)
 
+/** Independent provider positions and pending references; original content is still shared. */
+enum class CollaborationHistoryPurpose {
+    Browse,
+    Incoming,
+}
+
 /** Provider positions are bound to this device/room; locally acquired originals remain separate. */
 data class CollaborationHistoryTraversal(
     val conversationId: String,
     val roomId: String,
     val deviceId: String,
+    val purpose: CollaborationHistoryPurpose = CollaborationHistoryPurpose.Browse,
 ) {
     override fun toString() = "CollaborationHistoryTraversal([redacted])"
 }

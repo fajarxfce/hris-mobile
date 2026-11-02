@@ -39,7 +39,11 @@ internal class CollaborationHistoryKeys(
         credentials.read()?.let {
             return Base64.decode(it)
         }
-        check(!replicas.containsRecords(COLLABORATION_HISTORY_PREFIX))
+        if (replicas.containsRecords(COLLABORATION_HISTORY_PREFIX)) {
+            // A different repository may have published its key and first ciphertext after our
+            // initial credential read. Reuse that retained key; never create one over old records.
+            return Base64.decode(checkNotNull(credentials.read()))
+        }
         val content = cipher.generateKey()
         var index = byteArrayOf()
         var generated = byteArrayOf()

@@ -218,6 +218,35 @@ abstract class CollaborationRecoveryProgressStorageContract {
     }
 
     @Test
+    fun firstKeyReadCannotMissAConcurrentKeyAndCommittedSweep() = withDatabase { f ->
+        coroutineScope {
+            val entered = CompletableDeferred<Unit>()
+            val release = CompletableDeferred<Unit>()
+            val delayed =
+                object : ReplicaStore by f.database.replicas {
+                    override suspend fun containsRecords(partitionPrefix: String): Boolean {
+                        // This caller has already observed a missing credential. Another
+                        // independent
+                        // repository publishes the credential and its first ciphertext before this
+                        // read.
+                        entered.complete(Unit)
+                        release.await()
+                        return f.database.replicas.containsRecords(partitionPrefix)
+                    }
+                }
+            val loser = async { f.progress(delayed).replace(f.access(), null, sweep()) }
+            entered.await()
+            val winner = value(f.progress().replace(f.access(), null, sweep()))
+            val originalKey = f.keys.read()
+            release.complete(Unit)
+            assertEquals(AppResult.Success(null), loser.await())
+            assertEquals(originalKey, f.keys.read())
+            f.reopen()
+            assertEquals(AppResult.Success(winner), f.progress().current(f.access()))
+        }
+    }
+
+    @Test
     fun cancellationAfterCommitRetainsTheUncertainAttemptAcrossReopen() = withDatabase { f ->
         val store =
             object : ReplicaStore by f.database.replicas {

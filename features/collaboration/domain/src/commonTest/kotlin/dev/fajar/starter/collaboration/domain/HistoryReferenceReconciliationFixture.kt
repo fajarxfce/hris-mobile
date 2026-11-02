@@ -8,9 +8,12 @@ import dev.fajar.starter.common.result.*
 import kotlin.test.*
 import kotlinx.coroutines.flow.*
 
-internal class HistoryReferenceReconciliationFixture {
+internal class HistoryReferenceReconciliationFixture(
+    purpose: CollaborationHistoryPurpose = CollaborationHistoryPurpose.Browse
+) {
     val local = MessageIntentFixture()
-    val key = CollaborationHistoryTraversal(local.summary!!.conversation.id, "!room:test", id)
+    val key =
+        CollaborationHistoryTraversal(local.summary!!.conversation.id, "!room:test", id, purpose)
     var progress = CollaborationHistoryProgress(id, 4, "provider-next", 3)
     var references =
         List(3) { i ->

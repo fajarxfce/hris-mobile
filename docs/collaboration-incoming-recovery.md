@@ -71,3 +71,6 @@ Known authentication/access failures stay authoritative, provider details stay o
 of diagnostics, and no server delay is invented. Fixture host-retention and bounded
 raw-join corrections, the first failed run, and all unchanged input/artifact hashes
 are retained in the measurement. No live rollout or employee APK was performed.
+
+Incoming history now has [independent traversal ownership](collaboration-incoming-history.md).
+The worker still uses a latest original window until durable catchup is integrated.

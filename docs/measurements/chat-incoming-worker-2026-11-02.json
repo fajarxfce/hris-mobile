@@ -1171,7 +1171,91 @@
     "Independent real SDK/provider incoming proof is next; latest bounded original windows do not cover arbitrary long offline gaps.",
     "No FCM receive, notification, inline-reply or physical iPhone acceptance is implied.",
     "No employee APK install or live rollout by this increment. Phone remains15; private backend schema103, branch116 and disabled chat push remain.",
-    "Apple41409790492 audited at5a39b53f excludes later room and incoming worker changes. New exact-head Apple validation is due.",
-    "HRIS business policy; no generic Starter port is due."
-  ]
+    "HRIS business policy; no generic Starter port is due.",
+    "Core simulator suites and full Xcode application at3062bff2. App worker desktop cases are not executed here. Later ee888802 proof/mapper and incoming-purpose changes are excluded. No physical iPhone execution."
+  ],
+  "apple": {
+    "runId": 41414832120,
+    "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/41414832120",
+    "headSha": "3062bff25c678639204bcf4a5e2e95be85c155d4",
+    "status": "completed",
+    "conclusion": "success",
+    "sourceInputsVerified": 12,
+    "sourceSha256": {
+      "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/di/ApplicationWorkerModule.kt": "b86290a5ba13dca036deb8b7d4172b1ccdc0e1d7ec4ea464bee0e295b5d497a0",
+      "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/work/CollaborationCompanyRecovery.kt": "49fc0972f2ebd5869dd145d205d1739fe50edbb92de91a6fd35af5996654dd23",
+      "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/work/CollaborationDeliveryWorker.kt": "7f6a9ff72c66b3affba8f048a8f3d58cb712997f36ad1af740e77f2c1ef04d51",
+      "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/work/CollaborationIncomingRecovery.kt": "de3bd498befdf77bdf0266875197e6dd49bbf67861d058e6664a7c5525a73096",
+      "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/work/CollaborationRecoveryWorker.kt": "75c2b10b5c68cb4046fab5d46f8ebdd9b699752f9477203cc219c1f7b37f26d9",
+      "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/work/CollaborationWorkFailure.kt": "4ff342e9630a4b161036c0ee51999f3398d4e7d0f63e7c66bf801b2ce550906c",
+      "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt": "0ecd8ddc703c3dececa05f8512e94c6ebbbca636455ed4163470ebfecefd72b9",
+      "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationIncomingRecoveryTest.kt": "742cea5836e26db890bd4a87339653902419bc9df9d1a9d418cf5a3df50a2f5e",
+      "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationRecoveryWorkerTest.kt": "1fdac25f5dc0739af85aa98fd265c082e4aeb8328f870ae377360a2ec5ac5b32",
+      "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/app/work/CollaborationCompanyRecoveryTest.kt": "2737268799f3c06253b5c002dd077cf8956b83ef662a0dae576fb751ea1f6ffe",
+      "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/fixtures/NativeCollaborationUi.kt": "a77494b90dc3bcab9e22134b8a8d5229e7ec6e083e48b3b39eb0dc079956253d",
+      "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/fixtures/NativeWorkerSdk.kt": "2372631571f87977380e2b2c17516733b4b16f90168d771e83ef40117f04d1d6"
+    },
+    "reports": {
+      "tests": 112,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "suites": 30
+    },
+    "wakeStoreCases": {
+      "tests": 6,
+      "seconds": 0.124
+    },
+    "steps": {
+      "Compile iOS simulator tests": {
+        "seconds": 610.0,
+        "conclusion": "success"
+      },
+      "Run iOS simulator tests": {
+        "seconds": 123.0,
+        "conclusion": "success"
+      },
+      "Build iOS simulator app": {
+        "seconds": 1323.0,
+        "conclusion": "success"
+      },
+      "Verify generated Apple associations": {
+        "seconds": 1.0,
+        "conclusion": "success"
+      }
+    },
+    "reportSha256": {
+      "core/common/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.common.config.AppLinkPathTest.xml": "fdeee375f322a1067ccb28953948656297f3ec92b3ae18b25896c81ac24f7ccd",
+      "core/common/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.common.decimal.DecimalAmountTest.xml": "f6e3e599a9ed54e61c406a7385f7fa862db8a2b4c3c8a2f7837618aa1b7ee548",
+      "core/database/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.database.AppleReplicaStoreTest.xml": "98a1c49515279e2dcebfe4f89d908894a2cc7a3daa905883fa57214615ac057e",
+      "core/database/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.database.AppleWorkWakeStoreTest.xml": "e02f854c368cd65cf6bd732cbe3672133df0cf35a2b5e27b2841e377e9602ebf",
+      "core/fileio/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.fileio.AppleFileOutputTest.xml": "e2d3d20a036bf0d7f3a14eea7474ed6cd8dfc50ddf9aa8ea2c126d4b85132751",
+      "core/fileio/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.fileio.FileHandleRegistryTest.xml": "3f39868415d928e38f488c2e9d25349e49764ea5070f01dde09a640abfce8944",
+      "core/fileio/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.fileio.SafeFileCallTest.xml": "268fb68d6d2a2993eb126afb66e71e713fdb32d52f0c1dea43f6dba4c17c1234",
+      "core/fileio/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.fileio.Sha256DigestTest.xml": "475ad07854df2aadffb22b76fae937d5306db38c167a3ce5666148105ae2783c",
+      "core/identity/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.identity.data.AppleFirebaseClientOptionsTest.xml": "3583e0b4aa950e7442907206799e92793ba2dd6aac3d7e4546bedac6377b1ce9",
+      "core/identity/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.identity.data.AppleGoogleCredentialTest.xml": "f7ee3f58391122a934e579ac3d1ffd4aa39ea021f838f0cc2f2005ce687b546f",
+      "core/identity/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.identity.data.DeviceSessionTransportTest.xml": "e211740d81477f090cf7f2387a575d2dbed877d1f79ecfe89257191e37976600",
+      "core/identity/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.identity.data.FirebaseProviderTransportTest.xml": "248e0171de7580a42b8cba94fb771ba308c90e52dcaaa525312847615441d3d3",
+      "core/identity/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.identity.data.GoogleAuthorizationExchangeTest.xml": "324cb4b8f9be0004a81eaabb0f1fb70a0f45ccddbbf7634573e60cdfc85a29b4",
+      "core/identity/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.identity.data.GoogleAuthorizationProtocolTest.xml": "96330ecf07bd570ced7bc71ee3be69b006d2ad07c4f182d79f8a6895cb5b363a",
+      "core/identity/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.identity.data.GoogleCodeTransportTest.xml": "9be5b19032a220b66beaf9ed4ab5408179b932ddee78438f8990771e79c408a3",
+      "core/identity/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.identity.data.GoogleCredentialSessionTest.xml": "e7457ce80639d55d122c1256c2c384ecf813f6391851b77159defcb077002718",
+      "core/identity/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.identity.data.IdentityRepositoryTest.xml": "4bd06e93858a736d82b98fab3a20de3d5e3c2fdea088038d76cef9cb4e23aeed",
+      "core/identity/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.identity.data.InstalledFirebaseAuthenticationTest.xml": "02b2749a713e0be2b4ecdcab961d6836d215bda3c45a13a5d956eb670ece2d48",
+      "core/identity/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.identity.data.NativeFirebaseTransportTest.xml": "766ea54613fb9048e09ddf6cdbc1ab89399c93c0ada7a3fdcd7fd0a29fa0baa5",
+      "core/identity/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.identity.data.NativePushStateTest.xml": "3f7c97a3201b36fa2ff6184531759d0a2f887b348b9caddb752aba19ca2b93e6",
+      "core/identity/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.identity.data.NativePushTransportTest.xml": "f0198e76f02277201cc01f08b61bae60d5f80d38a35b1c6003ef5c02eed5b104",
+      "core/identity/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.identity.data.RefreshTransportTest.xml": "1bcc8c7f34e737446250744f15c49471e011366a0ef32b62ce6bc1f8393bfe8f",
+      "core/identity/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.identity.data.StoredSessionRepositoryTest.xml": "66debc122b4964ba1369cfd08c2186ff6318fb02e5be0fcfd517970c774bbb6c",
+      "core/identity/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.identity.data.sso.BrowserSsoRepositoryTest.xml": "76bdb3840c8a13475ae640d6e0522873b55a3c4bd0379c2436dfbf575eafc0d3",
+      "core/location/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.location.data.AppleLocationDataSourceTest.xml": "48479ec95ad44d20cb1ef132f98112a2db229ef660106c29d7432c52f6be053c",
+      "core/location/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.location.data.DeviceLocationRepositoryTest.xml": "298bf79c45b1c347982a18b687016cc9405782a8df94ef73b72c35abdedab0e1",
+      "core/notifications/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.notifications.data.ApplePushTokenSourceTest.xml": "dbc6dcc142c52dd234cbf9b93331ab548bac3136a1937cdd210e1db25f12dfc9",
+      "core/notifications/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.notifications.data.NotificationDestinationTest.xml": "d2b678b758dbd8cb9b3ed57d944c58ac6de0fbee1511827d3f97403051fc259b",
+      "core/notifications/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.notifications.data.PushTokenLifecycleTest.xml": "9bca03c6627e6f97e7d143c2266be309352ed0b2cb30156112953fbeb433aeb2",
+      "core/notifications/data/build/test-results/iosSimulatorArm64Test/TEST-iosSimulatorArm64Test.dev.fajar.starter.notifications.data.SafeNotificationCallTest.xml": "fcc3d9f984ade1b2974c1855c3fb8f2de5c982be7dab526d55c5b42642d5ee0a"
+    },
+    "limits": "Core simulator suites and full Xcode application at3062bff2. App worker desktop cases are not executed here. Later ee888802 proof/mapper and incoming-purpose changes are excluded. No physical iPhone execution."
+  }
 }
