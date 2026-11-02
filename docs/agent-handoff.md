@@ -1,5 +1,53 @@
 # Agent continuation — HRIS Mobile
 
+## Android release15 delivered after native recovery checks — 2 November 2026
+
+[Evidence](measurements/android-release15-2026-11-02.json): clean Mobile
+`30d7faab73681cd04100dc4cea74012b62fd87b5` passes all five actual Android
+SDK/HRIS/Synapse regressions in364s /365.046s, with all cleanup flags true.
+This covers SDK E2EE exchange, selected worker queued/frozen/cancelled recovery,
+scheduled process death and controlled native reference borrowing. It does not
+accept the new all-company worker or incoming FCM path. Platform source was
+`a9706280`; no live deployment occurred.
+
+Proof assembly passed in46s /49.576s. Universal devRelease15 assembly/lint passed
+in627s /630.891s; two actual StarterApplication cold starts each stayed alive12s,
+resumed and rendered the onboarding page (35.690s total). Both screenshots were
+inspected. ARM64 assembly/lint passed in73s /76.488s; all eight DEX files match the
+startup-tested universal artifact. Lint has zero errors and one existing warning.
+
+Authorized phone10.77.77.3:5555 now has **devRelease15**, version1.0.0,
+package`dev.fajar.hris.mobile.dev`,87,363,576 bytes, SHA-256
+`39a8bb9cfbaf95c394e228d16aebc2085448d8c4c3d2b0f051fadc13eca6a79e`.
+Installation began05:14:03 UTC and finished with verification in112.767s.
+Existing signer, UID10962 and first-install time remain. Install-only: no launch,
+uninstall or data clear. A slow read-only preflight APK pull was interrupted and
+retained in the evidence. Full installed-file SHA-256 computed on the phone matched
+the retained signed14 APK before update and the new15 APK afterward; no post-install
+full APK pull is claimed. The user confirmed11 opens, not a separate15 interaction.
+
+**Continue immediately:** apply and validate the reviewed six-file/ten-case
+processed-parent publication candidate in supplementary
+`.work/parent-publication-2026-11-02/candidate.json` using its baseline hashes.
+It is UNAPPLIED and UNTESTED at this checkpoint. Reuse the same Maintain collector;
+separate processed retention, ownership denial and cleanup failure. Application
+state must distinguish Pending/Observed/Stopped, invalidate on close/completion and
+reject late publication without duplicate observers or automatic restart. Run the
+focused actual app/DI/domain/proof checks and required root/browser checks, then
+commit/push and continue durable all-company wake/fair cursor implementation.
+
+Trace correction: one-time AndroidWorkScheduler already uses APPEND_OR_REPLACE;
+only its periodic work uses KEEP. Preserve the existing finishing-worker race fix
+while bounding/coalescing future FCM scheduling. Do not invent a session/account
+scope for global wake metadata. Test persist/schedule/ack crash gaps explicitly.
+
+Owned emulator5560 is stopped; unrelated5558 remains untouched. Owned temporary
+8GiB swap remains active; remove only with sufficient RAM for used pages plus safe
+headroom. Keep heavy builds sequential. Native receive/decrypt, notifications,
+privacy/read/mute/deep links and encrypted inline replies remain open. Backend push
+stays disabled, all54 PRD groups remain open, and no generic Starter/live rollout
+is implied. Continue after each push; physical iPhone acceptance alone is waived.
+
 ## Native parent startup and monotonic ownership validated — 2 November 2026
 
 [Contract](collaboration-parent-readiness.md) /

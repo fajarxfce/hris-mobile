@@ -1,5 +1,21 @@
 # Validation
 
+## Android release15 recovery and private-device update
+
+Clean source30d7faab passes five actual SDK/HRIS/Synapse regressions with cleanup,
+including encrypted exchange and selected-worker/scheduled recovery after process
+death. Universal release15 passes two12s actual application cold starts; inspected
+screenshots show readable onboarding. Its eight DEX files match the separately
+built ARM64 APK installed on the authorized phone. Signature, package, app UID,
+first-install time and full installed-file SHA-256 were verified without launching
+or clearing the phone app. Build/lint pass with one existing warning and no errors.
+
+[Detailed evidence](measurements/android-release15-2026-11-02.json) retains exact
+source/artifact hashes, commands, timings, all native cases and the interrupted
+slow preflight transfer. This is not incoming FCM, all-company receive, physical
+iPhone or complete communications PRD acceptance. The latest user confirmation
+concerns release11 startup; release15 has automated startup/install evidence.
+
 ## Configurable HTTPS app links
 
 The new registration generator, shared path admission, Android manifest transform
