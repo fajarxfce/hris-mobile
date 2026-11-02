@@ -1,5 +1,41 @@
 # Agent continuation — HRIS Mobile
 
+## Repaired hosted native proof accepted; reply read/review checks running
+
+Hosted native41502174267 atdf0a1d408c9f895160aff86f8e0e152f2fbcefdb against
+Platform304be02700cf07e496421c17e90f5a471b4bd68c PASSED all five actual interop
+cases/three suites, plus230 Android-host/37 and six proof-host/one; zero failures,
+errors or skips. Artifact13173370273 ZIP digest324c991d0b73fc2be97beccdfb181a4bb3771a5416985e7d795efba213370bef
+matches GitHub. All five drivers report the same proof APK hash abef3b722cecde658ae25f584b5192459b521fc04b5d01e4b1aef642fa0733e2.
+All scenarios passed and cleaned up: SDK exchanged seven admitted receipts and three
+encrypted messages; queued/frozen/cancelled worker inputs each survived actual process
+death, recovered176 incoming originals including175 seeded peer messages, and passed
+priority/history recovery; a separate WorkManager case resumed automatically after
+ordinary process death and network restoration.105 relevant source hashes verified at
+the actual CI commit. [Audited evidence](measurements/chat-ci-repair-native-hosted-2026-11-02.json).
+No new notification callback or reply-input scenario is exercised by these existing
+interop tests. Later completion/read/review is outside this CI source. The two failed
+local worker attempts and failed diagnostic boot below remain failures; local emulator
+hang unresolved. No emulator remains running; no further host retries needed to accept
+this independent hosted native proof. Latest native41504255602 at1a92 is running.
+
+Full Apple41508567222 attempt1 at2dd94e94 never acquired a macOS runner and failed
+before any steps; check annotations explicitly cite hosted ARM capacity. Requested
+failed-job rerun attempt2 on the SAME source. Prepared109-source audit remains under
+.work/chat-notification-reply-completion-apple-2026-11-02. Do not claim it passed.
+Latest accepted full Apple41502192261/df0 remains below. Portable41504255605 at1a92
+passed; Apple adapter job still running last checked.
+
+Uncommitted read/review now exists with20 domain cases and updated actual SQLite/
+assembled-DI coverage. Focused33 cases/four suites passed, but detekt rejected review
+length103/max100. Extracted exact hold-and-reread helper without policy changes; full
+root/proof/Wasm/browser check2 is RUNNING under .work/chat-notification-reply-review-2026-11-02.
+Do not commit those Kotlin changes until full checks and actual20 browser cases pass.
+Next: complete application reply wrapper, durable fair account recovery, native display/
+action ownership. Phone18 and live304/schema116/pushOFF unchanged. Keep long run and
+push every atomic commit. Next validated product build >18: notify, explicit phone
+10.77.77.3:5555 --install-only; preserve data/signature and do not drive its UI.
+
 ## Local emulator stopped; worker proof unresolved, continue independent work
 
 Native retry2 finished697.765s with three failed worker cases and unchanged frozen
