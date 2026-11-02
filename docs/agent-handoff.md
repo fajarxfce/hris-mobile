@@ -1,5 +1,29 @@
 # Agent continuation — HRIS Mobile
 
+## Full Apple through reply retention accepted; next run dispatched
+
+Run41502192261 at exactdf0a1d408c9f895160aff86f8e0e152f2fbcefdb passes full artifact/
+source/JUnit audit:830 cases/95 suites,zero failures/errors/skips;105 source hashes
+verified. Artifact13172365004 ZIP SHA256b0e10fa32af7dd54dc03b8e52fdeea6a2e8976cecbad78be84df5dbe2a80b38f
+matches GitHub's digest. Simulator compile606s/tests86s,full Xcode app1154s.
+[Evidence](measurements/chat-ci-repair-apple-2026-11-02.json). Includes notification
+action/invocation and reply-input retention compilation; actual tests include the
+domain cases. Does not include newer completion1a92 or native notification acceptance.
+
+Next full Apple41508567222 at2dd94e94ea6b74b9f4d9430f25348cb64a7f7f30 is dispatched:
+same application source as1a92 plus docs.109 source hashes already verified.
+Prepared .work/chat-notification-reply-completion-apple-2026-11-02/audit.py; run only
+after actual completion, do not overwrite completed artifacts or cancel it with
+another same-scope dispatch. Old control41497227558 is complete:portable failed the
+known lazy-item assertion,Apple passed. Latest control41504255605 at1a92 is running
+portable and Apple. Repaired native41502174267 is still running; source1a92 next.
+
+Local native worker retry remains active under Platform native-2 (PID1167388 owns
+emulator5562). Do not edit tracked source while its manifest is guarded. Documentation
+updates are excluded. First SDK/WorkManager cases passed; three worker cases still
+require accepted results, as recorded below. No phone install/change; phone18 remains.
+Continue long run after CI/native audit; all54 PRD groups remain open.
+
 ## Native compatibility investigation running — keep source frozen
 
 Current accepted application source1a92d53c2a523dec1b943d416bce6dd32bd49d21 is pushed.
