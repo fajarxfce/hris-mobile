@@ -11,6 +11,7 @@ on:
       - core/**
       - gradle/libs.versions.toml
       - gradle/verification-metadata.xml
+      - tool/check_native_notifications.py
       - .github/workflows/collaboration-hris.yml
   pull_request:
     paths:
@@ -20,6 +21,7 @@ on:
       - core/**
       - gradle/libs.versions.toml
       - gradle/verification-metadata.xml
+      - tool/check_native_notifications.py
       - .github/workflows/collaboration-hris.yml
 
 permissions:
@@ -76,7 +78,9 @@ jobs:
           avd-name: hris-mobile-dev
           emulator-port: 5560
           emulator-options: -no-window -no-snapshot -noaudio -no-boot-anim -gpu swiftshader -memory 2048 -cores 2
-          script: ./platform/gradlew -p platform --no-daemon --no-parallel --max-workers=1 '-Dorg.gradle.jvmargs=-Xmx1536m -Dfile.encoding=UTF-8' :apps:server:cleanTest :apps:server:test --tests '*NativeCollaborationSdkInteropTest' --tests '*NativeCollaborationWorkerInteropTest' --tests '*NativeCollaborationScheduledInteropTest'
+          script: |
+            python3 ./mobile/tool/check_native_notifications.py --serial emulator-5560 --apk "$HRIS_COLLAB_NATIVE_APK" --output ./mobile/.work/native-notification-proof
+            ./platform/gradlew -p platform --no-daemon --no-parallel --max-workers=1 '-Dorg.gradle.jvmargs=-Xmx1536m -Dfile.encoding=UTF-8' :apps:server:cleanTest :apps:server:test --tests '*NativeCollaborationSdkInteropTest' --tests '*NativeCollaborationWorkerInteropTest' --tests '*NativeCollaborationScheduledInteropTest'
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -97,6 +101,7 @@ jobs:
             platform/apps/server/build/test-results/test/TEST-*NativeCollaboration*InteropTest.xml
             mobile/features/collaboration/data/build/test-results/testAndroidHostTest/TEST-*.xml
             mobile/apps/collaboration-proof/build/test-results/testDebugUnitTest/TEST-*.xml
+            mobile/.work/native-notification-proof/
           include-hidden-files: true
           if-no-files-found: error
           retention-days: 7

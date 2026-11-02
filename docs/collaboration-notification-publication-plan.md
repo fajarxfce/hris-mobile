@@ -3,8 +3,10 @@
 The [raw journal](collaboration-notification-publications.md) and
 [admitted issuance](collaboration-notification-issuance.md) now have separate contracts
 and recorded validation. [Exact validation and settlement](collaboration-notification-publication-lifecycle.md)
-are also implemented. They do not activate native notifications. Continue through
-serialized publication/cleanup, callbacks and retained-input review; keep chat push off
+are also implemented. [Raw Android transport](native-notification-actions.md) is
+separately exercised with actual notification IPC in the isolated fixture. HRIS has not
+wired it into delivery yet. Continue through serialized publication/cleanup, callbacks
+and retained-input review; keep chat push off
 until that flow is usable.
 
 1. Inspect PrepareCollaborationMessageNotification and current app/native push lifetimes before changing boundaries. Its Ready projection includes access/conversation/room/event/contentHash/settingsVersion/readVersion/preview/sender/body. It is preparation only, not a lasting OS publication grant.
@@ -51,3 +53,44 @@ is mutable. Use explicit private receivers and complete bounded callbacks exactl
 private text must reach durable reply storage before any send/ack workflow. Test real
 notification-specific OS death/replay, since existing SDK and WorkManager interop cases
 do not cover those inputs. User-phone updates remain notify-then-install-only.
+
+## Integrating the tested Android transport
+
+The core data surface owns raw OS I/O and opaque references only. The new fixture proves
+PendingIntent/RemoteInput/NotificationManager behavior without an HRIS account, and is
+separate from application admission and durable input recovery. Keep these boundaries
+visible in acceptance evidence.
+
+The application owner must close its epoch on startup, parent change or observer failure,
+cancel and join pending native work, and clear its namespace before admitting another
+parent. Failed cleanup keeps that gate closed until an explicit finite reconciliation.
+Register an active request before a second epoch check so invalidation cannot miss work
+that starts concurrently. Serialize all submission/removal/cleanup, bound each request,
+and track opaque attempted references before Binder submission. Cancellation after
+submission needs exact-render compensation or later journal reconciliation, not a claim
+of cross-process rollback. Do not retain private previews in a long-lived tracking map.
+
+Company/source/settings/read invalidation is separate from native parent observation.
+ApplicationCollaborationLifetime retains the parent under selected-company denial;
+ObserveCollaborationList is selected-workspace only. Neither alone monitors active cards
+from every company. Current settings/read repositories lack change observation; add a
+narrow owned signal and cancellation/denial tests instead of indefinite polling or UI
+state in repositories. Foreground thread registration belongs app/navigation lifecycle.
+
+The raw transport has five routing hints, including Open. The HRIS journal currently
+has four authenticated actions. Choose and test explicit navigation-only envelope
+handling; an outer Open hint must never trigger a send or mark-read command. The Activity
+must receive notification content directly, without a background notification trampoline.
+
+Old-family/pre-retention reply failures still need encrypted explicit review. Existing
+Replies.submit handles current-family durable input, and does not by itself retain an
+old-family reply. An owned journal snapshot may provide the original envelope/parent
+for authentication; never trust a parent copied from intent extras. Bound native callback
+completion and finish exactly once after joined work. A denied company must not require
+returning decrypted preview solely to find an opaque cancellation target.
+
+Startup namespace cleanup does not settle every retained old journal watermark. Add
+bounded opaque discovery and exact retirement/reconciliation that cannot revive a
+previously dismissed source. Raw active pages are four records and omit inactive
+watermarks. Keep acquired priority hints until publication uncertainty is recoverable;
+ordinary missed-hint recovery and initial-sync/backfill suppression need explicit rules.

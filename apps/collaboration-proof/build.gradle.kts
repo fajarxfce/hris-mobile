@@ -17,6 +17,7 @@ dependencies {
     compileOnly(libs.compose.runtime)
     implementation(libs.matrix.sdk.android)
     implementation(libs.coroutines.core)
+    implementation(libs.android.core)
     implementation(projects.apps.shared)
     implementation(projects.features.collaboration.presentation)
     implementation(projects.core.presentation)

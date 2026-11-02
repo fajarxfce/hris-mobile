@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <application
         android:name=".HrisScheduledProofApplication"
         android:allowBackup="false"
@@ -11,6 +12,7 @@
             <meta-data android:name="androidx.work.WorkManagerInitializer" android:value="androidx.startup" tools:node="remove" />
         </provider>
         <activity android:name=".HrisScheduledProofActivity" android:exported="true" />
+        <receiver android:name=".NotificationProofReceiver" android:exported="false" />
     </application>
     <instrumentation
         android:name=".MatrixProofInstrumentation"

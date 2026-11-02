@@ -1,5 +1,18 @@
 # Validation
 
+## Raw Android notification actions — 2 November 2026
+
+[Actual Android IPC proof](native-notification-actions.md) passes11 behavior groups in
+two API35 scenarios, including real RemoteInput, immutable actions, preserved envelopes,
+stale-render cancellation and namespace cleanup. No employee/provider/user-phone used.
+Root checks pass3570 desktop/516 suites,230 Android-host/37, six proof-host/one, ten
+build-logic/two and13 browser/four, zero failures/errors/skips. A fixture-only API31 guard
+correction then passes proof assembly/tests, lint and root quality checks. Lint retains
+47 preexisting dependency-version/proof-manifest warnings and no errors.
+[Evidence](measurements/native-notification-actions-2026-11-02.json) distinguishes both
+native runs, source review, full-check reuse and the corrected lint failure. HRIS
+publication/callback/review wiring and notification-input OS-death proof remain pending.
+
 ## Exact notification publication lifecycle — 2 November 2026
 
 [Lifecycle](collaboration-notification-publication-lifecycle.md) passes62 fresh focused

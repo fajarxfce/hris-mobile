@@ -1,5 +1,62 @@
 # Agent continuation — HRIS Mobile
 
+## Raw Android actions proved; continue HRIS publication ownership
+
+The core notification data module now has a separate raw actionable surface. Actual
+Android NotificationManager/PendingIntent/RemoteInput proof covers private/public
+versions, reply-only mutability, explicit private receiver, full URI action identity,
+stale render cancellation, preserved original envelopes, namespace cleanup and denied
+permission/channel. No HRIS receiver/delivery binding is active yet. Do not route chat
+content through generic plaintext notification history.
+[Contract](native-notification-actions.md),
+[evidence](measurements/native-notification-actions-2026-11-02.json).
+
+Focused1 passed90.051s:19 fresh cases/five suites (13 core notification/four, six proof
+host/one). Full2 passed248.797s:3570 desktop/516 suites,230 Android-host/37, six proof
+host/one, ten build-logic/two,13 browser/four;399 fresh cases/74 suites, zero failures/
+errors/skips.13 implementation/workflow/driver inputs frozen. Removing UPDATE_CURRENT
+was a review improvement after the first native pass; replay retains the original
+envelope instead of rewriting extras. Full2 tests that product source.
+
+Lint3 failed68.995s with one NewApi error: the isolated probe checked PendingIntent.
+isActivity before its API31 guard. Only that fixture assertion moved inside its guard.
+Follow-up4 passed90.169s: proof assembly, six proof-host cases, lint, formatting,
+architecture74 and detekt. Product hashes match full2; only the probe API guard differs.
+Lint has zero errors and47 existing version-availability/proof-manifest warnings; no
+dependency upgrades or unrelated fixture-policy changes were made.
+
+Native1 passed10 behavior groups/two actual API35 scenarios in25.966s before the envelope
+review. Native2 passed11 groups/two scenarios in5.065s against final sources, including
+same-render envelope preservation; no native scenario failed. Separate emulator-only
+proof package, fictional text and no account/provider. Fixture data cleared after each
+run; owned5562 emulators stopped; other emulators untouched. Final proof APK SHA256
+b57d30c9e85011db99386586f6ddc0f0998ff6e1572b6ed816f5b22c31d3a02a.
+This is actual raw IPC, not HRIS admission, notification-input OS death, or phone UI.
+
+Hosted Native HRIS workflow now runs tool/check_native_notifications.py on owned5560
+before its existing five SDK/WorkManager cases, preserving separate raw evidence. That
+new hosted run is not yet accepted. Consolidated full Apple is prepared at
+.work/chat-native-notification-apple-2026-11-02/dispatch.py for175 source paths; dispatch
+once after the code commit/push and follow actual result. Last audited Apple remains
+bb95ff1d/41539628582:895/101/full Xcode964s, excludes issuer/lifecycle/this increment.
+
+NEXT implement the serialized application surface lifetime and admitted coordinator,
+then callback retention/review/routing, company/settings/read invalidation and focused
+thread suppression. The expanded [integration plan](collaboration-notification-publication-plan.md#integrating-the-tested-android-transport)
+is authoritative; .work/chat-notification-native-next-2026-11-02/application-owner-after-
+raw.txt is supplemental design ONLY, no owner source drafted/applied. Transport has
+five routing hints but HRIS currently authenticates four actions: Open/navigation must
+not dispatch send/read from an untrusted hint. Existing Replies.submit does not retain
+old-family/pre-retention failures automatically. Resolve explicit encrypted review
+before enabling chat notifications. Add notification-specific OS-death replay, then iOS
+surface/full Xcode and integrated Mobile proof before generic Starter port.
+
+Phone19/sourcec0 remains installed. No new product release or phone install here.
+Next meaningful release>19: notify immediately, install-only with explicit10.77.77.3:5555,
+preserve signer/data and never launch/drive its UI. Live304/schema116/chat push OFF,
+all54 PRD groups open. Keep long run going and push atomic commits. Earlier sections
+below are historical.
+
 ## Exact publication lifecycle accepted; continue native integration
 
 ValidateCollaborationNotificationPublication checks an exact active render against

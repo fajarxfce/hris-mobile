@@ -38,6 +38,10 @@ class MatrixProofInstrumentation : Instrumentation() {
                     else 120_000
                 ) {
                     when (scenario) {
+                        "native-notification" ->
+                            NativeNotificationProbe(targetContext, directory).run(denied = false)
+                        "native-notification-denied" ->
+                            NativeNotificationProbe(targetContext, directory).run(denied = true)
                         "company-recovery" -> CompanyRecoveryProbe(targetContext, directory).run()
                         "company-recovery-stage" ->
                             CompanyRecoveryProbe(targetContext, directory).stage()
