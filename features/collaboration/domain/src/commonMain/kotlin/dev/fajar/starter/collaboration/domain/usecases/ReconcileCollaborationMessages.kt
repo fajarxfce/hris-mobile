@@ -29,22 +29,26 @@ class ReconcileCollaborationMessages(
     private val execution = Mutex()
 
     suspend operator fun invoke(workspaceId: String, conversationId: String): AppResult<Int> =
+        invoke(CollaborationLocalScope.Selected(workspaceId), conversationId)
+
+    suspend operator fun invoke(
+        scope: CollaborationLocalScope,
+        conversationId: String,
+    ): AppResult<Int> =
         execution.withLock {
             if (!validCollaborationMessageId(conversationId)) return@withLock failed()
-            val captured = capture(workspaceId)
+            val captured = capture(scope)
             if (captured is AppResult.Failed) return@withLock captured
             val access = (captured as AppResult.Success).value
-            continuation(workspaceId, access).let { if (it is AppResult.Failed) return@withLock it }
-            val journal = checked(workspaceId, access) { receipts.read(access, conversationId) }
+            continuation(scope, access).let { if (it is AppResult.Failed) return@withLock it }
+            val journal = checked(scope, access) { receipts.read(access, conversationId) }
             if (journal is AppResult.Failed) return@withLock journal
             val acknowledged = (journal as AppResult.Success).value
             if (acknowledged.isEmpty()) return@withLock AppResult.Success(0)
-            val read =
-                checked(workspaceId, access) { messages.observe(access, conversationId).first() }
+            val read = checked(scope, access) { messages.observe(access, conversationId).first() }
             if (read is AppResult.Failed) return@withLock read
             val records = (read as AppResult.Success).value
-            val retained =
-                completedReceipts(workspaceId, access, conversationId, records, acknowledged)
+            val retained = completedReceipts(scope, access, conversationId, records, acknowledged)
             if (retained is AppResult.Failed) return@withLock retained
             val updates =
                 collaborationReceiptProjection(
@@ -57,7 +61,7 @@ class ReconcileCollaborationMessages(
             var changed = 0
             for ((record, sent) in updates) {
                 if (record.state == sent) continue
-                val saved = checked(workspaceId, access) { messages.update(access, record, sent) }
+                val saved = checked(scope, access) { messages.update(access, record, sent) }
                 if (saved is AppResult.Failed) return@withLock saved
                 if (!(saved as AppResult.Success).value) return@withLock failed()
                 changed++
@@ -66,7 +70,7 @@ class ReconcileCollaborationMessages(
         }
 
     private suspend fun completedReceipts(
-        workspaceId: String,
+        scope: CollaborationLocalScope,
         access: CollaborationLocalAccess,
         conversationId: String,
         records: List<CollaborationMessageRecord>,
@@ -78,7 +82,7 @@ class ReconcileCollaborationMessages(
         val result = mutableListOf<CollaborationMessageCompletion>()
         for (id in ids) {
             val read =
-                checked(workspaceId, access) {
+                checked(scope, access) {
                     when (val proof = completions.readCompletion(access, id)) {
                         is AppResult.Failed -> proof
                         is AppResult.Success ->
@@ -94,26 +98,26 @@ class ReconcileCollaborationMessages(
     }
 
     private suspend fun <T> checked(
-        workspaceId: String,
+        scope: CollaborationLocalScope,
         access: CollaborationLocalAccess,
         operation: suspend () -> AppResult<T>,
     ): AppResult<T> {
         val result = operation()
-        val current = continuation(workspaceId, access)
+        val current = continuation(scope, access)
         return if (current is AppResult.Failed) current else result
     }
 
-    private suspend fun capture(workspaceId: String) =
-        sessions.captureMessageAccess(workspaceId, workspaces, server, build, clock)
+    private suspend fun capture(scope: CollaborationLocalScope) =
+        sessions.captureMessageAccess(scope, workspaces, server, build, clock)
 
     private suspend fun continuation(
-        workspaceId: String,
+        scope: CollaborationLocalScope,
         access: CollaborationLocalAccess,
     ): AppResult<Unit> {
         currentCoroutineContext().ensureActive()
         val gate = lists.admission(access)
         // Capture after gate I/O so an account replacement during that read cannot publish success.
-        val current = capture(workspaceId)
+        val current = capture(scope)
         currentCoroutineContext().ensureActive()
         if (gate is AppResult.Success)
             gate.value.denial?.let {

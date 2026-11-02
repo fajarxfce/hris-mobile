@@ -1,0 +1,169 @@
+{
+  "date": "2026-11-02",
+  "baseCommit": "9866eb950916c940d3c8ef124b46452ebfba9a79",
+  "scope": "Captured local account/company scope for message observation, receipt recovery/projection/retirement and retained control reads. Separate from remote admission.",
+  "sourceSha256": {
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationLocalScope.kt": "0296f8d31f4dfbee5fe17cab1857eade25a966280fe7cad8009cc437271db9f8",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationCapturedLocalPolicy.kt": "674b34d1023745df004a7176c54f818bfe325894c080cf92e9e09a13b22b0782",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/CollaborationMessageAccess.kt": "209fe6bcf4af8fcb1299a1ba005ccc5e687286502ba015d4585834c7b0978d4f",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ReconcileCollaborationMessages.kt": "376a89c6f1c59295d0c39679979017a4e899be305f6a507f3758fd498a796d1e",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/RecoverCollaborationMessageReceipts.kt": "3d67d5cd3bef20f64d3a4f8020eefb63a7c9c78b8d743068742efe7195543dc3",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/RetireCollaborationMessages.kt": "789486ace355d4aa8fb3ea17aefb37c7557bd613fd2092fa2e5873914e8598d0",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ObserveCollaborationMessages.kt": "5663217639cefb3e26a28766ef5c08eb16a00ff7db4ad67dea0cd15bdf890135",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationDeliveryFixture.kt": "9637e7e2473f810bac99924b1dd22c5329086a86225c76c4b8d40a369d6d19dd",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/OriginalReceiptFixture.kt": "c96b4c25f0f166ac69dacc338217efcd52805ae89a9cd9092957cf326b2b9682",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationRetirementFixture.kt": "5fdadd6b04b6961f33dcb4ef623df1b877b74eab764c6f0e6f402b4ba4443979",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationMessageIntentTest.kt": "1eec8a1978a56dd7be211060abad0cce2f3482a3e664c5e8f485ca8d94338dfa",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationCapturedLocalScopeTest.kt": "ad948b5bddbef549f83fec86a0b7840a4bf396a8cb0eb1095688082e5845f701",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/CollaborationSetupOwner.kt": "f3b80d7f344e1492970028487972537b5848d5a7b0518a363ccd65103939a6e4",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ReadCollaborationControl.kt": "b6b6aa21e218775c66dabff0924a9aec304aa2244f57a3d05d6438597f2c140e",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/ReadCollaborationControlTest.kt": "0ddbeb66fa4a435ebc096675c9d474d09f458884e5ac2b70195dc7ee45191e4f"
+  },
+  "initialRun": {
+    "exitCode": 0,
+    "wallSeconds": 143.072,
+    "inputsUnchanged": true,
+    "command": [
+      "xvfb-run",
+      "-a",
+      "./gradlew",
+      ":features:collaboration:domain:desktopTest",
+      ":apps:shared:desktopTest",
+      "--tests",
+      "*CollaborationBindingsTest",
+      ":apps:collaboration-proof:compileDebugKotlin",
+      ":formatCheck",
+      ":architectureCheck",
+      ":detekt",
+      "-Pkotlin.compiler.execution.strategy=in-process",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=1",
+      "-Dorg.gradle.jvmargs=-Xmx1536m"
+    ]
+  },
+  "validationTransitions": {
+    "attempt1": {
+      "domainTests": 480,
+      "domainFailures": 0,
+      "bindingTests": 2,
+      "bindingFailures": 0,
+      "gradleSeconds": 139,
+      "wallSeconds": 143.072,
+      "scope": "Initial12 files /11 added cases; captured messages and receipt work."
+    },
+    "attempt2Scope": "Add local ReadControl and native-family capture with four cases;15 total Kotlin inputs."
+  },
+  "focusedRun": {
+    "exitCode": 0,
+    "wallSeconds": 139.684,
+    "inputsUnchanged": true,
+    "command": [
+      "xvfb-run",
+      "-a",
+      "./gradlew",
+      ":features:collaboration:domain:desktopTest",
+      ":apps:shared:desktopTest",
+      "--tests",
+      "*CollaborationBindingsTest",
+      ":apps:collaboration-proof:compileDebugKotlin",
+      ":formatCheck",
+      ":architectureCheck",
+      ":detekt",
+      "-Pkotlin.compiler.execution.strategy=in-process",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=1",
+      "-Dorg.gradle.jvmargs=-Xmx1536m"
+    ]
+  },
+  "focusedGradleSeconds": 136,
+  "focusedReports": {
+    "domain": {
+      "tests": 484,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "bindings": {
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "finalRun": {
+    "exitCode": 0,
+    "wallSeconds": 267.22,
+    "inputsUnchanged": true,
+    "command": [
+      "xvfb-run",
+      "-a",
+      "./gradlew",
+      ":check",
+      ":features:collaboration:domain:wasmJsBrowserTest",
+      ":features:collaboration:data:wasmJsBrowserTest",
+      "-Pkotlin.compiler.execution.strategy=in-process",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=1",
+      "-Dorg.gradle.jvmargs=-Xmx1536m"
+    ]
+  },
+  "finalGradleSeconds": 263,
+  "reports": {
+    "desktopTest": {
+      "tests": 2933,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "testAndroidHostTest": {
+      "tests": 209,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "wasmJsBrowserTest": {
+      "tests": 756,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "buildLogic": {
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "addedCases": 15,
+  "checked": [
+    "Existing String callers preserve selected workspace permission/module/policy behavior; Captured scope checks active local session/account/audience/canonical company identity without any workspace reads.",
+    "Captured local scope has no remote admission or credential-age deadline and cannot be supplied as remote operation scope. Ordinary expiry still allows owned local receipt recovery/projection/retirement.",
+    "Retained company denial stops recovery/observation without erasing originals or pending records. Message subscriptions close on denial/account loss, survive token rotation and are disposed with the collector.",
+    "Cancellation or owner replacement before receipt append stops it; an already atomic receipt append or completion archive remains retained when ownership is lost afterward. No implicit native work or transport occurs.",
+    "Retirement keeps the32-item bound and durable completion/receipt ordering. Tests use33 records across two explicit passes.",
+    "Retained setup/direct/room control reads accept Captured scope without selection, additionally match current native family, reject old-family commands and preserve intent on denial/late owner/cancellation.",
+    "Focused484 domain/two actual app DI cases, proof adapter Kotlin compilation and static checks pass. Final root and affected browser checks pass."
+  ],
+  "limits": [
+    "Domain fixtures and existing repository regressions are not new JNI/provider or FCM acceptance.",
+    "No APK build/phone install. Phone remains verified release14 from8c557716, predating this increment.",
+    "Raw FCM fields cannot directly authorize Captured access. Application discovery must derive it from owned account records and retain current company gates.",
+    "Local discovery/cursor/drafts/queue integration, remote room-control scope and shared bounded worker integration remain next.",
+    "No live server rollout, generic Starter port or complete PRD group acceptance. Backend push remains disabled."
+  ],
+  "localEvidenceSha256": {
+    "check-1.log": "fab130621366dd0a04628c2ff7a2c06bc40b8141a16cc6b4253e6636bdd52d1c",
+    "check-1.json": "9209e87454068d688357de7ace0c54cd656fcb31ff5181160b9d3a15dcbf125d",
+    "check-2.log": "8507d1cbf1b140c208f185de8f469dd0d14a4070b1082a6831aac0d0a03c217a",
+    "check-2.json": "72faa34f08a3170c9e141744dbcf92bd9705a18c4a09ba9187bb2170dc299c00",
+    "check-3.log": "b1506e59aa7cc6d4b8289dfce7e31ad66aae7407c4e1118e598df471804f9e34",
+    "check-3.json": "87ea21161236d994b54f5a8bcf5e4a4cff6510c577e197dd3e96fd572e1c1c12",
+    "inputs-1.json": "f5145b75271d736cdec649b8115c74a4e513ecb4fd09e22b3cd48a770a96c798",
+    "inputs-2.json": "2c37740ba4e91f3a0c6865c5cec03c5bec1079e53f9ddde16c107626d1bedb97",
+    "inputs-3.json": "2c37740ba4e91f3a0c6865c5cec03c5bec1079e53f9ddde16c107626d1bedb97",
+    "validation-transitions.json": "b89adfb31c8142b158139c6cfef38961facda02f1e8230d4c0063fef54aa9f3b"
+  }
+}

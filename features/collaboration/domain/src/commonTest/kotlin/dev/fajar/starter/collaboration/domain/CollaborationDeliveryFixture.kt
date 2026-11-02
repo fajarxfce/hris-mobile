@@ -339,7 +339,9 @@ internal class CollaborationDeliveryFixture {
         deviceId: String = device.deviceId,
     ) = delivery(scope, deviceId, conversation)
 
-    suspend fun reconcile() = reconcile("selection", conversation)
+    suspend fun reconcile(
+        scope: CollaborationLocalScope = CollaborationLocalScope.Selected("selection")
+    ) = reconcile(scope, conversation)
 
     fun receipt(record: CollaborationMessageRecord = records.first(), event: String = "\$first") =
         CollaborationMessageReceipt(

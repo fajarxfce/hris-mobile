@@ -21,9 +21,15 @@ class ObserveCollaborationMessages(
     private val build: AppBuild,
     private val clock: Clock,
 ) {
-    @OptIn(ExperimentalCoroutinesApi::class)
     operator fun invoke(
         workspaceId: String,
+        conversationId: String,
+    ): Flow<AppResult<List<CollaborationMessageRecord>>> =
+        invoke(CollaborationLocalScope.Selected(workspaceId), conversationId)
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    operator fun invoke(
+        scope: CollaborationLocalScope,
         conversationId: String,
     ): Flow<AppResult<List<CollaborationMessageRecord>>> {
         if (!validCollaborationMessageId(conversationId))
@@ -34,7 +40,7 @@ class ObserveCollaborationMessages(
                 )
             )
         return sessions
-            .observeMessageAccess(workspaceId, workspaces, server, build, clock)
+            .observeMessageAccess(scope, workspaces, server, build, clock)
             .flatMapLatest { access ->
                 when (access) {
                     is AppResult.Failed -> flowOf(access)

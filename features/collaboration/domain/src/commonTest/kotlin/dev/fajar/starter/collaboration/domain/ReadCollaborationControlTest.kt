@@ -11,6 +11,86 @@ import kotlinx.coroutines.test.runTest
 
 class ReadCollaborationControlTest {
     @Test
+    fun capturedControlReadsRetainedSetupDirectAndRoomAfterExpiry() = runTest {
+        for (kind in 0..2) {
+            val f = Fixture()
+            if (kind == 0)
+                f.control.record =
+                    f.control.retain().copy(outcome = CollaborationSetupOutcome.Unconfirmed())
+            else
+                f.retain(
+                    if (kind == 1) CollaborationConversationAction.Open(f.id)
+                    else CollaborationConversationAction.RequestRoom(f.id, COMMAND_DEVICE, 1, null)
+                )
+            val scope = f.captured()
+            val reader = f.reader()
+            val found =
+                when (kind) {
+                    0 -> reader.setup(scope)
+                    1 -> reader.direct(scope, f.id)
+                    else -> reader.room(scope, f.id)
+                }
+            assertSame(
+                if (kind == 0) f.control.record else f.conversation,
+                assertIs<AppResult.Success<*>>(found).value.let {
+                    (it as CollaborationRead<*>).value
+                },
+            )
+            assertEquals(0, f.control.access.calls)
+            assertTrue(f.control.calls.isEmpty())
+            assertEquals(0, f.control.updateCalls)
+            assertNull(f.control.access.workspace)
+        }
+    }
+
+    @Test
+    fun capturedControlCannotReadAnEarlierNativeFamilysRetainedCommand() = runTest {
+        val f = Fixture()
+        f.control.record =
+            f.control.retain().copy(outcome = CollaborationSetupOutcome.Unconfirmed())
+        val scope = f.captured()
+        val original = f.control.record
+        val identity = requireNotNull(f.control.access.session)
+        f.control.access.session =
+            identity.copy(binding = identity.binding.copy(serverId = deliveryId(99)))
+        assertIs<AppResult.Failed>(f.reader().setup(scope))
+        assertSame(original, f.control.record)
+        assertEquals(0, f.control.updateCalls)
+    }
+
+    @Test
+    fun capturedControlRetainsCompanyDenialAndDoesNotReadPendingCommands() = runTest {
+        val f = Fixture()
+        f.retain(CollaborationConversationAction.Open(f.id))
+        val scope = f.captured()
+        f.control.access.admission.deny(f.denial)
+        assertEquals(AppResult.Failed(f.denial), f.reader().direct(scope, f.id))
+        assertTrue(f.resources.isEmpty())
+        assertNotNull(f.conversation)
+    }
+
+    @Test
+    fun capturedControlRejectsALateOwnerAndCancellationWithoutDeletingIntent() = runTest {
+        for (cancel in listOf(false, true)) {
+            val f = Fixture()
+            f.control.record =
+                f.control.retain().copy(outcome = CollaborationSetupOutcome.Unconfirmed())
+            val scope = f.captured()
+            val original = f.control.record
+            f.control.beforeCurrent = {
+                if (cancel) currentCoroutineContext().cancel() else f.control.access.session = null
+            }
+            if (cancel) {
+                val task = launch { f.reader().setup(scope) }
+                task.join()
+                assertTrue(task.isCancelled)
+            } else assertIs<AppResult.Failed>(f.reader().setup(scope))
+            assertSame(original, f.control.record)
+            assertEquals(0, f.control.updateCalls)
+        }
+    }
+
+    @Test
     fun retainedSetupSurvivesExpiredCredentialsPolicyAgeAndApplicationUpgrade() = runTest {
         val f = Fixture()
         val record = f.control.retain().copy(outcome = CollaborationSetupOutcome.Unconfirmed())
@@ -289,6 +369,40 @@ class ReadCollaborationControlTest {
                     CollaborationConversationOutcome.Unconfirmed(),
                 )
                 .also { conversation = it }
+
+        fun captured(): CollaborationLocalScope.Captured {
+            val owner =
+                control.owner.copy(
+                    accountId = deliveryId(90),
+                    companyId = deliveryId(91),
+                    nativeSessionId = deliveryId(92),
+                )
+            val previous = requireNotNull(control.access.session)
+            control.access.session =
+                previous.copy(
+                    user = previous.user.copy(id = owner.accountId),
+                    binding = previous.binding.copy(serverId = owner.nativeSessionId),
+                )
+            control.access.workspace = null
+            control.access.beforeWorkspace = { error("Captured control cannot read selection") }
+            control.access.now += 365.days
+            control.record =
+                control.record?.let {
+                    it.copy(command = it.command.copy(binding = owner.setupBinding()))
+                }
+            conversation =
+                conversation?.let {
+                    it.copy(command = it.command.copy(binding = owner.setupBinding()))
+                }
+            return CollaborationLocalScope.Captured(
+                CollaborationLocalAccess(
+                    owner.sessionId,
+                    owner.audience,
+                    owner.accountId,
+                    owner.companyId,
+                )
+            )
+        }
 
         fun reader() =
             ReadCollaborationControl(

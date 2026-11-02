@@ -1,5 +1,51 @@
 # Agent continuation — HRIS Mobile
 
+## Captured local message/control ownership validated — 2 November 2026
+
+[Contract](collaboration-captured-local-scope.md) /
+[evidence](measurements/chat-captured-local-scope-2026-11-02.json): message observation,
+receipt recovery/projection/retirement and retained setup/direct/room reads accept
+Selected or Captured local scope. Existing String callers retain workspace behavior.
+Captured access checks the active local session/account/audience and canonical company,
+then the retained company gate, without workspace reads or remote permission deadlines.
+Control reads also bind commands to the current native family without a live TTL.
+
+All15 new cases pass within484 domain tests, including expired-credential recovery,
+32-item retirement, late owner/cancellation, retained receipt/completion facts and
+observer disposal. Actual DI's two cases, proof adapter compilation and static checks
+pass in136s /139.684s. Initial12-file focused checks passed480 domain/two DI cases in
+139s /143.072s before adding three control files/four cases; both scopes are recorded.
+Final15-input root/browser checks pass in263s /267.22s:
+2,933 desktop, 209 Android host, 756 browser and 10 build-logic cases, zero failures/skips.
+No new JNI, employee APK build or phone install. Phone remains verified14 from8c557716.
+
+**Continue immediately:** typed remote Prepare/Replay/ReconcileConversation, exact
+background RequestRoom device binding and retained company gates. A nine-file,
+12-test candidate is UNAPPLIED/UNTESTED in
+`.work/captured-local-2026-11-02/remote-control-candidate.json`; verify its baseline
+hashes before applying. It adds required list-repository DI and updates the existing
+domain/presentation constructors. Validate domain/presentation, actual DI/proof
+compile and full root/browser checks after applying.
+
+Critical distinction: a historical command failure is not a newly received server
+denial. Replay combines prior failure with transport/storage failures. Reusing that
+combined value to restrict the company would reclose a freshly admitted gate and
+prevent retry forever. The candidate separately carries contextResult and the actual
+receivedResponse; only the latter confirms a new denial. Tests include explicit
+readmission followed by successful retry, historical denial plus transport failure,
+and new MFA/company denial under cancellation/failed cleanup. Supplementary detail:
+`.work/captured-local-2026-11-02/next-control-notes.txt`.
+
+Then convert local delivery/draft discovery, cursor/queue/confirm/suspend operations
+and generalize the existing bounded worker. Do not fabricate workspace IDs or copy
+outbox logic. Captured scope must come from owned records, never raw FCM fields; it
+does not authorize remote I/O. Reuse ApplicationCollaborationLifetime and test initial
+parent readiness while workspace observation is pending, maintaining foreground
+retention across token rotation. Durable all-company wake/reconnect/periodic recovery,
+notification privacy/read/mute and inline replies remain required. Delivery stays
+disabled; all54 PRD groups remain open. No generic Starter port or live rollout.
+Owned temporary swap remains active pending safe cleanup; preserve unrelated jobs.
+
 ## Background staging/delivery and SDK denial classification validated — 2 November 2026
 
 [Contract](collaboration-background-outbox.md) /

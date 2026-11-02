@@ -23,10 +23,12 @@ class ReadCollaborationControl(
     private val build: AppBuild,
     private val clock: Clock,
 ) {
+    suspend fun setup(workspaceId: String) = setup(CollaborationLocalScope.Selected(workspaceId))
+
     suspend fun setup(
-        workspaceId: String
+        scope: CollaborationLocalScope
     ): AppResult<CollaborationRead<CollaborationSetupCommandRecord?>> =
-        read(workspaceId, { setupCommands.current(it) }) { record, owner ->
+        read(scope, { setupCommands.current(it) }) { record, owner ->
             record == null ||
                 (record.command.binding == owner.setupBinding() &&
                     ((record.outcome as? CollaborationSetupOutcome.Bootstrapped)?.let {
@@ -36,13 +38,19 @@ class ReadCollaborationControl(
         }
 
     suspend fun direct(workspaceId: String, peerAccountId: String) =
-        conversation(workspaceId, "direct", peerAccountId)
+        direct(CollaborationLocalScope.Selected(workspaceId), peerAccountId)
+
+    suspend fun direct(scope: CollaborationLocalScope, peerAccountId: String) =
+        conversation(scope, "direct", peerAccountId)
 
     suspend fun room(workspaceId: String, conversationId: String) =
-        conversation(workspaceId, "room", conversationId)
+        room(CollaborationLocalScope.Selected(workspaceId), conversationId)
+
+    suspend fun room(scope: CollaborationLocalScope, conversationId: String) =
+        conversation(scope, "room", conversationId)
 
     private suspend fun conversation(
-        workspaceId: String,
+        scope: CollaborationLocalScope,
         kind: String,
         id: String,
     ): AppResult<CollaborationRead<CollaborationConversationCommandRecord?>> {
@@ -52,7 +60,7 @@ class ReadCollaborationControl(
                 FailureKind.Validation,
             )
         val resource = "$kind/$id"
-        return read(workspaceId, { conversationCommands.current(it, resource) }) { record, owner ->
+        return read(scope, { conversationCommands.current(it, resource) }) { record, owner ->
             record == null ||
                 (record.command.binding == owner.setupBinding() &&
                     record.command.action.resourceId() == resource)
@@ -60,17 +68,17 @@ class ReadCollaborationControl(
     }
 
     private suspend fun <T> read(
-        workspaceId: String,
+        scope: CollaborationLocalScope,
         acquire: suspend (CollaborationOwner) -> AppResult<T>,
         valid: (T, CollaborationOwner) -> Boolean,
     ): AppResult<CollaborationRead<T>> {
-        val captured = capture(workspaceId)
+        val captured = capture(scope)
         if (captured is AppResult.Failed) return captured
         val owner = (captured as AppResult.Success).value
-        val before = continuation(workspaceId, owner, null)
+        val before = continuation(scope, owner, null)
         if (before is AppResult.Failed) return before
         val received = acquire(owner)
-        val current = continuation(workspaceId, owner, received)
+        val current = continuation(scope, owner, received)
         if (current is AppResult.Failed) return current
         if (received is AppResult.Failed) return received
         val value = (received as AppResult.Success).value
@@ -80,16 +88,16 @@ class ReadCollaborationControl(
     }
 
     private suspend fun continuation(
-        workspaceId: String,
+        scope: CollaborationLocalScope,
         owner: CollaborationOwner,
         received: AppResult<*>?,
     ): AppResult<Unit> {
         currentCoroutineContext().ensureActive()
-        val current = requireCollaborationOwner(capture(workspaceId), owner, received)
+        val current = requireCollaborationOwner(capture(scope), owner, received)
         if (current is AppResult.Failed) return current
         val gate = admission.admission(owner.localListAccess())
         currentCoroutineContext().ensureActive()
-        val checked = requireCollaborationOwner(capture(workspaceId), owner, gate)
+        val checked = requireCollaborationOwner(capture(scope), owner, gate)
         if (checked is AppResult.Failed) return checked
         return when (gate) {
             is AppResult.Failed -> gate
@@ -98,8 +106,8 @@ class ReadCollaborationControl(
         }
     }
 
-    private suspend fun capture(workspaceId: String) =
-        sessions.captureCollaborationLocalOwner(workspaceId, workspaces, server, build, clock)
+    private suspend fun capture(scope: CollaborationLocalScope) =
+        sessions.captureCollaborationLocalOwner(scope, workspaces, server, build, clock)
 
     private companion object {
         val canonicalId = Regex("[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}")

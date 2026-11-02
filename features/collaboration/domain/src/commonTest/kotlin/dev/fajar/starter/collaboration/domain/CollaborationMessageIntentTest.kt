@@ -345,7 +345,8 @@ internal class MessageIntentFixture {
     suspend fun queue(text: String = "  Offline\nmessage 🙂  ") =
         queue("selection", conversation, intentId(5), text)
 
-    fun observe() = observer("selection", conversation)
+    fun observe(scope: CollaborationLocalScope = CollaborationLocalScope.Selected("selection")) =
+        observer(scope, conversation)
 }
 
 private fun intentId(value: Int) = "00000000-0000-0000-0000-" + value.toString().padStart(12, '0')

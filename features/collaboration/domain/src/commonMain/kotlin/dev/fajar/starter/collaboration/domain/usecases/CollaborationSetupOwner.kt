@@ -106,3 +106,39 @@ internal suspend fun SessionRepository.captureCollaborationLocalOwner(
         )
     )
 }
+
+/** Retained command binding additionally follows the current native family, without a live TTL. */
+internal suspend fun SessionRepository.captureCollaborationLocalOwner(
+    scope: CollaborationLocalScope,
+    workspaces: WorkspaceRepository,
+    server: IdentityServer,
+    build: AppBuild,
+    clock: Clock,
+): AppResult<CollaborationOwner> {
+    if (scope is CollaborationLocalScope.Selected)
+        return captureCollaborationLocalOwner(scope.workspaceId, workspaces, server, build, clock)
+    val read = current()
+    currentCoroutineContext().ensureActive()
+    if (read is AppResult.Failed) return read
+    val identity = (read as AppResult.Success).value
+    val captured =
+        collaborationCapturedLocalAccess(
+            (scope as CollaborationLocalScope.Captured).access,
+            identity,
+            server.audience,
+        )
+    if (captured is AppResult.Failed) return captured
+    requireNotNull(identity)
+    if (!validCollaborationMessageId(identity.binding.serverId))
+        return workspaceFailure("client.session_changed", FailureKind.Unauthorized)
+    val access = (captured as AppResult.Success).value
+    return AppResult.Success(
+        CollaborationOwner(
+            access.sessionId,
+            access.audience,
+            access.accountId,
+            access.companyId,
+            identity.binding.serverId,
+        )
+    )
+}

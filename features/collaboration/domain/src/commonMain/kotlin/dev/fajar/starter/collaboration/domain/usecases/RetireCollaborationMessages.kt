@@ -32,14 +32,20 @@ class RetireCollaborationMessages(
     private val execution = Mutex()
 
     suspend operator fun invoke(workspaceId: String, conversationId: String): AppResult<Int> =
+        invoke(CollaborationLocalScope.Selected(workspaceId), conversationId)
+
+    suspend operator fun invoke(
+        scope: CollaborationLocalScope,
+        conversationId: String,
+    ): AppResult<Int> =
         execution.withLock {
             if (!validCollaborationMessageId(conversationId)) return@withLock failed()
-            val captured = capture(workspaceId)
+            val captured = capture(scope)
             if (captured is AppResult.Failed) return@withLock captured
             val access = (captured as AppResult.Success).value
-            continuation(workspaceId, access).let { if (it is AppResult.Failed) return@withLock it }
+            continuation(scope, access).let { if (it is AppResult.Failed) return@withLock it }
             val read =
-                checked(workspaceId, access) {
+                checked(scope, access) {
                     when (val result = receipts.read(access, conversationId)) {
                         is AppResult.Failed -> result
                         is AppResult.Success ->
@@ -58,18 +64,18 @@ class RetireCollaborationMessages(
                     }
             )
                 return@withLock failed()
-            val prepared = prepare(workspaceId, access, conversationId, journal)
+            val prepared = prepare(scope, access, conversationId, journal)
             if (prepared is AppResult.Failed) return@withLock prepared
             val batch = (prepared as AppResult.Success).value
             if (batch.isEmpty()) return@withLock AppResult.Success(0)
             for ((proof, _) in batch) {
                 val archived =
-                    checked(workspaceId, access) { completions.archiveCompletion(access, proof) }
+                    checked(scope, access) { completions.archiveCompletion(access, proof) }
                 if (archived is AppResult.Failed) return@withLock archived
                 if (!(archived as AppResult.Success).value) return@withLock failed()
             }
             val removed =
-                checked(workspaceId, access) {
+                checked(scope, access) {
                     retirement.removeReceipts(access, conversationId, batch.map { it.second })
                 }
             if (removed is AppResult.Failed) return@withLock removed
@@ -78,7 +84,7 @@ class RetireCollaborationMessages(
         }
 
     private suspend fun prepare(
-        workspaceId: String,
+        scope: CollaborationLocalScope,
         access: CollaborationLocalAccess,
         conversationId: String,
         journal: List<CollaborationMessageReceipt>,
@@ -86,7 +92,7 @@ class RetireCollaborationMessages(
         val batch =
             mutableListOf<Pair<CollaborationMessageCompletion, CollaborationMessageReceipt>>()
         for (receipt in journal) {
-            val prepared = candidate(workspaceId, access, conversationId, receipt)
+            val prepared = candidate(scope, access, conversationId, receipt)
             if (prepared is AppResult.Failed) return prepared
             (prepared as AppResult.Success).value?.let { batch += it to receipt }
             if (batch.size == 32) break
@@ -95,13 +101,13 @@ class RetireCollaborationMessages(
     }
 
     private suspend fun candidate(
-        workspaceId: String,
+        scope: CollaborationLocalScope,
         access: CollaborationLocalAccess,
         conversationId: String,
         receipt: CollaborationMessageReceipt,
     ): AppResult<CollaborationMessageCompletion?> {
         val retained =
-            checked(workspaceId, access) {
+            checked(scope, access) {
                 when (val result = completions.readCompletion(access, receipt.intent.id)) {
                     is AppResult.Failed -> result
                     is AppResult.Success ->
@@ -113,8 +119,7 @@ class RetireCollaborationMessages(
         if (retained is AppResult.Failed) return retained
         val previous = (retained as AppResult.Success).value
         val read =
-            if (previous == null)
-                checked(workspaceId, access) { messages.get(access, receipt.intent.id) }
+            if (previous == null) checked(scope, access) { messages.get(access, receipt.intent.id) }
             else AppResult.Success(previous.record)
         if (read is AppResult.Failed) return read
         val record = (read as AppResult.Success).value ?: return failed()
@@ -123,7 +128,7 @@ class RetireCollaborationMessages(
         val sent = record.state as? CollaborationMessageState.Sent ?: return AppResult.Success(null)
         val origin = sent.origin ?: return AppResult.Success(null)
         val original =
-            checked(workspaceId, access) {
+            checked(scope, access) {
                 when (
                     val result =
                         history.getByLogicalId(
@@ -150,26 +155,26 @@ class RetireCollaborationMessages(
     }
 
     private suspend fun <T> checked(
-        workspaceId: String,
+        scope: CollaborationLocalScope,
         access: CollaborationLocalAccess,
         operation: suspend () -> AppResult<T>,
     ): AppResult<T> {
         val result = operation()
-        val current = continuation(workspaceId, access)
+        val current = continuation(scope, access)
         return if (current is AppResult.Failed) current else result
     }
 
-    private suspend fun capture(workspaceId: String) =
-        sessions.captureMessageAccess(workspaceId, workspaces, server, build, clock)
+    private suspend fun capture(scope: CollaborationLocalScope) =
+        sessions.captureMessageAccess(scope, workspaces, server, build, clock)
 
     private suspend fun continuation(
-        workspaceId: String,
+        scope: CollaborationLocalScope,
         access: CollaborationLocalAccess,
     ): AppResult<Unit> {
         currentCoroutineContext().ensureActive()
         val gate = lists.admission(access)
         // Capture after gate I/O so an account replacement during that read cannot publish success.
-        val current = capture(workspaceId)
+        val current = capture(scope)
         currentCoroutineContext().ensureActive()
         if (gate is AppResult.Success)
             gate.value.denial?.let {

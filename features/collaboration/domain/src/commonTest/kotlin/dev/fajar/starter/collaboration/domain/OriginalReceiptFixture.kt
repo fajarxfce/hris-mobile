@@ -105,5 +105,7 @@ internal class OriginalReceiptFixture {
             delivery.completions,
         )
 
-    suspend fun recover() = useCase("selection", delivery.conversation)
+    suspend fun recover(
+        scope: CollaborationLocalScope = CollaborationLocalScope.Selected("selection")
+    ) = useCase(scope, delivery.conversation)
 }

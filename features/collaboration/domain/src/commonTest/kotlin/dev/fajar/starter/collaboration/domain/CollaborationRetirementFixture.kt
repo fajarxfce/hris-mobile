@@ -75,5 +75,7 @@ internal class CollaborationRetirementFixture {
             }
     }
 
-    suspend fun retire() = useCase("selection", delivery.conversation)
+    suspend fun retire(
+        scope: CollaborationLocalScope = CollaborationLocalScope.Selected("selection")
+    ) = useCase(scope, delivery.conversation)
 }

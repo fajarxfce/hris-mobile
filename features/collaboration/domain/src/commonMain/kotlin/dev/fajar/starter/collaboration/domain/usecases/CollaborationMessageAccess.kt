@@ -1,7 +1,7 @@
 package dev.fajar.starter.collaboration.domain.usecases
 
 import dev.fajar.starter.collaboration.domain.entities.*
-import dev.fajar.starter.collaboration.domain.policies.collaborationLocalAccess
+import dev.fajar.starter.collaboration.domain.policies.*
 import dev.fajar.starter.common.config.AppBuild
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.identity.domain.entities.IdentityServer
@@ -76,3 +76,50 @@ internal fun SessionRepository.observeMessageAccess(
             }
         }
         .distinctUntilChanged()
+
+internal suspend fun SessionRepository.captureMessageAccess(
+    scope: CollaborationLocalScope,
+    workspaces: WorkspaceRepository,
+    server: IdentityServer,
+    build: AppBuild,
+    clock: Clock,
+): AppResult<CollaborationLocalAccess> =
+    when (scope) {
+        is CollaborationLocalScope.Selected ->
+            captureMessageAccess(scope.workspaceId, workspaces, server, build, clock)
+        is CollaborationLocalScope.Captured -> {
+            val read = current()
+            currentCoroutineContext().ensureActive()
+            when (read) {
+                is AppResult.Failed -> read
+                is AppResult.Success ->
+                    collaborationCapturedLocalAccess(scope.access, read.value, server.audience)
+            }
+        }
+    }
+
+internal fun SessionRepository.observeMessageAccess(
+    scope: CollaborationLocalScope,
+    workspaces: WorkspaceRepository,
+    server: IdentityServer,
+    build: AppBuild,
+    clock: Clock,
+): Flow<AppResult<CollaborationLocalAccess>> =
+    when (scope) {
+        is CollaborationLocalScope.Selected ->
+            observeMessageAccess(scope.workspaceId, workspaces, server, build, clock)
+        is CollaborationLocalScope.Captured ->
+            observe()
+                .map { read ->
+                    when (read) {
+                        is AppResult.Failed -> read
+                        is AppResult.Success ->
+                            collaborationCapturedLocalAccess(
+                                scope.access,
+                                read.value,
+                                server.audience,
+                            )
+                    }
+                }
+                .distinctUntilChanged()
+    }
