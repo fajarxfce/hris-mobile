@@ -37,7 +37,8 @@ remain in their own encrypted durable stores and platform jobs carry only task k
 [Validation](measurements/work-wake-storage-2026-11-02.json) records actual SQLite
 and IndexedDB generation races,40 competing capacity requests, same-generation
 replay, cancellation, account replacement, close/reopen and previous-schema
-migration. It preserves the first failed cancellation case and its fix. The six
-isolated Apple cases are prepared for separately audited hosted execution.
+migration. It preserves the first failed cancellation case and its fix. All six isolated Apple cases also pass in hosted run41396150119 at be8ebc7b: actual
+Room/BundledSQLite generation, capacity, cancellation, ownership and reopen checks.
+The complete iOS simulator application and generated associations pass.
 
 HRIS maps this primitive through [durable chat recovery requests](collaboration-recovery-wakes.md).

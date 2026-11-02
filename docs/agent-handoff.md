@@ -1,5 +1,42 @@
 # Agent continuation — HRIS Mobile
 
+## Apple wake storage audited; Android scheduler proved locally — 2 November 2026
+
+[Apple run41396150119](https://github.com/fajarxfce/hris-mobile/actions/runs/41396150119)
+at exact be8ebc7b is now completed and audited: 112 tests in30 suites,
+zero failures/errors/skips. All six AppleWorkWakeStoreTest cases run against actual
+isolated Room/BundledSQLite and pass in0.117s. Simulator compilation,
+tests, full Xcode app and generated associations pass; [exact hashes/timings](measurements/work-wake-storage-2026-11-02.json).
+This source boundary excludes later HRIS recovery policy and the current scheduler.
+
+The five current uncommitted scheduler/proof files now pass real Android proof.
+Core focus1:13 desktop/13 browser,152s /155.762s. Full2:3,024 desktop,215 Android host,
+13 worker-browser,10 build-logic,263s /267.084s. A fixture-only cancellation-cleanup
+review correction then passes proof APK/static checks in66s /70.22s; core inputs
+are unchanged. Actual native run1 passes all three scenarios in22.458s: two slots,
+40 competing requests (four accepted,36 explicit capacity failures),20 backoff
+requests reusing one ID, failed/cancelled slot reuse, other running slot retention,
+old-generation fencing and actual process-death repair. Input-only key, network,
+backoff, no dependencies and cleanup are checked against real WorkManager SQLite.
+Artifact fd6dccc8,343,275,325 bytes; five unchanged inputs throughout native proof.
+
+Next record docs/measurements and commit/push those five source/test files. Source
+base380cc654; scratch `.work/collapsed-scheduling-2026-11-02` has reports, scripts,
+contract draft and result.json. The proposed tag/chain design was rejected before
+application; current two independent slots use KEEP only on a vacant slot after a
+durable write. Ordinary keys retain APPEND_OR_REPLACE. No application key opts in.
+
+Then port three generic scheduler files plus the now-proven isolated Apple database
+wrapper to Starter. AndroidWorkScheduler's baseline matches exactly there. Run own
+root/worker-browser/Android/lint/Web checks, push, then one Apple-only Starter run
+and audit its XML. HRIS policy and proof application stay in Mobile. Continue actual
+all-company recovery/receive/notifications afterward; no PRD completion yet.
+
+Owned emulator5562/PID4105492 is stopped and absence verified. Port5560 was acquired
+by unrelated CodePush AVDcodepush-ci08/PID4082879; it was preserved. Never treat5560
+as owned without checking again. Phone remains15, server unchanged/push disabled,
+all54 PRD groups open. Continue after each push.
+
 ## HRIS durable recovery request policy validated — 2 November 2026
 
 [Contract](collaboration-recovery-wakes.md) / [evidence](measurements/chat-recovery-wake-2026-11-02.json):
