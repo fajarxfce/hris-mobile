@@ -8,8 +8,10 @@ import dev.fajar.starter.collaboration.data.datasources.createAndroidCollaborati
 import dev.fajar.starter.collaboration.data.mappers.collaborationSdkAcquisitionFailure
 import dev.fajar.starter.collaboration.data.sdk.CollaborationSdkRecord
 import dev.fajar.starter.collaboration.domain.entities.CollaborationMessageDevice
+import dev.fajar.starter.collaboration.domain.entities.CollaborationOwnReadReceipts
 import dev.fajar.starter.collaboration.domain.entities.CollaborationOwner
 import dev.fajar.starter.collaboration.domain.entities.CollaborationProviderHistoryPage
+import dev.fajar.starter.collaboration.domain.entities.CollaborationReadReceiptVisibility
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationMessageQueueLease
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationRuntimeLease
 import dev.fajar.starter.common.result.*
@@ -56,6 +58,14 @@ internal constructor(
             lifetime,
             pusherApi,
         ) {
+            credentialFailures.value
+                ?: sync.failures.value?.takeIf {
+                    it.kind in setOf(FailureKind.Unauthorized, FailureKind.AccessDenied)
+                }
+                ?: if (stopRequested.get()) syncStopped().failure else null
+        }
+    private val readReceipts =
+        AndroidCollaborationReadReceipts(nativeClient, record.matrixUserId, children, lifetime) {
             credentialFailures.value
                 ?: sync.failures.value?.takeIf {
                     it.kind in setOf(FailureKind.Unauthorized, FailureKind.AccessDenied)
@@ -240,6 +250,19 @@ internal constructor(
     suspend fun findHistoryHead(roomId: String): AppResult<String?> = historyReads.read(roomId)
 
     suspend fun activatePusher(): AppResult<Unit> = pusher.activate()
+
+    /** SDK-local metadata; this neither starts sync nor compares event ordering. */
+    suspend fun readOwnReadReceipts(roomId: String): AppResult<CollaborationOwnReadReceipts> =
+        readReceipts.readOwn(roomId)
+
+    /**
+     * The caller must freshly admit the exact owner/device/room and retain a durable read intent.
+     */
+    suspend fun sendReadReceipt(
+        roomId: String,
+        eventId: String,
+        visibility: CollaborationReadReceiptVisibility,
+    ): AppResult<Unit> = readReceipts.send(roomId, eventId, visibility)
 
     /**
      * Provider references only. The admitted caller owns durable progress and content acquisition.

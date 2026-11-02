@@ -181,6 +181,7 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
                     runtime.proofKeyFingerprint() ==
                         read("gateway-staged", 4096).getString("senderKeyFingerprint")
                 )
+                HrisReadReceiptProof.restored(runtime, fixture.getString("roomId"), result)
                 check(runtime.startSync() is AppResult.Success)
                 proof =
                     HrisProductQueueProof(
@@ -447,6 +448,13 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
                                 recipient.nativeClient.userId(),
                                 body(fixture, "reply"),
                             )
+                        HrisReadReceiptProof.exchange(
+                            sender,
+                            recipient,
+                            senderRoom,
+                            sent.eventId,
+                            answered.eventId,
+                        )
                         check(recipientTimeline.close() is AppResult.Success)
                         // Screen disposal leaves the sibling runtime/observer usable.
                         senderTimeline.awaitMessage(
@@ -454,22 +462,7 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
                             body(fixture, "reply"),
                             logicalId(fixture, "replyId"),
                         )
-                        protectedFlags(JSONObject())
-                            .put("encryptedBothDirections", true)
-                            .put("logicalIdsPreserved", true)
-                            .put("queueRestored", true)
-                            .put("ownedTimelineObserved", true)
-                            .put("transactionReused", true)
-                            .put("identityAfterRestart", true)
-                            .put("messageIntentRestored", true)
-                            .put("queueMappingRecovered", true)
-                            .put("queueWriterExclusive", true)
-                            .put("perRoomDeliveryIsolated", true)
-                            .put("heldQueueRestored", true)
-                            .put("nativeDeliveryOwned", true)
-                            .put("commonSenderOwned", true)
-                            .put("receiptJournalRecovered", true)
-                            .put("projectionInterrupted", true)
+                        exchangeFlags()
                             .withHistoryEvidence(history)
                             .put("senderEventId", sent.eventId)
                             .put("recipientEventId", answered.eventId)
@@ -480,6 +473,26 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
                     }
             }
     }
+
+    private fun exchangeFlags() =
+        protectedFlags(JSONObject())
+            .put("encryptedBothDirections", true)
+            .put("nativeReadReceiptsExchanged", true)
+            .put("nativePrivateReceiptIsolated", true)
+            .put("logicalIdsPreserved", true)
+            .put("queueRestored", true)
+            .put("ownedTimelineObserved", true)
+            .put("transactionReused", true)
+            .put("identityAfterRestart", true)
+            .put("messageIntentRestored", true)
+            .put("queueMappingRecovered", true)
+            .put("queueWriterExclusive", true)
+            .put("perRoomDeliveryIsolated", true)
+            .put("heldQueueRestored", true)
+            .put("nativeDeliveryOwned", true)
+            .put("commonSenderOwned", true)
+            .put("receiptJournalRecovered", true)
+            .put("projectionInterrupted", true)
 
     private fun JSONObject.withHistoryEvidence(history: JSONObject) = apply {
         for (flag in

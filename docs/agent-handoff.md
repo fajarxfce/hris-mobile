@@ -1,5 +1,44 @@
 # Agent continuation — HRIS Mobile
 
+## Native public/private read receipts accepted — 2 November 2026
+
+[Contract](collaboration-read-receipts.md) / [evidence](measurements/chat-read-receipt-client-2026-11-02.json):
+Android owns finite receipt reads/writes through existing parent-child cleanup.
+A separate lazy native request starts only after current caller acquisition;
+cancellation/parent closure joins it before closing the room. Failed cleanup stays
+owned. Eight host lifecycle/validation cases pass. This adapter is not yet exposed
+through the common runtime repository or invoked by product read/notification actions.
+
+Actual SDK→HRIS→Synapse proof PASSES109.111s on114 Mobile/25 Platform inputs.
+Five empty receipt POSTs (three private/two public) return200. Private metadata is
+invisible to the peer; the SDK retains own metadata through actual process death and
+reads it in the next process before sync. Existing encrypted exchange, queue/held-room
+isolation, acknowledgement/completion recovery and three process restarts also pass.
+Proof APK343,275,325 bytes, SHA2564bd9200487608c1efb258d29ddb3762e92bfe32079934307010fb690254cd035.
+No FCM/OS notification/phone or Apple provider claim. Owned emulator5562/PID705941
+is stopped and proof package absent; cleanup retained in measurement.
+
+Full root/proof check2 passes275.337s:3262 desktop/230 Android host/10 build-logic/
+six proof-host cases with explicit cache/up-to-date task statuses;1683 cases in218
+suites freshly executed. Focused check1 passed eight cases but failed detekt's
+101-line proof function; extracted completed-exchange evidence before the full pass.
+No production failure or repeated native attempt. Python driver26 cases pass0.159s.
+
+Platform receipt gateway8c87839a is pushed with focused99.155s/broad809.053s and real
+Synapse7.216s evidence. Four counterpart native proof/driver changes are validated
+locally and must be committed/pushed with their evidence immediately after this commit.
+Live API/worker remain dac6fb0d/schema116, all chat push OFF; installed phone17 unchanged.
+Keep private Matrix identity/keys/checkpoints and Google/native sessions intact.
+
+Next: expose these operations through the common runtime owner; implement encrypted
+local read intent/state and admitted replay, then mute/privacy/account-bound notification
+actions and inline replies. Do not infer read ordering from timestamps or unknown gaps.
+Continue all54 PRD groups; no whole group closes here. Apple shared/complete Xcode
+validation must cover subsequent common changes. No generic Starter port applies to
+this Matrix/HRIS increment. Notify before each phone update, explicit10.77.77.3:5555
+--install-only, never drive the user's UI. Push every commit and continue long run.
+
+
 ## Native priority recovery accepted — 2 November 2026
 
 [Evidence](measurements/chat-priority-native-2026-11-02.json) binds 108 Mobile and
