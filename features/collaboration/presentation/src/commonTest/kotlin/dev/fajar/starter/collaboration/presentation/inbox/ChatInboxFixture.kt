@@ -199,6 +199,11 @@ internal class ChatInboxFixture {
         }
     val remote =
         object : CollaborationConversationRepository {
+            override suspend fun summaryByRoom(
+                owner: CollaborationOwner,
+                roomId: String,
+            ): AppResult<CollaborationDirectSummary> = error("No implicit room lookup")
+
             override suspend fun summaries(
                 owner: CollaborationOwner,
                 after: String?,

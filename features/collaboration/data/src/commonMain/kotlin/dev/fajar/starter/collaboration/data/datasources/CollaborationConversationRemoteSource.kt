@@ -29,6 +29,12 @@ interface CollaborationConversationRemoteSource {
 
     suspend fun summary(session: String, company: String, id: String): CollaborationDirectSummaryDto
 
+    suspend fun summaryByRoom(
+        session: String,
+        company: String,
+        roomId: String,
+    ): CollaborationDirectSummaryDto
+
     suspend fun room(session: String, company: String, id: String): CollaborationDirectRoomDto
 
     suspend fun open(

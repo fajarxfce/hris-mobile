@@ -412,6 +412,7 @@ internal class LocalListFixture {
         AppResult.Success(CollaborationPage(listOf(summary), null))
     var pointResult: AppResult<CollaborationDirectSummary> = AppResult.Success(summary)
     val pointCalls = mutableListOf<String>()
+    val roomCalls = mutableListOf<String>()
     val published = mutableListOf<List<CollaborationDirectSummary>>()
     var restrictResult: AppResult<Boolean> = AppResult.Success(true)
     var mergeResult: AppResult<Boolean> = AppResult.Success(true)
@@ -487,6 +488,15 @@ internal class LocalListFixture {
         }
     val remote =
         object : CollaborationConversationRepository {
+            override suspend fun summaryByRoom(
+                owner: CollaborationOwner,
+                roomId: String,
+            ): AppResult<CollaborationDirectSummary> {
+                roomCalls += roomId
+                beforeRemoteReturn()
+                return pointResult
+            }
+
             override suspend fun summaries(
                 owner: CollaborationOwner,
                 after: String?,

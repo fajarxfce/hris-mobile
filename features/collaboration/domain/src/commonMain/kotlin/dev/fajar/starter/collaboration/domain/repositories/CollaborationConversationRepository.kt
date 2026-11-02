@@ -34,6 +34,12 @@ interface CollaborationConversationRepository {
         conversationId: String,
     ): AppResult<CollaborationDirectSummary>
 
+    /** Current server-side participant lookup; an incoming room ID grants no access by itself. */
+    suspend fun summaryByRoom(
+        owner: CollaborationOwner,
+        roomId: String,
+    ): AppResult<CollaborationDirectSummary>
+
     suspend fun room(
         owner: CollaborationOwner,
         conversationId: String,

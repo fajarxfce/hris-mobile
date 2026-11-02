@@ -323,6 +323,11 @@ private class ReadFixture {
         }
     val conversations =
         object : CollaborationConversationRepository {
+            override suspend fun summaryByRoom(
+                owner: CollaborationOwner,
+                roomId: String,
+            ): AppResult<CollaborationDirectSummary> = error("No implicit room lookup")
+
             private suspend fun <T> acquire(value: T, scope: CollaborationOwner): AppResult<T> {
                 calls++
                 owner = scope

@@ -70,6 +70,14 @@ class RemoteCollaborationConversationRepository(
         remote.room(owner.sessionId, owner.companyId, conversationId).toRoom(owner, conversationId)
     }
 
+    override suspend fun summaryByRoom(owner: CollaborationOwner, roomId: String) = safeApiCall {
+        validate(owner)
+        require(
+            roomId.length in 2..255 && roomId.startsWith('!') && roomId.all { it.code in 33..126 }
+        )
+        remote.summaryByRoom(owner.sessionId, owner.companyId, roomId).toSummary(owner)
+    }
+
     override suspend fun open(owner: CollaborationOwner, command: CollaborationOpenDirect) =
         safeApiCall {
             validate(owner)

@@ -14,6 +14,39 @@ import kotlinx.coroutines.test.runTest
 
 class CollaborationBackgroundReadTest {
     @Test
+    fun roomLookupUsesRemainingCapturedAdmissionWithoutForegroundSelection() = runTest {
+        val f = Fixture()
+        f.base.setup.now += 40.seconds
+        val result =
+            assertIs<AppResult.Success<CollaborationRead<CollaborationDirectSummary>>>(
+                f.refresh.byRoom(f.scope, "!hint:example.test")
+            )
+        assertEquals(f.summary, result.value.value)
+        assertEquals(f.owner, f.observedOwner)
+        assertEquals(listOf("!hint:example.test"), f.base.roomCalls)
+        assertEquals(0, f.base.remoteCalls)
+        assertTrue(f.base.pointCalls.isEmpty())
+        assertNull(f.base.setup.workspace)
+    }
+
+    @Test
+    fun roomLookupCannotPublishAfterCapturedExpiryOrParentReplacement() = runTest {
+        for (mode in 0..2) {
+            val f = Fixture()
+            if (mode == 0) f.base.setup.now += 60.seconds
+            else
+                f.base.beforeRemoteReturn = {
+                    if (mode == 1) f.base.setup.now += 60.seconds
+                    else f.base.setup.session = f.session.copy(id = "replaced")
+                }
+            assertIs<AppResult.Failed>(f.refresh.byRoom(f.scope, "!hint:example.test"))
+            assertEquals(if (mode == 0) 0 else 1, f.base.roomCalls.size)
+            assertEquals(0, f.base.merges)
+            assertEquals(0, f.base.admits)
+        }
+    }
+
+    @Test
     fun admittedBackgroundPagesAndPointsReuseExistingPublicationWithoutWorkspaceSelection() =
         runTest {
             val f = Fixture()
@@ -197,6 +230,15 @@ class CollaborationBackgroundReadTest {
 
         private val remote =
             object : CollaborationConversationRepository by base.remote {
+                override suspend fun summaryByRoom(
+                    owner: CollaborationOwner,
+                    roomId: String,
+                ): AppResult<CollaborationDirectSummary> {
+                    assertEquals(this@Fixture.owner, owner)
+                    observedOwner = owner
+                    return base.remote.summaryByRoom(owner, roomId)
+                }
+
                 override suspend fun summaries(
                     owner: CollaborationOwner,
                     after: String?,

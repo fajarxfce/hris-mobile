@@ -50,6 +50,14 @@ class NativeCollaborationUi {
         }
         val base =
             "/api/v1/companies/${NativeUiServer.COMPANY_ONE}/collaboration/direct-conversations"
+        if (path == "$base/summary-by-room") {
+            check(request.method == HttpMethod.Get)
+            val id =
+                ids.singleOrNull { roomId(it) == request.url.parameters["roomId"] }
+                    ?: return """{"code":"collaboration_conversation_not_found"}""" to
+                        HttpStatusCode.NotFound
+            return wire(summary(id))
+        }
         if (path == "$base/summaries") {
             val after = request.url.parameters["after"]
             val limit = request.url.parameters["limit"]?.toInt() ?: 30

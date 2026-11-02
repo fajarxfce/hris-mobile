@@ -63,6 +63,16 @@ class CollaborationConversationApi(
             forSession(session)
         }
 
+    suspend fun summaryByRoom(
+        session: String,
+        company: String,
+        roomId: String,
+    ): CollaborationDirectSummaryDto =
+        client.requestJson(direct(company) + "/summary-by-room", maximumBytes = 4096) {
+            forSession(session)
+            parameter("roomId", roomId)
+        }
+
     suspend fun open(
         session: String,
         company: String,

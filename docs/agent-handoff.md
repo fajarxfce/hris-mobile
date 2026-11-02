@@ -1,5 +1,40 @@
 # Agent continuation — HRIS Mobile
 
+## Owned room lookup validated — 2 November 2026
+
+[Contract](collaboration-room-lookup.md) / [evidence](measurements/chat-room-lookup-2026-11-02.json):
+RefreshCollaborationList.byRoom resolves an admitted direct summary from an opaque
+room hint without directory scan, workspace selection, room creation or SDK startup.
+It shares current scope, publication mutex, encrypted list merge and retained-denial
+gates. Native transport has one encoded roomId query parameter and 4,096-byte response
+bound; repository validates request/company/participants. Platform companion
+`2124c6fc` is pushed and passes current native/RLS/HTTP/worker checks with no migration.
+
+Focused check1 passes611 domain/53 suites,351 data/46 and one real app-container
+lookup/reopen case, plus Android release/static checks,179.945s. Full root/release/
+collaboration browsers/app Wasm passes310.687s on the same15 Kotlin inputs:3,210
+desktop479 suites,222 Android host36,940 browser96 and10 build-logic2, zero failures/
+errors/skips. The measurement distinguishes newly executed tasks from valid Gradle
+UP-TO-DATE reports; domain/data desktop were already executed by focused1. No source
+correction or failed check in this increment.
+
+Apple41436278627 at exact pushed receiver headdd1a449b9a00a7323d453a48584b179c8e007416
+is ACTIVE. Ten standalone Swift extraction cases pass8s; simulator compilation431s
+and tests77s pass; full Xcode app is in progress. Do not cancel or dispatch another
+same-scope run until completion. Audit final XML/artifact/source hashes. This run
+excludes the current room lookup sources. Older41433354322 failed before runner
+allocation, as documented below, not application code.
+
+Next: apply the bounded encrypted push-priority queue, current hinted company/device
+admission and independently checked room binding, then privacy/read/mute projection,
+durable notification actions and encrypted inline replies. Candidate .txt files and
+concrete design are supplementary in .work/chat-push-priority-2026-11-02; none has yet
+been applied or tested. Keep full fair sweeps and generation fencing. Private schema103/
+API-worker2c2a59e3 and installed phone15 remain unchanged; compatible rollout plus
+release16+ can expose validated foreground/offline chat while chat push stays off.
+Notify before install, explicit10.77.77.3:5555 and --install-only. All54 groups remain
+open. No Starter port, owned emulator, active goal or subagent. Continue after push.
+
 ## Native push receive routing validated — 2 November 2026
 
 [Contract](collaboration-push-receive.md) / [evidence](measurements/chat-push-receive-2026-11-02.json):

@@ -25,6 +25,29 @@ class RefreshCollaborationList(
 ) {
     private val acquisition = Mutex()
 
+    /** Resolve an opaque room hint under the same capture, publication and denial gate as reads. */
+    suspend fun byRoom(
+        scope: CollaborationOperationScope,
+        roomId: String,
+    ): AppResult<CollaborationRead<CollaborationDirectSummary>> {
+        currentCoroutineContext().ensureActive()
+        if (
+            roomId.length !in 2..255 ||
+                !roomId.startsWith('!') ||
+                roomId.any { it.code !in 33..126 }
+        )
+            return collaborationSetupFailure(
+                "client.collaboration_invalid_request",
+                FailureKind.Validation,
+            )
+        return acquire(
+            scope,
+            { conversations.summaryByRoom(it, roomId) },
+            { listOf(it) },
+            ::collaborationContentResponseClosesRead,
+        )
+    }
+
     suspend operator fun invoke(workspaceId: String, after: String? = null, limit: Int = 30) =
         invoke(CollaborationOperationScope.Selected(workspaceId), after, limit)
 
