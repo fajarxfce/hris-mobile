@@ -2,6 +2,7 @@ package dev.fajar.starter.app.di
 
 import dev.fajar.starter.app.bootstrap.ApplicationCollaborationLifetime
 import dev.fajar.starter.app.notifications.CollaborationNotificationCommands
+import dev.fajar.starter.app.notifications.CollaborationNotificationReplies
 import dev.fajar.starter.app.work.ApplicationPush
 import dev.fajar.starter.app.work.ApplicationPushReceiver
 import dev.fajar.starter.app.work.CollaborationCompanyRecovery
@@ -23,6 +24,7 @@ import org.koin.dsl.module
 /** App entry points share one instance with the scheduler; feature use cases keep their own DI. */
 fun applicationWorkerModule() = module {
     single { CollaborationNotificationCommands(get(), get(), get(), get(), get()) }
+    single { CollaborationNotificationReplies(get(), get(), get(), get(), get(), get()) }
     single {
         val inbox = inject<InboxPushWorker>()
         val chat = inject<CollaborationRecoveryWorker>()

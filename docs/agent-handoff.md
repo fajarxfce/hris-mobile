@@ -1,5 +1,46 @@
 # Agent continuation — HRIS Mobile
 
+## Retain-first reply workflow accepted; continue durable account recovery
+
+CollaborationNotificationReplies is now the application-owned submission/resume entry
+point. It authenticates/retains input before company send admission, bounds eight
+callbacks (including active) by one eight-second total deadline, serializes turns,
+and makes recovery decline contention without extra waiters. Exact completion runs
+before and after authenticated dispatch. Matching existing commands retire input;
+changed text/old family/missing context remain held through reproduced review.
+Transient failures keep unreviewed input. A failed or cancelled dispatch may have
+committed the immutable command; retries reproduce it without issuing another send.
+Absent is distinct from CommandRetained and NeedsReview; none grants native display.
+[Contract](collaboration-notification-reply-flow.md), [evidence](measurements/chat-notification-reply-flow-2026-11-02.json).
+
+Focused16 cases/two suites pass87.246s (14 new assembled-storage application tests,
+two DI). Root/proof assembly/Wasm compile pass247.934s:3455 desktop/505 suites,
+230 Android-host/37,six proof-host/one,ten build-logic/two, with explicit reuse.
+364 fresh cases/67 suites, zero failures/errors/skips; five input hashes unchanged.
+No failed attempts. Actual encrypted SQLite reopen, fictional HTTP and simulated
+SDK; credentials retained in test memory. No new browser execution or OS-death
+notification input proof; no native receiver/display/review UI wired. No generic port.
+
+Next: independent durable account reply discovery/cursor/recovery phase. Eight
+UNAPPLIED .txt production drafts plus plan under
+.work/chat-notification-reply-recovery-2026-11-02. Tests are NOT written yet. The plan
+requires account-only opaque ID discovery (do not company-gate the cursor), exact CAS
+advance BEFORE each attempt, bounded paging with one wrap, fair progress past denied/
+slow records, no endless immediate cycle over denied input, and ordinary company
+recovery's reserved turn. Work stays immutable; Advance accepts separate expectedCursor
+as the batch progresses. Add actual SQLite/IndexedDB, domain ownership/cancellation,
+application graph and global worker reservation/ACK tests before accepting.
+Then native display journal/issuer/callbacks and explicit review UI; chat push OFF.
+Do not mistake any .txt draft or future recovery comment for activated worker wiring.
+
+Full Apple/native latest audited sources remain completion2dd94e94/1a92 below and
+exclude read/review/workflow. Dispatch full Xcode on this committed workflow source;
+follow actual CI outcomes. Current phone18/source42f5d157 and live304/schema116 unchanged.
+Keep long run, atomic commits and push each. Next validated product build >18: notify
+before install, explicit10.77.77.3:5555 --install-only, same signer/data, no phone UI.
+No local emulator running; local host hang investigation is historical, not accepted.
+All54 PRD groups remain open. Earlier checkpoints below are historical.
+
 ## Reply input read/review accepted; next application callback workflow
 
 Full Apple41508567222 attempt2 at2dd94e94ea6b74b9f4d9430f25348cb64a7f7f30

@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModelStore
 import dev.fajar.starter.app.bootstrap.ApplicationCollaborationLifetime
 import dev.fajar.starter.app.di.createAppContainer
 import dev.fajar.starter.app.notifications.CollaborationNotificationCommands
+import dev.fajar.starter.app.notifications.CollaborationNotificationReplies
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.repositories.*
 import dev.fajar.starter.collaboration.domain.usecases.*
@@ -298,6 +299,10 @@ class CollaborationBindingsTest {
                 assertSame(
                     container.koin.get<CollaborationNotificationCommands>(),
                     container.koin.get<CollaborationNotificationCommands>(),
+                )
+                assertSame(
+                    container.koin.get<CollaborationNotificationReplies>(),
+                    container.koin.get<CollaborationNotificationReplies>(),
                 )
                 assertNotNull(container.koin.get<ReadCollaborationNotificationSettings>())
                 assertNotNull(container.koin.get<PrepareCollaborationMessageNotification>())
