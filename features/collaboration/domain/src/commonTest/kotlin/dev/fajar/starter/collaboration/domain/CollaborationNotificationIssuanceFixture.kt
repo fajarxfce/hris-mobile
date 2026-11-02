@@ -144,6 +144,29 @@ internal class CollaborationNotificationIssuanceFixture {
             local.clock,
         )
 
+    val validator =
+        ValidateCollaborationNotificationPublication(
+            journal,
+            actions,
+            projection.settings.repo,
+            projection.read.repo,
+            projection.history,
+            projection.identities,
+            local.lists,
+            local.setup.sessions,
+            local.setup.workspaces,
+            local.server,
+            local.build,
+            local.clock,
+        )
+    val finisher =
+        FinishCollaborationNotificationPublication(
+            journal,
+            local.setup.sessions,
+            local.server,
+            local.build,
+        )
+
     fun scope() = projection.settings.scope().copy(nativeSessionId = parent.nativeSessionId)
 
     suspend fun message(): CollaborationMessageNotification =

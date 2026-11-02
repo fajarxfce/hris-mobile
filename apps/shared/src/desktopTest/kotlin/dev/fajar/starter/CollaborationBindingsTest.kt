@@ -329,6 +329,11 @@ class CollaborationBindingsTest {
                 )
                 assertNotNull(container.koin.get<ReadCollaborationNotificationSettings>())
                 assertNotNull(container.koin.get<PrepareCollaborationMessageNotification>())
+                assertNotNull(container.koin.get<ValidateCollaborationNotificationPublication>())
+                assertSame(
+                    container.koin.get<FinishCollaborationNotificationPublication>(),
+                    container.koin.get<FinishCollaborationNotificationPublication>(),
+                )
                 assertSame(
                     container.koin.get<IssueCollaborationMessageNotification>(),
                     container.koin.get<IssueCollaborationMessageNotification>(),

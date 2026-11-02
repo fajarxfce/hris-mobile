@@ -150,6 +150,43 @@ class CollaborationDataModule {
         )
 
     @Single
+    fun finishNotificationPublication(
+        journal: CollaborationNotificationPublicationRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) = FinishCollaborationNotificationPublication(journal, sessions, server, build)
+
+    @Factory
+    fun validateNotificationPublication(
+        journal: CollaborationNotificationPublicationRepository,
+        actions: CollaborationNotificationActionRepository,
+        settings: CollaborationNotificationSettingsRepository,
+        reads: CollaborationReadStateRepository,
+        history: CollaborationHistoryRepository,
+        identities: CollaborationIdentityRepository,
+        lists: CollaborationListRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) =
+        ValidateCollaborationNotificationPublication(
+            journal,
+            actions,
+            settings,
+            reads,
+            history,
+            identities,
+            lists,
+            sessions,
+            workspaces,
+            server,
+            build,
+            Clock.System,
+        )
+
+    @Single
     fun issueMessageNotification(
         journal: CollaborationNotificationPublicationRepository,
         actions: CollaborationNotificationActionRepository,

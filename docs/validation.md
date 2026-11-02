@@ -1,5 +1,18 @@
 # Validation
 
+## Exact notification publication lifecycle — 2 November 2026
+
+[Lifecycle](collaboration-notification-publication-lifecycle.md) passes62 fresh focused
+cases and root checks in378.476s:3565 desktop/515 suites,230 Android-host/37, six
+proof-host/one, ten build-logic/two,53 browser/four; zero failures/errors/skips.
+[Evidence](measurements/chat-notification-lifecycle-2026-11-02.json) preserves ten source
+hashes and2039 fresh cases/252 suites. Actual Koin/SQLite tests cover reopen, old-family
+cleanup despite company denial, stale privacy render and cancellation after commit.
+Published here is test metadata; native OS publication/actions remain pending.
+Earlier raw-journal sourcebb95ff1d also passes [audited full Apple](measurements/chat-notification-publication-apple-2026-11-02.json):
+895 simulator cases/101 suites and full Xcode964s,150 source hashes and artifact
+digest verified. That run excludes subsequent issuance and this lifecycle.
+
 ## Admitted chat notification issuance — 2 November 2026
 
 [Issuance](collaboration-notification-issuance.md) passes55 focused cases with explicit

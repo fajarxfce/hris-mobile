@@ -2,9 +2,10 @@
 
 The [raw journal](collaboration-notification-publications.md) and
 [admitted issuance](collaboration-notification-issuance.md) now have separate contracts
-and recorded validation. They do not activate native notifications. Continue through
-exact native revalidation, serialized publication/cleanup, callbacks and retained-input
-review; keep chat push off until that flow is usable.
+and recorded validation. [Exact validation and settlement](collaboration-notification-publication-lifecycle.md)
+are also implemented. They do not activate native notifications. Continue through
+serialized publication/cleanup, callbacks and retained-input review; keep chat push off
+until that flow is usable.
 
 1. Inspect PrepareCollaborationMessageNotification and current app/native push lifetimes before changing boundaries. Its Ready projection includes access/conversation/room/event/contentHash/settingsVersion/readVersion/preview/sender/body. It is preparation only, not a lasting OS publication grant.
 2. Add a bounded account-owned encrypted publication journal under existing collaboration-history credentials (create=false). Keep stable opaque native-card ID per company/conversation and fresh render UUID. Persist exact action envelopes plus immutable projection source stamps BEFORE OS publication; replay that render after uncertainty rather than resealing it. Never put decrypted chat in generic plaintext notification history. Bound cards/bytes and raw ID page discovery; exact CAS and original owner checks throughout.

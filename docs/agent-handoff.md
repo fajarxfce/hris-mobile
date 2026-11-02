@@ -1,5 +1,53 @@
 # Agent continuation — HRIS Mobile
 
+## Exact publication lifecycle accepted; continue native integration
+
+ValidateCollaborationNotificationPublication checks an exact active render against
+current native parent/company/source and all authenticated actions, then rereads the
+journal. FinishCollaborationNotificationPublication acknowledges Published or retires
+Dismissed/Cancelled by exact CAS, strips retired preview/actions and returns opaque
+metadata. Same account may clean its older native family under company denial, but
+cannot publish it. Both operations are finite8s; Finish is singleton/nonwaiting.
+Internal authentication is shared with issuance without UC-to-UC calls. These are
+point-in-time domain operations, not a lasting OS lease or distributed transaction.
+[Contract](collaboration-notification-publication-lifecycle.md),
+[evidence](measurements/chat-notification-lifecycle-2026-11-02.json).
+
+Focused1 passed159.318s,62 fresh cases/seven suites:14 lifecycle domain,16 issuance,
+14 raw publication, nine envelopes, four actual application lifecycle, three issuance
+integration and two DI cases. Full2 passed378.476s:3565 desktop/515 suites,230 Android
+host/37, six proof-host/one, ten build-logic/two,53 browser/four.2039 fresh cases/252
+suites; zero failures/errors/skips; ten frozen input hashes. Quality/architecture74/
+detekt, proof assembly and shared Wasm compilation passed. SQLite/application reopen
+uses fictional HTTP/simulated SDK and memory fixture credentials; no OS display or
+notification-input process-death proof. No failed check in this increment.
+
+NEXT serialize native publication and exact-render cancellation in an application-owned
+lease, cancel/join invalidation and handle namespace cleanup independently of old
+account decryption. Connect admitted priority candidates before wake acknowledgment;
+ordinary/backfill discovery and focused-thread suppression still need explicit policy.
+Then native adapters/actions, retained-input review and notification-specific OS-death
+proof. The supplemental .work/chat-notification-native-next-2026-11-02/plan.txt remains
+design beyond the now-implemented lifecycle. No native callback/display is active.
+Use UI/UX/Compose skills for UI and dedicated emulator, never user-phone automation.
+
+Raw-journal [Apple41539628582](https://github.com/fajarxfce/hris-mobile/actions/runs/41539628582)
+atbb95ff1d passes independently audited895 simulator cases/101 suites and full Xcode
+964s (test compilation637s/execution102s), zero failures/errors/skips.150 source
+hashes and GitHub artifact digest verified; artifact13188010537, ZIP SHA256
+8ca4c79714ae4d319c2d762d1cc37fba650bbd2e98039fbd63c89e0877e916d8.
+[Apple evidence](measurements/chat-notification-publication-apple-2026-11-02.json).
+This excludes issuer017 and this lifecycle; later consolidated Apple must cover them.
+Native1eb/41523212486 remains the last independent five-case audit and excludes
+notification inputs. No local heavy Gradle job or owned emulator remains here.
+
+Phone19/sourcec0 remains installed. Build the next product release with version>19,
+notify immediately before explicit10.77.77.3:5555 install-only, preserve signer/data,
+and do not launch its UI. Chat exists; native notification actions/call/video/meeting
+UI remain absent. Live304/schema116/chat push OFF, all54 PRD groups open. No Starter
+port for HRIS policies. Continue long run with atomic commits/pushes; older sections
+below are historical.
+
 ## Admitted issuance accepted; continue exact native validation and cleanup
 
 IssueCollaborationMessageNotification now retains an admitted exact Prepared render,

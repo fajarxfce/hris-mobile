@@ -151,16 +151,7 @@ class IssueCollaborationMessageNotification(
         previous: CollaborationNotificationPublication,
         original: CollaborationHistoryMessage,
     ): AppResult<CollaborationNotificationIssuance> {
-        val tokens = requireNotNull(previous.body.actions)
-        val supplied = listOf(tokens.reply, tokens.markRead, tokens.mute, tokens.dismiss)
-        val opened = mutableListOf<CollaborationNotificationAction>()
-        for (token in supplied) {
-            val result = authority.checked(parent, message) { actions.open(parent, token) }
-            if (result is AppResult.Failed) return result
-            opened += (result as AppResult.Success).value
-        }
-        if (!validCollaborationPublicationActions(previous.body, opened))
-            return notificationPublicationFailure(FailureKind.Conflict)
+        authority.authenticate(previous.body, actions).let { if (it is AppResult.Failed) return it }
         confirm(parent, message, original).let { if (it is AppResult.Failed) return it }
         // An external writer may have replaced this render while its envelopes were being checked.
         val current =
