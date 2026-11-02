@@ -30,6 +30,11 @@ class MatrixProofInstrumentation : Instrumentation() {
             runBlocking {
                 withTimeout(if (scenario.startsWith("hris-worker-")) 210_000 else 120_000) {
                     when (scenario) {
+                        "work-wake" -> CollapsedSchedulingProbe(targetContext, directory).run()
+                        "work-wake-stage" ->
+                            CollapsedSchedulingProbe(targetContext, directory).stage()
+                        "work-wake-resume" ->
+                            CollapsedSchedulingProbe(targetContext, directory).run(resuming = true)
                         "provider" -> NativeMatrixProbe(directory).run()
                         "hris-worker-stage" ->
                             HrisWorkerMatrixProbe(targetContext, directory).stage()

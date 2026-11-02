@@ -29,6 +29,6 @@ observe the durable result. No operation attempts to undo a committed result.
 
 [Validation](measurements/chat-recovery-wake-2026-11-02.json) records ten domain and
 six data regressions on desktop/browser, plus assembled application DI and actual
-SQLite fencing. Registered all-company workers, bounded Android scheduling, FCM
-receive/decrypt and notifications are separate outstanding integration work. The
-operations currently have no application entry-point callers.
+SQLite fencing. The [bounded Android scheduler](bounded-work-scheduling.md) now has separate real
+WorkManager proof. Registered all-company workers, FCM receive/decrypt and notifications
+remain outstanding. These HRIS operations currently have no application entry-point callers.

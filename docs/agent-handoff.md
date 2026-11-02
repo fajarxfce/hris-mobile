@@ -1,41 +1,55 @@
 # Agent continuation — HRIS Mobile
 
-## Apple wake storage audited; Android scheduler proved locally — 2 November 2026
+## Bounded Android wake scheduling proved — 2 November 2026
 
-[Apple run41396150119](https://github.com/fajarxfce/hris-mobile/actions/runs/41396150119)
-at exact be8ebc7b is now completed and audited: 112 tests in30 suites,
-zero failures/errors/skips. All six AppleWorkWakeStoreTest cases run against actual
-isolated Room/BundledSQLite and pass in0.117s. Simulator compilation,
-tests, full Xcode app and generated associations pass; [exact hashes/timings](measurements/work-wake-storage-2026-11-02.json).
-This source boundary excludes later HRIS recovery policy and the current scheduler.
+[Contract](bounded-work-scheduling.md) / [evidence](measurements/android-collapsed-work-2026-11-02.json):
+opted-in fresh task keys use two independently named slots. A query after the
+caller commits a durable wake reuses a waiting slot or fills a vacant slot with
+KEEP; running slots are not reused. Ordinary keys retain APPEND_OR_REPLACE. Keys
+and admitted callers are bounded to32; two running slots reject another request.
+Application processing must handle two OS jobs without duplicate native ownership.
+No employee task opts in yet; no all-company consumer/FCM activation is claimed.
 
-The five current uncommitted scheduler/proof files now pass real Android proof.
-Core focus1:13 desktop/13 browser,152s /155.762s. Full2:3,024 desktop,215 Android host,
-13 worker-browser,10 build-logic,263s /267.084s. A fixture-only cancellation-cleanup
-review correction then passes proof APK/static checks in66s /70.22s; core inputs
-are unchanged. Actual native run1 passes all three scenarios in22.458s: two slots,
-40 competing requests (four accepted,36 explicit capacity failures),20 backoff
-requests reusing one ID, failed/cancelled slot reuse, other running slot retention,
-old-generation fencing and actual process-death repair. Input-only key, network,
-backoff, no dependencies and cleanup are checked against real WorkManager SQLite.
-Artifact fd6dccc8,343,275,325 bytes; five unchanged inputs throughout native proof.
+Eight new common cases pass:13 worker desktop/13 browser in152s /155.762s with
+proof Android compilation/static. Full2 passes3,024 desktop,215 Android host,13
+worker-browser and10 build-logic in263s /267.084s on five unchanged inputs. A later
+fixture-only review correction makes cleanup bounded and noncancellable, tracking
+initial reads too; proof APK/static checks pass66s /70.22s. All three production/
+shared test inputs remain identical to the full run. Actual Android run1 then
+passes all three scenarios in22.458s on five unchanged final inputs/artifact:
+40 competing requests (four accepted),20 backoff requests reuse one pending ID,
+failed/cancelled slots recover, the other running slot survives, old completions
+cannot erase later generations and a real process stop retains a recoverable wake.
+SQLite input/network/backoff/no-dependency checks and cleanup pass. Synthetic proof
+APK fd6dccc8 is343,275,325 bytes; it is not an employee APK or FCM acceptance.
 
-Next record docs/measurements and commit/push those five source/test files. Source
-base380cc654; scratch `.work/collapsed-scheduling-2026-11-02` has reports, scripts,
-contract draft and result.json. The proposed tag/chain design was rejected before
-application; current two independent slots use KEEP only on a vacant slot after a
-durable write. Ordinary keys retain APPEND_OR_REPLACE. No application key opts in.
+**Continue immediately:** push this commit, then port the three generic core/worker
+files plus the separately Mobile-proven AppleWorkWakeStoreTest wrapper to Starter.
+AndroidWorkScheduler baseline matches exactly. Preserve Starter demo/configuration;
+HRIS policy and the debug proof application remain in Mobile. Run independent root/
+worker-browser/Android/lint/production Web checks, record exact source/report hashes,
+push, then dispatch one Starter Apple-only CI and audit its downloaded XML/Xcode.
+Continue HRIS consumer implementation while that hosted run executes.
 
-Then port three generic scheduler files plus the now-proven isolated Apple database
-wrapper to Starter. AndroidWorkScheduler's baseline matches exactly there. Run own
-root/worker-browser/Android/lint/Web checks, push, then one Apple-only Starter run
-and audit its XML. HRIS policy and proof application stay in Mobile. Continue actual
-all-company recovery/receive/notifications afterward; no PRD completion yet.
+Mobile [Apple run41396150119](https://github.com/fajarxfce/hris-mobile/actions/runs/41396150119)
+at be8ebc7b is independently audited:112 cases/30 suites,zero failures/errors/skips,
+all six AppleWorkWakeStoreTest cases in0.117s, compile584s/tests84s/Xcode1166s and
+associations1s. [Storage evidence](measurements/work-wake-storage-2026-11-02.json).
+This earlier source does not include current HRIS policy or generic slot scheduler.
 
-Owned emulator5562/PID4105492 is stopped and absence verified. Port5560 was acquired
-by unrelated CodePush AVDcodepush-ci08/PID4082879; it was preserved. Never treat5560
-as owned without checking again. Phone remains15, server unchanged/push disabled,
-all54 PRD groups open. Continue after each push.
+Next actual work: native parent publication -> registered all-company consumer,
+fair company/room cursors, incoming discovery/SDK sync independent of local outgoing
+messages, then notifications/privacy/deep links/encrypted replies. Use current
+native directory and fresh per-company admissions; no FCM data can select authority.
+RefreshCollaborationList already accepts operation scope; trace Background support.
+The old tag/chain proposal was rejected BEFORE implementation because WorkManager
+can delete whole WorkSpecs and tags; do not revive it from historical notes.
+
+Owned emulator5562/PID4105492 stopped; absence verified. Port5560 is now unrelated
+CodePush AVDcodepush-ci08/PID4082879, preserved. Recheck ownership before any reuse.
+Phone remains15 from30d7faab; private server unchanged/push disabled. All54 PRD
+groups remain open. Temporary swap still active pending safe headroom. Continue
+past every commit/push; local `.work/collapsed-scheduling-2026-11-02` is supplementary.
 
 ## HRIS durable recovery request policy validated — 2 November 2026
 
