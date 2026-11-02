@@ -1,5 +1,55 @@
 # Agent continuation — HRIS Mobile
 
+## Shared admitted background worker validated — 2 November 2026
+
+[Contract](collaboration-admitted-worker.md) /
+[evidence](measurements/chat-admitted-worker-2026-11-02.json): the existing worker
+accepts an ephemeral background admission. It loads exact setup/readmission before
+captured local recovery and finite runtime borrowing, then shares all existing
+room/outbox/history algorithms. It never reads or changes workspace selection in
+that entry. The remaining original wall/monotonic budget includes setup/acquisition;
+per-room12s limits remain. Both scheduled selected and background entries return
+Retry(busy) immediately when occupied instead of joining a waiting queue.
+
+The worker owns one finite reference and independent credential/runtime/local
+access monitors. Interruption cannot wait for an initial access-flow emission;
+failed references cannot start delivery. Pending work and observations are cancelled
+and joined before reference release. Background history focus capacity defers
+recovery without foreground reclamation or resending; foreground ownership survives
+reference release. Platform job inputs stay task-key-only, never serialized grants.
+
+All16 new application cases pass within43 actual app collaboration tests;509 domain
+cases, two assembled DI cases, proof Kotlin compilation and static checks pass in
+71s /74.704s. The first52s /56.244s run retained two assertion failures: an old test
+expected the second worker invocation to wait, and a new test omitted the already
+closed staging queue from its count. Both assertions now reflect explicit behavior;
+product Kotlin stayed unchanged. Final seven-input root and app Wasm compilation
+pass in327s /330.664s: 2,976 desktop, 209 Android host and 10 build-logic
+cases, zero failures/skips. This app-only increment does not rerun browser tests;
+prior d8ebe56f records781 passing affected browser cases. No new JNI/APK/phone run.
+
+**Continue immediately:** fix MaintainCollaborationRuntimeOwnership initial parent
+readiness while Workspace.observe is pending, preserve the last actual workspace
+for same-parent token rotation, and anchor effective time/hard expiry monotonically
+across repeated session/workspace emissions and clock rollback. Reuse the existing
+single application collector; do not replace WorkspaceRepository. Detailed design
+notes are supplementary at `.work/background-worker-2026-11-02/next-parent-notes.txt`.
+A three-file/seven-case parent candidate is UNAPPLIED/UNTESTED at
+`.work/background-worker-2026-11-02/parent-candidate.json`; verify baseline hashes
+before applying and review its initial-parent-only observation expectations. Preserve prior collector/cleanup,
+denial and timer regressions; test pending initial observation, replacement/logout,
+old-source cancellation, foreground preservation and nonresurrection after expiry.
+
+Then persist collapsed all-company wake generations and fair company/room cursors,
+consume owned native-directory pages plus reconnect/periodic full sweeps, and wire
+real receive/decrypt, notification privacy/read/mute/deep links and encrypted inline
+reply. Background worker entry alone is not incoming-FCM acceptance. Keep backend
+delivery disabled. Private server is still schema103/API-worker2c2a59e3, not branch116.
+Phone remains verified14 from8c557716; next meaningful install15+ must be notified,
+explicit serial, same signer/data, install-only. No generic Starter or live rollout.
+All54 PRD groups remain open; continue after each push. Owned temporary swap remains
+active pending safe cleanup; preserve unrelated CodePush jobs and AVD5558.
+
 ## Captured local delivery and frozen-draft recovery validated — 2 November 2026
 
 [Contract](collaboration-captured-recovery.md) /

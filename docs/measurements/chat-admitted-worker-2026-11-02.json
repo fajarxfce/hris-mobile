@@ -1,0 +1,154 @@
+{
+  "date": "2026-11-02",
+  "baseCommit": "d8ebe56f1718ad3054215ca5eaa3741d4f42184c",
+  "scope": "Existing bounded worker accepts ephemeral background admission, shares local/remote room work and owns a finite monitored runtime reference.",
+  "sourceSha256": {
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/work/CollaborationDeliveryWorker.kt": "84792e79c8d17cefd8582eb5c87d9f807eeea8eda37eb20b32a44c130f98e5f0",
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/work/CollaborationBackgroundDeliveryMonitor.kt": "eecf4f520eaa462d6c8c817a4ec664fbc6fe9d845c79b0880c42359a4fad8837",
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/di/ApplicationWorkerModule.kt": "7ca42903e04337825985178ff0cd2696d519685a2ae2022de4d697afce100d1b",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/fixtures/NativeWorkerSdk.kt": "3a3e99996ff82e3cb42a3138a177d85808f9c389da5a3295b18d3e39ccc89f65",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBackgroundDeliveryWorkerTest.kt": "25ccaf885811e570246be8f884fa843870c71d60c0f7d95f76837f862890d321",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/app/work/CollaborationBackgroundDeliveryMonitorTest.kt": "10c4eb6886457e830bfad6846e2694a2231287d9ccf4b595c92d5fa7c141d6b3",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationDeliveryWorkerTest.kt": "101a575971b772422b2015bddb0b62d5e57579ad75821a92b4bad8a4b62baf31"
+  },
+  "initialRun": {
+    "exitCode": 1,
+    "wallSeconds": 56.244,
+    "inputsUnchanged": true,
+    "command": [
+      "xvfb-run",
+      "-a",
+      "./gradlew",
+      ":features:collaboration:domain:desktopTest",
+      ":apps:shared:desktopTest",
+      "--tests",
+      "*Collaboration*Test",
+      ":apps:collaboration-proof:compileDebugKotlin",
+      ":formatCheck",
+      ":architectureCheck",
+      ":detekt",
+      "-Pkotlin.compiler.execution.strategy=in-process",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=1",
+      "-Dorg.gradle.jvmargs=-Xmx1536m"
+    ]
+  },
+  "validationTransitions": {
+    "attempt1": {
+      "gradleSeconds": 52,
+      "wallSeconds": 56.244,
+      "domainTests": 509,
+      "domainFailures": 0,
+      "applicationTests": 43,
+      "applicationFailures": 2,
+      "scope": "Six Kotlin inputs /16 added cases; proof/static tasks were not reached."
+    },
+    "correction": "New interruption assertion counts release of the active send queue in addition to the already closed staging queue. Existing serialized-worker test now expects immediate Retry(busy), then verifies a later explicit pass finishes without another delivery. Product Kotlin unchanged; seventh input is the existing worker test."
+  },
+  "focusedRun": {
+    "exitCode": 0,
+    "wallSeconds": 74.704,
+    "inputsUnchanged": true,
+    "command": [
+      "xvfb-run",
+      "-a",
+      "./gradlew",
+      ":features:collaboration:domain:desktopTest",
+      ":apps:shared:desktopTest",
+      "--tests",
+      "*Collaboration*Test",
+      ":apps:collaboration-proof:compileDebugKotlin",
+      ":formatCheck",
+      ":architectureCheck",
+      ":detekt",
+      "-Pkotlin.compiler.execution.strategy=in-process",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=1",
+      "-Dorg.gradle.jvmargs=-Xmx1536m"
+    ]
+  },
+  "focusedGradleSeconds": 71,
+  "focusedReports": {
+    "domain": {
+      "tests": 509,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "application": {
+      "tests": 43,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "finalRun": {
+    "exitCode": 0,
+    "wallSeconds": 330.664,
+    "inputsUnchanged": true,
+    "command": [
+      "xvfb-run",
+      "-a",
+      "./gradlew",
+      ":check",
+      ":apps:shared:compileKotlinWasmJs",
+      "-Pkotlin.compiler.execution.strategy=in-process",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=1",
+      "-Dorg.gradle.jvmargs=-Xmx1536m"
+    ]
+  },
+  "finalGradleSeconds": 327,
+  "reports": {
+    "desktopTest": {
+      "tests": 2976,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "testAndroidHostTest": {
+      "tests": 209,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "buildLogic": {
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "addedApplicationCases": 16,
+  "checked": [
+    "Selected/platform and Background entries share a no-wait mutex. Concurrent callers receive Retry(busy); a later explicit pass completes without an extra delivery.",
+    "Background setup readmits exact valid setup before captured draft/outbox discovery and finite runtime borrowing; no selected workspace reads, foreground Ensure or implicit bootstrap.",
+    "Original wall/monotonic budget includes setup and native acquisition, with per-room12s bounds. Expired admission does no I/O; pending acquisition stops at the original deadline.",
+    "Retained original command IDs and room operation receipts survive restart/lost response. History capacity defers background recovery without foreground reclamation or a replacement send.",
+    "Independent runtime/credential/local access signals cancel pending delivery, including before any first access-flow emission. Cancellation disposes observers and releases only the finite background reference.",
+    "Existing foreground ownership survives background reference release. Late cancelled acquisition is closed without publication; the fake repository cleans resources when acquisition cannot return.",
+    "509 domain and43 actual app collaboration cases pass, including two assembled DI cases, proof adapter Kotlin compilation and static checks.",
+    "Root checks and app Wasm Kotlin compilation pass on seven unchanged source inputs. Browser tests are not rerun for this app-only increment; preceding d8ebe56f records781 affected browser cases."
+  ],
+  "limits": [
+    "Application tests use actual encrypted repositories/DI and simulated SDK/control-plane wire fixtures, not new JNI or live provider acceptance.",
+    "No employee APK build or phone installation; phone remains verified release14 from8c557716.",
+    "Initial native-parent readiness and durable all-company wake/directory/reconnect/periodic coordination remain next. No incoming FCM notification or inline reply acceptance.",
+    "No live rollout or generic Starter port. Backend chat delivery stays disabled; all54 PRD groups remain open."
+  ],
+  "localEvidenceSha256": {
+    "check-1.log": "edcaedc784d4889fed624386838a147b88c49616dc213114ecc644144f2bf085",
+    "check-1.json": "318c3c4ec41fca597c38e99108faaa5ddaf28475508cebc625bff3b3579acc7d",
+    "check-2.log": "4be310bc3c79852e72000c021c08311dcc47f2c3e413dafa9ef37cd8a496326c",
+    "check-2.json": "7e1b8a2ba867fdb1c8d6f7e63054d68b01ba9e6fc44df7bd4663a119550d7190",
+    "check-3.log": "06f01ade2d6eb9eeb6df84614bf7815cb24f00f054ed8a30db5d98d838a3c0a7",
+    "check-3.json": "28fd58f83f5fec5099ff086722fd0ab4afc150ee0e792d586046171b14800b2a",
+    "inputs-1.json": "7ea4bfa4434eb621e45e01e9694628f28c0fbcc7c2accd6ba5dbd4d025a7a8e3",
+    "inputs-2.json": "9967716b63a473c0bf3ad0b8fe9a98e4c1f9ec19aab729f33a7569eb614483d7",
+    "inputs-3.json": "9967716b63a473c0bf3ad0b8fe9a98e4c1f9ec19aab729f33a7569eb614483d7",
+    "validation-transitions.json": "566b280aebf5a1d0298048e0ff60403ebd8a4a828c20cf24bce2503d5c463b21"
+  }
+}

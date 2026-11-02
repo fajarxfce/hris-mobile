@@ -5,6 +5,7 @@ import dev.fajar.starter.collaboration.domain.repositories.*
 import dev.fajar.starter.common.result.*
 import java.security.MessageDigest
 import kotlin.time.Clock
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 
 /**
@@ -21,6 +22,13 @@ class NativeWorkerSdk(private val wire: NativeCollaborationUi) : CollaborationRu
     var childOpens = 0
     var queueCloses = 0
     var restores = 0
+    var backgroundEnabled = false
+    var backgroundAcquisitions = 0
+    var backgroundPublications = 0
+    var backgroundCloses = 0
+    var beforeBackgroundReturn: suspend () -> Unit = {}
+    val backgroundInterruptions = MutableStateFlow<Failure?>(null)
+    val backgroundCredentialFailures = MutableStateFlow<Failure?>(null)
     var restoreFailure: Failure? = null
     var loseDeliveryReply = false
     var withholdOriginals = false
@@ -81,9 +89,49 @@ class NativeWorkerSdk(private val wire: NativeCollaborationUi) : CollaborationRu
         owner: CollaborationOwner,
         deviceId: String,
         lifetimeMillis: Long,
-    ): AppResult<
-        dev.fajar.starter.collaboration.domain.repositories.CollaborationBackgroundRuntimeLease?
-    > = error("No implicit background runtime")
+    ): AppResult<CollaborationBackgroundRuntimeLease?> {
+        check(backgroundEnabled) { "No implicit background runtime" }
+        check(deviceId == wire.deviceId && lifetimeMillis in 1..60_000)
+        backgroundAcquisitions++
+        val foreground = this.owner
+        val lease =
+            object : CollaborationBackgroundRuntimeLease {
+                override val owner = owner
+                override val deviceId = deviceId
+                override val interruptions = backgroundInterruptions
+                override val credentialFailures = backgroundCredentialFailures
+                private var closed = false
+                private var published = false
+
+                override fun publish(): AppResult<Unit> {
+                    check(!closed)
+                    if (!published) {
+                        published = true
+                        backgroundPublications++
+                        this@NativeWorkerSdk.owner = owner
+                    }
+                    return AppResult.Success(Unit)
+                }
+
+                override suspend fun close(): AppResult<Unit> {
+                    if (!closed) {
+                        closed = true
+                        backgroundCloses++
+                        if (published && this@NativeWorkerSdk.owner == owner)
+                            this@NativeWorkerSdk.owner = foreground
+                    }
+                    return AppResult.Success(Unit)
+                }
+            }
+        var transferred = false
+        try {
+            beforeBackgroundReturn()
+            transferred = true
+            return AppResult.Success(lease)
+        } finally {
+            if (!transferred) withContext(NonCancellable) { lease.close() }
+        }
+    }
 
     override suspend fun activatePusher(
         owner: CollaborationOwner,

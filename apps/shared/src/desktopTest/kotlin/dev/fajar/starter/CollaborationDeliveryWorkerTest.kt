@@ -224,7 +224,7 @@ class CollaborationDeliveryWorkerTest {
     }
 
     @Test
-    fun platformTaskAndForegroundRequestShareOneSerializedWorker() = runBlocking {
+    fun platformTaskAndForegroundRequestShareOneWorkerWithoutWaitingForAnotherPass() = runBlocking {
         withFixture { f ->
             val queued = f.queue()
             val platformTask =
@@ -241,12 +241,16 @@ class CollaborationDeliveryWorkerTest {
             val first = async { f.worker() }
             withTimeout(5_000) { entered.await() }
             val second = async(start = CoroutineStart.UNDISPATCHED) { platformTask() }
-            assertFalse(second.isCompleted)
+            assertTrue(second.isCompleted)
+            assertEquals(
+                "client.collaboration_delivery_busy",
+                assertIs<SyncResult.Retry>(second.await()).failure?.code,
+            )
             assertEquals(1, f.sdk.deliveries)
             release.complete(Unit)
             withTimeout(5_000) {
                 assertEquals(SyncResult.Complete, first.await())
-                assertEquals(SyncResult.Complete, second.await())
+                assertEquals(SyncResult.Complete, platformTask())
             }
             assertEquals(listOf(queued.intent.id), f.sdk.enqueued)
             assertEquals(1, f.sdk.deliveries)

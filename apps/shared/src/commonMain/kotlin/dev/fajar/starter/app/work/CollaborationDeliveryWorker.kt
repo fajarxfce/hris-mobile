@@ -2,14 +2,16 @@ package dev.fajar.starter.app.work
 
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.policies.localListAccess
+import dev.fajar.starter.collaboration.domain.repositories.CollaborationBackgroundRuntimeLease
 import dev.fajar.starter.collaboration.domain.usecases.*
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.sync.domain.*
+import kotlin.time.Clock
+import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 
 /** A bounded platform entry point. The encrypted command store, not this worker, owns intent. */
 class CollaborationDeliveryWorker(
@@ -33,14 +35,72 @@ class CollaborationDeliveryWorker(
     private val reopenHistory: ReopenCollaborationHistory,
     private val recover: RecoverCollaborationMessageReceipts,
     private val retire: RetireCollaborationMessages,
+    private val acquireBackground: AcquireCollaborationBackgroundRuntime,
+    private val clock: Clock = Clock.System,
 ) : SyncTask {
     override val key = QueueCollaborationText.DELIVERY_KEY
     private val execution = Mutex()
 
-    override suspend fun invoke(): SyncResult =
-        execution.withLock {
-            withTimeoutOrNull(60.seconds) { process() } ?: SyncResult.Retry(timeout())
+    override suspend fun invoke(): SyncResult = bounded(60.seconds) { process() }
+
+    /** Ephemeral admitted work; platform job input still contains only a durable task key. */
+    suspend operator fun invoke(admission: CollaborationBackgroundAdmission): SyncResult =
+        bounded(
+            minOf(
+                60.seconds,
+                admission.expiresAt - clock.now(),
+                -admission.monotonicDeadline.elapsedNow(),
+            )
+        ) {
+            processBackground(admission)
         }
+
+    private suspend fun bounded(budget: Duration, action: suspend () -> SyncResult): SyncResult {
+        currentCoroutineContext().ensureActive()
+        if (!execution.tryLock()) return SyncResult.Retry(busy())
+        try {
+            if (budget <= Duration.ZERO) return SyncResult.Retry(timeout())
+            return withTimeoutOrNull(budget) { action() } ?: SyncResult.Retry(timeout())
+        } finally {
+            execution.unlock()
+        }
+    }
+
+    private suspend fun processBackground(admission: CollaborationBackgroundAdmission): SyncResult {
+        val scope = CollaborationOperationScope.Background(admission)
+        // Fresh setup can readmit an old company gate before any local discovery or SDK borrowing.
+        val setup = loadSetup(scope)
+        currentCoroutineContext().ensureActive()
+        if (setup is AppResult.Failed) return deliveryFailure(setup.failure)
+        val configured = (setup as AppResult.Success).value
+        if (configured.owner != admission.owner) return SyncResult.Blocked(changed())
+        val device = configured.device ?: return SyncResult.Blocked(setupRequired())
+        val local = CollaborationLocalScope.Captured(configured.owner.localListAccess())
+        val draftResult = recoverDrafts(local)
+        currentCoroutineContext().ensureActive()
+        val found = discover(local)
+        currentCoroutineContext().ensureActive()
+        if (found is AppResult.Failed) return deliveryFailure(found.failure)
+        val work = (found as AppResult.Success).value ?: return draftResult
+        if (work.access != local.access) return SyncResult.Blocked(changed())
+        var lease: CollaborationBackgroundRuntimeLease? = null
+        try {
+            val acquired = acquireBackground(admission)
+            if (acquired is AppResult.Success) lease = acquired.value
+            currentCoroutineContext().ensureActive()
+            if (acquired is AppResult.Failed) return deliveryFailure(acquired.failure)
+            val borrowed = lease ?: return SyncResult.Blocked(setupRequired())
+            return monitorCollaborationBackgroundDelivery(
+                borrowed,
+                observeAccess(local),
+                work.access,
+            ) {
+                processPrepared(work, scope, device, draftResult)
+            }
+        } finally {
+            withContext(NonCancellable) { lease?.close() }
+        }
+    }
 
     private suspend fun process(): SyncResult {
         val draftResult = recoverDrafts()
@@ -64,6 +124,15 @@ class CollaborationDeliveryWorker(
         currentCoroutineContext().ensureActive()
         if (restored is AppResult.Failed) return deliveryFailure(restored.failure)
         if (!(restored as AppResult.Success).value.value) return SyncResult.Blocked(setupRequired())
+        return processPrepared(work, scope, device, draftResult)
+    }
+
+    private suspend fun processPrepared(
+        work: CollaborationDeliveryWork,
+        scope: CollaborationOperationScope,
+        device: CollaborationDeviceSetup,
+        draftResult: SyncResult,
+    ): SyncResult {
         var cursor = work.cursor
         var retry: Failure? = null
         var blocked: Failure? = null
@@ -359,9 +428,19 @@ class CollaborationDeliveryWorker(
             "client.collaboration_history_pending",
             "client.collaboration_runtime_opening",
             "client.collaboration_close_pending",
-            "client.collaboration_queue_busy" -> SyncResult.Retry(failure)
+            "client.collaboration_queue_busy",
+            "client.collaboration_runtime_busy",
+            "client.collaboration_history_focus_capacity",
+            "client.collaboration_revalidation_required" -> SyncResult.Retry(failure)
             else -> syncFailure(failure)
         }
+
+    private fun busy() =
+        Failure(
+            FailureKind.Unavailable,
+            "Chat delivery is already running.",
+            code = "client.collaboration_delivery_busy",
+        )
 
     private fun timeout() =
         Failure(
