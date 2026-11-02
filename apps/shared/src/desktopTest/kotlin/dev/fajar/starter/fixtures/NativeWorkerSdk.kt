@@ -42,6 +42,10 @@ class NativeWorkerSdk(private val wire: NativeCollaborationUi) : CollaborationRu
     var beforeHistory: suspend () -> Unit = {}
     var beforeResume: suspend () -> Unit = {}
     var beforeEnter: suspend () -> Unit = {}
+    val readReceipts = mutableListOf<Triple<String, String, CollaborationReadReceiptVisibility>>()
+    var activeReadReceipts = 0
+    var beforeReadReceipt: suspend () -> Unit = {}
+    var readReceiptFailure: Failure? = null
     val sender = "@fictional:example.test"
 
     fun incoming(conversationId: String, text: String): CollaborationHistoryChange.Text {
@@ -169,7 +173,18 @@ class NativeWorkerSdk(private val wire: NativeCollaborationUi) : CollaborationRu
         eventId: String,
         visibility:
             dev.fajar.starter.collaboration.domain.entities.CollaborationReadReceiptVisibility,
-    ): AppResult<Unit> = error("No implicit read receipt delivery")
+    ): AppResult<Unit> {
+        check(this.owner == owner && deviceId == wire.deviceId)
+        check(originals[matrixRoomId].orEmpty().any { it.eventId == eventId })
+        readReceipts += Triple(matrixRoomId, eventId, visibility)
+        activeReadReceipts++
+        try {
+            beforeReadReceipt()
+            return readReceiptFailure?.let { AppResult.Failed(it) } ?: AppResult.Success(Unit)
+        } finally {
+            activeReadReceipts--
+        }
+    }
 
     override suspend fun activatePusher(
         owner: CollaborationOwner,

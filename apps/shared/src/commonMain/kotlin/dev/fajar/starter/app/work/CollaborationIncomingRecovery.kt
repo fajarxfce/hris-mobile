@@ -24,6 +24,7 @@ class CollaborationIncomingRecovery(
     private val observeAccess: ObserveCollaborationAccess,
     private val enter: EnterCollaborationConversation,
     private val recoverHistory: CollaborationIncomingHistoryRecovery,
+    private val deliverReadReceipts: DeliverCollaborationReadReceipts,
     private val clock: Clock = Clock.System,
 ) {
     private val execution = Mutex()
@@ -219,10 +220,33 @@ class CollaborationIncomingRecovery(
                     deviceId,
                     CollaborationHistoryPurpose.Incoming,
                 )
-            return if (priorityEventId == null) recoverHistory(scope, key)
-            else recoverHistory.priority(scope, key, priorityEventId)
+            val receipts = receipts(scope, deviceId, conversationId, roomId)
+            if (receipts is SyncResult.Blocked) return receipts
+            // A failed metadata request still leaves an incoming turn within the room budget.
+            val recovered =
+                if (priorityEventId == null) recoverHistory(scope, key)
+                else recoverHistory.priority(scope, key, priorityEventId)
+            return combineCollaborationRecovery(receipts, recovered)
         } finally {
             withContext(NonCancellable) { child?.close() }
+        }
+    }
+
+    private suspend fun receipts(
+        scope: CollaborationOperationScope.Background,
+        deviceId: String,
+        conversationId: String,
+        roomId: String,
+    ): SyncResult {
+        val delivered =
+            withTimeoutOrNull(3.seconds) {
+                deliverReadReceipts(scope, deviceId, conversationId, roomId, limit = 2)
+            } ?: return SyncResult.Retry(failure("read_receipt_timeout"))
+        currentCoroutineContext().ensureActive()
+        return when (delivered) {
+            is AppResult.Failed -> collaborationWorkFailure(delivered.failure)
+            is AppResult.Success ->
+                if (delivered.value.remaining == 0) SyncResult.Complete else SyncResult.Retry()
         }
     }
 

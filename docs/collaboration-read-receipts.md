@@ -3,7 +3,8 @@
 Android's installed runtime now has finite public/private receipt operations and
 an own-receipt read from the SDK store. The common runtime contract now
 exposes these operations, and finite admitted replay consumes durable local read
-intents. Product worker/UI and notification invocation are still separate work. The caller must
+intents. The incoming recovery worker now invokes replay; foreground/UI and notification
+actions remain separate work. The caller must
 admit the current owner/device/room and durably retain its read intent before a
 write. Receipt timestamps never supply application event ordering.
 
@@ -65,9 +66,26 @@ Android host/10 build-logic/six proof-host cases including explicit reused tasks
 1732 cases/222 suites execute freshly, zero failures/errors/skips. Twenty-seven
 Python driver cases pass0.104s and reject missing/non-Boolean recovery claims.
 
-Product worker/foreground invocation, notification suppression/actions, privacy/mute
+Foreground invocation, notification suppression/actions, privacy/mute
 preferences and multi-device receipt reconciliation remain. A read receipt is
 separate from recipient durable delivery ACK; neither wall-clock ordering nor one
 receipt proves an unseen gap was acquired. No whole communications feature closes
 here, and live chat push remains disabled. New common code still requires hosted
 full Apple/Xcode coverage; a physical iPhone test waiver does not supply that result.
+
+The incoming worker now gives at most two pending receipts a three-second operation
+sub-budget in each admitted room turn. Native cancellation cleanup can extend that
+sub-budget; the existing room/worker lifetime still owns it. An ordinary receipt
+failure leaves a turn for acquiring incoming history; a confirmed denial keeps the
+content gate closed. Remaining intents request another fair sweep. The shared graph
+supplies the existing singleton sender. No outbox or selected workspace is required.
+
+[Worker evidence](measurements/chat-read-receipt-worker-2026-11-02.json): seven cases
+use the real shared container, encrypted SQLite and HTTP mappings with an explicit
+SDK double. They cover database reopen/no-op repeat, the two-intent limit, history
+progress after network failure/timeout, cancellation and lease cleanup, new intent
+during delivery, and retained facts after confirmed denial. Focused23 cases pass
+66.328s. Full root/proof assembly/Wasm compile pass236.840s:3306 desktop,230 Android
+host,10 build-logic and6 proof host cases including reuse;339 cases/65 suites fresh,
+zero failures/errors/skips. Initial focused check failed one assertion comparing
+safe gate copy with provider wording; kind/code and retained facts are now asserted.

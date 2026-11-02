@@ -41,7 +41,18 @@ fun applicationWorkerModule() = module {
     single { CollaborationDraftRecovery(get(), get(), get(), get(), get()) }
     single { CollaborationIncomingHistoryRecovery(get(), get(), get(), get(), get(), get()) }
     single {
-        CollaborationIncomingRecovery(get(), get(), get(), get(), get(), get(), get(), get(), get())
+        CollaborationIncomingRecovery(
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+        )
     }
     single { CollaborationPriorityRecovery(get(), get(), get(), get()) }
     single {

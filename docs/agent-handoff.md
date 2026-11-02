@@ -1,5 +1,36 @@
 # Agent continuation — HRIS Mobile
 
+## Receipt recovery worker accepted — 2 November 2026
+
+The existing incoming room turn now invokes admitted receipt replay: limit2 with
+3-second operation sub-budget, preserving incoming history progress on ordinary
+receipt failure and closing publication on confirmed denial. Remaining intents
+continue a fair sweep; cancellation joins through the existing child/runtime owner.
+No selected workspace/outbox needed. [Evidence](measurements/chat-read-receipt-worker-2026-11-02.json).
+
+Focused23 cases pass66.328s; full root/proof/Wasm pass236.840s with3306 desktop,
+230 Android host,10 build-logic,6 proof host cases including reused tasks;339 cases/
+65 suites fresh, no failures/errors/skips. Seven new shared-container/SQLite/HTTP
+cases use an SDK double. Initial focused62.360s failed only a provider-message versus
+safe-gate-copy assertion; corrected classification and retained ciphertext assertions
+pass. No new native provider or physical phone proof is claimed. Actual native
+sender/process recovery remains the accepted ae4a1b27 proof below.
+
+Hosted Apple41475111107 at04e5cf7e has passed simulator tests and is building the
+full Xcode app; audit its final reports (it does not cover this worker increment).
+Platform full Verify41475356301 at304be027 remains running. Gateway receipts still
+not deployed: live API/worker dac6fb0d/schema116, chat push OFF; phone release17.
+
+Next: apply/review staged UI work in .work/chat-visible-read-2026-11-02 AFTER this
+commit. staged.json has nine source baselines and .txt drafts; additional ReadFixture/
+ReadTest .txt drafts still need fixture wiring and lifecycle Compose tests. Drafts
+are NOT validated or accepted. They expose the authenticated history room binding,
+observe resumed/focused viewport, retain exact local read intent and request worker
+recovery. Review owner replacement, cancellation and visibility carefully. Then
+privacy/mute/notification actions and all54 groups; continue long run. Next validated
+product build goes to10.77.77.3:5555 after notice, --install-only, preserve data and
+signing, no phone UI interaction. No generic Starter port applies to HRIS policy.
+
 ## Apple validation and next integration — 2 November 2026
 
 Mobile ae4a1b27 and Platform304be027 are pushed, with actual admitted read-receipt
