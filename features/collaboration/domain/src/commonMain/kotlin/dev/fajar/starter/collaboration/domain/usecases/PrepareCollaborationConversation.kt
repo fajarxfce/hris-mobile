@@ -25,31 +25,30 @@ class PrepareCollaborationConversation(
     private val server: IdentityServer,
     private val build: AppBuild,
     private val clock: Clock,
+    private val lists: CollaborationListRepository,
 ) {
     suspend operator fun invoke(
         workspaceId: String,
         action: CollaborationConversationAction,
+    ): AppResult<CollaborationConversationCommandRecord> =
+        invoke(CollaborationOperationScope.Selected(workspaceId), action)
+
+    suspend operator fun invoke(
+        scope: CollaborationOperationScope,
+        action: CollaborationConversationAction,
     ): AppResult<CollaborationConversationCommandRecord> {
-        val captured = capture(workspaceId)
+        val captured = capture(scope)
         if (captured is AppResult.Failed) return captured
         val owner = (captured as AppResult.Success).value
-        val valid =
-            when (action) {
-                is CollaborationConversationAction.Open ->
-                    canonicalId(action.peerAccountId) && action.peerAccountId != owner.accountId
-                is CollaborationConversationAction.RequestRoom ->
-                    canonicalId(action.conversationId) &&
-                        canonicalId(action.deviceId) &&
-                        action.deviceVersion in 0..999_999 &&
-                        action.provisioningVersion?.let { it in 0..999_998 } != false
-            }
+        val valid = validAction(scope, action, owner)
         if (!valid)
             return collaborationSetupFailure(
                 "client.collaboration_invalid_command",
                 FailureKind.Validation,
             )
+        continuation(scope, owner, null).let { if (it is AppResult.Failed) return it }
         val stored = commands.current(owner, action.resourceId())
-        val admitted = continuation(workspaceId, owner, stored)
+        val admitted = continuation(scope, owner, stored)
         if (admitted is AppResult.Failed) return admitted
         if (stored is AppResult.Failed) return stored
         (stored as AppResult.Success).value?.let {
@@ -57,7 +56,7 @@ class PrepareCollaborationConversation(
         }
         if (action is CollaborationConversationAction.RequestRoom) {
             val device = setup.read(owner)
-            val current = continuation(workspaceId, owner, device)
+            val current = continuation(scope, owner, device, device)
             if (current is AppResult.Failed) return current
             if (device is AppResult.Failed) return device
             val value = (device as AppResult.Success).value
@@ -69,7 +68,7 @@ class PrepareCollaborationConversation(
             )
                 return collaborationSetupFailure("client.collaboration_setup_changed")
             val room = conversations.room(owner, action.conversationId)
-            val latest = continuation(workspaceId, owner, room)
+            val latest = continuation(scope, owner, room, room)
             if (latest is AppResult.Failed) return latest
             if (room is AppResult.Failed) return room
             val status = (room as AppResult.Success).value
@@ -99,7 +98,7 @@ class PrepareCollaborationConversation(
             )
         currentCoroutineContext().ensureActive()
         val inserted = commands.insert(owner, command)
-        val current = continuation(workspaceId, owner, inserted)
+        val current = continuation(scope, owner, inserted)
         if (current is AppResult.Failed) return current
         if (inserted is AppResult.Failed) return inserted
         when ((inserted as AppResult.Success).value) {
@@ -111,7 +110,7 @@ class PrepareCollaborationConversation(
                 return collaborationSetupFailure("client.session_changed", FailureKind.Unauthorized)
         }
         val saved = commands.current(owner, action.resourceId())
-        val latest = continuation(workspaceId, owner, saved)
+        val latest = continuation(scope, owner, saved)
         if (latest is AppResult.Failed) return latest
         if (saved is AppResult.Failed) return saved
         return (saved as AppResult.Success).value?.let { retained(it, action, owner) }
@@ -127,18 +126,43 @@ class PrepareCollaborationConversation(
             AppResult.Success(record)
         else collaborationSetupFailure("client.collaboration_conversation_pending")
 
+    private fun validAction(
+        scope: CollaborationOperationScope,
+        action: CollaborationConversationAction,
+        owner: CollaborationOwner,
+    ) =
+        collaborationControlDeviceMatches(scope, action) &&
+            when (action) {
+                is CollaborationConversationAction.Open ->
+                    canonicalId(action.peerAccountId) && action.peerAccountId != owner.accountId
+                is CollaborationConversationAction.RequestRoom ->
+                    canonicalId(action.conversationId) &&
+                        canonicalId(action.deviceId) &&
+                        action.deviceVersion in 0..999_999 &&
+                        action.provisioningVersion?.let { it in 0..999_998 } != false
+            }
+
     private fun canonicalId(value: String) =
         value.matches(Regex("[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"))
 
-    private suspend fun capture(workspaceId: String) =
-        sessions.captureCollaborationOwner(workspaceId, workspaces, server, build, clock)
+    private suspend fun capture(scope: CollaborationOperationScope) =
+        sessions.captureCollaborationOwner(scope, workspaces, server, build, clock)
 
     private suspend fun continuation(
-        workspaceId: String,
+        scope: CollaborationOperationScope,
         owner: CollaborationOwner,
         received: AppResult<*>?,
-    ): AppResult<Unit> {
-        currentCoroutineContext().ensureActive()
-        return requireCollaborationOwner(capture(workspaceId), owner, received)
-    }
+        response: AppResult<*>? = null,
+    ): AppResult<Unit> =
+        sessions.continueCollaborationControl(
+            scope,
+            owner,
+            received,
+            response,
+            lists,
+            workspaces,
+            server,
+            build,
+            clock,
+        )
 }

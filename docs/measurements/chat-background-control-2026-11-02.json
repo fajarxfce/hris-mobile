@@ -1,0 +1,170 @@
+{
+  "date": "2026-11-02",
+  "baseCommit": "57df24aae29d3bff156f3baef9470964ceba8000",
+  "scope": "Shared Selected/Background setup and conversation control; distinguish new remote denial from historical command failure.",
+  "sourceSha256": {
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/CollaborationControlContinuation.kt": "9931cac50ee4218024541fc8302b09a3a8e4e4c6e22edfa43de770a8d599f9ff",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/PrepareCollaborationConversation.kt": "221cd8e371daa4c64117f642a417a332d9165b30291e37b149b872a814c3500c",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ReplayCollaborationConversation.kt": "502c3222fbd4e71bc6df889d8a615a6858f680bacc3bc571a8630264aa806256",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ReconcileCollaborationConversation.kt": "24344771c274882b9193ae9b9c70b3f27d336ed4af6ea617e18ba1e9a64b69be",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt": "def220ac2494afcca5131b83e3f1451263cdeeff028f7ab0472b1f37d2188691",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationConversationCommandFixture.kt": "1ba1822edcc980eb2140d292b2c99f0857a605f07b0824d98d375c0118d1f04d",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadFixture.kt": "dcfcbf4b8ad501acd4f05e22d44d5a726d2379170d5f2305fb60dd97b215ebc4",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/participants/ChatParticipantsFixture.kt": "fd95d5a4aa66ca36dd6905e60e81793433a22c2e3c289cecd563aee8a2e6d09e",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationBackgroundControlTest.kt": "38fcf168430a15167f777fcd85759f52d182ce7cc7736231dde5afebabe4950c",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/LoadCollaborationSetup.kt": "dd183d65a04a4b762acb7dce1a4c9d11f37024961a927f73c1f1d27635836be8"
+  },
+  "initialRun": {
+    "exitCode": 0,
+    "wallSeconds": 158.268,
+    "inputsUnchanged": true,
+    "command": [
+      "xvfb-run",
+      "-a",
+      "./gradlew",
+      ":features:collaboration:domain:desktopTest",
+      ":features:collaboration:presentation:desktopTest",
+      ":apps:shared:desktopTest",
+      "--tests",
+      "*CollaborationBindingsTest",
+      ":apps:collaboration-proof:compileDebugKotlin",
+      ":formatCheck",
+      ":architectureCheck",
+      ":detekt",
+      "-Pkotlin.compiler.execution.strategy=in-process",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=1",
+      "-Dorg.gradle.jvmargs=-Xmx1536m"
+    ]
+  },
+  "validationTransitions": {
+    "attempt1": {
+      "domainTests": 496,
+      "presentationTests": 118,
+      "bindingTests": 2,
+      "failures": 0,
+      "gradleSeconds": 154,
+      "wallSeconds": 158.268,
+      "scope": "Nine inputs and12 new control cases."
+    },
+    "attempt2Scope": "Add typed background LoadSetup with exact active device/platform/nonregressing version validation before gate CAS; four extra cases and real LoadSetup readmission in retry test. Ten Kotlin inputs."
+  },
+  "focusedRun": {
+    "exitCode": 0,
+    "wallSeconds": 155.518,
+    "inputsUnchanged": true,
+    "command": [
+      "xvfb-run",
+      "-a",
+      "./gradlew",
+      ":features:collaboration:domain:desktopTest",
+      ":features:collaboration:presentation:desktopTest",
+      ":apps:shared:desktopTest",
+      "--tests",
+      "*CollaborationBindingsTest",
+      ":apps:collaboration-proof:compileDebugKotlin",
+      ":formatCheck",
+      ":architectureCheck",
+      ":detekt",
+      "-Pkotlin.compiler.execution.strategy=in-process",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=1",
+      "-Dorg.gradle.jvmargs=-Xmx1536m"
+    ]
+  },
+  "focusedGradleSeconds": 152,
+  "focusedReports": {
+    "domain": {
+      "tests": 500,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "presentation": {
+      "tests": 118,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "bindings": {
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "finalRun": {
+    "exitCode": 0,
+    "wallSeconds": 252.715,
+    "inputsUnchanged": true,
+    "command": [
+      "xvfb-run",
+      "-a",
+      "./gradlew",
+      ":check",
+      ":features:collaboration:domain:wasmJsBrowserTest",
+      ":features:collaboration:data:wasmJsBrowserTest",
+      "-Pkotlin.compiler.execution.strategy=in-process",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=1",
+      "-Dorg.gradle.jvmargs=-Xmx1536m"
+    ]
+  },
+  "finalGradleSeconds": 249,
+  "reports": {
+    "desktopTest": {
+      "tests": 2949,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "testAndroidHostTest": {
+      "tests": 209,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "wasmJsBrowserTest": {
+      "tests": 772,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "buildLogic": {
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "addedCases": 16,
+  "checked": [
+    "Typed setup loading validates the exact admitted active device, matching platform and nonregressing version before readmission CAS. Concurrent denial, missing or invalid setup cannot clear the company gate.",
+    "Prepare/replay/reconcile share their original command ID, outcome/version and CAS algorithms. Background RequestRoom requires the exact admitted device, including already retained commands.",
+    "Retained gates are checked before command storage and after suspending work; expiry, owner replacement and cancellation stop publication but retain already atomic intents.",
+    "Historical command failures retain explanatory priority without being treated as newly received denial. Freshly readmitted commands retry with their original operation ID.",
+    "New company/session/MFA denial retains the local gate under cancellation/failed cleanup and has precedence over failed current-owner reads. Recipient rejection remains operation-specific.",
+    "Existing selected command and presentation regressions, actual app DI, proof adapter compilation, static checks, root and affected browser targets pass."
+  ],
+  "limits": [
+    "Domain fixtures and proof adapter compilation are not new JNI/provider acceptance.",
+    "No employee APK build or phone install here. Phone remains verified release14 from8c557716.",
+    "Local delivery/draft discovery and shared application worker integration are next; no incoming FCM receive, notification or inline-reply acceptance.",
+    "Backend push remains disabled; no live schema/provider rollout or generic Starter port. All54 PRD groups remain open."
+  ],
+  "localEvidenceSha256": {
+    "check-1.log": "b37595d4ff33d8d3869473ab8863aa55a6fa33a9dffe7f9af8bf87218c8be4ed",
+    "check-1.json": "a4240808940ae54a866d3c1ef209b07c462a120193fac1dfa874f6640cf7f8a1",
+    "check-2.log": "ff4e5b500fdaf16df03eded76f6927f9612094460c6bdc70e4b56aa06528a6c1",
+    "check-2.json": "b5ddd5f0d6e687ddbe6755e1968b19296b1a3c4b7580122818d13025ddab5699",
+    "check-3.log": "498958e5cc3f64bd9bbb8143d1a3dbb47331a7e9d2fa56b1b919b3105139fcb9",
+    "check-3.json": "44cae8c788f54f710a03ef43751568df739fa6bd75e421d48d27782fcf74a733",
+    "inputs-1.json": "300bc26d04260c2eabb9497828d5cd963c66f37bed908ede02f45d00b885e86c",
+    "inputs-2.json": "048dcc9b6326f3ec245fa097954fcfcea65faac25e78b422d8625e1f1dd85eee",
+    "inputs-3.json": "048dcc9b6326f3ec245fa097954fcfcea65faac25e78b422d8625e1f1dd85eee",
+    "validation-transitions.json": "b1440aaf3aa6981c8f13ad1426389ea2683af470a0daec9b3d2b9f1d1b1bd877"
+  }
+}

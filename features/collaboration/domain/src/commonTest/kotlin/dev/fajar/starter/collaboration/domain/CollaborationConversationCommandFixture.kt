@@ -216,6 +216,7 @@ internal class ConversationCommandFixture {
             server,
             build,
             clock,
+            setup.admission.repository,
         )
 
     fun replay() =
@@ -227,6 +228,7 @@ internal class ConversationCommandFixture {
             server,
             build,
             clock,
+            setup.admission.repository,
         )
 
     fun reconcile() =
@@ -238,5 +240,6 @@ internal class ConversationCommandFixture {
             server,
             build,
             clock,
+            setup.admission.repository,
         )
 }

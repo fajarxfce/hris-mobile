@@ -10,8 +10,6 @@ import dev.fajar.starter.identity.domain.entities.IdentityServer
 import dev.fajar.starter.identity.domain.repositories.SessionRepository
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
 import kotlin.time.Clock
-import kotlinx.coroutines.currentCoroutineContext
-import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
@@ -24,6 +22,7 @@ class ReplayCollaborationConversation(
     private val server: IdentityServer,
     private val build: AppBuild,
     private val clock: Clock,
+    private val lists: CollaborationListRepository,
 ) {
     private val execution = Mutex()
 
@@ -31,14 +30,21 @@ class ReplayCollaborationConversation(
         workspaceId: String,
         commandId: String,
     ): AppResult<CollaborationConversationCommandRecord> =
+        invoke(CollaborationOperationScope.Selected(workspaceId), commandId)
+
+    suspend operator fun invoke(
+        scope: CollaborationOperationScope,
+        commandId: String,
+    ): AppResult<CollaborationConversationCommandRecord> =
         execution.withLock {
             val owner =
-                when (val captured = capture(workspaceId)) {
+                when (val captured = capture(scope)) {
                     is AppResult.Failed -> return@withLock captured
                     is AppResult.Success -> captured.value
                 }
+            continuation(scope, owner, null).let { if (it is AppResult.Failed) return@withLock it }
             val stored = commands.get(owner, commandId)
-            val admitted = continuation(workspaceId, owner, stored)
+            val admitted = continuation(scope, owner, stored)
             if (admitted is AppResult.Failed) return@withLock admitted
             val record =
                 when (stored) {
@@ -51,15 +57,20 @@ class ReplayCollaborationConversation(
                 }
             if (record.command.id != commandId || record.command.binding != owner.setupBinding())
                 return@withLock collaborationSetupFailure("client.collaboration_command_changed")
+            if (!collaborationControlDeviceMatches(scope, record.command.action))
+                return@withLock collaborationSetupFailure(
+                    "client.collaboration_invalid_command",
+                    FailureKind.Validation,
+                )
             if (record.outcome is CollaborationConversationOutcome.Confirmed)
                 return@withLock AppResult.Success(record)
             if (record.attempts >= 1_000)
                 return@withLock collaborationSetupFailure("client.collaboration_attempt_limit")
-            deliver(workspaceId, owner, record)
+            deliver(scope, owner, record)
         }
 
     private suspend fun deliver(
-        workspaceId: String,
+        scope: CollaborationOperationScope,
         owner: CollaborationOwner,
         original: CollaborationConversationCommandRecord,
     ): AppResult<CollaborationConversationCommandRecord> {
@@ -85,7 +96,7 @@ class ReplayCollaborationConversation(
             }
         val preparedOwner =
             continuation(
-                workspaceId,
+                scope,
                 owner,
                 if (preparing is AppResult.Failed) preparing
                 else previousFailure?.let { AppResult.Failed(it) },
@@ -97,11 +108,11 @@ class ReplayCollaborationConversation(
                 if (!saved.value)
                     return collaborationSetupFailure("client.collaboration_command_changed")
         }
-        val admitted =
-            continuation(workspaceId, owner, previousFailure?.let { AppResult.Failed(it) })
+        val admitted = continuation(scope, owner, previousFailure?.let { AppResult.Failed(it) })
         if (admitted is AppResult.Failed) return admitted
+        val response = send(owner, original.command)
         val result =
-            when (val delivered = send(owner, original.command)) {
+            when (val delivered = response) {
                 is AppResult.Failed ->
                     AppResult.Failed(
                         retainCollaborationCommandFailure(
@@ -112,7 +123,7 @@ class ReplayCollaborationConversation(
                     )
                 is AppResult.Success -> delivered
             }
-        val current = continuation(workspaceId, owner, result)
+        val current = continuation(scope, owner, result, response)
         if (current is AppResult.Failed) return current
         val outcome =
             when (result) {
@@ -140,7 +151,7 @@ class ReplayCollaborationConversation(
                     )
                 )
             else result
-        val latest = continuation(workspaceId, owner, completion)
+        val latest = continuation(scope, owner, completion)
         if (latest is AppResult.Failed) return latest
         // Confirmed access failures remain authoritative even when outcome persistence fails.
         if (completion is AppResult.Failed) return completion
@@ -185,15 +196,24 @@ class ReplayCollaborationConversation(
         }
     }
 
-    private suspend fun capture(workspaceId: String) =
-        sessions.captureCollaborationOwner(workspaceId, workspaces, server, build, clock)
+    private suspend fun capture(scope: CollaborationOperationScope) =
+        sessions.captureCollaborationOwner(scope, workspaces, server, build, clock)
 
     private suspend fun continuation(
-        workspaceId: String,
+        scope: CollaborationOperationScope,
         owner: CollaborationOwner,
         received: AppResult<*>?,
-    ): AppResult<Unit> {
-        currentCoroutineContext().ensureActive()
-        return requireCollaborationOwner(capture(workspaceId), owner, received)
-    }
+        response: AppResult<*>? = null,
+    ): AppResult<Unit> =
+        sessions.continueCollaborationControl(
+            scope,
+            owner,
+            received,
+            response,
+            lists,
+            workspaces,
+            server,
+            build,
+            clock,
+        )
 }

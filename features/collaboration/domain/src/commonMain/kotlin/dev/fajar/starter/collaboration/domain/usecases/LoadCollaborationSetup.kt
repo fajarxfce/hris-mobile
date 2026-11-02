@@ -20,8 +20,11 @@ class LoadCollaborationSetup(
     private val clock: Clock,
     private val replicas: CollaborationListRepository,
 ) {
-    suspend operator fun invoke(workspaceId: String): AppResult<CollaborationSetup> {
-        val captured = capture(workspaceId)
+    suspend operator fun invoke(workspaceId: String): AppResult<CollaborationSetup> =
+        invoke(CollaborationOperationScope.Selected(workspaceId))
+
+    suspend operator fun invoke(scope: CollaborationOperationScope): AppResult<CollaborationSetup> {
+        val captured = capture(scope)
         if (captured is AppResult.Failed) return captured
         val owner = (captured as AppResult.Success).value
         val access = owner.localListAccess()
@@ -35,7 +38,7 @@ class LoadCollaborationSetup(
                     requireNotNull(retainedDenial)
                 else failure
             )
-        val before = requireCollaborationOwner(capture(workspaceId), owner, null)
+        val before = requireCollaborationOwner(capture(scope), owner, null)
         if (before is AppResult.Failed) return failed(before.failure)
         val result = setup.read(owner)
         if (result is AppResult.Failed && collaborationListResponseClosesRead(result.failure)) {
@@ -45,18 +48,27 @@ class LoadCollaborationSetup(
             }
         }
         currentCoroutineContext().ensureActive()
-        val admitted = requireCollaborationOwner(capture(workspaceId), owner, result)
+        val admitted = requireCollaborationOwner(capture(scope), owner, result)
         if (admitted is AppResult.Failed) return failed(admitted.failure)
         if (result is AppResult.Failed) return failed(result.failure)
+        val device = (result as AppResult.Success).value
+        if (
+            scope is CollaborationOperationScope.Background &&
+                (device?.id != scope.admission.observation.deviceId ||
+                    device.version < scope.admission.observation.deviceVersion ||
+                    device.state != CollaborationDeviceState.ACTIVE ||
+                    device.platform.name != build.platform.name.uppercase())
+        )
+            return failed(collaborationSetupFailure("client.collaboration_setup_changed").failure)
         val reopened = replicas.admit(access, gate.revision)
         currentCoroutineContext().ensureActive()
-        val current = requireCollaborationOwner(capture(workspaceId), owner, reopened)
+        val current = requireCollaborationOwner(capture(scope), owner, reopened)
         if (current is AppResult.Failed) return failed(current.failure)
         if (reopened is AppResult.Failed) return failed(reopened.failure)
         if (!(reopened as AppResult.Success).value) {
             val latest = replicas.admission(access)
             currentCoroutineContext().ensureActive()
-            val finalOwner = requireCollaborationOwner(capture(workspaceId), owner, latest)
+            val finalOwner = requireCollaborationOwner(capture(scope), owner, latest)
             if (finalOwner is AppResult.Failed) return failed(finalOwner.failure)
             return when (latest) {
                 is AppResult.Failed -> failed(latest.failure)
@@ -65,9 +77,9 @@ class LoadCollaborationSetup(
                         ?: failed(collaborationListConflict().failure)
             }
         }
-        return AppResult.Success(CollaborationSetup(owner, (result as AppResult.Success).value))
+        return AppResult.Success(CollaborationSetup(owner, device))
     }
 
-    private suspend fun capture(workspaceId: String) =
-        sessions.captureCollaborationOwner(workspaceId, workspaces, server, build, clock)
+    private suspend fun capture(scope: CollaborationOperationScope) =
+        sessions.captureCollaborationOwner(scope, workspaces, server, build, clock)
 }

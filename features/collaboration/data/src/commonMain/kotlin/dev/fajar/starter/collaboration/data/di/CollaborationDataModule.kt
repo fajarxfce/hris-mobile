@@ -700,6 +700,7 @@ class CollaborationDataModule {
         workspaces: WorkspaceRepository,
         server: IdentityServer,
         build: AppBuild,
+        lists: CollaborationListRepository,
     ) =
         PrepareCollaborationConversation(
             commands,
@@ -710,6 +711,7 @@ class CollaborationDataModule {
             server,
             build,
             Clock.System,
+            lists,
         )
 
     @Single
@@ -720,6 +722,7 @@ class CollaborationDataModule {
         workspaces: WorkspaceRepository,
         server: IdentityServer,
         build: AppBuild,
+        lists: CollaborationListRepository,
     ) =
         ReplayCollaborationConversation(
             commands,
@@ -729,6 +732,7 @@ class CollaborationDataModule {
             server,
             build,
             Clock.System,
+            lists,
         )
 
     @Factory
@@ -739,6 +743,7 @@ class CollaborationDataModule {
         workspaces: WorkspaceRepository,
         server: IdentityServer,
         build: AppBuild,
+        lists: CollaborationListRepository,
     ) =
         ReconcileCollaborationConversation(
             commands,
@@ -748,6 +753,7 @@ class CollaborationDataModule {
             server,
             build,
             Clock.System,
+            lists,
         )
 
     @Factory

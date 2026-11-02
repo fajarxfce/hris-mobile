@@ -1,5 +1,50 @@
 # Agent continuation — HRIS Mobile
 
+## Background setup and conversation control validated — 2 November 2026
+
+[Contract](collaboration-background-control.md) /
+[evidence](measurements/chat-background-control-2026-11-02.json): LoadSetup and
+Prepare/Replay/ReconcileConversation share Selected/Background remote admission.
+Background never reads workspace selection and binds room requests to the exact
+admitted device. Setup readmission requires the matching active device/platform and
+nonregressing version before gate CAS. Retained denial and committed-intent rules
+remain in force through cancellation, expiry and native-parent replacement.
+
+Historical command failure is deliberately separate from a newly received denial.
+A fresh admitted retry keeps its original operation without closing the company
+again merely because its old explanatory failure was a denial. Newly observed HRIS
+denials still retain the gate under failed cleanup or owner reads.
+
+All 16 added cases pass within 500 domain and 118 presentation tests; both actual
+app DI cases, proof adapter compilation and static checks pass in152s /155.518s.
+Initial nine-input/12-case checks also passed496 domain,118 presentation and two DI
+cases in154s /158.268s before the setup extension. Final ten-input root/browser checks
+pass in249s /252.715s: 2,949 desktop, 209 Android host, 772 browser
+and 10 build-logic cases, zero failures/errors/skips. No new JNI or APK run.
+Phone remains verified14 from8c557716; no install or server change here.
+
+**Continue immediately:** captured local delivery/draft discovery/cursors and
+queue/confirm/suspend, then shared application worker integration. An eighteen-file
+candidate with nine new domain and two actual application cases is UNAPPLIED and
+UNTESTED at `.work/background-control-2026-11-02/next-local-candidate.json`.
+Verify all baseline hashes before applying. It carries explicit local scope in work
+records, preserves selected String entry points, reuses access observation and
+prepares the existing worker's inner pass with separate local/remote scopes. It
+adds a captured draft-recovery entry; scheduled delivery remains selected-only.
+Validate domain, all actual app collaboration worker cases, proof compilation,
+static checks and full root/browser checks. No fake workspace IDs or duplicated outbox.
+
+Then hold an admitted finite background runtime reference across the shared worker,
+observe interruptions/credential failure and release only that reference. Do not
+call foreground Ensure/reclamation while borrowed; history capacity defers bounded
+background recovery. Test no-wait worker admission and initial application-parent
+readiness without a first workspace emission, preserving foreground retention and
+monotonic parent deadlines across token rotation. Durable all-company collapsed
+wake generations, fair cursors, directory/reconnect/periodic sweep, notifications
+and encrypted inline replies remain required. Delivery stays disabled; all54 PRD
+groups remain open. Continue after checkpoints. No generic Starter or live rollout.
+Owned temporary swap remains active pending safe cleanup; preserve unrelated jobs.
+
 ## Captured local message/control ownership validated — 2 November 2026
 
 [Contract](collaboration-captured-local-scope.md) /

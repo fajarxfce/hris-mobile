@@ -663,6 +663,7 @@ internal class ChatThreadFixture {
                 server,
                 build,
                 clock,
+                local,
             )
         }
 

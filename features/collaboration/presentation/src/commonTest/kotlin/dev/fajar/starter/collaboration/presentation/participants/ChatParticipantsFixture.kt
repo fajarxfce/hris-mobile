@@ -202,6 +202,7 @@ internal class ChatParticipantsFixture {
                 base.server,
                 base.build,
                 base.clock,
+                local,
             ),
             ReplayCollaborationConversation(
                 commands,
@@ -211,6 +212,7 @@ internal class ChatParticipantsFixture {
                 base.server,
                 base.build,
                 base.clock,
+                local,
             ),
             RefreshCollaborationList(
                 local,
@@ -229,6 +231,7 @@ internal class ChatParticipantsFixture {
                 base.server,
                 base.build,
                 base.clock,
+                local,
             ),
         )
 }
