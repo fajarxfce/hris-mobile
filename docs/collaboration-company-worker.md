@@ -62,5 +62,6 @@ SQLite/IndexedDB tests prove the encrypted progress repository separately. Three
 domain cases cover periodic wake creation, failures and cancellation; startup tests
 cover stable-parent renewal and retained scheduling failure. The assembled container
 resolves the singleton task and its dependencies. Android release/proof Kotlin
-compilation is included. Actual WorkManager consumer and SDK/provider acceptance
-remain separate until their recorded emulator runs pass.
+compilation is included. Actual Android consumer/OS/storage execution now passes the [native proof](measurements/android-company-recovery-2026-11-02.json): 40 failed enqueues retain the newest wake, two OS tasks serialize company processing, old ACK cannot erase a new wake, and process restart preserves an uncertain attempt while advancing later companies. All three scenarios complete in 35.839 seconds; proof process and owned emulator are stopped. Directory, admission and company callbacks are synthetic; SDK/provider/FCM acceptance remains separate.
+
+Known next correction: per-company `SyncResult.Retry(null)` denotes successful bounded work with more pending commands. The current consumer treats it as a transient failure at sweep completion, introducing unnecessary backoff. Persist continuation separately from failed/uncertain work before incoming integration or employee release.

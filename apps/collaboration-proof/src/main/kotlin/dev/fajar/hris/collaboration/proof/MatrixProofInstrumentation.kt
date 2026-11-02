@@ -28,8 +28,20 @@ class MatrixProofInstrumentation : Instrumentation() {
                     android.os.Build.MODEL.contains("sdk")
             )
             runBlocking {
-                withTimeout(if (scenario.startsWith("hris-worker-")) 210_000 else 120_000) {
+                withTimeout(
+                    if (
+                        scenario.startsWith("hris-worker-") ||
+                            scenario.startsWith("company-recovery")
+                    )
+                        210_000
+                    else 120_000
+                ) {
                     when (scenario) {
+                        "company-recovery" -> CompanyRecoveryProbe(targetContext, directory).run()
+                        "company-recovery-stage" ->
+                            CompanyRecoveryProbe(targetContext, directory).stage()
+                        "company-recovery-resume" ->
+                            CompanyRecoveryProbe(targetContext, directory).run(resuming = true)
                         "work-wake" -> CollapsedSchedulingProbe(targetContext, directory).run()
                         "work-wake-stage" ->
                             CollapsedSchedulingProbe(targetContext, directory).stage()

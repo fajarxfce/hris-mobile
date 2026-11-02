@@ -1,0 +1,191 @@
+{
+  "date": "2026-11-02",
+  "consumerCommit": "338fea17b5738698f45c824cd1d6a06142050946",
+  "scope": "Actual Android WorkManager, app recovery worker, domain policy, encrypted Room and Keystore; synthetic directory/admission/company callbacks. No SDK, provider, FCM, employee release or live activation acceptance.",
+  "build": {
+    "exitCode": 0,
+    "wallSeconds": 70.996,
+    "inputsUnchanged": true,
+    "command": [
+      "xvfb-run",
+      "-a",
+      "./gradlew",
+      ":apps:collaboration-proof:assembleDebug",
+      ":formatCheck",
+      ":architectureCheck",
+      ":detekt",
+      "-Pkotlin.compiler.execution.strategy=in-process",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=1",
+      "-Dorg.gradle.jvmargs=-Xmx1536m"
+    ]
+  },
+  "native": {
+    "serial": "emulator-5562",
+    "package": "dev.fajar.hris.collaboration.proof",
+    "artifact": {
+      "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+      "sha256": "26f8c50cb6fd2ade38dd9cad8b422067cb577aa100d9704bece453478a6b545f",
+      "bytes": 343275325
+    },
+    "scenarios": {
+      "company-recovery": {
+        "wallSeconds": 1.905,
+        "priorProcessAbsent": true,
+        "instrumentation": {
+          "complete": true
+        },
+        "evidence": {
+          "burstRequests": 40,
+          "rejectedEnqueuesRetainNewestWake": true,
+          "oldSweepDidNotEraseNewWake": true,
+          "maxSimultaneousOsTasks": 2,
+          "maxCompanyProcessors": 1,
+          "companyAttempts": 14,
+          "taskCompletions": 8,
+          "retryResults": 0,
+          "companyOrder": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "cleanup": true,
+          "sdkOrProviderAccepted": false
+        }
+      },
+      "company-recovery-stage": {
+        "wallSeconds": 0.862,
+        "priorProcessAbsent": true,
+        "instrumentation": {
+          "complete": true
+        },
+        "evidence": {
+          "generation": "f1d319c0-26c0-4cf2-b4d1-bc0e83eac15b",
+          "processId": 3377,
+          "attemptPersisted": true
+        }
+      },
+      "company-recovery-resume": {
+        "wallSeconds": 31.338,
+        "priorProcessAbsent": true,
+        "instrumentation": {
+          "complete": true
+        },
+        "evidence": {
+          "processDeathRepair": true,
+          "sameWakeGeneration": true,
+          "uncertainAttemptRetriedAfterLaterCompanies": true,
+          "maxSimultaneousOsTasks": 1,
+          "maxCompanyProcessors": 1,
+          "companyAttempts": 13,
+          "taskCompletions": 7,
+          "retryResults": 1,
+          "companyOrder": [
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "cleanup": true,
+          "sdkOrProviderAccepted": false
+        }
+      }
+    },
+    "inputsSha256": {
+      "apps/android/src/main/kotlin/dev/fajar/hris/StarterApplication.kt": "7bf676e2c6d5f6a5970fb20022b9cde7c3e7ece311b10eeca78faea60be98707",
+      "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/bootstrap/ApplicationCollaborationLifetime.kt": "d6ba0aaf73a3f46ebc5120e0e0931cc99c8c59fe5c7a11b230e660dce5c65ecd",
+      "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/di/ApplicationCollaborationModule.kt": "185a7dcc014847a64a674926f2d941a91293ad4d697bcde64340fe0fc373429c",
+      "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/di/ApplicationWorkerModule.kt": "065f3bb703def3ebcc3dad315c1ca59ef3132c0c7a291b216907178c39294484",
+      "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/work/CollaborationRecoveryParent.kt": "89852f0763d330f7e9dc7cfc5c14b9ba00e7cc087bc14da2e5c60d35c2b78dcf",
+      "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/work/CollaborationRecoveryWorker.kt": "0663d4a848288464dd802890f5733e617116c22d7b6df7c634b1cfd31123f8db",
+      "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/ApplicationCollaborationLifetimeTest.kt": "ec3e2a99802aa854cbedeae4236314c37085d5ae36149bf5ec9f2587ae675c5e",
+      "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt": "d6876320e71a14292d679055cfb83bb5ebda31371bc2e94dfffbeac1cd49ffc8",
+      "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationRecoveryWorkerTest.kt": "c2328f1faad043cad24175db1d2035821a6a40dd14bed6b9a92d941a336bca5d",
+      "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/fixtures/RecoveryWorkerFixture.kt": "e4543d889fbbe10a0fd87eb3fa6f3cad7d5d13ada599bb6cd8ac3a304467c114",
+      "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt": "e834d3d865a98c668c186baa63605d650402faee8bfd7c6ffdb7bae92202e153",
+      "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/EnsureCollaborationRecoveryWake.kt": "5cb65b77654ce7eb296141f5f053d46464d60f976b104ce77f8dffd12840d7d3",
+      "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationRecoveryWakeTest.kt": "a0baa4073c49d34b98af8eb9672043f35eb3a148348a8e373e8f31266c5f64ed",
+      "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationDeliveryWorkerTest.kt": "4c90cf7e0df5bb976e9d98aec4ced645c37df7d40fe193ecee71c630d9e63c96",
+      "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/CompanyRecoveryProofOwner.kt": "1adf1f193664275e42c12c66fa32f1700e8dda321908d86727cc2351e6adeef1",
+      "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/CompanyRecoveryProbe.kt": "d2429930b06e67c60ec8d1c5de5a222b6912a25e9d9541daa1fd04a7025e47e1",
+      "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/MatrixProofInstrumentation.kt": "dbfa21d6c8d811f5c5c4d7738f8576dc73b12d0456a570ad4e2c04f48f075c47"
+    },
+    "employeeAppTouched": false,
+    "phoneTouched": false,
+    "clearedOnlyOwnedProofApplication": true,
+    "complete": true,
+    "proofProcessStopped": true,
+    "wallSeconds": 35.839,
+    "inputsUnchanged": true,
+    "apkUnchanged": true
+  },
+  "emulatorCleanup": {
+    "pid": 4184863,
+    "serial": "emulator-5562",
+    "ownershipVerified": true,
+    "exitCode": 0,
+    "processAbsent": true,
+    "wallSeconds": 1.203,
+    "otherEmulatorsTouched": false
+  },
+  "priorAttempts": {
+    "build1": "APK assembled; Detekt rejected fixture run() length. Extracted burst/resume helpers and counters; production unchanged.",
+    "build2": {
+      "exitCode": 0,
+      "wallSeconds": 66.744,
+      "inputsUnchanged": true,
+      "command": [
+        "xvfb-run",
+        "-a",
+        "./gradlew",
+        ":apps:collaboration-proof:assembleDebug",
+        ":formatCheck",
+        ":architectureCheck",
+        ":detekt",
+        "-Pkotlin.compiler.execution.strategy=in-process",
+        "--no-daemon",
+        "--no-parallel",
+        "--max-workers=1",
+        "-Dorg.gradle.jvmargs=-Xmx1536m"
+      ]
+    },
+    "native1": {
+      "wallSeconds": 6.201,
+      "failure": "ACK assertion before WorkManager completion raced pending=false publication. Stopped proof process and retained failed run, source hashes and Room snapshot; pending=0.",
+      "correction": {
+        "failure": "Native run1 saw durable pending=false before asserting the in-memory ACK result; assertion was before the worker/WorkManager completion wait. Failure database snapshot confirms pending=0.",
+        "correction": "Keep the expected generation and assert the application ACK only after actual task completion; add bounded phase diagnostics and callback/result bounds. No production changes.",
+        "changed": [
+          "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/CompanyRecoveryProbe.kt"
+        ],
+        "productionChanged": false
+      }
+    }
+  },
+  "limits": [
+    "Healthy company pagination proved; healthy per-company Retry(null) backlog is not covered and currently triggers backoff. Correct this before incoming integration/release.",
+    "Actual provider and FCM processing remain unaccepted.",
+    "Hosted Apple run41405822268 at consumer338fea17 remains active."
+  ]
+}
