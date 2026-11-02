@@ -1,5 +1,36 @@
 # Agent continuation — HRIS Mobile
 
+## Release18 installed; receipt gateway live — 2 November 2026
+
+Clean42f5d157 built signed devRelease18/1.0.0 (arm64, non-debuggable) and lint in
+477.226s. API/Firebase target, signature,16KiB alignment and compiled backup
+exclusions verified. APK87544452 bytes, SHA256
+9216942d0acb4dbdc1145138bafa6cac7e62331ab5e837b3e718c2fb218cb957.
+Two anonymous emulator cold starts pass with resumed readable UI and no crash;
+second screenshot visually inspected. Owned emulator5562/PID871456 stopped.
+
+Installed after notice with --install-only on10.77.77.3:5555 at16:39UTC in57.480s
+including pulled-APK exact verification. Same signer, appUID10962 and original
+first-install timestamp retained; no uninstall/data clear/UI launch. This is
+installation/startup evidence, not human chat or calling acceptance.
+[Evidence](measurements/android-release-phone-2026-11-02-build18.json).
+
+Platform304be027 is live at unchanged schema116 after all14 full-CI jobs and fresh
+verified recovery. Google/person/native/document fingerprints and existing Matrix
+identity/config/provider containers preserved, dashboard2124c6fc unchanged, all
+chat push flags OFF. Platform72447fb8 records the rollout. First checkpoint attempt
+used inheritedJava17 and stopped before replacement; explicitJava21 corrected it,
+with old runtime restored and verified before successful retry.
+
+Apple41480512291 at42f5d157 has passed simulator tests and is compiling full Xcode;
+audit final reports/artifact before acceptance. Earlier04e5cf7e Apple success excludes
+worker/viewport. Continue privacy/mute, notifications/actions/inline replies and
+all54 PRD groups. No generic Starter port. Chat inbox/thread UI is present; voice/
+video/meeting UI still absent. Next validated phone version must exceed18, notify
+first, explicit serial, --install-only, preserve data/signing and never drive UI.
+Continue long run and push every atomic commit. Older pending sections below are
+historical; .work release18 scripts already ran and must not blindly be repeated.
+
 ## Active viewport read marks — 2 November 2026
 
 Chat now records exact local read coverage from a resumed, focused conversation.
