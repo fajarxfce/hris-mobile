@@ -1,5 +1,31 @@
 # Agent continuation — HRIS Mobile
 
+## Release17 accepted candidate and generic port — 2 November 2026
+
+[Evidence](measurements/android-release-phone-2026-11-02-build17.json): clean c6347c75
+arm64 devRelease17 build/lint passes433.769s (Gradle7m10s), zero lint issues. APK
+87,495,300 bytes, SHA256b94aedf2b1eb81949d8eeacc82fd2906f0c85b27641e3bcc65fd8884e5fb34d2,
+same installed development signer, non-debuggable, exact Firebase/private API and
+revision metadata,16KiB alignment. Actual resource table resolves shortened backup
+XML path; both nine-domain exclusions and false backup attributes are inspected.
+Two local verifier assumptions (unshortened path/old aapt boolean text) were corrected
+without rebuilding or changing application source. Prior release16 remains intact.
+
+Starter0d4432e is pushed with identical XML/attributes after independent root/resources/
+lint70.128s:356 desktop/six build-logic, zero failures/errors/skips,44 existing warnings.
+No shared Kotlin/Apple or HRIS policy port. Mobile Apple41446374520 remains active at
+cc4c11f1 in Xcode; audit once complete. Platform full Verify41448616746 at2334e266 still
+runs; do not cancel/duplicate. Phone remains15, no installation. Before deploying17,
+finish compatible server packages/images/checkpoint/clone/rollout/grants and refresh
+phone preflight; notify and use explicitserial install-only, never phone UI driving.
+
+Next native-priority proof is staged only in .work/native-priority-2026-11-02:
+oldest of175 offline encrypted peer events, actual receiver/queue/HRIS/SDK, container
+reopens, retained global wake and unchanged traversals. Apply Mobile fixture after
+this build; Platform fixture changes must not invalidate rollout source guards.
+No claim of actual FCM/OS priority delivery. Continue notifications/actions/replies
+and all54 open groups after this candidate; this is not task completion.
+
 ## Android backup exclusions validated — 2 November 2026
 
 [Contract](android-data-extraction.md) / [evidence](measurements/android-data-extraction-2026-11-02.json):
