@@ -33,6 +33,27 @@ internal class HrisProofRuntimeAccess(private val runtime: AndroidCollaborationR
         dev.fajar.starter.collaboration.domain.repositories.CollaborationBackgroundRuntimeLease?
     > = error("No implicit background runtime")
 
+    override suspend fun readOwnReadReceipts(
+        owner: CollaborationOwner,
+        deviceId: String,
+        matrixRoomId: String,
+    ): AppResult<dev.fajar.starter.collaboration.domain.entities.CollaborationOwnReadReceipts> {
+        check(owner == runtime.owner && deviceId == runtime.deviceId)
+        return runtime.readOwnReadReceipts(matrixRoomId)
+    }
+
+    override suspend fun sendReadReceipt(
+        owner: CollaborationOwner,
+        deviceId: String,
+        matrixRoomId: String,
+        eventId: String,
+        visibility:
+            dev.fajar.starter.collaboration.domain.entities.CollaborationReadReceiptVisibility,
+    ): AppResult<Unit> {
+        check(owner == runtime.owner && deviceId == runtime.deviceId)
+        return runtime.sendReadReceipt(matrixRoomId, eventId, visibility)
+    }
+
     override suspend fun activatePusher(
         owner: CollaborationOwner,
         deviceId: String,

@@ -16,6 +16,22 @@ class UnavailableCollaborationRuntimeRepository : CollaborationRuntimeRepository
         lifetimeMillis: Long,
     ): AppResult<CollaborationBackgroundRuntimeLease?> = unavailable()
 
+    override suspend fun readOwnReadReceipts(
+        owner: CollaborationOwner,
+        deviceId: String,
+        matrixRoomId: String,
+    ): AppResult<dev.fajar.starter.collaboration.domain.entities.CollaborationOwnReadReceipts> =
+        unavailable()
+
+    override suspend fun sendReadReceipt(
+        owner: CollaborationOwner,
+        deviceId: String,
+        matrixRoomId: String,
+        eventId: String,
+        visibility:
+            dev.fajar.starter.collaboration.domain.entities.CollaborationReadReceiptVisibility,
+    ): AppResult<Unit> = unavailable()
+
     override suspend fun activatePusher(
         owner: CollaborationOwner,
         deviceId: String,

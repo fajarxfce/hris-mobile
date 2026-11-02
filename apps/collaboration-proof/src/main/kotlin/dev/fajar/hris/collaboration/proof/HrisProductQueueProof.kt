@@ -7,6 +7,7 @@ import dev.fajar.starter.collaboration.data.repositories.EncryptedCollaborationH
 import dev.fajar.starter.collaboration.data.repositories.EncryptedCollaborationHistoryTraversalRepository
 import dev.fajar.starter.collaboration.data.repositories.EncryptedCollaborationListRepository
 import dev.fajar.starter.collaboration.data.repositories.EncryptedCollaborationMessageRepository
+import dev.fajar.starter.collaboration.data.repositories.EncryptedCollaborationReadStateRepository
 import dev.fajar.starter.collaboration.data.repositories.EncryptedCollaborationReceiptRepository
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.policies.recoverCollaborationQueue
@@ -438,6 +439,7 @@ internal class HrisProductQueueProof(
                 ::reconcileProviderReferences,
             )
             .verify(setOf(sentEventId, replyEventId))
+        readStateProof().prepare(sentEventId, replyEventId)
         return HrisProofOriginalHistory(
                 { database.replicas },
                 historyKey,
@@ -460,7 +462,40 @@ internal class HrisProductQueueProof(
             .put("providerHistoryReferencesRestored", true)
             .put("providerHistoryReferencesReconciled", true)
             .put("providerHistoryRestartPreserved", true)
+            .put("nativeLocalReadIntentPrepared", true)
     }
+
+    suspend fun recoverReadState(result: org.json.JSONObject) {
+        readStateProof()
+            .recover(result.getString("senderEventId"), result.getString("recipientEventId"))
+        result.put("nativeLocalReadIntentStoreRestored", true)
+        result.put("nativeReadReceiptReplayAdmitted", true)
+        result.put("nativeReadReceiptAckUncertaintyRecovered", true)
+    }
+
+    private fun readStateProof() =
+        HrisProofReadState(
+            runtime,
+            conversationId,
+            roomId,
+            {
+                EncryptedCollaborationReadStateRepository(
+                    database.replicas,
+                    AesGcmContentCipher(),
+                    historyKey,
+                )
+            },
+            {
+                EncryptedCollaborationHistoryRepository(
+                    database.replicas,
+                    AesGcmContentCipher(),
+                    historyKey,
+                )
+            },
+            { listRepository() },
+            requireNotNull(application),
+            ::reopenDatabase,
+        )
 
     suspend fun reopenHistory(
         repository: CollaborationRuntimeRepository,

@@ -20,6 +20,22 @@ interface CollaborationRuntimeRepository {
         lifetimeMillis: Long,
     ): AppResult<CollaborationBackgroundRuntimeLease?>
 
+    /** Finite receipt lookup in an existing owned, known room. Never opens or enrolls. */
+    suspend fun readOwnReadReceipts(
+        owner: CollaborationOwner,
+        deviceId: String,
+        matrixRoomId: String,
+    ): AppResult<CollaborationOwnReadReceipts>
+
+    /** Finite unthreaded metadata write; the caller owns live admission and durable retry. */
+    suspend fun sendReadReceipt(
+        owner: CollaborationOwner,
+        deviceId: String,
+        matrixRoomId: String,
+        eventId: String,
+        visibility: CollaborationReadReceiptVisibility,
+    ): AppResult<Unit>
+
     /** Uses an installed SDK bearer and the fixed managed endpoint. Never opens or enrolls. */
     suspend fun activatePusher(owner: CollaborationOwner, deviceId: String): AppResult<Unit>
 

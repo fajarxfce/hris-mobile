@@ -1,5 +1,48 @@
 # Agent continuation — HRIS Mobile
 
+## Admitted read-receipt replay and actual recovery accepted — 2 November 2026
+
+[Contract](collaboration-read-receipts.md) / [evidence](measurements/chat-read-receipt-replay-2026-11-02.json):
+common runtime receipt entry and a singleton finite sender now consume the encrypted
+queue. Exact retained coverage/originals, live HRIS device/platform/conversation/room
+admission, another pending-intent read before SDK entry and fresh admission after
+SDK success precede identical local ACK.20-second budget, default4/max8 intents,
+no hidden retry/ordering/coalescing; concurrent points and uncertain outcomes remain.
+Confirmed remote denial is retained even when writing its gate fails. No worker,
+foreground/UI, notification or scheduler call yet.
+
+Focused133.705s passes12 domain/two assembled-container cases. Full root/proof plus
+12 browser cases PASSES292.360s:3299 desktop/230 Android host/10 build-logic/six proof
+host cases including explicit reuse;1732 cases/222 suites fresh, zero failures/errors/
+skips. Actual native113.216s passes one HRIS/PostgreSQL/Synapse/Android scenario on
+133 Mobile/25 Platform hashes. Local mark survives database reopen; provider success
+followed by interrupted app ACK leaves the intent through real OS death. The next
+process replays, acknowledges, reopens and repeats without another send. Exact local
+coverage remains. Seven receipt POSTs succeed200 (five private/two public); prior
+private isolation, three encrypted sends and all three process-death stages pass.
+27 driver cases pass0.104s. Proof APK343275325B SHA256
+6dbe4aceb281528b02f97eef9b519fce78ce28638f253eab2e72ec4e8040cd01.
+
+Local dirs .work/chat-read-receipt-replay-2026-11-02 and Platform
+.work/chat-read-receipt-replay-native-2026-11-02 retain reports/scripts. Staged .txt
+files have been applied; DO NOT reapply old baselines. Actual fixture
+.work/collaboration/37854341d48f45a0b43dc56ca73b985b has verified.json, not acceptance.json.
+Owned emulator5562/PID790095 boot26.497s, proof removed by driver, stopped1.905s.
+No emulator or heavy job remains. Phone remains17; private runtime remains
+dac6fb0d/schema116, chat push OFF. No Apple or phone acceptance is inferred.
+
+Commit/push this Mobile increment, then the three validated Platform proof/driver
+inputs with counterpart evidence. Previous local mark increment a349c84e is pushed.
+Next: dispatch full Apple/Xcode against this common integration; wire read receipt
+replay into the existing account-bound background worker and foreground chat, then
+privacy/mute and notification inline reply/actions, and continue all54 groups.
+Explicit privacy cancellation must not masquerade as server ACK or silently drop
+pending public receipts. No generic Starter port applies to these HRIS policies.
+User requests the next validated product build on the phone too: notice first,
+explicit10.77.77.3:5555 --install-only, retain signing/data, never drive phone UI.
+Chat UI is in17; voice/video/meeting UI remains absent. Continue long run; not done.
+
+
 ## Local read/mark admission accepted — 2 November 2026
 
 [Contract](collaboration-read-state.md) / [evidence](measurements/chat-read-state-policy-2026-11-02.json):

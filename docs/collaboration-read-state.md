@@ -73,6 +73,8 @@ reuse.1716 cases in220 suites execute freshly with zero failures/errors/skips. T
 first42.074s attempt stopped at a test assertion's incompatible generic expected
 type; no tests ran, and production source was unchanged by that correction.
 
-Common runtime receipt entry, admitted replay, notification suppression/actions,
-mute/privacy and multi-device receipt reconciliation remain separate integration
-work. No live chat push or whole communications feature is accepted here.
+[Common runtime entry and admitted replay](collaboration-read-receipts.md) now
+consume this queue and are proven through actual HRIS/Synapse/Android process-death
+recovery. Worker/foreground invocation, notification suppression/actions, mute/privacy
+and multi-device reconciliation remain. No live chat push or whole communications
+feature is accepted here.

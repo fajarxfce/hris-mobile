@@ -176,6 +176,23 @@ internal class CollaborationDeliveryFixture {
                 dev.fajar.starter.collaboration.domain.repositories.CollaborationBackgroundRuntimeLease?
             > = error("No implicit background runtime")
 
+            override suspend fun readOwnReadReceipts(
+                owner: CollaborationOwner,
+                deviceId: String,
+                matrixRoomId: String,
+            ): AppResult<
+                dev.fajar.starter.collaboration.domain.entities.CollaborationOwnReadReceipts
+            > = error("No implicit read receipt lookup")
+
+            override suspend fun sendReadReceipt(
+                owner: CollaborationOwner,
+                deviceId: String,
+                matrixRoomId: String,
+                eventId: String,
+                visibility:
+                    dev.fajar.starter.collaboration.domain.entities.CollaborationReadReceiptVisibility,
+            ): AppResult<Unit> = error("No implicit read receipt delivery")
+
             override suspend fun activatePusher(
                 owner: CollaborationOwner,
                 deviceId: String,

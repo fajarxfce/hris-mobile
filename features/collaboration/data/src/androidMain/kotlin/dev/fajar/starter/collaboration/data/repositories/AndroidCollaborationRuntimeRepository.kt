@@ -103,6 +103,49 @@ class AndroidCollaborationRuntimeRepository(
         }
     }
 
+    override suspend fun readOwnReadReceipts(
+        owner: CollaborationOwner,
+        deviceId: String,
+        matrixRoomId: String,
+    ): AppResult<dev.fajar.starter.collaboration.domain.entities.CollaborationOwnReadReceipts> {
+        currentCoroutineContext().ensureActive()
+        val runtime =
+            leases.singleOrNull {
+                it.owner == owner && it.deviceId == deviceId && it.availableForEntry
+            }
+                ?: return AppResult.Failed(
+                    Failure(
+                        FailureKind.Unavailable,
+                        "Chat runtime is not open.",
+                        code = "client.collaboration_runtime_not_open",
+                    )
+                )
+        return runtime.readOwnReadReceipts(matrixRoomId)
+    }
+
+    override suspend fun sendReadReceipt(
+        owner: CollaborationOwner,
+        deviceId: String,
+        matrixRoomId: String,
+        eventId: String,
+        visibility:
+            dev.fajar.starter.collaboration.domain.entities.CollaborationReadReceiptVisibility,
+    ): AppResult<Unit> {
+        currentCoroutineContext().ensureActive()
+        val runtime =
+            leases.singleOrNull {
+                it.owner == owner && it.deviceId == deviceId && it.availableForEntry
+            }
+                ?: return AppResult.Failed(
+                    Failure(
+                        FailureKind.Unavailable,
+                        "Chat runtime is not open.",
+                        code = "client.collaboration_runtime_not_open",
+                    )
+                )
+        return runtime.sendReadReceipt(matrixRoomId, eventId, visibility)
+    }
+
     override suspend fun activatePusher(
         owner: CollaborationOwner,
         deviceId: String,

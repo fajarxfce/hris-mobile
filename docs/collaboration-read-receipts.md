@@ -1,8 +1,9 @@
 # Native read-receipt transport
 
 Android's installed runtime now has finite public/private receipt operations and
-an own-receipt read from the SDK store. These are data-layer operations; they do
-not yet mark the product history read or publish a notification. The caller must
+an own-receipt read from the SDK store. The common runtime contract now
+exposes these operations, and finite admitted replay consumes durable local read
+intents. Product worker/UI and notification invocation are still separate work. The caller must
 admit the current owner/device/room and durably retain its read intent before a
 write. Receipt timestamps never supply application event ordering.
 
@@ -36,9 +37,37 @@ explicit reused reports;1,683 cases/218 suites executed freshly. Initial focused
 check97.483s passed all eight host cases but failed a101-line proof method; the
 completed-exchange evidence builder was extracted before the successful full run.
 
-Product integration still requires encrypted local read intents, exact observed
-message coverage, admitted replay, privacy/mute preferences and notification action
-ownership. A read receipt is distinct from the recipient's durable delivery ACK.
-Neither wall-clock ordering nor a receipt for one event proves an unseen history
-gap was locally acquired. No whole communications feature is accepted by this
-transport adapter, and live chat push remains disabled.
+`DeliverCollaborationReadReceipts` processes a bounded snapshot of one to eight
+retained intents (four by default) within20seconds, with shared try-lock exclusion.
+It validates exact local coverage and acquired history, then checks the current
+HRIS owner, active device/platform, conversation pair and identical mapped room.
+A second pending-intent read after that admission prevents a removed intent from
+starting transport. SDK success is followed by another current device/room
+admission before acknowledging only the identical queued entry. A concurrent new
+point remains queued. Confirmed server denial stays buffered even if saving that
+denial fails. Other failures preserve the intent; only an explicit later invocation
+replays it. There is no SDK enrollment, join, sync start or local ordering inference.
+
+The actual SDK proof marks two acquired originals through the local use case,
+reopens the encrypted database, sends a private receipt through common replay and
+interrupts its local acknowledgement. A subsequent real OS process sees the same
+pending intent and exact coverage, replays it, retains its ACK over another database
+reopen and performs a no-op repeat. Existing private-receipt isolation, protected
+SDK recovery, three encrypted sends and the other process-death stages also pass.
+[Evidence](measurements/chat-read-receipt-replay-2026-11-02.json): native113.216s,
+seven HTTP200 receipt requests (five private/two public),133 Mobile and25 Platform
+input hashes unchanged; fixture/package cleanup passed. Owned emulator5562/PID790095
+was stopped afterward. No phone work occurred.
+
+Twelve sender-policy cases plus two assembled-container cases pass133.705s. Full
+root/proof assembly and twelve browser cases pass292.360s, with3299 desktop/230
+Android host/10 build-logic/six proof-host cases including explicit reused tasks;
+1732 cases/222 suites execute freshly, zero failures/errors/skips. Twenty-seven
+Python driver cases pass0.104s and reject missing/non-Boolean recovery claims.
+
+Product worker/foreground invocation, notification suppression/actions, privacy/mute
+preferences and multi-device receipt reconciliation remain. A read receipt is
+separate from recipient durable delivery ACK; neither wall-clock ordering nor one
+receipt proves an unseen gap was acquired. No whole communications feature closes
+here, and live chat push remains disabled. New common code still requires hosted
+full Apple/Xcode coverage; a physical iPhone test waiver does not supply that result.

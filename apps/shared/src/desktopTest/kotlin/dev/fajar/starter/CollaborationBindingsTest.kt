@@ -52,6 +52,23 @@ class CollaborationBindingsTest {
                         dev.fajar.starter.collaboration.domain.repositories.CollaborationBackgroundRuntimeLease?
                     > = error("No implicit background runtime")
 
+                    override suspend fun readOwnReadReceipts(
+                        owner: CollaborationOwner,
+                        deviceId: String,
+                        matrixRoomId: String,
+                    ): AppResult<
+                        dev.fajar.starter.collaboration.domain.entities.CollaborationOwnReadReceipts
+                    > = error("No implicit read receipt lookup")
+
+                    override suspend fun sendReadReceipt(
+                        owner: CollaborationOwner,
+                        deviceId: String,
+                        matrixRoomId: String,
+                        eventId: String,
+                        visibility:
+                            dev.fajar.starter.collaboration.domain.entities.CollaborationReadReceiptVisibility,
+                    ): AppResult<Unit> = error("No implicit read receipt delivery")
+
                     override suspend fun activatePusher(
                         owner: CollaborationOwner,
                         deviceId: String,
@@ -261,6 +278,10 @@ class CollaborationBindingsTest {
                 assertNotNull(container.koin.get<CollaborationHistoryRepository>())
                 assertNotNull(container.koin.get<CollaborationReadStateRepository>())
                 assertNotNull(container.koin.get<ReadCollaborationReadState>())
+                assertSame(
+                    container.koin.get<DeliverCollaborationReadReceipts>(),
+                    container.koin.get<DeliverCollaborationReadReceipts>(),
+                )
                 assertSame(
                     container.koin.get<MarkCollaborationMessagesRead>(),
                     container.koin.get<MarkCollaborationMessagesRead>(),

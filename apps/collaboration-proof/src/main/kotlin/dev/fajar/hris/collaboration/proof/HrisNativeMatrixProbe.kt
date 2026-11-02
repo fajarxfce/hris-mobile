@@ -202,6 +202,7 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
                         body(fixture, "ackBody"),
                         transaction,
                     )
+                proof.recoverReadState(result)
                 write(
                     "gateway-precompletion-result",
                     result
@@ -504,6 +505,7 @@ internal class HrisNativeMatrixProbe(private val context: Context, private val d
                 "providerHistoryReferencesRestored",
                 "providerHistoryReferencesReconciled",
                 "providerHistoryRestartPreserved",
+                "nativeLocalReadIntentPrepared",
             )) {
             put(flag, history.remove(flag) == true)
         }
