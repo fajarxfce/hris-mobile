@@ -30,8 +30,17 @@ class MaintainCollaborationRuntimeOwnership(
 ) {
     private val observation = Mutex()
 
+    operator fun invoke(): Flow<AppResult<CollaborationOwner?>> =
+        publications().map { publication ->
+            when (publication) {
+                is AppResult.Failed -> publication
+                is AppResult.Success -> publication.value.result
+            }
+        }
+
+    /** Shares the sole observer with invoke; failures outside a value processed no retention. */
     @OptIn(ExperimentalCoroutinesApi::class)
-    operator fun invoke(): Flow<AppResult<CollaborationOwner?>> = flow {
+    fun publications(): Flow<AppResult<CollaborationRuntimePublication>> = flow {
         if (!observation.tryLock()) {
             emit(collaborationSetupFailure("client.collaboration_owner_busy"))
             return@flow
@@ -46,10 +55,14 @@ class MaintainCollaborationRuntimeOwnership(
                     }
                     val closed = runtimes.updateRetention(candidate.retention)
                     currentCoroutineContext().ensureActive()
-                    // Keep a confirmed denial even when native cleanup cannot finish yet.
                     emit(
-                        if (candidate.result is AppResult.Failed) candidate.result
-                        else if (closed is AppResult.Failed) closed else candidate.result
+                        AppResult.Success(
+                            CollaborationRuntimePublication(
+                                candidate.retention,
+                                candidate.result,
+                                closed,
+                            )
+                        )
                     )
                 }
             )

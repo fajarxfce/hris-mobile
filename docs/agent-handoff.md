@@ -1,5 +1,53 @@
 # Agent continuation — HRIS Mobile
 
+## Processed parent publication validated — 2 November 2026
+
+[Contract](collaboration-parent-readiness.md#processed-publication-and-application-lifetime) /
+[evidence](measurements/chat-parent-publication-2026-11-02.json): the same exclusive
+Maintain collector now publishes processed retention, ownership result and cleanup
+result separately. The legacy entry maps that stream with unchanged denial priority.
+Application state distinguishes Pending/Observed/Stopped; close invalidates it
+immediately and terminal atomic updates prevent late publication. Source exception
+or completion clears ownership without implicit restart. Parent-only observation
+does not schedule selected-company work or claim native acquisition readiness.
+
+Four new domain and six application cases pass within520 domain and49 actual
+application collaboration tests, including assembled DI. Proof Kotlin compilation,
+format/architecture/detekt pass in215s /218.858s. Full root, affected browser and app
+Wasm compilation pass in298s /301.988s on six unchanged inputs:2,993 desktop,
+209 Android host,792 browser and10 build-logic cases; zero failures/errors/skips.
+No new JNI/APK/install for this increment; phone remains verified15 from30d7faab.
+
+**Continue immediately:** durable collapsed wakes and all-company fair recovery.
+A nine-file raw storage candidate is UNAPPLIED/UNTESTED and incomplete under
+`.work/durable-wake-2026-11-02/candidate.json`. It adds application-global bounded
+work-wake metadata without synthetic account/session scope, Room11→12 and
+IndexedDB10→11 additions. Same-generation requests repeat unchanged; acknowledgment
+checks the exact pending generation, preserving newer requests. Complete common
+concurrency/capacity/cancellation contracts, native migration/reopen and browser
+adapter/reopen validation before applying or accepting it. It contains no message,
+account, credential or grant payload. Registered keys/generation creation and
+scheduling remain caller policy. Wire it into actual recovery after validation.
+
+Scheduling trace/design: current one-time AndroidWorkScheduler uses
+APPEND_OR_REPLACE. Official WorkManager2.12 source shows duplicate APPEND of a
+retained WorkRequest ID can create self-dependency; do not assume idempotency.
+A candidate bounded strategy persists the wake before querying unfinished work,
+reuses a pending ENQUEUED/BLOCKED task, and appends a successor when only RUNNING
+work exists. Validate ordering, concurrent enqueue, process death, retry/backoff
+and capacity with actual WorkManager before acceptance. Bound query/enqueue admission
+and unfinished work; preserve the existing finishing-worker race fix. Notes and
+read upstream sources are supplementary under `.work/parent-publication-2026-11-02`.
+
+Then use fresh native-directory/admission with fair company/room cursors, periodic/
+reconnect sweeps, real receive/decrypt, notification privacy/read/mute/deep links
+and encrypted inline replies. Native incoming receive may need captured list
+refresh beyond the existing outgoing/draft worker. Backend push stays disabled;
+all54 PRD groups remain open. No live rollout or generic Starter port yet. Proven
+generic wake foundations should return to Starter after Mobile validation. Owned
+emulator5560 is stopped; preserve unrelated5558/jobs. Temporary8GiB swap remains
+active pending safe RAM headroom. Continue after each push.
+
 ## Android release15 delivered after native recovery checks — 2 November 2026
 
 [Evidence](measurements/android-release15-2026-11-02.json): clean Mobile

@@ -1,0 +1,123 @@
+{
+  "date": "2026-11-02",
+  "baseCommit": "94d62e110a5f17da89d6445c4800c8a9fe6a520e",
+  "scope": "Explicit processed native-retention publication from the single application observer, with independent ownership/cleanup outcomes and terminal lifetime state.",
+  "sourceSha256": {
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationRuntimePublication.kt": "bc8a1f1f05218fe078053f0e1424f6e6e02fc14e9b2f45aa4968b12ba9addba4",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/MaintainCollaborationRuntimeOwnership.kt": "82f8c1be02bd0fb5f9100bf3044d259ee31728ef18604fa0f253bc4b8a51ed60",
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/bootstrap/ApplicationCollaborationState.kt": "632bc390228a33d813d5d045decdc632edba805df18ab015c66d9e019933c61d",
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/bootstrap/ApplicationCollaborationLifetime.kt": "017bf76872315359a72c9ca3c4b09f0639301972514c4261b5afc0ddc055148e",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationRuntimeOwnershipTest.kt": "ee6d0f8c52a6bbb9fbe249b56ab683e3e6faf72dc9239dd1ccec25a4e2274e58",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/ApplicationCollaborationLifetimeTest.kt": "951535b868fcf4ca96e3dedcfd4ed1bc4795c6e9b3f685440f47cf4371ed4c85"
+  },
+  "focusedRun": {
+    "exitCode": 0,
+    "wallSeconds": 218.858,
+    "inputsUnchanged": true,
+    "command": [
+      "xvfb-run",
+      "-a",
+      "./gradlew",
+      ":features:collaboration:domain:desktopTest",
+      ":apps:shared:desktopTest",
+      "--tests",
+      "*Collaboration*Test",
+      ":apps:collaboration-proof:compileDebugKotlin",
+      ":formatCheck",
+      ":architectureCheck",
+      ":detekt",
+      "-Pkotlin.compiler.execution.strategy=in-process",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=1",
+      "-Dorg.gradle.jvmargs=-Xmx1536m"
+    ]
+  },
+  "focusedGradleSeconds": 215,
+  "focusedReports": {
+    "domain": {
+      "tests": 520,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "application": {
+      "tests": 49,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "finalRun": {
+    "exitCode": 0,
+    "wallSeconds": 301.988,
+    "inputsUnchanged": true,
+    "command": [
+      "xvfb-run",
+      "-a",
+      "./gradlew",
+      ":check",
+      ":features:collaboration:domain:wasmJsBrowserTest",
+      ":features:collaboration:data:wasmJsBrowserTest",
+      ":apps:shared:compileKotlinWasmJs",
+      "-Pkotlin.compiler.execution.strategy=in-process",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=1",
+      "-Dorg.gradle.jvmargs=-Xmx1536m"
+    ]
+  },
+  "finalGradleSeconds": 298,
+  "reports": {
+    "desktopTest": {
+      "tests": 2993,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "testAndroidHostTest": {
+      "tests": 209,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "wasmJsBrowserTest": {
+      "tests": 792,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "buildLogic": {
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "addedDomainCases": 4,
+  "addedApplicationCases": 6,
+  "checked": [
+    "Legacy owner observations and typed publications share one exclusive Maintain collector and one cleanup path. A competing collector cannot acquire or close the active owners resources.",
+    "A publication is consumed only after retention processing returns and cancellation is checked. Ownership denial takes precedence in the legacy result while native cleanup failure remains separately visible.",
+    "Application lifetime begins Pending, exposes consumed Observed values and ends Stopped. Pending is not an observed empty parent. Processed parent survives cleanup failure without claiming available SDK resources.",
+    "Close invalidates application publication immediately before cancellation; atomic terminal-state updates suppress late results. Source exception/completion clears the old publication, disposes observation and never restarts implicitly.",
+    "Pending initial session/workspace, replacement/logout, repeated start and noncancellable late retention are covered. Deterministic gates release even on failed assertions.",
+    "Existing selected-owner task-key scheduling remains. A parent-only publication does not schedule selected-company delivery or perform network/native acquisition.",
+    "520 domain and49 application collaboration cases, including assembled DI, proof Kotlin compilation and static checks pass. Required root/browser checks and app Wasm compilation pass on six unchanged inputs."
+  ],
+  "limits": [
+    "Publication is a processed resource-retention observation, not live permission, native store availability or proof every cleanup operation finished. Unsupported platform adapters still reject acquisition.",
+    "Desktop application fixtures and proof compilation are not new JNI, incoming FCM or all-company coordinator acceptance. Phone remains verified release15 from30d7faab; no new APK install in this increment.",
+    "One-time Android scheduling already uses APPEND_OR_REPLACE. Future coalescing must preserve its finishing-worker race protection and explicitly test persist/schedule/ack gaps.",
+    "Durable wake storage, fair all-company cursors, incoming receive/decrypt, notifications/privacy/read/mute/deep links and encrypted inline replies remain. No live rollout or generic Starter port; all54 PRD groups remain open."
+  ],
+  "localEvidenceSha256": {
+    "check-1.log": "fca34bdb76fc1a69282afd4b65a508ab4fb6f1779e341bc23f745cedd4ba0b5d",
+    "check-1.json": "f2d5e6eeeea757314668bae60807825c1bf940c0bcda48ef5d657a3f33e409b9",
+    "check-2.log": "dcb554cdd33c166fd861728d1d865570cc73a020e1be37954312f1544ac9a996",
+    "check-2.json": "65fc6a96bd2aa636a04521d9ed640a4a752e585ae30e0912fe5212578bf7e199",
+    "inputs-1.json": "85a94fb1961fbdcea1b21e7314f5506511888a0cfd25c5e3ae9771532093e656",
+    "inputs-2.json": "85a94fb1961fbdcea1b21e7314f5506511888a0cfd25c5e3ae9771532093e656",
+    "reports-1.json": "88967bc6422f596099529c40d880814828a41549278ed72cdba4825539e52774"
+  }
+}

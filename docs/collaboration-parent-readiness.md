@@ -37,12 +37,37 @@ under clock rollback, transient read failure and forward/backward clock movement
 Existing observer exclusivity, denial, timer renewal and late cleanup cases remain.
 Initial stream expectations explicitly include the new parent-only phase.
 
-Application startup readiness still needs an explicit consumed publication signal
-for the future all-company coordinator. `ApplicationCollaborationLifetime.state`
-currently starts at `Success(null)`; that default is not evidence that native
-retention was processed. Reuse the existing collector, and keep failed cleanup
-separate from current parent identity when designing that signal. Do not start a
-second collector or use a raw FCM company/device field as authority.
+## Processed publication and application lifetime
+
+`MaintainCollaborationRuntimeOwnership.publications()` emits a typed publication
+after retention processing returns and cancellation is checked. It carries the
+processed retention, ownership outcome and cleanup outcome separately. A valid
+parent remains explicit when bounded cleanup fails; its presence never promises
+that a native store is ready. Unsupported platforms still reject acquisition.
+A failure outside the publication means this observer did not process a retention.
+
+The existing owner-result entry maps the same publication, preserving confirmed
+ownership denial ahead of cleanup failure. Both entries share one exclusive
+collector and cleanup path. They cannot observe or close each other's resources.
+
+`ApplicationCollaborationLifetime.state` distinguishes Pending, Observed and
+Stopped. A default state is no longer evidence of an observed empty parent. The
+application consumes the typed stream once. Close marks Stopped immediately, then
+cancels its owned job; atomic state updates reject late publication. Source failure
+or ordinary completion also clears the previous publication. This instance never
+restarts implicitly. Cleanup ownership and `closeAndJoin` remain explicit.
+
+Existing selected-owner task-key scheduling remains unchanged. Parent-only
+publication does not schedule selected-company delivery, open a native runtime or
+perform network work. A future all-company coordinator can consume the processed
+parent, but every acquisition still needs current server admission and registry
+checks. Raw FCM identity fields remain unsuitable as authority.
+
+[Publication validation](measurements/chat-parent-publication-2026-11-02.json)
+covers pending initial session/workspace, processed parent with failed cleanup,
+company denial priority, mutual collector exclusion, replacement/logout, repeated
+start, late noncancellable cleanup, source exception and normal completion. Four
+new domain and six application cases pass alongside existing startup/DI checks.
 
 Durable all-company wakes, fair directory/room cursors, receive/reconnect/periodic
 recovery, notification privacy/read/mute and encrypted inline replies remain open.

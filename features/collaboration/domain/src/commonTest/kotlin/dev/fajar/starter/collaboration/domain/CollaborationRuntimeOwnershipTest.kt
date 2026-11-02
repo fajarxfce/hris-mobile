@@ -21,6 +21,123 @@ import kotlinx.coroutines.test.*
 
 class CollaborationRuntimeOwnershipTest {
     @Test
+    fun typedPublicationWaitsForRetentionAndDoesNotWaitForAWorkspace() = runTest {
+        val f = OwnershipFixture(testScheduler)
+        val entered = CompletableDeferred<Unit>()
+        val release = CompletableDeferred<Unit>()
+        f.beforeWorkspaceObservation = { awaitCancellation() }
+        f.onClose = {
+            entered.complete(Unit)
+            release.await()
+            AppResult.Success(Unit)
+        }
+        val publications = mutableListOf<AppResult<CollaborationRuntimePublication>>()
+        val job = backgroundScope.launch { f.maintain.publications().collect(publications::add) }
+        try {
+            entered.await()
+            assertTrue(publications.isEmpty())
+            release.complete(Unit)
+            runCurrent()
+            val published =
+                assertIs<AppResult.Success<CollaborationRuntimePublication>>(publications.single())
+                    .value
+            assertEquals(CollaborationRuntimeRetention(f.parent, null), published.retention)
+            assertEquals(AppResult.Success(null), published.ownership)
+            assertEquals(AppResult.Success(Unit), published.cleanup)
+            job.cancelAndJoin()
+            assertNull(f.retentions.last().parent)
+            assertEquals(0, f.workspaceObservers)
+        } finally {
+            release.complete(Unit)
+            job.cancelAndJoin()
+        }
+    }
+
+    @Test
+    fun typedPublicationSeparatesParentAndCompanyDenialFromFailedNativeCleanup() = runTest {
+        val f = OwnershipFixture(testScheduler)
+        f.onClose = { f.setup.storageFailure }
+        val publications = mutableListOf<AppResult<CollaborationRuntimePublication>>()
+        val job = backgroundScope.launch { f.maintain.publications().collect(publications::add) }
+        runCurrent()
+        val foreground =
+            assertIs<AppResult.Success<CollaborationRuntimePublication>>(publications.last()).value
+        assertEquals(f.parent, foreground.retention.parent)
+        assertEquals(f.owner, foreground.retention.foreground)
+        assertEquals(AppResult.Success(f.owner), foreground.ownership)
+        assertEquals(f.setup.storageFailure, foreground.cleanup)
+        assertEquals(f.setup.storageFailure, foreground.result)
+        f.workspace.value = AppResult.Success(f.selected.copy(permissions = emptySet()))
+        runCurrent()
+        val denied =
+            assertIs<AppResult.Success<CollaborationRuntimePublication>>(publications.last()).value
+        assertEquals(f.parent, denied.retention.parent)
+        assertNull(denied.retention.foreground)
+        assertEquals(f.owner.companyId, denied.retention.deniedCompanyId)
+        assertEquals("permission_denied", assertIs<AppResult.Failed>(denied.ownership).failure.code)
+        assertEquals(f.setup.storageFailure, denied.cleanup)
+        assertEquals(denied.ownership, denied.result)
+        assertEquals("permission_denied", f.local.gate.value.denial?.code)
+        job.cancelAndJoin()
+    }
+
+    @Test
+    fun typedAndLegacyCollectorsShareOneExclusiveRuntimeObserver() = runTest {
+        for (typedFirst in listOf(false, true)) {
+            val f = OwnershipFixture(testScheduler)
+            val job =
+                backgroundScope.launch {
+                    if (typedFirst) f.maintain.publications().collect() else f.maintain().collect()
+                }
+            runCurrent()
+            val before = f.retentions.toList()
+            val busy = if (typedFirst) f.maintain().first() else f.maintain.publications().first()
+            assertEquals(
+                "client.collaboration_owner_busy",
+                assertIs<AppResult.Failed>(busy).failure.code,
+            )
+            assertEquals(before, f.retentions)
+            assertEquals(1, f.workspaceObservers)
+            job.cancelAndJoin()
+            assertNull(f.retentions.last().parent)
+            assertEquals(0, f.workspaceObservers)
+        }
+    }
+
+    @Test
+    fun typedPublicationCannotEscapeAfterCancelledLateRetention() = runTest {
+        val f = OwnershipFixture(testScheduler)
+        val entered = CompletableDeferred<Unit>()
+        val release = CompletableDeferred<Unit>()
+        f.beforeWorkspaceObservation = { awaitCancellation() }
+        var first = true
+        f.onClose = {
+            if (first) {
+                first = false
+                withContext(NonCancellable) {
+                    entered.complete(Unit)
+                    release.await()
+                }
+            }
+            AppResult.Success(Unit)
+        }
+        val publications = mutableListOf<AppResult<CollaborationRuntimePublication>>()
+        val job = backgroundScope.launch { f.maintain.publications().collect(publications::add) }
+        try {
+            entered.await()
+            job.cancel()
+            release.complete(Unit)
+            job.join()
+            assertTrue(publications.isEmpty())
+            assertNull(f.retentions.last().parent)
+            assertEquals(0, f.workspaceObservers)
+        } finally {
+            release.complete(Unit)
+            job.cancelAndJoin()
+        }
+    }
+
+    @Test
     fun pendingInitialWorkspacePublishesItsParentBeforeAddingTheObservedForeground() = runTest {
         val f = OwnershipFixture(testScheduler)
         val release = CompletableDeferred<Unit>()
