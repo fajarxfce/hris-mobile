@@ -1,24 +1,27 @@
 package dev.fajar.starter.collaboration.domain.usecases
 
-import dev.fajar.starter.collaboration.domain.policies.parseCollaborationPushSignal
-import dev.fajar.starter.collaboration.domain.policies.requestRecoveryExecution
-import dev.fajar.starter.collaboration.domain.repositories.CollaborationRecoveryWakeRepository
+import dev.fajar.starter.collaboration.domain.entities.*
+import dev.fajar.starter.collaboration.domain.policies.*
+import dev.fajar.starter.collaboration.domain.repositories.*
 import dev.fajar.starter.common.config.*
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.identity.domain.entities.IdentityServer
 import dev.fajar.starter.identity.domain.entities.Session
 import dev.fajar.starter.identity.domain.repositories.SessionRepository
 import dev.fajar.starter.sync.domain.repositories.SyncScheduleRepository
+import kotlin.time.Clock
 import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.*
 
-/** Only local ownership and a fixed durable wake; never authority from packet company/room data. */
+/** Bounded local priority hints plus a durable full sweep; packet data never admits content. */
 class QueueCollaborationPushSignal(
     private val sessions: SessionRepository,
     private val schedules: SyncScheduleRepository,
     private val wakes: CollaborationRecoveryWakeRepository,
     private val server: IdentityServer,
     private val build: AppBuild,
+    private val priorities: CollaborationPushPriorityRepository,
+    private val clock: Clock = Clock.System,
 ) {
     suspend operator fun invoke(fields: Map<String, String>): AppResult<Boolean> {
         currentCoroutineContext().ensureActive()
@@ -48,6 +51,11 @@ class QueueCollaborationPushSignal(
             if (identity((beforeSchedule as AppResult.Success).value) != identity(session))
                 return@withTimeoutOrNull failure("client.session_changed", FailureKind.Unauthorized)
             if (retained is AppResult.Failed) return@withTimeoutOrNull retained
+            // Priority is optional acceleration. Its failure must not prevent the full sweep.
+            withTimeoutOrNull(750) { retain(session, signal.hint) }
+            currentCoroutineContext().ensureActive()
+            val priorityGuard = sessions.guardPushParent(server, build, parent(session))
+            if (priorityGuard is AppResult.Failed) return@withTimeoutOrNull priorityGuard
             val scheduled = requestRecoveryExecution(schedules)
             currentCoroutineContext().ensureActive()
             val after = sessions.current()
@@ -61,6 +69,32 @@ class QueueCollaborationPushSignal(
             }
         } ?: failure("client.collaboration_push_timeout", FailureKind.Timeout)
     }
+
+    private suspend fun retain(session: Session, hint: CollaborationPushHint) {
+        val parent = parent(session)
+        repeat(3) {
+            val loaded = priorities.current(parent)
+            currentCoroutineContext().ensureActive()
+            if (loaded is AppResult.Failed) return
+            val before = (loaded as AppResult.Success).value
+            if (before != null && !validCollaborationPushPriority(before)) return
+            val next =
+                nextCollaborationPushHints(before?.hints.orEmpty(), hint, clock.now().epochSeconds)
+            if (next == before?.hints.orEmpty()) return
+            if (sessions.guardPushParent(server, build, parent) is AppResult.Failed) return
+            val saved = priorities.replace(parent, before, next)
+            currentCoroutineContext().ensureActive()
+            if (saved is AppResult.Failed || (saved as AppResult.Success).value != null) return
+        }
+    }
+
+    private fun parent(session: Session) =
+        CollaborationNativeParent(
+            session.id,
+            session.binding.audience,
+            session.user.id,
+            session.binding.serverId,
+        )
 
     private fun identity(session: Session?) =
         session?.let { listOf(it.id, it.binding.audience, it.user.id, it.binding.serverId) }

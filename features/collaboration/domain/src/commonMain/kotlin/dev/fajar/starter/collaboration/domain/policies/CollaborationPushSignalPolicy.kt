@@ -1,6 +1,6 @@
 package dev.fajar.starter.collaboration.domain.policies
 
-import dev.fajar.starter.collaboration.domain.entities.CollaborationPushSignal
+import dev.fajar.starter.collaboration.domain.entities.*
 
 fun parseCollaborationPushSignal(fields: Map<String, String>): CollaborationPushSignal? {
     val base =
@@ -28,28 +28,24 @@ fun parseCollaborationPushSignal(fields: Map<String, String>): CollaborationPush
         }
     )
         return null
-    val revision = pushNumber(fields.getValue("revision")) ?: return null
-    val issued = pushNumber(fields.getValue("issuedAt")) ?: return null
-    val expiry = pushNumber(fields.getValue("expiresAt")) ?: return null
-    if (
-        revision < 1 ||
-            issued !in 0..253_402_300_799L ||
-            expiry !in 0..253_402_300_799L ||
-            expiry - issued !in 1..86_400L
-    )
-        return null
-    if (fields.size == 12) {
-        val room = fields.getValue("matrixRoomId")
-        if (
-            !room.startsWith('!') ||
-                room.length !in 2..255 ||
-                room.any { it.isWhitespace() || it.isISOControl() }
+    val hint =
+        CollaborationPushHint(
+            fields.getValue("eventId"),
+            fields.getValue("companyId"),
+            fields.getValue("deviceId"),
+            pushNumber(fields.getValue("revision")) ?: return null,
+            pushNumber(fields.getValue("issuedAt")) ?: return null,
+            pushNumber(fields.getValue("expiresAt")) ?: return null,
+            fields["matrixRoomId"],
+            fields["matrixEventId"],
         )
-            return null
-        if (!validCollaborationEventId(fields.getValue("matrixEventId"))) return null
-    }
+    if (!validCollaborationPushHint(hint)) return null
     // Late/duplicate hints may still request recovery; neither their time nor room grants display.
-    return CollaborationPushSignal(fields.getValue("accountId"), fields.getValue("nativeSessionId"))
+    return CollaborationPushSignal(
+        fields.getValue("accountId"),
+        fields.getValue("nativeSessionId"),
+        hint,
+    )
 }
 
 private fun pushNumber(value: String): Long? =

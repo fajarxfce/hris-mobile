@@ -1,8 +1,10 @@
 package dev.fajar.starter
 
 import dev.fajar.starter.app.work.*
-import dev.fajar.starter.collaboration.domain.entities.CollaborationRecoveryWake
+import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationRecoveryWakeRepository
+import dev.fajar.starter.collaboration.domain.usecases.CompleteCollaborationPushPriority
+import dev.fajar.starter.collaboration.domain.usecases.ReadCollaborationPushPriority
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.fixtures.CollaborationWorkerFixture
 import dev.fajar.starter.fixtures.NativeUiServer
@@ -27,12 +29,13 @@ class ApplicationPushIntegrationTest {
                 (f.koin.get<WorkspaceRepository>().current(session.id) as AppResult.Success).value
             )
             val receive = f.koin.get<ApplicationPushReceiver>()
+            val fields = chatFields(session)
             val wakes = f.koin.get<CollaborationRecoveryWakeRepository>()
-            assertEquals(
-                AppResult.Success(ApplicationPush.Chat),
-                receive.queue(chatFields(session)),
-            )
+            assertEquals(AppResult.Success(ApplicationPush.Chat), receive.queue(fields))
             val first = assertNotNull((wakes.pending() as AppResult.Success).value)
+            val firstPriority =
+                (f.koin.get<ReadCollaborationPushPriority>()() as AppResult.Success).value
+            assertEquals(1L, firstPriority.priority!!.hints.single().revision)
             assertEquals(listOf(CollaborationRecoveryWake.WORK_KEY), f.scheduled)
             assertEquals(0, f.sdk.restores)
             assertEquals(0, f.sdk.backgroundAcquisitions)
@@ -48,10 +51,23 @@ class ApplicationPushIntegrationTest {
             val reopened = f.koin.get<CollaborationRecoveryWakeRepository>()
             assertEquals(AppResult.Success(first), reopened.pending())
             assertEquals(
+                AppResult.Success(firstPriority),
+                f.koin.get<ReadCollaborationPushPriority>()(),
+            )
+            assertEquals(
                 AppResult.Success(ApplicationPush.Chat),
-                f.koin.get<ApplicationPushReceiver>().queue(chatFields(session)),
+                f.koin.get<ApplicationPushReceiver>().queue(fields + ("revision" to "2")),
             )
             assertEquals(AppResult.Success(false), reopened.acknowledge(first))
+            assertEquals(
+                AppResult.Success(false),
+                f.koin.get<CompleteCollaborationPushPriority>()(
+                    firstPriority,
+                    requireNotNull(firstPriority.priority).hints.single(),
+                ),
+            )
+            val newest = (f.koin.get<ReadCollaborationPushPriority>()() as AppResult.Success).value
+            assertEquals(2L, newest.priority!!.hints.single().revision)
             assertNotEquals(first, (reopened.pending() as AppResult.Success).value)
             assertTrue(f.server.unexpectedPaths.isEmpty())
         } finally {
@@ -127,7 +143,7 @@ class ApplicationPushIntegrationTest {
             "nativeSessionId" to session.binding.serverId,
             "deviceId" to UUID.randomUUID().toString(),
             "revision" to "1",
-            "issuedAt" to "1793491200",
-            "expiresAt" to "1793491500",
+            "issuedAt" to (System.currentTimeMillis() / 1000).toString(),
+            "expiresAt" to (System.currentTimeMillis() / 1000 + 300).toString(),
         )
 }

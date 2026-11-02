@@ -1,5 +1,54 @@
 # Agent continuation — HRIS Mobile
 
+## Encrypted push priority queue validated — 2 November 2026
+
+[Contract](collaboration-push-priority.md) / [evidence](measurements/chat-push-priority-2026-11-02.json):
+Validated envelopes now retain bounded room/event scheduling hints in a16-entry
+account/native-family queue. Shared protected history key, distinct AEAD/partition,
+24,000 plaintext/32,768 encoded limits; no generic storage bound enlargement. Local
+session remains transactional ownership and native family binds ciphertext. Newer
+company/device revisions coalesce in place; expired/future signals still request the
+full sweep. Independent global wake precedes optional750ms/three-CAS priority work,
+then fixed1.5s scheduling inside the3s receiver. Priority failure does not suppress
+full recovery. Reads/completion guard local ownership independently of credential age;
+exact snapshot CAS and fresh empty generations prevent stale acknowledgment.
+
+Initial focused1 fails only a cross-module nullable-property smart cast in the app
+integration test,127.280s. All631 domain/56 suites and361 data/47 already pass. Test
+assertion corrected with requireNotNull; production unchanged. Focused2 passes the
+same domain/data reports plus15 app push/6 suites and Android/static105.705s. Full3
+root/Android release/affected browsers/app Wasm passes327.155s on20 unchanged Kotlin
+inputs:3,240 desktop483 suites,222 Android host36,970 browser100,10 build-logic2;
+zero failures/errors/skips. Task status map distinguishes executed and accepted
+UP-TO-DATE reports. Ten SQLite/IndexedDB cases include maximum escaped payload,
+reopen, same-family renewal, separate families, tampering, lost key, concurrency,
+late account change and cancellation;20 new domain cases cover policy/access/budgets.
+Real app DI/SQLite receives without selection/SDK, reopens, replaces revision and
+rejects an older snapshot's completion.
+
+Apple41436278627 atdd1a449b9a00a7323d453a48584b179c8e007416 is COMPLETE and audited:
+112 core cases/30 suites, ten standalone Swift cases8s, simulator compilation431s/
+tests77s, full Xcode947s and associations1s. All68 combined incoming-wave/receiver
+source hashes match that exact commit. It excludes room lookup71c7f80c and this queue.
+No active Apple run now: dispatch the next exact pushed head, audit its final artifacts.
+Physical iPhone acceptance remains waived; core Apple tasks exclude collaboration/app
+desktop tests.
+
+Next .work/chat-priority-processing-2026-11-02 contains UNAPPLIED .txt candidates:
+fresh hinted company/device admission without inventing directory versions;
+ReadCollaborationHistoryEvent for exact retained original alias/tombstone under local
+gates; incoming priority shares runtime/timeline/20s parent-priority budget, checks
+actual room binding and never advances normal company/room/history seek. Main worker
+must still give fair recovery its turn and retain the global wake for pending priority.
+Candidates need application review, DI/tests, focused/root/browser checks and push.
+Then implement read/mute/privacy notification projection, durable actions/inline reply,
+compatible private backend/Matrix rollout and authorized release16+ installation.
+
+Private schema103/API-worker2c2a59e3 and phone15 unchanged. Chat push stays disabled.
+Notify before phone install; explicit10.77.77.3:5555, --install-only, no UI driving.
+All54 groups remain open. No Starter port, owned emulator, active goal or subagent.
+Continue immediately after push; this is not PRD completion.
+
 ## Owned room lookup validated — 2 November 2026
 
 [Contract](collaboration-room-lookup.md) / [evidence](measurements/chat-room-lookup-2026-11-02.json):

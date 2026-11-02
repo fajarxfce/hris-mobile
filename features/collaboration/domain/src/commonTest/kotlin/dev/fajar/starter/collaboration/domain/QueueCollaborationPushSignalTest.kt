@@ -15,7 +15,10 @@ class QueueCollaborationPushSignalTest {
             val f = CollaborationPushFixture()
             val receive = f.receiver(platform)
             assertEquals(AppResult.Success(true), receive(fields()))
-            assertEquals(listOf("read", "write", "read", "schedule", "read"), f.calls)
+            assertEquals(
+                listOf("read", "write", "read", "read", "read", "schedule", "read"),
+                f.calls,
+            )
             val first = assertNotNull(f.retained)
             assertEquals(AppResult.Success(true), receive(fields(true)))
             assertNotEquals(first, f.retained)
@@ -112,12 +115,12 @@ class QueueCollaborationPushSignalTest {
 
     @Test
     fun lateSessionReadFailureCannotMasqueradeAsSuccessfulDelivery() = runTest {
-        for (read in listOf(2, 3)) {
+        for (read in 2..5) {
             val f = CollaborationPushFixture()
             f.onRead = { if (it == read) f.sessionFailure = f.storage }
             assertEquals(AppResult.Failed(f.storage), f.receiver()(fields()))
             assertNotNull(f.retained)
-            assertEquals(if (read == 3) 1 else 0, f.scheduled.size)
+            assertEquals(if (read == 5) 1 else 0, f.scheduled.size)
         }
     }
 

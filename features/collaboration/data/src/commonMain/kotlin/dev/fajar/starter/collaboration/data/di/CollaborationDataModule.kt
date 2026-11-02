@@ -20,7 +20,24 @@ class CollaborationDataModule {
         wakes: CollaborationRecoveryWakeRepository,
         server: IdentityServer,
         build: AppBuild,
-    ) = QueueCollaborationPushSignal(sessions, schedules, wakes, server, build)
+        priorities: CollaborationPushPriorityRepository,
+    ) = QueueCollaborationPushSignal(sessions, schedules, wakes, server, build, priorities)
+
+    @Factory
+    fun readPushPriority(
+        priorities: CollaborationPushPriorityRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) = ReadCollaborationPushPriority(priorities, sessions, server, build)
+
+    @Factory
+    fun completePushPriority(
+        priorities: CollaborationPushPriorityRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) = CompleteCollaborationPushPriority(priorities, sessions, server, build)
 
     @Factory
     fun readRoomRecovery(

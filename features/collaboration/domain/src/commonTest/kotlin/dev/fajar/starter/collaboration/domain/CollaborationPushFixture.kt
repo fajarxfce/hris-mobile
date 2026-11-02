@@ -1,13 +1,15 @@
 package dev.fajar.starter.collaboration.domain
 
-import dev.fajar.starter.collaboration.domain.entities.CollaborationRecoveryWake
-import dev.fajar.starter.collaboration.domain.repositories.CollaborationRecoveryWakeRepository
-import dev.fajar.starter.collaboration.domain.usecases.QueueCollaborationPushSignal
+import dev.fajar.starter.collaboration.domain.entities.*
+import dev.fajar.starter.collaboration.domain.repositories.*
+import dev.fajar.starter.collaboration.domain.usecases.*
 import dev.fajar.starter.common.config.*
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.identity.domain.entities.*
 import dev.fajar.starter.identity.domain.repositories.SessionRepository
 import dev.fajar.starter.sync.domain.repositories.SyncScheduleRepository
+import kotlin.time.Clock
+import kotlin.time.Instant
 
 internal class CollaborationPushFixture {
     private val setup = CollaborationSetupFixture()
@@ -30,6 +32,55 @@ internal class CollaborationPushFixture {
     val scheduled = mutableListOf<String>()
     var reads = 0
     var writes = 0
+    var priority: CollaborationPushPriority? = null
+    var priorityFailure: Failure? = null
+    var beforePriorityRead: suspend () -> Unit = {}
+    var beforePriorityWrite: suspend () -> Unit = {}
+    var afterPriorityWrite: suspend () -> Unit = {}
+    var priorityReads = 0
+    var priorityWrites = 0
+    var loseWrites = 0
+    var now = 1_793_491_210L
+    val clock =
+        object : Clock {
+            override fun now() = Instant.fromEpochSeconds(now)
+        }
+    val priorities =
+        object : CollaborationPushPriorityRepository {
+            override suspend fun current(
+                parent: CollaborationNativeParent
+            ): AppResult<CollaborationPushPriority?> {
+                priorityReads++
+                val result = priority
+                beforePriorityRead()
+                return priorityFailure?.let { AppResult.Failed(it) } ?: AppResult.Success(result)
+            }
+
+            override suspend fun replace(
+                parent: CollaborationNativeParent,
+                expected: CollaborationPushPriority?,
+                hints: List<CollaborationPushHint>,
+            ): AppResult<CollaborationPushPriority?> {
+                priorityWrites++
+                beforePriorityWrite()
+                priorityFailure?.let {
+                    return AppResult.Failed(it)
+                }
+                if (loseWrites > 0) {
+                    loseWrites--
+                    return AppResult.Success(null)
+                }
+                if (priority != expected) return AppResult.Success(null)
+                val result =
+                    CollaborationPushPriority(
+                        "a1000000-0000-4000-8000-" + priorityWrites.toString().padStart(12, '0'),
+                        hints.toList(),
+                    )
+                priority = result
+                afterPriorityWrite()
+                return AppResult.Success(result)
+            }
+        }
     val storage = Failure(FailureKind.Storage, "Fictional storage failure", code = "test.storage")
     val unavailable =
         Failure(FailureKind.Network, "Fictional schedule failure", code = "test.schedule")
@@ -85,6 +136,24 @@ internal class CollaborationPushFixture {
             wakes,
             IdentityServer(initial.binding.audience, "Fictional receiver"),
             AppBuild(platform, 16, "test", null),
+            priorities,
+            clock,
+        )
+
+    fun reader() =
+        ReadCollaborationPushPriority(
+            priorities,
+            sessions,
+            IdentityServer(initial.binding.audience, "Fictional receiver"),
+            AppBuild(AppPlatform.Android, 16, "test", null),
+        )
+
+    fun complete() =
+        CompleteCollaborationPushPriority(
+            priorities,
+            sessions,
+            IdentityServer(initial.binding.audience, "Fictional receiver"),
+            AppBuild(AppPlatform.Android, 16, "test", null),
         )
 
     companion object {

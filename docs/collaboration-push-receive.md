@@ -56,3 +56,8 @@ projection, durable action deduplication and encrypted replies before enabling s
 chat push. There is no live FCM/Doze/terminated-app receive, OS display or phone-install
 claim in this increment. All54 communications PRD groups remain open. The entry-point
 routing is HRIS application policy; no generic Starter port is due.
+
+The subsequent [encrypted priority queue](collaboration-push-priority.md) now retains
+bounded hints alongside this global wake. Hosted Apple41436278627 validates this
+receiver atdd1a449b, including ten Swift extraction cases and the full Xcode app;
+the queue change itself requires its next exact-head hosted build.
