@@ -187,6 +187,12 @@ class CollaborationBindingsTest {
                     container.koin.get<CollaborationRecoveryRepository>(),
                 )
                 assertNotNull(container.koin.get<ReadCollaborationControl>())
+                assertNotNull(container.koin.get<ReadCollaborationRecoveryProgress>())
+                assertNotNull(container.koin.get<UpdateCollaborationRecoveryProgress>())
+                assertSame(
+                    container.koin.get<CollaborationRecoveryProgressRepository>(),
+                    container.koin.get<CollaborationRecoveryProgressRepository>(),
+                )
                 val wakeRepository = container.koin.get<CollaborationRecoveryWakeRepository>()
                 assertSame(
                     wakeRepository,

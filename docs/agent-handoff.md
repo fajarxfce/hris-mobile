@@ -1,5 +1,49 @@
 # Agent continuation — HRIS Mobile
 
+## Account-owned company recovery progress validated — 2 November 2026
+
+[Contract](collaboration-company-recovery.md) / [evidence](measurements/chat-company-recovery-2026-11-02.json):
+account-scoped encrypted seek/in-flight/retry state now survives restart and same-
+account reauthentication. New wakes do not reset an active finite sweep. Attempt
+persists before external work; uncertain attempts and transient failures require
+another sweep. A clean Finish stores inactive progress before returning only the
+original wake for separate exact-generation acknowledgment. Late account changes,
+competing writes, tampering and lost protected keys cannot publish a false finish.
+
+The first focused run failed test compilation (IdentityServer fixture omitted
+required deviceName, 40s /43.528s); no production correction was needed. Corrected
+focused checks pass 542 domain,308 data,two assembled-DI cases plus Android proof
+compilation/static in152s /155.704s. Full root/affected browser/app-Wasm checks
+pass in296s /299.533s on all13 unchanged source/test inputs:3,044 desktop,215
+Android host,828 browser and10 build-logic, zero failures/errors/skips. Twelve new
+domain and eight storage cases cover SQLite/IndexedDB reopen and cancellation.
+No all-company consumer or FCM entry caller is wired by this increment.
+
+**Continue immediately:** implement the app-owned company worker and its actual
+entry. Use processed parent state, current directory/admission and captured work;
+never change selected workspace. RefreshCollaborationList already accepts Background.
+The old DeliveryWorker exits when no outgoing work exists, so independent incoming
+room discovery/history acquisition is still necessary before notification acceptance.
+Keep fair room progress and actual provider proof separate from company coverage.
+
+Two OS jobs can run. Admit at most one processor and one resource-free waiter;
+capture authority after acquiring the processing mutex. Track waiting separately
+from admitted count to avoid mistaking an exiting task for future work. Cancel/join
+on parent replacement; workspace changes do not replace a native parent. Healthy
+pagination should schedule a same-generation continuation and complete, rather than
+building exponential backoff. Waiting/backoff/finishing races require tests and
+actual Android proof. Current supplementary design is in
+`.work/company-worker-2026-11-02/design.txt`; no next-increment source is applied yet.
+Do not revive the old no-wait consumer proposal from historical scratch notes.
+
+Starter [5679c51](https://github.com/fajarxfce/compose-fluent-starter/commit/5679c51)
+records independent Apple41400133440 at exact136d2e5a:92 cases/26 suites, six wake
+cases0.178s, full Xcode586s, zero failures/errors/skips. That port is complete;
+this HRIS policy stays in Mobile. No new employee APK/server rollout: phone15,
+private schema103/API-worker2c2a59e3, push disabled, all54 PRD groups open.
+Owned5562 remains stopped;5560 is unrelated CodePush. Temporary8GiB swap remains
+active pending safe headroom. Continue after each commit/push.
+
 ## Starter port pushed and hosted validation running — 2 November 2026
 
 Mobile e00ab4ee is pushed. Starter [136d2e5a](https://github.com/fajarxfce/compose-fluent-starter/commit/136d2e5a607fb20b6f5ccd07bd88ed14b0a6b668)

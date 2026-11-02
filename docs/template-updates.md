@@ -12,8 +12,11 @@ lint has zero fatal/errors and45 existing warnings. APK is built, not installed.
 
 [Starter evidence](https://github.com/fajarxfce/compose-fluent-starter/blob/136d2e5a607fb20b6f5ccd07bd88ed14b0a6b668/docs/measurements/bounded-work-2026-11-02.json)
 contains exact source/report/artifact hashes. Its own [Apple CI41400133440](https://github.com/fajarxfce/compose-fluent-starter/actions/runs/41400133440)
-is in progress at that exact head; audit XML and Xcode before acceptance. No HRIS
-recovery policy, proof application, configuration or task opt-in is copied.
+is completed and independently audited: 92 simulator cases in 26 suites, including
+six AppleWorkWakeStoreTest cases in 0.178s, zero failures/errors/skips and a complete
+Xcode application (586s). [Audited evidence](https://github.com/fajarxfce/compose-fluent-starter/blob/5679c51/docs/measurements/bounded-work-2026-11-02.json)
+binds all four source hashes and downloaded XML. No HRIS recovery policy, proof
+application, configuration or task opt-in is copied.
 
 ## Durable work wake storage — 2 November 2026
 
