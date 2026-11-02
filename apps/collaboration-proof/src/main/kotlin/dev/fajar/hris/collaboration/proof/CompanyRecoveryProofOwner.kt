@@ -170,8 +170,11 @@ internal class CompanyRecoveryProofOwner(context: Context) {
                 build,
                 clock,
             ),
-            build,
-            execute,
+            // This isolated company-sweep fixture has no push hints. Native priority is
+            // exercised separately through the actual application container and Matrix SDK.
+            recoverPriority = { SyncResult.Complete },
+            build = build,
+            recoverCompany = execute,
         )
 
     fun close() {

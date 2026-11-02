@@ -308,5 +308,41 @@
     "newVersionCode": 17,
     "sameInstalledSigner": true,
     "installationStarted": false
+  },
+  "emulatorStartup": {
+    "complete": true,
+    "serial": "emulator-5562",
+    "phoneTouched": false,
+    "source": "c6347c75278408256f775e65eb30d7ecae9b605e",
+    "sha256": "b94aedf2b1eb81949d8eeacc82fd2906f0c85b27641e3bcc65fd8884e5fb34d2",
+    "versionCode": 17,
+    "debuggable": false,
+    "primaryEmulatorAbi": "x86_64",
+    "nativeBridge": "libndk_translation.so",
+    "coldStarts": [
+      {
+        "coldStart": 1,
+        "pid": 3440,
+        "stableSeconds": 12,
+        "readableUiNodeCount": 7,
+        "resumed": true,
+        "processCrash": false,
+        "elapsedSeconds": 16.104,
+        "screenshotSha256": "6ed073ff109c6fa12da244c369f1f8bd1ce3811b14b6fe4360bcd4863c0b8039"
+      },
+      {
+        "coldStart": 2,
+        "pid": 3640,
+        "stableSeconds": 12,
+        "readableUiNodeCount": 7,
+        "resumed": true,
+        "processCrash": false,
+        "elapsedSeconds": 15.624,
+        "screenshotSha256": "6ed073ff109c6fa12da244c369f1f8bd1ce3811b14b6fe4360bcd4863c0b8039"
+      }
+    ],
+    "elapsedSeconds": 33.918,
+    "apkUnchanged": true,
+    "visualInspection": "Both captures render the existing HRIS onboarding page. No authenticated Home/chat interaction performed."
   }
 }

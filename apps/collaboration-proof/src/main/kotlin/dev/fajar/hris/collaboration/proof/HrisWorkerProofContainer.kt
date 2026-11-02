@@ -3,8 +3,11 @@ package dev.fajar.hris.collaboration.proof
 import android.content.Context
 import dev.fajar.starter.app.bootstrap.ApplicationCollaborationLifetime
 import dev.fajar.starter.app.di.createAppContainer
+import dev.fajar.starter.app.work.ApplicationPush
+import dev.fajar.starter.app.work.ApplicationPushReceiver
 import dev.fajar.starter.app.work.CollaborationDeliveryWorker
 import dev.fajar.starter.app.work.CollaborationIncomingRecovery
+import dev.fajar.starter.app.work.CollaborationPriorityRecovery
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.policies.localListAccess
 import dev.fajar.starter.collaboration.domain.repositories.*
@@ -66,7 +69,13 @@ internal class HrisWorkerProofContainer(
                     platformScheduler
                         ?: object : WorkScheduler {
                             override suspend fun enqueue(key: String) {
-                                check(key == QueueCollaborationText.DELIVERY_KEY)
+                                check(
+                                    key in
+                                        setOf(
+                                            QueueCollaborationText.DELIVERY_KEY,
+                                            CollaborationRecoveryWake.WORK_KEY,
+                                        )
+                                )
                                 synchronized(requests) { requests += key }
                             }
                         },
@@ -279,6 +288,33 @@ internal class HrisWorkerProofContainer(
                 CollaborationHistoryTraversal(conversationId, roomId, deviceId, purpose),
             )
         )
+
+    suspend fun queuePriority(fields: Map<String, String>) {
+        check(backgroundOnly)
+        check(
+            expect(container.koin.get<ApplicationPushReceiver>().queue(fields)) ==
+                ApplicationPush.Chat
+        )
+    }
+
+    suspend fun prioritySnapshot() = expect(container.koin.get<ReadCollaborationPushPriority>()())
+
+    suspend fun priorityWake() = expect(container.koin.get<ReadCollaborationRecoveryWake>()())
+
+    suspend fun priorityPosition(deviceId: String, roomId: String): List<Any> =
+        listOf(
+            expect(container.koin.get<ReadCollaborationRecoveryProgress>()()),
+            expect(container.koin.get<ReadCollaborationRoomRecovery>()(access)),
+            capturedReferences(deviceId, roomId, CollaborationHistoryPurpose.Browse),
+            capturedReferences(deviceId, roomId, CollaborationHistoryPurpose.Incoming),
+        )
+
+    suspend fun runPriority(
+        parent: CollaborationNativeParent
+    ): dev.fajar.starter.sync.domain.SyncResult {
+        check(backgroundOnly)
+        return container.koin.get<CollaborationPriorityRecovery>()(parent)
+    }
 
     suspend fun runIncoming(deviceId: String): dev.fajar.starter.sync.domain.SyncResult {
         check(backgroundOnly)

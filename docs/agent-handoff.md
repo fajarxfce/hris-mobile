@@ -1,31 +1,52 @@
 # Agent continuation — HRIS Mobile
 
-## Priority Apple compilation audited — 2 November 2026
+## Native priority recovery accepted — 2 November 2026
 
-[Apple41446374520](https://github.com/fajarxfce/hris-mobile/actions/runs/41446374520)
-COMPLETE at exactcc4c11f1b538d48680ee892f6709925bbe5e18ec. Downloaded artifact digest and
-106 combined receiver/priority/runtime source hashes match.112 core native simulator
-cases/30 suites pass, zero failures/errors/skips; Swift11s, compile740s, tests127s,
-full Xcode1436s and associations1s. [Exact reports/source evidence](measurements/android-release-phone-2026-11-02-build17.json).
-Shared priority code is compiled in the full app; its behavior remains desktop SDK-
-double coverage until the new native proof. No physical iPhone, FCM or OS acceptance.
-Android-only backup exclusions do not require a duplicate Apple run.
+[Evidence](measurements/chat-priority-native-2026-11-02.json) binds 108 Mobile and
+seven Platform inputs to proof APK SHA256
+a54d65517c55a4a94bd22303dd5ba1380aab0bcf8544dd96e1096e3a3b113a5b (343,275,325 bytes).
+Actual HRIS/PostgreSQL/Synapse/Android SDK passes all three lifecycle variants:
+cancelled draft in 289.577s, queued and frozen draft in 569.699s. Each recovers the
+oldest of 175 offline peer events in one priority turn, retains 12 originals, preserves
+the global wake and all company/room/Browse/Incoming positions across container reopens,
+then recovers 176 originals in 11 fair incoming turns. Foreground independently pages
+11 times over 186 references. One worker send and 175 peer ciphertexts, no duplicate
+worker send; cancelled intent absent. Owned runtime and fixture cleanup pass.
 
-Release17 clean c6347c75 artifact remains unchanged and not installed. Explicit phone
-preflight confirms15, connected and same signer. Platform Verify41448616746 at2334e266
-still runs; four dashboard shards pass, backend/downstream pending. No live HRIS
-migration or grant. Starter0d4432e port pushed. Next private access verification script
-is staged in Platform .work/chat-private-rollout-2026-11-02/verify-pilot-access.py;
-run after successful deployment/grants, revoke only its owned native/MFA session.
+Full check/proof build 3 passes 97.046s: 3,262 desktop, 222 Android host, 10 build-logic
+and six proof-host cases, zero failures/errors/skips. Initial checks failed on a
+101-line method and an outdated company-fixture constructor; phase ownership was
+extracted and the synthetic company fixture explicitly supplies an empty priority
+lane. No production source changed in this commit. Company WorkManager/process repair
+also passes 45.199s, with synthetic work and no provider claim. Initial native run
+correctly refused the company fixture's remaining owned APK before native SDK execution;
+its installed hash was verified before removing only that package. Guard unchanged.
+A missing collector input manifest was corrected before starting the second invocation.
+All attempts and input/report hashes remain in the measurement.
 
-Native priority proof is now three UNCOMMITTED Android proof inputs. Initial full
-check1 fails33.742s at detekt because resume grew to101 lines; phase/checkpoint
-ownership moved into the two phase helpers, no suppression. Full check2 is ACTIVE
-(.work/native-priority-2026-11-02,107 frozen inputs). Do not run another heavy local
-job until it finishes. Platform's four proof/driver changes remain only staged in
-its matching .work folder so current rollout source guards stay valid. Next: audit
-full/proof APK result, then actual native scenarios after rollout; no acceptance
-until they pass. Continue notification/privacy/actions/replies and all54 open groups.
+The receiver is invoked with strict synthetic metadata; FCM/OS delivery, notification
+privacy/actions, inline replies and capacity remain unaccepted. Counterpart Platform
+proof is committed/pushed as bc9774eb. Owned emulator 5562/PID 553348 is stopped and its
+proof package removed; phone untouched. No HRIS policy is portable to Starter here.
+
+Release 17 at clean c6347c75 remains verified, NOT INSTALLED. Its exact arm64 APK
+cold-starts twice on the owned x86 emulator via libndk_translation (33.918s), showing
+existing onboarding; no authenticated/chat UI acceptance. The build17 measurement
+now records that evidence. Phone still 15; notify before explicit 10.77.77.3:5555
+--install-only, never launch or drive its UI. Apple 41446374520 at cc4c11f1 is fully
+audited: 112 native core cases/30 suites, 106 combined source hashes and full Xcode
+build pass. Physical iPhone testing remains waived. Starter backup port 0d4432e passed.
+
+Platform full Verify 41454857226 at dac6fb0d17ad8b8b3226a4fbb93233bd315a1d7d is ACTIVE:
+all eight backend and four dashboard shards pass; dashboard/recovery integration run.
+Require all 14 jobs before private rollout. Two earlier failures remain archived.
+HRIS still schema 103/API-worker 2c2a59e3/dashboard 1e0522c0; no live HRIS migration,
+chat grants or phone install. Private Matrix and pre-enrollment checkpoint retained,
+all chat push flags off. Next: audit CI, verified packages/images, fresh coordinated
+HRIS checkpoint, isolated 103→116 upgrade, explicit API/worker/dashboard rollout,
+role-preserving employee/operator chat grants and read-only pilot access verification,
+then install 17. Continue notification read/mute/privacy/actions/inline replies and
+all 54 open groups; this proof and installation are not completion.
 
 ## Release17 accepted candidate and generic port — 2 November 2026
 

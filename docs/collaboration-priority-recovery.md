@@ -47,9 +47,19 @@ acquisition, container restart and full-worker fairness/global-wake retention.
 [Measurements](measurements/chat-priority-processing-2026-11-02.json) retain source
 and report hashes, corrections and the precise native/hosted scope.
 
-The provider in application tests is an owned SDK double. This is not live FCM,
-APNs, OS notification, native SDK priority, load/latency or phone acceptance. Per-hint
-retry ordering under sustained failures remains performance work; the fair full
-sweep continues other companies/rooms. Notification privacy/read/mute projection,
+The deterministic application tests use an owned SDK double. A separate
+[actual native proof](measurements/chat-priority-native-2026-11-02.json) now exercises
+strict metadata through the real receiver, encrypted queue, HRIS admission/room lookup
+and Android Matrix SDK. After process death, each of the queued, frozen and cancelled
+draft variants acquires the oldest of 175 offline peer events without a selected
+workspace or pending outbox. Queue and originals survive container reopen; priority
+leaves the global wake and all four ordinary progress positions unchanged. Normal
+recovery then retains all 176 originals in 11 turns, with no duplicate worker send.
+The proof module owns its container and joins native cleanup. Its synthetic company
+WorkManager fixture uses an explicit empty priority lane and is measured separately.
+
+This does not accept FCM, APNs, OS notifications, load/latency or phone behavior.
+Per-hint retry ordering under sustained failures remains performance work; the fair
+full sweep continues other companies/rooms. Notification privacy/read/mute projection,
 durable display/actions and encrypted inline replies still follow this acquisition
-path. The private runtime and installed phone remain unchanged by this increment.
+path. The private HRIS runtime and installed phone remain unchanged by this proof.

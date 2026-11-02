@@ -150,9 +150,8 @@ internal class HrisWorkerMatrixProbe(private val context: Context, directory: Fi
                         sender.repository.isOpen(sender.currentOwner, sender.registeredDeviceId)
                     )
                 )
-                recordPhase("incoming", historical.size)
+                val priority = recoverPriority(historical)
                 val incoming = recoverIncoming(historical)
-                files.write("worker-incoming", incoming)
                 recordPhase("foreground", historical.size)
                 app = openApplication().also { application = it }
                 app.activate()
@@ -165,7 +164,7 @@ internal class HrisWorkerMatrixProbe(private val context: Context, directory: Fi
                         historical,
                     )
                 cancelled?.completed(app, queued)
-                recordCompletion(eventId, passes, historical, foreground, incoming)
+                recordCompletion(eventId, passes, historical, foreground, incoming, priority)
                 recordPhase("complete", historical.size)
             } catch (failure: Exception) {
                 primary = failure
@@ -185,16 +184,33 @@ internal class HrisWorkerMatrixProbe(private val context: Context, directory: Fi
             }
         }
 
-    private suspend fun recoverIncoming(historical: List<HrisHistoricalMessage>) =
-        HrisIncomingHistoryProbe(
+    private suspend fun recoverPriority(historical: List<HrisHistoricalMessage>): JSONObject {
+        recordPhase("priority", historical.size)
+        return HrisPriorityHistoryProbe(
                 open = { openApplication(backgroundOnly = true) },
                 runtime = sender.repository,
                 owner = sender.currentOwner,
                 deviceId = sender.registeredDeviceId,
                 roomId = files.roomId,
-                progress = { files.write("worker-incoming-progress", it) },
             )
             .run(historical)
+    }
+
+    private suspend fun recoverIncoming(historical: List<HrisHistoricalMessage>): JSONObject {
+        recordPhase("incoming", historical.size)
+        val result =
+            HrisIncomingHistoryProbe(
+                    open = { openApplication(backgroundOnly = true) },
+                    runtime = sender.repository,
+                    owner = sender.currentOwner,
+                    deviceId = sender.registeredDeviceId,
+                    roomId = files.roomId,
+                    progress = { files.write("worker-incoming-progress", it) },
+                )
+                .run(historical)
+        files.write("worker-incoming", result)
+        return result
+    }
 
     private fun recordCompletion(
         eventId: String,
@@ -202,6 +218,7 @@ internal class HrisWorkerMatrixProbe(private val context: Context, directory: Fi
         historical: List<HrisHistoricalMessage>,
         foreground: HrisForegroundHistoryResult,
         incoming: JSONObject,
+        priority: JSONObject,
     ) {
         files.write(
             "worker-result",
@@ -226,6 +243,7 @@ internal class HrisWorkerMatrixProbe(private val context: Context, directory: Fi
                 .put("pendingStateReferences", foreground.pendingStateReferences)
                 .put("historyPeerEvents", JSONArray(historical.map { it.eventId }))
                 .put("incoming", incoming)
+                .put("priority", priority)
                 .also { cancelled?.evidence(it) },
         )
     }
