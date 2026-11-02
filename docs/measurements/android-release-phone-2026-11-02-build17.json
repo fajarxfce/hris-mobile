@@ -296,9 +296,31 @@
     "scope": "112 core native simulator cases and complete Xcode app at priority-processing source; shared priority code compiles in the app but priority behavior tests use the desktop SDK double. Android backup XML separately validated; physical iPhone waived."
   },
   "installation": {
-    "confirmed": false,
-    "phoneVersion": 15,
-    "reason": "Compatible server full CI and guarded rollout pending. Notice, explicit serial10.77.77.3:5555 and --install-only required."
+    "confirmed": true,
+    "startedAt": "2026-11-02T14:22:28.833863+00:00",
+    "elapsedSecondsIncludingVerification": 62.534,
+    "serial": "10.77.77.3:5555",
+    "variant": "devRelease",
+    "applicationId": "dev.fajar.hris.mobile.dev",
+    "versionCode": 17,
+    "versionName": "1.0.0",
+    "debuggable": false,
+    "installedSha256": "b94aedf2b1eb81949d8eeacc82fd2906f0c85b27641e3bcc65fd8884e5fb34d2",
+    "installedBytesMatch": true,
+    "existingAppIdPreserved": true,
+    "firstInstallTimePreserved": true,
+    "updateInPlace": true,
+    "uninstalled": false,
+    "appDataCleared": false,
+    "uiLaunched": false,
+    "after": {
+      "appId": "10962",
+      "firstInstallTime": "2026-10-29 15:48:23",
+      "lastUpdateTime": "2026-11-02 21:22:54",
+      "versionCode": "17 minSdk=24 targetSdk=36",
+      "versionName": "1.0.0",
+      "debuggable": false
+    }
   },
   "phonePreflight": {
     "observedAt": "2026-11-02T13:15:07.173715+00:00",
@@ -344,5 +366,15 @@
     "elapsedSeconds": 33.918,
     "apkUnchanged": true,
     "visualInspection": "Both captures render the existing HRIS onboarding page. No authenticated Home/chat interaction performed."
+  },
+  "compatibleServer": {
+    "source": "dac6fb0d17ad8b8b3226a4fbb93233bd315a1d7d",
+    "schema": 116,
+    "ci": "https://github.com/fajarxfce/hris-platform/actions/runs/41454857226",
+    "all14JobsPassed": true,
+    "pilotGrantsVerified": true,
+    "googleNativeDocumentIntegrityPreserved": true,
+    "chatPushEnabled": false,
+    "evidence": "https://github.com/fajarxfce/hris-platform/blob/f0929362/docs/measurements/chat-private-rollout-2026-11-02.json"
   }
 }

@@ -29,24 +29,35 @@ privacy/actions, inline replies and capacity remain unaccepted. Counterpart Plat
 proof is committed/pushed as bc9774eb. Owned emulator 5562/PID 553348 is stopped and its
 proof package removed; phone untouched. No HRIS policy is portable to Starter here.
 
-Release 17 at clean c6347c75 remains verified, NOT INSTALLED. Its exact arm64 APK
-cold-starts twice on the owned x86 emulator via libndk_translation (33.918s), showing
-existing onboarding; no authenticated/chat UI acceptance. The build17 measurement
-now records that evidence. Phone still 15; notify before explicit 10.77.77.3:5555
---install-only, never launch or drive its UI. Apple 41446374520 at cc4c11f1 is fully
-audited: 112 native core cases/30 suites, 106 combined source hashes and full Xcode
-build pass. Physical iPhone testing remains waived. Starter backup port 0d4432e passed.
+Release17 at clean c6347c75 is now INSTALLED on explicit10.77.77.3:5555 after notice,
+using --install-only. Update/pull-back verification takes62.534s; installed SHA256
+b94aedf2b1eb81949d8eeacc82fd2906f0c85b27641e3bcc65fd8884e5fb34d2 exactly matches the
+87,495,300-byte accepted APK. UID10962/first-install time retained, non-debuggable,
+no uninstall/data clear/UI launch. [Build/install evidence](measurements/android-release-phone-2026-11-02-build17.json).
+Two actual-artifact emulator cold starts passed earlier via libndk_translation,
+showing onboarding; no new phone login/chat/FCM claim. Future delivery must use a
+higher versionCode, notify first and retain explicitserial install-only.
 
-Platform full Verify 41454857226 at dac6fb0d17ad8b8b3226a4fbb93233bd315a1d7d is ACTIVE:
-all eight backend and four dashboard shards pass; dashboard/recovery integration run.
-Require all 14 jobs before private rollout. Two earlier failures remain archived.
-HRIS still schema 103/API-worker 2c2a59e3/dashboard 1e0522c0; no live HRIS migration,
-chat grants or phone install. Private Matrix and pre-enrollment checkpoint retained,
-all chat push flags off. Next: audit CI, verified packages/images, fresh coordinated
-HRIS checkpoint, isolated 103→116 upgrade, explicit API/worker/dashboard rollout,
-role-preserving employee/operator chat grants and read-only pilot access verification,
-then install 17. Continue notification read/mute/privacy/actions/inline replies and
-all 54 open groups; this proof and installation are not completion.
+Platform full Verify41454857226 COMPLETE at dac6fb0d: all14 jobs pass, 3,153 active
+API/116 active worker cases,1,111 mocked and56 actual browser workflows, schema116
+recovery. Verified private API/worker/dashboard rollout and fresh103→116 backup/clone
+checks pass. Existing Google/person/native/document state retained. Employee/operator
+chat grants and read-only contact/device/directory checks pass, with applied roles
+preserved. Temporary operator sessions revoked. API/worker now schema116/dac6fb0d,
+dashboard immutable2124c6fc; stable private Matrix provider and keys retained.
+All chat push flags remain OFF; no real-account messages or provider enrollment by
+the operator checks. Platform f0929362 records exact source/images/checkpoints.
+
+Apple41446374520 atcc4c11f1 is fully audited:112 native core cases/30 suites,
+106 combined source hashes and full Xcode. Physical iPhone testing waived. Starter
+backup port0d4432e passed and is pushed; no HRIS receipt policy port.
+
+Next: Platform receipt work is staged as17 .txt inputs under .work/chat-receipts-
+2026-11-02. It will add exact public/private receipt delivery and scoped sync
+projection before Mobile read/mute/privacy/action integration. No new receipt code
+is accepted yet. Continue encrypted inline replies and all54 open groups; this
+phone/server delivery is not task completion. User's latest startup confirmation
+was for release11; do not invent a release17 UI confirmation or drive their phone.
 
 ## Release17 accepted candidate and generic port — 2 November 2026
 
