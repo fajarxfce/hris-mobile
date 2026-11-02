@@ -1,5 +1,68 @@
 # Agent continuation — HRIS Mobile
 
+## Release19 installed; continue native notification publication
+
+Release19 (devRelease1.0.0, arm64, non-debuggable) from
+c0fafd8592bfaa1eaab40f153235a18f66afa59f is INSTALLED on the authorized phone
+10.77.77.3:5555. Notify-before-install was given; install-only update started
+2026-11-02T21:49:41.888604Z and verification finished in46.912s. UID10962 and first
+install2026-10-29 15:48:23 preserved; no uninstall/data clear/UI launch or driving.
+Installed bytes match SHA25669046c53bf99091a218e2c1470c0291e8916d2ddf2a2ba4ad79cbe0099bcf470.
+Same dev signer as18; private API/Firebase app/arm64/16KiB alignment/18 backup
+exclusions verified. Build+lint475.141s, zero lint issues, clean source before/after.
+[Release evidence](measurements/android-release-phone-2026-11-02-build19.json).
+
+Owned emulator5562/PID1504915 booted26.706s; two cold starts passed12s stable windows,
+readable UI/no crash,18.984s and16.566s. Total smoke61.320s; second screenshot visually
+inspected (onboarding, no clipping; not a pixel baseline). Emulator is STOPPED and
+transport absent. Startup wrapper exited1 solely because its initial cleanup checked
+ADB immediately after signalling; later inspection found the PID gone/transport closed.
+Added bounded10s polling and confirmed cleanup, no second app run. The verifier's first
+attempt also had a preparation mistake: fixed backup count18 was accidentally changed
+to19 with versionCode; corrected verifier only, APK unchanged. Both helper failures are
+preserved in evidence; do not call the initial wrapper a clean command pass. Unrelated
+CodePush emulator5580 was untouched. No own local heavy job/emulator remains.
+
+Native [41523212486](https://github.com/fajarxfce/hris-mobile/actions/runs/41523212486)
+at1ebc0f9400a8200bda56b0178e447d814a40feca is newly AUDITED: five actual interop cases/
+three suites,230 Android-host/37 and six proof-host/one, zero failures/errors/skips.
+Artifact13180757970 ZIP SHA2563b517b430b840a48abc4124bac0c44ea0fb17657804ad6dd26572d1aa274d6c4
+matches GitHub;130 source hashes checked. SDK receipts/encrypted sends, three worker
+process-death states and separate WorkManager restart/network recovery all passed
+and cleaned up. APK hash0d6a2b8ff3bca0ca3f4097e77b1d21ab585014e4ef166ee2d82ed7c8d41e2d25
+reported by all five drivers. Android build804s/Platform compile259s/native step969s.
+[Native evidence](measurements/chat-reply-seek-native-hosted-2026-11-02.json).
+This source covers basic seek only: excludes cycle/new reply worker. Existing native
+scenarios do NOT exercise notification reply inputs, receivers or display.
+
+Full Apple41530048115 atc0fafd85 is RUNNING (last simulator compilation),141 source
+hashes verified. .work/chat-notification-reply-worker-apple-2026-11-02 has dispatch,
+sources and audit.py ready; wait for actual success/full Xcode before auditing. Do
+not redispatch/cancel it. Latest accepted full Xcode remains8ca/41520480368 below.
+At last check: c0 control41530010424/native41530010432 pending; native protocol
+41530010464 running;9129 native41528135379 running;1eb control41523212264 running.
+9129 control41528135677 was superseded/cancelled. Follow actual results; none of these
+pending/running jobs is accepted yet. Physical iPhone tests remain waived.
+
+NEXT: implement [native publication/receiver plan](collaboration-notification-publication-plan.md).
+Supplementary .work/chat-notification-publication-2026-11-02/plan.txt and storage-design.txt
+are design notes only, NO journal code drafted/applied yet. Evaluate one account
+active-card index plus encrypted per-conversation documents/watermarks, exact-CAS
+state and stable envelopes; avoid a two-partition atomicity gap and permanent active
+capacity consumption by dismissed cards. Current history has timestamp/event IDs,
+not causal sequence: define acquired-candidate ordering, never arbitrary push order.
+A suppressed unrelated candidate must not cancel the current different card. Native
+publication requires a serialized owner lease in addition to domain post-IO guards.
+Then native actions, explicit retained-input review UI and actual reply-input OS-death
+proof. Use UI/UX/Compose skills for UI; dedicated emulator only, never user-phone UI.
+
+Release19 adds internal reply recovery, not native notification actions or voice/video/
+meeting UI. Chat push OFF and live304/schema116 unchanged. All54 PRD groups remain
+open. Continue long run, atomic commits and push each; don't final at this delivery.
+Next validated product update must be >19 and use notify-then-install-only with same
+signer/data. No generic Starter port for these HRIS policies. Earlier checkpoints
+below are historical.
+
 ## Application reply recovery accepted; build/install release19, then native publication
 
 The real Koin application now runs a bounded reply phase inside global chat recovery.

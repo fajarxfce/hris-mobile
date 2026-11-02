@@ -1,0 +1,206 @@
+{
+  "date": "2026-11-02",
+  "source": {
+    "commit": "c0fafd8592bfaa1eaab40f153235a18f66afa59f",
+    "cleanBeforeBuild": true,
+    "cleanAfterBuild": true
+  },
+  "build": {
+    "command": [
+      "xvfb-run",
+      "-a",
+      "./gradlew",
+      ":apps:android:assembleDevRelease",
+      "-Pkotlin.compiler.execution.strategy=in-process",
+      ":apps:android:lintDevRelease",
+      "-PrequireSigning=true",
+      "-PappEnvironment=dev",
+      "-PappVersion=1.0.0",
+      "-PappVersionCode=19",
+      "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+      "--init-script",
+      "/home/fajar/hris/hris-mobile/.work/release-phone-2026-11-02-build19/phone-arm64.init.gradle",
+      "--stacktrace",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=1",
+      "-Dorg.gradle.jvmargs=-Xmx1536m"
+    ],
+    "startedAt": "2026-11-02T21:37:30.746718+00:00",
+    "elapsedSeconds": 475.141,
+    "exitCode": 0
+  },
+  "artifact": {
+    "nativeAbis": [
+      "arm64-v8a"
+    ],
+    "zipAligned16KiB": true,
+    "artifact": ".work/release-phone-2026-11-02-build19/hris-mobile-dev-release-1.0.0-19-arm64.apk",
+    "variant": "devRelease",
+    "applicationId": "dev.fajar.hris.mobile.dev",
+    "versionCode": 19,
+    "versionName": "1.0.0",
+    "bytes": 87675524,
+    "sha256": "69046c53bf99091a218e2c1470c0291e8916d2ddf2a2ba4ad79cbe0099bcf470",
+    "debuggable": false,
+    "signatureVerified": true,
+    "samePreviouslyInstalledSigner": true,
+    "signerSha256": "aca5ce6a26b978dee1d63c63103b6799848ab760d47ef4cf5ee68620fc8721f3",
+    "signerSha1": "23860b51e4305aa7900090aeab6783d39a12ff33",
+    "signingBoundary": "Release build signed with the existing development key for an in-place private-device update.",
+    "privateApiVerifiedInDex": true,
+    "fixtureEndpointsAbsent": true,
+    "firebaseDevAppMatches": true,
+    "compiledBackupExclusionsVerified": true,
+    "backupRulesSha256": "4ffd221f949918ffb48641e48f4135ae2509061b89a529c641dbeedfaa610e66",
+    "sameInstalledSigner": true
+  },
+  "lint": {
+    "issues": 0,
+    "severityCounts": {
+      "Fatal": 0,
+      "Error": 0,
+      "Warning": 0,
+      "Informational": 0
+    },
+    "reportSha256": "3cc5615c61ea6904882bb714ba526f5bf192e79ddc623bcb0a6e5d487b0371bc"
+  },
+  "emulatorBoot": {
+    "pid": 1504915,
+    "serial": "emulator-5562",
+    "command": [
+      "/home/fajar/Android/Sdk/emulator/emulator",
+      "-avd",
+      "hris-mobile-dev",
+      "-port",
+      "5562",
+      "-data",
+      "/home/fajar/hris/hris-mobile/.work/startup-fix-2026-11-01/clean-userdata.img",
+      "-no-window",
+      "-no-snapshot",
+      "-no-audio",
+      "-no-boot-anim",
+      "-gpu",
+      "swiftshader_indirect",
+      "-memory",
+      "1536",
+      "-cores",
+      "2",
+      "-feature",
+      "-Vulkan"
+    ],
+    "startTicks": "133270324",
+    "bootSeconds": 26.706
+  },
+  "emulatorStartup": {
+    "complete": true,
+    "serial": "emulator-5562",
+    "phoneTouched": false,
+    "source": "c0fafd8592bfaa1eaab40f153235a18f66afa59f",
+    "sha256": "69046c53bf99091a218e2c1470c0291e8916d2ddf2a2ba4ad79cbe0099bcf470",
+    "versionCode": 19,
+    "debuggable": false,
+    "primaryEmulatorAbi": "x86_64",
+    "nativeBridge": "libndk_translation.so",
+    "coldStarts": [
+      {
+        "coldStart": 1,
+        "pid": 2506,
+        "stableSeconds": 12,
+        "readableUiNodeCount": 7,
+        "resumed": true,
+        "processCrash": false,
+        "elapsedSeconds": 18.984,
+        "screenshotSha256": "e6b31bb8c71c16ab6647d6740a79f9fa2bda29171d2de6f6ac84c2f5ecab984a"
+      },
+      {
+        "coldStart": 2,
+        "pid": 3194,
+        "stableSeconds": 12,
+        "readableUiNodeCount": 7,
+        "resumed": true,
+        "processCrash": false,
+        "elapsedSeconds": 16.566,
+        "screenshotSha256": "aea244c872f6859795eaf871191c0dfb49ef41df7049bc7387183ef435c3b975"
+      }
+    ],
+    "elapsedSeconds": 61.32,
+    "apkUnchanged": true
+  },
+  "visualInspection": {
+    "image": "emulator-startup-2.png",
+    "sha256": "aea244c872f6859795eaf871191c0dfb49ef41df7049bc7387183ef435c3b975",
+    "inspected": true,
+    "observation": "Onboarding employee-services screen renders readable title/body, illustration, skip/continue controls and page indicator. No clipping observed. This is startup evidence, not a pixel-baseline comparison or acceptance of all product screens."
+  },
+  "emulatorStop": {
+    "pid": 1504915,
+    "serial": "emulator-5562",
+    "stopped": true,
+    "signalSent": false,
+    "transportAbsent": true,
+    "seconds": 0.002
+  },
+  "verificationCorrection": {
+    "passed": false,
+    "reason": "Verifier preparation accidentally replaced the fixed eighteen backup exclusions with nineteen while increasing versionCode. The nine backup domains each need two exclusions; APK build/signature/ABI/source checks preceding it passed. Correct the verifier constant, not the product.",
+    "artifactChanged": false,
+    "sourceChanged": false
+  },
+  "cleanupCorrection": {
+    "passed": false,
+    "reason": "Stop helper required ADB transport removal immediately after signalling its owned PID; first post-stop observation still returned device. Inspect owned process and transport before any retry.",
+    "smokePassed": true,
+    "followUp": "Recorded owned PID was absent and ADB transport had closed on the next inspection. Added bounded ten-second transport polling; repeated cleanup confirmed absence without another signal. No emulator/app test was repeated; unrelated CodePush emulator5580 was untouched."
+  },
+  "installation": {
+    "confirmed": true,
+    "startedAt": "2026-11-02T21:49:41.888604+00:00",
+    "elapsedSecondsIncludingVerification": 46.912,
+    "serial": "10.77.77.3:5555",
+    "variant": "devRelease",
+    "applicationId": "dev.fajar.hris.mobile.dev",
+    "versionCode": 19,
+    "versionName": "1.0.0",
+    "debuggable": false,
+    "installedSha256": "69046c53bf99091a218e2c1470c0291e8916d2ddf2a2ba4ad79cbe0099bcf470",
+    "installedBytesMatch": true,
+    "existingAppIdPreserved": true,
+    "firstInstallTimePreserved": true,
+    "updateInPlace": true,
+    "uninstalled": false,
+    "appDataCleared": false,
+    "uiLaunched": false,
+    "after": {
+      "appId": "10962",
+      "firstInstallTime": "2026-10-29 15:48:23",
+      "lastUpdateTime": "2026-11-03 04:49:58",
+      "versionCode": "19 minSdk=24 targetSdk=36",
+      "versionName": "1.0.0",
+      "debuggable": false
+    }
+  },
+  "compatibleServer": {
+    "source": "304be02700cf07e496421c17e90f5a471b4bd68c",
+    "schema": 116,
+    "runtimeChangedByThisRelease": false,
+    "previousAcceptance": "https://github.com/fajarxfce/hris-platform/blob/72447fb8/docs/measurements/chat-read-receipt-rollout-2026-11-02.json"
+  },
+  "apple": {
+    "run": 41530048115,
+    "source": "c0fafd8592bfaa1eaab40f153235a18f66afa59f",
+    "status": "pending completion and artifact audit",
+    "verifiedSourceFiles": 141,
+    "latestAcceptedRun": 41520480368,
+    "latestAcceptedSource": "8ca3c7d79dfbbd98c7db5456f5aad31d2621642b"
+  },
+  "limits": [
+    "Private devRelease update signed with the existing development key; package/dev API/Firebase app/signature/arm64/16KiB alignment and eighteen backup exclusions verified in the actual APK.",
+    "Two cold starts on the dedicated owned Android emulator, twelve-second stable windows each; arm64 APK runs through its libndk_translation bridge. No user-phone UI driven.",
+    "The first artifact verifier failed because preparation accidentally changed the fixed eighteen backup exclusions to nineteen along with versionCode. Corrected the verifier; product APK/source unchanged and subsequent full artifact verification passed.",
+    "The combined emulator command exited nonzero solely because cleanup checked ADB transport removal too soon. Both startup cases passed; subsequent owned-PID/transport inspection and bounded cleanup confirmed removal.",
+    "Updates account reply recovery and its independent global-worker lane. Native notification display/actions/review UI, voice/video/meeting UI and OS-death reply-input acceptance remain pending; chat push remains off.",
+    "Latest audited native provider proof41523212486 at1ebc0f94 predates cycle/worker. Its five existing scenarios do not test notification replies.",
+    "No generic Starter change for this HRIS-specific recovery increment. All54 PRD groups remain open; continue implementation after installation."
+  ]
+}
