@@ -1,5 +1,42 @@
 # Agent continuation — HRIS Mobile
 
+## Cursor foundation under full validation; durable cycle still required
+
+Mobile HEAD8ca3c7d7 has accepted reply read/review + application submission/resume.
+Full Apple41520480368 at8ca3c7d79dfbbd98c7db5456f5aad31d2621642b is RUNNING
+(last compile simulator tests).117 exact source hashes and prepared artifact audit
+under .work/chat-notification-reply-flow-apple-2026-11-02. Dispatch succeeded although
+an immediate run-list lookup raced visibility; recovered the known run ID without
+another dispatch. Latest control41520406550/native41520406393 pending behind824
+control41519184287/native41519184124. Latest accepted full Apple/native remain below.
+
+Uncommitted basic reply discovery/cursor has15 Kotlin inputs: encrypted account seek,
+opaque four-entry discovery with one wrap, exact CAS advance before attempt, owning
+bindings,14 domain cases,seven real SQLite/IndexedDB storage cases and DI assertions.
+Focused1 passed14 domain cases but storage test compilation failed because the test
+ReplicaStore.replace override omitted nullable ReplicaSnapshot. Fixed test signature;
+expanded wrapped-page failure and inactive-account write assertions. Focused2 PASSED
+23 cases/four suites160.443s; format/architecture74 modules/detekt clean. Full3 is
+RUNNING under .work/chat-notification-reply-recovery-2026-11-02 (root/proof/Wasm plus
+21 actual browser cases/three suites expected). Do not accept or commit Kotlin until
+its result and exact source hashes are checked. Current code does not wire a worker.
+
+Review found an important gap in the UNAPPLIED application-worker draft: a healthy
+last page can forget a transient failure from an earlier page after the cursor moves.
+Do NOT apply that draft as-is. [Tracked recovery design](collaboration-notification-reply-recovery.md)
+now specifies an optional durable cycle with initial/inFlight/retryRequired/finished,
+Begin/Settle/Finish exact CAS, sticky failure across pages and minimum-sequence restart
+after interrupted Finish. Add cycle state/transitions + migration/owner/cancellation/
+reopen tests after the basic cursor foundation; then rewrite the app phase and wire
+its reserved global-worker turn/ACK union. Supplementary detailed plan at
+.work/chat-notification-reply-recovery-2026-11-02/durable-cycle-plan.txt. No cycle code
+or tests yet, no native callback/display/notification activation, chat push OFF.
+
+Phone18/source42f5d157 and live304/schema116 unchanged. No local emulator running.
+One local heavy job (cursor full3), no phone interaction. Continue long run/atomic
+commits/push each; next validated product build >18 notify then explicit phone
+10.77.77.3:5555 --install-only, same signer/data, no UI driving. All54 PRD groups open.
+
 ## Retain-first reply workflow accepted; continue durable account recovery
 
 CollaborationNotificationReplies is now the application-owned submission/resume entry
