@@ -14,6 +14,22 @@ import org.koin.core.annotation.*
 @ComponentScan("dev.fajar.starter.collaboration.data")
 class CollaborationDataModule {
     @Factory
+    fun readRoomRecovery(
+        progress: CollaborationRoomRecoveryRepository,
+        lists: CollaborationListRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+    ) = ReadCollaborationRoomRecovery(progress, lists, sessions, server)
+
+    @Factory
+    fun updateRoomRecovery(
+        progress: CollaborationRoomRecoveryRepository,
+        lists: CollaborationListRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+    ) = UpdateCollaborationRoomRecovery(progress, lists, sessions, server)
+
+    @Factory
     fun ensureRecoveryWake(wakes: CollaborationRecoveryWakeRepository) =
         EnsureCollaborationRecoveryWake(wakes)
 

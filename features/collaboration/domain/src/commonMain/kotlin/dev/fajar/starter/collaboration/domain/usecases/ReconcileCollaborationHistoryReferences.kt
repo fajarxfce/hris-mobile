@@ -33,17 +33,26 @@ class ReconcileCollaborationHistoryReferences(
         after: String? = null,
         limit: Int = 20,
     ): AppResult<CollaborationHistoryReconciliation> =
+        invoke(CollaborationLocalScope.Selected(workspaceId), key, after, limit)
+
+    suspend operator fun invoke(
+        scope: CollaborationLocalScope,
+        key: CollaborationHistoryTraversal,
+        after: String? = null,
+        limit: Int = 20,
+    ): AppResult<CollaborationHistoryReconciliation> =
         execution.withLock {
+            currentCoroutineContext().ensureActive()
             if (
                 !validCollaborationHistoryTraversal(key) ||
                     limit !in 1..20 ||
                     !validCollaborationHistoryReferenceCursor(after)
             )
                 return@withLock failed()
-            val captured = capture(workspaceId)
+            val captured = capture(scope)
             if (captured is AppResult.Failed) return@withLock captured
             val access = (captured as AppResult.Success).value
-            continuation(workspaceId, access).let { if (it is AppResult.Failed) return@withLock it }
+            continuation(scope, access).let { if (it is AppResult.Failed) return@withLock it }
             val read = traversal.observeReferences(access, key, after, limit).first()
             // Detach the bounded list before another suspension can mutate caller-owned values.
             val page =
@@ -51,7 +60,7 @@ class ReconcileCollaborationHistoryReferences(
                     ?.value
                     ?.takeIf { it.events.size <= limit }
                     ?.let { it.copy(events = it.events.toList()) }
-            continuation(workspaceId, access).let { if (it is AppResult.Failed) return@withLock it }
+            continuation(scope, access).let { if (it is AppResult.Failed) return@withLock it }
             if (read is AppResult.Failed) return@withLock read
             if (page == null || !validCollaborationPendingHistoryReferences(page, after, limit))
                 return@withLock failed()
@@ -64,9 +73,7 @@ class ReconcileCollaborationHistoryReferences(
                         key.roomId,
                         reference.event.eventId,
                     )
-                continuation(workspaceId, access).let {
-                    if (it is AppResult.Failed) return@withLock it
-                }
+                continuation(scope, access).let { if (it is AppResult.Failed) return@withLock it }
                 if (found is AppResult.Failed) return@withLock found
                 val fact = (found as AppResult.Success).value ?: continue
                 val event = reference.event
@@ -82,9 +89,7 @@ class ReconcileCollaborationHistoryReferences(
             }
             if (resolved.isNotEmpty()) {
                 val saved = traversal.resolve(access, key, requireNotNull(page.progress), resolved)
-                continuation(workspaceId, access).let {
-                    if (it is AppResult.Failed) return@withLock it
-                }
+                continuation(scope, access).let { if (it is AppResult.Failed) return@withLock it }
                 if (saved is AppResult.Failed) return@withLock saved
                 if (!(saved as AppResult.Success).value) return@withLock failed()
             }
@@ -97,16 +102,16 @@ class ReconcileCollaborationHistoryReferences(
             )
         }
 
-    private suspend fun capture(workspaceId: String) =
-        sessions.captureMessageAccess(workspaceId, workspaces, server, build, clock)
+    private suspend fun capture(scope: CollaborationLocalScope) =
+        sessions.captureMessageAccess(scope, workspaces, server, build, clock)
 
     private suspend fun continuation(
-        workspaceId: String,
+        scope: CollaborationLocalScope,
         access: CollaborationLocalAccess,
     ): AppResult<Unit> {
         currentCoroutineContext().ensureActive()
         val gate = lists.admission(access)
-        val current = capture(workspaceId)
+        val current = capture(scope)
         currentCoroutineContext().ensureActive()
         if (gate is AppResult.Success)
             gate.value.denial?.let {

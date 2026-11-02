@@ -27,7 +27,16 @@ class ReadCollaborationHistoryReferences(
         key: CollaborationHistoryTraversal,
         after: String? = null,
         limit: Int = 20,
+    ): AppResult<CollaborationHistoryReferences> =
+        invoke(CollaborationLocalScope.Selected(workspaceId), key, after, limit)
+
+    suspend operator fun invoke(
+        scope: CollaborationLocalScope,
+        key: CollaborationHistoryTraversal,
+        after: String? = null,
+        limit: Int = 20,
     ): AppResult<CollaborationHistoryReferences> {
+        currentCoroutineContext().ensureActive()
         if (
             !validCollaborationHistoryTraversal(key) ||
                 limit !in 1..20 ||
@@ -37,33 +46,33 @@ class ReadCollaborationHistoryReferences(
                 "client.collaboration_invalid_history",
                 FailureKind.Validation,
             )
-        val captured = capture(workspaceId)
+        val captured = capture(scope)
         if (captured is AppResult.Failed) return captured
         val access = (captured as AppResult.Success).value
-        continuation(workspaceId, access).let { if (it is AppResult.Failed) return it }
+        continuation(scope, access).let { if (it is AppResult.Failed) return it }
         val loaded = traversal.observeReferences(access, key, after, limit).first()
         val page =
             (loaded as? AppResult.Success)
                 ?.value
                 ?.takeIf { it.events.size <= limit }
                 ?.let { it.copy(events = it.events.toList()) }
-        continuation(workspaceId, access).let { if (it is AppResult.Failed) return it }
+        continuation(scope, access).let { if (it is AppResult.Failed) return it }
         if (loaded is AppResult.Failed) return loaded
         if (page == null || !validCollaborationPendingHistoryReferences(page, after, limit))
             return collaborationSetupFailure("client.collaboration_history_unresolved")
         return AppResult.Success(page)
     }
 
-    private suspend fun capture(workspaceId: String) =
-        sessions.captureMessageAccess(workspaceId, workspaces, server, build, clock)
+    private suspend fun capture(scope: CollaborationLocalScope) =
+        sessions.captureMessageAccess(scope, workspaces, server, build, clock)
 
     private suspend fun continuation(
-        workspaceId: String,
+        scope: CollaborationLocalScope,
         access: CollaborationLocalAccess,
     ): AppResult<Unit> {
         currentCoroutineContext().ensureActive()
         val gate = lists.admission(access)
-        val current = capture(workspaceId)
+        val current = capture(scope)
         currentCoroutineContext().ensureActive()
         if (gate is AppResult.Success)
             gate.value.denial?.let {

@@ -1220,5 +1220,12 @@
     "No new employee APK or server deployment; phone remains15 and live chat push disabled.",
     "Apple41405822268 at338fea17 passes112 core simulator cases and full Xcode, but excludes this later healthy-continuation change. New hosted validation remains due.",
     "Incoming room discovery/acquisition, independent catchup progress, receive, notification privacy/actions and encrypted replies remain."
-  ]
+  ],
+  "apple": {
+    "databaseId": 41409790492,
+    "headSha": "5a39b53f0ece41d314738090e330bd7004e528db",
+    "status": "in_progress",
+    "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/41409790492",
+    "scope": "apple"
+  }
 }

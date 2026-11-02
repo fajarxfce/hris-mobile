@@ -198,6 +198,12 @@ class CollaborationBindingsTest {
                     },
                 )
                 assertNotNull(container.koin.get<UpdateCollaborationRecoveryProgress>())
+                assertNotNull(container.koin.get<ReadCollaborationRoomRecovery>())
+                assertNotNull(container.koin.get<UpdateCollaborationRoomRecovery>())
+                assertSame(
+                    container.koin.get<CollaborationRoomRecoveryRepository>(),
+                    container.koin.get<CollaborationRoomRecoveryRepository>(),
+                )
                 assertSame(
                     container.koin.get<CollaborationRecoveryProgressRepository>(),
                     container.koin.get<CollaborationRecoveryProgressRepository>(),

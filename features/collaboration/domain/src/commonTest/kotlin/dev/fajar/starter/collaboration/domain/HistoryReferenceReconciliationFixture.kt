@@ -47,6 +47,7 @@ internal class HistoryReferenceReconciliationFixture {
     var factReads = 0
     var writes = 0
     var activeReads = 0
+    val accessed = mutableListOf<CollaborationLocalAccess>()
     var afterRead: suspend () -> Unit = {}
     var afterFact: suspend () -> Unit = {}
     var afterWrite: suspend () -> Unit = {}
@@ -65,6 +66,7 @@ internal class HistoryReferenceReconciliationFixture {
                 after: String?,
                 limit: Int,
             ) = flow {
+                accessed += access
                 assertEquals(key, traversal)
                 reads++
                 activeReads++
@@ -104,6 +106,7 @@ internal class HistoryReferenceReconciliationFixture {
                 expected: CollaborationHistoryProgress,
                 references: List<CollaborationHistoryReference>,
             ): AppResult<Boolean> {
+                accessed += access
                 assertEquals(key, traversal)
                 writes++
                 if (rejectWrite || progress != expected) return AppResult.Success(false)
@@ -129,6 +132,7 @@ internal class HistoryReferenceReconciliationFixture {
                 roomId: String,
                 eventId: String,
             ): AppResult<CollaborationHistoryEventFact?> {
+                accessed += access
                 assertEquals(key.conversationId, conversationId)
                 assertEquals(key.roomId, roomId)
                 factReads++

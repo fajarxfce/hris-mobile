@@ -35,3 +35,7 @@ lease fixture; this increment adds no new JNI, incoming FCM, device-installation
 full background-worker acceptance. The earlier native-runtime evidence remains
 separate. Continue shared outbox scope and all-company receive/recovery; backend
 push delivery remains disabled pending real receive acceptance.
+
+Local reference reading and reconciliation now also accept Captured scope; see
+[room recovery and reference ownership](collaboration-room-recovery.md). They retain
+local facts without borrowing an SDK runtime or replacing provider browse positions.

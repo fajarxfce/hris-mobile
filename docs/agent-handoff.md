@@ -1,5 +1,60 @@
 # Agent continuation — HRIS Mobile
 
+## Room recovery and captured reference scope validated — 2 November 2026
+
+[Contract](collaboration-room-recovery.md) / [evidence](measurements/chat-room-recovery-2026-11-02.json):
+account/company-owned room progress now retains seek, unfinished attempt and independent
+retry/continuation flags. Attempt persists before external work; Complete preserves
+prior outcomes; validated-directory Finish atomically resets and returns Covered,
+Continue or Retry. Fresh generations fence competing writers and repeated positions.
+Protected history keys, bounded authenticated payloads and account fences are shared
+with existing storage. Age/reauthentication retain facts; known denial, cancellation
+and late account replacement cannot publish false coverage. No incoming caller yet.
+
+Read/ReconcileCollaborationHistoryReferences now accept Captured local scope through
+their existing implementation. String overloads still delegate to Selected. All raw
+reference/fact/resolution calls carry the captured account/company, even with no or a
+different selected workspace. Provider browse position is unchanged. Exact original/
+tombstone matching, bounded metadata, denial priority, late-write facts and subscription
+cleanup remain. Already-cancelled entry stops before admission/reference storage.
+
+Room-only focused1 passes559 domain,320 data,two actual DI cases plus Android release/
+proof Kotlin and static checks154s /157.623s on13 unchanged inputs. Then scope support
+added two use-case overloads, fixture access tracking and eight regressions. Final17-
+input full2 root, affected browser, Android release/proof Kotlin and app-Wasm passes
+371s /374.686s:3,102 desktop,215 Android host,865 affected browser,10 build-logic;
+zero failures/errors/skips. New cases:12 room domain,9 shared storage,8 captured scope.
+Both report/source boundaries are recorded; no failed check occurred in this increment.
+SQLite/IndexedDB are real; no new WorkManager/SDK/HRIS/FCM proof is implied here.
+
+**Continue immediately:** app-owned incoming coordinator using durable room progress,
+existing Background LoadSetup/RefreshList/AcquireRuntime/Enter/AcquireHistory and
+monitorCollaborationBackgroundDelivery. It must acquire incoming content even when
+there is no outbox, release each timeline/runtime, preserve the native-parent monitor,
+never switch workspace, and keep outgoing and incoming finite/fair. Current outer
+worker includes admission in its30s company budget and pages two companies in90s;
+do not give two independent30s lanes that starve the second. Review/test an explicit
+combined budget or one-company quantum before wiring both lanes. Existing synthetic
+native proof and app worker tests must be updated and rerun if those limits change.
+
+RefreshList server pagination is stable UUID ascending. Persist Attempt before each
+room operation so one failure/interruption cannot permanently exclude later rooms.
+A latest original window is bounded128 events and is NOT full long-offline recovery.
+Incoming recent catchup needs its own durable provider traversal; do not repeatedly
+reset the foreground Older cursor with Latest. Existing AcquireProviderHistory uses
+that shared browse cursor. Opaque FCM priority hints may reduce scanning latency but
+never grant content access; collapse recovery still must cover all admitted companies.
+Then actual provider/captured incoming, FCM/privacy/actions/encrypted replies, compatible
+server rollout and employee release. Preserve all remaining P0-P8/54 groups.
+
+Apple41409790492 is active at5a39b53f0ece41d314738090e330bd7004e528db; do not cancel it
+with another dispatch. It excludes this room increment. Prior41405822268 is audited
+112 core cases/full Xcode at338fea17. No new employee install: phone15 remains;
+private Platform schema103/API-worker2c2a59e3 and disabled chat push remain. Branch116
+is not live. Owned5562/proof process stopped; preserve unrelated5560. No generic
+Starter port is due for this HRIS policy. Old seven .txt candidates are obsolete;
+source is authoritative. Continue after each push while hosted checks execute.
+
 ## Healthy company backlog fixed and proved — 2 November 2026
 
 [Evidence](measurements/chat-company-continuation-2026-11-02.json): successful bounded
