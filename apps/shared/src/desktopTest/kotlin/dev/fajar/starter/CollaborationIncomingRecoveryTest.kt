@@ -25,13 +25,15 @@ class CollaborationIncomingRecoveryTest {
         withFixture { f ->
             val incoming = f.sdk.incoming(f.first, "Fictional incoming before send")
             val outgoing = f.queue(text = "Fictional outgoing reply")
-            f.withoutSelection()
+            f.withoutIncomingSelection()
             f.sdk.backgroundEnabled = true
             assertEquals(
                 SyncResult.Retry(),
-                f.koin.get<dev.fajar.starter.app.work.CollaborationCompanyRecovery>()(f.grant()),
+                f.koin.get<dev.fajar.starter.app.work.CollaborationCompanyRecovery>()(
+                    f.incomingGrant()
+                ),
             )
-            assertEquals(incoming.text, f.original(incoming)?.text)
+            assertEquals(incoming.text, f.incomingOriginal(incoming)?.text)
             assertEquals(listOf(outgoing.intent.id), f.sdk.enqueued)
             assertEquals(1, f.sdk.deliveries)
             assertEquals(2, f.sdk.backgroundAcquisitions)
@@ -44,15 +46,15 @@ class CollaborationIncomingRecoveryTest {
         withFixture { f ->
             val original = f.sdk.incoming(f.first, "Fictional incoming message")
             f.reopen()
-            f.withoutSelection()
+            f.withoutIncomingSelection()
             f.sdk.backgroundEnabled = true
             val worker = f.koin.get<CollaborationIncomingRecovery>()
-            assertEquals(SyncResult.Retry(), worker(f.grant()))
-            assertEquals(original.text, f.original(original)?.text)
+            assertEquals(SyncResult.Retry(), worker(f.incomingGrant()))
+            assertEquals(original.text, f.incomingOriginal(original)?.text)
             assertEquals(f.first, f.position()?.afterConversationId)
             assertNull(f.position()?.inFlightConversationId)
-            assertEquals(SyncResult.Retry(), worker(f.grant()))
-            assertEquals(SyncResult.Complete, worker(f.grant()))
+            assertEquals(SyncResult.Retry(), worker(f.incomingGrant()))
+            assertEquals(SyncResult.Complete, worker(f.incomingGrant()))
             assertEquals(CollaborationRoomRecoveryPosition(), f.position())
             assertEquals(3, f.sdk.backgroundAcquisitions)
             assertReleased(f)
@@ -60,7 +62,7 @@ class CollaborationIncomingRecoveryTest {
             assertEquals(0, f.sdk.deliveries)
             assertEquals(0, f.sdk.restores)
             f.reopen()
-            assertEquals(original.text, f.original(original)?.text)
+            assertEquals(original.text, f.incomingOriginal(original)?.text)
             assertEquals(CollaborationRoomRecoveryPosition(), f.position())
             assertTrue(f.server.unexpectedPaths.isEmpty())
         }
@@ -70,23 +72,23 @@ class CollaborationIncomingRecoveryTest {
     fun aFailedFirstRoomDoesNotStarveLaterRoomsOrLoseItsFailureAtDirectoryEnd() = runBlocking {
         withFixture { f ->
             val original = f.sdk.incoming(f.first, "Fictional retained original")
-            f.withoutSelection()
+            f.withoutIncomingSelection()
             f.sdk.backgroundEnabled = true
             f.sdk.historyCapacityOnce = true
             val worker = f.koin.get<CollaborationIncomingRecovery>()
-            assertEquals(SyncResult.Retry(), worker(f.grant()))
+            assertEquals(SyncResult.Retry(), worker(f.incomingGrant()))
             assertTrue(f.position()!!.retryRequired)
-            assertNull(f.original(original))
-            assertEquals(SyncResult.Retry(), worker(f.grant()))
-            assertNotNull(assertIs<SyncResult.Retry>(worker(f.grant())).failure)
+            assertNull(f.incomingOriginal(original))
+            assertEquals(SyncResult.Retry(), worker(f.incomingGrant()))
+            assertNotNull(assertIs<SyncResult.Retry>(worker(f.incomingGrant())).failure)
             assertEquals(
                 f.server.collaboration.ids.map(f.server.collaboration::roomId),
                 f.sdk.attemptedRooms,
             )
-            assertEquals(SyncResult.Retry(), worker(f.grant()))
-            assertEquals(original.text, f.original(original)?.text)
-            assertEquals(SyncResult.Retry(), worker(f.grant()))
-            assertEquals(SyncResult.Complete, worker(f.grant()))
+            assertEquals(SyncResult.Retry(), worker(f.incomingGrant()))
+            assertEquals(original.text, f.incomingOriginal(original)?.text)
+            assertEquals(SyncResult.Retry(), worker(f.incomingGrant()))
+            assertEquals(SyncResult.Complete, worker(f.incomingGrant()))
             assertEquals(0, f.sdk.historyReopens)
             assertEquals(0, f.sdk.deliveries)
             assertReleased(f)
@@ -97,10 +99,10 @@ class CollaborationIncomingRecoveryTest {
     fun anEmptyDirectoryCompletesWithoutOpeningTheSdk() = runBlocking {
         withFixture { f ->
             f.server.collaboration.listedIds = emptyList()
-            f.withoutSelection()
+            f.withoutIncomingSelection()
             assertEquals(
                 SyncResult.Complete,
-                f.koin.get<CollaborationIncomingRecovery>()(f.grant()),
+                f.koin.get<CollaborationIncomingRecovery>()(f.incomingGrant()),
             )
             assertEquals(CollaborationRoomRecoveryPosition(), f.position())
             assertEquals(0, f.sdk.backgroundAcquisitions)
@@ -113,8 +115,8 @@ class CollaborationIncomingRecoveryTest {
             withFixture { f ->
                 f.server.collaboration.listedIds = listOf(f.first)
                 f.server.collaboration.rooms[f.first] = state
-                f.withoutSelection()
-                val result = f.koin.get<CollaborationIncomingRecovery>()(f.grant())
+                f.withoutIncomingSelection()
+                val result = f.koin.get<CollaborationIncomingRecovery>()(f.incomingGrant())
                 if (state == "QUEUED" || state == "RUNNING")
                     assertNotNull(assertIs<SyncResult.Retry>(result).failure)
                 else assertEquals(SyncResult.Complete, result)
@@ -128,14 +130,17 @@ class CollaborationIncomingRecoveryTest {
     fun freshSetupReadmissionReopensPreviouslyDeniedIncomingProjection() = runBlocking {
         withFixture { f ->
             val original = f.sdk.incoming(f.first, "Fictional readmitted message")
-            val access = f.grant().owner.localListAccess()
+            val access = f.incomingGrant().owner.localListAccess()
             assertIs<AppResult.Success<*>>(
                 f.koin.get<CollaborationListRepository>().restrict(access, denied())
             )
-            f.withoutSelection()
+            f.withoutIncomingSelection()
             f.sdk.backgroundEnabled = true
-            assertEquals(SyncResult.Retry(), f.koin.get<CollaborationIncomingRecovery>()(f.grant()))
-            assertEquals(original.text, f.original(original)?.text)
+            assertEquals(
+                SyncResult.Retry(),
+                f.koin.get<CollaborationIncomingRecovery>()(f.incomingGrant()),
+            )
+            assertEquals(original.text, f.incomingOriginal(original)?.text)
             assertNull(
                 assertIs<AppResult.Success<CollaborationListAdmission>>(
                         f.koin.get<CollaborationListRepository>().admission(access)
@@ -152,29 +157,29 @@ class CollaborationIncomingRecoveryTest {
         runBlocking {
             withFixture { f ->
                 val original = f.sdk.incoming(f.first, "Fictional interrupted original")
-                f.withoutSelection()
+                f.withoutIncomingSelection()
                 f.sdk.backgroundEnabled = true
                 val entered = CompletableDeferred<Unit>()
                 f.sdk.beforeHistory = {
                     entered.complete(Unit)
                     awaitCancellation()
                 }
-                val job = async { f.koin.get<CollaborationIncomingRecovery>()(f.grant()) }
+                val job = async { f.koin.get<CollaborationIncomingRecovery>()(f.incomingGrant()) }
                 withTimeout(5.seconds) { entered.await() }
                 job.cancelAndJoin()
                 assertEquals(f.first, f.position()?.inFlightConversationId)
-                assertNull(f.original(original))
+                assertNull(f.incomingOriginal(original))
                 assertReleased(f)
                 f.sdk.beforeHistory = {}
                 f.reopen()
-                f.withoutSelection()
+                f.withoutIncomingSelection()
                 val replacement = f.koin.get<CollaborationIncomingRecovery>()
-                assertEquals(SyncResult.Retry(), replacement(f.grant()))
-                assertNotNull(assertIs<SyncResult.Retry>(replacement(f.grant())).failure)
-                assertEquals(SyncResult.Retry(), replacement(f.grant()))
-                assertEquals(original.text, f.original(original)?.text)
-                assertEquals(SyncResult.Retry(), replacement(f.grant()))
-                assertEquals(SyncResult.Complete, replacement(f.grant()))
+                assertEquals(SyncResult.Retry(), replacement(f.incomingGrant()))
+                assertNotNull(assertIs<SyncResult.Retry>(replacement(f.incomingGrant())).failure)
+                assertEquals(SyncResult.Retry(), replacement(f.incomingGrant()))
+                assertEquals(original.text, f.incomingOriginal(original)?.text)
+                assertEquals(SyncResult.Retry(), replacement(f.incomingGrant()))
+                assertEquals(SyncResult.Complete, replacement(f.incomingGrant()))
                 assertReleased(f)
             }
         }
@@ -183,7 +188,7 @@ class CollaborationIncomingRecoveryTest {
     fun concurrentIncomingDoesNotQueueAnotherRuntimeAndCancellationReleasesTheLock() = runBlocking {
         withFixture { f ->
             f.sdk.incoming(f.first, "Fictional pending original")
-            f.withoutSelection()
+            f.withoutIncomingSelection()
             f.sdk.backgroundEnabled = true
             val worker = f.koin.get<CollaborationIncomingRecovery>()
             val entered = CompletableDeferred<Unit>()
@@ -191,14 +196,15 @@ class CollaborationIncomingRecoveryTest {
                 entered.complete(Unit)
                 awaitCancellation()
             }
-            val job = async { worker(f.grant()) }
+            val job = async { worker(f.incomingGrant()) }
             withTimeout(5.seconds) { entered.await() }
-            val busy = assertIs<SyncResult.Retry>(withTimeout(1.seconds) { worker(f.grant()) })
+            val busy =
+                assertIs<SyncResult.Retry>(withTimeout(1.seconds) { worker(f.incomingGrant()) })
             assertEquals("client.collaboration_incoming_busy", busy.failure?.code)
             assertEquals(1, f.sdk.backgroundAcquisitions)
             job.cancelAndJoin()
             f.sdk.beforeHistory = {}
-            assertEquals(SyncResult.Retry(), worker(f.grant()))
+            assertEquals(SyncResult.Retry(), worker(f.incomingGrant()))
             assertEquals(2, f.sdk.backgroundAcquisitions)
             assertReleased(f)
         }
@@ -208,19 +214,19 @@ class CollaborationIncomingRecoveryTest {
     fun sdkInterruptionCancelsHistoryAndClosesOwnedObserversAndChildren() = runBlocking {
         withFixture { f ->
             val original = f.sdk.incoming(f.first, "Fictional interrupted history")
-            f.withoutSelection()
+            f.withoutIncomingSelection()
             f.sdk.backgroundEnabled = true
             val entered = CompletableDeferred<Unit>()
             f.sdk.beforeHistory = {
                 entered.complete(Unit)
                 awaitCancellation()
             }
-            val job = async { f.koin.get<CollaborationIncomingRecovery>()(f.grant()) }
+            val job = async { f.koin.get<CollaborationIncomingRecovery>()(f.incomingGrant()) }
             withTimeout(5.seconds) { entered.await() }
             f.sdk.backgroundInterruptions.value = Failure(FailureKind.Network, "Interrupted")
             assertEquals(SyncResult.Retry(), withTimeout(5.seconds) { job.await() })
             assertTrue(f.position()!!.retryRequired)
-            assertNull(f.original(original))
+            assertNull(f.incomingOriginal(original))
             assertReleased(f)
         }
     }
@@ -229,8 +235,8 @@ class CollaborationIncomingRecoveryTest {
     fun lateHistoryAfterAccountLossCannotPublishOriginalsOrClaimCoverage() = runBlocking {
         withFixture { f ->
             val original = f.sdk.incoming(f.first, "Fictional late original")
-            val access = f.grant().owner.localListAccess()
-            f.withoutSelection()
+            val access = f.incomingGrant().owner.localListAccess()
+            f.withoutIncomingSelection()
             f.sdk.backgroundEnabled = true
             val entered = CompletableDeferred<Unit>()
             val release = CompletableDeferred<Unit>()
@@ -240,7 +246,7 @@ class CollaborationIncomingRecoveryTest {
                     release.await()
                 }
             }
-            val job = async { f.koin.get<CollaborationIncomingRecovery>()(f.grant()) }
+            val job = async { f.koin.get<CollaborationIncomingRecovery>()(f.incomingGrant()) }
             withTimeout(5.seconds) { entered.await() }
             assertEquals(
                 AppResult.Success(true),
@@ -268,8 +274,8 @@ class CollaborationIncomingRecoveryTest {
         runBlocking {
             withFixture { f ->
                 val original = f.sdk.incoming(f.first, "Fictional restricted original")
-                val access = f.grant().owner.localListAccess()
-                f.withoutSelection()
+                val access = f.incomingGrant().owner.localListAccess()
+                f.withoutIncomingSelection()
                 f.sdk.backgroundEnabled = true
                 val entered = CompletableDeferred<Unit>()
                 val release = CompletableDeferred<Unit>()
@@ -279,7 +285,7 @@ class CollaborationIncomingRecoveryTest {
                         release.await()
                     }
                 }
-                val job = async { f.koin.get<CollaborationIncomingRecovery>()(f.grant()) }
+                val job = async { f.koin.get<CollaborationIncomingRecovery>()(f.incomingGrant()) }
                 withTimeout(5.seconds) { entered.await() }
                 assertIs<AppResult.Success<*>>(
                     f.koin.get<CollaborationListRepository>().restrict(access, denied())
@@ -287,7 +293,7 @@ class CollaborationIncomingRecoveryTest {
                 release.complete(Unit)
                 assertIs<SyncResult.Blocked>(withTimeout(5.seconds) { job.await() })
                 assertIs<AppResult.Failed>(f.koin.get<ReadCollaborationRoomRecovery>()(access))
-                assertNull(f.original(original))
+                assertNull(f.incomingOriginal(original))
                 assertReleased(f)
             }
         }
@@ -295,7 +301,7 @@ class CollaborationIncomingRecoveryTest {
     @Test
     fun lateRuntimeAfterCancellationIsClosedBeforeAnyTimelinePublication() = runBlocking {
         withFixture { f ->
-            f.withoutSelection()
+            f.withoutIncomingSelection()
             f.sdk.backgroundEnabled = true
             val entered = CompletableDeferred<Unit>()
             val release = CompletableDeferred<Unit>()
@@ -305,7 +311,7 @@ class CollaborationIncomingRecoveryTest {
                     release.await()
                 }
             }
-            val job = async { f.koin.get<CollaborationIncomingRecovery>()(f.grant()) }
+            val job = async { f.koin.get<CollaborationIncomingRecovery>()(f.incomingGrant()) }
             withTimeout(5.seconds) { entered.await() }
             job.cancel()
             release.complete(Unit)
@@ -322,14 +328,16 @@ class CollaborationIncomingRecoveryTest {
     fun originalAdmissionDeadlineBoundsPendingHistoryWithoutRenewal() = runBlocking {
         withFixture { f ->
             f.sdk.incoming(f.first, "Fictional timed original")
-            f.withoutSelection()
+            f.withoutIncomingSelection()
             f.sdk.backgroundEnabled = true
             val entered = CompletableDeferred<Unit>()
             f.sdk.beforeHistory = {
                 entered.complete(Unit)
                 awaitCancellation()
             }
-            val job = async { f.koin.get<CollaborationIncomingRecovery>()(f.grant(2.seconds)) }
+            val job = async {
+                f.koin.get<CollaborationIncomingRecovery>()(f.incomingGrant(2.seconds))
+            }
             withTimeout(5.seconds) { entered.await() }
             val result = assertIs<SyncResult.Retry>(withTimeout(5.seconds) { job.await() })
             assertEquals("client.collaboration_incoming_timeout", result.failure?.code)
@@ -341,15 +349,17 @@ class CollaborationIncomingRecoveryTest {
     @Test
     fun expiredOrAlreadyCancelledEntryDoesNoSetupOrRuntimeWork() = runBlocking {
         withFixture { f ->
-            f.withoutSelection()
+            f.withoutIncomingSelection()
             val elapsed = TestTimeSource()
-            val grant = f.grant().copy(monotonicDeadline = elapsed.markNow() + 2.seconds)
+            val grant = f.incomingGrant().copy(monotonicDeadline = elapsed.markNow() + 2.seconds)
             elapsed += 2.seconds
             val worker = f.koin.get<CollaborationIncomingRecovery>()
             val reads = f.server.collaboration.reads.size
             assertIs<SyncResult.Retry>(worker(grant))
             val job = Job().apply { cancel() }
-            assertFailsWith<CancellationException> { withContext(job) { worker(f.grant()) } }
+            assertFailsWith<CancellationException> {
+                withContext(job) { worker(f.incomingGrant()) }
+            }
             assertEquals(reads, f.server.collaboration.reads.size)
             assertEquals(0, f.sdk.backgroundAcquisitions)
         }
@@ -373,7 +383,7 @@ class CollaborationIncomingRecoveryTest {
     }
 }
 
-private fun CollaborationWorkerFixture.grant(
+internal fun CollaborationWorkerFixture.incomingGrant(
     duration: Duration = 60.seconds
 ): CollaborationBackgroundAdmission {
     val now = Clock.System.now()
@@ -400,7 +410,7 @@ private fun CollaborationWorkerFixture.grant(
     )
 }
 
-private fun CollaborationWorkerFixture.withoutSelection() {
+internal fun CollaborationWorkerFixture.withoutIncomingSelection() {
     val selected = koin.get<WorkspaceRepository>()
     val unavailable =
         object : WorkspaceRepository by selected {
@@ -415,18 +425,20 @@ private fun CollaborationWorkerFixture.withoutSelection() {
 
 private suspend fun CollaborationWorkerFixture.position() =
     assertIs<AppResult.Success<CollaborationRoomRecoverySnapshot>>(
-            koin.get<ReadCollaborationRoomRecovery>()(grant().owner.localListAccess())
+            koin.get<ReadCollaborationRoomRecovery>()(incomingGrant().owner.localListAccess())
         )
         .value
         .progress
         ?.position
 
-private suspend fun CollaborationWorkerFixture.original(event: CollaborationHistoryChange.Text) =
+internal suspend fun CollaborationWorkerFixture.incomingOriginal(
+    event: CollaborationHistoryChange.Text
+) =
     assertIs<AppResult.Success<CollaborationHistoryMessage?>>(
             koin
                 .get<CollaborationHistoryRepository>()
                 .getByEvent(
-                    grant().owner.localListAccess(),
+                    incomingGrant().owner.localListAccess(),
                     first,
                     server.collaboration.roomId(first),
                     event.eventId,

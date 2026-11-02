@@ -24,8 +24,12 @@ internal class AndroidCollaborationHistoryReads(
     suspend fun read(roomId: String): AppResult<String?> =
         request(CollaborationHistoryRequest.Head(roomId)) { collaborationHistoryHead(it, roomId) }
 
-    suspend fun page(roomId: String, position: String?): AppResult<CollaborationProviderPageDto> {
-        return request(CollaborationHistoryRequest.Page(roomId, position)) {
+    suspend fun page(
+        roomId: String,
+        position: String?,
+        untilPosition: String? = null,
+    ): AppResult<CollaborationProviderPageDto> {
+        return request(CollaborationHistoryRequest.Page(roomId, position, untilPosition)) {
             collaborationProviderPage(it, roomId, position)
         }
     }
@@ -38,7 +42,8 @@ internal class AndroidCollaborationHistoryReads(
             return AppResult.Failed(it)
         }
         val position = (query as? CollaborationHistoryRequest.Page)?.position
-        if (position != null && !validCollaborationProviderPosition(position))
+        val untilPosition = (query as? CollaborationHistoryRequest.Page)?.untilPosition
+        if (listOfNotNull(position, untilPosition).any { !validCollaborationProviderPosition(it) })
             return AppResult.Failed(Failure(FailureKind.Validation, "Invalid history position."))
         val roomId = query.roomId
         if (

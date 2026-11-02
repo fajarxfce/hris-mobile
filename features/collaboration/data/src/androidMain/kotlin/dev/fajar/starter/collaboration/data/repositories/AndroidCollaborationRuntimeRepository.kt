@@ -169,6 +169,7 @@ class AndroidCollaborationRuntimeRepository(
         deviceId: String,
         matrixRoomId: String,
         position: String?,
+        untilPosition: String?,
     ): AppResult<CollaborationProviderHistoryPage> {
         val runtime =
             leases.singleOrNull {
@@ -181,7 +182,7 @@ class AndroidCollaborationRuntimeRepository(
                         code = "client.collaboration_runtime_not_open",
                     )
                 )
-        return runtime.readProviderHistory(matrixRoomId, position)
+        return runtime.readProviderHistory(matrixRoomId, position, untilPosition)
     }
 
     override suspend fun findHistoryHead(

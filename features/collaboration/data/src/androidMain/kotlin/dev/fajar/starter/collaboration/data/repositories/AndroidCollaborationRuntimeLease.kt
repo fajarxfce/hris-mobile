@@ -247,8 +247,9 @@ internal constructor(
     suspend fun readProviderHistory(
         roomId: String,
         position: String?,
+        untilPosition: String? = null,
     ): AppResult<CollaborationProviderHistoryPage> =
-        when (val result = historyReads.page(roomId, position)) {
+        when (val result = historyReads.page(roomId, position, untilPosition)) {
             is AppResult.Failed -> result
             is AppResult.Success ->
                 AppResult.Success(
@@ -260,6 +261,7 @@ internal constructor(
                         result.value.start,
                         result.value.next,
                         result.value.events.toList(),
+                        untilPosition,
                     )
                 )
         }

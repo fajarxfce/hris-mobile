@@ -57,6 +57,13 @@ internal class HistoryReferenceReconciliationFixture(
 
     private val traversal =
         object : CollaborationHistoryTraversalRepository {
+            override suspend fun advanceIncomingReferences(
+                access: CollaborationLocalAccess,
+                traversal: CollaborationHistoryTraversal,
+                source: CollaborationHistoryReferences,
+                retryRequired: Boolean,
+            ): AppResult<Boolean> = error("No implicit incoming seek advance")
+
             override suspend fun progress(
                 access: CollaborationLocalAccess,
                 traversal: CollaborationHistoryTraversal,

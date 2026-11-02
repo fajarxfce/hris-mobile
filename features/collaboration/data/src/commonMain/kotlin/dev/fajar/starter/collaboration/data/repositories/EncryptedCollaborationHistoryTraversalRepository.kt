@@ -98,6 +98,10 @@ class EncryptedCollaborationHistoryTraversalRepository(
         val latest = origin == CollaborationHistoryPageOrigin.Latest
         require(latest || expected == null || !expected.exhausted)
         require(captured.requestedPosition == if (latest) null else expected?.next)
+        require(
+            captured.requestedUntilPosition ==
+                collaborationHistoryUntilPosition(traversal, expected, origin)
+        )
         val scope = historyScope(access)
         val partition = traversalPartition(access, traversal)
         val raw = replicas.checkpoint(scope, partition)
@@ -124,6 +128,7 @@ class EncryptedCollaborationHistoryTraversalRepository(
                     raw?.revision?.plus(1) ?: 0,
                     captured.next,
                     count,
+                    collaborationIncomingHistoryPosition(traversal, previous, captured, origin),
                 )
             val documents = added.map { codec.reference(progress, it) }
             val checkpoint = codec.checkpoint(progress)
@@ -185,4 +190,66 @@ class EncryptedCollaborationHistoryTraversalRepository(
         keys.use(create) { content, index ->
             operation(CollaborationHistoryTraversalCodec(access, traversal, cipher, content, index))
         }
+
+    override suspend fun advanceIncomingReferences(
+        access: CollaborationLocalAccess,
+        traversal: CollaborationHistoryTraversal,
+        source: CollaborationHistoryReferences,
+        retryRequired: Boolean,
+    ) = safeStorageCall {
+        require(
+            traversal.purpose == CollaborationHistoryPurpose.Incoming && source.events.size <= 20
+        )
+        val captured = source.copy(events = source.events.toList())
+        val expected = requireNotNull(captured.progress)
+        val position = requireNotNull(expected.incoming)
+        val through = position.pendingThrough ?: expected.references
+        require(validCollaborationPendingHistoryReferences(captured, position.pendingAfter, 20))
+        require(captured.events.all { it.sequence < through })
+        val scope = historyScope(access)
+        val partition = traversalPartition(access, traversal)
+        val raw = replicas.checkpoint(scope, partition) ?: return@safeStorageCall false
+        withCodec(access, traversal) { codec ->
+            val current = codec.progress(raw)
+            if (
+                current.generation != expected.generation ||
+                    current.revision < expected.revision ||
+                    current.references < expected.references ||
+                    current.incoming != position
+            )
+                return@withCodec false
+            var last: ReplicaDocument? = null
+            for (reference in captured.events) {
+                val row =
+                    requireNotNull(
+                        replicas.document(scope, partition, codec.id(reference.event.eventId))
+                    )
+                require(codec.reference(raw, row).copy(resolved = false) == reference)
+                last = row
+            }
+            val after = captured.after
+            val previousAfter = position.pendingAfter
+            require(
+                after == null ||
+                    (after == last?.sortKey &&
+                        (previousAfter == null || after > previousAfter) &&
+                        captured.events.last().sequence + 1 < through)
+            )
+            if (after == position.pendingAfter) return@withCodec true
+            val progress =
+                current.copy(
+                    revision = current.revision + 1,
+                    incoming =
+                        position.copy(
+                            pendingAfter = after,
+                            pendingThrough = if (after == null) null else through,
+                            pendingRetryRequired =
+                                after != null && (position.pendingRetryRequired || retryRequired),
+                        ),
+                )
+            val checkpoint = codec.checkpoint(progress)
+            currentCoroutineContext().ensureActive()
+            replicas.commit(raw.handle, raw.revision, checkpoint, emptyList(), true)
+        }
+    }
 }

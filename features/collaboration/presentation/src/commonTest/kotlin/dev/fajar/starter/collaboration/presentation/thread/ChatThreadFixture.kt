@@ -350,6 +350,7 @@ internal class ChatThreadFixture {
                 deviceId: String,
                 matrixRoomId: String,
                 position: String?,
+                untilPosition: String?,
             ) = past.provider(owner, deviceId, matrixRoomId, position)
 
             override suspend fun readOriginalHistory(

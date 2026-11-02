@@ -63,13 +63,18 @@ class AcquireCollaborationProviderHistory(
         val loaded = checked(scope, owner) { history.progress(owner.localListAccess(), traversal) }
         if (loaded is AppResult.Failed) return loaded
         val previous = (loaded as AppResult.Success).value
-        if (previous != null && !validCollaborationHistoryProgress(previous))
+        if (
+            previous != null &&
+                (!validCollaborationHistoryProgress(previous) ||
+                    (purpose == CollaborationHistoryPurpose.Browse && previous.incoming != null))
+        )
             return failed("client.collaboration_invalid_history_progress")
         val latest = origin == CollaborationHistoryPageOrigin.Latest
         if (!latest && previous?.exhausted == true)
             return AppResult.Success(CollaborationProviderHistoryAcquisition(0, true))
         val position = if (latest) null else previous?.next
-        val received = runtimes.readProviderHistory(owner, deviceId, roomId, position)
+        val until = collaborationHistoryUntilPosition(traversal, previous, origin)
+        val received = runtimes.readProviderHistory(owner, deviceId, roomId, position, until)
         val snapshot =
             (received as? AppResult.Success)?.value?.let {
                 if (it.events.size > 20) null else it.copy(events = it.events.toList())
@@ -80,6 +85,7 @@ class AcquireCollaborationProviderHistory(
             snapshot == null ||
                 snapshot.owner != owner ||
                 snapshot.requestedPosition != position ||
+                snapshot.requestedUntilPosition != until ||
                 !validCollaborationProviderPage(snapshot, owner.localListAccess(), traversal)
         )
             return failed("client.collaboration_invalid_history_page")

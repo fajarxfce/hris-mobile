@@ -48,6 +48,7 @@ interface CollaborationRuntimeRepository {
         deviceId: String,
         matrixRoomId: String,
         position: String?,
+        untilPosition: String? = null,
     ): AppResult<CollaborationProviderHistoryPage>
 
     /**

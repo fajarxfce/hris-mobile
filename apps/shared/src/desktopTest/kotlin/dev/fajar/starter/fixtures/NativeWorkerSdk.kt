@@ -35,6 +35,10 @@ class NativeWorkerSdk(private val wire: NativeCollaborationUi) : CollaborationRu
     var historyCapacityOnce = false
     var historyReopens = 0
     var historyReads = 0
+    var historyWindowLimit = 128
+    val withheldHistory = mutableSetOf<String>()
+    val providerBounds = mutableListOf<Pair<String?, String?>>()
+    var beforeProvider: suspend () -> Unit = {}
     var beforeHistory: suspend () -> Unit = {}
     var beforeResume: suspend () -> Unit = {}
     var beforeEnter: suspend () -> Unit = {}
@@ -175,7 +179,36 @@ class NativeWorkerSdk(private val wire: NativeCollaborationUi) : CollaborationRu
         deviceId: String,
         matrixRoomId: String,
         position: String?,
-    ): AppResult<CollaborationProviderHistoryPage> = error("No provider pagination")
+        untilPosition: String?,
+    ): AppResult<CollaborationProviderHistoryPage> {
+        check(this.owner == owner && deviceId == wire.deviceId)
+        val events = originals[matrixRoomId].orEmpty().toList()
+        val from = position?.removePrefix("history-")?.toInt() ?: events.size
+        val until = untilPosition?.removePrefix("history-")?.toInt() ?: 0
+        check(until in 0..from && from <= events.size)
+        val end = maxOf(until, from - 20)
+        val page =
+            CollaborationProviderHistoryPage(
+                owner,
+                deviceId,
+                matrixRoomId,
+                position,
+                position ?: "history-$from",
+                if (end > until) "history-$end" else null,
+                events.subList(end, from).asReversed().map {
+                    CollaborationProviderHistoryEvent(
+                        it.eventId,
+                        it.sender,
+                        it.timestamp,
+                        "m.room.encrypted",
+                    )
+                },
+                untilPosition,
+            )
+        providerBounds += position to untilPosition
+        beforeProvider()
+        return AppResult.Success(page)
+    }
 
     override suspend fun findHistoryHead(
         owner: CollaborationOwner,
@@ -209,14 +242,21 @@ class NativeWorkerSdk(private val wire: NativeCollaborationUi) : CollaborationRu
                 )
             )
         }
+        val events = originals[matrixRoomId].orEmpty()
+        val index = events.indexOfFirst { it.eventId == anchorEventId }
+        check(index >= 0 && historyWindowLimit in 1..128)
+        val start = maxOf(0, index - historyWindowLimit / 2)
+        val window = events.subList(start, minOf(events.size, start + historyWindowLimit))
         return AppResult.Success(
             CollaborationOriginalWindow(
                 owner,
                 deviceId,
                 matrixRoomId,
                 anchorEventId,
-                if (withholdOriginals) emptyList() else originals[matrixRoomId].orEmpty().toList(),
-                if (withholdOriginals) listOf(anchorEventId) else emptyList(),
+                if (withholdOriginals) emptyList()
+                else window.filter { it.eventId !in withheldHistory },
+                if (withholdOriginals) listOf(anchorEventId)
+                else window.filter { it.eventId in withheldHistory }.map { it.eventId },
             )
         )
     }

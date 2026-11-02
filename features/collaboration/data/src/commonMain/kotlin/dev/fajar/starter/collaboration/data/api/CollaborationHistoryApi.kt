@@ -38,6 +38,9 @@ internal class CollaborationHistoryApi(
                     (request as? CollaborationHistoryRequest.Page)?.position?.let {
                         parameters.append("from", it)
                     }
+                    (request as? CollaborationHistoryRequest.Page)?.untilPosition?.let {
+                        parameters.append("to", it)
+                    }
                 }
                 expectSuccess = false
                 bearerAuth(accessToken)

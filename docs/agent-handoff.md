@@ -1,5 +1,67 @@
 # Agent continuation — HRIS Mobile
 
+## Bounded incoming waves and real Android catchup validated — 2 November 2026
+
+[Contract](collaboration-incoming-history.md) / [evidence](measurements/chat-incoming-history-waves-2026-11-02.json):
+incoming recovery now retains provider `from`/`to` boundaries, a completed wave head,
+and a fair fixed-high-water pending-reference pass. Browse retains its exact old
+partition/AAD/schema. Incoming schema2 canonically encodes opaque ASCII positions
+inside AEAD, preserving the existing32,768-character database checkpoint cap. Original
+facts remain shared, and seek advancement never acknowledges unresolved plaintext.
+Room12s/lane15s budgets, owned/captured access and joined resource cleanup remain.
+
+Focused5 passes584 domain,346 data and94 selected app cases plus Android release/
+proof Kotlin/static checks120.551s on47 inputs. Full7 passes425s Gradle /428.941s wall
+on51 inputs:3,169 desktop472 suites,217 Android host35,908 collaboration browser92,
+6 proof host1,10 build-logic2; zero failures/errors/skips. Earlier failures retain two
+compiler fixes, worst-case JSON checkpoint overflow/canonical encoding correction,
+two renamed fixture references and one proof-method detekt extraction. Subsequent
+changes are confined to three proof files: APK/host/static8 passes96.152s on52 inputs,
+6 host cases. Production inputs remain those accepted by full7; no second root run
+on altered proof-only code is claimed.
+
+Real SDK/HRIS/PostgreSQL/Synapse native runs2+3 pass all3 variants on the SAME APK
+cb5830040a023fbf4a2ab040800f120521b0286da1d4949f3448966d7b525e50 (343,275,325 bytes),
+with52 Mobile and7 Platform inputs unchanged. CANCELLED_DRAFT passes394.103s;
+QUEUED/FROZEN_DRAFT pass671.255s together. Each recovers175 peer originals plus the
+prior outgoing original, exhausts186 references in11 turns and survives11 container
+reopens. Outbox empty, no workspace selection, fresh native admission, Browse still
+untouched and runtime released are asserted each turn. Foreground ViewModel completes
+11 independent Browse pages;10 state references remain. Server verifies all ciphertext
+and exactly one outgoing worker send. Cleanup succeeds for every final case.
+
+Native1 preserves3/5 failures in716.614s: SDK death/actual OS scheduling regressions
+pass; cancelled/queued expanded cases hit old210s instrumentation timeout; frozen
+fails before installation on an empty AVD reply/IndexError. New bounded phase/turn
+counters show successful complete fixture times245.182–260.457s, including175 queue
+pause checks and container reopen work. Worker-resume fixture allows420s inside480s
+Python/10min JUnit bounds; production deadlines unchanged. Empty AVD replies now fail
+as controlled RuntimeError before device/artifact mutation, with no fallback/retry.
+84 driver cases pass0.363s. Owned191463 unexpectedly exited; cause not established
+and no kernel termination record found. Later owned225320 and240903 stopped1.711s
+and1.355s. No emulator remains owned. Unrelated5560/phone15 untouched.
+
+Apple41421351125 at cacae157a83c0653428156fc47e53e97bbe1db9d is COMPLETE/audited:
+112 core cases30 suites,6 wake cases0.070s, compile452s/tests82s/Xcode861s/associations
+0s;16 source hashes verified. It excludes these new waves. Dispatch the next exact
+committed head after push. Core CI excludes app desktop cases; physical iPhone waived.
+Platform companion proof/evidence is in the same-date measurement file in that repo.
+Publish both atomic increments before continuing. No generic Starter port is due.
+
+**Continue immediately:** FCM receive routing, bounded authenticated priority hints
+plus fair full sweeps, notification privacy/read/mute/actions and durable encrypted
+replies; compatible private rollout and release16+ installation with notice and
+`--install-only`. Android currently sends every data-only push to the inbox parser;
+iOS also extracts only inbox fields. New receiver must record a fresh domain recovery
+wake before scheduling, preserving an in-flight sweep's generation fencing. No packet
+company/room is authority. Local receive ownership must not depend on credential age.
+`.work/chat-push-receiver-2026-11-02` has unexecuted .txt candidates/test notes only.
+Fixed all-company wake alone is not latency/scale or notification acceptance.
+
+All54 PRD groups remain open. Last verified private schema103/API-worker2c2a59e3,
+branch116, disabled chat push and phone15 remain. No rollout/phone operation here.
+No active goal or subagents. Do not stop after this checkpoint.
+
 ## Incoming traversal isolation and concurrent key creation validated — 2 November 2026
 
 [Contract](collaboration-incoming-history.md) / [evidence](measurements/chat-incoming-history-purpose-2026-11-02.json)

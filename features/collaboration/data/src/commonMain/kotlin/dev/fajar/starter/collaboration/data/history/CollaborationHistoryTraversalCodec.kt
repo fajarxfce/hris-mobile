@@ -34,6 +34,16 @@ private data class HistoryProgressDto(
     val next: String?,
     val references: Long,
     val schema: Int = 1,
+    val incoming: IncomingHistoryPositionDto? = null,
+)
+
+@Serializable
+private data class IncomingHistoryPositionDto(
+    val head: String,
+    val until: String?,
+    val pendingAfter: String? = null,
+    val pendingThrough: Long? = null,
+    val pendingRetryRequired: Boolean = false,
 )
 
 @Serializable
@@ -70,18 +80,35 @@ internal class CollaborationHistoryTraversalCodec(
             Json.decodeFromString<HistoryProgressDto>(
                 open(raw.handle.generation, "checkpoint", raw.revision, "", raw.payload)
             )
-        require(value.schema == 1 && value.roomId == traversal.roomId)
-        require(value.next == null || validCollaborationProviderPosition(value.next))
+        require(value.schema in 1..2 && value.roomId == traversal.roomId)
+        require((value.schema == 1) == (value.incoming == null))
+        require(traversal.purpose == CollaborationHistoryPurpose.Incoming || value.incoming == null)
+        require(value.incoming?.pendingAfter?.let(historyReferenceCursor::matches) != false)
         require(value.references in 0..9_007_199_254_740_991L)
         return CollaborationHistoryProgress(
-            raw.handle.generation,
-            raw.revision,
-            value.next,
-            value.references,
-        )
+                raw.handle.generation,
+                raw.revision,
+                value.next?.let { position(it, value.schema) },
+                value.references,
+                value.incoming?.let {
+                    CollaborationIncomingHistoryPosition(
+                        position(it.head, value.schema),
+                        it.until?.let { until -> position(until, value.schema) },
+                        it.pendingAfter,
+                        it.pendingThrough,
+                        it.pendingRetryRequired,
+                    )
+                },
+            )
+            .also { require(validCollaborationHistoryProgress(it)) }
     }
 
     suspend fun checkpoint(progress: CollaborationHistoryProgress): String {
+        require(validCollaborationHistoryProgress(progress))
+        require(
+            traversal.purpose == CollaborationHistoryPurpose.Incoming || progress.incoming == null
+        )
+        require(progress.incoming?.pendingAfter?.let(historyReferenceCursor::matches) != false)
         val next = progress.next
         require(
             validCollaborationMessageId(progress.generation) &&
@@ -97,7 +124,24 @@ internal class CollaborationHistoryTraversalCodec(
             progress.revision,
             "",
             Json.encodeToString(
-                HistoryProgressDto(traversal.roomId, progress.next, progress.references)
+                HistoryProgressDto(
+                    traversal.roomId,
+                    progress.next?.let {
+                        if (progress.incoming == null) it else encodedPosition(it)
+                    },
+                    progress.references,
+                    schema = if (progress.incoming == null) 1 else 2,
+                    incoming =
+                        progress.incoming?.let {
+                            IncomingHistoryPositionDto(
+                                encodedPosition(it.head),
+                                it.until?.let(::encodedPosition),
+                                it.pendingAfter,
+                                it.pendingThrough,
+                                it.pendingRetryRequired,
+                            )
+                        },
+                )
             ),
         )
     }
@@ -215,7 +259,7 @@ internal class CollaborationHistoryTraversalCodec(
     ): String {
         val bytes = value.encodeToByteArray(throwOnInvalidSequence = true)
         return try {
-            require(bytes.size <= 16_384)
+            require(bytes.size <= payloadLimit(id))
             Base64.encode(cipher.encrypt(key, aad(generation, id, revision, sort), bytes)).also {
                 require(it.length <= 32_768)
             }
@@ -234,10 +278,28 @@ internal class CollaborationHistoryTraversalCodec(
         require(value.length in 1..32_768)
         val bytes = cipher.decrypt(key, aad(generation, id, revision, sort), Base64.decode(value))
         return try {
-            require(bytes.size <= 16_384)
+            require(bytes.size <= payloadLimit(id))
             bytes.decodeToString(throwOnInvalidSequence = true)
         } finally {
             bytes.fill(0)
         }
+    }
+
+    private fun payloadLimit(id: String) =
+        if (id == "checkpoint" && traversal.purpose == CollaborationHistoryPurpose.Incoming) 24_000
+        else 16_384
+
+    // Canonical ASCII encoding bounds JSON expansion without weakening the replica envelope cap.
+    private fun encodedPosition(value: String): String {
+        require(validCollaborationProviderPosition(value))
+        return Base64.encode(value.encodeToByteArray())
+    }
+
+    private fun position(value: String, schema: Int): String {
+        if (schema == 1) return value.also { require(validCollaborationProviderPosition(it)) }
+        require(value.length in 1..5464)
+        val decoded = Base64.decode(value).decodeToString(throwOnInvalidSequence = true)
+        require(validCollaborationProviderPosition(decoded) && encodedPosition(decoded) == value)
+        return decoded
     }
 }

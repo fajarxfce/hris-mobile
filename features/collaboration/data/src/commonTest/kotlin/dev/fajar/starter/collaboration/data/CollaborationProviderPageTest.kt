@@ -151,6 +151,48 @@ class CollaborationProviderPageTest {
     }
 
     @Test
+    fun boundedWavesEncodeBothOpaquePositionsWithoutChangingTheirContents() = runTest {
+        val stop = "opaque+/=?&stop"
+        val positions = listOf(null, "opaque+/=?&from")
+        var count = 0
+        val http =
+            createHttpClient(
+                MockEngine { request ->
+                    val position = positions[count++]
+                    assertEquals(position, request.url.parameters["from"])
+                    assertEquals(stop, request.url.parameters["to"])
+                    assertEquals("b", request.url.parameters["dir"])
+                    assertEquals("20", request.url.parameters["limit"])
+                    assertEquals(
+                        if (position == null) setOf("to", "dir", "limit")
+                        else setOf("from", "to", "dir", "limit"),
+                        request.url.parameters.names(),
+                    )
+                    respond(page(emptyList(), next = null))
+                },
+                "https://application.example.test/api/",
+            )
+        try {
+            val api =
+                CollaborationHistoryApi(
+                    http,
+                    CollaborationSdkEndpoint("https://gateway.example.test/"),
+                )
+            for (position in positions) {
+                val raw =
+                    api.read(
+                        "fictional-current",
+                        CollaborationHistoryRequest.Page(room, position, stop),
+                    )
+                assertNull(collaborationProviderPage(raw, room, position).next)
+            }
+            assertEquals(2, count)
+        } finally {
+            http.cancelAndClose()
+        }
+    }
+
+    @Test
     fun thePageBodyHasItsOwnFiniteLimit() = runTest {
         val http =
             createHttpClient(

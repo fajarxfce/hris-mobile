@@ -56,10 +56,11 @@ internal class HrisProofRuntimeAccess(private val runtime: AndroidCollaborationR
         deviceId: String,
         matrixRoomId: String,
         position: String?,
+        untilPosition: String?,
     ): AppResult<CollaborationProviderHistoryPage> {
         check(owner == runtime.owner && deviceId == runtime.deviceId)
         providerReads++
-        return runtime.readProviderHistory(matrixRoomId, position).also {
+        return runtime.readProviderHistory(matrixRoomId, position, untilPosition).also {
             if (it is AppResult.Success) providerPage = it.value
         }
     }

@@ -29,7 +29,8 @@ class MatrixProofInstrumentation : Instrumentation() {
             )
             runBlocking {
                 withTimeout(
-                    if (
+                    if (scenario == "hris-worker-resume") 420_000
+                    else if (
                         scenario.startsWith("hris-worker-") ||
                             scenario.startsWith("company-recovery")
                     )

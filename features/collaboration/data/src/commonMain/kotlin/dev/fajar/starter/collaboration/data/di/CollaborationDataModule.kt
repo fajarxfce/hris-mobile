@@ -392,6 +392,25 @@ class CollaborationDataModule {
         )
 
     @Factory
+    fun advanceIncomingReferences(
+        traversal: CollaborationHistoryTraversalRepository,
+        lists: CollaborationListRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) =
+        AdvanceCollaborationIncomingReferences(
+            traversal,
+            lists,
+            sessions,
+            workspaces,
+            server,
+            build,
+            Clock.System,
+        )
+
+    @Factory
     fun acquireProviderHistory(
         history: CollaborationHistoryTraversalRepository,
         lists: CollaborationListRepository,

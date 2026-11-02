@@ -19,6 +19,7 @@ import org.matrix.rustcomponents.sdk.Room
 /** Actual app worker/SDK across process death. Platform scheduling is a separate proof. */
 internal class HrisWorkerMatrixProbe(private val context: Context, directory: File) {
     private val files = HrisWorkerProofFiles(directory)
+    private val startedNanos = System.nanoTime()
     private val frozenOnly = files.initialState == "FROZEN_DRAFT"
     private val cancelled =
         if (files.initialState == "CANCELLED_DRAFT") HrisCancelledWorkerIntent(files) else null
@@ -93,6 +94,7 @@ internal class HrisWorkerMatrixProbe(private val context: Context, directory: Fi
             )
             check(queued.getString("state") == files.initialState)
             check(!files.exists("worker-send") && !files.exists("worker-result"))
+            recordPhase("restore")
             var application: HrisWorkerProofContainer? = null
             var peer: AndroidCollaborationRuntimeLease? = null
             var timeline: CollaborationTimelineLease? = null
@@ -119,6 +121,7 @@ internal class HrisWorkerMatrixProbe(private val context: Context, directory: Fi
                     while (!files.exists("worker-send")) delay(100)
                     check(files.read("worker-send", 128).get("ready") == true)
                 }
+                recordPhase("delivery")
                 val passes = deliver(app)
                 val eventId = received.eventId()
                 check(
@@ -140,21 +143,17 @@ internal class HrisWorkerMatrixProbe(private val context: Context, directory: Fi
                         sender.repository.isOpen(sender.currentOwner, sender.registeredDeviceId)
                     )
                 )
+                recordPhase("seed")
                 val historical = seedHistory(requireNotNull(peer), requireNotNull(room))
                 check(
                     !expect(
                         sender.repository.isOpen(sender.currentOwner, sender.registeredDeviceId)
                     )
                 )
-                val incoming =
-                    HrisIncomingHistoryProbe(
-                            open = { openApplication(backgroundOnly = true) },
-                            runtime = sender.repository,
-                            owner = sender.currentOwner,
-                            deviceId = sender.registeredDeviceId,
-                        )
-                        .run(historical.last(), historical.first())
+                recordPhase("incoming", historical.size)
+                val incoming = recoverIncoming(historical)
                 files.write("worker-incoming", incoming)
+                recordPhase("foreground", historical.size)
                 app = openApplication().also { application = it }
                 app.activate()
                 val foreground =
@@ -167,6 +166,7 @@ internal class HrisWorkerMatrixProbe(private val context: Context, directory: Fi
                     )
                 cancelled?.completed(app, queued)
                 recordCompletion(eventId, passes, historical, foreground, incoming)
+                recordPhase("complete", historical.size)
             } catch (failure: Exception) {
                 primary = failure
                 throw failure
@@ -184,6 +184,17 @@ internal class HrisWorkerMatrixProbe(private val context: Context, directory: Fi
                 )
             }
         }
+
+    private suspend fun recoverIncoming(historical: List<HrisHistoricalMessage>) =
+        HrisIncomingHistoryProbe(
+                open = { openApplication(backgroundOnly = true) },
+                runtime = sender.repository,
+                owner = sender.currentOwner,
+                deviceId = sender.registeredDeviceId,
+                roomId = files.roomId,
+                progress = { files.write("worker-incoming-progress", it) },
+            )
+            .run(historical)
 
     private fun recordCompletion(
         eventId: String,
@@ -310,11 +321,22 @@ internal class HrisWorkerMatrixProbe(private val context: Context, directory: Fi
         room: Room,
     ): List<HrisHistoricalMessage> {
         val seed = ProofQueuedMessage(peer.nativeClient, room)
-        return List(32) { index ->
+        return List(175) { index ->
             val body = "history-$index-${files.logicalId}"
             val sent = seed.send(body, UUID.randomUUID().toString())
+            if ((index + 1) % 25 == 0) recordPhase("seed", index + 1)
             HrisHistoricalMessage(sent.eventId, body)
         }
+    }
+
+    private fun recordPhase(phase: String, seeded: Int = 0) {
+        files.write(
+            "worker-progress",
+            JSONObject()
+                .put("phase", phase)
+                .put("seeded", seeded)
+                .put("elapsedMillis", (System.nanoTime() - startedNanos) / 1_000_000),
+        )
     }
 
     private fun <T> expect(result: AppResult<T>): T =

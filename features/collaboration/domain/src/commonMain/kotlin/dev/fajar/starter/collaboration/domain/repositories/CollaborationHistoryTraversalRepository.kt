@@ -44,4 +44,16 @@ interface CollaborationHistoryTraversalRepository {
         expected: CollaborationHistoryProgress,
         references: List<CollaborationHistoryReference>,
     ): AppResult<Boolean>
+
+    /**
+     * Advances only Incoming's pending-reference seek after a bounded page was attempted. Missing
+     * originals stay pending. Concurrent resolution/page extension is allowed within the same wave;
+     * changed owner, generation, wave or pending seek loses. Provider bounds and references remain.
+     */
+    suspend fun advanceIncomingReferences(
+        access: CollaborationLocalAccess,
+        traversal: CollaborationHistoryTraversal,
+        source: CollaborationHistoryReferences,
+        retryRequired: Boolean,
+    ): AppResult<Boolean>
 }

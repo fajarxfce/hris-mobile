@@ -220,6 +220,7 @@ internal class ChatSetupFixture {
                 deviceId: String,
                 matrixRoomId: String,
                 position: String?,
+                untilPosition: String?,
             ): AppResult<CollaborationProviderHistoryPage> = error("No history")
 
             override suspend fun findHistoryHead(

@@ -31,11 +31,28 @@ data class CollaborationHistoryProgress(
     val revision: Long,
     val next: String?,
     val references: Long,
+    val incoming: CollaborationIncomingHistoryPosition? = null,
 ) {
     val exhausted: Boolean
         get() = next == null
 
     override fun toString() = "CollaborationHistoryProgress([redacted])"
+}
+
+/** A provider-bounded wave and independent pending-reference seek. Neither acknowledges content. */
+data class CollaborationIncomingHistoryPosition(
+    /**
+     * First page's start, promoted to the next wave's exclusive older boundary after exhaustion.
+     */
+    val head: String,
+    /** Last completed wave's start; unchanged while this wave is incomplete or explicitly reset. */
+    val until: String?,
+    val pendingAfter: String? = null,
+    /** Exclusive reference count captured at the beginning of a finite pending pass. */
+    val pendingThrough: Long? = null,
+    val pendingRetryRequired: Boolean = false,
+) {
+    override fun toString() = "CollaborationIncomingHistoryPosition([redacted])"
 }
 
 /** First-observed provider traversal order, independent of event timestamps. */

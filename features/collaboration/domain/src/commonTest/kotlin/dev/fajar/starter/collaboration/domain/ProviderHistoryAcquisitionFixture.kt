@@ -1,7 +1,7 @@
 package dev.fajar.starter.collaboration.domain
 
 import dev.fajar.starter.collaboration.domain.entities.*
-import dev.fajar.starter.collaboration.domain.policies.localListAccess
+import dev.fajar.starter.collaboration.domain.policies.*
 import dev.fajar.starter.collaboration.domain.repositories.*
 import dev.fajar.starter.collaboration.domain.usecases.AcquireCollaborationProviderHistory
 import dev.fajar.starter.common.result.*
@@ -51,6 +51,7 @@ internal class ProviderHistoryAcquisitionFixture(
     var afterStage: suspend () -> Unit = {}
     val saved = mutableListOf<CollaborationProviderHistoryPage>()
     val positions = mutableListOf<String?>()
+    val stops = mutableListOf<String?>()
     val stagedOrigins = mutableListOf<CollaborationHistoryPageOrigin>()
     val stagedProgress = mutableListOf<CollaborationHistoryProgress?>()
 
@@ -79,11 +80,13 @@ internal class ProviderHistoryAcquisitionFixture(
                 deviceId: String,
                 matrixRoomId: String,
                 position: String?,
+                untilPosition: String?,
             ): AppResult<CollaborationProviderHistoryPage> {
                 assertEquals(delivery.owner, owner)
                 assertEquals(traversal.deviceId, deviceId)
                 assertEquals(traversal.roomId, matrixRoomId)
                 positions += position
+                stops += untilPosition
                 reads++
                 active++
                 try {
@@ -98,6 +101,13 @@ internal class ProviderHistoryAcquisitionFixture(
 
     private val history =
         object : CollaborationHistoryTraversalRepository {
+            override suspend fun advanceIncomingReferences(
+                access: CollaborationLocalAccess,
+                traversal: CollaborationHistoryTraversal,
+                source: CollaborationHistoryReferences,
+                retryRequired: Boolean,
+            ): AppResult<Boolean> = error("No implicit incoming seek advance")
+
             override suspend fun progress(
                 access: CollaborationLocalAccess,
                 traversal: CollaborationHistoryTraversal,
@@ -143,6 +153,7 @@ internal class ProviderHistoryAcquisitionFixture(
                         (expected?.revision ?: -1) + 1,
                         page.next,
                         (expected?.references ?: 0) + page.events.size,
+                        collaborationIncomingHistoryPosition(traversal, expected, page, origin),
                     )
                 afterStage()
                 return stageFailure?.let { AppResult.Failed(it) } ?: AppResult.Success(true)

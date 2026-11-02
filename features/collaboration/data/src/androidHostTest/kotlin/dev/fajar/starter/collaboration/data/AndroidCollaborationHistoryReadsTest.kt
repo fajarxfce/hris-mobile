@@ -51,6 +51,10 @@ class AndroidCollaborationHistoryReadsTest {
                     FailureKind.Validation,
                     assertIs<AppResult.Failed>(reads.page(room, position)).failure.kind,
                 )
+                assertEquals(
+                    FailureKind.Validation,
+                    assertIs<AppResult.Failed>(reads.page(room, "valid", position)).failure.kind,
+                )
             }
             assertEquals(0, sessions)
         } finally {
@@ -69,6 +73,7 @@ class AndroidCollaborationHistoryReadsTest {
                 MockEngine {
                     requests++
                     assertEquals("opaque-position", it.url.parameters["from"])
+                    assertEquals("opaque-stop", it.url.parameters["to"])
                     assertEquals("20", it.url.parameters["limit"])
                     try {
                         entered.complete(Unit)
@@ -97,7 +102,7 @@ class AndroidCollaborationHistoryReadsTest {
                 null
             }
         try {
-            val pending = async { reads.page(room, "opaque-position") }
+            val pending = async { reads.page(room, "opaque-position", "opaque-stop") }
             entered.await()
             assertEquals(AppResult.Success(Unit), children.close())
             assertIs<AppResult.Failed>(pending.await())

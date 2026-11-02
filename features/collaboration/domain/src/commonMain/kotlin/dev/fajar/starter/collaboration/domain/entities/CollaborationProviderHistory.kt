@@ -20,6 +20,8 @@ data class CollaborationProviderHistoryPage(
     val next: String?,
     /** Backward provider order; timestamps must not be used to reconstruct traversal order. */
     val events: List<CollaborationProviderHistoryEvent>,
+    /** Exclusive older bound for one incoming wave; owned provider positions, never timestamps. */
+    val requestedUntilPosition: String? = null,
 ) {
     override fun toString() = "CollaborationProviderHistoryPage([redacted])"
 }

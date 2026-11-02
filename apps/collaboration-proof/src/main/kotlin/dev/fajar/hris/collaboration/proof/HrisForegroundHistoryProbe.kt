@@ -21,7 +21,7 @@ internal data class HrisForegroundHistoryResult(
 /** Real app ViewModel and use cases; native Activity rendering is covered separately. */
 internal class HrisForegroundHistoryProbe(
     private val factory: () -> ChatThreadViewModel,
-    private val snapshot: suspend () -> CollaborationHistoryPage,
+    private val snapshot: suspend () -> List<CollaborationHistoryMessage>,
     private val references: suspend () -> CollaborationHistoryReferences,
 ) {
     suspend fun run(
@@ -30,10 +30,10 @@ internal class HrisForegroundHistoryProbe(
         historical: List<HrisHistoricalMessage>,
     ): HrisForegroundHistoryResult =
         withContext(Dispatchers.Main) {
-            check(historical.size == 32 && historical.map { it.eventId }.distinct().size == 32)
+            check(historical.size == 175 && historical.map { it.eventId }.distinct().size == 175)
             val oldest = historical.first()
             val latest = historical.last()
-            check(snapshot().messages.none { oldest.eventId in it.eventIds })
+            check(snapshot().single { oldest.eventId in it.eventIds }.text == oldest.body)
             val store = ViewModelStore()
             val provider =
                 ViewModelProvider.create(store, viewModelFactory { initializer { factory() } })
@@ -43,32 +43,36 @@ internal class HrisForegroundHistoryProbe(
                 await(HrisForegroundPhase.LATEST, model) {
                     healthy(model.state.value)
                     model.state.value.connection == ChatThreadConnection.CONNECTED &&
-                        snapshot().messages.any { latest.eventId in it.eventIds }
+                        snapshot().any { latest.eventId in it.eventIds }
                 }
-                // Native live items can preview older text. This checkpoint concerns durable
-                // originals.
-                check(snapshot().messages.none { oldest.eventId in it.eventIds })
+                // Incoming recovery has retained every original; Browse still has its own cursor.
+                check(snapshot().single { oldest.eventId in it.eventIds }.text == oldest.body)
                 var pages = 0
-                while (model.state.value.hasOlder && pages < 4) {
+                var localWindows = 0
+                while (model.state.value.hasOlder && pages + localWindows < 16) {
                     val before = references().progress
+                    val rows = model.state.value.rows.map { it.eventId }
                     model.onEvent(ChatThreadEvent.OlderRequested)
                     await(HrisForegroundPhase.OLDER, model) {
                         healthy(model.state.value)
-                        references().progress != before &&
+                        (references().progress != before ||
+                            model.state.value.rows.map { it.eventId } != rows) &&
                             !model.state.value.loadingOlder &&
                             !model.state.value.syncing
                     }
-                    pages++
+                    if (references().progress != before) pages++ else localWindows++
                 }
-                check(pages in 2..4 && !model.state.value.hasOlder)
-                val saved = snapshot().messages
+                check(pages in 2..12 && localWindows >= 1 && !model.state.value.hasOlder)
+                val saved = snapshot()
                 check(saved.single { originalEvent in it.eventIds }.text == originalBody)
                 for (event in historical) check(
                     saved.single { event.eventId in it.eventIds }.text == event.body
                 )
                 val pending = references()
                 val progress = requireNotNull(pending.progress)
-                check(progress.exhausted && progress.references in 33..80 && pending.after == null)
+                check(
+                    progress.exhausted && progress.references in 176..224 && pending.after == null
+                )
                 check(
                     pending.events.none {
                         it.event.type in setOf("m.room.encrypted", "m.room.message", "m.sticker")
@@ -108,12 +112,7 @@ internal class HrisForegroundHistoryProbe(
             }
         if (completed != true) {
             val state = model.state.value
-            throw HrisForegroundTimeout(
-                phase,
-                state.connection,
-                state.rows.size,
-                snapshot().messages.size,
-            )
+            throw HrisForegroundTimeout(phase, state.connection, state.rows.size, snapshot().size)
         }
     }
 }

@@ -76,6 +76,7 @@ class CollaborationBindingsTest {
                         deviceId: String,
                         matrixRoomId: String,
                         position: String?,
+                        untilPosition: String?,
                     ): AppResult<CollaborationProviderHistoryPage> =
                         error("No implicit provider history page")
 
@@ -276,6 +277,7 @@ class CollaborationBindingsTest {
                     container.koin.get<CollaborationMessageRepository>(),
                     container.koin.get<CollaborationMessageCancellationRepository>(),
                 )
+                assertNotNull(container.koin.get<AdvanceCollaborationIncomingReferences>())
                 assertNotNull(container.koin.get<ObserveCollaborationHistory>())
                 assertNotNull(container.koin.get<AcquireCollaborationHistory>())
                 assertNotNull(container.koin.get<AcquireCollaborationProviderHistory>())

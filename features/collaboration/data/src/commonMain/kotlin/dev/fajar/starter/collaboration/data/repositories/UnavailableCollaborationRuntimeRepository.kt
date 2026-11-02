@@ -38,6 +38,7 @@ class UnavailableCollaborationRuntimeRepository : CollaborationRuntimeRepository
         deviceId: String,
         matrixRoomId: String,
         position: String?,
+        untilPosition: String?,
     ): AppResult<CollaborationProviderHistoryPage> = unavailable()
 
     override suspend fun findHistoryHead(

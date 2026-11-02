@@ -4,6 +4,7 @@ import dev.fajar.starter.app.bootstrap.ApplicationCollaborationLifetime
 import dev.fajar.starter.app.work.CollaborationCompanyRecovery
 import dev.fajar.starter.app.work.CollaborationDeliveryWorker
 import dev.fajar.starter.app.work.CollaborationDraftRecovery
+import dev.fajar.starter.app.work.CollaborationIncomingHistoryRecovery
 import dev.fajar.starter.app.work.CollaborationIncomingRecovery
 import dev.fajar.starter.app.work.CollaborationRecoveryWorker
 import dev.fajar.starter.app.work.InboxPushWorker
@@ -20,6 +21,7 @@ fun applicationWorkerModule() = module {
     single { InboxPushWorker(get(), get(), inject(), get()) } bind SyncTask::class
     single { NativePushWorker(get(), inject()) } bind SyncTask::class
     single { CollaborationDraftRecovery(get(), get(), get(), get(), get()) }
+    single { CollaborationIncomingHistoryRecovery(get(), get(), get(), get(), get()) }
     single {
         CollaborationIncomingRecovery(get(), get(), get(), get(), get(), get(), get(), get(), get())
     }

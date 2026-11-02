@@ -456,6 +456,7 @@ internal class StageFixture {
                 deviceId: String,
                 matrixRoomId: String,
                 position: String?,
+                untilPosition: String?,
             ): AppResult<CollaborationProviderHistoryPage> =
                 error("No implicit provider history page")
 

@@ -7,8 +7,11 @@ internal sealed interface CollaborationHistoryRequest {
         override fun toString() = "HistoryHeadRequest([redacted])"
     }
 
-    data class Page(override val roomId: String, val position: String?) :
-        CollaborationHistoryRequest {
+    data class Page(
+        override val roomId: String,
+        val position: String?,
+        val untilPosition: String? = null,
+    ) : CollaborationHistoryRequest {
         override fun toString() = "HistoryPageRequest([redacted])"
     }
 }

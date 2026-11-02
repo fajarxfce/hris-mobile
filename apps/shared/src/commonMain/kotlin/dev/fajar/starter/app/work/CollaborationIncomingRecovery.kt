@@ -22,7 +22,7 @@ class CollaborationIncomingRecovery(
     private val acquireRuntime: AcquireCollaborationBackgroundRuntime,
     private val observeAccess: ObserveCollaborationAccess,
     private val enter: EnterCollaborationConversation,
-    private val acquireHistory: AcquireCollaborationHistory,
+    private val recoverHistory: CollaborationIncomingHistoryRecovery,
     private val clock: Clock = Clock.System,
 ) {
     private val execution = Mutex()
@@ -110,7 +110,8 @@ class CollaborationIncomingRecovery(
         val metadata = readRoom.room(scope, conversationId)
         currentCoroutineContext().ensureActive()
         if (metadata is AppResult.Failed) return collaborationWorkFailure(metadata.failure)
-        when ((metadata as AppResult.Success).value.value.state) {
+        val binding = (metadata as AppResult.Success).value.value
+        when (binding.state) {
             CollaborationDirectRoomState.NOT_REQUESTED -> return SyncResult.Complete
             CollaborationDirectRoomState.QUEUED,
             CollaborationDirectRoomState.RUNNING ->
@@ -132,7 +133,7 @@ class CollaborationIncomingRecovery(
                 observeAccess(CollaborationLocalScope.Captured(access)),
                 access,
             ) {
-                originals(scope, deviceId, conversationId)
+                originals(scope, deviceId, conversationId, binding.matrixRoomId)
             }
         } finally {
             withContext(NonCancellable) { lease?.close() }
@@ -140,9 +141,10 @@ class CollaborationIncomingRecovery(
     }
 
     private suspend fun originals(
-        scope: CollaborationOperationScope,
+        scope: CollaborationOperationScope.Background,
         deviceId: String,
         conversationId: String,
+        roomId: String?,
     ): SyncResult {
         var child: CollaborationTimelineLease? = null
         try {
@@ -150,12 +152,16 @@ class CollaborationIncomingRecovery(
             if (opened is AppResult.Success) child = opened.value
             currentCoroutineContext().ensureActive()
             if (opened is AppResult.Failed) return collaborationWorkFailure(opened.failure)
-            val acquired = acquireHistory(scope, deviceId, conversationId)
-            currentCoroutineContext().ensureActive()
-            if (acquired is AppResult.Failed) return collaborationWorkFailure(acquired.failure)
-            return if ((acquired as AppResult.Success).value.unresolvedEvents == 0)
-                SyncResult.Complete
-            else SyncResult.Retry(failure("history_pending", FailureKind.Unavailable))
+            if (roomId == null) return SyncResult.Retry(failure("room_pending"))
+            return recoverHistory(
+                scope,
+                CollaborationHistoryTraversal(
+                    conversationId,
+                    roomId,
+                    deviceId,
+                    CollaborationHistoryPurpose.Incoming,
+                ),
+            )
         } finally {
             withContext(NonCancellable) { child?.close() }
         }

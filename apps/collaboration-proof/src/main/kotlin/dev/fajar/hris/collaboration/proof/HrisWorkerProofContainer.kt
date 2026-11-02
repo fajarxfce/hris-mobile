@@ -237,6 +237,49 @@ internal class HrisWorkerProofContainer(
         )
     }
 
+    /** Bounded fixture scan, through owned local reads; never enlarges a production page. */
+    suspend fun capturedOriginals(): List<CollaborationHistoryMessage> {
+        val messages = mutableListOf<CollaborationHistoryMessage>()
+        var after: String? = null
+        repeat(4) {
+            check(
+                expect(
+                    container.koin.get<ObserveCollaborationAccess>()(
+                            CollaborationLocalScope.Captured(access)
+                        )
+                        .first()
+                ) == access
+            )
+            val page =
+                expect(
+                    container.koin
+                        .get<CollaborationHistoryRepository>()
+                        .observe(access, conversationId, after = after)
+                        .first()
+                )
+            messages += page.messages
+            if (page.next == null) {
+                check(messages.map { it.primaryEventId }.distinct().size == messages.size)
+                return messages
+            }
+            check(page.next != after)
+            after = page.next
+        }
+        error("Fixture exceeded its four-page retained history bound")
+    }
+
+    suspend fun capturedReferences(
+        deviceId: String,
+        roomId: String,
+        purpose: CollaborationHistoryPurpose = CollaborationHistoryPurpose.Incoming,
+    ) =
+        expect(
+            container.koin.get<ReadCollaborationHistoryReferences>()(
+                CollaborationLocalScope.Captured(access),
+                CollaborationHistoryTraversal(conversationId, roomId, deviceId, purpose),
+            )
+        )
+
     suspend fun runIncoming(deviceId: String): dev.fajar.starter.sync.domain.SyncResult {
         check(backgroundOnly)
         val parent =
@@ -269,7 +312,7 @@ internal class HrisWorkerProofContainer(
                         parametersOf(application.workspaceId, conversationId)
                     }
                 },
-                snapshot = { history() },
+                snapshot = { capturedOriginals() },
                 references = {
                     expect(
                         container.koin.get<ReadCollaborationHistoryReferences>()(

@@ -104,7 +104,8 @@ abstract class CollaborationHistoryPurposeStorageContract {
                         f.access,
                         key,
                         previous,
-                        f.page(listOf(f.event(), f.event(4)), next = "incoming-next"),
+                        f.page(listOf(f.event(), f.event(4)), next = "incoming-next")
+                            .copy(requestedUntilPosition = previous.incoming!!.head),
                         CollaborationHistoryPageOrigin.Latest,
                     )
                 )
