@@ -20,6 +20,7 @@ internal class CollaborationNotificationReplyRecoveryFixture {
     var afterPage: suspend () -> Unit = {}
     var afterAdvance: suspend () -> Unit = {}
     val pageAfters = mutableListOf<Long?>()
+    val pageLimits = mutableListOf<Int>()
     var cursorReads = 0
     var advances = 0
     var sequence = 7000
@@ -31,7 +32,8 @@ internal class CollaborationNotificationReplyRecoveryFixture {
                 limit: Int,
                 pendingOnly: Boolean,
             ): AppResult<CollaborationNotificationReplyPage> {
-                assertEquals(4, limit)
+                check(limit == 1 || limit == 4)
+                pageLimits += limit
                 assertEquals(true, pendingOnly)
                 assertEquals(local.setup.session!!.id, access.sessionId)
                 pageAfters += after
@@ -64,11 +66,23 @@ internal class CollaborationNotificationReplyRecoveryFixture {
                 access: CollaborationRecoveryAccess,
                 expected: CollaborationNotificationReplyRecoveryCursor?,
                 afterSequence: Long,
+            ): AppResult<CollaborationNotificationReplyRecoveryCursor?> =
+                replace(access, expected, afterSequence, null)
+
+            override suspend fun replace(
+                access: CollaborationRecoveryAccess,
+                expected: CollaborationNotificationReplyRecoveryCursor?,
+                afterSequence: Long,
+                cycle: CollaborationNotificationReplyRecoveryCycle?,
             ): AppResult<CollaborationNotificationReplyRecoveryCursor?> {
                 advances++
                 val changed =
                     if (cursor == expected)
-                        CollaborationNotificationReplyRecoveryCursor(id(sequence++), afterSequence)
+                        CollaborationNotificationReplyRecoveryCursor(
+                            id(sequence++),
+                            afterSequence,
+                            cycle,
+                        )
                     else null
                 if (changed != null) cursor = changed
                 afterAdvance()

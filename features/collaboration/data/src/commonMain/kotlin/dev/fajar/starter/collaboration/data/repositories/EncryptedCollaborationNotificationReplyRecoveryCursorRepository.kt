@@ -36,12 +36,30 @@ class EncryptedCollaborationNotificationReplyRecoveryCursorRepository(
         expected: CollaborationNotificationReplyRecoveryCursor?,
         afterSequence: Long,
     ) = safeStorageCall {
+        require(expected?.cycle == null)
+        write(access, expected, afterSequence, null)
+    }
+
+    override suspend fun replace(
+        access: CollaborationRecoveryAccess,
+        expected: CollaborationNotificationReplyRecoveryCursor?,
+        afterSequence: Long,
+        cycle: CollaborationNotificationReplyRecoveryCycle?,
+    ) = safeStorageCall { write(access, expected, afterSequence, cycle) }
+
+    private suspend fun write(
+        access: CollaborationRecoveryAccess,
+        expected: CollaborationNotificationReplyRecoveryCursor?,
+        afterSequence: Long,
+        cycle: CollaborationNotificationReplyRecoveryCycle?,
+    ): CollaborationNotificationReplyRecoveryCursor? {
         require(validCollaborationNotificationReplyRecoverySequence(afterSequence))
         require(expected == null || validCollaborationNotificationReplyRecoveryCursor(expected))
+        require(cycle == null || validCollaborationNotificationReplyRecoveryCycle(cycle))
         val scope = recoveryScope(access)
         val raw = replicas.checkpoint(scope, NOTIFICATION_REPLY_RECOVERY_PARTITION)
-        if (raw == null && expected != null) return@safeStorageCall null
-        keys.use(create = false) { content, _ ->
+        if (raw == null && expected != null) return null
+        return keys.use(create = false) { content, _ ->
             val codec = CollaborationNotificationReplyRecoveryCursorCodec(access, cipher, content)
             val current = raw?.let { codec.decode(it) }
             if (current != expected) return@use null
@@ -49,6 +67,7 @@ class EncryptedCollaborationNotificationReplyRecoveryCursorRepository(
                 CollaborationNotificationReplyRecoveryCursor(
                     Uuid.random().toString(),
                     afterSequence,
+                    cycle,
                 )
             if (
                 replicas.replace(

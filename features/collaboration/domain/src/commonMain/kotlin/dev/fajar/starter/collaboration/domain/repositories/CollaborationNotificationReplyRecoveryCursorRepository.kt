@@ -14,4 +14,12 @@ interface CollaborationNotificationReplyRecoveryCursorRepository {
         expected: CollaborationNotificationReplyRecoveryCursor?,
         afterSequence: Long,
     ): AppResult<CollaborationNotificationReplyRecoveryCursor?>
+
+    /** Raw exact-version replacement. The caller owns all cycle transition policy. */
+    suspend fun replace(
+        access: CollaborationRecoveryAccess,
+        expected: CollaborationNotificationReplyRecoveryCursor?,
+        afterSequence: Long,
+        cycle: CollaborationNotificationReplyRecoveryCycle?,
+    ): AppResult<CollaborationNotificationReplyRecoveryCursor?>
 }

@@ -176,6 +176,121 @@ abstract class CollaborationNotificationReplyRecoveryStorageContract {
         assertEquals(last, expect(f.cursors().current(f.access())))
     }
 
+    @Test
+    fun legacySeekUpgradesToCycleWithoutChangingTheKeyOrHistory() = withDatabase { f ->
+        val legacy = expect(f.cursors().advance(f.access(), null, 10))!!
+        val key = f.keys.read()
+        val history = f.raw()
+        assertNull(legacy.cycle)
+        f.reopen()
+        assertEquals(legacy, expect(f.cursors().current(f.access())))
+        val initial =
+            CollaborationNotificationReplyRecoveryCycle(historyId(9500), true, false, false, false)
+        val upgraded =
+            expect(f.cursors().replace(f.access(), legacy, legacy.afterSequence, initial))!!
+        f.reopen()
+        assertEquals(upgraded, expect(f.cursors().current(f.access())))
+        assertEquals(initial, upgraded.cycle)
+        assertEquals(key, f.keys.read())
+        assertEquals(history, f.raw())
+    }
+
+    @Test
+    fun stickyRetryAndFinishedCycleReopenWhileStaleSettlementAndLegacyAdvanceCannotOverwrite() =
+        withDatabase { f ->
+            val initial =
+                CollaborationNotificationReplyRecoveryCycle(
+                    historyId(9501),
+                    true,
+                    false,
+                    false,
+                    false,
+                )
+            val begun = expect(f.cursors().replace(f.access(), null, 0, initial))!!
+            val attempt = initial.copy(initial = false, inFlight = true)
+            val pending = expect(f.cursors().replace(f.access(), begun, 1, attempt))!!
+            f.reopen()
+            assertEquals(pending, expect(f.cursors().current(f.access())))
+            val retry = attempt.copy(inFlight = false, retryRequired = true)
+            val settled = expect(f.cursors().replace(f.access(), pending, 1, retry))!!
+            assertNull(
+                expect(
+                    f.cursors().replace(f.access(), pending, 1, retry.copy(retryRequired = false))
+                )
+            )
+            assertIs<AppResult.Failed>(f.cursors().advance(f.access(), settled, 2))
+            val finished =
+                expect(f.cursors().replace(f.access(), settled, 1, retry.copy(finished = true)))!!
+            f.reopen()
+            assertEquals(finished, expect(f.cursors().current(f.access())))
+            assertTrue(finished.cycle!!.retryRequired)
+        }
+
+    @Test
+    fun invalidCycleCombinationsNeverReplaceTheStoredCursor() = withDatabase { f ->
+        val cycle =
+            CollaborationNotificationReplyRecoveryCycle(historyId(9502), true, false, false, false)
+        val current = expect(f.cursors().replace(f.access(), null, 0, cycle))!!
+        val raw = f.rawCursor()
+        for (invalid in
+            listOf(
+                cycle.copy(id = "bad"),
+                cycle.copy(inFlight = true),
+                cycle.copy(retryRequired = true),
+                cycle.copy(finished = true),
+                cycle.copy(initial = false, inFlight = true, finished = true),
+            )) assertIs<AppResult.Failed>(f.cursors().replace(f.access(), current, 1, invalid))
+        assertEquals(raw, f.rawCursor())
+        assertEquals(current, expect(f.cursors().current(f.access())))
+    }
+
+    @Test
+    fun cancellationAfterCycleCommitKeepsInFlightForTheNextContainer() = withDatabase { f ->
+        val actual = f.database.replicas
+        val entered = CompletableDeferred<Unit>()
+        var stopped = false
+        val store =
+            object : ReplicaStore by actual {
+                override suspend fun replace(
+                    scope: ReplicaScope,
+                    partition: String,
+                    expected: ReplicaCheckpoint?,
+                    snapshot: ReplicaSnapshot?,
+                ): Boolean {
+                    assertTrue(actual.replace(scope, partition, expected, snapshot))
+                    try {
+                        entered.complete(Unit)
+                        awaitCancellation()
+                    } finally {
+                        stopped = true
+                    }
+                }
+            }
+        val cycle =
+            CollaborationNotificationReplyRecoveryCycle(historyId(9503), false, true, false, false)
+        coroutineScope {
+            val pending = async { f.cursors(store).replace(f.access(), null, 1, cycle) }
+            entered.await()
+            pending.cancelAndJoin()
+        }
+        assertTrue(stopped)
+        f.reopen()
+        assertEquals(cycle, expect(f.cursors().current(f.access()))!!.cycle)
+        assertNull(expect(f.cursors().replace(f.access(), null, 1, cycle.copy(inFlight = false))))
+    }
+
+    @Test
+    fun maximumLegacySequenceUpgradesAndReopensWithoutRounding() = withDatabase { f ->
+        val sequence = 9_007_199_254_740_990L
+        val legacy = expect(f.cursors().advance(f.access(), null, sequence))!!
+        val cycle =
+            CollaborationNotificationReplyRecoveryCycle(historyId(9504), true, false, false, false)
+        val upgraded = expect(f.cursors().replace(f.access(), legacy, sequence, cycle))!!
+        f.reopen()
+        assertEquals(sequence, expect(f.cursors().current(f.access()))!!.afterSequence)
+        assertEquals(upgraded, expect(f.cursors().current(f.access())))
+    }
+
     private fun CollaborationHistoryFixture.access() =
         CollaborationRecoveryAccess(access.sessionId, access.audience, access.accountId)
 

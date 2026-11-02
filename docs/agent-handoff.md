@@ -1,5 +1,61 @@
 # Agent continuation — HRIS Mobile
 
+## Durable reply cycle accepted; connect the bounded application worker next
+
+The encrypted cursor now retains a cycle UUID and initial/in-flight/sticky-retry/
+finished outcomes. Begin keeps an active cycle, starts new work at minimum sequence,
+and returns no work for an empty account without requiring a history key or creating
+a cursor. Advance records the attempt before work; Settle cannot clear earlier
+failures; Finish proves an empty tail and includes interrupted attempts. A new tail
+after a lost Finish cannot hide an older reply. Legacy integer cursor decode and
+existing key/AAD are preserved; stale legacy writes cannot clear a cycle.
+[Contract](collaboration-notification-reply-recovery.md),
+[measurements](measurements/chat-notification-reply-cycle-2026-11-02.json).
+
+Focused1 passed 59 cases/six suites in 192.770s. Review then found the fresh-account
+empty-queue behavior; added a pending probe and three regressions. Focused2 passed
+62/six in 211.542s. Full3 passed in 476.782s: 3501 desktop/509 suites, 230 Android-host/
+37, six proof-host/one, ten build-logic/two, and 43 actual browser/four (31 domain,
+12 real IndexedDB). 1965 fresh cases/246 suites, zero failures/errors/skips; explicit
+reuse recorded and all 18 Kotlin hashes unchanged. Format/architecture74/detekt,
+proof assembly and shared Wasm compile passed. Real SQLite/IndexedDB reopen and
+assembled reply workflow are covered; credentials held in test memory, not OS-death
+notification-input acceptance. No application recovery phase activated yet.
+
+NEXT: .work/chat-notification-reply-worker-2026-11-02 has ten UNAPPLIED Kotlin drafts,
+draft-map.json, inputs.json, plan.txt, focused/full harness and audit. The earlier
+seek-only worker draft is obsolete. New worker uses Begin/Advance/Settle/Finish,
+eight seconds total/four IDs/two seconds per attempt/no waiting processor. Global
+recovery reserves reply8s, priority20s and ordinary company50s within90s. Any
+independent failure must beat healthy continuation before wake acknowledgment.
+Expected native parent must be passed into Begin and checked BEFORE storage, so a
+stale worker cannot start a replacement account's cycle. This extra guard is in the
+worker drafts, not this accepted commit. Update all constructor sites, including the
+isolated company-only proof fixture. Drafts include five global budget/lifetime/ACK
+regressions, seven real SQLite/Koin worker cases, and one new domain owner guard.
+Apply, test and audit them next; no worker test result is claimed yet.
+
+Full Apple [41520480368](https://github.com/fajarxfce/hris-mobile/actions/runs/41520480368)
+at 8ca3c7d79dfbbd98c7db5456f5aad31d2621642b passed: 863 simulator cases/98 suites,
+zero failures/errors/skips; simulator compile797s/tests102s/full Xcode1395s. Artifact
+13179977279 ZIP SHA256 dfd3916c8c4ec5b1d14c64cc0431635e9a6b6e58c3d3bb48bfcf5a0c90faccde
+verified against GitHub; 117 source hashes checked. This covers read/review and
+application submission flow, excludes seek/cycle/worker. [Apple evidence](measurements/chat-notification-reply-flow-apple-2026-11-02.json).
+Control41523212264/native41523212486 at 1ebc0f94 are running; native last in emulator
+step. Older queued 8ca control/native were superseded/cancelled, not passed.
+Latest audited native remains 1a92 below. Dispatch full Apple on the later committed
+worker source; do not claim physical iPhone/APNs/CallKit acceptance.
+
+Continue long run, commit atomically and push each. After worker acceptance, make a
+validated release19 from clean pushed source, verify signer/ABI/API/cold startup,
+notify before phone installation, then explicit10.77.77.3:5555 --install-only. Keep
+same dev signer, data and Google session; never drive phone UI while it is in use.
+Phone18/source42f5d157 and live304/schema116/chat push OFF remain unchanged. No own
+local heavy job/emulator remains after cycle full3. Other host jobs are unrelated;
+do not touch them. Native journal/issuer/callbacks/review UI follow. No generic
+Starter port for this HRIS policy; all54 PRD groups remain open. Earlier checkpoints
+below are historical.
+
 ## Encrypted reply seek accepted; implement durable cycle and actual worker next
 
 Basic account reply recovery now has encrypted exact-CAS seek, opaque four-entry

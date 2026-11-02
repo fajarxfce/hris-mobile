@@ -34,13 +34,14 @@ class ReadCollaborationNotificationReplyRecovery(
         val cursor = (position as AppResult.Success).value
         if (cursor != null && !validCollaborationNotificationReplyRecoveryCursor(cursor))
             return failure(FailureKind.Conflict)
-        var after = cursor?.afterSequence
+        if (cursor?.cycle?.finished == true) return failure(FailureKind.Conflict)
+        var after = if (cursor?.cycle?.initial == true) null else cursor?.afterSequence
         var page = inputs.page(access, after, COLLABORATION_NOTIFICATION_REPLY_RECOVERY_LIMIT)
         guard(parent).let { if (it is AppResult.Failed) return it }
         if (page is AppResult.Failed) return page
         var value = (page as AppResult.Success).value
         if (value.inputs.isEmpty() && value.nextAfter != null) return failure(FailureKind.Conflict)
-        if (value.inputs.isEmpty() && after != null) {
+        if (value.inputs.isEmpty() && after != null && cursor?.cycle == null) {
             after = null
             page = inputs.page(access, null, COLLABORATION_NOTIFICATION_REPLY_RECOVERY_LIMIT)
             guard(parent).let { if (it is AppResult.Failed) return it }

@@ -11,7 +11,15 @@ fun validCollaborationNotificationReplyRecoveryCursor(
     value: CollaborationNotificationReplyRecoveryCursor
 ): Boolean =
     validCollaborationMessageId(value.generation) &&
-        validCollaborationNotificationReplyRecoverySequence(value.afterSequence)
+        validCollaborationNotificationReplyRecoverySequence(value.afterSequence) &&
+        value.cycle?.let(::validCollaborationNotificationReplyRecoveryCycle) != false
+
+fun validCollaborationNotificationReplyRecoveryCycle(
+    value: CollaborationNotificationReplyRecoveryCycle
+): Boolean =
+    validCollaborationMessageId(value.id) &&
+        (!value.initial || (!value.inFlight && !value.retryRequired && !value.finished)) &&
+        (!value.finished || (!value.initial && !value.inFlight))
 
 fun validCollaborationNotificationReplyRecoveryWork(
     value: CollaborationNotificationReplyRecoveryWork
@@ -21,6 +29,12 @@ fun validCollaborationNotificationReplyRecoveryWork(
     val entries = value.entries
     if (cursor != null && !validCollaborationNotificationReplyRecoveryCursor(cursor)) return false
     if (after != null && after != cursor?.afterSequence) return false
+    val cycle = cursor?.cycle
+    if (
+        cycle != null &&
+            (cycle.finished || after != if (cycle.initial) null else cursor?.afterSequence)
+    )
+        return false
     if (
         entries.size !in 1..COLLABORATION_NOTIFICATION_REPLY_RECOVERY_LIMIT ||
             value.hasMore && entries.size != COLLABORATION_NOTIFICATION_REPLY_RECOVERY_LIMIT

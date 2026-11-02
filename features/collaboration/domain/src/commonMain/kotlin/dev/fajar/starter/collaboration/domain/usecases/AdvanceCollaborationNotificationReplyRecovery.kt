@@ -34,6 +34,13 @@ class AdvanceCollaborationNotificationReplyRecovery(
                     })
         )
             return failure(FailureKind.Validation)
+        val cycle = expectedCursor?.cycle
+        if (
+            cycle?.id != work.cursor?.cycle?.id ||
+                cycle?.finished == true ||
+                (expectedCursor != work.cursor && cycle?.initial == true)
+        )
+            return failure(FailureKind.Validation)
         return withTimeoutOrNull(8_000) { advance(work, reference, expectedCursor) }
             ?: failure(FailureKind.Timeout)
     }
@@ -47,14 +54,23 @@ class AdvanceCollaborationNotificationReplyRecovery(
         guard(parent).let { if (it is AppResult.Failed) return it }
         val access =
             CollaborationRecoveryAccess(parent.sessionId, parent.audience, parent.accountId)
-        val written = cursors.advance(access, expectedCursor, reference.sequence)
+        val cycle =
+            expectedCursor?.cycle?.let {
+                it.copy(
+                    initial = false,
+                    inFlight = true,
+                    retryRequired = it.retryRequired || it.inFlight,
+                )
+            }
+        val written = cursors.replace(access, expectedCursor, reference.sequence, cycle)
         guard(parent).let { if (it is AppResult.Failed) return it }
         if (written is AppResult.Failed) return written
         val cursor = (written as AppResult.Success).value ?: return failure(FailureKind.Conflict)
         if (
             !validCollaborationNotificationReplyRecoveryCursor(cursor) ||
                 cursor.afterSequence != reference.sequence ||
-                cursor.generation == expectedCursor?.generation
+                cursor.generation == expectedCursor?.generation ||
+                cursor.cycle != cycle
         )
             return failure(FailureKind.Conflict)
         return AppResult.Success(cursor)

@@ -537,6 +537,324 @@ class CollaborationNotificationRepliesTest {
         }
     }
 
+    @Test
+    fun transientFirstReplySurvivesHealthyLaterPageAndReopenUntilFullRetryCycle() = runBlocking {
+        withFixture { f, target ->
+            val inputs =
+                (1..6).map { index ->
+                    f.retain(
+                        f.seal(CollaborationNotificationAction.Reply(id(), target)),
+                        "Cycle reply $index",
+                    )
+                }
+            val actual = f.koin.get<CollaborationNotificationActionRepository>()
+            val actions =
+                object : CollaborationNotificationActionRepository by actual {
+                    override suspend fun open(
+                        parent: CollaborationNativeParent,
+                        token: CollaborationNotificationActionToken,
+                    ): AppResult<CollaborationNotificationAction> =
+                        if (token == inputs.first().candidate.token)
+                            AppResult.Failed(
+                                Failure(FailureKind.Storage, "Temporary decoding failure")
+                            )
+                        else actual.open(parent, token)
+                }
+            val commands =
+                CollaborationNotificationCommands(
+                    OpenCollaborationNotificationAction(
+                        actions,
+                        f.koin.get(),
+                        f.koin.get(),
+                        f.koin.get(),
+                        f.koin.get(),
+                        f.koin.get(),
+                        f.koin.get(),
+                        Clock.System,
+                    ),
+                    f.koin.get(),
+                    f.koin.get(),
+                    f.koin.get(),
+                    f.koin.get(),
+                )
+            val failingFirst = f.flow(commands = commands)
+            var state =
+                assertIs<AppResult.Success<CollaborationNotificationReplyRecoverySnapshot>>(
+                        f.koin.get<BeginCollaborationNotificationReplyRecoveryCycle>()()
+                    )
+                    .value
+            repeat(2) { page ->
+                val work =
+                    assertIs<AppResult.Success<CollaborationNotificationReplyRecoveryWork?>>(
+                            f.koin.get<ReadCollaborationNotificationReplyRecovery>()()
+                        )
+                        .value!!
+                for (entry in work.entries) {
+                    state =
+                        state.copy(
+                            cursor =
+                                assertIs<
+                                        AppResult.Success<
+                                            CollaborationNotificationReplyRecoveryCursor
+                                        >
+                                    >(
+                                        f.koin.get<AdvanceCollaborationNotificationReplyRecovery>()(
+                                            work,
+                                            entry,
+                                            state.cursor,
+                                        )
+                                    )
+                                    .value
+                        )
+                    val result =
+                        if (page == 0 && entry.id == inputs.first().id)
+                            failingFirst.resume(entry.id)
+                        else f.koin.get<CollaborationNotificationReplies>().resume(entry.id)
+                    val retry = result is AppResult.Failed
+                    if (retry) assertEquals(FailureKind.Storage, result.failure.kind)
+                    else assertQueued(result)
+                    state =
+                        assertIs<AppResult.Success<CollaborationNotificationReplyRecoverySnapshot>>(
+                                f.koin.get<SettleCollaborationNotificationReplyRecoveryCycle>()(
+                                    state,
+                                    retry,
+                                )
+                            )
+                            .value
+                }
+                assertTrue(state.cursor.cycle!!.retryRequired)
+                if (page == 0) {
+                    f.reopen()
+                    f.withoutIncomingSelection()
+                    state =
+                        assertIs<AppResult.Success<CollaborationNotificationReplyRecoverySnapshot>>(
+                                f.koin.get<BeginCollaborationNotificationReplyRecoveryCycle>()()
+                            )
+                            .value
+                    assertTrue(state.cursor.cycle!!.retryRequired)
+                }
+            }
+            val finished =
+                assertIs<AppResult.Success<CollaborationNotificationReplyRecoverySnapshot>>(
+                        f.koin.get<FinishCollaborationNotificationReplyRecoveryCycle>()(state)
+                    )
+                    .value
+            assertTrue(finished.cursor.cycle!!.retryRequired)
+            assertEquals(inputs.first(), f.inputs().single())
+            assertNull(f.message(inputs.first().candidate.action.operationId))
+            val appended =
+                f.retain(
+                    f.seal(CollaborationNotificationAction.Reply(id(), target)),
+                    "Newer tail input",
+                )
+            state =
+                assertIs<AppResult.Success<CollaborationNotificationReplyRecoverySnapshot>>(
+                        f.koin.get<BeginCollaborationNotificationReplyRecoveryCycle>()()
+                    )
+                    .value
+            val work =
+                assertIs<AppResult.Success<CollaborationNotificationReplyRecoveryWork?>>(
+                        f.koin.get<ReadCollaborationNotificationReplyRecovery>()()
+                    )
+                    .value!!
+            assertEquals(listOf(inputs.first().id, appended.id), work.entries.map { it.id })
+            for (entry in work.entries) {
+                state =
+                    state.copy(
+                        cursor =
+                            assertIs<
+                                    AppResult.Success<CollaborationNotificationReplyRecoveryCursor>
+                                >(
+                                    f.koin.get<AdvanceCollaborationNotificationReplyRecovery>()(
+                                        work,
+                                        entry,
+                                        state.cursor,
+                                    )
+                                )
+                                .value
+                    )
+                assertQueued(f.koin.get<CollaborationNotificationReplies>().resume(entry.id))
+                state =
+                    assertIs<AppResult.Success<CollaborationNotificationReplyRecoverySnapshot>>(
+                            f.koin.get<SettleCollaborationNotificationReplyRecoveryCycle>()(
+                                state,
+                                false,
+                            )
+                        )
+                        .value
+            }
+            val healthy =
+                assertIs<AppResult.Success<CollaborationNotificationReplyRecoverySnapshot>>(
+                        f.koin.get<FinishCollaborationNotificationReplyRecoveryCycle>()(state)
+                    )
+                    .value
+            assertFalse(healthy.cursor.cycle!!.retryRequired)
+            assertTrue(f.inputs().isEmpty())
+            assertEquals(
+                "Cycle reply 1",
+                f.message(inputs.first().candidate.action.operationId)!!.intent.text,
+            )
+            assertTrue(f.sdk.enqueued.isEmpty())
+        }
+    }
+
+    @Test
+    fun interruptedAttemptAndDiscardedFinishResultReopenBeforeNewTailWithoutLosingOldInput() =
+        runBlocking {
+            for (queued in listOf(false, true)) withFixture { f, target ->
+                val input =
+                    f.retain(
+                        f.seal(CollaborationNotificationAction.Reply(id(), target)),
+                        "Interrupted cycle input",
+                    )
+                var state =
+                    assertIs<AppResult.Success<CollaborationNotificationReplyRecoverySnapshot>>(
+                            f.koin.get<BeginCollaborationNotificationReplyRecoveryCycle>()()
+                        )
+                        .value
+                val firstWork =
+                    assertIs<AppResult.Success<CollaborationNotificationReplyRecoveryWork?>>(
+                            f.koin.get<ReadCollaborationNotificationReplyRecovery>()()
+                        )
+                        .value!!
+                state =
+                    state.copy(
+                        cursor =
+                            assertIs<
+                                    AppResult.Success<CollaborationNotificationReplyRecoveryCursor>
+                                >(
+                                    f.koin.get<AdvanceCollaborationNotificationReplyRecovery>()(
+                                        firstWork,
+                                        firstWork.entries.single(),
+                                        state.cursor,
+                                    )
+                                )
+                                .value
+                    )
+                if (queued)
+                    assertQueued(f.koin.get<CollaborationNotificationReplies>().resume(input.id))
+                val existing = f.message(input.candidate.action.operationId)
+                // No outcome settlement: reopen with the last attempted sequence still in flight.
+                f.reopen()
+                f.withoutIncomingSelection()
+                state =
+                    assertIs<AppResult.Success<CollaborationNotificationReplyRecoverySnapshot>>(
+                            f.koin.get<BeginCollaborationNotificationReplyRecoveryCycle>()()
+                        )
+                        .value
+                assertTrue(state.cursor.cycle!!.inFlight)
+                assertNull(
+                    assertIs<AppResult.Success<CollaborationNotificationReplyRecoveryWork?>>(
+                            f.koin.get<ReadCollaborationNotificationReplyRecovery>()()
+                        )
+                        .value
+                )
+                assertTrue(
+                    assertIs<AppResult.Success<CollaborationNotificationReplyRecoverySnapshot>>(
+                            f.koin.get<FinishCollaborationNotificationReplyRecoveryCycle>()(state)
+                        )
+                        .value
+                        .cursor
+                        .cycle!!
+                        .retryRequired
+                )
+                // Discard the finished result, as if the caller stopped before returning to its
+                // worker.
+                f.reopen()
+                f.withoutIncomingSelection()
+                val tail =
+                    f.retain(
+                        f.seal(CollaborationNotificationAction.Reply(id(), target)),
+                        "Appended after interruption",
+                    )
+                state =
+                    assertIs<AppResult.Success<CollaborationNotificationReplyRecoverySnapshot>>(
+                            f.koin.get<BeginCollaborationNotificationReplyRecoveryCycle>()()
+                        )
+                        .value
+                val work =
+                    assertIs<AppResult.Success<CollaborationNotificationReplyRecoveryWork?>>(
+                            f.koin.get<ReadCollaborationNotificationReplyRecovery>()()
+                        )
+                        .value!!
+                assertEquals(
+                    if (queued) listOf(tail.id) else listOf(input.id, tail.id),
+                    work.entries.map { it.id },
+                )
+                for (entry in work.entries) {
+                    state =
+                        state.copy(
+                            cursor =
+                                assertIs<
+                                        AppResult.Success<
+                                            CollaborationNotificationReplyRecoveryCursor
+                                        >
+                                    >(
+                                        f.koin.get<AdvanceCollaborationNotificationReplyRecovery>()(
+                                            work,
+                                            entry,
+                                            state.cursor,
+                                        )
+                                    )
+                                    .value
+                        )
+                    assertQueued(f.koin.get<CollaborationNotificationReplies>().resume(entry.id))
+                    state =
+                        assertIs<AppResult.Success<CollaborationNotificationReplyRecoverySnapshot>>(
+                                f.koin.get<SettleCollaborationNotificationReplyRecoveryCycle>()(
+                                    state,
+                                    false,
+                                )
+                            )
+                            .value
+                }
+                assertFalse(
+                    assertIs<AppResult.Success<CollaborationNotificationReplyRecoverySnapshot>>(
+                            f.koin.get<FinishCollaborationNotificationReplyRecoveryCycle>()(state)
+                        )
+                        .value
+                        .cursor
+                        .cycle!!
+                        .retryRequired
+                )
+                assertTrue(f.inputs().isEmpty())
+                if (queued) assertEquals(existing, f.message(input.candidate.action.operationId))
+                assertEquals(
+                    input.candidate.text,
+                    f.message(input.candidate.action.operationId)!!.intent.text,
+                )
+            }
+        }
+
+    @Test
+    fun accountWithoutRetainedRepliesNeedsNoHistoryKeyOrRecoveryCursor() = runBlocking {
+        val f = CollaborationWorkerFixture()
+        try {
+            f.initialize()
+            f.withoutIncomingSelection()
+            assertEquals(
+                AppResult.Success(null),
+                f.koin.get<BeginCollaborationNotificationReplyRecoveryCycle>()(),
+            )
+            val access = f.access()
+            assertEquals(
+                AppResult.Success(null),
+                f.koin
+                    .get<CollaborationNotificationReplyRecoveryCursorRepository>()
+                    .current(
+                        CollaborationRecoveryAccess(
+                            access.sessionId,
+                            access.audience,
+                            access.accountId,
+                        )
+                    ),
+            )
+            assertTrue(f.sdk.enqueued.isEmpty())
+        } finally {
+            f.close()
+        }
+    }
+
     private fun CollaborationWorkerFixture.flow(
         actions: CollaborationNotificationActionRepository = koin.get(),
         commands: CollaborationNotificationCommands = koin.get(),

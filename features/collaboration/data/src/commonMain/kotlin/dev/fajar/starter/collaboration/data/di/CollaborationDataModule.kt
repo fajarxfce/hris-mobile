@@ -14,6 +14,32 @@ import org.koin.core.annotation.*
 @ComponentScan("dev.fajar.starter.collaboration.data")
 class CollaborationDataModule {
     @Factory
+    fun beginNotificationReplyRecoveryCycle(
+        cursors: CollaborationNotificationReplyRecoveryCursorRepository,
+        inputs: CollaborationNotificationReplyRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) = BeginCollaborationNotificationReplyRecoveryCycle(cursors, inputs, sessions, server, build)
+
+    @Factory
+    fun settleNotificationReplyRecoveryCycle(
+        cursors: CollaborationNotificationReplyRecoveryCursorRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) = SettleCollaborationNotificationReplyRecoveryCycle(cursors, sessions, server, build)
+
+    @Factory
+    fun finishNotificationReplyRecoveryCycle(
+        cursors: CollaborationNotificationReplyRecoveryCursorRepository,
+        inputs: CollaborationNotificationReplyRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) = FinishCollaborationNotificationReplyRecoveryCycle(cursors, inputs, sessions, server, build)
+
+    @Factory
     fun readNotificationReplyRecovery(
         inputs: CollaborationNotificationReplyRepository,
         cursors: CollaborationNotificationReplyRecoveryCursorRepository,

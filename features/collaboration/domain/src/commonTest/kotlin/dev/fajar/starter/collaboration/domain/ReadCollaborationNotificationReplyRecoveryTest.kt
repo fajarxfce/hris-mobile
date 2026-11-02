@@ -22,6 +22,7 @@ class ReadCollaborationNotificationReplyRecoveryTest {
             assertEquals(f.records.take(4).map { it.id }, work.entries.map { it.id })
             assertTrue(work.hasMore)
             assertEquals(listOf<Long?>(null), f.pageAfters)
+            assertEquals(listOf(4), f.pageLimits)
             assertEquals(0, f.local.messageReads)
             assertEquals(0, f.native.opens)
             assertEquals(0, f.local.setup.calls)
