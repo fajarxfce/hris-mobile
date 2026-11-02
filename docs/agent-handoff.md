@@ -1,5 +1,37 @@
 # Agent continuation — HRIS Mobile
 
+## Local emulator stopped; worker proof unresolved, continue independent work
+
+Native retry2 finished697.765s with three failed worker cases and unchanged frozen
+APK/7825 source hashes. Emulator1167388 again exited via its HangDetector/CrashReporter
+SIGSEGV. Changing swiftshader_indirect to modern swiftshader did not resolve it.
+The cancelled-draft scenario reached176 accepted encrypted sends and provider history/
+context reads before the hang (attempt1 reached158). The instrument subprocess uses
+DEVNULL for stdout/stderr, ruling out an undrained host output pipe. Host core includes
+qemud_pipe_send/AdbVsockPipe frames; a precise deadlock cause is not proven. Both failed
+attempts and coredump metadata remain in Platform .work/chat-ci-repair-native-2026-11-02.
+
+A third diagnostic BOOT only disabled the emulator VirtioVsockPipe feature (documented
+as the replacement for goldfish_pipe). It never exposed a booted ADB target before
+the startup deadline. No application test3 ran. Owned PID1192132 was stopped2.211s
+after PID/AVD/port checks; its transport is absent. boot-3/result.json records this.
+No emulator or local heavy job remains. Do not run native-3 or the original five-case
+audit against these failed results; do not blindly repeat renderer/transport changes.
+Do not describe worker proof as accepted. SDK and Android WorkManager from attempt1
+remain their separate passing cases. [Updated evidence](measurements/chat-ci-native-investigation-2026-11-02.json).
+
+Tracked source is no longer frozen for local proof. Continue independent reply read/
+review/recovery implementation while following repaired hosted native41502174267
+(emulator stage last checked) and latest native41504255602. Portable CI41504255605 at
+1a92 has PASSED; its Apple adapter job is running. Full Apple41502192261 is accepted
+below; next completion Apple41508567222 at2dd94e94 is queued. This host investigation
+does not block independent product work or justify changing application code without
+evidence. Existing .txt read/review drafts remain unapplied/unvalidated; add their
+ownership/CAS/cancellation and assembled-graph coverage before acceptance.
+Phone18 and live304be027/schema116 pushOFF unchanged. No phone interaction. All54
+groups remain open; continue long run/push atomic commits and install next validated
+product build >18 only after notice, explicit serial and --install-only.
+
 ## Full Apple through reply retention accepted; next run dispatched
 
 Run41502192261 at exactdf0a1d408c9f895160aff86f8e0e152f2fbcefdb passes full artifact/

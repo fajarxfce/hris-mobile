@@ -1,6 +1,6 @@
 {
   "date": "2026-11-02",
-  "status": "worker_retry_in_progress_not_accepted",
+  "status": "local_worker_proof_not_accepted_hosted_proof_pending",
   "mobileSource": {
     "count": 3628,
     "manifestSha256": "6091e8a38ad1fa5908fcf88de3a0d9d6ae6e4f1d593a08ca611ff035df6b087e",
@@ -108,15 +108,14 @@
   },
   "driverCaseCount": 87,
   "pending": {
-    "localWorkerRetry": "Platform .work/chat-ci-repair-native-2026-11-02/native-2",
-    "ownedEmulatorPid": 1167388,
-    "serial": "emulator-5562",
-    "gpu": "swiftshader",
-    "sourceChanges": false,
+    "localWorkerRetry": null,
+    "ownedEmulatorPid": null,
+    "serial": null,
     "hostedNativeRepairedRun": 41502174267,
     "hostedNativeLatestPending": 41504255602,
-    "hostedControlLatestPending": 41504255605,
-    "appleFull": 41502192261
+    "hostedControlLatest": 41504255605,
+    "appleFullLatestAccepted": 41502192261,
+    "appleFullNext": 41508567222
   },
   "limits": [
     "First attempt proves SDK and Android WorkManager cases only; three application-worker cases are not accepted.",
@@ -124,5 +123,56 @@
     "Coredump shows emulator HangDetector/CrashReporter fatal path. Exact underlying emulator hang is unresolved; no application fix inferred.",
     "Same frozen proof APK and backend code are reused. This is not a product phone APK or native notification acceptance.",
     "Phone18/source42f5d157 remains; no phone interaction. Live304be027/schema116 pushOFF; all54 PRD groups remain open."
-  ]
+  ],
+  "secondAttempt": {
+    "startedAt": "2026-11-02T19:06:30.614863+00:00",
+    "wallSeconds": 697.765,
+    "exitCode": 1,
+    "artifactUnchanged": true,
+    "inputsUnchanged": true,
+    "reports": {
+      "tests": 3,
+      "failures": 3,
+      "errors": 0,
+      "skipped": 0,
+      "suites": 1
+    },
+    "reportSha256": {
+      "TEST-dev.fajar.hris.NativeCollaborationWorkerInteropTest.xml": "2cfd40862e0aa741e520792c5a747c6e2a2e51815c69936a850271bec51d1e24"
+    }
+  },
+  "secondAttemptReview": {
+    "status": "failed_same_emulator_hang",
+    "wallSeconds": 697.765,
+    "tests": 3,
+    "failures": 3,
+    "rendererChangeDidNotResolve": true,
+    "coreInfoSha256": "a2de9003401e73843fbe443feea472da35612b38b3a72931afab0655c9d2a162",
+    "evidence": [
+      "Emulator1167388 exits via HangDetector/CrashReporter SIGSEGV again.",
+      "Second cancelled-draft attempt reached176 accepted encrypted sends and history/context reads; first attempt stopped at158. Underlying app/protocol assertions unchanged.",
+      "Instrumentation subprocess stdout/stderr use DEVNULL, so an undrained host stdout pipe is not the cause.",
+      "Host core includes qemud_pipe_send and AdbVsockPipe service frames; installed emulator feature configuration enables VirtioVsockPipe. Exact deadlock cause remains unproven."
+    ],
+    "next": "Run only the first failed cancelled-draft case with emulator VirtioVsockPipe disabled, exercising the legacy ADB transport. Same frozen APK/backend/175-message assertions. This is a diagnostic host change, not an app fix; no third identical retry.",
+    "phoneTouched": false
+  },
+  "secondAttemptStop": {
+    "serial": "emulator-5562",
+    "pid": 1167388,
+    "alreadyExited": true,
+    "serialAbsent": true,
+    "wallSeconds": 0.0
+  },
+  "thirdBootDiagnostic": {
+    "status": "boot_timeout_no_application_test_started",
+    "attemptedFeature": "-VirtioVsockPipe",
+    "pid": 1192132,
+    "serial": "emulator-5562",
+    "ownedProcessStopped": true,
+    "transportAbsent": true,
+    "stopSeconds": 2.211,
+    "phoneTouched": false,
+    "next": "Legacy transport did not yield a booted ADB target. Do not run native-3/audit scripts or claim a third app test. Both prior host crashes remain unresolved; await repaired hosted native proof and investigate emulator tooling separately without further blind retries."
+  }
 }
