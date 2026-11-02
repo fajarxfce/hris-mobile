@@ -34,7 +34,8 @@ internal class CollaborationRecoveryProgressCodec(
                 Json.decodeFromString<ProgressDto>(
                     bytes.decodeToString(throwOnInvalidSequence = true)
                 )
-            require(dto.schema == 1)
+            require(dto.schema in 1..2)
+            require(dto.schema != 1 || dto.sweep?.continuationRequired != true)
             CollaborationRecoveryProgress(
                     raw.handle.generation,
                     dto.sweep?.let {
@@ -43,6 +44,7 @@ internal class CollaborationRecoveryProgressCodec(
                             it.afterCompanyId,
                             it.inFlightCompanyId,
                             it.retryRequired,
+                            it.continuationRequired,
                         )
                     },
                 )
@@ -57,13 +59,14 @@ internal class CollaborationRecoveryProgressCodec(
         require(validCollaborationRecoveryProgress(value))
         val dto =
             ProgressDto(
-                1,
+                2,
                 value.sweep?.let {
                     SweepDto(
                         it.wakeGeneration,
                         it.afterCompanyId,
                         it.inFlightCompanyId,
                         it.retryRequired,
+                        it.continuationRequired,
                     )
                 },
             )
@@ -99,4 +102,5 @@ private data class SweepDto(
     val afterCompanyId: String?,
     val inFlightCompanyId: String?,
     val retryRequired: Boolean,
+    val continuationRequired: Boolean = false,
 )

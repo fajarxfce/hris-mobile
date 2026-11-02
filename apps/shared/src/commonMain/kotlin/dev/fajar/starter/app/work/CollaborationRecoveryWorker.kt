@@ -104,18 +104,23 @@ class CollaborationRecoveryWorker(
                     snapshot,
                     CollaborationRecoveryChange.Complete(
                         device.companyId,
-                        result is SyncResult.Retry,
+                        retryRequired = result is SyncResult.Retry && result.failure != null,
+                        continuationRequired = result is SyncResult.Retry && result.failure == null,
                     ),
                 )
             if (completed is AppResult.Failed) return retry(completed)
             snapshot = (completed as AppResult.Success).value.snapshot
         }
         if (directory.nextAfterCompanyId != null) return continuePending()
+        val sweep = requireNotNull(snapshot.progress?.sweep)
+        val healthyContinuation =
+            sweep.continuationRequired && !sweep.retryRequired && sweep.inFlightCompanyId == null
         val finished = updateProgress(snapshot, CollaborationRecoveryChange.Finish)
         if (finished is AppResult.Failed) return retry(finished)
         val completion =
             (finished as AppResult.Success).value.completedWake
-                ?: return SyncResult.Retry(failure("sweep_pending"))
+                ?: return if (healthyContinuation) continuePending()
+                else SyncResult.Retry(failure("sweep_pending"))
         val acknowledged = completeWake(completion)
         if (acknowledged is AppResult.Failed) return retry(acknowledged)
         // An ACK can lose to a new wake; check even after success because a later write can win.

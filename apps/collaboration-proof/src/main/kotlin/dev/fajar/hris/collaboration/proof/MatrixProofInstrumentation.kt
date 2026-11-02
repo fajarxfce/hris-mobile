@@ -41,7 +41,11 @@ class MatrixProofInstrumentation : Instrumentation() {
                         "company-recovery-stage" ->
                             CompanyRecoveryProbe(targetContext, directory).stage()
                         "company-recovery-resume" ->
-                            CompanyRecoveryProbe(targetContext, directory).run(resuming = true)
+                            CompanyRecoveryProbe(targetContext, directory)
+                                .run(CompanyRecoveryProbe.Scenario.Resume)
+                        "company-recovery-backlog" ->
+                            CompanyRecoveryProbe(targetContext, directory)
+                                .run(CompanyRecoveryProbe.Scenario.Backlog)
                         "work-wake" -> CollapsedSchedulingProbe(targetContext, directory).run()
                         "work-wake-stage" ->
                             CollapsedSchedulingProbe(targetContext, directory).stage()

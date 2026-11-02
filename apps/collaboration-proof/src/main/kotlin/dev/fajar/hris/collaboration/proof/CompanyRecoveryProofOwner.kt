@@ -128,6 +128,7 @@ internal class CompanyRecoveryProofOwner(context: Context) {
             ): AppResult<CollaborationAdmissionObservation> {
                 check(owner == parent.owner(owner.companyId))
                 val device = references.single { it.companyId == owner.companyId }
+                val admittedAt = clock.now()
                 return AppResult.Success(
                     CollaborationAdmissionObservation(
                         owner,
@@ -135,8 +136,8 @@ internal class CompanyRecoveryProofOwner(context: Context) {
                         device.version,
                         1,
                         1,
-                        clock.now(),
-                        clock.now() + 60.seconds,
+                        admittedAt,
+                        admittedAt + 60.seconds,
                     )
                 )
             }

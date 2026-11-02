@@ -11,6 +11,41 @@ import kotlinx.coroutines.test.runTest
 
 class CollaborationRecoveryProgressTest {
     @Test
+    fun healthyRemainingWorkSurvivesLaterSuccessAndRestartsWithoutAcknowledgment() = runTest {
+        val f = ProgressFixture()
+        f.change(CollaborationRecoveryChange.Begin(f.wake))
+        f.change(CollaborationRecoveryChange.Attempt(progressId(1)))
+        f.change(CollaborationRecoveryChange.Complete(progressId(1), false, true))
+        f.change(CollaborationRecoveryChange.Attempt(progressId(2)))
+        f.change(CollaborationRecoveryChange.Complete(progressId(2), false))
+        val pending = f.snapshot().progress!!.sweep!!
+        assertTrue(pending.continuationRequired)
+        assertFalse(pending.retryRequired)
+        val again = f.change(CollaborationRecoveryChange.Finish)
+        assertNull(again.completedWake)
+        assertEquals(CollaborationRecoverySweep(f.wake.generation), again.snapshot.progress!!.sweep)
+        f.change(CollaborationRecoveryChange.Attempt(progressId(1)))
+        f.change(CollaborationRecoveryChange.Complete(progressId(1), false))
+        assertEquals(f.wake, f.change(CollaborationRecoveryChange.Finish).completedWake)
+    }
+
+    @Test
+    fun continuationCannotEraseFailureOrAnInterruptedAttempt() = runTest {
+        for (interrupted in listOf(false, true)) {
+            val f = ProgressFixture()
+            f.change(CollaborationRecoveryChange.Begin(f.wake))
+            f.change(CollaborationRecoveryChange.Attempt(progressId(1)))
+            if (!interrupted) f.change(CollaborationRecoveryChange.Complete(progressId(1), true))
+            f.change(CollaborationRecoveryChange.Attempt(progressId(2)))
+            f.change(CollaborationRecoveryChange.Complete(progressId(2), false, true))
+            val pending = f.snapshot().progress!!.sweep!!
+            assertTrue(pending.retryRequired)
+            assertTrue(pending.continuationRequired)
+            assertNull(f.change(CollaborationRecoveryChange.Finish).completedWake)
+        }
+    }
+
+    @Test
     fun expiredTransportAndAbsentWorkspaceDoNotHideOwnedRecoveryProgress() = runTest {
         val f = ProgressFixture()
         f.setup.workspace = null

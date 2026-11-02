@@ -24,6 +24,12 @@ import org.json.JSONObject
 
 /** Actual WorkManager/Room/Keystore consumer proof. Directory and company work are synthetic. */
 internal class CompanyRecoveryProbe(private val context: Context, private val directory: File) {
+    enum class Scenario(val output: String) {
+        Burst("company-recovery"),
+        Resume("company-recovery-resume"),
+        Backlog("company-recovery-backlog"),
+    }
+
     suspend fun stage() {
         val owner = CompanyRecoveryProofOwner(context)
         try {
@@ -51,7 +57,7 @@ internal class CompanyRecoveryProbe(private val context: Context, private val di
         }
     }
 
-    suspend fun run(resuming: Boolean = false) {
+    suspend fun run(scenario: Scenario = Scenario.Burst) {
         check(!File(directory, "workmanager-enabled.json").exists())
         val owner = CompanyRecoveryProofOwner(context)
         val closing = AtomicBoolean()
@@ -69,11 +75,12 @@ internal class CompanyRecoveryProbe(private val context: Context, private val di
                     check(count == 1)
                     check(counts.calls.size < 128)
                     counts.calls += grant.owner.companyId
-                    if (!resuming && counts.calls.size == 1) {
+                    if (scenario == Scenario.Burst && counts.calls.size == 1) {
                         entered.complete(Unit)
                         release.await()
                     }
-                    SyncResult.Complete
+                    if (scenario == Scenario.Backlog && counts.calls.size <= 14) SyncResult.Retry()
+                    else SyncResult.Complete
                 } finally {
                     counts.callbacks.decrementAndGet()
                 }
@@ -109,10 +116,10 @@ internal class CompanyRecoveryProbe(private val context: Context, private val di
             initialized = true
             val request = RequestCollaborationRecovery(owner.wakes, schedules)
             val expectedAcknowledgment =
-                if (resuming) {
-                    resume(owner, scheduler, counts, checks)
-                } else {
-                    burst(owner, request, counts, entered, release, checks)
+                when (scenario) {
+                    Scenario.Resume -> resume(owner, scheduler, counts, checks)
+                    Scenario.Burst -> burst(owner, request, counts, entered, release, checks)
+                    Scenario.Backlog -> backlog(owner, scheduler, counts, checks)
                 }
             withTimeout(20_000) {
                 manager.getWorkInfosFlow(query()).first {
@@ -126,7 +133,7 @@ internal class CompanyRecoveryProbe(private val context: Context, private val di
             check(success(owner.read()).progress?.sweep == null)
             check(owner.states.subscriptionCount.value == 0)
             check(counts.callbackMaximum.get() == 1)
-            if (!resuming) check(counts.results.none { it is SyncResult.Retry })
+            if (scenario != Scenario.Resume) check(counts.results.none { it is SyncResult.Retry })
             checks
                 .put("maxSimultaneousOsTasks", counts.maximum.get())
                 .put("maxCompanyProcessors", counts.callbackMaximum.get())
@@ -154,8 +161,26 @@ internal class CompanyRecoveryProbe(private val context: Context, private val di
         }
         checks.put("cleanup", true).put("sdkOrProviderAccepted", false)
         directory.mkdirs()
-        File(directory, if (resuming) "company-recovery-resume.json" else "company-recovery.json")
-            .writeText(checks.toString())
+        File(directory, "${scenario.output}.json").writeText(checks.toString())
+    }
+
+    private suspend fun backlog(
+        owner: CompanyRecoveryProofOwner,
+        scheduler: AndroidWorkScheduler,
+        counts: ProbeCounts,
+        checks: JSONObject,
+    ): String {
+        check(success(owner.wakes.pending()) == null)
+        val requested = success(owner.wakes.request())
+        scheduler.enqueue(KEY)
+        withTimeout(20_000) { while (success(owner.wakes.pending()) != null) delay(100) }
+        saveProgress("backlog-resolved", owner, requested.generation, counts)
+        check(counts.calls.toList() == List(3) { (1..7).map(::id) }.flatten())
+        checks
+            .put("healthyCompanyBatches", 3)
+            .put("allCompaniesCoveredBeforeNextBatch", true)
+            .put("completedWithoutFailureBackoff", true)
+        return requested.generation
     }
 
     private suspend fun resume(
@@ -172,6 +197,7 @@ internal class CompanyRecoveryProbe(private val context: Context, private val di
         saveProgress("resume-start", owner, generation, counts)
         scheduler.enqueue(KEY)
         withTimeout(100_000) { while (success(owner.wakes.pending()) != null) delay(100) }
+        saveProgress("resume-resolved", owner, generation, counts)
         check(counts.calls.toList().take(6) == (2..7).map(::id))
         check(counts.calls.toList().drop(6).take(7) == (1..7).map(::id))
         check(counts.results.any { it is SyncResult.Retry })
@@ -205,6 +231,7 @@ internal class CompanyRecoveryProbe(private val context: Context, private val di
         saveProgress("burst-held", owner, newest.generation, counts)
         release.complete(Unit)
         withTimeout(80_000) { while (success(owner.wakes.pending()) != null) delay(100) }
+        saveProgress("burst-resolved", owner, newest.generation, counts)
         check(counts.calls.toList().take(7) == (1..7).map(::id))
         check(counts.calls.toList().drop(7).take(7) == (1..7).map(::id))
         checks
@@ -234,6 +261,8 @@ internal class CompanyRecoveryProbe(private val context: Context, private val di
                     .put("activeTasks", counts.active.get())
                     .put("companyAttempts", counts.calls.size)
                     .put("completedTasks", counts.results.size)
+                    .put("companyOrder", JSONArray(counts.calls.map { it.takeLast(12).toInt() }))
+                    .put("retryResults", counts.results.count { it is SyncResult.Retry })
                     .toString()
             )
     }

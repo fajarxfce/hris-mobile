@@ -14,6 +14,85 @@ import kotlinx.coroutines.test.*
 
 class CollaborationRecoveryWorkerTest {
     @Test
+    fun multipleHealthyBatchesCoverEveryCompanyWithoutFailureBackoffOrEarlyAcknowledgment() =
+        runTest {
+            val f = RecoveryWorkerFixture(testScheduler)
+            val worker = f.worker()
+            f.onCompany = {
+                if (f.attempted.size <= 10) SyncResult.Retry() else SyncResult.Complete
+            }
+            repeat(8) {
+                assertEquals(SyncResult.Complete, worker())
+                assertNotNull(f.wake)
+                assertEquals(0, f.acknowledgments)
+            }
+            assertEquals(SyncResult.Complete, worker())
+            assertEquals(List(3) { (1..5).map(::recoveryId) }.flatten(), f.attempted)
+            assertNull(f.wake)
+            assertEquals(1, f.wakeWrites)
+            assertEquals(1, f.acknowledgments)
+            assertEquals(8, f.scheduled.size)
+            assertEquals(0L, testScheduler.currentTime)
+            assertEquals(0, f.states.subscriptionCount.value)
+        }
+
+    @Test
+    fun aReplacementWorkerRetainsHealthyContinuationAcrossCompanyPages() = runTest {
+        val f = RecoveryWorkerFixture(testScheduler, 3)
+        f.onCompany = { SyncResult.Retry() }
+        assertEquals(SyncResult.Complete, f.worker()())
+        val wake = f.wake
+        assertTrue(f.progress!!.sweep!!.continuationRequired)
+        assertFalse(f.progress!!.sweep!!.retryRequired)
+        f.onCompany = { SyncResult.Complete }
+        assertEquals(SyncResult.Complete, f.worker()())
+        assertEquals(wake, f.wake)
+        assertNull(f.progress!!.sweep!!.afterCompanyId)
+        repeat(2) { assertEquals(SyncResult.Complete, f.worker()()) }
+        assertEquals(List(2) { (1..3).map(::recoveryId) }.flatten(), f.attempted)
+        assertNull(f.wake)
+        assertEquals(1, f.acknowledgments)
+    }
+
+    @Test
+    fun realFailureStillRequiresBackoffWhenLaterCompaniesHaveHealthyRemainingWork() = runTest {
+        val f = RecoveryWorkerFixture(testScheduler, 3)
+        f.onCompany = { grant ->
+            if (grant.owner.companyId == recoveryId(1))
+                SyncResult.Retry(Failure(FailureKind.Network, "Temporarily unavailable"))
+            else SyncResult.Retry()
+        }
+        assertEquals(SyncResult.Complete, f.worker()())
+        assertTrue(f.progress!!.sweep!!.retryRequired)
+        assertTrue(f.progress!!.sweep!!.continuationRequired)
+        assertNotNull(assertIs<SyncResult.Retry>(f.worker()()).failure)
+        assertEquals((1..3).map(::recoveryId), f.attempted)
+        assertNotNull(f.wake)
+        assertEquals(0, f.acknowledgments)
+        assertEquals(1, f.scheduled.size)
+    }
+
+    @Test
+    fun failedContinuationSchedulingRetainsTheRestartedSweepForLaterRecovery() = runTest {
+        val f = RecoveryWorkerFixture(testScheduler, 1)
+        val unavailable = Failure(FailureKind.Unavailable, "Unavailable scheduler")
+        f.onCompany = { SyncResult.Retry() }
+        f.scheduleFailure = unavailable
+        assertEquals(SyncResult.Retry(unavailable), f.worker()())
+        val original = assertNotNull(f.wake)
+        assertEquals(CollaborationRecoverySweep(original.generation), f.progress!!.sweep)
+        assertEquals(0, f.acknowledgments)
+        assertEquals(3, f.scheduled.size)
+        assertEquals(200L, testScheduler.currentTime)
+        f.scheduleFailure = null
+        f.onCompany = { SyncResult.Complete }
+        assertEquals(SyncResult.Complete, f.worker()())
+        assertNull(f.wake)
+        assertEquals(1, f.wakeWrites)
+        assertEquals(1, f.acknowledgments)
+    }
+
+    @Test
     fun aFailingFirstCompanyCannotStarveLaterCompaniesOrAcknowledgeAnUncleanSweep() = runTest {
         val f = RecoveryWorkerFixture(testScheduler)
         val worker = f.worker()
@@ -21,7 +100,7 @@ class CollaborationRecoveryWorkerTest {
         f.onCompany = {
             if (!failed) {
                 failed = true
-                SyncResult.Retry()
+                SyncResult.Retry(Failure(FailureKind.Network, "Temporarily unavailable"))
             } else SyncResult.Complete
         }
         assertEquals(SyncResult.Complete, worker())

@@ -14,6 +14,8 @@ data class CollaborationRecoverySweep(
     val afterCompanyId: String? = null,
     val inFlightCompanyId: String? = null,
     val retryRequired: Boolean = false,
+    /** Successful bounded company work remains; this alone does not require failure backoff. */
+    val continuationRequired: Boolean = false,
 )
 
 data class CollaborationRecoveryProgress(
@@ -34,8 +36,11 @@ sealed interface CollaborationRecoveryChange {
      */
     data class Attempt(val companyId: String) : CollaborationRecoveryChange
 
-    data class Complete(val companyId: String, val retryRequired: Boolean) :
-        CollaborationRecoveryChange
+    data class Complete(
+        val companyId: String,
+        val retryRequired: Boolean,
+        val continuationRequired: Boolean = false,
+    ) : CollaborationRecoveryChange
 
     /** Only the single processing owner may finish after reaching the validated directory end. */
     data object Finish : CollaborationRecoveryChange

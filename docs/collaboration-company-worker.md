@@ -28,7 +28,7 @@ periodic consumer without recursively enqueueing it. The worker captures account
 progress and requests at most two live device references after its saved seek.
 Each Attempt is durable before admission and company work. Inactive/revoked/foreign-
 platform references are covered without enrollment or content acquisition. Complete
-preserves retry requirements; another company can progress after a transient failure.
+preserves retry and healthy-continuation requirements; another company can progress after a transient failure.
 A blocked attempt leaves its underlying commands and required user action intact.
 Sweep completion is coverage of these attempts, not message-delivery acknowledgment.
 
@@ -64,4 +64,24 @@ cover stable-parent renewal and retained scheduling failure. The assembled conta
 resolves the singleton task and its dependencies. Android release/proof Kotlin
 compilation is included. Actual Android consumer/OS/storage execution now passes the [native proof](measurements/android-company-recovery-2026-11-02.json): 40 failed enqueues retain the newest wake, two OS tasks serialize company processing, old ACK cannot erase a new wake, and process restart preserves an uncertain attempt while advancing later companies. All three scenarios complete in 35.839 seconds; proof process and owned emulator are stopped. Directory, admission and company callbacks are synthetic; SDK/provider/FCM acceptance remains separate.
 
-Known next correction: per-company `SyncResult.Retry(null)` denotes successful bounded work with more pending commands. The current consumer treats it as a transient failure at sweep completion, introducing unnecessary backoff. Persist continuation separately from failed/uncertain work before incoming integration or employee release.
+Per-company `SyncResult.Retry(null)` denotes successful bounded work with more
+pending commands. It now sets the independent durable continuation flag. At sweep
+end, Finish first commits the restarted sweep; a healthy continuation schedules the
+same wake without OS failure backoff. Real failures or interrupted attempts win even
+when other companies report healthy remaining work. Scheduling failure still returns
+Retry and retains the restarted sweep and original wake. No pending command is
+acknowledged by this coverage marker. Incoming recovery remains the next integration.
+
+The [continuation regression evidence](measurements/chat-company-continuation-2026-11-02.json)
+records two domain, three shared storage and four app cases plus real Android
+three-batch execution: all seven companies advance in order across21 attempts,
+12 OS task completions, zero Retry results,1.593s. Burst and interrupted-process
+regressions also pass; all four scenarios total37.916s. The measurement preserves
+both failed fixtures, the corrected source hashes and emulator cleanup. Full root,
+affected browser and app Wasm checks pass on the final ten inputs.
+
+Hosted [Apple41405822268](https://github.com/fajarxfce/hris-mobile/actions/runs/41405822268)
+at consumer338fea17 is completed/audited:112 core simulator cases in30 suites,
+zero failures/errors/skips, six raw wake cases0.122s and full Xcode app1303s.
+Fourteen exact source hashes match that commit. Core simulator suites do not run
+the app worker's desktop cases; this earlier run excludes the continuation change.

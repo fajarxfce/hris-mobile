@@ -1,5 +1,58 @@
 # Agent continuation — HRIS Mobile
 
+## Healthy company backlog fixed and proved — 2 November 2026
+
+[Evidence](measurements/chat-company-continuation-2026-11-02.json): successful bounded
+company batches now persist continuation separately from failure/uncertain attempts.
+At directory end, durable restart precedes same-wake scheduling; healthy backlog
+avoids OS failure backoff, while real failures still require it. Payload schema2
+reads schema1 without losing its wake/seek/failure; unsupported schemas cannot clear
+progress. Two new domain, three shared storage and four app cases cover the change.
+
+Focused2 passes547 domain,311 data,22 worker/DI plus Android release Kotlin/proof APK
+and static checks in137s /140.844s. Focused1 had two invalid raw migration fixtures
+that reused a generation; corrected fixture uses fresh IDs and matching AAD, with
+production unchanged. Native1 passed burst/stage but failed resumed callback order.
+Inspection found fictional admission used two clock reads and could exceed60s;
+that invalid fixture was corrected to one instant, with bounded diagnostics added.
+The failed run did not retain skipped callback IDs, so do not invent them.
+
+Final native build3/static passes68s /71.904s. Native2 passes all four scenarios in
+37.916s: burst2.238s,stage0.830s,resume31.340s,healthy backlog1.593s. Three healthy
+batches cover all seven companies in order (21 callbacks/12 task completions) with
+zero Retry results; interrupted work retains its real backoff. Actual WorkManager,
+consumer/domain/Room/Keystore are used with synthetic directory/admission/company
+callbacks. No SDK/provider/FCM acceptance. Proof process and owned emulator5562/PID15507
+are stopped; phone15/employee package and unrelated5560 untouched.
+
+Final full4 root/affected browser/app-Wasm passes292s /295.868s with10 unchanged
+inputs:3,073 desktop,215 Android host,836 affected browser,10 build-logic; zero
+failures/errors/skips. Exact reports/source/APK hashes and failed attempts are
+retained. No new employee APK/live server activation is implied. HRIS policy stays
+in Mobile; no generic Starter port is due.
+
+Apple41405822268 at338fea17b5738698f45c824cd1d6a06142050946 is NOW COMPLETE/AUDITED:
+112 cases/30 suites, six wake cases0.122s, compile608s/tests67s/Xcode1303s/associations1s.
+Fourteen source hashes and all XML match. Worker desktop tests are not in its core
+simulator suite; it excludes this later continuation correction. No hosted run is
+active now; dispatch a new exact implementation head after pushing this increment.
+
+**Continue immediately:** durable per-company room recovery, then incoming acquisition
+independent of outgoing backlog, actual provider and opaque FCM/notification/reply.
+Seven UNAPPLIED candidates exist under `.work/incoming-recovery-2026-11-02/`:
+entities/policy/contract/read/update/codec/repository.txt. They are a draft, not tested.
+Review, add domain/storage/DI tests and apply only after this increment is committed.
+The proposed row uses account/company ownership, generation CAS, saved room seek,
+in-flight attempt and independent retry/continuation flags. Attempt precedes external
+work; Complete preserves flags; Finish requires validated directory end and resets
+only after a durable CAS. Ordinary expiry/reauth retain local facts, known denial and
+replacement account gate access. Do not reuse/reset foreground Older history position
+for every background wake; long offline gaps need independent catchup progress.
+Read/ReconcileCollaborationHistoryReferences still lack Captured local overloads.
+Current callbacks still invoke outgoing delivery only. Backend schema116 remains
+undeployed (private103); retain disabled chat push through actual receive acceptance.
+All54 PRD groups remain open. Continue after every push, including while CI executes.
+
 ## Native all-company consumer proof passed — 2 November 2026
 
 [Evidence](measurements/android-company-recovery-2026-11-02.json) binds17 unchanged

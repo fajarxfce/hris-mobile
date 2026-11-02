@@ -68,13 +68,19 @@ internal fun nextCollaborationRecoverySweep(
                 current.copy(
                     inFlightCompanyId = null,
                     retryRequired = current.retryRequired || change.retryRequired,
+                    continuationRequired =
+                        current.continuationRequired || change.continuationRequired,
                 )
             )
         }
         CollaborationRecoveryChange.Finish -> {
             if (current == null) return invalidProgress()
             AppResult.Success(
-                if (current.retryRequired || current.inFlightCompanyId != null)
+                if (
+                    current.retryRequired ||
+                        current.continuationRequired ||
+                        current.inFlightCompanyId != null
+                )
                     CollaborationRecoverySweep(current.wakeGeneration)
                 else null
             )
