@@ -100,7 +100,7 @@ internal class HrisWorkerMatrixProbe(private val context: Context, directory: Fi
             var received: HrisProofMessages? = null
             var primary: Exception? = null
             try {
-                val app = openApplication().also { application = it }
+                var app = openApplication().also { application = it }
                 app.activate()
                 val restored = restore(app, queued)
                 check(app.scheduledKeys.isEmpty())
@@ -133,7 +133,30 @@ internal class HrisWorkerMatrixProbe(private val context: Context, directory: Fi
                 verifyCompletion(app, restored.command, queued, eventId)
                 check(app.pending().isEmpty())
                 check(app.runWorker() == SyncResult.Complete)
+                app.close()
+                application = null
+                check(
+                    !expect(
+                        sender.repository.isOpen(sender.currentOwner, sender.registeredDeviceId)
+                    )
+                )
                 val historical = seedHistory(requireNotNull(peer), requireNotNull(room))
+                check(
+                    !expect(
+                        sender.repository.isOpen(sender.currentOwner, sender.registeredDeviceId)
+                    )
+                )
+                val incoming =
+                    HrisIncomingHistoryProbe(
+                            open = { openApplication(backgroundOnly = true) },
+                            runtime = sender.repository,
+                            owner = sender.currentOwner,
+                            deviceId = sender.registeredDeviceId,
+                        )
+                        .run(historical.last(), historical.first())
+                files.write("worker-incoming", incoming)
+                app = openApplication().also { application = it }
+                app.activate()
                 val foreground =
                     app.foregroundHistory(
                         sender.registeredDeviceId,
@@ -143,7 +166,7 @@ internal class HrisWorkerMatrixProbe(private val context: Context, directory: Fi
                         historical,
                     )
                 cancelled?.completed(app, queued)
-                recordCompletion(eventId, passes, historical, foreground)
+                recordCompletion(eventId, passes, historical, foreground, incoming)
             } catch (failure: Exception) {
                 primary = failure
                 throw failure
@@ -167,6 +190,7 @@ internal class HrisWorkerMatrixProbe(private val context: Context, directory: Fi
         passes: Int,
         historical: List<HrisHistoricalMessage>,
         foreground: HrisForegroundHistoryResult,
+        incoming: JSONObject,
     ) {
         files.write(
             "worker-result",
@@ -190,6 +214,7 @@ internal class HrisWorkerMatrixProbe(private val context: Context, directory: Fi
                 .put("providerReferences", foreground.references)
                 .put("pendingStateReferences", foreground.pendingStateReferences)
                 .put("historyPeerEvents", JSONArray(historical.map { it.eventId }))
+                .put("incoming", incoming)
                 .also { cancelled?.evidence(it) },
         )
     }
@@ -239,7 +264,7 @@ internal class HrisWorkerMatrixProbe(private val context: Context, directory: Fi
         }
     }
 
-    private fun openApplication() =
+    private fun openApplication(backgroundOnly: Boolean = false) =
         HrisWorkerProofContainer(
             context,
             sender.currentOwner,
@@ -247,6 +272,7 @@ internal class HrisWorkerMatrixProbe(private val context: Context, directory: Fi
             files.fixture.getJSONObject("sender").getString("hrisAccessToken"),
             sender.repository,
             http,
+            backgroundOnly = backgroundOnly,
         )
 
     private suspend fun deliver(app: HrisWorkerProofContainer): Int {

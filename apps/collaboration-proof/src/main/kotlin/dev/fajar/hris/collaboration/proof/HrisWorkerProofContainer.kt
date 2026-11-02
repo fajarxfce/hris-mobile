@@ -4,6 +4,7 @@ import android.content.Context
 import dev.fajar.starter.app.bootstrap.ApplicationCollaborationLifetime
 import dev.fajar.starter.app.di.createAppContainer
 import dev.fajar.starter.app.work.CollaborationDeliveryWorker
+import dev.fajar.starter.app.work.CollaborationIncomingRecovery
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.policies.localListAccess
 import dev.fajar.starter.collaboration.domain.repositories.*
@@ -32,14 +33,15 @@ import org.koin.dsl.module
 /** Actual app bindings/storage/worker, seeded fictional login, actual control-plane and SDK I/O. */
 internal class HrisWorkerProofContainer(
     context: Context,
-    owner: CollaborationOwner,
+    private val owner: CollaborationOwner,
     private val conversationId: String,
     hrisAccessToken: String,
     private val runtime: CollaborationRuntimeRepository,
     nativeHttp: HttpClient,
     platformScheduler: WorkScheduler? = null,
+    private val backgroundOnly: Boolean = false,
 ) {
-    private val application = HrisProofApplicationAccess(owner, hrisAccessToken)
+    private val application = HrisProofApplicationAccess(owner, hrisAccessToken, backgroundOnly)
     private val database = createAppDatabase(context)
     private val access = owner.localListAccess()
     private val requests = mutableListOf<String>()
@@ -93,6 +95,20 @@ internal class HrisWorkerProofContainer(
         database.accounts.activate(
             access.sessionId,
             accountStorageKey(access.audience, access.accountId),
+        )
+        // This fixture seeds the application host instead of starting its periodic scheduler.
+        // A reopened foreground host must replace the prior background-only retention decision.
+        val parent =
+            CollaborationNativeParent(
+                owner.sessionId,
+                owner.audience,
+                owner.accountId,
+                owner.nativeSessionId,
+            )
+        expect(
+            runtime.updateRetention(
+                CollaborationRuntimeRetention(parent, owner.takeUnless { backgroundOnly })
+            )
         )
     }
 
@@ -193,6 +209,52 @@ internal class HrisWorkerProofContainer(
     }
 
     suspend fun runWorker() = syncTasks().single { it.key == QueueCollaborationText.DELIVERY_KEY }()
+
+    suspend fun capturedPending() =
+        expect(
+            container.koin.get<ObserveCollaborationMessages>()(
+                    CollaborationLocalScope.Captured(access),
+                    conversationId,
+                )
+                .first()
+        )
+
+    /** Raw retained facts are checked only after the real local access gate admits this owner. */
+    suspend fun capturedHistory(): CollaborationHistoryPage {
+        check(
+            expect(
+                container.koin.get<ObserveCollaborationAccess>()(
+                        CollaborationLocalScope.Captured(access)
+                    )
+                    .first()
+            ) == access
+        )
+        return expect(
+            container.koin
+                .get<CollaborationHistoryRepository>()
+                .observe(access, conversationId)
+                .first()
+        )
+    }
+
+    suspend fun runIncoming(deviceId: String): dev.fajar.starter.sync.domain.SyncResult {
+        check(backgroundOnly)
+        val parent =
+            CollaborationNativeParent(
+                owner.sessionId,
+                owner.audience,
+                owner.accountId,
+                owner.nativeSessionId,
+            )
+        expect(runtime.updateRetention(CollaborationRuntimeRetention(parent, null)))
+        val page = expect(container.koin.get<LoadCollaborationDevicePage>()(parent, limit = 1))
+        check(page.parent == parent && page.nextAfterCompanyId == null)
+        val reference = page.devices.single()
+        check(reference.companyId == owner.companyId && reference.deviceId == deviceId)
+        val grant =
+            expect(container.koin.get<AcquireCollaborationBackgroundAdmission>()(parent, reference))
+        return container.koin.get<CollaborationIncomingRecovery>()(grant)
+    }
 
     suspend fun foregroundHistory(
         deviceId: String,

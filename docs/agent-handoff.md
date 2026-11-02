@@ -1,5 +1,55 @@
 # Agent continuation — HRIS Mobile
 
+## Actual incoming SDK/provider proof passed; generic Matrix retry corrected — 2 November 2026
+
+[Evidence](measurements/chat-incoming-provider-2026-11-02.json) records five real
+Android/HRIS/PostgreSQL/Synapse scenarios in384.631s, zero failures/errors/skips,
+plus Platform format/architecture. In QUEUED/FROZEN_DRAFT/CANCELLED_DRAFT cases the
+sender runtime closes before32 encrypted peer seeds. Fresh real native directory,
+admission and one summary page then drive the actual incoming worker with an empty
+outbox and a workspace repository that rejects selection reads/observers. Each takes
+one pass;12 originals (including the prior outgoing original) remain after container
+reopen, and the final borrowed runtime is released. Foreground paging then verifies
+all32 peer originals plus the outgoing original. SDK process-death and actual scheduled
+offline/ordinary-death regressions also pass. Incoming itself is explicitly invoked;
+this is not incoming FCM/Doze/terminated-app or all-company provider acceptance.
+
+Actual first native run failed4/5 in356.106s. Raw held-room join received503 provider_busy;
+fixture now bounds idempotent M_UNKNOWN retries to3 with1s gaps. Three incoming cases
+reached foreground, then Unavailable/Unclassified: inspection found fixture did not
+republish foreground retention after reopening a background-only host. Activate now
+publishes that seeded decision; a validated incoming checkpoint is retained separately.
+First diagnostics lack the exact failure code/final incoming metrics; do not invent them.
+Production mapper now classifies Matrix M_UNKNOWN as Service/retryable so transient
+server failures cannot masquerade as user-action conditions. Explicit denials and
+unrecognized payload sanitization remain. One new shared mapper case passes.
+
+Initial root/proof check1 passed75.3s on4 proof inputs. Final root/proof/Android release/
+affected data browser check2 passes297s /301.21s on7 inputs:3,124 desktop465 suites,
+216 Android host35,6 proof host1,299 data browser39,10 build-logic2; zero failures/
+errors/skips. Platform81 Python driver tests pass0.167s;4 native inputs frozen.
+Exact logs/reports/source hashes and APK5f17598f (343,275,325 bytes) bind both runs.
+All native driver cleanup succeeds. Owned5562/PID99409 stopped1.003s; prior79619
+stopped1.404s. Unrelated5560 and phone15 untouched. No generic Starter port is due.
+
+[Apple41414832120](https://github.com/fajarxfce/hris-mobile/actions/runs/41414832120)
+is ACTIVE at3062bff25c678639204bcf4a5e2e95be85c155d4: simulator tests passed, Xcode
+building. It covers the incoming app coordinator but excludes these later proof/mapper
+changes. Do not dispatch a cancelling run. Audit XML/source/full Xcode on completion,
+then dispatch the next implementation head. Core Apple tests exclude app desktop cases.
+
+**Continue immediately:** independent durable recent-history traversal/frontier and
+pending-reference progress, then FCM privacy/actions/encrypted replies and compatible
+backend rollout. Latest window alone is not a long-offline catchup. Do not reset the
+foreground Older traversal on every wake. Existing Read/ReconcileHistoryReferences
+accept captured scope; native readProviderHistory pages20 and original windows128.
+Review separate traversal purpose/partition/AAD with legacy Browse unchanged, durable
+scan bounds/overlap and pending-reference fairness before wiring incoming. Preserve
+missing-key content and distinguish metadata coverage from decrypted originals/receipts.
+A prototype discussion is local only, not implementation. All54 PRD groups remain open.
+Phone15/private schema103/API-worker2c2a59e3/branch116/push disabled remain; next employee
+release16+ requires compatible server rollout and validated feature behavior. Continue.
+
 ## Incoming worker and fair company turns validated — 2 November 2026
 
 [Contract](collaboration-incoming-recovery.md) / [evidence](measurements/chat-incoming-worker-2026-11-02.json):

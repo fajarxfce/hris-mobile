@@ -15,6 +15,9 @@ internal fun collaborationSdkFailure(code: String, retryAfterMillis: ULong?): Fa
             "M_USER_LOCKED",
             "M_USER_SUSPENDED" -> FailureKind.AccessDenied
             "M_NOT_FOUND" -> FailureKind.Unavailable
+            // Matrix uses M_UNKNOWN for generic server failures, including gateway503/busy.
+            // Keep the original operation retryable; this code does not prove a user restriction.
+            "M_UNKNOWN",
             "M_LIMIT_EXCEEDED",
             "M_RESOURCE_LIMIT_EXCEEDED" -> FailureKind.Service
             "M_CONNECTION_TIMEOUT" -> FailureKind.Timeout

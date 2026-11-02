@@ -54,3 +54,20 @@ under the one-company quantum, including21 healthy callbacks/21 task completions
 without Retry. Native directory/admission/company callbacks are synthetic; SDK and
 FCM acceptance remain separate. Failed fixture assertions and exact input/report/APK
 hashes are retained. No employee installation or server activation by this increment.
+
+[Actual provider evidence](measurements/chat-incoming-provider-2026-11-02.json) now
+passes all five SDK/worker/scheduled regressions in384.631s. Each of three worker
+variants acquires the latest peer original in one turn using fresh real HRIS native
+admission with no selected workspace/outbox, releases the borrowed SDK, reopens the
+same encrypted history, then completes normal foreground older-history paging. The
+receiving SDK is closed during32 peer sends; this does not mean the whole Android
+process/network was offline. Twelve stored originals include the earlier outgoing
+message; older peer originals are acquired by the subsequent foreground phase.
+Incoming FCM/OS scheduling and full long-offline catchup remain separate acceptance.
+
+Matrix's generic M_UNKNOWN server failure now maps to Service/retryable rather than
+an unproven user-action condition. The observed gateway503/busy exposed this gap.
+Known authentication/access failures stay authoritative, provider details stay out
+of diagnostics, and no server delay is invented. Fixture host-retention and bounded
+raw-join corrections, the first failed run, and all unchanged input/artifact hashes
+are retained in the measurement. No live rollout or employee APK was performed.

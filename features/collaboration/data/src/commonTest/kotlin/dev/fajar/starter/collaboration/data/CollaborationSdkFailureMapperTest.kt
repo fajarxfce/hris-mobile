@@ -7,6 +7,15 @@ import kotlin.test.*
 
 class CollaborationSdkFailureMapperTest {
     @Test
+    fun genericMatrixServerFailureRetainsRetryWithoutInventingAServerDelayOrDenial() {
+        val failure = collaborationSdkFailure("M_UNKNOWN", ULong.MAX_VALUE)
+        assertEquals(FailureKind.Service, failure.kind)
+        assertEquals("client.collaboration_sdk_unavailable", failure.code)
+        assertNull(failure.retryAfterSeconds)
+        assertTrue(failure.parameters.isEmpty())
+    }
+
+    @Test
     fun shutdownAndCredentialFaultsDoNotEraseAnAlreadyReceivedDenial() {
         val denied = AppResult.Failed(collaborationSdkFailure("M_FORBIDDEN", null))
         for (kind in listOf(FailureKind.Storage, FailureKind.Unavailable)) {

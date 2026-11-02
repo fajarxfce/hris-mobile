@@ -23,6 +23,7 @@ import kotlinx.coroutines.flow.flowOf
 internal class HrisProofApplicationAccess(
     val owner: CollaborationOwner,
     private val accessToken: String,
+    private val backgroundOnly: Boolean = false,
 ) {
     private val apiOrigin = owner.audience.trimEnd('/') + "/api/v1/"
 
@@ -95,11 +96,17 @@ internal class HrisProofApplicationAccess(
         }
     val workspaces =
         object : WorkspaceRepository {
-            override fun observe(sessionId: String) =
-                flowOf(AppResult.Success(workspace.takeIf { sessionId == owner.sessionId }))
+            override fun observe(
+                sessionId: String
+            ): kotlinx.coroutines.flow.Flow<AppResult<Workspace?>> {
+                check(!backgroundOnly) { "Incoming proof cannot observe selected workspace" }
+                return flowOf(AppResult.Success(workspace.takeIf { sessionId == owner.sessionId }))
+            }
 
-            override suspend fun current(sessionId: String) =
-                AppResult.Success(workspace.takeIf { sessionId == owner.sessionId })
+            override suspend fun current(sessionId: String): AppResult<Workspace?> {
+                check(!backgroundOnly) { "Incoming proof cannot read selected workspace" }
+                return AppResult.Success(workspace.takeIf { sessionId == owner.sessionId })
+            }
 
             override suspend fun compareAndSet(
                 sessionId: String,
