@@ -278,6 +278,7 @@ class CollaborationBindingsTest {
                 assertNotNull(container.koin.get<CollaborationHistoryRepository>())
                 assertNotNull(container.koin.get<CollaborationReadStateRepository>())
                 assertNotNull(container.koin.get<CollaborationNotificationSettingsRepository>())
+                assertNotNull(container.koin.get<CollaborationNotificationActionRepository>())
                 assertNotNull(container.koin.get<ReadCollaborationNotificationSettings>())
                 assertNotNull(container.koin.get<PrepareCollaborationMessageNotification>())
                 val notificationSettings =

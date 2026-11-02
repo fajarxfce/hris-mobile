@@ -1,5 +1,51 @@
 # Agent continuation — HRIS Mobile
 
+## Notification action envelopes accepted — 2 November 2026
+
+Bounded native action metadata now seals under the retained history content key.
+Reply/read/mute/dismiss carry stable operation UUIDs and company/conversation/room/
+original/native-card/render identity. AAD binds API/account/local and native session;
+old-family or changed-key tokens reject. No body or bearer credential is embedded.
+Mute carries the observed settings revision and preview. Missing keys never regenerate.
+[Contract](collaboration-notification-actions.md),
+[evidence](measurements/chat-notification-actions-2026-11-02.json).
+
+Focused 11 cases/two suites pass in 150.412s, including nine real-cipher storage
+contract cases and two assembled DI cases. Full root/proof/Wasm/browser passes
+358.711s: 3355 desktop/495 suites, 230 Android host/37, ten build-logic/two,
+six proof-host/one and nine actual browser/one, including explicit task reuse.
+1785 cases/229 suites are fresh; zero failures/errors/skips. Nine source/test
+inputs stayed unchanged. DB reopen retains test credentials and an in-memory token;
+it does not prove token journal persistence or OS process death. No Starter port.
+
+Apple 41487045428 at 7d35e975 failed before any build step because GitHub could not
+acquire a hosted macOS ARM runner; annotations identify capacity constraints.
+Replacement 41492596519 at exact 222bd44147081089e4f22fbe1828e619916554f9 is running
+simulator compilation. It covers settings/projection, EXCLUDES these newer actions.
+Audit actual final artifact/source/JUnit/full Xcode when complete; do not cancel it
+by dispatching another same-scope workflow blindly. Latest accepted Apple remains
+42f5d157/run41480512291. Phone18 and live304be027/schema116 remain; chat push OFF.
+
+Next: commit/push this increment, then admitted native action issuance/consumption,
+encrypted display journal, serialized publication/cancellation, privacy controls and
+native inline replies; continue all54 open PRD groups. Crypto opening is NOT current
+admission. Capture the parent from SessionRepository, never Intent extras; gate local
+company/retained denial/exact history around pending operations. Persist exact sealed
+tokens before publishing and reuse after uncertainty; re-sealing makes new ciphertext.
+Use existing durable reply/read/settings operations and exact render cancellation.
+RemoteInput receiver must be explicit/internal, bounded and application-owned.
+Display bookkeeping must not consume CommandStore's global128 employee command slots.
+No decrypted chat content in generic plaintext notification history. Source stamps do
+not form an atomic OS display lease, and candidate suppression must not clear an
+unrelated card. Delivery notes under .work are supplemental; these constraints are
+required regardless of their older one-use wording. No native display is active yet.
+
+Local .work/chat-notification-actions-2026-11-02/check-2 and audit.py passed; do not
+repeat accepted broad checks absent changes/failures. All .txt projection drafts were
+already applied and superseded by reviewed Kotlin. Next product phone build >18:
+notify first, explicit10.77.77.3:5555, --install-only, preserve data/signing, no UI driving.
+Continue long run after this checkpoint and push every atomic commit.
+
 ## Local notification projection accepted — 2 November 2026
 
 A captured-account exact event can now be prepared from encrypted original history,

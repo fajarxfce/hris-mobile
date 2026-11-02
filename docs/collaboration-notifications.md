@@ -6,6 +6,10 @@ now supplies account-bound encrypted preferences and conditional offline changes
 owned originals by mute/read/privacy state. System display, UI controls, cancellation
 and native action consumers still need integration; live chat push remains disabled.
 
+[Encrypted action envelopes](collaboration-notification-actions.md) now define the
+bounded native IPC format and captured-family binding. Durable issuance and admitted
+reply/read/mute/dismiss consumers remain separate required integration.
+
 The managed-pusher client operation is implemented. It is not yet invoked
 automatically by the application or worker. Native [push receive routing](collaboration-push-receive.md) now persists
 recovery wakes. Live FCM acceptance, decrypted notifications and inline replies remain
