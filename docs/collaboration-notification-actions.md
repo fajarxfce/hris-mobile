@@ -33,8 +33,10 @@ carries the observed settings revision and preview choice, so replay cannot sile
 overwrite a later preference. Dismissal and transient UI updates must match the
 original render; an old action must not clear or overwrite an unrelated newer card.
 
-The display journal, admitted issuance/consumption, native PendingIntent/RemoteInput
-integration, failed-reply handling and OS display/cancellation remain pending. No
-Android receiver or UI action is activated by this primitive. Decrypted chat content
+[Current-family admission and local command dispatch](collaboration-notification-invocations.md)
+now consume these descriptors through the existing durable commands. The display
+journal, admitted issuance, native PendingIntent/RemoteInput integration, failed-reply
+handling and OS display/cancellation remain pending. No Android receiver or UI action
+is activated by this primitive. Decrypted chat content
 must not enter the generic plaintext notification history. No database/key migration,
 public read-receipt preference change or live chat push activation is included.

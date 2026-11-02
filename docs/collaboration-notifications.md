@@ -7,8 +7,10 @@ owned originals by mute/read/privacy state. System display, UI controls, cancell
 and native action consumers still need integration; live chat push remains disabled.
 
 [Encrypted action envelopes](collaboration-notification-actions.md) now define the
-bounded native IPC format and captured-family binding. Durable issuance and admitted
-reply/read/mute/dismiss consumers remain separate required integration.
+bounded native IPC format and captured-family binding. [Current-family invocation
+and local command dispatch](collaboration-notification-invocations.md) now reuse the
+existing reply/read/mute operations. Durable issuance, failed-input retention and
+native display/receiver integration remain required.
 
 The managed-pusher client operation is implemented. It is not yet invoked
 automatically by the application or worker. Native [push receive routing](collaboration-push-receive.md) now persists
@@ -53,13 +55,12 @@ consumes this scoped recovery without requiring a selected workspace or outgoing
 command. Owned leases coexist with the foreground runtime; captured account/session
 ownership gates late results and avoids opening the same store twice. Incoming
 company/room progress and push priority are separate durable positions. Notification
-replies still need owned encrypted actions through the existing command pipeline,
-with duplicate-action and process-death recovery.
+replies now have an admitted local command dispatcher; native callbacks, failed-input
+retention and process-death recovery of the delivery journal remain required.
 
 The pinned Rust SDK NotificationClient requires sliding sync. The current product
 uses classic SyncV2 with `SlidingSyncVersion.NONE`; do not wire it in on the
-assumption that its context fallback bypasses that requirement. A scoped sliding
-contract or notification projection over the existing owned decrypted history needs
-its own implementation and proof. Privacy, mute/read state, account-bound actions,
-Apple extensions and browser behavior also remain open. Keep
+assumption that its context fallback bypasses that requirement. The implemented local
+projection uses owned decrypted history instead. Native privacy/cancellation controls,
+action receivers, Apple extensions and browser delivery behavior remain open. Keep
 `HRIS_COLLABORATION_PUSH_DELIVERY_ENABLED=false` until recovery is usable.

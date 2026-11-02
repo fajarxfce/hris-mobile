@@ -33,6 +33,8 @@ class MarkCollaborationMessagesRead(
         eventIds: List<String>,
         intent: CollaborationReadReceiptIntent,
         expectedAccess: CollaborationLocalAccess? = null,
+        /** Native callbacks may skip fully retained coverage after an old ACK is superseded. */
+        onlyIfUnread: Boolean = false,
     ): AppResult<CollaborationReadState> {
         currentCoroutineContext().ensureActive()
         if (
@@ -45,7 +47,7 @@ class MarkCollaborationMessagesRead(
         if (!execution.tryLock()) return unavailableReadState()
         return try {
             withTimeoutOrNull(10_000) {
-                mark(scope, conversationId, roomId, selected, intent, expectedAccess)
+                mark(scope, conversationId, roomId, selected, intent, expectedAccess, onlyIfUnread)
             } ?: unavailableReadState()
         } finally {
             execution.unlock()
@@ -59,6 +61,7 @@ class MarkCollaborationMessagesRead(
         selected: List<String>,
         intent: CollaborationReadReceiptIntent,
         expectedAccess: CollaborationLocalAccess?,
+        onlyIfUnread: Boolean,
     ): AppResult<CollaborationReadState> {
         val captured = sessions.captureMessageAccess(scope, workspaces, server, build, clock)
         if (captured is AppResult.Failed) return captured
@@ -91,6 +94,7 @@ class MarkCollaborationMessagesRead(
             previous.pending.find { it.id == intent.id }
                 ?: previous.acknowledged?.takeIf { it.id == intent.id }
         if (known != null && known != intent) return changedReadState()
+        if (onlyIfUnread && selected.all { it in previous.readEventIds }) return loaded
         if (known == intent && selected.all { it in previous.readEventIds }) return loaded
         if (known == null && previous.pending.size >= 128)
             return collaborationSetupFailure("client.command_queue_full", FailureKind.Storage)

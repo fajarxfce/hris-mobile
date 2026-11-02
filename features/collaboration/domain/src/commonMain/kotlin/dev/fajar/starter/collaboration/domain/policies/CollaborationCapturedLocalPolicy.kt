@@ -9,6 +9,7 @@ fun collaborationCapturedLocalAccess(
     access: CollaborationLocalAccess,
     session: Session?,
     audience: String,
+    nativeSessionId: String? = null,
 ): AppResult<CollaborationLocalAccess> {
     if (
         session == null ||
@@ -20,6 +21,12 @@ fun collaborationCapturedLocalAccess(
             access.sessionId.any { it.code !in 33..126 } ||
             !validCollaborationMessageId(access.accountId) ||
             !validCollaborationMessageId(access.companyId)
+    )
+        return collaborationSetupFailure("client.session_changed", FailureKind.Unauthorized)
+    if (
+        nativeSessionId != null &&
+            (!validCollaborationMessageId(nativeSessionId) ||
+                session.binding.serverId != nativeSessionId)
     )
         return collaborationSetupFailure("client.session_changed", FailureKind.Unauthorized)
     return AppResult.Success(access)

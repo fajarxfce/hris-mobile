@@ -1,5 +1,72 @@
 # Agent continuation — HRIS Mobile
 
+## Admitted notification command dispatch accepted — 2 November 2026
+
+Current-session token opening now checks acquired company/direct-conversation and
+exact reply/read event facts, including valid tombstones. Mute/dismiss do not need
+original body retention. Captured native scopes pin the remote family throughout
+pending message/read/settings work and observations, even when local session/account
+IDs are unchanged. Ordinary captured reads retain their local account/session checks;
+access-token rotation keeps a pinned observer open. No fresh credential or selected
+company is required for these local operations.
+
+The app singleton dispatches authenticated reply/read/mute/dismiss kinds through
+existing durable use cases, within eight seconds and without a waiting queue. Reply
+retains its original operation/body and actual command state. Native read covers only
+the target using private metadata; unread-only policy avoids requeue after a later
+ACK replaces the old receipt, while known operation conflicts still reject. Mute uses
+observed settings version/preview and cannot overwrite a later unmute. Dismiss returns
+an exact original-render request only. [Contract](collaboration-notification-invocations.md),
+[evidence](measurements/chat-notification-invocations-2026-11-02.json).
+
+Initial admission-focused18 cases pass151.053s. Expanded focused30 cases/five suites
+pass160.896s:19 domain, nine actual shared Koin/crypto/SQLite integration cases and two
+DI cases. Includes duplicate/reopen/changed reply input, cancellation after committed
+reply while scheduling, superseded receipt ACK, stale mute, retained denial, bounded
+callback overlap/cancellation/deadline and native-family replacement. SDK is explicitly
+simulated, HTTP is fictional. Full root/proof/Wasm/browser passes363.004s:3383 desktop/
+499 suites,230 Android host/37, ten build-logic/two, six proof-host/one and19 actual
+browser/three, including explicit task reuse.1823 cases/235 suites fresh; zero failures,
+errors or skips. Sixteen source/test hashes unchanged. No failed attempts in this
+increment. DB reopen retains test credentials/tokens; this is not OS process death.
+
+Apple41492596519 at222bd441 is building the full Xcode app after simulator tests.
+It covers settings/projection, EXCLUDES action envelopes5fb8611b and this dispatcher.
+Prepared artifact/source/JUnit audit: .work/chat-notification-projection-apple-2026-11-02/
+audit.py, run only after success. Do not cancel this job with another same-scope
+workflow. Latest accepted Apple remains42f5d157/run41480512291. Phone18/source42f5d157,
+live304be027/schema116, Starter0d4432e remain; all chat push OFF. No generic port.
+
+Next: commit/push, then encrypted native reply-input retention BEFORE wiring an Android
+receiver. The command dispatcher requires its caller to persist input first; currently
+no OS callback invokes it. Same token/body must recover; changed text on an old token
+must remain a separate review input without overwriting the composer or first command.
+Retaining family-authenticated private input is distinct from company send admission;
+a later company denial must not silently lose typed text. Old-account input must never
+be stored under its replacement. Retire input only against an exact retained-command
+proof. Preserve uncertainty and cancellation-after-commit. A separate bounded encrypted
+input replica should not consume global128 employee-command slots for bookkeeping.
+Then implement exact-token issuance/display journal, serialized publication/cancellation,
+privacy controls and native inline replies. Results here are not OS display leases;
+match current owner and exact render before changing native cards, and allow separate
+privacy cleanup after content admission is denied. Input text is never logged or put
+in generic plaintext notification history. All54 PRD groups remain open; continue
+long run after each milestone and push every atomic commit.
+
+Design notes .work/chat-notification-delivery-2026-11-02/next-input-retention.md include
+storage bounds and unresolved producer/capacity policy. Replica checkpoint limit32768
+characters cannot hold many full token sets; use bounded encrypted document records
+with authenticated checkpoint/CAS metadata. Do not notify every backfill event or
+mistake scheduling hints/timestamps for message authorization/order. Prepare -> Attempted
+before notify -> SubmittedToOS/Retired preserves uncertainty, not exactly-once sound.
+Current priority worker completes hints after original acquisition, so display integration
+must preserve its own durable work before that completion. Native privacy changes need
+owned serialization/cancellation; current local use cases have no OS publication owner.
+
+Local check-3/audit.py/record.py completed under .work/chat-notification-invocations-2026-11-02;
+no repeat of accepted broad checks absent changes/failures. Next product phone build >18:
+notify first, explicit10.77.77.3:5555, --install-only, preserve signing/data, no UI driving.
+
 ## Notification action envelopes accepted — 2 November 2026
 
 Bounded native action metadata now seals under the retained history content key.

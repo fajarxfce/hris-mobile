@@ -93,7 +93,12 @@ internal suspend fun SessionRepository.captureMessageAccess(
             when (read) {
                 is AppResult.Failed -> read
                 is AppResult.Success ->
-                    collaborationCapturedLocalAccess(scope.access, read.value, server.audience)
+                    collaborationCapturedLocalAccess(
+                        scope.access,
+                        read.value,
+                        server.audience,
+                        scope.nativeSessionId,
+                    )
             }
         }
     }
@@ -118,6 +123,7 @@ internal fun SessionRepository.observeMessageAccess(
                                 scope.access,
                                 read.value,
                                 server.audience,
+                                scope.nativeSessionId,
                             )
                     }
                 }
