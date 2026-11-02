@@ -21,20 +21,95 @@ import kotlinx.coroutines.test.*
 
 class CollaborationRuntimeOwnershipTest {
     @Test
-    fun leavingACompanyClosesAllResourcesAndReturningDoesNotOpenAnotherSession() = runTest {
+    fun leavingACompanyDropsForegroundRetentionWhileKeepingTheNativeParent() = runTest {
         val f = OwnershipFixture(testScheduler)
         val job = backgroundScope.launch { f.maintain().collect(f.observed::add) }
         runCurrent()
-        assertEquals(listOf<CollaborationOwner?>(f.setup.owner), f.closedExcept)
+        assertEquals(listOf<CollaborationOwner?>(f.owner), f.closedExcept)
         f.workspace.value = AppResult.Success(null)
         runCurrent()
         assertEquals(AppResult.Success(null), f.observed.last())
         assertNull(f.closedExcept.last())
-        f.workspace.value = AppResult.Success(f.setup.access.selected)
+        assertEquals(f.parent, f.retentions.last().parent)
+        assertNull(f.retentions.last().foreground)
+        f.workspace.value = AppResult.Success(f.selected)
         runCurrent()
-        assertEquals(AppResult.Success(f.setup.owner), f.observed.last())
+        assertEquals(AppResult.Success(f.owner), f.observed.last())
         job.cancelAndJoin()
         assertNull(f.closedExcept.last())
+        assertNull(f.retentions.last().parent)
+    }
+
+    @Test
+    fun parentExpiryStillFiresAfterForegroundExpiryDespiteClockRollback() = runTest {
+        val f = OwnershipFixture(testScheduler)
+        val start = f.now()
+        f.session.value =
+            AppResult.Success(
+                f.initial.copy(
+                    binding =
+                        f.initial.binding.copy(
+                            expiresAtEpochMillis = (start + 2.seconds).toEpochMilliseconds()
+                        )
+                )
+            )
+        val policy = checkNotNull(f.selected.policy)
+        f.workspace.value =
+            AppResult.Success(
+                f.selected.copy(
+                    admission = f.selected.admission.copy(expiresAt = start + 2.seconds),
+                    policy =
+                        policy.copy(policy = policy.policy.copy(validUntil = start + 1.seconds)),
+                )
+            )
+        val job = backgroundScope.launch { f.maintain().collect(f.observed::add) }
+        runCurrent()
+        assertEquals(f.owner, f.retentions.last().foreground)
+        f.clockOffset = -1.hours.inWholeMilliseconds
+        advanceTimeBy(1_000)
+        runCurrent()
+        assertEquals(f.parent, f.retentions.last().parent)
+        assertNull(f.retentions.last().foreground)
+        advanceTimeBy(1_000)
+        runCurrent()
+        assertNull(f.retentions.last().parent)
+        job.cancelAndJoin()
+    }
+
+    @Test
+    fun unavailableWorkspaceCannotTurnAValidParentIntoLogout() = runTest {
+        val f = OwnershipFixture(testScheduler)
+        val job = backgroundScope.launch { f.maintain().collect(f.observed::add) }
+        runCurrent()
+        f.workspace.value = f.setup.storageFailure
+        runCurrent()
+        assertEquals(f.parent, f.retentions.last().parent)
+        assertNull(f.retentions.last().foreground)
+        assertEquals(0, f.local.restricts)
+        f.session.value = f.setup.storageFailure
+        runCurrent()
+        assertNull(f.retentions.last().parent)
+        job.cancelAndJoin()
+    }
+
+    @Test
+    fun companyDenialReachesTheRetainedGateDespiteStorageAndNativeCleanupFailure() = runTest {
+        val f = OwnershipFixture(testScheduler)
+        f.local.restrictResult = f.setup.storageFailure
+        f.onClose = { f.setup.storageFailure }
+        val job = backgroundScope.launch { f.maintain().collect(f.observed::add) }
+        runCurrent()
+        f.workspace.value = AppResult.Success(f.selected.copy(permissions = emptySet()))
+        runCurrent()
+        assertEquals("permission_denied", f.local.gate.value.denial?.code)
+        assertEquals(1, f.local.restricts)
+        assertEquals(f.parent, f.retentions.last().parent)
+        assertEquals(f.owner.companyId, f.retentions.last().deniedCompanyId)
+        assertEquals(
+            "permission_denied",
+            assertIs<AppResult.Failed>(f.observed.last()).failure.code,
+        )
+        job.cancelAndJoin()
     }
 
     @Test
@@ -42,7 +117,7 @@ class CollaborationRuntimeOwnershipTest {
         repeat(4) { scenario ->
             val f = OwnershipFixture(testScheduler)
             val start = f.now()
-            val selected = f.setup.access.selected
+            val selected = f.selected
             val policy = checkNotNull(selected.policy)
             val ending = start + 1.seconds
             f.workspace.value =
@@ -57,9 +132,9 @@ class CollaborationRuntimeOwnershipTest {
                         2 -> {
                             f.session.value =
                                 AppResult.Success(
-                                    f.setup.access.initial.copy(
+                                    f.initial.copy(
                                         binding =
-                                            f.setup.access.initial.binding.copy(
+                                            f.initial.binding.copy(
                                                 expiresAtEpochMillis = ending.toEpochMilliseconds()
                                             )
                                     )
@@ -81,7 +156,7 @@ class CollaborationRuntimeOwnershipTest {
                 )
             val job = backgroundScope.launch { f.maintain().collect(f.observed::add) }
             runCurrent()
-            assertEquals(AppResult.Success(f.setup.owner), f.observed.single())
+            assertEquals(AppResult.Success(f.owner), f.observed.single())
             f.clockOffset = -1.hours.inWholeMilliseconds
             advanceTimeBy(999)
             runCurrent()
@@ -104,7 +179,7 @@ class CollaborationRuntimeOwnershipTest {
     @Test
     fun aFreshPolicyReplacesItsOldTimerWithoutCreatingASecondOwner() = runTest {
         val f = OwnershipFixture(testScheduler)
-        val selected = f.setup.access.selected
+        val selected = f.selected
         val policy = checkNotNull(selected.policy)
         f.workspace.value =
             AppResult.Success(
@@ -133,11 +208,8 @@ class CollaborationRuntimeOwnershipTest {
         runCurrent()
         advanceTimeBy(501)
         runCurrent()
-        assertEquals(
-            listOf<AppResult<CollaborationOwner?>>(AppResult.Success(f.setup.owner)),
-            f.observed,
-        )
-        assertEquals(listOf<CollaborationOwner?>(f.setup.owner), f.closedExcept)
+        assertEquals(listOf<AppResult<CollaborationOwner?>>(AppResult.Success(f.owner)), f.observed)
+        assertEquals(listOf<CollaborationOwner?>(f.owner), f.closedExcept)
         advanceTimeBy(1_499)
         runCurrent()
         assertIs<AppResult.Failed>(f.observed.last())
@@ -152,12 +224,10 @@ class CollaborationRuntimeOwnershipTest {
         runCurrent()
         f.session.value =
             AppResult.Success(
-                f.setup.access.initial.copy(
-                    tokens = f.setup.access.initial.tokens.copy(accessToken = "renewed")
-                )
+                f.initial.copy(tokens = f.initial.tokens.copy(accessToken = "renewed"))
             )
         runCurrent()
-        assertEquals(listOf<CollaborationOwner?>(f.setup.owner), f.closedExcept)
+        assertEquals(listOf<CollaborationOwner?>(f.owner), f.closedExcept)
         assertEquals(1, f.observed.size)
         job.cancelAndJoin()
     }
@@ -168,8 +238,7 @@ class CollaborationRuntimeOwnershipTest {
         val job = backgroundScope.launch { f.maintain().collect(f.observed::add) }
         runCurrent()
         f.onClose = { f.setup.storageFailure }
-        f.workspace.value =
-            AppResult.Success(f.setup.access.selected.copy(permissions = emptySet()))
+        f.workspace.value = AppResult.Success(f.selected.copy(permissions = emptySet()))
         runCurrent()
         assertEquals(
             "permission_denied",
@@ -202,7 +271,7 @@ class CollaborationRuntimeOwnershipTest {
         release.complete(Unit)
         runCurrent()
         assertEquals(listOf<AppResult<CollaborationOwner?>>(AppResult.Success(null)), f.observed)
-        assertEquals(listOf(f.setup.owner, null), f.closedExcept)
+        assertEquals(listOf(f.owner, null), f.closedExcept)
         job.cancelAndJoin()
     }
 
@@ -219,7 +288,7 @@ class CollaborationRuntimeOwnershipTest {
         assertEquals(calls, f.closedExcept.size)
         job.cancelAndJoin()
         assertNull(f.closedExcept.last())
-        assertEquals(AppResult.Success(f.setup.owner), f.maintain().first())
+        assertEquals(AppResult.Success(f.owner), f.maintain().first())
         assertNull(f.closedExcept.last())
     }
 
@@ -245,14 +314,44 @@ class CollaborationRuntimeOwnershipTest {
 
 private class OwnershipFixture(private val scheduler: TestCoroutineScheduler) {
     val setup = CollaborationCommandFixture()
+    val initial =
+        setup.access.initial.copy(
+            user = setup.access.initial.user.copy(id = "a1000000-0000-4000-8000-000000000001"),
+            binding =
+                setup.access.initial.binding.copy(serverId = "a1000000-0000-4000-8000-000000000002"),
+        )
+    val selected =
+        setup.access.selected.copy(
+            admission =
+                setup.access.selected.admission.copy(
+                    accountId = initial.user.id,
+                    familyId = initial.binding.serverId,
+                )
+        )
+    val owner =
+        CollaborationOwner(
+            initial.id,
+            initial.binding.audience,
+            initial.user.id,
+            selected.company.id,
+            initial.binding.serverId,
+        )
+    val parent =
+        CollaborationNativeParent(
+            owner.sessionId,
+            owner.audience,
+            owner.accountId,
+            owner.nativeSessionId,
+        )
+    val local = LocalListFixture()
+    val retentions = mutableListOf<CollaborationRuntimeRetention>()
     private val started = scheduler.currentTime
     var clockOffset = 0L
 
     fun now() = setup.access.now + (scheduler.currentTime - started + clockOffset).milliseconds
 
-    val session = MutableStateFlow<AppResult<Session?>>(AppResult.Success(setup.access.initial))
-    val workspace =
-        MutableStateFlow<AppResult<Workspace?>>(AppResult.Success(setup.access.selected))
+    val session = MutableStateFlow<AppResult<Session?>>(AppResult.Success(initial))
+    val workspace = MutableStateFlow<AppResult<Workspace?>>(AppResult.Success(selected))
     val observed = mutableListOf<AppResult<CollaborationOwner?>>()
     val closedExcept = mutableListOf<CollaborationOwner?>()
     var onClose: suspend (CollaborationOwner?) -> AppResult<Unit> = { AppResult.Success(Unit) }
@@ -266,6 +365,22 @@ private class OwnershipFixture(private val scheduler: TestCoroutineScheduler) {
         }
     private val runtimes =
         object : CollaborationRuntimeRepository {
+            override suspend fun updateRetention(
+                retention:
+                    dev.fajar.starter.collaboration.domain.entities.CollaborationRuntimeRetention
+            ): AppResult<Unit> {
+                retentions += retention
+                return closeOtherOwners(retention.foreground)
+            }
+
+            override suspend fun acquireBackground(
+                owner: CollaborationOwner,
+                deviceId: String,
+                lifetimeMillis: Long,
+            ): AppResult<
+                dev.fajar.starter.collaboration.domain.repositories.CollaborationBackgroundRuntimeLease?
+            > = error("No implicit background runtime")
+
             override suspend fun activatePusher(
                 owner: CollaborationOwner,
                 deviceId: String,
@@ -345,6 +460,7 @@ private class OwnershipFixture(private val scheduler: TestCoroutineScheduler) {
     val maintain =
         MaintainCollaborationRuntimeOwnership(
             runtimes,
+            local.replica,
             sessions,
             workspaces,
             setup.server,
@@ -352,5 +468,6 @@ private class OwnershipFixture(private val scheduler: TestCoroutineScheduler) {
             object : Clock {
                 override fun now() = this@OwnershipFixture.now()
             },
+            scheduler.timeSource,
         )
 }

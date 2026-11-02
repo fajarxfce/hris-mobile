@@ -6,6 +6,20 @@ import kotlinx.coroutines.flow.StateFlow
 
 /** Store I/O and SDK ownership only. Use cases admit installation and live delivery separately. */
 interface CollaborationRuntimeRepository {
+    /** Retain current parent and foreground resources; invalidate obsolete pending acquisitions. */
+    suspend fun updateRetention(retention: CollaborationRuntimeRetention): AppResult<Unit>
+
+    /**
+     * Borrow or restore a scoped resource for at most the supplied remaining lifetime
+     * (1..60,000ms). Never enrolls. A new resource remains unpublished until its owning use case
+     * accepts it.
+     */
+    suspend fun acquireBackground(
+        owner: CollaborationOwner,
+        deviceId: String,
+        lifetimeMillis: Long,
+    ): AppResult<CollaborationBackgroundRuntimeLease?>
+
     /** Uses an installed SDK bearer and the fixed managed endpoint. Never opens or enrolls. */
     suspend fun activatePusher(owner: CollaborationOwner, deviceId: String): AppResult<Unit>
 
@@ -83,6 +97,20 @@ interface CollaborationRuntimeRepository {
 
     /** Close obsolete resources, never their stored facts. Null closes every owned runtime. */
     suspend fun closeOtherOwners(retainedOwner: CollaborationOwner?): AppResult<Unit>
+}
+
+/** Finite reference to an application runtime. Closing it never closes a retained foreground. */
+interface CollaborationBackgroundRuntimeLease {
+    val owner: CollaborationOwner
+    val deviceId: String
+    val credentialFailures: StateFlow<Failure?>
+    val interruptions: StateFlow<Failure?>
+
+    /** Synchronous acceptance after final admission, with no network or suspension. */
+    fun publish(): AppResult<Unit>
+
+    /** Releases only this reference; unfinished native drain stays application-owned. */
+    suspend fun close(): AppResult<Unit>
 }
 
 /** The application keeps this resource through its owned SDK work and closes it on replacement. */

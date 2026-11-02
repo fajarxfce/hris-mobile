@@ -130,7 +130,7 @@ fun collaborationBackgroundOwner(
             "client.collaboration_invalid_admission",
             FailureKind.Unexpected,
         )
-    if (now < grant.requestedAt || now >= grant.expiresAt)
+    if (now < grant.requestedAt || now >= grant.expiresAt || grant.monotonicDeadline.hasPassedNow())
         return collaborationRecoveryFailure(
             "client.collaboration_revalidation_required",
             FailureKind.Unavailable,

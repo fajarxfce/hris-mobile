@@ -19,6 +19,7 @@ class AcquireCollaborationBackgroundAdmission(
     private val server: IdentityServer,
     private val build: AppBuild,
     private val clock: Clock,
+    private val timeSource: TimeSource = TimeSource.Monotonic,
 ) {
     private val execution = Mutex()
 
@@ -66,6 +67,7 @@ class AcquireCollaborationBackgroundAdmission(
         val initial = capture(parent)
         if (initial is AppResult.Failed) return initial
         val requestedAt = clock.now()
+        val requestedMark = timeSource.markNow()
         val owner = parent.owner(device.companyId)
         val received = recovery.admission(owner)
         val rejected = (received as? AppResult.Failed)?.failure
@@ -79,14 +81,24 @@ class AcquireCollaborationBackgroundAdmission(
         if (received is AppResult.Failed) return received
         if (current is AppResult.Failed) return current
         val session = (current as AppResult.Success).value
-        return admitCollaborationBackgroundObservation(
-            (received as AppResult.Success).value,
-            parent,
-            device,
-            requestedAt,
-            clock.now(),
-            Instant.fromEpochMilliseconds(session.binding.expiresAtEpochMillis),
-        )
+        val admitted =
+            admitCollaborationBackgroundObservation(
+                (received as AppResult.Success).value,
+                parent,
+                device,
+                requestedAt,
+                clock.now(),
+                Instant.fromEpochMilliseconds(session.binding.expiresAtEpochMillis),
+            )
+        if (admitted is AppResult.Failed) return admitted
+        val grant = (admitted as AppResult.Success).value
+        val deadline = requestedMark + (grant.expiresAt - grant.requestedAt)
+        if (deadline.hasPassedNow())
+            return collaborationRecoveryFailure(
+                "client.collaboration_revalidation_required",
+                FailureKind.Unavailable,
+            )
+        return AppResult.Success(grant.copy(monotonicDeadline = deadline))
     }
 
     private suspend fun capture(parent: CollaborationNativeParent): AppResult<Session> {

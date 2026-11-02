@@ -178,6 +178,7 @@ internal class ProtectedHrisProofOwner(
             check(owned.owner == renewedOwner && identity(owned) == keys)
             check(owned.installedOperationId == fixture.getString("bootstrapOperationId"))
             publishFixture(owned)
+            owned = proveHrisRuntimeBorrowing(runtime, owned)
             owner = renewedOwner
             return owned.also { owned = null }
         } finally {

@@ -73,6 +73,18 @@ class NativeWorkerSdk(private val wire: NativeCollaborationUi) : CollaborationRu
         return AppResult.Success(Unit)
     }
 
+    override suspend fun updateRetention(
+        retention: dev.fajar.starter.collaboration.domain.entities.CollaborationRuntimeRetention
+    ): AppResult<Unit> = closeOtherOwners(retention.foreground)
+
+    override suspend fun acquireBackground(
+        owner: CollaborationOwner,
+        deviceId: String,
+        lifetimeMillis: Long,
+    ): AppResult<
+        dev.fajar.starter.collaboration.domain.repositories.CollaborationBackgroundRuntimeLease?
+    > = error("No implicit background runtime")
+
     override suspend fun activatePusher(
         owner: CollaborationOwner,
         deviceId: String,

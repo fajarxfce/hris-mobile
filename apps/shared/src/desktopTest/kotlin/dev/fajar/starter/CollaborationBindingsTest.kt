@@ -39,6 +39,19 @@ class CollaborationBindingsTest {
             var suppliedHttp: HttpClient? = null
             val runtime =
                 object : CollaborationRuntimeRepository {
+                    override suspend fun updateRetention(
+                        retention:
+                            dev.fajar.starter.collaboration.domain.entities.CollaborationRuntimeRetention
+                    ): AppResult<Unit> = closeOtherOwners(retention.foreground)
+
+                    override suspend fun acquireBackground(
+                        owner: CollaborationOwner,
+                        deviceId: String,
+                        lifetimeMillis: Long,
+                    ): AppResult<
+                        dev.fajar.starter.collaboration.domain.repositories.CollaborationBackgroundRuntimeLease?
+                    > = error("No implicit background runtime")
+
                     override suspend fun activatePusher(
                         owner: CollaborationOwner,
                         deviceId: String,
@@ -164,6 +177,10 @@ class CollaborationBindingsTest {
                 assertSame(
                     container.koin.get<AcquireCollaborationBackgroundAdmission>(),
                     container.koin.get<AcquireCollaborationBackgroundAdmission>(),
+                )
+                assertSame(
+                    container.koin.get<AcquireCollaborationBackgroundRuntime>(),
+                    container.koin.get<AcquireCollaborationBackgroundRuntime>(),
                 )
                 assertSame(
                     container.koin.get<CollaborationRecoveryRepository>(),

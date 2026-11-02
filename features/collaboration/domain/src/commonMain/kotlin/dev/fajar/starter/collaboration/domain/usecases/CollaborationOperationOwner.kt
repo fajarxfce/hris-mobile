@@ -22,19 +22,21 @@ internal suspend fun SessionRepository.captureCollaborationOwner(
     when (scope) {
         is CollaborationOperationScope.Selected ->
             captureCollaborationOwner(scope.workspaceId, workspaces, server, build, clock)
-        is CollaborationOperationScope.Background -> {
-            val captured = current()
-            currentCoroutineContext().ensureActive()
-            when (captured) {
-                is AppResult.Failed -> captured
-                is AppResult.Success ->
-                    collaborationBackgroundOwner(
-                        scope.admission,
-                        captured.value,
-                        server,
-                        build,
-                        clock.now(),
-                    )
-            }
-        }
+        is CollaborationOperationScope.Background ->
+            captureCollaborationBackgroundOwner(scope.admission, server, build, clock)
     }
+
+internal suspend fun SessionRepository.captureCollaborationBackgroundOwner(
+    admission: CollaborationBackgroundAdmission,
+    server: IdentityServer,
+    build: AppBuild,
+    clock: Clock,
+): AppResult<CollaborationOwner> {
+    val captured = current()
+    currentCoroutineContext().ensureActive()
+    return when (captured) {
+        is AppResult.Failed -> captured
+        is AppResult.Success ->
+            collaborationBackgroundOwner(admission, captured.value, server, build, clock.now())
+    }
+}

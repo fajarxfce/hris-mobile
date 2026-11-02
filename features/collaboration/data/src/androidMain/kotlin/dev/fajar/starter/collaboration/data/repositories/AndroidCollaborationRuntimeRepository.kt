@@ -14,10 +14,10 @@ import dev.fajar.starter.identity.domain.entities.IdentityServer
 import dev.fajar.starter.securestorage.*
 import dev.fajar.starter.storage.safeStorageCall
 import io.ktor.client.HttpClient
-import java.util.concurrent.ConcurrentHashMap
 import kotlin.io.encoding.Base64
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.TimeSource
 import kotlinx.coroutines.*
-import kotlinx.coroutines.sync.Semaphore
 import org.matrix.rustcomponents.sdk.Client
 
 /**
@@ -32,8 +32,76 @@ class AndroidCollaborationRuntimeRepository(
     private val endpoint: CollaborationSdkEndpoint,
     private val http: HttpClient,
 ) : CollaborationRuntimeRepository {
-    private val capacity = Semaphore(5)
-    private val leases = ConcurrentHashMap.newKeySet<AndroidCollaborationRuntimeLease>()
+    private val registry =
+        SdkRuntimeRegistry<AndroidCollaborationRuntimeLease>(
+            { it.availableForEntry && it.credentialFailures.value == null },
+            { it.requestClose() },
+        )
+    private val leases
+        get() = registry.resources()
+
+    override suspend fun updateRetention(
+        retention: CollaborationRuntimeRetention
+    ): AppResult<Unit> {
+        val stopped = registry.update(retention)
+        return drain((stopped + leases.filter { it.closingRequested }).distinct())
+    }
+
+    override suspend fun acquireBackground(
+        owner: CollaborationOwner,
+        deviceId: String,
+        lifetimeMillis: Long,
+    ): AppResult<CollaborationBackgroundRuntimeLease?> {
+        if (lifetimeMillis !in 1..60_000)
+            return AppResult.Failed(Failure(FailureKind.Validation, "Invalid recovery lifetime."))
+        val deadline = TimeSource.Monotonic.markNow() + lifetimeMillis.milliseconds
+        drain(leases.filter { it.closingRequested })
+        currentCoroutineContext().ensureActive()
+        if (deadline.hasPassedNow()) return AppResult.Failed(backgroundRuntimeExpired())
+        val prepared = safeStorageCall { collaborationSdkScope(owner, deviceId, server, endpoint) }
+        if (prepared is AppResult.Failed) return prepared
+        val scope = (prepared as AppResult.Success).value
+        val reserved = registry.reserveBackground(scope.storeId, owner, deviceId)
+        if (reserved is AppResult.Failed) return reserved
+        val borrow = (reserved as AppResult.Success).value
+        val owned = AndroidCollaborationBackgroundRuntimeLease(registry, borrow, deadline)
+        var transferred = false
+        var acquisitionStarted = false
+        try {
+            currentCoroutineContext().ensureActive()
+            owned.interruptions.value?.let {
+                return AppResult.Failed(it)
+            }
+            if (borrow.creating) {
+                val acquired = handover {
+                    acquisitionStarted = true
+                    acquire(borrow.reservation, scope, null)
+                }
+                if (acquired is AppResult.Failed) return acquired
+                if ((acquired as AppResult.Success).value == null) return AppResult.Success(null)
+            }
+            currentCoroutineContext().ensureActive()
+            owned.interruptions.value?.let {
+                return AppResult.Failed(it)
+            }
+            owned.credentialFailures.value?.let {
+                return AppResult.Failed(it)
+            }
+            if (deadline.hasPassedNow()) return AppResult.Failed(backgroundRuntimeExpired())
+            transferred = true
+            return AppResult.Success(owned)
+        } finally {
+            if (!transferred)
+                withContext(NonCancellable) {
+                    try {
+                        owned.close()
+                    } finally {
+                        if (borrow.creating && !acquisitionStarted)
+                            registry.released(borrow.reservation)
+                    }
+                }
+        }
+    }
 
     override suspend fun activatePusher(
         owner: CollaborationOwner,
@@ -86,17 +154,14 @@ class AndroidCollaborationRuntimeRepository(
                 matrixRoomId.any { it.isWhitespace() || it.isISOControl() }
         )
             return AppResult.Failed(Failure(FailureKind.Validation, "Invalid history focus."))
-        val matching = leases.filter { it.owner == owner && it.deviceId == deviceId }
-        if (matching.size > 1)
-            return AppResult.Failed(
-                Failure(
-                    FailureKind.Unavailable,
-                    "Chat runtime is busy.",
-                    code = "client.collaboration_runtime_opening",
-                )
-            )
-        return matching.singleOrNull()?.prepareHistoryReopen(matrixRoomId, anchorEventId)
-            ?: AppResult.Success(true)
+        val reserved = registry.beginHistoryReopen(owner, deviceId)
+        if (reserved is AppResult.Failed) return reserved
+        val entry = (reserved as AppResult.Success).value ?: return AppResult.Success(true)
+        return try {
+            checkNotNull(entry.resource).prepareHistoryReopen(matrixRoomId, anchorEventId)
+        } finally {
+            registry.endHistoryReopen(entry)
+        }
     }
 
     override suspend fun readProviderHistory(
@@ -217,25 +282,39 @@ class AndroidCollaborationRuntimeRepository(
                     code = "client.collaboration_runtime_opening",
                 )
             )
+        if (registry.retainForeground(owner, deviceId) == null)
+            return AppResult.Failed(
+                existing.credentialFailures.value
+                    ?: Failure(
+                        FailureKind.Unavailable,
+                        "Chat runtime is no longer retained.",
+                        code = "client.collaboration_runtime_not_retained",
+                    )
+            )
         return AppResult.Success(true)
     }
 
     override suspend fun install(
         owner: CollaborationOwner,
         command: CollaborationSetupCommandRecord,
-    ): AppResult<CollaborationRuntimeLease> = handover {
-        val outcome = command.outcome as CollaborationSetupOutcome.Bootstrapped
-        require(
-            command.attempts > 0 &&
-                collaborationGatewayMatchesCommand(owner, command.command, outcome.gateway)
-        )
-        requireNotNull(open(owner, outcome.gateway.deviceId, command.command to outcome.gateway))
+    ): AppResult<CollaborationRuntimeLease> {
+        val prepared = safeStorageCall {
+            val outcome = command.outcome as CollaborationSetupOutcome.Bootstrapped
+            require(
+                command.attempts > 0 &&
+                    collaborationGatewayMatchesCommand(owner, command.command, outcome.gateway)
+            )
+            command.command to outcome.gateway
+        }
+        if (prepared is AppResult.Failed) return prepared
+        val installation = (prepared as AppResult.Success).value
+        return open(owner, installation.second.deviceId, installation) { requireNotNull(it) }
     }
 
     override suspend fun restore(
         owner: CollaborationOwner,
         deviceId: String,
-    ): AppResult<CollaborationRuntimeLease?> = handover { open(owner, deviceId, null) }
+    ): AppResult<CollaborationRuntimeLease?> = open(owner, deviceId, null) { it }
 
     override suspend fun enterTimeline(
         owner: CollaborationOwner,
@@ -261,8 +340,12 @@ class AndroidCollaborationRuntimeRepository(
     }
 
     override suspend fun closeOtherOwners(retainedOwner: CollaborationOwner?): AppResult<Unit> {
-        val obsolete = leases.filter { it.owner != retainedOwner || it.closingRequested }
-        val results = coroutineScope { obsolete.map { async { it.close() } }.awaitAll() }
+        val obsolete = registry.closeOtherOwners(retainedOwner)
+        return drain((obsolete + leases.filter { it.closingRequested }).distinct())
+    }
+
+    private suspend fun drain(resources: List<AndroidCollaborationRuntimeLease>): AppResult<Unit> {
+        val results = coroutineScope { resources.map { async { it.close() } }.awaitAll() }
         return results.filterIsInstance<AppResult.Failed>().firstOrNull() ?: AppResult.Success(Unit)
     }
 
@@ -278,26 +361,36 @@ class AndroidCollaborationRuntimeRepository(
         }
     }
 
-    private suspend fun open(
+    private suspend fun <T : AndroidCollaborationRuntimeLease?> open(
         owner: CollaborationOwner,
         deviceId: String,
         installation: Pair<CollaborationSetupCommand, CollaborationGateway>?,
-    ): AndroidCollaborationRuntimeLease? {
-        // An earlier cancelled installation may have no caller left to retry its
-        // failed drain. An explicit open retries each already-closing owner once;
-        // at most five concurrent five-second waits, never a live lease or a loop.
-        coroutineScope {
-            leases.filter { it.closingRequested }.map { async { it.close() } }.awaitAll()
-        }
+        result: (AndroidCollaborationRuntimeLease?) -> T,
+    ): AppResult<T> {
+        drain(leases.filter { it.closingRequested })
         currentCoroutineContext().ensureActive()
-        check(capacity.tryAcquire()) { "SDK runtime capacity is full." }
+        val prepared = safeStorageCall { collaborationSdkScope(owner, deviceId, server, endpoint) }
+        if (prepared is AppResult.Failed) return prepared
+        val scope = (prepared as AppResult.Success).value
+        val reserved = registry.reserveForeground(scope.storeId, owner, deviceId)
+        if (reserved is AppResult.Failed) return reserved
+        val reservation = (reserved as AppResult.Success).value
+        return handover { result(acquire(reservation, scope, installation)) }
+    }
+
+    private suspend fun acquire(
+        reservation: SdkRuntimeReservation<AndroidCollaborationRuntimeLease>,
+        scope: CollaborationSdkScope,
+        installation: Pair<CollaborationSetupCommand, CollaborationGateway>?,
+    ): AndroidCollaborationRuntimeLease? {
+        val owner = reservation.owner
         var directory: CollaborationSdkStoreLease? = null
         var lease: AndroidCollaborationRuntimeLease? = null
         var credentials: AtomicCredentialStore? = null
         var client: Client? = null
         var handedOver = false
         try {
-            val scope = collaborationSdkScope(owner, deviceId, server, endpoint)
+            check(registry.accepts(reservation)) { "SDK acquisition is no longer retained." }
             directory = stores.acquire(scope.storeId)
             credentials = credentialFactory(scope.credentialRecordName)
             check(credentials.persistent) {
@@ -323,10 +416,9 @@ class AndroidCollaborationRuntimeRepository(
                     CollaborationHistoryApi(http, endpoint),
                     CollaborationPusherApi(http, endpoint),
                 ) {
-                    leases.remove(it)
-                    capacity.release()
+                    registry.released(reservation)
                 }
-            leases.add(lease)
+            check(registry.attach(reservation, lease)) { "SDK acquisition is no longer retained." }
             clients.restorePaused(client, retained.toNativeSession())
             lease.startMonitoring()
             when (persistence.markInitialized()) {
@@ -338,6 +430,7 @@ class AndroidCollaborationRuntimeRepository(
             handedOver = true
             return lease
         } finally {
+            lease?.finishAcquisition()
             if (!handedOver) {
                 if (lease != null) lease.close()
                 else {
@@ -351,7 +444,7 @@ class AndroidCollaborationRuntimeRepository(
                         try {
                             directory?.close()
                         } finally {
-                            capacity.release()
+                            registry.released(reservation)
                         }
                     }
                 }

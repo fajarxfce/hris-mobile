@@ -30,16 +30,18 @@ internal constructor(
     record: CollaborationSdkRecord,
     historyApi: CollaborationHistoryApi,
     pusherApi: CollaborationPusherApi,
+    dispatcher: CoroutineDispatcher = Dispatchers.Default,
     private val released: (AndroidCollaborationRuntimeLease) -> Unit,
 ) : CollaborationRuntimeLease {
     override val deviceId = record.deviceId
     override val installedOperationId = record.bootstrapOperationId
     override val credentialFailures = persistence.failures
     private val lifetimeJob = SupervisorJob()
-    private val lifetime = CoroutineScope(lifetimeJob + Dispatchers.Default)
+    private val lifetime = CoroutineScope(lifetimeJob + dispatcher)
     private val shutdown = SdkStoreShutdown(lifetime) { releaseResources() }
     private val stopRequested = AtomicBoolean()
     private val acquisitionComplete = AtomicBoolean()
+    private val acquisitionFinished = CompletableDeferred<Unit>()
     private val published = AtomicBoolean()
     private val sync =
         SdkSyncLifecycle(lifetime) { createAndroidCollaborationSync(nativeClient, lifetime) }
@@ -106,6 +108,11 @@ internal constructor(
     internal val closingRequested
         get() = stopRequested.get()
 
+    /** Registry invalidation is synchronous; its caller drains outside the registry monitor. */
+    internal fun requestClose() {
+        stopRequested.set(true)
+    }
+
     internal val availableForEntry
         get() = acquisitionComplete.get() && published.get() && !stopRequested.get()
 
@@ -162,6 +169,12 @@ internal constructor(
     internal fun completeAcquisition() {
         check(!stopRequested.get())
         check(acquisitionComplete.compareAndSet(false, true))
+        finishAcquisition()
+    }
+
+    /** Repository finally also signals unsuccessful acquisition before attempting its drain. */
+    internal fun finishAcquisition() {
+        acquisitionFinished.complete(Unit)
     }
 
     private val initialization =
@@ -325,6 +338,8 @@ internal constructor(
     }
 
     private suspend fun releaseResources(): SdkShutdownAttempt {
+        // Never pause/destroy the client or unlock its directory while restore still uses it.
+        acquisitionFinished.await()
         val credentialResult = persistence.close()
         credentialWatcher.cancelAndJoin()
         syncWatcher.cancelAndJoin()

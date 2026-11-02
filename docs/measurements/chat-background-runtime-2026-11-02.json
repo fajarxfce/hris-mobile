@@ -1,0 +1,802 @@
+{
+  "date": "2026-11-02",
+  "baseCommit": "5aa6f75260eb429e98cbb34c600bcbec1c7ee57c",
+  "scope": "Finite background Android runtime references and independent native-parent/foreground retention; not a completed incoming recovery worker.",
+  "sourceSha256": {
+    "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisProofRuntimeBorrowing.kt": "934a6597cf54870aad73c8dd25d96f1b3abf73591737815ab0e595cad58fa10b",
+    "features/collaboration/data/src/androidHostTest/kotlin/dev/fajar/starter/collaboration/data/AndroidCollaborationBackgroundRuntimeTest.kt": "178911856d2638660142edb3f1b7d52a3e2effb86827b912ec6acd4c241e4f1f",
+    "features/collaboration/data/src/androidHostTest/kotlin/dev/fajar/starter/collaboration/data/RuntimeLeaseFixture.kt": "9dd15d171ab794d2d0d35999486cc037f3da6307243c3b401c0d6acd4272fd1f",
+    "features/collaboration/data/src/androidHostTest/kotlin/dev/fajar/starter/collaboration/data/SdkRuntimeRegistryTest.kt": "43ffe3a376a14cc5a069e0df77488873708845b37139ecc93b397edea626dfcb",
+    "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/repositories/AndroidCollaborationBackgroundRuntimeLease.kt": "55f45cca94ecaef8b8f9eb6a3954f678ff91b1dcac8eb71fed4a3135d3ffa9aa",
+    "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/repositories/SdkRuntimeRegistry.kt": "a7bcd97e937d17ad93214138734e00b6c862dccc9d46553a74d38d629e9357ff",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationRuntimeRetention.kt": "8bc65dae1fe6c7cfcab272778130bb159f100151c411fb6a38f4ca725bdc05d5",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/AcquireCollaborationBackgroundRuntime.kt": "5705ac9b62a23e9be2d215128eba49da432e791db340f4a6eecb35a239b362a8",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationBackgroundRuntimeTest.kt": "c741a7bbe97a8702d5f3c02521ed0cf2a712bc19fbf0a03ccf86f096c1c56a6c",
+    "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisProofRuntimeAccess.kt": "d26e444fc05e681a443fb1c85992f09931b15e8e7aa3a82ab9a9898c1638a60a",
+    "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/ProtectedHrisProofOwner.kt": "f4845af7ca2485aa08905313913590eea638eba3752fe0c66e306fa6d425e0fa",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationBindingsTest.kt": "e5f125ebc45ed2f64d96178d9a8930174cfb81f57b9bfcacf9f848e9fc21fd91",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/fixtures/NativeWorkerSdk.kt": "40f8043aff6ebb0da24934ef4d1d9275b6f7a4c8d7f97004a92db3b0dc55dbb5",
+    "features/collaboration/data/src/androidHostTest/kotlin/dev/fajar/starter/collaboration/data/AndroidCollaborationRuntimePublicationTest.kt": "911734e9ffd176cb3aa9efef7a83ffdcce020bf36ad9f690f5b18ba4bce6e80d",
+    "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/repositories/AndroidCollaborationRuntimeLease.kt": "94d050a5659bb4ccdd60bcff029ccd446309c9be8be13f042e3b4d68880b65fc",
+    "features/collaboration/data/src/androidMain/kotlin/dev/fajar/starter/collaboration/data/repositories/AndroidCollaborationRuntimeRepository.kt": "00dfc6ba80a30c573fb297520cef6aa0f641f28d2d197908d62e4ee389cda767",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt": "57535674e3fccfdc5fe40ec6c6bb8f1d864cbdd1255a27e832fef6b54b5c926f",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/UnavailableCollaborationRuntimeRepository.kt": "fc89ac5bc19df13f91c3d80711c73474acd3b0aa2d9ccf25c95e9909cb672bcd",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationRecovery.kt": "068604efb981dd773e82f08501b8974b29bac5f73e7f1e078f2ee293de20e76c",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationRecoveryPolicy.kt": "6aff4e142843568e6d2f06521656447b4fdae1bdb08e6ed88fd306c47272f23d",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationRuntimeRepository.kt": "74ea50a109defa41ea23a6d3da8fa2f14c881edec459a5524b9b22d30f1dcf88",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/AcquireCollaborationBackgroundAdmission.kt": "05d05759900da827309a1d03043dd842921a84a2fcce6f198937cc02fc1f3a22",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/CollaborationOperationOwner.kt": "1d4dcaf655364489f9cc6b2517c1bd80ab9fa05bdbe79a1f09dc64108e8fde51",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/MaintainCollaborationRuntimeOwnership.kt": "54d36c1a8741246679da9ac1ef9a47517e0b8bc6c57972da83922047bb327645",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/ActivateCollaborationPusherTest.kt": "91278bdff1a77a96865419326c623a05eb33e32cfe901af9e8935ce6406919c3",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationDeliveryFixture.kt": "915f6fb901b80823bd7292e8d200f1fa11f3f253473ced1dd19ff75d4cdc07c3",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationRecoveryTest.kt": "bd6d4ddf0d799b5073ed18c1f7a3860119a938edf7b2311305e4476e22fc6e55",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationRuntimeInstallationTest.kt": "d218c0dfa0a4e08d4454401019a61e59dc0261c472fddc31e9f74952f59a8e93",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationRuntimeOwnershipTest.kt": "c5dcf9f633d4a505d3d6925c624d39bc8f9b35d452c823fcc08ae235440f26a6",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationRuntimeRestorationTest.kt": "ce1909e96f1e533544388b982619b2e7f03817b7aa32f6457ffdcc4c0a0d216a",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/EnsureCollaborationRuntimeTest.kt": "6471bc2ebe0f0d5ca17b808296475ed70247015240e4c8237aa5627ae3aefb45",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/EnterCollaborationConversationTest.kt": "9d3360f8203718339c78b55bef226be51af209d4ab0db2005b96eea8b9b1d312",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/StageCollaborationTextTest.kt": "440c716cb48f82dec6de8c7f157b483d09f8031b18c175dc2ac29e3aeb9cd997",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/setup/ChatSetupFixture.kt": "f59372fb30be288eaec131e49077151bb8527c7107e4061f8eb462abf0b0d3d6",
+    "features/collaboration/data/karma.config.d/fixture-timeout.js": "495ec71dff8d16e3c3e687bddeef74557b1d36f4f44a0021695fe304bd5a3839"
+  },
+  "focusedRun": {
+    "exitCode": 0,
+    "wallSeconds": 143.769,
+    "inputsUnchanged": true,
+    "command": [
+      "xvfb-run",
+      "-a",
+      "./gradlew",
+      ":features:collaboration:domain:desktopTest",
+      ":features:collaboration:data:testAndroidHostTest",
+      ":apps:collaboration-proof:testDebugUnitTest",
+      ":apps:collaboration-proof:assembleDebug",
+      ":apps:collaboration-proof:lintDebug",
+      ":formatCheck",
+      ":architectureCheck",
+      ":detekt",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=1",
+      "-Dorg.gradle.jvmargs=-Xmx1536m"
+    ]
+  },
+  "focusedGradleSeconds": 140,
+  "focusedReports": {
+    "domain": {
+      "tests": 444,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "androidHost": {
+      "tests": 209,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "proof": {
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "lint": {
+      "Error": 0,
+      "Warning": 47
+    },
+    "apk": {
+      "bytes": 343275325,
+      "sha256": "91638cf626570c02dfa60a5b40540d8a0d857f28428a7d89e3ec1d20fb40e702"
+    }
+  },
+  "bindingsRun": {
+    "exitCode": 0,
+    "wallSeconds": 113.105,
+    "inputsUnchanged": true,
+    "command": [
+      "xvfb-run",
+      "-a",
+      "./gradlew",
+      ":features:collaboration:domain:desktopTest",
+      ":features:collaboration:data:testAndroidHostTest",
+      ":apps:collaboration-proof:compileDebugKotlin",
+      ":apps:shared:desktopTest",
+      "--tests",
+      "*CollaborationBindingsTest",
+      ":formatCheck",
+      ":architectureCheck",
+      ":detekt",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=1",
+      "-Dorg.gradle.jvmargs=-Xmx1536m"
+    ]
+  },
+  "bindingsReports": {
+    "domain": {
+      "tests": 444,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "androidHost": {
+      "tests": 207,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "bindings": {
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "native": {
+    "startedAt": "2026-11-02T03:17:32.518254+00:00",
+    "apkSha256": "91638cf626570c02dfa60a5b40540d8a0d857f28428a7d89e3ec1d20fb40e702",
+    "mobileBase": "5aa6f75260eb429e98cbb34c600bcbec1c7ee57c",
+    "platformBase": "2308b3374b44c2a6cb80b9bc0eecb9f8ee110343",
+    "exit": 0,
+    "seconds": 169.876,
+    "directories": [
+      ".work/collaboration-worker/cf4947079df24c6e8891ab639df33bcf",
+      ".work/collaboration-worker/f43fe1e1df134f7186a629767ca4ddfb"
+    ],
+    "artifactUnchanged": true,
+    "inputsUnchanged": true,
+    "gradleSeconds": 169,
+    "suites": [
+      {
+        "name": "dev.fajar.hris.NativeCollaborationWorkerInteropTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "time": 152.242
+      }
+    ],
+    "cases": [
+      {
+        "directory": ".work/collaboration-worker/cf4947079df24c6e8891ab639df33bcf",
+        "passed": true,
+        "cleanup": true,
+        "case": "FROZEN_DRAFT",
+        "processes": 2,
+        "forcedProcessDeaths": 1,
+        "proof": {
+          "processId": 4486,
+          "initialState": "FROZEN_DRAFT",
+          "frozenDraftRecovered": true,
+          "outboxEmptyBeforeRecovery": true,
+          "draftConfirmedCleared": true,
+          "encryptedReceived": true,
+          "senderRuntimeRestoredByWorker": true,
+          "originalHistoryAcquired": true,
+          "completionRetired": true,
+          "repeatedWorkerComplete": true,
+          "foregroundHistoryPaged": true,
+          "foregroundStoppedHistoryRetained": true,
+          "passes": 2,
+          "historyPages": 4,
+          "providerReferences": 43,
+          "pendingStateReferences": 10
+        },
+        "acceptance": {
+          "passed": true,
+          "cleanup": true,
+          "processes": 2,
+          "forcedProcessDeaths": 1,
+          "initialState": "FROZEN_DRAFT",
+          "encryptedSends": 33,
+          "workerEncryptedSends": 1,
+          "seededPeerEncryptedSends": 32,
+          "foregroundHistoryAccepted": true,
+          "platformWorkManagerAccepted": false
+        }
+      },
+      {
+        "directory": ".work/collaboration-worker/f43fe1e1df134f7186a629767ca4ddfb",
+        "passed": true,
+        "cleanup": true,
+        "case": "QUEUED",
+        "processes": 2,
+        "forcedProcessDeaths": 1,
+        "proof": {
+          "processId": 3318,
+          "initialState": "QUEUED",
+          "encryptedReceived": true,
+          "senderRuntimeRestoredByWorker": true,
+          "originalHistoryAcquired": true,
+          "completionRetired": true,
+          "repeatedWorkerComplete": true,
+          "foregroundHistoryPaged": true,
+          "foregroundStoppedHistoryRetained": true,
+          "passes": 1,
+          "historyPages": 4,
+          "providerReferences": 43,
+          "pendingStateReferences": 10
+        },
+        "acceptance": {
+          "passed": true,
+          "cleanup": true,
+          "processes": 2,
+          "forcedProcessDeaths": 1,
+          "initialState": "QUEUED",
+          "encryptedSends": 33,
+          "workerEncryptedSends": 1,
+          "seededPeerEncryptedSends": 32,
+          "foregroundHistoryAccepted": true,
+          "platformWorkManagerAccepted": false
+        }
+      },
+      {
+        "directory": ".work/collaboration-worker/83191107d2bc41debe9a5211d830c75c",
+        "passed": true,
+        "cleanup": true,
+        "case": "SCHEDULED",
+        "automaticJobStart": true,
+        "processes": 2,
+        "ordinaryProcessDeaths": 1,
+        "networkRestored": true,
+        "proof": {
+          "processId": 3984,
+          "workState": "SUCCEEDED",
+          "runAttemptCount": 1,
+          "senderRuntimeRestoredByWorker": true,
+          "originalHistoryAcquired": true,
+          "completionRetired": true
+        },
+        "acceptance": {
+          "passed": true,
+          "cleanup": true,
+          "processes": 2,
+          "ordinaryProcessDeaths": 1,
+          "automaticJobStart": true,
+          "networkRestored": true,
+          "encryptedSends": 1,
+          "workManagerExecutionAccepted": true,
+          "retryCancellationAccepted": false
+        }
+      },
+      {
+        "directory": ".work/collaboration-worker/e346ce9468d8448ab9572ea898c17b2a",
+        "passed": true,
+        "cleanup": true,
+        "case": "CANCELLED_DRAFT",
+        "processes": 2,
+        "forcedProcessDeaths": 1,
+        "proof": {
+          "processId": 6680,
+          "initialState": "CANCELLED_DRAFT",
+          "cancelledArchiveRetained": true,
+          "cancelledReceiptAbsent": true,
+          "cancelledReplayDidNotSchedule": true,
+          "cancelledDraftConfirmedCleared": true,
+          "cancelledAbsentFromHistory": true,
+          "encryptedReceived": true,
+          "senderRuntimeRestoredByWorker": true,
+          "originalHistoryAcquired": true,
+          "completionRetired": true,
+          "repeatedWorkerComplete": true,
+          "foregroundHistoryPaged": true,
+          "foregroundStoppedHistoryRetained": true,
+          "passes": 2,
+          "historyPages": 4,
+          "providerReferences": 43,
+          "pendingStateReferences": 10
+        },
+        "acceptance": {
+          "passed": true,
+          "cleanup": true,
+          "processes": 2,
+          "forcedProcessDeaths": 1,
+          "initialState": "CANCELLED_DRAFT",
+          "encryptedSends": 33,
+          "workerEncryptedSends": 1,
+          "seededPeerEncryptedSends": 32,
+          "foregroundHistoryAccepted": true,
+          "platformWorkManagerAccepted": false
+        }
+      },
+      {
+        "directory": ".work/collaboration/dc5630a6e0ca4284827e6feeffd322b6",
+        "passed": true,
+        "cleanup": true,
+        "case": "SDK",
+        "proof": {
+          "encryptedBothDirections": true,
+          "logicalIdsPreserved": true,
+          "syncMode": "classic",
+          "protectedStoreReopened": true,
+          "missingRecordPreserved": true,
+          "wrongPassphrasePreserved": true,
+          "exclusiveOwner": true,
+          "queueRestored": true,
+          "transactionReused": true,
+          "identityAfterRestart": true,
+          "messageIntentRestored": true,
+          "queueMappingRecovered": true,
+          "queueWriterExclusive": true,
+          "perRoomDeliveryIsolated": true,
+          "heldQueueRestored": true,
+          "nativeDeliveryOwned": true,
+          "commonSenderOwned": true,
+          "receiptJournalRecovered": true,
+          "projectionInterrupted": true,
+          "originalHistoryWindowOwned": true,
+          "historyBodiesRestored": true,
+          "commonHistoryAcquisitionOwned": true,
+          "latestHistoryHeadOwned": true,
+          "providerHistoryPageOwned": true,
+          "commonProviderHistoryAcquisitionOwned": true,
+          "providerHistoryReferencesRestored": true,
+          "providerHistoryReferencesReconciled": true,
+          "providerHistoryRestartPreserved": true,
+          "historyRuntimeReopened": true,
+          "ackBeforeJournalRecovered": true,
+          "completionCleanupRecovered": true,
+          "processRestarted": true,
+          "processRestartedAfterAck": true,
+          "processRestartedAfterCompletion": true
+        }
+      }
+    ],
+    "evidenceSha256": {
+      ".work/runtime-borrowing-2026-11-02/retry-2/reports/TEST-dev.fajar.hris.NativeCollaborationWorkerInteropTest.xml": "f884f739efe1e88855c6e7d4dbf810f52afc60064f4f3b87fba6ba09bf3c8fc2",
+      ".work/runtime-borrowing-2026-11-02/interrupted-1/reports/TEST-dev.fajar.hris.NativeCollaborationScheduledInteropTest.xml": "0b0349368340c4abda46a223f72fa602bd05ea9334481c957f07e420c217b2b7",
+      ".work/runtime-borrowing-2026-11-02/interrupted-1/reports/TEST-dev.fajar.hris.NativeCollaborationSdkInteropTest.xml": "d022d38a5d38c86a44c575bbd3eb472864836b2d0433e6f480c15c320ecbe321",
+      ".work/runtime-borrowing-2026-11-02/interrupted-1/reports/TEST-dev.fajar.hris.NativeCollaborationWorkerInteropTest.xml": "ff74caca311c02e39054a8c2268bc5eb05307e7c4deea09188b69dd51320f019",
+      ".work/collaboration-worker/cf4947079df24c6e8891ab639df33bcf/result.json": "2b6e8609cd9ed7c1b99622c8f972649a7e5f632d4e0aec3bb37e15a212e0eb7c",
+      ".work/collaboration-worker/cf4947079df24c6e8891ab639df33bcf/acceptance.json": "c04907cd023bceba0d4f52c87f86f234063395975b6744309513df6d47061ad6",
+      ".work/collaboration-worker/cf4947079df24c6e8891ab639df33bcf/gateway-trace.json": "703fa7c6a22fa9ddb10aad93b34be7c556ff706c0908de9099320973a12ef944",
+      ".work/collaboration-worker/cf4947079df24c6e8891ab639df33bcf/gateway-observations.json": "41d24184ab4499d6bc5cf911bb3f669f43254a679f352a21587028974f78f3e8",
+      ".work/collaboration-worker/cf4947079df24c6e8891ab639df33bcf/native-worker-queued.json": "7fa2c1db2bca0c09d7ec382a2aa216ea027aa4536441154776d851556e49dbc9",
+      ".work/collaboration-worker/cf4947079df24c6e8891ab639df33bcf/native-worker-restored.json": "9253ed65e72d2575d851d51643a40865d9089db82ac46fc86c74d75932cb34c6",
+      ".work/collaboration-worker/f43fe1e1df134f7186a629767ca4ddfb/result.json": "b558f43550061031436b6a5a0c8aa01b9d94af3781fd57751e009ea3ac466ba1",
+      ".work/collaboration-worker/f43fe1e1df134f7186a629767ca4ddfb/acceptance.json": "8fc8a2e5c4612720c04177e99d271593074b133f8023216d68e8d979c781183e",
+      ".work/collaboration-worker/f43fe1e1df134f7186a629767ca4ddfb/gateway-trace.json": "9a773ac3ea9d9444f845b92f3a51859a7689f8eb5e399f28dbeeb596b1b1b217",
+      ".work/collaboration-worker/f43fe1e1df134f7186a629767ca4ddfb/gateway-observations.json": "09915b305cc0300ce89c7d6317dd2f7f9d1c86fb794281c3deacf3cfd554d219",
+      ".work/collaboration-worker/f43fe1e1df134f7186a629767ca4ddfb/native-worker-queued.json": "12f8b86b508cf29adf18a298057b447d40c96e4c4b94b0a58af10a0f1e8cb8fe",
+      ".work/collaboration-worker/f43fe1e1df134f7186a629767ca4ddfb/native-worker-restored.json": "a06630c1959fcd04cdd90f38bb3a8a7b0b22e946a0ef1a3972d52b27c07c2723",
+      ".work/collaboration-worker/83191107d2bc41debe9a5211d830c75c/result.json": "eea1c0698eb7d438378fdb675a10b3461266031df907dee91d327953a9b70d23",
+      ".work/collaboration-worker/83191107d2bc41debe9a5211d830c75c/acceptance.json": "fd045e66b7260271165e47c76f436ee57938fab1b0329fa3a5497eba93346100",
+      ".work/collaboration-worker/83191107d2bc41debe9a5211d830c75c/gateway-trace.json": "cbae334ff8c895d488bd1c1355b04724461574d41e39074421130eccee8d2aa6",
+      ".work/collaboration-worker/83191107d2bc41debe9a5211d830c75c/gateway-observations.json": "82eb5c6a3e25f622220c86113f660947ba53c197665728bdb962c3cf600e70c5",
+      ".work/collaboration-worker/83191107d2bc41debe9a5211d830c75c/stopped.json": "2b36ed84ad5192a25e8b6869391f0739d653c536639029d3aeb3359fa177974f",
+      ".work/collaboration-worker/83191107d2bc41debe9a5211d830c75c/started.json": "6a4633e55b0e3a11ac85483a79e998d5215f73bd5b973ff85c1c4a0d31b35934",
+      ".work/collaboration-worker/83191107d2bc41debe9a5211d830c75c/network-before.json": "79dfab35e5f4104e398aa74de7c3d6e56dda0a96ac31d2fcb699ac1df093c6ad",
+      ".work/collaboration-worker/aca37a41f1cf4cc2ab236fc32b45406e/result.json": "06d8311b6b653cdc9736acd83ec2a778e338c4750823c013b484ca2e8e5fc830",
+      ".work/collaboration-worker/e346ce9468d8448ab9572ea898c17b2a/result.json": "f16790f7758650a4faeca2de24a59677f5a714faf5db67d80e8fe902a6eea1e0",
+      ".work/collaboration-worker/e346ce9468d8448ab9572ea898c17b2a/acceptance.json": "9674e6965c94a47fc83dcc936549ac3abcaa7fee19ecd499823aa5bacda7c567",
+      ".work/collaboration-worker/e346ce9468d8448ab9572ea898c17b2a/gateway-trace.json": "8e34738523954d4d3e08eddc650bab10d5d16085c7fe0706eeca284ef65597c4",
+      ".work/collaboration-worker/e346ce9468d8448ab9572ea898c17b2a/gateway-observations.json": "8e6635a0bccbfa1a7f33f7168533fdd13287f590eae2e8570e2a5d8461df3941",
+      ".work/collaboration-worker/e346ce9468d8448ab9572ea898c17b2a/native-worker-queued.json": "0294555432243ed5afffa0697de85050e826b83922fb8bf5fe7ca8ce195def0a",
+      ".work/collaboration-worker/e346ce9468d8448ab9572ea898c17b2a/native-worker-restored.json": "7d85e0e04f0a3d828e4bd92ed7ec88ccaaff236944c54a98b71666d340281e4d",
+      ".work/collaboration-worker/ef01c4fc847341bab3f1aa74252f1944/result.json": "f3f2d9f967731d41d03d04ad54c8dbdc28a0682fa6f1189e55687536a10afeb2",
+      ".work/collaboration/dc5630a6e0ca4284827e6feeffd322b6/result.json": "7856668037d1bd8ace93418ae5f381b9ce4eb444dde8d502f7af6fe8faa0651f",
+      ".work/collaboration/dc5630a6e0ca4284827e6feeffd322b6/verified.json": "575610f36b04c6112d34ebe708bbdd6439af72b3f8965ddfa3422e39f7bb7f6c",
+      ".work/collaboration/dc5630a6e0ca4284827e6feeffd322b6/gateway-trace.json": "8552118b5b5444add495f364047af8dd59a80531246931579e74634c720fb1f4"
+    },
+    "interruptedAttempt": {
+      "startedAt": "2026-11-02T02:42:59.894680+00:00",
+      "apkSha256": "91638cf626570c02dfa60a5b40540d8a0d857f28428a7d89e3ec1d20fb40e702",
+      "mobileBase": "5aa6f75260eb429e98cbb34c600bcbec1c7ee57c",
+      "platformBase": "2308b3374b44c2a6cb80b9bc0eecb9f8ee110343",
+      "exit": 1,
+      "seconds": 359.369,
+      "directories": [
+        ".work/collaboration-worker/83191107d2bc41debe9a5211d830c75c",
+        ".work/collaboration-worker/aca37a41f1cf4cc2ab236fc32b45406e",
+        ".work/collaboration-worker/e346ce9468d8448ab9572ea898c17b2a",
+        ".work/collaboration-worker/ef01c4fc847341bab3f1aa74252f1944",
+        ".work/collaboration/dc5630a6e0ca4284827e6feeffd322b6"
+      ],
+      "artifactUnchanged": true,
+      "inputsUnchanged": true
+    },
+    "interruption": {
+      "pid": 3805888,
+      "serial": "emulator-5560",
+      "kernelConfirmedOomKill": true,
+      "evidence": [
+        "Nov 02 02:48:36 arch-jkt kernel: Out of memory: Killed process 3805888 (qemu-system-x86) total-vm:5300364kB, anon-rss:3740556kB, file-rss:36kB, shmem-rss:0kB, UID:1000 pgtables:8580kB oom_score_adj:0",
+        "Nov 02 02:48:36 arch-jkt kernel: oom_reaper: reaped process 3805888 (qemu-system-x86), now anon-rss:0kB, file-rss:0kB, shmem-rss:0kB"
+      ],
+      "absentVerified": true,
+      "nativeAttempt": "interrupted-1",
+      "applicationFailureEstablished": false,
+      "dashboardActiveAfterAutomaticRestart": true
+    },
+    "acceptedAcrossTwoRuns": true,
+    "nativeBorrowingFixture": {
+      "calledBy": "ProtectedHrisProofOwner.installAndReopen",
+      "backgroundOnlyProtectedRestore": true,
+      "unpublishedAcquisitionUnavailable": true,
+      "selectionReleasePreservesBackgroundReference": true,
+      "lastBackgroundReleaseDrainsNativeClient": true,
+      "foregroundSurvivesSharedReferenceRelease": true,
+      "sameCryptographicIdentityAfterReopen": true,
+      "admission": "Controlled fixture; not incoming FCM or full recovery-worker acceptance"
+    }
+  },
+  "requiredChecks": {
+    "rootCheckCompleted": true,
+    "rootLogMarkerPresent": true,
+    "run7": {
+      "exitCode": 1,
+      "wallSeconds": 1023.233,
+      "inputsUnchanged": true,
+      "command": [
+        "xvfb-run",
+        "-a",
+        "./gradlew",
+        ":check",
+        "-Pkotlin.compiler.execution.strategy=in-process",
+        ":features:collaboration:domain:wasmJsBrowserTest",
+        ":features:collaboration:data:wasmJsBrowserTest",
+        ":apps:android:assembleDevRelease",
+        ":apps:android:lintDevRelease",
+        "-PrequireSigning=true",
+        "-PappEnvironment=dev",
+        "-PappVersion=1.0.0",
+        "-PappVersionCode=14",
+        "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+        "--no-daemon",
+        "--no-parallel",
+        "--max-workers=1",
+        "-Dorg.gradle.jvmargs=-Xmx1280m"
+      ]
+    },
+    "run7BrowserFailures": [
+      {
+        "name": "indexedPreparedPagesCross603MixedDraftsWithoutReadingEditingBodies[wasmJs, browser, ChromeHeadless156.0.0.0, Linux0.0.0]",
+        "message": "Error: Error: Timeout of 2000ms exceeded. For async tests and hooks, ensure \"done()\" is called; if returning a Promise, ensure it resolves."
+      },
+      {
+        "name": "overlappingWindowsTraverseBeyondFiveHundredInBothDirectionsAcrossRestart[wasmJs, browser, ChromeHeadless156.0.0.0, Linux0.0.0]",
+        "message": "Error: Error: Timeout of 2000ms exceeded. For async tests and hooks, ensure \"done()\" is called; if returning a Promise, ensure it resolves."
+      }
+    ],
+    "run8": {
+      "exitCode": 1,
+      "wallSeconds": 147.633,
+      "inputsUnchanged": true,
+      "command": [
+        "xvfb-run",
+        "-a",
+        "./gradlew",
+        "-Pkotlin.compiler.execution.strategy=in-process",
+        ":features:collaboration:data:wasmJsBrowserTest",
+        ":apps:android:assembleDevRelease",
+        ":apps:android:lintDevRelease",
+        "-PrequireSigning=true",
+        "-PappEnvironment=dev",
+        "-PappVersion=1.0.0",
+        "-PappVersionCode=14",
+        "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+        "--no-daemon",
+        "--no-parallel",
+        "--max-workers=1",
+        "-Dorg.gradle.jvmargs=-Xmx1280m"
+      ]
+    },
+    "run8Browser": {
+      "tests": 272,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "largeFixtures": [
+        {
+          "name": "indexedPreparedPagesCross603MixedDraftsWithoutReadingEditingBodies[wasmJs, browser, ChromeHeadless156.0.0.0, Linux0.0.0]",
+          "seconds": 0.0
+        },
+        {
+          "name": "overlappingWindowsTraverseBeyondFiveHundredInBothDirectionsAcrossRestart[wasmJs, browser, ChromeHeadless156.0.0.0, Linux0.0.0]",
+          "seconds": 0.0
+        }
+      ]
+    },
+    "karma": {
+      "generatedConfig": "build/wasm/packages/hris-mobile-features-collaboration-data-test/karma.conf.js",
+      "generatedSha256": "4652e6bb13e79d75801dfd96ee4389faa3df46e324313b0ea2d811453cd96cc7",
+      "moduleSnippetIncluded": true,
+      "mochaTimeoutMillis": 10000,
+      "productDeadlineChanged": false
+    },
+    "run8ReleaseFailure": "D8 Java heap space at 1280MiB; no changed assertion or product deadline."
+  },
+  "releaseFollowup": {
+    "exitCode": 0,
+    "wallSeconds": 103.642,
+    "inputsUnchanged": true,
+    "command": [
+      "xvfb-run",
+      "-a",
+      "./gradlew",
+      "-Pkotlin.compiler.execution.strategy=in-process",
+      ":apps:android:assembleDevRelease",
+      ":apps:android:lintDevRelease",
+      "-PrequireSigning=true",
+      "-PappEnvironment=dev",
+      "-PappVersion=1.0.0",
+      "-PappVersionCode=14",
+      "-PapiBaseUrl.dev=http://10.77.77.1:8088/api/v1/",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=1",
+      "-Dorg.gradle.jvmargs=-Xmx2048m"
+    ]
+  },
+  "reports": {
+    "desktopTest": {
+      "tests": 2893,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "testAndroidHostTest": {
+      "tests": 209,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "wasmJsBrowserTest": {
+      "tests": 716,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "buildLogic": {
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "lint": {
+      "Error": 0,
+      "Warning": 1
+    },
+    "apk": {
+      "bytes": 281097776,
+      "sha256": "64b05d5326fbb10fe85ae04012ba37170c0da7e4436a8369def4fe7329ad5649"
+    },
+    "gradleSeconds": 100
+  },
+  "rootPythonChecks": {
+    "androidRunner": 10,
+    "distribution": 17
+  },
+  "actualApplicationStartup": {
+    "serial": "emulator-5560",
+    "isolatedEmulatorData": true,
+    "actualApplication": "dev.fajar.hris.StarterApplication",
+    "variant": "devRelease",
+    "debuggable": false,
+    "versionCode": 14,
+    "sha256": "64b05d5326fbb10fe85ae04012ba37170c0da7e4436a8369def4fe7329ad5649",
+    "bytes": 281097776,
+    "elapsedSeconds": 35.695,
+    "coldStarts": [
+      {
+        "coldStart": 1,
+        "pid": 5439,
+        "stableSeconds": 12,
+        "renderedTexts": [
+          "HR",
+          "HRIS",
+          "Skip",
+          "Employee services",
+          "Access attendance, requests, and work information.",
+          "1 of 3",
+          "Continue"
+        ],
+        "resumed": true,
+        "processCrash": false,
+        "elapsedSeconds": 16.955
+      },
+      {
+        "coldStart": 2,
+        "pid": 5685,
+        "stableSeconds": 12,
+        "renderedTexts": [
+          "HR",
+          "HRIS",
+          "Skip",
+          "Employee services",
+          "Access attendance, requests, and work information.",
+          "1 of 3",
+          "Continue"
+        ],
+        "resumed": true,
+        "processCrash": false,
+        "elapsedSeconds": 15.662
+      }
+    ],
+    "screenshotsInspected": true,
+    "screenshotsSha256": {
+      "startup-1.png": "07dabbdf4ba2dfabaa4af830321720cee0842272f45ac4570045670bb612f46b",
+      "startup-2.png": "daccf79dd9ca13f34bb1f9bcba6c6f51db92681fca1b13beb225856cee51ca83"
+    }
+  },
+  "emulatorRestart": {
+    "pid": 3859059,
+    "serial": "emulator-5560",
+    "command": [
+      "/home/fajar/Android/Sdk/emulator/emulator",
+      "-avd",
+      "hris-mobile-dev",
+      "-port",
+      "5560",
+      "-data",
+      "/home/fajar/hris/hris-mobile/.work/startup-fix-2026-11-01/clean-userdata.img",
+      "-no-window",
+      "-no-snapshot",
+      "-no-audio",
+      "-no-boot-anim",
+      "-gpu",
+      "swiftshader_indirect",
+      "-memory",
+      "1536",
+      "-cores",
+      "2",
+      "-feature",
+      "-Vulkan"
+    ],
+    "bootSeconds": 24.242
+  },
+  "emulatorStopped": {
+    "pid": 3859059,
+    "serial": "emulator-5560",
+    "absentVerified": true
+  },
+  "temporarySwap": {
+    "path": "/var/tmp/hris-validation-2026-11-02.swap",
+    "bytes": 8589934592,
+    "active": true,
+    "persistedInFstab": false,
+    "createdAt": "2026-11-02T02:55:21.529023+00:00",
+    "reason": "Kernel-confirmed emulator OOM during concurrent validation",
+    "filesystem": "Btrfs swapfile without CoW",
+    "cleanup": "Only swapoff after available RAM exceeds used swap plus a safe margin; preserve unrelated swap."
+  },
+  "earlierIterations": [
+    {
+      "iteration": 1,
+      "exitCode": 1,
+      "wallSeconds": 44.469,
+      "inputsUnchanged": true,
+      "command": [
+        "xvfb-run",
+        "-a",
+        "./gradlew",
+        ":features:collaboration:data:testAndroidHostTest",
+        ":formatCheck",
+        ":architectureCheck",
+        ":detekt",
+        "--no-daemon",
+        "--no-parallel",
+        "--max-workers=1",
+        "-Dorg.gradle.jvmargs=-Xmx1536m"
+      ]
+    },
+    {
+      "iteration": 2,
+      "exitCode": 0,
+      "wallSeconds": 50.759,
+      "inputsUnchanged": true,
+      "command": [
+        "xvfb-run",
+        "-a",
+        "./gradlew",
+        ":features:collaboration:data:testAndroidHostTest",
+        ":formatCheck",
+        ":architectureCheck",
+        ":detekt",
+        "--no-daemon",
+        "--no-parallel",
+        "--max-workers=1",
+        "-Dorg.gradle.jvmargs=-Xmx1536m"
+      ]
+    },
+    {
+      "iteration": 3,
+      "exitCode": 0,
+      "wallSeconds": 116.039,
+      "inputsUnchanged": true,
+      "command": [
+        "xvfb-run",
+        "-a",
+        "./gradlew",
+        ":features:collaboration:domain:desktopTest",
+        ":features:collaboration:data:testAndroidHostTest",
+        ":apps:collaboration-proof:compileDebugKotlin",
+        ":apps:shared:compileTestKotlinDesktop",
+        ":formatCheck",
+        ":architectureCheck",
+        ":detekt",
+        "--no-daemon",
+        "--no-parallel",
+        "--max-workers=1",
+        "-Dorg.gradle.jvmargs=-Xmx1536m"
+      ]
+    },
+    {
+      "iteration": 4,
+      "exitCode": 0,
+      "wallSeconds": 113.105,
+      "inputsUnchanged": true,
+      "command": [
+        "xvfb-run",
+        "-a",
+        "./gradlew",
+        ":features:collaboration:domain:desktopTest",
+        ":features:collaboration:data:testAndroidHostTest",
+        ":apps:collaboration-proof:compileDebugKotlin",
+        ":apps:shared:desktopTest",
+        "--tests",
+        "*CollaborationBindingsTest",
+        ":formatCheck",
+        ":architectureCheck",
+        ":detekt",
+        "--no-daemon",
+        "--no-parallel",
+        "--max-workers=1",
+        "-Dorg.gradle.jvmargs=-Xmx1536m"
+      ]
+    },
+    {
+      "iteration": 5,
+      "exitCode": 0,
+      "wallSeconds": 116.601,
+      "inputsUnchanged": true,
+      "command": [
+        "xvfb-run",
+        "-a",
+        "./gradlew",
+        ":features:collaboration:domain:desktopTest",
+        ":features:collaboration:data:testAndroidHostTest",
+        ":apps:collaboration-proof:testDebugUnitTest",
+        ":apps:collaboration-proof:assembleDebug",
+        ":apps:collaboration-proof:lintDebug",
+        ":formatCheck",
+        ":architectureCheck",
+        ":detekt",
+        "--no-daemon",
+        "--no-parallel",
+        "--max-workers=1",
+        "-Dorg.gradle.jvmargs=-Xmx1536m"
+      ]
+    }
+  ],
+  "checked": [
+    "One protected store reservation is acquired before SDK construction. Five native slots include pending acquisition and unfinished drain; two background references have no waiting queue.",
+    "A background reference never exposes the parent closer. Expiry or caller release preserves an active foreground owner; parent replacement/logout/denial stops affected pending and published clients.",
+    "A late client stays attached to its original reservation. Native shutdown waits for acquisition to finish before pausing/destroying the client or unlocking its directory.",
+    "History reopening excludes borrowers for the entire suspending decision; a late completion cannot clear a replacement reservation marker.",
+    "Background acquisition checks current parent/gate before and after I/O, validates device/owner and publishes synchronously before transfer. Missing protected identity stays explicit null with no enrollment.",
+    "The original monotonic grant deadline charges network/acquisition time and prevents wall-clock rollback from extending the maximum 60-second budget.",
+    "The hard-parent timer survives foreground expiry. Workspace failure drops foreground retention; identity failure drops the parent. Confirmed company denial remains gated despite cleanup failure.",
+    "All five native cases are accepted across the initial and retry runs with the same proof APK and unchanged Kotlin inputs. The kernel-confirmed emulator OOM and two interrupted cases remain recorded as failures.",
+    "Two large IndexedDB correctness fixtures exceeded the default two-second Mocha budget under load. The data module now has a finite ten-second browser budget, verified in generated Karma configuration; all 272 cases then pass.",
+    "Root checks and domain browser checks completed before the data-browser timeout. The data-browser retry passed before D8 exhausted the reduced 1280MiB heap; only remaining release targets were retried at 2048MiB."
+  ],
+  "limits": [
+    "Inert FFI host tests are separate from the actual SDK/HRIS/Synapse proof. Native borrowing uses controlled fixture admission, not incoming FCM or complete multi-company recovery acceptance.",
+    "Scheduled retry/cancellation acceptance remains false. This is not hosted CI, production capacity or complete PRD acceptance.",
+    "Universal devRelease14 is startup-tested on the dedicated emulator. Phone remains user-confirmed release11 pending the separate clean-source arm64 build and notified install-only update.",
+    "No Apple/web runtime, generic Starter port or live schema/provider rollout. Keep backend push delivery disabled.",
+    "Temporary owned swap is not in fstab. Remove it only after sufficient RAM is available; preserve unrelated work and existing swap."
+  ],
+  "interruptedFixtureCleanup": {
+    "serial": "emulator-5560",
+    "package": "dev.fajar.hris.collaboration.proof",
+    "employeeApplicationTouched": false,
+    "previousArtifactMatched": true,
+    "previousSha256": "91638cf626570c02dfa60a5b40540d8a0d857f28428a7d89e3ec1d20fb40e702",
+    "removed": true,
+    "absentVerified": true,
+    "reverseMappingsPresent": false
+  }
+}

@@ -1,5 +1,67 @@
 # Agent continuation — HRIS Mobile
 
+## Finite background runtime references validated — 2 November 2026
+
+[Contract](collaboration-background-runtime.md) /
+[evidence](measurements/chat-background-runtime-2026-11-02.json): background work
+can borrow an existing published Android client or restore its protected store,
+without a parent close handle or changing the selected company. Native parent and
+foreground retention are separate. Five reserved native slots include pending
+opens/unfinished drain; two finite references have no waiting queue. Acquisition
+completion fences native destruction, and history reopening excludes concurrent
+borrowing for its entire decision. Monotonic admission budgets include network and
+acquisition time. Cancellation, late parent changes and retained denials are covered.
+
+Focused checks pass 444 domain, 209 Android host and six proof-cleanup cases in
+140s Gradle /143.769s wall; actual DI's two cases also pass. All five native cases
+are now accepted on the same proof APK `91638cf6`, across two recorded runs against
+Platform2308b337 (implementation8b77c4fa). The first run passed SDK, scheduled and
+cancelled-draft scenarios, then the kernel killed owned emulator5560/PID3805888
+for host OOM. Its two interrupted cases remain recorded as failures. The queued
+and frozen-draft retry passes in169s /169.876s; both clean up successfully. The
+interrupted fixture was removed only after verifying its exact APK. Actual native
+borrowing preserves the cryptographic identity and the foreground client.
+
+Required checks now pass: 2,893 desktop, 209 Android host, 716 browser and ten
+build-logic cases, plus ten runner/17 distribution Python checks. Run7 completed
+root/domain checks but two large IndexedDB fixtures exceeded Mocha's default2s.
+A module-local10s budget is verified in generated Karma configuration; all272 data
+browser cases then pass. Run8 subsequently hit D8's reduced1280MiB heap; run9's
+remaining release targets pass at2048MiB in100s /103.642s. Failed runs remain in
+the evidence. Keep `-Pkotlin.compiler.execution.strategy=in-process` for upcoming
+checks to avoid changing all compiler inputs again; use2048MiB for APK assembly.
+
+Universal devRelease14 is281,097,776bytes, SHA256 `64b05d53`. App lint has zero
+errors/one existing warning. The actual StarterApplication passes two12s stable
+cold starts with resumed/readable onboarding and inspected screenshots in35.695s.
+The owned emulator was stopped and absence verified. Phone remains user-confirmed
+release11 pending the separate arm64 update; there is no phone-install claim here.
+
+**Continue immediately:** commit/push this checkpoint, then use the prepared
+`.work/release-phone-2026-11-02-build14` tooling to build from the clean commit,
+verify signer and DEX equivalence to the startup-tested universal14, preflight the
+phone, notify, and install-only on10.77.77.3:5555. Preserve app data/signing and
+verify installed bytes. Push installation evidence, then resume implementation.
+
+Next: typed Selected/Background native entry/original/provider history, shared
+outbox orchestration, durable all-company wake/reconnect/periodic recovery, incoming
+notifications/privacy/read/mute/deep links and inline replies. A seven-file,
+13-test candidate is **UNAPPLIED/UNTESTED** in
+`.work/runtime-borrowing-2026-11-02/typed-native-scope-candidate.json`; check its
+baseline hashes before applying. Git contracts remain authoritative. Reuse
+ApplicationCollaborationLifetime, already started by StarterApplication; do not
+start a second observer. Test initial parent readiness while the first workspace
+observation is pending before wiring incoming recovery. No selection swapping or
+copied integrity logic. Keep backend delivery disabled; all54 groups remain open.
+No generic Starter port or live backend rollout in this increment.
+
+Host resource note: an owned8GiB Btrfs swapfile
+`/var/tmp/hris-validation-2026-11-02.swap` is active, mode0600, priority-3 and not in
+fstab. It prevented further host-wide OOM during concurrent unrelated CodePush
+work. Keep it until RAM can safely absorb its used pages plus a margin, then remove
+only this swapfile. Preserve unrelated jobs/AVD5558 and existing swap. Creation and
+kernel evidence are retained in this increment's measurement and scratch records.
+
 ## Native runtime publication and five native regressions validated — 2 November 2026
 
 [Contract](collaboration-runtime-publication.md) /

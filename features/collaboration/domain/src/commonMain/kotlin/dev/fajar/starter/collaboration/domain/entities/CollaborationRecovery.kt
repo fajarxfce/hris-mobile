@@ -1,6 +1,8 @@
 package dev.fajar.starter.collaboration.domain.entities
 
 import kotlin.time.Instant
+import kotlin.time.TimeMark
+import kotlin.time.TimeSource
 
 /** Current local request scope plus native parent; independent of the selected workspace. */
 data class CollaborationNativeParent(
@@ -46,6 +48,8 @@ data class CollaborationBackgroundAdmission(
     val observation: CollaborationAdmissionObservation,
     val requestedAt: Instant,
     val expiresAt: Instant,
+    /** Ephemeral process clock: a wall-clock adjustment cannot extend this request's budget. */
+    val monotonicDeadline: TimeMark = TimeSource.Monotonic.markNow() + (expiresAt - requestedAt),
 ) {
     val owner
         get() = observation.owner

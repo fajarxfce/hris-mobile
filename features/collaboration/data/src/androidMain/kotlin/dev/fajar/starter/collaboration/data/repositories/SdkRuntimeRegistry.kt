@@ -1,0 +1,250 @@
+package dev.fajar.starter.collaboration.data.repositories
+
+import dev.fajar.starter.collaboration.domain.entities.*
+import dev.fajar.starter.common.result.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+
+/**
+ * Mechanical resource ownership under one short monitor. Callbacks are synchronous and perform no
+ * I/O; every returned resource must be drained outside the monitor. Reservations count before SDK
+ * construction, and invalidation never releases an unfinished acquisition's capacity.
+ */
+internal class SdkRuntimeRegistry<T : Any>(
+    private val available: (T) -> Boolean,
+    private val requestStop: (T) -> Unit,
+) {
+    private val monitor = Any()
+    private val entries = mutableMapOf<String, SdkRuntimeReservation<T>>()
+    private val borrowers = mutableSetOf<SdkRuntimeBorrow<T>>()
+    private var retention: CollaborationRuntimeRetention? = null
+
+    fun reserveForeground(
+        storeId: String,
+        owner: CollaborationOwner,
+        deviceId: String,
+    ): AppResult<SdkRuntimeReservation<T>> =
+        synchronized(monitor) {
+            val decision = retention
+            if (decision != null && (!retainsParent(owner) || decision.foreground != owner))
+                return@synchronized stopped()
+            if (storeId in entries) return@synchronized busy()
+            if (entries.size >= CLIENT_LIMIT) return@synchronized capacity()
+            AppResult.Success(
+                SdkRuntimeReservation<T>(storeId, owner, deviceId, foreground = true).also {
+                    entries[storeId] = it
+                }
+            )
+        }
+
+    /** Existing published resources are borrowed; no other call receives their parent closer. */
+    fun reserveBackground(
+        storeId: String,
+        owner: CollaborationOwner,
+        deviceId: String,
+    ): AppResult<SdkRuntimeBorrow<T>> =
+        synchronized(monitor) {
+            if (retention == null || !retainsParent(owner)) return@synchronized stopped()
+            if (borrowers.size >= BORROW_LIMIT) return@synchronized capacity()
+            val existing = entries[storeId]
+            if (
+                existing != null &&
+                    (existing.owner != owner ||
+                        existing.deviceId != deviceId ||
+                        existing.retired ||
+                        existing.historyReopening ||
+                        existing.resource?.let(available) != true ||
+                        borrowers.any { it.reservation === existing })
+            )
+                return@synchronized busy()
+            if (existing == null && entries.size >= CLIENT_LIMIT) return@synchronized capacity()
+            val entry =
+                existing
+                    ?: SdkRuntimeReservation<T>(storeId, owner, deviceId, foreground = false).also {
+                        entries[storeId] = it
+                    }
+            AppResult.Success(
+                SdkRuntimeBorrow(entry, creating = existing == null).also(borrowers::add)
+            )
+        }
+
+    /** A late native client is still attached to its reservation so its full drain stays owned. */
+    fun attach(reservation: SdkRuntimeReservation<T>, resource: T): Boolean =
+        synchronized(monitor) {
+            check(entries[reservation.storeId] === reservation && reservation.resource == null)
+            reservation.resource = resource
+            if (reservation.retired) requestStop(resource)
+            !reservation.retired
+        }
+
+    fun publish(borrow: SdkRuntimeBorrow<T>, publish: (T) -> AppResult<Unit>): AppResult<Unit> =
+        synchronized(monitor) {
+            borrow.failure.value?.let {
+                return@synchronized AppResult.Failed(it)
+            }
+            val entry = borrow.reservation
+            if (
+                borrow !in borrowers ||
+                    entries[entry.storeId] !== entry ||
+                    entry.retired ||
+                    !retainsParent(entry.owner)
+            )
+                return@synchronized stopped()
+            val resource = entry.resource ?: return@synchronized busy()
+            if (!borrow.creating || borrow.published)
+                return@synchronized if (available(resource)) AppResult.Success(Unit) else stopped()
+            publish(resource).also { if (it is AppResult.Success) borrow.published = true }
+        }
+
+    /** Successful foreground entry promotes an already published background-created client. */
+    fun retainForeground(owner: CollaborationOwner, deviceId: String): T? =
+        synchronized(monitor) {
+            val entry = findEntry(owner, deviceId) ?: return@synchronized null
+            val resource = entry.resource ?: return@synchronized null
+            if (!available(resource)) return@synchronized null
+            val decision = retention
+            if (decision != null && (!retainsParent(owner) || decision.foreground != owner))
+                return@synchronized null
+            entry.foreground = true
+            resource
+        }
+
+    fun find(owner: CollaborationOwner, deviceId: String): T? =
+        synchronized(monitor) { findEntry(owner, deviceId)?.resource }
+
+    fun resources(): List<T> = synchronized(monitor) { entries.values.mapNotNull { it.resource } }
+
+    fun accepts(reservation: SdkRuntimeReservation<T>): Boolean =
+        synchronized(monitor) {
+            entries[reservation.storeId] === reservation && !reservation.retired
+        }
+
+    /** Excludes a borrower for the whole suspending history-reopen decision, not just its check. */
+    fun beginHistoryReopen(
+        owner: CollaborationOwner,
+        deviceId: String,
+    ): AppResult<SdkRuntimeReservation<T>?> =
+        synchronized(monitor) {
+            val entry =
+                entries.values.singleOrNull { it.owner == owner && it.deviceId == deviceId }
+                    ?: return@synchronized AppResult.Success(null)
+            if (entry.resource == null) return@synchronized busy()
+            if (entry.historyReopening || borrowers.any { it.reservation === entry })
+                return@synchronized registryFailure("client.collaboration_runtime_busy")
+            entry.historyReopening = true
+            AppResult.Success(entry)
+        }
+
+    fun endHistoryReopen(entry: SdkRuntimeReservation<T>) =
+        synchronized(monitor) {
+            if (entries[entry.storeId] === entry) entry.historyReopening = false
+        }
+
+    fun update(next: CollaborationRuntimeRetention): List<T> =
+        synchronized(monitor) {
+            val foreground = next.foreground
+            require(foreground == null || next.parent?.owner(foreground.companyId) == foreground)
+            retention = next
+            entries.values.forEach { entry ->
+                if (!retainsParent(entry.owner)) retire(entry)
+                else {
+                    if (next.foreground != entry.owner) entry.foreground = false
+                    retireIfIdle(entry)
+                }
+            }
+            closingResources()
+        }
+
+    /** Explicit legacy drain invalidates current reservations, not future standalone entries. */
+    fun closeOtherOwners(retained: CollaborationOwner?): List<T> =
+        synchronized(monitor) {
+            entries.values.filter { it.owner != retained }.forEach(::retire)
+            closingResources()
+        }
+
+    /** Expiry/caller cancellation releases only this reference; foreground ownership survives. */
+    fun releaseBorrow(borrow: SdkRuntimeBorrow<T>, failure: Failure): T? =
+        synchronized(monitor) {
+            borrow.failure.compareAndSet(null, failure)
+            borrowers.remove(borrow)
+            val entry = borrow.reservation
+            if (entries[entry.storeId] !== entry) return@synchronized null
+            retireIfIdle(entry)
+            entry.resource.takeIf { entry.retired }
+        }
+
+    /** Only the acquisition cleanup or fully drained native owner may release its reservation. */
+    fun released(reservation: SdkRuntimeReservation<T>) =
+        synchronized(monitor) {
+            if (entries[reservation.storeId] !== reservation) return@synchronized
+            entries.remove(reservation.storeId)
+            borrowers
+                .filter { it.reservation === reservation }
+                .forEach { it.failure.compareAndSet(null, stopped().failure) }
+        }
+
+    private fun findEntry(owner: CollaborationOwner, deviceId: String) =
+        entries.values.singleOrNull { it.owner == owner && it.deviceId == deviceId && !it.retired }
+
+    private fun retainsParent(owner: CollaborationOwner): Boolean {
+        val decision = retention ?: return false
+        return decision.parent?.owner(owner.companyId) == owner &&
+            decision.deniedCompanyId != owner.companyId
+    }
+
+    private fun retireIfIdle(entry: SdkRuntimeReservation<T>) {
+        if (
+            !entry.foreground &&
+                borrowers.none { it.reservation === entry && it.failure.value == null }
+        )
+            retire(entry)
+    }
+
+    private fun retire(entry: SdkRuntimeReservation<T>) {
+        if (!entry.retired) {
+            entry.retired = true
+            borrowers
+                .filter { it.reservation === entry }
+                .forEach { it.failure.compareAndSet(null, stopped().failure) }
+            entry.resource?.let(requestStop)
+        }
+    }
+
+    private fun closingResources() = entries.values.filter { it.retired }.mapNotNull { it.resource }
+
+    private fun stopped() = registryFailure("client.collaboration_runtime_not_retained")
+
+    private fun busy() = registryFailure("client.collaboration_runtime_opening")
+
+    private fun capacity() = registryFailure("client.collaboration_runtime_capacity")
+
+    private fun registryFailure(code: String) =
+        AppResult.Failed(
+            Failure(FailureKind.Unavailable, "Chat runtime is unavailable.", code = code)
+        )
+
+    private companion object {
+        const val CLIENT_LIMIT = 5
+        const val BORROW_LIMIT = 2
+    }
+}
+
+internal class SdkRuntimeReservation<T : Any>(
+    val storeId: String,
+    val owner: CollaborationOwner,
+    val deviceId: String,
+    internal var foreground: Boolean,
+) {
+    internal var resource: T? = null
+    internal var retired = false
+    internal var historyReopening = false
+}
+
+internal class SdkRuntimeBorrow<T : Any>(
+    val reservation: SdkRuntimeReservation<T>,
+    internal val creating: Boolean,
+) {
+    internal val failure = MutableStateFlow<Failure?>(null)
+    internal var published = false
+    val failures = failure.asStateFlow()
+}

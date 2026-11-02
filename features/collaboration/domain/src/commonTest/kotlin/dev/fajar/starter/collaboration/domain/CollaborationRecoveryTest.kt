@@ -1,3 +1,5 @@
+@file:OptIn(kotlin.time.ExperimentalTime::class)
+
 package dev.fajar.starter.collaboration.domain
 
 import dev.fajar.starter.collaboration.domain.entities.*
@@ -9,10 +11,29 @@ import dev.fajar.starter.identity.domain.entities.IdentityServer
 import kotlin.test.*
 import kotlin.time.Clock
 import kotlin.time.Duration.Companion.seconds
+import kotlin.time.TestTimeSource
+import kotlin.time.TimeSource
 import kotlinx.coroutines.*
 import kotlinx.coroutines.test.*
 
 class CollaborationRecoveryTest {
+    @Test
+    fun monotonicAdmissionBudgetIncludesTransportAndCannotBeRenewedByWallClockRollback() = runTest {
+        val time = TestTimeSource()
+        val f = Fixture(time)
+        val start = f.setup.now
+        f.onAdmission = {
+            time += 7.seconds
+            f.setup.now += 7.seconds
+            AppResult.Success(f.observation)
+        }
+        val grant = assertIs<AppResult.Success<CollaborationBackgroundAdmission>>(f.admit()).value
+        assertEquals(53.seconds, -grant.monotonicDeadline.elapsedNow())
+        f.setup.now = start + 1.seconds
+        time += 53.seconds
+        assertTrue(grant.monotonicDeadline.hasPassedNow())
+    }
+
     @Test
     fun discoveryAndAdmissionIgnoreForegroundSelectionAndNeverReopenLocalReads() = runTest {
         val f = Fixture()
@@ -228,7 +249,7 @@ class CollaborationRecoveryTest {
         assertEquals(1, f.admissionCalls)
     }
 
-    private class Fixture {
+    private class Fixture(private val timeSource: TimeSource = TimeSource.Monotonic) {
         val setup = CollaborationSetupFixture()
         val parent =
             CollaborationNativeParent(
@@ -311,6 +332,7 @@ class CollaborationRecoveryTest {
                 server,
                 build,
                 clock,
+                timeSource,
             )
 
         suspend fun admit(

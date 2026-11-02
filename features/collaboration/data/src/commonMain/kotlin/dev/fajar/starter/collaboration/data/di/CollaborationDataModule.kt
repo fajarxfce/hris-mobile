@@ -770,8 +770,26 @@ class CollaborationDataModule {
         )
 
     @Single
+    fun acquireBackgroundRuntime(
+        runtimes: CollaborationRuntimeRepository,
+        lists: CollaborationListRepository,
+        sessions: SessionRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) =
+        AcquireCollaborationBackgroundRuntime(
+            runtimes,
+            lists,
+            sessions,
+            server,
+            build,
+            Clock.System,
+        )
+
+    @Single
     fun maintainRuntimeOwnership(
         runtimes: CollaborationRuntimeRepository,
+        lists: CollaborationListRepository,
         sessions: SessionRepository,
         workspaces: WorkspaceRepository,
         server: IdentityServer,
@@ -779,6 +797,7 @@ class CollaborationDataModule {
     ) =
         MaintainCollaborationRuntimeOwnership(
             runtimes,
+            lists,
             sessions,
             workspaces,
             server,
