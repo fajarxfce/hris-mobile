@@ -15,8 +15,12 @@ class CollaborationDraftRecovery(
     private val confirm: ConfirmCollaborationDraftSend,
     private val suspendSend: SuspendCollaborationDraftSend,
 ) {
-    suspend operator fun invoke(): SyncResult {
-        val found = discover()
+    suspend operator fun invoke(): SyncResult = recover(discover())
+
+    suspend operator fun invoke(scope: CollaborationLocalScope): SyncResult =
+        recover(discover(scope))
+
+    private suspend fun recover(found: AppResult<CollaborationDraftRecoveryWork?>): SyncResult {
         currentCoroutineContext().ensureActive()
         if (found is AppResult.Failed) return recoveryFailure(found.failure)
         val work = (found as AppResult.Success).value ?: return SyncResult.Complete
@@ -30,7 +34,7 @@ class CollaborationDraftRecovery(
             cursor = (moved as AppResult.Success).value
             val queued =
                 queue(
-                    work.workspaceId,
+                    work.scope,
                     draft.conversationId,
                     requireNotNull(draft.submissionId),
                     draft.text,
@@ -39,7 +43,7 @@ class CollaborationDraftRecovery(
             currentCoroutineContext().ensureActive()
             var failed = (queued as? AppResult.Failed)?.failure
             if (failed == null) {
-                val confirmed = confirm(work.workspaceId, draft, work.access)
+                val confirmed = confirm(work.scope, draft, work.access)
                 currentCoroutineContext().ensureActive()
                 failed = (confirmed as? AppResult.Failed)?.failure
             } else if (
@@ -51,7 +55,7 @@ class CollaborationDraftRecovery(
             ) {
                 // Reproduce the blocking facts before holding the original. A successful racing
                 // admission or changed draft must never be treated as an unsent cancellation.
-                val reviewed = suspendSend(work.workspaceId, draft, work.access)
+                val reviewed = suspendSend(work.scope, draft, work.access)
                 currentCoroutineContext().ensureActive()
                 when (reviewed) {
                     is AppResult.Failed -> failed = reviewed.failure
@@ -74,7 +78,7 @@ class CollaborationDraftRecovery(
                 }
             }
         }
-        val remaining = discover()
+        val remaining = discover(work.scope)
         currentCoroutineContext().ensureActive()
         if (remaining is AppResult.Failed) return recoveryFailure(remaining.failure)
         // A shared storage/authority failure needs a later trigger. Confirmed per-draft holds are

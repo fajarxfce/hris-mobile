@@ -33,17 +33,24 @@ class SuspendCollaborationDraftSend(
         workspaceId: String,
         expected: CollaborationDraft,
         expectedAccess: CollaborationLocalAccess? = null,
+    ): AppResult<CollaborationDraft?> =
+        invoke(CollaborationLocalScope.Selected(workspaceId), expected, expectedAccess)
+
+    suspend operator fun invoke(
+        scope: CollaborationLocalScope,
+        expected: CollaborationDraft,
+        expectedAccess: CollaborationLocalAccess? = null,
     ): AppResult<CollaborationDraft?> {
         if (!validCollaborationDraft(expected) || expected.submissionId == null)
             return invalidDraft()
-        val captured = sessions.captureMessageAccess(workspaceId, workspaces, server, build, clock)
+        val captured = sessions.captureMessageAccess(scope, workspaces, server, build, clock)
         if (captured is AppResult.Failed) return captured
         val access = (captured as AppResult.Success).value
         if (expectedAccess != null && access != expectedAccess)
             return collaborationSetupFailure("client.session_changed", FailureKind.Unauthorized)
-        guard(workspaceId, access).let { if (it is AppResult.Failed) return it }
+        guard(scope, access).let { if (it is AppResult.Failed) return it }
         val command = messages.get(access, expected.submissionId)
-        guard(workspaceId, access).let { if (it is AppResult.Failed) return it }
+        guard(scope, access).let { if (it is AppResult.Failed) return it }
         if (command is AppResult.Failed) return command
         val intent = (command as AppResult.Success).value?.intent
         if (
@@ -56,7 +63,7 @@ class SuspendCollaborationDraftSend(
             return AppResult.Success(null)
         if (intent == null) {
             val conversation = lists.get(access, expected.conversationId)
-            guard(workspaceId, access).let { if (it is AppResult.Failed) return it }
+            guard(scope, access).let { if (it is AppResult.Failed) return it }
             if (conversation is AppResult.Failed) return conversation
             if (
                 ownsDraftConversation(
@@ -68,7 +75,7 @@ class SuspendCollaborationDraftSend(
                 return AppResult.Success(null)
         }
         val read = drafts.get(access, expected.conversationId)
-        guard(workspaceId, access).let { if (it is AppResult.Failed) return it }
+        guard(scope, access).let { if (it is AppResult.Failed) return it }
         if (read is AppResult.Failed) return read
         val current = (read as AppResult.Success).value
         if (current != expected || current.reviewRequired) return AppResult.Success(current)
@@ -80,20 +87,12 @@ class SuspendCollaborationDraftSend(
             )
         currentCoroutineContext().ensureActive()
         val written = drafts.replace(access, current, replacement)
-        guard(workspaceId, access).let { if (it is AppResult.Failed) return it }
+        guard(scope, access).let { if (it is AppResult.Failed) return it }
         if (written is AppResult.Failed) return written
         return if ((written as AppResult.Success).value) AppResult.Success(replacement)
         else changedDraft()
     }
 
-    private suspend fun guard(workspaceId: String, access: CollaborationLocalAccess) =
-        sessions.checkDraftContinuation(
-            workspaceId,
-            access,
-            lists,
-            workspaces,
-            server,
-            build,
-            clock,
-        )
+    private suspend fun guard(scope: CollaborationLocalScope, access: CollaborationLocalAccess) =
+        sessions.checkDraftContinuation(scope, access, lists, workspaces, server, build, clock)
 }

@@ -9,11 +9,19 @@ data class CollaborationDraftRecoveryCursor(
 }
 
 data class CollaborationDraftRecoveryWork(
-    val workspaceId: String,
+    val scope: CollaborationLocalScope,
     val access: CollaborationLocalAccess,
     val cursor: CollaborationDraftRecoveryCursor?,
     val drafts: List<CollaborationDraft>,
     val hasMore: Boolean,
 ) {
+    constructor(
+        workspaceId: String,
+        access: CollaborationLocalAccess,
+        cursor: CollaborationDraftRecoveryCursor?,
+        drafts: List<CollaborationDraft>,
+        hasMore: Boolean,
+    ) : this(CollaborationLocalScope.Selected(workspaceId), access, cursor, drafts, hasMore)
+
     override fun toString() = "CollaborationDraftRecoveryWork([redacted])"
 }

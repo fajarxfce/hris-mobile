@@ -31,21 +31,13 @@ class AdvanceCollaborationDraftRecovery(
                 work.drafts.none { it.conversationId == conversationId }
         )
             return invalidDraft()
-        guard(work.workspaceId, work.access).let { if (it is AppResult.Failed) return it }
+        guard(work.scope, work.access).let { if (it is AppResult.Failed) return it }
         val written = cursors.advance(work.access, work.cursor, conversationId)
-        guard(work.workspaceId, work.access).let { if (it is AppResult.Failed) return it }
+        guard(work.scope, work.access).let { if (it is AppResult.Failed) return it }
         if (written is AppResult.Failed) return written
         return (written as AppResult.Success).value?.let { AppResult.Success(it) } ?: changedDraft()
     }
 
-    private suspend fun guard(workspaceId: String, access: CollaborationLocalAccess) =
-        sessions.checkDraftContinuation(
-            workspaceId,
-            access,
-            lists,
-            workspaces,
-            server,
-            build,
-            clock,
-        )
+    private suspend fun guard(scope: CollaborationLocalScope, access: CollaborationLocalAccess) =
+        sessions.checkDraftContinuation(scope, access, lists, workspaces, server, build, clock)
 }

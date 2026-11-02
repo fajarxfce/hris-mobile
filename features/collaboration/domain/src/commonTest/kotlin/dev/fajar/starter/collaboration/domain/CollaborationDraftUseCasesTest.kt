@@ -346,10 +346,15 @@ internal class DraftIntentFixture {
 
     suspend fun prepare(expected: CollaborationDraft) = preparer("selection", expected)
 
-    suspend fun confirm(expected: CollaborationDraft) = confirmer("selection", expected)
+    suspend fun confirm(
+        expected: CollaborationDraft,
+        scope: CollaborationLocalScope = CollaborationLocalScope.Selected("selection"),
+    ) = confirmer(scope, expected)
 
-    suspend fun queue(expected: CollaborationDraft) =
-        queue("selection", conversation, expected.submissionId!!, expected.text)
+    suspend fun queue(
+        expected: CollaborationDraft,
+        scope: CollaborationLocalScope = CollaborationLocalScope.Selected("selection"),
+    ) = queue(scope, conversation, expected.submissionId!!, expected.text)
 
     fun observe() = observer("selection", conversation)
 

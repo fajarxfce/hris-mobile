@@ -42,7 +42,22 @@ class ReadCollaborationDeliveryWork(
                 access.companyId != workspace.company.id
         )
             return changed()
-        continuation(workspace.id, access).let { if (it is AppResult.Failed) return it }
+        return read(CollaborationLocalScope.Selected(workspace.id), access)
+    }
+
+    suspend operator fun invoke(
+        scope: CollaborationLocalScope
+    ): AppResult<CollaborationDeliveryWork?> {
+        val captured = sessions.captureMessageAccess(scope, workspaces, server, build, clock)
+        if (captured is AppResult.Failed) return captured
+        return read(scope, (captured as AppResult.Success).value)
+    }
+
+    private suspend fun read(
+        scope: CollaborationLocalScope,
+        access: CollaborationLocalAccess,
+    ): AppResult<CollaborationDeliveryWork?> {
+        continuation(scope, access).let { if (it is AppResult.Failed) return it }
         val stored =
             when (val received = messages.observe(access, null).first()) {
                 is AppResult.Failed -> received
@@ -55,7 +70,7 @@ class ReadCollaborationDeliveryWork(
                     AppResult.Success(received.value.toList())
                 }
             }
-        continuation(workspace.id, access).let { if (it is AppResult.Failed) return it }
+        continuation(scope, access).let { if (it is AppResult.Failed) return it }
         if (stored is AppResult.Failed) return stored
         val records = (stored as AppResult.Success).value
         if (
@@ -74,7 +89,7 @@ class ReadCollaborationDeliveryWork(
             )
         if (records.isEmpty()) return AppResult.Success(null)
         val position = cursors.current(access)
-        continuation(workspace.id, access).let { if (it is AppResult.Failed) return it }
+        continuation(scope, access).let { if (it is AppResult.Failed) return it }
         if (position is AppResult.Failed) return position
         val cursor = (position as AppResult.Success).value
         if (
@@ -93,22 +108,17 @@ class ReadCollaborationDeliveryWork(
                 ?.let { after -> ids.indexOfFirst { it > after } }
                 ?.takeIf { it >= 0 } ?: 0
         return AppResult.Success(
-            CollaborationDeliveryWork(
-                workspace.id,
-                access,
-                ids.drop(first) + ids.take(first),
-                cursor,
-            )
+            CollaborationDeliveryWork(scope, access, ids.drop(first) + ids.take(first), cursor)
         )
     }
 
     private suspend fun continuation(
-        workspaceId: String,
+        scope: CollaborationLocalScope,
         access: CollaborationLocalAccess,
     ): AppResult<Unit> {
         currentCoroutineContext().ensureActive()
         val gate = lists.admission(access)
-        val current = sessions.captureMessageAccess(workspaceId, workspaces, server, build, clock)
+        val current = sessions.captureMessageAccess(scope, workspaces, server, build, clock)
         currentCoroutineContext().ensureActive()
         if (gate is AppResult.Success)
             gate.value.denial?.let {

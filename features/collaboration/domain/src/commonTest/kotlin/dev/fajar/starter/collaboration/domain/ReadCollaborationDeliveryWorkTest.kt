@@ -54,7 +54,7 @@ class ReadCollaborationDeliveryWorkTest {
             result.conversationIds,
         )
         assertEquals(first.intent.owner, result.access.messageOwner())
-        assertEquals("selection", result.workspaceId)
+        assertEquals(CollaborationLocalScope.Selected("selection"), result.scope)
         assertEquals(0, f.base.setup.calls)
         assertEquals(0, f.activeObservers)
         assertFalse(result.toString().contains(first.intent.text))
@@ -205,6 +205,75 @@ class ReadCollaborationDeliveryWorkTest {
         job.join()
         assertTrue(job.isCancelled)
         assertEquals(work.conversationIds.first(), assertNotNull(f.cursor).afterConversationId)
+    }
+
+    @Test
+    fun capturedDiscoveryAndFairCursorRemainLocalAfterExpiryAndWithoutSelection() = runTest {
+        val f = Fixture()
+        val original = assertIs<AppResult.Success<CollaborationMessageRecord>>(f.base.queue()).value
+        val other = original.copy(intent = original.intent.copy(id = id(8), conversationId = id(9)))
+        f.base.records.value = listOf(original, other)
+        val scope = f.base.captureRecoveryScope()
+        val first = assertIs<AppResult.Success<CollaborationDeliveryWork?>>(f.read(scope)).value!!
+        assertEquals(scope, first.scope)
+        assertEquals(scope.access, first.access)
+        assertIs<AppResult.Success<*>>(f.advance(first, first.conversationIds.first()))
+        val next = assertIs<AppResult.Success<CollaborationDeliveryWork?>>(f.read(scope)).value!!
+        assertEquals(
+            listOf(other.intent.conversationId, original.intent.conversationId),
+            next.conversationIds,
+        )
+        assertIs<AppResult.Failed>(f.advance(first, first.conversationIds.first()))
+        assertEquals(0, f.base.setup.calls)
+        assertEquals(0, f.activeObservers)
+    }
+
+    @Test
+    fun anotherCapturedAccountOrRetainedDenialCannotDiscoverOrAdvanceOwnedWork() = runTest {
+        val f = Fixture()
+        assertIs<AppResult.Success<*>>(f.base.queue())
+        val scope = f.base.captureRecoveryScope()
+        val invalid = CollaborationLocalScope.Captured(scope.access.copy(accountId = id(99)))
+        assertIs<AppResult.Failed>(f.read(invalid))
+        assertEquals(0, f.observations)
+        val work = assertIs<AppResult.Success<CollaborationDeliveryWork?>>(f.read(scope)).value!!
+        assertIs<AppResult.Failed>(
+            f.advance(work.copy(scope = invalid), work.conversationIds.single())
+        )
+        assertNull(f.cursor)
+        f.base.gate.value = CollaborationListAdmission("denied", f.base.denied)
+        assertEquals(AppResult.Failed(f.base.denied), f.read(scope))
+        assertEquals(
+            AppResult.Failed(f.base.denied),
+            f.advance(work, work.conversationIds.single()),
+        )
+        assertNull(f.cursor)
+        assertEquals(1, f.observations)
+        assertEquals(1, f.base.records.value.size)
+    }
+
+    @Test
+    fun capturedCursorCommitSurvivesCancellationWithoutPublishingItsLateResult() = runTest {
+        val f = Fixture()
+        assertIs<AppResult.Success<*>>(f.base.queue())
+        val scope = f.base.captureRecoveryScope()
+        val work = assertIs<AppResult.Success<CollaborationDeliveryWork?>>(f.read(scope)).value!!
+        val entered = CompletableDeferred<Unit>()
+        f.afterAdvance = {
+            entered.complete(Unit)
+            awaitCancellation()
+        }
+        val task = launch { f.advance(work, work.conversationIds.single()) }
+        entered.await()
+        task.cancelAndJoin()
+        assertEquals(work.conversationIds.single(), f.cursor?.afterConversationId)
+        assertEquals(1, f.base.records.value.size)
+        f.afterAdvance = {}
+        assertIs<AppResult.Failed>(f.advance(work, work.conversationIds.single()))
+        assertEquals(
+            scope,
+            assertIs<AppResult.Success<CollaborationDeliveryWork?>>(f.read(scope)).value!!.scope,
+        )
     }
 
     private class Fixture {

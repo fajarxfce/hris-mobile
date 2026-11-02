@@ -41,9 +41,24 @@ class ReadCollaborationDraftRecovery(
                 access.companyId != workspace.company.id
         )
             return collaborationSetupFailure("client.session_changed", FailureKind.Unauthorized)
-        guard(workspace.id, access).let { if (it is AppResult.Failed) return it }
+        return read(CollaborationLocalScope.Selected(workspace.id), access)
+    }
+
+    suspend operator fun invoke(
+        scope: CollaborationLocalScope
+    ): AppResult<CollaborationDraftRecoveryWork?> {
+        val captured = sessions.captureMessageAccess(scope, workspaces, server, build, clock)
+        if (captured is AppResult.Failed) return captured
+        return read(scope, (captured as AppResult.Success).value)
+    }
+
+    private suspend fun read(
+        scope: CollaborationLocalScope,
+        access: CollaborationLocalAccess,
+    ): AppResult<CollaborationDraftRecoveryWork?> {
+        guard(scope, access).let { if (it is AppResult.Failed) return it }
         val position = cursors.current(access)
-        guard(workspace.id, access).let { if (it is AppResult.Failed) return it }
+        guard(scope, access).let { if (it is AppResult.Failed) return it }
         if (position is AppResult.Failed) return position
         val cursor = (position as AppResult.Success).value
         if (
@@ -54,13 +69,13 @@ class ReadCollaborationDraftRecovery(
             return changedDraft()
         var after = cursor?.afterConversationId
         var page = drafts.prepared(access, after)
-        guard(workspace.id, access).let { if (it is AppResult.Failed) return it }
+        guard(scope, access).let { if (it is AppResult.Failed) return it }
         if (page is AppResult.Failed) return page
         if ((page as AppResult.Success).value.drafts.isEmpty() && cursor != null) {
             // At most one wrap. Held drafts are excluded by the same atomic document index.
             after = null
             page = drafts.prepared(access)
-            guard(workspace.id, access).let { if (it is AppResult.Failed) return it }
+            guard(scope, access).let { if (it is AppResult.Failed) return it }
             if (page is AppResult.Failed) return page
         }
         val value = (page as AppResult.Success).value
@@ -83,7 +98,7 @@ class ReadCollaborationDraftRecovery(
             if (value.drafts.isEmpty()) null
             else
                 CollaborationDraftRecoveryWork(
-                    workspace.id,
+                    scope,
                     access,
                     cursor,
                     value.drafts,
@@ -92,14 +107,6 @@ class ReadCollaborationDraftRecovery(
         )
     }
 
-    private suspend fun guard(workspaceId: String, access: CollaborationLocalAccess) =
-        sessions.checkDraftContinuation(
-            workspaceId,
-            access,
-            lists,
-            workspaces,
-            server,
-            build,
-            clock,
-        )
+    private suspend fun guard(scope: CollaborationLocalScope, access: CollaborationLocalAccess) =
+        sessions.checkDraftContinuation(scope, access, lists, workspaces, server, build, clock)
 }

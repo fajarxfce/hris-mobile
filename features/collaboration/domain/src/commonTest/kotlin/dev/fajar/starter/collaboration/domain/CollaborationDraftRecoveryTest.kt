@@ -12,6 +12,121 @@ import kotlinx.coroutines.test.runTest
 
 class CollaborationDraftRecoveryTest {
     @Test
+    fun capturedFrozenDraftKeepsItsOriginalIdAcrossQueueCommitFailureAndConfirmation() = runTest {
+        val f = RecoveryDraftFixture()
+        val frozen = f.base.freeze()
+        val scope = f.f.captureRecoveryScope()
+        f.f.insertResult = AppResult.Failed(f.f.storage)
+        assertIs<AppResult.Failed>(f.base.queue(frozen, scope))
+        assertEquals(frozen, f.base.slot.value)
+        assertEquals(frozen.submissionId, f.f.records.value.single().intent.id)
+        f.f.insertResult = AppResult.Success(CollaborationMessageInsertion.STORED)
+        assertIs<AppResult.Success<*>>(f.base.queue(frozen, scope))
+        assertEquals(1, f.f.insertions)
+        assertIs<AppResult.Success<*>>(f.base.confirm(frozen, scope))
+        assertEquals("", f.base.slot.value?.text)
+        assertNull(f.base.slot.value?.submissionId)
+        assertEquals(
+            listOf(QueueCollaborationText.DELIVERY_KEY, QueueCollaborationText.DELIVERY_KEY),
+            f.f.scheduledKeys,
+        )
+        assertEquals(0, f.f.setup.calls)
+    }
+
+    @Test
+    fun capturedDraftDiscoveryPreservesTheEightItemBoundWrapAndCursorCas() = runTest {
+        val f = RecoveryDraftFixture()
+        val frozen = f.base.freeze()
+        f.source = (1..9).map { frozen.copy(conversationId = recoveryId(it)) }
+        val scope = f.f.captureRecoveryScope()
+        val first =
+            assertIs<AppResult.Success<CollaborationDraftRecoveryWork?>>(f.read(scope)).value!!
+        assertEquals(scope, first.scope)
+        assertEquals(f.source.take(8), first.drafts)
+        assertTrue(first.hasMore)
+        assertIs<AppResult.Success<*>>(f.advance(first, first.drafts.last().conversationId))
+        assertIs<AppResult.Failed>(f.advance(first, first.drafts.first().conversationId))
+        val next =
+            assertIs<AppResult.Success<CollaborationDraftRecoveryWork?>>(f.read(scope)).value!!
+        assertEquals(listOf(f.source.last()), next.drafts)
+        assertIs<AppResult.Success<*>>(f.advance(next, next.drafts.single().conversationId))
+        val wrapped =
+            assertIs<AppResult.Success<CollaborationDraftRecoveryWork?>>(f.read(scope)).value!!
+        assertEquals(f.source.take(8), wrapped.drafts)
+        assertEquals(listOf(null, recoveryId(8), recoveryId(9), null), f.anchors)
+        assertEquals(0, f.f.insertions)
+    }
+
+    @Test
+    fun aCapturedUnavailableDraftIsHeldWithoutLosingTextOrClearingAnotherEditorsSlot() = runTest {
+        val f = RecoveryDraftFixture()
+        val frozen = f.base.freeze()
+        val scope = f.f.captureRecoveryScope()
+        val summary = f.f.summary
+        f.f.summary = null
+        val held =
+            assertIs<AppResult.Success<CollaborationDraft?>>(f.suspendSend(frozen, scope)).value!!
+        assertTrue(held.reviewRequired)
+        assertEquals(frozen.text, held.text)
+        assertEquals(frozen.submissionId, held.submissionId)
+        f.f.summary = summary
+        assertIs<AppResult.Success<*>>(f.base.queue(held, scope))
+        val later =
+            held.copy(revision = recoveryId(77), text = "Later editor text", submissionId = null)
+        f.base.slot.value = later
+        assertEquals(AppResult.Success(later), f.base.confirm(frozen, scope))
+        assertEquals(later, f.base.slot.value)
+        assertEquals(frozen.submissionId, f.f.records.value.single().intent.id)
+    }
+
+    @Test
+    fun capturedDenialAndLateOwnerLossStopDraftRecoveryWithoutErasingItsOriginal() = runTest {
+        val f = RecoveryDraftFixture()
+        val frozen = f.base.freeze()
+        f.source = listOf(frozen)
+        val scope = f.f.captureRecoveryScope()
+        f.afterPage = {
+            f.f.gate.value = CollaborationListAdmission("denied", f.f.denied)
+            f.f.setup.sessionFailure = f.f.storage
+        }
+        assertEquals(AppResult.Failed(f.f.denied), f.read(scope))
+        f.f.setup.sessionFailure = null
+        assertEquals(AppResult.Failed(f.f.denied), f.base.queue(frozen, scope))
+        assertEquals(AppResult.Failed(f.f.denied), f.base.confirm(frozen, scope))
+        assertEquals(AppResult.Failed(f.f.denied), f.suspendSend(frozen, scope))
+        assertEquals(0, f.f.messageReads)
+        assertEquals(frozen, f.base.slot.value)
+        f.f.gate.value = CollaborationListAdmission("readmitted", null)
+        f.f.afterInsert = { f.f.setup.session = null }
+        assertIs<AppResult.Failed>(f.base.queue(frozen, scope))
+        assertEquals(frozen.submissionId, f.f.records.value.single().intent.id)
+        assertEquals(frozen, f.base.slot.value)
+        assertNull(f.cursor)
+    }
+
+    @Test
+    fun cancellationDuringCapturedDraftConfirmationRetainsTheCommittedAcknowledgement() = runTest {
+        val f = RecoveryDraftFixture()
+        val frozen = f.base.freeze()
+        val scope = f.f.captureRecoveryScope()
+        assertIs<AppResult.Success<*>>(f.base.queue(frozen, scope))
+        val entered = CompletableDeferred<Unit>()
+        f.base.afterWrite = {
+            entered.complete(Unit)
+            awaitCancellation()
+        }
+        val task = launch { f.base.confirm(frozen, scope) }
+        entered.await()
+        task.cancelAndJoin()
+        assertEquals("", f.base.slot.value?.text)
+        assertNull(f.base.slot.value?.submissionId)
+        assertEquals(frozen.submissionId, f.f.records.value.single().intent.id)
+        f.base.afterWrite = {}
+        assertEquals(AppResult.Success(f.base.slot.value), f.base.confirm(frozen, scope))
+        assertEquals(1, f.f.insertions)
+    }
+
+    @Test
     fun expiredCredentialsStillDiscoverAnOwnedFrozenBatchWithoutNetwork() = runTest {
         val f = RecoveryDraftFixture()
         val frozen = f.base.freeze()
@@ -276,9 +391,13 @@ private class RecoveryDraftFixture {
             f.messages,
         )
 
-    suspend fun read() = reader()
+    suspend fun read(scope: CollaborationLocalScope? = null) =
+        if (scope == null) reader() else reader(scope)
 
-    suspend fun suspendSend(expected: CollaborationDraft) = suspender("selection", expected)
+    suspend fun suspendSend(
+        expected: CollaborationDraft,
+        scope: CollaborationLocalScope = CollaborationLocalScope.Selected("selection"),
+    ) = suspender(scope, expected)
 
     fun access() =
         CollaborationLocalAccess(

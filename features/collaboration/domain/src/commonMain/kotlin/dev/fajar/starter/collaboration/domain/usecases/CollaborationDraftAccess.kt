@@ -21,9 +21,29 @@ internal suspend fun SessionRepository.checkDraftContinuation(
     server: IdentityServer,
     build: AppBuild,
     clock: Clock,
+): AppResult<Unit> =
+    checkDraftContinuation(
+        CollaborationLocalScope.Selected(workspaceId),
+        access,
+        lists,
+        workspaces,
+        server,
+        build,
+        clock,
+    )
+
+internal suspend fun SessionRepository.checkDraftContinuation(
+    scope: CollaborationLocalScope,
+    access: CollaborationLocalAccess,
+    lists: CollaborationListRepository,
+    workspaces: WorkspaceRepository,
+    server: IdentityServer,
+    build: AppBuild,
+    clock: Clock,
 ): AppResult<Unit> {
+    currentCoroutineContext().ensureActive()
     val gate = lists.admission(access)
-    val current = captureMessageAccess(workspaceId, workspaces, server, build, clock)
+    val current = captureMessageAccess(scope, workspaces, server, build, clock)
     currentCoroutineContext().ensureActive()
     if (gate is AppResult.Success)
         gate.value.denial?.let {

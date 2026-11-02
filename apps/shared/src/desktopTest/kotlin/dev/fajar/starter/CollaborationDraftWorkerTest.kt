@@ -1,11 +1,13 @@
 package dev.fajar.starter
 
+import dev.fajar.starter.app.work.CollaborationDraftRecovery
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.repositories.*
 import dev.fajar.starter.collaboration.domain.usecases.*
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.fixtures.CollaborationWorkerFixture
 import dev.fajar.starter.sync.domain.SyncResult
+import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
 import java.util.UUID
 import kotlin.test.*
 import kotlin.time.Clock
@@ -14,6 +16,78 @@ import kotlinx.coroutines.flow.first
 import org.koin.dsl.module
 
 class CollaborationDraftWorkerTest {
+    @Test
+    fun capturedFrozenRecoveryUsesEncryptedOriginalAfterRestartWithNoWorkspaceAccess() =
+        runBlocking {
+            withFixture { f ->
+                val frozen = f.freeze("Captured frozen original")
+                val scope = CollaborationLocalScope.Captured(f.access())
+                f.reopen()
+                val selected = f.koin.get<WorkspaceRepository>()
+                val noSelection =
+                    object : WorkspaceRepository by selected {
+                        override suspend fun current(sessionId: String): Nothing =
+                            error("No selected workspace read")
+
+                        override fun observe(sessionId: String): Nothing =
+                            error("No selected workspace observer")
+                    }
+                f.koin.loadModules(listOf(module { single<WorkspaceRepository> { noSelection } }))
+                val recover = f.koin.get<CollaborationDraftRecovery>()
+                assertEquals(SyncResult.Complete, recover(scope))
+                assertEquals(SyncResult.Complete, recover(scope))
+                val queued =
+                    assertIs<AppResult.Success<CollaborationMessageRecord?>>(
+                            f.koin
+                                .get<CollaborationMessageRepository>()
+                                .get(scope.access, requireNotNull(frozen.submissionId))
+                        )
+                        .value!!
+                assertEquals(frozen.text, queued.intent.text)
+                assertEquals(frozen.submissionId, queued.intent.id)
+                assertEquals(CollaborationMessageState.Queued, queued.state)
+                val cleared =
+                    assertIs<AppResult.Success<CollaborationDraft?>>(
+                            f.koin
+                                .get<CollaborationDraftRepository>()
+                                .get(scope.access, frozen.conversationId)
+                        )
+                        .value!!
+                assertEquals("", cleared.text)
+                assertNull(cleared.submissionId)
+                assertTrue(f.sdk.enqueued.isEmpty())
+                assertEquals(0, f.sdk.deliveries)
+            }
+        }
+
+    @Test
+    fun capturedRecoveryKeepsAnEncryptedFrozenDraftWhileTheCompanyRemainsDenied() = runBlocking {
+        withFixture { f ->
+            val frozen = f.freeze("Denied captured original")
+            val scope = CollaborationLocalScope.Captured(f.access())
+            val denial =
+                Failure(FailureKind.AccessDenied, "Access denied", code = "company_access_denied")
+            assertIs<AppResult.Success<*>>(
+                f.koin.get<CollaborationListRepository>().restrict(scope.access, denial)
+            )
+            f.reopen()
+            val blocked =
+                assertIs<SyncResult.Blocked>(f.koin.get<CollaborationDraftRecovery>()(scope))
+            assertEquals(denial.code, blocked.failure.code)
+            assertEquals(
+                AppResult.Success(frozen),
+                f.koin.get<CollaborationDraftRepository>().get(scope.access, frozen.conversationId),
+            )
+            assertEquals(
+                AppResult.Success(null),
+                f.koin
+                    .get<CollaborationMessageRepository>()
+                    .get(scope.access, requireNotNull(frozen.submissionId)),
+            )
+            assertTrue(f.sdk.enqueued.isEmpty())
+        }
+    }
+
     @Test
     fun discoveryContentionRetriesBeforeAndAfterAdmissionWithoutDuplicatingTheMessage() =
         runBlocking {

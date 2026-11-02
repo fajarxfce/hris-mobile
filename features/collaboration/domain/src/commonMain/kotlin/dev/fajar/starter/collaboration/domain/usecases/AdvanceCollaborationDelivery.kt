@@ -50,8 +50,7 @@ class AdvanceCollaborationDelivery(
     private suspend fun continuation(work: CollaborationDeliveryWork): AppResult<Unit> {
         currentCoroutineContext().ensureActive()
         val gate = lists.admission(work.access)
-        val captured =
-            sessions.captureMessageAccess(work.workspaceId, workspaces, server, build, clock)
+        val captured = sessions.captureMessageAccess(work.scope, workspaces, server, build, clock)
         currentCoroutineContext().ensureActive()
         if (gate is AppResult.Success)
             gate.value.denial?.let {

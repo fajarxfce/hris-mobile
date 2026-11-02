@@ -1,0 +1,165 @@
+{
+  "date": "2026-11-02",
+  "baseCommit": "2cc2a21aa86328d800c2170fff6ffbd572740448",
+  "scope": "Captured local delivery/draft discovery, cursor advance, queue/confirm/review hold and access observation; shared worker inner scopes.",
+  "sourceSha256": {
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationDeliveryWork.kt": "b6cf60db574806e990671bb504532707cc09fd7fead1bc27b0c6142caaf2ce74",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationDraftRecovery.kt": "e9f830e9887076e5f3ee3f1b763edf29266544ac9debdb63002a3890f5d3536b",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ReadCollaborationDeliveryWork.kt": "c2727fae7ae1b5184aadb9d9e81c5be71fce0ba79f3570fb6f477344730e1b87",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ReadCollaborationDraftRecovery.kt": "8f36a5d6fb91461d6b92aeb8800b096a6cd1d10926623eaeb7675c112f0fa3dd",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/AdvanceCollaborationDelivery.kt": "dc2b66e609f52c715abcc52f306594b03c79f62499cafb969b2679d8cb3fcc15",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/AdvanceCollaborationDraftRecovery.kt": "8ff366cf545473bf2241c62aee29f3e943bc3634bfe8686f2e1b889572c676ac",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/CollaborationDraftAccess.kt": "5f730746960884835ff7f992b898c971fc2c12b2920c91eae120a9c1da9c3244",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/QueueCollaborationText.kt": "f1ffe5c4279a388229463b2ad391c6ecc5617c72db11334756e58948e057feb2",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ConfirmCollaborationDraftSend.kt": "c746052cd481a3c7825ca1b971d335cd5c3dd34313d770dab8990a57cb1b9e71",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/SuspendCollaborationDraftSend.kt": "b2e9a868598e269b7bdd8011a26be2b40a597d2fbb1414d25346acc3f9f8bae7",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ObserveCollaborationAccess.kt": "b60c90a6c9d11edc6d2ba618b409d49ae90159e658b11245cb58380c653ec847",
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/work/CollaborationDraftRecovery.kt": "b87975e9cbfdfd080bb48c129788c677345f45bf61ea42911258327b5e73db4c",
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/work/CollaborationDeliveryWorker.kt": "ae1dc5d5004d72854dba11a6bed9d2e78b4a2e84d3d74a813a78d1e5dacdd73d",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/ReadCollaborationDeliveryWorkTest.kt": "f379ac599012cfc30a00a0d0d1bc5f4337536a73466aa616d36a63bf416ffb13",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationDraftUseCasesTest.kt": "1e7ab4a78595ecaca8ab3bc09ebe60f4c3580da08ecccb6c0386bd61ef54557a",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationDraftRecoveryTest.kt": "b4c1743534fe6f159553d8ca6994da6c2b823dca748387f8721a279b13bcc63f",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationCapturedRecoveryTest.kt": "cf6329446863c96c84de5fab86fa022165ea5d6b647d3f47a0490c9e88686566",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationDraftWorkerTest.kt": "932d5c68bcf2ace02797ec72159021602c8352348ef42f30fd38ed921a3d435d"
+  },
+  "initialRun": {
+    "exitCode": 1,
+    "wallSeconds": 40.013,
+    "inputsUnchanged": true,
+    "command": [
+      "xvfb-run",
+      "-a",
+      "./gradlew",
+      ":features:collaboration:domain:desktopTest",
+      ":apps:shared:desktopTest",
+      "--tests",
+      "*Collaboration*Test",
+      ":apps:collaboration-proof:compileDebugKotlin",
+      ":formatCheck",
+      ":architectureCheck",
+      ":detekt",
+      "-Pkotlin.compiler.execution.strategy=in-process",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=1",
+      "-Dorg.gradle.jvmargs=-Xmx1536m"
+    ]
+  },
+  "validationTransitions": {
+    "attempt1": "Compilation stopped in new domain observation test: expected List<Success> and actual MutableList<AppResult> required explicit assertion typing. No tests executed.36s Gradle.",
+    "correction": "Assert collection size and single AppResult independently; correct new app fixture enum from nonexistent Forbidden to AccessDenied, found during review before app compilation. Product Kotlin unchanged."
+  },
+  "focusedRun": {
+    "exitCode": 0,
+    "wallSeconds": 147.572,
+    "inputsUnchanged": true,
+    "command": [
+      "xvfb-run",
+      "-a",
+      "./gradlew",
+      ":features:collaboration:domain:desktopTest",
+      ":apps:shared:desktopTest",
+      "--tests",
+      "*Collaboration*Test",
+      ":apps:collaboration-proof:compileDebugKotlin",
+      ":formatCheck",
+      ":architectureCheck",
+      ":detekt",
+      "-Pkotlin.compiler.execution.strategy=in-process",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=1",
+      "-Dorg.gradle.jvmargs=-Xmx1536m"
+    ]
+  },
+  "focusedGradleSeconds": 144,
+  "focusedReports": {
+    "domain": {
+      "tests": 509,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "application": {
+      "tests": 27,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "finalRun": {
+    "exitCode": 0,
+    "wallSeconds": 290.976,
+    "inputsUnchanged": true,
+    "command": [
+      "xvfb-run",
+      "-a",
+      "./gradlew",
+      ":check",
+      ":features:collaboration:domain:wasmJsBrowserTest",
+      ":features:collaboration:data:wasmJsBrowserTest",
+      "-Pkotlin.compiler.execution.strategy=in-process",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=1",
+      "-Dorg.gradle.jvmargs=-Xmx1536m"
+    ]
+  },
+  "finalGradleSeconds": 287,
+  "reports": {
+    "desktopTest": {
+      "tests": 2960,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "testAndroidHostTest": {
+      "tests": 209,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "wasmJsBrowserTest": {
+      "tests": 781,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "buildLogic": {
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "addedDomainCases": 9,
+  "addedApplicationCases": 2,
+  "checked": [
+    "Work records carry explicit local Selected/Captured scope. Original selected no-argument discovery and String entry points preserve workspace behavior.",
+    "Captured discovery/cursor work has no remote deadline and never reads workspace selection.128-message bounds, stable ordering,8-draft indexed pages, one wrap and cursor CAS are shared.",
+    "Lost queue commit replies retain the original body/submission ID; recovery confirms the exact durable command without a second insertion. Concurrent editor slots survive old confirmation.",
+    "Review holds retain unsent text and submission ID. Denial, cancellation and replacement cannot erase pending commands or already committed cursor/acknowledgment facts.",
+    "Captured access observation ignores equivalent token rotation, closes on denial/replacement, and disposes with its consumer.",
+    "Actual application recovery reads the encrypted original after container restart with workspace reads forbidden; repeated recovery keeps one queued intent. Retained denial leaves encrypted frozen text intact.",
+    "509 domain and27 actual app collaboration cases, including existing selected worker behavior and two DI cases, pass with proof adapter compilation and static checks.",
+    "Final root and affected browser checks pass; unchanged18 Kotlin inputs."
+  ],
+  "limits": [
+    "The delivery worker scheduled entry is still selected-only. Its shared inner pass now separates local and remote scope; a captured draft recovery entry is available.",
+    "No new JNI/provider, FCM receive/notification/inline reply, APK build or phone install acceptance. Phone stays verified14 from8c557716.",
+    "An unapplied six-file/16-test background worker candidate is supplementary; do not count it as validated.",
+    "Backend delivery remains disabled. No live schema rollout, generic Starter change or fully accepted PRD group."
+  ],
+  "localEvidenceSha256": {
+    "check-1.log": "f0dc9a4aea2c35c0b3f0ad0c4e0ebc329fc8039d631307111d562e3ad477d726",
+    "check-1.json": "f4b17741b8cdabf4e24cce66eba3132e1108aa85f16564a159c32eab2233aa7d",
+    "check-2.log": "29cd47adcdd8eeb4733d757a7b125baa252b81514faff19b544912cead2c6d49",
+    "check-2.json": "329b62b6f174825937b445c7e6cc87a24feaf1a44f759805fb2bcac9c252f519",
+    "check-3.log": "7a175bbabeb45e89c8ce7c131c8b9795ef60761a5bb2457602ab50e41ab222c7",
+    "check-3.json": "63089097fd2e4a459f52ed425b88a4535f75ac8ba67a3cc5395f3760359ec56d",
+    "inputs-1.json": "be876183ba9a912e857e14c8a1f98aa7967a976c5cc2d76753283acbde4ca059",
+    "inputs-2.json": "6cb25191f9d3d77d50e02bd63b8543c467bf4043073598831718c54fb1878106",
+    "inputs-3.json": "6cb25191f9d3d77d50e02bd63b8543c467bf4043073598831718c54fb1878106",
+    "validation-transitions.json": "612d7320991aa7401ea19049b30e2dd9332c7981a456b97833a04b17c001f63f"
+  }
+}

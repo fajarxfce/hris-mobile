@@ -1,5 +1,50 @@
 # Agent continuation — HRIS Mobile
 
+## Captured local delivery and frozen-draft recovery validated — 2 November 2026
+
+[Contract](collaboration-captured-recovery.md) /
+[evidence](measurements/chat-captured-recovery-2026-11-02.json): discovery/work
+records, cursor advancement, queue/confirm/suspend and access observation share
+Selected/Captured local scope. No synthetic workspace IDs or remote TTL for owned
+facts. Original128-record/eight-draft bounds, stable fairness/CAS, frozen submission
+ID, review holds and concurrent-editor protection remain shared. The application
+has a captured draft-recovery entry and separate local/remote inner delivery scope;
+its scheduled delivery entry is still selected-company-only at this checkpoint.
+
+Nine new domain and two actual application cases pass within509 domain/27 app
+collaboration tests, including both DI cases. Real encrypted frozen-draft recovery
+after restart forbids workspace reads and preserves one original intent. Proof
+adapter compilation and static checks pass in144s /147.572s. Initial compilation
+stopped at a new test's collection type inference (36s /40.013s); the assertion was
+made explicit and a new fixture's invalid enum name corrected. No product logic
+changed for those corrections; the failed attempt remains in the evidence.
+Final18-input root/browser checks pass in287s /290.976s: 2,960 desktop,
+209 Android host, 781 browser and 10 build-logic cases, all zero failures/skips.
+No new JNI, APK build, phone install or server change; phone remains verified14.
+
+**Continue immediately:** an UNAPPLIED/UNTESTED six-file,16-test background-worker
+candidate is at `.work/captured-recovery-2026-11-02/background-worker-candidate.json`.
+Verify baseline hashes before applying. It adds a typed background entry to the
+same worker, loads setup before local discovery and finite runtime borrowing, owns
+only the borrowed reference and observes independent credential/interruption/local
+access signals. Initial failed references cannot start work; native failure must
+not wait for the first access-flow emission. Selected/background entries use the
+same no-wait mutex and bounded shared room pass. Original grant budget includes
+setup/acquisition. The fake SDK opts in explicitly; no provider acceptance claimed.
+Its16 cases cover actual app persistence/room replay, history capacity deferral,
+parent/company/SDK interruption, cancelled late acquisition, concurrency, deadlines,
+foreground preservation and monitor cancellation/disposal. Validate actual app
+collaboration cases, DI/proof compile, static/root checks and app Wasm compilation.
+
+Then fix initial application-parent readiness while workspace observation is still
+pending, preserving foreground retention across token rotation and monotonic parent
+expiry. Implement durable all-company collapsed wakes, fair directory/room cursors,
+reconnect/periodic full sweeps, notifications/privacy/read/mute and encrypted inline
+reply. No WorkspaceRepository replacement in production; no foreground reclamation
+from a background pass. Backend delivery stays disabled; all54 PRD groups remain
+open. Continue after each push. No generic Starter port or live rollout. Owned
+temporary swap remains active pending safe cleanup; preserve unrelated jobs/AVD5558.
+
 ## Background setup and conversation control validated — 2 November 2026
 
 [Contract](collaboration-background-control.md) /

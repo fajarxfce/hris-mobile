@@ -49,7 +49,10 @@ class CollaborationDeliveryWorker(
         currentCoroutineContext().ensureActive()
         if (found is AppResult.Failed) return syncFailure(found.failure)
         val work = (found as AppResult.Success).value ?: return draftResult
-        val setup = loadSetup(work.workspaceId)
+        val selection =
+            work.scope as? CollaborationLocalScope.Selected ?: return SyncResult.Blocked(changed())
+        val scope = CollaborationOperationScope.Selected(selection.workspaceId)
+        val setup = loadSetup(scope)
         currentCoroutineContext().ensureActive()
         if (setup is AppResult.Failed) return syncFailure(setup.failure)
         val configured = (setup as AppResult.Success).value
@@ -57,7 +60,7 @@ class CollaborationDeliveryWorker(
         val device = configured.device ?: return SyncResult.Blocked(setupRequired())
         if (device.state != CollaborationDeviceState.ACTIVE)
             return SyncResult.Blocked(setupRequired())
-        val restored = ensureRuntime(work.workspaceId, device.id)
+        val restored = ensureRuntime(scope.workspaceId, device.id)
         currentCoroutineContext().ensureActive()
         if (restored is AppResult.Failed) return deliveryFailure(restored.failure)
         if (!(restored as AppResult.Success).value.value) return SyncResult.Blocked(setupRequired())
@@ -73,7 +76,7 @@ class CollaborationDeliveryWorker(
             if (advanced is AppResult.Failed) return SyncResult.Retry(advanced.failure)
             cursor = (advanced as AppResult.Success).value
             val result =
-                withTimeoutOrNull(12.seconds) { processRoom(work, device, conversationId) }
+                withTimeoutOrNull(12.seconds) { processRoom(work, scope, device, conversationId) }
                     ?: AppResult.Failed(timeout())
             currentCoroutineContext().ensureActive()
             if (result is AppResult.Failed) {
@@ -88,7 +91,7 @@ class CollaborationDeliveryWorker(
             }
         }
         guard(work).let { if (it is AppResult.Failed) return syncFailure(it.failure) }
-        val remaining = discover()
+        val remaining = discover(work.scope)
         currentCoroutineContext().ensureActive()
         if (remaining is AppResult.Failed) return syncFailure(remaining.failure)
         val pending = (remaining as AppResult.Success).value ?: return draftResult
@@ -100,46 +103,47 @@ class CollaborationDeliveryWorker(
 
     private suspend fun processRoom(
         work: CollaborationDeliveryWork,
+        scope: CollaborationOperationScope,
         device: CollaborationDeviceSetup,
         conversationId: String,
     ): AppResult<Unit> {
-        val projected = reconcile(work.workspaceId, conversationId)
+        val projected = reconcile(work.scope, conversationId)
         currentCoroutineContext().ensureActive()
         if (projected is AppResult.Failed) return projected
-        val snapshot = messages(work.workspaceId, conversationId).first()
+        val snapshot = messages(work.scope, conversationId).first()
         currentCoroutineContext().ensureActive()
         if (snapshot is AppResult.Failed) return snapshot
         val records = (snapshot as AppResult.Success).value
         if (records.isEmpty()) return AppResult.Success(Unit)
         val pending = records.filter { it.state !is CollaborationMessageState.Sent }
-        val room = readyRoom(work, device, conversationId, pending.isNotEmpty())
+        val room = readyRoom(work, scope, device, conversationId, pending.isNotEmpty())
         currentCoroutineContext().ensureActive()
         if (room is AppResult.Failed) return room
         if (!(room as AppResult.Success).value) return AppResult.Failed(waitingRoom())
         var child: dev.fajar.starter.collaboration.domain.repositories.CollaborationTimelineLease? =
             null
         try {
-            val acquired = enter(work.workspaceId, device.id, conversationId)
+            val acquired = enter(scope, device.id, conversationId)
             if (acquired is AppResult.Success) child = acquired.value
             currentCoroutineContext().ensureActive()
             guard(work).let { if (it is AppResult.Failed) return it }
             if (acquired is AppResult.Failed) return acquired
             if (records.any { it.state != CollaborationMessageState.Queued }) {
                 // Resolve retained uncertainty from original evidence before resuming an old ID.
-                val recovered = acquireOriginals(work, device.id, conversationId)
+                val recovered = acquireOriginals(work, scope, device.id, conversationId)
                 currentCoroutineContext().ensureActive()
                 if (recovered is AppResult.Failed) return recovered
                 if ((recovered as AppResult.Success).value) {
                     withContext(NonCancellable) { child?.close() }
                     child = null
-                    val reopened = enter(work.workspaceId, device.id, conversationId)
+                    val reopened = enter(scope, device.id, conversationId)
                     if (reopened is AppResult.Success) child = reopened.value
                     currentCoroutineContext().ensureActive()
                     guard(work).let { if (it is AppResult.Failed) return it }
                     if (reopened is AppResult.Failed) return reopened
                 }
             }
-            val current = messages(work.workspaceId, conversationId).first()
+            val current = messages(work.scope, conversationId).first()
             currentCoroutineContext().ensureActive()
             if (current is AppResult.Failed) return current
             val selected =
@@ -151,9 +155,9 @@ class CollaborationDeliveryWorker(
                             .thenBy { it.intent.id }
                     )
                     .take(8)
-            val flushed = flush(work, device.id, conversationId, selected)
+            val flushed = flush(work, scope, device.id, conversationId, selected)
             if (flushed is AppResult.Failed) return flushed
-            return acquireAndRetire(work, device.id, conversationId)
+            return acquireAndRetire(work, scope, device.id, conversationId)
         } finally {
             withContext(NonCancellable) { child?.close() }
         }
@@ -161,17 +165,18 @@ class CollaborationDeliveryWorker(
 
     private suspend fun flush(
         work: CollaborationDeliveryWork,
+        scope: CollaborationOperationScope,
         deviceId: String,
         conversationId: String,
         selected: List<CollaborationMessageRecord>,
     ): AppResult<Unit> {
         for (record in selected) {
-            val result = stage(work.workspaceId, deviceId, record.intent.id)
+            val result = stage(scope, deviceId, record.intent.id)
             currentCoroutineContext().ensureActive()
             if (result is AppResult.Failed) return result
         }
         if (selected.isNotEmpty()) {
-            val sent = deliver(work.workspaceId, deviceId, conversationId)
+            val sent = deliver(scope, deviceId, conversationId)
             currentCoroutineContext().ensureActive()
             if (sent is AppResult.Failed) return sent
             // Unselected durable intents are expected to remain for another bounded pass.
@@ -193,15 +198,16 @@ class CollaborationDeliveryWorker(
 
     private suspend fun readyRoom(
         work: CollaborationDeliveryWork,
+        scope: CollaborationOperationScope,
         device: CollaborationDeviceSetup,
         conversationId: String,
         hasPending: Boolean,
     ): AppResult<Boolean> {
-        val retained = control.room(work.workspaceId, conversationId)
+        val retained = control.room(work.scope, conversationId)
         currentCoroutineContext().ensureActive()
         if (retained is AppResult.Failed) return retained
         var command = (retained as AppResult.Success).value.value
-        val loaded = read.room(work.workspaceId, conversationId)
+        val loaded = read.room(scope, conversationId)
         currentCoroutineContext().ensureActive()
         if (loaded is AppResult.Failed) return loaded
         val room = (loaded as AppResult.Success).value.value
@@ -214,7 +220,7 @@ class CollaborationDeliveryWorker(
         ) {
             val prepared =
                 prepare(
-                    work.workspaceId,
+                    scope,
                     CollaborationConversationAction.RequestRoom(
                         conversationId,
                         device.id,
@@ -228,16 +234,16 @@ class CollaborationDeliveryWorker(
         }
         if (command != null) {
             if (command.outcome !is CollaborationConversationOutcome.Confirmed) {
-                val result = replay(work.workspaceId, command.command.id)
+                val result = replay(scope, command.command.id)
                 currentCoroutineContext().ensureActive()
                 if (result is AppResult.Failed) return result
             }
-            val observed = reconcileRoom(work.workspaceId, command.command.id)
+            val observed = reconcileRoom(scope, command.command.id)
             currentCoroutineContext().ensureActive()
             if (observed is AppResult.Failed) return observed
             if (!(observed as AppResult.Success).value) return AppResult.Success(false)
         }
-        val latest = read.room(work.workspaceId, conversationId)
+        val latest = read.room(scope, conversationId)
         currentCoroutineContext().ensureActive()
         return when (latest) {
             is AppResult.Failed -> latest
@@ -260,10 +266,11 @@ class CollaborationDeliveryWorker(
 
     private suspend fun acquireOriginals(
         work: CollaborationDeliveryWork,
+        scope: CollaborationOperationScope,
         deviceId: String,
         conversationId: String,
     ): AppResult<Boolean> {
-        val snapshot = messages(work.workspaceId, conversationId).first()
+        val snapshot = messages(work.scope, conversationId).first()
         currentCoroutineContext().ensureActive()
         if (snapshot is AppResult.Failed) return snapshot
         val anchor =
@@ -272,13 +279,14 @@ class CollaborationDeliveryWorker(
                 .mapNotNull { (it.state as? CollaborationMessageState.Sent)?.eventId }
                 .firstOrNull()
         var reopened = false
-        var acquired = acquire(work.workspaceId, deviceId, conversationId, anchor)
+        var acquired = acquire(scope, deviceId, conversationId, anchor)
         currentCoroutineContext().ensureActive()
         if (
             acquired is AppResult.Failed &&
                 acquired.failure.code == "client.collaboration_history_focus_capacity"
         ) {
-            val prepared = reopenHistory(work.workspaceId, deviceId, conversationId, anchor)
+            if (scope !is CollaborationOperationScope.Selected) return acquired
+            val prepared = reopenHistory(scope.workspaceId, deviceId, conversationId, anchor)
             currentCoroutineContext().ensureActive()
             if (prepared is AppResult.Failed) return prepared
             if (
@@ -289,14 +297,14 @@ class CollaborationDeliveryWorker(
             reopened = prepared.value.value == CollaborationHistoryRuntimePreparation.Reopened
             // One admitted capacity recovery; a missing receipt uses a freshly owned head.
             // No send is repeated to obtain history.
-            acquired = acquire(work.workspaceId, deviceId, conversationId, anchor)
+            acquired = acquire(scope, deviceId, conversationId, anchor)
             currentCoroutineContext().ensureActive()
         }
         if (acquired is AppResult.Failed) return acquired
-        val recovered = recover(work.workspaceId, conversationId)
+        val recovered = recover(work.scope, conversationId)
         currentCoroutineContext().ensureActive()
         if (recovered is AppResult.Failed) return recovered
-        val projected = reconcile(work.workspaceId, conversationId)
+        val projected = reconcile(work.scope, conversationId)
         currentCoroutineContext().ensureActive()
         if (projected is AppResult.Failed) return projected
         val admitted = guard(work)
@@ -306,17 +314,18 @@ class CollaborationDeliveryWorker(
 
     private suspend fun acquireAndRetire(
         work: CollaborationDeliveryWork,
+        scope: CollaborationOperationScope,
         deviceId: String,
         conversationId: String,
     ): AppResult<Unit> {
-        val acquired = acquireOriginals(work, deviceId, conversationId)
+        val acquired = acquireOriginals(work, scope, deviceId, conversationId)
         currentCoroutineContext().ensureActive()
         if (acquired is AppResult.Failed) return acquired
-        val retired = retire(work.workspaceId, conversationId)
+        val retired = retire(work.scope, conversationId)
         currentCoroutineContext().ensureActive()
         if (retired is AppResult.Failed) return retired
         if ((retired as AppResult.Success).value == 0) {
-            val pending = messages(work.workspaceId, conversationId).first()
+            val pending = messages(work.scope, conversationId).first()
             currentCoroutineContext().ensureActive()
             if (pending is AppResult.Failed) return pending
             if (
@@ -336,7 +345,7 @@ class CollaborationDeliveryWorker(
     }
 
     private suspend fun guard(work: CollaborationDeliveryWork): AppResult<Unit> {
-        val current = observeAccess(work.workspaceId).first()
+        val current = observeAccess(work.scope).first()
         currentCoroutineContext().ensureActive()
         if (current is AppResult.Failed) return current
         if ((current as AppResult.Success).value != work.access) return AppResult.Failed(changed())

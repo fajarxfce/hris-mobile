@@ -35,6 +35,21 @@ class QueueCollaborationText(
         text: String,
         expectedAccess: CollaborationLocalAccess? = null,
     ): AppResult<CollaborationMessageRecord> =
+        invoke(
+            CollaborationLocalScope.Selected(workspaceId),
+            conversationId,
+            id,
+            text,
+            expectedAccess,
+        )
+
+    suspend operator fun invoke(
+        scope: CollaborationLocalScope,
+        conversationId: String,
+        id: String,
+        text: String,
+        expectedAccess: CollaborationLocalAccess? = null,
+    ): AppResult<CollaborationMessageRecord> =
         submissions.withLock {
             if (
                 !validCollaborationMessageId(id) ||
@@ -45,7 +60,7 @@ class QueueCollaborationText(
                     "client.collaboration_invalid_message",
                     FailureKind.Validation,
                 )
-            val captured = capture(workspaceId)
+            val captured = capture(scope)
             if (captured is AppResult.Failed) return@withLock captured
             val access = (captured as AppResult.Success).value
             if (expectedAccess != null && access != expectedAccess)
@@ -53,19 +68,15 @@ class QueueCollaborationText(
                     "client.session_changed",
                     FailureKind.Unauthorized,
                 )
-            continuation(workspaceId, access).let { if (it is AppResult.Failed) return@withLock it }
+            continuation(scope, access).let { if (it is AppResult.Failed) return@withLock it }
             val retained = messages.get(access, id)
-            continuation(workspaceId, access).let { if (it is AppResult.Failed) return@withLock it }
+            continuation(scope, access).let { if (it is AppResult.Failed) return@withLock it }
             if (retained is AppResult.Failed) return@withLock retained
             (retained as AppResult.Success).value?.let {
-                return@withLock wake(
-                    workspaceId,
-                    access,
-                    matching(it, access, conversationId, id, text),
-                )
+                return@withLock wake(scope, access, matching(it, access, conversationId, id, text))
             }
             val acquired = conversations.get(access, conversationId)
-            continuation(workspaceId, access).let { if (it is AppResult.Failed) return@withLock it }
+            continuation(scope, access).let { if (it is AppResult.Failed) return@withLock it }
             if (acquired is AppResult.Failed) return@withLock acquired
             val direct = (acquired as AppResult.Success).value?.conversation
             if (
@@ -87,7 +98,7 @@ class QueueCollaborationText(
                 )
             currentCoroutineContext().ensureActive()
             val inserted = messages.insert(access, intent)
-            continuation(workspaceId, access).let { if (it is AppResult.Failed) return@withLock it }
+            continuation(scope, access).let { if (it is AppResult.Failed) return@withLock it }
             if (inserted is AppResult.Failed) return@withLock inserted
             when ((inserted as AppResult.Success).value) {
                 CollaborationMessageInsertion.CAPACITY_EXCEEDED ->
@@ -103,10 +114,10 @@ class QueueCollaborationText(
                 CollaborationMessageInsertion.STORED -> Unit
             }
             val stored = messages.get(access, id)
-            continuation(workspaceId, access).let { if (it is AppResult.Failed) return@withLock it }
+            continuation(scope, access).let { if (it is AppResult.Failed) return@withLock it }
             if (stored is AppResult.Failed) return@withLock stored
             (stored as AppResult.Success).value?.let {
-                wake(workspaceId, access, matching(it, access, conversationId, id, text))
+                wake(scope, access, matching(it, access, conversationId, id, text))
             } ?: collaborationSetupFailure("client.collaboration_message_changed")
         }
 
@@ -116,7 +127,7 @@ class QueueCollaborationText(
     }
 
     private suspend fun wake(
-        workspaceId: String,
+        scope: CollaborationLocalScope,
         access: CollaborationLocalAccess,
         result: AppResult<CollaborationMessageRecord>,
     ): AppResult<CollaborationMessageRecord> {
@@ -128,7 +139,7 @@ class QueueCollaborationText(
             // Failed scheduling cannot undo a committed intent. Startup/periodic recovery scans
             // durable commands. Cancellation still prevents a late UI acknowledgement.
             withTimeoutOrNull(1_500) { schedules.request(DELIVERY_KEY) }
-            val current = continuation(workspaceId, access)
+            val current = continuation(scope, access)
             if (current is AppResult.Failed) return current
         }
         return result
@@ -151,16 +162,16 @@ class QueueCollaborationText(
             AppResult.Success(record)
         else collaborationSetupFailure("client.collaboration_message_changed")
 
-    private suspend fun capture(workspaceId: String) =
-        sessions.captureMessageAccess(workspaceId, workspaces, server, build, clock)
+    private suspend fun capture(scope: CollaborationLocalScope) =
+        sessions.captureMessageAccess(scope, workspaces, server, build, clock)
 
     private suspend fun continuation(
-        workspaceId: String,
+        scope: CollaborationLocalScope,
         access: CollaborationLocalAccess,
     ): AppResult<Unit> {
         currentCoroutineContext().ensureActive()
         val gate = conversations.admission(access)
-        val current = capture(workspaceId)
+        val current = capture(scope)
         currentCoroutineContext().ensureActive()
         if (gate is AppResult.Success)
             gate.value.denial?.let {
