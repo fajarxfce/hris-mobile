@@ -1,5 +1,39 @@
 # Agent continuation — HRIS Mobile
 
+## Release16 staged; compatible server rollout pending — 2 November 2026
+
+[Build/evidence](measurements/android-release-phone-2026-11-02-build16.json): exact
+cc4c11f1b538d48680ee892f6709925bbe5e18ec arm64 devRelease16 build and lint pass464.885s,
+1,969 Gradle tasks (614 executed/1,355 up-to-date). APK87,494,648 bytes,
+SHA256291fbe05606191876cec1dae8eb02c0b1872210a338d92e8b3a4f125f820c07c. Signature matches
+installed certificate aca5ce6a…721f3, non-debuggable, exact Firebase dev registration and
+private API verified in binary, fixture endpoints absent,16KiB alignment. Source clean
+before/after. Read-only phone preflight confirms15, connected10.77.77.3:5555 and same
+signer. NO INSTALL yet. Notify first, use explicitserial --install-only, never drive UI.
+Prepared scripts/artifact are .work/release-phone-2026-11-02-build16; do not overwrite
+that artifact with a different build. Recheck package before install if state changes.
+
+Apple41441078558 at d93e8cd5 COMPLETE:112 core cases/30 suites, zero failures/errors/skips,
+96 combined incoming-wave/receiver/lookup/queue source hashes verified. Swift11s,
+simulator compile672s/tests150s, full Xcode1320s and associations1s all pass. Archived
+XML/source hashes are in the build16 measurement. Current Apple41446374520 at EXACT
+cc4c11f1 is ACTIVE and covers the subsequent priority-processing source. Do not cancel
+or duplicate. Physical iPhone acceptance remains waived; full app compile required.
+
+Platform isolated Synapse/PostgreSQL runs privately and pre-enrollment recovery now
+passes with archived keys only. Full Verify41442782804 at2124c6fc is still active (four
+dashboard/three backend shards pass, backend1/downstream pending). Compatible dashboard
+built into immutable private assets. No HRIS migration/grant/deployment yet; schema103/
+API-worker2c2a59e3/dashboard1e0522c0 still run. Continue guarded accepted packages/images,
+fresh coordinated checkpoint, isolated103→116 upgrade and explicit API/worker/dashboard
+rollout; then employee/operator collaboration.chat grants preserving role snapshots,
+and authorized phone16 installation. Platform's operator plan/measurement/handoff
+contain exact protected paths and state. All chat push flags remain off.
+
+Continue native SDK priority proof and notification read/mute/privacy projection,
+durable display/actions and encrypted inline replies. All54 groups remain open, no
+Starter port or owned emulator. This staged delivery is not completion; keep working.
+
 ## Push priority recovery validated — 2 November 2026
 
 [Contract](collaboration-priority-recovery.md) / [evidence](measurements/chat-priority-processing-2026-11-02.json):
