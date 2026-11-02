@@ -41,10 +41,15 @@ c0 control41530010424 and protocol41530010464 succeeded (not separately artifact
 9129 native41528135379 succeeded (not independently audited), c0 native41530010432 runs.
 Latest independently audited native five-case source remains1eb/41523212486 below.
 
-NEXT: commit/push this accepted journal, then dispatch prepared full Apple exactly once
-from .work/chat-notification-publication-apple-2026-11-02/dispatch.py (150 source paths,
-no dispatch yet at this checkpoint). Follow its actual result; never redispatch if its
-request file exists. Then continue .work/chat-notification-issuance-2026-11-02: twelve
+Journal bb95ff1d398e1a821ec0132734614f6250bda9c2 is COMMITTED/PUSHED. Full Apple
+[41539628582](https://github.com/fajarxfce/hris-mobile/actions/runs/41539628582) was dispatched
+at2026-11-02T22:43:18Z on that exact source,150 verified source hashes; last queued.
+[Dispatch evidence](measurements/chat-notification-publication-apple-2026-11-02.json)
+is not test acceptance. .work/chat-notification-publication-apple-2026-11-02 has run/
+sources/audit.py ready. Follow actual success and full Xcode, audit/download once;
+do not redispatch/cancel. No local heavy job or owned emulator remains at this checkpoint.
+
+NEXT continue .work/chat-notification-issuance-2026-11-02: twelve
 Kotlin inputs drafted as .txt ONLY, not applied/compiled. apply.py requires clean Git
 and accepted journal measurement, records base hashes and rejects duplicate apply.
 Review source before applying: internal current-family/company/source authority,
