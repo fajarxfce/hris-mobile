@@ -1030,6 +1030,28 @@
     "Priority is bounded to20s; incoming15s and room12s remain. Fair company/history traversal is never reset or advanced by priority. Global wake cannot complete while priority remains."
   ],
   "hostedApple": {
+    "run": "https://github.com/fajarxfce/hris-mobile/actions/runs/41446374520",
+    "head": "cc4c11f1b538d48680ee892f6709925bbe5e18ec",
+    "observedStatus": "completed",
+    "conclusion": "success",
+    "counts": {
+      "tests": 112,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "suites": 30
+    },
+    "sourceFilesVerified": 106,
+    "evidence": "android-release-phone-2026-11-02-build17.json",
+    "scope": "112 core native simulator cases and complete Xcode app at priority-processing source; shared priority code compiles in the app but priority behavior tests use the desktop SDK double. Android backup XML separately validated; physical iPhone waived."
+  },
+  "limitations": [
+    "No live FCM/APNs, OS notification/action/reply, native SDK priority, load/latency or phone acceptance. Prior actual-SDK incoming waves cover their own recorded source only.",
+    "Per-hint retry ordering under sustained failure remains performance work; normal fair sweeps continue.",
+    "Private schema103/API-worker2c2a59e3 and installed phone15 unchanged. Chat push remains disabled. Physical iPhone acceptance waived; hosted compile still required.",
+    "All54 PRD feature groups remain open; this HRIS-specific increment has no Starter port."
+  ],
+  "priorHostedObservation": {
     "run": "https://github.com/fajarxfce/hris-mobile/actions/runs/41441078558",
     "head": "d93e8cd5eef294d3488a7ccb7f64cac6222ed241",
     "observedStatus": "in_progress",
@@ -1040,11 +1062,5 @@
       "simulator tests150s"
     ],
     "pending": "Full Xcode app build and final artifact audit. This run excludes all16 current priority-processing inputs."
-  },
-  "limitations": [
-    "No live FCM/APNs, OS notification/action/reply, native SDK priority, load/latency or phone acceptance. Prior actual-SDK incoming waves cover their own recorded source only.",
-    "Per-hint retry ordering under sustained failure remains performance work; normal fair sweeps continue.",
-    "Private schema103/API-worker2c2a59e3 and installed phone15 unchanged. Chat push remains disabled. Physical iPhone acceptance waived; hosted compile still required.",
-    "All54 PRD feature groups remain open; this HRIS-specific increment has no Starter port."
-  ]
+  }
 }

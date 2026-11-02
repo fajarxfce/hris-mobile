@@ -1,5 +1,32 @@
 # Agent continuation — HRIS Mobile
 
+## Priority Apple compilation audited — 2 November 2026
+
+[Apple41446374520](https://github.com/fajarxfce/hris-mobile/actions/runs/41446374520)
+COMPLETE at exactcc4c11f1b538d48680ee892f6709925bbe5e18ec. Downloaded artifact digest and
+106 combined receiver/priority/runtime source hashes match.112 core native simulator
+cases/30 suites pass, zero failures/errors/skips; Swift11s, compile740s, tests127s,
+full Xcode1436s and associations1s. [Exact reports/source evidence](measurements/android-release-phone-2026-11-02-build17.json).
+Shared priority code is compiled in the full app; its behavior remains desktop SDK-
+double coverage until the new native proof. No physical iPhone, FCM or OS acceptance.
+Android-only backup exclusions do not require a duplicate Apple run.
+
+Release17 clean c6347c75 artifact remains unchanged and not installed. Explicit phone
+preflight confirms15, connected and same signer. Platform Verify41448616746 at2334e266
+still runs; four dashboard shards pass, backend/downstream pending. No live HRIS
+migration or grant. Starter0d4432e port pushed. Next private access verification script
+is staged in Platform .work/chat-private-rollout-2026-11-02/verify-pilot-access.py;
+run after successful deployment/grants, revoke only its owned native/MFA session.
+
+Native priority proof is now three UNCOMMITTED Android proof inputs. Initial full
+check1 fails33.742s at detekt because resume grew to101 lines; phase/checkpoint
+ownership moved into the two phase helpers, no suppression. Full check2 is ACTIVE
+(.work/native-priority-2026-11-02,107 frozen inputs). Do not run another heavy local
+job until it finishes. Platform's four proof/driver changes remain only staged in
+its matching .work folder so current rollout source guards stay valid. Next: audit
+full/proof APK result, then actual native scenarios after rollout; no acceptance
+until they pass. Continue notification/privacy/actions/replies and all54 open groups.
+
 ## Release17 accepted candidate and generic port — 2 November 2026
 
 [Evidence](measurements/android-release-phone-2026-11-02-build17.json): clean c6347c75
