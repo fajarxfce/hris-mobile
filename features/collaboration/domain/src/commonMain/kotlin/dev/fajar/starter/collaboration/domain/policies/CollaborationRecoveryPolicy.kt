@@ -97,3 +97,43 @@ fun admitCollaborationBackgroundObservation(
 
 fun collaborationRecoveryFailure(code: String, kind: FailureKind) =
     AppResult.Failed(Failure(kind, "Chat recovery requires current access.", code = code))
+
+/** Rechecks a captured grant for subsequent operations without renewing any deadline. */
+fun collaborationBackgroundOwner(
+    grant: CollaborationBackgroundAdmission,
+    session: Session?,
+    server: IdentityServer,
+    build: AppBuild,
+    now: Instant,
+): AppResult<CollaborationOwner> {
+    val parent = collaborationNativeParent(session, server, build, now)
+    if (parent is AppResult.Failed) return parent
+    val owner = grant.owner
+    if ((parent as AppResult.Success).value.owner(owner.companyId) != owner)
+        return collaborationRecoveryFailure("client.session_changed", FailureKind.Unauthorized)
+    val observed = grant.observation
+    val duration = observed.expiresAt - observed.admittedAt
+    if (
+        !validCollaborationMessageId(owner.companyId) ||
+            !validCollaborationMessageId(observed.deviceId) ||
+            observed.deviceVersion < 0 ||
+            observed.nativeSessionVersion < 0 ||
+            observed.credentialVersion < 0 ||
+            observed.admittedAt.toEpochMilliseconds() < 0 ||
+            grant.requestedAt.toEpochMilliseconds() < 0 ||
+            duration <= 0.seconds ||
+            duration > 60.seconds ||
+            grant.expiresAt > grant.requestedAt + duration ||
+            grant.expiresAt <= grant.requestedAt
+    )
+        return collaborationRecoveryFailure(
+            "client.collaboration_invalid_admission",
+            FailureKind.Unexpected,
+        )
+    if (now < grant.requestedAt || now >= grant.expiresAt)
+        return collaborationRecoveryFailure(
+            "client.collaboration_revalidation_required",
+            FailureKind.Unavailable,
+        )
+    return AppResult.Success(owner)
+}

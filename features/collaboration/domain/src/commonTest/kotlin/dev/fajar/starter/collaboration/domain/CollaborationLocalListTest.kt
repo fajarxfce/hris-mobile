@@ -389,7 +389,7 @@ class CollaborationLocalListTest {
     }
 }
 
-private class LocalListFixture {
+internal class LocalListFixture {
     val setup = CollaborationSetupFixture()
     val denied = Failure(FailureKind.AccessDenied, "Denied", code = "permission_denied")
     val network = Failure(FailureKind.Network, "Offline", code = "fixture.network")

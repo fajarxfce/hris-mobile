@@ -25,13 +25,19 @@ class RefreshCollaborationList(
 ) {
     private val acquisition = Mutex()
 
+    suspend operator fun invoke(workspaceId: String, after: String? = null, limit: Int = 30) =
+        invoke(CollaborationOperationScope.Selected(workspaceId), after, limit)
+
+    suspend fun conversation(workspaceId: String, conversationId: String) =
+        conversation(CollaborationOperationScope.Selected(workspaceId), conversationId)
+
     suspend operator fun invoke(
-        workspaceId: String,
+        scope: CollaborationOperationScope,
         after: String? = null,
         limit: Int = 30,
     ): AppResult<CollaborationRead<CollaborationPage<CollaborationDirectSummary>>> =
         acquire(
-            workspaceId,
+            scope,
             { conversations.summaries(it, after, limit) },
             { it.items },
             ::collaborationListResponseClosesRead,
@@ -39,11 +45,11 @@ class RefreshCollaborationList(
 
     /** Acquires a new/opened DM directly, including one absent from the first directory page. */
     suspend fun conversation(
-        workspaceId: String,
+        scope: CollaborationOperationScope,
         conversationId: String,
     ): AppResult<CollaborationRead<CollaborationDirectSummary>> =
         acquire(
-            workspaceId,
+            scope,
             { owner ->
                 when (val received = conversations.summary(owner, conversationId)) {
                     is AppResult.Failed -> received
@@ -61,14 +67,14 @@ class RefreshCollaborationList(
         )
 
     private suspend fun <T> acquire(
-        workspaceId: String,
+        scope: CollaborationOperationScope,
         read: suspend (CollaborationOwner) -> AppResult<T>,
         items: (T) -> List<CollaborationDirectSummary>,
         closesRead: (Failure) -> Boolean,
     ): AppResult<CollaborationRead<T>> =
         acquisition.withLock {
             val owner =
-                when (val captured = capture(workspaceId)) {
+                when (val captured = capture(scope)) {
                     is AppResult.Failed -> return@withLock captured
                     is AppResult.Success -> captured.value
                 }
@@ -93,7 +99,7 @@ class RefreshCollaborationList(
                     is AppResult.Failed -> return@withLock failed(current.failure)
                     is AppResult.Success -> current.value
                 }
-            val before = requireCollaborationOwner(capture(workspaceId), owner, null)
+            val before = requireCollaborationOwner(capture(scope), owner, null)
             if (before is AppResult.Failed) return@withLock failed(before.failure)
             val received = read(owner)
             // A received denial must reach the process gate even if the route is cancelled now.
@@ -104,13 +110,13 @@ class RefreshCollaborationList(
                 }
             }
             currentCoroutineContext().ensureActive()
-            val admitted = requireCollaborationOwner(capture(workspaceId), owner, received)
+            val admitted = requireCollaborationOwner(capture(scope), owner, received)
             if (admitted is AppResult.Failed) return@withLock failed(admitted.failure)
             if (received is AppResult.Failed) return@withLock failed(received.failure)
             val page = (received as AppResult.Success).value
             val merged = replicas.merge(access, checkpoint, items(page), clock.now())
             currentCoroutineContext().ensureActive()
-            val afterWrite = requireCollaborationOwner(capture(workspaceId), owner, merged)
+            val afterWrite = requireCollaborationOwner(capture(scope), owner, merged)
             if (afterWrite is AppResult.Failed) return@withLock failed(afterWrite.failure)
             when (merged) {
                 is AppResult.Failed -> return@withLock failed(merged.failure)
@@ -119,7 +125,7 @@ class RefreshCollaborationList(
             }
             val reopened = replicas.admit(access, admission.revision)
             currentCoroutineContext().ensureActive()
-            val finalOwner = requireCollaborationOwner(capture(workspaceId), owner, reopened)
+            val finalOwner = requireCollaborationOwner(capture(scope), owner, reopened)
             if (finalOwner is AppResult.Failed) return@withLock failed(finalOwner.failure)
             when (reopened) {
                 is AppResult.Failed -> failed(reopened.failure)
@@ -138,6 +144,6 @@ class RefreshCollaborationList(
             }
         }
 
-    private suspend fun capture(workspaceId: String) =
-        sessions.captureCollaborationOwner(workspaceId, workspaces, server, build, clock)
+    private suspend fun capture(scope: CollaborationOperationScope) =
+        sessions.captureCollaborationOwner(scope, workspaces, server, build, clock)
 }

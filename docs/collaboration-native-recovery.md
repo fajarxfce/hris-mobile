@@ -45,3 +45,19 @@ precise account-owned actions and encrypted durable inline replies. Keep backend
 push delivery disabled until the complete native recovery path has provider evidence.
 
 [Validation](measurements/chat-native-recovery-client-2026-11-02.json) records the exact source, test commands, counts and release startup evidence. The matching [Platform contract](https://github.com/fajarxfce/hris-platform/blob/8b77c4fab7f49fc646336412324830261651247c/docs/collaboration/native-recovery.md) is validated separately.
+
+## Shared acquisition scope
+
+`CollaborationOperationScope.Selected` preserves existing foreground entry points.
+`Background` carries the original ephemeral admission. Current parent identity,
+strict grant shape and original local deadline are checked before and after pending
+operations; a subsequent call does not restart that deadline. Background capture
+never reads workspace selection. Existing `RefreshCollaborationList` and
+`ReadCollaborationConversations` now accept either scope while retaining their
+shared publication, checkpoint, denial revision and cancellation handling.
+
+[Scope evidence](measurements/chat-background-read-scope-2026-11-02.json) includes
+seven new cases and full regression/browser checks. History/outbox and native
+runtime borrowing are not yet adapted. A native runtime must become reusable only
+after its owning operation completes current admission; background borrowers must
+not acquire a resource still liable to cleanup by an earlier failed installation.

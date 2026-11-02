@@ -1,0 +1,115 @@
+{
+  "date": "2026-11-02",
+  "baseCommit": "a8558228980263e853acf6cf7fe4fe7bbbbd1202",
+  "scope": "Typed selected/background company scope for existing conversation reads and summary publication. SDK/background worker integration remains next.",
+  "sourceSha256": {
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationOperationScope.kt": "49f9837eb169abb189a9bd84f2fedc55e9816c028374f61d727534469dc76538",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationRecoveryPolicy.kt": "c046997e3cceb9fbd7fd128a0101cc64fc71f1dfc157d6177375da943ea942c6",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/CollaborationOperationOwner.kt": "948074e925a00c7321af9243d11433fe99019decd6f0a8ebbd25bfdb70cbd7a7",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ReadCollaborationConversations.kt": "7ab2c2891ad9ee9900da6900c60b374cfd88fbf1233127807d006e0c7569737a",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/RefreshCollaborationList.kt": "4b1cdbcce33843317c2f1811f85bdc0a5200e3f315ab8f182a4e5496fe4c393e",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationBackgroundReadTest.kt": "40d9276153d8ffa580c8c88ca4c96bcd772af602a3154dc590b03780dade2f48",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationLocalListTest.kt": "e747401957e1f7677833daf0da26035b5b80f4f9fcb294052f379fae331bbb56"
+  },
+  "focusedRun": {
+    "exitCode": 0,
+    "wallSeconds": 166.687,
+    "inputsUnchanged": true,
+    "command": [
+      "xvfb-run",
+      "-a",
+      "./gradlew",
+      ":features:collaboration:domain:desktopTest",
+      ":features:collaboration:data:desktopTest",
+      ":apps:shared:desktopTest",
+      "--tests",
+      "*CollaborationBindingsTest",
+      ":formatCheck",
+      ":architectureCheck",
+      ":detekt",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=1",
+      "-Dorg.gradle.jvmargs=-Xmx1536m"
+    ]
+  },
+  "focusedGradleSeconds": 163,
+  "focusedReports": {
+    "domain": {
+      "tests": 425,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "data": {
+      "tests": 294,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "bindings": {
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "finalRun": {
+    "exitCode": 0,
+    "wallSeconds": 249.772,
+    "inputsUnchanged": true,
+    "command": [
+      "xvfb-run",
+      "-a",
+      "./gradlew",
+      ":check",
+      ":features:collaboration:domain:wasmJsBrowserTest",
+      ":features:collaboration:data:wasmJsBrowserTest",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=1",
+      "-Dorg.gradle.jvmargs=-Xmx1536m"
+    ]
+  },
+  "gradleSeconds": 246,
+  "reports": {
+    "desktopTest": {
+      "tests": 2874,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "wasmJsBrowserTest": {
+      "tests": 697,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "testAndroidHostTest": {
+      "tests": 186,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "test": {
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "checked": [
+    "Existing String entry points delegate to Selected(workspaceId) with unchanged admission, projection and cancellation behavior.",
+    "Background scope captures only current session/native-parent identity and its original finite admission; it does not read or change WorkspaceRepository selection.",
+    "Checks reject malformed/foreign grants, negative versions, extended lifetime, clock rollback, expired proof and parent replacement. Reuse never renews the original deadline; a valid operation at40seconds is allowed.",
+    "Existing list/point acquisition retains its publication mutex, checkpoint and denial revision checks. Remote denial survives cancellation and cleanup failure; a concurrent newer denial wins over earlier success.",
+    "No late result or late merge reopens a denied projection after scope expiry. Owned local foreground facts retain their original age-independent behavior.",
+    "Seven new background cases, full domain/data suites and actual shared-container bindings pass. Root check, affected browser suites, Android host, format/architecture and detekt pass."
+  ],
+  "limits": [
+    "Only RefreshCollaborationList and ReadCollaborationConversations consume the new typed scope. History, outbox and runtime borrowing still require integration.",
+    "No automatic worker, SDK open, native provider I/O, new APK assembly or phone installation in this increment.",
+    "Existing recovery-client universal13 startup evidence belongs to a8558228 preceding source; do not claim that APK contains these new overloads. Phone remains accepted11.",
+    "No live schema/provider change, generic Starter port or PRD feature acceptance. Keep backend push delivery disabled."
+  ]
+}

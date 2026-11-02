@@ -1,6 +1,42 @@
 # Agent continuation — HRIS Mobile
 
 
+## Shared conversation reads accept background scope — 2 November 2026
+
+[Evidence](measurements/chat-background-read-scope-2026-11-02.json): typed
+Selected/Background scope now feeds existing RefreshCollaborationList and
+ReadCollaborationConversations. Existing String entry points preserve foreground
+behavior. Background capture checks current account/native parent and the original
+finite proof without reading/changing workspace selection. Publication, denial CAS,
+cancellation and late-result rules remain shared. Seven new background cases pass,
+including later use at40s, expiry/replacement, cancelled denial and late merge.
+
+Focused425 domain/294 data/two actual DI cases pass in163s /166.687s. Full root,
+affected browser suites, Android host, format/architecture and detekt pass in246s
+Gradle /249.772s wall; seven inputs unchanged. Exact aggregate counts are in the
+record. No APK build or phone install in this increment. Phone remains accepted11;
+prior universal13 startup evidence is at a8558228 and predates this change.
+
+**Continue immediately:** explicit native runtime publication after final owning
+use-case admission/command retirement, before another foreground/background caller
+can reuse it. Currently completeAcquisition makes the SDK entry visible before
+Ensure/Install/Restore finishes its pending ownership checks; background borrowing
+must not enter that window and then lose its parent to the earlier caller's cleanup.
+Add a synchronous publish/accept step to the lease and those three owning use cases,
+with native lease and pending/cancellation/retirement tests. Then finite background
+borrow/reference ownership alongside foreground retention, parent expiry/replacement
+and shutdown, reusing the same SDK/store. Extend typed scope through existing
+history/outbox use cases instead of copying their integrity and denial rules.
+
+The earlier runtime-next.txt notes remain useful. Its typed-scope-prepared.json is
+now applied and refined; do not apply it again. This first scope increment covers
+control/list reads only. Durable all-company hint/reconnect/periodic recovery,
+FCM receive/decrypt/privacy/read/mute/deep links and inline replies remain next.
+Keep delivery disabled; all54 catalog groups and remaining P0–P8 remain open. No
+generic Starter change or live rollout. Continue after each pushed checkpoint.
+
+
+
 ## Native-parent discovery and company admission client validated — 2 November 2026
 
 [Contract](collaboration-native-recovery.md) / [evidence](measurements/chat-native-recovery-client-2026-11-02.json):
