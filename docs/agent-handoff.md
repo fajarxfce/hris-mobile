@@ -1,5 +1,48 @@
 # Agent continuation — HRIS Mobile
 
+## Notification reply input accepted; CI repair next — 2 November 2026
+
+Reply text, exact token and original native family now persist in a separate encrypted
+account replica before send admission. At most 64 active inputs; no composer overwrite
+or employee-command slot consumption. Repeated descriptor/text restores the original
+token; changed text is a separate input. Exact versions protect review/removal. Missing
+history keys never regenerate. The current-family retention use case checks ownership
+after pending decode/storage, including committed input whose acknowledgment is lost.
+[Contract](collaboration-notification-reply-inputs.md),
+[evidence](measurements/chat-notification-reply-inputs-2026-11-02.json).
+
+Focused attempt1:23 cases/one failure in100.107s, solely an incorrect test expectation
+for inactive-account raw storage absence. Corrected attempt2:25 cases/three suites
+including ten explicit reused domain cases;15 fresh/two suites,124.306s. Full root/
+proof/Wasm/browser:377.197s,3406 desktop/501 suites,230 Android host/37, ten build-logic/
+two, six proof-host/one and23 actual browser/two.1850 fresh/236 suites; zero failures,
+errors or skips.13 source/test hashes unchanged; format, architecture and detekt pass.
+Actual SQLite/IndexedDB reopen retains test credential state; not OS process death.
+No native receiver, completion proof, dispatcher wrapper or display journal yet.
+
+Urgent next: repair two automatic CI failures discovered while following earlier runs.
+Native run41493788108 uses stale Platform8b77c4f, before the required receipt gateway;
+update its immutable checkout to accepted/live304be027 and verify all actual native
+proof cases (worker failures still need confirmation). Portable run41489333369 fails
+ChatThreadLayoutTest:performScrollTo requests an uncomposed lazy item. Scroll the list
+semantically, retain fixed-header/composer/touch assertions, and verify on hosted CI.
+Downloaded old portable artifact13164751343 ZIP digest955cef55b4cb123478f8ec3baa7697402865051d1ec028ff11446bb703c8e52e
+matches GitHub; the actual Indonesian2x screenshot was inspected. Evidence/logs under
+.work/chat-ci-followup-2026-11-02. Current control41497227558 has failed portable and
+still-running Apple; native41497227823 is running with the old pin. Local passing
+checks do not excuse these failures. Follow final outcomes and fix before broadening.
+
+Latest accepted full Apple remains222bd441/run41492596519:801 cases/91 suites and
+full Xcode app; excludes newer actions, invocation and reply input. After CI repairs,
+dispatch next full Apple on accepted source and audit artifacts/JUnit/source hashes.
+Then continue exact-command proof before retiring reply inputs, bounded review/read/
+recovery, native callback ownership, display journal/issuer and all54 open PRD groups.
+Current private notes .work/chat-notification-reply-inputs-2026-11-02/completion-next.md
+are supplementary; persist decisive contracts in Git. No generic Starter port.
+Phone18/source42f5d157, live304be027/schema116 and Starter0d4432e unchanged; push OFF.
+Next product build >18: notify, explicit10.77.77.3:5555, --install-only, preserve data/
+signing, no phone UI driving. Continue long run and push every atomic commit.
+
 ## Settings/projection Apple build accepted — 2 November 2026
 
 Apple41492596519 at exact222bd44147081089e4f22fbe1828e619916554f9 is fully audited:
