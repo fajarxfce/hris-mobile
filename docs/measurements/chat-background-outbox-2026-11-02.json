@@ -1,0 +1,156 @@
+{
+  "date": "2026-11-02",
+  "baseCommit": "1d6f9f08870cf66b5e6487c2e87b12065d1fb277",
+  "scope": "Shared admitted background staging/delivery and SDK credential failure classification; separate from whole incoming/outbox worker acceptance.",
+  "sourceSha256": {
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/StageCollaborationText.kt": "3a1463ed72b668cc21a4cf306f036ef73ff165a893c71fbe52eeebd99a4a48ce",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/DeliverCollaborationMessages.kt": "8ec92ed172af57415c41ec4619735bccdf6b2e64197ab5a8d85b638d4b3a43da",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/StageCollaborationTextTest.kt": "c4f80ee8bc7dcf90dd368b4d507eb1a13c49c9e54f9332f22188b0c86d17a247",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationDeliveryFixture.kt": "10cc15b6195f588bdb5b5c9a5175e95b0ad9c19a66c13017e58cbbbba892de7e",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationBackgroundOutboxScopeTest.kt": "bff0bd5c598afa7761d0248f55afef0c4ebd3db11fec4a40011633cb4777c462"
+  },
+  "initialRun": {
+    "exitCode": 1,
+    "wallSeconds": 46.539,
+    "inputsUnchanged": true,
+    "command": [
+      "xvfb-run",
+      "-a",
+      "./gradlew",
+      ":features:collaboration:domain:desktopTest",
+      ":apps:shared:desktopTest",
+      "--tests",
+      "*CollaborationBindingsTest",
+      ":apps:collaboration-proof:compileDebugKotlin",
+      ":formatCheck",
+      ":architectureCheck",
+      ":detekt",
+      "-Pkotlin.compiler.execution.strategy=in-process",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=1",
+      "-Dorg.gradle.jvmargs=-Xmx1536m"
+    ]
+  },
+  "validationTransitions": {
+    "attempt1": {
+      "domainTests": 469,
+      "failures": 1,
+      "gradleSeconds": 43,
+      "wallSeconds": 46.539,
+      "failure": "New recovery fixture expected one SDK resume window after two delivery invocations; existing Sent mappings intentionally participate in later queue inspection and alias retention.",
+      "correction": "Test now models an already-drained second SDK window, asserts original transaction mapping and Sent projection before that window, unchanged intent and receipt. Delivery fixture prohibits enqueue. No product algorithm changed to hide the failed expectation.",
+      "passedCases": 468
+    }
+  },
+  "focusedRun": {
+    "exitCode": 0,
+    "wallSeconds": 134.385,
+    "inputsUnchanged": true,
+    "command": [
+      "xvfb-run",
+      "-a",
+      "./gradlew",
+      ":features:collaboration:domain:desktopTest",
+      ":apps:shared:desktopTest",
+      "--tests",
+      "*CollaborationBindingsTest",
+      ":apps:collaboration-proof:compileDebugKotlin",
+      ":formatCheck",
+      ":architectureCheck",
+      ":detekt",
+      "-Pkotlin.compiler.execution.strategy=in-process",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=1",
+      "-Dorg.gradle.jvmargs=-Xmx1536m"
+    ]
+  },
+  "focusedGradleSeconds": 130,
+  "focusedReports": {
+    "domain": {
+      "tests": 469,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "bindings": {
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "finalRun": {
+    "exitCode": 0,
+    "wallSeconds": 257.828,
+    "inputsUnchanged": true,
+    "command": [
+      "xvfb-run",
+      "-a",
+      "./gradlew",
+      ":check",
+      ":features:collaboration:domain:wasmJsBrowserTest",
+      ":features:collaboration:data:wasmJsBrowserTest",
+      "-Pkotlin.compiler.execution.strategy=in-process",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=1",
+      "-Dorg.gradle.jvmargs=-Xmx1536m"
+    ]
+  },
+  "finalGradleSeconds": 254,
+  "reports": {
+    "desktopTest": {
+      "tests": 2918,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "testAndroidHostTest": {
+      "tests": 209,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "wasmJsBrowserTest": {
+      "tests": 741,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "buildLogic": {
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "addedCases": 12,
+  "checked": [
+    "Existing String callers delegate to Selected. Background owner/grant capture never reads or changes WorkspaceRepository; another device is rejected before setup/native I/O.",
+    "Staging retains uncertainty before native enqueue; late expiry recovers the original mapping with a new admission instead of creating another transaction.",
+    "Preparation expiry and parent replacement close the writer without enqueue; SDK unauthorized does not restrict local history for either scope. Received company denial still restricts under cancellation despite failed cleanup.",
+    "Observed-send receipts remain account-fenced and retained before continuation on expiry, cancellation or native-parent replacement. No late publication occurs after gate denial.",
+    "The corrected recovery fixture models an already-drained second SDK window. Same logical intent and transaction, original receipt and Sent projection before that window are asserted. Native enqueue is prohibited by the delivery fixture. Sent mappings remain eligible for known-queue inspection and alias retention.",
+    "Actual app container bindings, proof adapter Kotlin compilation, format/architecture/detekt and full root/affected browser checks pass."
+  ],
+  "limits": [
+    "New background cases use controlled domain fixtures, not new JNI, provider or FCM acceptance.",
+    "No employee APK build, phone install or live server rollout. Phone remains release14 from8c557716; it predates this source.",
+    "Shared room-control, captured local scopes/discovery/cursors/draft recovery and application-worker integration remain next; never swap selected workspace for background work.",
+    "Keep backend delivery disabled pending real receive/recovery acceptance. No generic Starter port or complete PRD feature group acceptance."
+  ],
+  "localEvidenceSha256": {
+    "check-1.log": "8c6562aa4042e918af57731f3776708f8fbe4a948fe9562d92e5b6cdf3354b82",
+    "check-1.json": "08808954420d7a03265bef7944ec5d809192da0f1945beac08efa65d4376bcc0",
+    "check-2.log": "109d65f3952befb86c1a4a1787b39244c4a1f7dbf1ccc17860da172572fa8326",
+    "check-2.json": "312f42a2f274038ca90a9f7c8cdf1679cf74161598ab547a5f7d101d469eb0ee",
+    "check-3.log": "32abec889391070b9bf8324497e7e9b22175a5092fd3a54dad5c8b939ce3b97b",
+    "check-3.json": "0544ffec1e05ee55c6fde13e87051b16926e3689245d56cd5163a87579ba09ea",
+    "inputs-1.json": "0676ed10fda344baf5252f7b8267bad07aa7b355226930a4ab1376467f50101f",
+    "inputs-2.json": "75ad332188fd63b4b093b4c68ac4f00832f68dd1a4ae0292200fa06e0610f9ad",
+    "inputs-3.json": "75ad332188fd63b4b093b4c68ac4f00832f68dd1a4ae0292200fa06e0610f9ad",
+    "validation-transitions.json": "b62b8102631bde9e0a080eea2037ce1b46c8d924f7d6308624c692d078b06372"
+  }
+}

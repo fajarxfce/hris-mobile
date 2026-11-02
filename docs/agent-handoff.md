@@ -1,5 +1,49 @@
 # Agent continuation — HRIS Mobile
 
+## Background staging/delivery and SDK denial classification validated — 2 November 2026
+
+[Contract](collaboration-background-outbox.md) /
+[evidence](measurements/chat-background-outbox-2026-11-02.json): StageText and
+DeliverMessages now use shared Selected/Background admission without consulting
+workspace selection. Both require the exact admitted device. Existing uncertainty,
+transaction mapping, receipt append, projection and cancellation rules remain shared.
+Staging now reuses content-denial classification: SDK-token unauthorized stops the
+native operation but does not close all local company history. Confirmed HRIS
+company/session/MFA denials still retain their gate even under failed cleanup.
+
+All 12 added cases pass within 469 domain tests, and both actual app DI cases pass.
+Proof adapter Kotlin compilation, format/architecture and detekt pass in130s Gradle
+/134.385s wall. The initial43s /46.539s run had one new-test expectation failure:
+Sent mappings intentionally participate in later SDK queue inspection/alias recovery.
+The corrected test models a drained second window and verifies the original mapping,
+receipt and projection before that window; the fixture prohibits enqueue. No product
+algorithm was changed to mask that assertion. The failed run remains in the evidence.
+
+Final root/affected browser checks pass in254s /257.828s with five unchanged
+Kotlin inputs: 2,918 desktop, 209 Android host, 741 browser and 10 build-logic cases.
+No new JNI run or employee APK build/install here. Phone remains verified release14
+from8c557716, which predates these overloads and the SDK classification correction.
+
+**Continue immediately:** captured local ownership for message observation, receipt
+recovery/projection and retirement, independent of remote grant expiry. A 12-file,
+11-test candidate is UNAPPLIED/UNTESTED in
+`.work/background-outbox-2026-11-02/next-local-candidate.json`; verify baseline hashes
+before applying. Its current shape keeps Selected behavior and adds Captured access
+with active account/session/audience fencing and retained gate checks. Review this
+policy before broadening local discovery. Captured access is not remote authority
+and must never be trusted directly from FCM fields. It has no remote TTL.
+
+Then convert local ReadControl/discovery/cursor/drafts and remote room-control
+commands, including exact background device binding and retained-denial handling.
+Generalize the existing application worker; do not duplicate its bounded outbox or
+replace WorkspaceRepository. Reuse the application-owned runtime collector and test
+initial parent readiness while workspace observation is pending, preserving a
+foreground client across token rotation. Incoming all-company collapsed hints,
+reconnect/periodic sweep, notification privacy/read/mute and inline reply remain next.
+Keep backend delivery disabled; all54 PRD groups remain open. No generic Starter
+port or live rollout. Continue after every pushed checkpoint. Owned temporary swap
+remains active pending safe cleanup; preserve unrelated CodePush jobs/AVD5558.
+
 ## Shared background native entry and history validated — 2 November 2026
 
 [Contract](collaboration-background-history.md) /

@@ -334,7 +334,10 @@ internal class CollaborationDeliveryFixture {
             }
     }
 
-    suspend fun deliver() = delivery("selection", device.deviceId, conversation)
+    suspend fun deliver(
+        scope: CollaborationOperationScope = CollaborationOperationScope.Selected("selection"),
+        deviceId: String = device.deviceId,
+    ) = delivery(scope, deviceId, conversation)
 
     suspend fun reconcile() = reconcile("selection", conversation)
 

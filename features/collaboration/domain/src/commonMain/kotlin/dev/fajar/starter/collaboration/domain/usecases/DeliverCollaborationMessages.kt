@@ -38,29 +38,35 @@ class DeliverCollaborationMessages(
         deviceId: String,
         conversationId: String,
     ): AppResult<CollaborationDeliveryReport> =
+        invoke(CollaborationOperationScope.Selected(workspaceId), deviceId, conversationId)
+
+    suspend operator fun invoke(
+        scope: CollaborationOperationScope,
+        deviceId: String,
+        conversationId: String,
+    ): AppResult<CollaborationDeliveryReport> =
         execution.withLock {
             if (
                 !validCollaborationMessageId(deviceId) ||
+                    !collaborationOperationOwnsDevice(scope, deviceId) ||
                     !validCollaborationMessageId(conversationId)
             )
                 return@withLock failed(
                     "client.collaboration_invalid_message",
                     FailureKind.Validation,
                 )
-            val captured = capture(workspaceId)
+            val captured = capture(scope)
             if (captured is AppResult.Failed) return@withLock captured
             val owner = (captured as AppResult.Success).value
-            continuation(workspaceId, owner, null).let {
-                if (it is AppResult.Failed) return@withLock it
-            }
-            val admitted = admitRoom(workspaceId, owner, deviceId, conversationId)
+            continuation(scope, owner, null).let { if (it is AppResult.Failed) return@withLock it }
+            val admitted = admitRoom(scope, owner, deviceId, conversationId)
             if (admitted is AppResult.Failed) return@withLock admitted
             val roomId = (admitted as AppResult.Success).value
             var queue: CollaborationMessageQueueLease? = null
             try {
                 val acquired = runtimes.acquireMessageQueue(owner, deviceId, roomId)
                 if (acquired is AppResult.Success) queue = acquired.value
-                continuation(workspaceId, owner, acquired).let {
+                continuation(scope, owner, acquired).let {
                     if (it is AppResult.Failed) return@withLock it
                 }
                 if (acquired is AppResult.Failed) return@withLock acquired
@@ -76,19 +82,19 @@ class DeliverCollaborationMessages(
                         "client.collaboration_queue_owner_changed",
                         FailureKind.Unauthorized,
                     )
-                deliver(workspaceId, owner, conversationId, writer)
+                deliver(scope, owner, conversationId, writer)
             } finally {
                 withContext(NonCancellable) { queue?.close() }
             }
         }
 
     private suspend fun deliver(
-        workspaceId: String,
+        scope: CollaborationOperationScope,
         owner: CollaborationOwner,
         conversationId: String,
         queue: CollaborationMessageQueueLease,
     ): AppResult<CollaborationDeliveryReport> {
-        val projected = project(workspaceId, owner, conversationId)
+        val projected = project(scope, owner, conversationId)
         if (projected is AppResult.Failed) return projected
         val records = (projected as AppResult.Success).value
         val mapped =
@@ -99,13 +105,13 @@ class DeliverCollaborationMessages(
                 queue.device,
             ) ?: return failed("client.collaboration_queue_unresolved")
         if (mapped.isEmpty()) return AppResult.Success(collaborationDeliveryReport(records, null))
-        val admitted = admitRoom(workspaceId, owner, queue.device.deviceId, conversationId)
+        val admitted = admitRoom(scope, owner, queue.device.deviceId, conversationId)
         if (admitted is AppResult.Failed) return admitted
         if ((admitted as AppResult.Success).value != queue.device.roomId)
             return failed("client.collaboration_conversation_mismatch", FailureKind.AccessDenied)
         val delivered = queue.resume(mapped.keys.toSet())
         if (delivered is AppResult.Failed) {
-            val current = continuation(workspaceId, owner, delivered)
+            val current = continuation(scope, owner, delivered)
             return if (current is AppResult.Failed) current else delivered
         }
         val outcome = (delivered as AppResult.Success).value
@@ -115,14 +121,14 @@ class DeliverCollaborationMessages(
             else retainObserved(owner.localListAccess(), conversationId, observed)
         // Already observed facts use the captured account fence, even if authority has since
         // expired or the company gate closed. No new send or UI publication occurs in that step.
-        val current = continuation(workspaceId, owner, saved)
+        val current = continuation(scope, owner, saved)
         if (current is AppResult.Failed) return current
         if (saved is AppResult.Failed) return saved
-        val readmitted = admitRoom(workspaceId, owner, queue.device.deviceId, conversationId)
+        val readmitted = admitRoom(scope, owner, queue.device.deviceId, conversationId)
         if (readmitted is AppResult.Failed) return readmitted
         if ((readmitted as AppResult.Success).value != queue.device.roomId)
             return failed("client.collaboration_conversation_mismatch", FailureKind.AccessDenied)
-        val reconciled = project(workspaceId, owner, conversationId)
+        val reconciled = project(scope, owner, conversationId)
         if (reconciled is AppResult.Failed) return reconciled
         val reason =
             if (
@@ -154,18 +160,18 @@ class DeliverCollaborationMessages(
         }
 
     private suspend fun project(
-        workspaceId: String,
+        scope: CollaborationOperationScope,
         owner: CollaborationOwner,
         conversationId: String,
     ): AppResult<List<CollaborationMessageRecord>> {
         val access = owner.localListAccess()
-        val read = checked(workspaceId, owner) { messages.observe(access, conversationId).first() }
+        val read = checked(scope, owner) { messages.observe(access, conversationId).first() }
         if (read is AppResult.Failed) return read
-        val journal = checked(workspaceId, owner) { receipts.read(access, conversationId) }
+        val journal = checked(scope, owner) { receipts.read(access, conversationId) }
         if (journal is AppResult.Failed) return journal
         val records = (read as AppResult.Success).value
         val known = (journal as AppResult.Success).value
-        val retained = completedReceipts(workspaceId, owner, conversationId, records, known)
+        val retained = completedReceipts(scope, owner, conversationId, records, known)
         if (retained is AppResult.Failed) return retained
         val updates =
             collaborationReceiptProjection(
@@ -178,7 +184,7 @@ class DeliverCollaborationMessages(
         val next = records.associateBy { it.intent.id }.toMutableMap()
         for ((record, sent) in updates) {
             if (record.state == sent) continue
-            val saved = checked(workspaceId, owner) { messages.update(access, record, sent) }
+            val saved = checked(scope, owner) { messages.update(access, record, sent) }
             if (saved is AppResult.Failed) return saved
             if (!(saved as AppResult.Success).value)
                 return failed("client.collaboration_message_changed")
@@ -188,12 +194,12 @@ class DeliverCollaborationMessages(
     }
 
     private suspend fun admitRoom(
-        workspaceId: String,
+        scope: CollaborationOperationScope,
         owner: CollaborationOwner,
         deviceId: String,
         conversationId: String,
     ): AppResult<String> {
-        val registered = checked(workspaceId, owner) { setup.read(owner) }
+        val registered = checked(scope, owner) { setup.read(owner) }
         if (registered is AppResult.Failed) return registered
         val device = (registered as AppResult.Success).value
         if (
@@ -202,7 +208,7 @@ class DeliverCollaborationMessages(
                 device.platform.name != build.platform.name.uppercase()
         )
             return failed("client.collaboration_device_unavailable", FailureKind.Unavailable)
-        val read = checked(workspaceId, owner) { conversations.get(owner, conversationId) }
+        val read = checked(scope, owner) { conversations.get(owner, conversationId) }
         if (read is AppResult.Failed) return read
         val direct = (read as AppResult.Success).value
         if (
@@ -211,7 +217,7 @@ class DeliverCollaborationMessages(
                 owner.accountId !in listOf(direct.firstAccountId, direct.secondAccountId)
         )
             return failed("client.collaboration_conversation_mismatch", FailureKind.AccessDenied)
-        val loaded = checked(workspaceId, owner) { conversations.room(owner, conversationId) }
+        val loaded = checked(scope, owner) { conversations.room(owner, conversationId) }
         if (loaded is AppResult.Failed) return loaded
         val room = (loaded as AppResult.Success).value
         if (room.conversationId != conversationId)
@@ -229,7 +235,7 @@ class DeliverCollaborationMessages(
     }
 
     private suspend fun completedReceipts(
-        workspaceId: String,
+        scope: CollaborationOperationScope,
         owner: CollaborationOwner,
         conversationId: String,
         records: List<CollaborationMessageRecord>,
@@ -242,7 +248,7 @@ class DeliverCollaborationMessages(
         val result = mutableListOf<CollaborationMessageCompletion>()
         for (id in ids) {
             val read =
-                checked(workspaceId, owner) {
+                checked(scope, owner) {
                     when (val proof = completions.readCompletion(access, id)) {
                         is AppResult.Failed -> proof
                         is AppResult.Success ->
@@ -260,17 +266,17 @@ class DeliverCollaborationMessages(
     }
 
     private suspend fun <T> checked(
-        workspaceId: String,
+        scope: CollaborationOperationScope,
         owner: CollaborationOwner,
         operation: suspend () -> AppResult<T>,
     ): AppResult<T> {
         val result = operation()
-        val admitted = continuation(workspaceId, owner, result)
+        val admitted = continuation(scope, owner, result)
         return if (admitted is AppResult.Failed) admitted else result
     }
 
     private suspend fun continuation(
-        workspaceId: String,
+        scope: CollaborationOperationScope,
         owner: CollaborationOwner,
         received: AppResult<*>?,
     ): AppResult<Unit> {
@@ -281,7 +287,7 @@ class DeliverCollaborationMessages(
             }
         currentCoroutineContext().ensureActive()
         val gate = lists.admission(owner.localListAccess())
-        val current = capture(workspaceId)
+        val current = capture(scope)
         currentCoroutineContext().ensureActive()
         if (rejected != null && collaborationContentResponseClosesRead(rejected))
             return AppResult.Failed(rejected)
@@ -295,8 +301,8 @@ class DeliverCollaborationMessages(
         return AppResult.Success(Unit)
     }
 
-    private suspend fun capture(workspaceId: String) =
-        sessions.captureCollaborationOwner(workspaceId, workspaces, server, build, clock)
+    private suspend fun capture(scope: CollaborationOperationScope) =
+        sessions.captureCollaborationOwner(scope, workspaces, server, build, clock)
 
     private fun failed(code: String, kind: FailureKind = FailureKind.Conflict) =
         collaborationSetupFailure(code, kind)

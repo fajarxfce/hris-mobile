@@ -327,7 +327,7 @@ class StageCollaborationTextTest {
     }
 }
 
-private class StageFixture {
+internal class StageFixture {
     var origin = CollaborationMessageOrigin("@fixture:example.test", "a".repeat(64))
     var prepareFailure: Failure? = null
     var preparations = 0
@@ -336,7 +336,7 @@ private class StageFixture {
     val control = ConversationCommandFixture()
     val device =
         CollaborationMessageDevice(stageId(6), stageId(7), stageId(8), "!room:example.test")
-    private val owner: CollaborationOwner
+    val owner: CollaborationOwner
         get() =
             CollaborationOwner(
                 "local",
@@ -575,7 +575,10 @@ private class StageFixture {
         assertIs<AppResult.Success<*>>(base.queue())
     }
 
-    suspend fun stage() = staging("selection", device.deviceId, record.intent.id)
+    suspend fun stage(
+        scope: CollaborationOperationScope = CollaborationOperationScope.Selected("selection"),
+        deviceId: String = device.deviceId,
+    ) = staging(scope, deviceId, record.intent.id)
 
     fun replace(value: CollaborationMessageRecord) {
         base.records.value =
