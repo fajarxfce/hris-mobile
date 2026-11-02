@@ -28,6 +28,7 @@ internal class HistoryReopeningFixture {
     var leaseOwner = delivery.owner
     var leaseDevice = delivery.device.deviceId
     var closes = 0
+    var publicationFailure: Failure? = null
     val failures = MutableStateFlow<Failure?>(null)
     val lease =
         object : CollaborationRuntimeLease {
@@ -39,6 +40,11 @@ internal class HistoryReopeningFixture {
 
             override val installedOperationId = delivery.device.bootstrapOperationId
             override val credentialFailures = failures
+
+            override fun publish(): AppResult<Unit> {
+                events += "publish"
+                return publicationFailure?.let { AppResult.Failed(it) } ?: AppResult.Success(Unit)
+            }
 
             override suspend fun retryCredentialWrite(): AppResult<Unit> =
                 error("No implicit write retry")

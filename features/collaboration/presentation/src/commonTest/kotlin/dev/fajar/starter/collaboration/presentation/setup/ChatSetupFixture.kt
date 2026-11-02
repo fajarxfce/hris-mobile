@@ -143,6 +143,8 @@ internal class ChatSetupFixture {
 
             override val credentialFailures = MutableStateFlow<Failure?>(null)
 
+            override fun publish(): AppResult<Unit> = AppResult.Success(Unit)
+
             override suspend fun retryCredentialWrite(): AppResult<Unit> =
                 error("No hidden credential retry")
 

@@ -51,6 +51,8 @@ class RestoreCollaborationRuntime(
                 return AppResult.Failed(it)
             }
             currentCoroutineContext().ensureActive()
+            val published = runtime.publish()
+            if (published is AppResult.Failed) return published
             transferred = true
             return AppResult.Success(runtime)
         } finally {

@@ -21,6 +21,11 @@ internal class HrisProofRuntimeAccess(private val runtime: AndroidCollaborationR
     var providerReads = 0
         private set
 
+    override suspend fun activatePusher(
+        owner: CollaborationOwner,
+        deviceId: String,
+    ): AppResult<Unit> = error("No implicit pusher activation")
+
     override suspend fun selfIdentity(
         owner: CollaborationOwner,
         deviceId: String,

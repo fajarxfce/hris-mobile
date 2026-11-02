@@ -13,7 +13,7 @@ class ReopenCollaborationHistoryTest {
         val f = HistoryReopeningFixture()
         assertEquals(f.result(CollaborationHistoryRuntimePreparation.Reopened), f.reopen())
         assertEquals(
-            listOf("get", "room", "prepare", "get", "room", "restore", "get", "room"),
+            listOf("get", "room", "prepare", "get", "room", "restore", "get", "room", "publish"),
             f.events,
         )
         assertEquals(3, f.local.setup.calls)
@@ -115,6 +115,7 @@ class ReopenCollaborationHistoryTest {
             assertIs<AppResult.Failed>(f.reopen())
             assertEquals(1, f.closes)
             assertEquals("close", f.events.last())
+            assertFalse("publish" in f.events)
         }
     }
 
@@ -148,6 +149,29 @@ class ReopenCollaborationHistoryTest {
         task.join()
         assertTrue(task.isCancelled)
         assertEquals(1, f.closes)
+        assertFalse("publish" in f.events)
+    }
+
+    @Test
+    fun pendingFinalRoomAdmissionDoesNotPublishAndFailedPublicationClosesTheNewLease() = runTest {
+        val f = HistoryReopeningFixture()
+        val entered = CompletableDeferred<Unit>()
+        val release = CompletableDeferred<Unit>()
+        f.delivery.control.beforeRemote = {
+            f.events += it
+            if (it == "room" && "restore" in f.events) {
+                entered.complete(Unit)
+                release.await()
+            }
+        }
+        f.publicationFailure = f.local.storage
+        val task = async { f.reopen() }
+        entered.await()
+        assertFalse("publish" in f.events)
+        assertEquals(0, f.closes)
+        release.complete(Unit)
+        assertEquals(AppResult.Failed(f.local.storage), task.await())
+        assertEquals(listOf("publish", "close"), f.events.takeLast(2))
     }
 
     @Test
@@ -200,6 +224,7 @@ class ReopenCollaborationHistoryTest {
                 "restore",
                 "get",
                 "room",
+                "publish",
             ),
             f.events,
         )

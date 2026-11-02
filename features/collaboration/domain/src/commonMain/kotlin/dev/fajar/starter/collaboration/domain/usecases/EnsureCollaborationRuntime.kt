@@ -69,6 +69,8 @@ class EnsureCollaborationRuntime(
                     return@withLock AppResult.Failed(it)
                 }
                 currentCoroutineContext().ensureActive()
+                val published = lease.publish()
+                if (published is AppResult.Failed) return@withLock published
                 // The repository retains this registered lease; the application lifetime drains it.
                 retained = true
                 AppResult.Success(CollaborationRead(owner, true))

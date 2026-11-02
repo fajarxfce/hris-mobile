@@ -40,6 +40,7 @@ internal constructor(
     private val shutdown = SdkStoreShutdown(lifetime) { releaseResources() }
     private val stopRequested = AtomicBoolean()
     private val acquisitionComplete = AtomicBoolean()
+    private val published = AtomicBoolean()
     private val sync =
         SdkSyncLifecycle(lifetime) { createAndroidCollaborationSync(nativeClient, lifetime) }
     private val children = SdkChildResources(lifetime)
@@ -106,7 +107,24 @@ internal constructor(
         get() = stopRequested.get()
 
     internal val availableForEntry
-        get() = acquisitionComplete.get() && !stopRequested.get()
+        get() = acquisitionComplete.get() && published.get() && !stopRequested.get()
+
+    override fun publish(): AppResult<Unit> {
+        if (stopRequested.get()) return syncStopped()
+        credentialFailures.value?.let {
+            return AppResult.Failed(it)
+        }
+        if (!acquisitionComplete.get())
+            return AppResult.Failed(
+                Failure(
+                    FailureKind.Unavailable,
+                    "Chat is still opening.",
+                    code = "client.collaboration_runtime_opening",
+                )
+            )
+        published.set(true)
+        return if (stopRequested.get()) syncStopped() else AppResult.Success(Unit)
+    }
 
     /** No active queue writer is interrupted to reclaim this client's retained history caches. */
     internal suspend fun prepareHistoryReopen(
@@ -140,7 +158,7 @@ internal constructor(
             is AppResult.Success -> AppResult.Success(true)
         }
 
-    /** Publication follows paused SDK restore and durable initialization. */
+    /** Native readiness precedes the owning use case's separate admission/publication step. */
     internal fun completeAcquisition() {
         check(!stopRequested.get())
         check(acquisitionComplete.compareAndSet(false, true))

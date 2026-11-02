@@ -55,6 +55,8 @@ class NativeWorkerSdk(private val wire: NativeCollaborationUi) : CollaborationRu
                 override val installedOperationId = wire.bootstrapId
                 override val credentialFailures = MutableStateFlow<Failure?>(null)
 
+                override fun publish(): AppResult<Unit> = AppResult.Success(Unit)
+
                 override suspend fun retryCredentialWrite(): AppResult<Unit> =
                     error("No implicit credential retry")
 

@@ -146,6 +146,8 @@ class ReopenCollaborationHistory(
                 return AppResult.Failed(it)
             }
             currentCoroutineContext().ensureActive()
+            val published = lease.publish()
+            if (published is AppResult.Failed) return published
             retained = true
             return AppResult.Success(
                 CollaborationRead(owner, CollaborationHistoryRuntimePreparation.Reopened)

@@ -21,6 +21,7 @@ class CollaborationRuntimeInstallationTest {
         assertEquals(f.setup.owner, result.owner)
         assertEquals(f.lease.deviceId, result.value)
         assertNull(f.setup.record)
+        assertEquals(1, f.lease.publications)
         assertEquals(0, f.lease.closes)
         f.lease.close()
     }
@@ -67,11 +68,16 @@ class CollaborationRuntimeInstallationTest {
     @Test
     fun confirmedFactsRetireOnlyAfterProtectedInstallationAndTransferThePausedOwner() = runTest {
         val f = InstallationFixture()
-        f.beforeRemove = { assertTrue(f.installed) }
+        f.beforeRemove = {
+            assertTrue(f.installed)
+            assertEquals(0, f.lease.publications)
+        }
+        f.lease.beforePublish = { assertNull(f.setup.record) }
         val result = assertIs<AppResult.Success<CollaborationRuntimeLease>>(f.install()()).value
         assertSame(f.lease, result)
         assertNull(f.setup.record)
         assertEquals(1, f.installations.size)
+        assertEquals(1, f.lease.publications)
         assertEquals(0, f.lease.closes)
         assertTrue(f.setup.calls.isEmpty())
         // Old gateway deadline facts do not delete local ownership or grant sending authority.
@@ -225,6 +231,7 @@ class CollaborationRuntimeInstallationTest {
         assertEquals(f.setup.storageFailure, f.install()())
         assertEquals(f.record, f.setup.record)
         assertEquals(1, f.lease.closes)
+        assertEquals(0, f.lease.publications)
         f.lease = InstallationLease(f.setup.owner)
         f.removeResult = null
         assertIs<AppResult.Success<CollaborationRuntimeLease>>(f.install()())
@@ -261,6 +268,7 @@ class CollaborationRuntimeInstallationTest {
         assertTrue(task.isCancelled)
         assertEquals(1, f.lease.closes)
         assertEquals(f.record, f.setup.record)
+        assertEquals(0, f.lease.publications)
     }
 
     @Test
@@ -282,7 +290,41 @@ class CollaborationRuntimeInstallationTest {
             assertNull(f.setup.record)
             assertTrue(f.installed)
             assertEquals(1, f.lease.closes)
+            assertEquals(0, f.lease.publications)
         }
+    }
+
+    @Test
+    fun pendingRetirementCannotExposeTheNewRuntimeToAConcurrentCaller() = runTest {
+        val f = InstallationFixture()
+        val entered = CompletableDeferred<Unit>()
+        val release = CompletableDeferred<Unit>()
+        f.beforeRemove = {
+            entered.complete(Unit)
+            release.await()
+        }
+        val task = async { f.install()() }
+        entered.await()
+        assertTrue(f.installed)
+        assertEquals(0, f.lease.publications)
+        assertEquals(f.record, f.setup.record)
+        release.complete(Unit)
+        assertIs<AppResult.Success<CollaborationRuntimeLease>>(task.await())
+        assertEquals(1, f.lease.publications)
+        f.lease.close()
+    }
+
+    @Test
+    fun publicationFailureKeepsProtectedFactsButNeverTransfersTheirRuntime() = runTest {
+        val f = InstallationFixture()
+        val stopped = AppResult.Failed(Failure(FailureKind.Unavailable, "Stopped"))
+        f.lease.publishResult = stopped
+        f.lease.closeResult = f.setup.storageFailure
+        assertEquals(stopped, f.install()())
+        assertNull(f.setup.record)
+        assertTrue(f.installed)
+        assertEquals(1, f.lease.publications)
+        assertEquals(1, f.lease.closes)
     }
 
     @Test
@@ -475,7 +517,16 @@ private class InstallationLease(override var owner: CollaborationOwner) :
     override var installedOperationId = "operation"
     override val credentialFailures = MutableStateFlow<Failure?>(null)
     var closes = 0
+    var publications = 0
+    var publishResult: AppResult<Unit> = AppResult.Success(Unit)
+    var beforePublish: () -> Unit = {}
     var closeResult: AppResult<Unit> = AppResult.Success(Unit)
+
+    override fun publish(): AppResult<Unit> {
+        beforePublish()
+        publications++
+        return publishResult
+    }
 
     override suspend fun retryCredentialWrite(): AppResult<Unit> =
         error("No implicit credential retry")

@@ -1,5 +1,55 @@
 # Agent continuation — HRIS Mobile
 
+## Native runtime publication and five native regressions validated — 2 November 2026
+
+[Contract](collaboration-runtime-publication.md) /
+[evidence](measurements/chat-runtime-publication-2026-11-02.json): completed SDK
+acquisition stays private until synchronous publication after final owning-use-case
+admission. All **four** acquisition paths are covered: Ensure, Install, Restore and
+ReopenHistory. Install also waits for command retirement. No suspension separates
+publication from transfer; failure/cancellation keeps cleanup with the original
+caller. This is resource ownership, not permission to send or read remotely.
+
+Focused430 domain/190 Android host/six proof cleanup cases, actual proof APK assembly,
+lint, format/architecture and detekt pass in156s Gradle /160.313s wall. Proof lint
+has zero errors/47 warnings. The earlier pusher interface addition had left the
+proof adapter without its new method; it is now explicit and compiled. Four new
+host cases use inert FFI handles; they are separate from actual native evidence.
+
+The same proof APK `6f88fcd6` passes all five actual SDK/HRIS/Synapse cases against
+Platform8b77c4fa in369s /369.345s. SDK56.804s, scheduled46.985s, three worker cases
+240.250s; all results/cleanup pass and31 evidence hashes are retained. Queued,
+frozen-only and cancelled-draft cases each retain older history and verify33
+encrypted events. CI now pins that Platform revision; hosted execution is not yet
+audited. The owned emulator5560 is stopped and absence verified.
+
+Full root and affected browser checks pass in236s /239.946s:2,879 desktop,190
+Android host,702 browser and10 build-logic tests, plus10 Android-runner/17
+distribution Python checks. Sixteen Kotlin inputs stayed unchanged throughout;
+the later CI-pin-only change makes17 full-check inputs. No employee APK build or
+phone installation here. Phone remains user-confirmed release11; earlier
+universal13 startup proof predates this change. Next useful update14+, notify
+first and preserve signer/data with explicit10.77.77.3:5555 install-only.
+
+**Continue immediately:** finite background runtime borrowing alongside foreground
+retention, using one SDK/store per owner/device. Carry current native parent
+separately from optional selected-company owner. Parent expiry must still fire
+after foreground admission expires; token rotation must retain the same parent.
+Reserve capacity/store identity before suspending acquisition and invalidate late
+opens on parent replacement/shutdown. Unfinished cleanup retains capacity5. A
+borrower gets a finite releasable reference, never a parent close handle; releasing
+it must preserve a foreground client. Test pending opens, expiry, replacement,
+denial and failed drain. Detailed supplementary notes are in
+`.work/runtime-publication-2026-11-02/next-runtime.txt`.
+
+Then extend existing Selected/Background scope through history/outbox instead of
+copying their integrity/denial logic, and implement durable all-company collapsed
+wake/reconnect/periodic recovery, receive/decrypt/privacy/read/mute/deep links and
+inline replies. Classic SyncV2 remains required; NotificationClient needs sliding
+sync. Keep push delivery disabled until real receive/recovery acceptance. No live
+rollout or generic Starter change; all54 PRD groups remain unaccepted. Continue
+after each pushed checkpoint.
+
 
 ## Shared conversation reads accept background scope — 2 November 2026
 

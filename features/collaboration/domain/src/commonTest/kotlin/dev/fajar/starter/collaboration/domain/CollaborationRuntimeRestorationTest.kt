@@ -53,6 +53,7 @@ class CollaborationRuntimeRestorationTest {
         assertEquals(pending, f.setup.record)
         assertTrue(f.setup.calls.isEmpty())
         assertEquals("installed-operation", f.lease.installedOperationId)
+        assertEquals(1, f.publications)
         assertEquals(0, f.closes)
         f.lease.close()
     }
@@ -93,6 +94,7 @@ class CollaborationRuntimeRestorationTest {
             }
             assertIs<AppResult.Failed>(f.restore())
             assertEquals(1, f.closes)
+            assertEquals(0, f.publications)
         }
     }
 
@@ -138,10 +140,23 @@ class CollaborationRuntimeRestorationTest {
         }
         val task = async { f.restore() }
         entered.await()
+        assertEquals(0, f.publications)
         task.cancel()
         release.complete(Unit)
         task.join()
         assertTrue(task.isCancelled)
+        assertEquals(1, f.closes)
+        assertEquals(0, f.publications)
+    }
+
+    @Test
+    fun failedPublicationNeverTransfersTheRestoredLeaseDespiteFailedCleanup() = runTest {
+        val f = RestorationFixture()
+        val denied = Failure(FailureKind.Unauthorized, "Stopped before publication")
+        f.publicationFailure = denied
+        f.closeFailure = f.setup.storageFailure.failure
+        assertEquals(AppResult.Failed(denied), f.restore())
+        assertEquals(1, f.publications)
         assertEquals(1, f.closes)
     }
 
@@ -168,6 +183,8 @@ private class RestorationFixture {
     val setup = CollaborationCommandFixture()
     var calls = 0
     var closes = 0
+    var publications = 0
+    var publicationFailure: Failure? = null
     var closeFailure: Failure? = null
     var leaseOwner = setup.owner
     var leaseDevice = "device"
@@ -182,6 +199,11 @@ private class RestorationFixture {
 
             override val installedOperationId = "installed-operation"
             override val credentialFailures = failures
+
+            override fun publish(): AppResult<Unit> {
+                publications++
+                return publicationFailure?.let { AppResult.Failed(it) } ?: AppResult.Success(Unit)
+            }
 
             override suspend fun retryCredentialWrite(): AppResult<Unit> =
                 error("No implicit credential retry")

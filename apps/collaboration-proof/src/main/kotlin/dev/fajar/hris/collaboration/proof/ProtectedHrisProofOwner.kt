@@ -90,15 +90,36 @@ internal class ProtectedHrisProofOwner(
         error("Owned entry attempts exhausted")
     }
 
-    suspend fun restoreStored(): AndroidCollaborationRuntimeLease =
-        requireNotNull(success(runtime.restore(owner, deviceId)))
-            as AndroidCollaborationRuntimeLease
+    suspend fun restoreStored(): AndroidCollaborationRuntimeLease {
+        val restored =
+            requireNotNull(success(runtime.restore(owner, deviceId)))
+                as AndroidCollaborationRuntimeLease
+        try {
+            publishFixture(restored)
+            return restored
+        } catch (failure: Exception) {
+            closeHrisProofResources(failure, listOf({ restored.closeProofRuntime() }))
+            throw failure
+        }
+    }
+
+    /** This seeded fixture owns admission; product entry uses its owning use cases. */
+    private suspend fun publishFixture(lease: AndroidCollaborationRuntimeLease) {
+        val opening = runtime.isOpen(lease.owner, deviceId)
+        check(
+            opening is AppResult.Failed &&
+                opening.failure.code == "client.collaboration_runtime_opening"
+        )
+        success(lease.publish())
+        check(success(runtime.isOpen(lease.owner, deviceId)))
+    }
 
     suspend fun installAndReopen(): AndroidCollaborationRuntimeLease {
         var owned: AndroidCollaborationRuntimeLease? = null
         try {
             owned = success(runtime.install(owner, command())) as AndroidCollaborationRuntimeLease
             val keys = identity(owned)
+            publishFixture(owned)
             check(success(runtime.isOpen(owner, deviceId)))
             check(runtime.restore(owner, deviceId) is AppResult.Failed)
             owned.closeProofRuntime()
@@ -156,6 +177,7 @@ internal class ProtectedHrisProofOwner(
                     as AndroidCollaborationRuntimeLease
             check(owned.owner == renewedOwner && identity(owned) == keys)
             check(owned.installedOperationId == fixture.getString("bootstrapOperationId"))
+            publishFixture(owned)
             owner = renewedOwner
             return owned.also { owned = null }
         } finally {

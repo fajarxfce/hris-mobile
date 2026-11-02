@@ -27,6 +27,7 @@ class EnsureCollaborationRuntimeTest {
         assertEquals(opening, assertIs<AppResult.Failed>(f.entry("selection", "device")).failure)
         assertEquals(0, f.restores)
         assertEquals(0, f.closes)
+        assertEquals(0, f.publications)
     }
 
     @Test
@@ -35,6 +36,7 @@ class EnsureCollaborationRuntimeTest {
         f.open = true
         repeat(3) { assertTrue(f.ensure().value) }
         assertEquals(3, f.probes)
+        assertEquals(0, f.publications)
         assertEquals(0, f.restores)
         assertEquals(0, f.closes)
     }
@@ -63,10 +65,13 @@ class EnsureCollaborationRuntimeTest {
         val second = async { f.ensure() }
         runCurrent()
         assertEquals(1, f.probes)
+        assertEquals(0, f.publications)
+        assertFalse(f.open)
         release.complete(Unit)
         assertTrue(first.await().value)
         assertTrue(second.await().value)
         assertEquals(1, f.restores)
+        assertEquals(1, f.publications)
         assertEquals(0, f.closes)
         assertEquals(AppResult.Success(Unit), f.runtime.closeOtherOwners(null))
         assertEquals(1, f.closes)
@@ -113,6 +118,18 @@ class EnsureCollaborationRuntimeTest {
         f.beforeRestore = { f.setup.session = f.setup.initial.copy(id = "replaced") }
         assertIs<AppResult.Failed>(f.entry("selection", "device"))
         assertEquals(1, f.closes)
+        assertEquals(0, f.publications)
+        assertFalse(f.open)
+    }
+
+    @Test
+    fun failedPublicationDoesNotReportReadyAndStillDisposesTheNewOwner() = runTest {
+        val f = EnsureRuntimeFixture()
+        f.publicationFailure = f.denied
+        f.closeFailure = f.storage
+        assertEquals(f.denied, assertIs<AppResult.Failed>(f.entry("selection", "device")).failure)
+        assertEquals(1, f.publications)
+        assertEquals(1, f.closes)
         assertFalse(f.open)
     }
 
@@ -158,6 +175,7 @@ class EnsureCollaborationRuntimeTest {
         request.join()
         assertTrue(request.isCancelled)
         assertEquals(1, f.closes)
+        assertEquals(0, f.publications)
         assertFalse(f.open)
     }
 
@@ -189,6 +207,8 @@ private class EnsureRuntimeFixture {
     var probes = 0
     var restores = 0
     var closes = 0
+    var publications = 0
+    var publicationFailure: Failure? = null
     val denied = Failure(FailureKind.Unauthorized, "Denied", code = "native_session_invalid")
     val storage = Failure(FailureKind.Storage, "Unavailable", code = "fixture.storage")
     var probeFailure: Failure? = null
@@ -206,6 +226,15 @@ private class EnsureRuntimeFixture {
 
             override val installedOperationId = "installed-operation"
             override val credentialFailures = this@EnsureRuntimeFixture.credentialFailures
+
+            override fun publish(): AppResult<Unit> {
+                publications++
+                publicationFailure?.let {
+                    return AppResult.Failed(it)
+                }
+                open = true
+                return AppResult.Success(Unit)
+            }
 
             override suspend fun retryCredentialWrite(): AppResult<Unit> =
                 error("No credential retry")
@@ -282,7 +311,6 @@ private class EnsureRuntimeFixture {
                 restores++
                 beforeRestore()
                 if (missing) return AppResult.Success(null)
-                open = true
                 return AppResult.Success(lease)
             }
 

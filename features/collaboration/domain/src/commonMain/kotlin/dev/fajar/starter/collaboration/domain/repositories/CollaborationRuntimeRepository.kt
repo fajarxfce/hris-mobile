@@ -92,6 +92,9 @@ interface CollaborationRuntimeLease {
     val installedOperationId: String
     val credentialFailures: StateFlow<Failure?>
 
+    /** Publish paused ownership after final admission. No suspension or network; repeatable. */
+    fun publish(): AppResult<Unit>
+
     suspend fun retryCredentialWrite(): AppResult<Unit>
 
     /** Bounded wait; the repository retains unfinished cleanup and its exclusive store lock. */
