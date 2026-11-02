@@ -1,5 +1,41 @@
 # Agent continuation — HRIS Mobile
 
+## Settings/projection Apple build accepted — 2 November 2026
+
+Apple41492596519 at exact222bd44147081089e4f22fbe1828e619916554f9 is fully audited:
+801 cases/91 suites, zero failures/errors/skips;72 accepted source hashes verified
+against that commit. Artifact13168136589 has verified GitHub ZIP digest
+fc400e60a5934858c91c2661b7c1bfab9b4a030574752685a396be35bb7cd4e9.
+Simulator compile795s/tests81s, full Xcode app1225s. This covers local settings and
+notification projection, EXCLUDES action envelopes5fb8611b, command dispatchb8703cbe
+and newer input retention. [Evidence](measurements/chat-notification-projection-apple-2026-11-02.json).
+No physical iPhone/APNs/CallKit/provider/display acceptance. Physical tests waived.
+This replaces the earlier pending status; all Apple jobs are now finished. Dispatch
+next Apple workflow on the next accepted source after reply-input validation/push.
+
+Ongoing uncommitted work:13 Kotlin inputs for encrypted reply-input storage and a
+current-family private-input retention use case, under .work/chat-notification-reply-inputs-2026-11-02.
+Authenticated checkpoint lists at most64 active input documents, independently of
+composer/employee-command slots. HMAC identity makes repeated text/descriptor recover
+the original token; changed text retains a separate input. Exact revisions protect
+review/removal and later re-created input. No OS receiver or dispatcher wrapper yet.
+First focused23 cases failed one test in100.107s: it expected a failure for inactive
+account reads, while the existing raw replica contract returns absence. The test now
+explicitly asserts null and verifies old input remains recoverable under its owner;
+production code unchanged. Focused attempt2 is running; full/browser still REQUIRED.
+Do not claim this input work accepted before actual reports. Raw storage absence is
+not current-session authority: use cases must guard ownership around it.
+
+Current implementation headb8703cbe is pushed. Phone18/source42f5d157 and live304be027/
+schema116 remain; all chat push OFF. No emulator or phone interaction. Continue input
+validation, then exact retained-command proof before input retirement, bounded review/
+read/recovery, durable receiver wrapper, display journal/issuer/serialization and all54
+open PRD groups. .work/.../completion-next.md records detailed follow-through. Native
+reply caller must persist input before command dispatch and preserve it after failures.
+No generic Starter port. Next product phone build >18: notify first, explicit
+10.77.77.3:5555, --install-only, preserve signing/data, never drive phone UI. Keep
+working after this documentation commit and push every atomic commit.
+
 ## Admitted notification command dispatch accepted — 2 November 2026
 
 Current-session token opening now checks acquired company/direct-conversation and
