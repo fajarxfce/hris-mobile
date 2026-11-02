@@ -1,5 +1,19 @@
 # Template updates
 
+## Durable work wake storage — 2 November 2026
+
+Mobile `be8ebc7b` proves the raw application-global key/generation/pending store,
+including transactional capacity, old-completion fencing, replay, cancellation,
+close/reopen and SQLite11→12/IndexedDB10→11 migrations. Its 15 shared source/test/
+schema files are copied exactly to [Starter `dab675a8`](https://github.com/fajarxfce/compose-fluent-starter/commit/dab675a8804fb15a205e4a66329a096755f067eb).
+
+Starter's independent root/database-browser/Android/lint/production Web run passes
+in 301s / 305.231s: 348 desktop, 42 database-browser and six build-logic cases, zero
+failures/errors/skips. Lint has zero fatal/errors and 45 existing warnings. Its APK
+is built, not installed. [Starter evidence](https://github.com/fajarxfce/compose-fluent-starter/blob/dab675a8804fb15a205e4a66329a096755f067eb/docs/measurements/work-wake-storage-2026-11-02.json)
+retains exact source, XML, APK and Web hashes. HRIS policy and application wiring
+remain in Mobile. Six Apple wrappers await Mobile hosted proof before porting.
+
 ## Reverse indexed replica pages — 1 November 2026
 
 Eight portable raw-query source/test files are copied to Starter after Mobile's 76s

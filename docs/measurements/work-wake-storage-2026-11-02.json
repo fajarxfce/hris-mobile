@@ -186,5 +186,17 @@
     "scope": "apple",
     "observedStatus": "in_progress",
     "acceptance": false
+  },
+  "starterPort": {
+    "commit": "dab675a8804fb15a205e4a66329a096755f067eb",
+    "portableFiles": 15,
+    "evidence": "https://github.com/fajarxfce/compose-fluent-starter/blob/dab675a8804fb15a205e4a66329a096755f067eb/docs/measurements/work-wake-storage-2026-11-02.json",
+    "gradleSeconds": 301,
+    "wallSeconds": 305.231,
+    "desktopTests": 348,
+    "databaseBrowserTests": 42,
+    "buildLogicTests": 6,
+    "appleWrapperPorted": false,
+    "apkInstalled": false
   }
 }
