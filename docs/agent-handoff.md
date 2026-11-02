@@ -1,40 +1,52 @@
 # Agent continuation — HRIS Mobile
 
-## Repaired hosted native proof accepted; reply read/review checks running
+## Full Apple and native completion-source CI accepted; read/review rerun active
 
-Hosted native41502174267 atdf0a1d408c9f895160aff86f8e0e152f2fbcefdb against
-Platform304be02700cf07e496421c17e90f5a471b4bd68c PASSED all five actual interop
-cases/three suites, plus230 Android-host/37 and six proof-host/one; zero failures,
-errors or skips. Artifact13173370273 ZIP digest324c991d0b73fc2be97beccdfb181a4bb3771a5416985e7d795efba213370bef
-matches GitHub. All five drivers report the same proof APK hash abef3b722cecde658ae25f584b5192459b521fc04b5d01e4b1aef642fa0733e2.
-All scenarios passed and cleaned up: SDK exchanged seven admitted receipts and three
-encrypted messages; queued/frozen/cancelled worker inputs each survived actual process
-death, recovered176 incoming originals including175 seeded peer messages, and passed
-priority/history recovery; a separate WorkManager case resumed automatically after
-ordinary process death and network restoration.105 relevant source hashes verified at
-the actual CI commit. [Audited evidence](measurements/chat-ci-repair-native-hosted-2026-11-02.json).
-No new notification callback or reply-input scenario is exercised by these existing
-interop tests. Later completion/read/review is outside this CI source. The two failed
-local worker attempts and failed diagnostic boot below remain failures; local emulator
-hang unresolved. No emulator remains running; no further host retries needed to accept
-this independent hosted native proof. Latest native41504255602 at1a92 is running.
+Full Apple41508567222 attempt2 at2dd94e94ea6b74b9f4d9430f25348cb64a7f7f30
+(docs-only after1a92) PASSED:843 simulator cases/96 suites, no failures/errors/skips;
+compile698s, tests75s, full Xcode1484s. Artifact13175603014 ZIP SHA256
+fbb0eba840c415b25b8b7476f02c7adafb5693fcc7ca7c71558e6036a80bd696
+matches GitHub.109 exact source hashes checked. This covers exact reply completion;
+read/review and later work excluded. Attempt1 failed solely because no hosted macOS
+runner acquired the job; retained separately. Physical iPhone remains waived. No
+APNs/CallKit/native-notification acceptance. [Apple evidence](measurements/chat-notification-reply-completion-apple-2026-11-02.json).
 
-Full Apple41508567222 attempt1 at2dd94e94 never acquired a macOS runner and failed
-before any steps; check annotations explicitly cite hosted ARM capacity. Requested
-failed-job rerun attempt2 on the SAME source. Prepared109-source audit remains under
-.work/chat-notification-reply-completion-apple-2026-11-02. Do not claim it passed.
-Latest accepted full Apple41502192261/df0 remains below. Portable41504255605 at1a92
-passed; Apple adapter job still running last checked.
+Native41504255602 at1a92d53c2a523dec1b943d416bce6dd32bd49d21 against
+Platform304be027 PASSED five actual interop cases/three suites plus230 Android-host/
+37 and six proof-host/one, zero failures/errors/skips. ZIP digest
+8b0d649f71906684e2acddfceaa2828e1a2541725b2b88b5aee88f1c718152f7
+verified against GitHub;109 source hashes checked. All five scenarios passed and
+cleaned up: SDK receipts/encrypted messages, queued/frozen/cancelled worker inputs
+across process death with176 incoming originals, and separate automatic WorkManager
+restart/network recovery. Existing native scenarios do not exercise notification
+reply input/receiver behavior. [Native evidence](measurements/chat-reply-completion-native-hosted-2026-11-02.json).
+Earlier repaireddf0 native41502174267 also accepted with [separate evidence](measurements/chat-ci-repair-native-hosted-2026-11-02.json).
+Control41504255605 at1a92 portable AND Apple adapter/host jobs finished success;
+not separately artifact-audited here. Full Xcode evidence above is independently audited.
+Both failed local worker attempts and failed diagnostic boot below remain failures;
+local emulator host hang unresolved, no emulator running, no repeat required.
 
-Uncommitted read/review now exists with20 domain cases and updated actual SQLite/
-assembled-DI coverage. Focused33 cases/four suites passed, but detekt rejected review
-length103/max100. Extracted exact hold-and-reread helper without policy changes; full
-root/proof/Wasm/browser check2 is RUNNING under .work/chat-notification-reply-review-2026-11-02.
-Do not commit those Kotlin changes until full checks and actual20 browser cases pass.
-Next: complete application reply wrapper, durable fair account recovery, native display/
-action ownership. Phone18 and live304/schema116/pushOFF unchanged. Keep long run and
-push every atomic commit. Next validated product build >18: notify, explicit phone
-10.77.77.3:5555 --install-only; preserve data/signature and do not drive its UI.
+Uncommitted read/review has20 domain cases and actual SQLite/assembled-DI coverage.
+Focused33 cases/four suites passed but detekt rejected review length103/max100;
+extracted exact hold-and-reread helper. Full check2 eventually logged BUILD SUCCESSFUL
+47m7s and produced1882 fresh passing cases/239 suites including20 actual browser/two.
+The Python wrapper timed out1800s and killed only xvfb-run; Gradle child continued,
+so its actual exit code was not collected. This is NOT a clean command pass. Preserved
+all fresh reports and input hashes, recorded wrapper failure separately. Host I/O
+pressure was extreme (load260, IO some65/full36 over60s); no unrelated processes stopped.
+Updated local harness now owns a process group and terminates descendants on timeout.
+Full check3 RUNNING with unchanged eight Kotlin inputs, rerunning the20 browser cases;
+required before commit. Directory .work/chat-notification-reply-review-2026-11-02.
+
+Next application reply wrapper has UNAPPLIED .txt drafts under
+.work/chat-notification-reply-flow-2026-11-02 (wrapper/result/14 assembled-storage tests).
+Retain before company admission; bounded serialized callbacks, exact completion before/
+after dispatch; only reproduced review; preserve uncertainty. Apply and validate only
+after read/review acceptance. Then durable fair account recovery and native display/
+action ownership. Phone18 and live304/schema116/pushOFF unchanged. Keep long run/push
+atomic commits. Next validated product build >18: notify first, explicit authorized
+10.77.77.3:5555 --install-only; preserve data/signature, no phone UI driving.
+All54 PRD groups open. Earlier checkpoints below are historical and superseded here.
 
 ## Local emulator stopped; worker proof unresolved, continue independent work
 
