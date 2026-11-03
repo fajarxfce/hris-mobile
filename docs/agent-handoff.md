@@ -69,12 +69,24 @@ No checks need repeating absent new changes. Work/audits complete in
 .work/chat-notification-action-recovery-2026-11-03. Full Apple at543c61b9 excludes v2;
 freeze the union of its227 source paths and these19 for one subsequent Apple run.
 
-NEXT after pushing this fixture commit: inspect automatic native workflow queue
-without duplicating it. If the prior c64cc036 run with the known one-shot fixture
-has started, cancel only that superseded run after the corrected run exists; retain
-older543c61b9 completion/evidence. Freeze old Apple227 union accepted v2 nineteen
-source paths at this new commit and dispatch ONE full ci.yml scope=apple; audit after
-completion. Continue focused-route notification ownership/disposition meanwhile.
+Corrected native41585074316 at **a90dc3f6801f4dc3a49cab4eca8b6d629b024196** is
+IN_PROGRESS. Superseded41584514002 atc64cc036 was cancelled only after the corrected
+run existed: it still had the confirmed one-shot fixture. Cancellation and source
+checks saved in .work/chat-proof-observation-2026-11-03/superseded-native.json.
+Older native41579417140 at543c61b9 also FAILED; its artifact has not yet been audited.
+No full provider acceptance is claimed; do not duplicate these runs.
+
+ONE consolidated full Apple [41585101233](measurements/chat-notification-action-recovery-apple-2026-11-03.json)
+was dispatched05:38:38Z at a90dc3f6,227 frozen source paths (all19 v2 paths were already
+in the previous227-file union). It is PENDING. .work/chat-action-recovery-apple-2026-11-03/
+audit.py is ready; run after successful completion only, exclusive extraction. This
+build includes v2 and current storage ownership; Android proof-only code does not
+execute on Apple. Do not dispatch/cancel another Apple run until this result is handled.
+
+NEXT implement actual focused-route notification ownership/disposition while hosted
+checks run. No local heavy job or owned emulator remains. The phone still has verified
+release20; these test-fixture builds are not new product APKs. On the next actual
+validated product release use >20, notify before explicit install-only, preserve data.
 
 Focus source trace: ChatThreadViewModel obtains actual owner from readContext; expose
 that authenticated owner in state and clear it on scope failure/replacement. Route

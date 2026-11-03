@@ -1,0 +1,16 @@
+{
+  "superseded": {
+    "conclusion": "",
+    "headSha": "c64cc036be96a12e2922ad632210833043712f57",
+    "status": "in_progress",
+    "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/41584514002"
+  },
+  "replacement": {
+    "conclusion": "",
+    "headSha": "a90dc3f6801f4dc3a49cab4eca8b6d629b024196",
+    "status": "pending",
+    "url": "https://github.com/fajarxfce/hris-mobile/actions/runs/41585074316"
+  },
+  "reason": "Old v2 source still contains confirmed one-shot native-proof session observer; locally accepted corrected fixture has a queued automatic replacement. No provider acceptance claimed for the cancelled source.",
+  "cancelOutput": "\u2713 Request to cancel workflow 41584514002 submitted.\n"
+}
