@@ -9,6 +9,7 @@ interface AppDatabase {
     val replicas: ReplicaStore
     val commands: CommandStore
     val workWakes: WorkWakeStore
+    val deviceRecords: DeviceRecordStore
     val blobs: BlobStore
 
     fun close()

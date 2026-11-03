@@ -1,5 +1,48 @@
 # Agent continuation — HRIS Mobile
 
+## Device-owned raw records accepted locally; continue encrypted input repository
+
+[Raw storage contract](device-records.md) and
+[evidence](measurements/device-records-2026-11-03.json) are locally ACCEPTED.
+DeviceRecordStore retains opaque device-owned records before account activation, with
+atomic existing-record-first insertion, global bounded capacity, exact cleanup and
+bounded ordered pages. No encryption, account authorization or notification policy
+lives in this raw layer. SQLite12->13/IndexedDB11->12 are additive; every prior Room
+entity definition is unchanged. Public record diagnostics are redacted. Nothing evicts
+pending input or clears these rows on logout/account replacement.
+
+Focused1 PASSED99.993s: nine SQLite cases/two suites and51 actual browser/eight. Full2
+PASSED593.026s:3,794 desktop/537 suites,230 Android-host/37,51 browser/eight,11 proof-host/
+three,ten build-logic/two;1,764 fresh cases/281 suites,15 unchanged Kotlin hashes and
+schema digest verified, zero failures/errors/skips. Root quality, isolated proof
+assembly and shared Wasm passed. Eight Apple wrappers are prepared; Apple acceptance
+is pending a subsequent full hosted run. No more local tests absent a new reason.
+.work/chat-device-records-2026-11-03 audit.py/record.py completed.
+
+NEXT implement encrypted pre-retention notification input repository and explicit
+protected device-key ownership in application hosts. Six UNAPPLIED .txt Kotlin drafts
+and next-input-repository.txt/drafts-note.txt are in the raw-store work directory.
+They have not been compiled or accepted. Use existing shared actual SQLite/browser
+contract fixtures; validate key loss/tamper/cancellation/lost-response/reopen/capacity
+before application integration. Signed notification origin must be authenticated for
+the actual current account before transfer to owned input or review UI. No automatic
+send for a previous family; quarantine deletion must follow proven durable transfer.
+Native callback/review UI and input-specific OS-death proof remain open.
+
+No local heavy job/emulator remains. Phone21 is already installed; no new APK needed
+for this raw-only increment. Platform304/schema116 and Starter0d4432e unchanged. The
+five prior raw database/schema inputs match Starter exactly, but port only after
+Mobile's remaining Apple acceptance. Generic notification adapter port still waits
+for integrated Mobile acceptance. All54 PRD groups remain open, production chat
+notification hosts unbound and push OFF; voice/video/meeting UI absent.
+
+Current hosted gates: Apple41588371503 and native41587502684 at de69 include focus/
+build21 but exclude these raw records. Do not cancel/duplicate; audit each once after
+completion. Then freeze their source union plus raw records and any accepted encrypted
+input increment for ONE subsequent full Apple. Native auto queue handles later source.
+
+Historical checkpoint below is superseded by this current status.
+
 ## Corrected native provider proof accepted; device records in progress
 
 Hosted native [41585074316](measurements/chat-native-proof-observation-hosted-2026-11-03.json)

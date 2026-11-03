@@ -595,3 +595,14 @@ completion storage, with insertion fencing after pending capacity is released.
 SQLite 11 / IndexedDB 10 migration, rollback, restart, ownership and same-revision
 replacement are covered. HRIS proof encoding, message retirement, journal cleanup
 and UI remain downstream; this does not copy HRIS policy or configuration.
+
+
+## Device-owned raw input records — 3 November 2026
+
+[DeviceRecordStore](device-records.md) is implemented and locally validated in Mobile;
+[measurement](measurements/device-records-2026-11-03.json) includes real SQLite/browser
+contracts, additive migrations, full root and Android proof assembly. Existing generic
+database/schema inputs match Starter exactly. Eight Apple contract wrappers await
+full hosted Mobile execution before this source and schema are ported. The encrypted
+HRIS reply repository, origin authentication and callback/review policy remain Mobile.
+No Starter change is included in this checkpoint.
