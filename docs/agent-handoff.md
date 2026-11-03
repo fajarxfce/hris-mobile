@@ -56,12 +56,20 @@ never activated; do not invent mandatory legacy-v1 migration. Chat push OFF, all
 groups open; voice/video/meeting UI absent. Generic Starter port awaits integrated Mobile
 proof. Physical iPhone waived; full hosted Xcode mandatory.
 
-Apple41564138207 at c69bd898 is in progress, now building the iOS simulator app after its
-test step. It covers 202 earlier inputs and EXCLUDES process-gate/actor changes. Do not
-redispatch it; audit .work/chat-notification-reconciliation-apple-2026-11-03/audit.py after
-completion. Schedule later changes as a separate consolidated Apple run after this one.
-Do not repeat diagnosed local provider emulator hangs. No local heavy job or owned emulator
-remains after Full4. Phone19/sourcec0 remains installed; next meaningful release above19:
+[Apple41564138207 at c69bd898](measurements/chat-notification-reconciliation-apple-2026-11-03.json)
+is now ACCEPTED: 962 simulator cases/108 suites, zero failures/errors/skips, 202 verified
+source hashes, full Xcode 1,245s (test compile623s/tests70s). Artifact13199928107 archive
+SHA256 fc76a7884f31197c11ae35769b5a38deea75f9476f787cff5e763f14b2694905 matches GitHub.
+It excludes process-gate/actor changes. Shared app integration tests are not in this
+simulator task; the app compiles in Xcode. No iOS actionable surface/APNs/CallKit or
+notification-input acceptance is claimed.
+
+The consolidated successor [41568117750](measurements/chat-notification-process-apple-2026-11-03.json)
+was dispatched ONCE at93f8a185 with207 source hashes. It is PENDING; do not redispatch.
+Audit .work/chat-notification-process-apple-2026-11-03/audit.py only after full Xcode
+completes. Any subsequent candidate implementation is outside that frozen snapshot.
+Do not repeat diagnosed local provider emulator hangs. No local heavy job or owned
+emulator remains after Full4. Phone19/sourcec0 remains installed; next meaningful release above19:
 notify then explicit10.77.77.3:5555 install-only, preserve signer/data, never drive phone UI.
 Live304/schema116 unchanged. Continue long run and push every atomic commit.
 

@@ -37,7 +37,7 @@ actual Koin/encrypted SQLite process cases. The latter exercise privacy replacem
 mute/private-read retirement across reopen, and company denial outside the selected company,
 using fictional acquisition and a fake OS. The full run passes 3,693 desktop cases, 230
 Android-host cases, six proof-host cases and ten build-logic cases, with proof assembly,
-shared Wasm compilation and root quality checks. Earlier failed fixture/formatting attempts
+shared Wasm compilation and root quality checks. Earlier failed fixture and module-length attempts
 remain recorded separately. No device/provider acceptance is inferred from these tests.
 
 The current process reconciles existing journal records. New-candidate delivery, focused

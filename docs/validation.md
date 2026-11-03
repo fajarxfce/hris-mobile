@@ -1,5 +1,15 @@
 # Validation
 
+## Full Apple through finite reconciliation — 3 November 2026
+
+[Run41564138207 at c69bd898](measurements/chat-notification-reconciliation-apple-2026-11-03.json)
+passes 962 simulator cases/108 suites and full Xcode in 1,245s, with 202 source hashes and
+a verified GitHub artifact digest. It predates the process gate/coordinator. Shared app
+integration tests do not execute in that simulator task. The consolidated successor
+[41568117750 at93f8a185](measurements/chat-notification-process-apple-2026-11-03.json)
+is pending with207 source hashes; it is not yet acceptance. Native HRIS notification
+host/callbacks and notification-specific OS-death proof remain separate work.
+
 ## Process-owned native reconciliation — 3 November 2026
 
 [The bounded process](collaboration-notification-process.md) passes 63 focused cases,
