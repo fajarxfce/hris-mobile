@@ -1,5 +1,20 @@
 # Agent continuation — HRIS Mobile
 
+## Updated hosted checks dispatched — 3 November 2026
+
+Routing/driver increment ff3b3246f726e86be91d84efc1da1b5033809c38 is pushed and locally
+accepted below. ONE full [Apple41634596520](measurements/chat-native-routing-apple-2026-11-03.json)
+and automatic [Native41634550829](measurements/chat-native-routing-hosted-2026-11-03.json)
+are running at that source. Source manifests and audit/fetch scripts are ready in
+matching .work directories. Apple must include34 workspace-domain simulator cases
+(14 selection) plus full Xcode; do not cancel it by dispatching another same-branch
+Apple. Native must retain reply-recovery.json, validate at most four completed worker
+turns, pass all five actions and providers, and have all three SystemUI PNGs inspected.
+The two earlier rejected Native runs remain rejected. No local heavy job or owned
+emulator remains. Begin application runtime integration described below/host-next.txt.
+Phone23 is installed; next meaningful validated product24+. No phone action yet.
+
+
 ## Native chat routing accepted locally — 3 November 2026
 
 [Contract](collaboration-native-chat-navigation.md) /
