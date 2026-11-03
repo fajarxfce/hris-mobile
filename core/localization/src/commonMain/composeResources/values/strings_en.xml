@@ -980,6 +980,8 @@
     <string name="chat_connected_en">Connected</string>
     <string name="chat_room_waiting_en">Preparing conversation</string>
     <string name="chat_start_message_en">Write your first message.</string>
+    <string name="chat_no_saved_messages_en">No messages saved on this device yet.</string>
+    <string name="chat_load_messages_en">Load messages</string>
     <string name="chat_older_messages_en">Older messages</string>
     <string name="chat_save_unconfirmed_en">Saving was interrupted. Retry to confirm this message.</string>
     <string name="chat_service_summary_en">Conversations with colleagues</string>

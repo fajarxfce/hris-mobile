@@ -9,6 +9,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import dev.fajar.starter.collaboration.presentation.thread.*
 import dev.fajar.starter.designsystem.components.*
@@ -79,6 +80,15 @@ fun ChatThreadPage(
                 verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.Bottom),
             ) {
                 val failure = state.localFailure ?: state.historyFailure ?: state.failure
+                val emptyHistory =
+                    !state.loading &&
+                        !state.loadingOlder &&
+                        state.rows.isEmpty() &&
+                        failure == null &&
+                        !state.historyIncomplete
+                val historyAction =
+                    if (state.rows.isEmpty()) AppString.ChatLoadMessages
+                    else AppString.ChatOlderMessages
                 if (
                     failure != null ||
                         state.submissionPending ||
@@ -131,34 +141,44 @@ fun ChatThreadPage(
                             Modifier.fillMaxWidth().padding(8.dp),
                             contentAlignment = Alignment.Center,
                         ) {
-                            AppProgressRing(appString(AppString.ChatOlderMessages))
+                            AppProgressRing(appString(historyAction))
                         }
                     }
-                if (state.hasOlder)
+                if (state.hasOlder && !emptyHistory)
                     item("older") {
-                        AppTextButton(
-                            appString(AppString.ChatOlderMessages),
-                            { onEvent(ChatThreadEvent.OlderRequested) },
-                            enabled = !state.loading && !state.loadingOlder,
-                        )
+                        Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                            AppTextButton(
+                                appString(historyAction),
+                                { onEvent(ChatThreadEvent.OlderRequested) },
+                                enabled = !state.loading && !state.loadingOlder,
+                            )
+                        }
                     }
                 if (state.historyIncomplete)
                     item("history-incomplete") {
                         AppText(appString(AppString.ChatHistoryIncomplete), color = AppColors.muted)
                     }
-                if (
-                    !state.loading &&
-                        !state.loadingOlder &&
-                        state.rows.isEmpty() &&
-                        failure == null &&
-                        !state.historyIncomplete
-                )
+                if (emptyHistory)
                     item("empty") {
-                        AppText(
-                            appString(AppString.ChatStartMessage),
-                            color = AppColors.muted,
-                            modifier = Modifier.fillMaxWidth().padding(vertical = 24.dp),
-                        )
+                        Column(
+                            Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 16.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.spacedBy(4.dp),
+                        ) {
+                            AppText(
+                                appString(
+                                    if (state.hasOlder) AppString.ChatNoSavedMessages
+                                    else AppString.ChatStartMessage
+                                ),
+                                color = AppColors.muted,
+                                textAlign = TextAlign.Center,
+                            )
+                            if (state.hasOlder)
+                                AppTextButton(
+                                    appString(AppString.ChatLoadMessages),
+                                    { onEvent(ChatThreadEvent.OlderRequested) },
+                                )
+                        }
                     }
             }
             if (state.browsingHistory)

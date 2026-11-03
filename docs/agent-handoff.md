@@ -1,5 +1,40 @@
 # Agent continuation — HRIS Mobile
 
+## Empty-history presentation checked; release28 preparation — 3 November2026
+
+The thread now distinguishes no locally saved messages from confirmed empty history.
+One centered localized Load messages action replaces the misleading first-message
+prompt plus Older messages pair. Populated history actions are centered; loading,
+retry/incomplete notices and composition remain usable. No runtime paging/cursor or
+native ownership behavior changed. [Evidence](measurements/chat-empty-history-layout-2026-11-03.json):
+297 fresh tests (164 desktop presentation,128 browser presentation,5 localization),
+138.925s,784 unchanged input fingerprints; format/detekt/architecture74 PASS.
+Four PNGs actually inspected and retained in docs/images/chat-empty-history.
+Two rejected test-fixture attempts are documented; final test scrolls the actual
+lazy list for older controls and checks normal/200percent text without hover styling
+in the empty-state baseline.
+
+Phone still27; DO NOT reinstall27. Release28 scripts prepared and syntax checked
+under .work/release-phone-2026-11-03-build28, but no build/verification/emulator/
+preflight/install has run. After this commit/push, build from a clean tree; validate
+artifact/lint, owned emulator cold starts and screenshots, then preflight installed27,
+notify user and install-only28. Keep one heavy local job and preserve app data/signature.
+
+Platform main checkout remains8b40bd0f: all8 backend and4 dashboard shards plus
+recovery integration passed; full Verify41695437208 still runs dashboard integration.
+Backend artifact audit:3161 API cases/6 opt-in skipped,117 worker/1 opt-in skipped;
+no failures/errors. Actual Matrix/FCM opt-in evidence is separate, as below. All
+chat push flags remain OFF pending final CI, staged images and fresh coordinated
+checkpoint/restore. Main .work/chat-push-rollout-2026-11-03 contains prepared scripts.
+
+Platform group branch feat/communication-space (isolated worktree of that name)
+pushed5debc632: V117 stable directory and restricted role,33 database tests plus12
+recovery-tool cases. Bounded directory repository/query/tests are WIP there, not yet
+run or wired to DI/public API. Keep schema117 separate from the116 push rollout.
+Current c770 native41691878601 and control41691878650 still run; control portable
+passed and Apple builds Xcode. New UI commits may queue later proofs; do not cancel
+the current acceptance or claim Apple Matrix/APNs/CallKit. Continue full PRD.
+
 ## Phone release27 installed; continue server and PRD — 3 November2026
 
 [Installed evidence](measurements/chat-inbox-history-phone-2026-11-03.json). Normal

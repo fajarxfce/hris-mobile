@@ -980,6 +980,8 @@
     <string name="chat_connected_id">Terhubung</string>
     <string name="chat_room_waiting_id">Menyiapkan percakapan</string>
     <string name="chat_start_message_id">Tulis pesan pertama.</string>
+    <string name="chat_no_saved_messages_id">Belum ada pesan tersimpan di perangkat ini.</string>
+    <string name="chat_load_messages_id">Muat pesan</string>
     <string name="chat_older_messages_id">Pesan sebelumnya</string>
     <string name="chat_save_unconfirmed_id">Penyimpanan terputus. Coba lagi untuk memastikan pesan ini.</string>
     <string name="chat_service_summary_id">Percakapan dengan rekan kerja</string>

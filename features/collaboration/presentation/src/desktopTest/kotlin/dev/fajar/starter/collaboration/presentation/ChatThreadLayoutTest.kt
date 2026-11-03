@@ -27,6 +27,56 @@ class ChatThreadLayoutTest {
     @get:Rule val compose = createComposeRule()
 
     @Test
+    fun uncachedHistoryOffersOneClearActionBeforeShowingAnEmptyConversation() {
+        val events = mutableListOf<ChatThreadEvent>()
+        var fontScale by mutableStateOf(1f)
+        var state by
+            mutableStateOf(
+                ChatThreadState(
+                    title = "Dewi Kartika",
+                    loading = false,
+                    draftReady = true,
+                    hasOlder = true,
+                )
+            )
+        compose.setContent {
+            val density = LocalDensity.current
+            CompositionLocalProvider(
+                LocalDensity provides Density(density.density, fontScale),
+                LocalAppLanguage provides AppLanguage.Indonesian,
+            ) {
+                AppTheme {
+                    Box(Modifier.size(320.dp, 640.dp).testTag("frame")) {
+                        ChatThreadPage(state, rememberLazyListState(), events::add)
+                    }
+                }
+            }
+        }
+        screenshot("chat-uncached-history")
+        compose.runOnIdle { fontScale = 2f }
+        compose.onNodeWithText("Belum ada pesan tersimpan di perangkat ini.").assertIsDisplayed()
+        compose.onNodeWithText("Tulis pesan pertama.").assertDoesNotExist()
+        compose.onNodeWithText("Pesan sebelumnya").assertDoesNotExist()
+        compose.onAllNodesWithText("Muat pesan").assertCountEquals(1)
+        compose.onNodeWithText("Muat pesan").assertIsDisplayed().assertHeightIsAtLeast(48.dp)
+
+        screenshot("chat-uncached-history-large-text")
+        compose.onNodeWithText("Muat pesan").performClick()
+        compose.onNodeWithContentDescription("Pesan").assertIsDisplayed().assertIsEnabled()
+        compose.runOnIdle {
+            assertEquals(listOf<ChatThreadEvent>(ChatThreadEvent.OlderRequested), events)
+            state = state.copy(loadingOlder = true)
+        }
+        compose.onNode(hasText("Muat pesan") and hasClickAction()).assertIsNotEnabled()
+        compose.onNodeWithText("Tulis pesan pertama.").assertDoesNotExist()
+        compose.runOnIdle { state = state.copy(loadingOlder = false, hasOlder = false) }
+        compose.onNodeWithText("Muat pesan").assertDoesNotExist()
+        compose.onNodeWithText("Tulis pesan pertama.").assertIsDisplayed()
+        compose.onNodeWithContentDescription("Pesan").assertIsEnabled()
+        screenshot("chat-confirmed-empty-large-text")
+    }
+
+    @Test
     fun queuedMessageCancelActionRemainsReachableAtNarrowLargeText() {
         val events = mutableListOf<ChatThreadEvent>()
         val queued =
@@ -331,6 +381,7 @@ class ChatThreadLayoutTest {
                 ChatThreadState(
                     draftReady = true,
                     title = "Ari Pratama",
+                    rows = rows(),
                     loading = false,
                     loadingOlder = true,
                     hasOlder = true,
@@ -351,14 +402,21 @@ class ChatThreadLayoutTest {
                 }
             }
         }
+        compose.onNode(hasScrollToIndexAction()).performScrollToNode(hasText("Pesan sebelumnya"))
         compose.onNodeWithText("Pesan sebelumnya").performScrollTo().assertIsNotEnabled()
         compose.onNodeWithContentDescription("Pesan").assertIsDisplayed().assertIsEnabled()
         compose.runOnIdle { state = state.copy(loadingOlder = false) }
+        compose.onNode(hasScrollToIndexAction()).performScrollToNode(hasText("Pesan sebelumnya"))
         compose
             .onNodeWithText("Pesan sebelumnya")
             .performScrollTo()
             .assertIsEnabled()
             .performClick()
+        compose
+            .onNode(hasScrollToIndexAction())
+            .performScrollToNode(
+                hasText("Sebagian riwayat lama belum tersedia. Segarkan untuk mencoba lagi.")
+            )
         compose
             .onNodeWithText("Sebagian riwayat lama belum tersedia. Segarkan untuk mencoba lagi.")
             .performScrollTo()
