@@ -1,7 +1,9 @@
 package dev.fajar.starter.app.notifications
 
 import dev.fajar.starter.collaboration.domain.entities.CollaborationNativeParent
+import dev.fajar.starter.collaboration.domain.entities.CollaborationNotificationActionToken
 import dev.fajar.starter.common.result.*
+import dev.fajar.starter.notifications.data.dto.ActionNotificationInput
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,6 +28,25 @@ class CollaborationNotificationDelivery : AutoCloseable {
         currentCoroutineContext().ensureActive()
         val captured = state.value as? State.Bound ?: return unavailable()
         val result = captured.process.publish(parent, candidate, allowAlert)
+        currentCoroutineContext().ensureActive()
+        return if (state.value === captured) result else unavailable()
+    }
+
+    suspend fun act(
+        input: ActionNotificationInput
+    ): AppResult<CollaborationNotificationActionOutcome> = withProcess { act(input) }
+
+    suspend fun acknowledgeReply(token: CollaborationNotificationActionToken): AppResult<Unit> =
+        withProcess {
+            acknowledgeReply(token)
+        }
+
+    private suspend fun <T> withProcess(
+        operation: suspend CollaborationNotificationProcess.() -> AppResult<T>
+    ): AppResult<T> {
+        currentCoroutineContext().ensureActive()
+        val captured = state.value as? State.Bound ?: return unavailable()
+        val result = captured.process.operation()
         currentCoroutineContext().ensureActive()
         return if (state.value === captured) result else unavailable()
     }

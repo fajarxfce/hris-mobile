@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="chat_action_not_confirmed">Couldn’t confirm this action. Open chat to check.</string>
     <string name="chat_reply_saved">Reply saved. HRIS will process it when your account is available.</string>
     <string name="chat_reply_not_saved">Couldn’t confirm your reply. Open HRIS to continue.</string>
 </resources>

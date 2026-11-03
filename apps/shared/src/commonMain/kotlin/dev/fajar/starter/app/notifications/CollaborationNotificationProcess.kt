@@ -3,6 +3,7 @@ package dev.fajar.starter.app.notifications
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.policies.*
 import dev.fajar.starter.common.result.*
+import dev.fajar.starter.notifications.data.dto.ActionNotificationInput
 import dev.fajar.starter.notifications.data.dto.ActionNotificationReference
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
@@ -29,6 +30,7 @@ class CollaborationNotificationProcess(
             CollaborationNativeParent, CollaborationNotificationCandidate, Boolean,
         ) -> AppResult<CollaborationNotificationPublicationResult>,
     dispatcher: CoroutineDispatcher = Dispatchers.Default,
+    private val actions: CollaborationNotificationActions? = null,
 ) : AutoCloseable {
     private val lifetime = SupervisorJob()
     private val scope = CoroutineScope(lifetime + dispatcher)
@@ -114,6 +116,59 @@ class CollaborationNotificationProcess(
                 }
             }
         } ?: surfaceFailure(FailureKind.Timeout)
+    }
+
+    suspend fun act(
+        input: ActionNotificationInput
+    ): AppResult<CollaborationNotificationActionOutcome> = withActions { invoke(input) }
+
+    suspend fun acknowledgeReply(token: CollaborationNotificationActionToken): AppResult<Unit> =
+        withActions {
+            acknowledgeReply(token)
+        }
+
+    private suspend fun <T> withActions(
+        operation: suspend CollaborationNotificationActions.() -> AppResult<T>
+    ): AppResult<T> {
+        currentCoroutineContext().ensureActive()
+        val handler = actions ?: return surfaceFailure(FailureKind.Unavailable)
+        if (!lifetime.isActive || !started.value) return surfaceFailure(FailureKind.Unavailable)
+        return try {
+            val result =
+                withTimeoutOrNull(8_000) {
+                    // Only contention before lease acquisition is retried. No uncertain mutation or
+                    // transport result is replayed by a native callback.
+                    var applied: AppResult<T>
+                    do {
+                        val ready =
+                            owner.states.first {
+                                it !is CollaborationNotificationSurfaceState.Pending &&
+                                    (it !is CollaborationNotificationSurfaceState.Ready ||
+                                        it.isIdle)
+                            }
+                        if (
+                            !lifetime.isActive ||
+                                ready !is CollaborationNotificationSurfaceState.Ready
+                        )
+                            return@withTimeoutOrNull surfaceFailure(FailureKind.Unavailable)
+                        applied = handler.operation()
+                        if (
+                            applied is AppResult.Failed &&
+                                applied.failure.code == NOTIFICATION_SURFACE_BUSY
+                        )
+                            yield()
+                    } while (
+                        applied is AppResult.Failed &&
+                            applied.failure.code == NOTIFICATION_SURFACE_BUSY
+                    )
+                    applied
+                } ?: surfaceFailure(FailureKind.Timeout)
+            currentCoroutineContext().ensureActive()
+            if (lifetime.isActive) result else surfaceFailure(FailureKind.Unavailable)
+        } finally {
+            // The action has released its lease before discovery can resume a Dismissing intent.
+            requestScan()
+        }
     }
 
     /** A caller that changes the journal requests discovery, not direct concurrent native I/O. */

@@ -24,6 +24,40 @@ class CollaborationNotificationActions(
         return withTimeoutOrNull(8_000) { apply(input) } ?: surfaceFailure(FailureKind.Timeout)
     }
 
+    /** Called only after protected reply capture succeeds. Never queues a send or marks read. */
+    suspend fun acknowledgeReply(token: CollaborationNotificationActionToken): AppResult<Unit> {
+        currentCoroutineContext().ensureActive()
+        return withTimeoutOrNull(8_000) {
+            val opened = open(token)
+            if (opened is AppResult.Failed) return@withTimeoutOrNull opened
+            val invocation = (opened as AppResult.Success).value
+            val action = invocation.action
+            if (action !is CollaborationNotificationAction.Reply)
+                return@withTimeoutOrNull surfaceFailure(FailureKind.Validation)
+            val access = invocation.scope.access
+            val native =
+                invocation.scope.nativeSessionId
+                    ?: return@withTimeoutOrNull surfaceFailure(FailureKind.Validation)
+            val parent =
+                CollaborationNativeParent(
+                    access.sessionId,
+                    access.audience,
+                    access.accountId,
+                    native,
+                )
+            owner.withOwner(parent) {
+                val found = read(parent, action.target)
+                if (found is AppResult.Failed) return@withOwner found
+                val reference = (found as AppResult.Success).value
+                if (reference == null || !reference.state.isPendingPublication())
+                    return@withOwner AppResult.Success(Unit)
+                val requested = beginDismissal(parent, reference)
+                if (requested is AppResult.Failed) return@withOwner requested
+                removeAndFinish(parent, (requested as AppResult.Success).value)
+            }
+        } ?: surfaceFailure(FailureKind.Timeout)
+    }
+
     private suspend fun apply(
         input: ActionNotificationInput
     ): AppResult<CollaborationNotificationActionOutcome> {
@@ -82,37 +116,58 @@ class CollaborationNotificationActions(
             if ((applied as AppResult.Success).value.invocation != invocation)
                 return@withOwner surfaceFailure(FailureKind.Conflict)
             if (input.kind == ActionNotificationKind.Dismiss) {
-                val requested = cancel.requestDismissal(parent, reference)
+                val requested = beginDismissal(parent, reference)
                 if (requested is AppResult.Failed) return@withOwner requested
-                when (val saved = (requested as AppResult.Success).value) {
-                    CollaborationNotificationPublicationSettlement.Contended ->
-                        return@withOwner surfaceFailure(FailureKind.Conflict)
-                    is CollaborationNotificationPublicationSettlement.Settled -> {
-                        if (
-                            saved.id != reference.id ||
-                                saved.notificationId != input.reference.id ||
-                                saved.renderId != input.reference.renderId ||
-                                saved.state != CollaborationNotificationPublicationState.Dismissing
-                        )
-                            return@withOwner surfaceFailure(FailureKind.Conflict)
-                        reference = reference.copy(version = saved.version, state = saved.state)
-                    }
-                }
+                reference = (requested as AppResult.Success).value
             }
-            // Local read/mute may already be retained if cleanup loses its response. Neither a
-            // retry nor this completion means that a network receipt was delivered.
-            val removed = remove(input.reference)
-            if (removed is AppResult.Failed) return@withOwner removed
-            if ((removed as AppResult.Success).value == ActionNotificationRemoval.Replaced)
-                return@withOwner surfaceFailure(FailureKind.Conflict)
-            val settled = cancel(parent, reference)
-            if (settled is AppResult.Failed) return@withOwner settled
-            when ((settled as AppResult.Success).value) {
-                CollaborationNotificationPublicationSettlement.Contended ->
+            val finished = removeAndFinish(parent, reference)
+            if (finished is AppResult.Failed) return@withOwner finished
+            AppResult.Success(CollaborationNotificationActionOutcome.Completed(input.kind))
+        }
+    }
+
+    private suspend fun beginDismissal(
+        parent: CollaborationNativeParent,
+        reference: CollaborationNotificationPublicationReference,
+    ): AppResult<CollaborationNotificationPublicationReference> {
+        val requested = cancel.requestDismissal(parent, reference)
+        if (requested is AppResult.Failed) return requested
+        return when (val saved = (requested as AppResult.Success).value) {
+            CollaborationNotificationPublicationSettlement.Contended ->
+                surfaceFailure(FailureKind.Conflict)
+            is CollaborationNotificationPublicationSettlement.Settled -> {
+                if (
+                    saved.id != reference.id ||
+                        saved.notificationId != reference.target.notificationId ||
+                        saved.renderId != reference.target.renderId ||
+                        saved.state != CollaborationNotificationPublicationState.Dismissing
+                )
                     surfaceFailure(FailureKind.Conflict)
-                is CollaborationNotificationPublicationSettlement.Settled ->
-                    AppResult.Success(CollaborationNotificationActionOutcome.Completed(input.kind))
+                else AppResult.Success(reference.copy(version = saved.version, state = saved.state))
             }
+        }
+    }
+
+    private suspend fun CollaborationNotificationSurfaceLease.removeAndFinish(
+        parent: CollaborationNativeParent,
+        reference: CollaborationNotificationPublicationReference,
+    ): AppResult<Unit> {
+        val removed =
+            remove(
+                ActionNotificationReference(
+                    reference.target.notificationId,
+                    reference.target.renderId,
+                )
+            )
+        if (removed is AppResult.Failed) return removed
+        if ((removed as AppResult.Success).value == ActionNotificationRemoval.Replaced)
+            return surfaceFailure(FailureKind.Conflict)
+        val settled = cancel(parent, reference)
+        if (settled is AppResult.Failed) return settled
+        return when ((settled as AppResult.Success).value) {
+            CollaborationNotificationPublicationSettlement.Contended ->
+                surfaceFailure(FailureKind.Conflict)
+            is CollaborationNotificationPublicationSettlement.Settled -> AppResult.Success(Unit)
         }
     }
 }

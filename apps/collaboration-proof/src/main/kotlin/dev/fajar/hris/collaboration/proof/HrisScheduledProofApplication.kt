@@ -2,6 +2,7 @@ package dev.fajar.hris.collaboration.proof
 
 import android.app.Application
 import androidx.work.Configuration
+import dev.fajar.starter.app.notifications.AndroidCollaborationActionHost
 import dev.fajar.starter.app.notifications.AndroidCollaborationNotificationHost
 import dev.fajar.starter.worker.SyncWorkerFactory
 import java.io.File
@@ -11,7 +12,14 @@ import kotlinx.coroutines.withTimeout
 
 /** Only the dedicated, separately installed debug proof application uses seeded login inputs. */
 class HrisScheduledProofApplication :
-    Application(), Configuration.Provider, AndroidCollaborationNotificationHost {
+    Application(),
+    Configuration.Provider,
+    AndroidCollaborationNotificationHost,
+    AndroidCollaborationActionHost {
+    internal val actionProof by lazy { NotificationActionProof(this) }
+    override val notificationActions
+        get() = actionProof.native
+
     internal val inputProof by lazy { NotificationInputProof(this) }
     override val notificationReplies
         get() = inputProof.native

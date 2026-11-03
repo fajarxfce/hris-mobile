@@ -19,6 +19,7 @@ class CollaborationNotificationReplyCallbacks(
                 CollaborationNotificationInputReference
             >,
     context: CoroutineContext = Dispatchers.Default,
+    private val acknowledge: suspend (CollaborationNotificationActionToken) -> Unit = {},
 ) {
     private val lifetime = SupervisorJob(context[Job])
     private val scope = CoroutineScope(context + lifetime)
@@ -37,9 +38,15 @@ class CollaborationNotificationReplyCallbacks(
         val job =
             scope.launch {
                 try {
-                    val result = withTimeoutOrNull(8_000) { capture(token, text) }
-                    if (result is AppResult.Success)
-                        outcome.value = CollaborationReplyCaptureOutcome.Saved
+                    withTimeoutOrNull(8_000) {
+                        val result = capture(token, text)
+                        if (result is AppResult.Success) {
+                            outcome.value = CollaborationReplyCaptureOutcome.Saved
+                            // Input is already protected. Native acknowledgement is best effort;
+                            // its timeout/failure cannot turn durable input into an unsaved claim.
+                            acknowledge(token)
+                        }
+                    }
                 } catch (cancelled: CancellationException) {
                     throw cancelled
                 } catch (_: Exception) {

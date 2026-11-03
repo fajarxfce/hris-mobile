@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="chat_action_not_confirmed">Tindakan belum terkonfirmasi. Buka chat untuk memeriksa.</string>
     <string name="chat_reply_saved">Balasan tersimpan. HRIS akan memprosesnya saat akun tersedia.</string>
     <string name="chat_reply_not_saved">Balasan belum terkonfirmasi. Buka HRIS untuk melanjutkan.</string>
 </resources>

@@ -78,7 +78,8 @@ class NotificationDriverOwnershipTest(unittest.TestCase):
 
     def execute(self):
         with patch.object(proof.subprocess, 'run', side_effect=self.command), \
-                patch.object(proof, 'input_recovery', return_value={'complete': True}):
+                patch.object(proof, 'input_recovery', return_value={'complete': True}), \
+                patch.object(proof, 'action_callbacks', return_value={'complete': True}):
             return proof.run(self.args)
 
     def result(self):
@@ -241,6 +242,85 @@ class NotificationInputProcessOwnershipTest(unittest.TestCase):
         self.bad_review = True
         with self.assertRaises(AssertionError):
             proof.input_recovery(self.adb, Path(self.temp.name))
+
+
+
+
+class NotificationActionDriverTest(unittest.TestCase):
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.temp.cleanup)
+        self.output = Path(self.temp.name)
+        self.files = {}
+        self.count = 0
+        self.failure = None
+
+    def adb(self, *command, **kwargs):
+        if command[:4] == ('shell', 'run-as', proof.PACKAGE, 'cat'):
+            name = Path(command[-1]).stem
+            if name not in self.files:
+                raise subprocess.CalledProcessError(1, command)
+            return json.dumps(self.files[name])
+        if command[:4] == ('shell', 'am', 'start', '-W'):
+            mode = command[command.index('mode') + 1]
+            if command[5].endswith('NotificationActionSenderActivity'):
+                self.count += 1
+                self.files['action-callback'] = {'count': self.count, 'applied': self.failure != 'unconfirmed', 'pid': 123}
+            elif '--ez' in command:
+                self.files['action-verified'] = {'complete': True, 'mode': mode, 'pid': 123,
+                    'httpCalls': 0, 'messageCommands': 1 if self.failure == 'sent' else 0,
+                    'nativeCards': 1 if mode == 'Open' else 0,
+                    'state': 'Wrong' if self.failure == 'state' else {'Open': 'Published', 'MarkRead': 'Cancelled', 'Dismiss': 'Dismissed', 'Reply': 'Dismissed', 'Mute': 'Cancelled'}[mode]}
+            else:
+                self.files['action-staged'] = {'complete': True, 'mode': mode, 'pid': 123}
+                if self.failure == 'fixture':
+                    self.files['action-failure'] = {'category': 'FictionalFailure', 'frames': 'owned.fixture:1'}
+            return ''
+        if command == ('shell', 'cmd', 'statusbar', 'collapse'):
+            return ''
+        self.fail('Unexpected command')
+
+    def test_all_five_actions_require_confirmed_native_and_durable_outcomes(self):
+        result = proof.action_callbacks(self.adb, self.output)
+        self.assertTrue(result['complete'])
+        self.assertEqual(5, len(result['cases']))
+        self.assertFalse(result['systemUiReply'])
+
+    def test_unconfirmed_callback_cannot_pass(self):
+        self.failure = 'unconfirmed'
+        with self.assertRaises(AssertionError): proof.action_callbacks(self.adb, self.output)
+
+    def test_wrong_journal_state_cannot_pass(self):
+        self.failure = 'state'
+        with self.assertRaises(AssertionError): proof.action_callbacks(self.adb, self.output)
+
+    def test_unexpected_message_command_cannot_pass(self):
+        self.failure = 'sent'
+        with self.assertRaises(AssertionError): proof.action_callbacks(self.adb, self.output)
+
+    def test_fixture_failure_is_retained_before_uninstall(self):
+        self.failure = 'fixture'
+        with self.assertRaises(AssertionError): proof.action_callbacks(self.adb, self.output)
+        self.assertEqual(self.files['action-failure'], json.loads((self.output/'action-failure.json').read_text()))
+
+
+class NotificationReplySurfaceTest(unittest.TestCase):
+    def test_unrelated_foreground_is_not_a_retired_shade(self):
+        self.assertFalse(proof.reply_surface_retired('<hierarchy><node package="owned.app" /></hierarchy>'))
+
+    def test_private_content_neutral_card_and_reply_controls_all_block_acceptance(self):
+        for attribute in [
+            'text="Fictional action proof"', 'text="Fictional native reply"',
+            'text="HRIS Protocol Proof"', 'class="android.widget.EditText"',
+            'resource-id="com.android.systemui:id/remote_input_send"',
+        ]:
+            with self.subTest(attribute=attribute):
+                self.assertFalse(proof.reply_surface_retired(
+                    f'<hierarchy><node package="com.android.systemui" {attribute} /></hierarchy>'))
+
+    def test_unrelated_system_notifications_can_remain(self):
+        self.assertTrue(proof.reply_surface_retired(
+            '<hierarchy><node package="com.android.systemui" text="Set a screen lock" /></hierarchy>'))
 
 
 if __name__ == '__main__':

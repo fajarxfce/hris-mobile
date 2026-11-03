@@ -14,6 +14,9 @@
         <activity android:name=".HrisScheduledProofActivity" android:exported="true" />
         <receiver android:name=".NotificationProofReceiver" android:exported="false" />
         <receiver android:name="dev.fajar.starter.app.notifications.AndroidCollaborationReplyReceiver" android:exported="false" />
+        <receiver android:name="dev.fajar.starter.app.notifications.AndroidCollaborationActionReceiver" android:exported="false" />
+        <activity android:name=".NotificationActionProofActivity" android:exported="true" />
+        <activity android:name=".NotificationActionSenderActivity" android:process=":action_sender" android:exported="true" />
         <activity android:name=".NotificationInputProofActivity" android:exported="true" />
         <activity android:name=".NotificationInputSenderActivity" android:process=":reply_sender" android:exported="true" />
     </application>

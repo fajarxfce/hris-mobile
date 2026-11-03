@@ -1,0 +1,727 @@
+{
+  "date": "2026-11-03",
+  "status": "accepted-local",
+  "baseCommit": "2b06ff9a",
+  "sourceSha256": {
+    "apps/collaboration-proof/src/main/AndroidManifest.xml": "b4f24454f5e8f7f0984cee58269f16acb94d8531d5a30ca6fcb0fed16a287cd8",
+    "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisScheduledProofApplication.kt": "088fee5ed87bd970d3c304e807128cae5c695af5219e6580b99b5178dcb47bd2",
+    "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/NotificationActionProof.kt": "7e550adab59198ac89356d29535652652b3d4c223850064489092e999ec22c46",
+    "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/NotificationActionProofActivity.kt": "485f69b0e632adfaa814b4e8c2de040aae20f84eefcb5bd941f17bfc73888f4b",
+    "apps/shared/src/androidMain/kotlin/dev/fajar/starter/app/notifications/AndroidCollaborationNotificationActions.kt": "2d92ebe7b504856f26b28b7204a86e74dd762fc82f4588b65cfc9a7ba6d078c4",
+    "apps/shared/src/androidMain/res/values-in/strings.xml": "0d2090d1d1d55f17ee006ffbbe7642954270cf4d07face09352766be8b2b3f92",
+    "apps/shared/src/androidMain/res/values/strings.xml": "a8953291fd33b06d5ce4f5043c91eb190801184960c88ab9c62ba96b55dcf0de",
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/di/ApplicationNotificationModule.kt": "8f0cf4347017271da1257b0278c82543ae326b283d2b6a3e7c2106508a90b5c8",
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/notifications/CollaborationNotificationActionCallbacks.kt": "7ade3ecf8682ac97e0c56f2d372187faaf604317f367f0f741cedaa727267310",
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/notifications/CollaborationNotificationActions.kt": "eb94516dba765d171663a9ab8dee59c2b7def353a33aaccdd5f8c46aea919ca3",
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/notifications/CollaborationNotificationDelivery.kt": "8ef45ba0ec9304d45641589b58390f6edf70fce7c545211988b39865d1d53a9d",
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/notifications/CollaborationNotificationProcess.kt": "fdad36a49040a9d9cdb29dd20cbb91584969cf1aa400e63dcf3194cbf596c8ed",
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/notifications/CollaborationNotificationReplyCallbacks.kt": "a57a0ed78a015c7c9bd82ca36cf87a7e057cf61383647482ed58c50adc781d4b",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationNotificationActionCallbacksTest.kt": "5be6f19ccfd8a89fb0ca411b78fb9a1ef3c026cea47e2116277447f339a0f142",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationNotificationActionsTest.kt": "f7d1f613637e5bb95e5954a6191ec6ebbf872fff0e6539927333f66bc4f85b9e",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationNotificationProcessIntegrationTest.kt": "96ae4b9583875268f03893807e25c9b0cd1d9ea6578330d5f386c9c323b05bc1",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationNotificationReplyCallbacksTest.kt": "df88606347a1508e7d6b80013096675e068154c97aed3b11dcd1c085d7cef5f9",
+    "core/notifications/data/src/androidMain/kotlin/dev/fajar/starter/notifications/data/datasources/AndroidActionNotificationDisplaySource.kt": "06c65a6d23eaa4035783acaf737a2fe29f60e48e3aff1f00c934f5dab371136b",
+    "tool/check_native_notifications.py": "505e935f2e94c2a99870f76162b4ce668258a7c7d3368d1e6f64c50355907c2c",
+    "tool/test_native_notifications.py": "512367b00c8c44e0bf7694c120ce16653b0a9e6f0e38aeb93d754a7d047f0259",
+    ".github/workflows/collaboration-hris.yml": "c3db9ea6239767da5b307b5c1a34a1e8dc7482edcdfdac559711b6e5a217bd76"
+  },
+  "nativeSourceSha256": {
+    "apps/collaboration-proof/src/main/AndroidManifest.xml": "b4f24454f5e8f7f0984cee58269f16acb94d8531d5a30ca6fcb0fed16a287cd8",
+    "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/HrisScheduledProofApplication.kt": "088fee5ed87bd970d3c304e807128cae5c695af5219e6580b99b5178dcb47bd2",
+    "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/NotificationActionProof.kt": "7e550adab59198ac89356d29535652652b3d4c223850064489092e999ec22c46",
+    "apps/collaboration-proof/src/main/kotlin/dev/fajar/hris/collaboration/proof/NotificationActionProofActivity.kt": "485f69b0e632adfaa814b4e8c2de040aae20f84eefcb5bd941f17bfc73888f4b",
+    "apps/shared/src/androidMain/kotlin/dev/fajar/starter/app/notifications/AndroidCollaborationNotificationActions.kt": "2d92ebe7b504856f26b28b7204a86e74dd762fc82f4588b65cfc9a7ba6d078c4",
+    "apps/shared/src/androidMain/res/values-in/strings.xml": "0d2090d1d1d55f17ee006ffbbe7642954270cf4d07face09352766be8b2b3f92",
+    "apps/shared/src/androidMain/res/values/strings.xml": "a8953291fd33b06d5ce4f5043c91eb190801184960c88ab9c62ba96b55dcf0de",
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/di/ApplicationNotificationModule.kt": "8f0cf4347017271da1257b0278c82543ae326b283d2b6a3e7c2106508a90b5c8",
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/notifications/CollaborationNotificationActionCallbacks.kt": "7ade3ecf8682ac97e0c56f2d372187faaf604317f367f0f741cedaa727267310",
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/notifications/CollaborationNotificationActions.kt": "eb94516dba765d171663a9ab8dee59c2b7def353a33aaccdd5f8c46aea919ca3",
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/notifications/CollaborationNotificationDelivery.kt": "8ef45ba0ec9304d45641589b58390f6edf70fce7c545211988b39865d1d53a9d",
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/notifications/CollaborationNotificationProcess.kt": "fdad36a49040a9d9cdb29dd20cbb91584969cf1aa400e63dcf3194cbf596c8ed",
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/notifications/CollaborationNotificationReplyCallbacks.kt": "a57a0ed78a015c7c9bd82ca36cf87a7e057cf61383647482ed58c50adc781d4b",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationNotificationActionCallbacksTest.kt": "5be6f19ccfd8a89fb0ca411b78fb9a1ef3c026cea47e2116277447f339a0f142",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationNotificationActionsTest.kt": "f7d1f613637e5bb95e5954a6191ec6ebbf872fff0e6539927333f66bc4f85b9e",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationNotificationProcessIntegrationTest.kt": "96ae4b9583875268f03893807e25c9b0cd1d9ea6578330d5f386c9c323b05bc1",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationNotificationReplyCallbacksTest.kt": "df88606347a1508e7d6b80013096675e068154c97aed3b11dcd1c085d7cef5f9",
+    "core/notifications/data/src/androidMain/kotlin/dev/fajar/starter/notifications/data/datasources/AndroidActionNotificationDisplaySource.kt": "06c65a6d23eaa4035783acaf737a2fe29f60e48e3aff1f00c934f5dab371136b",
+    "tool/check_native_notifications.py": "395bc61777e5d36a4d68eb86f4c85a7f44389d4318bc18a42d6e595482851c82",
+    "tool/test_native_notifications.py": "8dac35eea83defaf346b9006ba1e047cf8d34ba4052a8f51501f1c008eba7d73"
+  },
+  "nativeApkSha256": "2eddbccf0061d0cb62ab26ddaf63eba2902b4606efe8a94e3e7acf4a295e7c8d",
+  "checks": [
+    {
+      "startedAt": "2026-11-03T10:04:40.887017+00:00",
+      "exitCode": 0,
+      "wallSeconds": 116.816,
+      "inputsUnchanged": true,
+      "attempt": 1,
+      "kind": "focused",
+      "freshReports": {
+        "suites": 4,
+        "tests": 57,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "resultSha256": "7c55052de6a2bca1f243322fc971c8f759e8bea666a2bd7c3fd63fa78ebb0b0d"
+    },
+    {
+      "startedAt": "2026-11-03T10:13:20.818474+00:00",
+      "exitCode": 0,
+      "wallSeconds": 115.299,
+      "inputsUnchanged": true,
+      "attempt": 2,
+      "kind": "focused",
+      "freshReports": {
+        "suites": 6,
+        "tests": 72,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "resultSha256": "0721011e1c737499203c6748a930215016b100a4e83c2fe5f7f964d84cce9adb"
+    },
+    {
+      "startedAt": "2026-11-03T10:17:34.057804+00:00",
+      "exitCode": 1,
+      "wallSeconds": 41.515,
+      "inputsUnchanged": true,
+      "attempt": 3,
+      "kind": "full",
+      "freshReports": {
+        "suites": 0,
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "resultSha256": "dc43d6355dd7a6ee14fa17bd01ab2af560fd76b7968ef2884d19a8d7202953c6"
+    },
+    {
+      "startedAt": "2026-11-03T10:19:29.527499+00:00",
+      "exitCode": 1,
+      "wallSeconds": 39.164,
+      "inputsUnchanged": true,
+      "attempt": 4,
+      "kind": "full",
+      "freshReports": {
+        "suites": 0,
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "resultSha256": "20320dce72a87ca9b13026aea5c3d4e8bd5fe1603b44663d6fa64293ccae8123"
+    },
+    {
+      "startedAt": "2026-11-03T10:21:05.567566+00:00",
+      "exitCode": 0,
+      "wallSeconds": 365.122,
+      "inputsUnchanged": true,
+      "attempt": 5,
+      "kind": "full",
+      "freshReports": {
+        "suites": 91,
+        "tests": 579,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "allReports": {
+        "desktop": {
+          "tests": 3928,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "suites": 556
+        },
+        "buildLogic": {
+          "tests": 10,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "suites": 2
+        },
+        "androidHost": {
+          "tests": 230,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "suites": 37
+        },
+        "proofHost": {
+          "tests": 15,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "suites": 4
+        }
+      },
+      "allReportAuditSha256": "f5a182f396a15bf10f195e0207c3ff7f50ef4837dc799c2a6adc4ee4d9dca0d2",
+      "resultSha256": "4a2822fb57ed2d52e55dde5aeb2d507db248ca25ca5ff77a185a1c4f964fac81"
+    },
+    {
+      "startedAt": "2026-11-03T10:31:28.518108+00:00",
+      "exitCode": 0,
+      "wallSeconds": 93.42,
+      "inputsUnchanged": true,
+      "attempt": 6,
+      "kind": "proof-build",
+      "freshReports": {
+        "suites": 4,
+        "tests": 15,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "allReports": {
+        "proofHost": {
+          "tests": 15,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "suites": 4
+        }
+      },
+      "allReportAuditSha256": "d191c4f08327f97d58d382195bf88bcb30e32f0b3af0fa1f75132da7504b9df4",
+      "resultSha256": "2643c1f43141c47727dc7cc35903372de267b42cb06bc5b015b5c6dfa8de9e12"
+    },
+    {
+      "startedAt": "2026-11-03T10:40:55.499352+00:00",
+      "exitCode": 0,
+      "wallSeconds": 114.929,
+      "inputsUnchanged": true,
+      "attempt": 7,
+      "kind": "full",
+      "freshReports": {
+        "suites": 4,
+        "tests": 15,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "allReports": {
+        "desktop": {
+          "tests": 3928,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "suites": 556
+        },
+        "androidHost": {
+          "tests": 230,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "suites": 37
+        },
+        "buildLogic": {
+          "tests": 10,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "suites": 2
+        },
+        "proofHost": {
+          "tests": 15,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "suites": 4
+        }
+      },
+      "allReportAuditSha256": "45bc7f5c2261f7c9bfa80e5d3d2f1b523ef3e5a7882b0a464da326c0f20be6d7",
+      "resultSha256": "e5417cf1a0320171f7779fb86e9aee0fc0fb9e252368e0412bf512a99e3f1c9e"
+    },
+    {
+      "startedAt": "2026-11-03T10:48:13.002254+00:00",
+      "exitCode": 0,
+      "wallSeconds": 112.89,
+      "inputsUnchanged": true,
+      "attempt": 8,
+      "kind": "full",
+      "freshReports": {
+        "suites": 4,
+        "tests": 15,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "allReports": {
+        "desktop": {
+          "tests": 3928,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "suites": 556
+        },
+        "androidHost": {
+          "tests": 230,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "suites": 37
+        },
+        "buildLogic": {
+          "tests": 10,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "suites": 2
+        },
+        "proofHost": {
+          "tests": 15,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "suites": 4
+        }
+      },
+      "allReportAuditSha256": "1be12c4689b17132ab6379420ce4187496b30254033553bd859d86363005092b",
+      "resultSha256": "3a35fea8993ee86a0c37e762db7a5bb5d047a37961b6c1fe33e6253345011060"
+    },
+    {
+      "startedAt": "2026-11-03T10:55:50.203677+00:00",
+      "exitCode": 0,
+      "wallSeconds": 115.487,
+      "inputsUnchanged": true,
+      "attempt": 9,
+      "kind": "full",
+      "freshReports": {
+        "suites": 4,
+        "tests": 15,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "allReports": {
+        "desktop": {
+          "tests": 3928,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "suites": 556
+        },
+        "androidHost": {
+          "tests": 230,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "suites": 37
+        },
+        "buildLogic": {
+          "tests": 10,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "suites": 2
+        },
+        "proofHost": {
+          "tests": 15,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "suites": 4
+        }
+      },
+      "allReportAuditSha256": "2439b20dafa28706d8043372d86ae483a7fdaf5d9a8ff9c1df3a9b1414ef56a4",
+      "resultSha256": "e85c24ec5d880b2c8ec29f313070af88eb1262eaaf323daeaebe610dbdb809c3"
+    }
+  ],
+  "native": {
+    "serial": "emulator-5562",
+    "scenarios": [
+      {
+        "name": "native-notification-denied",
+        "seconds": 5.527,
+        "complete": true,
+        "sdk": 35,
+        "cases": [
+          "permission-denial-does-not-submit"
+        ],
+        "cleanedUp": true,
+        "scope": "Raw Android IPC only; no HRIS admission, durable reply, OS-death replay or application wiring"
+      },
+      {
+        "name": "native-notification",
+        "seconds": 8.823,
+        "complete": true,
+        "sdk": 35,
+        "cases": [
+          "actual-private-display-and-immutable-public-version",
+          "same-render-replay-updates-stable-card",
+          "stale-removal-preserves-new-render-and-new-render-may-alert",
+          "same-render-reissue-keeps-original-immutable-envelope",
+          "real-remote-input-and-old-render-envelope-remain-distinct",
+          "immutable-actions-ignore-injected-remote-input",
+          "colliding-java-hashes-cannot-retarget-pending-intents",
+          "missing-oversized-or-cross-component-input-is-rejected",
+          "namespace-cleanup-preserves-unrelated-application-notifications",
+          "disabled-channel-is-distinct-from-submitted",
+          "newer-inventory-fences-stale-removal-while-os-card-is-absent",
+          "opaque-no-backup-inventory-reopens-and-clears-without-account-data",
+          "latest-owned-inventory-can-cancel-its-older-visible-predecessor",
+          "full-opaque-inventory-does-not-evict-or-submit",
+          "corrupt-inventory-withholds-new-posts-and-cleans-visible-cards"
+        ],
+        "cleanedUp": true,
+        "scope": "Raw Android IPC only; no HRIS admission, durable reply, OS-death replay or application wiring"
+      }
+    ],
+    "sdk": 35,
+    "apkSha256": "2eddbccf0061d0cb62ab26ddaf63eba2902b4606efe8a94e3e7acf4a295e7c8d",
+    "inputRecovery": {
+      "complete": true,
+      "pid": 3586,
+      "protectedRowsBeforeRecovery": 1,
+      "reviewRowsAfterRecovery": 1,
+      "wrongAccountPreservedInput": true,
+      "oldFamilyRequiresReview": true,
+      "httpCalls": 0,
+      "commandRetained": false,
+      "cleanedUp": true,
+      "ordinaryProcessKills": 3,
+      "callbackCount": 4,
+      "processIds": [
+        3275,
+        3376,
+        3484,
+        3586
+      ],
+      "seconds": 16.004,
+      "scope": "Real Android callback, Keystore/Room/app recovery; fictional account; no HTTP/Matrix send or production host activation"
+    },
+    "actionCallbacks": {
+      "complete": true,
+      "cases": [
+        {
+          "complete": true,
+          "mode": "Open",
+          "pid": 3621,
+          "state": "Published",
+          "httpCalls": 0,
+          "messageCommands": 0,
+          "nativeCards": 1,
+          "callbackCount": 1
+        },
+        {
+          "complete": true,
+          "mode": "MarkRead",
+          "pid": 3621,
+          "state": "Cancelled",
+          "httpCalls": 0,
+          "messageCommands": 0,
+          "nativeCards": 0,
+          "callbackCount": 2
+        },
+        {
+          "complete": true,
+          "mode": "Dismiss",
+          "pid": 3621,
+          "state": "Dismissed",
+          "httpCalls": 0,
+          "messageCommands": 0,
+          "nativeCards": 0,
+          "callbackCount": 3
+        },
+        {
+          "complete": true,
+          "mode": "Reply",
+          "pid": 3621,
+          "state": "Dismissed",
+          "httpCalls": 0,
+          "messageCommands": 0,
+          "nativeCards": 0,
+          "callbackCount": 4
+        },
+        {
+          "complete": true,
+          "mode": "Mute",
+          "pid": 3621,
+          "state": "Cancelled",
+          "httpCalls": 0,
+          "messageCommands": 0,
+          "nativeCards": 0,
+          "callbackCount": 5
+        }
+      ],
+      "systemUiReply": true,
+      "seconds": 49.488,
+      "scope": "Actual Android application callbacks, encrypted Room/Keystore and native cards; seeded fictional session/conversation/history; no discovery actor, provider send or product activation"
+    },
+    "complete": true,
+    "fixtureAbsent": true,
+    "fixtureUninstalled": true,
+    "fixtureDataCleared": true,
+    "seconds": 116.032
+  },
+  "nativeEvidenceSha256": {
+    "native-notification-denied.log": "5e9411f645c6d27ebbd5e1090293e0798c6bb11a73f2d788ba4d540d002a33d6",
+    "native-notification.log": "5e9411f645c6d27ebbd5e1090293e0798c6bb11a73f2d788ba4d540d002a33d6",
+    "notification-input-verify.log": "5e9411f645c6d27ebbd5e1090293e0798c6bb11a73f2d788ba4d540d002a33d6",
+    "action-Open-callback.json": "93c3476bf6e36dc012a298afbe7853d19cdf135735eb50eec45623cc450fced3",
+    "action-progress.json": "1f5cc915d1182db84bd41c8ff18a79ebc3183f3b3c9c04044b4a6c89159d1e98",
+    "action-MarkRead-callback.json": "f2f81021adfe89302210ddb7e528b5ca59fda255bdeed00eaff0acf9c0ff6679",
+    "action-Dismiss-callback.json": "20b818ba860d2df36e9e2080f0fa596d04b0174bf1db3ffd3f6142fe2f45f386",
+    "reply-notification.xml": "702a2aa022a1800d5cf78d2e288c17fcd5ae905f39c8adad599450a20285243a",
+    "reply-notification.png": "0b3ab32c55bc942111cf7861a2c4e03fbec9f9fcb5b1b99d1e4a884fd101d36e",
+    "reply-editor.xml": "acfcc949662de77173bce783c8b2862243e5dbd0b76154a75fb37b4770ef97ce",
+    "reply-editor.png": "2b4e0a43c4f83f20ec62eef60343982d4d60448105c0172cf354554796043a7c",
+    "action-Reply-callback.json": "b3fa8178280c3714718e5d727ff0a4057c91468b91ac8c85a25287eaef9b18d5",
+    "reply-acknowledged.xml": "110cb8c31ad87c2fcdc07be3190273470e97a202891d9490f755107f784e3135",
+    "reply-acknowledged.png": "70d238a42a5a275d0ddfb7de57cb06af873bff910273daef6e76c54274ff17b7",
+    "action-Mute-callback.json": "c1fb8d7f7305ed47765f5667818131d79e89904b628eb36743b0771311e29098",
+    "result.json": "c1293382a7affa36aba682d8a33a0698af823e9a870e9396c5f8ec1e859249c0"
+  },
+  "ownedEmulator": {
+    "start": {
+      "pid": 694671,
+      "serial": "emulator-5562",
+      "command": [
+        "/home/fajar/Android/Sdk/emulator/emulator",
+        "-avd",
+        "hris-mobile-dev",
+        "-port",
+        "5562",
+        "-data",
+        "/home/fajar/hris/hris-mobile/.work/startup-fix-2026-11-01/clean-userdata.img",
+        "-no-window",
+        "-no-snapshot",
+        "-no-audio",
+        "-no-boot-anim",
+        "-gpu",
+        "swiftshader_indirect",
+        "-memory",
+        "1536",
+        "-cores",
+        "2",
+        "-feature",
+        "-Vulkan"
+      ],
+      "startTicks": "138042927",
+      "bootSeconds": 32.797
+    },
+    "stop": {
+      "pid": 694671,
+      "serial": "emulator-5562",
+      "stopped": true,
+      "signalSent": true,
+      "transportAbsent": true,
+      "seconds": 1.404
+    }
+  },
+  "screenshots": {
+    "reply-notification.png": {
+      "sha256": "0b3ab32c55bc942111cf7861a2c4e03fbec9f9fcb5b1b99d1e4a884fd101d36e",
+      "actuallyViewed": true
+    },
+    "reply-editor.png": {
+      "sha256": "2b4e0a43c4f83f20ec62eef60343982d4d60448105c0172cf354554796043a7c",
+      "actuallyViewed": true
+    },
+    "reply-acknowledged.png": {
+      "sha256": "70d238a42a5a275d0ddfb7de57cb06af873bff910273daef6e76c54274ff17b7",
+      "actuallyViewed": true
+    }
+  },
+  "driverFollowup": {
+    "tests": 21,
+    "failures": 0,
+    "directEntryAndDiscovery": true,
+    "acceptedActualNative5Xml": true,
+    "rejectedActualNative2Through4Xml": true,
+    "changesAfterNative": "Stronger UI validator rejects original text, neutral app card, editor/send and non-SystemUI foreground; workflow now opts into the already exercised --reply-system-ui path. APK sources unchanged."
+  },
+  "rejectedNativeAttempts": [
+    {
+      "attempt": 1,
+      "auditSha256": "881b70ae867cd123334b75b8183b4aa328430565930e55d294038b6bddfd8905",
+      "result": {
+        "accepted": false,
+        "cause": "Seeded direct-conversation version was1; the existing mapper requires immutable DM identity version0. Failure before actions, no policy relaxed. Shared history key must also reuse earlier fixture key because its retained review rows are in the same database/prefix. Corrected fixture only.",
+        "nativeSeconds": 76.33,
+        "rawGroups": 16,
+        "inputRecovery": {
+          "complete": true,
+          "pid": 3602,
+          "protectedRowsBeforeRecovery": 1,
+          "reviewRowsAfterRecovery": 1,
+          "wrongAccountPreservedInput": true,
+          "oldFamilyRequiresReview": true,
+          "httpCalls": 0,
+          "commandRetained": false,
+          "cleanedUp": true,
+          "ordinaryProcessKills": 3,
+          "callbackCount": 4,
+          "processIds": [
+            3220,
+            3349,
+            3469,
+            3602
+          ],
+          "seconds": 22.169,
+          "scope": "Real Android callback, Keystore/Room/app recovery; fictional account; no HTTP/Matrix send or production host activation"
+        },
+        "fixtureUninstalled": true,
+        "ownedEmulatorStopped": true,
+        "apkSha256": "d0b052b3e3e384beacef7563842a263d3d20e47316bfeff100a1a217a44540a1"
+      }
+    },
+    {
+      "attempt": 2,
+      "auditSha256": "fdf4c1d88e795e535fe5ec5c9fd7f022ddf5bb1ba1d5f6a763170f43a65e9e0e",
+      "result": {
+        "accepted": false,
+        "nativeSeconds": 94.91,
+        "fixtureUninstalled": true,
+        "ownedEmulatorStopped": true,
+        "scope": "Reached SystemUI Reply editor, fixed fictional text entered and callback Saved. UI acknowledgment still showed original card and reply history; test refused acceptance. Full five-action result not retained, do not claim five passed.",
+        "cause": "Android15 NMS intentionally disallows cancel of a lifetime-extended directly replied notification. Public AOSP android15-release NotificationManagerService lines3768+7664 and SystemUI RemoteInputCoordinator examined; no hiddenAPI or private flags used.",
+        "fix": "Raw adapter now cancels, replaces an existing card with a silent no-content/no-action neutral notification, cancels again, and confirms actual OS absence before dropping opaque inventory. Namespace clear uses same path. Must re-run real SystemUI proof and raw fencing/cleanup cases before accepting.",
+        "screenshotsActuallyViewed": [
+          "reply-editor.png"
+        ],
+        "inputRecovery": {
+          "complete": true,
+          "pid": 3620,
+          "protectedRowsBeforeRecovery": 1,
+          "reviewRowsAfterRecovery": 1,
+          "wrongAccountPreservedInput": true,
+          "oldFamilyRequiresReview": true,
+          "httpCalls": 0,
+          "commandRetained": false,
+          "cleanedUp": true,
+          "ordinaryProcessKills": 3,
+          "callbackCount": 4,
+          "processIds": [
+            3277,
+            3391,
+            3508,
+            3620
+          ],
+          "seconds": 14.565,
+          "scope": "Real Android callback, Keystore/Room/app recovery; fictional account; no HTTP/Matrix send or production host activation"
+        }
+      }
+    },
+    {
+      "attempt": 3,
+      "auditSha256": "4e38e9afeff3d5c0f623b78789e4d0a15a5b4fdff37d208091dd30601a30ca54",
+      "result": {
+        "accepted": false,
+        "seconds": 104.859,
+        "apkSha256": "e3b50fd7139dadf8e925087d8cf1550dde6470fb1e60088d29903c833f81cb1b",
+        "fixtureUninstalled": true,
+        "ownedEmulatorStopped": true,
+        "actualProgress": [
+          {
+            "complete": true,
+            "mode": "Open",
+            "pid": 3574,
+            "state": "Published",
+            "httpCalls": 0,
+            "messageCommands": 0,
+            "nativeCards": 1,
+            "callbackCount": 1
+          },
+          {
+            "complete": true,
+            "mode": "MarkRead",
+            "pid": 3574,
+            "state": "Cancelled",
+            "httpCalls": 0,
+            "messageCommands": 0,
+            "nativeCards": 0,
+            "callbackCount": 2
+          },
+          {
+            "complete": true,
+            "mode": "Dismiss",
+            "pid": 3574,
+            "state": "Dismissed",
+            "httpCalls": 0,
+            "messageCommands": 0,
+            "nativeCards": 0,
+            "callbackCount": 3
+          },
+          {
+            "complete": true,
+            "mode": "Reply",
+            "pid": 3574,
+            "state": "Dismissed",
+            "httpCalls": 0,
+            "messageCommands": 0,
+            "nativeCards": 0,
+            "callbackCount": 4
+          }
+        ],
+        "failure": "SystemUI kept the original private card and reply history even though the native journal was Dismissed and OS active card inventory was empty. Screenshot reply-acknowledged.png actually viewed. No full-five-actions acceptance.",
+        "fix": "Wait for OS publication of a unique neutral retirement marker before final cancel; otherwise NMS may discard the queued neutral post before delivering it to SystemUI. Requires another actual UI check."
+      }
+    },
+    {
+      "attempt": 4,
+      "auditSha256": "d56016d0f5b7b6a07ba148cb594c32fdcc19a259e35807e817287824114926d5",
+      "result": {
+        "accepted": false,
+        "seconds": 94.455,
+        "apkSha256": "5e24eff4490058b492c6a864fda2675450b178123ae7368a32418e14bf8ee805",
+        "fixtureUninstalled": true,
+        "ownedEmulatorStopped": true,
+        "actualProgress": [
+          {
+            "complete": true,
+            "mode": "Open",
+            "pid": 3605,
+            "state": "Published",
+            "httpCalls": 0,
+            "messageCommands": 0,
+            "nativeCards": 1,
+            "callbackCount": 1
+          },
+          {
+            "complete": true,
+            "mode": "MarkRead",
+            "pid": 3605,
+            "state": "Cancelled",
+            "httpCalls": 0,
+            "messageCommands": 0,
+            "nativeCards": 0,
+            "callbackCount": 2
+          },
+          {
+            "complete": true,
+            "mode": "Dismiss",
+            "pid": 3605,
+            "state": "Dismissed",
+            "httpCalls": 0,
+            "messageCommands": 0,
+            "nativeCards": 0,
+            "callbackCount": 3
+          },
+          {
+            "complete": true,
+            "mode": "Reply",
+            "pid": 3605,
+            "state": "Dismissed",
+            "httpCalls": 0,
+            "messageCommands": 0,
+            "nativeCards": 0,
+            "callbackCount": 4
+          }
+        ],
+        "failure": "OS retirement-marker publication plus immediate cancel still left original SystemUI reply history. No five-action acceptance.",
+        "next": "Batch silent neutral updates with explicit empty content and framework600ms expiry, past AOSP500ms direct-reply cooldown, wait for publication and actual absence. No hiddenAPI or indefinite app sleep. Requires native proof."
+      }
+    }
+  ],
+  "phoneTouched": false,
+  "limits": [
+    "API35 owned emulator, fictional accounts, actual Room/Keystore and native components. No production notification activation or user messages.",
+    "Five native actions execute application callbacks; seeded journal/history and empty discovery deliberately exclude provider sends and full publication actor.",
+    "Reply confirms durable capture, not delivery. No message command or read is created by capture/acknowledgment.",
+    "A silent empty update with public 600ms expiry releases direct-reply history. Publication and native absence are checked; actual SystemUI absence is separately evidenced. No general guarantee for every OEM or untested failure timing.",
+    "Final full check reuses desktop/host/logic reports; 15 proof tests are fresh. Full5 and focused runs retain prior fresh coverage.",
+    "Full hosted Apple and new exact-source native run remain pending. Physical iPhone waived. All54 PRD groups open; phone23 remains installed."
+  ]
+}

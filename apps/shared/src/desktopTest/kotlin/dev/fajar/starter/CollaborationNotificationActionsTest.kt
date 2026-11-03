@@ -8,6 +8,7 @@ import dev.fajar.starter.notifications.data.dto.*
 import java.util.UUID
 import kotlin.test.*
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.first
 import org.koin.core.parameter.parametersOf
 
 /** Actual Koin/SQLite and fictional acquisition; OS display is explicitly simulated here. */
@@ -247,6 +248,74 @@ class CollaborationNotificationActionsTest {
                 f.publication()!!.body.state,
             )
             assertTrue(success(read(f.parent)).references.isEmpty())
+        }
+    }
+
+    @Test
+    fun capturedReplyCanRetireItsCardWithoutQueuingOrMarkingRead() = runBlocking {
+        fixture { f ->
+            val input = f.input(ActionNotificationKind.Reply)
+            val token = CollaborationNotificationActionToken(input.envelope)
+            val captured =
+                success(
+                    f.app.koin
+                        .get<CollaborationNotificationReplies>()
+                        .capture(token, "Fictional pending reply")
+                )
+            val protected = f.app.koin.get<CollaborationNotificationInputRepository>()
+            val before = success(protected.get(captured))
+            assertNotNull(before)
+            assertEquals(AppResult.Success(Unit), f.actions().acknowledgeReply(token))
+            assertEquals(before, success(protected.get(captured)))
+            assertTrue(f.native.cards.isEmpty())
+            assertEquals(
+                CollaborationNotificationPublicationState.Dismissed,
+                f.publication()!!.body.state,
+            )
+            assertTrue(f.readState().pending.isEmpty())
+            assertTrue(
+                success(
+                        f.app.koin
+                            .get<CollaborationMessageRepository>()
+                            .observe(f.scope.access, null)
+                            .first()
+                    )
+                    .isEmpty()
+            )
+            assertTrue(f.app.sdk.enqueued.isEmpty())
+        }
+    }
+
+    @Test
+    fun replyAcknowledgmentRejectsOtherKindsAndPreservesASupersedingNativeCard() = runBlocking {
+        fixture { f ->
+            val original = f.publication()
+            val invalid =
+                CollaborationNotificationActionToken(
+                    f.input(ActionNotificationKind.MarkRead).envelope
+                )
+            assertEquals(
+                FailureKind.Validation,
+                assertIs<AppResult.Failed>(f.actions().acknowledgeReply(invalid)).failure.kind,
+            )
+            assertEquals(original, f.publication())
+            val card = f.native.cards.values.single()
+            val replacement =
+                card.copy(reference = card.reference.copy(renderId = UUID.randomUUID().toString()))
+            f.native.cards[card.reference.id] = replacement
+            assertIs<AppResult.Failed>(
+                f.actions()
+                    .acknowledgeReply(
+                        CollaborationNotificationActionToken(
+                            card.envelopes.getValue(ActionNotificationKind.Reply)
+                        )
+                    )
+            )
+            assertEquals(replacement, f.native.cards.values.single())
+            assertEquals(
+                CollaborationNotificationPublicationState.Dismissing,
+                f.publication()!!.body.state,
+            )
         }
     }
 

@@ -1,5 +1,16 @@
 # Template updates
 
+## Native action notification primitives — Mobile proof accepted, port next
+
+[Mobile callback/native evidence](measurements/chat-native-callbacks-2026-11-03.json)
+proves real Android action PendingIntents, exact render removal, no-backup inventory
+and SystemUI reply-history retirement with public OS expiry. Eight generic core files
+(six production, two common tests) must return to Starter; its notifications module
+has none yet and its dependencies already match. Keep HRIS admission/encryption,
+callbacks, fixture and production configuration in Mobile. Independent Starter checks
+and hosted Apple remain required after copying the accepted source.
+
+
 ## Bounded Android scheduling and Apple wake proof — 2 November 2026
 
 Mobile e00ab4ee proves three reusable scheduler/test files with actual Android

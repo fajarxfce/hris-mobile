@@ -1,50 +1,52 @@
 # Agent continuation — HRIS Mobile
 
 
-## Android direct-reply lifetime fix under native proof; Apple actions accepted
+## Native callbacks and actual SystemUI reply accepted locally — 3 November 2026
 
+[Contract](collaboration-native-notification-callbacks.md) /
+[evidence](measurements/chat-native-callbacks-2026-11-03.json).
+Current implementation has 21 tracked inputs, including the CI SystemUI opt-in.
+Full9 passed in 115.487s: 3,928 desktop/556 suites, 230 host/37, 15 proof/four,
+ten build-logic/two; zero failures/errors/skips. Fifteen proof cases are fresh;
+other reports reused. Full5 passed in 365.122s with 579 fresh cases/91 suites.
+Final Python driver tests: 21, direct entry and discovery both pass.
+
+Native5 PASSED in 116.032s on the exclusively owned API35 emulator5562:
+16 raw groups, three ordinary process kills/four input callbacks, and five actual
+application actions (Open, MarkRead, Dismiss, Reply, Mute). All use real OS components
+and encrypted Room/Keystore; fictional session/history, HTTP zero, no message command.
+Input recovery 16.004s; action proof 49.488s. All three SystemUI screenshots ACTUALLY
+VIEWED. Reply card, private text and editor disappear. Final stricter Python validator
+also accepts this real XML and rejects native2/3/4 stale-card XML. APK SHA256
+2eddbccf0061d0cb62ab26ddaf63eba2902b4606efe8a94e3e7acf4a295e7c8d.
+Fixture uninstalled; emulator PID694671 stopped and transport absent. No local heavy
+job remains. All evidence/audit complete in .work/chat-native-callbacks-2026-11-03.
+
+Rejected attempts remain recorded: native1 fixture DM version was wrong; native2
+plain cancel, native3 immediate neutral/cancel and native4 publication-barrier/cancel
+left original SystemUI history. Native5 uses silent empty updates with public 600ms
+OS expiry, publication confirmation and absence confirmation, batched for namespace
+cleanup. No hidden flags. Generic eight-file notification port to Starter is NEXT;
+raw primitives are not there yet. Do not copy HRIS callback policy or proof app.
+
+[Native41615080704](measurements/chat-notification-actions-native-2026-11-03.json)
+at4389f537 is independently accepted/audited: five provider/three suites, 230 host/37,
+15 proof/four; zero. 341 source hashes and GitHub artifact13223539624 verified.
+Archive SHA256 c25aef94c3251cf3226733cecd0c3951292e55542c47d2f4d4a29db4ae7632fa.
+Build998s/Platform348s/native1152s. Raw16 and three input-recovery kills pass.
 [Apple41616077153](measurements/chat-notification-actions-apple-2026-11-03.json)
-at4389f537 is accepted/audited:1,045 simulator/119 suites, zero;335 source hashes
-verified. GitHub artifact13223178826 ZIP SHA256
-f70a062e1fdac9701e8d24c56dffb60231981957cd07991c33c440d2e3458cba.
-Compile730s/tests63s/full Xcode1343s. Excludes current callback and Android cleanup
-work. Do not repeat audit. Native438941615080704 remains in progress.
+at4389 is also accepted: 1,045 simulator/119 suites, 335 source hashes, full Xcode.
+Neither hosted run covers the current callback changes. Do not repeat old audits.
 
-CURRENT20 UNCOMMITTED inputs in .work/chat-native-callbacks-2026-11-03 are frozen
-for native3 (PTY43427), the ONLY local heavy job. Owned emulator5562 via device-3
-(start/stop scripts and wrapper); do not touch other emulators or phone. Full7
-PASS114.929s:3,928 desktop/556,230 host/37,15 proof/four,ten logic/two, zero;15fresh
-proof cases/four. Full5 PASS365.122s had579fresh/91 and same common app sources.
-Full7 also Android/Wasm/rootquality; audit complete. Python18 tests pass by both
-discovery and direct entry. Seventeen earlier app inputs plus fixture fixes, driver
-updates and generic AndroidActionNotificationDisplaySource now comprise20 inputs.
-
-Native1 FAILED before actions: fixture direct-conversation version1 violated the
-existing immutable DM version0 contract. Corrected fixture version and reused
-existing history/input keys of the sequential proof database; no policy relaxed.
-Raw16 and three input-recovery kills passed; fixture uninstalled/emulator stopped.
-Proof6 PASS93.420s/15fresh. Native2 reached real SystemUI Reply, typed fixed fictional
-text and callback Saved, but rejected remaining original card. reply-editor.png
-ACTUALLY VIEWED. Android15 AOSP NMS forbids app cancel of lifetime-extended direct-
-reply notifications. Generic raw adapter now cancels, replaces an existing visible
-card with a silent, no-content/no-action neutral update, cancels again, then confirms
-actual OS absence before dropping opaque inventory. Namespace clear follows the
-same path, including obsolete-account privacy cleanup. No hidden flags/APIs.
-Needs native3 SystemUI/raw fencing proof BEFORE acceptance and generic Starter port.
-Native2 failure evidence in native-2/failure-audit.json; do not claim allfivepassed.
-
-Native3 wrapper requires accepted full7 hashes, stores exactAPK and finaldriver
-hashes. tool/check_native_notifications.py --reply-system-ui tests actual editor
-and retains screenshots/XML, per-action callback/progress records before cleanup.
-On success inspect allthree screenshots and audit source/APK/result/cleanup. Then
-commit/push and dispatch ONE full Apple; automatic native workflow should queue
-behind4389. Production hosts still unbound/chat push OFF. Next implement native
-Activity Open with captured account/family and cross-company selection, then bind
-production. Draft in .work/chat-native-navigation-2026-11-03; no navigation edits yet.
-Reviewed edited-send still pending. Phone23 already installed; next product24+,
-notify before each install-only; never launch phone UI. All54 PRD groups OPEN.
-Starterd312769 and Platform72447fb8 unchanged; continue long run.
-
+NEXT commit/push this implementation; automatic native CI now includes --reply-system-ui.
+Dispatch one full Apple at the new source, prepare both evidence audits, then port
+raw primitives to Starter with independent root/Android/browser/Web/Apple checks.
+Continue typed native Activity Open/cross-company navigation and production host binding;
+draft in .work/chat-native-navigation-2026-11-03. No navigation edits yet. Reviewed
+edited-send still pending. Production notification hosts remain unbound, chat push OFF.
+Phone23 already delivered; next meaningful validated product build24+, notify before
+install-only and never drive phone UI. Starterd312769 and Platform72447fb8 unchanged.
+All54 communications PRD groups OPEN; continue long run.
 
 ## Saved-reply native accepted; callback native proof being built
 

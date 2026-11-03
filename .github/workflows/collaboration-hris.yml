@@ -83,7 +83,7 @@ jobs:
           emulator-port: 5560
           emulator-options: -no-window -no-snapshot -noaudio -no-boot-anim -gpu swiftshader -memory 2048 -cores 2
           script: |
-            python3 ./mobile/tool/check_native_notifications.py --serial emulator-5560 --apk "$HRIS_COLLAB_NATIVE_APK" --output ./mobile/.work/native-notification-proof
+            python3 ./mobile/tool/check_native_notifications.py --serial emulator-5560 --apk "$HRIS_COLLAB_NATIVE_APK" --output ./mobile/.work/native-notification-proof --reply-system-ui
             ./platform/gradlew -p platform --no-daemon --no-parallel --max-workers=1 '-Dorg.gradle.jvmargs=-Xmx1536m -Dfile.encoding=UTF-8' :apps:server:cleanTest :apps:server:test --tests '*NativeCollaborationSdkInteropTest' --tests '*NativeCollaborationWorkerInteropTest' --tests '*NativeCollaborationScheduledInteropTest'
       - uses: actions/upload-artifact@v4
         if: always()

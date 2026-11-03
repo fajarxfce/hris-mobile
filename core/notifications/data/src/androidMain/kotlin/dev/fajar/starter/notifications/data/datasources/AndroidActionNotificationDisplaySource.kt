@@ -18,11 +18,15 @@ import dev.fajar.starter.notifications.data.mappers.*
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
+import java.io.IOException
+import java.util.UUID
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeoutOrNull
 
 /** Raw adapter. A successful Binder submission is not user visibility, reading or delivery. */
 class AndroidActionNotificationDisplaySource(
@@ -126,7 +130,8 @@ class AndroidActionNotificationDisplaySource(
         // Under the required single writer, latest==expected also fences an older still-visible
         // card while this newer request waits in the OS queue. An absent card still needs cancel.
         currentCoroutineContext().ensureActive()
-        manager.cancel(tag, 0)
+        retire(setOf(tag), if (current != null) setOf(tag) else emptySet())
+        confirmRemoved(setOf(tag))
         currentCoroutineContext().ensureActive()
         if (latest != null) writePending(pending.filterNot { it.id == expected.id })
         currentCoroutineContext().ensureActive()
@@ -147,18 +152,80 @@ class AndroidActionNotificationDisplaySource(
                 indexFailure = failure
                 emptyList()
             }
-        val tags = pending.map { prefix + it.id }.toMutableSet()
-        for (entry in manager.activeNotifications) {
-            if (entry.id == 0 && entry.tag?.startsWith(prefix) == true) tags += entry.tag
-        }
-        for (tag in tags) {
-            currentCoroutineContext().ensureActive()
-            manager.cancel(tag, 0)
-        }
+        val visible =
+            manager.activeNotifications
+                .filter { it.id == 0 && it.tag?.startsWith(prefix) == true }
+                .map { it.tag }
+                .toSet()
+        val tags = pending.map { prefix + it.id }.toMutableSet().apply { addAll(visible) }
+        retire(tags, visible)
+        confirmRemoved(tags)
         // Corrupt inventory must not silently authorize more posts; visible cleanup is best effort.
         indexFailure?.let { throw it }
         writePending(emptyList())
         currentCoroutineContext().ensureActive()
+    }
+
+    private suspend fun retire(tags: Set<String>, visible: Set<String>) {
+        for (tag in tags) {
+            currentCoroutineContext().ensureActive()
+            manager.cancel(tag, 0)
+        }
+        if (visible.isEmpty() || !allowed()) return
+        // Direct-reply history may outlive cancel(), including in SystemUI after the service
+        // forgets the original. Replace existing cards without private content or actions, then
+        // let the OS expiry pass the reply-history cooldown. Batch the namespace in one window.
+        val pending = visible.associateWith { UUID.randomUUID().toString() }.toMutableMap()
+        try {
+            for ((tag, retirement) in pending) {
+                currentCoroutineContext().ensureActive()
+                val neutral =
+                    NotificationCompat.Builder(context, channel)
+                        .setSmallIcon(iconResource)
+                        .setContentTitle(context.applicationInfo.loadLabel(context.packageManager))
+                        .setContentText("")
+                        .setStyle(NotificationCompat.BigTextStyle().bigText(""))
+                        .setVisibility(NotificationCompat.VISIBILITY_SECRET)
+                        .setOnlyAlertOnce(true)
+                        .setSilent(true)
+                        .setTimeoutAfter(600)
+                        .addExtras(Bundle().apply { putString(RETIREMENT, retirement) })
+                        .build()
+                manager.notify(tag, 0, neutral)
+            }
+            val posted =
+                withTimeoutOrNull(1_000) {
+                    while (pending.isNotEmpty()) {
+                        for (entry in manager.activeNotifications) {
+                            if (
+                                entry.id == 0 &&
+                                    pending[entry.tag] ==
+                                        entry.notification.extras.getString(RETIREMENT)
+                            )
+                                pending.remove(entry.tag)
+                        }
+                        if (pending.isNotEmpty()) delay(20)
+                    }
+                    true
+                } == true
+            if (!posted) throw IOException("Owned notification retirement was not confirmed")
+            confirmRemoved(visible)
+        } finally {
+            // Native expiry still owns cleanup if the process dies after the neutral update.
+            // Opaque inventory remains until both publication and absence have been confirmed.
+            for (tag in visible) manager.cancel(tag, 0)
+        }
+    }
+
+    private suspend fun confirmRemoved(tags: Set<String>) {
+        if (tags.isEmpty()) return
+        val removed =
+            withTimeoutOrNull(1_000) {
+                while (manager.activeNotifications.any { it.id == 0 && it.tag in tags }) delay(20)
+                true
+            } == true
+        currentCoroutineContext().ensureActive()
+        if (!removed) throw IOException("Owned notification removal was not confirmed")
     }
 
     private fun readPending(): List<ActionNotificationReference> {
@@ -283,5 +350,6 @@ class AndroidActionNotificationDisplaySource(
 
     companion object {
         private const val RENDER = "owned_notification_render"
+        private const val RETIREMENT = "owned_notification_retirement"
     }
 }

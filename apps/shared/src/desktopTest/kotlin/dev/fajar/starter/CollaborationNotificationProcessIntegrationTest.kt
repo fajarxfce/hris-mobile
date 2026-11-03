@@ -3,6 +3,7 @@ package dev.fajar.starter
 import dev.fajar.starter.app.notifications.*
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationListRepository
+import dev.fajar.starter.collaboration.domain.repositories.CollaborationNotificationInputRepository
 import dev.fajar.starter.collaboration.domain.usecases.MarkCollaborationMessagesRead
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.notifications.data.dto.*
@@ -16,6 +17,120 @@ import org.koin.core.parameter.parametersOf
 
 /** Actual app DI and encrypted SQLite; acquisition and the native OS remain explicit fakes. */
 class CollaborationNotificationProcessIntegrationTest {
+    @Test
+    fun boundReplyCallbackCapturesThenAcknowledgesThroughTheActualProcessGraph() = runBlocking {
+        withProcess(seedPublication = false) { f, process, shown, _ ->
+            val delivery = f.app.koin.get<CollaborationNotificationDelivery>()
+            assertTrue(delivery.start(process))
+            assertIs<AppResult.Success<*>>(delivery.publish(f.parent, f.candidate))
+            val card = next(shown) { true }
+            idle(f)
+            val callbacks = f.app.koin.get<CollaborationNotificationReplyCallbacks>()
+            val outcome = CompletableDeferred<CollaborationReplyCaptureOutcome>()
+            callbacks.receive(
+                CollaborationNotificationActionToken(
+                    card.envelopes.getValue(ActionNotificationKind.Reply)
+                ),
+                "Fictional retained reply",
+            ) {
+                outcome.complete(it)
+            }
+            assertEquals(
+                CollaborationReplyCaptureOutcome.Saved,
+                withTimeout(12_000) { outcome.await() },
+            )
+            val inputs = f.app.koin.get<CollaborationNotificationInputRepository>()
+            val reference =
+                assertIs<AppResult.Success<List<CollaborationNotificationInputReference>>>(
+                        inputs.page()
+                    )
+                    .value
+                    .single()
+            assertNotNull(
+                assertIs<AppResult.Success<CollaborationNotificationInput?>>(inputs.get(reference))
+                    .value
+            )
+            assertEquals(
+                CollaborationNotificationPublicationState.Dismissed,
+                f.publication()!!.body.state,
+            )
+            assertTrue(f.native.cards.isEmpty())
+            assertTrue(f.app.sdk.enqueued.isEmpty())
+            callbacks.closeAndJoin()
+            delivery.closeAndJoin()
+        }
+    }
+
+    @Test
+    fun boundActionCallbackWaitsForAnExistingLeaseAndRetiresOnceWithoutSending() = runBlocking {
+        withProcess(seedPublication = false) { f, process, shown, _ ->
+            val delivery = f.app.koin.get<CollaborationNotificationDelivery>()
+            assertTrue(delivery.start(process))
+            assertIs<AppResult.Success<*>>(delivery.publish(f.parent, f.candidate))
+            val card = next(shown) { true }
+            idle(f)
+            val entered = CompletableDeferred<Unit>()
+            val release = CompletableDeferred<Unit>()
+            val holding = async {
+                f.owner.withOwner(f.parent) {
+                    entered.complete(Unit)
+                    release.await()
+                    AppResult.Success(Unit)
+                }
+            }
+            withTimeout(8_000) { entered.await() }
+            val callbacks = f.app.koin.get<CollaborationNotificationActionCallbacks>()
+            val outcome = CompletableDeferred<CollaborationActionCallbackOutcome>()
+            callbacks.receive(
+                ActionNotificationInput(
+                    card.reference,
+                    ActionNotificationKind.Dismiss,
+                    card.envelopes.getValue(ActionNotificationKind.Dismiss),
+                )
+            ) {
+                outcome.complete(it)
+            }
+            // A callback cannot acknowledge while another writer owns the native surface.
+            assertFalse(outcome.isCompleted)
+            release.complete(Unit)
+            assertIs<AppResult.Success<*>>(holding.await())
+            assertEquals(
+                CollaborationActionCallbackOutcome.Applied,
+                withTimeout(12_000) { outcome.await() },
+            )
+            assertEquals(
+                CollaborationNotificationPublicationState.Dismissed,
+                f.publication()!!.body.state,
+            )
+            assertTrue(f.native.cards.isEmpty())
+            assertTrue(f.app.sdk.enqueued.isEmpty())
+            callbacks.closeAndJoin()
+            delivery.closeAndJoin()
+        }
+    }
+
+    @Test
+    fun unboundAndClosedDeliveryCannotExecuteAuthenticatedNativeActions() = runBlocking {
+        withProcess { f, process, _, _ ->
+            val card = f.native.cards.values.single()
+            val input =
+                ActionNotificationInput(
+                    card.reference,
+                    ActionNotificationKind.Open,
+                    card.envelopes.getValue(ActionNotificationKind.Open),
+                )
+            val delivery = f.app.koin.get<CollaborationNotificationDelivery>()
+            assertIs<AppResult.Failed>(delivery.act(input))
+            assertTrue(delivery.start(process))
+            assertIs<AppResult.Success<*>>(delivery.act(input))
+            delivery.closeAndJoin()
+            assertIs<AppResult.Failed>(delivery.act(input))
+            assertIs<AppResult.Failed>(
+                delivery.acknowledgeReply(CollaborationNotificationActionToken(input.envelope))
+            )
+        }
+    }
+
     @Test
     fun focusedRouteChangeRetiresAnExistingCardWithoutAnExplicitPublishAndBlurStaysQuiet() =
         runBlocking {

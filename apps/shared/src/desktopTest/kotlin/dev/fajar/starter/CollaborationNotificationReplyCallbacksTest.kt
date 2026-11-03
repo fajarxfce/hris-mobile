@@ -17,6 +17,73 @@ class CollaborationNotificationReplyCallbacksTest {
         )
 
     @Test
+    fun acknowledgementStartsOnlyAfterRetentionAndFailureCannotUnsavesConfirmedInput() = runTest {
+        for (success in listOf(false, true)) {
+            val events = mutableListOf<String>()
+            val owner =
+                CollaborationNotificationReplyCallbacks(
+                    { _, _ ->
+                        events += "capture"
+                        if (success) AppResult.Success(reference)
+                        else AppResult.Failed(Failure(FailureKind.Storage, "Unavailable"))
+                    },
+                    coroutineContext,
+                    acknowledge = { received ->
+                        assertEquals(token, received)
+                        events += "acknowledge"
+                        error("Simulated native failure")
+                    },
+                )
+            owner.receive(token, "Fictional input") { events += it.name }
+            runCurrent()
+            assertEquals(
+                if (success) listOf("capture", "acknowledge", "Saved")
+                else listOf("capture", "NotSaved"),
+                events,
+            )
+            owner.closeAndJoin()
+        }
+    }
+
+    @Test
+    fun acknowledgementTimeoutAndOwnerCloseJoinBeforeSavedCompletion() = runTest {
+        for (timeout in listOf(false, true)) {
+            var joined = false
+            val outcomes = mutableListOf<CollaborationReplyCaptureOutcome>()
+            val owner =
+                CollaborationNotificationReplyCallbacks(
+                    { _, _ -> AppResult.Success(reference) },
+                    coroutineContext,
+                    acknowledge = {
+                        try {
+                            awaitCancellation()
+                        } finally {
+                            withContext(NonCancellable) {
+                                delay(50)
+                                joined = true
+                            }
+                        }
+                    },
+                )
+            owner.receive(token, "Fictional retained input") {
+                assertTrue(joined)
+                outcomes += it
+            }
+            runCurrent()
+            assertTrue(outcomes.isEmpty())
+            if (timeout) {
+                advanceTimeBy(8_000)
+                runCurrent()
+                assertTrue(outcomes.isEmpty())
+                advanceTimeBy(50)
+                runCurrent()
+            } else owner.closeAndJoin()
+            assertEquals(listOf(CollaborationReplyCaptureOutcome.Saved), outcomes)
+            owner.closeAndJoin()
+        }
+    }
+
+    @Test
     fun cancellationBeforeLaunchEntryStillFinishesExactlyOnce() = runTest {
         var entered = false
         val results = mutableListOf<CollaborationReplyCaptureOutcome>()

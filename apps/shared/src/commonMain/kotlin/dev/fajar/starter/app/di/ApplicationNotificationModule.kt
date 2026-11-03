@@ -1,5 +1,6 @@
 package dev.fajar.starter.app.di
 
+import dev.fajar.starter.app.notifications.CollaborationNotificationActionCallbacks
 import dev.fajar.starter.app.notifications.CollaborationNotificationActions
 import dev.fajar.starter.app.notifications.CollaborationNotificationCommands
 import dev.fajar.starter.app.notifications.CollaborationNotificationCopy
@@ -51,6 +52,7 @@ fun applicationNotificationModule() = module {
             reconcile = { parent, reference, failure ->
                 reconcile.reconcile(parent, reference, copy, failure)
             },
+            actions = get<CollaborationNotificationActions> { parametersOf(owner) },
         )
     }
     single { CollaborationNotificationCommands(get(), get(), get(), get(), get()) }
@@ -62,8 +64,17 @@ fun applicationNotificationModule() = module {
     }
     single { CollaborationNotificationInputRecoveryWorker(get(), get(), get()) }
     single {
+            val delivery = get<CollaborationNotificationDelivery>()
+            CollaborationNotificationActionCallbacks(delivery::act)
+        }
+        .onClose { it?.close() }
+    single {
             val replies = get<CollaborationNotificationReplies>()
-            CollaborationNotificationReplyCallbacks(replies::capture)
+            val delivery = get<CollaborationNotificationDelivery>()
+            CollaborationNotificationReplyCallbacks(
+                replies::capture,
+                acknowledge = { delivery.acknowledgeReply(it) },
+            )
         }
         .onClose { it?.close() }
     single {
