@@ -74,13 +74,27 @@ Current v2 action recovery supports an issuing family that differs from the curr
 family for the same account; v1 still needs its original family for authentication.
 An old family is retained for the existing explicit review path, without a new send.
 
-These use cases are bound in the actual application container. They do not yet run
-from native callbacks or the device-input worker. Application integration must share
-the existing reply execution mutex across transfer, cleanup and processing, so another
-local recovery cannot retire the account copy while transfer still needs it. Callback
-ownership, durable scan fairness, input review UI and notification-input OS-death tests
-remain separate work. Explicit discard must coordinate with account transfer and
-retained commands; deleting a device row alone cannot cancel an already-copied reply.
+`CollaborationNotificationReplies.capture` protects the input, then requests the
+existing durable recovery wake and scheduler. It returns only the opaque reference,
+without account restoration, company admission or Matrix access. The whole callback
+turn is bounded to eight seconds, including at most one second for scheduling. At most
+eight capture/submission turns can be admitted. Failed scheduling does not undo a
+successful capture; cancellation joins pending work before releasing its slot.
+
+`resumeProtected` shares the existing reply execution mutex with ordinary submission
+and account-input recovery. Transfer, exact device cleanup, reread and processing all
+occur within that finite turn. Another local recovery cannot retire the account copy
+while transfer still needs it. Capture remains available while this mutex is held.
+An uncertain transfer does not start command processing. The account queue can later
+recover an independently retained copy, and repeated capture reproduces its original
+operation rather than a new send.
+
+These application methods and use cases are bound in the actual container. Native
+callbacks and the device-input discovery worker do not invoke them yet. Startup and
+periodic discovery of protected device rows, durable scan fairness, callback ownership,
+input review UI and notification-input OS-death tests remain separate work. Explicit
+discard must coordinate with account transfer and retained commands; deleting a
+device row alone cannot cancel an already-copied reply.
 
 Production chat notification hosts remain unbound and chat push is disabled. This is
 not the planned Drive/iCloud backup format or acceptance of an OS reply callback.
@@ -92,3 +106,8 @@ Local and hosted validation are recorded separately in `docs/measurements`.
 covers bounded capture, account replacement, cancellation, exact cleanup, response loss
 and actual encrypted SQLite/Koin reopen with fictional transport. Native callbacks and
 physical process death remain separate acceptance gates.
+
+[Application-flow validation](measurements/chat-notification-input-flow-2026-11-03.json)
+adds actual-container capture/wake/reopen, shared-mutex exclusion through cleanup,
+independent capture, cancelled recovery, scheduling failure/deadline and response-loss
+checks. It does not prove native callback delivery or automatic discovery of device rows.

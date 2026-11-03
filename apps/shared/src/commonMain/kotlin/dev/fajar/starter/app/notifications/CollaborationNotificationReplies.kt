@@ -20,9 +20,57 @@ class CollaborationNotificationReplies(
     private val review: ReviewCollaborationNotificationReply,
     private val commands: CollaborationNotificationCommands,
     private val recover: RequestCollaborationRecovery,
+    private val protect: ProtectCollaborationNotificationReply,
+    private val transfer: TransferCollaborationNotificationInput,
 ) {
     private val execution = Mutex()
     private val submissions = Semaphore(8)
+
+    /** Native callbacks protect input and request work without restoring an account or Matrix. */
+    suspend fun capture(
+        token: CollaborationNotificationActionToken,
+        text: String,
+    ): AppResult<CollaborationNotificationInputReference> {
+        currentCoroutineContext().ensureActive()
+        if (!submissions.tryAcquire()) return failure(FailureKind.Unavailable)
+        return try {
+            withTimeoutOrNull(8_000) {
+                val stored = protect(token, text)
+                if (stored is AppResult.Failed) return@withTimeoutOrNull stored
+                val input = (stored as AppResult.Success).value
+                // Retention survives a failed enqueue; startup and later wakes scan it again.
+                withTimeoutOrNull(1_000) { recover() }
+                currentCoroutineContext().ensureActive()
+                AppResult.Success(input.reference)
+            } ?: failure(FailureKind.Timeout)
+        } finally {
+            submissions.release()
+        }
+    }
+
+    /** Transfer, cleanup and processing share the account-reply recovery turn. */
+    suspend fun resumeProtected(
+        reference: CollaborationNotificationInputReference
+    ): AppResult<CollaborationNotificationReplyResult> {
+        currentCoroutineContext().ensureActive()
+        if (!execution.tryLock()) return failure(FailureKind.Unavailable)
+        return try {
+            withTimeoutOrNull(8_000) {
+                when (val copied = transfer(reference)) {
+                    is AppResult.Failed -> copied
+                    is AppResult.Success ->
+                        when (val value = copied.value) {
+                            CollaborationNotificationInputTransfer.Absent ->
+                                AppResult.Success(CollaborationNotificationReplyResult.Absent)
+                            is CollaborationNotificationInputTransfer.Transferred ->
+                                processRetained(value.replyId)
+                        }
+                }
+            } ?: failure(FailureKind.Timeout)
+        } finally {
+            execution.unlock()
+        }
+    }
 
     /** At most eight admitted callbacks, including the active one; waiting shares the deadline. */
     suspend fun submit(
@@ -53,18 +101,21 @@ class CollaborationNotificationReplies(
         currentCoroutineContext().ensureActive()
         if (!execution.tryLock()) return failure(FailureKind.Unavailable)
         return try {
-            withTimeoutOrNull(8_000) {
-                when (val found = read(id)) {
-                    is AppResult.Failed -> found
-                    is AppResult.Success ->
-                        found.value?.let { process(it) }
-                            ?: AppResult.Success(CollaborationNotificationReplyResult.Absent)
-                }
-            } ?: failure(FailureKind.Timeout)
+            withTimeoutOrNull(8_000) { processRetained(id) } ?: failure(FailureKind.Timeout)
         } finally {
             execution.unlock()
         }
     }
+
+    private suspend fun processRetained(
+        id: String
+    ): AppResult<CollaborationNotificationReplyResult> =
+        when (val found = read(id)) {
+            is AppResult.Failed -> found
+            is AppResult.Success ->
+                found.value?.let { process(it) }
+                    ?: AppResult.Success(CollaborationNotificationReplyResult.Absent)
+        }
 
     private suspend fun process(
         input: CollaborationNotificationReplyInput

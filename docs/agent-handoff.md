@@ -1,30 +1,46 @@
 # Agent continuation — HRIS Mobile
 
-## Authenticated device-input transfer accepted locally
+## Application capture and protected-input recovery accepted locally
 
-[Capture and transfer](collaboration-notification-input.md) is locally ACCEPTED;
-[evidence](measurements/chat-notification-input-transfer-2026-11-03.json). Capture is
-session-independent, bounded to eight callbacks/eight seconds. Transfer authenticates
-the actual account, preserves the issuing family, rereads exact account-owned retention,
-then removes the exact protected device generation. It does not schedule, admit company
-access or send. Uncertain copy/cleanup and parent changes preserve recoverable facts.
-A missing device input is not proof of transfer. Old-family input remains for review.
+[Capture/recovery flow](collaboration-notification-input.md) is locally ACCEPTED;
+[evidence](measurements/chat-notification-input-flow-2026-11-03.json).
+CollaborationNotificationReplies.capture protects input before durable wake/scheduling,
+without account restoration or Matrix. Eight-second turn/eight shared admissions;
+scheduling at most1s. Failed enqueue leaves the protected reference and pending wake.
+resumeProtected shares the existing submit/resume mutex through authenticated transfer,
+exact cleanup, account reread and processing. Independent capture stays available.
+Uncertain transfer cannot start a command in that call; replay reproduces the original.
 
-Focused1 PASSED209.282s:54 desktop/seven suites and11 proof-host/three,65 fresh/ten.
-Full2 PASSED336.423s:3,829 desktop/542,230 Android-host/37,11 proof-host/three,ten
-build-logic/two;2,225 fresh/270. Root quality, proof assembly and shared Wasm passed;
-ten Kotlin input hashes unchanged, zero failures/errors/skips. Fifteen new domain
-cases and five actual Koin/encrypted SQLite integration cases cover no-session capture,
-account replacement, exact readback, response loss, cancellation and reopen. Existing
-reply flow is still invoked separately in tests. Work/audit/record complete in
-.work/chat-notification-input-transfer-2026-11-03; no repeat checks absent changes.
+Focused1 PASSED94.632s:41 fresh desktop cases/four suites. Full2 PASSED265.033s:
+3,837 desktop/542,230 Android-host/37,15 proof-host/four,ten build-logic/two;
+546 fresh/86, zero failures/errors/skips and five unchanged Kotlin hashes. Root quality,
+proof assembly and shared Wasm pass. Eight additional actual Koin/encrypted SQLite
+cases cover no-session capture/wake/reopen, shared-mutex exclusion, independent capture,
+cancellation, scheduler failure/deadline, bounded admission and copy/cleanup response
+loss. Actual HTTP/Matrix are fictional. Work/audit/record complete in
+.work/chat-notification-input-flow-2026-11-03; drafts are APPLIED, do not copy again.
 
-NEXT integrate capture plus durable wake and protected-input recovery with the existing
-CollaborationNotificationReplies execution mutex. Transfer, exact cleanup and process
-must share that mutex. Native callbacks only protect and request a wake, not open Matrix.
-The worker needs bounded persistent scan fairness across mixed-account input. Explicit
-discard must coordinate with transfer/account commands. Review UI, native callback and
-notification-input OS-death proof remain open; do not expose unverified text in account UI.
+Underlying capture/transfer use cases are committed/pushed89ddf252. Their independent
+[proof](measurements/chat-notification-input-transfer-2026-11-03.json) has54 desktop+
+11 proof focused cases and full3,829 desktop/230 host/11 proof/ten logic, zero; exact
+account copy read before device removal, old-family review and no-session preservation.
+
+NEXT implement durable device-input discovery/worker and native callback ownership.
+The refined design in .work/chat-notification-input-recovery-2026-11-03/design.txt
+uses an account-encrypted finite snapshot of at most64 opaque references, nextIndex,
+inFlight/sticky retry/continuation/finished, exact CAS and guards after pending work.
+Snapshot capture is bounded to four metadata pages; persist each attempt before running
+resumeProtected. Finish rereads current references to detect arrivals/replacement before
+old cursor. A finite snapshot prevents a slow first page or constant arrival from
+starving older work across process restarts. These are design notes, NOT implemented.
+Preserve the90s worker's reserved company/priority/reply budgets when adding this phase.
+
+Native callbacks must only capture/request wake, never restore Matrix inside goAsync.
+HrisWorkerProofContainer currently omits explicit notification-input credentials and
+uses the fixture memory default; add AndroidCredentialStore before claiming input
+process-death proof. Production Android already has the key. Explicit discard must
+coordinate with account transfer/commands. Native input callbacks, automatic protected
+row discovery, review UI and input OS-death proof remain open. No production binding.
 
 The receipt fixture correction is locally ACCEPTED:
 [evidence](measurements/chat-read-receipt-barrier-2026-11-03.json). Wait up to20s for
@@ -58,17 +74,18 @@ no HRIS keys, encryption or policy. Starter must run its own root/browser/Androi
 and full Apple gates. Its five base database/schema files were byte-identical before
 Mobile's raw-store increment; verify current status before porting.
 
-NEXT application capture/resume drafts are UNAPPLIED in
-.work/chat-notification-input-flow-2026-11-03. Apply source and eight additional tests,
-wire the two new constructor dependencies in DI and both manual test constructors,
-verify shared-mutex cleanup/cancellation/replay and actual no-session capture/wake.
-Then implement persistent fair input discovery and native callback lifetime/OS-death
-proof. No native notification binding or review UI yet. Continue without stopping.
+Starter generic DeviceRecordStore port is APPLIED/UNCOMMITTED,16 byte-identical inputs
+(15 Kotlin/schema13) from Mobile76bd/accepted Apple81c7. Four preexisting Kotlin bases
+and schema12 matched. Independent Starter root/database browser/Android dev/lint/Web
+check1 is RUNNING in .work/device-records-port-2026-11-03; this owns the ONLY local
+heavy slot. Do not start Mobile Gradle/emulator until it completes. No Starter source
+mutation during that check. Inspect reports/schema/source hashes, fix real failures,
+commit/push, then dispatch one Starter full Apple requiring eight raw storage cases.
 
-Phone21 is already installed; no new product APK in this increment. Notify before the
-next validated phone install, explicit10.77.77.3:5555, --install-only. Live304/schema116
-and Starter0d4432e unchanged. No local heavy job remains. Chat push OFF/native hosts
-unbound/voice-video-meeting UI absent/all54 PRD groups still open. Continue long run.
+Phone21 remains installed. No product APK was built in this increment; next validated
+phone update must notify first, select10.77.77.3:5555 and --install-only. Platform304/
+schema116 remains unchanged. Chat push OFF/native hosts unbound/voice-video-meeting UI
+absent/all54 PRD groups still open. Continue long run after these commits.
 
 ## Protected pre-session notification input accepted locally
 

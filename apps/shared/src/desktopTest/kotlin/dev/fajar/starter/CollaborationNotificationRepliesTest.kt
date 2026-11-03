@@ -994,6 +994,8 @@ class CollaborationNotificationRepliesTest {
             koin.get(),
             commands,
             koin.get(),
+            koin.get(),
+            koin.get(),
         )
 
     private fun replyValue(result: AppResult<CollaborationNotificationReplyResult>) =
