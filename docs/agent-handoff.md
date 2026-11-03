@@ -1,5 +1,51 @@
 # Agent continuation — HRIS Mobile
 
+## Product notification runtime in progress — 3 November 2026
+
+24 host, Android composition/resource, readiness, fixture and driver inputs are WIP
+and are NOT yet accepted for product release. Current source manifest:
+.work/chat-native-host-2026-11-03/inputs.json. Full check3 is running; keep those
+inputs frozen until completion. No owned emulator is active. Native runner/device
+scripts are prepared in that directory and must follow a successful source audit.
+
+ApplicationNotificationHost now binds actual ApplicationCollaborationLifetime state
+through recoveryParent to one SurfaceOwner and Process/Delivery. Android Application
+implements the private action host and starts a single Android runtime. Current
+localized immutable copy is sampled per publication/reconciliation; callback labels
+resolve through the same application language. No Activity is retained.
+
+Cold-start review found that initial Pending could produce Blocked(null), rejecting
+MarkRead before restored identity arrived. Delivery now waits for this host's observed
+session readiness within ONE8s deadline shared with execution. Closing releases its
+waiting callers; cancellation remains caller-owned. Surface advisory state treats
+Blocked for an old parent as Pending; a current-parent cleanup failure stays Blocked.
+Actual Koin/encrypted SQLite test starts sealed MarkRead while application state is
+Pending, then starts the real collaboration lifetime and verifies exact private read,
+journal retirement and no outgoing message. It passes.
+
+Focused1 rejected138.823s:39 cases pass, Android compile exposed missing explicit
+core.settings.domain dependency in apps/android. Fixed. Focused2 passes203.129s:
+112 desktop/eight suites plus15 proof/four, zero failures/errors/skips,127 fresh.
+Root format/architecture/detekt and Android dev/proof assembly/lint pass. Unit tests
+include start-once, replacement/held cleanup, late state, close-before-start, rejected
+second host, cancellation, close during readiness, shared8s deadline and stale
+Blocked advisory. All19 focused source/report digests audited.
+
+The subsequent native runtime fixture and driver changes are NOT yet compiled/run.
+They test real Android runtime resources/NotificationManager and joined cleanup with
+explicitly fake admission/settings ports, separately from actual Koin desktop tests.
+25 driver tests pass. Full3 includes all24 current inputs and root checks/Wasm/Android.
+No native success, full-host acceptance or release24 has been claimed.
+
+Hosted routing checks41634596520 Apple and41634550829 Native remain in progress at
+ff3b3246. Do not duplicate/cancel Apple. They exclude this host increment. Starter
+9959c1d and Platform72447fb8 remain unchanged; Platform runtime304/schema116, chat
+push OFF. Phone23 remains installed. Next: complete full/native host checks, commit
+and push accepted source/docs, then build/validate release24 and notify before
+10.77.77.3:5555 install-only. Do not launch or drive phone UI. Continue reviewed-send
+and remaining PRD afterward; all54 groups remain open, voice/video/meeting UI absent.
+
+
 ## Updated hosted checks dispatched — 3 November 2026
 
 Routing/driver increment ff3b3246f726e86be91d84efc1da1b5033809c38 is pushed and locally
