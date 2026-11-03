@@ -1,6 +1,7 @@
 package dev.fajar.hris.collaboration.proof
 
 import dev.fajar.starter.collaboration.data.repositories.AndroidCollaborationRuntimeLease
+import dev.fajar.starter.collaboration.domain.entities.CollaborationOwnReadReceipts
 import dev.fajar.starter.collaboration.domain.entities.CollaborationReadReceiptVisibility
 import dev.fajar.starter.common.result.AppResult
 import kotlinx.coroutines.delay
@@ -58,8 +59,7 @@ internal object HrisReadReceiptProof {
                 recipient.nativeClient.userId(),
             ) == null
         )
-        val own = expect(recipient.readOwnReadReceipts(roomId))
-        check(own.privateEventId == sentEventId && own.publicEventId == sentEventId)
+        awaitOwnReceipts(sentEventId) { recipient.readOwnReadReceipts(roomId) }
         expect(
             sender.sendReadReceipt(roomId, replyEventId, CollaborationReadReceiptVisibility.Private)
         )
@@ -79,6 +79,17 @@ internal object HrisReadReceiptProof {
                 result.getString("recipientEventId")
         )
         result.put("nativeReadReceiptStoreRestored", true)
+    }
+
+    /** A peer's sync does not prove that this client's own store has caught up. */
+    internal suspend fun awaitOwnReceipts(
+        expectedEventId: String,
+        read: suspend () -> AppResult<CollaborationOwnReadReceipts>,
+    ) {
+        await {
+            val own = expect(read())
+            own.privateEventId == expectedEventId && own.publicEventId == expectedEventId
+        }
     }
 
     private suspend fun await(ready: suspend () -> Boolean) {

@@ -26,22 +26,44 @@ The worker needs bounded persistent scan fairness across mixed-account input. Ex
 discard must coordinate with transfer/account commands. Review UI, native callback and
 notification-input OS-death proof remain open; do not expose unverified text in account UI.
 
-Hosted native41587502684 atde69 FAILED one SDK receipt fixture assertion at
-HrisReadReceiptProof.exchange:62. Sender receipt sync is not a recipient-local barrier.
-Raw16 groups/two scenarios and the other four provider scenarios passed, with cleanup;
-239 sources and GitHub archive verified. Audit is complete in
-.work/chat-notification-focus-native-2026-11-03/failure-audit.json. The bounded-own-store
-barrier fix and four regression cases are UNAPPLIED .txt drafts in
-.work/chat-read-receipt-barrier-2026-11-03. Apply/check/commit this correction next; never
-remove receipt assertions or claim whole native acceptance. Automatic81c7 run41592216948
-is already running and contains the old barrier; do not duplicate or cancel it.
+The receipt fixture correction is locally ACCEPTED:
+[evidence](measurements/chat-read-receipt-barrier-2026-11-03.json). Wait up to20s for
+both own receipt IDs after the independent sender observation; privacy and restored-store
+assertions remain. Four new regression cases cover either field lagging, wrong event,
+deadline/cancellation joins and storage failures. Root/proof assembly/lint passed116.304s;
+15 fresh proof-host/four suites, two source hashes unchanged, product root tests reused.
+Lint0 errors/same47 existing warnings. No native acceptance for this correction yet.
 
-Full Apple41592237356 at81c7 remains in progress with268 frozen paths. Simulator tests
-passed; full Xcode still pending. Audit once complete using prepared script; require
-all eight AppleDeviceRecordStoreTest cases and the full app build. This includes raw
-schema13/protected input/Swift keys but EXCLUDES the new capture/transfer use cases.
-Do not dispatch a replacement until it completes. After acceptance port only generic
-DeviceRecordStore and its tests/schema to Starter; then run Starter's own gates.
+Hosted native41587502684 atde69 FAILED one SDK assertion at exchange:62;
+[audited evidence](measurements/chat-notification-focus-native-2026-11-03.json).
+Raw16 groups/two scenarios and the other four provider scenarios passed, with cleanup;
+239 sources and artifact13210193167 verified. ZIP SHA256
+`a64bcc7ca10b08c626d4451ff331bdc369f8404171905ddcaf4d3791f9427771`.
+Five receipt POSTs returned200 before the failed own-store assertion. The artifact does
+not show which receipt field lagged. Do not claim whole native acceptance. Automatic
+81c7 run41592216948 is already running with the old barrier; no manual duplicate/cancel.
+Later automatic queue may supersede pending89dd source with this correction.
+
+Full Apple41592237356 at81c7 is ACCEPTED:
+[evidence](measurements/chat-notification-input-apple-2026-11-03.json).
+997 simulator cases/111 suites, zero failures/errors/skips,268 frozen sources;
+compile466s/tests47s/full Xcode752s. All eight AppleDeviceRecordStoreTest cases passed.
+Artifact13211114027 GitHub SHA256
+`29edcd0c7b6c328965bc33064f92c434d47177486ee8dc9578d32735f7747d98`.
+Audit complete in .work/chat-notification-input-apple-2026-11-03; do not repeat.
+This includes raw schema13/protected input/Swift keys but EXCLUDES89dd capture/transfer
+use cases. Consolidate those with the next application flow for one later full Apple.
+Mobile raw storage is now proven for the generic Starter port:15 Kotlin files/schema13,
+no HRIS keys, encryption or policy. Starter must run its own root/browser/Android/Web
+and full Apple gates. Its five base database/schema files were byte-identical before
+Mobile's raw-store increment; verify current status before porting.
+
+NEXT application capture/resume drafts are UNAPPLIED in
+.work/chat-notification-input-flow-2026-11-03. Apply source and eight additional tests,
+wire the two new constructor dependencies in DI and both manual test constructors,
+verify shared-mutex cleanup/cancellation/replay and actual no-session capture/wake.
+Then implement persistent fair input discovery and native callback lifetime/OS-death
+proof. No native notification binding or review UI yet. Continue without stopping.
 
 Phone21 is already installed; no new product APK in this increment. Notify before the
 next validated phone install, explicit10.77.77.3:5555, --install-only. Live304/schema116
