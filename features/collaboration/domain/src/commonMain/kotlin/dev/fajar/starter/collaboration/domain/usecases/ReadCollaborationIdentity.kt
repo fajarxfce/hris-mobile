@@ -9,8 +9,7 @@ import dev.fajar.starter.identity.domain.entities.IdentityServer
 import dev.fajar.starter.identity.domain.repositories.SessionRepository
 import dev.fajar.starter.workspace.domain.repositories.WorkspaceRepository
 import kotlin.time.Clock
-import kotlinx.coroutines.currentCoroutineContext
-import kotlinx.coroutines.ensureActive
+import kotlinx.coroutines.*
 
 /**
  * Reads owned identity without live authority; explicit acquisition uses protected SDK metadata
@@ -29,20 +28,36 @@ class ReadCollaborationIdentity(
     suspend fun current(
         workspaceId: String
     ): AppResult<CollaborationRead<CollaborationSelfIdentity?>> =
-        read(workspaceId) { owner -> identities.current(owner.localListAccess()) }
+        read(CollaborationOperationScope.Selected(workspaceId)) { owner ->
+            identities.current(owner.localListAccess())
+        }
 
+    suspend fun acquire(workspaceId: String, deviceId: String) =
+        acquire(CollaborationOperationScope.Selected(workspaceId), deviceId)
+
+    /** The caller owns the already-open SDK runtime; a background grant never reads selection. */
     suspend fun acquire(
-        workspaceId: String,
+        scope: CollaborationOperationScope,
         deviceId: String,
     ): AppResult<CollaborationRead<CollaborationSelfIdentity?>> {
-        if (!validCollaborationMessageId(deviceId))
+        if (
+            !validCollaborationMessageId(deviceId) ||
+                !collaborationOperationOwnsDevice(scope, deviceId)
+        )
             return collaborationSetupFailure(
                 "client.collaboration_invalid_request",
                 FailureKind.Validation,
             )
-        return read(workspaceId) { owner ->
+        return read(scope) { owner ->
             val received = runtimes.selfIdentity(owner, deviceId)
-            val current = continuation(workspaceId, owner, received)
+            val rejected = (received as? AppResult.Failed)?.failure
+            if (rejected != null && collaborationContentResponseClosesRead(rejected))
+                withContext(NonCancellable) {
+                    withTimeoutOrNull(2_000) {
+                        admission.restrict(owner.localListAccess(), rejected)
+                    }
+                }
+            val current = continuation(scope, owner, received)
             if (current is AppResult.Failed) return@read current
             if (received is AppResult.Failed) return@read received
             val identity =
@@ -53,7 +68,7 @@ class ReadCollaborationIdentity(
                     FailureKind.Unexpected,
                 )
             val saved = identities.retain(owner.localListAccess(), identity)
-            val completed = continuation(workspaceId, owner, saved)
+            val completed = continuation(scope, owner, saved)
             if (completed is AppResult.Failed) return@read completed
             when (saved) {
                 is AppResult.Failed -> saved
@@ -65,16 +80,16 @@ class ReadCollaborationIdentity(
     }
 
     private suspend fun <T> read(
-        workspaceId: String,
+        scope: CollaborationOperationScope,
         operation: suspend (CollaborationOwner) -> AppResult<T>,
     ): AppResult<CollaborationRead<T>> {
-        val captured = capture(workspaceId)
+        val captured = capture(scope)
         if (captured is AppResult.Failed) return captured
         val owner = (captured as AppResult.Success).value
-        val before = continuation(workspaceId, owner, null)
+        val before = continuation(scope, owner, null)
         if (before is AppResult.Failed) return before
         val result = operation(owner)
-        val after = continuation(workspaceId, owner, result)
+        val after = continuation(scope, owner, result)
         if (after is AppResult.Failed) return after
         return when (result) {
             is AppResult.Failed -> result
@@ -83,16 +98,22 @@ class ReadCollaborationIdentity(
     }
 
     private suspend fun continuation(
-        workspaceId: String,
+        scope: CollaborationOperationScope,
         owner: CollaborationOwner,
         received: AppResult<*>?,
     ): AppResult<Unit> {
+        val rejected = (received as? AppResult.Failed)?.failure
         currentCoroutineContext().ensureActive()
-        val current = requireCollaborationOwner(capture(workspaceId), owner, received)
-        if (current is AppResult.Failed) return current
         val gate = admission.admission(owner.localListAccess())
+        val current = capture(scope)
         currentCoroutineContext().ensureActive()
-        val checked = requireCollaborationOwner(capture(workspaceId), owner, gate)
+        if (rejected != null && collaborationContentResponseClosesRead(rejected))
+            return AppResult.Failed(rejected)
+        if (gate is AppResult.Success)
+            gate.value.denial?.let {
+                return AppResult.Failed(it)
+            }
+        val checked = requireCollaborationOwner(current, owner, received)
         if (checked is AppResult.Failed) return checked
         return when (gate) {
             is AppResult.Failed -> gate
@@ -101,6 +122,17 @@ class ReadCollaborationIdentity(
         }
     }
 
-    private suspend fun capture(workspaceId: String) =
-        sessions.captureCollaborationLocalOwner(workspaceId, workspaces, server, build, clock)
+    private suspend fun capture(scope: CollaborationOperationScope) =
+        when (scope) {
+            is CollaborationOperationScope.Selected ->
+                sessions.captureCollaborationLocalOwner(
+                    scope.workspaceId,
+                    workspaces,
+                    server,
+                    build,
+                    clock,
+                )
+            is CollaborationOperationScope.Background ->
+                sessions.captureCollaborationOwner(scope, workspaces, server, build, clock)
+        }
 }

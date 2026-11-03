@@ -43,3 +43,7 @@ must respect existing incoming/priority budgets and keep durable hints through u
 Foreground focus, initial/backfill/dropped-hint rules, permission/channel/capacity recovery,
 authenticated callbacks, encrypted input review and notification-input process-death proof
 remain next. Chat push remains off and no product APK was installed by this change.
+
+[Incoming identity acquisition](collaboration-incoming-identity.md) now supplies the owned
+self identity needed for notification preparation without requiring a previously opened chat.
+The priority publication handoff and actual native host are still pending.

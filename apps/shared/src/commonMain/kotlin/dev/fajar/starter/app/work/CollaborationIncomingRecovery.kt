@@ -25,6 +25,7 @@ class CollaborationIncomingRecovery(
     private val enter: EnterCollaborationConversation,
     private val recoverHistory: CollaborationIncomingHistoryRecovery,
     private val deliverReadReceipts: DeliverCollaborationReadReceipts,
+    private val readIdentity: ReadCollaborationIdentity,
     private val clock: Clock = Clock.System,
 ) {
     private val execution = Mutex()
@@ -208,6 +209,8 @@ class CollaborationIncomingRecovery(
     ): SyncResult {
         var child: CollaborationTimelineLease? = null
         try {
+            val identity = identity(scope, deviceId)
+            if (identity is SyncResult.Blocked) return identity
             val opened = enter(scope, deviceId, conversationId)
             if (opened is AppResult.Success) child = opened.value
             currentCoroutineContext().ensureActive()
@@ -226,9 +229,31 @@ class CollaborationIncomingRecovery(
             val recovered =
                 if (priorityEventId == null) recoverHistory(scope, key)
                 else recoverHistory.priority(scope, key, priorityEventId)
-            return combineCollaborationRecovery(receipts, recovered)
+            return combineCollaborationRecovery(
+                identity,
+                combineCollaborationRecovery(receipts, recovered),
+            )
         } finally {
             withContext(NonCancellable) { child?.close() }
+        }
+    }
+
+    private suspend fun identity(
+        scope: CollaborationOperationScope.Background,
+        deviceId: String,
+    ): SyncResult {
+        val result =
+            withTimeoutOrNull(2.seconds) { readIdentity.acquire(scope, deviceId) }
+                ?: return SyncResult.Retry(failure("identity_timeout"))
+        currentCoroutineContext().ensureActive()
+        return when (result) {
+            is AppResult.Failed ->
+                if (result.failure.kind == FailureKind.Unavailable) SyncResult.Retry(result.failure)
+                else collaborationWorkFailure(result.failure)
+            is AppResult.Success ->
+                if (result.value.value == null)
+                    SyncResult.Retry(failure("identity_pending", FailureKind.Unavailable))
+                else SyncResult.Complete
         }
     }
 

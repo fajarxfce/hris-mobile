@@ -47,6 +47,10 @@ class NativeWorkerSdk(private val wire: NativeCollaborationUi) : CollaborationRu
     var beforeReadReceipt: suspend () -> Unit = {}
     var readReceiptFailure: Failure? = null
     val sender = "@fictional:example.test"
+    var beforeIdentity: suspend () -> Unit = {}
+    var identityResult: AppResult<CollaborationSelfIdentity?> =
+        AppResult.Success(CollaborationSelfIdentity(sender))
+    var identityReads = 0
 
     fun incoming(conversationId: String, text: String): CollaborationHistoryChange.Text {
         check(conversationId in wire.ids)
@@ -191,8 +195,12 @@ class NativeWorkerSdk(private val wire: NativeCollaborationUi) : CollaborationRu
         deviceId: String,
     ): AppResult<Unit> = error("No implicit pusher activation")
 
-    override suspend fun selfIdentity(owner: CollaborationOwner, deviceId: String) =
-        AppResult.Success(CollaborationSelfIdentity(sender))
+    override suspend fun selfIdentity(owner: CollaborationOwner, deviceId: String) = run {
+        check(this.owner == owner && deviceId == wire.deviceId)
+        identityReads++
+        beforeIdentity()
+        identityResult
+    }
 
     override suspend fun prepareHistoryReopen(
         owner: CollaborationOwner,

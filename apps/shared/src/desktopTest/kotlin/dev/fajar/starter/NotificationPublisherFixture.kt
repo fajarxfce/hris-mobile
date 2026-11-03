@@ -53,10 +53,9 @@ internal class NotificationPublisherFixture {
             SyncResult.Complete,
             app.koin.get<CollaborationIncomingRecovery>()(app.incomingGrant()),
         )
-        assertIs<AppResult.Success<*>>(
-            app.koin
-                .get<CollaborationIdentityRepository>()
-                .retain(scope.access, CollaborationSelfIdentity(app.sdk.sender))
+        assertEquals(
+            AppResult.Success(CollaborationSelfIdentity(app.sdk.sender)),
+            app.koin.get<CollaborationIdentityRepository>().current(scope.access),
         )
         candidate =
             CollaborationNotificationCandidate(

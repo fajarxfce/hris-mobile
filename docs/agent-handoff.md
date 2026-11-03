@@ -1,5 +1,61 @@
 # Agent continuation — HRIS Mobile
 
+## Background identity accepted; wire the priority publication handoff
+
+Incoming recovery now acquires its own SDK identity under the existing finite runtime,
+without selected-workspace reads or a second runtime. A2-second cooperative metadata budget
+leaves time for history; missing/transient identity preserves retry while originals still
+progress. Exact admitted device, current parent, wall/monotonic expiry, known denial and
+cancellation guard SDK/storage. Only a raw SDK denial can retain a new gate; derived expiry/
+family failures cannot become permanent company denial. Existing selected local-read semantics
+remain. [Contract](collaboration-incoming-identity.md), [evidence](measurements/chat-incoming-identity-2026-11-03.json).
+
+Focused1 FAILED47.392s at nullable generic expected-type compilation; fixed. Focused2
+FAILED46.491s:17 domain cases/four failures exposed both the fixture's unsupported restrict
+method and outer continuation wrongly retaining derived failures as SDK denial. Restricted
+only at the raw SDK response boundary and added no-denial-on-expiry assertion. Focused3
+FAILED46.642s at the fixture's Unit/Boolean return-type mismatch; corrected. Focused4 PASSED
+162.934s/83 cases/13 suites/root quality. Added one actual2-second deadline case, then Full5
+PASSED329.868s:3,723 desktop/530 suites,230 Android-host/37,six proof-host/one,ten build-logic/two,
+proof assembly/shared Wasm/root quality.2,134 fresh cases/261 suites, seven final hashes,
+zero failures/errors/skips. Eight new domain and four actual Koin/SQLite incoming cases.
+NotificationPublisherFixture now gets identity through incoming recovery, without repository
+seeding. SDK/HTTP/OS remain fictional in these integration tests; no device acceptance claimed.
+
+NEXT connect priority delivery through the one explicitly owned process. Design notes in
+.work/chat-incoming-identity-2026-11-03/next-delivery.txt are NOT applied. Capture only opaque
+candidate IDs after exact original/tombstone acquisition and return them AFTER timeline/runtime
+close. Publish before CompletePushPriority CAS under outer20s, never inside room12s. Hinted
+NOT_REQUESTED cannot Complete without an original. An unbound/closed host must return pending;
+keep hint through publication uncertainty, permission/channel/capacity or cancellation.
+Submitted/Suppressed/Unchanged can resolve it; expiry remains a separate scheduling decision.
+
+Suggested app NotificationDelivery binding takes ownership of one passed Process, starts once,
+never reopens after close, rejects second binding, joins active work/compensation on disposal.
+Native entry points still wait for focus/permission wakeups and authenticated callbacks/input
+review. Koin singleton plus onClose is not a substitute for explicit native-host closeAndJoin.
+Tests must use actual Process/Publisher/Koin/SQLite with an explicit fake OS, not success no-ops.
+Existing PriorityRecoveryTest and its reopen cases need an owned host. Join it BEFORE fixture
+container/database closure. Current native HrisPriorityHistoryProbe expects successful hint ACK:
+explicitly bind actual process/journal to a labelled proof-only fake display for this case,
+verify native provider runtime closed before fake show, retain Published before ACK and record
+fake-surface scope. Existing16rawOS groups remain separate; no native-input acceptance implied.
+HrisWorkerProofContainer uses real Android sender.repository; HrisProofRuntimeAccess deliberately
+rejects identity only in unrelated finite proof operations. Production Android identity reads
+its protected initialized SDK credential record and closes the credential source.
+
+Then initial/backfill/dropped-hint baseline, focused-route ownership, permission/channel recovery,
+authenticated action v2/old-parent and pre-retention encrypted input review, and actual
+notification-input OS-death tests. Chat push OFF, all54 PRD groups open; voice/video/meet UI absent.
+Generic Starter port waits for integrated Mobile proof. Live304/schema116 unchanged.
+
+Apple41568117750/93f8a185 ACCEPTED962/108,207 hashes/full Xcode1,126s, excludes candidate52876f16
+and this increment; do not repeat it. Native automatic41571732304 at52876f16 was in progress at
+03:40Z; do not dispatch a duplicate. Full local5 finished; no owned local heavy job/emulator.
+Phone19/sourcec0 remains installed. Next meaningful release>19: notify and explicit
+10.77.77.3:5555 install-only, preserve signer/data, no phone UI automation. Continue long run;
+push every atomic commit.
+
 ## Full Apple process validation accepted; background identity acquisition in progress
 
 [Run41568117750 at93f8a185](measurements/chat-notification-process-apple-2026-11-03.json)

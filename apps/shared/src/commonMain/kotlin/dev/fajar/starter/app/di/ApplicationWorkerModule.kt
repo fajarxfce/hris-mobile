@@ -54,6 +54,7 @@ fun applicationWorkerModule() = module {
             get(),
             get(),
             get(),
+            get(),
         )
     }
     single { CollaborationPriorityRecovery(get(), get(), get(), get()) }

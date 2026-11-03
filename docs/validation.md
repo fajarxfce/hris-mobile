@@ -1,5 +1,15 @@
 # Validation
 
+## Background incoming identity — 3 November 2026
+
+[Background identity](collaboration-incoming-identity.md) passes83 focused cases/13 suites
+and full checks:3,723 desktop/530 suites,230 Android-host/37,six proof-host/one,ten build-logic/two,
+proof assembly/shared Wasm/root quality. Full5 takes329.868s, with2,134 fresh cases/261 suites,
+seven hashes and zero failures/errors/skips. [Evidence](measurements/chat-incoming-identity-2026-11-03.json)
+preserves three rejected attempts, including a corrected distinction between SDK denial and
+derived parent/deadline failure. Four actual Koin/SQLite cases include joined2-second metadata
+timeout with continued history acquisition. SDK/HTTP/OS are fakes; no phone installation.
+
 ## Candidate delivery through the process — 3 November 2026
 
 [Queued candidate delivery](collaboration-notification-candidates.md) passes 81 focused
