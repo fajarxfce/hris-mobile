@@ -1,5 +1,51 @@
 # Agent continuation — HRIS Mobile
 
+## Reviewed-send focused checks pass; full8 running — 3 November 2026
+
+Source is STILL UNCOMMITTED/NOT RELEASE-ACCEPTED. [Progress/evidence](measurements/chat-reviewed-send-2026-11-03.json).
+Focused7 PASS267.501s:57 fresh/five suites, zero failures/errors/skips; includes
+9 MVI/7 Compose UI and41 application tests across three suites (21 reply tests,
+including two new actual-Koin/encrypted-SQLite restart/duplicate-draft cases).
+Domain926/86 and encrypted reply-storage19 cases passed earlier and were reused.
+Root format/architecture/detekt, devDebug assemble/lint pass; product lint0 issues.
+All37 inputs unchanged during focused7. Five screenshots-7 ACTUALLY VIEWED:
+focused editor, held reply, immutable confirmed reply, OriginalProcessing refusal,
+Indonesian320x640/font2 at bottom. Open chat is secondary to Send; entire final
+button fits after real scroll. These are desktop Compose keyboard/captures, NOT
+Android IME or phone UI. Earlier screenshots-6 showed two competing primary actions;
+polish and reinspection are complete. Earlier failed checks1–6 remain recorded.
+
+Two final unit races were then added: discard winning after final input read
+prevents late edited insertion; new command already starting refuses discard.
+NO production source changed after focused7. Full8 is NOW RUNNING in
+.work/chat-reviewed-send-2026-11-03/check-8, exec session37322. ONE heavy job only;
+no owned emulator. Next collect full8. Root :check does NOT run browser tests, so
+run python .work/chat-reviewed-send-2026-11-03/check-browser.py 9 browser afterward
+(two actual IndexedDB reply/recovery suites), then audit exact reports/source hashes.
+The reviewed domain suite now has14 tests; observed-native-parent suite has7.
+
+Release25 scripts PREPARED ONLY under .work/release-phone-2026-11-03-build25.
+They expect currently installed24 and the same signer; no25 build or installation.
+Use clean accepted source, verify APK/lint/backup exclusions/16KiB alignment and
+minified emulator cold starts, inspect PNGs, stop owned emulator, notify before
+explicit10.77.77.3:5555 --install-only. Never launch phone UI, clear data or alter
+Google mapping. Phone24 source418c7ef6 stays installed.
+
+Hosted templates PREPARED ONLY under .work/chat-reviewed-send-apple-2026-11-03
+(384 paths) and ...-hosted-... (393 paths). Fill exact committed source hash/run IDs
+and generate sources.json from committed bytes; placeholders currently prevent use.
+Apple template requires14 reviewed-reply and7 saved-reply observation simulator cases
+plus existing full Xcode gates. Native additionally requires runtime4/raw16/three
+input deaths/five actions and actual viewing of all three SystemUI PNGs. Do not
+infer acceptance from dispatch or reuse418 evidence for reviewed-send.
+
+Host418 Apple41639434001 and Native41639264778 ACCEPTED. Protocol41639264850 reports
+success (not separately artifact-audited); control41639264755 still running its
+portable/Apple adapter jobs at last query. Starter9959c1d and Platform72447fb8/runtime304/
+schema116 unchanged; live chat push OFF. All54 groups OPEN, voice/video/meeting UI absent.
+Continue long run after verified source/release25; no final at this milestone.
+
+
 ## Host native gate accepted; reviewed-send validation underway — 3 November 2026
 
 Native418c7ef6 / run41639264778 ACCEPTED. Artifact13234703425 /249017 bytes,

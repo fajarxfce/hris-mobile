@@ -1,0 +1,196 @@
+{
+  "status": "in_progress",
+  "date": "2026-11-03",
+  "baselineCommit": "3c0169a9",
+  "sourceCommitted": false,
+  "attempts": [
+    {
+      "startedAt": "2026-11-03T13:27:32.815985+00:00",
+      "exitCode": 1,
+      "wallSeconds": 39.252,
+      "inputsUnchanged": true,
+      "attempt": 1,
+      "freshCounts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "freshSuites": 0,
+      "reason": "Missing policy import; fixed.",
+      "logSha256": "1b1fe5027127a70463dfe6eb4c06e7ecfd01a275b46269196ef9a5f0f3a4832d"
+    },
+    {
+      "startedAt": "2026-11-03T13:29:12.148592+00:00",
+      "exitCode": 1,
+      "wallSeconds": 98.437,
+      "inputsUnchanged": true,
+      "attempt": 2,
+      "freshCounts": {
+        "tests": 924,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "freshSuites": 86,
+      "reason": "Domain passed; public cross-module property required a local value for smart cast; fixed.",
+      "logSha256": "ad3f1f7b26d19cd595a93d808b312328ce6961a08961c6ca90f8b2899d022f6b"
+    },
+    {
+      "startedAt": "2026-11-03T13:31:59.340550+00:00",
+      "exitCode": 1,
+      "wallSeconds": 180.209,
+      "inputsUnchanged": true,
+      "attempt": 3,
+      "freshCounts": {
+        "tests": 956,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "freshSuites": 88,
+      "reason": "Domain and encrypted SQLite tests passed; missing explicit BackHandler dependency; fixed.",
+      "logSha256": "3e60ca8fdc87ac3f31bbcae22f8a06b6c53c866d65ca418c21401681610391a9"
+    },
+    {
+      "startedAt": "2026-11-03T13:36:02.655067+00:00",
+      "exitCode": 1,
+      "wallSeconds": 76.436,
+      "inputsUnchanged": true,
+      "attempt": 4,
+      "freshCounts": {
+        "tests": 926,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "freshSuites": 86,
+      "reason": "Domain passed; BackHandler requires ExperimentalComposeUiApi opt-in; fixed.",
+      "logSha256": "80385d2b7d626d68b1ff7d2c65850d17c5a5be419d28122905ad6461d937b206"
+    },
+    {
+      "startedAt": "2026-11-03T13:39:25.764482+00:00",
+      "exitCode": 1,
+      "wallSeconds": 89.457,
+      "inputsUnchanged": true,
+      "attempt": 5,
+      "freshCounts": {
+        "tests": 0,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "freshSuites": 0,
+      "reason": "Production presentation compiled; two UI-test list assertions required explicit event type; fixed.",
+      "logSha256": "b441e25ef0be057a33dab90e1e812d237ea5d0a81817edfcda48ba00018ace73"
+    },
+    {
+      "startedAt": "2026-11-03T13:41:20.126005+00:00",
+      "exitCode": 1,
+      "wallSeconds": 297.249,
+      "inputsUnchanged": true,
+      "attempt": 6,
+      "freshCounts": {
+        "tests": 57,
+        "failures": 2,
+        "errors": 0,
+        "skipped": 0
+      },
+      "freshSuites": 5,
+      "reason": "16 MVI/UI tests passed; two new app tests incorrectly used the fixture that rejects selected-workspace reads; fixed without relaxing old fixture assertions.",
+      "logSha256": "b7e74f9faa8f06df2ae217a439ad3018efc31db7ddcb47e2ac4cb50ee4730e56"
+    },
+    {
+      "startedAt": "2026-11-03T13:47:03.667254+00:00",
+      "exitCode": 0,
+      "wallSeconds": 267.501,
+      "inputsUnchanged": true,
+      "attempt": 7,
+      "freshCounts": {
+        "tests": 57,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "freshSuites": 5,
+      "reason": "Focused checks passed including actual-Koin edited recovery, root format/architecture/detekt, Android dev debug assembly and zero-issue lint.",
+      "logSha256": "db518283ba88bcc2e89f50bbd381a9ef2af1cb77b64b3a400d4d60cc606c737f"
+    }
+  ],
+  "focusedSourceSha256": {
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/di/ApplicationNotificationModule.kt": "f32d2f34069c9cb577bb11fcc327573fd9f5ff5b3122042e5e73e8d53969f72f",
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/notifications/CollaborationNotificationReplies.kt": "e31fdac4fbc22b6709685caa73f3bd3f6f0ecd3366dc8842a1d89081e2a26020",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationNotificationInputRecoveryWorkerTest.kt": "96653e44c156f6ae372c27fdd8f2835d8b9c57207b185ee8107597773f46490e",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationNotificationInputTransferIntegrationTest.kt": "e485758380a273b1c30191d8b730ded96eb90564f82af9784c8921cd8d97c0e8",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationNotificationRepliesTest.kt": "69db329b2870a038aa0d29054e74d56830af2dc877d47633e304ebd1bda00f12",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/CollaborationNotificationReplyRecoveryWorkerTest.kt": "f5f6fb8763b5713037a83bc1f9b8ef64af1486a0133970d389f2f9ed45e72e43",
+    "core/localization/src/commonMain/composeResources/values/strings_en.xml": "6c725acdb2df46175f726912a1b4ae66bd2ac0e78cd8d79c8469925833a1cbe3",
+    "core/localization/src/commonMain/composeResources/values/strings_id.xml": "c8b131e03daaed6db6f60ea3c06acc009ad6d6834f6741fa3b7fc4d61dc6e3bb",
+    "core/localization/src/commonMain/kotlin/dev/fajar/starter/localization/AppString.kt": "a149746dd5e83735503355ea6c26fc968b6ff2129e057bc60d7c31471c832dba",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/di/CollaborationDataModule.kt": "aefca86c10e30a6146f5e36746e37c9cb0b1e301a7745b2676a530f3a5a23292",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/notifications/CollaborationNotificationReplyCodec.kt": "4e9c09c18cf40c880b73f60f7ecd778da8cd167560a63114062fdf103e6cdddc",
+    "features/collaboration/data/src/commonMain/kotlin/dev/fajar/starter/collaboration/data/repositories/EncryptedCollaborationNotificationReplyRepository.kt": "271c70af66af7ceffd4de94a0131d4ae4651e82b22a20d78128d13a2f5f8d393",
+    "features/collaboration/data/src/commonTest/kotlin/dev/fajar/starter/collaboration/data/CollaborationNotificationReplyStorageContract.kt": "00a98b3a86ad644ef4cb54f77c9bee86659b83974dfc5c460b4df9885e2ce469",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationNotificationReplyInput.kt": "9b9b98ec14aa7156fb23338f8d5874d964471605ecb27bb6601696f5deb3d425",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationReviewedReplyResult.kt": "520d66c8e49ebbccbedf7f3e0ad9562dae0080f11bad04b11135a1839ee22bee",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/entities/CollaborationSavedReply.kt": "eea914633d71f88b0be9d87ee05e08939ce610ef009831d3b93abf720bbc5498",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/policies/CollaborationNotificationReplyPolicy.kt": "8f78346395f8959e8128c1a5affd22ba6c84cddcb7db69a782f52d58c8d7ab6c",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/repositories/CollaborationNotificationReplyResolutionRepository.kt": "b06dba17ffc7096171e982dbda36904d007015db41f192be09a7b807836c7b42",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/CollaborationReviewedReplyAccess.kt": "ae9c2b72083da72717cf1a09744a84d816e30b70fc7f71a14e8a6cb7475a8c7e",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/CompleteCollaborationNotificationReply.kt": "19198d0e8fa809ceaeaa0e7161dc2a56841642636889966fd85a2c52aaa325f2",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ConfirmCollaborationReply.kt": "b8ad2f3215205358fcaa34d2c31a6303d064481d767dd1b1ea1efb683c5123ec",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/DiscardCollaborationNotificationReply.kt": "fc723a20bbae8f1bab0b384b98ac1cdb32b44ef5b3923a5ec7cf66a32cc5b140",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ObserveCollaborationSavedReplies.kt": "75c99bb4ef60499ce977ee11b448d8f9a2a30696eb4a580f51393ce010e32665",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ResumeCollaborationReviewedReply.kt": "c25924616c9cf51b3af1ff4472c4dfdd0e932851eaf1cb19ef06ae9aec18fda5",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ReviewCollaborationNotificationReply.kt": "f759d1f1fe76efec53befb8e512e08775e313b646b87d4d8e5598eaef3961cc7",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/ReviewedReplyCommands.kt": "a8ec9010b72b10c7353731e063170ebffd529b3831257c2b5fbfcca191d70e48",
+    "features/collaboration/domain/src/commonMain/kotlin/dev/fajar/starter/collaboration/domain/usecases/SaveCollaborationReplyDraft.kt": "d26d2f4f4934a4784d8a01ddf7f7ef58416fad17f5d9a4cff5acde8850e8240b",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/CollaborationReviewedReplyTest.kt": "f5a9e02b1d3db38135192369fc38f351256d92df926a1ec1ace81c57144b1762",
+    "features/collaboration/domain/src/commonTest/kotlin/dev/fajar/starter/collaboration/domain/ObserveCollaborationSavedRepliesTest.kt": "3d171d128563eac35e3589fe60be55d4a452dc1416aabfd7f5229730b3974fa8",
+    "features/collaboration/presentation/build.gradle.kts": "e9995637c8494855bbc1b76d1265abd19579d7abc541b79826d97e9b03a9ea61",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/navigation/CollaborationNavigation.kt": "8504c9f35c94c1f69c0205d96bfcdb3320e9a13802ecc32465ada97ddf08924d",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/replies/SavedRepliesEvent.kt": "23b9477f17dd3e3bc7083ca0089bc072a8180f920ab6e052795cc1bbd16e5cfd",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/replies/SavedRepliesState.kt": "514c9ab96081057ef8fad04558f74398e8d95d1f9cfb53e85a4a1ff1982f584e",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/replies/SavedRepliesViewModel.kt": "e8f3b89898082ed2250bb9fdcd496f2b5fc4e47c6617c7c91815fed579359759",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/replies/pages/SavedRepliesPage.kt": "735af3a8294fba74b6ef53fe7552f9e05f8edf784a9eadf850a62a2ed05ccba9",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/replies/SavedRepliesViewModelTest.kt": "1ece6f8cd73076df63502c02e105b9e804423e49f3dc4c3907fb9f40e2d6fb7a",
+    "features/collaboration/presentation/src/desktopTest/kotlin/dev/fajar/starter/collaboration/presentation/SavedRepliesLayoutTest.kt": "b9aac33cdf231604d5bae811ec6b307cd0e2cc157b4cfd968060e77c55ac3e57"
+  },
+  "screenshots": {
+    "images": {
+      "chat-saved-reply-indonesian-large-text.png": {
+        "sha256": "17445b617dcb78e77ca244fc4b18d2883ad2d8f4c676a89a45b8e72110850592",
+        "inspected": true
+      },
+      "chat-saved-reply.png": {
+        "sha256": "717627810a723820fbccd26c053ef93b2c60ebe53ee6d749e1baff3ed027804d",
+        "inspected": true
+      },
+      "chat-reviewed-reply-confirmed.png": {
+        "sha256": "fc59c3c9ed852ee356653b414f25c70262d02366d786a668905dbee8892d136d",
+        "inspected": true
+      },
+      "chat-reviewed-reply-editor.png": {
+        "sha256": "75386df2019c763282a1b054a9edc6ce389e20a749bffb723ca39775a26fc8b5",
+        "inspected": true
+      },
+      "chat-reviewed-reply-original-processing.png": {
+        "sha256": "98d626c574d3e6633793bac96ff9b9e6c8c4c6fdf56678f9540831a20157e8a4",
+        "inspected": true
+      }
+    },
+    "assessment": "All five actually viewed. A single primary Send/Continue action, secondary Open chat, distinct discard. Editable text and saving status, immutable confirmed body, OriginalProcessing refusal are legible at360x760. Indonesian320x640/font2 scroll reaches the entire two-line discard button with bottom padding. These are Compose desktop captures and keyboard interaction, not Android IME or a physical phone session."
+  },
+  "lint": {
+    "path": "apps/android/build/reports/lint-results-devDebug.xml",
+    "sha256": "3cc5615c61ea6904882bb714ba526f5bf192e79ddc623bcb0a6e5d487b0371bc",
+    "severities": {}
+  },
+  "pending": [
+    "Full8 running with two additional unit race tests; all production source hashes unchanged from focused7.",
+    "Root check does not run IndexedDB: run prepared check-browser.py 9 browser afterward.",
+    "Final source commit/push, source-specific hosted Apple/Native gates.",
+    "Release25 build/lint/minified emulator smoke and notified install-only; phone24 remains installed."
+  ],
+  "scope": "No live provider send, new Android IME session, real employee messages or phone UI in this increment so far. Actual-Koin/SQLite integration uses fictional provider ports. All54 PRD groups remain open."
+}
