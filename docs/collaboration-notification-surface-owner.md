@@ -51,3 +51,8 @@ reply errors. Existing action opening gates company access and is insufficient b
 for denied-card cleanup. The integration plan tracks these separately. Current Apple
 41547382869 atdb74e22d excludes this owner. Chat push remains off; the phone remains on
 release19. Generic Starter port follows integrated Mobile proof.
+
+Explicit removal now [registers cleanup obligations before native IPC](collaboration-notification-removal.md),
+sharing the four-reference bound with show. Thus a failed/cancelled remove-only turn
+also receives joined exact compensation; repeated cleanup failure blocks new publication.
+The raw adapter still decides whether the expected render was replaced.

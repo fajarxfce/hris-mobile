@@ -125,8 +125,9 @@ published checkpoints and per-company buffered admission under the actual native
 It includes initial state, excludes publication ACKs and closes on stream completion or
 failure. It does not start a native host. Connect bounded opaque card ownership and
 semantic reconciliation next, including startup registration races and busy invalidations.
-The surface lease must register explicit removal obligations before IPC, so failed
-removal cannot bypass joined compensation and leave publication open.
+[The surface lease now registers explicit removal obligations before IPC](collaboration-notification-removal.md),
+so failed removal receives joined exact compensation and repeated cleanup failure blocks
+publication. Connect this primitive to finite semantic reconciliation next.
 
 Before callback activation, resolve old-parent action authentication. Current v1 full-
 parent AAD may become unavailable after journal replacement. Native HRIS callbacks are

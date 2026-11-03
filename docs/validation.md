@@ -1,5 +1,15 @@
 # Validation
 
+## Joined compensation for explicit notification removal — 3 November 2026
+
+[Remove-only cleanup](collaboration-notification-removal.md) passes22 focused mechanical
+owner cases and root checks3649 desktop/524 suites,230 Android-host/37, six proof-host/
+one and ten build-logic/two; zero failures/errors/skips. Proof assembly, shared Wasm and
+root quality also pass. [Evidence](measurements/chat-notification-removal-2026-11-03.json)
+records two frozen source hashes and424 fresh full-check cases/74 suites, with reused
+reports explicitly distinguished. Raw adapter/schema unchanged; no new native IPC,
+product installation or notification-input process-death acceptance claimed.
+
 ## Native source invalidation and completed hosted audits — 3 November 2026
 
 [Advisory source observation](collaboration-notification-invalidation.md) passes20 focused

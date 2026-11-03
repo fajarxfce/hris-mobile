@@ -1,5 +1,56 @@
 # Agent continuation — HRIS Mobile
 
+## Explicit native removal cleanup accepted; continue semantic reconciliation
+
+The surface lease now records remove-only cleanup obligations before native IPC, sharing
+its existing four-reference bound with show. Failed/cancelled requests join exact
+compensation; another cleanup failure blocks publication until explicit namespace
+reconciliation succeeds. Newer native renders survive stale cleanup. [Contract](collaboration-notification-removal.md),
+[evidence](measurements/chat-notification-removal-2026-11-03.json).
+
+Focused1 passed89.019s:22 fresh owner cases/one suite. Full2 passed244.637s:3649 desktop/
+524 suites,230 Android-host/37, six proof-host/one and ten build-logic/two;424 fresh cases/
+74 suites, zero failures/errors/skips, two frozen Kotlin inputs. Root quality/architecture74/
+detekt, proof assembly and shared Wasm compile pass. No failed attempt. No raw adapter,
+storage schema or native host activation changed, so no new raw/provider/device proof
+is claimed. No local heavy job or owned emulator remains. The five removal-tests.txt
+cases in the preceding reconciliation directory are APPLIED/STALE; do not reapply.
+
+NEXT implement finite semantic reconciliation of an owned opaque publication reference.
+Supplemental .work/chat-notification-reconciliation-2026-11-03/plan.txt and reconciler.txt
+are UNAPPLIED drafts. The refined approach keeps publisher's own owner turn, followed by
+a separate exact cleanup turn as needed, avoiding nested leases. Add an optional expected
+publication reference to publisher -> Issue and compare it with the internally read
+previous.cleanupReference before reuse/mutation. That parameter does NOT exist yet.
+Reconciler receives only references produced by owned journal discovery, never raw intent
+extras; callbacks need separate authentication. Confirmed read/mute/redaction/denial retires
+the exact current record; transient missing/history/observation failure hides native content
+while keeping the journal active. A source Failure bypasses publication. Remove/register
+native obligation before journal cancellation so cancellation during journal I/O still
+joins cleanup. Replaced native render returns Contended/rescan. Test actual app graph,
+stale version/render, old family, late denial, cancellation and uncertain storage/native IO.
+Draft details remain subject to review; do not assume they are accepted implementation.
+
+Then the bounded process actor and native callbacks:64 opaque refs/dirty IDs, initial
+subscription revalidation, joined observers, explicit journal rescan and Busy lifecycle
+wakeups without hot retries. Existing source changes and per-company buffered denial
+are accepted, not yet connected to this host. Old-parent action authentication and
+pre-retention encrypted input review remain open; current native callbacks are not live,
+so establish actual compatibility needs before adding legacy-v1 migration. See prior
+entry and [host plan](collaboration-notification-publication-plan.md).
+
+Latest audited full Apple remains11cba615/41554262782 (936/105, Xcode1399s), native remains
+7a0ab3d3/41554674578 (16 raw groups plus five SDK/WorkManager scenarios). Their exact
+source/artifact digests are recorded below; both precede this change and source observation.
+Do not redispatch completed runs or repeat long local provider emulator hangs. Physical
+iPhone waived; full hosted Xcode still required for future integrated app acceptance.
+
+Phone19/sourcec0 remains installed. Next meaningful product release>19: notify then
+explicit10.77.77.3:5555 install-only, preserve signer/data, never drive UI. Live304/schema116/
+chat push OFF; all54 PRD groups open. Voice/video/meeting UI absent. Generic Starter port
+waits for integrated Mobile proof. Continue long run and push every atomic commit.
+Older entries below are historical.
+
 ## Source invalidation and hosted audits accepted; continue finite native reconciliation
 
 Five exact published source checkpoints now emit advisory changes without reading keys,

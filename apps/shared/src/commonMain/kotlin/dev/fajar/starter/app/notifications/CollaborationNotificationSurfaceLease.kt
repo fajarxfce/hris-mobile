@@ -36,7 +36,14 @@ internal constructor(
     ): AppResult<ActionNotificationRemoval> {
         if (!validActionNotificationReference(reference))
             return surfaceFailure(FailureKind.Validation)
-        return call { safeNotificationCall { source.remove(reference) } }
+        return call {
+            if (reference !in attempted && attempted.size >= 4)
+                return@call surfaceFailure(FailureKind.Unavailable)
+            // Explicit removal can fail or be cancelled after native submission too. Register
+            // its exact cleanup obligation before IPC, even when this turn never showed a card.
+            attempted += reference
+            safeNotificationCall { source.remove(reference) }
+        }
     }
 
     private suspend fun <T> call(operation: suspend () -> AppResult<T>): AppResult<T> {

@@ -15,6 +15,107 @@ import kotlinx.coroutines.test.*
 /** Mechanical lifetime tests, with virtual time and a fake OS surface; not HRIS/OS integration. */
 class CollaborationNotificationSurfaceOwnerTest {
     @Test
+    fun failedExplicitRemovalIsCompensatedBeforeAnotherNativeTurn() = runTest {
+        withFixture { f ->
+            f.start()
+            assertIs<AppResult.Success<*>>(f.show())
+            f.source.onRemove = {
+                if (f.source.removes == 1) error("Fictional first removal failure")
+            }
+            assertIs<AppResult.Failed>(f.owner.withOwner(f.parent) { remove(f.payload.reference) })
+            assertEquals(2, f.source.removes)
+            assertTrue(f.source.visible.isEmpty())
+            assertIs<AppResult.Success<*>>(f.show())
+        }
+    }
+
+    @Test
+    fun repeatedExplicitRemovalFailureBlocksPublicationUntilExplicitCleanup() = runTest {
+        withFixture { f ->
+            f.start()
+            assertIs<AppResult.Success<*>>(f.show())
+            f.source.onRemove = { error("Fictional unavailable removal") }
+            assertIs<AppResult.Failed>(f.owner.withOwner(f.parent) { remove(f.payload.reference) })
+            assertEquals(2, f.source.removes)
+            failed(FailureKind.Unavailable, f.show())
+            assertEquals(1, f.source.shows)
+            assertIs<AppResult.Success<*>>(f.owner.reconcile())
+            assertTrue(f.source.visible.isEmpty())
+            f.source.onRemove = {}
+            assertIs<AppResult.Success<*>>(f.show())
+        }
+    }
+
+    @Test
+    fun cancellingPendingRemovalJoinsExactCompensationBeforeReturning() = runTest {
+        withFixture { f ->
+            f.start()
+            assertIs<AppResult.Success<*>>(f.show())
+            var joined = false
+            f.source.onRemove = {
+                if (f.source.removes == 1) {
+                    try {
+                        awaitCancellation()
+                    } finally {
+                        joined = true
+                    }
+                }
+            }
+            val pending = launch { f.owner.withOwner(f.parent) { remove(f.payload.reference) } }
+            try {
+                runCurrent()
+                assertEquals(1, f.source.removes)
+                pending.cancelAndJoin()
+                assertTrue(joined)
+                assertEquals(2, f.source.removes)
+                assertTrue(f.source.visible.isEmpty())
+                assertIs<AppResult.Success<*>>(f.show())
+            } finally {
+                withContext(NonCancellable) { pending.cancelAndJoin() }
+            }
+        }
+    }
+
+    @Test
+    fun uncertainOldRemovalNeverCompensatesByDeletingANewerRender() = runTest {
+        withFixture { f ->
+            f.start()
+            assertIs<AppResult.Success<*>>(f.show())
+            val newer = f.payload.copy(reference = f.payload.reference.copy(renderId = "newer"))
+            f.source.onRemove = {
+                if (f.source.removes == 1) {
+                    f.source.visible[newer.reference.id] = newer
+                    error("Fictional uncertain replaced removal")
+                }
+            }
+            assertIs<AppResult.Failed>(f.owner.withOwner(f.parent) { remove(f.payload.reference) })
+            assertEquals(2, f.source.removes)
+            assertEquals(listOf(newer.reference), f.source.active())
+        }
+    }
+
+    @Test
+    fun explicitRemovalSharesTheFourReferenceCleanupBound() = runTest {
+        withFixture { f ->
+            f.start()
+            assertIs<AppResult.Failed>(
+                f.owner.withOwner(f.parent) {
+                    for (index in 1..4) assertIs<AppResult.Success<*>>(
+                        remove(ActionNotificationReference("card-$index", "render"))
+                    )
+                    failed(
+                        FailureKind.Unavailable,
+                        remove(ActionNotificationReference("card-5", "render")),
+                    )
+                    rejection()
+                }
+            )
+            assertEquals(8, f.source.removes)
+            assertIs<AppResult.Success<*>>(f.show())
+        }
+    }
+
+    @Test
     fun startupWaitsForCleanupBeforeGrantingAnyNativeTurn() = runTest {
         withFixture { f ->
             val release = CompletableDeferred<Unit>()
