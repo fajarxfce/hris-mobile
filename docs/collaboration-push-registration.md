@@ -69,3 +69,11 @@ the proof package. It uses a fictional encrypted sender and observes a decrypted
 reply with a logical ID; the actual product remains responsible for setup, pusher,
 FCM reception and native reply. Its execution is still pending in Platform's owned
 FCM fixture. Never install the loopback fixture product APK on the user's phone.
+
+Apple41667309251 attempt1 could not acquire a hosted macOS runner and ended before
+checkout or tests. Exact-source retry requested; this is infrastructure failure,
+not Apple compilation or acceptance. Native41662285409 accepts the earlier0a452
+checkpoint only; new activation source1136 has its own Native41667296924 gate.
+Actual product FCM run8 reached a ready thread but pusher registration remained
+absent and the thread reported service unavailable. Cause is pending bounded
+gateway/worker diagnostics; local source tests are not a delivery claim.

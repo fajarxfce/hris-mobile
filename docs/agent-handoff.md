@@ -1,5 +1,45 @@
 # Agent continuation — HRIS Mobile
 
+## Checkpoint Native accepted; product FCM diagnostics and Apple retry ongoing — 3 November 2026
+
+Native41662285409 at0a452afb is ACCEPTED after source/archive/report/visual audit.
+[Evidence](measurements/chat-input-checkpoint-hosted-2026-11-03.json):395 source hashes,
+artifact13248605004 SHAef0ee301490503efba73a8493bb049e40c5031c2cb2152e68e667d7129bd4342,
+230 Android host/18 proof-host/five actual provider cases all pass. Raw16/runtime4,
+three ordinary input deaths/four callbacks, one586ms Complete with exactly one
+SessionChanged copy, five action cases and all three PNGs actually viewed. Owned
+cleanup passes. Old41650906105 remains rejected. This does not cover new1136 activation.
+
+Product source1136fb9e529faa2d5ad2f3dc02bf8c7fb326e298 is pushed and locally accepted
+(full495.015s;4,015 desktop/230 host/18 proof/ten logic). Native41667296924 is its
+separate pending gate. Apple41667309251 attempt1 failed before any checkout/tests:
+GitHub could not acquire a macOS runner for15 minutes. Exact-source failed-job retry
+attempt2 requested; retain.work/chat-push-activation-apple-2026-11-03/
+runner-unavailable-attempt1.json. No Apple source failure or acceptance is claimed.
+397 Apple/408 Native source fingerprints and audit scripts are prepared in matching
+.work/chat-push-activation-apple and -hosted folders dated2026-11-03.
+
+Isolated build5 from clean1136 PASS45.425s. product5 SHA
+e05999a372674776628e89a7dc5e8e9450dc1c20e7c31c8beb40736de02d7662;
+peer5 SHA9ccd3b6b50d98543b77308e3648af8dcd4ebd1f3ca7aad98b295b83dbb97ad9b.
+Loopback18084, x86 devDebug/proof only: NEVER install on a phone. Platform73cd2ed9
+now records bounded gateway/status/error codes and private OS/SDK/job failure logs;
+25 Python guards and compile/format/architecture PASS35.569s. Run9 currently executing
+with unchanged artifacts5 under Platform.work/product-chat-fcm-2026-11-03/run9.py.
+
+Run7 stopped at emulator boot (all cleanup passed). Run8 boots31.569s, logs in,
+registers FCM and opens the peer thread, but pusher wait fails; thread says service
+unavailable. Counts1/0/0; no encrypted send/FCM delivery. Both PNGs viewed, owned
+cleanup and process/image/credential absence pass. Cause remains UNKNOWN. New diagnostics
+must identify the actual response/worker failure; do not bypass application activation
+from the fixture. Exact previous failures are in Platform's product-chat-fcm-boot evidence.
+
+NEXT finish run9 diagnostics, correct proven issue, obtain actual product FCM/new-source
+gates and build validated normal release26+. Preparation exists, not built/installed.
+Phone25 remains installed; notify before each install-only, preserve signer/UID/data,
+never launch/drive phone UI. Platform runtime304/schema116/push OFF and Starter9959c1d
+unchanged. Keep one heavy local job. Continue all54 groups; voice/video/meeting UI absent.
+
 ## Product push activation implemented; full local checks accepted — 3 November 2026
 
 [Contract](collaboration-push-registration.md) / [evidence](measurements/chat-push-activation-2026-11-03.json).
