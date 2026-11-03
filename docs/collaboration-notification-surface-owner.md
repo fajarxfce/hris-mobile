@@ -56,3 +56,10 @@ Explicit removal now [registers cleanup obligations before native IPC](collabora
 sharing the four-reference bound with show. Thus a failed/cancelled remove-only turn
 also receives joined exact compensation; repeated cleanup failure blocks new publication.
 The raw adapter still decides whether the expected render was replaced.
+
+
+[Cold process coordination and explicit namespace pause](collaboration-notification-process-gate.md)
+are now implemented. A failed owned journal scan can hide the namespace without account
+keys and keep publication blocked until explicit recovery. Ready's opaque epoch, idle
+flag and completion revision coordinate work but do not replace actual execution or
+content admission. The bounded process actor and native callback integration remain next.

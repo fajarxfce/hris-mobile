@@ -150,3 +150,10 @@ joined parent/source/focus cancellation, explicit journal rescan, and Busy/Conte
 handling without hot retries. Reconciler inputs come from owned discovery; this is not
 native callback authentication. Native input review and process-death proof still precede
 activation of chat push.
+
+
+[Cold process coordination and explicit namespace pause](collaboration-notification-process-gate.md)
+are now implemented. A failed owned journal scan can hide the namespace without account
+keys and keep publication blocked until explicit recovery. Ready's opaque epoch, idle
+flag and completion revision coordinate work but do not replace actual execution or
+content admission. The bounded process actor and native callback integration remain next.

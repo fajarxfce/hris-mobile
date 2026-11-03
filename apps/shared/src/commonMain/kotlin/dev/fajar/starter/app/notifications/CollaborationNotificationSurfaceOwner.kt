@@ -25,6 +25,26 @@ class CollaborationNotificationSurfaceOwner(
     private val phase = MutableStateFlow<Phase>(Phase.Dormant)
     private val active = MutableStateFlow<Job?>(null)
     private val execution = Mutex()
+    private val activity = MutableStateFlow(0L)
+
+    /** Cold advisory state. Every native operation still checks the actual epoch and mutex. */
+    val states: Flow<CollaborationNotificationSurfaceState> =
+        combine(phase, parents, activity) { captured, parent, revision ->
+                when {
+                    !lifetime.isActive || captured == Phase.Closed ->
+                        CollaborationNotificationSurfaceState.Closed
+                    captured is Phase.Ready && captured.parent == parent ->
+                        CollaborationNotificationSurfaceState.Ready(
+                            captured.parent,
+                            !execution.isLocked,
+                            captured,
+                            revision,
+                        )
+                    captured is Phase.Blocked -> CollaborationNotificationSurfaceState.Blocked
+                    else -> CollaborationNotificationSurfaceState.Pending
+                }
+            }
+            .distinctUntilChanged()
 
     fun start() {
         if (!lifetime.isActive || !started.compareAndSet(false, true)) return
@@ -52,12 +72,12 @@ class CollaborationNotificationSurfaceOwner(
         val ready = phase.value as? Phase.Ready ?: return surfaceFailure(FailureKind.Unavailable)
         if (ready.parent != parent || !current(ready))
             return surfaceFailure(FailureKind.Unauthorized)
-        if (!execution.tryLock()) return surfaceFailure(FailureKind.Unavailable)
+        if (!tryExecution()) return surfaceFailure(FailureKind.Unavailable)
         return try {
             if (!current(ready)) return surfaceFailure(FailureKind.Unauthorized)
             request(ready, operation)
         } finally {
-            execution.unlock()
+            unlockExecution()
         }
     }
 
@@ -68,7 +88,7 @@ class CollaborationNotificationSurfaceOwner(
         if (captured is Phase.Ready && current(captured)) return AppResult.Success(Unit)
         if (captured !is Phase.Blocked || !lifetime.isActive)
             return surfaceFailure(FailureKind.Unavailable)
-        if (!execution.tryLock()) return surfaceFailure(FailureKind.Unavailable)
+        if (!tryExecution()) return surfaceFailure(FailureKind.Unavailable)
         return try {
             if (phase.value !== captured) return surfaceFailure(FailureKind.Unavailable)
             val cleared = clear()
@@ -81,8 +101,47 @@ class CollaborationNotificationSurfaceOwner(
                 surfaceFailure(FailureKind.Unauthorized)
             else AppResult.Success(Unit)
         } finally {
-            execution.unlock()
+            unlockExecution()
         }
+    }
+
+    /**
+     * Hide this namespace when owned journal discovery is unavailable. Cleanup is independent of
+     * account keys. Even successful cleanup keeps publication blocked until explicit
+     * reconciliation. Call outside a lease; a lease cannot join its own request.
+     */
+    suspend fun pause(parent: CollaborationNativeParent): AppResult<Unit> {
+        currentCoroutineContext().ensureActive()
+        if (currentCoroutineContext()[NotificationSurfaceExecution] != null)
+            return surfaceFailure(FailureKind.Validation)
+        val captured = phase.value
+        if (!lifetime.isActive || parents.value != parent)
+            return surfaceFailure(FailureKind.Unauthorized)
+        if (captured !is Phase.Ready && captured !is Phase.Blocked)
+            return surfaceFailure(FailureKind.Unavailable)
+        val changing = Phase.Changing()
+        if (!phase.compareAndSet(captured, changing)) return surfaceFailure(FailureKind.Unavailable)
+        active.value?.cancel()
+        val result =
+            try {
+                withContext(NonCancellable) {
+                    withTimeoutOrNull(2_000) {
+                        active.value?.cancelAndJoin()
+                        execution.withLock {
+                            if (phase.value !== changing || parents.value != parent)
+                                surfaceFailure(FailureKind.Unauthorized)
+                            else clear()
+                        }
+                    } ?: surfaceFailure(FailureKind.Timeout)
+                }
+            } finally {
+                phase.compareAndSet(changing, Phase.Blocked(parent))
+                activityChanged()
+            }
+        currentCoroutineContext().ensureActive()
+        return if (parents.value != parent || !lifetime.isActive)
+            surfaceFailure(FailureKind.Unauthorized)
+        else result
     }
 
     private suspend fun replace(parent: CollaborationNativeParent?) {
@@ -98,6 +157,18 @@ class CollaborationNotificationSurfaceOwner(
                 else Phase.Blocked(parent)
             phase.compareAndSet(changing, next)
         }
+        activityChanged()
+    }
+
+    private fun tryExecution(): Boolean = execution.tryLock().also { if (it) activityChanged() }
+
+    private fun unlockExecution() {
+        execution.unlock()
+        activityChanged()
+    }
+
+    private fun activityChanged() {
+        activity.update { if (it == Long.MAX_VALUE) 0 else it + 1 }
     }
 
     private suspend fun <T> request(

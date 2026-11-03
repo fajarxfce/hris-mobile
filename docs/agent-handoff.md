@@ -1,5 +1,57 @@
 # Agent continuation — HRIS Mobile
 
+## Process gate accepted; implement the bounded notification coordinator
+
+The surface owner now exposes cold Pending/Ready/Blocked/Closed coordination states.
+Ready carries parent, opaque epoch, advisory idle flag and completion revision; it is not
+admission or an execution lease. `pause(parent)` closes the epoch before attempting
+joined work/compensation and namespace cleanup without account keys. Even successful
+cleanup stays Blocked until explicit reconciliation. Timeout also stays blocked; it does
+not prove an uncooperative native call has stopped. Old-parent/nested pauses are rejected.
+[Contract](collaboration-notification-process-gate.md),
+[evidence](measurements/chat-notification-process-gate-2026-11-03.json).
+
+Focused1 passed 91.248s, 30 fresh cases/one suite. Full2 passed 251.782s: 3,669 desktop/
+526 suites, 230 Android-host/37, six proof-host/one and ten build-logic/two; 441 fresh
+cases/75 suites. Full2 exposed the new Ready copy-visibility warning. Only the explicit
+ConsistentCopyVisibility annotation was then added. Targeted3 passed 125.708s on final
+source: 30 owner plus six proof-host cases, proof assembly/shared Wasm/root quality.
+All runs have zero failures/errors/skips, with three source hashes per run. Full2 is
+not relabeled as a final-source full rerun. No local heavy job or owned emulator remains.
+
+NEXT implement the bounded opaque process reconciliation coordinator. Detailed design,
+Kotlin DRAFT and test plan are in .work/chat-notification-process-gate-2026-11-03/
+(actor-next.txt, process.txt, process-tests-plan.txt). None is applied Kotlin yet. The
+coordinator owns startup/close, max 64 references, one conflated wake channel, whole-scan
+budget and joined source subscriptions. A failed journal scan calls pause; explicit
+retry reopens. Source callbacks cancel matching registered work without joining from the
+callback; the actor joins it. Register lazy work before checking epoch/source again.
+
+Preserve a source subscription across own ACK/version changes, then rescan without
+redirtying the same handled signal. Contended retains its old reference and retries when
+discovery returns a different reference; no hot loop on an unchanged one. Busy needs a
+distinct failure code and must propagate through Reconciler without semantic cleanup.
+Wait for idle plus a completion revision newer than the failed attempt's captured
+revision, so a concurrent completion is not missed. Generic storage failures must not
+retry themselves on their own completion wake. Pending/failed source observations never
+grant publication; explicit recovery can restart subscriptions. Add request-scan revision
+checking around lazy registration and review the draft before applying it.
+
+After this coordinator, route candidate delivery through the same actor, add owned
+focused-thread registration and initial/backfill/alert classification. Then authenticated
+native callbacks, old-family/pre-retention encrypted input review and actual notification-
+input OS-death proof. Actual Koin/encrypted SQLite integration must supplement virtual
+fake-port tests. Current HRIS native hosts remain inactive; chat push OFF, all 54 PRD
+groups open, voice/video/meeting UI absent. Do not port HRIS policy to Starter.
+
+Full Apple 41564138207 at c69bd898 is in progress (202 earlier source hashes); dispatch
+was already requested once. Audit .work/chat-notification-reconciliation-apple-2026-11-03/
+audit.py after full Xcode completes. It excludes this process-gate change. Do not duplicate
+the dispatch, rerun completed hosted proofs or repeat local provider emulator hangs.
+Phone19/sourcec0 remains installed; next meaningful product release above19 must notify
+then install-only to explicit10.77.77.3:5555, preserving signer/data and never driving its
+UI. Live304/schema116 is unchanged. Continue long run and push every atomic commit.
+
 ## Finite semantic reconciliation accepted; continue process lifetime and native callbacks
 
 Issuer and publisher now accept an optional exact expected publication reference. Invalid/

@@ -9,11 +9,179 @@ import dev.fajar.starter.notifications.data.datasources.ActionNotificationDispla
 import dev.fajar.starter.notifications.data.dto.*
 import kotlin.test.*
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.test.*
 
 /** Mechanical lifetime tests, with virtual time and a fake OS surface; not HRIS/OS integration. */
 class CollaborationNotificationSurfaceOwnerTest {
+    @Test
+    fun coldStateClosesForLateCollectorsAndAfterCloseBeforeStart() = runTest {
+        withFixture { f ->
+            assertEquals(CollaborationNotificationSurfaceState.Pending, f.owner.states.first())
+            f.owner.closeAndJoin()
+            f.owner.start()
+            assertEquals(CollaborationNotificationSurfaceState.Closed, f.owner.states.first())
+        }
+        withFixture { f ->
+            f.start()
+            assertIs<CollaborationNotificationSurfaceState.Ready>(f.owner.states.first())
+            f.owner.closeAndJoin()
+            assertEquals(CollaborationNotificationSurfaceState.Closed, f.owner.states.first())
+        }
+    }
+
+    @Test
+    fun stateWaitsForCleanupAndWakesAfterBusyWorkReleasesSerialization() = runTest {
+        withFixture { f ->
+            val cleanup = CompletableDeferred<Unit>()
+            f.source.onClear = { cleanup.await() }
+            f.owner.start()
+            runCurrent()
+            assertEquals(CollaborationNotificationSurfaceState.Pending, f.owner.states.first())
+            cleanup.complete(Unit)
+            runCurrent()
+            val idle = assertIs<CollaborationNotificationSurfaceState.Ready>(f.owner.states.first())
+            assertTrue(idle.isIdle)
+            val release = CompletableDeferred<Unit>()
+            f.source.onShow = { release.await() }
+            val work = async { f.show() }
+            runCurrent()
+            val busy = assertIs<CollaborationNotificationSurfaceState.Ready>(f.owner.states.first())
+            assertFalse(busy.isIdle)
+            assertSame(idle.epoch, busy.epoch)
+            release.complete(Unit)
+            assertIs<AppResult.Success<*>>(work.await())
+            val next = assertIs<CollaborationNotificationSurfaceState.Ready>(f.owner.states.first())
+            assertTrue(next.isIdle)
+            assertSame(idle.epoch, next.epoch)
+            assertNotEquals(idle.revision, next.revision)
+        }
+    }
+
+    @Test
+    fun pauseHidesWithoutKeysAndSuccessfulCleanupStillNeedsExplicitRetry() = runTest {
+        withFixture { f ->
+            f.start()
+            val first =
+                assertIs<CollaborationNotificationSurfaceState.Ready>(f.owner.states.first())
+            assertIs<AppResult.Success<*>>(f.show())
+            assertIs<AppResult.Success<*>>(f.owner.pause(f.parent))
+            assertTrue(f.source.visible.isEmpty())
+            assertEquals(CollaborationNotificationSurfaceState.Blocked, f.owner.states.first())
+            failed(FailureKind.Unavailable, f.show())
+            assertIs<AppResult.Success<*>>(f.owner.reconcile())
+            val next = assertIs<CollaborationNotificationSurfaceState.Ready>(f.owner.states.first())
+            assertNotSame(first.epoch, next.epoch)
+            assertTrue(next.isIdle)
+            assertIs<AppResult.Success<*>>(f.show())
+        }
+    }
+
+    @Test
+    fun pauseJoinsPendingPublicationAndCompensationBeforeNamespaceClear() = runTest {
+        withFixture { f ->
+            f.start()
+            f.source.onShow = {
+                try {
+                    awaitCancellation()
+                } finally {
+                    f.source.events += "joined-show"
+                }
+            }
+            val work = async { f.show() }
+            runCurrent()
+            assertIs<AppResult.Success<*>>(f.owner.pause(f.parent))
+            failed(FailureKind.Unauthorized, work.await())
+            assertTrue(f.source.events.indexOf("joined-show") < f.source.events.indexOf("clear-2"))
+            assertEquals(1, f.source.removes)
+            assertTrue(f.source.visible.isEmpty())
+            assertEquals(CollaborationNotificationSurfaceState.Blocked, f.owner.states.first())
+        }
+    }
+
+    @Test
+    fun failedPauseAndTimedOutCleanupKeepTheGateClosedWithoutAutomaticRetry() = runTest {
+        withFixture { f ->
+            f.start()
+            f.source.onClear = { error("Fictional namespace failure") }
+            assertIs<AppResult.Failed>(f.owner.pause(f.parent))
+            assertEquals(CollaborationNotificationSurfaceState.Blocked, f.owner.states.first())
+            val attempts = f.source.clears
+            advanceTimeBy(30_000)
+            runCurrent()
+            assertEquals(attempts, f.source.clears)
+            f.source.onClear = { awaitCancellation() }
+            failed(FailureKind.Timeout, f.owner.pause(f.parent))
+            failed(FailureKind.Unavailable, f.show())
+            f.source.onClear = {}
+            assertIs<AppResult.Success<*>>(f.owner.reconcile())
+            assertIs<AppResult.Success<*>>(f.show())
+        }
+    }
+
+    @Test
+    fun cancellationDuringPauseJoinsCleanupAndCannotReopenTheGate() = runTest {
+        withFixture { f ->
+            f.start()
+            val release = CompletableDeferred<Unit>()
+            f.source.onClear = { release.await() }
+            val pause = launch { f.owner.pause(f.parent) }
+            runCurrent()
+            pause.cancel()
+            runCurrent()
+            assertFalse(pause.isCompleted)
+            failed(FailureKind.Unavailable, f.show())
+            failed(FailureKind.Unavailable, f.owner.reconcile())
+            release.complete(Unit)
+            pause.join()
+            assertTrue(pause.isCancelled)
+            assertEquals(CollaborationNotificationSurfaceState.Blocked, f.owner.states.first())
+            f.source.onClear = {}
+            assertIs<AppResult.Success<*>>(f.owner.reconcile())
+        }
+    }
+
+    @Test
+    fun oldPauseCannotClearOrReopenAReplacementParent() = runTest {
+        withFixture { f ->
+            f.start()
+            val release = CompletableDeferred<Unit>()
+            f.source.onClear = { if (f.source.clears == 2) release.await() }
+            val pause = async { f.owner.pause(f.parent) }
+            runCurrent()
+            val next = f.parent.copy(nativeSessionId = "new-family")
+            f.parents.value = next
+            runCurrent()
+            assertEquals(CollaborationNotificationSurfaceState.Pending, f.owner.states.first())
+            release.complete(Unit)
+            failed(FailureKind.Unauthorized, pause.await())
+            runCurrent()
+            val ready =
+                assertIs<CollaborationNotificationSurfaceState.Ready>(f.owner.states.first())
+            assertEquals(next, ready.parent)
+            assertIs<AppResult.Success<*>>(f.owner.withOwner(next) { show(f.payload) })
+            val clears = f.source.clears
+            failed(FailureKind.Unauthorized, f.owner.pause(f.parent))
+            assertEquals(clears, f.source.clears)
+            assertEquals(listOf(f.payload.reference), f.source.active())
+        }
+    }
+
+    @Test
+    fun pauseInsideALeaseIsRejectedWithoutCancellingItself() = runTest {
+        withFixture { f ->
+            f.start()
+            assertIs<AppResult.Success<*>>(
+                f.owner.withOwner(f.parent) {
+                    failed(FailureKind.Validation, f.owner.pause(f.parent))
+                    show(f.payload)
+                }
+            )
+            assertEquals(1, f.source.clears)
+            assertEquals(listOf(f.payload.reference), f.source.active())
+        }
+    }
+
     @Test
     fun failedExplicitRemovalIsCompensatedBeforeAnotherNativeTurn() = runTest {
         withFixture { f ->

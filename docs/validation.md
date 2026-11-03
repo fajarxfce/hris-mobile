@@ -1,5 +1,15 @@
 # Validation
 
+## Native process gate and explicit namespace pause — 3 November 2026
+
+[Process coordination](collaboration-notification-process-gate.md) adds eight cases to the
+30-case mechanical owner suite. Full checks pass 3,669 desktop, 230 Android-host, six
+proof-host and ten build-logic cases, with zero failures/errors/skips. After correcting a
+new copy-visibility warning using one annotation, targeted validation passes the 30 owner
+and six proof-host cases, proof assembly, shared Wasm and root quality. [Evidence](measurements/chat-notification-process-gate-2026-11-03.json)
+keeps the full run's pre-annotation hashes distinct from final targeted checks. No native
+host activation, new raw IPC proof, product release or phone installation is claimed.
+
 ## Conditional issuance and finite native reconciliation — 3 November 2026
 
 [Semantic reconciliation](collaboration-notification-reconciliation.md) passes29 focused
