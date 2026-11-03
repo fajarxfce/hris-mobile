@@ -1,5 +1,40 @@
 # Agent continuation — HRIS Mobile
 
+## Corrected native provider proof accepted; device records in progress
+
+Hosted native [41585074316](measurements/chat-native-proof-observation-hosted-2026-11-03.json)
+at **a90dc3f6801f4dc3a49cab4eca8b6d629b024196** is ACCEPTED. Actual isolated API/PG/
+Synapse304 and owned API35 emulator: all five SDK/worker scenarios passed, plus
+230 Android-host/37 suites and11 proof-host/three, zero failures/errors/skips.
+Three process-death worker cases each recover176 originals in11 passes/11 container
+reopens; priority completes in one pass. SDK has three encrypted sends/seven receipt
+POST200 responses. WorkManager has automatic restart after ordinary process death and
+network restoration. Raw notification IPC16 groups/two scenarios passed39.452s with
+verified fixture uninstall before the independent provider cases. The same proof APK
+SHA256 is reported by all drivers.232 frozen source hashes verified.
+Artifact13209277435,129955 bytes, GitHub SHA256
+`7567bceb58756ef13780c0cf6fe69a2da24007d9fa7421f43fbc94806f8865f6`.
+Build976s/Platform316s/native1101s. Audit complete in
+.work/chat-proof-observation-native-2026-11-03; do not re-extract or rerun. This confirms
+the corrected continuous observation fixture removes the demonstrated priority failure.
+No native notification-input process-death/review acceptance: priority uses an explicit
+fake display, raw IPC runs separately, production notification hosts remain unbound.
+
+Automatic native41587502684 at de69f282 is now IN_PROGRESS, includes focus/build21.
+Auditors prepared in .work/chat-notification-focus-native-2026-11-03 with239 frozen
+source paths. Wait/audit once; no manual dispatch or cancel. Full Apple41588371503 at
+de69 is still running; latest accepted Apple41585101233 covers v2/a90, excludes focus.
+
+DeviceRecordStore source is IN PROGRESS,15 Kotlin files plus additive schema13.
+Focused1 passed99.993s: nine SQLite cases/two suites and51 actual browser cases/eight,
+zero failures/errors/skips. This includes two concurrent DB owners, exact deletion,
+replay/capacity, account replacement, cancellation, reopen and actual predecessor
+migration. Generated schema13 only adds device_records; every prior entity definition
+is unchanged. Full2 is RUNNING; do not change source inputs or start another local
+heavy job. Work: .work/chat-device-records-2026-11-03; contract docs/device-records.md.
+Apple/Starter acceptance of this raw store is still pending; encrypted input repository
+and native callback integration are not implemented yet. Phone21 remains installed.
+
 ## Release21 installed; v2 full Apple accepted
 
 Product build21 at **de69f28229aaeb7367e8bd37ee2439d012ad1a57** PASSED475.842s,
