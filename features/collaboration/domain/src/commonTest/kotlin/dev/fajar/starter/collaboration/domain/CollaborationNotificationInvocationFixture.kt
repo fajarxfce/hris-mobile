@@ -29,9 +29,10 @@ internal class CollaborationNotificationInvocationFixture {
             id(901),
             id(902),
         )
-    val token = CollaborationNotificationActionToken("v1.fixture-opaque-token")
+    var token = CollaborationNotificationActionToken("v1.fixture-opaque-token")
     var action: CollaborationNotificationAction =
         CollaborationNotificationAction.Reply(id(903), target)
+    var issuingParent = parent
     var opens = 0
     var openFailure: Failure? = null
     var afterOpen: suspend () -> Unit = {}
@@ -42,6 +43,27 @@ internal class CollaborationNotificationInvocationFixture {
                 action: CollaborationNotificationAction,
             ): AppResult<CollaborationNotificationActionToken> =
                 error("Callback never mints tokens")
+
+            override suspend fun recover(
+                parent: CollaborationNativeParent,
+                token: CollaborationNotificationActionToken,
+            ): AppResult<CollaborationAuthenticatedNotificationAction> {
+                val current = local.setup.session!!
+                assertEquals(
+                    CollaborationNativeParent(
+                        current.id,
+                        current.binding.audience,
+                        current.user.id,
+                        current.binding.serverId,
+                    ),
+                    parent,
+                )
+                assertEquals(this@CollaborationNotificationInvocationFixture.token, token)
+                opens++
+                val captured = CollaborationAuthenticatedNotificationAction(issuingParent, action)
+                afterOpen()
+                return openFailure?.let { AppResult.Failed(it) } ?: AppResult.Success(captured)
+            }
 
             override suspend fun open(
                 parent: CollaborationNativeParent,

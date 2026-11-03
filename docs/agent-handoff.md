@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-## Release20 installed; continue authenticated notification input recovery
+## Authenticated reply recovery accepted; repair native proof observation next
 
 Release20 devRelease1.0.0 from **543c61b9f821c6f63f404970c8b015a7c4ea9013** is INSTALLED
 on10.77.77.3:5555 with explicit install-only; do not reinstall it. APK87,806,596 bytes,
@@ -45,17 +45,34 @@ joined cancellation, and allowlisted failure categories. Do not weaken productio
 completion guards. Corrected hosted native execution must establish whether other
 failures remain. Do not repeat known hanging long local provider/emulator runs.
 
-Authenticated action v2 is IMPLEMENTED BUT UNACCEPTED in the working tree,16 Kotlin
-paths plus docs/collaboration-notification-action-recovery.md. Work directory
-.work/chat-notification-action-recovery-2026-11-03. Strict open preserves exact parent;
-separate account/audience-authenticated recover returns issuing metadata for private
-retention. Existing complete/review flow must retain SessionChanged rather than send.
-Focused attempts1/2 failed stale unsupported-v2 examples,3 was interrupted after a stale
-open interception blocked the retention test barrier (now uses recover and a child
-completion guard),4 failed two new app cases. Attempt5 adds controlled kind/code
-assertion diagnostics and is currently running; inspect its result before another heavy
-job. No v2 acceptance or phone delivery claimed. Finish diagnosis/focused/root/proof/
-Wasm/nonempty browser checks, atomic commit+push; then fix the native proof observation.
+Authenticated action v2 and old-family private retention are ACCEPTED. Strict open
+requires exact issuing parent; separate recovery authenticates actual account/audience
+and preserves original parent. Storage receives CURRENT captured recovery access,
+separate from the issuing descriptor: old-session writes correctly fail the database
+ownership check. Actual Koin/SQLite cases verify SessionChanged review without sending,
+reopen/replay deduplication and exact existing-command completion without another send.
+[Contract](collaboration-notification-action-recovery.md),
+[evidence](measurements/chat-notification-action-recovery-2026-11-03.json).
+
+Focused7 PASSED229.472s:126 fresh cases/12 suites. Full8 PASSED345.108s:3,766 desktop/
+532 suites,230 Android-host/37,six proof-host/one,ten build-logic/two,41 browser/three;
+2,212 fresh cases/265 suites,19 unchanged Kotlin hashes, zero failures/errors/skips.
+Root quality/proof assembly/shared Wasm passed. Six earlier rejected attempts are
+preserved: stale unsupported-version examples, interrupted obsolete retention barrier,
+real inactive-session write refusal, and an incorrect current-owner fixture assertion.
+No checks need repeating absent new changes. Work/audits complete in
+.work/chat-notification-action-recovery-2026-11-03. Full Apple at543c61b9 excludes v2;
+freeze the union of its227 source paths and these19 for one subsequent Apple run.
+
+NEXT fix the proof-only observation defect described above. Prepared host regressions
+are .txt outside build inputs in .work/chat-proof-observation-2026-11-03; copy only after
+this accepted commit. check.py/audit.py and four-path inputs.json are ready; capture
+current base before running. First demonstrate failing regression, then keep seeded
+flows alive until caller cancellation and add controlled failure labels; run focused
+and root/proof assembly/lint. Push each atomic commit; automatic native run will queue
+without interrupting the current run. No long local provider/emulator retry. After
+fixture acceptance dispatch one consolidated full Apple run, then continue actual
+focused-route ownership/disposition and authenticated native callback integration.
 
 Focused-route ownership/disposition and device-encrypted pre-retention input quarantine,
 review UI, real native callbacks, permission wakeups, baselines and notification-input

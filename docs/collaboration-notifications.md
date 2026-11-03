@@ -9,8 +9,12 @@ and native action consumers still need integration; live chat push remains disab
 [Encrypted action envelopes](collaboration-notification-actions.md) now define the
 bounded native IPC format and captured-family binding. [Current-family invocation
 and local command dispatch](collaboration-notification-invocations.md) now reuse the
-existing reply/read/mute operations. Durable issuance, failed-input retention and
-native display/receiver integration remain required.
+existing reply/read/mute operations. The [durable journal](collaboration-notification-publications.md),
+[owned publisher](collaboration-notification-publisher.md),
+[retained reply flow](collaboration-notification-reply-flow.md) and
+[old-family input recovery](collaboration-notification-action-recovery.md) are implemented
+with separate validation. Native HRIS display/receiver wiring, authenticated review UI
+and notification-input OS-death acceptance remain required.
 
 The managed-pusher client operation is implemented. It is not yet invoked
 automatically by the application or worker. Native [push receive routing](collaboration-push-receive.md) now persists
@@ -55,8 +59,8 @@ consumes this scoped recovery without requiring a selected workspace or outgoing
 command. Owned leases coexist with the foreground runtime; captured account/session
 ownership gates late results and avoids opening the same store twice. Incoming
 company/room progress and push priority are separate durable positions. Notification
-replies now have an admitted local command dispatcher; native callbacks, failed-input
-retention and process-death recovery of the delivery journal remain required.
+replies have admitted command dispatch and encrypted failed-input retention. Native
+callbacks and actual OS-death acceptance for notification input remain required.
 
 The pinned Rust SDK NotificationClient requires sliding sync. The current product
 uses classic SyncV2 with `SlidingSyncVersion.NONE`; do not wire it in on the

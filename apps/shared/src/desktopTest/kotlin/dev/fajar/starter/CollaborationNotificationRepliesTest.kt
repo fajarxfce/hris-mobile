@@ -16,6 +16,7 @@ import kotlin.test.*
 import kotlin.time.Clock
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.selects.select
 
 /** Real application graph, encrypted SQLite and reopen; fictional HTTP and simulated Matrix SDK. */
 class CollaborationNotificationRepliesTest {
@@ -209,6 +210,119 @@ class CollaborationNotificationRepliesTest {
     }
 
     @Test
+    fun callbackFirstReceivedAfterFamilyReplacementIsRetainedForReviewWithoutSending() =
+        runBlocking {
+            for (native in listOf(false, true)) withFixture { f, target ->
+                val action = CollaborationNotificationAction.Reply(id(), target)
+                val token = f.seal(action)
+                assertTrue(token.encoded.startsWith("v2."))
+                val old =
+                    assertNotNull(
+                        assertIs<
+                                AppResult.Success<
+                                    dev.fajar.starter.identity.domain.entities.Session?
+                                >
+                            >(
+                                f.koin.get<SessionRepository>().current()
+                            )
+                            .value
+                    )
+                val next =
+                    if (native) old.copy(binding = old.binding.copy(serverId = id()))
+                    else old.copy(id = id())
+                assertEquals(
+                    AppResult.Success(true),
+                    f.koin.get<SessionRepository>().compareAndSet(old, next),
+                )
+                f.session = next
+                f.server.collaboration.nativeSessionId = next.binding.serverId
+                f.reopen()
+                f.withoutIncomingSelection()
+                val result =
+                    replyValue(
+                        f.koin
+                            .get<CollaborationNotificationReplies>()
+                            .submit(token, "Late notification reply")
+                    )
+                assertIs<CollaborationNotificationReplyResult.NeedsReview>(result)
+                val input = f.inputs().single()
+                assertEquals(CollaborationNotificationReplyReview.SessionChanged, input.review)
+                assertEquals(old.id, input.candidate.parent.sessionId)
+                assertEquals(old.binding.serverId, input.candidate.parent.nativeSessionId)
+                assertEquals("Late notification reply", input.candidate.text)
+                assertNull(f.message(action.operationId))
+                assertIs<AppResult.Failed>(
+                    f.koin.get<CollaborationNotificationCommands>()(
+                        token,
+                        "Late notification reply",
+                    )
+                )
+                f.reopen()
+                f.withoutIncomingSelection()
+                assertEquals(
+                    AppResult.Success(result),
+                    f.koin.get<CollaborationNotificationReplies>().resume(input.id),
+                )
+                assertEquals(input, f.inputs().single())
+                assertEquals(
+                    AppResult.Success(result),
+                    f.koin
+                        .get<CollaborationNotificationReplies>()
+                        .submit(token, "Late notification reply"),
+                )
+                assertEquals(1, f.inputs().size)
+                assertNull(f.message(action.operationId))
+                assertTrue(f.sdk.enqueued.isEmpty())
+                assertEquals(0, f.sdk.deliveries)
+            }
+        }
+
+    @Test
+    fun lateCallbackAfterNativeReplacementRecognizesAnExistingCommandWithoutSendingAgain() =
+        runBlocking {
+            withFixture { f, target ->
+                val action = CollaborationNotificationAction.Reply(id(), target)
+                val token = f.seal(action)
+                assertIs<AppResult.Success<*>>(
+                    f.koin.get<CollaborationNotificationCommands>()(
+                        token,
+                        "Existing original command",
+                    )
+                )
+                val command = assertNotNull(f.message(action.operationId))
+                val old =
+                    assertNotNull(
+                        assertIs<
+                                AppResult.Success<
+                                    dev.fajar.starter.identity.domain.entities.Session?
+                                >
+                            >(
+                                f.koin.get<SessionRepository>().current()
+                            )
+                            .value
+                    )
+                val next = old.copy(id = id(), binding = old.binding.copy(serverId = id()))
+                assertEquals(
+                    AppResult.Success(true),
+                    f.koin.get<SessionRepository>().compareAndSet(old, next),
+                )
+                f.session = next
+                f.server.collaboration.nativeSessionId = next.binding.serverId
+                f.reopen()
+                f.withoutIncomingSelection()
+                assertQueued(
+                    f.koin
+                        .get<CollaborationNotificationReplies>()
+                        .submit(token, "Existing original command")
+                )
+                assertEquals(command, f.message(action.operationId))
+                assertTrue(f.inputs().isEmpty())
+                assertTrue(f.sdk.enqueued.isEmpty())
+                assertEquals(0, f.sdk.deliveries)
+            }
+        }
+
+    @Test
     fun cancelledQueueSchedulingPreservesBothInputAndCommandForCompletionOnlyRecovery() =
         runBlocking {
             withFixture { f, target ->
@@ -274,10 +388,10 @@ class CollaborationNotificationRepliesTest {
             var stopped = false
             val actions =
                 object : CollaborationNotificationActionRepository by actual {
-                    override suspend fun open(
+                    override suspend fun recover(
                         parent: CollaborationNativeParent,
                         token: CollaborationNotificationActionToken,
-                    ): AppResult<CollaborationNotificationAction> {
+                    ): AppResult<CollaborationAuthenticatedNotificationAction> {
                         if (first) {
                             first = false
                             try {
@@ -287,13 +401,16 @@ class CollaborationNotificationRepliesTest {
                                 stopped = true
                             }
                         }
-                        return actual.open(parent, token)
+                        return actual.recover(parent, token)
                     }
                 }
             val flow = f.flow(actions = actions)
             val token = f.seal(CollaborationNotificationAction.Reply(id(), target))
             val firstJob = launch { flow.submit(token, "Cancelled before retention") }
-            entered.await()
+            select<Unit> {
+                entered.onAwait {}
+                firstJob.onJoin { fail("Callback returned before its retention barrier") }
+            }
             val next =
                 async(start = CoroutineStart.UNDISPATCHED) { flow.submit(token, "Next callback") }
             assertFalse(next.isCompleted)
@@ -316,22 +433,25 @@ class CollaborationNotificationRepliesTest {
             var pending = true
             val actions =
                 object : CollaborationNotificationActionRepository by actual {
-                    override suspend fun open(
+                    override suspend fun recover(
                         parent: CollaborationNativeParent,
                         token: CollaborationNotificationActionToken,
-                    ): AppResult<CollaborationNotificationAction> {
+                    ): AppResult<CollaborationAuthenticatedNotificationAction> {
                         if (pending) {
                             entered.complete(Unit)
                             awaitCancellation()
                         }
-                        return actual.open(parent, token)
+                        return actual.recover(parent, token)
                     }
                 }
             val flow = f.flow(actions = actions)
             val token = f.seal(CollaborationNotificationAction.Reply(id(), target))
             val jobs = mutableListOf<Job>()
             jobs += launch { flow.submit(token, "Blocked callback") }
-            entered.await()
+            select<Unit> {
+                entered.onAwait {}
+                jobs.first().onJoin { fail("Callback returned before its retention barrier") }
+            }
             repeat(7) {
                 jobs +=
                     launch(start = CoroutineStart.UNDISPATCHED) {
@@ -358,17 +478,17 @@ class CollaborationNotificationRepliesTest {
             var stopped = false
             val actions =
                 object : CollaborationNotificationActionRepository by actual {
-                    override suspend fun open(
+                    override suspend fun recover(
                         parent: CollaborationNativeParent,
                         token: CollaborationNotificationActionToken,
-                    ): AppResult<CollaborationNotificationAction> {
+                    ): AppResult<CollaborationAuthenticatedNotificationAction> {
                         if (pending)
                             try {
                                 awaitCancellation()
                             } finally {
                                 stopped = true
                             }
-                        return actual.open(parent, token)
+                        return actual.recover(parent, token)
                     }
                 }
             val flow = f.flow(actions = actions)
@@ -876,13 +996,17 @@ class CollaborationNotificationRepliesTest {
             koin.get(),
         )
 
+    private fun replyValue(result: AppResult<CollaborationNotificationReplyResult>) =
+        assertIs<AppResult.Success<CollaborationNotificationReplyResult>>(
+                result,
+                (result as? AppResult.Failed)?.failure?.let { "${it.kind}: ${it.code}" },
+            )
+            .value
+
     private fun assertQueued(result: AppResult<CollaborationNotificationReplyResult>) {
         assertEquals(
             CollaborationMessageState.Queued,
-            assertIs<CollaborationNotificationReplyResult.CommandRetained>(
-                    assertIs<AppResult.Success<CollaborationNotificationReplyResult>>(result).value
-                )
-                .state,
+            assertIs<CollaborationNotificationReplyResult.CommandRetained>(replyValue(result)).state,
         )
     }
 

@@ -21,70 +21,125 @@ private data class NotificationActionDto(
     val schema: Int = 1,
 )
 
-internal fun encodeNotificationAction(value: CollaborationNotificationAction): ByteArray {
-    require(validCollaborationNotificationAction(value))
-    val mute = value as? CollaborationNotificationAction.Mute
+@Serializable
+private data class NotificationActionParentDto(
+    val sessionId: String,
+    val audience: String,
+    val accountId: String,
+    val nativeSessionId: String,
+)
+
+@Serializable
+private data class NotificationActionEnvelopeDto(
+    val parent: NotificationActionParentDto,
+    val action: NotificationActionDto,
+    val schema: Int = 2,
+)
+
+/** Legacy local envelopes have their parent only in AAD and remain strict-family reads. */
+internal fun encodeNotificationAction(value: CollaborationNotificationAction): ByteArray =
+    Json.encodeToString(actionDto(value)).encodeToByteArray(throwOnInvalidSequence = true)
+
+internal fun decodeNotificationAction(plain: ByteArray): CollaborationNotificationAction =
+    Json.decodeFromString<NotificationActionDto>(
+            plain.decodeToString(throwOnInvalidSequence = true)
+        )
+        .action()
+
+internal fun encodeNotificationActionEnvelope(
+    parent: CollaborationNativeParent,
+    action: CollaborationNotificationAction,
+): ByteArray {
+    require(validCollaborationNotificationParent(parent))
     return Json.encodeToString(
-            NotificationActionDto(
-                value.operationId,
-                value.target.companyId,
-                value.target.conversationId,
-                value.target.roomId,
-                value.target.eventId,
-                value.target.notificationId,
-                value.target.renderId,
-                when (value) {
-                    is CollaborationNotificationAction.Reply -> "reply"
-                    is CollaborationNotificationAction.MarkRead -> "read"
-                    is CollaborationNotificationAction.Mute -> "mute"
-                    is CollaborationNotificationAction.Dismiss -> "dismiss"
-                },
-                mute?.expected?.generation,
-                mute?.expected?.revision,
-                mute?.preview?.name,
+            NotificationActionEnvelopeDto(
+                NotificationActionParentDto(
+                    parent.sessionId,
+                    parent.audience,
+                    parent.accountId,
+                    parent.nativeSessionId,
+                ),
+                actionDto(action),
             )
         )
         .encodeToByteArray(throwOnInvalidSequence = true)
 }
 
-internal fun decodeNotificationAction(plain: ByteArray): CollaborationNotificationAction {
+internal fun decodeNotificationActionEnvelope(
+    plain: ByteArray
+): CollaborationAuthenticatedNotificationAction {
     val dto =
-        Json.decodeFromString<NotificationActionDto>(
+        Json.decodeFromString<NotificationActionEnvelopeDto>(
             plain.decodeToString(throwOnInvalidSequence = true)
         )
-    require(dto.schema == 1)
+    require(dto.schema == 2)
+    return CollaborationAuthenticatedNotificationAction(
+            CollaborationNativeParent(
+                dto.parent.sessionId,
+                dto.parent.audience,
+                dto.parent.accountId,
+                dto.parent.nativeSessionId,
+            ),
+            dto.action.action(),
+        )
+        .also { require(validCollaborationAuthenticatedNotificationAction(it)) }
+}
+
+private fun actionDto(value: CollaborationNotificationAction): NotificationActionDto {
+    require(validCollaborationNotificationAction(value))
+    val mute = value as? CollaborationNotificationAction.Mute
+    return NotificationActionDto(
+        value.operationId,
+        value.target.companyId,
+        value.target.conversationId,
+        value.target.roomId,
+        value.target.eventId,
+        value.target.notificationId,
+        value.target.renderId,
+        when (value) {
+            is CollaborationNotificationAction.Reply -> "reply"
+            is CollaborationNotificationAction.MarkRead -> "read"
+            is CollaborationNotificationAction.Mute -> "mute"
+            is CollaborationNotificationAction.Dismiss -> "dismiss"
+        },
+        mute?.expected?.generation,
+        mute?.expected?.revision,
+        mute?.preview?.name,
+    )
+}
+
+private fun NotificationActionDto.action(): CollaborationNotificationAction {
+    require(schema == 1)
     val target =
         CollaborationNotificationActionTarget(
-            dto.companyId,
-            dto.conversationId,
-            dto.roomId,
-            dto.eventId,
-            dto.notificationId,
-            dto.renderId,
+            companyId,
+            conversationId,
+            roomId,
+            eventId,
+            notificationId,
+            renderId,
         )
-    if (dto.kind != "mute")
-        require(
-            dto.expectedGeneration == null && dto.expectedRevision == null && dto.preview == null
-        )
+    if (kind != "mute")
+        require(expectedGeneration == null && expectedRevision == null && preview == null)
     val action =
-        when (dto.kind) {
-            "reply" -> CollaborationNotificationAction.Reply(dto.operationId, target)
-            "read" -> CollaborationNotificationAction.MarkRead(dto.operationId, target)
-            "dismiss" -> CollaborationNotificationAction.Dismiss(dto.operationId, target)
+        when (kind) {
+            "reply" -> CollaborationNotificationAction.Reply(operationId, target)
+            "read" -> CollaborationNotificationAction.MarkRead(operationId, target)
+            "dismiss" -> CollaborationNotificationAction.Dismiss(operationId, target)
             "mute" -> {
-                require((dto.expectedGeneration == null) == (dto.expectedRevision == null))
+                require((expectedGeneration == null) == (expectedRevision == null))
                 val expected =
-                    dto.expectedGeneration?.let {
+                    expectedGeneration?.let {
                         CollaborationNotificationSettingsRevision(
                             it,
-                            requireNotNull(dto.expectedRevision),
+                            requireNotNull(expectedRevision),
                         )
                     }
                 CollaborationNotificationAction.Mute(
-                    dto.operationId,
+                    operationId,
                     target,
                     expected,
-                    enumValueOf(requireNotNull(dto.preview)),
+                    enumValueOf(requireNotNull(preview)),
                 )
             }
             else -> error("Unsupported notification action")

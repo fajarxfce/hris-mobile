@@ -98,7 +98,7 @@ fun validCollaborationNotificationMessage(message: CollaborationMessageNotificat
 
 /** Canonical encoding only, including issuer padding; this does not authenticate the envelope. */
 private fun validPublicationToken(value: CollaborationNotificationActionToken): Boolean {
-    if (value.encoded.length !in 4..4096 || !value.encoded.startsWith("v1.")) return false
+    if (!validCollaborationNotificationTokenShape(value)) return false
     val encoded = value.encoded.drop(3)
     return runCatching {
             val bytes = Base64.UrlSafe.decode(encoded)

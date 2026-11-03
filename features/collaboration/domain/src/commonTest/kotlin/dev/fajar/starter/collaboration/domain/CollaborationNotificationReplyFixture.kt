@@ -15,8 +15,18 @@ internal class CollaborationNotificationReplyFixture {
     val inputs =
         object : CollaborationNotificationReplyRepository {
             override suspend fun retain(
-                candidate: CollaborationNotificationReplyCandidate
+                access: CollaborationRecoveryAccess,
+                candidate: CollaborationNotificationReplyCandidate,
             ): AppResult<CollaborationNotificationReplyRetention> {
+                val current = native.local.setup.session!!
+                kotlin.test.assertEquals(
+                    CollaborationRecoveryAccess(
+                        current.id,
+                        current.binding.audience,
+                        current.user.id,
+                    ),
+                    access,
+                )
                 stores++
                 forced?.let {
                     afterStore()

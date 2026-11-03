@@ -13,8 +13,13 @@ extras. Opening authenticates the envelope and captured family; it does not admi
 company, room, history item or write. Those checks remain required in the action
 handler around pending operations.
 
-The format is `v1.` followed by canonical URL-safe Base64 ciphertext, limited to 4096
-characters. Plaintext is bounded to 3072 bytes and decoded fields retain the existing
+New envelopes use [authenticated v2 recovery](collaboration-notification-action-recovery.md):
+`v2.` followed by canonical URL-safe Base64 ciphertext, limited to 4096 characters.
+Account/API audience is associated data; the original parent remains authenticated inside
+the encrypted payload. Strict invocation compares that parent with the current family;
+private reply retention can recover a same-account old parent without granting a send.
+Legacy `v1.` reads still require the exact original family. Plaintext is bounded to
+3072 bytes and decoded fields retain the existing
 UUID, Matrix ID and revision bounds. Unknown versions, kinds, preview values,
 incomplete observed versions and mute-only fields on other actions reject. Cipher
 authentication covers modifications and native-parent substitution. Cancellation
@@ -34,9 +39,12 @@ overwrite a later preference. Dismissal and transient UI updates must match the
 original render; an old action must not clear or overwrite an unrelated newer card.
 
 [Current-family admission and local command dispatch](collaboration-notification-invocations.md)
-now consume these descriptors through the existing durable commands. The display
-journal, admitted issuance, native PendingIntent/RemoteInput integration, failed-reply
-handling and OS display/cancellation remain pending. No Android receiver or UI action
+now consume these descriptors through the existing durable commands. The encrypted
+[journal and issuance](collaboration-notification-publications.md),
+[owned publisher](collaboration-notification-publisher.md) and
+[retained reply flow](collaboration-notification-reply-flow.md) have separate contracts.
+Native HRIS receiver/delegate wiring, review UI and actual notification-input OS-death
+acceptance remain pending. No Android receiver or UI action
 is activated by this primitive. Decrypted chat content
 must not enter the generic plaintext notification history. No database/key migration,
 public read-receipt preference change or live chat push activation is included.

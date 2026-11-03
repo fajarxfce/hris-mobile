@@ -12,7 +12,8 @@ import kotlinx.coroutines.sync.Mutex
 
 /**
  * Retains private typed input before company send admission. This never opens company content,
- * changes a composer, grants a send or renews credentials. The token must belong to this family.
+ * changes a composer, grants a send or renews credentials. An authenticated previous family is
+ * retained for review; the current family still owns this retention operation.
  */
 class RetainCollaborationNotificationReply(
     private val actions: CollaborationNotificationActionRepository,
@@ -28,11 +29,7 @@ class RetainCollaborationNotificationReply(
         text: String,
     ): AppResult<CollaborationNotificationReplyInput> {
         currentCoroutineContext().ensureActive()
-        if (
-            token.encoded.length !in 4..4096 ||
-                !token.encoded.startsWith("v1.") ||
-                !validCollaborationText(text)
-        )
+        if (!validCollaborationNotificationTokenShape(token) || !validCollaborationText(text))
             return replyInputFailure(FailureKind.Validation)
         if (!execution.tryLock()) return replyInputFailure(FailureKind.Unavailable)
         return try {
@@ -50,18 +47,29 @@ class RetainCollaborationNotificationReply(
         val captured = sessions.capturePushParent(server, build)
         if (captured is AppResult.Failed) return captured
         val parent = (captured as AppResult.Success).value
-        val decoded = actions.open(parent, token)
+        val decoded = actions.recover(parent, token)
         sessions.guardPushParent(server, build, parent).let {
             if (it is AppResult.Failed) return it
         }
         if (decoded is AppResult.Failed) return decoded
+        val origin = (decoded as AppResult.Success).value
+        if (
+            !validCollaborationAuthenticatedNotificationAction(origin) ||
+                origin.parent.accountId != parent.accountId ||
+                origin.parent.audience != parent.audience
+        )
+            return replyInputFailure(FailureKind.Validation)
         val action =
-            (decoded as AppResult.Success).value as? CollaborationNotificationAction.Reply
+            origin.action as? CollaborationNotificationAction.Reply
                 ?: return replyInputFailure(FailureKind.Validation)
-        val candidate = CollaborationNotificationReplyCandidate(parent, action, token, text)
+        val candidate = CollaborationNotificationReplyCandidate(origin.parent, action, token, text)
         if (!validCollaborationNotificationReplyCandidate(candidate))
             return replyInputFailure(FailureKind.Validation)
-        val saved = inputs.retain(candidate)
+        val saved =
+            inputs.retain(
+                CollaborationRecoveryAccess(parent.sessionId, parent.audience, parent.accountId),
+                candidate,
+            )
         sessions.guardPushParent(server, build, parent).let {
             if (it is AppResult.Failed) return it
         }

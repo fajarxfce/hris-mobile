@@ -37,7 +37,7 @@ class RetainCollaborationNotificationReplyTest {
             FailureKind.Validation,
             assertIs<AppResult.Failed>(f.retain(text)).failure.kind,
         )
-        for (token in listOf("", "v2.invalid", "v1." + "x".repeat(4094))) assertIs<
+        for (token in listOf("", "v3.invalid", "v1." + "x".repeat(4094))) assertIs<
             AppResult.Failed
         >(
             f.retain(CollaborationNotificationActionToken(token), "Reply")
@@ -67,6 +67,51 @@ class RetainCollaborationNotificationReplyTest {
             )
         }
         assertEquals(0, f.stores)
+    }
+
+    @Test
+    fun authenticatedPreviousFamilyCanRetainPrivateInputWithoutAcquiringCompanyOrSending() =
+        runTest {
+            for (native in listOf(false, true)) {
+                val f = CollaborationNotificationReplyFixture()
+                f.native.token = CollaborationNotificationActionToken("v2.fixture-opaque-token")
+                val issuer = f.native.parent
+                if (native) f.native.replaceFamily()
+                else
+                    f.native.local.setup.session =
+                        f.native.local.setup.session!!.copy(id = "new-local-session")
+                f.native.local.beforeAdmission = {
+                    error("No company admission for private input retention")
+                }
+                val input =
+                    assertIs<AppResult.Success<CollaborationNotificationReplyInput>>(f.retain())
+                        .value
+                assertEquals(issuer, input.candidate.parent)
+                assertEquals(1, f.stores)
+                assertEquals(0, f.native.local.insertions)
+                assertEquals(0, f.native.read.base.factReads)
+            }
+        }
+
+    @Test
+    fun foreignOrMalformedAuthenticatedOriginNeverReachesPrivateStorage() = runTest {
+        for (change in 0..3) {
+            val f = CollaborationNotificationReplyFixture()
+            val parent = f.native.parent
+            f.native.issuingParent =
+                when (change) {
+                    0 -> parent.copy(accountId = CollaborationReadStateFixture.id(8888))
+                    1 -> parent.copy(audience = "https://foreign.example.test/")
+                    2 -> parent.copy(nativeSessionId = "invalid")
+                    else -> parent.copy(sessionId = "invalid local family")
+                }
+            assertEquals(
+                FailureKind.Validation,
+                assertIs<AppResult.Failed>(f.retain()).failure.kind,
+            )
+            assertEquals(0, f.stores)
+            assertEquals(0, f.native.local.insertions)
+        }
     }
 
     @Test

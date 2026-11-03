@@ -5,6 +5,16 @@ data class CollaborationNotificationActionToken(val encoded: String) {
     override fun toString() = "CollaborationNotificationActionToken([redacted])"
 }
 
+/**
+ * Authenticated issuing metadata; current ownership, company admission and commands are separate.
+ */
+data class CollaborationAuthenticatedNotificationAction(
+    val parent: CollaborationNativeParent,
+    val action: CollaborationNotificationAction,
+) {
+    override fun toString() = "CollaborationAuthenticatedNotificationAction([redacted])"
+}
+
 data class CollaborationNotificationActionTarget(
     val companyId: String,
     val conversationId: String,

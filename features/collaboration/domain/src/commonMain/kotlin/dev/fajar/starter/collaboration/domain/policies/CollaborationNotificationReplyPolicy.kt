@@ -14,8 +14,7 @@ fun validCollaborationNotificationReplyCandidate(
         validCollaborationMessageId(parent.accountId) &&
         validCollaborationMessageId(parent.nativeSessionId) &&
         validCollaborationNotificationAction(value.action) &&
-        value.token.encoded.length in 4..4096 &&
-        value.token.encoded.startsWith("v1.") &&
+        validCollaborationNotificationTokenShape(value.token) &&
         validCollaborationText(value.text)
 }
 

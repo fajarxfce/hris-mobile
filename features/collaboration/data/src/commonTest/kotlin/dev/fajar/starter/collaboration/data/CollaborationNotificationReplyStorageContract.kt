@@ -17,6 +17,42 @@ abstract class CollaborationNotificationReplyStorageContract {
     protected abstract fun databaseOwner(): CollaborationHistoryDatabaseOwner
 
     @Test
+    fun oldIssuerUsesCurrentStorageOwnerAndPreservesItsDescriptorAcrossReopen() =
+        withDatabase { f ->
+            val candidate = f.candidate()
+            val renewed = f.access.copy(sessionId = "replacement-login")
+            val access = f.inputAccess().copy(sessionId = renewed.sessionId)
+            f.reopen(renewed)
+            assertEquals(
+                CollaborationNotificationReplyRetention.Contended,
+                expect(f.inputs().retain(f.inputAccess(), candidate)),
+            )
+            val input =
+                assertIs<CollaborationNotificationReplyRetention.Retained>(
+                        expect(f.inputs().retain(access, candidate))
+                    )
+                    .input
+            assertEquals(candidate, input.candidate)
+            for (foreign in
+                listOf(
+                    access.copy(accountId = historyId(9970)),
+                    access.copy(audience = "https://other.example.test/"),
+                )) {
+                assertIs<AppResult.Failed>(f.inputs().retain(foreign, candidate))
+            }
+            f.reopen(renewed)
+            assertEquals(input, expect(f.inputs().get(access, input.id)))
+            assertEquals(
+                input,
+                assertIs<CollaborationNotificationReplyRetention.Retained>(
+                        expect(f.inputs().retain(access, candidate))
+                    )
+                    .input,
+            )
+            assertEquals(listOf(input), expect(f.inputs().page(access)).inputs)
+        }
+
+    @Test
     fun exactInputAndTokenReopenWithoutPlaintextMetadataOrHistoryMutation() = withDatabase { f ->
         val history = f.raw()
         val candidate = f.candidate()
@@ -148,7 +184,7 @@ abstract class CollaborationNotificationReplyStorageContract {
         val next = f.candidate(65)
         assertEquals(
             CollaborationNotificationReplyRetention.CapacityExceeded,
-            expect(f.inputs().retain(next)),
+            expect(f.inputs().retain(f.inputAccess(), next)),
         )
         val retained = mutableListOf<CollaborationNotificationReplyInput>()
         var after: Long? = null
@@ -159,7 +195,9 @@ abstract class CollaborationNotificationReplyStorageContract {
         } while (after != null)
         assertEquals(stored.map { it.id }, retained.map { it.id })
         assertTrue(expect(f.inputs().remove(f.inputAccess(), retained.first())))
-        assertIs<CollaborationNotificationReplyRetention.Retained>(expect(f.inputs().retain(next)))
+        assertIs<CollaborationNotificationReplyRetention.Retained>(
+            expect(f.inputs().retain(f.inputAccess(), next))
+        )
         assertNotNull(f.lookup())
     }
 
@@ -204,7 +242,7 @@ abstract class CollaborationNotificationReplyStorageContract {
         val key = f.keys.read()
         f.keys.write(null)
         assertIs<AppResult.Failed>(f.inputs().get(f.inputAccess(), first.id))
-        assertIs<AppResult.Failed>(f.inputs().retain(first.candidate))
+        assertIs<AppResult.Failed>(f.inputs().retain(f.inputAccess(), first.candidate))
         assertNull(f.keys.read())
         f.keys.write(Base64.encode(ByteArray(64) { 8 }))
         assertIs<AppResult.Failed>(f.inputs().page(f.inputAccess()))
@@ -261,7 +299,7 @@ abstract class CollaborationNotificationReplyStorageContract {
                     error("Simulated lost storage reply")
                 }
             }
-        assertIs<AppResult.Failed>(f.inputs(uncertain).retain(next))
+        assertIs<AppResult.Failed>(f.inputs(uncertain).retain(f.inputAccess(), next))
         assertEquals(1, commits)
         f.reopen()
         val recovered = f.retain(next)
@@ -297,7 +335,7 @@ abstract class CollaborationNotificationReplyStorageContract {
         var acknowledged = false
         val job =
             CoroutineScope(currentCoroutineContext()).launch {
-                f.inputs(delayed).retain(next)
+                f.inputs(delayed).retain(f.inputAccess(), next)
                 acknowledged = true
             }
         committed.await()
@@ -335,7 +373,7 @@ abstract class CollaborationNotificationReplyStorageContract {
                         )
                     }
                 }
-            val result = f.inputs(replaced).retain(next)
+            val result = f.inputs(replaced).retain(f.inputAccess(), next)
             assertFalse(
                 result is AppResult.Success &&
                     result.value is CollaborationNotificationReplyRetention.Retained
@@ -368,8 +406,8 @@ abstract class CollaborationNotificationReplyStorageContract {
                 candidate.copy(text = "\uD800"),
                 candidate.copy(action = candidate.action.copy(operationId = "bad")),
                 candidate.copy(parent = candidate.parent.copy(nativeSessionId = "bad")),
-                candidate.copy(token = CollaborationNotificationActionToken("v2.invalid")),
-            )) assertIs<AppResult.Failed>(f.inputs().retain(invalid))
+                candidate.copy(token = CollaborationNotificationActionToken("v3.invalid")),
+            )) assertIs<AppResult.Failed>(f.inputs().retain(f.inputAccess(), invalid))
         assertIs<AppResult.Failed>(f.inputs().page(f.inputAccess(), limit = 0))
         assertIs<AppResult.Failed>(f.inputs().page(f.inputAccess(), limit = 21))
         assertIs<AppResult.Failed>(f.inputs().page(f.inputAccess(), after = -1))
@@ -427,7 +465,7 @@ abstract class CollaborationNotificationReplyStorageContract {
         candidate: CollaborationNotificationReplyCandidate
     ) =
         assertIs<CollaborationNotificationReplyRetention.Retained>(
-                expect(inputs().retain(candidate))
+                expect(inputs().retain(inputAccess(), candidate))
             )
             .input
 

@@ -18,4 +18,14 @@ interface CollaborationNotificationActionRepository {
         parent: CollaborationNativeParent,
         token: CollaborationNotificationActionToken,
     ): AppResult<CollaborationNotificationAction>
+
+    /**
+     * Authenticates the issuing parent under this account/audience for private input retention. A
+     * recoverable old parent never grants a command in the current family. Legacy envelopes without
+     * an encrypted issuing parent remain limited to their exact current parent.
+     */
+    suspend fun recover(
+        parent: CollaborationNativeParent,
+        token: CollaborationNotificationActionToken,
+    ): AppResult<CollaborationAuthenticatedNotificationAction>
 }

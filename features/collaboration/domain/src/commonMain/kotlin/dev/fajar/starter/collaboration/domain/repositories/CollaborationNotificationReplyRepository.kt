@@ -6,10 +6,12 @@ import dev.fajar.starter.common.result.AppResult
 /** Separate encrypted input retention; no composer mutation, send grant or transport queue. */
 interface CollaborationNotificationReplyRepository {
     /**
-     * Caller first authenticates the descriptor/token against the current captured native family.
+     * Caller authenticates the issuing descriptor within the current account/audience. The current
+     * access owns storage I/O; candidate.parent preserves the possibly older issuing family.
      */
     suspend fun retain(
-        candidate: CollaborationNotificationReplyCandidate
+        access: CollaborationRecoveryAccess,
+        candidate: CollaborationNotificationReplyCandidate,
     ): AppResult<CollaborationNotificationReplyRetention>
 
     suspend fun get(

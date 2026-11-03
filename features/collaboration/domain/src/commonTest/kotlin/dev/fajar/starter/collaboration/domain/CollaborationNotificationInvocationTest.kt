@@ -47,7 +47,7 @@ class CollaborationNotificationInvocationTest {
     @Test
     fun malformedBoundedInputAndNonNativeHostsNeverOpenCrypto() = runTest {
         val f = CollaborationNotificationInvocationFixture()
-        for (value in listOf("", "v1.", "v2.token", "v1." + "x".repeat(4094))) assertEquals(
+        for (value in listOf("", "v1.", "v3.token", "v1." + "x".repeat(4094))) assertEquals(
             FailureKind.Validation,
             assertIs<AppResult.Failed>(f.opener()(CollaborationNotificationActionToken(value)))
                 .failure

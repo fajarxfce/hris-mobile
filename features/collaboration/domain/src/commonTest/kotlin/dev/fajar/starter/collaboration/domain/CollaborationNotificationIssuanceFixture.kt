@@ -66,6 +66,24 @@ internal class CollaborationNotificationIssuanceFixture {
                 return sealFailure?.let { AppResult.Failed(it) } ?: AppResult.Success(token)
             }
 
+            override suspend fun recover(
+                parent: CollaborationNativeParent,
+                token: CollaborationNotificationActionToken,
+            ): AppResult<CollaborationAuthenticatedNotificationAction> {
+                opens++
+                val saved = tokens[token]
+                afterOpen()
+                if (
+                    saved == null ||
+                        saved.first.accountId != parent.accountId ||
+                        saved.first.audience != parent.audience
+                )
+                    return AppResult.Failed(Failure(FailureKind.Unauthorized, "Rejected"))
+                return AppResult.Success(
+                    CollaborationAuthenticatedNotificationAction(saved.first, saved.second)
+                )
+            }
+
             override suspend fun open(
                 parent: CollaborationNativeParent,
                 token: CollaborationNotificationActionToken,

@@ -26,7 +26,7 @@ class OpenCollaborationNotificationAction(
         token: CollaborationNotificationActionToken
     ): AppResult<CollaborationNotificationInvocation> {
         currentCoroutineContext().ensureActive()
-        if (token.encoded.length !in 4..4096 || !token.encoded.startsWith("v1."))
+        if (!validCollaborationNotificationTokenShape(token))
             return notificationActionFailure(FailureKind.Validation)
         return withTimeoutOrNull(10_000) { open(token) }
             ?: notificationActionFailure(FailureKind.Unavailable)

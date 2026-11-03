@@ -22,45 +22,46 @@ class EncryptedCollaborationNotificationReplyRepository(
 ) : CollaborationNotificationReplyRepository {
     private val keys = CollaborationHistoryKeys(replicas, cipher, credentials)
 
-    override suspend fun retain(candidate: CollaborationNotificationReplyCandidate) =
-        safeStorageCall {
-            require(validCollaborationNotificationReplyCandidate(candidate))
-            val parent = candidate.parent
-            val access =
-                CollaborationRecoveryAccess(parent.sessionId, parent.audience, parent.accountId)
-            val raw = replicas.checkpoint(recoveryScope(access), NOTIFICATION_REPLY_PARTITION)
-            keys.use { key, index ->
-                val codec = CollaborationNotificationReplyCodec(access, cipher, key, index)
-                val active = raw?.let { codec.checkpoint(it) } ?: emptyList()
-                val id = codec.id(candidate)
-                val reference = active.find { it.id == id }
-                if (reference != null) {
-                    val retained = load(codec, requireNotNull(raw), reference)
-                    require(retained.candidate.copy(token = candidate.token) == candidate)
-                    return@use if (current(codec, raw))
-                        CollaborationNotificationReplyRetention.Retained(retained)
-                    else CollaborationNotificationReplyRetention.Contended
-                }
-                if (active.size >= COLLABORATION_NOTIFICATION_REPLY_CAPACITY)
-                    return@use if (current(codec, raw))
-                        CollaborationNotificationReplyRetention.CapacityExceeded
-                    else CollaborationNotificationReplyRetention.Contended
-                val generation = raw?.handle?.generation ?: Uuid.random().toString()
-                val revision = (raw?.revision ?: -1) + 1
-                val input =
-                    CollaborationNotificationReplyInput(
-                        id,
-                        CollaborationNotificationReplyRevision(generation, revision),
-                        revision,
-                        candidate,
-                    )
-                val next = active + CollaborationNotificationReplyCodec.reference(input)
-                val document = codec.input(input)
-                val written = publish(codec, raw, generation, revision, next, document)
-                if (written) CollaborationNotificationReplyRetention.Retained(input)
+    override suspend fun retain(
+        access: CollaborationRecoveryAccess,
+        candidate: CollaborationNotificationReplyCandidate,
+    ) = safeStorageCall {
+        require(validCollaborationNotificationReplyCandidate(candidate))
+        val parent = candidate.parent
+        require(parent.audience == access.audience && parent.accountId == access.accountId)
+        val raw = replicas.checkpoint(recoveryScope(access), NOTIFICATION_REPLY_PARTITION)
+        keys.use { key, index ->
+            val codec = CollaborationNotificationReplyCodec(access, cipher, key, index)
+            val active = raw?.let { codec.checkpoint(it) } ?: emptyList()
+            val id = codec.id(candidate)
+            val reference = active.find { it.id == id }
+            if (reference != null) {
+                val retained = load(codec, requireNotNull(raw), reference)
+                require(retained.candidate.copy(token = candidate.token) == candidate)
+                return@use if (current(codec, raw))
+                    CollaborationNotificationReplyRetention.Retained(retained)
                 else CollaborationNotificationReplyRetention.Contended
             }
+            if (active.size >= COLLABORATION_NOTIFICATION_REPLY_CAPACITY)
+                return@use if (current(codec, raw))
+                    CollaborationNotificationReplyRetention.CapacityExceeded
+                else CollaborationNotificationReplyRetention.Contended
+            val generation = raw?.handle?.generation ?: Uuid.random().toString()
+            val revision = (raw?.revision ?: -1) + 1
+            val input =
+                CollaborationNotificationReplyInput(
+                    id,
+                    CollaborationNotificationReplyRevision(generation, revision),
+                    revision,
+                    candidate,
+                )
+            val next = active + CollaborationNotificationReplyCodec.reference(input)
+            val document = codec.input(input)
+            val written = publish(codec, raw, generation, revision, next, document)
+            if (written) CollaborationNotificationReplyRetention.Retained(input)
+            else CollaborationNotificationReplyRetention.Contended
         }
+    }
 
     override suspend fun get(access: CollaborationRecoveryAccess, id: String) = safeStorageCall {
         require(validCollaborationNotificationReplyId(id))

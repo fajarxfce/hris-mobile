@@ -1,10 +1,27 @@
 # Validation
 
-## Consolidated Apple delivery gate — pending
+## Authenticated old-family reply recovery — 3 November 2026
 
-[Full Apple41575891048](measurements/chat-priority-notification-delivery-apple-2026-11-03.json)
-was dispatched once at76d004e5 with221 source hashes. It is pending and is not yet acceptance.
-Native callback/input and actual device delivery remain independent gates.
+[Action v2 and private retention](collaboration-notification-action-recovery.md) pass
+126 focused cases and full checks:3,766 desktop/532 suites,230 Android-host/37,six
+proof-host/one,ten build-logic/two and41 browser/three, zero failures/errors/skips.
+Root quality/proof assembly/shared Wasm pass. [Evidence](measurements/chat-notification-action-recovery-2026-11-03.json)
+records345.108s,2,212 fresh cases/265 suites,19 frozen source hashes and six rejected
+attempts. Actual SQLite exposed inactive-session write refusal; current storage access
+is now separate from the authenticated issuing parent. No native callback activation
+or product APK installation is claimed by this increment.
+
+## Consolidated Apple and native delivery gates — 3 November 2026
+
+[Full Apple41579492354](measurements/chat-muted-notification-apple-2026-11-03.json)
+at release20 source543c61b9 passes984 simulator cases/110 suites and full Xcode900s,
+with227 verified source hashes and the artifact digest verified against GitHub.
+This includes durable mute disposition and excludes subsequent action-v2 work.
+[Native41575838871](measurements/chat-priority-notification-native-failure-2026-11-03.json)
+at76d004e5 failed three priority worker scenarios; raw notification16 groups and the
+SDK/scheduled scenarios passed. The proof session stream completes prematurely; a
+fixture correction and hosted rerun are required before full native acceptance.
+Production chat notification hosts remain unbound; chat push is disabled.
 
 ## Priority notification handoff — 3 November 2026
 

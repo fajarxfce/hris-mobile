@@ -1,6 +1,7 @@
 package dev.fajar.starter.collaboration.data
 
 import dev.fajar.starter.collaboration.data.notifications.encodeNotificationAction
+import dev.fajar.starter.collaboration.data.notifications.encodeNotificationActionEnvelope
 import dev.fajar.starter.collaboration.data.repositories.EncryptedCollaborationNotificationActionRepository
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.common.result.*
@@ -40,7 +41,7 @@ abstract class CollaborationNotificationActionContract {
         for (action in actions) {
             val token = expect(f.repo().seal(f.parent(), action))
             assertEquals(action, expect(f.repo().open(f.parent(), token)))
-            assertTrue(token.encoded.startsWith("v1."))
+            assertTrue(token.encoded.startsWith("v2."))
             for (sensitive in
                 listOf(
                     target.companyId,
@@ -72,6 +73,139 @@ abstract class CollaborationNotificationActionContract {
             )
         for (owner in changed) assertIs<AppResult.Failed>(f.repo().open(owner, token))
         assertEquals(f.reply(), expect(f.repo().open(parent, token)))
+    }
+
+    @Test
+    fun issuingParentSurvivesSameAccountFamilyReplacementOnlyForRecovery() = withDatabase { f ->
+        val issuer = f.parent()
+        val action = f.reply()
+        val token = expect(f.repo().seal(issuer, action))
+        val expected = CollaborationAuthenticatedNotificationAction(issuer, action)
+        for (parent in
+            listOf(
+                issuer,
+                issuer.copy(sessionId = "new-local-family"),
+                issuer.copy(nativeSessionId = historyId(9671)),
+                issuer.copy(sessionId = "new-local-family", nativeSessionId = historyId(9672)),
+            )) {
+            assertEquals(expected, expect(f.repo().recover(parent, token)))
+            if (parent != issuer) assertIs<AppResult.Failed>(f.repo().open(parent, token))
+            f.reopen()
+            assertEquals(expected, expect(f.repo().recover(parent, token)))
+        }
+        for (parent in
+            listOf(
+                issuer.copy(accountId = historyId(9673)),
+                issuer.copy(audience = "https://foreign.example.test/"),
+            )) assertIs<AppResult.Failed>(f.repo().recover(parent, token))
+        assertFalse(expected.toString().contains(action.operationId))
+    }
+
+    @Test
+    fun legacyLocalEnvelopeStillRequiresItsExactParentForRecovery() = withDatabase { f ->
+        val issuer = f.parent()
+        val token = f.forge(encodeNotificationAction(f.reply()).decodeToString())
+        assertEquals(
+            CollaborationAuthenticatedNotificationAction(issuer, f.reply()),
+            expect(f.repo().recover(issuer, token)),
+        )
+        assertEquals(f.reply(), expect(f.repo().open(issuer, token)))
+        assertIs<AppResult.Failed>(
+            f.repo().recover(issuer.copy(sessionId = "new-local-family"), token)
+        )
+        assertIs<AppResult.Failed>(
+            f.repo().recover(issuer.copy(nativeSessionId = historyId(9674)), token)
+        )
+    }
+
+    @Test
+    fun authenticatedV2PayloadCannotChangeAccountAudienceOrSmuggleInvalidOriginAndAction() =
+        withDatabase { f ->
+            val dto =
+                Json.parseToJsonElement(
+                        encodeNotificationActionEnvelope(f.parent(), f.reply()).decodeToString()
+                    )
+                    .jsonObject
+            val origin = dto.getValue("parent").jsonObject
+            val action = dto.getValue("action").jsonObject
+            val variants =
+                listOf(
+                    JsonObject(dto + ("schema" to JsonPrimitive(3))),
+                    JsonObject(
+                        dto +
+                            ("parent" to
+                                JsonObject(
+                                    origin + ("accountId" to JsonPrimitive(historyId(9675)))
+                                ))
+                    ),
+                    JsonObject(
+                        dto +
+                            ("parent" to
+                                JsonObject(
+                                    origin +
+                                        ("audience" to
+                                            JsonPrimitive("https://foreign.example.test/"))
+                                ))
+                    ),
+                    JsonObject(
+                        dto +
+                            ("parent" to
+                                JsonObject(origin + ("nativeSessionId" to JsonPrimitive("bad"))))
+                    ),
+                    JsonObject(
+                        dto +
+                            ("parent" to
+                                JsonObject(origin + ("sessionId" to JsonPrimitive("bad family"))))
+                    ),
+                    JsonObject(
+                        dto +
+                            ("action" to
+                                JsonObject(action + ("preview" to JsonPrimitive("Message"))))
+                    ),
+                    JsonObject(
+                        dto + ("action" to JsonObject(action + ("kind" to JsonPrimitive("call"))))
+                    ),
+                )
+            for (variant in variants) assertIs<AppResult.Failed>(
+                f.repo().recover(f.parent(), f.forge(variant.toString(), version = 2))
+            )
+            assertIs<AppResult.Failed>(
+                f.repo().recover(f.parent(), f.forge(" ".repeat(3073), version = 2))
+            )
+            assertNotNull(f.lookup())
+        }
+
+    @Test
+    fun recoveryCannotReplaceMissingKeyAndCancellationJoinsItsPendingRead() = withDatabase { f ->
+        val token = expect(f.repo().seal(f.parent(), f.reply()))
+        val key = f.keys.read()
+        f.keys.write(null)
+        assertIs<AppResult.Failed>(f.repo().recover(f.parent(), token))
+        assertNull(f.keys.read())
+        f.keys.write(key)
+        val entered = CompletableDeferred<Unit>()
+        var stopped = false
+        val pending =
+            object : AtomicCredentialStore by f.keys {
+                override suspend fun read(): String? {
+                    try {
+                        entered.complete(Unit)
+                        awaitCancellation()
+                    } finally {
+                        stopped = true
+                    }
+                }
+            }
+        coroutineScope {
+            val job = launch {
+                f.repo(pending).recover(f.parent(), token)
+                fail("Cancelled decode returned")
+            }
+            entered.await()
+            job.cancelAndJoin()
+        }
+        assertTrue(stopped)
+        assertEquals(f.reply(), expect(f.repo().recover(f.parent(), token)).action)
     }
 
     @Test
@@ -125,7 +259,8 @@ abstract class CollaborationNotificationActionContract {
                 listOf(
                     "",
                     "v1.",
-                    "v2." + good.encoded.removePrefix("v1."),
+                    "v3." + good.encoded.drop(3),
+                    "v1." + good.encoded.drop(3),
                     changed,
                     good.encoded.dropLast(1),
                     "v1." + "x".repeat(4094),
@@ -261,26 +396,27 @@ abstract class CollaborationNotificationActionContract {
         EncryptedCollaborationNotificationActionRepository(database.replicas, cipher, credentials)
 
     private suspend fun CollaborationHistoryFixture.forge(
-        value: String
+        value: String,
+        version: Int = 1,
     ): CollaborationNotificationActionToken {
         val full = Base64.decode(requireNotNull(keys.read()))
         val key = full.copyOfRange(0, 32)
         val owner = parent()
-        val aad =
-            Json.encodeToString(
-                    listOf(
-                        "hris-notification-action-v1",
-                        owner.sessionId,
-                        owner.audience,
-                        owner.accountId,
-                        owner.nativeSessionId,
-                    )
+        val fields =
+            if (version == 2) listOf("hris-notification-action-v2", owner.audience, owner.accountId)
+            else
+                listOf(
+                    "hris-notification-action-v1",
+                    owner.sessionId,
+                    owner.audience,
+                    owner.accountId,
+                    owner.nativeSessionId,
                 )
-                .encodeToByteArray()
+        val aad = Json.encodeToString(fields).encodeToByteArray()
         val plain = value.encodeToByteArray()
         return try {
             CollaborationNotificationActionToken(
-                "v1." + Base64.UrlSafe.encode(cipher.encrypt(key, aad, plain))
+                "v$version." + Base64.UrlSafe.encode(cipher.encrypt(key, aad, plain))
             )
         } finally {
             full.fill(0)
