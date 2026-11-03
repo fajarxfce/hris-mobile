@@ -1,5 +1,46 @@
 # Agent continuation — HRIS Mobile
 
+## Release21 installed; v2 full Apple accepted
+
+Product build21 at **de69f28229aaeb7367e8bd37ee2439d012ad1a57** PASSED475.842s,
+with unchanged clean source before/after. Artifact signature, same prior signer, arm64,
+16KiB alignment, private dev API/Firebase and18 backup exclusions verified; product lint0.
+Dedicated owned5562 emulator boot28.618s; two stable12-second cold starts, no crash,
+readable seven nodes each. Startup screenshot inspected; no all-page claim. Owned
+emulator stopped and transport absent2.005s. Phone install-only is CONFIRMED, started06:14:40Z/51.017s including verification.
+UID10962 and first-install2026-10-29 15:48:23 preserved; no uninstall/data clear/phone UI
+launch or account reset. APK87,822,980 bytes; pulled installed SHA256 matches
+`03c2c7c7df52af241c6786f8288c38acc73bce74f9a81ee7ba40b0fa4f8da440`.
+[Release evidence](measurements/android-release-phone-2026-11-03-build21.json).
+.work/release-phone-2026-11-03-build21 holds complete scripts/evidence; do not reinstall.
+Next actual validated product build must use >21; notify before install-only.
+
+Full Apple [41585101233](measurements/chat-notification-action-recovery-apple-2026-11-03.json)
+at a90dc3f6 is ACCEPTED:986 simulator cases/110 suites, zero failures/errors/skips,
+227 relevant source hashes. Full Xcode1019s, compile566s, tests93s. Artifact13208248217
+SHA256 `6de03ebfb67ebe1896de9175d24f5cc833be462a5102b6ff07e1e1d257c8933e`
+verified against GitHub. Audit complete; do not repeat extraction or dispatch.
+
+ONE subsequent full Apple [41588371503](measurements/chat-notification-focus-apple-2026-11-03.json)
+was dispatched06:11:52Z at de69f282 with234 frozen source paths, includes focus/build21.
+It is PENDING; audit.py ready in .work/chat-notification-focus-apple-2026-11-03. Wait for
+completion, audit once; do not cancel or duplicate. Native corrected41585074316 at a90
+still runs, automatic41587502684 at de69 queued behind it. No manual duplicate runs.
+
+DeviceRecordStore implementation is now IN PROGRESS (uncommitted): generic bounded
+opaque device-owned records independent of account activation, additive SQLite13 and
+IndexedDB12. Only raw storage source exists so far; tests/migration/graph validation
+must pass before commit or use. No new app release for this unfinished increment.
+Continue the device-encrypted pre-retention input gap. Read the
+existing design in .work/chat-device-records-2026-11-03/design.txt and the focus
+work-directory after-release-input-quarantine.txt. Raw device-owned bounded opaque
+storage needs actual SQLite/IndexedDB/Apple contracts and migration evidence before
+an encrypted repository uses it. Existing generic Inbox is plaintext; account-owned
+Replica/Blob writes must not be bypassed with a synthetic account. Do not activate
+production notification hosts/push yet. All54 PRD groups remain open.
+
+Historical checkpoint below is superseded by this current status.
+
 ## Focused-route notification disposition accepted; deliver build21
 
 Focus integration is locally ACCEPTED. [Contract](collaboration-notification-focus.md),
