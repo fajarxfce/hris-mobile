@@ -46,3 +46,9 @@ encrypted input review and notification-specific process-death proof remain next
 native entry point starts this process yet and chat push remains off. No new product APK
 was delivered. Capacity and flow bounds are not a claim of device performance; measure
 realistic loads when integrating candidate delivery and the native host.
+
+
+[Finite candidate delivery](collaboration-notification-candidates.md) is now implemented
+inside the same actor, with provisional source readiness, bounded caller-owned requests,
+joined cancellation and silent uncertainty replay. Incoming priority handoff and native
+host/focus/callback/review integration remain next; chat push is still off.

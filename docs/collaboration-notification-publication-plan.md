@@ -164,3 +164,9 @@ journal/source reconciliation and exact cleanup of obsolete references. It retai
 work through contention without repeating its own ACK, and pauses on uncertain discovery.
 Candidate delivery, owned foreground focus, authenticated callbacks and encrypted input
 review still precede native HRIS activation. No chat push is enabled by this binding.
+
+
+[Finite candidate delivery](collaboration-notification-candidates.md) is now implemented
+inside the same actor, with provisional source readiness, bounded caller-owned requests,
+joined cancellation and silent uncertainty replay. Incoming priority handoff and native
+host/focus/callback/review integration remain next; chat push is still off.

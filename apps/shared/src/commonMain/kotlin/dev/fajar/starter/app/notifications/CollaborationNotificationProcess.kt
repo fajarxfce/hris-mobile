@@ -10,8 +10,8 @@ import kotlinx.coroutines.flow.*
 
 /**
  * Process-owned reconciliation of bounded opaque journal references. This owner must be the sole
- * normal native writer. Candidate delivery, focused-thread registration and native callbacks are
- * separate integration steps; calling requestScan does not grant permission to publish content.
+ * normal native writer. Focused-thread registration and native callbacks are separate integration
+ * steps; calling requestScan does not grant permission to publish content.
  */
 class CollaborationNotificationProcess(
     private val owner: CollaborationNotificationSurfaceOwner,
@@ -24,6 +24,10 @@ class CollaborationNotificationProcess(
         suspend (
             CollaborationNativeParent, CollaborationNotificationPublicationReference, Failure?,
         ) -> AppResult<CollaborationNotificationReconciliationResult>,
+    private val publishCandidate:
+        suspend (
+            CollaborationNativeParent, CollaborationNotificationCandidate, Boolean,
+        ) -> AppResult<CollaborationNotificationPublicationResult>,
     dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) : AutoCloseable {
     private val lifetime = SupervisorJob()
@@ -38,7 +42,8 @@ class CollaborationNotificationProcess(
     private val retried = MutableStateFlow(0L)
     private val active = MutableStateFlow<Work?>(null)
     // Only the actor mutates this bounded map. Source callbacks own their signal, never the map.
-    private val slots = linkedMapOf<String, Slot>()
+    private val slots = linkedMapOf<NotificationSourceKey, Slot>()
+    private val candidates = CollaborationNotificationCandidateQueue()
 
     fun start() {
         if (!lifetime.isActive || !started.compareAndSet(false, true)) return
@@ -68,11 +73,47 @@ class CollaborationNotificationProcess(
                     active.value?.job?.cancelAndJoin()
                     releaseSlots()
                     owner.closeAndJoin()
+                    candidates.close(surfaceFailure(FailureKind.Unavailable))
                 }
                 lifetime.cancel()
             }
         }
         owner.start()
+    }
+
+    /** Finite caller-owned request. The process retains only opaque IDs while awaiting sources. */
+    suspend fun publish(
+        parent: CollaborationNativeParent,
+        candidate: CollaborationNotificationCandidate,
+        allowAlert: Boolean = false,
+    ): AppResult<CollaborationNotificationPublicationResult> {
+        currentCoroutineContext().ensureActive()
+        if (!validNotificationCandidate(parent, candidate))
+            return surfaceFailure(FailureKind.Validation)
+        return withTimeoutOrNull(8_000) {
+            coroutineScope {
+                val request =
+                    NotificationCandidateRequest(
+                        parent,
+                        candidate,
+                        allowAlert,
+                        CompletableDeferred(currentCoroutineContext()[Job]),
+                    )
+                try {
+                    if (!lifetime.isActive || !candidates.offer(request))
+                        return@coroutineScope surfaceFailure(FailureKind.Unavailable)
+                    wake.trySend(Unit)
+                    request.result.await()
+                } finally {
+                    request.result.cancel()
+                    candidates.remove(request)
+                    withContext(NonCancellable) {
+                        active.value?.takeIf { it.request === request }?.job?.cancelAndJoin()
+                    }
+                    wake.trySend(Unit)
+                }
+            }
+        } ?: surfaceFailure(FailureKind.Timeout)
     }
 
     /** A caller that changes the journal requests discovery, not direct concurrent native I/O. */
@@ -100,6 +141,7 @@ class CollaborationNotificationProcess(
         var scanRequest = -1L
         var retryRequest = -1L
         var needsScan = true
+        var preferCandidate = false
         while (currentCoroutineContext().isActive) {
             wake.receive()
             while (currentCoroutineContext().isActive) {
@@ -109,7 +151,17 @@ class CollaborationNotificationProcess(
                 if (ready == null || ready.epoch !== epoch) {
                     releaseSlots()
                     epoch = ready?.epoch
+                    if (ready != null)
+                        candidates
+                            .pending()
+                            .filter { it.parent != ready.parent }
+                            .forEach { complete(it, surfaceFailure(FailureKind.Unauthorized)) }
                     needsScan = true
+                }
+                if (state is CollaborationNotificationSurfaceState.Blocked) {
+                    candidates.pending().forEach {
+                        complete(it, surfaceFailure(FailureKind.Unavailable))
+                    }
                 }
                 if (ready == null || !ready.isIdle) break
                 if (scanRequest != requested.value) {
@@ -121,34 +173,123 @@ class CollaborationNotificationProcess(
                     restartSources(ready.parent)
                 }
                 if (needsScan) {
-                    val result = perform(ready) { scan(ready.parent) }
+                    val result = scanAndUpdate(ready)
                     if (result == null) continue
                     if (result is AppResult.Failed) {
-                        owner.pause(ready.parent)
-                        break
-                    }
-                    val updated =
-                        perform(ready) {
-                            withTimeoutOrNull(8_000) {
-                                updateSlots(ready.parent, (result as AppResult.Success).value)
-                            } ?: surfaceFailure(FailureKind.Timeout)
-                        }
-                    if (updated == null) continue
-                    if (updated is AppResult.Failed) {
-                        if (updated.failure.code != NOTIFICATION_SURFACE_BUSY)
+                        if (result.failure.code != NOTIFICATION_SURFACE_BUSY)
                             owner.pause(ready.parent)
                         break
                     }
                     needsScan = false
                     continue
                 }
-                val slot =
+                synchronizeCandidates(ready.parent)
+                val candidate =
+                    candidates.pending().firstOrNull {
+                        it.parent == ready.parent &&
+                            it.busyRevision != ready.revision &&
+                            slots[it.key]?.signal?.value?.observed == true
+                    }
+                val selected = candidate?.let { slots[it.key] }
+                val dirty =
                     slots.values.firstOrNull {
-                        it.handled !== it.signal.value && it.busyRevision != ready.revision
-                    } ?: break
-                needsScan = settle(ready, slot)
+                        it.reference != null &&
+                            it.handled !== it.signal.value &&
+                            it.busyRevision != ready.revision
+                    }
+                val failedCurrent =
+                    selected?.takeIf {
+                        it.reference != null &&
+                            it.handled !== it.signal.value &&
+                            it.busyRevision != ready.revision &&
+                            it.signal.value.result is AppResult.Failed
+                    }
+                if (
+                    candidate != null &&
+                        selected != null &&
+                        failedCurrent == null &&
+                        (preferCandidate || dirty == null)
+                ) {
+                    needsScan = deliver(ready, selected, candidate)
+                    preferCandidate = false
+                } else if (failedCurrent != null || dirty != null) {
+                    needsScan = settle(ready, requireNotNull(failedCurrent ?: dirty))
+                    preferCandidate = true
+                } else break
             }
         }
+    }
+
+    private suspend fun scanAndUpdate(
+        ready: CollaborationNotificationSurfaceState.Ready
+    ): AppResult<Unit>? {
+        val result = perform(ready) { scan(ready.parent) } ?: return null
+        if (result is AppResult.Failed) return result
+        return perform(ready) {
+            withTimeoutOrNull(8_000) {
+                updateSlots(ready.parent, (result as AppResult.Success).value)
+            } ?: surfaceFailure(FailureKind.Timeout)
+        }
+    }
+
+    private suspend fun synchronizeCandidates(parent: CollaborationNativeParent) {
+        candidates
+            .pending()
+            .filter { it.parent != parent }
+            .forEach { complete(it, surfaceFailure(FailureKind.Unauthorized)) }
+        val requests = candidates.pending()
+        val keys = requests.map { it.key }.toSet()
+        val unused = slots.values.filter { it.reference == null && it.key !in keys }
+        removeSlots(unused)
+        for (request in requests) {
+            if (request.key in slots) continue
+            if (slots.size >= 64) {
+                complete(request, surfaceFailure(FailureKind.Unavailable))
+                continue
+            }
+            val slot = Slot(request.key)
+            slots[request.key] = slot
+            subscribe(parent, slot)
+        }
+    }
+
+    private suspend fun deliver(
+        ready: CollaborationNotificationSurfaceState.Ready,
+        slot: Slot,
+        request: NotificationCandidateRequest,
+    ): Boolean {
+        val signal = slot.signal.value
+        val result =
+            (signal.result as? AppResult.Failed)
+                ?: perform(ready, slot, signal, request) {
+                    publishCandidate(ready.parent, request.candidate, request.allowAlert)
+                }
+        if (result == null) {
+            // Cancellation may follow committed preparation. Keep its journal recoverable, but
+            // do not immediately replay the same source behind the cancelled caller's back.
+            if (!request.result.isActive && slot.signal.value === signal) slot.handled = signal
+            return true
+        }
+        if (result is AppResult.Failed && result.failure.code == NOTIFICATION_SURFACE_BUSY) {
+            request.busyRevision = ready.revision
+            return false
+        }
+        // A suppressed/older candidate must not acknowledge a dirty, unrelated current card.
+        if (
+            slot.reference == null ||
+                result == AppResult.Success(CollaborationNotificationPublicationResult.Submitted)
+        )
+            slot.handled = signal
+        complete(request, result)
+        return true
+    }
+
+    private fun complete(
+        request: NotificationCandidateRequest,
+        result: AppResult<CollaborationNotificationPublicationResult>,
+    ) {
+        request.result.complete(result)
+        candidates.remove(request)
     }
 
     private suspend fun settle(
@@ -156,7 +297,7 @@ class CollaborationNotificationProcess(
         slot: Slot,
     ): Boolean {
         val signal = slot.signal.value
-        val reference = slot.reference
+        val reference = slot.reference ?: return false
         val result =
             perform(ready, slot, signal) {
                 reconcile(ready.parent, reference, (signal.result as? AppResult.Failed)?.failure)
@@ -215,6 +356,8 @@ class CollaborationNotificationProcess(
                 references += items
                 after = page.nextAfter
             } while (after != null)
+            if (references.map { it.key() }.distinct().size != references.size)
+                return@withTimeoutOrNull surfaceFailure(FailureKind.Unavailable)
             AppResult.Success(references.toList())
         } ?: surfaceFailure(FailureKind.Timeout)
 
@@ -222,32 +365,48 @@ class CollaborationNotificationProcess(
         parent: CollaborationNativeParent,
         references: List<CollaborationNotificationPublicationReference>,
     ): AppResult<Unit> {
-        val incoming = references.associateBy { it.id }
-        val obsolete =
-            slots.values.filter { old ->
-                val next = incoming[old.reference.id]
-                next == null ||
-                    next.target.companyId != old.reference.target.companyId ||
-                    next.target.conversationId != old.reference.target.conversationId
-            }
-        // A journal may have been retired by another finite action. Forgetting the subscription
-        // alone would leave its private native card behind. Exact cleanup preserves newer renders.
-        for (old in obsolete) {
-            val target = old.reference.target
+        val incoming = references.associateBy { it.key() }
+        val requests = candidates.pending().filter { it.parent == parent }
+        val provisional =
+            requests
+                .map { it.key }
+                .distinct()
+                .filter { it !in incoming }
+                .take(64 - incoming.size)
+                .toSet()
+        requests
+            .filter { it.key !in incoming && it.key !in provisional }
+            .forEach { complete(it, surfaceFailure(FailureKind.Unavailable)) }
+        // Exact cleanup precedes forgetting a journal reference, even when its source survives
+        // for another queued candidate. A changed native ID must not orphan the previous card.
+        for (slot in slots.values) {
+            val old = slot.reference ?: continue
+            val next = incoming[slot.key]
+            if (
+                next != null &&
+                    next.id == old.id &&
+                    next.target.notificationId == old.target.notificationId
+            )
+                continue
+            val target = old.target
             val removed =
                 owner.withOwner(parent) {
                     remove(ActionNotificationReference(target.notificationId, target.renderId))
                 }
             if (removed is AppResult.Failed) return removed
         }
-        obsolete.forEach { it.observer?.cancel() }
-        obsolete.mapNotNull { it.observer }.joinAll()
-        obsolete.forEach { slots.remove(it.reference.id) }
+        removeSlots(slots.values.filter { it.key !in incoming && it.key !in provisional })
+        for (slot in slots.values) if (slot.key !in incoming) {
+            slot.reference = null
+            slot.contended = null
+            slot.busyRevision = null
+        }
         for (reference in references) {
-            val existing = slots[reference.id]
+            val key = reference.key()
+            val existing = slots[key]
             if (existing == null) {
-                val slot = Slot(reference)
-                slots[reference.id] = slot
+                val slot = Slot(key, reference)
+                slots[key] = slot
                 subscribe(parent, slot)
             } else {
                 if (existing.contended != null && existing.contended != reference) {
@@ -255,18 +414,27 @@ class CollaborationNotificationProcess(
                     existing.handled = null
                     existing.busyRevision = null
                 }
-                // Our own published ACK changes the reference without changing the source signal.
+                // Promotion and our own ACK keep the same admitted source subscription.
                 existing.reference = reference
             }
         }
         return AppResult.Success(Unit)
     }
 
+    private suspend fun removeSlots(obsolete: List<Slot>) {
+        obsolete.forEach { it.observer?.cancel() }
+        obsolete.mapNotNull { it.observer }.joinAll()
+        obsolete.forEach { slots.remove(it.key) }
+    }
+
+    private fun CollaborationNotificationPublicationReference.key() =
+        NotificationSourceKey(target.companyId, target.conversationId)
+
     private suspend fun restartSources(parent: CollaborationNativeParent) {
         slots.values.forEach { it.observer?.cancel() }
         slots.values.mapNotNull { it.observer }.joinAll()
         slots.values.forEach { slot ->
-            slot.signal.value = Signal(surfaceFailure(FailureKind.Unavailable))
+            slot.signal.value = Signal(surfaceFailure(FailureKind.Unavailable), observed = false)
             slot.handled = null
             slot.busyRevision = null
             subscribe(parent, slot)
@@ -274,7 +442,7 @@ class CollaborationNotificationProcess(
     }
 
     private fun subscribe(parent: CollaborationNativeParent, slot: Slot) {
-        val target = slot.reference.target
+        val target = slot.key
         slot.observer =
             scope.launch {
                 try {
@@ -300,17 +468,19 @@ class CollaborationNotificationProcess(
         ready: CollaborationNotificationSurfaceState.Ready,
         slot: Slot? = null,
         signal: Signal? = null,
+        request: NotificationCandidateRequest? = null,
         operation: suspend () -> AppResult<T>,
     ): AppResult<T>? = supervisorScope {
         val refreshRevision = requested.value
         val pending = async(start = CoroutineStart.LAZY) { operation() }
-        val work = Work(ready.epoch, slot, signal, refreshRevision, pending)
+        val work = Work(ready.epoch, slot, signal, refreshRevision, request, pending)
         active.value = work
         fun current(): Boolean {
             val now = observed.value as? CollaborationNotificationSurfaceState.Ready
             return now?.epoch === ready.epoch &&
                 requested.value == refreshRevision &&
-                (slot == null || slot.signal.value === signal)
+                (slot == null || slot.signal.value === signal) &&
+                (request == null || request.result.isActive)
         }
         try {
             if (!current()) return@supervisorScope null
@@ -336,6 +506,7 @@ class CollaborationNotificationProcess(
     }
 
     override fun close() {
+        candidates.close(surfaceFailure(FailureKind.Unavailable))
         active.value?.job?.cancel()
         lifetime.cancel()
         owner.close()
@@ -347,10 +518,14 @@ class CollaborationNotificationProcess(
         owner.closeAndJoin()
     }
 
-    private class Signal(val result: AppResult<Unit>)
+    private class Signal(val result: AppResult<Unit>, val observed: Boolean = true)
 
-    private class Slot(var reference: CollaborationNotificationPublicationReference) {
-        val signal = MutableStateFlow(Signal(surfaceFailure(FailureKind.Unavailable)))
+    private class Slot(
+        val key: NotificationSourceKey,
+        var reference: CollaborationNotificationPublicationReference? = null,
+    ) {
+        val signal =
+            MutableStateFlow(Signal(surfaceFailure(FailureKind.Unavailable), observed = false))
         var handled: Signal? = null
         var contended: CollaborationNotificationPublicationReference? = null
         var busyRevision: Long? = null
@@ -362,6 +537,7 @@ class CollaborationNotificationProcess(
         val slot: Slot?,
         val signal: Signal?,
         val refreshRevision: Long,
+        val request: NotificationCandidateRequest?,
         val job: Job,
     )
 

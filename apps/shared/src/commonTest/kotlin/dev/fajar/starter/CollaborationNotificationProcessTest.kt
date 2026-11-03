@@ -15,6 +15,368 @@ import kotlinx.coroutines.test.*
 /** Real mechanical owner, virtual time, fake journal/policy/OS ports; not provider acceptance. */
 class CollaborationNotificationProcessTest {
     @Test
+    fun candidateWaitsForTheBusySurfaceCompletionWithoutDroppingItsRequest() = runTest {
+        fixture { f ->
+            f.references = emptyList()
+            f.start()
+            val entered = CompletableDeferred<Unit>()
+            val release = CompletableDeferred<Unit>()
+            var blocker: Job? = null
+            f.beforePublish = {
+                if (blocker == null) {
+                    blocker =
+                        backgroundScope.launch {
+                            f.owner.withOwner(f.parent) {
+                                entered.complete(Unit)
+                                release.await()
+                                AppResult.Success(Unit)
+                            }
+                        }
+                    entered.await()
+                }
+            }
+            try {
+                val request = async { f.process.publish(f.parent, f.candidate()) }
+                runCurrent()
+                assertFalse(request.isCompleted)
+                assertEquals(1, f.candidateCalls)
+                assertTrue(f.native.cards.isEmpty())
+                release.complete(Unit)
+                runCurrent()
+                assertIs<AppResult.Success<*>>(request.await())
+                assertEquals(2, f.candidateCalls)
+                assertEquals(1, f.native.cards.size)
+            } finally {
+                withContext(NonCancellable) { blocker?.cancelAndJoin() }
+            }
+        }
+    }
+
+    @Test
+    fun cancellingOneOfTwoCandidatesKeepsTheirSharedSourceForTheOther() = runTest {
+        fixture { f ->
+            f.references = emptyList()
+            f.signals.resetReplayCache()
+            f.start()
+            val first = async { f.process.publish(f.parent, f.candidate()) }
+            val second = async { f.process.publish(f.parent, f.candidate()) }
+            runCurrent()
+            assertEquals(1, f.opened)
+            first.cancelAndJoin()
+            runCurrent()
+            assertEquals(0, f.closed)
+            f.signals.emit(AppResult.Success(Unit))
+            runCurrent()
+            assertIs<AppResult.Success<*>>(second.await())
+            assertEquals(1, f.candidateCalls)
+            assertEquals(1, f.opened)
+        }
+    }
+
+    @Test
+    fun cancelledCandidateWaitsForLateNativeCompletionAndExactCompensation() = runTest {
+        fixture { f ->
+            f.references = emptyList()
+            f.start()
+            val release = CompletableDeferred<Unit>()
+            f.native.onShow = { withContext(NonCancellable) { release.await() } }
+            val request = async { f.process.publish(f.parent, f.candidate()) }
+            runCurrent()
+            val cancelled = launch { request.cancelAndJoin() }
+            try {
+                runCurrent()
+                assertFalse(cancelled.isCompleted)
+                assertIs<AppResult.Failed>(f.owner.withOwner(f.parent) { AppResult.Success(Unit) })
+                release.complete(Unit)
+                cancelled.join()
+                runCurrent()
+                assertTrue(request.isCancelled)
+                assertTrue(f.native.cards.isEmpty())
+                assertEquals(0, f.publications)
+                assertIs<AppResult.Success<*>>(
+                    f.owner.withOwner(f.parent) { AppResult.Success(Unit) }
+                )
+            } finally {
+                release.complete(Unit)
+                withContext(NonCancellable) {
+                    cancelled.cancelAndJoin()
+                    request.cancelAndJoin()
+                }
+            }
+        }
+    }
+
+    @Test
+    fun candidatesProgressBetweenRepeatedDirtyReferenceTurns() = runTest {
+        fixture { f ->
+            f.start()
+            val events = mutableListOf<String>()
+            f.afterCommit = {
+                events += "reconcile"
+                if (events.count { it == "reconcile" } < 3) f.signals.emit(AppResult.Success(Unit))
+            }
+            f.beforePublish = { events += "candidate" }
+            val request =
+                async(start = CoroutineStart.UNDISPATCHED) {
+                    f.process.publish(f.parent, f.candidate(2))
+                }
+            assertTrue(f.signals.tryEmit(AppResult.Success(Unit)))
+            runCurrent()
+            assertIs<AppResult.Success<*>>(request.await())
+            assertTrue(events.count { it == "reconcile" } >= 3)
+            val third = events.withIndex().filter { it.value == "reconcile" }[2].index
+            assertTrue(events.indexOf("candidate") < third)
+        }
+    }
+
+    @Test
+    fun newlyDiscoveredFullJournalReleasesExcessProvisionalSlotsBeforeAddingSources() = runTest {
+        fixture { f ->
+            f.references = emptyList()
+            f.signals.resetReplayCache()
+            f.start()
+            val request = async { f.process.publish(f.parent, f.candidate()) }
+            runCurrent()
+            assertEquals(1, f.opened)
+            f.references = (2..65).map { f.reference(it) }
+            f.process.requestScan()
+            runCurrent()
+            assertIs<AppResult.Failed>(request.await())
+            assertEquals(64, f.opened - f.closed)
+            assertEquals(1, f.closed)
+            assertEquals(0, f.candidateCalls)
+        }
+    }
+
+    @Test
+    fun candidateWaitsForItsFirstSourceAndPromotesWithoutDuplicateObservationOrReplay() = runTest {
+        fixture { f ->
+            f.references = emptyList()
+            f.signals.resetReplayCache()
+            f.start()
+            val request = async { f.process.publish(f.parent, f.candidate(), allowAlert = true) }
+            runCurrent()
+            assertFalse(request.isCompleted)
+            assertEquals(1, f.opened)
+            assertEquals(0, f.candidateCalls)
+            f.signals.emit(AppResult.Success(Unit))
+            runCurrent()
+            assertIs<AppResult.Success<*>>(request.await())
+            assertEquals(listOf(true), f.alertRequests)
+            assertEquals(1, f.opened)
+            assertEquals(0, f.closed)
+            assertEquals(0, f.publications)
+            assertEquals(1, f.native.cards.size)
+            advanceTimeBy(60_000)
+            runCurrent()
+            assertEquals(1, f.candidateCalls)
+            assertEquals(0, f.publications)
+        }
+    }
+
+    @Test
+    fun cancelledWaitingCandidateReleasesItsProvisionalSource() = runTest {
+        fixture { f ->
+            f.references = emptyList()
+            f.signals.resetReplayCache()
+            f.start()
+            val request = async { f.process.publish(f.parent, f.candidate()) }
+            runCurrent()
+            assertEquals(1, f.opened)
+            request.cancelAndJoin()
+            runCurrent()
+            assertEquals(1, f.closed)
+            f.signals.emit(AppResult.Success(Unit))
+            runCurrent()
+            assertEquals(0, f.candidateCalls)
+            assertTrue(f.references.isEmpty())
+        }
+    }
+
+    @Test
+    fun twentyPendingRequestsBoundTheQueueAndTimeoutReleasesAllProvisionalSources() = runTest {
+        fixture { f ->
+            f.references = emptyList()
+            f.signals.resetReplayCache()
+            f.start()
+            val requests =
+                (1..20).map { index -> async { f.process.publish(f.parent, f.candidate(index)) } }
+            runCurrent()
+            assertEquals(20, f.opened)
+            assertEquals(
+                FailureKind.Unavailable,
+                assertIs<AppResult.Failed>(f.process.publish(f.parent, f.candidate(21)))
+                    .failure
+                    .kind,
+            )
+            assertEquals(0, f.candidateCalls)
+            advanceTimeBy(8_001)
+            runCurrent()
+            requests.forEach {
+                assertEquals(
+                    FailureKind.Timeout,
+                    assertIs<AppResult.Failed>(it.await()).failure.kind,
+                )
+            }
+            assertEquals(20, f.closed)
+            f.signals.emit(AppResult.Success(Unit))
+            assertIs<AppResult.Success<*>>(f.process.publish(f.parent, f.candidate(21)))
+            runCurrent()
+            assertEquals(1, f.candidateCalls)
+        }
+    }
+
+    @Test
+    fun malformedAndForeignCandidatesNeverOpenTheirSource() = runTest {
+        fixture { f ->
+            f.references = emptyList()
+            f.start()
+            assertEquals(
+                FailureKind.Validation,
+                assertIs<AppResult.Failed>(
+                        f.process.publish(f.parent, f.candidate().copy(eventId = "invalid"))
+                    )
+                    .failure
+                    .kind,
+            )
+            assertEquals(
+                FailureKind.Unauthorized,
+                assertIs<AppResult.Failed>(
+                        f.process.publish(f.parent.copy(accountId = uuid(999)), f.candidate())
+                    )
+                    .failure
+                    .kind,
+            )
+            assertEquals(0, f.opened)
+            assertEquals(0, f.candidateCalls)
+        }
+    }
+
+    @Test
+    fun parentReplacementRejectsOldQueuedRequestsBeforeReadingTheNewJournal() = runTest {
+        fixture { f ->
+            f.references = emptyList()
+            f.signals.resetReplayCache()
+            f.start()
+            val request = async { f.process.publish(f.parent, f.candidate()) }
+            runCurrent()
+            f.onRead = { awaitCancellation() }
+            f.parents.value = f.parent.copy(accountId = uuid(999))
+            runCurrent()
+            assertEquals(
+                FailureKind.Unauthorized,
+                assertIs<AppResult.Failed>(request.await()).failure.kind,
+            )
+            assertEquals(1, f.closed)
+            assertEquals(0, f.candidateCalls)
+        }
+    }
+
+    @Test
+    fun cancellationAfterPreparationJoinsWorkAndLeavesQuietRecoverableJournal() = runTest {
+        fixture { f ->
+            f.references = emptyList()
+            f.start()
+            var joined = false
+            f.afterPublishPrepared = {
+                try {
+                    awaitCancellation()
+                } finally {
+                    joined = true
+                }
+            }
+            val request = async { f.process.publish(f.parent, f.candidate()) }
+            runCurrent()
+            assertEquals(
+                CollaborationNotificationPublicationState.Prepared,
+                f.references.single().state,
+            )
+            request.cancelAndJoin()
+            runCurrent()
+            assertTrue(joined)
+            assertTrue(f.native.cards.isEmpty())
+            assertEquals(0, f.publications)
+            assertEquals(1, f.opened)
+            f.afterPublishPrepared = {}
+            assertIs<AppResult.Success<*>>(f.process.retry())
+            runCurrent()
+            assertEquals(1, f.native.cards.size)
+        }
+    }
+
+    @Test
+    fun sourceFailureDuringCandidatePublicationJoinsCompensationBeforeFailure() = runTest {
+        fixture { f ->
+            f.references = emptyList()
+            f.start()
+            var joined = false
+            f.native.onShow = {
+                try {
+                    awaitCancellation()
+                } finally {
+                    joined = true
+                }
+            }
+            val request = async { f.process.publish(f.parent, f.candidate()) }
+            runCurrent()
+            assertEquals(1, f.native.cards.size)
+            f.signals.emit(unavailable())
+            runCurrent()
+            assertIs<AppResult.Failed>(request.await())
+            assertTrue(joined)
+            assertTrue(f.native.cards.isEmpty())
+            assertTrue(f.native.removals >= 1)
+            assertEquals(
+                CollaborationNotificationPublicationState.Prepared,
+                f.references.single().state,
+            )
+        }
+    }
+
+    @Test
+    fun candidateSharesAnExistingConversationWatchAndTheTotalSlotBound() = runTest {
+        fixture { f ->
+            f.references = (1..64).map { f.reference(it) }
+            f.start()
+            assertIs<AppResult.Failed>(f.process.publish(f.parent, f.candidate(65)))
+            assertEquals(64, f.opened)
+            assertEquals(0, f.candidateCalls)
+            assertIs<AppResult.Success<*>>(f.process.publish(f.parent, f.candidate(1)))
+            runCurrent()
+            assertEquals(64, f.opened)
+            assertEquals(1, f.candidateCalls)
+        }
+    }
+
+    @Test
+    fun closeSettlesWaitingRequestsAndPreventsReopeningTheQueue() = runTest {
+        fixture { f ->
+            f.references = emptyList()
+            f.signals.resetReplayCache()
+            f.start()
+            val request = async { f.process.publish(f.parent, f.candidate()) }
+            runCurrent()
+            f.process.closeAndJoin()
+            assertIs<AppResult.Failed>(request.await())
+            assertEquals(1, f.closed)
+            assertIs<AppResult.Failed>(f.process.publish(f.parent, f.candidate()))
+            assertEquals(0, f.candidateCalls)
+        }
+    }
+
+    @Test
+    fun duplicateConversationReferencesCannotCollapseIntoOneSourceSlot() = runTest {
+        fixture { f ->
+            val first = f.reference(1)
+            f.references = listOf(first, f.reference(2).copy(target = first.target))
+            f.start()
+            assertEquals(CollaborationNotificationSurfaceState.Blocked, f.owner.states.first())
+            assertEquals(0, f.opened)
+            assertTrue(f.native.cards.isEmpty())
+        }
+    }
+
+    @Test
     fun busyWorkWaitsForCompletionWithoutLosingItsDirtySignal() = runTest {
         fixture { f ->
             val entered = CompletableDeferred<Unit>()
@@ -458,6 +820,10 @@ class CollaborationNotificationProcessTest {
         var flow: () -> Flow<AppResult<Unit>> = { signals }
         var onRead: suspend (String?) -> Unit = {}
         var afterCommit: suspend () -> Unit = {}
+        var afterPublishPrepared: suspend () -> Unit = {}
+        var beforePublish: suspend () -> Unit = {}
+        var candidateCalls = 0
+        val alertRequests = mutableListOf<Boolean>()
         var beforeReconcile: suspend () -> Unit = {}
         var syntheticBusyOnce = false
         var readFailure = false
@@ -553,8 +919,61 @@ class CollaborationNotificationProcessTest {
                             }
                         }
                 },
+                publishCandidate = { captured, candidate, alert ->
+                    publish(captured, candidate, alert)
+                },
                 dispatcher = StandardTestDispatcher(test.testScheduler),
             )
+
+        private suspend fun publish(
+            captured: CollaborationNativeParent,
+            candidate: CollaborationNotificationCandidate,
+            alert: Boolean,
+        ): AppResult<CollaborationNotificationPublicationResult> {
+            candidateCalls++
+            beforePublish()
+            return owner.withOwner(captured) {
+                alertRequests += alert
+                val index = candidate.conversationId.takeLast(12).toInt(16) - 100
+                val base = reference(index)
+                val prepared =
+                    base.copy(
+                        parent = captured,
+                        target =
+                            base.target.copy(
+                                roomId = candidate.roomId,
+                                eventId = candidate.eventId,
+                                renderId = uuid(5000 + candidateCalls),
+                            ),
+                        state = CollaborationNotificationPublicationState.Prepared,
+                    )
+                references =
+                    (references.filter { it.id != prepared.id } + prepared).sortedBy { it.id }
+                afterPublishPrepared()
+                val shown = show(payload(prepared).copy(silent = !alert))
+                if (shown is AppResult.Failed) return@withOwner shown
+                references =
+                    references.map {
+                        if (it.id == prepared.id)
+                            it.copy(
+                                state = CollaborationNotificationPublicationState.Published,
+                                version = it.version.copy(revision = 1),
+                            )
+                        else it
+                    }
+                AppResult.Success(CollaborationNotificationPublicationResult.Submitted)
+            }
+        }
+
+        fun candidate(index: Int = 1): CollaborationNotificationCandidate =
+            reference(index).target.let {
+                CollaborationNotificationCandidate(
+                    it.companyId,
+                    it.conversationId,
+                    it.roomId,
+                    it.eventId,
+                )
+            }
 
         fun start() {
             process.start()

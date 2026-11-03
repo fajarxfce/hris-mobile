@@ -17,6 +17,85 @@ import org.koin.core.parameter.parametersOf
 /** Actual app DI and encrypted SQLite; acquisition and the native OS remain explicit fakes. */
 class CollaborationNotificationProcessIntegrationTest {
     @Test
+    fun uncertainNativeResultRetainsPreparationAndTheNextCandidateRequestReplaysSilently() =
+        runBlocking {
+            withProcess(seedPublication = false) { f, process, shown, _ ->
+                f.native.onShow = {
+                    shown.send(it)
+                    throw java.io.IOException("Fictional uncertain native acknowledgment")
+                }
+                process.start()
+                assertIs<AppResult.Failed>(
+                    process.publish(f.parent, f.candidate, allowAlert = true)
+                )
+                val uncertain = next(shown) { true }
+                idle(f)
+                assertEquals(
+                    CollaborationNotificationPublicationState.Prepared,
+                    f.publication()!!.body.state,
+                )
+                assertTrue(f.native.cards.isEmpty())
+                assertEquals(1, f.native.attempts)
+                f.native.onShow = { shown.send(it) }
+                assertEquals(
+                    AppResult.Success(CollaborationNotificationPublicationResult.Submitted),
+                    process.publish(f.parent, f.candidate, allowAlert = true),
+                )
+                val replay = next(shown) { true }
+                assertEquals(uncertain.reference, replay.reference)
+                assertTrue(replay.silent)
+                assertEquals(
+                    CollaborationNotificationPublicationState.Published,
+                    f.publication()!!.body.state,
+                )
+                assertTrue(f.app.sdk.enqueued.isEmpty())
+            }
+        }
+
+    @Test
+    fun newCandidateWaitsForOwnedSourcesAndOnlyItsFirstOriginalMayAlert() = runBlocking {
+        withProcess(seedPublication = false) { f, process, shown, _ ->
+            process.start()
+            assertEquals(
+                AppResult.Success(CollaborationNotificationPublicationResult.Submitted),
+                process.publish(f.parent, f.candidate, allowAlert = true),
+            )
+            val original = next(shown) { it.body == "Fictional original for notification" }
+            idle(f)
+            assertFalse(original.silent)
+            assertEquals(
+                CollaborationNotificationPublicationState.Published,
+                f.publication()!!.body.state,
+            )
+            assertEquals(
+                AppResult.Success(CollaborationNotificationPublicationResult.Submitted),
+                process.publish(f.parent, f.candidate, allowAlert = true),
+            )
+            val replay = next(shown) { it.reference == original.reference }
+            assertTrue(replay.silent)
+            assertTrue(f.app.sdk.enqueued.isEmpty())
+        }
+    }
+
+    @Test
+    fun initiallyMutedCandidateCreatesNeitherPublicationNorNativeContent() = runBlocking {
+        withProcess(seedPublication = false) { f, process, _, _ ->
+            f.preferences(
+                CollaborationNotificationPreview.Message,
+                CollaborationNotificationMute.Forever,
+            )
+            process.start()
+            assertEquals(
+                AppResult.Success(CollaborationNotificationPublicationResult.Suppressed),
+                process.publish(f.parent, f.candidate, allowAlert = true),
+            )
+            assertNull(f.publication())
+            assertTrue(f.native.cards.isEmpty())
+            assertTrue(f.app.sdk.enqueued.isEmpty())
+        }
+    }
+
+    @Test
     fun processObservesPrivacyChangesOutsideTheSelectedCompanyAndRerendersSilently() = runBlocking {
         withProcess { f, process, shown, _ ->
             process.start()
@@ -117,13 +196,14 @@ class CollaborationNotificationProcessIntegrationTest {
     }
 
     private suspend fun withProcess(
+        seedPublication: Boolean = true,
         block:
             suspend (
                 NotificationPublisherFixture,
                 CollaborationNotificationProcess,
                 Channel<ActionNotificationPayload>,
                 Channel<ActionNotificationReference>,
-            ) -> Unit
+            ) -> Unit,
     ) {
         val f = NotificationPublisherFixture()
         val shown = Channel<ActionNotificationPayload>(32)
@@ -132,7 +212,7 @@ class CollaborationNotificationProcessIntegrationTest {
         try {
             f.initialize()
             f.preferences(CollaborationNotificationPreview.Message)
-            assertIs<AppResult.Success<*>>(f.publish())
+            if (seedPublication) assertIs<AppResult.Success<*>>(f.publish())
             f.native.onShow = { shown.send(it) }
             f.native.onRemove = { removed.send(it) }
             val current =

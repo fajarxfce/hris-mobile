@@ -1,5 +1,15 @@
 # Validation
 
+## Candidate delivery through the process — 3 November 2026
+
+[Queued candidate delivery](collaboration-notification-candidates.md) passes 81 focused
+cases, including six actual Koin/encrypted SQLite process cases with a fake OS. Full checks
+pass 3,711 desktop/528 suites, 230 Android-host/37, six proof-host/one, ten build-logic/two,
+proof assembly, shared Wasm and root quality. [Evidence](measurements/chat-notification-candidates-2026-11-03.json)
+records five source hashes and 483 fresh full-run cases/77 suites, zero failures/errors/
+skips and no failed attempt. Worker/native host activation and notification-input OS-death
+proof remain separate work; no product APK was installed.
+
 ## Full Apple through finite reconciliation — 3 November 2026
 
 [Run41564138207 at c69bd898](measurements/chat-notification-reconciliation-apple-2026-11-03.json)

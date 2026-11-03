@@ -1,5 +1,65 @@
 # Agent continuation — HRIS Mobile
 
+## Notification candidate API accepted; connect incoming delivery and native ownership next
+
+Process.publish now queues max 20 opaque candidates/caller-owned completions. The caller
+has an eight-second cooperative budget and joins matching cancelled work/compensation.
+Company/conversation source slots support provisional candidates and stay within 64 total.
+Candidates wait for the first observation; an actual failure bypasses publication.
+Promotion retains the same watcher/handled signal. Complete discovery rejects duplicate
+source keys, cleans changed/forgotten native IDs exactly, and drops excess provisional
+slots before accepting an incoming full journal. [Contract](collaboration-notification-candidates.md),
+[evidence](measurements/chat-notification-candidates-2026-11-03.json).
+
+Work captures epoch/signal/scan revision/request liveness after lazy registration. Parent
+replacement rejects old requests before scanning the new journal. Cancellation after
+committed preparation keeps only the unchanged source handled, leaving quiet recoverable
+journal until another source signal or explicit retry; it does not immediately replay
+behind the cancelled caller. Other requests sharing its source remain live. Eligible
+candidates alternate with dirty references; existing-card failed-source cleanup precedes
+candidate failure. Busy work waits for idle/completion without dropping a request.
+
+Focused1 PASSED98.549s/65 cases, focused2 PASSED104.273s/75, focused3 PASSED91.834s/81;
+four suites and root quality in each. Full4 PASSED259.766s: 3,711 desktop/528 suites,
+230 Android-host/37, six proof-host/one, ten build-logic/two, proof assembly/shared Wasm/
+root quality. 483 fresh cases/77 suites, five frozen source hashes, no failures/errors/
+skips or failed attempt. The81 focused cases are35 virtual process,30 mechanical owner,
+ten finite-reconciler integration and six actual Koin/SQLite process cases. New real graph
+cases cover first-original alert/replay silence, initial mute without publication, and
+uncertain native result retaining Prepared then replaying the same reference silently.
+Acquisition/native OS remain fakes; this is not notification-input/device acceptance.
+
+NEXT connect priority recovery WITHOUT nesting an eight-second publisher wait inside the
+incoming room's12-second budget. Outer priority is20 seconds; incoming is15 seconds.
+History.priority already acquires and reads an exact original/tombstone before hint ACK.
+An optional APPLICATION callback through history.priority/incoming.priority can capture
+only retained candidate IDs in a local variable. Outer priority can publish after incoming
+returns/closes the transport lease, before completing the hint, under its existing budget.
+This avoids a second network by-room lookup. Inspect every signature/call site and actual
+retained event shape first; callback is IDs only and grants no lasting publication authority.
+Bind actual process ownership explicitly; do not silently ACK publication uncertainty or
+add a no-op path once native chat notifications are enabled. Worker handoff remains DESIGN
+ONLY in .work/chat-notification-candidates-2026-11-03/plan.txt. apply-initial.py is APPLIED/
+STALE; use current .kt. No priority/worker/native entry point is changed yet.
+
+Then app/navigation-owned focus with actual parent/account and joined disposal; first-sync/
+backfill/dropped-hint baseline; native permission/channel/capacity recovery wakeups. Measure
+realistic card/source load before claiming device performance (full rescan per outcome,
+up to64x5 raw streams). Finish authenticated native callbacks, account-owned action v2/
+old-family/pre-retention encrypted review, then notification-input OS-death proof. Current
+v1 HRIS callbacks never activated; do not invent mandatory legacy migration. Chat push OFF;
+all54 PRD groups open, voice/video/meeting UI absent. Generic Starter port waits for integrated
+Mobile proof. Physical iPhone waived; full hosted Xcode required.
+
+Apple41568117750 at93f8a185 is still building Xcode,207 earlier hashes, EXCLUDES candidate
+changes. Do not redispatch; audit .work/chat-notification-process-apple-2026-11-03/audit.py
+after completion. Previous41564138207 atc69bd898 is accepted962/108, full Xcode1245s,
+202 hashes/artifact13199928107 digest verified. No shared app integration tests run in that
+simulator task. No local heavy job or owned emulator remains after Full4. Phone19/sourcec0
+remains installed. Next meaningful product release above19: notify then explicit
+10.77.77.3:5555 install-only, preserve signer/data, never drive phone UI. Live304/schema116
+unchanged. Continue long run and push every atomic commit.
+
 ## Bounded notification process accepted; connect candidate delivery next
 
 The process now owns surface startup/close, cold readiness collection, one conflated wake,

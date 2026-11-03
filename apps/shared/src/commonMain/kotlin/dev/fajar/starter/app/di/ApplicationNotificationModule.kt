@@ -23,6 +23,7 @@ fun applicationNotificationModule() = module {
         CollaborationNotificationReconciler(owner, get { parametersOf(owner) }, get())
     }
     factory { (owner: CollaborationNotificationSurfaceOwner, copy: CollaborationNotificationCopy) ->
+        val publisher = get<CollaborationNotificationPublisher> { parametersOf(owner) }
         val read = get<ReadCollaborationNotificationPublications>()
         val observe = get<ObserveCollaborationNotificationChanges>()
         val reconcile = get<CollaborationNotificationReconciler> { parametersOf(owner) }
@@ -30,6 +31,9 @@ fun applicationNotificationModule() = module {
             owner,
             read = { parent, after -> read(parent, after) },
             observe = observe::invoke,
+            publishCandidate = { parent, candidate, alert ->
+                publisher.publish(parent, candidate, copy, alert)
+            },
             reconcile = { parent, reference, failure ->
                 reconcile.reconcile(parent, reference, copy, failure)
             },
