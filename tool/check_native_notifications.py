@@ -52,7 +52,7 @@ def main():
         assert "Success" in adb("shell", "pm", "clear", PACKAGE)
         for scenario, granted, expected in [
             ("native-notification-denied", False, 1),
-            ("native-notification", True, 10),
+            ("native-notification", True, 15),
         ]:
             began = time.monotonic()
             adb("shell", "pm", "grant" if granted else "revoke", PACKAGE, PERMISSION)

@@ -1,5 +1,53 @@
 # Agent continuation — HRIS Mobile
 
+## Opaque native pending inventory accepted; continue admitted publisher
+
+Android records the latest opaque card/render ID in a bounded canonical no-backup
+AtomicFile before notify, verifies the synced commit, and cancels absent IDs. Under the
+required serialized sole writer, an old removal cannot erase a newer pending render;
+the latest request can cancel its older visible predecessor. Namespace cleanup unions
+persisted IDs and active tags without account decryption. Corrupt inventory permits
+visible cleanup but remains failed/retained, so the owner gate stays closed. No private
+payload/token/account data, new key or eviction. [Contract](native-notification-actions.md),
+[evidence](measurements/native-notification-pending-2026-11-03.json).
+
+Focused1 passed116.052s with24 fresh cases/six suites, proof assembly/lint and root quality.
+Full2 passed242.339s:3592 desktop/518 suites,230 Android-host/37, six proof-host/one,
+ten build-logic/two and18 browser/five;415 fresh cases/75 suites, zero failures/errors/
+skips, five unchanged source/driver hashes. Lint retains47 existing warnings/no errors.
+Native1 passed8.515s:16 behavior groups/two actual API35 scenarios, fixture data cleared.
+APK SHA256 c260118c936f0b56c0c6df44a1363f61114b58131dd0b885376f9d1ec063ac0f.
+Owned emulator5562/PID1971617 stopped in1.606s; unrelated emulators untouched. No local
+heavy job remains. No failed attempt in this increment. The fixture reopens a real file,
+but OS absence/older presentation and full inventory are synthetic setups, not stalled
+OS queues, killed notification-input processes or power-cut durability tests.
+
+Full Apple41547382869 atdb74e22d is now AUDITED SUCCESS:930 simulator cases/104 suites,
+full Xcode1336s,175 verified source hashes, artifact13193300792 and GitHub ZIP digest
+6eca533575245a2d6f0bc94c0649b69306ac0cf493833f9e301e6b4c3edd9a11.
+[Apple evidence](measurements/native-notification-actions-apple-2026-11-02.json).
+It excludes owner7cf6bd72 and this inventory. Native HRIS41544727565 ateac completed
+success but needs artifact audit; raw+interop41550122006 at7cf is running. db74 native
+HRIS41547370301 was superseded/cancelled; protocol41547370414 succeeded. Inspect actual
+artifacts before acceptance; do not repeat long local provider-emulator hangs.
+
+NEXT integrate Prepare/Issue/Validate/Finish with the surface owner in a finite app
+publisher and actual Koin/SQLite tests. Explicit new-original versus silent replay/
+same-source rerender policy is needed; default recovery stays silent. Open should be an
+authenticated navigation-only alias and must never execute a send/read action from an
+outer routing hint. Supplementary .work/chat-notification-publisher-2026-11-03 contains
+plan.txt and UNAPPLIED .txt drafts, not implemented source. Follow the expanded
+[integration plan](collaboration-notification-publication-plan.md), including ongoing
+all-company/source/settings/read invalidation, focused-thread registration, opaque
+denied-card retirement, retained old-family/pre-retention reply review and actual native
+host/process-death proof. The raw transport and owner are still not bound to delivery.
+
+Phone19/sourcec0 remains installed; no product build/install in this increment. Next
+meaningful release>19: notify immediately before explicit10.77.77.3:5555 install-only,
+preserve signer/data, never launch/drive the phone UI. Live304/schema116/chat push OFF,
+all54 PRD groups open. Continue long run with atomic commit/push and Git handoff; no
+Starter port until integrated Mobile proof. Older entries below are historical.
+
 ## Mechanical surface owner accepted; continue queued OS cleanup and HRIS integration
 
 CollaborationNotificationSurfaceOwner/Lease now implement closed startup/parent epochs,

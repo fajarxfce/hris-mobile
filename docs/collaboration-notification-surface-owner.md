@@ -37,11 +37,12 @@ actual browser runtimes. This is not actual native integration or an application
 binding test. [Evidence](measurements/chat-notification-surface-owner-2026-11-02.json)
 records the corrected test-only generic inference failure, explicit reuse and root checks.
 
-The raw Android surface currently enumerates active OS cards for namespace cleanup,
-while `notify` acknowledges a queued request. Add queued-submission and restart coverage
-before claiming cleanup of every accepted request; durable opaque pending IDs independent
-of account decryption may be needed. The earlier eleven-group raw Android proof does not
-exercise this owner or prove notification-input process death.
+The raw Android surface now records opaque pending IDs before `notify`, and namespace
+cleanup includes those IDs even when the OS reports no active card. Its separate
+[sixteen-group native proof](native-notification-actions.md) covers real-file adapter
+reopen plus synthetic absence/older presentation, capacity and corruption. It does not
+exercise this owner or inject stalled OS queues, notification-input process death or
+power cuts. Joined application work remains distinct from an OS/database transaction.
 
 The coordinator still needs all-company admission, settings/read/history invalidation,
 focused-thread registration, bounded opaque journal discovery and retirement, conservative

@@ -42,11 +42,24 @@ alert according to the caller's silent flag. After uncertain process recovery th
 caller must choose silent replay explicitly; an absent OS record is not proof an alert
 never happened. No distributed exactly-once alert guarantee is claimed.
 
-Active reads return opaque references only. Exact removal compares the OS render before
-cancelling its stable tag. Namespace cleanup also removes malformed old records without
-old-account decryption, and preserves unrelated application notifications. The caller
-must serialize submission/removal/cleanup and cancel and join obsolete work. A read of
-OS metadata and later cancellation cannot be atomic against another independent writer.
+Active reads return opaque references only. Before submission, an AtomicFile under
+Android no-backup storage records the latest stable card/render ID. The canonical
+inventory holds at most64 IDs and32KiB, contains no preview, token, reply or account
+identifier, and is synced and read back before notification IPC. Capacity never evicts
+an existing entry. All file I/O runs on the I/O dispatcher.
+
+Under the required serialized sole writer, the persisted latest render fences an old
+removal even if the OS card is absent. Cancelling that latest render also cancels an
+older still-visible predecessor. Without an inventory entry, removal compares the OS
+render. An absent card still receives cancellation. Namespace cleanup unions persisted
+IDs and currently active tags, including malformed old cards, without old-account
+decryption; unrelated application notifications remain untouched. Only completed
+cancellation clears the inventory. Corruption allows best-effort visible cleanup but
+throws and preserves the bad file, so the application owner cannot reopen its gate.
+
+The caller must serialize submission/removal/cleanup and cancel and join obsolete work.
+No separate writer may bypass this inventory. OS cancellation and local persistence are
+not one transaction; cancellation results do not prove a prior alert never happened.
 
 ## Verification and integration boundary
 
@@ -55,6 +68,10 @@ and RemoteInput with fictional strings and no HRIS account/provider. It covers d
 permission, private/public versions, stable replay, new-render alerts, stale cancellation,
 real reply extraction, immutable-action injection rejection, hash collisions, preserved
 same-render envelopes, malformed input, namespace cleanup and a disabled channel.
+The subsequent pending-inventory probe adds real-file adapter reopen, absent-card stale
+removal, cancellation of an older visible predecessor, capacity and corruption checks.
+Absence/predecessor cases use explicit fixture OS calls; capacity uses a synthetic
+64-reference file. These are not OS queue-stall, killed-process or power-cut injections.
 The driver requires an explicit emulator serial plus qemu/boot checks before installation;
 it clears only the separately packaged fixture's data, and never targets the user phone.
 
@@ -62,6 +79,8 @@ it clears only the separately packaged fixture's data, and never targets the use
 interop cases in hosted native HRIS CI. Raw notification IPC proof does not replace
 those tests, or prove notification-specific retained-input process death. See
 [recorded evidence](measurements/native-notification-actions-2026-11-02.json).
+The [inventory increment](measurements/native-notification-pending-2026-11-03.json)
+records16 native behavior groups across two scenarios, including the five new groups.
 
 Next, connect the HRIS journal and an application-owned serialized lease with parent,
 company, source/settings/read and foreground-thread invalidation. Add bounded private

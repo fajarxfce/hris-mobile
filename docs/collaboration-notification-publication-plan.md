@@ -98,8 +98,10 @@ watermarks. Keep acquired priority hints until publication uncertainty is recove
 ordinary missed-hint recovery and initial-sync/backfill suppression need explicit rules.
 
 
-Before wiring, verify cleanup of notifications accepted into the OS queue but not yet
-reported active, including process restart. The raw source currently clears active
-entries only and treats an absent exact render as no-op. Durable opaque pending IDs
-independent of account decryption may be necessary; no private text/tokens belong there.
-Do not claim this coverage from the existing active-card raw proof or fake owner tests.
+The raw source now persists a bounded opaque pending-ID inventory before OS submission
+and cancels absent IDs. Cleanup is independent of account decryption; no private text or
+tokens belong there. Actual native tests cover file reopen, synthetic absence/older
+presentation, stale render fencing, capacity and corrupt-file cleanup. These supplement
+the fake owner tests, but do not inject a stalled OS queue, killed notification-input
+process or power cut. Notification-specific OS-death replay remains required before
+activation; retain the distinction in acceptance evidence.

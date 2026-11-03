@@ -1,5 +1,23 @@
 # Validation
 
+## Android pending notification inventory — 3 November 2026
+
+[Opaque no-backup inventory](native-notification-actions.md) passes16 actual API35
+behavior groups across two isolated fixture scenarios. Adapter-file reopen, stale
+removal while absent, older visible predecessor cleanup, capacity and corruption are
+covered with explicit synthetic setups; no OS queue-stall/process-death claim.
+Root checks pass3592 desktop/518 suites,230 Android-host/37, six proof-host/one,
+ten build-logic/two and18 browser/five; zero failures/errors/skips. Focused assembly,
+lint and quality pass with47 existing lint warnings/no errors.
+[Evidence](measurements/native-notification-pending-2026-11-03.json) records frozen
+inputs,415 fresh full-check cases, native results and owned-emulator cleanup.
+
+Earlier raw-source db74e22d also passes [audited full Apple](measurements/native-notification-actions-apple-2026-11-02.json):
+930 simulator cases/104 suites and full Xcode1336s,175 source hashes and GitHub artifact
+digest verified. That run excludes the subsequent mechanical owner and pending index.
+HRIS notification/callback/review activation and notification-input OS-death proof remain
+pending. No product APK or phone install in this increment; release19 remains installed.
+
 ## Application notification surface lifetime — 2 November 2026
 
 The [mechanical owner](collaboration-notification-surface-owner.md) passes17 common
