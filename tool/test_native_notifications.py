@@ -196,7 +196,8 @@ class NotificationInputProcessOwnershipTest(unittest.TestCase):
             return ''
         if command[:3] == ('shell', 'am', 'instrument'):
             self.files['instrumentation'] = {'complete': True}
-            turns = [{'turn': 1, 'result': 'Complete', 'protectedRows': 0, 'reviewRows': 1}]
+            turns = [{'turn': 1, 'result': 'Complete', 'protectedRows': 0, 'reviewRows': 1,
+                      'reviewStates': ['SessionChanged']}]
             self.files['reply-recovery'] = {'turns': turns}
             self.files['reply-verified'] = {'complete': True, 'cleanedUp': True,
                 'pid': self.process(), 'protectedRowsBeforeRecovery': 1,
@@ -250,13 +251,26 @@ class NotificationInputProcessOwnershipTest(unittest.TestCase):
 
 
 class NotificationRecoveryTurnsTest(unittest.TestCase):
-    def turn(self, number, result='Retry', protected=1, reviewed=0):
-        return dict(turn=number, result=result, protectedRows=protected, reviewRows=reviewed)
+    def turn(self, number, result='Retry', protected=1, reviewed=0, state='SessionChanged'):
+        return dict(turn=number, result=result, protectedRows=protected, reviewRows=reviewed,
+                    reviewStates=[state] * reviewed)
 
     def test_subsequent_finite_turn_can_finish_the_exact_copy(self):
         proof.validate_input_recovery_turns([
-            self.turn(1), self.turn(2, protected=1, reviewed=1),
+            self.turn(1, protected=1, reviewed=1, state='Pending'),
+            self.turn(2, protected=0, reviewed=1, state='Pending'),
             self.turn(3, 'Complete', protected=0, reviewed=1)])
+
+    def test_missing_inconsistent_or_wrong_review_states_cannot_pass(self):
+        for states in (None, [], ['SessionChanged', 'SessionChanged'], ['MessageChanged']):
+            turn = self.turn(1, 'Complete', 0, 1)
+            turn['reviewStates'] = states
+            with self.subTest(states=states), self.assertRaises(AssertionError):
+                proof.validate_input_recovery_turns([turn])
+
+    def test_completed_unreviewed_copy_is_not_accepted(self):
+        with self.assertRaises(AssertionError):
+            proof.validate_input_recovery_turns([self.turn(1, 'Complete', 0, 1, 'Pending')])
 
     def test_loss_or_duplicate_copies_cannot_pass(self):
         for first in [self.turn(1, protected=0), self.turn(1, reviewed=2)]:

@@ -1,5 +1,42 @@
 # Agent continuation — HRIS Mobile
 
+## Native checkpoint correction accepted locally — 3 November 2026
+
+The checkpoint fixture/host driver now record and validate intermediate review states.
+Incomplete Retry may retain an exact unreviewed account copy; Complete still requires
+original removal and exactly one SessionChanged copy, with no draft/resolution.
+[Evidence](measurements/chat-input-checkpoint-native-2026-11-03.json): local native
+100.163s PASS, raw16/runtime4/three process deaths/five actions, all three PNGs actually
+viewed. This run completes in one758ms turn; Pending interruptions are host regression
+coverage, not observed native behavior. Owned emulator2180707 stopped/transport absent.
+
+Full xvfb root/proof/build/lint PASS127.791s, inputs unchanged. Reports including reused
+results:3997 desktop/230 Android host/18 proof-host/10 build-logic, zero failures/errors/
+skips;18 proof-host cases freshly executed. Product lint0, proof47 existing warnings.
+Twenty-seven native-driver regressions pass. Production/common source is unchanged;
+Apple41651053921 remains applicable, and installed phone25 must not be reinstalled.
+The local APK also contains an uninvoked product-peer scenario outside this checkpoint
+commit. Push this atomic checkpoint, audit the automatically triggered exact-source
+Native replacement; old41650906105 stays REJECTED. Prepared audit in
+.work/chat-input-checkpoint-hosted-2026-11-03 expects18 proof-host and reviewStates.
+
+Actual-product FCM is still UNACCEPTED. Platform run6 passes fictional password login,
+one native FCM registration and the Chat is ready UI, then setup navigation times out;
+owned peer/emulator cleanup passes. Run5 emulator timeout/failed combined cleanup and
+all earlier attempts are retained. Platform now has20 passing driver guards and uses
+snapshot-based activation plus failure frames. Mobile peer4 APK is prepared from the
+full quality run; its peer source/MatrixProofInstrumentation remain UNCOMMITTED.
+
+NEW CONFIRMED PRODUCT GAP: ActivateCollaborationPusher is bound and tested but has no
+production caller. Native FCM registration therefore does not establish the Matrix
+chat push binding. Wire a finite, scoped application activation path with cancellation,
+current registration/session/runtime ownership and explicit retry behavior. Do not call
+it from the fixture to bypass the product gap. Then repeat actual product FCM acceptance,
+full new-source checks/Apple, and deliver next validated phone26+ with notice/install-only.
+No phone UI, real employee message, Firebase account or live configuration was touched.
+Platform runtime304/schema116/chat push OFF and Starter9959c1d unchanged. Continue all54
+groups; voice/video/meeting UI still absent. No generic Starter port for HRIS policy.
+
 ## Reviewed-send Apple accepted; owned FCM preparation continues — 3 November 2026
 
 Apple41651053921 at a3f39be7 is ACCEPTED:1,094 simulator/123 suites,384 source hashes,

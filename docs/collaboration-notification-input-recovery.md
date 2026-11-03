@@ -55,7 +55,26 @@ its existing scenarios do not inject notification reply callbacks.
 
 The [Android callback proof](collaboration-notification-callbacks.md) now exercises
 native receiver ownership, generic capture feedback and retained input across three
-ordinary process deaths. Review UI, SystemUI reply status and complete native action
-routing remain next. Production notification hosts remain
-unbound and chat push stays disabled until those flows are usable. No user-phone
-interaction or physical iPhone execution is implied by these checks.
+ordinary process deaths. The product host and reviewed-reply UI are now implemented;
+see [reviewed replies](collaboration-reviewed-replies.md) and the current handoff.
+Actual product FCM delivery remains a separate pending gate, so live chat push stays
+disabled. No user-phone interaction or physical iPhone execution is implied here.
+
+## Intermediate Android recovery checkpoints
+
+Transfer and old-family review are separate durable commits. An interrupted finite
+worker turn can retain the original protected input, one exact account copy, or both.
+That copy may still await review. The native fixture accepts this intermediate state
+only during an incomplete Retry; text/token equality and absence of a draft/resolution
+remain mandatory. Complete requires exactly one SessionChanged copy and removal of
+the original protected input. Loss, duplication and other review reasons fail.
+
+Each turn now records reviewStates alongside protected/account row counts. The host
+driver validates their correspondence and rejects missing or pending final review.
+Three checkpoint unit cases and 27 driver regressions cover these boundaries.
+[Local Android evidence](measurements/chat-input-checkpoint-native-2026-11-03.json)
+passes the existing 16 raw cases, four runtime cases, three process deaths and five
+native actions with actual SystemUI Reply. All three screenshots were inspected.
+This execution completed in one 758ms turn; it does not claim to have observed the
+intermediate Pending state. Hosted run41650906105 remains rejected, and a matching
+replacement is required. No production worker deadline or policy changed.

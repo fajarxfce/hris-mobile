@@ -292,16 +292,24 @@ internal class NotificationInputProof(private val context: Context) {
                     .put("milliseconds", elapsed)
                     .put("protectedRows", if (protected == null) 0 else 1)
                     .put("reviewRows", saved.size)
+                    .put("reviewStates", JSONArray(saved.map { it.review?.name ?: "Pending" }))
             )
             write("reply-recovery", JSONObject().put("turns", turns))
             // Every observed boundary retains the exact original or its one reviewed copy.
             check(protected == null || protected == original)
-            check(saved.size <= 1)
+            check(
+                validNotificationInputCheckpoint(
+                    result == SyncResult.Complete,
+                    if (protected == null) 0 else 1,
+                    saved.map { it.review },
+                )
+            )
             check(
                 saved.all {
                     it.candidate.text == original.reply.text &&
                         it.candidate.token == original.reply.token &&
-                        it.review == CollaborationNotificationReplyReview.SessionChanged
+                        it.draft == null &&
+                        it.resolution == null
                 }
             )
             check(protected != null || saved.size == 1)

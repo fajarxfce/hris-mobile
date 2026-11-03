@@ -481,5 +481,63 @@
   "limits": [
     "No success inferred from earlier418 or local a3 tests. Product FCM acceptance remains separate; live chat push OFF.",
     "The new product FCM peer/checkpoint fixture changes are uncommitted and not proved by this rejected run."
-  ]
+  ],
+  "rawAndroid": {
+    "apkSha256": "33906c7e05dcae5c3caaf64ac2c64a4e106397d59ff2e80761870335840728e2",
+    "sdk": 35,
+    "scenarios": [
+      {
+        "name": "native-notification-denied",
+        "seconds": 5.133,
+        "complete": true,
+        "sdk": 35,
+        "cases": [
+          "permission-denial-does-not-submit"
+        ],
+        "cleanedUp": true,
+        "scope": "Raw Android IPC only; no HRIS admission, durable reply, OS-death replay or application wiring"
+      },
+      {
+        "name": "native-notification",
+        "seconds": 13.09,
+        "complete": true,
+        "sdk": 35,
+        "cases": [
+          "actual-private-display-and-immutable-public-version",
+          "same-render-replay-updates-stable-card",
+          "stale-removal-preserves-new-render-and-new-render-may-alert",
+          "same-render-reissue-keeps-original-immutable-envelope",
+          "real-remote-input-and-old-render-envelope-remain-distinct",
+          "immutable-actions-ignore-injected-remote-input",
+          "colliding-java-hashes-cannot-retarget-pending-intents",
+          "missing-oversized-or-cross-component-input-is-rejected",
+          "namespace-cleanup-preserves-unrelated-application-notifications",
+          "disabled-channel-is-distinct-from-submitted",
+          "newer-inventory-fences-stale-removal-while-os-card-is-absent",
+          "opaque-no-backup-inventory-reopens-and-clears-without-account-data",
+          "latest-owned-inventory-can-cancel-its-older-visible-predecessor",
+          "full-opaque-inventory-does-not-evict-or-submit",
+          "corrupt-inventory-withholds-new-posts-and-cleans-visible-cards"
+        ],
+        "cleanedUp": true,
+        "scope": "Raw Android IPC only; no HRIS admission, durable reply, OS-death replay or application wiring"
+      }
+    ],
+    "runtimeComposition": {
+      "seconds": 3.928,
+      "complete": true,
+      "cleanedUp": true,
+      "cases": [
+        "english-copy-and-native-actions",
+        "language-change-without-host-replacement",
+        "system-language-resource-resolution",
+        "one-application-host-and-joined-native-cleanup"
+      ],
+      "scope": "Android runtime composition and OS resources; fake admission/settings storage, no provider/account/actions"
+    },
+    "secondsUntilFailure": 69.05,
+    "fixtureAbsent": true,
+    "fixtureUninstalled": true,
+    "fixtureDataCleared": true
+  }
 }

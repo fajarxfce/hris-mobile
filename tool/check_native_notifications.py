@@ -210,7 +210,11 @@ def validate_input_recovery_turns(turns):
         counts = [turn.get("protectedRows"), turn.get("reviewRows")]
         assert all(type(value) is int and 0 <= value <= 1 for value in counts)
         assert sum(counts) >= 1, "Captured input disappeared before its reviewed copy"
+        states = turn.get("reviewStates")
+        assert isinstance(states, list) and len(states) == counts[1], "Missing review checkpoint states"
+        assert all(state in ("Pending", "SessionChanged") for state in states)
     assert turns[-1]["protectedRows"] == 0 and turns[-1]["reviewRows"] == 1
+    assert turns[-1]["reviewStates"] == ["SessionChanged"], "Completed input still awaits review"
 
 
 def aapt_path(args):
