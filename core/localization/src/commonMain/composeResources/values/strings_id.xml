@@ -993,4 +993,23 @@
     <string name="chat_draft_leave_id">Keluar tanpa menyimpan</string>
     <string name="chat_draft_leave_explanation_id">Perubahan terakhir belum dapat disimpan. Keluar dari percakapan dan hanya mempertahankan draf terakhir yang tersimpan?</string>
     <string name="chat_draft_invalid_id">Periksa panjang dan karakter pesan.</string>
+    <string name="chat_saved_replies_id">Balasan tersimpan</string>
+    <string name="chat_saved_reply_id">Balasan tersimpan</string>
+    <string name="chat_saved_replies_hint_id">Balasan dari notifikasi untuk perusahaan ini.</string>
+    <string name="chat_saved_replies_empty_id">Belum ada balasan tersimpan</string>
+    <string name="chat_reply_waiting_id">Menunggu diproses</string>
+    <string name="chat_reply_session_changed_id">Sesi masuk berubah. Tinjau balasan ini sebelum melanjutkan.</string>
+    <string name="chat_reply_message_changed_id">Operasi ini sudah digunakan balasan lain. Buka chat untuk memeriksa statusnya.</string>
+    <string name="chat_reply_context_unavailable_id">Percakapan atau pesan asal belum tersedia. Balasan tetap tersimpan.</string>
+    <string name="chat_reply_waiting_hint_id">Balasan tersimpan di perangkat ini. Pengiriman belum dikonfirmasi.</string>
+    <string name="chat_reply_body_id">Balasan Anda</string>
+    <string name="chat_reply_open_chat_id">Buka chat</string>
+    <string name="chat_reply_discard_id">Buang balasan tersimpan</string>
+    <string name="chat_reply_discard_title_id">Buang balasan ini?</string>
+    <string name="chat_reply_discard_hint_id">Balasan tersimpan akan dihapus agar tidak dikirim nanti. Pesan yang sudah dikirim tidak dapat dibatalkan di sini.</string>
+    <string name="chat_reply_discarded_id">Balasan tersimpan dibuang.</string>
+    <string name="chat_reply_absent_id">Balasan ini tidak lagi tersimpan. Periksa statusnya di percakapan.</string>
+    <string name="chat_reply_already_processing_id">Pesan ini sudah mulai dikirim. Buka chat untuk memeriksa statusnya.</string>
+    <string name="chat_reply_discard_unconfirmed_id">Penghapusan belum dapat dikonfirmasi. Muat ulang atau coba lagi.</string>
+    <string name="chat_reply_needs_review_id">Perlu ditinjau</string>
 </resources>

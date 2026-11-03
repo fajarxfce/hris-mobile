@@ -23,8 +23,50 @@ class EncryptedCollaborationMessageRepository(
 ) :
     CollaborationMessageRepository,
     CollaborationMessageCompletionRepository,
-    CollaborationMessageCancellationRepository {
+    CollaborationMessageCancellationRepository,
+    CollaborationMessagePreventionRepository {
     private val insertions = Mutex()
+
+    override suspend fun prevent(
+        access: CollaborationLocalAccess,
+        intent: CollaborationMessageIntent,
+    ) = safeStorageCall {
+        intent.toDto(access)
+        val scope = messageScope(access)
+        val partition = messagePartition(access)
+        insertions.withLock {
+            val (active, archived) = existing(scope, partition, intent.id)
+            if (active != null) return@withLock false
+            withKey(access, create = archived == null) { codec ->
+                if (archived != null) prevented(codec.archivedRecord(archived), intent)
+                else {
+                    val raw =
+                        CommandRecord(
+                            partition,
+                            intent.id,
+                            intent.id,
+                            intent.orderKey(),
+                            codec.request(intent),
+                            codec.state(intent.id, 0, CollaborationMessageState.Queued.toDto()),
+                        )
+                    val proof = codec.cancellation(raw)
+                    currentCoroutineContext().ensureActive()
+                    commands.archiveAbsent(scope, raw, proof)
+                    // Reproduce the authenticated outcome even if a competing writer won.
+                    commands.archived(scope, partition, intent.id)?.let {
+                        prevented(codec.archivedRecord(it), intent)
+                    } == true
+                }
+            }
+        }
+    }
+
+    private fun prevented(record: CollaborationMessageRecord, intent: CollaborationMessageIntent) =
+        record.state == CollaborationMessageState.Cancelled &&
+            record.intent.id == intent.id &&
+            record.intent.owner == intent.owner &&
+            record.intent.conversationId == intent.conversationId &&
+            record.intent.text == intent.text
 
     override fun observe(
         access: CollaborationLocalAccess,

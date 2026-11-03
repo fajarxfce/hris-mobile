@@ -50,6 +50,13 @@ interface CommandStore {
      */
     suspend fun archive(scope: CommandScope, expected: CommandRecord, evidence: String): Boolean
 
+    /**
+     * Retains immutable evidence without ever publishing pending work. An active ID or occupied
+     * resource returns false; an existing archive succeeds only for the exact record/evidence.
+     * Shares the insertion transaction, so a competing insert cannot bypass the retained ID.
+     */
+    suspend fun archiveAbsent(scope: CommandScope, record: CommandRecord, evidence: String): Boolean
+
     /** Only an existence bit, used to avoid replacing a lost key over retained ciphertext. */
     suspend fun containsRecords(): Boolean
 }

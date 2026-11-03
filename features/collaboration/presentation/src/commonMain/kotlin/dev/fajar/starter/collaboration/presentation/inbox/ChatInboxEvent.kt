@@ -11,6 +11,8 @@ sealed interface ChatInboxEvent {
 
     data object PreviousRequested : ChatInboxEvent
 
+    data object SavedRepliesRequested : ChatInboxEvent
+
     data object NewChatRequested : ChatInboxEvent
 
     data object BackRequested : ChatInboxEvent

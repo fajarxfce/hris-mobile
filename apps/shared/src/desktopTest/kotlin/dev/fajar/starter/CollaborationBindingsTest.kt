@@ -407,8 +407,23 @@ class CollaborationBindingsTest {
                 )
                 assertNotNull(container.koin.get<ObserveCollaborationList>())
                 assertNotNull(container.koin.get<ObserveCollaborationAccess>())
+                assertNotNull(container.koin.get<ObserveCollaborationSavedReplies>())
+                assertNotNull(container.koin.get<DiscardCollaborationNotificationReply>())
+                assertNotNull(
+                    container.koin.get<
+                        dev.fajar.starter.collaboration.domain.repositories.CollaborationMessagePreventionRepository
+                    >()
+                )
                 val screens = ViewModelStore()
                 try {
+                    screens.put(
+                        "saved-replies",
+                        container.koin.get<
+                            dev.fajar.starter.collaboration.presentation.replies.SavedRepliesViewModel
+                        > {
+                            parametersOf("selection", "")
+                        },
+                    )
                     screens.put(
                         "thread",
                         container.koin.get<ChatThreadViewModel> {

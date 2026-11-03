@@ -9,6 +9,7 @@ import dev.fajar.starter.database.*
 import kotlin.io.encoding.Base64
 import kotlin.test.*
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 
@@ -421,6 +422,41 @@ abstract class CollaborationNotificationReplyStorageContract {
         f.reopen()
         assertEquals(retained, expect(f.inputs().get(f.inputAccess(), retained.id)))
     }
+
+    @Test
+    fun observationSignalsRetentionHoldAndRemovalWithoutReturningPrivateContent() =
+        withDatabase { f ->
+            coroutineScope {
+                val signals =
+                    kotlinx.coroutines.channels.Channel<AppResult<Unit>>(
+                        kotlinx.coroutines.channels.Channel.UNLIMITED
+                    )
+                val repo = f.inputs()
+                val job = launch {
+                    repo.observeChanges(f.inputAccess()).collect { signals.send(it) }
+                }
+                try {
+                    assertEquals(AppResult.Success(Unit), signals.receive())
+                    val input = f.retain(f.candidate())
+                    assertEquals(AppResult.Success(Unit), signals.receive())
+                    assertEquals(
+                        AppResult.Success(true),
+                        repo.hold(
+                            f.inputAccess(),
+                            input,
+                            CollaborationNotificationReplyReview.SessionChanged,
+                        ),
+                    )
+                    assertEquals(AppResult.Success(Unit), signals.receive())
+                    val held = assertNotNull(expect(repo.get(f.inputAccess(), input.id)))
+                    assertEquals(AppResult.Success(true), repo.remove(f.inputAccess(), held))
+                    assertEquals(AppResult.Success(Unit), signals.receive())
+                } finally {
+                    job.cancelAndJoin()
+                    signals.cancel()
+                }
+            }
+        }
 
     private fun CollaborationHistoryFixture.inputAccess() =
         CollaborationRecoveryAccess(access.sessionId, access.audience, access.accountId)

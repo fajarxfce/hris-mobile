@@ -1,6 +1,8 @@
 package dev.fajar.starter.collaboration.presentation.inbox
 
 sealed interface ChatInboxEffect {
+    data object SavedReplies : ChatInboxEffect
+
     data object NewChat : ChatInboxEffect
 
     data object Back : ChatInboxEffect

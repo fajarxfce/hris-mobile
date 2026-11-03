@@ -58,6 +58,14 @@ fun ChatInboxPage(
             )
         },
     ) {
+        item("saved-replies") {
+            AppTextButton(
+                appString(AppString.ChatSavedReplies),
+                { onEvent(ChatInboxEvent.SavedRepliesRequested) },
+                modifier = Modifier.padding(horizontal = 8.dp),
+                enabled = !state.restricted,
+            )
+        }
         if (
             (state.loading && state.page == null) ||
                 (state.page?.items?.isEmpty() == true && state.refreshing)

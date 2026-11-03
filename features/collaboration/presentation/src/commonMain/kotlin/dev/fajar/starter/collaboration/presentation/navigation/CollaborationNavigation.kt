@@ -12,6 +12,8 @@ import dev.fajar.starter.collaboration.presentation.inbox.*
 import dev.fajar.starter.collaboration.presentation.inbox.pages.ChatInboxPage
 import dev.fajar.starter.collaboration.presentation.participants.*
 import dev.fajar.starter.collaboration.presentation.participants.pages.ChatParticipantsPage
+import dev.fajar.starter.collaboration.presentation.replies.*
+import dev.fajar.starter.collaboration.presentation.replies.pages.SavedRepliesPage
 import dev.fajar.starter.collaboration.presentation.setup.*
 import dev.fajar.starter.collaboration.presentation.setup.pages.ChatSetupPage
 import dev.fajar.starter.collaboration.presentation.thread.*
@@ -23,6 +25,10 @@ import org.koin.core.parameter.parametersOf
 
 @Serializable data object ChatInboxRoute
 
+@Serializable data object ChatSavedRepliesRoute
+
+@Serializable data class ChatSavedReplyRoute(val id: String)
+
 @Serializable data object ChatParticipantsRoute
 
 @Serializable data object ChatSetupRoute
@@ -32,6 +38,8 @@ import org.koin.core.parameter.parametersOf
 fun NavGraphBuilder.collaborationRoutes(
     workspaceId: String,
     onNewChat: () -> Unit,
+    onSavedReplies: () -> Unit,
+    onSavedReply: (String) -> Unit,
     onConversation: (String) -> Unit,
     onSelectedConversation: (String) -> Unit,
     onSetup: () -> Unit,
@@ -44,7 +52,21 @@ fun NavGraphBuilder.collaborationRoutes(
             null
         },
 ) {
-    composable<ChatInboxRoute> { ChatInboxEntry(workspaceId, onNewChat, onConversation, onBack) }
+    composable<ChatInboxRoute> {
+        ChatInboxEntry(workspaceId, onNewChat, onSavedReplies, onConversation, onBack)
+    }
+    composable<ChatSavedRepliesRoute> {
+        SavedRepliesEntry(workspaceId, "", onSavedReply, onConversation, onBack)
+    }
+    composable<ChatSavedReplyRoute> { entry ->
+        SavedRepliesEntry(
+            workspaceId,
+            entry.toRoute<ChatSavedReplyRoute>().id,
+            onSavedReply,
+            onConversation,
+            onBack,
+        )
+    }
     composable<ChatParticipantsRoute> {
         ChatParticipantsEntry(workspaceId, onSelectedConversation, onBack)
     }
@@ -64,6 +86,7 @@ fun NavGraphBuilder.collaborationRoutes(
 private fun ChatInboxEntry(
     workspaceId: String,
     onNewChat: () -> Unit,
+    onSavedReplies: () -> Unit,
     onConversation: (String) -> Unit,
     onBack: () -> Unit,
 ) {
@@ -78,6 +101,7 @@ private fun ChatInboxEntry(
         when (it) {
             ChatInboxEffect.Back -> onBack()
             ChatInboxEffect.NewChat -> onNewChat()
+            ChatInboxEffect.SavedReplies -> onSavedReplies()
             ChatInboxEffect.ScrollToStart -> list.requestScrollToItem(0)
             is ChatInboxEffect.OpenConversation -> onConversation(it.id)
         }
@@ -156,4 +180,30 @@ private fun ChatThreadEntry(
     ChatThreadFocusObserver(state, conversationId, onThreadFocus)
     ChatThreadViewportObserver(state, list, vm::onEvent)
     ChatThreadPage(state, list, vm::onEvent)
+}
+
+@Composable
+private fun SavedRepliesEntry(
+    workspaceId: String,
+    replyId: String,
+    onReply: (String) -> Unit,
+    onConversation: (String) -> Unit,
+    onBack: () -> Unit,
+) {
+    val vm =
+        koinViewModel<SavedRepliesViewModel>(parameters = { parametersOf(workspaceId, replyId) })
+    val state by vm.state.collectAsStateWithLifecycle()
+    val list = rememberLazyListState()
+    LifecycleStartEffect(vm) {
+        vm.onEvent(SavedRepliesEvent.Entered)
+        onStopOrDispose { vm.onEvent(SavedRepliesEvent.Stopped) }
+    }
+    CollectEffects(vm.effects) {
+        when (it) {
+            SavedRepliesEffect.Back -> onBack()
+            is SavedRepliesEffect.OpenReply -> onReply(it.id)
+            is SavedRepliesEffect.OpenChat -> onConversation(it.conversationId)
+        }
+    }
+    SavedRepliesPage(state, list, vm::onEvent)
 }

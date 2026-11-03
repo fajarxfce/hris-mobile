@@ -345,6 +345,154 @@ abstract class CollaborationCancellationStorageContract {
         assertEquals(CollaborationMessageState.Cancelled, f.read().state)
     }
 
+    @Test
+    fun preventingAbsentReplyNeverPublishesPendingWorkAndSurvivesReauthentication() =
+        withDatabase { f ->
+            assertEquals(AppResult.Success(true), f.repo.prevent(f.access, f.intent))
+            val original = f.read()
+            assertEquals(CollaborationMessageState.Cancelled, original.state)
+            assertTrue(f.rows().isEmpty())
+            val archived = assertNotNull(f.archive())
+            assertFalse(archived.record.request.contains(f.intent.text))
+            f.reopen(f.access.copy(sessionId = "restored"))
+            assertEquals(original, f.read())
+            assertEquals(
+                AppResult.Success(true),
+                f.repo.prevent(
+                    f.access,
+                    f.intent.copy(createdAt = f.intent.createdAt + kotlin.time.Duration.parse("1h")),
+                ),
+            )
+            assertEquals(archived, f.archive())
+            assertEquals(AppResult.Success(null), f.repo.readCompletion(f.access, f.intent.id))
+            f.insert()
+            assertTrue(f.rows().isEmpty())
+            assertEquals(original, f.read())
+            assertEquals(
+                AppResult.Success(false),
+                f.repo.prevent(f.access, f.intent.copy(text = "Different reply")),
+            )
+        }
+
+    @Test
+    fun preventingReplyCannotReplaceActiveQueuedOrStartedMessages() = withDatabase { f ->
+        f.insert()
+        val original = f.read()
+        assertEquals(AppResult.Success(false), f.repo.prevent(f.access, f.intent))
+        assertEquals(original, f.read())
+        assertNull(f.archive())
+    }
+
+    @Test
+    fun lostPreventionResponseRetainsPermanentFenceWithoutActiveRow() = withDatabase { f ->
+        val store = f.database.commands
+        val lost =
+            object : CommandStore by store {
+                override suspend fun archiveAbsent(
+                    scope: CommandScope,
+                    record: CommandRecord,
+                    evidence: String,
+                ): Boolean {
+                    assertTrue(store.archiveAbsent(scope, record, evidence))
+                    error("Fixture lost prevention response")
+                }
+            }
+        assertIs<AppResult.Failed>(f.repository(store = lost).prevent(f.access, f.intent))
+        f.reopen(f.access.copy(sessionId = "restored"))
+        assertEquals(AppResult.Success(true), f.repo.prevent(f.access, f.intent))
+        assertEquals(CollaborationMessageState.Cancelled, f.read().state)
+        assertTrue(f.rows().isEmpty())
+    }
+
+    @Test
+    fun preventionWinningAgainstAnInflightInsertionNeverQueuesTheReply() = withDatabase { f ->
+        val entered = CompletableDeferred<Unit>()
+        val release = CompletableDeferred<Unit>()
+        val store = f.database.commands
+        val held =
+            object : CommandStore by store {
+                override suspend fun insert(
+                    scope: CommandScope,
+                    record: CommandRecord,
+                ): CommandInsertResult {
+                    entered.complete(Unit)
+                    release.await()
+                    return store.insert(scope, record)
+                }
+            }
+        coroutineScope {
+            val insertion = async { f.repository(store = held).insert(f.access, f.intent) }
+            try {
+                entered.await()
+                assertEquals(AppResult.Success(true), f.repo.prevent(f.access, f.intent))
+            } finally {
+                release.complete(Unit)
+            }
+            assertIs<AppResult.Failed>(insertion.await())
+        }
+        assertEquals(CollaborationMessageState.Cancelled, f.read().state)
+        assertTrue(f.rows().isEmpty())
+    }
+
+    @Test
+    fun insertionWinningAgainstPreventionPreservesItsExactPendingRow() = withDatabase { f ->
+        val entered = CompletableDeferred<Unit>()
+        val release = CompletableDeferred<Unit>()
+        val store = f.database.commands
+        val held =
+            object : CommandStore by store {
+                override suspend fun archiveAbsent(
+                    scope: CommandScope,
+                    record: CommandRecord,
+                    evidence: String,
+                ): Boolean {
+                    entered.complete(Unit)
+                    release.await()
+                    return store.archiveAbsent(scope, record, evidence)
+                }
+            }
+        coroutineScope {
+            val prevention = async { f.repository(store = held).prevent(f.access, f.intent) }
+            try {
+                entered.await()
+                f.insert()
+            } finally {
+                release.complete(Unit)
+            }
+            assertEquals(AppResult.Success(false), prevention.await())
+        }
+        assertEquals(CollaborationMessageState.Queued, f.read().state)
+        assertEquals(1, f.rows().size)
+        assertNull(f.archive())
+    }
+
+    @Test
+    fun cancellationAfterPreventionCommitJoinsBeforeRetryAndPreservesProof() = withDatabase { f ->
+        val entered = CompletableDeferred<Unit>()
+        val store = f.database.commands
+        val held =
+            object : CommandStore by store {
+                override suspend fun archiveAbsent(
+                    scope: CommandScope,
+                    record: CommandRecord,
+                    evidence: String,
+                ): Boolean {
+                    assertTrue(store.archiveAbsent(scope, record, evidence))
+                    entered.complete(Unit)
+                    awaitCancellation()
+                }
+            }
+        coroutineScope {
+            val job = launch { f.repository(store = held).prevent(f.access, f.intent) }
+            entered.await()
+            job.cancelAndJoin()
+        }
+        f.reopen(f.access.copy(sessionId = "restored"))
+        assertEquals(AppResult.Success(true), f.repo.prevent(f.access, f.intent))
+        assertEquals(CollaborationMessageState.Cancelled, f.read().state)
+        assertTrue(f.rows().isEmpty())
+    }
+
     private suspend fun MessageStorageFixture.archive() =
         database.commands.archived(messageScope(access), messagePartition(access), intent.id)
 

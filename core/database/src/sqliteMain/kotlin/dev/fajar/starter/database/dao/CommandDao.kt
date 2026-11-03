@@ -188,4 +188,34 @@ abstract class CommandDao {
         check(delete(expected.accountKey, expected.partition, expected.id, expected.revision) == 1)
         return true
     }
+
+    @Transaction
+    open suspend fun archiveAbsent(
+        session: String,
+        entry: CommandEntity,
+        evidence: String,
+    ): Boolean {
+        if (!admitted(session, entry.accountKey)) return false
+        val candidate =
+            CommandArchiveEntity(
+                entry.accountKey,
+                entry.partition,
+                entry.id,
+                entry.resourceId,
+                entry.sortKey,
+                entry.request,
+                entry.state,
+                entry.revision,
+                evidence,
+            )
+        val previous = completed(entry.accountKey, entry.partition, entry.id)
+        if (previous != null) return previous == candidate
+        if (
+            record(entry.accountKey, entry.partition, entry.id) != null ||
+                occupied(entry.accountKey, entry.partition, entry.resourceId)
+        )
+            return false
+        retain(candidate)
+        return true
+    }
 }

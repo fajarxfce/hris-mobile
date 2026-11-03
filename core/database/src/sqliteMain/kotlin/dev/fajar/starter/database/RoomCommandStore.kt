@@ -129,6 +129,28 @@ internal class RoomCommandStore(private val database: StarterDatabase) : Command
     }
 
     override suspend fun containsRecords() = dao.containsRecords()
+
+    override suspend fun archiveAbsent(
+        scope: CommandScope,
+        record: CommandRecord,
+        evidence: String,
+    ): Boolean {
+        validateCommandArchive(scope, record, evidence)
+        return dao.archiveAbsent(
+            scope.sessionId,
+            CommandEntity(
+                scope.accountKey,
+                record.partition,
+                record.id,
+                record.resourceId,
+                record.sortKey,
+                record.request,
+                record.state,
+                record.revision,
+            ),
+            evidence,
+        )
+    }
 }
 
 private fun CommandEntity.toRecord() =

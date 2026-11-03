@@ -10,6 +10,29 @@ import kotlinx.coroutines.test.runTest
 
 class CompleteCollaborationNotificationReplyTest {
     @Test
+    fun exactCancelledArchiveRetiresDuplicateWithoutConversationAndStillHonorsDenial() = runTest {
+        val f = CollaborationNotificationReplyCompletionFixture()
+        f.seed(CollaborationMessageState.Cancelled)
+        f.local.summary = null
+        f.local.afterConversation = { error("No conversation lookup for cancellation") }
+        f.local.gate.value = CollaborationListAdmission("denied", f.local.denied)
+        assertEquals(AppResult.Failed(f.local.denied), f.complete())
+        assertEquals(f.expected, f.saved)
+        f.local.gate.value = CollaborationListAdmission("admitted", null)
+        assertEquals(
+            AppResult.Success(
+                CollaborationNotificationReplyCompletion.Retired(
+                    CollaborationMessageState.Cancelled
+                )
+            ),
+            f.complete(),
+        )
+        assertNull(f.saved)
+        assertEquals(0, f.native.opens)
+        assertEquals(0, f.local.insertions)
+    }
+
+    @Test
     fun exactDurableAndArchivedStatesRetireInputWithoutHistoryOrLiveCredentials() = runTest {
         val device = CollaborationNotificationReplyCompletionFixture().device()
         for (state in

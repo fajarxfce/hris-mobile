@@ -11,7 +11,10 @@ import dev.fajar.starter.collaboration.domain.repositories.CollaborationNotifica
 import dev.fajar.starter.database.*
 import dev.fajar.starter.securestorage.*
 import dev.fajar.starter.storage.safeStorageCall
+import dev.fajar.starter.storage.safeStorageFlow
 import kotlin.uuid.Uuid
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.*
 import org.koin.core.annotation.*
 
 @Single
@@ -21,6 +24,26 @@ class EncryptedCollaborationNotificationReplyRepository(
     @Named("collaboration-history-content-key") credentials: AtomicCredentialStore,
 ) : CollaborationNotificationReplyRepository {
     private val keys = CollaborationHistoryKeys(replicas, cipher, credentials)
+
+    override fun observeChanges(access: CollaborationRecoveryAccess) =
+        safeStorageFlow(
+                flow {
+                    emitAll(
+                        replicas
+                            .observePublishedCheckpoint(
+                                recoveryScope(access),
+                                NOTIFICATION_REPLY_PARTITION,
+                            )
+                            .distinctUntilChanged()
+                            .map { Unit }
+                            .onCompletion { cause ->
+                                check(cause != null) { "Reply observation completed" }
+                            }
+                    )
+                }
+            )
+            .flowOn(Dispatchers.Default)
+            .buffer(0)
 
     override suspend fun retain(
         access: CollaborationRecoveryAccess,

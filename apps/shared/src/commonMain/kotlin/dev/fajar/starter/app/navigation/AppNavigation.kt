@@ -242,6 +242,12 @@ fun AppNavigation(navigation: ScopedNavigationState, incomingLinks: Flow<String>
                     }
                     collaborationRoutes(
                         stage.workspace.id,
+                        onSavedReplies = {
+                            controller.navigate(ChatSavedRepliesRoute) { launchSingleTop = true }
+                        },
+                        onSavedReply = {
+                            controller.navigate(ChatSavedReplyRoute(it)) { launchSingleTop = true }
+                        },
                         onThreadFocus = onThreadFocus,
                         onNewChat = {
                             controller.navigate(ChatParticipantsRoute) { launchSingleTop = true }

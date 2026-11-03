@@ -5,6 +5,58 @@ import org.jetbrains.compose.resources.StringResource
 
 /** Explicit pairs keep runtime language changes portable across Android, iOS, desktop and Web. */
 enum class AppString(val english: StringResource, val indonesian: StringResource) {
+    ChatReplyNeedsReview(
+        Res.string.chat_reply_needs_review_en,
+        Res.string.chat_reply_needs_review_id,
+    ),
+    ChatSavedReplies(Res.string.chat_saved_replies_en, Res.string.chat_saved_replies_id),
+    ChatSavedReply(Res.string.chat_saved_reply_en, Res.string.chat_saved_reply_id),
+    ChatSavedRepliesHint(
+        Res.string.chat_saved_replies_hint_en,
+        Res.string.chat_saved_replies_hint_id,
+    ),
+    ChatSavedRepliesEmpty(
+        Res.string.chat_saved_replies_empty_en,
+        Res.string.chat_saved_replies_empty_id,
+    ),
+    ChatReplyWaiting(Res.string.chat_reply_waiting_en, Res.string.chat_reply_waiting_id),
+    ChatReplySessionChanged(
+        Res.string.chat_reply_session_changed_en,
+        Res.string.chat_reply_session_changed_id,
+    ),
+    ChatReplyMessageChanged(
+        Res.string.chat_reply_message_changed_en,
+        Res.string.chat_reply_message_changed_id,
+    ),
+    ChatReplyContextUnavailable(
+        Res.string.chat_reply_context_unavailable_en,
+        Res.string.chat_reply_context_unavailable_id,
+    ),
+    ChatReplyWaitingHint(
+        Res.string.chat_reply_waiting_hint_en,
+        Res.string.chat_reply_waiting_hint_id,
+    ),
+    ChatReplyBody(Res.string.chat_reply_body_en, Res.string.chat_reply_body_id),
+    ChatReplyOpenChat(Res.string.chat_reply_open_chat_en, Res.string.chat_reply_open_chat_id),
+    ChatReplyDiscard(Res.string.chat_reply_discard_en, Res.string.chat_reply_discard_id),
+    ChatReplyDiscardTitle(
+        Res.string.chat_reply_discard_title_en,
+        Res.string.chat_reply_discard_title_id,
+    ),
+    ChatReplyDiscardHint(
+        Res.string.chat_reply_discard_hint_en,
+        Res.string.chat_reply_discard_hint_id,
+    ),
+    ChatReplyDiscarded(Res.string.chat_reply_discarded_en, Res.string.chat_reply_discarded_id),
+    ChatReplyAbsent(Res.string.chat_reply_absent_en, Res.string.chat_reply_absent_id),
+    ChatReplyAlreadyProcessing(
+        Res.string.chat_reply_already_processing_en,
+        Res.string.chat_reply_already_processing_id,
+    ),
+    ChatReplyDiscardUnconfirmed(
+        Res.string.chat_reply_discard_unconfirmed_en,
+        Res.string.chat_reply_discard_unconfirmed_id,
+    ),
     ChatCancelSend(Res.string.chat_cancel_send_en, Res.string.chat_cancel_send_id),
     ChatCancelTitle(Res.string.chat_cancel_title_en, Res.string.chat_cancel_title_id),
     ChatCancelExplanation(

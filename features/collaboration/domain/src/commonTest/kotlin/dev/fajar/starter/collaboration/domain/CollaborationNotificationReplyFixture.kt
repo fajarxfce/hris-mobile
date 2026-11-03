@@ -14,6 +14,10 @@ internal class CollaborationNotificationReplyFixture {
     var afterStore: suspend () -> Unit = {}
     val inputs =
         object : CollaborationNotificationReplyRepository {
+            override fun observeChanges(
+                access: CollaborationRecoveryAccess
+            ): kotlinx.coroutines.flow.Flow<AppResult<Unit>> = error("Retention does not observe")
+
             override suspend fun retain(
                 access: CollaborationRecoveryAccess,
                 candidate: CollaborationNotificationReplyCandidate,

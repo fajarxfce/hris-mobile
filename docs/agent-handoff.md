@@ -1,5 +1,59 @@
 # Agent continuation — HRIS Mobile
 
+## Saved replies accepted locally; next deliver release 23 and complete native actions
+
+[Contract](collaboration-saved-replies.md) /
+[local evidence](measurements/chat-saved-replies-2026-11-03.json).
+The 41 implementation inputs are ACCEPTED locally: compact Chat -> Saved replies ->
+detail, company-admitted reactive private input, explicit safe discard and durable
+cancellation without a temporary Queued row. Actual Koin/SQLite integration proves
+input -> discard -> reopen -> late duplicate -> Cancelled, with no SDK enqueue/delivery.
+Only exact Cancelled revision0 can retire a duplicate without disposable conversation
+metadata; current account/company denial checks remain. No source test failures remain.
+
+Focused5 PASS88.461s/76 desktop cases/11 suites (15 fresh/five). Full6 PASS749.590s:
+3,898 desktop/552,230 Android host/37,34 actual browser/three,ten build-logic/two,
+zero failures/errors/skips. Of these,3,188 cases/433 suites executed freshly; other
+root suites were reused as recorded. Root quality/shared Wasm/Android dev assembly
+and lint passed; lint zero issues. The 41 source hashes remained unchanged.
+Three final Compose screenshots were actually viewed: compact list, detail and
+320x640 Indonesian detail at twice the font scale. This is controlled screen evidence,
+not all-screen/full-device acceptance. First four rejected focused attempts and
+fixture/test-only corrections are preserved in the measurement; no policy was relaxed.
+Local work/evidence: .work/chat-notification-review-2026-11-03. No local heavy job remains.
+
+NEXT commit/push this consumer and dispatch ONE full hosted Apple on that source.
+Require AppleCommandPreventionTest two Room cases plus Discard seven, Observe six
+and Complete fourteen domain cases. Presentation/VM and application integration tests
+execute on desktop, not in the current Apple simulator task; full Xcode compiles the
+application. Phone22 is already installed. Build validated release23 with the same
+signer/API/Firebase/data, inspect two owned-emulator starts, notify before explicit
+10.77.77.3:5555 install-only; never launch or drive the phone UI.
+Then implement native reply status/Open/read/mute/dismiss and durable reviewed-send
+resolution, followed by production hosts and owned-device acceptance. No editable
+review send yet. Open chat navigates only; different-body conflict stays held.
+Chat push OFF; production hosts unbound. Voice/video/meeting UI absent; all54 PRD
+groups OPEN. Continue long run after atomic pushed commits. No real-account messages.
+
+Port the eight generic archiveAbsent files/tests to Starter after Mobile proof, with
+independent root/browser/Android/lint/Web/full Apple. No schema migration. Existing
+raw device store port is complete (Starter935d07d). Platform304/schema116 unchanged.
+
+Native input worker41599045402 atadc0 is ACCEPTED and audited:
+[evidence](measurements/chat-notification-input-recovery-native-2026-11-03.json).
+Five native/three,230 host/37,15 proof/four; raw16/two31.807s and verified uninstall.
+All297 sources/artifact13217406201/GitHub ZIP digest verified. Build989s/Platform329s/
+native1089s. Includes input worker, excludes callbacks6976/current saved replies.
+Callback native41601851260 at6976 is RUNNING; do not duplicate/cancel it. Its audit
+must require the new inputRecovery proof across three ordinary process deaths.
+Apple41603224301 at6976 is ACCEPTED and audited:
+[evidence](measurements/chat-notification-callback-apple-2026-11-03.json).
+1,021 simulator/114, zero;300 sources/artifact13217292129/digest verified;
+compile708s/tests94s/full Xcode1137s. Excludes these saved replies. Do not repeat audit.
+Physical iPhone waived; hosted Xcode remains mandatory, no native APNs/CallKit claim.
+
+## Earlier callback checkpoint (current validation state above takes precedence)
+
 ## Android reply callbacks accepted locally with real process-death proof
 
 [Callback contract](collaboration-notification-callbacks.md) /

@@ -75,24 +75,30 @@ class CompleteCollaborationNotificationReply(
                 ?: return AppResult.Success(CollaborationNotificationReplyCompletion.Absent)
         if (retained != expected) return completionFailure(FailureKind.Conflict)
         val action = retained.candidate.action
-        val conversation = lists.get(scope.access, action.target.conversationId)
-        guard(scope).let { if (it is AppResult.Failed) return it }
-        if (conversation is AppResult.Failed) return conversation
-        if (
-            !ownsCollaborationReadConversation(
-                scope.access,
-                action.target.conversationId,
-                (conversation as AppResult.Success).value,
-            )
-        )
-            return completionFailure(FailureKind.Unavailable)
         // Original message history is not required to prove an already retained reply command.
         val read = messages.get(scope.access, action.operationId)
         guard(scope).let { if (it is AppResult.Failed) return it }
         if (read is AppResult.Failed) return read
-        val message =
-            (read as AppResult.Success).value
-                ?: return AppResult.Success(CollaborationNotificationReplyCompletion.Pending)
+        val message = (read as AppResult.Success).value
+        // An exact cancelled operation grants no delivery or read. Its permanent owned archive
+        // must also suppress a duplicate callback when disposable conversation metadata is absent.
+        if (message?.state != CollaborationMessageState.Cancelled) {
+            val conversation = lists.get(scope.access, action.target.conversationId)
+            guard(scope).let { if (it is AppResult.Failed) return it }
+            if (conversation is AppResult.Failed) return conversation
+            if (
+                !ownsCollaborationReadConversation(
+                    scope.access,
+                    action.target.conversationId,
+                    (conversation as AppResult.Success).value,
+                )
+            )
+                return completionFailure(FailureKind.Unavailable)
+        }
+        if (message == null)
+            return AppResult.Success(CollaborationNotificationReplyCompletion.Pending)
+        if (message.state == CollaborationMessageState.Cancelled && message.revision != 0L)
+            return completionFailure(FailureKind.Conflict)
         if (
             message.intent.id != action.operationId ||
                 message.intent.owner != scope.access.messageOwner() ||

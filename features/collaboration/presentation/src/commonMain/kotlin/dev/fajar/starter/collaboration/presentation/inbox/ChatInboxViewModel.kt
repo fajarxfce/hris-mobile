@@ -31,6 +31,7 @@ class ChatInboxViewModel(
         on<ChatInboxEvent.RefreshRequested>(::onRefreshRequested)
         on<ChatInboxEvent.NextRequested>(::onNextRequested)
         on<ChatInboxEvent.PreviousRequested>(::onPreviousRequested)
+        on<ChatInboxEvent.SavedRepliesRequested>(::onSavedRepliesRequested)
         on<ChatInboxEvent.NewChatRequested>(::onNewChatRequested)
         on<ChatInboxEvent.BackRequested>(::onBackRequested)
         on<ChatInboxEvent.ConversationSelected>(::onConversationSelected)
@@ -194,6 +195,12 @@ class ChatInboxViewModel(
             return
         onStopped(ChatInboxEvent.Stopped)
         viewModelScope.launch { emitEffect(ChatInboxEffect.OpenConversation(event.id)) }
+    }
+
+    private fun onSavedRepliesRequested(event: ChatInboxEvent.SavedRepliesRequested) {
+        if (!visible || state.value.restricted) return
+        onStopped(ChatInboxEvent.Stopped)
+        viewModelScope.launch { emitEffect(ChatInboxEffect.SavedReplies) }
     }
 
     private fun onNewChatRequested(event: ChatInboxEvent.NewChatRequested) {

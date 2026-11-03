@@ -191,7 +191,68 @@ internal class IndexedDbCommandStore(
     }
 
     override suspend fun containsRecords() = anyCommands(database()).await<JsBoolean>().toBoolean()
+
+    override suspend fun archiveAbsent(
+        scope: CommandScope,
+        record: CommandRecord,
+        evidence: String,
+    ): Boolean {
+        validateCommandArchive(scope, record, evidence)
+        val db = database()
+        currentCoroutineContext().ensureActive()
+        return withContext(NonCancellable) {
+            val changed =
+                archiveAbsentCommand(
+                        db,
+                        scope.sessionId,
+                        scope.accountKey,
+                        codec.encodeToString(record),
+                        evidence,
+                    )
+                    .await<JsBoolean>()
+                    .toBoolean()
+            if (changed) changes.tryEmit(Unit)
+            changed
+        }
+    }
 }
+
+@JsFun(
+    """(db, session, account, json, evidence) => new Promise((resolve, reject) => {
+    const tx = db.transaction(['account_scope', 'durable_commands', 'command_archives'], 'readwrite');
+    const scopes = tx.objectStore('account_scope'), owner = scopes.get('current'), principal = scopes.get('command-account');
+    const active = tx.objectStore('durable_commands'), archives = tx.objectStore('command_archives');
+    const entry = {...JSON.parse(json), accountKey:account}, key = [account, entry.partition, entry.id];
+    let changed = false;
+    principal.onsuccess = () => {
+        if (owner.result !== session || principal.result !== account) return;
+        const retained = archives.get(key);
+        retained.onsuccess = () => {
+            const previous = retained.result;
+            if (previous) {
+                changed = previous.request === entry.request && previous.state === entry.state &&
+                    previous.revision === entry.revision && previous.resourceId === entry.resourceId &&
+                    previous.sortKey === entry.sortKey && previous.evidence === evidence;
+                return;
+            }
+            const current = active.get(key), occupied = active.index('resource').getKey([account, entry.partition, entry.resourceId]);
+            occupied.onsuccess = () => {
+                if (current.result || occupied.result !== undefined) return;
+                archives.add({...entry, evidence}); changed = true;
+            };
+        };
+    };
+    tx.oncomplete = () => resolve(changed);
+    tx.onabort = () => reject(tx.error || new Error('Command archive creation failed.'));
+})"""
+)
+private external fun archiveAbsentCommand(
+    db: JsAny,
+    session: String,
+    account: String,
+    json: String,
+    evidence: String,
+): Promise<JsBoolean>
 
 @JsFun(
     """(db, session, account, partition, resource, after, limit) => new Promise((resolve, reject) => {
