@@ -7,6 +7,7 @@ import dev.fajar.starter.workspace.domain.entities.Workspace
 
 enum class HomeTab {
     Home,
+    Chat,
     Inbox,
     Employees,
     Account,

@@ -129,6 +129,8 @@ separate encrypted working copies and reopen locally. Choosing new catalog entri
 and saving to the server still require current online review. Saved commands retain
 their original body and operation ID until their outcome is reconciled.
 
+Chat is available directly from the primary bottom navigation. Its compact thread
+groups messages by day and restores saved history exhaustion when reopened.
 The chat module includes colleague selection, direct conversations, a durable local
 text queue and [review of retained notification replies](docs/collaboration-reviewed-replies.md).
 Held replies support encrypted working drafts, explicit sending and guarded discard.

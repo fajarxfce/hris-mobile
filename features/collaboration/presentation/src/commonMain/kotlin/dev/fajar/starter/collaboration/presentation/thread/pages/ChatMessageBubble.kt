@@ -11,16 +11,18 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.presentation.thread.*
+import dev.fajar.starter.designsystem.components.AppIcon
 import dev.fajar.starter.designsystem.components.AppIconButton
 import dev.fajar.starter.designsystem.components.AppText
 import dev.fajar.starter.designsystem.theme.AppColors
 import dev.fajar.starter.localization.*
 import io.github.composefluent.FluentTheme
 import io.github.composefluent.icons.Icons
+import io.github.composefluent.icons.regular.Checkmark
+import io.github.composefluent.icons.regular.Clock
 import io.github.composefluent.icons.regular.Dismiss
-import kotlin.time.Instant
+import io.github.composefluent.icons.regular.ErrorCircle
 import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
 
 @Composable
 internal fun ChatMessageBubble(
@@ -29,18 +31,22 @@ internal fun ChatMessageBubble(
     onCancel: (() -> Unit)? = null,
 ) {
     val own = row.ownership == ChatMessageOwnership.SELF
-    Box(
+    BoxWithConstraints(
         modifier.fillMaxWidth(),
         contentAlignment = if (own) Alignment.CenterEnd else Alignment.CenterStart,
     ) {
         Column(
-            Modifier.fillMaxWidth(0.9f)
-                .widthIn(max = 540.dp)
+            Modifier.widthIn(max = minOf(maxWidth * 0.86f, 480.dp))
                 .background(
                     if (own) AppColors.tint else AppColors.surface,
-                    RoundedCornerShape(16.dp),
+                    RoundedCornerShape(
+                        topStart = 16.dp,
+                        topEnd = 16.dp,
+                        bottomStart = if (own) 16.dp else 4.dp,
+                        bottomEnd = if (own) 4.dp else 16.dp,
+                    ),
                 )
-                .padding(horizontal = 14.dp, vertical = 10.dp)
+                .padding(horizontal = 12.dp, vertical = 8.dp)
                 .semantics(mergeDescendants = true) {},
             verticalArrangement = Arrangement.spacedBy(4.dp),
         ) {
@@ -59,34 +65,38 @@ internal fun ChatMessageBubble(
                     CollaborationMessageKind.UNSUPPORTED -> appString(AppString.ChatUnsupported)
                 }
             SelectionContainer { AppText(body) }
-            val local =
-                Instant.fromEpochMilliseconds(row.timestamp)
-                    .toLocalDateTime(TimeZone.currentSystemDefault())
-            val time =
-                local.hour.toString().padStart(2, '0') +
-                    ":" +
-                    local.minute.toString().padStart(2, '0')
-            val details = buildList {
-                add(formatLocalDate(local.date.toString(), appLanguageTag()) + " · " + time)
-                if (row.edited) add(appString(AppString.ChatEdited))
-                if (own)
-                    add(
-                        appString(
-                            when (row.delivery) {
-                                CollaborationMessageDelivery.PENDING -> AppString.ChatQueued
-                                CollaborationMessageDelivery.FAILED -> AppString.ChatSendFailed
-                                CollaborationMessageDelivery.SENT -> AppString.ChatSent
-                            }
-                        )
+            val time = chatMessageTime(row.timestamp, TimeZone.currentSystemDefault())
+            Row(
+                Modifier.align(Alignment.End),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
+            ) {
+                if (row.edited)
+                    AppText(
+                        appString(AppString.ChatEdited),
+                        style = FluentTheme.typography.caption,
+                        color = AppColors.muted,
                     )
-            }
-            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                AppText(
-                    details.joinToString(" · "),
-                    modifier = Modifier.weight(1f),
-                    style = FluentTheme.typography.caption,
-                    color = AppColors.muted,
-                )
+                AppText(time, style = FluentTheme.typography.caption, color = AppColors.muted)
+                if (own) {
+                    val (icon, label) =
+                        when (row.delivery) {
+                            CollaborationMessageDelivery.PENDING ->
+                                Icons.Regular.Clock to AppString.ChatQueued
+                            CollaborationMessageDelivery.FAILED ->
+                                Icons.Regular.ErrorCircle to AppString.ChatSendFailed
+                            CollaborationMessageDelivery.SENT ->
+                                Icons.Regular.Checkmark to AppString.ChatSent
+                        }
+                    AppIcon(
+                        icon,
+                        appString(label),
+                        Modifier.size(16.dp),
+                        tint =
+                            if (row.delivery == CollaborationMessageDelivery.FAILED) AppColors.error
+                            else AppColors.muted,
+                    )
+                }
                 if (onCancel != null)
                     AppIconButton(
                         Icons.Regular.Dismiss,

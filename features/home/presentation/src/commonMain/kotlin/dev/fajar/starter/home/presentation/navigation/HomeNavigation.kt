@@ -28,6 +28,7 @@ fun NavGraphBuilder.homeRoutes(
     inbox: @Composable () -> Unit,
     employees: @Composable () -> Unit,
     inboxBadge: @Composable () -> Unit,
+    chat: @Composable () -> Unit,
     onSettings: () -> Unit,
 ) {
     composable<HomeRoute> { entry ->
@@ -49,6 +50,6 @@ fun NavGraphBuilder.homeRoutes(
                 HomeEffect.OpenSessions -> onSessions()
             }
         }
-        HomePage(state, viewModel::onEvent, attendance, inbox, employees, inboxBadge)
+        HomePage(state, viewModel::onEvent, attendance, inbox, employees, inboxBadge, chat)
     }
 }

@@ -31,19 +31,30 @@ internal class ChatThreadHistoryPager(
     var recoveryAnchor: String? = null
         private set
 
+    /** Restore an owned end marker without contacting the provider or replaying decryption. */
+    suspend fun exhausted(
+        workspaceId: String,
+        key: CollaborationHistoryTraversal,
+    ): AppResult<Boolean> {
+        val result = readReferences(workspaceId, key)
+        currentCoroutineContext().ensureActive()
+        return when (result) {
+            is AppResult.Failed -> result
+            is AppResult.Success ->
+                AppResult.Success(
+                    result.value.progress?.exhausted == true &&
+                        result.value.events.isEmpty() &&
+                        result.value.after == null
+                )
+        }
+    }
+
     suspend fun load(
         workspaceId: String,
         key: CollaborationHistoryTraversal,
         position: ChatThreadHistoryPosition,
     ): AppResult<ChatThreadHistoryBatch> {
         recoveryAnchor = null
-        var fetched = false
-        if (position.storedEnd) {
-            val result = acquireProvider(workspaceId, key.deviceId, key.conversationId)
-            currentCoroutineContext().ensureActive()
-            if (result is AppResult.Failed) return result
-            fetched = true
-        }
         val acknowledged = reconcileReferences(workspaceId, key, position.after)
         currentCoroutineContext().ensureActive()
         if (acknowledged is AppResult.Failed) return acknowledged
@@ -51,7 +62,7 @@ internal class ChatThreadHistoryPager(
         currentCoroutineContext().ensureActive()
         if (loaded is AppResult.Failed) return loaded
         var page = (loaded as AppResult.Success).value
-        if (!fetched && page.events.isEmpty() && page.progress?.exhausted != true) {
+        if (page.progress?.exhausted != true && (position.storedEnd || page.events.isEmpty())) {
             val result = acquireProvider(workspaceId, key.deviceId, key.conversationId)
             currentCoroutineContext().ensureActive()
             if (result is AppResult.Failed) return result

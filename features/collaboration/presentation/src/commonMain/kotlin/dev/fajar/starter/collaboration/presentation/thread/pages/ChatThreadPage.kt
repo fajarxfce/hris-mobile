@@ -4,7 +4,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -13,9 +14,14 @@ import dev.fajar.starter.collaboration.presentation.thread.*
 import dev.fajar.starter.designsystem.components.*
 import dev.fajar.starter.designsystem.theme.AppColors
 import dev.fajar.starter.localization.*
+import io.github.composefluent.FluentTheme
 import io.github.composefluent.icons.Icons
 import io.github.composefluent.icons.regular.ArrowLeft
 import io.github.composefluent.icons.regular.ArrowSync
+import kotlin.time.Clock
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 
 @Composable
 fun ChatThreadPage(
@@ -23,6 +29,7 @@ fun ChatThreadPage(
     listState: LazyListState,
     onEvent: (ChatThreadEvent) -> Unit,
     modifier: Modifier = Modifier,
+    today: LocalDate = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date,
 ) {
     Box(
         modifier
@@ -61,8 +68,6 @@ fun ChatThreadPage(
                             state.connection != ChatThreadConnection.CONNECTING &&
                                 !state.syncing &&
                                 !state.loadingOlder,
-                        loading =
-                            state.connection == ChatThreadConnection.CONNECTING || state.syncing,
                     )
                 },
             )
@@ -70,8 +75,8 @@ fun ChatThreadPage(
                 state = listState,
                 reverseLayout = true,
                 modifier = Modifier.weight(1f).fillMaxWidth(),
-                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
-                verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.Bottom),
+                contentPadding = PaddingValues(horizontal = 12.dp, vertical = 12.dp),
+                verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.Bottom),
             ) {
                 val failure = state.localFailure ?: state.historyFailure ?: state.failure
                 if (
@@ -88,22 +93,47 @@ fun ChatThreadPage(
                             enabled = !state.loading && !state.loadingOlder,
                         )
                     }
-                items(state.rows, key = { it.key }, contentType = { "message" }) {
-                    val id = it.localId
-                    ChatMessageBubble(
-                        it,
-                        onCancel =
-                            if (
-                                it.canCancel &&
-                                    id != null &&
-                                    state.localFailure == null &&
-                                    !state.leaving
-                            )
-                                ({ onEvent(ChatThreadEvent.CancelRequested(id)) })
-                            else null,
-                    )
+                itemsIndexed(
+                    state.rows,
+                    key = { _, row -> row.key },
+                    contentType = { _, _ -> "message" },
+                ) { index, row ->
+                    val id = row.localId
+                    val date = chatMessageDate(row.timestamp, TimeZone.currentSystemDefault())
+                    val older = state.rows.getOrNull(index + 1)
+                    Column(
+                        Modifier.fillMaxWidth(),
+                        verticalArrangement = Arrangement.spacedBy(4.dp),
+                    ) {
+                        if (
+                            older == null ||
+                                chatMessageDate(older.timestamp, TimeZone.currentSystemDefault()) !=
+                                    date
+                        )
+                            ChatDayDivider(date, today)
+                        ChatMessageBubble(
+                            row,
+                            onCancel =
+                                if (
+                                    row.canCancel &&
+                                        id != null &&
+                                        state.localFailure == null &&
+                                        !state.leaving
+                                )
+                                    ({ onEvent(ChatThreadEvent.CancelRequested(id)) })
+                                else null,
+                        )
+                    }
                 }
-                if (state.loading || state.loadingOlder) item("loading") { AppLoading() }
+                if ((state.loading && state.rows.isEmpty()) || state.loadingOlder)
+                    item("loading") {
+                        Box(
+                            Modifier.fillMaxWidth().padding(8.dp),
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            AppProgressRing(appString(AppString.ChatOlderMessages))
+                        }
+                    }
                 if (state.hasOlder)
                     item("older") {
                         AppTextButton(
@@ -169,6 +199,21 @@ fun ChatThreadPage(
         }
     }
     state.cancellationDialog?.let { ChatCancellationDialog(it, onEvent) }
+}
+
+@Composable
+private fun ChatDayDivider(date: LocalDate, today: LocalDate) {
+    val resource = chatDayResource(date, today)
+    Box(Modifier.fillMaxWidth().padding(vertical = 12.dp), contentAlignment = Alignment.Center) {
+        AppText(
+            if (resource != null) appString(resource) else chatCalendarDate(date),
+            modifier =
+                Modifier.background(AppColors.surface, RoundedCornerShape(12.dp))
+                    .padding(horizontal = 12.dp, vertical = 4.dp),
+            style = FluentTheme.typography.caption,
+            color = AppColors.muted,
+        )
+    }
 }
 
 @Composable

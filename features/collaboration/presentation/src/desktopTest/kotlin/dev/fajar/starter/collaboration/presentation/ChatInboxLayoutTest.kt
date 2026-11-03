@@ -163,6 +163,37 @@ class ChatInboxLayoutTest {
     }
 
     @Test
+    fun aSavedEmptyInboxRemainsReadableDuringBackgroundRefresh() {
+        compose.setContent {
+            AppTheme {
+                ChatInboxPage(
+                    ChatInboxState(
+                        page =
+                            CollaborationLocalList(
+                                dev.fajar.starter.collaboration.domain.entities
+                                    .CollaborationListCheckpoint(
+                                        "generation",
+                                        1,
+                                        0,
+                                        kotlin.time.Instant.parse("2026-11-03T00:00:00Z"),
+                                    ),
+                                emptyList(),
+                                null,
+                            ),
+                        loading = false,
+                        refreshing = true,
+                    ),
+                    rememberLazyListState(),
+                    {},
+                )
+            }
+        }
+        compose.onNodeWithText("Loading").assertDoesNotExist()
+        compose.onNodeWithText("No conversations yet").assertIsDisplayed()
+        compose.onNodeWithContentDescription("New chat").assertIsEnabled()
+    }
+
+    @Test
     fun ordinaryListUsesCompactRowsAndDecorativeInitialsStaySilent() {
         val fixture = ChatInboxFixture()
         val names =

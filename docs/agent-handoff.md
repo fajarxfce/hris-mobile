@@ -1,5 +1,53 @@
 # Agent continuation — HRIS Mobile
 
+## Primary Chat tab and compact thread accepted locally — 3 November 2026
+
+[Contract](chat-experience.md) / [evidence](measurements/chat-experience-2026-11-03.json).
+User's four complaints are active priorities, not cancellation of the long-run PRD.
+Chat is now a primary bottom tab (removed from services), with notification links
+returning to that parent. Bubbles fit content, use day separators/compact real
+pending/sent/failed icons, and a multiline pill composer. Known provider exhaustion
+is restored on room reopening and checked before another provider acquisition.
+A saved empty list remains visible during refresh; no toolbar spinner for each
+history synchronization. Delivered/read ACKs, preview/unread list projection and
+cross-company ownership are still NEXT, not implemented by this increment.
+
+Focused156 tests PASS239.29s. Full xvfb root/Wasm/product+proof build/lint
+PASS530.774s, inputs unchanged:4024 desktop/569 suites,230 Android host/37,
+18 proof-host/five,ten logic/two all pass (including reused);933 cases/145 suites
+fresh. Product lint0, proof47 existing warnings/0errors. Initial unpublished-empty
+progress regression rejected and fixed. Three light/dark2x-text/landscape PNGs
+actually viewed and tracked; prior cancellation/window/large-text tests pass.
+No generic Starter change is needed. Atomic commit/push then clean normal
+release26 via.work/release-phone-2026-11-03-build26/build-arm64.py; scripts prepared,
+not built yet. Notify before install-only; never drive phone UI. Phone25 remains.
+
+Platformfd09de67 records four completed fictional SAMPLE accounts: distinct random
+Argon2 passwords, chat-only API membership grants, API person links,4 successful
+native logins and5 other contacts each; all temporary verification sessions revoked.
+No provider device/message or Firebase mapping was changed. Native accounts alone
+are not proof of Firebase mobile sign-in/device enrollment. Private passwords only
+in Platform.work/chat-demo-2026-11-03/accounts.private.json; never upload. Group
+cross-company admission/migration is required by the amended PRD and documented;
+removing company filters alone must not bypass its existing ownership constraints.
+
+Apple41667309251 attempt2 at1136fb9e is now ACCEPTED:1097 simulator/123 suites,
+397 source fingerprints, full Xcode1202s; artifact13250850483 SHA
+ d354a19dc0bf94cdf5a3fe7a07db41202405ac2cf776961182c90674db8312a1.
+[Evidence](measurements/chat-push-activation-apple-2026-11-03.json). Attempt1 failed
+before checkout due hosted-runner capacity and is retained. New UI source requires
+its own full Xcode gate. Native41667296924 at1136 still running; audit separately.
+
+Platform FCM run11 (clock corrected by5bebbdc6) registers native+Matrix pusher and
+sends an encrypted peer original; callback200 but delivered0, timeout waiting for
+FCM-caused restart. Counts1/1/0, both owned cleanup true, chat/home PNGs viewed.
+New UNCOMMITTED Platform push-state fixture diagnostics have not run. Finish after
+Mobile build frees local capacity. Keep one heavy local job. Runtime304/schema116/
+push OFF and Starter9959c1d unchanged. Continue recipient ACK/UI, group scope,
+FCM/inline reply, rich messages, voice/video/meetings and all54 groups; do not stop
+at this source/UI milestone.
+
+
 ## Checkpoint Native accepted; product FCM diagnostics and Apple retry ongoing — 3 November 2026
 
 Native41662285409 at0a452afb is ACCEPTED after source/archive/report/visual audit.

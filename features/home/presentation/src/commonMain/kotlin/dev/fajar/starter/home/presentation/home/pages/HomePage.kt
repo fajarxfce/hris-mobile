@@ -9,10 +9,12 @@ import dev.fajar.starter.designsystem.theme.AppColors
 import dev.fajar.starter.home.presentation.home.*
 import dev.fajar.starter.localization.*
 import io.github.composefluent.icons.Icons
+import io.github.composefluent.icons.filled.Chat
 import io.github.composefluent.icons.filled.Home
 import io.github.composefluent.icons.filled.Mail
 import io.github.composefluent.icons.filled.People
 import io.github.composefluent.icons.filled.Person
+import io.github.composefluent.icons.regular.Chat
 import io.github.composefluent.icons.regular.Home
 import io.github.composefluent.icons.regular.Mail
 import io.github.composefluent.icons.regular.People
@@ -26,6 +28,7 @@ fun HomePage(
     inbox: @Composable () -> Unit,
     employees: @Composable () -> Unit,
     inboxBadge: @Composable () -> Unit,
+    chat: @Composable () -> Unit,
 ) {
     Column(Modifier.fillMaxSize().background(AppColors.canvas)) {
         AppNavigationScaffold(
@@ -36,6 +39,12 @@ fun HomePage(
                         appString(AppString.Home),
                         Icons.Regular.Home,
                         Icons.Filled.Home,
+                    ),
+                    AppNavigationItem(
+                        HomeTab.Chat,
+                        appString(AppString.ChatTitle),
+                        Icons.Regular.Chat,
+                        Icons.Filled.Chat,
                     ),
                     AppNavigationItem(
                         HomeTab.Inbox,
@@ -63,6 +72,7 @@ fun HomePage(
             AppTabContent(state.tab, stateKey = { it.name }) { tab ->
                 when (tab) {
                     HomeTab.Home -> HomeOverview(state, onEvent, attendance)
+                    HomeTab.Chat -> chat()
                     HomeTab.Inbox -> inbox()
                     HomeTab.Employees -> employees()
                     HomeTab.Account -> HomeAccountPage(state, onEvent)

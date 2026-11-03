@@ -56,7 +56,7 @@ fun NavGraphBuilder.collaborationRoutes(
         },
 ) {
     composable<ChatInboxRoute> {
-        ChatInboxEntry(workspaceId, onNewChat, onSavedReplies, onConversation, onBack)
+        ChatInboxContent(workspaceId, onNewChat, onSavedReplies, onConversation, onBack)
     }
     composable<ChatSavedRepliesRoute> {
         SavedRepliesEntry(workspaceId, "", onSavedReply, onConversation, onBack)
@@ -86,12 +86,12 @@ fun NavGraphBuilder.collaborationRoutes(
 }
 
 @Composable
-private fun ChatInboxEntry(
+fun ChatInboxContent(
     workspaceId: String,
     onNewChat: () -> Unit,
     onSavedReplies: () -> Unit,
     onConversation: (String) -> Unit,
-    onBack: () -> Unit,
+    onBack: (() -> Unit)? = null,
 ) {
     val vm = koinViewModel<ChatInboxViewModel>(parameters = { parametersOf(workspaceId) })
     val state by vm.state.collectAsStateWithLifecycle()
@@ -102,14 +102,14 @@ private fun ChatInboxEntry(
     }
     CollectEffects(vm.effects) {
         when (it) {
-            ChatInboxEffect.Back -> onBack()
+            ChatInboxEffect.Back -> onBack?.invoke()
             ChatInboxEffect.NewChat -> onNewChat()
             ChatInboxEffect.SavedReplies -> onSavedReplies()
             ChatInboxEffect.ScrollToStart -> list.requestScrollToItem(0)
             is ChatInboxEffect.OpenConversation -> onConversation(it.id)
         }
     }
-    ChatInboxPage(state, list, vm::onEvent)
+    ChatInboxPage(state, list, vm::onEvent, onBack = onBack)
 }
 
 @Composable

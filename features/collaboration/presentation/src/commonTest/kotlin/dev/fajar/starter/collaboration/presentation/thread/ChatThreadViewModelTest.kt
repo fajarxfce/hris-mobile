@@ -13,6 +13,54 @@ import kotlinx.coroutines.test.*
 
 class ChatThreadViewModelTest {
     @Test
+    fun reopeningAnExhaustedRoomRestoresItsEndWithoutAnotherOlderRequest() = runTest {
+        withModel { f, vm, store, _ ->
+            f.online()
+            f.past.pages += listOf(f.past.event(1))
+            vm.onEvent(ChatThreadEvent.Entered)
+            advanceUntilIdle()
+            vm.onEvent(ChatThreadEvent.OlderRequested)
+            advanceUntilIdle()
+            assertFalse(vm.state.value.hasOlder)
+            store.clear()
+            runCurrent()
+            val restored = f.model()
+            store.put("restored", restored)
+            restored.onEvent(ChatThreadEvent.Entered)
+            advanceUntilIdle()
+            assertEquals("Older message 1", restored.state.value.rows.single().text)
+            assertFalse(restored.state.value.hasOlder)
+            repeat(4) { restored.onEvent(ChatThreadEvent.OlderRequested) }
+            advanceUntilIdle()
+            assertEquals(listOf<String?>(null), f.past.requestedPositions)
+            assertEquals(1, f.past.stages)
+        }
+    }
+
+    @Test
+    fun anEmptyCommittedEndDoesNotAdvertiseOlderMessagesAfterRestart() = runTest {
+        withModel { f, vm, store, _ ->
+            f.online()
+            vm.onEvent(ChatThreadEvent.Entered)
+            advanceUntilIdle()
+            vm.onEvent(ChatThreadEvent.OlderRequested)
+            advanceUntilIdle()
+            assertFalse(vm.state.value.hasOlder)
+            store.clear()
+            runCurrent()
+            val restored = f.model()
+            store.put("restored", restored)
+            restored.onEvent(ChatThreadEvent.Entered)
+            advanceUntilIdle()
+            assertFalse(restored.state.value.hasOlder)
+            assertFalse(restored.state.value.loading)
+            restored.onEvent(ChatThreadEvent.OlderRequested)
+            advanceUntilIdle()
+            assertEquals(1, f.past.requestedPositions.size)
+        }
+    }
+
+    @Test
     fun expiredCredentialsKeepLocalHistoryAndAllowOwnedQueueWithoutNativeWork() = runTest {
         withModel { f, vm, _, _ ->
             f.base.now += 30.days

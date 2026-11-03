@@ -188,8 +188,6 @@ fun AppNavigation(navigation: ScopedNavigationState, incomingLinks: Flow<AppInco
                     if (!companyBlocked) {
                         val openService: (HomeService) -> Unit = { service ->
                             when (service) {
-                                HomeService.Chat ->
-                                    controller.navigate(ChatInboxRoute) { launchSingleTop = true }
                                 HomeService.Attendance ->
                                     controller.navigate(AttendanceRoute) { launchSingleTop = true }
                                 HomeService.Calendar ->
@@ -253,6 +251,26 @@ fun AppNavigation(navigation: ScopedNavigationState, incomingLinks: Flow<AppInco
                                 )
                             },
                             inboxBadge = { InboxBadgeContent(stage.workspace.id) },
+                            chat = {
+                                ChatInboxContent(
+                                    workspaceId = stage.workspace.id,
+                                    onNewChat = {
+                                        controller.navigate(ChatParticipantsRoute) {
+                                            launchSingleTop = true
+                                        }
+                                    },
+                                    onSavedReplies = {
+                                        controller.navigate(ChatSavedRepliesRoute) {
+                                            launchSingleTop = true
+                                        }
+                                    },
+                                    onConversation = {
+                                        controller.navigate(ChatThreadRoute(it)) {
+                                            launchSingleTop = true
+                                        }
+                                    },
+                                )
+                            },
                             employees = {
                                 EmployeesContent(
                                     stage.workspace.id,

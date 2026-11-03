@@ -23,6 +23,7 @@ fun ChatInboxPage(
     listState: LazyListState,
     onEvent: (ChatInboxEvent) -> Unit,
     modifier: Modifier = Modifier,
+    onBack: (() -> Unit)? = { onEvent(ChatInboxEvent.BackRequested) },
 ) {
     AppLazyPage(
         modifier = modifier,
@@ -33,13 +34,17 @@ fun ChatInboxPage(
         topBar = {
             AppTopBar(
                 title = appString(AppString.ChatTitle),
-                navigation = {
-                    AppIconButton(
-                        Icons.Regular.ArrowLeft,
-                        appString(AppString.Back),
-                        { onEvent(ChatInboxEvent.BackRequested) },
-                    )
-                },
+                navigation =
+                    if (onBack == null) null
+                    else {
+                        {
+                            AppIconButton(
+                                Icons.Regular.ArrowLeft,
+                                appString(AppString.Back),
+                                onBack,
+                            )
+                        }
+                    },
                 actions = {
                     AppIconButton(
                         Icons.Regular.ArrowSync,
@@ -66,9 +71,10 @@ fun ChatInboxPage(
                 enabled = !state.restricted,
             )
         }
+        val initialAcquisition = state.refreshing && state.page?.checkpoint == null
         if (
             (state.loading && state.page == null) ||
-                (state.page?.items?.isEmpty() == true && state.refreshing)
+                (state.page?.items?.isEmpty() == true && initialAcquisition)
         )
             item("loading") { AppLoading() }
         val failure = state.failure ?: state.refreshFailure
@@ -91,7 +97,7 @@ fun ChatInboxPage(
         if (
             state.page?.items?.isEmpty() == true &&
                 !state.loading &&
-                !state.refreshing &&
+                !initialAcquisition &&
                 failure == null
         )
             item("empty") {

@@ -1,0 +1,147 @@
+{
+  "date": "2026-11-03",
+  "status": "local source and visual checks accepted; release26 and new-source hosted gates next",
+  "baseCommit": "a82c14090677c3e3f16e2e835bf8a8429dfc340f",
+  "sourceSha256": {
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/navigation/AppNavigation.kt": "a3b525f62bd017ad816c0078eb05fc79cef4fdcd91bf8234573ded6a77537af8",
+    "apps/shared/src/commonMain/kotlin/dev/fajar/starter/app/navigation/OpenAppLink.kt": "69f30fa6101fc6142e738f927a0824cfba7ecb9cd4d1d7c8bc08e62526392671",
+    "apps/shared/src/desktopTest/kotlin/dev/fajar/starter/ChatBottomNavigationTest.kt": "a3a0b742389253489bdd4e74c1906f3e072cba8efcc7cc3e4043ee056d659057",
+    "core/localization/src/commonMain/composeResources/values/strings_en.xml": "6df2f8f87896f09329fde11d3f04c4884cfd6f5d933f63f1883824bccbd66fc1",
+    "core/localization/src/commonMain/composeResources/values/strings_id.xml": "f37ecdcdd78e31f0afe85ef66879ba9f465bf97c1135cafb9acb790111a06d6b",
+    "core/localization/src/commonMain/kotlin/dev/fajar/starter/localization/AppString.kt": "41a4adbb0842412aee154a7b7a73504f4a5a33694a6e0ac46ab5485812c138ce",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/inbox/pages/ChatInboxPage.kt": "a8d2cd569e9f605612fd7c79231f5d60c56c6f9b3bf0767de2ba658d2c4cf204",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/navigation/CollaborationNavigation.kt": "7a41974cb1aea7577702ed34ee891f28016ffd74b50c9828a515ae7c34658aff",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatMessageTime.kt": "15ad2c56fbd6969f3796eb3427d74a672b91b6693ece9329e78117f37d3d2d54",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadHistoryPager.kt": "ddd564a064daba5c29638cafa2fab8de2a8e036cda5d71445196f5d3f2177a85",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadViewModel.kt": "24258ecad4316b72f5162bace0e6708cf797112982dce625e0f6a2488cee2498",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/pages/ChatComposer.kt": "d232a2db4a1ffa1db5cb33254a261bb639740e500d589ffae664db4ef81940fd",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/pages/ChatMessageBubble.kt": "989e6cead6341ac006be035adc0d78692bdc2550d3f4e9174477e572535d4647",
+    "features/collaboration/presentation/src/commonMain/kotlin/dev/fajar/starter/collaboration/presentation/thread/pages/ChatThreadPage.kt": "099c05f61eba9922c6150272f6290096eda114fb42f6e5175543c24e28eeca5c",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatMessageTimeTest.kt": "28352cbb2ddd1d5bd732172278d332b508749a77efd3faee89c55674c547e4e2",
+    "features/collaboration/presentation/src/commonTest/kotlin/dev/fajar/starter/collaboration/presentation/thread/ChatThreadViewModelTest.kt": "6a82b188aa8e6f50f7bc221e8d131118ef073c57c18e6158767e9ab3cc0eaae4",
+    "features/collaboration/presentation/src/desktopTest/kotlin/dev/fajar/starter/collaboration/presentation/ChatBubbleLayoutTest.kt": "82df93b3dc5108bc38985e8b9a33bc692c81dd2bd8088fd1a771247a0969c50d",
+    "features/collaboration/presentation/src/desktopTest/kotlin/dev/fajar/starter/collaboration/presentation/ChatInboxLayoutTest.kt": "7ef641971f48cf38e389e0274365e40eedf4390bdcbfaf2c1ee54418c81d9df9",
+    "features/home/presentation/src/commonMain/kotlin/dev/fajar/starter/home/presentation/catalog/HomeService.kt": "12cedea3088111154d39a3ca6d05d6934f4bda8efbc7b550b7c25a90f955c069",
+    "features/home/presentation/src/commonMain/kotlin/dev/fajar/starter/home/presentation/home/HomeState.kt": "68dbb44c2c6564312b458d55ba3cfe0c69c5674935ff9a1433f357da92115e73",
+    "features/home/presentation/src/commonMain/kotlin/dev/fajar/starter/home/presentation/home/pages/HomePage.kt": "d3eb2aee45612917abedcfeef6650ca0ee3c8662fcbdcf4333668b34ce3b9d09",
+    "features/home/presentation/src/commonMain/kotlin/dev/fajar/starter/home/presentation/navigation/HomeNavigation.kt": "d31288bc940a2f999c8b1cba32f189d894f03b0e60ae637bd33be77bce133442"
+  },
+  "fullBuildInputs": {
+    "count": 3833,
+    "sha256": "87b695fe8c5df577bcd6a2993972da00876513b56a2f3c55e38438502451c128"
+  },
+  "quality": {
+    "wallSeconds": 530.774,
+    "inputsUnchanged": true,
+    "command": [
+      "xvfb-run",
+      "-a",
+      "./gradlew",
+      ":check",
+      ":apps:shared:compileKotlinWasmJs",
+      ":apps:android:assembleDevDebug",
+      ":apps:android:lintDevDebug",
+      ":apps:collaboration-proof:assembleDebug",
+      ":apps:collaboration-proof:testDebugUnitTest",
+      ":apps:collaboration-proof:lintDebug",
+      "--init-script",
+      "/home/fajar/hris/hris-mobile/.work/product-chat-fcm-2026-11-03/x86.init.gradle",
+      "-Pkotlin.compiler.execution.strategy=in-process",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=1",
+      "-Dorg.gradle.jvmargs=-Xmx1536m"
+    ],
+    "countsIncludingReusedReports": {
+      "desktop": {
+        "tests": 4024,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "suites": 569
+      },
+      "proofHost": {
+        "tests": 18,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "suites": 5
+      },
+      "androidHost": {
+        "tests": 230,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "suites": 37
+      },
+      "buildLogic": {
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "suites": 2
+      }
+    },
+    "freshCounts": {
+      "suites": 145,
+      "tests": 933,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "lint": {
+      "product": {
+        "issues": 0,
+        "errors": 0,
+        "sha256": "3cc5615c61ea6904882bb714ba526f5bf192e79ddc623bcb0a6e5d487b0371bc"
+      },
+      "proof": {
+        "issues": 47,
+        "errors": 0,
+        "sha256": "cda4e6113bf69b4a10c8078ea9667f7a60e4d562b2db58cb220f002884c29016"
+      }
+    },
+    "reportInventorySha256": "812b37ec820f0a2fd48720004a73374587926a6f515d7d4dcbec4ee04d8110a2"
+  },
+  "focused": {
+    "seconds": 239.29,
+    "tests": 156,
+    "failures": 0,
+    "inputsUnchanged": true
+  },
+  "rejectedAttempt": {
+    "seconds": 99.911,
+    "tests": 151,
+    "failures": 1,
+    "reason": "An unpublished empty inbox lost its initial progress indication. Rendering now distinguishes no checkpoint from a saved empty inbox; both branches pass."
+  },
+  "screenshots": {
+    "docs/images/chat-experience/chat-bubbles-dark-large-text.png": {
+      "sha256": "7c245147e58d6a0085107d219cffb9ea07187c5b906eb84dc49356628620e41d",
+      "actuallyViewed": true
+    },
+    "docs/images/chat-experience/chat-bubbles-landscape.png": {
+      "sha256": "5bc0083768281b6153934e527deb8da3f8dba3bc0cead5a1a6455ecaca030e7b",
+      "actuallyViewed": true
+    },
+    "docs/images/chat-experience/chat-bubbles-light.png": {
+      "sha256": "e4f8c9a304d4b74ba55081ebc24dd81f97990b394e392003f8dcc40f7041b629",
+      "actuallyViewed": true
+    }
+  },
+  "scope": [
+    "Chat tab and notification parent navigation, removed service-menu tile, retained feature MVI/lifecycle ownership.",
+    "Content-sized bubbles, day grouping, compact true pending/sent/failed transport icons and multiline composer.",
+    "Exhausted provider history restored from local progress on room reentry; no repeated provider request at a known end.",
+    "Saved empty inbox remains readable during background acquisition; initial unpublished content retains feedback."
+  ],
+  "pending": [
+    "Recipient durable delivered/read acknowledgements and persisted inbox preview/unread projection.",
+    "Organization-wide cross-company conversation/device/push ownership migration; Platform has recorded the explicit scope amendment.",
+    "New common UI source needs matching Apple full Xcode;1136 Apple41667309251 accepted separately and does not cover this change.",
+    "Native1136 gate41667296924 and real product FCM delivery/inline reply remain independent.",
+    "Normal phone26+ build, minified smoke and install-only; currently phone25.",
+    "Rich messages, calls/video/meetings and all54 PRD groups remain active."
+  ],
+  "starterPort": "Not needed: HRIS navigation/business presentation; generic design-system source unchanged."
+}

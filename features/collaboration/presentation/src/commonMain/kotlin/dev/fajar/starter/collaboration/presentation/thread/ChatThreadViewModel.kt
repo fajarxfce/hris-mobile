@@ -1036,6 +1036,19 @@ class ChatThreadViewModel(
                 olderRecoveryAnchor = null
                 olderKey = key
                 updateState { it.copy(historyIncomplete = false, historyFailure = null) }
+                val restored = olderHistory.exhausted(workspaceId, key)
+                currentCoroutineContext().ensureActive()
+                if (access != owned) return
+                when (restored) {
+                    is AppResult.Success -> olderScanned = restored.value
+                    is AppResult.Failed -> {
+                        if (collaborationContentResponseClosesRead(restored.failure)) {
+                            restrict(restored.failure)
+                            return
+                        }
+                        updateState { it.copy(historyFailure = restored.failure) }
+                    }
+                }
             }
             updateState { it.copy(connection = ChatThreadConnection.CONNECTED) }
             project()

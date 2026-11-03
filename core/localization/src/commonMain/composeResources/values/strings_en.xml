@@ -1036,4 +1036,12 @@
     <string name="chat_reply_leave_draft_en">Leave</string>
     <string name="chat_reply_keep_editing_en">Keep editing</string>
     <string name="chat_reply_approved_body_en">Confirmed reply</string>
+    <string name="chat_yesterday_en">Yesterday</string>
+    <string name="chat_monday_en">Monday</string>
+    <string name="chat_tuesday_en">Tuesday</string>
+    <string name="chat_wednesday_en">Wednesday</string>
+    <string name="chat_thursday_en">Thursday</string>
+    <string name="chat_friday_en">Friday</string>
+    <string name="chat_saturday_en">Saturday</string>
+    <string name="chat_sunday_en">Sunday</string>
 </resources>

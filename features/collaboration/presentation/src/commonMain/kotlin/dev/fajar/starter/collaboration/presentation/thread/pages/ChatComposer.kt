@@ -1,12 +1,16 @@
 package dev.fajar.starter.collaboration.presentation.thread.pages
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
@@ -17,7 +21,7 @@ import dev.fajar.starter.collaboration.presentation.thread.*
 import dev.fajar.starter.designsystem.components.*
 import dev.fajar.starter.designsystem.theme.AppColors
 import dev.fajar.starter.localization.*
-import io.github.composefluent.component.TextField
+import io.github.composefluent.FluentTheme
 import io.github.composefluent.icons.Icons
 import io.github.composefluent.icons.regular.Send
 
@@ -29,25 +33,36 @@ internal fun ChatComposer(
 ) {
     val label = appString(AppString.ChatMessage)
     val savingLabel = appString(AppString.ChatDraftSaving)
-    Column(modifier.fillMaxWidth().background(AppColors.surface)) {
+    Column(modifier.fillMaxWidth().background(AppColors.canvas)) {
         Row(
             Modifier.fillMaxWidth().padding(8.dp),
             verticalAlignment = Alignment.Bottom,
-            horizontalArrangement = Arrangement.spacedBy(4.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            TextField(
+            BasicTextField(
                 value = state.draft,
                 onValueChange = { onEvent(ChatThreadEvent.DraftChanged(it)) },
                 modifier =
-                    Modifier.weight(1f).heightIn(min = 48.dp, max = 160.dp).semantics {
+                    Modifier.weight(1f).heightIn(min = 48.dp).semantics {
                         contentDescription = label
                         if (state.draftSaving) stateDescription = savingLabel
                     },
                 enabled = state.canCompose,
                 singleLine = false,
-                isClearable = false,
-                shape = RoundedCornerShape(16.dp),
-                placeholder = { AppText(label, color = AppColors.muted) },
+                maxLines = 6,
+                textStyle = FluentTheme.typography.body.copy(color = AppColors.text),
+                cursorBrush = SolidColor(AppColors.accent),
+                decorationBox = { input ->
+                    Box(
+                        Modifier.background(AppColors.surface, RoundedCornerShape(24.dp))
+                            .border(1.dp, AppColors.border, RoundedCornerShape(24.dp))
+                            .padding(horizontal = 16.dp, vertical = 12.dp),
+                        contentAlignment = Alignment.CenterStart,
+                    ) {
+                        if (state.draft.isEmpty()) AppText(label, color = AppColors.muted)
+                        input()
+                    }
+                },
                 keyboardOptions =
                     KeyboardOptions(
                         capitalization = KeyboardCapitalization.Sentences,
@@ -58,6 +73,7 @@ internal fun ChatComposer(
                 Icons.Regular.Send,
                 appString(if (state.submissionPending) AppString.Retry else AppString.ChatSend),
                 { onEvent(ChatThreadEvent.SendRequested) },
+                modifier = Modifier.background(AppColors.tint, CircleShape),
                 enabled = state.canSend,
                 loading = state.saving,
             )
