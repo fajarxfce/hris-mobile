@@ -1,5 +1,15 @@
 # Validation
 
+## Native proof observation repair — 3 November 2026
+
+[Fixture observation](collaboration-native-proof-observation.md) reproduces four expected
+regression failures, then passes all five new cases and11 complete proof-host cases.
+Root/proof assembly checks pass121.630s, with existing desktop/Android-host suites
+explicitly reused. Lint zero errors and47 previously recorded warnings.
+[Evidence](measurements/chat-native-proof-observation-2026-11-03.json) preserves the
+red/green runs and four hashes. Corrected hosted native execution remains required;
+production source guards and notification activation are unchanged.
+
 ## Authenticated old-family reply recovery — 3 November 2026
 
 [Action v2 and private retention](collaboration-notification-action-recovery.md) pass

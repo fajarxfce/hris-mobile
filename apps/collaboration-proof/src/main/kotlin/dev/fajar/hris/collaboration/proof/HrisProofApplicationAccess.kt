@@ -17,7 +17,8 @@ import io.ktor.client.request.header
 import io.ktor.http.Url
 import kotlin.time.Clock
 import kotlin.time.Duration.Companion.minutes
-import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.awaitCancellation
+import kotlinx.coroutines.flow.flow
 
 /** Seeded local login/workspace, actual HRIS control HTTP adapters. This is not login UI proof. */
 internal class HrisProofApplicationAccess(
@@ -82,7 +83,10 @@ internal class HrisProofApplicationAccess(
         object : SessionRepository {
             override val persistent = true
 
-            override fun observe() = flowOf(AppResult.Success(session))
+            override fun observe() = flow {
+                emit(AppResult.Success(session))
+                awaitCancellation()
+            }
 
             override suspend fun current() = AppResult.Success(session)
 
@@ -100,7 +104,10 @@ internal class HrisProofApplicationAccess(
                 sessionId: String
             ): kotlinx.coroutines.flow.Flow<AppResult<Workspace?>> {
                 check(!backgroundOnly) { "Incoming proof cannot observe selected workspace" }
-                return flowOf(AppResult.Success(workspace.takeIf { sessionId == owner.sessionId }))
+                return flow {
+                    emit(AppResult.Success(workspace.takeIf { sessionId == owner.sessionId }))
+                    awaitCancellation()
+                }
             }
 
             override suspend fun current(sessionId: String): AppResult<Workspace?> {

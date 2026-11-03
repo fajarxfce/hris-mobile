@@ -1,6 +1,6 @@
 # Agent continuation — HRIS Mobile
 
-## Authenticated reply recovery accepted; repair native proof observation next
+## Native proof observation repaired; continue focused-route notifications
 
 Release20 devRelease1.0.0 from **543c61b9f821c6f63f404970c8b015a7c4ea9013** is INSTALLED
 on10.77.77.3:5555 with explicit install-only; do not reinstall it. APK87,806,596 bytes,
@@ -36,14 +36,19 @@ acceptance is withheld. Artifact13206336258 SHA256
 `aab64315f53494a2cb518e1e02a470e8d562f8bf92d9528fb750ddfce335fa4` verified.
 Current automatic native41579417140 at543c61b9 is still running; do not duplicate.
 
-Confirmed fixture contract defect: HrisProofApplicationAccess.sessions.observe uses
-flowOf, completing immediately after its seeded snapshot; production notification
-observation correctly treats source completion as unavailable. NEXT after v2 acceptance:
-keep proof session/workspace observation alive until caller cancellation, preserve
-backgroundOnly workspace-read prohibition, add host regression for initial snapshot and
-joined cancellation, and allowlisted failure categories. Do not weaken production source
-completion guards. Corrected hosted native execution must establish whether other
-failures remain. Do not repeat known hanging long local provider/emulator runs.
+The proof observation defect is now FIXED and locally accepted: seeded session and
+permitted workspace flows remain active until caller cancellation. Background-only
+workspace reads remain prohibited, production completion guards remain unchanged,
+and error evidence uses fixed category labels. [Contract](collaboration-native-proof-observation.md),
+[evidence](measurements/chat-native-proof-observation-2026-11-03.json).
+Red1 reproduces four failures/five cases38.263s; Green2 passes five cases51.190s.
+Full3 passes121.630s:11 fresh proof-host/three suites, reused3,766 desktop/532,
+230 Android-host/37,ten build-logic/two; four unchanged hashes, proof assembly/root
+quality. Lint zero errors,47 warnings with exact diagnostic counts matching prior
+tracked baseline. Initial evidence recorder mistakenly required zero total issues;
+corrected to preserve verified warnings, no source/test rerun. Audit complete in
+.work/chat-proof-observation-2026-11-03. No local heavy job or owned emulator remains.
+Corrected hosted native execution is still required; no provider acceptance claim.
 
 Authenticated action v2 and old-family private retention are ACCEPTED. Strict open
 requires exact issuing parent; separate recovery authenticates actual account/audience
@@ -64,15 +69,29 @@ No checks need repeating absent new changes. Work/audits complete in
 .work/chat-notification-action-recovery-2026-11-03. Full Apple at543c61b9 excludes v2;
 freeze the union of its227 source paths and these19 for one subsequent Apple run.
 
-NEXT fix the proof-only observation defect described above. Prepared host regressions
-are .txt outside build inputs in .work/chat-proof-observation-2026-11-03; copy only after
-this accepted commit. check.py/audit.py and four-path inputs.json are ready; capture
-current base before running. First demonstrate failing regression, then keep seeded
-flows alive until caller cancellation and add controlled failure labels; run focused
-and root/proof assembly/lint. Push each atomic commit; automatic native run will queue
-without interrupting the current run. No long local provider/emulator retry. After
-fixture acceptance dispatch one consolidated full Apple run, then continue actual
-focused-route ownership/disposition and authenticated native callback integration.
+NEXT after pushing this fixture commit: inspect automatic native workflow queue
+without duplicating it. If the prior c64cc036 run with the known one-shot fixture
+has started, cancel only that superseded run after the corrected run exists; retain
+older543c61b9 completion/evidence. Freeze old Apple227 union accepted v2 nineteen
+source paths at this new commit and dispatch ONE full ci.yml scope=apple; audit after
+completion. Continue focused-route notification ownership/disposition meanwhile.
+
+Focus source trace: ChatThreadViewModel obtains actual owner from readContext; expose
+that authenticated owner in state and clear it on scope failure/replacement. Route
+composition owns registration only while RESUMED and window-focused; release exact
+registration on disposal. IDs alone are not ownership. App focus revision must be
+read directly before/after native I/O and observed by the existing process so late
+work is cancelled/joined. A durable inactive original prevents alert on later blur.
+Do not model focus as AccessDenied/source failure, or acknowledge without disposition.
+
+Implementation direction to evaluate: existing Issue->Validate->Finish(Cancelled)
+can retain a focused original without display; Issue.Ready would also need the actual
+previous opaque publication reference so old native render is removed exactly before
+settlement. No new database schema needed. Verify current source before choosing this;
+it is design only. Keep mute behavior, actual parent/company/history admission,
+conditional journal checks, and late/cancellation/uncertain-write safeguards intact.
+Add Koin/SQLite reopen tests and route lifecycle tests; full root/relevant checks,
+atomic commits/push. Generic Starter port still waits for integrated Mobile proof.
 
 Focused-route ownership/disposition and device-encrypted pre-retention input quarantine,
 review UI, real native callbacks, permission wakeups, baselines and notification-input
