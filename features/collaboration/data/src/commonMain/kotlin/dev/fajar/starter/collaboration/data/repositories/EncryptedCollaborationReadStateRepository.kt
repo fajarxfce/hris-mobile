@@ -10,9 +10,12 @@ import dev.fajar.starter.collaboration.domain.repositories.CollaborationReadStat
 import dev.fajar.starter.database.*
 import dev.fajar.starter.securestorage.*
 import dev.fajar.starter.storage.safeStorageCall
+import dev.fajar.starter.storage.safeStorageFlow
 import kotlin.uuid.Uuid
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
+import kotlinx.coroutines.flow.*
 import org.koin.core.annotation.*
 
 @Single
@@ -23,6 +26,33 @@ class EncryptedCollaborationReadStateRepository(
 ) : CollaborationReadStateRepository {
     private val keys = CollaborationHistoryKeys(replicas, cipher, credentials)
 
+    override fun observe(
+        access: CollaborationLocalAccess,
+        conversationId: String,
+        roomId: String,
+        eventIds: List<String>,
+    ) =
+        safeStorageFlow(
+                flow {
+                    validateReadStateRoom(roomId)
+                    val selected = select(eventIds)
+                    emitAll(
+                        replicas
+                            .observeCheckpoint(
+                                historyScope(access),
+                                readStatePartition(access, conversationId),
+                            )
+                            .map { selected to it }
+                    )
+                },
+                mapValue = { (selected, raw) ->
+                    snapshot(access, conversationId, roomId, selected, raw)
+                },
+            )
+            .distinctUntilChanged()
+            .flowOn(Dispatchers.Default)
+            .buffer(0)
+
     override suspend fun read(
         access: CollaborationLocalAccess,
         conversationId: String,
@@ -31,12 +61,26 @@ class EncryptedCollaborationReadStateRepository(
     ) = safeStorageCall {
         validateReadStateRoom(roomId)
         val selected = select(eventIds)
+        snapshot(
+            access,
+            conversationId,
+            roomId,
+            selected,
+            replicas.checkpoint(historyScope(access), readStatePartition(access, conversationId)),
+        )
+    }
+
+    private suspend fun snapshot(
+        access: CollaborationLocalAccess,
+        conversationId: String,
+        roomId: String,
+        selected: List<String>,
+        raw: ReplicaCheckpoint?,
+    ): CollaborationReadState {
+        if (raw == null) return CollaborationReadState(null, emptySet(), emptyList(), null)
         val scope = historyScope(access)
         val partition = readStatePartition(access, conversationId)
-        val raw = replicas.checkpoint(scope, partition)
-        if (raw == null)
-            return@safeStorageCall CollaborationReadState(null, emptySet(), emptyList(), null)
-        withCodec(access, conversationId, roomId) { codec ->
+        return withCodec(access, conversationId, roomId) { codec ->
             val value = codec.checkpoint(raw)
             val marked = linkedSetOf<String>()
             for (eventId in selected) {

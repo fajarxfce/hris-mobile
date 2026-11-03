@@ -10,9 +10,12 @@ import dev.fajar.starter.collaboration.domain.repositories.CollaborationNotifica
 import dev.fajar.starter.database.*
 import dev.fajar.starter.securestorage.*
 import dev.fajar.starter.storage.safeStorageCall
+import dev.fajar.starter.storage.safeStorageFlow
 import kotlin.uuid.Uuid
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
+import kotlinx.coroutines.flow.*
 import org.koin.core.annotation.*
 
 @Single
@@ -23,21 +26,53 @@ class EncryptedCollaborationNotificationSettingsRepository(
 ) : CollaborationNotificationSettingsRepository {
     private val keys = CollaborationHistoryKeys(replicas, cipher, credentials)
 
+    override fun observe(access: CollaborationLocalAccess, conversationId: String) =
+        safeStorageFlow(
+                flow {
+                    emitAll(
+                        replicas.observeCheckpoint(
+                            historyScope(access),
+                            notificationSettingsPartition(access, conversationId),
+                        )
+                    )
+                },
+                mapValue = { raw -> snapshot(access, conversationId, raw) },
+            )
+            .distinctUntilChanged()
+            .flowOn(Dispatchers.Default)
+            .buffer(0)
+
     override suspend fun read(access: CollaborationLocalAccess, conversationId: String) =
         safeStorageCall {
-            val scope = historyScope(access)
-            val partition = notificationSettingsPartition(access, conversationId)
-            val raw =
-                replicas.checkpoint(scope, partition)
-                    ?: return@safeStorageCall CollaborationNotificationSettingsState()
-            keys.use { key, _ ->
-                val value =
-                    CollaborationNotificationSettingsCodec(access, conversationId, cipher, key)
-                        .open(raw)
-                require(replicas.checkpoint(scope, partition) == raw)
-                value
-            }
+            snapshot(
+                access,
+                conversationId,
+                replicas.checkpoint(
+                    historyScope(access),
+                    notificationSettingsPartition(access, conversationId),
+                ),
+            )
         }
+
+    private suspend fun snapshot(
+        access: CollaborationLocalAccess,
+        conversationId: String,
+        raw: ReplicaCheckpoint?,
+    ): CollaborationNotificationSettingsState {
+        if (raw == null) return CollaborationNotificationSettingsState()
+        return keys.use { key, _ ->
+            val value =
+                CollaborationNotificationSettingsCodec(access, conversationId, cipher, key)
+                    .open(raw)
+            require(
+                replicas.checkpoint(
+                    historyScope(access),
+                    notificationSettingsPartition(access, conversationId),
+                ) == raw
+            )
+            value
+        }
+    }
 
     override suspend fun update(
         access: CollaborationLocalAccess,

@@ -1,5 +1,16 @@
 # Validation
 
+## Notification settings and read-state observation — 3 November 2026
+
+[Cold owned streams](collaboration-notification-source-observation.md) pass26 focused
+SQLite cases and26 browser IndexedDB cases. Full root checks pass3624 desktop/521
+suites,230 Android-host/37, six proof-host/one and ten build-logic/two, with zero
+failures/errors/skips. Proof assembly, shared Wasm and root quality also pass.
+[Evidence](measurements/chat-notification-source-observation-2026-11-03.json) distinguishes
+2061 fresh cases/254 suites from reused reports and records nine frozen source hashes.
+No native-host activation, notification-input process death, product release or phone
+installation occurred in this increment.
+
 ## Opaque notification discovery and cancellation — 3 November 2026
 
 [Cleanup operations](collaboration-notification-retirement.md) pass15 focused cases,

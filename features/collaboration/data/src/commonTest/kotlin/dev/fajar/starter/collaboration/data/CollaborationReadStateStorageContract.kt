@@ -8,12 +8,118 @@ import dev.fajar.starter.common.result.*
 import dev.fajar.starter.database.*
 import kotlin.test.*
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.test.runTest
 
 /** Identical persistence, race and cryptographic checks on real SQLite and IndexedDB. */
 abstract class CollaborationReadStateStorageContract {
     protected abstract fun databaseOwner(): CollaborationHistoryDatabaseOwner
+
+    @Test
+    fun observationKeepsItsOriginalBoundedSelectionThroughMarksAcknowledgmentAndReopen() =
+        withDatabase { f ->
+            coroutineScope {
+                val selected = mutableListOf(event(1))
+                val updates =
+                    kotlinx.coroutines.channels.Channel<AppResult<CollaborationReadState>>(8)
+                val job = launch {
+                    f.readRepository().observe(f.access, f.conversation, f.room, selected).collect {
+                        updates.send(it)
+                    }
+                }
+                try {
+                    assertEquals(
+                        CollaborationReadState(null, emptySet(), emptyList(), null),
+                        expect(updates.receive()),
+                    )
+                    assertNull(f.keys.read())
+                    selected[0] = event(2)
+                    assertTrue(expect(f.mark(null, listOf(event(1), event(2)), intent(2))))
+                    val marked = expect(updates.receive())
+                    assertEquals(setOf(event(1)), marked.readEventIds)
+                    assertEquals(listOf(intent(2)), marked.pending)
+                    assertTrue(expect(f.ack(intent(2))))
+                    val acknowledged = expect(updates.receive())
+                    assertEquals(setOf(event(1)), acknowledged.readEventIds)
+                    assertTrue(acknowledged.pending.isEmpty())
+                    assertEquals(intent(2), acknowledged.acknowledged)
+                    job.cancelAndJoin()
+                    f.reopen()
+                    assertEquals(
+                        acknowledged,
+                        expect(
+                            f.readRepository()
+                                .observe(f.access, f.conversation, f.room, listOf(event(1)))
+                                .first()
+                        ),
+                    )
+                } finally {
+                    withContext(NonCancellable) { job.cancelAndJoin() }
+                    updates.close()
+                }
+            }
+        }
+
+    @Test
+    fun readObservationRecoversMappedCorruptionButCompletesAfterFailedSource() = withDatabase { f ->
+        assertTrue(expect(f.mark(null, listOf(event(1)), intent(1))))
+        val raw =
+            f.database.replicas.checkpoint(
+                historyScope(f.access),
+                readStatePartition(f.access, f.conversation),
+            )!!
+        var subscriptions = 0
+        val store =
+            object : ReplicaStore by f.database.replicas {
+                override fun observeCheckpoint(scope: ReplicaScope, partition: String) = flow {
+                    subscriptions++
+                    assertEquals(readStatePartition(f.access, f.conversation), partition)
+                    emit(raw.copy(payload = "malformed read metadata"))
+                    emit(raw)
+                    emit(raw)
+                    error("Fictional source failure")
+                }
+            }
+        val values =
+            f.readRepository(store)
+                .observe(f.access, f.conversation, f.room, listOf(event(1)))
+                .toList()
+        assertEquals(3, values.size)
+        assertIs<AppResult.Failed>(values[0])
+        assertEquals(f.readState(event(1)), expect(values[1]))
+        assertIs<AppResult.Failed>(values[2])
+        assertEquals(1, subscriptions)
+    }
+
+    @Test
+    fun invalidReadSubscriptionCannotOpenStorageOrCreateACredential() = withDatabase { f ->
+        var subscriptions = 0
+        val store =
+            object : ReplicaStore by f.database.replicas {
+                override fun observeCheckpoint(
+                    scope: ReplicaScope,
+                    partition: String,
+                ): Flow<ReplicaCheckpoint?> {
+                    subscriptions++
+                    error("Invalid selection must not reach storage")
+                }
+            }
+        val repo = f.readRepository(store)
+        for (events in
+            listOf(List(129) { event(it) }, listOf(event(1), event(1)), listOf("invalid"))) {
+            assertIs<AppResult.Failed>(
+                repo.observe(f.access, f.conversation, f.room, events).first()
+            )
+        }
+        assertIs<AppResult.Failed>(
+            repo.observe(f.access, f.conversation, "invalid-room", emptyList()).first()
+        )
+        assertIs<AppResult.Failed>(
+            repo.observe(f.access, "invalid-conversation", f.room, emptyList()).first()
+        )
+        assertEquals(0, subscriptions)
+        assertNull(f.keys.read())
+    }
 
     @Test
     fun exactCoverageAndPendingIntentSurviveReopenWithoutPlaintextOrAgeLimit() = withDatabase { f ->

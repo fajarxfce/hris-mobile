@@ -1,5 +1,54 @@
 # Agent continuation — HRIS Mobile
 
+## Settings/read observations accepted; continue native source invalidation
+
+Cold encrypted settings and private read-state streams now follow their exact owned
+partitions, share finite-read decoding, suppress duplicate mapped snapshots and join
+pending mapping on cancellation. Empty defaults create no key. Fixed read-event
+selection is copied at subscription; malformed mapping can recover, while failed
+upstream completes without restarting. [Contract](collaboration-notification-source-observation.md),
+[evidence](measurements/chat-notification-source-observation-2026-11-03.json).
+
+Focused1 passed98.449s:26 fresh cases/two suites. Full2 passed397.352s:3624 desktop/521
+suites,230 Android-host/37, six proof-host/one, ten build-logic/two,26 browser/two;
+2061 fresh cases/254 suites, zero failures/errors/skips, nine frozen Kotlin inputs.
+Root quality/architecture74/detekt, proof assembly and shared Wasm compile passed.
+No failed attempt, schema/key change, or local heavy job/owned emulator remains.
+The unrelated-write test is a fictional independent checkpoint, not full journal-ACK
+or native-host integration. Source-observation .txt test drafts are APPLIED/STALE.
+
+NEXT implement advisory metadata changes for history/company list/self identity/
+settings/read partitions, exclude publication ACK/action/reply/traversal writes, then
+combine actual native parent and each company's buffered read admission. Raw changes
+carry no contents/grant and wake semantic validation. Watcher completion/failure must
+close the gate; do not distinct Unit signals or depend on selected workspace. Planned
+repository/UC drafts under .work/chat-notification-invalidation-2026-11-03 are UNAPPLIED.
+Then bounded64 opaque per-card application ownership, initial subscription revalidation,
+joined invalidation and retained dirty work while busy. Same-source stamp/privacy
+changes may silently rerender; read/mute/redaction/denial retire only the exact current
+source. See [host plan](collaboration-notification-publication-plan.md).
+
+Native callbacks and encrypted old-family/pre-retention reply review remain required.
+A newly identified design issue: after native-family replacement and journal overwrite,
+the old v1 parent-bound reply envelope may no longer have a trusted old-parent lookup.
+Do not assume the latest journal authenticates every old OS input. Resolve bounded
+old-parent retention or a compatible authenticated parent-hint envelope/quarantine
+before activation; untrusted intent extras never grant send/read authority. No chosen
+schema/implementation yet. Notification-specific OS-death proof remains separate.
+
+Corrected native41554674578 at7a0ab3d3 is running actual emulator tests; full Apple
+41554262782 at11cba615 is running full Xcode after simulator tests. Neither is accepted
+yet. Existing Apple audit helper and new corrected-native fetch/audit helpers under
+.work/chat-native-notification-corrected-hosted-2026-11-03 (185 source hashes) are ready;
+run only after success. Do not cancel/redispatch or repeat long local provider hangs.
+Both hosted runs exclude retirement6f54a5dc and this observation increment.
+
+Phone19/sourcec0 remains installed. Next meaningful product release>19: notify then
+explicit10.77.77.3:5555 install-only, preserve signer/data, never drive its UI. Live304/
+schema116/chat push OFF, all54 PRD groups open. Publisher/raw surface still unactivated;
+voice/video/meeting UI absent. Generic Starter port waits for integrated Mobile proof.
+Continue long run, push every atomic commit. Older entries below are historical.
+
 ## Opaque discovery and cancellation accepted; continue source observation and native host
 
 ReadCollaborationNotificationPublications returns one-to-four ordered opaque cleanup

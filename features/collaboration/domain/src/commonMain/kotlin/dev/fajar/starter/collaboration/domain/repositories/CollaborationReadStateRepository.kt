@@ -2,9 +2,18 @@ package dev.fajar.starter.collaboration.domain.repositories
 
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.common.result.AppResult
+import kotlinx.coroutines.flow.Flow
 
 /** Encrypted local facts and a bounded metadata-intent queue. No SDK, admission or retry policy. */
 interface CollaborationReadStateRepository {
+    /** Fixed, bounded event selection for this subscription; no message contents or SDK I/O. */
+    fun observe(
+        access: CollaborationLocalAccess,
+        conversationId: String,
+        roomId: String,
+        eventIds: List<String>,
+    ): Flow<AppResult<CollaborationReadState>>
+
     /** One coherent room checkpoint and exact coverage for 0..128 distinct queried event IDs. */
     suspend fun read(
         access: CollaborationLocalAccess,

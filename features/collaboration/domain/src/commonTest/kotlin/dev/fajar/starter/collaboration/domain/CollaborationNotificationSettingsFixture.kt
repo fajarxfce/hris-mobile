@@ -19,6 +19,12 @@ internal class CollaborationNotificationSettingsFixture {
     var afterWrite: suspend () -> Unit = {}
     val repo =
         object : CollaborationNotificationSettingsRepository {
+            override fun observe(
+                access: CollaborationLocalAccess,
+                conversationId: String,
+            ): kotlinx.coroutines.flow.Flow<AppResult<CollaborationNotificationSettingsState>> =
+                error("This fixture exercises finite settings operations only")
+
             override suspend fun read(
                 access: CollaborationLocalAccess,
                 conversationId: String,

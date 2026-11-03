@@ -24,6 +24,14 @@ internal class ChatThreadReadFixture(private val thread: ChatThreadFixture) {
     val selections = mutableListOf<List<String>>()
     val repository =
         object : CollaborationReadStateRepository {
+            override fun observe(
+                access: CollaborationLocalAccess,
+                conversationId: String,
+                roomId: String,
+                eventIds: List<String>,
+            ): kotlinx.coroutines.flow.Flow<AppResult<CollaborationReadState>> =
+                error("This fixture exercises finite read operations only")
+
             override suspend fun read(
                 access: CollaborationLocalAccess,
                 conversationId: String,

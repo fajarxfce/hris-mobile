@@ -77,8 +77,9 @@ of cross-process rollback. Do not retain private previews in a long-lived tracki
 Company/source/settings/read invalidation is separate from native parent observation.
 ApplicationCollaborationLifetime retains the parent under selected-company denial;
 ObserveCollaborationList is selected-workspace only. Neither alone monitors active cards
-from every company. Current settings/read repositories lack change observation; add a
-narrow owned signal and cancellation/denial tests instead of indefinite polling or UI
+from every company. [Settings/read repositories now expose owned observations](collaboration-notification-source-observation.md).
+Add the remaining narrow history/list/identity signals and company cancellation/denial
+tests instead of indefinite polling or UI
 state in repositories. Foreground thread registration belongs app/navigation lifecycle.
 
 The raw transport has five routing hints, including Open. The HRIS journal has four

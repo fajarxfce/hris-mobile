@@ -9,11 +9,134 @@ import dev.fajar.starter.database.*
 import kotlin.test.*
 import kotlin.time.Instant
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.test.runTest
 
 /** The same encryption, competing-writer and interruption cases run on SQLite and IndexedDB. */
 abstract class CollaborationNotificationSettingsStorageContract {
     protected abstract fun databaseOwner(): CollaborationHistoryDatabaseOwner
+
+    @Test
+    fun observationStartsWithoutKeyAndIgnoresUnrelatedWritesBeforeFollowingSavedSettings() =
+        withDatabase { f ->
+            coroutineScope {
+                val updates =
+                    kotlinx.coroutines.channels.Channel<
+                        AppResult<CollaborationNotificationSettingsState>
+                    >(
+                        8
+                    )
+                val job = launch {
+                    f.repo().observe(f.access, f.conversation).collect { updates.send(it) }
+                }
+                try {
+                    assertEquals(
+                        CollaborationNotificationSettingsState(),
+                        expect(updates.receive()),
+                    )
+                    assertNull(f.keys.read())
+                    assertTrue(
+                        f.database.replicas.replace(
+                            historyScope(f.access),
+                            "notification-publications-fixture",
+                            null,
+                            ReplicaSnapshot(
+                                historyId(9009),
+                                "opaque unrelated checkpoint",
+                                emptyList(),
+                            ),
+                        )
+                    )
+                    assertTrue(expect(f.repo().update(f.access, f.conversation, change(1))))
+                    val saved = expect(updates.receive())
+                    assertEquals(change(1).settings, saved.settings)
+                    assertTrue(updates.tryReceive().isFailure)
+                    val next = change(2, saved.version, CollaborationNotificationMute.Unmuted)
+                    assertTrue(expect(f.repo().update(f.access, f.conversation, next)))
+                    val latest = expect(updates.receive())
+                    assertEquals(next.settings, latest.settings)
+                    assertTrue(latest.version!!.revision > saved.version!!.revision)
+                    job.cancelAndJoin()
+                    f.reopen()
+                    assertEquals(latest, expect(f.repo().observe(f.access, f.conversation).first()))
+                } finally {
+                    withContext(NonCancellable) { job.cancelAndJoin() }
+                    updates.close()
+                }
+            }
+        }
+
+    @Test
+    fun malformedSettingsEmissionCanRecoverButFailedUpstreamDoesNotRestartItself() =
+        withDatabase { f ->
+            assertTrue(expect(f.repo().update(f.access, f.conversation, change(1))))
+            val raw =
+                f.database.replicas.checkpoint(
+                    historyScope(f.access),
+                    notificationSettingsPartition(f.access, f.conversation),
+                )!!
+            var subscriptions = 0
+            val store =
+                object : ReplicaStore by f.database.replicas {
+                    override fun observeCheckpoint(scope: ReplicaScope, partition: String) = flow {
+                        subscriptions++
+                        assertEquals(historyScope(f.access), scope)
+                        assertEquals(
+                            notificationSettingsPartition(f.access, f.conversation),
+                            partition,
+                        )
+                        emit(raw.copy(payload = "malformed encrypted settings"))
+                        emit(raw)
+                        emit(raw)
+                        error("Fictional observation failure")
+                    }
+                }
+            val values = f.repo(store).observe(f.access, f.conversation).toList()
+            assertEquals(3, values.size)
+            assertIs<AppResult.Failed>(values[0])
+            assertEquals(f.settings(), expect(values[1]))
+            assertIs<AppResult.Failed>(values[2])
+            assertEquals(1, subscriptions)
+        }
+
+    @Test
+    fun cancellingSettingsObservationJoinsPendingMappingWithoutALateValue() = withDatabase { f ->
+        assertTrue(expect(f.repo().update(f.access, f.conversation, change(1))))
+        val entered = CompletableDeferred<Unit>()
+        var joined = false
+        val partition = notificationSettingsPartition(f.access, f.conversation)
+        val store =
+            object : ReplicaStore by f.database.replicas {
+                override suspend fun checkpoint(
+                    scope: ReplicaScope,
+                    partition: String,
+                ): ReplicaCheckpoint? {
+                    if (partition != notificationSettingsPartition(f.access, f.conversation))
+                        return f.database.replicas.checkpoint(scope, partition)
+                    entered.complete(Unit)
+                    try {
+                        awaitCancellation()
+                    } finally {
+                        joined = true
+                    }
+                }
+            }
+        coroutineScope {
+            val values = mutableListOf<AppResult<CollaborationNotificationSettingsState>>()
+            val job = launch {
+                f.repo(store).observe(f.access, f.conversation).collect { values += it }
+            }
+            try {
+                entered.await()
+                job.cancelAndJoin()
+                assertTrue(joined)
+                assertTrue(values.isEmpty())
+                assertNotNull(f.database.replicas.checkpoint(historyScope(f.access), partition))
+            } finally {
+                withContext(NonCancellable) { job.cancelAndJoin() }
+            }
+        }
+    }
 
     @Test
     fun defaultsNeedNoKeyAndSavedPrivacySurvivesDatabaseReopenAndReauthentication() =
