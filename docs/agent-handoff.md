@@ -1,5 +1,40 @@
 # Agent continuation — HRIS Mobile
 
+## Encrypted notification input in progress
+
+Raw DeviceRecordStore is COMMITTED/PUSHED at
+**76bd7673e898b2c5ca4b6af98827a03848fc6071**; accepted local evidence below.
+The next encrypted input implementation is UNCOMMITTED and focused1 is RUNNING:
+.work/chat-notification-input-2026-11-03,18 frozen inputs (17 Kotlin/one Swift).
+No source mutation or second local heavy job until this check completes. SQLite14
+new storage cases already passed; browser/Koin/quality results are not yet accepted.
+
+The six .txt drafts from the raw-store work directory have now been APPLIED and
+improved; do not recopy them over current source. Canonical token decoding now occurs
+before key creation. Retention authenticates an existing record before allowing more
+writes, so a well-formed wrong key cannot mix encryption keys in one queue. Explicit
+protected input key is wired in Android/Apple/browser/Desktop and closed by its app
+container. Desktop uses OS credential storage independently of session-persistence
+settings. New actual SQLite/browser tests exercise fourteen cases each; one Koin
+integration checks no-session preservation/reopen and key ownership. Contract:
+[protected pre-session input](collaboration-notification-input.md). No use case/native
+callback/review UI or authenticated transfer cleanup is implemented by this increment.
+
+After focused1: inspect fresh XML and exact source hashes; fix any real failure with
+its failed-run evidence preserved. Run full root/proof assembly/Wasm and required
+browser cases, record actual counts, commit and push the accepted implementation.
+Then implement authenticated transfer and exact cleanup before OS callback/review UI.
+Do not expose unverified text under a different account or treat local encryption
+as account authorization. Physical iPhone waived; full Xcode still required.
+
+Hosted Apple41588371503 at de69 is still building Xcode; audit once after completion.
+Native41587502684 at de69 is RUNNING; automatic41590342856 at76bd is PENDING behind it.
+No manual duplicates/cancels. Auditors ready for de69 Apple/native. After the Apple
+result is audited, freeze its234 paths plus raw15/schema and any accepted input sources
+for one consolidated full Apple. Existing CI excludes this uncommitted repository.
+Phone21 remains installed; no other APK or real-account messages. Live304/schema116
+and Starter0d4432e unchanged; notification hosts unbound/chat push OFF/all54 groups open.
+
 ## Device-owned raw records accepted locally; continue encrypted input repository
 
 [Raw storage contract](device-records.md) and
