@@ -1,5 +1,71 @@
 # Agent continuation — HRIS Mobile
 
+## Finite input recovery in progress; Starter port and native gate updated
+
+Mobile application capture/recovery is COMMITTED/PUSHED at
+5bc5a7a31d17aff8fab4e7bb3e4cac32d37bf198. The next finite device-input recovery
+implementation is APPLIED/UNCOMMITTED with23 frozen Kotlin files. Focused1 is RUNNING
+in .work/chat-notification-input-recovery-2026-11-03; it owns the only local heavy slot.
+Do not mutate these inputs or launch another local Gradle/emulator until completion.
+No new product APK or phone install. Phone21 remains installed.
+
+New domain/data code retains an account-encrypted snapshot of at most64 opaque input
+references using the existing history key (never creates one), random cycle/generation,
+nextIndex, inFlight, sticky retry, continuation and finished. Prepare collects at most
+four metadata pages; exact CAS advances before each attempt. Finish rereads current
+references to detect arrival/replacement before the prior seek. No private text/token
+is in the cursor. SQLite/browser contracts and domain transition tests are added.
+The actual app worker is wired as a four-second phase before existing reply/priority/
+company work, with at most two1s resumeProtected attempts. The90s overall turn remains;
+new virtual-time test reserves49s company work even after4+8+20s independent timeouts.
+An actual Koin/SQLite fixture tests64 inputs, failed prefix,32 container reopens,
+cancellation, arrivals and old-family review. These tests are NOT yet accepted.
+HrisWorkerProofContainer now owns an explicit Android notification-input credential
+store; the isolated company fixture explicitly has no input phase. No native callback
+activation, notification-input OS-death proof or review UI is claimed.
+
+After focused1, inspect fresh results and preserve any failures; fix actual defects,
+then run full root, eight real browser storage cases (selector with trailing wildcard),
+proof host/assembly and shared Wasm, freeze source hashes, record, commit and push.
+Next add native capture callback ownership and actual OS-death replay. Do not keep
+splitting storage foundations once this integration is validated; application hosts
+and callback/review behavior are the remaining notification work.
+
+Hosted native41592216948 at81c7 is now ACCEPTED:
+[evidence](measurements/chat-notification-input-native-2026-11-03.json).
+273 exact source hashes; five provider cases/three suites,230 Android-host/37,
+11 proof-host/three, zero failures/errors/skips. Raw notification16 groups/two scenarios
+passed30.988s with verified uninstall. SDK three encrypted sends/seven receipt POST200;
+three worker states each176 originals/11 passes/11 container reopens, priority one pass;
+ordinary WorkManager death/automatic restart/network restoration pass. Artifact13212856645
+GitHub SHA256 `4070579f16fb483ebafb452f09be9fe9d4c5fe080213c2035f2181538d3893ff`.
+Proof APK `6a0b0b0b851cf9a3b0c89c29580930c4445c03447b0cd9176ed725edf9a7e088`.
+Build1021s/Platform322s/native1115s. Audit complete in
+.work/chat-notification-input-native-2026-11-03; do not repeat. It excludes89dd transfer,
+bf69 receipt barrier and5bc application flow/new worker. Success with the old barrier
+does not remove the separately reproduced de69 fixture race.
+
+Native41595695537 at5bc is RUNNING and includes the corrected receipt barrier/15 host
+proof tests. The queued89dd41594372624 andbf6941594812123 were superseded automatically;
+no manual cancellation. Do not duplicate/cancel. Its audit preparation remains next;
+freeze the previous273 sources plus transfer10/barrier2/flow5 against committed5bc.
+This still excludes the current uncommitted worker/callback work.
+
+Starter raw storage is COMMITTED/PUSHED16f4b23718c98e49cc69970dcf71e96ec8cceb2a;
+current docs headc37bff9. Its independent root/database-browser/Android dev/lint/Web
+PASSED325.503s:365 desktop/120,51 fresh browser/eight,six build-logic/one;
+217 fresh/63,16 exact Mobile sources/schema, zero failures/errors/skips. Lint0 errors/
+44 existing warnings. No APK installed. ONE full Starter Apple41596469348 dispatched
+07:27:45Z at16f4b237; pending/running. Auditor ready in Starter
+.work/device-records-apple-2026-11-03,16 frozen sources, require eight Apple storage cases
+and full Xcode plus actual report/artifact/source digests. Do not repeat local tests.
+
+Latest accepted Mobile Apple41592237356 at81c7 has997 cases/111 suites and full Xcode,
+but excludes89dd+5bc+new worker. Consolidate the new accepted application/worker code
+in a later full Mobile Apple; no duplicate active run. Platform304/schema116 unchanged,
+chat push OFF/native hosts unbound/all54 groups open. Continue long run.
+
+
 ## Application capture and protected-input recovery accepted locally
 
 [Capture/recovery flow](collaboration-notification-input.md) is locally ACCEPTED;
