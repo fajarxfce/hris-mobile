@@ -20,6 +20,7 @@ class CollaborationNotificationPublisher(
     private val finish: FinishCollaborationNotificationPublication,
     private val prepareMute: PrepareCollaborationMutedNotification,
     private val commitMute: CommitCollaborationMutedNotification,
+    private val focus: CollaborationNotificationFocus = CollaborationNotificationFocus(),
 ) {
     suspend fun publish(
         parent: CollaborationNativeParent,
@@ -29,6 +30,7 @@ class CollaborationNotificationPublisher(
         expected: CollaborationNotificationPublicationReference? = null,
     ): AppResult<CollaborationNotificationPublicationResult> =
         owner.withOwner(parent) {
+            val focused = focus.capture()
             val access =
                 CollaborationLocalAccess(
                     parent.sessionId,
@@ -55,6 +57,7 @@ class CollaborationNotificationPublisher(
                     }
                     is CollaborationNotificationProjection.Ready -> projection.message
                 }
+            if (!focus.current(focused)) return@withOwner surfaceFailure(FailureKind.Conflict)
             val issued = issue(scope, message, expected)
             if (issued is AppResult.Failed) return@withOwner issued
             val ready =
@@ -65,7 +68,9 @@ class CollaborationNotificationPublisher(
                         )
                     is CollaborationNotificationIssuance.Ready -> value
                 }
-            submit(ready, copy, allowAlert)
+            if (!focus.current(focused)) return@withOwner surfaceFailure(FailureKind.Conflict)
+            if (focused.matches(parent, candidate)) suppressFocused(ready, focused)
+            else submit(ready, copy, allowAlert, focused)
         }
 
     private suspend fun CollaborationNotificationSurfaceLease.suppressMuted(
@@ -113,16 +118,57 @@ class CollaborationNotificationPublisher(
         return AppResult.Success(CollaborationNotificationPublicationResult.SuppressionRecorded)
     }
 
+    private suspend fun CollaborationNotificationSurfaceLease.suppressFocused(
+        ready: CollaborationNotificationIssuance.Ready,
+        focused: CollaborationNotificationFocus.Snapshot,
+    ): AppResult<CollaborationNotificationPublicationResult> {
+        val publication = ready.publication
+        validate(publication).let { if (it is AppResult.Failed) return it }
+        if (!focus.current(focused)) return surfaceFailure(FailureKind.Conflict)
+        val previous = ready.previous
+        if (previous != null && previous.state.isActivePublication()) {
+            val removed =
+                remove(
+                    ActionNotificationReference(
+                        previous.target.notificationId,
+                        previous.target.renderId,
+                    )
+                )
+            if (removed is AppResult.Failed) return removed
+            if ((removed as AppResult.Success).value == ActionNotificationRemoval.Replaced)
+                return surfaceFailure(FailureKind.Conflict)
+        }
+        validate(publication).let { if (it is AppResult.Failed) return it }
+        if (!focus.current(focused)) return surfaceFailure(FailureKind.Conflict)
+        val finished = finish(publication, CollaborationNotificationPublicationState.Cancelled)
+        if (finished is AppResult.Failed) return finished
+        val receipt =
+            when (val value = (finished as AppResult.Success).value) {
+                CollaborationNotificationPublicationSettlement.Contended ->
+                    return surfaceFailure(FailureKind.Conflict)
+                is CollaborationNotificationPublicationSettlement.Settled -> value
+            }
+        validate.afterCancellation(publication, receipt).let {
+            if (it is AppResult.Failed) return it
+        }
+        if (!focus.current(focused)) return surfaceFailure(FailureKind.Conflict)
+        currentCoroutineContext().ensureActive()
+        return AppResult.Success(CollaborationNotificationPublicationResult.SuppressionRecorded)
+    }
+
     private suspend fun CollaborationNotificationSurfaceLease.submit(
         ready: CollaborationNotificationIssuance.Ready,
         copy: CollaborationNotificationCopy,
         allowAlert: Boolean,
+        focused: CollaborationNotificationFocus.Snapshot,
     ): AppResult<CollaborationNotificationPublicationResult> {
         val publication = ready.publication
         validate(publication).let { if (it is AppResult.Failed) return it }
+        if (!focus.current(focused)) return surfaceFailure(FailureKind.Conflict)
         val payload = publication.nativePayload(copy, silent = !allowAlert || !ready.newOriginal)
         val submitted = show(payload)
         if (submitted is AppResult.Failed) return submitted
+        if (!focus.current(focused)) return surfaceFailure(FailureKind.Conflict)
         when ((submitted as AppResult.Success).value) {
             ActionNotificationSubmission.PermissionRequired ->
                 return AppResult.Success(
@@ -161,6 +207,7 @@ class CollaborationNotificationPublisher(
                     ),
             )
         validate(acknowledged).let { if (it is AppResult.Failed) return it }
+        if (!focus.current(focused)) return surfaceFailure(FailureKind.Conflict)
         currentCoroutineContext().ensureActive()
         return AppResult.Success(CollaborationNotificationPublicationResult.Submitted)
     }

@@ -158,6 +158,7 @@ class IssueCollaborationMessageNotification(
                     CollaborationNotificationIssuance.Ready(
                         stored,
                         newOriginal = previous?.body?.target?.eventId != message.eventId,
+                        previous = previous?.cleanupReference(),
                     )
                 )
             }
@@ -182,7 +183,11 @@ class IssueCollaborationMessageNotification(
             return notificationPublicationFailure(FailureKind.Conflict)
         // After uncertain storage/OS delivery, absence is not proof that no alert occurred.
         return AppResult.Success(
-            CollaborationNotificationIssuance.Ready(previous, newOriginal = false)
+            CollaborationNotificationIssuance.Ready(
+                previous,
+                newOriginal = false,
+                previous = previous.cleanupReference(),
+            )
         )
     }
 

@@ -1,5 +1,15 @@
 # Validation
 
+## Focused-route notification disposition — 3 November 2026
+
+[Owned focus and inactive settlement](collaboration-notification-focus.md) pass107
+focused desktop cases plus11 proof cases. Full3 passes3,785 desktop/535 suites,230
+Android-host/37,11 proof-host/three and ten build-logic/two, zero failures/errors/skips;
+root quality/proof assembly/shared Wasm pass. [Evidence](measurements/chat-notification-focus-2026-11-03.json)
+records336.536s,2,190 fresh cases/265 suites,18 source hashes and the rejected missing-import
+attempt. UI lifecycle and actual Koin/SQLite cases are distinct from fake OS behavior.
+Hosted a90dc3f6 predates focus; actual native host/input acceptance remains open.
+
 ## Native proof observation repair — 3 November 2026
 
 [Fixture observation](collaboration-native-proof-observation.md) reproduces four expected

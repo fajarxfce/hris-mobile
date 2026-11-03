@@ -20,6 +20,7 @@ class ChatThreadViewModelTest {
             vm.onEvent(ChatThreadEvent.Entered)
             runCurrent()
             assertEquals("Colleague 1", vm.state.value.title)
+            assertEquals(f.setup.owner, vm.state.value.notificationOwner)
             assertEquals("Saved conversation", vm.state.value.rows.single().text)
             assertEquals(0, f.setup.reads)
             assertEquals(0, f.timelineOpens)
@@ -96,6 +97,7 @@ class ChatThreadViewModelTest {
             f.base.session.value = null
             runCurrent()
             assertNull(vm.state.value.title)
+            assertNull(vm.state.value.notificationOwner)
             assertTrue(vm.state.value.rows.isEmpty())
             assertEquals("", vm.state.value.draft)
             assertNotNull(vm.state.value.localFailure)

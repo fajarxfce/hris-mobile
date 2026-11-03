@@ -3,6 +3,7 @@ package dev.fajar.starter.app.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleStartEffect
@@ -11,6 +12,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.compose.composable
 import dev.fajar.starter.app.bootstrap.*
+import dev.fajar.starter.app.notifications.CollaborationNotificationFocus
 import dev.fajar.starter.auth.presentation.navigation.*
 import dev.fajar.starter.collaboration.presentation.navigation.*
 import dev.fajar.starter.designsystem.components.*
@@ -35,11 +37,14 @@ import dev.fajar.starter.workspace.domain.entities.PendingActionGroup
 import dev.fajar.starter.workspace.presentation.navigation.*
 import dev.fajar.starter.workspace.presentation.policy.*
 import kotlinx.coroutines.flow.Flow
+import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun AppNavigation(navigation: ScopedNavigationState, incomingLinks: Flow<String>) {
     val controller = navigation.controller
+    val notificationFocus = koinInject<CollaborationNotificationFocus>()
+    val onThreadFocus = remember(notificationFocus) { notificationFocus::register }
     val viewModel = koinViewModel<AppViewModel>()
     val state by viewModel.state.collectAsStateWithLifecycle()
     val stage = state.accessFailure?.let { AppStage.Failed(it) } ?: state.stage
@@ -237,6 +242,7 @@ fun AppNavigation(navigation: ScopedNavigationState, incomingLinks: Flow<String>
                     }
                     collaborationRoutes(
                         stage.workspace.id,
+                        onThreadFocus = onThreadFocus,
                         onNewChat = {
                             controller.navigate(ChatParticipantsRoute) { launchSingleTop = true }
                         },

@@ -17,6 +17,39 @@ import org.koin.core.parameter.parametersOf
 /** Actual app DI and encrypted SQLite; acquisition and the native OS remain explicit fakes. */
 class CollaborationNotificationProcessIntegrationTest {
     @Test
+    fun focusedRouteChangeRetiresAnExistingCardWithoutAnExplicitPublishAndBlurStaysQuiet() =
+        runBlocking {
+            withProcess(seedPublication = false) { f, process, shown, removed ->
+                process.start()
+                assertEquals(
+                    AppResult.Success(CollaborationNotificationPublicationResult.Submitted),
+                    process.publish(f.parent, f.candidate, true),
+                )
+                val original = next(shown) { true }
+                idle(f)
+                val registration =
+                    assertNotNull(
+                        f.app.koin
+                            .get<CollaborationNotificationFocus>()
+                            .register(f.app.incomingGrant().owner, f.candidate.conversationId)
+                    )
+                assertEquals(original.reference, withTimeout(15_000) { removed.receive() })
+                idle(f)
+                assertEquals(
+                    CollaborationNotificationPublicationState.Cancelled,
+                    f.publication()!!.body.state,
+                )
+                assertTrue(f.native.cards.isEmpty())
+                registration.close()
+                assertEquals(
+                    AppResult.Success(CollaborationNotificationPublicationResult.Unchanged),
+                    process.publish(f.parent, f.candidate, true),
+                )
+                assertEquals(1, f.native.attempts)
+            }
+        }
+
+    @Test
     fun uncertainNativeResultRetainsPreparationAndTheNextCandidateRequestReplaysSilently() =
         runBlocking {
             withProcess(seedPublication = false) { f, process, shown, _ ->

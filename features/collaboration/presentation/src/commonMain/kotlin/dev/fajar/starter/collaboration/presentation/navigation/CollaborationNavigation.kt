@@ -36,6 +36,13 @@ fun NavGraphBuilder.collaborationRoutes(
     onSelectedConversation: (String) -> Unit,
     onSetup: () -> Unit,
     onBack: () -> Unit,
+    onThreadFocus:
+        (
+            dev.fajar.starter.collaboration.domain.entities.CollaborationOwner, String,
+        ) -> AutoCloseable? =
+        { _, _ ->
+            null
+        },
 ) {
     composable<ChatInboxRoute> { ChatInboxEntry(workspaceId, onNewChat, onConversation, onBack) }
     composable<ChatParticipantsRoute> {
@@ -48,6 +55,7 @@ fun NavGraphBuilder.collaborationRoutes(
             entry.toRoute<ChatThreadRoute>().conversationId,
             onSetup,
             onBack,
+            onThreadFocus,
         )
     }
 }
@@ -123,6 +131,10 @@ private fun ChatThreadEntry(
     conversationId: String,
     onSetup: () -> Unit,
     onBack: () -> Unit,
+    onThreadFocus:
+        (
+            dev.fajar.starter.collaboration.domain.entities.CollaborationOwner, String,
+        ) -> AutoCloseable?,
 ) {
     val vm =
         koinViewModel<ChatThreadViewModel>(
@@ -141,6 +153,7 @@ private fun ChatThreadEntry(
             ChatThreadEffect.ScrollToNewest -> list.requestScrollToItem(0)
         }
     }
+    ChatThreadFocusObserver(state, conversationId, onThreadFocus)
     ChatThreadViewportObserver(state, list, vm::onEvent)
     ChatThreadPage(state, list, vm::onEvent)
 }

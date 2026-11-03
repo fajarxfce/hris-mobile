@@ -8,6 +8,8 @@ sealed interface CollaborationNotificationIssuance {
     data class Ready(
         val publication: CollaborationNotificationPublication,
         val newOriginal: Boolean,
+        /** Exact previous native render, including reuse; never inferred from a new render ID. */
+        val previous: CollaborationNotificationPublicationReference? = null,
     ) : CollaborationNotificationIssuance {
         override fun toString() = "CollaborationNotificationIssuance.Ready([redacted])"
     }

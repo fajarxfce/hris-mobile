@@ -1,20 +1,45 @@
 # Agent continuation — HRIS Mobile
 
-## Native proof observation repaired; continue focused-route notifications
+## Focused-route notification disposition accepted; deliver build21
 
-UNACCEPTED working-tree focus increment:18 Kotlin paths are frozen by
-.work/chat-notification-focus-2026-11-03/check-1 (focused run currently active; inspect
-result/log before another heavy task). [Draft contract](collaboration-notification-focus.md).
-New app focus holder and current revision guards; actual thread owner exposed to
-route lifecycle/window registration; process observes focus; Issue.Ready carries the
-exact previous cleanup reference; publisher removes it before Cancelled settlement;
-Validate.afterCancellation rechecks the original source and inactive write. No new
-storage schema. New common ownership, domain provenance/retired-source, Compose
-lifecycle, Koin SQLite and process invalidation regressions are in the working tree.
-Run focused/root/proof/Wasm checks and preserve failures before acceptance/commit.
-This source is newer than hosted a90dc3f6; do not claim that pending Apple/native
-covers focus. Phone20 unchanged. No owned emulator is running.
+Focus integration is locally ACCEPTED. [Contract](collaboration-notification-focus.md),
+[evidence](measurements/chat-notification-focus-2026-11-03.json). Actual admitted thread
+owner feeds resumed/window-focused route registration; stale cleanup cannot clear a
+new route. The process observes focus revisions and joins obsolete work. Issuance
+carries the exact previous native reference; focused publication removes it before
+Cancelled settlement, then validates the original source and exact inactive write.
+No native show on the matching-focus path; blur/reopen cannot revive that original.
 
+Focused1 failed app compilation after69 passing domain/UI cases due to omitted remember
+import. Focused2 passed155.262s:107 desktop/12 suites plus11 proof/three;49 fresh/nine
+with69 explicitly reused. Full3 passed336.536s:3,785 desktop/535,230 Android-host/37,
+11 proof-host/three,ten build-logic/two;2,190 fresh/265 and18 unchanged Kotlin hashes,
+zero failures/errors/skips. Root quality, proof assembly and shared Wasm passed.
+Work/audits complete in .work/chat-notification-focus-2026-11-03. No further tests needed
+without new changes/failures. Focus changes conservatively wake other watched sources;
+measured64-source behavior remains separate. Production native hosts remain unbound,
+chat push OFF; all54 PRD groups open and voice/video/meeting UI absent.
+
+NEXT deliver build21. Scripts prepared, not yet executed, in
+.work/release-phone-2026-11-03-build21. Require clean accepted HEAD for build-arm64.py;
+it checks unchanged HEAD/clean status at the end. DO NOT commit or edit tracked files
+while this release build runs. One local heavy job at a time. Build+lint with the
+previously required2560MiB local heap, verify-arm64.py/verify-lint.py, then owned5562
+short two-cold-start smoke and guaranteed stop; inspect the screenshot. Phone was
+connected at preparation, explicit serial10.77.77.3:5555. Preflight signer/identity,
+notify user IMMEDIATELY BEFORE install.py --install-only; no phone UI launch, uninstall
+or data clear. Record actual build21 evidence rather than copying build20 failed-run
+or Apple fields. Release20 remains installed until successful update is verified.
+
+Hosted Apple41585101233 and corrected native41585074316 at a90dc3f6 are still running;
+their source excludes focus. Auditors ready in .work/chat-action-recovery-apple-2026-11-03
+and .work/chat-proof-observation-native-2026-11-03 (232 frozen relevant source files).
+Run artifact auditors only after completion; native success auditor requires actual
+five scenarios/16 raw groups/11 host proof cases. If failed, inspect controlled category
+and preserve failure before another fix. No duplicate native/manual run. Apple must
+complete and be audited before dispatching one new full Apple for focus/build21. A
+read-only artifact audit and workflow dispatch can run during APK build, but defer all
+tracked documentation writes/commits until the release build finishes.
 
 Release20 devRelease1.0.0 from **543c61b9f821c6f63f404970c8b015a7c4ea9013** is INSTALLED
 on10.77.77.3:5555 with explicit install-only; do not reinstall it. APK87,806,596 bytes,
@@ -102,24 +127,13 @@ checks run. No local heavy job or owned emulator remains. The phone still has ve
 release20; these test-fixture builds are not new product APKs. On the next actual
 validated product release use >20, notify before explicit install-only, preserve data.
 
-Focus source trace: ChatThreadViewModel obtains actual owner from readContext; expose
-that authenticated owner in state and clear it on scope failure/replacement. Route
-composition owns registration only while RESUMED and window-focused; release exact
-registration on disposal. IDs alone are not ownership. App focus revision must be
-read directly before/after native I/O and observed by the existing process so late
-work is cancelled/joined. A durable inactive original prevents alert on later blur.
-Do not model focus as AccessDenied/source failure, or acknowledge without disposition.
+After build21 delivery continue device-encrypted pre-retention notification input,
+authenticated callback/review UI and actual platform host integration. Focus ownership
+and durable disposition are now implemented; generic Starter port remains scoped to
+proven reusable foundations, not HRIS policy. Keep real notification OS-death/permission/
+historical baselines and64-source measurement as explicit remaining acceptance.
 
-Implementation direction to evaluate: existing Issue->Validate->Finish(Cancelled)
-can retain a focused original without display; Issue.Ready would also need the actual
-previous opaque publication reference so old native render is removed exactly before
-settlement. No new database schema needed. Verify current source before choosing this;
-it is design only. Keep mute behavior, actual parent/company/history admission,
-conditional journal checks, and late/cancellation/uncertain-write safeguards intact.
-Add Koin/SQLite reopen tests and route lifecycle tests; full root/relevant checks,
-atomic commits/push. Generic Starter port still waits for integrated Mobile proof.
-
-Focused-route ownership/disposition and device-encrypted pre-retention input quarantine,
+Device-encrypted pre-retention input quarantine,
 review UI, real native callbacks, permission wakeups, baselines and notification-input
 OS-death proof remain open. Production native notification hosts are unbound; chat push
 OFF. Voice/video/meeting UI absent; all54 PRD groups open. Continue the long run after

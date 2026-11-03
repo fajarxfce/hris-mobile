@@ -1,7 +1,7 @@
 # Focused conversation notifications
 
-This increment is implemented in the working tree and is not yet accepted. Its
-focused validation is running; see the current agent handoff for the result.
+Focused-route ownership and inactive settlement are locally accepted. Production
+native host activation and hosted validation of this source remain separate gates.
 
 The thread state carries the actual account/company/native owner returned by local
 context admission. Navigation owns a registration only while the route is resumed,
@@ -39,3 +39,12 @@ iOS delegates. Chat push remains disabled. Device-encrypted pre-retention quaran
 authenticated review UI, callbacks, permission wakes, historical/backfill baselines,
 actual notification-input OS-death acceptance and integrated native delivery remain
 open. Release20 on the phone predates this increment.
+
+[Validation](measurements/chat-notification-focus-2026-11-03.json): focused2 passes107
+desktop cases/12 suites plus11 proof cases/three, including69 reused domain/UI cases.
+Full3 passes3,785 desktop/535 suites,230 Android-host/37,11 proof-host/three and ten
+build-logic/two, zero failures/errors/skips, in336.536s.2,190 full-run cases/265 suites
+are fresh;18 Kotlin hashes are unchanged. Root quality, proof assembly and shared
+Wasm compile pass. The first attempt passed69 cases before a missing import stopped
+app compilation; the corrected import preserves the same behavior and expectations.
+No screenshot or actual native notification-input OS-death acceptance is claimed.

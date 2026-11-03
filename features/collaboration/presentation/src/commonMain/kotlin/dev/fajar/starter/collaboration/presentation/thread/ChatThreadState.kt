@@ -1,5 +1,6 @@
 package dev.fajar.starter.collaboration.presentation.thread
 
+import dev.fajar.starter.collaboration.domain.entities.CollaborationOwner
 import dev.fajar.starter.common.result.Failure
 
 enum class ChatThreadConnection {
@@ -12,6 +13,8 @@ enum class ChatThreadConnection {
 
 data class ChatThreadState(
     val title: String? = null,
+    /** Captured by admitted local context; a route ID alone cannot claim notification focus. */
+    val notificationOwner: CollaborationOwner? = null,
     /** Ephemeral owner generation for viewport callbacks; never a credential. */
     val readViewportToken: String? = null,
     val rows: List<ChatMessageRow> = emptyList(),

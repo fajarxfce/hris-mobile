@@ -10,6 +10,45 @@ import kotlinx.coroutines.test.runTest
 
 class CollaborationNotificationPublicationLifecycleTest {
     @Test
+    fun cancelledSourceValidationChecksBothTheExactInactiveWriteAndOriginalTimestamp() = runTest {
+        val f = CollaborationNotificationIssuanceFixture()
+        val original = publication(f.issue())
+        val receipt =
+            settled(f.finisher(original, CollaborationNotificationPublicationState.Cancelled))
+        assertEquals(AppResult.Success(Unit), f.validator.afterCancellation(original, receipt))
+        val retained = f.stored!!
+        assertNull(retained.body.actions)
+        assertNull(retained.body.message)
+        f.projection.original =
+            f.projection.original!!.copy(timestamp = original.body.timestamp + 1)
+        failed(f.validator.afterCancellation(original, receipt), FailureKind.Conflict)
+        f.projection.original = f.projection.original!!.copy(timestamp = original.body.timestamp)
+        f.stored =
+            retained.copy(version = retained.version.copy(revision = retained.version.revision + 1))
+        failed(f.validator.afterCancellation(original, receipt), FailureKind.Conflict)
+        assertEquals(2, f.writes)
+    }
+
+    @Test
+    fun cancelledSourceValidationRejectsForeignReceiptAndLateParentReplacement() = runTest {
+        val f = CollaborationNotificationIssuanceFixture()
+        val original = publication(f.issue())
+        val receipt =
+            settled(f.finisher(original, CollaborationNotificationPublicationState.Cancelled))
+        for (invalid in
+            listOf(
+                receipt.copy(id = "foreign"),
+                receipt.copy(notificationId = "foreign"),
+                receipt.copy(renderId = "foreign"),
+                receipt.copy(state = CollaborationNotificationPublicationState.Published),
+                receipt.copy(version = original.version),
+            )) failed(f.validator.afterCancellation(original, invalid), FailureKind.Validation)
+        f.replaceFamily()
+        failed(f.validator.afterCancellation(original, receipt), FailureKind.Unauthorized)
+        assertEquals(CollaborationNotificationPublicationState.Cancelled, f.stored!!.body.state)
+    }
+
+    @Test
     fun exactPreparedAndPublishedValidationIsReadOnlyAndWorksWithExpiredLocalFacts() = runTest {
         val f = CollaborationNotificationIssuanceFixture()
         f.local.setup.now += 365.days

@@ -10,6 +10,28 @@ import kotlinx.coroutines.test.runTest
 
 class CollaborationNotificationIssuanceTest {
     @Test
+    fun issuanceCarriesExactPreviousRenderAcrossReuseAndFamilyReplacement() = runTest {
+        val f = CollaborationNotificationIssuanceFixture()
+        suspend fun result() =
+            assertIs<CollaborationNotificationIssuance.Ready>(
+                assertIs<AppResult.Success<CollaborationNotificationIssuance>>(f.issue()).value
+            )
+        val first = result()
+        assertNull(first.previous)
+        val previous = first.publication
+        val reused = result()
+        assertEquals(previous.id, reused.previous!!.id)
+        assertEquals(previous.version, reused.previous!!.version)
+        assertEquals(previous.body.target, reused.previous!!.target)
+        f.replaceFamily()
+        val changed = result()
+        assertNotEquals(previous.body.target.renderId, changed.publication.body.target.renderId)
+        assertEquals(previous.body.target, changed.previous!!.target)
+        assertEquals(previous.body.parent, changed.previous!!.parent)
+        assertEquals(previous.body.state, changed.previous!!.state)
+    }
+
+    @Test
     fun onlyANewlyRetainedOriginalAllowsAnAlertWhileReplayAndFamilyRerenderStaySilent() = runTest {
         val f = CollaborationNotificationIssuanceFixture()
         suspend fun newOriginal() =

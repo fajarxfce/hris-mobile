@@ -155,6 +155,7 @@ class ChatThreadViewModel(
                     updateState {
                         it.copy(
                             title = value.value.summary.peer.displayName,
+                            notificationOwner = value.owner,
                             localFailure = null,
                             readViewportToken = it.readViewportToken ?: Uuid.random().toString(),
                         )

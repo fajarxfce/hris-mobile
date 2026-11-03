@@ -49,11 +49,47 @@ class ValidateCollaborationNotificationPublication(
                 !expected.body.state.isActivePublication()
         )
             return notificationPublicationFailure(FailureKind.Validation)
-        return withTimeoutOrNull(8_000) { validate(expected) }
+        return withTimeoutOrNull(8_000) { validate(expected, expected) }
             ?: notificationPublicationFailure(FailureKind.Unavailable)
     }
 
-    private suspend fun validate(expected: CollaborationNotificationPublication): AppResult<Unit> {
+    /** Rechecks the original source after an exact inactive write; never authorizes display. */
+    suspend fun afterCancellation(
+        original: CollaborationNotificationPublication,
+        receipt: CollaborationNotificationPublicationSettlement.Settled,
+    ): AppResult<Unit> {
+        currentCoroutineContext().ensureActive()
+        if (
+            !validCollaborationNotificationPublication(original) ||
+                !original.body.state.isActivePublication() ||
+                receipt.id != original.id ||
+                receipt.notificationId != original.body.target.notificationId ||
+                receipt.renderId != original.body.target.renderId ||
+                receipt.state != CollaborationNotificationPublicationState.Cancelled ||
+                receipt.version.generation != original.version.generation ||
+                receipt.version.revision <= original.version.revision
+        )
+            return notificationPublicationFailure(FailureKind.Validation)
+        val retired =
+            original.copy(
+                version = receipt.version,
+                body =
+                    original.body.copy(
+                        state = CollaborationNotificationPublicationState.Cancelled,
+                        message = null,
+                        actions = null,
+                    ),
+            )
+        if (!validCollaborationNotificationPublication(retired))
+            return notificationPublicationFailure(FailureKind.Validation)
+        return withTimeoutOrNull(8_000) { validate(original, retired) }
+            ?: notificationPublicationFailure(FailureKind.Unavailable)
+    }
+
+    private suspend fun validate(
+        expected: CollaborationNotificationPublication,
+        retained: CollaborationNotificationPublication,
+    ): AppResult<Unit> {
         val captured = sessions.capturePushParent(server, build)
         if (captured is AppResult.Failed) return captured
         val parent = (captured as AppResult.Success).value
@@ -61,7 +97,7 @@ class ValidateCollaborationNotificationPublication(
             return notificationPublicationFailure(FailureKind.Unauthorized)
         val message = requireNotNull(expected.body.message)
         authority.guard(parent, message.access).let { if (it is AppResult.Failed) return it }
-        exact(expected, message).let { if (it is AppResult.Failed) return it }
+        exact(retained, message).let { if (it is AppResult.Failed) return it }
         val inspected = authority.inspect(parent, message)
         if (inspected is AppResult.Failed) return inspected
         val original = (inspected as AppResult.Success).value
@@ -72,7 +108,7 @@ class ValidateCollaborationNotificationPublication(
         if (confirmed is AppResult.Failed) return confirmed
         if ((confirmed as AppResult.Success).value != original)
             return notificationPublicationFailure(FailureKind.Conflict)
-        return exact(expected, message)
+        return exact(retained, message)
     }
 
     private suspend fun exact(
