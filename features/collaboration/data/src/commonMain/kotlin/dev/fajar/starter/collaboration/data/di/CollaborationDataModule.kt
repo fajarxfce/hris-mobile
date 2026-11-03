@@ -241,6 +241,52 @@ class CollaborationDataModule {
         )
 
     @Factory
+    fun prepareMutedNotification(
+        journal: CollaborationNotificationPublicationRepository,
+        settings: CollaborationNotificationSettingsRepository,
+        history: CollaborationHistoryRepository,
+        lists: CollaborationListRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) =
+        PrepareCollaborationMutedNotification(
+            journal,
+            settings,
+            history,
+            lists,
+            sessions,
+            workspaces,
+            server,
+            build,
+            Clock.System,
+        )
+
+    @Single
+    fun commitMutedNotification(
+        journal: CollaborationNotificationPublicationRepository,
+        settings: CollaborationNotificationSettingsRepository,
+        history: CollaborationHistoryRepository,
+        lists: CollaborationListRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) =
+        CommitCollaborationMutedNotification(
+            journal,
+            settings,
+            history,
+            lists,
+            sessions,
+            workspaces,
+            server,
+            build,
+            Clock.System,
+        )
+
+    @Factory
     fun prepareMessageNotification(
         settings: CollaborationNotificationSettingsRepository,
         reads: CollaborationReadStateRepository,

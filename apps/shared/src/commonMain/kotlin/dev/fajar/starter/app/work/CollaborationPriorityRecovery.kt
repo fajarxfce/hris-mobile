@@ -71,6 +71,7 @@ class CollaborationPriorityRecovery(
                     when (submitted.value) {
                         CollaborationNotificationPublicationResult.Submitted,
                         CollaborationNotificationPublicationResult.Suppressed,
+                        CollaborationNotificationPublicationResult.SuppressionRecorded,
                         CollaborationNotificationPublicationResult.Unchanged -> Unit
                         else -> return pending("notification_pending")
                     }

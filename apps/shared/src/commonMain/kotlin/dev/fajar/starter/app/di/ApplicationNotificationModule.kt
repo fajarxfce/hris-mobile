@@ -20,7 +20,7 @@ fun applicationNotificationModule() = module {
     single { CollaborationNotificationDelivery() }.onClose { it?.close() }
     // A host supplies its already-started surface owner. No native delivery is started here.
     factory { (owner: CollaborationNotificationSurfaceOwner) ->
-        CollaborationNotificationPublisher(owner, get(), get(), get(), get())
+        CollaborationNotificationPublisher(owner, get(), get(), get(), get(), get(), get())
     }
     factory { (owner: CollaborationNotificationSurfaceOwner) ->
         CollaborationNotificationReconciler(owner, get { parametersOf(owner) }, get())

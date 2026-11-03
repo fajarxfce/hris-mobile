@@ -277,7 +277,11 @@ class CollaborationNotificationProcess(
         // A suppressed/older candidate must not acknowledge a dirty, unrelated current card.
         if (
             slot.reference == null ||
-                result == AppResult.Success(CollaborationNotificationPublicationResult.Submitted)
+                result == AppResult.Success(CollaborationNotificationPublicationResult.Submitted) ||
+                result ==
+                    AppResult.Success(
+                        CollaborationNotificationPublicationResult.SuppressionRecorded
+                    )
         )
             slot.handled = signal
         complete(request, result)

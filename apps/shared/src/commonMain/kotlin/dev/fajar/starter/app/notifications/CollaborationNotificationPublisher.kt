@@ -1,6 +1,7 @@
 package dev.fajar.starter.app.notifications
 
 import dev.fajar.starter.collaboration.domain.entities.*
+import dev.fajar.starter.collaboration.domain.policies.isActivePublication
 import dev.fajar.starter.collaboration.domain.usecases.*
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.notifications.data.dto.*
@@ -17,6 +18,8 @@ class CollaborationNotificationPublisher(
     private val issue: IssueCollaborationMessageNotification,
     private val validate: ValidateCollaborationNotificationPublication,
     private val finish: FinishCollaborationNotificationPublication,
+    private val prepareMute: PrepareCollaborationMutedNotification,
+    private val commitMute: CommitCollaborationMutedNotification,
 ) {
     suspend fun publish(
         parent: CollaborationNativeParent,
@@ -43,10 +46,13 @@ class CollaborationNotificationPublisher(
                         return@withOwner AppResult.Success(
                             CollaborationNotificationPublicationResult.PendingHistory
                         )
-                    is CollaborationNotificationProjection.Suppressed ->
+                    is CollaborationNotificationProjection.Suppressed -> {
+                        if (projection.reason == CollaborationNotificationSuppression.Muted)
+                            return@withOwner suppressMuted(parent, access, candidate, expected)
                         return@withOwner AppResult.Success(
                             CollaborationNotificationPublicationResult.Suppressed
                         )
+                    }
                     is CollaborationNotificationProjection.Ready -> projection.message
                 }
             val issued = issue(scope, message, expected)
@@ -61,6 +67,51 @@ class CollaborationNotificationPublisher(
                 }
             submit(ready, copy, allowAlert)
         }
+
+    private suspend fun CollaborationNotificationSurfaceLease.suppressMuted(
+        parent: CollaborationNativeParent,
+        access: CollaborationLocalAccess,
+        candidate: CollaborationNotificationCandidate,
+        expected: CollaborationNotificationPublicationReference?,
+    ): AppResult<CollaborationNotificationPublicationResult> {
+        val prepared =
+            prepareMute(
+                parent,
+                access,
+                candidate.conversationId,
+                candidate.roomId,
+                candidate.eventId,
+            )
+        if (prepared is AppResult.Failed) return prepared
+        val plan =
+            when (val value = (prepared as AppResult.Success).value) {
+                CollaborationMutedNotificationPreparation.PendingHistory ->
+                    return AppResult.Success(
+                        CollaborationNotificationPublicationResult.PendingHistory
+                    )
+                CollaborationMutedNotificationPreparation.AlreadySuppressed ->
+                    return AppResult.Success(CollaborationNotificationPublicationResult.Suppressed)
+                is CollaborationMutedNotificationPreparation.Ready -> value.plan
+            }
+        if (expected != null && plan.previous != expected)
+            return AppResult.Success(CollaborationNotificationPublicationResult.Unchanged)
+        val previous = plan.previous
+        if (previous != null && previous.state.isActivePublication()) {
+            val removed =
+                remove(
+                    ActionNotificationReference(
+                        previous.target.notificationId,
+                        previous.target.renderId,
+                    )
+                )
+            if (removed is AppResult.Failed) return removed
+            if ((removed as AppResult.Success).value == ActionNotificationRemoval.Replaced)
+                return surfaceFailure(FailureKind.Conflict)
+        }
+        val committed = commitMute(plan)
+        if (committed is AppResult.Failed) return committed
+        return AppResult.Success(CollaborationNotificationPublicationResult.SuppressionRecorded)
+    }
 
     private suspend fun CollaborationNotificationSurfaceLease.submit(
         ready: CollaborationNotificationIssuance.Ready,

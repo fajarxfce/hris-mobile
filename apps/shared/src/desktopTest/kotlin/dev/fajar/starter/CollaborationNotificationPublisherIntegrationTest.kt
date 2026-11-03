@@ -255,7 +255,7 @@ class CollaborationNotificationPublisherIntegrationTest {
         }
 
     @Test
-    fun suppressedOrMissingCandidateDoesNotCancelAnotherCardOrSendAnImplicitCommand() =
+    fun missingCandidatePreservesCardAndMutedOriginalRetiresItWithoutImplicitCommand() =
         runBlocking {
             withFixture { f ->
                 complete(f.publish())
@@ -264,18 +264,24 @@ class CollaborationNotificationPublisherIntegrationTest {
                     AppResult.Success(CollaborationNotificationPublicationResult.PendingHistory),
                     f.publish(selected = f.candidate.copy(eventId = "\$fictional-missing-event")),
                 )
+                assertEquals(first, f.native.cards.values.single())
                 f.preferences(
                     CollaborationNotificationPreview.Hidden,
                     CollaborationNotificationMute.Forever,
                 )
                 assertEquals(
-                    AppResult.Success(CollaborationNotificationPublicationResult.Suppressed),
+                    AppResult.Success(
+                        CollaborationNotificationPublicationResult.SuppressionRecorded
+                    ),
                     f.publish(),
                 )
-                assertEquals(first, f.native.cards.values.single())
+                assertTrue(f.native.cards.isEmpty())
+                assertEquals(
+                    CollaborationNotificationPublicationState.Cancelled,
+                    f.publication()!!.body.state,
+                )
                 assertEquals(1, f.native.attempts)
                 assertTrue(f.app.sdk.enqueued.isEmpty())
-                // Ongoing active-card invalidation is a separate required host responsibility.
             }
         }
 

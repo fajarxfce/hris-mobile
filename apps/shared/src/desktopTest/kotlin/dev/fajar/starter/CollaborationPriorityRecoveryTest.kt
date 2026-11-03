@@ -27,36 +27,60 @@ class CollaborationPriorityRecoveryTest {
             f.koin.get<ApplicationPushReceiver>().queue(f.fields(event))
             val before = f.readPriority()
             assertIs<SyncResult.Retry>(f.koin.get<CollaborationPriorityRecovery>()(before.parent))
-            val access = f.incomingGrant().owner.localListAccess()
-            val settings =
-                assertIs<AppResult.Success<CollaborationNotificationSettingsState>>(
-                        f.koin
-                            .get<CollaborationNotificationSettingsRepository>()
-                            .read(access, f.first)
-                    )
-                    .value
-            assertIs<AppResult.Success<*>>(
-                f.koin.get<UpdateCollaborationNotificationSettings>()(
-                    CollaborationLocalScope.Captured(access, f.session.binding.serverId),
-                    f.first,
-                    CollaborationNotificationSettingsChange(
-                        UUID.randomUUID().toString(),
-                        settings.version,
-                        CollaborationNotificationSettings(
-                            CollaborationNotificationMute.Forever,
-                            CollaborationNotificationPreview.Hidden,
-                        ),
-                    ),
-                )
-            )
+            f.notificationMute(CollaborationNotificationMute.Forever)
             f.startPriorityNotifications(native)
             assertEquals(
                 SyncResult.Complete,
                 f.koin.get<CollaborationPriorityRecovery>()(before.parent),
             )
             assertTrue(f.readPriority().priority!!.hints.isEmpty())
-            assertNull(f.publication())
+            val muted = assertNotNull(f.publication())
+            assertEquals(CollaborationNotificationPublicationState.Cancelled, muted.body.state)
+            assertNull(muted.body.message)
+            assertNull(muted.body.actions)
             assertEquals(0, native.attempts)
+        }
+    }
+
+    @Test
+    fun interruptedAcknowledgmentThenUnmuteAndReopenCannotAlertForMutedOriginal() = runBlocking {
+        withFixture(notifications = false) { f, native ->
+            val event = f.sdk.incoming(f.first, "Fictional muted original before interrupted ACK")
+            f.koin.get<ApplicationPushReceiver>().queue(f.fields(event))
+            val before = f.readPriority()
+            assertIs<SyncResult.Retry>(f.koin.get<CollaborationPriorityRecovery>()(before.parent))
+            f.notificationMute(CollaborationNotificationMute.Forever)
+            f.startPriorityNotifications(native)
+            assertEquals(
+                AppResult.Success(CollaborationNotificationPublicationResult.SuppressionRecorded),
+                f.koin
+                    .get<CollaborationNotificationDelivery>()
+                    .publish(
+                        before.parent,
+                        CollaborationNotificationCandidate(
+                            NativeUiServer.COMPANY_ONE,
+                            f.first,
+                            f.server.collaboration.roomId(f.first),
+                            event.eventId,
+                        ),
+                        allowAlert = true,
+                    ),
+            )
+            // The process ends after durable disposition and before CompletePushPriority executes.
+            assertEquals(before, f.readPriority())
+            val retained = assertNotNull(f.publication())
+            f.reopen()
+            f.withoutIncomingSelection()
+            f.notificationMute(CollaborationNotificationMute.Unmuted)
+            f.startPriorityNotifications(native)
+            assertEquals(
+                SyncResult.Complete,
+                f.koin.get<CollaborationPriorityRecovery>()(before.parent),
+            )
+            assertTrue(f.readPriority().priority!!.hints.isEmpty())
+            assertEquals(retained, f.publication())
+            assertEquals(0, native.attempts)
+            assertTrue(native.cards.isEmpty())
         }
     }
 
@@ -543,6 +567,28 @@ class CollaborationPriorityRecoveryTest {
         } finally {
             f.close()
         }
+    }
+
+    private suspend fun CollaborationWorkerFixture.notificationMute(
+        mute: CollaborationNotificationMute
+    ) {
+        val access = incomingGrant().owner.localListAccess()
+        val settings =
+            assertIs<AppResult.Success<CollaborationNotificationSettingsState>>(
+                    koin.get<CollaborationNotificationSettingsRepository>().read(access, first)
+                )
+                .value
+        assertIs<AppResult.Success<*>>(
+            koin.get<UpdateCollaborationNotificationSettings>()(
+                CollaborationLocalScope.Captured(access, session.binding.serverId),
+                first,
+                CollaborationNotificationSettingsChange(
+                    UUID.randomUUID().toString(),
+                    settings.version,
+                    CollaborationNotificationSettings(mute, CollaborationNotificationPreview.Hidden),
+                ),
+            )
+        )
     }
 
     private fun CollaborationWorkerFixture.fields(

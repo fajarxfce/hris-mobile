@@ -20,6 +20,7 @@ enum class CollaborationNotificationPublicationResult {
     Submitted,
     PendingHistory,
     Suppressed,
+    SuppressionRecorded,
     Unchanged,
     PermissionRequired,
     ChannelDisabled,

@@ -36,6 +36,7 @@ internal class CollaborationNotificationIssuanceFixture {
     var reads = 0
     var writes = 0
     var readFailure: Failure? = null
+    var writeFailure: Failure? = null
     var sealFailure: Failure? = null
     var writeOutcome: CollaborationNotificationPublicationWrite? = null
     var commit = true
@@ -115,6 +116,9 @@ internal class CollaborationNotificationIssuanceFixture {
                     )
                 if (commit) stored = value
                 afterWrite()
+                writeFailure?.let {
+                    return AppResult.Failed(it)
+                }
                 return AppResult.Success(
                     writeOutcome ?: CollaborationNotificationPublicationWrite.Stored(value)
                 )
@@ -166,6 +170,52 @@ internal class CollaborationNotificationIssuanceFixture {
             local.server,
             local.build,
         )
+
+    val prepareMute =
+        PrepareCollaborationMutedNotification(
+            journal,
+            projection.settings.repo,
+            projection.history,
+            local.lists,
+            local.setup.sessions,
+            local.setup.workspaces,
+            local.server,
+            local.build,
+            local.clock,
+        )
+    val commitMute =
+        CommitCollaborationMutedNotification(
+            journal,
+            projection.settings.repo,
+            projection.history,
+            local.lists,
+            local.setup.sessions,
+            local.setup.workspaces,
+            local.server,
+            local.build,
+            local.clock,
+        )
+
+    fun mute() {
+        projection.preference(
+            CollaborationNotificationSettings(CollaborationNotificationMute.Forever)
+        )
+    }
+
+    suspend fun mutePlan(): CollaborationMutedNotificationPlan =
+        assertIs<CollaborationMutedNotificationPreparation.Ready>(
+                assertIs<AppResult.Success<*>>(
+                        prepareMute(
+                            parent,
+                            scope().access,
+                            projection.conversation,
+                            projection.room,
+                            projection.event,
+                        )
+                    )
+                    .value
+            )
+            .plan
 
     fun scope() = projection.settings.scope().copy(nativeSessionId = parent.nativeSessionId)
 

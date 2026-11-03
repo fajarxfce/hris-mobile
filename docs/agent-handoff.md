@@ -1,41 +1,67 @@
 # Agent continuation — HRIS Mobile
 
-## Consolidated Apple accepted; mute disposition currently under local validation
+## Durable mute disposition accepted; deliver release20, then continue native input/focus
+
+Muted originals now receive a guarded inactive Cancelled watermark before priority
+hint acknowledgment. Prepare carries metadata and the exact prior journal reference;
+inside the surface lease, exact native removal precedes conditional commit. No preview,
+action token or native show is created. Source/parent/denial/settings changes, cancellation
+and uncertain writes never report confirmed suppression. A committed inactive record
+survives response loss and reopen; unmute cannot revive that original. Missing originals
+remain pending unless an owned redaction fact already supplies terminal evidence.
+[Contract](collaboration-muted-notifications.md),
+[evidence](measurements/chat-muted-notification-2026-11-03.json).
+
+Full3 PASSED294.686s:3,757 desktop/532 suites,230 Android-host/37,six proof-host/one,
+ten build-logic/two; proof assembly/shared Wasm/root quality.2,162 fresh cases/262 suites,
+17 final source hashes, zero failures/errors/skips. Focused1 PASSED245.152s/125fresh;
+focused2 PASSED123.563s/123fresh plus six explicitly reused proof cases. Fourteen new
+domain cases/six Koin SQLite cases and one priority/process test ending between durable
+suppression and hint ACK, then reopen/unmute. Fake HTTP/SDK/OS remain explicit. No
+failed attempt. No local heavy job or owned emulator remains at this checkpoint.
+.work/chat-muted-notification-2026-11-03/audit.py and record.py completed; do not rerun
+full checks without a new reason. No storage schema/browser migration was introduced.
+
+NEXT release20 scripts PREPARED in .work/release-phone-2026-11-03-build20. After this
+commit is pushed and source is clean: build+lint, verify actual APK/signature/18 backup
+exclusions/16KiB/arm64; short owned emulator startup, stop it and inspect screenshot;
+notify immediately before explicit10.77.77.3:5555 install-only. Phone19 remains installed
+and connected. Preserve data/signer/UID/first-install; no phone UI automation. One heavy
+local job at a time. Keep Git HEAD and worktree clean throughout the release build;
+collect new CI evidence in .work until it finishes. Record installation in Git, push,
+and CONTINUE. The user requested each next mobile build on the phone.
+
+Continue authenticated action v2 and old-family typed-input retention for explicit
+review, then actual-parent/account/company/conversation focused-route suppression.
+Read .work/chat-muted-notification-2026-11-03/next-actions.txt and the existing source;
+those notes are design only. Current action v1 authenticates parent only as AAD, so a
+callback after replacement cannot independently recover its original parent. HRIS v1
+native hosts never activated; do not invent a mandatory legacy migration. Normal Send
+must still require exact current parent. Unknown/locked-key input needs bounded device
+encrypted quarantine and explicit account-authenticated review; no premature "saved".
+Focus must have its own revision/ownership and durable disposition; do not model it as
+a failed-source surrogate that revives old originals on blur. ChatThreadViewModel gets
+actual owner from readContext; arbitrary route IDs do not grant authority. Permission/
+channel/capacity wakeups, historical/backfill/dropped-hint baselines, native callbacks,
+notification-specific OS-death evidence and measured64-source behavior remain open.
 
 Full Apple [41575891048](measurements/chat-priority-notification-delivery-apple-2026-11-03.json)
-at76d004e5 is ACCEPTED:970 simulator cases/109 suites, zero failures/errors/skips,
-221 verified source hashes, full Xcode application build1,142s; test compile609s/test64s.
-Artifact13204977615 has verified GitHub ZIP digest
-`9abea12c79fc9ed86669b8c08b014a146c8d27a320aa06f669b5cb78b0902a6f`.
-Audit .work/chat-priority-notification-delivery-apple-2026-11-03 completed; do not rerun
-its exclusive extraction or redispatch this source. It includes candidate queue,
-background identity and priority handoff, but EXCLUDES the current mute increment.
-Shared app integration tests execute on desktop; Apple compiles their production app
-counterparts. No APNs/CallKit/native HRIS notification callbacks are accepted.
+at76d004e5 is ACCEPTED970/109,221 hashes, full Xcode1,142s/test compile609s/test64s.
+Artifact13204977615 ZIP SHA256
+`9abea12c79fc9ed86669b8c08b014a146c8d27a320aa06f669b5cb78b0902a6f` verified against
+GitHub. Audit .work/chat-priority-notification-delivery-apple-2026-11-03 is complete;
+do not repeat extraction/dispatch. It EXCLUDES current mute work. Dispatch ONE full
+Apple at the accepted mute/release20 source using union of old221 and current17 paths;
+freeze hashes, audit after completion. Physical iPhone waived; full Xcode required.
+Shared app integration executes on desktop; Apple compiles production app counterparts.
 
-Current UNCOMMITTED mute work uses two guarded domain operations and existing journal:
-prepare actual metadata/previous ref, remove exact active native render, commit inactive
-Cancelled watermark without preview/actions.17 Kotlin paths in
-.work/chat-muted-notification-2026-11-03. Focused1 passed245.152s/125fresh and focused2
-passed123.563s/123fresh (six additional proof cases explicitly reused). Full3 is still
-running; do not change its frozen Kotlin inputs. Fourteen domain cases/six new Koin
-SQLite mute cases plus an interrupted-hint-ACK/reopen/unmute integration case. Commit
-and push only after full3 passes and its audit/measurement are recorded.
-
-Release20 scripts are PREPARED in .work/release-phone-2026-11-03-build20; no product
-build/install started. After mute acceptance and a clean pushed source, build+lint,
-verify APK/signature/18 backup exclusions/16KiB/arm64, run short owned emulator startup,
-stop it, inspect screenshot, then notify and install-only on10.77.77.3:5555. Phone19
-remains installed; device was connected. Preserve app data/signer/UID/first-install;
-never drive phone UI. One heavy local job at a time. Continue implementation afterward.
-
-Automatic native41574010908 at56d3d6a6 FAILED before emulator/application execution:
-Android system-image download reported `Error on ZipFile unknown archive`; TCP5560
-was unavailable. Build and Platform fixture compile succeeded. Latest run41575838871
-at76d004e5 is already running; do not manually duplicate it. Local failure record is
-.work/chat-muted-notification-2026-11-03/identity-native-infrastructure-failure.json.
-Production native notification hosts remain unbound, chat push OFF, all54 PRD groups
-open and voice/video/meeting UI absent. Live304/schema116 and Starter are unchanged.
+Native41574010908 at56d3d6a6 FAILED before emulator/application execution: system-image
+download reported `Error on ZipFile unknown archive`; TCP5560 unavailable. Build/Platform
+fixture compile succeeded. Existing run41575838871 at76d004e5 is running; do not manually
+duplicate. This source includes priority fake-display proof, which must be distinguished
+from actual raw OS notification tests. Production notification hosts remain unbound,
+chat push OFF, all54 PRD groups open; voice/video/meeting UI absent. Live304/schema116
+and Starter unchanged. Generic native port waits for integrated Mobile proof.
 
 ## Priority-to-notification handoff accepted; native focus/callbacks and durable disposition next
 

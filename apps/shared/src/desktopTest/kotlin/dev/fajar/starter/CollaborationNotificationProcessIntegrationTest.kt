@@ -78,7 +78,7 @@ class CollaborationNotificationProcessIntegrationTest {
     }
 
     @Test
-    fun initiallyMutedCandidateCreatesNeitherPublicationNorNativeContent() = runBlocking {
+    fun initiallyMutedCandidateRetainsAnInactiveWatermarkWithoutNativeContent() = runBlocking {
         withProcess(seedPublication = false) { f, process, _, _ ->
             f.preferences(
                 CollaborationNotificationPreview.Message,
@@ -86,10 +86,13 @@ class CollaborationNotificationProcessIntegrationTest {
             )
             process.start()
             assertEquals(
-                AppResult.Success(CollaborationNotificationPublicationResult.Suppressed),
+                AppResult.Success(CollaborationNotificationPublicationResult.SuppressionRecorded),
                 process.publish(f.parent, f.candidate, allowAlert = true),
             )
-            assertNull(f.publication())
+            val muted = assertNotNull(f.publication())
+            assertEquals(CollaborationNotificationPublicationState.Cancelled, muted.body.state)
+            assertNull(muted.body.message)
+            assertNull(muted.body.actions)
             assertTrue(f.native.cards.isEmpty())
             assertTrue(f.app.sdk.enqueued.isEmpty())
         }

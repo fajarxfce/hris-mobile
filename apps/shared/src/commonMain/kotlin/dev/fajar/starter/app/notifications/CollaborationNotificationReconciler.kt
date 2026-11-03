@@ -49,6 +49,11 @@ class CollaborationNotificationReconciler(
             return AppResult.Success(CollaborationNotificationReconciliationResult.Submitted)
         if (result == AppResult.Success(CollaborationNotificationPublicationResult.Unchanged))
             return AppResult.Success(CollaborationNotificationReconciliationResult.Contended)
+        if (
+            result ==
+                AppResult.Success(CollaborationNotificationPublicationResult.SuppressionRecorded)
+        )
+            return AppResult.Success(CollaborationNotificationReconciliationResult.Retired)
         val retire =
             when (result) {
                 is AppResult.Failed -> collaborationListResponseClosesRead(result.failure)
