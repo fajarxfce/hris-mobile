@@ -1,5 +1,40 @@
 # Agent continuation — HRIS Mobile
 
+## Native a3f gate rejected; product FCM fixture in progress — 3 November 2026
+
+Phone25 remains installed and verified; do not reinstall or drive its UI.
+Native41650906105 at a3f39be7 is **REJECTED**. [Evidence](measurements/chat-reviewed-send-hosted-2026-11-03.json)
+verifies393 sources and archive13237819903. Android230/37 and proof15/4 pass;
+raw16 and runtime4 pass. Protected-input proof stops at recoverInputs:300 after
+one1979ms Retry with original1/account-copy1. The old assertion did not record
+review enum or individual failed predicate; do not invent a proven cause. Five
+provider scenarios and five action/SystemUI cases did not execute. Apple41651053921
+still building full Xcode at last query.
+
+UNCOMMITTED/UNACCEPTED fixture changes: NotificationInputCheckpoint permits an
+unreviewed durable copy only on an incomplete turn, records each review enum, and
+requires exactly one SessionChanged copy plus original removal on Complete. Exact
+text/token equality and no draft/resolution remain asserted. Three pure checkpoint
+regressions added; native execution still pending. Product app code is unchanged.
+
+Actual-product FCM test is being implemented across Mobile proof and Platform:
+HrisProductNotificationPeer is a separate encrypted sender package, real devDebug
+product app logs into isolated API with fictional native password, real worker
+and private Synapse/TLS proxy own the FCM chain. ProductFcmDevice owns a disposable
+copy of the AVD image on5562, refuses phone serials, never changes source image;
+eight driver safety/cleanup tests pass. No real employee messages/Firebase accounts
+created. Existing private service-account path is used only by owned worker; no
+secrets in Git/GitHub. No actual FCM test has executed yet.
+
+.work/product-chat-fcm-2026-11-03: Mobile build1 FAIL7.529s (init script affected
+included build-logic), fixed to beforeProject application plugin. Build2 FAIL118.156s
+because peer referenced private cleanup methods; switched to shared cleanup helper.
+Build3 currently running, source fingerprints fixed through completion. Next collect,
+compile Platform test fixture/worker, run short owned FCM scenario and inspect captures;
+then full quality and native checkpoint proof. Keep one heavy local job at a time.
+Platform runtime304/schema116 and live push flags unchanged/off; all54 groups open.
+Continue long run. No generic Starter port for these HRIS test fixtures.
+
 ## Current: release 25 installed; actual chat FCM acceptance next — 3 November 2026
 
 Source **a3f39be7390874cf04b807b9abad365393530852** is committed, pushed and locally
