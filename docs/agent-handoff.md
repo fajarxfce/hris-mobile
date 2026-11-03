@@ -1,5 +1,29 @@
 # Agent continuation — HRIS Mobile
 
+## Phone release27 installed; continue server and PRD — 3 November2026
+
+[Installed evidence](measurements/chat-inbox-history-phone-2026-11-03.json). Normal
+minified devRelease1.0.0/code27 from clean8ac28f68 (runtimec770) is installed on
+10.77.77.3:5555. Build PASS236.486s; lint0; 16KiB zip alignment, Firebase dev config,
+18 compiled backup exclusions, private API and absence of fixture endpoints verified.
+APK88058548 bytes, SHA4c86f7720b3745dce81f64c4aa1a6218933bfc3df2c94a8c04b4c7830fc32fd5.
+Same signer aca5ce6a26b978dee1d63c63103b6799848ab760d47ef4cf5ee68620fc8721f3.
+Two owned emulator cold starts PASS61.544s, each stable12s, PID2612/3303; both
+onboarding PNGs actually viewed. Owned emulator3503064 stopped/transport absent.
+Phone installation at18:42:21.763681UTC takes45.27s including exact APK pull-back.
+AppId10962 and firstInstall2026-10-29 15:48:23 preserved; lastUpdate2026-11-04
+01:42:41 device time. No uninstall/data clear/UI launch. DO NOT reinstall27.
+
+Native two-case regression and actual product FCM run16 are accepted below. Platform
+8b40bd0f is pushed: optional MFA browser readiness fix plus current FCM/TLS staging
+evidence. Replacement full Verify41695437208 is running from that exact source;
+old41692502923 ended cancelled after its known dashboard4 failure, with backend1/3/4
+and dashboard1/2/3 passed, others superseded. New full gate remains required for
+server rollout. Private TLS candidate is staged only; live304/schema116/push OFF.
+Keep proceeding through push rollout and cross-company/recipient ACK/rich-chat/
+voice/video/meeting PRD. Keep user updates frequent and every commit pushed.
+
+
 ## Current chat Android recovery and actual FCM accepted; build27 next — 3 November2026
 
 Mobile c770a83f repairs durable history reuse; commit is pushed. Immutable product6/
