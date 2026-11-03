@@ -1,5 +1,44 @@
 # Agent continuation — HRIS Mobile
 
+## Release 23 installed; native actions in progress
+
+Release23 from8b5f87501d618ac40fdcaccc94d4d97b85270e00 is INSTALLED:
+[evidence](measurements/android-release-phone-2026-11-03-build23.json).
+DevRelease1.0.0/code23, arm64, nondebuggable, same signer/API/Firebase and18 backup
+exclusions. Build/lint PASS504.577s, zero lint issues; clean source before/after.
+APK87,923,116 bytes, SHA256
+`f835766c7be05ca9056b9da7075e626a59a238e73aa3a5d6ab2ec26e946ea679`.
+Owned5562/PID168155 boot30.552s; startup smoke PASS51.440s/two12-second cold starts,
+no crash, screenshot actually viewed. Owner stopped/transport absent1.605s.
+After notice, install-only to10.77.77.3:5555 started09:30:52Z and verified90.085s;
+installed bytes match, UID10962/first-install preserved. No phone UI launch/data clear/
+uninstall or real-account messages. DO NOT reinstall23; next validated update code>23.
+
+Saved-reply consumer8b5f8750 and local evidence are committed/pushed. Full hosted
+Apple41610059249 is RUNNING on that source,331 frozen hashes:
+[checkpoint](measurements/chat-saved-replies-apple-2026-11-03.json).
+Audit script ready in .work/chat-saved-replies-apple-2026-11-03. Require exact two
+AppleCommandPrevention,seven Discard,six Observe and14 Complete cases plus full Xcode.
+Previous callback native41601851260 at6976 remains running; do not duplicate/cancel.
+
+CURRENT UNCOMMITTED native-action work: five source files APPLIED in
+.work/chat-notification-actions-2026-11-03, NOT TESTED yet. Point journal reference
+read and application Open/read/mute/dismiss coordinator with actual graph and
+ownership regression fixtures. Android action receiver/Open navigation not wired.
+Before validation, complete durable dismissal: a process death between OS dismissal
+and journal cancellation must not repost the dismissed original. Read/mute already
+retain durable state; simple remove-then-cancel is insufficient for dismiss.
+A recoverable journal dismissal intent before native removal is under review.
+Do not bind production hosts or claim completed action acceptance from these drafts.
+
+The ONLY local heavy job is Starter command-prevention port full1 (PTY12066) in
+../compose-fluent-starter/.work/command-prevention-port-2026-11-03. Eight source
+hashes frozen there; no Starter source edits until its check completes. Independent
+root/browser/Android/lint/Web and full hosted Apple required. Mobile release jobs
+and emulator are complete. Platform304/schema116 unchanged, chat push OFF,
+voice/video/meeting UI absent; all54 groups OPEN. Continue long run.
+
+
 ## Saved replies accepted locally; next deliver release 23 and complete native actions
 
 [Contract](collaboration-saved-replies.md) /
