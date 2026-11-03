@@ -1,5 +1,41 @@
 # Agent continuation — HRIS Mobile
 
+## Saved-reply Apple accepted; native callback acknowledgment in progress
+
+Apple41610059249 at8b5f8750 is ACCEPTED and audited:
+[evidence](measurements/chat-saved-replies-apple-2026-11-03.json).
+1,037 simulator/117 suites, zero;331 source hashes and artifact13219964122 verified.
+GitHub ZIP SHA256924e0e9790073255bf07763efa507536466d946f782ac8cff86ab0718ce39146.
+Compile693s/tests127s/full Xcode1296s. Requires/passes two Apple command prevention,
+seven discard,six observe and14 complete cases. Full audit complete; do not repeat.
+This covers delivered phone23 source, excludes later action/dismissal4389.
+
+Common actions4389f537911d3a6a09b7e81d10978af0bca3922f is committed/pushed after
+full local acceptance below. ONE full Apple41616077153 now dispatched there;
+[checkpoint](measurements/chat-notification-actions-apple-2026-11-03.json),
+335 frozen source hashes. Require five point-read/three dismissal domain cases
+plus previous cases/full Xcode. Native8b41609991459 is running and438941615080704 is
+pending behind it. Both native source manifests/fetch/audit scripts are prepared in
+.work/chat-saved-replies-native-2026-11-03 and
+.work/chat-notification-actions-native-2026-11-03. No duplicate/cancellation.
+
+CURRENT seven source inputs are APPLIED, UNCOMMITTED in
+.work/chat-native-callbacks-2026-11-03, frozen in focused1 (PTY60197), ONLY local heavy
+job. Protected ReplyCallbacks now acknowledge only after confirmed capture, with
+Saved retained if acknowledgment fails/timeouts and all cleanup joined within owner
+lifetime. Delivery/Process forward actions and reply acknowledgment through their
+bound owner, then request journal discovery. Actions acknowledgment authenticates
+Reply target, persists Dismissing/removes exact card/finalizes; no queue or read.
+Actual graph/owner tests added, acceptance pending. Need a bound Delivery/Process
+integration test to execute forwarding, then nonreply Android callback facade and
+actual owned native IPC/SystemUI proof. New constructor receiver hooks are not wired
+in production. Android Activity Chat navigation remains next; company/session guards
+must be preserved. No newer phone build or install;23 is already delivered.
+
+Starter c5ca7c3 clean/pushed, Apple41612522666 pending. Platform304/schema116 and
+Google mapping unchanged. Chat push OFF; all54 groups OPEN. Continue long run.
+
+
 ## Native actions and durable dismissal accepted locally
 
 [Contract](collaboration-notification-action-disposition.md) /

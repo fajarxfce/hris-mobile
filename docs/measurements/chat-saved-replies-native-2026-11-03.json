@@ -1,0 +1,13 @@
+{
+  "source": "8b5f87501d618ac40fdcaccc94d4d97b85270e00",
+  "run": "https://github.com/fajarxfce/hris-mobile/actions/runs/41609991459",
+  "status": "in_progress",
+  "sourceCount": 337,
+  "scope": "Compiled shared app plus existing five provider/native SDK scenarios,230 host and15 proof cases,raw16 and three-death reply capture. Product UI and nonreply native action behavior are not executed by these drivers.",
+  "requirements": [
+    "GitHub archive digest/source verification",
+    "Five native,230 host,15 proof XML cases with no failures",
+    "Raw16 plus input recovery through three ordinary process deaths",
+    "Verified fixture uninstall"
+  ]
+}
