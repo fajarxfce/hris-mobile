@@ -1,0 +1,95 @@
+{
+  "source": "3d85d569412f8eb5ed735403362a4cdb175aef70",
+  "platformSource": "e0dbb567acc4c5571b82324c515ed8ddc145007d",
+  "run": "https://github.com/fajarxfce/hris-mobile/actions/runs/41741297195",
+  "status": "passed",
+  "artifacts": [
+    {
+      "mode": "native",
+      "artifactId": 13282281712,
+      "archiveSha256": "bd9d4d96064bf0763c335f1eee6cc15eada507aee48aae7d8ccc10c8af8ee146",
+      "githubDigestVerified": true,
+      "resultSha256": "1333aec9a42976116f1813f2eba000e835e39882e5ee4cfb82ed1c5727a99f9d",
+      "elapsedSeconds": 72.855,
+      "native": {
+        "apkSha256": "50d28fc14c76e05be94df99ac6ebf54a4082bea9b83965e788cf49c937080416",
+        "package": "dev.fajar.hris.collaboration.proof",
+        "avd": "hris-mobile-dev",
+        "androidApi": "35",
+        "syncMode": "native"
+      },
+      "browser": {
+        "expected": 2,
+        "unexpected": 0,
+        "flaky": 0,
+        "skipped": 0,
+        "duration": 27501.903
+      },
+      "checks": {
+        "wrong_issuer": true,
+        "wrong_audience": true,
+        "expired_jwt_beyond_provider_leeway": true,
+        "public_registration_disabled": true,
+        "loopback_only_http": true,
+        "isolated_dedicated_network": true,
+        "provider_protocol_counters": true,
+        "browser_e2ee_restart_media": true,
+        "browser_offline_invitee_first_message_sender_offline": true,
+        "android_requested_sync_protocol": true,
+        "android_web_bidirectional_e2ee": true,
+        "android_sdk_refresh_preserves_device_key": true,
+        "android_sdk_queue_encrypted_logical_ids": true,
+        "android_encrypts_for_offline_invitee_before_join": true
+      },
+      "cleanup": true,
+      "providerSourcesVerified": 14,
+      "slidingSyncRequests": 17
+    },
+    {
+      "mode": "classic",
+      "artifactId": 13282926108,
+      "archiveSha256": "a96abb8608fb7d6f4c538b980b69d6465de0fe1192df2da2530389c10482b517",
+      "githubDigestVerified": true,
+      "resultSha256": "a09ab687bebee44613183c1be68792f02abb932777489af62fd373afe9170afd",
+      "elapsedSeconds": 64.882,
+      "native": {
+        "apkSha256": "3b1d69e52e8cefb59cbb70542996d5d604431ff751ca74f8aa64744e556ab4f5",
+        "package": "dev.fajar.hris.collaboration.proof",
+        "avd": "hris-mobile-dev",
+        "androidApi": "35",
+        "syncMode": "classic"
+      },
+      "browser": {
+        "expected": 2,
+        "unexpected": 0,
+        "flaky": 0,
+        "skipped": 0,
+        "duration": 23242.618
+      },
+      "checks": {
+        "wrong_issuer": true,
+        "wrong_audience": true,
+        "expired_jwt_beyond_provider_leeway": true,
+        "public_registration_disabled": true,
+        "loopback_only_http": true,
+        "isolated_dedicated_network": true,
+        "provider_protocol_counters": true,
+        "browser_e2ee_restart_media": true,
+        "browser_offline_invitee_first_message_sender_offline": true,
+        "android_requested_sync_protocol": true,
+        "android_web_bidirectional_e2ee": true,
+        "android_sdk_refresh_preserves_device_key": true,
+        "android_sdk_queue_encrypted_logical_ids": true,
+        "android_encrypts_for_offline_invitee_before_join": true
+      },
+      "cleanup": true,
+      "providerSourcesVerified": 14,
+      "slidingSyncRequests": 0
+    }
+  ],
+  "limits": [
+    "Raw isolated Android/web SDK and provider regression; not the HRIS product UI, cross-company transfer or user phone.",
+    "The new local SDK identity stage/resume scenarios are separately evidenced on the local owned emulator.",
+    "Provider protocol counters include explicit fixture requests; they are not the HRIS gateway allowlist."
+  ]
+}

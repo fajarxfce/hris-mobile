@@ -1,5 +1,35 @@
 # Agent continuation — HRIS Mobile
 
+## Local SDK increment: hosted raw protocol regression accepted — 3 November 2026
+
+Mobile source 3d85d569 is pushed. Protocol CI41741297195 passed both native and
+classic sync modes against pinned Platform e0dbb567. Downloaded artifact digests
+and all 14 provider-driver source hashes match. Each mode passes two browser/native
+scenarios, with no failure/flaky/skip; native72.855s, classic64.882s, owned cleanup
+true. Sliding-sync requests are17 and0 as expected. Actual encrypted Android/web
+messages, offline-invitee first-message decryption, SDK token renewal preserving
+keys, encrypted pending IDs and browser restart/media regression pass.
+[Evidence](measurements/collaboration-local-sdk-protocol-2026-11-03.json) records
+both artifacts and their distinct fixture APK hashes. These are raw provider SDK
+regressions, not group HRIS transfer or a product phone build. The new local identity
+stage/resume proof is separately accepted below.
+
+Control/Apple41741297181 and actual-HRIS native41741297183 remain running. Their
+retargeted audit scripts are prepared under .work/local-sdk-identity-2026-11-03/
+hosted (control) and hosted/native (fetch/audit); do not run acceptance until jobs
+finish. Source fingerprints use check3/sources.json from the local acceptance.
+The native audit expects232 Android-host,18 proof-host and5 native cases; visually
+inspect its three SystemUI PNGs after downloading. No audit process is left running.
+
+Platform group work continues at e905b8d6 with UNCOMMITTED V123 runtime fences in
+/home/fajar/hris/.worktrees/communication-space. Focused five actual database cases
+pass; full database/storage regression is running there. Do not edit its checked
+core/modules/tool inputs. Its raw recovery-tool future-schema test needs correction
+from123 to124 after that run; the current source is not accepted yet. Untested
+runtime-port drafts are isolated in its ignored runtime-ports-next directory.
+Live8b40/schema116 pushON, phone28 and Starter9959c1d are unchanged. Continue the full
+long run, frequent user/Git updates and push every atomic commit.
+
 ## Local SDK identity continuity accepted — 3 November 2026
 
 AndroidCollaborationSdkClientSource now reads public ed25519/curve25519 identity
