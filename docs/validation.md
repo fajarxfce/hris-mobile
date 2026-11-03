@@ -1,5 +1,11 @@
 # Validation
 
+## Consolidated Apple delivery gate — pending
+
+[Full Apple41575891048](measurements/chat-priority-notification-delivery-apple-2026-11-03.json)
+was dispatched once at76d004e5 with221 source hashes. It is pending and is not yet acceptance.
+Native callback/input and actual device delivery remain independent gates.
+
 ## Priority notification handoff — 3 November 2026
 
 [Priority delivery](collaboration-priority-notification-delivery.md) passes two focused runs

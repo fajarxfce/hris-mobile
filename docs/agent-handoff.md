@@ -1,5 +1,14 @@
 # Agent continuation — HRIS Mobile
 
+## Consolidated Apple queued at the accepted priority handoff
+
+Priority handoff76d004e5 is pushed. Full Apple [41575891048](measurements/chat-priority-notification-delivery-apple-2026-11-03.json)
+was dispatched ONCE at04:04:04Z with221 source hashes (old207 union candidate/identity/priority).
+It is PENDING; do not redispatch. Audit .work/chat-priority-notification-delivery-apple-2026-11-03/audit.py
+only after completion; extraction directories are intentionally exclusive. Candidate/focus changes
+after76d004e5 are outside that snapshot. No local heavy job or owned emulator remains.
+Continue next implementation below; no product release installed by these foundation changes.
+
 ## Priority-to-notification handoff accepted; native focus/callbacks and durable disposition next
 
 Incoming captures only retained candidate IDs and returns them only with Complete AFTER
