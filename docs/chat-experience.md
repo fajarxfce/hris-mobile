@@ -73,3 +73,9 @@ window, and a mixed page that opens only its missing middle message. All 291 des
 and browser presentation cases pass with application Wasm/format/architecture/detekt.
 Actual Android SDK revalidation remains pending; see
 [measurement](measurements/chat-history-local-reuse-2026-11-03.json).
+
+Actual Android revalidation now passes both previously failing process-death cases
+with 176 retained originals and exhausted foreground paging in each; see the
+[native measurement](measurements/chat-history-local-reuse-native-2026-11-03.json).
+The same immutable source also passes real Firebase restart/notification/inline
+reply through the normal application [product gate](measurements/chat-current-product-fcm-2026-11-03.json).

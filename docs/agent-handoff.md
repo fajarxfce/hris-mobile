@@ -1,5 +1,50 @@
 # Agent continuation — HRIS Mobile
 
+## Current chat Android recovery and actual FCM accepted; build27 next — 3 November2026
+
+Mobile c770a83f repairs durable history reuse; commit is pushed. Immutable product6/
+peer6 build PASS62.014s from a clean c770 tree. [Native regression evidence](measurements/chat-history-local-reuse-native-2026-11-03.json): both formerly failing
+QUEUED/FROZEN_DRAFT scenarios PASS645.323s with fresh2/0/0/0 JUnit, Platformd00ac5f5.
+Each proves176 encrypted originals, one worker send,175 peer sends, one process
+death,11 incoming passes/reopens and11 foreground pages,186 references/10 state-only
+references, exhausted browse and retained offline rows. Mobile3824/Platform4325
+source fingerprints unchanged; both fixtures and owned emulator cleaned up.
+
+[Actual latest product FCM](measurements/chat-current-product-fcm-2026-11-03.json)
+run16 PASS271.055s/driver209.335s, fresh1/0/0/0. Normal product login/Chat navigation,
+one native registration/managed pusher/delivered wake, Firebase-caused process
+restart, real SystemUI Reply and encrypted peer receipt. All five PNGs actually
+viewed. Independent checks verify fixture credentials, disposable image, QEMU PID
+and ADB transport gone. No phone/live changes. These are fixture APKs; NEVER install
+them on the phone. Product6 SHA87f6eb26b4fc5c660780d4d4041f357e709c580c9b55c2896571fa401bc27e7c;
+peer6 SHAdb15d3d0e8674bf633ddbef84002c6731e7ba8478fcb47bd0af65a16dc3d6c68.
+
+[Inbox Apple](measurements/chat-inbox-previews-apple-2026-11-03.json) run41685480887
+at537b89ae PASS1104 cases/124 suites,419 source hashes, full Xcode1318s; archive13256328884
+SHA7ab89377183921feb7e0540b71b54810d7624c3919074eadb2ab25e04e1794ce.
+It predates the pager fix. Current c770 control41691878650 is running; matching native
+41691878601 pending with fetch/audit/sources432 ready in.work/chat-history-local-reuse-hosted-2026-11-03.
+Old537 control41685363392 FAILED its browser time-zone test, confirmed in Mobile archive13256385047 (SHA9b6b975a246d88f6da446efd62defd68fda0eabbc6d6b28dfd07554748543e3c);
+Apple job passed. The fix is already a59d3cd2;
+do not rerun old source. Details in.work/chat-inbox-previews-control-2026-11-03.
+
+Phone remains26. Build normal signed arm64 devRelease27 using prepared.work/release-phone-2026-11-03-build27/build-arm64.py after clean Git, then verify-and-smoke.py,
+inspect both startup PNGs, preflight, notify, install-only. Preserve Google/account
+state, signer and first-install/UID; never launch or drive the phone UI. Cancelled
+candidate27 attempt1 remains retained; no version27 has been installed.
+
+Platform full Verify41692502923 atd00 found dashboard shard4 failing optional MFA
+Escape while the dialog is still busy (trace confirms); a test readiness assertion
+is being validated locally. It is not accepted for deployment. Private TLS candidate
+is staged under ~/.config/hris/chat-push-pilot, active files unchanged. Non-root/read-only
+nginx configuration check passes after bounding its default temp directories; no
+proxy is running. Full CI, rollout checkpoints and live push activation continue.
+The screenshots also show an empty room's Older messages action before the initial
+browse cursor is known; refine that empty state in the next UI increment without
+hiding unknown history. Recipient ACKs, cross-company migration, rich chat, calls,
+meetings, real Apple/web SDK integration and all54 groups remain active.
+
+
 ## Native history regression repaired locally; verify before phone27 — 3 November 2026
 
 [Evidence](measurements/chat-history-local-reuse-2026-11-03.json). bd399 Native

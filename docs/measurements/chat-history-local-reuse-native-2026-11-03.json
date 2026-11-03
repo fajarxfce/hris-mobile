@@ -1,0 +1,150 @@
+{
+  "startedAt": "2026-11-03T18:15:52.760145+00:00",
+  "mobileCommit": "c770a83fc08a59f75273e2260ef58047c0876c18",
+  "platformCommit": "d00ac5f56c72b167c7c75f177a5512e542fc8e14",
+  "artifact": {
+    "file": ".work/product-chat-fcm-2026-11-03/peer6.apk",
+    "sha256": "db15d3d0e8674bf633ddbef84002c6731e7ba8478fcb47bd0af65a16dc3d6c68",
+    "bytes": 105373162,
+    "package": "dev.fajar.hris.collaboration.proof",
+    "abis": [
+      "x86_64"
+    ],
+    "buildAttempt": 6,
+    "inputsSha256": "2a5dc072570321e1e2c6a9fbec1a253281b8f473aed47388126ad7f088e52399"
+  },
+  "exitCode": 0,
+  "wallSeconds": 645.323,
+  "reports": {
+    "tests": 2,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "reportSha256": "f45547347beb352e4a75a649f7df43cd7cd85e388a33db420c3993350ed38ecd",
+  "sourceFiles": {
+    "mobile": 3824,
+    "platform": 4325
+  },
+  "inputManifestSha256": "393d02aa9449272e6c09fcc37ec7060f178ffdefc883349cfadb6a5ff242da86",
+  "artifactUnchanged": true,
+  "inputsUnchanged": true,
+  "emulatorCleanup": true,
+  "sourceImageUnchanged": true,
+  "scenarios": [
+    {
+      "initialState": "QUEUED",
+      "encryptedSends": 176,
+      "workerEncryptedSends": 1,
+      "seededPeerEncryptedSends": 175,
+      "forcedProcessDeaths": 1,
+      "historyPages": 11,
+      "providerReferences": 186,
+      "pendingStateReferences": 10,
+      "incoming": {
+        "incomingWithoutOutbox": true,
+        "incomingWithoutSelection": true,
+        "incomingFreshNativeAdmission": true,
+        "incomingOriginalAfterOfflineSeed": true,
+        "incomingHistoryRetainedAfterReopen": true,
+        "incomingRuntimeReleased": true,
+        "incomingAllOriginalsRecovered": true,
+        "incomingTraversalRetainedAfterReopen": true,
+        "incomingBrowseUnchanged": true,
+        "incomingPasses": 11,
+        "incomingSavedOriginals": 176,
+        "incomingContainerReopens": 11
+      },
+      "foregroundHistoryAccepted": true,
+      "passed": true,
+      "cleanup": true,
+      "acceptanceSha256": "90460bc119a7c8961e13c6550f05eb041658ef84fe095d88f7e50ef934d4bbf2"
+    },
+    {
+      "initialState": "FROZEN_DRAFT",
+      "encryptedSends": 176,
+      "workerEncryptedSends": 1,
+      "seededPeerEncryptedSends": 175,
+      "forcedProcessDeaths": 1,
+      "historyPages": 11,
+      "providerReferences": 186,
+      "pendingStateReferences": 10,
+      "incoming": {
+        "incomingWithoutOutbox": true,
+        "incomingWithoutSelection": true,
+        "incomingFreshNativeAdmission": true,
+        "incomingOriginalAfterOfflineSeed": true,
+        "incomingHistoryRetainedAfterReopen": true,
+        "incomingRuntimeReleased": true,
+        "incomingAllOriginalsRecovered": true,
+        "incomingTraversalRetainedAfterReopen": true,
+        "incomingBrowseUnchanged": true,
+        "incomingPasses": 11,
+        "incomingSavedOriginals": 176,
+        "incomingContainerReopens": 11
+      },
+      "foregroundHistoryAccepted": true,
+      "passed": true,
+      "cleanup": true,
+      "acceptanceSha256": "9ca6eaecdd61822b61829a017c548517768690740fe8578bb2300ffc95f17a54"
+    }
+  ],
+  "phoneTouched": false,
+  "liveServicesChanged": false,
+  "status": "passed",
+  "build": {
+    "sourceCommit": "c770a83fc08a59f75273e2260ef58047c0876c18",
+    "cleanBeforeBuild": true,
+    "cleanAfterBuild": true,
+    "command": [
+      "./gradlew",
+      ":apps:android:assembleDevDebug",
+      ":apps:collaboration-proof:assembleDebug",
+      ":apps:collaboration-proof:testDebugUnitTest",
+      "-PapiBaseUrl.dev=http://127.0.0.1:18084/api/v1/",
+      "--init-script",
+      "/home/fajar/hris/hris-mobile/.work/product-chat-fcm-2026-11-03/x86.init.gradle",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=1",
+      "-Dorg.gradle.jvmargs=-Xmx1536m",
+      "-Pkotlin.compiler.execution.strategy=in-process",
+      "--stacktrace"
+    ],
+    "startedAt": "2026-11-03T18:14:33.748559+00:00",
+    "seconds": 62.014,
+    "exitCode": 0,
+    "inputsUnchanged": true
+  },
+  "artifacts": [
+    {
+      "file": ".work/product-chat-fcm-2026-11-03/product6.apk",
+      "sha256": "87f6eb26b4fc5c660780d4d4041f357e709c580c9b55c2896571fa401bc27e7c",
+      "bytes": 104938014,
+      "package": "dev.fajar.hris.mobile.dev",
+      "abis": [
+        "x86_64"
+      ],
+      "buildAttempt": 6,
+      "inputsSha256": "2a5dc072570321e1e2c6a9fbec1a253281b8f473aed47388126ad7f088e52399"
+    },
+    {
+      "file": ".work/product-chat-fcm-2026-11-03/peer6.apk",
+      "sha256": "db15d3d0e8674bf633ddbef84002c6731e7ba8478fcb47bd0af65a16dc3d6c68",
+      "bytes": 105373162,
+      "package": "dev.fajar.hris.collaboration.proof",
+      "abis": [
+        "x86_64"
+      ],
+      "buildAttempt": 6,
+      "inputsSha256": "2a5dc072570321e1e2c6a9fbec1a253281b8f473aed47388126ad7f088e52399"
+    }
+  ],
+  "previousFailure": "chat-history-local-reuse-2026-11-03.json",
+  "limits": [
+    "Actual isolated API/PostgreSQL/Synapse and owned API35 emulator; two previously failing recovery scenarios only.",
+    "Source image preservation check compares file size and modification time; driver uses only its disposable copy.",
+    "Actual product FCM run16 also passes; normal phone release27 and current hosted gates remain separate.",
+    "Recipient delivery/read ACKs, cross-company migration, rich chat, calls and meetings continue."
+  ]
+}

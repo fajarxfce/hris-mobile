@@ -1,0 +1,224 @@
+{
+  "date": "2026-11-03",
+  "status": "passed",
+  "run": {
+    "sourceDirtyBefore": false,
+    "platformCommit": "d00ac5f56c72b167c7c75f177a5512e542fc8e14",
+    "mobileArtifacts": [
+      {
+        "file": ".work/product-chat-fcm-2026-11-03/product6.apk",
+        "sha256": "87f6eb26b4fc5c660780d4d4041f357e709c580c9b55c2896571fa401bc27e7c",
+        "bytes": 104938014,
+        "package": "dev.fajar.hris.mobile.dev",
+        "abis": [
+          "x86_64"
+        ],
+        "buildAttempt": 6,
+        "inputsSha256": "2a5dc072570321e1e2c6a9fbec1a253281b8f473aed47388126ad7f088e52399"
+      },
+      {
+        "file": ".work/product-chat-fcm-2026-11-03/peer6.apk",
+        "sha256": "db15d3d0e8674bf633ddbef84002c6731e7ba8478fcb47bd0af65a16dc3d6c68",
+        "bytes": 105373162,
+        "package": "dev.fajar.hris.collaboration.proof",
+        "abis": [
+          "x86_64"
+        ],
+        "buildAttempt": 6,
+        "inputsSha256": "2a5dc072570321e1e2c6a9fbec1a253281b8f473aed47388126ad7f088e52399"
+      }
+    ],
+    "command": [
+      "sudo",
+      "-n",
+      "runuser",
+      "-u",
+      "fajar",
+      "-g",
+      "docker",
+      "--",
+      "env",
+      "JAVA_HOME=/usr/lib/jvm/java-21-openjdk",
+      "PATH=/usr/lib/jvm/java-21-openjdk/bin:/usr/local/bin:/usr/bin",
+      "ANDROID_HOME=/home/fajar/Android/Sdk",
+      "ANDROID_SDK_ROOT=/home/fajar/Android/Sdk",
+      "ANDROID_AVD_HOME=/home/fajar/.android/avd",
+      "HRIS_COLLAB_PRODUCT_FCM_APK=/home/fajar/hris/hris-mobile/.work/product-chat-fcm-2026-11-03/product6.apk",
+      "HRIS_COLLAB_NATIVE_APK=/home/fajar/hris/hris-mobile/.work/product-chat-fcm-2026-11-03/peer6.apk",
+      "HRIS_COLLAB_PRODUCT_WORKER_JAR=/home/fajar/hris/hris-platform/apps/worker/build/libs/apps-worker.jar",
+      "HRIS_COLLAB_PRODUCT_SOURCE_IMAGE=/home/fajar/hris/hris-mobile/.work/startup-fix-2026-11-01/clean-userdata.img",
+      "HRIS_TEST_FCM_PROJECT_ID=cmp-fajar",
+      "HRIS_TEST_FCM_CREDENTIALS_FILE=/home/fajar/cmp-fajar-firebase-adminsdk-fbsvc-cce6e88ba3.json",
+      "./gradlew",
+      "formatCheck",
+      "architectureCheck",
+      "collaborationProductFixtureCheck",
+      ":apps:server:test",
+      "--rerun",
+      "--tests",
+      "*ProductChatFcmInteropTest",
+      "--no-daemon",
+      "--no-parallel",
+      "--max-workers=1",
+      "-Dorg.gradle.jvmargs=-Xmx1536m",
+      "--stacktrace"
+    ],
+    "startedAt": "2026-11-03T18:26:54.499137+00:00",
+    "seconds": 271.055,
+    "exitCode": 0,
+    "inputsUnchanged": true,
+    "mobileInputsUnchanged": true,
+    "mobileCommit": "c770a83fc08a59f75273e2260ef58047c0876c18",
+    "workerJarSha256": "430620d7e64614db7524de60f0edbe09914e71917ab640542265457ade960b1c",
+    "junitSha256": "eff6784130f62051a90a9c331f1969007109e3068f1469ab33b4a4f9d878ae19",
+    "counts": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "driver": {
+    "passed": true,
+    "phoneTouched": false,
+    "serial": "emulator-5562",
+    "productApkSha256": "87f6eb26b4fc5c660780d4d4041f357e709c580c9b55c2896571fa401bc27e7c",
+    "proofApkSha256": "db15d3d0e8674bf633ddbef84002c6731e7ba8478fcb47bd0af65a16dc3d6c68",
+    "killedProductPid": 2875,
+    "sentEventId": "$GjUJS0_DUyoK5_PBNF9iNQVitFHicd3ITjmN9LItoAM",
+    "productStartedByPush": true,
+    "restartedProductPid": 4917,
+    "notificationShown": true,
+    "encryptedReplyReceived": true,
+    "replyLogicalId": "d68d7086-8eb1-4b44-bab6-aa0b341aa240",
+    "replyEventId": "$prsKgzHkR2zAVDTiJNtHfQ2iIai2i699V9rlUxPmRog",
+    "peerCleanedUp": true,
+    "deviceCleanedUp": true,
+    "cleanedUp": true,
+    "elapsedSeconds": 209.335
+  },
+  "serverCounts": {
+    "registrations": 1,
+    "pushers": 1,
+    "delivered": 1
+  },
+  "pushState": {
+    "providerPushers": {
+      "available": true,
+      "value": 1
+    },
+    "providerHasFailedPush": {
+      "available": true,
+      "value": false
+    },
+    "callbacks": [
+      {
+        "status": 200,
+        "parsed": true,
+        "devices": 1,
+        "hasEvent": true,
+        "expectedRoom": true
+      }
+    ],
+    "hints": {
+      "available": true,
+      "value": [
+        {
+          "revision": 1,
+          "delivered_revision": 1,
+          "attempt_revision": 1,
+          "attempts": 1,
+          "visible_revision": 1,
+          "leased": false,
+          "unexpired": true,
+          "available": true
+        }
+      ]
+    }
+  },
+  "admission": [
+    {
+      "available": true,
+      "value": []
+    },
+    {
+      "available": true,
+      "value": [
+        {
+          "binding_reserved": true,
+          "binding_published": true,
+          "account_active": true,
+          "company_active": true,
+          "member_active": true,
+          "chat_permission": true,
+          "parent_present": true,
+          "parent_not_revoked": true,
+          "parent_unexpired": true,
+          "credential_current": true,
+          "parent_authentication_not_future": true,
+          "authentication_precedes_session_creation": true,
+          "parent_rotated": true,
+          "device_present": true,
+          "device_active": true,
+          "device_created": true,
+          "device_platform": true,
+          "gateway_present": true,
+          "gateway_parent": true,
+          "gateway_platform": true,
+          "gateway_not_revoked": true,
+          "gateway_version": true,
+          "gateway_chronology": true,
+          "gateway_unexpired": true,
+          "registration_present": true,
+          "registration_enabled": true,
+          "registration_platform": true,
+          "registration_version": true,
+          "registration_chronology": true,
+          "registration_unexpired": true,
+          "owned_room_present": true
+        }
+      ]
+    }
+  ],
+  "screenshots": {
+    "product-notifications-enabled.png": {
+      "sha256": "35947abfe83234c2e736f87808ebc1a086343052ebd1e1c8dfc3317abd1f6dd5",
+      "visuallyInspected": true
+    },
+    "product-chat-ready.png": {
+      "sha256": "fdee1eeae3710120e1eaec0f0d7be796de568c5c9b794960e3ced2b3331ab8a4",
+      "visuallyInspected": true
+    },
+    "product-chat-notification.png": {
+      "sha256": "73f4aa125045decf280f45b8ff66ef7eafd59846f96fdfd6559ef5a74f9fa314",
+      "visuallyInspected": true
+    },
+    "product-chat-reply-editor.png": {
+      "sha256": "04daead665671dc931b67b939c7812c08a1f70071b8a1625ee9e4487635a1817",
+      "visuallyInspected": true
+    },
+    "product-chat-reply-acknowledged.png": {
+      "sha256": "f6a6166ebb9ceb750279b3dd57398af6cd39d5904b82e61b49c7fb2321ac718d",
+      "visuallyInspected": true
+    }
+  },
+  "evidenceSha256": {
+    "result.json": "7d8c1a261004dda266b538f6834b92e1accdbac505851b6454a29984a43b6646",
+    "push-state.json": "5f3851fc7832358b9c751849dcaf72893aa99ae433dfcc701707b28b3f746071",
+    "push-admission.json": "6119a89b077758f272b1c5a929b16452e40acc63f0e7295ac146e71f29c28509",
+    "server-status.json": "a5ad9bad3be53ad1046198041406754f6499df7e1ac1321147184f2ad410cf6f"
+  },
+  "independentCleanup": {
+    "emulatorProcessAbsent": true,
+    "adbTransportAbsent": true,
+    "disposableImageAbsent": true,
+    "fixtureCredentialsRemoved": true
+  },
+  "liveServicesChanged": false,
+  "limits": [
+    "Actual Android product with normal login, latest Chat tab/UI and owned Firebase/HRIS/Synapse. One bounded scenario; not load/Doze/Apple/web acceptance.",
+    "Phone release27 remains a separate normal minified artifact.",
+    "Live push stays off while private ingress and full backend/dashboard release checks complete.",
+    "Cross-company communication identity, delivered/read ACKs, rich messages, calls and meetings remain active work."
+  ]
+}
