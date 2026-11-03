@@ -22,6 +22,9 @@ kotlin.sourceSets {
         implementation(libs.coroutines.test)
         implementation(projects.core.sync.domain)
     }
+    getByName("wasmJsTest").dependencies {
+        implementation(npm("@js-joda/timezone", libs.versions.js.joda.timezone.get()))
+    }
 }
 
 kotlin {

@@ -1,5 +1,44 @@
 # Agent continuation — HRIS Mobile
 
+## Browser dates passed; next clean build27 and current-source FCM — 3 November 2026
+
+[Browser evidence](measurements/chat-browser-timezones-2026-11-03.json). Actual bd399
+control41677393371 failed one of123 presentation browser cases: Asia/Jakarta data
+was missing only from the standalone test bundle; the application already imports
+it. Added the existing pinned @js-joda/timezone2.23.0 to wasmJsTest and its initializer.
+The package lock changes exactly one test workspace, no package versions. First
+local attempt failed lock enforcement before tests (42.906s), retained. Normal
+upgrade task passed19.011s. Fresh browser check2 PASS184.074s, unchanged inputs:
+1,523 cases/151 suites, zero failures/errors/skips, application Wasm compile,
+format/architecture74/detekt0 pass. Named-zone and midnight assertions are unchanged.
+Production Kotlin source remains537b89ae. Commit/push then normal release27 build.
+
+Platform d00ac5f5 is pushed and its actual product FCM run15 PASSED:266.651s, fresh
+one-case JUnit, driver207.402s. Legitimate native authentication occurs before session
+creation; the incorrect push admission ordering is removed with future/revocation/
+credential/ownership checks intact. Broad backend325 pass/one optional skip. Real
+FCM starts the dead product, real SystemUI Reply reaches the peer encrypted; all five
+PNGs viewed, cleanup/secrets removal/owned emulator absence confirmed. Immutable
+artifacts5 are Mobile1136 and must be replaced by current source artifact6 before
+latest UI/push deployment acceptance. Builders6/verification prepared in.work/product-chat-fcm-2026-11-03; not run. Fresh worker JAR SHA430620d7e64614db7524de60f0edbe09914e71917ab640542265457ade960b1c.
+Live runtime304/schema116/push OFF and Starter9959c1d stay unchanged.
+
+No heavy local job remains after the browser check. Release27 helpers in.work/release-phone-2026-11-03-build27 are prepared, not run. Build from clean source, verify lint/
+signer/source/Firebase/endpoints, smoke twice on owned emulator and view images,
+then notify immediately before install-only. Current phone26/UID10962 remains;
+ADB was connected17:40UTC. Preserve data and Google identity, never drive phone UI.
+After this phone update, build product/peer6 and repeat actual FCM with the latest UI.
+
+bd399 Native41677393348 attempt2 still runs; do not duplicate retry. Attempt1 SDK
+archive failure is retained. New537 full Apple41685480887 and Native41685363689 are
+running/pending; source audits prepared in.work/chat-inbox-previews-apple-2026-11-03 and its matching hosted folder (419/430 paths). Native pending may be superseded automatically by this
+new commit; audit the exact replacement source/outputs. bd399 Apple41677479513 is
+already accepted. The537 control41685363392 started before this test-harness fix;
+no cancel was performed because it was already running. A fresh control gate follows
+this commit. Continue all54 groups with user updates, every commit pushed and Git
+handoffs; complaints and phone updates do not stop the PRD.
+
+
 ## Offline inbox preview accepted locally; keep updating the user — 3 November 2026
 
 The user explicitly requests continued progress updates, every commit pushed,
