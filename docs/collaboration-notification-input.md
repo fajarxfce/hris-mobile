@@ -62,3 +62,5 @@ family for the same account; v1 still needs its original family for authenticati
 Production chat notification hosts remain unbound and chat push is disabled. This is
 not the planned Drive/iCloud backup format or acceptance of an OS reply callback.
 Local and hosted validation are recorded separately in `docs/measurements`.
+
+[Local validation](measurements/chat-notification-input-2026-11-03.json) includes real SQLite/browser storage, Koin ownership, full root/proof/Wasm, and the preserved empty-browser-filter correction. Hosted Apple for this increment remains a separate gate.

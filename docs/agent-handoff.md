@@ -1,5 +1,57 @@
 # Agent continuation — HRIS Mobile
 
+## Protected pre-session notification input accepted locally
+
+The [encrypted input repository](collaboration-notification-input.md) is locally
+ACCEPTED; [evidence](measurements/chat-notification-input-2026-11-03.json). Unverified
+callback token/text is protected before login with a separate device content/index
+key, stable HMAC identity, random-generation AES-GCM envelope, strict syntax before
+key creation, existing-record key authentication, capacity64 and exact deletion.
+Actual Android/Apple/Desktop/browser hosts supply and own the protected key; desktop
+key persistence is independent of session persistence. This grants no account access,
+UI display or send. No native callback or authenticated transfer is activated yet.
+
+Focused1 PASSED232.721s with17 desktop cases/three suites. Its browser selector lacked
+a trailing wildcard, selected ZERO cases and is NOT browser acceptance. Full2
+PASSED363.451s:3,809 desktop/539 suites,230 Android-host/37,11 proof-host/three,ten
+build-logic/two;2,216 fresh/270,root quality/proof assembly/shared Wasm pass. It inherited
+the same empty browser filter. Corrected browser3 PASSED33.015s with14 FRESH actual
+IndexedDB cases/one suite. All18 implementation inputs (17 Kotlin/one Swift) unchanged
+across checks; zero failures/errors/skips. Commands, coverage gap and correction are
+preserved. Fourteen real SQLite cases mirror browser behavior; one additional Koin
+case verifies no-session retention, no implicit request, singleton key ownership and
+close/reopen. Work/audits/record complete in .work/chat-notification-input-2026-11-03.
+No repeat local checks absent new changes or failure.
+
+Full Apple [41588371503](measurements/chat-notification-focus-apple-2026-11-03.json)
+at de69f282 (phone21/focus) is now ACCEPTED:989 simulator cases/110 suites, zero failures/
+errors/skips,234 frozen sources; compile662s/tests92s/full Xcode1194s. Artifact13210841463
+GitHub SHA256 `3bc0e9347b239da15165c160db5003384bb82b925f641560f115344cdc4e6375`.
+Audit complete in .work/chat-notification-focus-apple-2026-11-03; do not repeat. This
+excludes raw device records and protected input. AFTER this accepted source is committed/
+pushed, dispatch ONE consolidated full Apple with prior234 paths plus raw15/schema13
+and input18. Verify all eight AppleDeviceRecordStoreTest cases and complete Xcode;
+physical iPhone remains waived. Do not dispatch another while that run is active.
+
+NEXT authenticated capture/transfer and exact cleanup before application worker/native
+callback/review UI. Read .work/chat-notification-input-2026-11-03/next-transfer.txt and
+the existing CollaborationNotificationReplies mutex. Coordinate repos directly in
+use cases, preserve guards after pending work, prove actual-account durable copy before
+removing device input, and keep old-family input for review. Do not expose unverified
+text to current-account UI or use a supplied receipt without rereading stored facts.
+Worker paging must not starve mixed-account inputs. Protected repository is not itself
+native callback/OS-death acceptance or Drive/iCloud backup.
+
+No local heavy job or owned emulator remains. Phone21 is already installed; no APK was
+built in this repository increment. Native41587502684 at de69 continues; automatic
+41590342856 at76bd was queued before this next push. Let automatic queue supersede
+pending older source; no manual duplicate/cancel. Latest accepted native41585074316 at
+a90 is documented below. Live304/schema116 and Starter0d4432e unchanged. Generic raw
+storage port awaits Mobile Apple acceptance. All54 PRD groups remain open; chat push
+OFF/native notification hosts unbound/voice-video-meeting UI absent.
+
+Historical in-progress notes below are superseded by this acceptance.
+
 ## Encrypted notification input in progress
 
 Raw DeviceRecordStore is COMMITTED/PUSHED at

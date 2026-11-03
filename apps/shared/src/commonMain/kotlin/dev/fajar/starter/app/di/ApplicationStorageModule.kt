@@ -16,6 +16,7 @@ fun applicationStorageModule(database: AppDatabase, preferences: UserPreferences
     single<TransferStore> { get<AppDatabase>().transfers }
     single<CommandStore> { get<AppDatabase>().commands }
     single<WorkWakeStore> { get<AppDatabase>().workWakes }
+    single<DeviceRecordStore> { get<AppDatabase>().deviceRecords }
     single<BlobStore> { get<AppDatabase>().blobs }
     single<ReplicaStore> { get<AppDatabase>().replicas }
     single<ContentCipher> { AesGcmContentCipher() }

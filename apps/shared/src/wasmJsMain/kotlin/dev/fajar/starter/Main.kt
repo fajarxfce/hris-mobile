@@ -56,6 +56,8 @@ fun main() {
                 BrowserProtectedCredentialStore(namespace, "collaboration-receipt-content-key"),
             collaborationHistoryCredentials =
                 BrowserProtectedCredentialStore(namespace, "collaboration-history-content-key"),
+            collaborationNotificationInputCredentials =
+                BrowserProtectedCredentialStore(namespace, "collaboration-notification-input-key"),
             selfProfileReplicaCredentials =
                 BrowserProtectedCredentialStore(namespace, "self-profile-replica-content-key"),
             documentCatalogCredentials =

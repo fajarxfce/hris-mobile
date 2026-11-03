@@ -93,6 +93,7 @@ fun createAppContainer(
     collaborationListCredentials: AtomicCredentialStore = MemoryCredentialStore(),
     collaborationReceiptCredentials: AtomicCredentialStore = MemoryCredentialStore(),
     collaborationHistoryCredentials: AtomicCredentialStore = MemoryCredentialStore(),
+    collaborationNotificationInputCredentials: AtomicCredentialStore = MemoryCredentialStore(),
     selfProfileReplicaCredentials: CredentialStore = MemoryCredentialStore(),
     documentCatalogCredentials: CredentialStore = MemoryCredentialStore(),
     commandCredentials: AtomicCredentialStore = MemoryCredentialStore(),
@@ -126,6 +127,7 @@ fun createAppContainer(
             collaborationListCredentials,
             collaborationReceiptCredentials,
             collaborationHistoryCredentials,
+            collaborationNotificationInputCredentials,
         ),
         applicationFirebaseModule(firebaseOptions, googleCredentials),
         module {

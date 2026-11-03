@@ -71,6 +71,8 @@ class StarterApplication : Application(), Configuration.Provider {
                 AndroidCredentialStore(this, "collaboration-receipt-content-key"),
             collaborationHistoryCredentials =
                 AndroidCredentialStore(this, "collaboration-history-content-key"),
+            collaborationNotificationInputCredentials =
+                AndroidCredentialStore(this, "collaboration-notification-input-key"),
             selfProfileReplicaCredentials =
                 AndroidCredentialStore(this, "self-profile-replica-content-key"),
             documentCatalogCredentials =

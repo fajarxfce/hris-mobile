@@ -39,8 +39,8 @@ may have committed; recovery rereads or repeats the same retained identity. Inde
 mutations join their transaction completion after it starts. There is no automatic
 retry, expiry, background job or notification callback in this component.
 
-The intended first caller is encrypted pre-retention notification reply storage.
-That repository, its protected device key, authenticated transfer to an account,
-callback lifetime, recovery worker and review UI remain separate implementation
-work. Production notification hosts remain unbound. Validation is recorded in
+The first caller is [encrypted pre-retention notification reply storage](collaboration-notification-input.md).
+Its repository and protected device key are implemented separately in HRIS. Authenticated
+transfer to an account, callback lifetime, recovery worker and review UI remain
+separate implementation work. Production notification hosts remain unbound. Validation is recorded in
 `docs/measurements`; do not treat this contract alone as acceptance.

@@ -15,6 +15,7 @@ internal fun applicationCollaborationModule(
     listCredentials: AtomicCredentialStore,
     receiptCredentials: AtomicCredentialStore,
     historyCredentials: AtomicCredentialStore,
+    notificationInputCredentials: AtomicCredentialStore,
 ) = module {
     single<CollaborationRuntimeRepository> {
         runtime(get(), get(named(dev.fajar.starter.network.HttpClients.Public)))
@@ -25,5 +26,9 @@ internal fun applicationCollaborationModule(
     single<AtomicCredentialStore>(named("collaboration-receipt-content-key")) { receiptCredentials }
         .onClose { it?.close() }
     single<AtomicCredentialStore>(named("collaboration-history-content-key")) { historyCredentials }
+        .onClose { it?.close() }
+    single<AtomicCredentialStore>(named("collaboration-notification-input-key")) {
+            notificationInputCredentials
+        }
         .onClose { it?.close() }
 }
