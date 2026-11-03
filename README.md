@@ -129,6 +129,12 @@ separate encrypted working copies and reopen locally. Choosing new catalog entri
 and saving to the server still require current online review. Saved commands retain
 their original body and operation ID until their outcome is reconciled.
 
+The chat module includes colleague selection, direct conversations, a durable local
+text queue and [review of retained notification replies](docs/collaboration-reviewed-replies.md).
+Held replies support encrypted working drafts, explicit sending and guarded discard.
+Live chat push remains disabled while rollout acceptance is completed. Calls, video
+and meetings remain in progress under the communications PRD.
+
 ## Development
 
 Requires JDK 21 and Android SDK 36. Start HRIS Platform using its development

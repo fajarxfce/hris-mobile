@@ -22,6 +22,7 @@ class CollaborationNotificationReplies(
     private val recover: RequestCollaborationRecovery,
     private val protect: ProtectCollaborationNotificationReply,
     private val transfer: TransferCollaborationNotificationInput,
+    private val resumeReviewed: ResumeCollaborationReviewedReply,
 ) {
     private val execution = Mutex()
     private val submissions = Semaphore(8)
@@ -120,6 +121,20 @@ class CollaborationNotificationReplies(
     private suspend fun process(
         input: CollaborationNotificationReplyInput
     ): AppResult<CollaborationNotificationReplyResult> {
+        if (input.resolution != null)
+            return when (val resumed = resumeReviewed(input)) {
+                is AppResult.Failed -> resumed
+                is AppResult.Success ->
+                    when (val value = resumed.value) {
+                        CollaborationReviewedReplyResult.Absent ->
+                            AppResult.Success(CollaborationNotificationReplyResult.Absent)
+                        is CollaborationReviewedReplyResult.NeedsReview -> needsReview(input)
+                        is CollaborationReviewedReplyResult.CommandRetained ->
+                            AppResult.Success(
+                                CollaborationNotificationReplyResult.CommandRetained(value.state)
+                            )
+                    }
+            }
         when (val existing = complete(input)) {
             is AppResult.Failed -> return reviewFailure(input, existing)
             is AppResult.Success ->

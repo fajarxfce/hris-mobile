@@ -6,12 +6,15 @@ import dev.fajar.starter.collaboration.data.repositories.*
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.database.*
+import dev.fajar.starter.securestorage.ContentCipher
 import kotlin.io.encoding.Base64
 import kotlin.test.*
+import kotlin.time.Instant
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
+import kotlinx.serialization.json.*
 
 /** Actual content cipher, authenticated membership and account-scoped SQLite/IndexedDB storage. */
 abstract class CollaborationNotificationReplyStorageContract {
@@ -457,6 +460,170 @@ abstract class CollaborationNotificationReplyStorageContract {
                 }
             }
         }
+
+    @Test
+    fun editedDraftAndConfirmedResolutionSurviveReopenAndDuplicateCallbacks() = withDatabase { f ->
+        val original = f.retain(f.candidate())
+        val access = f.inputAccess()
+        val repo = f.inputs()
+        assertTrue(
+            expect(repo.hold(access, original, CollaborationNotificationReplyReview.SessionChanged))
+        )
+        val held = assertNotNull(expect(repo.get(access, original.id)))
+        assertTrue(expect(repo.saveDraft(access, held, "Private edited working copy")))
+        f.reopen()
+        val drafted = assertNotNull(expect(f.inputs().get(access, original.id)))
+        assertEquals("Private edited working copy", drafted.draft)
+        assertEquals(drafted, f.retain(original.candidate))
+        val resolution =
+            CollaborationNotificationReplyResolution(
+                original.candidate.parent,
+                historyId(9910),
+                Instant.fromEpochMilliseconds(1_793_491_200_000),
+                "Explicit edited send",
+            )
+        assertTrue(expect(f.inputs().confirm(access, drafted, resolution)))
+        f.reopen()
+        val confirmed = assertNotNull(expect(f.inputs().get(access, original.id)))
+        assertEquals(resolution, confirmed.resolution)
+        assertNull(confirmed.review)
+        assertNull(confirmed.draft)
+        assertEquals(confirmed, f.retain(original.candidate))
+        assertEquals(listOf(confirmed), expect(f.inputs().page(access)).inputs)
+        val raw =
+            f.database.replicas
+                .observe(recoveryScope(access), NOTIFICATION_REPLY_PARTITION, limit = 200)
+                .first()
+        assertTrue(
+            raw.documents.none {
+                "Explicit edited send" in it.toString() ||
+                    "Private edited working copy" in it.toString()
+            }
+        )
+        assertFalse(confirmed.toString().contains("Explicit edited send"))
+    }
+
+    @Test
+    fun staleDraftCannotOverwriteConfirmationAndReapprovalOnlyChangesParent() = withDatabase { f ->
+        val repo = f.inputs()
+        val access = f.inputAccess()
+        val original = f.retain(f.candidate())
+        assertTrue(
+            expect(repo.hold(access, original, CollaborationNotificationReplyReview.SessionChanged))
+        )
+        val held = assertNotNull(expect(repo.get(access, original.id)))
+        assertTrue(expect(repo.saveDraft(access, held, "")))
+        val empty = assertNotNull(expect(repo.get(access, original.id)))
+        assertEquals("", empty.draft)
+        assertFalse(expect(repo.saveDraft(access, held, "Stale editor")))
+        val resolution =
+            CollaborationNotificationReplyResolution(
+                original.candidate.parent,
+                historyId(9911),
+                Instant.fromEpochMilliseconds(1_793_491_200_001),
+                "Approved",
+            )
+        assertTrue(expect(repo.confirm(access, empty, resolution)))
+        assertFalse(expect(repo.saveDraft(access, empty, "Late edit")))
+        val confirmed = assertNotNull(expect(repo.get(access, original.id)))
+        assertIs<AppResult.Failed>(
+            repo.confirm(access, confirmed, resolution.copy(text = "Different"))
+        )
+        assertIs<AppResult.Failed>(
+            repo.confirm(access, confirmed, resolution.copy(operationId = historyId(9912)))
+        )
+        val approved =
+            resolution.copy(parent = resolution.parent.copy(nativeSessionId = historyId(9913)))
+        assertTrue(expect(repo.confirm(access, confirmed, approved)))
+        assertEquals(approved, assertNotNull(expect(repo.get(access, original.id))).resolution)
+    }
+
+    @Test
+    fun largestValidBodiesStayWithinExistingReplicaBoundsWithoutTruncation() = withDatabase { f ->
+        val candidate = f.candidate().copy(text = "🙂".repeat(8192))
+        val original = f.retain(candidate)
+        val repo = f.inputs()
+        val access = f.inputAccess()
+        assertTrue(
+            expect(repo.hold(access, original, CollaborationNotificationReplyReview.SessionChanged))
+        )
+        val held = assertNotNull(expect(repo.get(access, original.id)))
+        val draft = "\n".repeat(16_384)
+        assertTrue(expect(repo.saveDraft(access, held, draft)))
+        f.reopen()
+        val drafted = assertNotNull(expect(f.inputs().get(access, original.id)))
+        assertEquals(draft, drafted.draft)
+        assertEquals(candidate, drafted.candidate)
+        val resolution =
+            CollaborationNotificationReplyResolution(
+                candidate.parent,
+                historyId(9914),
+                Instant.fromEpochMilliseconds(1_793_491_200_001),
+                "é".repeat(16_384),
+            )
+        assertTrue(expect(f.inputs().confirm(access, drafted, resolution)))
+        f.reopen()
+        assertEquals(
+            resolution,
+            assertNotNull(expect(f.inputs().get(access, original.id))).resolution,
+        )
+        val raw =
+            f.database.replicas
+                .observe(recoveryScope(access), NOTIFICATION_REPLY_PARTITION, limit = 200)
+                .first()
+        assertTrue(raw.documents.all { requireNotNull(it.payload).length <= 131_072 })
+    }
+
+    @Test
+    fun schemaOneCiphertextReopensAndCanBeEditedWithoutChangingInputIdentity() = withDatabase { f ->
+        val legacyCipher =
+            object : ContentCipher by f.cipher {
+                override suspend fun encrypt(
+                    key: ByteArray,
+                    associatedData: ByteArray,
+                    plaintext: ByteArray,
+                ): ByteArray {
+                    val objectValue =
+                        Json.parseToJsonElement(plaintext.decodeToString()) as? JsonObject
+                    if (objectValue?.containsKey("action") != true)
+                        return f.cipher.encrypt(key, associatedData, plaintext)
+                    val fields =
+                        objectValue.toMutableMap().apply {
+                            this["schema"] = JsonPrimitive(1)
+                            remove("draft")
+                            remove("resolution")
+                        }
+                    val legacy = JsonObject(fields).toString().encodeToByteArray()
+                    return try {
+                        f.cipher.encrypt(key, associatedData, legacy)
+                    } finally {
+                        legacy.fill(0)
+                    }
+                }
+            }
+        val candidate = f.candidate()
+        val old =
+            EncryptedCollaborationNotificationReplyRepository(
+                f.database.replicas,
+                legacyCipher,
+                f.keys,
+            )
+        val original =
+            assertIs<CollaborationNotificationReplyRetention.Retained>(
+                    expect(old.retain(f.inputAccess(), candidate))
+                )
+                .input
+        f.reopen()
+        val repo = f.inputs()
+        val access = f.inputAccess()
+        assertEquals(original, expect(repo.get(access, original.id)))
+        assertTrue(
+            expect(repo.hold(access, original, CollaborationNotificationReplyReview.SessionChanged))
+        )
+        val held = assertNotNull(expect(repo.get(access, original.id)))
+        assertTrue(expect(repo.saveDraft(access, held, "Edited legacy reply")))
+        assertEquals(original.id, assertNotNull(expect(repo.get(access, original.id))).id)
+    }
 
     private fun CollaborationHistoryFixture.inputAccess() =
         CollaborationRecoveryAccess(access.sessionId, access.audience, access.accountId)

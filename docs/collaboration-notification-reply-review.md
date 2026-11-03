@@ -8,6 +8,12 @@ can read its old input for review; this does not make the old action token curre
 Returned data is a snapshot, not an enduring UI or notification publication lease.
 UI owners still observe account/admission changes and discard obsolete projections.
 
+[Confirmed reviewed submissions](collaboration-reviewed-replies.md) use their
+immutable new ID/body and explicit approval parent for these checks. They require
+an owned conversation but do not reuse the original notification event as new send
+authority. The separate resume path holds OriginalProcessing if the original send
+has started; this never grants permission to send a second message.
+
 `ReviewCollaborationNotificationReply` accepts the exact retained input version and
 reproduces the facts that justify a hold:
 

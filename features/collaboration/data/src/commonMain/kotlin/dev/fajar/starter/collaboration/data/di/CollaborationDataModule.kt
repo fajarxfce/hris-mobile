@@ -14,6 +14,75 @@ import org.koin.core.annotation.*
 @ComponentScan("dev.fajar.starter.collaboration.data")
 class CollaborationDataModule {
     @Factory
+    fun saveReplyDraft(
+        inputs: CollaborationNotificationReplyRepository,
+        resolutions: CollaborationNotificationReplyResolutionRepository,
+        lists: CollaborationListRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) =
+        SaveCollaborationReplyDraft(
+            inputs,
+            resolutions,
+            lists,
+            sessions,
+            workspaces,
+            server,
+            build,
+            Clock.System,
+        )
+
+    @Factory
+    fun confirmReply(
+        inputs: CollaborationNotificationReplyRepository,
+        resolutions: CollaborationNotificationReplyResolutionRepository,
+        lists: CollaborationListRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        server: IdentityServer,
+        build: AppBuild,
+    ) =
+        ConfirmCollaborationReply(
+            inputs,
+            resolutions,
+            lists,
+            sessions,
+            workspaces,
+            server,
+            build,
+            Clock.System,
+        )
+
+    @Factory
+    fun resumeReviewedReply(
+        inputs: CollaborationNotificationReplyRepository,
+        messages: CollaborationMessageRepository,
+        cancellations: CollaborationMessageCancellationRepository,
+        prevention: CollaborationMessagePreventionRepository,
+        lists: CollaborationListRepository,
+        sessions: SessionRepository,
+        workspaces: WorkspaceRepository,
+        server: IdentityServer,
+        build: AppBuild,
+        schedules: SyncScheduleRepository,
+    ) =
+        ResumeCollaborationReviewedReply(
+            inputs,
+            messages,
+            cancellations,
+            prevention,
+            lists,
+            sessions,
+            workspaces,
+            server,
+            build,
+            Clock.System,
+            schedules,
+        )
+
+    @Factory
     fun observeSavedReplies(
         inputs: CollaborationNotificationReplyRepository,
         lists: CollaborationListRepository,

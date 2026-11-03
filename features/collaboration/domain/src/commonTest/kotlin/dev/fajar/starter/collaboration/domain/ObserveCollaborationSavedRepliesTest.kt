@@ -41,6 +41,7 @@ class ObserveCollaborationSavedRepliesTest {
             }
         val snapshot =
             assertIs<AppResult.Success<CollaborationSavedReplies>>(f.observe().first()).value
+        assertEquals(f.base.native.parent, snapshot.parent)
         assertEquals(32, snapshot.items.size)
         assertTrue(
             snapshot.items.all {
@@ -165,6 +166,31 @@ class ObserveCollaborationSavedRepliesTest {
         job.cancelAndJoin()
         assertEquals(0, f.active)
         assertEquals(0, f.base.local.setup.calls)
+    }
+
+    @Test
+    fun nativeFamilyReplacementIsObservableEvenWhenLocalAccessIsUnchanged() = runTest {
+        val f = Fixture()
+        val values = mutableListOf<AppResult<CollaborationSavedReplies>>()
+        val job =
+            backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
+                f.observe().toList(values)
+            }
+        runCurrent()
+        val initial = assertIs<AppResult.Success<CollaborationSavedReplies>>(values.last()).value
+        val session = f.session.value!!
+        val family = f.base.id(778)
+        f.session.value = session.copy(binding = session.binding.copy(serverId = family))
+        f.workspace.value =
+            f.workspace.value!!.let { it.copy(admission = it.admission.copy(familyId = family)) }
+        runCurrent()
+        val next = assertIs<AppResult.Success<CollaborationSavedReplies>>(values.last()).value
+        assertEquals(initial.access, next.access)
+        assertEquals(family, next.parent?.nativeSessionId)
+        assertNotEquals(initial.parent, next.parent)
+        assertEquals(1, f.active)
+        job.cancelAndJoin()
+        assertEquals(0, f.active)
     }
 
     private class Fixture {

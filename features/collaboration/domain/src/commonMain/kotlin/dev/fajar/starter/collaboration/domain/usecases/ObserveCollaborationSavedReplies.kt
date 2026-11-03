@@ -27,12 +27,46 @@ class ObserveCollaborationSavedReplies(
     @OptIn(ExperimentalCoroutinesApi::class)
     operator fun invoke(workspaceId: String): Flow<AppResult<CollaborationSavedReplies>> =
         sessions
-            .observeMessageAccess(workspaceId, workspaces, server, build, clock)
+            .observe()
             .onCompletion { cause -> if (cause == null) emit(failed(FailureKind.Unavailable)) }
-            .flatMapLatest { owned ->
-                when (owned) {
-                    is AppResult.Failed -> flowOf(owned)
-                    is AppResult.Success -> observe(workspaceId, owned.value)
+            .flatMapLatest { identity ->
+                when (identity) {
+                    is AppResult.Failed -> flowOf(identity)
+                    is AppResult.Success -> {
+                        val session =
+                            identity.value
+                                ?: return@flatMapLatest flowOf(failed(FailureKind.Unauthorized))
+                        val captured = collaborationPushParent(session, server, build)
+                        if (captured is AppResult.Failed) return@flatMapLatest flowOf(captured)
+                        val parent = (captured as AppResult.Success).value
+                        workspaces
+                            .observe(session.id)
+                            .onCompletion { cause ->
+                                if (cause == null) emit(failed(FailureKind.Unavailable))
+                            }
+                            .map { workspace ->
+                                when (workspace) {
+                                    is AppResult.Failed -> workspace
+                                    is AppResult.Success ->
+                                        collaborationLocalAccess(
+                                            workspaceId,
+                                            workspace.value,
+                                            session,
+                                            server.audience,
+                                            build,
+                                            clock.now(),
+                                        )
+                                }
+                            }
+                            .distinctUntilChanged()
+                            .flatMapLatest { owned ->
+                                when (owned) {
+                                    is AppResult.Failed -> flowOf(owned)
+                                    is AppResult.Success ->
+                                        observe(workspaceId, owned.value, parent)
+                                }
+                            }
+                    }
                 }
             }
             .onCompletion { cause -> if (cause == null) emit(failed(FailureKind.Unavailable)) }
@@ -46,6 +80,7 @@ class ObserveCollaborationSavedReplies(
     private fun observe(
         workspaceId: String,
         access: CollaborationLocalAccess,
+        parent: CollaborationNativeParent,
     ): Flow<AppResult<CollaborationSavedReplies>> =
         lists
             .observeAdmission(access)
@@ -70,8 +105,9 @@ class ObserveCollaborationSavedReplies(
                                 .mapLatest { change ->
                                     if (change is AppResult.Failed) change
                                     else
-                                        withTimeoutOrNull(8_000) { read(workspaceId, access) }
-                                            ?: failed(FailureKind.Timeout)
+                                        withTimeoutOrNull(8_000) {
+                                            read(workspaceId, access, parent)
+                                        } ?: failed(FailureKind.Timeout)
                                 }
                 }
             }
@@ -79,17 +115,22 @@ class ObserveCollaborationSavedReplies(
     private suspend fun read(
         workspaceId: String,
         access: CollaborationLocalAccess,
+        parent: CollaborationNativeParent,
     ): AppResult<CollaborationSavedReplies> {
-        suspend fun guard() =
-            sessions.checkReadStateContinuation(
-                CollaborationLocalScope.Selected(workspaceId),
-                access,
-                lists,
-                workspaces,
-                server,
-                build,
-                clock,
-            )
+        suspend fun guard(): AppResult<Unit> {
+            val current =
+                sessions.checkReadStateContinuation(
+                    CollaborationLocalScope.Selected(workspaceId),
+                    access,
+                    lists,
+                    workspaces,
+                    server,
+                    build,
+                    clock,
+                )
+            if (current is AppResult.Failed) return current
+            return sessions.guardPushParent(server, build, parent)
+        }
         guard().let { if (it is AppResult.Failed) return it }
         val recovery =
             CollaborationRecoveryAccess(access.sessionId, access.audience, access.accountId)
@@ -141,6 +182,7 @@ class ObserveCollaborationSavedReplies(
                 selected.map {
                     CollaborationSavedReply(it, names[it.candidate.action.target.conversationId])
                 },
+                parent,
             )
         )
     }

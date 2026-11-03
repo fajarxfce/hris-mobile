@@ -1,8 +1,11 @@
+@file:OptIn(androidx.compose.ui.ExperimentalComposeUiApi::class)
+
 package dev.fajar.starter.collaboration.presentation.navigation
 
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.backhandler.BackHandler
 import androidx.lifecycle.compose.LifecycleStartEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
@@ -205,5 +208,6 @@ private fun SavedRepliesEntry(
             is SavedRepliesEffect.OpenChat -> onConversation(it.conversationId)
         }
     }
+    BackHandler { vm.onEvent(SavedRepliesEvent.BackRequested) }
     SavedRepliesPage(state, list, vm::onEvent)
 }

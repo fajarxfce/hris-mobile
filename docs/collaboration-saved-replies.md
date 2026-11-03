@@ -2,7 +2,9 @@
 
 Chat opens a company-scoped Saved replies list and a separate detail route. The
 account-owned encrypted input is displayed with its recipient when the retained
-conversation is available, its original text and a short explanation of a hold.
+conversation is available, its working or confirmed text and an explanation of a hold.
+[Reviewed replies](collaboration-reviewed-replies.md) support encrypted working drafts,
+explicit confirmation, restart recovery and guarded discard of an unsent edit.
 Waiting input remains distinct from a delivered message. Open chat navigates to
 the existing conversation without modifying its composer or acknowledging a read.
 
@@ -32,17 +34,17 @@ queue insert or staging transition can win, in which case discard keeps the inpu
 The transaction and operation fence provide arbitration across independent app
 owners; no in-memory mutex is treated as the durable cancellation decision.
 
-This increment does not send edited review text or reauthorize an old notification
-token. Those actions require a durable reviewed submission tied to a fresh operation,
-with explicit recovery of uncertain submissions. A different-body operation conflict
-stays reviewable; it is not silently cancelled. The [Android application runtime](collaboration-android-notification-runtime.md) now
-owns notification delivery; chat push remains off and edited review sending is pending.
+Edited reviewed text uses a fresh, immutable operation ID and explicit current-parent
+confirmation. It never reauthorizes the old notification token. Original and edited
+operations are fenced separately; a started or conflicting original stays intact.
+The [Android application runtime](collaboration-android-notification-runtime.md) owns
+notification delivery. Live chat push remains off pending rollout acceptance.
 Physical iPhone testing is waived; full hosted Apple build and simulator coverage
 remain required. Generic archive creation is ported to Starter aa58a21b with full Apple acceptance.
 
-Local acceptance is recorded in [the measurement](measurements/chat-saved-replies-2026-11-03.json):
+Initial saved-reply acceptance is recorded in [the measurement](measurements/chat-saved-replies-2026-11-03.json):
 3,898 desktop,230 Android host and34 actual browser cases, zero failures; root
 quality/shared Wasm/Android assembly and lint passed. The three controlled Compose
 screenshots were actually inspected, including Indonesian at twice the font scale.
 Full hosted Apple for this saved-reply increment and phone23 are accepted in the
-current agent handoff. See that checkpoint for subsequent native runtime and reviewed-send work.
+current agent handoff. See that checkpoint and the reviewed-reply contract for the newer implementation and release.

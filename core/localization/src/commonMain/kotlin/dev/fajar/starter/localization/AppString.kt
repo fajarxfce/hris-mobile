@@ -5,6 +5,67 @@ import org.jetbrains.compose.resources.StringResource
 
 /** Explicit pairs keep runtime language changes portable across Android, iOS, desktop and Web. */
 enum class AppString(val english: StringResource, val indonesian: StringResource) {
+    ChatReplyEditBody(Res.string.chat_reply_edit_body_en, Res.string.chat_reply_edit_body_id),
+    ChatReplyDraftSaved(Res.string.chat_reply_draft_saved_en, Res.string.chat_reply_draft_saved_id),
+    ChatReplySavingDraft(
+        Res.string.chat_reply_saving_draft_en,
+        Res.string.chat_reply_saving_draft_id,
+    ),
+    ChatReplyDraftSaveFailed(
+        Res.string.chat_reply_draft_save_failed_en,
+        Res.string.chat_reply_draft_save_failed_id,
+    ),
+    ChatReplySaveDraft(Res.string.chat_reply_save_draft_en, Res.string.chat_reply_save_draft_id),
+    ChatReplySend(Res.string.chat_reply_send_en, Res.string.chat_reply_send_id),
+    ChatReplyRetrySend(Res.string.chat_reply_retry_send_en, Res.string.chat_reply_retry_send_id),
+    ChatReplySendHint(Res.string.chat_reply_send_hint_en, Res.string.chat_reply_send_hint_id),
+    ChatReplySendQueued(Res.string.chat_reply_send_queued_en, Res.string.chat_reply_send_queued_id),
+    ChatReplySendStarted(
+        Res.string.chat_reply_send_started_en,
+        Res.string.chat_reply_send_started_id,
+    ),
+    ChatReplySent(Res.string.chat_reply_sent_en, Res.string.chat_reply_sent_id),
+    ChatReplySendCancelled(
+        Res.string.chat_reply_send_cancelled_en,
+        Res.string.chat_reply_send_cancelled_id,
+    ),
+    ChatReplyActionUnconfirmed(
+        Res.string.chat_reply_action_unconfirmed_en,
+        Res.string.chat_reply_action_unconfirmed_id,
+    ),
+    ChatReplyOriginalProcessing(
+        Res.string.chat_reply_original_processing_en,
+        Res.string.chat_reply_original_processing_id,
+    ),
+    ChatReplyDiscardEdit(
+        Res.string.chat_reply_discard_edit_en,
+        Res.string.chat_reply_discard_edit_id,
+    ),
+    ChatReplyDiscardEditHint(
+        Res.string.chat_reply_discard_edit_hint_en,
+        Res.string.chat_reply_discard_edit_hint_id,
+    ),
+    ChatReplyEditDiscarded(
+        Res.string.chat_reply_edit_discarded_en,
+        Res.string.chat_reply_edit_discarded_id,
+    ),
+    ChatReplyLeaveDraftTitle(
+        Res.string.chat_reply_leave_draft_title_en,
+        Res.string.chat_reply_leave_draft_title_id,
+    ),
+    ChatReplyLeaveDraftHint(
+        Res.string.chat_reply_leave_draft_hint_en,
+        Res.string.chat_reply_leave_draft_hint_id,
+    ),
+    ChatReplyLeaveDraft(Res.string.chat_reply_leave_draft_en, Res.string.chat_reply_leave_draft_id),
+    ChatReplyKeepEditing(
+        Res.string.chat_reply_keep_editing_en,
+        Res.string.chat_reply_keep_editing_id,
+    ),
+    ChatReplyApprovedBody(
+        Res.string.chat_reply_approved_body_en,
+        Res.string.chat_reply_approved_body_id,
+    ),
     ChatReplyNeedsReview(
         Res.string.chat_reply_needs_review_en,
         Res.string.chat_reply_needs_review_id,

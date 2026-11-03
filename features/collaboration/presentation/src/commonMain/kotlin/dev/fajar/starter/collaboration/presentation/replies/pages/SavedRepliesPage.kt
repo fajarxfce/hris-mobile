@@ -76,7 +76,7 @@ fun SavedRepliesPage(
                         overflow = TextOverflow.Ellipsis,
                     )
                     AppText(
-                        row.input.candidate.text,
+                        row.input.resolution?.text ?: row.input.draft ?: row.input.candidate.text,
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis,
                     )
@@ -99,24 +99,100 @@ fun SavedRepliesPage(
             spacing = 16.dp,
             topBar = { SavedRepliesBar(state, onEvent) },
         ) {
-            if (state.loading || state.busy) AppLoading()
+            if (state.loading) AppLoading()
             state.failure?.let { AppFeedback(failureText(it)) }
             state.outcome?.let { AppFeedback(appString(discardOutcome(it))) }
+            state.sendOutcome
+                ?.takeUnless {
+                    it is CollaborationReviewedReplyResult.NeedsReview && state.selected != null
+                }
+                ?.let { AppFeedback(appString(sendOutcome(it))) }
             if (state.actionFailure != null)
-                AppFeedback(appString(AppString.ChatReplyDiscardUnconfirmed))
+                AppFeedback(appString(AppString.ChatReplyActionUnconfirmed))
             val selected = state.selected
             if (selected != null && state.failure == null) {
                 AppText(
                     selected.conversationName ?: appString(AppString.ChatSavedReply),
                     style = FluentTheme.typography.subtitle,
                 )
-                AppText(appString(reviewHint(selected.input.review)), color = AppColors.muted)
-                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    AppText(
-                        appString(AppString.ChatReplyBody),
-                        style = FluentTheme.typography.bodyStrong,
+                AppText(
+                    appString(
+                        reviewHint(
+                            (state.sendOutcome as? CollaborationReviewedReplyResult.NeedsReview)
+                                ?.reason ?: selected.input.review
+                        )
+                    ),
+                    color = AppColors.muted,
+                )
+                if (selected.input.review != null && selected.input.resolution == null) {
+                    AppTextField(
+                        appString(AppString.ChatReplyEditBody),
+                        state.draft ?: selected.input.draft ?: selected.input.candidate.text,
+                        { onEvent(SavedRepliesEvent.DraftChanged(it)) },
+                        Modifier.fillMaxWidth(),
+                        enabled = state.editable,
+                        maxLines = 8,
                     )
-                    SelectionContainer { AppText(selected.input.candidate.text) }
+                    AppText(
+                        appString(
+                            when {
+                                state.savingDraft -> AppString.ChatReplySavingDraft
+                                state.draftFailure != null -> AppString.ChatReplyDraftSaveFailed
+                                else -> AppString.ChatReplyDraftSaved
+                            }
+                        ),
+                        color =
+                            if (state.draftFailure != null) AppColors.error else AppColors.muted,
+                        style = FluentTheme.typography.caption,
+                    )
+                    if (state.draftFailure != null)
+                        AppTextButton(
+                            appString(AppString.ChatReplySaveDraft),
+                            { onEvent(SavedRepliesEvent.SaveDraftRequested) },
+                            enabled = state.editable,
+                        )
+                } else {
+                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        AppText(
+                            appString(
+                                if (selected.input.resolution != null)
+                                    AppString.ChatReplyApprovedBody
+                                else AppString.ChatReplyBody
+                            ),
+                            style = FluentTheme.typography.bodyStrong,
+                        )
+                        SelectionContainer {
+                            AppText(
+                                selected.input.resolution?.text ?: selected.input.candidate.text
+                            )
+                        }
+                    }
+                }
+                if (selected.input.review != null || selected.input.resolution != null) {
+                    AppButton(
+                        appString(
+                            if (selected.input.resolution != null || state.pendingSendId != null)
+                                AppString.ChatReplyRetrySend
+                            else AppString.ChatReplySend
+                        ),
+                        { onEvent(SavedRepliesEvent.SendRequested) },
+                        Modifier.fillMaxWidth(),
+                        enabled =
+                            !state.busy &&
+                                selected.input.review !=
+                                    CollaborationNotificationReplyReview.OriginalProcessing &&
+                                !(state.draft
+                                        ?: selected.input.resolution?.text
+                                        ?: selected.input.candidate.text)
+                                    .isBlank(),
+                        loading = state.busy && state.pendingSendId != null,
+                    )
+                    if (selected.input.resolution == null)
+                        AppText(
+                            appString(AppString.ChatReplySendHint),
+                            color = AppColors.muted,
+                            style = FluentTheme.typography.caption,
+                        )
                 }
                 FlowRow(
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -127,23 +203,56 @@ fun SavedRepliesPage(
                             appString(AppString.ChatReplyOpenChat),
                             { onEvent(SavedRepliesEvent.OpenChatRequested) },
                             enabled = !state.busy,
+                            primary = false,
                         )
-                    AppTextButton(
-                        appString(AppString.ChatReplyDiscard),
-                        { onEvent(SavedRepliesEvent.DiscardRequested) },
-                        enabled = !state.busy,
+                    if (
+                        selected.input.resolution != null &&
+                            selected.input.review ==
+                                CollaborationNotificationReplyReview.OriginalProcessing
                     )
+                        AppTextButton(
+                            appString(AppString.ChatReplyDiscardEdit),
+                            { onEvent(SavedRepliesEvent.DiscardEditRequested) },
+                            enabled = !state.busy,
+                        )
+                    else
+                        AppTextButton(
+                            appString(AppString.ChatReplyDiscard),
+                            { onEvent(SavedRepliesEvent.DiscardRequested) },
+                            enabled = !state.busy,
+                        )
                 }
             } else if (
-                !state.loading && !state.busy && state.failure == null && state.outcome == null
+                !state.loading &&
+                    !state.busy &&
+                    state.failure == null &&
+                    state.outcome == null &&
+                    state.sendOutcome == null
             ) {
                 AppText(appString(AppString.ChatReplyAbsent), color = AppColors.muted)
             }
         }
     }
+    if (state.leaveConfirmation)
+        AppDialog(
+            appString(AppString.ChatReplyLeaveDraftTitle),
+            appString(AppString.ChatReplyKeepEditing),
+            { onEvent(SavedRepliesEvent.LeaveDismissed) },
+        ) {
+            AppText(appString(AppString.ChatReplyLeaveDraftHint), Modifier.padding(16.dp))
+            AppButton(
+                appString(AppString.ChatReplyLeaveDraft),
+                { onEvent(SavedRepliesEvent.LeaveConfirmed) },
+                Modifier.fillMaxWidth().padding(16.dp),
+            )
+        }
     if (state.confirmation && state.selected != null && state.failure == null)
         AppDialog(
-            appString(AppString.ChatReplyDiscardTitle),
+            appString(
+                if (state.discardMode == CollaborationReplyDiscardMode.EditedDraftOnly)
+                    AppString.ChatReplyDiscardEdit
+                else AppString.ChatReplyDiscardTitle
+            ),
             appString(AppString.Close),
             { onEvent(SavedRepliesEvent.DiscardDismissed) },
         ) {
@@ -153,9 +262,15 @@ fun SavedRepliesPage(
                     .padding(16.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp),
             ) {
-                AppText(appString(AppString.ChatReplyDiscardHint))
+                AppText(
+                    appString(
+                        if (state.discardMode == CollaborationReplyDiscardMode.EditedDraftOnly)
+                            AppString.ChatReplyDiscardEditHint
+                        else AppString.ChatReplyDiscardHint
+                    )
+                )
                 if (state.actionFailure != null)
-                    AppFeedback(appString(AppString.ChatReplyDiscardUnconfirmed))
+                    AppFeedback(appString(AppString.ChatReplyActionUnconfirmed))
             }
             Column(Modifier.fillMaxWidth().padding(16.dp)) {
                 AppButton(
@@ -188,7 +303,7 @@ private fun SavedRepliesBar(state: SavedRepliesState, onEvent: (SavedRepliesEven
                 Icons.Regular.ArrowSync,
                 appString(AppString.Refresh),
                 { onEvent(SavedRepliesEvent.RefreshRequested) },
-                enabled = !state.loading && !state.busy,
+                enabled = !state.loading && !state.busy && !state.unsavedDraft,
             )
         },
     )
@@ -197,6 +312,8 @@ private fun SavedRepliesBar(state: SavedRepliesState, onEvent: (SavedRepliesEven
 private fun reviewHint(review: CollaborationNotificationReplyReview?) =
     when (review) {
         null -> AppString.ChatReplyWaitingHint
+        CollaborationNotificationReplyReview.OriginalProcessing ->
+            AppString.ChatReplyOriginalProcessing
         CollaborationNotificationReplyReview.SessionChanged -> AppString.ChatReplySessionChanged
         CollaborationNotificationReplyReview.MessageChanged -> AppString.ChatReplyMessageChanged
         CollaborationNotificationReplyReview.ContextUnavailable ->
@@ -205,8 +322,22 @@ private fun reviewHint(review: CollaborationNotificationReplyReview?) =
 
 private fun discardOutcome(outcome: CollaborationReplyDiscard) =
     when (outcome) {
+        CollaborationReplyDiscard.EditedDraftDiscarded -> AppString.ChatReplyEditDiscarded
         CollaborationReplyDiscard.Discarded -> AppString.ChatReplyDiscarded
         CollaborationReplyDiscard.Absent -> AppString.ChatReplyAbsent
         CollaborationReplyDiscard.AlreadyProcessing -> AppString.ChatReplyAlreadyProcessing
         CollaborationReplyDiscard.MessageChanged -> AppString.ChatReplyMessageChanged
+    }
+
+private fun sendOutcome(outcome: CollaborationReviewedReplyResult): AppString =
+    when (outcome) {
+        CollaborationReviewedReplyResult.Absent -> AppString.ChatReplyAbsent
+        is CollaborationReviewedReplyResult.NeedsReview -> reviewHint(outcome.reason)
+        is CollaborationReviewedReplyResult.CommandRetained ->
+            when (outcome.state) {
+                CollaborationMessageState.Queued -> AppString.ChatReplySendQueued
+                CollaborationMessageState.Cancelled -> AppString.ChatReplySendCancelled
+                is CollaborationMessageState.Sent -> AppString.ChatReplySent
+                else -> AppString.ChatReplySendStarted
+            }
     }

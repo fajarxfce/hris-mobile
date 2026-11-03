@@ -89,7 +89,17 @@ fun applicationNotificationModule() = module {
         CollaborationNotificationActions(owner, get(), get(), get(), get())
     }
     single {
-        CollaborationNotificationReplies(get(), get(), get(), get(), get(), get(), get(), get())
+        CollaborationNotificationReplies(
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+        )
     }
     single { CollaborationNotificationInputRecoveryWorker(get(), get(), get()) }
     single {

@@ -58,7 +58,7 @@ class SavedRepliesLayoutTest {
     }
 
     @Test
-    fun ordinaryDetailLabelsItsSavedTextAndDoesNotOfferAnImplicitSend() {
+    fun heldDetailLabelsItsSavedTextAndOffersExplicitSend() {
         val row = savedReply()
         compose.setContent {
             AppTheme {
@@ -76,7 +76,7 @@ class SavedRepliesLayoutTest {
         compose.onNodeWithText(row.input.candidate.text).assertIsDisplayed()
         compose.onNodeWithText("Open chat").assertIsDisplayed()
         compose.onNodeWithText("Discard saved reply").assertIsDisplayed()
-        compose.onNodeWithText("Send").assertDoesNotExist()
+        compose.onNodeWithText("Send reply").assertIsDisplayed()
         screenshot("chat-saved-reply")
     }
 
@@ -115,6 +115,8 @@ class SavedRepliesLayoutTest {
         compose.runOnIdle {
             assertEquals(listOf<SavedRepliesEvent>(SavedRepliesEvent.DiscardRequested), events)
         }
+        compose.onNodeWithTag("frame").performTouchInput { swipeUp() }
+        compose.onNodeWithText("Buang balasan tersimpan").assertIsDisplayed()
         screenshot("chat-saved-reply-indonesian-large-text")
     }
 
@@ -153,6 +155,116 @@ class SavedRepliesLayoutTest {
         compose.onNodeWithText("Sent").assertDoesNotExist()
     }
 
+    @Test
+    fun editorForwardsKeyboardChangesAndSendAsSeparateActions() {
+        val row = savedReply()
+        val events = mutableListOf<SavedRepliesEvent>()
+        var state by mutableStateOf(SavedRepliesState(row.input.id, snapshot(row), loading = false))
+        compose.setContent {
+            AppTheme {
+                Box(Modifier.size(360.dp, 760.dp).testTag("frame")) {
+                    SavedRepliesPage(
+                        state,
+                        rememberLazyListState(),
+                        { event ->
+                            events += event
+                            if (event is SavedRepliesEvent.DraftChanged)
+                                state = state.copy(draft = event.text, savingDraft = true)
+                        },
+                    )
+                }
+            }
+        }
+        compose
+            .onNode(hasSetTextAction())
+            .performClick()
+            .performTextReplacement("Updated fictional reply\nPlease check the attached claim.")
+        compose.onNode(hasSetTextAction()).assertIsFocused()
+        compose.onNodeWithText("Saving draft…").assertIsDisplayed()
+        compose.runOnIdle { assertTrue(events.all { it is SavedRepliesEvent.DraftChanged }) }
+        screenshot("chat-reviewed-reply-editor")
+        compose.onNodeWithText("Send reply").performScrollTo().performClick()
+        compose.runOnIdle { assertEquals(SavedRepliesEvent.SendRequested, events.last()) }
+    }
+
+    @Test
+    fun confirmedReplyKeepsItsBodyReadOnlyAndRetryExplicit() {
+        val row =
+            savedReply().let {
+                it.copy(
+                    input =
+                        it.input.copy(
+                            review = null,
+                            resolution =
+                                CollaborationNotificationReplyResolution(
+                                    it.input.candidate.parent,
+                                    id(99),
+                                    kotlin.time.Instant.fromEpochMilliseconds(1_793_491_200_000),
+                                    "Confirmed fictional reply",
+                                ),
+                        )
+                )
+            }
+        val events = mutableListOf<SavedRepliesEvent>()
+        compose.setContent {
+            AppTheme {
+                Box(Modifier.size(360.dp, 760.dp).testTag("frame")) {
+                    SavedRepliesPage(
+                        SavedRepliesState(row.input.id, snapshot(row), loading = false),
+                        rememberLazyListState(),
+                        events::add,
+                    )
+                }
+            }
+        }
+        compose.onNode(hasSetTextAction()).assertDoesNotExist()
+        compose.onNodeWithText("Confirmed fictional reply").assertIsDisplayed()
+        compose.onNodeWithText("Continue sending").performClick()
+        compose.runOnIdle {
+            assertEquals(listOf<SavedRepliesEvent>(SavedRepliesEvent.SendRequested), events)
+        }
+        screenshot("chat-reviewed-reply-confirmed")
+    }
+
+    @Test
+    fun startedOriginalDisablesSendingAndOffersDiscardOfOnlyTheSavedEdit() {
+        val row =
+            savedReply().let {
+                it.copy(
+                    input =
+                        it.input.copy(
+                            review = CollaborationNotificationReplyReview.OriginalProcessing,
+                            resolution =
+                                CollaborationNotificationReplyResolution(
+                                    it.input.candidate.parent,
+                                    id(99),
+                                    kotlin.time.Instant.fromEpochMilliseconds(1_793_491_200_000),
+                                    "Saved fictional edit",
+                                ),
+                        )
+                )
+            }
+        val events = mutableListOf<SavedRepliesEvent>()
+        compose.setContent {
+            AppTheme {
+                Box(Modifier.size(360.dp, 760.dp).testTag("frame")) {
+                    SavedRepliesPage(
+                        SavedRepliesState(row.input.id, snapshot(row), loading = false),
+                        rememberLazyListState(),
+                        events::add,
+                    )
+                }
+            }
+        }
+        compose.onNodeWithText("Continue sending").assertIsNotEnabled()
+        compose.onNodeWithText("Discard saved reply").assertDoesNotExist()
+        compose.onNodeWithText("Discard saved edit").performScrollTo().performClick()
+        compose.runOnIdle {
+            assertEquals(listOf<SavedRepliesEvent>(SavedRepliesEvent.DiscardEditRequested), events)
+        }
+        screenshot("chat-reviewed-reply-original-processing")
+    }
+
     private fun screenshot(name: String) {
         Image.makeFromBitmap(compose.onNodeWithTag("frame").captureToImage().asSkiaBitmap()).use {
             image ->
@@ -169,6 +281,7 @@ class SavedRepliesLayoutTest {
         CollaborationSavedReplies(
             CollaborationLocalAccess("local", "https://hris.example.test/", id(1), id(2)),
             rows,
+            CollaborationNativeParent("local", "https://hris.example.test/", id(1), id(3)),
         )
 
     private fun savedReply() =

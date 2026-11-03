@@ -8,6 +8,7 @@ import dev.fajar.starter.collaboration.data.recovery.recoveryScope
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.policies.*
 import dev.fajar.starter.collaboration.domain.repositories.CollaborationNotificationReplyRepository
+import dev.fajar.starter.collaboration.domain.repositories.CollaborationNotificationReplyResolutionRepository
 import dev.fajar.starter.database.*
 import dev.fajar.starter.securestorage.*
 import dev.fajar.starter.storage.safeStorageCall
@@ -22,7 +23,7 @@ class EncryptedCollaborationNotificationReplyRepository(
     private val replicas: ReplicaStore,
     private val cipher: ContentCipher,
     @Named("collaboration-history-content-key") credentials: AtomicCredentialStore,
-) : CollaborationNotificationReplyRepository {
+) : CollaborationNotificationReplyRepository, CollaborationNotificationReplyResolutionRepository {
     private val keys = CollaborationHistoryKeys(replicas, cipher, credentials)
 
     override fun observeChanges(access: CollaborationRecoveryAccess) =
@@ -135,6 +136,64 @@ class EncryptedCollaborationNotificationReplyRepository(
         expected: CollaborationNotificationReplyInput,
         reason: CollaborationNotificationReplyReview,
     ) = safeStorageCall { change(access, expected, reason) }
+
+    override suspend fun saveDraft(
+        access: CollaborationRecoveryAccess,
+        expected: CollaborationNotificationReplyInput,
+        text: String,
+    ) = safeStorageCall {
+        require(
+            expected.review != null &&
+                expected.resolution == null &&
+                validCollaborationReplyDraft(text)
+        )
+        edit(access, expected, expected.copy(draft = text))
+    }
+
+    override suspend fun confirm(
+        access: CollaborationRecoveryAccess,
+        expected: CollaborationNotificationReplyInput,
+        resolution: CollaborationNotificationReplyResolution,
+    ) = safeStorageCall {
+        require(validCollaborationReplyResolution(expected.candidate, resolution))
+        val previous = expected.resolution
+        require(previous != null || expected.review != null)
+        require(previous == null || previous.copy(parent = resolution.parent) == resolution)
+        edit(access, expected, expected.copy(review = null, draft = null, resolution = resolution))
+    }
+
+    private suspend fun edit(
+        access: CollaborationRecoveryAccess,
+        expected: CollaborationNotificationReplyInput,
+        changed: CollaborationNotificationReplyInput,
+    ): Boolean {
+        require(
+            validCollaborationNotificationReplyInput(expected) &&
+                validCollaborationNotificationReplyInput(changed)
+        )
+        require(
+            expected.candidate.parent.audience == access.audience &&
+                expected.candidate.parent.accountId == access.accountId
+        )
+        val raw =
+            replicas.checkpoint(recoveryScope(access), NOTIFICATION_REPLY_PARTITION) ?: return false
+        return keys.use { key, index ->
+            val codec = CollaborationNotificationReplyCodec(access, cipher, key, index)
+            val active = codec.checkpoint(raw)
+            val reference = active.find { it.id == expected.id } ?: return@use false
+            val found = load(codec, raw, reference)
+            if (found != expected) return@use false
+            if (found == changed) return@use current(codec, raw)
+            val revision = raw.revision + 1
+            val updated = changed.copy(version = changed.version.copy(revision = revision))
+            val next =
+                active.map {
+                    if (it.id == found.id) CollaborationNotificationReplyCodec.reference(updated)
+                    else it
+                }
+            publish(codec, raw, raw.handle.generation, revision, next, codec.input(updated))
+        }
+    }
 
     override suspend fun remove(
         access: CollaborationRecoveryAccess,

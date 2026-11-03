@@ -28,122 +28,110 @@ class DiscardCollaborationNotificationReply(
         workspaceId: String,
         expectedAccess: CollaborationLocalAccess,
         expected: CollaborationNotificationReplyInput,
+        mode: CollaborationReplyDiscardMode = CollaborationReplyDiscardMode.All,
+        expectedParent: CollaborationNativeParent? = null,
     ): AppResult<CollaborationReplyDiscard> {
         currentCoroutineContext().ensureActive()
-        if (!validCollaborationNotificationReplyInput(expected))
-            return failed(FailureKind.Validation)
-        return withTimeoutOrNull(8_000) { discard(workspaceId, expectedAccess, expected) }
-            ?: failed(FailureKind.Timeout)
+        if (
+            !validCollaborationNotificationReplyInput(expected) ||
+                (mode == CollaborationReplyDiscardMode.EditedDraftOnly &&
+                    expected.resolution == null)
+        )
+            return reviewedReplyFailure(FailureKind.Validation)
+        return withTimeoutOrNull(8_000) {
+            discard(workspaceId, expectedAccess, expected, mode, expectedParent)
+        } ?: reviewedReplyFailure(FailureKind.Timeout)
     }
 
     private suspend fun discard(
         workspaceId: String,
         access: CollaborationLocalAccess,
         expected: CollaborationNotificationReplyInput,
+        mode: CollaborationReplyDiscardMode,
+        parent: CollaborationNativeParent?,
     ): AppResult<CollaborationReplyDiscard> {
-        val captured = sessions.capturePushParent(server, build)
-        if (captured is AppResult.Failed) return captured
-        val parent = (captured as AppResult.Success).value
-        val candidate = expected.candidate
-        if (
-            parent.sessionId != access.sessionId ||
-                parent.audience != access.audience ||
-                parent.accountId != access.accountId ||
-                candidate.parent.audience != access.audience ||
-                candidate.parent.accountId != access.accountId ||
-                candidate.action.target.companyId != access.companyId
-        )
-            return failed(FailureKind.Unauthorized)
-        val scope = CollaborationLocalScope.Selected(workspaceId)
-        suspend fun guard(): AppResult<Unit> {
-            val current =
-                sessions.checkReadStateContinuation(
-                    scope,
-                    access,
-                    lists,
-                    workspaces,
-                    server,
-                    build,
-                    clock,
-                )
-            if (current is AppResult.Failed) return current
-            return sessions.guardPushParent(server, build, parent)
-        }
-        guard().let { if (it is AppResult.Failed) return it }
-        val recovery =
-            CollaborationRecoveryAccess(access.sessionId, access.audience, access.accountId)
-        val found = inputs.get(recovery, expected.id)
-        guard().let { if (it is AppResult.Failed) return it }
-        if (found is AppResult.Failed) return found
-        val current =
-            (found as AppResult.Success).value ?: return result(CollaborationReplyDiscard.Absent)
-        if (current != expected) return failed(FailureKind.Conflict)
-        val action = candidate.action
-        val read = messages.get(access, action.operationId)
-        guard().let { if (it is AppResult.Failed) return it }
-        if (read is AppResult.Failed) return read
-        val message = (read as AppResult.Success).value
-        if (message != null) {
-            if (!matches(message, access, candidate))
-                return result(CollaborationReplyDiscard.MessageChanged)
-            if (
-                message.state != CollaborationMessageState.Queued &&
-                    message.state != CollaborationMessageState.Cancelled
+        val captured =
+            ReviewedReplyAccess.capture(
+                expected,
+                sessions,
+                lists,
+                workspaces,
+                server,
+                build,
+                clock,
+                workspaceId,
+                access,
+                parent,
             )
-                return result(CollaborationReplyDiscard.AlreadyProcessing)
-        }
-        currentCoroutineContext().ensureActive()
-        val fenced =
-            when (message?.state) {
-                CollaborationMessageState.Cancelled -> AppResult.Success(true)
-                CollaborationMessageState.Queued -> cancellations.cancel(access, message)
-                else ->
-                    prevention.prevent(
-                        access,
-                        CollaborationMessageIntent(
-                            action.operationId,
-                            access.messageOwner(),
-                            action.target.conversationId,
-                            clock.now(),
-                            candidate.text,
-                        ),
-                    )
+        if (captured is AppResult.Failed) return captured
+        val context = (captured as AppResult.Success).value
+        val read = context.checked { inputs.get(context.recovery, expected.id) }
+        if (read is AppResult.Failed) return read
+        val current =
+            (read as AppResult.Success).value
+                ?: return AppResult.Success(CollaborationReplyDiscard.Absent)
+        if (current != expected) return reviewedReplyFailure(FailureKind.Conflict)
+        val candidate = current.candidate
+        val original =
+            CollaborationMessageIntent(
+                candidate.action.operationId,
+                access.messageOwner(),
+                candidate.action.target.conversationId,
+                clock.now(),
+                candidate.text,
+            )
+        if (mode == CollaborationReplyDiscardMode.EditedDraftOnly) {
+            // Explicitly discard only the saved edit; the already-started original stays untouched.
+            val found = context.checked { messages.get(access, original.id) }
+            if (found is AppResult.Failed) return found
+            val command =
+                (found as AppResult.Success).value
+                    ?: return reviewedReplyFailure(FailureKind.Conflict)
+            if (!matchesReviewedReplyCommand(command, original))
+                return AppResult.Success(CollaborationReplyDiscard.MessageChanged)
+            if (
+                command.state == CollaborationMessageState.Queued ||
+                    command.state == CollaborationMessageState.Cancelled
+            )
+                return reviewedReplyFailure(FailureKind.Conflict)
+        } else {
+            val fenced =
+                fenceReviewedReplyCommand(context, messages, cancellations, prevention, original)
+            if (fenced is AppResult.Failed) return fenced
+            fenceOutcome((fenced as AppResult.Success).value)?.let {
+                return AppResult.Success(it)
             }
-        guard().let { if (it is AppResult.Failed) return it }
-        if (fenced is AppResult.Failed) return fenced
-        if (!(fenced as AppResult.Success).value) return failed(FailureKind.Conflict)
-        val proof = messages.get(access, action.operationId)
-        guard().let { if (it is AppResult.Failed) return it }
-        if (proof is AppResult.Failed) return proof
-        val terminal = (proof as AppResult.Success).value
-        if (
-            terminal == null ||
-                !matches(terminal, access, candidate) ||
-                terminal.state != CollaborationMessageState.Cancelled
-        )
-            return failed(FailureKind.Conflict)
-        currentCoroutineContext().ensureActive()
-        val removed = inputs.remove(recovery, expected)
-        guard().let { if (it is AppResult.Failed) return it }
+        }
+        current.resolution?.let { resolution ->
+            val edited =
+                CollaborationMessageIntent(
+                    resolution.operationId,
+                    access.messageOwner(),
+                    original.conversationId,
+                    resolution.createdAt,
+                    resolution.text,
+                )
+            val fenced =
+                fenceReviewedReplyCommand(context, messages, cancellations, prevention, edited)
+            if (fenced is AppResult.Failed) return fenced
+            fenceOutcome((fenced as AppResult.Success).value)?.let {
+                return AppResult.Success(it)
+            }
+        }
+        val removed = context.checked { inputs.remove(context.recovery, current) }
         if (removed is AppResult.Failed) return removed
-        return if ((removed as AppResult.Success).value) result(CollaborationReplyDiscard.Discarded)
-        else failed(FailureKind.Conflict)
+        if (!(removed as AppResult.Success).value) return reviewedReplyFailure(FailureKind.Conflict)
+        return AppResult.Success(
+            if (mode == CollaborationReplyDiscardMode.EditedDraftOnly)
+                CollaborationReplyDiscard.EditedDraftDiscarded
+            else CollaborationReplyDiscard.Discarded
+        )
     }
 
-    private fun matches(
-        message: CollaborationMessageRecord,
-        access: CollaborationLocalAccess,
-        candidate: CollaborationNotificationReplyCandidate,
-    ) =
-        message.intent.id == candidate.action.operationId &&
-            message.intent.owner == access.messageOwner() &&
-            message.intent.conversationId == candidate.action.target.conversationId &&
-            message.intent.text == candidate.text &&
-            message.revision >= 0 &&
-            validCollaborationMessageState(message.state)
-
-    private fun result(value: CollaborationReplyDiscard) = AppResult.Success(value)
-
-    private fun failed(kind: FailureKind) =
-        collaborationSetupFailure("client.collaboration_reply_discard_unavailable", kind)
+    private fun fenceOutcome(fence: ReviewedReplyFence): CollaborationReplyDiscard? =
+        when (fence) {
+            ReviewedReplyFence.Fenced -> null
+            ReviewedReplyFence.Processing -> CollaborationReplyDiscard.AlreadyProcessing
+            ReviewedReplyFence.Changed -> CollaborationReplyDiscard.MessageChanged
+        }
 }

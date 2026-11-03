@@ -999,7 +999,7 @@
     <string name="chat_saved_replies_empty_id">Belum ada balasan tersimpan</string>
     <string name="chat_reply_waiting_id">Menunggu diproses</string>
     <string name="chat_reply_session_changed_id">Sesi masuk berubah. Tinjau balasan ini sebelum melanjutkan.</string>
-    <string name="chat_reply_message_changed_id">Operasi ini sudah digunakan balasan lain. Buka chat untuk memeriksa statusnya.</string>
+    <string name="chat_reply_message_changed_id">Balasan ini perlu diperiksa. Buka chat untuk memeriksa percakapannya.</string>
     <string name="chat_reply_context_unavailable_id">Percakapan atau pesan asal belum tersedia. Balasan tetap tersimpan.</string>
     <string name="chat_reply_waiting_hint_id">Balasan tersimpan di perangkat ini. Pengiriman belum dikonfirmasi.</string>
     <string name="chat_reply_body_id">Balasan Anda</string>
@@ -1014,4 +1014,26 @@
     <string name="chat_reply_needs_review_id">Perlu ditinjau</string>
     <string name="native_chat_open_unavailable_id">Percakapan belum dapat dibuka. Coba lagi.</string>
     <string name="native_chat_open_verification_id">Verifikasi akun dan pilih perusahaan, lalu coba lagi.</string>
+    <string name="chat_reply_edit_body_id">Balasan Anda</string>
+    <string name="chat_reply_draft_saved_id">Draf tersimpan di perangkat ini</string>
+    <string name="chat_reply_saving_draft_id">Menyimpan draf…</string>
+    <string name="chat_reply_draft_save_failed_id">Perubahan terakhir belum terkonfirmasi tersimpan.</string>
+    <string name="chat_reply_save_draft_id">Simpan draf</string>
+    <string name="chat_reply_send_id">Kirim balasan</string>
+    <string name="chat_reply_retry_send_id">Lanjutkan pengiriman</string>
+    <string name="chat_reply_send_hint_id">Periksa percakapan dan balasan sebelum mengirim.</string>
+    <string name="chat_reply_send_queued_id">Balasan masuk antrean dan akan dikirim saat terhubung.</string>
+    <string name="chat_reply_send_started_id">Balasan sedang dikirim. Buka chat untuk memeriksa statusnya.</string>
+    <string name="chat_reply_sent_id">Balasan terkirim.</string>
+    <string name="chat_reply_send_cancelled_id">Balasan ini dibatalkan. Tidak ada pesan baru yang ditambahkan ke antrean.</string>
+    <string name="chat_reply_action_unconfirmed_id">Hasil belum dapat dipastikan. Muat ulang untuk memeriksa sebelum mencoba lagi.</string>
+    <string name="chat_reply_original_processing_id">Balasan awal sudah mulai dikirim. Edit ini tetap disimpan agar tidak mengirim pesan kedua. Periksa chat sebelum membuang draf edit.</string>
+    <string name="chat_reply_discard_edit_id">Buang draf edit</string>
+    <string name="chat_reply_discard_edit_hint_id">Buang draf edit ini saja? Balasan awal sudah mulai dikirim dan tetap ada di chat.</string>
+    <string name="chat_reply_edit_discarded_id">Draf edit dibuang. Balasan awal tidak dibatalkan.</string>
+    <string name="chat_reply_leave_draft_title_id">Tinggalkan draf ini?</string>
+    <string name="chat_reply_leave_draft_hint_id">Perubahan terakhir mungkin belum tersimpan. Tetap di sini untuk menyimpannya, atau tinggalkan dengan draf terakhir yang tersimpan.</string>
+    <string name="chat_reply_leave_draft_id">Tinggalkan</string>
+    <string name="chat_reply_keep_editing_id">Lanjutkan mengedit</string>
+    <string name="chat_reply_approved_body_id">Balasan yang dikonfirmasi</string>
 </resources>

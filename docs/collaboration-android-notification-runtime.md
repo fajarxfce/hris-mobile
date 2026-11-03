@@ -20,7 +20,8 @@ Open links authenticate through the domain and route independently of this displ
 binding. Inline replies retain protected input before acknowledgment and recover
 through the existing bounded worker. Acknowledging a reply retires its notification;
 it does not itself confirm network delivery. Saved replies expose pending/review
-status and explicit discard. Sending edited reviewed text remains a separate step.
+status, encrypted working drafts and explicit discard. [Reviewed sending](collaboration-reviewed-replies.md)
+persists separate consent and handles its new operation before original completion.
 
 AndroidCollaborationNotificationRuntime holds only application context. It owns the
 language collector and creates native display/intents plus private callback adapters.
@@ -49,7 +50,9 @@ lint pass. Proof4 validates corrected fixture IDs before native1 passes105.401s;
 runtime cases, raw16, three process kills and five callbacks/SystemUI pass. All three
 SystemUI screenshots were actually inspected. [Release24](measurements/android-release-phone-2026-11-03-build24.json) is installed
 on the authorized phone after minified emulator startup checks. Updated hosted
-Apple/Native checks of this host source remain running.
+[Apple](measurements/chat-native-host-apple-2026-11-03.json) and
+[Native](measurements/chat-native-host-hosted-2026-11-03.json) checks of this host source
+are accepted. New reviewed-send source has separate gates.
 Chat push remains disabled on the live server. This application/session policy has
 no Starter port; the previously accepted generic notification sources remain shared.
 Voice/video/meeting behavior and physical iOS/APNs/CallKit are not established here.

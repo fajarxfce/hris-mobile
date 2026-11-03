@@ -72,14 +72,17 @@ class ReviewCollaborationNotificationReply(
         val input = (found as AppResult.Success).value ?: return AppResult.Success(null)
         if (input != expected) return unavailable(FailureKind.Conflict)
         if (input.review != null) return AppResult.Success(input)
-        val read = messages.get(scope.access, candidate.action.operationId)
+        val operationId = input.resolution?.operationId ?: candidate.action.operationId
+        val text = input.resolution?.text ?: candidate.text
+        val approvedParent = input.resolution?.parent ?: candidate.parent
+        val read = messages.get(scope.access, operationId)
         guard(scope).let { if (it is AppResult.Failed) return it }
         if (read is AppResult.Failed) return read
         val message = (read as AppResult.Success).value
         val reason =
             if (message != null) {
                 if (
-                    message.intent.id != candidate.action.operationId ||
+                    message.intent.id != operationId ||
                         message.intent.owner != scope.access.messageOwner() ||
                         !validCollaborationMessageId(message.intent.conversationId) ||
                         !validCollaborationText(message.intent.text) ||
@@ -89,12 +92,11 @@ class ReviewCollaborationNotificationReply(
                     return unavailable(FailureKind.Conflict)
                 if (
                     message.intent.conversationId == candidate.action.target.conversationId &&
-                        message.intent.text == candidate.text
+                        message.intent.text == text
                 )
                     return AppResult.Success(null)
                 CollaborationNotificationReplyReview.MessageChanged
-            } else if (candidate.parent != parent)
-                CollaborationNotificationReplyReview.SessionChanged
+            } else if (approvedParent != parent) CollaborationNotificationReplyReview.SessionChanged
             else {
                 val context = lists.get(scope.access, candidate.action.target.conversationId)
                 guard(scope).let { if (it is AppResult.Failed) return it }
@@ -106,6 +108,7 @@ class ReviewCollaborationNotificationReply(
                         (context as AppResult.Success).value,
                     )
                 ) {
+                    if (input.resolution != null) return AppResult.Success(null)
                     val fact =
                         history.getEventFact(
                             scope.access,

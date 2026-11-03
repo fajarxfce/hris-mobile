@@ -294,6 +294,7 @@ class CollaborationNotificationReplyRecoveryWorkerTest {
                 koin.get(),
                 koin.get(),
                 koin.get(),
+                koin.get(),
             )
         return CollaborationNotificationReplyRecoveryWorker(
             koin.get(),

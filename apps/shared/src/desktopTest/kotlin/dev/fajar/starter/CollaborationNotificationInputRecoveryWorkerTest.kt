@@ -214,6 +214,7 @@ class CollaborationNotificationInputRecoveryWorkerTest {
                 koin.get(),
                 koin.get(),
                 transfer,
+                koin.get(),
             )
         return CollaborationNotificationInputRecoveryWorker(koin.get(), koin.get(), replies)
     }

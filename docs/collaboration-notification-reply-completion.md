@@ -4,7 +4,11 @@
 reproducing the matching immutable message from encrypted command storage. The
 account/audience/company, conversation, operation ID and exact text must match, with
 a valid command revision/state. Queued, staging, staged, sent and cancelled commands
-all preserve the user's original input. Retirement describes local retention, not
+all preserve the confirmed command. A reviewed resolution selects its new operation
+ID and body; original cancellation cannot retire it. An unconfirmed working draft
+returns Pending, including an empty draft, so a duplicate callback cannot erase
+an ongoing edit. See [reviewed replies](collaboration-reviewed-replies.md).
+Retirement describes local retention, not
 provider delivery or successful sending.
 
 The use case captures the current native session and checks company admission before
@@ -35,7 +39,7 @@ publication/cancellation lease and is not an Android receiver. Display ownership
 notification actions and recovery UI remain separate integration work. No push flag
 is enabled by this change.
 
-Required follow-through:
+Integration constraints:
 
 - The application reply owner retains input, attempts completion first, and dispatches
   only a still-pending, unreviewed input using its exact stored token/text. It repeats

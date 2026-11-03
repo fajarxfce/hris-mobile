@@ -999,7 +999,7 @@
     <string name="chat_saved_replies_empty_en">No saved replies</string>
     <string name="chat_reply_waiting_en">Waiting to process</string>
     <string name="chat_reply_session_changed_en">Your sign-in changed. Review this reply before continuing.</string>
-    <string name="chat_reply_message_changed_en">A different reply already uses this operation. Open the chat to check its status.</string>
+    <string name="chat_reply_message_changed_en">This reply needs attention. Open the chat to check the conversation.</string>
     <string name="chat_reply_context_unavailable_en">The original conversation or message is unavailable. Your reply is still saved.</string>
     <string name="chat_reply_waiting_hint_en">Your reply is saved on this device. Delivery has not been confirmed.</string>
     <string name="chat_reply_body_en">Your reply</string>
@@ -1014,4 +1014,26 @@
     <string name="chat_reply_needs_review_en">Needs review</string>
     <string name="native_chat_open_unavailable_en">Could not open this conversation. Try again.</string>
     <string name="native_chat_open_verification_en">Verify your account and choose a company, then try again.</string>
+    <string name="chat_reply_edit_body_en">Your reply</string>
+    <string name="chat_reply_draft_saved_en">Draft saved on this device</string>
+    <string name="chat_reply_saving_draft_en">Saving draft…</string>
+    <string name="chat_reply_draft_save_failed_en">Latest changes have not been confirmed as saved.</string>
+    <string name="chat_reply_save_draft_en">Save draft</string>
+    <string name="chat_reply_send_en">Send reply</string>
+    <string name="chat_reply_retry_send_en">Continue sending</string>
+    <string name="chat_reply_send_hint_en">Check the conversation and reply before sending.</string>
+    <string name="chat_reply_send_queued_en">Reply queued. It will send when connected.</string>
+    <string name="chat_reply_send_started_en">Reply is being sent. Open the chat to check its status.</string>
+    <string name="chat_reply_sent_en">Reply sent.</string>
+    <string name="chat_reply_send_cancelled_en">This reply was cancelled. No new message was queued.</string>
+    <string name="chat_reply_action_unconfirmed_en">Could not confirm the result. Refresh to check before retrying.</string>
+    <string name="chat_reply_original_processing_en">The original reply has already started sending. This edit will stay here to avoid sending a second message. Check the chat before discarding the saved edit.</string>
+    <string name="chat_reply_discard_edit_en">Discard saved edit</string>
+    <string name="chat_reply_discard_edit_hint_en">Discard only this saved edit? The original reply has already started sending and will remain in the chat.</string>
+    <string name="chat_reply_edit_discarded_en">Saved edit discarded. The original reply was not cancelled.</string>
+    <string name="chat_reply_leave_draft_title_en">Leave this draft?</string>
+    <string name="chat_reply_leave_draft_hint_en">Your latest changes may not be saved. Stay here to save them, or leave with the last saved draft.</string>
+    <string name="chat_reply_leave_draft_en">Leave</string>
+    <string name="chat_reply_keep_editing_en">Keep editing</string>
+    <string name="chat_reply_approved_body_en">Confirmed reply</string>
 </resources>

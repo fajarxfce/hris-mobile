@@ -1,8 +1,9 @@
 # Reviewed notification replies
 
-Implementation is in progress. This contract is not release acceptance; see the
-current [handoff](agent-handoff.md) and the final source-specific measurement when
-available. Phone24 predates this change.
+[Local acceptance](measurements/chat-reviewed-send-2026-11-03.json) records root,
+Android/Wasm, encrypted SQLite/IndexedDB and inspected Compose UI checks. Hosted
+Apple/native and phone release gates are tracked separately in the
+[current handoff](agent-handoff.md). Phone24 predates this change.
 
 ## Working draft and explicit confirmation
 
@@ -74,9 +75,9 @@ checkpoint schema remain unchanged. Schema1 ciphertext is still readable; no
 Room/IndexedDB schema migration is introduced. A document contains at most the
 original plus one working/confirmed body. Confirmation clears the working draft.
 
-Each body stays bounded by16,384 UTF-16 units/32,768 UTF-8 bytes. Drafts allow empty
+Each body stays bounded by 16,384 UTF-16 units/32,768 UTF-8 bytes. Drafts allow empty
 text; confirmed bodies use normal nonblank message validation. Encoded input is
-bounded by131,072 bytes and plaintext by98,200 bytes, inside existing generic
+bounded by 131,072 bytes and plaintext by 98,200 bytes, inside existing generic
 replica limits. No generic storage limit is widened. Malformed or oversized
 inputs fail without truncation or replacing existing ciphertext. Confirmation and
 draft edits use exact checkpoint/document CAS. Duplicate/resealed callbacks keep

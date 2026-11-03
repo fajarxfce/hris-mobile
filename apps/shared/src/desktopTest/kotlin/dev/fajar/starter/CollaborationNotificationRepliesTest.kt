@@ -975,6 +975,140 @@ class CollaborationNotificationRepliesTest {
         }
     }
 
+    @Test
+    fun actualGraphRestartsAnEditedConfirmationBeforeTheOriginalCancellation() = runBlocking {
+        withFixture(selectedReads = true) { f, target ->
+            val selected =
+                assertIs<AppResult.Success<dev.fajar.starter.workspace.domain.entities.Workspace>>(
+                        f.koin.get<dev.fajar.starter.workspace.domain.usecases.SelectWorkspace>()(
+                            f.session.id,
+                            target.companyId,
+                        )
+                    )
+                    .value
+            val action = CollaborationNotificationAction.Reply(id(), target)
+            val original = f.retain(f.seal(action), "Original fictional reply")
+            val access = f.access()
+            val recovery =
+                CollaborationRecoveryAccess(access.sessionId, access.audience, access.accountId)
+            val repo = f.koin.get<CollaborationNotificationReplyRepository>()
+            assertEquals(
+                AppResult.Success(true),
+                repo.hold(recovery, original, CollaborationNotificationReplyReview.SessionChanged),
+            )
+            val held = f.inputs().single()
+            val snapshot =
+                assertIs<AppResult.Success<CollaborationSavedReplies>>(
+                        f.koin.get<ObserveCollaborationSavedReplies>()(selected.id).first()
+                    )
+                    .value
+            val drafted =
+                assertIs<AppResult.Success<CollaborationNotificationReplyInput>>(
+                        f.koin.get<SaveCollaborationReplyDraft>()(
+                            selected.id,
+                            access,
+                            assertNotNull(snapshot.parent),
+                            held,
+                            "Edited fictional reply",
+                        )
+                    )
+                    .value
+            val newId = id()
+            val confirmed =
+                assertIs<AppResult.Success<CollaborationNotificationReplyInput>>(
+                        f.koin.get<ConfirmCollaborationReply>()(
+                            selected.id,
+                            access,
+                            assertNotNull(snapshot.parent),
+                            drafted,
+                            newId,
+                            "Edited fictional reply",
+                        )
+                    )
+                    .value
+            assertNull(f.message(action.operationId))
+            assertNull(f.message(newId))
+            f.reopen()
+            f.withoutIncomingSelection()
+            assertEquals(confirmed, f.inputs().single())
+            assertQueued(f.koin.get<CollaborationNotificationReplies>().resume(confirmed.id))
+            assertEquals(CollaborationMessageState.Cancelled, f.message(action.operationId)?.state)
+            assertEquals("Edited fictional reply", f.message(newId)?.intent?.text)
+            assertEquals(newId, f.message(newId)?.intent?.id)
+            assertTrue(f.inputs().isEmpty())
+            assertTrue(f.sdk.enqueued.isEmpty())
+        }
+    }
+
+    @Test
+    fun actualGraphDuplicateCallbackCannotEraseAnEncryptedWorkingDraft() = runBlocking {
+        withFixture(selectedReads = true) { f, target ->
+            val selected =
+                assertIs<AppResult.Success<dev.fajar.starter.workspace.domain.entities.Workspace>>(
+                        f.koin.get<dev.fajar.starter.workspace.domain.usecases.SelectWorkspace>()(
+                            f.session.id,
+                            target.companyId,
+                        )
+                    )
+                    .value
+            val action = CollaborationNotificationAction.Reply(id(), target)
+            val token = f.seal(action)
+            val original = f.retain(token, "Original retained reply")
+            val access = f.access()
+            val recovery =
+                CollaborationRecoveryAccess(access.sessionId, access.audience, access.accountId)
+            assertEquals(
+                AppResult.Success(true),
+                f.koin
+                    .get<CollaborationNotificationReplyRepository>()
+                    .hold(recovery, original, CollaborationNotificationReplyReview.SessionChanged),
+            )
+            val snapshot =
+                assertIs<AppResult.Success<CollaborationSavedReplies>>(
+                        f.koin.get<ObserveCollaborationSavedReplies>()(selected.id).first()
+                    )
+                    .value
+            val draft =
+                assertIs<AppResult.Success<CollaborationNotificationReplyInput>>(
+                        f.koin.get<SaveCollaborationReplyDraft>()(
+                            selected.id,
+                            access,
+                            assertNotNull(snapshot.parent),
+                            f.inputs().single(),
+                            "Keep this edited draft",
+                        )
+                    )
+                    .value
+            assertEquals(
+                AppResult.Success(true),
+                f.koin
+                    .get<CollaborationMessagePreventionRepository>()
+                    .prevent(
+                        access,
+                        CollaborationMessageIntent(
+                            action.operationId,
+                            access.messageOwner(),
+                            target.conversationId,
+                            Clock.System.now(),
+                            original.candidate.text,
+                        ),
+                    ),
+            )
+            assertIs<CollaborationNotificationReplyResult.NeedsReview>(
+                replyValue(
+                    f.koin
+                        .get<CollaborationNotificationReplies>()
+                        .submit(token, original.candidate.text)
+                )
+            )
+            f.reopen()
+            f.withoutIncomingSelection()
+            assertEquals(draft, f.inputs().single())
+            assertEquals("Keep this edited draft", f.inputs().single().draft)
+            assertTrue(f.sdk.enqueued.isEmpty())
+        }
+    }
+
     private fun CollaborationWorkerFixture.flow(
         actions: CollaborationNotificationActionRepository = koin.get(),
         commands: CollaborationNotificationCommands = koin.get(),
@@ -993,6 +1127,7 @@ class CollaborationNotificationRepliesTest {
             completion,
             koin.get(),
             commands,
+            koin.get(),
             koin.get(),
             koin.get(),
             koin.get(),
@@ -1061,14 +1196,15 @@ class CollaborationNotificationRepliesTest {
             .value
 
     private suspend fun withFixture(
-        block: suspend (CollaborationWorkerFixture, CollaborationNotificationActionTarget) -> Unit
+        selectedReads: Boolean = false,
+        block: suspend (CollaborationWorkerFixture, CollaborationNotificationActionTarget) -> Unit,
     ) {
         val f = CollaborationWorkerFixture()
         try {
             f.initialize()
             f.server.collaboration.listedIds = listOf(f.first)
             f.sdk.backgroundEnabled = true
-            f.withoutIncomingSelection()
+            if (!selectedReads) f.withoutIncomingSelection()
             val original = f.sdk.incoming(f.first, "Fictional notification original")
             assertEquals(
                 SyncResult.Complete,

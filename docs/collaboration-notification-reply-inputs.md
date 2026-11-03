@@ -30,8 +30,11 @@ send grant. Existing storage ownership keys and revisions remain storage metadat
 reply text, action context and tokens are encrypted, and document IDs use keyed hashes.
 
 Input uses the existing message bounds: 16,384 UTF-16 units and 32,768 UTF-8 bytes.
-Encrypted document payload is bounded to 98,304 characters and plaintext to 65,536
-bytes. The checkpoint uses at most 32,768 characters/24,576 plaintext bytes, within
+Schema2 adds an optional working draft or immutable confirmed resolution; it stores
+at most the original plus one working/confirmed body. Schema1 remains readable.
+Encrypted input is bounded to 131,072 characters and plaintext to 98,200 bytes,
+inside the unchanged generic replica limit. Legacy schema1 plaintext stays bounded
+to 65,536 bytes. The checkpoint uses at most 32,768 characters/24,576 plaintext bytes, within
 the existing raw storage bounds. No database migration or key reset is introduced.
 
 `RetainCollaborationNotificationReply` authenticates the token against the current
@@ -47,7 +50,7 @@ Raw repository absence for an inactive account is not session authority. Consume
 use cases must capture/check the current owner around reads, review and removal, and
 gate company content before exposing input in UI. The repository's remove operation
 requires an exact retained-command proof or explicit discard from its caller; that
-application policy and the bounded recovery/UI workflow remain to be implemented.
+application policy and bounded recovery/UI workflow are implemented in the linked contracts.
 The command dispatcher must use the exact stored token/text and preserve input after
 failures or uncertainty. Permanent review needs reproduced facts, not a transient
 storage/refresh failure. Native entry points must serialize input persistence so
@@ -57,3 +60,9 @@ No Android receiver, native reply wrapper, display journal, notification UI or l
 chat push flag is activated by this increment. Input-retention storage is not proof
 of native process-death recovery. Those integrations remain required before enabling
 the real notification path.
+
+The implemented [reviewed-reply contract](collaboration-reviewed-replies.md) adds
+exact-CAS draft/confirmation edits without changing index identity, checkpoint
+schema or AAD namespace. Duplicate callbacks preserve these fields. Native callback,
+display, worker and UI integration are now implemented and have separate acceptance
+records; live chat push remains disabled until rollout acceptance.

@@ -491,6 +491,7 @@ class CollaborationNotificationInputTransferIntegrationTest {
             recover,
             protect,
             transfer,
+            koin.get(),
         )
 
     private suspend fun CollaborationWorkerFixture.protect(

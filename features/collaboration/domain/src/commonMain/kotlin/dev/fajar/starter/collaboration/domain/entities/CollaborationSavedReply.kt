@@ -10,13 +10,20 @@ data class CollaborationSavedReply(
 data class CollaborationSavedReplies(
     val access: CollaborationLocalAccess,
     val items: List<CollaborationSavedReply>,
+    val parent: CollaborationNativeParent? = null,
 ) {
     override fun toString() = "CollaborationSavedReplies([redacted])"
 }
 
 enum class CollaborationReplyDiscard {
     Discarded,
+    EditedDraftDiscarded,
     Absent,
     AlreadyProcessing,
     MessageChanged,
+}
+
+enum class CollaborationReplyDiscardMode {
+    All,
+    EditedDraftOnly,
 }

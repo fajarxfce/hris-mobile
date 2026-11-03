@@ -10,6 +10,7 @@ import dev.whyoleg.cryptography.CryptographyProvider
 import dev.whyoleg.cryptography.algorithms.HMAC
 import dev.whyoleg.cryptography.algorithms.SHA256
 import kotlin.io.encoding.Base64
+import kotlin.time.Instant
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 
@@ -41,7 +42,22 @@ private data class NotificationReplyDto(
     val text: String,
     val review: String?,
     val schema: Int = 1,
+    val draft: String? = null,
+    val resolution: NotificationReplyResolutionDto? = null,
 )
+
+@Serializable
+private data class NotificationReplyResolutionDto(
+    val sessionId: String,
+    val nativeSessionId: String,
+    val operationId: String,
+    val createdAtMillis: Long,
+    val text: String,
+)
+
+// Leave room for authenticated-encryption framing within the existing replica document limit.
+private const val REPLY_INPUT_ENCODED_LIMIT = 131_072
+private const val REPLY_INPUT_PLAIN_LIMIT = 98_200
 
 /** The encrypted checkpoint authenticates every active document identity and exact revision. */
 internal class CollaborationNotificationReplyCodec(
@@ -136,8 +152,8 @@ internal class CollaborationNotificationReplyCodec(
                 document.id,
                 document.version,
                 document.sortKey,
-                98304,
-                65536,
+                REPLY_INPUT_ENCODED_LIMIT,
+                REPLY_INPUT_PLAIN_LIMIT,
             )
         val input =
             try {
@@ -146,9 +162,13 @@ internal class CollaborationNotificationReplyCodec(
                         plain.decodeToString(throwOnInvalidSequence = true)
                     )
                 require(
-                    dto.schema == 1 &&
+                    dto.schema in 1..2 &&
                         dto.review == reference.review &&
                         dto.action.length in 1..4096
+                )
+                require(
+                    dto.schema != 1 ||
+                        (dto.draft == null && dto.resolution == null && plain.size <= 65536)
                 )
                 val actionBytes = Base64.decode(dto.action)
                 val action =
@@ -160,10 +180,7 @@ internal class CollaborationNotificationReplyCodec(
                     } finally {
                         actionBytes.fill(0)
                     }
-                CollaborationNotificationReplyInput(
-                    document.id,
-                    CollaborationNotificationReplyRevision(raw.handle.generation, document.version),
-                    reference.sequence,
+                val candidate =
                     CollaborationNotificationReplyCandidate(
                         CollaborationNativeParent(
                             dto.sessionId,
@@ -174,8 +191,25 @@ internal class CollaborationNotificationReplyCodec(
                         action,
                         CollaborationNotificationActionToken(dto.token),
                         dto.text,
-                    ),
+                    )
+                CollaborationNotificationReplyInput(
+                    document.id,
+                    CollaborationNotificationReplyRevision(raw.handle.generation, document.version),
+                    reference.sequence,
+                    candidate,
                     dto.review?.let { enumValueOf<CollaborationNotificationReplyReview>(it) },
+                    dto.draft,
+                    dto.resolution?.let {
+                        CollaborationNotificationReplyResolution(
+                            candidate.parent.copy(
+                                sessionId = it.sessionId,
+                                nativeSessionId = it.nativeSessionId,
+                            ),
+                            it.operationId,
+                            Instant.fromEpochMilliseconds(it.createdAtMillis),
+                            it.text,
+                        )
+                    },
                 )
             } finally {
                 plain.fill(0)
@@ -208,6 +242,18 @@ internal class CollaborationNotificationReplyCodec(
                     candidate.token.encoded,
                     candidate.text,
                     value.review?.name,
+                    schema = 2,
+                    draft = value.draft,
+                    resolution =
+                        value.resolution?.let {
+                            NotificationReplyResolutionDto(
+                                it.parent.sessionId,
+                                it.parent.nativeSessionId,
+                                it.operationId,
+                                it.createdAt.toEpochMilliseconds(),
+                                it.text,
+                            )
+                        },
                 )
             } finally {
                 actionBytes.fill(0)
@@ -220,8 +266,8 @@ internal class CollaborationNotificationReplyCodec(
                 value.id,
                 value.version.revision,
                 order,
-                98304,
-                65536,
+                REPLY_INPUT_ENCODED_LIMIT,
+                REPLY_INPUT_PLAIN_LIMIT,
             )
         return ReplicaDocument(value.id, value.version.revision, order, payload)
     }

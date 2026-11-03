@@ -74,9 +74,15 @@ class CompleteCollaborationNotificationReply(
             (found as AppResult.Success).value
                 ?: return AppResult.Success(CollaborationNotificationReplyCompletion.Absent)
         if (retained != expected) return completionFailure(FailureKind.Conflict)
+        // A working edit is independent of original delivery. Only explicit send/discard may
+        // retire it; a duplicate native callback must not silently erase even an empty draft.
+        if (retained.draft != null)
+            return AppResult.Success(CollaborationNotificationReplyCompletion.Pending)
         val action = retained.candidate.action
+        val operationId = retained.resolution?.operationId ?: action.operationId
+        val text = retained.resolution?.text ?: retained.candidate.text
         // Original message history is not required to prove an already retained reply command.
-        val read = messages.get(scope.access, action.operationId)
+        val read = messages.get(scope.access, operationId)
         guard(scope).let { if (it is AppResult.Failed) return it }
         if (read is AppResult.Failed) return read
         val message = (read as AppResult.Success).value
@@ -100,10 +106,10 @@ class CompleteCollaborationNotificationReply(
         if (message.state == CollaborationMessageState.Cancelled && message.revision != 0L)
             return completionFailure(FailureKind.Conflict)
         if (
-            message.intent.id != action.operationId ||
+            message.intent.id != operationId ||
                 message.intent.owner != scope.access.messageOwner() ||
                 message.intent.conversationId != action.target.conversationId ||
-                message.intent.text != retained.candidate.text ||
+                message.intent.text != text ||
                 message.revision < 0 ||
                 !validCollaborationMessageState(message.state)
         )

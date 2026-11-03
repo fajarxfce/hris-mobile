@@ -18,7 +18,13 @@ Nothing owns a detached coroutine, Activity or native callback. The platform cal
 must keep its own bounded lifetime, join cancellation and handle failure before
 retention. In-memory waiters are not an OS process-death guarantee.
 
-The workflow first reproduces a matching immutable command through exact completion.
+Confirmed [reviewed submissions](collaboration-reviewed-replies.md) enter their
+separate finite resume path before original completion. They retain one fresh ID
+across retry/reapproval and fence the original before queuing the confirmed body.
+A working draft cannot be erased by a duplicate original callback.
+
+For untouched notification input, the workflow first reproduces a matching immutable
+command through exact completion.
 It can retire input for an already-retained command even after same-account
 reauthentication. If no command exists, held input stays held. Review reproduces a
 permanent conflict or missing context; a transient storage/transport failure never
@@ -43,7 +49,8 @@ Outcomes have distinct meanings:
 
 Results are not notification display/cancellation leases. Native display ownership,
 authenticated action issuance, retained input discovery with a fair durable account
-cursor, explicit review UI and Android/iOS callback wiring remain separate work.
+cursor, explicit review UI and platform callback wiring have separate contracts and
+acceptance records.
 Chat push stays disabled until the complete owned native flow is usable and verified.
 
 Validation: [actual checks and limits](measurements/chat-notification-reply-flow-2026-11-02.json).

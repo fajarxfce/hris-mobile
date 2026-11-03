@@ -1,5 +1,55 @@
 # Agent continuation — HRIS Mobile
 
+## Reviewed-send accepted locally; next source commit and release25 — 3 November 2026
+
+[Contract](collaboration-reviewed-replies.md) / [evidence](measurements/chat-reviewed-send-2026-11-03.json).
+All37 source inputs are LOCALLY ACCEPTED. Full8 PASS571.836s:3,997 desktop/564 suites,
+230 Android host/37,15 proof/four,ten logic/two; all failures/errors/skips0. 2,700 tests/
+338 suites executed fresh. Root quality, shared Wasm compile, Android dev/proof
+assembly and lint pass. Product lint0; proof47 unchanged warnings/0 errors.
+Browser9 PASS66.197s:31 real IndexedDB cases/two suites, including19 reply-storage
+and12 recovery cases. All37 source digests verified unchanged during both checks.
+
+Focused7 PASS267.501s with57 fresh/five suites, including9 MVI,7 Compose and41 app
+cases (21 reply cases, two new actual-Koin/encrypted-SQLite scenarios). Five screenshots-7
+ACTUALLY VIEWED; single primary send, secondary Open chat, readable immutable/held
+states, Indonesian320x640/font2 with full final button visible. Only two extra domain
+race tests changed after focused7; no production/UI changes. Full domain suite now
+includes14 reviewed-reply and7 saved-reply observation cases. Failed attempts1–6 are
+preserved with reasons; no failures retroactively relabelled.
+
+NEXT commit/push accepted source + current docs. Source is still uncommitted at this
+checkpoint; verify manifest paths/digests and git diff --check. Then generate exact
+committed384-source Apple/393-source Native manifests, fill prepared script placeholders,
+dispatch full Apple and find automatic Native run at that source. Templates under
+.work/chat-reviewed-send-apple-2026-11-03 and ...-hosted-...; require exact artifact
+hashes, full Xcode/simulator (14 new reviewed,7 observe), Native five providers plus
+runtime4/raw16/three input deaths/five actions and all three PNGs actually viewed.
+Do not reuse accepted418 results as proof of new reviewed-send source.
+
+Release25 scripts .work/release-phone-2026-11-03-build25 PREPARED, NOT RUN. No heavy local
+job or owned emulator now. Build clean committed source, verify artifact/lint/signer/
+16KiB/backup exclusions, run two minified emulator starts and inspect PNGs, stop owned
+emulator. Preflight expects currently installed24 and same signer; notify immediately
+before explicit10.77.77.3:5555 install.py --install-only. Never launch phone UI or clear
+data. Phone24 remains installed; next version25+. Preserve Google account mapping.
+
+Current implementation: encrypted mutable draft separate from immutable confirmed
+ID/body/millisecond timestamp/full parent; explicit reapproval changes parent only;
+resume handles edited resolution before original completion, fences old operation,
+reproduces new command before input removal; discard fences both or explicitly only
+an unsent edit while original already started. Current owners guard every I/O, autosave
+successors join all predecessors, stopped/replaced UI clears private state. Same-account
+existing-command recovery is distinct from permission for a new queue entry. No HTTP or
+Matrix send in these domain operations; actual integrations use fictional provider ports.
+
+Host418 full Apple/Native accepted, protocol reports success, control41639264755 still
+running at last query. Platform72447fb8/runtime304/schema116 and Starter9959c1d unchanged;
+chat push OFF. All54 PRD groups OPEN; voice/video/meeting UI absent. After release25,
+continue native notification rollout acceptance and remaining communications; no final
+at this milestone. No generic Starter port is required for this HRIS-specific policy.
+
+
 ## Reviewed-send focused checks pass; full8 running — 3 November 2026
 
 Source is STILL UNCOMMITTED/NOT RELEASE-ACCEPTED. [Progress/evidence](measurements/chat-reviewed-send-2026-11-03.json).
