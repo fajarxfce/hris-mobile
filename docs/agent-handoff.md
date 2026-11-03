@@ -1,5 +1,36 @@
 # Agent continuation — HRIS Mobile
 
+## Release26 installed; source UI gates and remaining communications continue — 3 November 2026
+
+[Phone evidence](measurements/chat-experience-phone-2026-11-03.json): clean bd399317
+normal devRelease26 build PASS474.453s, lint0,88042148 bytes SHA
+21d134bc1e1cbae5e4fdf242da450f1318bdab07c6a5c3568740a7586a540cf4.
+Two real emulator cold starts pass53.966s; both onboarding PNGs actually viewed,
+owned emulator stopped. Initial smoke helper incorrectly retained its25 assertion:
+failed before installation, recorded separately, corrected to26 without rebuilding.
+Phone10.77.77.3:5555 updated16:56:36UTC,43.372s including pull-back verification;
+UID10962, original first-install time and signer/data preserved. No phone UI driven.
+Do not reinstall26. Future phone updates still require notice immediately before
+install-only, with the same signer and preserved data.
+
+[1136 Native evidence](measurements/chat-push-activation-hosted-2026-11-03.json)
+ACCEPTED:41667296924, artifact13250826555 SHA
+fa1cc410d5f660c92cb9a00af73d4bda24b478f1ab7d0cdd18385fc4ab9f698f,
+408 source hashes,230 Android host/18 proof host/five actual provider cases all pass.
+Raw16/runtime4/input recovery3 deaths/actions5 and all three SystemUI PNGs inspected.
+This gate does not invoke product FCM. New bd399 Apple41677479513 and Native41677393348
+remain running; prepared audits/sources in.work/chat-ux-apple-2026-11-03 (410 paths)
+and.work/chat-ux-hosted-2026-11-03 (421 paths). Fetch/audit and inspect required images.
+
+Active next increment: offline inbox previews from bounded owned local history/drafts.
+Initial entities/ObserveCollaborationInbox are WIP and not yet validated; no acceptance
+claim. Preserve owner/admission fencing and stop detail observers when hidden. Real
+recipient durable delivery/read ACKs and group cross-company ownership remain required.
+Platform FCM run12 now executing with exact artifacts5 and independent bounded push
+state probes; one heavy local job. Wait before another Gradle/emulator job. Runtime304/
+schema116/push OFF and Starter9959c1d unchanged. Continue the whole PRD after these fixes.
+
+
 ## Primary Chat tab and compact thread accepted locally — 3 November 2026
 
 [Contract](chat-experience.md) / [evidence](measurements/chat-experience-2026-11-03.json).
