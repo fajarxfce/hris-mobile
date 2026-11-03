@@ -19,6 +19,15 @@ class MatrixProofInstrumentation : Instrumentation() {
         start()
     }
 
+    private fun scenarioTimeoutMillis(): Long =
+        when {
+            scenario == "hris-product-peer" -> 300_000
+            scenario == "hris-worker-resume" -> 420_000
+            scenario.startsWith("hris-worker-") || scenario.startsWith("company-recovery") ->
+                210_000
+            else -> 120_000
+        }
+
     override fun onStart() {
         val directory = File(targetContext.filesDir, "protocol-proof")
         val output = JSONObject()
@@ -28,16 +37,7 @@ class MatrixProofInstrumentation : Instrumentation() {
                     android.os.Build.MODEL.contains("sdk")
             )
             runBlocking {
-                withTimeout(
-                    if (scenario == "hris-product-peer") 300_000
-                    else if (scenario == "hris-worker-resume") 420_000
-                    else if (
-                        scenario.startsWith("hris-worker-") ||
-                            scenario.startsWith("company-recovery")
-                    )
-                        210_000
-                    else 120_000
-                ) {
+                withTimeout(scenarioTimeoutMillis()) {
                     when (scenario) {
                         "hris-product-peer" ->
                             HrisProductNotificationPeer(targetContext, directory).run()
@@ -71,6 +71,8 @@ class MatrixProofInstrumentation : Instrumentation() {
                             CollapsedSchedulingProbe(targetContext, directory).stage()
                         "work-wake-resume" ->
                             CollapsedSchedulingProbe(targetContext, directory).run(resuming = true)
+                        "local-identity-stage" -> LocalSdkIdentityProbe(directory).stage()
+                        "local-identity-resume" -> LocalSdkIdentityProbe(directory).resume()
                         "provider" -> NativeMatrixProbe(directory).run()
                         "hris-worker-stage" ->
                             HrisWorkerMatrixProbe(targetContext, directory).stage()

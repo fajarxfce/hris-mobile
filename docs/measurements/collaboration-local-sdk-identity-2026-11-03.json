@@ -1,0 +1,172 @@
+{
+  "scope": "Local SDK public identity observation and server-compatible fingerprint; isolated native continuity proof, no product ownership transfer",
+  "baseCommit": "0d96e737",
+  "rootGate": {
+    "startedAt": "2026-11-03T23:30:47.181942+00:00",
+    "elapsedSeconds": 156.1,
+    "exitCode": 0,
+    "sourceFiles": 3877,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 18,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "rootRequiredTargetReports": {
+    "desktopTest": {
+      "suites": 572,
+      "tests": 4042,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "testAndroidHostTest": {
+      "suites": 38,
+      "tests": 232,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "test": {
+      "suites": 2,
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "testDebugUnitTest": {
+      "suites": 5,
+      "tests": 18,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "rootReportFreshness": "Final root gate has18 fresh proof tests; other required root reports were reused by Gradle.2727 cases ran in check2 with no failures; only the isolated LocalSdkIdentityProbe changed before check3.",
+  "browserGate": {
+    "startedAt": "2026-11-03T23:34:00.070286+00:00",
+    "elapsedSeconds": 99.15,
+    "exitCode": 0,
+    "sourceFiles": 3877,
+    "sourcesUnchanged": true,
+    "freshCounts": {
+      "tests": 461,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "mapperReports": {
+    "root-tests:features/collaboration/data/build/test-results/desktopTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSdkIdentityMapperTest.xml": {
+      "sha256": "776546c1f732c7f361a173d6e8061bf55bd31d1bd6cecd97c0132f86e1dad96c",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "root-tests:features/collaboration/data/build/test-results/testAndroidHostTest/TEST-dev.fajar.starter.collaboration.data.CollaborationSdkIdentityMapperTest.xml": {
+      "sha256": "178caf7e6ed5baac1ef31dd998c76e1fae52176d0d147a570e572ed4c98f8b19",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "browser:features/collaboration/data/build/test-results/wasmJsBrowserTest/TEST-wasmJsBrowserTest.dev.fajar.starter.collaboration.data.CollaborationSdkIdentityMapperTest.xml": {
+      "sha256": "7e8ef5aa28d49b2302e53bcb580f7a414303cf692f665f4778989bb0155c84f3",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "proofArtifact": {
+    "apkSha256": "0ccc4c12e654e6a9cc4f113a7f33b995fad4bc547fac3c109e83262c1704af36",
+    "bytes": 291101880,
+    "lintErrors": 0,
+    "lintWarnings": 47
+  },
+  "native": {
+    "startedAt": "2026-11-03T23:36:35.807509+00:00",
+    "serial": "emulator-5562",
+    "apkSha256": "0ccc4c12e654e6a9cc4f113a7f33b995fad4bc547fac3c109e83262c1704af36",
+    "providerRequired": false,
+    "productApkInstalled": false,
+    "stageInstrumentation": {
+      "complete": true
+    },
+    "stage": {
+      "complete": true,
+      "localIdentityRead": true,
+      "exclusiveStore": true,
+      "providerRequired": false
+    },
+    "processAbsentBetweenPhases": true,
+    "resumeInstrumentation": {
+      "complete": true
+    },
+    "continuity": {
+      "complete": true,
+      "reopenedSameKeys": true,
+      "emptyStoreMismatch": true,
+      "wrongPassphraseRejected": true,
+      "reopenedAfterFailure": true,
+      "exclusiveStoreReleased": true,
+      "ownedFilesRemoved": true,
+      "providerRequired": false,
+      "sdk": "26.10.23"
+    },
+    "sourcesUnchanged": true,
+    "complete": true,
+    "emulatorStopped": {
+      "pid": 1433824,
+      "serial": "emulator-5562",
+      "stopped": true,
+      "signalSent": true,
+      "transportAbsent": true,
+      "seconds": 1.004
+    },
+    "elapsedSeconds": 74.319
+  },
+  "quality": [
+    "root :check (format,detekt,architecture,distribution,desktop,Android host,build logic,Python checks)",
+    ":apps:collaboration-proof:testDebugUnitTest",
+    ":apps:collaboration-proof:assembleDebug",
+    ":apps:collaboration-proof:lintDebug",
+    ":features:collaboration:data:wasmJsBrowserTest",
+    "git diff --check"
+  ],
+  "earlierRuns": [
+    {
+      "run": "check1",
+      "elapsedSeconds": 44.671,
+      "freshTests": 0,
+      "accepted": false,
+      "reason": "Existing instrumentation onStart grew to101 lines. Scenario timeout selection was extracted without changing timeout values."
+    },
+    {
+      "run": "check2",
+      "elapsedSeconds": 572.074,
+      "freshTests": 2727,
+      "failures": 0,
+      "accepted": false,
+      "reason": "Root and Android-host tests passed; proof APK compilation found a leftover CancellationException catch after an incomplete test-fixture edit. Fixed to typed SDK build/client exceptions."
+    }
+  ],
+  "evidence": [
+    "Raw identity reads acquire and close the native Encryption handle and preserve cancellation; only public keys leave the SDK",
+    "Bounded canonical fingerprint matches the independent HRIS vector and padded/unpadded base64; malformed/missing/noncanonical keys and ambiguous IDs are rejected",
+    "Actual SDK26.10.23 opens a fresh encrypted local store without a reachable provider; stage closes resources before an explicit process stop",
+    "After process restart, reopening the same directory/passphrase returns the same identity; a distinct empty directory under the same user/device returns different keys",
+    "Wrong passphrase is rejected by the SDK; a subsequent correct reopen keeps the original identity",
+    "Concurrent file lease acquisition is rejected; subsequent acquisition succeeds after native client close; owned fixture files and emulator are removed/stopped"
+  ],
+  "limits": [
+    "No production caller, server migration, store alias, gateway credential change or group runtime is enabled",
+    "This is local store continuity across a clean close/process restart, not interrupted in-flight migration recovery or remote private-key attestation",
+    "No provider messaging/key publication is exercised by this offline native probe; server admission/signature checks remain required",
+    "Installed phone28 and live8b40/schema116 are unchanged; the proof APK is emulator-only",
+    "Actual Apple SDK implementation/continuity is still pending"
+  ]
+}

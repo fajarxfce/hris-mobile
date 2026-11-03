@@ -1,5 +1,48 @@
 # Agent continuation — HRIS Mobile
 
+## Local SDK identity continuity accepted — 3 November 2026
+
+AndroidCollaborationSdkClientSource now reads public ed25519/curve25519 identity
+from an owned opened client and closes its Encryption handle. The common mapper
+returns user/device plus the exact HRIS canonical fingerprint, with bounded IDs,
+strict 32-byte keys and canonical padded/unpadded base64. There is no product caller,
+private-key export, store alias, group gateway credential change or migration yet.
+See [contract](collaboration-local-identity.md) and
+[evidence](measurements/collaboration-local-sdk-identity-2026-11-03.json).
+
+Root check3 PASS 156.1s with 18 fresh proof cases and 3877 unchanged checked hashes.
+Required reused reports: 4042 desktop/572 suites, 232 Android-host/38, 10 build-logic/2;
+root format/detekt/architecture/distribution/Python checks pass. Check2 had 2727 fresh
+passing cases before a fixture compilation error; only LocalSdkIdentityProbe changed
+before the final build. Browser 461/54 PASS 99.15s, including the two new mapper cases.
+Proof APK 291101880 bytes SHA 0ccc4c12e654e6a9cc4f113a7f33b995fad4bc547fac3c109e83262c1704af36,
+lint 0 errors / 47 warnings. Earlier check1 stopped 44.671s on Detekt method length;
+check2 stopped 572.074s on a leftover exception catch. Both are recorded, not accepted.
+
+Actual SDK 26.10.23 emulator proof PASS 74.319s (boot 30.427s). Local stage, explicit
+process stop/restart, same-store key continuity, different empty-store identity,
+wrong-passphrase rejection, correct reopen after failure and exclusive file-lease
+release pass. No reachable provider is used. Owned files are removed and exact
+emulator PID 1433824/transport stopped. All sessions/checks are complete. Scripts and
+safe JSON remain under .work/local-sdk-identity-2026-11-03. This is clean-close/store
+continuity, not an interrupted migration or server/private-key possession proof.
+Do not install the debug proof APK on the phone. Normal release 28 remains installed.
+
+Next explicit retained runtime/SDK ownership transfer and group gateway/rooms/
+inbox/push/read migration. Platform source is /home/fajar/hris/.worktrees/
+communication-space at e905b8d6 (preceded by fc1a6c40). V117–122 and opt-in group
+native/worker graph are accepted: 14 API/worker cases, 126 active full worker plus 1
+opt-in retention skip, actual scheduled Synapse activation, and 26 native status
+cases. Group flags stay default false; public runtime and retained-device activation
+remain unaccepted. Read its handoff and ignored runtime-transfer-next.md. Preserve
+original company/native store hashes, keys and pending transaction IDs; never logout
+a losing Matrix candidate. Actual Apple SDK continuity remains pending.
+
+Live 8b40/schema116 pushON/SMTP OFF, phone 28 and Starter 9959c1d remain current. This
+HRIS-specific identity convention requires no Starter port. All 54 communications
+acceptance groups remain open. Continue the full long run, frequent user/Git updates
+and push every atomic commit. Older V119-running notes below are historical.
+
 ## Release 28 source control/Apple gate also accepted — 3 November 2026
 
 Control41701412602 at8273ae8d now passes both jobs. Downloaded digest-verified

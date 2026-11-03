@@ -36,6 +36,22 @@ class AndroidCollaborationSdkClientSource {
         currentCoroutineContext().ensureActive()
     }
 
+    /** The caller owns this opened client and must keep its directory lease until it closes. */
+    suspend fun identity(client: Client): CollaborationSdkIdentityData {
+        currentCoroutineContext().ensureActive()
+        val value =
+            client.encryption().use { encryption ->
+                CollaborationSdkIdentityData(
+                    client.userId(),
+                    client.deviceId(),
+                    encryption.ed25519Key(),
+                    encryption.curve25519Key(),
+                )
+            }
+        currentCoroutineContext().ensureActive()
+        return value
+    }
+
     private suspend fun build(
         directory: CollaborationSdkStoreLease,
         passphrase: String,
