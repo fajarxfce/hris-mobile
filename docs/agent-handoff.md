@@ -1,5 +1,33 @@
 # Agent continuation — HRIS Mobile
 
+## Reviewed-send Apple accepted; owned FCM preparation continues — 3 November 2026
+
+Apple41651053921 at a3f39be7 is ACCEPTED:1,094 simulator/123 suites,384 source hashes,
+compile646s/tests107s/full Xcode911s. Artifact13239546708 SHA256
+e6efe85c5a99aa4a3a19b5ff5801202e2093469335ccffffe1213d4c7398be50.
+[Evidence](measurements/chat-reviewed-send-apple-2026-11-03.json). Includes14 reviewed
+and7 saved-observation cases. No physical iPhone/APNs/CallKit claim. Native a3f remains
+REJECTED as recorded below; no retroactive success. Phone25 installed, no new install.
+
+Mobile FCM fixture build3 PASS56.243s, source digests unchanged: devDebug product
+and separate peer x86 APKs plus18 proof-host tests. Artifact hashes and prior failures
+are in .work/product-chat-fcm-2026-11-03. Product explicitly targets loopback18084 for
+the isolated fixture; **never install that APK on the phone**. Next phone remains26+.
+The three checkpoint regressions pass; local native checkpoint execution/full root
+quality are still pending. Source remains UNCOMMITTED fixture-only WIP.
+
+Platform owned-product FCM driver/worker/test source is UNCOMMITTED. Eight Python
+guard/cleanup cases pass; compile1 now running under .work/product-chat-fcm-2026-11-03.
+No emulator is running and no FCM message has been sent. Finish compile, then improve
+UI label selection to prefer clickable matches (Sign in/Home also occur in headers),
+verify exact artifacts, run bounded fixture after server readiness, inspect captures.
+Keep one heavy local job at a time. Actual FCM must independently prove notification
+and encrypted reply; ordinary process restart alone is not causal FCM evidence.
+
+Live Platform304/schema116/push OFF and Starter9959c1d unchanged. All54 groups open,
+voice/video/meeting UI absent. Continue implementation after this gate, push commits;
+no completion claim or generic Starter port here.
+
 ## Native a3f gate rejected; product FCM fixture in progress — 3 November 2026
 
 Phone25 remains installed and verified; do not reinstall or drive its UI.
