@@ -46,12 +46,18 @@ internal class HrisPriorityHistoryProbe(
                 check(current.priorityWake() == wake)
                 check(current.priorityPosition(deviceId, roomId) == position)
                 check(current.capturedPending().isEmpty())
+                current.startPriorityNotifications(deviceId)
                 val result = current.runPriority(snapshot.parent)
                 check(!expect(runtime.isOpen(owner, deviceId)))
                 check(current.priorityPosition(deviceId, roomId) == position)
                 check(current.priorityWake() == wake)
                 check(current.capturedPending().isEmpty() && current.scheduledKeys.isEmpty())
                 if (result == SyncResult.Complete) {
+                    check(current.priorityNotificationSubmissions() > 0)
+                    check(
+                        current.priorityPublicationState() ==
+                            CollaborationNotificationPublicationState.Published
+                    )
                     check(current.prioritySnapshot().priority?.hints?.isEmpty() == true)
                     val originals = current.capturedOriginals()
                     check(originals.single { target.eventId in it.eventIds }.text == target.body)
@@ -63,6 +69,10 @@ internal class HrisPriorityHistoryProbe(
                     reopened.activate()
                     check(reopened.capturedOriginals() == originals)
                     check(reopened.prioritySnapshot().priority?.hints?.isEmpty() == true)
+                    check(
+                        reopened.priorityPublicationState() ==
+                            CollaborationNotificationPublicationState.Published
+                    )
                     check(reopened.priorityWake() == wake)
                     check(reopened.priorityPosition(deviceId, roomId) == position)
                     check(!expect(runtime.isOpen(owner, deviceId)))
@@ -118,6 +128,9 @@ internal class HrisPriorityHistoryProbe(
             .put("priorityTraversalUnchanged", true)
             .put("priorityGlobalWakeRetained", true)
             .put("priorityHintCompleted", true)
+            .put("priorityNotificationSubmitted", true)
+            .put("priorityNotificationJournalRetained", true)
+            .put("priorityNotificationSurface", "fake")
             .put("priorityPasses", passes)
             .put("prioritySavedOriginals", originals)
             .put("priorityEventId", event)

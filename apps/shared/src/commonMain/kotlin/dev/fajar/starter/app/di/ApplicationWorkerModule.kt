@@ -57,7 +57,7 @@ fun applicationWorkerModule() = module {
             get(),
         )
     }
-    single { CollaborationPriorityRecovery(get(), get(), get(), get()) }
+    single { CollaborationPriorityRecovery(get(), get(), get(), get(), get()) }
     single {
         val incoming = inject<CollaborationIncomingRecovery>()
         val outgoing = inject<CollaborationDeliveryWorker>()

@@ -1,5 +1,68 @@
 # Agent continuation — HRIS Mobile
 
+## Priority-to-notification handoff accepted; native focus/callbacks and durable disposition next
+
+Incoming captures only retained candidate IDs and returns them only with Complete AFTER
+joining timeline/runtime. Priority then submits through the one explicit NotificationDelivery
+binding BEFORE hint CAS, within its existing20s budget rather than room12s. The publisher
+rechecks parent/company/source authority. Unbound/closed host, missing history, uncertainty,
+permission/channel/capacity and cancellation retain the hint; Submitted/Suppressed/Unchanged
+can resolve it. New push revisions during acquisition or native show survive old ACK.
+Hinted NOT_REQUESTED cannot acknowledge missing content; clock rollback cannot expire a
+not-yet-due hint. [Contract](collaboration-priority-notification-delivery.md),
+[evidence](measurements/chat-priority-notification-delivery-2026-11-03.json).
+
+Delivery atomically takes ownership of ONE provided Process and starts it once; acceptance
+is not readiness. Rejected process remains caller-owned. Closed cannot reopen. closeAndJoin
+joins registered work, sources and exact compensation before storage closure. Koin onClose
+only starts cancellation. Production hosts still DO NOT bind it; chat push OFF.
+
+Focused1 PASSED133.858s:79 desktop/six suites+six proof/one,85fresh. Focused2 PASSED83.134s:
+82 fresh desktop/six suites+six explicitly reused proof cases. Full3 PASSED236.238s:
+3,736 desktop/530 suites,230 Android-host/37,six proof-host/one,ten build-logic/two, proof
+assembly/shared Wasm/root quality.494fresh/77 suites,14 hashes,zero failures/errors/skips;
+no failed attempt. Three new virtual binding/close cases bring process suite to38; ten new
+actual Koin/SQLite priority cases bring its suite to17. Actual process/publisher/journal with
+fake HTTP/SDK/OS. First candidate fake show asserts acquisition released; later independent
+journal reconciliation may overlap another incoming transport, so no global no-network rule.
+
+Native HrisPriorityHistoryProbe now explicitly starts the real process/publisher/journal
+against HrisPriorityNotificationHost's FAKE display (opaque refs only). It asserts real provider
+isOpen=false before FIRST fake submission, Published before ACK and journal retention after
+reopen. It emits priorityNotificationSurface=fake. The pinned Platform driver keeps older
+summary fields and discards these extra flags from its reduced output. Do not claim native
+OS publication from this proof. Existing16rawOS groups are separate. Root proof build passed;
+this NEW native execution has not been accepted. Worker fixture/proof container join delivery
+before Koin/database/runtime closure. HrisProofRuntimeAccess remains unchanged for unrelated
+finite operations; native worker uses the real Android repository.
+
+NEXT bind actual-parent/account/company/conversation focused-route ownership; cancel/join
+obsolete work and retire current card while focused, independently of delayed viewport read.
+Read CollaborationNavigation.kt, ChatThreadViewportObserver.kt and ChatThreadState.kt before
+editing. Continue using the existing UI/UX and Compose-testing skills for route integration.
+Durable initial/backfill/dropped-hint AND suppression disposition needs explicit implementation:
+current Projection.Suppressed creates no journal (initial-mute test deliberately checks none).
+If hint ACK is uncertain and mute/focus changes before retry, that original may be reconsidered.
+Do not claim no historical revival until a durable terminal disposition/baseline exists. Reuse
+journal watermark semantics carefully; no fake success under unavailable storage or access.
+
+Finish authenticated action v2 (old parent encrypted under actual-account/audience AAD),
+old-family/pre-retention encrypted input review and actual native callbacks/receiver lifetime,
+then notification-input OS-death proof. Current HRIS v1 callbacks were never activated; do not
+invent mandatory migration. Native permission/channel/capacity wakeups and measured64-source
+load remain integration work. All54 PRD groups open; voice/video/meet UI absent. Generic Starter
+port waits for integrated Mobile proof. Live304/schema116 unchanged; no product APK this step.
+
+No local heavy job or owned emulator after Full3. Automatic native41571732304 at52876f16 was
+still running;56d3d6a6 run41574010908 pending. Next push may supersede that pending run; match
+actual source head before recording acceptance, do not manually duplicate. Full Apple41568117750
+at93f8a185 is already accepted962/108,207 hashes/full Xcode1,126s and excludes candidate/identity/
+priority work. Dispatch ONE consolidated full Apple after committing this handoff, freeze the
+union of old207 hashes and candidate5/identity7/current14 paths, then audit after completion.
+Physical iPhone waived; full Xcode required. Phone19/sourcec0 still installed. Next meaningful
+release>19: notify then explicit10.77.77.3:5555 install-only, preserve signer/data, no phone UI
+automation. Continue long run and push each atomic commit.
+
 ## Background identity accepted; wire the priority publication handoff
 
 Incoming recovery now acquires its own SDK identity under the existing finite runtime,

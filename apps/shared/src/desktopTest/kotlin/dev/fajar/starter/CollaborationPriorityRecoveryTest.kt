@@ -1,5 +1,6 @@
 package dev.fajar.starter
 
+import dev.fajar.starter.app.notifications.*
 import dev.fajar.starter.app.work.ApplicationPushReceiver
 import dev.fajar.starter.app.work.CollaborationPriorityRecovery
 import dev.fajar.starter.collaboration.domain.entities.*
@@ -11,6 +12,7 @@ import dev.fajar.starter.fixtures.CollaborationWorkerFixture
 import dev.fajar.starter.fixtures.NativeUiServer
 import dev.fajar.starter.identity.domain.repositories.SessionRepository
 import dev.fajar.starter.identity.domain.usecases.SignIn
+import dev.fajar.starter.notifications.data.dto.*
 import dev.fajar.starter.sync.domain.SyncResult
 import java.util.UUID
 import kotlin.test.*
@@ -19,8 +21,308 @@ import kotlinx.coroutines.*
 
 class CollaborationPriorityRecoveryTest {
     @Test
+    fun initialMuteResolvesItsAcquiredHintWithoutCreatingNativeContent() = runBlocking {
+        withFixture(notifications = false) { f, native ->
+            val event = f.sdk.incoming(f.first, "Fictional muted priority")
+            f.koin.get<ApplicationPushReceiver>().queue(f.fields(event))
+            val before = f.readPriority()
+            assertIs<SyncResult.Retry>(f.koin.get<CollaborationPriorityRecovery>()(before.parent))
+            val access = f.incomingGrant().owner.localListAccess()
+            val settings =
+                assertIs<AppResult.Success<CollaborationNotificationSettingsState>>(
+                        f.koin
+                            .get<CollaborationNotificationSettingsRepository>()
+                            .read(access, f.first)
+                    )
+                    .value
+            assertIs<AppResult.Success<*>>(
+                f.koin.get<UpdateCollaborationNotificationSettings>()(
+                    CollaborationLocalScope.Captured(access, f.session.binding.serverId),
+                    f.first,
+                    CollaborationNotificationSettingsChange(
+                        UUID.randomUUID().toString(),
+                        settings.version,
+                        CollaborationNotificationSettings(
+                            CollaborationNotificationMute.Forever,
+                            CollaborationNotificationPreview.Hidden,
+                        ),
+                    ),
+                )
+            )
+            f.startPriorityNotifications(native)
+            assertEquals(
+                SyncResult.Complete,
+                f.koin.get<CollaborationPriorityRecovery>()(before.parent),
+            )
+            assertTrue(f.readPriority().priority!!.hints.isEmpty())
+            assertNull(f.publication())
+            assertEquals(0, native.attempts)
+        }
+    }
+
+    @Test
+    fun dismissedOriginalCanResolveAnotherHintWithoutRecreatingItsCard() = runBlocking {
+        withFixture { f, native ->
+            val event = f.sdk.incoming(f.first, "Fictional dismissed priority")
+            val fields = f.fields(event)
+            f.koin.get<ApplicationPushReceiver>().queue(fields)
+            val parent = f.readPriority().parent
+            assertEquals(SyncResult.Complete, f.koin.get<CollaborationPriorityRecovery>()(parent))
+            val published = assertNotNull(f.publication())
+            // Simulate the external OS dismiss before its authenticated application settlement.
+            native.remove(native.cards.values.single().reference)
+            assertIs<AppResult.Success<*>>(
+                f.koin.get<FinishCollaborationNotificationPublication>()(
+                    published,
+                    CollaborationNotificationPublicationState.Dismissed,
+                )
+            )
+            val attempts = native.attempts
+            f.koin.get<ApplicationPushReceiver>().queue(fields + ("revision" to "2"))
+            assertEquals(SyncResult.Complete, f.koin.get<CollaborationPriorityRecovery>()(parent))
+            assertTrue(f.readPriority().priority!!.hints.isEmpty())
+            assertEquals(
+                CollaborationNotificationPublicationState.Dismissed,
+                f.publication()!!.body.state,
+            )
+            assertEquals(attempts, native.attempts)
+            assertTrue(native.cards.isEmpty())
+        }
+    }
+
+    @Test
+    fun newerPushDuringNativeSubmissionSurvivesTheCapturedAcknowledgment() = runBlocking {
+        withFixture { f, native ->
+            val event = f.sdk.incoming(f.first, "Fictional push arriving during native submit")
+            val fields = f.fields(event)
+            f.koin.get<ApplicationPushReceiver>().queue(fields)
+            val before = f.readPriority()
+            var first = true
+            native.onShow = {
+                if (first) {
+                    first = false
+                    f.assertReleased()
+                    f.koin.get<ApplicationPushReceiver>().queue(fields + ("revision" to "2"))
+                }
+            }
+            assertEquals(
+                SyncResult.Retry(),
+                f.koin.get<CollaborationPriorityRecovery>()(before.parent),
+            )
+            assertEquals(2L, f.readPriority().priority!!.hints.single().revision)
+            assertEquals(
+                CollaborationNotificationPublicationState.Published,
+                f.publication()!!.body.state,
+            )
+            assertEquals(
+                SyncResult.Complete,
+                f.koin.get<CollaborationPriorityRecovery>()(before.parent),
+            )
+            assertTrue(f.readPriority().priority!!.hints.isEmpty())
+            assertTrue(native.cards.values.single().silent)
+        }
+    }
+
+    @Test
+    fun unboundHostRetainsAcquiredHintAcrossReopenUntilActualPublicationCompletes() = runBlocking {
+        withFixture(notifications = false) { f, native ->
+            val event = f.sdk.incoming(f.first, "Fictional message awaiting its notification host")
+            f.koin.get<ApplicationPushReceiver>().queue(f.fields(event))
+            val before = f.readPriority()
+            assertIs<SyncResult.Retry>(f.koin.get<CollaborationPriorityRecovery>()(before.parent))
+            assertEquals(before, f.readPriority())
+            assertEquals(event.text, f.incomingOriginal(event)?.text)
+            assertEquals(0, native.attempts)
+            f.assertReleased()
+            f.reopen()
+            f.withoutIncomingSelection()
+            f.startPriorityNotifications(native)
+            assertEquals(
+                SyncResult.Complete,
+                f.koin.get<CollaborationPriorityRecovery>()(before.parent),
+            )
+            assertTrue(f.readPriority().priority!!.hints.isEmpty())
+            assertEquals(
+                CollaborationNotificationPublicationState.Published,
+                f.publication()!!.body.state,
+            )
+            assertEquals(1, native.cards.size)
+            f.assertReleased()
+        }
+    }
+
+    @Test
+    fun uncertainNativeResultKeepsPreparedPublicationAndHintThenReplaysSilently() = runBlocking {
+        withFixture { f, native ->
+            val event = f.sdk.incoming(f.first, "Fictional uncertain notification")
+            f.koin.get<ApplicationPushReceiver>().queue(f.fields(event))
+            val before = f.readPriority()
+            var original: ActionNotificationReference? = null
+            native.onShow = {
+                if (native.attempts == 1) f.assertReleased()
+                original = it.reference
+                throw java.io.IOException("Fictional lost native acknowledgment")
+            }
+            assertIs<SyncResult.Retry>(f.koin.get<CollaborationPriorityRecovery>()(before.parent))
+            assertEquals(before, f.readPriority())
+            assertEquals(
+                CollaborationNotificationPublicationState.Prepared,
+                f.publication()!!.body.state,
+            )
+            assertTrue(native.cards.isEmpty())
+            native.onShow = { if (native.attempts == 1) f.assertReleased() }
+            assertEquals(
+                SyncResult.Complete,
+                f.koin.get<CollaborationPriorityRecovery>()(before.parent),
+            )
+            val replay = native.cards.values.single()
+            assertEquals(original, replay.reference)
+            assertTrue(replay.silent)
+            assertEquals(
+                CollaborationNotificationPublicationState.Published,
+                f.publication()!!.body.state,
+            )
+            assertTrue(f.readPriority().priority!!.hints.isEmpty())
+            assertTrue(f.sdk.enqueued.isEmpty())
+        }
+    }
+
+    @Test
+    fun permissionChannelAndCapacityOutcomesKeepTheHintUntilTheirRetryIsSubmitted() = runBlocking {
+        for (outcome in
+            listOf(
+                ActionNotificationSubmission.PermissionRequired,
+                ActionNotificationSubmission.ChannelDisabled,
+                ActionNotificationSubmission.CapacityReached,
+            )) {
+            withFixture { f, native ->
+                val event =
+                    f.sdk.incoming(f.first, "Fictional notification pending native availability")
+                f.koin.get<ApplicationPushReceiver>().queue(f.fields(event))
+                val before = f.readPriority()
+                native.submission = outcome
+                assertIs<SyncResult.Retry>(
+                    f.koin.get<CollaborationPriorityRecovery>()(before.parent)
+                )
+                assertEquals(before, f.readPriority())
+                assertEquals(
+                    CollaborationNotificationPublicationState.Prepared,
+                    f.publication()!!.body.state,
+                )
+                assertTrue(native.cards.isEmpty())
+                f.assertReleased()
+                native.submission = ActionNotificationSubmission.Submitted
+                assertEquals(
+                    SyncResult.Complete,
+                    f.koin.get<CollaborationPriorityRecovery>()(before.parent),
+                )
+                assertTrue(native.cards.values.single().silent)
+                assertTrue(f.readPriority().priority!!.hints.isEmpty())
+            }
+        }
+    }
+
+    @Test
+    fun cancellationAfterNativeSubmissionJoinsCompensationAndKeepsTheHintAcrossReopen() =
+        runBlocking {
+            withFixture { f, native ->
+                val event = f.sdk.incoming(f.first, "Fictional cancelled notification delivery")
+                f.koin.get<ApplicationPushReceiver>().queue(f.fields(event))
+                val before = f.readPriority()
+                val entered = CompletableDeferred<Unit>()
+                native.onShow = {
+                    if (native.attempts == 1) f.assertReleased()
+                    entered.complete(Unit)
+                    awaitCancellation()
+                }
+                val request = async { f.koin.get<CollaborationPriorityRecovery>()(before.parent) }
+                withTimeout(5.seconds) { entered.await() }
+                request.cancelAndJoin()
+                assertEquals(before, f.readPriority())
+                assertTrue(native.cards.isEmpty())
+                assertEquals(
+                    CollaborationNotificationPublicationState.Prepared,
+                    f.publication()!!.body.state,
+                )
+                native.onShow = { if (native.attempts == 1) f.assertReleased() }
+                f.reopen()
+                f.withoutIncomingSelection()
+                f.startPriorityNotifications(native)
+                assertEquals(
+                    SyncResult.Complete,
+                    f.koin.get<CollaborationPriorityRecovery>()(before.parent),
+                )
+                assertTrue(native.cards.values.single().silent)
+                assertTrue(f.readPriority().priority!!.hints.isEmpty())
+            }
+        }
+
+    @Test
+    fun hintedUnprovisionedRoomCannotAcknowledgeAnOriginalItNeverAcquired() = runBlocking {
+        withFixture { f, native ->
+            val event = f.sdk.incoming(f.first, "Fictional inconsistent hinted room")
+            f.koin.get<ApplicationPushReceiver>().queue(f.fields(event))
+            val before = f.readPriority()
+            f.server.collaboration.rooms[f.first] = "NOT_REQUESTED"
+            assertIs<SyncResult.Retry>(f.koin.get<CollaborationPriorityRecovery>()(before.parent))
+            assertEquals(before, f.readPriority())
+            assertEquals(0, f.sdk.backgroundAcquisitions)
+            assertEquals(0, native.attempts)
+        }
+    }
+
+    @Test
+    fun missingIdentityKeepsTheHintEvenAfterItsOriginalWasAcquired() = runBlocking {
+        withFixture { f, native ->
+            val event = f.sdk.incoming(f.first, "Fictional original pending identity")
+            f.koin.get<ApplicationPushReceiver>().queue(f.fields(event))
+            val before = f.readPriority()
+            f.sdk.identityResult = AppResult.Success(null)
+            assertIs<SyncResult.Retry>(f.koin.get<CollaborationPriorityRecovery>()(before.parent))
+            assertEquals(event.text, f.incomingOriginal(event)?.text)
+            assertEquals(before, f.readPriority())
+            assertEquals(0, native.attempts)
+            f.sdk.identityResult = AppResult.Success(CollaborationSelfIdentity(f.sdk.sender))
+            assertEquals(
+                SyncResult.Complete,
+                f.koin.get<CollaborationPriorityRecovery>()(before.parent),
+            )
+            assertTrue(f.readPriority().priority!!.hints.isEmpty())
+        }
+    }
+
+    @Test
+    fun clockRollbackDoesNotTreatANotYetDueHintAsExpired() = runBlocking {
+        withFixture { f, native ->
+            val event = f.sdk.incoming(f.first, "Fictional hint during clock rollback")
+            f.koin.get<ApplicationPushReceiver>().queue(f.fields(event))
+            val before = f.readPriority()
+            val clock =
+                object : kotlin.time.Clock {
+                    override fun now() =
+                        kotlin.time.Instant.fromEpochSeconds(
+                            before.priority!!.hints.single().issuedAt - 1
+                        )
+                }
+            val recovery =
+                CollaborationPriorityRecovery(
+                    f.koin.get(),
+                    f.koin.get(),
+                    f.koin.get(),
+                    f.koin.get(),
+                    f.koin.get(),
+                    clock,
+                )
+            assertIs<SyncResult.Retry>(recovery(before.parent))
+            assertEquals(before, f.readPriority())
+            assertEquals(0, f.sdk.backgroundAcquisitions)
+            assertEquals(0, native.attempts)
+        }
+    }
+
+    @Test
     fun expiredNativeCredentialsKeepOwnedPriorityWithoutContactingTheServer() = runBlocking {
-        withFixture { f ->
+        withFixture { f, native ->
             val event =
                 f.sdk.incoming(f.first, "Fictional retained priority during session renewal")
             f.koin.get<ApplicationPushReceiver>().queue(f.fields(event))
@@ -46,7 +348,13 @@ class CollaborationPriorityRecoveryTest {
                     kotlin.time.Clock.System,
                 )
             val processor =
-                CollaborationPriorityRecovery(f.koin.get(), f.koin.get(), admission, f.koin.get())
+                CollaborationPriorityRecovery(
+                    f.koin.get(),
+                    f.koin.get(),
+                    admission,
+                    f.koin.get(),
+                    f.koin.get(),
+                )
             f.server.collaboration.reads.clear()
             assertIs<SyncResult.Blocked>(processor(before.parent))
             assertEquals(before, f.readPriority())
@@ -58,12 +366,13 @@ class CollaborationPriorityRecoveryTest {
     @Test
     fun actualContainerAcquiresHintedRoomOutsideDirectoryAndRetainsOriginalAcrossReopen() =
         runBlocking {
-            withFixture { f ->
+            withFixture { f, native ->
                 val event = f.sdk.incoming(f.first, "Fictional priority message")
                 val fields = f.fields(event)
                 assertIs<AppResult.Success<*>>(f.koin.get<ApplicationPushReceiver>().queue(fields))
                 f.reopen()
                 f.withoutIncomingSelection()
+                f.startPriorityNotifications(native)
                 val before = f.readPriority()
                 assertEquals(1, before.priority!!.hints.size)
                 assertEquals(
@@ -94,7 +403,7 @@ class CollaborationPriorityRecoveryTest {
 
     @Test
     fun independentlyChangedRoomBindingCannotOpenSdkOrPretendTheHintIsContent() = runBlocking {
-        withFixture { f ->
+        withFixture { f, native ->
             val event = f.sdk.incoming(f.first, "Fictional retained message")
             f.koin.get<ApplicationPushReceiver>().queue(f.fields(event))
             f.server.collaboration.returnedRoomId = "!other:example.test"
@@ -110,7 +419,7 @@ class CollaborationPriorityRecoveryTest {
 
     @Test
     fun confirmedAdmissionDenialRetainsHintAndKeepsReadGateClosed() = runBlocking {
-        withFixture { f ->
+        withFixture { f, native ->
             val event = f.sdk.incoming(f.first, "Fictional denied priority")
             f.koin.get<ApplicationPushReceiver>().queue(f.fields(event))
             f.server.collaboration.admissionFailureCode = "permission_denied"
@@ -130,7 +439,7 @@ class CollaborationPriorityRecoveryTest {
 
     @Test
     fun unresolvedOriginalAndFocusCapacityKeepHintForLaterOwnedRecovery() = runBlocking {
-        for (capacity in listOf(false, true)) withFixture { f ->
+        for (capacity in listOf(false, true)) withFixture { f, native ->
             val event = f.sdk.incoming(f.first, "Fictional pending original")
             f.koin.get<ApplicationPushReceiver>().queue(f.fields(event))
             val before = f.readPriority()
@@ -152,7 +461,7 @@ class CollaborationPriorityRecoveryTest {
 
     @Test
     fun newerPushDuringAcquisitionCannotBeAcknowledgedByTheCapturedWorker() = runBlocking {
-        withFixture { f ->
+        withFixture { f, native ->
             val event = f.sdk.incoming(f.first, "Fictional first hint")
             val fields = f.fields(event)
             f.koin.get<ApplicationPushReceiver>().queue(fields)
@@ -177,7 +486,7 @@ class CollaborationPriorityRecoveryTest {
 
     @Test
     fun cancellationReleasesOwnedRuntimeAndRetainsHintAcrossContainerRestart() = runBlocking {
-        withFixture { f ->
+        withFixture { f, native ->
             val event = f.sdk.incoming(f.first, "Fictional interrupted priority")
             f.koin.get<ApplicationPushReceiver>().queue(f.fields(event))
             val before = f.readPriority()
@@ -194,6 +503,7 @@ class CollaborationPriorityRecoveryTest {
             f.sdk.beforeHistory = {}
             f.reopen()
             f.withoutIncomingSelection()
+            f.startPriorityNotifications(native)
             assertEquals(
                 SyncResult.Complete,
                 f.koin.get<CollaborationPriorityRecovery>()(before.parent),
@@ -202,7 +512,10 @@ class CollaborationPriorityRecoveryTest {
         }
     }
 
-    private suspend fun withFixture(block: suspend (CollaborationWorkerFixture) -> Unit) {
+    private suspend fun withFixture(
+        notifications: Boolean = true,
+        block: suspend (CollaborationWorkerFixture, PublisherDisplaySource) -> Unit,
+    ) {
         val f = CollaborationWorkerFixture()
         try {
             assertIs<AppResult.Success<*>>(
@@ -220,7 +533,12 @@ class CollaborationPriorityRecoveryTest {
             f.server.collaboration.listedIds = emptyList()
             f.withoutIncomingSelection()
             f.sdk.backgroundEnabled = true
-            block(f)
+            val native =
+                PublisherDisplaySource().also { display ->
+                    display.onShow = { if (display.attempts == 1) f.assertReleased() }
+                }
+            if (notifications) f.startPriorityNotifications(native)
+            block(f, native)
             assertTrue(f.server.unexpectedPaths.isEmpty())
         } finally {
             f.close()
@@ -249,6 +567,22 @@ class CollaborationPriorityRecoveryTest {
 
     private suspend fun CollaborationWorkerFixture.readPriority() =
         (koin.get<ReadCollaborationPushPriority>()() as AppResult.Success).value
+
+    private suspend fun CollaborationWorkerFixture.publication() =
+        assertIs<AppResult.Success<CollaborationNotificationPublication?>>(
+                koin
+                    .get<CollaborationNotificationPublicationRepository>()
+                    .read(
+                        CollaborationRecoveryAccess(
+                            session.id,
+                            session.binding.audience,
+                            session.user.id,
+                        ),
+                        NativeUiServer.COMPANY_ONE,
+                        first,
+                    )
+            )
+            .value
 
     private fun CollaborationWorkerFixture.assertReleased() {
         assertEquals(sdk.backgroundAcquisitions, sdk.backgroundCloses)

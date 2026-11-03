@@ -15,6 +15,73 @@ import kotlinx.coroutines.test.*
 /** Real mechanical owner, virtual time, fake journal/policy/OS ports; not provider acceptance. */
 class CollaborationNotificationProcessTest {
     @Test
+    fun deliveryCannotSucceedWithoutAHostAndAcceptsOnlyOneOwnedProcess() = runTest {
+        fixture { f ->
+            f.references = emptyList()
+            val delivery = CollaborationNotificationDelivery()
+            assertIs<AppResult.Failed>(delivery.publish(f.parent, f.candidate()))
+            assertIs<AppResult.Failed>(delivery.retry())
+            assertEquals(0, f.candidateCalls)
+            assertTrue(delivery.start(f.process))
+            assertFalse(delivery.start(f.process))
+            try {
+                assertIs<AppResult.Success<*>>(delivery.publish(f.parent, f.candidate(), true))
+                assertEquals(listOf(true), f.alertRequests)
+            } finally {
+                delivery.closeAndJoin()
+            }
+            assertFalse(delivery.start(f.process))
+            assertIs<AppResult.Failed>(delivery.publish(f.parent, f.candidate()))
+            assertTrue(f.native.cards.isEmpty())
+        }
+    }
+
+    @Test
+    fun closingDeliveryResolvesSourceWaitingRequestsAndCannotReopen() = runTest {
+        fixture { f ->
+            f.references = emptyList()
+            f.signals.resetReplayCache()
+            val delivery = CollaborationNotificationDelivery()
+            assertTrue(delivery.start(f.process))
+            val request = async { delivery.publish(f.parent, f.candidate()) }
+            runCurrent()
+            assertFalse(request.isCompleted)
+            delivery.closeAndJoin()
+            assertIs<AppResult.Failed>(request.await())
+            assertEquals(f.opened, f.closed)
+            assertEquals(0, f.candidateCalls)
+            assertFalse(delivery.start(f.process))
+        }
+    }
+
+    @Test
+    fun closingDeliveryJoinsLateNativeCompletionAndCompensationBeforeReturning() = runTest {
+        fixture { f ->
+            f.references = emptyList()
+            val release = CompletableDeferred<Unit>()
+            f.native.onShow = { withContext(NonCancellable) { release.await() } }
+            val delivery = CollaborationNotificationDelivery()
+            assertTrue(delivery.start(f.process))
+            val request = async { delivery.publish(f.parent, f.candidate()) }
+            runCurrent()
+            assertEquals(1, f.native.cards.size)
+            val closed = async { delivery.closeAndJoin() }
+            try {
+                runCurrent()
+                assertFalse(closed.isCompleted)
+                assertFalse(request.isCompleted)
+            } finally {
+                release.complete(Unit)
+            }
+            closed.await()
+            assertIs<AppResult.Failed>(request.await())
+            assertTrue(f.native.cards.isEmpty())
+            assertEquals(0, f.publications)
+            assertEquals(f.opened, f.closed)
+        }
+    }
+
+    @Test
     fun candidateWaitsForTheBusySurfaceCompletionWithoutDroppingItsRequest() = runTest {
         fixture { f ->
             f.references = emptyList()

@@ -1,5 +1,6 @@
 package dev.fajar.starter.app.work
 
+import dev.fajar.starter.app.notifications.CollaborationNotificationCandidate
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.policies.*
 import dev.fajar.starter.collaboration.domain.usecases.*
@@ -18,12 +19,14 @@ class CollaborationIncomingHistoryRecovery(
     private val readEvent: ReadCollaborationHistoryEvent,
 ) {
     /**
-     * An exact admitted original/tombstone resolves the hint without advancing either traversal.
+     * An exact admitted original/tombstone yields opaque IDs without advancing either traversal.
+     * The application callback only captures IDs; publication waits for the caller's runtime close.
      */
     suspend fun priority(
         scope: CollaborationOperationScope.Background,
         key: CollaborationHistoryTraversal,
         eventId: String,
+        onRetained: (CollaborationNotificationCandidate) -> Unit,
     ): SyncResult {
         val acquired = acquireOriginals(scope, key.deviceId, key.conversationId, eventId)
         currentCoroutineContext().ensureActive()
@@ -36,8 +39,16 @@ class CollaborationIncomingHistoryRecovery(
             )
         currentCoroutineContext().ensureActive()
         if (retained is AppResult.Failed) return collaborationWorkFailure(retained.failure)
-        return if ((retained as AppResult.Success).value != null) SyncResult.Complete
-        else SyncResult.Retry(pendingFailure())
+        if ((retained as AppResult.Success).value == null) return SyncResult.Retry(pendingFailure())
+        onRetained(
+            CollaborationNotificationCandidate(
+                scope.admission.owner.companyId,
+                key.conversationId,
+                key.roomId,
+                eventId,
+            )
+        )
+        return SyncResult.Complete
     }
 
     suspend operator fun invoke(

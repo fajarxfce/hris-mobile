@@ -2,6 +2,7 @@ package dev.fajar.starter.app.di
 
 import dev.fajar.starter.app.notifications.CollaborationNotificationCommands
 import dev.fajar.starter.app.notifications.CollaborationNotificationCopy
+import dev.fajar.starter.app.notifications.CollaborationNotificationDelivery
 import dev.fajar.starter.app.notifications.CollaborationNotificationProcess
 import dev.fajar.starter.app.notifications.CollaborationNotificationPublisher
 import dev.fajar.starter.app.notifications.CollaborationNotificationReconciler
@@ -12,9 +13,11 @@ import dev.fajar.starter.collaboration.domain.usecases.ObserveCollaborationNotif
 import dev.fajar.starter.collaboration.domain.usecases.ReadCollaborationNotificationPublications
 import org.koin.core.parameter.parametersOf
 import org.koin.dsl.module
+import org.koin.dsl.onClose
 
 /** Lazy application bindings. A platform host explicitly owns and starts the process lifetime. */
 fun applicationNotificationModule() = module {
+    single { CollaborationNotificationDelivery() }.onClose { it?.close() }
     // A host supplies its already-started surface owner. No native delivery is started here.
     factory { (owner: CollaborationNotificationSurfaceOwner) ->
         CollaborationNotificationPublisher(owner, get(), get(), get(), get())

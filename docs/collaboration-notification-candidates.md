@@ -47,3 +47,7 @@ remain next. Chat push remains off and no product APK was installed by this chan
 [Incoming identity acquisition](collaboration-incoming-identity.md) now supplies the owned
 self identity needed for notification preparation without requiring a previously opened chat.
 The priority publication handoff and actual native host are still pending.
+
+The [priority handoff](collaboration-priority-notification-delivery.md) now passes retained
+candidates after transport close and retains hints until a known publication outcome.
+Production native host activation and notification-input acceptance remain pending.

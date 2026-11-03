@@ -2,6 +2,7 @@ package dev.fajar.starter.fixtures
 
 import dev.fajar.starter.app.bootstrap.ApplicationCollaborationLifetime
 import dev.fajar.starter.app.di.*
+import dev.fajar.starter.app.notifications.CollaborationNotificationDelivery
 import dev.fajar.starter.app.work.CollaborationDeliveryWorker
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.usecases.*
@@ -110,6 +111,7 @@ class CollaborationWorkerFixture {
             .value
 
     suspend fun reopen() {
+        container.koin.get<CollaborationNotificationDelivery>().closeAndJoin()
         container.koin.get<ApplicationCollaborationLifetime>().closeAndJoin()
         container.close()
         sdk.closeOtherOwners(null)
@@ -117,6 +119,7 @@ class CollaborationWorkerFixture {
     }
 
     suspend fun close() {
+        container.koin.get<CollaborationNotificationDelivery>().closeAndJoin()
         container.koin.get<ApplicationCollaborationLifetime>().closeAndJoin()
         container.close()
         sdk.closeOtherOwners(null)

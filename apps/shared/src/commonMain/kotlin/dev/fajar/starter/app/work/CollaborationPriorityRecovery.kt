@@ -1,6 +1,9 @@
 package dev.fajar.starter.app.work
 
+import dev.fajar.starter.app.notifications.CollaborationNotificationDelivery
+import dev.fajar.starter.app.notifications.CollaborationNotificationPublicationResult
 import dev.fajar.starter.collaboration.domain.entities.*
+import dev.fajar.starter.collaboration.domain.policies.collaborationContentResponseClosesRead
 import dev.fajar.starter.collaboration.domain.usecases.*
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.sync.domain.SyncResult
@@ -14,6 +17,7 @@ class CollaborationPriorityRecovery(
     private val complete: CompleteCollaborationPushPriority,
     private val admit: AcquireCollaborationBackgroundAdmission,
     private val incoming: CollaborationIncomingRecovery,
+    private val notifications: CollaborationNotificationDelivery,
     private val clock: Clock = Clock.System,
 ) {
     suspend operator fun invoke(parent: CollaborationNativeParent): SyncResult {
@@ -37,19 +41,40 @@ class CollaborationPriorityRecovery(
             return SyncResult.Blocked(collaborationRecoveryParentChanged())
         val hint = snapshot.priority?.hints?.firstOrNull() ?: return SyncResult.Complete
         val now = clock.now().epochSeconds
+        if (now < hint.issuedAt) return pending("not_due")
         if (hint.roomId != null && now >= hint.issuedAt && now < hint.expiresAt) {
             val granted = admit.forHint(parent, hint.companyId, hint.deviceId)
             currentCoroutineContext().ensureActive()
-            val received =
-                when (granted) {
-                    is AppResult.Failed -> collaborationWorkFailure(granted.failure)
-                    is AppResult.Success -> incoming.priority(granted.value, hint)
-                }
+            if (granted is AppResult.Failed) return collaborationWorkFailure(granted.failure)
+            val received = incoming.priority((granted as AppResult.Success).value, hint)
             currentCoroutineContext().ensureActive()
-            if (received !is SyncResult.Complete) return received
-            // Credential age and denied/uncertain acquisition retain this owned hint. Only an
-            // acquired original/tombstone or scheduling expiry can complete it.
-
+            if (received.result !is SyncResult.Complete) return received.result
+            val candidate = received.candidate ?: return pending("candidate_pending")
+            if (
+                candidate.companyId != hint.companyId ||
+                    candidate.roomId != hint.roomId ||
+                    candidate.eventId != hint.matrixEventId
+            )
+                return pending("candidate_changed")
+            // Incoming has joined its timeline/runtime before the process receives this request.
+            val submitted = notifications.publish(parent, candidate, allowAlert = true)
+            currentCoroutineContext().ensureActive()
+            when (submitted) {
+                is AppResult.Failed ->
+                    return if (
+                        collaborationContentResponseClosesRead(submitted.failure) ||
+                            submitted.failure.kind == FailureKind.Validation
+                    )
+                        SyncResult.Blocked(submitted.failure)
+                    else SyncResult.Retry(submitted.failure)
+                is AppResult.Success ->
+                    when (submitted.value) {
+                        CollaborationNotificationPublicationResult.Submitted,
+                        CollaborationNotificationPublicationResult.Suppressed,
+                        CollaborationNotificationPublicationResult.Unchanged -> Unit
+                        else -> return pending("notification_pending")
+                    }
+            }
         }
         val saved = complete(snapshot, hint)
         currentCoroutineContext().ensureActive()
@@ -58,4 +83,13 @@ class CollaborationPriorityRecovery(
             SyncResult.Complete
         else SyncResult.Retry()
     }
+
+    private fun pending(suffix: String) =
+        SyncResult.Retry(
+            Failure(
+                FailureKind.Unavailable,
+                "Chat recovery is pending.",
+                code = "client.collaboration_priority_$suffix",
+            )
+        )
 }

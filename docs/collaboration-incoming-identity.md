@@ -32,3 +32,7 @@ Chat push remains disabled and this change does not install an APK.
 [Validation evidence](measurements/chat-incoming-identity-2026-11-03.json) records83 passing
 focused cases and full checks with3,723 desktop,230 Android-host,six proof-host and ten
 build-logic cases, plus proof assembly/shared Wasm. Three rejected attempts remain recorded.
+
+The [priority handoff](collaboration-priority-notification-delivery.md) now passes retained
+candidates after transport close and retains hints until a known publication outcome.
+Production native host activation and notification-input acceptance remain pending.

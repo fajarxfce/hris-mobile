@@ -1,5 +1,15 @@
 # Validation
 
+## Priority notification handoff — 3 November 2026
+
+[Priority delivery](collaboration-priority-notification-delivery.md) passes two focused runs
+(85 fresh; then82 fresh desktop plus six reused proof cases) and Full3 in236.238s:3,736 desktop/
+530 suites,230 Android-host/37,six proof-host/one,ten build-logic/two, proof assembly/shared Wasm/
+root quality. [Evidence](measurements/chat-priority-notification-delivery-2026-11-03.json)
+records494fresh/77 suites,14 frozen hashes and no failures/errors/skips. Updated native provider
+proof uses the real application publisher/journal with an explicitly fake display; compilation
+is accepted, new device execution is still pending. No product APK or phone installation.
+
 ## Background incoming identity — 3 November 2026
 
 [Background identity](collaboration-incoming-identity.md) passes83 focused cases/13 suites

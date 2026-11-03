@@ -3,6 +3,7 @@ package dev.fajar.hris.collaboration.proof
 import android.content.Context
 import dev.fajar.starter.app.bootstrap.ApplicationCollaborationLifetime
 import dev.fajar.starter.app.di.createAppContainer
+import dev.fajar.starter.app.notifications.CollaborationNotificationDelivery
 import dev.fajar.starter.app.work.ApplicationPush
 import dev.fajar.starter.app.work.ApplicationPushReceiver
 import dev.fajar.starter.app.work.CollaborationDeliveryWorker
@@ -48,6 +49,7 @@ internal class HrisWorkerProofContainer(
     private val database = createAppDatabase(context)
     private val access = owner.localListAccess()
     private val requests = mutableListOf<String>()
+    private var priorityNotifications: HrisPriorityNotificationHost? = null
     val scheduledKeys: List<String>
         get() = synchronized(requests) { requests.toList() }
 
@@ -316,6 +318,43 @@ internal class HrisWorkerProofContainer(
         return container.koin.get<CollaborationPriorityRecovery>()(parent)
     }
 
+    fun startPriorityNotifications(deviceId: String) {
+        check(backgroundOnly && priorityNotifications == null)
+        priorityNotifications =
+            HrisPriorityNotificationHost(
+                container.koin,
+                CollaborationNativeParent(
+                    owner.sessionId,
+                    owner.audience,
+                    owner.accountId,
+                    owner.nativeSessionId,
+                ),
+            ) {
+                check(!expect(runtime.isOpen(owner, deviceId)))
+            }
+    }
+
+    fun priorityNotificationSubmissions() = requireNotNull(priorityNotifications).submissions
+
+    suspend fun priorityPublicationState() =
+        expect(
+                container.koin
+                    .get<
+                        dev.fajar.starter.collaboration.domain.repositories.CollaborationNotificationPublicationRepository
+                    >()
+                    .read(
+                        CollaborationRecoveryAccess(
+                            owner.sessionId,
+                            owner.audience,
+                            owner.accountId,
+                        ),
+                        owner.companyId,
+                        conversationId,
+                    )
+            )
+            ?.body
+            ?.state
+
     suspend fun runIncoming(deviceId: String): dev.fajar.starter.sync.domain.SyncResult {
         check(backgroundOnly)
         val parent =
@@ -363,6 +402,7 @@ internal class HrisWorkerProofContainer(
     suspend fun close() =
         withContext(NonCancellable) {
             try {
+                container.koin.get<CollaborationNotificationDelivery>().closeAndJoin()
                 container.koin.get<ApplicationCollaborationLifetime>().closeAndJoin()
                 drainHrisProofRuntime { runtime.closeOtherOwners(null) }
             } finally {

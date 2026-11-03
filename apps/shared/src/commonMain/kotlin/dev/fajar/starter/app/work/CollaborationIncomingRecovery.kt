@@ -1,5 +1,6 @@
 package dev.fajar.starter.app.work
 
+import dev.fajar.starter.app.notifications.CollaborationNotificationCandidate
 import dev.fajar.starter.collaboration.domain.entities.*
 import dev.fajar.starter.collaboration.domain.policies.localListAccess
 import dev.fajar.starter.collaboration.domain.policies.validCollaborationPushHint
@@ -36,6 +37,20 @@ class CollaborationIncomingRecovery(
     suspend fun priority(
         admission: CollaborationBackgroundAdmission,
         hint: CollaborationPushHint,
+    ): CollaborationIncomingPriorityResult {
+        var candidate: CollaborationNotificationCandidate? = null
+        val result = priorityResult(admission, hint) { candidate = it }
+        currentCoroutineContext().ensureActive()
+        return CollaborationIncomingPriorityResult(
+            result,
+            candidate.takeIf { result == SyncResult.Complete },
+        )
+    }
+
+    private suspend fun priorityResult(
+        admission: CollaborationBackgroundAdmission,
+        hint: CollaborationPushHint,
+        onRetained: (CollaborationNotificationCandidate) -> Unit,
     ): SyncResult {
         currentCoroutineContext().ensureActive()
         if (
@@ -71,7 +86,7 @@ class CollaborationIncomingRecovery(
                     failure("owner_changed", FailureKind.Unauthorized)
                 )
             withTimeoutOrNull(12.seconds) {
-                room(admission, hint.deviceId, summary.value.conversation.id, hint)
+                room(admission, hint.deviceId, summary.value.conversation.id, hint, onRetained)
             } ?: SyncResult.Retry(failure("room_timeout"))
         }
     }
@@ -157,6 +172,7 @@ class CollaborationIncomingRecovery(
         deviceId: String,
         conversationId: String,
         hint: CollaborationPushHint? = null,
+        onRetained: ((CollaborationNotificationCandidate) -> Unit)? = null,
     ): SyncResult {
         val scope = CollaborationOperationScope.Background(admission)
         val metadata = readRoom.room(scope, conversationId)
@@ -164,7 +180,9 @@ class CollaborationIncomingRecovery(
         if (metadata is AppResult.Failed) return collaborationWorkFailure(metadata.failure)
         val binding = (metadata as AppResult.Success).value.value
         when (binding.state) {
-            CollaborationDirectRoomState.NOT_REQUESTED -> return SyncResult.Complete
+            CollaborationDirectRoomState.NOT_REQUESTED ->
+                return if (hint == null) SyncResult.Complete
+                else SyncResult.Retry(failure("room_pending", FailureKind.Unavailable))
             CollaborationDirectRoomState.QUEUED,
             CollaborationDirectRoomState.RUNNING ->
                 return SyncResult.Retry(failure("room_pending", FailureKind.Unavailable))
@@ -193,6 +211,7 @@ class CollaborationIncomingRecovery(
                     conversationId,
                     binding.matrixRoomId,
                     hint?.matrixEventId,
+                    onRetained,
                 )
             }
         } finally {
@@ -206,6 +225,7 @@ class CollaborationIncomingRecovery(
         conversationId: String,
         roomId: String?,
         priorityEventId: String?,
+        onRetained: ((CollaborationNotificationCandidate) -> Unit)?,
     ): SyncResult {
         var child: CollaborationTimelineLease? = null
         try {
@@ -228,7 +248,8 @@ class CollaborationIncomingRecovery(
             // A failed metadata request still leaves an incoming turn within the room budget.
             val recovered =
                 if (priorityEventId == null) recoverHistory(scope, key)
-                else recoverHistory.priority(scope, key, priorityEventId)
+                else
+                    recoverHistory.priority(scope, key, priorityEventId, requireNotNull(onRetained))
             return combineCollaborationRecovery(
                 identity,
                 combineCollaborationRecovery(receipts, recovered),
