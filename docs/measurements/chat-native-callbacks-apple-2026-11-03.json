@@ -1,0 +1,7 @@
+{
+  "source": "f3843601fd8fb7af48a6d89171df0e42bc41f714",
+  "run": "https://github.com/fajarxfce/hris-mobile/actions/runs/41624960880",
+  "status": "pending",
+  "sourceCount": 340,
+  "scope": "Full simulator core/domain tests and complete Xcode application; common callback application code compiled, actual callback/SystemUI behavior tested separately on Android."
+}

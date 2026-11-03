@@ -1,15 +1,18 @@
 # Template updates
 
-## Native action notification primitives — Mobile proof accepted, port next
+## Native action notification primitives — ported and locally validated
 
-[Mobile callback/native evidence](measurements/chat-native-callbacks-2026-11-03.json)
+[Mobile f3843601 evidence](measurements/chat-native-callbacks-2026-11-03.json)
 proves real Android action PendingIntents, exact render removal, no-backup inventory
 and SystemUI reply-history retirement with public OS expiry. Eight generic core files
-(six production, two common tests) must return to Starter; its notifications module
-has none yet and its dependencies already match. Keep HRIS admission/encryption,
-callbacks, fixture and production configuration in Mobile. Independent Starter checks
-and hosted Apple remain required after copying the accepted source.
-
+(six production, two common tests) are copied exactly to
+[Starter cb36373](https://github.com/fajarxfce/compose-fluent-starter/commit/cb36373).
+Its independent checks pass in 260.027s: 377 desktop, 18 browser and six logic cases,
+zero failures/errors/skips; ten new common tests execute freshly on both platforms.
+Android/lint/production Web pass; no phone install. Full Starter Apple41626260198
+is pending. HRIS admission/encryption, callbacks, fixture and production configuration
+remain in Mobile. Workspace/company selection is also Mobile-only; Starter has no
+workspace module.
 
 ## Bounded Android scheduling and Apple wake proof — 2 November 2026
 

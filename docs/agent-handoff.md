@@ -1,5 +1,50 @@
 # Agent continuation — HRIS Mobile
 
+## Guarded company selection in progress; callback proof committed — 3 November 2026
+
+Callback implementation f3843601fd8fb7af48a6d89171df0e42bc41f714 is committed/pushed.
+ONE full [Apple41624960880](measurements/chat-native-callbacks-apple-2026-11-03.json)
+and automatic [Native41624916023](measurements/chat-native-callbacks-hosted-2026-11-03.json)
+are outstanding at that exact source. Manifests/audit scripts are prepared in
+.work/chat-native-callbacks-apple-2026-11-03 and
+.work/chat-native-callbacks-hosted-2026-11-03. Native audit additionally requires all
+five actual action callbacks and SystemUI screenshots; inspect PNGs before accepting.
+No duplicate runs or old audit reruns. Native/Apple4389 below are already accepted.
+
+Generic raw port is complete locally in Starter cb36373, now docs25af5af, both pushed.
+Eight identical new files, 260.027s, 377 desktop/123 suites, 18 browser/five and six
+logic/one; zero. 85 fresh/34; ten new common contracts freshly run on both desktop and
+browser. Lint zero errors/44 prior warnings. Starter full Apple41626260198 is pending
+with 32-source manifest. No Starter phone install. Starter has NO core/workspace;
+company membership/selection policy in the next Mobile increment is not port scope.
+
+CURRENT six UNCOMMITTED core/workspace Kotlin inputs are frozen in
+.work/chat-native-navigation-2026-11-03/check-3, full run PTY41799, ONLY local heavy job.
+New WorkspaceSelectionOwner binds session/audience/account/native family. New
+WorkspaceSelectionOrigin also captures exact workspace ID (null explicitly means
+no selection). SelectWorkspace rejects a mismatched owner before company/account
+I/O, rejects a changed origin before lookup, guards after each await and after CAS.
+Existing unguarded manual callers stay compatible. WorkspaceContext/policy now
+publish actual owner even when no company is admitted. No app navigation edits yet.
+
+Focused2 PASSED56.321s: 34 fresh domain cases/three suites plus format/architecture74/
+detekt zero. Six new tests include four identity mismatches before I/O, token renewal,
+replacement at each lookup, late CAS acknowledgment/cancellation, pre-lookup manual
+choice and actual observed family. Focused1 rejected32.594s/one of34: the fixture
+incorrectly expected a previous-family workspace to remain admitted. Corrected to
+require null current workspace while its stored fact remains; no policy weakened.
+Audit focused2 complete. Full3 must pass before commit; inspect complete app tests
+because WorkspaceContext changed. Owned emulator5562 is stopped; phone23 untouched.
+
+Detailed next implementation is .work/chat-native-navigation-2026-11-03/implementation-next.txt.
+After full3: commit these six domain/context inputs, then typed native AppLink routing,
+MVI-owned finite cancellation/join/retry, same-company offline opening and cross-company
+SelectWorkspace with original owner/workspace. Then bind actual Android Application
+notification host and test startup/IPC/navigation. Production hosts remain unbound,
+chat push OFF. Reviewed edited-send and all54 PRD groups remain open. Next meaningful
+validated product APK24+, notify before install-only; never drive phone UI. Continue.
+
+
 
 ## Native callbacks and actual SystemUI reply accepted locally — 3 November 2026
 
