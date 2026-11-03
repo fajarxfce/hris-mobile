@@ -1,6 +1,51 @@
 # Agent continuation — HRIS Mobile
 
 
+## Android direct-reply lifetime fix under native proof; Apple actions accepted
+
+[Apple41616077153](measurements/chat-notification-actions-apple-2026-11-03.json)
+at4389f537 is accepted/audited:1,045 simulator/119 suites, zero;335 source hashes
+verified. GitHub artifact13223178826 ZIP SHA256
+f70a062e1fdac9701e8d24c56dffb60231981957cd07991c33c440d2e3458cba.
+Compile730s/tests63s/full Xcode1343s. Excludes current callback and Android cleanup
+work. Do not repeat audit. Native438941615080704 remains in progress.
+
+CURRENT20 UNCOMMITTED inputs in .work/chat-native-callbacks-2026-11-03 are frozen
+for native3 (PTY43427), the ONLY local heavy job. Owned emulator5562 via device-3
+(start/stop scripts and wrapper); do not touch other emulators or phone. Full7
+PASS114.929s:3,928 desktop/556,230 host/37,15 proof/four,ten logic/two, zero;15fresh
+proof cases/four. Full5 PASS365.122s had579fresh/91 and same common app sources.
+Full7 also Android/Wasm/rootquality; audit complete. Python18 tests pass by both
+discovery and direct entry. Seventeen earlier app inputs plus fixture fixes, driver
+updates and generic AndroidActionNotificationDisplaySource now comprise20 inputs.
+
+Native1 FAILED before actions: fixture direct-conversation version1 violated the
+existing immutable DM version0 contract. Corrected fixture version and reused
+existing history/input keys of the sequential proof database; no policy relaxed.
+Raw16 and three input-recovery kills passed; fixture uninstalled/emulator stopped.
+Proof6 PASS93.420s/15fresh. Native2 reached real SystemUI Reply, typed fixed fictional
+text and callback Saved, but rejected remaining original card. reply-editor.png
+ACTUALLY VIEWED. Android15 AOSP NMS forbids app cancel of lifetime-extended direct-
+reply notifications. Generic raw adapter now cancels, replaces an existing visible
+card with a silent, no-content/no-action neutral update, cancels again, then confirms
+actual OS absence before dropping opaque inventory. Namespace clear follows the
+same path, including obsolete-account privacy cleanup. No hidden flags/APIs.
+Needs native3 SystemUI/raw fencing proof BEFORE acceptance and generic Starter port.
+Native2 failure evidence in native-2/failure-audit.json; do not claim allfivepassed.
+
+Native3 wrapper requires accepted full7 hashes, stores exactAPK and finaldriver
+hashes. tool/check_native_notifications.py --reply-system-ui tests actual editor
+and retains screenshots/XML, per-action callback/progress records before cleanup.
+On success inspect allthree screenshots and audit source/APK/result/cleanup. Then
+commit/push and dispatch ONE full Apple; automatic native workflow should queue
+behind4389. Production hosts still unbound/chat push OFF. Next implement native
+Activity Open with captured account/family and cross-company selection, then bind
+production. Draft in .work/chat-native-navigation-2026-11-03; no navigation edits yet.
+Reviewed edited-send still pending. Phone23 already installed; next product24+,
+notify before each install-only; never launch phone UI. All54 PRD groups OPEN.
+Starterd312769 and Platform72447fb8 unchanged; continue long run.
+
+
 ## Saved-reply native accepted; callback native proof being built
 
 [Native41609991459](measurements/chat-saved-replies-native-2026-11-03.json) at
