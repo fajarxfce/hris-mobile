@@ -1,5 +1,40 @@
 # Agent continuation — HRIS Mobile
 
+## Native actions and durable dismissal accepted locally
+
+[Contract](collaboration-notification-action-disposition.md) /
+[evidence](measurements/chat-notification-actions-2026-11-03.json).
+Sixteen unchanged implementation inputs are ACCEPTED locally. Focused2 PASS103.277s:
+61 desktop/seven suites,45 fresh/six. Full3 PASS459.096s:3,916 desktop/555,230 Android
+host/37,16 fresh browser/one,ten logic/two;2,326 fresh/283, zero failures/errors/skips.
+Root quality/Android dev assembly/lint/shared Wasm pass, lint zero issues. Full audit
+and record complete in .work/chat-notification-actions-2026-11-03. No local heavy
+job or owned emulator remains. Initial rejected focused1 and exact test correction
+are preserved: owner close returns Unauthorized after join; caller cancellation
+separately propagates and retry does not duplicate a private read intent.
+
+Open returns captured navigation only after sealed kind/full reference checks.
+Read/mute use durable commands and exact native/journal cleanup. Dismissing persists
+before OS removal, strips preview/actions and remains indexed without being eligible
+for display. Metadata-only recovery finishes Dismissed after restart or content denial;
+old renders and capacity remain protected. Actual app tests use Koin/SQLite and a
+SIMULATED OS display. This is not native callback or product notification activation.
+
+NEXT commit/push, then connect bounded Android action callbacks, reply acknowledgment
+and Activity Open navigation, with actual isolated Android proof. Concrete next design
+in .work/chat-notification-actions-2026-11-03/native-followup.txt. Full Apple must include
+five point-read/three dismissal-intent domain cases and current application, after
+saved-reply41610059249 completes; no same-scope cancellation or duplicate dispatch.
+Production hosts remain unbound/chat push OFF. Reviewed edited-send still pending.
+Phone23 already installed; next validated product release must use code>23 and notify
+before explicit install-only, no phone UI. Platform304/schema116 unchanged. All54 PRD
+groups remain OPEN, voice/video/meeting UI absent. Continue long run.
+
+Starter command prevention port is locally accepted and pushed c5ca7c3 (sourceaa58a21).
+Full Starter Apple41612522666 is running on24 frozen sources; audit script ready.
+Previous callback native6976 is fully accepted below; no repeat audit. Mobile saved-
+reply Apple41610059249 at8b5f8750 is still building full Xcode and excludes these actions.
+
 ## Callback native proof accepted — 3 November 2026
 
 [41601851260](measurements/chat-notification-callback-native-2026-11-03.json) at

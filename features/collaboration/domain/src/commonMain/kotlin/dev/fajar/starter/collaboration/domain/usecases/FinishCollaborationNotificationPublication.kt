@@ -28,7 +28,8 @@ class FinishCollaborationNotificationPublication(
         currentCoroutineContext().ensureActive()
         if (
             !validCollaborationNotificationPublication(expected) ||
-                state == CollaborationNotificationPublicationState.Prepared
+                state == CollaborationNotificationPublicationState.Prepared ||
+                state == CollaborationNotificationPublicationState.Dismissing
         )
             return notificationPublicationFailure(FailureKind.Validation)
         if (!execution.tryLock()) return notificationPublicationFailure(FailureKind.Unavailable)

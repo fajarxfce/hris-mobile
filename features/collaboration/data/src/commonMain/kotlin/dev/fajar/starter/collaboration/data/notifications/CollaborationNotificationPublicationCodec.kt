@@ -139,7 +139,7 @@ internal class CollaborationNotificationPublicationCodec(
         )
         require(id(body.target.companyId, body.target.conversationId) == value.id)
         val storedReference = active.find { it.id == value.id }
-        if (body.state.isActivePublication()) require(storedReference == reference(value))
+        if (body.state.isPendingPublication()) require(storedReference == reference(value))
         else require(storedReference == null)
         return value
     }
@@ -183,7 +183,7 @@ internal class CollaborationNotificationPublicationCodec(
             )
             require(
                 enumValueOf<CollaborationNotificationPublicationState>(entry.state)
-                    .isActivePublication()
+                    .isPendingPublication()
             )
         }
     }

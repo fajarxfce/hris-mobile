@@ -12,6 +12,13 @@ adapter acknowledged submission; it does not mean that the user saw or read the 
 Dismissed and Cancelled records retain only a source watermark and target identity.
 They contain neither preview text nor action tokens.
 
+Dismissing is an additional durable cleanup intent, also without previews or action
+tokens. It stays in the bounded index until exact native cleanup finishes Dismissed;
+the issuer cannot republish its original event. The general recovery page includes
+it, while Prepared-only discovery does not. This keeps interrupted user dismissals
+recoverable without treating them as displayable records. See
+[action disposition](collaboration-notification-action-disposition.md).
+
 ## Atomic updates and recovery
 
 An account partition under `collaboration-history/notification-publications` contains
@@ -22,7 +29,7 @@ updates the document and replaces the active index. There is no two-partition in
 update window. Unrelated conversation updates do not invalidate an unchanged expected
 document; the repository rereads the current checkpoint for each operation.
 
-The active index permits at most 64 records. Capacity exhaustion rejects a new active
+The pending index permits at most64 Prepared, Published or Dismissing records. Capacity exhaustion rejects a new active
 record without evicting another conversation. Inactive watermarks remain individually
 addressable but do not consume active capacity. Discovery pages contain at most four
 active records, ordered by opaque document ID, and default to Prepared records only.

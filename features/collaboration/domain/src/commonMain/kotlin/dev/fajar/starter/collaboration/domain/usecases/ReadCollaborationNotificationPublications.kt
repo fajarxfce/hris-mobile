@@ -30,6 +30,41 @@ class ReadCollaborationNotificationPublications(
             ?: notificationPublicationFailure(FailureKind.Unavailable)
     }
 
+    /** Exact cleanup lookup only. Native action authentication remains the caller's policy. */
+    suspend operator fun invoke(
+        parent: CollaborationNativeParent,
+        target: CollaborationNotificationActionTarget,
+    ): AppResult<CollaborationNotificationPublicationReference?> {
+        currentCoroutineContext().ensureActive()
+        if (!validCollaborationNotificationTarget(target))
+            return notificationPublicationFailure(FailureKind.Validation)
+        return withTimeoutOrNull(8_000) {
+            sessions.guardPushParent(server, build, parent).let {
+                if (it is AppResult.Failed) return@withTimeoutOrNull it
+            }
+            val access =
+                CollaborationRecoveryAccess(parent.sessionId, parent.audience, parent.accountId)
+            val found = journal.read(access, target.companyId, target.conversationId)
+            sessions.guardPushParent(server, build, parent).let {
+                if (it is AppResult.Failed) return@withTimeoutOrNull it
+            }
+            if (found is AppResult.Failed) return@withTimeoutOrNull found
+            val current =
+                (found as AppResult.Success).value
+                    ?: return@withTimeoutOrNull AppResult.Success(null)
+            if (
+                !validCollaborationNotificationPublication(current) ||
+                    current.body.parent.accountId != parent.accountId ||
+                    current.body.parent.audience != parent.audience
+            )
+                return@withTimeoutOrNull notificationPublicationFailure(FailureKind.Unavailable)
+            if (current.body.target != target) return@withTimeoutOrNull AppResult.Success(null)
+            if (current.body.parent != parent)
+                return@withTimeoutOrNull notificationPublicationFailure(FailureKind.Conflict)
+            AppResult.Success(current.cleanupReference())
+        } ?: notificationPublicationFailure(FailureKind.Timeout)
+    }
+
     private suspend fun read(
         parent: CollaborationNativeParent,
         after: String?,
@@ -60,7 +95,7 @@ class ReadCollaborationNotificationPublications(
         if (
             entries.any {
                 !validCollaborationNotificationPublication(it) ||
-                    !it.body.state.isActivePublication() ||
+                    !it.body.state.isPendingPublication() ||
                     it.body.parent.accountId != parent.accountId ||
                     it.body.parent.audience != parent.audience
             }

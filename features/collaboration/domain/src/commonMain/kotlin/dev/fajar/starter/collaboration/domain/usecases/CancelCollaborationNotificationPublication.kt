@@ -25,17 +25,33 @@ class CancelCollaborationNotificationPublication(
         parent: CollaborationNativeParent,
         expected: CollaborationNotificationPublicationReference,
     ): AppResult<CollaborationNotificationPublicationSettlement> {
+        return change(parent, expected, dismiss = false)
+    }
+
+    /** Persist the user's dismissal before native removal; startup must discover this intent. */
+    suspend fun requestDismissal(
+        parent: CollaborationNativeParent,
+        expected: CollaborationNotificationPublicationReference,
+    ): AppResult<CollaborationNotificationPublicationSettlement> =
+        change(parent, expected, dismiss = true)
+
+    private suspend fun change(
+        parent: CollaborationNativeParent,
+        expected: CollaborationNotificationPublicationReference,
+        dismiss: Boolean,
+    ): AppResult<CollaborationNotificationPublicationSettlement> {
         currentCoroutineContext().ensureActive()
         if (!validCollaborationNotificationReference(expected))
             return notificationPublicationFailure(FailureKind.Validation)
         if (
             expected.parent.accountId != parent.accountId ||
-                expected.parent.audience != parent.audience
+                expected.parent.audience != parent.audience ||
+                (dismiss && expected.parent != parent)
         )
             return notificationPublicationFailure(FailureKind.Unauthorized)
         if (!execution.tryLock()) return notificationPublicationFailure(FailureKind.Unavailable)
         return try {
-            withTimeoutOrNull(8_000) { cancel(parent, expected) }
+            withTimeoutOrNull(8_000) { cancel(parent, expected, dismiss) }
                 ?: notificationPublicationFailure(FailureKind.Unavailable)
         } finally {
             execution.unlock()
@@ -45,6 +61,7 @@ class CancelCollaborationNotificationPublication(
     private suspend fun cancel(
         parent: CollaborationNativeParent,
         expected: CollaborationNotificationPublicationReference,
+        dismiss: Boolean,
     ): AppResult<CollaborationNotificationPublicationSettlement> {
         sessions.guardPushParent(server, build, parent).let {
             if (it is AppResult.Failed) return it
@@ -62,11 +79,22 @@ class CancelCollaborationNotificationPublication(
         if (current?.cleanupReference() != expected)
             return AppResult.Success(CollaborationNotificationPublicationSettlement.Contended)
         requireNotNull(current)
-        if (!current.body.state.isActivePublication())
+        if (
+            !current.body.state.isPendingPublication() ||
+                (dismiss &&
+                    current.body.state == CollaborationNotificationPublicationState.Dismissing)
+        )
             return AppResult.Success(current.cleanupReceipt())
         val desired =
             current.body.copy(
-                state = CollaborationNotificationPublicationState.Cancelled,
+                state =
+                    when {
+                        dismiss -> CollaborationNotificationPublicationState.Dismissing
+                        current.body.state ==
+                            CollaborationNotificationPublicationState.Dismissing ->
+                            CollaborationNotificationPublicationState.Dismissed
+                        else -> CollaborationNotificationPublicationState.Cancelled
+                    },
                 message = null,
                 actions = null,
             )

@@ -4,6 +4,8 @@ package dev.fajar.starter.collaboration.domain.entities
 enum class CollaborationNotificationPublicationState {
     Prepared,
     Published,
+    /** Durable user dismissal awaiting exact native removal; contains no preview or actions. */
+    Dismissing,
     Dismissed,
     Cancelled,
 }

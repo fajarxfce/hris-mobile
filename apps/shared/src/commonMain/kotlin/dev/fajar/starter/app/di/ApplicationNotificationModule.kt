@@ -1,5 +1,6 @@
 package dev.fajar.starter.app.di
 
+import dev.fajar.starter.app.notifications.CollaborationNotificationActions
 import dev.fajar.starter.app.notifications.CollaborationNotificationCommands
 import dev.fajar.starter.app.notifications.CollaborationNotificationCopy
 import dev.fajar.starter.app.notifications.CollaborationNotificationDelivery
@@ -53,6 +54,9 @@ fun applicationNotificationModule() = module {
         )
     }
     single { CollaborationNotificationCommands(get(), get(), get(), get(), get()) }
+    factory { (owner: CollaborationNotificationSurfaceOwner) ->
+        CollaborationNotificationActions(owner, get(), get(), get(), get())
+    }
     single {
         CollaborationNotificationReplies(get(), get(), get(), get(), get(), get(), get(), get())
     }

@@ -19,6 +19,83 @@ abstract class CollaborationNotificationPublicationStorageContract {
     protected abstract fun databaseOwner(): CollaborationHistoryDatabaseOwner
 
     @Test
+    fun dismissalIntentReopensInCleanupDiscoveryWithoutPreviewOrPreparedPublication() =
+        withDatabase { f ->
+            val original = f.store(null, f.body())
+            val body =
+                original.body.copy(
+                    state = CollaborationNotificationPublicationState.Dismissing,
+                    message = null,
+                    actions = null,
+                )
+            val pending = f.store(original, body)
+            f.reopen()
+            assertEquals(pending, f.read(body))
+            assertEquals(
+                listOf(pending),
+                expect(f.journal().page(f.access(), preparedOnly = false)).publications,
+            )
+            assertTrue(
+                expect(f.journal().page(f.access(), preparedOnly = true)).publications.isEmpty()
+            )
+            assertIs<AppResult.Failed>(
+                f.journal()
+                    .replace(
+                        f.access(),
+                        pending,
+                        original.body.copy(
+                            state = CollaborationNotificationPublicationState.Dismissing
+                        ),
+                    )
+            )
+            val completed = f.store(pending, body.inactive())
+            f.reopen()
+            assertEquals(completed, f.read(body))
+            assertTrue(
+                expect(f.journal().page(f.access(), preparedOnly = false)).publications.isEmpty()
+            )
+        }
+
+    @Test
+    fun aLostDismissalWriteResponseRetainsTheExactIndexedCleanupIntent() = withDatabase { f ->
+        val original = f.store(null, f.body())
+        val body =
+            original.body.copy(
+                state = CollaborationNotificationPublicationState.Dismissing,
+                message = null,
+                actions = null,
+            )
+        val actual = f.database.replicas
+        val lost =
+            object : ReplicaStore by actual {
+                override suspend fun commit(
+                    handle: ReplicaHandle,
+                    expectedRevision: Long,
+                    checkpoint: String,
+                    documents: List<ReplicaDocument>,
+                    publish: Boolean,
+                ): Boolean {
+                    assertTrue(
+                        actual.commit(handle, expectedRevision, checkpoint, documents, publish)
+                    )
+                    error("Simulated lost response")
+                }
+            }
+        assertIs<AppResult.Failed>(f.journal(lost).replace(f.access(), original, body))
+        f.reopen()
+        val pending = f.read(body)!!
+        assertEquals(body, pending.body)
+        assertEquals(
+            listOf(pending),
+            expect(f.journal().page(f.access(), preparedOnly = false)).publications,
+        )
+        assertEquals(
+            AppResult.Success(CollaborationNotificationPublicationWrite.Contended),
+            f.journal().replace(f.access(), original, body),
+        )
+    }
+
+    @Test
     fun exactPreviewAndAllActionEnvelopesReopenWithoutPlaintextOrHistoryMutation() =
         withDatabase { f ->
             val history = f.raw()
@@ -137,7 +214,22 @@ abstract class CollaborationNotificationPublicationStorageContract {
                 f.journal().replace(f.access(), null, extra),
             )
             assertEquals(before, f.rawPublications())
-            val inactive = f.store(all.first(), all.first().body.inactive())
+            val dismissing =
+                f.store(
+                    all.first(),
+                    all.first()
+                        .body
+                        .copy(
+                            state = CollaborationNotificationPublicationState.Dismissing,
+                            message = null,
+                            actions = null,
+                        ),
+                )
+            assertEquals(
+                AppResult.Success(CollaborationNotificationPublicationWrite.CapacityExceeded),
+                f.journal().replace(f.access(), null, extra),
+            )
+            val inactive = f.store(dismissing, dismissing.body.inactive())
             val accepted = f.store(null, extra)
             f.reopen()
             assertEquals(inactive, f.read(inactive.body))

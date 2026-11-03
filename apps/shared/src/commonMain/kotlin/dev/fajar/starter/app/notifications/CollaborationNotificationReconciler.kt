@@ -23,11 +23,13 @@ class CollaborationNotificationReconciler(
         currentCoroutineContext().ensureActive()
         if (
             !validCollaborationNotificationReference(reference) ||
-                !reference.state.isActivePublication() ||
+                !reference.state.isPendingPublication() ||
                 reference.parent.accountId != parent.accountId ||
                 reference.parent.audience != parent.audience
         )
             return surfaceFailure(FailureKind.Validation)
+        if (reference.state == CollaborationNotificationPublicationState.Dismissing)
+            return dispose(parent, reference, retire = true)
         val target = reference.target
         val result =
             sourceFailure?.let { AppResult.Failed(it) }
@@ -60,6 +62,15 @@ class CollaborationNotificationReconciler(
                 is AppResult.Success ->
                     result.value == CollaborationNotificationPublicationResult.Suppressed
             }
+        return dispose(parent, reference, retire)
+    }
+
+    private suspend fun dispose(
+        parent: CollaborationNativeParent,
+        reference: CollaborationNotificationPublicationReference,
+        retire: Boolean,
+    ): AppResult<CollaborationNotificationReconciliationResult> {
+        val target = reference.target
         return owner.withOwner(parent) {
             // Remove/register the native obligation first. Cancellation during journal I/O must
             // still join exact native compensation; the two services are not one transaction.

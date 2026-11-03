@@ -351,7 +351,7 @@ class CollaborationNotificationProcess(
                             (items.isEmpty() || page.nextAfter != ids.last())) ||
                         items.any {
                             !validCollaborationNotificationReference(it) ||
-                                !it.state.isActivePublication() ||
+                                !it.state.isPendingPublication() ||
                                 it.parent.accountId != parent.accountId ||
                                 it.parent.audience != parent.audience
                         }

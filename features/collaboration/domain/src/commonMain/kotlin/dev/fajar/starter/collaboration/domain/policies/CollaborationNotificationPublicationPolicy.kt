@@ -9,6 +9,10 @@ fun CollaborationNotificationPublicationState.isActivePublication() =
     this == CollaborationNotificationPublicationState.Prepared ||
         this == CollaborationNotificationPublicationState.Published
 
+/** Active display or a durable cleanup intent that must remain discoverable after restart. */
+fun CollaborationNotificationPublicationState.isPendingPublication() =
+    isActivePublication() || this == CollaborationNotificationPublicationState.Dismissing
+
 fun validCollaborationNotificationPublicationId(value: String) = publicationId.matches(value)
 
 fun validCollaborationNotificationPublication(

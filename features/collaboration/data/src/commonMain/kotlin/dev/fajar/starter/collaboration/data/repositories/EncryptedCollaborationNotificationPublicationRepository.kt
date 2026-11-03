@@ -64,7 +64,7 @@ class EncryptedCollaborationNotificationPublicationRepository(
             if (previous != expected) return@use CollaborationNotificationPublicationWrite.Contended
             val remaining = active.filter { it.id != id }
             if (
-                body.state.isActivePublication() &&
+                body.state.isPendingPublication() &&
                     remaining.size >= COLLABORATION_NOTIFICATION_PUBLICATION_CAPACITY
             )
                 return@use if (current(codec, raw))
@@ -80,7 +80,7 @@ class EncryptedCollaborationNotificationPublicationRepository(
                 )
             val references =
                 remaining +
-                    if (body.state.isActivePublication())
+                    if (body.state.isPendingPublication())
                         listOf(CollaborationNotificationPublicationCodec.reference(value))
                     else emptyList()
             val document = codec.publication(value)

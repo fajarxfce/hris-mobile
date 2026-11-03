@@ -1,7 +1,7 @@
 package dev.fajar.starter.app.notifications
 
 import dev.fajar.starter.collaboration.domain.entities.*
-import dev.fajar.starter.collaboration.domain.policies.isActivePublication
+import dev.fajar.starter.collaboration.domain.policies.isPendingPublication
 import dev.fajar.starter.collaboration.domain.usecases.*
 import dev.fajar.starter.common.result.*
 import dev.fajar.starter.notifications.data.dto.*
@@ -101,7 +101,7 @@ class CollaborationNotificationPublisher(
         if (expected != null && plan.previous != expected)
             return AppResult.Success(CollaborationNotificationPublicationResult.Unchanged)
         val previous = plan.previous
-        if (previous != null && previous.state.isActivePublication()) {
+        if (previous != null && previous.state.isPendingPublication()) {
             val removed =
                 remove(
                     ActionNotificationReference(
@@ -126,7 +126,7 @@ class CollaborationNotificationPublisher(
         validate(publication).let { if (it is AppResult.Failed) return it }
         if (!focus.current(focused)) return surfaceFailure(FailureKind.Conflict)
         val previous = ready.previous
-        if (previous != null && previous.state.isActivePublication()) {
+        if (previous != null && previous.state.isPendingPublication()) {
             val removed =
                 remove(
                     ActionNotificationReference(
