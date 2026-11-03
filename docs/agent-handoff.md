@@ -1,5 +1,36 @@
 # Agent continuation — HRIS Mobile
 
+## Reviewed-send implementation in progress; host Apple accepted — 3 November 2026
+
+PHONE24 remains installed, source418c7ef6; next meaningful build25+. Do not reinstall24
+or launch/drive phone UI. Platform runtime304/schema116 unchanged; chat push OFF.
+
+Apple host41639434001 ACCEPTED: artifact13233721273, SHA256
+69012858c98e697c8ac0e28f40e41569b4458f75ca28e70da892552f9333af1d;
+1,079 simulator cases/122 suites,376 source digests verified; compile437s/tests60s/
+full Xcode720s. This covers418c7ef6, NOT the following working-tree changes.
+Native41639264778 still running; fetch/audit scripts are ready under
+.work/chat-native-host-hosted-2026-11-03. Inspect all three hosted PNGs after audit.
+
+UNVALIDATED WORKING TREE: edited notification reply resolution and encrypted working
+drafts. Domain now separates draft from immutable confirmed operation ID/body/time;
+confirmed current-parent consent precedes original permanent cancellation and edited
+queue insertion. Resume handles resolution before old completion; confirmation clears
+held review, recovery never silently reapproves another family. Discard supports explicit
+saved-edit-only mode when original already started. Actual MVI/page/EN+ID bindings added;
+autosave predecessor joins and full parent observation are being checked. No compilation,
+format, tests, screenshots or acceptance yet. Scripts .work/chat-reviewed-send-2026-11-03
+are supplementary; finish implementation and meaningful tests, do not ship this WIP.
+
+NEXT fix/update fixtures for new required use-case dependencies, add domain crash/fence/
+reapproval tests, real encrypted SQLite/IndexedDB schema1 compatibility/max bounds/CAS,
+actual-Koin app recovery and MVI keyboard/disposal tests. Review draft status and late
+observation handling. Then focused/root xvfb check, Wasm/Android/lint, visually inspect
+screenshots, commit/push accepted source, hosted Apple/Native and validated release25
+install-only after notifying user. One heavy local job at a time. No heavy job active now.
+All54 communications PRD groups still OPEN; voice/video/meet UI absent. Continue long run.
+
+
 ## Phone24 installed; routing hosted gates accepted — 3 November 2026
 
 **PHONE24 IS INSTALLED. Do not reinstall it; next meaningful product25+.**
