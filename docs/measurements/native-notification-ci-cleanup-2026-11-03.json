@@ -1,0 +1,200 @@
+{
+  "date": "2026-11-03",
+  "baseCommit": "11cba6157151ca6a837f452e94d090e61d730351",
+  "sourceSha256": {
+    "tool/check_native_notifications.py": "9310c58629126bf59150e74790210e9be6d942db60cfb05dbb059dc6c7a58f9a",
+    "tool/test_native_notifications.py": "304b83422fe6872fb80cd28bf48baa95aad37da6bfa19b8c740883a13c9de0ec",
+    ".github/workflows/collaboration-hris.yml": "76228cb9158df9af53bc3949cdc73ce49a45a45c3238df1801fcba4e672040c0"
+  },
+  "failedHosted": {
+    "run": "https://github.com/fajarxfce/hris-mobile/actions/runs/41550122006",
+    "headSha": "7cf6bd72ffdfe80645938d4c801d827a2a48b6e7",
+    "artifactId": 13193192595,
+    "artifactSha256": "85bc739ca0fc77d2b7c47c2405d5b63ff2b90fa44122dfa35069a411b31b4bd5",
+    "githubArchiveDigestVerified": true,
+    "rawProbe": {
+      "serial": "emulator-5560",
+      "sdk": 35,
+      "apkSha256": "f3cf2a021265d67a839ed91481665254e0f5812ee4442d666c630d1b1447443b",
+      "scenarios": [
+        {
+          "name": "native-notification-denied",
+          "seconds": 4.041,
+          "complete": true,
+          "sdk": 35,
+          "cases": [
+            "permission-denial-does-not-submit"
+          ],
+          "cleanedUp": true,
+          "scope": "Raw Android IPC only; no HRIS admission, durable reply, OS-death replay or application wiring"
+        },
+        {
+          "name": "native-notification",
+          "seconds": 2.537,
+          "complete": true,
+          "sdk": 35,
+          "cases": [
+            "actual-private-display-and-immutable-public-version",
+            "same-render-replay-updates-stable-card",
+            "stale-removal-preserves-new-render-and-new-render-may-alert",
+            "same-render-reissue-keeps-original-immutable-envelope",
+            "real-remote-input-and-old-render-envelope-remain-distinct",
+            "immutable-actions-ignore-injected-remote-input",
+            "colliding-java-hashes-cannot-retarget-pending-intents",
+            "missing-oversized-or-cross-component-input-is-rejected",
+            "namespace-cleanup-preserves-unrelated-application-notifications",
+            "disabled-channel-is-distinct-from-submitted"
+          ],
+          "cleanedUp": true,
+          "scope": "Raw Android IPC only; no HRIS admission, durable reply, OS-death replay or application wiring"
+        }
+      ],
+      "complete": true,
+      "fixtureDataCleared": true,
+      "seconds": 15.788
+    },
+    "interopCounts": {
+      "tests": 5,
+      "failures": 5,
+      "errors": 0,
+      "skipped": 0,
+      "suites": 3
+    },
+    "diagnosis": "Raw probe succeeds but pm clear leaves proof package installed. Unchanged Platform NativeDevice.prepare refuses an existing package before assuming ownership; all five following cases fail before instrumentation or gateway calls. Preserve that refusal, release only the raw driver owned installation."
+  },
+  "unit": {
+    "command": [
+      "python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tool",
+      "-p",
+      "test_native_notifications.py"
+    ],
+    "tests": 8,
+    "failures": 0,
+    "errors": 0,
+    "seconds": 0.006,
+    "exitCode": 0,
+    "source": "Initial observed terminal run after applying driver and workflow"
+  },
+  "native": {
+    "serial": "emulator-5562",
+    "scenarios": [
+      {
+        "name": "native-notification-denied",
+        "seconds": 1.462,
+        "complete": true,
+        "sdk": 35,
+        "cases": [
+          "permission-denial-does-not-submit"
+        ],
+        "cleanedUp": true,
+        "scope": "Raw Android IPC only; no HRIS admission, durable reply, OS-death replay or application wiring"
+      },
+      {
+        "name": "native-notification",
+        "seconds": 1.292,
+        "complete": true,
+        "sdk": 35,
+        "cases": [
+          "actual-private-display-and-immutable-public-version",
+          "same-render-replay-updates-stable-card",
+          "stale-removal-preserves-new-render-and-new-render-may-alert",
+          "same-render-reissue-keeps-original-immutable-envelope",
+          "real-remote-input-and-old-render-envelope-remain-distinct",
+          "immutable-actions-ignore-injected-remote-input",
+          "colliding-java-hashes-cannot-retarget-pending-intents",
+          "missing-oversized-or-cross-component-input-is-rejected",
+          "namespace-cleanup-preserves-unrelated-application-notifications",
+          "disabled-channel-is-distinct-from-submitted",
+          "newer-inventory-fences-stale-removal-while-os-card-is-absent",
+          "opaque-no-backup-inventory-reopens-and-clears-without-account-data",
+          "latest-owned-inventory-can-cancel-its-older-visible-predecessor",
+          "full-opaque-inventory-does-not-evict-or-submit",
+          "corrupt-inventory-withholds-new-posts-and-cleans-visible-cards"
+        ],
+        "cleanedUp": true,
+        "scope": "Raw Android IPC only; no HRIS admission, durable reply, OS-death replay or application wiring"
+      }
+    ],
+    "sdk": 35,
+    "apkSha256": "35f155670f64c872f9a52bed1ea6d1972a7c83f58a15f3654f82974a63c39678",
+    "complete": true,
+    "fixtureUninstalled": true,
+    "fixtureDataCleared": true,
+    "seconds": 6.279
+  },
+  "proofApk": {
+    "path": "apps/collaboration-proof/build/outputs/apk/debug/collaboration-proof-debug.apk",
+    "bytes": 343275325,
+    "sha256": "35f155670f64c872f9a52bed1ea6d1972a7c83f58a15f3654f82974a63c39678",
+    "source": "11cba6157151ca6a837f452e94d090e61d730351"
+  },
+  "legacyOwnedCleanup": {
+    "serial": "emulator-5562",
+    "package": "dev.fajar.hris.collaboration.proof",
+    "previousOwnedApkSha256": "c260118c936f0b56c0c6df44a1363f61114b58131dd0b885376f9d1ec063ac0f",
+    "uninstalled": true,
+    "absent": true
+  },
+  "nextPlatformDriver": {
+    "serial": "emulator-5562",
+    "package": "dev.fajar.hris.collaboration.proof",
+    "scope": "Actual unchanged Platform NativeDevice ownership/installation/cleanup only; no SDK/WorkManager interop or provider call",
+    "prepared": true,
+    "apkSha256": "35f155670f64c872f9a52bed1ea6d1972a7c83f58a15f3654f82974a63c39678",
+    "cleanup": true,
+    "packageAbsent": true,
+    "seconds": 2.704,
+    "platformDriverSha256": "8c4fc2c6624dae79b5894cf1a24ed0f9f5f7743dd72bbed130c4a4a6b9780999"
+  },
+  "emulator": {
+    "start": {
+      "pid": 2060758,
+      "serial": "emulator-5562",
+      "command": [
+        "/home/fajar/Android/Sdk/emulator/emulator",
+        "-avd",
+        "hris-mobile-dev",
+        "-port",
+        "5562",
+        "-data",
+        "/home/fajar/hris/hris-mobile/.work/startup-fix-2026-11-01/clean-userdata.img",
+        "-no-window",
+        "-no-snapshot",
+        "-no-audio",
+        "-no-boot-anim",
+        "-gpu",
+        "swiftshader_indirect",
+        "-memory",
+        "1536",
+        "-cores",
+        "2",
+        "-feature",
+        "-Vulkan"
+      ],
+      "startTicks": "134300830",
+      "bootSeconds": 24.166
+    },
+    "stop": {
+      "pid": 2060758,
+      "serial": "emulator-5562",
+      "stopped": true,
+      "signalSent": true,
+      "transportAbsent": true,
+      "seconds": 1.604
+    }
+  },
+  "limitations": [
+    "Driver now verifies dedicated AVD/qemu/boot/API, debug proof APK identity and absent package before install. It never uses replacement/downgrade. Caller must exclusively own this emulator throughout; no user phone may be targeted.",
+    "Uncertain installation is owned for cleanup. Force-stop failure does not skip uninstall; final package absence is checked and cleanup failure fails the run. Eight mock command-boundary cases include preexisting/other AVD/physical/wrong APK refusal, lost installation response and cleanup failures.",
+    "Actual API35 raw proof passes16 behavior groups/two scenarios, then the unchanged Platform NativeDevice.prepare installs successfully and its cleanup uninstalls. This is exact sequential ownership preflight only, not the full SDK/WorkManager/provider suite. Hosted rerun remains required.",
+    "This Kotlin APK is the previously full-checked publisher11cba615 source. Python/workflow-only fix does not rerun Gradle. Opaque raw pending-index native cases remain synthetic absence/predecessor/capacity setups, not queue-stall or notification-input OS-death proof.",
+    "Historical leftover on owned local emulator was removed only after its installed SHA256 matched the earlier successfully tested c260118c APK. Other emulators/user phone untouched; owned5562 stopped and package absent.",
+    "Consolidated Apple41554262782 at11cba615/184 source paths is running. It is separate from this Python/workflow-only change. Follow existing audit helper after actual success; no duplicate dispatch/cancellation.",
+    "No product APK release/install, native chat activation or platform deployment. Phone19/sourcec0 remains installed; chat push OFF and54 PRD groups open. Continue admission/invalidation/callback/review after CI repair."
+  ]
+}

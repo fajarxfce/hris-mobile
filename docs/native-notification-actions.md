@@ -72,8 +72,11 @@ The subsequent pending-inventory probe adds real-file adapter reopen, absent-car
 removal, cancellation of an older visible predecessor, capacity and corruption checks.
 Absence/predecessor cases use explicit fixture OS calls; capacity uses a synthetic
 64-reference file. These are not OS queue-stall, killed-process or power-cut injections.
-The driver requires an explicit emulator serial plus qemu/boot checks before installation;
-it clears only the separately packaged fixture's data, and never targets the user phone.
+The driver requires an explicit emulator serial, dedicated AVD, qemu/boot/API checks,
+verified debug proof APK identity and an absent proof package before installation. It
+never replaces existing data. It uninstalls its owned fixture and verifies package
+absence in finally, including after uncertain installation; force-stop failure still
+attempts uninstall. It never targets the user phone.
 
 `tool/check_native_notifications.py` also runs before the existing five SDK/WorkManager
 interop cases in hosted native HRIS CI. Raw notification IPC proof does not replace
@@ -81,6 +84,11 @@ those tests, or prove notification-specific retained-input process death. See
 [recorded evidence](measurements/native-notification-actions-2026-11-02.json).
 The [inventory increment](measurements/native-notification-pending-2026-11-03.json)
 records16 native behavior groups across two scenarios, including the five new groups.
+The [sequential cleanup repair](measurements/native-notification-ci-cleanup-2026-11-03.json)
+records eight driver tests and a subsequent real Platform-driver ownership preflight.
+This corrects the earlier raw driver's pm-clear-only cleanup, which left a package that
+the following SDK fixture correctly refused to replace. Full hosted SDK/WorkManager
+acceptance remains separately tracked.
 
 The [application publisher](collaboration-notification-publisher.md) now coordinates the
 journal and a serialized lease, tested with actual encrypted storage and a fake OS.

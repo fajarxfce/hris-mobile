@@ -12,6 +12,7 @@ on:
       - gradle/libs.versions.toml
       - gradle/verification-metadata.xml
       - tool/check_native_notifications.py
+      - tool/test_native_notifications.py
       - .github/workflows/collaboration-hris.yml
   pull_request:
     paths:
@@ -22,6 +23,7 @@ on:
       - gradle/libs.versions.toml
       - gradle/verification-metadata.xml
       - tool/check_native_notifications.py
+      - tool/test_native_notifications.py
       - .github/workflows/collaboration-hris.yml
 
 permissions:
@@ -57,7 +59,9 @@ jobs:
       - run: sdkmanager 'platforms;android-36' 'build-tools;36.0.0'
       - name: Build isolated Android SDK fixture before starting the emulator
         working-directory: mobile
-        run: ./gradlew --no-daemon --no-parallel --max-workers=1 :features:collaboration:data:testAndroidHostTest :apps:collaboration-proof:testDebugUnitTest :apps:collaboration-proof:assembleDebug :apps:collaboration-proof:lintDebug
+        run: |
+          python3 -m unittest discover -s tool -p 'test_native_notifications.py'
+          ./gradlew --no-daemon --no-parallel --max-workers=1 :features:collaboration:data:testAndroidHostTest :apps:collaboration-proof:testDebugUnitTest :apps:collaboration-proof:assembleDebug :apps:collaboration-proof:lintDebug
       - name: Compile HRIS fixture and verify driver cleanup
         working-directory: platform
         run: |

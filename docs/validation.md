@@ -1,5 +1,19 @@
 # Validation
 
+## Sequential native fixture cleanup — 3 November 2026
+
+The raw Android driver passes8 ownership/cleanup tests and16 actual API35 notification
+groups in6.279s. It uninstalls its owned fixture; the unchanged following Platform driver
+then passes actual prepare/install/cleanup in2.704s. Package absence and owned-emulator
+shutdown are verified. [Evidence](measurements/native-notification-ci-cleanup-2026-11-03.json)
+preserves the preceding hosted preflight failure and distinguishes this short ownership
+proof from the full SDK/WorkManager suite, whose corrected hosted run remains pending.
+No new Gradle run or product installation for this Python/workflow-only repair.
+
+Consolidated full [Apple41554262782](measurements/chat-notification-publisher-apple-2026-11-03.json)
+at publisher11cba615 is running with184 verified source paths; do not treat it as accepted
+until its actual artifacts and full Xcode result are audited.
+
 ## Admitted application notification publisher — 3 November 2026
 
 The [publisher](collaboration-notification-publisher.md) passes27 focused cases, including

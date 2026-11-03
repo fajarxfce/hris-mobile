@@ -1,5 +1,55 @@
 # Agent continuation — HRIS Mobile
 
+## Native fixture ownership repair accepted locally; continue host invalidation and CI audit
+
+The raw notification driver now verifies dedicated AVD/qemu/boot/API, debug proof APK
+identity and absent package before installation. It uses no replace/downgrade flags,
+owns uncertain installation, and uninstalls/verifies absence in finally. A force-stop
+failure cannot skip uninstall, and any cleanup failure fails the run. The following
+Platform driver's refusal to replace an existing package remains unchanged. Eight new
+Python command-boundary tests pass and now run in hosted native CI before Gradle.
+[Evidence](measurements/native-notification-ci-cleanup-2026-11-03.json).
+
+Actual local API35 raw proof passes16 groups/two scenarios in6.279s and uninstalls.
+Immediately afterward the unchanged Platform NativeDevice.prepare installs successfully,
+then cleans/uninstalls in2.704s; package absence verified. This is the exact sequential
+ownership boundary, not the full SDK/WorkManager/provider suite. APK343275325 bytes SHA256
+35f155670f64c872f9a52bed1ea6d1972a7c83f58a15f3654f82974a63c39678,
+from fully checked publisher11cba615. No new Gradle run for this Python/workflow-only fix.
+Historical local leftover was uninstalled only after matching prior owned c260118c APK.
+Owned emulator5562/PID2060758 boot24.166s, stopped1.604s; no local heavy job remains.
+
+The preceding failed hosted7cf/41550122006 is preserved: raw11 groups pass15.788s,
+then all five native preflights fail. Artifact13193192595 ZIP
+85bc739ca0fc77d2b7c47c2405d5b63ff2b90fa44122dfa35069a411b31b4bd5
+matches GitHub digest. No instrumentation/gateway execution occurred in those five cases.
+Follow the corrected hosted run after push. Older e4/41552877271 and pending
+11c/41554252506 still contain the diagnosed driver bug; if cancelled/superseded, record
+that reason explicitly. Do not repeat long local provider-emulator hang experiments.
+
+Full Apple41554262782 was dispatched ONCE at2026-11-03T00:38:10Z for
+11cba6157151ca6a837f452e94d090e61d730351,184 verified source paths. It is running, not
+accepted. [Pending evidence](measurements/chat-notification-publisher-apple-2026-11-03.json).
+Follow .work/chat-notification-publisher-apple-2026-11-03/audit.py after actual success;
+never cancel/redispatch. Physical iPhone waived; full Xcode required. It includes the
+publisher but excludes this Python/workflow fix, which does not change app code.
+
+NEXT continue ongoing all-company/read/settings/history invalidation, focused-thread
+scope and bounded opaque denied-card retirement, then old-family/pre-retention encrypted
+reply review and Android/iOS callbacks. The admitted publisher is a tested Koin factory;
+no native host starts it yet. Follow [publisher contract](collaboration-notification-publisher.md)
+and [integration plan](collaboration-notification-publication-plan.md). Source checkpoints
+must exclude publication-ACK writes to avoid feedback. A source-stamp/privacy change may
+need silent rerender; read/mute/redaction/dismissal needs exact retirement. Unrelated
+suppressed candidates must never clear a different card. Publisher and cleanup .txt
+drafts are APPLIED/STALE; follow-through.txt remains design only.
+
+Phone19/sourcec0 remains installed. Next meaningful product release>19: notify immediately
+before explicit10.77.77.3:5555 install-only, preserve signer/data, never drive its UI.
+Live304/schema116/chat push OFF and all54 PRD groups open. No Starter port until
+integrated Mobile proof. Continue long run and push each atomic commit. Older entries
+below are historical.
+
 ## Admitted publisher accepted; fix sequential native fixture cleanup, then host integration
 
 The parameterized Koin publisher factory now coordinates Prepare/Issue/Validate/native
