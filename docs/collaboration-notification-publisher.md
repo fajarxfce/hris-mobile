@@ -65,3 +65,8 @@ include new-original versus replay/native-family alert behavior.
 these tests from native SDK IPC. Android/iOS host binding, real notification-input process
 death, old-family/pre-retention review, foreground scope and all-company invalidation
 remain required. No user-phone installation or full communications acceptance is implied.
+
+The publisher now forwards an optional exact publication reference to issuance for
+[finite reconciliation](collaboration-notification-reconciliation.md). A changed/missing
+reference yields Unchanged before new envelopes or mutation; reconciliation treats it
+as Contended without native cleanup, including ACK-only revision changes.

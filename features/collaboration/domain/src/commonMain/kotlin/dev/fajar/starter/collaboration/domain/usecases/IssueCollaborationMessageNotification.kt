@@ -50,12 +50,23 @@ class IssueCollaborationMessageNotification(
     suspend operator fun invoke(
         scope: CollaborationLocalScope.Captured,
         message: CollaborationMessageNotification,
+        /** Conditional reconciliation must not publish after its discovered reference changes. */
+        expected: CollaborationNotificationPublicationReference? = null,
     ): AppResult<CollaborationNotificationIssuance> {
         currentCoroutineContext().ensureActive()
         if (
             scope.nativeSessionId == null ||
                 scope.access != message.access ||
                 !validCollaborationNotificationMessage(message)
+        )
+            return notificationPublicationFailure(FailureKind.Validation)
+        if (
+            expected != null &&
+                (!validCollaborationNotificationReference(expected) ||
+                    expected.target.companyId != message.access.companyId ||
+                    expected.target.conversationId != message.conversationId ||
+                    expected.parent.accountId != message.access.accountId ||
+                    expected.parent.audience != message.access.audience)
         )
             return notificationPublicationFailure(FailureKind.Validation)
         if (!execution.tryLock()) return notificationPublicationFailure(FailureKind.Unavailable)
@@ -68,7 +79,7 @@ class IssueCollaborationMessageNotification(
                     return@withTimeoutOrNull notificationPublicationFailure(
                         FailureKind.Unauthorized
                     )
-                issue(parent, message)
+                issue(parent, message, expected)
             } ?: notificationPublicationFailure(FailureKind.Unavailable)
         } finally {
             execution.unlock()
@@ -78,6 +89,7 @@ class IssueCollaborationMessageNotification(
     private suspend fun issue(
         parent: CollaborationNativeParent,
         message: CollaborationMessageNotification,
+        expected: CollaborationNotificationPublicationReference?,
     ): AppResult<CollaborationNotificationIssuance> {
         val inspected = authority.inspect(parent, message)
         if (inspected is AppResult.Failed) return inspected
@@ -88,6 +100,8 @@ class IssueCollaborationMessageNotification(
             }
         if (loaded is AppResult.Failed) return loaded
         val previous = (loaded as AppResult.Success).value
+        if (expected != null && previous?.cleanupReference() != expected)
+            return AppResult.Success(CollaborationNotificationIssuance.Unchanged)
         val decision = collaborationNotificationReplacement(parent, message, original, previous)
         when (decision) {
             CollaborationNotificationReplacement.Ignore ->

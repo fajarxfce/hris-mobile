@@ -1,5 +1,66 @@
 # Agent continuation — HRIS Mobile
 
+## Finite semantic reconciliation accepted; continue process lifetime and native callbacks
+
+Issuer and publisher now accept an optional exact expected publication reference. Invalid/
+foreign conditions fail before journal IO; changed/missing reference returns Unchanged
+without sealing or mutation. Reconciler maps Unchanged to Contended WITHOUT native IO,
+including ACK-only version changes with unchanged render ID. The parameterized Koin
+factory reuses publisher's own owner turn, followed by a separate exact cleanup turn as
+needed; no nested leases. [Contract](collaboration-notification-reconciliation.md),
+[evidence](measurements/chat-notification-reconciliation-2026-11-03.json).
+
+Current admitted sources rerender silently. A source Failure bypasses publication.
+Confirmed suppression/company denial removes native content then cancels exact journal;
+transient/permission/history outcomes hide while preserving active journal. Removal is
+registered before journal IO, so cancellation/lost committed response still joins exact
+compensation. Replaced render/contended journal requires rescan. Reconciler references
+must come from owned discovery, never raw callback extras; callback auth remains separate.
+
+Focused1 passed158.850s:29 fresh cases/three suites (17 existing issuer,3 conditional,
+9 actual Koin/SQLite app cases). Full2 passed370.835s:3661 desktop/526 suites,230 Android-
+host/37, six proof-host/one, ten build-logic/two and20 browser/two;2092 fresh cases/259
+suites, zero failures/errors/skips, six frozen Kotlin inputs. Root quality/architecture74/
+detekt, proof assembly/shared Wasm compile pass. No failed attempt or local heavy job/
+owned emulator remains. Application cases use fictional acquisition and a fake OS.
+Reconciler.txt and implementation drafts are APPLIED/STALE; actor-next.txt is DESIGN ONLY.
+
+NEXT process actor, exclusive owner of native publication/reconciliation/removal. Bound64
+opaque refs/dirty IDs; source/processed-parent/focus collectors have explicit joined
+lifetimes. Register/revalidate initial subscriptions and rescan after every journal-changing
+outcome because ACKs do not wake source observations. Contended must discover CURRENT
+reference, not drop work or repeatedly reuse a stale one. Source failure bypasses publishing
+until observation recovers. Preserve Busy work without hot retry. Consider a cold surface
+status Flow from existing Phase so actor can await Ready/Blocked/Closed after asynchronous
+start; avoid stateIn readiness retaining stale Ready when owner scope closes. Normal
+native operations should all use the actor, not competing direct publisher owners.
+
+Focused-thread registration belongs app/navigation/lifecycle. It must cancel/join pending
+publication and retire its current notification, independent of viewport read timing;
+include owned parent/account and dispose old routes. Journal discovery failure needs finite
+namespace cleanup/gated recovery so unavailable keys cannot leave private cards indefinitely.
+MaintainCollaborationRuntimeOwnership already buffers per-company restriction before
+runtime retention; recoveryParent alone is not a company grant. Supplemental
+.work/chat-notification-reconciliation-2026-11-03/actor-next.txt contains these design notes.
+
+Then authenticated native callbacks, old-parent action v2/retained-input review and actual
+notification-input process-death proof. Production HRIS callbacks are not yet live, so verify
+real compatibility needs before designing legacy-v1 migration. Source primitives and finite
+reconciler are not a started notification host. All54 PRD groups still open; chat push OFF.
+
+Consolidated full Apple manifest202 paths and dispatch/audit helpers are ready under
+.work/chat-notification-reconciliation-apple-2026-11-03, NOT dispatched yet. Dispatch ONCE
+after this commit/push on clean branch, record resulting run, then audit only after full
+Xcode succeeds. Last audited Apple11cba615/41554262782 (936/105, Xcode1399s) and corrected
+native7a0ab3d3/41554674578 (16 raw groups plus five SDK/WorkManager scenarios) precede
+current source changes. Do not redispatch completed runs or repeat local provider hangs.
+Physical iPhone waived, full hosted Xcode required.
+
+Phone19/sourcec0 remains installed. Next meaningful product release>19: notify then
+explicit10.77.77.3:5555 install-only, preserve signer/data, never drive UI. Live304/schema116
+unchanged; voice/video/meeting UI absent. Generic Starter port waits for integrated Mobile
+proof. Continue long run and push every atomic commit. Older entries below are historical.
+
 ## Explicit native removal cleanup accepted; continue semantic reconciliation
 
 The surface lease now records remove-only cleanup obligations before native IPC, sharing

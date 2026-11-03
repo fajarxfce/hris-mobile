@@ -23,6 +23,7 @@ class CollaborationNotificationPublisher(
         candidate: CollaborationNotificationCandidate,
         copy: CollaborationNotificationCopy,
         allowAlert: Boolean = false,
+        expected: CollaborationNotificationPublicationReference? = null,
     ): AppResult<CollaborationNotificationPublicationResult> =
         owner.withOwner(parent) {
             val access =
@@ -48,7 +49,7 @@ class CollaborationNotificationPublisher(
                         )
                     is CollaborationNotificationProjection.Ready -> projection.message
                 }
-            val issued = issue(scope, message)
+            val issued = issue(scope, message, expected)
             if (issued is AppResult.Failed) return@withOwner issued
             val ready =
                 when (val value = (issued as AppResult.Success).value) {

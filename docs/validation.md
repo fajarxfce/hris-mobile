@@ -1,5 +1,15 @@
 # Validation
 
+## Conditional issuance and finite native reconciliation — 3 November 2026
+
+[Semantic reconciliation](collaboration-notification-reconciliation.md) passes29 focused
+cases, including nine actual Koin/SQLite app cases with a fake OS. Full checks pass3661
+desktop/526 suites,230 Android-host/37, six proof-host/one, ten build-logic/two and20
+browser/two; zero failures/errors/skips. Proof assembly, shared Wasm and root quality
+also pass. [Evidence](measurements/chat-notification-reconciliation-2026-11-03.json)
+records six frozen source hashes and2092 fresh cases/259 suites. No failed attempt,
+started native host, notification-input process-death acceptance or product installation.
+
 ## Joined compensation for explicit notification removal — 3 November 2026
 
 [Remove-only cleanup](collaboration-notification-removal.md) passes22 focused mechanical

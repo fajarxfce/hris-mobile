@@ -135,3 +135,18 @@ not yet live; verify migration needs before designing legacy support. An authent
 account-owned envelope with encrypted original-parent metadata is a candidate, not an
 implemented format. Current-parent send authorization, old-family review, failed-save
 handling and notification-input OS-death proof remain mandatory parts of integration.
+
+## Finite semantic reconciliation is implemented
+
+[Conditional issuance and reconciliation](collaboration-notification-reconciliation.md)
+now preserve a newer ACK/render when an old reference requests refresh. The reconciler
+silently republishes admitted current sources, bypasses publication on failed observation,
+retires confirmed suppression/denial and hides transiently unavailable sources while
+retaining their journal. Exact native removal precedes journal cancellation so interrupted
+journal IO still joins registered cleanup. It uses two finite owner turns without nesting.
+
+Connect the exclusive process actor next: bounded opaque work, initial observer readiness,
+joined parent/source/focus cancellation, explicit journal rescan, and Busy/Contended
+handling without hot retries. Reconciler inputs come from owned discovery; this is not
+native callback authentication. Native input review and process-death proof still precede
+activation of chat push.
