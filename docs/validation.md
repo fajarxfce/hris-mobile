@@ -1,5 +1,24 @@
 # Validation
 
+## Native source invalidation and completed hosted audits — 3 November 2026
+
+[Advisory source observation](collaboration-notification-invalidation.md) passes20 focused
+cases, root checks3644 desktop/524 suites,230 Android-host/37, six proof-host/one and
+ten build-logic/two, plus17 browser cases/two suites. All accepted reports have zero
+failures/errors/skips. [Evidence](measurements/chat-notification-invalidation-2026-11-03.json)
+preserves the initial normalized-message assertion failure and full3's empty browser
+invocation. Browser-only4 corrects its filter on identical source; the empty run is not
+acceptance. Root/proof/shared Wasm checks passed without requiring repetition.
+
+Independently, [full Apple](measurements/chat-notification-publisher-apple-2026-11-03.json)
+at11cba615 passes936 simulator cases/105 suites and full Xcode1399s with184 source hashes.
+[Corrected hosted native](measurements/native-notification-corrected-hosted-2026-11-03.json)
+at7a0ab3d3 passes16 raw notification groups, verified uninstall, then all five SDK/
+WorkManager scenarios,230 Android-host and six proof-host cases with185 hashes.
+Both artifact ZIPs match GitHub digests. Both runs precede subsequent retirement and
+source observation. Raw IPC and existing process-recovery cases do not prove activated
+HRIS callbacks or notification-specific input replay. No product install occurred here.
+
 ## Notification settings and read-state observation — 3 November 2026
 
 [Cold owned streams](collaboration-notification-source-observation.md) pass26 focused

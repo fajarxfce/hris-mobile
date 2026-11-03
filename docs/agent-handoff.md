@@ -1,5 +1,78 @@
 # Agent continuation — HRIS Mobile
 
+## Source invalidation and hosted audits accepted; continue finite native reconciliation
+
+Five exact published source checkpoints now emit advisory changes without reading keys,
+document bodies or returning content. Unit signals are not publication permission.
+ObserveCollaborationNotificationChanges binds them to the actual native parent and the
+specified company's buffered read admission, independent of selected workspace. Parent/
+denial changes cancel and join sources; each signal checks admission/parent within8s.
+Known denial returns before a pending session read. Failure or normal completion of any
+source/session/admission stream closes observation; no implicit restart.
+[Contract](collaboration-notification-invalidation.md),
+[evidence](measurements/chat-notification-invalidation-2026-11-03.json).
+
+Focused1 failed135.321s:19 cases/three suites, one assertion comparing a normalized Failure
+message although kind/code were correct. Fixed classification assertion; review added
+known-denial/pending-session coverage and checked source completion. Focused2 passed109.483s:
+20 fresh cases/three suites. Full3 passed383.654s:3644 desktop/524 suites,230 Android-host/37,
+six proof-host/one and ten build-logic/two;2055 fresh cases/255 suites, zero failures/errors/
+skips. Root quality/architecture74/detekt, proof assembly and shared Wasm compile pass.
+Its browser filters lacked trailing wildcards and produced NO browser reports: audit
+rejected that gap. Corrected browser-only4 passed26.473s:17 fresh cases/two suites on the
+identical ten frozen Kotlin inputs. Do not count empty browser3 as acceptance. Local audit
+now rejects missing browser groups and prevents later XML from filling an earlier run's
+missing output. A same-file copy error while hardening that helper was fixed; no app rerun.
+No local heavy job or owned emulator remains. Implementation .txt drafts are APPLIED/STALE.
+
+NEXT finite application reconciliation under the existing surface lease. Review found
+lease.remove currently does not register cleanup obligations, so a failed explicit remove
+can leave the owner Ready when compensation sees no attempted show. Track removal refs
+before IPC under the same four-reference bound; joined compensation must block subsequent
+publication if removal still fails. Five unapplied cases plus a broader design are in
+.work/chat-notification-reconciliation-2026-11-03. Then reconcile an exact reference:
+silently rerender benign source-stamp/privacy changes; retire confirmed read/mute/redaction/
+denial; hide on transient uncertainty while preserving active journal. Never remove a
+newer render for a stale reference. Avoid nesting publisher.withOwner inside another lease.
+An optional exact-reference condition on issuance is proposed, not implemented.
+
+Afterward add the process actor: bounded64 opaque references/dirty IDs, initial subscription
+revalidation, joined observers, explicit publication-journal rescan and no private payload
+queue. Busy invalidations need a lifecycle wakeup without hot retries. Current owner exposes
+no readiness/completion signal. MaintainCollaborationRuntimeOwnership already buffers
+lists.restrict BEFORE runtime retention; its recoveryParent alone is not company admission.
+See [host plan](collaboration-notification-publication-plan.md) and supplemental
+.work/chat-notification-invalidation-2026-11-03/host-next.txt.
+
+Callback/input review remains open: old v1 full-parent-AAD action may lose its trusted
+old-parent lookup after journal overwrite. Native HRIS callbacks have not been activated,
+so verify actual migration needs before adding hypothetical legacy compatibility. Consider
+an account/audience-authenticated v2 envelope carrying original parent inside ciphertext;
+normal send still requires current parent, older-family input needs explicit review.
+Pre-retention encrypted quarantine/failed-save retry and notification-specific OS-death
+proof remain unimplemented. These are design findings, not accepted features.
+
+Independent hosted audits are now complete and recorded:
+- Full Apple11cba615/41554262782:936 simulator cases/105 suites, full Xcode1399s
+  (test compile785s/run98s),184 source hashes. Artifact13195921070 ZIP
+  f1e92fc3875f93f391997f94b3c484356e3031f0777575a5f50608d17950a920 matches GitHub.
+  [Evidence](measurements/chat-notification-publisher-apple-2026-11-03.json).
+- Corrected native7a0ab3d3/41554674578:16 raw IPC groups32.622s with verified fixture
+  uninstall, then all five SDK/WorkManager scenarios,230 Android-host/37 and6 proof-host/1;
+  zero failures/errors/skips,185 source hashes. Artifact13195567598 ZIP
+  d87e7240d3760239a21326810eecf6b5da2dba63bdb246c35d3b4f7e01fba1d4 matches GitHub.
+  All drivers report APK324f0ae0cd5099d66bd6db12f01db07e5d0a5da914447c650daeff2fd4e0ad32.
+  Build1018s/Platform332s/native step1094s. [Evidence](measurements/native-notification-corrected-hosted-2026-11-03.json).
+Both precede retirement6f54a5dc, settings/read observations522ae177 and this increment.
+Neither proves active HRIS notification callbacks or notification-input process death.
+Do not redispatch these completed runs or repeat long local provider emulator hangs.
+
+Phone19/sourcec0 remains installed. Next meaningful product release>19: notify then
+explicit10.77.77.3:5555 install-only, preserve signer/data, never drive UI. Live304/schema116/
+chat push OFF; all54 PRD groups open. Voice/video/meeting UI absent. Generic Starter port
+waits for integrated Mobile proof. Continue long run, push every atomic commit.
+Older entries below are historical.
+
 ## Settings/read observations accepted; continue native source invalidation
 
 Cold encrypted settings and private read-state streams now follow their exact owned

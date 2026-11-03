@@ -99,3 +99,8 @@ and notification-specific process-death proof. Implement the iOS host surface se
 and verify full Xcode. Chat push remains off and the user's installed release19 is
 unchanged. Port these generic primitives to Starter after integrated Mobile proof;
 HRIS admission and cryptographic policy stay in Mobile.
+
+The [corrected hosted sequence](measurements/native-notification-corrected-hosted-2026-11-03.json)
+at7a0ab3d3 now passes16 raw groups with verified uninstall before the five SDK/WorkManager
+scenarios. This closes the earlier fixture-ownership failure; those two kinds of native
+proof remain separate from HRIS notification callback/input integration.

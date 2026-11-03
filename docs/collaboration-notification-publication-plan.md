@@ -117,3 +117,20 @@ presentation, stale render fencing, capacity and corrupt-file cleanup. These sup
 the fake owner tests, but do not inject a stalled OS queue, killed notification-input
 process or power cut. Notification-specific OS-death replay remains required before
 activation; retain the distinction in acceptance evidence.
+
+## Source observation is implemented; native reconciliation remains next
+
+[Advisory invalidation](collaboration-notification-invalidation.md) observes five exact
+published checkpoints and per-company buffered admission under the actual native parent.
+It includes initial state, excludes publication ACKs and closes on stream completion or
+failure. It does not start a native host. Connect bounded opaque card ownership and
+semantic reconciliation next, including startup registration races and busy invalidations.
+The surface lease must register explicit removal obligations before IPC, so failed
+removal cannot bypass joined compensation and leave publication open.
+
+Before callback activation, resolve old-parent action authentication. Current v1 full-
+parent AAD may become unavailable after journal replacement. Native HRIS callbacks are
+not yet live; verify migration needs before designing legacy support. An authenticated
+account-owned envelope with encrypted original-parent metadata is a candidate, not an
+implemented format. Current-parent send authorization, old-family review, failed-save
+handling and notification-input OS-death proof remain mandatory parts of integration.
