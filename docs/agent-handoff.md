@@ -1,5 +1,39 @@
 # Agent continuation — HRIS Mobile
 
+
+## Saved-reply native accepted; callback native proof being built
+
+[Native41609991459](measurements/chat-saved-replies-native-2026-11-03.json) at
+8b5f8750 is accepted/audited:five provider/three suites,230 Android host/37 and15
+proof/four, zero failures/errors/skips;337 source hashes verified. GitHub artifact
+13221852660 ZIP SHA256c716e1dfb01b62db127f0bb96ba446896c482c8ab67176a0982bcfbfb74f3341.
+Allfive APK digests7fe9569397794fba22672b1464aecdaa20f793c8eed157fe668cce754ea451c5.
+Raw16/two, verified fixture uninstall, three ordinary process kills/four callbacks
+PIDs3669,3882,4058,4243; one protected input to one review input, wrong-account
+preservation, HTTP0 and no command in capture proof. Input recovery18.229s.
+Build977s/Platform333s/native1113s. Do not repeat completed fetch/audit. This covers
+phone23 source; later actions4389 and current native callbacks remain separate.
+
+CURRENT19 uncommitted implementation/fixture/driver inputs are frozen in
+.work/chat-native-callbacks-2026-11-03/check-4 (PTY68732), ONLY local heavy job.
+Focused1 PASS116.816s/57fresh4; focused2 PASS115.299s/72fresh6, zero. Actual Koin/SQLite
+Delivery/Process/global callback forwarding exercised, including owner contention.
+Nonreply application callbacks and private Android action facade/receiver added;
+Open cannot become a broadcast action. Process waits boundedly for native ownership
+and retries only pre-mutation BUSY. Reply capture acknowledgment never queues or reads.
+Native fixture with five actual PendingIntent actions and optional SystemUI reply
+driver now added but NOT accepted. Full3 rejected41.515s solely fixture LongMethod;
+seedOriginal extracted, cleanup added, full4 now running. No emulator started.
+After full checks, run one short owned5562 proof with --reply-system-ui, inspect
+actual images and callback/journal records. Add failure audit if needed; no local
+long provider suite. Then commit/push and hosted full Apple/native exact source.
+
+Native438941615080704 and Apple438941616077153 remain outstanding; no duplicates.
+Starter d312769 clean/pushed: independent Apple41612522666 now ACCEPTED102sim/28,
+24sources/full Xcode686s, see Starter handoff. Phone23 already delivered; next product
+version must be24+. Native Activity product navigation, binding and reviewed edited-
+send remain next. Production host unbound/push OFF; all54 PRD groups OPEN. Continue.
+
 ## Saved-reply Apple accepted; native callback acknowledgment in progress
 
 Apple41610059249 at8b5f8750 is ACCEPTED and audited:
